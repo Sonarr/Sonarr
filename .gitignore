@@ -1,6 +1,8 @@
 _ReSharper.*
 bin
 obj
+/bin/*
+/obj/*
 build
 dist
 *.suo
