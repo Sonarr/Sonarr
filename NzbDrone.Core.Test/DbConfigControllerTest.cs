@@ -1,0 +1,59 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using Gallio.Framework;
+using log4net;
+using MbUnit.Framework;
+using MbUnit.Framework.ContractVerifiers;
+using Moq;
+using NzbDrone.Core.Controllers;
+using NzbDrone.Core.Repository;
+using SubSonic.Repository;
+
+namespace NzbDrone.Core.Test
+{
+    [TestFixture]
+    public class DbConfigControllerTest
+    {
+        [Test]
+        public void Overwrite_existing_value()
+        {
+            String key = "MY_KEY";
+            String value = "MY_VALUE";
+
+            //setup
+            var repo = new Mock<IRepository>();
+            var config = new Config() { Key = key, Value = value };
+            repo.Setup(r => r.Single<Config>(key)).Returns(config);
+            var target = new DbConfigController(new Mock<ILog>().Object, repo.Object);
+
+            //Act
+            target.SetValue(key, value);
+
+            //Assert
+            repo.Verify(c => c.Update(config));
+            repo.Verify(c => c.Add(It.IsAny<Config>()), Times.Never());
+        }
+
+        [Test]
+        public void Add_new_value()
+        {
+            String key = "MY_KEY";
+            String value = "MY_VALUE";
+
+            //setup
+            var repo = new Mock<IRepository>();
+            var config = new Config() { Key = key, Value = value };
+            repo.Setup(r => r.Single<Config>(It.IsAny<string>())).Returns<Config>(null).Verifiable();
+            var target = new DbConfigController(new Mock<ILog>().Object, repo.Object);
+
+            //Act
+            target.SetValue(key, value);
+
+            //Assert
+            repo.Verify();
+            repo.Verify(r => r.Update(It.IsAny<Config>()), Times.Never());
+            repo.Verify(r => r.Add(It.Is<Config>(c => c.Key == key && c.Value == value)), Times.Once());
+        }
+    }
+}

@@ -21,7 +21,7 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult Index()
         {
-            return View(new SettingsModel() { RootPath = _configController.SeriesRoot });
+            return View(new SettingsModel() { TvFolder = _configController.SeriesRoot });
         }
 
         [HttpPost]
@@ -29,7 +29,7 @@ namespace NzbDrone.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                _configController.SeriesRoot = model.RootPath;
+                _configController.SeriesRoot = model.TvFolder;
             }
             
             return RedirectToAction("index");

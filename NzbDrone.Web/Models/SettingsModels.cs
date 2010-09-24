@@ -13,7 +13,11 @@ namespace NzbDrone.Web.Models
 
     public class SettingsModel
     {
-        public String RootPath
+            
+        [Required]
+        [DataType(DataType.Text)]
+        [DisplayName("TV Folder")]
+        public String TvFolder
         {
             get;
             set;

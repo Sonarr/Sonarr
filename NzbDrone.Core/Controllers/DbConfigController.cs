@@ -10,15 +10,14 @@ namespace NzbDrone.Core.Controllers
     public class DbConfigController : IConfigController
     {
         private const string _seriesroots = "SeriesRoots";
-        private readonly IDiskController _diskController;
         private readonly ILog _logger;
         private readonly IRepository _sonicRepo;
 
 
-        public DbConfigController(ILog logger, IDiskController diskController, IRepository dataRepository)
+        public DbConfigController(ILog logger, IRepository dataRepository)
         {
             _logger = logger;
-            _diskController = diskController;
+
             _sonicRepo = dataRepository;
         }
 
@@ -43,7 +42,7 @@ namespace NzbDrone.Core.Controllers
         }
 
 
-        private string GetValue(string key, object defaultValue, bool makePermanent)
+        public string GetValue(string key, object defaultValue, bool makePermanent)
         {
             string value;
 
@@ -66,14 +65,24 @@ namespace NzbDrone.Core.Controllers
             return value;
         }
 
-        private void SetValue(string key, string value)
+        public void SetValue(string key, string value)
         {
             if (String.IsNullOrEmpty(key)) throw new ArgumentOutOfRangeException("key");
-            if (value== null) throw new ArgumentNullException("key");
+            if (value == null) throw new ArgumentNullException("key");
 
             _logger.DebugFormat("Writing Setting to file. Key:'{0}' Value:'{1}'", key, value);
 
-            _sonicRepo.Add(new Config { Key = key, Value = value });
+            var dbValue = _sonicRepo.Single<Config>(key);
+
+            if (dbValue == null)
+            {
+                _sonicRepo.Add(new Config { Key = key, Value = value });
+            }
+            else
+            {
+                dbValue.Value = value;
+                _sonicRepo.Update(dbValue);
+            }
         }
     }
 }

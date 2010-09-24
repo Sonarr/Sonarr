@@ -11,5 +11,8 @@ namespace NzbDrone.Core.Controllers
 
             set;
         }
+
+        string GetValue(string key, object defaultValue, bool makePermanent);
+        void SetValue(string key, string value);
     }
 }
