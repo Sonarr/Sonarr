@@ -30,9 +30,10 @@ namespace NzbDrone.Web.Controllers
             if (ModelState.IsValid)
             {
                 _configController.SeriesRoot = model.TvFolder;
+                //return RedirectToAction("index");
             }
-            
-            return RedirectToAction("index");
+
+            return View(model);
         }
 
     }

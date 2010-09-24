@@ -32,16 +32,23 @@ namespace NzbDrone.Core.Controllers
             return _sonioRepo.All<Series>();
         }
 
+        public Series GetSeries(int tvdbId)
+        {
+            return _sonioRepo.Single<Series>(s=> s.TvdbId == tvdbId);
+        }
+
+
+
         public void SyncSeriesWithDisk()
         {
 
             foreach (string seriesFolder in _diskController.GetDirectories(_config.SeriesRoot))
             {
-                var dirInfo = new DirectoryInfo(seriesFolder);
-                if (!_sonioRepo.Exists<Series>(s => s.Path == _diskController.CleanPath(dirInfo.FullName)))
+                var cleanPath  =_diskController.CleanPath(new DirectoryInfo(seriesFolder).FullName);
+                if (!_sonioRepo.Exists<Series>(s => s.Path == cleanPath))
                 {
-                    _logger.InfoFormat("Folder '{0} isn't mapped to a series in the database. Trying to map it.'", seriesFolder);
-                    AddShow(seriesFolder);
+                    _logger.InfoFormat("Folder '{0} isn't mapped to a series in the database. Trying to map it.'", cleanPath);
+                    AddShow(cleanPath);
                 }
             }
 
@@ -60,7 +67,7 @@ namespace NzbDrone.Core.Controllers
 
         private void AddShow(string path, TvdbSeries series)
         {
-            _sonioRepo.Add(new Series { Id = series.Id, SeriesName = series.SeriesName, AirTimes = series.AirsTime, AirsDayOfWeek = series.AirsDayOfWeek, Overview = series.Overview, Status = series.Status, Language = series.Language.Name, Path = path });
+            _sonioRepo.Add(new Series { TvdbId = series.Id, SeriesName = series.SeriesName, AirTimes = series.AirsTime, AirsDayOfWeek = series.AirsDayOfWeek, Overview = series.Overview, Status = series.Status, Language = series.Language.Abbriviation, Path = path });
         }
     }
 }

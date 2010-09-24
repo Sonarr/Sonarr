@@ -6,6 +6,7 @@ namespace NzbDrone.Core.Controllers
     public interface ISeriesController
     {
         IQueryable<Series> GetSeries();
+        Series GetSeries(int tvdbId);
         void SyncSeriesWithDisk();
     }
 }

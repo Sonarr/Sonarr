@@ -81,6 +81,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
+    <Content Include="Views\Series\Details.aspx" />
     <Content Include="Views\Series\index.aspx" />
     <Content Include="Views\Settings\Index.aspx" />
     <Content Include="Web.config">

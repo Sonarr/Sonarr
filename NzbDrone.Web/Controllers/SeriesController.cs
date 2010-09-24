@@ -35,9 +35,9 @@ namespace NzbDrone.Web.Controllers
         //
         // GET: /Series/Details/5
 
-        public ActionResult Details(int id)
+        public ActionResult Details(int tvdbId)
         {
-            return View();
+            return View(_seriesController.GetSeries(tvdbId));
         }
 
         //

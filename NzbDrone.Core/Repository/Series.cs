@@ -1,10 +1,12 @@
 ﻿using System;
+using SubSonic.SqlGeneration.Schema;
 
 namespace NzbDrone.Core.Repository
 {
     public class Series
     {
-        public int Id
+        [SubSonicPrimaryKey]
+        public int TvdbId
         {
             get;
             set;
@@ -22,6 +24,7 @@ namespace NzbDrone.Core.Repository
             set;
         }
 
+        [SubSonicLongString]
         public string Overview
         {
             get;
@@ -51,5 +54,6 @@ namespace NzbDrone.Core.Repository
             get;
             set;
         }
+
     }
 }
