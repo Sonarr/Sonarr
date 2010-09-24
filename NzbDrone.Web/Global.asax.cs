@@ -34,7 +34,7 @@ namespace NzbDrone.Web
             AreaRegistration.RegisterAllAreas();
             RegisterRoutes(RouteTable.Routes);
             base.OnApplicationStarted();
-        }
+            }
 
         protected override IKernel CreateKernel()
         {
