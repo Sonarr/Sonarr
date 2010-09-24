@@ -9,3 +9,4 @@ dist
 *resharper*
 *.user
 *.cache
+nzbdrone.db
