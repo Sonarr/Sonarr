@@ -68,6 +68,9 @@ namespace NzbDrone.Core.Controllers
 
         private void SetValue(string key, string value)
         {
+            if (String.IsNullOrEmpty(key)) throw new ArgumentOutOfRangeException("key");
+            if (value== null) throw new ArgumentNullException("key");
+
             _logger.DebugFormat("Writing Setting to file. Key:'{0}' Value:'{1}'", key, value);
 
             _sonicRepo.Add(new Config { Key = key, Value = value });

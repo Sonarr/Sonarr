@@ -25,7 +25,7 @@ namespace NzbDrone.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Save(SettingsModel model)
+        public ActionResult Index(SettingsModel model)
         {
             if (ModelState.IsValid)
             {

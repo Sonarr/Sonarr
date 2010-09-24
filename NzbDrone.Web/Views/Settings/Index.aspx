@@ -1,6 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<NzbDrone.Web.Models.SettingsModel>" %>
-<%@ Import Namespace="NzbDrone.Web.Controllers" %>
 
+<%@ Import Namespace="NzbDrone.Web.Controllers" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
     Index
 </asp:Content>
@@ -9,6 +9,7 @@
         Settings</h2>
     <% using (Html.BeginForm())
        { %>
+    <%: Html.ValidationSummary(true, "Account creation was unsuccessful. Please correct the errors and try again.") %>
     <div>
         <fieldset>
             <legend>General</legend>
