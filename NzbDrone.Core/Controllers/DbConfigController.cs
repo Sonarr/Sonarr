@@ -9,6 +9,7 @@ namespace NzbDrone.Core.Controllers
 {
     public class DbConfigController : IConfigController
     {
+        private const string _seriesroots = "SeriesRoots";
         private readonly IDiskController _diskController;
         private readonly ILog _logger;
         private readonly IRepository _sonicRepo;
@@ -21,19 +22,26 @@ namespace NzbDrone.Core.Controllers
             _sonicRepo = dataRepository;
         }
 
-        #region IConfigController Members
-
-        public List<String> GetTvRoots()
-        {
-            return (GetValue("tvRoot").Trim(';').Split(';').Where(path => _diskController.Exists(path))).ToList();
-        }
-
-        #endregion
 
         private string GetValue(string key)
         {
             return GetValue(key, String.Empty, false);
         }
+
+        public String SeriesRoot
+        {
+            get
+            {
+                return GetValue(_seriesroots);
+            }
+
+            set
+            {
+                SetValue(_seriesroots, value);
+            }
+
+        }
+
 
         private string GetValue(string key, object defaultValue, bool makePermanent)
         {
@@ -62,7 +70,7 @@ namespace NzbDrone.Core.Controllers
         {
             _logger.DebugFormat("Writing Setting to file. Key:'{0}' Value:'{1}'", key, value);
 
-            _sonicRepo.Add(new Config {Key = key, Value = value});
+            _sonicRepo.Add(new Config { Key = key, Value = value });
         }
     }
 }

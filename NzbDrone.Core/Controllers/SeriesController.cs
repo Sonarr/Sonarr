@@ -34,18 +34,17 @@ namespace NzbDrone.Core.Controllers
 
         public void SyncSeriesWithDisk()
         {
-            foreach (string root in _config.GetTvRoots())
+
+            foreach (string seriesFolder in _diskController.GetDirectories(_config.SeriesRoot))
             {
-                foreach (string seriesFolder in _diskController.GetDirectories(root))
+                var dirInfo = new DirectoryInfo(seriesFolder);
+                if (!_sonioRepo.Exists<Series>(s => s.Path == _diskController.CleanPath(dirInfo.FullName)))
                 {
-                    var dirInfo = new DirectoryInfo(seriesFolder);
-                    if (!_sonioRepo.Exists<Series>(s => s.Path == _diskController.CleanPath(dirInfo.FullName)))
-                    {
-                        _logger.InfoFormat("Folder '{0} isn't mapped to a series in the database. Trying to map it.'", seriesFolder);
-                        AddShow(seriesFolder);
-                    }
+                    _logger.InfoFormat("Folder '{0} isn't mapped to a series in the database. Trying to map it.'", seriesFolder);
+                    AddShow(seriesFolder);
                 }
             }
+
         }
 
         #endregion
@@ -61,7 +60,7 @@ namespace NzbDrone.Core.Controllers
 
         private void AddShow(string path, TvdbSeries series)
         {
-            _sonioRepo.Add(new Series {Id = series.Id, SeriesName = series.SeriesName, AirTimes = series.AirsTime, AirsDayOfWeek = series.AirsDayOfWeek, Overview = series.Overview, Status = series.Status, Language = series.Language.Name, Path = path});
+            _sonioRepo.Add(new Series { Id = series.Id, SeriesName = series.SeriesName, AirTimes = series.AirsTime, AirsDayOfWeek = series.AirsDayOfWeek, Overview = series.Overview, Status = series.Status, Language = series.Language.Name, Path = path });
         }
     }
 }

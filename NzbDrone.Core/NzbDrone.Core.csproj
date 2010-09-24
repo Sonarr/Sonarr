@@ -140,7 +140,6 @@
     <Compile Include="Repository\Series.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Controllers\FileConfigController.cs" />
     <Compile Include="Controllers\DiskController.cs" />
     <Compile Include="Controllers\IConfigController.cs" />
     <Compile Include="Controllers\IDiskController.cs" />

@@ -82,6 +82,7 @@
   <ItemGroup>
     <Content Include="Global.asax" />
     <Content Include="Views\Series\index.aspx" />
+    <Content Include="Views\Settings\Index.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -117,7 +118,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Settings\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NzbDrone.Core\NzbDrone.Core.csproj">

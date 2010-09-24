@@ -12,7 +12,7 @@
     <p>
         New passwords are required to be a minimum of <%: ViewData["PasswordLength"] %> characters in length.
     </p>
-
+    
     <% using (Html.BeginForm()) { %>
         <%: Html.ValidationSummary(true, "Password change was unsuccessful. Please correct the errors and try again.") %>
         <div>
