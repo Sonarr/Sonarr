@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Controllers
 
         public TvDbController()
         {
-            _handler = new TvdbHandler(new XmlCacheProvider(Path.Combine(Main.AppPath, @"\tvdbcache.xml")), TvDbApiKey);
+            _handler = new TvdbHandler(new XmlCacheProvider(Path.Combine(Main.AppPath, @"cache\tvdbcache.xml")), TvDbApiKey);
         }
 
         #region ITvDbController Members
