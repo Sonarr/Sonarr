@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NzbDrone", "NzbDrone\NzbDro
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{57A04B72-8088-4F75-A582-1158CF8291F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcApplication1", "MvcApplication1\MvcApplication1.csproj", "{23650B89-93C1-4512-8133-55AFF80AEC73}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,18 +89,6 @@ Global
 		{D12F7F2F-8A3C-415F-88FA-6DD061A84869}.Release|x64.ActiveCfg = Release|x86
 		{D12F7F2F-8A3C-415F-88FA-6DD061A84869}.Release|x86.ActiveCfg = Release|x86
 		{D12F7F2F-8A3C-415F-88FA-6DD061A84869}.Release|x86.Build.0 = Release|x86
-		{23650B89-93C1-4512-8133-55AFF80AEC73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{23650B89-93C1-4512-8133-55AFF80AEC73}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{23650B89-93C1-4512-8133-55AFF80AEC73}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{23650B89-93C1-4512-8133-55AFF80AEC73}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{23650B89-93C1-4512-8133-55AFF80AEC73}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{23650B89-93C1-4512-8133-55AFF80AEC73}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{23650B89-93C1-4512-8133-55AFF80AEC73}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{23650B89-93C1-4512-8133-55AFF80AEC73}.Release|Any CPU.Build.0 = Release|Any CPU
-		{23650B89-93C1-4512-8133-55AFF80AEC73}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{23650B89-93C1-4512-8133-55AFF80AEC73}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{23650B89-93C1-4512-8133-55AFF80AEC73}.Release|x64.ActiveCfg = Release|Any CPU
-		{23650B89-93C1-4512-8133-55AFF80AEC73}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
