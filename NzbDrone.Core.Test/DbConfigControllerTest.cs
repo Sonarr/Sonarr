@@ -13,17 +13,18 @@ using SubSonic.Repository;
 namespace NzbDrone.Core.Test
 {
     [TestFixture]
+    // ReSharper disable InconsistentNaming
     public class DbConfigControllerTest
     {
         [Test]
         public void Overwrite_existing_value()
         {
-            String key = "MY_KEY";
-            String value = "MY_VALUE";
+            const string key = "MY_KEY";
+            const string value = "MY_VALUE";
 
-            //setup
+            //Arrange
             var repo = new Mock<IRepository>();
-            var config = new Config() { Key = key, Value = value };
+            var config = new Config { Key = key, Value = value };
             repo.Setup(r => r.Single<Config>(key)).Returns(config);
             var target = new DbConfigController(new Mock<ILog>().Object, repo.Object);
 
@@ -38,12 +39,11 @@ namespace NzbDrone.Core.Test
         [Test]
         public void Add_new_value()
         {
-            String key = "MY_KEY";
-            String value = "MY_VALUE";
+            const string key = "MY_KEY";
+            const string value = "MY_VALUE";
 
-            //setup
+            //Arrange
             var repo = new Mock<IRepository>();
-            var config = new Config() { Key = key, Value = value };
             repo.Setup(r => r.Single<Config>(It.IsAny<string>())).Returns<Config>(null).Verifiable();
             var target = new DbConfigController(new Mock<ILog>().Object, repo.Object);
 
