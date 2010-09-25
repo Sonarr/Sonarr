@@ -80,6 +80,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Background.jpg" />
+    <Content Include="Content\BannerBottomEdge.gif" />
+    <Content Include="Content\BannerTopEdge.gif" />
+    <Content Include="Content\ButtonBack.gif" />
+    <Content Include="Content\Error.png" />
+    <Content Include="Content\menuBack.gif" />
+    <Content Include="Content\menuHoverBack.gif" />
+    <Content Include="Content\TableHeaderBackground.gif" />
     <Content Include="Global.asax" />
     <Content Include="Views\Series\Details.aspx" />
     <Content Include="Views\Series\index.aspx" />

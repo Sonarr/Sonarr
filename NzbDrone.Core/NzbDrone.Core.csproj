@@ -134,8 +134,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\DbConfigController.cs" />
+    <Compile Include="Controllers\IDownloadClientController.cs" />
     <Compile Include="Controllers\ISeriesController.cs" />
     <Compile Include="Controllers\ITvDbController.cs" />
+    <Compile Include="Controllers\SabController.cs" />
     <Compile Include="Repository\Config.cs" />
     <Compile Include="Repository\Series.cs" />
     <Compile Include="Main.cs" />
