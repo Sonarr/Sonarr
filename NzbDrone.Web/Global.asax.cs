@@ -1,6 +1,5 @@
 ﻿using System.Web.Mvc;
 using System.Web.Routing;
-using log4net;
 using Ninject;
 using Ninject.Web.Mvc;
 using NzbDrone.Core;
