@@ -42,6 +42,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Moq\Moq.dll</HintPath>
     </Reference>
+    <Reference Include="Ninject, Version=2.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\NzbDrone.Core\Libraries\Ninject.dll</HintPath>
+    </Reference>
     <Reference Include="SubSonic.Core, Version=3.0.0.3, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\NzbDrone.Core\Libraries\SubSonic.Core.dll</HintPath>
@@ -59,7 +63,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DbConfigControllerTest.cs" />
+    <Compile Include="Ninject.Moq\ExtensionsForBindingSyntax.cs" />
+    <Compile Include="Ninject.Moq\MockingKernel.cs" />
+    <Compile Include="Ninject.Moq\MockProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SeriesTest.cs" />
     <Compile Include="TvDbControllerTest.cs" />
   </ItemGroup>
   <ItemGroup>
