@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Web;
 using log4net;
 using System.Xml.Linq;
 using System.Xml;
@@ -28,7 +29,7 @@ namespace NzbDrone.Core.Controllers
             const string mode = "addurl";
             const string cat = "tv";
             string name = nzb.Link.ToString().Replace("&", "%26");
-            string nzbName = CleanUrlString(nzb.Title);
+            string nzbName = HttpUtility.UrlEncode(nzb.Title);
 
             string action = string.Format("mode={0}&name={1}&cat={2}&nzbname={3}", mode, name, cat, nzbName);
             string request = GetSabRequest(action);
@@ -45,7 +46,7 @@ namespace NzbDrone.Core.Controllers
         {
             string action = "mode=queue&output=xml";
 
-            XDocument xDoc = XDocument.Load(action);
+            XDocument xDoc = XDocument.Load(GetSabRequest(action));
 
             //If an Error Occurred, retuyrn
             if (xDoc.Descendants("error").Count() != 0)
@@ -86,23 +87,6 @@ namespace NzbDrone.Core.Controllers
             string response = webClient.DownloadString(request).Replace("\n", String.Empty);
             _logger.DebugFormat("Queue Repsonse: [{0}]", response);
             return response;
-        }
-
-        private string CleanUrlString(string name)
-        {
-            string result = name;
-            string[] badCharacters =
-                {
-                    "%", "<", ">", "#", "{", "}", "|", "\\", "^", "`", "[", "]", "`", ";", "/", "?",
-                    ":", "@", "=", "&", "$"
-                };
-            string[] goodCharacters =
-                {
-                    "%25", "%3C", "%3E", "%23", "%7B", "%7D", "%7C", "%5C", "%5E", "%7E", "%5B",
-                    "%5D", "%60", "%3B", "%2F", "%3F", "%3A", "%40", "%3D", "%26", "%24"
-                };
-
-            return result.Trim();
         }
     }
 }

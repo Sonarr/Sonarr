@@ -141,6 +141,10 @@
     <Compile Include="Controllers\ITvDbController.cs" />
     <Compile Include="Controllers\SabController.cs" />
     <Compile Include="Repository\Config.cs" />
+    <Compile Include="Repository\Episode.cs" />
+    <Compile Include="Repository\FeedItem.cs" />
+    <Compile Include="Repository\ItemInfo.cs" />
+    <Compile Include="Repository\Site.cs" />
     <Compile Include="Repository\Series.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
