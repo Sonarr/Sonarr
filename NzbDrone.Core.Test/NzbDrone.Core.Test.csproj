@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="DbConfigControllerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SabControllerTest.cs" />
     <Compile Include="TvDbControllerTest.cs" />
   </ItemGroup>
   <ItemGroup>
