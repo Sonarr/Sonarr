@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Controllers
 
         public Series GetSeries(int tvdbId)
         {
-            return _sonioRepo.Single<Series>(s=> s.TvdbId == tvdbId);
+            return _sonioRepo.Single<Series>(s=> s.TvdbId == tvdbId.ToString());
         }
 
 
@@ -67,7 +67,7 @@ namespace NzbDrone.Core.Controllers
 
         private void AddShow(string path, TvdbSeries series)
         {
-            _sonioRepo.Add(new Series { TvdbId = series.Id, SeriesName = series.SeriesName, AirTimes = series.AirsTime, AirsDayOfWeek = series.AirsDayOfWeek, Overview = series.Overview, Status = series.Status, Language = series.Language.Abbriviation, Path = path });
+            _sonioRepo.Add(new Series { TvdbId = series.Id.ToString(), SeriesName = series.SeriesName, AirTimes = series.AirsTime, AirsDayOfWeek = series.AirsDayOfWeek, Overview = series.Overview, Status = series.Status, Language = series.Language.Abbriviation, Path = path });
         }
     }
 }

@@ -6,7 +6,7 @@ namespace NzbDrone.Core.Repository
     public class Series
     {
         [SubSonicPrimaryKey]
-        public int TvdbId
+        public string TvdbId
         {
             get;
             set;
