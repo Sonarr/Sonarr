@@ -11,14 +11,12 @@ namespace NzbDrone.Core.Providers
         private readonly ILog _logger;
         private readonly IRepository _sonicRepo;
 
-
         public ConfigProvider(ILog logger, IRepository dataRepository)
         {
             _logger = logger;
 
             _sonicRepo = dataRepository;
         }
-
 
         private string GetValue(string key)
         {
@@ -27,18 +25,10 @@ namespace NzbDrone.Core.Providers
 
         public String SeriesRoot
         {
-            get
-            {
-                return GetValue(SERIES_ROOTS);
-            }
+            get { return GetValue(SERIES_ROOTS); }
 
-            set
-            {
-                SetValue(SERIES_ROOTS, value);
-            }
-
+            set { SetValue(SERIES_ROOTS, value); }
         }
-
 
         public string GetValue(string key, object defaultValue, bool makePermanent)
         {
@@ -46,19 +36,11 @@ namespace NzbDrone.Core.Providers
 
             var dbValue = _sonicRepo.Single<Config>(key);
 
-            if (dbValue != null && !String.IsNullOrEmpty(dbValue.Value))
-            {
-                return dbValue.Value;
-            }
-
+            if (dbValue != null && !String.IsNullOrEmpty(dbValue.Value)) return dbValue.Value;
 
             _logger.WarnFormat("Unable to find config key '{0}' defaultValue:'{1}'", key, defaultValue);
-            if (makePermanent)
-            {
-                SetValue(key, defaultValue.ToString());
-            }
+            if (makePermanent) SetValue(key, defaultValue.ToString());
             value = defaultValue.ToString();
-
 
             return value;
         }
@@ -72,10 +54,7 @@ namespace NzbDrone.Core.Providers
 
             var dbValue = _sonicRepo.Single<Config>(key);
 
-            if (dbValue == null)
-            {
-                _sonicRepo.Add(new Config { Key = key, Value = value });
-            }
+            if (dbValue == null) _sonicRepo.Add(new Config {Key = key, Value = value});
             else
             {
                 dbValue.Value = value;

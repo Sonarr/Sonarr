@@ -11,7 +11,6 @@ namespace NzbDrone.Core
 {
     public static class Main
     {
-
         public static void BindKernel(IKernel kernel)
         {
             string connectionString = String.Format("Data Source={0};Version=3;", Path.Combine(AppPath, "nzbdrone.db"));

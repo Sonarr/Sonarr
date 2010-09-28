@@ -36,11 +36,8 @@ namespace NzbDrone.Core.Providers
             return _sonioRepo.Single<Series>(s => s.TvdbId == tvdbId.ToString());
         }
 
-
-
         public void SyncSeriesWithDisk()
         {
-
             foreach (string seriesFolder in _diskProvider.GetDirectories(_config.SeriesRoot))
             {
                 var cleanPath = DiskProvider.CleanPath(new DirectoryInfo(seriesFolder).FullName);
@@ -50,7 +47,6 @@ namespace NzbDrone.Core.Providers
                     AddShow(cleanPath);
                 }
             }
-
         }
 
         #endregion
@@ -58,10 +54,7 @@ namespace NzbDrone.Core.Providers
         private void AddShow(string path)
         {
             var searchResults = _tvDb.SearchSeries(new DirectoryInfo(path).Name);
-            if (searchResults.Count != 0 && !_sonioRepo.Exists<Series>(s => s.TvdbId == searchResults[0].Id.ToString()))
-            {
-                AddShow(path, _tvDb.GetSeries(searchResults[0].Id, searchResults[0].Language));
-            }
+            if (searchResults.Count != 0 && !_sonioRepo.Exists<Series>(s => s.TvdbId == searchResults[0].Id.ToString())) AddShow(path, _tvDb.GetSeries(searchResults[0].Id, searchResults[0].Language));
         }
 
         private void AddShow(string path, TvdbSeries series)

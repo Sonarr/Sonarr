@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Web;
-using log4net;
 using System.Xml.Linq;
-using NzbDrone.Core.Repository;
+using log4net;
 
 namespace NzbDrone.Core.Providers
 {
@@ -38,8 +37,7 @@ namespace NzbDrone.Core.Providers
             string response = _http.DownloadString(request).Replace("\n", String.Empty);
             _logger.DebugFormat("Queue Repsonse: [{0}]", response);
 
-            if (response == "ok")
-                return true;
+            if (response == "ok") return true;
 
             return false;
         }
@@ -53,14 +51,14 @@ namespace NzbDrone.Core.Providers
             XDocument xDoc = XDocument.Parse(response);
 
             //If an Error Occurred, retuyrn)
-            if (xDoc.Descendants("error").Count() != 0)
-                return false;
+            if (xDoc.Descendants("error").Count() != 0) return false;
 
-            if (xDoc.Descendants("queue").Count() == 0)
-                return false;
+            if (xDoc.Descendants("queue").Count() == 0) return false;
 
             //Get the Count of Items in Queue where 'filename' is Equal to goodName, if not zero, return true (isInQueue)))
-            if ((from s in xDoc.Descendants("slot") where s.Element("filename").Value.Equals(title, StringComparison.InvariantCultureIgnoreCase) select s).Count() != 0)
+            if ((from s in xDoc.Descendants("slot")
+                 where s.Element("filename").Value.Equals(title, StringComparison.InvariantCultureIgnoreCase)
+                 select s).Count() != 0)
             {
                 _logger.DebugFormat("Episode in queue - '{0}'", title);
 
@@ -79,9 +77,7 @@ namespace NzbDrone.Core.Providers
             string password = _config.GetValue("Password", String.Empty, false);
             string apiKey = _config.GetValue("ApiKey", String.Empty, false);
 
-            return string.Format(
-                @"http://{0}/sabnzbd/api?$Action&apikey={1}&ma_username={2}&ma_password={3}",
-                sabnzbdInfo, apiKey, username, password).Replace("$Action", action);
+            return string.Format(@"http://{0}/sabnzbd/api?$Action&apikey={1}&ma_username={2}&ma_password={3}", sabnzbdInfo, apiKey, username, password).Replace("$Action", action);
         }
     }
 }

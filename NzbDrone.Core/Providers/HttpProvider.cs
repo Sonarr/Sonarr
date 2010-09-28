@@ -1,9 +1,8 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 
 namespace NzbDrone.Core.Providers
 {
-    class HttpProvider : IHttpProvider
+    internal class HttpProvider : IHttpProvider
     {
         public string DownloadString(string request)
         {

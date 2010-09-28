@@ -6,9 +6,7 @@ namespace NzbDrone.Core.Providers
 {
     public class EpisodeProvider
     {
-        private static Regex _parseRegex =
-    new Regex(
-        @"(?<showName>.*)
+        private static readonly Regex _parseRegex = new Regex(@"(?<showName>.*)
 (?:
   s(?<seasonNumber>\d+)e(?<episodeNumber>\d+)-?e(?<episodeNumber2>\d+)
 | s(?<seasonNumber>\d+)e(?<episodeNumber>\d+)
@@ -23,24 +21,13 @@ namespace NzbDrone.Core.Providers
 | (?<episodeName>.*)
 )", RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace);
 
-
         public static Episode Parse(string title)
         {
             Match match = _parseRegex.Match(title);
 
-            if (!match.Success)
-                return null;
+            if (!match.Success) return null;
 
-            return new Episode
-            {
-                
-                Season = ParseInt(match.Groups["seasonNumber"].Value),
-                EpisodeNumber = ParseInt(match.Groups["episodeNumber"].Value),
-                EpisodeNumber2 = ParseInt(match.Groups["episodeNumber2"].Value),
-                Title = ReplaceSeparatorChars(match.Groups["episodeName"].Value),
-                Release = ReplaceSeparatorChars(match.Groups["release"].Value),
-                Proper = title.Contains("PROPER")
-            };
+            return new Episode {Season = ParseInt(match.Groups["seasonNumber"].Value), EpisodeNumber = ParseInt(match.Groups["episodeNumber"].Value), EpisodeNumber2 = ParseInt(match.Groups["episodeNumber2"].Value), Title = ReplaceSeparatorChars(match.Groups["episodeName"].Value), Release = ReplaceSeparatorChars(match.Groups["release"].Value), Proper = title.Contains("PROPER")};
         }
 
         private static string ReplaceSeparatorChars(string s)
@@ -59,10 +46,8 @@ namespace NzbDrone.Core.Providers
         private static DateTime ParseAirDate(string s)
         {
             DateTime d;
-            if (DateTime.TryParse(ReplaceSeparatorChars(s).Replace(' ', '-'), out d))
-                return d;
+            if (DateTime.TryParse(ReplaceSeparatorChars(s).Replace(' ', '-'), out d)) return d;
             return DateTime.MinValue;
         }
-
     }
 }

@@ -8,6 +8,7 @@ namespace NzbDrone.Core.Repository
     {
         [SubSonicPrimaryKey]
         public string EpisodeId { get; set; }
+
         public string SeriesId { get; set; }
         public string Title { get; set; }
         public string Title2 { get; set; }
@@ -19,6 +20,6 @@ namespace NzbDrone.Core.Repository
         public int Quality { get; set; }
         public bool Proper { get; set; }
         public String FileName { get; set; }
-        public  SyndicationItem Feed { get; set; }
+        public SyndicationItem Feed { get; set; }
     }
 }
