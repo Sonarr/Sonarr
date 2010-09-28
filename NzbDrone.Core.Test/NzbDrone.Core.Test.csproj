@@ -87,11 +87,13 @@
     <Content Include="Libs\Moq.dll" />
     <Content Include="Libs\Moq.xml" />
     <Content Include="Files\Queue.xml">
+    <Content Include="Files\Queue.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Files\QueueEmpty.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+
     <Content Include="Files\QueueError.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
