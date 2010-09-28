@@ -8,12 +8,12 @@ namespace NzbDrone.Core.Providers
 {
     public class TvDbProvider : ITvDbProvider
     {
-        private const string TvDbApiKey = "5D2D188E86E07F4F";
+        private const string TVDB_APIKEY = "5D2D188E86E07F4F";
         private readonly TvdbHandler _handler;
 
         public TvDbProvider()
         {
-            _handler = new TvdbHandler(new XmlCacheProvider(Path.Combine(Main.AppPath, @"cache\tvdbcache.xml")), TvDbApiKey);
+            _handler = new TvdbHandler(new XmlCacheProvider(Path.Combine(Main.AppPath, @"cache\tvdbcache.xml")), TVDB_APIKEY);
         }
 
         #region ITvDbProvider Members

@@ -26,7 +26,8 @@ namespace NzbDrone.Core.Providers
 
         public static string CleanPath(string path)
         {
-            if (string.IsNullOrEmpty(path)) throw new ArgumentException("Path can not be null or empty");
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentException("Path can not be null or empty");
             return path.ToLower().Trim('/', '\\', ' ');
         }
     }

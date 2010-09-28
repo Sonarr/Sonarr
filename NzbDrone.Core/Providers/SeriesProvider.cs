@@ -54,7 +54,8 @@ namespace NzbDrone.Core.Providers
         private void AddShow(string path)
         {
             var searchResults = _tvDb.SearchSeries(new DirectoryInfo(path).Name);
-            if (searchResults.Count != 0 && !_sonioRepo.Exists<Series>(s => s.TvdbId == searchResults[0].Id.ToString())) AddShow(path, _tvDb.GetSeries(searchResults[0].Id, searchResults[0].Language));
+            if (searchResults.Count != 0 && !_sonioRepo.Exists<Series>(s => s.TvdbId == searchResults[0].Id.ToString()))
+                AddShow(path, _tvDb.GetSeries(searchResults[0].Id, searchResults[0].Language));
         }
 
         private void AddShow(string path, TvdbSeries series)

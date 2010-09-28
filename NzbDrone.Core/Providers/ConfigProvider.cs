@@ -36,10 +36,12 @@ namespace NzbDrone.Core.Providers
 
             var dbValue = _sonicRepo.Single<Config>(key);
 
-            if (dbValue != null && !String.IsNullOrEmpty(dbValue.Value)) return dbValue.Value;
+            if (dbValue != null && !String.IsNullOrEmpty(dbValue.Value))
+                return dbValue.Value;
 
             _logger.WarnFormat("Unable to find config key '{0}' defaultValue:'{1}'", key, defaultValue);
-            if (makePermanent) SetValue(key, defaultValue.ToString());
+            if (makePermanent)
+                SetValue(key, defaultValue.ToString());
             value = defaultValue.ToString();
 
             return value;
@@ -47,14 +49,22 @@ namespace NzbDrone.Core.Providers
 
         public void SetValue(string key, string value)
         {
-            if (String.IsNullOrEmpty(key)) throw new ArgumentOutOfRangeException("key");
-            if (value == null) throw new ArgumentNullException("key");
+            if (String.IsNullOrEmpty(key))
+                throw new ArgumentOutOfRangeException("key");
+            if (value == null)
+                throw new ArgumentNullException("key");
 
             _logger.DebugFormat("Writing Setting to file. Key:'{0}' Value:'{1}'", key, value);
 
             var dbValue = _sonicRepo.Single<Config>(key);
 
-            if (dbValue == null) _sonicRepo.Add(new Config {Key = key, Value = value});
+            if (dbValue == null)
+            {
+                _sonicRepo.Add(new Config {
+                                              Key = key,
+                                              Value = value
+                                          });
+            }
             else
             {
                 dbValue.Value = value;
