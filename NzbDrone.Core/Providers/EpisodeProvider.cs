@@ -6,7 +6,7 @@ using SubSonic.Repository;
 
 namespace NzbDrone.Core.Providers
 {
-    public class EpisodeProvider
+    public class EpisodeProvider : IEpisodeProvider
     {
         //TODO: Remove parsing of the series name, it should be done in series provider
         private static readonly Regex ParseRegex = new Regex(@"(?<showName>.*)
@@ -44,6 +44,16 @@ namespace NzbDrone.Core.Providers
             throw new NotImplementedException();
         }
 
+        public IList<Episode> GetEpisodesBySeason(long seasonId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<Episode> GetEpisodeBySeries(long seriesId)
+        {
+            throw new NotImplementedException();
+        }
+
         public String GetSabTitle(Episode episode)
         {
             var series = _seriesProvider.GetSeries(episode.SeriesId);
@@ -59,7 +69,7 @@ namespace NzbDrone.Core.Providers
         /// </summary>
         /// <param name="episode">Episode that needs to be checked</param>
         /// <returns></returns>
-        public bool IsEpisodeNeeded(Episode episode)
+        public bool IsNeeded(Episode episode)
         {
             throw new NotImplementedException();
         }

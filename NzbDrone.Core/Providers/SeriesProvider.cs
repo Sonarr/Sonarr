@@ -55,6 +55,12 @@ namespace NzbDrone.Core.Providers
             return _sonioRepo.Single<Series>(s => s.TvdbId == tvdbId.ToString());
         }
 
+        public IList<Season> GetSeasons(long tvdbId)
+        {
+            return _sonioRepo.Find<Season>(c => c.SeriesId == tvdbId);
+        }
+
+    
         public void SyncSeriesWithDisk()
         {
             foreach (string seriesFolder in _diskProvider.GetDirectories(_config.SeriesRoot))

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Providers
