@@ -145,7 +145,6 @@
     <Compile Include="Providers\SabProvider.cs" />
     <Compile Include="Repository\Config.cs" />
     <Compile Include="Repository\Episode.cs" />
-    <Compile Include="Repository\FeedItem.cs" />
     <Compile Include="Repository\ItemInfo.cs" />
     <Compile Include="Repository\Quality.cs" />
     <Compile Include="Repository\Site.cs" />

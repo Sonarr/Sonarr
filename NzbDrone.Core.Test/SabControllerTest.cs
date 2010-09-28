@@ -181,8 +181,6 @@ namespace NzbDrone.Core.Test
             var target = new SabProvider(config.Object, new Mock<ILog>().Object, http.Object);
 
             Episode episode = new Episode();
-            FeedItem item = new FeedItem();
-            item.TitleFix = "Ubuntu Test";
 
             //Act
             bool result = target.IsInQueue(episode);
