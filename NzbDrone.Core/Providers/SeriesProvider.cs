@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using log4net;
 using NzbDrone.Core.Helpers;
@@ -7,26 +6,26 @@ using NzbDrone.Core.Repository;
 using SubSonic.Repository;
 using TvdbLib.Data;
 
-namespace NzbDrone.Core.Controllers
+namespace NzbDrone.Core.Providers
 {
-    public class SeriesController : ISeriesController
+    public class SeriesProvider : ISeriesProvider
     {
-        private readonly IConfigController _config;
-        private readonly IDiskController _diskController;
+        private readonly IConfigProvider _config;
+        private readonly IDiskProvider _diskProvider;
         private readonly ILog _logger;
         private readonly IRepository _sonioRepo;
-        private readonly ITvDbController _tvDb;
+        private readonly ITvDbProvider _tvDb;
 
-        public SeriesController(ILog logger, IDiskController diskController, IConfigController configController, IRepository dataRepository, ITvDbController tvDbController)
+        public SeriesProvider(ILog logger, IDiskProvider diskProvider, IConfigProvider configProvider, IRepository dataRepository, ITvDbProvider tvDbProvider)
         {
             _logger = logger;
-            _diskController = diskController;
-            _config = configController;
+            _diskProvider = diskProvider;
+            _config = configProvider;
             _sonioRepo = dataRepository;
-            _tvDb = tvDbController;
+            _tvDb = tvDbProvider;
         }
 
-        #region ISeriesController Members
+        #region ISeriesProvider Members
 
         public IQueryable<Series> GetSeries()
         {
@@ -43,7 +42,7 @@ namespace NzbDrone.Core.Controllers
         public void SyncSeriesWithDisk()
         {
 
-            foreach (string seriesFolder in _diskController.GetDirectories(_config.SeriesRoot))
+            foreach (string seriesFolder in _diskProvider.GetDirectories(_config.SeriesRoot))
             {
                 var cleanPath = Disk.CleanPath(new DirectoryInfo(seriesFolder).FullName);
                 if (!_sonioRepo.Exists<Series>(s => s.Path == cleanPath))

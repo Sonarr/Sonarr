@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using NzbDrone.Core.Controllers;
+using NzbDrone.Core.Providers;
 using NzbDrone.Web.Models;
 
 namespace NzbDrone.Web.Controllers
@@ -12,16 +12,16 @@ namespace NzbDrone.Web.Controllers
     {
         //
         // GET: /Settings/
-        private IConfigController _configController;
+        private IConfigProvider _configProvider;
 
-        public SettingsController(IConfigController configController)
+        public SettingsController(IConfigProvider configProvider)
         {
-            _configController = configController;
+            _configProvider = configProvider;
         }
 
         public ActionResult Index()
         {
-            return View(new SettingsModel() { TvFolder = _configController.SeriesRoot });
+            return View(new SettingsModel() { TvFolder = _configProvider.SeriesRoot });
         }
 
         [HttpPost]
@@ -29,7 +29,7 @@ namespace NzbDrone.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                _configController.SeriesRoot = model.TvFolder;
+                _configProvider.SeriesRoot = model.TvFolder;
                 //return RedirectToAction("index");
             }
 

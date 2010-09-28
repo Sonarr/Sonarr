@@ -10,7 +10,7 @@ using MbUnit.Framework.ContractVerifiers;
 using Moq;
 using Ninject;
 using Ninject.Moq;
-using NzbDrone.Core.Controllers;
+using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
 using SubSonic.Repository;
 using TvdbLib.Data;
@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Test
 
             //Arrange
             var moqData = new Mock<IRepository>();
-            var moqTvdb = new Mock<ITvDbController>();
+            var moqTvdb = new Mock<ITvDbProvider>();
 
             //setup db to return a fake series
             Series fakeSeries = Builder<Series>.CreateNew()
@@ -52,14 +52,14 @@ namespace NzbDrone.Core.Test
 
             var kernel = new MockingKernel();
             kernel.Bind<IRepository>().ToConstant(moqData.Object);
-            kernel.Bind<ITvDbController>().ToConstant(moqTvdb.Object);
-            kernel.Bind<IConfigController>().ToConstant(MockLib.StandardConfig);
-            kernel.Bind<IDiskController>().ToConstant(MockLib.StandardDisk);
-            kernel.Bind<ISeriesController>().To<SeriesController>();
+            kernel.Bind<ITvDbProvider>().ToConstant(moqTvdb.Object);
+            kernel.Bind<IConfigProvider>().ToConstant(MockLib.StandardConfig);
+            kernel.Bind<IDiskProvider>().ToConstant(MockLib.StandardDisk);
+            kernel.Bind<ISeriesProvider>().To<SeriesProvider>();
 
 
             //Act
-            var seriesController = kernel.Get<ISeriesController>();
+            var seriesController = kernel.Get<ISeriesProvider>();
             seriesController.SyncSeriesWithDisk();
 
             //Assert

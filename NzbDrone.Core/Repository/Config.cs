@@ -17,6 +17,5 @@ namespace NzbDrone.Core.Repository
             set;
         }
 
-       
     }
 }

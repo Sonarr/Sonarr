@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
 
-namespace NzbDrone.Core.Controllers
+namespace NzbDrone.Core.Providers
 {
-    class HttpController : IHttpController
+    class HttpProvider : IHttpProvider
     {
         public string GetRequest(string request)
         {
             //Get the request and return as String Array
-
             try
             {
                 var webClient = new WebClient();

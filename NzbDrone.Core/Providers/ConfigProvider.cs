@@ -1,20 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using log4net;
 using NzbDrone.Core.Repository;
 using SubSonic.Repository;
 
-namespace NzbDrone.Core.Controllers
+namespace NzbDrone.Core.Providers
 {
-    public class DbConfigController : IConfigController
+    public class ConfigProvider : IConfigProvider
     {
-        private const string _seriesroots = "SeriesRoots";
+        private const string SERIES_ROOTS = "SeriesRoots";
         private readonly ILog _logger;
         private readonly IRepository _sonicRepo;
 
 
-        public DbConfigController(ILog logger, IRepository dataRepository)
+        public ConfigProvider(ILog logger, IRepository dataRepository)
         {
             _logger = logger;
 
@@ -31,12 +29,12 @@ namespace NzbDrone.Core.Controllers
         {
             get
             {
-                return GetValue(_seriesroots);
+                return GetValue(SERIES_ROOTS);
             }
 
             set
             {
-                SetValue(_seriesroots, value);
+                SetValue(SERIES_ROOTS, value);
             }
 
         }

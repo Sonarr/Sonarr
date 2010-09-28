@@ -6,7 +6,7 @@ using log4net;
 using MbUnit.Framework;
 using MbUnit.Framework.ContractVerifiers;
 using Moq;
-using NzbDrone.Core.Controllers;
+using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
 using SubSonic.Repository;
 
@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Test
             var repo = new Mock<IRepository>();
             var config = new Config { Key = key, Value = value };
             repo.Setup(r => r.Single<Config>(key)).Returns(config);
-            var target = new DbConfigController(new Mock<ILog>().Object, repo.Object);
+            var target = new ConfigProvider(new Mock<ILog>().Object, repo.Object);
 
             //Act
             target.SetValue(key, value);
@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Test
             //Arrange
             var repo = new Mock<IRepository>();
             repo.Setup(r => r.Single<Config>(It.IsAny<string>())).Returns<Config>(null).Verifiable();
-            var target = new DbConfigController(new Mock<ILog>().Object, repo.Object);
+            var target = new ConfigProvider(new Mock<ILog>().Object, repo.Object);
 
             //Act
             target.SetValue(key, value);

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.IO;
 
-namespace NzbDrone.Core.Controllers
+namespace NzbDrone.Core.Providers
 {
-    public class DiskController : IDiskController
+    public class DiskProvider : IDiskProvider
     {
-        #region IDiskController Members
+        #region IDiskProvider Members
 
         public bool Exists(string path)
         {

@@ -4,19 +4,19 @@ using TvdbLib;
 using TvdbLib.Cache;
 using TvdbLib.Data;
 
-namespace NzbDrone.Core.Controllers
+namespace NzbDrone.Core.Providers
 {
-    public class TvDbController : ITvDbController
+    public class TvDbProvider : ITvDbProvider
     {
         private const string TvDbApiKey = "5D2D188E86E07F4F";
         private readonly TvdbHandler _handler;
 
-        public TvDbController()
+        public TvDbProvider()
         {
             _handler = new TvdbHandler(new XmlCacheProvider(Path.Combine(Main.AppPath, @"cache\tvdbcache.xml")), TvDbApiKey);
         }
 
-        #region ITvDbController Members
+        #region ITvDbProvider Members
 
         public IList<TvdbSearchResult> SearchSeries(string name)
         {

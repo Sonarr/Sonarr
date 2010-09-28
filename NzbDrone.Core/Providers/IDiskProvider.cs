@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace NzbDrone.Core.Controllers
+namespace NzbDrone.Core.Providers
 {
-    public interface IDiskController
+    public interface IDiskProvider
     {
         bool Exists(string path);
         string[] GetDirectories(string path);

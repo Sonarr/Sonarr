@@ -1,31 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Text;
 using System.Web;
 using log4net;
 using System.Xml.Linq;
-using System.Xml;
 using NzbDrone.Core.Repository;
 
-namespace NzbDrone.Core.Controllers
+namespace NzbDrone.Core.Providers
 {
-    public class SabController : IDownloadClientController
+    public class SabProvider : IDownloadProvider
     {
-        private readonly IConfigController _config;
+        private readonly IConfigProvider _config;
         private readonly ILog _logger;
-        private readonly IHttpController _http;
+        private readonly IHttpProvider _http;
 
-        public SabController(IConfigController config, ILog logger, IHttpController http)
+        public SabProvider(IConfigProvider config, ILog logger, IHttpProvider http)
         {
             _config = config;
             _logger = logger;
             _http = http;
         }
 
-        #region IDownloadClientController Members
+        #region IDownloadProvider Members
 
         public bool AddByUrl(ItemInfo nzb)
         {

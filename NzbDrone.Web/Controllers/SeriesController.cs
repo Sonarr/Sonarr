@@ -3,31 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using NzbDrone.Core.Controllers;
+using NzbDrone.Core.Providers;
 
 namespace NzbDrone.Web.Controllers
 {
     public class SeriesController : Controller
     {
-        private readonly ISeriesController _seriesController;
+        private readonly ISeriesProvider _seriesProvider;
         //
         // GET: /Series/
 
-        public SeriesController(ISeriesController seriesController)
+        public SeriesController(ISeriesProvider seriesProvider)
         {
-            _seriesController = seriesController;
+            _seriesProvider = seriesProvider;
         }
 
         public ActionResult Index()
         {
-            ViewData.Model = _seriesController.GetSeries().ToList();
+            ViewData.Model = _seriesProvider.GetSeries().ToList();
             return View();
         }
 
 
         public ActionResult Sync()
         {
-            _seriesController.SyncSeriesWithDisk();
+            _seriesProvider.SyncSeriesWithDisk();
             return RedirectToAction("Index");
         }
 
@@ -37,7 +37,7 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult Details(int tvdbId)
         {
-            return View(_seriesController.GetSeries(tvdbId));
+            return View(_seriesProvider.GetSeries(tvdbId));
         }
 
         //

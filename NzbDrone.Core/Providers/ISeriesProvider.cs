@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using NzbDrone.Core.Repository;
 
-namespace NzbDrone.Core.Controllers
+namespace NzbDrone.Core.Providers
 {
-    public interface ISeriesController
+    public interface ISeriesProvider
     {
         IQueryable<Series> GetSeries();
         Series GetSeries(int tvdbId);

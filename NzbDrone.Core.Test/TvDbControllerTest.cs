@@ -4,7 +4,7 @@ using System.Text;
 using Gallio.Framework;
 using MbUnit.Framework;
 using MbUnit.Framework.ContractVerifiers;
-using NzbDrone.Core.Controllers;
+using NzbDrone.Core.Providers;
 
 namespace NzbDrone.Core.Test
 {
@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Test
         [Ignore("Have to find a way to mock app path for tests.")]
         public void TestSearch(string title)
         {
-            var tvCont =new TvDbController();
+            var tvCont =new TvDbProvider();
             var result = tvCont.SearchSeries(title);
 
             Assert.AreNotEqual(0, result.Count);

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Moq;
-using NzbDrone.Core.Controllers;
+using NzbDrone.Core.Providers;
 
 namespace NzbDrone.Core.Test
 {
@@ -18,21 +18,21 @@ namespace NzbDrone.Core.Test
         }
 
 
-        public static IConfigController StandardConfig
+        public static IConfigProvider StandardConfig
         {
             get
             {
-                var mock = new Mock<IConfigController>();
+                var mock = new Mock<IConfigProvider>();
                 mock.SetupGet(c => c.SeriesRoot).Returns("C:\\");
                 return mock.Object;
             }
         }
 
-        public static IDiskController StandardDisk
+        public static IDiskProvider StandardDisk
         {
             get
             {
-                var mock = new Mock<IDiskController>();
+                var mock = new Mock<IDiskProvider>();
                 mock.Setup(c => c.GetDirectories(It.IsAny<String>())).Returns(StandardSeries);
                 mock.Setup(c => c.Exists(It.Is<String>(d => StandardSeries.Contains(d)))).Returns(true);
                 return mock.Object;
