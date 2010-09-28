@@ -14,7 +14,7 @@ namespace NzbDrone.Core
 
         public static void BindKernel(IKernel kernel)
         {
-            string connectionString = String.Format("Data Source={0};Version=3;",Path.Combine(AppPath, "nzbdrone.db")) ;
+            string connectionString = String.Format("Data Source={0};Version=3;", Path.Combine(AppPath, "nzbdrone.db"));
             var provider = ProviderFactory.GetProvider(connectionString, "System.Data.SQLite");
 
             kernel.Bind<ISeriesController>().To<SeriesController>();
@@ -24,9 +24,6 @@ namespace NzbDrone.Core
             kernel.Bind<ILog>().ToMethod(c => LogManager.GetLogger("logger-name"));
             kernel.Bind<IRepository>().ToMethod(c => new SimpleRepository(provider, SimpleRepositoryOptions.RunMigrations));
         }
-
-
-        private static string _appPath;
 
         public static String AppPath
         {

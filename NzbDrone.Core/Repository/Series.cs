@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Repository
             set;
         }
 
-        public string AirTimes
+        public String AirTimes
         {
             get;
             set;

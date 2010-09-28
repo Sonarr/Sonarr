@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DbConfigControllerTest.cs" />
+    <Compile Include="MockLib.cs" />
     <Compile Include="Ninject.Moq\ExtensionsForBindingSyntax.cs" />
     <Compile Include="Ninject.Moq\MockingKernel.cs" />
     <Compile Include="Ninject.Moq\MockProvider.cs" />

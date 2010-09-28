@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using log4net;
+using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Repository;
 using SubSonic.Repository;
 using TvdbLib.Data;
@@ -34,7 +35,7 @@ namespace NzbDrone.Core.Controllers
 
         public Series GetSeries(int tvdbId)
         {
-            return _sonioRepo.Single<Series>(s=> s.TvdbId == tvdbId.ToString());
+            return _sonioRepo.Single<Series>(s => s.TvdbId == tvdbId.ToString());
         }
 
 
@@ -44,7 +45,7 @@ namespace NzbDrone.Core.Controllers
 
             foreach (string seriesFolder in _diskController.GetDirectories(_config.SeriesRoot))
             {
-                var cleanPath  =_diskController.CleanPath(new DirectoryInfo(seriesFolder).FullName);
+                var cleanPath = Disk.CleanPath(new DirectoryInfo(seriesFolder).FullName);
                 if (!_sonioRepo.Exists<Series>(s => s.Path == cleanPath))
                 {
                     _logger.InfoFormat("Folder '{0} isn't mapped to a series in the database. Trying to map it.'", cleanPath);
@@ -59,7 +60,7 @@ namespace NzbDrone.Core.Controllers
         private void AddShow(string path)
         {
             var searchResults = _tvDb.SearchSeries(new DirectoryInfo(path).Name);
-            if (searchResults.Count != 0)
+            if (searchResults.Count != 0 && !_sonioRepo.Exists<Series>(s => s.TvdbId == searchResults[0].Id.ToString()))
             {
                 AddShow(path, _tvDb.GetSeries(searchResults[0].Id, searchResults[0].Language));
             }
@@ -67,7 +68,16 @@ namespace NzbDrone.Core.Controllers
 
         private void AddShow(string path, TvdbSeries series)
         {
-            _sonioRepo.Add(new Series { TvdbId = series.Id.ToString(), SeriesName = series.SeriesName, AirTimes = series.AirsTime, AirsDayOfWeek = series.AirsDayOfWeek, Overview = series.Overview, Status = series.Status, Language = series.Language.Abbriviation, Path = path });
+            var repoSeries = new Series();
+            repoSeries.TvdbId = series.Id.ToString();
+            repoSeries.SeriesName = series.SeriesName;
+            repoSeries.AirTimes = series.AirsTime;
+            repoSeries.AirsDayOfWeek = series.AirsDayOfWeek;
+            repoSeries.Overview = series.Overview;
+            repoSeries.Status = series.Status;
+            repoSeries.Language = series.Language != null ? series.Language.Abbriviation : string.Empty;
+            repoSeries.Path = path;
+            _sonioRepo.Add(repoSeries);
         }
     }
 }

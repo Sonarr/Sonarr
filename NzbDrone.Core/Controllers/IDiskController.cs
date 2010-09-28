@@ -7,6 +7,5 @@ namespace NzbDrone.Core.Controllers
         bool Exists(string path);
         string[] GetDirectories(string path);
         String CreateDirectory(string path);
-        string CleanPath(string path);
     }
 }
