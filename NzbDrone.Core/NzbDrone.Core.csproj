@@ -145,6 +145,8 @@
     <Compile Include="Providers\ITvDbProvider.cs" />
     <Compile Include="Providers\SabProvider.cs" />
     <Compile Include="Repository\Config.cs" />
+    <Compile Include="Repository\RemoteEpisode.cs" />
+    <Compile Include="Repository\LocalEpisode.cs" />
     <Compile Include="Repository\Episode.cs" />
     <Compile Include="Repository\Quality.cs" />
     <Compile Include="Repository\Series.cs" />
@@ -201,7 +203,9 @@
     <Content Include="Libraries\TvdbLib.pdb" />
     <Content Include="Libraries\TvdbLib.XML" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="nzbdrone.db" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -1,10 +1,14 @@
+using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using NzbDrone.Core.Repository;
+using SubSonic.Repository;
 
 namespace NzbDrone.Core.Providers
 {
     public class EpisodeProvider
     {
+        //TODO: Remove parsing of the series name, it should be done in series provider
         private static readonly Regex ParseRegex = new Regex(@"(?<showName>.*)
 (?:
   s(?<seasonNumber>\d+)e(?<episodeNumber>\d+)-?e(?<episodeNumber2>\d+)
@@ -20,36 +24,88 @@ namespace NzbDrone.Core.Providers
 | (?<episodeName>.*)
 )", RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace);
 
-        public static Episode Parse(string title)
+
+        private readonly IRepository _sonicRepo;
+        private readonly ISeriesProvider _seriesProvider;
+
+        public EpisodeProvider(IRepository sonicRepo, ISeriesProvider seriesProvider)
         {
-            Match match = ParseRegex.Match(title);
+            _sonicRepo = sonicRepo;
+            _seriesProvider = seriesProvider;
+        }
+
+        public Episode GetEpisode(long id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Episode SaveEpisode(Episode episode)
+        {
+            throw new NotImplementedException();
+        }
+
+        public String GetSabTitle(Episode episode)
+        {
+            var series = _seriesProvider.GetSeries(episode.SeriesId);
+            if (series == null) throw new ArgumentException("Unknown series. ID: " + episode.SeriesId);
+
+            //TODO: This method should return a standard title for the sab episode.
+            throw new NotImplementedException();
+
+        }
+
+        /// <summary>
+        /// Comprehensive check on whether or not this episode is needed.
+        /// </summary>
+        /// <param name="episode">Episode that needs to be checked</param>
+        /// <returns></returns>
+        public bool IsEpisodeNeeded(Episode episode)
+        {
+            throw new NotImplementedException();
+        }
+
+
+
+        /// <summary>
+        /// Parses a post title into list of episode objects
+        /// </summary>
+        /// <param name="title">Title of the report</param>
+        /// <returns>List of episodes relating to the post</returns>
+        public static List<Episode> Parse(string title)
+        {
+            var match = ParseRegex.Match(title);
 
             if (!match.Success)
-                return null;
+                throw new ArgumentException(String.Format("Title doesn't match any know patterns. [{0}]", title));
 
-            return new Episode {
-                                   Season = ParseInt(match.Groups["seasonNumber"].Value),
-                                   EpisodeNumber = ParseInt(match.Groups["episodeNumber"].Value),
-                                   EpisodeNumber2 = ParseInt(match.Groups["episodeNumber2"].Value),
-                                   Title = ReplaceSeparatorChars(match.Groups["episodeName"].Value),
-                                   Release = ReplaceSeparatorChars(match.Groups["release"].Value),
-                                   Proper = title.Contains("PROPER")
-                               };
+            var result = new List<Episode>();
+
+            result.Add(new Episode() { EpisodeNumber = Convert.ToInt32(match.Groups["episodeNumber"].Value) });
+
+            if (match.Groups["episodeNumber2"].Success)
+            {
+                result.Add(new Episode() { EpisodeNumber = Convert.ToInt32(match.Groups["episodeNumber2"].Value) });
+            }
+
+            foreach (var ep in result)
+            {
+                //TODO: Get TVDB episode Title, Series name and the rest of the details
+                ep.Season = Convert.ToInt32(match.Groups["seasonNumber"].Value);
+                ep.Title = ReplaceSeparatorChars(match.Groups["episodeName"].Value);
+                ep.Proper = title.Contains("PROPER");
+                ep.Quality = Quality.Unknown;
+            }
+
+            return result;
         }
 
-        private static string ReplaceSeparatorChars(string s)
+        private static string ReplaceSeparatorChars(string text)
         {
-            if (s == null)
-                return string.Empty;
+            if (text == null)
+                throw new ArgumentNullException("text");
 
-            return s.Replace('.', ' ').Replace('-', ' ').Replace('_', ' ').Trim();
+            return text.Replace('.', ' ').Replace('-', ' ').Replace('_', ' ').Trim();
         }
 
-        private static int ParseInt(string s)
-        {
-            int i;
-            int.TryParse(s, out i);
-            return i;
-        }
     }
 }

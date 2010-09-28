@@ -8,18 +8,12 @@ namespace NzbDrone.Core.Repository
     {
         [SubSonicPrimaryKey]
         public string EpisodeId { get; set; }
-
-        public string SeriesId { get; set; }
+        public long SeriesId { get; set; }
         public string Title { get; set; }
-        public string Title2 { get; set; }
-        public int Season { get; set; }
+        public long Season { get; set; }
         public int EpisodeNumber { get; set; }
-        public int EpisodeNumber2 { get; set; }
         public DateTime AirDate { get; set; }
-        public string Release { get; set; }
-        public int Quality { get; set; }
+        public Quality Quality { get; set; }
         public bool Proper { get; set; }
-        public String FileName { get; set; }
-        public SyndicationItem Feed { get; set; }
     }
 }
