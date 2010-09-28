@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Controllers
 
         #region ITvDbController Members
 
-        public List<TvdbSearchResult> SearchSeries(string name)
+        public IList<TvdbSearchResult> SearchSeries(string name)
         {
             return _handler.SearchSeries(name);
         }

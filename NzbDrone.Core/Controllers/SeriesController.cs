@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Controllers
 
         private void AddShow(string path)
         {
-            List<TvdbSearchResult> searchResults = _tvDb.SearchSeries(new DirectoryInfo(path).Name);
+            var searchResults = _tvDb.SearchSeries(new DirectoryInfo(path).Name);
             if (searchResults.Count != 0)
             {
                 AddShow(path, _tvDb.GetSeries(searchResults[0].Id, searchResults[0].Language));

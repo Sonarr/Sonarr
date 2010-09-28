@@ -5,7 +5,7 @@ namespace NzbDrone.Core.Controllers
 {
     public interface ITvDbController
     {
-        List<TvdbSearchResult> SearchSeries(string name);
+        IList<TvdbSearchResult> SearchSeries(string name);
         TvdbSeries GetSeries(int id, TvdbLanguage language);
     }
 }
