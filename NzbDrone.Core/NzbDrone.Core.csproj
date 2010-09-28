@@ -136,7 +136,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\DbConfigController.cs" />
+    <Compile Include="Controllers\HttpController.cs" />
     <Compile Include="Controllers\IDownloadClientController.cs" />
+    <Compile Include="Controllers\IHttpController.cs" />
     <Compile Include="Controllers\ISeriesController.cs" />
     <Compile Include="Controllers\ITvDbController.cs" />
     <Compile Include="Controllers\SabController.cs" />
