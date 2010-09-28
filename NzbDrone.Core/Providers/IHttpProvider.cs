@@ -2,6 +2,6 @@
 {
     public interface IHttpProvider
     {
-        string GetRequest(string request);
+        string DownloadString(string request);
     }
 }

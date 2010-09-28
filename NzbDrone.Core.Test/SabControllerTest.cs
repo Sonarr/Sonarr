@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Test
             config.Setup(c => c.GetValue("Priority", String.Empty, false)).Returns(priority);
 
             var http = new Mock<IHttpProvider>();
-            http.Setup(s => s.GetRequest("http://192.168.5.55:2222/sabnzbd/api?mode=addurl&name=http://www.nzbclub.com/nzb_download.aspx?mid=1950232&priority=0&cat=tv&nzbname=This+is+an+Nzb&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass")).Returns("ok");
+            http.Setup(s => s.DownloadString("http://192.168.5.55:2222/sabnzbd/api?mode=addurl&name=http://www.nzbclub.com/nzb_download.aspx?mid=1950232&priority=0&cat=tv&nzbname=This+is+an+Nzb&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass")).Returns("ok");
 
             var target = new SabProvider(config.Object, new Mock<ILog>().Object, http.Object);
 
@@ -67,7 +67,7 @@ namespace NzbDrone.Core.Test
             config.Setup(c => c.GetValue("Priority", String.Empty, false)).Returns(priority);
 
             var http = new Mock<IHttpProvider>();
-            http.Setup(s => s.GetRequest("http://192.168.5.55:2222/sabnzbd/api?mode=addurl&name=http://www.nzbclub.com/nzb_download.aspx?mid=1950232&priority=0&cat=tv&nzbname=This+is+an+Nzb&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass")).Returns("error");
+            http.Setup(s => s.DownloadString("http://192.168.5.55:2222/sabnzbd/api?mode=addurl&name=http://www.nzbclub.com/nzb_download.aspx?mid=1950232&priority=0&cat=tv&nzbname=This+is+an+Nzb&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass")).Returns("error");
 
             var target = new SabProvider(config.Object, new Mock<ILog>().Object, http.Object);
 
@@ -102,16 +102,15 @@ namespace NzbDrone.Core.Test
             var http = new Mock<IHttpProvider>();
             http.Setup(
                 s =>
-                s.GetRequest(
+                s.DownloadString(
                     "http://192.168.5.55:2222/sabnzbd/api?mode=queue&output=xml&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
                 .Returns(new StreamReader(@".\Files\Queue.xml").ReadToEnd());
 
             var target = new SabProvider(config.Object, new Mock<ILog>().Object, http.Object);
 
             Episode episode = new Episode();
-            FeedItem item = new FeedItem();
-            item.TitleFix = "Ubuntu Test";
-            episode.FeedItem = item;
+
+            episode.FileName = "Ubuntu Test";
 
             //Act
             bool result = target.IsInQueue(episode);
@@ -140,16 +139,13 @@ namespace NzbDrone.Core.Test
             var http = new Mock<IHttpProvider>();
             http.Setup(
                 s =>
-                s.GetRequest(
+                s.DownloadString(
                     "http://192.168.5.55:2222/sabnzbd/api?mode=queue&output=xml&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
                 .Returns(new StreamReader(@".\Files\QueueEmpty.xml").ReadToEnd());
 
             var target = new SabProvider(config.Object, new Mock<ILog>().Object, http.Object);
 
             Episode episode = new Episode();
-            FeedItem item = new FeedItem();
-            item.TitleFix = "Ubuntu Test";
-            episode.FeedItem = item;
 
             //Act
             bool result = target.IsInQueue(episode);
@@ -178,7 +174,7 @@ namespace NzbDrone.Core.Test
             var http = new Mock<IHttpProvider>();
             http.Setup(
                 s =>
-                s.GetRequest(
+                s.DownloadString(
                     "http://192.168.5.55:2222/sabnzbd/api?mode=queue&output=xml&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
                 .Returns(new StreamReader(@".\Files\QueueError.xml").ReadToEnd());
 
@@ -187,7 +183,6 @@ namespace NzbDrone.Core.Test
             Episode episode = new Episode();
             FeedItem item = new FeedItem();
             item.TitleFix = "Ubuntu Test";
-            episode.FeedItem = item;
 
             //Act
             bool result = target.IsInQueue(episode);

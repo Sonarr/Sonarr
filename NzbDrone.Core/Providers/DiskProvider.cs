@@ -23,5 +23,11 @@ namespace NzbDrone.Core.Providers
         }
 
         #endregion
+
+        public static string CleanPath(string path)
+        {
+            if (string.IsNullOrEmpty(path)) throw new ArgumentException("Path can not be null or empty");
+            return path.ToLower().Trim('/', '\\', ' ');
+        }
     }
 }

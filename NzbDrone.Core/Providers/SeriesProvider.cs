@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using System.Linq;
 using log4net;
-using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Repository;
 using SubSonic.Repository;
 using TvdbLib.Data;
@@ -44,7 +43,7 @@ namespace NzbDrone.Core.Providers
 
             foreach (string seriesFolder in _diskProvider.GetDirectories(_config.SeriesRoot))
             {
-                var cleanPath = Disk.CleanPath(new DirectoryInfo(seriesFolder).FullName);
+                var cleanPath = DiskProvider.CleanPath(new DirectoryInfo(seriesFolder).FullName);
                 if (!_sonioRepo.Exists<Series>(s => s.Path == cleanPath))
                 {
                     _logger.InfoFormat("Folder '{0} isn't mapped to a series in the database. Trying to map it.'", cleanPath);

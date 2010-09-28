@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Providers
 
             _logger.DebugFormat("Adding report [{0}] to the queue.", nzbName);
 
-            string response = _http.GetRequest(request).Replace("\n", String.Empty);
+            string response = _http.DownloadString(request).Replace("\n", String.Empty);
             _logger.DebugFormat("Queue Repsonse: [{0}]", response);
 
             if (response == "ok")
@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Providers
         {
             string action = "mode=queue&output=xml";
             string request = GetSabRequest(action);
-            string response = _http.GetRequest(request);
+            string response = _http.DownloadString(request);
 
             XDocument xDoc = XDocument.Parse(response);
 
@@ -60,9 +60,9 @@ namespace NzbDrone.Core.Providers
                 return false;
 
             //Get the Count of Items in Queue where 'filename' is Equal to goodName, if not zero, return true (isInQueue)))
-            if ((from s in xDoc.Descendants("slot") where s.Element("filename").Value.Equals(epsiode.FeedItem.TitleFix, StringComparison.InvariantCultureIgnoreCase) select s).Count() != 0)
+            if ((from s in xDoc.Descendants("slot") where s.Element("filename").Value.Equals(epsiode.FileName, StringComparison.InvariantCultureIgnoreCase) select s).Count() != 0)
             {
-                _logger.DebugFormat("Episode in queue - '{0}'", epsiode.FeedItem.TitleFix);
+                _logger.DebugFormat("Episode in queue - '{0}'", epsiode.FileName);
 
                 return true;
             }

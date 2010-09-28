@@ -136,17 +136,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Providers\ConfigProvider.cs" />
+    <Compile Include="Providers\EpisodeProvider.cs" />
     <Compile Include="Providers\HttpProvider.cs" />
     <Compile Include="Providers\IDownloadProvider.cs" />
     <Compile Include="Providers\IHttpProvider.cs" />
     <Compile Include="Providers\ISeriesProvider.cs" />
     <Compile Include="Providers\ITvDbProvider.cs" />
     <Compile Include="Providers\SabProvider.cs" />
-    <Compile Include="Helpers\Disk.cs" />
     <Compile Include="Repository\Config.cs" />
     <Compile Include="Repository\Episode.cs" />
     <Compile Include="Repository\FeedItem.cs" />
     <Compile Include="Repository\ItemInfo.cs" />
+    <Compile Include="Repository\Quality.cs" />
     <Compile Include="Repository\Site.cs" />
     <Compile Include="Repository\Series.cs" />
     <Compile Include="Main.cs" />
