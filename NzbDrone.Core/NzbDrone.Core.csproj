@@ -130,16 +130,24 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
+    <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="TvdbLib, Version=0.8.8.0, Culture=neutral, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\DbConfigController.cs" />
+    <Compile Include="Controllers\HttpController.cs" />
     <Compile Include="Controllers\IDownloadClientController.cs" />
+    <Compile Include="Controllers\IHttpController.cs" />
     <Compile Include="Controllers\ISeriesController.cs" />
     <Compile Include="Controllers\ITvDbController.cs" />
     <Compile Include="Controllers\SabController.cs" />
     <Compile Include="Helpers\Disk.cs" />
     <Compile Include="Repository\Config.cs" />
+    <Compile Include="Repository\Episode.cs" />
+    <Compile Include="Repository\FeedItem.cs" />
+    <Compile Include="Repository\ItemInfo.cs" />
+    <Compile Include="Repository\Site.cs" />
     <Compile Include="Repository\Series.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

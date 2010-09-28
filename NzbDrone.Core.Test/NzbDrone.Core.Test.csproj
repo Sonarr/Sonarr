@@ -72,6 +72,7 @@
     <Compile Include="Ninject.Moq\MockingKernel.cs" />
     <Compile Include="Ninject.Moq\MockProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SabControllerTest.cs" />
     <Compile Include="SeriesTest.cs" />
     <Compile Include="TvDbControllerTest.cs" />
   </ItemGroup>
@@ -85,7 +86,17 @@
     <Content Include="Libs\FizzWare.NBuilder.dll" />
     <Content Include="Libs\Moq.dll" />
     <Content Include="Libs\Moq.xml" />
+    <Content Include="Files\Queue.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\QueueEmpty.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\QueueError.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
