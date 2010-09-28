@@ -129,6 +129,7 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Web" />
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
@@ -145,9 +146,7 @@
     <Compile Include="Providers\SabProvider.cs" />
     <Compile Include="Repository\Config.cs" />
     <Compile Include="Repository\Episode.cs" />
-    <Compile Include="Repository\ItemInfo.cs" />
     <Compile Include="Repository\Quality.cs" />
-    <Compile Include="Repository\Site.cs" />
     <Compile Include="Repository\Series.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

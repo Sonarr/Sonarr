@@ -38,12 +38,8 @@ namespace NzbDrone.Core.Test
 
             var target = new SabProvider(config.Object, new Mock<ILog>().Object, http.Object);
 
-            ItemInfo nzb = new ItemInfo();
-            nzb.Link = new Uri("http://www.nzbclub.com/nzb_download.aspx?mid=1950232");
-            nzb.Title = "This is an Nzb";
-
             //Act
-            bool result = target.AddByUrl(nzb);
+            bool result = target.AddByUrl("http://www.nzbclub.com/nzb_download.aspx?mid=1950232", "This is an Nzb");
 
             //Assert
             Assert.AreEqual(true, result);
@@ -71,12 +67,8 @@ namespace NzbDrone.Core.Test
 
             var target = new SabProvider(config.Object, new Mock<ILog>().Object, http.Object);
 
-            ItemInfo nzb = new ItemInfo();
-            nzb.Link = new Uri("http://www.nzbclub.com/nzb_download.aspx?mid=1950232");
-            nzb.Title = "This is an Nzb";
-
             //Act
-            bool result = target.AddByUrl(nzb);
+            bool result = target.AddByUrl("http://www.nzbclub.com/nzb_download.aspx?mid=1950232", "This is an Nzb");
 
             //Assert
             Assert.AreEqual(false, result);
@@ -108,12 +100,8 @@ namespace NzbDrone.Core.Test
 
             var target = new SabProvider(config.Object, new Mock<ILog>().Object, http.Object);
 
-            Episode episode = new Episode();
-
-            episode.FileName = "Ubuntu Test";
-
             //Act
-            bool result = target.IsInQueue(episode);
+            bool result = target.IsInQueue("Ubuntu Test");
 
             //Assert
             Assert.AreEqual(true, result);
@@ -145,10 +133,8 @@ namespace NzbDrone.Core.Test
 
             var target = new SabProvider(config.Object, new Mock<ILog>().Object, http.Object);
 
-            Episode episode = new Episode();
-
             //Act
-            bool result = target.IsInQueue(episode);
+            bool result = target.IsInQueue(String.Empty);
 
             //Assert
             Assert.AreEqual(false, result);
@@ -180,10 +166,8 @@ namespace NzbDrone.Core.Test
 
             var target = new SabProvider(config.Object, new Mock<ILog>().Object, http.Object);
 
-            Episode episode = new Episode();
-
             //Act
-            bool result = target.IsInQueue(episode);
+            bool result = target.IsInQueue(String.Empty);
 
             //Assert
             Assert.AreEqual(false, result);

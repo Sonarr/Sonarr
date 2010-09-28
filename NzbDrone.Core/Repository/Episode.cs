@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
+using System.ServiceModel.Syndication;
+using SubSonic.SqlGeneration.Schema;
 
 namespace NzbDrone.Core.Repository
 {
     public class Episode
     {
+        [SubSonicPrimaryKey]
+        public string EpisodeId { get; set; }
         public string SeriesId { get; set; }
         public string Title { get; set; }
         public string Title2 { get; set; }
@@ -19,5 +19,6 @@ namespace NzbDrone.Core.Repository
         public int Quality { get; set; }
         public bool Proper { get; set; }
         public String FileName { get; set; }
+        public  SyndicationItem Feed { get; set; }
     }
 }

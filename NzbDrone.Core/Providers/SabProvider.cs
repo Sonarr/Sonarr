@@ -22,13 +22,13 @@ namespace NzbDrone.Core.Providers
 
         #region IDownloadProvider Members
 
-        public bool AddByUrl(ItemInfo nzb)
+        public bool AddByUrl(string url, string title)
         {
             const string mode = "addurl";
             const string cat = "tv";
             string priority = _config.GetValue("Priority", String.Empty, false);
-            string name = nzb.Link.ToString().Replace("&", "%26");
-            string nzbName = HttpUtility.UrlEncode(nzb.Title);
+            string name = url.Replace("&", "%26");
+            string nzbName = HttpUtility.UrlEncode(title);
 
             string action = string.Format("mode={0}&name={1}&priority={2}&cat={3}&nzbname={4}", mode, name, priority, cat, nzbName);
             string request = GetSabRequest(action);
@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Providers
             return false;
         }
 
-        public bool IsInQueue(Episode epsiode)
+        public bool IsInQueue(string title)
         {
             string action = "mode=queue&output=xml";
             string request = GetSabRequest(action);
@@ -60,9 +60,9 @@ namespace NzbDrone.Core.Providers
                 return false;
 
             //Get the Count of Items in Queue where 'filename' is Equal to goodName, if not zero, return true (isInQueue)))
-            if ((from s in xDoc.Descendants("slot") where s.Element("filename").Value.Equals(epsiode.FileName, StringComparison.InvariantCultureIgnoreCase) select s).Count() != 0)
+            if ((from s in xDoc.Descendants("slot") where s.Element("filename").Value.Equals(title, StringComparison.InvariantCultureIgnoreCase) select s).Count() != 0)
             {
-                _logger.DebugFormat("Episode in queue - '{0}'", epsiode.FileName);
+                _logger.DebugFormat("Episode in queue - '{0}'", title);
 
                 return true;
             }
