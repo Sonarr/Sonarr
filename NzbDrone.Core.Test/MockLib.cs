@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using Moq;
 using NzbDrone.Core.Providers;
+using SubSonic.DataProviders;
+using SubSonic.Repository;
 
 namespace NzbDrone.Core.Test
 {
@@ -17,6 +19,17 @@ namespace NzbDrone.Core.Test
             get { return new string[] { "C:\\TV\\The Simpsons", "C:\\TV\\Family Guy" }; }
         }
 
+        public const string MemoryConnection = "Data Source=:memory:;Version=3;New=True";
+
+
+        public static IRepository MemoryRepository
+        {
+            get
+            {
+                var provider = ProviderFactory.GetProvider(MemoryConnection, "System.Data.SQLite");
+                return new SimpleRepository(provider, SimpleRepositoryOptions.RunMigrations);
+            }
+        }
 
         public static IConfigProvider StandardConfig
         {

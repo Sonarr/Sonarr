@@ -147,6 +147,7 @@
     <Compile Include="Providers\ITvDbProvider.cs" />
     <Compile Include="Providers\SabProvider.cs" />
     <Compile Include="Repository\Config.cs" />
+    <Compile Include="Repository\QualityProfile.cs" />
     <Compile Include="Repository\Season.cs" />
     <Compile Include="Repository\RemoteEpisode.cs" />
     <Compile Include="Repository\LocalEpisode.cs" />

@@ -55,7 +55,9 @@
       <HintPath>..\NzbDrone.Core\Libraries\SubSonic.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
+    <Reference Include="System.Data.SQLite">
+      <HintPath>..\NzbDrone.Core\Libraries\System.Data.SQLite.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -72,6 +74,7 @@
     <Compile Include="Ninject.Moq\MockingKernel.cs" />
     <Compile Include="Ninject.Moq\MockProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QualityProfileTest.cs" />
     <Compile Include="SabControllerTest.cs" />
     <Compile Include="SeriesTest.cs" />
     <Compile Include="TvDbControllerTest.cs" />
