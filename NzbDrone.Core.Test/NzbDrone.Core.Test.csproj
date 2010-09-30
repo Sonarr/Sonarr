@@ -56,7 +56,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data.SQLite">
-      <HintPath>..\NzbDrone.Core\Libraries\System.Data.SQLite.dll</HintPath>
+      <HintPath>Libs\System.Data.SQLite.DLL</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -98,8 +98,13 @@
     <Content Include="Files\QueueError.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Libs\System.Data.SQLite.DLL" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
