@@ -19,14 +19,15 @@ namespace NzbDrone.Core.Test
             get { return new string[] { "C:\\TV\\The Simpsons", "C:\\TV\\Family Guy" }; }
         }
 
-        public const string MemoryConnection = "Data Source=:memory:;Version=3;New=True";
 
 
-        public static IRepository MemoryRepository
+
+        public static IRepository EmptyRepository
         {
             get
             {
-                var provider = ProviderFactory.GetProvider(MemoryConnection, "System.Data.SQLite");
+
+                var provider = ProviderFactory.GetProvider("Data Source=" + Guid.NewGuid() + ".testdb;Version=3;New=True", "System.Data.SQLite");
                 return new SimpleRepository(provider, SimpleRepositoryOptions.RunMigrations);
             }
         }

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.IO;
 using MbUnit.Framework;
 using NzbDrone.Core.Repository;
 
@@ -14,12 +16,13 @@ namespace NzbDrone.Core.Test
         [Test]
         public void Test_Storage()
         {
+
             //Arrange
-            var repo = MockLib.MemoryRepository;
+            var repo = MockLib.EmptyRepository;
             var testProfile = new QualityProfile
             {
                 Cutoff = Quality.SDTV,
-                Q = new[] { Quality.HDTV, Quality.DVD }
+                Allowed = new List<Quality>() { Quality.HDTV, Quality.DVD },
             };
 
             //Act
@@ -29,8 +32,7 @@ namespace NzbDrone.Core.Test
             //Assert
             Assert.AreEqual(id, fetch.Id);
             Assert.AreEqual(testProfile.Cutoff, fetch.Cutoff);
-            Assert.AreEqual(testProfile.Qualitys, fetch.Qualitys);
-            Assert.AreElementsEqual(testProfile.Q, fetch.Q);
+            Assert.AreEqual(testProfile.Allowed, fetch.Allowed);
         }
     }
 }
