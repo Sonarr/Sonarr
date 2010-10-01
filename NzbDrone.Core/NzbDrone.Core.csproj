@@ -128,6 +128,10 @@
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL" />
     <Reference Include="Ninject, Version=2.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL" />
     <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL" />
+    <Reference Include="NLog.Extended, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libraries\NLog.Extended.dll</HintPath>
+    </Reference>
     <Reference Include="SubSonic.Core, Version=3.0.1.3, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libraries\SubSonic.Core.dll</HintPath>
@@ -202,6 +206,9 @@
     <Content Include="Libraries\Ninject.Web.Mvc.pdb" />
     <Content Include="Libraries\Ninject.xml" />
     <Content Include="Libraries\NLog.dll" />
+    <Content Include="Libraries\NLog.Extended.dll" />
+    <Content Include="Libraries\NLog.Extended.pdb" />
+    <Content Include="Libraries\NLog.Extended.xml" />
     <Content Include="Libraries\NLog.pdb" />
     <Content Include="Libraries\NLog.xml" />
     <Content Include="Libraries\SubSonic.Core.dll" />
@@ -211,9 +218,6 @@
     <Content Include="Libraries\TvdbLib.dll" />
     <Content Include="Libraries\TvdbLib.pdb" />
     <Content Include="Libraries\TvdbLib.XML" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="nzbdrone.db" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

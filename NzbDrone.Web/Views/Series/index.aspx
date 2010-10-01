@@ -4,8 +4,16 @@
     SeriesView
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
+    <ul id="menu">
+        <li>
+            <%: Html.ActionLink("Sync With Disk", "Sync") %></li>
+        <li>
+            <%: Html.ActionLink("View Unmapped Folders", "Unmapped") %></li>
+    </ul>
     <h2>
         SeriesView</h2>
+    <p>
+    </p>
     <table>
         <tr>
             <th>
@@ -24,7 +32,7 @@
         <% foreach (var item in Model)
            { %>
         <tr>
-         <%--   <td>
+            <%--   <td>
                          <%: Html.ActionLink("Details", "Details", new { item.TvdbId })%>
                 |
                 <%: Html.ActionLink("Delete", "Delete", new { item.TvdbId })%>
@@ -33,7 +41,7 @@
                 <%: item.TvdbId.ToString()%>
             </td>
             <td>
-                <%: Html.ActionLink(item.SeriesName, "Details", new { item.TvdbId })%>
+                <%: Html.ActionLink(item.Title, "Details", new { item.TvdbId })%>
             </td>
             <td>
                 <%: item.Status %>
@@ -44,8 +52,4 @@
         </tr>
         <% } %>
     </table>
-    <p>
-        <%: Html.ActionLink("Create New", "Create") %>
-        <%: Html.ActionLink("Sync With Disk", "Sync") %>
-    </p>
 </asp:Content>
