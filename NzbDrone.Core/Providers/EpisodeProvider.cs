@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using NzbDrone.Core.Repository;
+using NzbDrone.Core.Repository.Quality;
 using SubSonic.Repository;
 
 namespace NzbDrone.Core.Providers
@@ -100,10 +101,10 @@ namespace NzbDrone.Core.Providers
             foreach (var ep in result)
             {
                 //TODO: Get TVDB episode Title, Series name and the rest of the details
-                ep.Season = Convert.ToInt32(match.Groups["seasonNumber"].Value);
+                ep.SeasonNumber = Convert.ToInt32(match.Groups["seasonNumber"].Value);
                 ep.Title = ReplaceSeparatorChars(match.Groups["episodeName"].Value);
                 ep.Proper = title.Contains("PROPER");
-                ep.Quality = Quality.Unknown;
+                ep.Quality = QualityTypes.Unknown;
             }
 
             return result;

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using MbUnit.Framework;
 using NzbDrone.Core.Repository;
+using NzbDrone.Core.Repository.Quality;
 
 namespace NzbDrone.Core.Test
 {
@@ -18,11 +19,11 @@ namespace NzbDrone.Core.Test
         {
 
             //Arrange
-            var repo = MockLib.EmptyRepository;
+            var repo = MockLib.GetEmptyRepository();
             var testProfile = new QualityProfile
             {
-                Cutoff = Quality.SDTV,
-                Allowed = new List<Quality>() { Quality.HDTV, Quality.DVD },
+                Cutoff = QualityTypes.SDTV,
+                Allowed = new List<QualityTypes>() { QualityTypes.HDTV, QualityTypes.DVD },
             };
 
             //Act

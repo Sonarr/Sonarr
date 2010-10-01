@@ -14,6 +14,7 @@ using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
 using SubSonic.Repository;
 using TvdbLib.Data;
+using System.Linq;
 
 // ReSharper disable InconsistentNaming
 namespace NzbDrone.Core.Test
@@ -34,10 +35,10 @@ namespace NzbDrone.Core.Test
 
             //setup db to return a fake series
             Series fakeSeries = Builder<Series>.CreateNew()
-                .With(f => f.TvdbId = tvDbId.ToString())
+                .With(f => f.TvdbId = tvDbId)
                 .Build();
 
-            moqData.Setup(f => f.Exists<Series>(c => c.TvdbId == tvDbId.ToString())).
+            moqData.Setup(f => f.Exists<Series>(c => c.TvdbId == tvDbId)).
                 Returns(true);
 
             //setup tvdb to return the same show,
@@ -65,6 +66,25 @@ namespace NzbDrone.Core.Test
             //Assert
             //Verify that the show was added to the database only once.
             moqData.Verify(c => c.Add(It.IsAny<Series>()), Times.Once());
+        }
+
+        [Test]
+
+        [Description("This test confirms that the tvdb id stored in the db is preserved rather than being replaced by an auto incrementing value")]
+        public void tvdbid_is_preserved([RandomNumbers(Minimum = 100, Maximum = 999, Count = 1)] int tvdbId)
+        {
+            //Arrange
+            var sonicRepo = MockLib.GetEmptyRepository();
+            var series = Builder<Series>.CreateNew().With(c => c.TvdbId = tvdbId).Build();
+
+            //Act
+            var addId = sonicRepo.Add(series);
+
+            //Assert
+            Assert.AreEqual(tvdbId, addId);
+            var allSeries = sonicRepo.All<Series>();
+            Assert.IsNotEmpty(allSeries);
+            Assert.AreEqual(tvdbId, allSeries.First().TvdbId);
         }
     }
 }

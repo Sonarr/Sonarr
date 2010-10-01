@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Moq;
@@ -22,14 +23,10 @@ namespace NzbDrone.Core.Test
 
 
 
-        public static IRepository EmptyRepository
+        public static IRepository GetEmptyRepository()
         {
-            get
-            {
-
-                var provider = ProviderFactory.GetProvider("Data Source=" + Guid.NewGuid() + ".testdb;Version=3;New=True", "System.Data.SQLite");
-                return new SimpleRepository(provider, SimpleRepositoryOptions.RunMigrations);
-            }
+            var provider = ProviderFactory.GetProvider("Data Source=" + Guid.NewGuid() + ".testdb;Version=3;New=True", "System.Data.SQLite");
+            return new SimpleRepository(provider, SimpleRepositoryOptions.RunMigrations);
         }
 
         public static IConfigProvider StandardConfig

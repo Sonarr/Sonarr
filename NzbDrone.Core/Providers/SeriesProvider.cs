@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Providers
 
         public Series GetSeries(long tvdbId)
         {
-            return _sonioRepo.Single<Series>(s => s.TvdbId == tvdbId.ToString());
+            return _sonioRepo.Single<Series>(s => s.TvdbId == tvdbId);
         }
 
         public IList<Season> GetSeasons(long tvdbId)
@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Providers
             return _sonioRepo.Find<Season>(c => c.SeriesId == tvdbId);
         }
 
-    
+
         public void SyncSeriesWithDisk()
         {
             foreach (string seriesFolder in _diskProvider.GetDirectories(_config.SeriesRoot))
@@ -79,14 +79,14 @@ namespace NzbDrone.Core.Providers
         private void AddShow(string path)
         {
             var searchResults = _tvDb.SearchSeries(new DirectoryInfo(path).Name);
-            if (searchResults.Count != 0 && !_sonioRepo.Exists<Series>(s => s.TvdbId == searchResults[0].Id.ToString()))
+            if (searchResults.Count != 0 && !_sonioRepo.Exists<Series>(s => s.TvdbId == searchResults[0].Id))
                 AddShow(path, _tvDb.GetSeries(searchResults[0].Id, searchResults[0].Language));
         }
 
         private void AddShow(string path, TvdbSeries series)
         {
             var repoSeries = new Series();
-            repoSeries.TvdbId = series.Id.ToString();
+            repoSeries.TvdbId = series.Id;
             repoSeries.SeriesName = series.SeriesName;
             repoSeries.AirTimes = series.AirsTime;
             repoSeries.AirsDayOfWeek = series.AirsDayOfWeek;

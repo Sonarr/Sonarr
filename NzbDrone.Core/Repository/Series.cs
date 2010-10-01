@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using SubSonic.SqlGeneration.Schema;
 
 namespace NzbDrone.Core.Repository
 {
     public class Series
     {
-        [SubSonicPrimaryKey]
-        public string TvdbId { get; set; }
+        [SubSonicPrimaryKey(false)]
+        public int TvdbId { get; set; }
 
         public string SeriesName { get; set; }
 
@@ -22,5 +23,11 @@ namespace NzbDrone.Core.Repository
         public string Language { get; set; }
 
         public string Path { get; set; }
+
+        [SubSonicToManyRelation]
+        public virtual List<Season> Seasons { get; private set; }
+
+        [SubSonicToManyRelation]
+        public virtual List<Episode> Episodes { get; private set; }
     }
 }

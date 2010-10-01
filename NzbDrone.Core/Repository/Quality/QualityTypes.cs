@@ -1,10 +1,10 @@
-namespace NzbDrone.Core.Repository
+namespace NzbDrone.Core.Repository.Quality
 {
     // ReSharper disable InconsistentNaming
     /// <summary>
     ///   Represents Video Quality
     /// </summary>
-    public enum Quality
+    public enum QualityTypes
     {
         /// <summary>
         ///   Quality is unknown
