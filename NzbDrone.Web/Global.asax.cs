@@ -27,6 +27,7 @@ namespace NzbDrone.Web
 
         protected override void OnApplicationStarted()
         {
+            Main.ConfigureNlog();
             AreaRegistration.RegisterAllAreas();
             RegisterRoutes(RouteTable.Routes);
             base.OnApplicationStarted();

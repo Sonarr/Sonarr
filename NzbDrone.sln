@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NzbDrone", "NzbDrone\NzbDro
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{57A04B72-8088-4F75-A582-1158CF8291F7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CassiniDev.Lib4", "CassiniDev\CassiniDev.Lib4.csproj", "{070AE36D-4CE1-4708-BD0F-2896A6F117FC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -89,6 +91,18 @@ Global
 		{D12F7F2F-8A3C-415F-88FA-6DD061A84869}.Release|x64.ActiveCfg = Release|x86
 		{D12F7F2F-8A3C-415F-88FA-6DD061A84869}.Release|x86.ActiveCfg = Release|x86
 		{D12F7F2F-8A3C-415F-88FA-6DD061A84869}.Release|x86.Build.0 = Release|x86
+		{070AE36D-4CE1-4708-BD0F-2896A6F117FC}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{070AE36D-4CE1-4708-BD0F-2896A6F117FC}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{070AE36D-4CE1-4708-BD0F-2896A6F117FC}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{070AE36D-4CE1-4708-BD0F-2896A6F117FC}.Debug|x64.ActiveCfg = Debug|x86
+		{070AE36D-4CE1-4708-BD0F-2896A6F117FC}.Debug|x86.ActiveCfg = Debug|x86
+		{070AE36D-4CE1-4708-BD0F-2896A6F117FC}.Debug|x86.Build.0 = Debug|x86
+		{070AE36D-4CE1-4708-BD0F-2896A6F117FC}.Release|Any CPU.ActiveCfg = Release|x86
+		{070AE36D-4CE1-4708-BD0F-2896A6F117FC}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{070AE36D-4CE1-4708-BD0F-2896A6F117FC}.Release|Mixed Platforms.Build.0 = Release|x86
+		{070AE36D-4CE1-4708-BD0F-2896A6F117FC}.Release|x64.ActiveCfg = Release|x86
+		{070AE36D-4CE1-4708-BD0F-2896A6F117FC}.Release|x86.ActiveCfg = Release|x86
+		{070AE36D-4CE1-4708-BD0F-2896A6F117FC}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

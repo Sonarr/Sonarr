@@ -9,7 +9,9 @@ namespace NzbDrone.Core.Repository
         [SubSonicPrimaryKey(false)]
         public int TvdbId { get; set; }
 
-        public string SeriesName { get; set; }
+        public string Title { get; set; }
+
+        public string CleanTitle { get; set; }
 
         public string Status { get; set; }
 
@@ -24,10 +26,14 @@ namespace NzbDrone.Core.Repository
 
         public string Path { get; set; }
 
+        public bool Monitored { get; set; }
+
         [SubSonicToManyRelation]
         public virtual List<Season> Seasons { get; private set; }
 
         [SubSonicToManyRelation]
         public virtual List<Episode> Episodes { get; private set; }
+
+ 
     }
 }

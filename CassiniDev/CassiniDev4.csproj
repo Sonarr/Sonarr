@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0D9F0FEA-45F7-4CE4-9868-6FB9BBE3DD4C}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CassiniDev</RootNamespace>
+    <AssemblyName>CassiniDev</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ApplicationIcon>Resources\earth_network.ico</ApplicationIcon>
+    <StartupObject>
+    </StartupObject>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\CasssiniDev-DevKey.snk</AssemblyOriginatorKeyFile>
+    <TargetFrameworkSubset>
+    </TargetFrameworkSubset>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.SQLite, Version=1.0.66.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\System.Data.SQLite.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Views\HelpView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\HelpView.Designer.cs">
+      <DependentUpon>HelpView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Core\NtlmAuth.cs" />
+    <Compile Include="Core\RequestEventArgs.cs" />
+    <Compile Include="Core\Server.cs" />
+    <Compile Include="Misc\CommandLineParser.cs" />
+    <Compile Include="Misc\Common.cs" />
+    <Compile Include="Misc\Interop.cs" />
+    <Compile Include="Views\BodyView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\BodyView.Designer.cs">
+      <DependentUpon>BodyView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Logging\ServerLogBase.cs" />
+    <Compile Include="Logging\SQLiteServerLog.cs" />
+    <Compile Include="Logging\LogInfo.cs" />
+    <Compile Include="Views\LogView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\LogView.Designer.cs">
+      <DependentUpon>LogView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Logging\NullServerLogDal.cs" />
+    <Compile Include="Misc\NetworkUtils.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Misc\HostsFile.cs" />
+    <Compile Include="Core\Connection.cs">
+      <SubType>
+      </SubType>
+    </Compile>
+    <Compile Include="Views\FormView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\FormView.Designer.cs">
+      <DependentUpon>FormView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Core\Host.cs">
+      <SubType>
+      </SubType>
+    </Compile>
+    <Compile Include="Core\Messages.cs">
+      <SubType>
+      </SubType>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Core\Request.cs">
+      <SubType>
+      </SubType>
+    </Compile>
+    <Compile Include="Misc\CommandLineArguments.cs" />
+    <Compile Include="Resources\SR.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\earth_network.ico" />
+    <Content Include="Ms-PL.htm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ReadMe.htm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\BodyView.resx">
+      <DependentUpon>BodyView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\HelpView.resx">
+      <DependentUpon>HelpView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\LogView.resx">
+      <DependentUpon>LogView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\FormView.resx">
+      <DependentUpon>FormView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\CassiniDev.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PostBuildEvent>xcopy "$(TargetDir)$(TargetName).*" "$(ProjectDir)..\deploy\$(ConfigurationName)\" /S /I /F /Y &lt;nul:</PostBuildEvent>
+  </PropertyGroup>
+</Project>

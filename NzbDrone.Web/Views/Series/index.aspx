@@ -1,51 +1,36 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<IEnumerable<NzbDrone.Core.Repository.Series>>" %>
 
+<%@ Import Namespace="Telerik.Web.Mvc.UI" %>
+<%@ Import Namespace="NzbDrone.Core.Repository" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
-    SeriesView
+    Series
+</asp:Content>
+<asp:Content ID="Menue" ContentPlaceHolderID="ActionMenue" runat="server">
+    <%
+        Html.Telerik().Menu().Name("telerikGrid").Items(items => { items.Add().Text("View Unmapped Folders").Action("Unmapped", "Series"); })
+                                                .Items(items => items.Add().Text("Sync With Disk").Action("Sync", "Series"))
+                                                .Render();
+    %>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-    <h2>
-        SeriesView</h2>
-    <table>
-        <tr>
-            <th>
-                Id
-            </th>
-            <th>
-                SeriesName
-            </th>
-            <th>
-                Status
-            </th>
-            <th>
-                Path
-            </th>
-        </tr>
-        <% foreach (var item in Model)
-           { %>
-        <tr>
-         <%--   <td>
-                         <%: Html.ActionLink("Details", "Details", new { item.TvdbId })%>
-                |
-                <%: Html.ActionLink("Delete", "Delete", new { item.TvdbId })%>
-            </td>--%>
-            <td>
-                <%: item.TvdbId.ToString()%>
-            </td>
-            <td>
-                <%: Html.ActionLink(item.SeriesName, "Details", new { item.TvdbId })%>
-            </td>
-            <td>
-                <%: item.Status %>
-            </td>
-            <td>
-                <%: item.Path %>
-            </td>
-        </tr>
-        <% } %>
-    </table>
-    <p>
-        <%: Html.ActionLink("Create New", "Create") %>
-        <%: Html.ActionLink("Sync With Disk", "Sync") %>
-    </p>
+    <%
+
+
+        Html.Telerik().Grid(Model)
+       .Name("Grid")
+       .Columns(columns =>
+       {
+           columns.Bound(o => o.TvdbId).Width(100);
+           columns.Template(c =>
+                                   {
+    %>
+    <%:Html.ActionLink(c.Title, "Details", new {tvdbId =c.TvdbId}) %>
+    <%
+        }).Title("Title");
+           columns.Bound(o => o.Status);
+           columns.Bound(o => o.Path);
+       })
+       .Sortable(sort => sort.OrderBy(order => order.Add(o => o.Title).Ascending()).Enabled(false))
+       .Render();
+    %>
 </asp:Content>

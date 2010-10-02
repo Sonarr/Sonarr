@@ -34,10 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CassiniDev-lib, Version=3.5.1.7, Culture=neutral, PublicKeyToken=f7f6e0b4240c7c27, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\CassiniDev-lib.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -50,6 +46,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CassiniDev\CassiniDev.Lib4.csproj">
+      <Project>{070AE36D-4CE1-4708-BD0F-2896A6F117FC}</Project>
+      <Name>CassiniDev.Lib4</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NzbDrone.Web\NzbDrone.Web.csproj">
       <Project>{43BD3BBD-1531-4D8F-9C08-E1CD544AB2CD}</Project>
       <Name>NzbDrone.Web</Name>
@@ -63,7 +63,7 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="CassiniDev-lib.dll" />
+    <Content Include="CassiniDev4-lib.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

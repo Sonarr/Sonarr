@@ -2,11 +2,9 @@
 
 <%@ Import Namespace="NzbDrone.Web.Controllers" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
-    Index
+    Settings
 </asp:Content>
 <asp:Content ID="General" ContentPlaceHolderID="MainContent" runat="server">
-    <h2>
-        Settings</h2>
     <% using (Html.BeginForm())
        { %>
     <%: Html.ValidationSummary(true, "Unable to save your settings. Please correct the errors and try again.") %>

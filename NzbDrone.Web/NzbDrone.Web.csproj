@@ -24,6 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -47,6 +48,7 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data.SQLite">
       <HintPath>..\NzbDrone.Core\Libraries\System.Data.SQLite.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -69,6 +71,10 @@
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="Telerik.Web.Mvc, Version=2010.2.825.235, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libraries\Telerik.Web.Mvc.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\AccountController.cs" />
@@ -78,22 +84,125 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\IsCurrentActionHelper.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\SettingsModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Background.jpg" />
-    <Content Include="Content\BannerBottomEdge.gif" />
-    <Content Include="Content\BannerTopEdge.gif" />
-    <Content Include="Content\ButtonBack.gif" />
-    <Content Include="Content\Error.png" />
-    <Content Include="Content\menuBack.gif" />
-    <Content Include="Content\menuHoverBack.gif" />
-    <Content Include="Content\TableHeaderBackground.gif" />
+    <Content Include="Content\Black\editor.png" />
+    <Content Include="Content\Black\loading.gif" />
+    <Content Include="Content\Black\sprite.png" />
+    <Content Include="Content\Black\treeview-line.png" />
+    <Content Include="Content\Black\treeview-nodes.png" />
+    <Content Include="Content\Default\editor.png" />
+    <Content Include="Content\Default\loading.gif" />
+    <Content Include="Content\Default\sprite.png" />
+    <Content Include="Content\Default\treeview-line.png" />
+    <Content Include="Content\Default\treeview-nodes.png" />
+    <Content Include="Content\Forest\editor.png" />
+    <Content Include="Content\Forest\loading.gif" />
+    <Content Include="Content\Forest\sprite.png" />
+    <Content Include="Content\Forest\treeview-line.png" />
+    <Content Include="Content\Forest\treeview-nodes.png" />
+    <Content Include="Content\Hay\editor.png" />
+    <Content Include="Content\Hay\loading.gif" />
+    <Content Include="Content\Hay\sprite.png" />
+    <Content Include="Content\Hay\treeview-line.png" />
+    <Content Include="Content\Hay\treeview-nodes.png" />
+    <Content Include="Content\Images\img01.jpg" />
+    <Content Include="Content\Images\img02.jpg" />
+    <Content Include="Content\Images\img03.jpg" />
+    <Content Include="Content\Images\img07.jpg" />
+    <Content Include="Content\Office2007\editor.png" />
+    <Content Include="Content\Office2007\loading.gif" />
+    <Content Include="Content\Office2007\sprite.png" />
+    <Content Include="Content\Office2007\treeview-line.png" />
+    <Content Include="Content\Office2007\treeview-nodes.png" />
+    <Content Include="Content\Outlook\editor.png" />
+    <Content Include="Content\Outlook\loading.gif" />
+    <Content Include="Content\Outlook\sprite.png" />
+    <Content Include="Content\Outlook\treeview-line.png" />
+    <Content Include="Content\Outlook\treeview-nodes.png" />
+    <Content Include="Content\Simple\editor.png" />
+    <Content Include="Content\Simple\loading.gif" />
+    <Content Include="Content\Simple\sprite.png" />
+    <Content Include="Content\Simple\treeview-line.png" />
+    <Content Include="Content\Simple\treeview-nodes.png" />
+    <Content Include="Content\Sitefinity\editor.png" />
+    <Content Include="Content\Sitefinity\loading.gif" />
+    <Content Include="Content\Sitefinity\sprite.png" />
+    <Content Include="Content\Sitefinity\treeview-line.png" />
+    <Content Include="Content\Sitefinity\treeview-nodes.png" />
+    <Content Include="Content\style.css" />
+    <Content Include="Content\Sunset\editor.png" />
+    <Content Include="Content\Sunset\loading.gif" />
+    <Content Include="Content\Sunset\sprite.png" />
+    <Content Include="Content\Sunset\treeview-line.png" />
+    <Content Include="Content\Sunset\treeview-nodes.png" />
+    <Content Include="Content\telerik.black.min.css" />
+    <Content Include="Content\telerik.common.min.css" />
+    <Content Include="Content\telerik.default.min.css" />
+    <Content Include="Content\telerik.forest.min.css" />
+    <Content Include="Content\telerik.hay.min.css" />
+    <Content Include="Content\telerik.office2007.min.css" />
+    <Content Include="Content\telerik.outlook.min.css" />
+    <Content Include="Content\telerik.simple.min.css" />
+    <Content Include="Content\telerik.sitefinity.min.css" />
+    <Content Include="Content\telerik.sunset.min.css" />
+    <Content Include="Content\telerik.telerik.min.css" />
+    <Content Include="Content\telerik.vista.min.css" />
+    <Content Include="Content\telerik.web20.min.css" />
+    <Content Include="Content\telerik.webblue.min.css" />
+    <Content Include="Content\telerik.windows7.min.css" />
+    <Content Include="Content\Telerik\editor.png" />
+    <Content Include="Content\Telerik\loading.gif" />
+    <Content Include="Content\Telerik\sprite.png" />
+    <Content Include="Content\Telerik\treeview-line.png" />
+    <Content Include="Content\Telerik\treeview-nodes.png" />
+    <Content Include="Content\Vista\editor.png" />
+    <Content Include="Content\Vista\loading.gif" />
+    <Content Include="Content\Vista\sprite.png" />
+    <Content Include="Content\Web20\editor.png" />
+    <Content Include="Content\Web20\loading.gif" />
+    <Content Include="Content\Web20\sprite.png" />
+    <Content Include="Content\Web20\treeview-line.png" />
+    <Content Include="Content\Web20\treeview-nodes.png" />
+    <Content Include="Content\WebBlue\editor.png" />
+    <Content Include="Content\WebBlue\loading.gif" />
+    <Content Include="Content\WebBlue\sprite.png" />
+    <Content Include="Content\WebBlue\treeview-line.png" />
+    <Content Include="Content\WebBlue\treeview-nodes.png" />
+    <Content Include="Content\Windows7\editor.png" />
+    <Content Include="Content\Windows7\loading.gif" />
+    <Content Include="Content\Windows7\sprite.png" />
     <Content Include="Global.asax" />
+    <Content Include="Libraries\Telerik.Web.Mvc.dll" />
+    <Content Include="Libraries\Telerik.Web.Mvc.xml" />
+    <Content Include="Scripts\2010.2.825\jquery-1.4.2.min.js" />
+    <Content Include="Scripts\2010.2.825\jquery.validate.min.js" />
+    <Content Include="Scripts\2010.2.825\telerik.autocomplete.min.js" />
+    <Content Include="Scripts\2010.2.825\telerik.calendar.min.js" />
+    <Content Include="Scripts\2010.2.825\telerik.combobox.min.js" />
+    <Content Include="Scripts\2010.2.825\telerik.common.min.js" />
+    <Content Include="Scripts\2010.2.825\telerik.datepicker.min.js" />
+    <Content Include="Scripts\2010.2.825\telerik.draganddrop.min.js" />
+    <Content Include="Scripts\2010.2.825\telerik.editor.min.js" />
+    <Content Include="Scripts\2010.2.825\telerik.grid.editing.min.js" />
+    <Content Include="Scripts\2010.2.825\telerik.grid.filtering.min.js" />
+    <Content Include="Scripts\2010.2.825\telerik.grid.grouping.min.js" />
+    <Content Include="Scripts\2010.2.825\telerik.grid.min.js" />
+    <Content Include="Scripts\2010.2.825\telerik.grid.resizing.min.js" />
+    <Content Include="Scripts\2010.2.825\telerik.list.min.js" />
+    <Content Include="Scripts\2010.2.825\telerik.menu.min.js" />
+    <Content Include="Scripts\2010.2.825\telerik.panelbar.min.js" />
+    <Content Include="Scripts\2010.2.825\telerik.tabstrip.min.js" />
+    <Content Include="Scripts\2010.2.825\telerik.textbox.min.js" />
+    <Content Include="Scripts\2010.2.825\telerik.treeview.min.js" />
+    <Content Include="Scripts\2010.2.825\telerik.window.min.js" />
     <Content Include="Views\Series\Details.aspx" />
     <Content Include="Views\Series\index.aspx" />
+    <Content Include="Views\Series\Unmapped.aspx" />
     <Content Include="Views\Settings\Index.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -104,7 +213,6 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Content\Site.css" />
     <Content Include="Scripts\jquery-1.4.1.js" />
     <Content Include="Scripts\jquery-1.4.1.min.js" />
     <Content Include="Scripts\jquery-1.4.1-vsdoc.js" />
@@ -124,7 +232,6 @@
     <Content Include="Views\Home\About.aspx" />
     <Content Include="Views\Home\Index.aspx" />
     <Content Include="Views\Shared\Error.aspx" />
-    <Content Include="Views\Shared\LogOnUserControl.ascx" />
     <Content Include="Views\Shared\Site.Master" />
     <Content Include="Views\Web.config" />
   </ItemGroup>

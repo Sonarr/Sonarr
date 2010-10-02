@@ -32,6 +32,13 @@ namespace NzbDrone.Web.Controllers
         }
 
 
+        public ActionResult UnMapped()
+        {
+            _seriesProvider.SyncSeriesWithDisk();
+            return View(_seriesProvider.GetUnmappedFolders());
+        }
+
+
         //
         // GET: /Series/Details/5
 
