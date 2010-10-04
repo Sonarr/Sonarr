@@ -7,5 +7,6 @@ namespace NzbDrone.Core.Providers
     {
         IList<TvdbSearchResult> SearchSeries(string name);
         TvdbSeries GetSeries(int id, TvdbLanguage language);
+        TvdbSearchResult GetSeries(string title);
     }
 }

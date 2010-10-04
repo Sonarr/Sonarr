@@ -32,7 +32,6 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.SeriesRoot = model.TvFolder;
                 //return RedirectToAction("index");
             }
-
             return View(model);
         }
 

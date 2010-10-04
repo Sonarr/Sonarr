@@ -13,20 +13,13 @@ namespace NzbDrone.Core.Providers
         void SyncSeriesWithDisk();
 
         /// <summary>
-        /// Parses a post title
-        /// </summary>
-        /// <param name="postTitle">Title of the report</param>
-        /// <returns>TVDB id of the series this report belongs to</returns>
-        long Parse(string postTitle);
-
-        /// <summary>
         /// Determines if a series is being actively watched.
         /// </summary>
         /// <param name="id">The TVDB ID of the series</param>
         /// <returns>Whether or not the show is monitored</returns>
         bool IsMonitored(long id);
 
-        bool RegisterSeries(string path);
+        TvdbSeries MapPathToSeries(string path);
         void RegisterSeries(string path, TvdbSeries series);
         List<String> GetUnmappedFolders();
     }

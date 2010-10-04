@@ -23,87 +23,44 @@ namespace NzbDrone.Core.Test
     public class SeriesTest
     {
         [Test]
-        [Ignore("Can't get it to work")]
-        [Description("This test will confirm that a folder will be skipped if it has been resolved to a series already assigned to another folder")]
-        public void skip_same_series_diffrent_folder()
+        public void Map_path_to_series()
         {
-            var tvDbId = 1234;
-
             //Arrange
-            var moqData = new Mock<IRepository>();
-            var moqTvdb = new Mock<ITvDbProvider>();
-
-            //setup db to return a fake series
-            Series fakeSeries = Builder<Series>.CreateNew()
-                .With(f => f.TvdbId = tvDbId)
-                .Build();
-
-            moqData.Setup(f => f.Exists<Series>(c => c.TvdbId == tvDbId)).
-                Returns(true);
-
-            //setup tvdb to return the same show,
-            IList<TvdbSearchResult> fakeSearchResult = Builder<TvdbSearchResult>.CreateListOfSize(4).WhereTheFirst(1).Has(f => f.Id = tvDbId).Build();
-            TvdbSeries fakeTvDbSeries = Builder<TvdbSeries>.CreateNew()
-                .With(f => f.Id = tvDbId)
-                .Build();
-
-            moqTvdb.Setup(f => f.GetSeries(It.IsAny<int>(), It.IsAny<TvdbLanguage>())).Returns(fakeTvDbSeries);
-            moqTvdb.Setup(f => f.SearchSeries(It.IsAny<string>())).
-               Returns(fakeSearchResult);
-
-            var kernel = new MockingKernel();
-            kernel.Bind<IRepository>().ToConstant(moqData.Object);
-            kernel.Bind<ITvDbProvider>().ToConstant(moqTvdb.Object);
-            kernel.Bind<IConfigProvider>().ToConstant(MockLib.StandardConfig);
-            kernel.Bind<IDiskProvider>().ToConstant(MockLib.StandardDisk);
-            kernel.Bind<ISeriesProvider>().To<SeriesProvider>();
-
-
-            //Act
-            var seriesController = kernel.Get<ISeriesProvider>();
-            seriesController.SyncSeriesWithDisk();
-
-            //Assert
-            //Verify that the show was added to the database only once.
-            moqData.Verify(c => c.Add(It.IsAny<Series>()), Times.Once());
-        }
-
-
-        [Test]
-        [Row(0)]
-        [Row(1)]
-        [Row(2)]
-        [Row(3)]
-        public void register_series_with_match(int matchPosition)
-        {
             TvdbSeries fakeSeries = Builder<TvdbSeries>.CreateNew().With(f => f.SeriesName = "The Simpsons").Build();
-            var fakeSearch = Builder<TvdbSearchResult>.CreateListOfSize(4).Build();
-            fakeSearch[matchPosition].Id = fakeSeries.Id;
-            fakeSearch[matchPosition].SeriesName = fakeSeries.SeriesName;
+            var fakeSearch = Builder<TvdbSearchResult>.CreateNew().Build();
+            fakeSearch.Id = fakeSeries.Id;
+            fakeSearch.SeriesName = fakeSeries.SeriesName;
 
-
-            //Arrange
             var moqData = new Mock<IRepository>();
             var moqTvdb = new Mock<ITvDbProvider>();
 
             moqData.Setup(f => f.Exists<Series>(c => c.TvdbId == It.IsAny<long>())).Returns(false);
 
-            moqTvdb.Setup(f => f.SearchSeries(It.IsAny<String>())).Returns(fakeSearch);
+            moqTvdb.Setup(f => f.GetSeries(It.IsAny<String>())).Returns(fakeSearch);
             moqTvdb.Setup(f => f.GetSeries(fakeSeries.Id, It.IsAny<TvdbLanguage>())).Returns(fakeSeries);
 
             var kernel = new MockingKernel();
             kernel.Bind<IRepository>().ToConstant(moqData.Object);
             kernel.Bind<ITvDbProvider>().ToConstant(moqTvdb.Object);
             kernel.Bind<ISeriesProvider>().To<SeriesProvider>();
-            
 
             //Act
             var seriesController = kernel.Get<ISeriesProvider>();
-            seriesController.RegisterSeries(@"D:\TV Shows\The Simpsons");
+            var mappedSeries = seriesController.MapPathToSeries(@"D:\TV Shows\The Simpsons");
 
             //Assert
-            //Verify that the show was added to the database only once.
-            moqData.Verify(c => c.Add(It.Is<Series>(d => d.TvdbId == fakeSeries.Id)), Times.Once());
+            Assert.AreEqual(fakeSeries, mappedSeries);
+        }
+
+        [Test]
+        [Row(new object[] { "That's Life - 2x03 -The Devil and Miss DeLucca", "That's Life" })]
+        [Row(new object[] { "Van.Duin.Op.Zn.Best.S02E05.DUTCH.WS.PDTV.XViD-DiFFERENT", "Van Duin Op Zn Best" })]
+        [Row(new object[] { "Dollhouse.S02E06.The.Left.Hand.720p.BluRay.x264-SiNNERS", "Dollhouse" })]
+        [Row(new object[] { "Heroes.S02.COMPLETE.German.PROPER.DVDRip.XviD-Prim3time", "Heroes" })]
+        public void Test_Parse_Success(string postTitle, string title)
+        {
+            var result = SeriesProvider.ParseTitle(postTitle);
+            Assert.AreEqual(title, result, postTitle);
         }
 
 
@@ -142,7 +99,7 @@ namespace NzbDrone.Core.Test
         [Row(new object[] { "Simpsons The", "Simpsons", true })]
         public void Name_match_test(string a, string b, bool match)
         {
-            bool result = SeriesProvider.IsTitleMatch(a, b);
+            bool result = TvDbProvider.IsTitleMatch(a, b);
 
             Assert.AreEqual(match, result, "{0} , {1}", a, b);
         }

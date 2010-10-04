@@ -12,6 +12,7 @@ body
     font-family: Segoe UI, Tahoma, Geneva, sans-serif;
     font-size: 11px;
     color: #3C3C3C;
+    background-attachment: fixed;
 }
 
 h1, h2, h3

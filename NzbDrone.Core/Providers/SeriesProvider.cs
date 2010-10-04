@@ -15,7 +15,8 @@ namespace NzbDrone.Core.Providers
     {
         //TODO: Remove parsing of rest of tv show info we just need the show name
 
-        private static readonly Regex CleanUpRegex = new Regex(@"((\s|^)the(\s|$))|((\s|^)and(\s|$))|[^a-z]", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        //Trims all white spaces and separators from the end of the title.
+        private static readonly Regex CleanTitleRegex = new Regex(@"[\s.][^a-z]*$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
         private static readonly Regex ParseRegex = new Regex(@"(?<showName>.*)
 (?:
   s(?<seasonNumber>\d+)e(?<episodeNumber>\d+)-?e(?<episodeNumber2>\d+)
@@ -38,6 +39,7 @@ namespace NzbDrone.Core.Providers
         private readonly IRepository _sonioRepo;
         private readonly ITvDbProvider _tvDb;
         private static readonly Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+        private static readonly Regex CleanUpRegex = new Regex(@"((\s|^)the(\s|$))|((\s|^)and(\s|$))|[^a-z]", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         public SeriesProvider(IDiskProvider diskProvider, IConfigProvider configProvider, IRepository dataRepository, ITvDbProvider tvDbProvider)
         {
@@ -70,20 +72,18 @@ namespace NzbDrone.Core.Providers
         }
 
         /// <summary>
-        /// Parses a post title
+        /// Parses series name out of a post title
         /// </summary>
         /// <param name="postTitle">Title of the report</param>
-        /// <returns>TVDB id of the series this report belongs to</returns>
-        public long Parse(string postTitle)
+        /// <returns>Name series this report belongs to</returns>
+        public static string ParseTitle(string postTitle)
         {
             var match = ParseRegex.Match(postTitle);
 
             if (!match.Success)
                 throw new ArgumentException(String.Format("Title doesn't match any know patterns. [{0}]", postTitle));
 
-            //TODO: title should be mapped to a proper Series object. with tvdbId and everything even if it is not in the db or being tracked.
-
-            throw new NotImplementedException();
+            return CleanTitleRegex.Replace(match.Groups["showName"].Value, String.Empty).Replace(".", " ");
         }
 
         public void SyncSeriesWithDisk()
@@ -94,7 +94,23 @@ namespace NzbDrone.Core.Providers
             foreach (string seriesFolder in GetUnmappedFolders())
             {
                 Logger.Info("Folder '{0}' isn't mapped to a series in the database. Trying to map it.'", seriesFolder);
-                RegisterSeries(seriesFolder);
+                var mappedSeries = MapPathToSeries(seriesFolder);
+
+                if (mappedSeries == null)
+                {
+                    Logger.Warn("Unable to find a matching series for '{0}'", seriesFolder);
+                    break;
+                }
+
+                if (!_sonioRepo.Exists<Series>(s => s.TvdbId == mappedSeries.Id))
+                {
+                    RegisterSeries(seriesFolder, mappedSeries);
+                }
+                else
+                {
+                    Logger.Warn("Folder '{0}' mapped to '{1}' which is already another folder assigned to it.'", seriesFolder, mappedSeries.SeriesName);
+                }
+
             }
         }
 
@@ -113,27 +129,15 @@ namespace NzbDrone.Core.Providers
             return results;
         }
 
-        public bool RegisterSeries(string path)
+        public TvdbSeries MapPathToSeries(string path)
         {
             var seriesPath = new DirectoryInfo(path);
-            var searchResults = _tvDb.SearchSeries(seriesPath.Name);
-            Logger.Debug("Search for '{0}' returned {1} results", searchResults.Count);
+            var searchResults = _tvDb.GetSeries(seriesPath.Name);
 
-            if (searchResults.Count == 0)
-                return false;
+            if (searchResults == null)
+                return null;
 
-            foreach (var tvdbSearchResult in searchResults)
-            {
-                TvdbSearchResult result = tvdbSearchResult;
-                if (IsTitleMatch(seriesPath.Name, result.SeriesName) && !_sonioRepo.Exists<Series>(c => c.TvdbId == result.Id))
-                {
-                    RegisterSeries(path, _tvDb.GetSeries(result.Id, result.Language));
-                    return true;
-                }
-            }
-
-            Logger.Info("Unable to fine a match for {0}", seriesPath.Name);
-            return false;
+            return _tvDb.GetSeries(searchResults.Id, searchResults.Language);
         }
 
 
@@ -157,36 +161,7 @@ namespace NzbDrone.Core.Providers
 
         #region Static Helpers
 
-        /// <summary>
-        /// Determines whether a title in a search result is equal to the title searched for.
-        /// </summary>
-        /// <param name="directoryName">Name of the directory.</param>
-        /// <param name="tvdbTitle">The TVDB title.</param>
-        /// <returns>
-        /// 	<c>true</c> if the titles are found to be same; otherwise, <c>false</c>.
-        /// </returns>
-        public static bool IsTitleMatch(string directoryName, string tvdbTitle)
-        {
 
-
-
-            var result = false;
-
-            if (String.IsNullOrEmpty(directoryName))
-                throw new ArgumentException("directoryName");
-            if (String.IsNullOrEmpty(tvdbTitle))
-                throw new ArgumentException("tvdbTitle");
-
-            if (String.Equals(directoryName, tvdbTitle, StringComparison.CurrentCultureIgnoreCase))
-            {
-                result = true;
-            }
-            else if (String.Equals(CleanUpRegex.Replace(directoryName, ""), CleanUpRegex.Replace(tvdbTitle, ""), StringComparison.InvariantCultureIgnoreCase))
-                result = true;
-
-            Logger.Debug("Match between '{0}' and '{1}' was {2}", tvdbTitle, directoryName, result);
-            return result;
-        }
 
         #endregion
     }
