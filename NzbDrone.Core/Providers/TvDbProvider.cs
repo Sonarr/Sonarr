@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Providers
 
         public TvDbProvider()
         {
-            _handler = new TvdbHandler(new XmlCacheProvider(Path.Combine(Main.AppPath, @"cache\tvdbcache.xml")), TVDB_APIKEY);
+            _handler = new TvdbHandler(new XmlCacheProvider(CentralDispatch.AppPath + @"\cache\tvdb"), TVDB_APIKEY);
         }
 
         #region ITvDbProvider Members
@@ -44,13 +44,17 @@ namespace NzbDrone.Core.Providers
 
         public TvdbSearchResult GetSeries(string title)
         {
-            return SearchSeries(title)[0];
+            var searchResults = SearchSeries(title);
+            if (searchResults.Count == 0)
+                return null;
+
+            return searchResults[0];
         }
 
-        public TvdbSeries GetSeries(int id, TvdbLanguage language)
+        public TvdbSeries GetSeries(int id, bool loadEpisodes)
         {
-            Logger.Debug("Fetching seriesId'{0}' - '{1}' from tvdb", id, language);
-            return _handler.GetSeries(id, language, true, false, false);
+            Logger.Debug("Fetching SeriesId'{0}' from tvdb", id);
+            return _handler.GetSeries(id, TvdbLanguage.DefaultLanguage, loadEpisodes, false, false);
         }
 
         /// <summary>

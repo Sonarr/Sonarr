@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Test
         [SetUp]
         public void Setup()
         {
-            Main.ConfigureNlog();
+            CentralDispatch.ConfigureNlog();
         }
     }
 }

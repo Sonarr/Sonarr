@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using NLog;
 using NzbDrone.Core.Repository;
+using NzbDrone.Core.Repository.Episode;
 using NzbDrone.Core.Repository.Quality;
 using SubSonic.Repository;
 
@@ -27,12 +29,19 @@ namespace NzbDrone.Core.Providers
 
 
         private readonly IRepository _sonicRepo;
-        private readonly ISeriesProvider _seriesProvider;
+        private readonly ISeriesProvider _series;
+        private readonly ISeasonProvider _seasons;
+        private readonly ITvDbProvider _tvDb;
+        private static readonly Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
-        public EpisodeProvider(IRepository sonicRepo, ISeriesProvider seriesProvider)
+
+        public EpisodeProvider(IRepository sonicRepo, ISeriesProvider seriesProvider, ISeasonProvider seasonProvider, ITvDbProvider tvDbProvider)
         {
             _sonicRepo = sonicRepo;
-            _seriesProvider = seriesProvider;
+            _series = seriesProvider;
+            _tvDb = tvDbProvider;
+            _seasons = seasonProvider;
+
         }
 
         public Episode GetEpisode(long id)
@@ -40,7 +49,7 @@ namespace NzbDrone.Core.Providers
             throw new NotImplementedException();
         }
 
-        public Episode SaveEpisode(Episode episode)
+        public Episode UpdateEpisode(Episode episode)
         {
             throw new NotImplementedException();
         }
@@ -57,7 +66,7 @@ namespace NzbDrone.Core.Providers
 
         public String GetSabTitle(Episode episode)
         {
-            var series = _seriesProvider.GetSeries(episode.SeriesId);
+            var series = _series.GetSeries(episode.SeriesId);
             if (series == null) throw new ArgumentException("Unknown series. ID: " + episode.SeriesId);
 
             //TODO: This method should return a standard title for the sab episode.
@@ -75,6 +84,44 @@ namespace NzbDrone.Core.Providers
             throw new NotImplementedException();
         }
 
+        public void RefreshSeries(int seriesId)
+        {
+            Logger.Info("Starting episode info refresh for series:{0}", seriesId);
+            int successCount = 0;
+            int failCount = 0;
+            var targetSeries = _tvDb.GetSeries(seriesId, true);
+            foreach (var episode in targetSeries.Episodes)
+            {
+                try
+                {
+                    _seasons.EnsureSeason(seriesId, episode.SeasonId, episode.SeasonNumber);
+                    var newEpisode = new EpisodeInfo()
+                    {
+                        AirDate = episode.FirstAired,
+                        EpisodeId = episode.Id,
+                        EpisodeNumber = episode.EpisodeNumber,
+                        Language = episode.Language.Abbriviation,
+                        Overview = episode.Overview,
+                        SeasonId = episode.SeasonId,
+                        SeasonNumber = episode.SeasonNumber,
+                        SeriesId = episode.SeriesId,
+                        Title = episode.EpisodeName
+                    };
+
+                    _sonicRepo.Add<EpisodeInfo>(newEpisode);
+                    successCount++;
+
+                }
+                catch (Exception e)
+                {
+                    Logger.FatalException(String.Format("An error has occured while updating episode info for series {0}", seriesId), e);
+                    failCount++;
+                }
+            }
+
+            Logger.Info("Finished episode refresh for series:{0}. Success:{1} - Fail:{2} ", seriesId, successCount, failCount);
+        }
+
 
 
         /// <summary>
@@ -82,40 +129,30 @@ namespace NzbDrone.Core.Providers
         /// </summary>
         /// <param name="title">Title of the report</param>
         /// <returns>List of episodes relating to the post</returns>
-        public static List<Episode> Parse(string title)
+        public static List<RemoteEpisode> Parse(string title)
         {
             var match = ParseRegex.Match(title);
 
             if (!match.Success)
                 throw new ArgumentException(String.Format("Title doesn't match any know patterns. [{0}]", title));
 
-            var result = new List<Episode>();
+            var result = new List<RemoteEpisode>();
 
-            result.Add(new Episode() { EpisodeNumber = Convert.ToInt32(match.Groups["episodeNumber"].Value) });
+            result.Add(new RemoteEpisode { EpisodeNumber = Convert.ToInt32(match.Groups["episodeNumber"].Value) });
 
             if (match.Groups["episodeNumber2"].Success)
             {
-                result.Add(new Episode() { EpisodeNumber = Convert.ToInt32(match.Groups["episodeNumber2"].Value) });
+                result.Add(new RemoteEpisode { EpisodeNumber = Convert.ToInt32(match.Groups["episodeNumber2"].Value) });
             }
 
             foreach (var ep in result)
             {
-                //TODO: Get TVDB episode Title, Series name and the rest of the details
                 ep.SeasonNumber = Convert.ToInt32(match.Groups["seasonNumber"].Value);
-                ep.Title = ReplaceSeparatorChars(match.Groups["episodeName"].Value);
                 ep.Proper = title.Contains("PROPER");
                 ep.Quality = QualityTypes.Unknown;
             }
 
             return result;
-        }
-
-        private static string ReplaceSeparatorChars(string text)
-        {
-            if (text == null)
-                throw new ArgumentNullException("text");
-
-            return text.Replace('.', ' ').Replace('-', ' ').Replace('_', ' ').Trim();
         }
 
     }

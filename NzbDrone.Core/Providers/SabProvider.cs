@@ -2,20 +2,20 @@
 using System.Linq;
 using System.Web;
 using System.Xml.Linq;
-using log4net;
+using NLog;
 
 namespace NzbDrone.Core.Providers
 {
     public class SabProvider : IDownloadProvider
     {
         private readonly IConfigProvider _config;
-        private readonly ILog _logger;
         private readonly IHttpProvider _http;
 
-        public SabProvider(IConfigProvider config, ILog logger, IHttpProvider http)
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        public SabProvider(IConfigProvider config, IHttpProvider http)
         {
             _config = config;
-            _logger = logger;
             _http = http;
         }
 
@@ -32,10 +32,10 @@ namespace NzbDrone.Core.Providers
             string action = string.Format("mode={0}&name={1}&priority={2}&cat={3}&nzbname={4}", mode, name, priority, cat, nzbName);
             string request = GetSabRequest(action);
 
-            _logger.DebugFormat("Adding report [{0}] to the queue.", nzbName);
+            Logger.Debug("Adding report [{0}] to the queue.", nzbName);
 
             string response = _http.DownloadString(request).Replace("\n", String.Empty);
-            _logger.DebugFormat("Queue Repsonse: [{0}]", response);
+            Logger.Debug("Queue Repsonse: [{0}]", response);
 
             if (response == "ok")
                 return true;
@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Providers
             //Get the Count of Items in Queue where 'filename' is Equal to goodName, if not zero, return true (isInQueue)))
             if ((xDoc.Descendants("slot").Where(s => s.Element("filename").Value.Equals(title, StringComparison.InvariantCultureIgnoreCase))).Count() != 0)
             {
-                _logger.DebugFormat("Episode in queue - '{0}'", title);
+                Logger.Debug("Episode in queue - '{0}'", title);
 
                 return true;
             }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using NzbDrone.Core.Repository.Episode;
 using SubSonic.SqlGeneration.Schema;
 
 namespace NzbDrone.Core.Repository
@@ -7,7 +8,7 @@ namespace NzbDrone.Core.Repository
     public class Series
     {
         [SubSonicPrimaryKey(false)]
-        public int TvdbId { get; set; }
+        public virtual int SeriesId { get; set; }
 
         public string Title { get; set; }
 
@@ -32,8 +33,8 @@ namespace NzbDrone.Core.Repository
         public virtual List<Season> Seasons { get; private set; }
 
         [SubSonicToManyRelation]
-        public virtual List<Episode> Episodes { get; private set; }
+        public virtual List<EpisodeInfo> Episodes { get; private set; }
 
- 
+
     }
 }

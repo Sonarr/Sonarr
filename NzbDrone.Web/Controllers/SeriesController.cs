@@ -10,12 +10,14 @@ namespace NzbDrone.Web.Controllers
     public class SeriesController : Controller
     {
         private readonly ISeriesProvider _seriesProvider;
+        private readonly IEpisodeProvider _episodeProvider;
         //
         // GET: /Series/
 
-        public SeriesController(ISeriesProvider seriesProvider)
+        public SeriesController(ISeriesProvider seriesProvider, IEpisodeProvider episodeProvider)
         {
             _seriesProvider = seriesProvider;
+            _episodeProvider = episodeProvider;
         }
 
         public ActionResult Index()
@@ -39,90 +41,23 @@ namespace NzbDrone.Web.Controllers
         }
 
 
+        public ActionResult LoadEpisodes(int seriesId)
+        {
+            _episodeProvider.RefreshSeries(seriesId);
+            return RedirectToAction("Details", new
+            {
+                seriesId = seriesId
+            });
+        }
+
         //
         // GET: /Series/Details/5
 
-        public ActionResult Details(int tvdbId)
+        public ActionResult Details(int seriesId)
         {
-            return View(_seriesProvider.GetSeries(tvdbId));
+            return View(_seriesProvider.GetSeries(seriesId));
         }
 
-        //
-        // GET: /Series/Create
 
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        //
-        // POST: /Series/Create
-
-        [HttpPost]
-        public ActionResult Create(FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        //
-        // GET: /Series/Edit/5
-
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        //
-        // POST: /Series/Edit/5
-
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        //
-        // GET: /Series/Delete/5
-
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        //
-        // POST: /Series/Delete/5
-
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
     }
 }

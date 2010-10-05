@@ -7,6 +7,7 @@ using Moq;
 using NzbDrone.Core.Providers;
 using SubSonic.DataProviders;
 using SubSonic.Repository;
+using TvdbLib;
 
 namespace NzbDrone.Core.Test
 {
@@ -17,11 +18,8 @@ namespace NzbDrone.Core.Test
     {
         public static string[] StandardSeries
         {
-            get { return new string[] { "C:\\TV\\The Simpsons", "C:\\TV\\Family Guy" }; }
+            get { return new string[] { "c:\\tv\\the simpsons", "c:\\tv\\family guy", "c:\\tv\\southpark", "c:\\tv\\24" }; }
         }
-
-
-
 
         public static IRepository GetEmptyRepository()
         {
@@ -39,15 +37,12 @@ namespace NzbDrone.Core.Test
             }
         }
 
-        public static IDiskProvider StandardDisk
+        public static IDiskProvider GetStandardDisk()
         {
-            get
-            {
-                var mock = new Mock<IDiskProvider>();
-                mock.Setup(c => c.GetDirectories(It.IsAny<String>())).Returns(StandardSeries);
-                mock.Setup(c => c.Exists(It.Is<String>(d => StandardSeries.Contains(d)))).Returns(true);
-                return mock.Object;
-            }
+            var mock = new Mock<IDiskProvider>();
+            mock.Setup(c => c.GetDirectories(It.IsAny<String>())).Returns(StandardSeries);
+            mock.Setup(c => c.Exists(It.Is<String>(d => StandardSeries.Contains(d)))).Returns(true);
+            return mock.Object;
         }
     }
 }

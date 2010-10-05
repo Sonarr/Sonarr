@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Providers
     public interface ISeriesProvider
     {
         IQueryable<Series> GetSeries();
-        Series GetSeries(long tvdbId);
+        Series GetSeries(int seriesId);
         void SyncSeriesWithDisk();
 
         /// <summary>

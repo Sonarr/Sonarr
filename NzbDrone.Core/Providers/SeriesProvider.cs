@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using log4net;
 using NLog;
 using NzbDrone.Core.Repository;
 using SubSonic.Repository;
@@ -38,7 +37,7 @@ namespace NzbDrone.Core.Providers
         private readonly IDiskProvider _diskProvider;
         private readonly IRepository _sonioRepo;
         private readonly ITvDbProvider _tvDb;
-        private static readonly Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static readonly Regex CleanUpRegex = new Regex(@"((\s|^)the(\s|$))|((\s|^)and(\s|$))|[^a-z]", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         public SeriesProvider(IDiskProvider diskProvider, IConfigProvider configProvider, IRepository dataRepository, ITvDbProvider tvDbProvider)
@@ -56,9 +55,9 @@ namespace NzbDrone.Core.Providers
             return _sonioRepo.All<Series>();
         }
 
-        public Series GetSeries(long tvdbId)
+        public Series GetSeries(int seriesId)
         {
-            return _sonioRepo.Single<Series>(s => s.TvdbId == tvdbId);
+            return _sonioRepo.Single<Series>(s => s.SeriesId == seriesId);
         }
 
         /// <summary>
@@ -68,7 +67,7 @@ namespace NzbDrone.Core.Providers
         /// <returns>Whether or not the show is monitored</returns>
         public bool IsMonitored(long id)
         {
-            return _sonioRepo.Exists<Series>(c => c.TvdbId == id && c.Monitored);
+            return _sonioRepo.Exists<Series>(c => c.SeriesId == id && c.Monitored);
         }
 
         /// <summary>
@@ -99,16 +98,18 @@ namespace NzbDrone.Core.Providers
                 if (mappedSeries == null)
                 {
                     Logger.Warn("Unable to find a matching series for '{0}'", seriesFolder);
-                    break;
-                }
-
-                if (!_sonioRepo.Exists<Series>(s => s.TvdbId == mappedSeries.Id))
-                {
-                    RegisterSeries(seriesFolder, mappedSeries);
                 }
                 else
                 {
-                    Logger.Warn("Folder '{0}' mapped to '{1}' which is already another folder assigned to it.'", seriesFolder, mappedSeries.SeriesName);
+
+                    if (!_sonioRepo.Exists<Series>(s => s.SeriesId == mappedSeries.Id))
+                    {
+                        RegisterSeries(seriesFolder, mappedSeries);
+                    }
+                    else
+                    {
+                        Logger.Warn("Folder '{0}' mapped to '{1}' which is already another folder assigned to it.'", seriesFolder, mappedSeries.SeriesName);
+                    }
                 }
 
             }
@@ -137,7 +138,7 @@ namespace NzbDrone.Core.Providers
             if (searchResults == null)
                 return null;
 
-            return _tvDb.GetSeries(searchResults.Id, searchResults.Language);
+            return _tvDb.GetSeries(searchResults.Id, false);
         }
 
 
@@ -145,7 +146,7 @@ namespace NzbDrone.Core.Providers
         {
             Logger.Info("registering '{0}' with [{1}]-{2}", path, series.Id, series.SeriesName);
             var repoSeries = new Series();
-            repoSeries.TvdbId = series.Id;
+            repoSeries.SeriesId = series.Id;
             repoSeries.Title = series.SeriesName;
             repoSeries.AirTimes = series.AirsTime;
             repoSeries.AirsDayOfWeek = series.AirsDayOfWeek;

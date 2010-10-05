@@ -2,6 +2,7 @@
 
 namespace NzbDrone.Core.Repository
 {
+    [SubSonicTableNameOverride("Config")]
     public class Config
     {
         [SubSonicPrimaryKey]

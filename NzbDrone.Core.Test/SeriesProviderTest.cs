@@ -12,6 +12,7 @@ using Ninject;
 using Ninject.Moq;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
+using NzbDrone.Core.Repository.Episode;
 using SubSonic.Repository;
 using TvdbLib.Data;
 using System.Linq;
@@ -20,7 +21,7 @@ using System.Linq;
 namespace NzbDrone.Core.Test
 {
     [TestFixture]
-    public class SeriesTest
+    public class SeriesProviderTest
     {
         [Test]
         public void Map_path_to_series()
@@ -34,10 +35,10 @@ namespace NzbDrone.Core.Test
             var moqData = new Mock<IRepository>();
             var moqTvdb = new Mock<ITvDbProvider>();
 
-            moqData.Setup(f => f.Exists<Series>(c => c.TvdbId == It.IsAny<long>())).Returns(false);
+            moqData.Setup(f => f.Exists<Series>(c => c.SeriesId == It.IsAny<int>())).Returns(false);
 
             moqTvdb.Setup(f => f.GetSeries(It.IsAny<String>())).Returns(fakeSearch);
-            moqTvdb.Setup(f => f.GetSeries(fakeSeries.Id, It.IsAny<TvdbLanguage>())).Returns(fakeSeries);
+            moqTvdb.Setup(f => f.GetSeries(fakeSeries.Id, false)).Returns(fakeSeries).Verifiable();
 
             var kernel = new MockingKernel();
             kernel.Bind<IRepository>().ToConstant(moqData.Object);
@@ -49,6 +50,7 @@ namespace NzbDrone.Core.Test
             var mappedSeries = seriesController.MapPathToSeries(@"D:\TV Shows\The Simpsons");
 
             //Assert
+            moqTvdb.VerifyAll();
             Assert.AreEqual(fakeSeries, mappedSeries);
         }
 
@@ -71,7 +73,7 @@ namespace NzbDrone.Core.Test
         {
             //Arrange
             var sonicRepo = MockLib.GetEmptyRepository();
-            var series = Builder<Series>.CreateNew().With(c => c.TvdbId = tvdbId).Build();
+            var series = Builder<Series>.CreateNew().With(c => c.SeriesId = tvdbId).Build();
 
             //Act
             var addId = sonicRepo.Add(series);
@@ -80,28 +82,43 @@ namespace NzbDrone.Core.Test
             Assert.AreEqual(tvdbId, addId);
             var allSeries = sonicRepo.All<Series>();
             Assert.IsNotEmpty(allSeries);
-            Assert.AreEqual(tvdbId, allSeries.First().TvdbId);
+            Assert.AreEqual(tvdbId, allSeries.First().SeriesId);
         }
 
         [Test]
-        [Row(new object[] { "CAPITAL", "capital", true })]
-        [Row(new object[] { "Something!!", "Something", true })]
-        [Row(new object[] { "Simpsons 2000", "Simpsons", true })]
-        [Row(new object[] { "Simp222sons", "Simpsons", true })]
-        [Row(new object[] { "Simpsons", "The Simpsons", true })]
-        [Row(new object[] { "Law and order", "Law & order", true })]
-        [Row(new object[] { "xxAndxx", "xxxx", false })]
-        [Row(new object[] { "Andxx", "xx", false })]
-        [Row(new object[] { "xxAnd", "xx", false })]
-        [Row(new object[] { "Thexx", "xx", false })]
-        [Row(new object[] { "Thexx", "xx", false })]
-        [Row(new object[] { "xxThexx", "xxxxx", false })]
-        [Row(new object[] { "Simpsons The", "Simpsons", true })]
-        public void Name_match_test(string a, string b, bool match)
+        public void get_unmapped()
         {
-            bool result = TvDbProvider.IsTitleMatch(a, b);
+            //Setup
+            var kernel = new MockingKernel();
 
-            Assert.AreEqual(match, result, "{0} , {1}", a, b);
+
+            kernel.Bind<ISeriesProvider>().To<SeriesProvider>();
+            kernel.Bind<IDiskProvider>().ToConstant(MockLib.GetStandardDisk());
+
+            var seriesController = kernel.Get<ISeriesProvider>();
+
+            //Act
+            var unmappedFolder = seriesController.GetUnmappedFolders();
+
+            //Assert
+            Assert.AreElementsEqualIgnoringOrder(MockLib.StandardSeries, unmappedFolder);
+        }
+
+        [Test]
+        public void get_episode_test()
+        {
+            var fakeSeries = Builder<Series>.CreateNew().Build();
+            var fakeEpisode = Builder<EpisodeInfo>.CreateNew().With(c => c.SeriesId).Build();
+
+            Console.WriteLine("test");
+
+            var repo = MockLib.GetEmptyRepository();
+            repo.Add(fakeSeries);
+            repo.Add(fakeEpisode);
+
+            var fetchedSeries = repo.Single<Series>(fakeSeries.SeriesId);
+
+            Assert.IsNotEmpty(fetchedSeries.Episodes);
         }
     }
 }

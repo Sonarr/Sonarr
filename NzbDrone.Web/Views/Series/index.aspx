@@ -20,11 +20,11 @@
        .Name("Grid")
        .Columns(columns =>
        {
-           columns.Bound(o => o.TvdbId).Width(100);
+           columns.Bound(o => o.SeriesId).Width(100);
            columns.Template(c =>
                                    {
     %>
-    <%:Html.ActionLink(c.Title, "Details", new {tvdbId =c.TvdbId}) %>
+    <%:Html.ActionLink(c.Title, "Details", new {seriesId =c.SeriesId}) %>
     <%
         }).Title("Title");
            columns.Bound(o => o.Status);

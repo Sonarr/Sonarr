@@ -1,5 +1,5 @@
 ﻿using System;
-using log4net;
+using NLog;
 using NzbDrone.Core.Repository;
 using SubSonic.Repository;
 
@@ -8,13 +8,11 @@ namespace NzbDrone.Core.Providers
     public class ConfigProvider : IConfigProvider
     {
         private const string SERIES_ROOTS = "SeriesRoots";
-        private readonly ILog _logger;
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IRepository _sonicRepo;
 
-        public ConfigProvider(ILog logger, IRepository dataRepository)
+        public ConfigProvider(IRepository dataRepository)
         {
-            _logger = logger;
-
             _sonicRepo = dataRepository;
         }
 
@@ -39,7 +37,7 @@ namespace NzbDrone.Core.Providers
             if (dbValue != null && !String.IsNullOrEmpty(dbValue.Value))
                 return dbValue.Value;
 
-            _logger.WarnFormat("Unable to find config key '{0}' defaultValue:'{1}'", key, defaultValue);
+            Logger.Debug("Unable to find config key '{0}' defaultValue:'{1}'", key, defaultValue);
             if (makePermanent)
                 SetValue(key, defaultValue.ToString());
             value = defaultValue.ToString();
@@ -54,16 +52,17 @@ namespace NzbDrone.Core.Providers
             if (value == null)
                 throw new ArgumentNullException("key");
 
-            _logger.DebugFormat("Writing Setting to file. Key:'{0}' Value:'{1}'", key, value);
+            Logger.Debug("Writing Setting to file. Key:'{0}' Value:'{1}'", key, value);
 
             var dbValue = _sonicRepo.Single<Config>(key);
 
             if (dbValue == null)
             {
-                _sonicRepo.Add(new Config {
-                                              Key = key,
-                                              Value = value
-                                          });
+                _sonicRepo.Add(new Config
+                {
+                    Key = key,
+                    Value = value
+                });
             }
             else
             {

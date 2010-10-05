@@ -5,13 +5,15 @@ using Ninject;
 using NLog.Config;
 using NLog.Targets;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Repository;
+using NzbDrone.Core.Repository.Episode;
 using SubSonic.DataProviders;
 using SubSonic.Repository;
 using NLog;
 
 namespace NzbDrone.Core
 {
-    public static class Main
+    public static class CentralDispatch
     {
         public static void BindKernel(IKernel kernel)
         {
@@ -19,16 +21,27 @@ namespace NzbDrone.Core
             var provider = ProviderFactory.GetProvider(connectionString, "System.Data.SQLite");
 
             kernel.Bind<ISeriesProvider>().To<SeriesProvider>();
+            kernel.Bind<ISeasonProvider>().To<SeasonProvider>();
+            kernel.Bind<IEpisodeProvider>().To<EpisodeProvider>();
             kernel.Bind<IDiskProvider>().To<DiskProvider>();
             kernel.Bind<ITvDbProvider>().To<TvDbProvider>();
-            kernel.Bind<IConfigProvider>().To<ConfigProvider>();
-            kernel.Bind<log4net.ILog>().ToMethod(c => log4net.LogManager.GetLogger("logger-name"));
-            kernel.Bind<IRepository>().ToMethod(c => new SimpleRepository(provider, SimpleRepositoryOptions.RunMigrations));
+            kernel.Bind<IConfigProvider>().To<ConfigProvider>().InSingletonScope();
+            kernel.Bind<IRepository>().ToMethod(c => new SimpleRepository(provider, SimpleRepositoryOptions.RunMigrations)).InSingletonScope();
+
+            ForceMigration(kernel.Get<IRepository>());
         }
 
         public static String AppPath
         {
-            get { return new DirectoryInfo(HttpContext.Current.Server.MapPath("\\")).FullName; }
+            get
+            {
+                if (HttpContext.Current != null)
+                {
+                    return new DirectoryInfo(HttpContext.Current.Server.MapPath("\\")).FullName;
+                }
+                return Directory.GetCurrentDirectory();
+            }
+
         }
 
 
@@ -66,6 +79,13 @@ namespace NzbDrone.Core
             logger.Warn("warn log message");
             logger.Error("error log message");
             logger.Fatal("fatal log message");
+        }
+
+        private static void ForceMigration(IRepository repository)
+        {
+            repository.GetPaged<Series>(0, 1);
+            repository.GetPaged<EpisodeInfo>(0, 1);
+            repository.GetPaged<Series>(0, 1);
         }
     }
 }

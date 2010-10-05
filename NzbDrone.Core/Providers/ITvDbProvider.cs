@@ -6,7 +6,7 @@ namespace NzbDrone.Core.Providers
     public interface ITvDbProvider
     {
         IList<TvdbSearchResult> SearchSeries(string name);
-        TvdbSeries GetSeries(int id, TvdbLanguage language);
         TvdbSearchResult GetSeries(string title);
+        TvdbSeries GetSeries(int id,  bool loadEpisodes);
     }
 }

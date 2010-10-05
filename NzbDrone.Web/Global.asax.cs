@@ -27,7 +27,7 @@ namespace NzbDrone.Web
 
         protected override void OnApplicationStarted()
         {
-            Main.ConfigureNlog();
+            CentralDispatch.ConfigureNlog();
             AreaRegistration.RegisterAllAreas();
             RegisterRoutes(RouteTable.Routes);
             base.OnApplicationStarted();
@@ -36,7 +36,7 @@ namespace NzbDrone.Web
         protected override IKernel CreateKernel()
         {
             _kernel = new StandardKernel();
-            Main.BindKernel(_kernel);
+            CentralDispatch.BindKernel(_kernel);
             return _kernel;
         }
 

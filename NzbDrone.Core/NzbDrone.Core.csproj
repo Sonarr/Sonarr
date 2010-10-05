@@ -125,7 +125,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libraries\Castle.Core.dll</HintPath>
     </Reference>
-    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL" />
     <Reference Include="Ninject, Version=2.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL" />
     <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL" />
     <Reference Include="NLog.Extended, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
@@ -157,16 +156,17 @@
     <Compile Include="Providers\ISeriesProvider.cs" />
     <Compile Include="Providers\ITvDbProvider.cs" />
     <Compile Include="Providers\SabProvider.cs" />
+    <Compile Include="Providers\SeasonProvider.cs" />
+    <Compile Include="Repository\Episode\RemoteEpisode.cs" />
+    <Compile Include="Repository\Episode\EpisodeInfo.cs" />
     <Compile Include="Repository\Quality\AllowedQuality.cs" />
     <Compile Include="Repository\Config.cs" />
     <Compile Include="Repository\Quality\QualityProfile.cs" />
     <Compile Include="Repository\Season.cs" />
-    <Compile Include="Repository\RemoteEpisode.cs" />
-    <Compile Include="Repository\LocalEpisode.cs" />
-    <Compile Include="Repository\Episode.cs" />
+    <Compile Include="Repository\Episode\Episode.cs" />
     <Compile Include="Repository\Quality\QualityTypes.cs" />
     <Compile Include="Repository\Series.cs" />
-    <Compile Include="Main.cs" />
+    <Compile Include="CentralDispatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\DiskProvider.cs" />
     <Compile Include="Providers\IConfigProvider.cs" />
