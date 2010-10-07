@@ -9,6 +9,7 @@ using NzbDrone.Core.Providers;
 namespace NzbDrone.Core.Test
 {
     [TestFixture]
+    // ReSharper disable InconsistentNaming
     public class TvDbControllerTest
     {
         [Test]

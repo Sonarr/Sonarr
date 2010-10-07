@@ -7,6 +7,8 @@ using NzbDrone.Core.Repository.Quality;
 namespace NzbDrone.Core.Test
 {
     [TestFixture]
+    // ReSharper disable InconsistentNaming
+
     public class QualityProfileTest
     {
         /// <summary>

@@ -21,6 +21,7 @@ using System.Linq;
 namespace NzbDrone.Core.Test
 {
     [TestFixture]
+    // ReSharper disable InconsistentNaming
     public class SeriesProviderTest
     {
         [Test]
@@ -65,26 +66,6 @@ namespace NzbDrone.Core.Test
             Assert.AreEqual(title, result, postTitle);
         }
 
-
-
-        [Test]
-        [Description("This test confirms that the tvdb id stored in the db is preserved rather than being replaced by an auto incrementing value")]
-        public void tvdbid_is_preserved([RandomNumbers(Minimum = 100, Maximum = 999, Count = 1)] int tvdbId)
-        {
-            //Arrange
-            var sonicRepo = MockLib.GetEmptyRepository();
-            var series = Builder<Series>.CreateNew().With(c => c.SeriesId = tvdbId).Build();
-
-            //Act
-            var addId = sonicRepo.Add(series);
-
-            //Assert
-            Assert.AreEqual(tvdbId, addId);
-            var allSeries = sonicRepo.All<Series>();
-            Assert.IsNotEmpty(allSeries);
-            Assert.AreEqual(tvdbId, allSeries.First().SeriesId);
-        }
-
         [Test]
         public void get_unmapped()
         {
@@ -104,21 +85,6 @@ namespace NzbDrone.Core.Test
             Assert.AreElementsEqualIgnoringOrder(MockLib.StandardSeries, unmappedFolder);
         }
 
-        [Test]
-        public void get_episode_test()
-        {
-            var fakeSeries = Builder<Series>.CreateNew().Build();
-            var fakeEpisode = Builder<EpisodeInfo>.CreateNew().With(c => c.SeriesId).Build();
-
-            Console.WriteLine("test");
-
-            var repo = MockLib.GetEmptyRepository();
-            repo.Add(fakeSeries);
-            repo.Add(fakeEpisode);
-
-            var fetchedSeries = repo.Single<Series>(fakeSeries.SeriesId);
-
-            Assert.IsNotEmpty(fetchedSeries.Episodes);
-        }
+    
     }
 }

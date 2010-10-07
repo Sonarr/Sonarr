@@ -14,6 +14,7 @@ using SubSonic.Repository;
 namespace NzbDrone.Core.Test
 {
     [TestFixture]
+    // ReSharper disable InconsistentNaming
     public class SabControllerTest
     {
         [Test]

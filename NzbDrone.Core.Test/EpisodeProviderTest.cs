@@ -8,6 +8,7 @@ using MbUnit.Framework.ContractVerifiers;
 namespace NzbDrone.Core.Test
 {
     [TestFixture]
+    // ReSharper disable InconsistentNaming
     public class EpisodeProviderTest
     {
 

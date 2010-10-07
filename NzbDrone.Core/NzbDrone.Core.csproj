@@ -146,6 +146,7 @@
     <Reference Include="TvdbLib, Version=0.8.8.0, Culture=neutral, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SonicTrace.cs" />
     <Compile Include="Providers\ConfigProvider.cs" />
     <Compile Include="Providers\EpisodeProvider.cs" />
     <Compile Include="Providers\HttpProvider.cs" />

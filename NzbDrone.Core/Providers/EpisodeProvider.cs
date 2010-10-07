@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Providers
         private readonly ISeriesProvider _series;
         private readonly ISeasonProvider _seasons;
         private readonly ITvDbProvider _tvDb;
-        private static readonly Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
 
         public EpisodeProvider(IRepository sonicRepo, ISeriesProvider seriesProvider, ISeasonProvider seasonProvider, ITvDbProvider tvDbProvider)
