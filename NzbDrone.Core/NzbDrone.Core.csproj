@@ -143,12 +143,17 @@
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="TvdbLib, Version=0.8.8.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="UPnP, Version=1.0.3932.37442, Culture=neutral, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\Notification\BasicNotification.cs" />
     <Compile Include="Entities\Notification\NotificationStatus.cs" />
     <Compile Include="Entities\Notification\NotificationType.cs" />
     <Compile Include="Providers\INotificationProvider.cs" />
+    <Compile Include="Providers\IMediaDiscoveryProvider.cs" />
+    <Compile Include="Providers\IMediaProvider.cs" />
+    <Compile Include="Providers\MediaDiscoveryProvider.cs" />
+    <Compile Include="Providers\XBMCMediaProvider.cs" />
     <Compile Include="Entities\Notification\ProgressNotification.cs" />
     <Compile Include="Providers\NotificationProvider.cs" />
     <Compile Include="SonicTrace.cs" />
@@ -223,6 +228,7 @@
     <Content Include="Libraries\TvdbLib.dll" />
     <Content Include="Libraries\TvdbLib.pdb" />
     <Content Include="Libraries\TvdbLib.XML" />
+    <Content Include="Libraries\UPnP.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

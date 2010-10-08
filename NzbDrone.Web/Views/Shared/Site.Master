@@ -2,8 +2,7 @@
 
 <%@ Import Namespace="Helpers" %>
 <%@ Import Namespace="Telerik.Web.Mvc.UI" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
- "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <!--
 Design by Free CSS Templates
@@ -23,6 +22,33 @@ Released   : 20100727
         Html.Telerik().StyleSheetRegistrar().DefaultGroup(group => group.Add("telerik.common.css").Add("telerik.sitefinity.css")).Render();
     %>
     <link href="../../Content/style.css" rel="stylesheet" type="text/css" media="screen" />
+    <style>
+    .Mediabox 
+    {
+    	background:black;
+    }
+    .Play 
+    {
+    	cursor:pointer;
+        padding:5px;
+
+    }
+    .Pause 
+    {
+    	cursor:pointer;
+        padding:5px;
+    }
+    .Stop 
+    {
+    	cursor:pointer;
+        padding:5px;
+    }
+    </style>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    <script type="text/javascript">
+        <asp:ContentPlaceHolder ID="JavascriptContent" runat="server" />
+    </script>
+
 </head>
 <body>
     <div id="header">
