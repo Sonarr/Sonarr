@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using SubSonic.SqlGeneration.Schema;
 
-namespace NzbDrone.Core.Repository.Episode
+namespace NzbDrone.Core.Entities.Episode
 {
     [SubSonicTableNameOverride("EpisodeInfo")]
-    public class EpisodeInfo : Episode
+    public class EpisodeInfo : BasicEpisode
     {
         [SubSonicPrimaryKey(false)]
         public virtual int EpisodeId { get; set; }

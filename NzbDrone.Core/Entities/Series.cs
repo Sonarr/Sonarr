@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using NzbDrone.Core.Repository.Episode;
+using NzbDrone.Core.Entities.Episode;
 using SubSonic.SqlGeneration.Schema;
 
-namespace NzbDrone.Core.Repository
+namespace NzbDrone.Core.Entities
 {
     public class Series
     {

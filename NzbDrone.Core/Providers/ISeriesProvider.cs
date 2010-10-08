@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NzbDrone.Core.Repository;
+using NzbDrone.Core.Entities;
 using TvdbLib.Data;
 
 namespace NzbDrone.Core.Providers

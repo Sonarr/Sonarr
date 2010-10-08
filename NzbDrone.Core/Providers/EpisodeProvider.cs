@@ -2,9 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using NLog;
-using NzbDrone.Core.Repository;
-using NzbDrone.Core.Repository.Episode;
-using NzbDrone.Core.Repository.Quality;
+using NzbDrone.Core.Entities.Episode;
+using NzbDrone.Core.Entities.Quality;
 using SubSonic.Repository;
 
 namespace NzbDrone.Core.Providers
@@ -44,27 +43,27 @@ namespace NzbDrone.Core.Providers
 
         }
 
-        public Episode GetEpisode(long id)
+        public BasicEpisode GetEpisode(long id)
         {
             throw new NotImplementedException();
         }
 
-        public Episode UpdateEpisode(Episode episode)
+        public BasicEpisode UpdateEpisode(BasicEpisode episode)
         {
             throw new NotImplementedException();
         }
 
-        public IList<Episode> GetEpisodesBySeason(long seasonId)
+        public IList<BasicEpisode> GetEpisodesBySeason(long seasonId)
         {
             throw new NotImplementedException();
         }
 
-        public IList<Episode> GetEpisodeBySeries(long seriesId)
+        public IList<BasicEpisode> GetEpisodeBySeries(long seriesId)
         {
             throw new NotImplementedException();
         }
 
-        public String GetSabTitle(Episode episode)
+        public String GetSabTitle(BasicEpisode episode)
         {
             var series = _series.GetSeries(episode.SeriesId);
             if (series == null) throw new ArgumentException("Unknown series. ID: " + episode.SeriesId);
@@ -79,7 +78,7 @@ namespace NzbDrone.Core.Providers
         /// </summary>
         /// <param name="episode">Episode that needs to be checked</param>
         /// <returns></returns>
-        public bool IsNeeded(Episode episode)
+        public bool IsNeeded(BasicEpisode episode)
         {
             throw new NotImplementedException();
         }

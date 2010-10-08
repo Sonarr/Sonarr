@@ -7,6 +7,7 @@ using NzbDrone.Core.Providers;
 
 namespace NzbDrone.Web.Controllers
 {
+    [HandleError]
     public class SeriesController : Controller
     {
         private readonly ISeriesProvider _seriesProvider;

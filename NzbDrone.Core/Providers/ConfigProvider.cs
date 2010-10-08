@@ -1,6 +1,6 @@
 ﻿using System;
 using NLog;
-using NzbDrone.Core.Repository;
+using NzbDrone.Core.Entities;
 using SubSonic.Repository;
 
 namespace NzbDrone.Core.Providers

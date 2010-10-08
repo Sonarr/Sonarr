@@ -1,10 +1,8 @@
-﻿using System;
-using NzbDrone.Core.Repository.Quality;
-using SubSonic.SqlGeneration.Schema;
+﻿using SubSonic.SqlGeneration.Schema;
 
-namespace NzbDrone.Core.Repository.Episode
+namespace NzbDrone.Core.Entities.Episode
 {
-    public class Episode
+    public class BasicEpisode
     {
         public virtual int SeriesId { get; set; }
         public int SeasonNumber { get; set; }

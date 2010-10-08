@@ -1,4 +1,4 @@
-namespace NzbDrone.Core.Repository.Quality
+namespace NzbDrone.Core.Entities.Quality
 {
     // ReSharper disable InconsistentNaming
     /// <summary>

@@ -4,7 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
-using NzbDrone.Core.Repository;
+using NzbDrone.Core.Entities;
+using NzbDrone.Core.Entities.Notification;
 using SubSonic.Repository;
 using TvdbLib.Data;
 
@@ -32,7 +33,7 @@ namespace NzbDrone.Core.Providers
 )", RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace);
 
 
-
+        private readonly INotificationProvider _notificationProvider;
         private readonly IConfigProvider _config;
         private readonly IDiskProvider _diskProvider;
         private readonly IRepository _sonioRepo;
@@ -40,8 +41,11 @@ namespace NzbDrone.Core.Providers
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static readonly Regex CleanUpRegex = new Regex(@"((\s|^)the(\s|$))|((\s|^)and(\s|$))|[^a-z]", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        public SeriesProvider(IDiskProvider diskProvider, IConfigProvider configProvider, IRepository dataRepository, ITvDbProvider tvDbProvider)
+        private ProgressNotification _progress;
+
+        public SeriesProvider(INotificationProvider notificationProvider, IDiskProvider diskProvider, IConfigProvider configProvider, IRepository dataRepository, ITvDbProvider tvDbProvider)
         {
+            _notificationProvider = notificationProvider;
             _diskProvider = diskProvider;
             _config = configProvider;
             _sonioRepo = dataRepository;
@@ -87,31 +91,45 @@ namespace NzbDrone.Core.Providers
 
         public void SyncSeriesWithDisk()
         {
+            if (_progress != null && _progress.Status == NotificationStatus.InProgress)
+                throw new InvalidOperationException("Another Task is already in progress. " + _progress.Title);
+
             if (String.IsNullOrEmpty(_config.SeriesRoot))
                 throw new InvalidOperationException("TV Series folder is not configured yet.");
 
-            foreach (string seriesFolder in GetUnmappedFolders())
+            using (_progress = new ProgressNotification("Updating Series From Disk"))
             {
-                Logger.Info("Folder '{0}' isn't mapped to a series in the database. Trying to map it.'", seriesFolder);
-                var mappedSeries = MapPathToSeries(seriesFolder);
+                _notificationProvider.Register(_progress);
 
-                if (mappedSeries == null)
-                {
-                    Logger.Warn("Unable to find a matching series for '{0}'", seriesFolder);
-                }
-                else
-                {
+                var unmappedFolders = GetUnmappedFolders();
+                _progress.ProgressMax = unmappedFolders.Count;
 
-                    if (!_sonioRepo.Exists<Series>(s => s.SeriesId == mappedSeries.Id))
+                foreach (string seriesFolder in unmappedFolders)
+                {
+                    _progress.CurrentStatus = String.Format("Mapping folder {0}", seriesFolder);
+
+                    Logger.Info("Folder '{0}' isn't mapped to a series in the database. Trying to map it.'", seriesFolder);
+                    var mappedSeries = MapPathToSeries(seriesFolder);
+
+                    if (mappedSeries == null)
                     {
-                        RegisterSeries(seriesFolder, mappedSeries);
+                        Logger.Warn("Unable to find a matching series for '{0}'", seriesFolder);
                     }
                     else
                     {
-                        Logger.Warn("Folder '{0}' mapped to '{1}' which is already another folder assigned to it.'", seriesFolder, mappedSeries.SeriesName);
+                        if (!_sonioRepo.Exists<Series>(s => s.SeriesId == mappedSeries.Id))
+                        {
+                            RegisterSeries(seriesFolder, mappedSeries);
+                        }
+                        else
+                        {
+                            Logger.Warn("Folder '{0}' mapped to '{1}' which is already another folder assigned to it.'", seriesFolder, mappedSeries.SeriesName);
+                        }
                     }
+                    _progress.ProgressValue++;
                 }
 
+                _progress.Status = NotificationStatus.Completed;
             }
         }
 

@@ -6,8 +6,8 @@ using FizzWare.NBuilder;
 using Gallio.Framework;
 using MbUnit.Framework;
 using MbUnit.Framework.ContractVerifiers;
-using NzbDrone.Core.Repository;
-using NzbDrone.Core.Repository.Episode;
+using NzbDrone.Core.Entities;
+using NzbDrone.Core.Entities.Episode;
 
 namespace NzbDrone.Core.Test
 {

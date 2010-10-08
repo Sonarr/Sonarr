@@ -1,7 +1,6 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<IEnumerable<NzbDrone.Core.Repository.Series>>" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<IEnumerable<NzbDrone.Core.Entities.Series>>" %>
 
 <%@ Import Namespace="Telerik.Web.Mvc.UI" %>
-<%@ Import Namespace="NzbDrone.Core.Repository" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
     Series
 </asp:Content>

@@ -3,11 +3,10 @@ using System.IO;
 using System.Web;
 using Ninject;
 using NLog.Config;
-using NLog.Layouts;
 using NLog.Targets;
+using NzbDrone.Core.Entities;
+using NzbDrone.Core.Entities.Episode;
 using NzbDrone.Core.Providers;
-using NzbDrone.Core.Repository;
-using NzbDrone.Core.Repository.Episode;
 using SubSonic.DataProviders;
 using SubSonic.Repository;
 using NLog;
@@ -16,19 +15,21 @@ namespace NzbDrone.Core
 {
     public static class CentralDispatch
     {
-        private static readonly Logger Logger = LogManager.GetLogger("DB");
 
         public static void BindKernel(IKernel kernel)
         {
             string connectionString = String.Format("Data Source={0};Version=3;", Path.Combine(AppPath, "nzbdrone.db"));
             var provider = ProviderFactory.GetProvider(connectionString, "System.Data.SQLite");
             provider.Log = new SonicTrace();
-            kernel.Bind<ISeriesProvider>().To<SeriesProvider>();
+            provider.LogParams = true;
+
+            kernel.Bind<ISeriesProvider>().To<SeriesProvider>().InSingletonScope();
             kernel.Bind<ISeasonProvider>().To<SeasonProvider>();
             kernel.Bind<IEpisodeProvider>().To<EpisodeProvider>();
             kernel.Bind<IDiskProvider>().To<DiskProvider>();
             kernel.Bind<ITvDbProvider>().To<TvDbProvider>();
             kernel.Bind<IConfigProvider>().To<ConfigProvider>().InSingletonScope();
+            kernel.Bind<INotificationProvider>().To<NotificationProvider>().InSingletonScope();
             kernel.Bind<IRepository>().ToMethod(c => new SimpleRepository(provider, SimpleRepositoryOptions.RunMigrations)).InSingletonScope();
 
             ForceMigration(kernel.Get<IRepository>());
@@ -79,12 +80,9 @@ namespace NzbDrone.Core
             //config.AddTarget("file", fileTarget);
 
             // Step 3. Set target properties 
-
-
-
             // Step 4. Define rules
+            //LoggingRule fileRule = new LoggingRule("*", LogLevel.Trace, fileTarget);
             LoggingRule debugRule = new LoggingRule("*", LogLevel.Trace, debuggerTarget);
-            LoggingRule fileRule = new LoggingRule("*", LogLevel.Trace, fileTarget);
             LoggingRule consoleRule = new LoggingRule("*", LogLevel.Trace, consoleTarget);
 
             //config.LoggingRules.Add(fileRule);

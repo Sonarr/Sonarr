@@ -1,6 +1,6 @@
 ﻿using SubSonic.SqlGeneration.Schema;
 
-namespace NzbDrone.Core.Repository
+namespace NzbDrone.Core.Entities
 {
     [SubSonicTableNameOverride("Config")]
     public class Config

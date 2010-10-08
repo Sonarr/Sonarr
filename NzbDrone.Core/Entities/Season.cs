@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ServiceModel.Syndication;
+﻿using System.Collections.Generic;
 using SubSonic.SqlGeneration.Schema;
 
-namespace NzbDrone.Core.Repository
+namespace NzbDrone.Core.Entities
 {
     public class Season
     {
@@ -15,7 +13,7 @@ namespace NzbDrone.Core.Repository
         public string Folder { get; set; }
 
         [SubSonicToManyRelation]
-        public virtual List<Episode.Episode> Episodes { get; private set; }
+        public virtual List<Episode.BasicEpisode> Episodes { get; private set; }
 
         [SubSonicToOneRelation(ThisClassContainsJoinKey = true)]
         public virtual Series Series { get; private set; }
