@@ -22,6 +22,28 @@ Released   : 20100727
         Html.Telerik().StyleSheetRegistrar().DefaultGroup(group => group.Add("telerik.common.css").Add("telerik.sitefinity.css")).Render();
     %>
     <link href="../../Content/style.css" rel="stylesheet" type="text/css" media="screen" />
+    <style>
+    .Mediabox 
+    {
+    	background:black;
+    }
+    .Play 
+    {
+    	cursor:pointer;
+        padding:5px;
+
+    }
+    .Pause 
+    {
+    	cursor:pointer;
+        padding:5px;
+    }
+    .Stop 
+    {
+    	cursor:pointer;
+        padding:5px;
+    }
+    </style>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
     <script type="text/javascript">
         <asp:ContentPlaceHolder ID="JavascriptContent" runat="server" />
