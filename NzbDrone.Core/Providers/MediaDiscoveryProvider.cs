@@ -8,13 +8,7 @@ namespace NzbDrone.Core.Providers
     public class MediaDiscoveryProvider : IMediaDiscoveryProvider
     {
         #region IMediaDiscoveryProvider Members
-
-        public void Discover()
-        {
-            //calling the static instance will kick off the discovery process
-            OpenSource.UPnP.AudioVideoDevices instance = OpenSource.UPnP.AudioVideoDevices.Instance;
-        }
-
+        
         public bool DiscoveredMedia
         {
             get { return (OpenSource.UPnP.AudioVideoDevices.Instance.Devices.Count > 0); }

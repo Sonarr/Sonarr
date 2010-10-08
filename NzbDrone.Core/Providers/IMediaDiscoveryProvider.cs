@@ -5,9 +5,8 @@ using System.Text;
 
 namespace NzbDrone.Core.Providers
 {
-    interface IMediaDiscoveryProvider
+    public interface IMediaDiscoveryProvider
     {
-        void Discover();
         bool DiscoveredMedia { get; }
         List<IMediaProvider> Providers { get; }
     }

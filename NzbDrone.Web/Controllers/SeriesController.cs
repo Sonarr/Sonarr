@@ -50,6 +50,12 @@ namespace NzbDrone.Web.Controllers
             });
         }
 
+        public JsonResult MediaDetect()
+        {
+            Core.Providers.IMediaDiscoveryProvider disco = new Core.Providers.MediaDiscoveryProvider();
+            return Json(new { Discovered = disco.DiscoveredMedia }, JsonRequestBehavior.AllowGet);
+        }
+
         //
         // GET: /Series/Details/5
 

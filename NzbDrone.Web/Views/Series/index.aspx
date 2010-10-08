@@ -2,8 +2,36 @@
 
 <%@ Import Namespace="Telerik.Web.Mvc.UI" %>
 <%@ Import Namespace="NzbDrone.Core.Repository" %>
+
+<asp:Content ID="Content3" ContentPlaceHolderID="JavascriptContent" runat="server">
+    $(document).ready(function () {
+        setTimeout(MediaDetect(), 5000);
+        $("#Title").bind("click", MediaDetect);
+    });
+    var Discovered = false;
+    function MediaDetect() {
+        $.ajax({
+            url: 'Series/MediaDetect',
+            success: MediaDetectCallback
+        });
+
+    }
+    function MediaDetectCallback(data) {
+        Discovered=data.Discovered;
+        if(!Discovered) 
+            setTimeout(MediaDetect(), 10000);
+        else 
+            LightUpMedia(data);
+    }
+
+    function LightUpMedia(data) {
+        
+    }
+</asp:Content>
+
+
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
-    Series
+    <div id="Title">Series</div>
 </asp:Content>
 <asp:Content ID="Menue" ContentPlaceHolderID="ActionMenue" runat="server">
     <%
@@ -11,8 +39,6 @@
                                                 .Items(items => items.Add().Text("Sync With Disk").Action("Sync", "Series"))
                                                 .Render();
     %>
-
-    sss
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <%
