@@ -149,6 +149,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Providers\IMediaProvider.cs" />
+    <Compile Include="Providers\XBMCMediaProvider.cs" />
     <Compile Include="SonicTrace.cs" />
     <Compile Include="Providers\ConfigProvider.cs" />
     <Compile Include="Providers\EpisodeProvider.cs" />
