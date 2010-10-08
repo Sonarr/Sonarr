@@ -5,8 +5,8 @@ using System.Text;
 
 namespace NzbDrone.Core.Providers
 {
-    interface IMediaProvider
-    {
+    public interface IMediaProvider
+    {        
         void Play();
         void Play(string Location);
         void Play(string Location, bool AddToQueue);

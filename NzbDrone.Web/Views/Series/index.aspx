@@ -11,6 +11,8 @@
                                                 .Items(items => items.Add().Text("Sync With Disk").Action("Sync", "Series"))
                                                 .Render();
     %>
+
+    sss
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <%
