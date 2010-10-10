@@ -6,10 +6,10 @@ namespace NzbDrone.Core.Providers
 {
     public interface IEpisodeProvider
     {
-        BasicEpisode GetEpisode(long id);
-        BasicEpisode UpdateEpisode(BasicEpisode episode);
-        IList<BasicEpisode> GetEpisodesBySeason(long seasonId);
-        IList<BasicEpisode> GetEpisodeBySeries(long seriesId);
+        EpisodeInfo GetEpisode(long id);
+        void UpdateEpisode(EpisodeInfo episode);
+        IList<EpisodeInfo> GetEpisodesBySeason(long seasonId);
+        IList<EpisodeInfo> GetEpisodeBySeries(long seriesId);
         String GetSabTitle(BasicEpisode episode);
 
         /// <summary>
@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Providers
         /// </summary>
         /// <param name="episode">Episode that needs to be checked</param>
         /// <returns></returns>
-        bool IsNeeded(BasicEpisode episode);
+        bool IsNeeded(RemoteEpisode episode);
 
         void RefreshSeries(int seriesId);
     }

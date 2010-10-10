@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Providers
             throw new NotImplementedException();
         }
 
-        public List<Season> GetSeasongs(int seriesId)
+        public List<Season> GetSeasons(int seriesId)
         {
             throw new NotImplementedException();
         }
