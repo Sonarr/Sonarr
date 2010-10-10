@@ -9,7 +9,6 @@ namespace NzbDrone.Web
 {
     public class MvcApplication : NinjectHttpApplication
     {
-        private StandardKernel _kernel;
 
         public static void RegisterRoutes(RouteCollection routes)
         {
@@ -35,9 +34,8 @@ namespace NzbDrone.Web
 
         protected override IKernel CreateKernel()
         {
-            _kernel = new StandardKernel();
-            CentralDispatch.BindKernel(_kernel);
-            return _kernel;
+            return CentralDispatch.NinjectKernel;
+
         }
 
 

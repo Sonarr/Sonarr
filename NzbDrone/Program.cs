@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using NLog;
+﻿using NLog;
 using NzbDrone.Core;
 
-namespace NzbDrone.Console
+namespace NzbDrone
 {
     class Program
     {
@@ -15,6 +10,8 @@ namespace NzbDrone.Console
         static void Main(string[] args)
         {
             CentralDispatch.ConfigureNlog();
+            CentralDispatch.BindKernel();
+
             Logger.Info("Starting NZBDrone WebUI");
             var server = new CassiniDev.Server(@"D:\My Dropbox\Git\NzbDrone\NzbDrone.Web");
             server.Start();

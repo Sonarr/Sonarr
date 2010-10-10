@@ -161,6 +161,7 @@
     <Content Include="Content\Telerik\sprite.png" />
     <Content Include="Content\Telerik\treeview-line.png" />
     <Content Include="Content\Telerik\treeview-nodes.png" />
+    <Content Include="Content\ui.notify.css" />
     <Content Include="Content\Vista\editor.png" />
     <Content Include="Content\Vista\loading.gif" />
     <Content Include="Content\Vista\sprite.png" />
@@ -201,6 +202,8 @@
     <Content Include="Scripts\2010.2.825\telerik.textbox.min.js" />
     <Content Include="Scripts\2010.2.825\telerik.treeview.min.js" />
     <Content Include="Scripts\2010.2.825\telerik.window.min.js" />
+    <Content Include="Scripts\jquery.msg.js" />
+    <Content Include="Scripts\Notifications.js" />
     <Content Include="Views\Series\Details.aspx" />
     <Content Include="Views\Series\index.aspx" />
     <Content Include="Views\Series\Unmapped.aspx" />

@@ -149,6 +149,7 @@
     <Compile Include="Entities\Notification\BasicNotification.cs" />
     <Compile Include="Entities\Notification\NotificationStatus.cs" />
     <Compile Include="Entities\Notification\NotificationType.cs" />
+    <Compile Include="Providers\Fakes\FakeNotificationProvider.cs" />
     <Compile Include="Providers\INotificationProvider.cs" />
     <Compile Include="Providers\IMediaDiscoveryProvider.cs" />
     <Compile Include="Providers\IMediaProvider.cs" />
