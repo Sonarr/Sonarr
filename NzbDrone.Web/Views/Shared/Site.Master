@@ -22,12 +22,46 @@ Released   : 20100727
         Html.Telerik().StyleSheetRegistrar().DefaultGroup(group => group.Add("telerik.common.css").Add("telerik.sitefinity.css")).Render();
     %>
     <link href="../../Content/ui.notify.css" rel="stylesheet" type="text/css" />
-    <script src="../../Scripts/jquery.msg.js" type="text/javascript"></script>
     <link href="../../Content/style.css" rel="stylesheet" type="text/css" media="screen" />
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+        <link type="text/css" rel="stylesheet" href="http://www.erichynds.com/examples/style.css" />
+    <link type="text/css" rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/redmond/jquery-ui.css" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js" type="text/javascript"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery.notify.min.js" type="text/javascript"></script>
     <script src="../../Scripts/Notifications.js" type="text/javascript"></script>
     <script type="text/javascript">
-        <asp:ContentPlaceHolder ID="JavascriptContent" runat="server" />
+
+
+        function create(template, vars, opts) {
+            return $container.notify("create", template, vars, opts);
+        }
+
+
+
+        $(function () {
+
+            // initialize widget on a container, passing in all the defaults.
+            // the defaults will apply to any notification created within this
+            // container, but can be overwritten on notification-by-notification
+            // basis.
+            $container = $("#konfused").notify();
+
+
+            // create two when the pg loads
+            var tttt = create("default", { title: '*********Default Notification', text: 'Example of a default notification.  I will fade out after 5 seconds' });
+            create("sticky", { title: 'Sticky Notification', text: 'Example of a "sticky" notification.  Click on the X above to close me.' }, { expires: false });
+
+            // second
+            var container = $("#container-bottom").notify({ stack: 'above' });
+            container.notify("create", {
+                title: 'Look ma, two containers!',
+                text: 'This container is positioned on the bottom of the screen.  Notifications will stack on top of each other with the <code>position</code> attribute set to <code>above</code>.'
+            }, { expires: false });
+
+            container.notify("widget").find("input").bind("click", function () {
+                container.notify("create", 1, { title: 'Another Notification!', text: 'The quick brown fox jumped over the lazy dog.' });
+            });
+        });
     </script>
 </head>
 <body>
@@ -58,8 +92,55 @@ Released   : 20100727
             </div>
         </div>
     </div>
-    <div id="container-bottom" style="display: none; top: auto; right: 0; padding: 10px;
-        bottom: 0; margin: 0 0 10px 10px">
+    <div id="konfused" style="display: none">
+        <div id="default">
+            <h1>
+                #{title}</h1>
+            <h2>
+                <div class="defText">
+                    #{text}
+                </div>
+            </h2>
+        </div>
+        <div id="sticky">
+            <h1>
+                #{title}</h1>
+            <p>
+                #{text}</p>
+        </div>
+        <div id="themeroller" class="ui-state-error" style="padding: 10px; -moz-box-shadow: 0 0 6px #980000;
+            -webkit-box-shadow: 0 0 6px #980000; box-shadow: 0 0 6px #980000;">
+            <a class="ui-notify-close" href="#"><span class="ui-icon ui-icon-close" style="float: right">
+            </span></a><span style="float: left; margin: 0 5px 0 0;" class="ui-icon ui-icon-alert">
+            </span>
+            <h1>
+                #{title}</h1>
+            <p>
+                #{text}</p>
+            <p style="text-align: center">
+                <a class="ui-notify-close" href="#">Close Me</a></p>
+        </div>
+        <div id="withIcon">
+            <a class="ui-notify-close ui-notify-cross" href="#">x</a>
+            <div style="float: left; margin: 0 10px 0 0">
+                <img src="#{icon}" alt="warning" /></div>
+            <h1>
+                #{title}</h1>
+            <p>
+                #{text}</p>
+        </div>
+        <div id="buttons">
+            <h1>
+                #{title}</h1>
+            <p>
+                #{text}</p>
+            <p style="margin-top: 10px; text-align: center">
+                <input type="button" class="confirm" value="Close Dialog" />
+            </p>
+        </div>
+    </div>
+    <div id="container-bottom" style="top: auto; right: 0; padding: 10px; bottom: 0;
+        margin: 0 0 10px 10px">
         <div>
             <h1>
                 #{title}</h1>

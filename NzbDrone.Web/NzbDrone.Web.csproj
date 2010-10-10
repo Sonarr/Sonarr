@@ -202,7 +202,8 @@
     <Content Include="Scripts\2010.2.825\telerik.textbox.min.js" />
     <Content Include="Scripts\2010.2.825\telerik.treeview.min.js" />
     <Content Include="Scripts\2010.2.825\telerik.window.min.js" />
-    <Content Include="Scripts\jquery.msg.js" />
+    <Content Include="Scripts\jquery.notify.js" />
+    <Content Include="Scripts\jquery.notify.min.js" />
     <Content Include="Scripts\Notifications.js" />
     <Content Include="Views\Series\Details.aspx" />
     <Content Include="Views\Series\index.aspx" />

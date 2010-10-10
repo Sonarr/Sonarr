@@ -2,45 +2,6 @@
 
 <%@ Import Namespace="Telerik.Web.Mvc.UI" %>
 
-<asp:Content ID="Content3" ContentPlaceHolderID="JavascriptContent" runat="server">
-    $(document).ready(function () {
-        $("#Mediabox").bind("click", MediaBoxClick);
-        setTimeout('MediaDetect();', 5000);
-    });
-    var Discovered = false;
-
-    function MediaDetect() {
-        $.ajax({
-            url: 'Series/MediaDetect',
-            success: MediaDetectCallback
-        });
-
-    }
-    function MediaDetectCallback(data) {
-        Discovered=data.Discovered;
-        if(!Discovered) 
-            setTimeout('MediaDetect();', 10000);
-        else 
-            LightUpMedia(data);
-    }
-
-    function LightUpMedia(data) {
-        $.ajax({
-            url: 'Series/LightUpMedia',
-            success: LightUpMediaSuccess
-        });        
-    }
-    function LightUpMediaSuccess(data) {    
-        $("#Mediabox").html(data.HTML);
-    }
-    function MediaBoxClick(args) {   
-        $.ajax({
-            url: 'Series/ControlMedia',
-            data: "Action=" + args.target.className
-        });        
-    }
-</asp:Content>
-
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
     Series
