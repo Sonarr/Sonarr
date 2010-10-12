@@ -40,27 +40,34 @@ namespace NzbDrone.Core.Providers
             _series = seriesProvider;
             _tvDb = tvDbProvider;
             _seasons = seasonProvider;
-
         }
 
-        public BasicEpisode GetEpisode(long id)
+        public EpisodeInfo GetEpisode(long id)
         {
-            throw new NotImplementedException();
+            return _sonicRepo.Single<EpisodeInfo>(e => e.EpisodeId == id);
         }
 
-        public BasicEpisode UpdateEpisode(BasicEpisode episode)
+        public void UpdateEpisode(EpisodeInfo episode)
         {
-            throw new NotImplementedException();
+            var episodeToUpdate = _sonicRepo.Single<EpisodeInfo>(e => e.EpisodeId == episode.EpisodeId);
+
+            episodeToUpdate.AirDate = episode.AirDate;
+            episodeToUpdate.Overview = episode.Overview;
+            episodeToUpdate.Title = episode.Title;
+            episodeToUpdate.EpisodeNumber = episode.EpisodeNumber;
+            episodeToUpdate.SeasonNumber = episode.SeasonNumber;
+
+            _sonicRepo.Update<EpisodeInfo>(episodeToUpdate);
         }
 
-        public IList<BasicEpisode> GetEpisodesBySeason(long seasonId)
+        public IList<EpisodeInfo> GetEpisodesBySeason(long seasonId)
         {
-            throw new NotImplementedException();
+            return _sonicRepo.Find<EpisodeInfo>(e => e.SeasonId == seasonId);
         }
 
-        public IList<BasicEpisode> GetEpisodeBySeries(long seriesId)
+        public IList<EpisodeInfo> GetEpisodeBySeries(long seriesId)
         {
-            throw new NotImplementedException();
+            return _sonicRepo.Find<EpisodeInfo>(e => e.SeriesId == seriesId);
         }
 
         public String GetSabTitle(BasicEpisode episode)
@@ -70,7 +77,6 @@ namespace NzbDrone.Core.Providers
 
             //TODO: This method should return a standard title for the sab episode.
             throw new NotImplementedException();
-
         }
 
         /// <summary>
@@ -78,7 +84,7 @@ namespace NzbDrone.Core.Providers
         /// </summary>
         /// <param name="episode">Episode that needs to be checked</param>
         /// <returns></returns>
-        public bool IsNeeded(BasicEpisode episode)
+        public bool IsNeeded(RemoteEpisode episode)
         {
             throw new NotImplementedException();
         }
@@ -153,6 +159,5 @@ namespace NzbDrone.Core.Providers
 
             return result;
         }
-
     }
 }
