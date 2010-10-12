@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Providers
                 }
             }
 
-            Logger.Debug("Search for '{0}' returned {1} results", title);
+            Logger.Debug("Search for '{0}' returned {1} results", title, result.Count);
             return result;
         }
 

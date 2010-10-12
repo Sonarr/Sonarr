@@ -14,8 +14,12 @@ namespace NzbDrone.Core.Entities.Episode
         [SubSonicLongString]
         public string Overview { get; set; }
         public string Language { get; set; }
+        public int MediaFileId { get; set; }
 
         [SubSonicToOneRelation(ThisClassContainsJoinKey = true)]
         public virtual Season Season { get; set; }
+
+        [SubSonicToOneRelation(ThisClassContainsJoinKey = true)]
+        public virtual MediaFile File { get; set; }
     }
 }

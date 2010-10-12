@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using NzbDrone.Core.Entities.Notification;
 
@@ -7,7 +8,7 @@ namespace NzbDrone.Core.Providers
     class NotificationProvider : INotificationProvider
     {
         private readonly Dictionary<Guid, BasicNotification> _basicNotifications = new Dictionary<Guid, BasicNotification>();
-        private readonly Dictionary<Guid, ProgressNotification> _progressNotification = new Dictionary<Guid, ProgressNotification>();
+        private Dictionary<Guid, ProgressNotification> _progressNotification = new Dictionary<Guid, ProgressNotification>();
         private readonly Object _lock = new object();
 
         public void Register(ProgressNotification notification)
@@ -25,9 +26,9 @@ namespace NzbDrone.Core.Providers
             get { return new List<BasicNotification>(_basicNotifications.Values); }
         }
 
-        public List<ProgressNotification> ProgressNotifications
+        public List<ProgressNotification> GetProgressNotifications
         {
-            get { return new List<ProgressNotification>(_progressNotification.Values); }
+            get { return new List<ProgressNotification>(_progressNotification.Values.Where(p => p.Status == NotificationStatus.InProgress)); }
         }
 
         public void Dismiss(Guid notificationId)

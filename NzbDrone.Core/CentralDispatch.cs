@@ -38,7 +38,7 @@ namespace NzbDrone.Core
                 _kernel.Bind<IDiskProvider>().To<DiskProvider>();
                 _kernel.Bind<ITvDbProvider>().To<TvDbProvider>();
                 _kernel.Bind<IConfigProvider>().To<ConfigProvider>().InSingletonScope();
-                _kernel.Bind<INotificationProvider>().To<FakeNotificationProvider>().InSingletonScope();
+                _kernel.Bind<INotificationProvider>().To<NotificationProvider>().InSingletonScope();
                 _kernel.Bind<IRepository>().ToMethod(c => new SimpleRepository(provider, SimpleRepositoryOptions.RunMigrations)).InSingletonScope();
 
                 ForceMigration(_kernel.Get<IRepository>());

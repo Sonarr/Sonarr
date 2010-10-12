@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Providers
         void Register(BasicNotification notification);
         
         List<BasicNotification> BasicNotifications { get; }
-        List<ProgressNotification> ProgressNotifications { get; }
+        List<ProgressNotification> GetProgressNotifications { get; }
 
         /// <summary>
         /// Dismisses a notification based on its ID.

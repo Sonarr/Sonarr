@@ -21,7 +21,7 @@ namespace NzbDrone.Web.Controllers
         [HttpGet]
         public JsonResult Index()
         {
-            return Json(_notifications.ProgressNotifications, JsonRequestBehavior.AllowGet);
+            return Json(_notifications.GetProgressNotifications, JsonRequestBehavior.AllowGet);
         }
 
     }

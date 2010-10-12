@@ -39,10 +39,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\NzbDrone.Core\Libraries\Ninject.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject.Web.Mvc, Version=2.0.0.0, Culture=neutral, PublicKeyToken=79764a4ef1548af1, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\NzbDrone.Core\Libraries\Ninject.Web.Mvc.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -88,6 +84,9 @@
     <Compile Include="Helpers\IsCurrentActionHelper.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\SettingsModels.cs" />
+    <Compile Include="Ninject.Web.Mvc\NinjectActionInvoker.cs" />
+    <Compile Include="Ninject.Web.Mvc\NinjectControllerFactory.cs" />
+    <Compile Include="Ninject.Web.Mvc\NinjectHttpApplication.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +114,7 @@
     <Content Include="Content\Images\img02.jpg" />
     <Content Include="Content\Images\img03.jpg" />
     <Content Include="Content\Images\img07.jpg" />
+    <Content Include="Content\jquery.jgrowl.css" />
     <Content Include="Content\Office2007\editor.png" />
     <Content Include="Content\Office2007\loading.gif" />
     <Content Include="Content\Office2007\sprite.png" />
@@ -161,7 +161,6 @@
     <Content Include="Content\Telerik\sprite.png" />
     <Content Include="Content\Telerik\treeview-line.png" />
     <Content Include="Content\Telerik\treeview-nodes.png" />
-    <Content Include="Content\ui.notify.css" />
     <Content Include="Content\Vista\editor.png" />
     <Content Include="Content\Vista\loading.gif" />
     <Content Include="Content\Vista\sprite.png" />
@@ -202,9 +201,9 @@
     <Content Include="Scripts\2010.2.825\telerik.textbox.min.js" />
     <Content Include="Scripts\2010.2.825\telerik.treeview.min.js" />
     <Content Include="Scripts\2010.2.825\telerik.window.min.js" />
-    <Content Include="Scripts\jquery.notify.js" />
-    <Content Include="Scripts\jquery.notify.min.js" />
-    <Content Include="Scripts\Notifications.js" />
+    <Content Include="Scripts\jquery-ui-1.8.5.custom.min.js" />
+    <Content Include="Scripts\jquery.jgrowl.js" />
+    <Content Include="Scripts\Notification.js" />
     <Content Include="Views\Series\Details.aspx" />
     <Content Include="Views\Series\index.aspx" />
     <Content Include="Views\Series\Unmapped.aspx" />
@@ -218,8 +217,6 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Scripts\jquery-1.4.1.js" />
-    <Content Include="Scripts\jquery-1.4.1.min.js" />
     <Content Include="Scripts\jquery-1.4.1-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />

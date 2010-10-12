@@ -10,6 +10,7 @@ namespace NzbDrone.Core.Entities.Notification
         public ProgressNotification(string title)
         {
             Title = title;
+            CurrentStatus = String.Empty;
             Id = Guid.NewGuid();
             ProgressMax = 100;
             ProgressValue = 0;

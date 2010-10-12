@@ -146,6 +146,7 @@
     <Reference Include="UPnP, Version=1.0.3932.37442, Culture=neutral, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\MediaFile.cs" />
     <Compile Include="Entities\Notification\BasicNotification.cs" />
     <Compile Include="Entities\Notification\NotificationStatus.cs" />
     <Compile Include="Entities\Notification\NotificationType.cs" />
@@ -213,8 +214,6 @@
     <Content Include="Libraries\log4net.dll" />
     <Content Include="Libraries\log4net.xml" />
     <Content Include="Libraries\Ninject.dll" />
-    <Content Include="Libraries\Ninject.Web.Mvc.dll" />
-    <Content Include="Libraries\Ninject.Web.Mvc.pdb" />
     <Content Include="Libraries\Ninject.xml" />
     <Content Include="Libraries\NLog.dll" />
     <Content Include="Libraries\NLog.Extended.dll" />

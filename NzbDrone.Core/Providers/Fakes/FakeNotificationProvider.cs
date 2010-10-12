@@ -12,6 +12,7 @@ namespace NzbDrone.Core.Providers.Fakes
 
 
         ProgressNotification fakeNotification = new ProgressNotification("Updating Series");
+        ProgressNotification fakeNotification2 = new ProgressNotification("Updating Series2");
         public void Register(ProgressNotification notification)
         {
             _progressNotification.Add(notification.Id, notification);
@@ -27,14 +28,16 @@ namespace NzbDrone.Core.Providers.Fakes
             get { return new List<BasicNotification>(_basicNotifications.Values); }
         }
 
-        public List<ProgressNotification> ProgressNotifications
+        public List<ProgressNotification> GetProgressNotifications
         {
 
             get
             {
                 fakeNotification.Status = NotificationStatus.InProgress;
+                fakeNotification.Status = NotificationStatus.InProgress;
+                fakeNotification2.CurrentStatus = DateTime.UtcNow.ToString();
                 fakeNotification.CurrentStatus = DateTime.Now.ToString();
-                return new List<ProgressNotification> { fakeNotification };
+                return new List<ProgressNotification> { fakeNotification , fakeNotification2 };
             }
         }
 
