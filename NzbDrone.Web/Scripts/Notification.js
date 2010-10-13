@@ -58,11 +58,6 @@
             }
         }
 
-        function cleanUp(data) {
-        $(
-
-        }
-
         function MakeDiv(id, body) {
             return "<div id ='" + id + "'>" + body + "</div>";
         }
