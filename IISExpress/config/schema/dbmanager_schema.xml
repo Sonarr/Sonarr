@@ -1,0 +1,18 @@
+<configSchema>
+  <sectionSchema name="system.webServer/management/dbManager">
+    <attribute name="allowClientConnectionStrings" type="bool" defaultValue="true"/>
+    <element name="DBProviders">
+      <collection addElement="provider">
+        <attribute name="name" type="string" required="true" isUniqueKey="true" />
+        <attribute name="providerName" type="string" required="true"/>
+        <attribute name="type" type="string" required="true"/>
+        <element name="databaseBackup">
+          <attribute name="backupEnabled" type="bool" defaultValue="false"/>
+          <attribute name="restoreEnabled" type="bool" defaultValue="false"/>
+          <attribute name="customBackupType" type="string" />
+          <attribute name="backupPath" type="string" />
+        </element>
+      </collection>
+    </element>
+  </sectionSchema>
+</configSchema>

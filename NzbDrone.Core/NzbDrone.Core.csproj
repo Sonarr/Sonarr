@@ -217,7 +217,6 @@
     <Content Include="Libraries\Ninject.xml" />
     <Content Include="Libraries\NLog.dll" />
     <Content Include="Libraries\NLog.Extended.dll" />
-    <Content Include="Libraries\NLog.Extended.pdb" />
     <Content Include="Libraries\NLog.Extended.xml" />
     <Content Include="Libraries\NLog.pdb" />
     <Content Include="Libraries\NLog.xml" />

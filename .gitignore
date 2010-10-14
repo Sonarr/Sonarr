@@ -3,8 +3,6 @@
 Thumbs.db
 #Ignore files build by Visual Studio
 *.obj
-*.exe
-*.pdb
 *.user
 *.aps
 *.pch
@@ -27,6 +25,8 @@ obj/
 [Rr]elease*/
 _ReSharper*/
 [Tt]est[Rr]esult[s]
+
+/[Bb]uild/
 
 #NZBDrone specific
 nzbdrone.db

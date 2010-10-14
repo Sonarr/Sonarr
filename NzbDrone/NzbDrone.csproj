@@ -50,20 +50,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CassiniDev\CassiniDev.Lib4.csproj">
-      <Project>{070AE36D-4CE1-4708-BD0F-2896A6F117FC}</Project>
-      <Name>CassiniDev.Lib4</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NzbDrone.Web\NzbDrone.Web.csproj">
-      <Project>{43BD3BBD-1531-4D8F-9C08-E1CD544AB2CD}</Project>
-      <Name>NzbDrone.Web</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NzbDrone.Core\NzbDrone.Core.csproj">
-      <Project>{FF5EE3B6-913B-47CE-9CEB-11C51B4E1205}</Project>
-      <Name>NzbDrone.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

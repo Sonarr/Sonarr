@@ -1,0 +1,74 @@
+<appcmd>
+    <object name="site" alias="sites" classId="DefaultSiteObject" >
+        <verb name="list" classId="DefaultSiteObject" />
+        <verb name="set" classId="DefaultSiteObject" />
+        <verb name="add" classId="DefaultSiteObject" />
+        <verb name="delete" classId="DefaultSiteObject" />
+<!--
+        <verb name="start" classId="DefaultSiteObject" />
+        <verb name="stop" classId="DefaultSiteObject" />
+-->
+    </object>
+    <object name="app" alias="apps" classId="DefaultAppObject" >
+        <verb name="list" description="List applications" classId="DefaultAppObject" />
+        <verb name="set" classId="DefaultAppObject"  />
+        <verb name="add" classId="DefaultAppObject" />
+        <verb name="delete" classId="DefaultAppObject" />
+    </object>
+    <object name="vdir" alias="vdirs" classId="DefaultDirObject" >
+        <verb name="list" description="List virtual directories" classId="DefaultDirObject" />
+        <verb name="set" classId="DefaultDirObject" />
+        <verb name="add" classId="DefaultDirObject" />
+        <verb name="delete" classId="DefaultDirObject" />
+    </object>
+    <object name="apppool" alias="apppools" classId="DefaultAppPoolObject" >
+        <verb name="list" classId="DefaultAppPoolObject"  />
+        <verb name="set" classId="DefaultAppPoolObject"  />
+        <verb name="add" classId="DefaultAppPoolObject"  />
+        <verb name="delete" classId="DefaultAppPoolObject"  />
+<!--
+        <verb name="start" classId="DefaultAppPoolObject"  />
+        <verb name="stop" classId="DefaultAppPoolObject"  />
+        <verb name="recycle" classId="DefaultAppPoolObject"  />
+-->
+    </object>
+    <object name="config" alias="configs" classId="DefaultConfigObject" >
+        <verb name="list" classId="DefaultConfigObject"  />
+        <verb name="set" classId="DefaultConfigObject" />
+        <verb name="search" classId="DefaultConfigObject" />
+        <verb name="lock" classId="DefaultConfigObject"  />
+        <verb name="unlock" classId="DefaultConfigObject"  />
+        <verb name="clear" classId="DefaultConfigObject"  />
+        <verb name="reset" classId="DefaultConfigObject"  />
+<!--
+        <verb name="migrate" classId="DefaultConfigObject"  />
+-->
+    </object>
+<!--
+    <object name="wp" alias="wps" classId="DefaultWorkerProcessObject" >
+        <verb name="list" classId="DefaultWorkerProcessObject"  />
+    </object>
+    <object name="request" alias="requests" classId="DefaultRequestObject" >
+        <verb name="list" classId="DefaultRequestObject"  />
+    </object>
+-->
+    <object name="module" alias="modules" classId="DefaultModuleObject" >
+        <verb name="list" classId="DefaultModuleObject"  />
+        <verb name="set" classId="DefaultModuleObject"  />
+        <verb name="add" classId="DefaultModuleObject"  />
+        <verb name="delete" classId="DefaultModuleObject"  />
+        <verb name="install" classId="DefaultModuleObject"  />
+        <verb name="uninstall" classId="DefaultModuleObject"  />
+    </object>
+    <!--object name="backup" alias="backups" classId="DefaultBackupObject" >
+        <verb name="list" classId="DefaultBackupObject"  />
+        <verb name="add" classId="DefaultBackupObject"  />
+        <verb name="delete" classId="DefaultBackupObject"  />
+        <verb name="restore" classId="DefaultBackupObject"  />
+    </object-->    
+    <object name="trace" alias="traces" classId="DefaultTraceObject" >
+        <verb name="list" classId="DefaultTraceObject"  />
+        <verb name="configure" classId="DefaultTraceObject"  />
+        <verb name="inspect" classId="DefaultTraceObject"  />
+    </object>
+</appcmd>

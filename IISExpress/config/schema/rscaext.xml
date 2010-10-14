@@ -1,0 +1,162 @@
+<configSchema>
+
+  <sectionSchema name="system.applicationHost/sites">
+    <collection addElement="site">
+      <attribute name="state" type="enum" extension="Microsoft.ApplicationHost.RscaExtension">
+        <enum name="Starting" value="0" />
+        <enum name="Started" value="1" />
+        <enum name="Stopping" value="2" />
+        <enum name="Stopped" value="3" />
+        <enum name="Unknown" value="4" />
+      </attribute>
+      <method name="Start" extension="Microsoft.ApplicationHost.RscaExtension" />
+      <method name="Stop" extension="Microsoft.ApplicationHost.RscaExtension" />
+      <element name="bindings">
+        <collection addElement="binding" clearElement="clear">
+          <attribute name="isDsMapperEnabled" type="bool" extension="Microsoft.ApplicationHost.RscaExtension" />
+          <attribute name="certificateHash" type="string" extension="Microsoft.ApplicationHost.RscaExtension" />
+          <attribute name="certificateStoreName" type="string" extension="Microsoft.ApplicationHost.RscaExtension" />
+          <method name="EnableDsMapper" extension="Microsoft.ApplicationHost.RscaExtension" />
+          <method name="DisableDsMapper" extension="Microsoft.ApplicationHost.RscaExtension" />
+          <method name="AddSslCertificate" extension="Microsoft.ApplicationHost.RscaExtension">
+            <inputElement>
+              <attribute name="certificateHash" type="string" />
+              <attribute name="certificateStoreName" type="string" defaultValue="MY" />
+            </inputElement>
+          </method>
+          <method name="RemoveSslCertificate" extension="Microsoft.ApplicationHost.RscaExtension" />
+        </collection>
+      </element>
+    </collection>
+  </sectionSchema>
+
+  <sectionSchema name="system.applicationHost/applicationPools">
+    <collection addElement="add">
+      <attribute name="state" type="enum" extension="Microsoft.ApplicationHost.RscaExtension">
+        <enum name="Starting" value="0" />
+        <enum name="Started" value="1" />
+        <enum name="Stopping" value="2" />
+        <enum name="Stopped" value="3" />
+        <enum name="Unknown" value="4" />
+      </attribute>
+      <attribute name="applicationPoolSid" type="string" extension="Microsoft.ApplicationHost.RscaExtension" />
+      <method name="Start" extension="Microsoft.ApplicationHost.RscaExtension" />
+      <method name="Stop" extension="Microsoft.ApplicationHost.RscaExtension" />
+      <method name="Recycle" extension="Microsoft.ApplicationHost.RscaExtension" />
+      <element name="workerProcesses" extension="Microsoft.ApplicationHost.RscaExtension">
+        <collection addElement="workerProcess">
+          <attribute name="processId" type="uint" isUniqueKey="true" />
+          <attribute name="guid" type="string" />
+          <attribute name="state" type="enum">
+            <enum name="Starting" value="0" />
+            <enum name="Running" value="1" />
+            <enum name="Stopping" value="2" />
+            <enum name="Unknown" value="3" />
+          </attribute>
+          <attribute name="appPoolName" type="string" />
+          <method name="GetRequests" extension="Microsoft.ApplicationHost.RscaExtension">
+            <inputElement>
+              <attribute name="timeElapsedFilter" type="uint" defaultValue="0" />
+            </inputElement>
+            <outputElement>
+              <collection addElement="request">
+                <attribute name="requestId" type="string" />
+                <attribute name="connectionId" type="string" />
+                <attribute name="verb" type="string" />
+                <attribute name="url" type="string" />
+                <attribute name="siteId" type="uint" />
+                <attribute name="localPort" type="uint" />
+                <attribute name="hostName" type="string" />
+                <attribute name="clientIpAddress" type="string" />
+                <attribute name="timeElapsed" type="uint" />
+                <attribute name="pipeLineState" type="uint" />
+                <attribute name="timeInState" type="uint" />
+                <attribute name="currentModule" type="string" />
+                <attribute name="timeInModule" type="uint" />
+                <attribute name="localIpAddress" type="string" />
+              </collection>
+            </outputElement>
+          </method>
+          <element name="appDomains" extension="Microsoft.ApplicationHost.RscaExtension">
+            <collection addElement="appDomain">
+              <attribute name="id" type="string" />
+              <attribute name="virtualPath" type="string" />
+              <attribute name="physicalPath" type="string" />
+              <attribute name="siteId" type="uint" />
+              <attribute name="idle" type="uint" />
+              <method name="Unload" extension="Microsoft.ApplicationHost.RscaExtension" />
+            </collection>
+          </element>
+          <method name="GetCustomData" extension="Microsoft.ApplicationHost.RscaExtension">
+            <inputElement>
+              <attribute name="guidIdOfFunctionCall" type="string" />
+              <attribute name="parametersOfFunctionCall" type="string" />
+            </inputElement>
+            <outputElement>
+              <attribute name="data" type="string" />
+            </outputElement>
+          </method>
+        </collection>
+      </element>
+    </collection>
+    <element name="workerProcesses" extension="Microsoft.ApplicationHost.RscaExtension">
+      <collection addElement="workerProcess">
+        <attribute name="processId" type="uint" isUniqueKey="true" />
+        <attribute name="guid" type="string" />
+        <attribute name="state" type="enum">
+          <enum name="Starting" value="0" />
+          <enum name="Running" value="1" />
+          <enum name="Stopping" value="2" />
+          <enum name="Unknown" value="3" />
+        </attribute>
+        <attribute name="appPoolName" type="string" />
+        <method name="GetRequests" extension="Microsoft.ApplicationHost.RscaExtension">
+          <inputElement>
+            <attribute name="timeElapsedFilter" type="uint" defaultValue="0" />
+          </inputElement>
+          <outputElement>
+            <collection addElement="request">
+              <attribute name="requestId" type="string" />
+              <attribute name="connectionId" type="string" />
+              <attribute name="verb" type="string" />
+              <attribute name="url" type="string" />
+              <attribute name="siteId" type="uint" />
+              <attribute name="localPort" type="uint" />
+              <attribute name="hostName" type="string" />
+              <attribute name="clientIpAddress" type="string" />
+              <attribute name="timeElapsed" type="uint" />
+              <attribute name="pipeLineState" type="uint" />
+              <attribute name="timeInState" type="uint" />
+              <attribute name="currentModule" type="string" />
+              <attribute name="timeInModule" type="uint" />
+              <attribute name="localIpAddress" type="string" />
+            </collection>
+          </outputElement>
+        </method>
+        <element name="appDomains" extension="Microsoft.ApplicationHost.RscaExtension">
+          <collection addElement="appDomain">
+            <attribute name="id" type="string" />
+            <attribute name="virtualPath" type="string" />
+            <attribute name="physicalPath" type="string" />
+            <attribute name="siteId" type="uint" />
+            <attribute name="idle" type="uint" />
+            <method name="Unload" extension="Microsoft.ApplicationHost.RscaExtension" />
+          </collection>
+        </element>
+        <method name="GetCustomData" extension="Microsoft.ApplicationHost.RscaExtension">
+          <inputElement>
+            <attribute name="guidIdOfFunctionCall" type="string" />
+            <attribute name="parametersOfFunctionCall" type="string" />
+          </inputElement>
+          <outputElement>
+            <attribute name="data" type="string" />
+          </outputElement>
+        </method>
+      </collection>
+    </element>
+    <element name="applicationPoolsControl" extension="Microsoft.ApplicationHost.RscaExtension">
+      <method name="FlushTokenCache"  extension="Microsoft.ApplicationHost.RscaExtension"/>
+    </element>
+  </sectionSchema>
+
+</configSchema>
