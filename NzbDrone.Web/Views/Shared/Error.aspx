@@ -11,15 +11,3 @@
     <br />
     <%:Model.Exception.ToString()%>
 </asp:Content>
-<script runat="server">
-    protected void Page_Load(object sender, EventArgs e)
-    {
-        try
-        {
-            LogManager.GetLogger("EPICFAIL").FatalException("Unhandled Exception", Model.Exception);
-        }
-        catch (Exception)
-        {
-        }
-    }
-</script>

@@ -1,9 +1,12 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Diagnostics;
+using System.Web;
+using System.Web.Mvc;
 using System.Web.Routing;
 using Ninject;
 using Ninject.Web.Mvc;
+using NLog;
 using NzbDrone.Core;
-
 
 namespace NzbDrone.Web
 {
@@ -21,12 +24,11 @@ namespace NzbDrone.Web
                 "{controller}/{action}/{id}", // URL with parameters
                 new { controller = "Series", action = "Index", id = UrlParameter.Optional } // Parameter defaults
             );
-
         }
 
         protected override void OnApplicationStarted()
         {
-            CentralDispatch.ConfigureNlog();
+            Instrumentation.Setup();
             AreaRegistration.RegisterAllAreas();
             RegisterRoutes(RouteTable.Routes);
             base.OnApplicationStarted();
@@ -35,8 +37,14 @@ namespace NzbDrone.Web
         protected override IKernel CreateKernel()
         {
             return CentralDispatch.NinjectKernel;
-
         }
+
+        // ReSharper disable InconsistentNaming
+        protected void Application_Error(object sender, EventArgs e)
+        {
+            Instrumentation.LogEpicException(Server.GetLastError());
+        }
+
 
 
     }

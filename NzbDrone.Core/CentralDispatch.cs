@@ -29,7 +29,7 @@ namespace NzbDrone.Core
 
                 string connectionString = String.Format("Data Source={0};Version=3;", Path.Combine(AppPath, "nzbdrone.db"));
                 var provider = ProviderFactory.GetProvider(connectionString, "System.Data.SQLite");
-                provider.Log = new SonicTrace();
+                provider.Log = new Instrumentation.NlogWriter();
                 provider.LogParams = true;
 
                 _kernel.Bind<ISeriesProvider>().To<SeriesProvider>().InSingletonScope();
@@ -62,58 +62,12 @@ namespace NzbDrone.Core
         {
             get
             {
-
                 if (_kernel == null)
                 {
                     BindKernel();
                 }
-
                 return _kernel;
             }
-        }
-
-        public static void ConfigureNlog()
-        {
-            // Step 1. Create configuration object 
-            var config = new LoggingConfiguration();
-
-            string callSight = "${callsite:className=false:fileName=true:includeSourcePath=false:methodName=true}";
-
-            // Step 2. Create targets and add them to the configuration 
-            var debuggerTarget = new DebuggerTarget
-            {
-                Layout = callSight + "- ${logger}: ${message}"
-            };
-
-
-            var consoleTarget = new ColoredConsoleTarget
-            {
-                Layout = callSight + ": ${message}"
-            };
-
-
-            var fileTarget = new FileTarget
-            {
-                FileName = "${basedir}/test.log",
-                Layout = "${message}"
-            };
-
-            config.AddTarget("debugger", debuggerTarget);
-            config.AddTarget("console", consoleTarget);
-            //config.AddTarget("file", fileTarget);
-
-            // Step 3. Set target properties 
-            // Step 4. Define rules
-            //LoggingRule fileRule = new LoggingRule("*", LogLevel.Trace, fileTarget);
-            LoggingRule debugRule = new LoggingRule("*", LogLevel.Trace, debuggerTarget);
-            LoggingRule consoleRule = new LoggingRule("*", LogLevel.Trace, consoleTarget);
-
-            //config.LoggingRules.Add(fileRule);
-            config.LoggingRules.Add(debugRule);
-            config.LoggingRules.Add(consoleRule);
-
-            // Step 5. Activate the configuration
-            LogManager.Configuration = config;
         }
 
         private static void ForceMigration(IRepository repository)
