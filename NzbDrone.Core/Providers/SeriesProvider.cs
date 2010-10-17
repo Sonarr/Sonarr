@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Providers
 )", RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace);
 
 
-        private readonly INotificationProvider _notificationProvider;
+
         private readonly IConfigProvider _config;
         private readonly IDiskProvider _diskProvider;
         private readonly IRepository _sonioRepo;
@@ -41,11 +41,8 @@ namespace NzbDrone.Core.Providers
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static readonly Regex CleanUpRegex = new Regex(@"((\s|^)the(\s|$))|((\s|^)and(\s|$))|[^a-z]", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        private ProgressNotification _progress;
-
-        public SeriesProvider(INotificationProvider notificationProvider, IDiskProvider diskProvider, IConfigProvider configProvider, IRepository dataRepository, ITvDbProvider tvDbProvider)
+        public SeriesProvider(IDiskProvider diskProvider, IConfigProvider configProvider, IRepository dataRepository, ITvDbProvider tvDbProvider)
         {
-            _notificationProvider = notificationProvider;
             _diskProvider = diskProvider;
             _config = configProvider;
             _sonioRepo = dataRepository;
@@ -54,7 +51,7 @@ namespace NzbDrone.Core.Providers
 
         #region ISeriesProvider Members
 
-        public IQueryable<Series> GetSeries()
+        public IQueryable<Series> GetAllSeries()
         {
             return _sonioRepo.All<Series>();
         }
@@ -89,52 +86,12 @@ namespace NzbDrone.Core.Providers
             return CleanTitleRegex.Replace(match.Groups["showName"].Value, String.Empty).Replace(".", " ");
         }
 
-        public void SyncSeriesWithDisk()
+        public List<String> GetUnmappedFolders()
         {
-            if (_progress != null && _progress.Status == NotificationStatus.InProgress)
-                throw new InvalidOperationException("Another Task is already in progress. " + _progress.Title);
-
+            Logger.Debug("Generating list of unmapped folders");
             if (String.IsNullOrEmpty(_config.SeriesRoot))
                 throw new InvalidOperationException("TV Series folder is not configured yet.");
 
-            using (_progress = new ProgressNotification("Updating Series From Disk"))
-            {
-                _notificationProvider.Register(_progress);
-
-                var unmappedFolders = GetUnmappedFolders();
-                _progress.ProgressMax = unmappedFolders.Count;
-
-                foreach (string seriesFolder in unmappedFolders)
-                {
-                    _progress.CurrentStatus = String.Format("Mapping folder {0}", seriesFolder);
-
-                    Logger.Info("Folder '{0}' isn't mapped to a series in the database. Trying to map it.'", seriesFolder);
-                    var mappedSeries = MapPathToSeries(seriesFolder);
-
-                    if (mappedSeries == null)
-                    {
-                        Logger.Warn("Unable to find a matching series for '{0}'", seriesFolder);
-                    }
-                    else
-                    {
-                        if (!_sonioRepo.Exists<Series>(s => s.SeriesId == mappedSeries.Id))
-                        {
-                            RegisterSeries(seriesFolder, mappedSeries);
-                        }
-                        else
-                        {
-                            Logger.Warn("Folder '{0}' mapped to '{1}' which is already another folder assigned to it.'", seriesFolder, mappedSeries.SeriesName);
-                        }
-                    }
-                    _progress.ProgressValue++;
-                }
-
-                _progress.Status = NotificationStatus.Completed;
-            }
-        }
-
-        public List<String> GetUnmappedFolders()
-        {
             var results = new List<String>();
             foreach (string seriesFolder in _diskProvider.GetDirectories(_config.SeriesRoot))
             {
@@ -145,6 +102,7 @@ namespace NzbDrone.Core.Providers
                 }
             }
 
+            Logger.Debug("{0} unmapped folders detected.", results.Count);
             return results;
         }
 
@@ -160,9 +118,9 @@ namespace NzbDrone.Core.Providers
         }
 
 
-        public void RegisterSeries(string path, TvdbSeries series)
+        public void AddSeries(string path, TvdbSeries series)
         {
-            Logger.Info("registering '{0}' with [{1}]-{2}", path, series.Id, series.SeriesName);
+            Logger.Info("Adding Series [{0}]:{1} Path: {2}", series.Id, series.SeriesName, path);
             var repoSeries = new Series();
             repoSeries.SeriesId = series.Id;
             repoSeries.Title = series.SeriesName;

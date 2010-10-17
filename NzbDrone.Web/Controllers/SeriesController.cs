@@ -12,39 +12,40 @@ namespace NzbDrone.Web.Controllers
     {
         private readonly ISeriesProvider _seriesProvider;
         private readonly IEpisodeProvider _episodeProvider;
+        private readonly ISyncProvider _syncProvider;
         //
         // GET: /Series/
 
-        public SeriesController(ISeriesProvider seriesProvider, IEpisodeProvider episodeProvider)
+        public SeriesController(ISyncProvider syncProvider, ISeriesProvider seriesProvider, IEpisodeProvider episodeProvider)
         {
             _seriesProvider = seriesProvider;
             _episodeProvider = episodeProvider;
+            _syncProvider = syncProvider;
         }
 
         public ActionResult Index()
         {
-            ViewData.Model = _seriesProvider.GetSeries().ToList();
+            ViewData.Model = _seriesProvider.GetAllSeries().ToList();
             return View();
         }
 
 
         public ActionResult Sync()
         {
-            _seriesProvider.SyncSeriesWithDisk();
+            _syncProvider.BeginSyncUnmappedFolders();
             return RedirectToAction("Index");
         }
 
 
         public ActionResult UnMapped()
         {
-            _seriesProvider.SyncSeriesWithDisk();
             return View(_seriesProvider.GetUnmappedFolders());
         }
 
 
         public ActionResult LoadEpisodes(int seriesId)
         {
-            _episodeProvider.RefreshSeries(seriesId);
+            _episodeProvider.RefreshEpisodeInfo(seriesId);
             return RedirectToAction("Details", new
             {
                 seriesId = seriesId
@@ -82,9 +83,9 @@ namespace NzbDrone.Web.Controllers
                 default:
                     break;
             }
-            return Json(new { Success=true}, JsonRequestBehavior.AllowGet);
+            return Json(new { Success = true }, JsonRequestBehavior.AllowGet);
         }
-        
+
         //
         // GET: /Series/Details/5
 

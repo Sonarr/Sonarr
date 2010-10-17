@@ -19,6 +19,6 @@ namespace NzbDrone.Core.Providers
         /// <returns></returns>
         bool IsNeeded(RemoteEpisode episode);
 
-        void RefreshSeries(int seriesId);
+        void RefreshEpisodeInfo(int seriesId);
     }
 }

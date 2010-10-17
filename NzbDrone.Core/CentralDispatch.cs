@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Web;
 using Ninject;
@@ -11,6 +12,7 @@ using NzbDrone.Core.Providers.Fakes;
 using SubSonic.DataProviders;
 using SubSonic.Repository;
 using NLog;
+using System.Linq;
 
 namespace NzbDrone.Core
 {
@@ -38,6 +40,7 @@ namespace NzbDrone.Core
                 _kernel.Bind<IDiskProvider>().To<DiskProvider>();
                 _kernel.Bind<ITvDbProvider>().To<TvDbProvider>();
                 _kernel.Bind<IConfigProvider>().To<ConfigProvider>().InSingletonScope();
+                _kernel.Bind<ISyncProvider>().To<SyncProvider>().InSingletonScope();
                 _kernel.Bind<INotificationProvider>().To<NotificationProvider>().InSingletonScope();
                 _kernel.Bind<IRepository>().ToMethod(c => new SimpleRepository(provider, SimpleRepositoryOptions.RunMigrations)).InSingletonScope();
 
@@ -74,6 +77,40 @@ namespace NzbDrone.Core
         {
             repository.GetPaged<Series>(0, 1);
             repository.GetPaged<EpisodeInfo>(0, 1);
+        }
+
+
+        /// <summary>
+        /// This method forces IISExpress process to exit with the host application
+        /// </summary>
+        public static void DedicateToHost()
+        {
+            try
+            {
+                Logger.Info("Attaching to parent process for automatic termination.");
+                var pc = new PerformanceCounter("Process", "Creating Process ID", Process.GetCurrentProcess().ProcessName);
+                var pid = (int)pc.NextValue();
+                var hostProcess = Process.GetProcessById(pid);
+
+                hostProcess.EnableRaisingEvents = true;
+                hostProcess.Exited += (delegate
+                                       {
+                                           Logger.Info("Host has been terminated. Shutting down web server.");
+                                           ShutDown();
+                                       });
+
+                Logger.Info("Successfully Attached to host. Process ID: {0}", pid);
+            }
+            catch (Exception e)
+            {
+                Logger.Fatal(e);
+            }
+        }
+
+        private static void ShutDown()
+        {
+            Logger.Info("Shutting down application.");
+            Process.GetCurrentProcess().Kill();
         }
     }
 }

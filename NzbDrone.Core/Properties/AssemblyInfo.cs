@@ -1,8 +1,4 @@
-﻿// /*
-//  *   Sab NzbDrone: Automatic TV Sync for SAB http://sabscripts.googlecode.com
-//  *
-//  * 
-//  *   This program is free software: you can redistribute it and/or modify
+﻿//  *   This program is free software: you can redistribute it and/or modify
 //  *   it under the terms of the GNU General Public License as published by
 //  *   the Free Software Foundation, either version 3 of the License, or
 //  *   (at your option) any later version.
@@ -23,11 +19,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 
-[assembly: AssemblyTitle("NzbDrone")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("NZBDrone.Core")]
+[assembly: AssemblyDescription("NZBDrone Core Component")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("sabscripts.googlecode.com")]
-[assembly: AssemblyProduct("NzbDrone")]
+[assembly: AssemblyCompany("www.nzbdrone.com")]
+[assembly: AssemblyProduct("NZBDrone")]
 [assembly: AssemblyCopyright("GNU General Public v3")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -40,7 +36,7 @@ using System.Runtime.InteropServices;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 
-[assembly: Guid("a7b979bf-7f4e-4ccf-b2c6-fa8d3dfb650e")]
+[assembly: Guid("3C29FEF7-4B07-49ED-822E-1C29DC49BFAB")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -53,5 +49,4 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 
-[assembly: AssemblyVersion("0.9.8.4")]
-[assembly: AssemblyFileVersion("0.9.8.4")]
+[assembly: AssemblyVersion("0.2.0.*")]

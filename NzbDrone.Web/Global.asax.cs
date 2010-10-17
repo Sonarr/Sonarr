@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -12,6 +13,7 @@ namespace NzbDrone.Web
 {
     public class MvcApplication : NinjectHttpApplication
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public static void RegisterRoutes(RouteCollection routes)
         {
@@ -29,6 +31,7 @@ namespace NzbDrone.Web
         protected override void OnApplicationStarted()
         {
             Instrumentation.Setup();
+            CentralDispatch.DedicateToHost();
             AreaRegistration.RegisterAllAreas();
             RegisterRoutes(RouteTable.Routes);
             base.OnApplicationStarted();
@@ -42,7 +45,20 @@ namespace NzbDrone.Web
         // ReSharper disable InconsistentNaming
         protected void Application_Error(object sender, EventArgs e)
         {
-            Instrumentation.LogEpicException(Server.GetLastError());
+            var lastError = Server.GetLastError();
+            if (lastError is HttpException)
+            {
+                Logger.WarnException("", lastError);
+            }
+            else
+            {
+                Logger.FatalException("", lastError);
+            }
+        }
+
+        protected void Application_BeginRequest()
+        {
+            Thread.CurrentThread.Name = "UI";
         }
 
 

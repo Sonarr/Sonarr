@@ -67,7 +67,7 @@ namespace NzbDrone.Core.Providers
         /// </returns>
         public static bool IsTitleMatch(string directoryName, string tvdbTitle)
         {
-            Logger.Debug("Trying to match '{0}' and '{1}'", tvdbTitle, directoryName);
+
 
             var result = false;
 

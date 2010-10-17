@@ -29,7 +29,7 @@ namespace NzbDrone
             IISProcess = new Process();
 
             IISProcess.StartInfo.FileName = IISExe;
-            IISProcess.StartInfo.Arguments = "/config:IISExpress\\Appserver\\applicationhost.config";
+            IISProcess.StartInfo.Arguments = "/config:IISExpress\\Appserver\\applicationhost.config /trace:i";
             IISProcess.StartInfo.WorkingDirectory = Config.ProjectRoot;
 
             IISProcess.StartInfo.UseShellExecute = false;
@@ -37,8 +37,12 @@ namespace NzbDrone
             IISProcess.StartInfo.RedirectStandardError = true;
             IISProcess.StartInfo.CreateNoWindow = true;
 
-            IISProcess.OutputDataReceived += ((s, e) => IISLogger.Trace(e.Data));
+
+            IISProcess.OutputDataReceived += (OnDataReceived);
+
             IISProcess.ErrorDataReceived += ((s, e) => IISLogger.Fatal(e.Data));
+
+
 
             //Set Variables for the config file.
             Environment.SetEnvironmentVariable("NZBDRONE_PATH", Config.ProjectRoot);
@@ -52,6 +56,14 @@ namespace NzbDrone
             return IISProcess;
         }
 
+        private static void OnDataReceived(object s, DataReceivedEventArgs e)
+        {
+            if (e == null || e.Data == null || e.Data.StartsWith("Request started:") || e.Data.StartsWith("Request ended:") || e.Data == ("IncrementMessages called"))
+                return;
+
+            IISLogger.Trace(e.Data);
+        }
+
         internal static void StopIIS()
         {
             KillProcess(IISProcess);
@@ -59,11 +71,9 @@ namespace NzbDrone
 
         internal static void KillOrphaned()
         {
-            Logger.Trace("================================================");
             Logger.Info("Finding orphaned IIS Processes.");
             foreach (var process in Process.GetProcessesByName("IISExpress"))
             {
-                Logger.Trace("-------------------------");
                 string processPath = process.MainModule.FileName;
                 Logger.Info("[{0}]IIS Process found. Path:{1}", process.Id, processPath);
                 if (CleanPath(processPath) == CleanPath(IISExe))
@@ -75,12 +85,8 @@ namespace NzbDrone
                 {
                     Logger.Info("[{0}]Process has a different start-up path. skipping.", process.Id);
                 }
-                Logger.Trace("-------------------------");
             }
-            Logger.Trace("================================================");
         }
-
-
 
         private static void KillProcess(Process process)
         {

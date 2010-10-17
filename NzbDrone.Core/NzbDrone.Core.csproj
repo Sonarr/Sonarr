@@ -129,6 +129,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libraries\Exceptioneer.WindowsFormsClient.dll</HintPath>
     </Reference>
+    <Reference Include="Gallio, Version=3.2.0.0, Culture=neutral, PublicKeyToken=eb9cfa67ee6ab36e, processorArchitecture=MSIL" />
+    <Reference Include="MbUnit, Version=3.2.0.0, Culture=neutral, PublicKeyToken=eb9cfa67ee6ab36e, processorArchitecture=MSIL" />
     <Reference Include="Ninject, Version=2.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL" />
     <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL" />
     <Reference Include="NLog.Extended, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
@@ -141,6 +143,7 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
@@ -159,7 +162,9 @@
     <Compile Include="Providers\INotificationProvider.cs" />
     <Compile Include="Providers\IMediaDiscoveryProvider.cs" />
     <Compile Include="Providers\IMediaProvider.cs" />
+    <Compile Include="Providers\ISyncProvider.cs" />
     <Compile Include="Providers\MediaDiscoveryProvider.cs" />
+    <Compile Include="Providers\SyncProvider.cs" />
     <Compile Include="Providers\XBMCMediaProvider.cs" />
     <Compile Include="Entities\Notification\ProgressNotification.cs" />
     <Compile Include="Providers\NotificationProvider.cs" />
@@ -216,8 +221,6 @@
   <ItemGroup>
     <Content Include="Libraries\Castle.Core.dll" />
     <Content Include="Libraries\Exceptioneer.WindowsFormsClient.dll" />
-    <Content Include="Libraries\log4net.dll" />
-    <Content Include="Libraries\log4net.xml" />
     <Content Include="Libraries\Ninject.dll" />
     <Content Include="Libraries\Ninject.xml" />
     <Content Include="Libraries\NLog.dll" />
@@ -233,6 +236,11 @@
     <Content Include="Libraries\TvdbLib.pdb" />
     <Content Include="Libraries\TvdbLib.XML" />
     <Content Include="Libraries\UPnP.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Libraries\nlog.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

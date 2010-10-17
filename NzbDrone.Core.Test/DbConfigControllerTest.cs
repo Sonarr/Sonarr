@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using Gallio.Framework;
-using log4net;
 using MbUnit.Framework;
 using MbUnit.Framework.ContractVerifiers;
 using Moq;

@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Threading;
 using Exceptioneer.WindowsFormsClient;
 using NLog;
 using NLog.Config;
@@ -16,8 +17,12 @@ namespace NzbDrone
 
         static void Main()
         {
+            Logger.Info(Process.GetCurrentProcess().Id);
+
             try
             {
+                Thread.CurrentThread.Name = "Host";
+
                 AppDomain.CurrentDomain.UnhandledException += ((s, e) => AppDomainException(e));
                 AppDomain.CurrentDomain.ProcessExit += ProgramExited;
                 AppDomain.CurrentDomain.DomainUnload += ProgramExited;
@@ -35,8 +40,8 @@ namespace NzbDrone
 #if DEBUG
                 //Manually Attach debugger to IISExpress
                 if (Debugger.IsAttached)
-                { 
-                    ProcessAttacher.Attach(); 
+                {
+                    ProcessAttacher.Attach();
                 }
 #endif
 

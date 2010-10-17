@@ -26,7 +26,8 @@ obj/
 _ReSharper*/
 [Tt]est[Rr]esult[s]
 
-/[Bb]uild/
-
+[Bb]uild/
+[Ll]ogs/
+/[Pp]ackage/
 #NZBDrone specific
 nzbdrone.db

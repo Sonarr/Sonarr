@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using NLog;
@@ -89,40 +90,59 @@ namespace NzbDrone.Core.Providers
             throw new NotImplementedException();
         }
 
-        public void RefreshSeries(int seriesId)
+        public void RefreshEpisodeInfo(int seriesId)
         {
             Logger.Info("Starting episode info refresh for series:{0}", seriesId);
             int successCount = 0;
             int failCount = 0;
             var targetSeries = _tvDb.GetSeries(seriesId, true);
+
+            var updateList = new List<EpisodeInfo>();
+            var newList = new List<EpisodeInfo>();
+
+            Logger.Debug("Updating season info for series:{0}", seriesId);
+            targetSeries.Episodes.Select(e => new { e.SeasonId, e.SeasonNumber })
+                .Distinct().ToList()
+                .ForEach(s => _seasons.EnsureSeason(seriesId, s.SeasonId, s.SeasonNumber));
+
             foreach (var episode in targetSeries.Episodes)
             {
                 try
                 {
-                    _seasons.EnsureSeason(seriesId, episode.SeasonId, episode.SeasonNumber);
+                    Logger.Debug("Updating info for series:{0} - episode:{1}", seriesId, episode.Id);
                     var newEpisode = new EpisodeInfo()
+                      {
+                          AirDate = episode.FirstAired,
+                          EpisodeId = episode.Id,
+                          EpisodeNumber = episode.EpisodeNumber,
+                          Language = episode.Language.Abbriviation,
+                          Overview = episode.Overview,
+                          SeasonId = episode.SeasonId,
+                          SeasonNumber = episode.SeasonNumber,
+                          SeriesId = seriesId,
+                          Title = episode.EpisodeName
+                      };
+
+                    if (_sonicRepo.Exists<EpisodeInfo>(e => e.EpisodeId == newEpisode.EpisodeId))
                     {
-                        AirDate = episode.FirstAired,
-                        EpisodeId = episode.Id,
-                        EpisodeNumber = episode.EpisodeNumber,
-                        Language = episode.Language.Abbriviation,
-                        Overview = episode.Overview,
-                        SeasonId = episode.SeasonId,
-                        SeasonNumber = episode.SeasonNumber,
-                        SeriesId = episode.SeriesId,
-                        Title = episode.EpisodeName
-                    };
+                        updateList.Add(newEpisode);
+                    }
+                    else
+                    {
+                        newList.Add(newEpisode);
+                    }
 
-                    _sonicRepo.Add<EpisodeInfo>(newEpisode);
                     successCount++;
-
                 }
                 catch (Exception e)
                 {
-                    Logger.FatalException(String.Format("An error has occured while updating episode info for series {0}", seriesId), e);
+                    Logger.FatalException(String.Format("An error has occurred while updating episode info for series {0}", seriesId), e);
                     failCount++;
                 }
             }
+
+            _sonicRepo.AddMany(newList);
+            _sonicRepo.UpdateMany(updateList);
 
             Logger.Info("Finished episode refresh for series:{0}. Success:{1} - Fail:{2} ", seriesId, successCount, failCount);
         }

@@ -8,9 +8,8 @@ namespace NzbDrone.Core.Providers
 {
     public interface ISeriesProvider
     {
-        IQueryable<Series> GetSeries();
+        IQueryable<Series> GetAllSeries();
         Series GetSeries(int seriesId);
-        void SyncSeriesWithDisk();
 
         /// <summary>
         /// Determines if a series is being actively watched.
@@ -20,7 +19,7 @@ namespace NzbDrone.Core.Providers
         bool IsMonitored(long id);
 
         TvdbSeries MapPathToSeries(string path);
-        void RegisterSeries(string path, TvdbSeries series);
+        void AddSeries(string path, TvdbSeries series);
         List<String> GetUnmappedFolders();
     }
 }

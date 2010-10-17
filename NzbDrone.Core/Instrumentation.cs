@@ -13,75 +13,25 @@ namespace NzbDrone.Core
     {
         public static void Setup()
         {
-            // Step 1. Create configuration object 
-            var config = new LoggingConfiguration();
-
-            const string callSight = "${callsite:className=false:fileName=false:includeSourcePath=false:methodName=true}";
-            string layout = string.Concat("[${logger}](", callSight, "): ${message}");
-            // Step 2. Create targets and add them to the configuration 
-            var debuggerTarget = new DebuggerTarget
-            {
-                Layout = layout
-            };
-
-            var consoleTarget = new ColoredConsoleTarget
-            {
-                Layout = layout
-            };
-
-            var fileTarget = new FileTarget
-            {
-                FileName = "${basedir}/test.log",
-                Layout = layout
-            };
-
-            config.AddTarget("debugger", debuggerTarget);
-            config.AddTarget("console", consoleTarget);
-            //config.AddTarget("file", fileTarget);
-
-            // Step 3. Set target properties 
-            // Step 4. Define rules
-            //LoggingRule fileRule = new LoggingRule("*", LogLevel.Trace, fileTarget);
-            var debugRule = new LoggingRule("*", LogLevel.Trace, debuggerTarget);
-            var consoleRule = new LoggingRule("*", LogLevel.Trace, consoleTarget);
-
-            //config.LoggingRules.Add(fileRule);
-            config.LoggingRules.Add(debugRule);
-            config.LoggingRules.Add(consoleRule);
-
-            // Step 5. Activate the configuration
-            LogManager.Configuration = config;
-        }
-
-        public static void LogEpicException(Exception e)
-        {
-            try
-            {
-                LogManager.GetLogger("EPICFAIL").FatalException("Unhandled Exception", e);
-            }
-            catch (Exception totalFailException)
-            {
-                Console.WriteLine("TOTAL FAIL:{0}", totalFailException);
-                Console.WriteLine(e.ToString());
-            }
-
-            PublishExceptoion(e);
-        }
-
-
-        private static bool PublishExceptoion(Exception e)
-        {
-            //Don't publish exceptions when debugging the app.
             if (Debugger.IsAttached)
-                return false;
+            {
+                LogManager.ThrowExceptions = true;
+            }
 
-            return new Client
-                {
-                    ApiKey = "43BBF60A-EB2A-4C1C-B09E-422ADF637265",
-                    ApplicationName = "NZBDrone",
-                    CurrentException = e
-                }.Submit();
+            LogManager.Configuration = new XmlLoggingConfiguration(Path.Combine(CentralDispatch.AppPath, "log.config"), false);
+            LogManager.ConfigurationReloaded += ((s, e) => BindExceptioneer());
+            BindExceptioneer();
         }
+
+        private static void BindExceptioneer()
+        {
+            var exTarget = new ExceptioneerTarget();
+            LogManager.Configuration.AddTarget("Exceptioneer", exTarget);
+            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Error, exTarget));
+            LogManager.Configuration.Reload();
+        }
+
+
 
         public class NlogWriter : TextWriter
         {
@@ -108,7 +58,29 @@ namespace NzbDrone.Core
                 get { return Encoding.Default; }
             }
         }
+
+
+        public class ExceptioneerTarget : Target
+        {
+            protected override void Write(LogEventInfo logEvent)
+            {
+                if (logEvent.Exception == null)
+                    throw new InvalidOperationException(@"Missing Exception Object.. Please Use Logger.FatalException() or Logger.ErrorException() rather
+                than Logger.Fatal() and Logger.Error()");
+
+                if (!Debugger.IsAttached)
+                {
+                    new Client
+                    {
+                        ApiKey = "43BBF60A-EB2A-4C1C-B09E-422ADF637265",
+                        ApplicationName = "NZBDrone",
+                        CurrentException = logEvent.Exception
+                    }.Submit();
+                }
+            }
+        }
     }
-
-
 }
+
+
+

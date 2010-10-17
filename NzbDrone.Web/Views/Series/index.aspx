@@ -1,13 +1,13 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<IEnumerable<NzbDrone.Core.Entities.Series>>" %>
 
 <%@ Import Namespace="Telerik.Web.Mvc.UI" %>
-
-
+<%@ Import Namespace="System.Globalization" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
     Series
 </asp:Content>
 <asp:Content ID="Menue" ContentPlaceHolderID="ActionMenue" runat="server">
-    <div id="Mediabox"></div>
+    <div id="Mediabox">
+    </div>
     <%
         Html.Telerik().Menu().Name("telerikGrid").Items(items => { items.Add().Text("View Unmapped Folders").Action("Unmapped", "Series"); })
                                                 .Items(items => items.Add().Text("Sync With Disk").Action("Sync", "Series"))
@@ -16,7 +16,7 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <%
-
+    
 
         Html.Telerik().Grid(Model)
        .Name("Grid")
