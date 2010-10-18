@@ -28,11 +28,14 @@ Released   : 20100727
         Html.Telerik().StyleSheetRegistrar().DefaultGroup(group => group.Add("telerik.common.css")
             .Add("telerik.sitefinity.css")
             .Add("style.css")
-            .Add("jquery.jgrowl.css")).Render();
+            .Add("notibar.css")).Render();
     %>
 </head>
 <body>
     <div id="header">
+        <div id="msgBox">
+            <span id="msgText">Scanning Series Folder...</span>
+        </div>
         <div id="menu">
             <ul>
                 <%=Html.CurrentActionLink("Series", "Index", "Series") %>

@@ -182,9 +182,11 @@
             var self = this;
             var message = notification.message;
             var o = notification.options;
+            
 
             var notification = $(
-				'<div class="jGrowl-notification ui-state-highlight ui-corner-all' +
+				'<div id=' +
+                notification.options.guid +' class="jGrowl-notification ui-state-highlight ui-corner-all' +
 				((o.group != undefined && o.group != '') ? ' ' + o.group : '') + '">' +
 				'<div class="close">' + o.closeTemplate + '</div>' +
 				'<div class="header">' + o.header + '</div>' +
@@ -211,7 +213,7 @@
                         $('div.jGrowl-notification:first', self.element).before(notification);
                     }
 
-                    $(this).animate(o.animateOpen, o.speed, o.easing, function () {
+                    $(this).animate(o.animateOpen, 0, o.easing, function () {
                         // Fixes some anti-aliasing issues with IE filters.
                         if ($.browser.msie && (parseInt($(this).css('opacity'), 10) === 1 || parseInt($(this).css('opacity'), 10) === 0))
                             this.style.removeAttribute('filter');

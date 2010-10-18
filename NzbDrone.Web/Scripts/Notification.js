@@ -1,66 +1,47 @@
-﻿(function ($) {
+﻿/// <reference path="jquery-1.4.1-vsdoc.js" />
 
-    $(document).ready(function () {
+$(function () {
+    var speed = 0;
+    refreshNotifications();
 
-        var popups = [];
-
-        $.jGrowl.defaults.closer = false;
-        $.jGrowl.defaults.closeTemplate = '';
-
-
-        if (!$.browser.safari) {
-            $.jGrowl.defaults.animateOpen = {
-                width: 'show'
-            };
-
-            $.jGrowl.defaults.animateClose = {
-                width: 'hide'
-            };
-        }
+    var timer = window.setInterval(function () {
+        speed = 1800;
         refreshNotifications();
-        var timer = window.setInterval(refreshNotifications, 2000);
+    }, 2000);
 
-        function refreshNotifications() {
-            $.ajax({
-                url: '/Notification',
-                success: notificationCallback
-            });
+    function refreshNotifications() {
+        $.ajax({
+            url: '/Notification',
+            success: notificationCallback
+        });
+    }
+
+    function notificationCallback(data) {
+
+        if (data === "") {
+            CloseMsg();
         }
-
-        var failAjaxCounter = 0;
-        function notificationCallback(data) {
-
-            if (data === "") {
-                failAjaxCounter = failAjaxCounter + 1;
-
-                if (failAjaxCounter === 3) {
-                    window.clearInterval(timer);
-                }
-            }
-            else {
-                failAjaxCounter = 0;
-                for (var i in data) {
-
-                    var titleId = data[i].Id + "_title";
-                    var bodyId = data[i].Id + "_body";
-
-                    //New Notification
-                    if (popups[i] == undefined) {
-                        popups[i] = new Object();
-                        popups[i].Id = data;
-                        $.jGrowl(MakeDiv(bodyId, data[i].CurrentStatus), { sticky: true, header: MakeDiv(titleId, data[i].Title), id: data[i].Id });
-                    }
-                    //Update Existing Notification
-                    else {
-                        $('#' + bodyId).html(data[i].CurrentStatus);
-                    }
-                }
-            }
+        else {
+            DisplayMsg(data);
         }
+    }
 
-        function MakeDiv(id, body) {
-            return "<div id ='" + id + "'>" + body + "</div>";
-        }
+    //SetupNotifications();
+    //DisplayMsg("Scanning Series Folder.");
 
-    });
-})(jQuery);
+    function DisplayMsg(sMsg) {
+        //set the message text
+        $("#msgText").text(sMsg);
+        //show the message
+        $('#msgBox').slideUp(speed, null);
+    }
+
+    function CloseMsg() {
+        //hide the message
+        $('#msgBox').slideUp(speed, null);
+        //clear msg text
+        $("#msgtText").val("");
+    }
+});
+
+

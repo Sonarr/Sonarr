@@ -1,0 +1,23 @@
+﻿#msgBox
+{
+    display: none;
+    height: 40px;
+    background-color: #272525;
+    background-image: url(images/spin.gif) no-repeat left middle;
+    opacity: .9;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=85)";
+    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=85);
+    padding: 10px;
+    position: fixed;
+    text-align: left;
+    z-index: 99;
+    margin: 0px auto;
+    bottom: 0;
+    width: 930px;
+    font-size: 20px;
+    color: White;
+}
+#msgCloseButton
+{
+    float: right;
+}

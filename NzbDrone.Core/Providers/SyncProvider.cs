@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Providers
                 _seriesSyncThread = new Thread(SyncUnmappedFolders)
                 {
                     Name = "SyncUnmappedFolders",
-                    Priority = ThreadPriority.BelowNormal
+                    Priority = ThreadPriority.Lowest
                 };
 
                 _seriesSyncThread.Start();
@@ -54,10 +54,11 @@ namespace NzbDrone.Core.Providers
 
             try
             {
-                using (_seriesSyncNotification = new ProgressNotification("Series folder scan"))
+                using (_seriesSyncNotification = new ProgressNotification("Series Scan"))
                 {
                     _notificationProvider.Register(_seriesSyncNotification);
-
+                    _seriesSyncNotification.CurrentStatus = "Analysing Folder";
+                    Thread.Sleep(20000);
                     var unmappedFolders = _seriesProvider.GetUnmappedFolders();
                     _seriesSyncNotification.ProgressMax = unmappedFolders.Count;
 
@@ -65,7 +66,7 @@ namespace NzbDrone.Core.Providers
                     {
                         try
                         {
-                            _seriesSyncNotification.CurrentStatus = String.Format("Mapping folder \\{0}", CultureInfo.CurrentCulture.TextInfo.ToTitleCase(new DirectoryInfo(seriesFolder).Name));
+                            _seriesSyncNotification.CurrentStatus = String.Format("Analysing Folder: {0}", CultureInfo.CurrentCulture.TextInfo.ToTitleCase(new DirectoryInfo(seriesFolder).Name));
 
                             Logger.Info("Folder '{0}' isn't mapped in the database. Trying to map it.'", seriesFolder);
                             var mappedSeries = _seriesProvider.MapPathToSeries(seriesFolder);
@@ -96,10 +97,11 @@ namespace NzbDrone.Core.Providers
                         _seriesSyncNotification.ProgressValue++;
                     }
 
+                    _seriesSyncNotification.CurrentStatus = "Series Scan Completed";
+                    Logger.Info("Series folders scan has successfully completed.");
+                    Thread.Sleep(3000);
                     _seriesSyncNotification.Status = NotificationStatus.Completed;
                 }
-
-                Logger.Info("Series folders scan has successfully completed.");
             }
             catch (Exception e)
             {

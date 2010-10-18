@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Providers.Fakes
                 fakeNotification.Status = NotificationStatus.InProgress;
                 fakeNotification2.CurrentStatus = DateTime.UtcNow.ToString();
                 fakeNotification.CurrentStatus = DateTime.Now.ToString();
-                return new List<ProgressNotification> { fakeNotification , fakeNotification2 };
+                return new List<ProgressNotification> { fakeNotification  };
             }
         }
 

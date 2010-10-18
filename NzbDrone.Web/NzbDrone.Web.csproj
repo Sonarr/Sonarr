@@ -92,6 +92,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Images\spin.gif" />
     <Content Include="Content\Black\editor.png" />
     <Content Include="Content\Black\loading.gif" />
     <Content Include="Content\Black\sprite.png" />
@@ -117,6 +118,7 @@
     <Content Include="Content\Images\img03.jpg" />
     <Content Include="Content\Images\img07.jpg" />
     <Content Include="Content\jquery.jgrowl.css" />
+    <Content Include="Content\notibar.css" />
     <Content Include="Content\Office2007\editor.png" />
     <Content Include="Content\Office2007\loading.gif" />
     <Content Include="Content\Office2007\sprite.png" />
