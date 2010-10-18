@@ -36,10 +36,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ninject, Version=2.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\NzbDrone.Core\Libraries\Ninject.dll</HintPath>
-    </Reference>
+    <Reference Include="Ninject, Version=2.1.0.76, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL" />
     <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -86,7 +83,11 @@
     <Compile Include="Helpers\IsCurrentActionHelper.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\SettingsModels.cs" />
+    <Compile Include="Ninject.Web.Mvc\ControllerMissingBindingResolver.cs" />
+    <Compile Include="Ninject.Web.Mvc\FilterInjector.cs" />
+    <Compile Include="Ninject.Web.Mvc\IFilterInjector.cs" />
     <Compile Include="Ninject.Web.Mvc\NinjectActionInvoker.cs" />
+    <Compile Include="Ninject.Web.Mvc\NinjectAsyncActionInvoker.cs" />
     <Compile Include="Ninject.Web.Mvc\NinjectControllerFactory.cs" />
     <Compile Include="Ninject.Web.Mvc\NinjectHttpApplication.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

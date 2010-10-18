@@ -139,9 +139,9 @@
             Occurs when the object is disposed.
             </summary>
         </member>
-        <member name="T:Ninject.Activation.Caching.Cache">
+        <member name="T:Ninject.Activation.Caching.ActivationCache">
             <summary>
-            Tracks instances for re-use in certain scopes.
+            Stores the objects that were activated
             </summary>
         </member>
         <member name="T:Ninject.Components.NinjectComponent">
@@ -162,6 +162,135 @@
         <member name="P:Ninject.Components.NinjectComponent.Settings">
             <summary>
             Gets or sets the settings.
+            </summary>
+        </member>
+        <member name="T:Ninject.Activation.Caching.IActivationCache">
+            <summary>
+            Stores the objects that were activated
+            </summary>
+        </member>
+        <member name="M:Ninject.Activation.Caching.IActivationCache.Clear">
+            <summary>
+            Clears the cache.
+            </summary>
+        </member>
+        <member name="M:Ninject.Activation.Caching.IActivationCache.AddActivatedInstance(System.Object)">
+            <summary>
+            Adds an activated instance.
+            </summary>
+            <param name="instance">The instance to be added.</param>
+        </member>
+        <member name="M:Ninject.Activation.Caching.IActivationCache.AddDeactivatedInstance(System.Object)">
+            <summary>
+            Adds an deactivated instance.
+            </summary>
+            <param name="instance">The instance to be added.</param>
+        </member>
+        <member name="M:Ninject.Activation.Caching.IActivationCache.IsActivated(System.Object)">
+            <summary>
+            Determines whether the specified instance is activated.
+            </summary>
+            <param name="instance">The instance.</param>
+            <returns>
+                <c>true</c> if the specified instance is activated; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Ninject.Activation.Caching.IActivationCache.IsDeactivated(System.Object)">
+            <summary>
+            Determines whether the specified instance is deactivated.
+            </summary>
+            <param name="instance">The instance.</param>
+            <returns>
+                <c>true</c> if the specified instance is deactivated; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="T:Ninject.Activation.Caching.IPruneable">
+            <summary>
+            An object that is prunealble.
+            </summary>
+        </member>
+        <member name="M:Ninject.Activation.Caching.IPruneable.Prune">
+            <summary>
+            Removes instances from the cache which should no longer be re-used.
+            </summary>
+        </member>
+        <member name="F:Ninject.Activation.Caching.ActivationCache.activatedObjects">
+            <summary>
+            The objects that were activated as reference equal weak references.
+            </summary>
+        </member>
+        <member name="F:Ninject.Activation.Caching.ActivationCache.deactivatedObjects">
+            <summary>
+            The objects that were activated as reference equal weak references.
+            </summary>
+        </member>
+        <member name="M:Ninject.Activation.Caching.ActivationCache.#ctor(Ninject.Activation.Caching.ICachePruner)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Ninject.Activation.Caching.ActivationCache"/> class.
+            </summary>
+            <param name="cachePruner">The cache pruner.</param>
+        </member>
+        <member name="M:Ninject.Activation.Caching.ActivationCache.Clear">
+            <summary>
+            Clears the cache.
+            </summary>
+        </member>
+        <member name="M:Ninject.Activation.Caching.ActivationCache.AddActivatedInstance(System.Object)">
+            <summary>
+            Adds an activated instance.
+            </summary>
+            <param name="instance">The instance to be added.</param>
+        </member>
+        <member name="M:Ninject.Activation.Caching.ActivationCache.AddDeactivatedInstance(System.Object)">
+            <summary>
+            Adds an deactivated instance.
+            </summary>
+            <param name="instance">The instance to be added.</param>
+        </member>
+        <member name="M:Ninject.Activation.Caching.ActivationCache.IsActivated(System.Object)">
+            <summary>
+            Determines whether the specified instance is activated.
+            </summary>
+            <param name="instance">The instance.</param>
+            <returns>
+                <c>true</c> if the specified instance is activated; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Ninject.Activation.Caching.ActivationCache.IsDeactivated(System.Object)">
+            <summary>
+            Determines whether the specified instance is deactivated.
+            </summary>
+            <param name="instance">The instance.</param>
+            <returns>
+                <c>true</c> if the specified instance is deactivated; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Ninject.Activation.Caching.ActivationCache.Prune">
+            <summary>
+            Prunes this instance.
+            </summary>
+        </member>
+        <member name="M:Ninject.Activation.Caching.ActivationCache.RemoveDeadObjects(System.Collections.Generic.HashSet{System.Object})">
+            <summary>
+            Removes all dead objects.
+            </summary>
+            <param name="objects">The objects collection to be freed of dead objects.</param>
+        </member>
+        <member name="P:Ninject.Activation.Caching.ActivationCache.ActivatedObjectCount">
+            <summary>
+            Gets the activated object count.
+            </summary>
+            <value>The activated object count.</value>
+        </member>
+        <member name="P:Ninject.Activation.Caching.ActivationCache.DeactivatedObjectCount">
+            <summary>
+            Gets the deactivated object count.
+            </summary>
+            <value>The deactivated object count.</value>
+        </member>
+        <member name="T:Ninject.Activation.Caching.Cache">
+            <summary>
+            Tracks instances for re-use in certain scopes.
             </summary>
         </member>
         <member name="T:Ninject.Activation.Caching.ICache">
@@ -190,11 +319,6 @@
             <param name="instance">The instance to release.</param>
             <returns><see langword="True"/> if the instance was found and released; otherwise <see langword="false"/>.</returns>
         </member>
-        <member name="M:Ninject.Activation.Caching.ICache.Prune">
-            <summary>
-            Removes instances from the cache which should no longer be re-used.
-            </summary>
-        </member>
         <member name="M:Ninject.Activation.Caching.ICache.Clear(System.Object)">
             <summary>
             Immediately deactivates and removes all instances in the cache that are owned by
@@ -212,6 +336,12 @@
             Gets the number of entries currently stored in the cache.
             </summary>
         </member>
+        <member name="F:Ninject.Activation.Caching.Cache.entries">
+            <summary>
+            Contains all cached instances.
+            This is a dictionary of scopes to a multimap for bindings to cache entries.
+            </summary>
+        </member>
         <member name="M:Ninject.Activation.Caching.Cache.#ctor(Ninject.Activation.IPipeline,Ninject.Activation.Caching.ICachePruner)">
             <summary>
             Initializes a new instance of the <see cref="T:Ninject.Activation.Caching.Cache"/> class.
@@ -223,6 +353,7 @@
             <summary>
             Releases resources held by the object.
             </summary>
+            <param name="disposing"></param>
         </member>
         <member name="M:Ninject.Activation.Caching.Cache.Remember(Ninject.Activation.IContext,Ninject.Activation.InstanceReference)">
             <summary>
@@ -262,15 +393,64 @@
             Immediately deactivates and removes all instances in the cache, regardless of scope.
             </summary>
         </member>
+        <member name="M:Ninject.Activation.Caching.Cache.GetAllBindingEntries(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{Ninject.Planning.Bindings.IBinding,System.Collections.Generic.ICollection{Ninject.Activation.Caching.Cache.CacheEntry}}})">
+            <summary>
+            Gets all entries for a binding withing the selected scope.
+            </summary>
+            <param name="bindings">The bindings.</param>
+            <returns>All bindings of a binding.</returns>
+        </member>
+        <member name="M:Ninject.Activation.Caching.Cache.GetAllCacheEntries">
+            <summary>
+            Gets all cache entries.
+            </summary>
+            <returns>Returns all cache entries.</returns>
+        </member>
+        <member name="M:Ninject.Activation.Caching.Cache.Forget(System.Collections.Generic.IEnumerable{Ninject.Activation.Caching.Cache.CacheEntry})">
+            <summary>
+            Forgets the specified cache entries.
+            </summary>
+            <param name="cacheEntries">The cache entries.</param>
+        </member>
+        <member name="M:Ninject.Activation.Caching.Cache.Forget(Ninject.Activation.Caching.Cache.CacheEntry)">
+            <summary>
+            Forgets the specified entry.
+            </summary>
+            <param name="entry">The entry.</param>
+        </member>
         <member name="P:Ninject.Activation.Caching.Cache.Pipeline">
             <summary>
-            Gets or sets the pipeline component.
+            Gets the pipeline component.
             </summary>
         </member>
         <member name="P:Ninject.Activation.Caching.Cache.Count">
             <summary>
             Gets the number of entries currently stored in the cache.
             </summary>
+        </member>
+        <member name="T:Ninject.Activation.Caching.Cache.CacheEntry">
+            <summary>
+            An entry in the cache.
+            </summary>
+        </member>
+        <member name="M:Ninject.Activation.Caching.Cache.CacheEntry.#ctor(Ninject.Activation.IContext,Ninject.Activation.InstanceReference)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Ninject.Activation.Caching.Cache.CacheEntry"/> class.
+            </summary>
+            <param name="context">The context.</param>
+            <param name="reference">The instance reference.</param>
+        </member>
+        <member name="P:Ninject.Activation.Caching.Cache.CacheEntry.Context">
+            <summary>
+            Gets the context of the instance.
+            </summary>
+            <value>The context.</value>
+        </member>
+        <member name="P:Ninject.Activation.Caching.Cache.CacheEntry.Reference">
+            <summary>
+            Gets the instance reference.
+            </summary>
+            <value>The instance reference.</value>
         </member>
         <member name="T:Ninject.Activation.Caching.GarbageCollectionCachePruner">
             <summary>
@@ -283,7 +463,7 @@
             Prunes instances from an <see cref="T:Ninject.Activation.Caching.ICache"/> based on environmental information.
             </summary>
         </member>
-        <member name="M:Ninject.Activation.Caching.ICachePruner.Start(Ninject.Activation.Caching.ICache)">
+        <member name="M:Ninject.Activation.Caching.ICachePruner.Start(Ninject.Activation.Caching.IPruneable)">
             <summary>
             Starts pruning the specified cache based on the rules of the pruner.
             </summary>
@@ -294,25 +474,25 @@
             Stops pruning.
             </summary>
         </member>
+        <member name="F:Ninject.Activation.Caching.GarbageCollectionCachePruner.caches">
+            <summary>
+            The caches that are being pruned.
+            </summary>
+        </member>
         <member name="M:Ninject.Activation.Caching.GarbageCollectionCachePruner.Dispose(System.Boolean)">
             <summary>
             Releases resources held by the object.
             </summary>
         </member>
-        <member name="M:Ninject.Activation.Caching.GarbageCollectionCachePruner.Start(Ninject.Activation.Caching.ICache)">
+        <member name="M:Ninject.Activation.Caching.GarbageCollectionCachePruner.Start(Ninject.Activation.Caching.IPruneable)">
             <summary>
-            Starts pruning the specified cache based on the rules of the pruner.
+            Starts pruning the specified pruneable based on the rules of the pruner.
             </summary>
-            <param name="cache">The cache that will be pruned.</param>
+            <param name="pruneable">The pruneable that will be pruned.</param>
         </member>
         <member name="M:Ninject.Activation.Caching.GarbageCollectionCachePruner.Stop">
             <summary>
             Stops pruning.
-            </summary>
-        </member>
-        <member name="P:Ninject.Activation.Caching.GarbageCollectionCachePruner.Cache">
-            <summary>
-            Gets the cache that is being pruned.
             </summary>
         </member>
         <member name="T:Ninject.Activation.Providers.CallbackProvider`1">
@@ -464,10 +644,9 @@
             Gets or sets the selector component.
             </summary>
         </member>
-        <member name="T:Ninject.Activation.Strategies.ActivationStrategy">
+        <member name="T:Ninject.Activation.Strategies.ActivationCacheStrategy">
             <summary>
-            Contributes to a <see cref="T:Ninject.Activation.IPipeline"/>, and is called during the activation
-            and deactivation of an instance.
+            Adds all activated instances to the activation cache.
             </summary>
         </member>
         <member name="T:Ninject.Activation.Strategies.IActivationStrategy">
@@ -489,6 +668,48 @@
             </summary>
             <param name="context">The context.</param>
             <param name="reference">A reference to the instance being deactivated.</param>
+        </member>
+        <member name="F:Ninject.Activation.Strategies.ActivationCacheStrategy.activationCache">
+            <summary>
+            The activation cache.
+            </summary>
+        </member>
+        <member name="M:Ninject.Activation.Strategies.ActivationCacheStrategy.#ctor(Ninject.Activation.Caching.IActivationCache)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Ninject.Activation.Strategies.ActivationCacheStrategy"/> class.
+            </summary>
+            <param name="activationCache">The activation cache.</param>
+        </member>
+        <member name="M:Ninject.Activation.Strategies.ActivationCacheStrategy.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:Ninject.Activation.Strategies.ActivationCacheStrategy.Activate(Ninject.Activation.IContext,Ninject.Activation.InstanceReference)">
+            <summary>
+            Contributes to the activation of the instance in the specified context.
+            </summary>
+            <param name="context">The context.</param>
+            <param name="reference">A reference to the instance being activated.</param>
+        </member>
+        <member name="M:Ninject.Activation.Strategies.ActivationCacheStrategy.Deactivate(Ninject.Activation.IContext,Ninject.Activation.InstanceReference)">
+            <summary>
+            Contributes to the deactivation of the instance in the specified context.
+            </summary>
+            <param name="context">The context.</param>
+            <param name="reference">A reference to the instance being deactivated.</param>
+        </member>
+        <member name="P:Ninject.Activation.Strategies.ActivationCacheStrategy.Settings">
+            <summary>
+            Gets or sets the settings.
+            </summary>
+            <value>The ninject settings.</value>
+        </member>
+        <member name="T:Ninject.Activation.Strategies.ActivationStrategy">
+            <summary>
+            Contributes to a <see cref="T:Ninject.Activation.IPipeline"/>, and is called during the activation
+            and deactivation of an instance.
+            </summary>
         </member>
         <member name="M:Ninject.Activation.Strategies.ActivationStrategy.Activate(Ninject.Activation.IContext,Ninject.Activation.InstanceReference)">
             <summary>
@@ -899,11 +1120,17 @@
             Drives the activation (injection, etc.) of an instance.
             </summary>
         </member>
-        <member name="M:Ninject.Activation.Pipeline.#ctor(System.Collections.Generic.IEnumerable{Ninject.Activation.Strategies.IActivationStrategy})">
+        <member name="F:Ninject.Activation.Pipeline.activationCache">
+            <summary>
+            The activation cache.
+            </summary>
+        </member>
+        <member name="M:Ninject.Activation.Pipeline.#ctor(System.Collections.Generic.IEnumerable{Ninject.Activation.Strategies.IActivationStrategy},Ninject.Activation.Caching.IActivationCache)">
             <summary>
             Initializes a new instance of the <see cref="T:Ninject.Activation.Pipeline"/> class.
             </summary>
             <param name="strategies">The strategies to execute during activation and deactivation.</param>
+            <param name="activationCache">The activation cache.</param>
         </member>
         <member name="M:Ninject.Activation.Pipeline.Activate(Ninject.Activation.IContext,Ninject.Activation.InstanceReference)">
             <summary>
@@ -1191,6 +1418,59 @@
             Gets or sets the kernel that owns the component container.
             </summary>
         </member>
+        <member name="T:Ninject.Infrastructure.Language.ExtensionsForMemberInfo">
+            <summary>
+            Extensions for MemberInfo
+            </summary>
+        </member>
+        <member name="M:Ninject.Infrastructure.Language.ExtensionsForMemberInfo.HasAttribute``1(System.Reflection.MemberInfo)">
+            <summary>
+            Determines whether the specified member has attribute.
+            </summary>
+            <typeparam name="T">The type of the attribute.</typeparam>
+            <param name="member">The member.</param>
+            <returns>
+            	<c>true</c> if the specified member has attribute; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Ninject.Infrastructure.Language.ExtensionsForMemberInfo.HasAttribute(System.Reflection.MemberInfo,System.Type)">
+            <summary>
+            Determines whether the specified member has attribute.
+            </summary>
+            <param name="member">The member.</param>
+            <param name="type">The type of the attribute.</param>
+            <returns>
+            	<c>true</c> if the specified member has attribute; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Ninject.Infrastructure.Language.ExtensionsForMemberInfo.GetPropertyFromDeclaredType(System.Reflection.MemberInfo,System.Reflection.PropertyInfo,System.Reflection.BindingFlags)">
+            <summary>
+            Gets the property info from its declared tpe.
+            </summary>
+            <param name="memberInfo">The member info.</param>
+            <param name="propertyDefinition">The property definition.</param>
+            <param name="flags">The flags.</param>
+            <returns>The property info from the declared type of the property.</returns>
+        </member>
+        <member name="M:Ninject.Infrastructure.Language.ExtensionsForMemberInfo.IsPrivate(System.Reflection.PropertyInfo)">
+            <summary>
+            Determines whether the specified property info is private.
+            </summary>
+            <param name="propertyInfo">The property info.</param>
+            <returns>
+            	<c>true</c> if the specified property info is private; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Ninject.Infrastructure.Language.ExtensionsForMemberInfo.GetCustomAttributesExtended(System.Reflection.MemberInfo,System.Type,System.Boolean)">
+            <summary>
+            Gets the custom attributes.
+            This version is able to get custom attributes for properties from base types even if the property is none public.
+            </summary>
+            <param name="member">The member.</param>
+            <param name="attributeType">Type of the attribute.</param>
+            <param name="inherited">if set to <c>true</c> [inherited].</param>
+            <returns></returns>
+        </member>
         <member name="T:Ninject.Infrastructure.Future`1">
             <summary>
             Represents a future value.
@@ -1310,6 +1590,57 @@
             <summary>
             Gets the collection of collections of values.
             </summary>
+        </member>
+        <member name="T:Ninject.Infrastructure.ReferenceEqualWeakReference">
+            <summary>
+            Weak reference that can be used in collections. It is equal to the
+            object it references and has the same hash code.
+            </summary>
+        </member>
+        <member name="M:Ninject.Infrastructure.ReferenceEqualWeakReference.#ctor(System.Object)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Ninject.Infrastructure.ReferenceEqualWeakReference"/> class.
+            </summary>
+            <param name="target">The target.</param>
+        </member>
+        <member name="M:Ninject.Infrastructure.ReferenceEqualWeakReference.#ctor(System.Object,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Ninject.Infrastructure.ReferenceEqualWeakReference"/> class.
+            </summary>
+            <param name="target">The target.</param>
+            <param name="trackResurrection">if set to <c>true</c> [track resurrection].</param>
+        </member>
+        <member name="M:Ninject.Infrastructure.ReferenceEqualWeakReference.Equals(System.Object)">
+            <summary>
+            Determines whether the specified <see cref="T:System.Object"/> is equal to this instance.
+            </summary>
+            <param name="obj">The <see cref="T:System.Object"/> to compare with this instance.</param>
+            <returns>
+                <c>true</c> if the specified <see cref="T:System.Object"/> is equal to this instance; otherwise, <c>false</c>.
+            </returns>
+            <exception cref="T:System.NullReferenceException">
+            The <paramref name="obj"/> parameter is null.
+            </exception>
+        </member>
+        <member name="M:Ninject.Infrastructure.ReferenceEqualWeakReference.GetHashCode">
+            <summary>
+            Returns a hash code for this instance.
+            </summary>
+            <returns>
+            A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+            </returns>
+        </member>
+        <member name="P:Ninject.Infrastructure.ReferenceEqualWeakReference.IsAlive">
+            <summary>
+            Gets a value indicating whether this instance is alive.
+            </summary>
+            <value><c>true</c> if this instance is alive; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:Ninject.Infrastructure.ReferenceEqualWeakReference.Target">
+            <summary>
+            Gets or sets the target of this weak reference.
+            </summary>
+            <value>The targe of this weak reference.</value>
         </member>
         <member name="T:Ninject.Infrastructure.RequestFlags">
             <summary>
@@ -1870,6 +2201,20 @@
             <param name="service">The service in question.</param>
             <returns>The series of matching bindings.</returns>
         </member>
+        <member name="T:Ninject.Planning.Bindings.Resolvers.IMissingBindingResolver">
+            <summary>
+             Contains logic about which bindings to use for a given service request
+             when other attempts have failed.
+            </summary>
+        </member>
+        <member name="M:Ninject.Planning.Bindings.Resolvers.IMissingBindingResolver.Resolve(Ninject.Infrastructure.Multimap{System.Type,Ninject.Planning.Bindings.IBinding},Ninject.Activation.IRequest)">
+            <summary>
+            Returns any bindings from the specified collection that match the specified request.
+            </summary>
+            <param name="bindings">The multimap of all registered bindings.</param>
+            <param name="request">The request in question.</param>
+            <returns>The series of matching bindings.</returns>
+        </member>
         <member name="T:Ninject.Planning.Bindings.Resolvers.OpenGenericBindingResolver">
             <summary>
             Resolves bindings for open generic types.
@@ -1882,6 +2227,25 @@
             <param name="bindings">The multimap of all registered bindings.</param>
             <param name="service">The service in question.</param>
             <returns>The series of matching bindings.</returns>
+        </member>
+        <member name="T:Ninject.Planning.Bindings.Resolvers.SelfBindingResolver">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:Ninject.Planning.Bindings.Resolvers.SelfBindingResolver.Resolve(Ninject.Infrastructure.Multimap{System.Type,Ninject.Planning.Bindings.IBinding},Ninject.Activation.IRequest)">
+            <summary>
+            Returns any bindings from the specified collection that match the specified service.
+            </summary>
+            <param name="bindings">The multimap of all registered bindings.</param>
+            <param name="request">The service in question.</param>
+            <returns>The series of matching bindings.</returns>
+        </member>
+        <member name="M:Ninject.Planning.Bindings.Resolvers.SelfBindingResolver.TypeIsSelfBindable(System.Type)">
+            <summary>
+            Returns a value indicating whether the specified service is self-bindable.
+            </summary>
+            <param name="service">The service.</param>
+            <returns><see langword="True"/> if the type is self-bindable; otherwise <see langword="false"/>.</returns>
         </member>
         <member name="T:Ninject.Planning.Bindings.Resolvers.StandardBindingResolver">
             <summary>
@@ -2342,7 +2706,19 @@
             </summary>
             <param name="action">The action callback.</param>
         </member>
+        <member name="M:Ninject.Syntax.IBindingOnSyntax`1.OnActivation(System.Action{Ninject.Activation.IContext,`0})">
+            <summary>
+            Indicates that the specified callback should be invoked when instances are activated.
+            </summary>
+            <param name="action">The action callback.</param>
+        </member>
         <member name="M:Ninject.Syntax.IBindingOnSyntax`1.OnDeactivation(System.Action{`0})">
+            <summary>
+            Indicates that the specified callback should be invoked when instances are deactivated.
+            </summary>
+            <param name="action">The action callback.</param>
+        </member>
+        <member name="M:Ninject.Syntax.IBindingOnSyntax`1.OnDeactivation(System.Action{Ninject.Activation.IContext,`0})">
             <summary>
             Indicates that the specified callback should be invoked when instances are deactivated.
             </summary>
@@ -2573,16 +2949,23 @@
             </summary>
             <param name="action">The action callback.</param>
         </member>
+        <member name="M:Ninject.Planning.Bindings.BindingBuilder`1.OnActivation(System.Action{Ninject.Activation.IContext,`0})">
+            <summary>
+            Indicates that the specified callback should be invoked when instances are activated.
+            </summary>
+            <param name="action">The action callback.</param>
+        </member>
         <member name="M:Ninject.Planning.Bindings.BindingBuilder`1.OnDeactivation(System.Action{`0})">
             <summary>
             Indicates that the specified callback should be invoked when instances are deactivated.
             </summary>
             <param name="action">The action callback.</param>
         </member>
-        <member name="M:Ninject.Planning.Bindings.BindingBuilder`1.Ninject#Syntax#IFluentSyntax#GetType">
+        <member name="M:Ninject.Planning.Bindings.BindingBuilder`1.OnDeactivation(System.Action{Ninject.Activation.IContext,`0})">
             <summary>
-            Provides a root for the fluent syntax associated with an <see cref="P:Ninject.Planning.Bindings.BindingBuilder`1.Binding"/>.
+            Indicates that the specified callback should be invoked when instances are deactivated.
             </summary>
+            <param name="action">The action callback.</param>
         </member>
         <member name="P:Ninject.Planning.Bindings.BindingBuilder`1.Binding">
             <summary>
@@ -2988,6 +3371,14 @@
             <param name="service">The service that the target is requesting.</param>
             <param name="parent">The parent context in which the target is being injected.</param>
             <returns>A series of values that are available for injection.</returns>
+        </member>
+        <member name="M:Ninject.Planning.Targets.Target`1.GetValue(System.Type,Ninject.Activation.IContext)">
+            <summary>
+            Gets the value that should be injected into the target.
+            </summary>
+            <param name="service">The service that the target is requesting.</param>
+            <param name="parent">The parent context in which the target is being injected.</param>
+            <returns>The value that is to be injected.</returns>
         </member>
         <member name="M:Ninject.Planning.Targets.Target`1.ReadOptionalFromTarget">
             <summary>
@@ -3715,6 +4106,34 @@
             Gets a value indicating whether Ninject should inject non public members.
             </summary>
         </member>
+        <member name="P:Ninject.INinjectSettings.InjectParentPrivateProperties">
+            <summary>
+            Gets a value indicating whether Ninject should inject private properties of base classes.
+            </summary>
+            <remarks>
+            Activating this setting has an impact on the performance. It is recomended not
+            to use this feature and use constructor injection instead.
+            </remarks>
+        </member>
+        <member name="P:Ninject.INinjectSettings.ActivationCacheDisabled">
+            <summary>
+            Gets or sets a value indicating whether the activation cache is disabled.
+            If the activation cache is disabled less memory is used. But in some cases
+            instances are activated or deactivated multiple times. e.g. in the following scenario:
+            Bind{A}().ToSelf();
+            Bind{IA}().ToMethod(ctx => kernel.Get{IA}();
+            </summary>
+            <value>
+                <c>true</c> if activation cache is disabled; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Ninject.INinjectSettings.AllowNullInjection">
+            <summary>
+            Gets or sets a value indicating whether Null is a valid value for injection.
+            By defualt this is disabled and whenever a provider returns null an eception is thrown.
+            </summary>
+            <value><c>true</c> if null is allowed as injected value otherwise false.</value>
+        </member>
         <member name="T:Ninject.IStartable">
             <summary>
             A service that is started when activated, and stopped when deactivated.
@@ -3733,6 +4152,11 @@
         <member name="T:Ninject.KernelBase">
             <summary>
             The base implementation of an <see cref="T:Ninject.IKernel"/>.
+            </summary>
+        </member>
+        <member name="F:Ninject.KernelBase.HandleMissingBindingLockObject">
+            <summary>
+            Lock used when adding missing bindings.
             </summary>
         </member>
         <member name="M:Ninject.KernelBase.#ctor">
@@ -3850,6 +4274,19 @@
             <param name="request">The request to resolve.</param>
             <returns>An enumerator of instances that match the request.</returns>
         </member>
+        <member name="M:Ninject.KernelBase.GetBindingPrecedenceComparer">
+            <summary>
+            Returns an IComparer that is used to determine resolution precedence.
+            </summary>
+            <returns>An IComparer that is used to determine resolution precedence.</returns>
+        </member>
+        <member name="M:Ninject.KernelBase.SatifiesRequest(Ninject.Activation.IRequest)">
+            <summary>
+            Returns a predicate that can determine if a given IBinding matches the request.
+            </summary>
+            <param name="request">The request/</param>
+            <returns>A predicate that can determine if a given IBinding matches the request.</returns>
+        </member>
         <member name="M:Ninject.KernelBase.CreateRequest(System.Type,System.Func{Ninject.Planning.Bindings.IBindingMetadata,System.Boolean},System.Collections.Generic.IEnumerable{Ninject.Parameters.IParameter},System.Boolean,System.Boolean)">
             <summary>
             Creates a request for the specified service.
@@ -3892,6 +4329,13 @@
             Attempts to handle a missing binding for a service.
             </summary>
             <param name="service">The service.</param>
+            <returns><c>True</c> if the missing binding can be handled; otherwise <c>false</c>.</returns>
+        </member>
+        <member name="M:Ninject.KernelBase.HandleMissingBinding(Ninject.Activation.IRequest)">
+            <summary>
+            Attempts to handle a missing binding for a request.
+            </summary>
+            <param name="request">The request.</param>
             <returns><c>True</c> if the missing binding can be handled; otherwise <c>false</c>.</returns>
         </member>
         <member name="M:Ninject.KernelBase.TypeIsSelfBindable(System.Type)">
@@ -3970,6 +4414,36 @@
             <summary>
             Gets a value indicating whether Ninject should inject non public members.
             </summary>
+        </member>
+        <member name="P:Ninject.NinjectSettings.InjectParentPrivateProperties">
+            <summary>
+            Gets a value indicating whether Ninject should inject private properties of base classes.
+            </summary>
+            <remarks>
+            Activating this setting has an impact on the performance. It is recomended not
+            to use this feature and use constructor injection instead.
+            </remarks>
+        </member>
+        <member name="P:Ninject.NinjectSettings.ActivationCacheDisabled">
+            <summary>
+            Gets or sets a value indicating whether the activation cache is disabled.
+            If the activation cache is disabled less memory is used. But in some cases
+            instances are activated or deactivated multiple times. e.g. in the following scenario:
+            Bind{A}().ToSelf();
+            Bind{IA}().ToMethod(ctx =&gt; kernel.Get{IA}();
+            </summary>
+            <value>
+            	<c>true</c> if activation cache is disabled; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Ninject.NinjectSettings.AllowNullInjection">
+            <summary>
+            Gets or sets a value indicating whether Null is a valid value for injection.
+            By defualt this is disabled and whenever a provider returns null an eception is thrown.
+            </summary>
+            <value>
+            	<c>true</c> if null is allowed as injected value otherwise false.
+            </value>
         </member>
         <member name="T:Ninject.OnePerRequestModule">
             <summary>

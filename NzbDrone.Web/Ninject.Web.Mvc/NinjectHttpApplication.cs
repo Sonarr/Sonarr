@@ -16,7 +16,9 @@ using Ninject.Infrastructure;
 
 namespace Ninject.Web.Mvc
 {
-	/// <summary>
+    using Ninject.Planning.Bindings.Resolvers;
+
+    /// <summary>
 	/// Defines an <see cref="HttpApplication"/> that is controlled by a Ninject <see cref="IKernel"/>.
 	/// </summary>
 	public abstract class NinjectHttpApplication : HttpApplication, IHaveKernel
@@ -40,9 +42,14 @@ namespace Ninject.Web.Mvc
 			{
 				_kernel = CreateKernel();
 
-				_kernel.Bind<RouteCollection>().ToConstant(RouteTable.Routes);
+                _kernel.Components.RemoveAll<IMissingBindingResolver>();
+                _kernel.Components.Add<IMissingBindingResolver, ControllerMissingBindingResolver>();
+                _kernel.Components.Add<IMissingBindingResolver, SelfBindingResolver>();
+
+                _kernel.Bind<RouteCollection>().ToConstant(RouteTable.Routes);
 				_kernel.Bind<HttpContext>().ToMethod(ctx => HttpContext.Current).InTransientScope();
                 _kernel.Bind<HttpContextBase>().ToMethod(ctx => new HttpContextWrapper(HttpContext.Current)).InTransientScope();
+			    _kernel.Bind<IFilterInjector>().To<FilterInjector>().InSingletonScope();
 				
 				ControllerBuilder.Current.SetControllerFactory(CreateControllerFactory());
 
@@ -53,9 +60,9 @@ namespace Ninject.Web.Mvc
 		}
 
 		/// <summary>
-		/// Stops the application.
+		/// Releases the kernel on application end.
 		/// </summary>
-		public void Application_Stop()
+        public void Application_End()
 		{
 			lock (this)
 			{

@@ -9,19 +9,20 @@
 namespace Ninject.Web.Mvc
 {
     using System.Web.Mvc;
-    
+    using System.Web.Mvc.Async;
+
     /// <summary>
     /// An <see cref="IActionInvoker"/> that injects filters with dependencies.
     /// </summary>
-    public class NinjectActionInvoker : ControllerActionInvoker
+    public class NinjectAsyncActionInvoker : AsyncControllerActionInvoker
     {
         private readonly IFilterInjector filterInjector;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NinjectActionInvoker"/> class.
+        /// Initializes a new instance of the <see cref="NinjectAsyncActionInvoker"/> class.
         /// </summary>
         /// <param name="filterInjector">The filter injector.</param>
-        public NinjectActionInvoker(IFilterInjector filterInjector)
+        public NinjectAsyncActionInvoker(IFilterInjector filterInjector)
         {
             this.filterInjector = filterInjector;
         }
