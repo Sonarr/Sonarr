@@ -1,7 +1,7 @@
 using System;
 using NLog;
 
-namespace NzbDrone.Core.Entities.Notification
+namespace NzbDrone.Core.Model.Notification
 {
     public class ProgressNotification : IDisposable
     {
@@ -63,14 +63,14 @@ namespace NzbDrone.Core.Entities.Notification
         /// Gets or sets the status.
         /// </summary>
         /// <value>The status.</value>
-        public NotificationStatus Status { get; set; }
+        public ProgressNotificationStatus Status { get; set; }
 
         public void Dispose()
         {
-            if (Status == NotificationStatus.InProgress)
+            if (Status == ProgressNotificationStatus.InProgress)
             {
-                Logger.Error("Progress notification '{0}' was unexpectedly abandoned. ID:{1} Status:{2} CurrentStatus:{3} PercentComplete:{4}", Title, Id, Status, CurrentStatus, PercentComplete);
-                Status = NotificationStatus.Failed;
+                Logger.Warn("Progress notification '{0}' was unexpectedly abandoned. ID:{1} Status:{2} CurrentStatus:{3} PercentComplete:{4}", Title, Id, Status, CurrentStatus, PercentComplete);
+                Status = ProgressNotificationStatus.Failed;
             }
         }
     }

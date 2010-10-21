@@ -1,23 +1,22 @@
 using System;
 using System.Collections.Generic;
-using NzbDrone.Core.Entities.Episode;
+using NzbDrone.Core.Model;
+using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Providers
 {
     public interface IEpisodeProvider
     {
-        EpisodeInfo GetEpisode(long id);
-        void UpdateEpisode(EpisodeInfo episode);
-        IList<EpisodeInfo> GetEpisodesBySeason(long seasonId);
-        IList<EpisodeInfo> GetEpisodeBySeries(long seriesId);
-        String GetSabTitle(BasicEpisode episode);
+        Episode GetEpisode(long id);
+        IList<Episode> GetEpisodeBySeries(long seriesId);
+        String GetSabTitle(Episode episode);
 
         /// <summary>
         /// Comprehensive check on whether or not this episode is needed.
         /// </summary>
         /// <param name="episode">Episode that needs to be checked</param>
         /// <returns></returns>
-        bool IsNeeded(RemoteEpisode episode);
+        bool IsNeeded(EpisodeModel episode);
 
         void RefreshEpisodeInfo(int seriesId);
     }

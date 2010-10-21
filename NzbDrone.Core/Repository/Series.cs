@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using NzbDrone.Core.Entities.Episode;
 using SubSonic.SqlGeneration.Schema;
 
-namespace NzbDrone.Core.Entities
+namespace NzbDrone.Core.Repository
 {
     public class Series
     {
@@ -14,6 +13,7 @@ namespace NzbDrone.Core.Entities
 
         public string CleanTitle { get; set; }
 
+        [SubSonicNullString]
         public string Status { get; set; }
 
         [SubSonicLongString]
@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Entities
         public virtual List<Season> Seasons { get; private set; }
 
         [SubSonicToManyRelation]
-        public virtual List<EpisodeInfo> Episodes { get; private set; }
+        public virtual List<Episode> Episodes { get; private set; }
 
 
     }

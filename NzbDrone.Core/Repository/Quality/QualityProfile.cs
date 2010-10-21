@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using SubSonic.SqlGeneration.Schema;
 
-namespace NzbDrone.Core.Entities.Quality
+namespace NzbDrone.Core.Repository.Quality
 {
     public class QualityProfile
     {

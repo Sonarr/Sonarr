@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using NzbDrone.Core.Entities.Notification;
+using NzbDrone.Core.Model.Notification;
 
 namespace NzbDrone.Core.Providers
 {
@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Providers
 
         public List<ProgressNotification> GetProgressNotifications
         {
-            get { return new List<ProgressNotification>(_progressNotification.Values.Where(p => p.Status == NotificationStatus.InProgress)); }
+            get { return new List<ProgressNotification>(_progressNotification.Values.Where(p => p.Status == ProgressNotificationStatus.InProgress)); }
         }
 
         public void Dismiss(Guid notificationId)

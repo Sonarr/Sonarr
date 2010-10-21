@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using NLog;
-using NzbDrone.Core.Entities.Notification;
+using NzbDrone.Core.Model.Notification;
 
 namespace NzbDrone.Core.Providers
 {
@@ -58,7 +58,6 @@ namespace NzbDrone.Core.Providers
                 {
                     _notificationProvider.Register(_seriesSyncNotification);
                     _seriesSyncNotification.CurrentStatus = "Analysing Folder";
-                    Thread.Sleep(20000);
                     var unmappedFolders = _seriesProvider.GetUnmappedFolders();
                     _seriesSyncNotification.ProgressMax = unmappedFolders.Count;
 
@@ -100,7 +99,7 @@ namespace NzbDrone.Core.Providers
                     _seriesSyncNotification.CurrentStatus = "Series Scan Completed";
                     Logger.Info("Series folders scan has successfully completed.");
                     Thread.Sleep(3000);
-                    _seriesSyncNotification.Status = NotificationStatus.Completed;
+                    _seriesSyncNotification.Status = ProgressNotificationStatus.Completed;
                 }
             }
             catch (Exception e)

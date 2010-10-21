@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using NzbDrone.Core.Entities;
+using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Providers
 {

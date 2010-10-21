@@ -33,7 +33,7 @@ $(function () {
         //set the message text
         $("#msgText").text(sMsg);
         //show the message
-        $('#msgBox').slideUp(speed, null);
+        $('#msgBox').slideDown(speed, null);
     }
 
     function CloseMsg() {

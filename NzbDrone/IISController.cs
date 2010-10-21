@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using Microsoft.Web.Administration;
+using System.Xml.Linq;
+using System.Xml.XPath;
 using NLog;
 
 namespace NzbDrone
@@ -46,7 +45,16 @@ namespace NzbDrone
 
             //Set Variables for the config file.
             Environment.SetEnvironmentVariable("NZBDRONE_PATH", Config.ProjectRoot);
-            UpdateIISConfig();
+
+            try
+            {
+                UpdateIISConfig();
+            }
+            catch (Exception e)
+            {
+                Logger.Error("An error has occured while trying to update the config file.", e);
+            }
+
 
             Logger.Info("Starting process. [{0}]", IISProcess.StartInfo.FileName);
             IISProcess.Start();
@@ -101,10 +109,22 @@ namespace NzbDrone
 
         private static void UpdateIISConfig()
         {
+            string configPath = Path.Combine(IISFolder, @"AppServer\applicationhost.config");
+
+            Logger.Info(@"Server configuration file: {0}", configPath);
             Logger.Info(@"Configuring server to: [http://localhost:{0}]", Config.Port);
-            var serverManager = new ServerManager(Path.Combine(IISFolder, @"AppServer\applicationhost.config"));
-            serverManager.Sites["NZBDrone"].Bindings[0].BindingInformation = string.Format("*:{0}:", Config.Port);
-            serverManager.CommitChanges();
+
+            var configXml = XDocument.Load(configPath);
+
+            var bindings = configXml.XPathSelectElement("configuration/system.applicationHost/sites").Elements("site").Where(d => d.Attribute("name").Value.ToLowerInvariant() == "nzbdrone").First().Element("bindings");
+            bindings.Descendants().Remove();
+            bindings.Add(
+            new XElement("binding",
+            new XAttribute("protocol", "http"),
+            new XAttribute("bindingInformation", String.Format("*:{0}:", Config.Port))
+            ));
+
+            configXml.Save(configPath);
         }
 
         private static string CleanPath(string path)

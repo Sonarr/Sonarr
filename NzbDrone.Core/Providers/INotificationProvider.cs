@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using NzbDrone.Core.Entities.Notification;
+using NzbDrone.Core.Model.Notification;
 
 namespace NzbDrone.Core.Providers
 {

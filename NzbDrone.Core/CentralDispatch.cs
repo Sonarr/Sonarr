@@ -5,10 +5,9 @@ using System.Web;
 using Ninject;
 using NLog.Config;
 using NLog.Targets;
-using NzbDrone.Core.Entities;
-using NzbDrone.Core.Entities.Episode;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Fakes;
+using NzbDrone.Core.Repository;
 using SubSonic.DataProviders;
 using SubSonic.Repository;
 using NLog;
@@ -76,7 +75,7 @@ namespace NzbDrone.Core
         private static void ForceMigration(IRepository repository)
         {
             repository.GetPaged<Series>(0, 1);
-            repository.GetPaged<EpisodeInfo>(0, 1);
+            repository.GetPaged<Episode>(0, 1);
         }
 
 

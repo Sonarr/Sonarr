@@ -1,4 +1,4 @@
-namespace NzbDrone.Core.Entities.Quality
+namespace NzbDrone.Core.Repository.Quality
 {
     // ReSharper disable InconsistentNaming
     /// <summary>
@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Entities.Quality
         /// <summary>
         ///   SD File (Source could be HD)
         /// </summary>
-        SDTV = 1,
+        TV = 1,
         /// <summary>
         ///   SD File (DVD Source)
         /// </summary>

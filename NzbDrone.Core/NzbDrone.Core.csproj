@@ -121,6 +121,7 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Core, Version=2.5.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL" />
     <Reference Include="Exceptioneer.WindowsFormsClient, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libraries\Exceptioneer.WindowsFormsClient.dll</HintPath>
@@ -149,20 +150,25 @@
     <Reference Include="UPnP, Version=1.0.3932.37442, Culture=neutral, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entities\MediaFile.cs" />
-    <Compile Include="Entities\Notification\BasicNotification.cs" />
-    <Compile Include="Entities\Notification\NotificationStatus.cs" />
-    <Compile Include="Entities\Notification\NotificationType.cs" />
+    <Compile Include="Model\EpisodeParseResult.cs" />
+    <Compile Include="Model\EpisodeModel.cs" />
+    <Compile Include="Repository\EpisodeFile.cs" />
+    <Compile Include="Model\Notification\BasicNotification.cs" />
+    <Compile Include="Model\Notification\ProgressNotificationStatus.cs" />
+    <Compile Include="Model\Notification\BasicNotificationType.cs" />
     <Compile Include="Instrumentation.cs" />
+    <Compile Include="Parser.cs" />
     <Compile Include="Providers\Fakes\FakeNotificationProvider.cs" />
+    <Compile Include="Providers\IMediaFileProvider.cs" />
     <Compile Include="Providers\INotificationProvider.cs" />
     <Compile Include="Providers\IMediaDiscoveryProvider.cs" />
     <Compile Include="Providers\IMediaProvider.cs" />
     <Compile Include="Providers\ISyncProvider.cs" />
     <Compile Include="Providers\MediaDiscoveryProvider.cs" />
+    <Compile Include="Providers\MediaFileProvider.cs" />
     <Compile Include="Providers\SyncProvider.cs" />
     <Compile Include="Providers\XBMCMediaProvider.cs" />
-    <Compile Include="Entities\Notification\ProgressNotification.cs" />
+    <Compile Include="Model\Notification\ProgressNotification.cs" />
     <Compile Include="Providers\NotificationProvider.cs" />
     <Compile Include="Providers\ConfigProvider.cs" />
     <Compile Include="Providers\EpisodeProvider.cs" />
@@ -175,15 +181,13 @@
     <Compile Include="Providers\ITvDbProvider.cs" />
     <Compile Include="Providers\SabProvider.cs" />
     <Compile Include="Providers\SeasonProvider.cs" />
-    <Compile Include="Entities\Episode\RemoteEpisode.cs" />
-    <Compile Include="Entities\Episode\EpisodeInfo.cs" />
-    <Compile Include="Entities\Quality\AllowedQuality.cs" />
-    <Compile Include="Entities\Config.cs" />
-    <Compile Include="Entities\Quality\QualityProfile.cs" />
-    <Compile Include="Entities\Season.cs" />
-    <Compile Include="Entities\Episode\BasicEpisode.cs" />
-    <Compile Include="Entities\Quality\QualityTypes.cs" />
-    <Compile Include="Entities\Series.cs" />
+    <Compile Include="Repository\Episode.cs" />
+    <Compile Include="Repository\Quality\AllowedQuality.cs" />
+    <Compile Include="Repository\Config.cs" />
+    <Compile Include="Repository\Quality\QualityProfile.cs" />
+    <Compile Include="Repository\Season.cs" />
+    <Compile Include="Repository\Quality\QualityTypes.cs" />
+    <Compile Include="Repository\Series.cs" />
     <Compile Include="CentralDispatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\DiskProvider.cs" />
@@ -215,6 +219,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Libraries\Castle.Core.dll" />
+    <Content Include="Libraries\Castle.Core.pdb" />
+    <Content Include="Libraries\Castle.Core.xml" />
     <Content Include="Libraries\Exceptioneer.WindowsFormsClient.dll" />
     <Content Include="Libraries\Ninject.dll" />
     <Content Include="Libraries\Ninject.xml" />

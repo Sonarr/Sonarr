@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
-
+using FizzWare.NBuilder;
 using Moq;
 using NLog;
 using NzbDrone.Core.Providers;
@@ -50,11 +51,28 @@ namespace NzbDrone.Core.Test
             }
         }
 
-        public static IDiskProvider GetStandardDisk()
+        public static IDiskProvider GetStandardDisk(int seasons, int episodes)
         {
             var mock = new Mock<IDiskProvider>();
             mock.Setup(c => c.GetDirectories(It.IsAny<String>())).Returns(StandardSeries);
             mock.Setup(c => c.Exists(It.Is<String>(d => StandardSeries.Contains(d)))).Returns(true);
+
+
+            foreach (var series in StandardSeries)
+            {
+                var file = new List<String>();
+                for (int s = 0; s < seasons; s++)
+                {
+                    for (int e = 0; e < episodes; e++)
+                    {
+                        file.Add(String.Format("{0}\\Seasons {1}\\myepname.S{1:00}E{2:00}.avi", series, s, e));
+                    }
+                }
+
+                string series1 = series;
+                mock.Setup(c => c.GetFiles(series1, "*.avi", SearchOption.AllDirectories)).Returns(file.ToArray());
+            }
+
             return mock.Object;
         }
     }

@@ -5,8 +5,8 @@ using Gallio.Framework;
 using MbUnit.Framework;
 using MbUnit.Framework.ContractVerifiers;
 using Moq;
-using NzbDrone.Core.Entities;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Repository;
 using SubSonic.Repository;
 
 namespace NzbDrone.Core.Test

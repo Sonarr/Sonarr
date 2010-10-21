@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using NzbDrone.Core.Entities.Notification;
+using NzbDrone.Core.Model.Notification;
 
 namespace NzbDrone.Core.Providers.Fakes
 {
@@ -33,8 +33,8 @@ namespace NzbDrone.Core.Providers.Fakes
 
             get
             {
-                fakeNotification.Status = NotificationStatus.InProgress;
-                fakeNotification.Status = NotificationStatus.InProgress;
+                fakeNotification.Status = ProgressNotificationStatus.InProgress;
+                fakeNotification.Status = ProgressNotificationStatus.InProgress;
                 fakeNotification2.CurrentStatus = DateTime.UtcNow.ToString();
                 fakeNotification.CurrentStatus = DateTime.Now.ToString();
                 return new List<ProgressNotification> { fakeNotification  };

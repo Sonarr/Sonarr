@@ -17,6 +17,11 @@ namespace NzbDrone.Core.Providers
             return Directory.GetDirectories(path);
         }
 
+        public string[] GetFiles(string path, string pattern, SearchOption searchOption)
+        {
+            return Directory.GetFiles(path, pattern, searchOption);
+        }
+
         public String CreateDirectory(string path)
         {
             return Directory.CreateDirectory(path).FullName;

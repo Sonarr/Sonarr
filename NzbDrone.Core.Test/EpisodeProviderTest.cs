@@ -21,11 +21,11 @@ namespace NzbDrone.Core.Test
     public class EpisodeProviderTest
     {
         [Test]
-        public void BulkAddSpeedTest()
+        public void RefreshEpisodeInfo()
         {
             //Arrange
             int seriesId = 71663;
-            int episodeCount = 500;
+            int episodeCount = 10;
             var fakeEpisodes = Builder<TvdbSeries>.CreateNew().With(
                 c => c.Episodes =
                     new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(episodeCount).

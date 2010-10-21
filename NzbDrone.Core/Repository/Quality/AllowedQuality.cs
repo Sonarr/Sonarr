@@ -1,4 +1,4 @@
-﻿namespace NzbDrone.Core.Entities.Quality
+﻿namespace NzbDrone.Core.Repository.Quality
 {
     public class AllowedQuality
     {

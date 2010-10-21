@@ -6,8 +6,8 @@ using FizzWare.NBuilder;
 using Gallio.Framework;
 using MbUnit.Framework;
 using MbUnit.Framework.ContractVerifiers;
-using NzbDrone.Core.Entities;
-using NzbDrone.Core.Entities.Episode;
+using NzbDrone.Core.Model;
+using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Test
 {
@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Test
         {
             //Arrange
             var fakeSeries = Builder<Series>.CreateNew().With(s => s.SeriesId = 69).Build();
-            var fakeEpisode = Builder<EpisodeInfo>.CreateNew().With(c => c.SeriesId = 69).Build();
+            var fakeEpisode = Builder<Episode>.CreateNew().With(c => c.SeriesId = 69).Build();
 
             //Act
             var repo = MockLib.GetEmptyRepository();
@@ -54,6 +54,13 @@ namespace NzbDrone.Core.Test
             var allSeries = sonicRepo.All<Series>();
             Assert.IsNotEmpty(allSeries);
             Assert.AreEqual(tvdbId, allSeries.First().SeriesId);
+        }
+
+        [Test]
+        public void enteties_toString()
+        {
+            Console.WriteLine(new Episode().ToString());
+            Console.WriteLine(new EpisodeModel().ToString());
         }
     }
 }

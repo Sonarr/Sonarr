@@ -1,6 +1,6 @@
 using System;
 
-namespace NzbDrone.Core.Entities.Notification
+namespace NzbDrone.Core.Model.Notification
 {
     public class BasicNotification
     {
@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Entities.Notification
 
         public String Title { get; set; }
 
-        public NotificationType Type { get; set; }
+        public BasicNotificationType Type { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether or not this message should be automatically dismissed after a period of time.

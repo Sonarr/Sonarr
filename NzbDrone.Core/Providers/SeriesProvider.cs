@@ -4,8 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
-using NzbDrone.Core.Entities;
-using NzbDrone.Core.Entities.Notification;
+using NzbDrone.Core.Repository;
 using SubSonic.Repository;
 using TvdbLib.Data;
 
@@ -16,30 +15,12 @@ namespace NzbDrone.Core.Providers
         //TODO: Remove parsing of rest of tv show info we just need the show name
 
         //Trims all white spaces and separators from the end of the title.
-        private static readonly Regex CleanTitleRegex = new Regex(@"[\s.][^a-z]*$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        private static readonly Regex ParseRegex = new Regex(@"(?<showName>.*)
-(?:
-  s(?<seasonNumber>\d+)e(?<episodeNumber>\d+)-?e(?<episodeNumber2>\d+)
-| s(?<seasonNumber>\d+)e(?<episodeNumber>\d+)
-|  (?<seasonNumber>\d+)x(?<episodeNumber>\d+)
-|  (?<airDate>\d{4}.\d{2}.\d{2})
-)
-(?:
-  (?<episodeName>.*?)
-  (?<release>
-     (?:hdtv|pdtv|xvid|ws|720p|x264|bdrip|dvdrip|dsr|proper)
-     .*)
-| (?<episodeName>.*)
-)", RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace);
-
-
 
         private readonly IConfigProvider _config;
         private readonly IDiskProvider _diskProvider;
         private readonly IRepository _sonioRepo;
         private readonly ITvDbProvider _tvDb;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private static readonly Regex CleanUpRegex = new Regex(@"((\s|^)the(\s|$))|((\s|^)and(\s|$))|[^a-z]", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         public SeriesProvider(IDiskProvider diskProvider, IConfigProvider configProvider, IRepository dataRepository, ITvDbProvider tvDbProvider)
         {
@@ -69,21 +50,6 @@ namespace NzbDrone.Core.Providers
         public bool IsMonitored(long id)
         {
             return _sonioRepo.Exists<Series>(c => c.SeriesId == id && c.Monitored);
-        }
-
-        /// <summary>
-        /// Parses series name out of a post title
-        /// </summary>
-        /// <param name="postTitle">Title of the report</param>
-        /// <returns>Name series this report belongs to</returns>
-        public static string ParseTitle(string postTitle)
-        {
-            var match = ParseRegex.Match(postTitle);
-
-            if (!match.Success)
-                throw new ArgumentException(String.Format("Title doesn't match any know patterns. [{0}]", postTitle));
-
-            return CleanTitleRegex.Replace(match.Groups["showName"].Value, String.Empty).Replace(".", " ");
         }
 
         public List<String> GetUnmappedFolders()
@@ -130,7 +96,7 @@ namespace NzbDrone.Core.Providers
             repoSeries.Status = series.Status;
             repoSeries.Language = series.Language != null ? series.Language.Abbriviation : string.Empty;
             repoSeries.Path = path;
-            repoSeries.CleanTitle = CleanUpRegex.Replace(series.SeriesName, "").ToLower();
+            repoSeries.CleanTitle = Parser.NormalizeTitle(series.SeriesName);
             _sonioRepo.Add(repoSeries);
         }
 
