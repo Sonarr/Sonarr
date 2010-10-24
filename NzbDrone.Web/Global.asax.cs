@@ -54,11 +54,11 @@ namespace NzbDrone.Web
             var lastError = Server.GetLastError();
             if (lastError is HttpException)
             {
-                Logger.WarnException("", lastError);
+                Logger.WarnException(lastError.Message, lastError);
             }
             else
             {
-                Logger.FatalException("", lastError);
+                Logger.FatalException(lastError.Message, lastError);
             }
         }
 

@@ -33,6 +33,9 @@ namespace NzbDrone.Core.Instrumentation
 
             if (logEvent.Exception != null)
             {
+                if (String.IsNullOrWhiteSpace(log.Message))
+                    log.Message = logEvent.Exception.Message;
+
                 log.ExceptionMessage = logEvent.Exception.Message;
                 log.ExceptionString = logEvent.Exception.ToString();
                 log.ExceptionType = logEvent.Exception.GetType().ToString();

@@ -97,7 +97,7 @@ namespace NzbDrone.Core
         {
             try
             {
-                Logger.Info("Attaching to parent process for automatic termination.");
+                Logger.Debug("Attaching to parent process for automatic termination.");
                 var pc = new PerformanceCounter("Process", "Creating Process ID", Process.GetCurrentProcess().ProcessName);
                 var pid = (int)pc.NextValue();
                 var hostProcess = Process.GetProcessById(pid);
@@ -109,7 +109,7 @@ namespace NzbDrone.Core
                                            ShutDown();
                                        });
 
-                Logger.Info("Successfully Attached to host. Process ID: {0}", pid);
+                Logger.Debug("Successfully Attached to host. Process ID: {0}", pid);
             }
             catch (Exception e)
             {

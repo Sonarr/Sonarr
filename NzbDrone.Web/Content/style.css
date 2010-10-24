@@ -392,3 +392,9 @@ hr
 #footer a
 {
 }
+
+
+.t-grid .t-last {
+border-bottom:1px solid #EEEEEE;
+border-color:#EEEEEE;
+}

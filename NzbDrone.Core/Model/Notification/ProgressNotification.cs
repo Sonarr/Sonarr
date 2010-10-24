@@ -69,7 +69,7 @@ namespace NzbDrone.Core.Model.Notification
         {
             if (Status == ProgressNotificationStatus.InProgress)
             {
-                Logger.Warn("Progress notification '{0}' was unexpectedly abandoned. ID:{1} Status:{2} CurrentStatus:{3} PercentComplete:{4}", Title, Id, Status, CurrentStatus, PercentComplete);
+                Logger.Warn("Background task '{0}' was unexpectedly abandoned.", Title);
                 Status = ProgressNotificationStatus.Failed;
             }
         }

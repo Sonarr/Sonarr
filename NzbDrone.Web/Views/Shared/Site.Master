@@ -16,13 +16,8 @@ Released   : 20100727
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-    <style type="text/css">
-        div.jGrowl-notification
-        {
-            margin-left: 6px;
-        }
-    </style>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <asp:ContentPlaceHolder runat="server" ID="Scripts" />
     <title>NZBDrone</title>
     <%
         Html.Telerik().StyleSheetRegistrar().DefaultGroup(group => group.Add("telerik.common.css")
@@ -67,7 +62,6 @@ Released   : 20100727
             </div>
         </div>
     </div>
-    <!-- end #footer -->
     <% Html.Telerik().ScriptRegistrar().Scripts(
            c => c.Add("jquery-ui-1.8.5.custom.min.js")
                .Add("jquery.jgrowl.js")

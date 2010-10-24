@@ -213,7 +213,6 @@
     <Content Include="Scripts\jquery-ui-1.8.5.custom.min.js" />
     <Content Include="Scripts\jquery.jgrowl.js" />
     <Content Include="Scripts\Notification.js" />
-    <Content Include="Views\Log\LogDetail.ascx" />
     <Content Include="Views\Log\Index.aspx" />
     <Content Include="Views\Series\Details.aspx" />
     <Content Include="Views\Series\EpisodeDetail.ascx" />

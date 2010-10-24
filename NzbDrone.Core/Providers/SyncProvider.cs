@@ -67,7 +67,7 @@ namespace NzbDrone.Core.Providers
                         {
                             _seriesSyncNotification.CurrentStatus = String.Format("Analysing Folder: {0}", CultureInfo.CurrentCulture.TextInfo.ToTitleCase(new DirectoryInfo(seriesFolder).Name));
 
-                            Logger.Info("Folder '{0}' isn't mapped in the database. Trying to map it.'", seriesFolder);
+                            Logger.Debug("Folder '{0}' isn't mapped in the database. Trying to map it.'", seriesFolder);
                             var mappedSeries = _seriesProvider.MapPathToSeries(seriesFolder);
 
                             if (mappedSeries == null)
@@ -91,7 +91,7 @@ namespace NzbDrone.Core.Providers
                         }
                         catch (Exception e)
                         {
-                            Logger.ErrorException("", e);
+                            Logger.ErrorException(e.Message, e);
                         }
                         _seriesSyncNotification.ProgressValue++;
                     }
@@ -104,7 +104,7 @@ namespace NzbDrone.Core.Providers
             }
             catch (Exception e)
             {
-                Logger.ErrorException("", e);
+                Logger.ErrorException(e.Message, e);
             }
         }
     }
