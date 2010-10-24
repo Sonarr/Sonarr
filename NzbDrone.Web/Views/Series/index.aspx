@@ -5,9 +5,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
     Series
 </asp:Content>
-<asp:Content ID="Menue" ContentPlaceHolderID="ActionMenue" runat="server">
-    <div id="Mediabox">
-    </div>
+<asp:Content ID="Menu" ContentPlaceHolderID="ActionMenu" runat="server">
     <%
         Html.Telerik().Menu().Name("telerikGrid").Items(items => { items.Add().Text("View Unmapped Folders").Action("Unmapped", "Series"); })
                                                 .Items(items => items.Add().Text("Sync With Disk").Action("Sync", "Series"))

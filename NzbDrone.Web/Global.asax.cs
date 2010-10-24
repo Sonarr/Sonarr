@@ -8,6 +8,8 @@ using Ninject;
 using Ninject.Web.Mvc;
 using NLog;
 using NzbDrone.Core;
+using NzbDrone.Core.Instrumentation;
+using SubSonic.Repository;
 
 namespace NzbDrone.Web
 {
@@ -30,7 +32,8 @@ namespace NzbDrone.Web
 
         protected override void OnApplicationStarted()
         {
-            Instrumentation.Setup();
+            LogConfiguration.Setup();
+            Logger.Info("NZBDrone Starting up.");
             CentralDispatch.DedicateToHost();
             AreaRegistration.RegisterAllAreas();
             RegisterRoutes(RouteTable.Routes);
@@ -39,7 +42,10 @@ namespace NzbDrone.Web
 
         protected override IKernel CreateKernel()
         {
-            return CentralDispatch.NinjectKernel;
+            var kernel = CentralDispatch.NinjectKernel;
+            // kernel.Bind<IRepository>().ToConstant(kernel.Get<IRepository>("LogDb"));
+
+            return kernel;
         }
 
         // ReSharper disable InconsistentNaming

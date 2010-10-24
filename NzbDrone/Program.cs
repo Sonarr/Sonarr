@@ -41,7 +41,15 @@ namespace NzbDrone
                 //Manually Attach debugger to IISExpress
                 if (Debugger.IsAttached)
                 {
-                    ProcessAttacher.Attach();
+                    try
+                    {
+                        ProcessAttacher.Attach();
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.Warn("Unable to attach to debugger", e);
+                    }
+
                 }
 #endif
 

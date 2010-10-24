@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Providers
             var results = new List<String>();
             foreach (string seriesFolder in _diskProvider.GetDirectories(_config.SeriesRoot))
             {
-                var cleanPath = DiskProvider.CleanPath(new DirectoryInfo(seriesFolder).FullName);
+                var cleanPath = Parser.NormalizePath(new DirectoryInfo(seriesFolder).FullName);
                 if (!_sonioRepo.Exists<Series>(s => s.Path == cleanPath))
                 {
                     results.Add(cleanPath);

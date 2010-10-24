@@ -131,5 +131,12 @@ namespace NzbDrone.Core
         {
             return NormalizeRegex.Replace(title, String.Empty).ToLower();
         }
+
+        public static string NormalizePath(string path)
+        {
+            if (String.IsNullOrEmpty(path))
+                throw new ArgumentException("Path can not be null or empty");
+            return new FileInfo(path).FullName.ToLower().Trim('/', '\\', ' ');
+        }
     }
 }

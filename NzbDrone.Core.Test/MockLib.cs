@@ -7,6 +7,7 @@ using System.Text;
 using FizzWare.NBuilder;
 using Moq;
 using NLog;
+using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Providers;
 using SubSonic.DataProviders;
 using SubSonic.Repository;
@@ -32,10 +33,10 @@ namespace NzbDrone.Core.Test
         public static IRepository GetEmptyRepository(bool enableLogging)
         {
             Console.WriteLine("Creating an empty SQLite database");
-            var provider = ProviderFactory.GetProvider("Data Source=" + Guid.NewGuid() + ".testdb;Version=3;New=True", "System.Data.SQLite");
+            var provider = ProviderFactory.GetProvider("Data Source=" + Guid.NewGuid() + ".db;Version=3;New=True", "System.Data.SQLite");
             if (enableLogging)
             {
-                provider.Log = new Instrumentation.NlogWriter();
+                provider.Log = new NlogWriter();
                 provider.LogParams = true;
             }
             return new SimpleRepository(provider, SimpleRepositoryOptions.RunMigrations);
@@ -55,7 +56,7 @@ namespace NzbDrone.Core.Test
         {
             var mock = new Mock<IDiskProvider>();
             mock.Setup(c => c.GetDirectories(It.IsAny<String>())).Returns(StandardSeries);
-            mock.Setup(c => c.Exists(It.Is<String>(d => StandardSeries.Contains(d)))).Returns(true);
+            mock.Setup(c => c.FolderExists(It.Is<String>(d => StandardSeries.Contains(d)))).Returns(true);
 
 
             foreach (var series in StandardSeries)

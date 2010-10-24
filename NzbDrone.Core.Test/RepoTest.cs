@@ -6,8 +6,13 @@ using FizzWare.NBuilder;
 using Gallio.Framework;
 using MbUnit.Framework;
 using MbUnit.Framework.ContractVerifiers;
+using Ninject;
+using NLog;
+using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository;
+using LogLevel = NzbDrone.Core.Instrumentation.LogLevel;
+using NLog.Config;
 
 namespace NzbDrone.Core.Test
 {
@@ -61,6 +66,70 @@ namespace NzbDrone.Core.Test
         {
             Console.WriteLine(new Episode().ToString());
             Console.WriteLine(new EpisodeModel().ToString());
+        }
+
+        [Test]
+        public void write_log()
+        {
+            //setup
+            var message = Guid.NewGuid().ToString();
+
+            var sonicRepo = MockLib.GetEmptyRepository();
+
+            var sonicTarget = new SubsonicTarget(sonicRepo);
+            LogManager.Configuration.AddTarget("DbLogger", sonicTarget);
+            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", NLog.LogLevel.Info, sonicTarget));
+            LogManager.Configuration.Reload();
+
+            Logger Logger = LogManager.GetCurrentClassLogger();
+            //Act
+
+            Logger.Info(message);
+
+            //Assert
+            Assert.IsNotEmpty(sonicRepo.All<Log>());
+            Assert.Count(1, sonicRepo.All<Log>());
+
+            var logItem = sonicRepo.All<Log>().First();
+            Assert.AreNotEqual(new DateTime(), logItem.Time);
+            Assert.AreEqual(message, logItem.Message);
+            Assert.AreEqual(Logger.Name, logItem.Logger);
+            Assert.AreEqual(Logger.Name, logItem.Logger);
+            Assert.AreEqual(LogLevel.Info, logItem.Level);
+        }
+
+        [Test]
+        public void write_log_exception()
+        {
+            //setup
+            var message = Guid.NewGuid().ToString();
+
+            var sonicRepo = MockLib.GetEmptyRepository();
+
+            var sonicTarget = new SubsonicTarget(sonicRepo);
+            LogManager.Configuration.AddTarget("DbLogger", sonicTarget);
+            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", NLog.LogLevel.Info, sonicTarget));
+            LogManager.Configuration.Reload();
+
+            Logger Logger = LogManager.GetCurrentClassLogger();
+
+            var ex = new InvalidOperationException("Fake Exception");
+            //Act
+
+            Logger.ErrorException(message, ex);
+
+            //Assert
+            Assert.IsNotEmpty(sonicRepo.All<Log>());
+            Assert.Count(1, sonicRepo.All<Log>());
+
+            var logItem = sonicRepo.All<Log>().First();
+            Assert.AreNotEqual(new DateTime(), logItem.Time);
+            Assert.AreEqual(message, logItem.Message);
+            Assert.AreEqual(Logger.Name, logItem.Logger);
+            Assert.AreEqual(LogLevel.Error, logItem.Level);
+            Assert.AreEqual(ex.GetType().ToString(), logItem.ExceptionType);
+            Assert.AreEqual(ex.ToString(), logItem.ExceptionString);
+            Assert.AreEqual(ex.Message, logItem.ExceptionMessage);
         }
     }
 }

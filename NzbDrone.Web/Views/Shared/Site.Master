@@ -32,6 +32,10 @@ Released   : 20100727
     %>
 </head>
 <body>
+    <a href="http://github.com/kayone/NzbDrone">
+        <img style="position: absolute; top: 0; left: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png"
+            alt="Fork me on GitHub" />
+    </a>
     <div id="header">
         <div id="msgBox">
             <span id="msgText">Scanning Series Folder...</span>
@@ -40,6 +44,7 @@ Released   : 20100727
             <ul>
                 <%=Html.CurrentActionLink("Series", "Index", "Series") %>
                 <%=Html.CurrentActionLink("Settings", "Index", "Settings") %>
+                <%=Html.CurrentActionLink("Logs", "Index", "Log") %>
             </ul>
         </div>
         <!-- end #menu -->
@@ -53,7 +58,7 @@ Released   : 20100727
     <hr />
     <!-- end #logo -->
     <div id="page">
-        <asp:ContentPlaceHolder ID="ActionMenue" runat="server" />
+        <asp:ContentPlaceHolder ID="ActionMenu" runat="server" />
         <div id="content">
             <div class="post">
                 <div class="entry">

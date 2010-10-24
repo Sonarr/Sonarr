@@ -35,8 +35,8 @@ namespace NzbDrone
             dte2 = (DTE2)System.Runtime.InteropServices.Marshal.
             GetActiveObject("VisualStudio.DTE.10.0");
 
-            var pa = new ProcessAttacher(dte2, "iisexpress", 20);
-            pa.OptimisticAttachManaged();
+            var pa = new ProcessAttacher(dte2, "iisexpress", 10);
+            pa.PessimisticAttachManaged();
         }
 
 
@@ -87,10 +87,9 @@ namespace NzbDrone
             }
             catch (Exception ex)
             {
-                if (ex.Message.Contains("Invalid index."))
-                {
-                    return AttachResult.NotRunning;
-                }
+
+                return AttachResult.NotRunning;
+
             }
 
             proc.Attach2(eng);

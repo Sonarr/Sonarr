@@ -7,9 +7,14 @@ namespace NzbDrone.Core.Providers
     {
         #region IDiskProvider Members
 
-        public bool Exists(string path)
+        public bool FolderExists(string path)
         {
             return Directory.Exists(path);
+        }
+
+        public bool FileExists(string path)
+        {
+            return File.Exists(path);
         }
 
         public string[] GetDirectories(string path)
@@ -22,18 +27,16 @@ namespace NzbDrone.Core.Providers
             return Directory.GetFiles(path, pattern, searchOption);
         }
 
+        public long GetSize(string path)
+        {
+            return new FileInfo(path).Length;
+        }
+
         public String CreateDirectory(string path)
         {
             return Directory.CreateDirectory(path).FullName;
         }
 
         #endregion
-
-        public static string CleanPath(string path)
-        {
-            if (string.IsNullOrEmpty(path))
-                throw new ArgumentException("Path can not be null or empty");
-            return path.ToLower().Trim('/', '\\', ' ');
-        }
     }
 }

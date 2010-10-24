@@ -30,4 +30,4 @@ _ReSharper*/
 [Ll]ogs/
 /[Pp]ackage/
 #NZBDrone specific
-nzbdrone.db
+*.db

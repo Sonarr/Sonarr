@@ -8,6 +8,7 @@ namespace NzbDrone.Core.Providers
     public interface IEpisodeProvider
     {
         Episode GetEpisode(long id);
+        Episode GetEpisode(int seriesId, int seasonNumber, int episodeNumber);
         IList<Episode> GetEpisodeBySeries(long seriesId);
         String GetSabTitle(Episode episode);
 

@@ -74,6 +74,7 @@
     <Compile Include="Ninject.Moq\ExtensionsForBindingSyntax.cs" />
     <Compile Include="Ninject.Moq\MockingKernel.cs" />
     <Compile Include="Ninject.Moq\MockProvider.cs" />
+    <Compile Include="ParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QualityProfileTest.cs" />
     <Compile Include="RepoTest.cs" />

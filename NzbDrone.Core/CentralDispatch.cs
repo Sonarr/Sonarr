@@ -5,6 +5,7 @@ using System.Web;
 using Ninject;
 using NLog.Config;
 using NLog.Targets;
+using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Fakes;
 using NzbDrone.Core.Repository;
@@ -29,10 +30,15 @@ namespace NzbDrone.Core
                 _kernel = new StandardKernel();
 
                 string connectionString = String.Format("Data Source={0};Version=3;", Path.Combine(AppPath, "nzbdrone.db"));
-                var provider = ProviderFactory.GetProvider(connectionString, "System.Data.SQLite");
-                provider.Log = new Instrumentation.NlogWriter();
-                provider.LogParams = true;
+                var dbProvider = ProviderFactory.GetProvider(connectionString, "System.Data.SQLite");
 
+                string logConnectionString = String.Format("Data Source={0};Version=3;", Path.Combine(AppPath, "log.db"));
+                var logDbProvider = ProviderFactory.GetProvider(logConnectionString, "System.Data.SQLite");
+                var logRepository = new SimpleRepository(logDbProvider, SimpleRepositoryOptions.RunMigrations);
+
+                dbProvider.Log = new NlogWriter();
+                dbProvider.LogParams = true;
+              
                 _kernel.Bind<ISeriesProvider>().To<SeriesProvider>().InSingletonScope();
                 _kernel.Bind<ISeasonProvider>().To<SeasonProvider>();
                 _kernel.Bind<IEpisodeProvider>().To<EpisodeProvider>();
@@ -41,7 +47,12 @@ namespace NzbDrone.Core
                 _kernel.Bind<IConfigProvider>().To<ConfigProvider>().InSingletonScope();
                 _kernel.Bind<ISyncProvider>().To<SyncProvider>().InSingletonScope();
                 _kernel.Bind<INotificationProvider>().To<NotificationProvider>().InSingletonScope();
-                _kernel.Bind<IRepository>().ToMethod(c => new SimpleRepository(provider, SimpleRepositoryOptions.RunMigrations)).InSingletonScope();
+                _kernel.Bind<ILogProvider>().To<LogProvider>().InSingletonScope();
+                _kernel.Bind<IRepository>().ToMethod(c => new SimpleRepository(dbProvider, SimpleRepositoryOptions.RunMigrations)).InSingletonScope();
+
+                _kernel.Bind<IRepository>().ToConstant(logRepository).WhenInjectedInto<SubsonicTarget>().InSingletonScope();
+                _kernel.Bind<IRepository>().ToConstant(logRepository).WhenInjectedInto<LogProvider>().InSingletonScope();
+
 
                 ForceMigration(_kernel.Get<IRepository>());
             }
@@ -57,7 +68,6 @@ namespace NzbDrone.Core
                 }
                 return Directory.GetCurrentDirectory();
             }
-
         }
 
         public static IKernel NinjectKernel
@@ -75,6 +85,7 @@ namespace NzbDrone.Core
         private static void ForceMigration(IRepository repository)
         {
             repository.GetPaged<Series>(0, 1);
+            repository.GetPaged<EpisodeFile>(0, 1);
             repository.GetPaged<Episode>(0, 1);
         }
 

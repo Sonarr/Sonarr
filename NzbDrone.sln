@@ -1,16 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NzbDrone.Web.Tests", "NzbDrone.Web.Test\NzbDrone.Web.Tests.csproj", "{99CDD5DC-698F-4624-B431-2D6381CE3A15}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NzbDrone", "NzbDrone\NzbDrone.csproj", "{D12F7F2F-8A3C-415F-88FA-6DD061A84869}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NzbDrone.Core", "NzbDrone.Core\NzbDrone.Core.csproj", "{FF5EE3B6-913B-47CE-9CEB-11C51B4E1205}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NzbDrone.Web", "NzbDrone.Web\NzbDrone.Web.csproj", "{43BD3BBD-1531-4D8F-9C08-E1CD544AB2CD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NzbDrone.Core.Test", "NzbDrone.Core.Test\NzbDrone.Core.Test.csproj", "{193ADD3B-792B-4173-8E4C-5A3F8F0237F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NzbDrone.Core", "NzbDrone.Core\NzbDrone.Core.csproj", "{FF5EE3B6-913B-47CE-9CEB-11C51B4E1205}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NzbDrone.Web.Tests", "NzbDrone.Web.Test\NzbDrone.Web.Tests.csproj", "{99CDD5DC-698F-4624-B431-2D6381CE3A15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NzbDrone", "NzbDrone\NzbDrone.csproj", "{D12F7F2F-8A3C-415F-88FA-6DD061A84869}"
-EndProject
+
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{57A04B72-8088-4F75-A582-1158CF8291F7}"
 EndProject
 Global

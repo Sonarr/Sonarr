@@ -9,5 +9,7 @@ namespace NzbDrone.Core.Providers
         /// </summary>
         /// <param name="series">The series to be scanned</param>
         void Scan(Series series);
+
+        EpisodeFile ImportFile(Series series, string filePath);
     }
 }

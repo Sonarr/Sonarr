@@ -1,6 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<NzbDrone.Core.Repository.Series>" %>
 
 <%@ Import Namespace="Telerik.Web.Mvc.UI" %>
+<%@ Import Namespace="NzbDrone.Core.Repository" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
     <%: Model.Title %>
 </asp:Content>
@@ -31,22 +32,56 @@
         <div class="display-field">
             <%: Model.Path %></div>
     </fieldset>
-    <%= Html.Telerik().Grid(Model.Episodes)
-        .Name("Episodes")
-        .Columns(columns => 
+    <% 
+        //Normal Seasons
+        foreach (var season in Model.Seasons.Where(s => s.SeasonNumber > 0))
         {
-           columns.Bound(c => c.EpisodeNumber).Width(10);
-           columns.Bound(c => c.Title);
-           columns.Bound(c => c.AirDate).Format("{0:d}").Width(150);
-        })
-        .Groupable(grouping => grouping.Groups(groups => groups.Add(c => c.SeasonNumber)))
-        .Sortable(rows=>rows
-            .OrderBy(epSort => epSort.Add(c => c.EpisodeNumber)))
+    %>
+    <br />
+    <h3>
+        Season
+        <%: season.SeasonNumber %></h3>
+    <%
+        Html.Telerik().Grid(season.Episodes).Name("seasons_" + season.SeasonNumber)
+                              .Columns(columns =>
+                              {
+                                  columns.Bound(c => c.SeasonNumber).Width(0).Title("Seasons");
+                                  columns.Bound(c => c.EpisodeNumber).Width(0).Title("Episode");
+                                  columns.Bound(c => c.Title);
+                                  columns.Bound(c => c.AirDate).Format("{0:d}").Width(0);
+                              })
+                              .DetailView(detailView => detailView.Template(e => Html.RenderPartial("EpisodeDetail", e)))
+                              .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.EpisodeNumber)).Enabled(false))
+                              .Footer(false)
+                              .Render();
+        }
+
+        //Specials
+        var specialSeasons = Model.Seasons.Where(s => s.SeasonNumber == 0).FirstOrDefault();
+
+        if (specialSeasons != null)
+        {
+    %>
+    <br />
+    <h3>
+        Specials</h3>
+    <%
             
+Html.Telerik().Grid(specialSeasons.Episodes).Name("seasons_specials")
+                 .Columns(columns =>
+                 {
+                     columns.Bound(c => c.EpisodeNumber).Width(0).Title("Episode");
+                     columns.Bound(c => c.Title);
+                     columns.Bound(c => c.AirDate).Format("{0:d}").Width(0);
+                 })
+                 .DetailView(detailView => detailView.Template(e => Html.RenderPartial("EpisodeDetail", e)))
+                 .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.EpisodeNumber)).Enabled(false))
+                 .Footer(false)
+                 .Render();
+        }
     %>
     <p>
         <%-- <%: Html.ActionLink("Edit", "Edit", new { /* id=Model.PrimaryKey */ }) %> |--%>
-        <%: Html.ActionLink("Back to List", "Index") %>
-        <%: Html.ActionLink("Load Episodes", "LoadEpisodes", new{seriesId= Model.SeriesId}) %>
+        <%: Html.ActionLink("Back to Series", "Index") %>
     </p>
 </asp:Content>

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
+using FizzWare.NBuilder;
 using Gallio.Framework;
 using MbUnit.Framework;
 using MbUnit.Framework.ContractVerifiers;
@@ -18,68 +20,144 @@ namespace NzbDrone.Core.Test
     // ReSharper disable InconsistentNaming
     public class MediaFileProviderTests
     {
+
         [Test]
-        public void scan_test()
+        [Description("Verifies that a new file imported properly")]
+        public void import_new_file()
         {
             //Arrange
-            var repository = new Mock<IRepository>();
-            repository.Setup(c => c.Update(It.IsAny<Episode>())).Verifiable();
+            /////////////////////////////////////////
 
-            var diskProvider = MockLib.GetStandardDisk(1, 2);
+            //Constants
+            const string fileName = "WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD.avi";
+            const int seasonNumber = 3;
+            const int episodeNumner = 01;
+            const int size = 12345;
+
+            //Fakes
+            var fakeSeries = Builder<Series>.CreateNew().Build();
+            var fakeEpisode = Builder<Episode>.CreateNew().With(c => c.SeriesId = fakeSeries.SeriesId).Build();
+
+            //Mocks
+            var repository = new Mock<IRepository>();
+            repository.Setup(r => r.Exists<EpisodeFile>(It.IsAny<Expression<Func<EpisodeFile, Boolean>>>())).Returns(false).Verifiable();
+
+            var episodeProvider = new Mock<IEpisodeProvider>();
+            episodeProvider.Setup(e => e.GetEpisode(fakeSeries.SeriesId, seasonNumber, episodeNumner)).Returns(fakeEpisode).Verifiable();
+
+            var diskProvider = new Mock<IDiskProvider>();
+            diskProvider.Setup(e => e.GetSize(fileName)).Returns(12345).Verifiable();
 
             var kernel = new MockingKernel();
-            kernel.Bind<IDiskProvider>().ToConstant(diskProvider);
             kernel.Bind<IRepository>().ToConstant(repository.Object);
+
+            kernel.Bind<IEpisodeProvider>().ToConstant(episodeProvider.Object);
+            kernel.Bind<IDiskProvider>().ToConstant(diskProvider.Object);
             kernel.Bind<IMediaFileProvider>().To<MediaFileProvider>();
 
-            var fakeSeries = new Series()
-            {
-                Path = MockLib.StandardSeries[0]
-            };
-
             //Act
-            kernel.Get<IMediaFileProvider>().Scan(fakeSeries);
+            var result = kernel.Get<IMediaFileProvider>().ImportFile(fakeSeries, fileName);
 
             //Assert
-            repository.Verify(c => c.Update(It.IsAny<Episode>()), Times.Exactly(1 * 2));
+            repository.VerifyAll();
+            episodeProvider.VerifyAll();
+            diskProvider.VerifyAll();
+            Assert.IsNotNull(result);
+            repository.Verify(r => r.Add<EpisodeFile>(result), Times.Once());
+
+            Assert.AreEqual(fakeEpisode.EpisodeId, result.EpisodeId);
+            Assert.AreEqual(fakeEpisode.SeriesId, result.SeriesId);
+            Assert.AreEqual(QualityTypes.DVD, result.Quality);
+            Assert.AreEqual(Parser.NormalizePath(fileName), result.Path);
+            Assert.AreEqual(size, result.Size);
+            Assert.AreEqual(false, result.Proper);
+            Assert.AreNotEqual(new DateTime(), result.DateAdded);
+        }
 
 
+        [Test]
+        [Description("Verifies that an existing file will skip import")]
+        public void import_existing_file()
+        {
+            //Arrange
+            /////////////////////////////////////////
+
+            //Constants
+            const string fileName = "WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD.avi";
+
+            //Fakes
+            var fakeSeries = Builder<Series>.CreateNew().Build();
+            var fakeEpisode = Builder<Episode>.CreateNew().With(c => c.SeriesId = fakeSeries.SeriesId).Build();
+
+            //Mocks
+            var repository = new Mock<IRepository>(MockBehavior.Strict);
+            repository.Setup(r => r.Exists<EpisodeFile>(It.IsAny<Expression<Func<EpisodeFile, Boolean>>>())).Returns(true).Verifiable();
+
+            var episodeProvider = new Mock<IEpisodeProvider>(MockBehavior.Strict);
+            var diskProvider = new Mock<IDiskProvider>(MockBehavior.Strict);
+
+            var kernel = new MockingKernel();
+            kernel.Bind<IRepository>().ToConstant(repository.Object);
+
+            kernel.Bind<IEpisodeProvider>().ToConstant(episodeProvider.Object);
+            kernel.Bind<IDiskProvider>().ToConstant(diskProvider.Object);
+            kernel.Bind<IMediaFileProvider>().To<MediaFileProvider>();
+
+            //Act
+            var result = kernel.Get<IMediaFileProvider>().ImportFile(fakeSeries, fileName);
+
+            //Assert
+            repository.VerifyAll();
+            episodeProvider.VerifyAll();
+            diskProvider.VerifyAll();
+            Assert.IsNull(result);
+            repository.Verify(r => r.Add<EpisodeFile>(result), Times.Never());
         }
 
         [Test]
-        [Row("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD", 3, 1)]
-        [Row("Two.and.a.Half.Me.103.720p.HDTV.X264-DIMENSION", 1, 3)]
-        [Row("Chuck.4x05.HDTV.XviD-LOL", 4, 5)]
-        [Row("The.Girls.Next.Door.S03E06.DVDRip.XviD-WiDE", 3, 6)]
-        [Row("Degrassi.S10E27.WS.DSR.XviD-2HD", 10, 27)]
-        public void episode_parse(string path, int season, int episode)
+        [Description("Verifies that a file with no episode is skipped")]
+        public void import_file_with_no_episode()
         {
-            var result = Parser.ParseEpisodeInfo(path);
-            Assert.Count(1, result);
-            Assert.AreEqual(season, result[0].SeasonNumber);
-            Assert.AreEqual(episode, result[0].EpisodeNumber);
+            //Arrange
+            /////////////////////////////////////////
+
+            //Constants
+            const string fileName = "WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD.avi";
+            const int seasonNumber = 3;
+            const int episodeNumner = 01;
+
+            //Fakes
+            var fakeSeries = Builder<Series>.CreateNew().Build();
+
+            //Mocks
+            var repository = new Mock<IRepository>(MockBehavior.Strict);
+            repository.Setup(r => r.Exists<EpisodeFile>(It.IsAny<Expression<Func<EpisodeFile, Boolean>>>())).Returns(false).Verifiable();
+
+            var episodeProvider = new Mock<IEpisodeProvider>(MockBehavior.Strict);
+            episodeProvider.Setup(e => e.GetEpisode(fakeSeries.SeriesId, seasonNumber, episodeNumner)).Returns<Episode>(null).Verifiable();
+
+            var diskProvider = new Mock<IDiskProvider>(MockBehavior.Strict);
+
+
+            var kernel = new MockingKernel();
+            kernel.Bind<IRepository>().ToConstant(repository.Object);
+            kernel.Bind<IEpisodeProvider>().ToConstant(episodeProvider.Object);
+            kernel.Bind<IDiskProvider>().ToConstant(diskProvider.Object);
+            kernel.Bind<IMediaFileProvider>().To<MediaFileProvider>();
+
+            //Act
+            var result = kernel.Get<IMediaFileProvider>().ImportFile(fakeSeries, fileName);
+
+            //Assert
+            repository.VerifyAll();
+            episodeProvider.VerifyAll();
+            diskProvider.VerifyAll();
+            Assert.IsNull(result);
+            repository.Verify(r => r.Add<EpisodeFile>(result), Times.Never());
         }
 
-        [Test]
-        [Row("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD", QualityTypes.DVD)]
-        [Row("WEEDS.S03E01-06.DUAL.BDRip.AC3.-HELLYWOOD", QualityTypes.Bluray)]
-        [Row("Two.and.a.Half.Men.S08E05.720p.HDTV.X264-DIMENSION", QualityTypes.HDTV)]
-        [Row("Chuck.S04E05.HDTV.XviD-LOL", QualityTypes.TV)]
-        [Row("The.Girls.Next.Door.S03E06.DVDRip.XviD-WiDE", QualityTypes.DVD)]
-        [Row("Degrassi.S10E27.WS.DSR.XviD-2HD", QualityTypes.TV)]
-        [Row("Sonny.With.a.Chance.S02E15.720p.WEB-DL.DD5.1.H.264-SURFER", QualityTypes.WEBDL)]
-        [Row("Sonny.With.a.Chance.S02E15.720p", QualityTypes.HDTV)]
-        [Row("Sonny.With.a.Chance.S02E15.mkv", QualityTypes.HDTV)]
-        [Row("Sonny.With.a.Chance.S02E15.avi", QualityTypes.TV)]
-        [Row("Sonny.With.a.Chance.S02E15.xvid", QualityTypes.TV)]
-        [Row("Sonny.With.a.Chance.S02E15.divx", QualityTypes.TV)]
-        [Row("Sonny.With.a.Chance.S02E15", QualityTypes.Unknown)]
 
-        public void quality_parse(string path, object quality)
-        {
-            var result = Parser.ParseQuality(path);
-            Assert.AreEqual(quality, result);
-        }
+
 
     }
 

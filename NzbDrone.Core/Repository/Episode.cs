@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using SubSonic.SqlGeneration.Schema;
 
 namespace NzbDrone.Core.Repository
@@ -16,14 +17,13 @@ namespace NzbDrone.Core.Repository
         public string Overview { get; set; }
         public string Language { get; set; }
 
-        [SubSonicNullString]
-        public string Path { get; set; }
-        public long? Size { get; set; }
-
         [SubSonicToOneRelation(ThisClassContainsJoinKey = true)]
         public virtual Season Season { get; set; }
 
         [SubSonicToOneRelation(ThisClassContainsJoinKey = true)]
         public virtual Series Series { get; private set; }
+
+        [SubSonicToManyRelation]
+        public virtual List<EpisodeFile> Files { get; private set; }
     }
 }

@@ -30,7 +30,12 @@ namespace NzbDrone.Core.Providers
 
         public Episode GetEpisode(long id)
         {
-            return _sonicRepo.Single<Episode>(e => e.EpisodeId == id);
+            return _sonicRepo.Single<Episode>(id);
+        }
+
+        public Episode GetEpisode(int seriesId, int seasonNumber, int episodeNumber)
+        {
+            return _sonicRepo.Single<Episode>(c => c.SeriesId == seriesId && c.SeasonNumber == seasonNumber && c.EpisodeNumber == episodeNumber);
         }
 
         public IList<Episode> GetEpisodeBySeries(long seriesId)

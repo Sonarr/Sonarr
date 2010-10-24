@@ -150,13 +150,19 @@
     <Reference Include="UPnP, Version=1.0.3932.37442, Culture=neutral, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Instrumentation\ILogProvider.cs" />
+    <Compile Include="Instrumentation\LogLevel.cs" />
+    <Compile Include="Instrumentation\LogProvider.cs" />
+    <Compile Include="Instrumentation\SubsonicTarget.cs" />
+    <Compile Include="Instrumentation\ExceptioneerTarget.cs" />
+    <Compile Include="Instrumentation\NlogWriter.cs" />
     <Compile Include="Model\EpisodeParseResult.cs" />
     <Compile Include="Model\EpisodeModel.cs" />
     <Compile Include="Repository\EpisodeFile.cs" />
     <Compile Include="Model\Notification\BasicNotification.cs" />
     <Compile Include="Model\Notification\ProgressNotificationStatus.cs" />
     <Compile Include="Model\Notification\BasicNotificationType.cs" />
-    <Compile Include="Instrumentation.cs" />
+    <Compile Include="Instrumentation\LogConfiguration.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Providers\Fakes\FakeNotificationProvider.cs" />
     <Compile Include="Providers\IMediaFileProvider.cs" />
@@ -182,6 +188,7 @@
     <Compile Include="Providers\SabProvider.cs" />
     <Compile Include="Providers\SeasonProvider.cs" />
     <Compile Include="Repository\Episode.cs" />
+    <Compile Include="Instrumentation\Log.cs" />
     <Compile Include="Repository\Quality\AllowedQuality.cs" />
     <Compile Include="Repository\Config.cs" />
     <Compile Include="Repository\Quality\QualityProfile.cs" />

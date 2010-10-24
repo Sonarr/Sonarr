@@ -1,6 +1,9 @@
 using System;
 using System.IO;
 using MbUnit.Framework;
+using NLog;
+using NLog.Config;
+using System.Linq;
 
 namespace NzbDrone.Core.Test
 {
@@ -10,24 +13,43 @@ namespace NzbDrone.Core.Test
         [TearDown]
         public void TearDown()
         {
-            var dbFiles = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.testdb");
-
-            foreach (var dbFile in dbFiles)
+            foreach (var file in Directory.GetFiles(Directory.GetCurrentDirectory(), "*.db", SearchOption.AllDirectories))
             {
                 try
                 {
-                    File.Delete(dbFile);
+                    File.Delete(file);
                 }
                 catch
                 { }
+            }
+        }
 
+        [FixtureTearDown]
+        public void FixtureTearDown()
+        {
+            foreach (var file in Directory.GetFiles(Directory.GetCurrentDirectory(), "*.*", SearchOption.AllDirectories))
+            {
+                try
+                {
+                    File.Delete(file);
+                }
+                catch { }
             }
         }
 
         [SetUp]
-        public void Setup()
+        public void SetUp()
         {
-           Instrumentation.Setup();
+            try
+            {
+                LogManager.Configuration = new XmlLoggingConfiguration(Path.Combine(CentralDispatch.AppPath, "log.config"), false);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Unable to configure logging. " + e);
+            }
         }
+
+
     }
 }
