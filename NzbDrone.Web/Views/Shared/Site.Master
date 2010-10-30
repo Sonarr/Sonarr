@@ -1,40 +1,28 @@
-﻿<!--
-Design by Free CSS Templates
-http://www.freecsstemplates.org
-Released for free under a Creative Commons Attribution 2.5 License
-
-Name       : Concurrence  
-Description: A two-column, fixed-width design for 1024x768 screen resolutions.
-Version    : 1.0
-Released   : 20100727
--->
-
-<%@ Master Language="C#" Inherits="System.Web.Mvc.ViewMasterPage" %>
-
+﻿<%@ Master Language="C#" Inherits="System.Web.Mvc.ViewMasterPage" %>
 <%@ Import Namespace="Helpers" %>
 <%@ Import Namespace="Telerik.Web.Mvc.UI" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <asp:ContentPlaceHolder runat="server" ID="Scripts" />
     <title>NZBDrone</title>
     <%
         Html.Telerik().StyleSheetRegistrar().DefaultGroup(group => group.Add("telerik.common.css")
-            .Add("telerik.sitefinity.css")
-            .Add("style.css")
-            .Add("notibar.css")).Render();
+           .Add("telerik.sitefinity.css")
+           .Add("notibar.css"))
+           .Render();
     %>
+    <link href="../../Content/style.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
     <a href="http://github.com/kayone/NzbDrone">
-        <img style="position: absolute; top: 0; left: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png"
-            alt="Fork me on GitHub" />
+        <img style="position: absolute; top: 0; left: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png" />
     </a>
+    <div id="msgBox" style="visibility: hidden">
+        <span id="msgText">Scanning Series Folder...</span>
+    </div>
     <div id="header">
-        <div id="msgBox">
-            <span id="msgText">Scanning Series Folder...</span>
-        </div>
         <div id="menu">
             <ul>
                 <%=Html.CurrentActionLink("Series", "Index", "Series") %>
@@ -51,21 +39,16 @@ Released   : 20100727
         </h1>
     </div>
     <hr />
-    <!-- end #logo -->
     <div id="page">
         <asp:ContentPlaceHolder ID="ActionMenu" runat="server" />
-        <div id="content">
-            <div class="post">
-                <div class="entry">
-                    <asp:ContentPlaceHolder ID="MainContent" runat="server" />
-                </div>
-            </div>
-        </div>
+        <asp:ContentPlaceHolder ID="MainContent" runat="server" />
     </div>
-    <% Html.Telerik().ScriptRegistrar().Scripts(
+</body>
+<asp:contentplaceholder runat="server" id="Scripts" />
+<% Html.Telerik().ScriptRegistrar().Scripts(
            c => c.Add("jquery-ui-1.8.5.custom.min.js")
                .Add("jquery.jgrowl.js")
-               .Add("Notification.js")
-               ).Render(); %>
-</body>
+               .Add("Notification.js"))
+               .Render(); 
+%>
 </html>

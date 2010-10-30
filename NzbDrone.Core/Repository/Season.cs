@@ -10,8 +10,7 @@ namespace NzbDrone.Core.Repository
         public long SeriesId { get; set; }
         public int SeasonNumber { get; set; }
         public bool Monitored { get; set; }
-        public string Folder { get; set; }
-
+  
         [SubSonicToManyRelation]
         public virtual List<Episode> Episodes { get; private set; }
 

@@ -2,6 +2,7 @@
 
 <%@ Import Namespace="Telerik.Web.Mvc.UI" %>
 <%@ Import Namespace="NzbDrone.Core.Repository" %>
+<%@ Import Namespace="NzbDrone.Web.Models" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
     <%: Model.Title %>
 </asp:Content>
@@ -42,18 +43,23 @@
         Season
         <%: season.SeasonNumber %></h3>
     <%
-        Html.Telerik().Grid(season.Episodes).Name("seasons_" + season.SeasonNumber)
-                              .Columns(columns =>
-                              {
-                                  columns.Bound(c => c.SeasonNumber).Width(0).Title("Seasons");
-                                  columns.Bound(c => c.EpisodeNumber).Width(0).Title("Episode");
-                                  columns.Bound(c => c.Title);
-                                  columns.Bound(c => c.AirDate).Format("{0:d}").Width(0);
-                              })
-                              .DetailView(detailView => detailView.Template(e => Html.RenderPartial("EpisodeDetail", e)))
-                              .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.EpisodeNumber)).Enabled(false))
-                              .Footer(false)
-                              .Render();
+        Season season1 = season;
+        Html.Telerik().Grid<EpisodeModel>().Name("seasons_" + season.SeasonNumber)
+                          .Columns(columns =>
+                          {
+                              columns.Bound(c => c.SeasonNumber).Width(0).Title("Seasons");
+                              columns.Bound(c => c.EpisodeNumber).Width(0).Title("Episode");
+                              columns.Bound(c => c.Title).Title("Title");
+                              columns.Bound(c => c.AirDate).Format("{0:d}").Width(0);
+                          })
+            //.DetailView(detailView => detailView.Template(e => Html.RenderPartial("EpisodeDetail", e)))
+             .DetailView(detailView => detailView.ClientTemplate("<div id ='ep_<#= EpisodeId #>'/>"))
+             .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.EpisodeNumber)).Enabled(false))
+                          .Footer(false)
+                          .DataBinding(d => d.Ajax().Select("_AjaxSeasonGrid", "Series", new RouteValueDictionary { { "seasonId", season1.SeasonId.ToString() } }))
+            //.EnableCustomBinding(true)
+            .ClientEvents(e => e.OnDetailViewExpand("episodeDetailExpanded"))
+            .Render();
         }
 
         //Specials
@@ -74,8 +80,7 @@ Html.Telerik().Grid(specialSeasons.Episodes).Name("seasons_specials")
                      columns.Bound(c => c.Title);
                      columns.Bound(c => c.AirDate).Format("{0:d}").Width(0);
                  })
-                 .DetailView(detailView => detailView.Template(e => Html.RenderPartial("EpisodeDetail", e)))
-                 .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.EpisodeNumber)).Enabled(false))
+                .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.EpisodeNumber)).Enabled(false))
                  .Footer(false)
                  .Render();
         }
@@ -84,4 +89,13 @@ Html.Telerik().Grid(specialSeasons.Episodes).Name("seasons_specials")
         <%-- <%: Html.ActionLink("Edit", "Edit", new { /* id=Model.PrimaryKey */ }) %> |--%>
         <%: Html.ActionLink("Back to Series", "Index") %>
     </p>
+</asp:Content>
+<asp:Content ContentPlaceHolderID="Scripts" runat="server">
+    <script type="text/javascript">
+
+        function episodeDetailExpanded(e) {
+            $console.log("OnDetailViewExpand :: " + e.masterRow.cells[1].innerHTML);
+        }
+   
+    </script>
 </asp:Content>

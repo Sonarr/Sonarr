@@ -9,6 +9,7 @@ using MbUnit.Framework.ContractVerifiers;
 using Moq;
 using Ninject;
 using Ninject.Moq;
+using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
@@ -29,7 +30,7 @@ namespace NzbDrone.Core.Test
             /////////////////////////////////////////
 
             //Constants
-            const string fileName = "WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD.avi";
+            const string fileName = @"WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD.avi";
             const int seasonNumber = 3;
             const int episodeNumner = 01;
             const int size = 12345;
@@ -157,7 +158,34 @@ namespace NzbDrone.Core.Test
         }
 
 
+        [Test]
+        [Row("Season {season}\\S{season:00}E{episode:00} - {title} - {quality}", "Season 6\\S06E08 - Lethal Inspection - hdtv")]
+        [Row("Season {season}\\{series} - {season:##}{episode:00} - {title} - {quality}", "Season 6\\Futurama - 608 - Lethal Inspection - hdtv")]
+        [Row("Season {season}\\{series} - {season:##}{episode:00} - {title}", "Season 6\\Futurama - 608 - Lethal Inspection")]
+        public void test_file_path_generation(string patern, string path)
+        {
+            var fakeConfig = new Mock<IConfigProvider>();
+            fakeConfig.Setup(c => c.EpisodeNameFormat).Returns(patern);
 
+            var kernel = new MockingKernel();
+            kernel.Bind<IConfigProvider>().ToConstant(fakeConfig.Object);
+            kernel.Bind<IMediaFileProvider>().To<MediaFileProvider>();
+
+            var fakeEpisode = new EpisodeModel
+            {
+                SeasonNumber = 6,
+                EpisodeNumber = 8,
+                EpisodeTitle = "Lethal Inspection",
+                Quality = QualityTypes.HDTV,
+                SeriesTitle = "Futurama"
+            };
+
+            //Act
+            var result = kernel.Get<IMediaFileProvider>().GenerateEpisodePath(fakeEpisode);
+
+            //Assert
+            Assert.AreEqual(path.ToLowerInvariant(), result.ToLowerInvariant());
+        }
 
     }
 

@@ -43,6 +43,7 @@ namespace NzbDrone.Core.Test
             try
             {
                 LogManager.Configuration = new XmlLoggingConfiguration(Path.Combine(CentralDispatch.AppPath, "log.config"), false);
+                LogManager.ThrowExceptions = true;
             }
             catch (Exception e)
             {

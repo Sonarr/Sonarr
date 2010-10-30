@@ -1,4 +1,3 @@
-
 /*
 Design by Free CSS Templates
 http://www.freecsstemplates.org
@@ -6,7 +5,6 @@ Released for free under a Creative Commons Attribution 2.5 License
 */
 body
 {
-    margin: 20px 0px 0px 0px;
     padding: 0;
     background: #191919 url(images/img07.jpg) no-repeat right top;
     font-family: Segoe UI, Tahoma, Geneva, sans-serif;
@@ -19,7 +17,7 @@ h1, h2, h3
 {
     margin: 0;
     color: #549900;
-    font-family: Segoe UI Light;
+    font-family: Segoe UI Light,Tahoma, Geneva, sans-serif;
     text-transform: lowercase;
 }
 
@@ -173,63 +171,16 @@ hr
 {
 }
 
-/* Search */
-
-#search
-{
-    float: right;
-    padding: 10px 10px 0px 0px;
-}
-
-#search form
-{
-    float: right;
-    margin: 0;
-    padding: 4px 0px 0 0;
-}
-
-#search fieldset
-{
-    margin: 0;
-    padding: 0;
-    border: none;
-}
-
-#search input
-{
-    float: left;
-    font: 12px Georgia, "Times New Roman" , Times, serif;
-}
-
-#search-text
-{
-    width: 213px;
-    height: 28px;
-    padding: 6px 0 0 7px;
-    border: none;
-    background: url(images/img02.jpg) no-repeat left top;
-    color: #000000;
-}
-
-#search-submit
-{
-    width: 82px;
-    height: 28px;
-    margin-left: 10px;
-    padding: 0px 5px;
-    background: url(images/img03.jpg) no-repeat left top;
-    border: none;
-    text-indent: -9999px;
-    color: #FFFFFF;
-}
 
 /* Page */
 
 #page
 {
-    width: 950px;
     margin: 0 auto 60px;
     overflow: hidden;
+    background-color: White;
+    padding: 10px 20px 20px 20px;
+    width: 910px;
 }
 
 
@@ -293,77 +244,7 @@ hr
     background: #FFFFFF no-repeat;
     float: left;
     width: 100%;
-    padding: 0px 0px 0px 0px;
-}
-
-/* Post */
-
-.post
-{
     padding: 0px 30px 20px 30px;
-}
-
-.post .title
-{
-    height: 44px;
-    margin: 0px;
-    padding: 36px 0px 0px 0px;
-    width: 576px;
-}
-
-.post .title a
-{
-    letter-spacing: -2px;
-    text-decoration: none;
-    text-transform: lowercase;
-    font-size: 36px;
-    color: #424242;
-}
-
-.post .title a:hover
-{
-    color: #065EFE;
-}
-
-.post .meta
-{
-    margin-left: 2px;
-    padding: 4px 30px 2px 0px;
-    text-transform: uppercase;
-    font-weight: bold;
-    font-size: 11px;
-    color: #66665E;
-}
-
-.post .meta span
-{
-    margin: 0px;
-}
-
-.post .meta a
-{
-    text-decoration: none;
-}
-
-.post .entry
-{
-    padding: 10px 0px 0px 0px;
-}
-
-.post .comments
-{
-    display: block;
-    width: 120px;
-    height: 18px;
-    margin: 0px;
-    padding: 3px 0px 0px 40px;
-    background: #90BF35;
-    border: 1px solid #5F817E;
-    text-decoration: none;
-    font-size: 11px;
-    text-decoration: none;
-    font-weight: bold;
-    color: #FFFFFF;
 }
 
 /* Footer */
@@ -374,10 +255,6 @@ hr
     height: 100px;
     margin: 0 auto;
     padding: 0;
-}
-
-#footer-bgcontent
-{
 }
 
 #footer p
@@ -393,8 +270,14 @@ hr
 {
 }
 
+.stackframe
+{
+    font-family: Consolas, Monospace;
+}
 
-.t-grid .t-last {
-border-bottom:1px solid #EEEEEE;
-border-color:#EEEEEE;
+/*fix telerik grid missing boarder*/
+.t-grid .t-last
+{
+    border-bottom: 1px solid #EEEEEE;
+    border-color: #EEEEEE;
 }

@@ -43,6 +43,11 @@ namespace NzbDrone.Core.Providers
             return _sonicRepo.Find<Episode>(e => e.SeriesId == seriesId);
         }
 
+        public IList<Episode> GetEpisodeBySeason(long seasonId)
+        {
+            return _sonicRepo.Find<Episode>(e => e.SeasonId == seasonId);
+        }
+
         public String GetSabTitle(Episode episode)
         {
             var series = _series.GetSeries(episode.SeriesId);
@@ -72,7 +77,7 @@ namespace NzbDrone.Core.Providers
             var updateList = new List<Episode>();
             var newList = new List<Episode>();
 
-            Logger.Debug("Updating season info for series:{0}", seriesId);
+            Logger.Debug("Updating season info for series:{0}", targetSeries.SeriesName);
             targetSeries.Episodes.Select(e => new { e.SeasonId, e.SeasonNumber })
                 .Distinct().ToList()
                 .ForEach(s => _seasons.EnsureSeason(seriesId, s.SeasonId, s.SeasonNumber));
@@ -81,7 +86,7 @@ namespace NzbDrone.Core.Providers
             {
                 try
                 {
-                    Logger.Debug("Updating info for series:{0} - episode:{1}", seriesId, episode.Id);
+                    Logger.Trace("Updating info for series:{0} - episode:{1}", targetSeries.SeriesName, episode.EpisodeNumber);
                     var newEpisode = new Episode()
                       {
                           AirDate = episode.FirstAired,
@@ -116,7 +121,7 @@ namespace NzbDrone.Core.Providers
             _sonicRepo.AddMany(newList);
             _sonicRepo.UpdateMany(updateList);
 
-            Logger.Info("Finished episode refresh for series:{0}. Success:{1} - Fail:{2} ", seriesId, successCount, failCount);
+            Logger.Debug("Finished episode refresh for series:{0}. Successful:{1} - Failed:{2} ", targetSeries.SeriesName, successCount, failCount);
         }
     }
 }

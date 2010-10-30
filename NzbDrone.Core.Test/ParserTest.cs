@@ -18,6 +18,9 @@ namespace NzbDrone.Core.Test
         [Row("Chuck.4x05.HDTV.XviD-LOL", 4, 5)]
         [Row("The.Girls.Next.Door.S03E06.DVDRip.XviD-WiDE", 3, 6)]
         [Row("Degrassi.S10E27.WS.DSR.XviD-2HD", 10, 27)]
+        [Row(@"z:\tv shows\battlestar galactica (2003)\Season 3\S03E05 - Collaborators.mkv", 3, 5)]
+        [Row(@"z:\tv shows\modern marvels\Season 16\S16E03 - The Potato.mkv", 16, 3)]
+        [Row(@"z:\tv shows\robot chicken\Specials\S00E16 - Dear Consumer - SD TV.avi", 0, 16)]
         public void episode_parse(string path, int season, int episode)
         {
             var result = Parser.ParseEpisodeInfo(path);
@@ -40,6 +43,10 @@ namespace NzbDrone.Core.Test
         [Row("Sonny.With.a.Chance.S02E15.xvid", QualityTypes.TV)]
         [Row("Sonny.With.a.Chance.S02E15.divx", QualityTypes.TV)]
         [Row("Sonny.With.a.Chance.S02E15", QualityTypes.Unknown)]
+        [Row("S01E04 - So Old - Playdate - 720p TV.mkv", QualityTypes.HDTV)]
+        [Row("S22E03 - MoneyBART - HD TV.mkv", QualityTypes.HDTV)]
+        [Row("S01E03 - Come Fly With Me - 720p BluRay.mkv", QualityTypes.Bluray)]
+        [Row("S11E06 - D-Yikes! - 720p WEB-DL.mkv", QualityTypes.WEBDL)]
         public void quality_parse(string path, object quality)
         {
             var result = Parser.ParseQuality(path);

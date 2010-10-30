@@ -15,7 +15,7 @@
             }
             else if (e.dataItem.Level == 5) {
                 e.row.style.backgroundColor = "black";
-                e.row.style.Color = "white";
+                e.row.style.color = "red";
             }
             //e.row.style.color = 'blue';
         }
@@ -34,25 +34,21 @@
                           .Columns(columns =>
                                        {
                                            columns.Bound(c => c.Time).Title("Time").Width(190);
-                                           //columns.Bound(c => c.Time).Title("Time").Template(c => c.Time.ToShortTimeString()).Groupable(false);
                                            columns.Bound(c => c.DisplayLevel).Title("Level").Width(0);
                                            columns.Bound(c => c.Message);
                                        })
-                           .DataBinding(dataBinding => dataBinding.Ajax().Select("_AjaxBinding", "Log"))
-          .DetailView(detailView => detailView.ClientTemplate(
-               
+                           .DetailView(detailView => detailView.ClientTemplate(
+
                 "<div><#= Logger #></div>" +
                 "<div><#= ExceptionType #></div>" +
                 "<div><#= ExceptionMessage #></div>" +
-                "<div><#= ExceptionString #></div>" 
-           
-            ))
+                "<div class='stackframe'><#= ExceptionString #></div>"
+
+            )).DataBinding(data => data.Ajax().Select("_AjaxBinding", "Log"))
                           .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.Time).Descending()).Enabled(true))
-                          .Pageable(c => c.PageSize(50).Position(GridPagerPosition.Both).Style(GridPagerStyles.PageInput | GridPagerStyles.NextPreviousAndNumeric))
-          //.Groupable()
+                          .Pageable(c => c.PageSize(20).Position(GridPagerPosition.Both).Style(GridPagerStyles.PageInput | GridPagerStyles.NextPreviousAndNumeric))
                           .Filterable()
                           .ClientEvents(c => c.OnRowDataBound("onRowDataBound"))
-          //.Groupable(grouping => grouping.Groups(groups => groups.Add(c => c.Time.Date)).Enabled(true))
                           .Render();
     %>
 </asp:Content>

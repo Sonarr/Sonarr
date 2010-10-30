@@ -86,6 +86,7 @@
     </Compile>
     <Compile Include="Helpers\IsCurrentActionHelper.cs" />
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\EpisodeModel.cs" />
     <Compile Include="Models\SettingsModels.cs" />
     <Compile Include="Ninject.Web.Mvc\ControllerMissingBindingResolver.cs" />
     <Compile Include="Ninject.Web.Mvc\FilterInjector.cs" />

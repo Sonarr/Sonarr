@@ -17,7 +17,7 @@ namespace NzbDrone.Core
 
         private static readonly Regex[] ReportTitleRegex = new[]
                                                        {
-                                                         new Regex(@"(?<title>.+?)?\W(S)?(?<season>\d+)\w(?<episode>\d+)\W", RegexOptions.IgnoreCase | RegexOptions.Compiled)                                                        
+                                                         new Regex(@"(?<title>.+?)?\W(S)?(?<season>\d+)\w(?<episode>\d+)\W(?!\\)", RegexOptions.IgnoreCase | RegexOptions.Compiled)                                                        
                                                        };
 
         private static readonly Regex NormalizeRegex = new Regex(@"((\s|^)the(\s|$))|((\s|^)and(\s|$))|[^a-z]", RegexOptions.IgnoreCase | RegexOptions.Compiled);
@@ -43,21 +43,19 @@ namespace NzbDrone.Core
 
                     foreach (Match matchGroup in match)
                     {
-                        var tuple = new EpisodeParseResult
+                        var parsedEpisode = new EpisodeParseResult
                         {
                             SeriesTitle = seriesName,
                             SeasonNumber = Convert.ToInt32(matchGroup.Groups["season"].Value),
                             EpisodeNumber = Convert.ToInt32(matchGroup.Groups["episode"].Value)
                         };
 
-                        result.Add(tuple);
+                        result.Add(parsedEpisode);
 
-                        Logger.Trace("Episode Parsed. {0}", tuple);
+                        Logger.Trace("Episode Parsed. {0}", parsedEpisode);
                     }
                 }
             }
-
-            Logger.Trace("{0} episodes parsed from string.", result.Count);
 
             return result;
         }

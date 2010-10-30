@@ -40,7 +40,7 @@ namespace NzbDrone
         }
 
 
-        #region private
+#region private
 
         private readonly Dictionary<AttachType, string> _attachTypesMap;
         private readonly DTE2 _dte;
@@ -49,7 +49,7 @@ namespace NzbDrone
 
         #endregion
 
-        #region ctor
+#region ctor
 
         private ProcessAttacher(DTE2 dte, string processName, int waitTimeout)
         {
@@ -63,7 +63,7 @@ namespace NzbDrone
 
         #endregion
 
-        #region private methods
+#region private methods
 
         private AttachResult Attach(AttachType attachType)
         {
@@ -130,7 +130,7 @@ namespace NzbDrone
 
         #endregion
 
-        #region public methods
+#region public methods
 
 
         public void OptimisticAttachManaged()
@@ -146,6 +146,7 @@ namespace NzbDrone
         #endregion
     }
 
-#endif
 }
+#endif
+
 

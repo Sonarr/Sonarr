@@ -10,6 +10,7 @@ using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Fakes;
 using NzbDrone.Core.Repository;
 using SubSonic.DataProviders;
+using SubSonic.Query;
 using SubSonic.Repository;
 using NLog;
 using System.Linq;
@@ -31,14 +32,15 @@ namespace NzbDrone.Core
 
                 string connectionString = String.Format("Data Source={0};Version=3;", Path.Combine(AppPath, "nzbdrone.db"));
                 var dbProvider = ProviderFactory.GetProvider(connectionString, "System.Data.SQLite");
-
+        
                 string logConnectionString = String.Format("Data Source={0};Version=3;", Path.Combine(AppPath, "log.db"));
                 var logDbProvider = ProviderFactory.GetProvider(logConnectionString, "System.Data.SQLite");
                 var logRepository = new SimpleRepository(logDbProvider, SimpleRepositoryOptions.RunMigrations);
+                //dbProvider.ExecuteQuery(new QueryCommand("VACUUM", dbProvider));
 
                 dbProvider.Log = new NlogWriter();
                 dbProvider.LogParams = true;
-              
+
                 _kernel.Bind<ISeriesProvider>().To<SeriesProvider>().InSingletonScope();
                 _kernel.Bind<ISeasonProvider>().To<SeasonProvider>();
                 _kernel.Bind<IEpisodeProvider>().To<EpisodeProvider>();
@@ -48,6 +50,7 @@ namespace NzbDrone.Core
                 _kernel.Bind<ISyncProvider>().To<SyncProvider>().InSingletonScope();
                 _kernel.Bind<INotificationProvider>().To<NotificationProvider>().InSingletonScope();
                 _kernel.Bind<ILogProvider>().To<LogProvider>().InSingletonScope();
+                _kernel.Bind<IMediaFileProvider>().To<MediaFileProvider>().InSingletonScope();
                 _kernel.Bind<IRepository>().ToMethod(c => new SimpleRepository(dbProvider, SimpleRepositoryOptions.RunMigrations)).InSingletonScope();
 
                 _kernel.Bind<IRepository>().ToConstant(logRepository).WhenInjectedInto<SubsonicTarget>().InSingletonScope();

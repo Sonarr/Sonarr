@@ -14,15 +14,17 @@ namespace NzbDrone.Core.Providers
     public class MediaFileProvider : IMediaFileProvider
     {
         private readonly IRepository _repository;
+        private readonly IConfigProvider _configProvider;
         private readonly IDiskProvider _diskProvider;
         private readonly IEpisodeProvider _episodeProvider;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static readonly string[] MediaExtentions = new[] { "*.mkv", "*.avi", "*.wmv" };
 
-        public MediaFileProvider(IRepository repository, IDiskProvider diskProvider, IEpisodeProvider episodeProvider)
+        public MediaFileProvider(IRepository repository, IConfigProvider _configProvider, IDiskProvider diskProvider, IEpisodeProvider episodeProvider)
         {
             _repository = repository;
+            this._configProvider = _configProvider;
             _diskProvider = diskProvider;
             _episodeProvider = episodeProvider;
         }
@@ -55,21 +57,21 @@ namespace NzbDrone.Core.Providers
                     var episode = _episodeProvider.GetEpisode(series.SeriesId, closureEpisode.SeasonNumber, closureEpisode.EpisodeNumber);
                     if (episode != null)
                     {
-                        var epFile = new EpisodeFile();
-                        epFile.DateAdded = DateTime.Now;
-                        epFile.SeriesId = series.SeriesId;
-                        epFile.EpisodeId = episode.EpisodeId;
-                        epFile.Path = Parser.NormalizePath(filePath);
-                        epFile.Size = _diskProvider.GetSize(filePath);
-                        epFile.Quality = Parser.ParseQuality(filePath);
-                        epFile.Proper = Parser.ParseProper(filePath);
-                        _repository.Add(epFile);
-                        Logger.Info("File '{0}' successfully attached to {1}", episode.EpisodeId);
+                        var episodeFile = new EpisodeFile();
+                        episodeFile.DateAdded = DateTime.Now;
+                        episodeFile.SeriesId = series.SeriesId;
+                        episodeFile.EpisodeId = episode.EpisodeId;
+                        episodeFile.Path = Parser.NormalizePath(filePath);
+                        episodeFile.Size = _diskProvider.GetSize(filePath);
+                        episodeFile.Quality = Parser.ParseQuality(filePath);
+                        episodeFile.Proper = Parser.ParseProper(filePath);
+                        _repository.Add(episodeFile);
+                        Logger.Trace("File {0}:{1} attached to '{2}'", episodeFile.FileId, filePath, episode.EpisodeId);
 
-                        return epFile;
+                        return episodeFile;
                     }
 
-                    Logger.Warn("Unable to find Series:{0} Season:{1} Episode:{2} in the database.", series.Title, closureEpisode.SeasonNumber, closureEpisode.EpisodeNumber);
+                    Logger.Warn("Unable to find Series:{0} Season:{1} Episode:{2} in the database. File:{3}", series.Title, closureEpisode.SeasonNumber, closureEpisode.EpisodeNumber, filePath);
                 }
             }
             else
@@ -96,9 +98,23 @@ namespace NzbDrone.Core.Providers
             }
         }
 
+
+        public string GenerateEpisodePath(EpisodeModel episode)
+        {
+            var episodeNamePattern = _configProvider.EpisodeNameFormat;
+
+            episodeNamePattern = episodeNamePattern.Replace("{series}", "{0}");
+            episodeNamePattern = episodeNamePattern.Replace("{episode", "{1");
+            episodeNamePattern = episodeNamePattern.Replace("{season", "{2");
+            episodeNamePattern = episodeNamePattern.Replace("{title}", "{3}");
+            episodeNamePattern = episodeNamePattern.Replace("{quality}", "{4}");
+
+            return String.Format(episodeNamePattern, episode.SeriesTitle, episode.EpisodeNumber, episode.SeasonNumber, episode.EpisodeTitle, episode.Quality);
+        }
+
         private List<string> GetMediaFileList(string path)
         {
-            Logger.Info("Scanning '{0}' for episodes", path);
+            Logger.Debug("Scanning '{0}' for episodes", path);
 
             var mediaFileList = new List<string>();
 
@@ -107,8 +123,9 @@ namespace NzbDrone.Core.Providers
                 mediaFileList.AddRange(_diskProvider.GetFiles(path, ext, SearchOption.AllDirectories));
             }
 
-            Logger.Info("{0} media files were found in {1}", mediaFileList.Count, path);
+            Logger.Trace("{0} media files were found in {1}", mediaFileList.Count, path);
             return mediaFileList;
         }
+
     }
 }

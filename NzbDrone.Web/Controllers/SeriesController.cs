@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Repository;
+using NzbDrone.Web.Models;
+using Telerik.Web.Mvc;
 
 namespace NzbDrone.Web.Controllers
 {
@@ -52,38 +56,93 @@ namespace NzbDrone.Web.Controllers
             });
         }
 
-        public JsonResult MediaDetect()
+
+        [GridAction]
+        public ActionResult _AjaxSeasonGrid(int seasonId)
         {
-            Core.Providers.IMediaDiscoveryProvider disco = new Core.Providers.MediaDiscoveryProvider();
-            return Json(new { Discovered = disco.DiscoveredMedia }, JsonRequestBehavior.AllowGet);
+            var episodes = _episodeProvider.GetEpisodeBySeason(seasonId).Select(c => new EpisodeModel()
+                                                                                     {
+                                                                                         EpisodeId = c.EpisodeId,
+                                                                                         EpisodeNumber = c.EpisodeNumber,
+                                                                                         SeasonNumber = c.SeasonNumber,
+                                                                                         Title = c.Title,
+                                                                                         Overview = c.Overview,
+                                                                                         AirDate = c.AirDate
+                                                                                     });
+            return View(new GridModel(episodes));
         }
 
-        public JsonResult LightUpMedia()
+
+
+        [GridAction]
+        public ActionResult _CustomBinding(GridCommand command, int seasonId)
         {
-            Core.Providers.IMediaDiscoveryProvider disco = new Core.Providers.MediaDiscoveryProvider();
-            IMediaProvider p = disco.Providers[0];
-            return Json(new { ID = 0, HTML = "<span class='MediaRenderer XBMC'><span class='Play'>Play</span><span class='Pause'>Pause</span><span class='Stop'>Stop</span></span>" }, JsonRequestBehavior.AllowGet);
-        }
-        public JsonResult ControlMedia()
-        {
-            Core.Providers.IMediaDiscoveryProvider disco = new Core.Providers.MediaDiscoveryProvider();
-            IMediaProvider p = disco.Providers[0];
-            string action = Request["Action"];
-            switch (action)
+            IEnumerable<Episode> data = GetData(command);
+            return View(new GridModel
             {
-                case "Play":
-                    p.Play();
-                    break;
-                case "Pause":
-                    p.Pause();
-                    break;
-                case "Stop":
-                    p.Stop();
-                    break;
-                default:
-                    break;
+                Data = data,
+                Total = data.Count()
+            });
+        }
+        private IEnumerable<Episode> GetData(GridCommand command)
+        {
+
+            return null;
+            /*    
+            IQueryable<Episode> data = .Orders;
+            //Apply filtering
+            if (command.FilterDescriptors.Any())
+            {
+                data = data.Where(ExpressionBuilder.Expression<Order>(command.FilterDescriptors));
             }
-            return Json(new { Success = true }, JsonRequestBehavior.AllowGet);
+            // Apply sorting
+            foreach (SortDescriptor sortDescriptor in command.SortDescriptors)
+            {
+                if (sortDescriptor.SortDirection == ListSortDirection.Ascending)
+                {
+                    switch (sortDescriptor.Member)
+                    {
+                        case "OrderID":
+                            data = data.OrderBy(ExpressionBuilder.Expression<Order, int>(sortDescriptor.Member));
+                            break;
+                        case "Customer.ContactName":
+                            data = data.OrderBy(order => order.Customer.ContactName);
+                            break;
+                        case "ShipAddress":
+                            data = data.OrderBy(order => order.ShipAddress);
+                            break;
+                        case "OrderDate":
+                            data = data.OrderBy(order => order.OrderDate);
+                            break;
+                    }
+                }
+                else
+                {
+                    switch (sortDescriptor.Member)
+                    {
+                        case "OrderID":
+                            data = data.OrderByDescending(order => order.OrderID);
+                            break;
+                        case "Customer.ContactName":
+                            data = data.OrderByDescending(order => order.Customer.ContactName);
+                            break;
+                        case "ShipAddress":
+                            data = data.OrderByDescending(order => order.ShipAddress);
+                            break;
+                        case "OrderDate":
+                            data = data.OrderByDescending(order => order.OrderDate);
+                            break;
+                    }
+                }
+            }
+            count = data.Count();
+            // ... and paging
+            if (command.PageSize > 0)
+            {
+                data = data.Skip((command.Page - 1) * command.PageSize);
+            }
+            data = data.Take(command.PageSize);
+            return data;*/
         }
 
         //

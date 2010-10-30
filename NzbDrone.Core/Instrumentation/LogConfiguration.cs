@@ -22,9 +22,12 @@ namespace NzbDrone.Core.Instrumentation
 
         private static void BindCustomLoggers()
         {
+#if Release
             var exTarget = new ExceptioneerTarget();
             LogManager.Configuration.AddTarget("Exceptioneer", exTarget);
             LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", NLog.LogLevel.Error, exTarget));
+#endif
+
 
             var sonicTarget = CentralDispatch.NinjectKernel.Get<SubsonicTarget>();
             LogManager.Configuration.AddTarget("DbLogger", sonicTarget);

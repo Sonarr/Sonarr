@@ -14,6 +14,7 @@ namespace NzbDrone.Core.Providers
     {
         private readonly ISeriesProvider _seriesProvider;
         private readonly IEpisodeProvider _episodeProvider;
+        private readonly IMediaFileProvider _mediaFileProvider;
         private readonly INotificationProvider _notificationProvider;
 
         private ProgressNotification _seriesSyncNotification;
@@ -21,10 +22,11 @@ namespace NzbDrone.Core.Providers
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public SyncProvider(ISeriesProvider seriesProvider, IEpisodeProvider episodeProvider, INotificationProvider notificationProvider)
+        public SyncProvider(ISeriesProvider seriesProvider, IEpisodeProvider episodeProvider, IMediaFileProvider mediaFileProvider, INotificationProvider notificationProvider)
         {
             _seriesProvider = seriesProvider;
             _episodeProvider = episodeProvider;
+            _mediaFileProvider = mediaFileProvider;
             _notificationProvider = notificationProvider;
         }
 
@@ -65,7 +67,7 @@ namespace NzbDrone.Core.Providers
                     {
                         try
                         {
-                            _seriesSyncNotification.CurrentStatus = String.Format("Analysing Folder: {0}", CultureInfo.CurrentCulture.TextInfo.ToTitleCase(new DirectoryInfo(seriesFolder).Name));
+                            _seriesSyncNotification.CurrentStatus = String.Format("Searching For: {0}", CultureInfo.CurrentCulture.TextInfo.ToTitleCase(new DirectoryInfo(seriesFolder).Name));
 
                             Logger.Debug("Folder '{0}' isn't mapped in the database. Trying to map it.'", seriesFolder);
                             var mappedSeries = _seriesProvider.MapPathToSeries(seriesFolder);
@@ -79,9 +81,12 @@ namespace NzbDrone.Core.Providers
                                 //Check if series is mapped to another folder
                                 if (_seriesProvider.GetSeries(mappedSeries.Id) == null)
                                 {
-                                    _seriesSyncNotification.CurrentStatus = String.Format("Downloading Info for '{0}'", mappedSeries.SeriesName);
+                                    _seriesSyncNotification.CurrentStatus = String.Format("{0}: downloading series info...", mappedSeries.SeriesName);
                                     _seriesProvider.AddSeries(seriesFolder, mappedSeries);
                                     _episodeProvider.RefreshEpisodeInfo(mappedSeries.Id);
+                                    _seriesSyncNotification.CurrentStatus = String.Format("{0}: finding episodes on disk...", mappedSeries.SeriesName);
+                                    _mediaFileProvider.Scan(_seriesProvider.GetSeries(mappedSeries.Id));
+
                                 }
                                 else
                                 {

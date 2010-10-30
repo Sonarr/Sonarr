@@ -8,6 +8,8 @@ namespace NzbDrone.Core.Providers
     public class ConfigProvider : IConfigProvider
     {
         private const string SERIES_ROOTS = "SeriesRoots";
+        private const string EPISODE_NAME_FORMAT = "EpisodeNameFormat";
+       
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IRepository _sonicRepo;
 
@@ -19,6 +21,13 @@ namespace NzbDrone.Core.Providers
         private string GetValue(string key)
         {
             return GetValue(key, String.Empty, false);
+        }
+
+        public String EpisodeNameFormat
+        {
+            get { return GetValue(EPISODE_NAME_FORMAT); }
+
+            set { SetValue(EPISODE_NAME_FORMAT, value); }
         }
 
         public String SeriesRoot

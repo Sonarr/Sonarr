@@ -31,11 +31,10 @@ namespace NzbDrone.Core.Providers
             if (_sonicRepo.Exists<Season>(s => s.SeasonId == seasonId))
                 return;
             //TODO: Calculate Season Folder
-            Logger.Debug("Adding Season To DB. [SeriesID:{0} SeasonID:{1} SeasonNumber:{2} Folder:{3}]", seriesId, seasonId, seasonNumber, "????");
+            Logger.Trace("Adding Season To DB. [SeriesID:{0} SeasonID:{1} SeasonNumber:{2}]", seriesId, seasonId, seasonNumber, "????");
 
             var newSeason = new Season()
             {
-                Folder = String.Empty,
                 Monitored = true,
                 SeasonId = seasonId,
                 SeasonNumber = seasonNumber,

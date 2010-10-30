@@ -3,10 +3,16 @@ using SubSonic.SqlGeneration.Schema;
 
 namespace NzbDrone.Core.Model
 {
-    internal struct EpisodeParseResult
+    internal class EpisodeParseResult
     {
         internal string SeriesTitle { get; set; }
         internal int SeasonNumber { get; set; }
         internal int EpisodeNumber { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("Series:{0} Season:{1} Episode:{2}", SeriesTitle, SeasonNumber, EpisodeNumber);
+        }
+
     }
 }

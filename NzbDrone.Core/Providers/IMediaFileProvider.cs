@@ -1,3 +1,4 @@
+using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Providers
@@ -11,5 +12,6 @@ namespace NzbDrone.Core.Providers
         void Scan(Series series);
 
         EpisodeFile ImportFile(Series series, string filePath);
+        string GenerateEpisodePath(EpisodeModel episode);
     }
 }
