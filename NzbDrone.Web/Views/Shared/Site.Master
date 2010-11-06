@@ -1,7 +1,7 @@
 ﻿<%@ Master Language="C#" Inherits="System.Web.Mvc.ViewMasterPage" %>
+
 <%@ Import Namespace="Helpers" %>
 <%@ Import Namespace="Telerik.Web.Mvc.UI" %>
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
@@ -19,29 +19,24 @@
     <a href="http://github.com/kayone/NzbDrone">
         <img style="position: absolute; top: 0; left: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png" />
     </a>
-    <div id="msgBox" style="visibility: hidden">
-        <span id="msgText">Scanning Series Folder...</span>
-    </div>
-    <div id="header">
+    <div id="centered">
         <div id="menu">
             <ul>
-                <%=Html.CurrentActionLink("Series", "Index", "Series") %>
-                <%=Html.CurrentActionLink("Settings", "Index", "Settings") %>
-                <%=Html.CurrentActionLink("Logs", "Index", "Log") %>
+                <%: MvcHtmlString.Create(Html.CurrentActionLink("Series", "Index", "Series")) %>
+                <%: MvcHtmlString.Create(Html.CurrentActionLink("Settings", "Index", "Settings"))%>
+                <%: MvcHtmlString.Create(Html.CurrentActionLink("Logs", "Index", "Log"))%>
             </ul>
         </div>
-        <!-- end #menu -->
-    </div>
-    <!-- end #header -->
-    <div id="logo">
-        <h1>
+        <div id="logo">
             <asp:ContentPlaceHolder ID="TitleContent" runat="server" />
-        </h1>
-    </div>
-    <hr />
-    <div id="page">
-        <asp:ContentPlaceHolder ID="ActionMenu" runat="server" />
-        <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+        </div>
+        <div id="page">
+            <asp:ContentPlaceHolder ID="ActionMenu" runat="server" />
+            <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+        </div>
+        <div id="msgBox">
+            <span id="msgText">Scanning Series Folder...</span>
+        </div>
     </div>
 </body>
 <asp:contentplaceholder runat="server" id="Scripts" />
