@@ -130,11 +130,20 @@ namespace NzbDrone.Core
             return NormalizeRegex.Replace(title, String.Empty).ToLower();
         }
 
+        //Note: changing case on path is a problem for running on mono/*nix
         public static string NormalizePath(string path)
         {
             if (String.IsNullOrEmpty(path))
                 throw new ArgumentException("Path can not be null or empty");
-            return new FileInfo(path).FullName.ToLower().Trim('/', '\\', ' ');
+
+          var info = new FileInfo(path);
+
+          if( info.FullName.StartsWith(@"\\")) //UNC
+          {
+            return info.FullName.ToLower().TrimEnd('/', '\\', ' ');
+          }
+          
+          return info.FullName.ToLower().Trim('/', '\\', ' ');
         }
     }
 }
