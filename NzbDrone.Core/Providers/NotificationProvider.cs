@@ -28,7 +28,10 @@ namespace NzbDrone.Core.Providers
 
         public List<ProgressNotification> GetProgressNotifications
         {
-            get { return new List<ProgressNotification>(_progressNotification.Values.Where(p => p.Status == ProgressNotificationStatus.InProgress)); }
+            get
+            {
+                return new List<ProgressNotification>(_progressNotification.Values.Where(p => p.Status == ProgressNotificationStatus.InProgress));
+            }
         }
 
         public void Dismiss(Guid notificationId)

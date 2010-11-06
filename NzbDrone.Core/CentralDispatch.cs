@@ -32,7 +32,7 @@ namespace NzbDrone.Core
 
                 string connectionString = String.Format("Data Source={0};Version=3;", Path.Combine(AppPath, "nzbdrone.db"));
                 var dbProvider = ProviderFactory.GetProvider(connectionString, "System.Data.SQLite");
-        
+
                 string logConnectionString = String.Format("Data Source={0};Version=3;", Path.Combine(AppPath, "log.db"));
                 var logDbProvider = ProviderFactory.GetProvider(logConnectionString, "System.Data.SQLite");
                 var logRepository = new SimpleRepository(logDbProvider, SimpleRepositoryOptions.RunMigrations);

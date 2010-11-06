@@ -8,14 +8,13 @@
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=85)";
     filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=85);
     padding: 10px;
-    position: fixed;
     text-align: left;
+    position: fixed;
     z-index: 99;
-    margin: 0px auto;
     bottom: 0;
-    width: 930px;
     font-size: 20px;
     color: White;
+    width:890px;
 }
 #msgCloseButton
 {
