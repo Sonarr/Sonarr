@@ -41,6 +41,19 @@
             <exclude/>
             <excludeToc/>
         </member>
+        <member name="T:Telerik.Web.Mvc.Infrastructure.IWebAssetLocator">
+            <summary>
+            Basic building block to locate the correct virtual path.
+            </summary>
+        </member>
+        <member name="M:Telerik.Web.Mvc.Infrastructure.IWebAssetLocator.Locate(System.String,System.String)">
+            <summary>
+            Returns the correct virtual path based upon the debug mode and version.
+            </summary>
+            <param name="virtualPath">The virtual path.</param>
+            <param name="version">The version.</param>
+            <returns></returns>
+        </member>
         <member name="T:Telerik.Web.Mvc.Resources.EditorLocalization">
             <summary>
               A strongly-typed resource class, for looking up localized strings, etc.
@@ -72,9 +85,19 @@
               Looks up a localized string similar to Select font family.
             </summary>
         </member>
+        <member name="P:Telerik.Web.Mvc.Resources.EditorLocalization.FontNameInherit">
+            <summary>
+              Looks up a localized string similar to (inherited font).
+            </summary>
+        </member>
         <member name="P:Telerik.Web.Mvc.Resources.EditorLocalization.FontSize">
             <summary>
               Looks up a localized string similar to Select font size.
+            </summary>
+        </member>
+        <member name="P:Telerik.Web.Mvc.Resources.EditorLocalization.FontSizeInherit">
+            <summary>
+              Looks up a localized string similar to (inherited size).
             </summary>
         </member>
         <member name="P:Telerik.Web.Mvc.Resources.EditorLocalization.FormatBlock">
@@ -236,11 +259,6 @@
             Writes the cleanup script.
             </summary>
             <param name="writer">The writer.</param>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.ViewComponentBase.EnsureRequired">
-            <summary>
-            Ensures the required settings.
-            </summary>
         </member>
         <member name="M:Telerik.Web.Mvc.UI.ViewComponentBase.WriteHtml(System.Web.UI.HtmlTextWriter)">
             <summary>
@@ -526,6 +544,13 @@
             </code>
             </example>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.AutoCompleteBuilder.Enable(System.Boolean)">
+            <summary>
+            Enables or disables the autocomplete.
+            </summary>
+            <param name="allowSpinner"></param>
+            <returns></returns>
+        </member>
         <member name="T:Telerik.Web.Mvc.UI.Fluent.AutoCompleteMultipleValuesSettingsBuilder">
             <summary>
             Defines the fluent interface for building <see cref="T:Telerik.Web.Mvc.UI.Fluent.AutoCompleteMultipleValuesSettingsBuilder"/>
@@ -784,6 +809,13 @@
             </code>
             </example>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.ComboBoxBuilder.Enable(System.Boolean)">
+            <summary>
+            Enables or disables the combobox.
+            </summary>
+            <param name="allowSpinner"></param>
+            <returns></returns>
+        </member>
         <member name="T:Telerik.Web.Mvc.UI.Fluent.AutoCompleteBindingSettingsBuilder">
             <summary>
             Defines the fluent interface for building <see cref="T:Telerik.Web.Mvc.UI.Fluent.AutoCompleteBindingSettingsBuilder"/>
@@ -818,6 +850,23 @@
             <remarks>
             The Enabled method is useful when you need to enable binding based on certain conditions.
             </remarks>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DropDownBindingSettingsBuilder`1.Select(System.Web.Routing.RouteValueDictionary)">
+            <summary>
+            Sets the action, controller and route values for the select operation
+            </summary>
+            <param name="routeValues">The route values of the Action method.</param>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().DropDownList()
+                        .Name("DropDownList")
+                        .DataBinding(dataBinding => 
+                        {
+                            dataBinding.Ajax().Select(MVC.Home.Indec(1).GetRouteValueDictionary());
+                        })
+            %&gt;
+            </code>
+            </example>
         </member>
         <member name="M:Telerik.Web.Mvc.UI.Fluent.DropDownBindingSettingsBuilder`1.Select(System.String,System.String,System.Web.Routing.RouteValueDictionary)">
             <summary>
@@ -1153,6 +1202,289 @@
             The Delay method is useful when you need to postpone request to the server for some time.
             </remarks>
         </member>
+        <member name="T:Telerik.Web.Mvc.UI.Fluent.DateTimePickerBuilder">
+            <summary>
+            Defines the fluent interface for configuring the <see cref="T:Telerik.Web.Mvc.UI.TimePicker"/> component.
+            </summary>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DateTimePickerBuilder.#ctor(Telerik.Web.Mvc.UI.DateTimePicker)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Telerik.Web.Mvc.UI.Fluent.TimePickerBuilder"/> class.
+            </summary>
+            <param name="component">The component.</param>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DateTimePickerBuilder.ClientEvents(System.Action{Telerik.Web.Mvc.UI.DateTimePickerClientEventsBuilder})">
+            <summary>
+            Configures the client-side events.
+            </summary>
+            <param name="configurator">The client events action.</param>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().DateTimePicker()
+                        .Name("DateTimePicker")
+                        .ClientEvents(events =>
+                            events.OnLoad("onLoad").OnChange("onChange")
+                        )
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DateTimePickerBuilder.Effects(System.Action{Telerik.Web.Mvc.UI.EffectsBuilder})">
+            <summary>
+            Configures the effects of the dateTimePicker.
+            </summary>
+            <param name="configurator">The action which configures the effects.</param>
+            <example>
+            <code lang="CS">
+            &lt;%= Html.Telerik().DateTimePicker()
+                       .Name("DateTimePicker")
+                       .Effects(fx =>
+                       {
+            	            fx.Height()
+            		          .Opacity()
+            				  .OpenDuration(AnimationDuration.Normal)
+            				  .CloseDuration(AnimationDuration.Normal);
+                       })
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DateTimePickerBuilder.Format(System.String)">
+            <summary>
+            Sets the time format, which will be used to parse and format the <see cref="T:System.DateTime"/>.
+            </summary>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DateTimePickerBuilder.InputHtmlAttributes(System.Object)">
+            <summary>
+            Sets the Input HTML attributes.
+            </summary>
+            <param name="attributes">The HTML attributes.</param>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DateTimePickerBuilder.Enable(System.Boolean)">
+            <summary>
+            Sets whether dateTimePicker to be enabled.
+            </summary>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DateTimePickerBuilder.Value(System.Nullable{System.DateTime})">
+            <summary>
+            Sets the value of the dateTimePicker input
+            </summary>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DateTimePickerBuilder.Value(System.String)">
+            <summary>
+            Sets the value of the dateTimePicker input
+            </summary>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DateTimePickerBuilder.Min(System.DateTime)">
+            <summary>
+            Sets the minimal date, which can be selected in DateTimePicker.
+            </summary>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DateTimePickerBuilder.Min(System.String)">
+            <summary>
+            Sets the minimal date, which can be selected in DateTimePicker.
+            </summary>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DateTimePickerBuilder.Max(System.DateTime)">
+            <summary>
+            Sets the maximal date, which can be selected in DateTimePicker.
+            </summary>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DateTimePickerBuilder.Max(System.String)">
+            <summary>
+            Sets the maximal date, which can be selected in DateTimePicker.
+            </summary>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DateTimePickerBuilder.StartTime(System.DateTime)">
+            <summary>
+            Sets the minimal time, which can be selected in DateTimePicker.
+            </summary>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DateTimePickerBuilder.StartTime(System.String)">
+            <summary>
+            Sets the minimal time, which can be selected in DateTimePicker.
+            </summary>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DateTimePickerBuilder.EndTime(System.DateTime)">
+            <summary>
+            Sets the maximal time, which can be selected in DateTimePicker.
+            </summary>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DateTimePickerBuilder.EndTime(System.String)">
+            <summary>
+            Sets the maximal time, which can be selected in DateTimePicker.
+            </summary>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DateTimePickerBuilder.Interval(System.Int32)">
+            <summary>
+            Sets the interval between hours.
+            </summary>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DateTimePickerBuilder.CalendarButtonTitle(System.String)">
+            <summary>
+            Sets the title of the DateTimePicker button.
+            </summary>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DateTimePickerBuilder.TimeButtonTitle(System.String)">
+            <summary>
+            Sets the title of the DateTimePicker button.
+            </summary>
+        </member>
+        <member name="T:Telerik.Web.Mvc.UI.DateTimePickerClientEventsBuilder">
+            <summary>
+            Defines the fluent interface for configuring timepicker client events.
+            </summary>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.DateTimePickerClientEventsBuilder.#ctor(Telerik.Web.Mvc.UI.DateTimePickerClientEvents,System.Web.Mvc.ViewContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Telerik.Web.Mvc.UI.TimePickerClientEventsBuilder"/> class.
+            </summary>
+            <param name="clientEvents">Timepicker client-side events.</param>
+            <param name="viewContext">The context of the View.</param>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.DateTimePickerClientEventsBuilder.OnChange(System.Action)">
+            <summary>
+            Defines the inline handler of the OnChange client-side event
+            </summary>
+            <param name="onChangeAction">The action defining the inline handler.</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().DateTimePicker()
+                       .Name("DateTimePicker")
+                       .ClientEvents(events => events.OnChange(() =>
+                       {
+                            %&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;%
+                       }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.DateTimePickerClientEventsBuilder.OnChange(System.String)">
+            <summary>
+             Defines the name of the JavaScript function that will handle the the OnChange client-side event.
+            </summary>
+            <param name="onChangeHandlerName">The name of the JavaScript function that will handle the event.</param>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().DateTimePicker()
+                        .Name("DateTimePicker")
+                        .ClientEvents(events => events.OnChange("onChange"))
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.DateTimePickerClientEventsBuilder.OnLoad(System.Action)">
+            <summary>
+            Defines the inline handler of the OnLoad client-side event
+            </summary>
+            <param name="onLoadAction">The action defining the inline handler.</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().DateTimePicker()
+                       .Name("DateTimePicker")
+                       .ClientEvents(events => events.OnLoad(() =>
+                       {
+                            %&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;%
+                       }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.DateTimePickerClientEventsBuilder.OnLoad(System.String)">
+            <summary>
+             Defines the name of the JavaScript function that will handle the the OnLoad client-side event.
+            </summary>
+            <param name="onLoadHandlerName">The name of the JavaScript function that will handle the event.</param>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().DateTimePicker()
+                        .Name("DateTimePicker")
+                        .ClientEvents(events => events.OnLoad("onLoad"))
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.DateTimePickerClientEventsBuilder.OnOpen(System.Action)">
+            <summary>
+            Defines the inline handler of the OnOpen client-side event
+            </summary>
+            <param name="onOpenAction">The action defining the inline handler.</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().DateTimePicker()
+                       .Name("DateTimePicker")
+                       .ClientEvents(events => events.OnOpen(() =>
+                       {
+                            %&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;%
+                       }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.DateTimePickerClientEventsBuilder.OnOpen(System.String)">
+            <summary>
+             Defines the name of the JavaScript function that will handle the the OnOpen client-side event.
+            </summary>
+            <param name="onOpenHandlerName">The name of the JavaScript function that will handle the event.</param>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().DateTimePicker()
+                        .Name("DateTimePicker")
+                        .ClientEvents(events => events.OnOpen("onOpen"))
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.DateTimePickerClientEventsBuilder.OnClose(System.Action)">
+            <summary>
+            Defines the inline handler of the OnClose client-side event
+            </summary>
+            <param name="onCloseAction">The action defining the inline handler.</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().DateTimePicker()
+                       .Name("DateTimePicker")
+                       .ClientEvents(events => events.OnClose(() =>
+                       {
+                            %&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;%
+                       }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.DateTimePickerClientEventsBuilder.OnClose(System.String)">
+            <summary>
+             Defines the name of the JavaScript function that will handle the the OnClose client-side event.
+            </summary>
+            <param name="onCloseHandlerName">The name of the JavaScript function that will handle the event.</param>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().DateTimePicker()
+                        .Name("DateTimePicker")
+                        .ClientEvents(events => events.OnClose("onClose"))
+            %&gt;
+            </code>
+            </example>
+        </member>
         <member name="T:Telerik.Web.Mvc.UI.Fluent.DropDownListBindingSettingsBuilder">
             <summary>
             Defines the fluent interface for building <see cref="T:Telerik.Web.Mvc.UI.Fluent.DropDownListBindingSettingsBuilder"/>
@@ -1214,6 +1546,13 @@
             %&gt;
             </code>
             </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DropDownListBuilder.Enable(System.Boolean)">
+            <summary>
+            Enables or disables the dropdownlist.
+            </summary>
+            <param name="allowSpinner"></param>
+            <returns></returns>
         </member>
         <member name="M:Telerik.Web.Mvc.UI.Fluent.DropDownClientEventsBuilder.#ctor(Telerik.Web.Mvc.UI.DropDownClientEvents,System.Web.Mvc.ViewContext)">
             <summary>
@@ -1718,6 +2057,18 @@
             </summary>
             <param name="setEffectProperties">Builder, which sets different slide properties.</param>
         </member>
+        <member name="T:Telerik.Web.Mvc.UI.IGridCustomGroupingWrapper">
+            <exclude/>
+            <excludetoc/>
+        </member>
+        <member name="T:Telerik.Web.Mvc.UI.GridCustomGroupingWrapper`1">
+            <exclude/>
+            <excludetoc/>
+            <summary>
+            Simple wrapper used to trick the Grid's generic DataSource when custom binding is used
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
         <member name="T:Telerik.Web.Mvc.UI.Fluent.GridEditingSettingsBuilder">
             <summary>
             Defines the fluent interface for configuring grid editing.
@@ -1745,6 +2096,14 @@
             The Enabled method is useful when you need to enable grid editing on certain conditions.
             </remarks>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridEditingSettingsBuilder.TemplateName(System.String)">
+            <summary>
+            Specify an editor template which to be used for InForm or PopUp modes
+            </summary>
+            <param name="templateName">name of the editor template</param>
+            <remarks>This settings is applicable only when Mode is <see cref="F:Telerik.Web.Mvc.UI.GridEditMode.InForm"/> 
+            or <see cref="F:Telerik.Web.Mvc.UI.GridEditMode.PopUp"/></remarks>
+        </member>
         <member name="M:Telerik.Web.Mvc.UI.Fluent.GridEditingSettingsBuilder.DisplayDeleteConfirmation(System.Boolean)">
             <summary>
             Enables or disables delete confirmation.
@@ -1757,9 +2116,12 @@
             %&gt;
             </code>
             </example>
-            <remarks>
-            The Enabled method is useful when you need to enable grid editing on certain conditions.
-            </remarks>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridEditingSettingsBuilder.FormHtmlAttributes(System.Object)">
+            <summary>
+            Gets the HTML attributes of the form rendered during editing
+            </summary>
+            <param name="attributes">The attributes.</param>
         </member>
         <member name="T:Telerik.Web.Mvc.UI.Fluent.GridTemplateColumnBuilder`1">
             <summary>
@@ -1803,6 +2165,20 @@
              &lt;%= Html.Telerik().Grid(Model)
                         .Name("Grid")
                         .Columns(columns => columns.Bound(o => o.OrderID).HeaderHtmlAttributes(new {@class="order-header"}))
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridColumnBuilderBase`2.FooterHtmlAttributes(System.Object)">
+            <summary>
+            Sets the HTML attributes applied to the footer cell of the column.
+            </summary>
+            <param name="attributes">The attributes.</param>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().Grid(Model)
+                        .Name("Grid")
+                        .Columns(columns => columns.Bound(o => o.OrderID).FooterHtmlAttributes(new {@class="order-footer"}))
             %&gt;
             </code>
             </example>
@@ -1894,6 +2270,42 @@
             </code>
             </example>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridColumnBuilderBase`2.HeaderTemplate(System.Action)">
+            <summary>
+            Sets the header template for the column.
+            </summary>
+            <param name="template">The action defining the template.</param>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridColumnBuilderBase`2.HeaderTemplate(System.String)">
+            <summary>
+            Sets the header template for the column.
+            </summary>
+            <param name="template">The string defining the template.</param>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridColumnBuilderBase`2.HeaderTemplate(System.Func{System.Object,System.Object})">
+            <summary>
+            Sets the header template for the column.
+            </summary>
+            <param name="template">The action defining the template.</param>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridColumnBuilderBase`2.FooterTemplate(System.Action)">
+            <summary>
+            Sets the footer template for the column.
+            </summary>
+            <param name="template">The action defining the template.</param>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridColumnBuilderBase`2.FooterTemplate(System.String)">
+            <summary>
+            Sets the footer template for the column.
+            </summary>
+            <param name="template">The string defining the template.</param>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridColumnBuilderBase`2.FooterTemplate(System.Func{System.Object,System.Object})">
+            <summary>
+            Sets the footer template for the column.
+            </summary>
+            <param name="template">The action defining the template.</param>
+        </member>
         <member name="P:Telerik.Web.Mvc.UI.Fluent.GridColumnBuilderBase`2.Column">
             <summary>
             Gets or sets the column.
@@ -1920,6 +2332,12 @@
             </summary>
             <param name="attributes">The Image HTML attributes.</param>
             <returns></returns>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridGroupingSettingsBuilder`1.Visible(System.Boolean)">
+            <summary>
+            Determines if group header should be shown.
+            </summary>
+            <param name="value">true if visible, otherwise false.</param>
         </member>
         <member name="P:Telerik.Web.Mvc.Infrastructure.Implementation.Expressions.ExpressionBuilderOptions.LiftMemberAccessToNull">
             <summary>
@@ -2766,6 +3184,13 @@
             </summary>
             <param name="attributes">The HTML attributes.</param>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.TextBoxBuilderBase`3.Enable(System.Boolean)">
+            <summary>
+            Enables or disables the textbox.
+            </summary>
+            <param name="allowSpinner"></param>
+            <returns></returns>
+        </member>
         <!-- Badly formed XML comment ignored for member "M:Telerik.Web.Mvc.UI.IntegerTextBoxBuilder.#ctor(Telerik.Web.Mvc.UI.IntegerTextBox)" -->
         <member name="T:Telerik.Web.Mvc.UI.PercentTextBoxBuilder">
             <summary>
@@ -2839,29 +3264,6 @@
         </member>
         <member name="M:Telerik.Web.Mvc.Infrastructure.QueryableFactory.CreateQueryable(System.Collections.IEnumerable)">
             <exception cref="T:System.ArgumentNullException"><c>source</c> is null.</exception>
-        </member>
-        <member name="M:Telerik.Web.Mvc.Infrastructure.IServiceLocator.Resolve``1">
-            <summary>
-            Resolves this instance.
-            </summary>
-            <typeparam name="TService">The type of the service.</typeparam>
-            <returns></returns>
-        </member>
-        <member name="M:Telerik.Web.Mvc.Infrastructure.IServiceLocator.Register``1(``0)">
-            <summary>
-            Registers the specified service as singleton.
-            </summary>
-            <typeparam name="TService">The type of the service.</typeparam>
-            <param name="service">The service.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Telerik.Web.Mvc.Infrastructure.IServiceLocator.Register``1(System.Func{Telerik.Web.Mvc.Infrastructure.IServiceLocator,System.Object})">
-            <summary>
-            Registers the specified factory.
-            </summary>
-            <typeparam name="TService">The type of the service.</typeparam>
-            <param name="factory">The factory.</param>
-            <returns></returns>
         </member>
         <member name="M:Telerik.Web.Mvc.Infrastructure.Implementation.UrlAuthorization.InternalSiteMapNode.IsAccessibleToUser(System.Web.HttpContextBase)">
             ReSharper disable UnusedParameter.Local
@@ -3072,45 +3474,6 @@
             <exception cref="T:System.ArgumentNullException"> 
             <paramref name="source"/> is null.
             </exception>
-        </member>
-        <member name="T:Telerik.Web.Mvc.Infrastructure.Implementation.ServiceLocatorImpl">
-            <summary>
-            Default Service locator.
-            </summary>
-        </member>
-        <member name="M:Telerik.Web.Mvc.Infrastructure.Implementation.ServiceLocatorImpl.#ctor(System.Boolean)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Telerik.Web.Mvc.Infrastructure.Implementation.ServiceLocatorImpl"/> class.
-            </summary>
-            <param name="debugMode">if set to <c>true</c> [debug mode].</param>
-        </member>
-        <member name="M:Telerik.Web.Mvc.Infrastructure.Implementation.ServiceLocatorImpl.Resolve``1">
-            <summary>
-            Resolves this instance.
-            </summary>
-            <typeparam name="TService">The type of the service.</typeparam>
-            <returns></returns>
-        </member>
-        <member name="M:Telerik.Web.Mvc.Infrastructure.Implementation.ServiceLocatorImpl.Register``1(``0)">
-            <summary>
-            Registers the specified service as singleton.
-            </summary>
-            <typeparam name="TService">The type of the service.</typeparam>
-            <param name="service">The service.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Telerik.Web.Mvc.Infrastructure.Implementation.ServiceLocatorImpl.Register``1(System.Func{Telerik.Web.Mvc.Infrastructure.IServiceLocator,System.Object})">
-            <summary>
-            Registers the specified factory.
-            </summary>
-            <typeparam name="TService">The type of the service.</typeparam>
-            <param name="factory">The factory.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Telerik.Web.Mvc.Infrastructure.Implementation.ServiceLocatorImpl.DisposeCore">
-            <summary>
-            Disposes the resources.
-            </summary>
         </member>
         <member name="T:Telerik.Web.Mvc.PopulateSiteMapAttribute">
             <summary>
@@ -3787,6 +4150,12 @@
             <param name="routeName">Name of the route.</param>
             <returns></returns>
         </member>
+        <member name="M:Telerik.Web.Mvc.SiteMapNodeBuilder.Action(System.Web.Routing.RouteValueDictionary)">
+            <summary>
+            Sets the action to which the date should navigate
+            </summary>
+            <param name="routeValues">The route values of the Action method.</param>
+        </member>
         <member name="M:Telerik.Web.Mvc.SiteMapNodeBuilder.Action(System.String,System.String,System.Web.Routing.RouteValueDictionary)">
             <summary>
             Sets the action, controller and route values.
@@ -3921,14 +4290,6 @@
             <summary>
             Xml file based sitemap.
             </summary>
-        </member>
-        <member name="M:Telerik.Web.Mvc.XmlSiteMap.#ctor(Telerik.Web.Mvc.Infrastructure.IPathResolver,Telerik.Web.Mvc.Infrastructure.IFileSystem,Telerik.Web.Mvc.Infrastructure.ICacheManager)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Telerik.Web.Mvc.XmlSiteMap"/> class.
-            </summary>
-            <param name="pathResolver">The path resolver.</param>
-            <param name="fileSystem">The file system.</param>
-            <param name="cacheManager">The cache manager.</param>
         </member>
         <member name="M:Telerik.Web.Mvc.XmlSiteMap.#ctor">
             <summary>
@@ -4140,6 +4501,12 @@
             </summary>
             <param name="dates">List of <see cref="T:System.DateTime"/> objects</param>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.CalendarSelectionSettingsBuilder.Action(System.Web.Routing.RouteValueDictionary)">
+            <summary>
+            Sets the action to which the date should navigate
+            </summary>
+            <param name="routeValues">The route values of the Action method.</param>
+        </member>
         <member name="M:Telerik.Web.Mvc.UI.CalendarSelectionSettingsBuilder.Action(System.String,System.Object)">
             <summary>
             Sets the action to which the date should navigate
@@ -4225,6 +4592,16 @@
             Gets the template of the column.
             </summary>
         </member>
+        <member name="P:Telerik.Web.Mvc.UI.GridColumnBase`1.HeaderTemplate">
+            <summary>
+            Gets the header template of the column.
+            </summary>
+        </member>
+        <member name="P:Telerik.Web.Mvc.UI.GridColumnBase`1.FooterTemplate">
+            <summary>
+            Gets the footer template of the column.
+            </summary>
+        </member>
         <member name="P:Telerik.Web.Mvc.UI.GridColumnBase`1.Title">
             <summary>
             Gets or sets the title of the column.
@@ -4251,6 +4628,12 @@
             Gets the header HTML attributes.
             </summary>
             <value>The header HTML attributes.</value>
+        </member>
+        <member name="P:Telerik.Web.Mvc.UI.GridColumnBase`1.FooterHtmlAttributes">
+            <summary>
+            Gets the footer HTML attributes.
+            </summary>
+            <value>The footer HTML attributes.</value>
         </member>
         <member name="P:Telerik.Web.Mvc.UI.GridColumnBase`1.Visible">
             <summary>
@@ -4308,6 +4691,23 @@
             <remarks>
             The Enabled method is useful when you need to enable binding based on certain conditions.
             </remarks>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridBindingSettingsBuilder.Select(System.Web.Routing.RouteValueDictionary)">
+            <summary>
+            Sets the action, controller and route values for the select operation
+            </summary>
+            <param name="routeValues">The route values of the Action method.</param>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().Grid(Model)
+                        .Name("Grid")
+                        .DataBinding(dataBinding => 
+                        {
+                            dataBinding.Ajax().Select(MVC.Home.Index().GetRouteValueDictionary());
+                        })
+            %&gt;
+            </code>
+            </example>
         </member>
         <member name="M:Telerik.Web.Mvc.UI.Fluent.GridBindingSettingsBuilder.Select(System.String,System.String,System.Web.Routing.RouteValueDictionary)">
             <summary>
@@ -4431,6 +4831,23 @@
                         .DataBinding(dataBinding => 
                         {
                             dataBinding.Ajax().Select&lt;HomeController&gt;(controller => controller.Index()));
+                        })
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridBindingSettingsBuilder.Insert(System.Web.Routing.RouteValueDictionary)">
+            <summary>
+            Sets the action, controller and route values for the insert operation
+            </summary>
+            <param name="routeValues">The route values of the Action method.</param>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().Grid(Model)
+                        .Name("Grid")
+                        .DataBinding(dataBinding => 
+                        {
+                            dataBinding.Ajax().Insert(MVC.Home.Index(1).GetRouteValueDictionary());
                         })
             %&gt;
             </code>
@@ -4563,9 +4980,26 @@
             </code>
             </example>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridBindingSettingsBuilder.Update(System.Web.Routing.RouteValueDictionary)">
+            <summary>
+            Sets the action, controller and route values for the update operation
+            </summary>
+            <param name="routeValues">The route values of the Action method.</param>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().Grid(Model)
+                        .Name("Grid")
+                        .DataBinding(dataBinding => 
+                        {
+                            dataBinding.Ajax().Update(MVC.Home.Index(1).GetRouteValueDictionary());
+                        })
+            %&gt;
+            </code>
+            </example>
+        </member>
         <member name="M:Telerik.Web.Mvc.UI.Fluent.GridBindingSettingsBuilder.Update(System.String,System.String,System.Web.Routing.RouteValueDictionary)">
             <summary>
-            Sets the action, controller and route values for delete operation
+            Sets the action, controller and route values for update operation
             </summary>
             <param name="actionName">Name of the action.</param>
             <param name="controllerName">Name of the controller.</param>
@@ -4576,7 +5010,7 @@
                         .Name("Grid")
                         .DataBinding(dataBinding => 
                         {
-                            dataBinding.Ajax().Insert("Index", "Home", new RouteValueDictionary{ {"id", 1} });
+                            dataBinding.Ajax().Update(MVC.Home.Index(1).GetRouteValueDictionary());
                         })
             %&gt;
             </code>
@@ -4685,6 +5119,23 @@
                         .DataBinding(dataBinding => 
                         {
                             dataBinding.Ajax().Update&lt;HomeController&gt;(controller => controller.Index()));
+                        })
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridBindingSettingsBuilder.Delete(System.Web.Routing.RouteValueDictionary)">
+            <summary>
+            Sets the action, controller and route values for the delete operation
+            </summary>
+            <param name="routeValues">The route values of the Action method.</param>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().Grid(Model)
+                        .Name("Grid")
+                        .DataBinding(dataBinding => 
+                        {
+                            dataBinding.Ajax().Delete(MVC.Home.Index(1).GetRouteValueDictionary());
                         })
             %&gt;
             </code>
@@ -4887,25 +5338,30 @@
             </code>
             </example>
         </member>
-        <member name="T:Telerik.Web.Mvc.UI.Fluent.GridDataKeyBuilder`2">
+        <member name="T:Telerik.Web.Mvc.UI.Fluent.GridDataKeyBuilder`1">
             <summary>
             Defines the fluent interface for configuring the data key.
             </summary>
             <typeparam name="TModel">The type of the model</typeparam>
-            <typeparam name="TValue">The type of the value.</typeparam>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridDataKeyBuilder`2.#ctor(Telerik.Web.Mvc.UI.GridDataKey{`0,`1})">
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridDataKeyBuilder`1.#ctor(Telerik.Web.Mvc.UI.IGridDataKey{`0})">
             <summary>
-            Initializes a new instance of the <see cref="T:Telerik.Web.Mvc.UI.Fluent.GridDataKeyBuilder`2"/> class.
+            Initializes a new instance of the <see cref="T:Telerik.Web.Mvc.UI.Fluent.GridDataKeyBuilder`1"/> class.
             </summary>
             <param name="dataKey">The dataKey.</param>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridDataKeyBuilder`2.RouteKey(System.String)">
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridDataKeyBuilder`1.RouteKey(System.String)">
             <summary>
             Sets the RouteKey.
             </summary>
             <param name="value">The value.</param>
             <returns></returns>
+        </member>
+        <member name="P:Telerik.Web.Mvc.UI.GridEditingSettings.FormHtmlAttributes">
+            <summary>
+            Gets the HTML attributes of the form rendered during editing
+            </summary>
+            <value>The HTML attributes.</value>
         </member>
         <member name="T:Telerik.Web.Mvc.UI.Fluent.GridDataKeyFactory`1">
             <summary>
@@ -5031,6 +5487,284 @@
             </code>
             </example>
         </member>
+        <member name="T:Telerik.Web.Mvc.UI.TimePickerClientEventsBuilder">
+            <summary>
+            Defines the fluent interface for configuring timepicker client events.
+            </summary>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.TimePickerClientEventsBuilder.#ctor(Telerik.Web.Mvc.UI.TimePickerClientEvents,System.Web.Mvc.ViewContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Telerik.Web.Mvc.UI.TimePickerClientEventsBuilder"/> class.
+            </summary>
+            <param name="clientEvents">Timepicker client-side events.</param>
+            <param name="viewContext">The context of the View.</param>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.TimePickerClientEventsBuilder.OnChange(System.Action)">
+            <summary>
+            Defines the inline handler of the OnChange client-side event
+            </summary>
+            <param name="onChangeAction">The action defining the inline handler.</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().TimePicker()
+                       .Name("TimePicker")
+                       .ClientEvents(events => events.OnChange(() =>
+                       {
+                            %&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;%
+                       }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.TimePickerClientEventsBuilder.OnChange(System.String)">
+            <summary>
+             Defines the name of the JavaScript function that will handle the the OnChange client-side event.
+            </summary>
+            <param name="onChangeHandlerName">The name of the JavaScript function that will handle the event.</param>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().TimePicker()
+                        .Name("TimePicker")
+                        .ClientEvents(events => events.OnChange("onChange"))
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.TimePickerClientEventsBuilder.OnLoad(System.Action)">
+            <summary>
+            Defines the inline handler of the OnLoad client-side event
+            </summary>
+            <param name="onLoadAction">The action defining the inline handler.</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().TimePicker()
+                       .Name("TimePicker")
+                       .ClientEvents(events => events.OnLoad(() =>
+                       {
+                            %&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;%
+                       }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.TimePickerClientEventsBuilder.OnLoad(System.String)">
+            <summary>
+             Defines the name of the JavaScript function that will handle the the OnLoad client-side event.
+            </summary>
+            <param name="onLoadHandlerName">The name of the JavaScript function that will handle the event.</param>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().TimePicker()
+                        .Name("TimePicker")
+                        .ClientEvents(events => events.OnLoad("onLoad"))
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.TimePickerClientEventsBuilder.OnOpen(System.Action)">
+            <summary>
+            Defines the inline handler of the OnOpen client-side event
+            </summary>
+            <param name="onOpenAction">The action defining the inline handler.</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().TimePicker()
+                       .Name("TimePicker")
+                       .ClientEvents(events => events.OnOpen(() =>
+                       {
+                            %&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;%
+                       }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.TimePickerClientEventsBuilder.OnOpen(System.String)">
+            <summary>
+             Defines the name of the JavaScript function that will handle the the OnOpen client-side event.
+            </summary>
+            <param name="onOpenHandlerName">The name of the JavaScript function that will handle the event.</param>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().TimePicker()
+                        .Name("TimePicker")
+                        .ClientEvents(events => events.OnOpen("onOpen"))
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.TimePickerClientEventsBuilder.OnClose(System.Action)">
+            <summary>
+            Defines the inline handler of the OnClose client-side event
+            </summary>
+            <param name="onCloseAction">The action defining the inline handler.</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().TimePicker()
+                       .Name("TimePicker")
+                       .ClientEvents(events => events.OnClose(() =>
+                       {
+                            %&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;%
+                       }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.TimePickerClientEventsBuilder.OnClose(System.String)">
+            <summary>
+             Defines the name of the JavaScript function that will handle the the OnClose client-side event.
+            </summary>
+            <param name="onCloseHandlerName">The name of the JavaScript function that will handle the event.</param>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().TimePicker()
+                        .Name("TimePicker")
+                        .ClientEvents(events => events.OnClose("onClose"))
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="T:Telerik.Web.Mvc.UI.Fluent.TimePickerBuilder">
+            <summary>
+            Defines the fluent interface for configuring the <see cref="T:Telerik.Web.Mvc.UI.TimePicker"/> component.
+            </summary>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.TimePickerBuilder.#ctor(Telerik.Web.Mvc.UI.TimePicker)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Telerik.Web.Mvc.UI.Fluent.TimePickerBuilder"/> class.
+            </summary>
+            <param name="component">The component.</param>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.TimePickerBuilder.ClientEvents(System.Action{Telerik.Web.Mvc.UI.TimePickerClientEventsBuilder})">
+            <summary>
+            Configures the client-side events.
+            </summary>
+            <param name="configurator">The client events action.</param>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().TimePicker()
+                        .Name("TimePicker")
+                        .ClientEvents(events =>
+                            events.OnLoad("onLoad").OnChange("onChange")
+                        )
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.TimePickerBuilder.Effects(System.Action{Telerik.Web.Mvc.UI.EffectsBuilder})">
+            <summary>
+            Configures the effects of the timepicker.
+            </summary>
+            <param name="condigurator">The action which configures the effects.</param>
+            <example>
+            <code lang="CS">
+            &lt;%= Html.Telerik().TimePicker()
+                       .Name("TimePicker")
+                       .Effects(fx =>
+                       {
+            	            fx.Height()
+            		          .Opacity()
+            				  .OpenDuration(AnimationDuration.Normal)
+            				  .CloseDuration(AnimationDuration.Normal);
+                       })
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.TimePickerBuilder.Format(System.String)">
+            <summary>
+            Sets the time format, which will be used to parse and format the <see cref="T:System.DateTime"/>.
+            </summary>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.TimePickerBuilder.InputHtmlAttributes(System.Object)">
+            <summary>
+            Sets the Input HTML attributes.
+            </summary>
+            <param name="attributes">The HTML attributes.</param>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.TimePickerBuilder.Enable(System.Boolean)">
+            <summary>
+            Sets whether timepicker to be enabled.
+            </summary>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.TimePickerBuilder.Value(System.Nullable{System.DateTime})">
+            <summary>
+            Sets the value of the timepicker input
+            </summary>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.TimePickerBuilder.Value(System.Nullable{System.TimeSpan})">
+            <summary>
+            Sets the value of the timepicker input
+            </summary>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.TimePickerBuilder.Value(System.String)">
+            <summary>
+            Sets the value of the timepicker input
+            </summary>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.TimePickerBuilder.Min(System.DateTime)">
+            <summary>
+            Sets the minimum time, which can be selected in timepicker
+            </summary>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.TimePickerBuilder.Min(System.TimeSpan)">
+            <summary>
+            Sets the minimum time, which can be selected in timepicker
+            </summary>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.TimePickerBuilder.Min(System.String)">
+            <summary>
+            Sets the minimum time, which can be selected in timepicker
+            </summary>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.TimePickerBuilder.Max(System.DateTime)">
+            <summary>
+            Sets the maximum time, which can be selected in timepicker
+            </summary>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.TimePickerBuilder.Max(System.TimeSpan)">
+            <summary>
+            Sets the maximum time, which can be selected in timepicker
+            </summary>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.TimePickerBuilder.Max(System.String)">
+            <summary>
+            Sets the maximum time, which can be selected in timepicker
+            </summary>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.TimePickerBuilder.Interval(System.Int32)">
+            <summary>
+            Sets the interval between hours.
+            </summary>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.TimePickerBuilder.ShowButton(System.Boolean)">
+            <summary>
+            Sets whether timepicker to be rendered with button, which shows timeview on click.
+            </summary>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.TimePickerBuilder.ButtonTitle(System.String)">
+            <summary>
+            Sets the title of the timepicker button.
+            </summary>
+        </member>
         <member name="T:Telerik.Web.Mvc.UI.Fluent.TreeViewDragAndDropSettingsBuilder">
             <summary>
             Defines the fluent interface for configuring TreeView drag&amp;drop.
@@ -5083,6 +5817,23 @@
             <remarks>
             The Enabled method is useful when you need to enable binding based on certain conditions.
             </remarks>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.TreeViewBindingSettingsBuilder.Select(System.Web.Routing.RouteValueDictionary)">
+            <summary>
+            Sets the action, controller and route values
+            </summary>
+            <param name="routeValues">The route values of the Action method.</param>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().Grid(Model)
+                        .Name("Grid")
+                        .DataBinding(dataBinding => 
+                        {
+                            dataBinding.Ajax().Select(MVC.Home.Index(1).GetRouteValueDictionary());
+                        })
+            %&gt;
+            </code>
+            </example>
         </member>
         <member name="M:Telerik.Web.Mvc.UI.Fluent.TreeViewBindingSettingsBuilder.Select(System.String,System.String,System.Web.Routing.RouteValueDictionary)">
             <summary>
@@ -5238,11 +5989,6 @@
             %&gt;
             </code>
             </example>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.Fluent.TreeViewBuilder.Theme(System.String)">
-            <summary>
-            Sets the theme of the TreeView
-            </summary>
         </member>
         <member name="M:Telerik.Web.Mvc.UI.Fluent.TreeViewBuilder.BindTo(System.String,System.Action{Telerik.Web.Mvc.UI.TreeViewItem,Telerik.Web.Mvc.SiteMapNode})">
             <summary>
@@ -6131,6 +6877,20 @@
             </code>
             </example>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.NavigationItemBuilder`2.Action(System.Web.Routing.RouteValueDictionary)">
+            <summary>
+            Sets the action to which the item should navigate
+            </summary>
+            <param name="routeValues">The route values of the Action method.</param>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().Menu()
+                        .Name("Menu")
+                        .Items(items => items.Add().Text("Index").Action(MVC.Home.Index(3).GetRouteValueDictionary()))
+            %&gt;
+            </code>
+            </example>
+        </member>
         <member name="M:Telerik.Web.Mvc.UI.NavigationItemBuilder`2.Action(System.String,System.String,System.Web.Routing.RouteValueDictionary)">
             <summary>
             Sets the action to which the item should navigate
@@ -6539,11 +7299,6 @@
             </summary>
             <value>The client events.</value>
         </member>
-        <member name="P:Telerik.Web.Mvc.UI.TreeView.Theme">
-            <summary>
-            Gets or sets the theme.
-            </summary>
-        </member>
         <member name="P:Telerik.Web.Mvc.UI.TreeView.Items">
             <summary>
             Gets the items of the treeview.
@@ -6603,23 +7358,18 @@
             The action which will output the content.
             </summary>
         </member>
-        <member name="T:Telerik.Web.Mvc.UI.DatePickerBuilder">
+        <member name="T:Telerik.Web.Mvc.UI.Fluent.DatePickerBuilder">
             <summary>
             Defines the fluent interface for configuring the <see cref="T:Telerik.Web.Mvc.UI.DatePicker"/> component.
             </summary>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.DatePickerBuilder.#ctor(Telerik.Web.Mvc.UI.DatePicker)">
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DatePickerBuilder.#ctor(Telerik.Web.Mvc.UI.DatePicker)">
             <summary>
-            Initializes a new instance of the <see cref="T:Telerik.Web.Mvc.UI.PanelBarBuilder"/> class.
+            Initializes a new instance of the <see cref="T:Telerik.Web.Mvc.UI.Fluent.DatePickerBuilder"/> class.
             </summary>
             <param name="component">The component.</param>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.DatePickerBuilder.Theme(System.String)">
-            <summary>
-            Sets the theme of the datepicker
-            </summary>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.DatePickerBuilder.Effects(System.Action{Telerik.Web.Mvc.UI.EffectsBuilder})">
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DatePickerBuilder.Effects(System.Action{Telerik.Web.Mvc.UI.EffectsBuilder})">
             <summary>
             Configures the effects of the datepicker.
             </summary>
@@ -6638,52 +7388,52 @@
             </code>
             </example>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.DatePickerBuilder.ShowButton(System.Boolean)">
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DatePickerBuilder.ShowButton(System.Boolean)">
             <summary>
-            Sets whether datepicker to be rendered with button, which shows calendar on click
+            Sets whether datepicker to be rendered with button, which shows calendar on click.
             </summary>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.DatePickerBuilder.ButtonTitle(System.String)">
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DatePickerBuilder.ButtonTitle(System.String)">
             <summary>
             Sets the title of the datepicker button.
             </summary>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.DatePickerBuilder.Format(System.String)">
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DatePickerBuilder.Format(System.String)">
             <summary>
             Sets the date format, which will be used to parse and format the machine date.
             </summary>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.DatePickerBuilder.Value(System.Nullable{System.DateTime})">
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DatePickerBuilder.Value(System.Nullable{System.DateTime})">
             <summary>
             Sets the value of the datepicker input
             </summary>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.DatePickerBuilder.Value(System.String)">
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DatePickerBuilder.Value(System.String)">
             <summary>
             Sets the value of the datepicker input
             </summary>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.DatePickerBuilder.MinDate(System.DateTime)">
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DatePickerBuilder.Min(System.DateTime)">
             <summary>
             Sets the minimal date, which can be selected in DatePicker.
             </summary>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.DatePickerBuilder.MinDate(System.String)">
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DatePickerBuilder.Min(System.String)">
             <summary>
             Sets the minimal date, which can be selected in DatePicker.
             </summary>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.DatePickerBuilder.MaxDate(System.DateTime)">
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DatePickerBuilder.Max(System.DateTime)">
             <summary>
             Sets the maximal date, which can be selected in DatePicker.
             </summary>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.DatePickerBuilder.MaxDate(System.String)">
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DatePickerBuilder.Max(System.String)">
             <summary>
             Sets the maximal date, which can be selected in DatePicker.
             </summary>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.DatePickerBuilder.ClientEvents(System.Action{Telerik.Web.Mvc.UI.DatePickerClientEventsBuilder})">
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DatePickerBuilder.ClientEvents(System.Action{Telerik.Web.Mvc.UI.Fluent.DatePickerClientEventsBuilder})">
             <summary>
             Configures the client-side events.
             </summary>
@@ -6699,29 +7449,36 @@
             </code>
             </example>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.DatePickerBuilder.InputHtmlAttributes(System.Object)">
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DatePickerBuilder.InputHtmlAttributes(System.Object)">
             <summary>
             Sets the Input HTML attributes.
             </summary>
             <param name="attributes">The HTML attributes.</param>
         </member>
-        <member name="T:Telerik.Web.Mvc.UI.DatePickerClientEventsBuilder">
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DatePickerBuilder.Enable(System.Boolean)">
+            <summary>
+            Enables or disables the datepicker.
+            </summary>
+            <param name="allowSpinner"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Telerik.Web.Mvc.UI.Fluent.DatePickerClientEventsBuilder">
             <summary>
             Defines the fluent interface for configuring datepicker client events.
             </summary>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.DatePickerClientEventsBuilder.#ctor(Telerik.Web.Mvc.UI.DatePickerClientEvents,System.Web.Mvc.ViewContext)">
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DatePickerClientEventsBuilder.#ctor(Telerik.Web.Mvc.UI.DatePickerClientEvents,System.Web.Mvc.ViewContext)">
             <summary>
-            Initializes a new instance of the <see cref="T:Telerik.Web.Mvc.UI.DatePickerClientEventsBuilder"/> class.
+            Initializes a new instance of the <see cref="T:Telerik.Web.Mvc.UI.Fluent.DatePickerClientEventsBuilder"/> class.
             </summary>
             <param name="clientEvents">Datepicker client-side events.</param>
             <param name="viewContext">The context of the View.</param>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.DatePickerClientEventsBuilder.OnChange(System.Action)">
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DatePickerClientEventsBuilder.OnChange(System.Action)">
             <summary>
-            Defines the inline handler of the OnSelect client-side event
+            Defines the inline handler of the OnChange client-side event
             </summary>
-            <param name="onSelectAction">The action defining the inline handler.</param>
+            <param name="onChangeAction">The action defining the inline handler.</param>
             <example>
             <code lang="CS">
              &lt;% Html.Telerik().DatePicker()
@@ -6739,11 +7496,11 @@
             </code>
             </example>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.DatePickerClientEventsBuilder.OnChange(System.String)">
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DatePickerClientEventsBuilder.OnChange(System.String)">
             <summary>
-             Defines the name of the JavaScript function that will handle the the OnSelect client-side event.
+             Defines the name of the JavaScript function that will handle the the OnChange client-side event.
             </summary>
-            <param name="onSelectHandlerName">The name of the JavaScript function that will handle the event.</param>
+            <param name="onChangeHandlerName">The name of the JavaScript function that will handle the event.</param>
             <example>
             <code lang="CS">
              &lt;%= Html.Telerik().DatePicker()
@@ -6753,7 +7510,7 @@
             </code>
             </example>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.DatePickerClientEventsBuilder.OnLoad(System.Action)">
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DatePickerClientEventsBuilder.OnLoad(System.Action)">
             <summary>
             Defines the inline handler of the OnLoad client-side event
             </summary>
@@ -6775,7 +7532,7 @@
             </code>
             </example>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.DatePickerClientEventsBuilder.OnLoad(System.String)">
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DatePickerClientEventsBuilder.OnLoad(System.String)">
             <summary>
              Defines the name of the JavaScript function that will handle the the OnLoad client-side event.
             </summary>
@@ -6789,11 +7546,11 @@
             </code>
             </example>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.DatePickerClientEventsBuilder.OnOpen(System.Action)">
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DatePickerClientEventsBuilder.OnOpen(System.Action)">
             <summary>
-            Defines the inline handler of the OnPopupOpen client-side event
+            Defines the inline handler of the OnOpen client-side event
             </summary>
-            <param name="onLoadAction">The action defining the inline handler.</param>
+            <param name="onOpenInlineCode">The action defining the inline handler.</param>
             <example>
             <code lang="CS">
              &lt;% Html.Telerik().DatePicker()
@@ -6811,11 +7568,11 @@
             </code>
             </example>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.DatePickerClientEventsBuilder.OnOpen(System.String)">
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DatePickerClientEventsBuilder.OnOpen(System.String)">
             <summary>
-             Defines the name of the JavaScript function that will handle the the OnPopupOpen client-side event.
+             Defines the name of the JavaScript function that will handle the OnOpen client-side event.
             </summary>
-            <param name="onLoadHandlerName">The name of the JavaScript function that will handle the event.</param>
+            <param name="onOpenHandlerName">The name of the JavaScript function that will handle the event.</param>
             <example>
             <code lang="CS">
              &lt;%= Html.Telerik().DatePicker()
@@ -6825,11 +7582,11 @@
             </code>
             </example>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.DatePickerClientEventsBuilder.OnClose(System.Action)">
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DatePickerClientEventsBuilder.OnClose(System.Action)">
             <summary>
-            Defines the inline handler of the OnPopupClose client-side event
+            Defines the inline handler of the OnClose client-side event
             </summary>
-            <param name="onLoadAction">The action defining the inline handler.</param>
+            <param name="onCloseInlineCode">The action defining the inline handler.</param>
             <example>
             <code lang="CS">
              &lt;% Html.Telerik().DatePicker()
@@ -6847,11 +7604,11 @@
             </code>
             </example>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.DatePickerClientEventsBuilder.OnClose(System.String)">
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DatePickerClientEventsBuilder.OnClose(System.String)">
             <summary>
-             Defines the name of the JavaScript function that will handle the the OnPopupClose client-side event.
+             Defines the name of the JavaScript function that will handle the OnClose client-side event.
             </summary>
-            <param name="onLoadHandlerName">The name of the JavaScript function that will handle the event.</param>
+            <param name="onCloseHandlerName">The name of the JavaScript function that will handle the event.</param>
             <example>
             <code lang="CS">
              &lt;%= Html.Telerik().DatePicker()
@@ -6860,6 +7617,24 @@
             %&gt;
             </code>
             </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ContentNavigationItemBuilder`2.LoadContentFrom(System.Web.Routing.RouteValueDictionary)">
+             <summary>
+             Sets the Url, which will be requested to return the content. 
+             </summary>
+             <param name="routeValues">The route values of the Action method.</param>
+             <example>
+             <code lang="CS">
+              &lt;%= Html.Telerik().PanelBar()
+                     .Name("PanelBar")
+                     .Items(parent => {
+            
+                          parent.Add()
+                                .LoadContentFrom(MVC.Home.Index().GetRouteValueDictionary());
+                      })
+             %&gt;
+             </code>
+             </example>
         </member>
         <member name="M:Telerik.Web.Mvc.UI.ContentNavigationItemBuilder`2.LoadContentFrom(System.String,System.String)">
              <summary>
@@ -6977,6 +7752,20 @@
              &lt;%= Html.Telerik().Grid(Model)
                         .Name("Grid")
                         .Ajax(ajax => ajax.Route("Default"))
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridRequestSettingsBuilderBase`2.Action(System.Web.Routing.RouteValueDictionary)">
+            <summary>
+            Sets the action, controller and route values
+            </summary>
+            <param name="routeValues">The route values of the Action method.</param>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().Grid(Model)
+                        .Name("Grid")
+                        .Ajax(ajax => ajax.Action(MVC.Home.Index(1).GetRouteValueDictionary()))
             %&gt;
             </code>
             </example>
@@ -7154,6 +7943,12 @@
             </code>
             </example>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridBoundColumnBuilder`1.EditorTemplateName(System.String)">
+            <summary>
+            Specify which editor template should be used for the column
+            </summary>
+            <param name="templateName">name of the editor template</param>
+        </member>
         <member name="M:Telerik.Web.Mvc.UI.Fluent.GridBoundColumnBuilder`1.Sortable(System.Boolean)">
             <summary>
             Enables or disables sorting the column. All bound columns are sortable by default.
@@ -7206,7 +8001,31 @@
             </code>
             </example>        
         </member>
-        <!-- Badly formed XML comment ignored for member "M:Telerik.Web.Mvc.UI.Fluent.GridBoundColumnBuilder`1.Template(System.Action{`0})" -->
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridBoundColumnBuilder`1.Template(System.Action{`0})">
+            <summary>
+            Sets the template for the column.
+            </summary>
+            <param name="templateAction">The action defining the template.</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().Grid(Model)
+                       .Name("Grid")
+                       .Columns(columns => columns
+                                .Add(c => c.CustomerID)
+                                .Template(() => 
+                                { 
+                                    %&gt;
+                                     &gt;img 
+                                        alt="&lt;%= c.CustomerID %&gt;" 
+                                        src="&lt;%= Url.Content("~/Content/Grid/Customers/" + c.CustomerID + ".jpg") %&gt;" 
+                                     /&gt;
+                                    &lt;% 
+                                }).Title("Picture");)
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
         <member name="T:Telerik.Web.Mvc.UI.Fluent.GridClientEventsBuilder">
             <summary>
             Defines the fluent interface for configuring the <see cref="P:Telerik.Web.Mvc.UI.Grid`1.ClientEvents"/>.
@@ -7439,7 +8258,7 @@
             <summary>
             Defines the inline handler of the OnColumnResize client-side event.
             </summary>
-            <param name="onLoadInlineCode">The action defining the inline handler.</param>
+            <param name="onColumnResizeInlineCode">The action defining the inline handler.</param>
             <example>
             <code lang="CS">
              &lt;% Html.Telerik().Grid(Model)
@@ -7461,12 +8280,48 @@
             <summary>
              Defines the name of the JavaScript function that will handle the the OnColumnResize client-side event.
             </summary>
-            <param name="onLoadHandlerName">The name of the JavaScript function that will handle the event.</param>
+            <param name="onColumnResizeHandlerName">The name of the JavaScript function that will handle the event.</param>
             <example>
             <code lang="CS">
              &lt;%= Html.Telerik().Grid(Model)
                         .Name("Grid")
                         .ClientEvents(events => events.OnColumnResize("onColumnResize"))
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridClientEventsBuilder.OnColumnReorder(System.Action)">
+            <summary>
+            Defines the inline handler of the OnColumnReorder client-side event.
+            </summary>
+            <param name="onColumnReorderInlineCode">The action defining the inline handler.</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().Grid(Model)
+                       .Name("Grid")
+                       .ClientEvents(events => events.OnColumnReorder(() =>
+                       {
+                            %&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;%
+                       }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridClientEventsBuilder.OnColumnReorder(System.String)">
+            <summary>
+             Defines the name of the JavaScript function that will handle the the OnColumnResize client-side event.
+            </summary>
+            <param name="onColumnReorderHandlerName">The name of the JavaScript function that will handle the event.</param>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().Grid(Model)
+                        .Name("Grid")
+                        .ClientEvents(events => events.OnColumnReorder("onColumnReorder"))
             %&gt;
             </code>
             </example>
@@ -8098,20 +8953,12 @@
             <param name="action">The action.</param>
             <returns></returns>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.IClientSideObjectWriter.Append(System.String,System.Collections.Generic.IList{System.String})">
+        <member name="M:Telerik.Web.Mvc.UI.IClientSideObjectWriter.Append(System.String,Telerik.Web.Mvc.UI.HtmlTemplate)">
             <summary>
             Appends the specified name and value to the end of this instance.
             </summary>
             <param name="name">The name.</param>
-            <param name="values">The values.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.IClientSideObjectWriter.Append(System.String,System.Collections.Generic.IList{System.Int32})">
-            <summary>
-            Appends the specified name and value to the end of this instance.
-            </summary>
-            <param name="name">The name.</param>
-            <param name="values">The values.</param>
+            <param name="values">The HtmlTemplate.</param>
             <returns></returns>
         </member>
         <member name="M:Telerik.Web.Mvc.UI.IClientSideObjectWriter.AppendObject(System.String,System.Object)">
@@ -8186,7 +9033,7 @@
             </summary>
             <typeparam name="T">The type of the data item which the grid is bound to.</typeparam>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.Grid`1.#ctor(System.Web.Mvc.ViewContext,Telerik.Web.Mvc.UI.IClientSideObjectWriterFactory,Telerik.Web.Mvc.IUrlGenerator)">
+        <member name="M:Telerik.Web.Mvc.UI.Grid`1.#ctor(System.Web.Mvc.ViewContext,Telerik.Web.Mvc.UI.IClientSideObjectWriterFactory,Telerik.Web.Mvc.IUrlGenerator,Telerik.Web.Mvc.Infrastructure.ILocalizationService)">
             <summary>
             Initializes a new instance of the <see cref="T:Telerik.Web.Mvc.UI.Grid`1"/> class.
             </summary>
@@ -8305,6 +9152,20 @@
             </code>
             </example>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridBuilder`1.Reorderable(System.Action{Telerik.Web.Mvc.UI.Fluent.GridReorderingSettingsBuilder})">
+            <summary>
+            Configures the grid reordering settings
+            </summary>
+            <param name="configurator">Resizing settings configurator method</param>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().Grid(Model)
+                        .Name("Grid")
+                        .Reorderable(reordering => reordering.Columns(true))
+            %&gt;
+            </code>
+            </example>
+        </member>
         <member name="M:Telerik.Web.Mvc.UI.Fluent.GridBuilder`1.Localizable(System.String)">
             <summary>
             Sets the localization culture of the grid.
@@ -8368,7 +9229,7 @@
             <summary>
             Configure when to show footer of the grid.
             </summary>
-            <param name="visible">If it is true, the future is visible.</param>
+            <param name="visible">If it is true, the feature is visible.</param>
         </member>
         <member name="M:Telerik.Web.Mvc.UI.Fluent.GridBuilder`1.BindTo(System.Collections.Generic.IEnumerable{`0})">
             <summary>
@@ -8822,6 +9683,51 @@
             </code>
             </example>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridBuilder`1.NoRecordsTemplate(System.Action)">
+            <summary>
+            Sets the HTML content which the grid should display.
+            </summary>
+            <param name="value">The action which renders the message when grid has no data.</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().Grid()
+                       .Name("Grid")
+                       .NoRecordsTemplate(() => 
+                       { 
+                          %&gt;
+                                &lt;strong&gt; Hello World!!!;/strong&gt;
+                          &lt;% 
+                       })
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridBuilder`1.NoRecordsTemplate(System.Func{System.Object,System.Object})">
+            <summary>
+            Sets the empty message template which will be display if the grid has no data.
+            </summary>
+            <param name="value">The Razor inline message.</param>
+            <example>
+            <code lang="CS">
+             @(Html.Telerik().Grid()
+                       .Name("Grid")
+                       .NoRecordsTemplate(@&lt;strong&gt; Hello World!!!&lt;/strong&gt;))
+            </code>        
+            </example>
+            <returns></returns>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridBuilder`1.NoRecordsTemplate(System.String)">
+            <summary>
+            Sets the empty message template which will be display if the grid has no data.
+            </summary>
+            <param name="value">The action which renders the message when grid has no data.</param>
+            <code lang="CS">
+             &lt;%= Html.Telerik().Grid()
+                        .Name("Grid")
+                        .NoRecordsTemplate("&lt;strong&gt; Hello World!!!&lt;/strong&gt;")
+            %&gt;
+            </code>        
+        </member>
         <member name="T:Telerik.Web.Mvc.UI.Fluent.GridColumnFactory`1">
             <summary>
             Creates columns for the <see cref="T:Telerik.Web.Mvc.UI.Grid`1"/>.
@@ -8859,6 +9765,18 @@
             <summary>
             Defines a bound column.
             </summary>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridColumnFactory`1.AutoGenerate(System.Boolean)">
+            <summary>
+            Determines if columns should be automatically generated.
+            </summary>
+            <param name="shouldGenerate">If true columns should be generated, otherwise false.</param>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridColumnFactory`1.AutoGenerate(System.Action{Telerik.Web.Mvc.UI.GridColumnBase{`0}})">
+            <summary>
+            Determines if columns should be automatically generated.
+            </summary>
+            <param name="columnAction">Action which will be executed for each generated column.</param>
         </member>
         <member name="M:Telerik.Web.Mvc.UI.Fluent.GridColumnFactory`1.Add(System.Action{`0})">
             <summary>
@@ -8968,6 +9886,20 @@
              &lt;%= Html.Telerik().Grid(Model)
                         .Name("Grid")
                         .Pageable(paging => paging.PageSize(20))
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridPagerSettingsBuilder.PageTo(System.Int32)">
+            <summary>
+            Sets the current page of the grid.
+            </summary>
+            <param name="page">The page which the grid should display initially. Must be greater than zero.</param>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().Grid(Model)
+                        .Name("Grid")
+                        .Pageable(paging => paging.PageTo(2))
             %&gt;
             </code>
             </example>
@@ -9215,11 +10147,6 @@
             %&gt;
             </code>
             </example>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.MenuBuilder.Theme(System.String)">
-            <summary>
-            Sets the theme of the menu
-            </summary>
         </member>
         <member name="M:Telerik.Web.Mvc.UI.MenuBuilder.BindTo(System.String,System.Action{Telerik.Web.Mvc.UI.MenuItem,Telerik.Web.Mvc.SiteMapNode})">
             <summary>
@@ -9576,6 +10503,13 @@
             INavigatable extension for providing access to <see cref="T:Telerik.Web.Mvc.INavigatable"/>.
             </summary>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.NavigatableExtensions.Action(Telerik.Web.Mvc.INavigatable,System.Web.Routing.RouteValueDictionary)">
+            <summary>
+            Sets the action, controller name and route values of <see cref="T:Telerik.Web.Mvc.INavigatable"/> object.
+            </summary>
+            <param name="navigatable">The <see cref="T:Telerik.Web.Mvc.INavigatable"/> object.</param>
+            <param name="routeValues">The route values of the Action method.</param>
+        </member>
         <member name="M:Telerik.Web.Mvc.UI.NavigatableExtensions.Action(Telerik.Web.Mvc.INavigatable,System.String,System.String,System.Object)">
             <summary>
             Sets the action and controller name, along with Route values of <see cref="T:Telerik.Web.Mvc.INavigatable"/> object.
@@ -9678,11 +10612,6 @@
             %&gt;
             </code>
             </example>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.PanelBarBuilder.Theme(System.String)">
-            <summary>
-            Sets the theme of the panelbar
-            </summary>
         </member>
         <member name="M:Telerik.Web.Mvc.UI.PanelBarBuilder.ClientEvents(System.Action{Telerik.Web.Mvc.UI.PanelBarClientEventsBuilder})">
             <summary>
@@ -10619,32 +11548,523 @@
             Editor tool icon
             </summary>
         </member>
-        <member name="T:Telerik.Web.Mvc.UI.IWebAssetItemMerger">
+        <member name="T:Telerik.Web.Mvc.UI.ViewComponentFactory">
             <summary>
-            Defines the basic building block of web asset merging.
+            Provides the factory methods for creating Telerik View Components.
             </summary>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.IWebAssetItemMerger.Merge(System.String,System.String,System.Boolean,System.Boolean,Telerik.Web.Mvc.UI.WebAssetItemCollection)">
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.StyleSheetRegistrar">
             <summary>
-            Merges the specified assets.
+            Creates a <see cref="M:Telerik.Web.Mvc.UI.ViewComponentFactory.StyleSheetRegistrar"/>
             </summary>
-            <param name="contentType">Type of the content.</param>
-            <param name="assetHandlerPath">The asset handler path.</param>
-            <param name="isSecured">if set to <c>true</c> [is secured].</param>
-            <param name="canCompress">if set to <c>true</c> [can compress].</param>
-            <param name="assets">The assets.</param>
-            <returns></returns>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().StyleSheetRegistrar()
+                        .DefaultGroup(group =&gt; group
+                              group.Add("Site.css")
+                                   .Add("telerik.common.css")
+                                   .Add("telerik.vista.css")
+                                   .Compressed(true)
+                        )
+            %&gt;
+            </code>
+            </example>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.IWebAssetItemMerger.MergeGroup(System.String,System.String,System.Boolean,System.Boolean,Telerik.Web.Mvc.UI.WebAssetItemGroup)">
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.ScriptRegistrar">
             <summary>
-            Merges the specified asset group.
+            Creates a <see cref="M:Telerik.Web.Mvc.UI.ViewComponentFactory.ScriptRegistrar"/>
             </summary>
-            <param name="contentType">Type of the content.</param>
-            <param name="assetHandlerPath">The asset handler path.</param>
-            <param name="isSecured">if set to <c>true</c> [is secured].</param>
-            <param name="canCompress">if set to <c>true</c> [can compress].</param>
-            <param name="assets">The asset group.</param>
-            <returns></returns>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().ScriptRegistrar()
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.Menu">
+            <summary>
+            Creates a <see cref="M:Telerik.Web.Mvc.UI.ViewComponentFactory.Menu"/>
+            </summary>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().Menu()
+                        .Name("Menu")
+                        .Items(items =&gt; { /* add items here */ });
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.Editor">
+            <summary>
+            Creates a <see cref="M:Telerik.Web.Mvc.UI.ViewComponentFactory.Editor"/>
+            </summary>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().Editor()
+                        .Name("Editor");
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.Grid``1">
+            <summary>
+            Creates a new <see cref="M:Telerik.Web.Mvc.UI.ViewComponentFactory.Grid``1"/> bound to the specified data item type.
+            </summary>
+            <example>
+            <typeparam name="T">The type of the data item</typeparam>
+            <code lang="CS">
+             &lt;%= Html.Telerik().Grid&lt;Order&gt;()
+                        .Name("Grid")
+                        .BindTo(Model)
+            %&gt;
+            </code>
+            </example>
+            <remarks>
+            Do not forget to bind the grid using the <see cref="!:GridBuilder&lt;T&gt;.BindTo(System.String)"/> method when using this overload.
+            </remarks>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.Grid``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Creates a new <see cref="!:Telerik.Web.UI.Grid&lt;T&gt;"/> bound to the specified data source.
+            </summary>
+            <typeparam name="T">The type of the data item</typeparam>
+            <param name="dataSource">The data source.</param>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().Grid(Model)
+                        .Name("Grid")
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.Grid(System.Data.DataTable)">
+            <summary>
+            Creates a new <see cref="!:Telerik.Web.UI.Grid&lt;T&gt;"/> bound to a DataTable.
+            </summary>
+            <param name="dataSource">DataTable from which the grid instance will be bound</param>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.Grid(System.Data.DataView)">
+            <summary>
+            Creates a new <see cref="!:Telerik.Web.UI.Grid&lt;T&gt;"/> bound to a DataView.
+            </summary>
+            <param name="dataSource">DataView from which the grid instance will be bound</param>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.Grid``1(System.String)">
+            <summary>
+            Creates a new <see cref="!:Telerik.Web.UI.Grid&lt;T&gt;"/> bound an item in ViewData.
+            </summary>
+            <typeparam name="T">Type of the data item</typeparam>
+            <param name="dataSourceViewDataKey">The data source view data key.</param>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().Grid&lt;Order&gt;("orders")
+                        .Name("Grid")
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.TabStrip">
+            <summary>
+            Creates a new <see cref="M:Telerik.Web.Mvc.UI.ViewComponentFactory.TabStrip"/>.
+            </summary>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().TabStrip()
+                        .Name("TabStrip")
+                        .Items(items =&gt;
+                        {
+                            items.Add().Text("First");
+                            items.Add().Text("Second");
+                        })
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.DateTimePicker">
+            <summary>
+            Creates a new <see cref="M:Telerik.Web.Mvc.UI.ViewComponentFactory.DateTimePicker"/>.
+            </summary>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().DateTimePicker()
+                        .Name("DateTimePicker")
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.DatePicker">
+            <summary>
+            Creates a new <see cref="M:Telerik.Web.Mvc.UI.ViewComponentFactory.DatePicker"/>.
+            </summary>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().DatePicker()
+                        .Name("DatePicker")
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.TimePicker">
+            <summary>
+            Creates a new <see cref="M:Telerik.Web.Mvc.UI.ViewComponentFactory.TimePicker"/>.
+            </summary>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().TimePicker()
+                        .Name("TimePicker")
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.Calendar">
+            <summary>
+            Creates a new <see cref="M:Telerik.Web.Mvc.UI.ViewComponentFactory.Calendar"/>.
+            </summary>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().Calendar()
+                        .Name("Calendar")
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.PanelBar">
+            <summary>
+            Creates a new <see cref="M:Telerik.Web.Mvc.UI.ViewComponentFactory.PanelBar"/>.
+            </summary>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().PanelBar()
+                        .Name("PanelBar")
+                        .Items(items =&gt;
+                        {
+                            items.Add().Text("First");
+                            items.Add().Text("Second");
+                        })
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.TreeView">
+            <summary>
+            Creates a <see cref="M:Telerik.Web.Mvc.UI.ViewComponentFactory.TreeView"/>
+            </summary>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().TreeView()
+                        .Name("TreeView")
+                        .Items(items =&gt; { /* add items here */ });
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.NumericTextBox">
+            <summary>
+            Creates a new <see cref="M:Telerik.Web.Mvc.UI.ViewComponentFactory.NumericTextBox``1"/>.
+            </summary>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().NumericTextBox()
+                        .Name("NumericTextBox")
+            %&gt;
+            </code>
+            </example>
+            <returns>Returns <see cref="!:NumericTextBoxBuilder&lt;double&gt;"/>.</returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:Telerik.Web.Mvc.UI.ViewComponentFactory.NumericTextBox``1" -->
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.CurrencyTextBox">
+            <summary>
+            Creates a new <see cref="M:Telerik.Web.Mvc.UI.ViewComponentFactory.CurrencyTextBox"/>.
+            </summary>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().CurrencyTextBox()
+                        .Name("CurrencyTextBox")
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.PercentTextBox">
+            <summary>
+            Creates a new <see cref="M:Telerik.Web.Mvc.UI.ViewComponentFactory.PercentTextBox"/>.
+            </summary>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().PercentTextBox()
+                        .Name("PercentTextBox")
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.IntegerTextBox">
+            <summary>
+            Creates a new <see cref="M:Telerik.Web.Mvc.UI.ViewComponentFactory.IntegerTextBox"/>.
+            </summary>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().IntegerTextBox()
+                        .Name("IntegerTextBox")
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.Window">
+            <summary>
+            Creates a new <see cref="M:Telerik.Web.Mvc.UI.ViewComponentFactory.Window"/>.
+            </summary>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().Window()
+                        .Name("Window")
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.DropDownList">
+            <summary>
+            Creates a new <see cref="M:Telerik.Web.Mvc.UI.ViewComponentFactory.DropDownList"/>.
+            </summary>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().DropDownList()
+                        .Name("DropDownList")
+                        .Items(items =&gt;
+                        {
+                            items.Add().Text("First Item");
+                            items.Add().Text("Second Item");
+                        })
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.ComboBox">
+            <summary>
+            Creates a new <see cref="M:Telerik.Web.Mvc.UI.ViewComponentFactory.ComboBox"/>.
+            </summary>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().ComboBox()
+                        .Name("ComboBox")
+                        .Items(items =&gt;
+                        {
+                            items.Add().Text("First Item");
+                            items.Add().Text("Second Item");
+                        })
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.AutoComplete">
+            <summary>
+            Creates a new <see cref="M:Telerik.Web.Mvc.UI.ViewComponentFactory.AutoComplete"/>.
+            </summary>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().AutoComplete()
+                        .Name("AutoComplete")
+                        .Items(items =&gt;
+                        {
+                            items.Add().Text("First Item");
+                            items.Add().Text("Second Item");
+                        })
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory`1.EditorFor(System.Linq.Expressions.Expression{System.Func{`0,System.String}})">
+            <summary>
+            Creates a new <see cref="T:Telerik.Web.Mvc.UI.Editor"/> UI component.
+            </summary>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory`1.NumericTextBoxFor``1(System.Linq.Expressions.Expression{System.Func{`0,``0}})">
+            <summary>
+            Creates a new <see cref="T:Telerik.Web.Mvc.UI.NumericTextBox`1"/>.
+            </summary>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().NumericTextBoxFor(m=&gt;m.Property) %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory`1.NumericTextBoxFor``1(System.Linq.Expressions.Expression{System.Func{`0,System.Nullable{``0}}})">
+            <summary>
+            Creates a new <see cref="!:NumericTextBox&lt;Nullable&lt;TValue&gt;&gt;"/>.
+            </summary>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().NumericTextBoxFor(m=&gt;m.NullableProperty) %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory`1.IntegerTextBoxFor(System.Linq.Expressions.Expression{System.Func{`0,System.Nullable{System.Int32}}})">
+            <summary>
+            Creates a new <see cref="!:IntegerTextBox&lt;Nullable&lt;int&gt;&gt;"/>.
+            </summary>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().IntegerTextBoxFor(m=&gt;m.Property) %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory`1.IntegerTextBoxFor(System.Linq.Expressions.Expression{System.Func{`0,System.Int32}})">
+            <summary>
+            Creates a new <see cref="!:IntegerTextBox&lt;int&gt;"/>.
+            </summary>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().IntegerTextBoxFor(m=&gt;m.Property) %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory`1.CurrencyTextBoxFor(System.Linq.Expressions.Expression{System.Func{`0,System.Nullable{System.Decimal}}})">
+            <summary>
+            Creates a new <see cref="!:CurrencyTextBox&lt;Nullable&lt;decimal&gt;&gt;"/>.
+            </summary>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().CurrencyTextBoxFor(m=&gt;m.Property) %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory`1.CurrencyTextBoxFor(System.Linq.Expressions.Expression{System.Func{`0,System.Decimal}})">
+            <summary>
+            Creates a new <see cref="!:CurrencyTextBox&lt;decimal&gt;"/>.
+            </summary>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().CurrencyTextBoxFor(m=&gt;m.Property) %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory`1.PercentTextBoxFor(System.Linq.Expressions.Expression{System.Func{`0,System.Nullable{System.Double}}})">
+            <summary>
+            Creates a new <see cref="!:PercentTextBox&lt;Nullable&lt;double&gt;&gt;"/>.
+            </summary>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().PercentTextBoxFor(m=&gt;m.Property) %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory`1.PercentTextBoxFor(System.Linq.Expressions.Expression{System.Func{`0,System.Double}})">
+            <summary>
+            Creates a new <see cref="!:PercentTextBox&lt;double&gt;"/>.
+            </summary>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().PercentTextBoxFor(m=&gt;m.Property) %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory`1.DateTimePickerFor(System.Linq.Expressions.Expression{System.Func{`0,System.Nullable{System.DateTime}}})">
+            <summary>
+            Creates a new <see cref="!:DateTimePicker&lt;Nullable&lt;DateTime&gt;&gt;"/>.
+            </summary>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().DateTimePickerFor(m=&gt;m.Property) %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory`1.DateTimePickerFor(System.Linq.Expressions.Expression{System.Func{`0,System.DateTime}})">
+            <summary>
+            Creates a new <see cref="!:DateTimePicker&lt;DateTime&gt;"/>.
+            </summary>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().DateTimePickerFor(m=&gt;m.Property) %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory`1.DatePickerFor(System.Linq.Expressions.Expression{System.Func{`0,System.Nullable{System.DateTime}}})">
+            <summary>
+            Creates a new <see cref="!:DatePicker&lt;Nullable&lt;DateTime&gt;&gt;"/>.
+            </summary>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().DatePickerFor(m=&gt;m.Property) %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory`1.DatePickerFor(System.Linq.Expressions.Expression{System.Func{`0,System.DateTime}})">
+            <summary>
+            Creates a new <see cref="!:DatePicker&lt;DateTime&gt;"/>.
+            </summary>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().DatePickerFor(m=&gt;m.Property) %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory`1.TimePickerFor(System.Linq.Expressions.Expression{System.Func{`0,System.Nullable{System.DateTime}}})">
+            <summary>
+            Creates a new <see cref="!:TimePicker&lt;Nullable&lt;DateTime&gt;&gt;"/>.
+            </summary>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().TimePickerFor(m=&gt;m.Property) %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory`1.TimePickerFor(System.Linq.Expressions.Expression{System.Func{`0,System.DateTime}})">
+            <summary>
+            Creates a new <see cref="!:TimePicker&lt;DateTime&gt;"/>.
+            </summary>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().TimePickerFor(m=&gt;m.Property) %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory`1.TimePickerFor(System.Linq.Expressions.Expression{System.Func{`0,System.Nullable{System.TimeSpan}}})">
+            <summary>
+            Creates a new <see cref="!:TimePicker&lt;Nullable&lt;TimeSpan&gt;&gt;"/>.
+            </summary>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().TimePickerFor(m=&gt;m.Property) %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory`1.TimePickerFor(System.Linq.Expressions.Expression{System.Func{`0,System.TimeSpan}})">
+            <summary>
+            Creates a new <see cref="!:TimePicker&lt;TimeSpan&gt;"/>.
+            </summary>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().TimePickerFor(m=&gt;m.Property) %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory`1.DropDownListFor``1(System.Linq.Expressions.Expression{System.Func{`0,``0}})">
+            <summary>
+            Creates a new <see cref="T:Telerik.Web.Mvc.UI.DropDownList"/>.
+            </summary>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().DropDownListFor(m=&gt;m.Property) %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory`1.ComboBoxFor``1(System.Linq.Expressions.Expression{System.Func{`0,``0}})">
+            <summary>
+            Creates a new <see cref="T:Telerik.Web.Mvc.UI.ComboBox"/>.
+            </summary>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().ComboBoxFor(m=&gt;m.Property) %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory`1.AutoCompleteFor``1(System.Linq.Expressions.Expression{System.Func{`0,``0}})">
+            <summary>
+            Creates a new <see cref="T:Telerik.Web.Mvc.UI.AutoComplete"/>.
+            </summary>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().AutoCompleteFor(m=&gt;m.Property) %&gt;
+            </code>
+            </example>
         </member>
         <member name="M:Telerik.Web.Mvc.UI.Fluent.WindowEffectsBuilder.Zoom">
             <summary>
@@ -10731,6 +12151,42 @@
              &lt;%= Html.Telerik().Window()
                         .Name("Window")
                         .ClientEvents(events => events.OnOpen("onOpen"))
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.WindowClientEventsBuilder.OnActivate(System.Action)">
+            <summary>
+            Defines the inline handler of the OnActivate client-side event
+            </summary>
+            <param name="javaScript">The action defining the inline handler.</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().Window()
+                       .Name("Window")
+                       .ClientEvents(events => events.OnActivate(() =>
+                       {
+                            %&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;%
+                       }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.WindowClientEventsBuilder.OnActivate(System.String)">
+            <summary>
+             Defines the name of the JavaScript function that will handle the the OnActivate client-side event.
+            </summary>
+            <param name="handlerName">The name of the JavaScript function that will handle the event.</param>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().Window()
+                        .Name("Window")
+                        .ClientEvents(events => events.OnActivate("onActivate"))
             %&gt;
             </code>
             </example>
@@ -11009,6 +12465,20 @@
             </code>
             </example>        
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.WindowBuilder.LoadContentFrom(System.Web.Routing.RouteValueDictionary)">
+            <summary>
+            Sets the Url, which will be requested to return the content. 
+            </summary>
+            <param name="routeValues">The route values of the Action method.</param>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().Window()
+                    .Name("Window")
+                    .LoadContentFrom(MVC.Home.Index().GetRouteValueDictionary());
+            %&gt;
+            </code>
+            </example>
+        </member>
         <member name="M:Telerik.Web.Mvc.UI.Fluent.WindowBuilder.LoadContentFrom(System.String,System.String)">
             <summary>
             Sets the Url, which will be requested to return the content. 
@@ -11164,52 +12634,19 @@
             Sets whether the window can be moved.
             </summary>
         </member>
-        <member name="T:Telerik.Web.Mvc.IWebAssetRegistry">
-            <summary>
-            Defines basic building blocks of Global storage for web assets.
-            </summary>
-        </member>
-        <member name="T:Telerik.Web.Mvc.IWebAssetLocator">
-            <summary>
-            Basic building block to locate the correct virtual path.
-            </summary>
-        </member>
-        <member name="M:Telerik.Web.Mvc.IWebAssetLocator.Locate(System.String,System.String)">
-            <summary>
-            Returns the correct virtual path based upon the debug mode and version.
-            </summary>
-            <param name="virtualPath">The virtual path.</param>
-            <param name="version">The version.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Telerik.Web.Mvc.IWebAssetRegistry.Store(System.String,Telerik.Web.Mvc.UI.WebAssetItemGroup)">
-            <summary>
-            Stores the specified asset group.
-            </summary>
-            <param name="contentType">Type of the content.</param>
-            <param name="assetGroup">The asset group.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Telerik.Web.Mvc.IWebAssetRegistry.Retrieve(System.String)">
-            <summary>
-            Retrieves the web asset by specified id.
-            </summary>
-            <param name="id">The id.</param>
-            <returns></returns>
-        </member>
         <member name="T:Telerik.Web.Mvc.SharedWebAssetGroupBuilder">
             <summary>
             Builder class for fluently configuring the shared group.
             </summary>
         </member>
-        <member name="M:Telerik.Web.Mvc.SharedWebAssetGroupBuilder.#ctor(System.String,System.Collections.Generic.IDictionary{System.String,Telerik.Web.Mvc.UI.WebAssetItemGroup})">
+        <member name="M:Telerik.Web.Mvc.SharedWebAssetGroupBuilder.#ctor(System.String,System.Collections.Generic.IDictionary{System.String,Telerik.Web.Mvc.WebAssetGroup})">
             <summary>
             Initializes a new instance of the <see cref="T:Telerik.Web.Mvc.SharedWebAssetGroupBuilder"/> class.
             </summary>
             <param name="defaultPath">The default path.</param>
             <param name="assets">The assets.</param>
         </member>
-        <member name="M:Telerik.Web.Mvc.SharedWebAssetGroupBuilder.AddGroup(System.String,System.Action{Telerik.Web.Mvc.UI.WebAssetItemGroupBuilder})">
+        <member name="M:Telerik.Web.Mvc.SharedWebAssetGroupBuilder.AddGroup(System.String,System.Action{Telerik.Web.Mvc.UI.WebAssetGroupBuilder})">
             <summary>
             Adds the group.
             </summary>
@@ -11217,7 +12654,7 @@
             <param name="configureAction">The configure action.</param>
             <returns></returns>
         </member>
-        <member name="M:Telerik.Web.Mvc.SharedWebAssetGroupBuilder.GetGroup(System.String,System.Action{Telerik.Web.Mvc.UI.WebAssetItemGroupBuilder})">
+        <member name="M:Telerik.Web.Mvc.SharedWebAssetGroupBuilder.GetGroup(System.String,System.Action{Telerik.Web.Mvc.UI.WebAssetGroupBuilder})">
             <summary>
             Gets the group.
             </summary>
@@ -11273,29 +12710,29 @@
             </summary>
             <value>The scripts.</value>
         </member>
-        <member name="T:Telerik.Web.Mvc.Configuration.WebAssetItemConfigurationElement">
+        <member name="T:Telerik.Web.Mvc.Configuration.WebAssetConfigurationElement">
             <summary>
             Web asset item configuration element.
             </summary>
         </member>
-        <member name="P:Telerik.Web.Mvc.Configuration.WebAssetItemConfigurationElement.Source">
+        <member name="P:Telerik.Web.Mvc.Configuration.WebAssetConfigurationElement.Source">
             <summary>
             Gets or sets the source.
             </summary>
             <value>The source.</value>
         </member>
-        <member name="T:Telerik.Web.Mvc.Configuration.WebAssetItemConfigurationElementCollection">
+        <member name="T:Telerik.Web.Mvc.Configuration.WebAssetConfigurationElementCollection">
             <summary>
             Web asset item configuration collection.
             </summary>
         </member>
-        <member name="M:Telerik.Web.Mvc.Configuration.WebAssetItemConfigurationElementCollection.Add(Telerik.Web.Mvc.Configuration.WebAssetItemConfigurationElement)">
+        <member name="M:Telerik.Web.Mvc.Configuration.WebAssetConfigurationElementCollection.Add(Telerik.Web.Mvc.Configuration.WebAssetConfigurationElement)">
             <summary>
             Adds the specified element.
             </summary>
             <param name="element">The element.</param>
         </member>
-        <member name="M:Telerik.Web.Mvc.Configuration.WebAssetItemConfigurationElementCollection.CreateNewElement">
+        <member name="M:Telerik.Web.Mvc.Configuration.WebAssetConfigurationElementCollection.CreateNewElement">
             <summary>
             When overridden in a derived class, creates a new <see cref="T:System.Configuration.ConfigurationElement"/>.
             </summary>
@@ -11303,7 +12740,7 @@
             A new <see cref="T:System.Configuration.ConfigurationElement"/>.
             </returns>
         </member>
-        <member name="M:Telerik.Web.Mvc.Configuration.WebAssetItemConfigurationElementCollection.GetElementKey(System.Configuration.ConfigurationElement)">
+        <member name="M:Telerik.Web.Mvc.Configuration.WebAssetConfigurationElementCollection.GetElementKey(System.Configuration.ConfigurationElement)">
             <summary>
             Gets the element key for a specified configuration element when overridden in a derived class.
             </summary>
@@ -11312,30 +12749,30 @@
             An <see cref="T:System.Object"/> that acts as the key for the specified <see cref="T:System.Configuration.ConfigurationElement"/>.
             </returns>
         </member>
-        <member name="P:Telerik.Web.Mvc.Configuration.WebAssetItemConfigurationElementCollection.Item(System.String)">
+        <member name="P:Telerik.Web.Mvc.Configuration.WebAssetConfigurationElementCollection.Item(System.String)">
             <summary>
-            Gets the <see cref="T:Telerik.Web.Mvc.Configuration.WebAssetItemConfigurationElement"/> with the specified source.
+            Gets the <see cref="T:Telerik.Web.Mvc.Configuration.WebAssetConfigurationElement"/> with the specified source.
             </summary>
             <value></value>
         </member>
-        <member name="T:Telerik.Web.Mvc.Configuration.WebAssetItemGroupConfigurationElement">
+        <member name="T:Telerik.Web.Mvc.Configuration.WebAssetGroupConfigurationElement">
             <summary>
             Web asset group configuration element.
             </summary>
         </member>
-        <member name="P:Telerik.Web.Mvc.Configuration.WebAssetItemGroupConfigurationElement.Name">
+        <member name="P:Telerik.Web.Mvc.Configuration.WebAssetGroupConfigurationElement.Name">
             <summary>
             Gets or sets the name.
             </summary>
             <value>The name.</value>
         </member>
-        <member name="P:Telerik.Web.Mvc.Configuration.WebAssetItemGroupConfigurationElement.DefaultPath">
+        <member name="P:Telerik.Web.Mvc.Configuration.WebAssetGroupConfigurationElement.DefaultPath">
             <summary>
             Gets or sets the default path.
             </summary>
             <value>The default path.</value>
         </member>
-        <member name="P:Telerik.Web.Mvc.Configuration.WebAssetItemGroupConfigurationElement.UseTelerikContentDeliveryNetwork">
+        <member name="P:Telerik.Web.Mvc.Configuration.WebAssetGroupConfigurationElement.UseTelerikContentDeliveryNetwork">
             <summary>
             Gets or sets a value indicating whether to use telerik content delivery network.
             </summary>
@@ -11343,60 +12780,60 @@
             <c>true</c> if [use telerik content delivery network]; otherwise, <c>false</c>.
             </value>
         </member>
-        <member name="P:Telerik.Web.Mvc.Configuration.WebAssetItemGroupConfigurationElement.ContentDeliveryNetworkUrl">
+        <member name="P:Telerik.Web.Mvc.Configuration.WebAssetGroupConfigurationElement.ContentDeliveryNetworkUrl">
             <summary>
             Gets or sets the content delivery network URL.
             </summary>
             <value>The content delivery network URL.</value>
         </member>
-        <member name="P:Telerik.Web.Mvc.Configuration.WebAssetItemGroupConfigurationElement.Enabled">
+        <member name="P:Telerik.Web.Mvc.Configuration.WebAssetGroupConfigurationElement.Enabled">
             <summary>
-            Gets or sets a value indicating whether this <see cref="T:Telerik.Web.Mvc.Configuration.WebAssetItemGroupConfigurationElement"/> is enabled.
+            Gets or sets a value indicating whether this <see cref="T:Telerik.Web.Mvc.Configuration.WebAssetGroupConfigurationElement"/> is enabled.
             </summary>
             <value><c>true</c> if enabled; otherwise, <c>false</c>.</value>
         </member>
-        <member name="P:Telerik.Web.Mvc.Configuration.WebAssetItemGroupConfigurationElement.Version">
+        <member name="P:Telerik.Web.Mvc.Configuration.WebAssetGroupConfigurationElement.Version">
             <summary>
             Gets or sets the version.
             </summary>
             <value>The version.</value>
         </member>
-        <member name="P:Telerik.Web.Mvc.Configuration.WebAssetItemGroupConfigurationElement.Compress">
+        <member name="P:Telerik.Web.Mvc.Configuration.WebAssetGroupConfigurationElement.Compress">
             <summary>
-            Gets or sets a value indicating whether this <see cref="T:Telerik.Web.Mvc.Configuration.WebAssetItemGroupConfigurationElement"/> is compress.
+            Gets or sets a value indicating whether this <see cref="T:Telerik.Web.Mvc.Configuration.WebAssetGroupConfigurationElement"/> is compress.
             </summary>
             <value><c>true</c> if compress; otherwise, <c>false</c>.</value>
         </member>
-        <member name="P:Telerik.Web.Mvc.Configuration.WebAssetItemGroupConfigurationElement.CacheDurationInDays">
+        <member name="P:Telerik.Web.Mvc.Configuration.WebAssetGroupConfigurationElement.CacheDurationInDays">
             <summary>
             Gets or sets the cache duration in days.
             </summary>
             <value>The cache duration in days.</value>
         </member>
-        <member name="P:Telerik.Web.Mvc.Configuration.WebAssetItemGroupConfigurationElement.Combined">
+        <member name="P:Telerik.Web.Mvc.Configuration.WebAssetGroupConfigurationElement.Combined">
             <summary>
-            Gets or sets a value indicating whether this <see cref="T:Telerik.Web.Mvc.Configuration.WebAssetItemGroupConfigurationElement"/> is combined.
+            Gets or sets a value indicating whether this <see cref="T:Telerik.Web.Mvc.Configuration.WebAssetGroupConfigurationElement"/> is combined.
             </summary>
             <value><c>true</c> if combined; otherwise, <c>false</c>.</value>
         </member>
-        <member name="P:Telerik.Web.Mvc.Configuration.WebAssetItemGroupConfigurationElement.Items">
+        <member name="P:Telerik.Web.Mvc.Configuration.WebAssetGroupConfigurationElement.Items">
             <summary>
             Gets the items.
             </summary>
             <value>The items.</value>
         </member>
-        <member name="T:Telerik.Web.Mvc.Configuration.WebAssetItemGroupConfigurationElementCollection">
+        <member name="T:Telerik.Web.Mvc.Configuration.WebAssetGroupConfigurationElementCollection">
             <summary>
             Web asset group configuration collection 
             </summary>
         </member>
-        <member name="M:Telerik.Web.Mvc.Configuration.WebAssetItemGroupConfigurationElementCollection.Add(Telerik.Web.Mvc.Configuration.WebAssetItemGroupConfigurationElement)">
+        <member name="M:Telerik.Web.Mvc.Configuration.WebAssetGroupConfigurationElementCollection.Add(Telerik.Web.Mvc.Configuration.WebAssetGroupConfigurationElement)">
             <summary>
             Adds the specified element.
             </summary>
             <param name="element">The element.</param>
         </member>
-        <member name="M:Telerik.Web.Mvc.Configuration.WebAssetItemGroupConfigurationElementCollection.CreateNewElement">
+        <member name="M:Telerik.Web.Mvc.Configuration.WebAssetGroupConfigurationElementCollection.CreateNewElement">
             <summary>
             When overridden in a derived class, creates a new <see cref="T:System.Configuration.ConfigurationElement"/>.
             </summary>
@@ -11404,7 +12841,7 @@
             A new <see cref="T:System.Configuration.ConfigurationElement"/>.
             </returns>
         </member>
-        <member name="M:Telerik.Web.Mvc.Configuration.WebAssetItemGroupConfigurationElementCollection.GetElementKey(System.Configuration.ConfigurationElement)">
+        <member name="M:Telerik.Web.Mvc.Configuration.WebAssetGroupConfigurationElementCollection.GetElementKey(System.Configuration.ConfigurationElement)">
             <summary>
             Gets the element key for a specified configuration element when overridden in a derived class.
             </summary>
@@ -11413,63 +12850,18 @@
             An <see cref="T:System.Object"/> that acts as the key for the specified <see cref="T:System.Configuration.ConfigurationElement"/>.
             </returns>
         </member>
-        <member name="P:Telerik.Web.Mvc.Configuration.WebAssetItemGroupConfigurationElementCollection.Item(System.String)">
+        <member name="P:Telerik.Web.Mvc.Configuration.WebAssetGroupConfigurationElementCollection.Item(System.String)">
             <summary>
-            Gets the <see cref="T:Telerik.Web.Mvc.Configuration.WebAssetItemGroupConfigurationElement"/> with the specified name.
+            Gets the <see cref="T:Telerik.Web.Mvc.Configuration.WebAssetGroupConfigurationElement"/> with the specified name.
             </summary>
             <value></value>
-        </member>
-        <member name="T:Telerik.Web.Mvc.WebAsset">
-            <summary>
-            Reprenets an web asset.
-            </summary>
-        </member>
-        <member name="M:Telerik.Web.Mvc.WebAsset.#ctor(System.String,System.String,System.Boolean,System.Single,System.String)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Telerik.Web.Mvc.WebAsset"/> class.
-            </summary>
-            <param name="contentType">Type of the content.</param>
-            <param name="version">The version.</param>
-            <param name="compress">if set to <c>true</c> [compress].</param>
-            <param name="cacheDurationInDays">The cache duration in days.</param>
-            <param name="content">The content.</param>
-        </member>
-        <member name="P:Telerik.Web.Mvc.WebAsset.ContentType">
-            <summary>
-            Gets the type of the content.
-            </summary>
-            <value>The type of the content.</value>
-        </member>
-        <member name="P:Telerik.Web.Mvc.WebAsset.Version">
-            <summary>
-            Gets the version.
-            </summary>
-            <value>The version.</value>
-        </member>
-        <member name="P:Telerik.Web.Mvc.WebAsset.Compress">
-            <summary>
-            Gets a value indicating whether this <see cref="T:Telerik.Web.Mvc.WebAsset"/> is compressed.
-            </summary>
-            <value><c>true</c> if compress; otherwise, <c>false</c>.</value>
-        </member>
-        <member name="P:Telerik.Web.Mvc.WebAsset.CacheDurationInDays">
-            <summary>
-            Gets the cache duration in days.
-            </summary>
-            <value>The cache duration in days.</value>
-        </member>
-        <member name="P:Telerik.Web.Mvc.WebAsset.Content">
-            <summary>
-            Gets the content.
-            </summary>
-            <value>The content.</value>
         </member>
         <member name="T:Telerik.Web.Mvc.WebAssetHttpHandler">
             <summary>
             The HttpHandler to compress, cache and combine web assets.
             </summary>
         </member>
-        <member name="M:Telerik.Web.Mvc.WebAssetHttpHandler.#ctor(Telerik.Web.Mvc.IWebAssetRegistry,Telerik.Web.Mvc.Infrastructure.IHttpResponseCompressor,Telerik.Web.Mvc.Infrastructure.IHttpResponseCacher)">
+        <member name="M:Telerik.Web.Mvc.WebAssetHttpHandler.#ctor(Telerik.Web.Mvc.Infrastructure.IWebAssetGroupReader,Telerik.Web.Mvc.Infrastructure.IHttpResponseCompressor,Telerik.Web.Mvc.Infrastructure.IHttpResponseCacher)">
             <summary>
             Initializes a new instance of the <see cref="T:Telerik.Web.Mvc.WebAssetHttpHandler"/> class.
             </summary>
@@ -11499,58 +12891,6 @@
             Gets or sets the name of the id parameter.
             </summary>
             <value>The name of the id parameter.</value>
-        </member>
-        <member name="T:Telerik.Web.Mvc.WebAssetLocator">
-            <summary>
-            Default web asset locator.
-            </summary>
-        </member>
-        <member name="M:Telerik.Web.Mvc.WebAssetLocator.Locate(System.String,System.String)">
-            <summary>
-            Returns the correct virtual path based upon the debug mode and version.
-            </summary>
-            <param name="virtualPath">The virtual path.</param>
-            <param name="version">The version.</param>
-            <returns></returns>
-        </member>
-        <member name="T:Telerik.Web.Mvc.WebAssetRegistry">
-            <summary>
-            The default web asset registry.
-            </summary>
-        </member>
-        <member name="M:Telerik.Web.Mvc.WebAssetRegistry.#ctor(System.Boolean,Telerik.Web.Mvc.Infrastructure.ICacheManager,Telerik.Web.Mvc.IWebAssetLocator,Telerik.Web.Mvc.Infrastructure.IUrlResolver,Telerik.Web.Mvc.Infrastructure.IPathResolver,Telerik.Web.Mvc.Infrastructure.IVirtualPathProvider)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Telerik.Web.Mvc.WebAssetRegistry"/> class.
-            </summary>
-            <param name="isInDebugMode">if set to <c>true</c> [is in debug mode].</param>
-            <param name="cacheManager">The cache manager.</param>
-            <param name="assetLocator">The asset locator.</param>
-            <param name="urlResolver">The URL resolver.</param>
-            <param name="pathResolver">The path resolver.</param>
-            <param name="virtualPathProvider">The virtual path provider.</param>
-        </member>
-        <member name="M:Telerik.Web.Mvc.WebAssetRegistry.Store(System.String,Telerik.Web.Mvc.UI.WebAssetItemGroup)">
-            <summary>
-            Stores the specified asset group.
-            </summary>
-            <param name="contentType">Type of the content.</param>
-            <param name="assetGroup">The asset group.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Telerik.Web.Mvc.WebAssetRegistry.Retrieve(System.String)">
-            <summary>
-            Retrieves the web asset by specified id.
-            </summary>
-            <param name="id">The id.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Telerik.Web.Mvc.WebAssetRegistry.Locate(System.String,System.String)">
-            <summary>
-            Returns the correct virtual path based upon the debug mode and version.
-            </summary>
-            <param name="virtualPath">The virtual path.</param>
-            <param name="version">The version.</param>
-            <returns></returns>
         </member>
         <member name="T:Telerik.Web.Mvc.WebAssetDefaultSettings">
             <summary>
@@ -11636,41 +12976,6 @@
             <param name="context">The context.</param>
             <param name="duration">The duration.</param>
         </member>
-        <member name="T:Telerik.Web.Mvc.Infrastructure.IFileSystem">
-            <summary>
-            Defines members that a class must implement in order to access file system.
-            </summary>
-        </member>
-        <member name="M:Telerik.Web.Mvc.Infrastructure.IFileSystem.DirectoryExists(System.String)">
-            <summary>
-            Determines whether the specified directory exists.
-            </summary>
-            <param name="path">The path.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Telerik.Web.Mvc.Infrastructure.IFileSystem.FileExists(System.String)">
-            <summary>
-            Determines whether the specified file exists.
-            </summary>
-            <param name="path">The path.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Telerik.Web.Mvc.Infrastructure.IFileSystem.GetFiles(System.String,System.String,System.Boolean)">
-            <summary>
-            Gets the files in the specified locations.
-            </summary>
-            <param name="path">The path.</param>
-            <param name="searchPattern">The search pattern.</param>
-            <param name="recursive">if set to <c>true</c> [recursive].</param>
-            <returns></returns>
-        </member>
-        <member name="M:Telerik.Web.Mvc.Infrastructure.IFileSystem.ReadAllText(System.String)">
-            <summary>
-            Reads the content of the specified file.
-            </summary>
-            <param name="path">The path.</param>
-            <returns></returns>
-        </member>
         <member name="T:Telerik.Web.Mvc.Infrastructure.IConfigurationManager">
             <summary>
             Defines the read operaations of configuration.
@@ -11683,73 +12988,6 @@
             <typeparam name="T"></typeparam>
             <param name="sectionName">Name of the section.</param>
             <returns></returns>
-        </member>
-        <member name="T:Telerik.Web.Mvc.Infrastructure.ICacheManager">
-            <summary>
-            Defines members that a class must implement in order to access System.Web.HttpRuntime.Cache object.
-            </summary>
-        </member>
-        <member name="M:Telerik.Web.Mvc.Infrastructure.ICacheManager.GetItem(System.String)">
-            <summary>
-            Gets the item.
-            </summary>
-            <param name="key">The key.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Telerik.Web.Mvc.Infrastructure.ICacheManager.Insert(System.String,System.Object,System.Web.Caching.CacheItemRemovedCallback,System.String[])">
-            <summary>
-            Inserts the specified key.
-            </summary>
-            <param name="key">The key.</param>
-            <param name="value">The value.</param>
-            <param name="onRemoveCallback">The on remove callback.</param>
-            <param name="fileDependencies">The file dependencies.</param>
-        </member>
-        <member name="T:Telerik.Web.Mvc.Extensions.ArrayExtensions">
-            <summary>
-            Contains extension methods of T[].
-            </summary>
-        </member>
-        <member name="M:Telerik.Web.Mvc.Extensions.ArrayExtensions.IsNullOrEmpty``1(``0[])">
-            <summary>
-            Determines whether the specified array is empty or null.
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="instance">The instance.</param>
-            <returns>
-            <c>true</c> if [is null or empty] [the specified instance]; otherwise, <c>false</c>.
-            </returns>
-        </member>
-        <member name="M:Telerik.Web.Mvc.Extensions.ArrayExtensions.IsEmpty``1(``0[])">
-            <summary>
-            Determines whether the specified array is empty.
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="instance">The instance.</param>
-            <returns>
-            <c>true</c> if the specified instance is empty; otherwise, <c>false</c>.
-            </returns>
-        </member>
-        <member name="T:Telerik.Web.Mvc.Infrastructure.Implementation.CacheManagerWrapper">
-            <summary>
-            Encapsulates the System.Web.HttpRuntime.Cache object that contains methods for accessing System.Web.HttpRuntime.Cache object.
-            </summary>
-        </member>
-        <member name="M:Telerik.Web.Mvc.Infrastructure.Implementation.CacheManagerWrapper.GetItem(System.String)">
-            <summary>
-            Retrieves the specified item from the System.Web.HttpRuntime.Cache object.
-            </summary>
-            <param name="key">The object to be retrives from the cache.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Telerik.Web.Mvc.Infrastructure.Implementation.CacheManagerWrapper.Insert(System.String,System.Object,System.Web.Caching.CacheItemRemovedCallback,System.String[])">
-            <summary>
-            Inserts an object into the System.Web.Caching.Cache object with dependencies and a delegate you can use to notify your application when the inserted item is removed from the Cache.
-            </summary>
-            <param name="key">The object to be inserted in the cache.</param>
-            <param name="value">The file or cache key dependencies for the item. When any dependency changes, the object becomes invalid and is removed from the cache. If there are no dependencies, this parameter contains null.</param>
-            <param name="onRemoveCallback">A delegate that, if provided, will be called when an object is removed from the cache. You can use this to notify applications when their objects are deleted from the cache.</param>
-            <param name="fileDependencies">List of files that the cache item depends upon, if any of the file is changed the cache item will become invalid.</param>
         </member>
         <member name="T:Telerik.Web.Mvc.UI.ClientSideObjectWriterFactory">
             <summary>
@@ -11781,39 +13019,6 @@
             Gets or sets the value for client side.
             </summary>
             <value>The value.</value>
-        </member>
-        <member name="T:Telerik.Web.Mvc.Extensions.CollectionExtensions">
-            <summary>
-            Contains extension methods of ICollection&lt;T&gt;.
-            </summary>
-        </member>
-        <member name="M:Telerik.Web.Mvc.Extensions.CollectionExtensions.IsNullOrEmpty``1(System.Collections.Generic.ICollection{``0})">
-            <summary>
-            Determines whether the specified collection instance is null or empty.
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="instance">The instance to check.</param>
-            <returns>
-            <c>true</c> if the specified instance is null or empty; otherwise, <c>false</c>.
-            </returns>
-        </member>
-        <member name="M:Telerik.Web.Mvc.Extensions.CollectionExtensions.IsEmpty``1(System.Collections.Generic.ICollection{``0})">
-            <summary>
-            Determines whether the specified collection is empty.
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="instance">The instance.</param>
-            <returns>
-            <c>true</c> if the specified instance is empty; otherwise, <c>false</c>.
-            </returns>
-        </member>
-        <member name="M:Telerik.Web.Mvc.Extensions.CollectionExtensions.AddRange``1(System.Collections.Generic.ICollection{``0},System.Collections.Generic.IEnumerable{``0})">
-            <summary>
-            Adds the specified elements to the end of the System.Collections.Generic.ICollection&lt;T&gt;.
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="instance">The instance to add.</param>
-            <param name="collection"> The collection whose elements should be added to the end of the ICollection&lt;T&gt;. The collection itself cannot be null, but it can contain elements that are null, if type T is a reference type.</param>
         </member>
         <member name="T:Telerik.Web.Mvc.Infrastructure.Implementation.ConfigurationManagerWrapper">
             <summary>
@@ -11897,41 +13102,6 @@
             <param name="instance">The instance.</param>
             <param name="values">The values.</param>
         </member>
-        <member name="T:Telerik.Web.Mvc.Infrastructure.Implementation.FileSystemWrapper">
-            <summary>
-            Provides properties and methods for working with drives, files, and directories.
-            </summary>
-        </member>
-        <member name="M:Telerik.Web.Mvc.Infrastructure.Implementation.FileSystemWrapper.DirectoryExists(System.String)">
-            <summary>
-            Determines whether the given path refers to an existing directory on disk.
-            </summary>
-            <param name="path">The path to test.</param>
-            <returns>true if path refers to an existing directory; otherwise, false.</returns>
-        </member>
-        <member name="M:Telerik.Web.Mvc.Infrastructure.Implementation.FileSystemWrapper.FileExists(System.String)">
-            <summary>
-            Determines whether the specified file exists.
-            </summary>
-            <param name="path">The file to check.</param>
-            <returns>true if the caller has the required permissions and path contains the name of an existing file; otherwise, false. This method also returns false if path is null, an invalid path, or a zero-length string. If the caller does not have sufficient permissions to read the specified file, no exception is thrown and the method returns false regardless of the existence of path.</returns>
-        </member>
-        <member name="M:Telerik.Web.Mvc.Infrastructure.Implementation.FileSystemWrapper.GetFiles(System.String,System.String,System.Boolean)">
-            <summary>
-            Returns the names of files in the specified directory that match the specified search pattern, using a value to determine whether to search subdirectories.
-            </summary>
-            <param name="path">The directory to search.</param>
-            <param name="searchPattern">The search string to match against the names of files in path. The parameter cannot end in two periods ("..") or contain two periods ("..") followed by System.IO.Path.DirectorySeparatorChar or System.IO.Path.AltDirectorySeparatorChar, nor can it contain any of the characters in System.IO.Path.InvalidPathChars.</param>
-            <param name="recursive">if set to <c>true</c> the search operation should include all subdirectories or only the current directory.</param>
-            <returns>A String array containing the names of files in the specified directory that match the specified search pattern. File names include the full path.</returns>
-        </member>
-        <member name="M:Telerik.Web.Mvc.Infrastructure.Implementation.FileSystemWrapper.ReadAllText(System.String)">
-            <summary>
-            Opens a text file, reads all lines of the file, and then closes the file.
-            </summary>
-            <param name="path">The file to open for reading.</param>
-            <returns>A string containing all lines of the file.</returns>
-        </member>
         <member name="T:Telerik.Web.Mvc.Extensions.HttpContextBaseExtensions">
             <summary>
             Contains extension methods of <see cref="T:System.Web.HttpContextBase"/>.
@@ -11955,18 +13125,6 @@
             Gets a value indicating whether we're running under Linux or a Unix variant.
             </summary>
             <value><c>true</c> if Linux/Unix; otherwise, <c>false</c>.</value>
-        </member>
-        <member name="T:Telerik.Web.Mvc.Infrastructure.Implementation.HttpResponseCacher">
-            <summary>
-            Class used to cache the http response.
-            </summary>
-        </member>
-        <member name="M:Telerik.Web.Mvc.Infrastructure.Implementation.HttpResponseCacher.Cache(System.Web.HttpContextBase,System.TimeSpan)">
-            <summary>
-            Set the caching policy.
-            </summary>
-            <param name="context">The context.</param>
-            <param name="duration">The duration.</param>
         </member>
         <member name="T:Telerik.Web.Mvc.Infrastructure.Implementation.HttpResponseCompressor">
             <summary>
@@ -12113,15 +13271,6 @@
             <c>true</c> if the value of the comparing parameter is the same as this string; otherwise, <c>false</c>.
             </returns>
         </member>
-        <member name="M:Telerik.Web.Mvc.Extensions.StringExtensions.IsNullOrEmpty(System.String)">
-            <summary>
-            Determines whether this instance is null or empty string.
-            </summary>
-            <param name="instance">The string to check its value.</param>
-            <returns>
-            <c>true</c> if the value is null or empty string; otherwise, <c>false</c>.
-            </returns>
-        </member>
         <member name="M:Telerik.Web.Mvc.Extensions.StringExtensions.Compress(System.String)">
             <summary>
             Compresses the specified instance.
@@ -12231,6 +13380,11 @@
               Looks up a localized string similar to The DataKeys collection is empty. Please specify a data key..
             </summary>
         </member>
+        <member name="P:Telerik.Web.Mvc.Resources.TextResource.DataTableInLineEditingWithCustomEditorTemplates">
+            <summary>
+              Looks up a localized string similar to DataTable InLine editing and custom EditorTemplate per column is not supported.
+            </summary>
+        </member>
         <member name="P:Telerik.Web.Mvc.Resources.TextResource.DateOutOfRange">
             <summary>
               Looks up a localized string similar to Date should be bigger than MinDate and less than MaxDate..
@@ -12284,6 +13438,11 @@
         <member name="P:Telerik.Web.Mvc.Resources.TextResource.LocalGroupWithSpecifiedNameAlreadyExists">
             <summary>
               Looks up a localized string similar to Local group with name &quot;{0}&quot; already exists..
+            </summary>
+        </member>
+        <member name="P:Telerik.Web.Mvc.Resources.TextResource.LocalizationKeyNotFound">
+            <summary>
+              Looks up a localized string similar to The key with the following name &quot;{0}&quot; was not found. Please update all localization files..
             </summary>
         </member>
         <member name="P:Telerik.Web.Mvc.Resources.TextResource.MemberExpressionRequired">
@@ -12341,6 +13500,11 @@
               Looks up a localized string similar to {0} should be bigger than {1} and less then {2}.
             </summary>
         </member>
+        <member name="P:Telerik.Web.Mvc.Resources.TextResource.Rtl">
+            <summary>
+              Looks up a localized string similar to The &quot;{0}&quot; class is no longer supported. To enable RTL support you must include telerik.rtl.css and apply the &quot;t-rtl&quot; class to a parent HTML element or the &lt;body&gt;..
+            </summary>
+        </member>
         <member name="P:Telerik.Web.Mvc.Resources.TextResource.SiteMapShouldBeDefinedInViewData">
             <summary>
               Looks up a localized string similar to You must have SiteMap defined with key &quot;{0}&quot; in ViewData dictionary..
@@ -12361,14 +13525,29 @@
               Looks up a localized string similar to Passed string cannot be parsed to DateTime object..
             </summary>
         </member>
+        <member name="P:Telerik.Web.Mvc.Resources.TextResource.StringNotCorrectTimeSpan">
+            <summary>
+              Looks up a localized string similar to Passed string cannot be parsed to TimeSpan object..
+            </summary>
+        </member>
         <member name="P:Telerik.Web.Mvc.Resources.TextResource.TheSpecifiedMethodIsNotAnActionMethod">
             <summary>
               Looks up a localized string similar to The specified method is not an action method..
             </summary>
         </member>
+        <member name="P:Telerik.Web.Mvc.Resources.TextResource.TimeOutOfRange">
+            <summary>
+              Looks up a localized string similar to Time should be bigger than MinTime and less than MaxTime..
+            </summary>
+        </member>
         <member name="P:Telerik.Web.Mvc.Resources.TextResource.UrlAndContentUrlCannotBeSet">
             <summary>
               Looks up a localized string similar to You cannot set Url and ContentUrl at the same time..
+            </summary>
+        </member>
+        <member name="P:Telerik.Web.Mvc.Resources.TextResource.ValueNotValidForProperty">
+            <summary>
+              Looks up a localized string similar to The value &apos;{0}&apos; is invalid..
             </summary>
         </member>
         <member name="P:Telerik.Web.Mvc.Resources.TextResource.ValueOutOfRange">
@@ -12384,6 +13563,11 @@
         <member name="P:Telerik.Web.Mvc.Resources.TextResource.YouCannotAddMoreThanOnceColumnWhenSortModeIsSetToSingle">
             <summary>
               Looks up a localized string similar to You cannot add more than once column when sort mode is set to single column..
+            </summary>
+        </member>
+        <member name="P:Telerik.Web.Mvc.Resources.TextResource.YouCannotCallBindToWithoutCustomBinding">
+            <summary>
+              Looks up a localized string similar to You cannot use non generic BindTo overload without EnableCustomBinding set to true.
             </summary>
         </member>
         <member name="P:Telerik.Web.Mvc.Resources.TextResource.YouCannotCallRenderMoreThanOnce">
@@ -12406,81 +13590,55 @@
               Looks up a localized string similar to You must have to call Start prior calling this method..
             </summary>
         </member>
-        <member name="T:Telerik.Web.Mvc.UI.WebAssetItem">
+        <member name="M:Telerik.Web.Mvc.WebAssetCollection.#ctor(System.String)">
             <summary>
-            Defines an individual web asset.
-            </summary>
-        </member>
-        <member name="T:Telerik.Web.Mvc.UI.IWebAssetItem">
-            <summary>
-            Marker interface of web asset.
-            </summary>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.WebAssetItem.#ctor(System.String)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Telerik.Web.Mvc.UI.WebAssetItem"/> class.
-            </summary>
-        </member>
-        <member name="P:Telerik.Web.Mvc.UI.WebAssetItem.Source">
-            <summary>
-            Gets the source.
-            </summary>
-            <value>The source.</value>
-        </member>
-        <member name="T:Telerik.Web.Mvc.UI.WebAssetItemCollection">
-            <summary>
-            Represents a list of <see cref="T:Telerik.Web.Mvc.UI.IWebAssetItem"/> that can be accessed by index. Provides methods to search, sort and manipulate lists.
-            </summary>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.WebAssetItemCollection.#ctor(System.String)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Telerik.Web.Mvc.UI.WebAssetItemCollection"/> class.
+            Initializes a new instance of the <see cref="T:Telerik.Web.Mvc.WebAssetCollection"/> class.
             </summary>
             <param name="defaultPath">The default path.</param>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.WebAssetItemCollection.FindGroupByName(System.String)">
+        <member name="M:Telerik.Web.Mvc.WebAssetCollection.FindGroupByName(System.String)">
             <summary>
             Finds the group with the specified name.
             </summary>
             <param name="name">The name.</param>
             <returns></returns>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.WebAssetItemCollection.FindItemBySource(System.String)">
+        <member name="M:Telerik.Web.Mvc.WebAssetCollection.FindItemBySource(System.String)">
             <summary>
             Finds the item with the specified source.
             </summary>
             <param name="source">The source.</param>
             <returns></returns>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.WebAssetItemCollection.Add(System.String)">
+        <member name="M:Telerik.Web.Mvc.WebAssetCollection.Add(System.String)">
             <summary>
-            Adds the specified source as <see cref="T:Telerik.Web.Mvc.UI.WebAssetItem"/>.
+            Adds the specified source as <see cref="T:Telerik.Web.Mvc.WebAsset"/>.
             </summary>
             <param name="itemSource">The item source.</param>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.WebAssetItemCollection.Add(System.String,System.String)">
+        <member name="M:Telerik.Web.Mvc.WebAssetCollection.Add(System.String,System.String)">
             <summary>
-            Adds the specified source as <see cref="T:Telerik.Web.Mvc.UI.WebAssetItem"/> in the specified <see cref="T:Telerik.Web.Mvc.UI.WebAssetItemGroup"/>.
+            Adds the specified source as <see cref="T:Telerik.Web.Mvc.WebAsset"/> in the specified <see cref="T:Telerik.Web.Mvc.WebAssetGroup"/>.
             </summary>
             <param name="groupName">Name of the group.</param>
             <param name="itemSource">The item source.</param>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.WebAssetItemCollection.Insert(System.Int32,System.String)">
+        <member name="M:Telerik.Web.Mvc.WebAssetCollection.Insert(System.Int32,System.String)">
             <summary>
-            Inserts the specified source as <see cref="T:Telerik.Web.Mvc.UI.WebAssetItem"/> at the specified index.
+            Inserts the specified source as <see cref="T:Telerik.Web.Mvc.WebAsset"/> at the specified index.
             </summary>
             <param name="index">The index.</param>
             <param name="itemSource">The item source.</param>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.WebAssetItemCollection.Insert(System.Int32,System.String,System.String)">
+        <member name="M:Telerik.Web.Mvc.WebAssetCollection.Insert(System.Int32,System.String,System.String)">
             <summary>
-            Inserts the specified source as <see cref="T:Telerik.Web.Mvc.UI.WebAssetItem"/> at the specified index in the specified <see cref="T:Telerik.Web.Mvc.UI.WebAssetItemGroup"/>.
+            Inserts the specified source as <see cref="T:Telerik.Web.Mvc.WebAsset"/> at the specified index in the specified <see cref="T:Telerik.Web.Mvc.WebAssetGroup"/>.
             </summary>
             <param name="index">The index.</param>
             <param name="groupName">Name of the group.</param>
             <param name="itemSource">The item source.</param>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.WebAssetItemCollection.InsertItem(System.Int32,Telerik.Web.Mvc.UI.IWebAssetItem)">
+        <member name="M:Telerik.Web.Mvc.WebAssetCollection.InsertItem(System.Int32,Telerik.Web.Mvc.IWebAsset)">
             <summary>
             Inserts an element into the <see cref="T:System.Collections.ObjectModel.Collection`1"/> at the specified index.
             </summary>
@@ -12492,7 +13650,7 @@
             <paramref name="index"/> is greater than <see cref="P:System.Collections.ObjectModel.Collection`1.Count"/>.
             </exception>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.WebAssetItemCollection.SetItem(System.Int32,Telerik.Web.Mvc.UI.IWebAssetItem)">
+        <member name="M:Telerik.Web.Mvc.WebAssetCollection.SetItem(System.Int32,Telerik.Web.Mvc.IWebAsset)">
             <summary>
             Replaces the element at the specified index.
             </summary>
@@ -12504,50 +13662,50 @@
             <paramref name="index"/> is greater than <see cref="P:System.Collections.ObjectModel.Collection`1.Count"/>.
             </exception>
         </member>
-        <member name="P:Telerik.Web.Mvc.UI.WebAssetItemCollection.DefaultPath">
+        <member name="P:Telerik.Web.Mvc.WebAssetCollection.DefaultPath">
             <summary>
             Gets or sets the default path.
             </summary>
             <value>The default path.</value>
         </member>
-        <member name="P:Telerik.Web.Mvc.UI.WebAssetItemCollection.AssetGroups">
+        <member name="P:Telerik.Web.Mvc.WebAssetCollection.AssetGroups">
             <summary>
             Gets the asset groups.
             </summary>
             <value>The asset groups.</value>
         </member>
-        <member name="P:Telerik.Web.Mvc.UI.WebAssetItemCollection.AssetItems">
+        <member name="P:Telerik.Web.Mvc.WebAssetCollection.AssetItems">
             <summary>
             Gets the asset items.
             </summary>
             <value>The asset items.</value>
         </member>
-        <member name="T:Telerik.Web.Mvc.UI.WebAssetItemCollectionBuilder">
+        <member name="T:Telerik.Web.Mvc.UI.WebAssetCollectionBuilder">
             <summary>
             Defines the fluent interface for configuring web assets.
             </summary>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.WebAssetItemCollectionBuilder.#ctor(Telerik.Web.Mvc.WebAssetType,Telerik.Web.Mvc.UI.WebAssetItemCollection)">
+        <member name="M:Telerik.Web.Mvc.UI.WebAssetCollectionBuilder.#ctor(Telerik.Web.Mvc.WebAssetType,Telerik.Web.Mvc.WebAssetCollection)">
             <summary>
-            Initializes a new instance of the <see cref="T:Telerik.Web.Mvc.UI.WebAssetItemCollectionBuilder"/> class.
+            Initializes a new instance of the <see cref="T:Telerik.Web.Mvc.UI.WebAssetCollectionBuilder"/> class.
             </summary>
             <param name="assetType">Type of the asset.</param>
             <param name="assets">The assets.</param>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.WebAssetItemCollectionBuilder.op_Implicit(Telerik.Web.Mvc.UI.WebAssetItemCollectionBuilder)~Telerik.Web.Mvc.UI.WebAssetItemCollection">
+        <member name="M:Telerik.Web.Mvc.UI.WebAssetCollectionBuilder.op_Implicit(Telerik.Web.Mvc.UI.WebAssetCollectionBuilder)~Telerik.Web.Mvc.WebAssetCollection">
             <summary>
-            Performs an implicit conversion from <see cref="T:Telerik.Web.Mvc.UI.WebAssetItemCollectionBuilder"/> to <see cref="T:Telerik.Web.Mvc.UI.WebAssetItemCollection"/>.
+            Performs an implicit conversion from <see cref="T:Telerik.Web.Mvc.UI.WebAssetCollectionBuilder"/> to <see cref="!:Telerik.Web.Mvc.UI.WebAssetCollection"/>.
             </summary>
             <param name="builder">The builder.</param>
             <returns>The result of the conversion.</returns>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.WebAssetItemCollectionBuilder.ToCollection">
+        <member name="M:Telerik.Web.Mvc.UI.WebAssetCollectionBuilder.ToCollection">
             <summary>
             Returns the internal collection.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.WebAssetItemCollectionBuilder.Add(System.String)">
+        <member name="M:Telerik.Web.Mvc.UI.WebAssetCollectionBuilder.Add(System.String)">
             <summary>
             Adds a new web asset
             </summary>
@@ -12560,7 +13718,7 @@
             </code>
             </example>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.WebAssetItemCollectionBuilder.AddGroup(System.String,System.Action{Telerik.Web.Mvc.UI.WebAssetItemGroupBuilder})">
+        <member name="M:Telerik.Web.Mvc.UI.WebAssetCollectionBuilder.AddGroup(System.String,System.Action{Telerik.Web.Mvc.UI.WebAssetGroupBuilder})">
             <summary>
             Adds a new web asset group.
             </summary>
@@ -12578,7 +13736,7 @@
             </code>
             </example>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.WebAssetItemCollectionBuilder.AddSharedGroup(System.String)">
+        <member name="M:Telerik.Web.Mvc.UI.WebAssetCollectionBuilder.AddSharedGroup(System.String)">
             <summary>
             Adds the specified shared group.
             </summary>
@@ -12591,44 +13749,39 @@
             </code>
             </example>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.WebAssetItemCollectionBuilder.GetGroup(System.String,System.Action{Telerik.Web.Mvc.UI.WebAssetItemGroupBuilder})">
+        <member name="M:Telerik.Web.Mvc.UI.WebAssetCollectionBuilder.GetGroup(System.String,System.Action{Telerik.Web.Mvc.UI.WebAssetGroupBuilder})">
             <summary>
             Executes the provided delegate that is used to configure the group fluently.
             </summary>
             <param name="name">The name.</param>
             <param name="configureAction">The configure action.</param>
         </member>
-        <member name="T:Telerik.Web.Mvc.UI.WebAssetItemGroup">
+        <member name="M:Telerik.Web.Mvc.WebAssetGroup.#ctor(System.String,System.Boolean)">
             <summary>
-            Defines the <see cref="T:Telerik.Web.Mvc.UI.WebAssetItem"/> group.
-            </summary>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.WebAssetItemGroup.#ctor(System.String,System.Boolean)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Telerik.Web.Mvc.UI.WebAssetItemGroup"/> class.
+            Initializes a new instance of the <see cref="T:Telerik.Web.Mvc.WebAssetGroup"/> class.
             </summary>
             <param name="name">The name.</param>
             <param name="isShared">if set to <c>true</c> [is shared].</param>
         </member>
-        <member name="P:Telerik.Web.Mvc.UI.WebAssetItemGroup.Name">
+        <member name="P:Telerik.Web.Mvc.WebAssetGroup.Name">
             <summary>
             Gets or sets the name.
             </summary>
             <value>The name.</value>
         </member>
-        <member name="P:Telerik.Web.Mvc.UI.WebAssetItemGroup.IsShared">
+        <member name="P:Telerik.Web.Mvc.WebAssetGroup.IsShared">
             <summary>
             Gets or sets a value indicating whether this instance is shared.
             </summary>
             <value><c>true</c> if this instance is shared; otherwise, <c>false</c>.</value>
         </member>
-        <member name="P:Telerik.Web.Mvc.UI.WebAssetItemGroup.DefaultPath">
+        <member name="P:Telerik.Web.Mvc.WebAssetGroup.DefaultPath">
             <summary>
             Gets or sets the default path.
             </summary>
             <value>The default path.</value>
         </member>
-        <member name="P:Telerik.Web.Mvc.UI.WebAssetItemGroup.UseTelerikContentDeliveryNetwork">
+        <member name="P:Telerik.Web.Mvc.WebAssetGroup.UseTelerikContentDeliveryNetwork">
             <summary>
             Gets or sets a value indicating whether Telerik content delivery network would be used.
             </summary>
@@ -12636,43 +13789,43 @@
             <c>true</c> if [use Telerik content delivery network]; otherwise, <c>false</c>.
             </value>
         </member>
-        <member name="P:Telerik.Web.Mvc.UI.WebAssetItemGroup.ContentDeliveryNetworkUrl">
+        <member name="P:Telerik.Web.Mvc.WebAssetGroup.ContentDeliveryNetworkUrl">
             <summary>
             Gets or sets the content delivery network URL.
             </summary>
             <value>The content delivery network URL.</value>
         </member>
-        <member name="P:Telerik.Web.Mvc.UI.WebAssetItemGroup.Enabled">
+        <member name="P:Telerik.Web.Mvc.WebAssetGroup.Enabled">
             <summary>
-            Gets or sets a value indicating whether this <see cref="T:Telerik.Web.Mvc.UI.WebAssetItemGroup"/> is disabled.
+            Gets or sets a value indicating whether this <see cref="T:Telerik.Web.Mvc.WebAssetGroup"/> is disabled.
             </summary>
             <value><c>true</c> if disabled; otherwise, <c>false</c>.</value>
         </member>
-        <member name="P:Telerik.Web.Mvc.UI.WebAssetItemGroup.Version">
+        <member name="P:Telerik.Web.Mvc.WebAssetGroup.Version">
             <summary>
             Gets or sets the version.
             </summary>
             <value>The version.</value>
         </member>
-        <member name="P:Telerik.Web.Mvc.UI.WebAssetItemGroup.Compress">
+        <member name="P:Telerik.Web.Mvc.WebAssetGroup.Compress">
             <summary>
-            Gets or sets a value indicating whether this <see cref="T:Telerik.Web.Mvc.UI.WebAssetItemGroup"/> is compress.
+            Gets or sets a value indicating whether this <see cref="T:Telerik.Web.Mvc.WebAssetGroup"/> is compress.
             </summary>
             <value><c>true</c> if compress; otherwise, <c>false</c>.</value>
         </member>
-        <member name="P:Telerik.Web.Mvc.UI.WebAssetItemGroup.CacheDurationInDays">
+        <member name="P:Telerik.Web.Mvc.WebAssetGroup.CacheDurationInDays">
             <summary>
             Gets or sets the cache duration in days.
             </summary>
             <value>The cache duration in days.</value>
         </member>
-        <member name="P:Telerik.Web.Mvc.UI.WebAssetItemGroup.Combined">
+        <member name="P:Telerik.Web.Mvc.WebAssetGroup.Combined">
             <summary>
-            Gets or sets a value indicating whether this <see cref="T:Telerik.Web.Mvc.UI.WebAssetItemGroup"/> is combined.
+            Gets or sets a value indicating whether this <see cref="T:Telerik.Web.Mvc.WebAssetGroup"/> is combined.
             </summary>
             <value><c>true</c> if combined; otherwise, <c>false</c>.</value>
         </member>
-        <member name="P:Telerik.Web.Mvc.UI.WebAssetItemGroup.Items">
+        <member name="P:Telerik.Web.Mvc.WebAssetGroup.Items">
             <summary>
             Gets the items.
             </summary>
@@ -12835,22 +13988,6 @@
             <param name="action">The action.</param>
             <returns></returns>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.ClientSideObjectWriter.Append(System.String,System.Collections.Generic.IList{System.String})">
-            <summary>
-            Appends the specified name and value to the end of this instance.
-            </summary>
-            <param name="name">The name.</param>
-            <param name="values">The values.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.ClientSideObjectWriter.Append(System.String,System.Collections.Generic.IList{System.Int32})">
-            <summary>
-            Appends the specified name and value to the end of this instance.
-            </summary>
-            <param name="name">The name.</param>
-            <param name="values">The values.</param>
-            <returns></returns>
-        </member>
         <member name="M:Telerik.Web.Mvc.UI.ClientSideObjectWriter.Append``1(System.String,``0)">
             <summary>
             Appends the specified name and value to the end of this instance.
@@ -12918,452 +14055,6 @@
             </summary>
             <param name="component">The component.</param>
         </member>
-        <member name="T:Telerik.Web.Mvc.UI.ViewComponentFactory">
-            <summary>
-            Provides the factory methods for creating Telerik View Components.
-            </summary>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.StyleSheetRegistrar">
-            <summary>
-            Creates a <see cref="M:Telerik.Web.Mvc.UI.ViewComponentFactory.StyleSheetRegistrar"/>
-            </summary>
-            <example>
-            <code lang="CS">
-             &lt;%= Html.Telerik().StyleSheetRegistrar()
-                        .DefaultGroup(group =&gt; group
-                              group.Add("Site.css")
-                                   .Add("telerik.common.css")
-                                   .Add("telerik.vista.css")
-                                   .Compressed(true)
-                        )
-            %&gt;
-            </code>
-            </example>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.ScriptRegistrar">
-            <summary>
-            Creates a <see cref="M:Telerik.Web.Mvc.UI.ViewComponentFactory.ScriptRegistrar"/>
-            </summary>
-            <example>
-            <code lang="CS">
-             &lt;%= Html.Telerik().ScriptRegistrar()
-            %&gt;
-            </code>
-            </example>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.Menu">
-            <summary>
-            Creates a <see cref="M:Telerik.Web.Mvc.UI.ViewComponentFactory.Menu"/>
-            </summary>
-            <example>
-            <code lang="CS">
-             &lt;%= Html.Telerik().Menu()
-                        .Name("Menu")
-                        .Items(items =&gt; { /* add items here */ });
-            %&gt;
-            </code>
-            </example>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.Editor">
-            <summary>
-            Creates a <see cref="M:Telerik.Web.Mvc.UI.ViewComponentFactory.Editor"/>
-            </summary>
-            <example>
-            <code lang="CS">
-             &lt;%= Html.Telerik().Editor()
-                        .Name("Editor");
-            %&gt;
-            </code>
-            </example>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.Grid``1">
-            <summary>
-            Creates a new <see cref="M:Telerik.Web.Mvc.UI.ViewComponentFactory.Grid``1"/> bound to the specified data item type.
-            </summary>
-            <example>
-            <typeparam name="T">The type of the data item</typeparam>
-            <code lang="CS">
-             &lt;%= Html.Telerik().Grid&lt;Order&gt;()
-                        .Name("Grid")
-                        .BindTo(Model)
-            %&gt;
-            </code>
-            </example>
-            <remarks>
-            Do not forget to bind the grid using the <see cref="!:GridBuilder&lt;T&gt;.BindTo(System.String)"/> method when using this overload.
-            </remarks>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.Grid``1(System.Collections.Generic.IEnumerable{``0})">
-            <summary>
-            Creates a new <see cref="!:Telerik.Web.UI.Grid&lt;T&gt;"/> bound to the specified data source.
-            </summary>
-            <typeparam name="T">The type of the data item</typeparam>
-            <param name="dataSource">The data source.</param>
-            <example>
-            <code lang="CS">
-             &lt;%= Html.Telerik().Grid(Model)
-                        .Name("Grid")
-            %&gt;
-            </code>
-            </example>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.Grid``1(System.String)">
-            <summary>
-            Creates a new <see cref="!:Telerik.Web.UI.Grid&lt;T&gt;"/> bound an item in ViewData.
-            </summary>
-            <typeparam name="T">Type of the data item</typeparam>
-            <param name="dataSourceViewDataKey">The data source view data key.</param>
-            <example>
-            <code lang="CS">
-             &lt;%= Html.Telerik().Grid&lt;Order&gt;("orders")
-                        .Name("Grid")
-            %&gt;
-            </code>
-            </example>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.TabStrip">
-            <summary>
-            Creates a new <see cref="M:Telerik.Web.Mvc.UI.ViewComponentFactory.TabStrip"/>.
-            </summary>
-            <example>
-            <code lang="CS">
-             &lt;%= Html.Telerik().TabStrip()
-                        .Name("TabStrip")
-                        .Items(items =&gt;
-                        {
-                            items.Add().Text("First");
-                            items.Add().Text("Second");
-                        })
-            %&gt;
-            </code>
-            </example>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.DatePicker">
-            <summary>
-            Creates a new <see cref="M:Telerik.Web.Mvc.UI.ViewComponentFactory.DatePicker"/>.
-            </summary>
-            <example>
-            <code lang="CS">
-             &lt;%= Html.Telerik().DatePicker()
-                        .Name("DatePicker")
-            %&gt;
-            </code>
-            </example>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.Calendar">
-            <summary>
-            Creates a new <see cref="M:Telerik.Web.Mvc.UI.ViewComponentFactory.Calendar"/>.
-            </summary>
-            <example>
-            <code lang="CS">
-             &lt;%= Html.Telerik().Calendar()
-                        .Name("Calendar")
-            %&gt;
-            </code>
-            </example>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.PanelBar">
-            <summary>
-            Creates a new <see cref="M:Telerik.Web.Mvc.UI.ViewComponentFactory.PanelBar"/>.
-            </summary>
-            <example>
-            <code lang="CS">
-             &lt;%= Html.Telerik().PanelBar()
-                        .Name("PanelBar")
-                        .Items(items =&gt;
-                        {
-                            items.Add().Text("First");
-                            items.Add().Text("Second");
-                        })
-            %&gt;
-            </code>
-            </example>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.TreeView">
-            <summary>
-            Creates a <see cref="M:Telerik.Web.Mvc.UI.ViewComponentFactory.TreeView"/>
-            </summary>
-            <example>
-            <code lang="CS">
-             &lt;%= Html.Telerik().TreeView()
-                        .Name("TreeView")
-                        .Items(items =&gt; { /* add items here */ });
-            %&gt;
-            </code>
-            </example>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.NumericTextBox">
-            <summary>
-            Creates a new <see cref="M:Telerik.Web.Mvc.UI.ViewComponentFactory.NumericTextBox``1"/>.
-            </summary>
-            <example>
-            <code lang="CS">
-             &lt;%= Html.Telerik().NumericTextBox()
-                        .Name("NumericTextBox")
-            %&gt;
-            </code>
-            </example>
-            <returns>Returns <see cref="!:NumericTextBoxBuilder&lt;double&gt;"/>.</returns>
-        </member>
-        <!-- Badly formed XML comment ignored for member "M:Telerik.Web.Mvc.UI.ViewComponentFactory.NumericTextBox``1" -->
-        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.CurrencyTextBox">
-            <summary>
-            Creates a new <see cref="M:Telerik.Web.Mvc.UI.ViewComponentFactory.CurrencyTextBox"/>.
-            </summary>
-            <example>
-            <code lang="CS">
-             &lt;%= Html.Telerik().CurrencyTextBox()
-                        .Name("CurrencyTextBox")
-            %&gt;
-            </code>
-            </example>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.PercentTextBox">
-            <summary>
-            Creates a new <see cref="M:Telerik.Web.Mvc.UI.ViewComponentFactory.PercentTextBox"/>.
-            </summary>
-            <example>
-            <code lang="CS">
-             &lt;%= Html.Telerik().PercentTextBox()
-                        .Name("PercentTextBox")
-            %&gt;
-            </code>
-            </example>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.IntegerTextBox">
-            <summary>
-            Creates a new <see cref="M:Telerik.Web.Mvc.UI.ViewComponentFactory.IntegerTextBox"/>.
-            </summary>
-            <example>
-            <code lang="CS">
-             &lt;%= Html.Telerik().IntegerTextBox()
-                        .Name("IntegerTextBox")
-            %&gt;
-            </code>
-            </example>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.Window">
-            <summary>
-            Creates a new <see cref="M:Telerik.Web.Mvc.UI.ViewComponentFactory.Window"/>.
-            </summary>
-            <example>
-            <code lang="CS">
-             &lt;%= Html.Telerik().Window()
-                        .Name("Window")
-            %&gt;
-            </code>
-            </example>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.DropDownList">
-            <summary>
-            Creates a new <see cref="M:Telerik.Web.Mvc.UI.ViewComponentFactory.DropDownList"/>.
-            </summary>
-            <example>
-            <code lang="CS">
-             &lt;%= Html.Telerik().DropDownList()
-                        .Name("DropDownList")
-                        .Items(items =&gt;
-                        {
-                            items.Add().Text("First Item");
-                            items.Add().Text("Second Item");
-                        })
-            %&gt;
-            </code>
-            </example>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.ComboBox">
-            <summary>
-            Creates a new <see cref="M:Telerik.Web.Mvc.UI.ViewComponentFactory.ComboBox"/>.
-            </summary>
-            <example>
-            <code lang="CS">
-             &lt;%= Html.Telerik().ComboBox()
-                        .Name("ComboBox")
-                        .Items(items =&gt;
-                        {
-                            items.Add().Text("First Item");
-                            items.Add().Text("Second Item");
-                        })
-            %&gt;
-            </code>
-            </example>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory.AutoComplete">
-            <summary>
-            Creates a new <see cref="M:Telerik.Web.Mvc.UI.ViewComponentFactory.AutoComplete"/>.
-            </summary>
-            <example>
-            <code lang="CS">
-             &lt;%= Html.Telerik().AutoComplete()
-                        .Name("AutoComplete")
-                        .Items(items =&gt;
-                        {
-                            items.Add().Text("First Item");
-                            items.Add().Text("Second Item");
-                        })
-            %&gt;
-            </code>
-            </example>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory`1.EditorFor(System.Linq.Expressions.Expression{System.Func{`0,System.String}})">
-            <summary>
-            Creates a new <see cref="T:Telerik.Web.Mvc.UI.Editor"/> UI component.
-            </summary>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory`1.NumericTextBoxFor``1(System.Linq.Expressions.Expression{System.Func{`0,``0}})">
-            <summary>
-            Creates a new <see cref="T:Telerik.Web.Mvc.UI.NumericTextBox`1"/>.
-            </summary>
-            <example>
-            <code lang="CS">
-             &lt;%= Html.Telerik().NumericTextBoxFor(m=&gt;m.Property) %&gt;
-            </code>
-            </example>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory`1.NumericTextBoxFor``1(System.Linq.Expressions.Expression{System.Func{`0,System.Nullable{``0}}})">
-            <summary>
-            Creates a new <see cref="!:NumericTextBox&lt;Nullable&lt;TValue&gt;&gt;"/>.
-            </summary>
-            <example>
-            <code lang="CS">
-             &lt;%= Html.Telerik().NumericTextBoxFor(m=&gt;m.NullableProperty) %&gt;
-            </code>
-            </example>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory`1.IntegerTextBoxFor(System.Linq.Expressions.Expression{System.Func{`0,System.Nullable{System.Int32}}})">
-            <summary>
-            Creates a new <see cref="!:IntegerTextBox&lt;Nullable&lt;int&gt;&gt;"/>.
-            </summary>
-            <example>
-            <code lang="CS">
-             &lt;%= Html.Telerik().IntegerTextBoxFor(m=&gt;m.Property) %&gt;
-            </code>
-            </example>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory`1.IntegerTextBoxFor(System.Linq.Expressions.Expression{System.Func{`0,System.Int32}})">
-            <summary>
-            Creates a new <see cref="!:IntegerTextBox&lt;int&gt;"/>.
-            </summary>
-            <example>
-            <code lang="CS">
-             &lt;%= Html.Telerik().IntegerTextBoxFor(m=&gt;m.Property) %&gt;
-            </code>
-            </example>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory`1.CurrencyTextBoxFor(System.Linq.Expressions.Expression{System.Func{`0,System.Nullable{System.Decimal}}})">
-            <summary>
-            Creates a new <see cref="!:CurrencyTextBox&lt;Nullable&lt;decimal&gt;&gt;"/>.
-            </summary>
-            <example>
-            <code lang="CS">
-             &lt;%= Html.Telerik().CurrencyTextBoxFor(m=&gt;m.Property) %&gt;
-            </code>
-            </example>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory`1.CurrencyTextBoxFor(System.Linq.Expressions.Expression{System.Func{`0,System.Decimal}})">
-            <summary>
-            Creates a new <see cref="!:CurrencyTextBox&lt;decimal&gt;"/>.
-            </summary>
-            <example>
-            <code lang="CS">
-             &lt;%= Html.Telerik().CurrencyTextBoxFor(m=&gt;m.Property) %&gt;
-            </code>
-            </example>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory`1.PercentTextBoxFor(System.Linq.Expressions.Expression{System.Func{`0,System.Nullable{System.Double}}})">
-            <summary>
-            Creates a new <see cref="!:PercentTextBox&lt;Nullable&lt;double&gt;&gt;"/>.
-            </summary>
-            <example>
-            <code lang="CS">
-             &lt;%= Html.Telerik().PercentTextBoxFor(m=&gt;m.Property) %&gt;
-            </code>
-            </example>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory`1.PercentTextBoxFor(System.Linq.Expressions.Expression{System.Func{`0,System.Double}})">
-            <summary>
-            Creates a new <see cref="!:PercentTextBox&lt;double&gt;"/>.
-            </summary>
-            <example>
-            <code lang="CS">
-             &lt;%= Html.Telerik().PercentTextBoxFor(m=&gt;m.Property) %&gt;
-            </code>
-            </example>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory`1.DatePickerFor(System.Linq.Expressions.Expression{System.Func{`0,System.Nullable{System.DateTime}}})">
-            <summary>
-            Creates a new <see cref="!:DatePicker&lt;Nullable&lt;DateTime&gt;&gt;"/>.
-            </summary>
-            <example>
-            <code lang="CS">
-             &lt;%= Html.Telerik().DatePickerFor(m=&gt;m.Property) %&gt;
-            </code>
-            </example>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory`1.DatePickerFor(System.Linq.Expressions.Expression{System.Func{`0,System.DateTime}})">
-            <summary>
-            Creates a new <see cref="!:DatePicker&lt;DateTime&gt;"/>.
-            </summary>
-            <example>
-            <code lang="CS">
-             &lt;%= Html.Telerik().DatePickerFor(m=&gt;m.Property) %&gt;
-            </code>
-            </example>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory`1.DropDownListFor``1(System.Linq.Expressions.Expression{System.Func{`0,``0}})">
-            <summary>
-            Creates a new <see cref="T:Telerik.Web.Mvc.UI.DropDownList"/>.
-            </summary>
-            <example>
-            <code lang="CS">
-             &lt;%= Html.Telerik().DropDownListFor(m=&gt;m.Property) %&gt;
-            </code>
-            </example>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory`1.ComboBoxFor``1(System.Linq.Expressions.Expression{System.Func{`0,``0}})">
-            <summary>
-            Creates a new <see cref="T:Telerik.Web.Mvc.UI.ComboBox"/>.
-            </summary>
-            <example>
-            <code lang="CS">
-             &lt;%= Html.Telerik().ComboBoxFor(m=&gt;m.Property) %&gt;
-            </code>
-            </example>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.ViewComponentFactory`1.AutoCompleteFor``1(System.Linq.Expressions.Expression{System.Func{`0,``0}})">
-            <summary>
-            Creates a new <see cref="T:Telerik.Web.Mvc.UI.AutoComplete"/>.
-            </summary>
-            <example>
-            <code lang="CS">
-             &lt;%= Html.Telerik().AutoCompleteFor(m=&gt;m.Property) %&gt;
-            </code>
-            </example>
-        </member>
-        <member name="T:Telerik.Web.Mvc.UI.WebAssetItemMerger">
-            <summary>
-            The default web asset merger.
-            </summary>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.WebAssetItemMerger.#ctor(Telerik.Web.Mvc.IWebAssetRegistry,Telerik.Web.Mvc.Infrastructure.IUrlResolver,Telerik.Web.Mvc.Infrastructure.IUrlEncoder)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Telerik.Web.Mvc.UI.WebAssetItemMerger"/> class.
-            </summary>
-            <param name="assetRegistry">The asset registry.</param>
-            <param name="urlResolver">The URL resolver.</param>
-            <param name="urlEncoder">The URL encoder.</param>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.WebAssetItemMerger.Merge(System.String,System.String,System.Boolean,System.Boolean,Telerik.Web.Mvc.UI.WebAssetItemCollection)">
-            <summary>
-            Merges the specified assets.
-            </summary>
-            <param name="contentType">Type of the content.</param>
-            <param name="assetHandlerPath">The asset handler path.</param>
-            <param name="isSecured">if set to <c>true</c> [is secure].</param>
-            <param name="canCompress">if set to <c>true</c> [can compress].</param>
-            <param name="assets">The assets.</param>
-            <returns></returns>
-        </member>
         <member name="T:Telerik.Web.Mvc.UI.ScriptWrapperBase">
             <summary>
             Defines members that a class must implement in order to act as wrapper for script,
@@ -13430,7 +14121,7 @@
             </code>
             </example>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.StyleSheetRegistrarBuilder.DefaultGroup(System.Action{Telerik.Web.Mvc.UI.WebAssetItemGroupBuilder})">
+        <member name="M:Telerik.Web.Mvc.UI.StyleSheetRegistrarBuilder.DefaultGroup(System.Action{Telerik.Web.Mvc.UI.WebAssetGroupBuilder})">
             <summary>
             Configures the <see cref="P:Telerik.Web.Mvc.UI.StyleSheetRegistrar.DefaultGroup"/>.
             </summary>
@@ -13447,7 +14138,7 @@
             </code>
             </example>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.StyleSheetRegistrarBuilder.StyleSheets(System.Action{Telerik.Web.Mvc.UI.WebAssetItemCollectionBuilder})">
+        <member name="M:Telerik.Web.Mvc.UI.StyleSheetRegistrarBuilder.StyleSheets(System.Action{Telerik.Web.Mvc.UI.WebAssetCollectionBuilder})">
             <summary>
             Executes the provided delegate that is used to register the stylesheet files fluently.
             </summary>
@@ -13476,7 +14167,7 @@
             Used to ensure that the same instance is used for the same HttpContext.
             </summary>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.StyleSheetRegistrar.#ctor(Telerik.Web.Mvc.UI.WebAssetItemCollection,System.Web.Mvc.ViewContext,Telerik.Web.Mvc.UI.IWebAssetItemMerger)">
+        <member name="M:Telerik.Web.Mvc.UI.StyleSheetRegistrar.#ctor(Telerik.Web.Mvc.WebAssetCollection,System.Web.Mvc.ViewContext,Telerik.Web.Mvc.Infrastructure.IWebAssetCollectionResolver)">
             <summary>
             Initializes a new instance of the <see cref="T:Telerik.Web.Mvc.UI.StyleSheetRegistrar"/> class.
             </summary>
@@ -13519,12 +14210,6 @@
             </summary>
             <value>The view context.</value>
         </member>
-        <member name="P:Telerik.Web.Mvc.UI.StyleSheetRegistrar.AssetMerger">
-            <summary>
-            Gets or sets the asset merger.
-            </summary>
-            <value>The asset merger.</value>
-        </member>
         <member name="T:Telerik.Web.Mvc.Infrastructure.Implementation.UrlResolver">
             <summary>
             Class used to resolve relative path for virtual path.
@@ -13566,61 +14251,38 @@
             </summary>
             <value>The on page unload end.</value>
         </member>
-        <member name="T:Telerik.Web.Mvc.Infrastructure.Culture">
+        <member name="T:Telerik.Web.Mvc.UI.WebAssetGroupBuilder">
             <summary>
-            Helper class to get currrent and invariant culture.
+            Defines the fluent interface for configuring the <see cref="T:Telerik.Web.Mvc.WebAssetGroup"/>.
             </summary>
         </member>
-        <member name="P:Telerik.Web.Mvc.Infrastructure.Culture.Current">
+        <member name="M:Telerik.Web.Mvc.UI.WebAssetGroupBuilder.#ctor(Telerik.Web.Mvc.WebAssetGroup)">
             <summary>
-            Gets the System.Globalization.CultureInfo that represents the current culture used by the Resource Manager to look up culture-specific resources at run time.
-            </summary>
-            <value>The current.</value>
-        </member>
-        <member name="P:Telerik.Web.Mvc.Infrastructure.Culture.CurrentUI">
-            <summary>
-            Gets the System.Globalization.CultureInfo that represents the current UI culture
-            </summary>
-            <value>The current.</value>
-        </member>
-        <member name="P:Telerik.Web.Mvc.Infrastructure.Culture.Invariant">
-            <summary>
-            Gets the System.Globalization.CultureInfo that is culture-independent (invariant).
-            </summary>
-            <value>The invariant.</value>
-        </member>
-        <member name="T:Telerik.Web.Mvc.UI.WebAssetItemGroupBuilder">
-            <summary>
-            Defines the fluent interface for configuring the <see cref="T:Telerik.Web.Mvc.UI.WebAssetItemGroup"/>.
-            </summary>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.WebAssetItemGroupBuilder.#ctor(Telerik.Web.Mvc.UI.WebAssetItemGroup)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Telerik.Web.Mvc.UI.WebAssetItemGroupBuilder"/> class.
+            Initializes a new instance of the <see cref="T:Telerik.Web.Mvc.UI.WebAssetGroupBuilder"/> class.
             </summary>
             <param name="assetItemGroup">The asset item group.</param>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.WebAssetItemGroupBuilder.op_Implicit(Telerik.Web.Mvc.UI.WebAssetItemGroupBuilder)~Telerik.Web.Mvc.UI.WebAssetItemGroup">
+        <member name="M:Telerik.Web.Mvc.UI.WebAssetGroupBuilder.op_Implicit(Telerik.Web.Mvc.UI.WebAssetGroupBuilder)~Telerik.Web.Mvc.WebAssetGroup">
             <summary>
-            Performs an implicit conversion from <see cref="T:Telerik.Web.Mvc.UI.WebAssetItemGroupBuilder"/> to <see cref="T:Telerik.Web.Mvc.UI.WebAssetItemGroup"/>.
+            Performs an implicit conversion from <see cref="T:Telerik.Web.Mvc.UI.WebAssetGroupBuilder"/> to <see cref="!:Telerik.Web.Mvc.UI.WebAssetGroup"/>.
             </summary>
             <param name="builder">The builder.</param>
             <returns>The result of the conversion.</returns>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.WebAssetItemGroupBuilder.ToGroup">
+        <member name="M:Telerik.Web.Mvc.UI.WebAssetGroupBuilder.ToGroup">
             <summary>
             Returns the internal group.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.WebAssetItemGroupBuilder.UseTelerikContentDeliveryNetwork(System.Boolean)">
+        <member name="M:Telerik.Web.Mvc.UI.WebAssetGroupBuilder.UseTelerikContentDeliveryNetwork(System.Boolean)">
             <summary>
             Sets whether Telerik content delivery network would be used.
             </summary>
             <param name="value">if set to <c>true</c> [value].</param>
             <returns></returns>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.WebAssetItemGroupBuilder.ContentDeliveryNetworkUrl(System.String)">
+        <member name="M:Telerik.Web.Mvc.UI.WebAssetGroupBuilder.ContentDeliveryNetworkUrl(System.String)">
             <summary>
             Sets the content delivery network URL.
             </summary>
@@ -13633,7 +14295,7 @@
             </code>
             </example>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.WebAssetItemGroupBuilder.Enabled(System.Boolean)">
+        <member name="M:Telerik.Web.Mvc.UI.WebAssetGroupBuilder.Enabled(System.Boolean)">
             <summary>
             Enables or disables the group
             </summary>
@@ -13645,7 +14307,7 @@
             </code>
             </example>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.WebAssetItemGroupBuilder.Version(System.String)">
+        <member name="M:Telerik.Web.Mvc.UI.WebAssetGroupBuilder.Version(System.String)">
             <summary>
             Sets the version.
             </summary>
@@ -13658,7 +14320,7 @@
             </code>
             </example>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.WebAssetItemGroupBuilder.Compress(System.Boolean)">
+        <member name="M:Telerik.Web.Mvc.UI.WebAssetGroupBuilder.Compress(System.Boolean)">
             <summary>
             Sets whether the groups will be served as compressed. By default asset groups are not compressed.
             </summary>
@@ -13670,7 +14332,7 @@
             </code>
             </example>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.WebAssetItemGroupBuilder.CacheDurationInDays(System.Single)">
+        <member name="M:Telerik.Web.Mvc.UI.WebAssetGroupBuilder.CacheDurationInDays(System.Single)">
             <summary>
             Sets the caches the duration of this group.
             </summary>
@@ -13683,7 +14345,7 @@
             </code>
             </example>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.WebAssetItemGroupBuilder.Combined(System.Boolean)">
+        <member name="M:Telerik.Web.Mvc.UI.WebAssetGroupBuilder.Combined(System.Boolean)">
             <summary>
             Sets whether the groups items will be served as combined.
             </summary>
@@ -13695,16 +14357,16 @@
             </code>
             </example>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.WebAssetItemGroupBuilder.DefaultPath(System.String)">
+        <member name="M:Telerik.Web.Mvc.UI.WebAssetGroupBuilder.DefaultPath(System.String)">
             <summary>
-            Sets the defaults path of the containing <see cref="T:Telerik.Web.Mvc.UI.WebAssetItem"/>.
+            Sets the defaults path of the containing <see cref="T:Telerik.Web.Mvc.WebAsset"/>.
             </summary>
             <param name="path">The path.</param>
             <returns></returns>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.WebAssetItemGroupBuilder.Add(System.String)">
+        <member name="M:Telerik.Web.Mvc.UI.WebAssetGroupBuilder.Add(System.String)">
             <summary>
-            Adds the specified source as <see cref="T:Telerik.Web.Mvc.UI.WebAssetItem"/>.
+            Adds the specified source as <see cref="T:Telerik.Web.Mvc.WebAsset"/>.
             </summary>
             <param name="value">The value.</param>
             <example>
@@ -13725,7 +14387,7 @@
             Used to ensure that the same instance is used for the same HttpContext.
             </summary>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.ScriptRegistrar.#ctor(Telerik.Web.Mvc.UI.WebAssetItemCollection,System.Collections.Generic.IList{Telerik.Web.Mvc.UI.IScriptableComponent},System.Web.Mvc.ViewContext,Telerik.Web.Mvc.UI.IWebAssetItemMerger,Telerik.Web.Mvc.UI.ScriptWrapperBase)">
+        <member name="M:Telerik.Web.Mvc.UI.ScriptRegistrar.#ctor(Telerik.Web.Mvc.WebAssetCollection,System.Collections.Generic.IList{Telerik.Web.Mvc.UI.IScriptableComponent},System.Web.Mvc.ViewContext,Telerik.Web.Mvc.Infrastructure.IWebAssetCollectionResolver,Telerik.Web.Mvc.UI.ScriptWrapperBase)">
             <summary>
             Initializes a new instance of the <see cref="T:Telerik.Web.Mvc.UI.ScriptRegistrar"/> class.
             </summary>
@@ -13820,12 +14482,6 @@
             </summary>
             <value>The view context.</value>
         </member>
-        <member name="P:Telerik.Web.Mvc.UI.ScriptRegistrar.AssetMerger">
-            <summary>
-            Gets the asset merger.
-            </summary>
-            <value>The asset merger.</value>
-        </member>
         <member name="P:Telerik.Web.Mvc.UI.ScriptRegistrar.ScriptWrapper">
             <summary>
             Gets the script wrapper that is used to write the script statements.
@@ -13869,7 +14525,7 @@
             </code>
             </example>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.ScriptRegistrarBuilder.DefaultGroup(System.Action{Telerik.Web.Mvc.UI.WebAssetItemGroupBuilder})">
+        <member name="M:Telerik.Web.Mvc.UI.ScriptRegistrarBuilder.DefaultGroup(System.Action{Telerik.Web.Mvc.UI.WebAssetGroupBuilder})">
             <summary>
             Configures the <see cref="P:Telerik.Web.Mvc.UI.ScriptRegistrar.DefaultGroup"/>.
             </summary>
@@ -13916,7 +14572,7 @@
             </code>
             </example>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.ScriptRegistrarBuilder.Scripts(System.Action{Telerik.Web.Mvc.UI.WebAssetItemCollectionBuilder})">
+        <member name="M:Telerik.Web.Mvc.UI.ScriptRegistrarBuilder.Scripts(System.Action{Telerik.Web.Mvc.UI.WebAssetCollectionBuilder})">
             <summary>
             Executes the provided delegate that is used to register the script files fluently in different groups.
             </summary>
