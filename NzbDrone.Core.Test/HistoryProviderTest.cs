@@ -8,6 +8,7 @@ using MbUnit.Framework.ContractVerifiers;
 using Moq;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
+using NzbDrone.Core.Repository.Quality;
 using SubSonic.Repository;
 
 namespace NzbDrone.Core.Test
@@ -19,7 +20,7 @@ namespace NzbDrone.Core.Test
         public void AllItems()
         {
             //Setup
-            var indexer = new Indexer {Enabled = true, Name = "NzbMatrix", Order = 1, RssUrl = "http://www.nzbmatrix.com"};
+            var indexer = new Indexer {Enabled = true, IndexerName = "NzbMatrix", Order = 1, RssUrl = "http://www.nzbmatrix.com"};
             var series = new Series
                              {
                                  SeriesId = 5656,
@@ -47,7 +48,7 @@ namespace NzbDrone.Core.Test
             var list = new List<History>();
             list.Add(new History
                          {
-                             Id = new int(),
+                             HistoryId = new int(),
                              Date = DateTime.Now,
                              IsProper = false,
                              Quality = 1,
@@ -73,7 +74,7 @@ namespace NzbDrone.Core.Test
         {
             //Todo: This test fails... Moq Setup doesn't return the expected value
             //Setup
-            var indexer = new Indexer { Enabled = true, Name = "NzbMatrix", Order = 1, RssUrl = "http://www.nzbmatrix.com" };
+            var indexer = new Indexer { Enabled = true, IndexerName = "NzbMatrix", Order = 1, RssUrl = "http://www.nzbmatrix.com" };
             var series = new Series
             {
                 SeriesId = 5656,
@@ -101,7 +102,7 @@ namespace NzbDrone.Core.Test
             var list = new List<History>();
             list.Add(new History
             {
-                Id = new int(),
+                HistoryId = new int(),
                 Date = DateTime.Now,
                 IsProper = false,
                 Quality = 1,
@@ -118,7 +119,7 @@ namespace NzbDrone.Core.Test
             var target = new HistoryProvider(repo.Object);
 
             //Act
-            var result = target.Exists(episode, false);
+            var result = target.Exists(episode.EpisodeId, QualityTypes.TV, false);
 
             //Assert
             Assert.AreEqual(result, true);
@@ -130,7 +131,7 @@ namespace NzbDrone.Core.Test
             //Todo: This test fails... Moq Setup doesn't return the expected value
 
             //Setup
-            var indexer = new Indexer { Enabled = true, Name = "NzbMatrix", Order = 1, RssUrl = "http://www.nzbmatrix.com" };
+            var indexer = new Indexer { Enabled = true, IndexerName = "NzbMatrix", Order = 1, RssUrl = "http://www.nzbmatrix.com" };
             var series = new Series
             {
                 SeriesId = 5656,
@@ -158,7 +159,7 @@ namespace NzbDrone.Core.Test
             var list = new List<History>();
             list.Add(new History
             {
-                Id = new int(),
+                HistoryId = new int(),
                 Date = DateTime.Now,
                 IsProper = false,
                 Quality = 1,
@@ -173,7 +174,7 @@ namespace NzbDrone.Core.Test
             var target = new HistoryProvider(repo.Object);
 
             //Act
-            var result = target.Exists(episode, true);
+            var result = target.Exists(episode.EpisodeId, QualityTypes.TV, true);
 
             //Assert
             Assert.AreEqual(result, false);
