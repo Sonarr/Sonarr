@@ -76,11 +76,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\Copy of SettingsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LogController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\SeriesController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
+    <Compile Include="Controllers\SharedController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -98,6 +100,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\ajax-loader.gif" />
     <Content Include="Content\Images\spin.gif" />
     <Content Include="Content\Black\editor.png" />
     <Content Include="Content\Black\loading.gif" />
@@ -123,6 +126,25 @@
     <Content Include="Content\Images\img02.jpg" />
     <Content Include="Content\Images\img03.jpg" />
     <Content Include="Content\Images\img07.jpg" />
+    <Content Include="Content\Images\ui-bg_diagonals-small_0_aaaaaa_40x40.png" />
+    <Content Include="Content\Images\ui-bg_diagonals-thick_15_444444_40x40.png" />
+    <Content Include="Content\Images\ui-bg_glass_100_f0f0f0_1x400.png" />
+    <Content Include="Content\Images\ui-bg_glass_50_99c2ff_1x400.png" />
+    <Content Include="Content\Images\ui-bg_glass_55_fbf5d0_1x400.png" />
+    <Content Include="Content\Images\ui-bg_glass_80_e6e6e6_1x400.png" />
+    <Content Include="Content\Images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\Images\ui-bg_highlight-hard_100_f9f9f9_1x100.png" />
+    <Content Include="Content\Images\ui-bg_highlight-soft_100_e7eef3_1x100.png" />
+    <Content Include="Content\Images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\Images\ui-icons_2694e8_256x240.png" />
+    <Content Include="Content\Images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\Images\ui-icons_72a7cf_256x240.png" />
+    <Content Include="Content\Images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\Images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\Images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Content\jquery-ui-1.8.8.custom.css" />
+    <Content Include="Content\jquery-ui.css" />
+    <Content Include="Content\jquery-ui.custom.css" />
     <Content Include="Content\jquery.jgrowl.css" />
     <Content Include="Content\notibar.css" />
     <Content Include="Content\Office2007\editor.png" />
@@ -211,15 +233,51 @@
     <Content Include="Scripts\2010.2.825\telerik.textbox.min.js" />
     <Content Include="Scripts\2010.2.825\telerik.treeview.min.js" />
     <Content Include="Scripts\2010.2.825\telerik.window.min.js" />
+    <Content Include="Scripts\2010.3.1110\jquery-1.4.3.min.js" />
+    <Content Include="Scripts\2010.3.1110\jquery.validate.min.js" />
+    <Content Include="Scripts\2010.3.1110\telerik.autocomplete.min.js" />
+    <Content Include="Scripts\2010.3.1110\telerik.calendar.min.js" />
+    <Content Include="Scripts\2010.3.1110\telerik.combobox.min.js" />
+    <Content Include="Scripts\2010.3.1110\telerik.common.min.js" />
+    <Content Include="Scripts\2010.3.1110\telerik.datepicker.min.js" />
+    <Content Include="Scripts\2010.3.1110\telerik.datetimepicker.min.js" />
+    <Content Include="Scripts\2010.3.1110\telerik.draganddrop.min.js" />
+    <Content Include="Scripts\2010.3.1110\telerik.editor.min.js" />
+    <Content Include="Scripts\2010.3.1110\telerik.grid.editing.min.js" />
+    <Content Include="Scripts\2010.3.1110\telerik.grid.filtering.min.js" />
+    <Content Include="Scripts\2010.3.1110\telerik.grid.grouping.min.js" />
+    <Content Include="Scripts\2010.3.1110\telerik.grid.min.js" />
+    <Content Include="Scripts\2010.3.1110\telerik.grid.reordering.min.js" />
+    <Content Include="Scripts\2010.3.1110\telerik.grid.resizing.min.js" />
+    <Content Include="Scripts\2010.3.1110\telerik.list.min.js" />
+    <Content Include="Scripts\2010.3.1110\telerik.menu.min.js" />
+    <Content Include="Scripts\2010.3.1110\telerik.panelbar.min.js" />
+    <Content Include="Scripts\2010.3.1110\telerik.tabstrip.min.js" />
+    <Content Include="Scripts\2010.3.1110\telerik.textbox.min.js" />
+    <Content Include="Scripts\2010.3.1110\telerik.timepicker.min.js" />
+    <Content Include="Scripts\2010.3.1110\telerik.treeview.min.js" />
+    <Content Include="Scripts\2010.3.1110\telerik.window.min.js" />
+    <Content Include="Scripts\jquery-1.4.3.min.js" />
+    <Content Include="Scripts\jquery-ui-1.8.8.min.js" />
     <Content Include="Scripts\jquery-ui-1.8.5.custom.min.js" />
+    <Content Include="Scripts\jquery.form.js" />
     <Content Include="Scripts\jquery.jgrowl.js" />
+    <Content Include="Scripts\jquery-tgc-countdown-1.0.js" />
     <Content Include="Scripts\Notification.js" />
+    <Content Include="Scripts\telerik.common.min.js" />
     <Content Include="Views\Log\Index.aspx" />
     <Content Include="Views\Series\Details.aspx" />
     <Content Include="Views\Series\EpisodeDetail.ascx" />
     <Content Include="Views\Series\index.aspx" />
     <Content Include="Views\Series\Unmapped.aspx" />
+    <Content Include="Views\Settings\Copy of Indexers.ascx" />
+    <Content Include="Views\Settings\Downloads.ascx" />
+    <Content Include="Views\Settings\General.ascx" />
+    <Content Include="Views\Settings\Index-old.aspx" />
     <Content Include="Views\Settings\Index.aspx" />
+    <Content Include="Views\Settings\Indexers.ascx" />
+    <Content Include="Views\Settings\SubMenu.ascx" />
+    <Content Include="Views\Shared\Footer.ascx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -283,7 +341,7 @@
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost/NzbDrone</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>True</UseCustomServer>
+          <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>http://localhost:8989</CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>

@@ -8,6 +8,7 @@ using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository.Quality;
+using Rss;
 
 namespace NzbDrone.Core
 {
@@ -144,6 +145,19 @@ namespace NzbDrone.Core
           }
           
           return info.FullName.ToLower().Trim('/', '\\', ' ');
+        }
+
+        public static NzbInfoModel ParseNzbInfo(FeedInfoModel feed, RssItem item)
+        {
+            NzbSiteModel site = NzbSiteModel.Parse(feed.Url.ToLower());
+            return new NzbInfoModel
+            {
+                Id = site.ParseId(item.Link.ToString()),
+                Title = item.Title,
+                Site = site,
+                Link = item.Link,
+                Description = item.Description
+            };
         }
     }
 }

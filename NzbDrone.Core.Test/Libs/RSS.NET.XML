@@ -1,0 +1,1388 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>RSS.NET</name>
+    </assembly>
+    <members>
+        <member name="T:Rss.RssFeed">
+            <summary>The contents of a RssFeed</summary>
+        </member>
+        <member name="M:Rss.RssFeed.#ctor">
+            <summary>Initialize a new instance of the RssFeed class.</summary>
+        </member>
+        <member name="M:Rss.RssFeed.#ctor(System.Text.Encoding)">
+            <summary>Initialize a new instance of the RssFeed class with a specified encoding.</summary>
+        </member>
+        <member name="M:Rss.RssFeed.ToString">
+            <summary>Returns a string representation of the current Object.</summary>
+            <returns>The Url of the feed</returns>
+        </member>
+        <member name="M:Rss.RssFeed.Read(System.String)">
+            <summary>Reads the specified RSS feed</summary>
+            <param name="url">The url or filename of the RSS feed</param>
+            <returns>The contents of the feed</returns>
+        </member>
+        <member name="M:Rss.RssFeed.Read(System.Net.HttpWebRequest)">
+            <summary>Reads the specified RSS feed</summary>
+            <param name="Request">The specified way to connect to the web server</param>
+            <returns>The contents of the feed</returns>
+        </member>
+        <member name="M:Rss.RssFeed.Read(Rss.RssFeed)">
+            <summary>Reads the specified RSS feed</summary>
+            <param name="oldFeed">The cached version of the feed</param>
+            <returns>The current contents of the feed</returns>
+            <remarks>Will not download the feed if it has not been modified</remarks>
+        </member>
+        <member name="M:Rss.RssFeed.Read(System.Net.HttpWebRequest,Rss.RssFeed)">
+            <summary>Reads the specified RSS feed</summary>
+            <param name="Request">The specified way to connect to the web server</param>
+            <param name="oldFeed">The cached version of the feed</param>
+            <returns>The current contents of the feed</returns>
+            <remarks>Will not download the feed if it has not been modified</remarks>
+        </member>
+        <member name="M:Rss.RssFeed.Write(System.IO.Stream)">
+            <summary>Writes the RSS feed to the specified stream.</summary>
+            <param name="stream">specified Stream</param>
+            <exception cref="T:System.ArgumentException">The Stream cannot be written to.</exception>
+            <exception cref="T:System.InvalidOperationException">Feed must contain at least one channel.</exception>
+            <exception cref="T:System.InvalidOperationException">Channel must contain at least one item.</exception>
+        </member>
+        <member name="M:Rss.RssFeed.Write(System.String)">
+            <summary>Writes the RSS feed to the specified file.</summary>
+            <remarks>The encoding is ISO-8859-1.</remarks>
+            <exception cref="T:System.ArgumentException">The filename is empty, contains only white space, or contains one or more invalid characters.</exception>
+            <exception cref="T:System.UnauthorizedAccessException">Access is denied.</exception>
+            <exception cref="T:System.ArgumentNullException">The filename is a (null c#, Nothing vb) reference.</exception>
+            <exception cref="T:System.IO.DirectoryNotFoundException">The directory to write to is not found.</exception>
+            <exception cref="T:System.IO.IOException">The filename includes an incorrect or invalid syntax for file name, directory name, or volume label syntax.</exception>
+            <exception cref="T:System.Security.SecurityException">The caller does not have the required permission.</exception>
+            <param name="fileName">specified file (including path) If the file exists, it will be truncated with the new content.</param>
+            <exception cref="T:System.InvalidOperationException">Feed must contain at least one channel.</exception>
+            <exception cref="T:System.InvalidOperationException">Channel must contain at least one item.</exception>
+        </member>
+        <member name="P:Rss.RssFeed.Channels">
+            <summary>The channels that are contained in the feed.</summary>
+        </member>
+        <member name="P:Rss.RssFeed.Modules">
+            <summary>The modules that the feed adhears to.</summary>
+        </member>
+        <member name="P:Rss.RssFeed.Exceptions">
+            <summary>A collection of all exceptions encountered during the reading of the feed.</summary>
+        </member>
+        <member name="P:Rss.RssFeed.Version">
+            <summary>The Version of the feed.</summary>
+        </member>
+        <member name="P:Rss.RssFeed.ETag">
+            <summary>The server generated hash of the feed.</summary>
+        </member>
+        <member name="P:Rss.RssFeed.LastModified">
+            <summary>The server generated last modfified date and time of the feed.</summary>
+        </member>
+        <member name="P:Rss.RssFeed.Cached">
+            <summary>Indicates this feed has not been changed on the server, and the local copy was returned.</summary>
+        </member>
+        <member name="P:Rss.RssFeed.Url">
+            <summary>Location of the feed</summary>
+        </member>
+        <member name="P:Rss.RssFeed.Encoding">
+            <summary>Encoding of the feed</summary>
+        </member>
+        <member name="T:Rss.RssCategory">
+            <summary>Provide information regarding the location of the subject matter of the channel in a taxonomy</summary>
+        </member>
+        <member name="T:Rss.RssElement">
+            <summary>Base class for all RSS elements</summary>
+        </member>
+        <member name="M:Rss.RssElement.#ctor">
+            <summary>Initialize a new instance of the RssElement class</summary>
+        </member>
+        <member name="M:Rss.RssCategory.#ctor">
+            <summary>Initialize a new instance of the RssCategory class</summary>
+        </member>
+        <member name="P:Rss.RssCategory.Name">
+            <summary>Actual categorization given for this item, within the chosen taxonomy</summary>
+        </member>
+        <member name="P:Rss.RssCategory.Domain">
+            <summary>URL of external taxonomy</summary>
+        </member>
+        <member name="T:Rss.RssChannelCollection">
+            <summary>A strongly typed collection of <see cref="T:Rss.RssChannel"/> objects</summary>
+        </member>
+        <member name="M:Rss.RssChannelCollection.Add(Rss.RssChannel)">
+            <summary>Adds a specified channel to this collection.</summary>
+            <param name="channel">The channel to add.</param>
+            <returns>The zero-based index of the added channel.</returns>
+        </member>
+        <member name="M:Rss.RssChannelCollection.Contains(Rss.RssChannel)">
+            <summary>Determines whether the RssChannelCollection contains a specific element.</summary>
+            <param name="rssChannel">The RssChannel to locate in the RssChannelCollection.</param>
+            <returns>true if the RssChannelCollection contains the specified value; otherwise, false.</returns>
+        </member>
+        <member name="M:Rss.RssChannelCollection.CopyTo(Rss.RssChannel[],System.Int32)">
+            <summary>Copies the entire RssChannelCollection to a compatible one-dimensional <see cref="T:System.Array"/>, starting at the specified index of the target array.</summary>
+            <param name="array">The one-dimensional RssChannel Array that is the destination of the elements copied from RssChannelCollection. The Array must have zero-based indexing.</param>
+            <param name="index">The zero-based index in array at which copying begins.</param>
+            <exception cref="T:System.ArgumentNullException">array is a null reference (Nothing in Visual Basic).</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">index is less than zero.</exception>
+            <exception cref="T:System.ArgumentException">array is multidimensional. -or- index is equal to or greater than the length of array.-or-The number of elements in the source RssChannelCollection is greater than the available space from index to the end of the destination array.</exception>
+        </member>
+        <member name="M:Rss.RssChannelCollection.IndexOf(Rss.RssChannel)">
+            <summary>Searches for the specified RssChannel and returns the zero-based index of the first occurrence within the entire RssChannelCollection.</summary>
+            <param name="rssChannel">The RssChannel to locate in the RssChannelCollection.</param>
+            <returns>The zero-based index of the first occurrence of RssChannel within the entire RssChannelCollection, if found; otherwise, -1.</returns>
+        </member>
+        <member name="M:Rss.RssChannelCollection.Insert(System.Int32,Rss.RssChannel)">
+            <summary>Inserts a channel into this collection at a specified index.</summary>
+            <param name="index">The zero-based index of the collection at which to insert the channel.</param>
+            <param name="channel">The channel to insert into this collection.</param>
+        </member>
+        <member name="M:Rss.RssChannelCollection.Remove(Rss.RssChannel)">
+            <summary>Removes a specified channel from this collection.</summary>
+            <param name="channel">The channel to remove.</param>
+        </member>
+        <member name="P:Rss.RssChannelCollection.Item(System.Int32)">
+            <summary>Gets or sets the channel at a specified index.<para>In C#, this property is the indexer for the class.</para></summary>
+            <param name="index">The index of the collection to access.</param>
+            <value>A channel at each valid index.</value>
+            <remarks>This method is an indexer that can be used to access the collection.</remarks>
+            <exception cref="T:System.ArgumentOutOfRangeException">index is not a valid index.</exception>
+        </member>
+        <member name="T:Rss.RssEnclosure">
+            <summary>A reference to an attachment to the item</summary>
+        </member>
+        <member name="M:Rss.RssEnclosure.#ctor">
+            <summary>Initialize a new instance of the RssEnclosure class.</summary>
+        </member>
+        <member name="P:Rss.RssEnclosure.Url">
+            <summary>Where the enclosure is located</summary>
+        </member>
+        <member name="P:Rss.RssEnclosure.Length">
+            <summary>The size of the enclosure, in bytes</summary>
+            <remarks>-1 represents a null.</remarks>
+        </member>
+        <member name="P:Rss.RssEnclosure.Type">
+            <summary>A standard Multipurpose Internet Mail Extensions (MIME) type</summary>
+        </member>
+        <member name="T:Rss.RssChannel">
+            <summary>Grouping of related content items on a site</summary>
+        </member>
+        <member name="M:Rss.RssChannel.#ctor">
+            <summary>Initialize a new instance of the RssChannel class.</summary>
+        </member>
+        <member name="M:Rss.RssChannel.ToString">
+            <summary>Returns a string representation of the current Object.</summary>
+            <returns>The channel's title, description, or "RssChannel" if the title and description are blank.</returns>
+        </member>
+        <member name="P:Rss.RssChannel.Title">
+            <summary>The name of the channel</summary>
+            <remarks>Maximum length is 100 characters (For RSS 0.91)</remarks>
+        </member>
+        <member name="P:Rss.RssChannel.Link">
+            <summary>URL of the website named in the title</summary>
+            <remarks>Maximum length is 500 characters (For RSS 0.91)</remarks>
+        </member>
+        <member name="P:Rss.RssChannel.Description">
+            <summary>Description of the channel</summary>
+            <remarks>Maximum length is 500 characters (For RSS 0.91)</remarks>
+        </member>
+        <member name="P:Rss.RssChannel.Language">
+            <summary>Language the channel is written in</summary>
+        </member>
+        <member name="P:Rss.RssChannel.Image">
+            <summary>A link and description for a graphic icon that represent a channel</summary>
+        </member>
+        <member name="P:Rss.RssChannel.Copyright">
+            <summary>Copyright notice for content in the channel</summary>
+            <remarks>Maximum length is 100 (For RSS 0.91)</remarks>
+        </member>
+        <member name="P:Rss.RssChannel.ManagingEditor">
+            <summary>The email address of the managing editor of the channel, the person to contact for editorial inquiries</summary>
+            <remarks>
+            <para>Maximum length is 100 (For RSS 0.91)</para>
+            <para>The suggested format for email addresses in RSS elements is</para>
+            <para>bull@mancuso.com (Bull Mancuso)</para>
+            </remarks>
+        </member>
+        <member name="P:Rss.RssChannel.WebMaster">
+            <summary>The email address of the webmaster for the channel</summary>
+            <remarks>
+            <para>Person to contact if there are technical problems</para>
+            <para>Maximum length is 100 (For RSS 0.91)</para>
+            <para>The suggested format for email addresses in RSS elements is</para>
+            <para>bull@mancuso.com (Bull Mancuso)</para>
+            </remarks>
+        </member>
+        <member name="P:Rss.RssChannel.Rating">
+            <summary>The PICS rating for the channel</summary>
+            <remarks>Maximum length is 500 (For RSS 0.91)</remarks>
+        </member>
+        <member name="P:Rss.RssChannel.PubDate">
+            <summary>The publication date for the content in the channel, expressed as the coordinated universal time (UTC)</summary>
+        </member>
+        <member name="P:Rss.RssChannel.LastBuildDate">
+            <summary>The date-time the last time the content of the channel changed, expressed as the coordinated universal time (UTC)</summary>
+        </member>
+        <member name="P:Rss.RssChannel.Categories">
+            <summary>One or more categories the channel belongs to.</summary>
+        </member>
+        <member name="P:Rss.RssChannel.Generator">
+            <summary>A string indicating the program used to generate the channel</summary>
+        </member>
+        <member name="P:Rss.RssChannel.Docs">
+            <summary>A URL, points to the documentation for the format used in the RSS file</summary>
+            <remarks>Maximum length is 500 (For RSS 0.91).</remarks>
+        </member>
+        <member name="P:Rss.RssChannel.TextInput">
+            <summary>Provides information about an HTTP GET feature, typically for a search or subscription</summary>
+        </member>
+        <member name="P:Rss.RssChannel.SkipDays">
+            <summary>Readers should not read the channel during days listed. (UTC)</summary>
+            <remarks>Days are listed in the array in the following order:<list type="number">
+            <item><description>Monday</description></item>
+            <item><description>Tuesday</description></item>
+            <item><description>Wednesday</description></item>
+            <item><description>Thursday</description></item>
+            <item><description>Friday</description></item>
+            <item><description>Saturday</description></item>
+            <item><description>Sunday</description></item>
+            <item><description>Monday</description></item>
+            </list></remarks>
+        </member>
+        <member name="P:Rss.RssChannel.SkipHours">
+            <summary>Readers should not read the channel during hours listed (UTC)</summary>
+            <remarks>Represents a time in UTC - 1.</remarks>
+        </member>
+        <member name="P:Rss.RssChannel.Cloud">
+            <summary>Allow processes to register with a cloud to be notified of updates to the channel</summary>
+        </member>
+        <member name="P:Rss.RssChannel.TimeToLive">
+            <summary>The number of minutes that a channel can be cached.</summary>
+        </member>
+        <member name="P:Rss.RssChannel.Items">
+            <summary>All items within the channel</summary>
+        </member>
+        <member name="T:Rss.RssPhotoAlbumCategoryPhotoPeople">
+            <summary>People in a photo</summary>
+        </member>
+        <member name="T:Rss.RssModuleItemCollection">
+            <summary>A strongly typed collection of <see cref="T:Rss.RssModuleItem"/> objects</summary>
+        </member>
+        <member name="M:Rss.RssModuleItemCollection.Add(Rss.RssModuleItem)">
+            <summary>Adds a specified item to this collection.</summary>
+            <param name="rssModuleItem">The item to add.</param>
+            <returns>The zero-based index of the added item.</returns>
+        </member>
+        <member name="M:Rss.RssModuleItemCollection.Contains(Rss.RssModuleItem)">
+            <summary>Determines whether the RssModuleItemCollection contains a specific element.</summary>
+            <param name="rssModuleItem">The RssModuleItem to locate in the RssModuleItemCollection.</param>
+            <returns>true if the RssModuleItemCollection contains the specified value; otherwise, false.</returns>
+        </member>
+        <member name="M:Rss.RssModuleItemCollection.CopyTo(Rss.RssModuleItem[],System.Int32)">
+            <summary>Copies the entire RssModuleItemCollection to a compatible one-dimensional <see cref="T:System.Array"/>, starting at the specified index of the target array.</summary>
+            <param name="array">The one-dimensional RssModuleItem Array that is the destination of the elements copied from RssModuleItemCollection. The Array must have zero-based indexing.</param>
+            <param name="index">The zero-based index in array at which copying begins.</param>
+            <exception cref="T:System.ArgumentNullException">array is a null reference (Nothing in Visual Basic).</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">index is less than zero.</exception>
+            <exception cref="T:System.ArgumentException">array is multidimensional. -or- index is equal to or greater than the length of array.-or-The number of elements in the source RssModuleItemCollection is greater than the available space from index to the end of the destination array.</exception>
+        </member>
+        <member name="M:Rss.RssModuleItemCollection.IndexOf(Rss.RssModuleItem)">
+            <summary>Searches for the specified RssModuleItem and returns the zero-based index of the first occurrence within the entire RssModuleItemCollection.</summary>
+            <param name="rssModuleItem">The RssModuleItem to locate in the RssModuleItemCollection.</param>
+            <returns>The zero-based index of the first occurrence of RssModuleItem within the entire RssModuleItemCollection, if found; otherwise, -1.</returns>
+        </member>
+        <member name="M:Rss.RssModuleItemCollection.Insert(System.Int32,Rss.RssModuleItem)">
+            <summary>Inserts an item into this collection at a specified index.</summary>
+            <param name="index">The zero-based index of the collection at which to insert the item.</param>
+            <param name="rssModuleItem">The item to insert into this collection.</param>
+        </member>
+        <member name="M:Rss.RssModuleItemCollection.Remove(Rss.RssModuleItem)">
+            <summary>Removes a specified item from this collection.</summary>
+            <param name="rssModuleItem">The item to remove.</param>
+        </member>
+        <member name="M:Rss.RssModuleItemCollection.BindTo(System.Int32)">
+            <summary>Bind a particular item to this module</summary>
+            <param name="itemHashCode">Hash code of the item</param>
+        </member>
+        <member name="M:Rss.RssModuleItemCollection.IsBoundTo(System.Int32)">
+            <summary>Check if a particular item is bound to this module</summary>
+            <param name="itemHashCode">Hash code of the item</param>
+            <returns>true if this item is bound to this module, otherwise false</returns>
+        </member>
+        <member name="P:Rss.RssModuleItemCollection.Item(System.Int32)">
+            <summary>Gets or sets the item at a specified index.<para>In C#, this property is the indexer for the class.</para></summary>
+            <param name="index">The index of the collection to access.</param>
+            <value>An item at each valid index.</value>
+            <remarks>This method is an indexer that can be used to access the collection.</remarks>
+            <exception cref="T:System.ArgumentOutOfRangeException">index is not a valid index.</exception>
+        </member>
+        <member name="M:Rss.RssPhotoAlbumCategoryPhotoPeople.#ctor">
+            <summary>Initialize a new instance of the RssPhotoAlbumItemPhotoPeople class</summary>
+        </member>
+        <member name="M:Rss.RssPhotoAlbumCategoryPhotoPeople.#ctor(System.String)">
+            <summary>Initialize a new instance of the RssPhotoAlbumItemPhotoPeople class</summary>
+            <param name="value">Name of person</param>
+        </member>
+        <member name="M:Rss.RssPhotoAlbumCategoryPhotoPeople.Add(System.String)">
+            <summary>Add a person to the photo</summary>
+            <param name="value">Name of person</param>
+            <returns>The zero-based index of the added item</returns>
+        </member>
+        <member name="T:Rss.RssPhotoAlbumCategoryPhotos">
+            <summary>A collection of photos in a category</summary>
+        </member>
+        <member name="T:Rss.RssModuleItemCollectionCollection">
+            <summary>A strongly typed collection of <see cref="T:Rss.RssModuleItemCollection"/> objects</summary>
+        </member>
+        <member name="M:Rss.RssModuleItemCollectionCollection.Add(Rss.RssModuleItemCollection)">
+            <summary>Adds a specified item to this collection.</summary>
+            <param name="rssModuleItemCollection">The item to add.</param>
+            <returns>The zero-based index of the added item.</returns>
+        </member>
+        <member name="M:Rss.RssModuleItemCollectionCollection.Contains(Rss.RssModuleItemCollection)">
+            <summary>Determines whether the RssModuleItemCollectionCollection contains a specific element.</summary>
+            <param name="rssModuleItemCollection">The RssModuleItemCollection to locate in the RssModuleItemCollectionCollection.</param>
+            <returns>true if the RssModuleItemCollectionCollection contains the specified value; otherwise, false.</returns>
+        </member>
+        <member name="M:Rss.RssModuleItemCollectionCollection.CopyTo(Rss.RssModuleItemCollection[],System.Int32)">
+            <summary>Copies the entire RssModuleItemCollectionCollection to a compatible one-dimensional <see cref="T:System.Array"/>, starting at the specified index of the target array.</summary>
+            <param name="array">The one-dimensional RssModuleItemCollection Array that is the destination of the elements copied from RssModuleItemCollectionCollection. The Array must have zero-based indexing.</param>
+            <param name="index">The zero-based index in array at which copying begins.</param>
+            <exception cref="T:System.ArgumentNullException">array is a null reference (Nothing in Visual Basic).</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">index is less than zero.</exception>
+            <exception cref="T:System.ArgumentException">array is multidimensional. -or- index is equal to or greater than the length of array.-or-The number of elements in the source RssModuleItemCollectionCollection is greater than the available space from index to the end of the destination array.</exception>
+        </member>
+        <member name="M:Rss.RssModuleItemCollectionCollection.IndexOf(Rss.RssModuleItemCollection)">
+            <summary>Searches for the specified RssModuleItemCollection and returns the zero-based index of the first occurrence within the entire RssModuleItemCollectionCollection.</summary>
+            <param name="rssModuleItemCollection">The RssModuleItemCollection to locate in the RssModuleItemCollectionCollection.</param>
+            <returns>The zero-based index of the first occurrence of RssModuleItemCollection within the entire RssModuleItemCollectionCollection, if found; otherwise, -1.</returns>
+        </member>
+        <member name="M:Rss.RssModuleItemCollectionCollection.Insert(System.Int32,Rss.RssModuleItemCollection)">
+            <summary>Inserts an item into this collection at a specified index.</summary>
+            <param name="index">The zero-based index of the collection at which to insert the item.</param>
+            <param name="rssModuleItemCollection">The item to insert into this collection.</param>
+        </member>
+        <member name="M:Rss.RssModuleItemCollectionCollection.Remove(Rss.RssModuleItemCollection)">
+            <summary>Removes a specified item from this collection.</summary>
+            <param name="rssModuleItemCollection">The item to remove.</param>
+        </member>
+        <member name="P:Rss.RssModuleItemCollectionCollection.Item(System.Int32)">
+            <summary>Gets or sets the item at a specified index.<para>In C#, this property is the indexer for the class.</para></summary>
+            <param name="index">The index of the collection to access.</param>
+            <value>An item at each valid index.</value>
+            <remarks>This method is an indexer that can be used to access the collection.</remarks>
+            <exception cref="T:System.ArgumentOutOfRangeException">index is not a valid index.</exception>
+        </member>
+        <member name="M:Rss.RssPhotoAlbumCategoryPhotos.#ctor">
+            <summary>Initialize a new instance of the RssPhotoAlbumItemPhoto class</summary>
+        </member>
+        <member name="M:Rss.RssPhotoAlbumCategoryPhotos.Add(Rss.RssPhotoAlbumCategoryPhoto)">
+            <summary>Adds a sepecified photo to this collection.</summary>
+            <param name="photo">The photo to add.</param>
+            <returns>The zero-based index of the added item.</returns>
+        </member>
+        <member name="T:Rss.RssPhotoAlbumCategoryPhoto">
+            <summary>A photo in the category</summary>
+        </member>
+        <member name="M:Rss.RssPhotoAlbumCategoryPhoto.#ctor(System.DateTime,System.String,System.Uri)">
+            <summary>Initialize a new instance of the RssPhotoAlbumItemPhoto class</summary>
+            <param name="photoDate">Date of the Photo</param>
+            <param name="photoDescription">Description of the photo.</param>
+            <param name="photoLink">Direct link of the photo.</param>
+        </member>
+        <member name="M:Rss.RssPhotoAlbumCategoryPhoto.#ctor(System.DateTime,System.String,System.Uri,Rss.RssPhotoAlbumCategoryPhotoPeople)">
+            <summary>Initialize a new instance of the RssPhotoAlbumItemPhoto class</summary>
+            <param name="photoDate">Date of the Photo</param>
+            <param name="photoDescription">Description of the photo.</param>
+            <param name="photoPeople">People to add to the photo.</param>
+            <param name="photoLink">Direct link of the photo.</param>
+        </member>
+        <member name="M:Rss.RssPhotoAlbumCategoryPhoto.Add(System.DateTime,System.String,System.Uri,Rss.RssPhotoAlbumCategoryPhotoPeople)">
+            <summary>Adds a specified item to this collection.</summary>
+            <param name="photoDate">Date of the Photo</param>
+            <param name="photoDescription">Description of the photo.</param>
+            <param name="photoPeople">People to add to the photo.</param>
+            <param name="photoLink">Direct link of the photo.</param>
+            <returns>The zero-based index of the added item.</returns>
+        </member>
+        <member name="M:Rss.RssPhotoAlbumCategoryPhoto.Add(System.DateTime,System.String,System.Uri)">
+            <summary>Adds a specified item to this collection.</summary>
+            <param name="photoDate">Date of the Photo</param>
+            <param name="photoDescription">Description of the photo.</param>
+            <param name="photoLink">Direct link of the photo.</param>
+            <returns>The zero-based index of the added item.</returns>
+        </member>
+        <member name="M:Rss.RssPhotoAlbumCategoryPhoto.#ctor(System.String,System.String,System.Uri)">
+            <summary>Initialize a new instance of the RssPhotoAlbumItemPhoto class</summary>
+            <param name="photoDate">Date of the Photo</param>
+            <param name="photoDescription">Description of the photo.</param>
+            <param name="photoLink">Direct link of the photo.</param>
+        </member>
+        <member name="M:Rss.RssPhotoAlbumCategoryPhoto.#ctor(System.String,System.String,System.Uri,Rss.RssPhotoAlbumCategoryPhotoPeople)">
+            <summary>Initialize a new instance of the RssPhotoAlbumItemPhoto class</summary>
+            <param name="photoDate">Date of the Photo</param>
+            <param name="photoDescription">Description of the photo.</param>
+            <param name="photoPeople">People to add to the photo.</param>
+            <param name="photoLink">Direct link of the photo.</param>
+        </member>
+        <member name="M:Rss.RssPhotoAlbumCategoryPhoto.Add(System.String,System.String,System.Uri,Rss.RssPhotoAlbumCategoryPhotoPeople)">
+            <summary>Adds a specified item to this collection.</summary>
+            <param name="photoDate">Date of the Photo</param>
+            <param name="photoDescription">Description of the photo.</param>
+            <param name="photoPeople">People to add to the photo.</param>
+            <param name="photoLink">Direct link of the photo.</param>
+            <returns>The zero-based index of the added item.</returns>
+        </member>
+        <member name="M:Rss.RssPhotoAlbumCategoryPhoto.Add(System.String,System.String,System.Uri)">
+            <summary>Adds a specified item to this collection.</summary>
+            <param name="photoDate">Date of the Photo</param>
+            <param name="photoDescription">Description of the photo.</param>
+            <param name="photoLink">Direct link of the photo.</param>
+            <returns>The zero-based index of the added item.</returns>
+        </member>
+        <member name="T:Rss.RssPhotoAlbumCategories">
+            <summary>A collection of categories in a photo album</summary>
+        </member>
+        <member name="M:Rss.RssPhotoAlbumCategories.#ctor">
+            <summary>Initialize a new instance of the RssPhotoAlbumItemPhoto class</summary>
+        </member>
+        <member name="M:Rss.RssPhotoAlbumCategories.Add(Rss.RssPhotoAlbumCategory)">
+            <summary>Adds a sepecified category to this collection.</summary>
+            <param name="category">The category to add.</param>
+            <returns>The zero-based index of the added item.</returns>
+        </member>
+        <member name="T:Rss.RssPhotoAlbumCategory">
+            <summary>A Photo Album category</summary>
+        </member>
+        <member name="M:Rss.RssPhotoAlbumCategory.#ctor(System.String,System.String,System.DateTime,System.DateTime,Rss.RssPhotoAlbumCategoryPhoto)">
+            <summary>Initialize a new instance of the RssPhotoAlbumItem class</summary>
+            <param name="categoryName">Name of the category.</param>
+            <param name="categoryDescription">Description of the category.</param>
+            <param name="categoryDateFrom">From date of the category.</param>
+            <param name="categoryDateTo">To date of the category.</param>
+            <param name="categoryPhoto">Photos of the category.</param>
+        </member>
+        <member name="M:Rss.RssPhotoAlbumCategory.Add(System.String,System.String,System.DateTime,System.DateTime,Rss.RssPhotoAlbumCategoryPhoto)">
+            <summary>Adds a specified category to this collection.</summary>
+            <param name="categoryName">Name of the category.</param>
+            <param name="categoryDescription">Description of the category.</param>
+            <param name="categoryDateFrom">From date of the category.</param>
+            <param name="categoryDateTo">To date of the category.</param>
+            <param name="categoryPhoto">Photos of the category.</param>
+            <returns>The zero-based index of the added item.</returns>
+        </member>
+        <member name="M:Rss.RssPhotoAlbumCategory.#ctor(System.String,System.String,System.String,System.String,Rss.RssPhotoAlbumCategoryPhoto)">
+            <summary>Initialize a new instance of the RssPhotoAlbumItem class</summary>
+            <param name="categoryName">Name of the category.</param>
+            <param name="categoryDescription">Description of the category.</param>
+            <param name="categoryDateFrom">From date of the category.</param>
+            <param name="categoryDateTo">To date of the category.</param>
+            <param name="categoryPhoto">Photos of the category.</param>
+        </member>
+        <member name="M:Rss.RssPhotoAlbumCategory.Add(System.String,System.String,System.String,System.String,Rss.RssPhotoAlbumCategoryPhoto)">
+            <summary>Adds a specified category to this collection.</summary>
+            <param name="categoryName">Name of the category.</param>
+            <param name="categoryDescription">Description of the category.</param>
+            <param name="categoryDateFrom">From date of the category.</param>
+            <param name="categoryDateTo">To date of the category.</param>
+            <param name="categoryPhoto">Photos of the category.</param>
+            <returns>The zero-based index of the added item.</returns>
+        </member>
+        <member name="M:Rss.RssPhotoAlbumCategory.#ctor(System.String,System.String,System.DateTime,System.DateTime,Rss.RssPhotoAlbumCategoryPhotos)">
+            <summary>Initialize a new instance of the RssPhotoAlbumItem class</summary>
+            <param name="categoryName">Name of the category.</param>
+            <param name="categoryDescription">Description of the category.</param>
+            <param name="categoryDateFrom">From date of the category.</param>
+            <param name="categoryDateTo">To date of the category.</param>
+            <param name="categoryPhotos">Photos of the category.</param>
+        </member>
+        <member name="M:Rss.RssPhotoAlbumCategory.Add(System.String,System.String,System.DateTime,System.DateTime,Rss.RssPhotoAlbumCategoryPhotos)">
+            <summary>Adds a specified category to this collection.</summary>
+            <param name="categoryName">Name of the category.</param>
+            <param name="categoryDescription">Description of the category.</param>
+            <param name="categoryDateFrom">From date of the category.</param>
+            <param name="categoryDateTo">To date of the category.</param>
+            <param name="categoryPhotos">Photos of the category.</param>
+            <returns>The zero-based index of the added item.</returns>
+        </member>
+        <member name="M:Rss.RssPhotoAlbumCategory.#ctor(System.String,System.String,System.String,System.String,Rss.RssPhotoAlbumCategoryPhotos)">
+            <summary>Initialize a new instance of the RssPhotoAlbumItem class</summary>
+            <param name="categoryName">Name of the category.</param>
+            <param name="categoryDescription">Description of the category.</param>
+            <param name="categoryDateFrom">From date of the category.</param>
+            <param name="categoryDateTo">To date of the category.</param>
+            <param name="categoryPhotos">Photos of the category.</param>
+        </member>
+        <member name="M:Rss.RssPhotoAlbumCategory.Add(System.String,System.String,System.String,System.String,Rss.RssPhotoAlbumCategoryPhotos)">
+            <summary>Adds a specified category to this collection.</summary>
+            <param name="categoryName">Name of the category.</param>
+            <param name="categoryDescription">Description of the category.</param>
+            <param name="categoryDateFrom">From date of the category.</param>
+            <param name="categoryDateTo">To date of the category.</param>
+            <param name="categoryPhotos">Photos of the category.</param>
+            <returns>The zero-based index of the added item.</returns>
+        </member>
+        <member name="T:Rss.RssPhotoAlbum">
+            <summary>RSS syndication for Robert A. Wlodarczyk's Photo Album application (to be sold by Inno Thinx LLC)</summary>
+        </member>
+        <member name="T:Rss.RssModule">
+            <summary>Base class for all RSS modules</summary>
+        </member>
+        <member name="M:Rss.RssModule.#ctor">
+            <summary>Initialize a new instance of the RssModule class</summary>
+        </member>
+        <member name="M:Rss.RssModule.BindTo(System.Int32)">
+            <summary>Bind a particular channel to this module</summary>
+            <param name="channelHashCode">Hash code of the channel</param>
+        </member>
+        <member name="M:Rss.RssModule.IsBoundTo(System.Int32)">
+            <summary>Check if a particular channel is bound to this module</summary>
+            <param name="channelHashCode">Hash code of the channel</param>
+            <returns>true if this channel is bound to this module, otherwise false</returns>
+        </member>
+        <member name="P:Rss.RssModule.ChannelExtensions">
+            <summary>Collection of RSSModuleItem that are to be placed in the channel</summary>
+        </member>
+        <member name="P:Rss.RssModule.ItemExtensions">
+            <summary>Collection of RSSModuleItemCollection that are to be placed in the channel item</summary>
+        </member>
+        <member name="P:Rss.RssModule.NamespacePrefix">
+            <summary>Prefix for the given module namespace</summary>
+        </member>
+        <member name="P:Rss.RssModule.NamespaceURL">
+            <summary>URL for the given module namespace</summary>
+        </member>
+        <member name="M:Rss.RssPhotoAlbum.#ctor(System.Uri,Rss.RssPhotoAlbumCategory)">
+            <summary>Initialize a new instance of the RssPhotoAlbum class</summary>
+            <param name="link">Link to the Photo Album</param>
+            <param name="photoAlbumCategory">The category of the Photo Album to add</param>
+        </member>
+        <member name="M:Rss.RssPhotoAlbum.#ctor(System.Uri,Rss.RssPhotoAlbumCategories)">
+            <summary>Initialize a new instance of the RssPhotoAlbum class</summary>
+            <param name="link">Link to the Photo Album</param>
+            <param name="photoAlbumCategories">A collection of categories in the Photo Album to add</param>
+        </member>
+        <member name="P:Rss.RssPhotoAlbum.Link">
+            <summary>Link element for channel</summary>
+        </member>
+        <member name="T:Rss.RssDefault">
+            <summary>Contains default values and methods for maintaining data consistency</summary>
+        </member>
+        <member name="F:Rss.RssDefault.String">
+            <summary>Default value for a string in all RSS classes</summary>
+            <value>empty string</value>
+            <remarks>If an element in the RSS class library has the value of RssDefault.String, consider the element as "not entered", "null", or empty.</remarks>
+        </member>
+        <member name="F:Rss.RssDefault.Int">
+            <summary>Default value for an int in all RSS classes</summary>
+            <value>-1</value>
+            <remarks>If an element in the RSS class library has the value of RssDefault.Int, consider the element as "not entered", "null", or empty.</remarks>
+        </member>
+        <member name="F:Rss.RssDefault.DateTime">
+            <summary>Default value for a DateTime in all RSS classes</summary>
+            <value>DateTime.MinValue</value>
+            <remarks>If an element in the RSS class library has the value of RssDefault.DateTime, consider the element as "not entered", "null", or empty.</remarks>
+        </member>
+        <member name="F:Rss.RssDefault.Uri">
+            <summary>Default value for a Uri in all RSS classes</summary>
+            <value>gopher://rss-net.sf.net</value>
+            <remarks>If an element in the RSS class library has the value of RssDefault.Uri, consider the element as "not entered", "null", or empty.</remarks>
+        </member>
+        <member name="M:Rss.RssDefault.Check(System.String)">
+            <summary>Verifies the string passed is not null</summary>
+            <param name="input">string to verify</param>
+            <returns>RssDefault.String if input is null, otherwise input</returns>
+            <remarks>Method is used in properties to prevent a null value</remarks>
+        </member>
+        <member name="M:Rss.RssDefault.Check(System.Int32)">
+            <summary>Verifies the int passed is greater than or equal to -1</summary>
+            <param name="input">int to verify</param>
+            <returns>RssDefault.Int if int is less than -1, else input</returns>
+            <remarks>Method is used in properties to prevent values less than -1</remarks>
+        </member>
+        <member name="M:Rss.RssDefault.Check(System.Uri)">
+            <summary>Verifies the Uri passed is not null</summary>
+            <param name="input">Uri to verify</param>
+            <returns>RssDefault.Uri if input is null, otherwise input</returns>
+            <remarks>Method is used in all properties to prevent a null value</remarks>
+        </member>
+        <member name="T:Rss.DBBool">
+            <summary>Represents Null, False, and True</summary>
+            <remarks>Source: Microsoft c# example</remarks>
+        </member>
+        <member name="F:Rss.DBBool.Null">
+            <summary>A DBBool containing 'Null'.</summary>
+            <remarks>One of three possible DBBool values.</remarks>
+        </member>
+        <member name="F:Rss.DBBool.False">
+            <summary>A DBBool containing 'False'.</summary>
+            <remarks>One of three possible DBBool values.</remarks>
+        </member>
+        <member name="F:Rss.DBBool.True">
+            <summary>A DBBool containing 'True'.</summary>
+            <remarks>One of three possible DBBool values.</remarks>
+        </member>
+        <member name="F:Rss.DBBool.value">
+            <summary>Private field that stores –1, 0, 1 for False, Null, True.</summary>
+        </member>
+        <member name="M:Rss.DBBool.#ctor(System.Int32)">
+            <summary>Private instance constructor. The value parameter must be –1, 0, or 1.</summary>
+        </member>
+        <member name="M:Rss.DBBool.op_Implicit(System.Boolean)~Rss.DBBool">
+            <summary>Implicit conversion from bool to DBBool. Maps true to DBBool.True and false to DBBool.False.</summary>
+            <param name="x">a DBBool</param>
+        </member>
+        <member name="M:Rss.DBBool.op_Explicit(Rss.DBBool)~System.Boolean">
+            <summary>Explicit conversion from DBBool to bool.</summary>
+            <exception cref="T:System.InvalidOperationException">The given DBBool is Null</exception>
+            <param name="x">a DBBool</param>
+            <returns>true or false</returns>
+        </member>
+        <member name="M:Rss.DBBool.op_Equality(Rss.DBBool,Rss.DBBool)">
+            <summary>Equality operator.</summary>
+            <param name="x">a DBBool</param>
+            <param name="y">a DBBool</param>
+            <returns>Returns Null if either operand is Null, otherwise returns True or False.</returns>
+        </member>
+        <member name="M:Rss.DBBool.op_Inequality(Rss.DBBool,Rss.DBBool)">
+            <summary>Inequality operator.</summary>
+            <param name="x">a DBBool</param>
+            <param name="y">a DBBool</param>
+            <returns>Returns Null if either operand is Null, otherwise returns True or False.</returns>
+        </member>
+        <member name="M:Rss.DBBool.op_LogicalNot(Rss.DBBool)">
+            <summary>Logical negation operator.</summary>
+            <param name="x">a DBBool</param>
+            <returns>Returns True if the operand is False, Null if the operand is Null, or False if the operand is True.</returns>
+        </member>
+        <member name="M:Rss.DBBool.op_BitwiseAnd(Rss.DBBool,Rss.DBBool)">
+            <summary>Logical AND operator.</summary>
+            <param name="x">a DBBool</param>
+            <param name="y">a DBBool</param>
+            <returns>Returns False if either operand is False, otherwise Null if either operand is Null, otherwise True.</returns>
+        </member>
+        <member name="M:Rss.DBBool.op_BitwiseOr(Rss.DBBool,Rss.DBBool)">
+            <summary>Logical OR operator.</summary>
+            <param name="x">a DBBool</param>
+            <param name="y">a DBBool</param>
+            <returns>Returns True if either operand is True, otherwise Null if either operand is Null, otherwise False.</returns>
+        </member>
+        <member name="M:Rss.DBBool.op_True(Rss.DBBool)">
+            <summary>Definitely true operator.</summary>
+            <param name="x">a DBBool</param>
+            <returns>Returns true if the operand is True, false otherwise.</returns>
+        </member>
+        <member name="M:Rss.DBBool.op_False(Rss.DBBool)">
+            <summary>Definitely false operator.</summary>
+            <param name="x">a DBBool</param>
+            <returns>Returns true if the operand is False, false otherwise.</returns>
+        </member>
+        <member name="M:Rss.DBBool.Equals(System.Object)">
+            <summary>Determines whether two DBBool instances are equal.</summary>
+            <param name="o">The object to check.</param>
+            <returns>True if the two DBBools are equal.</returns>
+        </member>
+        <member name="M:Rss.DBBool.GetHashCode">
+            <summary>Serves as a hash function for a particular type, suitable for use in hashing algorithms and data structures like a hash table.</summary>
+            <returns>A hash code for the current DBBool.</returns>
+        </member>
+        <member name="M:Rss.DBBool.ToString">
+            <summary>Returns a string representation of the current Object.</summary>
+            <exception cref="T:System.InvalidOperationException">Object has not been initialized.</exception>
+            <returns>A string containing DBBool.False, DBBool.Null, or DBBool.True</returns>
+        </member>
+        <member name="P:Rss.DBBool.IsNull">
+            <summary>Properties to examine the value of a DBBool.</summary>
+            <remarks>Return true if this DBBool has the given value, false otherwise.</remarks>
+        </member>
+        <member name="P:Rss.DBBool.IsFalse">
+            <summary>Properties to examine the value of a DBBool.</summary>
+            <remarks>Return true if this DBBool has the given value, false otherwise.</remarks>
+        </member>
+        <member name="P:Rss.DBBool.IsTrue">
+            <summary>Properties to examine the value of a DBBool.</summary>
+            <remarks>Return true if this DBBool has the given value, false otherwise.</remarks>
+        </member>
+        <member name="T:Rss.RssModuleCollection">
+            <summary>A strongly typed collection of <see cref="T:Rss.RssModule"/> objects</summary>
+        </member>
+        <member name="M:Rss.RssModuleCollection.Add(Rss.RssModule)">
+            <summary>Adds a specified item to this collection.</summary>
+            <param name="rssModule">The item to add.</param>
+            <returns>The zero-based index of the added item.</returns>
+        </member>
+        <member name="M:Rss.RssModuleCollection.Contains(Rss.RssModule)">
+            <summary>Determines whether the RssModuleCollection contains a specific element.</summary>
+            <param name="rssModule">The RssModule to locate in the RssModuleCollection.</param>
+            <returns>true if the RssModuleCollection contains the specified value; otherwise, false.</returns>
+        </member>
+        <member name="M:Rss.RssModuleCollection.CopyTo(Rss.RssModule[],System.Int32)">
+            <summary>Copies the entire RssModuleCollection to a compatible one-dimensional <see cref="T:System.Array"/>, starting at the specified index of the target array.</summary>
+            <param name="array">The one-dimensional RssModule Array that is the destination of the elements copied from RssModuleCollection. The Array must have zero-based indexing.</param>
+            <param name="index">The zero-based index in array at which copying begins.</param>
+            <exception cref="T:System.ArgumentNullException">array is a null reference (Nothing in Visual Basic).</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">index is less than zero.</exception>
+            <exception cref="T:System.ArgumentException">array is multidimensional. -or- index is equal to or greater than the length of array.-or-The number of elements in the source RssModuleCollection is greater than the available space from index to the end of the destination array.</exception>
+        </member>
+        <member name="M:Rss.RssModuleCollection.IndexOf(Rss.RssModule)">
+            <summary>Searches for the specified RssModule and returns the zero-based index of the first occurrence within the entire RssModuleCollection.</summary>
+            <param name="rssModule">The RssModule to locate in the RssModuleCollection.</param>
+            <returns>The zero-based index of the first occurrence of RssModule within the entire RssModuleCollection, if found; otherwise, -1.</returns>
+        </member>
+        <member name="M:Rss.RssModuleCollection.Insert(System.Int32,Rss.RssModule)">
+            <summary>Inserts an item into this collection at a specified index.</summary>
+            <param name="index">The zero-based index of the collection at which to insert the item.</param>
+            <param name="rssModule">The item to insert into this collection.</param>
+        </member>
+        <member name="M:Rss.RssModuleCollection.Remove(Rss.RssModule)">
+            <summary>Removes a specified item from this collection.</summary>
+            <param name="rssModule">The item to remove.</param>
+        </member>
+        <member name="P:Rss.RssModuleCollection.Item(System.Int32)">
+            <summary>Gets or sets the item at a specified index.<para>In C#, this property is the indexer for the class.</para></summary>
+            <param name="index">The index of the collection to access.</param>
+            <value>An item at each valid index.</value>
+            <remarks>This method is an indexer that can be used to access the collection.</remarks>
+            <exception cref="T:System.ArgumentOutOfRangeException">index is not a valid index.</exception>
+        </member>
+        <member name="T:Rss.RssItemCollection">
+            <summary>A strongly typed collection of <see cref="T:Rss.RssItem"/> objects</summary>
+        </member>
+        <member name="M:Rss.RssItemCollection.Add(Rss.RssItem)">
+            <summary>Adds a specified item to this collection.</summary>
+            <param name="item">The item to add.</param>
+            <returns>The zero-based index of the added item.</returns>
+        </member>
+        <member name="M:Rss.RssItemCollection.Contains(Rss.RssItem)">
+            <summary>Determines whether the RssItemCollection contains a specific element.</summary>
+            <param name="rssItem">The RssItem to locate in the RssItemCollection.</param>
+            <returns>true if the RssItemCollection contains the specified value; otherwise, false.</returns>
+        </member>
+        <member name="M:Rss.RssItemCollection.CopyTo(Rss.RssItem[],System.Int32)">
+            <summary>Copies the entire RssItemCollection to a compatible one-dimensional <see cref="T:System.Array"/>, starting at the specified index of the target array.</summary>
+            <param name="array">The one-dimensional RssItem Array that is the destination of the elements copied from RssItemCollection. The Array must have zero-based indexing.</param>
+            <param name="index">The zero-based index in array at which copying begins.</param>
+            <exception cref="T:System.ArgumentNullException">array is a null reference (Nothing in Visual Basic).</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">index is less than zero.</exception>
+            <exception cref="T:System.ArgumentException">array is multidimensional. -or- index is equal to or greater than the length of array.-or-The number of elements in the source RssItemCollection is greater than the available space from index to the end of the destination array.</exception>
+        </member>
+        <member name="M:Rss.RssItemCollection.IndexOf(Rss.RssItem)">
+            <summary>Searches for the specified RssItem and returns the zero-based index of the first occurrence within the entire RssItemCollection.</summary>
+            <param name="rssItem">The RssItem to locate in the RssItemCollection.</param>
+            <returns>The zero-based index of the first occurrence of RssItem within the entire RssItemCollection, if found; otherwise, -1.</returns>
+        </member>
+        <member name="M:Rss.RssItemCollection.Insert(System.Int32,Rss.RssItem)">
+            <summary>Inserts an item into this collection at a specified index.</summary>
+            <param name="index">The zero-based index of the collection at which to insert the item.</param>
+            <param name="item">The item to insert into this collection.</param>
+        </member>
+        <member name="M:Rss.RssItemCollection.Remove(Rss.RssItem)">
+            <summary>Removes a specified item from this collection.</summary>
+            <param name="item">The item to remove.</param>
+        </member>
+        <member name="M:Rss.RssItemCollection.LatestPubDate">
+            <summary>The latest pubDate in the items collection</summary>
+            <value>The latest pubDate -or- RssDefault.DateTime if all item pubDates are not defined</value>
+        </member>
+        <member name="M:Rss.RssItemCollection.OldestPubDate">
+            <summary>The oldest pubDate in the items collection</summary>
+            <value>The oldest pubDate -or- RssDefault.DateTime if all item pubDates are not defined</value>
+        </member>
+        <member name="M:Rss.RssItemCollection.CalculatePubDates">
+            <summary>Calculates the oldest and latest pubdates</summary>
+        </member>
+        <member name="P:Rss.RssItemCollection.Item(System.Int32)">
+            <summary>Gets or sets the item at a specified index.<para>In C#, this property is the indexer for the class.</para></summary>
+            <param name="index">The index of the collection to access.</param>
+            <value>An item at each valid index.</value>
+            <remarks>This method is an indexer that can be used to access the collection.</remarks>
+            <exception cref="T:System.ArgumentOutOfRangeException">index is not a valid index.</exception>
+        </member>
+        <member name="T:Rss.RssCloud">
+            <summary>Allow processes to register with a cloud to be notified of updates to the channel.</summary>
+        </member>
+        <member name="M:Rss.RssCloud.#ctor">
+            <summary>Initialize a new instance of the RssCloud class.</summary>
+        </member>
+        <member name="P:Rss.RssCloud.Domain">
+            <summary>Domain name or IP address of the cloud</summary>
+        </member>
+        <member name="P:Rss.RssCloud.Port">
+            <summary>TCP port that the cloud is running on</summary>
+        </member>
+        <member name="P:Rss.RssCloud.Path">
+            <summary>Location of its responder</summary>
+        </member>
+        <member name="P:Rss.RssCloud.RegisterProcedure">
+            <summary>Name of the procedure to call to request notification</summary>
+        </member>
+        <member name="P:Rss.RssCloud.Protocol">
+            <summary>Protocol used</summary>
+        </member>
+        <member name="T:Rss.RssFeedCollection">
+            <summary>A strongly typed collection of <see cref="T:Rss.RssFeed"/> objects</summary>
+        </member>
+        <member name="M:Rss.RssFeedCollection.Add(Rss.RssFeed)">
+            <summary>Adds a specified feed to this collection.</summary>
+            <param name="feed">The feed to add.</param>
+            <returns>The zero-based index of the added feed.</returns>
+        </member>
+        <member name="M:Rss.RssFeedCollection.Contains(Rss.RssFeed)">
+            <summary>Determines whether the RssFeedCollection contains a specific element.</summary>
+            <param name="rssFeed">The RssFeed to locate in the RssFeedCollection.</param>
+            <returns>true if the RssFeedCollection contains the specified value; otherwise, false.</returns>
+        </member>
+        <member name="M:Rss.RssFeedCollection.CopyTo(Rss.RssFeed[],System.Int32)">
+            <summary>Copies the entire RssFeedCollection to a compatible one-dimensional <see cref="T:System.Array"/>, starting at the specified index of the target array.</summary>
+            <param name="array">The one-dimensional RssFeed Array that is the destination of the elements copied from RssFeedCollection. The Array must have zero-based indexing.</param>
+            <param name="index">The zero-based index in array at which copying begins.</param>
+            <exception cref="T:System.ArgumentNullException">array is a null reference (Nothing in Visual Basic).</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">index is less than zero.</exception>
+            <exception cref="T:System.ArgumentException">array is multidimensional. -or- index is equal to or greater than the length of array.-or-The number of elements in the source RssFeedCollection is greater than the available space from index to the end of the destination array.</exception>
+        </member>
+        <member name="M:Rss.RssFeedCollection.IndexOf(Rss.RssFeed)">
+            <summary>Searches for the specified RssFeed and returns the zero-based index of the first occurrence within the entire RssFeedCollection.</summary>
+            <param name="rssFeed">The RssFeed to locate in the RssFeedCollection.</param>
+            <returns>The zero-based index of the first occurrence of RssFeed within the entire RssFeedCollection, if found; otherwise, -1.</returns>
+        </member>
+        <member name="M:Rss.RssFeedCollection.Insert(System.Int32,Rss.RssFeed)">
+            <summary>Inserts a feed into this collection at a specified index.</summary>
+            <param name="index">The zero-based index of the collection at which to insert the feed.</param>
+            <param name="feed">The feed to insert into this collection.</param>
+        </member>
+        <member name="M:Rss.RssFeedCollection.Remove(Rss.RssFeed)">
+            <summary>Removes a specified category from this collection.</summary>
+            <param name="feed">The category to remove.</param>
+        </member>
+        <member name="P:Rss.RssFeedCollection.Item(System.Int32)">
+            <summary>Gets or sets the feed at a specified index.<para>In C#, this property is the indexer for the class.</para></summary>
+            <param name="index">The index of the collection to access.</param>
+            <value>A feed at each valid index.</value>
+            <remarks>This method is an indexer that can be used to access the collection.</remarks>
+            <exception cref="T:System.ArgumentOutOfRangeException">index is not a valid index.</exception>
+        </member>
+        <member name="P:Rss.RssFeedCollection.Item(System.String)">
+            <summary>Gets or sets the feed with the given name.<para>In C#, this property is the indexer for the class.</para></summary>
+            <param name="url">The url of the feed to access.</param>
+            <value>A feed at each valid url. If the feed does not exist, null.</value>
+            <remarks>This method is an indexer that can be used to access the collection.</remarks>
+        </member>
+        <member name="T:Rss.RssBlogChannel">
+            <summary>A RSS module that adds elements at the channel level that are common to weblogs.</summary>
+        </member>
+        <member name="M:Rss.RssBlogChannel.#ctor(System.Uri,System.Uri,System.Uri,System.Uri)">
+            <summary>Initialize a new instance of the </summary>
+            <param name="blogRoll">The URL of an OPML file containing the blogroll for the site.</param>
+            <param name="mySubscriptions">The URL of an OPML file containing the author's RSS subscriptions.</param>
+            <param name="blink">
+            	The URL of a weblog that the author of the weblog is promoting per Mark Pilgrim's description.
+            	<remarks>"http://diveintomark.org/archives/2002/09/17.html#blink_and_youll_miss_it"</remarks>
+            </param>
+            <param name="changes">
+            	The URL of a changes.xml file. When the feed that contains this element updates, it pings a server that updates this file. The presence of this element says to aggregators that they only have to read the changes file to see if this feed has updated. If several feeds point to the same changes file, the aggregator has to do less polling, resulting in better use of server bandwidth, and the Internet as a whole; and resulting in faster scans. Everyone wins. For more technical information, see the howto on the XML-RPC site.
+            	<remarks>"http://www.xmlrpc.com/weblogsComForRss"</remarks>
+            </param>
+        </member>
+        <member name="T:Rss.RssCloudProtocol">
+            <summary>All valid Rss Cloud protocols, including Null</summary>
+        </member>
+        <member name="F:Rss.RssCloudProtocol.Empty">
+            <summary>Not defined</summary>
+        </member>
+        <member name="F:Rss.RssCloudProtocol.NotSupported">
+            <summary>Protocol is not supported</summary>
+        </member>
+        <member name="F:Rss.RssCloudProtocol.XmlRpc">
+            <summary>xml-rpc</summary>
+        </member>
+        <member name="F:Rss.RssCloudProtocol.Soap">
+            <summary>soap</summary>
+        </member>
+        <member name="F:Rss.RssCloudProtocol.HttpPost">
+            <summary>http-post</summary>
+        </member>
+        <member name="T:Rss.RssVersion">
+            <summary>All RSS versions</summary>
+        </member>
+        <member name="F:Rss.RssVersion.Empty">
+            <summary>Not defined</summary>
+        </member>
+        <member name="F:Rss.RssVersion.NotSupported">
+            <summary>Version is not directly supported</summary>
+        </member>
+        <member name="F:Rss.RssVersion.RSS090">
+            <summary>RDF Site Summary (RSS) 0.9</summary>
+        </member>
+        <member name="F:Rss.RssVersion.RSS091">
+            <summary>Rich Site Summary (RSS) 0.91</summary>
+        </member>
+        <member name="F:Rss.RssVersion.RSS092">
+            <summary>Rich Site Summary (RSS) 0.92</summary>
+        </member>
+        <member name="F:Rss.RssVersion.RSS10">
+            <summary>RDF Site Summary (RSS) 1.0</summary>
+        </member>
+        <member name="F:Rss.RssVersion.RSS20">
+            <summary>Really Simple Syndication (RSS) 2.0</summary>
+        </member>
+        <member name="T:Rss.RssWriter">
+            <summary>Writes an RSS XML file.</summary>
+            <remarks>Represents a writer that provides a fast, non-cached, forward-only way of generating streams or files containing RSS XML data that conforms to the W3C Extensible Markup Language (XML) 1.0 and the Namespaces in XML recommendations.</remarks>
+        </member>
+        <member name="M:Rss.RssWriter.#ctor(System.IO.TextWriter)">
+            <summary>Creates an instance of the RssWriter class using the specified TextWriter.</summary>
+            <param name="textWriter">specified TextWriter</param>
+        </member>
+        <member name="M:Rss.RssWriter.#ctor(System.IO.Stream,System.Text.Encoding)">
+            <summary>Creates an instance of the RssWriter class using the specified Stream and Encoding.</summary>
+            <exception cref="T:System.ArgumentException">The encoding is not supported or the stream cannot be written to.</exception>
+            <param name="stream">Stream to output to</param>
+            <param name="encoding">The encoding to use. If encoding is (null c#, Nothing vb) it writes out the stream as UTF-8.</param>
+        </member>
+        <member name="M:Rss.RssWriter.#ctor(System.IO.Stream)">
+            <summary>Creates an instance of the RssWriter class using the specified Stream.</summary>
+            <remarks>The encoding is ISO-8859-1.</remarks>
+            <exception cref="T:System.ArgumentException">The Stream cannot be written to.</exception>
+            <param name="stream">specified Stream</param>
+        </member>
+        <member name="M:Rss.RssWriter.#ctor(System.String,System.Text.Encoding)">
+            <summary>Creates an instance of the RssWriter class using the specified file and Encoding.</summary>
+            <exception cref="T:System.ArgumentException">The encoding is not supported; the filename is empty, contains only white space, or contains one or more invalid characters.</exception>
+            <exception cref="T:System.UnauthorizedAccessException">Access is denied.</exception>
+            <exception cref="T:System.ArgumentNullException">The filename is a (null c#, Nothing vb) reference.</exception>
+            <exception cref="T:System.IO.DirectoryNotFoundException">The directory to write to is not found.</exception>
+            <exception cref="T:System.IO.IOException">The filename includes an incorrect or invalid syntax for file name, directory name, or volume label syntax.</exception>
+            <exception cref="T:System.Security.SecurityException">The caller does not have the required permission.</exception>
+            <param name="fileName">specified file (including path) If the file exists, it will be truncated with the new content.</param>
+            <param name="encoding">specified Encoding</param>
+        </member>
+        <member name="M:Rss.RssWriter.#ctor(System.String)">
+            <summary>Creates an instance of the RssWriter class using the specified file.</summary>
+            <remarks>The encoding is ISO-8859-1.</remarks>
+            <exception cref="T:System.ArgumentException">The filename is empty, contains only white space, or contains one or more invalid characters.</exception>
+            <exception cref="T:System.UnauthorizedAccessException">Access is denied.</exception>
+            <exception cref="T:System.ArgumentNullException">The filename is a (null c#, Nothing vb) reference.</exception>
+            <exception cref="T:System.IO.DirectoryNotFoundException">The directory to write to is not found.</exception>
+            <exception cref="T:System.IO.IOException">The filename includes an incorrect or invalid syntax for file name, directory name, or volume label syntax.</exception>
+            <exception cref="T:System.Security.SecurityException">The caller does not have the required permission.</exception>
+            <param name="fileName">specified file (including path) If the file exists, it will be truncated with the new content.</param>
+        </member>
+        <member name="M:Rss.RssWriter.BeginDocument">
+            <summary>Writes the begining data to the RSS file</summary>
+            <remarks>This routine is called from the WriteChannel and WriteItem subs</remarks>
+            <exception cref="T:System.NotSupportedException">RDF Site Summary (RSS) 1.0 is not currently supported.</exception>
+        </member>
+        <member name="M:Rss.RssWriter.Close">
+            <summary>Closes instance of RssWriter.</summary>
+            <remarks>Writes end elements, and releases connections</remarks>
+            <exception cref="T:System.InvalidOperationException">Occurs if the RssWriter is already closed or the caller is attempting to close before writing a channel.</exception>
+        </member>
+        <member name="M:Rss.RssWriter.Write(Rss.RssChannel)">
+            <summary>Writes an RSS channel</summary>
+            <exception cref="T:System.InvalidOperationException">RssWriter has been closed, and can not be written to.</exception>
+            <exception cref="T:System.ArgumentNullException">Channel must be instanciated with data, before calling Write.</exception>
+            <param name="channel">RSS channel to write</param>
+        </member>
+        <member name="M:Rss.RssWriter.Write(Rss.RssItem)">
+            <summary>Writes an RSS item</summary>
+            <exception cref="T:System.InvalidOperationException">Either the RssWriter has already been closed, or the caller is attempting to write an RSS item before an RSS channel.</exception>
+            <exception cref="T:System.ArgumentNullException">Item must be instanciated with data, before calling Write.</exception>
+            <param name="item">RSS item to write</param>
+        </member>
+        <member name="M:Rss.RssWriter.WriteElement(System.String,System.DateTime,System.Boolean)">
+            <summary>Writes an element with the specified local name and value</summary>
+            <param name="localName">the localname of the element</param>
+            <param name="input">the value of the element</param>
+            <param name="required">boolean that determines if input cannot be null</param>
+        </member>
+        <member name="M:Rss.RssWriter.WriteElement(System.String,System.Int32,System.Boolean)">
+            <summary>Writes an element with the specified local name and value</summary>
+            <param name="localName">the localname of the element</param>
+            <param name="input">the value of the element</param>
+            <param name="required">boolean that determines if input cannot be null</param>
+        </member>
+        <member name="M:Rss.RssWriter.WriteElement(System.String,System.String,System.Boolean)">
+            <summary>Writes an element with the specified local name and value</summary>
+            <param name="localName">the localname of the element</param>
+            <param name="input">the value of the element</param>
+            <param name="required">boolean that determines if input cannot be null</param>
+        </member>
+        <member name="M:Rss.RssWriter.WriteElement(System.String,System.Uri,System.Boolean)">
+            <summary>Writes an element with the specified local name and value</summary>
+            <param name="localName">the localname of the element</param>
+            <param name="input">the value of the element</param>
+            <param name="required">boolean that determines if input cannot be null</param>
+        </member>
+        <member name="M:Rss.RssWriter.WriteElement(System.String,System.Object,System.Boolean)">
+            <summary>Writes an element with the specified local name and value</summary>
+            <param name="localName">the localname of the element</param>
+            <param name="input">the value of the element</param>
+            <param name="required">boolean that determines if input cannot be null</param>
+        </member>
+        <member name="M:Rss.RssWriter.WriteAttribute(System.String,System.DateTime,System.Boolean)">
+            <summary>Writes an attribute with the specified local name and value</summary>
+            <param name="localName">the localname of the element</param>
+            <param name="input">the value of the element</param>
+            <param name="required">boolean that determines if input cannot be null</param>
+        </member>
+        <member name="M:Rss.RssWriter.WriteAttribute(System.String,System.Int32,System.Boolean)">
+            <summary>Writes an attribute with the specified local name and value</summary>
+            <param name="localName">the localname of the element</param>
+            <param name="input">the value of the element</param>
+            <param name="required">boolean that determines if input cannot be null</param>
+        </member>
+        <member name="M:Rss.RssWriter.WriteAttribute(System.String,System.String,System.Boolean)">
+            <summary>Writes an attribute with the specified local name and value</summary>
+            <param name="localName">the localname of the element</param>
+            <param name="input">the value of the element</param>
+            <param name="required">boolean that determines if input cannot be null</param>
+        </member>
+        <member name="M:Rss.RssWriter.WriteAttribute(System.String,System.Uri,System.Boolean)">
+            <summary>Writes an attribute with the specified local name and value</summary>
+            <param name="localName">the localname of the element</param>
+            <param name="input">the value of the element</param>
+            <param name="required">boolean that determines if input cannot be null</param>
+        </member>
+        <member name="M:Rss.RssWriter.WriteAttribute(System.String,System.Object,System.Boolean)">
+            <summary>Writes an attribute with the specified local name and value</summary>
+            <param name="localName">the localname of the element</param>
+            <param name="input">the value of the element</param>
+            <param name="required">boolean that determines if input cannot be null</param>
+        </member>
+        <member name="P:Rss.RssWriter.Version">
+            <summary>Gets or sets the RSS version to write.</summary>
+            <exception cref="T:System.InvalidOperationException">Can't change version number after data has been written.</exception>
+        </member>
+        <member name="P:Rss.RssWriter.XmlFormat">
+            <summary>Gets or sets the <see cref="T:System.Xml.Formatting"/> of the XML output.</summary>
+            <exception cref="T:System.InvalidOperationException">Can't change XML formatting after data has been written.</exception>
+        </member>
+        <member name="P:Rss.RssWriter.XmlIndentation">
+            <summary>Gets or sets how indentation to write for each level in the hierarchy when XmlFormat is set to <see cref="F:System.Xml.Formatting.Indented"/></summary>
+            <exception cref="T:System.InvalidOperationException">Can't change XML formatting after data has been written.</exception>
+            <exception cref="T:System.ArgumentException">Setting this property to a negative value.</exception>
+        </member>
+        <member name="P:Rss.RssWriter.Modules">
+            <summary>RSS modules</summary>
+        </member>
+        <member name="T:Rss.RssReader">
+            <summary>Reads an RSS file.</summary>
+            <remarks>Provides fast, non-cached, forward-only access to RSS data.</remarks>
+        </member>
+        <member name="M:Rss.RssReader.#ctor(System.String)">
+            <summary>Initializes a new instance of the RssReader class with the specified URL or filename.</summary>
+            <param name="url">The URL or filename for the file containing the RSS data.</param>
+            <exception cref="T:System.ArgumentException">Occures when unable to retrieve file containing the RSS data.</exception>
+        </member>
+        <member name="M:Rss.RssReader.#ctor(System.IO.TextReader)">
+            <summary>Creates an instance of the RssReader class using the specified TextReader.</summary>
+            <param name="textReader">specified TextReader</param>
+            <exception cref="T:System.ArgumentException">Occures when unable to retrieve file containing the RSS data.</exception>
+        </member>
+        <member name="M:Rss.RssReader.#ctor(System.IO.Stream)">
+            <summary>Creates an instance of the RssReader class using the specified Stream.</summary>
+            <exception cref="T:System.ArgumentException">Occures when unable to retrieve file containing the RSS data.</exception>
+            <param name="stream">Stream to read from</param>
+        </member>
+        <member name="M:Rss.RssReader.Read">
+            <summary>Reads the next RssElement from the stream.</summary>
+            <returns>An RSS Element</returns>
+            <exception cref="T:System.InvalidOperationException">RssReader has been closed, and can not be read.</exception>
+            <exception cref="T:System.IO.FileNotFoundException">RSS file not found.</exception>
+            <exception cref="T:System.Xml.XmlException">Invalid XML syntax in RSS file.</exception>
+            <exception cref="T:System.IO.EndOfStreamException">Unable to read an RssElement. Reached the end of the stream.</exception>
+        </member>
+        <member name="M:Rss.RssReader.Close">
+            <summary>Closes connection to file.</summary>
+            <remarks>This method also releases any resources held while reading.</remarks>
+        </member>
+        <member name="P:Rss.RssReader.Exceptions">
+            <summary>A collection of all exceptions the RssReader class has encountered.</summary>
+        </member>
+        <member name="P:Rss.RssReader.Version">
+            <summary>Gets the RSS version of the stream.</summary>
+            <value>One of the <see cref="T:Rss.RssVersion"/> values.</value>
+        </member>
+        <member name="T:Rss.RssGuid">
+            <summary>Globally unique identifier</summary>
+        </member>
+        <member name="M:Rss.RssGuid.#ctor">
+            <summary>Initialize a new instance of the RssGuid class.</summary>
+        </member>
+        <member name="P:Rss.RssGuid.PermaLink">
+            <summary>If true, a url that can be opened in a web browser that points to the item</summary>
+        </member>
+        <member name="P:Rss.RssGuid.Name">
+            <summary>Globally unique identifier value</summary>
+        </member>
+        <member name="T:Rss.RssImage">
+            <summary>A link and description for a graphic that represent a channel</summary>
+        </member>
+        <member name="M:Rss.RssImage.#ctor">
+            <summary>Initialize a new instance of the RssImage class.</summary>
+        </member>
+        <member name="P:Rss.RssImage.Url">
+            <summary>The URL of a GIF, JPEG or PNG image that represents the channel.</summary>
+            <remarks>Maximum length is 500 (For RSS 0.91).</remarks>
+        </member>
+        <member name="P:Rss.RssImage.Title">
+            <summary>Describes the image, it's used in the ALT attribute of the HTML img tag when the channel is rendered in HTML.</summary>
+            <remarks>Maximum length is 100 (For RSS 0.91).</remarks>
+        </member>
+        <member name="P:Rss.RssImage.Link">
+            <summary>The URL of the site, when the channel is rendered, the image is a link to the site.</summary>
+            <remarks>Maximum length is 500 (For RSS 0.91).</remarks>
+        </member>
+        <member name="P:Rss.RssImage.Description">
+            <summary>Contains text that is included in the TITLE attribute of the link formed around the image in the HTML rendering.</summary>
+        </member>
+        <member name="P:Rss.RssImage.Width">
+            <summary>Width of image in pixels</summary>
+            <remarks>Maximum value for height is 400 (For RSS 0.91)</remarks>
+        </member>
+        <member name="P:Rss.RssImage.Height">
+            <summary>Height of image in pixels</summary>
+            <remarks>Maximum value for width is 144 (For RSS 0.91)</remarks>
+        </member>
+        <member name="T:Rss.RssModuleItem">
+            <summary>A module may contain any number of items (either channel-based or item-based).</summary>
+        </member>
+        <member name="M:Rss.RssModuleItem.#ctor">
+            <summary>Initialize a new instance of the RssModuleItem class</summary>
+        </member>
+        <member name="M:Rss.RssModuleItem.#ctor(System.String)">
+            <summary>Initialize a new instance of the RssModuleItem class</summary>
+            <param name="name">The name of this RssModuleItem.</param>
+        </member>
+        <member name="M:Rss.RssModuleItem.#ctor(System.String,System.Boolean)">
+            <summary>Initialize a new instance of the RssModuleItem class</summary>
+            <param name="name">The name of this RssModuleItem.</param>
+            <param name="required">Is text required for this RssModuleItem?</param>
+        </member>
+        <member name="M:Rss.RssModuleItem.#ctor(System.String,System.String)">
+            <summary>Initialize a new instance of the RssModuleItem class</summary>
+            <param name="name">The name of this RssModuleItem.</param>
+            <param name="text">The text contained within this RssModuleItem.</param>
+        </member>
+        <member name="M:Rss.RssModuleItem.#ctor(System.String,System.Boolean,System.String)">
+            <summary>Initialize a new instance of the RssModuleItem class</summary>
+            <param name="name">The name of this RssModuleItem.</param>
+            <param name="required">Is text required for this RssModuleItem?</param>
+            <param name="text">The text contained within this RssModuleItem.</param>
+        </member>
+        <member name="M:Rss.RssModuleItem.#ctor(System.String,System.String,Rss.RssModuleItemCollection)">
+            <summary>Initialize a new instance of the RssModuleItem class</summary>
+            <param name="name">The name of this RssModuleItem.</param>
+            <param name="text">The text contained within this RssModuleItem.</param>
+            <param name="subElements">The sub-elements of this RssModuleItem (if any exist).</param>
+        </member>
+        <member name="M:Rss.RssModuleItem.#ctor(System.String,System.Boolean,System.String,Rss.RssModuleItemCollection)">
+            <summary>Initialize a new instance of the RssModuleItem class</summary>
+            <param name="name">The name of this RssModuleItem.</param>
+            <param name="required">Is text required for this RssModuleItem?</param>
+            <param name="text">The text contained within this RssModuleItem.</param>
+            <param name="subElements">The sub-elements of this RssModuleItem (if any exist).</param>
+        </member>
+        <member name="M:Rss.RssModuleItem.ToString">
+            <summary>Returns a string representation of the current Object.</summary>
+            <returns>The item's title, description, or "RssModuleItem" if the title and description are blank.</returns>
+        </member>
+        <member name="P:Rss.RssModuleItem.Name">
+            <summary>
+            The name of this RssModuleItem.
+            </summary>
+        </member>
+        <member name="P:Rss.RssModuleItem.Text">
+            <summary>
+            The text contained within this RssModuleItem.
+            </summary>
+        </member>
+        <member name="P:Rss.RssModuleItem.SubElements">
+            <summary>
+            The sub-elements of this RssModuleItem (if any exist).
+            </summary>
+        </member>
+        <member name="P:Rss.RssModuleItem.IsRequired">
+            <summary>
+            Is text for this element required?
+            </summary>
+        </member>
+        <member name="T:Rss.RssSource">
+            <summary>Describes an items source</summary>
+        </member>
+        <member name="M:Rss.RssSource.#ctor">
+            <summary>Initialize a new instance of the RssSource class</summary>
+        </member>
+        <member name="P:Rss.RssSource.Name">
+            <summary>Name of the RSS channel that the item came from</summary>
+        </member>
+        <member name="P:Rss.RssSource.Url">
+            <summary>URL of the original RSS feed from which the item was republished</summary>
+        </member>
+        <member name="T:Rss.ExceptionCollection">
+            <summary>A strongly typed collection of <see cref="T:System.Exception"/> objects</summary>
+        </member>
+        <member name="M:Rss.ExceptionCollection.Add(System.Exception)">
+            <summary>Adds a specified exception to this collection.</summary>
+            <param name="exception">The exception to add.</param>
+            <returns>The zero-based index of the added exception -or- -1 if the exception already exists.</returns>
+        </member>
+        <member name="M:Rss.ExceptionCollection.Contains(System.Exception)">
+            <summary>Determines whether the ExceptionCollection contains a specific element.</summary>
+            <param name="exception">The Exception to locate in the ExceptionCollection.</param>
+            <returns>true if the ExceptionCollection contains the specified value; otherwise, false.</returns>
+        </member>
+        <member name="M:Rss.ExceptionCollection.CopyTo(System.Exception[],System.Int32)">
+            <summary>Copies the entire ExceptionCollection to a compatible one-dimensional <see cref="T:System.Array"/>, starting at the specified index of the target array.</summary>
+            <param name="array">The one-dimensional Exception Array that is the destination of the elements copied from ExceptionCollection. The Array must have zero-based indexing.</param>
+            <param name="index">The zero-based index in array at which copying begins.</param>
+            <exception cref="T:System.ArgumentNullException">array is a null reference (Nothing in Visual Basic).</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">index is less than zero.</exception>
+            <exception cref="T:System.ArgumentException">array is multidimensional. -or- index is equal to or greater than the length of array.-or-The number of elements in the source ExceptionCollection is greater than the available space from index to the end of the destination array.</exception>
+        </member>
+        <member name="M:Rss.ExceptionCollection.IndexOf(System.Exception)">
+            <summary>Searches for the specified Exception and returns the zero-based index of the first occurrence within the entire ExceptionCollection.</summary>
+            <param name="exception">The Exception to locate in the ExceptionCollection.</param>
+            <returns>The zero-based index of the first occurrence of RssChannel within the entire ExceptionCollection, if found; otherwise, -1.</returns>
+        </member>
+        <member name="M:Rss.ExceptionCollection.Insert(System.Int32,System.Exception)">
+            <summary>Inserts an Exception into this collection at a specified index.</summary>
+            <param name="index">The zero-based index of the collection at which to insert the Exception.</param>
+            <param name="exception">The Exception to insert into this collection.</param>
+        </member>
+        <member name="M:Rss.ExceptionCollection.Remove(System.Exception)">
+            <summary>Removes a specified Exception from this collection.</summary>
+            <param name="exception">The Exception to remove.</param>
+        </member>
+        <member name="P:Rss.ExceptionCollection.Item(System.Int32)">
+            <summary>Gets or sets the exception at a specified index.<para>In C#, this property is the indexer for the class.</para></summary>
+            <param name="index">The index of the collection to access.</param>
+            <value>A exception at each valid index.</value>
+            <remarks>This method is an indexer that can be used to access the collection.</remarks>
+        </member>
+        <member name="P:Rss.ExceptionCollection.LastException">
+            <summary>Returns the last exception added through the Add method.</summary>
+            <value>The last exception -or- null if no exceptions exist</value>
+        </member>
+        <member name="T:Rss.RssCategoryCollection">
+            <summary>A strongly typed collection of <see cref="T:Rss.RssCategory"/> objects</summary>
+        </member>
+        <member name="M:Rss.RssCategoryCollection.Add(Rss.RssCategory)">
+            <summary>Adds a specified category to this collection.</summary>
+            <param name="rssCategory">The category to add.</param>
+            <returns>The zero-based index of the added category.</returns>
+        </member>
+        <member name="M:Rss.RssCategoryCollection.Contains(Rss.RssCategory)">
+            <summary>Determines whether the RssCategoryCollection contains a specific element.</summary>
+            <param name="rssCategory">The RssCategory to locate in the RssCategoryCollection.</param>
+            <returns>true if the RssCategoryCollection contains the specified value; otherwise, false.</returns>
+        </member>
+        <member name="M:Rss.RssCategoryCollection.CopyTo(Rss.RssCategory[],System.Int32)">
+            <summary>Copies the entire RssCategoryCollection to a compatible one-dimensional <see cref="T:System.Array"/>, starting at the specified index of the target array.</summary>
+            <param name="array">The one-dimensional RssCategory Array that is the destination of the elements copied from RssCategoryCollection. The Array must have zero-based indexing.</param>
+            <param name="index">The zero-based index in array at which copying begins.</param>
+            <exception cref="T:System.ArgumentNullException">array is a null reference (Nothing in Visual Basic).</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">index is less than zero.</exception>
+            <exception cref="T:System.ArgumentException">array is multidimensional. -or- index is equal to or greater than the length of array.-or-The number of elements in the source RssCategoryCollection is greater than the available space from index to the end of the destination array.</exception>
+        </member>
+        <member name="M:Rss.RssCategoryCollection.IndexOf(Rss.RssCategory)">
+            <summary>Searches for the specified RssCategory and returns the zero-based index of the first occurrence within the entire RssCategoryCollection.</summary>
+            <param name="rssCategory">The RssCategory to locate in the RssCategoryCollection.</param>
+            <returns>The zero-based index of the first occurrence of RssCategory within the entire RssCategoryCollection, if found; otherwise, -1.</returns>
+        </member>
+        <member name="M:Rss.RssCategoryCollection.Insert(System.Int32,Rss.RssCategory)">
+            <summary>Inserts an category into this collection at a specified index.</summary>
+            <param name="index">The zero-based index of the collection at which to insert the category.</param>
+            <param name="rssCategory">The category to insert into this collection.</param>
+        </member>
+        <member name="M:Rss.RssCategoryCollection.Remove(Rss.RssCategory)">
+            <summary>Removes a specified category from this collection.</summary>
+            <param name="rssCategory">The category to remove.</param>
+        </member>
+        <member name="P:Rss.RssCategoryCollection.Item(System.Int32)">
+            <summary>Gets or sets the category at a specified index.<para>In C#, this property is the indexer for the class.</para></summary>
+            <param name="index">The index of the collection to access.</param>
+            <value>A category at each valid index.</value>
+            <remarks>This method is an indexer that can be used to access the collection.</remarks>
+            <exception cref="T:System.ArgumentOutOfRangeException">index is not a valid index.</exception>
+        </member>
+        <member name="T:Rss.RssCreativeCommons">
+            <summary>A RSS module that adds elements at the channel or item level that specifies which Creative Commons license applies.</summary>
+        </member>
+        <member name="M:Rss.RssCreativeCommons.#ctor(System.Uri,System.Boolean)">
+            <summary>Initialize a new instance of the </summary>
+            <param name="license">
+            	If present as a sub-element of channel, indicates that the content of the RSS file is available under a license, indicated by a URL, which is the value of the license element. A list of some licenses that may be used in this context is on the Creative Commons website on this page, however the license element may point to licenses not authored by Creative Commons.
+            	You may also use the license element as a sub-element of item. When used this way it applies only to the content of that item. If an item has a license, and the channel does too, the license on the item applies, i.e. the inner license overrides the outer one.
+            	Multiple license elements are allowed, in either context, indicating that the content is available under multiple licenses.
+            	<remarks>"http://www.creativecommons.org/licenses/"</remarks>
+            </param>
+            <param name="isChannelSubElement">If present as a sub-element of channel then true, otherwise false</param>
+        </member>
+        <member name="T:Rss.RssItem">
+            <summary>A channel may contain any number of items, each of which links to more information about the item, with an optional description</summary>
+        </member>
+        <member name="M:Rss.RssItem.#ctor">
+            <summary>Initialize a new instance of the RssItem class</summary>
+        </member>
+        <member name="M:Rss.RssItem.ToString">
+            <summary>Returns a string representation of the current Object.</summary>
+            <returns>The item's title, description, or "RssItem" if the title and description are blank.</returns>
+        </member>
+        <member name="P:Rss.RssItem.Title">
+            <summary>Title of the item</summary>
+            <remarks>Maximum length is 100 (For RSS 0.91)</remarks>
+        </member>
+        <member name="P:Rss.RssItem.Link">
+            <summary>URL of the item</summary>
+            <remarks>Maximum length is 500 (For RSS 0.91)</remarks>
+        </member>
+        <member name="P:Rss.RssItem.Description">
+            <summary>Item synopsis</summary>
+            <remarks>Maximum length is 500 (For RSS 0.91)</remarks>
+        </member>
+        <member name="P:Rss.RssItem.Author">
+            <summary>Email address of the author of the item</summary>
+        </member>
+        <member name="P:Rss.RssItem.Categories">
+            <summary>Provide information regarding the location of the subject matter of the channel in a taxonomy</summary>
+        </member>
+        <member name="P:Rss.RssItem.Comments">
+            <summary>URL of a page for comments relating to the item</summary>
+        </member>
+        <member name="P:Rss.RssItem.Source">
+            <summary>Describes an items source</summary>
+        </member>
+        <member name="P:Rss.RssItem.Enclosure">
+            <summary>A reference to an attachment to the item</summary>
+        </member>
+        <member name="P:Rss.RssItem.Guid">
+            <summary>A string that uniquely identifies the item</summary>
+        </member>
+        <member name="P:Rss.RssItem.PubDate">
+            <summary>Indicates when the item was published</summary>
+        </member>
+        <member name="T:Rss.RssTextInput">
+            <summary>Multi-purpose channel element for the purpose of allowing users to submit queries back to the publisher's site</summary>
+            <remarks>Typically for a search or subscription</remarks>
+        </member>
+        <member name="M:Rss.RssTextInput.#ctor">
+            <summary>Initialize a new instance of the RssTextInput class</summary>
+        </member>
+        <member name="P:Rss.RssTextInput.Title">
+            <summary>The label of the submit button in the text input area</summary>
+            <remarks>Maximum length is 100 (For RSS 0.91)</remarks>
+        </member>
+        <member name="P:Rss.RssTextInput.Description">
+            <summary>Explains the text input area</summary>
+            <remarks>Maximum length is 500 (For RSS 0.91)</remarks>
+        </member>
+        <member name="P:Rss.RssTextInput.Name">
+            <summary>The name of the text object in the text input area</summary>
+            <remarks>Maximum length is 20 (For RSS 0.91).</remarks>
+        </member>
+        <member name="P:Rss.RssTextInput.Link">
+            <summary>The URL of the script that processes text input requests</summary>
+            <remarks>Maximum length is 500 (For RSS 0.91)</remarks>
+        </member>
+    </members>
+</doc>

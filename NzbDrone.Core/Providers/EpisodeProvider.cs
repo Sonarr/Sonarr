@@ -17,15 +17,17 @@ namespace NzbDrone.Core.Providers
         private readonly ISeriesProvider _series;
         private readonly ISeasonProvider _seasons;
         private readonly ITvDbProvider _tvDb;
+        private readonly IHistoryProvider _history;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
 
-        public EpisodeProvider(IRepository sonicRepo, ISeriesProvider seriesProvider, ISeasonProvider seasonProvider, ITvDbProvider tvDbProvider)
+        public EpisodeProvider(IRepository sonicRepo, ISeriesProvider seriesProvider, ISeasonProvider seasonProvider, ITvDbProvider tvDbProvider, IHistoryProvider history)
         {
             _sonicRepo = sonicRepo;
             _series = seriesProvider;
             _tvDb = tvDbProvider;
             _seasons = seasonProvider;
+            _history = history;
         }
 
         public Episode GetEpisode(long id)
@@ -64,6 +66,44 @@ namespace NzbDrone.Core.Providers
         /// <returns></returns>
         public bool IsNeeded(EpisodeModel episode)
         {
+            //IsSeasonIgnored
+            //IsQualityWanted
+            //EpisodeFileExists
+            //IsInHistory
+            //IsOnDisk? (How to handle episodes that are downloaded manually?)
+
+            if (IsSeasonIgnored(episode))
+                return false;
+            
+            if (!_series.QualityWanted(episode.SeriesId, episode.Quality))
+            {
+                Logger.Debug("Quality [{0}] is not wanted for: {1}", episode.Quality, episode.SeriesTitle);
+                return false;
+            }
+
+            //Check to see if there is an episode file for this episode
+            var dbEpisode = GetEpisode(episode.SeriesId, episode.SeasonNumber, episode.EpisodeNumber);
+            episode.EpisodeId = dbEpisode.EpisodeId;
+
+            var epWithFiles = _sonicRepo.Single<Episode>(c => c.EpisodeId == episode.EpisodeId && c.Files.Count > 0);
+            
+            if (epWithFiles != null)
+            {
+                //If not null we need to see if this episode has the quality as the download (or if it is better)
+                foreach (var file in epWithFiles.Files)
+                {
+                    if (file.Quality == episode.Quality)
+                        return false;
+                }
+            }
+
+            //IsInHistory? (NZBDrone)
+            if (_history.Exists(dbEpisode.EpisodeId, episode.Quality, episode.Proper))
+            {
+                Logger.Debug("Episode in history: {0}", episode.ToString());
+                return false;
+            }
+
             throw new NotImplementedException();
         }
 
@@ -86,6 +126,13 @@ namespace NzbDrone.Core.Providers
             {
                 try
                 {
+                    //DateTime throws an error in SQLServer per message below:
+                    //SqlDateTime overflow. Must be between 1/1/1753 12:00:00 AM and 12/31/9999 11:59:59 PM.
+                    //So lets hack it so it works for SQLServer (as well as SQLite), perhaps we can find a better solution
+                    //Todo: Fix this hack
+                    if (episode.FirstAired < new DateTime(1753, 1, 1))
+                        episode.FirstAired = new DateTime(1753, 1, 1);
+
                     Logger.Trace("Updating info for series:{0} - episode:{1}", targetSeries.SeriesName, episode.EpisodeNumber);
                     var newEpisode = new Episode()
                       {
@@ -122,6 +169,19 @@ namespace NzbDrone.Core.Providers
             _sonicRepo.UpdateMany(updateList);
 
             Logger.Debug("Finished episode refresh for series:{0}. Successful:{1} - Failed:{2} ", targetSeries.SeriesName, successCount, failCount);
+        }
+
+        private bool IsSeasonIgnored(EpisodeModel episode)
+        {
+            //Check if this Season is ignored
+            if (_seasons.IsIgnored(episode.SeriesId, episode.SeasonNumber))
+            {
+                Logger.Debug("Season {0} is ignored for: {1}", episode.SeasonNumber, episode.SeriesTitle);
+                return true;
+            }
+
+            Logger.Debug("Season {0} is wanted for: {1}", episode.SeasonNumber, episode.SeriesTitle);
+            return false;
         }
     }
 }

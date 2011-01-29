@@ -1,0 +1,17 @@
+/* Customisation of jQuery-ui classes */
+
+.ui-state-error  
+{	
+	padding: 3px;
+	padding-left : 10px;
+}
+
+.ui-state-highlight {
+	padding: 3px;	
+	padding-left : 10px;
+}
+
+.ui-icon 
+{
+	margin-top: 2px;
+}

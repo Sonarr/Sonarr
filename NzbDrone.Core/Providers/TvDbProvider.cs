@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Providers
 {
     public class TvDbProvider : ITvDbProvider
     {
-        private static readonly Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static readonly Regex CleanUpRegex = new Regex(@"((\s|^)the(\s|$))|((\s|^)and(\s|$))|[^a-z]", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         private const string TVDB_APIKEY = "5D2D188E86E07F4F";

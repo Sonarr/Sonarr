@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Core.Repository;
-using NzbDrone.Core.Repository;
+using NzbDrone.Core.Repository.Quality;
 using TvdbLib.Data;
 
 namespace NzbDrone.Core.Providers
@@ -22,5 +22,7 @@ namespace NzbDrone.Core.Providers
         TvdbSeries MapPathToSeries(string path);
         void AddSeries(string path, TvdbSeries series);
         List<String> GetUnmappedFolders();
+        Series FindSeries(string cleanTitle);
+        bool QualityWanted(int seriesId, QualityTypes quality);
     }
 }

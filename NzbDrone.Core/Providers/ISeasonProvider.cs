@@ -9,5 +9,7 @@ namespace NzbDrone.Core.Providers
         List<Season> GetSeasons(int seriesId);
         void EnsureSeason(int seriesId, int seasonId, int seasonNumber);
         int SaveSeason(Season season);
+        bool IsIgnored(int seasonId);
+        bool IsIgnored(int seriesId, int seasonNumber);
     }
 }

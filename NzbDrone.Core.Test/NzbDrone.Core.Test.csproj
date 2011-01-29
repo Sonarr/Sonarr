@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -52,6 +53,10 @@
     <Reference Include="NLog">
       <HintPath>..\NzbDrone.Core\Libraries\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="RSS.NET, Version=0.86.3627.40828, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libs\RSS.NET.dll</HintPath>
+    </Reference>
     <Reference Include="SubSonic.Core, Version=3.0.0.3, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\NzbDrone.Core\Libraries\SubSonic.Core.dll</HintPath>
@@ -68,6 +73,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HistoryProviderTest.cs" />
     <Compile Include="MediaFileProviderTests.cs" />
     <Compile Include="DbConfigControllerTest.cs" />
     <Compile Include="EpisodeProviderTest.cs" />
@@ -80,8 +86,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QualityProfileTest.cs" />
     <Compile Include="RepoTest.cs" />
+    <Compile Include="RssProviderTest.cs" />
     <Compile Include="SabControllerTest.cs" />
     <Compile Include="SeriesProviderTest.cs" />
+    <Compile Include="IndexerProviderTest.cs" />
     <Compile Include="TvDbControllerTest.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -91,6 +99,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Files\Feed.nzbmatrix.com.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Libs\FizzWare.NBuilder.dll" />
     <Content Include="Files\Queue.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -102,8 +113,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Libs\Moq.dll" />
-    <Content Include="Libs\Moq.pdb" />
     <Content Include="Libs\Moq.xml" />
+    <Content Include="Libs\RSS.NET.dll" />
+    <Content Include="Libs\RSS.NET.XML" />
     <Content Include="Libs\System.Data.SQLite.DLL">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

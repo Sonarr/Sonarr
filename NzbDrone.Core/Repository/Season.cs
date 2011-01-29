@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SubSonic.SqlGeneration.Schema;
 
 namespace NzbDrone.Core.Repository
@@ -6,8 +7,8 @@ namespace NzbDrone.Core.Repository
     public class Season
     {
         [SubSonicPrimaryKey(false)]
-        public virtual long SeasonId { get; set; }
-        public long SeriesId { get; set; }
+        public virtual int SeasonId { get; set; }
+        public int SeriesId { get; set; }
         public int SeasonNumber { get; set; }
         public bool Monitored { get; set; }
   

@@ -15,6 +15,7 @@ namespace NzbDrone.Core.Repository
         public int SeasonId { get; set; }
         public string Title { get; set; }
         public DateTime AirDate { get; set; }
+        [SubSonicLongString]
         public string Overview { get; set; }
         public string Language { get; set; }
 
@@ -26,5 +27,8 @@ namespace NzbDrone.Core.Repository
 
         [SubSonicToManyRelation]
         public virtual List<EpisodeFile> Files { get; private set; }
+
+        [SubSonicToManyRelation]
+        public virtual List<History> Histories { get; private set; }
     }
 }

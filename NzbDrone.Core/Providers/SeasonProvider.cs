@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using NLog;
 using NzbDrone.Core.Repository;
 using SubSonic.Repository;
+using System.Linq;
 
 namespace NzbDrone.Core.Providers
 {
     class SeasonProvider : ISeasonProvider
     {
         private readonly IRepository _sonicRepo;
-        private static readonly Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public SeasonProvider(IRepository dataRepository)
         {
@@ -18,12 +19,12 @@ namespace NzbDrone.Core.Providers
 
         public Season GetSeason(int seasonId)
         {
-            throw new NotImplementedException();
+            return _sonicRepo.Single<Season>(seasonId);
         }
 
         public List<Season> GetSeasons(int seriesId)
         {
-            throw new NotImplementedException();
+            return _sonicRepo.All<Season>().Where(s => s.SeriesId == seriesId).ToList();
         }
 
         public void EnsureSeason(int seriesId, int seasonId, int seasonNumber)
@@ -43,11 +44,27 @@ namespace NzbDrone.Core.Providers
             _sonicRepo.Add<Season>(newSeason);
         }
 
-
-
         public int SaveSeason(Season season)
         {
             throw new NotImplementedException();
+        }
+
+        public bool IsIgnored(int seasonId)
+        {
+            if (_sonicRepo.Single<Season>(seasonId).Monitored)
+                return true;
+
+            Logger.Debug("Season {0} is not wanted.");
+            return false;
+        }
+
+        public bool IsIgnored(int seriesId, int seasonNumber)
+        {
+            if (_sonicRepo.Single<Season>(s => s.SeriesId == seriesId && s.SeasonNumber == seasonNumber).Monitored)
+                return true;
+
+            Logger.Debug("Season: {0} is not wanted for Series: {1}", seasonNumber, seriesId);
+            return false;
         }
     }
 }

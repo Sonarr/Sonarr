@@ -29,6 +29,8 @@ namespace NzbDrone.Core.Repository
 
         public bool Monitored { get; set; }
 
+        public int Quality { get; set; }
+
         [SubSonicToManyRelation]
         public virtual List<Season> Seasons { get; private set; }
 

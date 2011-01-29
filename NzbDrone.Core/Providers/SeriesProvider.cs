@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Core.Repository;
+using NzbDrone.Core.Repository.Quality;
 using SubSonic.Repository;
 using TvdbLib.Data;
 
@@ -52,6 +53,11 @@ namespace NzbDrone.Core.Providers
             return _sonioRepo.Exists<Series>(c => c.SeriesId == id && c.Monitored);
         }
 
+        public bool QualityWanted(int seriesId, QualityTypes quality)
+        {
+            return _sonioRepo.Exists<Series>(s => s.SeriesId == seriesId && (QualityTypes)s.Quality == quality);
+        }
+
         public List<String> GetUnmappedFolders()
         {
             Logger.Debug("Generating list of unmapped folders");
@@ -83,7 +89,6 @@ namespace NzbDrone.Core.Providers
             return _tvDb.GetSeries(searchResults.Id, false);
         }
 
-
         public void AddSeries(string path, TvdbSeries series)
         {
             Logger.Info("Adding Series [{0}]:{1} Path: {2}", series.Id, series.SeriesName, path);
@@ -98,6 +103,11 @@ namespace NzbDrone.Core.Providers
             repoSeries.Path = path;
             repoSeries.CleanTitle = Parser.NormalizeTitle(series.SeriesName);
             _sonioRepo.Add(repoSeries);
+        }
+
+        public Series FindSeries(string cleanTitle)
+        {
+            return _sonioRepo.Single<Series>(s => s.CleanTitle == cleanTitle);
         }
 
         #endregion
