@@ -149,17 +149,31 @@ namespace NzbDrone.Web.Controllers
         {
             try
             {
+                //Todo: Only allow indexers to be enabled if user information has been provided
                 foreach (var indexer in data.Indexers)
                 {
+                    indexer.ApiUrl = String.Empty; //TODO: Remove this and use a Real API URL
                     _indexerProvider.Update(indexer);
                 }
 
-                _configProvider.SetValue("NzbMatrixUsername", data.NzbMatrixUsername);
-                _configProvider.SetValue("NzbMatrixApiKey", data.NzbMatrixApiKey);
-                _configProvider.SetValue("NzbsOrgUId", data.NzbsOrgUId);
-                _configProvider.SetValue("NzbsOrgHash", data.NzbsOrgHash);
-                _configProvider.SetValue("NzbsrusUId", data.NzbsrusUId);
-                _configProvider.SetValue("NzbsrusHash", data.NzbsrusHash);
+                if (data.NzbMatrixUsername != null)
+                    _configProvider.SetValue("NzbMatrixUsername", data.NzbMatrixUsername);
+
+                if (data.NzbMatrixApiKey != null)
+                    _configProvider.SetValue("NzbMatrixApiKey", data.NzbMatrixApiKey);
+
+                if (data.NzbsOrgUId != null)
+                    _configProvider.SetValue("NzbsOrgUId", data.NzbsOrgUId);
+
+                if (data.NzbsOrgHash != null)
+                    _configProvider.SetValue("NzbsOrgHash", data.NzbsOrgHash);
+
+                if (data.NzbsrusUId != null)
+                    _configProvider.SetValue("NzbsrusUId", data.NzbsrusUId);
+
+                if (data.NzbsrusHash != null)
+                    _configProvider.SetValue("NzbsrusHash", data.NzbsrusHash);
+
             }
             catch (Exception e)
             {

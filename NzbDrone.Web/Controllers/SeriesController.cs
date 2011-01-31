@@ -17,14 +17,16 @@ namespace NzbDrone.Web.Controllers
         private readonly ISeriesProvider _seriesProvider;
         private readonly IEpisodeProvider _episodeProvider;
         private readonly ISyncProvider _syncProvider;
+        private readonly IRssSyncProvider _rssSyncProvider;
         //
         // GET: /Series/
 
-        public SeriesController(ISyncProvider syncProvider, ISeriesProvider seriesProvider, IEpisodeProvider episodeProvider)
+        public SeriesController(ISyncProvider syncProvider, ISeriesProvider seriesProvider, IEpisodeProvider episodeProvider, IRssSyncProvider rssSyncProvider)
         {
             _seriesProvider = seriesProvider;
             _episodeProvider = episodeProvider;
             _syncProvider = syncProvider;
+            _rssSyncProvider = rssSyncProvider;
         }
 
         public ActionResult Index()
@@ -37,6 +39,12 @@ namespace NzbDrone.Web.Controllers
         public ActionResult Sync()
         {
             _syncProvider.BeginSyncUnmappedFolders();
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult RssSync()
+        {
+            _rssSyncProvider.Begin();
             return RedirectToAction("Index");
         }
 

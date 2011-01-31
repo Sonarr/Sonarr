@@ -173,8 +173,10 @@
     <Compile Include="Providers\IndexerProvider.cs" />
     <Compile Include="Providers\IRssSyncProvider.cs" />
     <Compile Include="Providers\IRssProvider.cs" />
+    <Compile Include="Providers\ITimerProvider.cs" />
     <Compile Include="Providers\RssSyncProvider.cs" />
     <Compile Include="Providers\RssProvider.cs" />
+    <Compile Include="Providers\TimerProvider.cs" />
     <Compile Include="Repository\EpisodeFile.cs" />
     <Compile Include="Model\Notification\BasicNotification.cs" />
     <Compile Include="Model\Notification\ProgressNotificationStatus.cs" />

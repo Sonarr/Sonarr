@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading;
 using NLog;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Model.Notification;
+using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using Rss;
 
@@ -22,11 +24,15 @@ namespace NzbDrone.Core.Providers
         private IEpisodeProvider _episode;
         private IHistoryProvider _history;
         private IDownloadProvider _sab;
+        private IConfigProvider _configProvider;
+        private readonly INotificationProvider _notificationProvider;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
+        private ProgressNotification _rssSyncNotification;
+
         public RssSyncProvider(IIndexerProvider indexerProvider, IRssProvider rss, ISeriesProvider series,
-            ISeasonProvider season, IEpisodeProvider episode, IHistoryProvider history, IDownloadProvider sab)
+            ISeasonProvider season, IEpisodeProvider episode, IHistoryProvider history, IDownloadProvider sab, INotificationProvider notificationProvider, IConfigProvider configProvider)
         {
             _indexerProvider = indexerProvider;
             _rss = rss;
@@ -35,6 +41,8 @@ namespace NzbDrone.Core.Providers
             _episode = episode;
             _history = history;
             _sab = sab;
+            _notificationProvider = notificationProvider;
+            _configProvider = configProvider;
         }
 
         #region IRssSyncProvider Members
@@ -69,22 +77,44 @@ namespace NzbDrone.Core.Providers
 
             var indexers = _indexerProvider.EnabledIndexers();
 
-            foreach (var i in indexers)
+            using (_rssSyncNotification = new ProgressNotification("RSS Sync"))
             {
-                var indexer = new FeedInfoModel(i.IndexerName, i.RssUrl);
+                _notificationProvider.Register(_rssSyncNotification);
+                _rssSyncNotification.CurrentStatus = "Starting Scan";
+                _rssSyncNotification.ProgressMax = indexers.Count();
 
-                foreach(RssItem item in  _rss.GetFeed(indexer))
+                foreach (var i in indexers)
                 {
-                    NzbInfoModel nzb = Parser.ParseNzbInfo(indexer, item);
-                    QueueIfWanted(nzb);
+                    Logger.Info("Starting RSS Sync for: {0}", i.IndexerName);
+                    //Need to insert the users information in the the URL before trying to use it
+                    i.RssUrl = GetUsersUrl(i); //Get the new users specific url (with their information) to use for the Sync
+
+                    if (i.RssUrl == null)
+                    {
+                        Logger.Debug("Unable to Sync {0}. User Information has not been configured.", i.IndexerName);
+                        continue; //Skip this indexer
+                    }
+
+                    _rssSyncNotification.CurrentStatus = String.Format("Syncing with RSS Feed: {0}", i.IndexerName);
+
+                    var indexer = new FeedInfoModel(i.IndexerName, i.RssUrl);
+
+                    foreach (RssItem item in _rss.GetFeed(indexer))
+                    {
+                        NzbInfoModel nzb = Parser.ParseNzbInfo(indexer, item);
+                        QueueIfWanted(nzb);
+                    }
                 }
+                _rssSyncNotification.CurrentStatus = "RSS Sync Completed";
+                Logger.Info("RSS Sync has successfully completed.");
+                Thread.Sleep(3000);
+                _rssSyncNotification.Status = ProgressNotificationStatus.Completed;
             }
         }
 
         private void QueueIfWanted(NzbInfoModel nzb)
         {
-            //Do we want this item?  
-
+            //Do we want this item?
             try
             {
                 if (nzb.IsPassworded())
@@ -161,6 +191,47 @@ namespace NzbDrone.Core.Providers
             }
 
             return String.Format("{0} - {1}{2} - {3}", series.Title, seasonNumber, episodeNumbers, episodeTitles);
+        }
+
+        private string GetUsersUrl(Indexer indexer)
+        {
+            if (indexer.IndexerName == "NzbMatrix")
+            {
+                var nzbMatrixUsername = _configProvider.GetValue("NzbMatrixUsername", String.Empty, false);
+                var nzbMatrixApiKey = _configProvider.GetValue("NzbMatrixApiKey", String.Empty, false);
+
+                if (!String.IsNullOrEmpty(nzbMatrixUsername) && !String.IsNullOrEmpty(nzbMatrixApiKey))
+                    return indexer.RssUrl.Replace("{USERNAME}", nzbMatrixUsername).Replace("{APIKEY}", nzbMatrixApiKey);
+
+                //Todo: Perform validation at the config level so a user is unable to enable a provider until user details are provided
+                return null; //Return Null if Provider is enabled, but user information is not supplied.
+            }
+
+            if (indexer.IndexerName == "NzbsOrg")
+            {
+                var nzbsOrgUId = _configProvider.GetValue("NzbsOrgUId", String.Empty, false);
+                var nzbsOrgHash = _configProvider.GetValue("NzbsOrgHash", String.Empty, false);
+
+                if (!String.IsNullOrEmpty(nzbsOrgUId) && !String.IsNullOrEmpty(nzbsOrgHash))
+                    return indexer.RssUrl.Replace("{UID}", nzbsOrgUId).Replace("{HASH}", nzbsOrgHash);
+
+                //Todo: Perform validation at the config level so a user is unable to enable a provider until user details are provided
+                return null; //Return Null if Provider is enabled, but user information is not supplied.
+            }
+
+            if (indexer.IndexerName == "NzbsOrg")
+            {
+                var nzbsrusUId = _configProvider.GetValue("NzbsrusUId", String.Empty, false);
+                var nzbsrusHash = _configProvider.GetValue("NzbsrusHash", String.Empty, false);
+
+                if (!String.IsNullOrEmpty(nzbsrusUId) && !String.IsNullOrEmpty(nzbsrusHash))
+                    return indexer.RssUrl.Replace("{UID}", nzbsrusUId).Replace("{HASH}", nzbsrusHash);
+
+                //Todo: Perform validation at the config level so a user is unable to enable a provider until user details are provided
+                return null; //Return Null if Provider is enabled, but user information is not supplied.
+            }
+
+            return indexer.RssUrl; //Currently other providers do not require user information to be substituted, simply return the RssUrl
         }
     }
 }

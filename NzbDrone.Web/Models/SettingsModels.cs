@@ -112,7 +112,7 @@ namespace NzbDrone.Web.Models
         }
 
         [DataType(DataType.Text)]
-        [DisplayName("Retentions")]
+        [DisplayName("Retention")]
         public int Rentention
         {
             get;

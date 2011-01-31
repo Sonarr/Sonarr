@@ -56,6 +56,8 @@ namespace NzbDrone.Core
                 _kernel.Bind<IEpisodeProvider>().To<EpisodeProvider>();
                 _kernel.Bind<IDiskProvider>().To<DiskProvider>();
                 _kernel.Bind<ITvDbProvider>().To<TvDbProvider>();
+                _kernel.Bind<IDownloadProvider>().To<SabProvider>();
+                _kernel.Bind<IHttpProvider>().To<HttpProvider>();
                 _kernel.Bind<IHistoryProvider>().To<HistoryProvider>();
                 _kernel.Bind<IConfigProvider>().To<ConfigProvider>().InSingletonScope();
                 _kernel.Bind<ISyncProvider>().To<SyncProvider>().InSingletonScope();
@@ -155,9 +157,9 @@ namespace NzbDrone.Core
         {
             //Setup the default providers in the Providers table
 
-            string nzbMatrixRss = "http://rss.nzbmatrix.com/rss.php?page=download&username=USERNAME&apikey=APIKEY&subcat=6&english=1";
-            string nzbsOrgRss = "http://nzbs.org/rss.php?type=1&dl=1&num=100&i=UID&h=HASH";
-            string nzbsrusRss = "http://www.nzbsrus.com/rssfeed.php?cat=91,75&i=UID&h=HASH";
+            string nzbMatrixRss = "http://rss.nzbmatrix.com/rss.php?page=download&username={USERNAME}&apikey={APIKEY}&subcat=6&english=1";
+            string nzbsOrgRss = "http://nzbs.org/rss.php?type=1&dl=1&num=100&i={UID}&h={HASH}";
+            string nzbsrusRss = "http://www.nzbsrus.com/rssfeed.php?cat=91,75&i={UID}&h={HASH}";
 
             var nzbMatrixIndexer = new Indexer
                                        {
