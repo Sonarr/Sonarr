@@ -48,18 +48,18 @@
         Html.Telerik().Grid<EpisodeModel>().Name("seasons_" + season.SeasonNumber)
                           .Columns(columns =>
                           {
-                              columns.Bound(c => c.SeasonNumber).Width(0).Title("Seasons");
+                              columns.Bound(c => c.SeasonNumber).Width(0).Title("Season");
                               columns.Bound(c => c.EpisodeNumber).Width(0).Title("Episode");
                               columns.Bound(c => c.Title).Title("Title");
                               columns.Bound(c => c.AirDate).Format("{0:d}").Width(0);
                           })
             //.DetailView(detailView => detailView.Template(e => Html.RenderPartial("EpisodeDetail", e)))
-             .DetailView(detailView => detailView.ClientTemplate("<div id ='ep_<#= EpisodeId #>'/>"))
-             .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.EpisodeNumber)).Enabled(false))
+             .DetailView(detailView => detailView.ClientTemplate("<div><#= Overview #></div>"))
+             .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.EpisodeNumber).Ascending()).Enabled(false))
                           .Footer(false)
                           .DataBinding(d => d.Ajax().Select("_AjaxSeasonGrid", "Series", new RouteValueDictionary { { "seasonId", season1.SeasonId.ToString() } }))
             //.EnableCustomBinding(true)
-            .ClientEvents(e => e.OnDetailViewExpand("episodeDetailExpanded"))
+            //.ClientEvents(e => e.OnDetailViewExpand("episodeDetailExpanded")) //Causes issues displaying the episode detail multiple times...
             .Render();
         }
 
@@ -81,7 +81,8 @@ Html.Telerik().Grid(specialSeasons.Episodes).Name("seasons_specials")
                      columns.Bound(c => c.Title);
                      columns.Bound(c => c.AirDate).Format("{0:d}").Width(0);
                  })
-                .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.EpisodeNumber)).Enabled(false))
+                 .DetailView(detailView => detailView.ClientTemplate("<div><#= Overview #></div>"))
+                 .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.EpisodeNumber)).Enabled(false))
                  .Footer(false)
                  .Render();
         }
