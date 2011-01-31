@@ -42,7 +42,8 @@ namespace NzbDrone.Web.Controllers
             ViewData["viewName"] = "General";
             return View("Index", new SettingsModel
                                      {
-                                         TvFolder = _configProvider.SeriesRoot
+                                         TvFolder = _configProvider.SeriesRoot,
+                                         Quality = Convert.ToInt32(_configProvider.GetValue("Quality", "1", true)),
                                      });
         }
 
@@ -79,7 +80,7 @@ namespace NzbDrone.Web.Controllers
 
                 SyncFrequency = Convert.ToInt32(_configProvider.GetValue("SyncFrequency", "15", true)),
                 DownloadPropers = Convert.ToBoolean(_configProvider.GetValue("DownloadPropers", "false", true)),
-                Rentention = Convert.ToInt32(_configProvider.GetValue("Rentention", "500", true)),
+                Retention = Convert.ToInt32(_configProvider.GetValue("Retention", "500", true)),
                 SabHost = _configProvider.GetValue("SabHost", "localhost", false),
                 SabPort = Convert.ToInt32(_configProvider.GetValue("SabPort", "8080", true)),
                 SabApiKey = _configProvider.GetValue("SabApiKey", String.Empty, false),
@@ -127,7 +128,11 @@ namespace NzbDrone.Web.Controllers
         {
             try
             {
-                _configProvider.SeriesRoot = data.TvFolder;
+                if (data.TvFolder != null)
+                    _configProvider.SeriesRoot = data.TvFolder;
+
+                //if (data.Quality != null)
+                //    _configProvider.SetValue("Quality", data.Quality);
             }
             catch (Exception e)
             {
@@ -200,8 +205,8 @@ namespace NzbDrone.Web.Controllers
 
                 _configProvider.SetValue("DownloadPropers", data.DownloadPropers.ToString());
 
-                if (data.Rentention > 0)
-                    _configProvider.SetValue("Retention", data.Rentention.ToString());
+                if (data.Retention > 0)
+                    _configProvider.SetValue("Retention", data.Retention.ToString());
 
                 if (data.SabHost != null)
                     _configProvider.SetValue("SabHost", data.SabHost);

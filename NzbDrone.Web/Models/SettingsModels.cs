@@ -24,6 +24,15 @@ namespace NzbDrone.Web.Models
             get;
             set;
         }
+
+        [DataType(DataType.Text)]
+        [DisplayName("Initial Quality")]
+        public int Quality
+        {
+            get;
+            set;
+        }
+
         #endregion
 
         #region Indexer Settings
@@ -113,7 +122,7 @@ namespace NzbDrone.Web.Models
 
         [DataType(DataType.Text)]
         [DisplayName("Retention")]
-        public int Rentention
+        public int Retention
         {
             get;
             set;

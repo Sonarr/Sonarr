@@ -172,3 +172,57 @@ hr
     padding: 1px, 1px, 1px, 1px;
     text-align: center;
 }
+
+/* Config Pages */
+.config-group
+{
+	width:300px;
+	display: block;
+	padding-bottom: 25px;
+}
+
+.config-title
+{
+	font-weight: bold;
+	padding-right: 15px;
+	float: left;
+}
+
+.config-value
+{
+	float: right;
+	
+}
+
+.config-validation
+{
+	
+}
+.sub-field
+{
+	width: 50%;
+}
+
+input[type="text"]
+{
+	border: 1px solid #006;
+    background: #ffc;
+}
+
+input[type="text"]:hover
+{
+	border: 1px solid #f00;
+    background: #ff6;
+}
+
+.submitButton
+{
+	border: 1px solid #006;
+    background: #ccf;
+}
+
+.submitButton:hover
+{
+	border: 1px solid #f00;
+    background: #eef;
+}

@@ -270,10 +270,8 @@
     <Content Include="Views\Series\EpisodeDetail.ascx" />
     <Content Include="Views\Series\index.aspx" />
     <Content Include="Views\Series\Unmapped.aspx" />
-    <Content Include="Views\Settings\Copy of Indexers.ascx" />
     <Content Include="Views\Settings\Downloads.ascx" />
     <Content Include="Views\Settings\General.ascx" />
-    <Content Include="Views\Settings\Index-old.aspx" />
     <Content Include="Views\Settings\Index.aspx" />
     <Content Include="Views\Settings\Indexers.ascx" />
     <Content Include="Views\Settings\SubMenu.ascx" />

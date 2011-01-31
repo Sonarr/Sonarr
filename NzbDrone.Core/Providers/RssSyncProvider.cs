@@ -185,6 +185,13 @@ namespace NzbDrone.Core.Providers
             foreach (var episode in episodes)
             {
                 var episodeInDb = _episode.GetEpisode(seriesId, episode.SeasonNumber, episode.EpisodeNumber);
+
+                if (episodeInDb == null)
+                {
+                    Logger.Debug("Episode Not found in Database");
+                    return String.Format("{0} - {1}x{2:00}", series.Title, episode.SeasonNumber, episode.SeriesTitle);
+                }
+
                 seasonNumber = episodeInDb.SeasonNumber;
                 episodeNumbers = String.Format("{0}x{1:00}", episodeNumbers, episodeInDb.EpisodeNumber);
                 episodeTitles = String.Format("{0} + {1}", episodeTitles, episodeInDb.Title);
