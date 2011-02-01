@@ -27,8 +27,12 @@ namespace NzbDrone.Core.Repository.Quality
         /// </summary>
         WEBDL = 4,
         /// <summary>
-        ///   HD File (Blu-ray Source)
+        ///   720P HD File (Blu-ray Source)
         /// </summary>
-        Bluray = 5
+        Bluray720p = 5,
+        /// <summary>
+        ///   1080P HD File (Blu-ray Source)
+        /// </summary>
+        Bluray1080p = 6
     }
 }

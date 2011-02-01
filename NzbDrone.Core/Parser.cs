@@ -90,7 +90,12 @@ namespace NzbDrone.Core
             }
 
             if (name.Contains("bluray") || name.Contains("bdrip"))
-                return QualityTypes.Bluray;
+            {
+                if (name.Contains("1080p"))
+                    return QualityTypes.Bluray1080p;
+
+                return QualityTypes.Bluray720p;
+            }
             if (name.Contains("web-dl"))
                 return QualityTypes.WEBDL;
             if (name.Contains("x264") || name.Contains("h264") || name.Contains("720p"))
