@@ -4,6 +4,16 @@
         <name>Telerik.Web.Mvc</name>
     </assembly>
     <members>
+        <member name="T:Telerik.Web.Mvc.Extensions.StructExtensions">
+            <summary>
+            Contains the extension methods of <see cref="!:struct"/>.
+            </summary>
+        </member>
+        <member name="M:Telerik.Web.Mvc.Extensions.StructExtensions.AsNullable``1(``0)">
+            <summary>
+            Create Nullable instance of the passed <see cref="!:struct"/>.
+            </summary>
+        </member>
         <member name="T:Telerik.Web.Mvc.Extensions.HttpRequestBaseExtensions">
             <summary>
             Contains extension methods of <see cref="T:System.Web.HttpRequestBase"/>.
@@ -551,6 +561,7 @@
             <param name="allowSpinner"></param>
             <returns></returns>
         </member>
+        <!-- Badly formed XML comment ignored for member "M:Telerik.Web.Mvc.UI.Fluent.AutoCompleteBuilder.Encode(System.Boolean)" -->
         <member name="T:Telerik.Web.Mvc.UI.Fluent.AutoCompleteMultipleValuesSettingsBuilder">
             <summary>
             Defines the fluent interface for building <see cref="T:Telerik.Web.Mvc.UI.Fluent.AutoCompleteMultipleValuesSettingsBuilder"/>
@@ -720,6 +731,7 @@
         </member>
         <!-- Badly formed XML comment ignored for member "M:Telerik.Web.Mvc.UI.Fluent.DropDownBuilderBase`2.BindTo(System.Collections.Generic.IEnumerable{Telerik.Web.Mvc.UI.DropDownItem})" -->
         <!-- Badly formed XML comment ignored for member "M:Telerik.Web.Mvc.UI.Fluent.DropDownBuilderBase`2.BindTo(System.Collections.Generic.IEnumerable{System.Web.Mvc.SelectListItem})" -->
+        <!-- Badly formed XML comment ignored for member "M:Telerik.Web.Mvc.UI.Fluent.DropDownBuilderBase`2.Encode(System.Boolean)" -->
         <member name="M:Telerik.Web.Mvc.UI.Fluent.ComboBoxBuilder.#ctor(Telerik.Web.Mvc.UI.ComboBox)">
             <summary>
             Initializes a new instance of the <see cref="T:Telerik.Web.Mvc.UI.Fluent.ComboBoxBuilder"/> class.
@@ -1363,6 +1375,27 @@
             </code>
             </example>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.DateTimePickerClientEventsBuilder.OnChange(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnChange client-side event
+            </summary>
+            <param name="onChangeAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().DateTimePicker()
+                       .Name("DateTimePicker")
+                       .ClientEvents(events => events.OnChange(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
         <member name="M:Telerik.Web.Mvc.UI.DateTimePickerClientEventsBuilder.OnChange(System.String)">
             <summary>
              Defines the name of the JavaScript function that will handle the the OnChange client-side event.
@@ -1394,6 +1427,27 @@
                             }
                             &lt;%
                        }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.DateTimePickerClientEventsBuilder.OnLoad(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnLoad client-side event
+            </summary>
+            <param name="onLoadAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().DateTimePicker()
+                       .Name("DateTimePicker")
+                       .ClientEvents(events => events.OnLoad(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
                        .Render();
             %&gt;
             </code>
@@ -1435,6 +1489,27 @@
             </code>
             </example>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.DateTimePickerClientEventsBuilder.OnOpen(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnOpen client-side event
+            </summary>
+            <param name="onOpenAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().DateTimePicker()
+                       .Name("DateTimePicker")
+                       .ClientEvents(events => events.OnOpen(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
         <member name="M:Telerik.Web.Mvc.UI.DateTimePickerClientEventsBuilder.OnOpen(System.String)">
             <summary>
              Defines the name of the JavaScript function that will handle the the OnOpen client-side event.
@@ -1466,6 +1541,27 @@
                             }
                             &lt;%
                        }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.DateTimePickerClientEventsBuilder.OnClose(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnClose client-side event
+            </summary>
+            <param name="onCloseAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().DateTimePicker()
+                       .Name("DateTimePicker")
+                       .ClientEvents(events => events.OnClose(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
                        .Render();
             %&gt;
             </code>
@@ -1565,7 +1661,7 @@
             <summary>
             Defines the inline handler of the OnLoad client-side event
             </summary>
-            <param name="onLoadInlineCode">The action defining the inline handler.</param>
+            <param name="onLoadCodeBlock">The action defining the inline handler.</param>
             <example>
             <code lang="CS">
              &lt;% Html.Telerik().DropDownList()
@@ -1578,6 +1674,27 @@
                             }
                             &lt;%
                        }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DropDownClientEventsBuilder.OnLoad(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnLoad client-side event
+            </summary>
+            <param name="onLoadInlineCodeBlock">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().DropDownList()
+                       .Name("DropDownList")
+                       .ClientEvents(events => events.OnLoad(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
                        .Render();
             %&gt;
             </code>
@@ -1601,7 +1718,7 @@
             <summary>
             Defines the inline handler of the OnChange client-side event
             </summary>
-            <param name="onChangeInlineCode">The action defining the inline handler.</param>
+            <param name="onChangeCodeBlock">The action defining the inline handler.</param>
             <example>
             <code lang="CS">
              &lt;% Html.Telerik().DropDownList()
@@ -1614,6 +1731,27 @@
                             }
                             &lt;%
                        }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DropDownClientEventsBuilder.OnChange(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnChange client-side event
+            </summary>
+            <param name="onChangeInlineCodeBlock">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().DropDownList()
+                       .Name("DropDownList")
+                       .ClientEvents(events => events.OnChange(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
                        .Render();
             %&gt;
             </code>
@@ -1673,7 +1811,7 @@
             <summary>
             Defines the inline handler of the OnClose client-side event
             </summary>
-            <param name="onCloseInlineCode">The action defining the inline handler.</param>
+            <param name="onCloseCodeBlock">The action defining the inline handler.</param>
             <example>
             <code lang="CS">
              &lt;% Html.Telerik().DropDownList()
@@ -1686,6 +1824,27 @@
                             }
                             &lt;%
                        }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DropDownClientEventsBuilder.OnClose(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnClose client-side event
+            </summary>
+            <param name="onCloseInlineCodeBlock">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().DropDownList()
+                       .Name("DropDownList")
+                       .ClientEvents(events => events.OnClose(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
                        .Render();
             %&gt;
             </code>
@@ -1709,7 +1868,7 @@
             <summary>
             Defines the inline handler of the OnDataBinding client-side event
             </summary>
-            <param name="onDataBindingInlineCode">The action defining the inline handler.</param>
+            <param name="onDataBindingCodeBlock">The action defining the inline handler.</param>
             <example>
             <code lang="CS">
              &lt;% Html.Telerik().DropDownList()
@@ -1722,6 +1881,27 @@
                             }
                             &lt;%
                        }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DropDownClientEventsBuilder.OnDataBinding(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnDataBinding client-side event
+            </summary>
+            <param name="onDataBindingInlineCodeBlock">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().DropDownList()
+                       .Name("DropDownList")
+                       .ClientEvents(events => events.OnDataBinding(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
                        .Render();
             %&gt;
             </code>
@@ -1745,7 +1925,7 @@
             <summary>
             Defines the inline handler of the OnDataBound client-side event
             </summary>
-            <param name="OnDataBoundInlineCode">The action defining the inline handler.</param>
+            <param name="onDataBoundCodeBlock">The action defining the inline handler.</param>
             <example>
             <code lang="CS">
              &lt;% Html.Telerik().DropDownList()
@@ -1758,6 +1938,27 @@
                             }
                             &lt;%
                        }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DropDownClientEventsBuilder.OnDataBound(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnDataBound client-side event
+            </summary>
+            <param name="onDataBoundInlineCodeBlock">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().DropDownList()
+                       .Name("DropDownList")
+                       .ClientEvents(events => events.OnDataBound(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
                        .Render();
             %&gt;
             </code>
@@ -1781,7 +1982,7 @@
             <summary>
             Defines the inline handler of the OnError client-side event
             </summary>
-            <param name="onErrorInlineCode">The action defining the inline handler.</param>
+            <param name="onErrorCodeBlock">The action defining the inline handler.</param>
             <example>
             <code lang="CS">
              &lt;% Html.Telerik().DropDownList()
@@ -1794,6 +1995,27 @@
                             }
                             &lt;%
                        }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DropDownClientEventsBuilder.OnError(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnError client-side event
+            </summary>
+            <param name="onErrorInlineCodeBlock">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().DropDownList()
+                       .Name("DropDownList")
+                       .ClientEvents(events => events.OnError(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
                        .Render();
             %&gt;
             </code>
@@ -1961,6 +2183,245 @@
             Gets or sets the URL.
             </summary>
             <value>The URL.</value>
+        </member>
+        <member name="T:Telerik.Web.Mvc.UI.Fluent.EditorClientEventsBuilder">
+            <summary>
+            Defines the fluent interface for configuring the <see cref="P:Telerik.Web.Mvc.UI.Editor.ClientEvents"/>.
+            </summary>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.EditorClientEventsBuilder.#ctor(Telerik.Web.Mvc.UI.EditorClientEvents)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Telerik.Web.Mvc.UI.Fluent.EditorClientEventsBuilder"/> class.
+            </summary>
+            <param name="clientEvents">The client events.</param>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.EditorClientEventsBuilder.OnLoad(System.Action)">
+            <summary>
+            Defines the inline handler of the OnLoad client-side event
+            </summary>
+            <param name="onLoadAction">The action defining the inline handler.</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().Editor()
+                       .Name("Editor")
+                       .ClientEvents(events => events.OnLoad(() =>
+                       {
+                            %&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;%
+                       }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>        
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.EditorClientEventsBuilder.OnLoad(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnLoad client-side event
+            </summary>
+            <param name="onLoadAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().Editor()
+                       .Name("Editor")
+                       .ClientEvents(events => events.OnLoad(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.EditorClientEventsBuilder.OnLoad(System.String)">
+            <summary>
+             Defines the name of the JavaScript function that will handle the the OnLoad client-side event.
+            </summary>
+            <param name="onLoadHandlerName">The name of the JavaScript function that will handle the event.</param>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().Editor()
+                        .Name("Editor")
+                        .ClientEvents(events => events.OnLoad("onLoad"))
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.EditorClientEventsBuilder.OnExecute(System.Action)">
+            <summary>
+            Defines the inline handler of the OnExecute client-side event
+            </summary>
+            <param name="onLoadAction">The action defining the inline handler.</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().Editor()
+                       .Name("Editor")
+                       .ClientEvents(events => events.OnExecute(() =>
+                       {
+                            %&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;%
+                       }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>        
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.EditorClientEventsBuilder.OnExecute(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnExecute client-side event
+            </summary>
+            <param name="onLoadAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().Editor()
+                       .Name("Editor")
+                       .ClientEvents(events => events.OnExecute(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.EditorClientEventsBuilder.OnExecute(System.String)">
+            <summary>
+             Defines the name of the JavaScript function that will handle the the OnExecute client-side event.
+            </summary>
+            <param name="onLoadHandlerName">The name of the JavaScript function that will handle the event.</param>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().Editor()
+                        .Name("Editor")
+                        .ClientEvents(events => events.OnExecute("onExecute"))
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.EditorClientEventsBuilder.OnSelectionChange(System.Action)">
+            <summary>
+            Defines the inline handler of the OnSelectionChange client-side event
+            </summary>
+            <param name="onLoadAction">The action defining the inline handler.</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().Editor()
+                       .Name("Editor")
+                       .ClientEvents(events => events.OnSelectionChange(() =>
+                       {
+                            %&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;%
+                       }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>        
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.EditorClientEventsBuilder.OnSelectionChange(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnSelectionChange client-side event
+            </summary>
+            <param name="onLoadAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().Editor()
+                       .Name("Editor")
+                       .ClientEvents(events => events.OnSelectionChange(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.EditorClientEventsBuilder.OnSelectionChange(System.String)">
+            <summary>
+             Defines the name of the JavaScript function that will handle the the OnSelectionChange client-side event.
+            </summary>
+            <param name="onLoadHandlerName">The name of the JavaScript function that will handle the event.</param>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().Editor()
+                        .Name("Editor")
+                        .ClientEvents(events => events.OnSelectionChange("onSelectionChange"))
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.EditorClientEventsBuilder.OnChange(System.Action)">
+            <summary>
+            Defines the inline handler of the OnChange client-side event
+            </summary>
+            <param name="onLoadAction">The action defining the inline handler.</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().Editor()
+                       .Name("Editor")
+                       .ClientEvents(events => events.OnChange(() =>
+                       {
+                            %&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;%
+                       }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>        
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.EditorClientEventsBuilder.OnChange(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnChange client-side event
+            </summary>
+            <param name="onLoadAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().Editor()
+                       .Name("Editor")
+                       .ClientEvents(events => events.OnChange(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.EditorClientEventsBuilder.OnChange(System.String)">
+            <summary>
+             Defines the name of the JavaScript function that will handle the the OnChange client-side event.
+            </summary>
+            <param name="onLoadHandlerName">The name of the JavaScript function that will handle the event.</param>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().Editor()
+                        .Name("Editor")
+                        .ClientEvents(events => events.OnChange("onChange"))
+            %&gt;
+            </code>
+            </example>
         </member>
         <member name="M:Telerik.Web.Mvc.UI.Fluent.EditorBuilder.Value(System.Action)">
             <summary>
@@ -3162,7 +3623,7 @@
             Define the tooltip text of the down button.
             </summary>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.TextBoxBuilderBase`3.ClientEvents(System.Action{Telerik.Web.Mvc.UI.TextboxBaseClientEventsBuilder})">
+        <member name="M:Telerik.Web.Mvc.UI.TextBoxBuilderBase`3.ClientEvents(System.Action{Telerik.Web.Mvc.UI.TextBoxBaseClientEventsBuilder})">
             <summary>
             Configures the client-side events.
             </summary>
@@ -4413,6 +4874,27 @@
             </code>
             </example>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.CalendarClientEventsBuilder.OnChange(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnSelect client-side event
+            </summary>
+            <param name="onSelectAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().Calendar()
+                       .Name("Calendar")
+                       .ClientEvents(events => events.OnChange(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
         <member name="M:Telerik.Web.Mvc.UI.CalendarClientEventsBuilder.OnChange(System.String)">
             <summary>
              Defines the name of the JavaScript function that will handle the OnDateSelect client-side event.
@@ -4444,6 +4926,27 @@
                             }
                             &lt;%
                        }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.CalendarClientEventsBuilder.OnLoad(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnLoad client-side event
+            </summary>
+            <param name="onLoadAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().Calendar()
+                       .Name("Calendar")
+                       .ClientEvents(events => events.OnLoad(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
                        .Render();
             %&gt;
             </code>
@@ -5410,16 +5913,16 @@
             Sets the decimal separator.
             </summary>
         </member>
-        <member name="T:Telerik.Web.Mvc.UI.TextboxBaseClientEventsBuilder">
+        <member name="T:Telerik.Web.Mvc.UI.TextBoxBaseClientEventsBuilder">
             <summary>
-            Defines the fluent interface for configuring the <see cref="!:TextboxBase.ClientEvents"/>.
+            Defines the fluent interface for configuring the <see cref="!:TextBoxBase.ClientEvents"/>.
             </summary>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.TextboxBaseClientEventsBuilder.OnChange(System.Action)">
+        <member name="M:Telerik.Web.Mvc.UI.TextBoxBaseClientEventsBuilder.OnChange(System.Action)">
             <summary>
             Defines the inline handler of the OnChange client-side event
             </summary>
-            <param name="onSelectAction">The action defining the inline handler.</param>
+            <param name="onChangeCodeBlock">The action defining the inline handler.</param>
             <example>
             <code lang="CS">
              &lt;% Html.Telerik().IntegerTextBox()
@@ -5437,7 +5940,28 @@
             </code>
             </example>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.TextboxBaseClientEventsBuilder.OnChange(System.String)">
+        <member name="M:Telerik.Web.Mvc.UI.TextBoxBaseClientEventsBuilder.OnChange(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnChange client-side event
+            </summary>
+            <param name="onChangeInlineCodeBlock">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().IntegerTextBox()
+                       .Name("IntegerTextBox")
+                       .ClientEvents(events => events.OnChange(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.TextBoxBaseClientEventsBuilder.OnChange(System.String)">
             <summary>
              Defines the name of the JavaScript function that will handle the the OnChange client-side event.
             </summary>
@@ -5451,11 +5975,11 @@
             </code>
             </example>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.TextboxBaseClientEventsBuilder.OnLoad(System.Action)">
+        <member name="M:Telerik.Web.Mvc.UI.TextBoxBaseClientEventsBuilder.OnLoad(System.Action)">
             <summary>
             Defines the inline handler of the OnLoad client-side event
             </summary>
-            <param name="onLoadAction">The action defining the inline handler.</param>
+            <param name="onLoadCodeBlock">The action defining the inline handler.</param>
             <example>
             <code lang="CS">
              &lt;% Html.Telerik().IntegerTextBox()
@@ -5473,7 +5997,28 @@
             </code>
             </example>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.TextboxBaseClientEventsBuilder.OnLoad(System.String)">
+        <member name="M:Telerik.Web.Mvc.UI.TextBoxBaseClientEventsBuilder.OnLoad(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnLoad client-side event
+            </summary>
+            <param name="onLoadInlineCodeBlock">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().IntegerTextBox()
+                       .Name("IntegerTextBox")
+                       .ClientEvents(events => events.OnLoad(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.TextBoxBaseClientEventsBuilder.OnLoad(System.String)">
             <summary>
              Defines the name of the JavaScript function that will handle the the OnLoad client-side event.
             </summary>
@@ -5521,6 +6066,27 @@
             </code>
             </example>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.TimePickerClientEventsBuilder.OnChange(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnChange client-side event
+            </summary>
+            <param name="onChangeAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().TimePicker()
+                       .Name("TimePicker")
+                       .ClientEvents(events => events.OnChange(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
         <member name="M:Telerik.Web.Mvc.UI.TimePickerClientEventsBuilder.OnChange(System.String)">
             <summary>
              Defines the name of the JavaScript function that will handle the the OnChange client-side event.
@@ -5552,6 +6118,27 @@
                             }
                             &lt;%
                        }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.TimePickerClientEventsBuilder.OnLoad(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnLoad client-side event
+            </summary>
+            <param name="onLoadAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().TimePicker()
+                       .Name("TimePicker")
+                       .ClientEvents(events => events.OnLoad(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
                        .Render();
             %&gt;
             </code>
@@ -5593,6 +6180,27 @@
             </code>
             </example>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.TimePickerClientEventsBuilder.OnOpen(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnOpen client-side event
+            </summary>
+            <param name="onOpenAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().TimePicker()
+                       .Name("TimePicker")
+                       .ClientEvents(events => events.OnOpen(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
         <member name="M:Telerik.Web.Mvc.UI.TimePickerClientEventsBuilder.OnOpen(System.String)">
             <summary>
              Defines the name of the JavaScript function that will handle the the OnOpen client-side event.
@@ -5624,6 +6232,27 @@
                             }
                             &lt;%
                        }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.TimePickerClientEventsBuilder.OnClose(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnClose client-side event
+            </summary>
+            <param name="onCloseAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().TimePicker()
+                       .Name("TimePicker")
+                       .ClientEvents(events => events.OnClose(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
                        .Render();
             %&gt;
             </code>
@@ -6251,6 +6880,27 @@
             </code>
             </example>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.TreeViewClientEventsBuilder.OnExpand(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnExpand client-side event
+            </summary>
+            <param name="onExpandAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().TreeView()
+                       .Name("TreeView")
+                       .ClientEvents(events => events.OnExpand(
+                            @&lt;text&gt;
+                            function(e) {
+                                // event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
         <member name="M:Telerik.Web.Mvc.UI.Fluent.TreeViewClientEventsBuilder.OnExpand(System.String)">
             <summary>
              Defines the name of the JavaScript function that will handle the the OnExpand client-side event.
@@ -6282,6 +6932,27 @@
                             }
                             &lt;%
                        }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.TreeViewClientEventsBuilder.OnCollapse(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnCollapse client-side event
+            </summary>
+            <param name="onCollapseAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().TreeView()
+                       .Name("TreeView")
+                       .ClientEvents(events => events.OnCollapse(
+                            @&lt;text&gt;
+                            function(e) {
+                                // event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
                        .Render();
             %&gt;
             </code>
@@ -6323,6 +6994,27 @@
             </code>
             </example>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.TreeViewClientEventsBuilder.OnSelect(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnSelect client-side event
+            </summary>
+            <param name="onSelectAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().TreeView()
+                       .Name("TreeView")
+                       .ClientEvents(events => events.OnSelect(
+                            @&lt;text&gt;
+                            function(e) {
+                                // event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
         <member name="M:Telerik.Web.Mvc.UI.Fluent.TreeViewClientEventsBuilder.OnSelect(System.String)">
             <summary>
              Defines the name of the JavaScript function that will handle the the OnSelect client-side event.
@@ -6354,6 +7046,27 @@
                             }
                             &lt;%
                        }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.TreeViewClientEventsBuilder.OnLoad(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnLoad client-side event
+            </summary>
+            <param name="onLoadAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().TreeView()
+                       .Name("TreeView")
+                       .ClientEvents(events => events.OnLoad(
+                            @&lt;text&gt;
+                            function(e) {
+                                // event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
                        .Render();
             %&gt;
             </code>
@@ -6395,6 +7108,27 @@
             </code>
             </example>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.TreeViewClientEventsBuilder.OnError(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnError client-side event
+            </summary>
+            <param name="onErrorAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().TreeView()
+                       .Name("TreeView")
+                       .ClientEvents(events => events.OnError(
+                            @&lt;text&gt;
+                            function(e) {
+                                // event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
         <member name="M:Telerik.Web.Mvc.UI.Fluent.TreeViewClientEventsBuilder.OnError(System.String)">
             <summary>
              Defines the name of the JavaScript function that will handle the the OnError client-side event.
@@ -6426,6 +7160,27 @@
                             }
                             &lt;%
                        }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.TreeViewClientEventsBuilder.OnNodeDragStart(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnNodeDragStart client-side event
+            </summary>
+            <param name="onNodeDragAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().TreeView()
+                       .Name("TreeView")
+                       .ClientEvents(events => events.OnNodeDragStart(
+                            @&lt;text&gt;
+                            function(e) {
+                                // event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
                        .Render();
             %&gt;
             </code>
@@ -6467,6 +7222,27 @@
             </code>
             </example>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.TreeViewClientEventsBuilder.OnNodeDrop(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnNodeDrop client-side event
+            </summary>
+            <param name="onNodeDropAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().TreeView()
+                       .Name("TreeView")
+                       .ClientEvents(events => events.OnNodeDrop(
+                            @&lt;text&gt;
+                            function(e) {
+                                // event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
         <member name="M:Telerik.Web.Mvc.UI.Fluent.TreeViewClientEventsBuilder.OnNodeDrop(System.String)">
             <summary>
              Defines the name of the JavaScript function that will handle the the OnNodeDrop client-side event.
@@ -6498,6 +7274,27 @@
                             }
                             &lt;%
                        }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.TreeViewClientEventsBuilder.OnNodeDropped(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnNodeDropped client-side event
+            </summary>
+            <param name="onNodeDroppedAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().TreeView()
+                       .Name("TreeView")
+                       .ClientEvents(events => events.OnNodeDropped(
+                            @&lt;text&gt;
+                            function(e) {
+                                // event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
                        .Render();
             %&gt;
             </code>
@@ -6539,6 +7336,27 @@
             </code>
             </example>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.TreeViewClientEventsBuilder.OnNodeDragCancelled(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnNodeDragCancelled client-side event
+            </summary>
+            <param name="onNodeDragCancelledAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().TreeView()
+                       .Name("TreeView")
+                       .ClientEvents(events => events.OnNodeDragCancelled(
+                            @&lt;text&gt;
+                            function(e) {
+                                // event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
         <member name="M:Telerik.Web.Mvc.UI.Fluent.TreeViewClientEventsBuilder.OnNodeDragCancelled(System.String)">
             <summary>
              Defines the name of the JavaScript function that will handle the the OnNodeDragCancelled client-side event.
@@ -6570,6 +7388,27 @@
                             }
                             &lt;%
                        }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.TreeViewClientEventsBuilder.OnNodeDragging(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnNodeDragging client-side event
+            </summary>
+            <param name="onNodeDragging">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().TreeView()
+                       .Name("TreeView")
+                       .ClientEvents(events => events.OnNodeDragging(
+                            @&lt;text&gt;
+                            function(e) {
+                                // event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
                        .Render();
             %&gt;
             </code>
@@ -6611,6 +7450,27 @@
             </code>
             </example>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.TreeViewClientEventsBuilder.OnDataBinding(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnDataBinding client-side event
+            </summary>
+            <param name="onDataBindingAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().TreeView()
+                       .Name("TreeView")
+                       .ClientEvents(events => events.OnDataBinding(
+                            @&lt;text&gt;
+                            function(e) {
+                                // event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
         <member name="M:Telerik.Web.Mvc.UI.Fluent.TreeViewClientEventsBuilder.OnDataBinding(System.String)">
             <summary>
              Defines the name of the JavaScript function that will handle the the OnDataBinding client-side event.
@@ -6647,6 +7507,27 @@
             </code>
             </example>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.TreeViewClientEventsBuilder.OnDataBound(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnDataBound client-side event
+            </summary>
+            <param name="onDataBoundAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().TreeView()
+                       .Name("TreeView")
+                       .ClientEvents(events => events.OnDataBound(
+                            @&lt;text&gt;
+                            function(e) {
+                                // event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
         <member name="M:Telerik.Web.Mvc.UI.Fluent.TreeViewClientEventsBuilder.OnDataBound(System.String)">
             <summary>
              Defines the name of the JavaScript function that will handle the the OnDataBound client-side event.
@@ -6678,6 +7559,27 @@
                             }
                             &lt;%
                        }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.TreeViewClientEventsBuilder.OnChecked(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnChecked client-side event. Requires ShowCheckBox to be true.
+            </summary>
+            <param name="onDataBoundAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().TreeView()
+                       .Name("TreeView")
+                       .ClientEvents(events => events.OnChecked(
+                            @&lt;text&gt;
+                            function(e) {
+                                // event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
                        .Render();
             %&gt;
             </code>
@@ -7019,6 +7921,27 @@
                        .Render();
             %&gt;
             </code>        
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.NavigationItemBuilder`2.Content(System.Func{System.Object,System.Object})">
+            <summary>
+            Sets the HTML content which the item should display.
+            </summary>
+            <param name="value">The content wrapped in a regular HTML tag or text tag (Razor syntax).</param>
+            <code lang="CS">
+             @(Html.Telerik().Menu()
+                  .Name("Menu")
+                  .Items(items => items
+                           .Add()
+                           .Text("First Item")
+                           .Content(
+                                @&lt;text&gt;
+                                        Some text
+                                        &lt;strong&gt; First Item Content&lt;/strong&gt;
+                                &lt;/text&gt;
+                           );
+                  )
+             )
+            </code>  
         </member>
         <member name="M:Telerik.Web.Mvc.UI.NavigationItemBuilder`2.Content(System.String)">
             <summary>
@@ -7496,6 +8419,27 @@
             </code>
             </example>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DatePickerClientEventsBuilder.OnChange(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnChange client-side event
+            </summary>
+            <param name="onChangeAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().DatePicker()
+                       .Name("DatePicker")
+                       .ClientEvents(events => events.OnChange(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
         <member name="M:Telerik.Web.Mvc.UI.Fluent.DatePickerClientEventsBuilder.OnChange(System.String)">
             <summary>
              Defines the name of the JavaScript function that will handle the the OnChange client-side event.
@@ -7527,6 +8471,27 @@
                             }
                             &lt;%
                        }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DatePickerClientEventsBuilder.OnLoad(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnLoad client-side event
+            </summary>
+            <param name="onLoadAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().DatePicker()
+                       .Name("DatePicker")
+                       .ClientEvents(events => events.OnLoad(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
                        .Render();
             %&gt;
             </code>
@@ -7568,6 +8533,28 @@
             </code>
             </example>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DatePickerClientEventsBuilder.OnOpen(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnOpen client-side event
+            </summary>
+            <param name="onOpenInlineCode">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().DatePicker()
+                       .Name("DatePicker")
+                       .ClientEvents(events => events.OnOpen(
+                            @&lt;text&gt;
+                            %&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
         <member name="M:Telerik.Web.Mvc.UI.Fluent.DatePickerClientEventsBuilder.OnOpen(System.String)">
             <summary>
              Defines the name of the JavaScript function that will handle the OnOpen client-side event.
@@ -7599,6 +8586,27 @@
                             }
                             &lt;%
                        }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.DatePickerClientEventsBuilder.OnClose(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnClose client-side event
+            </summary>
+            <param name="onCloseInlineCode">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().DatePicker()
+                       .Name("DatePicker")
+                       .ClientEvents(events => events.OnClose(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
                        .Render();
             %&gt;
             </code>
@@ -8060,6 +9068,27 @@
             </code>
             </example>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridClientEventsBuilder.OnLoad(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnLoad client-side event.
+            </summary>
+            <param name="onLoadInlineCode">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().Grid(Model)
+                       .Name("Grid")
+                       .ClientEvents(events => events.OnLoad(
+                            @&lt;text&gt;
+                            function(e) {
+                                //Load handling code
+                            }
+                            &lt;/text&gt;
+                       ))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
         <member name="M:Telerik.Web.Mvc.UI.Fluent.GridClientEventsBuilder.OnLoad(System.String)">
             <summary>
              Defines the name of the JavaScript function that will handle the the OnLoad client-side event.
@@ -8070,20 +9099,6 @@
              &lt;%= Html.Telerik().Grid(Model)
                         .Name("Grid")
                         .ClientEvents(events => events.OnLoad("onLoad"))
-            %&gt;
-            </code>
-            </example>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridClientEventsBuilder.OnEdit(System.String)">
-            <summary>
-             Defines the name of the JavaScript function that will handle the the OnEdit client-side event.
-            </summary>
-            <param name="onEditHandlerName">The name of the JavaScript function that will handle the event.</param>
-            <example>
-            <code lang="CS">
-             &lt;%= Html.Telerik().Grid(Model)
-                        .Name("Grid")
-                        .ClientEvents(events => events.OnEdit("onEdit"))
             %&gt;
             </code>
             </example>
@@ -8110,16 +9125,37 @@
             </code>
             </example>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridClientEventsBuilder.OnSave(System.String)">
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridClientEventsBuilder.OnEdit(System.Func{System.Object,System.Object})">
             <summary>
-             Defines the name of the JavaScript function that will handle the the OnSave client-side event.
+            Defines the inline handler of the OnEdit client-side event.
             </summary>
-            <param name="onSaveHandlerName">The name of the JavaScript function that will handle the event.</param>
+            <param name="onEditInlineCode">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().Grid(Model)
+                       .Name("Grid")
+                       .ClientEvents(events => events.OnEdit(
+                            @&lt;text&gt;
+                            function(e) {
+                                //edit handling code
+                            }
+                            &lt;/text&gt;
+                       ))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridClientEventsBuilder.OnEdit(System.String)">
+            <summary>
+             Defines the name of the JavaScript function that will handle the the OnEdit client-side event.
+            </summary>
+            <param name="onEditHandlerName">The name of the JavaScript function that will handle the event.</param>
             <example>
             <code lang="CS">
              &lt;%= Html.Telerik().Grid(Model)
                         .Name("Grid")
-                        .ClientEvents(events => events.OnSave("onSave"))
+                        .ClientEvents(events => events.OnEdit("onEdit"))
             %&gt;
             </code>
             </example>
@@ -8146,16 +9182,37 @@
             </code>
             </example>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridClientEventsBuilder.OnDetailViewExpand(System.String)">
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridClientEventsBuilder.OnSave(System.Func{System.Object,System.Object})">
             <summary>
-             Defines the name of the JavaScript function that will handle the the OnDetailViewExpand client-side event.
+            Defines the inline handler of the OnSave client-side event.
             </summary>
-            <param name="onDetailViewExpandHandlerName">The name of the JavaScript function that will handle the event.</param>
+            <param name="onSaveInlineCode">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().Grid(Model)
+                       .Name("Grid")
+                       .ClientEvents(events => events.OnSave(
+                            @&lt;text&gt;
+                            function(e) {
+                                //edit handling code
+                            }
+                            &lt;/text&gt;
+                       ))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridClientEventsBuilder.OnSave(System.String)">
+            <summary>
+             Defines the name of the JavaScript function that will handle the the OnSave client-side event.
+            </summary>
+            <param name="onSaveHandlerName">The name of the JavaScript function that will handle the event.</param>
             <example>
             <code lang="CS">
              &lt;%= Html.Telerik().Grid(Model)
                         .Name("Grid")
-                        .ClientEvents(events => events.OnDetailViewExpand("onDetailViewExpand"))
+                        .ClientEvents(events => events.OnSave("onSave"))
             %&gt;
             </code>
             </example>
@@ -8182,16 +9239,37 @@
             </code>
             </example>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridClientEventsBuilder.OnDetailViewCollapse(System.String)">
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridClientEventsBuilder.OnDetailViewExpand(System.Func{System.Object,System.Object})">
             <summary>
-             Defines the name of the JavaScript function that will handle the the OnDetailViewCollapse client-side event.
+            Defines the inline handler of the OnDetailViewExpand client-side event.
             </summary>
-            <param name="onDetailViewCollapseHandlerName">The name of the JavaScript function that will handle the event.</param>
+            <param name="onDetailViewExpandInlineCode">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().Grid(Model)
+                       .Name("Grid")
+                       .ClientEvents(events => events.OnDetailViewExpand(
+                            @&lt;text&gt;
+                            function(e) {
+                                //edit handling code
+                            }
+                            &lt;/text&gt;
+                       ))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridClientEventsBuilder.OnDetailViewExpand(System.String)">
+            <summary>
+             Defines the name of the JavaScript function that will handle the the OnDetailViewExpand client-side event.
+            </summary>
+            <param name="onDetailViewExpandHandlerName">The name of the JavaScript function that will handle the event.</param>
             <example>
             <code lang="CS">
              &lt;%= Html.Telerik().Grid(Model)
                         .Name("Grid")
-                        .ClientEvents(events => events.OnDetailViewCollapse("onDetailViewCollapse"))
+                        .ClientEvents(events => events.OnDetailViewExpand("onDetailViewExpand"))
             %&gt;
             </code>
             </example>
@@ -8218,16 +9296,37 @@
             </code>
             </example>
         </member>
-        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridClientEventsBuilder.OnDelete(System.String)">
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridClientEventsBuilder.OnDetailViewCollapse(System.Func{System.Object,System.Object})">
             <summary>
-             Defines the name of the JavaScript function that will handle the the OnDelete client-side event.
+            Defines the inline handler of the OnDetailViewCollapse client-side event.
             </summary>
-            <param name="onDeleteHandlerName">The name of the JavaScript function that will handle the event.</param>
+            <param name="onDetailViewCollapseInlineCode">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().Grid(Model)
+                       .Name("Grid")
+                       .ClientEvents(events => events.OnDetailViewCollapse(
+                            @&lt;text&gt;
+                            function(e) {
+                                //edit handling code
+                            }
+                            &lt;/text&gt;
+                       ))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridClientEventsBuilder.OnDetailViewCollapse(System.String)">
+            <summary>
+             Defines the name of the JavaScript function that will handle the the OnDetailViewCollapse client-side event.
+            </summary>
+            <param name="onDetailViewCollapseHandlerName">The name of the JavaScript function that will handle the event.</param>
             <example>
             <code lang="CS">
              &lt;%= Html.Telerik().Grid(Model)
                         .Name("Grid")
-                        .ClientEvents(events => events.OnSave("onDelete"))
+                        .ClientEvents(events => events.OnDetailViewCollapse("onDetailViewCollapse"))
             %&gt;
             </code>
             </example>
@@ -8254,6 +9353,41 @@
             </code>
             </example>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridClientEventsBuilder.OnDelete(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnSave client-side event.
+            </summary>
+            <param name="onDeleteInlineCode">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().Grid(Model)
+                       .Name("Grid")
+                       .ClientEvents(events => events.OnSave(
+                            @&lt;text&gt;
+                            function(e) {
+                                //edit handling code
+                            }
+                            &lt;/text&gt;
+                       ))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridClientEventsBuilder.OnDelete(System.String)">
+            <summary>
+             Defines the name of the JavaScript function that will handle the the OnDelete client-side event.
+            </summary>
+            <param name="onDeleteHandlerName">The name of the JavaScript function that will handle the event.</param>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().Grid(Model)
+                        .Name("Grid")
+                        .ClientEvents(events => events.OnSave("onDelete"))
+            %&gt;
+            </code>
+            </example>
+        </member>
         <member name="M:Telerik.Web.Mvc.UI.Fluent.GridClientEventsBuilder.OnColumnResize(System.Action)">
             <summary>
             Defines the inline handler of the OnColumnResize client-side event.
@@ -8271,6 +9405,27 @@
                             }
                             &lt;%
                        }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridClientEventsBuilder.OnColumnResize(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnColumnResize client-side event.
+            </summary>
+            <param name="onColumnResizeInlineCode">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().Grid(Model)
+                       .Name("Grid")
+                       .ClientEvents(events => events.OnColumnResize(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
                        .Render();
             %&gt;
             </code>
@@ -8312,6 +9467,27 @@
             </code>
             </example>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridClientEventsBuilder.OnColumnReorder(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnColumnReorder client-side event.
+            </summary>
+            <param name="onColumnReorderInlineCode">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().Grid(Model)
+                       .Name("Grid")
+                       .ClientEvents(events => events.OnColumnReorder(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
         <member name="M:Telerik.Web.Mvc.UI.Fluent.GridClientEventsBuilder.OnColumnReorder(System.String)">
             <summary>
              Defines the name of the JavaScript function that will handle the the OnColumnResize client-side event.
@@ -8322,20 +9498,6 @@
              &lt;%= Html.Telerik().Grid(Model)
                         .Name("Grid")
                         .ClientEvents(events => events.OnColumnReorder("onColumnReorder"))
-            %&gt;
-            </code>
-            </example>
-        </member>
-        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridClientEventsBuilder.OnRowSelect(System.String)">
-            <summary>
-             Defines the name of the JavaScript function that will handle the the OnRowSelect client-side event.
-            </summary>
-            <param name="onRowSelectHandlerName">The name of the JavaScript function that will handle the event.</param>
-            <example>
-            <code lang="CS">
-             &lt;%= Html.Telerik().Grid(Model)
-                        .Name("Grid")
-                        .ClientEvents(events => events.OnRowSelect("onRowSelect"))
             %&gt;
             </code>
             </example>
@@ -8362,6 +9524,41 @@
             </code>
             </example>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridClientEventsBuilder.OnRowSelect(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnRowSelect client-side event.
+            </summary>
+            <param name="onLoadAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().Grid(Model)
+                       .Name("Grid")
+                       .ClientEvents(events => events.OnRowSelect(
+                            @&lt;text&gt;
+                            function(e) {
+                                //Error handling code
+                            }
+                            &lt;/text&gt;
+                       ))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridClientEventsBuilder.OnRowSelect(System.String)">
+            <summary>
+             Defines the name of the JavaScript function that will handle the the OnRowSelect client-side event.
+            </summary>
+            <param name="onRowSelectHandlerName">The name of the JavaScript function that will handle the event.</param>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().Grid(Model)
+                        .Name("Grid")
+                        .ClientEvents(events => events.OnRowSelect("onRowSelect"))
+            %&gt;
+            </code>
+            </example>
+        </member>
         <member name="M:Telerik.Web.Mvc.UI.Fluent.GridClientEventsBuilder.OnError(System.Action)">
             <summary>
             Defines the inline handler of the OnError client-side event.
@@ -8379,6 +9576,27 @@
                             }
                             &lt;%
                        }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridClientEventsBuilder.OnError(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnError client-side event.
+            </summary>
+            <param name="onErrorInlineCode">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().Grid(Model)
+                       .Name("Grid")
+                       .ClientEvents(events => events.OnError(
+                            @&lt;text&gt;
+                            function(e) {
+                                //Error handling code
+                            }
+                            &lt;/text&gt;
+                       ))
                        .Render();
             %&gt;
             </code>
@@ -8420,6 +9638,27 @@
             </code>
             </example>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridClientEventsBuilder.OnDataBound(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline error handler of the OnDataBound client-side event.
+            </summary>
+            <param name="onDataBoundInlineCode">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().Grid(Model)
+                       .Name("Grid")
+                       .ClientEvents(events => events.OnDataBound(
+                            @&lt;text&gt;
+                            function(e) {
+                                //data bound handling code
+                            }
+                            &lt;/text&gt;
+                       ))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
         <member name="M:Telerik.Web.Mvc.UI.Fluent.GridClientEventsBuilder.OnDataBound(System.String)">
             <summary>
              Defines the name of the JavaScript function that will handle the the OnDataBound client-side event.
@@ -8451,6 +9690,27 @@
                             }
                             &lt;%
                        }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridClientEventsBuilder.OnDataBinding(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline error handler of the OnDataBinding client-side event.
+            </summary>
+            <param name="onDataBindingInlineCode">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().Grid(Model)
+                       .Name("Grid")
+                       .ClientEvents(events => events.OnDataBinding(
+                            @&lt;text&gt;
+                            function(e) {
+                                //data binding handling code
+                            }
+                            &lt;/text&gt;
+                       ))
                        .Render();
             %&gt;
             </code>
@@ -8488,6 +9748,28 @@
                             }
                             &lt;%
                        }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.GridClientEventsBuilder.OnRowDataBound(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline error handler of the OnRowDataBound client-side event.
+            </summary>
+            <param name="onRowDataBoundInlineCode">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().Grid(Model)
+                       .Name("Grid")
+                       .ClientEvents(events => events.OnRowDataBound(
+                            @&lt;text&gt;
+                            function(e) {
+                                var row = e.row;
+                                var dataItem = e.dataItem;
+                            }
+                            &lt;/text&gt;
+                       ))
                        .Render();
             %&gt;
             </code>
@@ -8946,6 +10228,14 @@
             <returns></returns>
         </member>
         <member name="M:Telerik.Web.Mvc.UI.IClientSideObjectWriter.Append(System.String,System.Action)">
+            <summary>
+            Appends the specified name and value to the end of this instance.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="action">The action.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.IClientSideObjectWriter.Append(System.String,System.Func{System.Object,System.Object})">
             <summary>
             Appends the specified name and value to the end of this instance.
             </summary>
@@ -10376,6 +11666,27 @@
             </code>
             </example>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.MenuClientEventsBuilder.OnOpen(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnOpen client-side event
+            </summary>
+            <param name="onOpenAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().Menu()
+                       .Name("Menu")
+                       .ClientEvents(events => events.OnOpen(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
         <member name="M:Telerik.Web.Mvc.UI.MenuClientEventsBuilder.OnOpen(System.String)">
             <summary>
              Defines the name of the JavaScript function that will handle the the OnOpen client-side event.
@@ -10407,6 +11718,27 @@
                             }
                             &lt;%
                        }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.MenuClientEventsBuilder.OnClose(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnClose client-side event
+            </summary>
+            <param name="onCloseAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().Menu()
+                       .Name("Menu")
+                       .ClientEvents(events => events.OnClose(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
                        .Render();
             %&gt;
             </code>
@@ -10448,6 +11780,27 @@
             </code>
             </example>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.MenuClientEventsBuilder.OnSelect(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnSelect client-side event
+            </summary>
+            <param name="onSelectAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().Menu()
+                       .Name("Menu")
+                       .ClientEvents(events => events.OnSelect(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
         <member name="M:Telerik.Web.Mvc.UI.MenuClientEventsBuilder.OnSelect(System.String)">
             <summary>
              Defines the name of the JavaScript function that will handle the the OnSelect client-side event.
@@ -10479,6 +11832,27 @@
                             }
                             &lt;%
                        }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.MenuClientEventsBuilder.OnLoad(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnLoad client-side event
+            </summary>
+            <param name="onSelectAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().Menu()
+                       .Name("Menu")
+                       .ClientEvents(events => events.OnLoad(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
                        .Render();
             %&gt;
             </code>
@@ -10837,6 +12211,27 @@
             </code>
             </example>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.PanelBarClientEventsBuilder.OnExpand(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnExpand client-side event
+            </summary>
+            <param name="onExpandAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().PanelBar()
+                       .Name("PanelBar")
+                       .ClientEvents(events => events.OnExpand(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
         <member name="M:Telerik.Web.Mvc.UI.PanelBarClientEventsBuilder.OnExpand(System.String)">
             <summary>
              Defines the name of the JavaScript function that will handle the the OnExpand client-side event.
@@ -10868,6 +12263,27 @@
                             }
                             &lt;%
                        }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.PanelBarClientEventsBuilder.OnCollapse(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnCollapse client-side event
+            </summary>
+            <param name="onCollapseAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().PanelBar()
+                       .Name("PanelBar")
+                       .ClientEvents(events => events.OnCollapse(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
                        .Render();
             %&gt;
             </code>
@@ -10909,6 +12325,27 @@
             </code>
             </example>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.PanelBarClientEventsBuilder.OnSelect(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnSelect client-side event
+            </summary>
+            <param name="onSelectAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().PanelBar()
+                       .Name("PanelBar")
+                       .ClientEvents(events => events.OnSelect(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
         <member name="M:Telerik.Web.Mvc.UI.PanelBarClientEventsBuilder.OnSelect(System.String)">
             <summary>
              Defines the name of the JavaScript function that will handle the the OnSelect client-side event.
@@ -10945,6 +12382,27 @@
             </code>
             </example>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.PanelBarClientEventsBuilder.OnLoad(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnLoad client-side event
+            </summary>
+            <param name="onLoadAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().PanelBar()
+                       .Name("PanelBar")
+                       .ClientEvents(events => events.OnLoad(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
         <member name="M:Telerik.Web.Mvc.UI.PanelBarClientEventsBuilder.OnLoad(System.String)">
             <summary>
              Defines the name of the JavaScript function that will handle the the OnLoad client-side event.
@@ -10976,6 +12434,27 @@
                             }
                             &lt;%
                        }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.PanelBarClientEventsBuilder.OnError(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnError client-side event
+            </summary>
+            <param name="onErrorAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().PanelBar()
+                       .Name("PanelBar")
+                       .ClientEvents(events => events.OnError(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
                        .Render();
             %&gt;
             </code>
@@ -11099,6 +12578,27 @@
             </code>
             </example>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.TabStripClientEventsBuilder.OnSelect(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnSelect client-side event
+            </summary>
+            <param name="onSelectAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().TabStrip()
+                       .Name("TabStrip")
+                       .ClientEvents(events => events.OnSelect(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
         <member name="M:Telerik.Web.Mvc.UI.TabStripClientEventsBuilder.OnSelect(System.String)">
             <summary>
              Defines the name of the JavaScript function that will handle the the OnSelect client-side event.
@@ -11109,6 +12609,63 @@
              &lt;%= Html.Telerik().TabStrip()
                         .Name("TabStrip")
                         .ClientEvents(events => events.OnSelect("onSelect"))
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.TabStripClientEventsBuilder.OnContentLoad(System.Action)">
+            <summary>
+            Defines the inline handler of the OnContentLoad client-side event
+            </summary>
+            <param name="onSelectAction">The action defining the inline handler.</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().TabStrip()
+                       .Name("TabStrip")
+                       .ClientEvents(events => events.OnContentLoad(() =>
+                       {
+                            %&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;%
+                       }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.TabStripClientEventsBuilder.OnContentLoad(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnContentLoad client-side event
+            </summary>
+            <param name="onSelectAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().TabStrip()
+                       .Name("TabStrip")
+                       .ClientEvents(events => events.OnContentLoad(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.TabStripClientEventsBuilder.OnContentLoad(System.String)">
+            <summary>
+             Defines the name of the JavaScript function that will handle the the OnContentLoad client-side event.
+            </summary>
+            <param name="onSelectHandlerName">The name of the JavaScript function that will handle the event.</param>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().TabStrip()
+                        .Name("TabStrip")
+                        .ClientEvents(events => events.OnContentLoad("onContentLoad"))
             %&gt;
             </code>
             </example>
@@ -11130,6 +12687,27 @@
                             }
                             &lt;%
                        }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.TabStripClientEventsBuilder.OnLoad(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnLoad client-side event
+            </summary>
+            <param name="onLoadAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().TabStrip()
+                       .Name("TabStrip")
+                       .ClientEvents(events => events.OnLoad(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
                        .Render();
             %&gt;
             </code>
@@ -11166,6 +12744,27 @@
                             }
                             &lt;%
                        }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.TabStripClientEventsBuilder.OnError(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnError client-side event
+            </summary>
+            <param name="onErrorAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().TabStrip()
+                       .Name("TabStrip")
+                       .ClientEvents(events => events.OnError(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
                        .Render();
             %&gt;
             </code>
@@ -11375,7 +12974,22 @@
         </member>
         <member name="F:Telerik.Web.Mvc.UI.UIPrimitives.Button">
             <summary>
-            Button
+            Button with plain text content
+            </summary>
+        </member>
+        <member name="F:Telerik.Web.Mvc.UI.UIPrimitives.ButtonIconText">
+            <summary>
+            Button with an icon and text content
+            </summary>
+        </member>
+        <member name="F:Telerik.Web.Mvc.UI.UIPrimitives.ButtonIcon">
+            <summary>
+            Button with an icon only
+            </summary>
+        </member>
+        <member name="F:Telerik.Web.Mvc.UI.UIPrimitives.ButtonBare">
+            <summary>
+            Bare button with an icon only (no background and borders)
             </summary>
         </member>
         <member name="F:Telerik.Web.Mvc.UI.UIPrimitives.Content">
@@ -11495,12 +13109,37 @@
         </member>
         <member name="T:Telerik.Web.Mvc.UI.UIPrimitives.Icons">
             <summary>
-            Contains CSS classes, used in the Grid
+            Contains CSS classes for icons
+            </summary>
+        </member>
+        <member name="F:Telerik.Web.Mvc.UI.UIPrimitives.Icons.Delete">
+            <summary>
+            "Delete" icon
+            </summary>
+        </member>
+        <member name="F:Telerik.Web.Mvc.UI.UIPrimitives.Icons.GroupDelete">
+            <summary>
+            "Delete Group" icon
+            </summary>
+        </member>
+        <member name="F:Telerik.Web.Mvc.UI.UIPrimitives.Icons.Refresh">
+            <summary>
+            "Minimize" icon
+            </summary>
+        </member>
+        <member name="F:Telerik.Web.Mvc.UI.UIPrimitives.Icons.Maximize">
+            <summary>
+            "Maximize" icon
+            </summary>
+        </member>
+        <member name="F:Telerik.Web.Mvc.UI.UIPrimitives.Icons.Close">
+            <summary>
+            "Close" icon
             </summary>
         </member>
         <member name="T:Telerik.Web.Mvc.UI.UIPrimitives.Grid">
             <summary>
-            Contains CSS classes, used in the Grid
+            Contains CSS classes, used in the grid
             </summary>
         </member>
         <member name="F:Telerik.Web.Mvc.UI.UIPrimitives.Grid.Action">
@@ -11528,24 +13167,64 @@
             Toolbar which contains different commands
             </summary>
         </member>
+        <member name="T:Telerik.Web.Mvc.UI.UIPrimitives.TreeView">
+            <summary>
+            Contains CSS classes, used in the treeview
+            </summary>
+        </member>
         <member name="F:Telerik.Web.Mvc.UI.UIPrimitives.TreeView.Lines">
             <summary>
             Class that shows treeview lines
             </summary>
         </member>
+        <member name="T:Telerik.Web.Mvc.UI.UIPrimitives.Editor">
+            <summary>
+            Contains CSS classes, used in the editor
+            </summary>
+        </member>
         <member name="F:Telerik.Web.Mvc.UI.UIPrimitives.Editor.ToolbarButton">
             <summary>
-            Editor toolbar button
+            Button in editor toolbar
             </summary>
         </member>
         <member name="F:Telerik.Web.Mvc.UI.UIPrimitives.Editor.ToolbarColorPicker">
             <summary>
-            Editor toolbar color picker
+            Color picker in editor toolbar
             </summary>
         </member>
         <member name="F:Telerik.Web.Mvc.UI.UIPrimitives.Editor.ToolIcon">
             <summary>
             Editor tool icon
+            </summary>
+        </member>
+        <member name="F:Telerik.Web.Mvc.UI.UIPrimitives.Editor.Custom">
+            <summary>
+            Custom tool
+            </summary>
+        </member>
+        <member name="T:Telerik.Web.Mvc.UI.UIPrimitives.Window">
+            <summary>
+            Contains CSS classes, used in the window
+            </summary>
+        </member>
+        <member name="F:Telerik.Web.Mvc.UI.UIPrimitives.Window.Action">
+            <summary>
+            Window buttons class
+            </summary>
+        </member>
+        <member name="F:Telerik.Web.Mvc.UI.UIPrimitives.Window.Content">
+            <summary>
+            Window content area
+            </summary>
+        </member>
+        <member name="F:Telerik.Web.Mvc.UI.UIPrimitives.Window.Icon">
+            <summary>
+            Window icon
+            </summary>
+        </member>
+        <member name="F:Telerik.Web.Mvc.UI.UIPrimitives.Window.TitleBar">
+            <summary>
+            Window title bar
             </summary>
         </member>
         <member name="T:Telerik.Web.Mvc.UI.ViewComponentFactory">
@@ -12071,6 +13750,98 @@
             Enables zoom animation.
             </summary>
         </member>
+        <member name="T:Telerik.Web.Mvc.UI.Fluent.WindowButtonsBuilder">
+            <summary>
+            Defines the fluent interface for configuring the <see cref="P:Telerik.Web.Mvc.UI.Window.Buttons"/>.
+            </summary>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.WindowButtonsBuilder.#ctor(Telerik.Web.Mvc.UI.IWindowButtonsContainer)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Telerik.Web.Mvc.UI.Fluent.WindowButtonsBuilder"/> class.
+            </summary>
+            <param name="container">The <see cref="T:Telerik.Web.Mvc.UI.IWindowButton"/> instance that is to be configured</param>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.WindowButtonsBuilder.Close">
+            <summary>
+            Configures the window to show a close button
+            </summary>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().Window()
+                        .Name("Window")
+                        .Buttons(buttons => buttons.Close())
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.WindowButtonsBuilder.Close(System.String)">
+            <summary>
+            Configures the window to show a close button and sets a fallback URL for environments where JavaScript is turned off.
+            </summary>
+            <param name="url">The fallback URL</param>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().Window()
+                        .Name("Window")
+                        .Buttons(buttons => buttons.Close(Url.Action("Home", "Index")))
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.WindowButtonsBuilder.Maximize">
+            <summary>
+            Configures the window to show a minimize button
+            </summary>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().Window()
+                        .Name("Window")
+                        .Buttons(buttons => buttons.Maximize())
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.WindowButtonsBuilder.Maximize(System.String)">
+            <summary>
+            Configures the window to show a minimize button and sets a fallback URL for environments where JavaScript is turned off.
+            </summary>
+            <param name="url">The fallback URL</param>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().Window()
+                        .Name("Window")
+                        .Buttons(buttons => buttons.Maximize(Url.Action("Home", "Index")))
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.WindowButtonsBuilder.Refresh">
+            <summary>
+            Configures the window to show a refresh button
+            </summary>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().Window()
+                        .Name("Window")
+                        .Buttons(buttons => buttons.Refresh())
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.WindowButtonsBuilder.Refresh(System.String)">
+            <summary>
+            Configures the window to show a refresh button and sets a fallback URL for environments where JavaScript is turned off.
+            </summary>
+            <param name="url">The fallback URL</param>
+            <example>
+            <code lang="CS">
+             &lt;%= Html.Telerik().Window()
+                        .Name("Window")
+                        .Buttons(buttons => buttons.Refresh(Url.Action("Home", "Index")))
+            %&gt;
+            </code>
+            </example>
+        </member>
         <member name="T:Telerik.Web.Mvc.UI.Fluent.WindowClientEventsBuilder">
             <summary>
             Defines the fluent interface for configuring the <see cref="P:Telerik.Web.Mvc.UI.Window.ClientEvents"/>.
@@ -12100,6 +13871,27 @@
                             }
                             &lt;%
                        }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.WindowClientEventsBuilder.OnLoad(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnLoad client-side event
+            </summary>
+            <param name="onLoadAction">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().Window()
+                       .Name("Window")
+                       .ClientEvents(events => events.OnLoad(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
                        .Render();
             %&gt;
             </code>
@@ -12141,6 +13933,27 @@
             </code>
             </example>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.WindowClientEventsBuilder.OnOpen(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnOpen client-side event
+            </summary>
+            <param name="javaScript">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().Window()
+                       .Name("Window")
+                       .ClientEvents(events => events.OnOpen(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
         <member name="M:Telerik.Web.Mvc.UI.Fluent.WindowClientEventsBuilder.OnOpen(System.String)">
             <summary>
              Defines the name of the JavaScript function that will handle the the OnOpen client-side event.
@@ -12172,6 +13985,27 @@
                             }
                             &lt;%
                        }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.WindowClientEventsBuilder.OnActivate(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnActivate client-side event
+            </summary>
+            <param name="javaScript">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().Window()
+                       .Name("Window")
+                       .ClientEvents(events => events.OnActivate(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
                        .Render();
             %&gt;
             </code>
@@ -12213,6 +14047,27 @@
             </code>
             </example>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.WindowClientEventsBuilder.OnClose(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnClose client-side event
+            </summary>
+            <param name="javaScript">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().Window()
+                       .Name("Window")
+                       .ClientEvents(events => events.OnClose(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
         <member name="M:Telerik.Web.Mvc.UI.Fluent.WindowClientEventsBuilder.OnClose(System.String)">
             <summary>
              Defines the name of the JavaScript function that will handle the the OnClose client-side event.
@@ -12244,6 +14099,27 @@
                             }
                             &lt;%
                        }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.WindowClientEventsBuilder.OnMove(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnMove client-side event
+            </summary>
+            <param name="javaScript">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().Window()
+                       .Name("Window")
+                       .ClientEvents(events => events.OnMove(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
                        .Render();
             %&gt;
             </code>
@@ -12285,6 +14161,27 @@
             </code>
             </example>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.WindowClientEventsBuilder.OnResize(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnResize client-side event
+            </summary>
+            <param name="javaScript">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().Window()
+                       .Name("Window")
+                       .ClientEvents(events => events.OnResize(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
         <member name="M:Telerik.Web.Mvc.UI.Fluent.WindowClientEventsBuilder.OnResize(System.String)">
             <summary>
              Defines the name of the JavaScript function that will handle the the OnResize client-side event.
@@ -12321,6 +14218,27 @@
             </code>
             </example>
         </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.WindowClientEventsBuilder.OnRefresh(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnRefresh client-side event
+            </summary>
+            <param name="javaScript">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().Window()
+                       .Name("Window")
+                       .ClientEvents(events => events.OnRefresh(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
         <member name="M:Telerik.Web.Mvc.UI.Fluent.WindowClientEventsBuilder.OnRefresh(System.String)">
             <summary>
              Defines the name of the JavaScript function that will handle the the OnRefresh client-side event.
@@ -12352,6 +14270,27 @@
                             }
                             &lt;%
                        }))
+                       .Render();
+            %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.Fluent.WindowClientEventsBuilder.OnError(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler of the OnError client-side event
+            </summary>
+            <param name="javaScript">The handler code wrapped in a text tag (Razor syntax).</param>
+            <example>
+            <code lang="CS">
+             &lt;% Html.Telerik().Window()
+                       .Name("Window")
+                       .ClientEvents(events => events.OnError(
+                            @&lt;text&gt;
+                            function(e) {
+                                //event handling code
+                            }
+                            &lt;/text&gt;
+                       ))
                        .Render();
             %&gt;
             </code>
@@ -13385,11 +15324,6 @@
               Looks up a localized string similar to DataTable InLine editing and custom EditorTemplate per column is not supported.
             </summary>
         </member>
-        <member name="P:Telerik.Web.Mvc.Resources.TextResource.DateOutOfRange">
-            <summary>
-              Looks up a localized string similar to Date should be bigger than MinDate and less than MaxDate..
-            </summary>
-        </member>
         <member name="P:Telerik.Web.Mvc.Resources.TextResource.DeleteCommandRequiresDelete">
             <summary>
               Looks up a localized string similar to The Delete data binding setting is required by the delete command. Please specify the Delete action or url in the DataBinding configuration..
@@ -13450,24 +15384,9 @@
               Looks up a localized string similar to Bound columns require a field or property access expression..
             </summary>
         </member>
-        <member name="P:Telerik.Web.Mvc.Resources.TextResource.MinDateShouldBeLessThanMaxDate">
+        <member name="P:Telerik.Web.Mvc.Resources.TextResource.MinPropertyMustBeLessThenMaxProperty">
             <summary>
-              Looks up a localized string similar to MinDate should be less than MaxDate..
-            </summary>
-        </member>
-        <member name="P:Telerik.Web.Mvc.Resources.TextResource.MinHeightShouldBeLessThanMaxHeight">
-            <summary>
-              Looks up a localized string similar to MinHeight should be less than MaxHeight..
-            </summary>
-        </member>
-        <member name="P:Telerik.Web.Mvc.Resources.TextResource.MinValueShouldBeLessThanMaxValue">
-            <summary>
-              Looks up a localized string similar to MinValue should be less than MaxValue.
-            </summary>
-        </member>
-        <member name="P:Telerik.Web.Mvc.Resources.TextResource.MinWidthShouldBeLessThanMaxWidth">
-            <summary>
-              Looks up a localized string similar to MinWidth should be less than MaxWidth..
+              Looks up a localized string similar to {0} should be less than {1}..
             </summary>
         </member>
         <member name="P:Telerik.Web.Mvc.Resources.TextResource.NameCannotBeBlank">
@@ -13548,11 +15467,6 @@
         <member name="P:Telerik.Web.Mvc.Resources.TextResource.ValueNotValidForProperty">
             <summary>
               Looks up a localized string similar to The value &apos;{0}&apos; is invalid..
-            </summary>
-        </member>
-        <member name="P:Telerik.Web.Mvc.Resources.TextResource.ValueOutOfRange">
-            <summary>
-              Looks up a localized string similar to Value should be bigger than MinValue and less than MaxValue..
             </summary>
         </member>
         <member name="P:Telerik.Web.Mvc.Resources.TextResource.WebServiceUrlRequired">
@@ -13981,6 +15895,14 @@
             <returns></returns>
         </member>
         <member name="M:Telerik.Web.Mvc.UI.ClientSideObjectWriter.Append(System.String,System.Action)">
+            <summary>
+            Appends the specified name and value to the end of this instance.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="action">The action.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ClientSideObjectWriter.Append(System.String,System.Func{System.Object,System.Object})">
             <summary>
             Appends the specified name and value to the end of this instance.
             </summary>
@@ -14597,6 +16519,23 @@
                       })
                       .Render();
             %&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Telerik.Web.Mvc.UI.ScriptRegistrarBuilder.OnDocumentReady(System.Func{System.Object,System.Object})">
+            <summary>
+            Defines the inline handler executed when the DOM document is ready (using the $(document).ready jQuery event)
+            </summary>
+            <param name="onDocumentReadyAction">The code of the inline handler wrapped in a text tag (Razor syntax)</param>
+            <example>
+            <code lang="CS">
+            @(Html.Telerik().ScriptRegistrar()
+                  .OnDocumentReady(
+                    @&lt;text&gt;
+                        alert("Document is ready");
+                    &lt;/text&gt;
+                  })
+            )
             </code>
             </example>
         </member>
