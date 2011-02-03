@@ -6,6 +6,7 @@
         Html.Telerik().Menu().Name("Menu").Items(items => {items.Add().Text("General").Action("General", "Settings"); })
                                                 .Items(items => items.Add().Text("Indexers").Action("Indexers", "Settings"))
                                                 .Items(items => items.Add().Text("Downloads").Action("Downloads", "Settings"))
+                                                .Items(items => items.Add().Text("Quality").Action("Quality", "Settings"))
                                                 .Render();
     %>
 

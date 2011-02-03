@@ -55,7 +55,7 @@ namespace Ninject.Web.Mvc
             if (asyncController != null)
             {
                 asyncController.ActionInvoker = this.CreateAsyncActionInvoker();
-            }
+            }5
             else
             {
                 var standardController = controller as Controller;

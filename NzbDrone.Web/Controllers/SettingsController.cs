@@ -15,12 +15,14 @@ namespace NzbDrone.Web.Controllers
     {
         private IConfigProvider _configProvider;
         private IIndexerProvider _indexerProvider;
+        private IQualityProvider _qualityProvider;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public SettingsController(IConfigProvider configProvider, IIndexerProvider indexerProvider)
+        public SettingsController(IConfigProvider configProvider, IIndexerProvider indexerProvider, IQualityProvider qualityProvider)
         {
             _configProvider = configProvider;
             _indexerProvider = indexerProvider;
+            _qualityProvider = qualityProvider;
         }
 
         public ActionResult Index(string viewName)
@@ -89,6 +91,18 @@ namespace NzbDrone.Web.Controllers
                 SabCategory = _configProvider.GetValue("SabCategory", String.Empty, false),
                 //SabPriority = _configProvider.GetValue("SabPriority", String.Empty, false)
             });
+        }
+
+        public ActionResult Quality()
+        {
+            ViewData["viewName"] = "Downloads";
+
+            var userProfiles = _qualityProvider.GetProfiles().Where(q => q.UserProfile).ToList();
+            var profiles = _qualityProvider.GetProfiles().Where(q => q.UserProfile == false).ToList();
+
+            QualityModel model = new QualityModel {Profiles = profiles, UserProfiles = userProfiles};
+
+            return View("Index", model);
         }
 
         public ActionResult SubMenu()
