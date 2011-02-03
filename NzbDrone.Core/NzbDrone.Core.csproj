@@ -171,9 +171,11 @@
     <Compile Include="Providers\IHistoryProvider.cs" />
     <Compile Include="Providers\IIndexerProvider.cs" />
     <Compile Include="Providers\IndexerProvider.cs" />
+    <Compile Include="Providers\IQualityProvider.cs" />
     <Compile Include="Providers\IRssSyncProvider.cs" />
     <Compile Include="Providers\IRssProvider.cs" />
     <Compile Include="Providers\ITimerProvider.cs" />
+    <Compile Include="Providers\QualityProvider.cs" />
     <Compile Include="Providers\RssSyncProvider.cs" />
     <Compile Include="Providers\RssProvider.cs" />
     <Compile Include="Providers\TimerProvider.cs" />

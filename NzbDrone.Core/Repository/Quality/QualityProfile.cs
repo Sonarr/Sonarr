@@ -7,33 +7,15 @@ namespace NzbDrone.Core.Repository.Quality
 {
     public class QualityProfile
     {
-        public int Id { get; set; }
-        public QualityTypes Cutoff { get; set; }
+        [SubSonicPrimaryKey(true)]
+        public int ProfileId { get; set; }
+        public string Name { get; set; }
+        public bool UserProfile { get; set; } //Allows us to tell the difference between default and user profiles
 
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public string SonicAllowed
-        {
-            get
-            {
-                string result = String.Empty;
-                foreach (var q in Allowed)
-                {
-                    result += (int)q + "|";
-                }
-                return result.Trim('|');
-            }
-            private set
-            {
-                var qualities = value.Split('|');
-                Allowed = new List<QualityTypes>(qualities.Length);
-                foreach (var quality in qualities)
-                {
-                    Allowed.Add((QualityTypes)Convert.ToInt32(quality));
-                }
-            }
-        }
+        [SubSonicToManyRelation]
+        public virtual List<AllowedQuality> Allowed { get; private set; }
 
         [SubSonicIgnore]
-        public List<QualityTypes> Allowed { get; set; }
+        public List<AllowedQuality> AllowedQualities { get; set; }
     }
 }
