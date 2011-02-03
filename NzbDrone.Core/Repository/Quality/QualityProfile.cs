@@ -12,10 +12,9 @@ namespace NzbDrone.Core.Repository.Quality
         public string Name { get; set; }
         public bool UserProfile { get; set; } //Allows us to tell the difference between default and user profiles
 
-        [SubSonicToManyRelation]
-        public virtual List<AllowedQuality> Allowed { get; private set; }
+        public List<QualityTypes> Allowed { get; set; }
+        public QualityTypes Cutoff { get; set; }
 
-        [SubSonicIgnore]
-        public List<AllowedQuality> AllowedQualities { get; set; }
+
     }
 }

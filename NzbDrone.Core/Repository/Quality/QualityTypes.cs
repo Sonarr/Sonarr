@@ -19,6 +19,10 @@ namespace NzbDrone.Core.Repository.Quality
         /// </summary>
         DVD = 2,
         /// <summary>
+        ///   SD File (HD Source)
+        /// </summary>
+        BDRip = 2,
+        /// <summary>
         ///   HD File (HDTV Source)
         /// </summary>
         HDTV = 3,
@@ -27,12 +31,9 @@ namespace NzbDrone.Core.Repository.Quality
         /// </summary>
         WEBDL = 4,
         /// <summary>
-        ///   720P HD File (Blu-ray Source)
+        ///   HD File (Blu-ray Source could be 1080p or 720p)
         /// </summary>
-        Bluray720p = 5,
-        /// <summary>
-        ///   1080P HD File (Blu-ray Source)
-        /// </summary>
-        Bluray1080p = 6
+        Bluray = 5,
+
     }
 }

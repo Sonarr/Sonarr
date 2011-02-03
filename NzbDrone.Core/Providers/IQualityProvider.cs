@@ -8,9 +8,9 @@ namespace NzbDrone.Core.Providers
 {
     public interface IQualityProvider
     {
-        void AddProfile(QualityProfile profile, List<AllowedQuality> allowedQualities);
-        void UpdateProfile(QualityProfile profile, List<AllowedQuality> allowedQualities);
-        void RemoveProfile(int profileId);
-        List<QualityProfile> GetProfiles();
+        void Add(QualityProfile profile);
+        void Update(QualityProfile profile);
+        void Delete(int profileId);
+        List<QualityProfile> GetAllProfiles();
     }
 }

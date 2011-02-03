@@ -97,8 +97,8 @@ namespace NzbDrone.Web.Controllers
         {
             ViewData["viewName"] = "Quality";
 
-            var userProfiles = _qualityProvider.GetProfiles().Where(q => q.UserProfile).ToList();
-            var profiles = _qualityProvider.GetProfiles().Where(q => q.UserProfile == false).ToList();
+            var userProfiles = _qualityProvider.GetAllProfiles().Where(q => q.UserProfile).ToList();
+            var profiles = _qualityProvider.GetAllProfiles().Where(q => q.UserProfile == false).ToList();
 
             QualityModel model = new QualityModel {Profiles = profiles, UserProfiles = userProfiles};
 

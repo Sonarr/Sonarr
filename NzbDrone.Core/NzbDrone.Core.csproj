@@ -212,7 +212,6 @@
     <Compile Include="Instrumentation\Log.cs" />
     <Compile Include="Repository\History.cs" />
     <Compile Include="Repository\Indexer.cs" />
-    <Compile Include="Repository\Quality\AllowedQuality.cs" />
     <Compile Include="Repository\Config.cs" />
     <Compile Include="Repository\Quality\QualityProfile.cs" />
     <Compile Include="Repository\Season.cs" />

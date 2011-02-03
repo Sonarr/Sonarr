@@ -18,7 +18,7 @@ namespace NzbDrone.Core
 
         private static readonly Regex[] ReportTitleRegex = new[]
                                                        {
-                                                         new Regex(@"(?<title>.+?)?\W(S)?(?<season>\d+)[EeXx](?<episode>\d+)\W(?!\\)", RegexOptions.IgnoreCase | RegexOptions.Compiled)                                                        
+                                                         new Regex(@"(?<title>.+?)?\W(S)?(?<season>\d+)\w(?<episode>\d+)\W(?!\\)", RegexOptions.IgnoreCase | RegexOptions.Compiled)                                                        
                                                        };
 
         private static readonly Regex NormalizeRegex = new Regex(@"((\s|^)the(\s|$))|((\s|^)and(\s|$))|[^a-z]", RegexOptions.IgnoreCase | RegexOptions.Compiled);
@@ -80,21 +80,25 @@ namespace NzbDrone.Core
 
             if (name.Contains("dvd"))
                 return QualityTypes.DVD;
+
+            if (name.Contains("bdrip") || name.Contains("brrip"))
+            {
+                return QualityTypes.BDRip;
+            }
+
             if (name.Contains("xvid") || name.Contains("divx"))
             {
-                if (name.Contains("bluray") || name.Contains("bdrip"))
+                if (name.Contains("bluray"))
                 {
-                    return QualityTypes.DVD;
+                    return QualityTypes.BDRip;
                 }
+
                 return QualityTypes.TV;
             }
 
-            if (name.Contains("bluray") || name.Contains("bdrip"))
+            if (name.Contains("bluray"))
             {
-                if (name.Contains("1080p"))
-                    return QualityTypes.Bluray1080p;
-
-                return QualityTypes.Bluray720p;
+                return QualityTypes.Bluray;
             }
             if (name.Contains("web-dl"))
                 return QualityTypes.WEBDL;
@@ -142,14 +146,14 @@ namespace NzbDrone.Core
             if (String.IsNullOrEmpty(path))
                 throw new ArgumentException("Path can not be null or empty");
 
-          var info = new FileInfo(path);
+            var info = new FileInfo(path);
 
-          if( info.FullName.StartsWith(@"\\")) //UNC
-          {
-            return info.FullName.ToLower().TrimEnd('/', '\\', ' ');
-          }
-          
-          return info.FullName.ToLower().Trim('/', '\\', ' ');
+            if (info.FullName.StartsWith(@"\\")) //UNC
+            {
+                return info.FullName.ToLower().TrimEnd('/', '\\', ' ');
+            }
+
+            return info.FullName.ToLower().Trim('/', '\\', ' ');
         }
 
         public static NzbInfoModel ParseNzbInfo(FeedInfoModel feed, RssItem item)

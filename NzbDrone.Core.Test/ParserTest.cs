@@ -21,6 +21,7 @@ namespace NzbDrone.Core.Test
         [Row(@"z:\tv shows\battlestar galactica (2003)\Season 3\S03E05 - Collaborators.mkv", 3, 5)]
         [Row(@"z:\tv shows\modern marvels\Season 16\S16E03 - The Potato.mkv", 16, 3)]
         [Row(@"z:\tv shows\robot chicken\Specials\S00E16 - Dear Consumer - SD TV.avi", 0, 16)]
+        [Row(@"Parenthood.2010.S02E14.HDTV.XviD-LOL", 2, 14)]
         public void episode_parse(string path, int season, int episode)
         {
             var result = Parser.ParseEpisodeInfo(path);
@@ -30,8 +31,8 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
-        [Row("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD", QualityTypes.DVD)]
-        [Row("WEEDS.S03E01-06.DUAL.BDRip.AC3.-HELLYWOOD", QualityTypes.Bluray)]
+        [Row("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD", QualityTypes.BDRip)]
+        [Row("WEEDS.S03E01-06.DUAL.BDRip.AC3.-HELLYWOOD", QualityTypes.BDRip)]
         [Row("Two.and.a.Half.Men.S08E05.720p.HDTV.X264-DIMENSION", QualityTypes.HDTV)]
         [Row("Chuck.S04E05.HDTV.XviD-LOL", QualityTypes.TV)]
         [Row("The.Girls.Next.Door.S03E06.DVDRip.XviD-WiDE", QualityTypes.DVD)]
