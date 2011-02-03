@@ -8,6 +8,7 @@ namespace NzbDrone.Core.Model
         internal string SeriesTitle { get; set; }
         internal int SeasonNumber { get; set; }
         internal int EpisodeNumber { get; set; }
+        internal int Year { get; set; }
 
         public override string ToString()
         {

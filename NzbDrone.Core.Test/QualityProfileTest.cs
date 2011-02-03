@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using MbUnit.Framework;
@@ -22,10 +23,11 @@ namespace NzbDrone.Core.Test
             //Arrange
             var repo = MockLib.GetEmptyRepository();
             var testProfile = new QualityProfile
-            {
-                Cutoff = QualityTypes.TV,
-                Allowed = new List<QualityTypes>() { QualityTypes.HDTV, QualityTypes.DVD },
-            };
+                                  {
+                                      Name = Guid.NewGuid().ToString(),
+                                      Cutoff = QualityTypes.TV,
+                                      Allowed = new List<QualityTypes>() { QualityTypes.HDTV, QualityTypes.DVD },
+                                  };
 
             //Act
             var id = (int)repo.Add(testProfile);
@@ -33,6 +35,7 @@ namespace NzbDrone.Core.Test
 
             //Assert
             Assert.AreEqual(id, fetch.ProfileId);
+            Assert.AreEqual(testProfile.Name, fetch.Name);
             Assert.AreEqual(testProfile.Cutoff, fetch.Cutoff);
             Assert.AreEqual(testProfile.Allowed, fetch.Allowed);
         }

@@ -18,7 +18,7 @@ namespace NzbDrone.Core
 
         private static readonly Regex[] ReportTitleRegex = new[]
                                                        {
-                                                         new Regex(@"(?<title>.+?)?\W(S)?(?<season>\d+)\w(?<episode>\d+)\W(?!\\)", RegexOptions.IgnoreCase | RegexOptions.Compiled)                                                        
+                                                         new Regex(@"(?<title>.+?)?\W?(?<year>\d+?)?\WS?(?<season>\d+)\w(?<episode>\d+)\W(?!\\)", RegexOptions.IgnoreCase | RegexOptions.Compiled)                                                        
                                                        };
 
         private static readonly Regex NormalizeRegex = new Regex(@"((\s|^)the(\s|$))|((\s|^)and(\s|$))|[^a-z]", RegexOptions.IgnoreCase | RegexOptions.Compiled);
@@ -41,15 +41,25 @@ namespace NzbDrone.Core
                 if (match.Count != 0)
                 {
                     var seriesName = NormalizeTitle(match[0].Groups["title"].Value);
+                    var year = 0;
+                    Int32.TryParse(match[0].Groups["year"].Value, out year);
+
+                    if (year < 1900 || year > DateTime.Now.Year + 1)
+                    {
+                        year = 0;
+                    }
 
                     foreach (Match matchGroup in match)
                     {
+
                         var parsedEpisode = new EpisodeParseResult
-                        {
-                            SeriesTitle = seriesName,
-                            SeasonNumber = Convert.ToInt32(matchGroup.Groups["season"].Value),
-                            EpisodeNumber = Convert.ToInt32(matchGroup.Groups["episode"].Value)
-                        };
+                                                {
+                                                    SeriesTitle = seriesName,
+                                                    SeasonNumber = Convert.ToInt32(matchGroup.Groups["season"].Value),
+                                                    EpisodeNumber = Convert.ToInt32(matchGroup.Groups["episode"].Value),
+                                                    Year = year
+                                                };
+
 
                         result.Add(parsedEpisode);
 
