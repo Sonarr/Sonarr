@@ -1,0 +1,34 @@
+/*
+Name: jQuery Simple Drop Down Plugin Stylesheet
+Author: Etienne Fardet
+Version: 1.2
+*/
+
+/* Demo common styles - Not needed to make the plugin work */
+/*
+body {font-family:Verdana, Geneva, sans-serif; font-size:14px;width:40%;margin:0 auto;}
+a {text-decoration:none;color:#039;}
+h3 {clear:both;color: #039;}
+pre {border:1px solid black; padding:8px;width:700px; margin:20px;}
+strong {color: #093;}
+.requirements {list-style:square;}
+.author {color: #003;font-size: 12px;font-weight: bold;font-style: italic;}
+*/
+
+/* Demo divs - Lists need to be placed in a div with an assigned ID that will be called within the page as a parameter for the main plugin function */
+/*
+#dropdown1 {position:relative;z-index:2;}
+#dropdown2 {position:relative;z-index:1;}
+#dropdown3 {position:relative;z-index:0;margin-left:170px;}
+*/
+
+/* Necessary Styles to make the demo work - Change background colors and colors to match your needs */
+.dropdown {background:url(./images/arrow.png) no-repeat 10px 8px #D9D6D5;color:#D9D6D5;-khtml-border-radius:8px;border-radius:8px;-moz-border-radius:8px;-webkit-border-radius:8px;cursor:pointer;margin:0;padding:0;position:absolute;}
+.dropdown a {text-decoration:none; color:#000;}
+.dropdown {list-style-type:none;margin:0;padding:0;width:120;margin:0 auto;}
+.drop ul {list-style-type:none;margin:0;padding:0;}
+.drop ul li:first-child {border-top:1px solid #D9D6D5;}
+.drop ul li {display:none; -moz-border-radius:0;-webkit-border-radius:0;background-color:#D9D6D5;padding:0px; padding-left:4px; padding-right:4px}
+.drop ul li:last-child {display:none;-khtml-border-radius:0 0 8px 8px;border-radius:0 0 8px 8px;-moz-border-radius:0 0 8px 8px;-webkit-border-radius:0 0 8px 8px;}
+.selected {padding:4px;color:#000;}
+.drop ul li:hover {background-color:#06f;}

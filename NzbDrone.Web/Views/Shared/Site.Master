@@ -17,6 +17,7 @@
     <link href="../../Content/style.css" rel="stylesheet" type="text/css" />
     <link href="../../Content/jquery-ui.css" rel="stylesheet" type="text/css" />
     <link href="../../Content/jquery-ui.custom.css" rel="stylesheet" type="text/css" /> 
+    <link href="../../Content/jquery-simpledropdown.css" rel="stylesheet" type="text/css" /> 
     <script type="text/javascript" src="../../Scripts/jquery-1.4.3.min.js"></script>
     <script type="text/javascript" src="../../Scripts/jquery-ui-1.8.8.min.js"></script>    
     <asp:ContentPlaceHolder ID="headerContent" runat="server"></asp:ContentPlaceHolder>
@@ -55,7 +56,8 @@
                .Add("jquery.form.js")
                .Add("jquery.jgrowl.js")
                .Add("Notification.js")
-               .Add("jquery-tgc-countdown-1.0.js"))
+               .Add("jquery-tgc-countdown-1.0.js")
+               .Add("jquery.simpledropdown.js"))
                .Render(); 
 %>
 </html>

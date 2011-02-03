@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<NzbDrone.Web.Models.SettingsModel>" %>
+﻿<%@ Page Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<dynamic>" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
     Settings
@@ -11,5 +11,5 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     
-    <% Html.RenderPartial(ViewData["viewName"].ToString(), Model); %>
+    <% Html.RenderPartial(ViewData["viewName"].ToString()); %>
 </asp:Content>

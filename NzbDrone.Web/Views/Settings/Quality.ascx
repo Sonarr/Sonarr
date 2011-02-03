@@ -11,6 +11,8 @@
             resetForm: false
         };
         $('#form').ajaxForm(options);
+        $.simpledropdown("#dropdown1");
+
     });
 
     function saveOrder(jqForm, options) {
@@ -57,5 +59,34 @@
         });
 	</script>
 
+    <% using (Html.BeginForm("SaveIndexers", "Settings", FormMethod.Post, new { id = "form", name = "form" }))
+       {%>
+<%: Html.ValidationSummary(true, "Unable to save your settings. Please correct the errors and try again.") %>
+    
+<div id="dropdown1">
+	<ul>
+		<li>Quality</li>
+		<li>
+			<ul>
+				<li><a href="#">Argentina</a></li>
+				<li><a href="#">Brazil</a></li>
+				<li><a href="#">Uruguay</a></li>
+				<li><a href="#">France</a></li>
+				<li><a href="#">United Kingdon</a></li>
+			</ul>
+		</li>
+	</ul>
+</div>
 
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+
+    <%}%>
 <div id="result"></div>

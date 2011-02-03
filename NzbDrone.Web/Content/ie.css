@@ -1,0 +1,12 @@
+/*
+Name: jQuery Simple Drop Down Plugin Stylesheet
+Author: Etienne Fardet
+Version: 1.2
+-- Fixes for IE --
+*/
+
+¨* {zoom:1;}
+
+.drop ul, .drop ul li {width:134px;}
+.drop ul li a, .drop ul li a:hover  {padding:8px;}
+.drop ul li a:hover {background-color:#06f;}

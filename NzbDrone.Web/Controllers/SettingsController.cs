@@ -95,7 +95,7 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult Quality()
         {
-            ViewData["viewName"] = "Downloads";
+            ViewData["viewName"] = "Quality";
 
             var userProfiles = _qualityProvider.GetProfiles().Where(q => q.UserProfile).ToList();
             var profiles = _qualityProvider.GetProfiles().Where(q => q.UserProfile == false).ToList();

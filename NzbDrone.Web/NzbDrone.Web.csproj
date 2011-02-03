@@ -73,7 +73,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\Copy of SettingsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LogController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
@@ -103,6 +102,8 @@
     <Content Include="Content\Default\treeview-nodes-rtl.png" />
     <Content Include="Content\Forest\treeview-nodes-rtl.png" />
     <Content Include="Content\Hay\treeview-nodes-rtl.png" />
+    <Content Include="Content\ie.css" />
+    <Content Include="Content\Images\arrow.png" />
     <Content Include="Content\Images\spin.gif" />
     <Content Include="Content\Black\editor.png" />
     <Content Include="Content\Black\loading.gif" />
@@ -144,6 +145,7 @@
     <Content Include="Content\Images\ui-icons_888888_256x240.png" />
     <Content Include="Content\Images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Content\Images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Content\jquery-simpledropdown.css" />
     <Content Include="Content\jquery-ui-1.8.8.custom.css" />
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\jquery-ui.custom.css" />
@@ -253,6 +255,7 @@
     <Content Include="Scripts\jquery.form.js" />
     <Content Include="Scripts\jquery.jgrowl.js" />
     <Content Include="Scripts\jquery-tgc-countdown-1.0.js" />
+    <Content Include="Scripts\jquery.simpledropdown.js" />
     <Content Include="Scripts\Notification.js" />
     <Content Include="Views\Log\Index.aspx" />
     <Content Include="Views\Series\Details.aspx" />
