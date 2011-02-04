@@ -84,6 +84,7 @@
     </Compile>
     <Compile Include="Helpers\IsCurrentActionHelper.cs" />
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\MappingModel.cs" />
     <Compile Include="Models\EpisodeModel.cs" />
     <Compile Include="Models\QualityModel.cs" />
     <Compile Include="Models\SettingsModels.cs" />

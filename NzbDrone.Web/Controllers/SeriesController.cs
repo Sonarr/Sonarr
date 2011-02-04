@@ -51,7 +51,7 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult UnMapped()
         {
-            return View(_seriesProvider.GetUnmappedFolders());
+            return View(_seriesProvider.GetUnmappedFolders().Select(c => new MappingModel() { Id = 1, Path = c.Value }).ToList());
         }
 
 
@@ -155,6 +155,14 @@ namespace NzbDrone.Web.Controllers
 
         //
         // GET: /Series/Details/5
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        [GridAction]
+        public ActionResult _SaveAjaxEditing(string id)
+        {
+            return RedirectToAction("UnMapped");
+        }
+
 
         public ActionResult Details(int seriesId)
         {

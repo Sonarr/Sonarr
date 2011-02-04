@@ -58,19 +58,19 @@ namespace NzbDrone.Core.Providers
             return _sonioRepo.Exists<Series>(s => s.SeriesId == seriesId && (QualityTypes)s.Quality == quality);
         }
 
-        public List<String> GetUnmappedFolders()
+        public Dictionary<Guid, String> GetUnmappedFolders()
         {
             Logger.Debug("Generating list of unmapped folders");
             if (String.IsNullOrEmpty(_config.SeriesRoot))
                 throw new InvalidOperationException("TV Series folder is not configured yet.");
 
-            var results = new List<String>();
+            var results = new Dictionary<Guid, String>();
             foreach (string seriesFolder in _diskProvider.GetDirectories(_config.SeriesRoot))
             {
                 var cleanPath = Parser.NormalizePath(new DirectoryInfo(seriesFolder).FullName);
                 if (!_sonioRepo.Exists<Series>(s => s.Path == cleanPath))
                 {
-                    results.Add(cleanPath);
+                    results.Add(Guid.NewGuid(), cleanPath);
                 }
             }
 

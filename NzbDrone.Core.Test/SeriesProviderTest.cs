@@ -83,7 +83,7 @@ namespace NzbDrone.Core.Test
             var unmappedFolder = seriesController.GetUnmappedFolders();
 
             //Assert
-            Assert.AreElementsEqualIgnoringOrder(MockLib.StandardSeries, unmappedFolder);
+            Assert.AreElementsEqualIgnoringOrder(MockLib.StandardSeries, unmappedFolder.Values);
         }
 
 

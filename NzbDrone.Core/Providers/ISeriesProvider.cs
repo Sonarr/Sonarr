@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Providers
 
         TvdbSeries MapPathToSeries(string path);
         void AddSeries(string path, TvdbSeries series);
-        List<String> GetUnmappedFolders();
+        Dictionary<Guid, String> GetUnmappedFolders();
         Series FindSeries(string cleanTitle);
         bool QualityWanted(int seriesId, QualityTypes quality);
     }

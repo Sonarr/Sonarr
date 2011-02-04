@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Providers
                     var unmappedFolders = _seriesProvider.GetUnmappedFolders();
                     _seriesSyncNotification.ProgressMax = unmappedFolders.Count;
 
-                    foreach (string seriesFolder in unmappedFolders)
+                    foreach (string seriesFolder in unmappedFolders.Values)
                     {
                         try
                         {
