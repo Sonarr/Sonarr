@@ -49,7 +49,6 @@
 	.ui-state-highlight { height: 1.5em; line-height: 1.2em; }
 	</style>
 
-
     <script type="text/javascript">
         $(function () {
             $("#sortable").sortable({
@@ -59,7 +58,7 @@
         });
 	</script>
 
-    <% using (Html.BeginForm("SaveIndexers", "Settings", FormMethod.Post, new { id = "form", name = "form" }))
+    <% using (Html.BeginForm("SaveQuality", "Settings", FormMethod.Post, new { id = "form", name = "form" }))
        {%>
 <%: Html.ValidationSummary(true, "Unable to save your settings. Please correct the errors and try again.") %>
     

@@ -123,11 +123,12 @@ namespace NzbDrone.Web.Controllers
             }
             catch (Exception)
             {
-                if (Request.IsAjaxRequest())
-                    return Content("Settings Saved.");
+                Logger.Error("Error saving settings.");
 
-                return Content("Settings Saved.");
-                Logger.Error("");
+                if (Request.IsAjaxRequest())
+                    return Content("Error saving settings.");
+
+                return Content("Error saving settings.");
             }
 
 
@@ -242,6 +243,29 @@ namespace NzbDrone.Web.Controllers
 
                 //if (data.SabPriority != null)
                 //    _configProvider.SetValue("SabPriority", data.SabPriority.ToString());
+            }
+            catch (Exception e)
+            {
+                Logger.ErrorException(e.Message, e);
+                if (Request.IsAjaxRequest())
+                    return Content("Error Saving Settings, please fix any errors");
+
+                return Content("Error Saving Settings, please fix any errors");
+            }
+
+            if (Request.IsAjaxRequest())
+                return Content("Settings Saved.");
+
+            return Content("Settings Saved.");
+        }
+
+        [HttpPost]
+        public ActionResult SaveQuality(QualityModel data)
+        {
+            try
+            {
+                
+
             }
             catch (Exception e)
             {

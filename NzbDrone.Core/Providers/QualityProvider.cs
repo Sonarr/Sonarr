@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NLog;
 using NzbDrone.Core.Repository.Quality;
 using SubSonic.Repository;
 
@@ -10,6 +11,7 @@ namespace NzbDrone.Core.Providers
     public class QualityProvider : IQualityProvider
     {
         private IRepository _sonicRepo;
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public QualityProvider(IRepository sonicRepo)
         {
@@ -27,8 +29,8 @@ namespace NzbDrone.Core.Providers
         {
             if (!_sonicRepo.Exists<QualityProfile>(q => q.ProfileId == profile.ProfileId))
             {
-                //Log Error
-                throw new InvalidOperationException("Unable to update none existing profile");
+                Logger.Error("Unable to update non-existing profile");
+                throw new InvalidOperationException("Unable to update non-existing profile");
             }
 
             _sonicRepo.Update(profile);
