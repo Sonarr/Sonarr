@@ -19,7 +19,7 @@
     <link href="../../Content/jquery-ui.custom.css" rel="stylesheet" type="text/css" /> 
     <link href="../../Content/jquery-simpledropdown.css" rel="stylesheet" type="text/css" /> 
     <script type="text/javascript" src="../../Scripts/jquery-1.4.3.min.js"></script>
-    <script type="text/javascript" src="../../Scripts/jquery-ui-1.8.8.min.js"></script>    
+    <%--<script type="text/javascript" src="../../Scripts/jquery-ui-1.8.8.min.js"></script>--%>
     <asp:ContentPlaceHolder ID="headerContent" runat="server"></asp:ContentPlaceHolder>
 </head>
 <body>
@@ -52,7 +52,8 @@
 </body>
 <asp:ContentPlaceHolder runat="server" id="Scripts" />
 <% Html.Telerik().ScriptRegistrar().Scripts(
-           c => c.Add("jquery-ui-1.8.8.min.js")
+           c => c.Add("jquery-1.4.3.min.js")
+               .Add("jquery-ui-1.8.8.min.js")
                .Add("jquery.form.js")
                .Add("jquery.jgrowl.js")
                .Add("Notification.js")

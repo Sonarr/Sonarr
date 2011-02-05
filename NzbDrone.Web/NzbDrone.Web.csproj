@@ -269,6 +269,9 @@
     <Content Include="Views\Settings\Indexers.ascx" />
     <Content Include="Views\Settings\Quality.ascx" />
     <Content Include="Views\Settings\SubMenu.ascx" />
+    <Content Include="Views\Settings\Test.ascx" />
+    <Content Include="Views\Settings\Test2.ascx" />
+    <Content Include="Views\Settings\UserProfileSection.ascx" />
     <Content Include="Views\Shared\Footer.ascx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

@@ -1,4 +1,5 @@
 ﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<NzbDrone.Web.Models.QualityModel>" %>
+<%@ Import Namespace="NzbDrone.Core.Repository.Quality" %>
 
 <script type="text/javascript">
     $(document).ready(function () {
@@ -71,10 +72,46 @@
                     <%: Html.DropDownListFor(m => m.DefaultProfileId, Model.SelectList)%>
                     <%= Html.ValidationMessageFor(m => m.DefaultProfileId)%>
                 </div>
-    
+
+                <div id="profile-editor">
+                    <%= Html.ActionLink("Add a New Profile", "AddUserProfile", null, new { id = "addItem" }) %>
+                    <div id="user-profiles">
+                        <%for (int i = 0; i < Model.UserProfiles.Count(); i++){%>
+                            <% Html.RenderPartial("UserProfileSection", Model.UserProfiles[i]); %>
+                            <%--<%= Html.TextBoxFor(m => m.UserProfiles[i].ApiUrl, new { @style = "display:none" })%>--%>
+                        <%}%>
+                    </div>
+                </div>
                 <br />
                 <input type="submit" class="button" value="Save" />
         </fieldset>
 
     <%}%>
 <div id="result"></div>
+
+<%--<script type="text/javascript">
+    $('#add-profile').click(
+        function () {
+            <% Model.UserProfiles.Add(new QualityProfile{Name = "New Quality"}); %>
+            $('<%: Html.LabelFor(m => m.UserProfiles.Last().Name) %><%: Html.TextBoxFor(m => m.UserProfiles.Last().Name) %><br/>')
+            .prependTo($('#user-profiles'));
+        });
+    
+</script>--%>
+
+<script type="text/javascript">
+
+    $("#addItem").click(function () {
+        $.ajax({
+            url: this.href,
+            cache: false,
+            success: function (html) { $("#user-profiles").prepend(html); }
+        });
+        return false;
+    });
+
+    $("a.deleteRow").live("click", function () {
+        $(this).parents("div.editorRow:first").remove();
+        return false;
+    });
+</script>

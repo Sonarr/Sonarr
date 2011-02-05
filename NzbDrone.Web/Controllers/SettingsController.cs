@@ -123,6 +123,11 @@ namespace NzbDrone.Web.Controllers
             return View("Index", model);
         }
 
+        public ViewResult AddUserProfile()
+        {
+            return View("UserProfileSection", new QualityProfile());
+        }
+
         public ActionResult SubMenu()
         {
             return PartialView();
