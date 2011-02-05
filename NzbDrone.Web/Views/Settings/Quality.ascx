@@ -60,32 +60,21 @@
 
     <% using (Html.BeginForm("SaveQuality", "Settings", FormMethod.Post, new { id = "form", name = "form" }))
        {%>
-<%: Html.ValidationSummary(true, "Unable to save your settings. Please correct the errors and try again.") %>
+        <fieldset>
+            <legend>Indexers</legend> 
+                <%: Html.ValidationSummary(true, "Unable to save your settings. Please correct the errors and try again.") %>
+
+                <div class="editor-label">
+                    <%= Html.LabelFor(m => m.DefaultProfileId) %>
+                </div>
+                <div class="editor-field">
+                    <%: Html.DropDownListFor(m => m.DefaultProfileId, Model.SelectList)%>
+                    <%= Html.ValidationMessageFor(m => m.DefaultProfileId)%>
+                </div>
     
-<div id="dropdown1">
-	<ul>
-		<li>Quality</li>
-		<li>
-			<ul>
-				<li><a href="#">Argentina</a></li>
-				<li><a href="#">Brazil</a></li>
-				<li><a href="#">Uruguay</a></li>
-				<li><a href="#">France</a></li>
-				<li><a href="#">United Kingdon</a></li>
-			</ul>
-		</li>
-	</ul>
-</div>
-
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-
+                <br />
+                <input type="submit" class="button" value="Save" />
+        </fieldset>
 
     <%}%>
 <div id="result"></div>

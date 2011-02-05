@@ -21,19 +21,19 @@ namespace NzbDrone.Core.Repository.Quality
         /// <summary>
         ///   SD File (HD Source)
         /// </summary>
-        BDRip = 2,
+        BDRip = 3,
         /// <summary>
         ///   HD File (HDTV Source)
         /// </summary>
-        HDTV = 3,
+        HDTV = 4,
         /// <summary>
         ///   HD File (Online Source)
         /// </summary>
-        WEBDL = 4,
+        WEBDL = 5,
         /// <summary>
         ///   HD File (Blu-ray Source could be 1080p or 720p)
         /// </summary>
-        Bluray = 5,
+        Bluray = 6,
 
     }
 }

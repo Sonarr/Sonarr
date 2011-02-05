@@ -5,7 +5,8 @@ using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using NLog;
-using NzbDrone.Core.Providers;  
+using NzbDrone.Core.Providers;
+using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Web.Models;
 
 namespace NzbDrone.Web.Controllers
@@ -98,9 +99,26 @@ namespace NzbDrone.Web.Controllers
             ViewData["viewName"] = "Quality";
 
             var userProfiles = _qualityProvider.GetAllProfiles().Where(q => q.UserProfile).ToList();
-            var profiles = _qualityProvider.GetAllProfiles().Where(q => q.UserProfile == false).ToList();
+            var profiles = _qualityProvider.GetAllProfiles().ToList();
+            var qualityTypes = new List<QualityTypes>();
 
-            QualityModel model = new QualityModel {Profiles = profiles, UserProfiles = userProfiles};
+            foreach (QualityTypes qual in Enum.GetValues(typeof(QualityTypes)))
+            {
+                qualityTypes.Add(qual);
+            }
+
+            var defaultQualityProfileId = Convert.ToInt32(_configProvider.GetValue("DefaultQualityProfile", profiles[0].ProfileId, true));
+
+            var selectList = new SelectList(profiles, "ProfileId", "Name");
+
+            var model = new QualityModel
+                                     {
+                                         Profiles = profiles,
+                                         UserProfiles = userProfiles,
+                                         Qualities = qualityTypes,
+                                         DefaultProfileId = defaultQualityProfileId,
+                                         SelectList = selectList
+                                     };
 
             return View("Index", model);
         }
@@ -264,9 +282,9 @@ namespace NzbDrone.Web.Controllers
         {
             try
             {
-                
-
+                _configProvider.SetValue("DefaultQualityProfile", data.DefaultProfileId.ToString());
             }
+
             catch (Exception e)
             {
                 Logger.ErrorException(e.Message, e);

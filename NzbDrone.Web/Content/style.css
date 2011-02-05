@@ -215,13 +215,13 @@ input[type="text"]:hover
     background: #ff6;
 }
 
-.submitButton
+.button
 {
 	border: 1px solid #006;
     background: #ccf;
 }
 
-.submitButton:hover
+.button:hover
 {
 	border: 1px solid #f00;
     background: #eef;

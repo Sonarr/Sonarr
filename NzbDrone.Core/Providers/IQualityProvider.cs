@@ -12,5 +12,6 @@ namespace NzbDrone.Core.Providers
         void Update(QualityProfile profile);
         void Delete(int profileId);
         List<QualityProfile> GetAllProfiles();
+        QualityProfile Find(int profileId);
     }
 }

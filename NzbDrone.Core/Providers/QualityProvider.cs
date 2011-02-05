@@ -48,6 +48,11 @@ namespace NzbDrone.Core.Providers
             return profiles;
         }
 
+        public QualityProfile Find(int profileId)
+        {
+            return _sonicRepo.Single<QualityProfile>(q => q.ProfileId == profileId);
+        }
+
         #endregion
     }
 }
