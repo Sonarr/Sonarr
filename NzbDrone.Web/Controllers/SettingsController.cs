@@ -98,8 +98,6 @@ namespace NzbDrone.Web.Controllers
         {
             ViewData["viewName"] = "Quality";
 
-            var userProfiles = _qualityProvider.GetAllProfiles().Where(q => q.UserProfile).ToList();
-            var profiles = _qualityProvider.GetAllProfiles().ToList();
             var qualityTypes = new List<QualityTypes>();
 
             foreach (QualityTypes qual in Enum.GetValues(typeof(QualityTypes)))
@@ -107,6 +105,11 @@ namespace NzbDrone.Web.Controllers
                 qualityTypes.Add(qual);
             }
 
+            ViewData["Qualities"] = qualityTypes;
+
+            var userProfiles = _qualityProvider.GetAllProfiles().Where(q => q.UserProfile).ToList();
+            var profiles = _qualityProvider.GetAllProfiles().ToList();
+            
             var defaultQualityProfileId = Convert.ToInt32(_configProvider.GetValue("DefaultQualityProfile", profiles[0].ProfileId, true));
 
             var selectList = new SelectList(profiles, "ProfileId", "Name");
@@ -115,7 +118,6 @@ namespace NzbDrone.Web.Controllers
                                      {
                                          Profiles = profiles,
                                          UserProfiles = userProfiles,
-                                         Qualities = qualityTypes,
                                          DefaultProfileId = defaultQualityProfileId,
                                          SelectList = selectList
                                      };

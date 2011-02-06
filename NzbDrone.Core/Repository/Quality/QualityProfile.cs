@@ -9,6 +9,7 @@ namespace NzbDrone.Core.Repository.Quality
     {
         [SubSonicPrimaryKey(true)]
         public int ProfileId { get; set; }
+
         [DisplayName("Name")]
         public string Name { get; set; }
         public bool UserProfile { get; set; } //Allows us to tell the difference between default and user profiles
@@ -17,6 +18,11 @@ namespace NzbDrone.Core.Repository.Quality
         [DisplayName("Allowed Qualities")]
         public List<QualityTypes> Allowed { get; set; }
 
+        [SubSonicIgnore]
+        [DisplayName("Allowed Qualities String")]
+        public string AllowedString { get; set; }
+
+        [DisplayName("Cutoff")]
         public QualityTypes Cutoff { get; set; }
 
         [EditorBrowsable(EditorBrowsableState.Never)]

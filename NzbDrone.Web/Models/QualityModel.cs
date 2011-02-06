@@ -12,7 +12,7 @@ namespace NzbDrone.Web.Models
     {
         public List<QualityProfile> Profiles { get; set; }
         public List<QualityProfile> UserProfiles { get; set; }
-        public List<QualityTypes> Qualities { get; set; }
+        //public List<QualityTypes> Qualities { get; set; }
 
         [DisplayName("Default Quality Profile")]
         public int DefaultProfileId { get; set; }

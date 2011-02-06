@@ -1,5 +1,6 @@
 ﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<NzbDrone.Web.Models.QualityModel>" %>
 <%@ Import Namespace="NzbDrone.Core.Repository.Quality" %>
+<%@ Import Namespace="NzbDrone.Web.Helpers" %>
 
 <script type="text/javascript">
     $(document).ready(function () {
@@ -62,42 +63,34 @@
     <% using (Html.BeginForm("SaveQuality", "Settings", FormMethod.Post, new { id = "form", name = "form" }))
        {%>
         <fieldset>
-            <legend>Indexers</legend> 
+            <legend>Quality</legend> 
                 <%: Html.ValidationSummary(true, "Unable to save your settings. Please correct the errors and try again.") %>
 
                 <div class="editor-label">
-                    <%= Html.LabelFor(m => m.DefaultProfileId) %>
+                    <%= Html.LabelFor(m => m.DefaultProfileId)%>
                 </div>
                 <div class="editor-field">
                     <%: Html.DropDownListFor(m => m.DefaultProfileId, Model.SelectList)%>
                     <%= Html.ValidationMessageFor(m => m.DefaultProfileId)%>
                 </div>
 
+                <br />
+
                 <div id="profile-editor">
                     <%= Html.ActionLink("Add a New Profile", "AddUserProfile", null, new { id = "addItem" }) %>
                     <div id="user-profiles">
-                        <%for (int i = 0; i < Model.UserProfiles.Count(); i++){%>
-                            <% Html.RenderPartial("UserProfileSection", Model.UserProfiles[i]); %>
-                            <%--<%= Html.TextBoxFor(m => m.UserProfiles[i].ApiUrl, new { @style = "display:none" })%>--%>
-                        <%}%>
+                        <%foreach (var item in Model.UserProfiles) { %>
+                            <% Html.RenderPartial("UserProfileSection", item); %>
+                        <% } %>
                     </div>
                 </div>
+
                 <br />
                 <input type="submit" class="button" value="Save" />
         </fieldset>
 
     <%}%>
 <div id="result"></div>
-
-<%--<script type="text/javascript">
-    $('#add-profile').click(
-        function () {
-            <% Model.UserProfiles.Add(new QualityProfile{Name = "New Quality"}); %>
-            $('<%: Html.LabelFor(m => m.UserProfiles.Last().Name) %><%: Html.TextBoxFor(m => m.UserProfiles.Last().Name) %><br/>')
-            .prependTo($('#user-profiles'));
-        });
-    
-</script>--%>
 
 <script type="text/javascript">
 
@@ -111,7 +104,7 @@
     });
 
     $("a.deleteRow").live("click", function () {
-        $(this).parents("div.editorRow:first").remove();
+        $(this).parents("div.userProfileSectionEditor:first").remove();
         return false;
     });
 </script>

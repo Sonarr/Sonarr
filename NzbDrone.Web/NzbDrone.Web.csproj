@@ -82,11 +82,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\HtmlPrefixScopeExtensions.cs" />
     <Compile Include="Helpers\IsCurrentActionHelper.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\MappingModel.cs" />
     <Compile Include="Models\EpisodeModel.cs" />
     <Compile Include="Models\QualityModel.cs" />
+    <Compile Include="Models\QualityProfileModel.cs" />
     <Compile Include="Models\SettingsModels.cs" />
     <Compile Include="Ninject.Web.Mvc\ControllerMissingBindingResolver.cs" />
     <Compile Include="Ninject.Web.Mvc\FilterInjector.cs" />
@@ -267,10 +269,9 @@
     <Content Include="Views\Settings\General.ascx" />
     <Content Include="Views\Settings\Index.aspx" />
     <Content Include="Views\Settings\Indexers.ascx" />
+    <Content Include="Views\Settings\ProfileAllowedQualities.ascx" />
     <Content Include="Views\Settings\Quality.ascx" />
     <Content Include="Views\Settings\SubMenu.ascx" />
-    <Content Include="Views\Settings\Test.ascx" />
-    <Content Include="Views\Settings\Test2.ascx" />
     <Content Include="Views\Settings\UserProfileSection.ascx" />
     <Content Include="Views\Shared\Footer.ascx" />
     <Content Include="Web.config">
