@@ -88,8 +88,8 @@
     <Compile Include="Models\MappingModel.cs" />
     <Compile Include="Models\EpisodeModel.cs" />
     <Compile Include="Models\QualityModel.cs" />
-    <Compile Include="Models\QualityProfileModel.cs" />
     <Compile Include="Models\SettingsModels.cs" />
+    <Compile Include="Models\TestModel.cs" />
     <Compile Include="Ninject.Web.Mvc\ControllerMissingBindingResolver.cs" />
     <Compile Include="Ninject.Web.Mvc\FilterInjector.cs" />
     <Compile Include="Ninject.Web.Mvc\IFilterInjector.cs" />
@@ -260,6 +260,7 @@
     <Content Include="Scripts\jquery-tgc-countdown-1.0.js" />
     <Content Include="Scripts\jquery.simpledropdown.js" />
     <Content Include="Scripts\Notification.js" />
+    <Content Include="Views\Home\Test.aspx" />
     <Content Include="Views\Log\Index.aspx" />
     <Content Include="Views\Series\Details.aspx" />
     <Content Include="Views\Series\EpisodeDetail.ascx" />
@@ -269,7 +270,6 @@
     <Content Include="Views\Settings\General.ascx" />
     <Content Include="Views\Settings\Index.aspx" />
     <Content Include="Views\Settings\Indexers.ascx" />
-    <Content Include="Views\Settings\ProfileAllowedQualities.ascx" />
     <Content Include="Views\Settings\Quality.ascx" />
     <Content Include="Views\Settings\SubMenu.ascx" />
     <Content Include="Views\Settings\UserProfileSection.ascx" />

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using NzbDrone.Web.Models;
 
 namespace NzbDrone.Web.Controllers
 {
@@ -18,6 +19,19 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult About()
         {
+            return View();
+        }
+
+        public ActionResult Test()
+        {
+            var model = new TestModel();
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Test(TestModel model)
+        {
+
             return View();
         }
     }

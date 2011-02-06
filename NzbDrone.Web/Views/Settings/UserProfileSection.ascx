@@ -4,9 +4,9 @@
 
 <% using (Html.BeginCollectionItem("UserProfiles"))
    { %>
-
         <style type="text/css">
 	        #sortable1, #sortable2 { list-style-type: none; margin: 0; padding: 0; float: left; margin-right: 10px; background: #eee; padding: 5px; width: 143px;}
+	        .allowedQualities, .otherQualities { list-style-type: none; margin: 0; padding: 0; float: left; margin-right: 10px; background: #eee; padding: 5px; width: 148px;}
 	        #sortable1 li, #sortable2 li { margin: 5px; padding: 5px; font-size: 1.2em; width: 120px; }
 	    </style>
 
@@ -16,11 +16,17 @@
                     connectWith: ".connectedSortable",
                     placeholder: "ui-state-highlight",
                     dropOnEmpty: true,
-                    update: function (event, ui) {
 
+                    create: function (event, ui) {
+                        var order = $('#sortable1').sortable("toArray");
+                        $("#allowedString").val(order);
+                    },
+
+                    update: function (event, ui) {
                         var order = $('#sortable1').sortable("toArray");
                         $("#allowedString").val(order);
                     }
+
                 }).disableSelection();
             });
 
@@ -29,12 +35,11 @@
     <div class="userProfileSectionEditor"> 
 
         <fieldset>
+            <%--<label><%= Model.Name %></label>--%>
 
-        <%= Html.TextBoxFor(m => m.AllowedString, new { @id = "allowedString", @style = "display:none" })%>
-        <%--<%= Html.TextBoxFor(m => m.AllowedString, new { @id = "allowedString" })%>--%>
-
-        <label><%= Model.Name %></label>
-            <div class="removeDiv"><a href="#" class="deleteRow">Remove</a></div>
+            <%= Html.TextBoxFor(m => m.AllowedString, new { @id = "allowedString", @style = "display:none" })%>
+            <%--<%= Html.TextBoxFor(m => m.AllowedString, new { @id = "allowedString" })%>--%>
+            <%--<%= Html.TextBox("Name", "Empty", new { @id = "allowedString2" })%>--%>
 
             <div class="editor-label">
                 <%= Html.LabelFor(x => x.Name)%>
@@ -52,16 +57,21 @@
             <br />
 
             <div class="allowedQualities">
-                <ul id="sortable1" class="connectedSortable" title="Allowed">
-                    <%for (int i = 0; i < Model.Allowed.Count(); i++){%>
-                        <li class="ui-state-default" id="<%= Model.Allowed[i].ToString() %>">
-                        <%= Html.DisplayTextFor(c => c.Allowed[i]) %>
-                        </li>
+                <h4 style="padding:0">Allowed</h4>
+                <ul id="sortable1" class="connectedSortable" title>
+                    <% if (Model.Allowed != null) { %>
+                        <%for (int i = 0; i < Model.Allowed.Count(); i++){%>
+                            <li class="ui-state-default" id="<%= Model.Allowed[i].ToString() %>">
+                            <%=Html.RadioButtonFor(x => x.Cutoff, Model.Allowed[i])%>
+                            <%= Html.DisplayTextFor(c => c.Allowed[i]) %>
+                            </li>
+                        <%}%>
                     <%}%>
                 </ul>
             </div>
 
             <div class="otherQualities">
+                <h4 padding-left="10px">Not-Allowed</h4>
                 <ul id="sortable2" class="connectedSortable">
                     <% var qualitiesList = (List<QualityTypes>) ViewData["Qualities"]; %>
 
@@ -70,18 +80,24 @@
                             //Skip Unknown and any item that is in the allowed list
                             if (qualitiesList[i].ToString() == "Unknown")
                                 continue;
-                            if (Model.Allowed.Contains(qualitiesList[i]))
-                                continue;
+                          
+                            if (Model.Allowed != null)
+                            {
+                                if (Model.Allowed.Contains(qualitiesList[i]))
+                                    continue;
+                            }
                         %>
 
                         <li class="ui-state-default" id="<%= qualitiesList[i].ToString() %>">
+                        <%=Html.RadioButtonFor(x => x.Cutoff, qualitiesList[i])%>
                         <%= Html.Label(qualitiesList[i].ToString()) %>
                         <%--<%= Html.RenderPartial("ProfileAllowedQualities", Model.Allowed[i]) %>--%>
                         </li>
 
-                        <% } %>
+                    <% } %>
                 </ul>
-            </div>            
+            </div>
+            <div class="removeDiv"><a href="#" class="deleteRow">Remove</a></div>         
         </fieldset>
     </div> 
 <% } %>
