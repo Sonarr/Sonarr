@@ -300,8 +300,17 @@ namespace NzbDrone.Web.Controllers
             {
                 _configProvider.SetValue("DefaultQualityProfile", data.DefaultProfileId.ToString());
 
+                foreach (var dbProfile in _qualityProvider.GetAllProfiles().Where(q => q.UserProfile))
+                {
+                    if (!data.UserProfiles.Exists(p => p.ProfileId == dbProfile.ProfileId))
+                        _qualityProvider.Delete(dbProfile.ProfileId);
+                }
+
+
                 foreach (var profile in data.UserProfiles)
                 {
+                    Logger.Debug(String.Format("Updating User Profile: {0}", profile));
+
                     profile.Allowed = new List<QualityTypes>();
                     foreach (var quality in profile.AllowedString.Split(','))
                     {
@@ -311,7 +320,8 @@ namespace NzbDrone.Web.Controllers
 
                     //If the Cutoff value selected is not in the allowed list then use the last allowed value, this should be validated on submit
                     if (!profile.Allowed.Contains(profile.Cutoff))
-                        profile.Cutoff = profile.Allowed.Last();
+                        throw new InvalidOperationException("Invalid Cutoff Value");
+                        //profile.Cutoff = profile.Allowed.Last();
 
                     if (profile.ProfileId > 0)
                         _qualityProvider.Update(profile);
@@ -319,7 +329,6 @@ namespace NzbDrone.Web.Controllers
                     else
                         _qualityProvider.Add(profile);
                 }
-
             }
 
             catch (Exception e)
