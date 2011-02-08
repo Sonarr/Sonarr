@@ -5,7 +5,7 @@
 <% using (Html.BeginCollectionItem("UserProfiles"))
    { %>
         <style type="text/css">
-	        #sortable1, #sortable2 { list-style-type: none; float: left; margin-right: 10px; background: #eee; padding-left: 5px; padding-right: 5px; width: 107px; }
+	        #sortable1, #sortable2 { list-style-type: none; margin-right: 10px; background: #eee; padding-left: 5px; padding-right: 5px; padding-top: 0px; padding-bottom: 6px; width: 107px; margin-bottom: 3px; }
 	        .allowedQualities, .otherQualities { list-style-type: none; float: left; margin-right: 10px; background: #eee; padding-left: 5px; padding-right: 5px; padding-top:6px; width: 112px; -khtml-border-radius:8px;border-radius:8px;-moz-border-radius:8px;-webkit-border-radius:8px; }
 	        #sortable1 li, #sortable2 li { margin: 5px; margin-left: 0px; padding: 0px; font-size: 1.2em; width: 100px; -khtml-border-radius:8px;border-radius:8px;-moz-border-radius:8px;-webkit-border-radius:8px; }
 	        #sortable1 li { background: #ddd; }
