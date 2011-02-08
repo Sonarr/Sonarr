@@ -11,7 +11,7 @@
 	        #sortable1 li { background: #ddd; }
 	        #sortable2 li { background: #DAA2A2; }
 	        .sortableHeader { margin:2px; margin-left:12px }
-	        #sortable1 li.ui-state-highlight, #sortable2 li.ui-state-highlight { background: #fbf5d0; }
+	        #sortable1 li.ui-state-highlight, #sortable2 li.ui-state-highlight { background: #fbf5d0; border-color: #065EFE; }
 	        .removeDiv { float: left; display:block; }
 	        
 	    </style>
@@ -40,69 +40,67 @@
 
     <div class="userProfileSectionEditor"> 
 
-        <fieldset style="width:275px; margin:5px;">
-            <%--<label><%= Model.Name %></label>--%>
+        <fieldset style="width:275px; margin:5px; margin-top: 0px; border-color:#CCCCCD">
 
-            <%= Html.TextBoxFor(m => m.AllowedString, new { @id = "allowedString", @style = "display:none" })%>
+            <div id="qualityHeader" style="padding-bottom: 5px; margin: 0px;">
+                <h2 style="display:inline; padding-right: 4px; margin-left: 4px;"><%= Html.DisplayTextFor(m => m.Name) %></h2>
+                <a href="#" class="deleteRow"><img src="../../Content/Images/X.png" alt="Delete" /></a>
+            </div>
 
-            <div class="config-group" style="width: 250px">
+            <div class="config-group" style="width: 250px; margin-bottom: 5px; margin-left: 5px;">
                 <div class="config-title"><%= Html.LabelFor(x => x.Name)%></div>
                 <div class="config-value"><%= Html.TextBoxFor(x => x.Name)%></div>
                 <div class="config-validation"><%= Html.ValidationMessageFor(x => x.Name)%></div>
             </div>
 
-            <div class="removeDiv"><a href="#" class="deleteRow">Remove</a></div>
-            <br />
+            <div id="sortablesDiv" style="margin: 0px;">
+                <div class="allowedQualities">
+                    <h4 class="sortableHeader">Allowed</h4>
+                    <ul id="sortable1" class="connectedSortable">
+                        <% if (Model.Allowed != null) { %>
+                            <%for (int i = 0; i < Model.Allowed.Count(); i++){%>
+                                <li class="ui-state-default" id="<%= Model.Allowed[i].ToString() %>">
+                                <%=Html.RadioButtonFor(x => x.Cutoff, Model.Allowed[i])%>
+                                <%= Html.DisplayTextFor(c => c.Allowed[i]) %>
+                                </li>
+                            <%}%>
+                        <%}%>
+                    </ul>
+                </div>
 
+                <div class="otherQualities">
+                    <h4 class="sortableHeader">Not-Allowed</h4>
+                    <ul id="sortable2" class="connectedSortable">
+                        <% var qualitiesList = (List<QualityTypes>) ViewData["Qualities"]; %>
+
+                        <%for (int i = 0; i < qualitiesList.Count(); i++){%>                      
+                            <%
+                                //Skip Unknown and any item that is in the allowed list
+                                if (qualitiesList[i].ToString() == "Unknown")
+                                    continue;
+                          
+                                if (Model.Allowed != null)
+                                {
+                                    if (Model.Allowed.Contains(qualitiesList[i]))
+                                        continue;
+                                }
+                            %>
+
+                            <li class="ui-state-default" id="<%= qualitiesList[i].ToString() %>">
+                            <%=Html.RadioButtonFor(x => x.Cutoff, qualitiesList[i])%>
+                            <%= Html.Label(qualitiesList[i].ToString()) %>
+                            <%--<%= Html.RenderPartial("ProfileAllowedQualities", Model.Allowed[i]) %>--%>
+                            </li>
+
+                        <% } %>
+                    </ul>
+                </div>
+            </div>
             <div class="hiddenProfileDetails">
                 <%= Html.TextBoxFor(x => x.ProfileId, new { @style = "display:none" })%>
                 <%= Html.CheckBoxFor(x => x.UserProfile, new { @style = "display:none" })%>
+                <%= Html.TextBoxFor(m => m.AllowedString, new { @id = "allowedString", @style = "display:none" })%>
             </div>
-
-            <br />
-
-            <div class="allowedQualities">
-                <h4 class="sortableHeader">Allowed</h4>
-                <ul id="sortable1" class="connectedSortable">
-                    <% if (Model.Allowed != null) { %>
-                        <%for (int i = 0; i < Model.Allowed.Count(); i++){%>
-                            <li class="ui-state-default" id="<%= Model.Allowed[i].ToString() %>">
-                            <%=Html.RadioButtonFor(x => x.Cutoff, Model.Allowed[i])%>
-                            <%= Html.DisplayTextFor(c => c.Allowed[i]) %>
-                            </li>
-                        <%}%>
-                    <%}%>
-                </ul>
-            </div>
-
-            <div class="otherQualities">
-                <h4 class="sortableHeader">Not-Allowed</h4>
-                <ul id="sortable2" class="connectedSortable">
-                    <% var qualitiesList = (List<QualityTypes>) ViewData["Qualities"]; %>
-
-                    <%for (int i = 0; i < qualitiesList.Count(); i++){%>                      
-                        <%
-                            //Skip Unknown and any item that is in the allowed list
-                            if (qualitiesList[i].ToString() == "Unknown")
-                                continue;
-                          
-                            if (Model.Allowed != null)
-                            {
-                                if (Model.Allowed.Contains(qualitiesList[i]))
-                                    continue;
-                            }
-                        %>
-
-                        <li class="ui-state-default" id="<%= qualitiesList[i].ToString() %>">
-                        <%=Html.RadioButtonFor(x => x.Cutoff, qualitiesList[i])%>
-                        <%= Html.Label(qualitiesList[i].ToString()) %>
-                        <%--<%= Html.RenderPartial("ProfileAllowedQualities", Model.Allowed[i]) %>--%>
-                        </li>
-
-                    <% } %>
-                </ul>
-            </div>
-            <br />
             
         </fieldset>
     </div> 

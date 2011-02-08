@@ -1,8 +1,7 @@
 h1, h2, h3
 {
     margin: 0;
-    color: #549900;
-    text-transform: lowercase;
+    color: #000000;
 }
 
 body
@@ -206,13 +205,13 @@ hr
 input[type="text"]
 {
 	border: 1px solid #006;
-    background: #ffc;
+    background: #CBE8FF;
 }
 
 input[type="text"]:hover
 {
-	border: 1px solid #f00;
-    background: #ff6;
+	border: 1px solid #065EFE;
+    background: #C0D6FF;
 }
 
 .button

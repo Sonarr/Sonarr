@@ -66,27 +66,37 @@
             <legend>Quality</legend> 
                 <%: Html.ValidationSummary(true, "Unable to save your settings. Please correct the errors and try again.") %>
 
-                <div class="editor-label">
-                    <%= Html.LabelFor(m => m.DefaultProfileId)%>
-                </div>
-                <div class="editor-field">
-                    <%: Html.DropDownListFor(m => m.DefaultProfileId, Model.SelectList)%>
-                    <%= Html.ValidationMessageFor(m => m.DefaultProfileId)%>
-                </div>
-
-                <br />
-
-                <div id="profile-editor">
-                    <%= Html.ActionLink("Add a New Profile", "AddUserProfile", null, new { id = "addItem" }) %>
-                    <div id="user-profiles">
-                        <%foreach (var item in Model.UserProfiles) { %>
-                            <% Html.RenderPartial("UserProfileSection", item); %>
-                        <% } %>
+                <div class="rightSide" style="float: right; width: 65%;">
+                    <div id="defaultQualityDiv" style="float: left; margin: 30px;">
+                        
+                        <div class="config-group" style="width: 250px; margin-bottom: 5px; margin-left: 5px;">
+                            <div class="config-title"><%= Html.LabelFor(m => m.DefaultProfileId)%></div>
+                            <div class="config-value"><%: Html.DropDownListFor(m => m.DefaultProfileId, Model.SelectList)%></div>
+                            <div class="config-validation"><%= Html.ValidationMessageFor(m => m.DefaultProfileId)%></div>
+                        </div>
                     </div>
                 </div>
 
-                <br />
-                <input type="submit" class="button" value="Save" />
+                <div id="leftSide" style="width:35%;">
+                    <div style="padding-top: 10px;">
+                        <div style="padding-left: 7px; margin-bottom: 5px;">
+                            <a id="addItem" style="text-decoration:none;" href="<%: Url.Action("AddUserProfile", "Settings") %>">
+                            <img src="../../Content/Images/Plus.png" alt="Add New Profile" />
+                            <h4 style="margin-left: 3px; display: inline; color: Black;">Add New Profile</h4></a>
+                        </div>
+
+                        <div id="user-profiles">
+                            <%foreach (var item in Model.UserProfiles) { %>
+                                <% Html.RenderPartial("UserProfileSection", item); %>
+                            <% } %>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 10px; padding-left: 5px;">
+                        <input type="submit" class="button" value="Save" />
+                    </div>
+                </div>
+
         </fieldset>
 
     <%}%>

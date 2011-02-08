@@ -107,6 +107,7 @@
     <Content Include="Content\Hay\treeview-nodes-rtl.png" />
     <Content Include="Content\ie.css" />
     <Content Include="Content\Images\arrow.png" />
+    <Content Include="Content\Images\Plus.png" />
     <Content Include="Content\Images\spin.gif" />
     <Content Include="Content\Black\editor.png" />
     <Content Include="Content\Black\loading.gif" />
@@ -148,6 +149,7 @@
     <Content Include="Content\Images\ui-icons_888888_256x240.png" />
     <Content Include="Content\Images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Content\Images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Content\Images\X.png" />
     <Content Include="Content\jquery-simpledropdown.css" />
     <Content Include="Content\jquery-ui-1.8.8.custom.css" />
     <Content Include="Content\jquery-ui.css" />
