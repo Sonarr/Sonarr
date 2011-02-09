@@ -7,8 +7,11 @@ namespace NzbDrone.Core.Providers
 {
     public interface ITimerProvider
     {
-        void ResetTimer();
-        void StartTimer();
-        void StopTimer();
+        void ResetRssSyncTimer();
+        void StartRssSyncTimer();
+        void StopRssSyncTimer();
+        void SetRssSyncTimer(int minutes);
+        TimeSpan RssSyncTimeLeft();
+        DateTime NextRssSyncTime();
     }
 }
