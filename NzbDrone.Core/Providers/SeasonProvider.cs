@@ -27,6 +27,11 @@ namespace NzbDrone.Core.Providers
             return _sonicRepo.All<Season>().Where(s => s.SeriesId == seriesId).ToList();
         }
 
+        public Season GetLatestSeason(int seriesId)
+        {
+            return _sonicRepo.All<Season>().Where(s => s.SeriesId == seriesId).OrderBy(s => s.SeasonNumber).Last();
+        }
+
         public void EnsureSeason(int seriesId, int seasonId, int seasonNumber)
         {
             if (_sonicRepo.Exists<Season>(s => s.SeasonId == seasonId))
