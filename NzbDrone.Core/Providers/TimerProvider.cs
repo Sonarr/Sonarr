@@ -17,10 +17,8 @@ namespace NzbDrone.Core.Providers
 
         private Timer _rssSyncTimer;
         private Timer _minuteTimer;
-
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
         private DateTime _rssSyncNextInterval;
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public TimerProvider(IRssSyncProvider rssSyncProvider, ISeriesProvider seriesProvider, ISeasonProvider seasonProvider, IEpisodeProvider episodeProvider)
         {
@@ -90,8 +88,8 @@ namespace NzbDrone.Core.Providers
 
         private void RunRssSync(object obj, ElapsedEventArgs args)
         {
-            DateTime.Now.AddMilliseconds(_rssSyncTimer.Interval);
-            _rssSyncProvider.Begin();
+            _rssSyncNextInterval = DateTime.Now.AddMilliseconds(_rssSyncTimer.Interval);
+            //_rssSyncProvider.Begin();
         }
 
         private void MinuteTimer_Elapsed(object obj, ElapsedEventArgs args)
