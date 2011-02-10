@@ -20,6 +20,7 @@ namespace NzbDrone.Core.Providers
         bool IsNeeded(EpisodeModel episode);
 
         void RefreshEpisodeInfo(int seriesId);
+        void RefreshEpisodeInfo(Season season);
         IList<Episode> GetEpisodeBySeason(long seasonId);
     }
 }
