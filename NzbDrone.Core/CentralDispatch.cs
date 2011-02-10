@@ -70,15 +70,21 @@ namespace NzbDrone.Core
                 _kernel.Bind<INotificationProvider>().To<NotificationProvider>().InSingletonScope();
                 _kernel.Bind<ILogProvider>().To<LogProvider>().InSingletonScope();
                 _kernel.Bind<IMediaFileProvider>().To<MediaFileProvider>().InSingletonScope();
+                _kernel.Bind<ITimerProvider>().To<TimerProvider>().InSingletonScope();
                 _kernel.Bind<IRepository>().ToMethod(c => new SimpleRepository(dbProvider, SimpleRepositoryOptions.RunMigrations)).InSingletonScope();
 
                 _kernel.Bind<IRepository>().ToConstant(logRepository).WhenInjectedInto<SubsonicTarget>().InSingletonScope();
                 _kernel.Bind<IRepository>().ToConstant(logRepository).WhenInjectedInto<LogProvider>().InSingletonScope();
 
-
                 ForceMigration(_kernel.Get<IRepository>());
                 SetupIndexers(_kernel.Get<IRepository>()); //Setup the default set of indexers on start-up
                 SetupDefaultQualityProfiles(_kernel.Get<IRepository>()); //Setup the default QualityProfiles on start-up
+
+                //Get the Timers going
+                var config = _kernel.Get<IConfigProvider>();
+                var timer = _kernel.Get<ITimerProvider>();
+                timer.SetRssSyncTimer(Convert.ToInt32(config.GetValue("SyncFrequency", "15", true)));
+                timer.StartRssSyncTimer();
             }
         }
 

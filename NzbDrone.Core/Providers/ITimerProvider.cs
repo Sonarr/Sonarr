@@ -13,5 +13,7 @@ namespace NzbDrone.Core.Providers
         void SetRssSyncTimer(int minutes);
         TimeSpan RssSyncTimeLeft();
         DateTime NextRssSyncTime();
+        void StartMinuteTimer();
+        void StopMinuteTimer();
     }
 }
