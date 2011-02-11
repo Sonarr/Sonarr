@@ -1,4 +1,4 @@
-﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<NzbDrone.Web.Models.SettingsModel>" %>
+﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<NzbDrone.Web.Models.DownloadSettingsModel>" %>
 
 <script type="text/javascript">
     $(document).ready(function () {
@@ -22,6 +22,10 @@
         $("#form :input").attr("disabled", false);
     }                
     </script>
+
+    <script src="/Scripts/MicrosoftAjax.js" type="text/javascript"></script>
+    <script src="/Scripts/MicrosoftMvcValidation.js" type="text/javascript"></script>
+    <% Html.EnableClientValidation(); %>
 
 <% using (Html.BeginForm("SaveDownloads", "Settings", FormMethod.Post, new { id = "form", name = "form" }))
        {%>
@@ -103,13 +107,11 @@
                     <div class="config-validation"><%= Html.ValidationMessageFor(m => m.SabCategory)%></div>
                 </div>
 
-                <%--<div class="editor-label">
-                    <%= Html.DropDownListFor(m => m.SabPriority) %>
+                <div class="config-group">
+                    <div class="config-title"><%= Html.LabelFor(m => m.SabPriority) %></div>
+                    <div class="config-value"><%= Html.DropDownListFor(m => m.SabPriority, Model.PrioritySelectList) %></div>
+                    <div class="config-validation"><%= Html.ValidationMessageFor(m => m.SabCategory)%></div>
                 </div>
-                <div class="editor-field">
-                    <%= Html.TextBoxFor(m => m.SabCategory)%>
-                    <%= Html.ValidationMessageFor(m => m.SabCategory)%>
-                </div>--%>
             </fieldset>
 
         <p>

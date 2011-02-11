@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using SubSonic.SqlGeneration.Schema;
 
 namespace NzbDrone.Core.Repository.Quality
@@ -23,6 +24,7 @@ namespace NzbDrone.Core.Repository.Quality
         public string AllowedString { get; set; }
 
         [DisplayName("Cutoff")]
+        [Required(ErrorMessage = "Valid Cutoff is Required")]
         public QualityTypes Cutoff { get; set; }
 
         [EditorBrowsable(EditorBrowsableState.Never)]

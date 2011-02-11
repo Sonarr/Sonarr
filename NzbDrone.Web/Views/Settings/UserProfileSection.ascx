@@ -89,13 +89,15 @@
                             <li class="ui-state-default" id="<%= qualitiesList[i].ToString() %>">
                             <%=Html.RadioButtonFor(x => x.Cutoff, qualitiesList[i])%>
                             <%= Html.Label(qualitiesList[i].ToString()) %>
-                            <%--<%= Html.RenderPartial("ProfileAllowedQualities", Model.Allowed[i]) %>--%>
                             </li>
 
                         <% } %>
                     </ul>
                 </div>
             </div>
+
+            <%= Html.ValidationMessageFor(x => x.Cutoff) %>
+
             <div class="hiddenProfileDetails">
                 <%= Html.TextBoxFor(x => x.ProfileId, new { @style = "display:none" })%>
                 <%= Html.CheckBoxFor(x => x.UserProfile, new { @style = "display:none" })%>

@@ -5,6 +5,7 @@ using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using NLog;
+using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Web.Models;
@@ -53,7 +54,7 @@ namespace NzbDrone.Web.Controllers
         public ActionResult Indexers()
         {
             ViewData["viewName"] = "Indexers";
-            return View("Index", new SettingsModel
+            return View("Index", new IndexerSettingsModel
                                      {
                                          NzbMatrixUsername = _configProvider.GetValue("NzbMatrixUsername", String.Empty, false),
                                          NzbMatrixApiKey = _configProvider.GetValue("NzbMatrixApiKey", String.Empty, false),
@@ -68,30 +69,22 @@ namespace NzbDrone.Web.Controllers
         public ActionResult Downloads()
         {
             ViewData["viewName"] = "Downloads";
-            return View("Index", new SettingsModel
-            {
-                //Sync Frequency
-                //Download Propers?
-                //Retention
-                //SAB Host/IP
-                //SAB Port
-                //SAB APIKey
-                //SAB Username
-                //SAB Password
-                //SAB Category
-                //SAB Priority
 
-                SyncFrequency = Convert.ToInt32(_configProvider.GetValue("SyncFrequency", "15", true)),
-                DownloadPropers = Convert.ToBoolean(_configProvider.GetValue("DownloadPropers", "false", true)),
-                Retention = Convert.ToInt32(_configProvider.GetValue("Retention", "500", true)),
-                SabHost = _configProvider.GetValue("SabHost", "localhost", false),
-                SabPort = Convert.ToInt32(_configProvider.GetValue("SabPort", "8080", true)),
-                SabApiKey = _configProvider.GetValue("SabApiKey", String.Empty, false),
-                SabUsername = _configProvider.GetValue("SabUsername", String.Empty, false),
-                SabPassword = _configProvider.GetValue("SabPassword", String.Empty, false),
-                SabCategory = _configProvider.GetValue("SabCategory", String.Empty, false),
-                //SabPriority = _configProvider.GetValue("SabPriority", String.Empty, false)
-            });
+            var model = new DownloadSettingsModel
+                            {
+                                SyncFrequency = Convert.ToInt32(_configProvider.GetValue("SyncFrequency", "15", true)),
+                                DownloadPropers = Convert.ToBoolean(_configProvider.GetValue("DownloadPropers", "false", true)),
+                                Retention = Convert.ToInt32(_configProvider.GetValue("Retention", "500", true)),
+                                SabHost = _configProvider.GetValue("SabHost", "localhost", false),
+                                SabPort = Convert.ToInt32(_configProvider.GetValue("SabPort", "8080", true)),
+                                SabApiKey = _configProvider.GetValue("SabApiKey", String.Empty, false),
+                                SabUsername = _configProvider.GetValue("SabUsername", String.Empty, false),
+                                SabPassword = _configProvider.GetValue("SabPassword", String.Empty, false),
+                                SabCategory = _configProvider.GetValue("SabCategory", String.Empty, false),
+                                SabPriority = (SabnzbdPriorityType)Enum.Parse(typeof(SabnzbdPriorityType), _configProvider.GetValue("SabPriority", "Normal", true)),
+                            };
+
+            return View("Index", model);
         }
 
         public ActionResult Quality()
@@ -109,7 +102,7 @@ namespace NzbDrone.Web.Controllers
 
             var userProfiles = _qualityProvider.GetAllProfiles().Where(q => q.UserProfile).ToList();
             var profiles = _qualityProvider.GetAllProfiles().ToList();
-            
+
             var defaultQualityProfileId = Convert.ToInt32(_configProvider.GetValue("DefaultQualityProfile", profiles[0].ProfileId, true));
 
             var selectList = new SelectList(profiles, "ProfileId", "Name");
@@ -150,10 +143,6 @@ namespace NzbDrone.Web.Controllers
             try
             {
                 _configProvider.SeriesRoot = data.TvFolder;
-                _configProvider.SetValue("NzbMatrixUsername", data.NzbMatrixUsername);
-                _configProvider.SetValue("NzbMatrixApiKey", data.NzbMatrixApiKey);
-                _configProvider.SetValue("NzbsOrgUId", data.NzbsOrgUId);
-                _configProvider.SetValue("NzbsOrgHash", data.NzbsOrgHash);
             }
             catch (Exception)
             {
@@ -191,7 +180,7 @@ namespace NzbDrone.Web.Controllers
 
                 return Content("Error Saving Settings, please fix any errors");
             }
-            
+
             if (Request.IsAjaxRequest())
                 return Content("Settings Saved.");
 
@@ -199,7 +188,7 @@ namespace NzbDrone.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult SaveIndexers(SettingsModel data)
+        public ActionResult SaveIndexers(IndexerSettingsModel data)
         {
             try
             {
@@ -245,52 +234,59 @@ namespace NzbDrone.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult SaveDownloads(SettingsModel data)
+        public ActionResult SaveDownloads(DownloadSettingsModel data)
         {
-            try
+            if (ModelState.IsValid)
             {
-                if (data.SyncFrequency > 15)
-                    _configProvider.SetValue("SyncFrequency", data.SyncFrequency.ToString());
+                try
+                {
+                    if (data.SyncFrequency > 15)
+                        _configProvider.SetValue("SyncFrequency", data.SyncFrequency.ToString());
 
-                _configProvider.SetValue("DownloadPropers", data.DownloadPropers.ToString());
+                    _configProvider.SetValue("DownloadPropers", data.DownloadPropers.ToString());
 
-                if (data.Retention > 0)
-                    _configProvider.SetValue("Retention", data.Retention.ToString());
+                    if (data.Retention > 0)
+                        _configProvider.SetValue("Retention", data.Retention.ToString());
 
-                if (data.SabHost != null)
-                    _configProvider.SetValue("SabHost", data.SabHost);
+                    if (data.SabHost != null)
+                        _configProvider.SetValue("SabHost", data.SabHost);
 
-                if (data.SabPort > 0)
-                    _configProvider.SetValue("SabPort", data.SabPort.ToString());
+                    if (data.SabPort > 0)
+                        _configProvider.SetValue("SabPort", data.SabPort.ToString());
 
-                if (data.SabApiKey != null)
-                    _configProvider.SetValue("SabApiKey", data.SabApiKey);
+                    if (data.SabApiKey != null)
+                        _configProvider.SetValue("SabApiKey", data.SabApiKey);
 
-                if (data.SabUsername != null)
-                    _configProvider.SetValue("SabUsername", data.SabUsername);
+                    if (data.SabUsername != null)
+                        _configProvider.SetValue("SabUsername", data.SabUsername);
 
-                if (data.SabPassword != null)
-                    _configProvider.SetValue("SabPassword", data.SabPassword);
+                    if (data.SabPassword != null)
+                        _configProvider.SetValue("SabPassword", data.SabPassword);
 
-                if (data.SabCategory != null)
-                    _configProvider.SetValue("SabCategory", data.SabCategory);
+                    if (data.SabCategory != null)
+                        _configProvider.SetValue("SabCategory", data.SabCategory);
 
-                //if (data.SabPriority != null)
-                //    _configProvider.SetValue("SabPriority", data.SabPriority.ToString());
-            }
-            catch (Exception e)
-            {
-                Logger.ErrorException(e.Message, e);
-                if (Request.IsAjaxRequest())
+                    _configProvider.SetValue("SabPriority", data.SabPriority.ToString());
+
+                    if (Request.IsAjaxRequest())
+                        return Content("Settings Saved.");
+
+                    return Content("Settings Saved.");
+                }
+
+                catch (Exception e)
+                {
+                    Logger.ErrorException(e.Message, e);
+                    if (Request.IsAjaxRequest())
+                        return Content("Error Saving Settings, please fix any errors");
+
                     return Content("Error Saving Settings, please fix any errors");
-
-                return Content("Error Saving Settings, please fix any errors");
+                }
             }
 
-            if (Request.IsAjaxRequest())
-                return Content("Settings Saved.");
-
-            return Content("Settings Saved.");
+            //ViewData["viewName"] = "Downloads";
+            //return View("Index", data);
+            return Content("Error Saving Settings, please fix any errors");
         }
 
         [HttpPost]
@@ -314,14 +310,14 @@ namespace NzbDrone.Web.Controllers
                     profile.Allowed = new List<QualityTypes>();
                     foreach (var quality in profile.AllowedString.Split(','))
                     {
-                        var qType = (QualityTypes)Enum.Parse(typeof (QualityTypes), quality);
+                        var qType = (QualityTypes)Enum.Parse(typeof(QualityTypes), quality);
                         profile.Allowed.Add(qType);
                     }
 
                     //If the Cutoff value selected is not in the allowed list then use the last allowed value, this should be validated on submit
                     if (!profile.Allowed.Contains(profile.Cutoff))
                         throw new InvalidOperationException("Invalid Cutoff Value");
-                        //profile.Cutoff = profile.Allowed.Last();
+                    //profile.Cutoff = profile.Allowed.Last();
 
                     if (profile.ProfileId > 0)
                         _qualityProvider.Update(profile);
@@ -334,6 +330,7 @@ namespace NzbDrone.Web.Controllers
             catch (Exception e)
             {
                 Logger.ErrorException(e.Message, e);
+
                 if (Request.IsAjaxRequest())
                     return Content("Error Saving Settings, please fix any errors");
 
@@ -347,9 +344,9 @@ namespace NzbDrone.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult SortedList(List<object > items)
+        public ActionResult SortedList(List<object> items)
         {
             return Content("Settings Saved.");
-        }  
+        }
     }
 }
