@@ -284,8 +284,9 @@ namespace NzbDrone.Web.Controllers
                 }
             }
 
-            //ViewData["viewName"] = "Downloads";
-            //return View("Index", data);
+            if (Request.IsAjaxRequest())
+                return Content("Error Saving Settings, please fix any errors");
+
             return Content("Error Saving Settings, please fix any errors");
         }
 

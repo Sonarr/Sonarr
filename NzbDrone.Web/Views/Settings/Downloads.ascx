@@ -31,7 +31,7 @@
        {%>
 <%: Html.ValidationSummary(true, "Unable to save your settings. Please correct the errors and try again.") %>
 
-    <fieldset >
+    <fieldset>
         <legend>Download Settings</legend>
         <%--//Sync Frequency
         //Download Propers?
@@ -47,77 +47,94 @@
             <fieldset class="sub-field">
                 <legend>Usenet Variables</legend>
 
-                <div class="config-group">
-                    <div class="config-title"><%= Html.LabelFor(m => m.SyncFrequency) %></div>
-                    <div class="config-value"><%= Html.TextBoxFor(m => m.SyncFrequency)%></div>
+                <div class="config-section">
+                    <div class="config-group">
+                        <div class="config-title"><%= Html.LabelFor(m => m.SyncFrequency) %></div>
+                        <div class="config-value"><%= Html.TextBoxFor(m => m.SyncFrequency)%></div>
+                    </div>
                     <div class="config-validation"><%= Html.ValidationMessageFor(m => m.SyncFrequency)%></div>
                 </div>
-
-                <div class="config-group">
-                    <div class="config-title"><%= Html.LabelFor(m => m.DownloadPropers)%></div>
-                    <div class="config-value"><%= Html.CheckBoxFor(m => m.DownloadPropers)%></div>
+                    
+                <div class="config-section">
+                    <div class="config-group">
+                        <div class="config-title"><%= Html.LabelFor(m => m.DownloadPropers)%></div>
+                        <div class="config-value"><%= Html.CheckBoxFor(m => m.DownloadPropers)%></div>
+                    
+                    </div>
                     <div class="config-validation"><%= Html.ValidationMessageFor(m => m.DownloadPropers)%></div>
                 </div>
 
-                <div class="config-group">
-                    <div class="config-title"><%= Html.LabelFor(m => m.Retention)%></div>
-                    <div class="config-value"><%= Html.TextBoxFor(m => m.Retention)%></div>
+                <div class="config-section">
+                    <div class="config-group">
+                        <div class="config-title"><%= Html.LabelFor(m => m.Retention)%></div>
+                        <div class="config-value"><%= Html.TextBoxFor(m => m.Retention)%></div>
+                    </div>
                     <div class="config-validation"><%= Html.ValidationMessageFor(m => m.Retention)%></div>
                 </div>
             </fieldset>
 
-            <br />
-
             <fieldset class="sub-field">
                 <legend>SABnzbd</legend>
 
-                <div class="config-group">
-                    <div class="config-title"><%= Html.LabelFor(m => m.SabHost)%></div>
-                    <div class="config-value"><%= Html.TextBoxFor(m => m.SabHost)%></div>
+                <div class="config-section">
+                    <div class="config-group">
+                        <div class="config-title"><%= Html.LabelFor(m => m.SabHost)%></div>
+                        <div class="config-value"><%= Html.TextBoxFor(m => m.SabHost)%></div>
+                    </div>
                     <div class="config-validation"><%= Html.ValidationMessageFor(m => m.SabHost)%></div>
                 </div>
 
-                <div class="config-group">
-                    <div class="config-title"><%= Html.LabelFor(m => m.SabPort)%></div>
-                    <div class="config-value"><%= Html.TextBoxFor(m => m.SabPort)%></div>
+                <div class="config-section">
+                    <div class="config-group">
+                        <div class="config-title"><%= Html.LabelFor(m => m.SabPort)%></div>
+                        <div class="config-value"><%= Html.TextBoxFor(m => m.SabPort)%></div>
+                    </div>
                     <div class="config-validation"><%= Html.ValidationMessageFor(m => m.SabPort)%></div>
                 </div>
 
-                <div class="config-group">
-                    <div class="config-title"><%= Html.LabelFor(m => m.SabApiKey)%></div>
-                    <div class="config-value"><%= Html.TextBoxFor(m => m.SabApiKey)%></div>
+                <div class="config-section">
+                    <div class="config-group">
+                        <div class="config-title"><%= Html.LabelFor(m => m.SabApiKey)%></div>
+                        <div class="config-value"><%= Html.TextBoxFor(m => m.SabApiKey)%></div>
+                    </div>
                     <div class="config-validation"><%= Html.ValidationMessageFor(m => m.SabApiKey)%></div>
                 </div>
 
-                <div class="config-group">
-                    <div class="config-title"><%= Html.LabelFor(m => m.SabUsername)%></div>
-                    <div class="config-value"><%= Html.TextBoxFor(m => m.SabUsername)%></div>
+                <div class="config-section">
+                    <div class="config-group">
+                        <div class="config-title"><%= Html.LabelFor(m => m.SabUsername)%></div>
+                        <div class="config-value"><%= Html.TextBoxFor(m => m.SabUsername)%></div>
+                    </div>
                     <div class="config-validation"><%= Html.ValidationMessageFor(m => m.SabUsername)%></div>
                 </div>
 
-                <div class="config-group">
-                    <div class="config-title"><%= Html.LabelFor(m => m.SabPassword)%></div>
-                    <div class="config-value"><%= Html.TextBoxFor(m => m.SabPassword)%></div>
+                <div class="config-section">
+                    <div class="config-group">
+                        <div class="config-title"><%= Html.LabelFor(m => m.SabPassword)%></div>
+                        <div class="config-value"><%= Html.TextBoxFor(m => m.SabPassword)%></div>
+                    </div>
                     <div class="config-validation"><%= Html.ValidationMessageFor(m => m.SabPassword)%></div>
                 </div>
 
-                <div class="config-group">
-                    <div class="config-title"><%= Html.LabelFor(m => m.SabCategory)%></div>
-                    <div class="config-value"><%= Html.TextBoxFor(m => m.SabCategory)%></div>
+                <div class="config-section">
+                    <div class="config-group">
+                        <div class="config-title"><%= Html.LabelFor(m => m.SabCategory)%></div>
+                        <div class="config-value"><%= Html.TextBoxFor(m => m.SabCategory)%></div>
+                    </div>
                     <div class="config-validation"><%= Html.ValidationMessageFor(m => m.SabCategory)%></div>
                 </div>
 
-                <div class="config-group">
-                    <div class="config-title"><%= Html.LabelFor(m => m.SabPriority) %></div>
-                    <div class="config-value"><%= Html.DropDownListFor(m => m.SabPriority, Model.PrioritySelectList) %></div>
+                <div class="config-section">
+                    <div class="config-group">
+                        <div class="config-title"><%= Html.LabelFor(m => m.SabPriority) %></div>
+                        <div class="config-value"><%= Html.DropDownListFor(m => m.SabPriority, Model.PrioritySelectList) %></div>
+                    </div>
                     <div class="config-validation"><%= Html.ValidationMessageFor(m => m.SabCategory)%></div>
                 </div>
             </fieldset>
 
-        <p>
             <input type="submit" value="Save" class="submitButton"/>
-        </p>
+    
+    <% } %>
     </fieldset>
-
-<% } %>
 <div id="result"></div>

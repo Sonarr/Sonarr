@@ -173,11 +173,18 @@ hr
 }
 
 /* Config Pages */
+.config-section
+{
+	width: 550px;
+	display: block;
+	padding-bottom: 25px;
+}
+
 .config-group
 {
 	width:300px;
 	display: block;
-	padding-bottom: 25px;
+	float: left;
 }
 
 .config-title
@@ -190,16 +197,19 @@ hr
 .config-value
 {
 	float: right;
-	
 }
 
 .config-validation
 {
-	
+	color: Red;
+	float: right;
 }
+
 .sub-field
 {
-	width: 50%;
+	width: 70%;
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
 input[type="text"]
