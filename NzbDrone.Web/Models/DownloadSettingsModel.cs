@@ -96,6 +96,6 @@ namespace NzbDrone.Web.Models
             set;
         }
 
-        public SelectList PrioritySelectList = new SelectList(new string[] { "Low", "Normal", "High" });
+        public SelectList PrioritySelectList = new SelectList(new string[] { "Default", "Paused", "Low", "Normal", "High", "Top" });
     }
 }
