@@ -137,6 +137,15 @@ namespace NzbDrone.Web.Controllers
             return PartialView();
         }
 
+        public QualityModel GetUpdatedProfileList()
+        {
+            var profiles = _qualityProvider.GetAllProfiles().ToList();
+            var defaultQualityProfileId = Convert.ToInt32(_configProvider.GetValue("DefaultQualityProfile", profiles[0].ProfileId, true));
+            var selectList = new SelectList(profiles, "ProfileId", "Name");
+            
+            return new QualityModel {DefaultProfileId = defaultQualityProfileId, SelectList = selectList};
+        }
+
         [HttpPost]
         public ActionResult Index(SettingsModel data)
         {

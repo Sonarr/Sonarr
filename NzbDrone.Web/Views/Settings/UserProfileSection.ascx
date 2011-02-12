@@ -3,40 +3,50 @@
 <%@ Import Namespace="NzbDrone.Core.Repository.Quality" %>
 
 <% using (Html.BeginCollectionItem("UserProfiles"))
-   { %>
+   { %>   
+
+       <%
+           var idClean = ViewData.TemplateInfo.HtmlFieldPrefix.Replace('[', '_').Replace(']', '_');
+
+           string sortable1 = String.Format("{0}_sortable1", idClean);
+           string sortable2 = String.Format("{0}_sortable2", idClean);
+           string allowedStringName = String.Format("{0}_AllowedString", idClean);
+           string connectedSortable = String.Format("connected{0}", idClean);
+       %>
+
         <style type="text/css">
-	        #sortable1, #sortable2 { list-style-type: none; margin-right: 10px; background: #eee; padding-left: 5px; padding-right: 5px; padding-top: 0px; padding-bottom: 6px; width: 107px; margin-bottom: 3px; }
-	        .allowedQualities, .otherQualities { list-style-type: none; float: left; margin-right: 10px; background: #eee; padding-left: 5px; padding-right: 5px; padding-top:6px; width: 112px; -khtml-border-radius:8px;border-radius:8px;-moz-border-radius:8px;-webkit-border-radius:8px; }
-	        #sortable1 li, #sortable2 li { margin: 5px; margin-left: 0px; padding: 0px; font-size: 1.2em; width: 100px; -khtml-border-radius:8px;border-radius:8px;-moz-border-radius:8px;-webkit-border-radius:8px; }
-	        #sortable1 li { background: #ddd; }
-	        #sortable2 li { background: #DAA2A2; }
-	        .sortableHeader { margin:2px; margin-left:12px }
-	        #sortable1 li.ui-state-highlight, #sortable2 li.ui-state-highlight { background: #fbf5d0; border-color: #065EFE; }
-	        .removeDiv { float: left; display:block; }
-	        
-	    </style>
+            .sortable1, .sortable2 { list-style-type: none; margin-right: 10px; background: #eee; padding-left: 5px; padding-right: 5px; padding-top: 0px; padding-bottom: 6px; width: 107px; margin-bottom: 3px; }
+            .allowedQualities, .otherQualities { list-style-type: none; float: left; margin-right: 10px; background: #eee; padding-left: 5px; padding-right: 5px; padding-top:6px; width: 112px; -khtml-border-radius:8px;border-radius:8px;-moz-border-radius:8px;-webkit-border-radius:8px; }
+            .sortable1 li, .sortable2 li { margin: 5px; margin-left: 0px; padding: 0px; font-size: 1.2em; width: 100px; -khtml-border-radius:8px;border-radius:8px;-moz-border-radius:8px;-webkit-border-radius:8px; }
+            .sortable1 li { background: #ddd; }
+            .sortable2 li { background: #DAA2A2; }
+            .sortableHeader { margin:2px; margin-left:12px }
+            .sortable1 li.ui-state-highlight, .sortable2 li.ui-state-highlight { background: #fbf5d0; border-color: #065EFE; }
+            .removeDiv { float: left; display:block; }
+            .ui-state-highlight { height: 1.5em; line-height: 1.2em; }
+
+        </style>
 
         <script type="text/javascript">
             $(function () {
-                $("#sortable1, #sortable2").sortable({
-                    connectWith: ".connectedSortable",
+                $("#<%= sortable1 %>, #<%= sortable2 %>").sortable({
+                    connectWith: ".<%= connectedSortable %>",
                     placeholder: "ui-state-highlight",
                     dropOnEmpty: true,
 
                     create: function (event, ui) {
-                        var order = $('#sortable1').sortable("toArray");
-                        $("#allowedString").val(order);
+                        var order = $('#<%= sortable1 %>').sortable("toArray");
+                        $("#<%= allowedStringName %>").val(order);
                     },
 
                     update: function (event, ui) {
-                        var order = $('#sortable1').sortable("toArray");
-                        $("#allowedString").val(order);
+                        var order = $('#<%= sortable1 %>').sortable("toArray");
+                        $("#<%= allowedStringName %>").val(order);
                     }
 
                 }).disableSelection();
             });
-
-	    </script>
+        </script>
 
     <div class="userProfileSectionEditor"> 
 
@@ -56,7 +66,7 @@
             <div id="sortablesDiv" style="margin: 0px;">
                 <div class="allowedQualities">
                     <h4 class="sortableHeader">Allowed</h4>
-                    <ul id="sortable1" class="connectedSortable">
+                    <ul id="<%= sortable1 %>" class="<%= connectedSortable %> sortable1">
                         <% if (Model.Allowed != null) { %>
                             <%for (int i = 0; i < Model.Allowed.Count(); i++){%>
                                 <li class="ui-state-default" id="<%= Model.Allowed[i].ToString() %>">
@@ -70,7 +80,7 @@
 
                 <div class="otherQualities">
                     <h4 class="sortableHeader">Not-Allowed</h4>
-                    <ul id="sortable2" class="connectedSortable">
+                    <ul id="<%= sortable2 %>" class="<%= connectedSortable %> sortable2">
                         <% var qualitiesList = (List<QualityTypes>) ViewData["Qualities"]; %>
 
                         <%for (int i = 0; i < qualitiesList.Count(); i++){%>                      
@@ -101,9 +111,8 @@
             <div class="hiddenProfileDetails">
                 <%= Html.TextBoxFor(x => x.ProfileId, new { @style = "display:none" })%>
                 <%= Html.CheckBoxFor(x => x.UserProfile, new { @style = "display:none" })%>
-                <%= Html.TextBoxFor(m => m.AllowedString, new { @id = "allowedString", @style = "display:none" })%>
+                <%= Html.TextBoxFor(m => m.AllowedString, new { @style = "display:none" })%>
             </div>
-            
         </fieldset>
     </div> 
 <% } %>

@@ -29,7 +29,7 @@
 
 <% using (Html.BeginForm("SaveDownloads", "Settings", FormMethod.Post, new { id = "form", name = "form" }))
        {%>
-<%: Html.ValidationSummary(true, "Unable to save your settings. Please correct the errors and try again.") %>
+<%--<%: Html.ValidationSummary(true, "Unable to save your settings. Please correct the errors and try again.") %>--%>
 
     <fieldset>
         <legend>Download Settings</legend>
