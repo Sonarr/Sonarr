@@ -224,13 +224,13 @@ input[type="text"]:hover
     background: #C0D6FF;
 }
 
-.button
+#save_button
 {
 	border: 1px solid #006;
     background: #ccf;
 }
 
-.button:hover
+#save_button:hover
 {
 	border: 1px solid #f00;
     background: #eef;

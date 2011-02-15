@@ -11,6 +11,7 @@
             resetForm: false
         };
         $('#form').ajaxForm(options);
+        $('#save_button').attr('disabled', '');
     });
 
     function saveOrder(jqForm, options) {
@@ -131,7 +132,7 @@
                 <%= Html.ValidationMessageFor(m => m.NzbsrusHash)%>
             </div>
         <br />
-            <input type="submit" value="Save" />
+            <input type="submit" id="save_button" value="Save" disabled="disabled" />
     </fieldset>
 
 <% } %>

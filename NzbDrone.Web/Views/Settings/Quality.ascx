@@ -12,6 +12,7 @@
             resetForm: false
         };
         $('#form').ajaxForm(options);
+        $('#save_button').attr('disabled', '');
     });
 
     function showRequest(formData, jqForm, options) {
@@ -61,7 +62,7 @@
                     </div>
 
                     <div style="margin-top: 10px; padding-left: 5px;">
-                        <input type="submit" class="button" value="Save" />
+                        <input type="submit" id="save_button" value="Save" disabled="disabled" />
                     </div>
                 </div>
 
