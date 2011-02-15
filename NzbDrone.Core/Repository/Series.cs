@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using NzbDrone.Core.Repository.Quality;
 using SubSonic.SqlGeneration.Schema;
 
 namespace NzbDrone.Core.Repository
@@ -29,7 +30,7 @@ namespace NzbDrone.Core.Repository
 
         public bool Monitored { get; set; }
 
-        public int Quality { get; set; }
+        public QualityProfile QualityProfile { get; set; }
 
         [SubSonicToManyRelation]
         public virtual List<Season> Seasons { get; private set; }

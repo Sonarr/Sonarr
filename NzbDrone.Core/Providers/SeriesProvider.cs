@@ -21,14 +21,16 @@ namespace NzbDrone.Core.Providers
         private readonly IDiskProvider _diskProvider;
         private readonly IRepository _sonioRepo;
         private readonly ITvDbProvider _tvDb;
+        private readonly IQualityProvider _quality;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public SeriesProvider(IDiskProvider diskProvider, IConfigProvider configProvider, IRepository dataRepository, ITvDbProvider tvDbProvider)
+        public SeriesProvider(IDiskProvider diskProvider, IConfigProvider configProvider, IRepository dataRepository, ITvDbProvider tvDbProvider, IQualityProvider quality)
         {
             _diskProvider = diskProvider;
             _config = configProvider;
             _sonioRepo = dataRepository;
             _tvDb = tvDbProvider;
+            _quality = quality;
         }
 
         #region ISeriesProvider Members
@@ -55,7 +57,10 @@ namespace NzbDrone.Core.Providers
 
         public bool QualityWanted(int seriesId, QualityTypes quality)
         {
-            return _sonioRepo.Exists<Series>(s => s.SeriesId == seriesId && (QualityTypes)s.Quality == quality);
+            var series = _sonioRepo.Single<Series>(seriesId);
+            var profile = _quality.Find(series.QualityProfile.ProfileId);
+
+            return profile.Allowed.Contains(quality);
         }
 
         public Dictionary<Guid, String> GetUnmappedFolders()
@@ -102,6 +107,8 @@ namespace NzbDrone.Core.Providers
             repoSeries.Language = series.Language != null ? series.Language.Abbriviation : string.Empty;
             repoSeries.Path = path;
             repoSeries.CleanTitle = Parser.NormalizeTitle(series.SeriesName);
+            repoSeries.Monitored = true; //New shows should be monitored
+            repoSeries.QualityProfile = (QualityProfile) Enum.Parse(typeof (QualityProfile), _config.GetValue("Quality", 1, true));
             _sonioRepo.Add(repoSeries);
         }
 
