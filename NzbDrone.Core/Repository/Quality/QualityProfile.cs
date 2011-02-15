@@ -11,6 +11,7 @@ namespace NzbDrone.Core.Repository.Quality
         [SubSonicPrimaryKey(true)]
         public int ProfileId { get; set; }
 
+        [Required (ErrorMessage = "A Name is Required")]
         [DisplayName("Name")]
         public string Name { get; set; }
         public bool UserProfile { get; set; } //Allows us to tell the difference between default and user profiles

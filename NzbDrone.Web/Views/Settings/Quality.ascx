@@ -26,11 +26,13 @@
 
     </script>
 
+    <% Html.EnableClientValidation(); %>
+
     <% using (Html.BeginForm("SaveQuality", "Settings", FormMethod.Post, new { id = "form", name = "form" }))
        {%>
         <fieldset>
             <legend>Quality</legend> 
-                <%: Html.ValidationSummary(true, "Unable to save your settings. Please correct the errors and try again.") %>
+                <%--<%: Html.ValidationSummary(true, "Unable to save your settings. Please correct the errors and try again.") %>--%>
 
                 <div class="rightSide" style="float: right; width: 65%;">
                     <div id="defaultQualityDiv" style="float: left; margin: 30px;">

@@ -304,36 +304,38 @@ namespace NzbDrone.Web.Controllers
         {
             try
             {
-                _configProvider.SetValue("DefaultQualityProfile", data.DefaultProfileId.ToString());
-
-                foreach (var dbProfile in _qualityProvider.GetAllProfiles().Where(q => q.UserProfile))
+                if (ModelState.IsValid)
                 {
-                    if (!data.UserProfiles.Exists(p => p.ProfileId == dbProfile.ProfileId))
-                        _qualityProvider.Delete(dbProfile.ProfileId);
-                }
+                    _configProvider.SetValue("DefaultQualityProfile", data.DefaultProfileId.ToString());
 
-
-                foreach (var profile in data.UserProfiles)
-                {
-                    Logger.Debug(String.Format("Updating User Profile: {0}", profile));
-
-                    profile.Allowed = new List<QualityTypes>();
-                    foreach (var quality in profile.AllowedString.Split(','))
+                    foreach (var dbProfile in _qualityProvider.GetAllProfiles().Where(q => q.UserProfile))
                     {
-                        var qType = (QualityTypes)Enum.Parse(typeof(QualityTypes), quality);
-                        profile.Allowed.Add(qType);
+                        if (!data.UserProfiles.Exists(p => p.ProfileId == dbProfile.ProfileId))
+                            _qualityProvider.Delete(dbProfile.ProfileId);
                     }
 
-                    //If the Cutoff value selected is not in the allowed list then use the last allowed value, this should be validated on submit
-                    if (!profile.Allowed.Contains(profile.Cutoff))
-                        throw new InvalidOperationException("Invalid Cutoff Value");
-                    //profile.Cutoff = profile.Allowed.Last();
+                    foreach (var profile in data.UserProfiles)
+                    {
+                        Logger.Debug(String.Format("Updating User Profile: {0}", profile));
 
-                    if (profile.ProfileId > 0)
-                        _qualityProvider.Update(profile);
+                        profile.Allowed = new List<QualityTypes>();
+                        foreach (var quality in profile.AllowedString.Split(','))
+                        {
+                            var qType = (QualityTypes) Enum.Parse(typeof (QualityTypes), quality);
+                            profile.Allowed.Add(qType);
+                        }
 
-                    else
-                        _qualityProvider.Add(profile);
+                        //If the Cutoff value selected is not in the allowed list then use the last allowed value, this should be validated on submit
+                        if (!profile.Allowed.Contains(profile.Cutoff))
+                            throw new InvalidOperationException("Invalid Cutoff Value");
+                        //profile.Cutoff = profile.Allowed.Last();
+
+                        if (profile.ProfileId > 0)
+                            _qualityProvider.Update(profile);
+
+                        else
+                            _qualityProvider.Add(profile);
+                    }
                 }
             }
 

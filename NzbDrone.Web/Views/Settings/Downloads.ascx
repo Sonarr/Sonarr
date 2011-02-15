@@ -23,8 +23,6 @@
     }                
     </script>
 
-    <script src="/Scripts/MicrosoftAjax.js" type="text/javascript"></script>
-    <script src="/Scripts/MicrosoftMvcValidation.js" type="text/javascript"></script>
     <% Html.EnableClientValidation(); %>
 
 <% using (Html.BeginForm("SaveDownloads", "Settings", FormMethod.Post, new { id = "form", name = "form" }))
