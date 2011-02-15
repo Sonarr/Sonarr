@@ -13,6 +13,7 @@ namespace NzbDrone.Core.Repository.Quality
 
         [Required (ErrorMessage = "A Name is Required")]
         [DisplayName("Name")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string Name { get; set; }
         public bool UserProfile { get; set; } //Allows us to tell the difference between default and user profiles
 
@@ -22,6 +23,7 @@ namespace NzbDrone.Core.Repository.Quality
 
         [SubSonicIgnore]
         [DisplayName("Allowed Qualities String")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string AllowedString { get; set; }
 
         [DisplayName("Cutoff")]

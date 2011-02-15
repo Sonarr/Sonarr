@@ -19,6 +19,8 @@ namespace NzbDrone.Web.Controllers
         private IIndexerProvider _indexerProvider;
         private IQualityProvider _qualityProvider;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private string _settingsSaved = "Settings Saved.";
+        private string _settingsFailed = "Error Saving Settings, please fix any errors";
 
         public SettingsController(IConfigProvider configProvider, IIndexerProvider indexerProvider, IQualityProvider qualityProvider)
         {
@@ -147,59 +149,21 @@ namespace NzbDrone.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(SettingsModel data)
-        {
-            try
-            {
-                _configProvider.SeriesRoot = data.TvFolder;
-            }
-            catch (Exception)
-            {
-                Logger.Error("Error saving settings.");
-
-                if (Request.IsAjaxRequest())
-                    return Content("Error saving settings.");
-
-                return Content("Error saving settings.");
-            }
-
-
-            if (Request.IsAjaxRequest())
-                return Content("Settings Saved.");
-
-            return Content("Settings Saved.");
-        }
-
-        [HttpPost]
         public ActionResult SaveGeneral(SettingsModel data)
         {
-            try
+            if (ModelState.IsValid)
             {
-                if (data.TvFolder != null)
-                    _configProvider.SeriesRoot = data.TvFolder;
-
-                //if (data.Quality != null)
-                //    _configProvider.SetValue("Quality", data.Quality);
-            }
-            catch (Exception e)
-            {
-                Logger.ErrorException(e.Message, e);
-                if (Request.IsAjaxRequest())
-                    return Content("Error Saving Settings, please fix any errors");
-
-                return Content("Error Saving Settings, please fix any errors");
+                _configProvider.SeriesRoot = data.TvFolder;
+                return Content(_settingsSaved);
             }
 
-            if (Request.IsAjaxRequest())
-                return Content("Settings Saved.");
-
-            return Content("Settings Saved.");
+            return Content(_settingsFailed);    
         }
 
         [HttpPost]
         public ActionResult SaveIndexers(IndexerSettingsModel data)
         {
-            try
+            if (ModelState.IsValid)
             {
                 //Todo: Only allow indexers to be enabled if user information has been provided
                 foreach (var indexer in data.Indexers)
@@ -208,38 +172,17 @@ namespace NzbDrone.Web.Controllers
                     _indexerProvider.Update(indexer);
                 }
 
-                if (data.NzbMatrixUsername != null)
-                    _configProvider.SetValue("NzbMatrixUsername", data.NzbMatrixUsername);
+                _configProvider.SetValue("NzbMatrixUsername", data.NzbMatrixUsername);
+                _configProvider.SetValue("NzbMatrixApiKey", data.NzbMatrixApiKey);
+                _configProvider.SetValue("NzbsOrgUId", data.NzbsOrgUId);
+                _configProvider.SetValue("NzbsOrgHash", data.NzbsOrgHash);
+                _configProvider.SetValue("NzbsrusUId", data.NzbsrusUId);
+                _configProvider.SetValue("NzbsrusHash", data.NzbsrusHash);
 
-                if (data.NzbMatrixApiKey != null)
-                    _configProvider.SetValue("NzbMatrixApiKey", data.NzbMatrixApiKey);
-
-                if (data.NzbsOrgUId != null)
-                    _configProvider.SetValue("NzbsOrgUId", data.NzbsOrgUId);
-
-                if (data.NzbsOrgHash != null)
-                    _configProvider.SetValue("NzbsOrgHash", data.NzbsOrgHash);
-
-                if (data.NzbsrusUId != null)
-                    _configProvider.SetValue("NzbsrusUId", data.NzbsrusUId);
-
-                if (data.NzbsrusHash != null)
-                    _configProvider.SetValue("NzbsrusHash", data.NzbsrusHash);
-
-            }
-            catch (Exception e)
-            {
-                Logger.ErrorException(e.Message, e);
-                if (Request.IsAjaxRequest())
-                    return Content("Error Saving Settings, please fix any errors");
-
-                return Content("Error Saving Settings, please fix any errors");
+                return Content(_settingsSaved);
             }
 
-            if (Request.IsAjaxRequest())
-                return Content("Settings Saved.");
-
-            return Content("Settings Saved.");
+            return Content(_settingsFailed);
         }
 
         [HttpPost]
@@ -247,118 +190,67 @@ namespace NzbDrone.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                try
-                {
-                    if (data.SyncFrequency > 15)
-                        _configProvider.SetValue("SyncFrequency", data.SyncFrequency.ToString());
-
+                    _configProvider.SetValue("SyncFrequency", data.SyncFrequency.ToString());
                     _configProvider.SetValue("DownloadPropers", data.DownloadPropers.ToString());
-
-                    if (data.Retention > 0)
-                        _configProvider.SetValue("Retention", data.Retention.ToString());
-
-                    if (data.SabHost != null)
-                        _configProvider.SetValue("SabHost", data.SabHost);
-
-                    if (data.SabPort > 0)
-                        _configProvider.SetValue("SabPort", data.SabPort.ToString());
-
-                    if (data.SabApiKey != null)
-                        _configProvider.SetValue("SabApiKey", data.SabApiKey);
-
-                    if (data.SabUsername != null)
-                        _configProvider.SetValue("SabUsername", data.SabUsername);
-
-                    if (data.SabPassword != null)
-                        _configProvider.SetValue("SabPassword", data.SabPassword);
-
-                    if (data.SabCategory != null)
-                        _configProvider.SetValue("SabCategory", data.SabCategory);
-
+                    _configProvider.SetValue("Retention", data.Retention.ToString());
+                    _configProvider.SetValue("SabHost", data.SabHost);
+                    _configProvider.SetValue("SabPort", data.SabPort.ToString());
+                    _configProvider.SetValue("SabApiKey", data.SabApiKey);
+                    _configProvider.SetValue("SabUsername", data.SabUsername);
+                    _configProvider.SetValue("SabPassword", data.SabPassword);
+                    _configProvider.SetValue("SabCategory", data.SabCategory);
                     _configProvider.SetValue("SabPriority", data.SabPriority.ToString());
 
-                    if (Request.IsAjaxRequest())
-                        return Content("Settings Saved.");
-
-                    return Content("Settings Saved.");
-                }
-
-                catch (Exception e)
-                {
-                    Logger.ErrorException(e.Message, e);
-                    if (Request.IsAjaxRequest())
-                        return Content("Error Saving Settings, please fix any errors");
-
-                    return Content("Error Saving Settings, please fix any errors");
-                }
+                    return Content(_settingsSaved);
             }
 
-            if (Request.IsAjaxRequest())
-                return Content("Error Saving Settings, please fix any errors");
-
-            return Content("Error Saving Settings, please fix any errors");
+            return Content(_settingsFailed);
         }
 
         [HttpPost]
         public ActionResult SaveQuality(QualityModel data)
         {
-            try
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
+                _configProvider.SetValue("DefaultQualityProfile", data.DefaultProfileId.ToString());
+
+                //Saves only the Default Quality, skips User Profiles since none exist
+                if (data.UserProfiles == null)
+                    return Content(_settingsSaved);
+
+                foreach (var dbProfile in _qualityProvider.GetAllProfiles().Where(q => q.UserProfile))
                 {
-                    _configProvider.SetValue("DefaultQualityProfile", data.DefaultProfileId.ToString());
+                    if (!data.UserProfiles.Exists(p => p.ProfileId == dbProfile.ProfileId))
+                        _qualityProvider.Delete(dbProfile.ProfileId);
+                }
 
-                    foreach (var dbProfile in _qualityProvider.GetAllProfiles().Where(q => q.UserProfile))
+                foreach (var profile in data.UserProfiles)
+                {
+                    Logger.Debug(String.Format("Updating User Profile: {0}", profile));
+
+                    profile.Allowed = new List<QualityTypes>();
+                    foreach (var quality in profile.AllowedString.Split(','))
                     {
-                        if (!data.UserProfiles.Exists(p => p.ProfileId == dbProfile.ProfileId))
-                            _qualityProvider.Delete(dbProfile.ProfileId);
+                        var qType = (QualityTypes)Enum.Parse(typeof(QualityTypes), quality);
+                        profile.Allowed.Add(qType);
                     }
 
-                    foreach (var profile in data.UserProfiles)
-                    {
-                        Logger.Debug(String.Format("Updating User Profile: {0}", profile));
+                    //If the Cutoff value selected is not in the allowed list then use the last allowed value, this should be validated on submit
+                    if (!profile.Allowed.Contains(profile.Cutoff))
+                        return Content("Error Saving Settings, please fix any errors");
+                    //profile.Cutoff = profile.Allowed.Last();
 
-                        profile.Allowed = new List<QualityTypes>();
-                        foreach (var quality in profile.AllowedString.Split(','))
-                        {
-                            var qType = (QualityTypes) Enum.Parse(typeof (QualityTypes), quality);
-                            profile.Allowed.Add(qType);
-                        }
+                    if (profile.ProfileId > 0)
+                        _qualityProvider.Update(profile);
 
-                        //If the Cutoff value selected is not in the allowed list then use the last allowed value, this should be validated on submit
-                        if (!profile.Allowed.Contains(profile.Cutoff))
-                            throw new InvalidOperationException("Invalid Cutoff Value");
-                        //profile.Cutoff = profile.Allowed.Last();
+                    else
+                        _qualityProvider.Add(profile);
 
-                        if (profile.ProfileId > 0)
-                            _qualityProvider.Update(profile);
-
-                        else
-                            _qualityProvider.Add(profile);
-                    }
+                    return Content(_settingsSaved);
                 }
             }
 
-            catch (Exception e)
-            {
-                Logger.ErrorException(e.Message, e);
-
-                if (Request.IsAjaxRequest())
-                    return Content("Error Saving Settings, please fix any errors");
-
-                return Content("Error Saving Settings, please fix any errors");
-            }
-
-            if (Request.IsAjaxRequest())
-                return Content("Settings Saved.");
-
-            return Content("Settings Saved.");
-        }
-
-        [HttpPost]
-        public ActionResult SortedList(List<object> items)
-        {
-            return Content("Settings Saved.");
+            return Content(_settingsFailed);
         }
     }
 }

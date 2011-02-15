@@ -57,6 +57,7 @@ namespace NzbDrone.Web.Models
 
         [DataType(DataType.Text)]
         [DisplayName("SABnzbd API Key")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
         public String SabApiKey
         {
             get;
@@ -65,6 +66,7 @@ namespace NzbDrone.Web.Models
 
         [DataType(DataType.Text)]
         [DisplayName("SABnzbd Username")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
         public String SabUsername
         {
             get;
@@ -73,6 +75,7 @@ namespace NzbDrone.Web.Models
 
         [DataType(DataType.Text)]
         [DisplayName("SABnzbd Password")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
         public String SabPassword
         {
             get;
@@ -80,6 +83,7 @@ namespace NzbDrone.Web.Models
         }
 
         [DataType(DataType.Text)]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
         [DisplayName("SABnzbd Category")]
         public String SabCategory
         {
@@ -88,7 +92,6 @@ namespace NzbDrone.Web.Models
         }
 
         [Required(ErrorMessage = "Please select a valid priority")]
-        [DataType(DataType.Text)]
         [DisplayName("SABnzbd Priority")]
         public SabnzbdPriorityType SabPriority
         {

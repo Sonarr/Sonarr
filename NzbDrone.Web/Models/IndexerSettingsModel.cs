@@ -12,6 +12,7 @@ namespace NzbDrone.Web.Models
     {
         [DataType(DataType.Text)]
         [DisplayName("NZBMatrix Username")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
         public String NzbMatrixUsername
         {
             get;
@@ -20,6 +21,7 @@ namespace NzbDrone.Web.Models
 
         [DataType(DataType.Text)]
         [DisplayName("NZBMatrix API Key")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
         public String NzbMatrixApiKey
         {
             get;
@@ -28,6 +30,7 @@ namespace NzbDrone.Web.Models
 
         [DataType(DataType.Text)]
         [DisplayName("NZBs.Org UID")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
         public String NzbsOrgUId
         {
             get;
@@ -36,6 +39,7 @@ namespace NzbDrone.Web.Models
 
         [DataType(DataType.Text)]
         [DisplayName("NZBs.Org Hash")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
         public String NzbsOrgHash
         {
             get;
@@ -44,6 +48,7 @@ namespace NzbDrone.Web.Models
 
         [DataType(DataType.Text)]
         [DisplayName("NZBsRus UID")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
         public String NzbsrusUId
         {
             get;
@@ -52,6 +57,7 @@ namespace NzbDrone.Web.Models
 
         [DataType(DataType.Text)]
         [DisplayName("NZBsRus Hash")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
         public String NzbsrusHash
         {
             get;
