@@ -57,19 +57,19 @@ namespace NzbDrone.Core.Providers
         public bool IsIgnored(int seasonId)
         {
             if (_sonicRepo.Single<Season>(seasonId).Monitored)
-                return true;
+                return false;
 
             Logger.Debug("Season {0} is not wanted.");
-            return false;
+            return true;
         }
 
         public bool IsIgnored(int seriesId, int seasonNumber)
         {
             if (_sonicRepo.Single<Season>(s => s.SeriesId == seriesId && s.SeasonNumber == seasonNumber).Monitored)
-                return true;
+                return false;
 
             Logger.Debug("Season: {0} is not wanted for Series: {1}", seasonNumber, seriesId);
-            return false;
+            return true;
         }
     }
 }

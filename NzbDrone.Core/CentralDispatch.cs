@@ -66,7 +66,7 @@ namespace NzbDrone.Core
                 _kernel.Bind<ISyncProvider>().To<SyncProvider>().InSingletonScope();
                 _kernel.Bind<IRssProvider>().To<RssProvider>().InSingletonScope();
                 _kernel.Bind<IRssSyncProvider>().To<RssSyncProvider>().InSingletonScope();
-                _kernel.Bind<IIndexerProvider>().To<IndexerProvider>().InSingletonScope();;
+                _kernel.Bind<IIndexerProvider>().To<IndexerProvider>().InSingletonScope(); ;
                 _kernel.Bind<INotificationProvider>().To<NotificationProvider>().InSingletonScope();
                 _kernel.Bind<ILogProvider>().To<LogProvider>().InSingletonScope();
                 _kernel.Bind<IMediaFileProvider>().To<MediaFileProvider>().InSingletonScope();
@@ -176,7 +176,6 @@ namespace NzbDrone.Core
                                            IndexerName = "NzbMatrix",
                                            RssUrl = nzbMatrixRss,
                                            ApiUrl = String.Empty,
-                                           Enabled = false,
                                            Order = 1
                                        };
 
@@ -185,7 +184,6 @@ namespace NzbDrone.Core
                                          IndexerName = "NzbsOrg",
                                          RssUrl = nzbsOrgRss,
                                          ApiUrl = String.Empty,
-                                         Enabled = false,
                                          Order = 2
                                      };
 
@@ -194,13 +192,13 @@ namespace NzbDrone.Core
                                   IndexerName = "Nzbsrus",
                                   RssUrl = nzbsrusRss,
                                   ApiUrl = String.Empty,
-                                  Enabled = false,
                                   Order = 3
                               };
 
             //NzbMatrix
             Logger.Debug("Checking for NzbMatrix Indexer");
-            if (!repository.Exists<Indexer>(i => i.IndexerName == "NzbMatrix"))
+            var nzbMatix = repository.Single<Indexer>("NzbMatrix");
+            if (nzbMatix == null)
             {
                 Logger.Debug("Adding new Indexer: NzbMatrix");
                 repository.Add(nzbMatrixIndexer);
@@ -209,12 +207,15 @@ namespace NzbDrone.Core
             else
             {
                 Logger.Debug("Updating Indexer: NzbMatrix");
-                repository.Update(nzbMatrixIndexer);
+                nzbMatix.RssUrl = nzbMatrixIndexer.RssUrl;
+                nzbMatix.ApiUrl = nzbMatrixIndexer.ApiUrl;
+                repository.Update(nzbMatix);
             }
 
             //Nzbs.org
             Logger.Debug("Checking for Nzbs.org");
-            if (!repository.Exists<Indexer>(i => i.IndexerName == "NzbsOrg"))
+            var nzbsOrg = repository.Single<Indexer>("NzbsOrg");
+            if (nzbsOrg == null)
             {
                 Logger.Debug("Adding new Indexer: Nzbs.org");
                 repository.Add(nzbsOrgIndexer);
@@ -223,12 +224,15 @@ namespace NzbDrone.Core
             else
             {
                 Logger.Debug("Updating Indexer: Nzbs.org");
-                repository.Update(nzbsOrgIndexer);
+                nzbsOrg.RssUrl = nzbsOrgIndexer.RssUrl;
+                nzbsOrg.ApiUrl = nzbsOrgIndexer.ApiUrl;
+                repository.Update(nzbsOrg);
             }
 
             //Nzbsrus
             Logger.Debug("Checking for Nzbsrus");
-            if (!repository.Exists<Indexer>(i => i.IndexerName == "Nzbsrus"))
+            var nzbsrus = repository.Single<Indexer>("Nzbsrus");
+            if (nzbsrus == null)
             {
                 Logger.Debug("Adding new Indexer: Nzbsrus");
                 repository.Add(nzbsrusIndexer);
@@ -237,7 +241,9 @@ namespace NzbDrone.Core
             else
             {
                 Logger.Debug("Updating Indexer: Nzbsrus");
-                repository.Update(nzbsrusIndexer);
+                nzbsrus.RssUrl = nzbsOrgIndexer.RssUrl;
+                nzbsrus.ApiUrl = nzbsOrgIndexer.ApiUrl;
+                repository.Update(nzbsrus);
             }
         }
 
@@ -246,42 +252,42 @@ namespace NzbDrone.Core
             var sdtv = new QualityProfile
                             {
                                 Name = "SDTV",
-                                Allowed = new List<QualityTypes> {QualityTypes.TV},
+                                Allowed = new List<QualityTypes> { QualityTypes.TV },
                                 Cutoff = QualityTypes.TV
                             };
 
             var dvd = new QualityProfile
                              {
                                  Name = "DVD SD",
-                                 Allowed = new List<QualityTypes> {QualityTypes.DVD},
+                                 Allowed = new List<QualityTypes> { QualityTypes.DVD },
                                  Cutoff = QualityTypes.DVD
                              };
 
             var bdrip = new QualityProfile
                              {
                                  Name = "BDRip",
-                                 Allowed = new List<QualityTypes> {QualityTypes.BDRip},
+                                 Allowed = new List<QualityTypes> { QualityTypes.BDRip },
                                  Cutoff = QualityTypes.BDRip
                              };
 
             var hdtv = new QualityProfile
                              {
                                  Name = "HDTV",
-                                 Allowed = new List<QualityTypes> {QualityTypes.HDTV},
+                                 Allowed = new List<QualityTypes> { QualityTypes.HDTV },
                                  Cutoff = QualityTypes.HDTV
                              };
 
             var webdl = new QualityProfile
                            {
                                Name = "WEBDL",
-                               Allowed = new List<QualityTypes> {QualityTypes.WEBDL},
+                               Allowed = new List<QualityTypes> { QualityTypes.WEBDL },
                                Cutoff = QualityTypes.WEBDL
                            };
 
             var bluray = new QualityProfile
                            {
                                Name = "Bluray",
-                               Allowed = new List<QualityTypes> {QualityTypes.Bluray},
+                               Allowed = new List<QualityTypes> { QualityTypes.Bluray },
                                Cutoff = QualityTypes.Bluray
                            };
 

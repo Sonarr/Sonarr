@@ -87,9 +87,10 @@ namespace NzbDrone.Core.Providers
                 {
                     Logger.Info("Starting RSS Sync for: {0}", i.IndexerName);
                     //Need to insert the users information in the the URL before trying to use it
-                    i.RssUrl = GetUsersUrl(i); //Get the new users specific url (with their information) to use for the Sync
+                    GetUsersUrl(i); //Get the new users specific url (with their information) to use for the Sync
 
-                    if (i.RssUrl == null)
+                    //If the url still contains '{' & '}' the user probably hasn't configured the indexer settings
+                    if (i.RssUrl.Contains("{") && i.RssUrl.Contains("}"))
                     {
                         Logger.Debug("Unable to Sync {0}. User Information has not been configured.", i.IndexerName);
                         continue; //Skip this indexer
@@ -200,7 +201,7 @@ namespace NzbDrone.Core.Providers
             return String.Format("{0} - {1}{2} - {3}", series.Title, seasonNumber, episodeNumbers, episodeTitles);
         }
 
-        private string GetUsersUrl(Indexer indexer)
+        private void GetUsersUrl(Indexer indexer)
         {
             if (indexer.IndexerName == "NzbMatrix")
             {
@@ -208,10 +209,10 @@ namespace NzbDrone.Core.Providers
                 var nzbMatrixApiKey = _configProvider.GetValue("NzbMatrixApiKey", String.Empty, false);
 
                 if (!String.IsNullOrEmpty(nzbMatrixUsername) && !String.IsNullOrEmpty(nzbMatrixApiKey))
-                    return indexer.RssUrl.Replace("{USERNAME}", nzbMatrixUsername).Replace("{APIKEY}", nzbMatrixApiKey);
+                    indexer.RssUrl = indexer.RssUrl.Replace("{USERNAME}", nzbMatrixUsername).Replace("{APIKEY}", nzbMatrixApiKey);
 
                 //Todo: Perform validation at the config level so a user is unable to enable a provider until user details are provided
-                return null; //Return Null if Provider is enabled, but user information is not supplied.
+                return;
             }
 
             if (indexer.IndexerName == "NzbsOrg")
@@ -220,10 +221,10 @@ namespace NzbDrone.Core.Providers
                 var nzbsOrgHash = _configProvider.GetValue("NzbsOrgHash", String.Empty, false);
 
                 if (!String.IsNullOrEmpty(nzbsOrgUId) && !String.IsNullOrEmpty(nzbsOrgHash))
-                    return indexer.RssUrl.Replace("{UID}", nzbsOrgUId).Replace("{HASH}", nzbsOrgHash);
+                    indexer.RssUrl = indexer.RssUrl.Replace("{UID}", nzbsOrgUId).Replace("{HASH}", nzbsOrgHash);
 
                 //Todo: Perform validation at the config level so a user is unable to enable a provider until user details are provided
-                return null; //Return Null if Provider is enabled, but user information is not supplied.
+                return;
             }
 
             if (indexer.IndexerName == "NzbsOrg")
@@ -232,13 +233,13 @@ namespace NzbDrone.Core.Providers
                 var nzbsrusHash = _configProvider.GetValue("NzbsrusHash", String.Empty, false);
 
                 if (!String.IsNullOrEmpty(nzbsrusUId) && !String.IsNullOrEmpty(nzbsrusHash))
-                    return indexer.RssUrl.Replace("{UID}", nzbsrusUId).Replace("{HASH}", nzbsrusHash);
+                    indexer.RssUrl = indexer.RssUrl.Replace("{UID}", nzbsrusUId).Replace("{HASH}", nzbsrusHash);
 
                 //Todo: Perform validation at the config level so a user is unable to enable a provider until user details are provided
-                return null; //Return Null if Provider is enabled, but user information is not supplied.
+                return;
             }
 
-            return indexer.RssUrl; //Currently other providers do not require user information to be substituted, simply return the RssUrl
+            return; //Currently other providers do not require user information to be substituted, simply return
         }
     }
 }
