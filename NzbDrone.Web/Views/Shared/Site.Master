@@ -52,13 +52,11 @@
 </body>
 <asp:ContentPlaceHolder runat="server" id="Scripts" />
 <% Html.Telerik().ScriptRegistrar().Scripts(
-           c => c.Add("jquery-1.4.3.min.js")
-               .Add("jquery-ui-1.8.8.min.js")
+           c => c.Add("jquery-ui-1.8.8.min.js")
                .Add("jquery.form.js")
                .Add("jquery.jgrowl.js")
                .Add("Notification.js")
                .Add("jquery-tgc-countdown-1.0.js")
-               .Add("jquery.simpledropdown.js")
                .Add("MicrosoftAjax.js")
                .Add("MicrosoftMvcValidation.js"))
                .Render(); 

@@ -35,7 +35,6 @@ namespace NzbDrone.Web.Controllers
             return View();
         }
 
-
         public ActionResult Sync()
         {
             _syncProvider.BeginSyncUnmappedFolders();
@@ -48,12 +47,10 @@ namespace NzbDrone.Web.Controllers
             return RedirectToAction("Index");
         }
 
-
         public ActionResult UnMapped()
         {
             return View(_seriesProvider.GetUnmappedFolders().Select(c => new MappingModel() { Id = 1, Path = c.Value }).ToList());
         }
-
 
         public ActionResult LoadEpisodes(int seriesId)
         {
@@ -63,7 +60,6 @@ namespace NzbDrone.Web.Controllers
                 seriesId = seriesId
             });
         }
-
 
         [GridAction]
         public ActionResult _AjaxSeasonGrid(int seasonId)
@@ -79,8 +75,6 @@ namespace NzbDrone.Web.Controllers
                                                                                      });
             return View(new GridModel(episodes));
         }
-
-
 
         [GridAction]
         public ActionResult _CustomBinding(GridCommand command, int seasonId)
@@ -163,12 +157,9 @@ namespace NzbDrone.Web.Controllers
             return RedirectToAction("UnMapped");
         }
 
-
         public ActionResult Details(int seriesId)
         {
             return View(_seriesProvider.GetSeries(seriesId));
         }
-
-
     }
 }
