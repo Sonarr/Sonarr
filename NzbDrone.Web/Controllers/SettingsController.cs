@@ -144,8 +144,8 @@ namespace NzbDrone.Web.Controllers
             var profiles = _qualityProvider.GetAllProfiles().ToList();
             var defaultQualityProfileId = Convert.ToInt32(_configProvider.GetValue("DefaultQualityProfile", profiles[0].ProfileId, true));
             var selectList = new SelectList(profiles, "ProfileId", "Name");
-            
-            return new QualityModel {DefaultProfileId = defaultQualityProfileId, SelectList = selectList};
+
+            return new QualityModel { DefaultProfileId = defaultQualityProfileId, SelectList = selectList };
         }
 
         [HttpPost]
@@ -157,7 +157,7 @@ namespace NzbDrone.Web.Controllers
                 return Content(_settingsSaved);
             }
 
-            return Content(_settingsFailed);    
+            return Content(_settingsFailed);
         }
 
         [HttpPost]
@@ -167,10 +167,7 @@ namespace NzbDrone.Web.Controllers
             {
                 //Todo: Only allow indexers to be enabled if user information has been provided
                 foreach (var indexer in data.Indexers)
-                {
-                    indexer.ApiUrl = String.Empty; //TODO: Remove this and use a Real API URL
                     _indexerProvider.Update(indexer);
-                }
 
                 _configProvider.SetValue("NzbMatrixUsername", data.NzbMatrixUsername);
                 _configProvider.SetValue("NzbMatrixApiKey", data.NzbMatrixApiKey);
@@ -190,18 +187,18 @@ namespace NzbDrone.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                    _configProvider.SetValue("SyncFrequency", data.SyncFrequency.ToString());
-                    _configProvider.SetValue("DownloadPropers", data.DownloadPropers.ToString());
-                    _configProvider.SetValue("Retention", data.Retention.ToString());
-                    _configProvider.SetValue("SabHost", data.SabHost);
-                    _configProvider.SetValue("SabPort", data.SabPort.ToString());
-                    _configProvider.SetValue("SabApiKey", data.SabApiKey);
-                    _configProvider.SetValue("SabUsername", data.SabUsername);
-                    _configProvider.SetValue("SabPassword", data.SabPassword);
-                    _configProvider.SetValue("SabCategory", data.SabCategory);
-                    _configProvider.SetValue("SabPriority", data.SabPriority.ToString());
+                _configProvider.SetValue("SyncFrequency", data.SyncFrequency.ToString());
+                _configProvider.SetValue("DownloadPropers", data.DownloadPropers.ToString());
+                _configProvider.SetValue("Retention", data.Retention.ToString());
+                _configProvider.SetValue("SabHost", data.SabHost);
+                _configProvider.SetValue("SabPort", data.SabPort.ToString());
+                _configProvider.SetValue("SabApiKey", data.SabApiKey);
+                _configProvider.SetValue("SabUsername", data.SabUsername);
+                _configProvider.SetValue("SabPassword", data.SabPassword);
+                _configProvider.SetValue("SabCategory", data.SabCategory);
+                _configProvider.SetValue("SabPriority", data.SabPriority.ToString());
 
-                    return Content(_settingsSaved);
+                return Content(_settingsSaved);
             }
 
             return Content(_settingsFailed);

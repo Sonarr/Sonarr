@@ -74,7 +74,7 @@ namespace NzbDrone.Core.Providers
 
             if (IsSeasonIgnored(episode))
                 return false;
-            
+
             if (!_series.QualityWanted(episode.SeriesId, episode.Quality))
             {
                 Logger.Debug("Quality [{0}] is not wanted for: {1}", episode.Quality, episode.SeriesTitle);
@@ -86,7 +86,7 @@ namespace NzbDrone.Core.Providers
             episode.EpisodeId = dbEpisode.EpisodeId;
 
             var epWithFiles = _sonicRepo.Single<Episode>(c => c.EpisodeId == episode.EpisodeId && c.Files.Count > 0);
-            
+
             if (epWithFiles != null)
             {
                 //If not null we need to see if this episode has the quality as the download (or if it is better)
@@ -104,7 +104,7 @@ namespace NzbDrone.Core.Providers
                 return false;
             }
 
-            throw new NotImplementedException();
+            return true;
         }
 
         public void RefreshEpisodeInfo(int seriesId)

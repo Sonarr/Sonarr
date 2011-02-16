@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Providers
         public void ResetRssSyncTimer()
         {
             double interval = _rssSyncTimer.Interval;
-            _rssSyncTimer .Interval= interval;
+            _rssSyncTimer.Interval = interval;
         }
 
         public void StartRssSyncTimer()
@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Providers
                 throw new InvalidOperationException("RSS Sync Frequency Invalid");
             }
 
-            _rssSyncTimer.Elapsed +=new ElapsedEventHandler(RunRssSync);
+            _rssSyncTimer.Elapsed += new ElapsedEventHandler(RunRssSync);
             _rssSyncTimer.Start();
             _rssSyncNextInterval = DateTime.Now.AddMilliseconds(_rssSyncTimer.Interval);
         }
@@ -59,7 +59,7 @@ namespace NzbDrone.Core.Providers
 
         public void SetRssSyncTimer(int minutes)
         {
-            long ms = minutes*60*1000;
+            long ms = minutes * 60 * 1000;
             _rssSyncTimer.Interval = ms;
         }
 
@@ -89,7 +89,7 @@ namespace NzbDrone.Core.Providers
         private void RunRssSync(object obj, ElapsedEventArgs args)
         {
             _rssSyncNextInterval = DateTime.Now.AddMilliseconds(_rssSyncTimer.Interval);
-            //_rssSyncProvider.Begin();
+            _rssSyncProvider.Begin();
         }
 
         private void MinuteTimer_Elapsed(object obj, ElapsedEventArgs args)

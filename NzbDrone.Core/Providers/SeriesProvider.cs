@@ -108,7 +108,7 @@ namespace NzbDrone.Core.Providers
             repoSeries.Path = path;
             repoSeries.CleanTitle = Parser.NormalizeTitle(series.SeriesName);
             repoSeries.Monitored = true; //New shows should be monitored
-            repoSeries.QualityProfile = (QualityProfile) Enum.Parse(typeof (QualityProfile), _config.GetValue("Quality", 1, true));
+            repoSeries.QualityProfile = _quality.Find(Convert.ToInt32(_config.GetValue("Quality", 1, true)));
             _sonioRepo.Add(repoSeries);
         }
 
