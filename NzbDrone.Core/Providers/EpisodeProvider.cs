@@ -18,16 +18,18 @@ namespace NzbDrone.Core.Providers
         private readonly ISeasonProvider _seasons;
         private readonly ITvDbProvider _tvDb;
         private readonly IHistoryProvider _history;
+        private readonly IQualityProvider _quality;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
 
-        public EpisodeProvider(IRepository sonicRepo, ISeriesProvider seriesProvider, ISeasonProvider seasonProvider, ITvDbProvider tvDbProvider, IHistoryProvider history)
+        public EpisodeProvider(IRepository sonicRepo, ISeriesProvider seriesProvider, ISeasonProvider seasonProvider, ITvDbProvider tvDbProvider, IHistoryProvider history, IQualityProvider quality)
         {
             _sonicRepo = sonicRepo;
             _series = seriesProvider;
             _tvDb = tvDbProvider;
             _seasons = seasonProvider;
             _history = history;
+            _quality = quality;
         }
 
         public Episode GetEpisode(long id)
@@ -83,6 +85,13 @@ namespace NzbDrone.Core.Providers
 
             //Check to see if there is an episode file for this episode
             var dbEpisode = GetEpisode(episode.SeriesId, episode.SeasonNumber, episode.EpisodeNumber);
+
+            if (dbEpisode == null)
+            {
+                //Todo: How do we want to handle this really? Episode could be released before information is on TheTvDB (Parks and Rec did this a lot in the first season from experience)
+                throw new NotImplementedException("Episode was not found in the database");
+            }
+
             episode.EpisodeId = dbEpisode.EpisodeId;
 
             var epWithFiles = _sonicRepo.Single<Episode>(c => c.EpisodeId == episode.EpisodeId && c.Files.Count > 0);
@@ -93,8 +102,31 @@ namespace NzbDrone.Core.Providers
                 foreach (var file in epWithFiles.Files)
                 {
                     if (file.Quality == episode.Quality)
+                    {
+                        //If the episodeFile is a Proper we don't need to download again
+                        if (file.Proper)
+                            return false;
+                    }
+
+                    //There will never be a time when the episode quality is less than what we have and we want it... ever.... I think.
+                    if (file.Quality > episode.Quality)
                         return false;
+
+                    //Now we need to handle upgrades and actually pay attention to the Cutoff Value
+                    if (file.Quality < episode.Quality)
+                    {
+                        var series = _series.GetSeries(episode.SeriesId);
+                        var quality = _quality.Find(series.ProfileId);
+
+                        if (quality.Cutoff <= file.Quality)
+                        {
+                            //If the episodeFile is a Proper we don't need to download again
+                            if (file.Proper)
+                                return false;
+                        }
+                    }
                 }
+                return true; //If we get to this point and the file has not yet been rejected then accept it
             }
 
             //IsInHistory? (NZBDrone)
