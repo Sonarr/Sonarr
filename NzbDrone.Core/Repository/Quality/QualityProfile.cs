@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Repository.Quality
         [SubSonicPrimaryKey(true)]
         public int ProfileId { get; set; }
 
-        [Required (ErrorMessage = "A Name is Required")]
+        [Required(ErrorMessage = "A Name is Required")]
         [DisplayName("Name")]
         [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string Name { get; set; }
@@ -52,5 +52,8 @@ namespace NzbDrone.Core.Repository.Quality
                 }
             }
         }
+
+        [SubSonicToManyRelation]
+        public virtual List<string> Series { get; private set; }
     }
 }
