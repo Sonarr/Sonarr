@@ -270,7 +270,6 @@
     <Content Include="Views\Series\EpisodeDetail.ascx" />
     <Content Include="Views\Series\index.aspx" />
     <Content Include="Views\Series\Unmapped.aspx" />
-    <Content Include="Views\Settings\Copy of UserProfileSection.ascx" />
     <Content Include="Views\Settings\Downloads.ascx" />
     <Content Include="Views\Settings\General.ascx" />
     <Content Include="Views\Settings\Index.aspx" />
