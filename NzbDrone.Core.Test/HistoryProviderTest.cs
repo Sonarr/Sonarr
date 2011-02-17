@@ -20,18 +20,18 @@ namespace NzbDrone.Core.Test
         public void AllItems()
         {
             //Setup
-            var indexer = new Indexer {Enabled = true, IndexerName = "NzbMatrix", Order = 1, RssUrl = "http://www.nzbmatrix.com"};
+            var indexer = new Indexer { Enabled = true, IndexerName = "NzbMatrix", Order = 1, RssUrl = "http://www.nzbmatrix.com" };
             var series = new Series
                              {
                                  SeriesId = 5656,
                                  CleanTitle = "rock",
                                  Monitored = true,
                                  Overview = "Series Overview",
-                                 Quality = 1,
+                                 ProfileId = 1,
                                  Title = "30 Rock",
                                  Path = @"C:\Test\TV\30 Rock"
                              };
-            var season = new Season{SeasonId = 4321, SeasonNumber = 1, SeriesId = 5656, Monitored = true};
+            var season = new Season { SeasonId = 4321, SeasonNumber = 1, SeriesId = 5656, Monitored = true };
             var episode = new Episode
                               {
                                   AirDate = DateTime.Today.AddDays(-1),
@@ -81,7 +81,7 @@ namespace NzbDrone.Core.Test
                 CleanTitle = "rock",
                 Monitored = true,
                 Overview = "Series Overview",
-                Quality = 1,
+                ProfileId = 1,
                 Title = "30 Rock",
                 Path = @"C:\Test\TV\30 Rock"
             };
@@ -138,7 +138,7 @@ namespace NzbDrone.Core.Test
                 CleanTitle = "rock",
                 Monitored = true,
                 Overview = "Series Overview",
-                Quality = 1,
+                ProfileId = 1,
                 Title = "30 Rock",
                 Path = @"C:\Test\TV\30 Rock"
             };
