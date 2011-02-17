@@ -24,8 +24,9 @@ namespace NzbDrone.Core.Providers
         public bool AddByUrl(string url, string title)
         {
             const string mode = "addurl";
-            const string cat = "tv";
-            string priority = _config.GetValue("Priority", String.Empty, false);
+            //string cat = _config.GetValue("SabCategory", String.Empty, true);
+            string cat = "tv";
+            string priority = _config.GetValue("SabPriority", String.Empty, false);
             string name = url.Replace("&", "%26");
             string nzbName = HttpUtility.UrlEncode(title);
 
@@ -73,12 +74,12 @@ namespace NzbDrone.Core.Providers
 
         private string GetSabRequest(string action)
         {
-            string sabnzbdInfo = _config.GetValue("SabnzbdInfo", String.Empty, false);
-            string username = _config.GetValue("Username", String.Empty, false);
-            string password = _config.GetValue("Password", String.Empty, false);
-            string apiKey = _config.GetValue("ApiKey", String.Empty, false);
+            string sabnzbdInfo = _config.GetValue("SabHost", String.Empty, false) + ":" + _config.GetValue("SabPort", String.Empty, false);
+            string username = _config.GetValue("SabUsername", String.Empty, false);
+            string password = _config.GetValue("SabPassword", String.Empty, false);
+            string apiKey = _config.GetValue("SabApiKey", String.Empty, false);
 
-            return string.Format(@"http://{0}/sabnzbd/api?$Action&apikey={1}&ma_username={2}&ma_password={3}", sabnzbdInfo, apiKey, username, password).Replace("$Action", action);
+            return string.Format(@"http://{0}/api?$Action&apikey={1}&ma_username={2}&ma_password={3}", sabnzbdInfo, apiKey, username, password).Replace("$Action", action);
         }
     }
 }
