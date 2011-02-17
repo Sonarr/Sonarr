@@ -164,8 +164,11 @@ namespace NzbDrone.Core.Providers
                             return;
 
                         var titleFix = GetTitleFix(new List<EpisodeParseResult> { episode }, episodeModel.SeriesId);
-                        _sab.IsInQueue(titleFix);
+
+                        if (_sab.IsInQueue(titleFix))
+                            return;
                     }
+                    var sabResult = _sab.AddByUrl(nzb.Link.ToString(), nzb.TitleFix);
                 }
             }
 

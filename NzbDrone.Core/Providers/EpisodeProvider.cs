@@ -77,6 +77,7 @@ namespace NzbDrone.Core.Providers
             if (IsSeasonIgnored(episode))
                 return false;
 
+            //Quickly check if this quality is wanted at all (We will later check if the quality is still needed)
             if (!_series.QualityWanted(episode.SeriesId, episode.Quality))
             {
                 Logger.Debug("Quality [{0}] is not wanted for: {1}", episode.Quality, episode.SeriesTitle);
@@ -88,7 +89,7 @@ namespace NzbDrone.Core.Providers
 
             if (dbEpisode == null)
             {
-                //Todo: How do we want to handle this really? Episode could be released before information is on TheTvDB (Parks and Rec did this a lot in the first season from experience)
+                //Todo: How do we want to handle this really? Episode could be released before information is on TheTvDB (Parks and Rec did this a lot in the first season, from experience)
                 throw new NotImplementedException("Episode was not found in the database");
             }
 
@@ -126,7 +127,7 @@ namespace NzbDrone.Core.Providers
                         }
                     }
                 }
-                return true; //If we get to this point and the file has not yet been rejected then accept it
+                return true;
             }
 
             //IsInHistory? (NZBDrone)
@@ -136,7 +137,7 @@ namespace NzbDrone.Core.Providers
                 return false;
             }
 
-            return true;
+            return true;//If we get to this point and the file has not yet been rejected then accept it
         }
 
         public void RefreshEpisodeInfo(int seriesId)
