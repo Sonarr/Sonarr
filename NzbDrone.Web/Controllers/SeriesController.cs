@@ -52,6 +52,12 @@ namespace NzbDrone.Web.Controllers
             return View(_seriesProvider.GetUnmappedFolders().Select(c => new MappingModel() { Id = 1, Path = c.Value }).ToList());
         }
 
+        public ActionResult Edit(int seriesId)
+        {
+            var series = _seriesProvider.GetSeries(seriesId);
+            return View(series);
+        }
+
         public ActionResult LoadEpisodes(int seriesId)
         {
             _episodeProvider.RefreshEpisodeInfo(seriesId);
@@ -159,7 +165,8 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult Details(int seriesId)
         {
-            return View(_seriesProvider.GetSeries(seriesId));
+            var series = _seriesProvider.GetSeries(seriesId);
+            return View(series);
         }
     }
 }

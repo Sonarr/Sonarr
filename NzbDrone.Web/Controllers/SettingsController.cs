@@ -105,15 +105,15 @@ namespace NzbDrone.Web.Controllers
             var userProfiles = _qualityProvider.GetAllProfiles().Where(q => q.UserProfile).ToList();
             var profiles = _qualityProvider.GetAllProfiles().ToList();
 
-            var defaultQualityProfileId = Convert.ToInt32(_configProvider.GetValue("DefaultQualityProfile", profiles[0].ProfileId, true));
+            var defaultQualityQualityProfileId = Convert.ToInt32(_configProvider.GetValue("DefaultQualityProfile", profiles[0].QualityProfileId, true));
 
-            var selectList = new SelectList(profiles, "ProfileId", "Name");
+            var selectList = new SelectList(profiles, "QualityProfileId", "Name");
 
             var model = new QualityModel
                                      {
                                          Profiles = profiles,
                                          UserProfiles = userProfiles,
-                                         DefaultProfileId = defaultQualityProfileId,
+                                         DefaultQualityProfileId = defaultQualityQualityProfileId,
                                          SelectList = selectList
                                      };
 
@@ -142,10 +142,10 @@ namespace NzbDrone.Web.Controllers
         public QualityModel GetUpdatedProfileList()
         {
             var profiles = _qualityProvider.GetAllProfiles().ToList();
-            var defaultQualityProfileId = Convert.ToInt32(_configProvider.GetValue("DefaultQualityProfile", profiles[0].ProfileId, true));
-            var selectList = new SelectList(profiles, "ProfileId", "Name");
+            var defaultQualityQualityProfileId = Convert.ToInt32(_configProvider.GetValue("DefaultQualityProfile", profiles[0].QualityProfileId, true));
+            var selectList = new SelectList(profiles, "QualityProfileId", "Name");
 
-            return new QualityModel { DefaultProfileId = defaultQualityProfileId, SelectList = selectList };
+            return new QualityModel { DefaultQualityProfileId = defaultQualityQualityProfileId, SelectList = selectList };
         }
 
         [HttpPost]
@@ -209,7 +209,7 @@ namespace NzbDrone.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                _configProvider.SetValue("DefaultQualityProfile", data.DefaultProfileId.ToString());
+                _configProvider.SetValue("DefaultQualityProfile", data.DefaultQualityProfileId.ToString());
 
                 //Saves only the Default Quality, skips User Profiles since none exist
                 if (data.UserProfiles == null)
@@ -217,8 +217,8 @@ namespace NzbDrone.Web.Controllers
 
                 foreach (var dbProfile in _qualityProvider.GetAllProfiles().Where(q => q.UserProfile))
                 {
-                    if (!data.UserProfiles.Exists(p => p.ProfileId == dbProfile.ProfileId))
-                        _qualityProvider.Delete(dbProfile.ProfileId);
+                    if (!data.UserProfiles.Exists(p => p.QualityProfileId == dbProfile.QualityProfileId))
+                        _qualityProvider.Delete(dbProfile.QualityProfileId);
                 }
 
                 foreach (var profile in data.UserProfiles)
@@ -237,7 +237,7 @@ namespace NzbDrone.Web.Controllers
                         return Content("Error Saving Settings, please fix any errors");
                     //profile.Cutoff = profile.Allowed.Last();
 
-                    if (profile.ProfileId > 0)
+                    if (profile.QualityProfileId > 0)
                         _qualityProvider.Update(profile);
 
                     else

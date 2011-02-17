@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Test
                                  CleanTitle = "rock",
                                  Monitored = true,
                                  Overview = "Series Overview",
-                                 ProfileId = 1,
+                                 QualityProfileId = 1,
                                  Title = "30 Rock",
                                  Path = @"C:\Test\TV\30 Rock"
                              };
@@ -81,7 +81,7 @@ namespace NzbDrone.Core.Test
                 CleanTitle = "rock",
                 Monitored = true,
                 Overview = "Series Overview",
-                ProfileId = 1,
+                QualityProfileId = 1,
                 Title = "30 Rock",
                 Path = @"C:\Test\TV\30 Rock"
             };
@@ -138,7 +138,7 @@ namespace NzbDrone.Core.Test
                 CleanTitle = "rock",
                 Monitored = true,
                 Overview = "Series Overview",
-                ProfileId = 1,
+                QualityProfileId = 1,
                 Title = "30 Rock",
                 Path = @"C:\Test\TV\30 Rock"
             };

@@ -95,12 +95,12 @@ namespace NzbDrone.Core.Providers
 
             episode.EpisodeId = dbEpisode.EpisodeId;
 
-            var epWithFiles = _sonicRepo.Single<Episode>(c => c.EpisodeId == episode.EpisodeId && c.Files.Count > 0);
+            var epWithFiles = _sonicRepo.All<EpisodeFile>().Where(c => c.EpisodeId == episode.EpisodeId);
 
             if (epWithFiles != null)
             {
                 //If not null we need to see if this episode has the quality as the download (or if it is better)
-                foreach (var file in epWithFiles.Files)
+                foreach (var file in epWithFiles)
                 {
                     if (file.Quality == episode.Quality)
                     {
@@ -117,7 +117,7 @@ namespace NzbDrone.Core.Providers
                     if (file.Quality < episode.Quality)
                     {
                         var series = _series.GetSeries(episode.SeriesId);
-                        var quality = _quality.Find(series.ProfileId);
+                        var quality = _quality.Find(series.QualityProfileId);
 
                         if (quality.Cutoff <= file.Quality)
                         {
@@ -127,7 +127,6 @@ namespace NzbDrone.Core.Providers
                         }
                     }
                 }
-                return true;
             }
 
             //IsInHistory? (NZBDrone)

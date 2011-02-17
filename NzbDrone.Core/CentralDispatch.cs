@@ -303,7 +303,7 @@ namespace NzbDrone.Core
             else
             {
                 Logger.Debug(String.Format("Updating default QualityProfile: {0}", sdtv.Name));
-                sdtv.ProfileId = sdtvDb.ProfileId;
+                sdtv.QualityProfileId = sdtvDb.QualityProfileId;
                 repository.Update(sdtv);
             }
 
@@ -319,7 +319,7 @@ namespace NzbDrone.Core
             else
             {
                 Logger.Debug(String.Format("Updating default QualityProfile: {0}", dvd.Name));
-                dvd.ProfileId = dvdDb.ProfileId;
+                dvd.QualityProfileId = dvdDb.QualityProfileId;
                 repository.Update(dvd);
             }
 
@@ -335,7 +335,7 @@ namespace NzbDrone.Core
             else
             {
                 Logger.Debug(String.Format("Updating default QualityProfile: {0}", bdrip.Name));
-                bdrip.ProfileId = bdripDb.ProfileId;
+                bdrip.QualityProfileId = bdripDb.QualityProfileId;
                 repository.Update(bdrip);
             }
 
@@ -351,7 +351,7 @@ namespace NzbDrone.Core
             else
             {
                 Logger.Debug(String.Format("Updating default QualityProfile: {0}", hdtv.Name));
-                hdtv.ProfileId = hdtvDb.ProfileId;
+                hdtv.QualityProfileId = hdtvDb.QualityProfileId;
                 repository.Update(hdtv);
             }
 
@@ -367,7 +367,7 @@ namespace NzbDrone.Core
             else
             {
                 Logger.Debug(String.Format("Updating default QualityProfile: {0}", webdl.Name));
-                webdl.ProfileId = webdlDb.ProfileId;
+                webdl.QualityProfileId = webdlDb.QualityProfileId;
                 repository.Update(webdl);
             }
 
@@ -383,7 +383,7 @@ namespace NzbDrone.Core
             else
             {
                 Logger.Debug(String.Format("Updating default QualityProfile: {0}", bluray.Name));
-                bluray.ProfileId = blurayDb.ProfileId;
+                bluray.QualityProfileId = blurayDb.QualityProfileId;
                 repository.Update(bluray);
             }
         }

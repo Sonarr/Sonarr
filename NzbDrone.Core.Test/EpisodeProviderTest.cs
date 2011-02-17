@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using FizzWare.NBuilder;
 using Gallio.Framework;
@@ -10,6 +11,8 @@ using Moq;
 using Ninject;
 using Ninject.Moq;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Repository;
+using NzbDrone.Core.Repository.Quality;
 using SubSonic.Repository;
 using TvdbLib.Data;
 using SubSonic.Extensions;
@@ -51,6 +54,42 @@ namespace NzbDrone.Core.Test
             tvdbMock.VerifyAll();
             Assert.Count(episodeCount, kernel.Get<IEpisodeProvider>().GetEpisodeBySeries(seriesId));
             Console.WriteLine("Duration: " + sw.Elapsed.ToString());
+        }
+
+        [Test]
+        public void IsNeededTrue()
+        {
+            //Setup
+            var season = new Mock<ISeasonProvider>();
+            var series = new Mock<ISeriesProvider>();
+            var history = new Mock<IHistoryProvider>();
+            var quality = new Mock<IQualityProvider>();
+            var repo = new Mock<IRepository>();
+
+            var epInDb = new Episode
+            {
+                AirDate = DateTime.Today,
+                EpisodeId = 55555,
+                EpisodeNumber = 5,
+                Language = "en",
+                SeasonId = 4444,
+                SeasonNumber = 1
+            };
+
+            season.Setup(s => s.IsIgnored(12345, 1)).Returns(false);
+            series.Setup(s => s.QualityWanted(12345, QualityTypes.TV)).Returns(true);
+            repo.Setup(s => s.Single<Episode>(c => c.SeriesId == 12345 && c.SeasonNumber == 1 && c.EpisodeNumber == 5)).
+                Returns(epInDb);
+
+            //repo.Setup(s => s.All<EpisodeFile>()).Returns();
+            //repo.All<EpisodeFile>().Where(c => c.EpisodeId == episode.EpisodeId);
+
+
+
+            //Act
+
+
+            //Assert
         }
     }
 }

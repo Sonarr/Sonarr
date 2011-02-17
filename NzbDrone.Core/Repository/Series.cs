@@ -30,10 +30,10 @@ namespace NzbDrone.Core.Repository
 
         public bool Monitored { get; set; }
 
-        public virtual int ProfileId { get; set; }
+        public int QualityProfileId { get; set; }
 
         [SubSonicToOneRelation(ThisClassContainsJoinKey = true)]
-        public virtual QualityProfile QualityProfile { get; set; }
+        public virtual QualityProfile QualityProfile { get; private set; }
 
         [SubSonicToManyRelation]
         public virtual List<Season> Seasons { get; private set; }

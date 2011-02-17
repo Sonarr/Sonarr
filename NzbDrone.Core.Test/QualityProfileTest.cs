@@ -31,10 +31,10 @@ namespace NzbDrone.Core.Test
 
             //Act
             var id = (int)repo.Add(testProfile);
-            var fetch = repo.Single<QualityProfile>(c => c.ProfileId == id);
+            var fetch = repo.Single<QualityProfile>(c => c.QualityProfileId == id);
 
             //Assert
-            Assert.AreEqual(id, fetch.ProfileId);
+            Assert.AreEqual(id, fetch.QualityProfileId);
             Assert.AreEqual(testProfile.Name, fetch.Name);
             Assert.AreEqual(testProfile.Cutoff, fetch.Cutoff);
             Assert.AreEqual(testProfile.Allowed, fetch.Allowed);

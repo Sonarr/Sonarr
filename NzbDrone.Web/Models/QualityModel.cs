@@ -15,7 +15,7 @@ namespace NzbDrone.Web.Models
         public List<QualityProfile> UserProfiles { get; set; }
 
         [DisplayName("Default Quality Profile")]
-        public int DefaultProfileId { get; set; }
+        public int DefaultQualityProfileId { get; set; }
 
         public SelectList SelectList { get; set; }
     }

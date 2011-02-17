@@ -109,7 +109,7 @@
             <%= Html.ValidationMessageFor(x => x.Cutoff) %>
 
             <div class="hiddenProfileDetails">
-                <%= Html.TextBoxFor(x => x.ProfileId, new { @style = "display:none" })%>
+                <%= Html.TextBoxFor(x => x.QualityProfileId, new { @style = "display:none" })%>
                 <%= Html.CheckBoxFor(x => x.UserProfile, new { @style = "display:none" })%>
                 <%= Html.TextBoxFor(m => m.AllowedString, new { @style = "display:none" })%>
             </div>

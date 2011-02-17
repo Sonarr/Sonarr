@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Providers
         public bool QualityWanted(int seriesId, QualityTypes quality)
         {
             var series = _sonioRepo.Single<Series>(seriesId);
-            var profile = _quality.Find(series.ProfileId);
+            var profile = _quality.Find(series.QualityProfileId);
 
             return profile.Allowed.Contains(quality);
         }
@@ -108,7 +108,7 @@ namespace NzbDrone.Core.Providers
             repoSeries.Path = path;
             repoSeries.CleanTitle = Parser.NormalizeTitle(series.SeriesName);
             repoSeries.Monitored = true; //New shows should be monitored
-            repoSeries.ProfileId = Convert.ToInt32(_config.GetValue("Quality", 1, true));
+            repoSeries.QualityProfileId = Convert.ToInt32(_config.GetValue("Quality", 1, true));
             _sonioRepo.Add(repoSeries);
         }
 

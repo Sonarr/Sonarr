@@ -132,44 +132,49 @@ namespace NzbDrone.Core.Providers
                     return;
                 }
 
-                if (episodeParseResults.Count() > 0)
+                //Todo: How to determine if we want the show if the FeedTitle is drastically different from the TitleOnDisk (CSI is one that comes to mind)
+                var series = _series.FindSeries(episodeParseResults[0].SeriesTitle);
+
+                if (series == null)
                 {
-                    //Todo: How to determine if we want the show if the FeedTitle is drastically different from the TitleOnDisk (CSI is one that comes to mind)
-                    var series = _series.FindSeries(episodeParseResults[0].SeriesTitle);
-
-                    if (series == null)
-                    {
-                        Logger.Debug("Show is not being watched: {0}", episodeParseResults[0].SeriesTitle);
-                        return;
-                    }
-
-                    Logger.Debug("Show is being watched: {0}", series.Title);
-
-                    nzb.TitleFix = GetTitleFix(episodeParseResults, series.SeriesId); //Get the TitleFix so we can use it later
-                    nzb.Proper = Parser.ParseProper(nzb.Title);
-
-                    //Loop through the list of the episodeParseResults to ensure that all the episodes are needed)
-                    foreach (var episode in episodeParseResults)
-                    {
-                        //IsEpisodeWanted?
-                        var episodeModel = new EpisodeModel();
-                        episodeModel.Proper = nzb.Proper;
-                        episodeModel.SeriesId = series.SeriesId;
-                        episodeModel.SeriesTitle = series.Title;
-                        episodeModel.Quality = Parser.ParseQuality(nzb.Title);
-                        episodeModel.SeasonNumber = episode.SeasonNumber;
-                        episodeModel.EpisodeNumber = episode.EpisodeNumber;
-
-                        if (!_episode.IsNeeded(episodeModel))
-                            return;
-
-                        var titleFix = GetTitleFix(new List<EpisodeParseResult> { episode }, episodeModel.SeriesId);
-
-                        if (_sab.IsInQueue(titleFix))
-                            return;
-                    }
-                    var sabResult = _sab.AddByUrl(nzb.Link.ToString(), nzb.TitleFix);
+                    Logger.Debug("Show is not being watched: {0}", episodeParseResults[0].SeriesTitle);
+                    return;
                 }
+
+                Logger.Debug("Show is being watched: {0}", series.Title);
+
+                nzb.TitleFix = GetTitleFix(episodeParseResults, series.SeriesId); //Get the TitleFix so we can use it later
+                nzb.Proper = Parser.ParseProper(nzb.Title);
+
+                //Loop through the list of the episodeParseResults to ensure that all the episodes are needed)
+                foreach (var episode in episodeParseResults)
+                {
+                    //IsEpisodeWanted?
+                    var episodeModel = new EpisodeModel();
+                    episodeModel.Proper = nzb.Proper;
+                    episodeModel.SeriesId = series.SeriesId;
+                    episodeModel.SeriesTitle = series.Title;
+                    episodeModel.Quality = Parser.ParseQuality(nzb.Title);
+                    episodeModel.SeasonNumber = episode.SeasonNumber;
+                    episodeModel.EpisodeNumber = episode.EpisodeNumber;
+
+                    if (!_episode.IsNeeded(episodeModel))
+                        return;
+
+                    var titleFix = GetTitleFix(new List<EpisodeParseResult> { episode }, episodeModel.SeriesId);
+
+                    if (_sab.IsInQueue(titleFix))
+                        return;
+                }
+
+                //If their is more than one episode in this NZB check to see if it has been added as a single NZB
+                if (episodeParseResults.Count > 1)
+                {
+                    if (_sab.IsInQueue(nzb.TitleFix))
+                        return;
+                }
+
+                var sabResult = _sab.AddByUrl(nzb.Link.ToString(), nzb.TitleFix);
             }
 
             catch (Exception ex)
@@ -193,13 +198,15 @@ namespace NzbDrone.Core.Providers
                 if (episodeInDb == null)
                 {
                     Logger.Debug("Episode Not found in Database");
-                    return String.Format("{0} - {1}x{2:00}", series.Title, episode.SeasonNumber, episode.SeriesTitle);
+                    return String.Format("{0} - {1:00}x{2}", series.Title, episode.SeasonNumber, episode.SeriesTitle);
                 }
 
                 seasonNumber = episodeInDb.SeasonNumber;
                 episodeNumbers = String.Format("{0}x{1:00}", episodeNumbers, episodeInDb.EpisodeNumber);
                 episodeTitles = String.Format("{0} + {1}", episodeTitles, episodeInDb.Title);
             }
+
+            episodeTitles = episodeTitles.Trim(' ', '+');
 
             return String.Format("{0} - {1}{2} - {3}", series.Title, seasonNumber, episodeNumbers, episodeTitles);
         }

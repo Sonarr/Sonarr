@@ -267,6 +267,7 @@
     <Content Include="Views\Home\Test.aspx" />
     <Content Include="Views\Log\Index.aspx" />
     <Content Include="Views\Series\Details.aspx" />
+    <Content Include="Views\Series\Edit.aspx" />
     <Content Include="Views\Series\EpisodeDetail.ascx" />
     <Content Include="Views\Series\index.aspx" />
     <Content Include="Views\Series\Unmapped.aspx" />

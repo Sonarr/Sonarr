@@ -90,7 +90,6 @@ namespace NzbDrone.Core.Test
             string apikey = "5c770e3197e4fe763423ee7c392c25d1";
             string username = "admin";
             string password = "pass";
-            string priority = "0";
 
             var config = new Mock<IConfigProvider>();
             config.Setup(c => c.GetValue("SabHost", String.Empty, false)).Returns(sabHost);
@@ -124,7 +123,6 @@ namespace NzbDrone.Core.Test
             string apikey = "5c770e3197e4fe763423ee7c392c25d1";
             string username = "admin";
             string password = "pass";
-            string priority = "0";
 
             var config = new Mock<IConfigProvider>();
             config.Setup(c => c.GetValue("SabHost", String.Empty, false)).Returns(sabHost);
@@ -158,7 +156,6 @@ namespace NzbDrone.Core.Test
             string apikey = "5c770e3197e4fe763423ee7c392c25d1";
             string username = "admin";
             string password = "pass";
-            string priority = "0";
 
             var config = new Mock<IConfigProvider>();
             config.Setup(c => c.GetValue("SabHost", String.Empty, false)).Returns(sabHost);

@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Providers
 
         public void Update(QualityProfile profile)
         {
-            if (!_sonicRepo.Exists<QualityProfile>(q => q.ProfileId == profile.ProfileId))
+            if (!_sonicRepo.Exists<QualityProfile>(q => q.QualityProfileId == profile.QualityProfileId))
             {
                 Logger.Error("Unable to update non-existing profile");
                 throw new InvalidOperationException("Unable to update non-existing profile");
@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Providers
 
         public QualityProfile Find(int profileId)
         {
-            return _sonicRepo.Single<QualityProfile>(q => q.ProfileId == profileId);
+            return _sonicRepo.Single<QualityProfile>(q => q.QualityProfileId == profileId);
         }
 
         #endregion

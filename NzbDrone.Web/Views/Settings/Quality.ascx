@@ -39,9 +39,9 @@
                     <div id="defaultQualityDiv" style="float: left; margin: 30px;">
                         
                         <div class="config-group" style="width: 250px; margin-bottom: 5px; margin-left: 5px;">
-                            <div class="config-title"><%= Html.LabelFor(m => m.DefaultProfileId)%></div>
-                            <div class="config-value"><%: Html.DropDownListFor(m => m.DefaultProfileId, Model.SelectList)%></div>
-                            <div class="config-validation"><%= Html.ValidationMessageFor(m => m.DefaultProfileId)%></div>
+                            <div class="config-title"><%= Html.LabelFor(m => m.DefaultQualityProfileId)%></div>
+                            <div class="config-value"><%: Html.DropDownListFor(m => m.DefaultQualityProfileId, Model.SelectList)%></div>
+                            <div class="config-validation"><%= Html.ValidationMessageFor(m => m.DefaultQualityProfileId)%></div>
                         </div>
                     </div>
                 </div>
