@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Script.Serialization;
+using NzbDrone.Core.Model;
 using SubSonic.SqlGeneration.Schema;
 
 namespace NzbDrone.Core.Repository
@@ -18,6 +19,7 @@ namespace NzbDrone.Core.Repository
         [SubSonicLongString]
         public string Overview { get; set; }
         public string Language { get; set; }
+        public EpisodeStatusType Status { get; set; }
 
         [SubSonicToOneRelation(ThisClassContainsJoinKey = true)]
         public virtual Season Season { get; set; }

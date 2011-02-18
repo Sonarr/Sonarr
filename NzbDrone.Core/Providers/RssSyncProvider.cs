@@ -103,7 +103,7 @@ namespace NzbDrone.Core.Providers
                     foreach (RssItem item in _rss.GetFeed(indexer))
                     {
                         NzbInfoModel nzb = Parser.ParseNzbInfo(indexer, item);
-                        QueueIfWanted(nzb);
+                        QueueIfWanted(nzb, i);
                     }
                 }
                 _rssSyncNotification.CurrentStatus = "RSS Sync Completed";
@@ -113,7 +113,7 @@ namespace NzbDrone.Core.Providers
             }
         }
 
-        private void QueueIfWanted(NzbInfoModel nzb)
+        private void QueueIfWanted(NzbInfoModel nzb, Indexer indexer)
         {
             //Do we want this item?
             try
@@ -145,6 +145,7 @@ namespace NzbDrone.Core.Providers
 
                 nzb.TitleFix = GetTitleFix(episodeParseResults, series.SeriesId); //Get the TitleFix so we can use it later
                 nzb.Proper = Parser.ParseProper(nzb.Title);
+                nzb.Quality = Parser.ParseQuality(nzb.Title);
 
                 //Loop through the list of the episodeParseResults to ensure that all the episodes are needed)
                 foreach (var episode in episodeParseResults)
@@ -154,7 +155,7 @@ namespace NzbDrone.Core.Providers
                     episodeModel.Proper = nzb.Proper;
                     episodeModel.SeriesId = series.SeriesId;
                     episodeModel.SeriesTitle = series.Title;
-                    episodeModel.Quality = Parser.ParseQuality(nzb.Title);
+                    episodeModel.Quality = nzb.Quality;
                     episodeModel.SeasonNumber = episode.SeasonNumber;
                     episodeModel.EpisodeNumber = episode.EpisodeNumber;
 
@@ -174,7 +175,34 @@ namespace NzbDrone.Core.Providers
                         return;
                 }
 
-                var sabResult = _sab.AddByUrl(nzb.Link.ToString(), nzb.TitleFix);
+                //Only add to history if it was added to properly sent to SABnzbd
+                if (_sab.AddByUrl(nzb.Link.ToString(), nzb.TitleFix))
+                {
+                    //We need to loop through the episodeParseResults so each episode in the NZB is properly handled
+                    foreach (var epr in episodeParseResults)
+                    {
+                        var episode = _episode.GetEpisode(series.SeriesId, epr.SeasonNumber, epr.EpisodeNumber);
+
+                        if (episode == null)
+                        {
+                            //Not sure how we got this far, so lets throw an exception
+                            throw new ArgumentOutOfRangeException();
+                        }
+
+                        //Set episode status to grabbed
+                        episode.Status = EpisodeStatusType.Grabbed;
+
+                        //Add to History
+                        var history = new History();
+                        history.Date = DateTime.Now;
+                        history.EpisodeId = episode.EpisodeId;
+                        history.IndexerName = indexer.IndexerName;
+                        history.IsProper = nzb.Proper;
+                        history.Quality = nzb.Quality;
+
+                        _history.Insert(history);
+                    }
+                }
             }
 
             catch (Exception ex)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NzbDrone.Core.Repository;
+using NzbDrone.Core.Repository.Quality;
 
 namespace NzbDrone.Core.Model
 {
@@ -15,6 +16,7 @@ namespace NzbDrone.Core.Model
         public Uri Link { get; set; }
         public string Description { get; set; }
         public bool Proper { get; set; }
+        public QualityTypes Quality { get; set; }
 
         public bool IsPassworded()
         {
