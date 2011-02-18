@@ -24,5 +24,6 @@ namespace NzbDrone.Core.Providers
         Dictionary<Guid, String> GetUnmappedFolders();
         Series FindSeries(string cleanTitle);
         bool QualityWanted(int seriesId, QualityTypes quality);
+        void UpdateSeries(Series series);
     }
 }

@@ -22,7 +22,7 @@
         $("#result").empty().html(responseText);
         $("#form :input").attr("disabled", false);
     }                
-    </script>
+</script>
 
     <% Html.EnableClientValidation(); %>
 

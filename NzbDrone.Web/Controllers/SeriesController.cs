@@ -18,15 +18,17 @@ namespace NzbDrone.Web.Controllers
         private readonly IEpisodeProvider _episodeProvider;
         private readonly ISyncProvider _syncProvider;
         private readonly IRssSyncProvider _rssSyncProvider;
+        private readonly IQualityProvider _qualityProvider;
         //
         // GET: /Series/
 
-        public SeriesController(ISyncProvider syncProvider, ISeriesProvider seriesProvider, IEpisodeProvider episodeProvider, IRssSyncProvider rssSyncProvider)
+        public SeriesController(ISyncProvider syncProvider, ISeriesProvider seriesProvider, IEpisodeProvider episodeProvider, IRssSyncProvider rssSyncProvider, IQualityProvider qualityProvider)
         {
             _seriesProvider = seriesProvider;
             _episodeProvider = episodeProvider;
             _syncProvider = syncProvider;
             _rssSyncProvider = rssSyncProvider;
+            _qualityProvider = qualityProvider;
         }
 
         public ActionResult Index()
@@ -50,12 +52,6 @@ namespace NzbDrone.Web.Controllers
         public ActionResult UnMapped()
         {
             return View(_seriesProvider.GetUnmappedFolders().Select(c => new MappingModel() { Id = 1, Path = c.Value }).ToList());
-        }
-
-        public ActionResult Edit(int seriesId)
-        {
-            var series = _seriesProvider.GetSeries(seriesId);
-            return View(series);
         }
 
         public ActionResult LoadEpisodes(int seriesId)
@@ -167,6 +163,23 @@ namespace NzbDrone.Web.Controllers
         {
             var series = _seriesProvider.GetSeries(seriesId);
             return View(series);
+        }
+
+        public ActionResult Edit(int seriesId)
+        {
+            var profiles = _qualityProvider.GetAllProfiles();
+            ViewData["SelectList"] = new SelectList(profiles, "QualityProfileId", "Name");
+
+            var series = _seriesProvider.GetSeries(seriesId);
+            return View(series);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(Series series)
+        {
+            //Need to add seriesProvider.Update
+            _seriesProvider.UpdateSeries(series);
+            return Content("Series Updated Successfully");
         }
     }
 }

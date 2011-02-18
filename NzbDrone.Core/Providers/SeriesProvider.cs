@@ -108,13 +108,18 @@ namespace NzbDrone.Core.Providers
             repoSeries.Path = path;
             repoSeries.CleanTitle = Parser.NormalizeTitle(series.SeriesName);
             repoSeries.Monitored = true; //New shows should be monitored
-            repoSeries.QualityProfileId = Convert.ToInt32(_config.GetValue("Quality", 1, true));
+            repoSeries.QualityProfileId = Convert.ToInt32(_config.GetValue("DefaultQualityProfile", "1", true));
             _sonioRepo.Add(repoSeries);
         }
 
         public Series FindSeries(string cleanTitle)
         {
             return _sonioRepo.Single<Series>(s => s.CleanTitle == cleanTitle);
+        }
+
+        public void UpdateSeries(Series series)
+        {
+            _sonioRepo.Update(series);
         }
 
         #endregion

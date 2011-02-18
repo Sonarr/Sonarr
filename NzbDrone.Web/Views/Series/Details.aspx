@@ -88,7 +88,7 @@ Html.Telerik().Grid(specialSeasons.Episodes).Name("seasons_specials")
         }
     %>
     <p>
-        <%-- <%: Html.ActionLink("Edit", "Edit", new { /* id=Model.PrimaryKey */ }) %> |--%>
+        <%: Html.ActionLink("Edit", "Edit", new {seriesId = Model.SeriesId}) %> | 
         <%: Html.ActionLink("Back to Series", "Index") %>
     </p>
 </asp:Content>
