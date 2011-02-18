@@ -22,9 +22,11 @@ namespace NzbDrone.Core.Providers
         private readonly IRepository _sonioRepo;
         private readonly ITvDbProvider _tvDb;
         private readonly IQualityProvider _quality;
+
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public SeriesProvider(IDiskProvider diskProvider, IConfigProvider configProvider, IRepository dataRepository, ITvDbProvider tvDbProvider, IQualityProvider quality)
+        public SeriesProvider(IDiskProvider diskProvider, IConfigProvider configProvider,
+            IRepository dataRepository, ITvDbProvider tvDbProvider, IQualityProvider quality)
         {
             _diskProvider = diskProvider;
             _config = configProvider;
@@ -120,6 +122,26 @@ namespace NzbDrone.Core.Providers
         public void UpdateSeries(Series series)
         {
             _sonioRepo.Update(series);
+        }
+
+        public void DeleteSeries(int seriesId)
+        {
+            var series = _sonioRepo.Single<Series>(seriesId);
+
+            //Delete Files, Episdes, Seasons then the Series
+            //Can't use providers because episode provider needs series provider - Cyclic Dependency Injection, this will work
+
+            Logger.Debug("Deleting EpisodeFiles from DB for Series: {0}", series.SeriesId);
+            _sonioRepo.DeleteMany(series.Files);
+
+            Logger.Debug("Deleting Episodes from DB for Series: {0}", series.SeriesId);
+            _sonioRepo.DeleteMany(series.Episodes);
+
+            Logger.Debug("Deleting Seasons from DB for Series: {0}", series.SeriesId);
+            _sonioRepo.DeleteMany(series.Seasons);
+
+            Logger.Debug("Deleting Series from DB {0}", series.Title);
+            _sonioRepo.Delete<Series>(seriesId);
         }
 
         #endregion

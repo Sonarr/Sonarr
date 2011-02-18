@@ -25,5 +25,6 @@ namespace NzbDrone.Core.Providers
         Series FindSeries(string cleanTitle);
         bool QualityWanted(int seriesId, QualityTypes quality);
         void UpdateSeries(Series series);
+        void DeleteSeries(int seriesId);
     }
 }

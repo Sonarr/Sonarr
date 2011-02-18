@@ -11,5 +11,6 @@ namespace NzbDrone.Core.Providers
         string[] GetFiles(string path, string pattern, SearchOption searchOption);
         bool FileExists(string path);
         long GetSize(string path);
+        void DeleteFile(string path);
     }
 }

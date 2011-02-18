@@ -37,6 +37,11 @@ namespace NzbDrone.Core.Providers
             return Directory.CreateDirectory(path).FullName;
         }
 
+        public void DeleteFile(string path)
+        {
+            File.Delete(path);
+        }
+
         #endregion
     }
 }

@@ -112,6 +112,17 @@ namespace NzbDrone.Core.Providers
             return String.Format(episodeNamePattern, episode.SeriesTitle, episode.EpisodeNumber, episode.SeasonNumber, episode.EpisodeTitle, episode.Quality);
         }
 
+        public void DeleteFromDb(int fileId)
+        {
+            _repository.Delete<EpisodeFile>(fileId);
+        }
+
+        public void DeleteFromDisk(int fileId, string path)
+        {
+            _diskProvider.DeleteFile(path);
+            _repository.Delete<EpisodeFile>(fileId);
+        }
+
         private List<string> GetMediaFileList(string path)
         {
             Logger.Debug("Scanning '{0}' for episodes", path);

@@ -21,7 +21,6 @@ namespace NzbDrone.Core.Providers
         private readonly IQualityProvider _quality;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-
         public EpisodeProvider(IRepository sonicRepo, ISeriesProvider seriesProvider, ISeasonProvider seasonProvider, ITvDbProvider tvDbProvider, IHistoryProvider history, IQualityProvider quality)
         {
             _sonicRepo = sonicRepo;
@@ -260,6 +259,11 @@ namespace NzbDrone.Core.Providers
             _sonicRepo.UpdateMany(updateList);
 
             Logger.Debug("Finished episode refresh for series:{0}. Successful:{1} - Failed:{2} ", targetSeries.SeriesName, successCount, failCount);
+        }
+
+        public void DeleteEpisode(int episodeId)
+        {
+            _sonicRepo.Delete<Episode>(episodeId);
         }
 
         private bool IsSeasonIgnored(EpisodeModel episode)

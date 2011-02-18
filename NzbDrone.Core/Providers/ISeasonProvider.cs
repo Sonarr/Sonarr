@@ -12,5 +12,6 @@ namespace NzbDrone.Core.Providers
         int SaveSeason(Season season);
         bool IsIgnored(int seasonId);
         bool IsIgnored(int seriesId, int seasonNumber);
+        void DeleteSeason(int seasonId);
     }
 }

@@ -22,5 +22,6 @@ namespace NzbDrone.Core.Providers
         void RefreshEpisodeInfo(int seriesId);
         void RefreshEpisodeInfo(Season season);
         IList<Episode> GetEpisodeBySeason(long seasonId);
+        void DeleteEpisode(int episodeId);
     }
 }

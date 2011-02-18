@@ -71,5 +71,10 @@ namespace NzbDrone.Core.Providers
             Logger.Debug("Season: {0} is not wanted for Series: {1}", seasonNumber, seriesId);
             return true;
         }
+
+        public void DeleteSeason(int seasonId)
+        {
+            _sonicRepo.Delete<Season>(seasonId);
+        }
     }
 }

@@ -181,5 +181,13 @@ namespace NzbDrone.Web.Controllers
             _seriesProvider.UpdateSeries(series);
             return Content("Series Updated Successfully");
         }
+
+        public ActionResult Delete(int seriesId)
+        {
+            //Need to add seriesProvider.Update
+            _seriesProvider.DeleteSeries(seriesId);
+
+            return RedirectToAction("Index", "Series");
+        }
     }
 }
