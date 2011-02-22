@@ -11,6 +11,7 @@ namespace NzbDrone.Core.Repository
         [SubSonicPrimaryKey(false)]
         public virtual int EpisodeId { get; set; }
         public virtual int SeriesId { get; set; }
+        public virtual int FileId { get; set; }
         public int SeasonNumber { get; set; }
         public int EpisodeNumber { get; set; }
         public int SeasonId { get; set; }
@@ -27,8 +28,8 @@ namespace NzbDrone.Core.Repository
         [SubSonicToOneRelation(ThisClassContainsJoinKey = true)]
         public virtual Series Series { get; private set; }
 
-        [SubSonicToManyRelation]
-        public virtual List<EpisodeFile> Files { get; private set; }
+        [SubSonicToOneRelation(ThisClassContainsJoinKey = true)]
+        public virtual EpisodeFile EpisodeFile { get; private set; }
 
         [SubSonicToManyRelation]
         public virtual List<History> Histories { get; private set; }

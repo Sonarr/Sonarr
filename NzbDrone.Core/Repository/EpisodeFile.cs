@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NzbDrone.Core.Repository.Quality;
 using SubSonic.SqlGeneration.Schema;
 
@@ -8,7 +9,6 @@ namespace NzbDrone.Core.Repository
     {
         [SubSonicPrimaryKey]
         public virtual int FileId { get; set; }
-        public int EpisodeId { get; set; }
         public int SeriesId { get; set; }
         public string Path { get; set; }
         public QualityTypes Quality { get; set; }
@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Repository
         public long Size { get; set; }
         public DateTime DateAdded { get; set; }
 
-        [SubSonicToOneRelation(ThisClassContainsJoinKey = true)]
-        public virtual Episode Episode { get; set; }
+        [SubSonicToManyRelation]
+        public virtual List<Episode> Episodes { get; set; }
     }
 }
