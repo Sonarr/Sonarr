@@ -199,6 +199,7 @@ namespace NzbDrone.Core.Providers
                         history.IndexerName = indexer.IndexerName;
                         history.IsProper = nzb.Proper;
                         history.Quality = nzb.Quality;
+                        history.NzbTitle = nzb.Title;
 
                         _history.Insert(history);
                     }

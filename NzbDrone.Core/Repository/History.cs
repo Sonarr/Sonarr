@@ -12,6 +12,7 @@ namespace NzbDrone.Core.Repository
         public int HistoryId { get; set; }
         public virtual int EpisodeId { get; set; }
         public virtual string IndexerName { get; set; }
+        public string NzbTitle { get; set; }
         public QualityTypes Quality { get; set; }
         public DateTime Date { get; set; }
         public bool IsProper { get; set; }
