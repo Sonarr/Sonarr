@@ -98,7 +98,6 @@ namespace NzbDrone.Core.Providers
             }
         }
 
-
         public string GenerateEpisodePath(EpisodeModel episode)
         {
             var episodeNamePattern = _configProvider.EpisodeNameFormat;
@@ -121,6 +120,16 @@ namespace NzbDrone.Core.Providers
         {
             _diskProvider.DeleteFile(path);
             _repository.Delete<EpisodeFile>(fileId);
+        }
+
+        public void Update(EpisodeFile episodeFile)
+        {
+            _repository.Update(episodeFile);
+        }
+
+        public EpisodeFile GetEpisodeFile(int episodeFileId)
+        {
+            return _repository.Single<EpisodeFile>(episodeFileId);
         }
 
         private List<string> GetMediaFileList(string path)

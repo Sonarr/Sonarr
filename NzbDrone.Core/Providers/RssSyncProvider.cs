@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Providers
                 Logger.Debug("Initializing background sync of RSS Feeds.");
                 _rssSyncThread = new Thread(SyncWithRss)
                 {
-                    Name = "SyncUnmappedFolders",
+                    Name = "RssSync",
                     Priority = ThreadPriority.Lowest
                 };
 

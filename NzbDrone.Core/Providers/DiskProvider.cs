@@ -42,6 +42,11 @@ namespace NzbDrone.Core.Providers
             File.Delete(path);
         }
 
+        public void RenameFile(string sourcePath, string destinationPath)
+        {
+            File.Move(sourcePath, destinationPath);
+        }
+
         #endregion
     }
 }
