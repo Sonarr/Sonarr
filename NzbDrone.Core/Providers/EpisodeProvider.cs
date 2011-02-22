@@ -94,36 +94,33 @@ namespace NzbDrone.Core.Providers
 
             episode.EpisodeId = dbEpisode.EpisodeId;
 
-            var epWithFiles = _sonicRepo.All<EpisodeFile>().Where(c => c.EpisodeId == episode.EpisodeId);
+            var file = _sonicRepo.Single<EpisodeFile>(c => c.FileId == dbEpisode.FileId);
 
-            if (epWithFiles != null)
+            if (file != null)
             {
                 //If not null we need to see if this episode has the quality as the download (or if it is better)
-                foreach (var file in epWithFiles)
+                if (file.Quality == episode.Quality)
                 {
-                    if (file.Quality == episode.Quality)
+                    //If the episodeFile is a Proper we don't need to download again
+                    if (file.Proper)
+                        return false;
+                }
+
+                //There will never be a time when the episode quality is less than what we have and we want it... ever.... I think.
+                if (file.Quality > episode.Quality)
+                    return false;
+
+                //Now we need to handle upgrades and actually pay attention to the Cutoff Value
+                if (file.Quality < episode.Quality)
+                {
+                    var series = _series.GetSeries(episode.SeriesId);
+                    var quality = _quality.Find(series.QualityProfileId);
+
+                    if (quality.Cutoff <= file.Quality)
                     {
                         //If the episodeFile is a Proper we don't need to download again
                         if (file.Proper)
                             return false;
-                    }
-
-                    //There will never be a time when the episode quality is less than what we have and we want it... ever.... I think.
-                    if (file.Quality > episode.Quality)
-                        return false;
-
-                    //Now we need to handle upgrades and actually pay attention to the Cutoff Value
-                    if (file.Quality < episode.Quality)
-                    {
-                        var series = _series.GetSeries(episode.SeriesId);
-                        var quality = _quality.Find(series.QualityProfileId);
-
-                        if (quality.Cutoff <= file.Quality)
-                        {
-                            //If the episodeFile is a Proper we don't need to download again
-                            if (file.Proper)
-                                return false;
-                        }
                     }
                 }
             }

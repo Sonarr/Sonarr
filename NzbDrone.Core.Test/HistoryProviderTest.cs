@@ -51,10 +51,9 @@ namespace NzbDrone.Core.Test
                              HistoryId = new int(),
                              Date = DateTime.Now,
                              IsProper = false,
-                             Quality = 1,
-                             Indexer = indexer,
-                             Episode = episode,
-                             EpisodeId = 1234
+                             Quality = QualityTypes.TV,
+                             IndexerName = indexer.IndexerName,
+                             EpisodeId = episode.EpisodeId
                          });
 
             var repo = new Mock<IRepository>();
@@ -105,10 +104,9 @@ namespace NzbDrone.Core.Test
                 HistoryId = new int(),
                 Date = DateTime.Now,
                 IsProper = false,
-                Quality = 1,
-                Indexer = indexer,
-                Episode = episode,
-                EpisodeId = 1234
+                Quality = QualityTypes.TV,
+                IndexerName = indexer.IndexerName,
+                EpisodeId = episode.EpisodeId
             });
 
             var proper = false;
@@ -162,10 +160,9 @@ namespace NzbDrone.Core.Test
                 HistoryId = new int(),
                 Date = DateTime.Now,
                 IsProper = false,
-                Quality = 1,
-                Indexer = indexer,
-                Episode = episode,
-                EpisodeId = 1234
+                Quality = QualityTypes.TV,
+                IndexerName = indexer.IndexerName,
+                EpisodeId = episode.EpisodeId
             });
 
             var repo = new Mock<IRepository>();

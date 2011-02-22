@@ -164,6 +164,8 @@
     <Compile Include="Instrumentation\NlogWriter.cs" />
     <Compile Include="Model\EpisodeParseResult.cs" />
     <Compile Include="Model\EpisodeModel.cs" />
+    <Compile Include="Model\EpisodeRenameModel.cs" />
+    <Compile Include="Model\EpisodeStatusType.cs" />
     <Compile Include="Model\FeedInfoModel.cs" />
     <Compile Include="Model\NzbInfoModel.cs" />
     <Compile Include="Model\NzbSiteModel.cs" />
@@ -173,10 +175,12 @@
     <Compile Include="Providers\IIndexerProvider.cs" />
     <Compile Include="Providers\IndexerProvider.cs" />
     <Compile Include="Providers\IQualityProvider.cs" />
+    <Compile Include="Providers\IRenameProvider.cs" />
     <Compile Include="Providers\IRssSyncProvider.cs" />
     <Compile Include="Providers\IRssProvider.cs" />
     <Compile Include="Providers\ITimerProvider.cs" />
     <Compile Include="Providers\QualityProvider.cs" />
+    <Compile Include="Providers\RenameProvider.cs" />
     <Compile Include="Providers\RssSyncProvider.cs" />
     <Compile Include="Providers\RssProvider.cs" />
     <Compile Include="Providers\TimerProvider.cs" />

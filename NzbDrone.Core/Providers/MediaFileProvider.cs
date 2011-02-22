@@ -51,16 +51,19 @@ namespace NzbDrone.Core.Providers
             {
                 var episodesInFile = Parser.ParseEpisodeInfo(filePath);
 
+                var episodes = new List<Episode>();
                 foreach (var parsedEpisode in episodesInFile)
                 {
                     EpisodeParseResult closureEpisode = parsedEpisode;
-                    var episode = _episodeProvider.GetEpisode(series.SeriesId, closureEpisode.SeasonNumber, closureEpisode.EpisodeNumber);
+                    var episode = _episodeProvider.GetEpisode(series.SeriesId, closureEpisode.SeasonNumber,
+                                                              closureEpisode.EpisodeNumber);
+                    episodes.Add(episode);
                     if (episode != null)
                     {
                         var episodeFile = new EpisodeFile();
                         episodeFile.DateAdded = DateTime.Now;
                         episodeFile.SeriesId = series.SeriesId;
-                        episodeFile.EpisodeId = episode.EpisodeId;
+                        episodeFile.Episodes = episodes;
                         episodeFile.Path = Parser.NormalizePath(filePath);
                         episodeFile.Size = _diskProvider.GetSize(filePath);
                         episodeFile.Quality = Parser.ParseQuality(filePath);

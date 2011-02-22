@@ -66,7 +66,7 @@ namespace NzbDrone.Core.Test
             Assert.IsNotNull(result);
             repository.Verify(r => r.Add<EpisodeFile>(result), Times.Once());
 
-            Assert.AreEqual(fakeEpisode.EpisodeId, result.EpisodeId);
+            Assert.AreEqual(fakeEpisode, result.Episodes[0]);
             Assert.AreEqual(fakeEpisode.SeriesId, result.SeriesId);
             Assert.AreEqual(QualityTypes.DVD, result.Quality);
             Assert.AreEqual(Parser.NormalizePath(fileName), result.Path);
