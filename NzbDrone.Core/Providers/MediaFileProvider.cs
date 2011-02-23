@@ -51,37 +51,49 @@ namespace NzbDrone.Core.Providers
             {
                 var episodesInFile = Parser.ParseEpisodeInfo(filePath);
 
+                //Stores the list of episodes to add to the EpisodeFile
                 var episodes = new List<Episode>();
+
                 foreach (var parsedEpisode in episodesInFile)
                 {
                     EpisodeParseResult closureEpisode = parsedEpisode;
                     var episode = _episodeProvider.GetEpisode(series.SeriesId, closureEpisode.SeasonNumber,
                                                               closureEpisode.EpisodeNumber);
-                    episodes.Add(episode);
                     if (episode != null)
                     {
-                        var episodeFile = new EpisodeFile();
-                        episodeFile.DateAdded = DateTime.Now;
-                        episodeFile.SeriesId = series.SeriesId;
-                        episodeFile.Episodes = episodes;
-                        episodeFile.Path = Parser.NormalizePath(filePath);
-                        episodeFile.Size = _diskProvider.GetSize(filePath);
-                        episodeFile.Quality = Parser.ParseQuality(filePath);
-                        episodeFile.Proper = Parser.ParseProper(filePath);
-                        _repository.Add(episodeFile);
-                        Logger.Trace("File {0}:{1} attached to '{2}'", episodeFile.FileId, filePath, episode.EpisodeId);
-
-                        return episodeFile;
+                        episodes.Add(episode);
                     }
 
-                    Logger.Warn("Unable to find Series:{0} Season:{1} Episode:{2} in the database. File:{3}", series.Title, closureEpisode.SeasonNumber, closureEpisode.EpisodeNumber, filePath);
+                    else
+                        Logger.Warn("Unable to find Series:{0} Season:{1} Episode:{2} in the database. File:{3}", series.Title, closureEpisode.SeasonNumber, closureEpisode.EpisodeNumber, filePath);
                 }
-            }
-            else
-            {
-                Logger.Trace("[{0}] already exists in the database. skipping.", filePath);
+
+                //Return null if no Episodes exist in the DB for the parsed episodes from file
+                if (episodes.Count < 1)
+                    return null;
+
+                var episodeFile = new EpisodeFile();
+                episodeFile.DateAdded = DateTime.Now;
+                episodeFile.SeriesId = series.SeriesId;
+                episodeFile.Episodes = episodes;
+                episodeFile.Path = Parser.NormalizePath(filePath);
+                episodeFile.Size = _diskProvider.GetSize(filePath);
+                episodeFile.Quality = Parser.ParseQuality(filePath);
+                episodeFile.Proper = Parser.ParseProper(filePath);
+                _repository.Add(episodeFile);
+
+                //This is for logging, a little ugly...
+                string episodeList = String.Empty;
+                foreach (var ep in episodes)
+                {
+                    episodeList += String.Format(", {0}", ep.EpisodeId).Trim(' ', ',');
+                }
+                Logger.Trace("File {0}:{1} attached to episode(s): '{2}'", episodeFile.FileId, filePath, episodeList);
+
+                return episodeFile;
             }
 
+            Logger.Trace("[{0}] already exists in the database. skipping.", filePath);
             return null;
         }
 
