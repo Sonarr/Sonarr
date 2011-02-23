@@ -19,16 +19,20 @@ namespace NzbDrone.Web.Controllers
         private readonly ISyncProvider _syncProvider;
         private readonly IRssSyncProvider _rssSyncProvider;
         private readonly IQualityProvider _qualityProvider;
+        private readonly IMediaFileProvider _mediaFileProvider;
         //
         // GET: /Series/
 
-        public SeriesController(ISyncProvider syncProvider, ISeriesProvider seriesProvider, IEpisodeProvider episodeProvider, IRssSyncProvider rssSyncProvider, IQualityProvider qualityProvider)
+        public SeriesController(ISyncProvider syncProvider, ISeriesProvider seriesProvider,
+            IEpisodeProvider episodeProvider, IRssSyncProvider rssSyncProvider,
+            IQualityProvider qualityProvider, IMediaFileProvider mediaFileProvider)
         {
             _seriesProvider = seriesProvider;
             _episodeProvider = episodeProvider;
             _syncProvider = syncProvider;
             _rssSyncProvider = rssSyncProvider;
             _qualityProvider = qualityProvider;
+            _mediaFileProvider = mediaFileProvider;
         }
 
         public ActionResult Index()
@@ -188,6 +192,15 @@ namespace NzbDrone.Web.Controllers
             _seriesProvider.DeleteSeries(seriesId);
 
             return RedirectToAction("Index", "Series");
+        }
+
+        public ActionResult SyncEpisodesOnDisk(int seriesId)
+        {
+            //Syncs the episodes on disk for the specified series
+            var series = _seriesProvider.GetSeries(seriesId);
+            _mediaFileProvider.Scan(series);
+
+            return RedirectToAction("Details", new { seriesId });
         }
     }
 }

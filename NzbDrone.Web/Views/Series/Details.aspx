@@ -33,10 +33,11 @@
         <div class="display-field">
             <%: Model.Path %></div>
     </fieldset>
+
     <% 
         //Todo: This breaks when using SQLServer... thoughts?
         //Normal Seasons
-        foreach (var season in Model.Seasons.Where(s => s.SeasonNumber > 0))
+        foreach (var season in Model.Seasons.Where(s => s.SeasonNumber > 0).Reverse())
         {
     %>
     <br />
@@ -55,7 +56,7 @@
                           })
              //.DetailView(detailView => detailView.Template(e => Html.RenderPartial("EpisodeDetail", e)))
              .DetailView(detailView => detailView.ClientTemplate("<div><#= Overview #></div>"))
-             .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.EpisodeNumber)).Enabled(false))
+             .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.EpisodeNumber).Descending()).Enabled(true))
                           .Footer(false)
                           .DataBinding(d => d.Ajax().Select("_AjaxSeasonGrid", "Series", new RouteValueDictionary { { "seasonId", season1.SeasonId.ToString() } }))
             //.EnableCustomBinding(true)
@@ -89,7 +90,8 @@ Html.Telerik().Grid(specialSeasons.Episodes).Name("seasons_specials")
     %>
     <p>
         <%: Html.ActionLink("Edit", "Edit", new {seriesId = Model.SeriesId}) %> | 
-        <%: Html.ActionLink("Back to Series", "Index") %>
+        <%: Html.ActionLink("Back to Series List", "Index") %> | 
+        <%: Html.ActionLink("Sync Episodes on Disk", "SyncEpisodesOnDisk", new {seriesId = Model.SeriesId}) %>
     </p>
 </asp:Content>
 <asp:Content ContentPlaceHolderID="Scripts" runat="server">

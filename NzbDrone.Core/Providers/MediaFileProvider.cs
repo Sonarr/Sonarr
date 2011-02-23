@@ -75,17 +75,18 @@ namespace NzbDrone.Core.Providers
                 var episodeFile = new EpisodeFile();
                 episodeFile.DateAdded = DateTime.Now;
                 episodeFile.SeriesId = series.SeriesId;
-                episodeFile.Episodes = episodes;
                 episodeFile.Path = Parser.NormalizePath(filePath);
                 episodeFile.Size = _diskProvider.GetSize(filePath);
                 episodeFile.Quality = Parser.ParseQuality(filePath);
                 episodeFile.Proper = Parser.ParseProper(filePath);
-                _repository.Add(episodeFile);
+                var fileId = (int)_repository.Add(episodeFile);
 
-                //This is for logging, a little ugly...
+                //This is for logging + updating the episodes that are linked to this EpisodeFile
                 string episodeList = String.Empty;
                 foreach (var ep in episodes)
                 {
+                    ep.FileId = fileId;
+                    _episodeProvider.UpdateEpisode(ep);
                     episodeList += String.Format(", {0}", ep.EpisodeId).Trim(' ', ',');
                 }
                 Logger.Trace("File {0}:{1} attached to episode(s): '{2}'", episodeFile.FileId, filePath, episodeList);

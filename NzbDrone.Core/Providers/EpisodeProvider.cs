@@ -263,6 +263,11 @@ namespace NzbDrone.Core.Providers
             _sonicRepo.Delete<Episode>(episodeId);
         }
 
+        public void UpdateEpisode(Episode episode)
+        {
+            _sonicRepo.Update(episode);
+        }
+
         private bool IsSeasonIgnored(EpisodeModel episode)
         {
             //Check if this Season is ignored

@@ -17,6 +17,6 @@ namespace NzbDrone.Core.Repository
         public DateTime DateAdded { get; set; }
 
         [SubSonicToManyRelation]
-        public virtual List<Episode> Episodes { get; set; }
+        public virtual List<Episode> Episodes { get; private set; }
     }
 }
