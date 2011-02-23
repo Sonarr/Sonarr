@@ -6,6 +6,17 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
     <%: Model.Title %>
 </asp:Content>
+
+<asp:Content ID="Menu" ContentPlaceHolderID="ActionMenu" runat="server">
+    <%
+        Html.Telerik().Menu().Name("SeriesMenu").Items(items => { items.Add().Text("Edit").Action("Edit", "Series", new {seriesId = Model.SeriesId});
+                                                                    items.Add().Text("Back to Series List").Action("Index", "Series");
+                                                                    items.Add().Text("Scan For Episodes on Disk").Action("SyncEpisodesOnDisk", "Series", new { seriesId = Model.SeriesId });
+                                                                    items.Add().Text("Rename Series").Action("RenameSeries", "Series", new { seriesId = Model.SeriesId });
+                                                                    }).Render();
+    %>
+</asp:Content>
+
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <fieldset>
         <div class="display-label">
@@ -61,6 +72,7 @@
                           .DataBinding(d => d.Ajax().Select("_AjaxSeasonGrid", "Series", new RouteValueDictionary { { "seasonId", season1.SeasonId.ToString() } }))
             //.EnableCustomBinding(true)
             //.ClientEvents(e => e.OnDetailViewExpand("episodeDetailExpanded")) //Causes issues displaying the episode detail multiple times...
+            .ToolBar(c => c.Custom().Text("Rename Season").Action("RenameSeason", "Series", new { seasonId = season1.SeasonId }).ButtonType(GridButtonType.Text))
             .Render();
         }
 
@@ -88,11 +100,6 @@ Html.Telerik().Grid(specialSeasons.Episodes).Name("seasons_specials")
                  .Render();
         }
     %>
-    <p>
-        <%: Html.ActionLink("Edit", "Edit", new {seriesId = Model.SeriesId}) %> | 
-        <%: Html.ActionLink("Back to Series List", "Index") %> | 
-        <%: Html.ActionLink("Sync Episodes on Disk", "SyncEpisodesOnDisk", new {seriesId = Model.SeriesId}) %>
-    </p>
 </asp:Content>
 <asp:Content ContentPlaceHolderID="Scripts" runat="server">
     <script type="text/javascript">
