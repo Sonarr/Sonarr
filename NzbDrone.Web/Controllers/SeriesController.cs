@@ -20,12 +20,15 @@ namespace NzbDrone.Web.Controllers
         private readonly IRssSyncProvider _rssSyncProvider;
         private readonly IQualityProvider _qualityProvider;
         private readonly IMediaFileProvider _mediaFileProvider;
+        private readonly IRenameProvider _renameProvider;
+
         //
         // GET: /Series/
 
         public SeriesController(ISyncProvider syncProvider, ISeriesProvider seriesProvider,
             IEpisodeProvider episodeProvider, IRssSyncProvider rssSyncProvider,
-            IQualityProvider qualityProvider, IMediaFileProvider mediaFileProvider)
+            IQualityProvider qualityProvider, IMediaFileProvider mediaFileProvider,
+            IRenameProvider renameProvider)
         {
             _seriesProvider = seriesProvider;
             _episodeProvider = episodeProvider;
@@ -33,6 +36,7 @@ namespace NzbDrone.Web.Controllers
             _rssSyncProvider = rssSyncProvider;
             _qualityProvider = qualityProvider;
             _mediaFileProvider = mediaFileProvider;
+            _renameProvider = renameProvider;
         }
 
         public ActionResult Index()
@@ -201,6 +205,32 @@ namespace NzbDrone.Web.Controllers
             _mediaFileProvider.Scan(series);
 
             return RedirectToAction("Details", new { seriesId });
+        }
+
+        public ActionResult RenameAll()
+        {
+            _renameProvider.RenameAll();
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult RenameSeries(int seriesId)
+        {
+            _renameProvider.RenameSeries(seriesId);
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult RenameSeason(int seasonId)
+        {
+            //Todo: Stay of Series Detail... AJAX?
+            _renameProvider.RenameSeason(seasonId);
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult RenameEpisode(int episodeId)
+        {
+            //Todo: Stay of Series Detail... AJAX?
+            _renameProvider.RenameEpisode(episodeId);
+            return RedirectToAction("Index");
         }
     }
 }

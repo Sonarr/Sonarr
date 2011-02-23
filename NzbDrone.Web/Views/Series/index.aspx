@@ -10,6 +10,7 @@
         Html.Telerik().Menu().Name("telerikGrid").Items(items => { items.Add().Text("View Unmapped Folders").Action("Unmapped", "Series"); })
                                                 .Items(items => items.Add().Text("Sync With Disk").Action("Sync", "Series"))
                                                 .Items(items => items.Add().Text("Start RSS Sync").Action("RssSync", "Series"))
+                                                .Items(items => items.Add().Text("Rename All").Action("RenameAll", "Series"))
                                                 .Render();
     %>
 </asp:Content>
