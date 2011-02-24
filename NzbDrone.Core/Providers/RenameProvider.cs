@@ -42,21 +42,15 @@ namespace NzbDrone.Core.Providers
 
             var seasonFolder = _configProvider.GetValue("SeasonFolder", "Season %s", true);
 
-            foreach (var series in _seriesProvider.GetAllSeries())
+            foreach (var episodeFile in _mediaFileProvider.GetEpisodeFiles())
             {
-                foreach (var episode in series.Episodes)
-                {
-                    var episodeRenameModel = new EpisodeRenameModel();
-                    episodeRenameModel.SeriesName = series.Title;
-                    episodeRenameModel.SeasonNumber = episode.SeasonNumber;
-                    episodeRenameModel.EpisodeNumber = episode.EpisodeNumber;
-                    episodeRenameModel.EpisodeName = episode.Title;
-                    episodeRenameModel.Folder = series.Path + Path.DirectorySeparatorChar + seasonFolder;
-                    episodeRenameModel.EpisodeFile = episode.EpisodeFile;
-
-                    _epsToRename.Add(episodeRenameModel);
-                    StartRename();
-                }
+                var series = _seriesProvider.GetSeries(episodeFile.SeriesId);
+                var erm = new EpisodeRenameModel();
+                erm.SeriesName = series.Title;
+                erm.Folder = series.Path + Path.DirectorySeparatorChar + seasonFolder;
+                erm.EpisodeFile = episodeFile;
+                _epsToRename.Add(erm);
+                StartRename();
             }
         }
 
@@ -67,17 +61,13 @@ namespace NzbDrone.Core.Providers
             var series = _seriesProvider.GetSeries(seriesId);
             var seasonFolder = _configProvider.GetValue("SeasonFolder", "Season %s", true);
 
-            foreach (var episode in series.Episodes)
+            foreach (var episodeFile in _mediaFileProvider.GetEpisodeFiles().Where(s => s.SeriesId == seriesId))
             {
-                var episodeRenameModel = new EpisodeRenameModel();
-                episodeRenameModel.SeriesName = series.Title;
-                episodeRenameModel.SeasonNumber = episode.SeasonNumber;
-                episodeRenameModel.EpisodeNumber = episode.EpisodeNumber;
-                episodeRenameModel.EpisodeName = episode.Title;
-                episodeRenameModel.Folder = series.Path + Path.DirectorySeparatorChar + seasonFolder;
-                episodeRenameModel.EpisodeFile = episode.EpisodeFile;
-
-                _epsToRename.Add(episodeRenameModel);
+                var erm = new EpisodeRenameModel();
+                erm.SeriesName = series.Title;
+                erm.Folder = series.Path + Path.DirectorySeparatorChar + seasonFolder;
+                erm.EpisodeFile = episodeFile;
+                _epsToRename.Add(erm);
                 StartRename();
             }
         }
@@ -89,36 +79,31 @@ namespace NzbDrone.Core.Providers
             var series = _seriesProvider.GetSeries(season.SeriesId);
             var seasonFolder = _configProvider.GetValue("SeasonFolder", "Season %s", true);
 
-            foreach (var episode in season.Episodes)
+            foreach (var episodeFile in _mediaFileProvider.GetEpisodeFiles().Where(s => s.Episodes[0].SeasonId == seasonId))
             {
-                var episodeRenameModel = new EpisodeRenameModel();
-                episodeRenameModel.SeriesName = series.Title;
-                episodeRenameModel.SeasonNumber = episode.SeasonNumber;
-                episodeRenameModel.EpisodeNumber = episode.EpisodeNumber;
-                episodeRenameModel.EpisodeName = episode.Title;
-                episodeRenameModel.Folder = series.Path + Path.DirectorySeparatorChar + seasonFolder;
-                episodeRenameModel.EpisodeFile = episode.EpisodeFile;
-
-                _epsToRename.Add(episodeRenameModel);
+                var erm = new EpisodeRenameModel();
+                erm.SeriesName = series.Title;
+                erm.Folder = series.Path + Path.DirectorySeparatorChar + seasonFolder;
+                erm.EpisodeFile = episodeFile;
+                _epsToRename.Add(erm);
                 StartRename();
             }
         }
 
         public void RenameEpisode(int episodeId)
         {
+            //This will properly rename multi-episode files if asked to rename either of the episode
             var episode = _episodeProvider.GetEpisode(episodeId);
             var series = _seriesProvider.GetSeries(episode.SeriesId);
             var seasonFolder = _configProvider.GetValue("SeasonFolder", "Season %s", true);
 
-            var episodeRenameModel = new EpisodeRenameModel();
-            episodeRenameModel.SeriesName = series.Title;
-            episodeRenameModel.SeasonNumber = episode.SeasonNumber;
-            episodeRenameModel.EpisodeNumber = episode.EpisodeNumber;
-            episodeRenameModel.EpisodeName = episode.Title;
-            episodeRenameModel.Folder = series.Path + Path.DirectorySeparatorChar + seasonFolder;
-            episodeRenameModel.EpisodeFile = episode.EpisodeFile;
+            var episodeFile = _mediaFileProvider.GetEpisodeFiles().Where(s => s.Episodes.Contains(episode)).FirstOrDefault();
 
-            _epsToRename.Add(episodeRenameModel);
+            var erm = new EpisodeRenameModel();
+            erm.SeriesName = series.Title;
+            erm.Folder = series.Path + Path.DirectorySeparatorChar + seasonFolder;
+            erm.EpisodeFile = episodeFile;
+            _epsToRename.Add(erm);
             StartRename();
         }
 
@@ -178,13 +163,30 @@ namespace NzbDrone.Core.Providers
             }
         }
 
-        private string GetNewName(EpisodeRenameModel episodeRenameModel)
+        private string GetNewName(EpisodeRenameModel erm)
         {
             //Todo: Get the users preferred naming convention instead of hard-coding it
-            return String.Format("{0} - S{1:00}E{2:00} - {3}", episodeRenameModel.SeriesName,
-                                 episodeRenameModel.SeasonNumber, episodeRenameModel.EpisodeNumber,
-                                 episodeRenameModel.EpisodeName);
-            //var fileString = _configProvider.GetValue("")
+
+            if (erm.EpisodeFile.Episodes.Count == 1)
+            {
+                return String.Format("{0} - S{1:00}E{2:00} - {3}", erm.SeriesName,
+                                     erm.EpisodeFile.Episodes[0].SeasonNumber, erm.EpisodeFile.Episodes[0].EpisodeNumber,
+                                     erm.EpisodeFile.Episodes[0].Title);
+            }
+
+            var epNumberString = String.Empty;
+            var epNameString = String.Empty;
+
+            foreach (var episode in erm.EpisodeFile.Episodes)
+            {
+                epNumberString = epNumberString + String.Format("E{0:00}", episode.EpisodeNumber);
+                epNameString = epNameString + String.Format("+ {0}", episode.Title).Trim(' ', '+');
+            }
+
+            return String.Format("{0} - S{1:00}E{2} - {3}", erm.SeriesName, erm.EpisodeFile.Episodes[0].SeasonNumber,
+                                 epNumberString, epNameString);
         }
+
+
     }
 }
