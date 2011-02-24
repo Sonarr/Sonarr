@@ -21,7 +21,9 @@ namespace NzbDrone.Core.Providers
         private readonly IQualityProvider _quality;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public EpisodeProvider(IRepository sonicRepo, ISeriesProvider seriesProvider, ISeasonProvider seasonProvider, ITvDbProvider tvDbProvider, IHistoryProvider history, IQualityProvider quality)
+        public EpisodeProvider(IRepository sonicRepo, ISeriesProvider seriesProvider,
+            ISeasonProvider seasonProvider, ITvDbProvider tvDbProvider,
+            IHistoryProvider history, IQualityProvider quality)
         {
             _sonicRepo = sonicRepo;
             _series = seriesProvider;
@@ -94,7 +96,7 @@ namespace NzbDrone.Core.Providers
 
             episode.EpisodeId = dbEpisode.EpisodeId;
 
-            var file = _sonicRepo.Single<EpisodeFile>(c => c.FileId == dbEpisode.FileId);
+            var file = dbEpisode.EpisodeFile;
 
             if (file != null)
             {

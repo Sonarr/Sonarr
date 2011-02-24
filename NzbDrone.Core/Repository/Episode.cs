@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Repository
         [SubSonicPrimaryKey(false)]
         public virtual int EpisodeId { get; set; }
         public virtual int SeriesId { get; set; }
-        public virtual int FileId { get; set; }
+        public virtual int EpisodeFileId { get; set; }
         public int SeasonNumber { get; set; }
         public int EpisodeNumber { get; set; }
         public int SeasonId { get; set; }

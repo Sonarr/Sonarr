@@ -85,11 +85,11 @@ namespace NzbDrone.Core.Providers
                 string episodeList = String.Empty;
                 foreach (var ep in episodes)
                 {
-                    ep.FileId = fileId;
+                    ep.EpisodeFileId = fileId;
                     _episodeProvider.UpdateEpisode(ep);
                     episodeList += String.Format(", {0}", ep.EpisodeId).Trim(' ', ',');
                 }
-                Logger.Trace("File {0}:{1} attached to episode(s): '{2}'", episodeFile.FileId, filePath, episodeList);
+                Logger.Trace("File {0}:{1} attached to episode(s): '{2}'", episodeFile.EpisodeFileId, filePath, episodeList);
 
                 return episodeFile;
             }
@@ -146,6 +146,11 @@ namespace NzbDrone.Core.Providers
         public EpisodeFile GetEpisodeFile(int episodeFileId)
         {
             return _repository.Single<EpisodeFile>(episodeFileId);
+        }
+
+        public List<EpisodeFile> GetEpisodeFiles()
+        {
+            return _repository.All<EpisodeFile>().ToList();
         }
 
         private List<string> GetMediaFileList(string path)

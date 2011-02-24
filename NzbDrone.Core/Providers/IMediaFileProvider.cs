@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository;
 
@@ -17,5 +18,6 @@ namespace NzbDrone.Core.Providers
         void DeleteFromDisk(int fileId, string path);
         void Update(EpisodeFile episodeFile);
         EpisodeFile GetEpisodeFile(int episodeFileId);
+        List<EpisodeFile> GetEpisodeFiles();
     }
 }
