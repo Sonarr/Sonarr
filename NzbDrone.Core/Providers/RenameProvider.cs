@@ -139,27 +139,30 @@ namespace NzbDrone.Core.Providers
             }
         }
 
-        private void RenameFile(EpisodeRenameModel episodeRenameModel)
+        private void RenameFile(EpisodeRenameModel erm)
         {
             try
             {
                 //Update EpisodeFile if successful
-                Logger.Debug("Renaming Episode: {0}", Path.GetFileName(episodeRenameModel.EpisodeFile.Path));
-                var newName = GetNewName(episodeRenameModel);
-                var newFilename = episodeRenameModel.Folder + Path.DirectorySeparatorChar + newName;
+                Logger.Debug("Renaming Episode: {0}", Path.GetFileName(erm.EpisodeFile.Path));
+                var newName = GetNewName(erm);
+                var newFilename = erm.Folder + Path.DirectorySeparatorChar + newName;
 
-                if (!_diskProvider.FolderExists(episodeRenameModel.Folder))
-                    _diskProvider.CreateDirectory(episodeRenameModel.Folder);
+                if (!_diskProvider.FolderExists(erm.Folder))
+                    _diskProvider.CreateDirectory(erm.Folder);
 
-                _diskProvider.RenameFile(episodeRenameModel.EpisodeFile.Path, newFilename);
-                episodeRenameModel.EpisodeFile.Path = newFilename;
-                _mediaFileProvider.Update(episodeRenameModel.EpisodeFile);
+                if (erm.EpisodeFile.Path == newFilename)
+                    return;
+
+                _diskProvider.RenameFile(erm.EpisodeFile.Path, newFilename);
+                erm.EpisodeFile.Path = newFilename;
+                _mediaFileProvider.Update(erm.EpisodeFile);
 
             }
             catch (Exception ex)
             {
                 Logger.DebugException(ex.Message, ex);
-                Logger.Warn("Unable to Rename Episode: {0}", Path.GetFileName(episodeRenameModel.EpisodeFile.Path));
+                Logger.Warn("Unable to Rename Episode: {0}", Path.GetFileName(erm.EpisodeFile.Path));
             }
         }
 
@@ -186,7 +189,5 @@ namespace NzbDrone.Core.Providers
             return String.Format("{0} - S{1:00}E{2} - {3}", erm.SeriesName, erm.EpisodeFile.Episodes[0].SeasonNumber,
                                  epNumberString, epNameString);
         }
-
-
     }
 }
