@@ -13,6 +13,7 @@
                                                                     items.Add().Text("Back to Series List").Action("Index", "Series");
                                                                     items.Add().Text("Scan For Episodes on Disk").Action("SyncEpisodesOnDisk", "Series", new { seriesId = Model.SeriesId });
                                                                     items.Add().Text("Rename Series").Action("RenameSeries", "Series", new { seriesId = Model.SeriesId });
+                                                                    items.Add().Text("Re-Scan Files").Action("ReScanFiles", "Series", new { seriesId = Model.SeriesId });
                                                                     }).Render();
     %>
 </asp:Content>

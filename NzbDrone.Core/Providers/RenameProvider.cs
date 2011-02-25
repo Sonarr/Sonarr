@@ -40,14 +40,12 @@ namespace NzbDrone.Core.Providers
         {
             //Get a list of all episode files/episodes and rename them
 
-            var seasonFolder = _configProvider.GetValue("SeasonFolder", "Season %s", true);
-
             foreach (var episodeFile in _mediaFileProvider.GetEpisodeFiles())
             {
                 var series = _seriesProvider.GetSeries(episodeFile.SeriesId);
                 var erm = new EpisodeRenameModel();
                 erm.SeriesName = series.Title;
-                erm.Folder = series.Path + Path.DirectorySeparatorChar + seasonFolder;
+                erm.Folder = series.Path + Path.DirectorySeparatorChar + GetSeasonFolder(episodeFile.Episodes[0].SeasonNumber);
                 erm.EpisodeFile = episodeFile;
                 _epsToRename.Add(erm);
                 StartRename();
@@ -59,13 +57,12 @@ namespace NzbDrone.Core.Providers
             //Get a list of all applicable episode files/episodes and rename them
 
             var series = _seriesProvider.GetSeries(seriesId);
-            var seasonFolder = _configProvider.GetValue("SeasonFolder", "Season %s", true);
 
             foreach (var episodeFile in _mediaFileProvider.GetEpisodeFiles().Where(s => s.SeriesId == seriesId))
             {
                 var erm = new EpisodeRenameModel();
                 erm.SeriesName = series.Title;
-                erm.Folder = series.Path + Path.DirectorySeparatorChar + seasonFolder;
+                erm.Folder = series.Path + Path.DirectorySeparatorChar + GetSeasonFolder(episodeFile.Episodes[0].SeasonNumber);
                 erm.EpisodeFile = episodeFile;
                 _epsToRename.Add(erm);
                 StartRename();
@@ -77,13 +74,12 @@ namespace NzbDrone.Core.Providers
             //Get a list of all applicable episode files/episodes and rename them
             var season = _seasonProvider.GetSeason(seasonId);
             var series = _seriesProvider.GetSeries(season.SeriesId);
-            var seasonFolder = _configProvider.GetValue("SeasonFolder", "Season %s", true);
 
             foreach (var episodeFile in _mediaFileProvider.GetEpisodeFiles().Where(s => s.Episodes[0].SeasonId == seasonId))
             {
                 var erm = new EpisodeRenameModel();
                 erm.SeriesName = series.Title;
-                erm.Folder = series.Path + Path.DirectorySeparatorChar + seasonFolder;
+                erm.Folder = series.Path + Path.DirectorySeparatorChar + GetSeasonFolder(episodeFile.Episodes[0].SeasonNumber);
                 erm.EpisodeFile = episodeFile;
                 _epsToRename.Add(erm);
                 StartRename();
@@ -95,13 +91,12 @@ namespace NzbDrone.Core.Providers
             //This will properly rename multi-episode files if asked to rename either of the episode
             var episode = _episodeProvider.GetEpisode(episodeId);
             var series = _seriesProvider.GetSeries(episode.SeriesId);
-            var seasonFolder = _configProvider.GetValue("SeasonFolder", "Season %s", true);
 
             var episodeFile = _mediaFileProvider.GetEpisodeFiles().Where(s => s.Episodes.Contains(episode)).FirstOrDefault();
 
             var erm = new EpisodeRenameModel();
             erm.SeriesName = series.Title;
-            erm.Folder = series.Path + Path.DirectorySeparatorChar + seasonFolder;
+            erm.Folder = series.Path + Path.DirectorySeparatorChar + GetSeasonFolder(episodeFile.Episodes[0].SeasonNumber);
             erm.EpisodeFile = episodeFile;
             _epsToRename.Add(erm);
             StartRename();
@@ -146,7 +141,8 @@ namespace NzbDrone.Core.Providers
                 //Update EpisodeFile if successful
                 Logger.Debug("Renaming Episode: {0}", Path.GetFileName(erm.EpisodeFile.Path));
                 var newName = GetNewName(erm);
-                var newFilename = erm.Folder + Path.DirectorySeparatorChar + newName;
+                var ext = Path.GetExtension(erm.EpisodeFile.Path);
+                var newFilename = erm.Folder + Path.DirectorySeparatorChar + newName + ext;
 
                 if (!_diskProvider.FolderExists(erm.Folder))
                     _diskProvider.CreateDirectory(erm.Folder);
@@ -188,6 +184,13 @@ namespace NzbDrone.Core.Providers
 
             return String.Format("{0} - S{1:00}E{2} - {3}", erm.SeriesName, erm.EpisodeFile.Episodes[0].SeasonNumber,
                                  epNumberString, epNameString);
+        }
+
+        private string GetSeasonFolder(int seasonNumber)
+        {
+            return
+                _configProvider.GetValue("SeasonFolder", "Season %s", true).Replace("%s", seasonNumber.ToString()).
+                    Replace("%0s", seasonNumber.ToString("00"));
         }
     }
 }

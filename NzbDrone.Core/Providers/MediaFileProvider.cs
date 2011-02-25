@@ -109,7 +109,7 @@ namespace NzbDrone.Core.Providers
                 if (!_diskProvider.FileExists(episodeFile.Path))
                 {
                     Logger.Trace("File {0} no longer exists on disk. removing from database.", episodeFile.Path);
-                    _repository.Delete<EpisodeFile>(episodeFile);
+                    _repository.Delete<EpisodeFile>(episodeFile.EpisodeFileId);
                 }
             }
         }

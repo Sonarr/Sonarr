@@ -218,7 +218,7 @@ namespace NzbDrone.Web.Controllers
         public ActionResult RenameSeries(int seriesId)
         {
             _renameProvider.RenameSeries(seriesId);
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", new { seriesId });
         }
 
         public ActionResult RenameSeason(int seasonId)
@@ -233,6 +233,15 @@ namespace NzbDrone.Web.Controllers
             //Todo: Stay of Series Detail... AJAX?
             _renameProvider.RenameEpisode(episodeId);
             return RedirectToAction("Index");
+        }
+
+        public ActionResult ReScanFiles(int seriesId)
+        {
+            var epFiles = _mediaFileProvider.GetEpisodeFiles().Where(s => s.SeriesId == seriesId).ToList();
+            _mediaFileProvider.CleanUp(epFiles);
+            _mediaFileProvider.Scan(_seriesProvider.GetSeries(seriesId));
+
+            return RedirectToAction("Details", "Series", new { seriesId });
         }
 
         //Local Helpers
