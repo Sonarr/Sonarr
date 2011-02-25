@@ -111,6 +111,11 @@ namespace NzbDrone.Core.Providers
             repoSeries.CleanTitle = Parser.NormalizeTitle(series.SeriesName);
             repoSeries.Monitored = true; //New shows should be monitored
             repoSeries.QualityProfileId = Convert.ToInt32(_config.GetValue("DefaultQualityProfile", "1", true));
+            repoSeries.SeasonFolder = true;
+
+            if (!Convert.ToBoolean(_config.GetValue("SeasonFolder", true, true)))
+                repoSeries.SeasonFolder = false;
+
             _sonioRepo.Add(repoSeries);
         }
 

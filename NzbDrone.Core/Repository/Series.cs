@@ -32,6 +32,8 @@ namespace NzbDrone.Core.Repository
 
         public int QualityProfileId { get; set; }
 
+        public bool SeasonFolder { get; set; }
+
         [SubSonicToOneRelation(ThisClassContainsJoinKey = true)]
         public virtual QualityProfile QualityProfile { get; private set; }
 
