@@ -10,22 +10,24 @@ namespace NzbDrone.Core.Providers
 {
     public class TimerProvider : ITimerProvider
     {
-        private IRssSyncProvider _rssSyncProvider;
-        private ISeriesProvider _seriesProvider;
-        private ISeasonProvider _seasonProvider;
-        private IEpisodeProvider _episodeProvider;
+        private readonly IRssSyncProvider _rssSyncProvider;
+        private readonly ISeriesProvider _seriesProvider;
+        private readonly ISeasonProvider _seasonProvider;
+        private readonly IEpisodeProvider _episodeProvider;
+        private readonly IMediaFileProvider _mediaFileProvider;
 
         private Timer _rssSyncTimer;
         private Timer _minuteTimer;
         private DateTime _rssSyncNextInterval;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public TimerProvider(IRssSyncProvider rssSyncProvider, ISeriesProvider seriesProvider, ISeasonProvider seasonProvider, IEpisodeProvider episodeProvider)
+        public TimerProvider(IRssSyncProvider rssSyncProvider, ISeriesProvider seriesProvider, ISeasonProvider seasonProvider, IEpisodeProvider episodeProvider, IMediaFileProvider mediaFileProvider)
         {
             _rssSyncProvider = rssSyncProvider;
             _seriesProvider = seriesProvider;
             _seasonProvider = seasonProvider;
             _episodeProvider = episodeProvider;
+            _mediaFileProvider = mediaFileProvider;
 
             _rssSyncTimer = new Timer();
             _minuteTimer = new Timer(60000);
@@ -114,6 +116,16 @@ namespace NzbDrone.Core.Providers
                 foreach (var series in _seriesProvider.GetAllSeries())
                 {
                     _episodeProvider.RefreshEpisodeInfo(series.SeriesId);
+                }
+            }
+
+            //Daily 00:00 (Midnight) - Cleanup (removed) EpisodeFiles + Scan for New EpisodeFiles
+            if (now.Hour == 0 && now.Minute == 0)
+            {
+                foreach (var series in _seriesProvider.GetAllSeries())
+                {
+                    _mediaFileProvider.CleanUp(series.EpisodeFiles);
+                    _mediaFileProvider.Scan(series);
                 }
             }
 

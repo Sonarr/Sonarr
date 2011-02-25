@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Repository
     {
         [SubSonicPrimaryKey]
         public virtual int EpisodeFileId { get; set; }
-        public int SeriesId { get; set; }
+        public virtual int SeriesId { get; set; }
         public string Path { get; set; }
         public QualityTypes Quality { get; set; }
         public bool Proper { get; set; }
@@ -18,5 +18,8 @@ namespace NzbDrone.Core.Repository
 
         [SubSonicToManyRelation]
         public virtual List<Episode> Episodes { get; private set; }
+
+        [SubSonicToOneRelation(ThisClassContainsJoinKey = true)]
+        public virtual Series Series { get; private set; }
     }
 }

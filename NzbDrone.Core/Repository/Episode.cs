@@ -12,9 +12,9 @@ namespace NzbDrone.Core.Repository
         public virtual int EpisodeId { get; set; }
         public virtual int SeriesId { get; set; }
         public virtual int EpisodeFileId { get; set; }
+        public virtual int SeasonId { get; set; }
         public int SeasonNumber { get; set; }
         public int EpisodeNumber { get; set; }
-        public int SeasonId { get; set; }
         public string Title { get; set; }
         public DateTime AirDate { get; set; }
         [SubSonicLongString]

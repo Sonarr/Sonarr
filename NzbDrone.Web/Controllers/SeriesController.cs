@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Web;
@@ -81,7 +82,8 @@ namespace NzbDrone.Web.Controllers
                                                                                          SeasonNumber = c.SeasonNumber,
                                                                                          Title = c.Title,
                                                                                          Overview = c.Overview,
-                                                                                         AirDate = c.AirDate
+                                                                                         AirDate = c.AirDate,
+                                                                                         Path = GetEpisodePath(c.EpisodeFile)
                                                                                      });
             return View(new GridModel(episodes));
         }
@@ -231,6 +233,16 @@ namespace NzbDrone.Web.Controllers
             //Todo: Stay of Series Detail... AJAX?
             _renameProvider.RenameEpisode(episodeId);
             return RedirectToAction("Index");
+        }
+
+        //Local Helpers
+        private string GetEpisodePath(EpisodeFile file)
+        {
+            if (file == null)
+                return String.Empty;
+
+            //Return the path relative to the Series' Folder
+            return file.Path.Replace(file.Series.Path, "").Trim(Path.DirectorySeparatorChar);
         }
     }
 }

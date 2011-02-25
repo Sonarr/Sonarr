@@ -14,6 +14,7 @@ namespace NzbDrone.Core.Providers
 
         EpisodeFile ImportFile(Series series, string filePath);
         string GenerateEpisodePath(EpisodeModel episode);
+        void CleanUp(List<EpisodeFile> files);
         void DeleteFromDb(int fileId);
         void DeleteFromDisk(int fileId, string path);
         void Update(EpisodeFile episodeFile);

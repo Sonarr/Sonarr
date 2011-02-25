@@ -64,6 +64,7 @@
                               columns.Bound(c => c.EpisodeNumber).Width(0).Title("Episode");
                               columns.Bound(c => c.Title).Title("Title");
                               columns.Bound(c => c.AirDate).Format("{0:d}").Width(0);
+                              columns.Bound(c => c.Path);
                           })
              //.DetailView(detailView => detailView.Template(e => Html.RenderPartial("EpisodeDetail", e)))
              .DetailView(detailView => detailView.ClientTemplate("<div><#= Overview #></div>"))

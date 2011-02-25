@@ -132,7 +132,7 @@ namespace NzbDrone.Core.Providers
             //Can't use providers because episode provider needs series provider - Cyclic Dependency Injection, this will work
 
             Logger.Debug("Deleting EpisodeFiles from DB for Series: {0}", series.SeriesId);
-            _sonioRepo.DeleteMany(series.Files);
+            _sonioRepo.DeleteMany(series.EpisodeFiles);
 
             Logger.Debug("Deleting Episodes from DB for Series: {0}", series.SeriesId);
             _sonioRepo.DeleteMany(series.Episodes);

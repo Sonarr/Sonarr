@@ -42,6 +42,6 @@ namespace NzbDrone.Core.Repository
         public virtual List<Episode> Episodes { get; private set; }
 
         [SubSonicToManyRelation]
-        public virtual List<EpisodeFile> Files { get; private set; }
+        public virtual List<EpisodeFile> EpisodeFiles { get; private set; }
     }
 }
