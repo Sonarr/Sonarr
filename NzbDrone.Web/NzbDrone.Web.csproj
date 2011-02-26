@@ -86,6 +86,7 @@
     <Compile Include="Helpers\IsCurrentActionHelper.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\DownloadSettingsModel.cs" />
+    <Compile Include="Models\EpisodeSortingModel.cs" />
     <Compile Include="Models\IndexerSettingsModel.cs" />
     <Compile Include="Models\MappingModel.cs" />
     <Compile Include="Models\EpisodeModel.cs" />
@@ -272,6 +273,7 @@
     <Content Include="Views\Series\index.aspx" />
     <Content Include="Views\Series\Unmapped.aspx" />
     <Content Include="Views\Settings\Downloads.ascx" />
+    <Content Include="Views\Settings\EpisodeSorting.ascx" />
     <Content Include="Views\Settings\General.ascx" />
     <Content Include="Views\Settings\Index.aspx" />
     <Content Include="Views\Settings\Indexers.ascx" />

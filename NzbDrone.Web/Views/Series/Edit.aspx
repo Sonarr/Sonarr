@@ -57,6 +57,14 @@
                 <%: Html.CheckBoxFor(model => model.Monitored) %>
                 <%: Html.ValidationMessageFor(model => model.Monitored) %>
             </div>
+
+            <div class="editor-label">
+                <%: Html.LabelFor(model => model.SeasonFolder) %>
+            </div>
+            <div class="editor-field">
+                <%: Html.CheckBoxFor(model => model.SeasonFolder)%>
+                <%: Html.ValidationMessageFor(model => model.SeasonFolder)%>
+            </div>
             
             <div class="editor-label">
                 <%: Html.LabelFor(model => model.QualityProfileId) %>

@@ -156,6 +156,7 @@
     <Reference Include="UPnP, Version=1.0.3932.37442, Culture=neutral, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EpisodeSortingHelper.cs" />
     <Compile Include="Instrumentation\ILogProvider.cs" />
     <Compile Include="Instrumentation\LogLevel.cs" />
     <Compile Include="Instrumentation\LogProvider.cs" />
@@ -165,6 +166,7 @@
     <Compile Include="Model\EpisodeParseResult.cs" />
     <Compile Include="Model\EpisodeModel.cs" />
     <Compile Include="Model\EpisodeRenameModel.cs" />
+    <Compile Include="Model\EpisodeSortingType.cs" />
     <Compile Include="Model\EpisodeStatusType.cs" />
     <Compile Include="Model\FeedInfoModel.cs" />
     <Compile Include="Model\NzbInfoModel.cs" />

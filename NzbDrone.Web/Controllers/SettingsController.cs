@@ -5,6 +5,7 @@ using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using NLog;
+using NzbDrone.Core;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository.Quality;
@@ -116,6 +117,30 @@ namespace NzbDrone.Web.Controllers
                                          DefaultQualityProfileId = defaultQualityQualityProfileId,
                                          SelectList = selectList
                                      };
+
+            return View("Index", model);
+        }
+
+        public ActionResult EpisodeSorting()
+        {
+            ViewData["viewName"] = "EpisodeSorting";
+
+            var model = new EpisodeSortingModel();
+
+            model.ShowName = Convert.ToBoolean(_configProvider.GetValue("Sorting_ShowName", true, true));
+            model.EpisodeName = Convert.ToBoolean(_configProvider.GetValue("Sorting_EpisodeName", true, true));
+            model.ReplaceSpaces = Convert.ToBoolean(_configProvider.GetValue("Sorting_ReplaceSpaces", false, true));
+            model.AppendQuality = Convert.ToBoolean(_configProvider.GetValue("Sorting_AppendQuality", false, true));
+            model.UseAirByDate = Convert.ToBoolean(_configProvider.GetValue("Sorting_UseAirByDate", true, true));
+            model.SeasonFolders = Convert.ToBoolean(_configProvider.GetValue("Sorting_SeasonFolder", true, true));
+            model.SeasonFolderFormat = _configProvider.GetValue("Sorting_SeasonFolderFormat", "Season %s", true);
+            model.SeparatorStyle = Convert.ToInt32(_configProvider.GetValue("Sorting_SeparatorStyle", 0, true));
+            model.NumberStyle = Convert.ToInt32(_configProvider.GetValue("Sorting_NumberStyle", 2, true));
+            model.MultiEpisodeStyle = Convert.ToInt32(_configProvider.GetValue("Sorting_MultiEpisodeStyle", 0, true));
+
+            model.SeparatorStyles = new SelectList(EpisodeSortingHelper.GetSeparatorStyles(), "Id", "Name");
+            model.NumberStyles = new SelectList(EpisodeSortingHelper.GetNumberStyles(), "Id", "Name");
+            model.MultiEpisodeStyles = new SelectList(EpisodeSortingHelper.GetMultiEpisodeStyles(), "Id", "Name");
 
             return View("Index", model);
         }
@@ -245,6 +270,28 @@ namespace NzbDrone.Web.Controllers
 
                     return Content(_settingsSaved);
                 }
+            }
+
+            return Content(_settingsFailed);
+        }
+
+        [HttpPost]
+        public ActionResult SaveEpisodeSorting(EpisodeSortingModel data)
+        {
+            if (ModelState.IsValid)
+            {
+                _configProvider.SetValue("Sorting_ShowName", data.ShowName.ToString());
+                _configProvider.SetValue("Sorting_EpisodeName", data.EpisodeName.ToString());
+                _configProvider.SetValue("Sorting_ReplaceSpaces", data.ReplaceSpaces.ToString());
+                _configProvider.SetValue("Sorting_AppendQuality", data.AppendQuality.ToString());
+                _configProvider.SetValue("Sorting_UseAirByDate", data.UseAirByDate.ToString());
+                _configProvider.SetValue("Sorting_SeasonFolder", data.SeasonFolders.ToString());
+                _configProvider.SetValue("Sorting_SeasonFolderFormat", data.SeasonFolderFormat);
+                _configProvider.SetValue("Sorting_SeparatorStyle", data.SeparatorStyle.ToString());
+                _configProvider.SetValue("Sorting_NumberStyle", data.NumberStyle.ToString());
+                _configProvider.SetValue("Sorting_MultiEpisodeStyle", data.MultiEpisodeStyle.ToString());
+
+                return Content(_settingsSaved);
             }
 
             return Content(_settingsFailed);

@@ -208,7 +208,7 @@ namespace NzbDrone.Core.Providers
         private string GetSeasonFolder(int seasonNumber)
         {
             return
-                _configProvider.GetValue("SeasonFolder", "Season %s", true).Replace("%s", seasonNumber.ToString()).
+                _configProvider.GetValue("Sorting_SeasonFolderFormat", "Season %s", true).Replace("%s", seasonNumber.ToString()).
                     Replace("%0s", seasonNumber.ToString("00"));
         }
     }

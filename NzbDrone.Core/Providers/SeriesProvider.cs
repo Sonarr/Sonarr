@@ -113,7 +113,7 @@ namespace NzbDrone.Core.Providers
             repoSeries.QualityProfileId = Convert.ToInt32(_config.GetValue("DefaultQualityProfile", "1", true));
             repoSeries.SeasonFolder = true;
 
-            if (!Convert.ToBoolean(_config.GetValue("SeasonFolder", true, true)))
+            if (!Convert.ToBoolean(_config.GetValue("Sorting_SeasonFolder", true, true)))
                 repoSeries.SeasonFolder = false;
 
             _sonioRepo.Add(repoSeries);
