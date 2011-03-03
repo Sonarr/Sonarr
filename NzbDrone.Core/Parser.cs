@@ -72,6 +72,38 @@ namespace NzbDrone.Core
         }
 
         /// <summary>
+        /// Parses a post title to find the series that relates to it
+        /// </summary>
+        /// <param name="title">Title of the report</param>
+        /// <returns>Normalized Series Name</returns>
+        internal static string ParseSeriesName(string title)
+        {
+            Logger.Trace("Parsing string '{0}'", title);
+
+            foreach (var regex in ReportTitleRegex)
+            {
+                var match = regex.Matches(title);
+
+                if (match.Count != 0)
+                {
+                    var seriesName = NormalizeTitle(match[0].Groups["title"].Value);
+                    var year = 0;
+                    Int32.TryParse(match[0].Groups["year"].Value, out year);
+
+                    if (year < 1900 || year > DateTime.Now.Year + 1)
+                    {
+                        year = 0;
+                    }
+
+                    Logger.Trace("Series Parsed. {0}", seriesName);
+                    return seriesName;
+                }
+            }
+
+            return String.Empty;
+        }
+
+        /// <summary>
         /// Parses proper status out of a report title
         /// </summary>
         /// <param name="title">Title of the report</param>

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using NLog;
+using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository;
 
@@ -48,7 +49,7 @@ namespace NzbDrone.Core.Providers
                 erm.Folder = series.Path;
 
                 if (series.SeasonFolder)
-                    erm.Folder += Path.DirectorySeparatorChar + GetSeasonFolder(episodeFile.Episodes[0].SeasonNumber);
+                    erm.Folder += Path.DirectorySeparatorChar + EpisodeRenameHelper.GetSeasonFolder(episodeFile.Episodes[0].SeasonNumber, _configProvider.GetValue("Sorting_SeasonFolderFormat", "Season %s", true));
 
                 erm.EpisodeFile = episodeFile;
                 _epsToRename.Add(erm);
@@ -70,7 +71,7 @@ namespace NzbDrone.Core.Providers
                 erm.Folder = series.Path;
 
                 if (series.SeasonFolder)
-                    erm.Folder += Path.DirectorySeparatorChar + GetSeasonFolder(episodeFile.Episodes[0].SeasonNumber);
+                    erm.Folder += Path.DirectorySeparatorChar + EpisodeRenameHelper.GetSeasonFolder(episodeFile.Episodes[0].SeasonNumber, _configProvider.GetValue("Sorting_SeasonFolderFormat", "Season %s", true));
 
                 erm.EpisodeFile = episodeFile;
                 _epsToRename.Add(erm);
@@ -92,7 +93,7 @@ namespace NzbDrone.Core.Providers
                 erm.Folder = series.Path;
 
                 if (series.SeasonFolder)
-                    erm.Folder += Path.DirectorySeparatorChar + GetSeasonFolder(episodeFile.Episodes[0].SeasonNumber);
+                    erm.Folder += Path.DirectorySeparatorChar + EpisodeRenameHelper.GetSeasonFolder(episodeFile.Episodes[0].SeasonNumber, _configProvider.GetValue("Sorting_SeasonFolderFormat", "Season %s", true));
 
                 erm.EpisodeFile = episodeFile;
                 _epsToRename.Add(erm);
@@ -114,7 +115,26 @@ namespace NzbDrone.Core.Providers
             erm.Folder = series.Path;
 
             if (series.SeasonFolder)
-                erm.Folder += Path.DirectorySeparatorChar + GetSeasonFolder(episodeFile.Episodes[0].SeasonNumber);
+                erm.Folder += Path.DirectorySeparatorChar + EpisodeRenameHelper.GetSeasonFolder(episodeFile.Episodes[0].SeasonNumber, _configProvider.GetValue("Sorting_SeasonFolderFormat", "Season %s", true));
+
+            erm.EpisodeFile = episodeFile;
+            _epsToRename.Add(erm);
+            StartRename();
+        }
+
+        public void RenameEpisodeFile(int episodeFileId)
+        {
+            //This will properly rename multi-episode files if asked to rename either of the episode
+            var episodeFile = _mediaFileProvider.GetEpisodeFile(episodeFileId);
+            var series = _seriesProvider.GetSeries(episodeFile.Series.SeriesId);
+
+            var erm = new EpisodeRenameModel();
+            erm.SeriesName = series.Title;
+
+            erm.Folder = series.Path;
+
+            if (series.SeasonFolder)
+                erm.Folder += Path.DirectorySeparatorChar + EpisodeRenameHelper.GetSeasonFolder(episodeFile.Episodes[0].SeasonNumber, _configProvider.GetValue("Sorting_SeasonFolderFormat", "Season %s", true));
 
             erm.EpisodeFile = episodeFile;
             _epsToRename.Add(erm);
@@ -159,7 +179,7 @@ namespace NzbDrone.Core.Providers
             {
                 //Update EpisodeFile if successful
                 Logger.Debug("Renaming Episode: {0}", Path.GetFileName(erm.EpisodeFile.Path));
-                var newName = GetNewName(erm);
+                var newName = EpisodeRenameHelper.GetNewName(erm);
                 var ext = Path.GetExtension(erm.EpisodeFile.Path);
                 var newFilename = erm.Folder + Path.DirectorySeparatorChar + newName + ext;
 
@@ -179,37 +199,6 @@ namespace NzbDrone.Core.Providers
                 Logger.DebugException(ex.Message, ex);
                 Logger.Warn("Unable to Rename Episode: {0}", Path.GetFileName(erm.EpisodeFile.Path));
             }
-        }
-
-        private string GetNewName(EpisodeRenameModel erm)
-        {
-            //Todo: Get the users preferred naming convention instead of hard-coding it
-
-            if (erm.EpisodeFile.Episodes.Count == 1)
-            {
-                return String.Format("{0} - S{1:00}E{2:00} - {3}", erm.SeriesName,
-                                     erm.EpisodeFile.Episodes[0].SeasonNumber, erm.EpisodeFile.Episodes[0].EpisodeNumber,
-                                     erm.EpisodeFile.Episodes[0].Title);
-            }
-
-            var epNumberString = String.Empty;
-            var epNameString = String.Empty;
-
-            foreach (var episode in erm.EpisodeFile.Episodes)
-            {
-                epNumberString = epNumberString + String.Format("E{0:00}", episode.EpisodeNumber);
-                epNameString = epNameString + String.Format("+ {0}", episode.Title).Trim(' ', '+');
-            }
-
-            return String.Format("{0} - S{1:00}E{2} - {3}", erm.SeriesName, erm.EpisodeFile.Episodes[0].SeasonNumber,
-                                 epNumberString, epNameString);
-        }
-
-        private string GetSeasonFolder(int seasonNumber)
-        {
-            return
-                _configProvider.GetValue("Sorting_SeasonFolderFormat", "Season %s", true).Replace("%s", seasonNumber.ToString()).
-                    Replace("%0s", seasonNumber.ToString("00"));
         }
     }
 }

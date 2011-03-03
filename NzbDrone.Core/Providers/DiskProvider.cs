@@ -29,7 +29,9 @@ namespace NzbDrone.Core.Providers
 
         public long GetSize(string path)
         {
-            return new FileInfo(path).Length;
+            var fi = new FileInfo(path);
+            return fi.Length;
+            //return new FileInfo(path).Length;
         }
 
         public String CreateDirectory(string path)

@@ -10,8 +10,8 @@ namespace NzbDrone.Core.Providers
         /// Scans the specified series folder for media files
         /// </summary>
         /// <param name="series">The series to be scanned</param>
-        void Scan(Series series);
-
+        List<EpisodeFile> Scan(Series series);
+        List<EpisodeFile> Scan(Series series, string path);
         EpisodeFile ImportFile(Series series, string filePath);
         string GenerateEpisodePath(EpisodeModel episode);
         void CleanUp(List<EpisodeFile> files);

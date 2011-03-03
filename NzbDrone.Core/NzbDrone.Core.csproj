@@ -156,7 +156,8 @@
     <Reference Include="UPnP, Version=1.0.3932.37442, Culture=neutral, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EpisodeSortingHelper.cs" />
+    <Compile Include="Helpers\EpisodeRenameHelper.cs" />
+    <Compile Include="Helpers\EpisodeSortingHelper.cs" />
     <Compile Include="Instrumentation\ILogProvider.cs" />
     <Compile Include="Instrumentation\LogLevel.cs" />
     <Compile Include="Instrumentation\LogProvider.cs" />

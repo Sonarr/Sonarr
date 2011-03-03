@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using NLog;
 using NzbDrone.Core;
+using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository.Quality;

@@ -21,10 +21,10 @@ namespace NzbDrone.Core.Providers
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static readonly string[] MediaExtentions = new[] { "*.mkv", "*.avi", "*.wmv" };
 
-        public MediaFileProvider(IRepository repository, IConfigProvider _configProvider, IDiskProvider diskProvider, IEpisodeProvider episodeProvider)
+        public MediaFileProvider(IRepository repository, IConfigProvider configProvider, IDiskProvider diskProvider, IEpisodeProvider episodeProvider)
         {
             _repository = repository;
-            this._configProvider = _configProvider;
+            _configProvider = configProvider;
             _diskProvider = diskProvider;
             _episodeProvider = episodeProvider;
         }
@@ -33,14 +33,36 @@ namespace NzbDrone.Core.Providers
         /// Scans the specified series folder for media files
         /// </summary>
         /// <param name="series">The series to be scanned</param>
-        public void Scan(Series series)
+        public List<EpisodeFile> Scan(Series series)
         {
             var mediaFileList = GetMediaFileList(series.Path);
+            var fileList = new List<EpisodeFile>();
 
             foreach (var filePath in mediaFileList)
             {
-                ImportFile(series, filePath);
+                var file = ImportFile(series, filePath);
+                if (file != null)
+                    fileList.Add(file);
             }
+            return fileList;
+        }
+
+        /// <summary>
+        /// Scans the specified series folder for media files
+        /// </summary>
+        /// <param name="series">The series to be scanned</param>
+        public List<EpisodeFile> Scan(Series series, string path)
+        {
+            var mediaFileList = GetMediaFileList(path);
+            var fileList = new List<EpisodeFile>();
+
+            foreach (var filePath in mediaFileList)
+            {
+                var file = ImportFile(series, filePath);
+                if (file != null)
+                    fileList.Add(file);
+            }
+            return fileList;
         }
 
         public EpisodeFile ImportFile(Series series, string filePath)
@@ -72,11 +94,20 @@ namespace NzbDrone.Core.Providers
                 if (episodes.Count < 1)
                     return null;
 
+                var size = _diskProvider.GetSize(filePath);
+
+                //If Size is less than 50MB and contains sample. Check for Size to ensure its not an episode with sample in the title
+                if (size < 50000000 && filePath.ToLower().Contains("sample"))
+                {
+                    Logger.Trace("[{0}] appears to be a sample... skipping.", filePath);
+                    return null;
+                }
+
                 var episodeFile = new EpisodeFile();
                 episodeFile.DateAdded = DateTime.Now;
                 episodeFile.SeriesId = series.SeriesId;
                 episodeFile.Path = Parser.NormalizePath(filePath);
-                episodeFile.Size = _diskProvider.GetSize(filePath);
+                episodeFile.Size = size;
                 episodeFile.Quality = Parser.ParseQuality(filePath);
                 episodeFile.Proper = Parser.ParseProper(filePath);
                 var fileId = (int)_repository.Add(episodeFile);
@@ -167,6 +198,5 @@ namespace NzbDrone.Core.Providers
             Logger.Trace("{0} media files were found in {1}", mediaFileList.Count, path);
             return mediaFileList;
         }
-
     }
 }

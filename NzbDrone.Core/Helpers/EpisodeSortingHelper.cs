@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using NzbDrone.Core.Model;
 
-namespace NzbDrone.Core
+namespace NzbDrone.Core.Helpers
 {
     public static class EpisodeSortingHelper
     {
