@@ -100,7 +100,16 @@ namespace NzbDrone.Core.Providers
 
                     var indexer = new FeedInfoModel(i.IndexerName, i.RssUrl);
 
-                    foreach (RssItem item in _rss.GetFeed(indexer))
+                    var feedItems = _rss.GetFeed(indexer);
+
+                    if (feedItems.Count() == 0)
+                    {
+                        _rssSyncNotification.CurrentStatus = String.Format("Failed to download RSS Feed: {0}", //
+                                                                           i.IndexerName);
+                        continue; //No need to process anything else
+                    }
+
+                    foreach (RssItem item in feedItems)
                     {
                         NzbInfoModel nzb = Parser.ParseNzbInfo(indexer, item);
                         QueueIfWanted(nzb, i);
