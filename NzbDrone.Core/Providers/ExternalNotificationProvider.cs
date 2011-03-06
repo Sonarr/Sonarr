@@ -12,13 +12,15 @@ namespace NzbDrone.Core.Providers
     public class ExternalNotificationProvider : IExtenalNotificationProvider
     {
         private readonly IConfigProvider _configProvider;
+        private readonly IXbmcProvider _xbmcProvider;
 
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public ExternalNotificationProvider(IConfigProvider configProvider)
+        public ExternalNotificationProvider(IConfigProvider configProvider, IXbmcProvider xbmcProvider)
         {
             _configProvider = configProvider;
+            _xbmcProvider = xbmcProvider;
         }
 
         #region IExternalNotificationProvider Members
@@ -31,7 +33,7 @@ namespace NzbDrone.Core.Providers
                 if (Convert.ToBoolean(_configProvider.GetValue("XbmcNotifyOnGrab", false, true)))
                 {
                     Logger.Trace("Sending Notifcation to XBMC");
-
+                    _xbmcProvider.Notify(header, message);
                     return;
                 }
                 Logger.Trace("XBMC NotifyOnGrab is not enabled");
@@ -50,20 +52,19 @@ namespace NzbDrone.Core.Providers
                 if (Convert.ToBoolean(_configProvider.GetValue("XbmcNotifyOnDownload", false, true)))
                 {
                     Logger.Trace("Sending Notifcation to XBMC");
-                    //Send to XBMC
+                    _xbmcProvider.Notify(header, message);
                 }
 
                 if (Convert.ToBoolean(_configProvider.GetValue("XbmcUpdateOnDownload", false, true)))
                 {
                     Logger.Trace("Sending Update Request to XBMC");
-                    //Send to XBMC
-                    //Send SeriesID
+                    _xbmcProvider.Update(erm.EpisodeFile.SeriesId);
                 }
 
                 if (Convert.ToBoolean(_configProvider.GetValue("XbmcCleanOnDownload", false, true)))
                 {
                     Logger.Trace("Sending Clean DB Request to XBMC");
-                    //Send to XBMC
+                    _xbmcProvider.Clean();
                 }
             }
 
@@ -81,20 +82,19 @@ namespace NzbDrone.Core.Providers
             if (Convert.ToBoolean(_configProvider.GetValue("XbmcNotifyOnRename", false, true)))
             {
                 Logger.Trace("Sending Notifcation to XBMC");
-                //Send to XBMC
+                _xbmcProvider.Notify(header, message);
             }
 
             if (Convert.ToBoolean(_configProvider.GetValue("XbmcUpdateOnRename", false, true)))
             {
                 Logger.Trace("Sending Update Request to XBMC");
-                //Send to XBMC
-                //Send SeriesID
+                _xbmcProvider.Update(erm.EpisodeFile.SeriesId);
             }
 
             if (Convert.ToBoolean(_configProvider.GetValue("XbmcCleanOnRename", false, true)))
             {
                 Logger.Trace("Sending Clean DB Request to XBMC");
-                //Send to XBMC
+                _xbmcProvider.Clean();
             }
 
 

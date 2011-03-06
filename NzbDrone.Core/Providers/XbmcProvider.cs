@@ -73,7 +73,6 @@ namespace NzbDrone.Core.Providers
             foreach (var host in _configProvider.GetValue("XbmcHosts", "localhost:80", true).Split(','))
             {
                 Logger.Trace("Sending DB Clean Request to XBMC Host: {0}", host);
-
                 var command = String.Format("ExecBuiltIn(CleanLibrary(database) )");
                 SendCommand(host, command);
             }
