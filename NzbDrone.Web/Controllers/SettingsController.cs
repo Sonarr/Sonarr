@@ -60,12 +60,12 @@ namespace NzbDrone.Web.Controllers
             ViewData["viewName"] = "Indexers";
             return View("Index", new IndexerSettingsModel
                                      {
-                                         NzbMatrixUsername = _configProvider.GetValue("NzbMatrixUsername", String.Empty, false),
-                                         NzbMatrixApiKey = _configProvider.GetValue("NzbMatrixApiKey", String.Empty, false),
-                                         NzbsOrgUId = _configProvider.GetValue("NzbsOrgUId", String.Empty, false),
-                                         NzbsOrgHash = _configProvider.GetValue("NzbsOrgHash", String.Empty, false),
-                                         NzbsrusUId = _configProvider.GetValue("NzbsrusUId", String.Empty, false),
-                                         NzbsrusHash = _configProvider.GetValue("NzbsrusHash", String.Empty, false),
+                                         NzbMatrixUsername = _configProvider.GetValue("NzbMatrixUsername", String.Empty, true),
+                                         NzbMatrixApiKey = _configProvider.GetValue("NzbMatrixApiKey", String.Empty, true),
+                                         NzbsOrgUId = _configProvider.GetValue("NzbsOrgUId", String.Empty, true),
+                                         NzbsOrgHash = _configProvider.GetValue("NzbsOrgHash", String.Empty, true),
+                                         NzbsrusUId = _configProvider.GetValue("NzbsrusUId", String.Empty, true),
+                                         NzbsrusHash = _configProvider.GetValue("NzbsrusHash", String.Empty, true),
                                          Indexers = _indexerProvider.AllIndexers()
                                      });
         }
@@ -79,12 +79,12 @@ namespace NzbDrone.Web.Controllers
                                 SyncFrequency = Convert.ToInt32(_configProvider.GetValue("SyncFrequency", "15", true)),
                                 DownloadPropers = Convert.ToBoolean(_configProvider.GetValue("DownloadPropers", "false", true)),
                                 Retention = Convert.ToInt32(_configProvider.GetValue("Retention", "500", true)),
-                                SabHost = _configProvider.GetValue("SabHost", "localhost", false),
+                                SabHost = _configProvider.GetValue("SabHost", "localhost", true),
                                 SabPort = Convert.ToInt32(_configProvider.GetValue("SabPort", "8080", true)),
-                                SabApiKey = _configProvider.GetValue("SabApiKey", String.Empty, false),
-                                SabUsername = _configProvider.GetValue("SabUsername", String.Empty, false),
-                                SabPassword = _configProvider.GetValue("SabPassword", String.Empty, false),
-                                SabCategory = _configProvider.GetValue("SabCategory", String.Empty, false),
+                                SabApiKey = _configProvider.GetValue("SabApiKey", String.Empty, true),
+                                SabUsername = _configProvider.GetValue("SabUsername", String.Empty, true),
+                                SabPassword = _configProvider.GetValue("SabPassword", String.Empty, true),
+                                SabTvCategory = _configProvider.GetValue("SabTvCategory", String.Empty, true),
                                 SabPriority = (SabnzbdPriorityType)Enum.Parse(typeof(SabnzbdPriorityType), _configProvider.GetValue("SabPriority", "Normal", true)),
                             };
 
@@ -221,7 +221,7 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.SetValue("SabApiKey", data.SabApiKey);
                 _configProvider.SetValue("SabUsername", data.SabUsername);
                 _configProvider.SetValue("SabPassword", data.SabPassword);
-                _configProvider.SetValue("SabCategory", data.SabCategory);
+                _configProvider.SetValue("SabTvCategory", data.SabTvCategory);
                 _configProvider.SetValue("SabPriority", data.SabPriority.ToString());
 
                 return Content(_settingsSaved);

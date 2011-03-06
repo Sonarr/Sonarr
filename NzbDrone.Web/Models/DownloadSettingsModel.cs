@@ -84,8 +84,8 @@ namespace NzbDrone.Web.Models
 
         [DataType(DataType.Text)]
         [DisplayFormat(ConvertEmptyStringToNull = false)]
-        [DisplayName("SABnzbd Category")]
-        public String SabCategory
+        [DisplayName("SABnzbd TV Category")]
+        public String SabTvCategory
         {
             get;
             set;

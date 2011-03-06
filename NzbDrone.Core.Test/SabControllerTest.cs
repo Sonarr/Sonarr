@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Test
             config.Setup(c => c.GetValue("SabUsername", String.Empty, false)).Returns(username);
             config.Setup(c => c.GetValue("SabPassword", String.Empty, false)).Returns(password);
             config.Setup(c => c.GetValue("SabPriority", String.Empty, false)).Returns(priority);
-            config.Setup(c => c.GetValue("SabCategory", String.Empty, false)).Returns(category);
+            config.Setup(c => c.GetValue("SabTvCategory", String.Empty, false)).Returns(category);
 
             var http = new Mock<IHttpProvider>();
             http.Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=addurl&name=http://www.nzbclub.com/nzb_download.aspx?mid=1950232&priority=0&cat=tv&nzbname=This+is+an+Nzb&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass")).Returns("ok");
@@ -67,7 +67,7 @@ namespace NzbDrone.Core.Test
             config.Setup(c => c.GetValue("SabUsername", String.Empty, false)).Returns(username);
             config.Setup(c => c.GetValue("SabPassword", String.Empty, false)).Returns(password);
             config.Setup(c => c.GetValue("SabPriority", String.Empty, false)).Returns(priority);
-            config.Setup(c => c.GetValue("SabCategory", String.Empty, false)).Returns(category);
+            config.Setup(c => c.GetValue("SabTvCategory", String.Empty, false)).Returns(category);
 
             var http = new Mock<IHttpProvider>();
             http.Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=addurl&name=http://www.nzbclub.com/nzb_download.aspx?mid=1950232&priority=0&cat=tv&nzbname=This+is+an+Nzb&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass")).Returns("error");

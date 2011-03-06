@@ -117,10 +117,10 @@
 
                 <div class="config-section">
                     <div class="config-group">
-                        <div class="config-title"><%= Html.LabelFor(m => m.SabCategory)%></div>
-                        <div class="config-value"><%= Html.TextBoxFor(m => m.SabCategory)%></div>
+                        <div class="config-title"><%= Html.LabelFor(m => m.SabTvCategory)%></div>
+                        <div class="config-value"><%= Html.TextBoxFor(m => m.SabTvCategory)%></div>
                     </div>
-                    <div class="config-validation"><%= Html.ValidationMessageFor(m => m.SabCategory)%></div>
+                    <div class="config-validation"><%= Html.ValidationMessageFor(m => m.SabTvCategory)%></div>
                 </div>
 
                 <div class="config-section">
@@ -128,7 +128,7 @@
                         <div class="config-title"><%= Html.LabelFor(m => m.SabPriority) %></div>
                         <div class="config-value"><%= Html.DropDownListFor(m => m.SabPriority, Model.PrioritySelectList) %></div>
                     </div>
-                    <div class="config-validation"><%= Html.ValidationMessageFor(m => m.SabCategory)%></div>
+                    <div class="config-validation"><%= Html.ValidationMessageFor(m => m.SabTvCategory)%></div>
                 </div>
             </fieldset>
 

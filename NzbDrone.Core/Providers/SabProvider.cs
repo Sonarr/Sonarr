@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Providers
         public bool AddByUrl(string url, string title)
         {
             const string mode = "addurl";
-            //string cat = _config.GetValue("SabCategory", String.Empty, true);
+            //string cat = _config.GetValue("SabTvCategory", String.Empty, true);
             string cat = "tv";
             string priority = _config.GetValue("SabPriority", String.Empty, false);
             string name = url.Replace("&", "%26");
