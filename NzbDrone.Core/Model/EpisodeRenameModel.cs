@@ -11,5 +11,6 @@ namespace NzbDrone.Core.Model
         public string SeriesName { get; set; }
         public string Folder { get; set; }
         public EpisodeFile EpisodeFile { get; set; }
+        public bool NewDownload { get; set; }
     }
 }

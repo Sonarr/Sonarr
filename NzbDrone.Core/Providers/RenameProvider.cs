@@ -19,6 +19,8 @@ namespace NzbDrone.Core.Providers
         private readonly IMediaFileProvider _mediaFileProvider;
         private readonly IDiskProvider _diskProvider;
         private readonly IConfigProvider _configProvider;
+        private readonly IExtenalNotificationProvider _externalNotificationProvider;
+
         private Thread _renameThread;
         private List<EpisodeRenameModel> _epsToRename = new List<EpisodeRenameModel>();
 
@@ -26,7 +28,8 @@ namespace NzbDrone.Core.Providers
 
         public RenameProvider(ISeriesProvider seriesProvider, ISeasonProvider seasonProvider,
             IEpisodeProvider episodeProvider, IMediaFileProvider mediaFileProvider,
-            IDiskProvider diskProvider, IConfigProvider configProvider)
+            IDiskProvider diskProvider, IConfigProvider configProvider,
+            IExtenalNotificationProvider extenalNotificationProvider)
         {
             _seriesProvider = seriesProvider;
             _seasonProvider = seasonProvider;
@@ -34,6 +37,7 @@ namespace NzbDrone.Core.Providers
             _mediaFileProvider = mediaFileProvider;
             _diskProvider = diskProvider;
             _configProvider = configProvider;
+            _externalNotificationProvider = extenalNotificationProvider;
         }
 
         #region IRenameProvider Members
@@ -122,7 +126,7 @@ namespace NzbDrone.Core.Providers
             StartRename();
         }
 
-        public void RenameEpisodeFile(int episodeFileId)
+        public void RenameEpisodeFile(int episodeFileId, bool newDownload)
         {
             //This will properly rename multi-episode files if asked to rename either of the episode
             var episodeFile = _mediaFileProvider.GetEpisodeFile(episodeFileId);
@@ -192,6 +196,12 @@ namespace NzbDrone.Core.Providers
                 _diskProvider.RenameFile(erm.EpisodeFile.Path, newFilename);
                 erm.EpisodeFile.Path = newFilename;
                 _mediaFileProvider.Update(erm.EpisodeFile);
+
+                if (erm.NewDownload)
+                    _externalNotificationProvider.OnDownload();
+
+                else
+                    _externalNotificationProvider.OnRename();
 
             }
             catch (Exception ex)

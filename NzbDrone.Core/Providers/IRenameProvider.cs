@@ -11,6 +11,6 @@ namespace NzbDrone.Core.Providers
         void RenameSeries(int seriesId);
         void RenameSeason(int seasonId);
         void RenameEpisode(int episodeId);
-        void RenameEpisodeFile(int episodeFileId);
+        void RenameEpisodeFile(int episodeFileId, bool newDownload);
     }
 }
