@@ -1,0 +1,32 @@
+Missing after HDD Failure....
+
+ExternalNotiifcationProvider
+	- NotifyOnGrab, Download, Rename
+	
+XbmcProvider
+	- SendNotification
+	- Update
+	- Clean
+	
+Settings/Notications
+NoticationSettingsModel
+	XBMC:
+		Enabled
+		Notify On: Grab, Download, Rename
+		Update On: Download, Rename
+		FullUpdate (If Required)
+		Clean On: Download, Rename
+		Show Image?
+		TimeToDisplay?
+	
+	
+ServerHelper
+	- Get IP/Hostname
+	
+
+SyncProvider Changes
+	- Add by Root or Single Series
+	
+AddSeries
+	- Simlar to SB
+	- FileBrowserModel - Name, Path

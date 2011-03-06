@@ -158,6 +158,7 @@
   <ItemGroup>
     <Compile Include="Helpers\EpisodeRenameHelper.cs" />
     <Compile Include="Helpers\EpisodeSortingHelper.cs" />
+    <Compile Include="Helpers\ServerHelper.cs" />
     <Compile Include="Instrumentation\ILogProvider.cs" />
     <Compile Include="Instrumentation\LogLevel.cs" />
     <Compile Include="Instrumentation\LogProvider.cs" />
@@ -173,20 +174,26 @@
     <Compile Include="Model\NzbInfoModel.cs" />
     <Compile Include="Model\NzbSiteModel.cs" />
     <Compile Include="Model\SabnzbdPriorityType.cs" />
+    <Compile Include="Providers\ExternalNotificationProvider.cs" />
     <Compile Include="Providers\HistoryProvider.cs" />
+    <Compile Include="Providers\IExtenalNotificationProvider.cs" />
     <Compile Include="Providers\IHistoryProvider.cs" />
     <Compile Include="Providers\IIndexerProvider.cs" />
     <Compile Include="Providers\IndexerProvider.cs" />
+    <Compile Include="Providers\IPostProcessingProvider.cs" />
     <Compile Include="Providers\IQualityProvider.cs" />
     <Compile Include="Providers\IRenameProvider.cs" />
     <Compile Include="Providers\IRssSyncProvider.cs" />
     <Compile Include="Providers\IRssProvider.cs" />
     <Compile Include="Providers\ITimerProvider.cs" />
+    <Compile Include="Providers\IXbmcProvider.cs" />
+    <Compile Include="Providers\PostProcessingProvider.cs" />
     <Compile Include="Providers\QualityProvider.cs" />
     <Compile Include="Providers\RenameProvider.cs" />
     <Compile Include="Providers\RssSyncProvider.cs" />
     <Compile Include="Providers\RssProvider.cs" />
     <Compile Include="Providers\TimerProvider.cs" />
+    <Compile Include="Providers\XbmcProvider.cs" />
     <Compile Include="Repository\EpisodeFile.cs" />
     <Compile Include="Model\Notification\BasicNotification.cs" />
     <Compile Include="Model\Notification\ProgressNotificationStatus.cs" />

@@ -231,6 +231,7 @@
     <Content Include="Content\Windows7\editor.png" />
     <Content Include="Content\Windows7\loading.gif" />
     <Content Include="Content\Windows7\sprite.png" />
+    <Content Include="Content\XbmcNotification.png" />
     <Content Include="Global.asax" />
     <Content Include="Libraries\Telerik.Web.Mvc.dll" />
     <Content Include="Libraries\Telerik.Web.Mvc.xml" />

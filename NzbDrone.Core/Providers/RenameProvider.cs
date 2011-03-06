@@ -198,10 +198,10 @@ namespace NzbDrone.Core.Providers
                 _mediaFileProvider.Update(erm.EpisodeFile);
 
                 if (erm.NewDownload)
-                    _externalNotificationProvider.OnDownload();
+                    _externalNotificationProvider.OnDownload(erm);
 
                 else
-                    _externalNotificationProvider.OnRename();
+                    _externalNotificationProvider.OnRename(erm);
 
             }
             catch (Exception ex)
