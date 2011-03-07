@@ -10,6 +10,7 @@
                                                          items.Add().Text("Downloads").Action("Downloads", "Settings");
                                                          items.Add().Text("Quality").Action("Quality", "Settings");
                                                          items.Add().Text("Episode Sorting").Action("EpisodeSorting", "Settings");
+                                                         items.Add().Text("Notifications").Action("Notifications", "Settings");
                                                      }).Render();
     %>
 

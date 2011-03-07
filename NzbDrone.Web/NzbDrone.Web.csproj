@@ -91,6 +91,7 @@
     <Compile Include="Models\IndexerSettingsModel.cs" />
     <Compile Include="Models\MappingModel.cs" />
     <Compile Include="Models\EpisodeModel.cs" />
+    <Compile Include="Models\NotificationSettingsModel.cs" />
     <Compile Include="Models\QualityModel.cs" />
     <Compile Include="Models\SettingsModels.cs" />
     <Compile Include="Models\TestModel.cs" />
@@ -274,6 +275,7 @@
     <Content Include="Views\Series\EpisodeDetail.ascx" />
     <Content Include="Views\Series\index.aspx" />
     <Content Include="Views\Series\Unmapped.aspx" />
+    <Content Include="Views\Settings\Notifications.ascx" />
     <Content Include="Views\Settings\Downloads.ascx" />
     <Content Include="Views\Settings\EpisodeSorting.ascx" />
     <Content Include="Views\Settings\General.ascx" />

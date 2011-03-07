@@ -122,6 +122,31 @@ namespace NzbDrone.Web.Controllers
             return View("Index", model);
         }
 
+        public ActionResult Notifications()
+        {
+            ViewData["viewName"] = "Notifications";
+
+            var model = new NotificationSettingsModel
+            {
+                XbmcEnabled = Convert.ToBoolean(_configProvider.GetValue("XbmcEnabled", false, true)),
+                XbmcNotifyOnGrab = Convert.ToBoolean(_configProvider.GetValue("XbmcNotifyOnGrab", false, true)),
+                XbmcNotifyOnDownload = Convert.ToBoolean(_configProvider.GetValue("XbmcNotifyOnDownload", false, true)),
+                XbmcNotifyOnRename = Convert.ToBoolean(_configProvider.GetValue("XbmcNotifyOnRename", false, true)),
+                XbmcNotificationImage = Convert.ToBoolean(_configProvider.GetValue("XbmcNotificationImage", false, true)),
+                XbmcDisplayTime = Convert.ToInt32(_configProvider.GetValue("XbmcDisplayTime", 3, true)),
+                XbmcUpdateOnDownload = Convert.ToBoolean(_configProvider.GetValue("XbmcUpdateOnDownload ", false, true)),
+                XbmcUpdateOnRename = Convert.ToBoolean(_configProvider.GetValue("XbmcUpdateOnRename", false, true)),
+                XbmcFullUpdate = Convert.ToBoolean(_configProvider.GetValue("XbmcFullUpdate", false, true)),
+                XbmcCleanOnDownload = Convert.ToBoolean(_configProvider.GetValue("XbmcCleanOnDownload", false, true)),
+                XbmcCleanOnRename = Convert.ToBoolean(_configProvider.GetValue("XbmcCleanOnRename", false, true)),
+                XbmcHosts = _configProvider.GetValue("XbmcHosts", "localhost:80", true),
+                XbmcUsername = _configProvider.GetValue("XbmcUsername", String.Empty, true),
+                XbmcPassword = _configProvider.GetValue("XbmcPassword", String.Empty, true)
+            };
+
+            return View("Index", model);
+        }
+
         public ActionResult EpisodeSorting()
         {
             ViewData["viewName"] = "EpisodeSorting";
@@ -271,6 +296,32 @@ namespace NzbDrone.Web.Controllers
 
                     return Content(_settingsSaved);
                 }
+            }
+
+            return Content(_settingsFailed);
+        }
+
+        [HttpPost]
+        public ActionResult SaveNotifications(NotificationSettingsModel data)
+        {
+            if (ModelState.IsValid)
+            {
+                _configProvider.SetValue("XbmcEnabled", data.XbmcEnabled.ToString());
+                _configProvider.SetValue("XbmcNotifyOnGrab", data.XbmcNotifyOnGrab.ToString());
+                _configProvider.SetValue("XbmcNotifyOnDownload", data.XbmcNotifyOnDownload.ToString());
+                _configProvider.SetValue("XbmcNotifyOnRename", data.XbmcNotifyOnRename.ToString());
+                _configProvider.SetValue("XbmcNotificationImage", data.XbmcNotificationImage.ToString());
+                _configProvider.SetValue("XbmcDisplayTime", data.XbmcDisplayTime.ToString());
+                _configProvider.SetValue("XbmcUpdateOnDownload", data.XbmcUpdateOnDownload.ToString());
+                _configProvider.SetValue("XbmcUpdateOnRename", data.XbmcUpdateOnRename.ToString());
+                _configProvider.SetValue("XbmcFullUpdate", data.XbmcFullUpdate.ToString());
+                _configProvider.SetValue("XbmcCleanOnDownload", data.XbmcCleanOnDownload.ToString());
+                _configProvider.SetValue("XbmcCleanOnRename", data.XbmcCleanOnRename.ToString());
+                _configProvider.SetValue("XbmcHosts", data.XbmcHosts);
+                _configProvider.SetValue("XbmcUsername", data.XbmcUsername);
+                _configProvider.SetValue("XbmcPassword", data.XbmcPassword);
+
+                return Content(_settingsSaved);
             }
 
             return Content(_settingsFailed);
