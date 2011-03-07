@@ -46,6 +46,11 @@ namespace NzbDrone.Web.Controllers
             return View();
         }
 
+        public ActionResult Add()
+        {
+            return View(new AddSeriesModel());
+        }
+
         public ActionResult Sync()
         {
             _syncProvider.BeginSyncUnmappedFolders();
