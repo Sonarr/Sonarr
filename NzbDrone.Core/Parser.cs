@@ -171,6 +171,32 @@ namespace NzbDrone.Core
             return result;
         }
 
+        internal static QualityTypes ParseDroneQuality(string name)
+        {
+            var result = QualityTypes.Unknown;
+
+            if (name.Contains("[TV]"))
+                return QualityTypes.TV;
+
+            if (name.Contains("[DVD]"))
+                return QualityTypes.DVD;
+
+            if (name.Contains("[BDRip]"))
+                return QualityTypes.BDRip;
+
+            if (name.Contains("[HDTV]"))
+                return QualityTypes.HDTV;
+
+            if (name.Contains("[WEBDL]"))
+                return QualityTypes.WEBDL;
+
+            if (name.Contains("[Bluray]"))
+                return QualityTypes.Bluray;
+
+            //If it's unknown let the "regular" quality parse have a go
+            return ParseQuality(name);
+        }
+
         /// <summary>
         /// Normalizes the title. removing all non-word characters as well as common tokens
         /// such as 'the' and 'and'
