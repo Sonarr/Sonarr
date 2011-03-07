@@ -153,8 +153,11 @@ namespace NzbDrone.Core.Providers
                 Logger.Debug("Show is being watched: {0}", series.Title);
 
                 nzb.TitleFix = GetTitleFix(episodeParseResults, series.SeriesId); //Get the TitleFix so we can use it later
+                
                 nzb.Proper = Parser.ParseProper(nzb.Title);
                 nzb.Quality = Parser.ParseQuality(nzb.Title);
+
+                nzb.TitleFix = String.Format("{0} [{1}]", nzb.TitleFix, nzb.Quality); //Add Quality to the titleFix
 
                 //Loop through the list of the episodeParseResults to ensure that all the episodes are needed)
                 foreach (var episode in episodeParseResults)
@@ -172,6 +175,7 @@ namespace NzbDrone.Core.Providers
                         return;
 
                     var titleFix = GetTitleFix(new List<EpisodeParseResult> { episode }, episodeModel.SeriesId);
+                    titleFix = String.Format("{0} [{1}]", titleFix, nzb.Quality); //Add Quality to the titleFix
 
                     if (_sab.IsInQueue(titleFix))
                         return;
