@@ -13,14 +13,16 @@ namespace NzbDrone.Core.Providers
     public class XbmcProvider : IXbmcProvider
     {
         private readonly IConfigProvider _configProvider;
+        private readonly IHttpProvider _httpProvider;
 
         private WebClient _webClient;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public XbmcProvider(IConfigProvider configProvider)
+        public XbmcProvider(IConfigProvider configProvider, IHttpProvider httpProvider)
         {
             _webClient = new WebClient();
             _configProvider = configProvider;
+            _httpProvider = httpProvider;
         }
 
         #region IXbmcProvider Members
@@ -84,25 +86,14 @@ namespace NzbDrone.Core.Providers
         {
             var username = _configProvider.GetValue("XbmcUsername", String.Empty, true);
             var password = _configProvider.GetValue("XbmcPassword", String.Empty, true);
+            var url = String.Format("http://{0}/xbmcCmds/xbmcHttp?command={1}", host, command);
 
             if (!String.IsNullOrEmpty(username))
             {
-                _webClient.Credentials = new NetworkCredential(username, password);
+                return _httpProvider.DownloadString(url, username, password);
             }
-
-            var url = String.Format("http://{0}/xbmcCmds/xbmcHttp?command={1}", host, command);
-
-            try
-            {
-                return _webClient.DownloadString(url);
-            }
-            catch (Exception ex)
-            {
-                Logger.Warn("Unable to Connect to XBMC Host: {0}", host);
-                Logger.DebugException(ex.Message, ex);
-            }
-
-            return string.Empty;
+            
+            return _httpProvider.DownloadString(url);
         }
 
         private string GetXbmcSeriesPath(string host, int seriesId)

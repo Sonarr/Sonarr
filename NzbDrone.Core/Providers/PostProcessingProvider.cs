@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Providers
 
             foreach (var file in fileList)
             {
-                //Todo: Where should we handle XBMC notifying/library updating etc? RenameProvider seems like a likely place, since we want to update XBMC after renaming (might as well)
+                //Notifications will be sent from the Renamer, depending on the bool NewDownload (which will be set to true from here), a normal rename will be treated as such.
                 _renameProvider.RenameEpisodeFile(file.EpisodeFileId, true);
             }
         }
