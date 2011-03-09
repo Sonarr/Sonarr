@@ -22,6 +22,7 @@ namespace NzbDrone.Web.Controllers
         private readonly IQualityProvider _qualityProvider;
         private readonly IMediaFileProvider _mediaFileProvider;
         private readonly IRenameProvider _renameProvider;
+        private readonly IRootDirProvider _rootDirProvider;
 
         //
         // GET: /Series/
@@ -29,7 +30,7 @@ namespace NzbDrone.Web.Controllers
         public SeriesController(ISyncProvider syncProvider, ISeriesProvider seriesProvider,
             IEpisodeProvider episodeProvider, IRssSyncProvider rssSyncProvider,
             IQualityProvider qualityProvider, IMediaFileProvider mediaFileProvider,
-            IRenameProvider renameProvider)
+            IRenameProvider renameProvider, IRootDirProvider rootDirProvider)
         {
             _seriesProvider = seriesProvider;
             _episodeProvider = episodeProvider;
@@ -38,6 +39,7 @@ namespace NzbDrone.Web.Controllers
             _qualityProvider = qualityProvider;
             _mediaFileProvider = mediaFileProvider;
             _renameProvider = renameProvider;
+            _rootDirProvider = rootDirProvider;
         }
 
         public ActionResult Index()
@@ -51,9 +53,15 @@ namespace NzbDrone.Web.Controllers
             return View(new AddSeriesModel());
         }
 
-        public ActionResult Sync()
+        public ActionResult AddExisting()
         {
-            _syncProvider.BeginSyncUnmappedFolders();
+            return View();
+        }
+
+        public ActionResult Sync(List<String> paths)
+        {
+            //Todo: Make this do something...
+            _syncProvider.BeginSyncUnmappedFolders(paths);
             return RedirectToAction("Index");
         }
 
@@ -63,9 +71,9 @@ namespace NzbDrone.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult UnMapped()
+        public ActionResult UnMapped(string path)
         {
-            return View(_seriesProvider.GetUnmappedFolders().Select(c => new MappingModel() { Id = 1, Path = c.Value }).ToList());
+            return View(_syncProvider.GetUnmappedFolders(path).Select(c => new MappingModel() { Id = 1, Path = c }).ToList());
         }
 
         public ActionResult LoadEpisodes(int seriesId)
@@ -103,6 +111,24 @@ namespace NzbDrone.Web.Controllers
                 Total = data.Count()
             });
         }
+
+        [GridAction]
+        public ActionResult _AjaxUnmappedFoldersGrid()
+        {
+            var unmappedList = new List<String>();
+
+            foreach (var folder in _rootDirProvider.GetAll())
+                unmappedList.AddRange(_syncProvider.GetUnmappedFolders(folder.Path));
+
+            var seriesPaths = unmappedList.Select(c => new AddExistingSeriesModel
+                                                           {
+                                                               IsWanted = true,
+                                                               Path = c
+                                                           });
+
+            return View(new GridModel(seriesPaths));
+        }
+
         private IEnumerable<Episode> GetData(GridCommand command)
         {
 

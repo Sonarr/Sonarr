@@ -9,6 +9,7 @@ using NzbDrone.Core;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Web.Models;
 
@@ -20,15 +21,19 @@ namespace NzbDrone.Web.Controllers
         private IConfigProvider _configProvider;
         private IIndexerProvider _indexerProvider;
         private IQualityProvider _qualityProvider;
+        private IRootDirProvider _rootDirProvider;
+
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private string _settingsSaved = "Settings Saved.";
         private string _settingsFailed = "Error Saving Settings, please fix any errors";
 
-        public SettingsController(IConfigProvider configProvider, IIndexerProvider indexerProvider, IQualityProvider qualityProvider)
+        public SettingsController(IConfigProvider configProvider, IIndexerProvider indexerProvider,
+            IQualityProvider qualityProvider, IRootDirProvider rootDirProvider)
         {
             _configProvider = configProvider;
             _indexerProvider = indexerProvider;
             _qualityProvider = qualityProvider;
+            _rootDirProvider = rootDirProvider;
         }
 
         public ActionResult Index(string viewName)
@@ -37,21 +42,18 @@ namespace NzbDrone.Web.Controllers
                 ViewData["viewName"] = viewName;
 
             else
-                ViewData["viewName"] = "General";
+                return RedirectToAction("General");
 
-            return View("Index", new SettingsModel
-                                     {
-                                         TvFolder = _configProvider.SeriesRoot
-                                     });
+            return View("Index");
         }
 
         public ActionResult General()
         {
             ViewData["viewName"] = "General";
+            
             return View("Index", new SettingsModel
                                      {
-                                         TvFolder = _configProvider.SeriesRoot,
-                                         Quality = Convert.ToInt32(_configProvider.GetValue("Quality", "1", true)),
+                                         Directories = new List<RootDir>()
                                      });
         }
 
@@ -185,6 +187,11 @@ namespace NzbDrone.Web.Controllers
             return View("UserProfileSection", new QualityProfile { Name = "New Profile", UserProfile = true });
         }
 
+        public ViewResult AddRootDir()
+        {
+            return View("RootDir", new RootDir { Default = false });
+        }
+
         public ActionResult SubMenu()
         {
             return PartialView();
@@ -202,9 +209,30 @@ namespace NzbDrone.Web.Controllers
         [HttpPost]
         public ActionResult SaveGeneral(SettingsModel data)
         {
-            if (ModelState.IsValid)
+            if (data.Directories.Count > 0)
             {
-                _configProvider.SeriesRoot = data.TvFolder;
+                //If the Javascript was beaten we need to return an error
+                if (!data.Directories.Exists(d => d.Default))
+                    return Content(_settingsFailed);
+
+                var currentRootDirs = _rootDirProvider.GetAll();
+
+                foreach (var currentRootDir in currentRootDirs)
+                {
+                    var closureRootDir = currentRootDir;
+                    if (!data.Directories.Exists(d => d.RootDirId == closureRootDir.RootDirId))
+                        _rootDirProvider.Remove(closureRootDir.RootDirId);
+                }
+
+                foreach (var dir in data.Directories)
+                {
+                    if (dir.RootDirId == 0)
+                        _rootDirProvider.Add(dir);
+
+                    else
+                        _rootDirProvider.Update(dir);
+                }
+
                 return Content(_settingsSaved);
             }
 

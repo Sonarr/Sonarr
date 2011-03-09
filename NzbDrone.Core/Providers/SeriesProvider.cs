@@ -65,26 +65,6 @@ namespace NzbDrone.Core.Providers
             return profile.Allowed.Contains(quality);
         }
 
-        public Dictionary<Guid, String> GetUnmappedFolders()
-        {
-            Logger.Debug("Generating list of unmapped folders");
-            if (String.IsNullOrEmpty(_config.SeriesRoot))
-                throw new InvalidOperationException("TV Series folder is not configured yet.");
-
-            var results = new Dictionary<Guid, String>();
-            foreach (string seriesFolder in _diskProvider.GetDirectories(_config.SeriesRoot))
-            {
-                var cleanPath = Parser.NormalizePath(new DirectoryInfo(seriesFolder).FullName);
-                if (!_sonioRepo.Exists<Series>(s => s.Path == cleanPath))
-                {
-                    results.Add(Guid.NewGuid(), cleanPath);
-                }
-            }
-
-            Logger.Debug("{0} unmapped folders detected.", results.Count);
-            return results;
-        }
-
         public TvdbSeries MapPathToSeries(string path)
         {
             var seriesPath = new DirectoryInfo(path);
@@ -147,6 +127,14 @@ namespace NzbDrone.Core.Providers
 
             Logger.Debug("Deleting Series from DB {0}", series.Title);
             _sonioRepo.Delete<Series>(seriesId);
+        }
+
+        public bool SeriesPathExists(string cleanPath)
+        {
+            if (_sonioRepo.Exists<Series>(s => s.Path == cleanPath))
+                return true;
+
+            return false;
         }
 
         #endregion

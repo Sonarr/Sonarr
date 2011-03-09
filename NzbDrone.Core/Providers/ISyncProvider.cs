@@ -1,8 +1,11 @@
+using System;
+using System.Collections.Generic;
+
 namespace NzbDrone.Core.Providers
 {
     public interface ISyncProvider
     {
-        void SyncUnmappedFolders();
-        void BeginSyncUnmappedFolders();
+        bool BeginSyncUnmappedFolders(List<string> paths);
+        List<String> GetUnmappedFolders(string path);
     }
 }

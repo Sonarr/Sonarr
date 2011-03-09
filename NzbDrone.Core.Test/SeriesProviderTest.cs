@@ -66,25 +66,25 @@ namespace NzbDrone.Core.Test
             //Assert.AreEqual(title, result, postTitle);
         }
 
-        [Test]
-        public void get_unmapped()
-        {
-            //Setup
-            var kernel = new MockingKernel();
+        //[Test]
+        //public void get_unmapped()
+        //{
+        //    //Setup
+        //    var kernel = new MockingKernel();
 
 
-            kernel.Bind<ISeriesProvider>().To<SeriesProvider>();
-            kernel.Bind<IDiskProvider>().ToConstant(MockLib.GetStandardDisk(0, 0));
-            kernel.Bind<IConfigProvider>().ToConstant(MockLib.StandardConfig);
+        //    kernel.Bind<ISeriesProvider>().To<SeriesProvider>();
+        //    kernel.Bind<IDiskProvider>().ToConstant(MockLib.GetStandardDisk(0, 0));
+        //    kernel.Bind<IConfigProvider>().ToConstant(MockLib.StandardConfig);
 
-            var seriesController = kernel.Get<ISeriesProvider>();
+        //    var seriesController = kernel.Get<ISeriesProvider>();
 
-            //Act
-            var unmappedFolder = seriesController.GetUnmappedFolders();
+        //    //Act
+        //    var unmappedFolder = seriesController.GetUnmappedFolders();
 
-            //Assert
-            Assert.AreElementsEqualIgnoringOrder(MockLib.StandardSeries, unmappedFolder.Values);
-        }
+        //    //Assert
+        //    Assert.AreElementsEqualIgnoringOrder(MockLib.StandardSeries, unmappedFolder.Values);
+        //}
 
 
     }

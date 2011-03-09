@@ -86,6 +86,7 @@
     <Compile Include="Helpers\HtmlPrefixScopeExtensions.cs" />
     <Compile Include="Helpers\IsCurrentActionHelper.cs" />
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\AddExistingSeriesModel.cs" />
     <Compile Include="Models\AddSeriesModel.cs" />
     <Compile Include="Models\DownloadSettingsModel.cs" />
     <Compile Include="Models\EpisodeSortingModel.cs" />
@@ -271,6 +272,7 @@
     <Content Include="Scripts\Notification.js" />
     <Content Include="Views\Home\Test.aspx" />
     <Content Include="Views\Log\Index.aspx" />
+    <Content Include="Views\Series\AddExisting.aspx" />
     <Content Include="Views\Series\Details.aspx" />
     <Content Include="Views\Series\Edit.aspx" />
     <Content Include="Views\Series\EpisodeDetail.ascx" />
@@ -278,6 +280,7 @@
     <Content Include="Views\Series\SubMenu.ascx" />
     <Content Include="Views\Series\Unmapped.aspx" />
     <Content Include="Views\Series\Add.aspx" />
+    <Content Include="Views\Settings\RootDir.ascx" />
     <Content Include="Views\Settings\Notifications.ascx" />
     <Content Include="Views\Settings\Downloads.ascx" />
     <Content Include="Views\Settings\EpisodeSorting.ascx" />

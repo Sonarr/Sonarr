@@ -12,6 +12,8 @@
            string sortable2 = String.Format("{0}_sortable2", idClean);
            string allowedStringName = String.Format("{0}_AllowedString", idClean);
            string connectedSortable = String.Format("connected{0}", idClean);
+           string title = String.Format("{0}_Title", idClean);
+           string nameBox = String.Format("{0}_Name", idClean);
        %>
 
         <style type="text/css">
@@ -24,7 +26,6 @@
             .sortable1 li.ui-state-highlight, .sortable2 li.ui-state-highlight { background: #fbf5d0; border-color: #065EFE; }
             .removeDiv { float: left; display:block; }
             .ui-state-highlight { height: 1.5em; line-height: 1.2em; }
-
         </style>
 
         <script type="text/javascript">
@@ -53,7 +54,7 @@
         <fieldset style="width:275px; margin:5px; margin-top: 0px; border-color:#CCCCCD">
 
             <div id="qualityHeader" style="padding-bottom: 5px; margin: 0px;">
-                <h2 style="display:inline; padding-right: 4px; margin-left: 4px;"><%= Html.DisplayTextFor(m => m.Name) %></h2>
+                <h2 style="display:inline; padding-right: 4px; margin-left: 4px;" id="<%= title %>"><%= Html.DisplayTextFor(m => m.Name) %></h2>
                 <a href="#" class="deleteRow"><img src="../../Content/Images/X.png" alt="Delete" /></a>
             </div>
 
@@ -115,4 +116,12 @@
             </div>
         </fieldset>
     </div> 
+
+    <script type="text/javascript">
+        $("#<%: nameBox %>").keyup(function () {
+            var value = $(this).val();
+            $("#<%= title %>").text(value);
+        }).keyup();
+    </script>
+
 <% } %>

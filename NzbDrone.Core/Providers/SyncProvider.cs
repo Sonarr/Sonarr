@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using NLog;
 using NzbDrone.Core.Model.Notification;
@@ -16,21 +15,54 @@ namespace NzbDrone.Core.Providers
         private readonly IEpisodeProvider _episodeProvider;
         private readonly IMediaFileProvider _mediaFileProvider;
         private readonly INotificationProvider _notificationProvider;
+        private readonly IDiskProvider _diskProvider;
 
         private ProgressNotification _seriesSyncNotification;
         private Thread _seriesSyncThread;
+        private List<string> _syncList;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public SyncProvider(ISeriesProvider seriesProvider, IEpisodeProvider episodeProvider, IMediaFileProvider mediaFileProvider, INotificationProvider notificationProvider)
+        public SyncProvider(ISeriesProvider seriesProvider, IEpisodeProvider episodeProvider,
+            IMediaFileProvider mediaFileProvider, INotificationProvider notificationProvider,
+            IDiskProvider diskProvider)
         {
             _seriesProvider = seriesProvider;
             _episodeProvider = episodeProvider;
             _mediaFileProvider = mediaFileProvider;
             _notificationProvider = notificationProvider;
+            _diskProvider = diskProvider;
         }
 
-        public void BeginSyncUnmappedFolders()
+        #region ISyncProvider Members
+
+        public List<String> GetUnmappedFolders(string path)
+        {
+            Logger.Debug("Generating list of unmapped folders");
+            if (String.IsNullOrEmpty(path))
+                throw new InvalidOperationException("Invalid path provided");
+
+            if (!_diskProvider.FolderExists(path))
+            {
+                Logger.Debug("Path supplied does not exist: {0}", path);
+            }
+
+            var results = new List<String>();
+            foreach (string seriesFolder in _diskProvider.GetDirectories(path))
+            {
+                var cleanPath = Parser.NormalizePath(new DirectoryInfo(seriesFolder).FullName);
+
+                if (!_seriesProvider.SeriesPathExists(cleanPath))
+                    results.Add(cleanPath);
+            }
+
+            Logger.Debug("{0} unmapped folders detected.", results.Count);
+            return results;
+        }
+
+        #endregion
+
+        public bool BeginSyncUnmappedFolders(List<string> paths)
         {
             Logger.Debug("User has request series folder scan");
             if (_seriesSyncThread == null || !_seriesSyncThread.IsAlive)
@@ -42,15 +74,22 @@ namespace NzbDrone.Core.Providers
                     Priority = ThreadPriority.Lowest
                 };
 
+                _syncList = paths;
                 _seriesSyncThread.Start();
             }
             else
             {
                 Logger.Warn("Series folder scan already in progress. Ignoring request.");
+
+                //return false if sync was already running, then we can tell the user to try again later
+                return false;
             }
+
+            //return true if sync has started
+            return true;
         }
 
-        public void SyncUnmappedFolders()
+        private void SyncUnmappedFolders()
         {
             Logger.Info("Starting Series folder scan");
 
@@ -60,14 +99,19 @@ namespace NzbDrone.Core.Providers
                 {
                     _notificationProvider.Register(_seriesSyncNotification);
                     _seriesSyncNotification.CurrentStatus = "Analysing Folder";
-                    var unmappedFolders = _seriesProvider.GetUnmappedFolders();
-                    _seriesSyncNotification.ProgressMax = unmappedFolders.Count;
+                    _seriesSyncNotification.ProgressMax = _syncList.Count;
 
-                    foreach (string seriesFolder in unmappedFolders.Values)
+                    foreach (var seriesFolder in _syncList)
                     {
                         try
                         {
                             _seriesSyncNotification.CurrentStatus = String.Format("Searching For: {0}", CultureInfo.CurrentCulture.TextInfo.ToTitleCase(new DirectoryInfo(seriesFolder).Name));
+
+                            if (_seriesProvider.SeriesPathExists(Parser.NormalizePath(seriesFolder)))
+                            {
+                                Logger.Debug("Folder '{0}' is mapped in the database. Skipping.'", seriesFolder);
+                                continue;
+                            }
 
                             Logger.Debug("Folder '{0}' isn't mapped in the database. Trying to map it.'", seriesFolder);
                             var mappedSeries = _seriesProvider.MapPathToSeries(seriesFolder);
@@ -86,7 +130,6 @@ namespace NzbDrone.Core.Providers
                                     _episodeProvider.RefreshEpisodeInfo(mappedSeries.Id);
                                     _seriesSyncNotification.CurrentStatus = String.Format("{0}: finding episodes on disk...", mappedSeries.SeriesName);
                                     _mediaFileProvider.Scan(_seriesProvider.GetSeries(mappedSeries.Id));
-
                                 }
                                 else
                                 {
