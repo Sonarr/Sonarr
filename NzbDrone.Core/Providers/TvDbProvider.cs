@@ -27,17 +27,9 @@ namespace NzbDrone.Core.Providers
         public IList<TvdbSearchResult> SearchSeries(string title)
         {
             Logger.Debug("Searching TVDB for '{0}'", title);
-            var result = new List<TvdbSearchResult>();
+            var result = _handler.SearchSeries(title);
 
-            foreach (var tvdbSearchResult in _handler.SearchSeries(title))
-            {
-                if (IsTitleMatch(tvdbSearchResult.SeriesName, title))
-                {
-                    result.Add(tvdbSearchResult);
-                }
-            }
-
-            Logger.Debug("Search for '{0}' returned {1} results", title, result.Count);
+            Logger.Debug("Search for '{0}' returned {1} possible results", title, result.Count);
             return result;
         }
 
@@ -48,7 +40,16 @@ namespace NzbDrone.Core.Providers
             if (searchResults.Count == 0)
                 return null;
 
-            return searchResults[0];
+            foreach (var tvdbSearchResult in searchResults)
+            {
+                if (IsTitleMatch(tvdbSearchResult.SeriesName, title))
+                {
+                    Logger.Debug("Search for '{0}' was successful", title);
+                    return tvdbSearchResult;
+                }
+            }
+
+            return null;
         }
 
         public TvdbSeries GetSeries(int id, bool loadEpisodes)
