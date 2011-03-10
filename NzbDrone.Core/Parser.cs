@@ -183,6 +183,7 @@ namespace NzbDrone.Core
         }
 
         //Note: changing case on path is a problem for running on mono/*nix
+        //Not going to change the casing any more... Looks Ugly in UI anyways :P
         public static string NormalizePath(string path)
         {
             if (String.IsNullOrEmpty(path))
@@ -192,10 +193,10 @@ namespace NzbDrone.Core
 
             if (info.FullName.StartsWith(@"\\")) //UNC
             {
-                return info.FullName.ToLower().TrimEnd('/', '\\', ' ');
+                return info.FullName.TrimEnd('/', '\\', ' ');
             }
 
-            return info.FullName.ToLower().Trim('/', '\\', ' ');
+            return info.FullName.Trim('/', '\\', ' ');
         }
 
         public static NzbInfoModel ParseNzbInfo(FeedInfoModel feed, RssItem item)
