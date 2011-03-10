@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using NLog;
+using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
 
 namespace NzbDrone.Core.Providers
@@ -19,7 +20,7 @@ namespace NzbDrone.Core.Providers
 
         private ProgressNotification _seriesSyncNotification;
         private Thread _seriesSyncThread;
-        private List<string> _syncList;
+        private List<SeriesMappingModel> _syncList;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
@@ -62,7 +63,7 @@ namespace NzbDrone.Core.Providers
 
         #endregion
 
-        public bool BeginSyncUnmappedFolders(List<string> paths)
+        public bool BeginSyncUnmappedFolders(List<SeriesMappingModel> unmapped)
         {
             Logger.Debug("User has request series folder scan");
             if (_seriesSyncThread == null || !_seriesSyncThread.IsAlive)
@@ -74,7 +75,7 @@ namespace NzbDrone.Core.Providers
                     Priority = ThreadPriority.Lowest
                 };
 
-                _syncList = paths;
+                _syncList = unmapped;
                 _seriesSyncThread.Start();
             }
             else
@@ -105,20 +106,20 @@ namespace NzbDrone.Core.Providers
                     {
                         try
                         {
-                            _seriesSyncNotification.CurrentStatus = String.Format("Searching For: {0}", CultureInfo.CurrentCulture.TextInfo.ToTitleCase(new DirectoryInfo(seriesFolder).Name));
+                            _seriesSyncNotification.CurrentStatus = String.Format("Searching For: {0}", new DirectoryInfo(seriesFolder.Path).Name);
 
-                            if (_seriesProvider.SeriesPathExists(Parser.NormalizePath(seriesFolder)))
+                            if (_seriesProvider.SeriesPathExists(Parser.NormalizePath(seriesFolder.Path)))
                             {
                                 Logger.Debug("Folder '{0}' is mapped in the database. Skipping.'", seriesFolder);
                                 continue;
                             }
 
                             Logger.Debug("Folder '{0}' isn't mapped in the database. Trying to map it.'", seriesFolder);
-                            var mappedSeries = _seriesProvider.MapPathToSeries(seriesFolder);
+                            var mappedSeries = _seriesProvider.MapPathToSeries(seriesFolder.TvDbId);
 
                             if (mappedSeries == null)
                             {
-                                Logger.Warn("Unable to find a matching series for '{0}'", seriesFolder);
+                                Logger.Warn("Invalid TVDB ID '{0}' Unable to map: '{1}'", seriesFolder.TvDbId, seriesFolder.Path);
                             }
                             else
                             {
@@ -126,7 +127,7 @@ namespace NzbDrone.Core.Providers
                                 if (_seriesProvider.GetSeries(mappedSeries.Id) == null)
                                 {
                                     _seriesSyncNotification.CurrentStatus = String.Format("{0}: downloading series info...", mappedSeries.SeriesName);
-                                    _seriesProvider.AddSeries(seriesFolder, mappedSeries);
+                                    _seriesProvider.AddSeries(seriesFolder.Path, mappedSeries);
                                     _episodeProvider.RefreshEpisodeInfo(mappedSeries.Id);
                                     _seriesSyncNotification.CurrentStatus = String.Format("{0}: finding episodes on disk...", mappedSeries.SeriesName);
                                     _mediaFileProvider.Scan(_seriesProvider.GetSeries(mappedSeries.Id));

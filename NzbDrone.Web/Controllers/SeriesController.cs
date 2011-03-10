@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
+using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
 using NzbDrone.Web.Models;
 using Telerik.Web.Mvc;
+using TvdbLib.Data;
+using EpisodeModel = NzbDrone.Web.Models.EpisodeModel;
 
 namespace NzbDrone.Web.Controllers
 {
@@ -50,19 +54,12 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult Add()
         {
-            return View(new AddSeriesModel());
+            return View(new AddNewSeriesModel());
         }
 
         public ActionResult AddExisting()
         {
             return View();
-        }
-
-        public ActionResult Sync(List<String> paths)
-        {
-            //Todo: Make this do something...
-            _syncProvider.BeginSyncUnmappedFolders(paths);
-            return RedirectToAction("Index");
         }
 
         public ActionResult RssSync()
@@ -115,18 +112,52 @@ namespace NzbDrone.Web.Controllers
         [GridAction]
         public ActionResult _AjaxUnmappedFoldersGrid()
         {
-            var unmappedList = new List<String>();
+            var unmappedList = new List<AddExistingSeriesModel>();
 
             foreach (var folder in _rootDirProvider.GetAll())
-                unmappedList.AddRange(_syncProvider.GetUnmappedFolders(folder.Path));
+            {
+                foreach (var unmappedFolder in _syncProvider.GetUnmappedFolders(folder.Path))
+                {
+                    var tvDbSeries = _seriesProvider.MapPathToSeries(unmappedFolder);
 
-            var seriesPaths = unmappedList.Select(c => new AddExistingSeriesModel
-                                                           {
-                                                               IsWanted = true,
-                                                               Path = c
-                                                           });
+                    //We still want to show this series as unmapped, but we don't know what it will be when mapped
+                    //Todo: Provide the user with a way to manually map a folder to a TvDb series (or make them rename the folder...)
+                    if (tvDbSeries == null)
+                        tvDbSeries = new TvdbSeries {Id = 0, SeriesName = String.Empty};
+                    
+                    unmappedList.Add(new AddExistingSeriesModel
+                                            {
+                                                IsWanted = true,
+                                                Path = unmappedFolder,
+                                                TvDbId = tvDbSeries.Id,
+                                                TvDbName = tvDbSeries.SeriesName
+                                            });
+                }
+            }
 
-            return View(new GridModel(seriesPaths));
+            return View(new GridModel(unmappedList));
+        }
+
+        public ActionResult SyncSelectedSeries(List<String> checkedRecords)
+        {
+
+            var unmappedList = new List<SeriesMappingModel>();
+
+            foreach (var checkedRecord in checkedRecords)
+            {
+                NameValueCollection nvc = HttpUtility.ParseQueryString(checkedRecord);
+
+                var path = HttpUtility.UrlDecode(nvc["path"]);
+                var tvDbId = Convert.ToInt32(HttpUtility.UrlDecode(nvc["tvdbid"]));
+
+                //If the TvDbId for this show is 0 then skip it... User made a mistake... They will have to manually map it
+                if (tvDbId < 1) continue;
+
+                unmappedList.Add(new SeriesMappingModel{Path = path, TvDbId = tvDbId});
+            }
+
+            _syncProvider.BeginSyncUnmappedFolders(unmappedList);
+            return Content("Sync Started for Selected Series");
         }
 
         private IEnumerable<Episode> GetData(GridCommand command)

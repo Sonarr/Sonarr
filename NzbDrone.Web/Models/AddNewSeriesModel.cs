@@ -7,16 +7,12 @@ using System.Web;
 
 namespace NzbDrone.Web.Models
 {
-    public class AddSeriesModel
+    public class AddNewSeriesModel
     {
+        [Required(ErrorMessage = "Please enter a series name")]
         [DataType(DataType.Text)]
         [DisplayName("Single Series Path")]
         [DisplayFormat(ConvertEmptyStringToNull = false)]
-        public string SingleSeries { get; set; }
-
-        [DataType(DataType.Text)]
-        [DisplayName("Series Root Path")]
-        [DisplayFormat(ConvertEmptyStringToNull = false)]
-        public string SeriesRoot { get; set; }
+        public string SeriesName { get; set; }
     }
 }

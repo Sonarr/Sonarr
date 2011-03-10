@@ -76,6 +76,11 @@ namespace NzbDrone.Core.Providers
             return _tvDb.GetSeries(searchResults.Id, false);
         }
 
+        public TvdbSeries MapPathToSeries(int tvDbId)
+        {
+            return _tvDb.GetSeries(tvDbId, false);
+        }
+
         public void AddSeries(string path, TvdbSeries series)
         {
             Logger.Info("Adding Series [{0}]:{1} Path: {2}", series.Id, series.SeriesName, path);

@@ -70,6 +70,10 @@
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Telerik.Web.Mvc, Version=2010.3.1318.235, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL" />
+    <Reference Include="TvdbLib, Version=0.8.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\NzbDrone.Core\Libraries\TvdbLib.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\AccountController.cs" />
@@ -87,7 +91,7 @@
     <Compile Include="Helpers\IsCurrentActionHelper.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\AddExistingSeriesModel.cs" />
-    <Compile Include="Models\AddSeriesModel.cs" />
+    <Compile Include="Models\AddNewSeriesModel.cs" />
     <Compile Include="Models\DownloadSettingsModel.cs" />
     <Compile Include="Models\EpisodeSortingModel.cs" />
     <Compile Include="Models\IndexerSettingsModel.cs" />
@@ -273,6 +277,7 @@
     <Content Include="Views\Home\Test.aspx" />
     <Content Include="Views\Log\Index.aspx" />
     <Content Include="Views\Series\AddExisting.aspx" />
+    <Content Include="Views\Series\AddNew.aspx" />
     <Content Include="Views\Series\Details.aspx" />
     <Content Include="Views\Series\Edit.aspx" />
     <Content Include="Views\Series\EpisodeDetail.ascx" />
