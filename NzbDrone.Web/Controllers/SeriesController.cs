@@ -27,6 +27,7 @@ namespace NzbDrone.Web.Controllers
         private readonly IMediaFileProvider _mediaFileProvider;
         private readonly IRenameProvider _renameProvider;
         private readonly IRootDirProvider _rootDirProvider;
+        private readonly ITvDbProvider _tvDbProvider;
 
         //
         // GET: /Series/
@@ -34,7 +35,8 @@ namespace NzbDrone.Web.Controllers
         public SeriesController(ISyncProvider syncProvider, ISeriesProvider seriesProvider,
             IEpisodeProvider episodeProvider, IRssSyncProvider rssSyncProvider,
             IQualityProvider qualityProvider, IMediaFileProvider mediaFileProvider,
-            IRenameProvider renameProvider, IRootDirProvider rootDirProvider)
+            IRenameProvider renameProvider, IRootDirProvider rootDirProvider,
+            ITvDbProvider tvDbProvider)
         {
             _seriesProvider = seriesProvider;
             _episodeProvider = episodeProvider;
@@ -44,6 +46,7 @@ namespace NzbDrone.Web.Controllers
             _mediaFileProvider = mediaFileProvider;
             _renameProvider = renameProvider;
             _rootDirProvider = rootDirProvider;
+            _tvDbProvider = tvDbProvider;
         }
 
         public ActionResult Index()
@@ -58,6 +61,11 @@ namespace NzbDrone.Web.Controllers
         }
 
         public ActionResult AddExisting()
+        {
+            return View();
+        }
+
+        public ActionResult AddNew()
         {
             return View();
         }
@@ -140,7 +148,6 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult SyncSelectedSeries(List<String> checkedRecords)
         {
-
             var unmappedList = new List<SeriesMappingModel>();
 
             foreach (var checkedRecord in checkedRecords)
@@ -156,8 +163,34 @@ namespace NzbDrone.Web.Controllers
                 unmappedList.Add(new SeriesMappingModel{Path = path, TvDbId = tvDbId});
             }
 
-            _syncProvider.BeginSyncUnmappedFolders(unmappedList);
-            return Content("Sync Started for Selected Series");
+            if(_syncProvider.BeginSyncUnmappedFolders(unmappedList))
+                return Content("Sync Started for Selected Series");
+
+            return Content("Sync already in progress, please wait for it to complete before retrying.");
+        }
+
+        public ActionResult SearchForSeries(string seriesName)
+        {
+            var model = new List<SeriesSearchResultModel>();
+
+            //Get Results from TvDb and convert them to something we can use.
+            foreach (var tvdbSearchResult in _tvDbProvider.SearchSeries(seriesName))
+            {
+                model.Add(new SeriesSearchResultModel
+                              {
+                                  TvDbId = tvdbSearchResult.Id,
+                                  TvDbName = tvdbSearchResult.SeriesName,
+                                  FirstAired = tvdbSearchResult.FirstAired
+                              });
+            }
+
+            ViewData["RootDirs"] = _rootDirProvider.GetAll();
+            ViewData["DirSep"] = Path.DirectorySeparatorChar;
+
+            //model.Add(new SeriesSearchResultModel{ TvDbId = 12345, TvDbName = "30 Rock", FirstAired = DateTime.Today });
+            //model.Add(new SeriesSearchResultModel { TvDbId = 65432, TvDbName = "The Office (US)", FirstAired = DateTime.Today.AddDays(-100) });
+
+            return PartialView("SeriesSearchResults", model);
         }
 
         private IEnumerable<Episode> GetData(GridCommand command)
@@ -220,9 +253,6 @@ namespace NzbDrone.Web.Controllers
             data = data.Take(command.PageSize);
             return data;*/
         }
-
-        //
-        // GET: /Series/Details/5
 
         [AcceptVerbs(HttpVerbs.Post)]
         [GridAction]

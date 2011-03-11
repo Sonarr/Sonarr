@@ -12,13 +12,12 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     
-    //Add a new series
-
     <%= Html.Label("Enter a Series Name") %>
-    <%= Html.TextBox("new_series_name", new { id="new_series_id" }) %>
+    <%= Html.TextBox("new_series_name", String.Empty, new { id="new_series_id" }) %>
 
-    //Browse Button??
-    //Auto-Complete?
+    <p>
+        <button class="t.button" onclick="searchSeries ()">Search</button>
+    </p>
 
     //Search Button - Perform AJAX search for this Series on TVDB
 
@@ -28,5 +27,28 @@
 
     Add, ask user to choose where to save the show in (used when sorting) then add the show... Possibly ask user to choose Quality Profile
     
+    <div id="result"></div>
+
+    <script type="text/javascript" language="javascript">
+
+        function searchSeries() {
+            var seriesSearch = $('#new_series_id');
+
+//            if ($seriesSearch.length < 1) {
+//                alert("Enter a valid name to search for");
+//                return;
+//            }          
+
+            //Setup a function to handle the results... Or return a partial...
+            $("#result").load('<%=Url.Action("SearchForSeries", "Series") %>', {
+                seriesName: seriesSearch.val()
+            }
+
+            //this.window.location = '<%= Url.Action("Index", "Series") %>';
+
+            );
+        }
+
+    </script>
 
 </asp:Content>

@@ -99,6 +99,7 @@
     <Compile Include="Models\EpisodeModel.cs" />
     <Compile Include="Models\NotificationSettingsModel.cs" />
     <Compile Include="Models\QualityModel.cs" />
+    <Compile Include="Models\SeriesSearchResultModel.cs" />
     <Compile Include="Models\SettingsModels.cs" />
     <Compile Include="Models\TestModel.cs" />
     <Compile Include="Ninject.Web.Mvc\ControllerMissingBindingResolver.cs" />
@@ -282,6 +283,7 @@
     <Content Include="Views\Series\Edit.aspx" />
     <Content Include="Views\Series\EpisodeDetail.ascx" />
     <Content Include="Views\Series\index.aspx" />
+    <Content Include="Views\Series\SeriesSearchResults.ascx" />
     <Content Include="Views\Series\SubMenu.ascx" />
     <Content Include="Views\Series\Unmapped.aspx" />
     <Content Include="Views\Series\Add.aspx" />

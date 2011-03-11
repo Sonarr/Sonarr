@@ -38,6 +38,11 @@ namespace NzbDrone.Core.Providers
             _sonioRepo.Update(rootDir);
         }
 
+        public RootDir GetRootDir(int rootDirId)
+        {
+            return _sonioRepo.Single<RootDir>(rootDirId);
+        }
+
         #endregion
     }
 }

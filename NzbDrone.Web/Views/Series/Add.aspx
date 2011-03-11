@@ -10,13 +10,8 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     
-    //Add New
-    
-
-    //Add Existing
-
-    //Ask user for existing TV Root Folder...
-    //Get list of unmapped folders and allow the user to check off the ones they want to add...
-    //
+    <%: Html.ActionLink("Add New Series", "AddNew", "Series") %>
+    <br />
+    <%: Html.ActionLink("Add Existing Series", "AddExisting", "Series") %>
 
 </asp:Content>

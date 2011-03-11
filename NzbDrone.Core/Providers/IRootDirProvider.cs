@@ -12,5 +12,6 @@ namespace NzbDrone.Core.Providers
         void Add(RootDir rootDir);
         void Remove(int rootDirId);
         void Update(RootDir rootDir);
+        RootDir GetRootDir(int rootDirId);
     }
 }

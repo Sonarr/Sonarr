@@ -4,7 +4,7 @@
 <%@ Import Namespace="NzbDrone.Web.Models" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
-    Add Existing Series
+    Add Existing
 </asp:Content>
 <asp:Content ID="Menu" ContentPlaceHolderID="ActionMenu" runat="server">
     <%
@@ -33,10 +33,6 @@
 
     </script>
     
-    //Get AJAX listing of unmapped directories
-    //When getting unmapped, also do a quick lookup on TVDB to see which series we would map this to... Don't do the mapping though...
-    //ITvDbProvider.GetSeries(string title);
-
     <%
         Html.Telerik().Grid<AddExistingSeriesModel>().Name("Unmapped_Series_Folders")
             .TableHtmlAttributes(new { id = "UnmappedSeriesGrid" })
@@ -85,7 +81,6 @@
             else {
                 $('#mastercheckbox').attr('checked', false);
             }
-
         });
 
         //Sync for selected series
@@ -100,15 +95,14 @@
 
             $("#result").load('<%=Url.Action("SyncSelectedSeries", "Series") %>', {
                 checkedRecords: $checkedRecords.map(function () { return jQuery.param({ path: this.name, tvdbid: this.value }) })
-            }
-            
-            //this.window.location = '<%= Url.Action("Index", "Series") %>';
+            });
 
-            );
-
-            
-
-            var grid = $('#UnmappedSeriesGrid').data('tGrid');
+            //Hide the series that we just tried to sync up (uncheck them too, otherwise they will be re-sync'd if we sync again)
+            $checkedRecords.each(function () {
+                var id = "#row_" + this.value;
+                $(this).attr("checked", false);
+                $(id).hide();
+            });
         }
 </script>
 </asp:Content>

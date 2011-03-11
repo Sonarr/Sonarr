@@ -30,6 +30,9 @@
         <fieldset>
             <legend>General</legend>
             
+                //Browse Button??
+                //Auto-Complete?
+                
             <div style="padding-top: 10px;">
                 <div style="padding-left: 7px; margin-bottom: 5px;">
                     <a id="addItem" style="text-decoration:none;" href="<%: Url.Action("AddRootDir", "Settings") %>">
