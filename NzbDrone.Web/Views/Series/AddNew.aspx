@@ -18,14 +18,6 @@
     <p>
         <button class="t.button" onclick="searchSeries ()">Search</button>
     </p>
-
-    //Search Button - Perform AJAX search for this Series on TVDB
-
-    //Return results with Radio Box + First Aired information, (link to TVDB too?) + Hidden ID text
-
-    User selects radio button and then presses add (or skips which clears results and #new_series_id)
-
-    Add, ask user to choose where to save the show in (used when sorting) then add the show... Possibly ask user to choose Quality Profile
     
     <div id="result"></div>
 
@@ -48,7 +40,7 @@
 
             );
         }
-
     </script>
+    <div id="tester"></div>
 
 </asp:Content>

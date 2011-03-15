@@ -65,7 +65,7 @@ namespace NzbDrone.Core.Providers
 
         public bool BeginSyncUnmappedFolders(List<SeriesMappingModel> unmapped)
         {
-            Logger.Debug("User has request series folder scan");
+            Logger.Debug("User has requested series folder scan");
             if (_seriesSyncThread == null || !_seriesSyncThread.IsAlive)
             {
                 Logger.Debug("Initializing background scan of series folder.");
@@ -76,6 +76,42 @@ namespace NzbDrone.Core.Providers
                 };
 
                 _syncList = unmapped;
+                _seriesSyncThread.Start();
+            }
+            else
+            {
+                Logger.Warn("Series folder scan already in progress. Ignoring request.");
+
+                //return false if sync was already running, then we can tell the user to try again later
+                return false;
+            }
+
+            //return true if sync has started
+            return true;
+        }
+
+        public bool BeginAddNewSeries(string dir, int seriesId, string seriesName)
+        {
+            Logger.Debug("User has requested adding of new series");
+            if (_seriesSyncThread == null || !_seriesSyncThread.IsAlive)
+            {
+                Logger.Debug("Initializing background add of of series folder.");
+                _seriesSyncThread = new Thread(SyncUnmappedFolders)
+                {
+                    Name = "SyncUnmappedFolders",
+                    Priority = ThreadPriority.Lowest
+                };
+
+                _syncList = new List<SeriesMappingModel>();
+
+                var path = dir + Path.DirectorySeparatorChar + seriesName;
+
+                //Create a directory for this new series
+                _diskProvider.CreateDirectory(path);
+
+                //Add it to the list so it will be processed
+                _syncList.Add(new SeriesMappingModel { Path = path, TvDbId = seriesId });
+
                 _seriesSyncThread.Start();
             }
             else

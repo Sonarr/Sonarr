@@ -169,26 +169,38 @@ namespace NzbDrone.Web.Controllers
             return Content("Sync already in progress, please wait for it to complete before retrying.");
         }
 
+        public ActionResult AddNewSeries(string dir, int seriesId, string seriesName)
+        {
+            //Get TVDB Series Name
+            //Create new folder for series
+            //Add the new series to the Database
+
+            if (_syncProvider.BeginAddNewSeries(dir, seriesId, seriesName))
+                return Content("Adding new series has started.");
+            
+            return Content("Unable to add new series, please wait for previous scans to complete first.");
+        }
+
         public ActionResult SearchForSeries(string seriesName)
         {
             var model = new List<SeriesSearchResultModel>();
 
             //Get Results from TvDb and convert them to something we can use.
-            foreach (var tvdbSearchResult in _tvDbProvider.SearchSeries(seriesName))
-            {
-                model.Add(new SeriesSearchResultModel
-                              {
-                                  TvDbId = tvdbSearchResult.Id,
-                                  TvDbName = tvdbSearchResult.SeriesName,
-                                  FirstAired = tvdbSearchResult.FirstAired
-                              });
-            }
+            //foreach (var tvdbSearchResult in _tvDbProvider.SearchSeries(seriesName))
+            //{
+            //    model.Add(new SeriesSearchResultModel
+            //                  {
+            //                      TvDbId = tvdbSearchResult.Id,
+            //                      TvDbName = tvdbSearchResult.SeriesName,
+            //                      FirstAired = tvdbSearchResult.FirstAired
+            //                  });
+            //}
 
             ViewData["RootDirs"] = _rootDirProvider.GetAll();
             ViewData["DirSep"] = Path.DirectorySeparatorChar;
 
-            //model.Add(new SeriesSearchResultModel{ TvDbId = 12345, TvDbName = "30 Rock", FirstAired = DateTime.Today });
-            //model.Add(new SeriesSearchResultModel { TvDbId = 65432, TvDbName = "The Office (US)", FirstAired = DateTime.Today.AddDays(-100) });
+            model.Add(new SeriesSearchResultModel{ TvDbId = 12345, TvDbName = "30 Rock", FirstAired = DateTime.Today });
+            model.Add(new SeriesSearchResultModel { TvDbId = 65432, TvDbName = "The Office (US)", FirstAired = DateTime.Today.AddDays(-100) });
 
             return PartialView("SeriesSearchResults", model);
         }

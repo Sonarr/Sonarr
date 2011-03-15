@@ -29,9 +29,6 @@
 <%: Html.ValidationSummary(true, "Unable to save your settings. Please correct the errors and try again.") %>
         <fieldset>
             <legend>General</legend>
-            
-                //Browse Button??
-                //Auto-Complete?
                 
             <div style="padding-top: 10px;">
                 <div style="padding-left: 7px; margin-bottom: 5px;">
