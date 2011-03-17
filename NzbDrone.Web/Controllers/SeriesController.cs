@@ -28,6 +28,7 @@ namespace NzbDrone.Web.Controllers
         private readonly IRenameProvider _renameProvider;
         private readonly IRootDirProvider _rootDirProvider;
         private readonly ITvDbProvider _tvDbProvider;
+        private readonly IDiskProvider _diskProvider;
 
         //
         // GET: /Series/
@@ -36,7 +37,7 @@ namespace NzbDrone.Web.Controllers
             IEpisodeProvider episodeProvider, IRssSyncProvider rssSyncProvider,
             IQualityProvider qualityProvider, IMediaFileProvider mediaFileProvider,
             IRenameProvider renameProvider, IRootDirProvider rootDirProvider,
-            ITvDbProvider tvDbProvider)
+            ITvDbProvider tvDbProvider, IDiskProvider diskProvider)
         {
             _seriesProvider = seriesProvider;
             _episodeProvider = episodeProvider;
@@ -47,6 +48,7 @@ namespace NzbDrone.Web.Controllers
             _renameProvider = renameProvider;
             _rootDirProvider = rootDirProvider;
             _tvDbProvider = tvDbProvider;
+            _diskProvider = diskProvider;
         }
 
         public ActionResult Index()
@@ -67,7 +69,25 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult AddNew()
         {
-            return View();
+            ViewData["RootDirs"] = _rootDirProvider.GetAll();
+            ViewData["DirSep"] = Path.DirectorySeparatorChar;
+
+            var model = new AddNewSeriesModel
+                            {
+                                DirectorySeparatorChar = Path.DirectorySeparatorChar.ToString(),
+                                RootDirectories = _rootDirProvider.GetAll()
+                            };
+
+            return View(model);
+        }
+
+        public ActionResult AddExistingManual(string path)
+        {
+            var model = new AddExistingManualModel();
+            model.Path = path;
+            model.FolderName = _diskProvider.GetFolderName(path);
+
+            return View(model);
         }
 
         public ActionResult RssSync()
@@ -137,6 +157,7 @@ namespace NzbDrone.Web.Controllers
                                             {
                                                 IsWanted = true,
                                                 Path = unmappedFolder,
+                                                PathEncoded = Url.Encode(unmappedFolder),
                                                 TvDbId = tvDbSeries.Id,
                                                 TvDbName = tvDbSeries.SeriesName
                                             });
@@ -181,26 +202,35 @@ namespace NzbDrone.Web.Controllers
             return Content("Unable to add new series, please wait for previous scans to complete first.");
         }
 
+        public ActionResult AddExistingSeries(string path, int seriesId)
+        {
+            //Get TVDB Series Name
+            //Create new folder for series
+            //Add the new series to the Database
+
+            if (_syncProvider.BeginAddExistingSeries(path, seriesId))
+                return Content("Manual adding of existing series has started");
+
+            return Content("Unable to add existing series, please wait for previous scans to complete first.");
+        }
+
         public ActionResult SearchForSeries(string seriesName)
         {
             var model = new List<SeriesSearchResultModel>();
 
             //Get Results from TvDb and convert them to something we can use.
-            //foreach (var tvdbSearchResult in _tvDbProvider.SearchSeries(seriesName))
-            //{
-            //    model.Add(new SeriesSearchResultModel
-            //                  {
-            //                      TvDbId = tvdbSearchResult.Id,
-            //                      TvDbName = tvdbSearchResult.SeriesName,
-            //                      FirstAired = tvdbSearchResult.FirstAired
-            //                  });
-            //}
+            foreach (var tvdbSearchResult in _tvDbProvider.SearchSeries(seriesName))
+            {
+                model.Add(new SeriesSearchResultModel
+                              {
+                                  TvDbId = tvdbSearchResult.Id,
+                                  TvDbName = tvdbSearchResult.SeriesName,
+                                  FirstAired = tvdbSearchResult.FirstAired
+                              });
+            }
 
-            ViewData["RootDirs"] = _rootDirProvider.GetAll();
-            ViewData["DirSep"] = Path.DirectorySeparatorChar;
-
-            model.Add(new SeriesSearchResultModel{ TvDbId = 12345, TvDbName = "30 Rock", FirstAired = DateTime.Today });
-            model.Add(new SeriesSearchResultModel { TvDbId = 65432, TvDbName = "The Office (US)", FirstAired = DateTime.Today.AddDays(-100) });
+            //model.Add(new SeriesSearchResultModel{ TvDbId = 12345, TvDbName = "30 Rock", FirstAired = DateTime.Today });
+            //model.Add(new SeriesSearchResultModel { TvDbId = 65432, TvDbName = "The Office (US)", FirstAired = DateTime.Today.AddDays(-100) });
 
             return PartialView("SeriesSearchResults", model);
         }

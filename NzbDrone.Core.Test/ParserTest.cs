@@ -57,9 +57,9 @@ namespace NzbDrone.Core.Test
         [Test]
         [Row(@"c:\test\", @"c:\test")]
         [Row(@"c:\\test\\", @"c:\test")]
-        [Row(@"C:\\Test\\", @"c:\test")]
-        [Row(@"C:\\Test\\Test\", @"c:\test\test")]
-        [Row(@"\\Testserver\Test\", @"\\testserver\test")]
+        [Row(@"C:\\Test\\", @"C:\Test")]
+        [Row(@"C:\\Test\\Test\", @"C:\Test\Test")]
+        [Row(@"\\Testserver\Test\", @"\\Testserver\Test")]
         public void Normalize_Path(string dirty, string clean)
         {
             var result = Parser.NormalizePath(dirty);

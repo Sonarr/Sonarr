@@ -13,5 +13,6 @@ namespace NzbDrone.Core.Providers
         long GetSize(string path);
         void DeleteFile(string path);
         void RenameFile(string sourcePath, string destinationPath);
+        string GetFolderName(string path);
     }
 }

@@ -4,7 +4,7 @@
 <%@ Import Namespace="NzbDrone.Web.Models" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
-    Add Existing
+    Add Existing Series
 </asp:Content>
 <asp:Content ID="Menu" ContentPlaceHolderID="ActionMenu" runat="server">
     <%
@@ -16,6 +16,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('#mastercheckbox').attr("checked", "checked");
+            document.getElementById('unmappedGrid').style.display = 'block';
         });
 
         function Grid_onRowDataBound(e) {
@@ -31,32 +32,43 @@
             //You can use the OnRowDataBound event to customize the way data is presented on the client-side
         };
 
+        function Grid_onLoad(e) {
+            $('.t-no-data').text("Loading...");
+        };
+
     </script>
-    
-    <%
-        Html.Telerik().Grid<AddExistingSeriesModel>().Name("Unmapped_Series_Folders")
-            .TableHtmlAttributes(new { id = "UnmappedSeriesGrid" })
-            .Columns(columns =>
-                         {
-                             columns.Bound(c => c.IsWanted).ClientTemplate("<input type='checkbox' name='<#= Path #>' class='checkedSeries' value='<#= TvDbId #>' checked='true'/>")
-                                 .Width(20).Title("<input id='mastercheckbox' type='checkbox' />")
-                                 .HtmlAttributes(new { style = "text-align:center" });
 
-                             columns.Bound(c => c.Path);
-                             columns.Bound(c => c.TvDbName);
-                         })
-            .DataBinding(d => d.Ajax().Select("_AjaxUnmappedFoldersGrid", "Series"))
-            .ClientEvents(events => events.OnRowDataBound("Grid_onRowDataBound"))
-            .Footer(false)
-            .Render();
-    %>
+    <div id="unmappedGrid" style="display:none">
+        <%
+            Html.Telerik().Grid<AddExistingSeriesModel>().Name("Unmapped_Series_Folders")
+                .TableHtmlAttributes(new { id = "UnmappedSeriesGrid" })
+                .Columns(columns =>
+                             {
+                                 columns.Bound(c => c.IsWanted).ClientTemplate("<input type='checkbox' name='<#= Path #>' class='checkedSeries' value='<#= TvDbId #>' checked='true'/>")
+                                     .Width(20).Title("<input id='mastercheckbox' type='checkbox' style='margin-left:5px'/>")
+                                     .HtmlAttributes(new { style = "text-align:center" });
 
-    <p>
-        <button class="t.button" onclick="syncSelected ()">Sync Selected Series</button>   
-    </p>
+                                 columns.Bound(c => c.Path).ClientTemplate("<a href=" + Url.Action("AddExistingManual", "Series", new { path = "<#= PathEncoded #>" }) + "><#= Path #></a>")
+                                     .Template(c =>
+                                      { %>
+                                        <%:Html.ActionLink(c.Path, "AddExistingManual", new { path = c.Path })%>
+                                        <% }).Title("Path");
+                                 columns.Bound(c => c.TvDbName);
+                             })
+                .DataBinding(d => d.Ajax().Select("_AjaxUnmappedFoldersGrid", "Series"))
+                .ClientEvents(events => events.OnRowDataBound("Grid_onRowDataBound"))
+                .ClientEvents(events => events.OnLoad("Grid_onLoad"))
+                .Footer(false)
+                .Render();
+        %>
+
+        <p>
+            <button class="t.button" onclick="syncSelected ()">Sync Selected Series</button>   
+        </p>
+
+    </div>
 
     <div id="result"></div>
-    <div id="tester"></div>
 
 <script type="text/javascript" language="javascript">
 

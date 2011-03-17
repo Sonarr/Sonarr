@@ -235,3 +235,10 @@ input[type="text"]:hover
 	border: 1px solid #f00;
     background: #eef;
 }
+
+/* Add Series */
+
+.tvDbSearchResults
+{
+    width: 400px;
+}

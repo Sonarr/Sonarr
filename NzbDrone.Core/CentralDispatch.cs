@@ -171,15 +171,18 @@ namespace NzbDrone.Core
         {
             //Setup the default providers in the Providers table
 
-            string nzbMatrixRss = "http://rss.nzbmatrix.com/rss.php?page=download&username={USERNAME}&apikey={APIKEY}&subcat=6&english=1";
+            string nzbMatrixRss = "http://rss.nzbmatrix.com/rss.php?page=download&username={USERNAME}&apikey={APIKEY}&subcat=6,41&english=1";
+            string nzbMatrixApi = "http://rss.nzbmatrix.com/rss.php?page=download&username={USERNAME}&apikey={APIKEY}&subcat=6,41&english=1&age={AGE}&term={TERM}";
             string nzbsOrgRss = "http://nzbs.org/rss.php?type=1&dl=1&num=100&i={UID}&h={HASH}";
+            string nzbsOrgApi = String.Empty;
             string nzbsrusRss = "http://www.nzbsrus.com/rssfeed.php?cat=91,75&i={UID}&h={HASH}";
+            string nzbsrusApi = String.Empty;
 
             var nzbMatrixIndexer = new Indexer
                                        {
                                            IndexerName = "NzbMatrix",
                                            RssUrl = nzbMatrixRss,
-                                           ApiUrl = String.Empty,
+                                           ApiUrl = nzbMatrixApi,
                                            Order = 1
                                        };
 
@@ -187,7 +190,7 @@ namespace NzbDrone.Core
                                      {
                                          IndexerName = "NzbsOrg",
                                          RssUrl = nzbsOrgRss,
-                                         ApiUrl = String.Empty,
+                                         ApiUrl = nzbsOrgApi,
                                          Order = 2
                                      };
 
@@ -195,7 +198,7 @@ namespace NzbDrone.Core
                               {
                                   IndexerName = "Nzbsrus",
                                   RssUrl = nzbsrusRss,
-                                  ApiUrl = String.Empty,
+                                  ApiUrl = nzbsrusApi,
                                   Order = 3
                               };
 

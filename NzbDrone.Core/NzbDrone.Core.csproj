@@ -158,6 +158,7 @@
   <ItemGroup>
     <Compile Include="Helpers\EpisodeRenameHelper.cs" />
     <Compile Include="Helpers\EpisodeSortingHelper.cs" />
+    <Compile Include="Helpers\SceneNameHelper.cs" />
     <Compile Include="Helpers\ServerHelper.cs" />
     <Compile Include="Instrumentation\ILogProvider.cs" />
     <Compile Include="Instrumentation\LogLevel.cs" />
@@ -174,9 +175,12 @@
     <Compile Include="Model\NzbInfoModel.cs" />
     <Compile Include="Model\NzbSiteModel.cs" />
     <Compile Include="Model\SabnzbdPriorityType.cs" />
+    <Compile Include="Model\SceneNameModel.cs" />
     <Compile Include="Model\SeriesMappingModel.cs" />
+    <Compile Include="Providers\BacklogProvider.cs" />
     <Compile Include="Providers\ExternalNotificationProvider.cs" />
     <Compile Include="Providers\HistoryProvider.cs" />
+    <Compile Include="Providers\IBacklogProvider.cs" />
     <Compile Include="Providers\IExtenalNotificationProvider.cs" />
     <Compile Include="Providers\IHistoryProvider.cs" />
     <Compile Include="Providers\IIndexerProvider.cs" />

@@ -8,6 +8,7 @@ namespace NzbDrone.Core.Providers
     {
         bool BeginSyncUnmappedFolders(List<SeriesMappingModel> unmapped);
         bool BeginAddNewSeries(string dir, int seriesId, string seriesName);
+        bool BeginAddExistingSeries(string path, int seriesId);
         List<String> GetUnmappedFolders(string path);
     }
 }

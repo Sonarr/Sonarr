@@ -14,13 +14,15 @@ namespace NzbDrone.Core.Providers
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IRepository _sonicRepo;
+        private readonly IConfigProvider _configProvider;
 
-        public IndexerProvider(IRepository sonicRepo)
+        public IndexerProvider(IRepository sonicRepo, IConfigProvider configProvider)
         {
             _sonicRepo = sonicRepo;
+            _configProvider = configProvider;
         }
 
-        #region IIndexerProvider
+        #region IIndexerProvider Members
 
         public List<Indexer> AllIndexers()
         {

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Web.Models
 {
@@ -14,5 +15,9 @@ namespace NzbDrone.Web.Models
         [DisplayName("Single Series Path")]
         [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string SeriesName { get; set; }
+
+        public string DirectorySeparatorChar { get; set; }
+
+        public List<RootDir> RootDirectories { get; set; }
     }
 }

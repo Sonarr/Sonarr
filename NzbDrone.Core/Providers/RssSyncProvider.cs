@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using NLog;
+using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Repository;
@@ -146,8 +147,14 @@ namespace NzbDrone.Core.Providers
 
                 if (series == null)
                 {
-                    Logger.Debug("Show is not being watched: {0}", episodeParseResults[0].SeriesTitle);
-                    return;
+                    //If we weren't able to find a title using the clean name, lets try again looking for a scene name
+                    series = _series.GetSeries(SceneNameHelper.FindByName(episodeParseResults[0].SeriesTitle));
+
+                    if (series == null)
+                    {
+                        Logger.Debug("Show is not being watched: {0}", episodeParseResults[0].SeriesTitle);
+                        return;
+                    }
                 }
 
                 Logger.Debug("Show is being watched: {0}", series.Title);

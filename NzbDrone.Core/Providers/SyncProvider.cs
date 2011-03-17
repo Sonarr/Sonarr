@@ -126,6 +126,37 @@ namespace NzbDrone.Core.Providers
             return true;
         }
 
+        public bool BeginAddExistingSeries(string path, int seriesId)
+        {
+            Logger.Debug("User has requested adding of new series");
+            if (_seriesSyncThread == null || !_seriesSyncThread.IsAlive)
+            {
+                Logger.Debug("Initializing background add of of series folder.");
+                _seriesSyncThread = new Thread(SyncUnmappedFolders)
+                {
+                    Name = "SyncUnmappedFolders",
+                    Priority = ThreadPriority.Lowest
+                };
+
+                _syncList = new List<SeriesMappingModel>();
+
+                //Add it to the list so it will be processed
+                _syncList.Add(new SeriesMappingModel { Path = path, TvDbId = seriesId });
+
+                _seriesSyncThread.Start();
+            }
+            else
+            {
+                Logger.Warn("Series folder scan already in progress. Ignoring request.");
+
+                //return false if sync was already running, then we can tell the user to try again later
+                return false;
+            }
+
+            //return true if sync has started
+            return true;
+        }
+
         private void SyncUnmappedFolders()
         {
             Logger.Info("Starting Series folder scan");
@@ -167,6 +198,7 @@ namespace NzbDrone.Core.Providers
                                     _episodeProvider.RefreshEpisodeInfo(mappedSeries.Id);
                                     _seriesSyncNotification.CurrentStatus = String.Format("{0}: finding episodes on disk...", mappedSeries.SeriesName);
                                     _mediaFileProvider.Scan(_seriesProvider.GetSeries(mappedSeries.Id));
+                                    //Todo: Launch Backlog search for this series _backlogProvider.StartSearch(mappedSeries.Id);
                                 }
                                 else
                                 {

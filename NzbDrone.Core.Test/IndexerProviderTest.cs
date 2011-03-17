@@ -30,9 +30,10 @@ namespace NzbDrone.Core.Test
             list.Add(new Indexer { IndexerName = "Test4", RssUrl = "http://www.test4.com/rss.php", Enabled = false, Order = 2 });
 
             var repo = new Mock<IRepository>();
+            var config = new Mock<IConfigProvider>();
             repo.Setup(r => r.All<Indexer>()).Returns(list.AsQueryable());
 
-            var target = new IndexerProvider(repo.Object);
+            var target = new IndexerProvider(repo.Object, config.Object);
 
             //Act
             var result = target.AllIndexers();
@@ -57,9 +58,10 @@ namespace NzbDrone.Core.Test
             list.Add(new Indexer { IndexerName = "Test4", RssUrl = "http://www.test4.com/rss.php", Enabled = false, Order = 2 });
 
             var repo = new Mock<IRepository>();
+            var config = new Mock<IConfigProvider>();
             repo.Setup(r => r.All<Indexer>()).Returns(list.AsQueryable());
 
-            var target = new IndexerProvider(repo.Object);
+            var target = new IndexerProvider(repo.Object, config.Object);
 
             //Act
             var result = target.EnabledIndexers();
