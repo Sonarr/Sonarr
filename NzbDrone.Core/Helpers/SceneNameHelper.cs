@@ -74,9 +74,9 @@ namespace NzbDrone.Core.Helpers
             new SceneNameModel { SeriesId = 73244, Name = "The Office US" },
         };
 
-        public static int FindByName(string seriesName)
+        public static int FindByName(string cleanSeriesName)
         {
-            var map = _sceneNameMappings.Single(s => s.Name == seriesName);
+            var map = _sceneNameMappings.Single(s => Parser.NormalizeTitle(s.Name) == cleanSeriesName);
 
             if (map == null)
                 return 0;

@@ -26,14 +26,18 @@ namespace NzbDrone.Core.Providers
         private IHistoryProvider _history;
         private IDownloadProvider _sab;
         private IConfigProvider _configProvider;
+        private IRssItemProcessingProvider _rssItemProcessor;
         private readonly INotificationProvider _notificationProvider;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private ProgressNotification _rssSyncNotification;
 
-        public RssSyncProvider(IIndexerProvider indexerProvider, IRssProvider rss, ISeriesProvider series,
-            ISeasonProvider season, IEpisodeProvider episode, IHistoryProvider history, IDownloadProvider sab, INotificationProvider notificationProvider, IConfigProvider configProvider)
+        public RssSyncProvider(IIndexerProvider indexerProvider, IRssProvider rss,
+            ISeriesProvider series, ISeasonProvider season,
+            IEpisodeProvider episode, IHistoryProvider history,
+            IDownloadProvider sab, INotificationProvider notificationProvider,
+            IConfigProvider configProvider, IRssItemProcessingProvider rssItemProcessor)
         {
             _indexerProvider = indexerProvider;
             _rss = rss;
@@ -44,6 +48,7 @@ namespace NzbDrone.Core.Providers
             _sab = sab;
             _notificationProvider = notificationProvider;
             _configProvider = configProvider;
+            _rssItemProcessor = rssItemProcessor;
         }
 
         #region IRssSyncProvider Members
@@ -113,7 +118,7 @@ namespace NzbDrone.Core.Providers
                     foreach (RssItem item in feedItems)
                     {
                         NzbInfoModel nzb = Parser.ParseNzbInfo(indexer, item);
-                        QueueIfWanted(nzb, i);
+                        _rssItemProcessor.QueueIfWanted(nzb, i);
                     }
                 }
                 _rssSyncNotification.CurrentStatus = "RSS Sync Completed";
@@ -121,143 +126,6 @@ namespace NzbDrone.Core.Providers
                 Thread.Sleep(3000);
                 _rssSyncNotification.Status = ProgressNotificationStatus.Completed;
             }
-        }
-
-        private void QueueIfWanted(NzbInfoModel nzb, Indexer indexer)
-        {
-            //Do we want this item?
-            try
-            {
-                if (nzb.IsPassworded())
-                {
-                    Logger.Debug("Skipping Passworded Report {0}", nzb.Title);
-                    return;
-                }
-
-                var episodeParseResults = Parser.ParseEpisodeInfo(nzb.Title);
-
-                if (episodeParseResults.Count() < 1)
-                {
-                    Logger.Debug("Unsupported Title: {0}", nzb.Title);
-                    return;
-                }
-
-                //Todo: How to determine if we want the show if the FeedTitle is drastically different from the TitleOnDisk (CSI is one that comes to mind)
-                var series = _series.FindSeries(episodeParseResults[0].SeriesTitle);
-
-                if (series == null)
-                {
-                    //If we weren't able to find a title using the clean name, lets try again looking for a scene name
-                    series = _series.GetSeries(SceneNameHelper.FindByName(episodeParseResults[0].SeriesTitle));
-
-                    if (series == null)
-                    {
-                        Logger.Debug("Show is not being watched: {0}", episodeParseResults[0].SeriesTitle);
-                        return;
-                    }
-                }
-
-                Logger.Debug("Show is being watched: {0}", series.Title);
-
-                nzb.TitleFix = GetTitleFix(episodeParseResults, series.SeriesId); //Get the TitleFix so we can use it later
-                
-                nzb.Proper = Parser.ParseProper(nzb.Title);
-                nzb.Quality = Parser.ParseQuality(nzb.Title);
-
-                nzb.TitleFix = String.Format("{0} [{1}]", nzb.TitleFix, nzb.Quality); //Add Quality to the titleFix
-
-                //Loop through the list of the episodeParseResults to ensure that all the episodes are needed)
-                foreach (var episode in episodeParseResults)
-                {
-                    //IsEpisodeWanted?
-                    var episodeModel = new EpisodeModel();
-                    episodeModel.Proper = nzb.Proper;
-                    episodeModel.SeriesId = series.SeriesId;
-                    episodeModel.SeriesTitle = series.Title;
-                    episodeModel.Quality = nzb.Quality;
-                    episodeModel.SeasonNumber = episode.SeasonNumber;
-                    episodeModel.EpisodeNumber = episode.EpisodeNumber;
-
-                    if (!_episode.IsNeeded(episodeModel))
-                        return;
-
-                    var titleFix = GetTitleFix(new List<EpisodeParseResult> { episode }, episodeModel.SeriesId);
-                    titleFix = String.Format("{0} [{1}]", titleFix, nzb.Quality); //Add Quality to the titleFix
-
-                    if (_sab.IsInQueue(titleFix))
-                        return;
-                }
-
-                //If their is more than one episode in this NZB check to see if it has been added as a single NZB
-                if (episodeParseResults.Count > 1)
-                {
-                    if (_sab.IsInQueue(nzb.TitleFix))
-                        return;
-                }
-
-                //Only add to history if it was added to properly sent to SABnzbd
-                if (_sab.AddByUrl(nzb.Link.ToString(), nzb.TitleFix))
-                {
-                    //We need to loop through the episodeParseResults so each episode in the NZB is properly handled
-                    foreach (var epr in episodeParseResults)
-                    {
-                        var episode = _episode.GetEpisode(series.SeriesId, epr.SeasonNumber, epr.EpisodeNumber);
-
-                        if (episode == null)
-                        {
-                            //Not sure how we got this far, so lets throw an exception
-                            throw new ArgumentOutOfRangeException();
-                        }
-
-                        //Set episode status to grabbed
-                        episode.Status = EpisodeStatusType.Grabbed;
-
-                        //Add to History
-                        var history = new History();
-                        history.Date = DateTime.Now;
-                        history.EpisodeId = episode.EpisodeId;
-                        history.IndexerName = indexer.IndexerName;
-                        history.IsProper = nzb.Proper;
-                        history.Quality = nzb.Quality;
-                        history.NzbTitle = nzb.Title;
-
-                        _history.Insert(history);
-                    }
-                }
-            }
-
-            catch (Exception ex)
-            {
-                Logger.ErrorException("Error Parsing NZB: " + ex.Message, ex);
-            }
-        }
-
-        private string GetTitleFix(List<EpisodeParseResult> episodes, int seriesId)
-        {
-            var series = _series.GetSeries(seriesId);
-
-            int seasonNumber = 0;
-            string episodeNumbers = String.Empty;
-            string episodeTitles = String.Empty;
-
-            foreach (var episode in episodes)
-            {
-                var episodeInDb = _episode.GetEpisode(seriesId, episode.SeasonNumber, episode.EpisodeNumber);
-
-                if (episodeInDb == null)
-                {
-                    Logger.Debug("Episode Not found in Database");
-                    return String.Format("{0} - {1:00}x{2}", series.Title, episode.SeasonNumber, episode.SeriesTitle);
-                }
-
-                seasonNumber = episodeInDb.SeasonNumber;
-                episodeNumbers = String.Format("{0}x{1:00}", episodeNumbers, episodeInDb.EpisodeNumber);
-                episodeTitles = String.Format("{0} + {1}", episodeTitles, episodeInDb.Title);
-            }
-
-            episodeTitles = episodeTitles.Trim(' ', '+');
-
-            return String.Format("{0} - {1}{2} - {3}", series.Title, seasonNumber, episodeNumbers, episodeTitles);
         }
 
         private void GetUsersUrl(Indexer indexer)

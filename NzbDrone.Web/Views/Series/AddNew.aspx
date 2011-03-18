@@ -29,7 +29,7 @@
     
     <div id="result"></div>
 
-<div id="RootDirectories" style="display:none">
+<div id="RootDirectories" class="rootDirectories" style="display:none">
     <fieldset>
         <legend>Root TV Folders</legend>
 

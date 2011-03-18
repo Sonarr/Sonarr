@@ -3,7 +3,7 @@ using SubSonic.SqlGeneration.Schema;
 
 namespace NzbDrone.Core.Model
 {
-    internal class EpisodeParseResult
+    public class EpisodeParseResult
     {
         internal string SeriesTitle { get; set; }
         internal int SeasonNumber { get; set; }

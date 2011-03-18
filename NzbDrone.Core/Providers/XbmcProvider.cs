@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Text;
 using System.Xml.Linq;
 using NLog;
@@ -15,12 +14,10 @@ namespace NzbDrone.Core.Providers
         private readonly IConfigProvider _configProvider;
         private readonly IHttpProvider _httpProvider;
 
-        private WebClient _webClient;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public XbmcProvider(IConfigProvider configProvider, IHttpProvider httpProvider)
         {
-            _webClient = new WebClient();
             _configProvider = configProvider;
             _httpProvider = httpProvider;
         }

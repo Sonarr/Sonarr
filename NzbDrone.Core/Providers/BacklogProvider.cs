@@ -20,6 +20,7 @@ namespace NzbDrone.Core.Providers
         private readonly IConfigProvider _configProvider;
         private readonly IIndexerProvider _indexerProvider;
         private readonly IRssProvider _rssProvider;
+        private readonly IRssItemProcessingProvider _rssItemProcessor;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private List<Series> _seriesList;
@@ -28,7 +29,7 @@ namespace NzbDrone.Core.Providers
 
         public BacklogProvider(ISeriesProvider seriesProvider, INotificationProvider notificationProvider,
             IConfigProvider configProvider, IIndexerProvider indexerProvider,
-            IRssProvider rssProvider)
+            IRssProvider rssProvider, IRssItemProcessingProvider _rssItemProcessor)
         {
             _seriesProvider = seriesProvider;
             _notificationProvider = notificationProvider;
