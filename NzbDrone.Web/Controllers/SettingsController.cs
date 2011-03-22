@@ -87,7 +87,9 @@ namespace NzbDrone.Web.Controllers
                                 SabUsername = _configProvider.GetValue("SabUsername", String.Empty, true),
                                 SabPassword = _configProvider.GetValue("SabPassword", String.Empty, true),
                                 SabTvCategory = _configProvider.GetValue("SabTvCategory", String.Empty, true),
-                                SabPriority = (SabnzbdPriorityType)Enum.Parse(typeof(SabnzbdPriorityType), _configProvider.GetValue("SabPriority", "Normal", true)),
+                                SabTvPriority = (SabnzbdPriorityType)Enum.Parse(typeof(SabnzbdPriorityType), _configProvider.GetValue("SabTvPriority", "Normal", true)),
+                                UseBlackHole = Convert.ToBoolean(_configProvider.GetValue("UseBlackHole", true, true)),
+                                BlackholeDirectory = _configProvider.GetValue("BlackholeDirectory", String.Empty, true)
                             };
 
             return View("Index", model);
@@ -275,7 +277,9 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.SetValue("SabUsername", data.SabUsername);
                 _configProvider.SetValue("SabPassword", data.SabPassword);
                 _configProvider.SetValue("SabTvCategory", data.SabTvCategory);
-                _configProvider.SetValue("SabPriority", data.SabPriority.ToString());
+                _configProvider.SetValue("SabTvPriority", data.SabTvPriority.ToString());
+                _configProvider.SetValue("UseBlackhole", data.UseBlackHole.ToString());
+                _configProvider.SetValue("BlackholeDirectory", data.BlackholeDirectory);
 
                 return Content(_settingsSaved);
             }

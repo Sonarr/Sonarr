@@ -10,8 +10,23 @@
             resetForm: false
         };
         $('#form').ajaxForm(options);
+        selectDownloadOption(); //Load either SAB or Blackhole div
         $('#save_button').attr('disabled', '');
     });
+
+    function selectDownloadOption() {
+        var selected = $("input[name='UseBlackHole']:checked").val();
+
+        if (selected == "True") {
+            document.getElementById('blackhole').style.display = 'block';
+            document.getElementById('sab').style.display = 'none';
+        }
+
+        else {
+            document.getElementById('sab').style.display = 'block';
+            document.getElementById('blackhole').style.display = 'none';
+        }
+    }
 
     function showRequest(formData, jqForm, options) {
         $("#result").empty().html('Saving...');
@@ -21,7 +36,11 @@
     function showResponse(responseText, statusText, xhr, $form) {
         $("#result").empty().html(responseText);
         $("#form :input").attr("disabled", false);
-    }                
+    }
+
+    $(".blackhole_radio").live("change", function () {
+        selectDownloadOption(); //Load either SAB or Blackhole div
+    });                
 </script>
 
     <% Html.EnableClientValidation(); %>
@@ -72,65 +91,93 @@
                 </div>
             </fieldset>
 
-            <fieldset class="sub-field">
-                <legend>SABnzbd</legend>
-
-                <div class="config-section">
-                    <div class="config-group">
-                        <div class="config-title"><%= Html.LabelFor(m => m.SabHost)%></div>
-                        <div class="config-value"><%= Html.TextBoxFor(m => m.SabHost)%></div>
-                    </div>
-                    <div class="config-validation"><%= Html.ValidationMessageFor(m => m.SabHost)%></div>
+            <div>
+                <div>
+                    <b><%= Html.LabelFor(m => m.UseBlackHole) %></b>
                 </div>
-
-                <div class="config-section">
-                    <div class="config-group">
-                        <div class="config-title"><%= Html.LabelFor(m => m.SabPort)%></div>
-                        <div class="config-value"><%= Html.TextBoxFor(m => m.SabPort)%></div>
-                    </div>
-                    <div class="config-validation"><%= Html.ValidationMessageFor(m => m.SabPort)%></div>
+                <div>
+                    <%= Html.RadioButtonFor(m => m.UseBlackHole, true, new { @class = "blackhole_radio" }) %>Blackhole
                 </div>
-
-                <div class="config-section">
-                    <div class="config-group">
-                        <div class="config-title"><%= Html.LabelFor(m => m.SabApiKey)%></div>
-                        <div class="config-value"><%= Html.TextBoxFor(m => m.SabApiKey)%></div>
-                    </div>
-                    <div class="config-validation"><%= Html.ValidationMessageFor(m => m.SabApiKey)%></div>
+                <div>
+                    <%= Html.RadioButtonFor(m => m.UseBlackHole, false, new { @class = "blackhole_radio" })%>SABnzbd
                 </div>
+            </div>
 
-                <div class="config-section">
-                    <div class="config-group">
-                        <div class="config-title"><%= Html.LabelFor(m => m.SabUsername)%></div>
-                        <div class="config-value"><%= Html.TextBoxFor(m => m.SabUsername)%></div>
-                    </div>
-                    <div class="config-validation"><%= Html.ValidationMessageFor(m => m.SabUsername)%></div>
-                </div>
+            <div id="sab" style="display:none">
+                <fieldset class="sub-field">
+                    <legend>SABnzbd</legend>
 
-                <div class="config-section">
-                    <div class="config-group">
-                        <div class="config-title"><%= Html.LabelFor(m => m.SabPassword)%></div>
-                        <div class="config-value"><%= Html.TextBoxFor(m => m.SabPassword)%></div>
+                    <div class="config-section">
+                        <div class="config-group">
+                            <div class="config-title"><%= Html.LabelFor(m => m.SabHost)%></div>
+                            <div class="config-value"><%= Html.TextBoxFor(m => m.SabHost)%></div>
+                        </div>
+                        <div class="config-validation"><%= Html.ValidationMessageFor(m => m.SabHost)%></div>
                     </div>
-                    <div class="config-validation"><%= Html.ValidationMessageFor(m => m.SabPassword)%></div>
-                </div>
 
-                <div class="config-section">
-                    <div class="config-group">
-                        <div class="config-title"><%= Html.LabelFor(m => m.SabTvCategory)%></div>
-                        <div class="config-value"><%= Html.TextBoxFor(m => m.SabTvCategory)%></div>
+                    <div class="config-section">
+                        <div class="config-group">
+                            <div class="config-title"><%= Html.LabelFor(m => m.SabPort)%></div>
+                            <div class="config-value"><%= Html.TextBoxFor(m => m.SabPort)%></div>
+                        </div>
+                        <div class="config-validation"><%= Html.ValidationMessageFor(m => m.SabPort)%></div>
                     </div>
-                    <div class="config-validation"><%= Html.ValidationMessageFor(m => m.SabTvCategory)%></div>
-                </div>
 
-                <div class="config-section">
-                    <div class="config-group">
-                        <div class="config-title"><%= Html.LabelFor(m => m.SabPriority) %></div>
-                        <div class="config-value"><%= Html.DropDownListFor(m => m.SabPriority, Model.PrioritySelectList) %></div>
+                    <div class="config-section">
+                        <div class="config-group">
+                            <div class="config-title"><%= Html.LabelFor(m => m.SabApiKey)%></div>
+                            <div class="config-value"><%= Html.TextBoxFor(m => m.SabApiKey)%></div>
+                        </div>
+                        <div class="config-validation"><%= Html.ValidationMessageFor(m => m.SabApiKey)%></div>
                     </div>
-                    <div class="config-validation"><%= Html.ValidationMessageFor(m => m.SabTvCategory)%></div>
-                </div>
-            </fieldset>
+
+                    <div class="config-section">
+                        <div class="config-group">
+                            <div class="config-title"><%= Html.LabelFor(m => m.SabUsername)%></div>
+                            <div class="config-value"><%= Html.TextBoxFor(m => m.SabUsername)%></div>
+                        </div>
+                        <div class="config-validation"><%= Html.ValidationMessageFor(m => m.SabUsername)%></div>
+                    </div>
+
+                    <div class="config-section">
+                        <div class="config-group">
+                            <div class="config-title"><%= Html.LabelFor(m => m.SabPassword)%></div>
+                            <div class="config-value"><%= Html.TextBoxFor(m => m.SabPassword)%></div>
+                        </div>
+                        <div class="config-validation"><%= Html.ValidationMessageFor(m => m.SabPassword)%></div>
+                    </div>
+
+                    <div class="config-section">
+                        <div class="config-group">
+                            <div class="config-title"><%= Html.LabelFor(m => m.SabTvCategory)%></div>
+                            <div class="config-value"><%= Html.TextBoxFor(m => m.SabTvCategory)%></div>
+                        </div>
+                        <div class="config-validation"><%= Html.ValidationMessageFor(m => m.SabTvCategory)%></div>
+                    </div>
+
+                    <div class="config-section">
+                        <div class="config-group">
+                            <div class="config-title"><%= Html.LabelFor(m => m.SabTvPriority) %></div>
+                            <div class="config-value"><%= Html.DropDownListFor(m => m.SabTvPriority, Model.PrioritySelectList)%></div>
+                        </div>
+                        <div class="config-validation"><%= Html.ValidationMessageFor(m => m.SabTvPriority)%></div>
+                    </div>
+                </fieldset>
+            </div>
+
+            <div id="blackhole" style="display:none">
+                <fieldset class="sub-field">
+                    <legend>Blackhole</legend>
+                    <div class="config-section">
+                        <div class="config-group">
+                            <div class="config-title"><%= Html.LabelFor(m => m.BlackholeDirectory) %></div>
+                            <div class="config-value"><%= Html.TextBoxFor(m => m.BlackholeDirectory)%></div>
+                        </div>
+                        <div class="config-validation"><%= Html.ValidationMessageFor(m => m.BlackholeDirectory)%></div>
+                    </div>
+
+                </fieldset>            
+            </div>
 
             <input type="submit" id="save_button" value="Save" disabled="disabled" />
     

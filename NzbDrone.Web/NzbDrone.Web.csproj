@@ -78,6 +78,7 @@
   <ItemGroup>
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ApiController.cs" />
+    <Compile Include="Controllers\HistoryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LogController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
@@ -276,6 +277,7 @@
     <Content Include="Scripts\jquery-tgc-countdown-1.0.js" />
     <Content Include="Scripts\jquery.simpledropdown.js" />
     <Content Include="Scripts\Notification.js" />
+    <Content Include="Views\History\Index.aspx" />
     <Content Include="Views\Home\Test.aspx" />
     <Content Include="Views\Log\Index.aspx" />
     <Content Include="Views\Series\AddExisting.aspx" />

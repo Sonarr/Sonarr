@@ -93,7 +93,23 @@ namespace NzbDrone.Web.Models
 
         [Required(ErrorMessage = "Please select a valid priority")]
         [DisplayName("SABnzbd Priority")]
-        public SabnzbdPriorityType SabPriority
+        public SabnzbdPriorityType SabTvPriority
+        {
+            get;
+            set;
+        }
+
+        [DisplayName("Use Blackhole")]
+        public bool UseBlackHole
+        {
+            get;
+            set;
+        }
+
+        [DataType(DataType.Text)]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
+        [DisplayName("Blackhole Directory")]
+        public String BlackholeDirectory
         {
             get;
             set;

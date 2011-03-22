@@ -24,9 +24,9 @@ namespace NzbDrone.Core.Providers
         public bool AddByUrl(string url, string title)
         {
             const string mode = "addurl";
-            //string cat = _config.GetValue("SabTvCategory", String.Empty, true);
-            string cat = "tv";
-            string priority = _config.GetValue("SabPriority", String.Empty, false);
+            string cat = _config.GetValue("SabTvCategory", String.Empty, true);
+            //string cat = "tv";
+            string priority = _config.GetValue("SabTvPriority", String.Empty, false);
             string name = url.Replace("&", "%26");
             string nzbName = HttpUtility.UrlEncode(title);
 
@@ -68,6 +68,32 @@ namespace NzbDrone.Core.Providers
             }
 
             return false; //Not in Queue
+        }
+
+        public bool AddById(string id, string title)
+        {
+            //mode=addid&name=333333&pp=3&script=customscript.cmd&cat=Example&priority=-1
+
+            const string mode = "addid";
+            string cat = _config.GetValue("SabTvCategory", String.Empty, true);
+            //string cat = "tv";
+            string priority = _config.GetValue("SabTvPriority", String.Empty, false);
+            string nzbName = HttpUtility.UrlEncode(title);
+
+            string action = string.Format("mode={0}&name={1}&priority={2}&cat={3}&nzbname={4}", mode, id, priority, cat, nzbName);
+            string request = GetSabRequest(action);
+
+            Logger.Debug("Adding report [{0}] to the queue.", nzbName);
+
+            string response = _http.DownloadString(request).Replace("\n", String.Empty);
+            Logger.Debug("Queue Repsonse: [{0}]", response);
+
+            if (response == "ok")
+                return true;
+
+            return false;
+
+            throw new NotImplementedException();
         }
 
         #endregion

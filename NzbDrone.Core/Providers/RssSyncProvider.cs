@@ -118,7 +118,7 @@ namespace NzbDrone.Core.Providers
                     foreach (RssItem item in feedItems)
                     {
                         NzbInfoModel nzb = Parser.ParseNzbInfo(indexer, item);
-                        _rssItemProcessor.QueueIfWanted(nzb, i);
+                        _rssItemProcessor.DownloadIfWanted(nzb, i);
                     }
                 }
                 _rssSyncNotification.CurrentStatus = "RSS Sync Completed";

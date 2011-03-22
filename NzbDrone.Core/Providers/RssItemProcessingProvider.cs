@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using NLog;
@@ -17,12 +18,15 @@ namespace NzbDrone.Core.Providers
         private IHistoryProvider _historyProvider;
         private IDownloadProvider _sabProvider;
         private IConfigProvider _configProvider;
+        private IHttpProvider _httpProvider;
+        private IDiskProvider _diskProvider;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public RssItemProcessingProvider(ISeriesProvider seriesProvider, ISeasonProvider seasonProvider, 
             IEpisodeProvider episodeProvider, IHistoryProvider historyProvider,
-            IDownloadProvider sabProvider, IConfigProvider configProvider)
+            IDownloadProvider sabProvider, IConfigProvider configProvider,
+            IHttpProvider httpProvider, IDiskProvider diskProvider)
         {
             _seriesProvider = seriesProvider;
             _seasonProvider = seasonProvider;
@@ -30,11 +34,13 @@ namespace NzbDrone.Core.Providers
             _historyProvider = historyProvider;
             _sabProvider = sabProvider;
             _configProvider = configProvider;
+            _httpProvider = httpProvider;
+            _diskProvider = diskProvider;
         }
 
         #region IRssItemProcessingProvider Members
 
-        public void QueueIfWanted(NzbInfoModel nzb, Indexer indexer)
+        public bool DownloadIfWanted(NzbInfoModel nzb, Indexer indexer)
         {
             //Do we want this item?
             try
@@ -42,7 +48,7 @@ namespace NzbDrone.Core.Providers
                 if (nzb.IsPassworded())
                 {
                     Logger.Debug("Skipping Passworded Report {0}", nzb.Title);
-                    return;
+                    return false;
                 }
 
                 var episodeParseResults = Parser.ParseEpisodeInfo(nzb.Title);
@@ -50,15 +56,15 @@ namespace NzbDrone.Core.Providers
                 if (episodeParseResults.Count() > 1)
                 {
                     ProcessStandardItem(nzb, indexer, episodeParseResults);
-                    return;
+                    return false;
                 }
 
-                //Try to handle Season X style naming
+                //Todo: Try to handle Season X style naming
 
                 if (episodeParseResults.Count() < 1)
                 {
                     Logger.Debug("Unsupported Title: {0}", nzb.Title);
-                    return;
+                    return false;
                 }
             }
 
@@ -66,6 +72,7 @@ namespace NzbDrone.Core.Providers
             {
                 Logger.ErrorException("Error Parsing NZB: " + ex.Message, ex);
             }
+            return false;
         }
 
         public string GetTitleFix(List<EpisodeParseResult> episodes, int seriesId)
@@ -142,25 +149,50 @@ namespace NzbDrone.Core.Providers
                 var titleFix = GetTitleFix(new List<EpisodeParseResult> { episode }, episodeModel.SeriesId);
                 titleFix = String.Format("{0} [{1}]", titleFix, nzb.Quality); //Add Quality to the titleFix
 
-                if (_sabProvider.IsInQueue(titleFix))
-                    return;
+                if (Convert.ToBoolean(_configProvider.GetValue("UseBlackhole", true, true)))
+                    if (_sabProvider.IsInQueue(titleFix))
+                        return;
             }
 
             //If their is more than one episode in this NZB check to see if it has been added as a single NZB
-            if (episodeParseResults.Count > 1)
+            
+            //Do we want to download the NZB Directly or Send to SABnzbd?
+
+            if (Convert.ToBoolean(_configProvider.GetValue("UseBlackHole", true, true)))
             {
-                if (_sabProvider.IsInQueue(nzb.TitleFix))
-                    return;
+                var path = _configProvider.GetValue("BlackholeDirectory", String.Empty, true);
+
+                if (String.IsNullOrEmpty(path))
+                {
+                    //Use the NZBDrone root Directory + /NZBs
+                    path = CentralDispatch.AppPath + Path.DirectorySeparatorChar + "NZBs";
+                }
+
+                if (_diskProvider.FolderExists(path))
+                    _httpProvider.DownloadFile(nzb.Link.ToString(), path);
+
+                else
+                    Logger.Error("Blackhole Directory doesn't exist, not saving NZB: '{0}'", path);
             }
-
-            //Only add to history if it was added to properly sent to SABnzbd
-            if (indexer.IndexerName != "Newzbin")
-                AddByUrl(episodeParseResults, series, nzb, indexer);
-
+            
+            //Send it to SABnzbd
             else
             {
-                //AddById(episodeParseResults, series, nzb, indexer);
+                if (episodeParseResults.Count > 1)
+                {
+                    if (_sabProvider.IsInQueue(nzb.TitleFix))
+                        return;
+                }
+
+                if (indexer.IndexerName != "Newzbin")
+                    AddByUrl(episodeParseResults, series, nzb, indexer);
+
+                else
+                {
+                    //AddById(episodeParseResults, series, nzb, indexer);
+                }
             }
+            
         }
 
         private void AddByUrl(List<EpisodeParseResult> episodeParseResults, Series series, NzbInfoModel nzb, Indexer indexer)
