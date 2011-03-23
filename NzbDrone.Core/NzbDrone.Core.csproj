@@ -177,6 +177,7 @@
     <Compile Include="Model\SabnzbdPriorityType.cs" />
     <Compile Include="Model\SceneNameModel.cs" />
     <Compile Include="Model\SeriesMappingModel.cs" />
+    <Compile Include="Model\UpcomingEpisodesModel.cs" />
     <Compile Include="Providers\BacklogProvider.cs" />
     <Compile Include="Providers\ExternalNotificationProvider.cs" />
     <Compile Include="Providers\HistoryProvider.cs" />
@@ -193,6 +194,7 @@
     <Compile Include="Providers\IRssSyncProvider.cs" />
     <Compile Include="Providers\IRssProvider.cs" />
     <Compile Include="Providers\ITimerProvider.cs" />
+    <Compile Include="Providers\IUpcomingEpisodesProvider.cs" />
     <Compile Include="Providers\IXbmcProvider.cs" />
     <Compile Include="Providers\PostProcessingProvider.cs" />
     <Compile Include="Providers\QualityProvider.cs" />
@@ -202,6 +204,7 @@
     <Compile Include="Providers\RssSyncProvider.cs" />
     <Compile Include="Providers\RssProvider.cs" />
     <Compile Include="Providers\TimerProvider.cs" />
+    <Compile Include="Providers\UpcomingEpisodesProvider.cs" />
     <Compile Include="Providers\XbmcProvider.cs" />
     <Compile Include="Repository\EpisodeFile.cs" />
     <Compile Include="Model\Notification\BasicNotification.cs" />
