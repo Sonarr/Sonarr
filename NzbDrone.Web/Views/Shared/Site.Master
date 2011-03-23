@@ -31,6 +31,8 @@
         <div id="menu">
             <ul>
                 <%: MvcHtmlString.Create(Html.CurrentActionLink("Series", "Index", "Series")) %>
+                <%: MvcHtmlString.Create(Html.CurrentActionLink("Upcoming", "Index", "Upcoming")) %>
+                <%: MvcHtmlString.Create(Html.CurrentActionLink("History", "Index", "History")) %>
                 <%: MvcHtmlString.Create(Html.CurrentActionLink("Settings", "Index", "Settings"))%>
                 <%: MvcHtmlString.Create(Html.CurrentActionLink("Logs", "Index", "Log"))%>
             </ul>

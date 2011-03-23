@@ -47,9 +47,11 @@
                                            columns.Bound(c => c.Date).Title("Date Grabbed").Width(60);
                                        })
                           .DetailView(detailView => detailView.ClientTemplate(
+                              "<fieldset>" +
                               "<div><b>Overview: </b><#= EpisodeOverview #></div>" +
                               "<div><b>NZB Title: </b><#= NzbTitle #></div>" +
-                              "<div><b>Proper: </b><#= IsProper #></div>"
+                              "<div><b>Proper: </b><#= IsProper #></div>" +
+                              "</fieldset>"
                               
                               ))
                           .DataBinding(data => data.Ajax().Select("_AjaxBinding", "History"))

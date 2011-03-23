@@ -30,14 +30,15 @@ namespace NzbDrone.Web.Controllers
         public ActionResult _AjaxBindingYesterday()
         {
             var upcoming = _upcomingEpisodesProvider.Yesterday().Select(e => new UpcomingEpisodeModel
-                                                                             {
-                                                                                 SeriesName = e.Series.Title,
-                                                                                 SeasonNumber = e.SeasonNumber,
-                                                                                 EpisodeNumber = e.EpisodeNumber,
-                                                                                 Title = e.Title,
-                                                                                 Overview = e.Overview,
-                                                                                 AirDate = e.AirDate
-                                                                             });
+            {
+                SeriesId = e.Series.SeriesId,
+                SeriesName = e.Series.Title,
+                SeasonNumber = e.SeasonNumber,
+                EpisodeNumber = e.EpisodeNumber,
+                Title = e.Title,
+                Overview = e.Overview,
+                AirDate = e.AirDate
+            });
             
             return View(new GridModel(upcoming));
         }
@@ -47,6 +48,7 @@ namespace NzbDrone.Web.Controllers
         {
             var upcoming = _upcomingEpisodesProvider.Today().Select(e => new UpcomingEpisodeModel
             {
+                SeriesId =  e.Series.SeriesId,
                 SeriesName = e.Series.Title,
                 SeasonNumber = e.SeasonNumber,
                 EpisodeNumber = e.EpisodeNumber,
@@ -63,6 +65,7 @@ namespace NzbDrone.Web.Controllers
         {
             var upcoming = _upcomingEpisodesProvider.Week().Select(e => new UpcomingEpisodeModel
             {
+                SeriesId = e.Series.SeriesId,
                 SeriesName = e.Series.Title,
                 SeasonNumber = e.SeasonNumber,
                 EpisodeNumber = e.EpisodeNumber,

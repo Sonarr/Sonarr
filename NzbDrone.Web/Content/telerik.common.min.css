@@ -488,7 +488,7 @@ div.t-window-content {
     border-width: 0 1px 1px 0;
     font-weight: normal;
     overflow: hidden;
-    padding: 0.3em 0.3em;
+    padding: 0.3em 0.6em;
     white-space: nowrap;
 }
 .t-grid-header .t-last-header {
@@ -500,7 +500,7 @@ div.t-window-content {
     height: 18px;
     line-height: 18px;
     margin: -0.3em -0.6em;
-    padding: 0.3em 0.3em 0.3em 0.6em;
+    padding: 0.3em 2.4em 0.3em 0.6em;
 }
 .t-grid-header .t-header .t-icon {
     position: static;
