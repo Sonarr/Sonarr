@@ -12,5 +12,6 @@ namespace NzbDrone.Core.Providers
         List<Indexer> AllIndexers();
         List<Indexer> EnabledIndexers();
         void Update(Indexer indexer);
+        Indexer Single(int indexerId);
     }
 }

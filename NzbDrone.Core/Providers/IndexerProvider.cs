@@ -39,6 +39,11 @@ namespace NzbDrone.Core.Providers
             _sonicRepo.Update(indexer);
         }
 
+        public Indexer Single(int indexerId)
+        {
+            return _sonicRepo.Single<Indexer>(indexerId);
+        }
+
         #endregion
     }
 }

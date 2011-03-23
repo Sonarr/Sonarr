@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Web.Script.Serialization;
 using NzbDrone.Core.Model;
 using SubSonic.SqlGeneration.Schema;
 

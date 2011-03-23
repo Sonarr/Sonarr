@@ -24,6 +24,7 @@ namespace NzbDrone.Core
         private static IKernel _kernel;
         private static readonly Object kernelLock = new object();
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static string _startupPath;
 
         public static void BindKernel()
         {
@@ -86,6 +87,9 @@ namespace NzbDrone.Core
                 SetupIndexers(_kernel.Get<IRepository>()); //Setup the default set of indexers on start-up
                 SetupDefaultQualityProfiles(_kernel.Get<IRepository>()); //Setup the default QualityProfiles on start-up
 
+                //Store the startup path 
+                _startupPath = AppPath;
+
                 //Get the Timers going
                 var config = _kernel.Get<IConfigProvider>();
                 var timer = _kernel.Get<ITimerProvider>();
@@ -116,6 +120,11 @@ namespace NzbDrone.Core
             }
         }
 
+        public static string StartupPath
+        {
+            get { return _startupPath; }
+        }
+
         public static IKernel NinjectKernel
         {
             get
@@ -134,6 +143,8 @@ namespace NzbDrone.Core
             repository.GetPaged<EpisodeFile>(0, 1);
             repository.GetPaged<Episode>(0, 1);
             repository.GetPaged<Season>(0, 1);
+            repository.GetPaged<History>(0, 1);
+            repository.GetPaged<Indexer>(0, 1);
         }
 
         /// <summary>
@@ -182,6 +193,7 @@ namespace NzbDrone.Core
 
             var nzbMatrixIndexer = new Indexer
                                        {
+                                           IndexerId = 1,
                                            IndexerName = "NzbMatrix",
                                            RssUrl = nzbMatrixRss,
                                            ApiUrl = nzbMatrixApi,
@@ -190,6 +202,7 @@ namespace NzbDrone.Core
 
             var nzbsOrgIndexer = new Indexer
                                      {
+                                         IndexerId = 2,
                                          IndexerName = "NzbsOrg",
                                          RssUrl = nzbsOrgRss,
                                          ApiUrl = nzbsOrgApi,
@@ -198,6 +211,7 @@ namespace NzbDrone.Core
 
             var nzbsrusIndexer = new Indexer
                               {
+                                  IndexerId = 3,
                                   IndexerName = "Nzbsrus",
                                   RssUrl = nzbsrusRss,
                                   ApiUrl = nzbsrusApi,
@@ -206,7 +220,7 @@ namespace NzbDrone.Core
 
             //NzbMatrix
             Logger.Debug("Checking for NzbMatrix Indexer");
-            var nzbMatix = repository.Single<Indexer>("NzbMatrix");
+            var nzbMatix = repository.Single<Indexer>(1);
             if (nzbMatix == null)
             {
                 Logger.Debug("Adding new Indexer: NzbMatrix");
@@ -223,7 +237,7 @@ namespace NzbDrone.Core
 
             //Nzbs.org
             Logger.Debug("Checking for Nzbs.org");
-            var nzbsOrg = repository.Single<Indexer>("NzbsOrg");
+            var nzbsOrg = repository.Single<Indexer>(2);
             if (nzbsOrg == null)
             {
                 Logger.Debug("Adding new Indexer: Nzbs.org");
@@ -240,7 +254,7 @@ namespace NzbDrone.Core
 
             //Nzbsrus
             Logger.Debug("Checking for Nzbsrus");
-            var nzbsrus = repository.Single<Indexer>("Nzbsrus");
+            var nzbsrus = repository.Single<Indexer>(3);
             if (nzbsrus == null)
             {
                 Logger.Debug("Adding new Indexer: Nzbsrus");

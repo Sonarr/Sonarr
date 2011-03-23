@@ -10,7 +10,9 @@ namespace NzbDrone.Core.Repository
 {
     public class Indexer
     {
-        [SubSonicPrimaryKey(true)]
+        [SubSonicPrimaryKey(false)]
+        public virtual int IndexerId { get; set; }
+
         public string IndexerName { get; set; }
         public string RssUrl { get; set; }
 

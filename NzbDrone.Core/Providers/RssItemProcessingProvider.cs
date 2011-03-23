@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Providers
 
                 var episodeParseResults = Parser.ParseEpisodeInfo(nzb.Title);
 
-                if (episodeParseResults.Count() > 1)
+                if (episodeParseResults.Count() > 0)
                 {
                     ProcessStandardItem(nzb, indexer, episodeParseResults);
                     return false;
@@ -70,6 +70,7 @@ namespace NzbDrone.Core.Providers
 
             catch (Exception ex)
             {
+                Logger.Error("Unsupported Title: {0}", nzb.Title);
                 Logger.ErrorException("Error Parsing NZB: " + ex.Message, ex);
             }
             return false;
@@ -89,8 +90,10 @@ namespace NzbDrone.Core.Providers
 
                 if (episodeInDb == null)
                 {
-                    Logger.Debug("Episode Not found in Database");
-                    return String.Format("{0} - {1:00}x{2}", series.Title, episode.SeasonNumber, episode.SeriesTitle);
+                    //Todo: Handle this some other way?
+                    Logger.Debug("Episode Not found in Database, Fake it...");
+                    //return String.Format("{0} - {1:00}x{2}", series.Title, episode.SeasonNumber, episode.EpisodeNumber);
+                    episodeInDb = new Episode { EpisodeNumber = episode.EpisodeNumber, Title = "TBA" };
                 }
 
                 seasonNumber = episodeInDb.SeasonNumber;
@@ -149,7 +152,7 @@ namespace NzbDrone.Core.Providers
                 var titleFix = GetTitleFix(new List<EpisodeParseResult> { episode }, episodeModel.SeriesId);
                 titleFix = String.Format("{0} [{1}]", titleFix, nzb.Quality); //Add Quality to the titleFix
 
-                if (Convert.ToBoolean(_configProvider.GetValue("UseBlackhole", true, true)))
+                if (!Convert.ToBoolean(_configProvider.GetValue("UseBlackhole", true, true)))
                     if (_sabProvider.IsInQueue(titleFix))
                         return;
             }
@@ -165,11 +168,17 @@ namespace NzbDrone.Core.Providers
                 if (String.IsNullOrEmpty(path))
                 {
                     //Use the NZBDrone root Directory + /NZBs
-                    path = CentralDispatch.AppPath + Path.DirectorySeparatorChar + "NZBs";
+                    //path = CentralDispatch.StartupPath + "NZBs";
+                    path = @"C:\Test\NZBs";
                 }
 
                 if (_diskProvider.FolderExists(path))
-                    _httpProvider.DownloadFile(nzb.Link.ToString(), path);
+                {
+                    var filename = path + Path.DirectorySeparatorChar + nzb.TitleFix;
+
+                    if (_httpProvider.DownloadFile(nzb.Link.ToString(), filename))
+                        AddToHistory(episodeParseResults, series, nzb, indexer);
+                }
 
                 else
                     Logger.Error("Blackhole Directory doesn't exist, not saving NZB: '{0}'", path);
@@ -185,7 +194,13 @@ namespace NzbDrone.Core.Providers
                 }
 
                 if (indexer.IndexerName != "Newzbin")
-                    AddByUrl(episodeParseResults, series, nzb, indexer);
+                {
+                    if (AddByUrl(nzb))
+                    {
+                        AddToHistory(episodeParseResults, series, nzb, indexer);
+                    }
+
+                }
 
                 else
                 {
@@ -195,35 +210,37 @@ namespace NzbDrone.Core.Providers
             
         }
 
-        private void AddByUrl(List<EpisodeParseResult> episodeParseResults, Series series, NzbInfoModel nzb, Indexer indexer)
+        private bool AddByUrl(NzbInfoModel nzb)
         {
-            if (_sabProvider.AddByUrl(nzb.Link.ToString(), nzb.TitleFix))
+            return _sabProvider.AddByUrl(nzb.Link.ToString(), nzb.TitleFix);
+        }
+
+        private void AddToHistory(List<EpisodeParseResult> episodeParseResults, Series series, NzbInfoModel nzb, Indexer indexer)
+        {
+            //We need to loop through the episodeParseResults so each episode in the NZB is properly handled
+            foreach (var epr in episodeParseResults)
             {
-                //We need to loop through the episodeParseResults so each episode in the NZB is properly handled
-                foreach (var epr in episodeParseResults)
+                var episode = _episodeProvider.GetEpisode(series.SeriesId, epr.SeasonNumber, epr.EpisodeNumber);
+
+                if (episode == null)
                 {
-                    var episode = _episodeProvider.GetEpisode(series.SeriesId, epr.SeasonNumber, epr.EpisodeNumber);
-
-                    if (episode == null)
-                    {
-                        //Not sure how we got this far, so lets throw an exception
-                        throw new ArgumentOutOfRangeException();
-                    }
-
-                    //Set episode status to grabbed
-                    episode.Status = EpisodeStatusType.Grabbed;
-
-                    //Add to History
-                    var history = new History();
-                    history.Date = DateTime.Now;
-                    history.EpisodeId = episode.EpisodeId;
-                    history.IndexerName = indexer.IndexerName;
-                    history.IsProper = nzb.Proper;
-                    history.Quality = nzb.Quality;
-                    history.NzbTitle = nzb.Title;
-
-                    _historyProvider.Insert(history);
+                    //Not sure how we got this far, so lets throw an exception
+                    throw new ArgumentOutOfRangeException();
                 }
+
+                //Set episode status to grabbed
+                episode.Status = EpisodeStatusType.Grabbed;
+
+                //Add to History
+                var history = new History();
+                history.Date = DateTime.Now;
+                history.EpisodeId = episode.EpisodeId;
+                history.IndexerId = indexer.IndexerId;
+                history.IsProper = nzb.Proper;
+                history.Quality = nzb.Quality;
+                history.NzbTitle = nzb.Title;
+
+                _historyProvider.Insert(history);
             }
         }
     }

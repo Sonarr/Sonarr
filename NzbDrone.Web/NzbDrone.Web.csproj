@@ -96,6 +96,7 @@
     <Compile Include="Models\AddNewSeriesModel.cs" />
     <Compile Include="Models\DownloadSettingsModel.cs" />
     <Compile Include="Models\EpisodeSortingModel.cs" />
+    <Compile Include="Models\HistoryModel.cs" />
     <Compile Include="Models\IndexerSettingsModel.cs" />
     <Compile Include="Models\MappingModel.cs" />
     <Compile Include="Models\EpisodeModel.cs" />

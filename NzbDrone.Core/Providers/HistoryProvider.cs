@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Providers
         public void Insert(History item)
         {
             _sonicRepo.Add(item);
-            Logger.Info("Item added to history: {0} - {1}x{2:00}", item.Episode.Series.Title, item.Episode.SeasonNumber, item.Episode.EpisodeNumber);
+            //Logger.Info("Item added to history: {0} - {1}x{2:00}", item.Episode.Series.Title, item.Episode.SeasonNumber, item.Episode.EpisodeNumber);
         }
 
         public bool Exists(int episodeId, QualityTypes quality, bool proper)
