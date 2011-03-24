@@ -14,8 +14,8 @@ namespace NzbDrone.Core.Test
     {
         [Test]
         [Row("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD", 3, 1)]
-        //[Row("Two.and.a.Half.Me.103.720p.HDTV.X264-DIMENSION", 1, 3)] //This only worked because the 0 doesn't affect the results
-        //[Row("Two.and.a.Half.Me.113.720p.HDTV.X264-DIMENSION", 1, 13)] //This failed because the 1 matters in this case
+        [Row("Two.and.a.Half.Me.103.720p.HDTV.X264-DIMENSION", 1, 3)] //This only worked because the 0 doesn't affect the results
+        //[Row("Two.and.a.Half.Me.113.720p.HDTV.X264-DIMENSION", 1, 13)] //This fails because the 1 matters in this case
         [Row("Chuck.4x05.HDTV.XviD-LOL", 4, 5)]
         [Row("The.Girls.Next.Door.S03E06.DVDRip.XviD-WiDE", 3, 6)]
         [Row("Degrassi.S10E27.WS.DSR.XviD-2HD", 10, 27)]
