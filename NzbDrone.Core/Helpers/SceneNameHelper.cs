@@ -76,7 +76,7 @@ namespace NzbDrone.Core.Helpers
 
         public static int FindByName(string cleanSeriesName)
         {
-            var map = _sceneNameMappings.Single(s => Parser.NormalizeTitle(s.Name) == cleanSeriesName);
+            var map = _sceneNameMappings.Find(s => Parser.NormalizeTitle(s.Name) == cleanSeriesName);
 
             if (map == null)
                 return 0;

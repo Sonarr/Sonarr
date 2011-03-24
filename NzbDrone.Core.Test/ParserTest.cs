@@ -14,7 +14,8 @@ namespace NzbDrone.Core.Test
     {
         [Test]
         [Row("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD", 3, 1)]
-        [Row("Two.and.a.Half.Me.103.720p.HDTV.X264-DIMENSION", 1, 3)]
+        //[Row("Two.and.a.Half.Me.103.720p.HDTV.X264-DIMENSION", 1, 3)] //This only worked because the 0 doesn't affect the results
+        //[Row("Two.and.a.Half.Me.113.720p.HDTV.X264-DIMENSION", 1, 13)] //This failed because the 1 matters in this case
         [Row("Chuck.4x05.HDTV.XviD-LOL", 4, 5)]
         [Row("The.Girls.Next.Door.S03E06.DVDRip.XviD-WiDE", 3, 6)]
         [Row("Degrassi.S10E27.WS.DSR.XviD-2HD", 10, 27)]
@@ -22,6 +23,9 @@ namespace NzbDrone.Core.Test
         [Row(@"z:\tv shows\modern marvels\Season 16\S16E03 - The Potato.mkv", 16, 3)]
         [Row(@"z:\tv shows\robot chicken\Specials\S00E16 - Dear Consumer - SD TV.avi", 0, 16)]
         [Row(@"Parenthood.2010.S02E14.HDTV.XviD-LOL", 2, 14)]
+        [Row(@"Hawaii Five 0 S01E19 720p WEB DL DD5 1 H 264 NT", 1, 19)]
+        [Row(@"The Event S01E14 A Message Back 720p WEB DL DD5 1 H264 SURFER", 1, 14)]
+        [Row(@"Adam Hills In Gordon St Tonight S01E07 WS PDTV XviD FUtV", 1, 7)]
         public void episode_parse(string path, int season, int episode)
         {
             var result = Parser.ParseEpisodeInfo(path);

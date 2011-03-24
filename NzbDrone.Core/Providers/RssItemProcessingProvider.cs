@@ -116,7 +116,11 @@ namespace NzbDrone.Core.Providers
             if (series == null)
             {
                 //If we weren't able to find a title using the clean name, lets try again looking for a scene name
-                series = _seriesProvider.GetSeries(SceneNameHelper.FindByName(episodeParseResults[0].SeriesTitle));
+
+                var sceneId = SceneNameHelper.FindByName(episodeParseResults[0].SeriesTitle);
+
+                if (sceneId != 0)
+                    series = _seriesProvider.GetSeries(sceneId);
 
                 if (series == null)
                 {
@@ -127,12 +131,8 @@ namespace NzbDrone.Core.Providers
 
             Logger.Debug("Show is being watched: {0}", series.Title);
 
-            nzb.TitleFix = GetTitleFix(episodeParseResults, series.SeriesId); //Get the TitleFix so we can use it later
-
             nzb.Proper = Parser.ParseProper(nzb.Title);
             nzb.Quality = Parser.ParseQuality(nzb.Title);
-
-            nzb.TitleFix = String.Format("{0} [{1}]", nzb.TitleFix, nzb.Quality); //Add Quality to the titleFix
 
             //Loop through the list of the episodeParseResults to ensure that all the episodes are needed
             foreach (var episode in episodeParseResults)
@@ -160,6 +160,9 @@ namespace NzbDrone.Core.Providers
             //If their is more than one episode in this NZB check to see if it has been added as a single NZB
             
             //Do we want to download the NZB Directly or Send to SABnzbd?
+
+            nzb.TitleFix = GetTitleFix(episodeParseResults, series.SeriesId); //Get the TitleFix so we can use it later
+            nzb.TitleFix = String.Format("{0} [{1}]", nzb.TitleFix, nzb.Quality); //Add Quality to the titleFix
 
             if (Convert.ToBoolean(_configProvider.GetValue("UseBlackHole", true, true)))
             {
