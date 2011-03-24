@@ -18,7 +18,8 @@ namespace NzbDrone.Core
 
         private static readonly Regex[] ReportTitleRegex = new[]
                                                        {
-                                                         new Regex(@"(?<title>.+?)?\W?(?<year>\d+?)?\WS?(?<season>\d+)(?:\-|\.|[a-z])(?<episode>\d+)\W(?!\\)", RegexOptions.IgnoreCase | RegexOptions.Compiled) 
+                                                         new Regex(@"(?<title>.+?)?\W?(?<year>\d+?)?\WS?(?<season>\d+)(?:\-|\.|[a-z])(?<episode>\d+)\W(?!\\)", RegexOptions.IgnoreCase | RegexOptions.Compiled),
+                                                         new Regex(@"(?<title>.+?)?\W?(?<year>\d+?)?\WS?(?<season>\d+)\W(?<episode>\d+)\W(?!\\)", RegexOptions.IgnoreCase | RegexOptions.Compiled) //Supports 103 naming
                                                        };
 
         private static readonly Regex NormalizeRegex = new Regex(@"((\s|^)the(\s|$))|((\s|^)and(\s|$))|[^a-z]", RegexOptions.IgnoreCase | RegexOptions.Compiled);
@@ -65,6 +66,7 @@ namespace NzbDrone.Core
 
                         Logger.Trace("Episode Parsed. {0}", parsedEpisode);
                     }
+                    break; //Break out of the for loop, we don't want to process every REGEX for each item otherwise we'll get duplicates
                 }
             }
 
