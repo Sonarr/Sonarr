@@ -177,7 +177,7 @@ namespace NzbDrone.Core.Providers
 
                 if (_diskProvider.FolderExists(path))
                 {
-                    var filename = path + Path.DirectorySeparatorChar + nzb.TitleFix;
+                    var filename = path + Path.DirectorySeparatorChar + nzb.TitleFix + ".nzb";
 
                     if (_httpProvider.DownloadFile(nzb.Link.ToString(), filename))
                         AddToHistory(episodeParseResults, series, nzb, indexer);

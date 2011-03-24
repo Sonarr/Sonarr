@@ -94,6 +94,7 @@
     <div>
         <%: Html.ActionLink("Back to Show", "Details", new { seriesId = Model.SeriesId }) %> | 
         <%: Html.ActionLink("Back to List", "Index") %>
+        <%: Html.ActionLink("Delete Series", "Delete", new { seriesId = Model.SeriesId })%>
     </div>
 
     <div id="result"></div>
