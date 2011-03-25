@@ -19,8 +19,13 @@ namespace NzbDrone.Core
         private static readonly Regex[] ReportTitleRegex = new[]
                                                        {
                                                          new Regex(@"(?<title>.+?)?\W?(?<year>\d+?)?\WS?(?<season>\d+)(?:\-|\.|[a-z])(?<episode>\d+)\W(?!\\)", RegexOptions.IgnoreCase | RegexOptions.Compiled),
-                                                         new Regex(@"(?<title>.+?)?\W?(?<year>\d+?)?\WS?(?<season>\d+)\w(?<episode>\d+)\W(?!\\)", RegexOptions.IgnoreCase | RegexOptions.Compiled) //Supports 103 naming
+                                                         new Regex(@"(?<title>.+?)?\W?(?<year>\d+?)?\WS?(?<season>\d+)(?<episode>\d{2})\W(?!\\)", RegexOptions.IgnoreCase | RegexOptions.Compiled) //Supports 103/113 naming
                                                        };
+
+        private static readonly Regex[] SeasonReportTitleRegex = new[]
+                                                        {
+                                                            new Regex(@"(?<title>.+?)?\W?(?<year>\d{4}?)?\W(?:S|Season)?\W?(?<season>\d+)(?!\\)", RegexOptions.IgnoreCase | RegexOptions.Compiled),
+                                                        };
 
         private static readonly Regex NormalizeRegex = new Regex(@"((\s|^)the(\s|$))|((\s|^)and(\s|$))|[^a-z]", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
@@ -71,6 +76,49 @@ namespace NzbDrone.Core
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Parses a post title into season it contains
+        /// </summary>
+        /// <param name="title">Title of the report</param>
+        /// <returns>Season information contained in the post</returns>
+        internal static SeasonParseResult ParseSeasonInfo(string title)
+        {
+            Logger.Trace("Parsing string '{0}'", title);
+
+            foreach (var regex in ReportTitleRegex)
+            {
+                var match = regex.Matches(title);
+
+                if (match.Count != 0)
+                {
+                    var seriesName = NormalizeTitle(match[0].Groups["title"].Value);
+                    var year = 0;
+                    Int32.TryParse(match[0].Groups["year"].Value, out year);
+
+                    if (year < 1900 || year > DateTime.Now.Year + 1)
+                    {
+                        year = 0;
+                    }
+
+                    var seasonNumber = Convert.ToInt32(match[0].Groups["season"].Value);
+
+                    var result = new SeasonParseResult
+                    {
+                        SeriesTitle = seriesName,
+                        SeasonNumber = seasonNumber,
+                        Year = year
+                    };
+
+                    
+
+                    Logger.Trace("Season Parsed. {0}", result);
+                    return result;
+                }
+            }
+
+            return null; //Return null
         }
 
         /// <summary>
