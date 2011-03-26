@@ -92,8 +92,6 @@ namespace NzbDrone.Core.Providers
                 return true;
 
             return false;
-
-            throw new NotImplementedException();
         }
 
         #endregion

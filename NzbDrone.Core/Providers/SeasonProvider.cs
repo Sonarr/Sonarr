@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NLog;
+using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository;
 using SubSonic.Repository;
 using System.Linq;
@@ -10,16 +11,24 @@ namespace NzbDrone.Core.Providers
     class SeasonProvider : ISeasonProvider
     {
         private readonly IRepository _sonicRepo;
+        private readonly ISeriesProvider _seriesProvider;
+
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public SeasonProvider(IRepository dataRepository)
+        public SeasonProvider(IRepository dataRepository, ISeriesProvider seriesProvider)
         {
             _sonicRepo = dataRepository;
+            _seriesProvider = seriesProvider;
         }
 
         public Season GetSeason(int seasonId)
         {
             return _sonicRepo.Single<Season>(seasonId);
+        }
+
+        public Season GetSeason(int seriesId, int seasonNumber)
+        {
+            return _sonicRepo.Single<Season>(s => s.SeriesId == seriesId && s.SeasonNumber == seasonNumber);
         }
 
         public List<Season> GetSeasons(int seriesId)
@@ -70,7 +79,7 @@ namespace NzbDrone.Core.Providers
             if (season == null)
                 return true;
 
-            return season.Monitored;
+            return !season.Monitored;
         }
 
         public void DeleteSeason(int seasonId)
