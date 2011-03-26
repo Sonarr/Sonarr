@@ -10,6 +10,7 @@ namespace NzbDrone.Core.Model
     {
         private static readonly IList<NzbSiteModel> Sites = new List<NzbSiteModel>
         {
+            new NzbSiteModel {Name = "newzbin", Url = "newzbin.com", Pattern = @"\d{7,10}"},
             new NzbSiteModel {Name = "nzbmatrix", Url = "nzbmatrix.com", Pattern = @"\d{6,10}"},
             new NzbSiteModel {Name = "nzbsDotOrg", Url = "nzbs.org", Pattern = @"\d{5,10}"},
             new NzbSiteModel {Name = "nzbsrus", Url = "nzbsrus.com", Pattern = @"\d{6,10}"},

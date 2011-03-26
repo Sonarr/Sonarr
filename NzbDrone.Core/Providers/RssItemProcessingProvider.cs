@@ -60,11 +60,11 @@ namespace NzbDrone.Core.Providers
                 }
 
                 //Handles Full Season NZBs
-                var seasonParsedResult = Parser.ParseSeasonInfo(nzb.Title);
+                var seasonParseResult = Parser.ParseSeasonInfo(nzb.Title);
 
-                if (seasonParsedResult != null)
+                if (seasonParseResult != null)
                 {
-                    //ProcessFullSeasonItem
+                    ProcessFullSeasonItem(nzb, indexer, seasonParseResult);
                     return;
                 }
 
@@ -180,13 +180,14 @@ namespace NzbDrone.Core.Providers
 
                 if (indexer.IndexerName != "Newzbin")
                 {
-                    if (AddByUrl(nzb))
+                    if (_sabProvider.AddByUrl(nzb.Link.ToString(), nzb.TitleFix))
                         AddToHistory(episodeParseResults, series, nzb, indexer);
                 }
                 
                 else
                 {
-                    //Send to SAB using Newzbin ID
+                    if (_sabProvider.AddById(nzb.Id, nzb.TitleFix))
+                        AddToHistory(episodeParseResults, series, nzb, indexer);
                 }
             }
         }
@@ -264,6 +265,7 @@ namespace NzbDrone.Core.Providers
                         episodesNeeded--; //Decrement the number of downloads we need, used if we want to replace all existing episodes if this will upgrade over X% of files
                         break; //We only want to download this NZB if ALL episodes can be upgraded by this Season NZB
                     }
+                    downloadWholeSeason = true;
                 }
             }
 
@@ -275,12 +277,7 @@ namespace NzbDrone.Core.Providers
                 {
                     if (DownloadNzb(nzb))
                     {
-                        var episodeParseResults = new List<EpisodeParseResult>();
-                        episodeParseResults.AddRange(
-                            season.Episodes.Select(
-                                e =>
-                                new EpisodeParseResult {EpisodeNumber = e.EpisodeNumber, SeasonNumber = e.SeasonNumber}));
-
+                        var episodeParseResults = GetEpisodeParseList(season.Episodes);
                         AddToHistory(episodeParseResults, series, nzb, indexer);
                     }
                 }
@@ -293,14 +290,9 @@ namespace NzbDrone.Core.Providers
 
                     if (indexer.IndexerName != "Newzbin")
                     {
-                        if (AddByUrl(nzb))
+                        if (_sabProvider.AddByUrl(nzb.Link.ToString(), nzb.TitleFix))
                         {
-                            var episodeParseResults = new List<EpisodeParseResult>();
-                            episodeParseResults.AddRange(
-                                season.Episodes.Select(
-                                    e =>
-                                    new EpisodeParseResult { EpisodeNumber = e.EpisodeNumber, SeasonNumber = e.SeasonNumber }));
-
+                            var episodeParseResults = GetEpisodeParseList(season.Episodes);
                             AddToHistory(episodeParseResults, series, nzb, indexer);
                         }
                             
@@ -308,18 +300,27 @@ namespace NzbDrone.Core.Providers
 
                     else
                     {
-                        //Send to SAB using Newzbin ID
+                        if (_sabProvider.AddById(nzb.Id, nzb.TitleFix))
+                        {
+                            var episodeParseResults = GetEpisodeParseList(season.Episodes);
+                            AddToHistory(episodeParseResults, series, nzb, indexer);
+                        }
                     }
                 }
             }
 
-            //Possibly grab the whole season if a certain % of the season is missing, rather than for 1 or 2 episodes
-            throw new NotImplementedException("NzbDrone is currently not able to handle downloadinga whole season when less than a whole season it missing");
+            //Possibly grab the whole season if a certain % of the season is missing, rather than for 1 or 2 episodes    
         }
 
-        private bool AddByUrl(NzbInfoModel nzb)
+        private List<EpisodeParseResult> GetEpisodeParseList(List<Episode> episodes)
         {
-            return _sabProvider.AddByUrl(nzb.Link.ToString(), nzb.TitleFix);
+            var episodeParseResults = new List<EpisodeParseResult>();
+            episodeParseResults.AddRange(
+                episodes.Select(
+                    e =>
+                    new EpisodeParseResult { EpisodeNumber = e.EpisodeNumber, SeasonNumber = e.SeasonNumber }));
+
+            return episodeParseResults;
         }
 
         private void AddToHistory(List<EpisodeParseResult> episodeParseResults, Series series, NzbInfoModel nzb, Indexer indexer)
