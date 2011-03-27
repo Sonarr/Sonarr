@@ -359,8 +359,8 @@ namespace NzbDrone.Core.Providers
             if (String.IsNullOrEmpty(path))
             {
                 //Use the NZBDrone root Directory + /NZBs
-                //path = CentralDispatch.StartupPath + "NZBs";
-                path = @"C:\Test\NZBs";
+                path = CentralDispatch.StartupPath + "NZBs";
+                //path = @"C:\Test\NZBs";
             }
 
             if (_diskProvider.FolderExists(path))

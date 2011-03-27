@@ -51,7 +51,8 @@ namespace NzbDrone.Core.Test
         [Row("Sonny.With.a.Chance.S02E15", QualityTypes.Unknown)]
         [Row("S01E04 - So Old - Playdate - 720p TV.mkv", QualityTypes.HDTV)]
         [Row("S22E03 - MoneyBART - HD TV.mkv", QualityTypes.HDTV)]
-        [Row("S01E03 - Come Fly With Me - 720p BluRay.mkv", QualityTypes.Bluray)]
+        [Row("S01E03 - Come Fly With Me - 720p BluRay.mkv", QualityTypes.Bluray720)]
+        [Row("S01E03 - Come Fly With Me - 1080p BluRay.mkv", QualityTypes.Bluray1080)]
         [Row("S11E06 - D-Yikes! - 720p WEB-DL.mkv", QualityTypes.WEBDL)]
         public void quality_parse(string path, object quality)
         {

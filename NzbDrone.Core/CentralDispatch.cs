@@ -33,6 +33,9 @@ namespace NzbDrone.Core
                 Logger.Debug("Binding Ninject's Kernel");
                 _kernel = new StandardKernel();
 
+                //Store the startup path 
+                _startupPath = AppPath;
+
                 //Sqlite
                 string connectionString = String.Format("Data Source={0};Version=3;", Path.Combine(AppPath, "nzbdrone.db"));
                 var dbProvider = ProviderFactory.GetProvider(connectionString, "System.Data.SQLite");
@@ -87,9 +90,6 @@ namespace NzbDrone.Core
                 ForceMigration(_kernel.Get<IRepository>());
                 SetupIndexers(_kernel.Get<IRepository>()); //Setup the default set of indexers on start-up
                 SetupDefaultQualityProfiles(_kernel.Get<IRepository>()); //Setup the default QualityProfiles on start-up
-
-                //Store the startup path 
-                _startupPath = AppPath;
 
                 //Get the Timers going
                 var config = _kernel.Get<IConfigProvider>();
@@ -273,142 +273,50 @@ namespace NzbDrone.Core
 
         private static void SetupDefaultQualityProfiles(IRepository repository)
         {
-            var sdtv = new QualityProfile
+            var sd = new QualityProfile
                             {
-                                Name = "SDTV",
-                                Allowed = new List<QualityTypes> { QualityTypes.TV },
+                                Name = "SD",
+                                Allowed = new List<QualityTypes> { QualityTypes.TV, QualityTypes.DVD },
                                 Cutoff = QualityTypes.TV
                             };
 
-            var dvd = new QualityProfile
+            var hd = new QualityProfile
                              {
-                                 Name = "DVD SD",
-                                 Allowed = new List<QualityTypes> { QualityTypes.DVD },
-                                 Cutoff = QualityTypes.DVD
-                             };
-
-            var bdrip = new QualityProfile
-                             {
-                                 Name = "BDRip",
-                                 Allowed = new List<QualityTypes> { QualityTypes.BDRip },
-                                 Cutoff = QualityTypes.BDRip
-                             };
-
-            var hdtv = new QualityProfile
-                             {
-                                 Name = "HDTV",
-                                 Allowed = new List<QualityTypes> { QualityTypes.HDTV },
+                                 Name = "HD",
+                                 Allowed = new List<QualityTypes> { QualityTypes.HDTV, QualityTypes.WEBDL, QualityTypes.BDRip, QualityTypes.Bluray720 },
                                  Cutoff = QualityTypes.HDTV
                              };
 
-            var webdl = new QualityProfile
-                           {
-                               Name = "WEBDL",
-                               Allowed = new List<QualityTypes> { QualityTypes.WEBDL },
-                               Cutoff = QualityTypes.WEBDL
-                           };
-
-            var bluray = new QualityProfile
-                           {
-                               Name = "Bluray",
-                               Allowed = new List<QualityTypes> { QualityTypes.Bluray },
-                               Cutoff = QualityTypes.Bluray
-                           };
-
-            //Add or Update SDTV
-            Logger.Debug(String.Format("Checking for default QualityProfile: {0}", sdtv.Name));
-            var sdtvDb = repository.Single<QualityProfile>(i => i.Name == sdtv.Name);
-            if (sdtvDb == null)
+            //Add or Update SD
+            Logger.Debug(String.Format("Checking for default QualityProfile: {0}", sd.Name));
+            var sdDb = repository.Single<QualityProfile>(i => i.Name == sd.Name);
+            if (sdDb == null)
             {
-                Logger.Debug(String.Format("Adding new default QualityProfile: {0}", sdtv.Name));
-                repository.Add(sdtv);
+                Logger.Debug(String.Format("Adding new default QualityProfile: {0}", sd.Name));
+                repository.Add(sd);
             }
 
             else
             {
-                Logger.Debug(String.Format("Updating default QualityProfile: {0}", sdtv.Name));
-                sdtv.QualityProfileId = sdtvDb.QualityProfileId;
-                repository.Update(sdtv);
+                Logger.Debug(String.Format("Updating default QualityProfile: {0}", sd.Name));
+                sd.QualityProfileId = sdDb.QualityProfileId;
+                repository.Update(sd);
             }
 
-            //Add or Update DVD
-            Logger.Debug(String.Format("Checking for default QualityProfile: {0}", dvd.Name));
-            var dvdDb = repository.Single<QualityProfile>(i => i.Name == dvd.Name);
-            if (dvdDb == null)
+            //Add or Update HD
+            Logger.Debug(String.Format("Checking for default QualityProfile: {0}", hd.Name));
+            var hdDb = repository.Single<QualityProfile>(i => i.Name == hd.Name);
+            if (hdDb == null)
             {
-                Logger.Debug(String.Format("Adding new default QualityProfile: {0}", dvd.Name));
-                repository.Add(dvd);
-            }
-
-            else
-            {
-                Logger.Debug(String.Format("Updating default QualityProfile: {0}", dvd.Name));
-                dvd.QualityProfileId = dvdDb.QualityProfileId;
-                repository.Update(dvd);
-            }
-
-            //Add or Update BDRip
-            Logger.Debug(String.Format("Checking for default QualityProfile: {0}", bdrip.Name));
-            var bdripDb = repository.Single<QualityProfile>(i => i.Name == bdrip.Name);
-            if (bdripDb == null)
-            {
-                Logger.Debug(String.Format("Adding new default QualityProfile: {0}", bdrip.Name));
-                repository.Add(bdrip);
+                Logger.Debug(String.Format("Adding new default QualityProfile: {0}", hd.Name));
+                repository.Add(hd);
             }
 
             else
             {
-                Logger.Debug(String.Format("Updating default QualityProfile: {0}", bdrip.Name));
-                bdrip.QualityProfileId = bdripDb.QualityProfileId;
-                repository.Update(bdrip);
-            }
-
-            //Add or Update HDTV
-            Logger.Debug(String.Format("Checking for default QualityProfile: {0}", hdtv.Name));
-            var hdtvDb = repository.Single<QualityProfile>(i => i.Name == hdtv.Name);
-            if (hdtvDb == null)
-            {
-                Logger.Debug(String.Format("Adding new default QualityProfile: {0}", hdtv.Name));
-                repository.Add(hdtv);
-            }
-
-            else
-            {
-                Logger.Debug(String.Format("Updating default QualityProfile: {0}", hdtv.Name));
-                hdtv.QualityProfileId = hdtvDb.QualityProfileId;
-                repository.Update(hdtv);
-            }
-
-            //Add or Update WEBDL
-            Logger.Debug(String.Format("Checking for default QualityProfile: {0}", webdl.Name));
-            var webdlDb = repository.Single<QualityProfile>(i => i.Name == webdl.Name);
-            if (webdlDb == null)
-            {
-                Logger.Debug(String.Format("Adding new default QualityProfile: {0}", webdl.Name));
-                repository.Add(webdl);
-            }
-
-            else
-            {
-                Logger.Debug(String.Format("Updating default QualityProfile: {0}", webdl.Name));
-                webdl.QualityProfileId = webdlDb.QualityProfileId;
-                repository.Update(webdl);
-            }
-
-            //Add or Update Bluray
-            Logger.Debug(String.Format("Checking for default QualityProfile: {0}", bluray.Name));
-            var blurayDb = repository.Single<QualityProfile>(i => i.Name == bluray.Name);
-            if (blurayDb == null)
-            {
-                Logger.Debug(String.Format("Adding new default QualityProfile: {0}", bluray.Name));
-                repository.Add(bluray);
-            }
-
-            else
-            {
-                Logger.Debug(String.Format("Updating default QualityProfile: {0}", bluray.Name));
-                bluray.QualityProfileId = blurayDb.QualityProfileId;
-                repository.Update(bluray);
+                Logger.Debug(String.Format("Updating default QualityProfile: {0}", hd.Name));
+                hd.QualityProfileId = hdDb.QualityProfileId;
+                repository.Update(hd);
             }
         }
     }

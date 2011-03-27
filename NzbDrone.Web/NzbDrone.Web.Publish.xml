@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <publishData>
-  <publishProfile publishUrl="C:\Users\keivan.beigi\Desktop\D\" deleteExistingFiles="True" ftpAnonymousLogin="False" ftpPassiveMode="True" msdeploySite="" msdeploySiteID="" msdeployRemoteSitePhysicalPath="" msdeployAllowUntrustedCertificate="False" msdeploySkipExtraFilesOnServer="True" msdeployMarkAsApp="False" profileName="Profile1" publishMethod="FileSystem" replaceMatchingFiles="False" userName="" savePWD="False" userPWD="" SelectedForPublish="True">
+  <publishProfile publishUrl="C:\Users\keivan.beigi\Desktop\D\" deleteExistingFiles="True" ftpAnonymousLogin="False" ftpPassiveMode="True" msdeploySite="" msdeploySiteID="" msdeployRemoteSitePhysicalPath="" msdeployAllowUntrustedCertificate="False" msdeploySkipExtraFilesOnServer="True" msdeployMarkAsApp="False" profileName="Profile1" publishMethod="FileSystem" replaceMatchingFiles="False" userName="" savePWD="False" userPWD="" SelectedForPublish="False">
     <file relUrl="Views/Series/Unmapped.aspx" publishTime="10/04/2010 22:53:21" />
     <file relUrl="Content/Sunset/loading.gif" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Scripts/MicrosoftAjax.js" publishTime="09/23/2010 18:44:18" />
@@ -16,11 +16,12 @@
     <file relUrl="Content/Outlook/treeview-nodes.png" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Web.config" publishTime="10/13/2010 09:30:51" />
     <file relUrl="Content/Images/img07.jpg" publishTime="10/02/2010 12:01:03" />
+    <file relUrl="bin/Ninject.dll" publishTime="09/23/2010 18:44:18" />
     <file relUrl="Content/Hay/sprite.png" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Views/Web.config" publishTime="10/13/2010 09:30:51" />
     <file relUrl="Content/Simple/loading.gif" publishTime="10/02/2010 12:01:03" />
+    <file relUrl="Content/Vista/sprite.png" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Scripts/jquery.validate.js" publishTime="09/23/2010 18:44:18" />
-    <file relUrl="Content/Default/loading.gif" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Content/telerik.hay.min.css" publishTime="10/02/2010 12:01:03" />
     <file relUrl="bin/SubSonic.Core.dll" publishTime="10/07/2010 20:33:38" />
     <file relUrl="Content/Simple/treeview-nodes.png" publishTime="10/02/2010 12:01:03" />
@@ -32,7 +33,6 @@
     <file relUrl="bin/Telerik.Web.Mvc.xml" publishTime="10/02/2010 12:01:03" />
     <file relUrl="bin/SubSonic.Core.xml" publishTime="10/07/2010 16:34:28" />
     <file relUrl="Content/Simple/sprite.png" publishTime="10/02/2010 12:01:03" />
-    <file relUrl="bin/System.Data.SQLite.dll" publishTime="09/23/2010 18:44:18" />
     <file relUrl="Content/Sitefinity/treeview-nodes.png" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Content/Black/editor.png" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Content/telerik.simple.min.css" publishTime="10/02/2010 12:01:03" />
@@ -42,10 +42,9 @@
     <file relUrl="Content/telerik.office2007.min.css" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Content/Black/treeview-nodes.png" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Content/Black/sprite.png" publishTime="10/02/2010 12:01:03" />
-    <file relUrl="Content/Vista/loading.gif" publishTime="10/02/2010 12:01:03" />
+    <file relUrl="Libraries/Telerik.Web.Mvc.xml" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Scripts/2010.2.825/telerik.grid.min.js" publishTime="10/02/2010 12:01:03" />
     <file relUrl="bin/Ninject.xml" publishTime="09/23/2010 18:44:18" />
-    <file relUrl="Libraries/Telerik.Web.Mvc.xml" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Scripts/2010.2.825/telerik.draganddrop.min.js" publishTime="10/02/2010 12:01:03" />
     <file relUrl="bin/NzbDrone.Core.dll" publishTime="10/13/2010 09:25:46" />
     <file relUrl="Scripts/MicrosoftMvcAjax.debug.js" publishTime="09/23/2010 18:44:18" />
@@ -63,8 +62,9 @@
     <file relUrl="Content/Default/sprite.png" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Content/WebBlue/editor.png" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Content/Black/treeview-line.png" publishTime="10/02/2010 12:01:03" />
+    <file relUrl="bin/System.Data.SQLite.xml" publishTime="09/23/2010 18:44:18" />
     <file relUrl="Scripts/MicrosoftMvcValidation.js" publishTime="09/23/2010 18:44:18" />
-    <file relUrl="Content/Outlook/sprite.png" publishTime="10/02/2010 12:01:03" />
+    <file relUrl="Scripts/2010.2.825/telerik.datepicker.min.js" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Scripts/2010.2.825/jquery.validate.min.js" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Content/telerik.default.min.css" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Content/Forest/editor.png" publishTime="10/02/2010 12:01:03" />
@@ -77,14 +77,14 @@
     <file relUrl="bin/NLog.pdb" publishTime="10/02/2010 12:01:03" />
     <file relUrl="bin/TvdbLib.xml" publishTime="09/23/2010 18:44:18" />
     <file relUrl="Content/Black/loading.gif" publishTime="10/02/2010 12:01:03" />
-    <file relUrl="Content/Vista/sprite.png" publishTime="10/02/2010 12:01:03" />
+    <file relUrl="Content/Telerik/treeview-nodes.png" publishTime="10/02/2010 12:01:03" />
     <file relUrl="bin/TvdbLib.dll" publishTime="09/23/2010 18:44:18" />
     <file relUrl="Content/Default/treeview-line.png" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Content/Hay/editor.png" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Content/Sunset/sprite.png" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Content/Forest/treeview-line.png" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Content/Web20/treeview-nodes.png" publishTime="10/02/2010 12:01:03" />
-    <file relUrl="Content/WebBlue/treeview-line.png" publishTime="10/02/2010 12:01:03" />
+    <file relUrl="Content/Default/loading.gif" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Content/Hay/loading.gif" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Libraries/Telerik.Web.Mvc.dll" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Content/telerik.webblue.min.css" publishTime="10/02/2010 12:01:03" />
@@ -92,6 +92,7 @@
     <file relUrl="bin/Castle.Core.dll" publishTime="10/07/2010 16:21:40" />
     <file relUrl="Scripts/2010.2.825/telerik.common.min.js" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Scripts/MicrosoftMvcValidation.debug.js" publishTime="09/23/2010 18:44:18" />
+    <file relUrl="Scripts/2010.2.825/telerik.autocomplete.min.js" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Scripts/2010.2.825/telerik.window.min.js" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Scripts/2010.2.825/telerik.editor.min.js" publishTime="10/02/2010 12:01:03" />
     <file relUrl="bin/UPnP.dll" publishTime="10/08/2010 00:10:47" />
@@ -104,25 +105,24 @@
     <file relUrl="Content/Sitefinity/treeview-line.png" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Scripts/MicrosoftMvcAjax.js" publishTime="09/23/2010 18:44:18" />
     <file relUrl="Content/Sunset/treeview-line.png" publishTime="10/02/2010 12:01:03" />
-    <file relUrl="Content/Outlook/treeview-line.png" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Content/telerik.forest.min.css" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Content/Web20/treeview-line.png" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Content/Images/img02.jpg" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Content/Web20/loading.gif" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Content/Telerik/editor.png" publishTime="10/02/2010 12:01:03" />
-    <file relUrl="Scripts/2010.2.825/telerik.datepicker.min.js" publishTime="10/02/2010 12:01:03" />
+    <file relUrl="Content/WebBlue/treeview-line.png" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Content/telerik.sunset.min.css" publishTime="10/02/2010 12:01:03" />
-    <file relUrl="bin/Ninject.dll" publishTime="09/23/2010 18:44:18" />
+    <file relUrl="Content/Outlook/treeview-line.png" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Views/Account/Register.aspx" publishTime="09/23/2010 18:44:18" />
     <file relUrl="Scripts/2010.2.825/telerik.calendar.min.js" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Scripts/2010.2.825/telerik.combobox.min.js" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Scripts/2010.2.825/telerik.grid.editing.min.js" publishTime="10/02/2010 12:01:03" />
-    <file relUrl="bin/System.Data.SQLite.xml" publishTime="09/23/2010 18:44:18" />
+    <file relUrl="Content/Vista/loading.gif" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Content/Outlook/editor.png" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Scripts/jquery-1.4.1-vsdoc.js" publishTime="09/23/2010 18:44:18" />
-    <file relUrl="Scripts/2010.2.825/telerik.autocomplete.min.js" publishTime="10/02/2010 12:01:03" />
+    <file relUrl="Content/Simple/treeview-line.png" publishTime="10/02/2010 12:01:03" />
+    <file relUrl="bin/System.Data.SQLite.dll" publishTime="09/23/2010 18:44:18" />
     <file relUrl="Content/Hay/treeview-line.png" publishTime="10/02/2010 12:01:03" />
-    <file relUrl="Views/Settings/Index.aspx" publishTime="10/04/2010 22:53:21" />
     <file relUrl="Content/Default/treeview-nodes.png" publishTime="10/02/2010 12:01:03" />
     <file relUrl="bin/NzbDrone.Web.pdb" publishTime="10/13/2010 09:30:36" />
     <file relUrl="bin/NzbDrone.Core.pdb" publishTime="10/13/2010 09:25:46" />
@@ -136,8 +136,8 @@
     <file relUrl="Scripts/jquery.jgrowl.js" publishTime="10/11/2010 13:31:43" />
     <file relUrl="Content/Office2007/treeview-line.png" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Views/Shared/Error.aspx" publishTime="10/07/2010 20:33:38" />
-    <file relUrl="Content/Simple/treeview-line.png" publishTime="10/02/2010 12:01:03" />
-    <file relUrl="Content/Telerik/treeview-nodes.png" publishTime="10/02/2010 12:01:03" />
+    <file relUrl="Content/Outlook/sprite.png" publishTime="10/02/2010 12:01:03" />
+    <file relUrl="Views/Settings/Index.aspx" publishTime="10/04/2010 22:53:21" />
     <file relUrl="Scripts/jquery-ui-1.8.5.custom.min.js" publishTime="10/11/2010 19:48:30" />
     <file relUrl="Content/Web20/editor.png" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Scripts/2010.2.825/telerik.grid.grouping.min.js" publishTime="10/02/2010 12:01:03" />
@@ -161,5 +161,241 @@
     <file relUrl="Views/Home/About.aspx" publishTime="09/23/2010 18:44:18" />
     <file relUrl="Scripts/2010.2.825/jquery-1.4.2.min.js" publishTime="10/02/2010 12:01:03" />
     <file relUrl="Scripts/2010.2.825/telerik.treeview.min.js" publishTime="10/02/2010 12:01:03" />
+  </publishProfile>
+  <publishProfile publishUrl="C:\NzbDrone Deploy\NzbDrone.Web" deleteExistingFiles="False" ftpAnonymousLogin="False" ftpPassiveMode="True" msdeploySite="" msdeploySiteID="" msdeployRemoteSitePhysicalPath="" msdeployAllowUntrustedCertificate="False" msdeploySkipExtraFilesOnServer="True" msdeployMarkAsApp="False" profileName="Markus" publishMethod="FileSystem" replaceMatchingFiles="True" userName="" savePWD="False" userPWD="" SelectedForPublish="True">
+    <file relUrl="Views/Series/Unmapped.aspx" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Sunset/loading.gif" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Scripts/MicrosoftAjax.js" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Scripts/jquery-tgc-countdown-1.0.js" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="bin/Telerik.Web.Mvc.dll" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Default/editor.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/style.css" publishTime="03/17/2011 08:08:13" />
+    <file relUrl="Content/Outlook/loading.gif" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Office2007/sprite.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Scripts/Notification.js" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Sunset/treeview-nodes-rtl.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Telerik/sprite.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/WebBlue/loading.gif" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Views/Account/ChangePassword.aspx" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Scripts/jquery.form.js" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Outlook/treeview-nodes.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Web.config" publishTime="03/26/2011 13:17:08" />
+    <file relUrl="Content/Images/img07.jpg" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Views/Series/AddNew.aspx" publishTime="03/17/2011 08:07:55" />
+    <file relUrl="Views/Series/Edit.aspx" publishTime="03/24/2011 00:22:44" />
+    <file relUrl="Scripts/2010.3.1318/telerik.grid.filtering.min.js" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Views/Web.config" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Simple/loading.gif" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Windows7/editor.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Scripts/2010.3.1318/telerik.common.min.js" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Scripts/jquery.validate.js" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Images/X.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Images/ui-bg_diagonals-thick_15_444444_40x40.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Scripts/2010.3.1318/telerik.panelbar.min.js" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/notibar.css" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="bin/SubSonic.Core.dll" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Images/ui-bg_glass_50_99c2ff_1x400.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/telerik.common.min.css" publishTime="03/23/2011 08:10:39" />
+    <file relUrl="bin/TvdbLib.dll" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Scripts/2010.3.1318/telerik.grid.min.js" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/WebBlue/treeview-nodes.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="bin/NLog.xml" publishTime="09/26/2010 18:12:50" />
+    <file relUrl="Content/Forest/loading.gif" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="bin/Telerik.Web.Mvc.xml" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/jquery-simpledropdown.css" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Forest/treeview-line.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="bin/SubSonic.Core.xml" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Simple/sprite.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Outlook/treeview-line.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Sitefinity/treeview-nodes.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Black/editor.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Views/Shared/Site.Master" publishTime="03/23/2011 08:19:09" />
+    <file relUrl="Views/Series/SeriesSearchResults.ascx" publishTime="03/16/2011 23:25:46" />
+    <file relUrl="Content/Office2007/treeview-nodes-rtl.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Scripts/jquery.simpledropdown.js" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Sunset/treeview-nodes.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Sitefinity/sprite.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Scripts/2010.3.1318/telerik.calendar.min.js" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Sitefinity/loading.gif" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/telerik.office2007.min.css" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Black/treeview-nodes.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Black/sprite.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Libraries/Telerik.Web.Mvc.xml" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Images/ui-bg_highlight-soft_100_e7eef3_1x100.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="bin/Ninject.xml" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Sitefinity/treeview-nodes-rtl.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Simple/treeview-nodes-rtl.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Simple/treeview-nodes.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Images/spin.gif" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Scripts/MicrosoftMvcAjax.debug.js" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Views/Shared/Footer.ascx" publishTime="03/09/2011 08:20:34" />
+    <file relUrl="Content/Windows7/sprite.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Views/Settings/EpisodeSorting.ascx" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Images/img03.jpg" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Simple/editor.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Views/Settings/Notifications.ascx" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Forest/treeview-nodes.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Scripts/2010.3.1318/telerik.grid.resizing.min.js" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/WebBlue/sprite.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="bin/NzbDrone.Core.dll" publishTime="03/26/2011 17:02:26" />
+    <file relUrl="Content/telerik.sitefinity.min.css" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Images/ui-bg_highlight-hard_100_f9f9f9_1x100.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Scripts/2010.3.1318/telerik.grid.grouping.min.js" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Office2007/loading.gif" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Views/Series/SubMenu.ascx" publishTime="03/11/2011 00:39:20" />
+    <file relUrl="Content/Telerik/treeview-nodes.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/telerik.black.min.css" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Images/Plus.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Scripts/2010.3.1318/jquery-1.4.4.min.js" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Global.asax" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Default/sprite.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/jquery-ui.css" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/WebBlue/editor.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Black/treeview-line.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Images/ui-icons_cd0a0a_256x240.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Scripts/2010.3.1318/telerik.list.min.js" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="bin/NzbDrone.Web.dll" publishTime="03/26/2011 17:02:27" />
+    <file relUrl="Scripts/2010.3.1318/telerik.datepicker.min.js" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Outlook/sprite.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Views/Account/LogOn.aspx" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/telerik.default.min.css" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Forest/editor.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Images/ui-icons_888888_256x240.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="bin/System.Web.Mvc.dll" publishTime="02/17/2010 08:24:14" />
+    <file relUrl="Content/Telerik/loading.gif" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="bin/System.Web.Mvc.xml" publishTime="02/17/2010 08:22:24" />
+    <file relUrl="Content/telerik.outlook.min.css" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Scripts/jquery-ui-1.8.8.min.js" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Views/Series/EpisodeDetail.ascx" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="bin/Exceptioneer.WindowsFormsClient.dll" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/jquery.jgrowl.css" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="bin/NLog.pdb" publishTime="09/26/2010 18:12:50" />
+    <file relUrl="Content/Images/ui-icons_72a7cf_256x240.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="bin/TvdbLib.xml" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Black/loading.gif" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Vista/sprite.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Images/ui-bg_glass_95_fef1ec_1x400.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Outlook/editor.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="log.config" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="bin/RSS.NET.xml" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Default/treeview-line.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Images/ui-icons_ffffff_256x240.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Sunset/sprite.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Office2007/editor.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="bin/RSS.NET.dll" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Web20/treeview-nodes.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Web20/treeview-nodes-rtl.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Default/loading.gif" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Hay/loading.gif" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Libraries/Telerik.Web.Mvc.dll" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Sunset/treeview-line.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/telerik.webblue.min.css" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Black/treeview-nodes-rtl.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Telerik/treeview-nodes-rtl.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="bin/Castle.Core.dll" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Scripts/MicrosoftMvcValidation.debug.js" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Scripts/2010.3.1318/telerik.combobox.min.js" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Views/Settings/Quality.ascx" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Images/ui-bg_glass_55_fbf5d0_1x400.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Vista/loading.gif" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Images/ui-icons_2e83ff_256x240.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="bin/UPnP.dll" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/telerik.vista.min.css" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Scripts/jquery.validate-vsdoc.js" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Views/Home/Index.aspx" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Images/arrow.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Images/ui-bg_glass_100_f0f0f0_1x400.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Sitefinity/treeview-line.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Scripts/MicrosoftMvcAjax.js" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Views/Log/Index.aspx" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/telerik.simple.min.css" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Default/treeview-nodes-rtl.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Scripts/2010.3.1318/telerik.autocomplete.min.js" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/telerik.forest.min.css" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Web20/treeview-line.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Scripts/2010.3.1318/telerik.tabstrip.min.js" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Views/Series/AddExisting.aspx" publishTime="03/17/2011 00:32:05" />
+    <file relUrl="Views/Settings/Downloads.ascx" publishTime="03/21/2011 20:56:07" />
+    <file relUrl="Scripts/2010.3.1318/telerik.grid.editing.min.js" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/XbmcNotification.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Views/Account/Register.aspx" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Images/img02.jpg" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Web20/loading.gif" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Forest/treeview-nodes-rtl.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Telerik/editor.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Scripts/2010.3.1318/telerik.draganddrop.min.js" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/WebBlue/treeview-line.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/telerik.sunset.min.css" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Simple/treeview-line.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="bin/Ninject.dll" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Views/History/Index.aspx" publishTime="03/23/2011 08:35:21" />
+    <file relUrl="Content/Hay/sprite.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Windows7/loading.gif" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Scripts/MicrosoftMvcValidation.js" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/telerik.hay.min.css" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="bin/Castle.Core.xml" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/jquery-ui-1.8.8.custom.css" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="bin/System.Data.SQLite.xml" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/WebBlue/treeview-nodes-rtl.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Scripts/jquery-1.4.1-vsdoc.js" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Images/ui-icons_222222_256x240.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="bin/System.Data.SQLite.dll" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Hay/treeview-line.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Views/Settings/Index.aspx" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Scripts/2010.3.1318/telerik.datetimepicker.min.js" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Default/treeview-nodes.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="bin/NzbDrone.Web.pdb" publishTime="03/26/2011 17:02:27" />
+    <file relUrl="bin/NzbDrone.Core.pdb" publishTime="03/26/2011 17:02:25" />
+    <file relUrl="Content/telerik.web20.min.css" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Scripts/2010.3.1318/telerik.grid.reordering.min.js" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/telerik.windows7.min.css" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Views/Series/Add.aspx" publishTime="03/10/2011 09:14:43" />
+    <file relUrl="Content/Hay/editor.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Scripts/jquery-1.4.3.min.js" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Views/Series/index.aspx" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Sunset/editor.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Telerik/treeview-line.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Scripts/MicrosoftAjax.debug.js" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Scripts/jquery.jgrowl.js" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Office2007/treeview-line.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Views/Settings/SubMenu.ascx" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Views/Shared/Error.aspx" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Views/Upcoming/Index.aspx" publishTime="03/23/2011 08:34:52" />
+    <file relUrl="Scripts/2010.3.1318/telerik.menu.min.js" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Views/Series/AddExistingManual.aspx" publishTime="03/16/2011 23:38:06" />
+    <file relUrl="Views/Settings/UserProfileSection.ascx" publishTime="03/08/2011 22:05:27" />
+    <file relUrl="Scripts/jquery-ui-1.8.5.custom.min.js" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Views/Settings/RootDir.ascx" publishTime="03/08/2011 22:09:59" />
+    <file relUrl="Content/Web20/editor.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Images/ui-bg_diagonals-small_0_aaaaaa_40x40.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Views/Settings/General.ascx" publishTime="03/15/2011 08:20:40" />
+    <file relUrl="Content/Office2007/treeview-nodes.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Views/Home/Test.aspx" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Outlook/treeview-nodes-rtl.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Vista/editor.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/telerik.rtl.min.css" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Hay/treeview-nodes-rtl.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Views/Settings/Indexers.ascx" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Sitefinity/editor.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Scripts/2010.3.1318/telerik.timepicker.min.js" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Images/ui-icons_2694e8_256x240.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Views/Series/Details.aspx" publishTime="03/22/2011 21:11:56" />
+    <file relUrl="Content/Images/ui-bg_glass_80_e6e6e6_1x400.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Scripts/2010.3.1318/telerik.treeview.min.js" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Scripts/2010.3.1318/telerik.window.min.js" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/jquery-ui.custom.css" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Hay/treeview-nodes.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Forest/sprite.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="bin/NLog.dll" publishTime="09/26/2010 18:12:50" />
+    <file relUrl="Content/ie.css" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Views/Account/ChangePasswordSuccess.aspx" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Scripts/2010.3.1318/telerik.textbox.min.js" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/telerik.telerik.min.css" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Scripts/2010.3.1318/telerik.editor.min.js" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Web20/sprite.png" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/Images/img01.jpg" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Content/ajax-loader.gif" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Views/Home/About.aspx" publishTime="03/07/2011 20:48:08" />
+    <file relUrl="Scripts/2010.3.1318/jquery.validate.min.js" publishTime="03/07/2011 20:48:08" />
   </publishProfile>
 </publishData>
