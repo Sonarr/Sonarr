@@ -81,7 +81,7 @@ namespace NzbDrone.Core.Providers
             return _tvDb.GetSeries(tvDbId, false);
         }
 
-        public void AddSeries(string path, TvdbSeries series)
+        public void AddSeries(string path, TvdbSeries series, int qualityProfileId)
         {
             Logger.Info("Adding Series [{0}]:{1} Path: {2}", series.Id, series.SeriesName, path);
             var repoSeries = new Series();
@@ -95,7 +95,10 @@ namespace NzbDrone.Core.Providers
             repoSeries.Path = path;
             repoSeries.CleanTitle = Parser.NormalizeTitle(series.SeriesName);
             repoSeries.Monitored = true; //New shows should be monitored
-            repoSeries.QualityProfileId = Convert.ToInt32(_config.GetValue("DefaultQualityProfile", "1", true));
+            repoSeries.QualityProfileId = qualityProfileId;
+            if (qualityProfileId == 0)
+                repoSeries.QualityProfileId = Convert.ToInt32(_config.GetValue("DefaultQualityProfile", "1", true));
+                
             repoSeries.SeasonFolder = true;
 
             if (!Convert.ToBoolean(_config.GetValue("Sorting_SeasonFolder", true, true)))

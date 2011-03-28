@@ -154,6 +154,10 @@ namespace NzbDrone.Core.Providers
                 var titleFix = GetTitleFix(new List<EpisodeParseResult> { episode }, episodeModel.SeriesId);
                 titleFix = String.Format("{0} [{1}]", titleFix, nzb.Quality); //Add Quality to the titleFix
 
+                //If it is a PROPER we want to put PROPER in the titleFix
+                if (nzb.Proper)
+                    titleFix = String.Format("{0} [PROPER]", titleFix);
+
                 if (!Convert.ToBoolean(_configProvider.GetValue("UseBlackhole", true, true)))
                     if (_sabProvider.IsInQueue(titleFix))
                         return;
@@ -161,6 +165,10 @@ namespace NzbDrone.Core.Providers
 
             nzb.TitleFix = GetTitleFix(episodeParseResults, series.SeriesId); //Get the TitleFix so we can use it later
             nzb.TitleFix = String.Format("{0} [{1}]", nzb.TitleFix, nzb.Quality); //Add Quality to the titleFix
+
+            //If it is a PROPER we want to put PROPER in the titleFix
+            if (nzb.Proper)
+                nzb.TitleFix = String.Format("{0} [PROPER]", nzb.TitleFix);
 
             if (Convert.ToBoolean(_configProvider.GetValue("UseBlackHole", true, true)))
             {

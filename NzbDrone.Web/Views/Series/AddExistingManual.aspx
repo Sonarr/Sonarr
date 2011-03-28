@@ -22,9 +22,18 @@
         <h4><%= Html.Label(Model.Path) %></h4>
     </div>
 
-    <%= Html.Label("Enter a Series Name") %>
-    <%= Html.TextBoxFor(m => m.FolderName, new { id="existing_series_id" }) %>
-    <%= Html.TextBoxFor(m => m.Path, new { id ="series_path", style="display:none" }) %>
+    <div style="width: 60%">
+        <div style="display:inline">
+            <%= Html.Label("Enter a Series Name") %>
+            <%= Html.TextBoxFor(m => m.FolderName, new { id="existing_series_id" }) %>
+            <%= Html.TextBoxFor(m => m.Path, new { id ="series_path", style="display:none" }) %>
+        </div>
+
+        <div style="display:inline; float:right;">
+            <%= Html.LabelFor(m => m.QualityProfileId)%>
+            <%: Html.DropDownListFor(m => m.QualityProfileId, Model.QualitySelectList)%>
+        </div>
+    </div>
 
     <p>
         <button class="t.button" id="searchButton" disabled="disabled" onclick="searchSeries ()">Search</button>
@@ -72,13 +81,15 @@
 
             var id = "#" + checkedSeries + "_text";
             var seriesName = $(id).val();
+            var qualityProfileId = $("#QualityProfileId").val();
 
             var pathTest = $('#series_path').val();
             $('#tester').text(pathTest);
 
             $("#addResult").load('<%=Url.Action("AddExistingSeries", "Series") %>', {
                 path: pathTest,
-                seriesId: checkedSeries
+                seriesId: checkedSeries,
+                qualityProfileId: qualityProfileId
             });
         }
 

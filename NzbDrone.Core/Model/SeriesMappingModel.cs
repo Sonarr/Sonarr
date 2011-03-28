@@ -9,5 +9,6 @@ namespace NzbDrone.Core.Model
     {
         public string Path { get; set; }
         public int TvDbId { get; set; }
+        public int QualityProfileId { get; set; }
     }
 }

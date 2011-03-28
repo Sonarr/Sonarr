@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Web.Models
@@ -19,5 +20,10 @@ namespace NzbDrone.Web.Models
         public string DirectorySeparatorChar { get; set; }
 
         public List<RootDir> RootDirectories { get; set; }
+
+        [DisplayName("Quality Profile")]
+        public int QualityProfileId { get; set; }
+
+        public SelectList QualitySelectList { get; set; }
     }
 }

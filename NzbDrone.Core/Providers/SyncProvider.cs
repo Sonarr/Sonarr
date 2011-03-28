@@ -90,7 +90,7 @@ namespace NzbDrone.Core.Providers
             return true;
         }
 
-        public bool BeginAddNewSeries(string dir, int seriesId, string seriesName)
+        public bool BeginAddNewSeries(string dir, int seriesId, string seriesName, int qualityProfileId)
         {
             Logger.Debug("User has requested adding of new series");
             if (_seriesSyncThread == null || !_seriesSyncThread.IsAlive)
@@ -110,7 +110,7 @@ namespace NzbDrone.Core.Providers
                 _diskProvider.CreateDirectory(path);
 
                 //Add it to the list so it will be processed
-                _syncList.Add(new SeriesMappingModel { Path = path, TvDbId = seriesId });
+                _syncList.Add(new SeriesMappingModel { Path = path, TvDbId = seriesId, QualityProfileId = qualityProfileId });
 
                 _seriesSyncThread.Start();
             }
@@ -126,7 +126,7 @@ namespace NzbDrone.Core.Providers
             return true;
         }
 
-        public bool BeginAddExistingSeries(string path, int seriesId)
+        public bool BeginAddExistingSeries(string path, int seriesId, int qualityProfileId)
         {
             Logger.Debug("User has requested adding of new series");
             if (_seriesSyncThread == null || !_seriesSyncThread.IsAlive)
@@ -141,7 +141,7 @@ namespace NzbDrone.Core.Providers
                 _syncList = new List<SeriesMappingModel>();
 
                 //Add it to the list so it will be processed
-                _syncList.Add(new SeriesMappingModel { Path = path, TvDbId = seriesId });
+                _syncList.Add(new SeriesMappingModel { Path = path, TvDbId = seriesId, QualityProfileId = qualityProfileId });
 
                 _seriesSyncThread.Start();
             }
@@ -194,7 +194,7 @@ namespace NzbDrone.Core.Providers
                                 if (_seriesProvider.GetSeries(mappedSeries.Id) == null)
                                 {
                                     _seriesSyncNotification.CurrentStatus = String.Format("{0}: downloading series info...", mappedSeries.SeriesName);
-                                    _seriesProvider.AddSeries(seriesFolder.Path, mappedSeries);
+                                    _seriesProvider.AddSeries(seriesFolder.Path, mappedSeries, seriesFolder.QualityProfileId);
                                     _episodeProvider.RefreshEpisodeInfo(mappedSeries.Id);
                                     _seriesSyncNotification.CurrentStatus = String.Format("{0}: finding episodes on disk...", mappedSeries.SeriesName);
                                     _mediaFileProvider.Scan(_seriesProvider.GetSeries(mappedSeries.Id));

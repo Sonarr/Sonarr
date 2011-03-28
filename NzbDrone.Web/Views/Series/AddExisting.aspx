@@ -38,6 +38,9 @@
 
     </script>
 
+            <%= Html.Label("Quality Profile")%>
+            <%: Html.DropDownList("qualityProfileId", (SelectList)ViewData["QualitySelectList"], ViewData["QualityProfileId"])%>
+
     <div id="unmappedGrid" style="display:none">
         <%
             Html.Telerik().Grid<AddExistingSeriesModel>().Name("Unmapped_Series_Folders")
@@ -105,8 +108,11 @@
                 return;
             }
 
+            var qualityProfileId = $("#qualityProfileId").val();
+
+
             $("#result").load('<%=Url.Action("SyncSelectedSeries", "Series") %>', {
-                checkedRecords: $checkedRecords.map(function () { return jQuery.param({ path: this.name, tvdbid: this.value }) })
+                checkedRecords: $checkedRecords.map(function () { return jQuery.param({ path: this.name, tvdbid: this.value, qualityProfileId: qualityProfileId }) })
             });
 
             //Hide the series that we just tried to sync up (uncheck them too, otherwise they will be re-sync'd if we sync again)

@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Providers
         bool IsMonitored(long id);
         TvdbSeries MapPathToSeries(string path);
         TvdbSeries MapPathToSeries(int tvDbId);
-        void AddSeries(string path, TvdbSeries series);
+        void AddSeries(string path, TvdbSeries series, int qualityProfileId);
         Series FindSeries(string cleanTitle);
         bool QualityWanted(int seriesId, QualityTypes quality);
         void UpdateSeries(Series series);

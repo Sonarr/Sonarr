@@ -20,8 +20,17 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     
-    <%= Html.Label("Enter a Series Name") %>
-    <%= Html.TextBox("new_series_name", String.Empty, new { id="new_series_id" }) %>
+    <div style="width: 60%">
+        <div style="display:inline">
+            <%= Html.Label("Enter a Series Name") %>
+            <%= Html.TextBox("new_series_name", String.Empty, new { id="new_series_id" }) %>
+        </div>
+        
+        <div style="display:inline; float:right;">
+            <%= Html.LabelFor(m => m.QualityProfileId)%>
+            <%: Html.DropDownListFor(m => m.QualityProfileId, Model.QualitySelectList)%>
+        </div>
+    </div>
 
     <p>
         <button class="t.button" id="searchButton" disabled="disabled" onclick="searchSeries ()">Search</button>
@@ -90,11 +99,13 @@
 
             var id = "#" + checkedSeries + "_text";
             var seriesName = $(id).val();
+            var qualityProfileId = $("#QualityProfileId").val();
 
             $("#addResult").load('<%=Url.Action("AddNewSeries", "Series") %>', {
                 dir: checkedDir,
                 seriesId: checkedSeries,
-                seriesName: seriesName
+                seriesName: seriesName,
+                qualityProfileId: qualityProfileId
             });
         }
 

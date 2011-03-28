@@ -21,11 +21,12 @@ Thumbs.db
 [Dd]ebug*/
 *.lib
 *.sbr
+*.nzb
 obj/
 [Rr]elease*/
 _ReSharper*/
 [Tt]est[Rr]esult[s]
-
+[Nn]zbs
 [Bb]uild/
 [Ll]ogs/
 /[Pp]ackage/

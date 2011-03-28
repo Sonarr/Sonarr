@@ -29,6 +29,7 @@ namespace NzbDrone.Web.Controllers
         private readonly IRootDirProvider _rootDirProvider;
         private readonly ITvDbProvider _tvDbProvider;
         private readonly IDiskProvider _diskProvider;
+        private readonly IConfigProvider _configProvider;
 
         //
         // GET: /Series/
@@ -37,7 +38,8 @@ namespace NzbDrone.Web.Controllers
             IEpisodeProvider episodeProvider, IRssSyncProvider rssSyncProvider,
             IQualityProvider qualityProvider, IMediaFileProvider mediaFileProvider,
             IRenameProvider renameProvider, IRootDirProvider rootDirProvider,
-            ITvDbProvider tvDbProvider, IDiskProvider diskProvider)
+            ITvDbProvider tvDbProvider, IDiskProvider diskProvider,
+            IConfigProvider configProvider)
         {
             _seriesProvider = seriesProvider;
             _episodeProvider = episodeProvider;
@@ -49,6 +51,7 @@ namespace NzbDrone.Web.Controllers
             _rootDirProvider = rootDirProvider;
             _tvDbProvider = tvDbProvider;
             _diskProvider = diskProvider;
+            _configProvider = configProvider;
         }
 
         public ActionResult Index()
@@ -64,6 +67,13 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult AddExisting()
         {
+            var defaultQuality = Convert.ToInt32(_configProvider.GetValue("DefaultQualityProfile", "1", true));
+            var profiles = _qualityProvider.GetAllProfiles();
+            var selectList = new SelectList(profiles, "QualityProfileId", "Name");
+
+            ViewData["QualityProfileId"] = defaultQuality;
+            ViewData["QualitySelectList"] = selectList;
+
             return View();
         }
 
@@ -72,10 +82,16 @@ namespace NzbDrone.Web.Controllers
             ViewData["RootDirs"] = _rootDirProvider.GetAll();
             ViewData["DirSep"] = Path.DirectorySeparatorChar;
 
+            var profiles = _qualityProvider.GetAllProfiles();
+            var selectList = new SelectList(profiles, "QualityProfileId", "Name");
+            var defaultQuality = Convert.ToInt32(_configProvider.GetValue("DefaultQualityProfile", "1", true));
+
             var model = new AddNewSeriesModel
                             {
                                 DirectorySeparatorChar = Path.DirectorySeparatorChar.ToString(),
-                                RootDirectories = _rootDirProvider.GetAll()
+                                RootDirectories = _rootDirProvider.GetAll(),
+                                QualityProfileId = defaultQuality,
+                                QualitySelectList = selectList
                             };
 
             return View(model);
@@ -83,9 +99,15 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult AddExistingManual(string path)
         {
+            var profiles = _qualityProvider.GetAllProfiles();
+            var selectList = new SelectList(profiles, "QualityProfileId", "Name");
+            var defaultQuality = Convert.ToInt32(_configProvider.GetValue("DefaultQualityProfile", "1", true));
+
             var model = new AddExistingManualModel();
             model.Path = path;
             model.FolderName = _diskProvider.GetFolderName(path);
+            model.QualityProfileId = defaultQuality;
+            model.QualitySelectList = selectList;
 
             return View(model);
         }
@@ -177,11 +199,12 @@ namespace NzbDrone.Web.Controllers
 
                 var path = HttpUtility.UrlDecode(nvc["path"]);
                 var tvDbId = Convert.ToInt32(HttpUtility.UrlDecode(nvc["tvdbid"]));
+                var qualityProfileId = Convert.ToInt32(HttpUtility.UrlDecode(nvc["qualityProfileId"]));
 
                 //If the TvDbId for this show is 0 then skip it... User made a mistake... They will have to manually map it
                 if (tvDbId < 1) continue;
 
-                unmappedList.Add(new SeriesMappingModel{Path = path, TvDbId = tvDbId});
+                unmappedList.Add(new SeriesMappingModel{Path = path, TvDbId = tvDbId, QualityProfileId = qualityProfileId});
             }
 
             if(_syncProvider.BeginSyncUnmappedFolders(unmappedList))
@@ -190,25 +213,25 @@ namespace NzbDrone.Web.Controllers
             return Content("Sync already in progress, please wait for it to complete before retrying.");
         }
 
-        public ActionResult AddNewSeries(string dir, int seriesId, string seriesName)
+        public ActionResult AddNewSeries(string dir, int seriesId, string seriesName, int qualityProfileId)
         {
             //Get TVDB Series Name
             //Create new folder for series
             //Add the new series to the Database
 
-            if (_syncProvider.BeginAddNewSeries(dir, seriesId, seriesName))
+            if (_syncProvider.BeginAddNewSeries(dir, seriesId, seriesName, qualityProfileId))
                 return Content("Adding new series has started.");
             
             return Content("Unable to add new series, please wait for previous scans to complete first.");
         }
 
-        public ActionResult AddExistingSeries(string path, int seriesId)
+        public ActionResult AddExistingSeries(string path, int seriesId, int qualityProfileId)
         {
             //Get TVDB Series Name
             //Create new folder for series
             //Add the new series to the Database
 
-            if (_syncProvider.BeginAddExistingSeries(path, seriesId))
+            if (_syncProvider.BeginAddExistingSeries(path, seriesId, qualityProfileId))
                 return Content("Manual adding of existing series has started");
 
             return Content("Unable to add existing series, please wait for previous scans to complete first.");
