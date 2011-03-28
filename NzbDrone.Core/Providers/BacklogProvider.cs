@@ -121,78 +121,7 @@ namespace NzbDrone.Core.Providers
 
                     foreach (var series in _seriesList)
                     {
-                        try
-                        {
-                            //Do the searching here
-                            _backlogSearchNotification.CurrentStatus = String.Format("Backlog Searching For: {0}", series.Title);
-
-                            var sceneNames = SceneNameHelper.FindById(series.SeriesId);
-
-                            if (sceneNames.Count < 1)
-                                sceneNames.Add(series.Title);
-
-                            foreach (var season in series.Seasons)
-                            {
-                                var episodesWithoutFiles = season.Episodes.Where(e => e.EpisodeFileId == 0);
-
-                                if (season.Episodes.Count() == episodesWithoutFiles.Count())
-                                {
-                                    //Whole season needs to be grabbed, look for the whole season first
-                                    //Lookup scene name using seriesId
-
-                                    foreach (var sceneName in sceneNames)
-                                    {
-                                        var searchString = String.Format("{0} Season {1}", sceneName,
-                                                                         season.SeasonNumber);
-
-                                        foreach (var i in _indexerProvider.EnabledIndexers())
-                                        {
-                                            //Get the users URL
-                                            GetUsersUrl(i, searchString);
-
-                                            //If the url still contains '{' & '}' the user probably hasn't configured the indexer settings
-                                            if (i.ApiUrl.Contains("{") && i.ApiUrl.Contains("}"))
-                                            {
-                                                Logger.Debug("Unable to Sync {0}. User Information has not been configured.", i.IndexerName);
-                                                continue; //Skip this indexer
-                                            }
-
-                                            var indexer = new FeedInfoModel(i.IndexerName, i.ApiUrl);
-
-                                            var feedItems = _rssProvider.GetFeed(indexer);
-
-                                            if (feedItems.Count() == 0)
-                                            {
-                                                Logger.Debug("Failed to download Backlog Search URL: {0}", indexer.Name);
-                                                continue; //No need to process anything else
-                                            }
-
-                                            foreach (RssItem item in feedItems)
-                                            {
-                                                NzbInfoModel nzb = Parser.ParseNzbInfo(indexer, item);
-                                                QueueSeasonIfWanted(nzb, i);
-                                            }
-
-                                        }
-                                    }
-                                }
-
-                                else
-                                {
-                                    //Grab the episodes 1-by-1 (or in smaller chunks)
-
-                                }
-
-                            }
-                            //Done searching for each episode
-                        }
-
-                        catch (Exception ex)
-                        {
-                            Logger.WarnException(ex.Message, ex);
-                        }
-
-                        _backlogSearchNotification.ProgressValue++;
+                        BackLogSeries(series);
                     }
 
                     _backlogSearchNotification.CurrentStatus = "Backlog Search Completed";
@@ -205,6 +134,80 @@ namespace NzbDrone.Core.Providers
             catch (Exception ex)
             {
                 Logger.WarnException(ex.Message, ex);
+            }
+        }
+
+        private void BackLogSeries(Series series)
+        {
+            try
+            {
+                //Do the searching here
+                _backlogSearchNotification.CurrentStatus = String.Format("Backlog Searching For: {0}", series.Title);
+
+                var sceneNames = SceneNameHelper.FindById(series.SeriesId);
+
+                if (sceneNames.Count < 1)
+                    sceneNames.Add(series.Title);
+
+                foreach (var season in series.Seasons)
+                {
+                    BackLogSeason(sceneNames, season);
+                }
+                //Done searching for each episode
+            }
+
+            catch (Exception ex)
+            {
+                Logger.WarnException(ex.Message, ex);
+            }
+
+            _backlogSearchNotification.ProgressValue++;
+        }
+
+        private void BackLogSeason(List<string> sceneNames, Season season)
+        {
+            var episodesWithoutFiles = season.Episodes.Where(e => e.EpisodeFileId == 0);
+
+            if (season.Episodes.Count() == episodesWithoutFiles.Count())
+            {
+                //Whole season needs to be grabbed, look for the whole season first
+                //Lookup scene name using seriesId
+
+                foreach (var sceneName in sceneNames)
+                {
+                    var searchString = String.Format("{0} Season {1}", sceneName,
+                                                     season.SeasonNumber);
+
+                    foreach (var i in _indexerProvider.EnabledIndexers())
+                    {
+                        //Get the users URL
+                        GetUsersUrl(i, searchString);
+
+                        //If the url still contains '{' & '}' the user probably hasn't configured the indexer settings
+                        if (i.ApiUrl.Contains("{") && i.ApiUrl.Contains("}"))
+                        {
+                            Logger.Debug("Unable to Sync {0}. User Information has not been configured.", i.IndexerName);
+                            continue; //Skip this indexer
+                        }
+
+                        var indexer = new FeedInfoModel(i.IndexerName, i.ApiUrl);
+
+                        var feedItems = _rssProvider.GetFeed(indexer);
+
+                        if (feedItems.Count() == 0)
+                        {
+                            Logger.Debug("Failed to download Backlog Search URL: {0}", indexer.Name);
+                            continue; //No need to process anything else
+                        }
+
+                        foreach (RssItem item in feedItems)
+                        {
+                            NzbInfoModel nzb = Parser.ParseNzbInfo(indexer, item);
+                            QueueSeasonIfWanted(nzb, i);
+                        }
+
+                    }
+                }
             }
         }
 

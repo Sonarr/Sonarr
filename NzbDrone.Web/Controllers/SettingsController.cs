@@ -24,8 +24,8 @@ namespace NzbDrone.Web.Controllers
         private IRootDirProvider _rootDirProvider;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private string _settingsSaved = "Settings Saved.";
-        private string _settingsFailed = "Error Saving Settings, please fix any errors";
+        private const string SETTINGS_SAVED = "Settings Saved.";
+        private const string SETTINGS_FAILED = "Error Saving Settings, please fix any errors";
 
         public SettingsController(IConfigProvider configProvider, IIndexerProvider indexerProvider,
             IQualityProvider qualityProvider, IRootDirProvider rootDirProvider)
@@ -50,10 +50,10 @@ namespace NzbDrone.Web.Controllers
         public ActionResult General()
         {
             ViewData["viewName"] = "General";
-            
+
             return View("Index", new SettingsModel
                                      {
-                                         Directories = new List<RootDir>()
+                                         Directories = _rootDirProvider.GetAll()
                                      });
         }
 
@@ -211,11 +211,14 @@ namespace NzbDrone.Web.Controllers
         [HttpPost]
         public ActionResult SaveGeneral(SettingsModel data)
         {
-            if (data.Directories.Count > 0)
+            if (data.Directories != null && data.Directories.Count > 0)
             {
                 //If the Javascript was beaten we need to return an error
-                if (!data.Directories.Exists(d => d.Default))
-                    return Content(_settingsFailed);
+
+                /*   
+                 * Kay.one: I can't see what its doing, all it does it dooesn't let me s.
+                 * if (!data.Directories.Exists(d => d.Default))
+                         return Content(SETTINGS_FAILED);*/
 
                 var currentRootDirs = _rootDirProvider.GetAll();
 
@@ -235,10 +238,10 @@ namespace NzbDrone.Web.Controllers
                         _rootDirProvider.Update(dir);
                 }
 
-                return Content(_settingsSaved);
+                return Content(SETTINGS_SAVED);
             }
 
-            return Content(_settingsFailed);
+            return Content(SETTINGS_FAILED);
         }
 
         [HttpPost]
@@ -257,10 +260,10 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.SetValue("NzbsrusUId", data.NzbsrusUId);
                 _configProvider.SetValue("NzbsrusHash", data.NzbsrusHash);
 
-                return Content(_settingsSaved);
+                return Content(SETTINGS_SAVED);
             }
 
-            return Content(_settingsFailed);
+            return Content(SETTINGS_FAILED);
         }
 
         [HttpPost]
@@ -281,10 +284,10 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.SetValue("UseBlackhole", data.UseBlackHole.ToString());
                 _configProvider.SetValue("BlackholeDirectory", data.BlackholeDirectory);
 
-                return Content(_settingsSaved);
+                return Content(SETTINGS_SAVED);
             }
 
-            return Content(_settingsFailed);
+            return Content(SETTINGS_FAILED);
         }
 
         [HttpPost]
@@ -296,7 +299,7 @@ namespace NzbDrone.Web.Controllers
 
                 //Saves only the Default Quality, skips User Profiles since none exist
                 if (data.UserProfiles == null)
-                    return Content(_settingsSaved);
+                    return Content(SETTINGS_SAVED);
 
                 foreach (var dbProfile in _qualityProvider.GetAllProfiles().Where(q => q.UserProfile))
                 {
@@ -326,11 +329,11 @@ namespace NzbDrone.Web.Controllers
                     else
                         _qualityProvider.Add(profile);
 
-                    return Content(_settingsSaved);
+                    return Content(SETTINGS_SAVED);
                 }
             }
 
-            return Content(_settingsFailed);
+            return Content(SETTINGS_FAILED);
         }
 
         [HttpPost]
@@ -353,10 +356,10 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.SetValue("XbmcUsername", data.XbmcUsername);
                 _configProvider.SetValue("XbmcPassword", data.XbmcPassword);
 
-                return Content(_settingsSaved);
+                return Content(SETTINGS_SAVED);
             }
 
-            return Content(_settingsFailed);
+            return Content(SETTINGS_FAILED);
         }
 
         [HttpPost]
@@ -375,10 +378,10 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.SetValue("Sorting_NumberStyle", data.NumberStyle.ToString());
                 _configProvider.SetValue("Sorting_MultiEpisodeStyle", data.MultiEpisodeStyle.ToString());
 
-                return Content(_settingsSaved);
+                return Content(SETTINGS_SAVED);
             }
 
-            return Content(_settingsFailed);
+            return Content(SETTINGS_FAILED);
         }
     }
 }
