@@ -191,7 +191,7 @@ namespace NzbDrone.Web.Controllers
 
         public ViewResult AddRootDir()
         {
-            return View("RootDir", new RootDir { Default = false });
+            return View("RootDir", new RootDir());
         }
 
         public ActionResult SubMenu()
@@ -225,13 +225,13 @@ namespace NzbDrone.Web.Controllers
                 foreach (var currentRootDir in currentRootDirs)
                 {
                     var closureRootDir = currentRootDir;
-                    if (!data.Directories.Exists(d => d.RootDirId == closureRootDir.RootDirId))
-                        _rootDirProvider.Remove(closureRootDir.RootDirId);
+                    if (!data.Directories.Exists(d => d.Id == closureRootDir.Id))
+                        _rootDirProvider.Remove(closureRootDir.Id);
                 }
 
                 foreach (var dir in data.Directories)
                 {
-                    if (dir.RootDirId == 0)
+                    if (dir.Id == 0)
                         _rootDirProvider.Add(dir);
 
                     else

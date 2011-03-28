@@ -1,17 +1,15 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<AddNewSeriesModel>" %>
+
 <%@ Import Namespace="NzbDrone.Web.Models" %>
 <%@ Import Namespace="Telerik.Web.Mvc.UI" %>
 <%@ Import Namespace="NzbDrone.Core.Repository" %>
-
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
     Add New Series
-
     <script type="text/javascript">
         jQuery(document).ready(function () {
             $('#searchButton').attr('disabled', '');
         });
     </script>
-
 </asp:Content>
 <asp:Content ID="Menu" ContentPlaceHolderID="ActionMenu" runat="server">
     <%
@@ -19,47 +17,37 @@
     %>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-    
     <div style="width: 60%">
-        <div style="display:inline">
+        <div style="display: inline">
             <%= Html.Label("Enter a Series Name") %>
             <%= Html.TextBox("new_series_name", String.Empty, new { id="new_series_id" }) %>
+            <button class="t.button" id="searchButton" disabled="disabled" onclick="searchSeries ()">
+                Search</button>
         </div>
-        
-        <div style="display:inline; float:right;">
+        <div style="display: inline; float: right;">
             <%= Html.LabelFor(m => m.QualityProfileId)%>
             <%: Html.DropDownListFor(m => m.QualityProfileId, Model.QualitySelectList)%>
         </div>
     </div>
-
-    <p>
-        <button class="t.button" id="searchButton" disabled="disabled" onclick="searchSeries ()">Search</button>
-    </p>
-    
-    <div id="result"></div>
-
-<div id="RootDirectories" class="rootDirectories" style="display:none">
-    <fieldset>
-        <legend>Root TV Folders</legend>
-
-        <% int d = 0; %>
-        <% foreach (var dir in Model.RootDirectories)
-            { %>
-                <%: Html.RadioButton("selectedRootDir", dir.Path, dir.Default, new { @class="dirList examplePart", id="dirRadio_" + d }) %>
-                <%: Html.Label(dir.Path) %>
-                <% if (dir.Default) { %> * <% } %>
-                <% d++;%>
-                <br />
-        <% } %>
-    </fieldset>
-
-    <div id="example"></div>
-
-    <button class="t.button" onclick="addSeries ()">Add New Series</button>
-</div>
-
-<div id="addResult"></div>
-
+    <div id="result">
+    </div>
+    <div id="RootDirectories" class="rootDirectories" style="display: none">
+        <fieldset>
+            <legend>Root TV Folders</legend>
+            <% int d = 0; %>
+            <% foreach (var dir in Model.RootDirectories)
+               { %>
+            <%: Html.RadioButton("selectedRootDir", dir.Path, d ==0 , new { @class="dirList examplePart", id="dirRadio_" + d }) %>
+            <%: Html.Label(dir.Path) %>
+            <% } %>
+        </fieldset>
+        <div id="example">
+        </div>
+        <button class="t.button" onclick="addSeries ()">
+            Add New Series</button>
+    </div>
+    <div id="addResult">
+    </div>
     <script type="text/javascript" language="javascript">
 
         $('#new_series_id').bind('keydown', function (e) {
@@ -69,23 +57,15 @@
         });
 
         function searchSeries() {
-            var seriesSearch = $('#new_series_id');  
+            var seriesSearch = $('#new_series_id');
 
             $("#result").text("Searching...");
-            document.getElementById('RootDirectories').style.display = 'none';
+            document.getElementById('RootDirectories').style.display = 'inline';
             $("#result").load('<%=Url.Action("SearchForSeries", "Series") %>', {
                 seriesName: seriesSearch.val()
             });
         }
-
-        $(".searchRadio").live("change", function () {
-            var checked = $(this).attr('checked');
-
-            if (checked) {
-                document.getElementById('RootDirectories').style.display = 'inline';
-            }
-        });
-
+         
         function addSeries() {
             //Get the selected tvdbid + selected root folder
             //jquery bit below doesn't want to work...
@@ -119,12 +99,12 @@
 
             var sep = "\\";
 
-            var str = "Example: " + dir + sep + seriesName;
+            var str = "Target: " + dir + sep + seriesName;
 
             $('#example').text(str);
 
         });
     </script>
-    <div id="tester"></div>
-
+    <div id="tester">
+    </div>
 </asp:Content>
