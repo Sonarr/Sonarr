@@ -54,7 +54,7 @@ namespace NzbDrone.Web
             var lastError = Server.GetLastError();
             if (lastError is HttpException)
             {
-                Logger.WarnException(lastError.Message, lastError);
+                Logger.WarnException(String.Format("{0}. URL[{1}]", lastError.Message, Request.Path), lastError);
             }
             else
             {
