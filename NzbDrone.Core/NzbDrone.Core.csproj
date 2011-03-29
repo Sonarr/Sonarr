@@ -217,13 +217,9 @@
     <Compile Include="Providers\Fakes\FakeNotificationProvider.cs" />
     <Compile Include="Providers\IMediaFileProvider.cs" />
     <Compile Include="Providers\INotificationProvider.cs" />
-    <Compile Include="Providers\IMediaDiscoveryProvider.cs" />
-    <Compile Include="Providers\IMediaProvider.cs" />
     <Compile Include="Providers\ISyncProvider.cs" />
-    <Compile Include="Providers\MediaDiscoveryProvider.cs" />
     <Compile Include="Providers\MediaFileProvider.cs" />
     <Compile Include="Providers\SyncProvider.cs" />
-    <Compile Include="Providers\XBMCMediaProvider.cs" />
     <Compile Include="Model\Notification\ProgressNotification.cs" />
     <Compile Include="Providers\NotificationProvider.cs" />
     <Compile Include="Providers\ConfigProvider.cs" />
