@@ -1418,6 +1418,140 @@
             Gets or sets the kernel that owns the component container.
             </summary>
         </member>
+        <member name="T:Ninject.Infrastructure.Introspection.ExceptionFormatter">
+            <summary>
+            Provides meaningful exception messages.
+            </summary>
+        </member>
+        <member name="M:Ninject.Infrastructure.Introspection.ExceptionFormatter.ModulesWithNullOrEmptyNamesAreNotSupported">
+            <summary>
+            Generates a message saying that modules without names are not supported.
+            </summary>
+            <returns>The exception message.</returns>
+        </member>
+        <member name="M:Ninject.Infrastructure.Introspection.ExceptionFormatter.ModuleWithSameNameIsAlreadyLoaded(Ninject.Modules.INinjectModule,Ninject.Modules.INinjectModule)">
+            <summary>
+            Generates a message saying that a module with the same name is already loaded.
+            </summary>
+            <param name="newModule">The new module.</param>
+            <param name="existingModule">The existing module.</param>
+            <returns>The exception message.</returns>
+        </member>
+        <member name="M:Ninject.Infrastructure.Introspection.ExceptionFormatter.NoModuleLoadedWithTheSpecifiedName(System.String)">
+            <summary>
+            Generates a message saying that no module has been loaded with the specified name.
+            </summary>
+            <param name="name">The module name.</param>
+            <returns>The exception message.</returns>
+        </member>
+        <member name="M:Ninject.Infrastructure.Introspection.ExceptionFormatter.CouldNotUniquelyResolveBinding(Ninject.Activation.IRequest)">
+            <summary>
+            Generates a message saying that the binding could not be uniquely resolved.
+            </summary>
+            <param name="request">The request.</param>
+            <returns>The exception message.</returns>
+        </member>
+        <member name="M:Ninject.Infrastructure.Introspection.ExceptionFormatter.CouldNotResolveBinding(Ninject.Activation.IRequest)">
+            <summary>
+            Generates a message saying that the binding could not be resolved on the specified request.
+            </summary>
+            <param name="request">The request.</param>
+            <returns>The exception message.</returns>
+        </member>
+        <member name="M:Ninject.Infrastructure.Introspection.ExceptionFormatter.CyclicalDependenciesDetected(Ninject.Activation.IContext)">
+            <summary>
+            Generates a message saying that the specified context has cyclic dependencies.
+            </summary>
+            <param name="context">The context.</param>
+            <returns>The exception message.</returns>
+        </member>
+        <member name="M:Ninject.Infrastructure.Introspection.ExceptionFormatter.InvalidAttributeTypeUsedInBindingCondition(Ninject.Planning.Bindings.IBinding,System.String,System.Type)">
+            <summary>
+            Generates a message saying that an invalid attribute type is used in the binding condition.
+            </summary>
+            <param name="binding">The binding.</param>
+            <param name="methodName">Name of the method.</param>
+            <param name="type">The type.</param>
+            <returns>The exception message.</returns>
+        </member>
+        <member name="M:Ninject.Infrastructure.Introspection.ExceptionFormatter.NoConstructorsAvailable(Ninject.Activation.IContext)">
+            <summary>
+            Generates a message saying that no constructors are available on the specified context.
+            </summary>
+            <param name="context">The context.</param>
+            <returns>The exception message.</returns>
+        </member>
+        <member name="M:Ninject.Infrastructure.Introspection.ExceptionFormatter.NoConstructorsAvailableForComponent(System.Type,System.Type)">
+            <summary>
+            Generates a message saying that no constructors are available for the given component.
+            </summary>
+            <param name="component">The component.</param>
+            <param name="implementation">The implementation.</param>
+            <returns>The exception message.</returns>
+        </member>
+        <member name="M:Ninject.Infrastructure.Introspection.ExceptionFormatter.NoSuchComponentRegistered(System.Type)">
+            <summary>
+            Generates a message saying that the specified component is not registered.
+            </summary>
+            <param name="component">The component.</param>
+            <returns>The exception message.</returns>
+        </member>
+        <member name="M:Ninject.Infrastructure.Introspection.ExceptionFormatter.CouldNotResolvePropertyForValueInjection(Ninject.Activation.IRequest,System.String)">
+            <summary>
+            Generates a message saying that the specified property could not be resolved on the specified request.
+            </summary>
+            <param name="request">The request.</param>
+            <param name="propertyName">The property name.</param>
+            <returns>The exception message.</returns>
+        </member>
+        <member name="M:Ninject.Infrastructure.Introspection.ExceptionFormatter.ProviderReturnedNull(Ninject.Activation.IContext)">
+            <summary>
+            Generates a message saying that the provider on the specified context returned null.
+            </summary>
+            <param name="context">The context.</param>
+            <returns>The exception message.</returns>
+        </member>
+        <member name="T:Ninject.Infrastructure.Introspection.FormatExtensions">
+            <summary>
+            Provides extension methods for string formatting
+            </summary>
+        </member>
+        <member name="M:Ninject.Infrastructure.Introspection.FormatExtensions.FormatActivationPath(Ninject.Activation.IRequest)">
+            <summary>
+            Formats the activation path into a meaningful string representation.
+            </summary>
+            <param name="request">The request to be formatted.</param>
+            <returns>The activation path formatted as string.</returns>
+        </member>
+        <member name="M:Ninject.Infrastructure.Introspection.FormatExtensions.Format(Ninject.Planning.Bindings.IBinding,Ninject.Activation.IContext)">
+            <summary>
+            Formats the given binding into a meaningful string representation. 
+            </summary>
+            <param name="binding">The binding to be formatted.</param>
+            <param name="context">The context.</param>
+            <returns>The binding formatted as string</returns>
+        </member>
+        <member name="M:Ninject.Infrastructure.Introspection.FormatExtensions.Format(Ninject.Activation.IRequest)">
+            <summary>
+            Formats the specified request into a meaningful string representation.
+            </summary>
+            <param name="request">The request to be formatted.</param>
+            <returns>The request formatted as string.</returns>
+        </member>
+        <member name="M:Ninject.Infrastructure.Introspection.FormatExtensions.Format(Ninject.Planning.Targets.ITarget)">
+            <summary>
+            Formats the specified target into a meaningful string representation..
+            </summary>
+            <param name="target">The target to be formatted.</param>
+            <returns>The target formatted as string.</returns>
+        </member>
+        <member name="M:Ninject.Infrastructure.Introspection.FormatExtensions.Format(System.Type)">
+            <summary>
+            Formats the specified type into a meaningful string representation..
+            </summary>
+            <param name="type">The type to be formatted.</param>
+            <returns>The type formatted as string.</returns>
+        </member>
         <member name="T:Ninject.Infrastructure.Language.ExtensionsForMemberInfo">
             <summary>
             Extensions for MemberInfo
@@ -2080,11 +2214,12 @@
             Modifies an activation process in some way.
             </summary>
         </member>
-        <member name="M:Ninject.Parameters.IParameter.GetValue(Ninject.Activation.IContext)">
+        <member name="M:Ninject.Parameters.IParameter.GetValue(Ninject.Activation.IContext,Ninject.Planning.Targets.ITarget)">
             <summary>
             Gets the value for the parameter within the specified context.
             </summary>
             <param name="context">The context.</param>
+            <param name="target">The target.</param>
             <returns>The value for the parameter.</returns>
         </member>
         <member name="P:Ninject.Parameters.IParameter.Name">
@@ -2113,11 +2248,20 @@
             <param name="valueCallback">The callback that will be triggered to get the parameter's value.</param>
             <param name="shouldInherit">Whether the parameter should be inherited into child requests.</param>
         </member>
-        <member name="M:Ninject.Parameters.Parameter.GetValue(Ninject.Activation.IContext)">
+        <member name="M:Ninject.Parameters.Parameter.#ctor(System.String,System.Func{Ninject.Activation.IContext,Ninject.Planning.Targets.ITarget,System.Object},System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Ninject.Parameters.Parameter"/> class.
+            </summary>
+            <param name="name">The name of the parameter.</param>
+            <param name="valueCallback">The callback that will be triggered to get the parameter's value.</param>
+            <param name="shouldInherit">Whether the parameter should be inherited into child requests.</param>
+        </member>
+        <member name="M:Ninject.Parameters.Parameter.GetValue(Ninject.Activation.IContext,Ninject.Planning.Targets.ITarget)">
             <summary>
             Gets the value for the parameter within the specified context.
             </summary>
             <param name="context">The context.</param>
+            <param name="target">The target.</param>
             <returns>The value for the parameter.</returns>
         </member>
         <member name="M:Ninject.Parameters.Parameter.Equals(System.Object)">
@@ -2169,6 +2313,13 @@
             <param name="name">The name of the argument to override.</param>
             <param name="valueCallback">The callback to invoke to get the value that should be injected.</param>
         </member>
+        <member name="M:Ninject.Parameters.ConstructorArgument.#ctor(System.String,System.Func{Ninject.Activation.IContext,Ninject.Planning.Targets.ITarget,System.Object})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Ninject.Parameters.ConstructorArgument"/> class.
+            </summary>
+            <param name="name">The name of the argument to override.</param>
+            <param name="valueCallback">The callback to invoke to get the value that should be injected.</param>
+        </member>
         <member name="T:Ninject.Parameters.PropertyValue">
             <summary>
             Overrides the injected value of a property.
@@ -2182,6 +2333,13 @@
             <param name="value">The value to inject into the property.</param>
         </member>
         <member name="M:Ninject.Parameters.PropertyValue.#ctor(System.String,System.Func{Ninject.Activation.IContext,System.Object})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Ninject.Parameters.PropertyValue"/> class.
+            </summary>
+            <param name="name">The name of the property to override.</param>
+            <param name="valueCallback">The callback to invoke to get the value that should be injected.</param>
+        </member>
+        <member name="M:Ninject.Parameters.PropertyValue.#ctor(System.String,System.Func{Ninject.Activation.IContext,Ninject.Planning.Targets.ITarget,System.Object})">
             <summary>
             Initializes a new instance of the <see cref="T:Ninject.Parameters.PropertyValue"/> class.
             </summary>
@@ -2667,6 +2825,13 @@
             <param name="name">The name of the argument to override.</param>
             <param name="callback">The callback to invoke to get the value for the argument.</param>
         </member>
+        <member name="M:Ninject.Syntax.IBindingWithSyntax`1.WithConstructorArgument(System.String,System.Func{Ninject.Activation.IContext,Ninject.Planning.Targets.ITarget,System.Object})">
+            <summary>
+            Indicates that the specified constructor argument should be overridden with the specified value.
+            </summary>
+            <param name="name">The name of the argument to override.</param>
+            <param name="callback">The callback to invoke to get the value for the argument.</param>
+        </member>
         <member name="M:Ninject.Syntax.IBindingWithSyntax`1.WithPropertyValue(System.String,System.Object)">
             <summary>
             Indicates that the specified property should be injected with the specified value.
@@ -2675,6 +2840,13 @@
             <param name="value">The value for the property.</param>
         </member>
         <member name="M:Ninject.Syntax.IBindingWithSyntax`1.WithPropertyValue(System.String,System.Func{Ninject.Activation.IContext,System.Object})">
+            <summary>
+            Indicates that the specified property should be injected with the specified value.
+            </summary>
+            <param name="name">The name of the property to override.</param>
+            <param name="callback">The callback to invoke to get the value for the property.</param>
+        </member>
+        <member name="M:Ninject.Syntax.IBindingWithSyntax`1.WithPropertyValue(System.String,System.Func{Ninject.Activation.IContext,Ninject.Planning.Targets.ITarget,System.Object})">
             <summary>
             Indicates that the specified property should be injected with the specified value.
             </summary>
@@ -2916,6 +3088,13 @@
             <param name="name">The name of the argument to override.</param>
             <param name="callback">The callback to invoke to get the value for the argument.</param>
         </member>
+        <member name="M:Ninject.Planning.Bindings.BindingBuilder`1.WithConstructorArgument(System.String,System.Func{Ninject.Activation.IContext,Ninject.Planning.Targets.ITarget,System.Object})">
+            <summary>
+            Indicates that the specified constructor argument should be overridden with the specified value.
+            </summary>
+            <param name="name">The name of the argument to override.</param>
+            <param name="callback">The callback to invoke to get the value for the argument.</param>
+        </member>
         <member name="M:Ninject.Planning.Bindings.BindingBuilder`1.WithPropertyValue(System.String,System.Object)">
             <summary>
             Indicates that the specified property should be injected with the specified value.
@@ -2924,6 +3103,13 @@
             <param name="value">The value for the property.</param>
         </member>
         <member name="M:Ninject.Planning.Bindings.BindingBuilder`1.WithPropertyValue(System.String,System.Func{Ninject.Activation.IContext,System.Object})">
+            <summary>
+            Indicates that the specified property should be injected with the specified value.
+            </summary>
+            <param name="name">The name of the property to override.</param>
+            <param name="callback">The callback to invoke to get the value for the property.</param>
+        </member>
+        <member name="M:Ninject.Planning.Bindings.BindingBuilder`1.WithPropertyValue(System.String,System.Func{Ninject.Activation.IContext,Ninject.Planning.Targets.ITarget,System.Object})">
             <summary>
             Indicates that the specified property should be injected with the specified value.
             </summary>
@@ -4274,6 +4460,30 @@
             <param name="request">The request to resolve.</param>
             <returns>An enumerator of instances that match the request.</returns>
         </member>
+        <member name="M:Ninject.KernelBase.CreateRequest(System.Type,System.Func{Ninject.Planning.Bindings.IBindingMetadata,System.Boolean},System.Collections.Generic.IEnumerable{Ninject.Parameters.IParameter},System.Boolean,System.Boolean)">
+            <summary>
+            Creates a request for the specified service.
+            </summary>
+            <param name="service">The service that is being requested.</param>
+            <param name="constraint">The constraint to apply to the bindings to determine if they match the request.</param>
+            <param name="parameters">The parameters to pass to the resolution.</param>
+            <param name="isOptional"><c>True</c> if the request is optional; otherwise, <c>false</c>.</param>
+            <param name="isUnique"><c>True</c> if the request should return a unique result; otherwise, <c>false</c>.</param>
+            <returns>The created request.</returns>
+        </member>
+        <member name="M:Ninject.KernelBase.BeginBlock">
+            <summary>
+            Begins a new activation block, which can be used to deterministically dispose resolved instances.
+            </summary>
+            <returns>The new activation block.</returns>
+        </member>
+        <member name="M:Ninject.KernelBase.GetBindings(System.Type)">
+            <summary>
+            Gets the bindings registered for the specified service.
+            </summary>
+            <param name="service">The service in question.</param>
+            <returns>A series of bindings that are registered for the service.</returns>
+        </member>
         <member name="M:Ninject.KernelBase.GetBindingPrecedenceComparer">
             <summary>
             Returns an IComparer that is used to determine resolution precedence.
@@ -4286,30 +4496,6 @@
             </summary>
             <param name="request">The request/</param>
             <returns>A predicate that can determine if a given IBinding matches the request.</returns>
-        </member>
-        <member name="M:Ninject.KernelBase.CreateRequest(System.Type,System.Func{Ninject.Planning.Bindings.IBindingMetadata,System.Boolean},System.Collections.Generic.IEnumerable{Ninject.Parameters.IParameter},System.Boolean,System.Boolean)">
-            <summary>
-            Creates a request for the specified service.
-            </summary>
-            <param name="service">The service that is being requested.</param>
-            <param name="constraint">The constraint to apply to the bindings to determine if they match the request.</param>
-            <param name="parameters">The parameters to pass to the resolution.</param>
-            <param name="isOptional"><c>True</c> if the request is optional; otherwise, <c>false</c>.</param>
-            <param name="isUnique"><c>True</c> if the request should return a unique result; otherwise, <c>false</c>.</param>
-            <returns>The created request.</returns>
-        </member>
-        <member name="M:Ninject.KernelBase.GetBindings(System.Type)">
-            <summary>
-            Gets the bindings registered for the specified service.
-            </summary>
-            <param name="service">The service in question.</param>
-            <returns>A series of bindings that are registered for the service.</returns>
-        </member>
-        <member name="M:Ninject.KernelBase.BeginBlock">
-            <summary>
-            Begins a new activation block, which can be used to deterministically dispose resolved instances.
-            </summary>
-            <returns>The new activation block.</returns>
         </member>
         <member name="M:Ninject.KernelBase.CreateBindingBuilder``1(Ninject.Planning.Bindings.IBinding)">
             <summary>

@@ -128,7 +128,10 @@
     </Reference>
     <Reference Include="Gallio, Version=3.2.0.0, Culture=neutral, PublicKeyToken=eb9cfa67ee6ab36e, processorArchitecture=MSIL" />
     <Reference Include="MbUnit, Version=3.2.0.0, Culture=neutral, PublicKeyToken=eb9cfa67ee6ab36e, processorArchitecture=MSIL" />
-    <Reference Include="Ninject, Version=2.1.0.76, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL" />
+    <Reference Include="Ninject, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Ninject.2.2.1.0\lib\.NetFramework 4.0\Ninject.dll</HintPath>
+    </Reference>
     <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL" />
     <Reference Include="NLog.Extended, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -277,8 +280,6 @@
     <Content Include="Libraries\Castle.Core.dll" />
     <Content Include="Libraries\Castle.Core.xml" />
     <Content Include="Libraries\Exceptioneer.WindowsFormsClient.dll" />
-    <Content Include="Libraries\Ninject.dll" />
-    <Content Include="Libraries\Ninject.xml" />
     <Content Include="Libraries\NLog.dll" />
     <Content Include="Libraries\NLog.Extended.dll" />
     <Content Include="Libraries\NLog.Extended.xml" />
@@ -297,6 +298,7 @@
     <None Include="Libraries\nlog.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
