@@ -41,9 +41,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Ninject.2.2.1.0\lib\.NetFramework 4.0\Ninject.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject.Web.Mvc, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+    <Reference Include="Ninject.Web.Mvc, Version=2.2.0.1, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libraries\Ninject.Web.Mvc.dll</HintPath>
+      <HintPath>..\packages\Ninject.Web.Mvc2.2.2.0.1\lib\.NetFramework 4.0\Ninject.Web.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL" />
     <Reference Include="SubSonic.Core, Version=3.0.0.3, Culture=neutral, processorArchitecture=MSIL">
@@ -467,8 +467,6 @@
     <Content Include="Content\style.css" />
     <Content Include="Content\XbmcNotification.png" />
     <Content Include="Global.asax" />
-    <Content Include="Libraries\Ninject.Web.Mvc.dll" />
-    <Content Include="Libraries\Ninject.Web.Mvc.xml" />
     <Content Include="Libraries\Telerik.Web.Mvc.dll" />
     <Content Include="Libraries\Telerik.Web.Mvc.xml" />
     <Content Include="Scripts\2011.1.315\jquery-1.5.1.min.js" />
