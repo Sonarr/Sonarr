@@ -6,7 +6,7 @@ namespace NzbDrone.Core.Instrumentation
 {
     public class NlogWriter : TextWriter
     {
-        private static readonly Logger Logger = LogManager.GetLogger("DB");
+        private static readonly Logger Logger = LogManager.GetLogger("NzbDrone.SubSonic");
 
 
         public override void Write(char[] buffer, int index, int count)

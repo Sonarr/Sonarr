@@ -60,10 +60,12 @@
             var seriesSearch = $('#new_series_id');
 
             $("#result").text("Searching...");
-            document.getElementById('RootDirectories').style.display = 'inline';
+           
             $("#result").load('<%=Url.Action("SearchForSeries", "Series") %>', {
                 seriesName: seriesSearch.val()
             });
+
+            document.getElementById('RootDirectories').style.display = 'inline';
         }
          
         function addSeries() {

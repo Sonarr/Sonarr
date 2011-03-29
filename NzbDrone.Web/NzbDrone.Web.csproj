@@ -15,6 +15,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <MvcBuildViews>true</MvcBuildViews>
     <TargetFrameworkProfile />
+    <UseIISExpress>false</UseIISExpress>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -293,7 +294,6 @@
     <Content Include="Views\Series\SeriesSearchResults.ascx" />
     <Content Include="Views\Series\SubMenu.ascx" />
     <Content Include="Views\Series\Unmapped.aspx" />
-    <Content Include="Views\Series\Add.aspx" />
     <Content Include="Views\Settings\RootDir.ascx" />
     <Content Include="Views\Settings\Notifications.ascx" />
     <Content Include="Views\Settings\Downloads.ascx" />

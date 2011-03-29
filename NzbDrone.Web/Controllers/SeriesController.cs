@@ -60,11 +60,6 @@ namespace NzbDrone.Web.Controllers
             return View();
         }
 
-        public ActionResult Add()
-        {
-            return View(new AddNewSeriesModel());
-        }
-
         public ActionResult AddExisting()
         {
             var defaultQuality = Convert.ToInt32(_configProvider.GetValue("DefaultQualityProfile", "1", true));

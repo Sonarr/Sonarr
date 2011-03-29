@@ -122,6 +122,7 @@ hr
     overflow: hidden;
     background-color: White;
     padding: 10px 20px 20px 20px;
+    min-height: 300px; 
 }
 
 
