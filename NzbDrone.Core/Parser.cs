@@ -18,7 +18,7 @@ namespace NzbDrone.Core
 
         private static readonly Regex[] ReportTitleRegex = new[]
                                                        {
-                                                         new Regex(@"(?<title>.+?)?\W?(?<year>\d+?)?\WS?(?<season>\d+)(?:\-|\.|[a-z])(?<episode>\d+)\W(?!\\)", RegexOptions.IgnoreCase | RegexOptions.Compiled),
+                                                         new Regex(@"(?<title>.+?)?\W?(?<year>\d+?)?\WS?(?<season>\d+)((?:\-|\.|[a-z])(?<episode>\d+))+\W(?!\\)", RegexOptions.IgnoreCase | RegexOptions.Compiled),
                                                          new Regex(@"(?<title>.+?)?\W?(?<year>\d+?)?\WS?(?<season>\d+)(?<episode>\d{2})\W(?!\\)", RegexOptions.IgnoreCase | RegexOptions.Compiled) //Supports 103/113 naming
                                                        };
 
@@ -58,18 +58,22 @@ namespace NzbDrone.Core
                     foreach (Match matchGroup in match)
                     {
 
-                        var parsedEpisode = new EpisodeParseResult
-                                                {
-                                                    SeriesTitle = seriesName,
-                                                    SeasonNumber = Convert.ToInt32(matchGroup.Groups["season"].Value),
-                                                    EpisodeNumber = Convert.ToInt32(matchGroup.Groups["episode"].Value),
-                                                    Year = year
-                                                };
+                        var seasonNumber = Convert.ToInt32(matchGroup.Groups["season"].Value);
+
+                        foreach (Capture episode in matchGroup.Groups["episode"].Captures)
+                        {
+                            var parsedEpisode = new EpisodeParseResult
+                            {
+                                SeriesTitle = seriesName,
+                                SeasonNumber = seasonNumber,
+                                EpisodeNumber = Convert.ToInt32(episode.Value),
+                                Year = year
+                            };
 
 
-                        result.Add(parsedEpisode);
-
-                        Logger.Trace("Episode Parsed. {0}", parsedEpisode);
+                            result.Add(parsedEpisode);
+                            Logger.Trace("Episode Parsed. {0}", parsedEpisode);
+                        }
                     }
                     break; //Break out of the for loop, we don't want to process every REGEX for each item otherwise we'll get duplicates
                 }

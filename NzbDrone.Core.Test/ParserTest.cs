@@ -13,7 +13,6 @@ namespace NzbDrone.Core.Test
     public class ParserTest
     {
         [Test]
-        [Row("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD", 3, 1)]
         [Row("Two.and.a.Half.Me.103.720p.HDTV.X264-DIMENSION", 1, 3)]
         [Row("Two.and.a.Half.Me.113.720p.HDTV.X264-DIMENSION", 1, 13)]
         [Row("Two.and.a.Half.Me.1013.720p.HDTV.X264-DIMENSION", 10, 13)]
@@ -33,6 +32,18 @@ namespace NzbDrone.Core.Test
             Assert.Count(1, result);
             Assert.AreEqual(season, result[0].SeasonNumber);
             Assert.AreEqual(episode, result[0].EpisodeNumber);
+        }
+
+        [Test]
+        [Row("The.Office.US.S03E01E02.DUAL.BDRip.XviD.AC3.-HELLYWOOD", 3, 1, 2)]
+        [Row("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD", 3, 1, 6)]
+        public void episode_parse_multi(string path, int season, int episodeOne, int episodeTwo)
+        {
+            var result = Parser.ParseEpisodeInfo(path);
+            Assert.Count(2, result);
+            Assert.AreEqual(season, result[0].SeasonNumber);
+            Assert.AreEqual(episodeOne, result[0].EpisodeNumber);
+            Assert.AreEqual(episodeTwo, result[1].EpisodeNumber);
         }
 
         [Test]
