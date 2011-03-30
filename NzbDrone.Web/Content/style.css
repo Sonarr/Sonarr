@@ -122,7 +122,7 @@ hr
     overflow: hidden;
     background-color: White;
     padding: 10px 20px 20px 20px;
-    min-height: 300px; 
+    min-height: 300px;
 }
 
 
@@ -164,7 +164,7 @@ hr
 .timer
 {
     text-align: center;
-    color: #065EFE; 
+    color: #065EFE;
 }
 
 #footer
@@ -176,65 +176,74 @@ hr
 /* Config Pages */
 .config-section
 {
-	width: 550px;
-	display: block;
-	padding-bottom: 25px;
+    width: 550px;
+    display: block;
+    padding-bottom: 25px;
 }
 
 .config-group
 {
-	width:300px;
-	display: block;
-	float: left;
+    width: 300px;
+    display: block;
+    float: left;
 }
 
 .config-title
 {
-	font-weight: bold;
-	padding-right: 15px;
-	float: left;
+    font-weight: bold;
+    padding-right: 15px;
+    float: left;
 }
 
 .config-value
 {
-	float: right;
+    float: right;
 }
 
 .config-validation
 {
-	color: Red;
-	float: right;
+    color: Red;
+    float: right;
 }
 
 .sub-field
 {
-	width: 70%;
-	margin-top: 10px;
-	margin-bottom: 10px;
+    width: 70%;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 input[type="text"]
 {
-	border: 1px solid #006;
+    border: 1px solid #006;
     background: #CBE8FF;
 }
 
 input[type="text"]:hover
 {
-	border: 1px solid #065EFE;
+    border: 1px solid #065EFE;
     background: #C0D6FF;
+}
+
+input[type="button"], input[type="submit"], input[type="reset"], input[type="file"]::-webkit-file-upload-button, button
+{
+    color: white;
+    background-color: #065EFE;
+    border-style: solid;
+    border-color: #065EFE;
+    padding: 5px 10px 5px 10px;
+    margin: 10px;
 }
 
 #save_button
 {
-	border: 1px solid #006;
-    background: #ccf;
 }
 
 #save_button:hover
 {
-	border: 1px solid #f00;
-    background: #eef;
+    border-bottom-style: solid;
+    border-bottom-width: 5px;
+    border-bottom-color: #3C3C3C;
 }
 
 /* Add Series */

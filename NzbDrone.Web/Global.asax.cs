@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Reflection;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
@@ -32,20 +33,32 @@ namespace NzbDrone.Web
 
         protected override void OnApplicationStarted()
         {
+            base.OnApplicationStarted();
+
             LogConfiguration.Setup();
             Logger.Info("NZBDrone Starting up.");
             CentralDispatch.DedicateToHost();
-            AreaRegistration.RegisterAllAreas();
+
             RegisterRoutes(RouteTable.Routes);
-            base.OnApplicationStarted();
+            //base.OnApplicationStarted();
+            AreaRegistration.RegisterAllAreas();
+            RegisterGlobalFilters(GlobalFilters.Filters);
+            //RegisterRoutes(RouteTable.Routes);
         }
 
         protected override IKernel CreateKernel()
         {
             var kernel = CentralDispatch.NinjectKernel;
-            // kernel.Bind<IRepository>().ToConstant(kernel.Get<IRepository>("LogDb"));
 
+            // kernel.Bind<IRepository>().ToConstant(kernel.Get<IRepository>("LogDb"));
+            kernel.Load(Assembly.GetExecutingAssembly());
             return kernel;
+        }
+
+
+        public static void RegisterGlobalFilters(GlobalFilterCollection filters)
+        {
+            filters.Add(new HandleErrorAttribute());
         }
 
         // ReSharper disable InconsistentNaming
@@ -54,7 +67,7 @@ namespace NzbDrone.Web
             var lastError = Server.GetLastError();
             if (lastError is HttpException)
             {
-                Logger.WarnException(lastError.Message, lastError);
+                Logger.WarnException(String.Format("{0}. URL[{1}]", lastError.Message, Request.Path), lastError);
             }
             else
             {

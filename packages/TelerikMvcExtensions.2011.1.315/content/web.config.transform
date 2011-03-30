@@ -1,0 +1,19 @@
+<configuration>
+   <system.web>
+        <pages>
+            <namespaces>
+                <add namespace="Telerik.Web.Mvc.UI" />
+            </namespaces>
+        </pages>
+        <httpHandlers>
+            <add verb="GET,HEAD" path="asset.axd" validate="false" type="Telerik.Web.Mvc.WebAssetHttpHandler, Telerik.Web.Mvc" />
+        </httpHandlers>
+   </system.web>
+   <system.webServer>
+        <validation validateIntegratedModeConfiguration="false" />
+        <handlers>
+            <remove name="asset" />
+            <add name="asset" preCondition="integratedMode" verb="GET,HEAD" path="asset.axd" type="Telerik.Web.Mvc.WebAssetHttpHandler, Telerik.Web.Mvc" />
+        </handlers>
+    </system.webServer>
+</configuration>

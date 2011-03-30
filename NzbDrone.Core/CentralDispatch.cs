@@ -21,7 +21,7 @@ namespace NzbDrone.Core
 {
     public static class CentralDispatch
     {
-        private static IKernel _kernel;
+        private static StandardKernel _kernel;
         private static readonly Object kernelLock = new object();
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static string _startupPath;
@@ -55,8 +55,7 @@ namespace NzbDrone.Core
                 //dbProvider.ExecuteQuery(new QueryCommand("VACUUM", dbProvider));
 
                 dbProvider.Log = new NlogWriter();
-                dbProvider.LogParams = true;
-
+               
                 _kernel.Bind<ISeriesProvider>().To<SeriesProvider>().InSingletonScope();
                 _kernel.Bind<ISeasonProvider>().To<SeasonProvider>();
                 _kernel.Bind<IEpisodeProvider>().To<EpisodeProvider>();
@@ -126,7 +125,7 @@ namespace NzbDrone.Core
             get { return _startupPath; }
         }
 
-        public static IKernel NinjectKernel
+        public static StandardKernel NinjectKernel
         {
             get
             {
