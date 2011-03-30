@@ -55,8 +55,7 @@ namespace NzbDrone.Core
                 //dbProvider.ExecuteQuery(new QueryCommand("VACUUM", dbProvider));
 
                 dbProvider.Log = new NlogWriter();
-                dbProvider.LogParams = true;
-
+               
                 _kernel.Bind<ISeriesProvider>().To<SeriesProvider>().InSingletonScope();
                 _kernel.Bind<ISeasonProvider>().To<SeasonProvider>();
                 _kernel.Bind<IEpisodeProvider>().To<EpisodeProvider>();

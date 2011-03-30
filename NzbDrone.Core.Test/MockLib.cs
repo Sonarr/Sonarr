@@ -37,7 +37,6 @@ namespace NzbDrone.Core.Test
             if (enableLogging)
             {
                 provider.Log = new NlogWriter();
-                provider.LogParams = true;
             }
             return new SimpleRepository(provider, SimpleRepositoryOptions.RunMigrations);
         }
