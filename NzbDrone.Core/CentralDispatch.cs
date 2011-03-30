@@ -21,7 +21,7 @@ namespace NzbDrone.Core
 {
     public static class CentralDispatch
     {
-        private static IKernel _kernel;
+        private static StandardKernel _kernel;
         private static readonly Object kernelLock = new object();
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static string _startupPath;
@@ -126,7 +126,7 @@ namespace NzbDrone.Core
             get { return _startupPath; }
         }
 
-        public static IKernel NinjectKernel
+        public static StandardKernel NinjectKernel
         {
             get
             {

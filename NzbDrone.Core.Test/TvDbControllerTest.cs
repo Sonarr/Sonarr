@@ -67,7 +67,7 @@ namespace NzbDrone.Core.Test
             var tvdbProvider = new TvDbProvider();
 
             //act
-            var result = tvdbProvider.SearchSeries("clone high");
+            var result = tvdbProvider.SearchSeries(Guid.NewGuid().ToString());
 
             //assert
             Assert.IsEmpty(result);

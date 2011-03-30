@@ -88,7 +88,7 @@ namespace NzbDrone
             {
                 proc = dbg.GetProcesses(trans, "").Item(_processName) as EnvDTE80.Process2;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
                 return AttachResult.NotRunning;

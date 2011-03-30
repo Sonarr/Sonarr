@@ -54,6 +54,7 @@ namespace NzbDrone.Core.Test
         [Row("S01E03 - Come Fly With Me - 720p BluRay.mkv", QualityTypes.Bluray720)]
         [Row("S01E03 - Come Fly With Me - 1080p BluRay.mkv", QualityTypes.Bluray1080)]
         [Row("S11E06 - D-Yikes! - 720p WEB-DL.mkv", QualityTypes.WEBDL)]
+        [Row("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD.avi", QualityTypes.BDRip)]
         public void quality_parse(string path, object quality)
         {
             var result = Parser.ParseQuality(path);

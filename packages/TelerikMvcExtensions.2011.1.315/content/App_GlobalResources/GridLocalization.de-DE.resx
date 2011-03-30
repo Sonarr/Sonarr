@@ -1,0 +1,255 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AddNew" xml:space="preserve">
+    <value>Neuen Datensatz hinzufügen</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Löschen</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Aktualisiere</value>
+  </data>
+  <data name="Insert" xml:space="preserve">
+    <value>Einfügen</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Bearbeiten</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>Wähle</value>
+  </data>
+  <data name="Page" xml:space="preserve">
+    <value>Seite</value>
+  </data>
+  <data name="DisplayingItems" xml:space="preserve">
+    <value>Anzeigen der Elemente {0} - {1} von {2}</value>
+  </data>
+  <data name="PageOf" xml:space="preserve">
+    <value>von {0}</value>
+  </data>
+  <data name="Filter" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="FilterAnd" xml:space="preserve">
+    <value>Und</value>
+  </data>
+  <data name="FilterClear" xml:space="preserve">
+    <value>Filter löschen</value>
+  </data>
+  <data name="FilterDateEq" xml:space="preserve">
+    <value>Ist gleich</value>
+  </data>
+  <data name="FilterDateGe" xml:space="preserve">
+    <value>Ist nach oder gleich</value>
+  </data>
+  <data name="FilterDateGt" xml:space="preserve">
+    <value>Ist nach</value>
+  </data>
+  <data name="FilterDateLe" xml:space="preserve">
+    <value>Ist vor oder gleich</value>
+  </data>
+  <data name="FilterDateLt" xml:space="preserve">
+    <value>Ist vor</value>
+  </data>
+  <data name="FilterDateNe" xml:space="preserve">
+    <value>Ist nicht gleich</value>
+  </data>
+  <data name="FilterNumberEq" xml:space="preserve">
+    <value>Ist gleich</value>
+  </data>
+  <data name="FilterNumberGe" xml:space="preserve">
+    <value>Ist größer als oder gleich</value>
+  </data>
+  <data name="FilterNumberGt" xml:space="preserve">
+    <value>Ist größer als</value>
+  </data>
+  <data name="FilterNumberLe" xml:space="preserve">
+    <value>Ist kleiner als oder gleich</value>
+  </data>
+  <data name="FilterNumberLt" xml:space="preserve">
+    <value>Ist kleiner</value>
+  </data>
+  <data name="FilterNumberNe" xml:space="preserve">
+    <value>Ist nicht gleich</value>
+  </data>
+  <data name="FilterShowRows" xml:space="preserve">
+    <value>Zeigt Zeilen mit Werten, die</value>
+  </data>
+  <data name="FilterStringEndsWith" xml:space="preserve">
+    <value>Endet mit</value>
+  </data>
+  <data name="FilterStringEq" xml:space="preserve">
+    <value>Ist gleich</value>
+  </data>
+  <data name="FilterStringNe" xml:space="preserve">
+    <value>Ist nicht gleich</value>
+  </data>
+  <data name="FilterStringStartsWith" xml:space="preserve">
+    <value>Beginnt mit</value>
+  </data>
+  <data name="FilterStringSubstringOf" xml:space="preserve">
+    <value>Beinhaltet</value>
+  </data>
+  <data name="GroupHint" xml:space="preserve">
+    <value>Ziehen Sie eine Spaltenüberschrift hierher, um nach dieser Spalte zu gruppieren</value>
+  </data>
+  <data name="FilterEnumEq" xml:space="preserve">
+    <value>Ist gleich</value>
+  </data>
+  <data name="FilterEnumNe" xml:space="preserve">
+    <value>Ist nicht gleich</value>
+  </data>
+  <data name="FilterSelectValue" xml:space="preserve">
+    <value>-wählen Sie-</value>
+  </data>
+  <data name="DeleteConfirmation" xml:space="preserve">
+    <value>Sind Sie sicher, dass Sie diesen Datensatz löschen wollen?</value>
+  </data>
+  <data name="FilterBoolIsFalse" xml:space="preserve">
+    <value>ist falsch</value>
+  </data>
+  <data name="FilterBoolIsTrue" xml:space="preserve">
+    <value>ist richtig</value>
+  </data>
+  <data name="NoRecords" xml:space="preserve">
+    <value>keine Daten</value>
+  </data>
+  <data name="CancelChanges" xml:space="preserve">
+    <value>Änderungen verwerfen</value>
+  </data>
+  <data name="SaveChanges" xml:space="preserve">
+    <value>Änderungen speichern</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Aktualisieren</value>
+  </data>
+  <data name="SortedAsc" xml:space="preserve">
+    <value>aufsteigend sortiert</value>
+  </data>
+  <data name="SortedDesc" xml:space="preserve">
+    <value>absteigend sortiert</value>
+  </data>
+  <data name="UnGroup" xml:space="preserve">
+    <value>Gruppierung aufheben</value>
+  </data>
+</root>
