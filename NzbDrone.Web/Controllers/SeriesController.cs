@@ -390,15 +390,6 @@ namespace NzbDrone.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult ReScanFiles(int seriesId)
-        {
-            var epFiles = _mediaFileProvider.GetEpisodeFiles().Where(s => s.SeriesId == seriesId).ToList();
-            _mediaFileProvider.CleanUp(epFiles);
-            _mediaFileProvider.Scan(_seriesProvider.GetSeries(seriesId));
-
-            return RedirectToAction("Details", "Series", new { seriesId });
-        }
-
         //Local Helpers
         private string GetEpisodePath(EpisodeFile file)
         {

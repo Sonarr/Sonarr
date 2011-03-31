@@ -13,20 +13,16 @@
            .Add("notibar.css"))
            .Render();
     %>
-
     <link href="../../Content/style.css" rel="stylesheet" type="text/css" />
     <link href="../../Content/jquery-ui.css" rel="stylesheet" type="text/css" />
-    <link href="../../Content/jquery-ui.custom.css" rel="stylesheet" type="text/css" /> 
-    <link href="../../Content/jquery-simpledropdown.css" rel="stylesheet" type="text/css" /> 
+    <link href="../../Content/jquery-ui.custom.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/jquery-simpledropdown.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="../../Scripts/jquery-1.5.1.min.js"></script>
     <%--<script type="text/javascript" src="../../Scripts/jquery-ui-1.8.8.min.js"></script>--%>
-    <asp:ContentPlaceHolder ID="headerContent" runat="server"></asp:ContentPlaceHolder>
+    <asp:ContentPlaceHolder ID="headerContent" runat="server">
+    </asp:ContentPlaceHolder>
 </head>
 <body>
-    <a href="http://github.com/kayone/NzbDrone">
-        <img style="position: absolute; top: 0; left: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png" alt="ForkMe"/>
-    </a>
-
     <div id="centered">
         <div id="menu">
             <ul>
@@ -52,7 +48,7 @@
         </div>
     </div>
 </body>
-<asp:ContentPlaceHolder runat="server" id="Scripts" />
+<asp:contentplaceholder runat="server" id="Scripts" />
 <% Html.Telerik().ScriptRegistrar().Scripts(
            c => c.Add("jquery-ui-1.8.8.min.js")
                .Add("jquery.form.js")
