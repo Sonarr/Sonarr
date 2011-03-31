@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using NzbDrone.Core.Repository.Quality;
 using SubSonic.SqlGeneration.Schema;
 
@@ -20,6 +21,7 @@ namespace NzbDrone.Core.Repository
         [SubSonicLongString]
         public string Overview { get; set; }
 
+        [DisplayName("Air on")]
         public DayOfWeek? AirsDayOfWeek { get; set; }
 
         public String AirTimes { get; set; }
@@ -30,11 +32,11 @@ namespace NzbDrone.Core.Repository
 
         public bool Monitored { get; set; }
 
-        public int QualityProfileId { get; set; }
+        public virtual int QualityProfileId { get; set; }
 
         public bool SeasonFolder { get; set; }
 
-        [SubSonicToOneRelation(ThisClassContainsJoinKey = true)]
+        [SubSonicToOneRelation(ThisClassContainsJoinKey = true, JoinKeyName = "QualityProfileId")]
         public virtual QualityProfile QualityProfile { get; private set; }
 
         [SubSonicToManyRelation]

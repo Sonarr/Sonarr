@@ -1,8 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using FizzWare.NBuilder;
 using MbUnit.Framework;
+using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
+using System.Linq;
+using TvdbLib.Data;
 
 namespace NzbDrone.Core.Test
 {
@@ -38,6 +42,37 @@ namespace NzbDrone.Core.Test
             Assert.AreEqual(testProfile.Name, fetch.Name);
             Assert.AreEqual(testProfile.Cutoff, fetch.Cutoff);
             Assert.AreEqual(testProfile.Allowed, fetch.Allowed);
+        }
+
+        [Test]
+        public void Test_Series_Quality()
+        {
+            //Arrange
+            var repo = MockLib.GetEmptyRepository();
+
+            var testProfile = new QualityProfile
+            {
+                Name = Guid.NewGuid().ToString(),
+                Cutoff = QualityTypes.TV,
+                Allowed = new List<QualityTypes>() { QualityTypes.HDTV, QualityTypes.DVD },
+            };
+
+
+            var profileId = (int)repo.Add(testProfile);
+
+            var series = Builder<Series>.CreateNew().Build();
+            series.QualityProfileId = profileId;
+
+            var seriesID = (int)repo.Add(series);
+
+
+            var result = repo.All<Series>();
+            var quality = repo.All<QualityProfile>();
+
+            Assert.Count(1, result);
+            Assert.AreEqual(result.ToList()[0].QualityProfile.Name, testProfile.Name);
+
+            //Act
         }
     }
 }

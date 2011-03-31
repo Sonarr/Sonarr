@@ -8,7 +8,7 @@ namespace NzbDrone.Core.Repository
 {
     public class RootDir
     {
-        public int Id { get; set; }
+        public virtual int Id { get; set; }
 
         public string Path { get; set; }
     }

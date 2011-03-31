@@ -16,15 +16,18 @@
        .Name("Grid")
        .Columns(columns =>
        {
-           columns.Bound(o => o.SeriesId).Width(100);
            columns.Template(c =>
-                                   {
+                                    {
     %>
     <%:Html.ActionLink(c.Title, "Details", new {seriesId =c.SeriesId}) %>
     <%
-        }).Title("Title");
-           columns.Bound(o => o.Status);
-           columns.Bound(o => o.Path);
+                                   }).Title("Title");
+          columns.Bound(o => o.Seasons.Count).Title("Seasons");
+          columns.Bound(o => o.QualityProfile.Name).Title("Quality");
+          columns.Bound(o => o.Status);
+          columns.Bound(o => o.AirsDayOfWeek);
+          columns.Bound(o => o.Path);
+
        })
        .Sortable(sort => sort.OrderBy(order => order.Add(o => o.Title).Ascending()).Enabled(false))
        .Render();

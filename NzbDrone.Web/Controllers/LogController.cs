@@ -36,28 +36,5 @@ namespace NzbDrone.Web.Controllers
         {
             return View(new GridModel(_logProvider.GetAllLogs()));
         }
-
-
-        [GridAction]
-        public ActionResult _AjaxBinding2()
-        {
-           var l= _logProvider.GetAllLogs().Select(c => new {
-                                                          c.DisplayLevel,
-                                                          c.ExceptionMessage,
-                                                          c.ExceptionString,
-                                                          c.ExceptionType,
-                                                          //c.Level,
-                                                          c.Logger,
-                                                          c.LogId,
-                                                          c.Message,
-                                                          c.Stack,
-                                                          c.Time
-                                                      });
-
-           return View(new GridModel(l));
-        }
-
-
-
     }
 }

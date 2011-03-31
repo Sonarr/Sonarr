@@ -253,12 +253,12 @@ namespace NzbDrone.Web.Controllers
                 foreach (var indexer in data.Indexers)
                     _indexerProvider.Update(indexer);
 
-                _configProvider.SetValue("NzbMatrixUsername", data.NzbMatrixUsername);
-                _configProvider.SetValue("NzbMatrixApiKey", data.NzbMatrixApiKey);
-                _configProvider.SetValue("NzbsOrgUId", data.NzbsOrgUId);
-                _configProvider.SetValue("NzbsOrgHash", data.NzbsOrgHash);
-                _configProvider.SetValue("NzbsrusUId", data.NzbsrusUId);
-                _configProvider.SetValue("NzbsrusHash", data.NzbsrusHash);
+                _configProvider.NzbMatrixUsername = data.NzbMatrixUsername;
+                _configProvider.NzbMatrixApiKey = data.NzbMatrixApiKey;
+                _configProvider.NzbsOrgUId = data.NzbsOrgUId;
+                _configProvider.NzbsOrgHash = data.NzbsOrgHash;
+                _configProvider.NzbsrusUId = data.NzbsrusUId;
+                _configProvider.NzbsrusHash = data.NzbsrusHash;
 
                 return Content(SETTINGS_SAVED);
             }
@@ -271,18 +271,18 @@ namespace NzbDrone.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                _configProvider.SetValue("SyncFrequency", data.SyncFrequency.ToString());
-                _configProvider.SetValue("DownloadPropers", data.DownloadPropers.ToString());
-                _configProvider.SetValue("Retention", data.Retention.ToString());
-                _configProvider.SetValue("SabHost", data.SabHost);
-                _configProvider.SetValue("SabPort", data.SabPort.ToString());
-                _configProvider.SetValue("SabApiKey", data.SabApiKey);
-                _configProvider.SetValue("SabUsername", data.SabUsername);
-                _configProvider.SetValue("SabPassword", data.SabPassword);
-                _configProvider.SetValue("SabTvCategory", data.SabTvCategory);
-                _configProvider.SetValue("SabTvPriority", data.SabTvPriority.ToString());
-                _configProvider.SetValue("UseBlackhole", data.UseBlackHole.ToString());
-                _configProvider.SetValue("BlackholeDirectory", data.BlackholeDirectory);
+                _configProvider.SyncFrequency = data.SyncFrequency.ToString();
+                _configProvider.DownloadPropers = data.DownloadPropers.ToString();
+                _configProvider.Retention = data.Retention.ToString();
+                _configProvider.SabHost = data.SabHost;
+                _configProvider.SabPort = data.SabPort.ToString();
+                _configProvider.SabApiKey = data.SabApiKey;
+                _configProvider.SabPassword = data.SabPassword;
+                _configProvider.SabTvCategory = data.SabTvCategory;
+                _configProvider.SabUsername = data.SabUsername;
+                _configProvider.SabTvPriority = data.SabTvPriority.ToString();
+                _configProvider.UseBlackhole = data.UseBlackHole.ToString();
+                _configProvider.BlackholeDirectory = data.BlackholeDirectory;
 
                 return Content(SETTINGS_SAVED);
             }

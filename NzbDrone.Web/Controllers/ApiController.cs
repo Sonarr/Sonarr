@@ -25,13 +25,13 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult ProcessEpisode(string apiKey, string dir, string nzbName, string category)
         {
-            if (apiKey != _configProvider.GetValue("ApiKey", String.Empty, true))
+            if (apiKey != _configProvider.ApiKey)
             {
                 Logger.Warn("API Key from Post Processing Script is Invalid");
                 return Content("Invalid API Key");
             }
 
-            if (_configProvider.GetValue("SabTvCategory", String.Empty, true) == category)
+            if (_configProvider.SabTvCategory == category)
             {
                 _postProcessingProvider.ProcessEpisode(dir, nzbName);
                 return Content("ok");
