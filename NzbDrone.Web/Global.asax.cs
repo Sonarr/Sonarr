@@ -20,15 +20,17 @@ namespace NzbDrone.Web
 
         public static void RegisterRoutes(RouteCollection routes)
         {
+
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             routes.IgnoreRoute("{*robotstxt}", new { robotstxt = @"(.*/)?robots.txt(/.*)?" });
             routes.IgnoreRoute("{*favicon}", new { favicon = @"(.*/)?favicon.ico(/.*)?" });
 
+
             routes.MapRoute(
-                "Default", // Route name
-                "{controller}/{action}/{id}", // URL with parameters
-                new { controller = "Series", action = "Index", id = UrlParameter.Optional } // Parameter defaults
-            );
+                   "Default", // Route name
+                   "{controller}/{action}/{id}", // URL with parameters
+                   new { controller = "Series", action = "Index", id = UrlParameter.Optional } // Parameter defaults
+               );
         }
 
         protected override void OnApplicationStarted()
@@ -68,6 +70,10 @@ namespace NzbDrone.Web
             if (lastError is HttpException)
             {
                 Logger.WarnException(String.Format("{0}. URL[{1}]", lastError.Message, Request.Path), lastError);
+                if (Request.Path.EndsWith(".aspx", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    Response.Redirect(Request.ApplicationPath);
+                }
             }
             else
             {

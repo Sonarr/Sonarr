@@ -8,10 +8,10 @@ namespace NzbDrone.Core.Repository
     {
         [SubSonicPrimaryKey(false)]
         public virtual int SeasonId { get; set; }
-        public int SeriesId { get; set; }
-        public int SeasonNumber { get; set; }
+        public virtual int SeriesId { get; set; }
+        public virtual int SeasonNumber { get; set; }
         public bool Monitored { get; set; }
-  
+
         [SubSonicToManyRelation]
         public virtual List<Episode> Episodes { get; private set; }
 

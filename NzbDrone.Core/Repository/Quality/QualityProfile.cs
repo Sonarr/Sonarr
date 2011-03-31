@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Repository.Quality
     public class QualityProfile
     {
         [SubSonicPrimaryKey(true)]
-        public int QualityProfileId { get; set; }
+        public virtual int QualityProfileId { get; set; }
 
         [Required(ErrorMessage = "A Name is Required")]
         [DisplayName("Name")]
@@ -26,8 +26,8 @@ namespace NzbDrone.Core.Repository.Quality
         [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string AllowedString { get; set; }
 
-        [DisplayName("Cutoff")]
-        [Required(ErrorMessage = "Valid Cutoff is Required")]
+        [DisplayName("Cut-off")]
+        [Required(ErrorMessage = "Valid Cut-off is Required")]
         public QualityTypes Cutoff { get; set; }
 
         [EditorBrowsable(EditorBrowsableState.Never)]

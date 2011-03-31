@@ -14,7 +14,11 @@
     bottom: 0;
     font-size: 20px;
     color: White;
-    width:890px;
+    width: 100% 
+    margin-right: auto;
+    width: 85%;
+    margin-left: auto;
+    min-width: 800px;
 }
 #msgCloseButton
 {

@@ -129,8 +129,9 @@ hr
 #centered
 {
     margin-right: auto;
-    width: 910px;
+    width: 85%;
     margin-left: auto;
+    min-width: 800px;
 }
 
 /** LOGO */

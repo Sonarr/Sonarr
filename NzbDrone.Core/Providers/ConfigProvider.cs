@@ -7,9 +7,6 @@ namespace NzbDrone.Core.Providers
 {
     public class ConfigProvider : IConfigProvider
     {
-        private const string SERIES_ROOTS = "SeriesRoots";
-        private const string EPISODE_NAME_FORMAT = "EpisodeNameFormat";
-       
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IRepository _sonicRepo;
 
@@ -18,23 +15,157 @@ namespace NzbDrone.Core.Providers
             _sonicRepo = dataRepository;
         }
 
-        private string GetValue(string key)
+        public String ApiKey
         {
-            return GetValue(key, String.Empty, false);
+            get { return GetValue("ApiKey"); }
+
+            set { SetValue("ApiKey", value); }
         }
+
 
         public String EpisodeNameFormat
         {
-            get { return GetValue(EPISODE_NAME_FORMAT); }
+            get { return GetValue("EpisodeNameFormat"); }
 
-            set { SetValue(EPISODE_NAME_FORMAT, value); }
+            set { SetValue("EpisodeNameFormat", value); }
         }
 
         public String SeriesRoot
         {
-            get { return GetValue(SERIES_ROOTS); }
+            get { return GetValue("SeriesRoots"); }
 
-            set { SetValue(SERIES_ROOTS, value); }
+            set { SetValue("SeriesRoots", value); }
+        }
+
+        public String NzbMatrixUsername
+        {
+            get { return GetValue("NzbMatrixUsername"); }
+
+            set { SetValue("NzbMatrixUsername", value); }
+        }
+
+        public String NzbMatrixApiKey
+        {
+            get { return GetValue("NzbMatrixApiKey"); }
+
+            set { SetValue("NzbMatrixApiKey", value); }
+        }
+
+        public String NzbsOrgUId
+        {
+            get { return GetValue("NzbsOrgUId"); }
+
+            set { SetValue("NzbsOrgUId", value); }
+        }
+
+        public String NzbsOrgHash
+        {
+            get { return GetValue("NzbsOrgHash"); }
+
+            set { SetValue("NzbsOrgHash", value); }
+        }
+
+        public String NzbsrusUId
+        {
+            get { return GetValue("NzbsrusUId"); }
+
+            set { SetValue("NzbsrusUId", value); }
+        }
+
+        public String NzbsrusHash
+        {
+            get { return GetValue("NzbsrusHash"); }
+
+            set { SetValue("NzbsrusHash", value); }
+        }
+
+        public String SyncFrequency
+        {
+            get { return GetValue("SyncFrequency"); }
+
+            set { SetValue("SyncFrequency", value); }
+        }
+
+        public String DownloadPropers
+        {
+            get { return GetValue("DownloadPropers"); }
+
+            set { SetValue("DownloadPropers", value); }
+        }
+
+        public String Retention
+        {
+            get { return GetValue("Retention"); }
+
+            set { SetValue("Retention", value); }
+        }
+
+        public String SabHost
+        {
+            get { return GetValue("SabHost"); }
+
+            set { SetValue("SabHost", value); }
+        }
+
+        public String SabPort
+        {
+            get { return GetValue("SabPort"); }
+
+            set { SetValue("SabPort", value); }
+        }
+
+        public String SabApiKey
+        {
+            get { return GetValue("SabApiKey"); }
+
+            set { SetValue("SabApiKey", value); }
+        }
+
+        public String SabUsername
+        {
+            get { return GetValue("SabUsername"); }
+
+            set { SetValue("SabUsername", value); }
+        }
+
+        public String SabPassword
+        {
+            get { return GetValue("SabPassword"); }
+
+            set { SetValue("SabPassword", value); }
+        }
+
+        public String SabTvCategory
+        {
+            get { return GetValue("SabTvCategory"); }
+
+            set { SetValue("SabTvCategory", value); }
+        }
+
+        public String SabTvPriority
+        {
+            get { return GetValue("SabTvPriority"); }
+
+            set { SetValue("SabTvPriority", value); }
+        }
+
+        public String UseBlackhole
+        {
+            get { return GetValue("UseBlackhole"); }
+
+            set { SetValue("UseBlackhole", value); }
+        }
+
+        public String BlackholeDirectory
+        {
+            get { return GetValue("BlackholeDirectory"); }
+
+            set { SetValue("BlackholeDirectory", value); }
+        }
+
+        private string GetValue(string key)
+        {
+            return GetValue(key, String.Empty, false);
         }
 
         public string GetValue(string key, object defaultValue, bool makePermanent)

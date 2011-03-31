@@ -6,18 +6,18 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
     <%: Model.Title %>
 </asp:Content>
-
 <asp:Content ID="Menu" ContentPlaceHolderID="ActionMenu" runat="server">
     <%
-        Html.Telerik().Menu().Name("SeriesMenu").Items(items => { items.Add().Text("Edit").Action("Edit", "Series", new {seriesId = Model.SeriesId});
-                                                                    items.Add().Text("Back to Series List").Action("Index", "Series");
-                                                                    items.Add().Text("Scan For Episodes on Disk").Action("SyncEpisodesOnDisk", "Series", new { seriesId = Model.SeriesId });
-                                                                    items.Add().Text("Rename Series").Action("RenameSeries", "Series", new { seriesId = Model.SeriesId });
-                                                                    items.Add().Text("Re-Scan Files").Action("ReScanFiles", "Series", new { seriesId = Model.SeriesId });
-                                                                    }).Render();
+        Html.Telerik().Menu().Name("SeriesMenu").Items(items =>
+        {
+            items.Add().Text("Edit").Action("Edit", "Series", new { seriesId = Model.SeriesId });
+            items.Add().Text("Back to Series List").Action("Index", "Series");
+            items.Add().Text("Scan For Episodes on Disk").Action("SyncEpisodesOnDisk", "Series", new { seriesId = Model.SeriesId });
+            items.Add().Text("Rename Series").Action("RenameSeries", "Series", new { seriesId = Model.SeriesId });
+            items.Add().Text("Re-Scan Files").Action("ReScanFiles", "Series", new { seriesId = Model.SeriesId });
+        }).Render();
     %>
 </asp:Content>
-
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <fieldset>
         <div class="display-label">
@@ -45,7 +45,6 @@
         <div class="display-field">
             <%: Model.Path %></div>
     </fieldset>
-
     <% 
         //Todo: This breaks when using SQLServer... thoughts?
         //Normal Seasons
@@ -57,25 +56,30 @@
         Season
         <%: season.SeasonNumber %></h3>
     <%
-        Season season1 = season;
-        Html.Telerik().Grid<EpisodeModel>().Name("seasons_" + season.SeasonNumber)
-                          .Columns(columns =>
-                          {
-                              columns.Bound(c => c.SeasonNumber).Width(0).Title("Season");
-                              columns.Bound(c => c.EpisodeNumber).Width(0).Title("Episode");
-                              columns.Bound(c => c.Title).Title("Title");
-                              columns.Bound(c => c.AirDate).Format("{0:d}").Width(0);
-                              columns.Bound(c => c.Path);
-                          })
-             //.DetailView(detailView => detailView.Template(e => Html.RenderPartial("EpisodeDetail", e)))
-             .DetailView(detailView => detailView.ClientTemplate("<div><#= Overview #></div>"))
-             .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.EpisodeNumber).Descending()).Enabled(true))
-                          .Footer(false)
-                          .DataBinding(d => d.Ajax().Select("_AjaxSeasonGrid", "Series", new RouteValueDictionary { { "seasonId", season1.SeasonId.ToString() } }))
-            //.EnableCustomBinding(true)
-            //.ClientEvents(e => e.OnDetailViewExpand("episodeDetailExpanded")) //Causes issues displaying the episode detail multiple times...
-            .ToolBar(c => c.Custom().Text("Rename Season").Action("RenameSeason", "Series", new { seasonId = season1.SeasonId }).ButtonType(GridButtonType.Text))
-            .Render();
+            Season season1 = season;
+            Html.Telerik().Grid<EpisodeModel>().Name("seasons_" + season.SeasonNumber)
+                              .Columns(columns =>
+                              {
+                                  columns.Bound(o => o.EpisodeId)
+                                      .ClientTemplate("<input type='checkbox' name='checkedEpisodes' value='<#= EpisodeId #>' />")
+                                      .Title("")
+                                      .Width(1)
+                                      .HtmlAttributes(new { style = "text-align:center" });
+
+                                  columns.Bound(c => c.EpisodeNumber).Width(0).Title("Episode");
+                                  columns.Bound(c => c.Title).Title("Title");
+                                  columns.Bound(c => c.AirDate).Format("{0:d}").Width(0);
+                                  columns.Bound(c => c.Path);
+                              })
+                //.DetailView(detailView => detailView.Template(e => Html.RenderPartial("EpisodeDetail", e)))
+                 .DetailView(detailView => detailView.ClientTemplate("<div><#= Overview #></div>"))
+                 .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.EpisodeNumber).Descending()).Enabled(true))
+                              .Footer(false)
+                              .DataBinding(d => d.Ajax().Select("_AjaxSeasonGrid", "Series", new RouteValueDictionary { { "seasonId", season1.SeasonId.ToString() } }))
+                //.EnableCustomBinding(true)
+                //.ClientEvents(e => e.OnDetailViewExpand("episodeDetailExpanded")) //Causes issues displaying the episode detail multiple times...
+                .ToolBar(c => c.Custom().Text("Rename Season").Action("RenameSeason", "Series", new { seasonId = season1.SeasonId }).ButtonType(GridButtonType.Text))
+                .Render();
         }
 
         //Specials
@@ -89,17 +93,17 @@
         Specials</h3>
     <%
             
-Html.Telerik().Grid(specialSeasons.Episodes).Name("seasons_specials")
-                 .Columns(columns =>
-                 {
-                     columns.Bound(c => c.EpisodeNumber).Width(0).Title("Episode");
-                     columns.Bound(c => c.Title);
-                     columns.Bound(c => c.AirDate).Format("{0:d}").Width(0);
-                 })
-                 .DetailView(detailView => detailView.ClientTemplate("<div><#= Overview #></div>"))
-                 .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.EpisodeNumber)).Enabled(false))
-                 .Footer(false)
-                 .Render();
+            Html.Telerik().Grid(specialSeasons.Episodes).Name("seasons_specials")
+                             .Columns(columns =>
+                             {
+                                 columns.Bound(c => c.EpisodeNumber).Width(0).Title("Episode");
+                                 columns.Bound(c => c.Title);
+                                 columns.Bound(c => c.AirDate).Format("{0:d}").Width(0);
+                             })
+                             .DetailView(detailView => detailView.ClientTemplate("<div><#= Overview #></div>"))
+                             .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.EpisodeNumber)).Enabled(false))
+                             .Footer(false)
+                             .Render();
         }
     %>
 </asp:Content>
