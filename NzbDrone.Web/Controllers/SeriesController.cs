@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
+using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Web.Models;
 using Telerik.Web.Mvc;
 using TvdbLib.Data;
@@ -138,7 +139,9 @@ namespace NzbDrone.Web.Controllers
                                                                                          Title = c.Title,
                                                                                          Overview = c.Overview,
                                                                                          AirDate = c.AirDate,
-                                                                                         Path = GetEpisodePath(c.EpisodeFile)
+                                                                                         Path = GetEpisodePath(c.EpisodeFile),
+                                                                                         Quality = c.EpisodeFile == null ? String.Empty : c.EpisodeFile.Quality.ToString()
+
                                                                                      });
             return View(new GridModel(episodes));
         }
@@ -168,8 +171,8 @@ namespace NzbDrone.Web.Controllers
                     //We still want to show this series as unmapped, but we don't know what it will be when mapped
                     //Todo: Provide the user with a way to manually map a folder to a TvDb series (or make them rename the folder...)
                     if (tvDbSeries == null)
-                        tvDbSeries = new TvdbSeries {Id = 0, SeriesName = String.Empty};
-                    
+                        tvDbSeries = new TvdbSeries { Id = 0, SeriesName = String.Empty };
+
                     unmappedList.Add(new AddExistingSeriesModel
                                             {
                                                 IsWanted = true,
@@ -199,10 +202,10 @@ namespace NzbDrone.Web.Controllers
                 //If the TvDbId for this show is 0 then skip it... User made a mistake... They will have to manually map it
                 if (tvDbId < 1) continue;
 
-                unmappedList.Add(new SeriesMappingModel{Path = path, TvDbId = tvDbId, QualityProfileId = qualityProfileId});
+                unmappedList.Add(new SeriesMappingModel { Path = path, TvDbId = tvDbId, QualityProfileId = qualityProfileId });
             }
 
-            if(_syncProvider.BeginSyncUnmappedFolders(unmappedList))
+            if (_syncProvider.BeginSyncUnmappedFolders(unmappedList))
                 return Content("Sync Started for Selected Series");
 
             return Content("Sync already in progress, please wait for it to complete before retrying.");
@@ -216,7 +219,7 @@ namespace NzbDrone.Web.Controllers
 
             if (_syncProvider.BeginAddNewSeries(dir, seriesId, seriesName, qualityProfileId))
                 return Content("Adding new series has started.");
-            
+
             return Content("Unable to add new series, please wait for previous scans to complete first.");
         }
 
