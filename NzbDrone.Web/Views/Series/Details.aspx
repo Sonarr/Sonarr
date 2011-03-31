@@ -14,7 +14,6 @@
             items.Add().Text("Back to Series List").Action("Index", "Series");
             items.Add().Text("Scan For Episodes on Disk").Action("SyncEpisodesOnDisk", "Series", new { seriesId = Model.SeriesId });
             items.Add().Text("Rename Series").Action("RenameSeries", "Series", new { seriesId = Model.SeriesId });
-            items.Add().Text("Re-Scan Files").Action("ReScanFiles", "Series", new { seriesId = Model.SeriesId });
         }).Render();
     %>
 </asp:Content>
@@ -66,13 +65,14 @@
                                       .Width(1)
                                       .HtmlAttributes(new { style = "text-align:center" });
 
-                                  columns.Bound(c => c.EpisodeNumber).Width(0).Title("Episode");
+                                  columns.Bound(c => c.EpisodeNumber).Width(10).Title("Episode");
                                   columns.Bound(c => c.Title).Title("Title");
                                   columns.Bound(c => c.AirDate).Format("{0:d}").Width(0);
+                                  columns.Bound(c => c.Quality);
                                   columns.Bound(c => c.Path);
                               })
                 //.DetailView(detailView => detailView.Template(e => Html.RenderPartial("EpisodeDetail", e)))
-                 .DetailView(detailView => detailView.ClientTemplate("<div><#= Overview #></div>"))
+                 .DetailView(detailView => detailView.ClientTemplate("<div><#= Overview #> </br><#= Path #> </div>"))
                  .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.EpisodeNumber).Descending()).Enabled(true))
                               .Footer(false)
                               .DataBinding(d => d.Ajax().Select("_AjaxSeasonGrid", "Series", new RouteValueDictionary { { "seasonId", season1.SeasonId.ToString() } }))
