@@ -187,28 +187,16 @@ namespace NzbDrone.Web.Controllers
             return View(new GridModel(unmappedList));
         }
 
-        public ActionResult SyncSelectedSeries(List<String> checkedRecords)
+        public ActionResult SyncSelectedSeries(string path, int tvdbId, int qualityProfileId)
         {
             var unmappedList = new List<SeriesMappingModel>();
 
-            foreach (var checkedRecord in checkedRecords)
-            {
-                NameValueCollection nvc = HttpUtility.ParseQueryString(checkedRecord);
+            //If the TvDbId for this show is 0 then skip it... User made a mistake... They will have to manually map it
+            if (tvdbId < 1) throw new ArgumentException("Invalid tvdb id", "tvdbId");
 
-                var path = HttpUtility.UrlDecode(nvc["path"]);
-                var tvDbId = Convert.ToInt32(HttpUtility.UrlDecode(nvc["tvdbid"]));
-                var qualityProfileId = Convert.ToInt32(HttpUtility.UrlDecode(nvc["qualityProfileId"]));
+            unmappedList.Add(new SeriesMappingModel { Path = path, TvDbId = tvdbId, QualityProfileId = qualityProfileId });
 
-                //If the TvDbId for this show is 0 then skip it... User made a mistake... They will have to manually map it
-                if (tvDbId < 1) continue;
-
-                unmappedList.Add(new SeriesMappingModel { Path = path, TvDbId = tvDbId, QualityProfileId = qualityProfileId });
-            }
-
-            if (_syncProvider.BeginSyncUnmappedFolders(unmappedList))
-                return Content("Sync Started for Selected Series");
-
-            return Content("Sync already in progress, please wait for it to complete before retrying.");
+            return Content("Ok");
         }
 
         public ActionResult AddNewSeries(string dir, int seriesId, string seriesName, int qualityProfileId)

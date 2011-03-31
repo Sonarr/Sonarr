@@ -2,7 +2,6 @@
 
 <%@ Import Namespace="Telerik.Web.Mvc.UI" %>
 <%@ Import Namespace="NzbDrone.Web.Models" %>
-
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
     Add Existing Series
 </asp:Content>
@@ -12,7 +11,6 @@
     %>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-
     <script type="text/javascript">
         $(document).ready(function () {
             $('#mastercheckbox').attr("checked", "checked");
@@ -37,11 +35,9 @@
         };
 
     </script>
-
-            <%= Html.Label("Quality Profile")%>
-            <%: Html.DropDownList("qualityProfileId", (SelectList)ViewData["QualitySelectList"], ViewData["QualityProfileId"])%>
-
-    <div id="unmappedGrid" style="display:none">
+    <%= Html.Label("Quality Profile")%>
+    <%: Html.DropDownList("qualityProfileId", (SelectList)ViewData["QualitySelectList"], ViewData["QualityProfileId"])%>
+    <div id="unmappedGrid" style="display: none">
         <%
             Html.Telerik().Grid<AddExistingSeriesModel>().Name("Unmapped_Series_Folders")
                 .TableHtmlAttributes(new { id = "UnmappedSeriesGrid" })
@@ -54,8 +50,8 @@
                                  columns.Bound(c => c.Path).ClientTemplate("<a href=" + Url.Action("AddExistingManual", "Series", new { path = "<#= PathEncoded #>" }) + "><#= Path #></a>")
                                      .Template(c =>
                                       { %>
-                                        <%:Html.ActionLink(c.Path, "AddExistingManual", new { path = c.Path })%>
-                                        <% }).Title("Path");
+        <%:Html.ActionLink(c.Path, "AddExistingManual", new { path = c.Path })%>
+        <% }).Title("Path");
                                  columns.Bound(c => c.TvDbName);
                              })
                 .DataBinding(d => d.Ajax().Select("_AjaxUnmappedFoldersGrid", "Series"))
@@ -64,16 +60,14 @@
                 .Footer(false)
                 .Render();
         %>
-
         <p>
-            <button class="t.button" onclick="syncSelected ()">Sync Selected Series</button>   
+            <button class="t.button" onclick="syncSelected ()">
+                Sync Selected Series</button>
         </p>
-
     </div>
-
-    <div id="result"></div>
-
-<script type="text/javascript" language="javascript">
+    <div id="result">
+    </div>
+    <script type="text/javascript" language="javascript">
 
         // MasterCheckBox functionality
         $('#mastercheckbox').click(function () {
@@ -110,17 +104,30 @@
 
             var qualityProfileId = $("#qualityProfileId").val();
 
+            $checkedRecords.each(function () {
+                $.ajax(
+                            {
+                                type: "POST",
+                                url: "/Series/SyncSelectedSeries",
+                                data: jQuery.param({ path: this.name, tvdbid: this.value, qualityProfileId: qualityProfileId }),
+                                error: function (req, status, error) {
+                                    alert("Sorry! We could not add " + this.name + "at this time");
+                                }
 
-            $("#result").load('<%=Url.Action("SyncSelectedSeries", "Series") %>', {
-                checkedRecords: $checkedRecords.map(function () { return jQuery.param({ path: this.name, tvdbid: this.value, qualityProfileId: qualityProfileId }) })
+                            }
+                       );
+
+
             });
 
-            //Hide the series that we just tried to sync up (uncheck them too, otherwise they will be re-sync'd if we sync again)
             $checkedRecords.each(function () {
+
                 var id = "#row_" + this.value;
                 $(this).attr("checked", false);
                 $(id).hide();
             });
+
+
         }
-</script>
+    </script>
 </asp:Content>
