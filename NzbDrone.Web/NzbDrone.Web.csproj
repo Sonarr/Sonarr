@@ -7,7 +7,7 @@
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{43BD3BBD-1531-4D8F-9C08-E1CD544AB2CD}</ProjectGuid>
-    <ProjectTypeGuids>{F85E285D-A4E0-4152-9332-AB1D724D3325};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <ProjectTypeGuids>{E53F8FEA-EAE0-44A6-8774-FFD645390401};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NzbDrone.Web</RootNamespace>
@@ -69,11 +69,12 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
     </Reference>
+    <Reference Include="System.Web.Razor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Web.Routing">
       <Private>False</Private>
     </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
@@ -86,6 +87,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\NzbDrone.Core\Libraries\TvdbLib.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web.WebPages" />
+    <Reference Include="System.Web.Helpers" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_GlobalResources\EditorLocalization.bg-BG.designer.cs">
@@ -606,11 +609,10 @@
     <Content Include="Scripts\jquery-tgc-countdown-1.0.js" />
     <Content Include="Scripts\jquery.simpledropdown.js" />
     <Content Include="Scripts\Notification.js" />
-    <Content Include="Views\AddSeries\AddSeriesItem.ascx" />
+    <None Include="Views\AddSeries\AddSeriesItem.cshtml" />
     <Content Include="Views\History\Index.aspx" />
     <Content Include="Views\Log\Index.aspx" />
     <Content Include="Views\AddSeries\AddExisting.aspx" />
-    <Content Include="Views\AddSeries\AddExistingManual.aspx" />
     <Content Include="Views\AddSeries\AddNew.aspx" />
     <Content Include="Views\Series\Details.aspx" />
     <Content Include="Views\Series\Edit.aspx" />
@@ -648,6 +650,14 @@
     <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
     <Content Include="Views\Shared\Error.aspx" />
     <Content Include="Views\Shared\Site.Master" />
+    <Content Include="Scripts\jquery-ui.js" />
+    <Content Include="Scripts\jquery-ui.min.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Views\Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
