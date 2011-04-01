@@ -18,17 +18,15 @@ namespace NzbDrone.Core.Providers
         //Trims all white spaces and separators from the end of the title.
 
         private readonly IConfigProvider _config;
-        private readonly IDiskProvider _diskProvider;
         private readonly IRepository _sonioRepo;
         private readonly ITvDbProvider _tvDb;
         private readonly IQualityProvider _quality;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public SeriesProvider(IDiskProvider diskProvider, IConfigProvider configProvider,
+        public SeriesProvider(IConfigProvider configProvider,
             IRepository dataRepository, ITvDbProvider tvDbProvider, IQualityProvider quality)
         {
-            _diskProvider = diskProvider;
             _config = configProvider;
             _sonioRepo = dataRepository;
             _tvDb = tvDbProvider;
@@ -76,33 +74,38 @@ namespace NzbDrone.Core.Providers
             return _tvDb.GetSeries(searchResults.Id, false);
         }
 
-        public TvdbSeries MapPathToSeries(int tvDbId)
+        public Series UpdateSeriesInfo(int seriesId)
         {
-            return _tvDb.GetSeries(tvDbId, false);
+            var tvDbSeries = _tvDb.GetSeries(seriesId, true);
+            var series = GetSeries(seriesId);
+
+            series.SeriesId = tvDbSeries.Id;
+            series.Title = tvDbSeries.SeriesName;
+            series.AirTimes = tvDbSeries.AirsTime;
+            series.AirsDayOfWeek = tvDbSeries.AirsDayOfWeek;
+            series.Overview = tvDbSeries.Overview;
+            series.Status = tvDbSeries.Status;
+            series.Language = tvDbSeries.Language != null ? tvDbSeries.Language.Abbriviation : string.Empty;
+            series.CleanTitle = Parser.NormalizeTitle(tvDbSeries.SeriesName);
+            series.LastInfoSync = DateTime.Now;
+
+            UpdateSeries(series);
+            return series;
         }
 
-        public void AddSeries(string path, TvdbSeries series, int qualityProfileId)
+        public void AddSeries(string path, int tvDbSeriesId, int qualityProfileId)
         {
-            Logger.Info("Adding Series [{0}]:{1} Path: {2}", series.Id, series.SeriesName, path);
+            Logger.Info("Adding Series [{0}] Path: [{1}]", tvDbSeriesId, path);
+
             var repoSeries = new Series();
-            repoSeries.SeriesId = series.Id;
-            repoSeries.Title = series.SeriesName;
-            repoSeries.AirTimes = series.AirsTime;
-            repoSeries.AirsDayOfWeek = series.AirsDayOfWeek;
-            repoSeries.Overview = series.Overview;
-            repoSeries.Status = series.Status;
-            repoSeries.Language = series.Language != null ? series.Language.Abbriviation : string.Empty;
+            repoSeries.SeriesId = tvDbSeriesId;
             repoSeries.Path = path;
-            repoSeries.CleanTitle = Parser.NormalizeTitle(series.SeriesName);
             repoSeries.Monitored = true; //New shows should be monitored
             repoSeries.QualityProfileId = qualityProfileId;
             if (qualityProfileId == 0)
                 repoSeries.QualityProfileId = Convert.ToInt32(_config.GetValue("DefaultQualityProfile", "1", true));
-                
-            repoSeries.SeasonFolder = true;
 
-            if (!Convert.ToBoolean(_config.GetValue("Sorting_SeasonFolder", true, true)))
-                repoSeries.SeasonFolder = false;
+            repoSeries.SeasonFolder = _config.UseSeasonFolder;
 
             _sonioRepo.Add(repoSeries);
         }
@@ -119,22 +122,35 @@ namespace NzbDrone.Core.Providers
 
         public void DeleteSeries(int seriesId)
         {
-            var series = _sonioRepo.Single<Series>(seriesId);
+            Logger.Warn("Deleting Series [{0}]", seriesId);
 
-            //Delete Files, Episdes, Seasons then the Series
-            //Can't use providers because episode provider needs series provider - Cyclic Dependency Injection, this will work
+            try
+            {
+                var series = _sonioRepo.Single<Series>(seriesId);
 
-            Logger.Debug("Deleting EpisodeFiles from DB for Series: {0}", series.SeriesId);
-            _sonioRepo.DeleteMany(series.EpisodeFiles);
+                //Delete Files, Episdes, Seasons then the Series
+                //Can't use providers because episode provider needs series provider - Cyclic Dependency Injection, this will work
 
-            Logger.Debug("Deleting Episodes from DB for Series: {0}", series.SeriesId);
-            _sonioRepo.DeleteMany(series.Episodes);
+                Logger.Debug("Deleting EpisodeFiles from DB for Series: {0}", series.SeriesId);
+                _sonioRepo.DeleteMany(series.EpisodeFiles);
 
-            Logger.Debug("Deleting Seasons from DB for Series: {0}", series.SeriesId);
-            _sonioRepo.DeleteMany(series.Seasons);
+                Logger.Debug("Deleting Episodes from DB for Series: {0}", series.SeriesId);
+                _sonioRepo.DeleteMany(series.Episodes);
 
-            Logger.Debug("Deleting Series from DB {0}", series.Title);
-            _sonioRepo.Delete<Series>(seriesId);
+                Logger.Debug("Deleting Seasons from DB for Series: {0}", series.SeriesId);
+                _sonioRepo.DeleteMany(series.Seasons);
+
+                Logger.Debug("Deleting Series from DB {0}", series.Title);
+                _sonioRepo.Delete<Series>(seriesId);
+
+                Logger.Info("Successfully deleted Series [{0}]", seriesId);
+
+            }
+            catch (Exception e)
+            {
+                Logger.Error("An error has occurred while deleting series.", e);
+                throw;
+            }
         }
 
         public bool SeriesPathExists(string cleanPath)
@@ -147,10 +163,5 @@ namespace NzbDrone.Core.Providers
 
         #endregion
 
-        #region Static Helpers
-
-
-
-        #endregion
     }
 }

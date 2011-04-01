@@ -163,9 +163,34 @@ namespace NzbDrone.Core.Providers
             set { SetValue("BlackholeDirectory", value); }
         }
 
+        public bool UseSeasonFolder
+        {
+            get { return GetValueBoolean("Sorting_SeasonFolder", true); }
+
+            set { SetValue("Sorting_SeasonFolder", value); }
+        }
+
+        public int DefaultQualityProfile
+        {
+            get { return GetValueInt("DefaultQualityProfile", 1); }
+
+            set { SetValue("DefaultQualityProfile", value); }
+        }
+
+
         private string GetValue(string key)
         {
             return GetValue(key, String.Empty, false);
+        }
+
+        private bool GetValueBoolean(string key, bool defaultValue = false)
+        {
+            return Convert.ToBoolean(GetValue(key, defaultValue, false));
+        }
+
+        private int GetValueInt(string key, int defaultValue = 0)
+        {
+            return Convert.ToInt16(GetValue(key, defaultValue, false));
         }
 
         public string GetValue(string key, object defaultValue, bool makePermanent)
@@ -183,6 +208,16 @@ namespace NzbDrone.Core.Providers
             value = defaultValue.ToString();
 
             return value;
+        }
+
+        public void SetValue(string key, Boolean value)
+        {
+            SetValue(key, value.ToString());
+        }
+
+        public void SetValue(string key, int value)
+        {
+            SetValue(key, value.ToString());
         }
 
         public void SetValue(string key, string value)

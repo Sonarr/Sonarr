@@ -11,11 +11,6 @@
     </script>
 
 </asp:Content>
-<asp:Content ID="Menu" ContentPlaceHolderID="ActionMenu" runat="server">
-    <%
-        Html.RenderPartial("SubMenu");
-    %>
-</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     
     <div>
@@ -86,7 +81,7 @@
             var pathTest = $('#series_path').val();
             $('#tester').text(pathTest);
 
-            $("#addResult").load('<%=Url.Action("AddExistingSeries", "Series") %>', {
+            $("#addResult").load('<%=Url.Action("AddExistingManual", "AddSeries") %>', {
                 path: pathTest,
                 seriesId: checkedSeries,
                 qualityProfileId: qualityProfileId

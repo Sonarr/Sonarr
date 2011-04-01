@@ -49,12 +49,6 @@ namespace NzbDrone.Core.Providers
             File.Move(sourcePath, destinationPath);
         }
 
-        public string GetFolderName(string path)
-        {
-            var di = new DirectoryInfo(path);
-            return di.Name;
-        }
-
         #endregion
     }
 }

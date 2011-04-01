@@ -14,6 +14,7 @@
     <AssemblyName>NzbDrone.Web</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <MvcBuildViews>true</MvcBuildViews>
+    <EnableUpdateable>false</EnableUpdateable>
     <TargetFrameworkProfile />
     <UseIISExpress>false</UseIISExpress>
   </PropertyGroup>
@@ -27,6 +28,8 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
     <PublishDatabases>false</PublishDatabases>
+    <MvcBuildViews>true</MvcBuildViews>
+    <EnableUpdateable>false</EnableUpdateable>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -35,6 +38,8 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <MvcBuildViews>true</MvcBuildViews>
+    <EnableUpdateable>false</EnableUpdateable>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ninject, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
@@ -186,6 +191,7 @@
     <Compile Include="Controllers\ApiController.cs" />
     <Compile Include="Controllers\HistoryController.cs" />
     <Compile Include="Controllers\LogController.cs" />
+    <Compile Include="Controllers\AddSeriesController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\SeriesController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
@@ -600,19 +606,17 @@
     <Content Include="Scripts\jquery-tgc-countdown-1.0.js" />
     <Content Include="Scripts\jquery.simpledropdown.js" />
     <Content Include="Scripts\Notification.js" />
+    <Content Include="Views\AddSeries\AddSeriesItem.ascx" />
     <Content Include="Views\History\Index.aspx" />
-    <Content Include="Views\Home\Test.aspx" />
     <Content Include="Views\Log\Index.aspx" />
-    <Content Include="Views\Series\AddExisting.aspx" />
-    <Content Include="Views\Series\AddExistingManual.aspx" />
-    <Content Include="Views\Series\AddNew.aspx" />
+    <Content Include="Views\AddSeries\AddExisting.aspx" />
+    <Content Include="Views\AddSeries\AddExistingManual.aspx" />
+    <Content Include="Views\AddSeries\AddNew.aspx" />
     <Content Include="Views\Series\Details.aspx" />
     <Content Include="Views\Series\Edit.aspx" />
-    <Content Include="Views\Series\EpisodeDetail.ascx" />
     <Content Include="Views\Series\index.aspx" />
     <Content Include="Views\Series\SeriesSearchResults.ascx" />
     <Content Include="Views\Series\SubMenu.ascx" />
-    <Content Include="Views\Series\Unmapped.aspx" />
     <Content Include="Views\Settings\RootDir.ascx" />
     <Content Include="Views\Settings\Notifications.ascx" />
     <Content Include="Views\Settings\Downloads.ascx" />
@@ -642,14 +646,11 @@
     <Content Include="Scripts\MicrosoftMvcAjax.debug.js" />
     <Content Include="Scripts\MicrosoftMvcValidation.js" />
     <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
-    <Content Include="Views\Home\About.aspx" />
-    <Content Include="Views\Home\Index.aspx" />
     <Content Include="Views\Shared\Error.aspx" />
     <Content Include="Views\Shared\Site.Master" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Series\DisplayTemplates\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NzbDrone.Core\NzbDrone.Core.csproj">

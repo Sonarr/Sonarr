@@ -61,52 +61,9 @@ namespace NzbDrone.Web.Controllers
             return View();
         }
 
-        public ActionResult AddExisting()
-        {
-            var defaultQuality = Convert.ToInt32(_configProvider.GetValue("DefaultQualityProfile", "1", true));
-            var profiles = _qualityProvider.GetAllProfiles();
-            var selectList = new SelectList(profiles, "QualityProfileId", "Name");
+      
 
-            ViewData["QualityProfileId"] = defaultQuality;
-            ViewData["QualitySelectList"] = selectList;
 
-            return View();
-        }
-
-        public ActionResult AddNew()
-        {
-            ViewData["RootDirs"] = _rootDirProvider.GetAll();
-            ViewData["DirSep"] = Path.DirectorySeparatorChar;
-
-            var profiles = _qualityProvider.GetAllProfiles();
-            var selectList = new SelectList(profiles, "QualityProfileId", "Name");
-            var defaultQuality = Convert.ToInt32(_configProvider.GetValue("DefaultQualityProfile", "1", true));
-
-            var model = new AddNewSeriesModel
-                            {
-                                DirectorySeparatorChar = Path.DirectorySeparatorChar.ToString(),
-                                RootDirectories = _rootDirProvider.GetAll(),
-                                QualityProfileId = defaultQuality,
-                                QualitySelectList = selectList
-                            };
-
-            return View(model);
-        }
-
-        public ActionResult AddExistingManual(string path)
-        {
-            var profiles = _qualityProvider.GetAllProfiles();
-            var selectList = new SelectList(profiles, "QualityProfileId", "Name");
-            var defaultQuality = Convert.ToInt32(_configProvider.GetValue("DefaultQualityProfile", "1", true));
-
-            var model = new AddExistingManualModel();
-            model.Path = path;
-            model.FolderName = _diskProvider.GetFolderName(path);
-            model.QualityProfileId = defaultQuality;
-            model.QualitySelectList = selectList;
-
-            return View(model);
-        }
 
         public ActionResult RssSync()
         {
@@ -187,41 +144,6 @@ namespace NzbDrone.Web.Controllers
             return View(new GridModel(unmappedList));
         }
 
-        public ActionResult SyncSelectedSeries(string path, int tvdbId, int qualityProfileId)
-        {
-            var unmappedList = new List<SeriesMappingModel>();
-
-            //If the TvDbId for this show is 0 then skip it... User made a mistake... They will have to manually map it
-            if (tvdbId < 1) throw new ArgumentException("Invalid tvdb id", "tvdbId");
-
-            unmappedList.Add(new SeriesMappingModel { Path = path, TvDbId = tvdbId, QualityProfileId = qualityProfileId });
-
-            return Content("Ok");
-        }
-
-        public ActionResult AddNewSeries(string dir, int seriesId, string seriesName, int qualityProfileId)
-        {
-            //Get TVDB Series Name
-            //Create new folder for series
-            //Add the new series to the Database
-
-            if (_syncProvider.BeginAddNewSeries(dir, seriesId, seriesName, qualityProfileId))
-                return Content("Adding new series has started.");
-
-            return Content("Unable to add new series, please wait for previous scans to complete first.");
-        }
-
-        public ActionResult AddExistingSeries(string path, int seriesId, int qualityProfileId)
-        {
-            //Get TVDB Series Name
-            //Create new folder for series
-            //Add the new series to the Database
-
-            if (_syncProvider.BeginAddExistingSeries(path, seriesId, qualityProfileId))
-                return Content("Manual adding of existing series has started");
-
-            return Content("Unable to add existing series, please wait for previous scans to complete first.");
-        }
 
         public ActionResult SearchForSeries(string seriesName)
         {

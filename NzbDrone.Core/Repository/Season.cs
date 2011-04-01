@@ -11,6 +11,10 @@ namespace NzbDrone.Core.Repository
         public virtual int SeriesId { get; set; }
         public virtual int SeasonNumber { get; set; }
         public bool Monitored { get; set; }
+        
+        public DayOfWeek? LastInfoSync { get; set; }
+
+        public DayOfWeek? LastDiskSync { get; set; }
 
         [SubSonicToManyRelation]
         public virtual List<Episode> Episodes { get; private set; }

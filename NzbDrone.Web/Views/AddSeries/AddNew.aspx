@@ -11,11 +11,6 @@
         });
     </script>
 </asp:Content>
-<asp:Content ID="Menu" ContentPlaceHolderID="ActionMenu" runat="server">
-    <%
-        Html.RenderPartial("SubMenu");
-    %>
-</asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <div style="width: 60%">
         <div style="display: inline">
@@ -83,7 +78,7 @@
             var seriesName = $(id).val();
             var qualityProfileId = $("#QualityProfileId").val();
 
-            $("#addResult").load('<%=Url.Action("AddNewSeries", "Series") %>', {
+            $("#addResult").load('<%=Url.Action("AddSeries", "Series") %>', {
                 dir: checkedDir,
                 seriesId: checkedSeries,
                 seriesName: seriesName,

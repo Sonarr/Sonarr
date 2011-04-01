@@ -214,17 +214,7 @@ hr
     margin-bottom: 10px;
 }
 
-input[type="text"]
-{
-    border: 1px solid #006;
-    background: #CBE8FF;
-}
 
-input[type="text"]:hover
-{
-    border: 1px solid #065EFE;
-    background: #C0D6FF;
-}
 
 input[type="button"], input[type="submit"], input[type="reset"], input[type="file"]::-webkit-file-upload-button, button
 {
@@ -234,6 +224,12 @@ input[type="button"], input[type="submit"], input[type="reset"], input[type="fil
     border-color: #065EFE;
     padding: 5px 10px 5px 10px;
     margin: 10px;
+}
+
+.listButton
+{
+    padding: 1px 10px 2px 10px;
+    margin: 0px;
 }
 
 #save_button
