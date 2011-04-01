@@ -77,38 +77,17 @@ namespace NzbDrone.Web.Controllers
             return View(unmappedList);
         }
 
-        public ActionResult AddExistingManual(string path)
-        {
-            var profiles = _qualityProvider.GetAllProfiles();
-            var selectList = new SelectList(profiles, "QualityProfileId", "Name");
-            var defaultQuality = _configProvider.DefaultQualityProfile;
-
-            var model = new AddExistingManualModel();
-            model.Path = path;
-            model.FolderName = new DirectoryInfo(path).Name;
-            model.QualityProfileId = defaultQuality;
-            model.QualitySelectList = selectList;
-
-            return View(model);
-        }
-
-
         public ActionResult RenderPartial(string path)
         {
-            var dataVal = _tvDbProvider.SearchSeries(new DirectoryInfo(path).Name);
-            var names = dataVal.Select(tvdb => tvdb.SeriesName).ToList();
 
-            if (dataVal.Count == 0) return null;
-            var ids = dataVal.Select(tvdb => tvdb.Id).ToList();
-            var list = new SelectList(dataVal, "Id", "SeriesName");
+            var suggestions = GetSuggestionList(new DirectoryInfo(path).Name);
 
             ViewData["guid"] = Guid.NewGuid();
             ViewData["path"] = path;
             ViewData["javaPath"] = path.Replace(Path.DirectorySeparatorChar, '|').Replace(Path.VolumeSeparatorChar, '^');
-            return PartialView("AddSeriesItem", list);
+            return PartialView("AddSeriesItem", suggestions);
 
         }
-
 
         public JsonResult AddSeries(string path, int seriesId, int qualityProfileId)
         {
@@ -119,6 +98,25 @@ namespace NzbDrone.Web.Controllers
             _seriesProvider.AddSeries(path.Replace('|', Path.DirectorySeparatorChar).Replace('^', Path.VolumeSeparatorChar), seriesId, qualityProfileId);
             ScanNewSeries();
             return new JsonResult() { Data = "ok" };
+        }
+
+        [HttpPost]
+        public ActionResult _textLookUp(string text, int? filterMode)
+        {
+            var suggestions = GetSuggestionList(text);
+
+            return new JsonResult
+            {
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                Data = suggestions
+            };
+        }
+        
+        public SelectList GetSuggestionList(string searchString)
+        {
+            var dataVal = _tvDbProvider.SearchSeries(searchString);
+
+            return new SelectList(dataVal, "Id", "SeriesName");
         }
 
     }

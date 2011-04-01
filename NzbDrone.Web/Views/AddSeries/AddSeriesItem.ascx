@@ -10,6 +10,8 @@
                 // .AutoFill(true)
                   .BindTo(Model)
                 // .DataBinding(b => b.Ajax().Select("TvDbLookup", "AddSeries"))
+                .DataBinding(binding => binding.Ajax().Select("_textLookUp", "AddSeries").Delay(400).Cache(false))
+
                   .Filterable(f => f.FilterMode(AutoCompleteFilterMode.Contains))
                   .HighlightFirstMatch(true)
                   .HtmlAttributes(new { style = "width:70%; align:right" })
@@ -28,8 +30,8 @@
 
     function addSeries(guid, path) {
         var qualityProfileId = $("#qualityProfileId").val();
-          var comboBox = $("#" + guid).data("tComboBox");
-          sendToServer(comboBox.value(), path, qualityProfileId);
+        var comboBox = $("#" + guid).data("tComboBox");
+        sendToServer(comboBox.value(), path, qualityProfileId);
         $("#div_" + guid).hide();
     }
 

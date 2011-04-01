@@ -37,16 +37,15 @@ namespace NzbDrone.Core
                 _startupPath = AppPath;
 
                 //Sqlite
-                string connectionString = String.Format("Data Source={0};Version=3;", Path.Combine(AppPath, "nzbdrone.db"));
+                var AppDataPath = new DirectoryInfo(Path.Combine(AppPath, "App_Data", "nzbdrone.db"));
+                if (!AppDataPath.Exists) AppDataPath.Create();
+
+                string connectionString = String.Format("Data Source={0};Version=3;", Path.Combine(AppDataPath.FullName, "nzbdrone.db"));
                 var dbProvider = ProviderFactory.GetProvider(connectionString, "System.Data.SQLite");
 
-                //SQLExpress
-                //string connectionString = String.Format(@"server=.\SQLExpress; database=NzbDrone; Trusted_Connection=True;");
-                //var dbProvider = ProviderFactory.GetProvider(connectionString, "System.Data.SqlClient");
-
-                //Sqlite
-                string logConnectionString = String.Format("Data Source={0};Version=3;", Path.Combine(AppPath, "log.db"));
+                string logConnectionString = String.Format("Data Source={0};Version=3;", Path.Combine(AppDataPath.FullName, "log.db"));
                 var logDbProvider = ProviderFactory.GetProvider(logConnectionString, "System.Data.SQLite");
+
 
                 //SQLExpress
                 //string logConnectionString = String.Format(@"server=.\SQLExpress; database=NzbDroneLogs; Trusted_Connection=True;");
@@ -55,7 +54,7 @@ namespace NzbDrone.Core
                 //dbProvider.ExecuteQuery(new QueryCommand("VACUUM", dbProvider));
 
                 dbProvider.Log = new NlogWriter();
-               
+
                 _kernel.Bind<ISeriesProvider>().To<SeriesProvider>().InSingletonScope();
                 _kernel.Bind<ISeasonProvider>().To<SeasonProvider>();
                 _kernel.Bind<IEpisodeProvider>().To<EpisodeProvider>();
