@@ -111,9 +111,9 @@ namespace NzbDrone.Core.Providers
             _sonioRepo.Add(repoSeries);
         }
 
-        public Series FindSeries(string cleanTitle)
+        public Series FindSeries(string title)
         {
-            return _sonioRepo.Single<Series>(s => s.CleanTitle == cleanTitle);
+            return _sonioRepo.Single<Series>(s => s.CleanTitle == Parser.NormalizeTitle(title));
         }
 
         public void UpdateSeries(Series series)
