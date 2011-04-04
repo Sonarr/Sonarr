@@ -21,6 +21,10 @@ namespace NzbDrone.Core.Repository
         public string Language { get; set; }
         public EpisodeStatusType Status { get; set; }
 
+        public DayOfWeek? LastInfoSync { get; set; }
+
+        public DayOfWeek? LastDiskSync { get; set; }
+
         [SubSonicToOneRelation(ThisClassContainsJoinKey = true)]
         public virtual Season Season { get; set; }
 

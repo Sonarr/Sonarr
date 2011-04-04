@@ -2,7 +2,7 @@
 using System.Net;
 using NLog;
 
-namespace NzbDrone.Core.Providers
+namespace NzbDrone.Core.Providers.Core
 {
     internal class HttpProvider : IHttpProvider
     {

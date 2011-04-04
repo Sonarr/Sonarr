@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NzbDrone.Core.Providers
+namespace NzbDrone.Core.Providers.Core
 {
     public interface IConfigProvider
     {
@@ -25,6 +25,8 @@ namespace NzbDrone.Core.Providers
         String SyncFrequency { get; set; }
         String SabTvPriority { get; set; }
         String ApiKey { get; set; }
+        bool UseSeasonFolder { get; set; }
+        int DefaultQualityProfile { get; set; }
 
         string GetValue(string key, object defaultValue, bool makePermanent);
         void SetValue(string key, string value);

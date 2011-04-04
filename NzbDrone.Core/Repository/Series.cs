@@ -11,21 +11,25 @@ namespace NzbDrone.Core.Repository
         [SubSonicPrimaryKey(false)]
         public virtual int SeriesId { get; set; }
 
+        [SubSonicNullString]
         public string Title { get; set; }
 
+        [SubSonicNullString]
         public string CleanTitle { get; set; }
 
         [SubSonicNullString]
         public string Status { get; set; }
 
-        [SubSonicLongString]
+        [SubSonicNullString]
         public string Overview { get; set; }
 
         [DisplayName("Air on")]
         public DayOfWeek? AirsDayOfWeek { get; set; }
 
+        [SubSonicNullString]
         public String AirTimes { get; set; }
 
+        [SubSonicNullString]
         public string Language { get; set; }
 
         public string Path { get; set; }
@@ -35,6 +39,10 @@ namespace NzbDrone.Core.Repository
         public virtual int QualityProfileId { get; set; }
 
         public bool SeasonFolder { get; set; }
+
+        public DateTime? LastInfoSync { get; set; }
+
+        public DateTime? LastDiskSync { get; set; }
 
         [SubSonicToOneRelation(ThisClassContainsJoinKey = true, JoinKeyName = "QualityProfileId")]
         public virtual QualityProfile QualityProfile { get; private set; }

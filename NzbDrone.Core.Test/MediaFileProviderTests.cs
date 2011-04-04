@@ -11,6 +11,7 @@ using Ninject;
 using Ninject.Moq;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using SubSonic.Repository;
@@ -70,7 +71,7 @@ namespace NzbDrone.Core.Test
             //Currently can't verify this since the list of episodes are loaded
             //Dynamically by SubSonic
             //Assert.AreEqual(fakeEpisode, result.Episodes[0]);
-            
+
             Assert.AreEqual(fakeEpisode.SeriesId, result.SeriesId);
             Assert.AreEqual(QualityTypes.BDRip, result.Quality);
             Assert.AreEqual(Parser.NormalizePath(fileName), result.Path);
@@ -162,34 +163,6 @@ namespace NzbDrone.Core.Test
         }
 
 
-        [Test]
-        [Row("Season {season}\\S{season:00}E{episode:00} - {title} - {quality}", "Season 6\\S06E08 - Lethal Inspection - hdtv")]
-        [Row("Season {season}\\{series} - {season:##}{episode:00} - {title} - {quality}", "Season 6\\Futurama - 608 - Lethal Inspection - hdtv")]
-        [Row("Season {season}\\{series} - {season:##}{episode:00} - {title}", "Season 6\\Futurama - 608 - Lethal Inspection")]
-        public void test_file_path_generation(string patern, string path)
-        {
-            var fakeConfig = new Mock<IConfigProvider>();
-            fakeConfig.Setup(c => c.EpisodeNameFormat).Returns(patern);
-
-            var kernel = new MockingKernel();
-            kernel.Bind<IConfigProvider>().ToConstant(fakeConfig.Object);
-            kernel.Bind<IMediaFileProvider>().To<MediaFileProvider>();
-
-            var fakeEpisode = new EpisodeModel
-            {
-                SeasonNumber = 6,
-                EpisodeNumber = 8,
-                EpisodeTitle = "Lethal Inspection",
-                Quality = QualityTypes.HDTV,
-                SeriesTitle = "Futurama"
-            };
-
-            //Act
-            var result = kernel.Get<IMediaFileProvider>().GenerateEpisodePath(fakeEpisode);
-
-            //Assert
-            Assert.AreEqual(path.ToLowerInvariant(), result.ToLowerInvariant());
-        }
 
     }
 

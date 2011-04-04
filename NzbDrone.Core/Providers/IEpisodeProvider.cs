@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Providers
         /// </summary>
         /// <param name="episode">Episode that needs to be checked</param>
         /// <returns></returns>
-        bool IsNeeded(EpisodeModel episode);
+        bool IsNeeded(EpisodeParseResult episode);
 
         void RefreshEpisodeInfo(int seriesId);
         void RefreshEpisodeInfo(Season season);

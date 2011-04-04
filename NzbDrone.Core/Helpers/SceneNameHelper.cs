@@ -8,7 +8,7 @@ namespace NzbDrone.Core.Helpers
 {
     public static class SceneNameHelper
     {
-        private static List<SceneNameModel> _sceneNameMappings = new List<SceneNameModel>
+        private static readonly List<SceneNameModel> SceneNameMappings = new List<SceneNameModel>
         {
             new SceneNameModel { SeriesId = 72546, Name = "CSI" },
             new SceneNameModel { SeriesId = 73696, Name = "CSI New York" },
@@ -76,7 +76,7 @@ namespace NzbDrone.Core.Helpers
 
         public static int FindByName(string cleanSeriesName)
         {
-            var map = _sceneNameMappings.Find(s => Parser.NormalizeTitle(s.Name) == cleanSeriesName);
+            var map = SceneNameMappings.Find(s => Parser.NormalizeTitle(s.Name) == cleanSeriesName);
 
             if (map == null)
                 return 0;
@@ -88,7 +88,7 @@ namespace NzbDrone.Core.Helpers
         {
             List<String> results = new List<string>();
 
-            var maps = _sceneNameMappings.Where(s => s.SeriesId == seriesId);
+            var maps = SceneNameMappings.Where(s => s.SeriesId == seriesId);
 
             foreach (var map in maps)
                 results.Add(map.Name);

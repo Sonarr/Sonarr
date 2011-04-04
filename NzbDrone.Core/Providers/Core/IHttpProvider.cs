@@ -1,4 +1,4 @@
-﻿namespace NzbDrone.Core.Providers
+﻿namespace NzbDrone.Core.Providers.Core
 {
     public interface IHttpProvider
     {

@@ -7,6 +7,7 @@ using MbUnit.Framework;
 using MbUnit.Framework.ContractVerifiers;
 using Moq;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Providers.Core;
 using SubSonic.Repository;
 
 namespace NzbDrone.Core.Test

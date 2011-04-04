@@ -1,0 +1,43 @@
+﻿@using NzbDrone.Core.Repository.Quality
+@model SelectList
+<div padding: 10px" id="div_@(ViewData["guid"])">
+    <fieldset>
+        <legend>@ViewData["path"].ToString()</legend>
+        <div>
+            @{Html.Telerik().ComboBox()
+            .Name("seriesList_" + ViewData["guid"].ToString())
+                  .BindTo(Model)
+                  .DataBinding(binding => binding.Ajax().Select("_textLookUp", "AddSeries").Delay(400).Cache(false))
+                  .Filterable(f => f.FilterMode(AutoCompleteFilterMode.Contains))
+                  .HighlightFirstMatch(true)
+                  .HtmlAttributes(new { style = "width: 300px;" })
+                  .SelectedIndex(0).Render();}
+            @Html.Telerik().DropDownList().Name("qualityList_" + ViewData["guid"].ToString()).BindTo((SelectList)ViewData["quality"]).HtmlAttributes(new { style = "width: 100px;" })
+            <button class="listButton" onclick="addSeries('@ViewData["guid"]','@ViewData["javaPath"].ToString()' )">
+                Add</button>
+        </div>
+    </fieldset>
+</div>
+<script type="text/javascript" language="javascript">
+
+    var addSeriesUrl = '@Url.Action("AddSeries", "AddSeries")';
+
+    function addSeries(guid, path) {
+        var seriesComboBox = $("#seriesList_" + guid).data("tComboBox");
+        var qualityComboBox = $("#qualityList_" + guid).data("tDropDownList");
+        sendToServer(seriesComboBox.value(), path, qualityComboBox.value());
+        $("#div_" + guid).hide();
+    }
+
+    function sendToServer(id, path, quality) {
+        $.ajax({
+            type: "POST",
+            url: addSeriesUrl,
+            data: jQuery.param({ path: path, seriesId: id, qualityProfileId: quality }),
+            error: function (req, status, error) {
+                alert("Sorry! We could not add " + path + " at this time. " + error);
+            }
+        });
+    }
+
+</script>

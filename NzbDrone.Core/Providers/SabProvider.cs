@@ -3,6 +3,7 @@ using System.Linq;
 using System.Web;
 using System.Xml.Linq;
 using NLog;
+using NzbDrone.Core.Providers.Core;
 
 namespace NzbDrone.Core.Providers
 {

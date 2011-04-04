@@ -65,76 +65,53 @@ namespace NzbDrone.Core.Providers
         /// <summary>
         /// Comprehensive check on whether or not this episode is needed.
         /// </summary>
-        /// <param name="episode">Episode that needs to be checked</param>
+        /// <param name="parsedReport">Episode that needs to be checked</param>
         /// <returns></returns>
-        public bool IsNeeded(EpisodeModel episode)
+        public bool IsNeeded(EpisodeParseResult parsedReport)
         {
-            //IsSeasonIgnored
-            //IsQualityWanted
-            //EpisodeFileExists
-            //IsInHistory
-            //IsOnDisk? (How to handle episodes that are downloaded manually?)
-
-            if (IsSeasonIgnored(episode))
-                return false;
-
-            //Quickly check if this quality is wanted at all (We will later check if the quality is still needed)
-            if (!_series.QualityWanted(episode.SeriesId, episode.Quality))
+            foreach (var episode in parsedReport.Episodes)
             {
-                Logger.Debug("Quality [{0}] is not wanted for: {1}", episode.Quality, episode.SeriesTitle);
-                return false;
-            }
+                var episodeInfo = GetEpisode(parsedReport.SeriesId, parsedReport.SeasonNumber, episode);
 
-            //Check to see if there is an episode file for this episode
-            var dbEpisode = GetEpisode(episode.SeriesId, episode.SeasonNumber, episode.EpisodeNumber);
-
-            if (dbEpisode == null)
-            {
-                //Todo: How do we want to handle this really? Episode could be released before information is on TheTvDB (Parks and Rec did this a lot in the first season, from experience)
-                throw new NotImplementedException("Episode was not found in the database");
-            }
-
-            episode.EpisodeId = dbEpisode.EpisodeId;
-
-            var file = dbEpisode.EpisodeFile;
-
-            if (file != null)
-            {
-                //If not null we need to see if this episode has the quality as the download (or if it is better)
-                if (file.Quality == episode.Quality)
+                if (episodeInfo == null)
                 {
-                    //If the episodeFile is a Proper we don't need to download again
-                    if (file.Proper)
-                        return false;
+                    //Todo: How do we want to handle this really? Episode could be released before information is on TheTvDB 
+                    //(Parks and Rec did this a lot in the first season, from experience)
+                    //Keivan: Should automatically add the episode to db with minimal information. then update the description/title when avilable.
+                    throw new NotImplementedException("Episode was not found in the database");
                 }
 
-                //There will never be a time when the episode quality is less than what we have and we want it... ever.... I think.
-                if (file.Quality > episode.Quality)
-                    return false;
+                var file = episodeInfo.EpisodeFile;
 
-                //Now we need to handle upgrades and actually pay attention to the Cutoff Value
-                if (file.Quality < episode.Quality)
+                if (file != null)
                 {
-                    var series = _series.GetSeries(episode.SeriesId);
-                    var quality = _quality.Find(series.QualityProfileId);
+                    //If not null we need to see if this episode has the quality as the download (or if it is better)
+                    if (file.Quality == parsedReport.Quality && file.Proper) continue;
 
-                    if (quality.Cutoff <= file.Quality)
+                    //There will never be a time when the episode quality is less than what we have and we want it... ever.... I think.
+                    if (file.Quality > parsedReport.Quality) continue;
+
+                    //Now we need to handle upgrades and actually pay attention to the Cutoff Value
+                    if (file.Quality < parsedReport.Quality)
                     {
-                        //If the episodeFile is a Proper we don't need to download again
-                        if (file.Proper)
-                            return false;
+                        var quality = _quality.Find(episodeInfo.Series.QualityProfileId);
+
+                        if (quality.Cutoff <= file.Quality && file.Proper) continue;
                     }
                 }
+
+                //IsInHistory? (NZBDrone)
+                if (_history.Exists(episodeInfo.EpisodeId, parsedReport.Quality, parsedReport.Proper))
+                {
+                    Logger.Debug("Episode in history: {0}", episode.ToString());
+                    continue;
+                }
+
+                return true;//If we get to this point and the file has not yet been rejected then accept it
             }
 
-            //IsInHistory? (NZBDrone)
-            if (_history.Exists(dbEpisode.EpisodeId, episode.Quality, episode.Proper))
-            {
-                Logger.Debug("Episode in history: {0}", episode.ToString());
-                return false;
-            }
+            return false;
 
-            return true;//If we get to this point and the file has not yet been rejected then accept it
         }
 
         public void RefreshEpisodeInfo(int seriesId)
@@ -270,7 +247,7 @@ namespace NzbDrone.Core.Providers
             _sonicRepo.Update(episode);
         }
 
-        private bool IsSeasonIgnored(EpisodeModel episode)
+        private bool IsSeasonIgnored(EpisodeParseResult episode)
         {
             //Check if this Season is ignored
             if (_seasons.IsIgnored(episode.SeriesId, episode.SeasonNumber))

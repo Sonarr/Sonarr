@@ -9,6 +9,7 @@ using NzbDrone.Core;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Web.Models;
@@ -162,7 +163,7 @@ namespace NzbDrone.Web.Controllers
             model.ReplaceSpaces = Convert.ToBoolean(_configProvider.GetValue("Sorting_ReplaceSpaces", false, true));
             model.AppendQuality = Convert.ToBoolean(_configProvider.GetValue("Sorting_AppendQuality", false, true));
             model.UseAirByDate = Convert.ToBoolean(_configProvider.GetValue("Sorting_UseAirByDate", true, true));
-            model.SeasonFolders = Convert.ToBoolean(_configProvider.GetValue("Sorting_SeasonFolder", true, true));
+            model.SeasonFolders = _configProvider.UseSeasonFolder;
             model.SeasonFolderFormat = _configProvider.GetValue("Sorting_SeasonFolderFormat", "Season %s", true);
             model.SeparatorStyle = Convert.ToInt32(_configProvider.GetValue("Sorting_SeparatorStyle", 0, true));
             model.NumberStyle = Convert.ToInt32(_configProvider.GetValue("Sorting_NumberStyle", 2, true));

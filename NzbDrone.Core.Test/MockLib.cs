@@ -9,6 +9,7 @@ using Moq;
 using NLog;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Providers.Core;
 using SubSonic.DataProviders;
 using SubSonic.Repository;
 using TvdbLib;

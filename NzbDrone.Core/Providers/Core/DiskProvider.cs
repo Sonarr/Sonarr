@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace NzbDrone.Core.Providers
+namespace NzbDrone.Core.Providers.Core
 {
     public class DiskProvider : IDiskProvider
     {
@@ -47,12 +47,6 @@ namespace NzbDrone.Core.Providers
         public void RenameFile(string sourcePath, string destinationPath)
         {
             File.Move(sourcePath, destinationPath);
-        }
-
-        public string GetFolderName(string path)
-        {
-            var di = new DirectoryInfo(path);
-            return di.Name;
         }
 
         #endregion

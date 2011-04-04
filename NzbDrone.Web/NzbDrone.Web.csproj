@@ -7,13 +7,14 @@
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{43BD3BBD-1531-4D8F-9C08-E1CD544AB2CD}</ProjectGuid>
-    <ProjectTypeGuids>{F85E285D-A4E0-4152-9332-AB1D724D3325};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <ProjectTypeGuids>{E53F8FEA-EAE0-44A6-8774-FFD645390401};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NzbDrone.Web</RootNamespace>
     <AssemblyName>NzbDrone.Web</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <MvcBuildViews>true</MvcBuildViews>
+    <EnableUpdateable>false</EnableUpdateable>
     <TargetFrameworkProfile />
     <UseIISExpress>false</UseIISExpress>
   </PropertyGroup>
@@ -27,6 +28,8 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
     <PublishDatabases>false</PublishDatabases>
+    <MvcBuildViews>true</MvcBuildViews>
+    <EnableUpdateable>false</EnableUpdateable>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -35,6 +38,8 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <MvcBuildViews>true</MvcBuildViews>
+    <EnableUpdateable>false</EnableUpdateable>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ninject, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
@@ -64,11 +69,12 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
     </Reference>
+    <Reference Include="System.Web.Razor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Web.Routing">
       <Private>False</Private>
     </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
@@ -81,6 +87,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\NzbDrone.Core\Libraries\TvdbLib.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web.WebPages" />
+    <Reference Include="System.Web.Helpers" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_GlobalResources\EditorLocalization.bg-BG.designer.cs">
@@ -186,6 +194,7 @@
     <Compile Include="Controllers\ApiController.cs" />
     <Compile Include="Controllers\HistoryController.cs" />
     <Compile Include="Controllers\LogController.cs" />
+    <Compile Include="Controllers\AddSeriesController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\SeriesController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
@@ -600,19 +609,16 @@
     <Content Include="Scripts\jquery-tgc-countdown-1.0.js" />
     <Content Include="Scripts\jquery.simpledropdown.js" />
     <Content Include="Scripts\Notification.js" />
+    <None Include="Views\AddSeries\AddSeriesItem.cshtml" />
     <Content Include="Views\History\Index.aspx" />
-    <Content Include="Views\Home\Test.aspx" />
     <Content Include="Views\Log\Index.aspx" />
-    <Content Include="Views\Series\AddExisting.aspx" />
-    <Content Include="Views\Series\AddExistingManual.aspx" />
-    <Content Include="Views\Series\AddNew.aspx" />
+    <Content Include="Views\AddSeries\AddExisting.aspx" />
+    <Content Include="Views\AddSeries\AddNew.aspx" />
     <Content Include="Views\Series\Details.aspx" />
     <Content Include="Views\Series\Edit.aspx" />
-    <Content Include="Views\Series\EpisodeDetail.ascx" />
     <Content Include="Views\Series\index.aspx" />
     <Content Include="Views\Series\SeriesSearchResults.ascx" />
     <Content Include="Views\Series\SubMenu.ascx" />
-    <Content Include="Views\Series\Unmapped.aspx" />
     <Content Include="Views\Settings\RootDir.ascx" />
     <Content Include="Views\Settings\Notifications.ascx" />
     <Content Include="Views\Settings\Downloads.ascx" />
@@ -642,14 +648,19 @@
     <Content Include="Scripts\MicrosoftMvcAjax.debug.js" />
     <Content Include="Scripts\MicrosoftMvcValidation.js" />
     <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
-    <Content Include="Views\Home\About.aspx" />
-    <Content Include="Views\Home\Index.aspx" />
     <Content Include="Views\Shared\Error.aspx" />
     <Content Include="Views\Shared\Site.Master" />
+    <Content Include="Scripts\jquery-ui.js" />
+    <Content Include="Scripts\jquery-ui.min.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Views\Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Series\DisplayTemplates\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NzbDrone.Core\NzbDrone.Core.csproj">

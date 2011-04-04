@@ -55,6 +55,36 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
+        public void Add_new_series()
+        {
+            var repo = MockLib.GetEmptyRepository();
+
+            var kernel = new MockingKernel();
+            kernel.Bind<ISeriesProvider>().To<SeriesProvider>();
+            kernel.Bind<IRepository>().ToConstant(repo);
+
+            string path = "C:\\Test\\";
+            int tvDbId = 1234;
+            int qualityProfileId = 2;
+
+            //Act
+            var seriesProvider = kernel.Get<ISeriesProvider>();
+            seriesProvider.AddSeries(path, tvDbId, qualityProfileId);
+
+
+            //Assert
+            var series = seriesProvider.GetAllSeries();
+            Assert.IsNotEmpty(series);
+            Assert.Count(1, series);
+            Assert.AreEqual(path, series.First().Path);
+            Assert.AreEqual(tvDbId, series.First().SeriesId);
+            Assert.AreEqual(qualityProfileId, series.First().QualityProfileId);
+
+        }
+
+
+
+        [Test]
         [Row(new object[] { "That's Life - 2x03 -The Devil and Miss DeLucca", "That's Life" })]
         [Row(new object[] { "Van.Duin.Op.Zn.Best.S02E05.DUTCH.WS.PDTV.XViD-DiFFERENT", "Van Duin Op Zn Best" })]
         [Row(new object[] { "Dollhouse.S02E06.The.Left.Hand.720p.BluRay.x264-SiNNERS", "Dollhouse" })]

@@ -31,7 +31,7 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -137,10 +137,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libraries\NLog.Extended.dll</HintPath>
     </Reference>
-    <Reference Include="RSS.NET, Version=0.86.3627.40828, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libraries\RSS.NET.dll</HintPath>
-    </Reference>
     <Reference Include="SubSonic.Core, Version=3.0.0.3, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>D:\OpenSource\sabscripts\SABSync\References\SubSonic.Core.dll</HintPath>
     </Reference>
@@ -168,22 +164,18 @@
     <Compile Include="Instrumentation\SubsonicTarget.cs" />
     <Compile Include="Instrumentation\ExceptioneerTarget.cs" />
     <Compile Include="Instrumentation\NlogWriter.cs" />
-    <Compile Include="Model\SeasonModel.cs" />
-    <Compile Include="Model\SeasonParseResult.cs" />
     <Compile Include="Model\EpisodeParseResult.cs" />
-    <Compile Include="Model\EpisodeModel.cs" />
     <Compile Include="Model\EpisodeRenameModel.cs" />
     <Compile Include="Model\EpisodeSortingType.cs" />
     <Compile Include="Model\EpisodeStatusType.cs" />
-    <Compile Include="Model\FeedInfoModel.cs" />
     <Compile Include="Model\NzbInfoModel.cs" />
-    <Compile Include="Model\NzbSiteModel.cs" />
     <Compile Include="Model\SabnzbdPriorityType.cs" />
     <Compile Include="Model\SceneNameModel.cs" />
-    <Compile Include="Model\SeriesMappingModel.cs" />
+    <Compile Include="Model\SeasonParseResult.cs" />
     <Compile Include="Model\UpcomingEpisodesModel.cs" />
-    <Compile Include="Providers\BacklogProvider.cs" />
+    <Compile Include="Providers\Feed\FeedProviderBase.cs" />
     <Compile Include="Providers\ExternalNotificationProvider.cs" />
+    <Compile Include="Providers\Feed\NzbsOrgFeedProvider.cs" />
     <Compile Include="Providers\HistoryProvider.cs" />
     <Compile Include="Providers\IBacklogProvider.cs" />
     <Compile Include="Providers\IExtenalNotificationProvider.cs" />
@@ -194,9 +186,7 @@
     <Compile Include="Providers\IQualityProvider.cs" />
     <Compile Include="Providers\IRenameProvider.cs" />
     <Compile Include="Providers\IRootDirProvider.cs" />
-    <Compile Include="Providers\IRssItemProcessingProvider.cs" />
     <Compile Include="Providers\IRssSyncProvider.cs" />
-    <Compile Include="Providers\IRssProvider.cs" />
     <Compile Include="Providers\ITimerProvider.cs" />
     <Compile Include="Providers\IUpcomingEpisodesProvider.cs" />
     <Compile Include="Providers\IXbmcProvider.cs" />
@@ -204,9 +194,6 @@
     <Compile Include="Providers\QualityProvider.cs" />
     <Compile Include="Providers\RenameProvider.cs" />
     <Compile Include="Providers\RootDirProvider.cs" />
-    <Compile Include="Providers\RssItemProcessingProvider.cs" />
-    <Compile Include="Providers\RssSyncProvider.cs" />
-    <Compile Include="Providers\RssProvider.cs" />
     <Compile Include="Providers\TimerProvider.cs" />
     <Compile Include="Providers\UpcomingEpisodesProvider.cs" />
     <Compile Include="Providers\XbmcProvider.cs" />
@@ -224,12 +211,12 @@
     <Compile Include="Providers\SyncProvider.cs" />
     <Compile Include="Model\Notification\ProgressNotification.cs" />
     <Compile Include="Providers\NotificationProvider.cs" />
-    <Compile Include="Providers\ConfigProvider.cs" />
+    <Compile Include="Providers\Core\ConfigProvider.cs" />
     <Compile Include="Providers\EpisodeProvider.cs" />
-    <Compile Include="Providers\HttpProvider.cs" />
+    <Compile Include="Providers\Core\HttpProvider.cs" />
     <Compile Include="Providers\IDownloadProvider.cs" />
     <Compile Include="Providers\IEpisodeProvider.cs" />
-    <Compile Include="Providers\IHttpProvider.cs" />
+    <Compile Include="Providers\Core\IHttpProvider.cs" />
     <Compile Include="Providers\ISeasonProvider.cs" />
     <Compile Include="Providers\ISeriesProvider.cs" />
     <Compile Include="Providers\ITvDbProvider.cs" />
@@ -247,9 +234,9 @@
     <Compile Include="Repository\Series.cs" />
     <Compile Include="CentralDispatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Providers\DiskProvider.cs" />
-    <Compile Include="Providers\IConfigProvider.cs" />
-    <Compile Include="Providers\IDiskProvider.cs" />
+    <Compile Include="Providers\Core\DiskProvider.cs" />
+    <Compile Include="Providers\Core\IConfigProvider.cs" />
+    <Compile Include="Providers\Core\IDiskProvider.cs" />
     <Compile Include="Providers\SeriesProvider.cs" />
     <Compile Include="Providers\TvDbProvider.cs" />
   </ItemGroup>
@@ -283,15 +270,12 @@
     <Content Include="Libraries\NLog.Extended.dll" />
     <Content Include="Libraries\NLog.Extended.xml" />
     <Content Include="Libraries\NLog.xml" />
-    <Content Include="Libraries\RSS.NET.dll" />
-    <Content Include="Libraries\RSS.NET.XML" />
     <Content Include="Libraries\SubSonic.Core.dll" />
     <Content Include="Libraries\SubSonic.Core.XML" />
     <Content Include="Libraries\System.Data.SQLite.dll" />
     <Content Include="Libraries\System.Data.SQLite.XML" />
     <Content Include="Libraries\TvdbLib.dll" />
     <Content Include="Libraries\TvdbLib.XML" />
-    <Content Include="Libraries\UPnP.dll" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Libraries\nlog.xsd">

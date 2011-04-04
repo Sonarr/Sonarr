@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using SubSonic.Repository;
 
@@ -76,18 +77,17 @@ namespace NzbDrone.Core.Providers
                 //Stores the list of episodes to add to the EpisodeFile
                 var episodes = new List<Episode>();
 
-                foreach (var parsedEpisode in episodesInFile)
+                foreach (var episodeNumber in episodesInFile.Episodes)
                 {
-                    EpisodeParseResult closureEpisode = parsedEpisode;
-                    var episode = _episodeProvider.GetEpisode(series.SeriesId, closureEpisode.SeasonNumber,
-                                                              closureEpisode.EpisodeNumber);
+                    var episode = _episodeProvider.GetEpisode(series.SeriesId, episodesInFile.SeasonNumber, episodeNumber);
+
                     if (episode != null)
                     {
                         episodes.Add(episode);
                     }
 
                     else
-                        Logger.Warn("Unable to find Series:{0} Season:{1} Episode:{2} in the database. File:{3}", series.Title, closureEpisode.SeasonNumber, closureEpisode.EpisodeNumber, filePath);
+                        Logger.Warn("Unable to find Series:{0} Season:{1} Episode:{2} in the database. File:{3}", series.Title, episodesInFile.SeasonNumber, episodeNumber, filePath);
                 }
 
                 //Return null if no Episodes exist in the DB for the parsed episodes from file
@@ -108,7 +108,7 @@ namespace NzbDrone.Core.Providers
                 episodeFile.SeriesId = series.SeriesId;
                 episodeFile.Path = Parser.NormalizePath(filePath);
                 episodeFile.Size = size;
-                episodeFile.Quality = Parser.ParseQuality(filePath);
+                episodeFile.Quality = episodesInFile.Quality;
                 episodeFile.Proper = Parser.ParseProper(filePath);
                 var fileId = (int)_repository.Add(episodeFile);
 
@@ -145,19 +145,7 @@ namespace NzbDrone.Core.Providers
             }
         }
 
-        public string GenerateEpisodePath(EpisodeModel episode)
-        {
-            var episodeNamePattern = _configProvider.EpisodeNameFormat;
-
-            episodeNamePattern = episodeNamePattern.Replace("{series}", "{0}");
-            episodeNamePattern = episodeNamePattern.Replace("{episode", "{1");
-            episodeNamePattern = episodeNamePattern.Replace("{season", "{2");
-            episodeNamePattern = episodeNamePattern.Replace("{title}", "{3}");
-            episodeNamePattern = episodeNamePattern.Replace("{quality}", "{4}");
-
-            return String.Format(episodeNamePattern, episode.SeriesTitle, episode.EpisodeNumber, episode.SeasonNumber, episode.EpisodeTitle, episode.Quality);
-        }
-
+   
         public void DeleteFromDb(int fileId)
         {
             _repository.Delete<EpisodeFile>(fileId);
