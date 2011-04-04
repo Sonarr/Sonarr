@@ -12,6 +12,6 @@ namespace NzbDrone.Core.Providers
         //This interface will contain methods to process individual RSS Feed Items (Queue if wanted)
 
         void DownloadIfWanted(NzbInfoModel nzb, Indexer indexer);
-        string GetTitleFix(EpisodeParseResult episodes, int seriesId);
+        string GetTitleFix(EpisodeParseResult episodes);
     }
 }

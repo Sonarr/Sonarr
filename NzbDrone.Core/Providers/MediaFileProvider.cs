@@ -145,19 +145,7 @@ namespace NzbDrone.Core.Providers
             }
         }
 
-        public string GenerateEpisodePath(EpisodeModel episode)
-        {
-            var episodeNamePattern = _configProvider.EpisodeNameFormat;
-
-            episodeNamePattern = episodeNamePattern.Replace("{series}", "{0}");
-            episodeNamePattern = episodeNamePattern.Replace("{episode", "{1");
-            episodeNamePattern = episodeNamePattern.Replace("{season", "{2");
-            episodeNamePattern = episodeNamePattern.Replace("{title}", "{3}");
-            episodeNamePattern = episodeNamePattern.Replace("{quality}", "{4}");
-
-            return String.Format(episodeNamePattern, episode.SeriesTitle, episode.EpisodeNumber, episode.SeasonNumber, episode.EpisodeTitle, episode.Quality);
-        }
-
+   
         public void DeleteFromDb(int fileId)
         {
             _repository.Delete<EpisodeFile>(fileId);

@@ -79,17 +79,15 @@ namespace NzbDrone.Core.Providers
             }
         }
 
-        public string GetTitleFix(EpisodeParseResult episodes, int seriesId)
+        public string GetTitleFix(EpisodeParseResult episodes)
         {
-            var series = _seriesProvider.GetSeries(seriesId);
-
             int seasonNumber = 0;
             string episodeNumbers = String.Empty;
             string episodeTitles = String.Empty;
 
             foreach (var episode in episodes.Episodes)
             {
-                var episodeInDb = _episodeProvider.GetEpisode(seriesId, episodes.SeasonNumber, episode);
+                var episodeInDb = _episodeProvider.GetEpisode(episodes.SeriesId, episodes.SeasonNumber, episode);
 
                 if (episodeInDb == null)
                 {
@@ -99,14 +97,14 @@ namespace NzbDrone.Core.Providers
                     episodeInDb = new Episode { EpisodeNumber = episode, Title = "TBA" };
                 }
 
-                seasonNumber = episodeInDb.SeasonNumber;
+                seasonNumber = episodes.SeasonNumber;
                 episodeNumbers = String.Format("{0}x{1:00}", episodeNumbers, episodeInDb.EpisodeNumber);
                 episodeTitles = String.Format("{0} + {1}", episodeTitles, episodeInDb.Title);
             }
 
             episodeTitles = episodeTitles.Trim(' ', '+');
 
-            return String.Format("{0} - {1}{2} - {3}", series.Title, seasonNumber, episodeNumbers, episodeTitles);
+            return String.Format("{0} - {1}{2} - {3}", episodes.SeriesTitle, seasonNumber, episodeNumbers, episodeTitles);
         }
 
         #endregion
@@ -140,19 +138,11 @@ namespace NzbDrone.Core.Providers
             //Loop through the list of the episodeParseResults to ensure that all the episodes are needed
             foreach (var episode in episodeParseResults.Episodes)
             {
-                //IsEpisodeWanted?
-                var episodeModel = new EpisodeModel();
-                episodeModel.Proper = nzb.Proper;
-                episodeModel.SeriesId = series.SeriesId;
-                episodeModel.SeriesTitle = series.Title;
-                episodeModel.Quality = nzb.Quality;
-                episodeModel.SeasonNumber = episodeParseResults.SeasonNumber;
-                episodeModel.EpisodeNumber = episode;
 
-                if (!_episodeProvider.IsNeeded(episodeModel))
+                if (!_episodeProvider.IsNeeded(episodeParseResults))
                     return;
 
-                var titleFix = GetTitleFix(episodeParseResults, episodeModel.SeriesId);
+                var titleFix = GetTitleFix(episodeParseResults);
                 titleFix = String.Format("{0} [{1}]", titleFix, nzb.Quality); //Add Quality to the titleFix
 
                 //If it is a PROPER we want to put PROPER in the titleFix
@@ -164,7 +154,7 @@ namespace NzbDrone.Core.Providers
                         return;
             }
 
-            nzb.TitleFix = GetTitleFix(episodeParseResults, series.SeriesId); //Get the TitleFix so we can use it later
+            nzb.TitleFix = GetTitleFix(episodeParseResults); //Get the TitleFix so we can use it later
             nzb.TitleFix = String.Format("{0} [{1}]", nzb.TitleFix, nzb.Quality); //Add Quality to the titleFix
 
             //If it is a PROPER we want to put PROPER in the titleFix
@@ -256,15 +246,8 @@ namespace NzbDrone.Core.Providers
 
                 foreach (var episode in season.Episodes)
                 {
-                    var episodeModel = new EpisodeModel();
-                    episodeModel.Proper = nzb.Proper;
-                    episodeModel.SeriesId = series.SeriesId;
-                    episodeModel.SeriesTitle = series.Title;
-                    episodeModel.Quality = nzb.Quality;
-                    episodeModel.SeasonNumber = episode.SeasonNumber;
-                    episodeModel.EpisodeNumber = episode.EpisodeNumber;
-
-                    if (!_episodeProvider.IsNeeded(episodeModel))
+                    
+                    //if (!_episodeProvider.IsNeeded(episode))
                     {
                         downloadWholeSeason = false;
                         episodesNeeded--; //Decrement the number of downloads we need, used if we want to replace all existing episodes if this will upgrade over X% of files

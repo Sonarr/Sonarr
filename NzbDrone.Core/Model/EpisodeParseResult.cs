@@ -7,9 +7,13 @@ namespace NzbDrone.Core.Model
     public class EpisodeParseResult
     {
         internal string SeriesTitle { get; set; }
+        public int SeriesId { get; set; }
+
         internal int SeasonNumber { get; set; }
         internal List<int> Episodes { get; set; }
         internal int Year { get; set; }
+
+        public bool Proper { get; set; }
 
         public QualityTypes Quality { get; set; }
 
