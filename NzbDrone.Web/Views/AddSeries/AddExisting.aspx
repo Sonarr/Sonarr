@@ -6,7 +6,6 @@
     Add Existing Series
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-    <%: Html.DropDownList("qualityProfileId", (SelectList)ViewData["QualitySelectList"], ViewData["QualityProfileId"])%>
     <%
         foreach (var path in Model)
         {

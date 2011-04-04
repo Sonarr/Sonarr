@@ -1,34 +1,31 @@
-﻿@model SelectList
-<div style="position: relative; padding: 10px" id="div_ @ViewData["guid"]">
-    <div style="position: relative; left: 0; width: 50%;">
-        @ViewData["path"].ToString()
-    </div>
-    <div style="position: relative; right: 0; width: 50%;">
-        @(Html.Telerik().ComboBox()
-            .Name(ViewData["guid"].ToString())
-                // .AutoFill(true)
+﻿@using NzbDrone.Core.Repository.Quality
+@model SelectList
+<div padding: 10px" id="div_@(ViewData["guid"])">
+    <fieldset>
+        <legend>@ViewData["path"].ToString()</legend>
+        <div>
+            @{Html.Telerik().ComboBox()
+            .Name("seriesList_" + ViewData["guid"].ToString())
                   .BindTo(Model)
-                // .DataBinding(b => b.Ajax().Select("TvDbLookup", "AddSeries"))
-                .DataBinding(binding => binding.Ajax().Select("_textLookUp", "AddSeries").Delay(400).Cache(false))
-
+                  .DataBinding(binding => binding.Ajax().Select("_textLookUp", "AddSeries").Delay(400).Cache(false))
                   .Filterable(f => f.FilterMode(AutoCompleteFilterMode.Contains))
                   .HighlightFirstMatch(true)
-                  .HtmlAttributes(new { style = "width:70%; align:right" })
-                  .SelectedIndex(0))
-        <button class="listButton" onclick="addSeries('@ViewData["guid"]','@ViewData["javaPath"].ToString()' )">
-            Add</button>
-    </div>
+                  .HtmlAttributes(new { style = "width: 300px;" })
+                  .SelectedIndex(0).Render();}
+            @Html.Telerik().DropDownList().Name("qualityList_" + ViewData["guid"].ToString()).BindTo((SelectList)ViewData["quality"]).HtmlAttributes(new { style = "width: 100px;" })
+            <button class="listButton" onclick="addSeries('@ViewData["guid"]','@ViewData["javaPath"].ToString()' )">
+                Add</button>
+        </div>
+    </fieldset>
 </div>
 <script type="text/javascript" language="javascript">
 
-
     var addSeriesUrl = '@Url.Action("AddSeries", "AddSeries")';
 
-
     function addSeries(guid, path) {
-        var qualityProfileId = $("#qualityProfileId").val();
-        var comboBox = $("#" + guid).data("tComboBox");
-        sendToServer(comboBox.value(), path, qualityProfileId);
+        var seriesComboBox = $("#seriesList_" + guid).data("tComboBox");
+        var qualityComboBox = $("#qualityList_" + guid).data("tDropDownList");
+        sendToServer(seriesComboBox.value(), path, qualityComboBox.value());
         $("#div_" + guid).hide();
     }
 
@@ -38,7 +35,7 @@
             url: addSeriesUrl,
             data: jQuery.param({ path: path, seriesId: id, qualityProfileId: quality }),
             error: function (req, status, error) {
-                alert("Sorry! We could not add " + this.name + "at this time. " + error);
+                alert("Sorry! We could not add " + path + " at this time. " + error);
             }
         });
     }

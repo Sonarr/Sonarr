@@ -60,13 +60,6 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult AddExisting()
         {
-            var defaultQuality = _configProvider.DefaultQualityProfile;
-            var profiles = _qualityProvider.GetAllProfiles();
-            var selectList = new SelectList(profiles, "QualityProfileId", "Name");
-
-            ViewData["QualityProfileId"] = defaultQuality;
-            ViewData["QualitySelectList"] = selectList;
-
             var unmappedList = new List<String>();
 
             foreach (var folder in _rootFolderProvider.GetAll())
@@ -85,6 +78,14 @@ namespace NzbDrone.Web.Controllers
             ViewData["guid"] = Guid.NewGuid();
             ViewData["path"] = path;
             ViewData["javaPath"] = path.Replace(Path.DirectorySeparatorChar, '|').Replace(Path.VolumeSeparatorChar, '^');
+
+            var qualityProfiles = _qualityProvider.GetAllProfiles();
+            ViewData["quality"] = new SelectList(
+                qualityProfiles,
+                "QualityProfileId",
+                "Name",
+                "HD");
+
             return PartialView("AddSeriesItem", suggestions);
 
         }
@@ -111,7 +112,7 @@ namespace NzbDrone.Web.Controllers
                 Data = suggestions
             };
         }
-        
+
         public SelectList GetSuggestionList(string searchString)
         {
             var dataVal = _tvDbProvider.SearchSeries(searchString);

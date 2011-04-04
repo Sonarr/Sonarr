@@ -8,10 +8,17 @@ body
 {
     padding: 0;
     background: #191919 url(images/img07.jpg) no-repeat right top;
-    font-family: "Segoe UI" , Tahoma, Geneva, sans-serif;
+    font-family: "Segoe UI" , "Segoe UI Light" , Tahoma, Geneva, sans-serif;
     font-size: 13px;
     color: #3C3C3C;
     background-attachment: fixed;
+}
+
+fieldset
+{
+    border-style: solid;
+    border-color: #065EFE;
+    border-width: 1px;
 }
 
 h1
@@ -138,7 +145,8 @@ hr
 
 #logo
 {
-    font-family: Segoe UI Light, Tahoma, Geneva, sans-serif;
+    font-family: "Segoe UI Light" , "Segoe UI" , Tahoma, Geneva, sans-serif;
+    font-weight: 100;
     height: 135px;
     background: url(images/img03.jpg) no-repeat left top;
     font-size: 90px;
@@ -159,6 +167,11 @@ hr
 {
     border-bottom: 1px solid #EEEEEE;
     border-color: #EEEEEE;
+}
+
+.t-combobox, .t-dropdown
+{
+    vertical-align: middle;
 }
 
 /* Footer */
@@ -216,7 +229,7 @@ hr
 
 
 
-input[type="button"], input[type="submit"], input[type="reset"], input[type="file"]::-webkit-file-upload-button, button
+button, input[type="button"], input[type="submit"], input[type="reset"]
 {
     color: white;
     background-color: #065EFE;
@@ -228,7 +241,8 @@ input[type="button"], input[type="submit"], input[type="reset"], input[type="fil
 
 .listButton
 {
-    padding: 1px 10px 2px 10px;
+    padding: 2px 10px 2px 10px;
+    vertical-align: middle;
     margin: 0px;
 }
 
