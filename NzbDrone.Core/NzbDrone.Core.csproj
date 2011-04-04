@@ -173,8 +173,9 @@
     <Compile Include="Model\SceneNameModel.cs" />
     <Compile Include="Model\SeasonParseResult.cs" />
     <Compile Include="Model\UpcomingEpisodesModel.cs" />
-    <Compile Include="Providers\FeedProviderBase.cs" />
+    <Compile Include="Providers\Feed\FeedProviderBase.cs" />
     <Compile Include="Providers\ExternalNotificationProvider.cs" />
+    <Compile Include="Providers\Feed\NzbsOrgFeedProvider.cs" />
     <Compile Include="Providers\HistoryProvider.cs" />
     <Compile Include="Providers\IBacklogProvider.cs" />
     <Compile Include="Providers\IExtenalNotificationProvider.cs" />
@@ -275,7 +276,6 @@
     <Content Include="Libraries\System.Data.SQLite.XML" />
     <Content Include="Libraries\TvdbLib.dll" />
     <Content Include="Libraries\TvdbLib.XML" />
-    <Content Include="Libraries\UPnP.dll" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Libraries\nlog.xsd">

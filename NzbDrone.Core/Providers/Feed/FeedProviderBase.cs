@@ -2,21 +2,24 @@
 using System.Xml;
 using NLog;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Providers.Core;
 
-namespace NzbDrone.Core.Providers
+namespace NzbDrone.Core.Providers.Feed
 {
     abstract class FeedProviderBase
     {
-        private readonly ISeriesProvider _seriesProvider;
-        private readonly ISeasonProvider _seasonProvider;
-        private readonly IEpisodeProvider _episodeProvider;
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        protected readonly ISeriesProvider _seriesProvider;
+        protected readonly ISeasonProvider _seasonProvider;
+        protected readonly IEpisodeProvider _episodeProvider;
+        protected readonly IConfigProvider _configProvider;
+        protected static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        protected FeedProviderBase(ISeriesProvider seriesProvider, ISeasonProvider seasonProvider, IEpisodeProvider episodeProvider)
+        protected FeedProviderBase(ISeriesProvider seriesProvider, ISeasonProvider seasonProvider, IEpisodeProvider episodeProvider, IConfigProvider configProvider)
         {
             _seriesProvider = seriesProvider;
             _seasonProvider = seasonProvider;
             _episodeProvider = episodeProvider;
+            _configProvider = configProvider;
         }
 
 
@@ -72,6 +75,7 @@ namespace NzbDrone.Core.Providers
 
             foreach (var url in URL)
             {
+                Logger.Debug("Downloading RSS " + url);
                 var feed = SyndicationFeed.Load(XmlReader.Create(url)).Items;
 
                 foreach (var item in feed)
@@ -85,6 +89,8 @@ namespace NzbDrone.Core.Providers
 
         private void ProcessItem(SyndicationItem feedItem)
         {
+            Logger.Info("Processing RSS feed item " + feedItem.Title);
+
             var parseResult = ParseFeed(feedItem);
 
             if (!_seriesProvider.IsMonitored(parseResult.SeriesId))
@@ -106,8 +112,6 @@ namespace NzbDrone.Core.Providers
             {
                 Logger.Debug("Episode {0} is not needed. skipping.", parseResult);
             }
-
-
         }
     }
 
