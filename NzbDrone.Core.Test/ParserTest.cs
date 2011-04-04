@@ -13,6 +13,7 @@ namespace NzbDrone.Core.Test
     public class ParserTest
     {
         [Test]
+        [Row("Sonny.With.a.Chance.S02E15", 2,15)]
         [Row("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD", 3, 1)]
         [Row("Two.and.a.Half.Me.103.720p.HDTV.X264-DIMENSION", 1, 3)]
         [Row("Two.and.a.Half.Me.113.720p.HDTV.X264-DIMENSION", 1, 13)]
@@ -30,9 +31,8 @@ namespace NzbDrone.Core.Test
         public void episode_parse(string path, int season, int episode)
         {
             var result = Parser.ParseEpisodeInfo(path);
-            Assert.Count(1, result);
-            Assert.AreEqual(season, result[0].SeasonNumber);
-            Assert.AreEqual(episode, result[0].EpisodeNumber);
+            Assert.AreEqual(season, result.SeasonNumber);
+            Assert.AreEqual(episode, result.Episodes[0]);
         }
 
         [Test]
@@ -49,15 +49,15 @@ namespace NzbDrone.Core.Test
         [Row("Sonny.With.a.Chance.S02E15.xvid", QualityTypes.TV)]
         [Row("Sonny.With.a.Chance.S02E15.divx", QualityTypes.TV)]
         [Row("Sonny.With.a.Chance.S02E15", QualityTypes.Unknown)]
-        [Row("S01E04 - So Old - Playdate - 720p TV.mkv", QualityTypes.HDTV)]
-        [Row("S22E03 - MoneyBART - HD TV.mkv", QualityTypes.HDTV)]
-        [Row("S01E03 - Come Fly With Me - 720p BluRay.mkv", QualityTypes.Bluray720)]
-        [Row("S01E03 - Come Fly With Me - 1080p BluRay.mkv", QualityTypes.Bluray1080)]
-        [Row("S11E06 - D-Yikes! - 720p WEB-DL.mkv", QualityTypes.WEBDL)]
+        [Row("Chuck - S01E04 - So Old - Playdate - 720p TV.mkv", QualityTypes.HDTV)]
+        [Row("Chuck - S22E03 - MoneyBART - HD TV.mkv", QualityTypes.HDTV)]
+        [Row("Chuck - S01E03 - Come Fly With Me - 720p BluRay.mkv", QualityTypes.Bluray720)]
+        [Row("Chuck - S01E03 - Come Fly With Me - 1080p BluRay.mkv", QualityTypes.Bluray1080)]
+        [Row("Chuck - S11E06 - D-Yikes! - 720p WEB-DL.mkv", QualityTypes.WEBDL)]
         [Row("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD.avi", QualityTypes.BDRip)]
         public void quality_parse(string path, object quality)
         {
-            var result = Parser.ParseQuality(path);
+            var result = Parser.ParseEpisodeInfo(path).Quality;
             Assert.AreEqual(quality, result);
         }
 

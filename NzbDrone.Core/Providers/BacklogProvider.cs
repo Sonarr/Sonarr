@@ -269,8 +269,6 @@ namespace NzbDrone.Core.Providers
                 nzb.TitleFix = String.Empty;
                 nzb.TitleFix = String.Format("{0} [{1}]", nzb.TitleFix, nzb.Quality); //Add Quality to the titleFix
 
-                //Check that we want this quality
-                var quality = Parser.ParseQuality(nzb.Title);
             }
 
             catch (Exception ex)

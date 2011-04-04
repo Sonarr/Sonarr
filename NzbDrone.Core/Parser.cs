@@ -38,9 +38,7 @@ namespace NzbDrone.Core
         {
             Logger.Trace("Parsing string '{0}'", title);
 
-            var result = new EpisodeParseResult();
-
-            foreach (var regex in ReportTitleRegex)
+           foreach (var regex in ReportTitleRegex)
             {
                 var match = regex.Matches(title);
 
@@ -69,13 +67,15 @@ namespace NzbDrone.Core
 
                     }
 
+                    parsedEpisode.Quality = ParseQuality(title);
+
                     Logger.Trace("Episode Parsed. {0}", parsedEpisode);
 
-                    break; //Break out of the for loop, we don't want to process every REGEX for each item otherwise we'll get duplicates
+                    return parsedEpisode;
                 }
             }
 
-            return result;
+            return null;
         }
 
         /// <summary>
@@ -112,6 +112,7 @@ namespace NzbDrone.Core
                     };
 
 
+                    result.Quality = ParseQuality(title);
 
                     Logger.Trace("Season Parsed. {0}", result);
                     return result;
@@ -163,7 +164,7 @@ namespace NzbDrone.Core
             return title.ToLower().Contains("proper");
         }
 
-        internal static QualityTypes ParseQuality(string name)
+        private static QualityTypes ParseQuality(string name)
         {
             Logger.Trace("Trying to parse quality for {0}", name);
 

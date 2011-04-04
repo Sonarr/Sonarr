@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using NzbDrone.Core.Repository.Quality;
 
 namespace NzbDrone.Core.Model
 {
@@ -9,6 +10,8 @@ namespace NzbDrone.Core.Model
         internal int SeasonNumber { get; set; }
         internal List<int> Episodes { get; set; }
         internal int Year { get; set; }
+
+        public QualityTypes Quality { get; set; }
 
         public override string ToString()
         {

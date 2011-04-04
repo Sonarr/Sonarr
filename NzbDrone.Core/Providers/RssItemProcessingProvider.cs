@@ -135,7 +135,7 @@ namespace NzbDrone.Core.Providers
             Logger.Debug("Show is being watched: {0}", series.Title);
 
             nzb.Proper = Parser.ParseProper(nzb.Title);
-            nzb.Quality = Parser.ParseQuality(nzb.Title);
+            nzb.Quality = episodeParseResults.Quality;
 
             //Loop through the list of the episodeParseResults to ensure that all the episodes are needed
             foreach (var episode in episodeParseResults.Episodes)
@@ -221,7 +221,7 @@ namespace NzbDrone.Core.Providers
             Logger.Debug("Show is being watched: {0}", series.Title);
 
             nzb.Proper = Parser.ParseProper(nzb.Title);
-            nzb.Quality = Parser.ParseQuality(nzb.Title);
+            nzb.Quality = seasonParseResult.Quality;
 
             if (!_seriesProvider.QualityWanted(series.SeriesId, nzb.Quality))
             {
