@@ -6,6 +6,7 @@ using System.Text;
 using System.Xml.Linq;
 using NLog;
 using NzbDrone.Core.Helpers;
+using NzbDrone.Core.Providers.Core;
 
 namespace NzbDrone.Core.Providers
 {

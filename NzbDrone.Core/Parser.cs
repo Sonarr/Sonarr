@@ -34,11 +34,11 @@ namespace NzbDrone.Core
         /// </summary>
         /// <param name="title">Title of the report</param>
         /// <returns>List of episodes contained to the post</returns>
-        internal static List<EpisodeParseResult> ParseEpisodeInfo(string title)
+        internal static EpisodeParseResult ParseEpisodeInfo(string title)
         {
             Logger.Trace("Parsing string '{0}'", title);
 
-            var result = new List<EpisodeParseResult>();
+            var result = new EpisodeParseResult();
 
             foreach (var regex in ReportTitleRegex)
             {
@@ -55,22 +55,22 @@ namespace NzbDrone.Core
                         year = 0;
                     }
 
+                    var parsedEpisode = new EpisodeParseResult
+                    {
+                        SeriesTitle = seriesName,
+                        SeasonNumber = Convert.ToInt32(match[0].Groups["season"].Value),
+                        Year = year,
+                        Episodes = new List<int>()
+                    };
+
                     foreach (Match matchGroup in match)
                     {
+                        parsedEpisode.Episodes.Add(Convert.ToInt32(matchGroup.Groups["episode"].Value));
 
-                        var parsedEpisode = new EpisodeParseResult
-                                                {
-                                                    SeriesTitle = seriesName,
-                                                    SeasonNumber = Convert.ToInt32(matchGroup.Groups["season"].Value),
-                                                    EpisodeNumber = Convert.ToInt32(matchGroup.Groups["episode"].Value),
-                                                    Year = year
-                                                };
-
-
-                        result.Add(parsedEpisode);
-
-                        Logger.Trace("Episode Parsed. {0}", parsedEpisode);
                     }
+
+                    Logger.Trace("Episode Parsed. {0}", parsedEpisode);
+
                     break; //Break out of the for loop, we don't want to process every REGEX for each item otherwise we'll get duplicates
                 }
             }
@@ -111,7 +111,7 @@ namespace NzbDrone.Core
                         Year = year
                     };
 
-                    
+
 
                     Logger.Trace("Season Parsed. {0}", result);
                     return result;
@@ -257,14 +257,11 @@ namespace NzbDrone.Core
 
         public static NzbInfoModel ParseNzbInfo(FeedInfoModel feed, RssItem item)
         {
-            NzbSiteModel site = NzbSiteModel.Parse(feed.Url.ToLower());
+
             return new NzbInfoModel
             {
-                Id = site.ParseId(item.Link.ToString()),
                 Title = item.Title,
-                Site = site,
-                Link = item.Link,
-                Description = item.Description
+                Link = item.Link
             };
         }
     }

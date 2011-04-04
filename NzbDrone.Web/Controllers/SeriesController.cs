@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Web.Models;

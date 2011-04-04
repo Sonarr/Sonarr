@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using SubSonic.Repository;
 
@@ -76,18 +77,17 @@ namespace NzbDrone.Core.Providers
                 //Stores the list of episodes to add to the EpisodeFile
                 var episodes = new List<Episode>();
 
-                foreach (var parsedEpisode in episodesInFile)
+                foreach (var episodeNumber in episodesInFile.Episodes)
                 {
-                    EpisodeParseResult closureEpisode = parsedEpisode;
-                    var episode = _episodeProvider.GetEpisode(series.SeriesId, closureEpisode.SeasonNumber,
-                                                              closureEpisode.EpisodeNumber);
+                    var episode = _episodeProvider.GetEpisode(series.SeriesId, episodesInFile.SeasonNumber, episodeNumber);
+
                     if (episode != null)
                     {
                         episodes.Add(episode);
                     }
 
                     else
-                        Logger.Warn("Unable to find Series:{0} Season:{1} Episode:{2} in the database. File:{3}", series.Title, closureEpisode.SeasonNumber, closureEpisode.EpisodeNumber, filePath);
+                        Logger.Warn("Unable to find Series:{0} Season:{1} Episode:{2} in the database. File:{3}", series.Title, episodesInFile.SeasonNumber, episodeNumber, filePath);
                 }
 
                 //Return null if no Episodes exist in the DB for the parsed episodes from file

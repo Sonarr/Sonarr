@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using NLog;
 using NzbDrone.Core.Model;
 using Rss;
 
-namespace NzbDrone.Core.Providers
+namespace NzbDrone.Core.Providers.Core
 {
     public class RssProvider : IRssProvider
     {

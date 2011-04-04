@@ -7,6 +7,7 @@ using System.Threading;
 using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
+using NzbDrone.Core.Providers.Core;
 
 namespace NzbDrone.Core.Providers
 {

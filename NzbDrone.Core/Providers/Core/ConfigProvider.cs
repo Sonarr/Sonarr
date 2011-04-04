@@ -3,7 +3,7 @@ using NLog;
 using NzbDrone.Core.Repository;
 using SubSonic.Repository;
 
-namespace NzbDrone.Core.Providers
+namespace NzbDrone.Core.Providers.Core
 {
     public class ConfigProvider : IConfigProvider
     {

@@ -8,6 +8,7 @@ using NLog;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
+using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using Rss;
 

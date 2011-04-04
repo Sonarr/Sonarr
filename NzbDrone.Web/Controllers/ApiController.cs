@@ -7,6 +7,7 @@ using System.Xml.Linq;
 using NLog;
 using NzbDrone.Core;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Providers.Core;
 
 namespace NzbDrone.Web.Controllers
 {

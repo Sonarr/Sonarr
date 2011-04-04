@@ -6,6 +6,7 @@ using System.Text;
 using NLog;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Providers
@@ -23,7 +24,7 @@ namespace NzbDrone.Core.Providers
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public RssItemProcessingProvider(ISeriesProvider seriesProvider, ISeasonProvider seasonProvider, 
+        public RssItemProcessingProvider(ISeriesProvider seriesProvider, ISeasonProvider seasonProvider,
             IEpisodeProvider episodeProvider, IHistoryProvider historyProvider,
             IDownloadProvider sabProvider, IConfigProvider configProvider,
             IHttpProvider httpProvider, IDiskProvider diskProvider)
@@ -53,7 +54,7 @@ namespace NzbDrone.Core.Providers
 
                 var episodeParseResults = Parser.ParseEpisodeInfo(nzb.Title);
 
-                if (episodeParseResults.Count() > 0)
+                if (episodeParseResults.Episodes.Count() > 0)
                 {
                     ProcessStandardItem(nzb, indexer, episodeParseResults);
                     return;
@@ -78,7 +79,7 @@ namespace NzbDrone.Core.Providers
             }
         }
 
-        public string GetTitleFix(List<EpisodeParseResult> episodes, int seriesId)
+        public string GetTitleFix(EpisodeParseResult episodes, int seriesId)
         {
             var series = _seriesProvider.GetSeries(seriesId);
 
@@ -86,16 +87,16 @@ namespace NzbDrone.Core.Providers
             string episodeNumbers = String.Empty;
             string episodeTitles = String.Empty;
 
-            foreach (var episode in episodes)
+            foreach (var episode in episodes.Episodes)
             {
-                var episodeInDb = _episodeProvider.GetEpisode(seriesId, episode.SeasonNumber, episode.EpisodeNumber);
+                var episodeInDb = _episodeProvider.GetEpisode(seriesId, episodes.SeasonNumber, episode);
 
                 if (episodeInDb == null)
                 {
                     //Todo: Handle this some other way?
                     Logger.Debug("Episode Not found in Database, Fake it...");
                     //return String.Format("{0} - {1:00}x{2}", series.Title, episode.SeasonNumber, episode.EpisodeNumber);
-                    episodeInDb = new Episode { EpisodeNumber = episode.EpisodeNumber, Title = "TBA" };
+                    episodeInDb = new Episode { EpisodeNumber = episode, Title = "TBA" };
                 }
 
                 seasonNumber = episodeInDb.SeasonNumber;
@@ -110,23 +111,23 @@ namespace NzbDrone.Core.Providers
 
         #endregion
 
-        private void ProcessStandardItem(NzbInfoModel nzb, Indexer indexer, List<EpisodeParseResult> episodeParseResults)
+        private void ProcessStandardItem(NzbInfoModel nzb, Indexer indexer, EpisodeParseResult episodeParseResults)
         {
             //Will try to match via NormalizeTitle, if that fails it will look for a scene name and do a lookup for your shows
-            var series = _seriesProvider.FindSeries(episodeParseResults[0].SeriesTitle);
+            var series = _seriesProvider.FindSeries(episodeParseResults.SeriesTitle);
 
             if (series == null)
             {
                 //If we weren't able to find a title using the clean name, lets try again looking for a scene name
 
-                var sceneId = SceneNameHelper.FindByName(episodeParseResults[0].SeriesTitle);
+                var sceneId = SceneNameHelper.FindByName(episodeParseResults.SeriesTitle);
 
                 if (sceneId != 0)
                     series = _seriesProvider.GetSeries(sceneId);
 
                 if (series == null)
                 {
-                    Logger.Debug("Show is not being watched: {0}", episodeParseResults[0].SeriesTitle);
+                    Logger.Debug("Show is not being watched: {0}", episodeParseResults.SeriesTitle);
                     return;
                 }
             }
@@ -137,7 +138,7 @@ namespace NzbDrone.Core.Providers
             nzb.Quality = Parser.ParseQuality(nzb.Title);
 
             //Loop through the list of the episodeParseResults to ensure that all the episodes are needed
-            foreach (var episode in episodeParseResults)
+            foreach (var episode in episodeParseResults.Episodes)
             {
                 //IsEpisodeWanted?
                 var episodeModel = new EpisodeModel();
@@ -145,13 +146,13 @@ namespace NzbDrone.Core.Providers
                 episodeModel.SeriesId = series.SeriesId;
                 episodeModel.SeriesTitle = series.Title;
                 episodeModel.Quality = nzb.Quality;
-                episodeModel.SeasonNumber = episode.SeasonNumber;
-                episodeModel.EpisodeNumber = episode.EpisodeNumber;
+                episodeModel.SeasonNumber = episodeParseResults.SeasonNumber;
+                episodeModel.EpisodeNumber = episode;
 
                 if (!_episodeProvider.IsNeeded(episodeModel))
                     return;
 
-                var titleFix = GetTitleFix(new List<EpisodeParseResult> { episode }, episodeModel.SeriesId);
+                var titleFix = GetTitleFix(episodeParseResults, episodeModel.SeriesId);
                 titleFix = String.Format("{0} [{1}]", titleFix, nzb.Quality); //Add Quality to the titleFix
 
                 //If it is a PROPER we want to put PROPER in the titleFix
@@ -172,15 +173,15 @@ namespace NzbDrone.Core.Providers
 
             if (Convert.ToBoolean(_configProvider.GetValue("UseBlackHole", true, true)))
             {
-                if (DownloadNzb(nzb))
-                    AddToHistory(episodeParseResults, series, nzb, indexer);
+                //if (DownloadNzb(nzb))
+                    //AddToHistory(episodeParseResults,  nzb, indexer);
             }
-            
+
             //Send it to SABnzbd
             else
             {
                 //Only need to do this check if it contains more than one episode (because we already checked individually before)
-                if (episodeParseResults.Count > 1)
+                if (episodeParseResults.Episodes.Count > 1)
                 {
                     if (_sabProvider.IsInQueue(nzb.TitleFix))
                         return;
@@ -188,15 +189,11 @@ namespace NzbDrone.Core.Providers
 
                 if (indexer.IndexerName != "Newzbin")
                 {
-                    if (_sabProvider.AddByUrl(nzb.Link.ToString(), nzb.TitleFix))
-                        AddToHistory(episodeParseResults, series, nzb, indexer);
+                    //if (_sabProvider.AddByUrl(nzb.Link.ToString(), nzb.TitleFix))
+                        //AddToHistory(_episodeProvider.GetEpisode(episodeParseResults.), series, nzb, indexer);
                 }
-                
-                else
-                {
-                    if (_sabProvider.AddById(nzb.Id, nzb.TitleFix))
-                        AddToHistory(episodeParseResults, series, nzb, indexer);
-                }
+
+
             }
         }
 
@@ -285,8 +282,7 @@ namespace NzbDrone.Core.Providers
                 {
                     if (DownloadNzb(nzb))
                     {
-                        var episodeParseResults = GetEpisodeParseList(season.Episodes);
-                        AddToHistory(episodeParseResults, series, nzb, indexer);
+                        AddToHistory(season.Episodes, nzb, indexer);
                     }
                 }
 
@@ -300,54 +296,26 @@ namespace NzbDrone.Core.Providers
                     {
                         if (_sabProvider.AddByUrl(nzb.Link.ToString(), nzb.TitleFix))
                         {
-                            var episodeParseResults = GetEpisodeParseList(season.Episodes);
-                            AddToHistory(episodeParseResults, series, nzb, indexer);
+                            AddToHistory(season.Episodes, nzb, indexer);
                         }
-                            
+
                     }
 
-                    else
-                    {
-                        if (_sabProvider.AddById(nzb.Id, nzb.TitleFix))
-                        {
-                            var episodeParseResults = GetEpisodeParseList(season.Episodes);
-                            AddToHistory(episodeParseResults, series, nzb, indexer);
-                        }
-                    }
                 }
             }
 
             //Possibly grab the whole season if a certain % of the season is missing, rather than for 1 or 2 episodes    
         }
 
-        private List<EpisodeParseResult> GetEpisodeParseList(List<Episode> episodes)
+        private void AddToHistory(IEnumerable<Episode> episodes, NzbInfoModel nzb, Indexer indexer)
         {
-            var episodeParseResults = new List<EpisodeParseResult>();
-            episodeParseResults.AddRange(
-                episodes.Select(
-                    e =>
-                    new EpisodeParseResult { EpisodeNumber = e.EpisodeNumber, SeasonNumber = e.SeasonNumber }));
+            //Set episode status to grabbed
+            //episode.Status = EpisodeStatusType.Grabbed;
 
-            return episodeParseResults;
-        }
+            //Add to History
 
-        private void AddToHistory(List<EpisodeParseResult> episodeParseResults, Series series, NzbInfoModel nzb, Indexer indexer)
-        {
-            //We need to loop through the episodeParseResults so each episode in the NZB is properly handled
-            foreach (var epr in episodeParseResults)
+            foreach (var episode in episodes)
             {
-                var episode = _episodeProvider.GetEpisode(series.SeriesId, epr.SeasonNumber, epr.EpisodeNumber);
-
-                if (episode == null)
-                {
-                    //Not sure how we got this far, so lets throw an exception
-                    throw new ArgumentOutOfRangeException();
-                }
-
-                //Set episode status to grabbed
-                episode.Status = EpisodeStatusType.Grabbed;
-
-                //Add to History
                 var history = new History();
                 history.Date = DateTime.Now;
                 history.EpisodeId = episode.EpisodeId;
@@ -376,7 +344,7 @@ namespace NzbDrone.Core.Providers
                 var filename = path + Path.DirectorySeparatorChar + nzb.TitleFix + ".nzb";
 
                 if (_httpProvider.DownloadFile(nzb.Link.ToString(), filename))
-                    return true; 
+                    return true;
             }
 
             Logger.Error("Blackhole Directory doesn't exist, not saving NZB: '{0}'", path);

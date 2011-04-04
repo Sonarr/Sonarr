@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using NzbDrone.Core.Helpers;
+using NzbDrone.Core.Providers.Core;
 
 namespace NzbDrone.Core.Providers
 {

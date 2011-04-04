@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using NLog;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Providers.Core;
 using SubSonic.Repository;
 using NzbDrone.Core.Repository;
 

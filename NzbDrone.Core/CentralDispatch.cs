@@ -8,6 +8,7 @@ using NLog.Config;
 using NLog.Targets;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.Fakes;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;

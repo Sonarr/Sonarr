@@ -7,6 +7,7 @@ using System.Threading;
 using NLog;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Providers

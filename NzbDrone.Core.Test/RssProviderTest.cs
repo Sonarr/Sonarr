@@ -8,6 +8,7 @@ using MbUnit.Framework.ContractVerifiers;
 using Moq;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Providers.Core;
 using Rss;
 
 namespace NzbDrone.Core.Test

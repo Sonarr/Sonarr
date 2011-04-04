@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Providers.Core;
 using NzbDrone.Web.Models;
 
 namespace NzbDrone.Web.Controllers
