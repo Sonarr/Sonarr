@@ -66,9 +66,9 @@
                                       .HtmlAttributes(new { style = "text-align:center" });
 
                                   columns.Bound(c => c.EpisodeNumber).Width(10).Title("Episode");
-                                  columns.Bound(c => c.Title).Title("Title");
-                                  columns.Bound(c => c.AirDate).Format("{0:d}").Width(0);
-                                  columns.Bound(c => c.Quality);
+                                  columns.Bound(c => c.Title).Title("Title").Width(300);
+                                  columns.Bound(c => c.AirDate).Format("{0:d}").Width(10);
+                                  columns.Bound(c => c.Quality).Width(10);
                                   columns.Bound(c => c.Path);
                               })
                 //.DetailView(detailView => detailView.Template(e => Html.RenderPartial("EpisodeDetail", e)))

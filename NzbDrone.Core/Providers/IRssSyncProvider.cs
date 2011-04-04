@@ -9,4 +9,12 @@ namespace NzbDrone.Core.Providers
     {
         void Begin();
     }
+
+    class RssSyncProvider : IRssSyncProvider
+    {
+        public void Begin()
+        {
+            
+        }
+    }
 }
