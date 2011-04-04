@@ -10,10 +10,7 @@ namespace NzbDrone.Core.Model
     public class NzbInfoModel
     {
         public string Title { get; set; }
-        public string TitleFix { get; set; }
         public Uri Link { get; set; }
-        public bool Proper { get; set; }
-        public QualityTypes Quality { get; set; }
 
         public bool IsPassworded()
         {

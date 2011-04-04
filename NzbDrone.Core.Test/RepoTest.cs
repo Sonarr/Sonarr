@@ -65,7 +65,6 @@ namespace NzbDrone.Core.Test
         public void enteties_toString()
         {
             Console.WriteLine(new Episode().ToString());
-            Console.WriteLine(new EpisodeModel().ToString());
         }
 
         [Test]

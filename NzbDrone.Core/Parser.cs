@@ -8,7 +8,6 @@ using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository.Quality;
-using Rss;
 
 namespace NzbDrone.Core
 {
@@ -38,7 +37,7 @@ namespace NzbDrone.Core
         {
             Logger.Trace("Parsing string '{0}'", title);
 
-           foreach (var regex in ReportTitleRegex)
+            foreach (var regex in ReportTitleRegex)
             {
                 var match = regex.Matches(title);
 
@@ -55,6 +54,7 @@ namespace NzbDrone.Core
 
                     var parsedEpisode = new EpisodeParseResult
                     {
+                        Proper = title.ToLower().Contains("proper"),
                         SeriesTitle = seriesName,
                         SeasonNumber = Convert.ToInt32(match[0].Groups["season"].Value),
                         Year = year,
@@ -256,14 +256,6 @@ namespace NzbDrone.Core
             return info.FullName.Trim('/', '\\', ' ');
         }
 
-        public static NzbInfoModel ParseNzbInfo(FeedInfoModel feed, RssItem item)
-        {
-
-            return new NzbInfoModel
-            {
-                Title = item.Title,
-                Link = item.Link
-            };
-        }
+      
     }
 }
