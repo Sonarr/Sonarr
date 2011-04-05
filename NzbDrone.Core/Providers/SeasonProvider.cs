@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace NzbDrone.Core.Providers
 {
-    class SeasonProvider : ISeasonProvider
+    public class SeasonProvider : ISeasonProvider
     {
         private readonly IRepository _sonicRepo;
         private readonly ISeriesProvider _seriesProvider;

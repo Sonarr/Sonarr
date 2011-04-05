@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Ninject;
 using NLog;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
@@ -22,7 +23,6 @@ namespace NzbDrone.Core.Providers
         private readonly IRepository _sonioRepo;
         private readonly ITvDbProvider _tvDb;
         private readonly IQualityProvider _quality;
-
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public SeriesProvider(IConfigProvider configProvider,
