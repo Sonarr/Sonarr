@@ -39,23 +39,17 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\NzbDrone.Core\Libraries\Castle.Core.dll</HintPath>
     </Reference>
-    <Reference Include="FizzWare.NBuilder, Version=2.1.9.0, Culture=neutral, PublicKeyToken=5651b03e12e42c12, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libs\FizzWare.NBuilder.dll</HintPath>
+    <Reference Include="FizzWare.NBuilder">
+      <HintPath>..\packages\NBuilder.2.3.0.0\lib\FizzWare.NBuilder.dll</HintPath>
     </Reference>
     <Reference Include="Gallio, Version=3.2.0.0, Culture=neutral, PublicKeyToken=eb9cfa67ee6ab36e, processorArchitecture=MSIL" />
     <Reference Include="MbUnit, Version=3.2.0.0, Culture=neutral, PublicKeyToken=eb9cfa67ee6ab36e, processorArchitecture=MSIL" />
     <Reference Include="Moq, Version=4.0.10827.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL" />
-    <Reference Include="Ninject, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Ninject">
       <HintPath>..\packages\Ninject.2.2.1.0\lib\.NetFramework 4.0\Ninject.dll</HintPath>
     </Reference>
     <Reference Include="NLog">
       <HintPath>..\NzbDrone.Core\Libraries\NLog.dll</HintPath>
-    </Reference>
-    <Reference Include="RSS.NET, Version=0.86.3627.40828, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libs\RSS.NET.dll</HintPath>
     </Reference>
     <Reference Include="SubSonic.Core, Version=3.0.0.3, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -106,7 +100,6 @@
     <Content Include="Files\RSS\nzbsorg.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Libs\FizzWare.NBuilder.dll" />
     <Content Include="Files\Queue.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -118,8 +111,6 @@
     </Content>
     <Content Include="Libs\Moq.dll" />
     <Content Include="Libs\Moq.xml" />
-    <Content Include="Libs\RSS.NET.dll" />
-    <Content Include="Libs\RSS.NET.XML" />
     <Content Include="Libs\System.Data.SQLite.DLL">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
