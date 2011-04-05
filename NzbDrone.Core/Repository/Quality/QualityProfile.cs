@@ -36,6 +36,8 @@ namespace NzbDrone.Core.Repository.Quality
             get
             {
                 string result = String.Empty;
+                if (Allowed == null) return result;
+                
                 foreach (var q in Allowed)
                 {
                     result += (int)q + "|";

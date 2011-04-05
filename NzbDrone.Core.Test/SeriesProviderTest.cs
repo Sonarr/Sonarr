@@ -12,6 +12,7 @@ using Ninject;
 using Ninject.Moq;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
+using NzbDrone.Core.Repository.Quality;
 using SubSonic.Repository;
 using TvdbLib.Data;
 using System.Linq;
@@ -96,26 +97,69 @@ namespace NzbDrone.Core.Test
             //Assert.AreEqual(title, result, postTitle);
         }
 
-        //[Test]
-        //public void get_unmapped()
-        //{
-        //    //Setup
-        //    var kernel = new MockingKernel();
+        [Test]
+        public void Test_is_monitored()
+        {
+            var kernel = new MockingKernel();
+            var repo = MockLib.GetEmptyRepository();
+            kernel.Bind<IRepository>().ToConstant(repo);
+            kernel.Bind<ISeriesProvider>().To<SeriesProvider>();
+
+            repo.Add(Builder<Series>.CreateNew()
+                .With(c => c.Monitored = true)
+                .With(c => c.SeriesId = 12)
+                .Build());
+
+            repo.Add(Builder<Series>.CreateNew()
+            .With(c => c.Monitored = false)
+            .With(c => c.SeriesId = 11)
+            .Build());
 
 
-        //    kernel.Bind<ISeriesProvider>().To<SeriesProvider>();
-        //    kernel.Bind<IDiskProvider>().ToConstant(MockLib.GetStandardDisk(0, 0));
-        //    kernel.Bind<IConfigProvider>().ToConstant(MockLib.StandardConfig);
-
-        //    var seriesController = kernel.Get<ISeriesProvider>();
-
-        //    //Act
-        //    var unmappedFolder = seriesController.GetUnmappedFolders();
-
-        //    //Assert
-        //    Assert.AreElementsEqualIgnoringOrder(MockLib.StandardSeries, unmappedFolder.Values);
-        //}
+            //Act, Assert
+            var provider = kernel.Get<ISeriesProvider>();
+            Assert.IsTrue(provider.IsMonitored(12));
+            Assert.IsFalse(provider.IsMonitored(11));
+            Assert.IsFalse(provider.IsMonitored(1));
+        }
 
 
+
+        [Test]
+        [Row(12, QualityTypes.TV, true)]
+        [Row(12, QualityTypes.Unknown, false)]
+        [Row(12, QualityTypes.Bluray1080, false)]
+        [Row(12, QualityTypes.Bluray720, false)]
+        [Row(12, QualityTypes.HDTV, false)]
+        [Row(12, QualityTypes.WEBDL, false)]
+        public void QualityWanted(int seriesId, QualityTypes qualityTypes, Boolean result)
+        {
+            var kernel = new MockingKernel();
+            var repo = MockLib.GetEmptyRepository();
+            kernel.Bind<IRepository>().ToConstant(repo);
+            kernel.Bind<ISeriesProvider>().To<SeriesProvider>();
+
+            var quality = Builder<QualityProfile>.CreateNew()
+                .With(q => q.Allowed = new List<QualityTypes>() { QualityTypes.BDRip, QualityTypes.DVD, QualityTypes.TV })
+                .With(q => q.Cutoff = QualityTypes.DVD)
+                .Build();
+
+            var qualityProviderMock = new Mock<IQualityProvider>();
+            qualityProviderMock.Setup(c => c.Find(quality.QualityProfileId)).Returns(quality).Verifiable();
+            kernel.Bind<IQualityProvider>().ToConstant(qualityProviderMock.Object);
+
+
+            repo.Add(Builder<Series>.CreateNew()
+                .With(c => c.SeriesId = 12)
+                .With(c => c.QualityProfileId = quality.QualityProfileId)
+                .Build());
+
+            //Act
+            var needed = kernel.Get<ISeriesProvider>().QualityWanted(seriesId, qualityTypes);
+
+            Assert.AreEqual(result, needed);
+
+
+        }
     }
 }

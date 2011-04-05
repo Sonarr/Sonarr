@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Xml;
 using NLog;
 
 namespace NzbDrone.Core.Providers.Core
@@ -40,39 +41,43 @@ namespace NzbDrone.Core.Providers.Core
             return String.Empty;
         }
 
-        public bool DownloadFile(string request, string filename)
+        public void DownloadFile(string request, string filename)
         {
             try
             {
                 var webClient = new WebClient();
                 webClient.DownloadFile(request, filename);
-                return true;
+
             }
             catch (Exception ex)
             {
                 Logger.Warn("Failed to get response from: {0}", request);
                 Logger.TraceException(ex.Message, ex);
+                throw;
             }
 
-            return false;
+
         }
 
-        public bool DownloadFile(string request, string filename, string username, string password)
+        public void DownloadFile(string request, string filename, string username, string password)
         {
             try
             {
                 var webClient = new WebClient();
                 webClient.Credentials = new NetworkCredential(username, password);
                 webClient.DownloadFile(request, filename);
-                return true;
             }
             catch (Exception ex)
             {
                 Logger.Warn("Failed to get response from: {0}", request);
                 Logger.TraceException(ex.Message, ex);
+                throw;
             }
+        }
 
-            return false;
+        public XmlReader DownloadXml(string url)
+        {
+            return XmlReader.Create(url);
         }
     }
 }

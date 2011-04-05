@@ -12,14 +12,17 @@ namespace NzbDrone.Core.Providers.Feed
         protected readonly ISeasonProvider _seasonProvider;
         protected readonly IEpisodeProvider _episodeProvider;
         protected readonly IConfigProvider _configProvider;
+        private readonly IHttpProvider _httpProvider;
         protected static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        protected FeedProviderBase(ISeriesProvider seriesProvider, ISeasonProvider seasonProvider, IEpisodeProvider episodeProvider, IConfigProvider configProvider)
+        protected FeedProviderBase(ISeriesProvider seriesProvider, ISeasonProvider seasonProvider,
+            IEpisodeProvider episodeProvider, IConfigProvider configProvider, IHttpProvider httpProvider)
         {
             _seriesProvider = seriesProvider;
             _seasonProvider = seasonProvider;
             _episodeProvider = episodeProvider;
             _configProvider = configProvider;
+            _httpProvider = httpProvider;
         }
 
 
@@ -76,7 +79,7 @@ namespace NzbDrone.Core.Providers.Feed
             foreach (var url in URL)
             {
                 Logger.Debug("Downloading RSS " + url);
-                var feed = SyndicationFeed.Load(XmlReader.Create(url)).Items;
+                var feed = SyndicationFeed.Load(_httpProvider.DownloadXml(url)).Items;
 
                 foreach (var item in feed)
                 {

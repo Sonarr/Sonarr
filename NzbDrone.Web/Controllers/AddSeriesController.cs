@@ -121,7 +121,7 @@ namespace NzbDrone.Web.Controllers
             var dataVal = _tvDbProvider.SearchSeries(searchString);
             var bestResult = _tvDbProvider.GetBestMatch(dataVal.ToList(), searchString);
 
-            return new SelectList(dataVal, "Id", "SeriesName", bestResult);
+            return new SelectList(dataVal, "Id", "SeriesName", dataVal[0].Id);
         }
 
     }

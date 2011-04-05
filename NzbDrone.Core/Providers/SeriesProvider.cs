@@ -59,8 +59,8 @@ namespace NzbDrone.Core.Providers
         public bool QualityWanted(int seriesId, QualityTypes quality)
         {
             var series = _sonioRepo.Single<Series>(seriesId);
-            var profile = _quality.Find(series.QualityProfileId);
 
+            var profile = _quality.Find(series.QualityProfileId);
             return profile.Allowed.Contains(quality);
         }
 
