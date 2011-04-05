@@ -6,7 +6,7 @@ using NzbDrone.Core.Providers.Core;
 
 namespace NzbDrone.Core.Providers.Feed
 {
-    abstract class FeedProviderBase
+    public abstract class FeedProviderBase
     {
         protected readonly ISeriesProvider _seriesProvider;
         protected readonly ISeasonProvider _seasonProvider;
@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Providers.Feed
         private readonly IHttpProvider _httpProvider;
         protected static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        protected FeedProviderBase(ISeriesProvider seriesProvider, ISeasonProvider seasonProvider,
+        public FeedProviderBase(ISeriesProvider seriesProvider, ISeasonProvider seasonProvider,
             IEpisodeProvider episodeProvider, IConfigProvider configProvider, IHttpProvider httpProvider)
         {
             _seriesProvider = seriesProvider;
@@ -52,7 +52,9 @@ namespace NzbDrone.Core.Providers.Feed
         /// <returns>Detailed episode info</returns>
         protected EpisodeParseResult ParseFeed(SyndicationItem item)
         {
-            var episodeParseResult = Parser.ParseEpisodeInfo(item.Title.ToString());
+            var episodeParseResult = Parser.ParseEpisodeInfo(item.Title.Text);
+            if (episodeParseResult == null) return null;
+            
             var seriesInfo = _seriesProvider.FindSeries(episodeParseResult.SeriesTitle);
 
             if (seriesInfo != null)
@@ -92,28 +94,31 @@ namespace NzbDrone.Core.Providers.Feed
 
         private void ProcessItem(SyndicationItem feedItem)
         {
-            Logger.Info("Processing RSS feed item " + feedItem.Title);
+            Logger.Info("Processing RSS feed item " + feedItem.Title.Text);
 
             var parseResult = ParseFeed(feedItem);
 
-            if (!_seriesProvider.IsMonitored(parseResult.SeriesId))
+            if (parseResult != null)
             {
-                Logger.Debug("{0} is present in the DB but not tracked. skipping.", parseResult.SeriesTitle);
-            }
+                if (!_seriesProvider.IsMonitored(parseResult.SeriesId))
+                {
+                    Logger.Debug("{0} is present in the DB but not tracked. skipping.", parseResult.SeriesTitle);
+                }
 
-            if (!_seriesProvider.QualityWanted(parseResult.SeriesId, parseResult.Quality))
-            {
-                Logger.Debug("Post doesn't meet the quality requirements [{0}]. skipping.", parseResult.Quality);
-            }
+                if (!_seriesProvider.QualityWanted(parseResult.SeriesId, parseResult.Quality))
+                {
+                    Logger.Debug("Post doesn't meet the quality requirements [{0}]. skipping.", parseResult.Quality);
+                }
 
-            if (_seasonProvider.IsIgnored(parseResult.SeriesId, parseResult.SeasonNumber))
-            {
-                Logger.Debug("Season {0} is currently set to ignore. skipping.", parseResult.SeasonNumber);
-            }
+                if (_seasonProvider.IsIgnored(parseResult.SeriesId, parseResult.SeasonNumber))
+                {
+                    Logger.Debug("Season {0} is currently set to ignore. skipping.", parseResult.SeasonNumber);
+                }
 
-            if (!_episodeProvider.IsNeeded(parseResult))
-            {
-                Logger.Debug("Episode {0} is not needed. skipping.", parseResult);
+                if (!_episodeProvider.IsNeeded(parseResult))
+                {
+                    Logger.Debug("Episode {0} is not needed. skipping.", parseResult);
+                }
             }
         }
     }

@@ -67,12 +67,14 @@
       <HintPath>Libs\System.Data.SQLite.DLL</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml" />
     <Reference Include="TvdbLib">
       <HintPath>..\NzbDrone.Core\Libraries\TvdbLib.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RssProviderTest.cs" />
     <Compile Include="HistoryProviderTest.cs" />
     <Compile Include="MediaFileProviderTests.cs" />
     <Compile Include="DbConfigControllerTest.cs" />
@@ -99,6 +101,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Files\Feed.nzbmatrix.com.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\RSS\nzbsorg.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Libs\FizzWare.NBuilder.dll" />

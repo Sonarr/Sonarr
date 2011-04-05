@@ -1,0 +1,69 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.ServiceModel.Syndication;
+using System.Text;
+using System.Xml;
+using Gallio.Framework;
+using MbUnit.Framework;
+using MbUnit.Framework.ContractVerifiers;
+using Moq;
+using Ninject;
+using Ninject.Moq;
+using NzbDrone.Core.Providers;
+using NzbDrone.Core.Providers.Core;
+using NzbDrone.Core.Providers.Feed;
+using NzbDrone.Core.Repository;
+using SubSonic.Repository;
+
+namespace NzbDrone.Core.Test
+{
+    [TestFixture]
+    public class RssProviderTest
+    // ReSharper disable InconsistentNaming
+    {
+        [Test]
+
+        public void Download_feed_test()
+        {
+            var kernel = new MockingKernel();
+
+            var xmlReader = XmlReader.Create(File.OpenRead(".\\Files\\Rss\\nzbsorg.xml"));
+            var httpMock = new Mock<IHttpProvider>(MockBehavior.Strict);
+            httpMock.Setup(h =>
+                h.DownloadXml(It.Is<String>(c => c == "www.google.com" || c == "www.yahoo.com")))
+                .Returns(xmlReader);
+
+            kernel.Bind<IHttpProvider>().ToConstant(httpMock.Object);
+            kernel.Bind<FeedProviderBase>().To<MockFeedProvider>();
+
+            kernel.Get<FeedProviderBase>().Fetch();
+
+        }
+
+    }
+
+    public class MockFeedProvider : FeedProviderBase
+    {
+        public MockFeedProvider(ISeriesProvider seriesProvider, ISeasonProvider seasonProvider, IEpisodeProvider episodeProvider, IConfigProvider configProvider, IHttpProvider httpProvider)
+            : base(seriesProvider, seasonProvider, episodeProvider, configProvider, httpProvider)
+        {
+        }
+
+        protected override string[] URL
+        {
+            get { return new[] { "www.google.com" }; }
+        }
+
+        protected override string Name
+        {
+            get { return "MyName"; }
+        }
+
+        protected override string NzbDownloadUrl(SyndicationItem item)
+        {
+            return item.Links[0].Uri.ToString();
+        }
+    }
+}
