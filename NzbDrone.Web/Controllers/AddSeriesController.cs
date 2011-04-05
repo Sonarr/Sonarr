@@ -80,12 +80,14 @@ namespace NzbDrone.Web.Controllers
             ViewData["path"] = path;
             ViewData["javaPath"] = path.Replace(Path.DirectorySeparatorChar, '|').Replace(Path.VolumeSeparatorChar, '^');
 
+            var defaultQuality = _configProvider.DefaultQualityProfile;
             var qualityProfiles = _qualityProvider.GetAllProfiles();
+
             ViewData["quality"] = new SelectList(
                 qualityProfiles,
                 "QualityProfileId",
                 "Name",
-                "HD");
+                defaultQuality); ;
 
             return PartialView("AddSeriesItem", suggestions);
 
@@ -117,8 +119,9 @@ namespace NzbDrone.Web.Controllers
         public SelectList GetSuggestionList(string searchString)
         {
             var dataVal = _tvDbProvider.SearchSeries(searchString);
+            var bestResult = _tvDbProvider.GetBestMatch(dataVal.ToList(), searchString);
 
-            return new SelectList(dataVal, "Id", "SeriesName");
+            return new SelectList(dataVal, "Id", "SeriesName", bestResult);
         }
 
     }

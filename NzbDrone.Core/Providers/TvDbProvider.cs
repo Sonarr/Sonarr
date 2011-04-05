@@ -52,6 +52,23 @@ namespace NzbDrone.Core.Providers
             return null;
         }
 
+        public int GetBestMatch(List<TvdbSearchResult> searchResults, string title)
+        {
+            if (searchResults.Count == 0)
+                return 0;
+
+            foreach (var tvdbSearchResult in searchResults)
+            {
+                if (IsTitleMatch(tvdbSearchResult.SeriesName, title))
+                {
+                    Logger.Debug("Search for '{0}' was successful", title);
+                    return tvdbSearchResult.Id;
+                }
+            }
+
+            return searchResults[0].Id;
+        }
+
         public TvdbSeries GetSeries(int id, bool loadEpisodes)
         {
             Logger.Debug("Fetching SeriesId'{0}' from tvdb", id);

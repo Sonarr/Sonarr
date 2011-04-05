@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Test
     public class ParserTest
     {
         [Test]
-        [Row("Sonny.With.a.Chance.S02E15", 2,15)]
+        [Row("Sonny.With.a.Chance.S02E15", 2, 15)]
         [Row("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD", 3, 1)]
         [Row("Two.and.a.Half.Me.103.720p.HDTV.X264-DIMENSION", 1, 3)]
         [Row("Two.and.a.Half.Me.113.720p.HDTV.X264-DIMENSION", 1, 13)]

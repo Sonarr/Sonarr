@@ -256,6 +256,6 @@ namespace NzbDrone.Core
             return info.FullName.Trim('/', '\\', ' ');
         }
 
-      
+
     }
 }
