@@ -1,6 +1,6 @@
 ﻿@using NzbDrone.Core.Repository.Quality
 @model SelectList
-<div padding: 10px" id="div_@(ViewData["guid"])">
+<div style="padding:3px" id="div_@(ViewData["guid"])">
     <fieldset>
         <legend>@ViewData["path"].ToString()</legend>
         <div>
@@ -11,7 +11,7 @@
                   .Filterable(f => f.FilterMode(AutoCompleteFilterMode.Contains))
                   .HighlightFirstMatch(true)
                   .HtmlAttributes(new { style = "width: 300px;" })
-                  .SelectedIndex(0).Render();}
+                  .Render();}
             @Html.Telerik().DropDownList().Name("qualityList_" + ViewData["guid"].ToString()).BindTo((SelectList)ViewData["quality"]).HtmlAttributes(new { style = "width: 100px;" })
             <button class="listButton" onclick="addSeries('@ViewData["guid"]','@ViewData["javaPath"].ToString()' )">
                 Add</button>
