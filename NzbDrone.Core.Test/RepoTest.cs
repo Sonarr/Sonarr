@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using FizzWare.NBuilder;
-using Gallio.Framework;
 using MbUnit.Framework;
-using MbUnit.Framework.ContractVerifiers;
-using Ninject;
 using NLog;
 using NzbDrone.Core.Instrumentation;
-using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository;
 using LogLevel = NzbDrone.Core.Instrumentation.LogLevel;
 using NLog.Config;
