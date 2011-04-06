@@ -76,6 +76,7 @@ namespace NzbDrone.Core.Test
             var sonicRepo = MockLib.GetEmptyRepository();
 
             var sonicTarget = new SubsonicTarget(sonicRepo);
+
             LogManager.Configuration.AddTarget("DbLogger", sonicTarget);
             LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", NLog.LogLevel.Info, sonicTarget));
             LogManager.Configuration.Reload();

@@ -8,7 +8,7 @@ namespace NzbDrone.Core.Repository.Quality
 {
     public class QualityProfile
     {
-        [SubSonicPrimaryKey(true)]
+        [SubSonicPrimaryKey]
         public virtual int QualityProfileId { get; set; }
 
         [Required(ErrorMessage = "A Name is Required")]

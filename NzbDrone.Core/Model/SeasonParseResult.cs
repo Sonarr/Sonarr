@@ -1,5 +1,4 @@
 ﻿using NzbDrone.Core.Repository.Quality;
-using SubSonic.SqlGeneration.Schema;
 
 namespace NzbDrone.Core.Model
 {

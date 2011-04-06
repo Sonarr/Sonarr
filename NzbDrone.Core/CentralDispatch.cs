@@ -100,7 +100,12 @@ namespace NzbDrone.Core
         {
             get
             {
-                return HostingEnvironment.ApplicationPhysicalPath;
+                if (!String.IsNullOrWhiteSpace(HostingEnvironment.ApplicationPhysicalPath))
+                {
+                    return HostingEnvironment.ApplicationPhysicalPath;
+                }
+                return Directory.GetCurrentDirectory();
+
             }
         }
 
