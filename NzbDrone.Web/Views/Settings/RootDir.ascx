@@ -18,7 +18,7 @@
         <div>
             <%: Html.TextBoxFor(m => m.Path, new { @class="root_dir_text" }) %>
             <a href="#" class="deleteRow">
-                <img src="../../Content/Images/X.png" alt="Delete" /></a>
+                <img src="../Content/Images/X.png" alt="Delete" /></a>
         </div>
         <div>
             <%: Html.ValidationMessageFor(m => m.Path) %>

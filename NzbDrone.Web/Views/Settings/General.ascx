@@ -33,7 +33,7 @@
             <div style="padding-top: 10px;">
                 <div style="padding-left: 7px; margin-bottom: 5px;">
                     <a id="addItem" style="text-decoration:none;" href="<%: Url.Action("AddRootDir", "Settings") %>">
-                    <img src="../../Content/Images/Plus.png" alt="Add New Profile" />
+                    <img src="../Content/Images/Plus.png" alt="Add New Profile" />
                     <h4 style="margin-left: 3px; display: inline; color: Black;">Add New Root Directory</h4></a>
                 </div>
 
