@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Web;
+using System.Web.Hosting;
 using Ninject;
 using NLog.Config;
 using NLog.Targets;
@@ -99,11 +100,7 @@ namespace NzbDrone.Core
         {
             get
             {
-                if (HttpContext.Current != null)
-                {
-                    return new DirectoryInfo(HttpContext.Current.Server.MapPath("\\")).FullName;
-                }
-                return Directory.GetCurrentDirectory();
+                return HostingEnvironment.ApplicationPhysicalPath;
             }
         }
 
