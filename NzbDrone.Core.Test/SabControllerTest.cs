@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using AutoMoq;
 using Gallio.Framework;
 using MbUnit.Framework;
 using MbUnit.Framework.ContractVerifiers;
@@ -28,22 +29,31 @@ namespace NzbDrone.Core.Test
             string priority = "0";
             string category = "tv";
 
-            var config = new Mock<IConfigProvider>();
-            config.Setup(c => c.GetValue("SabHost", String.Empty, false)).Returns(sabHost);
-            config.Setup(c => c.GetValue("SabPort", String.Empty, false)).Returns(sabPort);
-            config.Setup(c => c.GetValue("SabApiKey", String.Empty, false)).Returns(apikey);
-            config.Setup(c => c.GetValue("SabUsername", String.Empty, false)).Returns(username);
-            config.Setup(c => c.GetValue("SabPassword", String.Empty, false)).Returns(password);
-            config.Setup(c => c.GetValue("SabTvPriority", String.Empty, false)).Returns(priority);
-            config.Setup(c => c.GetValue("SabTvCategory", String.Empty, true)).Returns(category);
 
-            var http = new Mock<IHttpProvider>();
-            http.Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=addurl&name=http://www.nzbclub.com/nzb_download.aspx?mid=1950232&priority=0&cat=tv&nzbname=This+is+an+Nzb&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass")).Returns("ok");
+            var mocker = new AutoMoqer();
 
-            var target = new SabProvider(config.Object, http.Object);
+            var fakeConfig = mocker.GetMock<IConfigProvider>();
+            fakeConfig.Setup(c => c.GetValue("SabHost", String.Empty, false))
+                .Returns(sabHost);
+            fakeConfig.Setup(c => c.GetValue("SabPort", String.Empty, false))
+                .Returns(sabPort);
+            fakeConfig.Setup(c => c.GetValue("SabApiKey", String.Empty, false))
+                .Returns(apikey);
+            fakeConfig.Setup(c => c.GetValue("SabUsername", String.Empty, false))
+                .Returns(username);
+            fakeConfig.Setup(c => c.GetValue("SabPassword", String.Empty, false))
+                .Returns(password);
+            fakeConfig.Setup(c => c.GetValue("SabTvPriority", String.Empty, false))
+                .Returns(priority);
+            fakeConfig.Setup(c => c.GetValue("SabTvCategory", String.Empty, true))
+                .Returns(category);
+
+            mocker.GetMock<HttpProvider>()
+            .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=addurl&name=http://www.nzbclub.com/nzb_download.aspx?mid=1950232&priority=0&cat=tv&nzbname=This+is+an+Nzb&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
+            .Returns("ok");
 
             //Act
-            bool result = target.AddByUrl("http://www.nzbclub.com/nzb_download.aspx?mid=1950232", "This is an Nzb");
+            bool result = mocker.Resolve<SabProvider>().AddByUrl("http://www.nzbclub.com/nzb_download.aspx?mid=1950232", "This is an Nzb");
 
             //Assert
             Assert.AreEqual(true, result);
@@ -61,22 +71,23 @@ namespace NzbDrone.Core.Test
             string priority = "0";
             string category = "tv";
 
-            var config = new Mock<IConfigProvider>();
-            config.Setup(c => c.GetValue("SabHost", String.Empty, false)).Returns(sabHost);
-            config.Setup(c => c.GetValue("SabPort", String.Empty, false)).Returns(sabPort);
-            config.Setup(c => c.GetValue("SabApiKey", String.Empty, false)).Returns(apikey);
-            config.Setup(c => c.GetValue("SabUsername", String.Empty, false)).Returns(username);
-            config.Setup(c => c.GetValue("SabPassword", String.Empty, false)).Returns(password);
-            config.Setup(c => c.GetValue("SabTvPriority", String.Empty, false)).Returns(priority);
-            config.Setup(c => c.GetValue("SabTvCategory", String.Empty, true)).Returns(category);
+            var mocker = new AutoMoqer();
 
-            var http = new Mock<IHttpProvider>();
-            http.Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=addurl&name=http://www.nzbclub.com/nzb_download.aspx?mid=1950232&priority=0&cat=tv&nzbname=This+is+an+Nzb&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass")).Returns("error");
+            var fakeConfig = mocker.GetMock<IConfigProvider>();
+            fakeConfig.Setup(c => c.GetValue("SabHost", String.Empty, false)).Returns(sabHost);
+            fakeConfig.Setup(c => c.GetValue("SabPort", String.Empty, false)).Returns(sabPort);
+            fakeConfig.Setup(c => c.GetValue("SabApiKey", String.Empty, false)).Returns(apikey);
+            fakeConfig.Setup(c => c.GetValue("SabUsername", String.Empty, false)).Returns(username);
+            fakeConfig.Setup(c => c.GetValue("SabPassword", String.Empty, false)).Returns(password);
+            fakeConfig.Setup(c => c.GetValue("SabTvPriority", String.Empty, false)).Returns(priority);
+            fakeConfig.Setup(c => c.GetValue("SabTvCategory", String.Empty, true)).Returns(category);
 
-            var target = new SabProvider(config.Object, http.Object);
+            mocker.GetMock<HttpProvider>()
+           .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=addurl&name=http://www.nzbclub.com/nzb_download.aspx?mid=1950232&priority=0&cat=tv&nzbname=This+is+an+Nzb&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
+           .Returns("error");
 
             //Act
-            bool result = target.AddByUrl("http://www.nzbclub.com/nzb_download.aspx?mid=1950232", "This is an Nzb");
+            bool result = mocker.Resolve<SabProvider>().AddByUrl("http://www.nzbclub.com/nzb_download.aspx?mid=1950232", "This is an Nzb");
 
             //Assert
             Assert.AreEqual(false, result);
@@ -92,24 +103,21 @@ namespace NzbDrone.Core.Test
             string username = "admin";
             string password = "pass";
 
-            var config = new Mock<IConfigProvider>();
-            config.Setup(c => c.GetValue("SabHost", String.Empty, false)).Returns(sabHost);
-            config.Setup(c => c.GetValue("SabPort", String.Empty, false)).Returns(sabPort);
-            config.Setup(c => c.GetValue("SabApiKey", String.Empty, false)).Returns(apikey);
-            config.Setup(c => c.GetValue("SabUsername", String.Empty, false)).Returns(username);
-            config.Setup(c => c.GetValue("SabPassword", String.Empty, false)).Returns(password);
+            var mocker = new AutoMoqer();
 
-            var http = new Mock<IHttpProvider>();
-            http.Setup(
-                s =>
-                s.DownloadString(
-                    "http://192.168.5.55:2222/api?mode=queue&output=xml&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
+            var fakeConfig = mocker.GetMock<IConfigProvider>();
+            fakeConfig.Setup(c => c.GetValue("SabHost", String.Empty, false)).Returns(sabHost);
+            fakeConfig.Setup(c => c.GetValue("SabPort", String.Empty, false)).Returns(sabPort);
+            fakeConfig.Setup(c => c.GetValue("SabApiKey", String.Empty, false)).Returns(apikey);
+            fakeConfig.Setup(c => c.GetValue("SabUsername", String.Empty, false)).Returns(username);
+            fakeConfig.Setup(c => c.GetValue("SabPassword", String.Empty, false)).Returns(password);
+
+            mocker.GetMock<HttpProvider>()
+                .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=queue&output=xml&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
                 .Returns(new StreamReader(@".\Files\Queue.xml").ReadToEnd());
 
-            var target = new SabProvider(config.Object, http.Object);
-
             //Act
-            bool result = target.IsInQueue("Ubuntu Test");
+            bool result = mocker.Resolve<SabProvider>().IsInQueue("Ubuntu Test");
 
             //Assert
             Assert.AreEqual(true, result);
@@ -125,24 +133,21 @@ namespace NzbDrone.Core.Test
             string username = "admin";
             string password = "pass";
 
-            var config = new Mock<IConfigProvider>();
-            config.Setup(c => c.GetValue("SabHost", String.Empty, false)).Returns(sabHost);
-            config.Setup(c => c.GetValue("SabPort", String.Empty, false)).Returns(sabPort);
-            config.Setup(c => c.GetValue("SabApiKey", String.Empty, false)).Returns(apikey);
-            config.Setup(c => c.GetValue("SabUsername", String.Empty, false)).Returns(username);
-            config.Setup(c => c.GetValue("SabPassword", String.Empty, false)).Returns(password);
+            var mocker = new AutoMoqer();
 
-            var http = new Mock<IHttpProvider>();
-            http.Setup(
-                s =>
-                s.DownloadString(
-                    "http://192.168.5.55:2222/api?mode=queue&output=xml&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
-                .Returns(new StreamReader(@".\Files\QueueEmpty.xml").ReadToEnd());
+            var fakeConfig = mocker.GetMock<IConfigProvider>();
+            fakeConfig.Setup(c => c.GetValue("SabHost", String.Empty, false)).Returns(sabHost);
+            fakeConfig.Setup(c => c.GetValue("SabPort", String.Empty, false)).Returns(sabPort);
+            fakeConfig.Setup(c => c.GetValue("SabApiKey", String.Empty, false)).Returns(apikey);
+            fakeConfig.Setup(c => c.GetValue("SabUsername", String.Empty, false)).Returns(username);
+            fakeConfig.Setup(c => c.GetValue("SabPassword", String.Empty, false)).Returns(password);
 
-            var target = new SabProvider(config.Object, http.Object);
+            mocker.GetMock<HttpProvider>()
+           .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=queue&output=xml&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
+               .Returns(new StreamReader(@".\Files\QueueEmpty.xml").ReadToEnd());
 
             //Act
-            bool result = target.IsInQueue(String.Empty);
+            bool result = mocker.Resolve<SabProvider>().IsInQueue(String.Empty);
 
             //Assert
             Assert.AreEqual(false, result);
@@ -158,24 +163,22 @@ namespace NzbDrone.Core.Test
             string username = "admin";
             string password = "pass";
 
-            var config = new Mock<IConfigProvider>();
-            config.Setup(c => c.GetValue("SabHost", String.Empty, false)).Returns(sabHost);
-            config.Setup(c => c.GetValue("SabPort", String.Empty, false)).Returns(sabPort);
-            config.Setup(c => c.GetValue("SabApiKey", String.Empty, false)).Returns(apikey);
-            config.Setup(c => c.GetValue("SabUsername", String.Empty, false)).Returns(username);
-            config.Setup(c => c.GetValue("SabPassword", String.Empty, false)).Returns(password);
+            var mocker = new AutoMoqer();
 
-            var http = new Mock<IHttpProvider>();
-            http.Setup(
-                s =>
-                s.DownloadString(
-                    "http://192.168.5.55:2222/api?mode=queue&output=xml&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
-                .Returns(new StreamReader(@".\Files\QueueError.xml").ReadToEnd());
+            var fakeConfig = mocker.GetMock<IConfigProvider>();
+            fakeConfig.Setup(c => c.GetValue("SabHost", String.Empty, false)).Returns(sabHost);
+            fakeConfig.Setup(c => c.GetValue("SabPort", String.Empty, false)).Returns(sabPort);
+            fakeConfig.Setup(c => c.GetValue("SabApiKey", String.Empty, false)).Returns(apikey);
+            fakeConfig.Setup(c => c.GetValue("SabUsername", String.Empty, false)).Returns(username);
+            fakeConfig.Setup(c => c.GetValue("SabPassword", String.Empty, false)).Returns(password);
 
-            var target = new SabProvider(config.Object, http.Object);
+            mocker.GetMock<HttpProvider>()
+          .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=queue&output=xml&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
+              .Returns(new StreamReader(@".\Files\QueueError.xml").ReadToEnd());
+
 
             //Act
-            bool result = target.IsInQueue(String.Empty);
+            bool result = mocker.Resolve<SabProvider>().IsInQueue(String.Empty);
 
             //Assert
             Assert.AreEqual(false, result);

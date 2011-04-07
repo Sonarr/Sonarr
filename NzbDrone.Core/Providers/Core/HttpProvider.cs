@@ -5,11 +5,11 @@ using NLog;
 
 namespace NzbDrone.Core.Providers.Core
 {
-    internal class HttpProvider : IHttpProvider
+    public class HttpProvider
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public string DownloadString(string request)
+        public virtual string DownloadString(string request)
         {
             try
             {
@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Providers.Core
             return String.Empty;
         }
 
-        public string DownloadString(string request, string username, string password)
+        public virtual string DownloadString(string request, string username, string password)
         {
             try
             {
@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Providers.Core
             return String.Empty;
         }
 
-        public void DownloadFile(string request, string filename)
+        public virtual void DownloadFile(string request, string filename)
         {
             try
             {
@@ -59,7 +59,7 @@ namespace NzbDrone.Core.Providers.Core
 
         }
 
-        public void DownloadFile(string request, string filename, string username, string password)
+        public virtual void DownloadFile(string request, string filename, string username, string password)
         {
             try
             {
@@ -75,7 +75,7 @@ namespace NzbDrone.Core.Providers.Core
             }
         }
 
-        public XmlReader DownloadXml(string url)
+        public virtual XmlReader DownloadXml(string url)
         {
             return XmlReader.Create(url);
         }

@@ -65,7 +65,7 @@ namespace NzbDrone.Core
                 _kernel.Bind<IDiskProvider>().To<DiskProvider>();
                 _kernel.Bind<ITvDbProvider>().To<TvDbProvider>();
                 _kernel.Bind<IDownloadProvider>().To<SabProvider>();
-                _kernel.Bind<IHttpProvider>().To<HttpProvider>();
+                _kernel.Bind<HttpProvider>().To<HttpProvider>();
                 _kernel.Bind<IHistoryProvider>().To<HistoryProvider>();
                 _kernel.Bind<IQualityProvider>().To<QualityProvider>();
                 _kernel.Bind<IRootDirProvider>().To<RootDirProvider>();

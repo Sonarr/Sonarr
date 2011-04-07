@@ -221,7 +221,6 @@
     <Compile Include="Providers\Core\HttpProvider.cs" />
     <Compile Include="Providers\IDownloadProvider.cs" />
     <Compile Include="Providers\IEpisodeProvider.cs" />
-    <Compile Include="Providers\Core\IHttpProvider.cs" />
     <Compile Include="Providers\ISeasonProvider.cs" />
     <Compile Include="Providers\ISeriesProvider.cs" />
     <Compile Include="Providers\ITvDbProvider.cs" />

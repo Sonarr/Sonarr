@@ -5,6 +5,7 @@ using System.Linq;
 using System.ServiceModel.Syndication;
 using System.Text;
 using System.Xml;
+using AutoMoq;
 using Gallio.Framework;
 using MbUnit.Framework;
 using MbUnit.Framework.ContractVerifiers;
@@ -27,26 +28,22 @@ namespace NzbDrone.Core.Test
 
         public void Download_feed_test()
         {
-            var kernel = new MockingKernel();
+            var mocker = new AutoMoqer();
 
             var xmlReader = XmlReader.Create(File.OpenRead(".\\Files\\Rss\\nzbsorg.xml"));
-            var httpMock = new Mock<IHttpProvider>(MockBehavior.Strict);
-            httpMock.Setup(h =>
-                h.DownloadXml(It.Is<String>(c => c == "www.google.com" || c == "www.yahoo.com")))
+
+            mocker.GetMock<HttpProvider>()
+                .Setup(h => h.DownloadXml(It.IsAny<String>()))
                 .Returns(xmlReader);
 
-            kernel.Bind<IHttpProvider>().ToConstant(httpMock.Object);
-            kernel.Bind<FeedProviderBase>().To<MockFeedProvider>();
-
-            kernel.Get<FeedProviderBase>().Fetch();
-
+            mocker.Resolve<MockFeedProvider>().Fetch();
         }
 
     }
 
     public class MockFeedProvider : FeedProviderBase
     {
-        public MockFeedProvider(ISeriesProvider seriesProvider, ISeasonProvider seasonProvider, IEpisodeProvider episodeProvider, IConfigProvider configProvider, IHttpProvider httpProvider)
+        public MockFeedProvider(ISeriesProvider seriesProvider, ISeasonProvider seasonProvider, IEpisodeProvider episodeProvider, IConfigProvider configProvider, HttpProvider httpProvider)
             : base(seriesProvider, seasonProvider, episodeProvider, configProvider, httpProvider)
         {
         }

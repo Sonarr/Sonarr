@@ -12,11 +12,11 @@ namespace NzbDrone.Core.Providers.Feed
         protected readonly ISeasonProvider _seasonProvider;
         protected readonly IEpisodeProvider _episodeProvider;
         protected readonly IConfigProvider _configProvider;
-        private readonly IHttpProvider _httpProvider;
+        private readonly HttpProvider _httpProvider;
         protected static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public FeedProviderBase(ISeriesProvider seriesProvider, ISeasonProvider seasonProvider,
-            IEpisodeProvider episodeProvider, IConfigProvider configProvider, IHttpProvider httpProvider)
+            IEpisodeProvider episodeProvider, IConfigProvider configProvider, HttpProvider httpProvider)
         {
             _seriesProvider = seriesProvider;
             _seasonProvider = seasonProvider;
@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Providers.Feed
         {
             var episodeParseResult = Parser.ParseEpisodeInfo(item.Title.Text);
             if (episodeParseResult == null) return null;
-            
+
             var seriesInfo = _seriesProvider.FindSeries(episodeParseResult.SeriesTitle);
 
             if (seriesInfo != null)
