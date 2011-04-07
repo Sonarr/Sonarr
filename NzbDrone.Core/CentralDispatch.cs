@@ -63,7 +63,7 @@ namespace NzbDrone.Core
                 _kernel.Bind<IEpisodeProvider>().To<EpisodeProvider>();
                 _kernel.Bind<IUpcomingEpisodesProvider>().To<UpcomingEpisodesProvider>();
                 _kernel.Bind<IDiskProvider>().To<DiskProvider>();
-                _kernel.Bind<ITvDbProvider>().To<TvDbProvider>();
+                _kernel.Bind<TvDbProvider>().To<TvDbProvider>();
                 _kernel.Bind<IDownloadProvider>().To<SabProvider>();
                 _kernel.Bind<HttpProvider>().To<HttpProvider>();
                 _kernel.Bind<IHistoryProvider>().To<HistoryProvider>();

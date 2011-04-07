@@ -35,9 +35,6 @@
     <Reference Include="Accessibility">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="AutoMoq">
-      <HintPath>..\packages\AutoMoq.1.3.1.3\lib\AutoMoq.dll</HintPath>
-    </Reference>
     <Reference Include="Castle.Core, Version=2.5.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\NzbDrone.Core\Libraries\Castle.Core.dll</HintPath>
@@ -88,6 +85,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoMoq\AutoMoq.cs" />
+    <Compile Include="AutoMoq\Unity\AutoMockingBuilderStrategy.cs" />
+    <Compile Include="AutoMoq\Unity\AutoMockingContainerExtension.cs" />
     <Compile Include="RssProviderTest.cs" />
     <Compile Include="HistoryProviderTest.cs" />
     <Compile Include="MediaFileProviderTests.cs" />
@@ -114,6 +114,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AutoMoq\License.txt" />
     <Content Include="Files\Feed.nzbmatrix.com.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

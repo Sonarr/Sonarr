@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using AutoMoq;
 using FizzWare.NBuilder;
 using Gallio.Framework;
 using MbUnit.Framework;
@@ -28,30 +29,36 @@ namespace NzbDrone.Core.Test
         public void Map_path_to_series()
         {
             //Arrange
-            TvdbSeries fakeSeries = Builder<TvdbSeries>.CreateNew().With(f => f.SeriesName = "The Simpsons").Build();
-            var fakeSearch = Builder<TvdbSearchResult>.CreateNew().Build();
-            fakeSearch.Id = fakeSeries.Id;
-            fakeSearch.SeriesName = fakeSeries.SeriesName;
+            var fakeSeries = Builder<TvdbSeries>.CreateNew()
+                .With(f => f.SeriesName = "The Simpsons")
+                .Build();
 
-            var moqData = new Mock<IRepository>();
-            var moqTvdb = new Mock<ITvDbProvider>();
+            var fakeSearch = Builder<TvdbSearchResult>.CreateNew()
+                .With(s => s.Id = fakeSeries.Id)
+                .With(s => s.SeriesName = fakeSeries.SeriesName)
+                .Build();
 
-            moqData.Setup(f => f.Exists<Series>(c => c.SeriesId == It.IsAny<int>())).Returns(false);
 
-            moqTvdb.Setup(f => f.GetSeries(It.IsAny<String>())).Returns(fakeSearch);
-            moqTvdb.Setup(f => f.GetSeries(fakeSeries.Id, false)).Returns(fakeSeries).Verifiable();
+            var mocker = new AutoMoqer();
 
-            var kernel = new MockingKernel();
-            kernel.Bind<IRepository>().ToConstant(moqData.Object);
-            kernel.Bind<ITvDbProvider>().ToConstant(moqTvdb.Object);
-            kernel.Bind<ISeriesProvider>().To<SeriesProvider>();
+            mocker.GetMock<IRepository>()
+                .Setup(f => f.Exists<Series>(c => c.SeriesId == It.IsAny<int>()))
+                .Returns(false);
+
+            mocker.GetMock<TvDbProvider>()
+                .Setup(f => f.GetSeries(It.IsAny<String>()))
+                .Returns(fakeSearch);
+            mocker.GetMock<TvDbProvider>()
+                .Setup(f => f.GetSeries(fakeSeries.Id, false))
+                .Returns(fakeSeries)
+                .Verifiable();
 
             //Act
-            var seriesController = kernel.Get<ISeriesProvider>();
-            var mappedSeries = seriesController.MapPathToSeries(@"D:\TV Shows\The Simpsons");
+
+            var mappedSeries = mocker.Resolve<SeriesProvider>().MapPathToSeries(@"D:\TV Shows\The Simpsons");
 
             //Assert
-            moqTvdb.VerifyAll();
+            mocker.GetMock<TvDbProvider>().VerifyAll();
             Assert.AreEqual(fakeSeries, mappedSeries);
         }
 

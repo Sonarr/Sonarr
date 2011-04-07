@@ -21,12 +21,12 @@ namespace NzbDrone.Core.Providers
 
         private readonly IConfigProvider _config;
         private readonly IRepository _sonioRepo;
-        private readonly ITvDbProvider _tvDb;
+        private readonly TvDbProvider _tvDb;
         private readonly IQualityProvider _quality;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public SeriesProvider(IConfigProvider configProvider,
-            IRepository dataRepository, ITvDbProvider tvDbProvider, IQualityProvider quality)
+            IRepository dataRepository, TvDbProvider tvDbProvider, IQualityProvider quality)
         {
             _config = configProvider;
             _sonioRepo = dataRepository;

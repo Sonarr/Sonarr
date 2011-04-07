@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using AutoMoq;
 using Gallio.Framework;
 using MbUnit.Framework;
 using MbUnit.Framework.ContractVerifiers;
@@ -23,17 +24,20 @@ namespace NzbDrone.Core.Test
             const string value = "MY_VALUE";
 
             //Arrange
-            var repo = new Mock<IRepository>();
             var config = new Config { Key = key, Value = value };
-            repo.Setup(r => r.Single<Config>(key)).Returns(config);
-            var target = new ConfigProvider(repo.Object);
+
+            var mocker = new AutoMoqer();
+
+            mocker.GetMock<IRepository>()
+            .Setup(r => r.Single<Config>(key))
+            .Returns(config);
 
             //Act
-            target.SetValue(key, value);
+            mocker.Resolve<ConfigProvider>().SetValue(key, value);
 
             //Assert
-            repo.Verify(c => c.Update(config));
-            repo.Verify(c => c.Add(It.IsAny<Config>()), Times.Never());
+            mocker.GetMock<IRepository>().Verify(c => c.Update(config));
+            mocker.GetMock<IRepository>().Verify(c => c.Add(It.IsAny<Config>()), Times.Never());
         }
 
         [Test]
@@ -43,17 +47,20 @@ namespace NzbDrone.Core.Test
             const string value = "MY_VALUE";
 
             //Arrange
-            var repo = new Mock<IRepository>();
-            repo.Setup(r => r.Single<Config>(It.IsAny<string>())).Returns<Config>(null).Verifiable();
-            var target = new ConfigProvider(repo.Object);
+            var mocker = new AutoMoqer();
+
+            mocker.GetMock<IRepository>()
+            .Setup(r => r.Single<Config>(It.IsAny<string>()))
+            .Returns<Config>(null)
+            .Verifiable();
 
             //Act
-            target.SetValue(key, value);
+            mocker.Resolve<ConfigProvider>().SetValue(key, value);
 
             //Assert
-            repo.Verify();
-            repo.Verify(r => r.Update(It.IsAny<Config>()), Times.Never());
-            repo.Verify(r => r.Add(It.Is<Config>(c => c.Key == key && c.Value == value)), Times.Once());
+            mocker.GetMock<IRepository>().Verify();
+            mocker.GetMock<IRepository>().Verify(r => r.Update(It.IsAny<Config>()), Times.Never());
+            mocker.GetMock<IRepository>().Verify(r => r.Add(It.Is<Config>(c => c.Key == key && c.Value == value)), Times.Once());
         }
     }
 }

@@ -16,13 +16,13 @@ namespace NzbDrone.Core.Providers
         private readonly IRepository _sonicRepo;
         private readonly ISeriesProvider _series;
         private readonly ISeasonProvider _seasons;
-        private readonly ITvDbProvider _tvDb;
+        private readonly TvDbProvider _tvDb;
         private readonly IHistoryProvider _history;
         private readonly IQualityProvider _quality;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public EpisodeProvider(IRepository sonicRepo, ISeriesProvider seriesProvider,
-            ISeasonProvider seasonProvider, ITvDbProvider tvDbProvider,
+            ISeasonProvider seasonProvider, TvDbProvider tvDbProvider,
             IHistoryProvider history, IQualityProvider quality)
         {
             _sonicRepo = sonicRepo;
