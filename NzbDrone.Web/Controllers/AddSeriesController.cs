@@ -63,6 +63,12 @@ namespace NzbDrone.Web.Controllers
         {
             var unmappedList = new List<String>();
 
+            var profiles = _qualityProvider.GetAllProfiles();
+            var defaultQuality = Convert.ToInt32(_configProvider.DefaultQualityProfile);
+            var selectList = new SelectList(profiles, "QualityProfileId", "Name", defaultQuality);
+
+            ViewData["qualities"] = selectList;
+
             foreach (var folder in _rootFolderProvider.GetAll())
             {
                 unmappedList.AddRange(_syncProvider.GetUnmappedFolders(folder.Path));
