@@ -57,17 +57,17 @@ namespace NzbDrone.Core
 
                 dbProvider.Log = new NlogWriter();
 
+                _kernel.Bind<QualityProvider>().ToSelf();
+                _kernel.Bind<TvDbProvider>().ToSelf();
+                _kernel.Bind<HttpProvider>().ToSelf();
                 _kernel.Bind<ISeriesProvider>().To<SeriesProvider>().InSingletonScope();
                 _kernel.Bind<IRssSyncProvider>().To<RssSyncProvider>().InSingletonScope();
                 _kernel.Bind<ISeasonProvider>().To<SeasonProvider>();
                 _kernel.Bind<IEpisodeProvider>().To<EpisodeProvider>();
                 _kernel.Bind<IUpcomingEpisodesProvider>().To<UpcomingEpisodesProvider>();
                 _kernel.Bind<IDiskProvider>().To<DiskProvider>();
-                _kernel.Bind<TvDbProvider>().To<TvDbProvider>();
                 _kernel.Bind<IDownloadProvider>().To<SabProvider>();
-                _kernel.Bind<HttpProvider>().To<HttpProvider>();
                 _kernel.Bind<IHistoryProvider>().To<HistoryProvider>();
-                _kernel.Bind<QualityProvider>().To<QualityProvider>();
                 _kernel.Bind<IRootDirProvider>().To<RootDirProvider>();
                 _kernel.Bind<IExtenalNotificationProvider>().To<ExternalNotificationProvider>();
                 _kernel.Bind<IXbmcProvider>().To<XbmcProvider>();
