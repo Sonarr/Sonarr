@@ -183,7 +183,6 @@
     <Compile Include="Providers\Feed\NzbsOrgFeedProvider.cs" />
     <Compile Include="Providers\HistoryProvider.cs" />
     <Compile Include="Providers\IBacklogProvider.cs" />
-    <Compile Include="Providers\IExtenalNotificationProvider.cs" />
     <Compile Include="Providers\IHistoryProvider.cs" />
     <Compile Include="Providers\IIndexerProvider.cs" />
     <Compile Include="Providers\IndexerProvider.cs" />

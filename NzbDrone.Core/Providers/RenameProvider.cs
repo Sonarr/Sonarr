@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Providers
         private readonly IMediaFileProvider _mediaFileProvider;
         private readonly IDiskProvider _diskProvider;
         private readonly IConfigProvider _configProvider;
-        private readonly IExtenalNotificationProvider _externalNotificationProvider;
+        private readonly ExternalNotificationProvider _externalNotificationProvider;
 
         private Thread _renameThread;
         private List<EpisodeRenameModel> _epsToRename = new List<EpisodeRenameModel>();
@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Providers
         public RenameProvider(ISeriesProvider seriesProvider, ISeasonProvider seasonProvider,
             IEpisodeProvider episodeProvider, IMediaFileProvider mediaFileProvider,
             IDiskProvider diskProvider, IConfigProvider configProvider,
-            IExtenalNotificationProvider extenalNotificationProvider)
+            ExternalNotificationProvider extenalNotificationProvider)
         {
             _seriesProvider = seriesProvider;
             _seasonProvider = seasonProvider;
