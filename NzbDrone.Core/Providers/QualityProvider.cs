@@ -14,7 +14,10 @@ namespace NzbDrone.Core.Providers
         private IRepository _sonicRepo;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public QualityProvider() { }
+        public QualityProvider()
+        {
+            
+        }
 
         public QualityProvider(IRepository sonicRepo)
         {

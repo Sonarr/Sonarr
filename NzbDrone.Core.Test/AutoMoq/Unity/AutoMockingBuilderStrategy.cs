@@ -38,12 +38,14 @@ namespace AutoMoq.Unity
 
         private bool AMockObjectShouldBeCreatedForThisType(Type type)
         {
-            return TypeIsNotRegistered(type) && type.IsInterface;
+            var mocker = container.Resolve<AutoMoqer>();
+            return TypeIsNotRegistered(type) && (mocker.ResolveType == null || mocker.ResolveType != type);
+            //return TypeIsNotRegistered(type) && type.IsInterface;
         }
 
         private static Type GetTheTypeFromTheBuilderContext(IBuilderContext context)
         {
-            return ((NamedTypeBuildKey) context.OriginalBuildKey).Type;
+            return ((NamedTypeBuildKey)context.OriginalBuildKey).Type;
         }
 
         private bool TypeIsNotRegistered(Type type)
@@ -60,19 +62,19 @@ namespace AutoMoq.Unity
 
         private Mock InvokeTheMockCreationMethod(MethodInfo createMethod)
         {
-            return (Mock) createMethod.Invoke(mockFactory, new object[] {new List<object>().ToArray()});
+            return (Mock)createMethod.Invoke(mockFactory, new object[] { new List<object>().ToArray() });
         }
 
         private MethodInfo GenerateAnInterfaceMockCreationMethod(Type type)
         {
             var createMethodWithNoParameters = mockFactory.GetType().GetMethod("Create", EmptyArgumentList());
 
-            return createMethodWithNoParameters.MakeGenericMethod(new[] {type});
+            return createMethodWithNoParameters.MakeGenericMethod(new[] { type });
         }
 
         private static Type[] EmptyArgumentList()
         {
-            return new[] {typeof (object[])};
+            return new[] { typeof(object[]) };
         }
 
         #endregion
