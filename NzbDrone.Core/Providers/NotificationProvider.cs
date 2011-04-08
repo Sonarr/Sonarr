@@ -5,7 +5,7 @@ using NzbDrone.Core.Model.Notification;
 
 namespace NzbDrone.Core.Providers
 {
-    class NotificationProvider : INotificationProvider
+    public class NotificationProvider
     {
         private readonly Dictionary<Guid, BasicNotification> _basicNotifications = new Dictionary<Guid, BasicNotification>();
         private Dictionary<Guid, ProgressNotification> _progressNotification = new Dictionary<Guid, ProgressNotification>();

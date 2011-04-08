@@ -9,11 +9,11 @@ namespace NzbDrone.Web.Controllers
 {
     public class NotificationController : Controller
     {
-        private readonly INotificationProvider _notifications;
+        private readonly NotificationProvider _notifications;
         //
         // GET: /Notification/
 
-        public NotificationController(INotificationProvider notificationProvider)
+        public NotificationController(NotificationProvider notificationProvider)
         {
             _notifications = notificationProvider;
         }

@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Providers
         private readonly ISeriesProvider _seriesProvider;
         private readonly IEpisodeProvider _episodeProvider;
         private readonly IMediaFileProvider _mediaFileProvider;
-        private readonly INotificationProvider _notificationProvider;
+        private readonly NotificationProvider _notificationProvider;
         private readonly IDiskProvider _diskProvider;
 
         private ProgressNotification _seriesSyncNotification;
@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Providers
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public SyncProvider(ISeriesProvider seriesProvider, IEpisodeProvider episodeProvider,
-            IMediaFileProvider mediaFileProvider, INotificationProvider notificationProvider,
+            IMediaFileProvider mediaFileProvider, NotificationProvider notificationProvider,
             IDiskProvider diskProvider)
         {
             _seriesProvider = seriesProvider;
