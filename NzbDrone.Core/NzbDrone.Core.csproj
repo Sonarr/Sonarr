@@ -191,7 +191,6 @@
     <Compile Include="Providers\IRenameProvider.cs" />
     <Compile Include="Providers\IRssSyncProvider.cs" />
     <Compile Include="Providers\ITimerProvider.cs" />
-    <Compile Include="Providers\IUpcomingEpisodesProvider.cs" />
     <Compile Include="Providers\PostProcessingProvider.cs" />
     <Compile Include="Providers\QualityProvider.cs" />
     <Compile Include="Providers\RenameProvider.cs" />

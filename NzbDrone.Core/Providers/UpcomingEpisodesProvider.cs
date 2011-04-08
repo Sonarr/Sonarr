@@ -8,7 +8,7 @@ using SubSonic.Repository;
 
 namespace NzbDrone.Core.Providers
 {
-    public class UpcomingEpisodesProvider : IUpcomingEpisodesProvider
+    public class UpcomingEpisodesProvider
     {
         private IRepository _sonicRepo;
 
@@ -17,9 +17,9 @@ namespace NzbDrone.Core.Providers
             _sonicRepo = sonicRepo;
         }
 
-        #region IUpcomingEpisodesProvider
+        #region UpcomingEpisodesProvider Members
 
-        public UpcomingEpisodesModel Upcoming()
+        public virtual UpcomingEpisodesModel Upcoming()
         {
             var allEps = _sonicRepo.All<Episode>().Where(e => e.AirDate >= DateTime.Today.AddDays(-1) && e.AirDate < DateTime.Today.AddDays(8));
 
@@ -30,17 +30,17 @@ namespace NzbDrone.Core.Providers
             return new UpcomingEpisodesModel {Yesterday = yesterday, Today = today, Week = week};
         }
 
-        public List<Episode> Yesterday()
+        public virtual List<Episode> Yesterday()
         {
             return _sonicRepo.All<Episode>().Where(e => e.AirDate == DateTime.Today.AddDays(-1)).ToList();
         }
 
-        public List<Episode> Today()
+        public virtual List<Episode> Today()
         {
             return _sonicRepo.All<Episode>().Where(e => e.AirDate == DateTime.Today).ToList();
         }
 
-        public List<Episode> Week()
+        public virtual List<Episode> Week()
         {
             return _sonicRepo.All<Episode>().Where(e => e.AirDate > DateTime.Today && e.AirDate < DateTime.Today.AddDays(8)).ToList();
         }

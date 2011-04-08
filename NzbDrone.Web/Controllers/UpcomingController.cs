@@ -11,9 +11,9 @@ namespace NzbDrone.Web.Controllers
 {
     public class UpcomingController : Controller
     {
-        private IUpcomingEpisodesProvider _upcomingEpisodesProvider;
+        private UpcomingEpisodesProvider _upcomingEpisodesProvider;
 
-        public UpcomingController(IUpcomingEpisodesProvider upcomingEpisodesProvider)
+        public UpcomingController(UpcomingEpisodesProvider upcomingEpisodesProvider)
         {
             _upcomingEpisodesProvider = upcomingEpisodesProvider;
         }
