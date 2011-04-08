@@ -12,6 +12,12 @@ namespace NzbDrone.Core.Test
     // ReSharper disable InconsistentNaming
     public class ParserTest
     {
+        /*Fucked-up hall of shame,
+         * WWE.Wrestlemania.27.PPV.HDTV.XviD-KYR
+         * The.Kennedys.Part.2.DSR.XviD-SYS
+         */
+
+
         [Test]
         [Row("Sonny.With.a.Chance.S02E15", 2, 15)]
         [Row("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD", 3, 1)]
@@ -28,6 +34,8 @@ namespace NzbDrone.Core.Test
         [Row(@"Hawaii Five 0 S01E19 720p WEB DL DD5 1 H 264 NT", 1, 19)]
         [Row(@"The Event S01E14 A Message Back 720p WEB DL DD5 1 H264 SURFER", 1, 14)]
         [Row(@"Adam Hills In Gordon St Tonight S01E07 WS PDTV XviD FUtV", 1, 7)]
+        [Row(@"Adam Hills In Gordon St Tonight S01E07 WS PDTV XviD FUtV", 1, 7)]
+        [Row("The.Kennedys.Part.2.DSR.XviD-SYS", 1, 2)]
         public void episode_parse(string path, int season, int episode)
         {
             var result = Parser.ParseEpisodeInfo(path);
@@ -60,6 +68,20 @@ namespace NzbDrone.Core.Test
             var result = Parser.ParseEpisodeInfo(path).Quality;
             Assert.AreEqual(quality, result);
         }
+
+        [Test]
+        [Row("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD", 3, 1, 2, 3, 4, 5, 6)]
+        [Row("Two.and.a.Half.Me.103.104.720p.HDTV.X264-DIMENSION", 1, 3, 4)]
+        [Row("The.Kennedys.Part.1.and.Part.2.DSR.XviD-SYS", 1, 1, 2)]
+        public void episode_multipart_parse(string path, int season, params int[] episodes)
+        {
+            var result = Parser.ParseEpisodeInfo(path);
+            Assert.AreEqual(season, result.SeasonNumber);
+            Assert.Count(episodes.Length, result.Episodes);
+            Assert.AreElementsEqualIgnoringOrder(episodes, result.Episodes);
+        }
+
+
 
         [Test]
         [Row(@"c:\test\", @"c:\test")]

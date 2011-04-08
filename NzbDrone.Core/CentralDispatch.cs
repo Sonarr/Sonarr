@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Web;
+using System.Web.Hosting;
 using Ninject;
 using NLog.Config;
 using NLog.Targets;
@@ -62,9 +63,9 @@ namespace NzbDrone.Core
                 _kernel.Bind<IEpisodeProvider>().To<EpisodeProvider>();
                 _kernel.Bind<IUpcomingEpisodesProvider>().To<UpcomingEpisodesProvider>();
                 _kernel.Bind<IDiskProvider>().To<DiskProvider>();
-                _kernel.Bind<ITvDbProvider>().To<TvDbProvider>();
+                _kernel.Bind<TvDbProvider>().To<TvDbProvider>();
                 _kernel.Bind<IDownloadProvider>().To<SabProvider>();
-                _kernel.Bind<IHttpProvider>().To<HttpProvider>();
+                _kernel.Bind<HttpProvider>().To<HttpProvider>();
                 _kernel.Bind<IHistoryProvider>().To<HistoryProvider>();
                 _kernel.Bind<IQualityProvider>().To<QualityProvider>();
                 _kernel.Bind<IRootDirProvider>().To<RootDirProvider>();
@@ -99,11 +100,12 @@ namespace NzbDrone.Core
         {
             get
             {
-                if (HttpContext.Current != null)
+                if (!String.IsNullOrWhiteSpace(HostingEnvironment.ApplicationPhysicalPath))
                 {
-                    return new DirectoryInfo(HttpContext.Current.Server.MapPath("\\")).FullName;
+                    return HostingEnvironment.ApplicationPhysicalPath;
                 }
                 return Directory.GetCurrentDirectory();
+
             }
         }
 

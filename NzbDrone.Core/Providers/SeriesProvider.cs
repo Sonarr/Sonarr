@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Ninject;
 using NLog;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
@@ -20,13 +21,12 @@ namespace NzbDrone.Core.Providers
 
         private readonly IConfigProvider _config;
         private readonly IRepository _sonioRepo;
-        private readonly ITvDbProvider _tvDb;
+        private readonly TvDbProvider _tvDb;
         private readonly IQualityProvider _quality;
-
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public SeriesProvider(IConfigProvider configProvider,
-            IRepository dataRepository, ITvDbProvider tvDbProvider, IQualityProvider quality)
+            IRepository dataRepository, TvDbProvider tvDbProvider, IQualityProvider quality)
         {
             _config = configProvider;
             _sonioRepo = dataRepository;
@@ -36,12 +36,12 @@ namespace NzbDrone.Core.Providers
 
         #region ISeriesProvider Members
 
-        public IQueryable<Series> GetAllSeries()
+        public virtual IQueryable<Series> GetAllSeries()
         {
             return _sonioRepo.All<Series>();
         }
 
-        public Series GetSeries(int seriesId)
+        public virtual Series GetSeries(int seriesId)
         {
             return _sonioRepo.Single<Series>(s => s.SeriesId == seriesId);
         }
@@ -51,20 +51,20 @@ namespace NzbDrone.Core.Providers
         /// </summary>
         /// <param name="id">The TVDB ID of the series</param>
         /// <returns>Whether or not the show is monitored</returns>
-        public bool IsMonitored(long id)
+        public virtual bool IsMonitored(long id)
         {
             return _sonioRepo.Exists<Series>(c => c.SeriesId == id && c.Monitored);
         }
 
-        public bool QualityWanted(int seriesId, QualityTypes quality)
+        public virtual bool QualityWanted(int seriesId, QualityTypes quality)
         {
             var series = _sonioRepo.Single<Series>(seriesId);
-            var profile = _quality.Find(series.QualityProfileId);
 
+            var profile = _quality.Find(series.QualityProfileId);
             return profile.Allowed.Contains(quality);
         }
 
-        public TvdbSeries MapPathToSeries(string path)
+        public virtual TvdbSeries MapPathToSeries(string path)
         {
             var seriesPath = new DirectoryInfo(path);
             var searchResults = _tvDb.GetSeries(seriesPath.Name);
@@ -75,7 +75,7 @@ namespace NzbDrone.Core.Providers
             return _tvDb.GetSeries(searchResults.Id, false);
         }
 
-        public Series UpdateSeriesInfo(int seriesId)
+        public virtual Series UpdateSeriesInfo(int seriesId)
         {
             var tvDbSeries = _tvDb.GetSeries(seriesId, true);
             var series = GetSeries(seriesId);
@@ -94,7 +94,7 @@ namespace NzbDrone.Core.Providers
             return series;
         }
 
-        public void AddSeries(string path, int tvDbSeriesId, int qualityProfileId)
+        public virtual void AddSeries(string path, int tvDbSeriesId, int qualityProfileId)
         {
             Logger.Info("Adding Series [{0}] Path: [{1}]", tvDbSeriesId, path);
 
@@ -111,17 +111,17 @@ namespace NzbDrone.Core.Providers
             _sonioRepo.Add(repoSeries);
         }
 
-        public Series FindSeries(string title)
+        public virtual Series FindSeries(string title)
         {
             return _sonioRepo.Single<Series>(s => s.CleanTitle == Parser.NormalizeTitle(title));
         }
 
-        public void UpdateSeries(Series series)
+        public virtual void UpdateSeries(Series series)
         {
             _sonioRepo.Update(series);
         }
 
-        public void DeleteSeries(int seriesId)
+        public virtual void DeleteSeries(int seriesId)
         {
             Logger.Warn("Deleting Series [{0}]", seriesId);
 
@@ -154,7 +154,7 @@ namespace NzbDrone.Core.Providers
             }
         }
 
-        public bool SeriesPathExists(string cleanPath)
+        public virtual bool SeriesPathExists(string cleanPath)
         {
             if (_sonioRepo.Exists<Series>(s => s.Path == cleanPath))
                 return true;

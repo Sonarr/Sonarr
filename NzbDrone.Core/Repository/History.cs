@@ -6,7 +6,7 @@ namespace NzbDrone.Core.Repository
 {
     public class History
     {
-        [SubSonicPrimaryKey(true)]
+        [SubSonicPrimaryKey]
         public virtual int HistoryId { get; set; }
         public virtual int EpisodeId { get; set; }
         public virtual int IndexerId { get; set; }

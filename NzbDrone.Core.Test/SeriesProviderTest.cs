@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using AutoMoq;
 using FizzWare.NBuilder;
 using Gallio.Framework;
 using MbUnit.Framework;
@@ -12,6 +13,7 @@ using Ninject;
 using Ninject.Moq;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
+using NzbDrone.Core.Repository.Quality;
 using SubSonic.Repository;
 using TvdbLib.Data;
 using System.Linq;
@@ -27,30 +29,36 @@ namespace NzbDrone.Core.Test
         public void Map_path_to_series()
         {
             //Arrange
-            TvdbSeries fakeSeries = Builder<TvdbSeries>.CreateNew().With(f => f.SeriesName = "The Simpsons").Build();
-            var fakeSearch = Builder<TvdbSearchResult>.CreateNew().Build();
-            fakeSearch.Id = fakeSeries.Id;
-            fakeSearch.SeriesName = fakeSeries.SeriesName;
+            var fakeSeries = Builder<TvdbSeries>.CreateNew()
+                .With(f => f.SeriesName = "The Simpsons")
+                .Build();
 
-            var moqData = new Mock<IRepository>();
-            var moqTvdb = new Mock<ITvDbProvider>();
+            var fakeSearch = Builder<TvdbSearchResult>.CreateNew()
+                .With(s => s.Id = fakeSeries.Id)
+                .With(s => s.SeriesName = fakeSeries.SeriesName)
+                .Build();
 
-            moqData.Setup(f => f.Exists<Series>(c => c.SeriesId == It.IsAny<int>())).Returns(false);
 
-            moqTvdb.Setup(f => f.GetSeries(It.IsAny<String>())).Returns(fakeSearch);
-            moqTvdb.Setup(f => f.GetSeries(fakeSeries.Id, false)).Returns(fakeSeries).Verifiable();
+            var mocker = new AutoMoqer();
 
-            var kernel = new MockingKernel();
-            kernel.Bind<IRepository>().ToConstant(moqData.Object);
-            kernel.Bind<ITvDbProvider>().ToConstant(moqTvdb.Object);
-            kernel.Bind<ISeriesProvider>().To<SeriesProvider>();
+            mocker.GetMock<IRepository>()
+                .Setup(f => f.Exists<Series>(c => c.SeriesId == It.IsAny<int>()))
+                .Returns(false);
+
+            mocker.GetMock<TvDbProvider>()
+                .Setup(f => f.GetSeries(It.IsAny<String>()))
+                .Returns(fakeSearch);
+            mocker.GetMock<TvDbProvider>()
+                .Setup(f => f.GetSeries(fakeSeries.Id, false))
+                .Returns(fakeSeries)
+                .Verifiable();
 
             //Act
-            var seriesController = kernel.Get<ISeriesProvider>();
-            var mappedSeries = seriesController.MapPathToSeries(@"D:\TV Shows\The Simpsons");
+
+            var mappedSeries = mocker.Resolve<SeriesProvider>().MapPathToSeries(@"D:\TV Shows\The Simpsons");
 
             //Assert
-            moqTvdb.VerifyAll();
+            mocker.GetMock<TvDbProvider>().VerifyAll();
             Assert.AreEqual(fakeSeries, mappedSeries);
         }
 
@@ -96,26 +104,69 @@ namespace NzbDrone.Core.Test
             //Assert.AreEqual(title, result, postTitle);
         }
 
-        //[Test]
-        //public void get_unmapped()
-        //{
-        //    //Setup
-        //    var kernel = new MockingKernel();
+        [Test]
+        public void Test_is_monitored()
+        {
+            var kernel = new MockingKernel();
+            var repo = MockLib.GetEmptyRepository();
+            kernel.Bind<IRepository>().ToConstant(repo);
+            kernel.Bind<ISeriesProvider>().To<SeriesProvider>();
+
+            repo.Add(Builder<Series>.CreateNew()
+                .With(c => c.Monitored = true)
+                .With(c => c.SeriesId = 12)
+                .Build());
+
+            repo.Add(Builder<Series>.CreateNew()
+            .With(c => c.Monitored = false)
+            .With(c => c.SeriesId = 11)
+            .Build());
 
 
-        //    kernel.Bind<ISeriesProvider>().To<SeriesProvider>();
-        //    kernel.Bind<IDiskProvider>().ToConstant(MockLib.GetStandardDisk(0, 0));
-        //    kernel.Bind<IConfigProvider>().ToConstant(MockLib.StandardConfig);
-
-        //    var seriesController = kernel.Get<ISeriesProvider>();
-
-        //    //Act
-        //    var unmappedFolder = seriesController.GetUnmappedFolders();
-
-        //    //Assert
-        //    Assert.AreElementsEqualIgnoringOrder(MockLib.StandardSeries, unmappedFolder.Values);
-        //}
+            //Act, Assert
+            var provider = kernel.Get<ISeriesProvider>();
+            Assert.IsTrue(provider.IsMonitored(12));
+            Assert.IsFalse(provider.IsMonitored(11));
+            Assert.IsFalse(provider.IsMonitored(1));
+        }
 
 
+
+        [Test]
+        [Row(12, QualityTypes.TV, true)]
+        [Row(12, QualityTypes.Unknown, false)]
+        [Row(12, QualityTypes.Bluray1080, false)]
+        [Row(12, QualityTypes.Bluray720, false)]
+        [Row(12, QualityTypes.HDTV, false)]
+        [Row(12, QualityTypes.WEBDL, false)]
+        public void QualityWanted(int seriesId, QualityTypes qualityTypes, Boolean result)
+        {
+            var kernel = new MockingKernel();
+            var repo = MockLib.GetEmptyRepository();
+            kernel.Bind<IRepository>().ToConstant(repo);
+            kernel.Bind<ISeriesProvider>().To<SeriesProvider>();
+
+            var quality = Builder<QualityProfile>.CreateNew()
+                .With(q => q.Allowed = new List<QualityTypes>() { QualityTypes.BDRip, QualityTypes.DVD, QualityTypes.TV })
+                .With(q => q.Cutoff = QualityTypes.DVD)
+                .Build();
+
+            var qualityProviderMock = new Mock<IQualityProvider>();
+            qualityProviderMock.Setup(c => c.Find(quality.QualityProfileId)).Returns(quality).Verifiable();
+            kernel.Bind<IQualityProvider>().ToConstant(qualityProviderMock.Object);
+
+
+            repo.Add(Builder<Series>.CreateNew()
+                .With(c => c.SeriesId = 12)
+                .With(c => c.QualityProfileId = quality.QualityProfileId)
+                .Build());
+
+            //Act
+            var needed = kernel.Get<ISeriesProvider>().QualityWanted(seriesId, qualityTypes);
+
+            Assert.AreEqual(result, needed);
+
+
+        }
     }
 }

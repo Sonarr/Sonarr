@@ -121,7 +121,9 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.Core, Version=2.5.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL" />
+    <Reference Include="Castle.Core">
+      <HintPath>Libraries\Castle.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Exceptioneer.WindowsFormsClient, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libraries\Exceptioneer.WindowsFormsClient.dll</HintPath>
@@ -138,7 +140,8 @@
       <HintPath>Libraries\NLog.Extended.dll</HintPath>
     </Reference>
     <Reference Include="SubSonic.Core, Version=3.0.0.3, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>D:\OpenSource\sabscripts\SABSync\References\SubSonic.Core.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libraries\SubSonic.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -151,7 +154,9 @@
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="TvdbLib, Version=0.8.8.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="TvdbLib">
+      <HintPath>Libraries\TvdbLib.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\EpisodeRenameHelper.cs" />
@@ -216,10 +221,8 @@
     <Compile Include="Providers\Core\HttpProvider.cs" />
     <Compile Include="Providers\IDownloadProvider.cs" />
     <Compile Include="Providers\IEpisodeProvider.cs" />
-    <Compile Include="Providers\Core\IHttpProvider.cs" />
     <Compile Include="Providers\ISeasonProvider.cs" />
     <Compile Include="Providers\ISeriesProvider.cs" />
-    <Compile Include="Providers\ITvDbProvider.cs" />
     <Compile Include="Providers\SabProvider.cs" />
     <Compile Include="Providers\SeasonProvider.cs" />
     <Compile Include="Repository\Episode.cs" />
@@ -263,24 +266,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Libraries\Castle.Core.dll" />
-    <Content Include="Libraries\Castle.Core.xml" />
-    <Content Include="Libraries\Exceptioneer.WindowsFormsClient.dll" />
-    <Content Include="Libraries\NLog.dll" />
-    <Content Include="Libraries\NLog.Extended.dll" />
-    <Content Include="Libraries\NLog.Extended.xml" />
-    <Content Include="Libraries\NLog.xml" />
-    <Content Include="Libraries\SubSonic.Core.dll" />
-    <Content Include="Libraries\SubSonic.Core.XML" />
-    <Content Include="Libraries\System.Data.SQLite.dll" />
-    <Content Include="Libraries\System.Data.SQLite.XML" />
-    <Content Include="Libraries\TvdbLib.dll" />
-    <Content Include="Libraries\TvdbLib.XML" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Libraries\nlog.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

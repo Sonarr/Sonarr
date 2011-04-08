@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using AutoMoq;
 using FizzWare.NBuilder;
 using Gallio.Framework;
 using MbUnit.Framework;
@@ -27,8 +28,9 @@ namespace NzbDrone.Core.Test
         public void RefreshEpisodeInfo()
         {
             //Arrange
-            int seriesId = 71663;
-            int episodeCount = 10;
+            const int seriesId = 71663;
+            const int episodeCount = 10;
+
             var fakeEpisodes = Builder<TvdbSeries>.CreateNew().With(
                 c => c.Episodes =
                     new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(episodeCount).
@@ -37,23 +39,26 @@ namespace NzbDrone.Core.Test
                         .Build())
                     ).With(c => c.Id = seriesId).Build();
 
-            var tvdbMock = new Mock<ITvDbProvider>();
-            tvdbMock.Setup(c => c.GetSeries(seriesId, true)).Returns(fakeEpisodes).Verifiable();
+            var mocker = new AutoMoqer();
 
-            var kernel = new MockingKernel();
-            kernel.Bind<IRepository>().ToConstant(MockLib.GetEmptyRepository(false)).InSingletonScope();
-            kernel.Bind<ITvDbProvider>().ToConstant(tvdbMock.Object);
-            kernel.Bind<IEpisodeProvider>().To<EpisodeProvider>().InSingletonScope();
+            mocker.SetConstant(MockLib.GetEmptyRepository());
+
+            mocker.GetMock<TvDbProvider>()
+             .Setup(c => c.GetSeries(seriesId, true))
+             .Returns(fakeEpisodes).Verifiable();
+
+            //mocker.GetMock<IRepository>().SetReturnsDefault();
+
+
 
             //Act
             var sw = Stopwatch.StartNew();
-            kernel.Get<IEpisodeProvider>().RefreshEpisodeInfo(seriesId);
-
-
+            mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(seriesId);
+            var actualCount = mocker.Resolve<EpisodeProvider>().GetEpisodeBySeries(seriesId);
             //Assert
-            tvdbMock.VerifyAll();
-            Assert.Count(episodeCount, kernel.Get<IEpisodeProvider>().GetEpisodeBySeries(seriesId));
-            Console.WriteLine("Duration: " + sw.Elapsed.ToString());
+            mocker.GetMock<TvDbProvider>().VerifyAll();
+            Assert.Count(episodeCount, actualCount);
+            Console.WriteLine("Duration: " + sw.Elapsed);
         }
 
         [Test]

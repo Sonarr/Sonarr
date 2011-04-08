@@ -9,7 +9,7 @@ using TvdbLib.Data;
 
 namespace NzbDrone.Core.Providers
 {
-    public class TvDbProvider : ITvDbProvider
+    public class TvDbProvider
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static readonly Regex CleanUpRegex = new Regex(@"((\s|^)the(\s|$))|((\s|^)and(\s|$))|[^a-z]", RegexOptions.IgnoreCase | RegexOptions.Compiled);
@@ -22,9 +22,9 @@ namespace NzbDrone.Core.Providers
             _handler = new TvdbHandler(new XmlCacheProvider(CentralDispatch.AppPath + @"\cache\tvdb"), TVDB_APIKEY);
         }
 
-        #region ITvDbProvider Members
+        #region TvDbProvider Members
 
-        public IList<TvdbSearchResult> SearchSeries(string title)
+        public virtual IList<TvdbSearchResult> SearchSeries(string title)
         {
             Logger.Debug("Searching TVDB for '{0}'", title);
             var result = _handler.SearchSeries(title);
@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Providers
         }
 
 
-        public TvdbSearchResult GetSeries(string title)
+        public virtual TvdbSearchResult GetSeries(string title)
         {
             var searchResults = SearchSeries(title);
             if (searchResults.Count == 0)
@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Providers
             return null;
         }
 
-        public int GetBestMatch(List<TvdbSearchResult> searchResults, string title)
+        public virtual int GetBestMatch(List<TvdbSearchResult> searchResults, string title)
         {
             if (searchResults.Count == 0)
                 return 0;
@@ -69,7 +69,7 @@ namespace NzbDrone.Core.Providers
             return searchResults[0].Id;
         }
 
-        public TvdbSeries GetSeries(int id, bool loadEpisodes)
+        public virtual TvdbSeries GetSeries(int id, bool loadEpisodes)
         {
             Logger.Debug("Fetching SeriesId'{0}' from tvdb", id);
             return _handler.GetSeries(id, TvdbLanguage.DefaultLanguage, loadEpisodes, false, false);

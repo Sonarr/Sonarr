@@ -125,9 +125,9 @@ namespace NzbDrone.Web.Controllers
         public SelectList GetSuggestionList(string searchString)
         {
             var dataVal = _tvDbProvider.SearchSeries(searchString);
-            var bestResult = _tvDbProvider.GetBestMatch(dataVal.ToList(), searchString);
+            //var bestResult = _tvDbProvider.GetBestMatch(dataVal.ToList(), searchString);
 
-            return new SelectList(dataVal, "Id", "SeriesName", bestResult);
+            return new SelectList(dataVal, "Id", "SeriesName", dataVal[0].Id);
         }
 
     }

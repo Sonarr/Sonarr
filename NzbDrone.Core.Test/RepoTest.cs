@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using FizzWare.NBuilder;
-using Gallio.Framework;
 using MbUnit.Framework;
-using MbUnit.Framework.ContractVerifiers;
-using Ninject;
 using NLog;
 using NzbDrone.Core.Instrumentation;
-using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository;
 using LogLevel = NzbDrone.Core.Instrumentation.LogLevel;
 using NLog.Config;
@@ -76,6 +70,7 @@ namespace NzbDrone.Core.Test
             var sonicRepo = MockLib.GetEmptyRepository();
 
             var sonicTarget = new SubsonicTarget(sonicRepo);
+
             LogManager.Configuration.AddTarget("DbLogger", sonicTarget);
             LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", NLog.LogLevel.Info, sonicTarget));
             LogManager.Configuration.Reload();

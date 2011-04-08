@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Net;
+using System.Xml;
 using NLog;
 
 namespace NzbDrone.Core.Providers.Core
 {
-    internal class HttpProvider : IHttpProvider
+    public class HttpProvider
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public string DownloadString(string request)
+        public virtual string DownloadString(string request)
         {
             try
             {
@@ -23,7 +24,7 @@ namespace NzbDrone.Core.Providers.Core
             return String.Empty;
         }
 
-        public string DownloadString(string request, string username, string password)
+        public virtual string DownloadString(string request, string username, string password)
         {
             try
             {
@@ -40,39 +41,43 @@ namespace NzbDrone.Core.Providers.Core
             return String.Empty;
         }
 
-        public bool DownloadFile(string request, string filename)
+        public virtual void DownloadFile(string request, string filename)
         {
             try
             {
                 var webClient = new WebClient();
                 webClient.DownloadFile(request, filename);
-                return true;
+
             }
             catch (Exception ex)
             {
                 Logger.Warn("Failed to get response from: {0}", request);
                 Logger.TraceException(ex.Message, ex);
+                throw;
             }
 
-            return false;
+
         }
 
-        public bool DownloadFile(string request, string filename, string username, string password)
+        public virtual void DownloadFile(string request, string filename, string username, string password)
         {
             try
             {
                 var webClient = new WebClient();
                 webClient.Credentials = new NetworkCredential(username, password);
                 webClient.DownloadFile(request, filename);
-                return true;
             }
             catch (Exception ex)
             {
                 Logger.Warn("Failed to get response from: {0}", request);
                 Logger.TraceException(ex.Message, ex);
+                throw;
             }
+        }
 
-            return false;
+        public virtual XmlReader DownloadXml(string url)
+        {
+            return XmlReader.Create(url);
         }
     }
 }

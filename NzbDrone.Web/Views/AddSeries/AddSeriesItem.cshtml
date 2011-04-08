@@ -7,7 +7,7 @@
             @{Html.Telerik().ComboBox()
             .Name("seriesList_" + ViewData["guid"].ToString())
                   .BindTo(Model)
-                  .DataBinding(binding => binding.Ajax().Select("_textLookUp", "AddSeries").Delay(400).Cache(false))
+                  .DataBinding(binding => binding.Ajax().Select("_textLookUp", "AddSeries").Delay(400))
                   .Filterable(f => f.FilterMode(AutoCompleteFilterMode.Contains))
                   .HighlightFirstMatch(true)
                   .HtmlAttributes(new { style = "width: 300px;" })

@@ -8,7 +8,7 @@ namespace NzbDrone.Core.Repository.Quality
 {
     public class QualityProfile
     {
-        [SubSonicPrimaryKey(true)]
+        [SubSonicPrimaryKey]
         public virtual int QualityProfileId { get; set; }
 
         [Required(ErrorMessage = "A Name is Required")]
@@ -36,6 +36,8 @@ namespace NzbDrone.Core.Repository.Quality
             get
             {
                 string result = String.Empty;
+                if (Allowed == null) return result;
+                
                 foreach (var q in Allowed)
                 {
                     result += (int)q + "|";
