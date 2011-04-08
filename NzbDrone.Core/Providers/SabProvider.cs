@@ -7,7 +7,7 @@ using NzbDrone.Core.Providers.Core;
 
 namespace NzbDrone.Core.Providers
 {
-    public class SabProvider : IDownloadProvider
+    public class SabProvider
     {
         private readonly IConfigProvider _config;
         private readonly HttpProvider _http;
@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Providers
 
         #region IDownloadProvider Members
 
-        public bool AddByUrl(string url, string title)
+        public virtual bool AddByUrl(string url, string title)
         {
             const string mode = "addurl";
             string cat = _config.GetValue("SabTvCategory", String.Empty, true);
@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Providers
             return false;
         }
 
-        public bool IsInQueue(string title)
+        public virtual bool IsInQueue(string title)
         {
             const string action = "mode=queue&output=xml";
             string request = GetSabRequest(action);
@@ -71,7 +71,7 @@ namespace NzbDrone.Core.Providers
             return false; //Not in Queue
         }
 
-        public bool AddById(string id, string title)
+        public virtual bool AddById(string id, string title)
         {
             //mode=addid&name=333333&pp=3&script=customscript.cmd&cat=Example&priority=-1
 

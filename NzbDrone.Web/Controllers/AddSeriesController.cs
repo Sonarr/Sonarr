@@ -14,13 +14,13 @@ namespace NzbDrone.Web.Controllers
     {
         public IConfigProvider ConfigProvider { get; set; }
         private readonly ISyncProvider _syncProvider;
-        private readonly IRootDirProvider _rootFolderProvider;
+        private readonly RootDirProvider _rootFolderProvider;
         private readonly IConfigProvider _configProvider;
         private readonly QualityProvider _qualityProvider;
         private readonly TvDbProvider _tvDbProvider;
         private readonly ISeriesProvider _seriesProvider;
 
-        public AddSeriesController(ISyncProvider syncProvider, IRootDirProvider rootFolderProvider, IConfigProvider configProvider,
+        public AddSeriesController(ISyncProvider syncProvider, RootDirProvider rootFolderProvider, IConfigProvider configProvider,
             QualityProvider qualityProvider, TvDbProvider tvDbProvider, ISeriesProvider seriesProvider)
         {
             ConfigProvider = configProvider;
@@ -62,6 +62,12 @@ namespace NzbDrone.Web.Controllers
         public ActionResult AddExisting()
         {
             var unmappedList = new List<String>();
+
+            var profiles = _qualityProvider.GetAllProfiles();
+            var defaultQuality = Convert.ToInt32(_configProvider.DefaultQualityProfile);
+            var selectList = new SelectList(profiles, "QualityProfileId", "Name", defaultQuality);
+
+            ViewData["qualities"] = selectList;
 
             foreach (var folder in _rootFolderProvider.GetAll())
             {

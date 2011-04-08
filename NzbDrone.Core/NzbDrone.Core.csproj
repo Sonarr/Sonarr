@@ -183,17 +183,11 @@
     <Compile Include="Providers\Feed\NzbsOrgFeedProvider.cs" />
     <Compile Include="Providers\HistoryProvider.cs" />
     <Compile Include="Providers\IBacklogProvider.cs" />
-    <Compile Include="Providers\IExtenalNotificationProvider.cs" />
     <Compile Include="Providers\IHistoryProvider.cs" />
     <Compile Include="Providers\IIndexerProvider.cs" />
     <Compile Include="Providers\IndexerProvider.cs" />
-    <Compile Include="Providers\IPostProcessingProvider.cs" />
     <Compile Include="Providers\IRenameProvider.cs" />
-    <Compile Include="Providers\IRootDirProvider.cs" />
     <Compile Include="Providers\IRssSyncProvider.cs" />
-    <Compile Include="Providers\ITimerProvider.cs" />
-    <Compile Include="Providers\IUpcomingEpisodesProvider.cs" />
-    <Compile Include="Providers\IXbmcProvider.cs" />
     <Compile Include="Providers\PostProcessingProvider.cs" />
     <Compile Include="Providers\QualityProvider.cs" />
     <Compile Include="Providers\RenameProvider.cs" />
@@ -218,7 +212,6 @@
     <Compile Include="Providers\Core\ConfigProvider.cs" />
     <Compile Include="Providers\EpisodeProvider.cs" />
     <Compile Include="Providers\Core\HttpProvider.cs" />
-    <Compile Include="Providers\IDownloadProvider.cs" />
     <Compile Include="Providers\IEpisodeProvider.cs" />
     <Compile Include="Providers\ISeasonProvider.cs" />
     <Compile Include="Providers\ISeriesProvider.cs" />

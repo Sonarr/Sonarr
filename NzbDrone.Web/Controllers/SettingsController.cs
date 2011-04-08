@@ -22,14 +22,14 @@ namespace NzbDrone.Web.Controllers
         private IConfigProvider _configProvider;
         private IIndexerProvider _indexerProvider;
         private QualityProvider _qualityProvider;
-        private IRootDirProvider _rootDirProvider;
+        private RootDirProvider _rootDirProvider;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private const string SETTINGS_SAVED = "Settings Saved.";
         private const string SETTINGS_FAILED = "Error Saving Settings, please fix any errors";
 
         public SettingsController(IConfigProvider configProvider, IIndexerProvider indexerProvider,
-            QualityProvider qualityProvider, IRootDirProvider rootDirProvider)
+            QualityProvider qualityProvider, RootDirProvider rootDirProvider)
         {
             _configProvider = configProvider;
             _indexerProvider = indexerProvider;

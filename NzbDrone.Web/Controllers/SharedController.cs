@@ -9,9 +9,9 @@ namespace NzbDrone.Web.Controllers
 {
     public class SharedController : Controller
     {
-        private ITimerProvider _timerProvider;
+        private TimerProvider _timerProvider;
 
-        public SharedController(ITimerProvider timerProvider)
+        public SharedController(TimerProvider timerProvider)
         {
             _timerProvider = timerProvider;
         }

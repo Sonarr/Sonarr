@@ -12,7 +12,7 @@
                   .HighlightFirstMatch(true)
                   .HtmlAttributes(new { style = "width: 300px;" })
                   .Render();}
-            @Html.Telerik().DropDownList().Name("qualityList_" + ViewData["guid"].ToString()).BindTo((SelectList)ViewData["quality"]).HtmlAttributes(new { style = "width: 100px;" }).SelectedIndex(0)
+            @Html.Telerik().DropDownList().Name("qualityList_" + ViewData["guid"].ToString()).BindTo((SelectList)ViewData["quality"]).HtmlAttributes(new { style = "width: 100px", @class = "qualityDropbox" })
             <button class="listButton" onclick="addSeries('@ViewData["guid"]','@ViewData["javaPath"].ToString()' )">
                 Add</button>
         </div>

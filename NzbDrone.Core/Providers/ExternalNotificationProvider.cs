@@ -10,22 +10,21 @@ using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Providers
 {
-    public class ExternalNotificationProvider : IExtenalNotificationProvider
+    public class ExternalNotificationProvider
     {
         private readonly IConfigProvider _configProvider;
-        private readonly IXbmcProvider _xbmcProvider;
-
+        private readonly XbmcProvider _xbmcProvider;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public ExternalNotificationProvider(IConfigProvider configProvider, IXbmcProvider xbmcProvider)
+        public ExternalNotificationProvider(IConfigProvider configProvider, XbmcProvider xbmcProvider)
         {
             _configProvider = configProvider;
             _xbmcProvider = xbmcProvider;
         }
 
-        #region IExternalNotificationProvider Members
-        public void OnGrab(string message)
+        #region ExternalNotificationProvider Members
+        public virtual void OnGrab(string message)
         {
             var header = "NzbDrone [TV] - Grabbed";
 
@@ -43,7 +42,7 @@ namespace NzbDrone.Core.Providers
             Logger.Trace("XBMC Notifier is not enabled");
         }
 
-        public void OnDownload(EpisodeRenameModel erm)
+        public virtual void OnDownload(EpisodeRenameModel erm)
         {
             var header = "NzbDrone [TV] - Downloaded";
             var message = EpisodeRenameHelper.GetNewName(erm);
@@ -75,7 +74,7 @@ namespace NzbDrone.Core.Providers
             throw new NotImplementedException();
         }
 
-        public void OnRename(EpisodeRenameModel erm)
+        public virtual void OnRename(EpisodeRenameModel erm)
         {
             var header = "NzbDrone [TV] - Renamed";
             var message = EpisodeRenameHelper.GetNewName(erm);

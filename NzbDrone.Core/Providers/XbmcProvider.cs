@@ -10,7 +10,7 @@ using NzbDrone.Core.Providers.Core;
 
 namespace NzbDrone.Core.Providers
 {
-    public class XbmcProvider : IXbmcProvider
+    public class XbmcProvider
     {
         private readonly IConfigProvider _configProvider;
         private readonly HttpProvider _httpProvider;
@@ -23,9 +23,9 @@ namespace NzbDrone.Core.Providers
             _httpProvider = httpProvider;
         }
 
-        #region IXbmcProvider Members
+        #region XbmcProvider Members
 
-        public void Notify(string header, string message)
+        public virtual void Notify(string header, string message)
         {
             //Get time in seconds and convert to ms
             var time = Convert.ToInt32(_configProvider.GetValue("XbmcDisplayTime", "3", true)) * 1000;
@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Providers
             }
         }
 
-        public void Update(int seriesId)
+        public virtual void Update(int seriesId)
         {
             foreach (var host in _configProvider.GetValue("XbmcHosts", "localhost:80", true).Split(','))
             {
@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Providers
             }
         }
 
-        public void Clean()
+        public virtual void Clean()
         {
             foreach (var host in _configProvider.GetValue("XbmcHosts", "localhost:80", true).Split(','))
             {

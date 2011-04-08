@@ -8,7 +8,7 @@ using NzbDrone.Core.Model.Notification;
 
 namespace NzbDrone.Core.Providers
 {
-    public class TimerProvider : ITimerProvider
+    public class TimerProvider
     {
         private readonly IRssSyncProvider _rssSyncProvider;
         private readonly ISeriesProvider _seriesProvider;
@@ -33,15 +33,15 @@ namespace NzbDrone.Core.Providers
             _minuteTimer = new Timer(60000);
         }
 
-        #region ITimerProvider Members
+        #region TimerProvider Members
 
-        public void ResetRssSyncTimer()
+        public virtual void ResetRssSyncTimer()
         {
             double interval = _rssSyncTimer.Interval;
             _rssSyncTimer.Interval = interval;
         }
-
-        public void StartRssSyncTimer()
+               
+        public virtual void StartRssSyncTimer()
         {
             if (_rssSyncTimer.Interval < 900000) //If Timer is less than 15 minutes, throw an error! This should also be handled when saving the config, though a user could by-pass it by editing the DB directly... TNO (Trust No One)
             {
@@ -53,35 +53,35 @@ namespace NzbDrone.Core.Providers
             _rssSyncTimer.Start();
             _rssSyncNextInterval = DateTime.Now.AddMilliseconds(_rssSyncTimer.Interval);
         }
-
-        public void StopRssSyncTimer()
+               
+        public virtual void StopRssSyncTimer()
         {
             _rssSyncTimer.Stop();
         }
-
-        public void SetRssSyncTimer(int minutes)
+               
+        public virtual void SetRssSyncTimer(int minutes)
         {
             long ms = minutes * 60 * 1000;
             _rssSyncTimer.Interval = ms;
         }
-
-        public TimeSpan RssSyncTimeLeft()
+               
+        public virtual TimeSpan RssSyncTimeLeft()
         {
             return _rssSyncNextInterval.Subtract(DateTime.Now);
         }
-
-        public DateTime NextRssSyncTime()
+               
+        public virtual DateTime NextRssSyncTime()
         {
             return _rssSyncNextInterval;
         }
-
-        public void StartMinuteTimer()
+               
+        public virtual void StartMinuteTimer()
         {
             _minuteTimer.Elapsed += new ElapsedEventHandler(MinuteTimer_Elapsed);
             _minuteTimer.Start();
         }
-
-        public void StopMinuteTimer()
+               
+        public virtual void StopMinuteTimer()
         {
             _minuteTimer.Stop();
         }

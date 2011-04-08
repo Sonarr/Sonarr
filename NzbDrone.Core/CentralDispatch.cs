@@ -64,13 +64,14 @@ namespace NzbDrone.Core
                 _kernel.Bind<IRssSyncProvider>().To<RssSyncProvider>().InSingletonScope();
                 _kernel.Bind<ISeasonProvider>().To<SeasonProvider>();
                 _kernel.Bind<IEpisodeProvider>().To<EpisodeProvider>();
-                _kernel.Bind<IUpcomingEpisodesProvider>().To<UpcomingEpisodesProvider>();
+                _kernel.Bind<UpcomingEpisodesProvider>().To<UpcomingEpisodesProvider>();
                 _kernel.Bind<IDiskProvider>().To<DiskProvider>();
-                _kernel.Bind<IDownloadProvider>().To<SabProvider>();
+                _kernel.Bind<SabProvider>().To<SabProvider>();
                 _kernel.Bind<IHistoryProvider>().To<HistoryProvider>();
-                _kernel.Bind<IRootDirProvider>().To<RootDirProvider>();
-                _kernel.Bind<IExtenalNotificationProvider>().To<ExternalNotificationProvider>();
-                _kernel.Bind<IXbmcProvider>().To<XbmcProvider>();
+                _kernel.Bind<RootDirProvider>().To<RootDirProvider>();
+                _kernel.Bind<ExternalNotificationProvider>().To<ExternalNotificationProvider>();
+                _kernel.Bind<XbmcProvider>().To<XbmcProvider>();
+                _kernel.Bind<PostProcessingProvider>().To<PostProcessingProvider>();
                 _kernel.Bind<IConfigProvider>().To<ConfigProvider>().InSingletonScope();
                 _kernel.Bind<ISyncProvider>().To<SyncProvider>().InSingletonScope();
                 _kernel.Bind<IIndexerProvider>().To<IndexerProvider>().InSingletonScope();
@@ -78,7 +79,7 @@ namespace NzbDrone.Core
                 _kernel.Bind<INotificationProvider>().To<NotificationProvider>().InSingletonScope();
                 _kernel.Bind<ILogProvider>().To<LogProvider>().InSingletonScope();
                 _kernel.Bind<IMediaFileProvider>().To<MediaFileProvider>().InSingletonScope();
-                _kernel.Bind<ITimerProvider>().To<TimerProvider>().InSingletonScope();
+                _kernel.Bind<TimerProvider>().To<TimerProvider>().InSingletonScope();
                 _kernel.Bind<IRepository>().ToMethod(c => new SimpleRepository(dbProvider, SimpleRepositoryOptions.RunMigrations)).InSingletonScope();
 
                 _kernel.Bind<IRepository>().ToConstant(logRepository).WhenInjectedInto<SubsonicTarget>().InSingletonScope();
@@ -90,7 +91,7 @@ namespace NzbDrone.Core
 
                 //Get the Timers going
                 var config = _kernel.Get<IConfigProvider>();
-                var timer = _kernel.Get<ITimerProvider>();
+                var timer = _kernel.Get<TimerProvider>();
                 timer.SetRssSyncTimer(Convert.ToInt32(config.GetValue("SyncFrequency", "15", true)));
                 timer.StartRssSyncTimer();
             }

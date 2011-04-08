@@ -13,12 +13,12 @@ namespace NzbDrone.Web.Controllers
 {
     public class ApiController : Controller
     {
-        private readonly IPostProcessingProvider _postProcessingProvider;
+        private readonly PostProcessingProvider _postProcessingProvider;
         private readonly IConfigProvider _configProvider;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public ApiController(IPostProcessingProvider postProcessingProvider, IConfigProvider configProvider)
+        public ApiController(PostProcessingProvider postProcessingProvider, IConfigProvider configProvider)
         {
             _postProcessingProvider = postProcessingProvider;
             _configProvider = configProvider;
