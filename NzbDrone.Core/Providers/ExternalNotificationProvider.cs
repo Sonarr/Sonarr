@@ -13,12 +13,12 @@ namespace NzbDrone.Core.Providers
     public class ExternalNotificationProvider : IExtenalNotificationProvider
     {
         private readonly IConfigProvider _configProvider;
-        private readonly IXbmcProvider _xbmcProvider;
+        private readonly XbmcProvider _xbmcProvider;
 
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public ExternalNotificationProvider(IConfigProvider configProvider, IXbmcProvider xbmcProvider)
+        public ExternalNotificationProvider(IConfigProvider configProvider, XbmcProvider xbmcProvider)
         {
             _configProvider = configProvider;
             _xbmcProvider = xbmcProvider;
