@@ -213,7 +213,6 @@
     <Compile Include="Providers\Core\ConfigProvider.cs" />
     <Compile Include="Providers\EpisodeProvider.cs" />
     <Compile Include="Providers\Core\HttpProvider.cs" />
-    <Compile Include="Providers\IDownloadProvider.cs" />
     <Compile Include="Providers\IEpisodeProvider.cs" />
     <Compile Include="Providers\ISeasonProvider.cs" />
     <Compile Include="Providers\ISeriesProvider.cs" />
