@@ -12,9 +12,9 @@ namespace NzbDrone.Web.Controllers
 {
     public class HistoryController : Controller
     {
-        private IHistoryProvider _historyProvider;
+        private HistoryProvider _historyProvider;
 
-        public HistoryController(IHistoryProvider historyProvider)
+        public HistoryController(HistoryProvider historyProvider)
         {
             _historyProvider = historyProvider;
         }

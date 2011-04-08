@@ -67,7 +67,7 @@ namespace NzbDrone.Core
                 _kernel.Bind<UpcomingEpisodesProvider>().To<UpcomingEpisodesProvider>();
                 _kernel.Bind<IDiskProvider>().To<DiskProvider>();
                 _kernel.Bind<SabProvider>().ToSelf();
-                _kernel.Bind<IHistoryProvider>().To<HistoryProvider>();
+                _kernel.Bind<HistoryProvider>().ToSelf();
                 _kernel.Bind<RootDirProvider>().ToSelf();
                 _kernel.Bind<ExternalNotificationProvider>().ToSelf();
                 _kernel.Bind<XbmcProvider>().ToSelf();
