@@ -86,6 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoMoq\AutoMoqer.cs" />
+    <Compile Include="AutoMoq\AutoMoqerTest.cs" />
     <Compile Include="AutoMoq\Unity\AutoMockingBuilderStrategy.cs">
       <SubType>Code</SubType>
     </Compile>

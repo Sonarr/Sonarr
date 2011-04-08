@@ -16,6 +16,7 @@ namespace AutoMoq
     {
         private IUnityContainer container;
         private IDictionary<Type, object> registeredMocks;
+        internal Type ResolveType = null;
 
         public AutoMoqer()
         {
@@ -29,11 +30,15 @@ namespace AutoMoq
 
         public virtual T Resolve<T>()
         {
-            return container.Resolve<T>();
+            ResolveType = typeof(T);
+            var result = container.Resolve<T>();
+            ResolveType = null;
+            return result;
         }
 
         public virtual Mock<T> GetMock<T>() where T : class
         {
+            ResolveType = null;
             var type = GetTheMockType<T>();
             if (GetMockHasNotBeenCalledForThisType(type))
                 CreateANewMockAndRegisterIt<T>(type);
