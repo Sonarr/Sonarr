@@ -7,7 +7,7 @@ using SubSonic.Repository;
 
 namespace NzbDrone.Core.Providers
 {
-    public class RootDirProvider : IRootDirProvider
+    public class RootDirProvider
     {
         private readonly IRepository _sonioRepo;
 
@@ -18,27 +18,27 @@ namespace NzbDrone.Core.Providers
 
         #region IRootDirProvider
 
-        public List<RootDir> GetAll()
+        public virtual List<RootDir> GetAll()
         {
             return _sonioRepo.All<RootDir>().ToList();
         }
 
-        public void Add(RootDir rootDir)
+        public virtual void Add(RootDir rootDir)
         {
             _sonioRepo.Add(rootDir);
         }
-
-        public void Remove(int rootDirId)
+               
+        public virtual void Remove(int rootDirId)
         {
             _sonioRepo.Delete<RootDir>(rootDirId);
         }
-
-        public void Update(RootDir rootDir)
+               
+        public virtual void Update(RootDir rootDir)
         {
             _sonioRepo.Update(rootDir);
         }
-
-        public RootDir GetRootDir(int rootDirId)
+               
+        public virtual RootDir GetRootDir(int rootDirId)
         {
             return _sonioRepo.Single<RootDir>(rootDirId);
         }

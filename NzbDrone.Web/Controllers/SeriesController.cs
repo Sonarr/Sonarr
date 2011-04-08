@@ -28,7 +28,7 @@ namespace NzbDrone.Web.Controllers
         private readonly QualityProvider _qualityProvider;
         private readonly IMediaFileProvider _mediaFileProvider;
         private readonly IRenameProvider _renameProvider;
-        private readonly IRootDirProvider _rootDirProvider;
+        private readonly RootDirProvider _rootDirProvider;
         private readonly TvDbProvider _tvDbProvider;
         //
         // GET: /Series/
@@ -36,7 +36,7 @@ namespace NzbDrone.Web.Controllers
         public SeriesController(ISyncProvider syncProvider, ISeriesProvider seriesProvider,
             IEpisodeProvider episodeProvider, IRssSyncProvider rssSyncProvider,
             QualityProvider qualityProvider, IMediaFileProvider mediaFileProvider,
-            IRenameProvider renameProvider, IRootDirProvider rootDirProvider,
+            IRenameProvider renameProvider, RootDirProvider rootDirProvider,
             TvDbProvider tvDbProvider)
         {
             _seriesProvider = seriesProvider;

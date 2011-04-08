@@ -189,7 +189,6 @@
     <Compile Include="Providers\IndexerProvider.cs" />
     <Compile Include="Providers\IPostProcessingProvider.cs" />
     <Compile Include="Providers\IRenameProvider.cs" />
-    <Compile Include="Providers\IRootDirProvider.cs" />
     <Compile Include="Providers\IRssSyncProvider.cs" />
     <Compile Include="Providers\ITimerProvider.cs" />
     <Compile Include="Providers\IUpcomingEpisodesProvider.cs" />
