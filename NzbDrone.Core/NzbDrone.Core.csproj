@@ -188,7 +188,6 @@
     <Compile Include="Providers\IIndexerProvider.cs" />
     <Compile Include="Providers\IndexerProvider.cs" />
     <Compile Include="Providers\IPostProcessingProvider.cs" />
-    <Compile Include="Providers\IQualityProvider.cs" />
     <Compile Include="Providers\IRenameProvider.cs" />
     <Compile Include="Providers\IRootDirProvider.cs" />
     <Compile Include="Providers\IRssSyncProvider.cs" />

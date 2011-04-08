@@ -18,12 +18,12 @@ namespace NzbDrone.Core.Providers
         private readonly ISeasonProvider _seasons;
         private readonly TvDbProvider _tvDb;
         private readonly IHistoryProvider _history;
-        private readonly IQualityProvider _quality;
+        private readonly QualityProvider _quality;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public EpisodeProvider(IRepository sonicRepo, ISeriesProvider seriesProvider,
             ISeasonProvider seasonProvider, TvDbProvider tvDbProvider,
-            IHistoryProvider history, IQualityProvider quality)
+            IHistoryProvider history, QualityProvider quality)
         {
             _sonicRepo = sonicRepo;
             _series = seriesProvider;

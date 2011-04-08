@@ -21,7 +21,7 @@ namespace NzbDrone.Web.Controllers
     {
         private IConfigProvider _configProvider;
         private IIndexerProvider _indexerProvider;
-        private IQualityProvider _qualityProvider;
+        private QualityProvider _qualityProvider;
         private IRootDirProvider _rootDirProvider;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
@@ -29,7 +29,7 @@ namespace NzbDrone.Web.Controllers
         private const string SETTINGS_FAILED = "Error Saving Settings, please fix any errors";
 
         public SettingsController(IConfigProvider configProvider, IIndexerProvider indexerProvider,
-            IQualityProvider qualityProvider, IRootDirProvider rootDirProvider)
+            QualityProvider qualityProvider, IRootDirProvider rootDirProvider)
         {
             _configProvider = configProvider;
             _indexerProvider = indexerProvider;

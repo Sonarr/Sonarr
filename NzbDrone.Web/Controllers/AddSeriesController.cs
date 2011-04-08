@@ -16,12 +16,12 @@ namespace NzbDrone.Web.Controllers
         private readonly ISyncProvider _syncProvider;
         private readonly IRootDirProvider _rootFolderProvider;
         private readonly IConfigProvider _configProvider;
-        private readonly IQualityProvider _qualityProvider;
+        private readonly QualityProvider _qualityProvider;
         private readonly TvDbProvider _tvDbProvider;
         private readonly ISeriesProvider _seriesProvider;
 
         public AddSeriesController(ISyncProvider syncProvider, IRootDirProvider rootFolderProvider, IConfigProvider configProvider,
-            IQualityProvider qualityProvider, TvDbProvider tvDbProvider, ISeriesProvider seriesProvider)
+            QualityProvider qualityProvider, TvDbProvider tvDbProvider, ISeriesProvider seriesProvider)
         {
             ConfigProvider = configProvider;
             _syncProvider = syncProvider;

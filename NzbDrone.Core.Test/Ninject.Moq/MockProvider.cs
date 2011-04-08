@@ -9,7 +9,7 @@ namespace Ninject.Moq
 	/// <summary>
 	/// Creates mocked instances via Moq.
 	/// </summary>
-	public class MockProvider : IProvider
+	public class    MockProvider : IProvider
 	{
 		private static readonly Dictionary<Type, ConstructorInjector> _injectors = new Dictionary<Type, ConstructorInjector>();
 

@@ -25,23 +25,19 @@ namespace NzbDrone.Web.Controllers
         private readonly IEpisodeProvider _episodeProvider;
         private readonly ISyncProvider _syncProvider;
         private readonly IRssSyncProvider _rssSyncProvider;
-        private readonly IQualityProvider _qualityProvider;
+        private readonly QualityProvider _qualityProvider;
         private readonly IMediaFileProvider _mediaFileProvider;
         private readonly IRenameProvider _renameProvider;
         private readonly IRootDirProvider _rootDirProvider;
         private readonly TvDbProvider _tvDbProvider;
-        private readonly IDiskProvider _diskProvider;
-        private readonly IConfigProvider _configProvider;
-
         //
         // GET: /Series/
 
         public SeriesController(ISyncProvider syncProvider, ISeriesProvider seriesProvider,
             IEpisodeProvider episodeProvider, IRssSyncProvider rssSyncProvider,
-            IQualityProvider qualityProvider, IMediaFileProvider mediaFileProvider,
+            QualityProvider qualityProvider, IMediaFileProvider mediaFileProvider,
             IRenameProvider renameProvider, IRootDirProvider rootDirProvider,
-            TvDbProvider tvDbProvider, IDiskProvider diskProvider,
-            IConfigProvider configProvider)
+            TvDbProvider tvDbProvider)
         {
             _seriesProvider = seriesProvider;
             _episodeProvider = episodeProvider;
@@ -52,8 +48,6 @@ namespace NzbDrone.Web.Controllers
             _renameProvider = renameProvider;
             _rootDirProvider = rootDirProvider;
             _tvDbProvider = tvDbProvider;
-            _diskProvider = diskProvider;
-            _configProvider = configProvider;
         }
 
         public ActionResult Index()
@@ -62,7 +56,7 @@ namespace NzbDrone.Web.Controllers
             return View();
         }
 
-      
+
 
 
 
