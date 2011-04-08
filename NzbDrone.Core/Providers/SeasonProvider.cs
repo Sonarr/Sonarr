@@ -11,11 +11,11 @@ namespace NzbDrone.Core.Providers
     public class SeasonProvider : ISeasonProvider
     {
         private readonly IRepository _sonicRepo;
-        private readonly ISeriesProvider _seriesProvider;
+        private readonly SeriesProvider _seriesProvider;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public SeasonProvider(IRepository dataRepository, ISeriesProvider seriesProvider)
+        public SeasonProvider(IRepository dataRepository, SeriesProvider seriesProvider)
         {
             _sonicRepo = dataRepository;
             _seriesProvider = seriesProvider;

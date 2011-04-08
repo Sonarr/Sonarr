@@ -11,22 +11,22 @@ namespace NzbDrone.Core.Providers
         private Dictionary<Guid, ProgressNotification> _progressNotification = new Dictionary<Guid, ProgressNotification>();
         private readonly Object _lock = new object();
 
-        public void Register(ProgressNotification notification)
+        public virtual void Register(ProgressNotification notification)
         {
             _progressNotification.Add(notification.Id, notification);
         }
 
-        public void Register(BasicNotification notification)
+        public virtual void Register(BasicNotification notification)
         {
             _basicNotifications.Add(notification.Id, notification);
         }
 
-        public List<BasicNotification> BasicNotifications
+        public virtual List<BasicNotification> BasicNotifications
         {
             get { return new List<BasicNotification>(_basicNotifications.Values); }
         }
 
-        public List<ProgressNotification> GetProgressNotifications
+        public virtual List<ProgressNotification> GetProgressNotifications
         {
             get
             {
@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Providers
             }
         }
 
-        public void Dismiss(Guid notificationId)
+        public virtual void Dismiss(Guid notificationId)
         {
             lock (_lock)
             {

@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Providers
 {
     public class RenameProvider : IRenameProvider
     {
-        private readonly ISeriesProvider _seriesProvider;
+        private readonly SeriesProvider _seriesProvider;
         private readonly ISeasonProvider _seasonProvider;
         private readonly IEpisodeProvider _episodeProvider;
         private readonly IMediaFileProvider _mediaFileProvider;
@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Providers
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public RenameProvider(ISeriesProvider seriesProvider, ISeasonProvider seasonProvider,
+        public RenameProvider(SeriesProvider seriesProvider, ISeasonProvider seasonProvider,
             IEpisodeProvider episodeProvider, IMediaFileProvider mediaFileProvider,
             IDiskProvider diskProvider, IConfigProvider configProvider,
             ExternalNotificationProvider extenalNotificationProvider)

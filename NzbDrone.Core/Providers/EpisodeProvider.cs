@@ -14,14 +14,14 @@ namespace NzbDrone.Core.Providers
         //TODO: Remove parsing of the series name, it should be done in series provider
 
         private readonly IRepository _sonicRepo;
-        private readonly ISeriesProvider _series;
+        private readonly SeriesProvider _series;
         private readonly ISeasonProvider _seasons;
         private readonly TvDbProvider _tvDb;
         private readonly IHistoryProvider _history;
         private readonly QualityProvider _quality;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public EpisodeProvider(IRepository sonicRepo, ISeriesProvider seriesProvider,
+        public EpisodeProvider(IRepository sonicRepo, SeriesProvider seriesProvider,
             ISeasonProvider seasonProvider, TvDbProvider tvDbProvider,
             IHistoryProvider history, QualityProvider quality)
         {

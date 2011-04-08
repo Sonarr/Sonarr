@@ -21,7 +21,7 @@ namespace NzbDrone.Web.Controllers
     [HandleError]
     public class SeriesController : Controller
     {
-        private readonly ISeriesProvider _seriesProvider;
+        private readonly SeriesProvider _seriesProvider;
         private readonly IEpisodeProvider _episodeProvider;
         private readonly ISyncProvider _syncProvider;
         private readonly IRssSyncProvider _rssSyncProvider;
@@ -33,7 +33,7 @@ namespace NzbDrone.Web.Controllers
         //
         // GET: /Series/
 
-        public SeriesController(ISyncProvider syncProvider, ISeriesProvider seriesProvider,
+        public SeriesController(ISyncProvider syncProvider, SeriesProvider seriesProvider,
             IEpisodeProvider episodeProvider, IRssSyncProvider rssSyncProvider,
             QualityProvider qualityProvider, IMediaFileProvider mediaFileProvider,
             IRenameProvider renameProvider, RootDirProvider rootDirProvider,

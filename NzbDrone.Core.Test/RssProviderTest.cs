@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Test
 
     public class MockFeedProvider : FeedProviderBase
     {
-        public MockFeedProvider(ISeriesProvider seriesProvider, ISeasonProvider seasonProvider, IEpisodeProvider episodeProvider, IConfigProvider configProvider, HttpProvider httpProvider)
+        public MockFeedProvider(SeriesProvider seriesProvider, ISeasonProvider seasonProvider, IEpisodeProvider episodeProvider, IConfigProvider configProvider, HttpProvider httpProvider)
             : base(seriesProvider, seasonProvider, episodeProvider, configProvider, httpProvider)
         {
         }
