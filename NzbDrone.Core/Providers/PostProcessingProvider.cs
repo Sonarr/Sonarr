@@ -9,7 +9,7 @@ using NzbDrone.Core.Providers.Core;
 
 namespace NzbDrone.Core.Providers
 {
-    public class PostProcessingProvider : IPostProcessingProvider
+    public class PostProcessingProvider
     {
         private readonly ISeriesProvider _seriesProvider;
         private readonly IMediaFileProvider _mediaFileProvider;
@@ -23,9 +23,9 @@ namespace NzbDrone.Core.Providers
             _renameProvider = renameProvider;
         }
 
-        #region IPostProcessingProvider Members
+        #region PostProcessingProvider Members
 
-        public void ProcessEpisode(string dir, string nzbName)
+        public virtual void ProcessEpisode(string dir, string nzbName)
         {
             var parsedSeries = Parser.ParseSeriesName(nzbName);
             var series = _seriesProvider.FindSeries(parsedSeries);

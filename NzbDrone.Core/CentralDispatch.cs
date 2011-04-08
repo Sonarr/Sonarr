@@ -71,6 +71,7 @@ namespace NzbDrone.Core
                 _kernel.Bind<RootDirProvider>().To<RootDirProvider>();
                 _kernel.Bind<IExtenalNotificationProvider>().To<ExternalNotificationProvider>();
                 _kernel.Bind<XbmcProvider>().To<XbmcProvider>();
+                _kernel.Bind<PostProcessingProvider>().To<PostProcessingProvider>();
                 _kernel.Bind<IConfigProvider>().To<ConfigProvider>().InSingletonScope();
                 _kernel.Bind<ISyncProvider>().To<SyncProvider>().InSingletonScope();
                 _kernel.Bind<IIndexerProvider>().To<IndexerProvider>().InSingletonScope();
