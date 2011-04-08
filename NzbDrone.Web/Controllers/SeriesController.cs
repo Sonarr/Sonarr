@@ -29,7 +29,7 @@ namespace NzbDrone.Web.Controllers
         private readonly IMediaFileProvider _mediaFileProvider;
         private readonly IRenameProvider _renameProvider;
         private readonly IRootDirProvider _rootDirProvider;
-        private readonly ITvDbProvider _tvDbProvider;
+        private readonly TvDbProvider _tvDbProvider;
         private readonly IDiskProvider _diskProvider;
         private readonly IConfigProvider _configProvider;
 
@@ -40,7 +40,7 @@ namespace NzbDrone.Web.Controllers
             IEpisodeProvider episodeProvider, IRssSyncProvider rssSyncProvider,
             IQualityProvider qualityProvider, IMediaFileProvider mediaFileProvider,
             IRenameProvider renameProvider, IRootDirProvider rootDirProvider,
-            ITvDbProvider tvDbProvider, IDiskProvider diskProvider,
+            TvDbProvider tvDbProvider, IDiskProvider diskProvider,
             IConfigProvider configProvider)
         {
             _seriesProvider = seriesProvider;
