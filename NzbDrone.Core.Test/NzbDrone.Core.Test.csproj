@@ -85,9 +85,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AutoMoq\AutoMoq.cs" />
-    <Compile Include="AutoMoq\Unity\AutoMockingBuilderStrategy.cs" />
-    <Compile Include="AutoMoq\Unity\AutoMockingContainerExtension.cs" />
+    <Compile Include="AutoMoq\AutoMoqer.cs" />
+    <Compile Include="AutoMoq\Unity\AutoMockingBuilderStrategy.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AutoMoq\Unity\AutoMockingContainerExtension.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="RssProviderTest.cs" />
     <Compile Include="HistoryProviderTest.cs" />
     <Compile Include="MediaFileProviderTests.cs" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using NLog;
@@ -8,10 +9,12 @@ using SubSonic.Repository;
 
 namespace NzbDrone.Core.Providers
 {
-    public class QualityProvider : IQualityProvider
+    public class QualityProvider
     {
         private IRepository _sonicRepo;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        public QualityProvider() { }
 
         public QualityProvider(IRepository sonicRepo)
         {
@@ -20,12 +23,12 @@ namespace NzbDrone.Core.Providers
 
         #region IQualityProvider Members
 
-        public void Add(QualityProfile profile)
+        public virtual void Add(QualityProfile profile)
         {
             _sonicRepo.Add(profile);
         }
 
-        public void Update(QualityProfile profile)
+        public virtual void Update(QualityProfile profile)
         {
             if (!_sonicRepo.Exists<QualityProfile>(q => q.QualityProfileId == profile.QualityProfileId))
             {
@@ -36,19 +39,19 @@ namespace NzbDrone.Core.Providers
             _sonicRepo.Update(profile);
         }
 
-        public void Delete(int profileId)
+        public virtual void Delete(int profileId)
         {
             _sonicRepo.Delete<QualityProfile>(profileId);
         }
 
-        public List<QualityProfile> GetAllProfiles()
+        public virtual List<QualityProfile> GetAllProfiles()
         {
             var profiles = _sonicRepo.All<QualityProfile>().ToList();
 
             return profiles;
         }
 
-        public QualityProfile Find(int profileId)
+        public virtual QualityProfile Find(int profileId)
         {
             return _sonicRepo.Single<QualityProfile>(q => q.QualityProfileId == profileId);
         }

@@ -1,11 +1,14 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using AutoMoq.Unity;
 using Microsoft.Practices.Unity;
 using Moq;
 using Moq.Language.Flow;
+
+[assembly: InternalsVisibleTo("AutoMoq.Tests")]
 
 namespace AutoMoq
 {
@@ -38,16 +41,16 @@ namespace AutoMoq
             return TheRegisteredMockForThisType<T>(type);
         }
 
-        public virtual void SetConstant<T>(T instance) where T : class
-        {
-            container.RegisterInstance(instance);
-            SetMock(instance.GetType(), null);
-        }
-
         internal virtual void SetMock(Type type, Mock mock)
         {
             if (registeredMocks.ContainsKey(type) == false)
                 registeredMocks.Add(type, mock);
+        }
+
+        public virtual void SetConstant<T>(T instance) where T : class
+        {
+            container.RegisterInstance(instance);
+            SetMock(instance.GetType(), null);
         }
 
         #region private methods

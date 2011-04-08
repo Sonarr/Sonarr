@@ -65,18 +65,16 @@ namespace NzbDrone.Core.Test
         [Test]
         public void Add_new_series()
         {
-            var repo = MockLib.GetEmptyRepository();
 
-            var kernel = new MockingKernel();
-            kernel.Bind<ISeriesProvider>().To<SeriesProvider>();
-            kernel.Bind<IRepository>().ToConstant(repo);
+            var mocker = new AutoMoqer();
+            mocker.SetConstant(MockLib.GetEmptyRepository());
 
             string path = "C:\\Test\\";
             int tvDbId = 1234;
             int qualityProfileId = 2;
 
             //Act
-            var seriesProvider = kernel.Get<ISeriesProvider>();
+            var seriesProvider = mocker.Resolve<SeriesProvider>();
             seriesProvider.AddSeries(path, tvDbId, qualityProfileId);
 
 
@@ -107,24 +105,23 @@ namespace NzbDrone.Core.Test
         [Test]
         public void Test_is_monitored()
         {
-            var kernel = new MockingKernel();
-            var repo = MockLib.GetEmptyRepository();
-            kernel.Bind<IRepository>().ToConstant(repo);
-            kernel.Bind<ISeriesProvider>().To<SeriesProvider>();
+            var mocker = new AutoMoqer();
 
-            repo.Add(Builder<Series>.CreateNew()
+            mocker.SetConstant(MockLib.GetEmptyRepository());
+
+            mocker.Resolve<IRepository>().Add(Builder<Series>.CreateNew()
                 .With(c => c.Monitored = true)
                 .With(c => c.SeriesId = 12)
                 .Build());
 
-            repo.Add(Builder<Series>.CreateNew()
+            mocker.Resolve<IRepository>().Add(Builder<Series>.CreateNew()
             .With(c => c.Monitored = false)
             .With(c => c.SeriesId = 11)
             .Build());
 
 
             //Act, Assert
-            var provider = kernel.Get<ISeriesProvider>();
+            var provider = mocker.Resolve<SeriesProvider>();
             Assert.IsTrue(provider.IsMonitored(12));
             Assert.IsFalse(provider.IsMonitored(11));
             Assert.IsFalse(provider.IsMonitored(1));
@@ -141,32 +138,31 @@ namespace NzbDrone.Core.Test
         [Row(12, QualityTypes.WEBDL, false)]
         public void QualityWanted(int seriesId, QualityTypes qualityTypes, Boolean result)
         {
-            var kernel = new MockingKernel();
-            var repo = MockLib.GetEmptyRepository();
-            kernel.Bind<IRepository>().ToConstant(repo);
-            kernel.Bind<ISeriesProvider>().To<SeriesProvider>();
-
             var quality = Builder<QualityProfile>.CreateNew()
-                .With(q => q.Allowed = new List<QualityTypes>() { QualityTypes.BDRip, QualityTypes.DVD, QualityTypes.TV })
-                .With(q => q.Cutoff = QualityTypes.DVD)
-                .Build();
+                         .With(q => q.Allowed = new List<QualityTypes>() { QualityTypes.BDRip, QualityTypes.DVD, QualityTypes.TV })
+                         .With(q => q.Cutoff = QualityTypes.DVD)
+                         .Build();
 
-            var qualityProviderMock = new Mock<IQualityProvider>();
-            qualityProviderMock.Setup(c => c.Find(quality.QualityProfileId)).Returns(quality).Verifiable();
-            kernel.Bind<IQualityProvider>().ToConstant(qualityProviderMock.Object);
+            var series = Builder<Series>.CreateNew()
+             .With(c => c.SeriesId = 12)
+             .With(c => c.QualityProfileId = quality.QualityProfileId)
+             .Build();
+
+            var mocker = new AutoMoqer();
+            var emptyRepository = MockLib.GetEmptyRepository();
+            mocker.SetConstant(emptyRepository);
 
 
-            repo.Add(Builder<Series>.CreateNew()
-                .With(c => c.SeriesId = 12)
-                .With(c => c.QualityProfileId = quality.QualityProfileId)
-                .Build());
+            mocker.GetMock<QualityProvider>()
+            .Setup(c => c.Find(quality.QualityProfileId)).Returns(quality);
+
+
+            emptyRepository.Add(series);
 
             //Act
-            var needed = kernel.Get<ISeriesProvider>().QualityWanted(seriesId, qualityTypes);
+            var needed = mocker.Resolve<SeriesProvider>().QualityWanted(seriesId, qualityTypes);
 
             Assert.AreEqual(result, needed);
-
-
         }
     }
 }
