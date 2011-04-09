@@ -5,14 +5,9 @@ using System.Text;
 
 namespace NzbDrone.Core.Providers
 {
-    public interface IRssSyncProvider
+    public class RssSyncProvider
     {
-        void Begin();
-    }
-
-    public class RssSyncProvider : IRssSyncProvider
-    {
-        public void Begin()
+        public virtual void Begin()
         {
             
         }

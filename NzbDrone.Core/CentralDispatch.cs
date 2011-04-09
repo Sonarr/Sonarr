@@ -79,7 +79,7 @@ namespace NzbDrone.Core
                 _kernel.Bind<NotificationProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<ILogProvider>().To<LogProvider>().InSingletonScope();
                 _kernel.Bind<IMediaFileProvider>().To<MediaFileProvider>().InSingletonScope();
-                _kernel.Bind<TimerProvider>().To<TimerProvider>().InSingletonScope();
+                _kernel.Bind<TimerProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<IRepository>().ToMethod(c => new SimpleRepository(dbProvider, SimpleRepositoryOptions.RunMigrations)).InSingletonScope();
 
                 _kernel.Bind<IRepository>().ToConstant(logRepository).WhenInjectedInto<SubsonicTarget>().InSingletonScope();
