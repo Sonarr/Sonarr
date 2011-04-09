@@ -11,12 +11,12 @@ namespace NzbDrone.Core.Providers
 {
     public class PostProcessingProvider
     {
-        private readonly ISeriesProvider _seriesProvider;
+        private readonly SeriesProvider _seriesProvider;
         private readonly IMediaFileProvider _mediaFileProvider;
-        private readonly IRenameProvider _renameProvider;
+        private readonly RenameProvider _renameProvider;
 
-        public PostProcessingProvider(ISeriesProvider seriesProvider,
-            IMediaFileProvider mediaFileProvider, IRenameProvider renameProvider)
+        public PostProcessingProvider(SeriesProvider seriesProvider,
+            IMediaFileProvider mediaFileProvider, RenameProvider renameProvider)
         {
             _seriesProvider = seriesProvider;
            _mediaFileProvider = mediaFileProvider;

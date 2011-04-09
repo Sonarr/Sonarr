@@ -13,7 +13,7 @@ using TvdbLib.Data;
 
 namespace NzbDrone.Core.Providers
 {
-    public class SeriesProvider : ISeriesProvider
+    public class SeriesProvider
     {
         //TODO: Remove parsing of rest of tv show info we just need the show name
 
@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Providers
             _quality = quality;
         }
 
-        #region ISeriesProvider Members
+        #region SeriesProvider Members
 
         public virtual IQueryable<Series> GetAllSeries()
         {

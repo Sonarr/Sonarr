@@ -66,7 +66,7 @@ namespace NzbDrone.Core.Test
         {
             //Setup
             var season = new Mock<ISeasonProvider>();
-            var series = new Mock<ISeriesProvider>();
+            var series = new Mock<SeriesProvider>();
             //var history = new Mock<IHistoryProvider>();
             //var quality = new Mock<IQualityProvider>();
             var repo = new Mock<IRepository>();

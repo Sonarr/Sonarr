@@ -182,12 +182,9 @@
     <Compile Include="Providers\ExternalNotificationProvider.cs" />
     <Compile Include="Providers\Feed\NzbsOrgFeedProvider.cs" />
     <Compile Include="Providers\HistoryProvider.cs" />
-    <Compile Include="Providers\IBacklogProvider.cs" />
-    <Compile Include="Providers\IHistoryProvider.cs" />
-    <Compile Include="Providers\IIndexerProvider.cs" />
+    <Compile Include="Providers\BacklogProvider.cs" />
     <Compile Include="Providers\IndexerProvider.cs" />
-    <Compile Include="Providers\IRenameProvider.cs" />
-    <Compile Include="Providers\IRssSyncProvider.cs" />
+    <Compile Include="Providers\RssSyncProvider.cs" />
     <Compile Include="Providers\PostProcessingProvider.cs" />
     <Compile Include="Providers\QualityProvider.cs" />
     <Compile Include="Providers\RenameProvider.cs" />
@@ -203,7 +200,6 @@
     <Compile Include="Parser.cs" />
     <Compile Include="Providers\Fakes\FakeNotificationProvider.cs" />
     <Compile Include="Providers\IMediaFileProvider.cs" />
-    <Compile Include="Providers\INotificationProvider.cs" />
     <Compile Include="Providers\ISyncProvider.cs" />
     <Compile Include="Providers\MediaFileProvider.cs" />
     <Compile Include="Providers\SyncProvider.cs" />
@@ -214,7 +210,6 @@
     <Compile Include="Providers\Core\HttpProvider.cs" />
     <Compile Include="Providers\IEpisodeProvider.cs" />
     <Compile Include="Providers\ISeasonProvider.cs" />
-    <Compile Include="Providers\ISeriesProvider.cs" />
     <Compile Include="Providers\SabProvider.cs" />
     <Compile Include="Providers\SeasonProvider.cs" />
     <Compile Include="Repository\Episode.cs" />
@@ -231,7 +226,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\Core\DiskProvider.cs" />
     <Compile Include="Providers\Core\IConfigProvider.cs" />
-    <Compile Include="Providers\Core\IDiskProvider.cs" />
     <Compile Include="Providers\SeriesProvider.cs" />
     <Compile Include="Providers\TvDbProvider.cs" />
   </ItemGroup>
