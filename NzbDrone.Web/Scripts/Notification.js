@@ -11,7 +11,7 @@ $(function () {
 
     function refreshNotifications() {
         $.ajax({
-            url: 'Notification',
+            url: '/Notification',
             success: notificationCallback
         });
     }
