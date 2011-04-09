@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Providers
         private readonly IEpisodeProvider _episodeProvider;
         private readonly IMediaFileProvider _mediaFileProvider;
         private readonly NotificationProvider _notificationProvider;
-        private readonly IDiskProvider _diskProvider;
+        private readonly DiskProvider _diskProvider;
 
         private ProgressNotification _seriesSyncNotification;
         private Thread _seriesSyncThread;
@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Providers
 
         public SyncProvider(SeriesProvider seriesProvider, IEpisodeProvider episodeProvider,
             IMediaFileProvider mediaFileProvider, NotificationProvider notificationProvider,
-            IDiskProvider diskProvider)
+            DiskProvider diskProvider)
         {
             _seriesProvider = seriesProvider;
             _episodeProvider = episodeProvider;

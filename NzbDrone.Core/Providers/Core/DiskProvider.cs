@@ -3,48 +3,48 @@ using System.IO;
 
 namespace NzbDrone.Core.Providers.Core
 {
-    public class DiskProvider : IDiskProvider
+    public class DiskProvider
     {
         #region IDiskProvider Members
 
-        public bool FolderExists(string path)
+        public virtual bool FolderExists(string path)
         {
             return Directory.Exists(path);
         }
 
-        public bool FileExists(string path)
+        public virtual bool FileExists(string path)
         {
             return File.Exists(path);
         }
 
-        public string[] GetDirectories(string path)
+        public virtual string[] GetDirectories(string path)
         {
             return Directory.GetDirectories(path);
         }
 
-        public string[] GetFiles(string path, string pattern, SearchOption searchOption)
+        public virtual string[] GetFiles(string path, string pattern, SearchOption searchOption)
         {
             return Directory.GetFiles(path, pattern, searchOption);
         }
 
-        public long GetSize(string path)
+        public virtual long GetSize(string path)
         {
             var fi = new FileInfo(path);
             return fi.Length;
             //return new FileInfo(path).Length;
         }
 
-        public String CreateDirectory(string path)
+        public virtual String CreateDirectory(string path)
         {
             return Directory.CreateDirectory(path).FullName;
         }
 
-        public void DeleteFile(string path)
+        public virtual void DeleteFile(string path)
         {
             File.Delete(path);
         }
 
-        public void RenameFile(string sourcePath, string destinationPath)
+        public virtual void RenameFile(string sourcePath, string destinationPath)
         {
             File.Move(sourcePath, destinationPath);
         }

@@ -48,14 +48,14 @@ namespace NzbDrone.Core.Test
             var episodeProvider = new Mock<IEpisodeProvider>();
             episodeProvider.Setup(e => e.GetEpisode(fakeSeries.SeriesId, seasonNumber, episodeNumner)).Returns(fakeEpisode).Verifiable();
 
-            var diskProvider = new Mock<IDiskProvider>();
+            var diskProvider = new Mock<DiskProvider>();
             diskProvider.Setup(e => e.GetSize(fileName)).Returns(12345).Verifiable();
 
             var kernel = new MockingKernel();
             kernel.Bind<IRepository>().ToConstant(repository.Object);
 
             kernel.Bind<IEpisodeProvider>().ToConstant(episodeProvider.Object);
-            kernel.Bind<IDiskProvider>().ToConstant(diskProvider.Object);
+            kernel.Bind<DiskProvider>().ToConstant(diskProvider.Object);
             kernel.Bind<IMediaFileProvider>().To<MediaFileProvider>();
 
             //Act
@@ -100,13 +100,13 @@ namespace NzbDrone.Core.Test
             repository.Setup(r => r.Exists<EpisodeFile>(It.IsAny<Expression<Func<EpisodeFile, Boolean>>>())).Returns(true).Verifiable();
 
             var episodeProvider = new Mock<IEpisodeProvider>(MockBehavior.Strict);
-            var diskProvider = new Mock<IDiskProvider>(MockBehavior.Strict);
+            var diskProvider = new Mock<DiskProvider>(MockBehavior.Strict);
 
             var kernel = new MockingKernel();
             kernel.Bind<IRepository>().ToConstant(repository.Object);
 
             kernel.Bind<IEpisodeProvider>().ToConstant(episodeProvider.Object);
-            kernel.Bind<IDiskProvider>().ToConstant(diskProvider.Object);
+            kernel.Bind<DiskProvider>().ToConstant(diskProvider.Object);
             kernel.Bind<IMediaFileProvider>().To<MediaFileProvider>();
 
             //Act
@@ -142,13 +142,13 @@ namespace NzbDrone.Core.Test
             var episodeProvider = new Mock<IEpisodeProvider>(MockBehavior.Strict);
             episodeProvider.Setup(e => e.GetEpisode(fakeSeries.SeriesId, seasonNumber, episodeNumner)).Returns<Episode>(null).Verifiable();
 
-            var diskProvider = new Mock<IDiskProvider>(MockBehavior.Strict);
+            var diskProvider = new Mock<DiskProvider>(MockBehavior.Strict);
 
 
             var kernel = new MockingKernel();
             kernel.Bind<IRepository>().ToConstant(repository.Object);
             kernel.Bind<IEpisodeProvider>().ToConstant(episodeProvider.Object);
-            kernel.Bind<IDiskProvider>().ToConstant(diskProvider.Object);
+            kernel.Bind<DiskProvider>().ToConstant(diskProvider.Object);
             kernel.Bind<IMediaFileProvider>().To<MediaFileProvider>();
 
             //Act

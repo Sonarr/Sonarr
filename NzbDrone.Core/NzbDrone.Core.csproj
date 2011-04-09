@@ -183,7 +183,6 @@
     <Compile Include="Providers\Feed\NzbsOrgFeedProvider.cs" />
     <Compile Include="Providers\HistoryProvider.cs" />
     <Compile Include="Providers\BacklogProvider.cs" />
-    <Compile Include="Providers\IIndexerProvider.cs" />
     <Compile Include="Providers\IndexerProvider.cs" />
     <Compile Include="Providers\RssSyncProvider.cs" />
     <Compile Include="Providers\PostProcessingProvider.cs" />
@@ -227,7 +226,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\Core\DiskProvider.cs" />
     <Compile Include="Providers\Core\IConfigProvider.cs" />
-    <Compile Include="Providers\Core\IDiskProvider.cs" />
     <Compile Include="Providers\SeriesProvider.cs" />
     <Compile Include="Providers\TvDbProvider.cs" />
   </ItemGroup>

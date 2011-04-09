@@ -20,7 +20,7 @@ namespace NzbDrone.Web.Controllers
     public class SettingsController : Controller
     {
         private IConfigProvider _configProvider;
-        private IIndexerProvider _indexerProvider;
+        private IndexerProvider _indexerProvider;
         private QualityProvider _qualityProvider;
         private RootDirProvider _rootDirProvider;
 
@@ -28,7 +28,7 @@ namespace NzbDrone.Web.Controllers
         private const string SETTINGS_SAVED = "Settings Saved.";
         private const string SETTINGS_FAILED = "Error Saving Settings, please fix any errors";
 
-        public SettingsController(IConfigProvider configProvider, IIndexerProvider indexerProvider,
+        public SettingsController(IConfigProvider configProvider, IndexerProvider indexerProvider,
             QualityProvider qualityProvider, RootDirProvider rootDirProvider)
         {
             _configProvider = configProvider;

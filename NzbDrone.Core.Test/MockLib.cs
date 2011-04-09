@@ -52,9 +52,9 @@ namespace NzbDrone.Core.Test
             }
         }
 
-        public static IDiskProvider GetStandardDisk(int seasons, int episodes)
+        public static DiskProvider GetStandardDisk(int seasons, int episodes)
         {
-            var mock = new Mock<IDiskProvider>();
+            var mock = new Mock<DiskProvider>();
             mock.Setup(c => c.GetDirectories(It.IsAny<String>())).Returns(StandardSeries);
             mock.Setup(c => c.FolderExists(It.Is<String>(d => StandardSeries.Contains(d)))).Returns(true);
 

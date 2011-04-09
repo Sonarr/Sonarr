@@ -11,7 +11,7 @@ using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Providers
 {
-    public class IndexerProvider : IIndexerProvider
+    public class IndexerProvider
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IRepository _sonicRepo;
@@ -23,24 +23,24 @@ namespace NzbDrone.Core.Providers
             _configProvider = configProvider;
         }
 
-        #region IIndexerProvider Members
+        #region IndexerProvider Members
 
-        public List<Indexer> AllIndexers()
+        public virtual List<Indexer> AllIndexers()
         {
             return _sonicRepo.All<Indexer>().OrderBy(i => i.Order).ToList();
         }
 
-        public List<Indexer> EnabledIndexers()
+        public virtual List<Indexer> EnabledIndexers()
         {
             return _sonicRepo.All<Indexer>().Where(i => i.Enabled).OrderBy(i => i.Order).ToList();
         }
 
-        public void Update(Indexer indexer)
+        public virtual void Update(Indexer indexer)
         {
             _sonicRepo.Update(indexer);
         }
 
-        public Indexer Single(int indexerId)
+        public virtual Indexer Single(int indexerId)
         {
             return _sonicRepo.Single<Indexer>(indexerId);
         }

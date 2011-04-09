@@ -16,13 +16,13 @@ namespace NzbDrone.Core.Providers
     {
         private readonly IRepository _repository;
         private readonly IConfigProvider _configProvider;
-        private readonly IDiskProvider _diskProvider;
+        private readonly DiskProvider _diskProvider;
         private readonly IEpisodeProvider _episodeProvider;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static readonly string[] MediaExtentions = new[] { "*.mkv", "*.avi", "*.wmv" };
 
-        public MediaFileProvider(IRepository repository, IConfigProvider configProvider, IDiskProvider diskProvider, IEpisodeProvider episodeProvider)
+        public MediaFileProvider(IRepository repository, IConfigProvider configProvider, DiskProvider diskProvider, IEpisodeProvider episodeProvider)
         {
             _repository = repository;
             _configProvider = configProvider;

@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Providers
         private readonly ISeasonProvider _seasonProvider;
         private readonly IEpisodeProvider _episodeProvider;
         private readonly IMediaFileProvider _mediaFileProvider;
-        private readonly IDiskProvider _diskProvider;
+        private readonly DiskProvider _diskProvider;
         private readonly IConfigProvider _configProvider;
         private readonly ExternalNotificationProvider _externalNotificationProvider;
 
@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Providers
 
         public RenameProvider(SeriesProvider seriesProvider, ISeasonProvider seasonProvider,
             IEpisodeProvider episodeProvider, IMediaFileProvider mediaFileProvider,
-            IDiskProvider diskProvider, IConfigProvider configProvider,
+            DiskProvider diskProvider, IConfigProvider configProvider,
             ExternalNotificationProvider extenalNotificationProvider)
         {
             _seriesProvider = seriesProvider;

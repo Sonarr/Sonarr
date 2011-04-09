@@ -64,8 +64,8 @@ namespace NzbDrone.Core
                 _kernel.Bind<RssSyncProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<ISeasonProvider>().To<SeasonProvider>();
                 _kernel.Bind<IEpisodeProvider>().To<EpisodeProvider>();
-                _kernel.Bind<UpcomingEpisodesProvider>().To<UpcomingEpisodesProvider>();
-                _kernel.Bind<IDiskProvider>().To<DiskProvider>();
+                _kernel.Bind<UpcomingEpisodesProvider>().ToSelf();
+                _kernel.Bind<DiskProvider>().ToSelf();
                 _kernel.Bind<SabProvider>().ToSelf();
                 _kernel.Bind<HistoryProvider>().ToSelf();
                 _kernel.Bind<RootDirProvider>().ToSelf();
@@ -74,7 +74,7 @@ namespace NzbDrone.Core
                 _kernel.Bind<PostProcessingProvider>().ToSelf();
                 _kernel.Bind<IConfigProvider>().To<ConfigProvider>().InSingletonScope();
                 _kernel.Bind<ISyncProvider>().To<SyncProvider>().InSingletonScope();
-                _kernel.Bind<IIndexerProvider>().To<IndexerProvider>().InSingletonScope();
+                _kernel.Bind<IndexerProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<RenameProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<NotificationProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<ILogProvider>().To<LogProvider>().InSingletonScope();
