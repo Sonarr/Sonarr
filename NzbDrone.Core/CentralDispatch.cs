@@ -61,7 +61,7 @@ namespace NzbDrone.Core
                 _kernel.Bind<TvDbProvider>().ToSelf();
                 _kernel.Bind<HttpProvider>().ToSelf();
                 _kernel.Bind<SeriesProvider>().ToSelf().InSingletonScope();
-                _kernel.Bind<IRssSyncProvider>().To<RssSyncProvider>().InSingletonScope();
+                _kernel.Bind<RssSyncProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<ISeasonProvider>().To<SeasonProvider>();
                 _kernel.Bind<IEpisodeProvider>().To<EpisodeProvider>();
                 _kernel.Bind<UpcomingEpisodesProvider>().To<UpcomingEpisodesProvider>();
@@ -75,7 +75,7 @@ namespace NzbDrone.Core
                 _kernel.Bind<IConfigProvider>().To<ConfigProvider>().InSingletonScope();
                 _kernel.Bind<ISyncProvider>().To<SyncProvider>().InSingletonScope();
                 _kernel.Bind<IIndexerProvider>().To<IndexerProvider>().InSingletonScope();
-                _kernel.Bind<IRenameProvider>().To<RenameProvider>().InSingletonScope();
+                _kernel.Bind<RenameProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<NotificationProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<ILogProvider>().To<LogProvider>().InSingletonScope();
                 _kernel.Bind<IMediaFileProvider>().To<MediaFileProvider>().InSingletonScope();

@@ -12,7 +12,7 @@ using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Providers
 {
-    public class RenameProvider : IRenameProvider
+    public class RenameProvider
     {
         private readonly SeriesProvider _seriesProvider;
         private readonly ISeasonProvider _seasonProvider;
@@ -41,8 +41,8 @@ namespace NzbDrone.Core.Providers
             _externalNotificationProvider = extenalNotificationProvider;
         }
 
-        #region IRenameProvider Members
-        public void RenameAll()
+        #region RenameProvider Members
+        public virtual void RenameAll()
         {
             //Get a list of all episode files/episodes and rename them
 
@@ -61,8 +61,8 @@ namespace NzbDrone.Core.Providers
                 StartRename();
             }
         }
-
-        public void RenameSeries(int seriesId)
+               
+        public virtual void RenameSeries(int seriesId)
         {
             //Get a list of all applicable episode files/episodes and rename them
 
@@ -83,8 +83,8 @@ namespace NzbDrone.Core.Providers
                 StartRename();
             }
         }
-
-        public void RenameSeason(int seasonId)
+               
+        public virtual void RenameSeason(int seasonId)
         {
             //Get a list of all applicable episode files/episodes and rename them
             var season = _seasonProvider.GetSeason(seasonId);
@@ -105,8 +105,8 @@ namespace NzbDrone.Core.Providers
                 StartRename();
             }
         }
-
-        public void RenameEpisode(int episodeId)
+               
+        public virtual void RenameEpisode(int episodeId)
         {
             //This will properly rename multi-episode files if asked to rename either of the episode
             var episode = _episodeProvider.GetEpisode(episodeId);
@@ -126,8 +126,8 @@ namespace NzbDrone.Core.Providers
             _epsToRename.Add(erm);
             StartRename();
         }
-
-        public void RenameEpisodeFile(int episodeFileId, bool newDownload)
+               
+        public virtual void RenameEpisodeFile(int episodeFileId, bool newDownload)
         {
             //This will properly rename multi-episode files if asked to rename either of the episode
             var episodeFile = _mediaFileProvider.GetEpisodeFile(episodeFileId);
