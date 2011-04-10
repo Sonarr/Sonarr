@@ -14,6 +14,5 @@ namespace NzbDrone.Core.Model
         {
             return string.Format("Series:{0} Season:{1}", SeriesTitle, SeasonNumber);
         }
-
     }
 }

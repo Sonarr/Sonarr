@@ -1,6 +1,4 @@
 ﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<NzbDrone.Web.Models.QualityModel>" %>
-<%@ Import Namespace="NzbDrone.Core.Repository.Quality" %>
-<%@ Import Namespace="NzbDrone.Web.Helpers" %>
 
 <script type="text/javascript">
     $(document).ready(function () {
@@ -27,10 +25,12 @@
 
     </script>
 
-    <% Html.EnableClientValidation(); %>
+    <%
+        Html.EnableClientValidation();%>
 
-    <% using (Html.BeginForm("SaveQuality", "Settings", FormMethod.Post, new { id = "form", name = "form" }))
-       {%>
+    <%
+        using (Html.BeginForm("SaveQuality", "Settings", FormMethod.Post, new {id = "form", name = "form"}))
+        {%>
         <fieldset>
             <legend>Quality</legend> 
                 <%--<%: Html.ValidationSummary(true, "Unable to save your settings. Please correct the errors and try again.") %>--%>
@@ -39,9 +39,9 @@
                     <div id="defaultQualityDiv" style="float: left; margin: 30px;">
                         
                         <div class="config-group" style="width: 250px; margin-bottom: 5px; margin-left: 5px;">
-                            <div class="config-title"><%= Html.LabelFor(m => m.DefaultQualityProfileId)%></div>
-                            <div class="config-value"><%: Html.DropDownListFor(m => m.DefaultQualityProfileId, Model.SelectList)%></div>
-                            <div class="config-validation"><%= Html.ValidationMessageFor(m => m.DefaultQualityProfileId)%></div>
+                            <div class="config-title"><%=Html.LabelFor(m => m.DefaultQualityProfileId)%></div>
+                            <div class="config-value"><%:Html.DropDownListFor(m => m.DefaultQualityProfileId, Model.SelectList)%></div>
+                            <div class="config-validation"><%=Html.ValidationMessageFor(m => m.DefaultQualityProfileId)%></div>
                         </div>
                     </div>
                 </div>
@@ -49,15 +49,19 @@
                 <div id="leftSide" style="width:35%;">
                     <div style="padding-top: 10px;">
                         <div style="padding-left: 7px; margin-bottom: 5px;">
-                            <a id="addItem" style="text-decoration:none;" href="<%: Url.Action("AddUserProfile", "Settings") %>">
+                            <a id="addItem" style="text-decoration:none;" href="<%:Url.Action("AddUserProfile", "Settings")%>">
                             <img src="../../Content/Images/Plus.png" alt="Add New Profile" />
                             <h4 style="margin-left: 3px; display: inline; color: Black;">Add New Profile</h4></a>
                         </div>
 
                         <div id="user-profiles">
-                            <%foreach (var item in Model.UserProfiles) { %>
-                                <% Html.RenderPartial("UserProfileSection", item); %>
-                            <% } %>
+                            <%
+            foreach (var item in Model.UserProfiles)
+            {%>
+                                <%
+                Html.RenderPartial("UserProfileSection", item);%>
+                            <%
+            }%>
                         </div>
                     </div>
 
@@ -68,7 +72,8 @@
 
         </fieldset>
 
-    <%}%>
+    <%
+        }%>
 <div id="result"></div>
 
 <script type="text/javascript">

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
@@ -12,16 +10,17 @@ namespace NzbDrone.Web.Controllers
 {
     public class AddSeriesController : Controller
     {
-
-        private readonly SyncProvider _syncProvider;
-        private readonly RootDirProvider _rootFolderProvider;
         private readonly ConfigProvider _configProvider;
         private readonly QualityProvider _qualityProvider;
-        private readonly TvDbProvider _tvDbProvider;
+        private readonly RootDirProvider _rootFolderProvider;
         private readonly SeriesProvider _seriesProvider;
+        private readonly SyncProvider _syncProvider;
+        private readonly TvDbProvider _tvDbProvider;
 
-        public AddSeriesController(SyncProvider syncProvider, RootDirProvider rootFolderProvider, ConfigProvider configProvider,
-            QualityProvider qualityProvider, TvDbProvider tvDbProvider, SeriesProvider seriesProvider)
+        public AddSeriesController(SyncProvider syncProvider, RootDirProvider rootFolderProvider,
+                                   ConfigProvider configProvider,
+                                   QualityProvider qualityProvider, TvDbProvider tvDbProvider,
+                                   SeriesProvider seriesProvider)
         {
             _syncProvider = syncProvider;
             _rootFolderProvider = rootFolderProvider;
@@ -48,12 +47,12 @@ namespace NzbDrone.Web.Controllers
             var defaultQuality = Convert.ToInt32(_configProvider.DefaultQualityProfile);
 
             var model = new AddNewSeriesModel
-            {
-                DirectorySeparatorChar = Path.DirectorySeparatorChar.ToString(),
-                RootDirectories = _rootFolderProvider.GetAll(),
-                QualityProfileId = defaultQuality,
-                QualitySelectList = selectList
-            };
+                            {
+                                DirectorySeparatorChar = Path.DirectorySeparatorChar.ToString(),
+                                RootDirectories = _rootFolderProvider.GetAll(),
+                                QualityProfileId = defaultQuality,
+                                QualitySelectList = selectList
+                            };
 
             return View(model);
         }
@@ -78,7 +77,6 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult RenderPartial(string path)
         {
-
             var suggestions = GetSuggestionList(new DirectoryInfo(path).Name);
 
             ViewData["guid"] = Guid.NewGuid();
@@ -92,10 +90,10 @@ namespace NzbDrone.Web.Controllers
                 qualityProfiles,
                 "QualityProfileId",
                 "Name",
-                defaultQuality); ;
+                defaultQuality);
+            ;
 
             return PartialView("AddSeriesItem", suggestions);
-
         }
 
         public JsonResult AddSeries(string path, int seriesId, int qualityProfileId)
@@ -104,9 +102,11 @@ namespace NzbDrone.Web.Controllers
             //Create new folder for series
             //Add the new series to the Database
 
-            _seriesProvider.AddSeries(path.Replace('|', Path.DirectorySeparatorChar).Replace('^', Path.VolumeSeparatorChar), seriesId, qualityProfileId);
+            _seriesProvider.AddSeries(
+                path.Replace('|', Path.DirectorySeparatorChar).Replace('^', Path.VolumeSeparatorChar), seriesId,
+                qualityProfileId);
             ScanNewSeries();
-            return new JsonResult() { Data = "ok" };
+            return new JsonResult {Data = "ok"};
         }
 
         [HttpPost]
@@ -115,10 +115,10 @@ namespace NzbDrone.Web.Controllers
             var suggestions = GetSuggestionList(text);
 
             return new JsonResult
-            {
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
-                Data = suggestions
-            };
+                       {
+                           JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                           Data = suggestions
+                       };
         }
 
         public SelectList GetSuggestionList(string searchString)
@@ -133,6 +133,5 @@ namespace NzbDrone.Web.Controllers
 
             return new SelectList(dataVal, "Id", "SeriesName", selectId);
         }
-
     }
 }

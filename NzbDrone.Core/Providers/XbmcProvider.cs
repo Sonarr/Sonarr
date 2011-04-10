@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Xml.Linq;
 using NLog;
 using NzbDrone.Core.Helpers;
@@ -12,10 +10,9 @@ namespace NzbDrone.Core.Providers
 {
     public class XbmcProvider
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly ConfigProvider _configProvider;
         private readonly HttpProvider _httpProvider;
-
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public XbmcProvider(ConfigProvider configProvider, HttpProvider httpProvider)
         {
@@ -23,12 +20,10 @@ namespace NzbDrone.Core.Providers
             _httpProvider = httpProvider;
         }
 
-        #region XbmcProvider Members
-
         public virtual void Notify(string header, string message)
         {
             //Get time in seconds and convert to ms
-            var time = Convert.ToInt32(_configProvider.GetValue("XbmcDisplayTime", "3", true)) * 1000;
+            var time = Convert.ToInt32(_configProvider.GetValue("XbmcDisplayTime", "3", true))*1000;
             var command = String.Format("ExecBuiltIn(Notification({0},{1},{2}))", header, message, time);
 
             if (Convert.ToBoolean(_configProvider.GetValue("XbmcNotificationImage", false, true)))
@@ -55,7 +50,8 @@ namespace NzbDrone.Core.Providers
                 var xbmcSeriesPath = GetXbmcSeriesPath(host, seriesId);
 
                 //If the path is not found & the user wants to update the entire library, do it now.
-                if (String.IsNullOrEmpty(xbmcSeriesPath) && Convert.ToBoolean(_configProvider.GetValue("XbmcFullUpdate", false, true)))
+                if (String.IsNullOrEmpty(xbmcSeriesPath) &&
+                    Convert.ToBoolean(_configProvider.GetValue("XbmcFullUpdate", false, true)))
                 {
                     //Update the entire library
                     Logger.Trace("Series [{0}] doesn't exist on XBMC host: {1}, Updating Entire Library", seriesId, host);
@@ -78,8 +74,6 @@ namespace NzbDrone.Core.Providers
             }
         }
 
-        #endregion
-
         private string SendCommand(string host, string command)
         {
             var username = _configProvider.GetValue("XbmcUsername", String.Empty, true);
@@ -90,16 +84,20 @@ namespace NzbDrone.Core.Providers
             {
                 return _httpProvider.DownloadString(url, username, password);
             }
-            
+
             return _httpProvider.DownloadString(url);
         }
 
         private string GetXbmcSeriesPath(string host, int seriesId)
         {
-            var query = String.Format("select path.strPath from path, tvshow, tvshowlinkpath where tvshow.c12 = {0} and tvshowlinkpath.idShow = tvshow.idShow and tvshowlinkpath.idPath = path.idPath", seriesId);
+            var query =
+                String.Format(
+                    "select path.strPath from path, tvshow, tvshowlinkpath where tvshow.c12 = {0} and tvshowlinkpath.idShow = tvshow.idShow and tvshowlinkpath.idPath = path.idPath",
+                    seriesId);
             var command = String.Format("QueryVideoDatabase({0})", query);
 
-            var setResponseCommand = "SetResponseFormat(webheader;false;webfooter;false;header;<xml>;footer;</xml>;opentag;<tag>;closetag;</tag>;closefinaltag;false)";
+            var setResponseCommand =
+                "SetResponseFormat(webheader;false;webfooter;false;header;<xml>;footer;</xml>;opentag;<tag>;closetag;</tag>;closefinaltag;false)";
             var resetResponseCommand = "SetResponseFormat()";
 
             SendCommand(host, setResponseCommand);

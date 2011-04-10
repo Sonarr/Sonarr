@@ -24,23 +24,29 @@
         }                        
     </script>    
 
-<% using (Html.BeginForm("SaveGeneral", "Settings", FormMethod.Post, new { id = "form", name = "form" }))
-   {%>
-<%: Html.ValidationSummary(true, "Unable to save your settings. Please correct the errors and try again.") %>
+<%
+    using (Html.BeginForm("SaveGeneral", "Settings", FormMethod.Post, new {id = "form", name = "form"}))
+    {%>
+<%:Html.ValidationSummary(true,
+                                                 "Unable to save your settings. Please correct the errors and try again.")%>
         <fieldset>
             <legend>General</legend>
                 
             <div style="padding-top: 10px;">
                 <div style="padding-left: 7px; margin-bottom: 5px;">
-                    <a id="addItem" style="text-decoration:none;" href="<%: Url.Action("AddRootDir", "Settings") %>">
+                    <a id="addItem" style="text-decoration:none;" href="<%:Url.Action("AddRootDir", "Settings")%>">
                     <img src="../Content/Images/Plus.png" alt="Add New Profile" />
                     <h4 style="margin-left: 3px; display: inline; color: Black;">Add New Root Directory</h4></a>
                 </div>
 
                 <div id="root-dirs">
-                    <%foreach (var item in Model.Directories) { %>
-                        <% Html.RenderPartial("RootDir", item); %>
-                    <% } %>
+                    <%
+        foreach (var item in Model.Directories)
+        {%>
+                        <%
+            Html.RenderPartial("RootDir", item);%>
+                    <%
+        }%>
                 </div>
             </div>
 
@@ -48,7 +54,9 @@
                 <input type="submit" id="save_button" value="Save" disabled="disabled" />
             </p>
         </fieldset>
-<% } Html.EndForm();%>
+<%
+    }
+    Html.EndForm();%>
 <div id="result"></div>
 
 <script type="text/javascript">

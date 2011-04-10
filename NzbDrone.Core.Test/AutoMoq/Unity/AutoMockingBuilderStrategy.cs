@@ -10,9 +10,9 @@ namespace AutoMoq.Unity
 {
     internal class AutoMockingBuilderStrategy : BuilderStrategy
     {
+        private readonly IUnityContainer container;
         private readonly MockFactory mockFactory;
         private readonly IEnumerable<Type> registeredTypes;
-        private readonly IUnityContainer container;
 
         public AutoMockingBuilderStrategy(IEnumerable<Type> registeredTypes, IUnityContainer container)
         {
@@ -45,7 +45,7 @@ namespace AutoMoq.Unity
 
         private static Type GetTheTypeFromTheBuilderContext(IBuilderContext context)
         {
-            return ((NamedTypeBuildKey)context.OriginalBuildKey).Type;
+            return (context.OriginalBuildKey).Type;
         }
 
         private bool TypeIsNotRegistered(Type type)
@@ -62,19 +62,19 @@ namespace AutoMoq.Unity
 
         private Mock InvokeTheMockCreationMethod(MethodInfo createMethod)
         {
-            return (Mock)createMethod.Invoke(mockFactory, new object[] { new List<object>().ToArray() });
+            return (Mock) createMethod.Invoke(mockFactory, new object[] {new List<object>().ToArray()});
         }
 
         private MethodInfo GenerateAnInterfaceMockCreationMethod(Type type)
         {
             var createMethodWithNoParameters = mockFactory.GetType().GetMethod("Create", EmptyArgumentList());
 
-            return createMethodWithNoParameters.MakeGenericMethod(new[] { type });
+            return createMethodWithNoParameters.MakeGenericMethod(new[] {type});
         }
 
         private static Type[] EmptyArgumentList()
         {
-            return new[] { typeof(object[]) };
+            return new[] {typeof (object[])};
         }
 
         #endregion

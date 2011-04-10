@@ -1,5 +1,4 @@
 ﻿using System.ServiceModel.Syndication;
-using System.Xml;
 using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
@@ -8,15 +7,16 @@ namespace NzbDrone.Core.Providers.Feed
 {
     public abstract class FeedProviderBase
     {
-        protected readonly SeriesProvider _seriesProvider;
-        protected readonly SeasonProvider _seasonProvider;
-        protected readonly EpisodeProvider _episodeProvider;
-        protected readonly ConfigProvider _configProvider;
-        private readonly HttpProvider _httpProvider;
         protected static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        protected readonly ConfigProvider _configProvider;
+        protected readonly EpisodeProvider _episodeProvider;
+        private readonly HttpProvider _httpProvider;
+        protected readonly SeasonProvider _seasonProvider;
+        protected readonly SeriesProvider _seriesProvider;
 
         public FeedProviderBase(SeriesProvider seriesProvider, SeasonProvider seasonProvider,
-            EpisodeProvider episodeProvider, ConfigProvider configProvider, HttpProvider httpProvider)
+                                EpisodeProvider episodeProvider, ConfigProvider configProvider,
+                                HttpProvider httpProvider)
         {
             _seriesProvider = seriesProvider;
             _seasonProvider = seasonProvider;
@@ -27,28 +27,28 @@ namespace NzbDrone.Core.Providers.Feed
 
 
         /// <summary>
-        /// Gets the source URL for the feed
+        ///   Gets the source URL for the feed
         /// </summary>
         protected abstract string[] URL { get; }
 
         /// <summary>
-        /// Gets the name for this feed
+        ///   Gets the name for this feed
         /// </summary>
         protected abstract string Name { get; }
 
 
         /// <summary>
-        /// Generates direct link to download an NZB
+        ///   Generates direct link to download an NZB
         /// </summary>
-        /// <param name="item">RSS Feed item to generate the link for</param>
+        /// <param name = "item">RSS Feed item to generate the link for</param>
         /// <returns>Download link URL</returns>
         protected abstract string NzbDownloadUrl(SyndicationItem item);
 
 
         /// <summary>
-        /// Parses the RSS feed item and.
+        ///   Parses the RSS feed item and.
         /// </summary>
-        /// <param name="item">RSS feed item to parse</param>
+        /// <param name = "item">RSS feed item to parse</param>
         /// <returns>Detailed episode info</returns>
         protected EpisodeParseResult ParseFeed(SyndicationItem item)
         {
@@ -66,13 +66,11 @@ namespace NzbDrone.Core.Providers.Feed
 
             Logger.Debug("Unable to map {0} to any of series in database", episodeParseResult.SeriesTitle);
             return null;
-
         }
 
 
-
         /// <summary>
-        /// Fetches RSS feed and process each news item.
+        ///   Fetches RSS feed and process each news item.
         /// </summary>
         public void Fetch()
         {
@@ -122,5 +120,4 @@ namespace NzbDrone.Core.Providers.Feed
             }
         }
     }
-
 }

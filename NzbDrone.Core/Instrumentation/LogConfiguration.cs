@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
 using System.IO;
+using Ninject;
 using NLog;
 using NLog.Config;
-using Ninject;
 
 namespace NzbDrone.Core.Instrumentation
 {
@@ -15,7 +15,8 @@ namespace NzbDrone.Core.Instrumentation
                 LogManager.ThrowExceptions = true;
             }
 
-            LogManager.Configuration = new XmlLoggingConfiguration(Path.Combine(CentralDispatch.AppPath, "log.config"), false);
+            LogManager.Configuration = new XmlLoggingConfiguration(Path.Combine(CentralDispatch.AppPath, "log.config"),
+                                                                   false);
             LogManager.ConfigurationReloaded += ((s, e) => BindCustomLoggers());
             BindCustomLoggers();
         }
@@ -35,9 +36,5 @@ namespace NzbDrone.Core.Instrumentation
 
             LogManager.Configuration.Reload();
         }
-
     }
 }
-
-
-

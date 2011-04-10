@@ -7,25 +7,70 @@ namespace NzbDrone.Core.Helpers
     public static class EpisodeSortingHelper
     {
         private static readonly List<EpisodeSortingType> SeparatorStyles = new List<EpisodeSortingType>
-                                                                       {
-                                                                           new EpisodeSortingType {Id = 0, Name = "Dash", Pattern = " - "},
-                                                                           new EpisodeSortingType {Id = 1, Name = "Space", Pattern = " "}
-                                                                       };
+                                                                               {
+                                                                                   new EpisodeSortingType
+                                                                                       {
+                                                                                           Id = 0,
+                                                                                           Name = "Dash",
+                                                                                           Pattern = " - "
+                                                                                       },
+                                                                                   new EpisodeSortingType
+                                                                                       {
+                                                                                           Id = 1,
+                                                                                           Name = "Space",
+                                                                                           Pattern = " "
+                                                                                       }
+                                                                               };
 
         private static readonly List<EpisodeSortingType> NumberStyles = new List<EpisodeSortingType>
-                                                                    {
-                                                                        new EpisodeSortingType { Id = 0, Name = "1x05", Pattern = "%sx%0e"},
-                                                                        new EpisodeSortingType { Id = 1, Name = "01x05", Pattern = "%0sx%0e"},
-                                                                        new EpisodeSortingType { Id = 2, Name = "S01E05", Pattern = "S%0sE%0e"},
-                                                                        new EpisodeSortingType { Id = 3, Name = "s01e05", Pattern = "s%0se%0e"}
-                                                                    };
+                                                                            {
+                                                                                new EpisodeSortingType
+                                                                                    {
+                                                                                        Id = 0,
+                                                                                        Name = "1x05",
+                                                                                        Pattern = "%sx%0e"
+                                                                                    },
+                                                                                new EpisodeSortingType
+                                                                                    {
+                                                                                        Id = 1,
+                                                                                        Name = "01x05",
+                                                                                        Pattern = "%0sx%0e"
+                                                                                    },
+                                                                                new EpisodeSortingType
+                                                                                    {
+                                                                                        Id = 2,
+                                                                                        Name = "S01E05",
+                                                                                        Pattern = "S%0sE%0e"
+                                                                                    },
+                                                                                new EpisodeSortingType
+                                                                                    {
+                                                                                        Id = 3,
+                                                                                        Name = "s01e05",
+                                                                                        Pattern = "s%0se%0e"
+                                                                                    }
+                                                                            };
 
         private static readonly List<EpisodeSortingType> MultiEpisodeStyles = new List<EpisodeSortingType>
-                                                                          {
-                                                                              new EpisodeSortingType { Id = 0, Name = "Extend", Pattern = "" },
-                                                                              new EpisodeSortingType { Id = 1, Name = "Duplicate", Pattern = "" },
-                                                                              new EpisodeSortingType { Id = 2, Name = "Repeat", Pattern = "" }
-                                                                          };
+                                                                                  {
+                                                                                      new EpisodeSortingType
+                                                                                          {
+                                                                                              Id = 0,
+                                                                                              Name = "Extend",
+                                                                                              Pattern = ""
+                                                                                          },
+                                                                                      new EpisodeSortingType
+                                                                                          {
+                                                                                              Id = 1,
+                                                                                              Name = "Duplicate",
+                                                                                              Pattern = ""
+                                                                                          },
+                                                                                      new EpisodeSortingType
+                                                                                          {
+                                                                                              Id = 2,
+                                                                                              Name = "Repeat",
+                                                                                              Pattern = ""
+                                                                                          }
+                                                                                  };
 
         public static List<EpisodeSortingType> GetSeparatorStyles()
         {

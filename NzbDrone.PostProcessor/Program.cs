@@ -1,21 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text;
-using System.Xml;
 using System.Xml.Linq;
 
 namespace NzbDrone.PostProcessor
 {
-    class Program
+    internal class Program
     {
         private static string _host = "localhost";
         private static int _port = 8989;
         private static string _apiKey = String.Empty;
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             try
             {
@@ -35,7 +32,8 @@ namespace NzbDrone.PostProcessor
 
                 var hostString = _host + ":" + _port;
 
-                var url = String.Format("http://{0}/?apiKey={1}&dir={2}&nzbName={3}&category={4}", hostString, _apiKey, dir, nzbName, category);
+                var url = String.Format("http://{0}/?apiKey={1}&dir={2}&nzbName={3}&category={4}", hostString, _apiKey,
+                                        dir, nzbName, category);
 
                 var webClient = new WebClient();
                 webClient.DownloadString(url);
@@ -46,7 +44,7 @@ namespace NzbDrone.PostProcessor
             }
         }
 
-        static bool LoadConfig()
+        private static bool LoadConfig()
         {
             var configFile = "PostProcessor.xml";
             if (!File.Exists(configFile))
@@ -65,8 +63,10 @@ namespace NzbDrone.PostProcessor
             }
 
             var hostNode = config.Descendants("Host").FirstOrDefault();
-            var portNode = config.Descendants("Port").FirstOrDefault(); ;
-            var apiKeyNode = config.Descendants("ApiKey").FirstOrDefault(); ;
+            var portNode = config.Descendants("Port").FirstOrDefault();
+            ;
+            var apiKeyNode = config.Descendants("ApiKey").FirstOrDefault();
+            ;
 
             if (hostNode == null || portNode == null || apiKeyNode == null)
             {

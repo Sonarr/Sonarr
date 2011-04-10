@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
-using Ninject;
 using NLog;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
@@ -19,14 +16,14 @@ namespace NzbDrone.Core.Providers
 
         //Trims all white spaces and separators from the end of the title.
 
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly ConfigProvider _config;
+        private readonly QualityProvider _quality;
         private readonly IRepository _sonioRepo;
         private readonly TvDbProvider _tvDb;
-        private readonly QualityProvider _quality;
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public SeriesProvider(ConfigProvider configProvider,
-            IRepository dataRepository, TvDbProvider tvDbProvider, QualityProvider quality)
+                              IRepository dataRepository, TvDbProvider tvDbProvider, QualityProvider quality)
         {
             _config = configProvider;
             _sonioRepo = dataRepository;
@@ -37,8 +34,6 @@ namespace NzbDrone.Core.Providers
         public SeriesProvider()
         {
         }
-
-        #region SeriesProvider Members
 
         public virtual IQueryable<Series> GetAllSeries()
         {
@@ -51,9 +46,9 @@ namespace NzbDrone.Core.Providers
         }
 
         /// <summary>
-        /// Determines if a series is being actively watched.
+        ///   Determines if a series is being actively watched.
         /// </summary>
-        /// <param name="id">The TVDB ID of the series</param>
+        /// <param name = "id">The TVDB ID of the series</param>
         /// <returns>Whether or not the show is monitored</returns>
         public virtual bool IsMonitored(long id)
         {
@@ -149,7 +144,6 @@ namespace NzbDrone.Core.Providers
                 _sonioRepo.Delete<Series>(seriesId);
 
                 Logger.Info("Successfully deleted Series [{0}]", seriesId);
-
             }
             catch (Exception e)
             {
@@ -165,8 +159,5 @@ namespace NzbDrone.Core.Providers
 
             return false;
         }
-
-        #endregion
-
     }
 }

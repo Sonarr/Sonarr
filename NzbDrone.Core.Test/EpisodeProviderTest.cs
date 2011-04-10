@@ -1,22 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using AutoMoq;
 using FizzWare.NBuilder;
-using Gallio.Framework;
 using MbUnit.Framework;
-using MbUnit.Framework.ContractVerifiers;
 using Moq;
-using Ninject;
-using Ninject.Moq;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using SubSonic.Repository;
 using TvdbLib.Data;
-using SubSonic.Extensions;
 
 namespace NzbDrone.Core.Test
 {
@@ -33,22 +26,21 @@ namespace NzbDrone.Core.Test
 
             var fakeEpisodes = Builder<TvdbSeries>.CreateNew().With(
                 c => c.Episodes =
-                    new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(episodeCount).
-                        WhereAll()
-                        .Have(l => l.Language = new TvdbLanguage(0, "eng", "a"))
-                        .Build())
-                    ).With(c => c.Id = seriesId).Build();
+                     new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(episodeCount).
+                                               WhereAll()
+                                               .Have(l => l.Language = new TvdbLanguage(0, "eng", "a"))
+                                               .Build())
+                ).With(c => c.Id = seriesId).Build();
 
             var mocker = new AutoMoqer();
 
             mocker.SetConstant(MockLib.GetEmptyRepository());
 
             mocker.GetMock<TvDbProvider>()
-             .Setup(c => c.GetSeries(seriesId, true))
-             .Returns(fakeEpisodes).Verifiable();
+                .Setup(c => c.GetSeries(seriesId, true))
+                .Returns(fakeEpisodes).Verifiable();
 
             //mocker.GetMock<IRepository>().SetReturnsDefault();
-
 
 
             //Act
@@ -72,14 +64,14 @@ namespace NzbDrone.Core.Test
             var repo = new Mock<IRepository>();
 
             var epInDb = new Episode
-            {
-                AirDate = DateTime.Today,
-                EpisodeId = 55555,
-                EpisodeNumber = 5,
-                Language = "en",
-                SeasonId = 4444,
-                SeasonNumber = 1
-            };
+                             {
+                                 AirDate = DateTime.Today,
+                                 EpisodeId = 55555,
+                                 EpisodeNumber = 5,
+                                 Language = "en",
+                                 SeasonId = 4444,
+                                 SeasonNumber = 1
+                             };
 
             season.Setup(s => s.IsIgnored(12345, 1)).Returns(false);
             series.Setup(s => s.QualityWanted(12345, QualityTypes.TV)).Returns(true);
@@ -88,7 +80,6 @@ namespace NzbDrone.Core.Test
 
             //repo.Setup(s => s.All<EpisodeFile>()).Returns();
             //repo.All<EpisodeFile>().Where(c => c.EpisodeId == episode.EpisodeId);
-
 
 
             //Act

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace NzbDrone.Core.Providers
 {
@@ -13,6 +10,7 @@ namespace NzbDrone.Core.Providers
         {
             throw new NotImplementedException();
         }
+
         public virtual bool StartSearch(int seriesId)
         {
             throw new NotImplementedException();

@@ -3,10 +3,10 @@ using System.Linq;
 using FizzWare.NBuilder;
 using MbUnit.Framework;
 using NLog;
+using NLog.Config;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Repository;
-using LogLevel = NzbDrone.Core.Instrumentation.LogLevel;
-using NLog.Config;
+using LogLevel = NLog.LogLevel;
 
 namespace NzbDrone.Core.Test
 {
@@ -38,7 +38,9 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
-        [Description("This test confirms that the tvdb id stored in the db is preserved rather than being replaced by an auto incrementing value")]
+        [Description(
+            "This test confirms that the tvdb id stored in the db is preserved rather than being replaced by an auto incrementing value"
+            )]
         public void tvdbid_is_preserved([RandomNumbers(Minimum = 100, Maximum = 999, Count = 1)] int tvdbId)
         {
             //Arrange
@@ -72,7 +74,7 @@ namespace NzbDrone.Core.Test
             var sonicTarget = new SubsonicTarget(sonicRepo);
 
             LogManager.Configuration.AddTarget("DbLogger", sonicTarget);
-            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", NLog.LogLevel.Info, sonicTarget));
+            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Info, sonicTarget));
             LogManager.Configuration.Reload();
 
             Logger Logger = LogManager.GetCurrentClassLogger();
@@ -89,7 +91,7 @@ namespace NzbDrone.Core.Test
             Assert.AreEqual(message, logItem.Message);
             Assert.AreEqual(Logger.Name, logItem.Logger);
             Assert.AreEqual(Logger.Name, logItem.Logger);
-            Assert.AreEqual(LogLevel.Info, logItem.Level);
+            Assert.AreEqual(Instrumentation.LogLevel.Info, logItem.Level);
         }
 
         [Test]
@@ -102,7 +104,7 @@ namespace NzbDrone.Core.Test
 
             var sonicTarget = new SubsonicTarget(sonicRepo);
             LogManager.Configuration.AddTarget("DbLogger", sonicTarget);
-            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", NLog.LogLevel.Info, sonicTarget));
+            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Info, sonicTarget));
             LogManager.Configuration.Reload();
 
             Logger Logger = LogManager.GetCurrentClassLogger();
@@ -120,7 +122,7 @@ namespace NzbDrone.Core.Test
             Assert.AreNotEqual(new DateTime(), logItem.Time);
             Assert.AreEqual(message, logItem.Message);
             Assert.AreEqual(Logger.Name, logItem.Logger);
-            Assert.AreEqual(LogLevel.Error, logItem.Level);
+            Assert.AreEqual(Instrumentation.LogLevel.Error, logItem.Level);
             Assert.AreEqual(ex.GetType().ToString(), logItem.ExceptionType);
             Assert.AreEqual(ex.ToString(), logItem.ExceptionString);
             Assert.AreEqual(ex.Message, logItem.ExceptionMessage);
@@ -136,7 +138,7 @@ namespace NzbDrone.Core.Test
 
             var sonicTarget = new SubsonicTarget(sonicRepo);
             LogManager.Configuration.AddTarget("DbLogger", sonicTarget);
-            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", NLog.LogLevel.Info, sonicTarget));
+            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Info, sonicTarget));
             LogManager.Configuration.Reload();
 
             Logger Logger = LogManager.GetCurrentClassLogger();
@@ -154,7 +156,7 @@ namespace NzbDrone.Core.Test
             Assert.AreNotEqual(new DateTime(), logItem.Time);
             Assert.AreEqual(ex.Message, logItem.Message);
             Assert.AreEqual(Logger.Name, logItem.Logger);
-            Assert.AreEqual(LogLevel.Error, logItem.Level);
+            Assert.AreEqual(Instrumentation.LogLevel.Error, logItem.Level);
             Assert.AreEqual(ex.GetType().ToString(), logItem.ExceptionType);
             Assert.AreEqual(ex.ToString(), logItem.ExceptionString);
             Assert.AreEqual(ex.Message, logItem.ExceptionMessage);

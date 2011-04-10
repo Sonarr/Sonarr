@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using NzbDrone.Core.Instrumentation;
-using SubSonic.Repository;
 using Telerik.Web.Mvc;
 
 namespace NzbDrone.Web.Controllers
@@ -28,7 +23,6 @@ namespace NzbDrone.Web.Controllers
         {
             _logProvider.DeleteAll();
             return RedirectToAction("Index");
-
         }
 
         [GridAction]

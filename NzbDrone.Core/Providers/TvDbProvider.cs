@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Text.RegularExpressions;
 using NLog;
 using TvdbLib;
@@ -11,18 +10,18 @@ namespace NzbDrone.Core.Providers
 {
     public class TvDbProvider
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private static readonly Regex CleanUpRegex = new Regex(@"((\s|^)the(\s|$))|((\s|^)and(\s|$))|[^a-z]", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-
         private const string TVDB_APIKEY = "5D2D188E86E07F4F";
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        private static readonly Regex CleanUpRegex = new Regex(@"((\s|^)the(\s|$))|((\s|^)and(\s|$))|[^a-z]",
+                                                               RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
         private readonly TvdbHandler _handler;
 
         public TvDbProvider()
         {
             _handler = new TvdbHandler(new XmlCacheProvider(CentralDispatch.AppPath + @"\cache\tvdb"), TVDB_APIKEY);
         }
-
-        #region TvDbProvider Members
 
         public virtual IList<TvdbSearchResult> SearchSeries(string title)
         {
@@ -76,17 +75,15 @@ namespace NzbDrone.Core.Providers
         }
 
         /// <summary>
-        /// Determines whether a title in a search result is equal to the title searched for.
+        ///   Determines whether a title in a search result is equal to the title searched for.
         /// </summary>
-        /// <param name="directoryName">Name of the directory.</param>
-        /// <param name="tvdbTitle">The TVDB title.</param>
+        /// <param name = "directoryName">Name of the directory.</param>
+        /// <param name = "tvdbTitle">The TVDB title.</param>
         /// <returns>
-        /// 	<c>true</c> if the titles are found to be same; otherwise, <c>false</c>.
+        ///   <c>true</c> if the titles are found to be same; otherwise, <c>false</c>.
         /// </returns>
         public static bool IsTitleMatch(string directoryName, string tvdbTitle)
         {
-
-
             var result = false;
 
             if (String.IsNullOrEmpty(directoryName))
@@ -98,14 +95,13 @@ namespace NzbDrone.Core.Providers
             {
                 result = true;
             }
-            else if (String.Equals(CleanUpRegex.Replace(directoryName, ""), CleanUpRegex.Replace(tvdbTitle, ""), StringComparison.InvariantCultureIgnoreCase))
+            else if (String.Equals(CleanUpRegex.Replace(directoryName, ""), CleanUpRegex.Replace(tvdbTitle, ""),
+                                   StringComparison.InvariantCultureIgnoreCase))
                 result = true;
 
             Logger.Debug("Match between '{0}' and '{1}' was {2}", tvdbTitle, directoryName, result);
 
             return result;
         }
-
-        #endregion
     }
 }

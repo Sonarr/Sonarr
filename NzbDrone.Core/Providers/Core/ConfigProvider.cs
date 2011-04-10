@@ -238,10 +238,10 @@ namespace NzbDrone.Core.Providers.Core
             if (dbValue == null)
             {
                 _sonicRepo.Add(new Config
-                {
-                    Key = key,
-                    Value = value
-                });
+                                   {
+                                       Key = key,
+                                       Value = value
+                                   });
             }
             else
             {

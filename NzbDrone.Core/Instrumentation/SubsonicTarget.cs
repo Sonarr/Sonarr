@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Diagnostics;
-using Exceptioneer.WindowsFormsClient;
 using NLog;
 using NLog.Targets;
 using SubSonic.Repository;
-using Ninject;
-using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Instrumentation
 {

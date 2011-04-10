@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using NLog;
-using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers.Core;
 
@@ -13,20 +11,19 @@ namespace NzbDrone.Core.Providers
 {
     public class SyncProvider
     {
-        private readonly SeriesProvider _seriesProvider;
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private readonly DiskProvider _diskProvider;
         private readonly EpisodeProvider _episodeProvider;
         private readonly MediaFileProvider _mediaFileProvider;
         private readonly NotificationProvider _notificationProvider;
-        private readonly DiskProvider _diskProvider;
+        private readonly SeriesProvider _seriesProvider;
 
         private ProgressNotification _seriesSyncNotification;
         private Thread _seriesSyncThread;
 
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
         public SyncProvider(SeriesProvider seriesProvider, EpisodeProvider episodeProvider,
-            MediaFileProvider mediaFileProvider, NotificationProvider notificationProvider,
-            DiskProvider diskProvider)
+                            MediaFileProvider mediaFileProvider, NotificationProvider notificationProvider,
+                            DiskProvider diskProvider)
         {
             _seriesProvider = seriesProvider;
             _episodeProvider = episodeProvider;
@@ -34,8 +31,6 @@ namespace NzbDrone.Core.Providers
             _notificationProvider = notificationProvider;
             _diskProvider = diskProvider;
         }
-
-        #region ISyncProvider Members
 
         public List<String> GetUnmappedFolders(string path)
         {
@@ -64,8 +59,6 @@ namespace NzbDrone.Core.Providers
             return results;
         }
 
-        #endregion
-
         public bool BeginUpdateNewSeries()
         {
             Logger.Debug("User has requested a scan of new series");
@@ -73,10 +66,10 @@ namespace NzbDrone.Core.Providers
             {
                 Logger.Debug("Initializing background scan thread");
                 _seriesSyncThread = new Thread(SyncNewSeries)
-                {
-                    Name = "SyncNewSeries",
-                    Priority = ThreadPriority.Lowest
-                };
+                                        {
+                                            Name = "SyncNewSeries",
+                                            Priority = ThreadPriority.Lowest
+                                        };
 
                 _seriesSyncThread.Start();
             }
@@ -120,8 +113,6 @@ namespace NzbDrone.Core.Providers
 
         private void ScanSeries()
         {
-
-
             var syncList = _seriesProvider.GetAllSeries().Where(s => s.LastInfoSync == null).ToList();
             if (syncList.Count == 0) return;
 
@@ -131,13 +122,16 @@ namespace NzbDrone.Core.Providers
             {
                 try
                 {
-                    _seriesSyncNotification.CurrentStatus = String.Format("Searching For: {0}", new DirectoryInfo(currentSeries.Path).Name);
+                    _seriesSyncNotification.CurrentStatus = String.Format("Searching For: {0}",
+                                                                          new DirectoryInfo(currentSeries.Path).Name);
                     var updatedSeries = _seriesProvider.UpdateSeriesInfo(currentSeries.SeriesId);
 
-                    _seriesSyncNotification.CurrentStatus = String.Format("Downloading episode info For: {0}", updatedSeries.Title);
+                    _seriesSyncNotification.CurrentStatus = String.Format("Downloading episode info For: {0}",
+                                                                          updatedSeries.Title);
                     _episodeProvider.RefreshEpisodeInfo(updatedSeries.SeriesId);
 
-                    _seriesSyncNotification.CurrentStatus = String.Format("Scanning series folder {0}", updatedSeries.Path);
+                    _seriesSyncNotification.CurrentStatus = String.Format("Scanning series folder {0}",
+                                                                          updatedSeries.Path);
                     _mediaFileProvider.Scan(_seriesProvider.GetSeries(updatedSeries.SeriesId));
 
                     //Todo: Launch Backlog search for this series _backlogProvider.StartSearch(mappedSeries.Id);

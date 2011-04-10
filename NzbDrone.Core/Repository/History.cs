@@ -8,6 +8,7 @@ namespace NzbDrone.Core.Repository
     {
         [SubSonicPrimaryKey]
         public virtual int HistoryId { get; set; }
+
         public virtual int EpisodeId { get; set; }
         public virtual int IndexerId { get; set; }
         public string NzbTitle { get; set; }

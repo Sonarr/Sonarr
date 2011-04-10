@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using NLog;
 using NzbDrone.Core.Repository.Quality;
 using SubSonic.Repository;
@@ -11,20 +9,17 @@ namespace NzbDrone.Core.Providers
 {
     public class QualityProvider
     {
-        private IRepository _sonicRepo;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private readonly IRepository _sonicRepo;
 
         public QualityProvider()
         {
-            
         }
 
         public QualityProvider(IRepository sonicRepo)
         {
             _sonicRepo = sonicRepo;
         }
-
-        #region IQualityProvider Members
 
         public virtual void Add(QualityProfile profile)
         {
@@ -58,7 +53,5 @@ namespace NzbDrone.Core.Providers
         {
             return _sonicRepo.Single<QualityProfile>(q => q.QualityProfileId == profileId);
         }
-
-        #endregion
     }
 }

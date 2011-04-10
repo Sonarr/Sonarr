@@ -7,9 +7,10 @@ using NLog.Config;
 
 namespace NzbDrone
 {
-    class Config
+    internal class Config
     {
         private static string _projectRoot = string.Empty;
+
         internal static string ProjectRoot
         {
             get
@@ -31,15 +32,15 @@ namespace NzbDrone
             }
         }
 
-        internal static void ConfigureNlog()
-        {
-            LogManager.Configuration = new XmlLoggingConfiguration(Path.Combine(ProjectRoot, "NZBDrone.Web\\log.config"), false);
-        }
-
         internal static int Port
         {
             get { return Convert.ToInt32(ConfigurationManager.AppSettings.Get("port")); }
         }
 
+        internal static void ConfigureNlog()
+        {
+            LogManager.Configuration = new XmlLoggingConfiguration(
+                Path.Combine(ProjectRoot, "NZBDrone.Web\\log.config"), false);
+        }
     }
 }

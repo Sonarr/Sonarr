@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using NzbDrone.Core.Repository;
 using SubSonic.Repository;
 
@@ -27,17 +25,17 @@ namespace NzbDrone.Core.Providers
         {
             _sonioRepo.Add(rootDir);
         }
-               
+
         public virtual void Remove(int rootDirId)
         {
             _sonioRepo.Delete<RootDir>(rootDirId);
         }
-               
+
         public virtual void Update(RootDir rootDir)
         {
             _sonioRepo.Update(rootDir);
         }
-               
+
         public virtual RootDir GetRootDir(int rootDirId)
         {
             return _sonioRepo.Single<RootDir>(rootDirId);

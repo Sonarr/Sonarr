@@ -9,6 +9,7 @@ namespace NzbDrone.Core.Repository
     {
         [SubSonicPrimaryKey(false)]
         public virtual int EpisodeId { get; set; }
+
         public virtual int SeriesId { get; set; }
         public virtual int EpisodeFileId { get; set; }
         public virtual int SeasonId { get; set; }
@@ -16,8 +17,10 @@ namespace NzbDrone.Core.Repository
         public int EpisodeNumber { get; set; }
         public string Title { get; set; }
         public DateTime AirDate { get; set; }
+
         [SubSonicLongString]
         public string Overview { get; set; }
+
         public string Language { get; set; }
         public EpisodeStatusType Status { get; set; }
 

@@ -1,27 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Timers;
 using NLog;
-using NzbDrone.Core.Model.Notification;
 
 namespace NzbDrone.Core.Providers
 {
     public class TimerProvider
     {
-        private readonly RssSyncProvider _rssSyncProvider;
-        private readonly SeriesProvider _seriesProvider;
-        private readonly SeasonProvider _seasonProvider;
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly EpisodeProvider _episodeProvider;
         private readonly MediaFileProvider _mediaFileProvider;
 
-        private Timer _rssSyncTimer;
-        private Timer _minuteTimer;
+        private readonly Timer _minuteTimer;
+        private readonly RssSyncProvider _rssSyncProvider;
+        private readonly Timer _rssSyncTimer;
+        private readonly SeasonProvider _seasonProvider;
+        private readonly SeriesProvider _seriesProvider;
         private DateTime _rssSyncNextInterval;
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public TimerProvider(RssSyncProvider rssSyncProvider, SeriesProvider seriesProvider, SeasonProvider seasonProvider, EpisodeProvider episodeProvider, MediaFileProvider mediaFileProvider)
+        public TimerProvider(RssSyncProvider rssSyncProvider, SeriesProvider seriesProvider,
+                             SeasonProvider seasonProvider, EpisodeProvider episodeProvider,
+                             MediaFileProvider mediaFileProvider)
         {
             _rssSyncProvider = rssSyncProvider;
             _seriesProvider = seriesProvider;
@@ -33,8 +31,6 @@ namespace NzbDrone.Core.Providers
             _minuteTimer = new Timer(60000);
         }
 
-        #region TimerProvider Members
-
         public virtual void ResetRssSyncTimer()
         {
             double interval = _rssSyncTimer.Interval;
@@ -43,13 +39,14 @@ namespace NzbDrone.Core.Providers
 
         public virtual void StartRssSyncTimer()
         {
-            if (_rssSyncTimer.Interval < 900000) //If Timer is less than 15 minutes, throw an error! This should also be handled when saving the config, though a user could by-pass it by editing the DB directly... TNO (Trust No One)
+            if (_rssSyncTimer.Interval < 900000)
+                //If Timer is less than 15 minutes, throw an error! This should also be handled when saving the config, though a user could by-pass it by editing the DB directly... TNO (Trust No One)
             {
                 Logger.Error("RSS Sync Frequency is invalid, please set the interval first");
                 throw new InvalidOperationException("RSS Sync Frequency Invalid");
             }
 
-            _rssSyncTimer.Elapsed += new ElapsedEventHandler(RunRssSync);
+            _rssSyncTimer.Elapsed += RunRssSync;
             _rssSyncTimer.Start();
             _rssSyncNextInterval = DateTime.Now.AddMilliseconds(_rssSyncTimer.Interval);
         }
@@ -61,7 +58,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual void SetRssSyncTimer(int minutes)
         {
-            long ms = minutes * 60 * 1000;
+            long ms = minutes*60*1000;
             _rssSyncTimer.Interval = ms;
         }
 
@@ -77,7 +74,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual void StartMinuteTimer()
         {
-            _minuteTimer.Elapsed += new ElapsedEventHandler(MinuteTimer_Elapsed);
+            _minuteTimer.Elapsed += MinuteTimer_Elapsed;
             _minuteTimer.Start();
         }
 
@@ -85,8 +82,6 @@ namespace NzbDrone.Core.Providers
         {
             _minuteTimer.Stop();
         }
-
-        #endregion
 
         private void RunRssSync(object obj, ElapsedEventArgs args)
         {

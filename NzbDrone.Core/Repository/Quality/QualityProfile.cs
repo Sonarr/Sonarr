@@ -15,6 +15,7 @@ namespace NzbDrone.Core.Repository.Quality
         [DisplayName("Name")]
         [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string Name { get; set; }
+
         public bool UserProfile { get; set; } //Allows us to tell the difference between default and user profiles
 
         [SubSonicIgnore]
@@ -37,10 +38,10 @@ namespace NzbDrone.Core.Repository.Quality
             {
                 string result = String.Empty;
                 if (Allowed == null) return result;
-                
+
                 foreach (var q in Allowed)
                 {
-                    result += (int)q + "|";
+                    result += (int) q + "|";
                 }
                 return result.Trim('|');
             }
@@ -50,7 +51,7 @@ namespace NzbDrone.Core.Repository.Quality
                 Allowed = new List<QualityTypes>(qualities.Length);
                 foreach (var quality in qualities)
                 {
-                    Allowed.Add((QualityTypes)Convert.ToInt32(quality));
+                    Allowed.Add((QualityTypes) Convert.ToInt32(quality));
                 }
             }
         }

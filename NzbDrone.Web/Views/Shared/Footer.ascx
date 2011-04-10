@@ -17,4 +17,4 @@
 
 <%--<div>RSS Sync: <span style="display:none" id="syncTimer" class="timer"><%: ViewData["RssTimer"] %></span></div>--%>
 <div>RSS Sync: </div>
-<div style="display:none" id="syncTimer" class="timer"><%: ViewData["RssTimer"] %></div>
+<div style="display:none" id="syncTimer" class="timer"><%:ViewData["RssTimer"]%></div>

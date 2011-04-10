@@ -1,20 +1,21 @@
 ﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<NzbDrone.Core.Repository.Quality.QualityProfile>" %>
-<%@ Import Namespace="NzbDrone.Web.Helpers" %>
 <%@ Import Namespace="NzbDrone.Core.Repository.Quality" %>
+<%@ Import Namespace="NzbDrone.Web.Helpers" %>
 
-<% using (Html.BeginCollectionItem("UserProfiles"))
-   { %>   
+<%
+    using (Html.BeginCollectionItem("UserProfiles"))
+    {%>   
 
        <%
-           var idClean = ViewData.TemplateInfo.HtmlFieldPrefix.Replace('[', '_').Replace(']', '_');
+        var idClean = ViewData.TemplateInfo.HtmlFieldPrefix.Replace('[', '_').Replace(']', '_');
 
-           string sortable1 = String.Format("{0}_sortable1", idClean);
-           string sortable2 = String.Format("{0}_sortable2", idClean);
-           string allowedStringName = String.Format("{0}_AllowedString", idClean);
-           string connectedSortable = String.Format("connected{0}", idClean);
-           string title = String.Format("{0}_Title", idClean);
-           string nameBox = String.Format("{0}_Name", idClean);
-       %>
+        string sortable1 = String.Format("{0}_sortable1", idClean);
+        string sortable2 = String.Format("{0}_sortable2", idClean);
+        string allowedStringName = String.Format("{0}_AllowedString", idClean);
+        string connectedSortable = String.Format("connected{0}", idClean);
+        string title = String.Format("{0}_Title", idClean);
+        string nameBox = String.Format("{0}_Name", idClean);
+%>
 
         <style type="text/css">
             .sortable1, .sortable2 { list-style-type: none; margin-right: 10px; background: #eee; padding-left: 5px; padding-right: 5px; padding-top: 0px; padding-bottom: 6px; width: 107px; margin-bottom: 3px; }
@@ -30,19 +31,19 @@
 
         <script type="text/javascript">
             $(function () {
-                $("#<%= sortable1 %>, #<%= sortable2 %>").sortable({
-                    connectWith: ".<%= connectedSortable %>",
+                $("#<%=sortable1%>, #<%=sortable2%>").sortable({
+                    connectWith: ".<%=connectedSortable%>",
                     placeholder: "ui-state-highlight",
                     dropOnEmpty: true,
 
                     create: function (event, ui) {
-                        var order = $('#<%= sortable1 %>').sortable("toArray");
-                        $("#<%= allowedStringName %>").val(order);
+                        var order = $('#<%=sortable1%>').sortable("toArray");
+                        $("#<%=allowedStringName%>").val(order);
                     },
 
                     update: function (event, ui) {
-                        var order = $('#<%= sortable1 %>').sortable("toArray");
-                        $("#<%= allowedStringName %>").val(order);
+                        var order = $('#<%=sortable1%>').sortable("toArray");
+                        $("#<%=allowedStringName%>").val(order);
                     }
 
                 }).disableSelection();
@@ -54,74 +55,85 @@
         <fieldset style="width:275px; margin:5px; margin-top: 0px; border-color:#CCCCCD">
 
             <div id="qualityHeader" style="padding-bottom: 5px; margin: 0px;">
-                <h2 style="display:inline; padding-right: 4px; margin-left: 4px;" id="<%= title %>"><%= Html.DisplayTextFor(m => m.Name) %></h2>
+                <h2 style="display:inline; padding-right: 4px; margin-left: 4px;" id="<%=title%>"><%=Html.DisplayTextFor(m => m.Name)%></h2>
                 <a href="#" class="deleteRow"><img src="../../Content/Images/X.png" alt="Delete" /></a>
             </div>
 
             <div class="config-group" style="width: 250px; margin-bottom: 5px; margin-left: 5px;">
-                <div class="config-title"><%= Html.LabelFor(x => x.Name)%></div>
-                <div class="config-value"><%= Html.TextBoxFor(x => x.Name)%></div>
-                <div class="config-validation"><%= Html.ValidationMessageFor(x => x.Name)%></div>
+                <div class="config-title"><%=Html.LabelFor(x => x.Name)%></div>
+                <div class="config-value"><%=Html.TextBoxFor(x => x.Name)%></div>
+                <div class="config-validation"><%=Html.ValidationMessageFor(x => x.Name)%></div>
             </div>
 
             <div id="sortablesDiv" style="margin: 0px;">
                 <div class="allowedQualities">
                     <h4 class="sortableHeader">Allowed</h4>
-                    <ul id="<%= sortable1 %>" class="<%= connectedSortable %> sortable1">
-                        <% if (Model.Allowed != null) { %>
-                            <%for (int i = 0; i < Model.Allowed.Count(); i++){%>
-                                <li class="ui-state-default" id="<%= Model.Allowed[i].ToString() %>">
+                    <ul id="<%=sortable1%>" class="<%=connectedSortable%> sortable1">
+                        <%
+        if (Model.Allowed != null)
+        {%>
+                            <%
+            for (int i = 0; i < Model.Allowed.Count(); i++)
+            {%>
+                                <li class="ui-state-default" id="<%=Model.Allowed[i].ToString()%>">
                                 <%=Html.RadioButtonFor(x => x.Cutoff, Model.Allowed[i])%>
-                                <%= Html.DisplayTextFor(c => c.Allowed[i]) %>
+                                <%=Html.DisplayTextFor(c => c.Allowed[i])%>
                                 </li>
-                            <%}%>
-                        <%}%>
+                            <%
+            }%>
+                        <%
+        }%>
                     </ul>
                 </div>
 
                 <div class="otherQualities">
                     <h4 class="sortableHeader">Not-Allowed</h4>
-                    <ul id="<%= sortable2 %>" class="<%= connectedSortable %> sortable2">
-                        <% var qualitiesList = (List<QualityTypes>) ViewData["Qualities"]; %>
+                    <ul id="<%=sortable2%>" class="<%=connectedSortable%> sortable2">
+                        <%
+        var qualitiesList = (List<QualityTypes>) ViewData["Qualities"];%>
 
-                        <%for (int i = 0; i < qualitiesList.Count(); i++){%>                      
+                        <%
+        for (int i = 0; i < qualitiesList.Count(); i++)
+        {%>                      
                             <%
-                                //Skip Unknown and any item that is in the allowed list
-                                if (qualitiesList[i].ToString() == "Unknown")
-                                    continue;
-                          
-                                if (Model.Allowed != null)
-                                {
-                                    if (Model.Allowed.Contains(qualitiesList[i]))
-                                        continue;
-                                }
-                            %>
+            //Skip Unknown and any item that is in the allowed list
+            if (qualitiesList[i].ToString() == "Unknown")
+                continue;
 
-                            <li class="ui-state-default" id="<%= qualitiesList[i].ToString() %>">
+            if (Model.Allowed != null)
+            {
+                if (Model.Allowed.Contains(qualitiesList[i]))
+                    continue;
+            }
+%>
+
+                            <li class="ui-state-default" id="<%=qualitiesList[i].ToString()%>">
                             <%=Html.RadioButtonFor(x => x.Cutoff, qualitiesList[i])%>
-                            <%= Html.Label(qualitiesList[i].ToString()) %>
+                            <%=Html.Label(qualitiesList[i].ToString())%>
                             </li>
 
-                        <% } %>
+                        <%
+        }%>
                     </ul>
                 </div>
             </div>
 
-            <%= Html.ValidationMessageFor(x => x.Cutoff) %>
+            <%=Html.ValidationMessageFor(x => x.Cutoff)%>
 
             <div class="hiddenProfileDetails">
-                <%= Html.TextBoxFor(x => x.QualityProfileId, new { @style = "display:none" })%>
-                <%= Html.CheckBoxFor(x => x.UserProfile, new { @style = "display:none" })%>
-                <%= Html.TextBoxFor(m => m.AllowedString, new { @style = "display:none" })%>
+                <%=Html.TextBoxFor(x => x.QualityProfileId, new {@style = "display:none"})%>
+                <%=Html.CheckBoxFor(x => x.UserProfile, new {@style = "display:none"})%>
+                <%=Html.TextBoxFor(m => m.AllowedString, new {@style = "display:none"})%>
             </div>
         </fieldset>
     </div> 
 
     <script type="text/javascript">
-        $("#<%: nameBox %>").keyup(function () {
+        $("#<%:nameBox%>").keyup(function () {
             var value = $(this).val();
-            $("#<%= title %>").text(value);
+            $("#<%=title%>").text(value);
         }).keyup();
     </script>
 
-<% } %>
+<%
+    }%>

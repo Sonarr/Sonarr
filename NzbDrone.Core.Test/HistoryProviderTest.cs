@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Gallio.Framework;
 using MbUnit.Framework;
-using MbUnit.Framework.ContractVerifiers;
 using Moq;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
@@ -20,7 +17,14 @@ namespace NzbDrone.Core.Test
         public void AllItems()
         {
             //Setup
-            var indexer = new Indexer { Enabled = true, IndexerId = 0, IndexerName = "NzbMatrix", Order = 1, RssUrl = "http://www.nzbmatrix.com" };
+            var indexer = new Indexer
+                              {
+                                  Enabled = true,
+                                  IndexerId = 0,
+                                  IndexerName = "NzbMatrix",
+                                  Order = 1,
+                                  RssUrl = "http://www.nzbmatrix.com"
+                              };
             var series = new Series
                              {
                                  SeriesId = 5656,
@@ -31,7 +35,7 @@ namespace NzbDrone.Core.Test
                                  Title = "30 Rock",
                                  Path = @"C:\Test\TV\30 Rock"
                              };
-            var season = new Season { SeasonId = 4321, SeasonNumber = 1, SeriesId = 5656, Monitored = true };
+            var season = new Season {SeasonId = 4321, SeasonNumber = 1, SeriesId = 5656, Monitored = true};
             var episode = new Episode
                               {
                                   AirDate = DateTime.Today.AddDays(-1),
@@ -74,46 +78,53 @@ namespace NzbDrone.Core.Test
         {
             //Todo: This test fails... Moq Setup doesn't return the expected value
             //Setup
-            var indexer = new Indexer { Enabled = true, IndexerName = "NzbMatrix", Order = 1, RssUrl = "http://www.nzbmatrix.com" };
+            var indexer = new Indexer
+                              {
+                                  Enabled = true,
+                                  IndexerName = "NzbMatrix",
+                                  Order = 1,
+                                  RssUrl = "http://www.nzbmatrix.com"
+                              };
             var series = new Series
-            {
-                SeriesId = 5656,
-                CleanTitle = "rock",
-                Monitored = true,
-                Overview = "Series Overview",
-                QualityProfileId = 1,
-                Title = "30 Rock",
-                Path = @"C:\Test\TV\30 Rock"
-            };
-            var season = new Season { SeasonId = 4321, SeasonNumber = 1, SeriesId = 5656, Monitored = true };
+                             {
+                                 SeriesId = 5656,
+                                 CleanTitle = "rock",
+                                 Monitored = true,
+                                 Overview = "Series Overview",
+                                 QualityProfileId = 1,
+                                 Title = "30 Rock",
+                                 Path = @"C:\Test\TV\30 Rock"
+                             };
+            var season = new Season {SeasonId = 4321, SeasonNumber = 1, SeriesId = 5656, Monitored = true};
             var episode = new Episode
-            {
-                AirDate = DateTime.Today.AddDays(-1),
-                EpisodeId = 1234,
-                EpisodeNumber = 5,
-                Language = "English",
-                Overview = "This is an Overview",
-                SeasonNumber = 1,
-                SeasonId = 4321,
-                Season = season,
-                SeriesId = 5656
-            };
+                              {
+                                  AirDate = DateTime.Today.AddDays(-1),
+                                  EpisodeId = 1234,
+                                  EpisodeNumber = 5,
+                                  Language = "English",
+                                  Overview = "This is an Overview",
+                                  SeasonNumber = 1,
+                                  SeasonId = 4321,
+                                  Season = season,
+                                  SeriesId = 5656
+                              };
 
             var list = new List<History>();
             list.Add(new History
-            {
-                HistoryId = new int(),
-                Date = DateTime.Now,
-                IsProper = false,
-                Quality = QualityTypes.TV,
-                IndexerId = indexer.IndexerId,
-                EpisodeId = episode.EpisodeId
-            });
+                         {
+                             HistoryId = new int(),
+                             Date = DateTime.Now,
+                             IsProper = false,
+                             Quality = QualityTypes.TV,
+                             IndexerId = indexer.IndexerId,
+                             EpisodeId = episode.EpisodeId
+                         });
 
             var proper = false;
 
             var repo = new Mock<IRepository>();
-            repo.Setup(r => r.Exists<History>(h => h.EpisodeId == episode.EpisodeId && h.IsProper == proper)).Returns(true);
+            repo.Setup(r => r.Exists<History>(h => h.EpisodeId == episode.EpisodeId && h.IsProper == proper)).Returns(
+                true);
 
             var target = new HistoryProvider(repo.Object);
 
@@ -131,44 +142,51 @@ namespace NzbDrone.Core.Test
             //Todo: This test fails... Moq Setup doesn't return the expected value
 
             //Setup
-            var indexer = new Indexer { Enabled = true, IndexerName = "NzbMatrix", Order = 1, RssUrl = "http://www.nzbmatrix.com" };
+            var indexer = new Indexer
+                              {
+                                  Enabled = true,
+                                  IndexerName = "NzbMatrix",
+                                  Order = 1,
+                                  RssUrl = "http://www.nzbmatrix.com"
+                              };
             var series = new Series
-            {
-                SeriesId = 5656,
-                CleanTitle = "rock",
-                Monitored = true,
-                Overview = "Series Overview",
-                QualityProfileId = 1,
-                Title = "30 Rock",
-                Path = @"C:\Test\TV\30 Rock"
-            };
-            var season = new Season { SeasonId = 4321, SeasonNumber = 1, SeriesId = 5656, Monitored = true };
+                             {
+                                 SeriesId = 5656,
+                                 CleanTitle = "rock",
+                                 Monitored = true,
+                                 Overview = "Series Overview",
+                                 QualityProfileId = 1,
+                                 Title = "30 Rock",
+                                 Path = @"C:\Test\TV\30 Rock"
+                             };
+            var season = new Season {SeasonId = 4321, SeasonNumber = 1, SeriesId = 5656, Monitored = true};
             var episode = new Episode
-            {
-                AirDate = DateTime.Today.AddDays(-1),
-                EpisodeId = 1234,
-                EpisodeNumber = 5,
-                Language = "English",
-                Overview = "This is an Overview",
-                SeasonNumber = 1,
-                SeasonId = 4321,
-                Season = season,
-                SeriesId = 5656
-            };
+                              {
+                                  AirDate = DateTime.Today.AddDays(-1),
+                                  EpisodeId = 1234,
+                                  EpisodeNumber = 5,
+                                  Language = "English",
+                                  Overview = "This is an Overview",
+                                  SeasonNumber = 1,
+                                  SeasonId = 4321,
+                                  Season = season,
+                                  SeriesId = 5656
+                              };
 
             var list = new List<History>();
             list.Add(new History
-            {
-                HistoryId = new int(),
-                Date = DateTime.Now,
-                IsProper = false,
-                Quality = QualityTypes.TV,
-                IndexerId = indexer.IndexerId,
-                EpisodeId = episode.EpisodeId
-            });
+                         {
+                             HistoryId = new int(),
+                             Date = DateTime.Now,
+                             IsProper = false,
+                             Quality = QualityTypes.TV,
+                             IndexerId = indexer.IndexerId,
+                             EpisodeId = episode.EpisodeId
+                         });
 
             var repo = new Mock<IRepository>();
-            repo.Setup(r => r.Exists<History>(h => h.Episode == episode && h.IsProper == list[0].IsProper)).Returns(false);
+            repo.Setup(r => r.Exists<History>(h => h.Episode == episode && h.IsProper == list[0].IsProper)).Returns(
+                false);
 
             var target = new HistoryProvider(repo.Object);
 

@@ -1,8 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<AddNewSeriesModel>" %>
-
-<%@ Import Namespace="NzbDrone.Web.Models" %>
-<%@ Import Namespace="Telerik.Web.Mvc.UI" %>
-<%@ Import Namespace="NzbDrone.Core.Repository" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<NzbDrone.Web.Models.AddNewSeriesModel>" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
     Add New Series
     <script type="text/javascript">
@@ -14,14 +10,14 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <div style="width: 60%">
         <div style="display: inline">
-            <%= Html.Label("Enter a Series Name") %>
-            <%= Html.TextBox("new_series_name", String.Empty, new { id="new_series_id" }) %>
+            <%=Html.Label("Enter a Series Name")%>
+            <%=Html.TextBox("new_series_name", String.Empty, new {id = "new_series_id"})%>
             <button class="t.button" id="searchButton" disabled="disabled" onclick="searchSeries ()">
                 Search</button>
         </div>
         <div style="display: inline; float: right;">
-            <%= Html.LabelFor(m => m.QualityProfileId)%>
-            <%: Html.DropDownListFor(m => m.QualityProfileId, Model.QualitySelectList)%>
+            <%=Html.LabelFor(m => m.QualityProfileId)%>
+            <%:Html.DropDownListFor(m => m.QualityProfileId, Model.QualitySelectList)%>
         </div>
     </div>
     <div id="result">
@@ -29,12 +25,16 @@
     <div id="RootDirectories" class="rootDirectories" style="display: none">
         <fieldset>
             <legend>Root TV Folders</legend>
-            <% int d = 0; %>
-            <% foreach (var dir in Model.RootDirectories)
-               { %>
-            <%: Html.RadioButton("selectedRootDir", dir.Path, d ==0 , new { @class="dirList examplePart", id="dirRadio_" + d }) %>
-            <%: Html.Label(dir.Path) %>
-            <% } %>
+            <%
+                int d = 0;%>
+            <%
+                foreach (var dir in Model.RootDirectories)
+                {%>
+            <%:Html.RadioButton("selectedRootDir", dir.Path, d == 0,
+                                                       new {@class = "dirList examplePart", id = "dirRadio_" + d})%>
+            <%:Html.Label(dir.Path)%>
+            <%
+                }%>
         </fieldset>
         <div id="example">
         </div>
@@ -56,7 +56,7 @@
 
             $("#result").text("Searching...");
            
-            $("#result").load('<%=Url.Action("SearchForSeries", "Series") %>', {
+            $("#result").load('<%=Url.Action("SearchForSeries", "Series")%>', {
                 seriesName: seriesSearch.val()
             });
 
@@ -78,7 +78,7 @@
             var seriesName = $(id).val();
             var qualityProfileId = $("#QualityProfileId").val();
 
-            $("#addResult").load('<%=Url.Action("AddSeries", "Series") %>', {
+            $("#addResult").load('<%=Url.Action("AddSeries", "Series")%>', {
                 dir: checkedDir,
                 seriesId: checkedSeries,
                 seriesName: seriesName,

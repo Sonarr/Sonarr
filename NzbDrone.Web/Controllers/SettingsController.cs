@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Web;
 using System.Web.Mvc;
 using NLog;
-using NzbDrone.Core;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
@@ -19,17 +16,16 @@ namespace NzbDrone.Web.Controllers
     [HandleError]
     public class SettingsController : Controller
     {
-        private ConfigProvider _configProvider;
-        private IndexerProvider _indexerProvider;
-        private QualityProvider _qualityProvider;
-        private RootDirProvider _rootDirProvider;
-
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private const string SETTINGS_SAVED = "Settings Saved.";
         private const string SETTINGS_FAILED = "Error Saving Settings, please fix any errors";
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private readonly ConfigProvider _configProvider;
+        private readonly IndexerProvider _indexerProvider;
+        private readonly QualityProvider _qualityProvider;
+        private readonly RootDirProvider _rootDirProvider;
 
         public SettingsController(ConfigProvider configProvider, IndexerProvider indexerProvider,
-            QualityProvider qualityProvider, RootDirProvider rootDirProvider)
+                                  QualityProvider qualityProvider, RootDirProvider rootDirProvider)
         {
             _configProvider = configProvider;
             _indexerProvider = indexerProvider;
@@ -63,8 +59,10 @@ namespace NzbDrone.Web.Controllers
             ViewData["viewName"] = "Indexers";
             return View("Index", new IndexerSettingsModel
                                      {
-                                         NzbMatrixUsername = _configProvider.GetValue("NzbMatrixUsername", String.Empty, true),
-                                         NzbMatrixApiKey = _configProvider.GetValue("NzbMatrixApiKey", String.Empty, true),
+                                         NzbMatrixUsername =
+                                             _configProvider.GetValue("NzbMatrixUsername", String.Empty, true),
+                                         NzbMatrixApiKey =
+                                             _configProvider.GetValue("NzbMatrixApiKey", String.Empty, true),
                                          NzbsOrgUId = _configProvider.GetValue("NzbsOrgUId", String.Empty, true),
                                          NzbsOrgHash = _configProvider.GetValue("NzbsOrgHash", String.Empty, true),
                                          NzbsrusUId = _configProvider.GetValue("NzbsrusUId", String.Empty, true),
@@ -80,7 +78,8 @@ namespace NzbDrone.Web.Controllers
             var model = new DownloadSettingsModel
                             {
                                 SyncFrequency = Convert.ToInt32(_configProvider.GetValue("SyncFrequency", "15", true)),
-                                DownloadPropers = Convert.ToBoolean(_configProvider.GetValue("DownloadPropers", "false", true)),
+                                DownloadPropers =
+                                    Convert.ToBoolean(_configProvider.GetValue("DownloadPropers", "false", true)),
                                 Retention = Convert.ToInt32(_configProvider.GetValue("Retention", "500", true)),
                                 SabHost = _configProvider.GetValue("SabHost", "localhost", true),
                                 SabPort = Convert.ToInt32(_configProvider.GetValue("SabPort", "8080", true)),
@@ -88,7 +87,10 @@ namespace NzbDrone.Web.Controllers
                                 SabUsername = _configProvider.GetValue("SabUsername", String.Empty, true),
                                 SabPassword = _configProvider.GetValue("SabPassword", String.Empty, true),
                                 SabTvCategory = _configProvider.GetValue("SabTvCategory", String.Empty, true),
-                                SabTvPriority = (SabnzbdPriorityType)Enum.Parse(typeof(SabnzbdPriorityType), _configProvider.GetValue("SabTvPriority", "Normal", true)),
+                                SabTvPriority =
+                                    (SabnzbdPriorityType)
+                                    Enum.Parse(typeof (SabnzbdPriorityType),
+                                               _configProvider.GetValue("SabTvPriority", "Normal", true)),
                                 UseBlackHole = Convert.ToBoolean(_configProvider.GetValue("UseBlackHole", true, true)),
                                 BlackholeDirectory = _configProvider.GetValue("BlackholeDirectory", String.Empty, true)
                             };
@@ -102,7 +104,7 @@ namespace NzbDrone.Web.Controllers
 
             var qualityTypes = new List<QualityTypes>();
 
-            foreach (QualityTypes qual in Enum.GetValues(typeof(QualityTypes)))
+            foreach (QualityTypes qual in Enum.GetValues(typeof (QualityTypes)))
             {
                 qualityTypes.Add(qual);
             }
@@ -112,17 +114,18 @@ namespace NzbDrone.Web.Controllers
             var userProfiles = _qualityProvider.GetAllProfiles().Where(q => q.UserProfile).ToList();
             var profiles = _qualityProvider.GetAllProfiles().ToList();
 
-            var defaultQualityQualityProfileId = Convert.ToInt32(_configProvider.GetValue("DefaultQualityProfile", profiles[0].QualityProfileId, true));
+            var defaultQualityQualityProfileId =
+                Convert.ToInt32(_configProvider.GetValue("DefaultQualityProfile", profiles[0].QualityProfileId, true));
 
             var selectList = new SelectList(profiles, "QualityProfileId", "Name");
 
             var model = new QualityModel
-                                     {
-                                         Profiles = profiles,
-                                         UserProfiles = userProfiles,
-                                         DefaultQualityProfileId = defaultQualityQualityProfileId,
-                                         SelectList = selectList
-                                     };
+                            {
+                                Profiles = profiles,
+                                UserProfiles = userProfiles,
+                                DefaultQualityProfileId = defaultQualityQualityProfileId,
+                                SelectList = selectList
+                            };
 
             return View("Index", model);
         }
@@ -132,22 +135,31 @@ namespace NzbDrone.Web.Controllers
             ViewData["viewName"] = "Notifications";
 
             var model = new NotificationSettingsModel
-            {
-                XbmcEnabled = Convert.ToBoolean(_configProvider.GetValue("XbmcEnabled", false, true)),
-                XbmcNotifyOnGrab = Convert.ToBoolean(_configProvider.GetValue("XbmcNotifyOnGrab", false, true)),
-                XbmcNotifyOnDownload = Convert.ToBoolean(_configProvider.GetValue("XbmcNotifyOnDownload", false, true)),
-                XbmcNotifyOnRename = Convert.ToBoolean(_configProvider.GetValue("XbmcNotifyOnRename", false, true)),
-                XbmcNotificationImage = Convert.ToBoolean(_configProvider.GetValue("XbmcNotificationImage", false, true)),
-                XbmcDisplayTime = Convert.ToInt32(_configProvider.GetValue("XbmcDisplayTime", 3, true)),
-                XbmcUpdateOnDownload = Convert.ToBoolean(_configProvider.GetValue("XbmcUpdateOnDownload ", false, true)),
-                XbmcUpdateOnRename = Convert.ToBoolean(_configProvider.GetValue("XbmcUpdateOnRename", false, true)),
-                XbmcFullUpdate = Convert.ToBoolean(_configProvider.GetValue("XbmcFullUpdate", false, true)),
-                XbmcCleanOnDownload = Convert.ToBoolean(_configProvider.GetValue("XbmcCleanOnDownload", false, true)),
-                XbmcCleanOnRename = Convert.ToBoolean(_configProvider.GetValue("XbmcCleanOnRename", false, true)),
-                XbmcHosts = _configProvider.GetValue("XbmcHosts", "localhost:80", true),
-                XbmcUsername = _configProvider.GetValue("XbmcUsername", String.Empty, true),
-                XbmcPassword = _configProvider.GetValue("XbmcPassword", String.Empty, true)
-            };
+                            {
+                                XbmcEnabled = Convert.ToBoolean(_configProvider.GetValue("XbmcEnabled", false, true)),
+                                XbmcNotifyOnGrab =
+                                    Convert.ToBoolean(_configProvider.GetValue("XbmcNotifyOnGrab", false, true)),
+                                XbmcNotifyOnDownload =
+                                    Convert.ToBoolean(_configProvider.GetValue("XbmcNotifyOnDownload", false, true)),
+                                XbmcNotifyOnRename =
+                                    Convert.ToBoolean(_configProvider.GetValue("XbmcNotifyOnRename", false, true)),
+                                XbmcNotificationImage =
+                                    Convert.ToBoolean(_configProvider.GetValue("XbmcNotificationImage", false, true)),
+                                XbmcDisplayTime = Convert.ToInt32(_configProvider.GetValue("XbmcDisplayTime", 3, true)),
+                                XbmcUpdateOnDownload =
+                                    Convert.ToBoolean(_configProvider.GetValue("XbmcUpdateOnDownload ", false, true)),
+                                XbmcUpdateOnRename =
+                                    Convert.ToBoolean(_configProvider.GetValue("XbmcUpdateOnRename", false, true)),
+                                XbmcFullUpdate =
+                                    Convert.ToBoolean(_configProvider.GetValue("XbmcFullUpdate", false, true)),
+                                XbmcCleanOnDownload =
+                                    Convert.ToBoolean(_configProvider.GetValue("XbmcCleanOnDownload", false, true)),
+                                XbmcCleanOnRename =
+                                    Convert.ToBoolean(_configProvider.GetValue("XbmcCleanOnRename", false, true)),
+                                XbmcHosts = _configProvider.GetValue("XbmcHosts", "localhost:80", true),
+                                XbmcUsername = _configProvider.GetValue("XbmcUsername", String.Empty, true),
+                                XbmcPassword = _configProvider.GetValue("XbmcPassword", String.Empty, true)
+                            };
 
             return View("Index", model);
         }
@@ -180,14 +192,14 @@ namespace NzbDrone.Web.Controllers
         {
             var qualityTypes = new List<QualityTypes>();
 
-            foreach (QualityTypes qual in Enum.GetValues(typeof(QualityTypes)))
+            foreach (QualityTypes qual in Enum.GetValues(typeof (QualityTypes)))
             {
                 qualityTypes.Add(qual);
             }
 
             ViewData["Qualities"] = qualityTypes;
 
-            return View("UserProfileSection", new QualityProfile { Name = "New Profile", UserProfile = true });
+            return View("UserProfileSection", new QualityProfile {Name = "New Profile", UserProfile = true});
         }
 
         public ViewResult AddRootDir()
@@ -203,10 +215,11 @@ namespace NzbDrone.Web.Controllers
         public QualityModel GetUpdatedProfileList()
         {
             var profiles = _qualityProvider.GetAllProfiles().ToList();
-            var defaultQualityQualityProfileId = Convert.ToInt32(_configProvider.GetValue("DefaultQualityProfile", profiles[0].QualityProfileId, true));
+            var defaultQualityQualityProfileId =
+                Convert.ToInt32(_configProvider.GetValue("DefaultQualityProfile", profiles[0].QualityProfileId, true));
             var selectList = new SelectList(profiles, "QualityProfileId", "Name");
 
-            return new QualityModel { DefaultQualityProfileId = defaultQualityQualityProfileId, SelectList = selectList };
+            return new QualityModel {DefaultQualityProfileId = defaultQualityQualityProfileId, SelectList = selectList};
         }
 
         [HttpPost]
@@ -315,7 +328,7 @@ namespace NzbDrone.Web.Controllers
                     profile.Allowed = new List<QualityTypes>();
                     foreach (var quality in profile.AllowedString.Split(','))
                     {
-                        var qType = (QualityTypes)Enum.Parse(typeof(QualityTypes), quality);
+                        var qType = (QualityTypes) Enum.Parse(typeof (QualityTypes), quality);
                         profile.Allowed.Add(qType);
                     }
 

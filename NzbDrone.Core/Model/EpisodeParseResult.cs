@@ -19,8 +19,8 @@ namespace NzbDrone.Core.Model
 
         public override string ToString()
         {
-            return string.Format("Series:{0} Season:{1} Episode:{2}", SeriesTitle, SeasonNumber, String.Join(",", Episodes));
+            return string.Format("Series:{0} Season:{1} Episode:{2}", SeriesTitle, SeasonNumber,
+                                 String.Join(",", Episodes));
         }
-
     }
 }

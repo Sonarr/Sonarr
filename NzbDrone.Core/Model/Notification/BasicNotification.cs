@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Model.Notification
         }
 
         /// <summary>
-        /// Gets or sets the unique id.
+        ///   Gets or sets the unique id.
         /// </summary>
         /// <value>The Id.</value>
         public Guid Id { get; private set; }
@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Model.Notification
         public BasicNotificationType Type { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether or not this message should be automatically dismissed after a period of time.
+        ///   Gets or sets a value indicating whether or not this message should be automatically dismissed after a period of time.
         /// </summary>
         /// <value><c>true</c> if [auto dismiss]; otherwise, <c>false</c>.</value>
         public bool AutoDismiss { get; set; }

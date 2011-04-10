@@ -1,21 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NLog;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
-using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Providers
 {
     public class ExternalNotificationProvider
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly ConfigProvider _configProvider;
         private readonly XbmcProvider _xbmcProvider;
-
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public ExternalNotificationProvider(ConfigProvider configProvider, XbmcProvider xbmcProvider)
         {
@@ -23,7 +18,6 @@ namespace NzbDrone.Core.Providers
             _xbmcProvider = xbmcProvider;
         }
 
-        #region ExternalNotificationProvider Members
         public virtual void OnGrab(string message)
         {
             var header = "NzbDrone [TV] - Grabbed";
@@ -100,6 +94,5 @@ namespace NzbDrone.Core.Providers
 
             throw new NotImplementedException();
         }
-        #endregion
     }
 }

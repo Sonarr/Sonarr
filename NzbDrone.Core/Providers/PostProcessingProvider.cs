@@ -1,29 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Xml.Linq;
-using NzbDrone.Core.Helpers;
-using NzbDrone.Core.Providers.Core;
-
-namespace NzbDrone.Core.Providers
+﻿namespace NzbDrone.Core.Providers
 {
     public class PostProcessingProvider
     {
-        private readonly SeriesProvider _seriesProvider;
         private readonly MediaFileProvider _mediaFileProvider;
         private readonly RenameProvider _renameProvider;
+        private readonly SeriesProvider _seriesProvider;
 
         public PostProcessingProvider(SeriesProvider seriesProvider,
-            MediaFileProvider mediaFileProvider, RenameProvider renameProvider)
+                                      MediaFileProvider mediaFileProvider, RenameProvider renameProvider)
         {
             _seriesProvider = seriesProvider;
-           _mediaFileProvider = mediaFileProvider;
+            _mediaFileProvider = mediaFileProvider;
             _renameProvider = renameProvider;
         }
-
-        #region PostProcessingProvider Members
 
         public virtual void ProcessEpisode(string dir, string nzbName)
         {
@@ -42,7 +31,5 @@ namespace NzbDrone.Core.Providers
                 _renameProvider.RenameEpisodeFile(file.EpisodeFileId, true);
             }
         }
-
-        #endregion
     }
 }

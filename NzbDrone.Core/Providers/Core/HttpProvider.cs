@@ -47,7 +47,6 @@ namespace NzbDrone.Core.Providers.Core
             {
                 var webClient = new WebClient();
                 webClient.DownloadFile(request, filename);
-
             }
             catch (Exception ex)
             {
@@ -55,8 +54,6 @@ namespace NzbDrone.Core.Providers.Core
                 Logger.TraceException(ex.Message, ex);
                 throw;
             }
-
-
         }
 
         public virtual void DownloadFile(string request, string filename, string username, string password)

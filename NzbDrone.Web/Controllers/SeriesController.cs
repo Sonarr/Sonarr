@@ -1,43 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
-using System.Threading;
-using System.Web;
 using System.Web.Mvc;
-using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
-using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
-using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Web.Models;
 using Telerik.Web.Mvc;
 using TvdbLib.Data;
-using EpisodeModel = NzbDrone.Web.Models.EpisodeModel;
 
 namespace NzbDrone.Web.Controllers
 {
     [HandleError]
     public class SeriesController : Controller
     {
-        private readonly SeriesProvider _seriesProvider;
         private readonly EpisodeProvider _episodeProvider;
-        private readonly SyncProvider _syncProvider;
-        private readonly RssSyncProvider _rssSyncProvider;
-        private readonly QualityProvider _qualityProvider;
         private readonly MediaFileProvider _mediaFileProvider;
+        private readonly QualityProvider _qualityProvider;
         private readonly RenameProvider _renameProvider;
         private readonly RootDirProvider _rootDirProvider;
+        private readonly RssSyncProvider _rssSyncProvider;
+        private readonly SeriesProvider _seriesProvider;
+        private readonly SyncProvider _syncProvider;
         private readonly TvDbProvider _tvDbProvider;
         //
         // GET: /Series/
 
         public SeriesController(SyncProvider syncProvider, SeriesProvider seriesProvider,
-            EpisodeProvider episodeProvider, RssSyncProvider rssSyncProvider,
-            QualityProvider qualityProvider, MediaFileProvider mediaFileProvider,
-            RenameProvider renameProvider, RootDirProvider rootDirProvider,
-            TvDbProvider tvDbProvider)
+                                EpisodeProvider episodeProvider, RssSyncProvider rssSyncProvider,
+                                QualityProvider qualityProvider, MediaFileProvider mediaFileProvider,
+                                RenameProvider renameProvider, RootDirProvider rootDirProvider,
+                                TvDbProvider tvDbProvider)
         {
             _seriesProvider = seriesProvider;
             _episodeProvider = episodeProvider;
@@ -57,9 +50,6 @@ namespace NzbDrone.Web.Controllers
         }
 
 
-
-
-
         public ActionResult RssSync()
         {
             _rssSyncProvider.Begin();
@@ -68,33 +58,41 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult UnMapped(string path)
         {
-            return View(_syncProvider.GetUnmappedFolders(path).Select(c => new MappingModel() { Id = 1, Path = c }).ToList());
+            return View(_syncProvider.GetUnmappedFolders(path).Select(c => new MappingModel {Id = 1, Path = c}).ToList());
         }
 
         public ActionResult LoadEpisodes(int seriesId)
         {
             _episodeProvider.RefreshEpisodeInfo(seriesId);
             return RedirectToAction("Details", new
-            {
-                seriesId = seriesId
-            });
+                                                   {
+                                                       seriesId
+                                                   });
         }
 
         [GridAction]
         public ActionResult _AjaxSeasonGrid(int seasonId)
         {
-            var episodes = _episodeProvider.GetEpisodeBySeason(seasonId).Select(c => new EpisodeModel()
-                                                                                     {
-                                                                                         EpisodeId = c.EpisodeId,
-                                                                                         EpisodeNumber = c.EpisodeNumber,
-                                                                                         SeasonNumber = c.SeasonNumber,
-                                                                                         Title = c.Title,
-                                                                                         Overview = c.Overview,
-                                                                                         AirDate = c.AirDate,
-                                                                                         Path = GetEpisodePath(c.EpisodeFile),
-                                                                                         Quality = c.EpisodeFile == null ? String.Empty : c.EpisodeFile.Quality.ToString()
-
-                                                                                     });
+            var episodes = _episodeProvider.GetEpisodeBySeason(seasonId).Select(c => new EpisodeModel
+                                                                                         {
+                                                                                             EpisodeId = c.EpisodeId,
+                                                                                             EpisodeNumber =
+                                                                                                 c.EpisodeNumber,
+                                                                                             SeasonNumber =
+                                                                                                 c.SeasonNumber,
+                                                                                             Title = c.Title,
+                                                                                             Overview = c.Overview,
+                                                                                             AirDate = c.AirDate,
+                                                                                             Path =
+                                                                                                 GetEpisodePath(
+                                                                                                     c.EpisodeFile),
+                                                                                             Quality =
+                                                                                                 c.EpisodeFile == null
+                                                                                                     ? String.Empty
+                                                                                                     : c.EpisodeFile.
+                                                                                                           Quality.
+                                                                                                           ToString()
+                                                                                         });
             return View(new GridModel(episodes));
         }
 
@@ -103,10 +101,10 @@ namespace NzbDrone.Web.Controllers
         {
             IEnumerable<Episode> data = GetData(command);
             return View(new GridModel
-            {
-                Data = data,
-                Total = data.Count()
-            });
+                            {
+                                Data = data,
+                                Total = data.Count()
+                            });
         }
 
         [GridAction]
@@ -123,16 +121,16 @@ namespace NzbDrone.Web.Controllers
                     //We still want to show this series as unmapped, but we don't know what it will be when mapped
                     //Todo: Provide the user with a way to manually map a folder to a TvDb series (or make them rename the folder...)
                     if (tvDbSeries == null)
-                        tvDbSeries = new TvdbSeries { Id = 0, SeriesName = String.Empty };
+                        tvDbSeries = new TvdbSeries {Id = 0, SeriesName = String.Empty};
 
                     unmappedList.Add(new AddExistingSeriesModel
-                                            {
-                                                IsWanted = true,
-                                                Path = unmappedFolder,
-                                                PathEncoded = Url.Encode(unmappedFolder),
-                                                TvDbId = tvDbSeries.Id,
-                                                TvDbName = tvDbSeries.SeriesName
-                                            });
+                                         {
+                                             IsWanted = true,
+                                             Path = unmappedFolder,
+                                             PathEncoded = Url.Encode(unmappedFolder),
+                                             TvDbId = tvDbSeries.Id,
+                                             TvDbName = tvDbSeries.SeriesName
+                                         });
                 }
             }
 
@@ -163,7 +161,6 @@ namespace NzbDrone.Web.Controllers
 
         private IEnumerable<Episode> GetData(GridCommand command)
         {
-
             return null;
             /*    
             IQueryable<Episode> data = .Orders;
@@ -266,7 +263,7 @@ namespace NzbDrone.Web.Controllers
             var series = _seriesProvider.GetSeries(seriesId);
             _mediaFileProvider.Scan(series);
 
-            return RedirectToAction("Details", new { seriesId });
+            return RedirectToAction("Details", new {seriesId});
         }
 
         public ActionResult RenameAll()
@@ -278,7 +275,7 @@ namespace NzbDrone.Web.Controllers
         public ActionResult RenameSeries(int seriesId)
         {
             _renameProvider.RenameSeries(seriesId);
-            return RedirectToAction("Details", new { seriesId });
+            return RedirectToAction("Details", new {seriesId});
         }
 
         public ActionResult RenameSeason(int seasonId)

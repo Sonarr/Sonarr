@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using System.Xml.Linq;
+﻿using System.Web.Mvc;
 using NLog;
-using NzbDrone.Core;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 
@@ -13,10 +7,9 @@ namespace NzbDrone.Web.Controllers
 {
     public class ApiController : Controller
     {
-        private readonly PostProcessingProvider _postProcessingProvider;
-        private readonly ConfigProvider _configProvider;
-
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private readonly ConfigProvider _configProvider;
+        private readonly PostProcessingProvider _postProcessingProvider;
 
         public ApiController(PostProcessingProvider postProcessingProvider, ConfigProvider configProvider)
         {

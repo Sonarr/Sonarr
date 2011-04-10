@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Gallio.Framework;
 using MbUnit.Framework;
-using MbUnit.Framework.ContractVerifiers;
 using NzbDrone.Core.Providers;
 
 namespace NzbDrone.Core.Test
@@ -40,19 +36,19 @@ namespace NzbDrone.Core.Test
 
 
         [Test]
-        [Row(new object[] { "CAPITAL", "capital", true })]
-        [Row(new object[] { "Something!!", "Something", true })]
-        [Row(new object[] { "Simpsons 2000", "Simpsons", true })]
-        [Row(new object[] { "Simp222sons", "Simpsons", true })]
-        [Row(new object[] { "Simpsons", "The Simpsons", true })]
-        [Row(new object[] { "Law and order", "Law & order", true })]
-        [Row(new object[] { "xxAndxx", "xxxx", false })]
-        [Row(new object[] { "Andxx", "xx", false })]
-        [Row(new object[] { "xxAnd", "xx", false })]
-        [Row(new object[] { "Thexx", "xx", false })]
-        [Row(new object[] { "Thexx", "xx", false })]
-        [Row(new object[] { "xxThexx", "xxxxx", false })]
-        [Row(new object[] { "Simpsons The", "Simpsons", true })]
+        [Row(new object[] {"CAPITAL", "capital", true})]
+        [Row(new object[] {"Something!!", "Something", true})]
+        [Row(new object[] {"Simpsons 2000", "Simpsons", true})]
+        [Row(new object[] {"Simp222sons", "Simpsons", true})]
+        [Row(new object[] {"Simpsons", "The Simpsons", true})]
+        [Row(new object[] {"Law and order", "Law & order", true})]
+        [Row(new object[] {"xxAndxx", "xxxx", false})]
+        [Row(new object[] {"Andxx", "xx", false})]
+        [Row(new object[] {"xxAnd", "xx", false})]
+        [Row(new object[] {"Thexx", "xx", false})]
+        [Row(new object[] {"Thexx", "xx", false})]
+        [Row(new object[] {"xxThexx", "xxxxx", false})]
+        [Row(new object[] {"Simpsons The", "Simpsons", true})]
         public void Name_match_test(string a, string b, bool match)
         {
             bool result = TvDbProvider.IsTitleMatch(a, b);
@@ -85,8 +81,5 @@ namespace NzbDrone.Core.Test
             //assert
             Assert.IsNull(result);
         }
-
     }
-
-
 }

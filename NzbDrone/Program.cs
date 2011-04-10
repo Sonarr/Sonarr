@@ -1,21 +1,16 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;
-using System.Reflection;
 using System.Threading;
 using Exceptioneer.WindowsFormsClient;
 using NLog;
-using NLog.Config;
-using NLog.Targets;
 
 namespace NzbDrone
 {
-    static class Program
+    internal static class Program
     {
-
         private static readonly Logger Logger = LogManager.GetLogger("Application");
 
-        static void Main()
+        private static void Main()
         {
             Logger.Info(Process.GetCurrentProcess().Id);
 
@@ -26,7 +21,7 @@ namespace NzbDrone
                 AppDomain.CurrentDomain.UnhandledException += ((s, e) => AppDomainException(e));
                 AppDomain.CurrentDomain.ProcessExit += ProgramExited;
                 AppDomain.CurrentDomain.DomainUnload += ProgramExited;
-                System.Diagnostics.Process.GetCurrentProcess().Exited += ProgramExited;
+                Process.GetCurrentProcess().Exited += ProgramExited;
 
                 Config.ConfigureNlog();
 
@@ -35,7 +30,7 @@ namespace NzbDrone
                 IISController.KillOrphaned();
                 IISController.StartIIS();
 
-                System.Diagnostics.Process.Start(IISController.AppUrl);
+                Process.Start(IISController.AppUrl);
 
 #if DEBUG
                 //Manually Attach debugger to IISExpress
@@ -49,11 +44,8 @@ namespace NzbDrone
                     {
                         Logger.Warn("Unable to attach to debugger", e);
                     }
-
                 }
 #endif
-
-
             }
             catch (Exception e)
             {
@@ -72,21 +64,18 @@ namespace NzbDrone
             Logger.Fatal("EPIC FAIL: {0}", excepion);
 
             new Client
-            {
-                ApiKey = "43BBF60A-EB2A-4C1C-B09E-422ADF637265",
-                ApplicationName = "NZBDrone",
-                CurrentException = excepion as Exception
-            }.Submit();
+                {
+                    ApiKey = "43BBF60A-EB2A-4C1C-B09E-422ADF637265",
+                    ApplicationName = "NZBDrone",
+                    CurrentException = excepion as Exception
+                }.Submit();
 
             IISController.StopIIS();
         }
 
-        static void ProgramExited(object sender, EventArgs e)
+        private static void ProgramExited(object sender, EventArgs e)
         {
             IISController.StopIIS();
         }
-
-
     }
 }
-

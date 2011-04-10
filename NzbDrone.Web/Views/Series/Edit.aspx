@@ -33,68 +33,71 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
-    <h2><%: Html.DisplayTextFor(model => model.Title) %></h2>
+    <h2><%:Html.DisplayTextFor(model => model.Title)%></h2>
 
-    <% Html.EnableClientValidation(); %>
-    <% using (Html.BeginForm("Edit", "Series", FormMethod.Post, new { id = "form", name = "form" }))
-        { %>
+    <%
+        Html.EnableClientValidation();%>
+    <%
+        using (Html.BeginForm("Edit", "Series", FormMethod.Post, new {id = "form", name = "form"}))
+        {%>
         
         <fieldset>
             <legend>Edit</legend>
                      
             <div class="editor-label">
-                <%: Html.LabelFor(model => model.Path) %>
+                <%:Html.LabelFor(model => model.Path)%>
             </div>
             <div class="editor-field">
-                <%: Html.TextBoxFor(model => model.Path) %>
-                <%: Html.ValidationMessageFor(model => model.Path) %>
+                <%:Html.TextBoxFor(model => model.Path)%>
+                <%:Html.ValidationMessageFor(model => model.Path)%>
             </div>
             
             <div class="editor-label">
-                <%: Html.LabelFor(model => model.Monitored) %>
+                <%:Html.LabelFor(model => model.Monitored)%>
             </div>
             <div class="editor-field">
-                <%: Html.CheckBoxFor(model => model.Monitored) %>
-                <%: Html.ValidationMessageFor(model => model.Monitored) %>
+                <%:Html.CheckBoxFor(model => model.Monitored)%>
+                <%:Html.ValidationMessageFor(model => model.Monitored)%>
             </div>
 
             <div class="editor-label">
-                <%: Html.LabelFor(model => model.SeasonFolder) %>
+                <%:Html.LabelFor(model => model.SeasonFolder)%>
             </div>
             <div class="editor-field">
-                <%: Html.CheckBoxFor(model => model.SeasonFolder)%>
-                <%: Html.ValidationMessageFor(model => model.SeasonFolder)%>
+                <%:Html.CheckBoxFor(model => model.SeasonFolder)%>
+                <%:Html.ValidationMessageFor(model => model.SeasonFolder)%>
             </div>
             
             <div class="editor-label">
-                <%: Html.LabelFor(model => model.QualityProfileId) %>
+                <%:Html.LabelFor(model => model.QualityProfileId)%>
             </div>
             <div class="editor-field">
-                <%: Html.DropDownListFor(model => model.QualityProfileId, (SelectList)ViewData["SelectList"])%>
-                <%: Html.ValidationMessageFor(model => model.QualityProfileId) %>
+                <%:Html.DropDownListFor(model => model.QualityProfileId, (SelectList) ViewData["SelectList"])%>
+                <%:Html.ValidationMessageFor(model => model.QualityProfileId)%>
             </div>
 
             <div class="hidden" style="display:none;">
-                <%: Html.TextBoxFor(model => model.SeriesId) %>
-                <%: Html.TextBoxFor(model => model.Title) %>
-                <%: Html.TextBoxFor(model => model.CleanTitle) %>
-                <%: Html.TextBoxFor(model => model.Status) %>
-                <%: Html.TextBoxFor(model => model.Overview) %>
-                <%: Html.TextBoxFor(model => model.AirsDayOfWeek) %>
-                <%: Html.TextBoxFor(model => model.AirTimes) %>
-                <%: Html.TextBoxFor(model => model.Language) %>
+                <%:Html.TextBoxFor(model => model.SeriesId)%>
+                <%:Html.TextBoxFor(model => model.Title)%>
+                <%:Html.TextBoxFor(model => model.CleanTitle)%>
+                <%:Html.TextBoxFor(model => model.Status)%>
+                <%:Html.TextBoxFor(model => model.Overview)%>
+                <%:Html.TextBoxFor(model => model.AirsDayOfWeek)%>
+                <%:Html.TextBoxFor(model => model.AirTimes)%>
+                <%:Html.TextBoxFor(model => model.Language)%>
             </div>
             
             <p>
                 <input type="submit" id="save_button" value="Save" disabled="disabled" />
             </p>
         </fieldset>
-    <% } %>
+    <%
+        }%>
 
     <div>
-        <%: Html.ActionLink("Back to Show", "Details", new { seriesId = Model.SeriesId }) %> | 
-        <%: Html.ActionLink("Back to List", "Index") %>
-        <%: Html.ActionLink("Delete Series", "Delete", new { seriesId = Model.SeriesId })%>
+        <%:Html.ActionLink("Back to Show", "Details", new {seriesId = Model.SeriesId})%> | 
+        <%:Html.ActionLink("Back to List", "Index")%>
+        <%:Html.ActionLink("Delete Series", "Delete", new {seriesId = Model.SeriesId})%>
     </div>
 
     <div id="result"></div>

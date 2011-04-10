@@ -1,25 +1,19 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using NzbDrone.Core.Model.Notification;
 
 namespace NzbDrone.Core.Providers
 {
     public class NotificationProvider
     {
-        private readonly Dictionary<Guid, BasicNotification> _basicNotifications = new Dictionary<Guid, BasicNotification>();
-        private Dictionary<Guid, ProgressNotification> _progressNotification = new Dictionary<Guid, ProgressNotification>();
+        private readonly Dictionary<Guid, BasicNotification> _basicNotifications =
+            new Dictionary<Guid, BasicNotification>();
+
         private readonly Object _lock = new object();
 
-        public virtual void Register(ProgressNotification notification)
-        {
-            _progressNotification.Add(notification.Id, notification);
-        }
-
-        public virtual void Register(BasicNotification notification)
-        {
-            _basicNotifications.Add(notification.Id, notification);
-        }
+        private readonly Dictionary<Guid, ProgressNotification> _progressNotification =
+            new Dictionary<Guid, ProgressNotification>();
 
         public virtual List<BasicNotification> BasicNotifications
         {
@@ -30,8 +24,20 @@ namespace NzbDrone.Core.Providers
         {
             get
             {
-                return new List<ProgressNotification>(_progressNotification.Values.Where(p => p.Status == ProgressNotificationStatus.InProgress));
+                return
+                    new List<ProgressNotification>(
+                        _progressNotification.Values.Where(p => p.Status == ProgressNotificationStatus.InProgress));
             }
+        }
+
+        public virtual void Register(ProgressNotification notification)
+        {
+            _progressNotification.Add(notification.Id, notification);
+        }
+
+        public virtual void Register(BasicNotification notification)
+        {
+            _basicNotifications.Add(notification.Id, notification);
         }
 
         public virtual void Dismiss(Guid notificationId)

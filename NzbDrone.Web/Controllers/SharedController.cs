@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using NzbDrone.Core.Providers;
 
 namespace NzbDrone.Web.Controllers
 {
     public class SharedController : Controller
     {
-        private TimerProvider _timerProvider;
+        private readonly TimerProvider _timerProvider;
 
         public SharedController(TimerProvider timerProvider)
         {

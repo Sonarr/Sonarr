@@ -9,18 +9,15 @@ namespace NzbDrone.Core.Providers
 {
     public class SabProvider
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly ConfigProvider _config;
         private readonly HttpProvider _http;
-
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public SabProvider(ConfigProvider config, HttpProvider http)
         {
             _config = config;
             _http = http;
         }
-
-        #region IDownloadProvider Members
 
         public virtual bool AddByUrl(string url, string title)
         {
@@ -31,7 +28,8 @@ namespace NzbDrone.Core.Providers
             string name = url.Replace("&", "%26");
             string nzbName = HttpUtility.UrlEncode(title);
 
-            string action = string.Format("mode={0}&name={1}&priority={2}&cat={3}&nzbname={4}", mode, name, priority, cat, nzbName);
+            string action = string.Format("mode={0}&name={1}&priority={2}&cat={3}&nzbname={4}", mode, name, priority,
+                                          cat, nzbName);
             string request = GetSabRequest(action);
 
             Logger.Debug("Adding report [{0}] to the queue.", nzbName);
@@ -61,7 +59,10 @@ namespace NzbDrone.Core.Providers
                 return false;
 
             //Get the Count of Items in Queue where 'filename' is Equal to goodName, if not zero, return true (isInQueue)))
-            if ((xDoc.Descendants("slot").Where(s => s.Element("filename").Value.Equals(title, StringComparison.InvariantCultureIgnoreCase))).Count() != 0)
+            if (
+                (xDoc.Descendants("slot").Where(
+                    s => s.Element("filename").Value.Equals(title, StringComparison.InvariantCultureIgnoreCase))).Count() !=
+                0)
             {
                 Logger.Debug("Episode in queue - '{0}'", title);
 
@@ -81,7 +82,8 @@ namespace NzbDrone.Core.Providers
             string priority = _config.GetValue("SabTvPriority", String.Empty, false);
             string nzbName = HttpUtility.UrlEncode(title);
 
-            string action = string.Format("mode={0}&name={1}&priority={2}&cat={3}&nzbname={4}", mode, id, priority, cat, nzbName);
+            string action = string.Format("mode={0}&name={1}&priority={2}&cat={3}&nzbname={4}", mode, id, priority, cat,
+                                          nzbName);
             string request = GetSabRequest(action);
 
             Logger.Debug("Adding report [{0}] to the queue.", nzbName);
@@ -95,16 +97,17 @@ namespace NzbDrone.Core.Providers
             return false;
         }
 
-        #endregion
-
         private string GetSabRequest(string action)
         {
-            string sabnzbdInfo = _config.GetValue("SabHost", String.Empty, false) + ":" + _config.GetValue("SabPort", String.Empty, false);
+            string sabnzbdInfo = _config.GetValue("SabHost", String.Empty, false) + ":" +
+                                 _config.GetValue("SabPort", String.Empty, false);
             string username = _config.GetValue("SabUsername", String.Empty, false);
             string password = _config.GetValue("SabPassword", String.Empty, false);
             string apiKey = _config.GetValue("SabApiKey", String.Empty, false);
 
-            return string.Format(@"http://{0}/api?$Action&apikey={1}&ma_username={2}&ma_password={3}", sabnzbdInfo, apiKey, username, password).Replace("$Action", action);
+            return
+                string.Format(@"http://{0}/api?$Action&apikey={1}&ma_username={2}&ma_password={3}", sabnzbdInfo, apiKey,
+                              username, password).Replace("$Action", action);
         }
     }
 }

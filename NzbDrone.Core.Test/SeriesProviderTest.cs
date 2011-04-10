@@ -1,24 +1,18 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
+using System.Linq;
 using AutoMoq;
 using FizzWare.NBuilder;
-using Gallio.Framework;
 using MbUnit.Framework;
-using MbUnit.Framework.ContractVerifiers;
 using Moq;
-using Ninject;
-using Ninject.Moq;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using SubSonic.Repository;
 using TvdbLib.Data;
-using System.Linq;
 
 // ReSharper disable InconsistentNaming
+
 namespace NzbDrone.Core.Test
 {
     [TestFixture]
@@ -65,7 +59,6 @@ namespace NzbDrone.Core.Test
         [Test]
         public void Add_new_series()
         {
-
             var mocker = new AutoMoqer();
             mocker.SetConstant(MockLib.GetEmptyRepository());
 
@@ -85,16 +78,14 @@ namespace NzbDrone.Core.Test
             Assert.AreEqual(path, series.First().Path);
             Assert.AreEqual(tvDbId, series.First().SeriesId);
             Assert.AreEqual(qualityProfileId, series.First().QualityProfileId);
-
         }
 
 
-
         [Test]
-        [Row(new object[] { "That's Life - 2x03 -The Devil and Miss DeLucca", "That's Life" })]
-        [Row(new object[] { "Van.Duin.Op.Zn.Best.S02E05.DUTCH.WS.PDTV.XViD-DiFFERENT", "Van Duin Op Zn Best" })]
-        [Row(new object[] { "Dollhouse.S02E06.The.Left.Hand.720p.BluRay.x264-SiNNERS", "Dollhouse" })]
-        [Row(new object[] { "Heroes.S02.COMPLETE.German.PROPER.DVDRip.XviD-Prim3time", "Heroes" })]
+        [Row(new object[] {"That's Life - 2x03 -The Devil and Miss DeLucca", "That's Life"})]
+        [Row(new object[] {"Van.Duin.Op.Zn.Best.S02E05.DUTCH.WS.PDTV.XViD-DiFFERENT", "Van Duin Op Zn Best"})]
+        [Row(new object[] {"Dollhouse.S02E06.The.Left.Hand.720p.BluRay.x264-SiNNERS", "Dollhouse"})]
+        [Row(new object[] {"Heroes.S02.COMPLETE.German.PROPER.DVDRip.XviD-Prim3time", "Heroes"})]
         [Ignore("should be updated to validate agains a remote episode instance rather than just the title string")]
         public void Test_Parse_Success(string postTitle, string title)
         {
@@ -110,14 +101,14 @@ namespace NzbDrone.Core.Test
             mocker.SetConstant(MockLib.GetEmptyRepository());
 
             mocker.Resolve<IRepository>().Add(Builder<Series>.CreateNew()
-                .With(c => c.Monitored = true)
-                .With(c => c.SeriesId = 12)
-                .Build());
+                                                  .With(c => c.Monitored = true)
+                                                  .With(c => c.SeriesId = 12)
+                                                  .Build());
 
             mocker.Resolve<IRepository>().Add(Builder<Series>.CreateNew()
-            .With(c => c.Monitored = false)
-            .With(c => c.SeriesId = 11)
-            .Build());
+                                                  .With(c => c.Monitored = false)
+                                                  .With(c => c.SeriesId = 11)
+                                                  .Build());
 
 
             //Act, Assert
@@ -126,7 +117,6 @@ namespace NzbDrone.Core.Test
             Assert.IsFalse(provider.IsMonitored(11));
             Assert.IsFalse(provider.IsMonitored(1));
         }
-
 
 
         [Test]
@@ -139,14 +129,14 @@ namespace NzbDrone.Core.Test
         public void QualityWanted(int seriesId, QualityTypes qualityTypes, Boolean result)
         {
             var quality = Builder<QualityProfile>.CreateNew()
-                         .With(q => q.Allowed = new List<QualityTypes>() { QualityTypes.BDRip, QualityTypes.DVD, QualityTypes.TV })
-                         .With(q => q.Cutoff = QualityTypes.DVD)
-                         .Build();
+                .With(q => q.Allowed = new List<QualityTypes> {QualityTypes.BDRip, QualityTypes.DVD, QualityTypes.TV})
+                .With(q => q.Cutoff = QualityTypes.DVD)
+                .Build();
 
             var series = Builder<Series>.CreateNew()
-             .With(c => c.SeriesId = 12)
-             .With(c => c.QualityProfileId = quality.QualityProfileId)
-             .Build();
+                .With(c => c.SeriesId = 12)
+                .With(c => c.QualityProfileId = quality.QualityProfileId)
+                .Build();
 
             var mocker = new AutoMoqer();
             var emptyRepository = MockLib.GetEmptyRepository();
@@ -154,7 +144,7 @@ namespace NzbDrone.Core.Test
 
 
             mocker.GetMock<QualityProvider>()
-            .Setup(c => c.Find(quality.QualityProfileId)).Returns(quality);
+                .Setup(c => c.Find(quality.QualityProfileId)).Returns(quality);
 
 
             emptyRepository.Add(series);

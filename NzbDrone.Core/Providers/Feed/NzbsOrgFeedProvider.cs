@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.ServiceModel.Syndication;
-using System.Text;
+﻿using System.ServiceModel.Syndication;
 using NzbDrone.Core.Providers.Core;
 
 namespace NzbDrone.Core.Providers.Feed
 {
-    class NzbsOrgFeedProvider : FeedProviderBase
+    internal class NzbsOrgFeedProvider : FeedProviderBase
     {
-        public NzbsOrgFeedProvider(SeriesProvider seriesProvider, SeasonProvider seasonProvider, EpisodeProvider episodeProvider, ConfigProvider configProvider, HttpProvider httpProvider)
+        public NzbsOrgFeedProvider(SeriesProvider seriesProvider, SeasonProvider seasonProvider,
+                                   EpisodeProvider episodeProvider, ConfigProvider configProvider,
+                                   HttpProvider httpProvider)
             : base(seriesProvider, seasonProvider, episodeProvider, configProvider, httpProvider)
         {
         }
@@ -18,7 +16,11 @@ namespace NzbDrone.Core.Providers.Feed
         {
             get
             {
-                return new[] { string.Format("http://nzbs.org/rss.php?type=1&i={0}&h={1}", _configProvider.NzbsOrgUId, _configProvider.NzbsOrgHash) };
+                return new[]
+                           {
+                               string.Format("http://nzbs.org/rss.php?type=1&i={0}&h={1}", _configProvider.NzbsOrgUId,
+                                             _configProvider.NzbsOrgHash)
+                           };
             }
         }
 

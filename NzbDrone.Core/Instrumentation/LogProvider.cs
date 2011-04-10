@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using NLog;
 using SubSonic.Repository;
 
 namespace NzbDrone.Core.Instrumentation
 {
-
     public class LogProvider
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();

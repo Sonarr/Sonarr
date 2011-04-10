@@ -9,6 +9,7 @@ namespace NzbDrone.Core.Repository
     {
         [SubSonicPrimaryKey]
         public virtual int EpisodeFileId { get; set; }
+
         public virtual int SeriesId { get; set; }
         public string Path { get; set; }
         public QualityTypes Quality { get; set; }

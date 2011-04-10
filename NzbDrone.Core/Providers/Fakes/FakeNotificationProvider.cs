@@ -4,24 +4,19 @@ using NzbDrone.Core.Model.Notification;
 
 namespace NzbDrone.Core.Providers.Fakes
 {
-    class FakeNotificationProvider
+    internal class FakeNotificationProvider
     {
-        private readonly Dictionary<Guid, BasicNotification> _basicNotifications = new Dictionary<Guid, BasicNotification>();
-        private readonly Dictionary<Guid, ProgressNotification> _progressNotification = new Dictionary<Guid, ProgressNotification>();
+        private readonly Dictionary<Guid, BasicNotification> _basicNotifications =
+            new Dictionary<Guid, BasicNotification>();
+
         private readonly Object _lock = new object();
 
+        private readonly Dictionary<Guid, ProgressNotification> _progressNotification =
+            new Dictionary<Guid, ProgressNotification>();
 
-        ProgressNotification fakeNotification = new ProgressNotification("Updating Series");
-        ProgressNotification fakeNotification2 = new ProgressNotification("Updating Series2");
-        public void Register(ProgressNotification notification)
-        {
-            _progressNotification.Add(notification.Id, notification);
-        }
 
-        public void Register(BasicNotification notification)
-        {
-            _basicNotifications.Add(notification.Id, notification);
-        }
+        private readonly ProgressNotification fakeNotification = new ProgressNotification("Updating Series");
+        private readonly ProgressNotification fakeNotification2 = new ProgressNotification("Updating Series2");
 
         public List<BasicNotification> BasicNotifications
         {
@@ -30,15 +25,24 @@ namespace NzbDrone.Core.Providers.Fakes
 
         public List<ProgressNotification> GetProgressNotifications
         {
-
             get
             {
                 fakeNotification.Status = ProgressNotificationStatus.InProgress;
                 fakeNotification.Status = ProgressNotificationStatus.InProgress;
                 fakeNotification2.CurrentStatus = DateTime.UtcNow.ToString();
                 fakeNotification.CurrentStatus = DateTime.Now.ToString();
-                return new List<ProgressNotification> { fakeNotification  };
+                return new List<ProgressNotification> {fakeNotification};
             }
+        }
+
+        public void Register(ProgressNotification notification)
+        {
+            _progressNotification.Add(notification.Id, notification);
+        }
+
+        public void Register(BasicNotification notification)
+        {
+            _basicNotifications.Add(notification.Id, notification);
         }
 
         public void Dismiss(Guid notificationId)

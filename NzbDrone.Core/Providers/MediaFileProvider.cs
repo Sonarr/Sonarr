@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using NLog;
-using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using SubSonic.Repository;
@@ -14,31 +11,28 @@ namespace NzbDrone.Core.Providers
 {
     public class MediaFileProvider
     {
-        private readonly IRepository _repository;
-        private readonly ConfigProvider _configProvider;
-        private readonly DiskProvider _diskProvider;
-        private readonly EpisodeProvider _episodeProvider;
-
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static readonly string[] MediaExtentions = new[] { "*.mkv", "*.avi", "*.wmv" };
+        private readonly DiskProvider _diskProvider;
+        private readonly EpisodeProvider _episodeProvider;
+        private readonly IRepository _repository;
 
-        public MediaFileProvider(IRepository repository, ConfigProvider configProvider, DiskProvider diskProvider, EpisodeProvider episodeProvider)
+        public MediaFileProvider(IRepository repository, DiskProvider diskProvider,
+                                 EpisodeProvider episodeProvider)
         {
             _repository = repository;
-            _configProvider = configProvider;
             _diskProvider = diskProvider;
             _episodeProvider = episodeProvider;
         }
 
         public MediaFileProvider()
         {
-
         }
 
         /// <summary>
-        /// Scans the specified series folder for media files
+        ///   Scans the specified series folder for media files
         /// </summary>
-        /// <param name="series">The series to be scanned</param>
+        /// <param name = "series">The series to be scanned</param>
         public List<EpisodeFile> Scan(Series series)
         {
             var mediaFileList = GetMediaFileList(series.Path);
@@ -54,9 +48,9 @@ namespace NzbDrone.Core.Providers
         }
 
         /// <summary>
-        /// Scans the specified series folder for media files
+        ///   Scans the specified series folder for media files
         /// </summary>
-        /// <param name="series">The series to be scanned</param>
+        /// <param name = "series">The series to be scanned</param>
         public List<EpisodeFile> Scan(Series series, string path)
         {
             var mediaFileList = GetMediaFileList(path);
@@ -84,7 +78,8 @@ namespace NzbDrone.Core.Providers
 
                 foreach (var episodeNumber in episodesInFile.Episodes)
                 {
-                    var episode = _episodeProvider.GetEpisode(series.SeriesId, episodesInFile.SeasonNumber, episodeNumber);
+                    var episode = _episodeProvider.GetEpisode(series.SeriesId, episodesInFile.SeasonNumber,
+                                                              episodeNumber);
 
                     if (episode != null)
                     {
@@ -92,7 +87,8 @@ namespace NzbDrone.Core.Providers
                     }
 
                     else
-                        Logger.Warn("Unable to find Series:{0} Season:{1} Episode:{2} in the database. File:{3}", series.Title, episodesInFile.SeasonNumber, episodeNumber, filePath);
+                        Logger.Warn("Unable to find Series:{0} Season:{1} Episode:{2} in the database. File:{3}",
+                                    series.Title, episodesInFile.SeasonNumber, episodeNumber, filePath);
                 }
 
                 //Return null if no Episodes exist in the DB for the parsed episodes from file
@@ -125,7 +121,8 @@ namespace NzbDrone.Core.Providers
                     _episodeProvider.UpdateEpisode(ep);
                     episodeList += String.Format(", {0}", ep.EpisodeId).Trim(' ', ',');
                 }
-                Logger.Trace("File {0}:{1} attached to episode(s): '{2}'", episodeFile.EpisodeFileId, filePath, episodeList);
+                Logger.Trace("File {0}:{1} attached to episode(s): '{2}'", episodeFile.EpisodeFileId, filePath,
+                             episodeList);
 
                 return episodeFile;
             }
@@ -135,9 +132,9 @@ namespace NzbDrone.Core.Providers
         }
 
         /// <summary>
-        /// Removes files that no longer exist from the database
+        ///   Removes files that no longer exist from the database
         /// </summary>
-        /// <param name="files">list of files to verify</param>
+        /// <param name = "files">list of files to verify</param>
         public void CleanUp(List<EpisodeFile> files)
         {
             foreach (var episodeFile in files)

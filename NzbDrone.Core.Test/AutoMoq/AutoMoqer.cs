@@ -14,9 +14,9 @@ namespace AutoMoq
 {
     public class AutoMoqer
     {
+        internal Type ResolveType;
         private IUnityContainer container;
         private IDictionary<Type, object> registeredMocks;
-        internal Type ResolveType = null;
 
         public AutoMoqer()
         {
@@ -30,7 +30,7 @@ namespace AutoMoq
 
         public virtual T Resolve<T>()
         {
-            ResolveType = typeof(T);
+            ResolveType = typeof (T);
             var result = container.Resolve<T>();
             ResolveType = null;
             return result;
@@ -66,47 +66,6 @@ namespace AutoMoq
             container.RegisterInstance(instance);
             SetMock(instance.GetType(), null);
         }
-
-        #region private methods
-
-        private void SetupAutoMoqer(IUnityContainer container)
-        {
-            this.container = container;
-            registeredMocks = new Dictionary<Type, object>();
-
-            AddTheAutoMockingContainerExtensionToTheContainer(container);
-            container.RegisterInstance(this);
-        }
-
-        private static void AddTheAutoMockingContainerExtensionToTheContainer(IUnityContainer container)
-        {
-            container.AddNewExtension<AutoMockingContainerExtension>();
-            return;
-        }
-
-        private Mock<T> TheRegisteredMockForThisType<T>(Type type) where T : class
-        {
-            return (Mock<T>)registeredMocks.Where(x => x.Key == type).First().Value;
-        }
-
-        private void CreateANewMockAndRegisterIt<T>(Type type, MockBehavior behavior) where T : class
-        {
-            var mock = new Mock<T>(behavior);
-            container.RegisterInstance(mock.Object);
-            SetMock(type, mock);
-        }
-
-        private bool GetMockHasNotBeenCalledForThisType(Type type)
-        {
-            return registeredMocks.ContainsKey(type) == false;
-        }
-
-        private static Type GetTheMockType<T>() where T : class
-        {
-            return typeof(T);
-        }
-
-        #endregion
 
         public ISetup<T> Setup<T>(Expression<Action<T>> expression) where T : class
         {
@@ -147,5 +106,45 @@ namespace AutoMoq
             }
         }
 
+        #region private methods
+
+        private void SetupAutoMoqer(IUnityContainer container)
+        {
+            this.container = container;
+            registeredMocks = new Dictionary<Type, object>();
+
+            AddTheAutoMockingContainerExtensionToTheContainer(container);
+            container.RegisterInstance(this);
+        }
+
+        private static void AddTheAutoMockingContainerExtensionToTheContainer(IUnityContainer container)
+        {
+            container.AddNewExtension<AutoMockingContainerExtension>();
+            return;
+        }
+
+        private Mock<T> TheRegisteredMockForThisType<T>(Type type) where T : class
+        {
+            return (Mock<T>) registeredMocks.Where(x => x.Key == type).First().Value;
+        }
+
+        private void CreateANewMockAndRegisterIt<T>(Type type, MockBehavior behavior) where T : class
+        {
+            var mock = new Mock<T>(behavior);
+            container.RegisterInstance(mock.Object);
+            SetMock(type, mock);
+        }
+
+        private bool GetMockHasNotBeenCalledForThisType(Type type)
+        {
+            return registeredMocks.ContainsKey(type) == false;
+        }
+
+        private static Type GetTheMockType<T>() where T : class
+        {
+            return typeof (T);
+        }
+
+        #endregion
     }
 }

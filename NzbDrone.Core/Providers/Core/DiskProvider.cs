@@ -5,8 +5,6 @@ namespace NzbDrone.Core.Providers.Core
 {
     public class DiskProvider
     {
-        #region IDiskProvider Members
-
         public virtual bool FolderExists(string path)
         {
             return Directory.Exists(path);
@@ -48,7 +46,5 @@ namespace NzbDrone.Core.Providers.Core
         {
             File.Move(sourcePath, destinationPath);
         }
-
-        #endregion
     }
 }

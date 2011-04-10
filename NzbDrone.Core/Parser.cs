@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository.Quality;
 
 namespace NzbDrone.Core
@@ -16,22 +13,31 @@ namespace NzbDrone.Core
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private static readonly Regex[] ReportTitleRegex = new[]
-                                                       {
-                                                         new Regex(@"(?<title>.+?)?\W?(?<year>\d+?)?\WS?(?<season>\d+)(?:\-|\.|[a-z])(?<episode>\d+)\W(?!\\)", RegexOptions.IgnoreCase | RegexOptions.Compiled),
-                                                         new Regex(@"(?<title>.+?)?\W?(?<year>\d+?)?\WS?(?<season>\d+)(?<episode>\d{2})\W(?!\\)", RegexOptions.IgnoreCase | RegexOptions.Compiled) //Supports 103/113 naming
-                                                       };
+                                                               {
+                                                                   new Regex(
+                                                                       @"(?<title>.+?)?\W?(?<year>\d+?)?\WS?(?<season>\d+)(?:\-|\.|[a-z])(?<episode>\d+)\W(?!\\)",
+                                                                       RegexOptions.IgnoreCase | RegexOptions.Compiled),
+                                                                   new Regex(
+                                                                       @"(?<title>.+?)?\W?(?<year>\d+?)?\WS?(?<season>\d+)(?<episode>\d{2})\W(?!\\)",
+                                                                       RegexOptions.IgnoreCase | RegexOptions.Compiled)
+                                                                   //Supports 103/113 naming
+                                                               };
 
         private static readonly Regex[] SeasonReportTitleRegex = new[]
-                                                        {
-                                                            new Regex(@"(?<title>.+?)?\W?(?<year>\d{4}?)?\W(?:S|Season)?\W?(?<season>\d+)(?!\\)", RegexOptions.IgnoreCase | RegexOptions.Compiled),
-                                                        };
+                                                                     {
+                                                                         new Regex(
+                                                                             @"(?<title>.+?)?\W?(?<year>\d{4}?)?\W(?:S|Season)?\W?(?<season>\d+)(?!\\)",
+                                                                             RegexOptions.IgnoreCase |
+                                                                             RegexOptions.Compiled),
+                                                                     };
 
-        private static readonly Regex NormalizeRegex = new Regex(@"((\s|^)the(\s|$))|((\s|^)and(\s|$))|[^a-z]", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private static readonly Regex NormalizeRegex = new Regex(@"((\s|^)the(\s|$))|((\s|^)and(\s|$))|[^a-z]",
+                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         /// <summary>
-        /// Parses a post title into list of episodes it contains
+        ///   Parses a post title into list of episodes it contains
         /// </summary>
-        /// <param name="title">Title of the report</param>
+        /// <param name = "title">Title of the report</param>
         /// <returns>List of episodes contained to the post</returns>
         internal static EpisodeParseResult ParseEpisodeInfo(string title)
         {
@@ -53,18 +59,17 @@ namespace NzbDrone.Core
                     }
 
                     var parsedEpisode = new EpisodeParseResult
-                    {
-                        Proper = title.ToLower().Contains("proper"),
-                        SeriesTitle = seriesName,
-                        SeasonNumber = Convert.ToInt32(match[0].Groups["season"].Value),
-                        Year = year,
-                        Episodes = new List<int>()
-                    };
+                                            {
+                                                Proper = title.ToLower().Contains("proper"),
+                                                SeriesTitle = seriesName,
+                                                SeasonNumber = Convert.ToInt32(match[0].Groups["season"].Value),
+                                                Year = year,
+                                                Episodes = new List<int>()
+                                            };
 
                     foreach (Match matchGroup in match)
                     {
                         parsedEpisode.Episodes.Add(Convert.ToInt32(matchGroup.Groups["episode"].Value));
-
                     }
 
                     parsedEpisode.Quality = ParseQuality(title);
@@ -79,9 +84,9 @@ namespace NzbDrone.Core
         }
 
         /// <summary>
-        /// Parses a post title into season it contains
+        ///   Parses a post title into season it contains
         /// </summary>
-        /// <param name="title">Title of the report</param>
+        /// <param name = "title">Title of the report</param>
         /// <returns>Season information contained in the post</returns>
         internal static SeasonParseResult ParseSeasonInfo(string title)
         {
@@ -105,11 +110,11 @@ namespace NzbDrone.Core
                     var seasonNumber = Convert.ToInt32(match[0].Groups["season"].Value);
 
                     var result = new SeasonParseResult
-                    {
-                        SeriesTitle = seriesName,
-                        SeasonNumber = seasonNumber,
-                        Year = year
-                    };
+                                     {
+                                         SeriesTitle = seriesName,
+                                         SeasonNumber = seasonNumber,
+                                         Year = year
+                                     };
 
 
                     result.Quality = ParseQuality(title);
@@ -123,9 +128,9 @@ namespace NzbDrone.Core
         }
 
         /// <summary>
-        /// Parses a post title to find the series that relates to it
+        ///   Parses a post title to find the series that relates to it
         /// </summary>
-        /// <param name="title">Title of the report</param>
+        /// <param name = "title">Title of the report</param>
         /// <returns>Normalized Series Name</returns>
         internal static string ParseSeriesName(string title)
         {
@@ -155,9 +160,9 @@ namespace NzbDrone.Core
         }
 
         /// <summary>
-        /// Parses proper status out of a report title
+        ///   Parses proper status out of a report title
         /// </summary>
-        /// <param name="title">Title of the report</param>
+        /// <param name = "title">Title of the report</param>
         /// <returns></returns>
         internal static bool ParseProper(string title)
         {
@@ -229,10 +234,10 @@ namespace NzbDrone.Core
         }
 
         /// <summary>
-        /// Normalizes the title. removing all non-word characters as well as common tokens
-        /// such as 'the' and 'and'
+        ///   Normalizes the title. removing all non-word characters as well as common tokens
+        ///   such as 'the' and 'and'
         /// </summary>
-        /// <param name="title">title</param>
+        /// <param name = "title">title</param>
         /// <returns></returns>
         internal static string NormalizeTitle(string title)
         {
@@ -255,7 +260,5 @@ namespace NzbDrone.Core
 
             return info.FullName.Trim('/', '\\', ' ');
         }
-
-
     }
 }

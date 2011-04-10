@@ -1,29 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NLog;
-using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository;
 using SubSonic.Repository;
-using System.Linq;
 
 namespace NzbDrone.Core.Providers
 {
     public class SeasonProvider
     {
-        private readonly IRepository _sonicRepo;
-        private readonly SeriesProvider _seriesProvider;
-
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private readonly IRepository _sonicRepo;
 
-        public SeasonProvider(IRepository dataRepository, SeriesProvider seriesProvider)
+        public SeasonProvider(IRepository dataRepository)
         {
             _sonicRepo = dataRepository;
-            _seriesProvider = seriesProvider;
         }
 
         public SeasonProvider()
         {
-
         }
 
         public virtual Season GetSeason(int seasonId)
@@ -51,16 +46,17 @@ namespace NzbDrone.Core.Providers
             if (_sonicRepo.Exists<Season>(s => s.SeasonId == seasonId))
                 return;
             //TODO: Calculate Season Folder
-            Logger.Trace("Adding Season To DB. [SeriesID:{0} SeasonID:{1} SeasonNumber:{2}]", seriesId, seasonId, seasonNumber, "????");
+            Logger.Trace("Adding Season To DB. [SeriesID:{0} SeasonID:{1} SeasonNumber:{2}]", seriesId, seasonId,
+                         seasonNumber, "????");
 
-            var newSeason = new Season()
-            {
-                Monitored = true,
-                SeasonId = seasonId,
-                SeasonNumber = seasonNumber,
-                SeriesId = seriesId
-            };
-            _sonicRepo.Add<Season>(newSeason);
+            var newSeason = new Season
+                                {
+                                    Monitored = true,
+                                    SeasonId = seasonId,
+                                    SeasonNumber = seasonNumber,
+                                    SeriesId = seriesId
+                                };
+            _sonicRepo.Add(newSeason);
         }
 
         public virtual int SaveSeason(Season season)

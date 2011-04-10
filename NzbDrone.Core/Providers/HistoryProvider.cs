@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using NLog;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
@@ -11,9 +10,8 @@ namespace NzbDrone.Core.Providers
 {
     public class HistoryProvider
     {
-        private readonly IRepository _sonicRepo;
-
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private readonly IRepository _sonicRepo;
 
         public HistoryProvider(IRepository sonicRepo)
         {
@@ -23,8 +21,6 @@ namespace NzbDrone.Core.Providers
         public HistoryProvider()
         {
         }
-
-        #region HistoryProvider Members
 
         public virtual List<History> AllItems()
         {
@@ -54,13 +50,11 @@ namespace NzbDrone.Core.Providers
         public virtual bool Exists(int episodeId, QualityTypes quality, bool proper)
         {
             //Looks for the existance of this episode in History
-            if (_sonicRepo.Exists<History>(h => h.EpisodeId == episodeId && (QualityTypes)h.Quality == quality && h.IsProper == proper))
+            if (_sonicRepo.Exists<History>(h => h.EpisodeId == episodeId && h.Quality == quality && h.IsProper == proper))
                 return true;
 
             Logger.Debug("Episode not in History: {0}", episodeId);
             return false;
         }
-
-        #endregion
     }
 }

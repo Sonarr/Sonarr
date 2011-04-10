@@ -2,22 +2,16 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Web;
 using System.Web.Hosting;
 using Ninject;
-using NLog.Config;
-using NLog.Targets;
+using NLog;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
-using NzbDrone.Core.Providers.Fakes;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using SubSonic.DataProviders;
-using SubSonic.Query;
 using SubSonic.Repository;
-using NLog;
-using System.Linq;
 
 namespace NzbDrone.Core
 {
@@ -27,6 +21,45 @@ namespace NzbDrone.Core
         private static readonly Object KernelLock = new object();
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static string _startupPath;
+
+        public static String AppPath
+        {
+            get
+            {
+                if (!String.IsNullOrWhiteSpace(HostingEnvironment.ApplicationPhysicalPath))
+                {
+                    return HostingEnvironment.ApplicationPhysicalPath;
+                }
+                return Directory.GetCurrentDirectory();
+            }
+        }
+
+        public static string ExecutablePath
+        {
+            get
+            {
+                //var uri = new Uri(Assembly.EscapedCodeBase);
+                //return Path.GetDirectoryName(uri.LocalPath);
+                return Directory.GetCurrentDirectory();
+            }
+        }
+
+        public static string StartupPath
+        {
+            get { return _startupPath; }
+        }
+
+        public static StandardKernel NinjectKernel
+        {
+            get
+            {
+                if (_kernel == null)
+                {
+                    BindKernel();
+                }
+                return _kernel;
+            }
+        }
 
         public static void BindKernel()
         {
@@ -42,10 +75,12 @@ namespace NzbDrone.Core
                 var AppDataPath = new DirectoryInfo(Path.Combine(AppPath, "App_Data", "nzbdrone.db"));
                 if (!AppDataPath.Exists) AppDataPath.Create();
 
-                string connectionString = String.Format("Data Source={0};Version=3;", Path.Combine(AppDataPath.FullName, "nzbdrone.db"));
+                string connectionString = String.Format("Data Source={0};Version=3;",
+                                                        Path.Combine(AppDataPath.FullName, "nzbdrone.db"));
                 var dbProvider = ProviderFactory.GetProvider(connectionString, "System.Data.SQLite");
 
-                string logConnectionString = String.Format("Data Source={0};Version=3;", Path.Combine(AppDataPath.FullName, "log.db"));
+                string logConnectionString = String.Format("Data Source={0};Version=3;",
+                                                           Path.Combine(AppDataPath.FullName, "log.db"));
                 var logDbProvider = ProviderFactory.GetProvider(logConnectionString, "System.Data.SQLite");
 
 
@@ -80,9 +115,11 @@ namespace NzbDrone.Core
                 _kernel.Bind<LogProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<MediaFileProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<TimerProvider>().ToSelf().InSingletonScope();
-                _kernel.Bind<IRepository>().ToMethod(c => new SimpleRepository(dbProvider, SimpleRepositoryOptions.RunMigrations)).InSingletonScope();
+                _kernel.Bind<IRepository>().ToMethod(
+                    c => new SimpleRepository(dbProvider, SimpleRepositoryOptions.RunMigrations)).InSingletonScope();
 
-                _kernel.Bind<IRepository>().ToConstant(logRepository).WhenInjectedInto<SubsonicTarget>().InSingletonScope();
+                _kernel.Bind<IRepository>().ToConstant(logRepository).WhenInjectedInto<SubsonicTarget>().
+                    InSingletonScope();
                 _kernel.Bind<IRepository>().ToConstant(logRepository).WhenInjectedInto<LogProvider>().InSingletonScope();
 
                 ForceMigration(_kernel.Get<IRepository>());
@@ -97,46 +134,6 @@ namespace NzbDrone.Core
             }
         }
 
-        public static String AppPath
-        {
-            get
-            {
-                if (!String.IsNullOrWhiteSpace(HostingEnvironment.ApplicationPhysicalPath))
-                {
-                    return HostingEnvironment.ApplicationPhysicalPath;
-                }
-                return Directory.GetCurrentDirectory();
-
-            }
-        }
-
-        public static string ExecutablePath
-        {
-            get
-            {
-                //var uri = new Uri(Assembly.EscapedCodeBase);
-                //return Path.GetDirectoryName(uri.LocalPath);
-                return Directory.GetCurrentDirectory();
-            }
-        }
-
-        public static string StartupPath
-        {
-            get { return _startupPath; }
-        }
-
-        public static StandardKernel NinjectKernel
-        {
-            get
-            {
-                if (_kernel == null)
-                {
-                    BindKernel();
-                }
-                return _kernel;
-            }
-        }
-
         private static void ForceMigration(IRepository repository)
         {
             repository.GetPaged<Series>(0, 1);
@@ -148,23 +145,24 @@ namespace NzbDrone.Core
         }
 
         /// <summary>
-        /// This method forces IISExpress process to exit with the host application
+        ///   This method forces IISExpress process to exit with the host application
         /// </summary>
         public static void DedicateToHost()
         {
             try
             {
                 Logger.Debug("Attaching to parent process for automatic termination.");
-                var pc = new PerformanceCounter("Process", "Creating Process ID", Process.GetCurrentProcess().ProcessName);
-                var pid = (int)pc.NextValue();
+                var pc = new PerformanceCounter("Process", "Creating Process ID",
+                                                Process.GetCurrentProcess().ProcessName);
+                var pid = (int) pc.NextValue();
                 var hostProcess = Process.GetProcessById(pid);
 
                 hostProcess.EnableRaisingEvents = true;
                 hostProcess.Exited += (delegate
-                                       {
-                                           Logger.Info("Host has been terminated. Shutting down web server.");
-                                           ShutDown();
-                                       });
+                                           {
+                                               Logger.Info("Host has been terminated. Shutting down web server.");
+                                               ShutDown();
+                                           });
 
                 Logger.Debug("Successfully Attached to host. Process ID: {0}", pid);
             }
@@ -184,8 +182,10 @@ namespace NzbDrone.Core
         {
             //Setup the default providers in the Providers table
 
-            string nzbMatrixRss = "http://rss.nzbmatrix.com/rss.php?page=download&username={USERNAME}&apikey={APIKEY}&subcat=6,41&english=1";
-            string nzbMatrixApi = "http://rss.nzbmatrix.com/rss.php?page=download&username={USERNAME}&apikey={APIKEY}&subcat=6,41&english=1&age={AGE}&term={TERM}";
+            string nzbMatrixRss =
+                "http://rss.nzbmatrix.com/rss.php?page=download&username={USERNAME}&apikey={APIKEY}&subcat=6,41&english=1";
+            string nzbMatrixApi =
+                "http://rss.nzbmatrix.com/rss.php?page=download&username={USERNAME}&apikey={APIKEY}&subcat=6,41&english=1&age={AGE}&term={TERM}";
             string nzbsOrgRss = "http://nzbs.org/rss.php?type=1&dl=1&num=100&i={UID}&h={HASH}";
             string nzbsOrgApi = String.Empty;
             string nzbsrusRss = "http://www.nzbsrus.com/rssfeed.php?cat=91,75&i={UID}&h={HASH}";
@@ -210,13 +210,13 @@ namespace NzbDrone.Core
                                      };
 
             var nzbsrusIndexer = new Indexer
-                              {
-                                  IndexerId = 3,
-                                  IndexerName = "Nzbsrus",
-                                  RssUrl = nzbsrusRss,
-                                  ApiUrl = nzbsrusApi,
-                                  Order = 3
-                              };
+                                     {
+                                         IndexerId = 3,
+                                         IndexerName = "Nzbsrus",
+                                         RssUrl = nzbsrusRss,
+                                         ApiUrl = nzbsrusApi,
+                                         Order = 3
+                                     };
 
             //NzbMatrix
             Logger.Debug("Checking for NzbMatrix Indexer");
@@ -273,18 +273,20 @@ namespace NzbDrone.Core
         private static void SetupDefaultQualityProfiles(IRepository repository)
         {
             var sd = new QualityProfile
-                            {
-                                Name = "SD",
-                                Allowed = new List<QualityTypes> { QualityTypes.TV, QualityTypes.DVD },
-                                Cutoff = QualityTypes.TV
-                            };
+                         {
+                             Name = "SD",
+                             Allowed = new List<QualityTypes> {QualityTypes.TV, QualityTypes.DVD},
+                             Cutoff = QualityTypes.TV
+                         };
 
             var hd = new QualityProfile
-                             {
-                                 Name = "HD",
-                                 Allowed = new List<QualityTypes> { QualityTypes.HDTV, QualityTypes.WEBDL, QualityTypes.BDRip, QualityTypes.Bluray720 },
-                                 Cutoff = QualityTypes.HDTV
-                             };
+                         {
+                             Name = "HD",
+                             Allowed =
+                                 new List<QualityTypes>
+                                     {QualityTypes.HDTV, QualityTypes.WEBDL, QualityTypes.BDRip, QualityTypes.Bluray720},
+                             Cutoff = QualityTypes.HDTV
+                         };
 
             //Add or Update SD
             Logger.Debug(String.Format("Checking for default QualityProfile: {0}", sd.Name));

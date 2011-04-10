@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Linq;
 using System.Web.Mvc;
 using NzbDrone.Core.Providers;
-using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Web.Models;
 using Telerik.Web.Mvc;
 
@@ -12,7 +8,7 @@ namespace NzbDrone.Web.Controllers
 {
     public class HistoryController : Controller
     {
-        private HistoryProvider _historyProvider;
+        private readonly HistoryProvider _historyProvider;
 
         public HistoryController(HistoryProvider historyProvider)
         {

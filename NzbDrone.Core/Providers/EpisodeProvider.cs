@@ -1,7 +1,6 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
+using System.Linq;
 using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository;
@@ -13,17 +12,17 @@ namespace NzbDrone.Core.Providers
     {
         //TODO: Remove parsing of the series name, it should be done in series provider
 
-        private readonly IRepository _sonicRepo;
-        private readonly SeriesProvider _series;
-        private readonly SeasonProvider _seasons;
-        private readonly TvDbProvider _tvDb;
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly HistoryProvider _history;
         private readonly QualityProvider _quality;
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private readonly SeasonProvider _seasons;
+        private readonly SeriesProvider _series;
+        private readonly IRepository _sonicRepo;
+        private readonly TvDbProvider _tvDb;
 
         public EpisodeProvider(IRepository sonicRepo, SeriesProvider seriesProvider,
-            SeasonProvider seasonProvider, TvDbProvider tvDbProvider,
-            HistoryProvider history, QualityProvider quality)
+                               SeasonProvider seasonProvider, TvDbProvider tvDbProvider,
+                               HistoryProvider history, QualityProvider quality)
         {
             _sonicRepo = sonicRepo;
             _series = seriesProvider;
@@ -35,7 +34,6 @@ namespace NzbDrone.Core.Providers
 
         public EpisodeProvider()
         {
-
         }
 
         public virtual Episode GetEpisode(long id)
@@ -45,7 +43,9 @@ namespace NzbDrone.Core.Providers
 
         public virtual Episode GetEpisode(int seriesId, int seasonNumber, int episodeNumber)
         {
-            return _sonicRepo.Single<Episode>(c => c.SeriesId == seriesId && c.SeasonNumber == seasonNumber && c.EpisodeNumber == episodeNumber);
+            return
+                _sonicRepo.Single<Episode>(
+                    c => c.SeriesId == seriesId && c.SeasonNumber == seasonNumber && c.EpisodeNumber == episodeNumber);
         }
 
         public virtual IList<Episode> GetEpisodeBySeries(long seriesId)
@@ -68,9 +68,9 @@ namespace NzbDrone.Core.Providers
         }
 
         /// <summary>
-        /// Comprehensive check on whether or not this episode is needed.
+        ///   Comprehensive check on whether or not this episode is needed.
         /// </summary>
-        /// <param name="parsedReport">Episode that needs to be checked</param>
+        /// <param name = "parsedReport">Episode that needs to be checked</param>
         /// <returns></returns>
         public virtual bool IsNeeded(EpisodeParseResult parsedReport)
         {
@@ -112,11 +112,10 @@ namespace NzbDrone.Core.Providers
                     continue;
                 }
 
-                return true;//If we get to this point and the file has not yet been rejected then accept it
+                return true; //If we get to this point and the file has not yet been rejected then accept it
             }
 
             return false;
-
         }
 
         public virtual void RefreshEpisodeInfo(int seriesId)
@@ -130,7 +129,7 @@ namespace NzbDrone.Core.Providers
             var newList = new List<Episode>();
 
             Logger.Debug("Updating season info for series:{0}", targetSeries.SeriesName);
-            targetSeries.Episodes.Select(e => new { e.SeasonId, e.SeasonNumber })
+            targetSeries.Episodes.Select(e => new {e.SeasonId, e.SeasonNumber})
                 .Distinct().ToList()
                 .ForEach(s => _seasons.EnsureSeason(seriesId, s.SeasonId, s.SeasonNumber));
 
@@ -145,19 +144,20 @@ namespace NzbDrone.Core.Providers
                     if (episode.FirstAired < new DateTime(1753, 1, 1))
                         episode.FirstAired = new DateTime(1753, 1, 1);
 
-                    Logger.Trace("Updating info for series:{0} - episode:{1}", targetSeries.SeriesName, episode.EpisodeNumber);
-                    var newEpisode = new Episode()
-                      {
-                          AirDate = episode.FirstAired,
-                          EpisodeId = episode.Id,
-                          EpisodeNumber = episode.EpisodeNumber,
-                          Language = episode.Language.Abbriviation,
-                          Overview = episode.Overview,
-                          SeasonId = episode.SeasonId,
-                          SeasonNumber = episode.SeasonNumber,
-                          SeriesId = seriesId,
-                          Title = episode.EpisodeName
-                      };
+                    Logger.Trace("Updating info for series:{0} - episode:{1}", targetSeries.SeriesName,
+                                 episode.EpisodeNumber);
+                    var newEpisode = new Episode
+                                         {
+                                             AirDate = episode.FirstAired,
+                                             EpisodeId = episode.Id,
+                                             EpisodeNumber = episode.EpisodeNumber,
+                                             Language = episode.Language.Abbriviation,
+                                             Overview = episode.Overview,
+                                             SeasonId = episode.SeasonId,
+                                             SeasonNumber = episode.SeasonNumber,
+                                             SeriesId = seriesId,
+                                             Title = episode.EpisodeName
+                                         };
 
                     if (_sonicRepo.Exists<Episode>(e => e.EpisodeId == newEpisode.EpisodeId))
                     {
@@ -172,7 +172,8 @@ namespace NzbDrone.Core.Providers
                 }
                 catch (Exception e)
                 {
-                    Logger.FatalException(String.Format("An error has occurred while updating episode info for series {0}", seriesId), e);
+                    Logger.FatalException(
+                        String.Format("An error has occurred while updating episode info for series {0}", seriesId), e);
                     failCount++;
                 }
             }
@@ -180,12 +181,14 @@ namespace NzbDrone.Core.Providers
             _sonicRepo.AddMany(newList);
             _sonicRepo.UpdateMany(updateList);
 
-            Logger.Debug("Finished episode refresh for series:{0}. Successful:{1} - Failed:{2} ", targetSeries.SeriesName, successCount, failCount);
+            Logger.Debug("Finished episode refresh for series:{0}. Successful:{1} - Failed:{2} ",
+                         targetSeries.SeriesName, successCount, failCount);
         }
 
         public virtual void RefreshEpisodeInfo(Season season)
         {
-            Logger.Info("Starting episode info refresh for season {0} of series:{1}", season.SeasonNumber, season.SeriesId);
+            Logger.Info("Starting episode info refresh for season {0} of series:{1}", season.SeasonNumber,
+                        season.SeriesId);
             int successCount = 0;
             int failCount = 0;
             var targetSeries = _tvDb.GetSeries(season.SeriesId, true);
@@ -204,19 +207,20 @@ namespace NzbDrone.Core.Providers
                     if (episode.FirstAired < new DateTime(1753, 1, 1))
                         episode.FirstAired = new DateTime(1753, 1, 1);
 
-                    Logger.Trace("Updating info for series:{0} - episode:{1}", targetSeries.SeriesName, episode.EpisodeNumber);
-                    var newEpisode = new Episode()
-                    {
-                        AirDate = episode.FirstAired,
-                        EpisodeId = episode.Id,
-                        EpisodeNumber = episode.EpisodeNumber,
-                        Language = episode.Language.Abbriviation,
-                        Overview = episode.Overview,
-                        SeasonId = episode.SeasonId,
-                        SeasonNumber = episode.SeasonNumber,
-                        SeriesId = season.SeriesId,
-                        Title = episode.EpisodeName
-                    };
+                    Logger.Trace("Updating info for series:{0} - episode:{1}", targetSeries.SeriesName,
+                                 episode.EpisodeNumber);
+                    var newEpisode = new Episode
+                                         {
+                                             AirDate = episode.FirstAired,
+                                             EpisodeId = episode.Id,
+                                             EpisodeNumber = episode.EpisodeNumber,
+                                             Language = episode.Language.Abbriviation,
+                                             Overview = episode.Overview,
+                                             SeasonId = episode.SeasonId,
+                                             SeasonNumber = episode.SeasonNumber,
+                                             SeriesId = season.SeriesId,
+                                             Title = episode.EpisodeName
+                                         };
 
                     if (_sonicRepo.Exists<Episode>(e => e.EpisodeId == newEpisode.EpisodeId))
                     {
@@ -231,7 +235,9 @@ namespace NzbDrone.Core.Providers
                 }
                 catch (Exception e)
                 {
-                    Logger.FatalException(String.Format("An error has occurred while updating episode info for season {0} of series {1}", season.SeasonNumber, season.SeriesId), e);
+                    Logger.FatalException(
+                        String.Format("An error has occurred while updating episode info for season {0} of series {1}",
+                                      season.SeasonNumber, season.SeriesId), e);
                     failCount++;
                 }
             }
@@ -239,7 +245,8 @@ namespace NzbDrone.Core.Providers
             _sonicRepo.AddMany(newList);
             _sonicRepo.UpdateMany(updateList);
 
-            Logger.Debug("Finished episode refresh for series:{0}. Successful:{1} - Failed:{2} ", targetSeries.SeriesName, successCount, failCount);
+            Logger.Debug("Finished episode refresh for series:{0}. Successful:{1} - Failed:{2} ",
+                         targetSeries.SeriesName, successCount, failCount);
         }
 
         public virtual void DeleteEpisode(int episodeId)
@@ -251,6 +258,5 @@ namespace NzbDrone.Core.Providers
         {
             _sonicRepo.Update(episode);
         }
-
     }
 }

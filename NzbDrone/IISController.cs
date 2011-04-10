@@ -8,13 +8,13 @@ using NLog;
 
 namespace NzbDrone
 {
-    class IISController
+    internal class IISController
     {
-        public static Process IISProcess { get; private set; }
         private static readonly Logger IISLogger = LogManager.GetLogger("IISExpress");
         private static readonly Logger Logger = LogManager.GetLogger("IISController");
         private static readonly string IISFolder = Path.Combine(Config.ProjectRoot, @"IISExpress\");
         private static readonly string IISExe = Path.Combine(IISFolder, @"iisexpress.exe");
+        public static Process IISProcess { get; private set; }
 
 
         internal static string AppUrl
@@ -42,7 +42,6 @@ namespace NzbDrone
             IISProcess.ErrorDataReceived += ((s, e) => IISLogger.Fatal(e.Data));
 
 
-
             //Set Variables for the config file.
             Environment.SetEnvironmentVariable("NZBDRONE_PATH", Config.ProjectRoot);
 
@@ -66,7 +65,8 @@ namespace NzbDrone
 
         private static void OnDataReceived(object s, DataReceivedEventArgs e)
         {
-            if (e == null || e.Data == null || e.Data.StartsWith("Request started:") || e.Data.StartsWith("Request ended:") || e.Data == ("IncrementMessages called"))
+            if (e == null || e.Data == null || e.Data.StartsWith("Request started:") ||
+                e.Data.StartsWith("Request ended:") || e.Data == ("IncrementMessages called"))
                 return;
 
             IISLogger.Trace(e.Data);
@@ -116,13 +116,15 @@ namespace NzbDrone
 
             var configXml = XDocument.Load(configPath);
 
-            var bindings = configXml.XPathSelectElement("configuration/system.applicationHost/sites").Elements("site").Where(d => d.Attribute("name").Value.ToLowerInvariant() == "nzbdrone").First().Element("bindings");
+            var bindings =
+                configXml.XPathSelectElement("configuration/system.applicationHost/sites").Elements("site").Where(
+                    d => d.Attribute("name").Value.ToLowerInvariant() == "nzbdrone").First().Element("bindings");
             bindings.Descendants().Remove();
             bindings.Add(
-            new XElement("binding",
-            new XAttribute("protocol", "http"),
-            new XAttribute("bindingInformation", String.Format("*:{0}:", Config.Port))
-            ));
+                new XElement("binding",
+                             new XAttribute("protocol", "http"),
+                             new XAttribute("bindingInformation", String.Format("*:{0}:", Config.Port))
+                    ));
 
             configXml.Save(configPath);
         }

@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using NzbDrone.Core.Repository;
-using NzbDrone.Core.Repository.Quality;
 
 namespace NzbDrone.Web.Models
 {

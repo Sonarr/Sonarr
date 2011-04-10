@@ -8,10 +8,11 @@ namespace NzbDrone.Core.Repository
     {
         [SubSonicPrimaryKey(false)]
         public virtual int SeasonId { get; set; }
+
         public virtual int SeriesId { get; set; }
         public virtual int SeasonNumber { get; set; }
         public bool Monitored { get; set; }
-        
+
         public DayOfWeek? LastInfoSync { get; set; }
 
         public DayOfWeek? LastDiskSync { get; set; }

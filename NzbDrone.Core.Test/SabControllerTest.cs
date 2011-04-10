@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using AutoMoq;
-using Gallio.Framework;
 using MbUnit.Framework;
-using MbUnit.Framework.ContractVerifiers;
-using Moq;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
-using SubSonic.Repository;
 
 namespace NzbDrone.Core.Test
 {
@@ -49,11 +43,15 @@ namespace NzbDrone.Core.Test
                 .Returns(category);
 
             mocker.GetMock<HttpProvider>()
-            .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=addurl&name=http://www.nzbclub.com/nzb_download.aspx?mid=1950232&priority=0&cat=tv&nzbname=This+is+an+Nzb&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
-            .Returns("ok");
+                .Setup(
+                    s =>
+                    s.DownloadString(
+                        "http://192.168.5.55:2222/api?mode=addurl&name=http://www.nzbclub.com/nzb_download.aspx?mid=1950232&priority=0&cat=tv&nzbname=This+is+an+Nzb&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
+                .Returns("ok");
 
             //Act
-            bool result = mocker.Resolve<SabProvider>().AddByUrl("http://www.nzbclub.com/nzb_download.aspx?mid=1950232", "This is an Nzb");
+            bool result = mocker.Resolve<SabProvider>().AddByUrl(
+                "http://www.nzbclub.com/nzb_download.aspx?mid=1950232", "This is an Nzb");
 
             //Assert
             Assert.AreEqual(true, result);
@@ -83,11 +81,15 @@ namespace NzbDrone.Core.Test
             fakeConfig.Setup(c => c.GetValue("SabTvCategory", String.Empty, true)).Returns(category);
 
             mocker.GetMock<HttpProvider>()
-           .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=addurl&name=http://www.nzbclub.com/nzb_download.aspx?mid=1950232&priority=0&cat=tv&nzbname=This+is+an+Nzb&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
-           .Returns("error");
+                .Setup(
+                    s =>
+                    s.DownloadString(
+                        "http://192.168.5.55:2222/api?mode=addurl&name=http://www.nzbclub.com/nzb_download.aspx?mid=1950232&priority=0&cat=tv&nzbname=This+is+an+Nzb&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
+                .Returns("error");
 
             //Act
-            bool result = mocker.Resolve<SabProvider>().AddByUrl("http://www.nzbclub.com/nzb_download.aspx?mid=1950232", "This is an Nzb");
+            bool result = mocker.Resolve<SabProvider>().AddByUrl(
+                "http://www.nzbclub.com/nzb_download.aspx?mid=1950232", "This is an Nzb");
 
             //Assert
             Assert.AreEqual(false, result);
@@ -113,7 +115,10 @@ namespace NzbDrone.Core.Test
             fakeConfig.Setup(c => c.GetValue("SabPassword", String.Empty, false)).Returns(password);
 
             mocker.GetMock<HttpProvider>()
-                .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=queue&output=xml&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
+                .Setup(
+                    s =>
+                    s.DownloadString(
+                        "http://192.168.5.55:2222/api?mode=queue&output=xml&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
                 .Returns(new StreamReader(@".\Files\Queue.xml").ReadToEnd());
 
             //Act
@@ -143,8 +148,11 @@ namespace NzbDrone.Core.Test
             fakeConfig.Setup(c => c.GetValue("SabPassword", String.Empty, false)).Returns(password);
 
             mocker.GetMock<HttpProvider>()
-           .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=queue&output=xml&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
-               .Returns(new StreamReader(@".\Files\QueueEmpty.xml").ReadToEnd());
+                .Setup(
+                    s =>
+                    s.DownloadString(
+                        "http://192.168.5.55:2222/api?mode=queue&output=xml&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
+                .Returns(new StreamReader(@".\Files\QueueEmpty.xml").ReadToEnd());
 
             //Act
             bool result = mocker.Resolve<SabProvider>().IsInQueue(String.Empty);
@@ -173,8 +181,11 @@ namespace NzbDrone.Core.Test
             fakeConfig.Setup(c => c.GetValue("SabPassword", String.Empty, false)).Returns(password);
 
             mocker.GetMock<HttpProvider>()
-          .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=queue&output=xml&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
-              .Returns(new StreamReader(@".\Files\QueueError.xml").ReadToEnd());
+                .Setup(
+                    s =>
+                    s.DownloadString(
+                        "http://192.168.5.55:2222/api?mode=queue&output=xml&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
+                .Returns(new StreamReader(@".\Files\QueueError.xml").ReadToEnd());
 
 
             //Act

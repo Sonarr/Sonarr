@@ -1,16 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text;
 using AutoMoq;
 using FizzWare.NBuilder;
-using Gallio.Framework;
 using MbUnit.Framework;
-using MbUnit.Framework.ContractVerifiers;
 using Moq;
-using Ninject;
-using Ninject.Moq;
-using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
@@ -23,7 +16,6 @@ namespace NzbDrone.Core.Test
     // ReSharper disable InconsistentNaming
     public class MediaFileProviderTests
     {
-
         [Test]
         [Description("Verifies that a new file imported properly")]
         public void import_new_file()
@@ -45,15 +37,16 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer();
 
             mocker.GetMock<IRepository>()
-            .Setup(r => r.Exists<EpisodeFile>(It.IsAny<Expression<Func<EpisodeFile, Boolean>>>())).Returns(false).Verifiable();
+                .Setup(r => r.Exists(It.IsAny<Expression<Func<EpisodeFile, Boolean>>>())).Returns(false).Verifiable();
             mocker.GetMock<IRepository>()
-            .Setup(r => r.Add(It.IsAny<EpisodeFile>())).Returns(0).Verifiable();
+                .Setup(r => r.Add(It.IsAny<EpisodeFile>())).Returns(0).Verifiable();
 
             mocker.GetMock<EpisodeProvider>()
-            .Setup(e => e.GetEpisode(fakeSeries.SeriesId, seasonNumber, episodeNumner)).Returns(fakeEpisode).Verifiable();
+                .Setup(e => e.GetEpisode(fakeSeries.SeriesId, seasonNumber, episodeNumner)).Returns(fakeEpisode).
+                Verifiable();
 
             mocker.GetMock<DiskProvider>()
-           .Setup(e => e.GetSize(fileName)).Returns(12345).Verifiable();
+                .Setup(e => e.GetSize(fileName)).Returns(12345).Verifiable();
 
 
             //Act
@@ -62,7 +55,7 @@ namespace NzbDrone.Core.Test
             //Assert
             Assert.IsNotNull(result);
             mocker.GetMock<IRepository>().VerifyAll();
-            mocker.GetMock<IRepository>().Verify(r => r.Add<EpisodeFile>(result), Times.Once());
+            mocker.GetMock<IRepository>().Verify(r => r.Add(result), Times.Once());
             mocker.GetMock<EpisodeProvider>().VerifyAll();
             mocker.GetMock<DiskProvider>().VerifyAll();
 
@@ -96,7 +89,7 @@ namespace NzbDrone.Core.Test
 
             var mocker = new AutoMoqer();
             mocker.GetMock<IRepository>(MockBehavior.Strict)
-                .Setup(r => r.Exists<EpisodeFile>(It.IsAny<Expression<Func<EpisodeFile, Boolean>>>())).Returns(true).Verifiable();
+                .Setup(r => r.Exists(It.IsAny<Expression<Func<EpisodeFile, Boolean>>>())).Returns(true).Verifiable();
             mocker.GetMock<EpisodeProvider>(MockBehavior.Strict);
             mocker.GetMock<DiskProvider>(MockBehavior.Strict);
 
@@ -109,7 +102,7 @@ namespace NzbDrone.Core.Test
             mocker.GetMock<EpisodeProvider>().VerifyAll();
             mocker.GetMock<DiskProvider>(MockBehavior.Strict).VerifyAll();
             Assert.IsNull(result);
-            mocker.GetMock<IRepository>().Verify(r => r.Add<EpisodeFile>(result), Times.Never());
+            mocker.GetMock<IRepository>().Verify(r => r.Add(result), Times.Never());
         }
 
         [Test]
@@ -130,10 +123,11 @@ namespace NzbDrone.Core.Test
             //Mocks
             var mocker = new AutoMoqer();
             mocker.GetMock<IRepository>(MockBehavior.Strict)
-            .Setup(r => r.Exists<EpisodeFile>(It.IsAny<Expression<Func<EpisodeFile, Boolean>>>())).Returns(false).Verifiable();
+                .Setup(r => r.Exists(It.IsAny<Expression<Func<EpisodeFile, Boolean>>>())).Returns(false).Verifiable();
 
             mocker.GetMock<EpisodeProvider>(MockBehavior.Strict)
-            .Setup(e => e.GetEpisode(fakeSeries.SeriesId, seasonNumber, episodeNumner)).Returns<Episode>(null).Verifiable();
+                .Setup(e => e.GetEpisode(fakeSeries.SeriesId, seasonNumber, episodeNumner)).Returns<Episode>(null).
+                Verifiable();
 
             mocker.GetMock<DiskProvider>(MockBehavior.Strict);
 
@@ -144,12 +138,7 @@ namespace NzbDrone.Core.Test
             //Assert
             mocker.VerifyAllMocks();
             Assert.IsNull(result);
-            mocker.GetMock<IRepository>().Verify(r => r.Add<EpisodeFile>(result), Times.Never());
+            mocker.GetMock<IRepository>().Verify(r => r.Add(result), Times.Never());
         }
-
-
-
     }
-
-
 }

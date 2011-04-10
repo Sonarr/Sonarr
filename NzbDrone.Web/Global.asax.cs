@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data.SQLite;
-using System.Diagnostics;
 using System.Reflection;
 using System.Threading;
 using System.Web;
@@ -11,7 +10,6 @@ using Ninject.Web.Mvc;
 using NLog;
 using NzbDrone.Core;
 using NzbDrone.Core.Instrumentation;
-using SubSonic.Repository;
 
 namespace NzbDrone.Web
 {
@@ -21,17 +19,16 @@ namespace NzbDrone.Web
 
         public static void RegisterRoutes(RouteCollection routes)
         {
-
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-            routes.IgnoreRoute("{*robotstxt}", new { robotstxt = @"(.*/)?robots.txt(/.*)?" });
-            routes.IgnoreRoute("{*favicon}", new { favicon = @"(.*/)?favicon.ico(/.*)?" });
+            routes.IgnoreRoute("{*robotstxt}", new {robotstxt = @"(.*/)?robots.txt(/.*)?"});
+            routes.IgnoreRoute("{*favicon}", new {favicon = @"(.*/)?favicon.ico(/.*)?"});
 
 
             routes.MapRoute(
-                   "Default", // Route name
-                   "{controller}/{action}/{id}", // URL with parameters
-                   new { controller = "Series", action = "Index", id = UrlParameter.Optional } // Parameter defaults
-               );
+                "Default", // Route name
+                "{controller}/{action}/{id}", // URL with parameters
+                new {controller = "Series", action = "Index", id = UrlParameter.Optional} // Parameter defaults
+                );
         }
 
         protected override void OnApplicationStarted()
@@ -85,15 +82,11 @@ namespace NzbDrone.Web
                 Logger.Warn("Restarting application");
                 HttpRuntime.UnloadAppDomain();
             }
-
         }
 
         protected void Application_BeginRequest()
         {
             Thread.CurrentThread.Name = "UI";
         }
-
-
-
     }
 }

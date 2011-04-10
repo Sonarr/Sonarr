@@ -1,22 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using AutoMoq;
-using FizzWare.NBuilder;
-using Gallio.Framework;
 using MbUnit.Framework;
-using MbUnit.Framework.ContractVerifiers;
 using Moq;
-using Ninject;
-using Ninject.Moq;
-using NzbDrone.Core.Providers;
-using NzbDrone.Core.Repository;
-using NzbDrone.Core.Repository.Quality;
-using SubSonic.Repository;
-using TvdbLib.Data;
-using SubSonic.Extensions;
 
 namespace NzbDrone.Core.Test
 {
@@ -117,7 +102,7 @@ namespace NzbDrone.Core.Test
             //Arrange
             var mocker = new AutoMoqer();
 
-            var constant = new VirtualDependency() { PropValue = Guid.NewGuid().ToString() };
+            var constant = new VirtualDependency {PropValue = Guid.NewGuid().ToString()};
 
             mocker.SetConstant(constant);
 
@@ -127,7 +112,6 @@ namespace NzbDrone.Core.Test
             //Assert
             Assert.AreEqual(constant.PropValue, result);
         }
-
     }
 
     public class ConcreteClass
@@ -138,30 +122,35 @@ namespace NzbDrone.Core.Test
         }
     }
 
-    public class Dependency : IDependency { }
+    public class Dependency : IDependency
+    {
+    }
 
-    public interface IDependency { }
+    public interface IDependency
+    {
+    }
 
     public class ClassWithDependencies
     {
-        public IDependency Dependency { get; set; }
-
         public ClassWithDependencies(IDependency dependency)
         {
             Dependency = dependency;
         }
+
+        public IDependency Dependency { get; set; }
     }
 
     public class ClassWithVirtualDependencies
     {
         private readonly VirtualDependency _virtualDependency;
-        public IDependency Dependency { get; set; }
 
         public ClassWithVirtualDependencies(IDependency dependency, VirtualDependency virtualDependency)
         {
             _virtualDependency = virtualDependency;
             Dependency = dependency;
         }
+
+        public IDependency Dependency { get; set; }
 
         public string CallVirtualChild()
         {
@@ -178,19 +167,20 @@ namespace NzbDrone.Core.Test
     {
         private readonly IDependency _dependency;
 
-        public string PropValue { get; set; }
-
-        public VirtualDependency() { }
+        public VirtualDependency()
+        {
+        }
 
         public VirtualDependency(IDependency dependency)
         {
             _dependency = dependency;
         }
 
+        public string PropValue { get; set; }
+
         public virtual string VirtualMethod()
         {
             return "hello";
         }
     }
-
 }

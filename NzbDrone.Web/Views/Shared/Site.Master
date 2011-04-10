@@ -1,7 +1,5 @@
 ﻿<%@ Master Language="C#" Inherits="System.Web.Mvc.ViewMasterPage" %>
-
 <%@ Import Namespace="Helpers" %>
-<%@ Import Namespace="Telerik.Web.Mvc.UI" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head runat="server">
@@ -10,10 +8,10 @@
     <title>NZBDrone</title>
     <%
         Html.Telerik().StyleSheetRegistrar().DefaultGroup(group => group.Add("telerik.common.css")
-           .Add("telerik.sitefinity.css")
-           .Add("notibar.css"))
-           .Render();
-    %>
+                                                                       .Add("telerik.sitefinity.css")
+                                                                       .Add("notibar.css"))
+            .Render();
+%>
     <link href="../../Content/style.css" rel="stylesheet" type="text/css" />
     <link href="../../Content/jquery-ui.css" rel="stylesheet" type="text/css" />
     <link href="../../Content/jquery-ui.custom.css" rel="stylesheet" type="text/css" />
@@ -27,11 +25,11 @@
     <div id="centered">
         <div id="menu">
             <ul>
-                <%: MvcHtmlString.Create(Html.CurrentActionLink("Series", "Index", "Series")) %>
-                <%: MvcHtmlString.Create(Html.CurrentActionLink("Upcoming", "Index", "Upcoming")) %>
-                <%: MvcHtmlString.Create(Html.CurrentActionLink("History", "Index", "History")) %>
-                <%: MvcHtmlString.Create(Html.CurrentActionLink("Settings", "Index", "Settings"))%>
-                <%: MvcHtmlString.Create(Html.CurrentActionLink("Logs", "Index", "Log"))%>
+                <%:MvcHtmlString.Create(Html.CurrentActionLink("Series", "Index", "Series"))%>
+                <%:MvcHtmlString.Create(Html.CurrentActionLink("Upcoming", "Index", "Upcoming"))%>
+                <%:MvcHtmlString.Create(Html.CurrentActionLink("History", "Index", "History"))%>
+                <%:MvcHtmlString.Create(Html.CurrentActionLink("Settings", "Index", "Settings"))%>
+                <%:MvcHtmlString.Create(Html.CurrentActionLink("Logs", "Index", "Log"))%>
             </ul>
         </div>
         <div id="logo">
@@ -42,7 +40,8 @@
             <asp:ContentPlaceHolder ID="MainContent" runat="server" />
         </div>
         <div id="footer">
-            <%  Html.RenderAction("Footer", "Shared"); %>
+            <%
+                Html.RenderAction("Footer", "Shared");%>
         </div>
         <div id="msgBox">
             <span id="msgText">Scanning Series Folder...</span>
@@ -50,14 +49,15 @@
     </div>
 </body>
 <asp:contentplaceholder runat="server" id="Scripts" />
-<% Html.Telerik().ScriptRegistrar().Scripts(
-           c => c.Add("jquery-ui-1.8.8.min.js")
-               .Add("jquery.form.js")
-               .Add("jquery.jgrowl.js")
-               .Add("Notification.js")
-               .Add("jquery-tgc-countdown-1.0.js")
-               .Add("MicrosoftAjax.js")
-               .Add("MicrosoftMvcValidation.js"))
-               .Render(); 
+<%
+                Html.Telerik().ScriptRegistrar().Scripts(
+                    c => c.Add("jquery-ui-1.8.8.min.js")
+                             .Add("jquery.form.js")
+                             .Add("jquery.jgrowl.js")
+                             .Add("Notification.js")
+                             .Add("jquery-tgc-countdown-1.0.js")
+                             .Add("MicrosoftAjax.js")
+                             .Add("MicrosoftMvcValidation.js"))
+                    .Render();
 %>
 </html>

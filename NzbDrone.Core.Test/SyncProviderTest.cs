@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using AutoMoq;
-using Gallio.Framework;
 using MbUnit.Framework;
-using MbUnit.Framework.ContractVerifiers;
 using Moq;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
-using SubSonic.Repository;
 
 namespace NzbDrone.Core.Test
 {
@@ -35,7 +29,7 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof (ArgumentException))]
         public void empty_folder_path_throws()
         {
             var mocker = new AutoMoqer();

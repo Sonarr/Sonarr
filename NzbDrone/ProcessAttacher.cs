@@ -7,41 +7,25 @@
 #if DEBUG
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using EnvDTE;
 using EnvDTE80;
+using Thread = System.Threading.Thread;
 
 namespace NzbDrone
 {
-
     public class ProcessAttacher
     {
-        private enum AttachType
-        {
-            Managed,
-            Native,
-            ManagedAndNative
-        }
-
-
-
-        private enum AttachResult
-        {
-            Attached,
-            NotRunning,
-            BeingDebugged
-        }
-
         public static void Attach()
         {
             // Get an instance of the currently running Visual Studio IDE.
             DTE2 dte2;
-            dte2 = (DTE2)System.Runtime.InteropServices.Marshal.
-            GetActiveObject("VisualStudio.DTE.10.0");
+            dte2 = (DTE2) Marshal.
+                              GetActiveObject("VisualStudio.DTE.10.0");
 
             var pa = new ProcessAttacher(dte2, "iisexpress", 10);
             pa.PessimisticAttachManaged();
         }
-
 
         #region private
 
@@ -59,9 +43,10 @@ namespace NzbDrone
             _processName = processName;
             _waitTimeout = waitTimeout;
             _dte = dte;
-            _attachTypesMap = new Dictionary<AttachType, string> {
-                                                                     {AttachType.Managed, "Managed"}
-                                                                 };
+            _attachTypesMap = new Dictionary<AttachType, string>
+                                  {
+                                      {AttachType.Managed, "Managed"}
+                                  };
         }
 
         #endregion
@@ -82,23 +67,20 @@ namespace NzbDrone
 
             var eng = trans.Engines.Item(engine);
 
-            EnvDTE80.Process2 proc = null;
+            Process2 proc = null;
 
             try
             {
-                proc = dbg.GetProcesses(trans, "").Item(_processName) as EnvDTE80.Process2;
+                proc = dbg.GetProcesses(trans, "").Item(_processName) as Process2;
             }
             catch (Exception)
             {
-
                 return AttachResult.NotRunning;
-
             }
 
             proc.Attach2(eng);
 
             return AttachResult.Attached;
-
         }
 
         private AttachResult PessimisticAttach(AttachType attachType)
@@ -110,7 +92,7 @@ namespace NzbDrone
             while (res == AttachResult.NotRunning && timeout > DateTime.Now)
             {
                 res = Attach(attachType);
-                System.Threading.Thread.Sleep(100);
+                Thread.Sleep(100);
             }
             return res;
         }
@@ -119,7 +101,7 @@ namespace NzbDrone
         {
             if (_dte.Debugger.DebuggedProcesses != null)
             {
-                foreach (EnvDTE.Process process in _dte.Debugger.DebuggedProcesses)
+                foreach (Process process in _dte.Debugger.DebuggedProcesses)
                 {
                     if (process.Name.IndexOf(_processName) != -1)
                     {
@@ -135,7 +117,6 @@ namespace NzbDrone
 
         #region public methods
 
-
         public void OptimisticAttachManaged()
         {
             Attach(AttachType.Managed);
@@ -147,9 +128,29 @@ namespace NzbDrone
         }
 
         #endregion
+
+        #region Nested type: AttachResult
+
+        private enum AttachResult
+        {
+            Attached,
+            NotRunning,
+            BeingDebugged
+        }
+
+        #endregion
+
+        #region Nested type: AttachType
+
+        private enum AttachType
+        {
+            Managed,
+            Native,
+            ManagedAndNative
+        }
+
+        #endregion
     }
-
 }
+
 #endif
-
-

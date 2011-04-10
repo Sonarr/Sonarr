@@ -1,7 +1,7 @@
 using System;
-using System.Web.Mvc;
-using System.Web;
 using System.Collections.Generic;
+using System.Web;
+using System.Web.Mvc;
 
 namespace NzbDrone.Web.Helpers
 {
@@ -15,7 +15,9 @@ namespace NzbDrone.Web.Helpers
             string itemIndex = idsToReuse.Count > 0 ? idsToReuse.Dequeue() : Guid.NewGuid().ToString();
 
             // autocomplete="off" is needed to work around a very annoying Chrome behaviour whereby it reuses old values after the user clicks "Back", which causes the xyz.index and xyz[...] values to get out of sync.
-            html.ViewContext.Writer.WriteLine(string.Format("<input type=\"hidden\" name=\"{0}.index\" autocomplete=\"off\" value=\"{1}\" />", collectionName, itemIndex)); 
+            html.ViewContext.Writer.WriteLine(
+                string.Format("<input type=\"hidden\" name=\"{0}.index\" autocomplete=\"off\" value=\"{1}\" />",
+                              collectionName, itemIndex));
 
             return BeginHtmlFieldPrefixScope(html, string.Format("{0}[{1}]", collectionName, itemIndex));
         }
@@ -30,8 +32,9 @@ namespace NzbDrone.Web.Helpers
             // We need to use the same sequence of IDs following a server-side validation failure,  
             // otherwise the framework won't render the validation error messages next to each item.
             string key = idsToReuseKey + collectionName;
-            var queue = (Queue<string>)httpContext.Items[key];
-            if (queue == null) {
+            var queue = (Queue<string>) httpContext.Items[key];
+            if (queue == null)
+            {
                 httpContext.Items[key] = queue = new Queue<string>();
                 var previouslyUsedIds = httpContext.Request[collectionName + ".index"];
                 if (!string.IsNullOrEmpty(previouslyUsedIds))
@@ -41,10 +44,12 @@ namespace NzbDrone.Web.Helpers
             return queue;
         }
 
+        #region Nested type: HtmlFieldPrefixScope
+
         private class HtmlFieldPrefixScope : IDisposable
         {
-            private readonly TemplateInfo templateInfo;
             private readonly string previousHtmlFieldPrefix;
+            private readonly TemplateInfo templateInfo;
 
             public HtmlFieldPrefixScope(TemplateInfo templateInfo, string htmlFieldPrefix)
             {
@@ -54,10 +59,16 @@ namespace NzbDrone.Web.Helpers
                 templateInfo.HtmlFieldPrefix = htmlFieldPrefix;
             }
 
+            #region IDisposable Members
+
             public void Dispose()
             {
                 templateInfo.HtmlFieldPrefix = previousHtmlFieldPrefix;
             }
+
+            #endregion
         }
+
+        #endregion
     }
 }

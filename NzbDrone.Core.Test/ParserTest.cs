@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Gallio.Framework;
-using MbUnit.Framework;
-using MbUnit.Framework.ContractVerifiers;
+﻿using MbUnit.Framework;
 using NzbDrone.Core.Repository.Quality;
 
 namespace NzbDrone.Core.Test
@@ -70,9 +65,9 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
-        [Row("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD", 3, new[] { 2, 3, 4, 5, 6 })]
-        [Row("Two.and.a.Half.Me.103.104.720p.HDTV.X264-DIMENSION", 1, new[] { 3, 4 })]
-        [Row("The.Kennedys.Part.1.and.Part.2.DSR.XviD-SYS", 1, new[] { 1, 2 })]
+        [Row("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD", 3, new[] {2, 3, 4, 5, 6})]
+        [Row("Two.and.a.Half.Me.103.104.720p.HDTV.X264-DIMENSION", 1, new[] {3, 4})]
+        [Row("The.Kennedys.Part.1.and.Part.2.DSR.XviD-SYS", 1, new[] {1, 2})]
         public void episode_multipart_parse(string path, int season, int[] episodes)
         {
             var result = Parser.ParseEpisodeInfo(path);
@@ -80,7 +75,6 @@ namespace NzbDrone.Core.Test
             Assert.Count(episodes.Length, result.Episodes);
             Assert.AreElementsEqualIgnoringOrder(episodes, result.Episodes);
         }
-
 
 
         [Test]
