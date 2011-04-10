@@ -30,6 +30,11 @@ namespace NzbDrone.Core.Providers
             _episodeProvider = episodeProvider;
         }
 
+        public MediaFileProvider()
+        {
+
+        }
+
         /// <summary>
         /// Scans the specified series folder for media files
         /// </summary>

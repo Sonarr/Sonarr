@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.SQLite;
 using System.Diagnostics;
 using System.Reflection;
 using System.Threading;
@@ -74,11 +75,17 @@ namespace NzbDrone.Web
                 {
                     Response.Redirect(Request.ApplicationPath);
                 }
+                return;
             }
-            else
+
+            Logger.FatalException(lastError.Message, lastError);
+
+            if (lastError is SQLiteException)
             {
-                Logger.FatalException(lastError.Message, lastError);
+                Logger.Warn("Restarting application");
+                HttpRuntime.UnloadAppDomain();
             }
+
         }
 
         protected void Application_BeginRequest()

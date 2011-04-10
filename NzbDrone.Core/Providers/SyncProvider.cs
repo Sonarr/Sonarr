@@ -41,15 +41,17 @@ namespace NzbDrone.Core.Providers
         {
             Logger.Debug("Generating list of unmapped folders");
             if (String.IsNullOrEmpty(path))
-                throw new InvalidOperationException("Invalid path provided");
+                throw new ArgumentException("Invalid path provided", "path");
+
+            var results = new List<String>();
 
             if (!_diskProvider.FolderExists(path))
             {
                 Logger.Debug("Path supplied does not exist: {0}", path);
-                return null;
+                return results;
             }
 
-            var results = new List<String>();
+
             foreach (string seriesFolder in _diskProvider.GetDirectories(path))
             {
                 var cleanPath = Parser.NormalizePath(new DirectoryInfo(seriesFolder).FullName);
