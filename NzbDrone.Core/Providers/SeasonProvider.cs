@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace NzbDrone.Core.Providers
 {
-    public class SeasonProvider : ISeasonProvider
+    public class SeasonProvider
     {
         private readonly IRepository _sonicRepo;
         private readonly SeriesProvider _seriesProvider;
@@ -21,27 +21,32 @@ namespace NzbDrone.Core.Providers
             _seriesProvider = seriesProvider;
         }
 
-        public Season GetSeason(int seasonId)
+        public SeasonProvider()
+        {
+
+        }
+
+        public virtual Season GetSeason(int seasonId)
         {
             return _sonicRepo.Single<Season>(seasonId);
         }
 
-        public Season GetSeason(int seriesId, int seasonNumber)
+        public virtual Season GetSeason(int seriesId, int seasonNumber)
         {
             return _sonicRepo.Single<Season>(s => s.SeriesId == seriesId && s.SeasonNumber == seasonNumber);
         }
 
-        public List<Season> GetSeasons(int seriesId)
+        public virtual List<Season> GetSeasons(int seriesId)
         {
             return _sonicRepo.All<Season>().Where(s => s.SeriesId == seriesId).ToList();
         }
 
-        public Season GetLatestSeason(int seriesId)
+        public virtual Season GetLatestSeason(int seriesId)
         {
             return _sonicRepo.All<Season>().Where(s => s.SeriesId == seriesId).OrderBy(s => s.SeasonNumber).Last();
         }
 
-        public void EnsureSeason(int seriesId, int seasonId, int seasonNumber)
+        public virtual void EnsureSeason(int seriesId, int seasonId, int seasonNumber)
         {
             if (_sonicRepo.Exists<Season>(s => s.SeasonId == seasonId))
                 return;
@@ -58,12 +63,12 @@ namespace NzbDrone.Core.Providers
             _sonicRepo.Add<Season>(newSeason);
         }
 
-        public int SaveSeason(Season season)
+        public virtual int SaveSeason(Season season)
         {
             throw new NotImplementedException();
         }
 
-        public bool IsIgnored(int seasonId)
+        public virtual bool IsIgnored(int seasonId)
         {
             if (_sonicRepo.Single<Season>(seasonId).Monitored)
                 return false;
@@ -72,7 +77,7 @@ namespace NzbDrone.Core.Providers
             return true;
         }
 
-        public bool IsIgnored(int seriesId, int seasonNumber)
+        public virtual bool IsIgnored(int seriesId, int seasonNumber)
         {
             var season = _sonicRepo.Single<Season>(s => s.SeriesId == seriesId && s.SeasonNumber == seasonNumber);
 

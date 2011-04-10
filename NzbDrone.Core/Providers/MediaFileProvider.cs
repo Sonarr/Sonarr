@@ -12,17 +12,17 @@ using SubSonic.Repository;
 
 namespace NzbDrone.Core.Providers
 {
-    public class MediaFileProvider : IMediaFileProvider
+    public class MediaFileProvider
     {
         private readonly IRepository _repository;
-        private readonly IConfigProvider _configProvider;
+        private readonly ConfigProvider _configProvider;
         private readonly DiskProvider _diskProvider;
         private readonly EpisodeProvider _episodeProvider;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static readonly string[] MediaExtentions = new[] { "*.mkv", "*.avi", "*.wmv" };
 
-        public MediaFileProvider(IRepository repository, IConfigProvider configProvider, DiskProvider diskProvider, EpisodeProvider episodeProvider)
+        public MediaFileProvider(IRepository repository, ConfigProvider configProvider, DiskProvider diskProvider, EpisodeProvider episodeProvider)
         {
             _repository = repository;
             _configProvider = configProvider;

@@ -12,17 +12,18 @@ namespace NzbDrone.Web.Controllers
 {
     public class AddSeriesController : Controller
     {
-
+        public IConfigProvider ConfigProvider { get; set; }
         private readonly SyncProvider _syncProvider;
         private readonly RootDirProvider _rootFolderProvider;
-        private readonly ConfigProvider _configProvider;
+        private readonly IConfigProvider _configProvider;
         private readonly QualityProvider _qualityProvider;
         private readonly TvDbProvider _tvDbProvider;
         private readonly SeriesProvider _seriesProvider;
 
-        public AddSeriesController(SyncProvider syncProvider, RootDirProvider rootFolderProvider, ConfigProvider configProvider,
+        public AddSeriesController(SyncProvider syncProvider, RootDirProvider rootFolderProvider, IConfigProvider configProvider,
             QualityProvider qualityProvider, TvDbProvider tvDbProvider, SeriesProvider seriesProvider)
         {
+            ConfigProvider = configProvider;
             _syncProvider = syncProvider;
             _rootFolderProvider = rootFolderProvider;
             _configProvider = configProvider;
@@ -124,14 +125,9 @@ namespace NzbDrone.Web.Controllers
         public SelectList GetSuggestionList(string searchString)
         {
             var dataVal = _tvDbProvider.SearchSeries(searchString);
+            //var bestResult = _tvDbProvider.GetBestMatch(dataVal.ToList(), searchString);
 
-            int selectId = 0;
-            if (dataVal.Count != 0)
-            {
-                selectId = dataVal[0].Id;
-            }
-
-            return new SelectList(dataVal, "Id", "SeriesName", selectId);
+            return new SelectList(dataVal, "Id", "SeriesName", dataVal[0].Id);
         }
 
     }

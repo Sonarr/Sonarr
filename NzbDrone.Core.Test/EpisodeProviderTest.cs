@@ -65,7 +65,7 @@ namespace NzbDrone.Core.Test
         public void IsNeededTrue()
         {
             //Setup
-            var season = new Mock<ISeasonProvider>();
+            var season = new Mock<SeasonProvider>();
             var series = new Mock<SeriesProvider>();
             //var history = new Mock<IHistoryProvider>();
             //var quality = new Mock<IQualityProvider>();

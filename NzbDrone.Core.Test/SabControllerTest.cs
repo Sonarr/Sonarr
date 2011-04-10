@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Test
 
             var mocker = new AutoMoqer();
 
-            var fakeConfig = mocker.GetMock<IConfigProvider>();
+            var fakeConfig = mocker.GetMock<ConfigProvider>();
             fakeConfig.Setup(c => c.GetValue("SabHost", String.Empty, false))
                 .Returns(sabHost);
             fakeConfig.Setup(c => c.GetValue("SabPort", String.Empty, false))
@@ -73,7 +73,7 @@ namespace NzbDrone.Core.Test
 
             var mocker = new AutoMoqer();
 
-            var fakeConfig = mocker.GetMock<IConfigProvider>();
+            var fakeConfig = mocker.GetMock<ConfigProvider>();
             fakeConfig.Setup(c => c.GetValue("SabHost", String.Empty, false)).Returns(sabHost);
             fakeConfig.Setup(c => c.GetValue("SabPort", String.Empty, false)).Returns(sabPort);
             fakeConfig.Setup(c => c.GetValue("SabApiKey", String.Empty, false)).Returns(apikey);
@@ -105,7 +105,7 @@ namespace NzbDrone.Core.Test
 
             var mocker = new AutoMoqer();
 
-            var fakeConfig = mocker.GetMock<IConfigProvider>();
+            var fakeConfig = mocker.GetMock<ConfigProvider>();
             fakeConfig.Setup(c => c.GetValue("SabHost", String.Empty, false)).Returns(sabHost);
             fakeConfig.Setup(c => c.GetValue("SabPort", String.Empty, false)).Returns(sabPort);
             fakeConfig.Setup(c => c.GetValue("SabApiKey", String.Empty, false)).Returns(apikey);
@@ -135,7 +135,7 @@ namespace NzbDrone.Core.Test
 
             var mocker = new AutoMoqer();
 
-            var fakeConfig = mocker.GetMock<IConfigProvider>();
+            var fakeConfig = mocker.GetMock<ConfigProvider>();
             fakeConfig.Setup(c => c.GetValue("SabHost", String.Empty, false)).Returns(sabHost);
             fakeConfig.Setup(c => c.GetValue("SabPort", String.Empty, false)).Returns(sabPort);
             fakeConfig.Setup(c => c.GetValue("SabApiKey", String.Empty, false)).Returns(apikey);
@@ -165,7 +165,7 @@ namespace NzbDrone.Core.Test
 
             var mocker = new AutoMoqer();
 
-            var fakeConfig = mocker.GetMock<IConfigProvider>();
+            var fakeConfig = mocker.GetMock<ConfigProvider>();
             fakeConfig.Setup(c => c.GetValue("SabHost", String.Empty, false)).Returns(sabHost);
             fakeConfig.Setup(c => c.GetValue("SabPort", String.Empty, false)).Returns(sabPort);
             fakeConfig.Setup(c => c.GetValue("SabApiKey", String.Empty, false)).Returns(apikey);

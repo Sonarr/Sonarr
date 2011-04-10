@@ -12,16 +12,16 @@ namespace NzbDrone.Core.Providers
     {
         private readonly RssSyncProvider _rssSyncProvider;
         private readonly SeriesProvider _seriesProvider;
-        private readonly ISeasonProvider _seasonProvider;
+        private readonly SeasonProvider _seasonProvider;
         private readonly EpisodeProvider _episodeProvider;
-        private readonly IMediaFileProvider _mediaFileProvider;
+        private readonly MediaFileProvider _mediaFileProvider;
 
         private Timer _rssSyncTimer;
         private Timer _minuteTimer;
         private DateTime _rssSyncNextInterval;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public TimerProvider(RssSyncProvider rssSyncProvider, SeriesProvider seriesProvider, ISeasonProvider seasonProvider, EpisodeProvider episodeProvider, IMediaFileProvider mediaFileProvider)
+        public TimerProvider(RssSyncProvider rssSyncProvider, SeriesProvider seriesProvider, SeasonProvider seasonProvider, EpisodeProvider episodeProvider, MediaFileProvider mediaFileProvider)
         {
             _rssSyncProvider = rssSyncProvider;
             _seriesProvider = seriesProvider;

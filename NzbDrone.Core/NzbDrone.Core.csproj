@@ -198,8 +198,6 @@
     <Compile Include="Instrumentation\LogConfiguration.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Providers\Fakes\FakeNotificationProvider.cs" />
-    <Compile Include="Providers\IMediaFileProvider.cs" />
-    <Compile Include="Providers\ISyncProvider.cs" />
     <Compile Include="Providers\MediaFileProvider.cs" />
     <Compile Include="Providers\SyncProvider.cs" />
     <Compile Include="Model\Notification\ProgressNotification.cs" />
@@ -207,7 +205,6 @@
     <Compile Include="Providers\Core\ConfigProvider.cs" />
     <Compile Include="Providers\EpisodeProvider.cs" />
     <Compile Include="Providers\Core\HttpProvider.cs" />
-    <Compile Include="Providers\ISeasonProvider.cs" />
     <Compile Include="Providers\SabProvider.cs" />
     <Compile Include="Providers\SeasonProvider.cs" />
     <Compile Include="Repository\Episode.cs" />
@@ -223,7 +220,6 @@
     <Compile Include="CentralDispatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\Core\DiskProvider.cs" />
-    <Compile Include="Providers\Core\IConfigProvider.cs" />
     <Compile Include="Providers\SeriesProvider.cs" />
     <Compile Include="Providers\TvDbProvider.cs" />
   </ItemGroup>

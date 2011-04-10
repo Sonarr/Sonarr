@@ -70,10 +70,10 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
-        [Row("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD", 3, 1, 2, 3, 4, 5, 6)]
-        [Row("Two.and.a.Half.Me.103.104.720p.HDTV.X264-DIMENSION", 1, 3, 4)]
-        [Row("The.Kennedys.Part.1.and.Part.2.DSR.XviD-SYS", 1, 1, 2)]
-        public void episode_multipart_parse(string path, int season, params int[] episodes)
+        [Row("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD", 3, new[] { 2, 3, 4, 5, 6 })]
+        [Row("Two.and.a.Half.Me.103.104.720p.HDTV.X264-DIMENSION", 1, new[] { 3, 4 })]
+        [Row("The.Kennedys.Part.1.and.Part.2.DSR.XviD-SYS", 1, new[] { 1, 2 })]
+        public void episode_multipart_parse(string path, int season, int[] episodes)
         {
             var result = Parser.ParseEpisodeInfo(path);
             Assert.AreEqual(season, result.SeasonNumber);

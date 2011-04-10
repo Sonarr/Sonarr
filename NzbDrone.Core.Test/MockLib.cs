@@ -42,11 +42,11 @@ namespace NzbDrone.Core.Test
             return new SimpleRepository(provider, SimpleRepositoryOptions.RunMigrations);
         }
 
-        public static IConfigProvider StandardConfig
+        public static ConfigProvider StandardConfig
         {
             get
             {
-                var mock = new Mock<IConfigProvider>();
+                var mock = new Mock<ConfigProvider>();
                 mock.SetupGet(c => c.SeriesRoot).Returns("C:\\");
                 return mock.Object;
             }

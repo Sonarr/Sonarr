@@ -15,9 +15,9 @@ namespace NzbDrone.Core.Providers
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IRepository _sonicRepo;
-        private readonly IConfigProvider _configProvider;
+        private readonly ConfigProvider _configProvider;
 
-        public IndexerProvider(IRepository sonicRepo, IConfigProvider configProvider)
+        public IndexerProvider(IRepository sonicRepo, ConfigProvider configProvider)
         {
             _sonicRepo = sonicRepo;
             _configProvider = configProvider;

@@ -12,12 +12,12 @@ namespace NzbDrone.Core.Providers
 {
     public class XbmcProvider
     {
-        private readonly IConfigProvider _configProvider;
+        private readonly ConfigProvider _configProvider;
         private readonly HttpProvider _httpProvider;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public XbmcProvider(IConfigProvider configProvider, HttpProvider httpProvider)
+        public XbmcProvider(ConfigProvider configProvider, HttpProvider httpProvider)
         {
             _configProvider = configProvider;
             _httpProvider = httpProvider;

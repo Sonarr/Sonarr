@@ -5,7 +5,7 @@ using SubSonic.Repository;
 
 namespace NzbDrone.Core.Providers.Core
 {
-    public class ConfigProvider : IConfigProvider
+    public class ConfigProvider
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IRepository _sonicRepo;
@@ -15,7 +15,11 @@ namespace NzbDrone.Core.Providers.Core
             _sonicRepo = dataRepository;
         }
 
-        public String ApiKey
+        public ConfigProvider()
+        {
+        }
+
+        public virtual String ApiKey
         {
             get { return GetValue("ApiKey"); }
 
@@ -23,154 +27,154 @@ namespace NzbDrone.Core.Providers.Core
         }
 
 
-        public String EpisodeNameFormat
+        public virtual String EpisodeNameFormat
         {
             get { return GetValue("EpisodeNameFormat"); }
 
             set { SetValue("EpisodeNameFormat", value); }
         }
 
-        public String SeriesRoot
+        public virtual String SeriesRoot
         {
             get { return GetValue("SeriesRoots"); }
 
             set { SetValue("SeriesRoots", value); }
         }
 
-        public String NzbMatrixUsername
+        public virtual String NzbMatrixUsername
         {
             get { return GetValue("NzbMatrixUsername"); }
 
             set { SetValue("NzbMatrixUsername", value); }
         }
 
-        public String NzbMatrixApiKey
+        public virtual String NzbMatrixApiKey
         {
             get { return GetValue("NzbMatrixApiKey"); }
 
             set { SetValue("NzbMatrixApiKey", value); }
         }
 
-        public String NzbsOrgUId
+        public virtual String NzbsOrgUId
         {
             get { return GetValue("NzbsOrgUId"); }
 
             set { SetValue("NzbsOrgUId", value); }
         }
 
-        public String NzbsOrgHash
+        public virtual String NzbsOrgHash
         {
             get { return GetValue("NzbsOrgHash"); }
 
             set { SetValue("NzbsOrgHash", value); }
         }
 
-        public String NzbsrusUId
+        public virtual String NzbsrusUId
         {
             get { return GetValue("NzbsrusUId"); }
 
             set { SetValue("NzbsrusUId", value); }
         }
 
-        public String NzbsrusHash
+        public virtual String NzbsrusHash
         {
             get { return GetValue("NzbsrusHash"); }
 
             set { SetValue("NzbsrusHash", value); }
         }
 
-        public String SyncFrequency
+        public virtual String SyncFrequency
         {
             get { return GetValue("SyncFrequency"); }
 
             set { SetValue("SyncFrequency", value); }
         }
 
-        public String DownloadPropers
+        public virtual String DownloadPropers
         {
             get { return GetValue("DownloadPropers"); }
 
             set { SetValue("DownloadPropers", value); }
         }
 
-        public String Retention
+        public virtual String Retention
         {
             get { return GetValue("Retention"); }
 
             set { SetValue("Retention", value); }
         }
 
-        public String SabHost
+        public virtual String SabHost
         {
             get { return GetValue("SabHost"); }
 
             set { SetValue("SabHost", value); }
         }
 
-        public String SabPort
+        public virtual String SabPort
         {
             get { return GetValue("SabPort"); }
 
             set { SetValue("SabPort", value); }
         }
 
-        public String SabApiKey
+        public virtual String SabApiKey
         {
             get { return GetValue("SabApiKey"); }
 
             set { SetValue("SabApiKey", value); }
         }
 
-        public String SabUsername
+        public virtual String SabUsername
         {
             get { return GetValue("SabUsername"); }
 
             set { SetValue("SabUsername", value); }
         }
 
-        public String SabPassword
+        public virtual String SabPassword
         {
             get { return GetValue("SabPassword"); }
 
             set { SetValue("SabPassword", value); }
         }
 
-        public String SabTvCategory
+        public virtual String SabTvCategory
         {
             get { return GetValue("SabTvCategory"); }
 
             set { SetValue("SabTvCategory", value); }
         }
 
-        public String SabTvPriority
+        public virtual String SabTvPriority
         {
             get { return GetValue("SabTvPriority"); }
 
             set { SetValue("SabTvPriority", value); }
         }
 
-        public String UseBlackhole
+        public virtual String UseBlackhole
         {
             get { return GetValue("UseBlackhole"); }
 
             set { SetValue("UseBlackhole", value); }
         }
 
-        public String BlackholeDirectory
+        public virtual String BlackholeDirectory
         {
             get { return GetValue("BlackholeDirectory"); }
 
             set { SetValue("BlackholeDirectory", value); }
         }
 
-        public bool UseSeasonFolder
+        public virtual bool UseSeasonFolder
         {
             get { return GetValueBoolean("Sorting_SeasonFolder", true); }
 
             set { SetValue("Sorting_SeasonFolder", value); }
         }
 
-        public int DefaultQualityProfile
+        public virtual int DefaultQualityProfile
         {
             get { return GetValueInt("DefaultQualityProfile", 1); }
 
@@ -193,7 +197,7 @@ namespace NzbDrone.Core.Providers.Core
             return Convert.ToInt16(GetValue(key, defaultValue, false));
         }
 
-        public string GetValue(string key, object defaultValue, bool makePermanent)
+        public virtual string GetValue(string key, object defaultValue, bool makePermanent)
         {
             string value;
 
@@ -210,17 +214,17 @@ namespace NzbDrone.Core.Providers.Core
             return value;
         }
 
-        public void SetValue(string key, Boolean value)
+        public virtual void SetValue(string key, Boolean value)
         {
             SetValue(key, value.ToString());
         }
 
-        public void SetValue(string key, int value)
+        public virtual void SetValue(string key, int value)
         {
             SetValue(key, value.ToString());
         }
 
-        public void SetValue(string key, string value)
+        public virtual void SetValue(string key, string value)
         {
             if (String.IsNullOrEmpty(key))
                 throw new ArgumentOutOfRangeException("key");

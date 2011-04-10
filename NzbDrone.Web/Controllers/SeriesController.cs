@@ -23,19 +23,19 @@ namespace NzbDrone.Web.Controllers
     {
         private readonly SeriesProvider _seriesProvider;
         private readonly EpisodeProvider _episodeProvider;
-        private readonly ISyncProvider _syncProvider;
+        private readonly SyncProvider _syncProvider;
         private readonly RssSyncProvider _rssSyncProvider;
         private readonly QualityProvider _qualityProvider;
-        private readonly IMediaFileProvider _mediaFileProvider;
+        private readonly MediaFileProvider _mediaFileProvider;
         private readonly RenameProvider _renameProvider;
         private readonly RootDirProvider _rootDirProvider;
         private readonly TvDbProvider _tvDbProvider;
         //
         // GET: /Series/
 
-        public SeriesController(ISyncProvider syncProvider, SeriesProvider seriesProvider,
+        public SeriesController(SyncProvider syncProvider, SeriesProvider seriesProvider,
             EpisodeProvider episodeProvider, RssSyncProvider rssSyncProvider,
-            QualityProvider qualityProvider, IMediaFileProvider mediaFileProvider,
+            QualityProvider qualityProvider, MediaFileProvider mediaFileProvider,
             RenameProvider renameProvider, RootDirProvider rootDirProvider,
             TvDbProvider tvDbProvider)
         {

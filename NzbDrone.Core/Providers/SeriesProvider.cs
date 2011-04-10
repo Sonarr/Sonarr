@@ -19,13 +19,13 @@ namespace NzbDrone.Core.Providers
 
         //Trims all white spaces and separators from the end of the title.
 
-        private readonly IConfigProvider _config;
+        private readonly ConfigProvider _config;
         private readonly IRepository _sonioRepo;
         private readonly TvDbProvider _tvDb;
         private readonly QualityProvider _quality;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public SeriesProvider(IConfigProvider configProvider,
+        public SeriesProvider(ConfigProvider configProvider,
             IRepository dataRepository, TvDbProvider tvDbProvider, QualityProvider quality)
         {
             _config = configProvider;

@@ -9,12 +9,12 @@ namespace NzbDrone.Core.Providers
 {
     public class SabProvider
     {
-        private readonly IConfigProvider _config;
+        private readonly ConfigProvider _config;
         private readonly HttpProvider _http;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public SabProvider(IConfigProvider config, HttpProvider http)
+        public SabProvider(ConfigProvider config, HttpProvider http)
         {
             _config = config;
             _http = http;

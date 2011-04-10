@@ -61,7 +61,7 @@ namespace NzbDrone.Core
                 _kernel.Bind<TvDbProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<HttpProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<SeriesProvider>().ToSelf().InSingletonScope();
-                _kernel.Bind<ISeasonProvider>().To<SeasonProvider>().InSingletonScope();
+                _kernel.Bind<SeasonProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<RssSyncProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<EpisodeProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<UpcomingEpisodesProvider>().ToSelf().InSingletonScope();
@@ -72,13 +72,13 @@ namespace NzbDrone.Core
                 _kernel.Bind<ExternalNotificationProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<XbmcProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<PostProcessingProvider>().ToSelf().InSingletonScope();
-                _kernel.Bind<IConfigProvider>().To<ConfigProvider>().InSingletonScope();
-                _kernel.Bind<ISyncProvider>().To<SyncProvider>().InSingletonScope();
+                _kernel.Bind<ConfigProvider>().To<ConfigProvider>().InSingletonScope();
+                _kernel.Bind<SyncProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<IndexerProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<RenameProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<NotificationProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<LogProvider>().ToSelf().InSingletonScope();
-                _kernel.Bind<IMediaFileProvider>().To<MediaFileProvider>().InSingletonScope();
+                _kernel.Bind<MediaFileProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<TimerProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<IRepository>().ToMethod(c => new SimpleRepository(dbProvider, SimpleRepositoryOptions.RunMigrations)).InSingletonScope();
 
@@ -90,7 +90,7 @@ namespace NzbDrone.Core
                 SetupDefaultQualityProfiles(_kernel.Get<IRepository>()); //Setup the default QualityProfiles on start-up
 
                 //Get the Timers going
-                var config = _kernel.Get<IConfigProvider>();
+                var config = _kernel.Get<ConfigProvider>();
                 var timer = _kernel.Get<TimerProvider>();
                 timer.SetRssSyncTimer(Convert.ToInt32(config.GetValue("SyncFrequency", "15", true)));
                 timer.StartRssSyncTimer();

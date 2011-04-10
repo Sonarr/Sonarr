@@ -9,14 +9,14 @@ namespace NzbDrone.Core.Providers.Feed
     public abstract class FeedProviderBase
     {
         protected readonly SeriesProvider _seriesProvider;
-        protected readonly ISeasonProvider _seasonProvider;
+        protected readonly SeasonProvider _seasonProvider;
         protected readonly EpisodeProvider _episodeProvider;
-        protected readonly IConfigProvider _configProvider;
+        protected readonly ConfigProvider _configProvider;
         private readonly HttpProvider _httpProvider;
         protected static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public FeedProviderBase(SeriesProvider seriesProvider, ISeasonProvider seasonProvider,
-            EpisodeProvider episodeProvider, IConfigProvider configProvider, HttpProvider httpProvider)
+        public FeedProviderBase(SeriesProvider seriesProvider, SeasonProvider seasonProvider,
+            EpisodeProvider episodeProvider, ConfigProvider configProvider, HttpProvider httpProvider)
         {
             _seriesProvider = seriesProvider;
             _seasonProvider = seasonProvider;
