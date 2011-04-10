@@ -58,8 +58,7 @@
             .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.Date).Descending()).Enabled(true))
             .Pageable(
                 c =>
-                c.PageSize(20).Position(GridPagerPosition.Both).Style(GridPagerStyles.PageInput |
-                                                                      GridPagerStyles.NextPreviousAndNumeric))
+                c.PageSize(50).Position(GridPagerPosition.Bottom).Style(GridPagerStyles.NextPrevious))
             //.Filterable()
             //.ClientEvents(c => c.OnRowDataBound("onRowDataBound"))
             .Render();
