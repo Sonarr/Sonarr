@@ -8,7 +8,7 @@ using NzbDrone.Core.Repository.Quality;
 
 namespace NzbDrone.Core
 {
-    internal static class Parser
+    public static class Parser
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
@@ -239,7 +239,7 @@ namespace NzbDrone.Core
         /// </summary>
         /// <param name = "title">title</param>
         /// <returns></returns>
-        internal static string NormalizeTitle(string title)
+        public static string NormalizeTitle(string title)
         {
             return NormalizeRegex.Replace(title, String.Empty).ToLower();
         }
