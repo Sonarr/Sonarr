@@ -10,13 +10,13 @@ namespace NzbDrone.Core.Providers.Feed
     {
         protected readonly SeriesProvider _seriesProvider;
         protected readonly ISeasonProvider _seasonProvider;
-        protected readonly IEpisodeProvider _episodeProvider;
+        protected readonly EpisodeProvider _episodeProvider;
         protected readonly IConfigProvider _configProvider;
         private readonly HttpProvider _httpProvider;
         protected static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public FeedProviderBase(SeriesProvider seriesProvider, ISeasonProvider seasonProvider,
-            IEpisodeProvider episodeProvider, IConfigProvider configProvider, HttpProvider httpProvider)
+            EpisodeProvider episodeProvider, IConfigProvider configProvider, HttpProvider httpProvider)
         {
             _seriesProvider = seriesProvider;
             _seasonProvider = seasonProvider;

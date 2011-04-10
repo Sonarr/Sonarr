@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Providers
     {
         private readonly SeriesProvider _seriesProvider;
         private readonly ISeasonProvider _seasonProvider;
-        private readonly IEpisodeProvider _episodeProvider;
+        private readonly EpisodeProvider _episodeProvider;
         private readonly IMediaFileProvider _mediaFileProvider;
         private readonly DiskProvider _diskProvider;
         private readonly IConfigProvider _configProvider;
@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Providers
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public RenameProvider(SeriesProvider seriesProvider, ISeasonProvider seasonProvider,
-            IEpisodeProvider episodeProvider, IMediaFileProvider mediaFileProvider,
+            EpisodeProvider episodeProvider, IMediaFileProvider mediaFileProvider,
             DiskProvider diskProvider, IConfigProvider configProvider,
             ExternalNotificationProvider extenalNotificationProvider)
         {
@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Providers
                 StartRename();
             }
         }
-               
+
         public virtual void RenameSeries(int seriesId)
         {
             //Get a list of all applicable episode files/episodes and rename them
@@ -83,7 +83,7 @@ namespace NzbDrone.Core.Providers
                 StartRename();
             }
         }
-               
+
         public virtual void RenameSeason(int seasonId)
         {
             //Get a list of all applicable episode files/episodes and rename them
@@ -105,7 +105,7 @@ namespace NzbDrone.Core.Providers
                 StartRename();
             }
         }
-               
+
         public virtual void RenameEpisode(int episodeId)
         {
             //This will properly rename multi-episode files if asked to rename either of the episode
@@ -126,7 +126,7 @@ namespace NzbDrone.Core.Providers
             _epsToRename.Add(erm);
             StartRename();
         }
-               
+
         public virtual void RenameEpisodeFile(int episodeFileId, bool newDownload)
         {
             //This will properly rename multi-episode files if asked to rename either of the episode

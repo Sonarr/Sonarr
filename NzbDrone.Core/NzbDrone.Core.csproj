@@ -163,7 +163,6 @@
     <Compile Include="Helpers\EpisodeSortingHelper.cs" />
     <Compile Include="Helpers\SceneNameHelper.cs" />
     <Compile Include="Helpers\ServerHelper.cs" />
-    <Compile Include="Instrumentation\ILogProvider.cs" />
     <Compile Include="Instrumentation\LogLevel.cs" />
     <Compile Include="Instrumentation\LogProvider.cs" />
     <Compile Include="Instrumentation\SubsonicTarget.cs" />
@@ -208,7 +207,6 @@
     <Compile Include="Providers\Core\ConfigProvider.cs" />
     <Compile Include="Providers\EpisodeProvider.cs" />
     <Compile Include="Providers\Core\HttpProvider.cs" />
-    <Compile Include="Providers\IEpisodeProvider.cs" />
     <Compile Include="Providers\ISeasonProvider.cs" />
     <Compile Include="Providers\SabProvider.cs" />
     <Compile Include="Providers\SeasonProvider.cs" />

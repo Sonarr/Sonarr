@@ -9,7 +9,7 @@ using SubSonic.Repository;
 
 namespace NzbDrone.Core.Providers
 {
-    public class EpisodeProvider : IEpisodeProvider
+    public class EpisodeProvider
     {
         //TODO: Remove parsing of the series name, it should be done in series provider
 
@@ -33,27 +33,32 @@ namespace NzbDrone.Core.Providers
             _quality = quality;
         }
 
-        public Episode GetEpisode(long id)
+        public EpisodeProvider()
+        {
+
+        }
+
+        public virtual Episode GetEpisode(long id)
         {
             return _sonicRepo.Single<Episode>(id);
         }
 
-        public Episode GetEpisode(int seriesId, int seasonNumber, int episodeNumber)
+        public virtual Episode GetEpisode(int seriesId, int seasonNumber, int episodeNumber)
         {
             return _sonicRepo.Single<Episode>(c => c.SeriesId == seriesId && c.SeasonNumber == seasonNumber && c.EpisodeNumber == episodeNumber);
         }
 
-        public IList<Episode> GetEpisodeBySeries(long seriesId)
+        public virtual IList<Episode> GetEpisodeBySeries(long seriesId)
         {
             return _sonicRepo.Find<Episode>(e => e.SeriesId == seriesId);
         }
 
-        public IList<Episode> GetEpisodeBySeason(long seasonId)
+        public virtual IList<Episode> GetEpisodeBySeason(long seasonId)
         {
             return _sonicRepo.Find<Episode>(e => e.SeasonId == seasonId);
         }
 
-        public String GetSabTitle(Episode episode)
+        public virtual String GetSabTitle(Episode episode)
         {
             var series = _series.GetSeries(episode.SeriesId);
             if (series == null) throw new ArgumentException("Unknown series. ID: " + episode.SeriesId);
@@ -67,7 +72,7 @@ namespace NzbDrone.Core.Providers
         /// </summary>
         /// <param name="parsedReport">Episode that needs to be checked</param>
         /// <returns></returns>
-        public bool IsNeeded(EpisodeParseResult parsedReport)
+        public virtual bool IsNeeded(EpisodeParseResult parsedReport)
         {
             foreach (var episode in parsedReport.Episodes)
             {
@@ -114,7 +119,7 @@ namespace NzbDrone.Core.Providers
 
         }
 
-        public void RefreshEpisodeInfo(int seriesId)
+        public virtual void RefreshEpisodeInfo(int seriesId)
         {
             Logger.Info("Starting episode info refresh for series:{0}", seriesId);
             int successCount = 0;
@@ -178,7 +183,7 @@ namespace NzbDrone.Core.Providers
             Logger.Debug("Finished episode refresh for series:{0}. Successful:{1} - Failed:{2} ", targetSeries.SeriesName, successCount, failCount);
         }
 
-        public void RefreshEpisodeInfo(Season season)
+        public virtual void RefreshEpisodeInfo(Season season)
         {
             Logger.Info("Starting episode info refresh for season {0} of series:{1}", season.SeasonNumber, season.SeriesId);
             int successCount = 0;
@@ -237,27 +242,15 @@ namespace NzbDrone.Core.Providers
             Logger.Debug("Finished episode refresh for series:{0}. Successful:{1} - Failed:{2} ", targetSeries.SeriesName, successCount, failCount);
         }
 
-        public void DeleteEpisode(int episodeId)
+        public virtual void DeleteEpisode(int episodeId)
         {
             _sonicRepo.Delete<Episode>(episodeId);
         }
 
-        public void UpdateEpisode(Episode episode)
+        public virtual void UpdateEpisode(Episode episode)
         {
             _sonicRepo.Update(episode);
         }
 
-        private bool IsSeasonIgnored(EpisodeParseResult episode)
-        {
-            //Check if this Season is ignored
-            if (_seasons.IsIgnored(episode.SeriesId, episode.SeasonNumber))
-            {
-                Logger.Debug("Season {0} is ignored for: {1}", episode.SeasonNumber, episode.SeriesTitle);
-                return true;
-            }
-
-            Logger.Debug("Season {0} is wanted for: {1}", episode.SeasonNumber, episode.SeriesTitle);
-            return false;
-        }
     }
 }

@@ -24,13 +24,13 @@ namespace NzbDrone.Core
     public static class CentralDispatch
     {
         private static StandardKernel _kernel;
-        private static readonly Object kernelLock = new object();
+        private static readonly Object KernelLock = new object();
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static string _startupPath;
 
         public static void BindKernel()
         {
-            lock (kernelLock)
+            lock (KernelLock)
             {
                 Logger.Debug("Binding Ninject's Kernel");
                 _kernel = new StandardKernel();
@@ -57,27 +57,27 @@ namespace NzbDrone.Core
 
                 dbProvider.Log = new NlogWriter();
 
-                _kernel.Bind<QualityProvider>().ToSelf();
-                _kernel.Bind<TvDbProvider>().ToSelf();
-                _kernel.Bind<HttpProvider>().ToSelf();
+                _kernel.Bind<QualityProvider>().ToSelf().InSingletonScope();
+                _kernel.Bind<TvDbProvider>().ToSelf().InSingletonScope();
+                _kernel.Bind<HttpProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<SeriesProvider>().ToSelf().InSingletonScope();
+                _kernel.Bind<ISeasonProvider>().To<SeasonProvider>().InSingletonScope();
                 _kernel.Bind<RssSyncProvider>().ToSelf().InSingletonScope();
-                _kernel.Bind<ISeasonProvider>().To<SeasonProvider>();
-                _kernel.Bind<IEpisodeProvider>().To<EpisodeProvider>();
-                _kernel.Bind<UpcomingEpisodesProvider>().ToSelf();
-                _kernel.Bind<DiskProvider>().ToSelf();
-                _kernel.Bind<SabProvider>().ToSelf();
-                _kernel.Bind<HistoryProvider>().ToSelf();
-                _kernel.Bind<RootDirProvider>().ToSelf();
-                _kernel.Bind<ExternalNotificationProvider>().ToSelf();
-                _kernel.Bind<XbmcProvider>().ToSelf();
-                _kernel.Bind<PostProcessingProvider>().ToSelf();
+                _kernel.Bind<EpisodeProvider>().ToSelf().InSingletonScope();
+                _kernel.Bind<UpcomingEpisodesProvider>().ToSelf().InSingletonScope();
+                _kernel.Bind<DiskProvider>().ToSelf().InSingletonScope();
+                _kernel.Bind<SabProvider>().ToSelf().InSingletonScope();
+                _kernel.Bind<HistoryProvider>().ToSelf().InSingletonScope();
+                _kernel.Bind<RootDirProvider>().ToSelf().InSingletonScope();
+                _kernel.Bind<ExternalNotificationProvider>().ToSelf().InSingletonScope();
+                _kernel.Bind<XbmcProvider>().ToSelf().InSingletonScope();
+                _kernel.Bind<PostProcessingProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<IConfigProvider>().To<ConfigProvider>().InSingletonScope();
                 _kernel.Bind<ISyncProvider>().To<SyncProvider>().InSingletonScope();
                 _kernel.Bind<IndexerProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<RenameProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<NotificationProvider>().ToSelf().InSingletonScope();
-                _kernel.Bind<ILogProvider>().To<LogProvider>().InSingletonScope();
+                _kernel.Bind<LogProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<IMediaFileProvider>().To<MediaFileProvider>().InSingletonScope();
                 _kernel.Bind<TimerProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<IRepository>().ToMethod(c => new SimpleRepository(dbProvider, SimpleRepositoryOptions.RunMigrations)).InSingletonScope();

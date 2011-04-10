@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
+using AutoMoq;
 using FizzWare.NBuilder;
 using Gallio.Framework;
 using MbUnit.Framework;
@@ -41,32 +42,29 @@ namespace NzbDrone.Core.Test
             var fakeEpisode = Builder<Episode>.CreateNew().With(c => c.SeriesId = fakeSeries.SeriesId).Build();
 
             //Mocks
-            var repository = new Mock<IRepository>();
-            repository.Setup(r => r.Exists<EpisodeFile>(It.IsAny<Expression<Func<EpisodeFile, Boolean>>>())).Returns(false).Verifiable();
-            repository.Setup(r => r.Add(It.IsAny<EpisodeFile>())).Returns(0).Verifiable();
+            var mocker = new AutoMoqer();
 
-            var episodeProvider = new Mock<IEpisodeProvider>();
-            episodeProvider.Setup(e => e.GetEpisode(fakeSeries.SeriesId, seasonNumber, episodeNumner)).Returns(fakeEpisode).Verifiable();
+            mocker.GetMock<IRepository>()
+            .Setup(r => r.Exists<EpisodeFile>(It.IsAny<Expression<Func<EpisodeFile, Boolean>>>())).Returns(false).Verifiable();
+            mocker.GetMock<IRepository>()
+            .Setup(r => r.Add(It.IsAny<EpisodeFile>())).Returns(0).Verifiable();
 
-            var diskProvider = new Mock<DiskProvider>();
-            diskProvider.Setup(e => e.GetSize(fileName)).Returns(12345).Verifiable();
+            mocker.GetMock<EpisodeProvider>()
+            .Setup(e => e.GetEpisode(fakeSeries.SeriesId, seasonNumber, episodeNumner)).Returns(fakeEpisode).Verifiable();
 
-            var kernel = new MockingKernel();
-            kernel.Bind<IRepository>().ToConstant(repository.Object);
+            mocker.GetMock<DiskProvider>()
+           .Setup(e => e.GetSize(fileName)).Returns(12345).Verifiable();
 
-            kernel.Bind<IEpisodeProvider>().ToConstant(episodeProvider.Object);
-            kernel.Bind<DiskProvider>().ToConstant(diskProvider.Object);
-            kernel.Bind<IMediaFileProvider>().To<MediaFileProvider>();
 
             //Act
-            var result = kernel.Get<IMediaFileProvider>().ImportFile(fakeSeries, fileName);
+            var result = mocker.Resolve<MediaFileProvider>().ImportFile(fakeSeries, fileName);
 
             //Assert
-            repository.VerifyAll();
-            episodeProvider.VerifyAll();
-            diskProvider.VerifyAll();
             Assert.IsNotNull(result);
-            repository.Verify(r => r.Add<EpisodeFile>(result), Times.Once());
+            mocker.GetMock<IRepository>().VerifyAll();
+            mocker.GetMock<IRepository>().Verify(r => r.Add<EpisodeFile>(result), Times.Once());
+            mocker.GetMock<EpisodeProvider>().VerifyAll();
+            mocker.GetMock<DiskProvider>().VerifyAll();
 
             //Currently can't verify this since the list of episodes are loaded
             //Dynamically by SubSonic
@@ -93,31 +91,25 @@ namespace NzbDrone.Core.Test
 
             //Fakes
             var fakeSeries = Builder<Series>.CreateNew().Build();
-            var fakeEpisode = Builder<Episode>.CreateNew().With(c => c.SeriesId = fakeSeries.SeriesId).Build();
 
             //Mocks
-            var repository = new Mock<IRepository>(MockBehavior.Strict);
-            repository.Setup(r => r.Exists<EpisodeFile>(It.IsAny<Expression<Func<EpisodeFile, Boolean>>>())).Returns(true).Verifiable();
 
-            var episodeProvider = new Mock<IEpisodeProvider>(MockBehavior.Strict);
-            var diskProvider = new Mock<DiskProvider>(MockBehavior.Strict);
+            var mocker = new AutoMoqer();
+            mocker.GetMock<IRepository>(MockBehavior.Strict)
+                .Setup(r => r.Exists<EpisodeFile>(It.IsAny<Expression<Func<EpisodeFile, Boolean>>>())).Returns(true).Verifiable();
+            mocker.GetMock<EpisodeProvider>(MockBehavior.Strict);
+            mocker.GetMock<DiskProvider>(MockBehavior.Strict);
 
-            var kernel = new MockingKernel();
-            kernel.Bind<IRepository>().ToConstant(repository.Object);
-
-            kernel.Bind<IEpisodeProvider>().ToConstant(episodeProvider.Object);
-            kernel.Bind<DiskProvider>().ToConstant(diskProvider.Object);
-            kernel.Bind<IMediaFileProvider>().To<MediaFileProvider>();
 
             //Act
-            var result = kernel.Get<IMediaFileProvider>().ImportFile(fakeSeries, fileName);
+            var result = mocker.Resolve<MediaFileProvider>().ImportFile(fakeSeries, fileName);
 
             //Assert
-            repository.VerifyAll();
-            episodeProvider.VerifyAll();
-            diskProvider.VerifyAll();
+            mocker.GetMock<IRepository>().VerifyAll();
+            mocker.GetMock<EpisodeProvider>().VerifyAll();
+            mocker.GetMock<DiskProvider>(MockBehavior.Strict).VerifyAll();
             Assert.IsNull(result);
-            repository.Verify(r => r.Add<EpisodeFile>(result), Times.Never());
+            mocker.GetMock<IRepository>().Verify(r => r.Add<EpisodeFile>(result), Times.Never());
         }
 
         [Test]
@@ -136,30 +128,23 @@ namespace NzbDrone.Core.Test
             var fakeSeries = Builder<Series>.CreateNew().Build();
 
             //Mocks
-            var repository = new Mock<IRepository>(MockBehavior.Strict);
-            repository.Setup(r => r.Exists<EpisodeFile>(It.IsAny<Expression<Func<EpisodeFile, Boolean>>>())).Returns(false).Verifiable();
+            var mocker = new AutoMoqer();
+            mocker.GetMock<IRepository>(MockBehavior.Strict)
+            .Setup(r => r.Exists<EpisodeFile>(It.IsAny<Expression<Func<EpisodeFile, Boolean>>>())).Returns(false).Verifiable();
 
-            var episodeProvider = new Mock<IEpisodeProvider>(MockBehavior.Strict);
-            episodeProvider.Setup(e => e.GetEpisode(fakeSeries.SeriesId, seasonNumber, episodeNumner)).Returns<Episode>(null).Verifiable();
+            mocker.GetMock<EpisodeProvider>(MockBehavior.Strict)
+            .Setup(e => e.GetEpisode(fakeSeries.SeriesId, seasonNumber, episodeNumner)).Returns<Episode>(null).Verifiable();
 
-            var diskProvider = new Mock<DiskProvider>(MockBehavior.Strict);
+            mocker.GetMock<DiskProvider>(MockBehavior.Strict);
 
-
-            var kernel = new MockingKernel();
-            kernel.Bind<IRepository>().ToConstant(repository.Object);
-            kernel.Bind<IEpisodeProvider>().ToConstant(episodeProvider.Object);
-            kernel.Bind<DiskProvider>().ToConstant(diskProvider.Object);
-            kernel.Bind<IMediaFileProvider>().To<MediaFileProvider>();
 
             //Act
-            var result = kernel.Get<IMediaFileProvider>().ImportFile(fakeSeries, fileName);
+            var result = mocker.Resolve<MediaFileProvider>().ImportFile(fakeSeries, fileName);
 
             //Assert
-            repository.VerifyAll();
-            episodeProvider.VerifyAll();
-            diskProvider.VerifyAll();
+            mocker.VerifyAllMocks();
             Assert.IsNull(result);
-            repository.Verify(r => r.Add<EpisodeFile>(result), Times.Never());
+            mocker.GetMock<IRepository>().Verify(r => r.Add<EpisodeFile>(result), Times.Never());
         }
 
 

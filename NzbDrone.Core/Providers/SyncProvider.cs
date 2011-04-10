@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Providers
     public class SyncProvider : ISyncProvider
     {
         private readonly SeriesProvider _seriesProvider;
-        private readonly IEpisodeProvider _episodeProvider;
+        private readonly EpisodeProvider _episodeProvider;
         private readonly IMediaFileProvider _mediaFileProvider;
         private readonly NotificationProvider _notificationProvider;
         private readonly DiskProvider _diskProvider;
@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Providers
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public SyncProvider(SeriesProvider seriesProvider, IEpisodeProvider episodeProvider,
+        public SyncProvider(SeriesProvider seriesProvider, EpisodeProvider episodeProvider,
             IMediaFileProvider mediaFileProvider, NotificationProvider notificationProvider,
             DiskProvider diskProvider)
         {

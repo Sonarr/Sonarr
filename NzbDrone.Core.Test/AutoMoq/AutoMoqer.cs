@@ -36,14 +36,23 @@ namespace AutoMoq
             return result;
         }
 
-        public virtual Mock<T> GetMock<T>() where T : class
+        public virtual Mock<T> GetMock<T>(MockBehavior behavior = MockBehavior.Default) where T : class
         {
             ResolveType = null;
             var type = GetTheMockType<T>();
             if (GetMockHasNotBeenCalledForThisType(type))
-                CreateANewMockAndRegisterIt<T>(type);
+            {
+                CreateANewMockAndRegisterIt<T>(type, behavior);
+            }
 
-            return TheRegisteredMockForThisType<T>(type);
+            var mock = TheRegisteredMockForThisType<T>(type);
+
+            if (behavior != MockBehavior.Default && mock.Behavior == MockBehavior.Default)
+            {
+                throw new InvalidOperationException("Unable to change be behaviour of a an existing mock.");
+            }
+
+            return mock;
         }
 
         internal virtual void SetMock(Type type, Mock mock)
@@ -80,9 +89,9 @@ namespace AutoMoq
             return (Mock<T>)registeredMocks.Where(x => x.Key == type).First().Value;
         }
 
-        private void CreateANewMockAndRegisterIt<T>(Type type) where T : class
+        private void CreateANewMockAndRegisterIt<T>(Type type, MockBehavior behavior) where T : class
         {
-            var mock = new Mock<T>();
+            var mock = new Mock<T>(behavior);
             container.RegisterInstance(mock.Object);
             SetMock(type, mock);
         }
@@ -127,6 +136,15 @@ namespace AutoMoq
         public void Verify<T>(Expression<Action<T>> expression, Times times, string failMessage) where T : class
         {
             GetMock<T>().Verify(expression, times, failMessage);
+        }
+
+        public void VerifyAllMocks()
+        {
+            foreach (var registeredMock in registeredMocks)
+            {
+                var mock = registeredMock.Value as Mock;
+                mock.VerifyAll();
+            }
         }
 
     }

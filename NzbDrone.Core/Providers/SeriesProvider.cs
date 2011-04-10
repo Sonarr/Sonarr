@@ -34,6 +34,10 @@ namespace NzbDrone.Core.Providers
             _quality = quality;
         }
 
+        public SeriesProvider()
+        {
+        }
+
         #region SeriesProvider Members
 
         public virtual IQueryable<Series> GetAllSeries()

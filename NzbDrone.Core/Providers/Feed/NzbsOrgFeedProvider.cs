@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Providers.Feed
 {
     class NzbsOrgFeedProvider : FeedProviderBase
     {
-        public NzbsOrgFeedProvider(SeriesProvider seriesProvider, ISeasonProvider seasonProvider, IEpisodeProvider episodeProvider, IConfigProvider configProvider, HttpProvider httpProvider)
+        public NzbsOrgFeedProvider(SeriesProvider seriesProvider, ISeasonProvider seasonProvider, EpisodeProvider episodeProvider, IConfigProvider configProvider, HttpProvider httpProvider)
             : base(seriesProvider, seasonProvider, episodeProvider, configProvider, httpProvider)
         {
         }

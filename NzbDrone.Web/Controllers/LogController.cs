@@ -11,9 +11,9 @@ namespace NzbDrone.Web.Controllers
 {
     public class LogController : Controller
     {
-        private readonly ILogProvider _logProvider;
+        private readonly LogProvider _logProvider;
 
-        public LogController(ILogProvider logProvider)
+        public LogController(LogProvider logProvider)
         {
             _logProvider = logProvider;
         }

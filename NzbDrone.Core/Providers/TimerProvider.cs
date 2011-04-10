@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Providers
         private readonly RssSyncProvider _rssSyncProvider;
         private readonly SeriesProvider _seriesProvider;
         private readonly ISeasonProvider _seasonProvider;
-        private readonly IEpisodeProvider _episodeProvider;
+        private readonly EpisodeProvider _episodeProvider;
         private readonly IMediaFileProvider _mediaFileProvider;
 
         private Timer _rssSyncTimer;
@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Providers
         private DateTime _rssSyncNextInterval;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public TimerProvider(RssSyncProvider rssSyncProvider, SeriesProvider seriesProvider, ISeasonProvider seasonProvider, IEpisodeProvider episodeProvider, IMediaFileProvider mediaFileProvider)
+        public TimerProvider(RssSyncProvider rssSyncProvider, SeriesProvider seriesProvider, ISeasonProvider seasonProvider, EpisodeProvider episodeProvider, IMediaFileProvider mediaFileProvider)
         {
             _rssSyncProvider = rssSyncProvider;
             _seriesProvider = seriesProvider;
@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Providers
             double interval = _rssSyncTimer.Interval;
             _rssSyncTimer.Interval = interval;
         }
-               
+
         public virtual void StartRssSyncTimer()
         {
             if (_rssSyncTimer.Interval < 900000) //If Timer is less than 15 minutes, throw an error! This should also be handled when saving the config, though a user could by-pass it by editing the DB directly... TNO (Trust No One)
@@ -53,34 +53,34 @@ namespace NzbDrone.Core.Providers
             _rssSyncTimer.Start();
             _rssSyncNextInterval = DateTime.Now.AddMilliseconds(_rssSyncTimer.Interval);
         }
-               
+
         public virtual void StopRssSyncTimer()
         {
             _rssSyncTimer.Stop();
         }
-               
+
         public virtual void SetRssSyncTimer(int minutes)
         {
             long ms = minutes * 60 * 1000;
             _rssSyncTimer.Interval = ms;
         }
-               
+
         public virtual TimeSpan RssSyncTimeLeft()
         {
             return _rssSyncNextInterval.Subtract(DateTime.Now);
         }
-               
+
         public virtual DateTime NextRssSyncTime()
         {
             return _rssSyncNextInterval;
         }
-               
+
         public virtual void StartMinuteTimer()
         {
             _minuteTimer.Elapsed += new ElapsedEventHandler(MinuteTimer_Elapsed);
             _minuteTimer.Start();
         }
-               
+
         public virtual void StopMinuteTimer()
         {
             _minuteTimer.Stop();

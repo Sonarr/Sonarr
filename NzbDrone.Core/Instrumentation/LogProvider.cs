@@ -8,7 +8,7 @@ using SubSonic.Repository;
 namespace NzbDrone.Core.Instrumentation
 {
 
-    public class LogProvider : ILogProvider
+    public class LogProvider
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IRepository _repository;

@@ -17,12 +17,12 @@ namespace NzbDrone.Core.Providers
         private readonly IRepository _repository;
         private readonly IConfigProvider _configProvider;
         private readonly DiskProvider _diskProvider;
-        private readonly IEpisodeProvider _episodeProvider;
+        private readonly EpisodeProvider _episodeProvider;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static readonly string[] MediaExtentions = new[] { "*.mkv", "*.avi", "*.wmv" };
 
-        public MediaFileProvider(IRepository repository, IConfigProvider configProvider, DiskProvider diskProvider, IEpisodeProvider episodeProvider)
+        public MediaFileProvider(IRepository repository, IConfigProvider configProvider, DiskProvider diskProvider, EpisodeProvider episodeProvider)
         {
             _repository = repository;
             _configProvider = configProvider;
@@ -145,7 +145,7 @@ namespace NzbDrone.Core.Providers
             }
         }
 
-   
+
         public void DeleteFromDb(int fileId)
         {
             _repository.Delete<EpisodeFile>(fileId);
