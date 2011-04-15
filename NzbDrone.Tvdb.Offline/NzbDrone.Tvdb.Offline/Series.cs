@@ -10,19 +10,27 @@ namespace NzbDrone.Tvdb.Offline
 
         public string Title { get; set; }
 
+        [SubSonicNullString]
         public string CleanTitle { get; set; }
 
+        [SubSonicNullString]
         public string Status { get; set; }
 
+        public Boolean? Active { get; set; }
+
+        [SubSonicNullString]
         public string Overview { get; set; }
 
+        [SubSonicNullString]
         public string AirsDayOfWeek { get; set; }
+
+        public int? WeekDay { get; set; }
 
         public String AirTimes { get; set; }
 
-        public int RateCount { get; set; }
+        public int? RateCount { get; set; }
 
-        public decimal Rating { get; set; }
+        public decimal? Rating { get; set; }
 
         [SubSonicIgnore]
         public String Path { get; set; }

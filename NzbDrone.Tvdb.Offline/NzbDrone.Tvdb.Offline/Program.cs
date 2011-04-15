@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Xml.Linq;
 using Ionic.Zip;
+using Ionic.Zlib;
 using NLog;
 using NLog.Config;
 using SubSonic.DataProviders;
@@ -19,23 +20,41 @@ namespace NzbDrone.Tvdb.Offline
         static Logger _logger = LogManager.GetLogger("Main");
         private static DirectoryInfo _target;
         private static DirectoryInfo _temp;
-
+        private static bool _cleanDb;
+        private static string dbPath;
 
         static void Main(string[] args)
         {
             SetupLogger();
             _logger.Info("Starting TVDB Offline...");
-            GetPath(args);
+            ProcessArguments(args);
 
-            Start();
+            if (_cleanDb)
+            {
+                CleanUpDb();
+            }
+            else
+            {
+                CreateNewDb();
+            }
 
+
+            if (!String.IsNullOrWhiteSpace(dbPath))
+            {
+                using (ZipFile zip = new ZipFile())
+                {
+                    _logger.Info("Compressing database file");
+                    zip.CompressionLevel = CompressionLevel.BestCompression;
+                    zip.AddFiles(new[] { dbPath });
+                    zip.Save(dbPath + ".zip");
+                }
+            }
 
             Console.WriteLine("Press any key to exit...");
             Console.ReadLine();
         }
 
-
-        private static void Start()
+        private static void CreateNewDb()
         {
             _logger.Info("Starting to generate offline DB...");
             var files = _target.GetFiles("*.zip");
@@ -43,7 +62,7 @@ namespace NzbDrone.Tvdb.Offline
 
             var list = new Dictionary<int, Series>();
 
-            var repo = InitSubsonic();
+            var repo = InitSubsonic(true);
             decimal progress = 0;
             foreach (var fileInfo in files)
             {
@@ -123,23 +142,23 @@ namespace NzbDrone.Tvdb.Offline
 
         }
 
-        private static IRepository InitSubsonic()
+        private static IRepository InitSubsonic(bool purge, string name = "")
         {
-            var path = Path.Combine(_temp.FullName, "series_data.db");
-            _logger.Info("Creating Database file at {0}", path);
+            dbPath = Path.Combine(_temp.FullName, "series_data" + name + ".db");
+            _logger.Info("Loading Database file at {0}", dbPath);
 
-            if (File.Exists(path))
+            if (purge && File.Exists(dbPath))
             {
-                File.Delete(path);
+                File.Delete(dbPath);
             }
 
-            string logConnectionString = String.Format("Data Source={0};Version=3;", path);
+            string logConnectionString = String.Format("Data Source={0};Version=3;", dbPath);
             var provider = ProviderFactory.GetProvider(logConnectionString, "System.Data.SQLite");
 
             return new SimpleRepository(provider, SimpleRepositoryOptions.RunMigrations);
         }
 
-        private static void GetPath(string[] args)
+        private static void ProcessArguments(string[] args)
         {
             if (args == null || args.Count() == 0 || string.IsNullOrWhiteSpace(args[0]))
             {
@@ -155,12 +174,15 @@ namespace NzbDrone.Tvdb.Offline
                 Environment.Exit(0);
             }
 
+            if (args.Count() > 1 && !string.IsNullOrWhiteSpace(args[1]) && args[1].Trim().ToLower() == "/clean")
+            {
+                _cleanDb = true;
+            }
             _logger.Info("Target Path '[{0}]'", _target.FullName);
 
             _logger.Debug("Creating temporary folder");
             _temp = _target.CreateSubdirectory("temp");
         }
-
 
         private static void SetupLogger()
         {
@@ -176,6 +198,94 @@ namespace NzbDrone.Tvdb.Offline
                 Console.WriteLine(e.ToString());
             }
 
+        }
+
+        private static void CleanUpDb()
+        {
+            _logger.Info("Cleaning up database");
+            var repo = InitSubsonic(false);
+            var series = repo.All<Series>().ToList();
+            var cleanSeries = new List<Series>();
+            decimal progress = 0;
+
+            foreach (var item in series)
+            {
+                Console.Write("\r{0:0.0}%", progress * 100 / series.Count());
+
+                var clean = CleanSeries(item);
+
+                if (clean != null)
+                {
+                    cleanSeries.Add(clean);
+                }
+
+
+                progress++;
+            }
+
+            repo = InitSubsonic(true, "_cleanTitle");
+            _logger.Info("Writing clean list to database");
+            repo.AddMany(cleanSeries);
+        }
+
+
+        private static Series CleanSeries(Series series)
+        {
+            if (String.IsNullOrWhiteSpace(series.Title))
+            {
+                return null;
+            }
+
+            if (String.IsNullOrWhiteSpace(series.AirsDayOfWeek))
+            {
+                series.AirsDayOfWeek = null;
+            }
+            else
+            {
+                //if (series.AirsDayOfWeek.ToLower() == "daily")
+                //{
+                //    series.WeekDay = 8;
+                //}
+                //else
+                //{
+                //    DayOfWeek weekdayEnum;
+                //    if (Enum.TryParse(series.AirsDayOfWeek, true, out weekdayEnum))
+                //    {
+                //        series.WeekDay = (int)weekdayEnum;
+                //    }
+                //    else
+                //    {
+                //        _logger.Warn("Can't parse weekday enum " + series.AirsDayOfWeek);
+                //    }
+                //}
+                if (String.IsNullOrWhiteSpace(series.AirsDayOfWeek))
+                {
+                    series.AirsDayOfWeek = null;
+                }
+            }
+
+            if (String.IsNullOrWhiteSpace(series.Status))
+            {
+                series.Active = null;
+            }
+            else if (series.Status == "Ended")
+            {
+                series.Active = false;
+            }
+            else if (series.Status == "Continuing")
+            {
+                series.Active = true;
+            }
+            else
+            {
+                _logger.Warn("Can't parse status " + series.Status);
+            }
+
+            series.Status = null;
+            series.Overview = null;
+            series.CleanTitle = null;
+
+            return series;
         }
     }
 }
