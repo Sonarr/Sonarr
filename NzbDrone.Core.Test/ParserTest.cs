@@ -10,6 +10,7 @@ namespace NzbDrone.Core.Test
         /*Fucked-up hall of shame,
          * WWE.Wrestlemania.27.PPV.HDTV.XviD-KYR
          * The.Kennedys.Part.2.DSR.XviD-SYS
+         * 
          */
 
 
@@ -30,7 +31,7 @@ namespace NzbDrone.Core.Test
         [Row(@"The Event S01E14 A Message Back 720p WEB DL DD5 1 H264 SURFER", 1, 14)]
         [Row(@"Adam Hills In Gordon St Tonight S01E07 WS PDTV XviD FUtV", 1, 7)]
         [Row(@"Adam Hills In Gordon St Tonight S01E07 WS PDTV XviD FUtV", 1, 7)]
-        [Row("The.Kennedys.Part.2.DSR.XviD-SYS", 1, 2)]
+        //[Row("The.Kennedys.Part.2.DSR.XviD-SYS", 1, 2)]
         public void episode_parse(string path, int season, int episode)
         {
             var result = Parser.ParseEpisodeInfo(path);
@@ -65,9 +66,13 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
-        [Row("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD", 3, new[] { 2, 3, 4, 5, 6 })]
-        //[Row("Two.and.a.Half.Men.103.104.720p.HDTV.X264-DIMENSION", 1, new[] {3, 4})]
-        //[Row("The.Kennedys.Part.1.and.Part.2.DSR.XviD-SYS", 1, new[] {1, 2})]
+        [Row("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD", 3, new[] { 1, 2, 3, 4, 5, 6 })]
+        [Row("Two.and.a.Half.Men.103.104.720p.HDTV.X264-DIMENSION", 1, new[] {3, 4})]
+        [Row("Weeds.S03E01.S03E02.720p.HDTV.X264-DIMENSION", 3, new[] {1, 2})]
+        [Row("The Borgias S01e01 e02 ShoHD On Demand 1080i DD5 1 ALANiS", 1, new[] { 1, 2 })]
+        [Row("Big Time Rush 1x01 to 10 480i DD2 0 Sianto", 1, new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 })]
+        [Row("White.Collar.2x04.2x05.720p.BluRay-FUTV", 2, new[] { 4, 5 })]
+        //[Row("The.Kennedys.Part.1.and.Part.2.DSR.XviD-SYS", 1, new[] { 1, 2 })]
         public void episode_multipart_parse(string path, int season, int[] episodes)
         {
             var result = Parser.ParseEpisodeInfo(path);

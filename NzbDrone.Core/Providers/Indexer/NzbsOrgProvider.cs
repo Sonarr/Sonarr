@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Providers.Indexer
             {
                 return new[]
                                    {
-                                       string.Format("http://nzbs.org/rss.php?type=1&i={0}&h={1}", _configProvider.NzbsOrgUId, _configProvider.NzbsOrgHash)
+                                       string.Format("http://nzbs.org/rss.php?type=1&i={0}&h={1}&num=50&dl=1", _configProvider.NzbsOrgUId, _configProvider.NzbsOrgHash)
                                    };
             }
         }
@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Providers.Indexer
 
         protected override string NzbDownloadUrl(SyndicationItem item)
         {
-            return item.Id.Replace("action=view", "action=getnzb");
+            return item.Id;
         }
 
 
