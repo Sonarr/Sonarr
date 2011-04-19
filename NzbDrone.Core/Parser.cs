@@ -244,11 +244,10 @@ namespace NzbDrone.Core
             return NormalizeRegex.Replace(title, String.Empty).ToLower();
         }
 
-        //Note: changing case on path is a problem for running on mono/*nix
-        //Not going to change the casing any more... Looks Ugly in UI anyways :P
+
         public static string NormalizePath(string path)
         {
-            if (String.IsNullOrEmpty(path))
+            if (String.IsNullOrWhiteSpace(path))
                 throw new ArgumentException("Path can not be null or empty");
 
             var info = new FileInfo(path);
