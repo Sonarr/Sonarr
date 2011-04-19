@@ -21,8 +21,9 @@
         $("#result").empty().html(responseText);
         $("#form :input").attr("disabled", false);
     }
-    
 
+    
+    
 </script>
 <style type="text/css">
     #sortable
@@ -69,7 +70,7 @@
         <%
         for (int i = 0; i < Model.Indexers.Count(); i++)
         {%>
-        <li class="ui-state-default" id="<%=Model.Indexers[i].Id%>">
+        <li class="ui-state-default" id="<%=Model.Indexers[i].Id%> ">
             <%=Html.CheckBoxFor(c => c.Indexers[i].Enable)%><%=Html.DisplayTextFor(c => c.Indexers[i].Name)%></li>
         <%
         }%>
