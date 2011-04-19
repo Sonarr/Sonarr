@@ -15,10 +15,10 @@ namespace NzbDrone.Core
         private static readonly Regex[] ReportTitleRegex = new[]
                                                                {
                                                                    new Regex(
-                                                                       @"(?<title>.+?)?\W?(?<year>\d+?)?\WS?(?<season>\d+)(?:\-|\.|[a-z])(?<episode>\d+)\W(?!\\)",
+                                                                       @"(?<title>.+?)?\W?(?<year>\d{4}?)?(?:\WS?(?<season>\d{1,2})(?:(?:\-|\.|[ex]|\s|to)+(?<episode>\d+))+)+\W?(?!\\)",
                                                                        RegexOptions.IgnoreCase | RegexOptions.Compiled),
                                                                    new Regex(
-                                                                       @"(?<title>.+?)?\W?(?<year>\d+?)?\WS?(?<season>\d+)(?<episode>\d{2})\W(?!\\)",
+                                                                       @"(?<title>.+?)?\W?(?<year>\d{4}?)?(?:\W(?<season>\d+)(?<episode>\d{2}))+\W?(?!\\)",
                                                                        RegexOptions.IgnoreCase | RegexOptions.Compiled)
                                                                    //Supports 103/113 naming
                                                                };
@@ -45,7 +45,9 @@ namespace NzbDrone.Core
 
             foreach (var regex in ReportTitleRegex)
             {
-                var match = regex.Matches(title);
+                var simpleTitle = Regex.Replace(title, @"480[i|p]|720[i|p]|1080[i|p]|[x|h]264", String.Empty, RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+                var match = regex.Matches(simpleTitle);
 
                 if (match.Count != 0)
                 {
@@ -69,7 +71,22 @@ namespace NzbDrone.Core
 
                     foreach (Match matchGroup in match)
                     {
-                        parsedEpisode.Episodes.Add(Convert.ToInt32(matchGroup.Groups["episode"].Value));
+                        var count = matchGroup.Groups["episode"].Captures.Count;
+                        var first = Convert.ToInt32(matchGroup.Groups["episode"].Captures[0].Value);
+                        var last = Convert.ToInt32(matchGroup.Groups["episode"].Captures[count - 1].Value);
+
+                        for (int i = first; i <= last; i++)
+                        {
+                            parsedEpisode.Episodes.Add(i);
+                        }
+
+                        //else
+                        //{
+                        //    foreach (Capture ep in matchGroup.Groups["episode"].Captures)
+                        //    {
+                        //        parsedEpisode.Episodes.Add(Convert.ToInt32(ep.Value));
+                        //    }
+                        //}
                     }
 
                     parsedEpisode.Quality = ParseQuality(title);

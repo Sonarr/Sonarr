@@ -169,6 +169,8 @@
     <Compile Include="Instrumentation\SubsonicTarget.cs" />
     <Compile Include="Instrumentation\ExceptioneerTarget.cs" />
     <Compile Include="Instrumentation\NlogWriter.cs" />
+    <Compile Include="Providers\Indexer\NzbMatrixFeedProvider.cs" />
+    <Compile Include="Providers\Indexer\NzbsRUsFeedProvider.cs" />
     <Compile Include="Repository\IndexerSetting.cs" />
     <Compile Include="Model\EpisodeParseResult.cs" />
     <Compile Include="Model\EpisodeRenameModel.cs" />
