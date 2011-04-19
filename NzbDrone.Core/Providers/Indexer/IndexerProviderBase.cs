@@ -2,39 +2,45 @@
 using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
+using NzbDrone.Core.Repository;
+using SubSonic.Repository;
 
-namespace NzbDrone.Core.Providers.Feed
+namespace NzbDrone.Core.Providers.Indexer
 {
-    public abstract class FeedProviderBase
+    public abstract class IndexerProviderBase
     {
         protected static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         protected readonly ConfigProvider _configProvider;
         protected readonly EpisodeProvider _episodeProvider;
         private readonly HttpProvider _httpProvider;
+        protected readonly IRepository _repository;
+        private readonly IndexerProvider _indexerProvider;
         protected readonly SeasonProvider _seasonProvider;
         protected readonly SeriesProvider _seriesProvider;
 
-        public FeedProviderBase(SeriesProvider seriesProvider, SeasonProvider seasonProvider,
+
+        public IndexerProviderBase(SeriesProvider seriesProvider, SeasonProvider seasonProvider,
                                 EpisodeProvider episodeProvider, ConfigProvider configProvider,
-                                HttpProvider httpProvider)
+                                HttpProvider httpProvider, IRepository repository, IndexerProvider indexerProvider)
         {
             _seriesProvider = seriesProvider;
             _seasonProvider = seasonProvider;
             _episodeProvider = episodeProvider;
             _configProvider = configProvider;
             _httpProvider = httpProvider;
+            _repository = repository;
+            _indexerProvider = indexerProvider;
         }
-
 
         /// <summary>
         ///   Gets the source URL for the feed
         /// </summary>
-        protected abstract string[] URL { get; }
+        protected abstract string[] Url { get; }
 
         /// <summary>
-        ///   Gets the name for this feed
+        ///   Gets the name for the feed
         /// </summary>
-        protected abstract string Name { get; }
+        public abstract string Name { get; }
 
 
         /// <summary>
@@ -74,9 +80,9 @@ namespace NzbDrone.Core.Providers.Feed
         /// </summary>
         public void Fetch()
         {
-            Logger.Info("Fetching feeds from " + Name);
+            Logger.Info("Fetching feeds from " + Settings.Name);
 
-            foreach (var url in URL)
+            foreach (var url in Url)
             {
                 Logger.Debug("Downloading RSS " + url);
                 var feed = SyndicationFeed.Load(_httpProvider.DownloadXml(url)).Items;
@@ -87,7 +93,7 @@ namespace NzbDrone.Core.Providers.Feed
                 }
             }
 
-            Logger.Info("Finished processing feeds from " + Name);
+            Logger.Info("Finished processing feeds from " + Settings.Name);
         }
 
         private void ProcessItem(SyndicationItem feedItem)
@@ -119,5 +125,17 @@ namespace NzbDrone.Core.Providers.Feed
                 }
             }
         }
+
+        protected IndexerSetting Settings
+        {
+            get
+            {
+                return _indexerProvider.GetSettings(GetType());
+            }
+        }
+
+
+
+
     }
 }

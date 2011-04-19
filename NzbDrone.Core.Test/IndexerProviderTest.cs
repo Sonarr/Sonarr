@@ -1,9 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.ServiceModel.Syndication;
+using System.Xml;
+using AutoMoq;
+using FizzWare.NBuilder;
 using MbUnit.Framework;
 using Moq;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
+using NzbDrone.Core.Providers.Indexer;
 using NzbDrone.Core.Repository;
 using SubSonic.Repository;
 
@@ -11,69 +17,65 @@ namespace NzbDrone.Core.Test
 {
     [TestFixture]
     public class IndexerProviderTest
+    // ReSharper disable InconsistentNaming
     {
         [Test]
-        public void AllIndexers()
+        public void Download_feed_test()
         {
-            //
-            // TODO: Add test logic here
-            //
+            var mocker = new AutoMoqer();
 
-            //Setup
-            var list = new List<Indexer>();
-            list.Add(new Indexer
-                         {IndexerName = "Test1", RssUrl = "http://www.test1.com/rss.php", Enabled = true, Order = 1});
-            list.Add(new Indexer
-                         {IndexerName = "Test2", RssUrl = "http://www.test2.com/rss.php", Enabled = false, Order = 4});
-            list.Add(new Indexer
-                         {IndexerName = "Test3", RssUrl = "http://www.test3.com/rss.php", Enabled = true, Order = 3});
-            list.Add(new Indexer
-                         {IndexerName = "Test4", RssUrl = "http://www.test4.com/rss.php", Enabled = false, Order = 2});
+            var xmlReader = XmlReader.Create(File.OpenRead(".\\Files\\Rss\\nzbsorg.xml"));
 
-            var repo = new Mock<IRepository>();
-            var config = new Mock<ConfigProvider>();
-            repo.Setup(r => r.All<Indexer>()).Returns(list.AsQueryable());
+            mocker.GetMock<HttpProvider>()
+                .Setup(h => h.DownloadXml(It.IsAny<String>()))
+                .Returns(xmlReader);
 
-            var target = new IndexerProvider(repo.Object, config.Object);
+            var fakeSettings = Builder<IndexerSetting>.CreateNew().Build();
+            mocker.GetMock<IndexerProvider>()
+                .Setup(c => c.GetSettings(It.IsAny<Type>()))
+                .Returns(fakeSettings);
 
-            //Act
-            var result = target.AllIndexers();
-
-            //Assert
-
-            Assert.AreEqual(result.Last().IndexerName, "Test2");
+            mocker.Resolve<MockIndexerProvider>().Fetch();
         }
 
         [Test]
-        public void EnabledIndexers()
+        public void Init_indexer_test()
         {
-            //
-            // TODO: Add test logic here
-            //
+            var mocker = new AutoMoqer();
 
-            //Setup
-            var list = new List<Indexer>();
-            list.Add(new Indexer
-                         {IndexerName = "Test1", RssUrl = "http://www.test1.com/rss.php", Enabled = true, Order = 1});
-            list.Add(new Indexer
-                         {IndexerName = "Test2", RssUrl = "http://www.test2.com/rss.php", Enabled = false, Order = 4});
-            list.Add(new Indexer
-                         {IndexerName = "Test3", RssUrl = "http://www.test3.com/rss.php", Enabled = true, Order = 3});
-            list.Add(new Indexer
-                         {IndexerName = "Test4", RssUrl = "http://www.test4.com/rss.php", Enabled = false, Order = 2});
-
-            var repo = new Mock<IRepository>();
-            var config = new Mock<ConfigProvider>();
-            repo.Setup(r => r.All<Indexer>()).Returns(list.AsQueryable());
-
-            var target = new IndexerProvider(repo.Object, config.Object);
+            mocker.SetConstant(MockLib.GetEmptyRepository());
 
             //Act
-            var result = target.EnabledIndexers();
+            var indexerProvider = mocker.Resolve<IndexerProvider>();
+            indexerProvider.InitializeIndexers(new List<IndexerProviderBase>() { mocker.Resolve<MockIndexerProvider>() });
+            var indexers = indexerProvider.AllIndexers();
 
             //Assert
-            Assert.AreEqual(result.First().IndexerName, "Test1");
-            Assert.AreEqual(result.Last().IndexerName, "Test3");
+            Assert.Count(1, indexers);
+        }
+    }
+
+    public class MockIndexerProvider : IndexerProviderBase
+    {
+        public MockIndexerProvider(SeriesProvider seriesProvider, SeasonProvider seasonProvider, EpisodeProvider episodeProvider, ConfigProvider configProvider, HttpProvider httpProvider, IRepository repository, IndexerProvider indexerProvider)
+            : base(seriesProvider, seasonProvider, episodeProvider, configProvider, httpProvider, repository, indexerProvider)
+        {
+        }
+
+        protected override string[] Url
+        {
+            get { return new[] { "www.google.com" }; }
+        }
+
+        public override string Name
+        {
+            get { return "Mocked Indexer"; }
+        }
+
+
+        protected override string NzbDownloadUrl(SyndicationItem item)
+        {
+            return item.Links[0].Uri.ToString();
         }
     }
 }

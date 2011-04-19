@@ -7,6 +7,7 @@ using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
+using NzbDrone.Core.Providers.Indexer;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Web.Models;
@@ -63,11 +64,15 @@ namespace NzbDrone.Web.Controllers
                                              _configProvider.GetValue("NzbMatrixUsername", String.Empty, true),
                                          NzbMatrixApiKey =
                                              _configProvider.GetValue("NzbMatrixApiKey", String.Empty, true),
-                                         NzbsOrgUId = _configProvider.GetValue("NzbsOrgUId", String.Empty, true),
-                                         NzbsOrgHash = _configProvider.GetValue("NzbsOrgHash", String.Empty, true),
+
                                          NzbsrusUId = _configProvider.GetValue("NzbsrusUId", String.Empty, true),
                                          NzbsrusHash = _configProvider.GetValue("NzbsrusHash", String.Empty, true),
+
+                                         NzbsOrgHash = _configProvider.NzbsrusHash,
+                                         NzbsOrgUId = _configProvider.NzbsrusUId,
+
                                          Indexers = _indexerProvider.AllIndexers()
+
                                      });
         }
 
@@ -89,7 +94,7 @@ namespace NzbDrone.Web.Controllers
                                 SabTvCategory = _configProvider.GetValue("SabTvCategory", String.Empty, true),
                                 SabTvPriority =
                                     (SabnzbdPriorityType)
-                                    Enum.Parse(typeof (SabnzbdPriorityType),
+                                    Enum.Parse(typeof(SabnzbdPriorityType),
                                                _configProvider.GetValue("SabTvPriority", "Normal", true)),
                                 UseBlackHole = Convert.ToBoolean(_configProvider.GetValue("UseBlackHole", true, true)),
                                 BlackholeDirectory = _configProvider.GetValue("BlackholeDirectory", String.Empty, true)
@@ -104,7 +109,7 @@ namespace NzbDrone.Web.Controllers
 
             var qualityTypes = new List<QualityTypes>();
 
-            foreach (QualityTypes qual in Enum.GetValues(typeof (QualityTypes)))
+            foreach (QualityTypes qual in Enum.GetValues(typeof(QualityTypes)))
             {
                 qualityTypes.Add(qual);
             }
@@ -192,14 +197,14 @@ namespace NzbDrone.Web.Controllers
         {
             var qualityTypes = new List<QualityTypes>();
 
-            foreach (QualityTypes qual in Enum.GetValues(typeof (QualityTypes)))
+            foreach (QualityTypes qual in Enum.GetValues(typeof(QualityTypes)))
             {
                 qualityTypes.Add(qual);
             }
 
             ViewData["Qualities"] = qualityTypes;
 
-            return View("UserProfileSection", new QualityProfile {Name = "New Profile", UserProfile = true});
+            return View("UserProfileSection", new QualityProfile { Name = "New Profile", UserProfile = true });
         }
 
         public ViewResult AddRootDir()
@@ -219,7 +224,7 @@ namespace NzbDrone.Web.Controllers
                 Convert.ToInt32(_configProvider.GetValue("DefaultQualityProfile", profiles[0].QualityProfileId, true));
             var selectList = new SelectList(profiles, "QualityProfileId", "Name");
 
-            return new QualityModel {DefaultQualityProfileId = defaultQualityQualityProfileId, SelectList = selectList};
+            return new QualityModel { DefaultQualityProfileId = defaultQualityQualityProfileId, SelectList = selectList };
         }
 
         [HttpPost]
@@ -263,16 +268,22 @@ namespace NzbDrone.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                //Todo: Only allow indexers to be enabled if user information has been provided
                 foreach (var indexer in data.Indexers)
-                    _indexerProvider.Update(indexer);
+                {
+                    var setting =_indexerProvider.GetSettings(indexer.Id);
+                    setting.Enable = indexer.Enable;
+                    _indexerProvider.SaveSettings(setting);
+                }
 
                 _configProvider.NzbMatrixUsername = data.NzbMatrixUsername;
                 _configProvider.NzbMatrixApiKey = data.NzbMatrixApiKey;
-                _configProvider.NzbsOrgUId = data.NzbsOrgUId;
-                _configProvider.NzbsOrgHash = data.NzbsOrgHash;
                 _configProvider.NzbsrusUId = data.NzbsrusUId;
                 _configProvider.NzbsrusHash = data.NzbsrusHash;
+
+                var nzbsOrgSettings = _indexerProvider.GetSettings(typeof(NzbsOrgProvider));
+                _configProvider.NzbsrusHash = data.NzbsOrgHash;
+                _configProvider.NzbsOrgUId = data.NzbsOrgUId;
+
 
                 return Content(SETTINGS_SAVED);
             }
@@ -328,7 +339,7 @@ namespace NzbDrone.Web.Controllers
                     profile.Allowed = new List<QualityTypes>();
                     foreach (var quality in profile.AllowedString.Split(','))
                     {
-                        var qType = (QualityTypes) Enum.Parse(typeof (QualityTypes), quality);
+                        var qType = (QualityTypes)Enum.Parse(typeof(QualityTypes), quality);
                         profile.Allowed.Add(qType);
                     }
 

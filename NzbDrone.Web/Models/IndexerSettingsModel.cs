@@ -38,6 +38,6 @@ namespace NzbDrone.Web.Models
         [DisplayFormat(ConvertEmptyStringToNull = false)]
         public String NzbsrusHash { get; set; }
 
-        public List<Indexer> Indexers { get; set; }
+        public List<IndexerSetting> Indexers { get; set; }
     }
 }

@@ -20,14 +20,14 @@ namespace NzbDrone.Web
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-            routes.IgnoreRoute("{*robotstxt}", new {robotstxt = @"(.*/)?robots.txt(/.*)?"});
-            routes.IgnoreRoute("{*favicon}", new {favicon = @"(.*/)?favicon.ico(/.*)?"});
+            routes.IgnoreRoute("{*robotstxt}", new { robotstxt = @"(.*/)?robots.txt(/.*)?" });
+            routes.IgnoreRoute("{*favicon}", new { favicon = @"(.*/)?favicon.ico(/.*)?" });
 
 
             routes.MapRoute(
                 "Default", // Route name
                 "{controller}/{action}/{id}", // URL with parameters
-                new {controller = "Series", action = "Index", id = UrlParameter.Optional} // Parameter defaults
+                new { controller = "Series", action = "Index", id = UrlParameter.Optional } // Parameter defaults
                 );
         }
 
@@ -75,7 +75,7 @@ namespace NzbDrone.Web
                 return;
             }
 
-            Logger.FatalException(lastError.Message, lastError);
+            Logger.FatalException(lastError.Message + Environment.NewLine + Request.Url.PathAndQuery, lastError);
 
             if (lastError is SQLiteException)
             {

@@ -14,8 +14,7 @@
     }
 </style>
 <div class="rootDirSection">
-    <fieldset style="width: 350px; height: 16px; margin: 0px; margin-top: 0px; border-color: #CCCCCD;
-        -khtml-border-radius: 8px; border-radius: 8px; -moz-border-radius: 8px; -webkit-border-radius: 8px;">
+    <fieldset>
         <div>
             <%:Html.TextBoxFor(m => m.Path, new {@class = "root_dir_text"})%>
             <a href="#" class="deleteRow">

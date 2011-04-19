@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -8,6 +9,7 @@ using NLog;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
+using NzbDrone.Core.Providers.Indexer;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using SubSonic.DataProviders;
@@ -72,7 +74,7 @@ namespace NzbDrone.Core
                 _startupPath = AppPath;
 
                 //Sqlite
-                var AppDataPath = new DirectoryInfo(Path.Combine(AppPath, "App_Data", "nzbdrone.db"));
+                var AppDataPath = new DirectoryInfo(Path.Combine(AppPath, "App_Data"));
                 if (!AppDataPath.Exists) AppDataPath.Create();
 
                 string connectionString = String.Format("Data Source={0};Version=3;",
@@ -109,12 +111,12 @@ namespace NzbDrone.Core
                 _kernel.Bind<PostProcessingProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<ConfigProvider>().To<ConfigProvider>().InSingletonScope();
                 _kernel.Bind<SyncProvider>().ToSelf().InSingletonScope();
-                _kernel.Bind<IndexerProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<RenameProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<NotificationProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<LogProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<MediaFileProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<TimerProvider>().ToSelf().InSingletonScope();
+                _kernel.Bind<IndexerProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<IRepository>().ToMethod(
                     c => new SimpleRepository(dbProvider, SimpleRepositoryOptions.RunMigrations)).InSingletonScope();
 
@@ -123,7 +125,6 @@ namespace NzbDrone.Core
                 _kernel.Bind<IRepository>().ToConstant(logRepository).WhenInjectedInto<LogProvider>().InSingletonScope();
 
                 ForceMigration(_kernel.Get<IRepository>());
-                SetupIndexers(_kernel.Get<IRepository>()); //Setup the default set of indexers on start-up
                 SetupDefaultQualityProfiles(_kernel.Get<IRepository>()); //Setup the default QualityProfiles on start-up
 
                 //Get the Timers going
@@ -131,7 +132,16 @@ namespace NzbDrone.Core
                 var timer = _kernel.Get<TimerProvider>();
                 timer.SetRssSyncTimer(Convert.ToInt32(config.GetValue("SyncFrequency", "15", true)));
                 timer.StartRssSyncTimer();
+
+                BindIndexers();
             }
+        }
+
+        private static void BindIndexers()
+        {
+            _kernel.Bind<IndexerProviderBase>().To<NzbsOrgProvider>().InSingletonScope();
+            var indexers = _kernel.GetAll<IndexerProviderBase>();
+            _kernel.Get<IndexerProvider>().InitializeIndexers(indexers.ToList());
         }
 
         private static void ForceMigration(IRepository repository)
@@ -141,7 +151,6 @@ namespace NzbDrone.Core
             repository.GetPaged<Episode>(0, 1);
             repository.GetPaged<Season>(0, 1);
             repository.GetPaged<History>(0, 1);
-            repository.GetPaged<Indexer>(0, 1);
         }
 
         /// <summary>
@@ -154,7 +163,7 @@ namespace NzbDrone.Core
                 Logger.Debug("Attaching to parent process for automatic termination.");
                 var pc = new PerformanceCounter("Process", "Creating Process ID",
                                                 Process.GetCurrentProcess().ProcessName);
-                var pid = (int) pc.NextValue();
+                var pid = (int)pc.NextValue();
                 var hostProcess = Process.GetProcessById(pid);
 
                 hostProcess.EnableRaisingEvents = true;
@@ -178,104 +187,13 @@ namespace NzbDrone.Core
             Process.GetCurrentProcess().Kill();
         }
 
-        private static void SetupIndexers(IRepository repository)
-        {
-            //Setup the default providers in the Providers table
-
-            string nzbMatrixRss =
-                "http://rss.nzbmatrix.com/rss.php?page=download&username={USERNAME}&apikey={APIKEY}&subcat=6,41&english=1";
-            string nzbMatrixApi =
-                "http://rss.nzbmatrix.com/rss.php?page=download&username={USERNAME}&apikey={APIKEY}&subcat=6,41&english=1&age={AGE}&term={TERM}";
-            string nzbsOrgRss = "http://nzbs.org/rss.php?type=1&dl=1&num=100&i={UID}&h={HASH}";
-            string nzbsOrgApi = String.Empty;
-            string nzbsrusRss = "http://www.nzbsrus.com/rssfeed.php?cat=91,75&i={UID}&h={HASH}";
-            string nzbsrusApi = String.Empty;
-
-            var nzbMatrixIndexer = new Indexer
-                                       {
-                                           IndexerId = 1,
-                                           IndexerName = "NzbMatrix",
-                                           RssUrl = nzbMatrixRss,
-                                           ApiUrl = nzbMatrixApi,
-                                           Order = 1
-                                       };
-
-            var nzbsOrgIndexer = new Indexer
-                                     {
-                                         IndexerId = 2,
-                                         IndexerName = "NzbsOrg",
-                                         RssUrl = nzbsOrgRss,
-                                         ApiUrl = nzbsOrgApi,
-                                         Order = 2
-                                     };
-
-            var nzbsrusIndexer = new Indexer
-                                     {
-                                         IndexerId = 3,
-                                         IndexerName = "Nzbsrus",
-                                         RssUrl = nzbsrusRss,
-                                         ApiUrl = nzbsrusApi,
-                                         Order = 3
-                                     };
-
-            //NzbMatrix
-            Logger.Debug("Checking for NzbMatrix Indexer");
-            var nzbMatix = repository.Single<Indexer>(1);
-            if (nzbMatix == null)
-            {
-                Logger.Debug("Adding new Indexer: NzbMatrix");
-                repository.Add(nzbMatrixIndexer);
-            }
-
-            else
-            {
-                Logger.Debug("Updating Indexer: NzbMatrix");
-                nzbMatix.RssUrl = nzbMatrixIndexer.RssUrl;
-                nzbMatix.ApiUrl = nzbMatrixIndexer.ApiUrl;
-                repository.Update(nzbMatix);
-            }
-
-            //Nzbs.org
-            Logger.Debug("Checking for Nzbs.org");
-            var nzbsOrg = repository.Single<Indexer>(2);
-            if (nzbsOrg == null)
-            {
-                Logger.Debug("Adding new Indexer: Nzbs.org");
-                repository.Add(nzbsOrgIndexer);
-            }
-
-            else
-            {
-                Logger.Debug("Updating Indexer: Nzbs.org");
-                nzbsOrg.RssUrl = nzbsOrgIndexer.RssUrl;
-                nzbsOrg.ApiUrl = nzbsOrgIndexer.ApiUrl;
-                repository.Update(nzbsOrg);
-            }
-
-            //Nzbsrus
-            Logger.Debug("Checking for Nzbsrus");
-            var nzbsrus = repository.Single<Indexer>(3);
-            if (nzbsrus == null)
-            {
-                Logger.Debug("Adding new Indexer: Nzbsrus");
-                repository.Add(nzbsrusIndexer);
-            }
-
-            else
-            {
-                Logger.Debug("Updating Indexer: Nzbsrus");
-                nzbsrus.RssUrl = nzbsOrgIndexer.RssUrl;
-                nzbsrus.ApiUrl = nzbsOrgIndexer.ApiUrl;
-                repository.Update(nzbsrus);
-            }
-        }
 
         private static void SetupDefaultQualityProfiles(IRepository repository)
         {
             var sd = new QualityProfile
                          {
                              Name = "SD",
-                             Allowed = new List<QualityTypes> {QualityTypes.TV, QualityTypes.DVD},
+                             Allowed = new List<QualityTypes> { QualityTypes.TV, QualityTypes.DVD },
                              Cutoff = QualityTypes.TV
                          };
 
@@ -283,8 +201,7 @@ namespace NzbDrone.Core
                          {
                              Name = "HD",
                              Allowed =
-                                 new List<QualityTypes>
-                                     {QualityTypes.HDTV, QualityTypes.WEBDL, QualityTypes.BDRip, QualityTypes.Bluray720},
+                                 new List<QualityTypes> { QualityTypes.HDTV, QualityTypes.WEBDL, QualityTypes.BDRip, QualityTypes.Bluray720 },
                              Cutoff = QualityTypes.HDTV
                          };
 

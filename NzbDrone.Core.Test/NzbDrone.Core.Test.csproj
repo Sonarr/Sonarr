@@ -95,7 +95,7 @@
     </Compile>
     <Compile Include="SyncProviderTest.cs" />
     <Compile Include="RootDirProviderTest.cs" />
-    <Compile Include="RssProviderTest.cs" />
+    <Compile Include="IndexerProviderTest.cs" />
     <Compile Include="HistoryProviderTest.cs" />
     <Compile Include="MediaFileProviderTests.cs" />
     <Compile Include="DbConfigControllerTest.cs" />
@@ -111,7 +111,6 @@
     <Compile Include="RepoTest.cs" />
     <Compile Include="SabControllerTest.cs" />
     <Compile Include="SeriesProviderTest.cs" />
-    <Compile Include="IndexerProviderTest.cs" />
     <Compile Include="TvDbControllerTest.cs" />
   </ItemGroup>
   <ItemGroup>

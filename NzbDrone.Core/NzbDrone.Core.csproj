@@ -139,6 +139,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libraries\NLog.Extended.dll</HintPath>
     </Reference>
+    <Reference Include="NzbDrone.Core, Version=0.2.0.35870, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="SubSonic.Core, Version=3.0.0.3, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libraries\SubSonic.Core.dll</HintPath>
@@ -168,6 +169,7 @@
     <Compile Include="Instrumentation\SubsonicTarget.cs" />
     <Compile Include="Instrumentation\ExceptioneerTarget.cs" />
     <Compile Include="Instrumentation\NlogWriter.cs" />
+    <Compile Include="Repository\IndexerSetting.cs" />
     <Compile Include="Model\EpisodeParseResult.cs" />
     <Compile Include="Model\EpisodeRenameModel.cs" />
     <Compile Include="Model\EpisodeSortingType.cs" />
@@ -177,9 +179,9 @@
     <Compile Include="Model\SceneNameModel.cs" />
     <Compile Include="Model\SeasonParseResult.cs" />
     <Compile Include="Model\UpcomingEpisodesModel.cs" />
-    <Compile Include="Providers\Feed\FeedProviderBase.cs" />
+    <Compile Include="Providers\Indexer\IndexerProviderBase.cs" />
     <Compile Include="Providers\ExternalNotificationProvider.cs" />
-    <Compile Include="Providers\Feed\NzbsOrgFeedProvider.cs" />
+    <Compile Include="Providers\Indexer\NzbsOrgProvider.cs" />
     <Compile Include="Providers\HistoryProvider.cs" />
     <Compile Include="Providers\BacklogProvider.cs" />
     <Compile Include="Providers\IndexerProvider.cs" />
@@ -210,7 +212,6 @@
     <Compile Include="Repository\Episode.cs" />
     <Compile Include="Instrumentation\Log.cs" />
     <Compile Include="Repository\History.cs" />
-    <Compile Include="Repository\Indexer.cs" />
     <Compile Include="Repository\Config.cs" />
     <Compile Include="Repository\Quality\QualityProfile.cs" />
     <Compile Include="Repository\RootDir.cs" />
