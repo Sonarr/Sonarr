@@ -58,6 +58,7 @@ namespace NzbDrone.Web.Controllers
         public ActionResult Indexers()
         {
             ViewData["viewName"] = "Indexers";
+
             return View("Index", new IndexerSettingsModel
                                      {
                                          NzbMatrixUsername =
@@ -71,8 +72,13 @@ namespace NzbDrone.Web.Controllers
                                          NzbsOrgHash = _configProvider.NzbsrusHash,
                                          NzbsOrgUId = _configProvider.NzbsrusUId,
 
-                                         Indexers = _indexerProvider.AllIndexers()
+                                         NewzbinUsername = _configProvider.NewzbinUsername,
+                                         NewzbinPassword = _configProvider.NewzbinPassword,
 
+                                         NzbsOrgEnabled = _indexerProvider.GetSettings(typeof(NzbsOrgProvider)).Enable,
+                                         NzbMatrixEnabled = _indexerProvider.GetSettings(typeof(NzbMatrixProvider)).Enable,
+                                         NzbsRUsEnabled = _indexerProvider.GetSettings(typeof(NzbsRUsProvider)).Enable,
+                                         NewzbinEnabled = _indexerProvider.GetSettings(typeof(NewzbinProvider)).Enable
                                      });
         }
 
@@ -268,22 +274,33 @@ namespace NzbDrone.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                foreach (var indexer in data.Indexers)
-                {
-                    var setting =_indexerProvider.GetSettings(indexer.Id);
-                    setting.Enable = indexer.Enable;
-                    _indexerProvider.SaveSettings(setting);
-                }
-
-                _configProvider.NzbMatrixUsername = data.NzbMatrixUsername;
-                _configProvider.NzbMatrixApiKey = data.NzbMatrixApiKey;
-                _configProvider.NzbsrusUId = data.NzbsrusUId;
-                _configProvider.NzbsrusHash = data.NzbsrusHash;
-
                 var nzbsOrgSettings = _indexerProvider.GetSettings(typeof(NzbsOrgProvider));
+                nzbsOrgSettings.Enable = data.NzbsOrgEnabled;
+                _indexerProvider.SaveSettings(nzbsOrgSettings);
+
+                var nzbMatrixSettings = _indexerProvider.GetSettings(typeof(NzbMatrixProvider));
+                nzbMatrixSettings.Enable = data.NzbMatrixEnabled;
+                _indexerProvider.SaveSettings(nzbMatrixSettings);
+
+                var nzbsRUsSettings = _indexerProvider.GetSettings(typeof(NzbsRUsProvider));
+                nzbsRUsSettings.Enable = data.NzbsRUsEnabled;
+                _indexerProvider.SaveSettings(nzbsRUsSettings);
+
+                var newzbinSettings = _indexerProvider.GetSettings(typeof(NewzbinProvider));
+                newzbinSettings.Enable = data.NewzbinEnabled;
+                _indexerProvider.SaveSettings(newzbinSettings);
+
                 _configProvider.NzbsrusHash = data.NzbsOrgHash;
                 _configProvider.NzbsOrgUId = data.NzbsOrgUId;
 
+                _configProvider.NzbMatrixUsername = data.NzbMatrixUsername;
+                _configProvider.NzbMatrixApiKey = data.NzbMatrixApiKey;
+
+                _configProvider.NzbsrusUId = data.NzbsrusUId;
+                _configProvider.NzbsOrgUId = data.NzbsrusHash;
+
+                _configProvider.NewzbinUsername = data.NewzbinUsername;
+                _configProvider.NewzbinPassword = data.NewzbinPassword;
 
                 return Content(SETTINGS_SAVED);
             }

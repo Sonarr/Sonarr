@@ -628,7 +628,6 @@
     <Content Include="Views\Settings\EpisodeSorting.ascx" />
     <Content Include="Views\Settings\General.ascx" />
     <Content Include="Views\Settings\Index.aspx" />
-    <Content Include="Views\Settings\Indexers.ascx" />
     <Content Include="Views\Settings\Quality.ascx" />
     <Content Include="Views\Settings\SubMenu.ascx" />
     <Content Include="Views\Settings\UserProfileSection.ascx" />
@@ -661,6 +660,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Views\Web.config" />
+    <Content Include="Views\Settings\Indexers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -812,15 +812,6 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
-          <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>21704</DevelopmentServerPort>
-          <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/NzbDrone</IISUrl>
-          <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl>http://localhost:8989</CustomServerUrl>
-          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
           <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
