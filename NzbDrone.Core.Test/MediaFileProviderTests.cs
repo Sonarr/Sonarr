@@ -113,7 +113,7 @@ namespace NzbDrone.Core.Test
             /////////////////////////////////////////
 
             //Constants
-            const string fileName = "WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD.avi";
+            const string fileName = "WEEDS.S03E01.DUAL.BDRip.XviD.AC3.-HELLYWOOD.avi";
             const int seasonNumber = 3;
             const int episodeNumner = 01;
 
