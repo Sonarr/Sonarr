@@ -122,8 +122,7 @@ namespace NzbDrone.Core.Providers
             {
                 try
                 {
-                    _seriesSyncNotification.CurrentStatus = String.Format("Searching For: {0}",
-                                                                          new DirectoryInfo(currentSeries.Path).Name);
+                    _seriesSyncNotification.CurrentStatus = String.Format("Searching For: {0}", currentSeries.Title);
                     var updatedSeries = _seriesProvider.UpdateSeriesInfo(currentSeries.SeriesId);
 
                     _seriesSyncNotification.CurrentStatus = String.Format("Downloading episode info For: {0}",
