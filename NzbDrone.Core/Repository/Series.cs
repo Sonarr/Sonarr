@@ -45,15 +45,15 @@ namespace NzbDrone.Core.Repository
         public DateTime? LastDiskSync { get; set; }
 
         [SubSonicToOneRelation(ThisClassContainsJoinKey = true, JoinKeyName = "QualityProfileId")]
-        public virtual QualityProfile QualityProfile { get; private set; }
+        public virtual QualityProfile QualityProfile { get; protected set; }
 
         [SubSonicToManyRelation]
-        public virtual List<Season> Seasons { get; private set; }
+        public virtual List<Season> Seasons { get; protected set; }
 
         [SubSonicToManyRelation]
-        public virtual List<Episode> Episodes { get; private set; }
+        public virtual List<Episode> Episodes { get; protected set; }
 
         [SubSonicToManyRelation]
-        public virtual List<EpisodeFile> EpisodeFiles { get; private set; }
+        public virtual List<EpisodeFile> EpisodeFiles { get; protected set; }
     }
 }

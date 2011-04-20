@@ -116,7 +116,7 @@ namespace NzbDrone.Core
                 if (match.Count != 0)
                 {
                     var seriesName = NormalizeTitle(match[0].Groups["title"].Value);
-                    var year = 0;
+                    int year;
                     Int32.TryParse(match[0].Groups["year"].Value, out year);
 
                     if (year < 1900 || year > DateTime.Now.Year + 1)
@@ -130,11 +130,10 @@ namespace NzbDrone.Core
                                      {
                                          SeriesTitle = seriesName,
                                          SeasonNumber = seasonNumber,
-                                         Year = year
+                                         Year = year,
+                                         Quality = ParseQuality(title)
                                      };
 
-
-                    result.Quality = ParseQuality(title);
 
                     Logger.Trace("Season Parsed. {0}", result);
                     return result;
@@ -160,14 +159,7 @@ namespace NzbDrone.Core
                 if (match.Count != 0)
                 {
                     var seriesName = NormalizeTitle(match[0].Groups["title"].Value);
-                    var year = 0;
-                    Int32.TryParse(match[0].Groups["year"].Value, out year);
-
-                    if (year < 1900 || year > DateTime.Now.Year + 1)
-                    {
-                        year = 0;
-                    }
-
+           
                     Logger.Trace("Series Parsed. {0}", seriesName);
                     return seriesName;
                 }

@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Providers
 
             XDocument xDoc = XDocument.Parse(response);
 
-            //If an Error Occurred, retuyrn)
+            //If an Error Occurred, return)
             if (xDoc.Descendants("error").Count() != 0)
                 return false;
 

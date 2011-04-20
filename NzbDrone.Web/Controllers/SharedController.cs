@@ -1,5 +1,7 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Providers.Timers;
 
 namespace NzbDrone.Web.Controllers
 {
@@ -20,7 +22,7 @@ namespace NzbDrone.Web.Controllers
         [ChildActionOnly]
         public ActionResult Footer()
         {
-            ViewData["RssTimer"] = _timerProvider.NextRssSyncTime().ToString("yyyyMMddHHmmss");
+            ViewData["RssTimer"] = DateTime.Now.ToString("yyyyMMddHHmmss");
             //ViewData["RssTimer"] = DateTime.Now.AddMinutes(61).AddSeconds(10).ToString("yyyyMMddHHmmss");
             return PartialView();
         }

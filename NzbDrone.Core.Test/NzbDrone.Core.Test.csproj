@@ -93,6 +93,7 @@
     <Compile Include="AutoMoq\Unity\AutoMockingContainerExtension.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TimerProviderTest.cs" />
     <Compile Include="SyncProviderTest.cs" />
     <Compile Include="RootDirProviderTest.cs" />
     <Compile Include="IndexerProviderTest.cs" />
