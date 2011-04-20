@@ -109,8 +109,11 @@ namespace NzbDrone.Core
                 SetupDefaultQualityProfiles(_kernel.Get<IRepository>()); //Setup the default QualityProfiles on start-up
 
                 BindIndexers();
+                BindTimers();
             }
         }
+
+
 
         private static void BindIndexers()
         {
@@ -120,6 +123,12 @@ namespace NzbDrone.Core
             _kernel.Bind<IndexerProviderBase>().To<NewzbinProvider>().InSingletonScope();
             var indexers = _kernel.GetAll<IndexerProviderBase>();
             _kernel.Get<IndexerProvider>().InitializeIndexers(indexers.ToList());
+        }
+
+        private static void BindTimers()
+        {
+            _kernel.Bind<ITimer>().To<RssSyncTimer>().InTransientScope();
+            _kernel.Get<TimerProvider>().Initialize();
         }
 
         private static void ForceMigration(IRepository repository)

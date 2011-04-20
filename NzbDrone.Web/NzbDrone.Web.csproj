@@ -202,6 +202,7 @@
     <Compile Include="Controllers\SeriesController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\SharedController.cs" />
+    <Compile Include="Controllers\TimersController.cs" />
     <Compile Include="Controllers\UpcomingController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -662,6 +663,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Settings\Indexers.cshtml" />
+    <Content Include="Views\Timers\index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

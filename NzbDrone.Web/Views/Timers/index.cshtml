@@ -1,0 +1,59 @@
+﻿@model IEnumerable<NzbDrone.Core.Repository.TimerSetting>
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Timers</title>
+</head>
+<body>
+    <table>
+        <tr>
+            <th>
+            </th>
+            <th>
+                Enable
+            </th>
+            <th>
+                TypeName
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Interval
+            </th>
+            <th>
+                LastExecution
+            </th>
+            <th>
+                Success
+            </th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.Enable
+                </td>
+                <td>
+                    @item.TypeName
+                </td>
+                <td>
+                    @item.Name
+                </td>
+                <td>
+                    @item.Interval
+                </td>
+                <td>
+                    @String.Format("{0:g}", item.LastExecution)
+                </td>
+                <td>
+                    @item.Success
+                </td>
+            </tr>
+        }
+    </table>
+</body>
+</html>
