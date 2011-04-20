@@ -206,7 +206,7 @@ namespace NzbDrone.Core
             return title.ToLower().Contains("proper");
         }
 
-        private static QualityTypes ParseQuality(string name)
+        internal static QualityTypes ParseQuality(string name)
         {
             Logger.Trace("Trying to parse quality for {0}", name);
 

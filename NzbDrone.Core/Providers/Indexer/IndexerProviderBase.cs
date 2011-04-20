@@ -42,14 +42,12 @@ namespace NzbDrone.Core.Providers.Indexer
         /// </summary>
         public abstract string Name { get; }
 
-
         /// <summary>
         ///   Generates direct link to download an NZB
         /// </summary>
         /// <param name = "item">RSS Feed item to generate the link for</param>
         /// <returns>Download link URL</returns>
         protected abstract string NzbDownloadUrl(SyndicationItem item);
-
 
         /// <summary>
         ///   Parses the RSS feed item and.
@@ -74,6 +72,16 @@ namespace NzbDrone.Core.Providers.Indexer
             return null;
         }
 
+        /// <summary>
+        /// This method can be overwritten to provide indexer specific info parsing
+        /// </summary>
+        /// <param name="item">RSS item that needs to be parsed</param>
+        /// <param name="currentResult">Result of the built in parse function.</param>
+        /// <returns></returns>
+        protected virtual EpisodeParseResult CustomParser(SyndicationItem item, EpisodeParseResult currentResult)
+        {
+            return currentResult;
+        }
 
         /// <summary>
         ///   Fetches RSS feed and process each news item.
