@@ -115,7 +115,9 @@ namespace NzbDrone.Core
         private static void BindIndexers()
         {
             _kernel.Bind<IndexerProviderBase>().To<NzbsOrgProvider>().InSingletonScope();
-
+            _kernel.Bind<IndexerProviderBase>().To<NzbMatrixProvider>().InSingletonScope();
+            _kernel.Bind<IndexerProviderBase>().To<NzbsRUsProvider>().InSingletonScope();
+            _kernel.Bind<IndexerProviderBase>().To<NewzbinProvider>().InSingletonScope();
             var indexers = _kernel.GetAll<IndexerProviderBase>();
             _kernel.Get<IndexerProvider>().InitializeIndexers(indexers.ToList());
         }

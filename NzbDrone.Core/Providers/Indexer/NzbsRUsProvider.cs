@@ -4,9 +4,9 @@ using SubSonic.Repository;
 
 namespace NzbDrone.Core.Providers.Indexer
 {
-    internal class NzbsRUsFeedProvider : IndexerProviderBase
+    public class NzbsRUsProvider : IndexerProviderBase
     {
-        public NzbsRUsFeedProvider(SeriesProvider seriesProvider, SeasonProvider seasonProvider, EpisodeProvider episodeProvider, ConfigProvider configProvider, HttpProvider httpProvider, IRepository repository, IndexerProvider indexerProvider)
+        public NzbsRUsProvider(SeriesProvider seriesProvider, SeasonProvider seasonProvider, EpisodeProvider episodeProvider, ConfigProvider configProvider, HttpProvider httpProvider, IRepository repository, IndexerProvider indexerProvider)
             : base(seriesProvider, seasonProvider, episodeProvider, configProvider, httpProvider, repository, indexerProvider)
         {
         }

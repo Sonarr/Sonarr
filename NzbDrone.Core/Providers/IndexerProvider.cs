@@ -75,7 +75,5 @@ namespace NzbDrone.Core.Providers
                 }
             }
         }
-
-
     }
 }
