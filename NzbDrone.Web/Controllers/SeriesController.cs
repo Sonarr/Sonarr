@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 using NzbDrone.Core.Providers;
-using NzbDrone.Core.Providers.Timers;
+using NzbDrone.Core.Providers.Jobs;
 using NzbDrone.Core.Repository;
 using NzbDrone.Web.Models;
 using Telerik.Web.Mvc;
@@ -21,27 +21,25 @@ namespace NzbDrone.Web.Controllers
         private readonly RenameProvider _renameProvider;
         private readonly RootDirProvider _rootDirProvider;
         private readonly SeriesProvider _seriesProvider;
-        private readonly SyncProvider _syncProvider;
         private readonly TvDbProvider _tvDbProvider;
-        private readonly TimerProvider _timerProvider;
+        private readonly JobProvider _jobProvider;
         //
         // GET: /Series/
 
-        public SeriesController(SyncProvider syncProvider, SeriesProvider seriesProvider,
+        public SeriesController(SeriesProvider seriesProvider,
                                 EpisodeProvider episodeProvider,
                                 QualityProvider qualityProvider, MediaFileProvider mediaFileProvider,
                                 RenameProvider renameProvider, RootDirProvider rootDirProvider,
-                                TvDbProvider tvDbProvider, TimerProvider timerProvider)
+                                TvDbProvider tvDbProvider, JobProvider jobProvider)
         {
             _seriesProvider = seriesProvider;
             _episodeProvider = episodeProvider;
-            _syncProvider = syncProvider;
             _qualityProvider = qualityProvider;
             _mediaFileProvider = mediaFileProvider;
             _renameProvider = renameProvider;
             _rootDirProvider = rootDirProvider;
             _tvDbProvider = tvDbProvider;
-            _timerProvider = timerProvider;
+            _jobProvider = jobProvider;
         }
 
         public ActionResult Index()
@@ -53,13 +51,8 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult RssSync()
         {
-            _timerProvider.ForceExecute(typeof(RssSyncTimer));
+            _jobProvider.BeginExecute(typeof(RssSyncJob));
             return RedirectToAction("Index");
-        }
-
-        public ActionResult UnMapped(string path)
-        {
-            return View(_syncProvider.GetUnmappedFolders(path).Select(c => new MappingModel { Id = 1, Path = c }).ToList());
         }
 
         public ActionResult LoadEpisodes(int seriesId)
@@ -107,37 +100,6 @@ namespace NzbDrone.Web.Controllers
                                 Total = data.Count()
                             });
         }
-
-        [GridAction]
-        public ActionResult _AjaxUnmappedFoldersGrid()
-        {
-            var unmappedList = new List<AddExistingSeriesModel>();
-
-            foreach (var folder in _rootDirProvider.GetAll())
-            {
-                foreach (var unmappedFolder in _syncProvider.GetUnmappedFolders(folder.Path))
-                {
-                    var tvDbSeries = _seriesProvider.MapPathToSeries(unmappedFolder);
-
-                    //We still want to show this series as unmapped, but we don't know what it will be when mapped
-                    //Todo: Provide the user with a way to manually map a folder to a TvDb series (or make them rename the folder...)
-                    if (tvDbSeries == null)
-                        tvDbSeries = new TvdbSeries { Id = 0, SeriesName = String.Empty };
-
-                    unmappedList.Add(new AddExistingSeriesModel
-                                         {
-                                             IsWanted = true,
-                                             Path = unmappedFolder,
-                                             PathEncoded = Url.Encode(unmappedFolder),
-                                             TvDbId = tvDbSeries.Id,
-                                             TvDbName = tvDbSeries.SeriesName
-                                         });
-                }
-            }
-
-            return View(new GridModel(unmappedList));
-        }
-
 
         public ActionResult SearchForSeries(string seriesName)
         {
@@ -264,6 +226,13 @@ namespace NzbDrone.Web.Controllers
             var series = _seriesProvider.GetSeries(seriesId);
             _mediaFileProvider.Scan(series);
 
+            return RedirectToAction("Details", new { seriesId });
+        }
+
+        public ActionResult UpdateInfo(int seriesId)
+        {
+            //Syncs the episodes on disk for the specified series
+            _jobProvider.BeginExecute(typeof(UpdateInfoJob), seriesId);
             return RedirectToAction("Details", new { seriesId });
         }
 

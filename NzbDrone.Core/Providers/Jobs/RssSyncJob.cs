@@ -1,15 +1,16 @@
 ﻿using System.Linq;
 using NLog;
+using NzbDrone.Core.Model.Notification;
 
-namespace NzbDrone.Core.Providers.Timers
+namespace NzbDrone.Core.Providers.Jobs
 {
-    public class RssSyncTimer : ITimer
+    public class RssSyncJob : IJob
     {
         private readonly IndexerProvider _indexerProvider;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public RssSyncTimer(IndexerProvider indexerProvider)
+        public RssSyncJob(IndexerProvider indexerProvider)
         {
             _indexerProvider = indexerProvider;
         }
@@ -24,7 +25,7 @@ namespace NzbDrone.Core.Providers.Timers
             get { return 15; }
         }
 
-        public void Start()
+        public void Start(ProgressNotification notification, int targetId)
         {
             Logger.Info("Doing Things!!!!");
 
@@ -32,7 +33,7 @@ namespace NzbDrone.Core.Providers.Timers
 
             foreach (var indexerSetting in indexers)
             {
-                
+
             }
         }
     }

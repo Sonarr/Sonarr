@@ -3,22 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using NzbDrone.Core.Providers.Timers;
+using NzbDrone.Core.Providers.Jobs;
 
 namespace NzbDrone.Web.Controllers
 {
     public class TimersController : Controller
     {
-        private readonly TimerProvider _timerProvider;
+        private readonly JobProvider _jobProvider;
 
-        public TimersController(TimerProvider timerProvider)
+        public TimersController(JobProvider jobProvider)
         {
-            _timerProvider = timerProvider;
+            _jobProvider = jobProvider;
         }
 
         public ActionResult Index()
         {
-            return View(_timerProvider.All());
+            return View(_jobProvider.All());
         }
 
 

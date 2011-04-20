@@ -51,7 +51,7 @@ namespace NzbDrone
             }
             catch (Exception e)
             {
-                Logger.Error("An error has occured while trying to update the config file.", e);
+                Logger.ErrorException("An error has occurred while trying to update the config file.", e);
             }
 
 

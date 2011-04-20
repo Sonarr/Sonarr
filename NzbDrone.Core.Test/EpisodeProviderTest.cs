@@ -87,5 +87,25 @@ namespace NzbDrone.Core.Test
 
             //Assert
         }
+
+
+        [Test]
+        public void Add_daily_show_episodes()
+        {
+            var mocker = new AutoMoqer();
+            mocker.SetConstant(MockLib.GetEmptyRepository());
+            mocker.Resolve<TvDbProvider>();
+            const int tvDbSeriesId = 71256;
+            //act
+            var seriesProvider = mocker.Resolve<SeriesProvider>();
+
+            seriesProvider.AddSeries("c:\\test\\", tvDbSeriesId, 0);
+            var episodeProvider = mocker.Resolve<EpisodeProvider>();
+            episodeProvider.RefreshEpisodeInfo(tvDbSeriesId);
+
+            //assert
+            var episodes = episodeProvider.GetEpisodeBySeries(tvDbSeriesId);
+            Assert.IsNotEmpty(episodes);
+        }
     }
 }

@@ -25,29 +25,35 @@ namespace NzbDrone.Core.Providers
 
         public virtual IList<TvdbSearchResult> SearchSeries(string title)
         {
-            Logger.Debug("Searching TVDB for '{0}'", title);
-            var result = _handler.SearchSeries(title);
+            lock (_handler)
+            {
+                Logger.Debug("Searching TVDB for '{0}'", title);
 
-            Logger.Debug("Search for '{0}' returned {1} possible results", title, result.Count);
-            return result;
+                var result = _handler.SearchSeries(title);
+
+                Logger.Debug("Search for '{0}' returned {1} possible results", title, result.Count);
+                return result;
+            }
         }
 
 
         public virtual TvdbSearchResult GetSeries(string title)
         {
-            var searchResults = SearchSeries(title);
-            if (searchResults.Count == 0)
-                return null;
-
-            foreach (var tvdbSearchResult in searchResults)
+            lock (_handler)
             {
-                if (IsTitleMatch(tvdbSearchResult.SeriesName, title))
+                var searchResults = SearchSeries(title);
+                if (searchResults.Count == 0)
+                    return null;
+
+                foreach (var tvdbSearchResult in searchResults)
                 {
-                    Logger.Debug("Search for '{0}' was successful", title);
-                    return tvdbSearchResult;
+                    if (IsTitleMatch(tvdbSearchResult.SeriesName, title))
+                    {
+                        Logger.Debug("Search for '{0}' was successful", title);
+                        return tvdbSearchResult;
+                    }
                 }
             }
-
             return null;
         }
 
@@ -70,8 +76,11 @@ namespace NzbDrone.Core.Providers
 
         public virtual TvdbSeries GetSeries(int id, bool loadEpisodes)
         {
-            Logger.Debug("Fetching SeriesId'{0}' from tvdb", id);
-            return _handler.GetSeries(id, TvdbLanguage.DefaultLanguage, loadEpisodes, false, false);
+            lock (_handler)
+            {
+                Logger.Debug("Fetching SeriesId'{0}' from tvdb", id);
+                return _handler.GetSeries(id, TvdbLanguage.DefaultLanguage, loadEpisodes, false, false);
+            }
         }
 
         /// <summary>

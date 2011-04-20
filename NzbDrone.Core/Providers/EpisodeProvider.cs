@@ -129,7 +129,7 @@ namespace NzbDrone.Core.Providers
             var newList = new List<Episode>();
 
             Logger.Debug("Updating season info for series:{0}", targetSeries.SeriesName);
-            targetSeries.Episodes.Select(e => new {e.SeasonId, e.SeasonNumber})
+            targetSeries.Episodes.Select(e => new { e.SeasonId, e.SeasonNumber })
                 .Distinct().ToList()
                 .ForEach(s => _seasons.EnsureSeason(seriesId, s.SeasonId, s.SeasonNumber));
 
@@ -144,8 +144,7 @@ namespace NzbDrone.Core.Providers
                     if (episode.FirstAired < new DateTime(1753, 1, 1))
                         episode.FirstAired = new DateTime(1753, 1, 1);
 
-                    Logger.Trace("Updating info for series:{0} - episode:{1}", targetSeries.SeriesName,
-                                 episode.EpisodeNumber);
+                    Logger.Trace("Updating info for [{0}] - S{1}E{2}", targetSeries.SeriesName, episode.SeasonNumber, episode.EpisodeNumber);
                     var newEpisode = new Episode
                                          {
                                              AirDate = episode.FirstAired,

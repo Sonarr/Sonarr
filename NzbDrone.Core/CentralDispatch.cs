@@ -10,7 +10,7 @@ using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.Indexer;
-using NzbDrone.Core.Providers.Timers;
+using NzbDrone.Core.Providers.Jobs;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using SubSonic.DataProviders;
@@ -77,7 +77,7 @@ namespace NzbDrone.Core
                 dbProvider.Log = new NlogWriter();
 
                 _kernel.Bind<QualityProvider>().ToSelf().InSingletonScope();
-                _kernel.Bind<TvDbProvider>().ToSelf().InSingletonScope();
+                _kernel.Bind<TvDbProvider>().ToSelf().InTransientScope();
                 _kernel.Bind<HttpProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<SeriesProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<SeasonProvider>().ToSelf().InSingletonScope();
@@ -96,7 +96,7 @@ namespace NzbDrone.Core
                 _kernel.Bind<NotificationProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<LogProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<MediaFileProvider>().ToSelf().InSingletonScope();
-                _kernel.Bind<TimerProvider>().ToSelf().InSingletonScope();
+                _kernel.Bind<JobProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<IndexerProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<IRepository>().ToMethod(
                     c => new SimpleRepository(dbProvider, SimpleRepositoryOptions.RunMigrations)).InSingletonScope();
@@ -109,7 +109,7 @@ namespace NzbDrone.Core
                 SetupDefaultQualityProfiles(_kernel.Get<IRepository>()); //Setup the default QualityProfiles on start-up
 
                 BindIndexers();
-                BindTimers();
+                BindJobs();
             }
         }
 
@@ -125,10 +125,12 @@ namespace NzbDrone.Core
             _kernel.Get<IndexerProvider>().InitializeIndexers(indexers.ToList());
         }
 
-        private static void BindTimers()
+        private static void BindJobs()
         {
-            _kernel.Bind<ITimer>().To<RssSyncTimer>().InTransientScope();
-            _kernel.Get<TimerProvider>().Initialize();
+            _kernel.Bind<IJob>().To<RssSyncJob>().InTransientScope();
+            _kernel.Bind<IJob>().To<NewSeriesUpdate>().InTransientScope();
+            _kernel.Bind<IJob>().To<UpdateInfoJob>().InTransientScope();
+            _kernel.Get<JobProvider>().Initialize();
         }
 
         private static void ForceMigration(IRepository repository)

@@ -19,6 +19,9 @@
                                                                items.Add().Text("Scan For Episodes on Disk").Action(
                                                                    "SyncEpisodesOnDisk", "Series",
                                                                    new {seriesId = Model.SeriesId});
+                                                               items.Add().Text("Update Info").Action(
+                                                                  "UpdateInfo", "Series",
+                                                                  new { seriesId = Model.SeriesId });
                                                                items.Add().Text("Rename Series").Action("RenameSeries",
                                                                                                         "Series",
                                                                                                         new

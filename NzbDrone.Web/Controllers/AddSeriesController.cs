@@ -4,6 +4,7 @@ using System.IO;
 using System.Web.Mvc;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
+using NzbDrone.Core.Providers.Jobs;
 using NzbDrone.Web.Models;
 
 namespace NzbDrone.Web.Controllers
@@ -14,13 +15,14 @@ namespace NzbDrone.Web.Controllers
         private readonly QualityProvider _qualityProvider;
         private readonly RootDirProvider _rootFolderProvider;
         private readonly SeriesProvider _seriesProvider;
+        private readonly JobProvider _jobProvider;
         private readonly SyncProvider _syncProvider;
         private readonly TvDbProvider _tvDbProvider;
 
         public AddSeriesController(SyncProvider syncProvider, RootDirProvider rootFolderProvider,
                                    ConfigProvider configProvider,
                                    QualityProvider qualityProvider, TvDbProvider tvDbProvider,
-                                   SeriesProvider seriesProvider)
+                                   SeriesProvider seriesProvider, JobProvider jobProvider)
         {
             _syncProvider = syncProvider;
             _rootFolderProvider = rootFolderProvider;
@@ -28,12 +30,13 @@ namespace NzbDrone.Web.Controllers
             _qualityProvider = qualityProvider;
             _tvDbProvider = tvDbProvider;
             _seriesProvider = seriesProvider;
+            _jobProvider = jobProvider;
         }
 
         [HttpPost]
         public JsonResult ScanNewSeries()
         {
-            _syncProvider.BeginUpdateNewSeries();
+            _jobProvider.BeginExecute(typeof(NewSeriesUpdate));
             return new JsonResult();
         }
 
@@ -106,7 +109,7 @@ namespace NzbDrone.Web.Controllers
                 path.Replace('|', Path.DirectorySeparatorChar).Replace('^', Path.VolumeSeparatorChar), seriesId,
                 qualityProfileId);
             ScanNewSeries();
-            return new JsonResult {Data = "ok"};
+            return new JsonResult { Data = "ok" };
         }
 
         [HttpPost]

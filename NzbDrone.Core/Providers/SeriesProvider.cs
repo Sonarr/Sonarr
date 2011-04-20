@@ -147,7 +147,7 @@ namespace NzbDrone.Core.Providers
             }
             catch (Exception e)
             {
-                Logger.Error("An error has occurred while deleting series.", e);
+                Logger.ErrorException("An error has occurred while deleting series.", e);
                 throw;
             }
         }

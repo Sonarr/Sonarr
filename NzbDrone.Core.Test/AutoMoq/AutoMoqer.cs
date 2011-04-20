@@ -30,8 +30,9 @@ namespace AutoMoq
 
         public virtual T Resolve<T>()
         {
-            ResolveType = typeof (T);
+            ResolveType = typeof(T);
             var result = container.Resolve<T>();
+            SetConstant(result);
             ResolveType = null;
             return result;
         }
@@ -61,7 +62,7 @@ namespace AutoMoq
                 registeredMocks.Add(type, mock);
         }
 
-        public virtual void SetConstant<T>(T instance) where T : class
+        public virtual void SetConstant<T>(T instance)
         {
             container.RegisterInstance(instance);
             SetMock(instance.GetType(), null);
@@ -125,7 +126,7 @@ namespace AutoMoq
 
         private Mock<T> TheRegisteredMockForThisType<T>(Type type) where T : class
         {
-            return (Mock<T>) registeredMocks.Where(x => x.Key == type).First().Value;
+            return (Mock<T>)registeredMocks.Where(x => x.Key == type).First().Value;
         }
 
         private void CreateANewMockAndRegisterIt<T>(Type type, MockBehavior behavior) where T : class
@@ -142,7 +143,7 @@ namespace AutoMoq
 
         private static Type GetTheMockType<T>() where T : class
         {
-            return typeof (T);
+            return typeof(T);
         }
 
         #endregion

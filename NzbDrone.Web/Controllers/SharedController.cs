@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Web.Mvc;
 using NzbDrone.Core.Providers;
-using NzbDrone.Core.Providers.Timers;
+using NzbDrone.Core.Providers.Jobs;
 
 namespace NzbDrone.Web.Controllers
 {
     public class SharedController : Controller
     {
-        private readonly TimerProvider _timerProvider;
+        private readonly JobProvider _jobProvider;
 
-        public SharedController(TimerProvider timerProvider)
+        public SharedController(JobProvider jobProvider)
         {
-            _timerProvider = timerProvider;
+            _jobProvider = jobProvider;
         }
 
         public ActionResult Index()

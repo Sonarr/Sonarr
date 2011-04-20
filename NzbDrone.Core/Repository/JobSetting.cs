@@ -3,7 +3,7 @@ using SubSonic.SqlGeneration.Schema;
 
 namespace NzbDrone.Core.Repository
 {
-    public class TimerSetting
+    public class JobSetting
     {
         [SubSonicPrimaryKey(true)]
         public Int32 Id { get; set; }
