@@ -15,6 +15,9 @@ namespace NzbDrone.Core
         private static readonly Regex[] ReportTitleRegex = new[]
                                                                {
                                                                    new Regex(
+	   	                                                               @"(?<title>.+?)?\W?(?<year>\d{4}?)?\W+(?<airyear>\d{4})\W+(?<airmonth>\d{2})\W+(?<airday>\d{2})\W?(?!\\)",
+		                                                               RegexOptions.IgnoreCase | RegexOptions.Compiled),
+                                                                   new Regex(
                                                                        @"(?<title>.+?)?\W?(?<year>\d{4}?)?(?:\WS?(?<season>\d{1,2})(?:(?:\-|\.|[ex]|\s|to)+(?<episode>\d+))+)+\W?(?!\\)",
                                                                        RegexOptions.IgnoreCase | RegexOptions.Compiled),
                                                                    new Regex(
@@ -59,34 +62,59 @@ namespace NzbDrone.Core
                     {
                         year = 0;
                     }
+			
+			        var airyear = 0;
+			        Int32.TryParse(match[0].Groups["airyear"].Value, out airyear);
 
-                    var parsedEpisode = new EpisodeParseResult
-                                            {
-                                                Proper = title.ToLower().Contains("proper"),
-                                                SeriesTitle = seriesName,
-                                                SeasonNumber = Convert.ToInt32(match[0].Groups["season"].Value),
-                                                Year = year,
-                                                Episodes = new List<int>()
-                                            };
+                    EpisodeParseResult parsedEpisode;
 
-                    foreach (Match matchGroup in match)
+                    if (airyear < 1 )
                     {
-                        var count = matchGroup.Groups["episode"].Captures.Count;
-                        var first = Convert.ToInt32(matchGroup.Groups["episode"].Captures[0].Value);
-                        var last = Convert.ToInt32(matchGroup.Groups["episode"].Captures[count - 1].Value);
+                        var season = 0;
+                        Int32.TryParse(match[0].Groups["season"].Value, out season);
 
-                        for (int i = first; i <= last; i++)
+                        parsedEpisode = new EpisodeParseResult
                         {
-                            parsedEpisode.Episodes.Add(i);
+                            Proper = title.ToLower().Contains("proper"),
+                            SeriesTitle = seriesName,
+                            SeasonNumber = season,
+                            Year = year,
+                            Episodes = new List<int>()
+                        };
+
+                        foreach (Match matchGroup in match)
+                        {
+                            var count = matchGroup.Groups["episode"].Captures.Count;
+                            var first = Convert.ToInt32(matchGroup.Groups["episode"].Captures[0].Value);
+                            var last = Convert.ToInt32(matchGroup.Groups["episode"].Captures[count - 1].Value);
+
+                            for (int i = first; i <= last; i++)
+                            {
+                                parsedEpisode.Episodes.Add(i);
+                            }
+                        }
+                    }
+
+                    else
+                    {
+                        //Try to Parse as a daily show
+                        if (airyear > 0)
+                        {
+                            var airmonth = Convert.ToInt32(match[0].Groups["airmonth"].Value);
+                            var airday = Convert.ToInt32(match[0].Groups["airday"].Value);
+
+                            parsedEpisode = new EpisodeParseResult
+                            {
+                                Proper = title.ToLower().Contains("proper"),
+                                SeriesTitle = seriesName,
+                                Year = year,
+                                AirDate = new DateTime(airyear, airmonth, airday)
+                            };
                         }
 
-                        //else
-                        //{
-                        //    foreach (Capture ep in matchGroup.Groups["episode"].Captures)
-                        //    {
-                        //        parsedEpisode.Episodes.Add(Convert.ToInt32(ep.Value));
-                        //    }
-                        //}
+                        //Something went wrong with this one... return null
+                        else
+                            return null;
                     }
 
                     parsedEpisode.Quality = ParseQuality(title);

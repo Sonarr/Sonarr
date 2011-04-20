@@ -1,4 +1,5 @@
-﻿using MbUnit.Framework;
+﻿using System;
+using MbUnit.Framework;
 using NzbDrone.Core.Repository.Quality;
 
 namespace NzbDrone.Core.Test
@@ -12,7 +13,6 @@ namespace NzbDrone.Core.Test
          * The.Kennedys.Part.2.DSR.XviD-SYS
          * 
          */
-
 
         [Test]
         [Row("Sonny.With.a.Chance.S02E15", 2, 15)]
@@ -81,6 +81,16 @@ namespace NzbDrone.Core.Test
             Assert.AreElementsEqualIgnoringOrder(episodes, result.Episodes);
         }
 
+        [Test]
+        [Row("Conan 2011 04 18 Emma Roberts HDTV XviD BFF", 2011, 04, 18)]
+        [Row("The Tonight Show With Jay Leno 2011 04 15 1080i HDTV DD5 1 MPEG2 TrollHD", 2011, 04, 15)]
+        public void episode_daily_parse(string path, int year, int month, int day)
+        {
+            var result = Parser.ParseEpisodeInfo(path);
+            var airDate = new DateTime(year, month, day);
+
+            Assert.AreEqual(airDate, result.AirDate);
+        }
 
         [Test]
         [Row(@"c:\test\", @"c:\test")]
