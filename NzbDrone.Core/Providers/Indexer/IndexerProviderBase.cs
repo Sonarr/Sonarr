@@ -59,6 +59,8 @@ namespace NzbDrone.Core.Providers.Indexer
             var episodeParseResult = Parser.ParseEpisodeInfo(item.Title.Text);
             if (episodeParseResult == null) return null;
 
+            episodeParseResult = CustomParser(item, episodeParseResult);
+
             var seriesInfo = _seriesProvider.FindSeries(episodeParseResult.SeriesTitle);
 
             if (seriesInfo != null)
