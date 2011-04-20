@@ -10,6 +10,7 @@ using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.Indexer;
+using NzbDrone.Core.Providers.Timers;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using SubSonic.DataProviders;
@@ -22,7 +23,6 @@ namespace NzbDrone.Core
         private static StandardKernel _kernel;
         private static readonly Object KernelLock = new object();
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private static string _startupPath;
 
         public static String AppPath
         {
@@ -34,21 +34,6 @@ namespace NzbDrone.Core
                 }
                 return Directory.GetCurrentDirectory();
             }
-        }
-
-        public static string ExecutablePath
-        {
-            get
-            {
-                //var uri = new Uri(Assembly.EscapedCodeBase);
-                //return Path.GetDirectoryName(uri.LocalPath);
-                return Directory.GetCurrentDirectory();
-            }
-        }
-
-        public static string StartupPath
-        {
-            get { return _startupPath; }
         }
 
         public static StandardKernel NinjectKernel
@@ -70,19 +55,16 @@ namespace NzbDrone.Core
                 Logger.Debug("Binding Ninject's Kernel");
                 _kernel = new StandardKernel();
 
-                //Store the startup path 
-                _startupPath = AppPath;
-
                 //Sqlite
-                var AppDataPath = new DirectoryInfo(Path.Combine(AppPath, "App_Data"));
-                if (!AppDataPath.Exists) AppDataPath.Create();
+                var appDataPath = new DirectoryInfo(Path.Combine(AppPath, "App_Data"));
+                if (!appDataPath.Exists) appDataPath.Create();
 
                 string connectionString = String.Format("Data Source={0};Version=3;",
-                                                        Path.Combine(AppDataPath.FullName, "nzbdrone.db"));
+                                                        Path.Combine(appDataPath.FullName, "nzbdrone.db"));
                 var dbProvider = ProviderFactory.GetProvider(connectionString, "System.Data.SQLite");
 
                 string logConnectionString = String.Format("Data Source={0};Version=3;",
-                                                           Path.Combine(AppDataPath.FullName, "log.db"));
+                                                           Path.Combine(appDataPath.FullName, "log.db"));
                 var logDbProvider = ProviderFactory.GetProvider(logConnectionString, "System.Data.SQLite");
 
 
@@ -99,7 +81,6 @@ namespace NzbDrone.Core
                 _kernel.Bind<HttpProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<SeriesProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<SeasonProvider>().ToSelf().InSingletonScope();
-                _kernel.Bind<RssSyncProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<EpisodeProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<UpcomingEpisodesProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<DiskProvider>().ToSelf().InSingletonScope();
@@ -127,12 +108,6 @@ namespace NzbDrone.Core
                 ForceMigration(_kernel.Get<IRepository>());
                 SetupDefaultQualityProfiles(_kernel.Get<IRepository>()); //Setup the default QualityProfiles on start-up
 
-                //Get the Timers going
-                var config = _kernel.Get<ConfigProvider>();
-                var timer = _kernel.Get<TimerProvider>();
-                timer.SetRssSyncTimer(Convert.ToInt32(config.GetValue("SyncFrequency", "15", true)));
-                timer.StartRssSyncTimer();
-
                 BindIndexers();
             }
         }
@@ -157,7 +132,7 @@ namespace NzbDrone.Core
         }
 
         /// <summary>
-        ///   This method forces IISExpress process to exit with the host application
+        ///   Forces IISExpress process to exit with the host application
         /// </summary>
         public static void DedicateToHost()
         {
@@ -189,7 +164,6 @@ namespace NzbDrone.Core
             Logger.Info("Shutting down application.");
             Process.GetCurrentProcess().Kill();
         }
-
 
         private static void SetupDefaultQualityProfiles(IRepository repository)
         {

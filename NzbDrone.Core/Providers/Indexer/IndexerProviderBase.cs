@@ -107,22 +107,28 @@ namespace NzbDrone.Core.Providers.Indexer
                 if (!_seriesProvider.IsMonitored(parseResult.SeriesId))
                 {
                     Logger.Debug("{0} is present in the DB but not tracked. skipping.", parseResult.SeriesTitle);
+                    return;
                 }
 
                 if (!_seriesProvider.QualityWanted(parseResult.SeriesId, parseResult.Quality))
                 {
                     Logger.Debug("Post doesn't meet the quality requirements [{0}]. skipping.", parseResult.Quality);
+                    return;
                 }
 
                 if (_seasonProvider.IsIgnored(parseResult.SeriesId, parseResult.SeasonNumber))
                 {
                     Logger.Debug("Season {0} is currently set to ignore. skipping.", parseResult.SeasonNumber);
+                    return;
                 }
 
                 if (!_episodeProvider.IsNeeded(parseResult))
                 {
                     Logger.Debug("Episode {0} is not needed. skipping.", parseResult);
+                    return;
                 }
+
+                //Should probably queue item to download
             }
         }
 

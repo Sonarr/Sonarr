@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Threading;
 using MbUnit.Framework;
 using NzbDrone.Core.Repository.Quality;
 
@@ -15,6 +15,7 @@ namespace NzbDrone.Core.Test
          */
 
         [Test]
+        [Timeout(1)]
         [Row("Sonny.With.a.Chance.S02E15", 2, 15)]
         [Row("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD", 3, 1)]
         [Row("Two.and.a.Half.Me.103.720p.HDTV.X264-DIMENSION", 1, 3)]
@@ -40,6 +41,7 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
+        [Timeout(1)]
         [Row("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD", QualityTypes.BDRip)]
         [Row("WEEDS.S03E01-06.DUAL.BDRip.AC3.-HELLYWOOD", QualityTypes.BDRip)]
         [Row("Two.and.a.Half.Men.S08E05.720p.HDTV.X264-DIMENSION", QualityTypes.HDTV)]
@@ -66,9 +68,10 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
+        [Timeout(1)]
         [Row("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD", 3, new[] { 1, 2, 3, 4, 5, 6 })]
-        [Row("Two.and.a.Half.Men.103.104.720p.HDTV.X264-DIMENSION", 1, new[] {3, 4})]
-        [Row("Weeds.S03E01.S03E02.720p.HDTV.X264-DIMENSION", 3, new[] {1, 2})]
+        [Row("Two.and.a.Half.Men.103.104.720p.HDTV.X264-DIMENSION", 1, new[] { 3, 4 })]
+        [Row("Weeds.S03E01.S03E02.720p.HDTV.X264-DIMENSION", 3, new[] { 1, 2 })]
         [Row("The Borgias S01e01 e02 ShoHD On Demand 1080i DD5 1 ALANiS", 1, new[] { 1, 2 })]
         [Row("Big Time Rush 1x01 to 10 480i DD2 0 Sianto", 1, new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 })]
         [Row("White.Collar.2x04.2x05.720p.BluRay-FUTV", 2, new[] { 4, 5 })]

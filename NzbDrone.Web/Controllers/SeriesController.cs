@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Providers.Timers;
 using NzbDrone.Core.Repository;
 using NzbDrone.Web.Models;
 using Telerik.Web.Mvc;
@@ -19,28 +20,28 @@ namespace NzbDrone.Web.Controllers
         private readonly QualityProvider _qualityProvider;
         private readonly RenameProvider _renameProvider;
         private readonly RootDirProvider _rootDirProvider;
-        private readonly RssSyncProvider _rssSyncProvider;
         private readonly SeriesProvider _seriesProvider;
         private readonly SyncProvider _syncProvider;
         private readonly TvDbProvider _tvDbProvider;
+        private readonly TimerProvider _timerProvider;
         //
         // GET: /Series/
 
         public SeriesController(SyncProvider syncProvider, SeriesProvider seriesProvider,
-                                EpisodeProvider episodeProvider, RssSyncProvider rssSyncProvider,
+                                EpisodeProvider episodeProvider,
                                 QualityProvider qualityProvider, MediaFileProvider mediaFileProvider,
                                 RenameProvider renameProvider, RootDirProvider rootDirProvider,
-                                TvDbProvider tvDbProvider)
+                                TvDbProvider tvDbProvider, TimerProvider timerProvider)
         {
             _seriesProvider = seriesProvider;
             _episodeProvider = episodeProvider;
             _syncProvider = syncProvider;
-            _rssSyncProvider = rssSyncProvider;
             _qualityProvider = qualityProvider;
             _mediaFileProvider = mediaFileProvider;
             _renameProvider = renameProvider;
             _rootDirProvider = rootDirProvider;
             _tvDbProvider = tvDbProvider;
+            _timerProvider = timerProvider;
         }
 
         public ActionResult Index()
@@ -52,13 +53,13 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult RssSync()
         {
-            _rssSyncProvider.Begin();
+            _timerProvider.ForceExecute(typeof(RssSyncTimer));
             return RedirectToAction("Index");
         }
 
         public ActionResult UnMapped(string path)
         {
-            return View(_syncProvider.GetUnmappedFolders(path).Select(c => new MappingModel {Id = 1, Path = c}).ToList());
+            return View(_syncProvider.GetUnmappedFolders(path).Select(c => new MappingModel { Id = 1, Path = c }).ToList());
         }
 
         public ActionResult LoadEpisodes(int seriesId)
@@ -121,7 +122,7 @@ namespace NzbDrone.Web.Controllers
                     //We still want to show this series as unmapped, but we don't know what it will be when mapped
                     //Todo: Provide the user with a way to manually map a folder to a TvDb series (or make them rename the folder...)
                     if (tvDbSeries == null)
-                        tvDbSeries = new TvdbSeries {Id = 0, SeriesName = String.Empty};
+                        tvDbSeries = new TvdbSeries { Id = 0, SeriesName = String.Empty };
 
                     unmappedList.Add(new AddExistingSeriesModel
                                          {
@@ -263,7 +264,7 @@ namespace NzbDrone.Web.Controllers
             var series = _seriesProvider.GetSeries(seriesId);
             _mediaFileProvider.Scan(series);
 
-            return RedirectToAction("Details", new {seriesId});
+            return RedirectToAction("Details", new { seriesId });
         }
 
         public ActionResult RenameAll()
@@ -275,7 +276,7 @@ namespace NzbDrone.Web.Controllers
         public ActionResult RenameSeries(int seriesId)
         {
             _renameProvider.RenameSeries(seriesId);
-            return RedirectToAction("Details", new {seriesId});
+            return RedirectToAction("Details", new { seriesId });
         }
 
         public ActionResult RenameSeason(int seasonId)

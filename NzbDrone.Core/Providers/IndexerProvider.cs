@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Providers
             return _repository.Single<IndexerSetting>(s => s.IndexProviderType == type.ToString());
         }
 
-        public IndexerSetting GetSettings(int id)
+        public virtual IndexerSetting GetSettings(int id)
         {
             return _repository.Single<IndexerSetting>(s => s.Id == id);
         }

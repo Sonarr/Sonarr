@@ -1,5 +1,4 @@
-﻿/// <reference path="jquery-1.4.1-vsdoc.js" />
-
+﻿/// <reference path="jquery-1.5.2-vsdoc.js" />
 $(function () {
     var speed = 0;
     refreshNotifications();

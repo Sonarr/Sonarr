@@ -23,13 +23,13 @@ namespace NzbDrone.Core.Providers
         public virtual void Notify(string header, string message)
         {
             //Get time in seconds and convert to ms
-            var time = Convert.ToInt32(_configProvider.GetValue("XbmcDisplayTime", "3", true))*1000;
+            var time = Convert.ToInt32(_configProvider.GetValue("XbmcDisplayTime", "3", true)) * 1000;
             var command = String.Format("ExecBuiltIn(Notification({0},{1},{2}))", header, message, time);
 
             if (Convert.ToBoolean(_configProvider.GetValue("XbmcNotificationImage", false, true)))
             {
                 //Todo: Get the actual port that NzbDrone is running on...
-                var serverInfo = String.Format("http://{0}:{1}", ServerHelper.GetServerHostname(), "8989");
+                var serverInfo = String.Format("http://{0}:{1}", Environment.MachineName, "8989");
 
                 var imageUrl = String.Format("{0}/Content/XbmcNotification.png", serverInfo);
                 command = String.Format("ExecBuiltIn(Notification({0},{1},{2}, {3}))", header, message, time, imageUrl);
