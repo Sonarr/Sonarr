@@ -60,7 +60,7 @@
             <div>
                     @{ Html.Telerik().PanelBar()
                     .Name("PanelBar")
-                    .HtmlAttributes(new { style = "width: 300px; float: left; margin-bottom: 30px;" })
+                    .HtmlAttributes(new { style = "width: 300px; margin: 10px;" })
                     .ExpandMode(PanelBarExpandMode.Single)
                     .SelectedIndex(0)
                     .Items(item =>
@@ -197,7 +197,6 @@
                 }
         </div>
         
-        <br/>
         <div id="save_button_div">
             <input type="submit" id="save_button" value="Save" disabled="disabled" />
         </div>
