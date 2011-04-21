@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Core.Model;
@@ -58,13 +59,29 @@ namespace NzbDrone.Core.Providers
             return _sonicRepo.Find<Episode>(e => e.SeasonId == seasonId);
         }
 
-        public virtual String GetSabTitle(Episode episode)
+        public virtual String GetSabTitle(EpisodeParseResult parseResult)
         {
-            var series = _series.GetSeries(episode.SeriesId);
-            if (series == null) throw new ArgumentException("Unknown series. ID: " + episode.SeriesId);
+            //Show Name - 1x01-1x02 - Episode Name
+            //Show Name - 1x01 - Episode Name
+            var episodeString = new List<String>();
 
-            //TODO: This method should return a standard title for the sab episode.
-            throw new NotImplementedException();
+            foreach (var episode in parseResult.Episodes)
+            {
+                episodeString.Add(String.Format("{0}x{1}", parseResult.SeasonNumber, episode));
+            }
+
+            var epNumberString = String.Join("-", episodeString);
+            var series = _series.GetSeries(parseResult.SeriesId);
+            var folderName = new DirectoryInfo(series.Path).Name;
+
+            var result = String.Format("{0} - {1} - {2} {3}", folderName, epNumberString, parseResult.EpisodeTitle, parseResult.Quality);
+
+            if (parseResult.Proper)
+            {
+                result += " [Proper]";
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -80,10 +97,23 @@ namespace NzbDrone.Core.Providers
 
                 if (episodeInfo == null)
                 {
+
                     //Todo: How do we want to handle this really? Episode could be released before information is on TheTvDB 
                     //(Parks and Rec did this a lot in the first season, from experience)
-                    //Keivan: Should automatically add the episode to db with minimal information. then update the description/title when avilable.
-                    throw new NotImplementedException("Episode was not found in the database");
+                    //Keivan: Should automatically add the episode to db with minimal information. then update the description/title when available.
+                    episodeInfo = new Episode()
+                                      {
+                                          SeriesId = parsedReport.SeriesId,
+                                          AirDate = DateTime.Now.Date,
+                                          EpisodeNumber = episode,
+                                          SeasonNumber = parsedReport.SeasonNumber,
+                                          Title = String.Empty,
+                                          Overview = String.Empty,
+                                          Language = "en"
+                                      };
+
+                    _sonicRepo.Add(episodeInfo);
+
                 }
 
                 var file = episodeInfo.EpisodeFile;
@@ -221,6 +251,8 @@ namespace NzbDrone.Core.Providers
                                              Title = episode.EpisodeName
                                          };
 
+
+                    //TODO: Replace this db check with a local check. Should make things even faster
                     if (_sonicRepo.Exists<Episode>(e => e.EpisodeId == newEpisode.EpisodeId))
                     {
                         updateList.Add(newEpisode);

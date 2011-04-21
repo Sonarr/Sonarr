@@ -32,10 +32,10 @@ namespace NzbDrone.Core.Repository
         public virtual Season Season { get; set; }
 
         [SubSonicToOneRelation(ThisClassContainsJoinKey = true)]
-        public virtual Series Series { get; private set; }
+        public virtual Series Series { get; set; }
 
         [SubSonicToOneRelation(ThisClassContainsJoinKey = true)]
-        public virtual EpisodeFile EpisodeFile { get; private set; }
+        public virtual EpisodeFile EpisodeFile { get; set; }
 
         [SubSonicToManyRelation]
         public virtual List<History> Histories { get; private set; }
