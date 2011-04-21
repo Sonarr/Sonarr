@@ -1,4 +1,4 @@
-﻿using System.ServiceModel.Syndication;
+using System.ServiceModel.Syndication;
 using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
