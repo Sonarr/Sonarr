@@ -626,7 +626,7 @@
     <Content Include="Views\Series\SubMenu.ascx" />
     <Content Include="Views\Settings\RootDir.ascx" />
     <Content Include="Views\Settings\Notifications.ascx" />
-    <Content Include="Views\Settings\Downloads.ascx" />
+    <Content Include="Views\Settings\Downloads2.ascx" />
     <Content Include="Views\Settings\EpisodeSorting.ascx" />
     <Content Include="Views\Settings\General.ascx" />
     <Content Include="Views\Settings\Index.aspx" />
@@ -664,6 +664,7 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\Settings\Indexers.cshtml" />
     <Content Include="Views\Timers\index.cshtml" />
+    <Content Include="Views\Settings\Downloads.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
