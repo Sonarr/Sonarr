@@ -1,0 +1,27 @@
+﻿@model IEnumerable<NzbDrone.Core.Repository.Series>
+
+@section TitleContent{
+    Series
+}
+
+@section ActionMenu{
+    @{Html.RenderPartial("SubMenu");}
+}
+
+@section MainContent{
+    @{Html.Telerik().Grid(Model).Name("Grid")
+            .TableHtmlAttributes(new { @class = "Grid" })
+            .Columns(columns =>
+                         {
+                             columns.Template(c => @Html.ActionLink(c.Title ?? "New Series", "Details",
+                                                                        new {seriesId = c.SeriesId})
+                                                  ).Title("Title");
+                             columns.Bound(o => o.Seasons.Count).Title("Seasons");
+                             columns.Bound(o => o.QualityProfile.Name).Title("Quality");
+                             columns.Bound(o => o.Status);
+                             columns.Bound(o => o.AirsDayOfWeek);
+                             columns.Bound(o => o.Path);
+                         })
+            .Sortable(sort => sort.OrderBy(order => order.Add(o => o.Title).Ascending()).Enabled(false))
+            .Render();}
+}

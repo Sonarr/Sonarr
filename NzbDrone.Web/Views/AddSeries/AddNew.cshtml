@@ -57,7 +57,7 @@
             var seriesSearch = $('#new_series_id');
 
             $("#result").text("Searching...");
-            $("#result").load('<%=Url.Action("SearchForSeries", "Series")%>', {
+            $("#result").load('@Url.Action("SearchForSeries", "Series")', {
                 seriesName: seriesSearch.val()
             });
 
@@ -71,7 +71,7 @@
             var seriesName = $(id).val();
             var qualityProfileId = $("#QualityProfileId").val();
 
-            $("#addResult").load('<%=Url.Action("AddSeries", "Series")%>', {
+            $("#addResult").load('@Url.Action("AddSeries", "AddSeries")', {
                 dir: checkedDir,
                 seriesId: checkedSeries,
                 seriesName: seriesName,
