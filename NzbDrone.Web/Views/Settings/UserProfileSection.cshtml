@@ -28,19 +28,19 @@
 
     <script type="text/javascript">
         $(function () {
-            $("#<%=sortable1%>, #<%=sortable2%>").sortable({
-                connectWith: ".<%=connectedSortable%>",
+            $("#@sortable1, #@sortable2").sortable({
+                connectWith: ".@connectedSortable",
                 placeholder: "ui-state-highlight",
                 dropOnEmpty: true,
 
                 create: function (event, ui) {
-                    var order = $('#<%=sortable1%>').sortable("toArray");
-                    $("#<%=allowedStringName%>").val(order);
+                    var order = $('#@sortable1').sortable("toArray");
+                    $("#@allowedStringName>").val(order);
                 },
 
                 update: function (event, ui) {
-                    var order = $('#<%=sortable1%>').sortable("toArray");
-                    $("#<%=allowedStringName%>").val(order);
+                    var order = $('#@sortable1').sortable("toArray");
+                    $("#@allowedStringName").val(order);
                 }
 
             }).disableSelection();
@@ -52,7 +52,7 @@
         <fieldset style="width:285px; margin:5px; margin-top: 0px; border-color:#CCCCCD">
 
             <div id="qualityHeader" style="padding-bottom: 5px; margin: 0px;">
-                <h2 style="display:inline; padding-right: 4px; margin-left: 4px;" id="<%=title%>"><@Html.DisplayTextFor(m => m.Name)</h2>
+                <h2 style="display:inline; padding-right: 4px; margin-left: 4px;" id="@title"><@Html.DisplayTextFor(m => m.Name)</h2>
                 <a href="#" class="deleteRow"><img src="../../Content/Images/X.png" alt="Delete" /></a>
             </div>
 
@@ -65,12 +65,12 @@
             <div id="sortablesDiv" style="margin: 0px;">
                 <div class="allowedQualities">
                     <h4 class="sortableHeader">Allowed</h4>
-                    <ul id="<%=sortable1%>" class="<%=connectedSortable%> sortable1">
+                    <ul id="@sortable1" class="@connectedSortable sortable1">
                         @if (Model.Allowed != null)
                         {
                             for (int i = 0; i < Model.Allowed.Count(); i++)
                             {
-                                <li class="ui-state-default" id="<%=Model.Allowed[i].ToString()%>">
+                                <li class="ui-state-default" id="@Model.Allowed[i].ToString()">
                                 @Html.RadioButtonFor(x => x.Cutoff, Model.Allowed[i])
                                 @Html.DisplayTextFor(c => c.Allowed[i])
                                 </li>
@@ -101,7 +101,7 @@
                 }
             }
 
-            <li class="ui-state-default" id="<%=qualitiesList[i].ToString()%>">
+            <li class="ui-state-default" id="@qualitiesList[i].ToString()">
             @Html.RadioButtonFor(x => x.Cutoff, qualitiesList[i])
             @Html.Label(qualitiesList[i].ToString())
             </li>
@@ -121,9 +121,9 @@
     </div> 
 
     <script type="text/javascript">
-        $("#<%:nameBox%>").keyup(function () {
+        $("#@nameBox").keyup(function () {
             var value = $(this).val();
-            $("#<%=title%>").text(value);
+            $("#@title").text(value);
         }).keyup();
     </script>
 }

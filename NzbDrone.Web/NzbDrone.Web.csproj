@@ -624,16 +624,7 @@
     <Content Include="Views\Series\index.aspx" />
     <Content Include="Views\Series\SeriesSearchResults.ascx" />
     <Content Include="Views\Series\SubMenu.ascx" />
-    <Content Include="Views\Settings\RootDir.ascx" />
-    <Content Include="Views\Settings\Notifications.ascx" />
-    <Content Include="Views\Settings\Downloads2.ascx" />
-    <Content Include="Views\Settings\EpisodeSorting.ascx" />
-    <Content Include="Views\Settings\General.ascx" />
-    <Content Include="Views\Settings\Index.aspx" />
-    <Content Include="Views\Settings\Quality.ascx" />
-    <Content Include="Views\Settings\SubMenu.ascx" />
-    <Content Include="Views\Settings\UserProfileSection.ascx" />
-    <Content Include="Views\Shared\Footer.ascx" />
+    <Content Include="Views\Settings\Index2.aspx" />
     <Content Include="Views\Upcoming\Index.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -665,6 +656,17 @@
     <Content Include="Views\Settings\Indexers.cshtml" />
     <Content Include="Views\Timers\index.cshtml" />
     <Content Include="Views\Settings\Downloads.cshtml" />
+    <Content Include="Views\Settings\EpisodeSorting.cshtml" />
+    <Content Include="Views\Settings\General.cshtml" />
+    <Content Include="Views\Settings\Notifications.cshtml" />
+    <Content Include="Views\Settings\Quality.cshtml" />
+    <Content Include="Views\Settings\RootDir.cshtml" />
+    <Content Include="Views\Settings\SubMenu.cshtml" />
+    <Content Include="Views\Settings\UserProfileSection.cshtml" />
+    <Content Include="Views\Shared\SiteLayout.cshtml" />
+    <Content Include="Views\Shared\Footer.cshtml" />
+    <Content Include="Views\Settings\Index.cshtml" />
+    <Content Include="Views\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
