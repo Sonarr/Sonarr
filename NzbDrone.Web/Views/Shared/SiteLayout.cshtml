@@ -47,6 +47,9 @@
             </div>
         </div>
     </body>
+
+    @RenderSection("Scripts", required: false)
+
     @{Html.Telerik().ScriptRegistrar().Scripts(
         c => c.Add("jquery-ui-1.8.8.min.js")
                     .Add("jquery.form.js")

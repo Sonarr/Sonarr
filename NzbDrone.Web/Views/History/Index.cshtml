@@ -1,7 +1,7 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<List<NzbDrone.Web.Models.HistoryModel>>" %>
-<%@ Import Namespace="NzbDrone.Web.Models" %>
+﻿@model List<NzbDrone.Web.Models.HistoryModel>
+@using NzbDrone.Web.Models
 
-<asp:Content ID="Content1" ContentPlaceHolderID="Scripts" runat="server">
+@section Scripts{
     <script type="text/javascript">
         function onRowDataBound(e) {
 
@@ -20,24 +20,22 @@
             //e.row.style.color = 'blue';
         }
     </script>
-</asp:Content>
-<asp:Content ID="Content2" ContentPlaceHolderID="TitleContent" runat="server">
+}
+
+@section TitleContent{
     History
-</asp:Content>
-<asp:Content ID="Menu" ContentPlaceHolderID="ActionMenu" runat="server">
-    <%
-        Html.Telerik().Menu().Name("historyMenu").Items(items =>
-                                                            {
-                                                                items.Add().Text("Trim History").Action("Trim",
-                                                                                                        "History");
-                                                                items.Add().Text("Purge History").Action("Purge",
-                                                                                                         "History");
-                                                            }).Render();
-%>
-</asp:Content>
-<asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="server">
-    <%
-        Html.Telerik().Grid<HistoryModel>().Name("history")
+}
+
+@section ActionMenu{
+    @{Html.Telerik().Menu().Name("historyMenu").Items(items =>
+            {
+                items.Add().Text("Trim History").Action("Trim", "History");
+                items.Add().Text("Purge History").Action("Purge", "History");
+            }).Render();}
+}
+
+@section MainContent{
+    @{Html.Telerik().Grid<HistoryModel>().Name("history")
             .Columns(columns =>
                          {
                              columns.Bound(c => c.SeriesTitle).Title("Series Name").Width(120);
@@ -61,6 +59,5 @@
                 c.PageSize(50).Position(GridPagerPosition.Bottom).Style(GridPagerStyles.NextPrevious))
             //.Filterable()
             //.ClientEvents(c => c.OnRowDataBound("onRowDataBound"))
-            .Render();
-%>
-</asp:Content>
+            .Render();}
+}
