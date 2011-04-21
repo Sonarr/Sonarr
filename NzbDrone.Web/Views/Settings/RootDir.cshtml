@@ -1,0 +1,30 @@
+﻿@model NzbDrone.Core.Repository.RootDir
+@using NzbDrone.Web.Helpers;
+           
+<style type="text/css">
+    .root_dir_text
+    {
+        width: 300px;
+    }
+</style>
+
+@using (Html.BeginCollectionItem("Directories"))
+{
+    var idClean = ViewData.TemplateInfo.HtmlFieldPrefix.Replace('[', '_').Replace(']', '_');
+
+    <div class="rootDirSection">
+        <fieldset>
+            <div>
+                @Html.TextBoxFor(m => m.Path, new { @class = "root_dir_text" })
+                <a href="#" class="deleteRow">
+                    <img src="../../Content/Images/X.png" alt="Delete" /></a>
+            </div>
+            <div>
+                @Html.ValidationMessageFor(m => m.Path)
+            </div>
+            <div class="hiddenProfileDetails">
+                @Html.TextBoxFor(x => x.Id, new { @style = "display:none" })
+            </div>
+        </fieldset>
+    </div>
+}
