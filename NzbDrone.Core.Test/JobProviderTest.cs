@@ -53,6 +53,27 @@ namespace NzbDrone.Core.Test
         [Test]
         //This test will confirm that the concurrency checks are rest
         //after execution so the job can successfully run.
+        public void can_run_broken_job_again()
+        {
+            IEnumerable<IJob> fakeTimers = new List<IJob> { new BrokenJob() };
+            var mocker = new AutoMoqer();
+
+            mocker.SetConstant(MockLib.GetEmptyRepository());
+            mocker.SetConstant(fakeTimers);
+
+            var timerProvider = mocker.Resolve<JobProvider>();
+            timerProvider.Initialize();
+            var firstRun = timerProvider.RunScheduled();
+            var secondRun = timerProvider.RunScheduled();
+
+            Assert.IsTrue(firstRun);
+            Assert.IsTrue(secondRun);
+        }
+
+
+        [Test]
+        //This test will confirm that the concurrency checks are rest
+        //after execution so the job can successfully run.
         public void can_run_async_job_again()
         {
             IEnumerable<IJob> fakeTimers = new List<IJob> { new FakeJob() };
@@ -70,6 +91,28 @@ namespace NzbDrone.Core.Test
             Assert.IsTrue(firstRun);
             Assert.IsTrue(secondRun);
 
+        }
+
+
+        [Test]
+        //This test will confirm that the concurrency checks are rest
+        //after execution so the job can successfully run.
+        public void can_run_broken_async_job_again()
+        {
+            IEnumerable<IJob> fakeTimers = new List<IJob> { new BrokenJob() };
+            var mocker = new AutoMoqer();
+
+            mocker.SetConstant(MockLib.GetEmptyRepository());
+            mocker.SetConstant(fakeTimers);
+
+            var timerProvider = mocker.Resolve<JobProvider>();
+            timerProvider.Initialize();
+            var firstRun = timerProvider.BeginExecute(typeof(FakeJob));
+            Thread.Sleep(2000);
+            var secondRun = timerProvider.BeginExecute(typeof(FakeJob));
+
+            Assert.IsTrue(firstRun);
+            Assert.IsTrue(secondRun);
         }
 
 
@@ -183,6 +226,24 @@ namespace NzbDrone.Core.Test
         }
     }
 
+    public class BrokenJob : IJob
+    {
+        public string Name
+        {
+            get { return "FakeJob"; }
+        }
+
+        public int DefaultInterval
+        {
+            get { return 15; }
+        }
+
+        public void Start(ProgressNotification notification, int targetId)
+        {
+            throw new InvalidOperationException();
+        }
+    }
+
     public class SlowJob : IJob
     {
         public string Name
@@ -197,7 +258,7 @@ namespace NzbDrone.Core.Test
 
         public void Start(ProgressNotification notification, int targetId)
         {
-            Thread.Sleep(10000);
+            Thread.Sleep(5000);
         }
     }
 }

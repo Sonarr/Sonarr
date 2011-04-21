@@ -1,4 +1,4 @@
-﻿using System.ServiceModel.Syndication;
+using System.ServiceModel.Syndication;
 using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
@@ -33,56 +33,22 @@ namespace NzbDrone.Core.Providers.Indexer
         }
 
         /// <summary>
-        ///   Gets the source URL for the feed
-        /// </summary>
-        protected abstract string[] Url { get; }
-
-        /// <summary>
         ///   Gets the name for the feed
         /// </summary>
         public abstract string Name { get; }
 
         /// <summary>
-        ///   Generates direct link to download an NZB
+        ///   Gets the source URL for the feed
         /// </summary>
-        /// <param name = "item">RSS Feed item to generate the link for</param>
-        /// <returns>Download link URL</returns>
-        protected abstract string NzbDownloadUrl(SyndicationItem item);
+        protected abstract string[] Urls { get; }
 
-        /// <summary>
-        ///   Parses the RSS feed item and.
-        /// </summary>
-        /// <param name = "item">RSS feed item to parse</param>
-        /// <returns>Detailed episode info</returns>
-        protected EpisodeParseResult ParseFeed(SyndicationItem item)
+
+        protected IndexerSetting Settings
         {
-            var episodeParseResult = Parser.ParseEpisodeInfo(item.Title.Text);
-            if (episodeParseResult == null) return null;
-
-            episodeParseResult = CustomParser(item, episodeParseResult);
-
-            var seriesInfo = _seriesProvider.FindSeries(episodeParseResult.SeriesTitle);
-
-            if (seriesInfo != null)
+            get
             {
-                episodeParseResult.SeriesId = seriesInfo.SeriesId;
-                episodeParseResult.SeriesTitle = seriesInfo.Title;
-                return episodeParseResult;
+                return _indexerProvider.GetSettings(GetType());
             }
-
-            Logger.Debug("Unable to map {0} to any of series in database", episodeParseResult.SeriesTitle);
-            return null;
-        }
-
-        /// <summary>
-        /// This method can be overwritten to provide indexer specific info parsing
-        /// </summary>
-        /// <param name="item">RSS item that needs to be parsed</param>
-        /// <param name="currentResult">Result of the built in parse function.</param>
-        /// <returns></returns>
-        protected virtual EpisodeParseResult CustomParser(SyndicationItem item, EpisodeParseResult currentResult)
-        {
-            return currentResult;
         }
 
         /// <summary>
@@ -92,7 +58,7 @@ namespace NzbDrone.Core.Providers.Indexer
         {
             Logger.Info("Fetching feeds from " + Settings.Name);
 
-            foreach (var url in Url)
+            foreach (var url in Urls)
             {
                 Logger.Debug("Downloading RSS " + url);
                 var feed = SyndicationFeed.Load(_httpProvider.DownloadXml(url)).Items;
@@ -142,16 +108,45 @@ namespace NzbDrone.Core.Providers.Indexer
             }
         }
 
-        protected IndexerSetting Settings
+        /// <summary>
+        ///   Parses the RSS feed item and.
+        /// </summary>
+        /// <param name = "item">RSS feed item to parse</param>
+        /// <returns>Detailed episode info</returns>
+        protected EpisodeParseResult ParseFeed(SyndicationItem item)
         {
-            get
+            var episodeParseResult = Parser.ParseEpisodeInfo(item.Title.Text);
+            if (episodeParseResult == null) return CustomParser(item, null);
+
+            var seriesInfo = _seriesProvider.FindSeries(episodeParseResult.SeriesTitle);
+
+            if (seriesInfo != null)
             {
-                return _indexerProvider.GetSettings(GetType());
+                episodeParseResult.SeriesId = seriesInfo.SeriesId;
+                episodeParseResult.SeriesTitle = seriesInfo.Title;
+                return CustomParser(item, episodeParseResult);
             }
+
+            Logger.Debug("Unable to map {0} to any of series in database", episodeParseResult.SeriesTitle);
+            return CustomParser(item, episodeParseResult);
         }
 
+        /// <summary>
+        /// This method can be overwritten to provide indexer specific info parsing
+        /// </summary>
+        /// <param name="item">RSS item that needs to be parsed</param>
+        /// <param name="currentResult">Result of the built in parse function.</param>
+        /// <returns></returns>
+        protected virtual EpisodeParseResult CustomParser(SyndicationItem item, EpisodeParseResult currentResult)
+        {
+            return currentResult;
+        }
 
-
-
+        /// <summary>
+        ///   Generates direct link to download an NZB
+        /// </summary>
+        /// <param name = "item">RSS Feed item to generate the link for</param>
+        /// <returns>Download link URL</returns>
+        protected abstract string NzbDownloadUrl(SyndicationItem item);
     }
 }

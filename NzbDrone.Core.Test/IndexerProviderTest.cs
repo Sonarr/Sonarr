@@ -62,7 +62,7 @@ namespace NzbDrone.Core.Test
         {
         }
 
-        protected override string[] Url
+        protected override string[] Urls
         {
             get { return new[] { "www.google.com" }; }
         }

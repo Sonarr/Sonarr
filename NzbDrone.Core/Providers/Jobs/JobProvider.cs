@@ -127,7 +127,18 @@ namespace NzbDrone.Core.Providers.Jobs
             {
                 Logger.Debug("Initializing background thread");
 
-                ThreadStart starter = () => Execute(jobType, targetId);
+                ThreadStart starter = () =>
+                {
+                    try
+                    {
+                        Execute(jobType, targetId);
+                    }
+                    finally
+                    {
+                        _isRunning = false;
+                    }
+                };
+
                 _jobThread = new Thread(starter) { Name = "TimerThread", Priority = ThreadPriority.BelowNormal };
                 _jobThread.Start();
 
@@ -169,14 +180,7 @@ namespace NzbDrone.Core.Providers.Jobs
             }
             catch (Exception e)
             {
-                Logger.ErrorException("An error has occurred while executing timer job" + timerClass.Name, e);
-            }
-            finally
-            {
-                if (_jobThread == Thread.CurrentThread)
-                {
-                    _isRunning = false;
-                }
+                Logger.ErrorException("An error has occurred while executing timer job " + timerClass.Name, e);
             }
         }
 
@@ -194,14 +198,13 @@ namespace NzbDrone.Core.Providers.Jobs
                 var timerProviderLocal = timer;
                 if (!currentTimer.Exists(c => c.TypeName == timerProviderLocal.GetType().ToString()))
                 {
-                    var settings = new JobSetting()
+                    var settings = new JobSetting
                                        {
                                            Enable = true,
                                            TypeName = timer.GetType().ToString(),
                                            Name = timerProviderLocal.Name,
                                            Interval = timerProviderLocal.DefaultInterval,
                                            LastExecution = DateTime.MinValue
-
                                        };
 
                     SaveSettings(settings);

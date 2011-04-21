@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Providers.Indexer
         {
         }
 
-        protected override string[] Url
+        protected override string[] Urls
         {
             get
             {

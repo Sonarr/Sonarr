@@ -13,6 +13,8 @@ namespace NzbDrone.Core.Model
         internal List<int> Episodes { get; set; }
         internal int Year { get; set; }
 
+        internal string EpisodeTitle { get; set; }
+
         internal DateTime AirDate { get; set; }
 
         public bool Proper { get; set; }

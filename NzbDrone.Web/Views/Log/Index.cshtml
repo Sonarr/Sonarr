@@ -36,7 +36,7 @@
             .Columns(columns =>
                          {
                              columns.Bound(c => c.Time).Title("Time").Width(190);
-                             columns.Bound(c => c.DisplayLevel).Title("Level").Width(0);
+                             columns.Bound(c => c.Level).Title("Level").Width(0);
                              columns.Bound(c => c.Message);
                          })
             .DetailView(detailView => detailView.ClientTemplate(
