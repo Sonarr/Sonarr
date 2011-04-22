@@ -617,7 +617,6 @@
     <Content Include="Views\AddSeries\AddExisting.cshtml" />
     <Content Include="Views\AddSeries\AddNew.cshtml" />
     <None Include="Views\AddSeries\AddSeriesItem.cshtml" />
-    <Content Include="Views\Series\SeriesSearchResults2.ascx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -635,8 +634,6 @@
     <Content Include="Scripts\MicrosoftMvcAjax.debug.js" />
     <Content Include="Scripts\MicrosoftMvcValidation.js" />
     <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
-    <Content Include="Views\Shared\Error.aspx" />
-    <Content Include="Views\Shared\Site.Master" />
     <Content Include="Scripts\jquery-ui.js" />
     <Content Include="Scripts\jquery-ui.min.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
@@ -654,7 +651,6 @@
     <Content Include="Views\Settings\Quality.cshtml" />
     <Content Include="Views\Settings\RootDir.cshtml" />
     <Content Include="Views\Settings\SubMenu.cshtml" />
-    <Content Include="Views\Settings\UserProfileSection.cshtml" />
     <Content Include="Views\Shared\SiteLayout.cshtml" />
     <Content Include="Views\Shared\Footer.cshtml" />
     <Content Include="Views\Settings\Index.cshtml" />
@@ -666,7 +662,9 @@
     <Content Include="Views\Series\Edit.cshtml" />
     <Content Include="Views\Series\Index.cshtml" />
     <Content Include="Views\Series\SubMenu.cshtml" />
-    <Content Include="Views\Series\SeriesSearchResult.cshtml" />
+    <Content Include="Views\Series\SeriesSearchResults.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Settings\UserProfileSection.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

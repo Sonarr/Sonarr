@@ -21,9 +21,9 @@ namespace NzbDrone.Core.Providers
             _sonicRepo = sonicRepo;
         }
 
-        public virtual void Add(QualityProfile profile)
+        public virtual int Add(QualityProfile profile)
         {
-            _sonicRepo.Add(profile);
+            return Convert.ToInt32(_sonicRepo.Add(profile));
         }
 
         public virtual void Update(QualityProfile profile)

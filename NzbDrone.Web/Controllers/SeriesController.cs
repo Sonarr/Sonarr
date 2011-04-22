@@ -70,22 +70,15 @@ namespace NzbDrone.Web.Controllers
             var episodes = _episodeProvider.GetEpisodeBySeason(seasonId).Select(c => new EpisodeModel
                                                                                          {
                                                                                              EpisodeId = c.EpisodeId,
-                                                                                             EpisodeNumber =
-                                                                                                 c.EpisodeNumber,
-                                                                                             SeasonNumber =
-                                                                                                 c.SeasonNumber,
+                                                                                             EpisodeNumber = c.EpisodeNumber,
+                                                                                             SeasonNumber = c.SeasonNumber,
                                                                                              Title = c.Title,
                                                                                              Overview = c.Overview,
                                                                                              AirDate = c.AirDate,
-                                                                                             Path =
-                                                                                                 GetEpisodePath(
-                                                                                                     c.EpisodeFile),
-                                                                                             Quality =
-                                                                                                 c.EpisodeFile == null
+                                                                                             Path = GetEpisodePath(c.EpisodeFile),
+                                                                                             Quality = c.EpisodeFile == null
                                                                                                      ? String.Empty
-                                                                                                     : c.EpisodeFile.
-                                                                                                           Quality.
-                                                                                                           ToString()
+                                                                                                     : c.EpisodeFile.Quality.ToString()
                                                                                          });
             return View(new GridModel(episodes));
         }
