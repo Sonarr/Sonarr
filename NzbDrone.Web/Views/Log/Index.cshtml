@@ -5,13 +5,13 @@
 
             e.row.style.boarder = "";
 
-            if (e.dataItem.Level == 3) {
+            if (e.dataItem.Level == "Warn") {
                 e.row.style.backgroundColor = "#FFD700";
             }
-            else if (e.dataItem.Level == 4) {
+            else if (e.dataItem.Level == "Error") {
                 e.row.style.backgroundColor = "#FF7500";
             }
-            else if (e.dataItem.Level == 5) {
+            else if (e.dataItem.Level == "Fatal") {
                 e.row.style.backgroundColor = "black";
                 e.row.style.color = "red";
             }
