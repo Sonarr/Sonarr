@@ -98,6 +98,7 @@ namespace NzbDrone.Core
                 _kernel.Bind<MediaFileProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<JobProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<IndexerProvider>().ToSelf().InSingletonScope();
+                _kernel.Bind<WebTimer>().ToSelf().InSingletonScope();
                 _kernel.Bind<IRepository>().ToMethod(
                     c => new SimpleRepository(dbProvider, SimpleRepositoryOptions.RunMigrations)).InSingletonScope();
 
@@ -130,9 +131,9 @@ namespace NzbDrone.Core
             _kernel.Bind<IJob>().To<RssSyncJob>().InTransientScope();
             _kernel.Bind<IJob>().To<NewSeriesUpdate>().InTransientScope();
             _kernel.Bind<IJob>().To<UpdateInfoJob>().InTransientScope();
+            
             _kernel.Get<JobProvider>().Initialize();
-
-            new WebTimer().StartTimer(1);
+            _kernel.Get<WebTimer>().StartTimer(30);
         }
 
 

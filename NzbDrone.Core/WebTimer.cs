@@ -5,14 +5,21 @@ using System.Text;
 using System.Web;
 using System.Web.Caching;
 using NLog;
+using NzbDrone.Core.Providers.Jobs;
 
 namespace NzbDrone.Core
 {
     class WebTimer
     {
+        private readonly JobProvider _jobProvider;
 
         private static CacheItemRemovedCallback _onCacheRemove;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        public WebTimer(JobProvider jobProvider)
+        {
+            _jobProvider = jobProvider;
+        }
 
         public void StartTimer(int secondInterval)
         {
@@ -26,7 +33,7 @@ namespace NzbDrone.Core
 
         public void DoWork(string k, object v, CacheItemRemovedReason r)
         {
-            Logger.Info("Tick!");
+            _jobProvider.RunScheduled();
             StartTimer(Convert.ToInt32(v));
         }
     }

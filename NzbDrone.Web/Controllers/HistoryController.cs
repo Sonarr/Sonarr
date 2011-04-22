@@ -40,6 +40,7 @@ namespace NzbDrone.Web.Controllers
         {
 
             //TODO: possible subsonic bug, IQuarible causes some issues so ToList() is called
+            //https://github.com/subsonic/SubSonic-3.0/issues/263
             
             var history = _historyProvider.AllItems().ToList().Select(h => new HistoryModel
                                                                       {

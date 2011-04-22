@@ -7,11 +7,11 @@ using NzbDrone.Core.Providers.Jobs;
 
 namespace NzbDrone.Web.Controllers
 {
-    public class TimersController : Controller
+    public class JobController : Controller
     {
         private readonly JobProvider _jobProvider;
 
-        public TimersController(JobProvider jobProvider)
+        public JobController(JobProvider jobProvider)
         {
             _jobProvider = jobProvider;
         }

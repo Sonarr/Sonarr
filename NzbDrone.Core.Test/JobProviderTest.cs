@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Test
     public class JobProviderTest
     {
         [Test]
-        public void Run_Jobs()
+        public void Run_Jobs_Updates_Last_Execution()
         {
 
             IEnumerable<IJob> fakeTimers = new List<IJob> { new FakeJob() };
@@ -22,10 +22,38 @@ namespace NzbDrone.Core.Test
             mocker.SetConstant(MockLib.GetEmptyRepository());
             mocker.SetConstant(fakeTimers);
 
+            //Act
             var timerProvider = mocker.Resolve<JobProvider>();
             timerProvider.Initialize();
             timerProvider.RunScheduled();
 
+            //Assert
+            var settings = timerProvider.All();
+            Assert.IsNotEmpty(settings);
+            Assert.AreNotEqual(DateTime.MinValue, settings[0].LastExecution);
+            Assert.IsTrue(settings[0].Success);
+        }
+
+        [Test]
+        public void Run_Jobs_Updates_Last_Execution_Mark_as_unsuccesful()
+        {
+
+            IEnumerable<IJob> fakeTimers = new List<IJob> { new BrokenJob() };
+            var mocker = new AutoMoqer();
+
+            mocker.SetConstant(MockLib.GetEmptyRepository());
+            mocker.SetConstant(fakeTimers);
+
+            //Act
+            var timerProvider = mocker.Resolve<JobProvider>();
+            timerProvider.Initialize();
+            timerProvider.RunScheduled();
+
+            //Assert
+            var settings = timerProvider.All();
+            Assert.IsNotEmpty(settings);
+            Assert.AreNotEqual(DateTime.MinValue, settings[0].LastExecution);
+            Assert.IsFalse(settings[0].Success);
         }
 
 
@@ -222,7 +250,7 @@ namespace NzbDrone.Core.Test
 
         public void Start(ProgressNotification notification, int targetId)
         {
-            throw new NotImplementedException();
+
         }
     }
 

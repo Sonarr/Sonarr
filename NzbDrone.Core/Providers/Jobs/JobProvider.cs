@@ -87,8 +87,6 @@ namespace NzbDrone.Core.Providers.Jobs
 
                 foreach (var pendingTimer in pendingJobs)
                 {
-                    Logger.Info("Attempting to start job [{0}]. Last executing {1}", pendingTimer.Name,
-                                pendingTimer.LastExecution);
                     var timerClass = _jobs.Where(t => t.GetType().ToString() == pendingTimer.TypeName).FirstOrDefault();
                     Execute(timerClass.GetType(), 0);
                 }
@@ -162,12 +160,16 @@ namespace NzbDrone.Core.Providers.Jobs
             var timerClass = _jobs.Where(t => t.GetType() == jobType).FirstOrDefault();
             if (timerClass == null)
             {
-                Logger.Error("Unable to locate implantation for [{0}]. Make sure its properly registered.", jobType.ToString());
+                Logger.Error("Unable to locate implantation for '{0}'. Make sure its properly registered.", jobType.ToString());
                 return;
             }
 
+            var settings = All().Where(j => j.TypeName == jobType.ToString()).FirstOrDefault();
+
             try
             {
+                Logger.Info("Starting job '{0}'. Last execution {1}", settings.Name, settings.LastExecution);
+                settings.LastExecution = DateTime.Now;
                 var sw = Stopwatch.StartNew();
                 using (_notification = new ProgressNotification(timerClass.Name))
                 {
@@ -175,13 +177,17 @@ namespace NzbDrone.Core.Providers.Jobs
                     timerClass.Start(_notification, targetId);
                     _notification.Status = ProgressNotificationStatus.Completed;
                 }
+                settings.Success = true;
                 sw.Stop();
-                Logger.Info("timer [{0}] finished executing successfully. Duration {1}", timerClass.Name, sw.Elapsed.ToString());
+                Logger.Info("Job '{0}' successfully completed in {1} seconds", timerClass.Name, sw.Elapsed.Minutes, sw.Elapsed.Seconds);
             }
             catch (Exception e)
             {
+                settings.Success = false;
                 Logger.ErrorException("An error has occurred while executing timer job " + timerClass.Name, e);
             }
+
+            SaveSettings(settings);
         }
 
         /// <summary>
