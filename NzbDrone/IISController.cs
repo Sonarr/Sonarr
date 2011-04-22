@@ -27,7 +27,7 @@ namespace NzbDrone
             get { return string.Format("http://localhost:{0}/", Config.Port); }
         }
 
-        internal static Process StartIIS()
+        internal static Process StartServer()
         {
             Logger.Info("Preparing IISExpress Server...");
             IISProcess = new Process();
@@ -43,9 +43,6 @@ namespace NzbDrone
 
 
             IISProcess.OutputDataReceived += (OnDataReceived);
-
-            IISProcess.ErrorDataReceived += ((s, e) => IISLogger.Fatal(e.Data));
-
 
             //Set Variables for the config file.
             Environment.SetEnvironmentVariable("NZBDRONE_PATH", Config.ProjectRoot);
@@ -66,59 +63,18 @@ namespace NzbDrone
             IISProcess.BeginErrorReadLine();
             IISProcess.BeginOutputReadLine();
 
-            StartPing();
+            //Start Ping
+            _pingTimer = new Timer(10000) { AutoReset = true };
+            _pingTimer.Elapsed += (Server);
+            _pingTimer.Start();
 
             return IISProcess;
         }
 
-        private static void StartPing()
-        {
-            _pingTimer = new Timer(10000);
-            _pingTimer.AutoReset = true;
-            _pingTimer.Elapsed += (PingIIS);
-            _pingTimer.Start();
-        }
-
-        private static void PingIIS(object sender, ElapsedEventArgs e)
-        {
-            try
-            {
-                var webClient = new WebClient();
-                webClient.DownloadString(AppUrl);
-                Logger.Info("Server said hai...");
-                _pingFailCounter = 0;
-            }
-            catch (Exception ex)
-            {
-                _pingFailCounter++;
-                Logger.ErrorException("App is not responding. Count " + _pingFailCounter, ex);
-                if (_pingFailCounter > 3)
-                {
-                    _pingTimer.Stop();
-                    Logger.Warn("Attempting to restart server.");
-                    StopIIS();
-                    KillOrphaned();
-                    StartIIS();
-                }
-            }
-        }
-
-        private static void OnDataReceived(object s, DataReceivedEventArgs e)
-        {
-            if (e == null || e.Data == null || e.Data.StartsWith("Request started:") ||
-                e.Data.StartsWith("Request ended:") || e.Data == ("IncrementMessages called"))
-                return;
-
-            IISLogger.Trace(e.Data);
-        }
-
-        internal static void StopIIS()
+        internal static void StopServer()
         {
             KillProcess(IISProcess);
-        }
 
-        internal static void KillOrphaned()
-        {
             Logger.Info("Finding orphaned IIS Processes.");
             foreach (var process in Process.GetProcessesByName("IISExpress"))
             {
@@ -136,16 +92,40 @@ namespace NzbDrone
             }
         }
 
-        private static void KillProcess(Process process)
+        private static void RestartServer()
         {
-            if (process != null && !process.HasExited)
+            _pingTimer.Stop();
+            Logger.Warn("Attempting to restart server.");
+            StopServer();
+            StartServer();
+        }
+
+        private static void Server(object sender, ElapsedEventArgs e)
+        {
+            try
             {
-                Logger.Info("[{0}]Killing process", process.Id);
-                process.Kill();
-                Logger.Info("[{0}]Waiting for exit", process.Id);
-                process.WaitForExit();
-                Logger.Info("[{0}]Process terminated successfully", process.Id);
+                new WebClient().DownloadString(AppUrl);
+                Logger.Info("Server said hai...");
+                _pingFailCounter = 0;
             }
+            catch (Exception ex)
+            {
+                _pingFailCounter++;
+                Logger.ErrorException("App is not responding. Count " + _pingFailCounter, ex);
+                if (_pingFailCounter > 2)
+                {
+                    RestartServer();
+                }
+            }
+        }
+
+        private static void OnDataReceived(object s, DataReceivedEventArgs e)
+        {
+            if (e == null || e.Data == null || e.Data.StartsWith("Request started:") ||
+                e.Data.StartsWith("Request ended:") || e.Data == ("IncrementMessages called"))
+                return;
+
+            IISLogger.Trace(e.Data);
         }
 
         private static void UpdateIISConfig()
@@ -168,6 +148,18 @@ namespace NzbDrone
                     ));
 
             configXml.Save(configPath);
+        }
+
+        private static void KillProcess(Process process)
+        {
+            if (process != null && !process.HasExited)
+            {
+                Logger.Info("[{0}]Killing process", process.Id);
+                process.Kill();
+                Logger.Info("[{0}]Waiting for exit", process.Id);
+                process.WaitForExit();
+                Logger.Info("[{0}]Process terminated successfully", process.Id);
+            }
         }
 
         private static string CleanPath(string path)

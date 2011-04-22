@@ -27,8 +27,8 @@ namespace NzbDrone
 
                 Logger.Info("Starting NZBDrone. Start-up Path:'{0}'", Config.ProjectRoot);
 
-                IISController.KillOrphaned();
-                IISController.StartIIS();
+                IISController.StopServer();
+                IISController.StartServer();
 
                 Process.Start(IISController.AppUrl);
 
@@ -52,10 +52,6 @@ namespace NzbDrone
                 AppDomainException(e);
             }
 
-            Console.Write("Press Enter At Any Time To Exit...");
-
-            Console.ReadLine();
-            IISController.StopIIS();
         }
 
 
@@ -71,12 +67,12 @@ namespace NzbDrone
                     CurrentException = excepion as Exception
                 }.Submit();
 
-            IISController.StopIIS();
+            IISController.StopServer();
         }
 
         private static void ProgramExited(object sender, EventArgs e)
         {
-            IISController.StopIIS();
+            IISController.StopServer();
         }
     }
 }
