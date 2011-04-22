@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Providers.Jobs
 
         public void Start(ProgressNotification notification, int targetId)
         {
-            foreach (var indexer in _indexers)
+            foreach (var indexer in _indexers.Where(i => i.Settings.Enable))
             {
                 indexer.Fetch();
             }

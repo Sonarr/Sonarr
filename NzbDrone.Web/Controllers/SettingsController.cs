@@ -66,11 +66,11 @@ namespace NzbDrone.Web.Controllers
                                          NzbMatrixApiKey =
                                              _configProvider.GetValue("NzbMatrixApiKey", String.Empty, true),
 
-                                         NzbsrusUId = _configProvider.GetValue("NzbsrusUId", String.Empty, true),
-                                         NzbsrusHash = _configProvider.GetValue("NzbsrusHash", String.Empty, true),
+                                         NzbsrusUId = _configProvider.NzbsrusUId,
+                                         NzbsrusHash = _configProvider.NzbsrusHash,
 
-                                         NzbsOrgHash = _configProvider.NzbsrusHash,
-                                         NzbsOrgUId = _configProvider.NzbsrusUId,
+                                         NzbsOrgHash = _configProvider.NzbsOrgHash,
+                                         NzbsOrgUId = _configProvider.NzbsOrgUId,
 
                                          NewzbinUsername = _configProvider.NewzbinUsername,
                                          NewzbinPassword = _configProvider.NewzbinPassword,
@@ -214,7 +214,7 @@ namespace NzbDrone.Web.Controllers
                                      {
                                          Name = "New Profile",
                                          UserProfile = true,
-                                         Allowed = new List<QualityTypes> {QualityTypes.Unknown},
+                                         Allowed = new List<QualityTypes> { QualityTypes.Unknown },
                                          Cutoff = QualityTypes.Unknown,
                                      };
 
@@ -272,7 +272,7 @@ namespace NzbDrone.Web.Controllers
             {
                 return new JsonResult { Data = "failed" };
             }
-            
+
             return new JsonResult { Data = "ok" };
         }
 
@@ -333,14 +333,14 @@ namespace NzbDrone.Web.Controllers
                 newzbinSettings.Enable = data.NewzbinEnabled;
                 _indexerProvider.SaveSettings(newzbinSettings);
 
-                _configProvider.NzbsrusHash = data.NzbsOrgHash;
                 _configProvider.NzbsOrgUId = data.NzbsOrgUId;
+                _configProvider.NzbsOrgHash = data.NzbsOrgHash;
 
                 _configProvider.NzbMatrixUsername = data.NzbMatrixUsername;
                 _configProvider.NzbMatrixApiKey = data.NzbMatrixApiKey;
 
                 _configProvider.NzbsrusUId = data.NzbsrusUId;
-                _configProvider.NzbsOrgUId = data.NzbsrusHash;
+                _configProvider.NzbsrusHash = data.NzbsrusHash;
 
                 _configProvider.NewzbinUsername = data.NewzbinUsername;
                 _configProvider.NewzbinPassword = data.NewzbinPassword;
@@ -402,7 +402,7 @@ namespace NzbDrone.Web.Controllers
                         return Content("Error Saving Settings, please fix any errors");
                     //profile.Cutoff = profile.Allowed.Last();
 
-                     _qualityProvider.Update(profile);
+                    _qualityProvider.Update(profile);
                 }
                 return Content(SETTINGS_SAVED);
             }

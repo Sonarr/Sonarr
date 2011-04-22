@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Providers.Indexer
         protected abstract string[] Urls { get; }
 
 
-        protected IndexerSetting Settings
+        public IndexerSetting Settings
         {
             get
             {

@@ -1,0 +1,9 @@
+﻿@model IEnumerable<NzbDrone.Core.Repository.Config>
+@section TitleContent{
+Config
+}
+@section MainContent{
+    @{Html.Telerik().Grid(Model).Name("Grid")
+            .TableHtmlAttributes(new { @class = "Grid" })
+            .Render();}
+}

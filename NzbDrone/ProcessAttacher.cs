@@ -10,31 +10,27 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using EnvDTE;
 using EnvDTE80;
+using NLog;
 using Thread = System.Threading.Thread;
 
 namespace NzbDrone
 {
     public class ProcessAttacher
     {
+
+        private static readonly Logger Logger = LogManager.GetLogger("Application");
+
+
         public static void Attach()
         {
-            for (int i = 0; i < 10; i++)
-            {
-                try
-                {
-                    DTE2 dte2;
-                    dte2 = (DTE2)Marshal.
-                                      GetActiveObject("VisualStudio.DTE.10.0");
+            DTE2 dte2;
+            dte2 = (DTE2)Marshal.
+                              GetActiveObject("VisualStudio.DTE.10.0");
 
-                    var pa = new ProcessAttacher(dte2, "iisexpress", 10);
-                    pa.PessimisticAttachManaged();
-                    return;
-                }
-                catch
-                {
-                    Thread.Sleep(500);
-                }
-            }
+            var pa = new ProcessAttacher(dte2, "iisexpress", 10);
+            pa.PessimisticAttachManaged();
+            return;
+
             // Get an instance of the currently running Visual Studio IDE.
 
         }

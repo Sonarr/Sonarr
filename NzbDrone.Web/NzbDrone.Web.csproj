@@ -683,6 +683,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Settings\UserProfileSection.cshtml" />
     <Content Include="Views\System\Indexers.cshtml" />
+    <Content Include="Views\System\Config.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

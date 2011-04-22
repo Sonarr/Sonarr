@@ -30,28 +30,54 @@ namespace NzbDrone
                 IISController.StopServer();
                 IISController.StartServer();
 
-                Process.Start(IISController.AppUrl);
+
 
 #if DEBUG
-                //Manually Attach debugger to IISExpress
-                if (Debugger.IsAttached)
-                {
-                    try
-                    {
-                        ProcessAttacher.Attach();
-                    }
-                    catch (Exception e)
-                    {
-                        Logger.Warn("Unable to attach to debugger", e);
-                    }
-                }
+                Attach();
 #endif
+
+                Process.Start(IISController.AppUrl);
+
+                IISController.IISProcess.WaitForExit();
+
             }
             catch (Exception e)
             {
                 AppDomainException(e);
             }
 
+        }
+
+        private static void Attach()
+        {
+            if (Debugger.IsAttached)
+            {
+                Logger.Info("Trying to attach to debugger");
+
+                var count = 0;
+
+                while (true)
+                {
+                    try
+                    {
+                        ProcessAttacher.Attach();
+                        Logger.Info("Debugger Attached");
+                        return;
+                    }
+                    catch (Exception e)
+                    {
+                        count++;
+                        if (count > 20)
+                        {
+                            Logger.WarnException("Unable to attach to debugger", e);
+                            return;
+                        }
+
+                        Thread.Sleep(100);
+
+                    }
+                }
+            }
         }
 
 

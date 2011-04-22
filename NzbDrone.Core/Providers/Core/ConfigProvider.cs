@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using NLog;
 using NzbDrone.Core.Repository;
 using SubSonic.Repository;
@@ -13,6 +15,11 @@ namespace NzbDrone.Core.Providers.Core
         public ConfigProvider(IRepository dataRepository)
         {
             _sonicRepo = dataRepository;
+        }
+
+        public IList<Config> All()
+        {
+            return _sonicRepo.All<Config>().ToList();
         }
 
         public ConfigProvider()
