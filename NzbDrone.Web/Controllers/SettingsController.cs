@@ -210,7 +210,35 @@ namespace NzbDrone.Web.Controllers
 
             ViewData["Qualities"] = qualityTypes;
 
-            return View("UserProfileSection", new QualityProfile { Name = "New Profile", UserProfile = true });
+            var qualityProfile = new QualityProfile
+                                     {
+                                         Name = "New Profile",
+                                         UserProfile = true,
+                                         Allowed = new List<QualityTypes> {QualityTypes.Unknown},
+                                         Cutoff = QualityTypes.Unknown,
+                                     };
+
+            var id = _qualityProvider.Add(qualityProfile);
+            qualityProfile.QualityProfileId = id;
+            qualityProfile.Allowed = null;
+
+            ViewData["ProfileId"] = id;
+
+            return View("UserProfileSection", qualityProfile);
+        }
+
+        public ActionResult GetQualityProfileView(QualityProfile profile)
+        {
+            var qualityTypes = new List<QualityTypes>();
+
+            foreach (QualityTypes qual in Enum.GetValues(typeof(QualityTypes)))
+            {
+                qualityTypes.Add(qual);
+            }
+            ViewData["Qualities"] = qualityTypes;
+            ViewData["ProfileId"] = profile.QualityProfileId;
+
+            return PartialView("UserProfileSection", profile);
         }
 
         public ViewResult AddRootDir()
@@ -231,6 +259,21 @@ namespace NzbDrone.Web.Controllers
             var selectList = new SelectList(profiles, "QualityProfileId", "Name");
 
             return new QualityModel { DefaultQualityProfileId = defaultQualityQualityProfileId, SelectList = selectList };
+        }
+
+        public JsonResult DeleteQualityProfile(int profileId)
+        {
+            try
+            {
+                _qualityProvider.Delete(profileId);
+            }
+
+            catch (Exception)
+            {
+                return new JsonResult { Data = "failed" };
+            }
+            
+            return new JsonResult { Data = "ok" };
         }
 
         [HttpPost]
@@ -343,12 +386,6 @@ namespace NzbDrone.Web.Controllers
                 if (data.UserProfiles == null)
                     return Content(SETTINGS_SAVED);
 
-                foreach (var dbProfile in _qualityProvider.GetAllProfiles().Where(q => q.UserProfile))
-                {
-                    if (!data.UserProfiles.Exists(p => p.QualityProfileId == dbProfile.QualityProfileId))
-                        _qualityProvider.Delete(dbProfile.QualityProfileId);
-                }
-
                 foreach (var profile in data.UserProfiles)
                 {
                     Logger.Debug(String.Format("Updating User Profile: {0}", profile));
@@ -365,14 +402,9 @@ namespace NzbDrone.Web.Controllers
                         return Content("Error Saving Settings, please fix any errors");
                     //profile.Cutoff = profile.Allowed.Last();
 
-                    if (profile.QualityProfileId > 0)
-                        _qualityProvider.Update(profile);
-
-                    else
-                        _qualityProvider.Add(profile);
-
-                    return Content(SETTINGS_SAVED);
+                     _qualityProvider.Update(profile);
                 }
+                return Content(SETTINGS_SAVED);
             }
 
             return Content(SETTINGS_FAILED);

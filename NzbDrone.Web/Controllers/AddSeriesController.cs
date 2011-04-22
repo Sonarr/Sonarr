@@ -94,7 +94,6 @@ namespace NzbDrone.Web.Controllers
                 "QualityProfileId",
                 "Name",
                 defaultQuality);
-            ;
 
             return PartialView("AddSeriesItem", suggestions);
         }

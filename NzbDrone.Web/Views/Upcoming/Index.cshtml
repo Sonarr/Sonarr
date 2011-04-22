@@ -1,10 +1,10 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<List<NzbDrone.Web.Models.UpcomingEpisodeModel>>" %>
-<%@ Import Namespace="NzbDrone.Web.Models" %>
+﻿@model List<NzbDrone.Web.Models.UpcomingEpisodeModel>
+@using NzbDrone.Web.Models
 
-<asp:Content ID="Content1" ContentPlaceHolderID="Scripts" runat="server">
+@section Scripts{
+
     <script type="text/javascript">
         function onRowDataBound(e) {
-
             e.row.style.boarder = "";
 
             if (e.dataItem.Level == 3) {
@@ -20,23 +20,23 @@
             //e.row.style.color = 'blue';
         }
     </script>
-</asp:Content>
-<asp:Content ID="Content2" ContentPlaceHolderID="TitleContent" runat="server">
-    Upcoming
-</asp:Content>
-<asp:Content ID="Menu" ContentPlaceHolderID="ActionMenu" runat="server">
-    <%
-        Html.Telerik().Menu().Name("historyMenu").Items(
-            items => { items.Add().Text("Start RSS Sync").Action("RssSync", "Series"); }).Render();
-%>
-</asp:Content>
-<asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="server">
+}
 
+@section TitleContent{
+    Upcoming
+}
+
+@section ActionMenu{
+    @{Html.Telerik().Menu().Name("historyMenu").Items(
+            items => { items.Add().Text("Start RSS Sync").Action("RssSync", "Series"); }).Render();}
+}
+
+@section MainContent{
     <div id="yesterday">
         <h2>Yesterday</h2>
-        <%
-            Html.Telerik().Grid<UpcomingEpisodeModel>().Name("Yesterday").NoRecordsTemplate(
+        @{Html.Telerik().Grid<UpcomingEpisodeModel>().Name("Yesterday").NoRecordsTemplate(
                 "No watched shows aired yesterday")
+                .TableHtmlAttributes(new { @class = "Grid" })
                 .Columns(columns =>
                              {
                                  columns.Bound(c => c.SeriesName)
@@ -59,16 +59,15 @@
                 //.Pageable(c => c.PageSize(20).Position(GridPagerPosition.Both).Style(GridPagerStyles.PageInput | GridPagerStyles.NextPreviousAndNumeric))
                 //.Filterable()
                 //.ClientEvents(c => c.OnRowDataBound("onRowDataBound"))
-                .Render();
-%>
+                .Render();}
     </div>
 
     <br />
 
     <div id="today">
         <h2>Today</h2>
-        <%
-            Html.Telerik().Grid<UpcomingEpisodeModel>().Name("Today").NoRecordsTemplate("No watched shows airing today.")
+        @{Html.Telerik().Grid<UpcomingEpisodeModel>().Name("Today").NoRecordsTemplate("No watched shows airing today.")
+                .TableHtmlAttributes(new { @class = "Grid" })
                 .Columns(columns =>
                              {
                                  columns.Bound(c => c.SeriesName)
@@ -91,17 +90,16 @@
                 //.Pageable(c => c.PageSize(20).Position(GridPagerPosition.Both).Style(GridPagerStyles.PageInput | GridPagerStyles.NextPreviousAndNumeric))
                 //.Filterable()
                 //.ClientEvents(c => c.OnRowDataBound("onRowDataBound"))
-                .Render();
-%>
+                .Render();}
     </div>
 
     <br />
     
     <div id="week">
     <h2>7-Day Forecast</h2>
-        <%
-            Html.Telerik().Grid<UpcomingEpisodeModel>().Name("Week").NoRecordsTemplate(
+        @{Html.Telerik().Grid<UpcomingEpisodeModel>().Name("Week").NoRecordsTemplate(
                 "No watched shows airing in the next week...")
+                .TableHtmlAttributes(new { @class = "Grid" })
                 .Columns(columns =>
                              {
                                  columns.Bound(c => c.SeriesName)
@@ -124,7 +122,6 @@
                 //.Pageable(c => c.PageSize(20).Position(GridPagerPosition.Both).Style(GridPagerStyles.PageInput | GridPagerStyles.NextPreviousAndNumeric))
                 //.Filterable()
                 //.ClientEvents(c => c.OnRowDataBound("onRowDataBound"))
-                .Render();
-%>
+                .Render();}
     </div>
-</asp:Content>
+}

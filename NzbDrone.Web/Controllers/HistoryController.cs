@@ -38,7 +38,10 @@ namespace NzbDrone.Web.Controllers
         [GridAction]
         public ActionResult _AjaxBinding()
         {
-            var history = _historyProvider.AllItems().Select(h => new HistoryModel
+
+            //TODO: possible subsonic bug, IQuarible causes some issues so ToList() is called
+            
+            var history = _historyProvider.AllItems().ToList().Select(h => new HistoryModel
                                                                       {
                                                                           HistoryId = h.HistoryId,
                                                                           SeasonNumber = h.Episode.SeasonNumber,
@@ -47,10 +50,12 @@ namespace NzbDrone.Web.Controllers
                                                                           EpisodeOverview = h.Episode.Overview,
                                                                           SeriesTitle = h.Episode.Series.Title,
                                                                           NzbTitle = h.NzbTitle,
-                                                                          Quality = h.Quality.ToString("G"),
+                                                                          Quality = h.Quality.ToString(),
                                                                           IsProper = h.IsProper,
                                                                           Date = h.Date
                                                                       });
+
+            history.ToList();
 
             return View(new GridModel(history));
         }

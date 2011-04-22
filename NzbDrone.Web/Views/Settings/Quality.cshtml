@@ -49,11 +49,10 @@
                         </div>
 
                         <div id="user-profiles">
-
-            @foreach (var item in Model.UserProfiles)
-            {
-                Html.RenderPartial("UserProfileSection", item);
-            }
+                            @foreach (var item in Model.UserProfiles)
+                            {
+                                Html.RenderAction("GetQualityProfileView", item);
+                            }
                         </div>
                     </div>
 
@@ -77,8 +76,27 @@
         return false;
     });
 
-    $("a.deleteRow").live("click", function () {
-        $(this).parents("div.userProfileSectionEditor:first").remove();
-        return false;
-    });
+//    $("a.deleteRow").live("click", function () {
+//        $(this).parents("div.userProfileSectionEditor:first").remove();
+//        return false;
+    //    });
+
+    var deleteQualityProfileUrl = '@Url.Action("DeleteQualityProfile", "Settings")';
+
+    function deleteProfile(id) {
+        //$(this).parents("div.userProfileSectionEditor:first").remove();
+        sendToServer(id);
+        $("#div_" + id).hide();
+    }
+
+    function sendToServer(id) {
+        $.ajax({
+            type: "POST",
+            url: deleteQualityProfileUrl,
+            data: jQuery.param({ profileId: id }),
+            error: function (req, status, error) {
+                alert("Sorry! We could not add " + path + " at this time. " + error);
+            }
+        });
+    }
 </script>

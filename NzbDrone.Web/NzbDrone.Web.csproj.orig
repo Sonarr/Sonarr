@@ -634,6 +634,19 @@
     <Content Include="Views\AddSeries\AddExisting.cshtml" />
     <Content Include="Views\AddSeries\AddNew.cshtml" />
     <None Include="Views\AddSeries\AddSeriesItem.cshtml" />
+<<<<<<< HEAD
+    <Content Include="Views\History\Index.aspx" />
+    <Content Include="Views\Log\Index.aspx" />
+    <Content Include="Views\AddSeries\AddExisting.aspx" />
+    <Content Include="Views\AddSeries\AddNew.aspx" />
+    <Content Include="Views\Series\Details.aspx" />
+    <Content Include="Views\Series\Edit.aspx" />
+    <Content Include="Views\Series\index.aspx" />
+    <Content Include="Views\Series\SeriesSearchResults.ascx" />
+    <Content Include="Views\Series\SubMenu.ascx" />
+    <Content Include="Views\Upcoming\Index.aspx" />
+=======
+>>>>>>> markus101
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

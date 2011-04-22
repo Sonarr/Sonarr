@@ -18,13 +18,25 @@ namespace NzbDrone
     {
         public static void Attach()
         {
-            // Get an instance of the currently running Visual Studio IDE.
-            DTE2 dte2;
-            dte2 = (DTE2) Marshal.
-                              GetActiveObject("VisualStudio.DTE.10.0");
+            for (int i = 0; i < 10; i++)
+            {
+                try
+                {
+                    DTE2 dte2;
+                    dte2 = (DTE2)Marshal.
+                                      GetActiveObject("VisualStudio.DTE.10.0");
 
-            var pa = new ProcessAttacher(dte2, "iisexpress", 10);
-            pa.PessimisticAttachManaged();
+                    var pa = new ProcessAttacher(dte2, "iisexpress", 10);
+                    pa.PessimisticAttachManaged();
+                    return;
+                }
+                catch
+                {
+                    Thread.Sleep(500);
+                }
+            }
+            // Get an instance of the currently running Visual Studio IDE.
+
         }
 
         #region private
@@ -99,6 +111,8 @@ namespace NzbDrone
 
         private bool IsBeingDebugged()
         {
+
+
             if (_dte.Debugger.DebuggedProcesses != null)
             {
                 foreach (Process process in _dte.Debugger.DebuggedProcesses)

@@ -1,12 +1,14 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<NzbDrone.Core.Repository.Series>" %>
-<%@ Import Namespace="NzbDrone.Core.Repository" %>
-<%@ Import Namespace="NzbDrone.Web.Models" %>
-<asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
-    <%:Model.Title%>
-</asp:Content>
-<asp:Content ID="Menu" ContentPlaceHolderID="ActionMenu" runat="server">
-    <%
-        Html.Telerik().Menu().Name("SeriesMenu").Items(items =>
+﻿@model NzbDrone.Core.Repository.Series
+@using NzbDrone.Core.Repository
+@using NzbDrone.Web.Models
+
+@section TitleContent{
+    @Model.Title
+}
+
+@section ActionMenu{
+
+    @{Html.Telerik().Menu().Name("SeriesMenu").Items(items =>
                                                            {
                                                                items.Add().Text("Edit").Action("Edit", "Series",
                                                                                                new
@@ -31,49 +33,47 @@
                                                                                                             Model.
                                                                                                             SeriesId
                                                                                                             });
-                                                           }).Render();
-%>
-</asp:Content>
-<asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
+                                                           }).Render();}
+}
+
+@section MainContent{
+
     <fieldset>
         <div class="display-label">
             ID</div>
         <div class="display-field">
-            <%:Model.SeriesId%></div>
+            @Model.SeriesId</div>
         <div class="display-label">
             Overview</div>
         <div class="display-field">
-            <%:Model.Overview%></div>
+            @Model.Overview</div>
         <div class="display-label">
             Status</div>
         <div class="display-field">
-            <%:Model.Status%></div>
+            @Model.Status</div>
         <div class="display-label">
             AirTimes</div>
         <div class="display-field">
-            <%:Model.AirTimes%></div>
+            @Model.AirTimes</div>
         <div class="display-label">
             Language</div>
         <div class="display-field">
-            <%:Model.Language.ToUpper()%></div>
+            @Model.Language.ToUpper()</div>
         <div class="display-label">
             Location</div>
         <div class="display-field">
-            <%:Model.Path%></div>
+            @Model.Path</div>
     </fieldset>
-    <%
-        //Todo: This breaks when using SQLServer... thoughts?
-        //Normal Seasons
-        foreach (var season in Model.Seasons.Where(s => s.SeasonNumber > 0).Reverse())
+        @*Todo: This breaks when using SQLServer... thoughts?*@
+
+        @foreach (var season in Model.Seasons.Where(s => s.SeasonNumber > 0).Reverse())
         {
-%>
+
     <br />
-    <h3>
-        Season
-        <%:season.SeasonNumber%></h3>
-    <%
+    <h3>Season @season.SeasonNumber</h3>
             Season season1 = season;
             Html.Telerik().Grid<EpisodeModel>().Name("seasons_" + season.SeasonNumber)
+                .TableHtmlAttributes(new { @class = "Grid" })
                 .Columns(columns =>
                              {
                                  columns.Bound(o => o.EpisodeId)
@@ -107,17 +107,16 @@
         }
 
         //Specials
-        var specialSeasons = Model.Seasons.Where(s => s.SeasonNumber == 0).FirstOrDefault();
+        @{var specialSeasons = Model.Seasons.Where(s => s.SeasonNumber == 0).FirstOrDefault();}
 
-        if (specialSeasons != null)
+        @if (specialSeasons != null)
         {
-%>
+
     <br />
     <h3>
         Specials</h3>
-    <%
-
             Html.Telerik().Grid(specialSeasons.Episodes).Name("seasons_specials")
+                .TableHtmlAttributes(new { @class = "Grid" })
                 .Columns(columns =>
                              {
                                  columns.Bound(c => c.EpisodeNumber).Width(0).Title("Episode");
@@ -129,14 +128,13 @@
                 .Footer(false)
                 .Render();
         }
-%>
-</asp:Content>
-<asp:Content ContentPlaceHolderID="Scripts" runat="server">
-    <script type="text/javascript">
 
+}
+
+@section Scripts{
+    <script type="text/javascript">
         function episodeDetailExpanded(e) {
             $console.log("OnDetailViewExpand :: " + e.masterRow.cells[1].innerHTML);
         }
-   
     </script>
-</asp:Content>
+}

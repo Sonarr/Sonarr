@@ -2,10 +2,15 @@
 @using NzbDrone.Core.Repository.Quality
 @using NzbDrone.Web.Helpers
 
+@{
+    Layout = null;
+}
+
 @using (Html.BeginCollectionItem("UserProfiles"))
 {
 
     var idClean = ViewData.TemplateInfo.HtmlFieldPrefix.Replace('[', '_').Replace(']', '_');
+    var ugly = ViewData.TemplateInfo.HtmlFieldPrefix;
 
     string sortable1 = String.Format("{0}_sortable1", idClean);
     string sortable2 = String.Format("{0}_sortable2", idClean);
@@ -13,6 +18,7 @@
     string connectedSortable = String.Format("connected{0}", idClean);
     string title = String.Format("{0}_Title", idClean);
     string nameBox = String.Format("{0}_Name", idClean);
+    string cutoff = String.Format("{0}.Cutoff", ugly);
 
     <style type="text/css">
         .sortable1, .sortable2 { list-style-type: none; margin-right: 10px; background: #eee; padding-left: 5px; padding-right: 5px; padding-top: 0px; padding-bottom: 6px; width: 117px; margin-bottom: 3px; }
@@ -35,25 +41,32 @@
 
                 create: function (event, ui) {
                     var order = $('#@sortable1').sortable("toArray");
-                    $("#@allowedStringName>").val(order);
+                    $("#@allowedStringName").val(order);
                 },
 
                 update: function (event, ui) {
                     var order = $('#@sortable1').sortable("toArray");
                     $("#@allowedStringName").val(order);
-                }
 
+                    //If this is the first QualityType added to the Profile select it as the cutoff value (in-case the user forgets)
+                    var $list = $('#@sortable1 li');
+                    if ($list.length == 1) {
+                        var $radios = $('input[name="@cutoff"]');
+                        $radios.filter('[value=' + order + ']').attr('checked', true);
+                    }
+                }
             }).disableSelection();
         });
     </script>
 
-    <div class="userProfileSectionEditor"> 
+    <div class="userProfileSectionEditor" id="div_@(ViewData["ProfileId"])">
 
         <fieldset style="width:285px; margin:5px; margin-top: 0px; border-color:#CCCCCD">
+        <div id="tester"></div>
 
             <div id="qualityHeader" style="padding-bottom: 5px; margin: 0px;">
-                <h2 style="display:inline; padding-right: 4px; margin-left: 4px;" id="@title"><@Html.DisplayTextFor(m => m.Name)</h2>
-                <a href="#" class="deleteRow"><img src="../../Content/Images/X.png" alt="Delete" /></a>
+                <h2 style="display:inline; padding-right: 4px; margin-left: 4px;" id="@title">@{Html.DisplayTextFor(m => m.Name);}</h2>
+                <a href="#" id="@Model.QualityProfileId" class="deleteRow" onclick="deleteProfile('@ViewData["ProfileId"]')"><img src="../../Content/Images/X.png" alt="Delete" /></a>
             </div>
 
             <div class="config-group" style="width: 250px; margin-bottom: 5px; margin-left: 5px;">
@@ -88,10 +101,10 @@
         @for (int i = 0; i < qualitiesList.Count(); i++)
         {
             //Skip Unknown and any item that is in the allowed list
-            if (qualitiesList[i].ToString() == "Unknown")
-            {
-                continue;
-            }
+            //if (qualitiesList[i].ToString() == "Unknown")
+            //{
+            //    continue;
+            //}
 
             if (Model.Allowed != null)
             {
