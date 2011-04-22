@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using FizzWare.NBuilder;
 using Moq;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Providers.Core;
+using NzbDrone.Core.Repository;
 using SubSonic.DataProviders;
 using SubSonic.Repository;
 
@@ -17,7 +19,7 @@ namespace NzbDrone.Core.Test
     {
         public static string[] StandardSeries
         {
-            get { return new[] {"c:\\tv\\the simpsons", "c:\\tv\\family guy", "c:\\tv\\southpark", "c:\\tv\\24"}; }
+            get { return new[] { "c:\\tv\\the simpsons", "c:\\tv\\family guy", "c:\\tv\\southpark", "c:\\tv\\24" }; }
         }
 
         public static ConfigProvider StandardConfig
@@ -70,6 +72,24 @@ namespace NzbDrone.Core.Test
             }
 
             return mock.Object;
+        }
+
+        public static Series GetFakeSeries(int id, string title)
+        {
+            return Builder<Series>.CreateNew()
+                .With(c => c.SeriesId = id)
+                .With(c => c.Title = title)
+                .With(c => c.CleanTitle = Parser.NormalizeTitle(title))
+                .Build();
+        }
+
+        public static IList<Episode> GetFakeEpisodes(int seriesId)
+        {
+            var epNumber = new SequentialGenerator<int>();
+            return Builder<Episode>.CreateListOfSize(10)
+                .WhereAll().Have(c => c.SeriesId = seriesId)
+                .WhereAll().Have(c => c.EpisodeNumber = epNumber.Generate())
+                .Build();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMoq;
 using MbUnit.Framework;
 using Moq;
 using NzbDrone.Core.Providers;
@@ -61,6 +62,30 @@ namespace NzbDrone.Core.Test
 
             //Assert
             Assert.AreEqual(result.Count(), 1);
+        }
+
+
+        [Test]
+        public void add_item()
+        {
+            var mocker = new AutoMoqer();
+            var repo = MockLib.GetEmptyRepository();
+
+            mocker.SetConstant(repo);
+
+            var episodes = MockLib.GetFakeEpisodes(1);
+            repo.AddMany(episodes);
+
+            var episode = episodes[5];
+
+            var history = new History
+                              {
+                                  Date = DateTime.Now,
+                                  EpisodeId = episode.EpisodeId,
+                                  NzbTitle = "my title"
+                              };
+
+            mocker.Resolve<HistoryProvider>().Add(history);
         }
 
         [Test]

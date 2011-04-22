@@ -1,6 +1,5 @@
 ﻿@model List<NzbDrone.Web.Models.HistoryModel>
 @using NzbDrone.Web.Models
-
 @section Scripts{
     <script type="text/javascript">
         function onRowDataBound(e) {
@@ -21,11 +20,9 @@
         }
     </script>
 }
-
 @section TitleContent{
-    History
+History
 }
-
 @section ActionMenu{
     @{Html.Telerik().Menu().Name("historyMenu").Items(items =>
             {
@@ -33,17 +30,17 @@
                 items.Add().Text("Purge History").Action("Purge", "History");
             }).Render();}
 }
-
 @section MainContent{
     @{Html.Telerik().Grid<HistoryModel>().Name("history")
+           .TableHtmlAttributes(new { @class = "Grid" })
             .Columns(columns =>
                          {
                              columns.Bound(c => c.SeriesTitle).Title("Series Name").Width(120);
-                             columns.Bound(c => c.SeasonNumber).Title("Season #").Width(10);
-                             columns.Bound(c => c.EpisodeNumber).Title("Episode #").Width(10);
-                             columns.Bound(c => c.EpisodeTitle).Title("Episode Title").Width(140);
-                             columns.Bound(c => c.Quality).Title("Quality").Width(30);
-                             columns.Bound(c => c.Date).Title("Date Grabbed").Width(60);
+                             columns.Bound(c => c.SeasonNumber).Title("Season").Width(10);
+                             columns.Bound(c => c.EpisodeNumber).Title("Episode").Width(10);
+                             columns.Bound(c => c.EpisodeTitle).Title("Episode Title");
+                             columns.Bound(c => c.Quality).Title("Quality").Width(10);
+                             columns.Bound(c => c.Date).Title("Date/Time Grabbed");
                          })
             .DetailView(detailView => detailView.ClientTemplate(
                 "<fieldset>" +
@@ -57,7 +54,7 @@
             .Pageable(
                 c =>
                 c.PageSize(50).Position(GridPagerPosition.Bottom).Style(GridPagerStyles.NextPrevious))
-            //.Filterable()
-            //.ClientEvents(c => c.OnRowDataBound("onRowDataBound"))
+          //.Filterable()
+          //.ClientEvents(c => c.OnRowDataBound("onRowDataBound"))
             .Render();}
 }
