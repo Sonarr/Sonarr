@@ -14,6 +14,7 @@ namespace AutoMoq
 {
     public class AutoMoqer
     {
+        internal readonly MockBehavior DefaultBehavior = MockBehavior.Default;
         internal Type ResolveType;
         private IUnityContainer container;
         private IDictionary<Type, object> registeredMocks;
@@ -21,6 +22,13 @@ namespace AutoMoq
         public AutoMoqer()
         {
             SetupAutoMoqer(new UnityContainer());
+        }
+
+        public AutoMoqer(MockBehavior defaultBehavior)
+        {
+            DefaultBehavior = defaultBehavior;
+            SetupAutoMoqer(new UnityContainer());
+
         }
 
         internal AutoMoqer(IUnityContainer container)
@@ -37,7 +45,12 @@ namespace AutoMoq
             return result;
         }
 
-        public virtual Mock<T> GetMock<T>(MockBehavior behavior = MockBehavior.Default) where T : class
+        public virtual Mock<T> GetMock<T>() where T : class
+        {
+            return GetMock<T>(DefaultBehavior);
+        }
+
+        public virtual Mock<T> GetMock<T>(MockBehavior behavior) where T : class
         {
             ResolveType = null;
             var type = GetTheMockType<T>();
@@ -112,10 +125,10 @@ namespace AutoMoq
         private void SetupAutoMoqer(IUnityContainer container)
         {
             this.container = container;
-            registeredMocks = new Dictionary<Type, object>();
-
-            AddTheAutoMockingContainerExtensionToTheContainer(container);
             container.RegisterInstance(this);
+
+            registeredMocks = new Dictionary<Type, object>();
+            AddTheAutoMockingContainerExtensionToTheContainer(container);
         }
 
         private static void AddTheAutoMockingContainerExtensionToTheContainer(IUnityContainer container)
