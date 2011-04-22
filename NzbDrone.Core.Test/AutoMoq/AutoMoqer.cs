@@ -116,7 +116,8 @@ namespace AutoMoq
             foreach (var registeredMock in registeredMocks)
             {
                 var mock = registeredMock.Value as Mock;
-                mock.VerifyAll();
+                if (mock != null)
+                    mock.VerifyAll();
             }
         }
 
