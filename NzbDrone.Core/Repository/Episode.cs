@@ -40,9 +40,5 @@ namespace NzbDrone.Core.Repository
         [SubSonicToManyRelation]
         public virtual List<History> Histories { get; protected set; }
 
-        public override string ToString()
-        {
-            return String.Format("[Episode: '{0} S{1:00}E{2:00}']", Series.Title, SeasonNumber, EpisodeNumber);
-        }
     }
 }

@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Test
         /*Fucked-up hall of shame,
          * WWE.Wrestlemania.27.PPV.HDTV.XviD-KYR
          * The.Kennedys.Part.2.DSR.XviD-SYS
-         * 
+         * Unreported.World.Chinas.Lost.Sons.WS.PDTV.XviD-FTP
          */
 
         [Test]

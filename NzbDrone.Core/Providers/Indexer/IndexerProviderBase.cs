@@ -126,7 +126,7 @@ namespace NzbDrone.Core.Providers.Indexer
                 {
                     if (_historyProvider.Exists(episode.EpisodeId, parseResult.Quality, parseResult.Proper))
                     {
-                        _logger.Debug("Episode in history: {0}", episode.ToString());
+                        _logger.Debug("Episode in history: {0}", feedItem.Title.Text);
                     }
                     else
                     {
