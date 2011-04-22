@@ -127,21 +127,21 @@ namespace NzbDrone.Core.Providers.Indexer
                     if (_historyProvider.Exists(episode.EpisodeId, parseResult.Quality, parseResult.Proper))
                     {
                         _logger.Debug("Episode in history: {0}", episode.ToString());
-                        continue;
                     }
+                    else
+                    {
+                        //TODO: Add episode to sab
 
-                    //TODO: Add episode to sab
-
-                    _historyProvider.Add(new History
-                                                {
-                                                    Date = DateTime.Now,
-                                                    EpisodeId = episode.EpisodeId,
-                                                    IsProper = parseResult.Proper,
-                                                    NzbTitle = feedItem.Title.Text,
-                                                    Quality = parseResult.Quality
-                                                });
+                        _historyProvider.Add(new History
+                        {
+                            Date = DateTime.Now,
+                            EpisodeId = episode.EpisodeId,
+                            IsProper = parseResult.Proper,
+                            NzbTitle = feedItem.Title.Text,
+                            Quality = parseResult.Quality
+                        });
+                    }
                 }
-
             }
         }
 

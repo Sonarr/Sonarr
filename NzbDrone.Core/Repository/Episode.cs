@@ -38,6 +38,11 @@ namespace NzbDrone.Core.Repository
         public virtual EpisodeFile EpisodeFile { get; set; }
 
         [SubSonicToManyRelation]
-        public virtual List<History> Histories { get; private set; }
+        public virtual List<History> Histories { get; protected set; }
+
+        public override string ToString()
+        {
+            return String.Format("[Episode: '{0} S{1:00}E{2:00}']", Series.Title, SeasonNumber, EpisodeNumber);
+        }
     }
 }
