@@ -91,7 +91,8 @@ namespace NzbDrone.Core.Test
             Assert.AreEqual(message, logItem.Message);
             Assert.AreEqual(Logger.Name, logItem.Logger);
             Assert.AreEqual(Logger.Name, logItem.Logger);
-            Assert.AreEqual(Instrumentation.LogLevel.Info, logItem.Level);
+            Assert.AreEqual(LogLevel.Info.Name, logItem.Level);
+            Assert.AreEqual("write_log", logItem.Method);
         }
 
         [Test]
@@ -122,10 +123,9 @@ namespace NzbDrone.Core.Test
             Assert.AreNotEqual(new DateTime(), logItem.Time);
             Assert.AreEqual(message, logItem.Message);
             Assert.AreEqual(Logger.Name, logItem.Logger);
-            Assert.AreEqual(Instrumentation.LogLevel.Error, logItem.Level);
+            Assert.AreEqual(LogLevel.Error.Name, logItem.Level);
             Assert.AreEqual(ex.GetType().ToString(), logItem.ExceptionType);
-            Assert.AreEqual(ex.ToString(), logItem.ExceptionString);
-            Assert.AreEqual(ex.Message, logItem.ExceptionMessage);
+            Assert.AreEqual(ex.ToString(), logItem.Exception);
         }
 
         [Test]
@@ -156,10 +156,9 @@ namespace NzbDrone.Core.Test
             Assert.AreNotEqual(new DateTime(), logItem.Time);
             Assert.AreEqual(ex.Message, logItem.Message);
             Assert.AreEqual(Logger.Name, logItem.Logger);
-            Assert.AreEqual(Instrumentation.LogLevel.Error, logItem.Level);
+            Assert.AreEqual(LogLevel.Error.Name, logItem.Level);
             Assert.AreEqual(ex.GetType().ToString(), logItem.ExceptionType);
-            Assert.AreEqual(ex.ToString(), logItem.ExceptionString);
-            Assert.AreEqual(ex.Message, logItem.ExceptionMessage);
+            Assert.AreEqual(ex.ToString(), logItem.Exception);
         }
     }
 }

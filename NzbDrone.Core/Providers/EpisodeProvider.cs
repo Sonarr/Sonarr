@@ -11,10 +11,7 @@ namespace NzbDrone.Core.Providers
 {
     public class EpisodeProvider
     {
-        //TODO: Remove parsing of the series name, it should be done in series provider
-
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private readonly HistoryProvider _history;
         private readonly QualityProvider _quality;
         private readonly SeasonProvider _seasons;
         private readonly SeriesProvider _series;
@@ -23,13 +20,12 @@ namespace NzbDrone.Core.Providers
 
         public EpisodeProvider(IRepository sonicRepo, SeriesProvider seriesProvider,
                                SeasonProvider seasonProvider, TvDbProvider tvDbProvider,
-                               HistoryProvider history, QualityProvider quality)
+                               QualityProvider quality)
         {
             _sonicRepo = sonicRepo;
             _series = seriesProvider;
             _tvDb = tvDbProvider;
             _seasons = seasonProvider;
-            _history = history;
             _quality = quality;
         }
 
@@ -57,6 +53,15 @@ namespace NzbDrone.Core.Providers
         public virtual IList<Episode> GetEpisodeBySeason(long seasonId)
         {
             return _sonicRepo.Find<Episode>(e => e.SeasonId == seasonId);
+        }
+
+        public virtual IList<Episode> GetEpisodeByParseResult(EpisodeParseResult parseResult)
+        {
+            return _sonicRepo.Find<Episode>(e =>
+                                            e.SeriesId == parseResult.SeriesId &&
+                                            e.SeasonNumber == parseResult.SeasonNumber &&
+                                            parseResult.Episodes.Contains(e.EpisodeNumber));
+
         }
 
         public virtual String GetSabTitle(EpisodeParseResult parseResult)
@@ -101,7 +106,7 @@ namespace NzbDrone.Core.Providers
                     //Todo: How do we want to handle this really? Episode could be released before information is on TheTvDB 
                     //(Parks and Rec did this a lot in the first season, from experience)
                     //Keivan: Should automatically add the episode to db with minimal information. then update the description/title when available.
-                    episodeInfo = new Episode()
+                    episodeInfo = new Episode
                                       {
                                           SeriesId = parsedReport.SeriesId,
                                           AirDate = DateTime.Now.Date,
@@ -133,13 +138,6 @@ namespace NzbDrone.Core.Providers
 
                         if (quality.Cutoff <= file.Quality && file.Proper) continue;
                     }
-                }
-
-                //IsInHistory? (NZBDrone)
-                if (_history.Exists(episodeInfo.EpisodeId, parsedReport.Quality, parsedReport.Proper))
-                {
-                    Logger.Debug("Episode in history: {0}", episode.ToString());
-                    continue;
                 }
 
                 return true; //If we get to this point and the file has not yet been rejected then accept it

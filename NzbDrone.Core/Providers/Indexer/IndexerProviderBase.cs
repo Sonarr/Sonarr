@@ -1,9 +1,9 @@
+using System;
 using System.ServiceModel.Syndication;
 using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
-using SubSonic.Repository;
 
 namespace NzbDrone.Core.Providers.Indexer
 {
@@ -13,23 +13,23 @@ namespace NzbDrone.Core.Providers.Indexer
         protected readonly ConfigProvider _configProvider;
         protected readonly EpisodeProvider _episodeProvider;
         private readonly HttpProvider _httpProvider;
-        protected readonly IRepository _repository;
         private readonly IndexerProvider _indexerProvider;
+        private readonly HistoryProvider _historyProvider;
         protected readonly SeasonProvider _seasonProvider;
         protected readonly SeriesProvider _seriesProvider;
 
 
-        public IndexerProviderBase(SeriesProvider seriesProvider, SeasonProvider seasonProvider,
+        protected IndexerProviderBase(SeriesProvider seriesProvider, SeasonProvider seasonProvider,
                                 EpisodeProvider episodeProvider, ConfigProvider configProvider,
-                                HttpProvider httpProvider, IRepository repository, IndexerProvider indexerProvider)
+                                HttpProvider httpProvider, IndexerProvider indexerProvider, HistoryProvider historyProvider)
         {
             _seriesProvider = seriesProvider;
             _seasonProvider = seasonProvider;
             _episodeProvider = episodeProvider;
             _configProvider = configProvider;
             _httpProvider = httpProvider;
-            _repository = repository;
             _indexerProvider = indexerProvider;
+            _historyProvider = historyProvider;
         }
 
         /// <summary>
@@ -104,7 +104,28 @@ namespace NzbDrone.Core.Providers.Indexer
                     return;
                 }
 
-                //Should probably queue item to download
+                var episodes = _episodeProvider.GetEpisodeByParseResult(parseResult);
+
+                foreach (var episode in episodes)
+                {
+                    if (_historyProvider.Exists(episode.EpisodeId, parseResult.Quality, parseResult.Proper))
+                    {
+                        Logger.Debug("Episode in history: {0}", episode.ToString());
+                        continue;
+                    }
+
+                    //TODO: Add episode to sab
+
+                    _historyProvider.Insert(new History
+                                                {
+                                                    Date = DateTime.Now,
+                                                    EpisodeId = episode.EpisodeId,
+                                                    IsProper = parseResult.Proper,
+                                                    NzbTitle = feedItem.Title.Text,
+                                                    Quality = parseResult.Quality
+                                                });
+                }
+
             }
         }
 

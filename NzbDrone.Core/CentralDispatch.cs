@@ -131,7 +131,10 @@ namespace NzbDrone.Core
             _kernel.Bind<IJob>().To<NewSeriesUpdate>().InTransientScope();
             _kernel.Bind<IJob>().To<UpdateInfoJob>().InTransientScope();
             _kernel.Get<JobProvider>().Initialize();
+
+            new WebTimer().StartTimer(1);
         }
+
 
         private static void ForceMigration(IRepository repository)
         {
@@ -225,5 +228,7 @@ namespace NzbDrone.Core
                 repository.Update(hd);
             }
         }
+
+
     }
 }

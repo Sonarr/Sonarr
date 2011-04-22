@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Timers;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using NLog;
@@ -14,6 +16,9 @@ namespace NzbDrone
         private static readonly Logger Logger = LogManager.GetLogger("IISController");
         private static readonly string IISFolder = Path.Combine(Config.ProjectRoot, @"IISExpress\");
         private static readonly string IISExe = Path.Combine(IISFolder, @"iisexpress.exe");
+        private static Timer _pingTimer;
+        private static int _pingFailCounter;
+
         public static Process IISProcess { get; private set; }
 
 
@@ -60,7 +65,42 @@ namespace NzbDrone
 
             IISProcess.BeginErrorReadLine();
             IISProcess.BeginOutputReadLine();
+
+            StartPing();
+
             return IISProcess;
+        }
+
+        private static void StartPing()
+        {
+            _pingTimer = new Timer(10000);
+            _pingTimer.AutoReset = true;
+            _pingTimer.Elapsed += (PingIIS);
+            _pingTimer.Start();
+        }
+
+        private static void PingIIS(object sender, ElapsedEventArgs e)
+        {
+            try
+            {
+                var webClient = new WebClient();
+                webClient.DownloadString(AppUrl);
+                Logger.Info("Server said hai...");
+                _pingFailCounter = 0;
+            }
+            catch (Exception ex)
+            {
+                _pingFailCounter++;
+                Logger.ErrorException("App is not responding. Count " + _pingFailCounter, ex);
+                if (_pingFailCounter > 3)
+                {
+                    _pingTimer.Stop();
+                    Logger.Warn("Attempting to restart server.");
+                    StopIIS();
+                    KillOrphaned();
+                    StartIIS();
+                }
+            }
         }
 
         private static void OnDataReceived(object s, DataReceivedEventArgs e)
@@ -98,13 +138,14 @@ namespace NzbDrone
 
         private static void KillProcess(Process process)
         {
-            if (process == null) return;
-
-            Logger.Info("[{0}]Killing process", process.Id);
-            process.Kill();
-            Logger.Info("[{0}]Waiting for exit", process.Id);
-            process.WaitForExit();
-            Logger.Info("[{0}]Process terminated successfully", process.Id);
+            if (process != null && !process.HasExited)
+            {
+                Logger.Info("[{0}]Killing process", process.Id);
+                process.Kill();
+                Logger.Info("[{0}]Waiting for exit", process.Id);
+                process.WaitForExit();
+                Logger.Info("[{0}]Process terminated successfully", process.Id);
+            }
         }
 
         private static void UpdateIISConfig()
@@ -133,5 +174,7 @@ namespace NzbDrone
         {
             return path.ToLower().Replace("\\", "").Replace("//", "//");
         }
+
+
     }
 }

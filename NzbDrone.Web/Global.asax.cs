@@ -3,6 +3,7 @@ using System.Data.SQLite;
 using System.Reflection;
 using System.Threading;
 using System.Web;
+using System.Web.Caching;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Ninject;
@@ -65,13 +66,10 @@ namespace NzbDrone.Web
         protected void Application_Error(object sender, EventArgs e)
         {
             var lastError = Server.GetLastError();
-            if (lastError is HttpException)
+
+            if (lastError is HttpException && lastError.InnerException == null)
             {
                 Logger.WarnException(String.Format("{0}. URL[{1}]", lastError.Message, Request.Path), lastError);
-                if (Request.Path.EndsWith(".aspx", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    Response.Redirect(Request.ApplicationPath);
-                }
                 return;
             }
 

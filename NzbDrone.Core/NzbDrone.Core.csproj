@@ -162,7 +162,6 @@
     <Compile Include="Helpers\EpisodeRenameHelper.cs" />
     <Compile Include="Helpers\EpisodeSortingHelper.cs" />
     <Compile Include="Helpers\SceneNameHelper.cs" />
-    <Compile Include="Instrumentation\LogLevel.cs" />
     <Compile Include="Instrumentation\LogProvider.cs" />
     <Compile Include="Instrumentation\SubsonicTarget.cs" />
     <Compile Include="Instrumentation\ExceptioneerTarget.cs" />
@@ -228,6 +227,7 @@
     <Compile Include="Providers\Core\DiskProvider.cs" />
     <Compile Include="Providers\SeriesProvider.cs" />
     <Compile Include="Providers\TvDbProvider.cs" />
+    <Compile Include="WebTimer.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">

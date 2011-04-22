@@ -8,7 +8,6 @@ using NzbDrone.Core.Providers.Jobs;
 using NzbDrone.Core.Repository;
 using NzbDrone.Web.Models;
 using Telerik.Web.Mvc;
-using TvdbLib.Data;
 
 namespace NzbDrone.Web.Controllers
 {

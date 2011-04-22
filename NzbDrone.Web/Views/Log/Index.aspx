@@ -1,4 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<IEnumerable<NzbDrone.Core.Instrumentation.Log>>" %>
+
 <asp:Content ContentPlaceHolderID="Scripts" runat="server">
     <script type="text/javascript">
         function onRowDataBound(e) {
@@ -26,7 +27,7 @@
     <%
         Html.Telerik().Menu().Name("logMenu").Items(items => items.Add().Text("Clear Logs").Action("Clear", "Log")).
             Render();
-%>
+    %>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <%
@@ -39,8 +40,6 @@
                          })
             .DetailView(detailView => detailView.ClientTemplate(
                 "<div><#= Logger #></div>" +
-                "<div><#= ExceptionType #></div>" +
-                "<div><#= ExceptionMessage #></div>" +
                 "<div class='stackframe'><#= ExceptionString #></div>"
                                           )).DataBinding(data => data.Ajax().Select("_AjaxBinding", "Log"))
             .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.Time).Descending()).Enabled(true))
@@ -50,5 +49,5 @@
             .Filterable()
             .ClientEvents(c => c.OnRowDataBound("onRowDataBound"))
             .Render();
-%>
+    %>
 </asp:Content>

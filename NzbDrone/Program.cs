@@ -53,6 +53,7 @@ namespace NzbDrone
             }
 
             Console.Write("Press Enter At Any Time To Exit...");
+
             Console.ReadLine();
             IISController.StopIIS();
         }

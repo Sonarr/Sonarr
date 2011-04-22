@@ -20,10 +20,12 @@ namespace NzbDrone.Core.Instrumentation
             log.Time = logEvent.TimeStamp;
             log.Message = logEvent.FormattedMessage;
 
-            if (log.Stack != null)
+            if (logEvent.UserStackFrame != null)
             {
-                log.Stack = logEvent.StackTrace.ToString();
+                log.Method = logEvent.UserStackFrame.GetMethod().Name;
             }
+
+
 
             log.Logger = logEvent.LoggerName;
 
@@ -32,44 +34,13 @@ namespace NzbDrone.Core.Instrumentation
                 if (String.IsNullOrWhiteSpace(log.Message))
                     log.Message = logEvent.Exception.Message;
 
-                log.ExceptionMessage = logEvent.Exception.Message;
-                log.ExceptionString = logEvent.Exception.ToString();
+                log.Exception = logEvent.Exception.ToString();
                 log.ExceptionType = logEvent.Exception.GetType().ToString();
             }
 
-            switch (logEvent.Level.Name.ToLower())
-            {
-                case "trace":
-                    {
-                        log.Level = LogLevel.Trace;
-                        break;
-                    }
-                case "debug":
-                    {
-                        log.Level = LogLevel.Debug;
-                        break;
-                    }
-                case "info":
-                    {
-                        log.Level = LogLevel.Info;
-                        break;
-                    }
-                case "warn":
-                    {
-                        log.Level = LogLevel.Warn;
-                        break;
-                    }
-                case "error":
-                    {
-                        log.Level = LogLevel.Error;
-                        break;
-                    }
-                case "fatal":
-                    {
-                        log.Level = LogLevel.Fatal;
-                        break;
-                    }
-            }
+
+            log.Level = logEvent.Level.Name;
+
 
             _repo.Add(log);
         }

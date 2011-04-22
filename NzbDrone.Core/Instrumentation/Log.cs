@@ -15,27 +15,16 @@ namespace NzbDrone.Core.Instrumentation
 
         public string Logger { get; set; }
 
-        [SubSonicNullString]
-        public string Stack { get; set; }
+        public string Method { get; set; }
 
         [SubSonicNullString]
         [SubSonicLongString]
-        public string ExceptionMessage { get; set; }
-
-        [SubSonicNullString]
-        [SubSonicLongString]
-        public string ExceptionString { get; set; }
+        public string Exception { get; set; }
 
         [SubSonicNullString]
         public string ExceptionType { get; set; }
 
-        public LogLevel Level { get; set; }
+        public String Level { get; set; }
 
-        //This is needed for Telerik grid binding
-        [SubSonicIgnore]
-        public string DisplayLevel
-        {
-            get { return Level.ToString(); }
-        }
     }
 }
