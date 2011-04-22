@@ -80,12 +80,62 @@ namespace NzbDrone.Core.Test
             Assert.AreEqual(qualityProfileId, series.First().QualityProfileId);
         }
 
+        [Test]
+        public void find_series_empty_repo()
+        {
+            var mocker = new AutoMoqer();
+            mocker.SetConstant(MockLib.GetEmptyRepository());
+
+            //Act
+            var seriesProvider = mocker.Resolve<SeriesProvider>();
+            var series = seriesProvider.FindSeries("My Title");
+
+
+            //Assert
+            Assert.IsNull(series);
+        }
 
         [Test]
-        [Row(new object[] {"That's Life - 2x03 -The Devil and Miss DeLucca", "That's Life"})]
-        [Row(new object[] {"Van.Duin.Op.Zn.Best.S02E05.DUTCH.WS.PDTV.XViD-DiFFERENT", "Van Duin Op Zn Best"})]
-        [Row(new object[] {"Dollhouse.S02E06.The.Left.Hand.720p.BluRay.x264-SiNNERS", "Dollhouse"})]
-        [Row(new object[] {"Heroes.S02.COMPLETE.German.PROPER.DVDRip.XviD-Prim3time", "Heroes"})]
+        public void find_series_empty_match()
+        {
+            var mocker = new AutoMoqer();
+            var emptyRepository = MockLib.GetEmptyRepository();
+            mocker.SetConstant(emptyRepository);
+            emptyRepository.Add<Series>(MockLib.GetFakeSeries(1, "MyTitle"));
+            //Act
+            var seriesProvider = mocker.Resolve<SeriesProvider>();
+            var series = seriesProvider.FindSeries("WrongTitle");
+
+
+            //Assert
+            Assert.IsNull(series);
+        }
+
+        [Test]
+        [Row("The Test", "Test")]
+        [Row("The Test Title", "test title")]
+        public void find_series_match(string title, string searchTitle)
+        {
+            var mocker = new AutoMoqer();
+            var emptyRepository = MockLib.GetEmptyRepository();
+            mocker.SetConstant(emptyRepository);
+            emptyRepository.Add<Series>(MockLib.GetFakeSeries(1, title));
+            //Act
+            var seriesProvider = mocker.Resolve<SeriesProvider>();
+            var series = seriesProvider.FindSeries(searchTitle);
+
+
+            //Assert
+            Assert.IsNotNull(series);
+            Assert.AreEqual(title, series.Title);
+        }
+
+
+        [Test]
+        [Row(new object[] { "That's Life - 2x03 -The Devil and Miss DeLucca", "That's Life" })]
+        [Row(new object[] { "Van.Duin.Op.Zn.Best.S02E05.DUTCH.WS.PDTV.XViD-DiFFERENT", "Van Duin Op Zn Best" })]
+        [Row(new object[] { "Dollhouse.S02E06.The.Left.Hand.720p.BluRay.x264-SiNNERS", "Dollhouse" })]
+        [Row(new object[] { "Heroes.S02.COMPLETE.German.PROPER.DVDRip.XviD-Prim3time", "Heroes" })]
         [Ignore("should be updated to validate agains a remote episode instance rather than just the title string")]
         public void Test_Parse_Success(string postTitle, string title)
         {
@@ -129,7 +179,7 @@ namespace NzbDrone.Core.Test
         public void QualityWanted(int seriesId, QualityTypes qualityTypes, Boolean result)
         {
             var quality = Builder<QualityProfile>.CreateNew()
-                .With(q => q.Allowed = new List<QualityTypes> {QualityTypes.BDRip, QualityTypes.DVD, QualityTypes.TV})
+                .With(q => q.Allowed = new List<QualityTypes> { QualityTypes.BDRip, QualityTypes.DVD, QualityTypes.TV })
                 .With(q => q.Cutoff = QualityTypes.DVD)
                 .Build();
 

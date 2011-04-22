@@ -112,7 +112,8 @@ namespace NzbDrone.Core.Providers
 
         public virtual Series FindSeries(string title)
         {
-            return _sonioRepo.Single<Series>(s => s.CleanTitle == Parser.NormalizeTitle(title));
+            var normalizeTitle = Parser.NormalizeTitle(title);
+            return _sonioRepo.Single<Series>(s => s.CleanTitle == normalizeTitle);
         }
 
         public virtual void UpdateSeries(Series series)

@@ -80,17 +80,17 @@ namespace NzbDrone.Core.Providers.Indexer
             _logger.Info("Finished processing feeds from " + Settings.Name);
         }
 
-        private void ProcessItem(SyndicationItem feedItem)
+        internal void ProcessItem(SyndicationItem feedItem)
         {
             _logger.Info("Processing RSS feed item " + feedItem.Title.Text);
 
             var parseResult = ParseFeed(feedItem);
 
-            if (parseResult != null)
+            if (parseResult != null && parseResult.SeriesId != 0)
             {
                 if (!_seriesProvider.IsMonitored(parseResult.SeriesId))
                 {
-                    _logger.Debug("{0} is present in the DB but not tracked. skipping.", parseResult.SeriesTitle);
+                    _logger.Debug("{0} is present in the DB but not tracked. skipping.", parseResult.CleanTitle);
                     return;
                 }
 
@@ -147,16 +147,16 @@ namespace NzbDrone.Core.Providers.Indexer
             var episodeParseResult = Parser.ParseEpisodeInfo(item.Title.Text);
             if (episodeParseResult == null) return CustomParser(item, null);
 
-            var seriesInfo = _seriesProvider.FindSeries(episodeParseResult.SeriesTitle);
+            var seriesInfo = _seriesProvider.FindSeries(episodeParseResult.CleanTitle);
 
             if (seriesInfo != null)
             {
                 episodeParseResult.SeriesId = seriesInfo.SeriesId;
-                episodeParseResult.SeriesTitle = seriesInfo.Title;
+                episodeParseResult.CleanTitle = seriesInfo.Title;
                 return CustomParser(item, episodeParseResult);
             }
 
-            _logger.Debug("Unable to map {0} to any of series in database", episodeParseResult.SeriesTitle);
+            _logger.Debug("Unable to map {0} to any of series in database", episodeParseResult.CleanTitle);
             return CustomParser(item, episodeParseResult);
         }
 

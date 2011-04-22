@@ -53,11 +53,24 @@ namespace NzbDrone.Core.Test
             //Assert
             Assert.Count(1, indexers);
         }
+
+        [Test]
+        public void unmapped_series_shouldnt_call_any_providers()
+        {
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+            mocker.GetMock<SeriesProvider>()
+                .Setup(c => c.FindSeries(It.IsAny<String>()))
+                .Returns<Series>(null);
+
+            var indexer = mocker.Resolve<MockIndexerProvider>();
+            indexer.ProcessItem(new SyndicationItem { Title = new TextSyndicationContent("Adventure.Inc.S01E18.DVDRip.XviD-OSiTV") });
+        }
     }
 
     public class MockIndexerProvider : IndexerProviderBase
     {
-        public MockIndexerProvider(SeriesProvider seriesProvider, SeasonProvider seasonProvider, EpisodeProvider episodeProvider, ConfigProvider configProvider, HttpProvider httpProvider, IndexerProvider indexerProvider, HistoryProvider historyProvider) : base(seriesProvider, seasonProvider, episodeProvider, configProvider, httpProvider, indexerProvider, historyProvider)
+        public MockIndexerProvider(SeriesProvider seriesProvider, SeasonProvider seasonProvider, EpisodeProvider episodeProvider, ConfigProvider configProvider, HttpProvider httpProvider, IndexerProvider indexerProvider, HistoryProvider historyProvider)
+            : base(seriesProvider, seasonProvider, episodeProvider, configProvider, httpProvider, indexerProvider, historyProvider)
         {
         }
 

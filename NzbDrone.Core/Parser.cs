@@ -76,7 +76,7 @@ namespace NzbDrone.Core
                         parsedEpisode = new EpisodeParseResult
                         {
                             Proper = title.ToLower().Contains("proper"),
-                            SeriesTitle = seriesName,
+                            CleanTitle = seriesName,
                             SeasonNumber = season,
                             Year = year,
                             Episodes = new List<int>()
@@ -106,7 +106,7 @@ namespace NzbDrone.Core
                             parsedEpisode = new EpisodeParseResult
                             {
                                 Proper = title.ToLower().Contains("proper"),
-                                SeriesTitle = seriesName,
+                                CleanTitle = seriesName,
                                 Year = year,
                                 AirDate = new DateTime(airyear, airmonth, airday)
                             };

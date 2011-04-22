@@ -6,7 +6,7 @@ namespace NzbDrone.Core.Model
 {
     public class EpisodeParseResult
     {
-        internal string SeriesTitle { get; set; }
+        internal string CleanTitle { get; set; }
         public int SeriesId { get; set; }
 
         internal int SeasonNumber { get; set; }
@@ -24,9 +24,9 @@ namespace NzbDrone.Core.Model
         public override string ToString()
         {
             if (Episodes == null)
-                return string.Format("Series:{0} Air Date:{1}", SeriesTitle, AirDate.Date);
+                return string.Format("Series:{0} Air Date:{1}", CleanTitle, AirDate.Date);
 
-            return string.Format("Series:{0} Season:{1} Episode:{2}", SeriesTitle, SeasonNumber,
+            return string.Format("Series:{0} Season:{1} Episode:{2}", CleanTitle, SeasonNumber,
                                  String.Join(",", Episodes));
 
         }

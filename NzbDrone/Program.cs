@@ -46,6 +46,10 @@ namespace NzbDrone
                 AppDomainException(e);
             }
 
+            while (true)
+            {
+                Console.ReadLine();
+            }
         }
 
         private static void Attach()
