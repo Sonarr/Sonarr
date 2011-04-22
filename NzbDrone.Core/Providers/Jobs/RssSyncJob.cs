@@ -1,18 +1,21 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using NLog;
 using NzbDrone.Core.Model.Notification;
+using NzbDrone.Core.Providers.Indexer;
 
 namespace NzbDrone.Core.Providers.Jobs
 {
     public class RssSyncJob : IJob
     {
-        private readonly IndexerProvider _indexerProvider;
+        private readonly IEnumerable<IndexerProviderBase> _indexers;
+
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public RssSyncJob(IndexerProvider indexerProvider)
+        public RssSyncJob(IEnumerable<IndexerProviderBase> indexers)
         {
-            _indexerProvider = indexerProvider;
+            _indexers = indexers;
         }
 
         public string Name
@@ -27,13 +30,9 @@ namespace NzbDrone.Core.Providers.Jobs
 
         public void Start(ProgressNotification notification, int targetId)
         {
-            Logger.Info("Doing Things!!!!");
-
-            var indexers = _indexerProvider.AllIndexers().Where(c => c.Enable);
-
-            foreach (var indexerSetting in indexers)
+            foreach (var indexer in _indexers)
             {
-
+                indexer.Fetch();
             }
         }
     }

@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Providers
 
         }
 
-        public virtual List<IndexerSetting> AllIndexers()
+        public virtual List<IndexerSetting> All()
         {
             return _repository.All<IndexerSetting>().ToList();
         }
@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Providers
         {
             Logger.Info("Initializing indexers. Count {0}", indexers.Count);
 
-            var currentIndexers = AllIndexers();
+            var currentIndexers = All();
 
             foreach (var feedProvider in indexers)
             {

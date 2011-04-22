@@ -1,0 +1,9 @@
+﻿@model IEnumerable<NzbDrone.Core.Repository.IndexerSetting>
+@section TitleContent{
+Indexers
+}
+@section MainContent{
+    @{Html.Telerik().Grid(Model).Name("Grid")
+            .TableHtmlAttributes(new { @class = "Grid" })
+            .Render();}
+}

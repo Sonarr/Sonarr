@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Test
             //Act
             var indexerProvider = mocker.Resolve<IndexerProvider>();
             indexerProvider.InitializeIndexers(new List<IndexerProviderBase>() { mocker.Resolve<MockIndexerProvider>() });
-            var indexers = indexerProvider.AllIndexers();
+            var indexers = indexerProvider.All();
 
             //Assert
             Assert.Count(1, indexers);

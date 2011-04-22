@@ -166,25 +166,29 @@ namespace NzbDrone.Core.Providers.Jobs
 
             var settings = All().Where(j => j.TypeName == jobType.ToString()).FirstOrDefault();
 
-            try
+            using (_notification = new ProgressNotification(timerClass.Name))
             {
-                Logger.Info("Starting job '{0}'. Last execution {1}", settings.Name, settings.LastExecution);
-                settings.LastExecution = DateTime.Now;
-                var sw = Stopwatch.StartNew();
-                using (_notification = new ProgressNotification(timerClass.Name))
+                try
                 {
+                    Logger.Info("Starting job '{0}'. Last execution {1}", settings.Name, settings.LastExecution);
+                    settings.LastExecution = DateTime.Now;
+                    var sw = Stopwatch.StartNew();
+
                     _notificationProvider.Register(_notification);
                     timerClass.Start(_notification, targetId);
                     _notification.Status = ProgressNotificationStatus.Completed;
+
+                    settings.Success = true;
+                    sw.Stop();
+                    Logger.Info("Job '{0}' successfully completed in {1} seconds", timerClass.Name, sw.Elapsed.Minutes,
+                                sw.Elapsed.Seconds);
                 }
-                settings.Success = true;
-                sw.Stop();
-                Logger.Info("Job '{0}' successfully completed in {1} seconds", timerClass.Name, sw.Elapsed.Minutes, sw.Elapsed.Seconds);
-            }
-            catch (Exception e)
-            {
-                settings.Success = false;
-                Logger.ErrorException("An error has occurred while executing timer job " + timerClass.Name, e);
+                catch (Exception e)
+                {
+                    settings.Success = false;
+                    Logger.ErrorException("An error has occurred while executing timer job " + timerClass.Name, e);
+                    _notification.Status = ProgressNotificationStatus.Failed;
+                }
             }
 
             SaveSettings(settings);

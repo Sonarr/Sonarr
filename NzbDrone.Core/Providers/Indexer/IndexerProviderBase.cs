@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Providers.Indexer
 {
     public abstract class IndexerProviderBase
     {
-        protected static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        protected readonly Logger _logger;
         protected readonly ConfigProvider _configProvider;
         protected readonly EpisodeProvider _episodeProvider;
         private readonly HttpProvider _httpProvider;
@@ -30,6 +30,7 @@ namespace NzbDrone.Core.Providers.Indexer
             _httpProvider = httpProvider;
             _indexerProvider = indexerProvider;
             _historyProvider = historyProvider;
+            _logger = LogManager.GetLogger(GetType().ToString());
         }
 
         /// <summary>
@@ -56,25 +57,32 @@ namespace NzbDrone.Core.Providers.Indexer
         /// </summary>
         public void Fetch()
         {
-            Logger.Info("Fetching feeds from " + Settings.Name);
+            _logger.Info("Fetching feeds from " + Settings.Name);
 
             foreach (var url in Urls)
             {
-                Logger.Debug("Downloading RSS " + url);
-                var feed = SyndicationFeed.Load(_httpProvider.DownloadXml(url)).Items;
-
-                foreach (var item in feed)
+                try
                 {
-                    ProcessItem(item);
+                    _logger.Debug("Downloading RSS " + url);
+                    var feed = SyndicationFeed.Load(_httpProvider.DownloadXml(url)).Items;
+
+                    foreach (var item in feed)
+                    {
+                        ProcessItem(item);
+                    }
+                }
+                catch (Exception e)
+                {
+                    _logger.ErrorException("An error occurred while processing feed", e);
                 }
             }
 
-            Logger.Info("Finished processing feeds from " + Settings.Name);
+            _logger.Info("Finished processing feeds from " + Settings.Name);
         }
 
         private void ProcessItem(SyndicationItem feedItem)
         {
-            Logger.Info("Processing RSS feed item " + feedItem.Title.Text);
+            _logger.Info("Processing RSS feed item " + feedItem.Title.Text);
 
             var parseResult = ParseFeed(feedItem);
 
@@ -82,25 +90,25 @@ namespace NzbDrone.Core.Providers.Indexer
             {
                 if (!_seriesProvider.IsMonitored(parseResult.SeriesId))
                 {
-                    Logger.Debug("{0} is present in the DB but not tracked. skipping.", parseResult.SeriesTitle);
+                    _logger.Debug("{0} is present in the DB but not tracked. skipping.", parseResult.SeriesTitle);
                     return;
                 }
 
                 if (!_seriesProvider.QualityWanted(parseResult.SeriesId, parseResult.Quality))
                 {
-                    Logger.Debug("Post doesn't meet the quality requirements [{0}]. skipping.", parseResult.Quality);
+                    _logger.Debug("Post doesn't meet the quality requirements [{0}]. skipping.", parseResult.Quality);
                     return;
                 }
 
                 if (_seasonProvider.IsIgnored(parseResult.SeriesId, parseResult.SeasonNumber))
                 {
-                    Logger.Debug("Season {0} is currently set to ignore. skipping.", parseResult.SeasonNumber);
+                    _logger.Debug("Season {0} is currently set to ignore. skipping.", parseResult.SeasonNumber);
                     return;
                 }
 
                 if (!_episodeProvider.IsNeeded(parseResult))
                 {
-                    Logger.Debug("Episode {0} is not needed. skipping.", parseResult);
+                    _logger.Debug("Episode {0} is not needed. skipping.", parseResult);
                     return;
                 }
 
@@ -110,7 +118,7 @@ namespace NzbDrone.Core.Providers.Indexer
                 {
                     if (_historyProvider.Exists(episode.EpisodeId, parseResult.Quality, parseResult.Proper))
                     {
-                        Logger.Debug("Episode in history: {0}", episode.ToString());
+                        _logger.Debug("Episode in history: {0}", episode.ToString());
                         continue;
                     }
 
@@ -148,7 +156,7 @@ namespace NzbDrone.Core.Providers.Indexer
                 return CustomParser(item, episodeParseResult);
             }
 
-            Logger.Debug("Unable to map {0} to any of series in database", episodeParseResult.SeriesTitle);
+            _logger.Debug("Unable to map {0} to any of series in database", episodeParseResult.SeriesTitle);
             return CustomParser(item, episodeParseResult);
         }
 

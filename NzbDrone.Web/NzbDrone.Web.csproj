@@ -219,7 +219,7 @@
     <Compile Include="Controllers\SeriesController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\SharedController.cs" />
-    <Compile Include="Controllers\JobController.cs" />
+    <Compile Include="Controllers\SystemController.cs" />
     <Compile Include="Controllers\UpcomingController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -660,7 +660,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Settings\Indexers.cshtml" />
-    <Content Include="Views\Job\index.cshtml" />
+    <Content Include="Views\System\Jobs.cshtml" />
     <Content Include="Views\Settings\Downloads.cshtml" />
     <Content Include="Views\Settings\EpisodeSorting.cshtml" />
     <Content Include="Views\Settings\General.cshtml" />
@@ -673,7 +673,7 @@
     <Content Include="Views\Settings\Index.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\History\Index.cshtml" />
-    <Content Include="Views\Log\Index.cshtml" />
+    <Content Include="Views\Log\index.cshtml" />
     <Content Include="Views\Upcoming\Index.cshtml" />
     <Content Include="Views\Series\Details.cshtml" />
     <Content Include="Views\Series\Edit.cshtml" />
@@ -682,6 +682,7 @@
     <Content Include="Views\Series\SeriesSearchResults.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Settings\UserProfileSection.cshtml" />
+    <Content Include="Views\System\Indexers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
