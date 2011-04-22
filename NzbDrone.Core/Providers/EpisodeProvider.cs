@@ -57,10 +57,12 @@ namespace NzbDrone.Core.Providers
 
         public virtual IList<Episode> GetEpisodeByParseResult(EpisodeParseResult parseResult)
         {
-            return _sonicRepo.Find<Episode>(e =>
-                                            e.SeriesId == parseResult.SeriesId &&
-                                            e.SeasonNumber == parseResult.SeasonNumber &&
-                                            parseResult.Episodes.Contains(e.EpisodeNumber));
+            var seasonEpisodes = _sonicRepo.All<Episode>().Where(e =>
+                                                   e.SeriesId == parseResult.SeriesId &&
+                                                   e.SeasonNumber == parseResult.SeasonNumber).ToList();
+
+            //Has to be done separately since subsonic doesn't support contain method
+            return seasonEpisodes.Where(c => parseResult.Episodes.Contains(c.EpisodeNumber)).ToList();
 
         }
 

@@ -82,5 +82,14 @@ namespace NzbDrone.Core.Test
                 .With(c => c.CleanTitle = Parser.NormalizeTitle(title))
                 .Build();
         }
+
+        public static IList<Episode> GetFakeEpisodes(int seriesId)
+        {
+            var epNumber = new SequentialGenerator<int>();
+            return Builder<Episode>.CreateListOfSize(10)
+                .WhereAll().Have(c => c.SeriesId = seriesId)
+                .WhereAll().Have(c => c.EpisodeNumber = epNumber.Generate())
+                .Build();
+        }
     }
 }

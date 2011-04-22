@@ -117,6 +117,35 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
+        public void get_episode_by_parse_result()
+        {
+            var mocker = new AutoMoqer();
+            var repo = MockLib.GetEmptyRepository();
+            var fakeEpisodes = MockLib.GetFakeEpisodes(2);
+            repo.AddMany(fakeEpisodes);
+            mocker.SetConstant(repo);
+
+            var targetEpisode = fakeEpisodes[4];
+
+            var parseResult1 = new EpisodeParseResult
+            {
+                SeriesId = targetEpisode.SeriesId,
+                SeasonNumber = targetEpisode.SeasonNumber,
+                Episodes = new List<int> { targetEpisode.EpisodeNumber },
+                Quality = QualityTypes.DVD
+            };
+
+            var result = mocker.Resolve<EpisodeProvider>().GetEpisodeByParseResult(parseResult1);
+
+
+            Assert.Count(1, result);
+            Assert.AreEqual(targetEpisode.EpisodeId, result.First().EpisodeId);
+            Assert.AreEqual(targetEpisode.EpisodeNumber, result.First().EpisodeNumber);
+            Assert.AreEqual(targetEpisode.SeasonNumber, result.First().SeasonNumber);
+            Assert.AreEqual(targetEpisode.SeriesId, result.First().SeriesId);
+        }
+
+        [Test]
         public void Missing_episode_should_be_added()
         {
             //Setup

@@ -40,10 +40,10 @@ namespace NzbDrone.Core.Providers
             Logger.Info("History has been trimmed, items older than 30 days have been removed");
         }
 
-        public virtual void Insert(History item)
+        public virtual void Add(History item)
         {
             _sonicRepo.Add(item);
-            Logger.Debug("Item added to history: {0} - {1}x{2:00}", item.Episode.Series.Title, item.Episode.SeasonNumber, item.Episode.EpisodeNumber);
+            Logger.Debug("Item added to history: {0}", item.NzbTitle);
         }
 
         public virtual bool Exists(int episodeId, QualityTypes quality, bool proper)
@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Providers
             if (_sonicRepo.Exists<History>(h => h.EpisodeId == episodeId && h.Quality == quality && h.IsProper == proper))
                 return true;
 
-            Logger.Debug("Episode not in History. ID:{0} Q:{1} Proper:{2}", episodeId , quality, proper);
+            Logger.Debug("Episode not in History. ID:{0} Q:{1} Proper:{2}", episodeId, quality, proper);
             return false;
         }
     }

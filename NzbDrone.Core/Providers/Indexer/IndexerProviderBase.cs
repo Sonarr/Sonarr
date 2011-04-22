@@ -68,12 +68,20 @@ namespace NzbDrone.Core.Providers.Indexer
 
                     foreach (var item in feed)
                     {
-                        ProcessItem(item);
+                        try
+                        {
+                            ProcessItem(item);
+                        }
+                        catch (Exception itemEx)
+                        {
+                            _logger.ErrorException("An error occurred while processing feed item", itemEx);
+                        }
+
                     }
                 }
-                catch (Exception e)
+                catch (Exception feedEx)
                 {
-                    _logger.ErrorException("An error occurred while processing feed", e);
+                    _logger.ErrorException("An error occurred while processing feed", feedEx);
                 }
             }
 
@@ -82,7 +90,7 @@ namespace NzbDrone.Core.Providers.Indexer
 
         internal void ProcessItem(SyndicationItem feedItem)
         {
-            _logger.Info("Processing RSS feed item " + feedItem.Title.Text);
+            _logger.Debug("Processing RSS feed item " + feedItem.Title.Text);
 
             var parseResult = ParseFeed(feedItem);
 
@@ -124,7 +132,7 @@ namespace NzbDrone.Core.Providers.Indexer
 
                     //TODO: Add episode to sab
 
-                    _historyProvider.Insert(new History
+                    _historyProvider.Add(new History
                                                 {
                                                     Date = DateTime.Now,
                                                     EpisodeId = episode.EpisodeId,

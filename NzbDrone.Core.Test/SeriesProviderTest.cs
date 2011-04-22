@@ -113,7 +113,7 @@ namespace NzbDrone.Core.Test
 
         [Test]
         [Row("The Test", "Test")]
-        [Row("The Test Title", "test title")]
+        [Row("Through the Wormhole", "Through.the.Wormhole")]
         public void find_series_match(string title, string searchTitle)
         {
             var mocker = new AutoMoqer();
