@@ -131,7 +131,7 @@ namespace NzbDrone.Core
             _kernel.Bind<IJob>().To<RssSyncJob>().InTransientScope();
             _kernel.Bind<IJob>().To<NewSeriesUpdate>().InTransientScope();
             _kernel.Bind<IJob>().To<UpdateInfoJob>().InTransientScope();
-            
+
             _kernel.Get<JobProvider>().Initialize();
             _kernel.Get<WebTimer>().StartTimer(30);
         }
@@ -139,11 +139,12 @@ namespace NzbDrone.Core
 
         private static void ForceMigration(IRepository repository)
         {
-            repository.GetPaged<Series>(0, 1);
-            repository.GetPaged<EpisodeFile>(0, 1);
-            repository.GetPaged<Episode>(0, 1);
-            repository.GetPaged<Season>(0, 1);
-            repository.GetPaged<History>(0, 1);
+            repository.All<Series>().Count();
+            repository.All<Season>().Count();
+            repository.All<Episode>().Count();
+            repository.All<EpisodeFile>().Count();
+            repository.All<QualityProfile>().Count();
+            repository.All<History>().Count();
         }
 
         /// <summary>
