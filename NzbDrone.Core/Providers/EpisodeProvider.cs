@@ -66,30 +66,6 @@ namespace NzbDrone.Core.Providers
 
         }
 
-        public virtual String GetSabTitle(EpisodeParseResult parseResult)
-        {
-            //Show Name - 1x01-1x02 - Episode Name
-            //Show Name - 1x01 - Episode Name
-            var episodeString = new List<String>();
-
-            foreach (var episode in parseResult.Episodes)
-            {
-                episodeString.Add(String.Format("{0}x{1}", parseResult.SeasonNumber, episode));
-            }
-
-            var epNumberString = String.Join("-", episodeString);
-            var series = _series.GetSeries(parseResult.SeriesId);
-            var folderName = new DirectoryInfo(series.Path).Name;
-
-            var result = String.Format("{0} - {1} - {2} {3}", folderName, epNumberString, parseResult.EpisodeTitle, parseResult.Quality);
-
-            if (parseResult.Proper)
-            {
-                result += " [Proper]";
-            }
-
-            return result;
-        }
 
         /// <summary>
         ///   Comprehensive check on whether or not this episode is needed.

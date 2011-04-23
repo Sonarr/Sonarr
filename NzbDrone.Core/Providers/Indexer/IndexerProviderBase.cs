@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.ServiceModel.Syndication;
 using NLog;
 using NzbDrone.Core.Model;
@@ -160,6 +161,8 @@ namespace NzbDrone.Core.Providers.Indexer
             if (seriesInfo != null)
             {
                 episodeParseResult.SeriesId = seriesInfo.SeriesId;
+                episodeParseResult.FolderName = new DirectoryInfo(seriesInfo.Path).Name; ;
+
                 episodeParseResult.CleanTitle = seriesInfo.Title;
                 return CustomParser(item, episodeParseResult);
             }

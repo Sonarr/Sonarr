@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Xml.Linq;
 using NLog;
+using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
 
 namespace NzbDrone.Core.Providers
@@ -108,6 +111,29 @@ namespace NzbDrone.Core.Providers
             return
                 string.Format(@"http://{0}/api?$Action&apikey={1}&ma_username={2}&ma_password={3}", sabnzbdInfo, apiKey,
                               username, password).Replace("$Action", action);
+        }
+
+        public String GetSabTitle(EpisodeParseResult parseResult)
+        {
+            //Show Name - 1x01-1x02 - Episode Name
+            //Show Name - 1x01 - Episode Name
+            var episodeString = new List<String>();
+
+            foreach (var episode in parseResult.Episodes)
+            {
+                episodeString.Add(String.Format("{0}x{1}", parseResult.SeasonNumber, episode));
+            }
+
+            var epNumberString = String.Join("-", episodeString);
+
+            var result = String.Format("{0} - {1} - {2} {3}", parseResult.FolderName, epNumberString, parseResult.EpisodeTitle, parseResult.Quality);
+
+            if (parseResult.Proper)
+            {
+                result += " [Proper]";
+            }
+
+            return result;
         }
     }
 }

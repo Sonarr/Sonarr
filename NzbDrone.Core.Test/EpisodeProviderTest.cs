@@ -77,23 +77,23 @@ namespace NzbDrone.Core.Test
                                       Proper = isReportProper
                                   };
 
-            var epFile = new EpisodeFile()
-            {
-                Proper = isFileProper,
-                Quality = fileQuality
-            };
+            var epFile = new EpisodeFile
+                             {
+                                 Proper = isFileProper,
+                                 Quality = fileQuality
+                             };
 
             var episodeInfo = new Episode
                                   {
                                       SeriesId = 12,
                                       SeasonNumber = 2,
                                       EpisodeNumber = 3,
-                                      Series = new Series() { QualityProfileId = 1 },
+                                      Series = new Series { QualityProfileId = 1 },
                                       EpisodeFile = epFile
 
                                   };
 
-            var seriesQualityProfile = new QualityProfile()
+            var seriesQualityProfile = new QualityProfile
                                            {
                                                Allowed = new List<QualityTypes> { QualityTypes.TV, QualityTypes.DVD, QualityTypes.Bluray720, QualityTypes.Bluray1080 },
                                                Cutoff = QualityTypes.Bluray720,
@@ -180,44 +180,7 @@ namespace NzbDrone.Core.Test
             Assert.Count(2, episodes);
         }
 
-        [Test]
-        [Row(1, new[] { 2 }, "My Episode Title", QualityTypes.DVD, false, "My Series Name - 1x2 - My Episode Title DVD")]
-        [Row(1, new[] { 2 }, "My Episode Title", QualityTypes.DVD, true, "My Series Name - 1x2 - My Episode Title DVD [Proper]")]
-        [Row(1, new[] { 2 }, "", QualityTypes.DVD, true, "My Series Name - 1x2 -  DVD [Proper]")]
-        [Row(1, new[] { 2, 4 }, "My Episode Title", QualityTypes.HDTV, false, "My Series Name - 1x2-1x4 - My Episode Title HDTV")]
-        [Row(1, new[] { 2, 4 }, "My Episode Title", QualityTypes.HDTV, true, "My Series Name - 1x2-1x4 - My Episode Title HDTV [Proper]")]
-        [Row(1, new[] { 2, 4 }, "", QualityTypes.HDTV, true, "My Series Name - 1x2-1x4 -  HDTV [Proper]")]
-        public void sab_title(int seasons, int[] episodes, string title, QualityTypes quality, bool proper, string excpected)
-        {
-            //Arrange
-            var fakeSeries = new Series()
-                                 {
-                                     SeriesId = 12,
-                                     Path = "C:\\TV Shows\\My Series Name"
-                                 };
-
-            var mocker = new AutoMoqer();
-            mocker.GetMock<SeriesProvider>(MockBehavior.Strict)
-                .Setup(c => c.GetSeries(12))
-                .Returns(fakeSeries);
-
-            var parsResult = new EpisodeParseResult()
-                                 {
-                                     SeriesId = 12,
-                                     AirDate = DateTime.Now,
-                                     Episodes = episodes.ToList(),
-                                     Proper = proper,
-                                     Quality = quality,
-                                     SeasonNumber = seasons,
-                                     EpisodeTitle = title
-                                 };
-
-            //Act
-            var actual = mocker.Resolve<EpisodeProvider>().GetSabTitle(parsResult);
-
-            //Assert
-            Assert.AreEqual(excpected, actual);
-        }
+       
 
 
         [Test]

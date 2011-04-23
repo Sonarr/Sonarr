@@ -9,6 +9,8 @@ namespace NzbDrone.Core.Model
         internal string CleanTitle { get; set; }
         public int SeriesId { get; set; }
 
+        public string FolderName { get; set; }
+
         internal int SeasonNumber { get; set; }
         internal List<int> Episodes { get; set; }
 
