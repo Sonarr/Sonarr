@@ -24,13 +24,18 @@ namespace NzbDrone.Core.Test
         [Row("Chuck.4x05.HDTV.XviD-LOL", "Chuck", 4, 5)]
         [Row("The.Girls.Next.Door.S03E06.DVDRip.XviD-WiDE", "The.Girls.Next.Door", 3, 6)]
         [Row("Degrassi.S10E27.WS.DSR.XviD-2HD", "Degrassi", 10, 27)]
-        [Row("Parenthood.2010.S02E14.HDTV.XviD-LOL", "Parenthood", 2, 14)]
+        [Row("Parenthood.2010.S02E14.HDTV.XviD-LOL", "Parenthood 2010", 2, 14)]
         [Row("Hawaii Five 0 S01E19 720p WEB DL DD5 1 H 264 NT", "Hawaii Five", 1, 19)]
         [Row("The Event S01E14 A Message Back 720p WEB DL DD5 1 H264 SURFER", "The Event", 1, 14)]
         [Row("Adam Hills In Gordon St Tonight S01E07 WS PDTV XviD FUtV", "Adam Hills In Gordon St Tonight", 1, 7)]
         [Row("Adam Hills In Gordon St Tonight S01E07 WS PDTV XviD FUtV", "Adam Hills In Gordon St Tonight", 1, 7)]
         [Row("Adventure.Inc.S03E19.DVDRip.XviD-OSiTV", "Adventure.Inc", 3, 19)]
-        //[Row("The.Kennedys.Part.2.DSR.XviD-SYS", 1, 2)]
+        [Row("S03E09 WS PDTV XviD FUtV", "", 3, 9)]
+        [Row("5x10 WS PDTV XviD FUtV", "", 5, 10)]
+        [Row("Castle.2009.S01E14.HDTV.XviD-LOL", "Castle 2009", 1, 14)]
+        [Row("Pride.and.Prejudice.1995.S03E20.HDTV.XviD-LOL", "Pride and Prejudice 1995", 3, 20)]
+        //[Row(@"Season 4\07 WS PDTV XviD FUtV", "", 4, 7)]
+        [Row("The.Office.S03E115.DVDRip.XviD-OSiTV", "The.Office", 3, 115)]
         public void episode_parse(string postTitle, string title, int season, int episode)
         {
             var result = Parser.ParseEpisodeInfo(postTitle);
@@ -110,6 +115,18 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
+        [Row("Conan", "conan")]
+        [Row("The Tonight Show With Jay Leno", "tonightshowwithjayleno")]
+        [Row("The.Daily.Show", "dailyshow")]
+        [Row("Castle (2009)", "castle2009")]
+        [Row("Parenthood.2010", "parenthood2010")]
+        public void series_name_normalize(string parsedSeriesName, string seriesName)
+        {
+            var result = Parser.NormalizeTitle(parsedSeriesName);
+            Assert.AreEqual(seriesName, result);
+        }
+
+        [Test]
         [Row(@"c:\test\", @"c:\test")]
         [Row(@"c:\\test\\", @"c:\test")]
         [Row(@"C:\\Test\\", @"C:\Test")]
@@ -133,8 +150,11 @@ namespace NzbDrone.Core.Test
 
         [Test]
         [Row("the")]
-        [Row("And")]
-        [Row("Or")]
+        [Row("and")]
+        [Row("or")]
+        [Row("a")]
+        [Row("an")]
+        [Row("of")]
         public void Normalize_removed_common_words(string word)
         {
             var dirtyFormat = new[]
@@ -160,8 +180,11 @@ namespace NzbDrone.Core.Test
 
         [Test]
         [Row("the")]
-        [Row("And")]
-        [Row("Or")]
+        [Row("and")]
+        [Row("or")]
+        [Row("a")]
+        [Row("an")]
+        [Row("of")]
         public void Normalize_not_removed_common_words_in_the_middle(string word)
         {
             var dirtyFormat = new[]

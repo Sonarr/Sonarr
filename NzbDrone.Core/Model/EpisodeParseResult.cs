@@ -11,7 +11,6 @@ namespace NzbDrone.Core.Model
 
         internal int SeasonNumber { get; set; }
         internal List<int> Episodes { get; set; }
-        internal int Year { get; set; }
 
         internal string EpisodeTitle { get; set; }
 
