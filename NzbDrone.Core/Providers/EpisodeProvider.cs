@@ -178,7 +178,7 @@ namespace NzbDrone.Core.Providers
                     var newEpisode = new Episode
                                          {
                                              AirDate = episode.FirstAired,
-                                             EpisodeId = episode.Id,
+                                             TvDbEpisodeId = episode.Id,
                                              EpisodeNumber = episode.EpisodeNumber,
                                              Language = episode.Language.Abbriviation,
                                              Overview = episode.Overview,
@@ -188,8 +188,11 @@ namespace NzbDrone.Core.Providers
                                              Title = episode.EpisodeName
                                          };
 
-                    if (_sonicRepo.Exists<Episode>(e => e.EpisodeId == newEpisode.EpisodeId))
+                    var existingEpisode = GetEpisode(episode.SeriesId, episode.SeasonNumber, episode.EpisodeNumber);
+
+                    if (existingEpisode != null)
                     {
+                        newEpisode.EpisodeId = existingEpisode.EpisodeId;
                         updateList.Add(newEpisode);
                     }
                     else
@@ -203,72 +206,6 @@ namespace NzbDrone.Core.Providers
                 {
                     Logger.FatalException(
                         String.Format("An error has occurred while updating episode info for series {0}", seriesId), e);
-                    failCount++;
-                }
-            }
-
-            _sonicRepo.AddMany(newList);
-            _sonicRepo.UpdateMany(updateList);
-
-            Logger.Debug("Finished episode refresh for series:{0}. Successful:{1} - Failed:{2} ",
-                         targetSeries.SeriesName, successCount, failCount);
-        }
-
-        public virtual void RefreshEpisodeInfo(Season season)
-        {
-            Logger.Info("Starting episode info refresh for season {0} of series:{1}", season.SeasonNumber,
-                        season.SeriesId);
-            int successCount = 0;
-            int failCount = 0;
-            var targetSeries = _tvDb.GetSeries(season.SeriesId, true);
-
-            var updateList = new List<Episode>();
-            var newList = new List<Episode>();
-
-            foreach (var episode in targetSeries.Episodes.Where(e => e.SeasonId == season.SeasonId))
-            {
-                try
-                {
-                    //DateTime throws an error in SQLServer per message below:
-                    //SqlDateTime overflow. Must be between 1/1/1753 12:00:00 AM and 12/31/9999 11:59:59 PM.
-                    //So lets hack it so it works for SQLServer (as well as SQLite), perhaps we can find a better solution
-                    //Todo: Fix this hack
-                    if (episode.FirstAired < new DateTime(1753, 1, 1))
-                        episode.FirstAired = new DateTime(1753, 1, 1);
-
-                    Logger.Trace("Updating info for series:{0} - episode:{1}", targetSeries.SeriesName,
-                                 episode.EpisodeNumber);
-                    var newEpisode = new Episode
-                                         {
-                                             AirDate = episode.FirstAired,
-                                             EpisodeId = episode.Id,
-                                             EpisodeNumber = episode.EpisodeNumber,
-                                             Language = episode.Language.Abbriviation,
-                                             Overview = episode.Overview,
-                                             SeasonId = episode.SeasonId,
-                                             SeasonNumber = episode.SeasonNumber,
-                                             SeriesId = season.SeriesId,
-                                             Title = episode.EpisodeName
-                                         };
-
-
-                    //TODO: Replace this db check with a local check. Should make things even faster
-                    if (_sonicRepo.Exists<Episode>(e => e.EpisodeId == newEpisode.EpisodeId))
-                    {
-                        updateList.Add(newEpisode);
-                    }
-                    else
-                    {
-                        newList.Add(newEpisode);
-                    }
-
-                    successCount++;
-                }
-                catch (Exception e)
-                {
-                    Logger.FatalException(
-                        String.Format("An error has occurred while updating episode info for season {0} of series {1}",
-                                      season.SeasonNumber, season.SeriesId), e);
                     failCount++;
                 }
             }

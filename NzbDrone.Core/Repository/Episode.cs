@@ -7,8 +7,10 @@ namespace NzbDrone.Core.Repository
 {
     public class Episode
     {
-        [SubSonicPrimaryKey(false)]
+        [SubSonicPrimaryKey]
         public virtual int EpisodeId { get; set; }
+
+        public int? TvDbEpisodeId { get; set; }
 
         public virtual int SeriesId { get; set; }
         public virtual int EpisodeFileId { get; set; }
