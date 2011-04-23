@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Test
         [Row("The.Girls.Next.Door.S03E06.DVDRip.XviD-WiDE", "The.Girls.Next.Door", 3, 6)]
         [Row("Degrassi.S10E27.WS.DSR.XviD-2HD", "Degrassi", 10, 27)]
         [Row("Parenthood.2010.S02E14.HDTV.XviD-LOL", "Parenthood", 2, 14)]
-        [Row("Hawaii Five 0 S01E19 720p WEB DL DD5 1 H 264 NT", "Hawaii Five", 1, 19)]
+        [Row("Hawaii Five 0 S01E19 720p WEB DL DD5 1 H 264 NT", "Hawaii Five0", 1, 19)]
         [Row("The Event S01E14 A Message Back 720p WEB DL DD5 1 H264 SURFER", "The Event", 1, 14)]
         [Row("Adam Hills In Gordon St Tonight S01E07 WS PDTV XviD FUtV", "Adam Hills In Gordon St Tonight", 1, 7)]
         [Row("Adam Hills In Gordon St Tonight S01E07 WS PDTV XviD FUtV", "Adam Hills In Gordon St Tonight", 1, 7)]
@@ -133,8 +133,11 @@ namespace NzbDrone.Core.Test
 
         [Test]
         [Row("the")]
-        [Row("And")]
-        [Row("Or")]
+        [Row("and")]
+        [Row("or")]
+        [Row("a")]
+        [Row("an")]
+        [Row("of")]
         public void Normalize_removed_common_words(string word)
         {
             var dirtyFormat = new[]

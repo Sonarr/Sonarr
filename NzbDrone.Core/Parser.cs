@@ -34,7 +34,7 @@ namespace NzbDrone.Core
                                                                              RegexOptions.Compiled),
                                                                      };
 
-        private static readonly Regex NormalizeRegex = new Regex(@"((\s|^)the(\s|$))|((\s|^)and(\s|$))|[^a-z]",
+        private static readonly Regex NormalizeRegex = new Regex(@"((^|\W)(a|an|the|and|or|of)($|\W))|\W",
                                                                  RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         /// <summary>
