@@ -92,6 +92,7 @@ namespace NzbDrone.Core.Test
             var timerProvider = mocker.Resolve<JobProvider>();
             timerProvider.Initialize();
             var firstRun = timerProvider.RunScheduled();
+            Thread.Sleep(2000);
             var secondRun = timerProvider.RunScheduled();
 
             Assert.IsTrue(firstRun);

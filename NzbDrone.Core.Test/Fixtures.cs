@@ -33,6 +33,7 @@ namespace NzbDrone.Core.Test
             {
                 try
                 {
+
                     File.Delete(file);
                 }
                 catch
