@@ -13,18 +13,17 @@ namespace NzbDrone.Core
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private static readonly Regex[] ReportTitleRegex = new[]
-                                                               {
-                                                                   new Regex(
-	   	                                                               @"(?<title>.+?)?\W?(?<year>\d{4}?)?\W+(?<airyear>\d{4})\W+(?<airmonth>\d{2})\W+(?<airday>\d{2})\W?(?!\\)",
-		                                                               RegexOptions.IgnoreCase | RegexOptions.Compiled),
-                                                                   new Regex(
-                                                                       @"(?<title>.+?)?\W?(?<year>\d{4}?)?(?:\WS?(?<season>\d{1,2})(?:(?:\-|\.|[ex]|\s|to)+(?<episode>\d+))+)+\W?(?!\\)",
-                                                                       RegexOptions.IgnoreCase | RegexOptions.Compiled),
-                                                                   new Regex(
-                                                                       @"(?<title>.+?)?\W?(?<year>\d{4}?)?(?:\W(?<season>\d+)(?<episode>\d{2}))+\W?(?!\\)",
-                                                                       RegexOptions.IgnoreCase | RegexOptions.Compiled)
-                                                                   //Supports 103/113 naming
-                                                               };
+                                {
+                                    new Regex(@"^(?<title>.+?)?\W?(?<year>\d{4}?)?\W+(?<airyear>\d{4})\W+(?<airmonth>\d{2})\W+(?<airday>\d{2})\W?(?!\\)",
+                                        RegexOptions.IgnoreCase | RegexOptions.Compiled),
+                                    new Regex(@"^(?<title>.*?)?(?:\W?S?(?<season>\d{1,2}(?!\d+))(?:(?:\-|\.|[ex]|\s|to)+(?<episode>\d{1,2}(?!\d+)))+)+\W?(?!\\)",
+                                        RegexOptions.IgnoreCase | RegexOptions.Compiled),
+                                    new Regex(@"^(?<title>.+?)?\W?(?<year>\d{4}?)?(?:\W(?<season>\d+)(?<episode>\d{2}))+\W?(?!\\)",
+                                        RegexOptions.IgnoreCase | RegexOptions.Compiled),
+                                    //Supports 103/113 naming
+                                    new Regex(@"^(?<title>.*?)?(?:\W?S?(?<season>\d{1,2}(?!\d+))(?:(?:\-|\.|[ex]|\s|to)+(?<episode>\d+))+)+\W?(?!\\)",
+                                        RegexOptions.IgnoreCase | RegexOptions.Compiled)
+                                };
 
         private static readonly Regex[] SeasonReportTitleRegex = new[]
                                                                      {
@@ -34,7 +33,7 @@ namespace NzbDrone.Core
                                                                              RegexOptions.Compiled),
                                                                      };
 
-        private static readonly Regex NormalizeRegex = new Regex(@"((^|\W)(a|an|the|and|or|of)($|\W))|\W",
+        private static readonly Regex NormalizeRegex = new Regex(@"((^|\W)(a|an|the|and|or|of)($|\W))|\W|\b(?!(?:19\d{2}|20\d{2}))\d+\b",
                                                                  RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         /// <summary>
@@ -55,14 +54,7 @@ namespace NzbDrone.Core
                 if (match.Count != 0)
                 {
                     var seriesName = NormalizeTitle(match[0].Groups["title"].Value);
-                    var year = 0;
-                    Int32.TryParse(match[0].Groups["year"].Value, out year);
-
-                    if (year < 1900 || year > DateTime.Now.Year + 1)
-                    {
-                        year = 0;
-                    }
-			
+                    
 			        var airyear = 0;
 			        Int32.TryParse(match[0].Groups["airyear"].Value, out airyear);
 
@@ -78,7 +70,6 @@ namespace NzbDrone.Core
                             Proper = title.ToLower().Contains("proper"),
                             CleanTitle = seriesName,
                             SeasonNumber = season,
-                            Year = year,
                             Episodes = new List<int>()
                         };
 
@@ -107,7 +98,6 @@ namespace NzbDrone.Core
                             {
                                 Proper = title.ToLower().Contains("proper"),
                                 CleanTitle = seriesName,
-                                Year = year,
                                 AirDate = new DateTime(airyear, airmonth, airday)
                             };
                         }
