@@ -210,6 +210,7 @@ namespace NzbDrone.Core.Providers.Indexer
                     return true;
                 }
             }
+            return false;
         }
     }
 }
