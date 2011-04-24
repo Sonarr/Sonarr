@@ -1,0 +1,54 @@
+<configSchema>
+    <sectionSchema name="system.web/fullTrustAssemblies">
+        <collection addElement="add" removeElement="remove" clearElement="clear">
+            <attribute name="assemblyName" required="true" isUniqueKey="false" type="string" validationType="nonEmptyString" />
+            <attribute name="version" required="true" isUniqueKey="false" type="string" validationType="nonEmptyString" />
+            <attribute name="publicKey" required="true" isUniqueKey="false" type="string" validationType="nonEmptyString" />
+        </collection>
+     </sectionSchema>
+    <sectionSchema name="system.web/partialTrustVisibleAssemblies">
+        <collection addElement="add" removeElement="remove" clearElement="clear">
+            <attribute name="assemblyName" required="true" isUniqueKey="false" type="string" validationType="nonEmptyString" />
+            <attribute name="version" required="true" isUniqueKey="false" type="string" validationType="nonEmptyString" />
+            <attribute name="publicKey" required="true" isUniqueKey="false" type="string" validationType="nonEmptyString" />
+        </collection>
+     </sectionSchema>
+    <sectionSchema name="system.web/customErrors">
+        <attribute name="redirectMode" type="string" validationType="nonEmptyString" />
+    </sectionSchema>
+    <sectionSchema name="system.web/machineKey">
+        <attribute name="compatibilityMode" type="string" validationType="nonEmptyString" />
+    </sectionSchema>
+    <sectionSchema name="system.web/authentication">
+        <element name="forms">
+            <attribute name="ticketCompatibilityMode" type="string" validationType="nonEmptyString" />
+        </element>
+    </sectionSchema>
+    <sectionSchema name="system.web/compilation">
+        <attribute name="optimizeCompilations" type="bool" defaultValue="False" />
+        <attribute name="targetFramework" type="string" />
+        <element name="folderLevelBuildProviders">
+            <collection addElement="add" removeElement="remove" clearElement="clear">
+                <attribute name="name" required="true" isUniqueKey="true" type="string" validationType="nonEmptyString" />
+                <attribute name="type" required="true" isUniqueKey="false" type="string" validationType="nonEmptyString" />
+            </collection>
+        </element>
+    </sectionSchema>
+    <sectionSchema name="system.web/trust">
+        <attribute name="legacyCasModel" type="bool" defaultValue="False" />
+    </sectionSchema>
+    <sectionSchema name="system.web/httpRuntime" >
+        <attribute name="maxUrlLength" type="int" defaultValue="260" />
+        <attribute name="maxQueryStringLength" type="int" defaultValue="2048" />
+        <attribute name="relaxedUrlToFileSystemMapping" type="bool" defaultValue="False" />
+        <attribute name="requestPathInvalidCharacters" type="string" />
+        <attribute name="requestValidationMode" type="string" />
+        <attribute name="requestValidationType" type="string" />
+        <attribute name="encoderType" type="string" />
+    </sectionSchema>
+    <sectionSchema name="system.web/pages">
+        <attribute name="renderAllHiddenFieldsAtTopOfForm" type="bool" defaultValue="True" />
+        <attribute name="controlRenderingCompatibilityVersion" type="string" />
+        <attribute name="clientIDMode" type="string" defaultValue="Predictable" />
+    </sectionSchema>
+</configSchema>

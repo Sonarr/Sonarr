@@ -38,17 +38,14 @@ namespace NzbDrone
 
                 Process.Start(IISController.AppUrl);
 
-                IISController.IISProcess.WaitForExit();
-
+                while (true)
+                {
+                    Console.ReadLine();
+                }
             }
             catch (Exception e)
             {
                 AppDomainException(e);
-            }
-
-            while (true)
-            {
-                Console.ReadLine();
             }
         }
 

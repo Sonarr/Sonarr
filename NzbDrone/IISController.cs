@@ -16,6 +16,8 @@ namespace NzbDrone
         private static readonly Logger Logger = LogManager.GetLogger("IISController");
         private static readonly string IISFolder = Path.Combine(Config.ProjectRoot, @"IISExpress\");
         private static readonly string IISExe = Path.Combine(IISFolder, @"iisexpress.exe");
+        private static readonly string IISConfigPath = Path.Combine(IISFolder, "AppServer", "applicationhost.config");
+
         private static Timer _pingTimer;
         private static int _pingFailCounter;
 
@@ -33,7 +35,7 @@ namespace NzbDrone
             IISProcess = new Process();
 
             IISProcess.StartInfo.FileName = IISExe;
-            IISProcess.StartInfo.Arguments = "/config:IISExpress\\Appserver\\applicationhost.config /trace:i";
+            IISProcess.StartInfo.Arguments = String.Format("/config:{0} /trace:i", IISConfigPath);//"/config:"""" /trace:i";
             IISProcess.StartInfo.WorkingDirectory = Config.ProjectRoot;
 
             IISProcess.StartInfo.UseShellExecute = false;
@@ -105,13 +107,16 @@ namespace NzbDrone
             try
             {
                 new WebClient().DownloadString(AppUrl);
-                Logger.Info("Server said hai...");
+                if (_pingFailCounter > 0)
+                {
+                    Logger.Info("Application pool has been successfully recovered.");
+                }
                 _pingFailCounter = 0;
             }
             catch (Exception ex)
             {
                 _pingFailCounter++;
-                Logger.ErrorException("App is not responding. Count " + _pingFailCounter, ex);
+                Logger.ErrorException("Application pool is not responding. Count " + _pingFailCounter, ex);
                 if (_pingFailCounter > 2)
                 {
                     RestartServer();
@@ -121,7 +126,7 @@ namespace NzbDrone
 
         private static void OnDataReceived(object s, DataReceivedEventArgs e)
         {
-            if (e == null || e.Data == null || e.Data.StartsWith("Request started:") ||
+            if (e == null || String.IsNullOrWhiteSpace(e.Data) || e.Data.StartsWith("Request started:") ||
                 e.Data.StartsWith("Request ended:") || e.Data == ("IncrementMessages called"))
                 return;
 

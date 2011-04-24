@@ -17,7 +17,7 @@
       <assemblyIdentity type='win32' name='browscap' version='1.0.0.0' />
     </dependentAssembly>
   </dependency>
-    <dependency>
+  <dependency>
     <dependentAssembly>
       <assemblyIdentity type='win32' name='rsca2' version='1.0.0.0' />
     </dependentAssembly>

@@ -119,7 +119,7 @@
           <enum name="ApplicationPoolIdentity" value="4"/>
         </attribute>
         <attribute name="userName" type="string"/>
-        <attribute name="password" type="string" caseSensitive="true" encrypted="false"  />
+        <attribute name="password" type="string" caseSensitive="true" encrypted="true"  />
         <attribute name="loadUserProfile" type="bool" defaultValue="false"/>
         <attribute name="logonType" type="enum" defaultValue="LogonBatch">
           <enum name="LogonBatch" value="0"/>
@@ -212,7 +212,7 @@
           <enum name="ApplicationPoolIdentity" value="4"/>
         </attribute>
         <attribute name="userName" type="string"/>
-        <attribute name="password" type="string" caseSensitive="true" encrypted="false"  />
+        <attribute name="password" type="string" caseSensitive="true" encrypted="true"  />
         <attribute name="loadUserProfile" type="bool" defaultValue="false"/>
         <attribute name="logonType" type="enum" defaultValue="LogonBatch">
           <enum name="LogonBatch" value="0"/>
@@ -468,7 +468,7 @@
           <attribute name="path" type="string" isUniqueKey="true" validationType="virtualDirectoryPath" />
           <attribute name="physicalPath" type="string" expanded="true" />
           <attribute name="userName" type="string" />
-          <attribute name="password" type="string" caseSensitive="true" encrypted="false"  />
+          <attribute name="password" type="string" caseSensitive="true" encrypted="true"  />
           <attribute name="logonMethod" type="enum" defaultValue="ClearText">
             <enum name="Interactive" value="0"/>
             <enum name="Batch" value="1"/>
@@ -481,7 +481,7 @@
           <attribute name="path" type="string" validationType="virtualDirectoryPath"/>
           <attribute name="physicalPath" type="string" expanded="true" />
           <attribute name="userName" type="string"/>
-          <attribute name="password" type="string" caseSensitive="true" encrypted="false"  />
+          <attribute name="password" type="string" caseSensitive="true" encrypted="true"  />
           <attribute name="logonMethod" type="enum" defaultValue="ClearText">
             <enum name="Interactive" value="0"/>
             <enum name="Batch" value="1"/>
@@ -502,7 +502,7 @@
         <attribute name="path" type="string" validationType="virtualDirectoryPath"/>
         <attribute name="physicalPath" type="string" expanded="true" />
         <attribute name="userName" type="string" />
-        <attribute name="password" type="string" caseSensitive="true" encrypted="false"  />
+        <attribute name="password" type="string" caseSensitive="true" encrypted="true"  />
         <attribute name="logonMethod" type="enum" defaultValue="ClearText">
           <enum name="Interactive" value="0"/>
           <enum name="Batch" value="1"/>
@@ -588,7 +588,7 @@
       <attribute name="path" type="string" validationType="virtualDirectoryPath"/>
       <attribute name="physicalPath" type="string" expanded="true" />
       <attribute name="userName" type="string"/>
-      <attribute name="password" type="string" caseSensitive="true" encrypted="false"  />
+      <attribute name="password" type="string" caseSensitive="true" encrypted="true"  />
       <attribute name="logonMethod" type="enum" defaultValue="ClearText">
         <enum name="Interactive" value="0"/>
         <enum name="Batch" value="1"/>
@@ -990,7 +990,7 @@
     <attribute name="dataSource" type="string" caseSensitive="true" defaultValue="InternetDb" />
     <attribute name="tableName" type="string" caseSensitive="true" defaultValue="InternetLog" />
     <attribute name="userName" type="string" defaultValue="InternetAdmin" />
-    <attribute name="password" type="string" caseSensitive="true" encrypted="false"  />
+    <attribute name="password" type="string" caseSensitive="true" encrypted="true"  />
   </sectionSchema>
 
   <sectionSchema name="system.webServer/security/access">
@@ -1016,7 +1016,7 @@
   <sectionSchema name="system.webServer/security/authentication/anonymousAuthentication">
     <attribute name="enabled" type="bool" defaultValue="true" />
     <attribute name="userName" type="string" defaultValue="IUSR" />
-    <attribute name="password" type="string" caseSensitive="true" encrypted="false"  />
+    <attribute name="password" type="string" caseSensitive="true" encrypted="true"  />
     <attribute name="logonMethod" type="enum" defaultValue="ClearText">
       <enum name="Interactive" value="0" />
       <enum name="Batch" value="1" />
@@ -1078,14 +1078,14 @@
           </collection>
         </element>
         <attribute name="userName" type="string" validationType="nonEmptyString" />
-        <attribute name="password" type="string" caseSensitive="true" encrypted="false"  />
+        <attribute name="password" type="string" caseSensitive="true" encrypted="true"  />
       </collection>
     </element>
     <element name="oneToOneMappings">
       <collection addElement="add" clearElement="clear">
         <attribute name="enabled" type="bool" defaultValue="true" />
         <attribute name="userName" type="string" />
-        <attribute name="password" type="string" caseSensitive="true" encrypted="false"  />
+        <attribute name="password" type="string" caseSensitive="true" encrypted="true"  />
         <attribute name="certificate" type="string" caseSensitive="true" required="true" isUniqueKey="true" />
       </collection>
     </element>
@@ -1372,7 +1372,7 @@
       <attribute name="path" type="string" required="true" isUniqueKey ="true" />
       <collection addElement="add" removeElement="remove" clearElement="clear">
         <attribute name="name" type="string" required="true" isUniqueKey ="true" />
-        <attribute name="password" type="string" caseSensitive="true" encrypted="false"  />
+        <attribute name="password" type="string" caseSensitive="true" encrypted="true"  />
         <attribute name="credentialType" type="enum" defaultValue="IISManager">
           <enum name="IISManager" value="0" />
           <enum name="Windows" value="1" />
@@ -1386,9 +1386,9 @@
     <attribute name="enabled" type="bool" defaultValue="false" />
     <attribute name="path" type="string" expanded="true" defaultValue="" />
     <attribute name="userName" type="string" defaultValue="" />
-    <attribute name="password" type="string" caseSensitive="true" encrypted="false" />
+    <attribute name="password" type="string" caseSensitive="true" encrypted="true" />
     <attribute name="enableUncPolling" type="bool" defaultValue="false" />
     <attribute name="pollingPeriod" type="timeSpan" defaultValue="00:03:00" />
   </sectionSchema>
- 
+  
 </configSchema>
