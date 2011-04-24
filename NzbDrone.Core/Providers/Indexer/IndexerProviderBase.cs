@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.ServiceModel.Syndication;
 using NLog;
@@ -18,11 +19,12 @@ namespace NzbDrone.Core.Providers.Indexer
         private readonly HistoryProvider _historyProvider;
         protected readonly SeasonProvider _seasonProvider;
         protected readonly SeriesProvider _seriesProvider;
-
+        protected readonly SabProvider _sabProvider;
 
         protected IndexerProviderBase(SeriesProvider seriesProvider, SeasonProvider seasonProvider,
                                 EpisodeProvider episodeProvider, ConfigProvider configProvider,
-                                HttpProvider httpProvider, IndexerProvider indexerProvider, HistoryProvider historyProvider)
+                                HttpProvider httpProvider, IndexerProvider indexerProvider,
+                                HistoryProvider historyProvider, SabProvider sabProvider)
         {
             _seriesProvider = seriesProvider;
             _seasonProvider = seasonProvider;
@@ -31,6 +33,7 @@ namespace NzbDrone.Core.Providers.Indexer
             _httpProvider = httpProvider;
             _indexerProvider = indexerProvider;
             _historyProvider = historyProvider;
+            _sabProvider = sabProvider;
             _logger = LogManager.GetLogger(GetType().ToString());
         }
 
@@ -123,25 +126,33 @@ namespace NzbDrone.Core.Providers.Indexer
 
                 var episodes = _episodeProvider.GetEpisodeByParseResult(parseResult);
 
+                if (InHistory(episodes, parseResult, feedItem))
+                {
+                    return;
+                }
+                
+                var sabTitle = _sabProvider.GetSabTitle(parseResult);
+
+                if (_sabProvider.IsInQueue(sabTitle))
+                {
+                    return;
+                }
+
+                if (!_sabProvider.AddByUrl(NzbDownloadUrl(feedItem), sabTitle))
+                {
+                    return;
+                }
+
                 foreach (var episode in episodes)
                 {
-                    if (_historyProvider.Exists(episode.EpisodeId, parseResult.Quality, parseResult.Proper))
+                    _historyProvider.Add(new History
                     {
-                        _logger.Debug("Episode in history: {0}", feedItem.Title.Text);
-                    }
-                    else
-                    {
-                        //TODO: Add episode to sab
-
-                        _historyProvider.Add(new History
-                        {
-                            Date = DateTime.Now,
-                            EpisodeId = episode.EpisodeId,
-                            IsProper = parseResult.Proper,
-                            NzbTitle = feedItem.Title.Text,
-                            Quality = parseResult.Quality
-                        });
-                    }
+                        Date = DateTime.Now,
+                        EpisodeId = episode.EpisodeId,
+                        IsProper = parseResult.Proper,
+                        NzbTitle = feedItem.Title.Text,
+                        Quality = parseResult.Quality
+                    });
                 }
             }
         }
@@ -188,5 +199,17 @@ namespace NzbDrone.Core.Providers.Indexer
         /// <param name = "item">RSS Feed item to generate the link for</param>
         /// <returns>Download link URL</returns>
         protected abstract string NzbDownloadUrl(SyndicationItem item);
+
+        private bool InHistory(IList<Episode> episodes, EpisodeParseResult parseResult, SyndicationItem feedItem)
+        {
+            foreach (var episode in episodes)
+            {
+                if (_historyProvider.Exists(episode.EpisodeId, parseResult.Quality, parseResult.Proper))
+                {
+                    _logger.Debug("Episode in history: {0}", feedItem.Title.Text);
+                    return true;
+                }
+            }
+        }
     }
 }
