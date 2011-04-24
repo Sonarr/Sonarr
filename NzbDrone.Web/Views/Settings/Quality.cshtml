@@ -76,17 +76,11 @@
         return false;
     });
 
-//    $("a.deleteRow").live("click", function () {
-//        $(this).parents("div.userProfileSectionEditor:first").remove();
-//        return false;
-    //    });
-
     var deleteQualityProfileUrl = '@Url.Action("DeleteQualityProfile", "Settings")';
 
     function deleteProfile(id) {
-        //$(this).parents("div.userProfileSectionEditor:first").remove();
         sendToServer(id);
-        $("#div_" + id).hide();
+        $("#div_" + id).remove();
     }
 
     function sendToServer(id) {
@@ -95,7 +89,7 @@
             url: deleteQualityProfileUrl,
             data: jQuery.param({ profileId: id }),
             error: function (req, status, error) {
-                alert("Sorry! We could not add " + path + " at this time. " + error);
+                alert("Sorry! We could not delete your Profile at this time. " + error);
             }
         });
     }
