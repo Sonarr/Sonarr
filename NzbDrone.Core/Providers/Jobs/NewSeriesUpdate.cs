@@ -45,14 +45,14 @@ namespace NzbDrone.Core.Providers.Jobs
             {
                 try
                 {
-                    notification.CurrentStatus = String.Format("Searching For: {0}", new DirectoryInfo(currentSeries.Path).Name);
+                    notification.CurrentMessage = String.Format("Searching For: {0}", new DirectoryInfo(currentSeries.Path).Name);
                     var updatedSeries = _seriesProvider.UpdateSeriesInfo(currentSeries.SeriesId);
 
-                    notification.CurrentStatus = String.Format("Downloading episode info For: {0}",
+                    notification.CurrentMessage = String.Format("Downloading episode info For: {0}",
                                                                           updatedSeries.Title);
                     _episodeProvider.RefreshEpisodeInfo(updatedSeries.SeriesId);
 
-                    notification.CurrentStatus = String.Format("Scanning disk for {0} files",
+                    notification.CurrentMessage = String.Format("Scanning disk for {0} files",
                                                                           updatedSeries.Title);
                     _mediaFileProvider.Scan(_seriesProvider.GetSeries(updatedSeries.SeriesId));
                 }

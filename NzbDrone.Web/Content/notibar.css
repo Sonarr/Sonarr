@@ -15,6 +15,7 @@
     font-size: 20px;
     color: White;
     text-align: center;
+    white-space:nowrap;
 }
 #msgCloseButton
 {

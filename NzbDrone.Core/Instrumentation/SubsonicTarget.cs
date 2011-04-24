@@ -7,11 +7,11 @@ namespace NzbDrone.Core.Instrumentation
 {
     public class SubsonicTarget : Target
     {
-        private readonly IRepository _repo;
+        private readonly IRepository _repository;
 
-        public SubsonicTarget(IRepository repo)
+        public SubsonicTarget(IRepository repository)
         {
-            _repo = repo;
+            _repository = repository;
         }
 
         protected override void Write(LogEventInfo logEvent)
@@ -31,8 +31,8 @@ namespace NzbDrone.Core.Instrumentation
 
             if (logEvent.Exception != null)
             {
-                if (String.IsNullOrWhiteSpace(log.Message))
-                    log.Message = logEvent.Exception.Message;
+
+                log.Message += ": " + logEvent.Exception.Message;
 
                 log.Exception = logEvent.Exception.ToString();
                 log.ExceptionType = logEvent.Exception.GetType().ToString();
@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Instrumentation
             log.Level = logEvent.Level.Name;
 
 
-            _repo.Add(log);
+            _repository.Add(log);
         }
     }
 }

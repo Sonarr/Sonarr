@@ -187,6 +187,7 @@ namespace NzbDrone.Core.Providers.Jobs
                 {
                     settings.Success = false;
                     Logger.ErrorException("An error has occurred while executing timer job " + timerClass.Name, e);
+                    _notification.CurrentMessage = timerClass.Name + " Failed.";
                     _notification.Status = ProgressNotificationStatus.Failed;
                 }
             }

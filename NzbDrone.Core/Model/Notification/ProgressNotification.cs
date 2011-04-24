@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Model.Notification
         public ProgressNotification(string title)
         {
             Title = title;
-            CurrentStatus = String.Empty;
+            CurrentMessage = String.Empty;
             Id = Guid.NewGuid();
             ProgressMax = 100;
             ProgressValue = 0;
@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Model.Notification
         ///   Gets or sets the current status of this task. this field could be use to show the currently processing item in a long running task.
         /// </summary>
         /// <value>The current status.</value>
-        public String CurrentStatus { get; set; }
+        public String CurrentMessage { get; set; }
 
         /// <summary>
         ///   Gets or sets the completion status in percent.

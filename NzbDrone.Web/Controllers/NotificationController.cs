@@ -20,7 +20,7 @@ namespace NzbDrone.Web.Controllers
             string message = string.Empty;
             if (_notifications.GetProgressNotifications.Count != 0)
             {
-                message = _notifications.GetProgressNotifications[0].CurrentStatus;
+                message = _notifications.GetProgressNotifications[0].CurrentMessage;
             }
 
             return Json(message, JsonRequestBehavior.AllowGet);

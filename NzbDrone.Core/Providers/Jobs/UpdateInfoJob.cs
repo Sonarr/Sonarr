@@ -40,11 +40,10 @@ namespace NzbDrone.Core.Providers.Jobs
 
             foreach (var series in seriesToUpdate)
             {
-                notification.CurrentStatus = "Updating series info for " + series.Title;
+                notification.CurrentMessage = "Updating " + series.Title;
                 _seriesProvider.UpdateSeriesInfo(series.SeriesId);
-                notification.CurrentStatus = "Updating episode info for " + series.Title;
                 _episodeProvider.RefreshEpisodeInfo(series.SeriesId);
-                notification.CurrentStatus = "Update completed for " + series.Title;
+                notification.CurrentMessage = "Update completed for " + series.Title;
             }
         }
     }
