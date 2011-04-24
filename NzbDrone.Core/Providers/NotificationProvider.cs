@@ -24,9 +24,17 @@ namespace NzbDrone.Core.Providers
         {
             get
             {
-                return
-                    new List<ProgressNotification>(
-                        _progressNotification.Values.Where(p => p.Status == ProgressNotificationStatus.InProgress));
+
+                var activeNotification = _progressNotification.Values.Where(p => p.Status == ProgressNotificationStatus.InProgress).ToList();
+
+                if (activeNotification.Count == 0)
+                {
+                    //Get notifications that were recently done
+                    activeNotification = _progressNotification.Values.Where(p => p.CompletedTime >= DateTime.Now.AddSeconds(-3)).OrderByDescending(c => c.CompletedTime).ToList();
+
+                }
+
+                return activeNotification.ToList();
             }
         }
 

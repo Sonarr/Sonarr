@@ -1,9 +1,8 @@
 ﻿#msgBox
 {
     display: none;
-    height: 40px;
+    height: 30px;
     background-color: #272525;
-    background-image: url(images/spin.gif) no-repeat left middle;
     opacity: .9;
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=85)";
     filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=85);
@@ -12,13 +11,10 @@
     position: fixed;
     z-index: 99;
     bottom: 0;
+    right: 0;
     font-size: 20px;
     color: White;
-    width: 100% 
-    margin-right: auto;
-    width: 85%;
-    margin-left: auto;
-    min-width: 800px;
+    text-align: center;
 }
 #msgCloseButton
 {

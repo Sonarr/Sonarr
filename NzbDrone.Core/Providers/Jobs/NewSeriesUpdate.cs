@@ -52,8 +52,8 @@ namespace NzbDrone.Core.Providers.Jobs
                                                                           updatedSeries.Title);
                     _episodeProvider.RefreshEpisodeInfo(updatedSeries.SeriesId);
 
-                    notification.CurrentStatus = String.Format("Scanning series folder {0}",
-                                                                          updatedSeries.Path);
+                    notification.CurrentStatus = String.Format("Scanning disk for {0} files",
+                                                                          updatedSeries.Title);
                     _mediaFileProvider.Scan(_seriesProvider.GetSeries(updatedSeries.SeriesId));
                 }
 

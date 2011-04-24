@@ -4,7 +4,7 @@ $(function () {
     refreshNotifications();
 
     var timer = window.setInterval(function () {
-        speed = 1000;
+        speed = 500;
         refreshNotifications();
     }, 2000);
 

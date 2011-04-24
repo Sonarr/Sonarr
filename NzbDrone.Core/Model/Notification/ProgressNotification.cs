@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Model.Notification
         /// <value>The percent complete.</value>
         public int PercentComplete
         {
-            get { return Convert.ToInt32(Convert.ToDouble(ProgressValue)/Convert.ToDouble(ProgressMax)*100); }
+            get { return Convert.ToInt32(Convert.ToDouble(ProgressValue) / Convert.ToDouble(ProgressMax) * 100); }
         }
 
         /// <summary>
@@ -56,11 +56,30 @@ namespace NzbDrone.Core.Model.Notification
         /// <value>The progress value.</value>
         public int ProgressValue { get; set; }
 
+        private ProgressNotificationStatus _status;
+
         /// <summary>
         ///   Gets or sets the status.
         /// </summary>
         /// <value>The status.</value>
-        public ProgressNotificationStatus Status { get; set; }
+        public ProgressNotificationStatus Status
+        {
+            get { return _status; }
+            set
+            {
+                if (value != ProgressNotificationStatus.InProgress)
+                {
+                    CompletedTime = DateTime.Now;
+                }
+                _status = value;
+            }
+        }
+
+
+        /// <summary>
+        /// Gets the completed time.
+        /// </summary>
+        public DateTime CompletedTime { get; private set; }
 
         #region IDisposable Members
 
