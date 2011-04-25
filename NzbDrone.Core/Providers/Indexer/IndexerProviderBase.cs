@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.ServiceModel.Syndication;
 using NLog;
 using NzbDrone.Core.Model;
@@ -48,6 +49,15 @@ namespace NzbDrone.Core.Providers.Indexer
         protected abstract string[] Urls { get; }
 
 
+        /// <summary>
+        /// Gets the credential.
+        /// </summary>
+        protected virtual NetworkCredential Credentials
+        {
+            get { return null; }
+        }
+
+
         public IndexerSetting Settings
         {
             get
@@ -70,7 +80,7 @@ namespace NzbDrone.Core.Providers.Indexer
                 {
                     _logger.Trace("Downloading RSS " + url);
 
-                    var reader = new SyndicationFeedXmlReader(_httpProvider.DownloadStream(url));
+                    var reader = new SyndicationFeedXmlReader(_httpProvider.DownloadStream(url, Credentials));
                     var feed = SyndicationFeed.Load(reader).Items;
 
                     foreach (var item in feed)
@@ -168,10 +178,10 @@ namespace NzbDrone.Core.Providers.Indexer
         /// </summary>
         /// <param name = "item">RSS feed item to parse</param>
         /// <returns>Detailed episode info</returns>
-        protected EpisodeParseResult ParseFeed(SyndicationItem item)
+        public EpisodeParseResult ParseFeed(SyndicationItem item)
         {
             var episodeParseResult = Parser.ParseEpisodeInfo(item.Title.Text);
-            if (episodeParseResult == null) return CustomParser(item, null);
+            if (episodeParseResult == null) return null;
 
             var seriesInfo = _seriesProvider.FindSeries(episodeParseResult.CleanTitle);
 
@@ -185,7 +195,7 @@ namespace NzbDrone.Core.Providers.Indexer
             }
 
             _logger.Debug("Unable to map {0} to any of series in database", episodeParseResult.CleanTitle);
-            return CustomParser(item, episodeParseResult);
+            return null;
         }
 
         /// <summary>

@@ -40,10 +40,11 @@ namespace NzbDrone.Core.Providers.Core
             }
         }
 
-        public virtual Stream DownloadStream(string url)
+        public virtual Stream DownloadStream(string url, NetworkCredential credential)
         {
             var request = WebRequest.Create(url);
 
+            request.Credentials = credential;
             var response = request.GetResponse();
 
             return response.GetResponseStream();
