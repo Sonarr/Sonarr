@@ -35,7 +35,7 @@ namespace NzbDrone
             IISProcess = new Process();
 
             IISProcess.StartInfo.FileName = IISExe;
-            IISProcess.StartInfo.Arguments = String.Format("/config:{0} /trace:i", IISConfigPath);//"/config:"""" /trace:i";
+            IISProcess.StartInfo.Arguments = String.Format("/config:\"{0}\" /trace:i", IISConfigPath);//"/config:"""" /trace:i";
             IISProcess.StartInfo.WorkingDirectory = Config.ProjectRoot;
 
             IISProcess.StartInfo.UseShellExecute = false;
