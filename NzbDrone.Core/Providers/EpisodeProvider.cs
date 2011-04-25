@@ -45,6 +45,13 @@ namespace NzbDrone.Core.Providers
                     c => c.SeriesId == seriesId && c.SeasonNumber == seasonNumber && c.EpisodeNumber == episodeNumber);
         }
 
+        public virtual Episode GetEpisode(int seriesId, DateTime date)
+        {
+            return
+                _sonicRepo.Single<Episode>(
+                    c => c.SeriesId == seriesId && c.AirDate == date.Date);
+        }
+
         public virtual IList<Episode> GetEpisodeBySeries(long seriesId)
         {
             return _sonicRepo.Find<Episode>(e => e.SeriesId == seriesId);
@@ -168,7 +175,7 @@ namespace NzbDrone.Core.Providers
                     Logger.Trace("Updating info for [{0}] - S{1}E{2}", targetSeries.SeriesName, episode.SeasonNumber, episode.EpisodeNumber);
                     var newEpisode = new Episode
                                          {
-                                             AirDate = episode.FirstAired,
+                                             AirDate = episode.FirstAired.Date,
                                              TvDbEpisodeId = episode.Id,
                                              EpisodeNumber = episode.EpisodeNumber,
                                              Language = episode.Language.Abbriviation,

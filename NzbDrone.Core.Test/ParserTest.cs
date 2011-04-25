@@ -50,6 +50,7 @@ namespace NzbDrone.Core.Test
         [Row(@"z:\tv shows\modern marvels\Season 16\S16E03 - The Potato.mkv", 16, 3)]
         [Row(@"z:\tv shows\robot chicken\Specials\S00E16 - Dear Consumer - SD TV.avi", 0, 16)]
         [Row(@"D:\shares\TV Shows\Parks And Recreation\Season 2\S02E21 - 94 Meetings - 720p TV.mkv", 2, 21)]
+        [Row(@"D:\shares\TV Shows\Battlestar Galactica (2003)\Season 2\S02E21.avi", 2, 21)]
         public void file_path_parse(string path, int season, int episode)
         {
             var result = Parser.ParseEpisodeInfo(path);
@@ -111,12 +112,16 @@ namespace NzbDrone.Core.Test
         [Row("The Tonight Show With Jay Leno 2011 04 15 1080i HDTV DD5 1 MPEG2 TrollHD", "The Tonight Show With Jay Leno", 2011, 04, 15)]
         [Row("The.Daily.Show.2010.10.11.Johnny.Knoxville.iTouch-MW", "The.Daily.Show", 2010, 10, 11)]
         [Row("The Daily Show - 2011-04-12 - Gov. Deval Patrick", "The.Daily.Show", 2011, 04, 12)]
+        [Row("2011.01.10 - Denis Leary - HD TV.mkv", 2011, 1, 10)]
+        [Row("2011.03.13 - Denis Leary - HD TV.mkv", 2011, 3, 13)]
+        [Row("2011-03-13 - Denis Leary - HD TV.mkv", 2011, 3, 13)]
         public void episode_daily_parse(string postTitle, string title, int year, int month, int day)
         {
             var result = Parser.ParseEpisodeInfo(postTitle);
             var airDate = new DateTime(year, month, day);
             Assert.AreEqual(Parser.NormalizeTitle(title), result.CleanTitle);
             Assert.AreEqual(airDate, result.AirDate);
+            Assert.IsEmpty(result.Episodes);
         }
 
         [Test]
