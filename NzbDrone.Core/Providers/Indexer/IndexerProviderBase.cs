@@ -69,7 +69,9 @@ namespace NzbDrone.Core.Providers.Indexer
                 try
                 {
                     _logger.Trace("Downloading RSS " + url);
-                    var feed = SyndicationFeed.Load(_httpProvider.DownloadXml(url)).Items;
+
+                    var reader = new SyndicationFeedXmlReader(_httpProvider.DownloadStream(url));
+                    var feed = SyndicationFeed.Load(reader).Items;
 
                     foreach (var item in feed)
                     {
@@ -135,17 +137,17 @@ namespace NzbDrone.Core.Providers.Indexer
                     return;
                 }
 
-                var sabTitle = _sabProvider.GetSabTitle(parseResult);
+                //var sabTitle = _sabProvider.GetSabTitle(parseResult);
 
-                if (_sabProvider.IsInQueue(sabTitle))
-                {
-                    return;
-                }
+                //if (_sabProvider.IsInQueue(sabTitle))
+                //{
+                //    return;
+                //}
 
-                if (!_sabProvider.AddByUrl(NzbDownloadUrl(feedItem), sabTitle))
-                {
-                    return;
-                }
+                //if (!_sabProvider.AddByUrl(NzbDownloadUrl(feedItem), sabTitle))
+                //{
+                //    return;
+                //}
 
                 foreach (var episode in episodes)
                 {

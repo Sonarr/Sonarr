@@ -25,8 +25,6 @@ namespace NzbDrone.Core.Instrumentation
                 log.Method = logEvent.UserStackFrame.GetMethod().Name;
             }
 
-
-
             log.Logger = logEvent.LoggerName;
 
             if (logEvent.Exception != null)

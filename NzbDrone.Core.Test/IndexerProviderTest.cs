@@ -28,11 +28,9 @@ namespace NzbDrone.Core.Test
         {
             var mocker = new AutoMoqer();
 
-            var xmlReader = XmlReader.Create(File.OpenRead(".\\Files\\Rss\\" + fileName));
-
             mocker.GetMock<HttpProvider>()
-                .Setup(h => h.DownloadXml(It.IsAny<String>()))
-                .Returns(xmlReader);
+                          .Setup(h => h.DownloadStream(It.IsAny<String>()))
+                          .Returns(File.OpenRead(".\\Files\\Rss\\" + fileName));
 
             var fakeSettings = Builder<IndexerSetting>.CreateNew().Build();
             mocker.GetMock<IndexerProvider>()
