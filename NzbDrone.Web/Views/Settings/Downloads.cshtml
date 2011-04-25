@@ -16,6 +16,7 @@
     
     function selectDownloadOptionAtStart() {
         var checked = $('UseBlackHole').val();
+        var $radios = $('input[name="UseBlackhole"]');
         $radios.filter('[value=' + checked + ']').attr('checked', true);
         selectDownloadOption();
     }
@@ -89,7 +90,7 @@
             <div>
                 <div>
                     <b>@Html.LabelFor(m => m.UseBlackHole)</b>
-                    @Html.CheckBoxFor(m => m.UseBlackHole, new { style="display:block" })
+                    @Html.CheckBoxFor(m => m.UseBlackHole, new { style="display:none" })
                 </div>
                 <div>
                     @Html.RadioButton("UseBlackhole", true, new { @class="blackhole_radio" })Blackhole
