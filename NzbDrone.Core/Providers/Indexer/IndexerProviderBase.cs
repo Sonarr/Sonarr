@@ -61,13 +61,13 @@ namespace NzbDrone.Core.Providers.Indexer
         /// </summary>
         public void Fetch()
         {
-            _logger.Info("Fetching feeds from " + Settings.Name);
+            _logger.Debug("Fetching feeds from " + Settings.Name);
 
             foreach (var url in Urls)
             {
                 try
                 {
-                    _logger.Debug("Downloading RSS " + url);
+                    _logger.Trace("Downloading RSS " + url);
                     var feed = SyndicationFeed.Load(_httpProvider.DownloadXml(url)).Items;
 
                     foreach (var item in feed)
@@ -130,7 +130,7 @@ namespace NzbDrone.Core.Providers.Indexer
                 {
                     return;
                 }
-                
+
                 var sabTitle = _sabProvider.GetSabTitle(parseResult);
 
                 if (_sabProvider.IsInQueue(sabTitle))

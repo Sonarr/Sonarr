@@ -114,7 +114,7 @@ namespace NzbDrone.Core
                     return parsedEpisode;
                 }
             }
-            Logger.Warn("Unable to parse text into episode info. {0}", title);
+            Logger.Debug("Unable to parse text into episode info. {0}", title);
             return null;
         }
 

@@ -70,7 +70,7 @@ namespace NzbDrone.Core.Providers.Jobs
             {
                 if (_isRunning)
                 {
-                    Logger.Warn("Another instance of this job is already running. Ignoring request.");
+                    Logger.Info("Another instance of this job is already running. Ignoring request.");
                     return false;
                 }
                 _isRunning = true;
@@ -113,7 +113,7 @@ namespace NzbDrone.Core.Providers.Jobs
             {
                 if (_isRunning)
                 {
-                    Logger.Warn("Another job is already running. Ignoring request.");
+                    Logger.Info("Another job is already running. Ignoring request.");
                     return false;
                 }
                 _isRunning = true;
