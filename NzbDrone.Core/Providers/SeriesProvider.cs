@@ -58,9 +58,8 @@ namespace NzbDrone.Core.Providers
         public virtual bool QualityWanted(int seriesId, QualityTypes quality)
         {
             var series = _sonioRepo.Single<Series>(seriesId);
-
-            var profile = _quality.Find(series.QualityProfileId);
-            return profile.Allowed.Contains(quality);
+            Logger.Trace("Series {0} is using quality profile {1}", seriesId, series.QualityProfile.Name);
+            return series.QualityProfile.Allowed.Contains(quality);
         }
 
         public virtual TvdbSeries MapPathToSeries(string path)

@@ -20,11 +20,15 @@ namespace NzbDrone.Core.Test
     // ReSharper disable InconsistentNaming
     {
         [Test]
-        public void Download_feed_test()
+        [Row("nzbsorg.xml")]
+        [Row("nzbsrus.xml")]
+        [Row("newzbin.xml")]
+        [Row("nzbmatrix.xml")]
+        public void parse_feed_xml(string fileName)
         {
             var mocker = new AutoMoqer();
 
-            var xmlReader = XmlReader.Create(File.OpenRead(".\\Files\\Rss\\nzbsorg.xml"));
+            var xmlReader = XmlReader.Create(File.OpenRead(".\\Files\\Rss\\" + fileName));
 
             mocker.GetMock<HttpProvider>()
                 .Setup(h => h.DownloadXml(It.IsAny<String>()))
@@ -35,7 +39,28 @@ namespace NzbDrone.Core.Test
                 .Setup(c => c.GetSettings(It.IsAny<Type>()))
                 .Returns(fakeSettings);
 
-            mocker.Resolve<MockIndexerProvider>().Fetch();
+            var exceptions = mocker.Resolve<MockIndexerProvider>().Fetch();
+
+            foreach (var exception in exceptions)
+            {
+                Console.WriteLine(exception.ToString());
+            }
+
+            Assert.IsEmpty(exceptions);
+        }
+
+        [Test]
+        public void downloadFeed()
+        {
+            var mocker = new AutoMoqer();
+            mocker.SetConstant(new HttpProvider());
+
+            var fakeSettings = Builder<IndexerSetting>.CreateNew().Build();
+            mocker.GetMock<IndexerProvider>()
+                .Setup(c => c.GetSettings(It.IsAny<Type>()))
+                .Returns(fakeSettings);
+
+            mocker.Resolve<TestUrlIndexer>().Fetch();
         }
 
         [Test]
@@ -90,4 +115,28 @@ namespace NzbDrone.Core.Test
             return item.Links[0].Uri.ToString();
         }
     }
+
+    public class TestUrlIndexer : IndexerProviderBase
+    {
+        public TestUrlIndexer(SeriesProvider seriesProvider, SeasonProvider seasonProvider, EpisodeProvider episodeProvider, ConfigProvider configProvider, HttpProvider httpProvider, IndexerProvider indexerProvider, HistoryProvider historyProvider, SabProvider sabProvider)
+            : base(seriesProvider, seasonProvider, episodeProvider, configProvider, httpProvider, indexerProvider, historyProvider, sabProvider)
+        {
+        }
+
+        public override string Name
+        {
+            get { return "All Urls"; }
+        }
+
+        protected override string[] Urls
+        {
+            get { return new[] { "http://rss.nzbmatrix.com/rss.php?cat=TV" }; }
+        }
+
+        protected override string NzbDownloadUrl(SyndicationItem item)
+        {
+            return "http://google.com";
+        }
+    }
+
 }

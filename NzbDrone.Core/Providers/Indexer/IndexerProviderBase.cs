@@ -59,9 +59,10 @@ namespace NzbDrone.Core.Providers.Indexer
         /// <summary>
         ///   Fetches RSS feed and process each news item.
         /// </summary>
-        public void Fetch()
+        public List<Exception> Fetch()
         {
             _logger.Debug("Fetching feeds from " + Settings.Name);
+            var exeptions = new List<Exception>();
 
             foreach (var url in Urls)
             {
@@ -78,6 +79,7 @@ namespace NzbDrone.Core.Providers.Indexer
                         }
                         catch (Exception itemEx)
                         {
+                            exeptions.Add(itemEx);
                             _logger.ErrorException("An error occurred while processing feed item", itemEx);
                         }
 
@@ -85,11 +87,13 @@ namespace NzbDrone.Core.Providers.Indexer
                 }
                 catch (Exception feedEx)
                 {
+                    exeptions.Add(feedEx);
                     _logger.ErrorException("An error occurred while processing feed", feedEx);
                 }
             }
 
             _logger.Info("Finished processing feeds from " + Settings.Name);
+            return exeptions;
         }
 
         internal void ProcessItem(SyndicationItem feedItem)

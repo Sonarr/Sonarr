@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Providers
     public class EpisodeProvider
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private readonly QualityProvider _quality;
+        private readonly QualityProvider _qualityProvider;
         private readonly SeasonProvider _seasons;
         private readonly SeriesProvider _series;
         private readonly IRepository _sonicRepo;
@@ -20,13 +20,13 @@ namespace NzbDrone.Core.Providers
 
         public EpisodeProvider(IRepository sonicRepo, SeriesProvider seriesProvider,
                                SeasonProvider seasonProvider, TvDbProvider tvDbProvider,
-                               QualityProvider quality)
+                               QualityProvider qualityProvider)
         {
             _sonicRepo = sonicRepo;
             _series = seriesProvider;
             _tvDb = tvDbProvider;
             _seasons = seasonProvider;
-            _quality = quality;
+            _qualityProvider = qualityProvider;
         }
 
         public EpisodeProvider()
@@ -80,7 +80,7 @@ namespace NzbDrone.Core.Providers
 
                 if (episodeInfo == null)
                 {
-
+                    Logger.Debug("Episode S{0:00}E{1:00} doesn't exist in db. adding it now.", parsedReport.SeasonNumber, episode);
                     //Todo: How do we want to handle this really? Episode could be released before information is on TheTvDB 
                     //(Parks and Rec did this a lot in the first season, from experience)
                     //Keivan: Should automatically add the episode to db with minimal information. then update the description/title when available.
@@ -103,24 +103,39 @@ namespace NzbDrone.Core.Providers
 
                 if (file != null)
                 {
-                    //If not null we need to see if this episode has the quality as the download (or if it is better)
-                    if (file.Quality == parsedReport.Quality && file.Proper) continue;
+                    Logger.Debug("File is {0} Proper:{1}", file.Quality, file.Proper);
 
                     //There will never be a time when the episode quality is less than what we have and we want it... ever.... I think.
-                    if (file.Quality > parsedReport.Quality) continue;
+                    if (file.Quality > parsedReport.Quality)
+                    {
+                        Logger.Trace("file has better quality. skipping");
+                        continue;
+                    }
 
-                    //Now we need to handle upgrades and actually pay attention to the Cutoff Value
+                    //If not null we need to see if this episode has the quality as the download (or if it is better)
+                    if (file.Quality == parsedReport.Quality && file.Proper == parsedReport.Proper)
+                    {
+                        Logger.Trace("Same quality/proper. existing proper. skipping");
+                        continue;
+                    }
+
+                    //Now we need to handle upgrades and actually pay attention to the Cut-off Value
                     if (file.Quality < parsedReport.Quality)
                     {
-                        var quality = _quality.Find(episodeInfo.Series.QualityProfileId);
+                        if (episodeInfo.Series.QualityProfile.Cutoff <= file.Quality)
+                        {
+                            Logger.Trace("Quality is past cut-off skipping.");
+                            continue;
+                        }
 
-                        if (quality.Cutoff <= file.Quality && file.Proper) continue;
                     }
                 }
 
+                Logger.Debug("Episode {0} is needed", parsedReport);
                 return true; //If we get to this point and the file has not yet been rejected then accept it
             }
 
+            Logger.Debug("Episode {0} is not needed", parsedReport);
             return false;
         }
 

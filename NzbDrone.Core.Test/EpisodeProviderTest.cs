@@ -59,13 +59,19 @@ namespace NzbDrone.Core.Test
         [Test]
 
         //Should Download
-        [Row(QualityTypes.TV, true, QualityTypes.TV, false, true)]
-        [Row(QualityTypes.DVD, true, QualityTypes.TV, true, true)]
-        [Row(QualityTypes.DVD, true, QualityTypes.TV, true, true)]
-        //Should Skip
+        [Row(QualityTypes.TV, true, QualityTypes.HDTV, false, true)]
+        [Row(QualityTypes.DVD, true, QualityTypes.Bluray720, true, true)]
+        [Row(QualityTypes.HDTV, false, QualityTypes.HDTV, true, true)]
+
+
+        [Row(QualityTypes.HDTV, false, QualityTypes.HDTV, false, false)]
         [Row(QualityTypes.Bluray720, true, QualityTypes.Bluray1080, false, false)]
-        [Row(QualityTypes.TV, true, QualityTypes.HDTV, true, false)]
-        public void Is_Needed_Tv_Dvd_BluRay_BluRay720_Is_Cutoff(QualityTypes reportQuality, Boolean isReportProper, QualityTypes fileQuality, Boolean isFileProper, bool excpected)
+        [Row(QualityTypes.HDTV, true, QualityTypes.Bluray720, true, false)]
+        [Row(QualityTypes.Bluray1080, true, QualityTypes.Bluray720, true, false)]
+        [Row(QualityTypes.Bluray1080, false, QualityTypes.Bluray720, true, false)]
+        [Row(QualityTypes.Bluray1080, false, QualityTypes.Bluray720, true, false)]
+        [Row(QualityTypes.HDTV, false, QualityTypes.Bluray720, true, false)]
+        public void Is_Needed_Tv_Dvd_BluRay_BluRay720_Is_Cutoff(QualityTypes fileQuality, bool isFileProper, QualityTypes reportQuality, bool isReportProper, bool excpected)
         {
             //Setup
             var parseResult = new EpisodeParseResult
@@ -83,22 +89,24 @@ namespace NzbDrone.Core.Test
                                  Quality = fileQuality
                              };
 
+            var seriesQualityProfile = new QualityProfile
+            {
+                Name = "HD",
+                Allowed = new List<QualityTypes> { QualityTypes.HDTV, QualityTypes.WEBDL, QualityTypes.BDRip, QualityTypes.Bluray720 },
+                Cutoff = QualityTypes.HDTV
+            };
+
             var episodeInfo = new Episode
                                   {
                                       SeriesId = 12,
                                       SeasonNumber = 2,
                                       EpisodeNumber = 3,
-                                      Series = new Series { QualityProfileId = 1 },
+                                      Series = new Series { QualityProfileId = 1, QualityProfile = seriesQualityProfile },
                                       EpisodeFile = epFile
 
                                   };
 
-            var seriesQualityProfile = new QualityProfile
-                                           {
-                                               Allowed = new List<QualityTypes> { QualityTypes.TV, QualityTypes.DVD, QualityTypes.Bluray720, QualityTypes.Bluray1080 },
-                                               Cutoff = QualityTypes.Bluray720,
-                                               Name = "TV/DVD",
-                                           };
+
 
 
 
@@ -180,7 +188,7 @@ namespace NzbDrone.Core.Test
             Assert.Count(2, episodes);
         }
 
-       
+
 
 
         [Test]

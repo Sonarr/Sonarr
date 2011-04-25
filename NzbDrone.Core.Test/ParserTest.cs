@@ -48,16 +48,17 @@ namespace NzbDrone.Core.Test
         [Row(@"z:\tv shows\battlestar galactica (2003)\Season 3\S03E05 - Collaborators.mkv", 3, 5)]
         [Row(@"z:\tv shows\modern marvels\Season 16\S16E03 - The Potato.mkv", 16, 3)]
         [Row(@"z:\tv shows\robot chicken\Specials\S00E16 - Dear Consumer - SD TV.avi", 0, 16)]
+        [Row(@"D:\shares\TV Shows\Parks And Recreation\Season 2\S02E21 - 94 Meetings - 720p TV.mkv", 2, 21)]
         public void file_path_parse(string path, int season, int episode)
         {
             var result = Parser.ParseEpisodeInfo(path);
+            Assert.Count(1, result.Episodes);
             Assert.AreEqual(season, result.SeasonNumber);
             Assert.AreEqual(episode, result.Episodes[0]);
         }
 
 
         [Test]
-        [Timeout(1)]
         [Row("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD", QualityTypes.BDRip)]
         [Row("WEEDS.S03E01-06.DUAL.BDRip.AC3.-HELLYWOOD", QualityTypes.BDRip)]
         [Row("Two.and.a.Half.Men.S08E05.720p.HDTV.X264-DIMENSION", QualityTypes.HDTV)]
@@ -77,6 +78,8 @@ namespace NzbDrone.Core.Test
         [Row("Chuck - S01E03 - Come Fly With Me - 1080p BluRay.mkv", QualityTypes.Bluray1080)]
         [Row("Chuck - S11E06 - D-Yikes! - 720p WEB-DL.mkv", QualityTypes.WEBDL)]
         [Row("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD.avi", QualityTypes.BDRip)]
+        [Row("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD.avi", QualityTypes.BDRip)]
+        [Row("Law & Order: Special Victims Unit - 11x11 - Quickie", QualityTypes.Unknown)]
         public void quality_parse(string postTitle, object quality)
         {
             var result = Parser.ParseEpisodeInfo(postTitle).Quality;
