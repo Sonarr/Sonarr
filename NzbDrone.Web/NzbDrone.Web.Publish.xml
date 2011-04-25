@@ -849,7 +849,7 @@
     <file relUrl="Content/2011.1.315/Outlook/slider-vs-both.gif" publishTime="03/28/2011 22:03:28" />
     <file relUrl="Content/2011.1.315/Office2007/treeview-line.png" publishTime="03/28/2011 22:03:28" />
     <file relUrl="bin/System.Web.WebPages.Razor.xml" publishTime="12/20/2010 09:52:36" />
-    <file relUrl="bin/NzbDrone.Web.dll" publishTime="04/24/2011 19:23:51" />
+    <file relUrl="bin/NzbDrone.Web.dll" publishTime="04/24/2011 19:32:25" />
     <file relUrl="Content/Images/ui-bg_glass_50_99c2ff_1x400.png" publishTime="03/07/2011 20:48:08" />
     <file relUrl="Content/2011.1.315/Sunset/treeview-line.png" publishTime="03/28/2011 22:03:28" />
     <file relUrl="Content/2011.1.315/Default/imagebrowser.png" publishTime="03/28/2011 22:03:28" />
@@ -905,7 +905,7 @@
     <file relUrl="Content/jquery-ui-1.8.8.custom.css" publishTime="03/07/2011 20:48:08" />
     <file relUrl="Content/style.css" publishTime="04/20/2011 22:33:13" />
     <file relUrl="Views/Settings/General.cshtml" publishTime="04/20/2011 17:10:28" />
-    <file relUrl="bin/NzbDrone.Web.pdb" publishTime="04/24/2011 19:23:50" />
+    <file relUrl="bin/NzbDrone.Web.pdb" publishTime="04/24/2011 19:32:25" />
     <file relUrl="Content/2011.1.315/Sunset/sprite-vertical.png" publishTime="03/28/2011 22:03:28" />
     <file relUrl="Content/2011.1.315/Default/slider-hs-both.gif" publishTime="03/28/2011 22:03:28" />
     <file relUrl="Content/2011.1.315/Office2007/slider-hs-bottom.gif" publishTime="03/28/2011 22:03:28" />
@@ -931,6 +931,7 @@
     <file relUrl="Content/2011.1.315/Outlook/slider-hs-top.gif" publishTime="03/28/2011 22:03:28" />
     <file relUrl="Content/2011.1.315/Default/slider-hs-bottom.gif" publishTime="03/28/2011 22:03:28" />
     <file relUrl="Content/2011.1.315/Vista/imagebrowser.png" publishTime="03/28/2011 22:03:28" />
+    <file relUrl="favicon.ico" publishTime="03/30/2011 16:03:38" />
     <file relUrl="Content/2011.1.315/Office2007/slider-h-top.gif" publishTime="03/28/2011 22:03:28" />
     <file relUrl="Views/AddSeries/AddNew.cshtml" publishTime="04/20/2011 23:40:55" />
     <file relUrl="App_GlobalResources/GridLocalization.fr-FR.resx" publishTime="03/30/2011 16:03:37" />

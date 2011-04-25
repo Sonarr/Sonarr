@@ -590,6 +590,7 @@
     <Content Include="Content\notibar.css" />
     <Content Include="Content\style.css" />
     <Content Include="Content\XbmcNotification.png" />
+    <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Libraries\Ninject.Web.Mvc.dll" />
     <Content Include="Libraries\Ninject.Web.Mvc.xml" />
