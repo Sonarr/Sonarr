@@ -183,14 +183,20 @@ namespace NzbDrone.Core.Providers
                                              SeasonId = episode.SeasonId,
                                              SeasonNumber = episode.SeasonNumber,
                                              SeriesId = seriesId,
-                                             Title = episode.EpisodeName
+                                             Title = episode.EpisodeName,
+                                             LastInfoSync = DateTime.Now
+
                                          };
 
                     var existingEpisode = GetEpisode(episode.SeriesId, episode.SeasonNumber, episode.EpisodeNumber);
 
                     if (existingEpisode != null)
                     {
+                        //TODO: Write test for this, possibly make it future proof, we should only copy fields that come from tvdb
                         newEpisode.EpisodeId = existingEpisode.EpisodeId;
+                        newEpisode.EpisodeFileId = existingEpisode.EpisodeFileId;
+                        newEpisode.LastDiskSync = existingEpisode.LastDiskSync;
+                        newEpisode.Status = existingEpisode.Status;
                         updateList.Add(newEpisode);
                     }
                     else

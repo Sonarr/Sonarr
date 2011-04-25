@@ -4,6 +4,7 @@ using AutoMoq;
 using FizzWare.NBuilder;
 using MbUnit.Framework;
 using Moq;
+using Moq.Linq;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
@@ -127,6 +128,47 @@ namespace NzbDrone.Core.Test
 
         [Test]
         [Description("Verifies that a new file imported properly")]
+        public void import_existing_season_file()
+        {
+            //Arrange
+            /////////////////////////////////////////
+
+            //Constants
+            const string fileName = @"WEEDS.S03E01.DUAL.BDRip.XviD.AC3.-HELLYWOOD.avi";
+            const int seasonNumber = 3;
+            const int episodeNumner = 1;
+            const int size = 12345;
+
+            //Fakes
+            var fakeSeries = Builder<Series>.CreateNew().Build();
+            var fakeEpisode = Builder<Episode>.CreateNew()
+                .With(c => c.SeriesId = fakeSeries.SeriesId)
+                .With(c => c.EpisodeFileId = 12).Build();
+
+            //Mocks
+            var mocker = new AutoMoqer();
+
+            mocker.GetMock<IRepository>(MockBehavior.Strict)
+                .Setup(r => r.Exists(It.IsAny<Expression<Func<EpisodeFile, Boolean>>>())).Returns(true).Verifiable();
+
+            //mocker.GetMock<EpisodeProvider>()
+             //   .Setup(e => e.GetEpisode(fakeSeries.SeriesId, seasonNumber, episodeNumner)).Returns(fakeEpisode)
+               // .Verifiable();
+
+            mocker.GetMock<DiskProvider>()
+                .Setup(e => e.GetSize(fileName)).Returns(size).Verifiable();
+
+
+            //Act
+            var result = mocker.Resolve<MediaFileProvider>().ImportFile(fakeSeries, fileName);
+
+            //Assert
+            mocker.VerifyAllMocks();
+            Assert.IsNull(result);
+        }
+
+        [Test]
+        [Description("Verifies that a new file imported properly")]
         public void import_sample_file()
         {
             //Arrange
@@ -161,7 +203,7 @@ namespace NzbDrone.Core.Test
 
             //Assert
             Assert.IsNull(result);
-       }
+        }
 
         [Test]
         [Description("Verifies that an existing file will skip import")]
