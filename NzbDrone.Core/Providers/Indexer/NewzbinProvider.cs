@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Providers.Indexer
             {
                 return new[]
                                    {
-                                       string.Format("http://www.newzbin.com", _configProvider.NewzbinUsername, _configProvider.NewzbinPassword)
+                                       string.Format("http://{0}:{1}@www.newzbin.com/browse/category/p/tv?feed=rss&hauth=1", _configProvider.NewzbinUsername, _configProvider.NewzbinPassword)
                                    };
             }
         }
