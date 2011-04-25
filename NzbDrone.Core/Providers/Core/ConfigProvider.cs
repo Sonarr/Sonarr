@@ -201,7 +201,6 @@ namespace NzbDrone.Core.Providers.Core
             set { SetValue("DefaultQualityProfile", value); }
         }
 
-
         private string GetValue(string key)
         {
             return GetValue(key, String.Empty, false);

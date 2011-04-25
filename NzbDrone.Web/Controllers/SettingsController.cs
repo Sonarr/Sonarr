@@ -64,10 +64,8 @@ namespace NzbDrone.Web.Controllers
 
             return View("Index", new IndexerSettingsModel
                                      {
-                                         NzbMatrixUsername =
-                                             _configProvider.GetValue("NzbMatrixUsername", String.Empty, true),
-                                         NzbMatrixApiKey =
-                                             _configProvider.GetValue("NzbMatrixApiKey", String.Empty, true),
+                                         NzbMatrixUsername = _configProvider.NzbMatrixUsername,
+                                         NzbMatrixApiKey = _configProvider.NzbMatrixApiKey,
 
                                          NzbsrusUId = _configProvider.NzbsrusUId,
                                          NzbsrusHash = _configProvider.NzbsrusHash,
@@ -91,22 +89,21 @@ namespace NzbDrone.Web.Controllers
 
             var model = new DownloadSettingsModel
                             {
-                                SyncFrequency = Convert.ToInt32(_configProvider.GetValue("SyncFrequency", "15", true)),
-                                DownloadPropers =
-                                    Convert.ToBoolean(_configProvider.GetValue("DownloadPropers", "false", true)),
-                                Retention = Convert.ToInt32(_configProvider.GetValue("Retention", "500", true)),
-                                SabHost = _configProvider.GetValue("SabHost", "localhost", true),
-                                SabPort = Convert.ToInt32(_configProvider.GetValue("SabPort", "8080", true)),
-                                SabApiKey = _configProvider.GetValue("SabApiKey", String.Empty, true),
-                                SabUsername = _configProvider.GetValue("SabUsername", String.Empty, true),
-                                SabPassword = _configProvider.GetValue("SabPassword", String.Empty, true),
-                                SabTvCategory = _configProvider.GetValue("SabTvCategory", String.Empty, true),
+                                SyncFrequency = Convert.ToInt32(_configProvider.SyncFrequency),
+                                DownloadPropers = Convert.ToBoolean(_configProvider.DownloadPropers),
+                                Retention = Convert.ToInt32(_configProvider.Retention),
+                                SabHost = _configProvider.SabHost,
+                                SabPort = Convert.ToInt32(_configProvider.SabPort),
+                                SabApiKey = _configProvider.SabApiKey,
+                                SabUsername = _configProvider.SabUsername,
+                                SabPassword = _configProvider.SabPassword,
+                                SabTvCategory = _configProvider.SabTvCategory,
                                 SabTvPriority =
                                     (SabnzbdPriorityType)
                                     Enum.Parse(typeof(SabnzbdPriorityType),
-                                               _configProvider.GetValue("SabTvPriority", "Normal", true)),
-                                UseBlackHole = Convert.ToBoolean(_configProvider.GetValue("UseBlackHole", true, true)),
-                                BlackholeDirectory = _configProvider.GetValue("BlackholeDirectory", String.Empty, true)
+                                               _configProvider.SabTvPriority),
+                                UseBlackHole = Convert.ToBoolean(_configProvider.UseBlackhole),
+                                BlackholeDirectory = _configProvider.BlackholeDirectory
                             };
 
             return View("Index", model);
@@ -129,7 +126,7 @@ namespace NzbDrone.Web.Controllers
             var profiles = _qualityProvider.GetAllProfiles().ToList();
 
             var defaultQualityQualityProfileId =
-                Convert.ToInt32(_configProvider.GetValue("DefaultQualityProfile", profiles[0].QualityProfileId, true));
+                Convert.ToInt32(_configProvider.DefaultQualityProfile);
 
             var selectList = new SelectList(profiles, "QualityProfileId", "Name");
 
@@ -151,25 +148,16 @@ namespace NzbDrone.Web.Controllers
             var model = new NotificationSettingsModel
                             {
                                 XbmcEnabled = Convert.ToBoolean(_configProvider.GetValue("XbmcEnabled", false, true)),
-                                XbmcNotifyOnGrab =
-                                    Convert.ToBoolean(_configProvider.GetValue("XbmcNotifyOnGrab", false, true)),
-                                XbmcNotifyOnDownload =
-                                    Convert.ToBoolean(_configProvider.GetValue("XbmcNotifyOnDownload", false, true)),
-                                XbmcNotifyOnRename =
-                                    Convert.ToBoolean(_configProvider.GetValue("XbmcNotifyOnRename", false, true)),
-                                XbmcNotificationImage =
-                                    Convert.ToBoolean(_configProvider.GetValue("XbmcNotificationImage", false, true)),
+                                XbmcNotifyOnGrab = Convert.ToBoolean(_configProvider.GetValue("XbmcNotifyOnGrab", false, true)),
+                                XbmcNotifyOnDownload = Convert.ToBoolean(_configProvider.GetValue("XbmcNotifyOnDownload", false, true)),
+                                XbmcNotifyOnRename = Convert.ToBoolean(_configProvider.GetValue("XbmcNotifyOnRename", false, true)),
+                                XbmcNotificationImage = Convert.ToBoolean(_configProvider.GetValue("XbmcNotificationImage", false, true)),
                                 XbmcDisplayTime = Convert.ToInt32(_configProvider.GetValue("XbmcDisplayTime", 3, true)),
-                                XbmcUpdateOnDownload =
-                                    Convert.ToBoolean(_configProvider.GetValue("XbmcUpdateOnDownload ", false, true)),
-                                XbmcUpdateOnRename =
-                                    Convert.ToBoolean(_configProvider.GetValue("XbmcUpdateOnRename", false, true)),
-                                XbmcFullUpdate =
-                                    Convert.ToBoolean(_configProvider.GetValue("XbmcFullUpdate", false, true)),
-                                XbmcCleanOnDownload =
-                                    Convert.ToBoolean(_configProvider.GetValue("XbmcCleanOnDownload", false, true)),
-                                XbmcCleanOnRename =
-                                    Convert.ToBoolean(_configProvider.GetValue("XbmcCleanOnRename", false, true)),
+                                XbmcUpdateOnDownload = Convert.ToBoolean(_configProvider.GetValue("XbmcUpdateOnDownload ", false, true)),
+                                XbmcUpdateOnRename = Convert.ToBoolean(_configProvider.GetValue("XbmcUpdateOnRename", false, true)),
+                                XbmcFullUpdate = Convert.ToBoolean(_configProvider.GetValue("XbmcFullUpdate", false, true)),
+                                XbmcCleanOnDownload = Convert.ToBoolean(_configProvider.GetValue("XbmcCleanOnDownload", false, true)),
+                                XbmcCleanOnRename = Convert.ToBoolean(_configProvider.GetValue("XbmcCleanOnRename", false, true)),
                                 XbmcHosts = _configProvider.GetValue("XbmcHosts", "localhost:80", true),
                                 XbmcUsername = _configProvider.GetValue("XbmcUsername", String.Empty, true),
                                 XbmcPassword = _configProvider.GetValue("XbmcPassword", String.Empty, true)
