@@ -121,7 +121,7 @@ namespace NzbDrone.Core.Test
 
             var logItem = sonicRepo.All<Log>().First();
             Assert.AreNotEqual(new DateTime(), logItem.Time);
-            Assert.AreEqual(message, logItem.Message);
+            Assert.AreEqual(message + ": " + ex.Message, logItem.Message);
             Assert.AreEqual(Logger.Name, logItem.Logger);
             Assert.AreEqual(LogLevel.Error.Name, logItem.Level);
             Assert.AreEqual(ex.GetType().ToString(), logItem.ExceptionType);

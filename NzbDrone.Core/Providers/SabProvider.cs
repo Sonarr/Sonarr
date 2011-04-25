@@ -16,6 +16,10 @@ namespace NzbDrone.Core.Providers
         private readonly ConfigProvider _config;
         private readonly HttpProvider _http;
 
+        public SabProvider()
+        {
+        }
+
         public SabProvider(ConfigProvider config, HttpProvider http)
         {
             _config = config;

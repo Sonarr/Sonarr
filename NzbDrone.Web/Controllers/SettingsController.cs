@@ -293,8 +293,6 @@ namespace NzbDrone.Web.Controllers
                            };
             }
 
-            
-
             catch (Exception)
             {
                 return new JsonResult { Data = "failed" };

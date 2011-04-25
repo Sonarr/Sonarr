@@ -76,10 +76,6 @@ namespace NzbDrone.Core.Providers
         public virtual bool IsIgnored(int seriesId, int seasonNumber)
         {
             var season = _sonicRepo.Single<Season>(s => s.SeriesId == seriesId && s.SeasonNumber == seasonNumber);
-
-            if (season == null)
-                return true;
-
             return !season.Monitored;
         }
 

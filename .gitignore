@@ -33,3 +33,4 @@ _ReSharper*/
 #NZBDrone specific
 *.db
 *Web.Publish.xml
+NzbDrone.Web/NzbDrone.Web.Publish.xml

@@ -59,16 +59,19 @@ namespace NzbDrone.Core.Providers.Indexer
         /// <summary>
         ///   Fetches RSS feed and process each news item.
         /// </summary>
-        public void Fetch()
+        public List<Exception> Fetch()
         {
             _logger.Debug("Fetching feeds from " + Settings.Name);
+            var exeptions = new List<Exception>();
 
             foreach (var url in Urls)
             {
                 try
                 {
                     _logger.Trace("Downloading RSS " + url);
-                    var feed = SyndicationFeed.Load(_httpProvider.DownloadXml(url)).Items;
+
+                    var reader = new SyndicationFeedXmlReader(_httpProvider.DownloadStream(url));
+                    var feed = SyndicationFeed.Load(reader).Items;
 
                     foreach (var item in feed)
                     {
@@ -78,6 +81,7 @@ namespace NzbDrone.Core.Providers.Indexer
                         }
                         catch (Exception itemEx)
                         {
+                            exeptions.Add(itemEx);
                             _logger.ErrorException("An error occurred while processing feed item", itemEx);
                         }
 
@@ -85,11 +89,13 @@ namespace NzbDrone.Core.Providers.Indexer
                 }
                 catch (Exception feedEx)
                 {
+                    exeptions.Add(feedEx);
                     _logger.ErrorException("An error occurred while processing feed", feedEx);
                 }
             }
 
             _logger.Info("Finished processing feeds from " + Settings.Name);
+            return exeptions;
         }
 
         internal void ProcessItem(SyndicationItem feedItem)
@@ -131,17 +137,17 @@ namespace NzbDrone.Core.Providers.Indexer
                     return;
                 }
 
-                var sabTitle = _sabProvider.GetSabTitle(parseResult);
+                //var sabTitle = _sabProvider.GetSabTitle(parseResult);
 
-                if (_sabProvider.IsInQueue(sabTitle))
-                {
-                    return;
-                }
+                //if (_sabProvider.IsInQueue(sabTitle))
+                //{
+                //    return;
+                //}
 
-                if (!_sabProvider.AddByUrl(NzbDownloadUrl(feedItem), sabTitle))
-                {
-                    return;
-                }
+                //if (!_sabProvider.AddByUrl(NzbDownloadUrl(feedItem), sabTitle))
+                //{
+                //    return;
+                //}
 
                 foreach (var episode in episodes)
                 {

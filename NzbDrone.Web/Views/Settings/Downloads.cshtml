@@ -2,6 +2,7 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        selectDownloadOptionAtStart(); //Load either SAB or Blackhole div
         var options = {
             target: '#result',
             beforeSubmit: showRequest,
@@ -10,19 +11,26 @@
             resetForm: false
         };
         $('#form').ajaxForm(options);
-        selectDownloadOption(); //Load either SAB or Blackhole div
         $('#save_button').attr('disabled', '');
     });
+    
+    function selectDownloadOptionAtStart() {
+        var checked = $('UseBlackHole').val();
+        $radios.filter('[value=' + checked + ']').attr('checked', true);
+        selectDownloadOption();
+    }
 
     function selectDownloadOption() {
-        var selected = $("input[name='UseBlackHole']:checked").val();
+        var selected = $("input[name='UseBlackhole']:checked").val();
 
         if (selected == "True") {
+            $('#UseBlackHole').attr('checked', true);
             document.getElementById('blackhole').style.display = 'block';
             document.getElementById('sab').style.display = 'none';
         }
 
         else {
+            $('#UseBlackHole').attr('checked', false);
             document.getElementById('sab').style.display = 'block';
             document.getElementById('blackhole').style.display = 'none';
         }
@@ -81,12 +89,13 @@
             <div>
                 <div>
                     <b>@Html.LabelFor(m => m.UseBlackHole)</b>
+                    @Html.CheckBoxFor(m => m.UseBlackHole, new { style="display:block" })
                 </div>
                 <div>
-                    @Html.RadioButtonFor(m => m.UseBlackHole, true, new { @class = "blackhole_radio" })Blackhole
+                    @Html.RadioButton("UseBlackhole", true, new { @class="blackhole_radio" })Blackhole
                 </div>
                 <div>
-                    @Html.RadioButtonFor(m => m.UseBlackHole, false, new { @class = "blackhole_radio" })SABnzbd
+                    @Html.RadioButton("UseBlackhole", false, new { @class="blackhole_radio" })SABnzbd
                 </div>
             </div>
 

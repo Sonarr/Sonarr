@@ -7,6 +7,7 @@ using Moq;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
+using NzbDrone.Core.Repository.Quality;
 using SubSonic.DataProviders;
 using SubSonic.Repository;
 
@@ -46,7 +47,9 @@ namespace NzbDrone.Core.Test
             {
                 provider.Log = new NlogWriter();
             }
-            return new SimpleRepository(provider, SimpleRepositoryOptions.RunMigrations);
+            var repo = new SimpleRepository(provider, SimpleRepositoryOptions.RunMigrations);
+            ForceMigration(repo);
+            return repo;
         }
 
         public static DiskProvider GetStandardDisk(int seasons, int episodes)
@@ -90,6 +93,16 @@ namespace NzbDrone.Core.Test
                 .WhereAll().Have(c => c.SeriesId = seriesId)
                 .WhereAll().Have(c => c.EpisodeNumber = epNumber.Generate())
                 .Build();
+        }
+
+        private static void ForceMigration(IRepository repository)
+        {
+            repository.All<Series>().Count();
+            repository.All<Season>().Count();
+            repository.All<Episode>().Count();
+            repository.All<EpisodeFile>().Count();
+            repository.All<QualityProfile>().Count();
+            repository.All<History>().Count();
         }
     }
 }
