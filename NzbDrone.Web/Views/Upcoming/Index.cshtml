@@ -1,39 +1,16 @@
 ﻿@model List<NzbDrone.Web.Models.UpcomingEpisodeModel>
 @using NzbDrone.Web.Models
-
-@section Scripts{
-
-    <script type="text/javascript">
-        function onRowDataBound(e) {
-            e.row.style.boarder = "";
-
-            if (e.dataItem.Level == 3) {
-                e.row.style.backgroundColor = "#FFD700";
-            }
-            else if (e.dataItem.Level == 4) {
-                e.row.style.backgroundColor = "#FF7500";
-            }
-            else if (e.dataItem.Level == 5) {
-                e.row.style.backgroundColor = "black";
-                e.row.style.color = "red";
-            }
-            //e.row.style.color = 'blue';
-        }
-    </script>
-}
-
 @section TitleContent{
-    Upcoming
+Upcoming
 }
-
 @section ActionMenu{
     @{Html.Telerik().Menu().Name("historyMenu").Items(
             items => { items.Add().Text("Start RSS Sync").Action("RssSync", "Series"); }).Render();}
 }
-
 @section MainContent{
     <div id="yesterday">
-        <h2>Yesterday</h2>
+        <h2>
+            Yesterday</h2>
         @{Html.Telerik().Grid<UpcomingEpisodeModel>().Name("Yesterday").NoRecordsTemplate(
                 "No watched shows aired yesterday")
                 .TableHtmlAttributes(new { @class = "Grid" })
@@ -41,12 +18,12 @@
                              {
                                  columns.Bound(c => c.SeriesName)
                                      .ClientTemplate("<a href=" +
-                                                     Url.Action("Details", "Series", new {seriesId = "<#= SeriesId #>"}) +
+                                                     Url.Action("Details", "Series", new { seriesId = "<#= SeriesId #>" }) +
                                                      "><#= SeriesName #></a>")
-                                     .Title("Series Name").Width(110);
+                                     .Title("Series Name");
                                  columns.Bound(c => c.SeasonNumber).Title("Season #").Width(40);
                                  columns.Bound(c => c.EpisodeNumber).Title("Episode #").Width(40);
-                                 columns.Bound(c => c.Title).Title("Episode Title").Width(120);
+                                 columns.Bound(c => c.Title).Title("Episode Title");
                                  columns.Bound(c => c.AirDate).Title("Air Date").Width(0);
                              })
                 .DetailView(detailView => detailView.ClientTemplate(
@@ -56,28 +33,27 @@
                                               ))
                 .DataBinding(data => data.Ajax().Select("_AjaxBindingYesterday", "Upcoming"))
                 .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.AirDate).Ascending()).Enabled(true))
-                //.Pageable(c => c.PageSize(20).Position(GridPagerPosition.Both).Style(GridPagerStyles.PageInput | GridPagerStyles.NextPreviousAndNumeric))
-                //.Filterable()
-                //.ClientEvents(c => c.OnRowDataBound("onRowDataBound"))
+              //.Pageable(c => c.PageSize(20).Position(GridPagerPosition.Both).Style(GridPagerStyles.PageInput | GridPagerStyles.NextPreviousAndNumeric))
+              //.Filterable()
+              //.ClientEvents(c => c.OnRowDataBound("onRowDataBound"))
                 .Render();}
     </div>
-
     <br />
-
     <div id="today">
-        <h2>Today</h2>
+        <h2>
+            Today</h2>
         @{Html.Telerik().Grid<UpcomingEpisodeModel>().Name("Today").NoRecordsTemplate("No watched shows airing today.")
                 .TableHtmlAttributes(new { @class = "Grid" })
                 .Columns(columns =>
                              {
                                  columns.Bound(c => c.SeriesName)
                                      .ClientTemplate("<a href=" +
-                                                     Url.Action("Details", "Series", new {seriesId = "<#= SeriesId #>"}) +
+                                                     Url.Action("Details", "Series", new { seriesId = "<#= SeriesId #>" }) +
                                                      "><#= SeriesName #></a>")
-                                     .Title("Series Name").Width(110);
+                                     .Title("Series Name");
                                  columns.Bound(c => c.SeasonNumber).Title("Season #").Width(40);
                                  columns.Bound(c => c.EpisodeNumber).Title("Episode #").Width(40);
-                                 columns.Bound(c => c.Title).Title("Episode Title").Width(120);
+                                 columns.Bound(c => c.Title).Title("Episode Title");
                                  columns.Bound(c => c.AirDate).Title("Air Date").Width(0);
                              })
                 .DetailView(detailView => detailView.ClientTemplate(
@@ -87,16 +63,12 @@
                                               ))
                 .DataBinding(data => data.Ajax().Select("_AjaxBindingToday", "Upcoming"))
                 .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.AirDate).Ascending()).Enabled(true))
-                //.Pageable(c => c.PageSize(20).Position(GridPagerPosition.Both).Style(GridPagerStyles.PageInput | GridPagerStyles.NextPreviousAndNumeric))
-                //.Filterable()
-                //.ClientEvents(c => c.OnRowDataBound("onRowDataBound"))
                 .Render();}
     </div>
-
     <br />
-    
     <div id="week">
-    <h2>7-Day Forecast</h2>
+        <h2>
+            7-Day Forecast</h2>
         @{Html.Telerik().Grid<UpcomingEpisodeModel>().Name("Week").NoRecordsTemplate(
                 "No watched shows airing in the next week...")
                 .TableHtmlAttributes(new { @class = "Grid" })
@@ -104,12 +76,12 @@
                              {
                                  columns.Bound(c => c.SeriesName)
                                      .ClientTemplate("<a href=" +
-                                                     Url.Action("Details", "Series", new {seriesId = "<#= SeriesId #>"}) +
+                                                     Url.Action("Details", "Series", new { seriesId = "<#= SeriesId #>" }) +
                                                      "><#= SeriesName #></a>")
-                                     .Title("Series Name").Width(110);
+                                     .Title("Series Name");
                                  columns.Bound(c => c.SeasonNumber).Title("Season #").Width(40);
                                  columns.Bound(c => c.EpisodeNumber).Title("Episode #").Width(40);
-                                 columns.Bound(c => c.Title).Title("Episode Title").Width(120);
+                                 columns.Bound(c => c.Title).Title("Episode Title");
                                  columns.Bound(c => c.AirDate).Title("Air Date").Width(0);
                              })
                 .DetailView(detailView => detailView.ClientTemplate(
@@ -119,9 +91,6 @@
                                               ))
                 .DataBinding(data => data.Ajax().Select("_AjaxBindingWeek", "Upcoming"))
                 .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.AirDate).Ascending()).Enabled(true))
-                //.Pageable(c => c.PageSize(20).Position(GridPagerPosition.Both).Style(GridPagerStyles.PageInput | GridPagerStyles.NextPreviousAndNumeric))
-                //.Filterable()
-                //.ClientEvents(c => c.OnRowDataBound("onRowDataBound"))
                 .Render();}
     </div>
 }

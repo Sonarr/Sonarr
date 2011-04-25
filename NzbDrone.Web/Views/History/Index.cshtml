@@ -1,25 +1,5 @@
 ﻿@model List<NzbDrone.Web.Models.HistoryModel>
 @using NzbDrone.Web.Models
-@section Scripts{
-    <script type="text/javascript">
-        function onRowDataBound(e) {
-
-            e.row.style.boarder = "";
-
-            if (e.dataItem.Level == 3) {
-                e.row.style.backgroundColor = "#FFD700";
-            }
-            else if (e.dataItem.Level == 4) {
-                e.row.style.backgroundColor = "#FF7500";
-            }
-            else if (e.dataItem.Level == 5) {
-                e.row.style.backgroundColor = "black";
-                e.row.style.color = "red";
-            }
-            //e.row.style.color = 'blue';
-        }
-    </script>
-}
 @section TitleContent{
 History
 }
@@ -35,12 +15,12 @@ History
            .TableHtmlAttributes(new { @class = "Grid" })
             .Columns(columns =>
                          {
-                             columns.Bound(c => c.SeriesTitle).Title("Series Name").Width(120);
-                             columns.Bound(c => c.SeasonNumber).Title("Season").Width(10);
-                             columns.Bound(c => c.EpisodeNumber).Title("Episode").Width(10);
+                             columns.Bound(c => c.SeriesTitle).Title("Series Name");
+                             columns.Bound(c => c.SeasonNumber).Title("Season").Width(1);
+                             columns.Bound(c => c.EpisodeNumber).Title("Episode").Width(1);
                              columns.Bound(c => c.EpisodeTitle).Title("Episode Title");
                              columns.Bound(c => c.Quality).Title("Quality").Width(10);
-                             columns.Bound(c => c.Date).Title("Date/Time Grabbed");
+                             columns.Bound(c => c.Date).Title("Grabbed on");
                          })
             .DetailView(detailView => detailView.ClientTemplate(
                 "<fieldset>" +
