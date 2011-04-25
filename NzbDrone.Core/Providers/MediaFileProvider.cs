@@ -71,20 +71,25 @@ namespace NzbDrone.Core.Providers
 
             try
             {
+                var size = _diskProvider.GetSize(filePath);
 
-
+                //If Size is less than 50MB and contains sample. Check for Size to ensure its not an episode with sample in the title
+                if (size < 40000000 && filePath.ToLower().Contains("sample"))
+                {
+                    Logger.Trace("[{0}] appears to be a sample... skipping.", filePath);
+                    return null;
+                }
 
                 if (!_repository.Exists<EpisodeFile>(e => e.Path == Parser.NormalizePath(filePath)))
                 {
-                    var episodesInFile = Parser.ParseEpisodeInfo(filePath);
+                    var parseResult = Parser.ParseEpisodeInfo(filePath);
 
                     //Stores the list of episodes to add to the EpisodeFile
                     var episodes = new List<Episode>();
 
-                    foreach (var episodeNumber in episodesInFile.Episodes)
+                    if (parseResult.Episodes == null)
                     {
-                        var episode = _episodeProvider.GetEpisode(series.SeriesId, episodesInFile.SeasonNumber,
-                                                                  episodeNumber);
+                        var episode = _episodeProvider.GetEpisode(series.SeriesId, parseResult.AirDate.Date);
 
                         if (episode != null)
                         {
@@ -92,29 +97,35 @@ namespace NzbDrone.Core.Providers
                         }
 
                         else
-                            Logger.Warn("Unable to find Series:{0} Season:{1} Episode:{2} in the database. File:{3}",
-                                        series.Title, episodesInFile.SeasonNumber, episodeNumber, filePath);
+                            Logger.Warn("Unable to find '{0}' in the database. File:{1}", parseResult, filePath);
+                    }
+                    else
+                    {
+                        foreach (var episodeNumber in parseResult.Episodes)
+                        {
+                            var episode = _episodeProvider.GetEpisode(series.SeriesId, parseResult.SeasonNumber,
+                                                                      episodeNumber);
+
+                            if (episode != null)
+                            {
+                                episodes.Add(episode);
+                            }
+
+                            else
+                                Logger.Warn("Unable to find '{0}' in the database. File:{1}", parseResult, filePath);
+                        }
                     }
 
                     //Return null if no Episodes exist in the DB for the parsed episodes from file
                     if (episodes.Count < 1)
                         return null;
 
-                    var size = _diskProvider.GetSize(filePath);
-
-                    //If Size is less than 50MB and contains sample. Check for Size to ensure its not an episode with sample in the title
-                    if (size < 50000000 && filePath.ToLower().Contains("sample"))
-                    {
-                        Logger.Trace("[{0}] appears to be a sample... skipping.", filePath);
-                        return null;
-                    }
-
                     var episodeFile = new EpisodeFile();
                     episodeFile.DateAdded = DateTime.Now;
                     episodeFile.SeriesId = series.SeriesId;
                     episodeFile.Path = Parser.NormalizePath(filePath);
                     episodeFile.Size = size;
-                    episodeFile.Quality = episodesInFile.Quality;
+                    episodeFile.Quality = parseResult.Quality;
                     episodeFile.Proper = Parser.ParseProper(filePath);
                     var fileId = (int)_repository.Add(episodeFile);
 
