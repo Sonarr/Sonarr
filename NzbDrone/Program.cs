@@ -48,6 +48,9 @@ namespace NzbDrone
             {
                 AppDomainException(e);
             }
+
+            Console.WriteLine("Press enter to exit.");
+            Console.ReadLine();
         }
 
         private static void Attach()
@@ -88,12 +91,14 @@ namespace NzbDrone
             Console.WriteLine("EPIC FAIL: {0}", excepion);
             Logger.Fatal("EPIC FAIL: {0}", excepion);
 
+#if Release
             new Client
-                {
-                    ApiKey = "43BBF60A-EB2A-4C1C-B09E-422ADF637265",
-                    ApplicationName = "NZBDrone",
-                    CurrentException = excepion as Exception
-                }.Submit();
+            {
+                ApiKey = "43BBF60A-EB2A-4C1C-B09E-422ADF637265",
+                ApplicationName = "NZBDrone",
+                CurrentException = excepion as Exception
+            }.Submit();
+#endif
 
             IISController.StopServer();
         }
