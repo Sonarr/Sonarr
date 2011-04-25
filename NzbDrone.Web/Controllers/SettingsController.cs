@@ -24,14 +24,17 @@ namespace NzbDrone.Web.Controllers
         private readonly IndexerProvider _indexerProvider;
         private readonly QualityProvider _qualityProvider;
         private readonly RootDirProvider _rootDirProvider;
+        private readonly AutoConfigureProvider _autoConfigureProvider;
 
         public SettingsController(ConfigProvider configProvider, IndexerProvider indexerProvider,
-                                  QualityProvider qualityProvider, RootDirProvider rootDirProvider)
+                                  QualityProvider qualityProvider, RootDirProvider rootDirProvider,
+                                  AutoConfigureProvider autoConfigureProvider)
         {
             _configProvider = configProvider;
             _indexerProvider = indexerProvider;
             _qualityProvider = qualityProvider;
             _rootDirProvider = rootDirProvider;
+            _autoConfigureProvider = autoConfigureProvider;
         }
 
         public ActionResult Index(string viewName)
@@ -274,6 +277,30 @@ namespace NzbDrone.Web.Controllers
             }
 
             return new JsonResult { Data = "ok" };
+        }
+
+        public JsonResult AutoConfigureSab(string username, string password)
+        {
+            SabnzbdInfoModel info;
+
+            try
+            {
+                //info = _autoConfigureProvider.AutoConfigureSab(username, password);
+                info = new SabnzbdInfoModel
+                           {
+                               ApiKey = "123456",
+                               Port = 2222
+                           };
+            }
+
+            
+
+            catch (Exception)
+            {
+                return new JsonResult { Data = "failed" };
+            }
+
+            return Json(info);
         }
 
         [HttpPost]

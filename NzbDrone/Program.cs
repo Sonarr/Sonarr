@@ -21,6 +21,7 @@ namespace NzbDrone
                 AppDomain.CurrentDomain.UnhandledException += ((s, e) => AppDomainException(e));
                 AppDomain.CurrentDomain.ProcessExit += ProgramExited;
                 AppDomain.CurrentDomain.DomainUnload += ProgramExited;
+                Process.GetCurrentProcess().EnableRaisingEvents = true;
                 Process.GetCurrentProcess().Exited += ProgramExited;
 
                 Config.ConfigureNlog();

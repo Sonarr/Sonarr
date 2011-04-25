@@ -94,6 +94,8 @@
                 <fieldset class="sub-field">
                     <legend>SABnzbd</legend>
 
+                    <button type="button" onclick="autoConfigureSab()">Auto-Configure</button>
+
                     <div class="config-section">
                         <div class="config-group">
                             <div class="config-title">@Html.LabelFor(m => m.SabHost)</div>
@@ -172,4 +174,26 @@
     </fieldset>
 }
 <div id="result"></div>
-    
+   
+<script type="text/javascript">
+    var autoConfigureSabUrl = '@Url.Action("AutoConfigureSab", "Settings")';
+
+    function autoConfigureSab() {
+        $.ajax({
+            type: "POST",
+            url: autoConfigureSabUrl,
+            data: jQuery.param({ username: $('#SabUsername').val(), password: $('#SabPassword').val() }),
+            error: function (req, status, error) {
+                alert("Sorry! We could not autoconfigure SABnzbd for you");
+            },
+            success: autoConfigureSuccess
+        });
+
+        function autoConfigureSuccess(data) {
+            $('#SabApiKey').val(data.ApiKey);
+            $('#SabPort').val(data.Port);
+            $('#SabUsername').val(data.Username);
+            $('#SabPassword').val(data.Password);
+        }
+    }
+</script>
