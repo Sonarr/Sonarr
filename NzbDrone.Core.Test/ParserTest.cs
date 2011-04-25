@@ -17,7 +17,6 @@ namespace NzbDrone.Core.Test
 
         [Test]
         [Row("Sonny.With.a.Chance.S02E15", "Sonny.With.a.Chance", 2, 15)]
-        [Row("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD", "WEEDS", 3, 1)]
         [Row("Two.and.a.Half.Me.103.720p.HDTV.X264-DIMENSION", "Two.and.a.Half.Me", 1, 3)]
         [Row("Two.and.a.Half.Me.113.720p.HDTV.X264-DIMENSION", "Two.and.a.Half.Me", 1, 13)]
         [Row("Two.and.a.Half.Me.1013.720p.HDTV.X264-DIMENSION", "Two.and.a.Half.Me", 10, 13)]
@@ -36,12 +35,14 @@ namespace NzbDrone.Core.Test
         [Row("Pride.and.Prejudice.1995.S03E20.HDTV.XviD-LOL", "Pride and Prejudice 1995", 3, 20)]
         //[Row(@"Season 4\07 WS PDTV XviD FUtV", "", 4, 7)]
         [Row("The.Office.S03E115.DVDRip.XviD-OSiTV", "The.Office", 3, 115)]
+        [Row(@"Parks and Recreation - S02E21 - 94 Meetings - 720p TV.mkv", "Parks and Recreation", 2, 21)]
         public void episode_parse(string postTitle, string title, int season, int episode)
         {
             var result = Parser.ParseEpisodeInfo(postTitle);
             Assert.AreEqual(season, result.SeasonNumber);
             Assert.AreEqual(episode, result.Episodes[0]);
             Assert.AreEqual(Parser.NormalizeTitle(title), result.CleanTitle);
+            Assert.AreEqual(1, result.Episodes.Count);
         }
 
         [Test]
@@ -88,20 +89,21 @@ namespace NzbDrone.Core.Test
 
         [Test]
         [Timeout(1)]
-        [Row("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD", "WEEDS", 3, new[] { 1, 2, 3, 4, 5, 6 })]
-        [Row("Two.and.a.Half.Men.103.104.720p.HDTV.X264-DIMENSION", "Two.and.a.Half.Men", 1, new[] { 3, 4 })]
-        [Row("Weeds.S03E01.S03E02.720p.HDTV.X264-DIMENSION", "Weeds", 3, new[] { 1, 2 })]
-        [Row("The Borgias S01e01 e02 ShoHD On Demand 1080i DD5 1 ALANiS", "The Borgias", 1, new[] { 1, 2 })]
-        [Row("Big Time Rush 1x01 to 10 480i DD2 0 Sianto", "Big Time Rush", 1, new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 })]
-        [Row("White.Collar.2x04.2x05.720p.BluRay-FUTV", "White.Collar", 2, new[] { 4, 5 })]
+        [Row("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD", "WEEDS", 3, new[] { 1, 2, 3, 4, 5, 6 }, 6)]
+        [Row("Two.and.a.Half.Men.103.104.720p.HDTV.X264-DIMENSION", "Two.and.a.Half.Men", 1, new[] { 3, 4 }, 2)]
+        [Row("Weeds.S03E01.S03E02.720p.HDTV.X264-DIMENSION", "Weeds", 3, new[] { 1, 2 }, 2)]
+        [Row("The Borgias S01e01 e02 ShoHD On Demand 1080i DD5 1 ALANiS", "The Borgias", 1, new[] { 1, 2 }, 2)]
+        [Row("Big Time Rush 1x01 to 10 480i DD2 0 Sianto", "Big Time Rush", 1, new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }, 10)]
+        [Row("White.Collar.2x04.2x05.720p.BluRay-FUTV", "White.Collar", 2, new[] { 4, 5 }, 2)]
         //[Row("The.Kennedys.Part.1.and.Part.2.DSR.XviD-SYS", 1, new[] { 1, 2 })]
-        public void episode_multipart_parse(string postTitle, string title, int season, int[] episodes)
+        public void episode_multipart_parse(string postTitle, string title, int season, int[] episodes, int count)
         {
             var result = Parser.ParseEpisodeInfo(postTitle);
             Assert.AreEqual(season, result.SeasonNumber);
             Assert.Count(episodes.Length, result.Episodes);
             Assert.AreElementsEqualIgnoringOrder(episodes, result.Episodes);
             Assert.AreEqual(Parser.NormalizeTitle(title), result.CleanTitle);
+            Assert.AreEqual(count, result.Episodes.Count);
         }
 
         [Test]
