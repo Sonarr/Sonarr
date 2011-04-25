@@ -114,7 +114,6 @@ namespace NzbDrone.Core.Test
         [Row("The Daily Show - 2011-04-12 - Gov. Deval Patrick", "The.Daily.Show", 2011, 04, 12)]
         [Row("2011.01.10 - Denis Leary - HD TV.mkv", 2011, 1, 10)]
         [Row("2011.03.13 - Denis Leary - HD TV.mkv", 2011, 3, 13)]
-        [Row("2011-03-13 - Denis Leary - HD TV.mkv", 2011, 3, 13)]
         public void episode_daily_parse(string postTitle, string title, int year, int month, int day)
         {
             var result = Parser.ParseEpisodeInfo(postTitle);
