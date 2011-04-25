@@ -54,13 +54,13 @@ namespace NzbDrone.Core
                 if (match.Count != 0)
                 {
                     var seriesName = NormalizeTitle(match[0].Groups["title"].Value);
-                    
-			        var airyear = 0;
-			        Int32.TryParse(match[0].Groups["airyear"].Value, out airyear);
+
+                    var airyear = 0;
+                    Int32.TryParse(match[0].Groups["airyear"].Value, out airyear);
 
                     EpisodeParseResult parsedEpisode;
 
-                    if (airyear < 1 )
+                    if (airyear < 1)
                     {
                         var season = 0;
                         Int32.TryParse(match[0].Groups["season"].Value, out season);
@@ -177,7 +177,7 @@ namespace NzbDrone.Core
                 if (match.Count != 0)
                 {
                     var seriesName = NormalizeTitle(match[0].Groups["title"].Value);
-           
+
                     Logger.Trace("Series Parsed. {0}", seriesName);
                     return seriesName;
                 }
@@ -237,9 +237,9 @@ namespace NzbDrone.Core
                 return QualityTypes.HDTV;
 
             //Based on extension
-            if (result == QualityTypes.Unknown)
+            if (result == QualityTypes.Unknown && Path.HasExtension(name))
             {
-                switch (new FileInfo(name).Extension.ToLower())
+                switch (Path.GetExtension(name).ToLower())
                 {
                     case ".avi":
                     case ".xvid":

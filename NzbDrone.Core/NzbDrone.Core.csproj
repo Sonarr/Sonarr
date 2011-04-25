@@ -166,7 +166,7 @@
     <Compile Include="Instrumentation\SubsonicTarget.cs" />
     <Compile Include="Instrumentation\ExceptioneerTarget.cs" />
     <Compile Include="Instrumentation\NlogWriter.cs" />
-    <Compile Include="Model\SabnzbdInfoModel.cs" />
+    <Compile Include="Providers\Indexer\SyndicationFeedXmlReader.cs" />
     <Compile Include="Providers\AutoConfigureProvider.cs" />
     <Compile Include="Providers\Indexer\NzbMatrixProvider.cs" />
     <Compile Include="Providers\Jobs\NewSeriesUpdate.cs" />
