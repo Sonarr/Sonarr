@@ -44,7 +44,8 @@ namespace NzbDrone
             IISProcess.StartInfo.CreateNoWindow = true;
 
 
-            IISProcess.OutputDataReceived += (OnDataReceived);
+            IISProcess.OutputDataReceived += (OnOutputDataReceived);
+            IISProcess.ErrorDataReceived += (OnErrorDataReceived);
 
             //Set Variables for the config file.
             Environment.SetEnvironmentVariable("NZBDRONE_PATH", Config.ProjectRoot);
@@ -60,6 +61,9 @@ namespace NzbDrone
 
 
             Logger.Info("Starting process. [{0}]", IISProcess.StartInfo.FileName);
+
+
+
             IISProcess.Start();
 
             IISProcess.BeginErrorReadLine();
@@ -73,6 +77,14 @@ namespace NzbDrone
             return IISProcess;
         }
 
+        private static void OnErrorDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            if (e == null || String.IsNullOrWhiteSpace(e.Data))
+                return;
+
+            IISLogger.Error(e.Data);
+        }
+
         internal static void StopServer()
         {
             KillProcess(IISProcess);
@@ -82,7 +94,7 @@ namespace NzbDrone
             {
                 string processPath = process.MainModule.FileName;
                 Logger.Info("[{0}]IIS Process found. Path:{1}", process.Id, processPath);
-                if (CleanPath(processPath) == CleanPath(IISExe))
+                if (NormalizePath(processPath) == NormalizePath(IISExe))
                 {
                     Logger.Info("[{0}]Process is considered orphaned.", process.Id);
                     KillProcess(process);
@@ -124,7 +136,7 @@ namespace NzbDrone
             }
         }
 
-        private static void OnDataReceived(object s, DataReceivedEventArgs e)
+        private static void OnOutputDataReceived(object s, DataReceivedEventArgs e)
         {
             if (e == null || String.IsNullOrWhiteSpace(e.Data) || e.Data.StartsWith("Request started:") ||
                 e.Data.StartsWith("Request ended:") || e.Data == ("IncrementMessages called"))
@@ -167,9 +179,19 @@ namespace NzbDrone
             }
         }
 
-        private static string CleanPath(string path)
+        public static string NormalizePath(string path)
         {
-            return path.ToLower().Replace("\\", "").Replace("//", "//");
+            if (String.IsNullOrWhiteSpace(path))
+                throw new ArgumentException("Path can not be null or empty");
+
+            var info = new FileInfo(path);
+
+            if (info.FullName.StartsWith(@"\\")) //UNC
+            {
+                return info.FullName.TrimEnd('/', '\\', ' ');
+            }
+
+            return info.FullName.Trim('/', '\\', ' ').ToLower();
         }
 
 

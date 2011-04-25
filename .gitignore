@@ -32,3 +32,4 @@ _ReSharper*/
 /[Pp]ackage/
 #NZBDrone specific
 *.db
+*Web.Publish.xml

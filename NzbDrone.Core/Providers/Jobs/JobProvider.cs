@@ -70,7 +70,7 @@ namespace NzbDrone.Core.Providers.Jobs
             {
                 if (_isRunning)
                 {
-                    Logger.Info("Another instance of this job is already running. Ignoring request.");
+                    Logger.Warn("Another instance of this job is already running. Ignoring request.");
                     return false;
                 }
                 _isRunning = true;
@@ -78,7 +78,6 @@ namespace NzbDrone.Core.Providers.Jobs
 
             try
             {
-                Logger.Trace("Getting list of jobs needing to be executed");
 
                 var pendingJobs = All().Where(
                     t => t.Enable &&
@@ -114,16 +113,14 @@ namespace NzbDrone.Core.Providers.Jobs
             {
                 if (_isRunning)
                 {
-                    Logger.Info("Another instance of this job is already running. Ignoring request.");
+                    Logger.Warn("Another job is already running. Ignoring request.");
                     return false;
                 }
                 _isRunning = true;
             }
-
-            Logger.Info("User has requested a manual execution of {0}", jobType.Name);
             if (_jobThread == null || !_jobThread.IsAlive)
             {
-                Logger.Debug("Initializing background thread");
+                Logger.Trace("Initializing background thread");
 
                 ThreadStart starter = () =>
                 {
@@ -170,7 +167,7 @@ namespace NzbDrone.Core.Providers.Jobs
             {
                 try
                 {
-                    Logger.Info("Starting job '{0}'. Last execution {1}", settings.Name, settings.LastExecution);
+                    Logger.Debug("Starting job '{0}'. Last execution {1}", settings.Name, settings.LastExecution);
                     settings.LastExecution = DateTime.Now;
                     var sw = Stopwatch.StartNew();
 
@@ -180,7 +177,7 @@ namespace NzbDrone.Core.Providers.Jobs
 
                     settings.Success = true;
                     sw.Stop();
-                    Logger.Info("Job '{0}' successfully completed in {1} seconds", timerClass.Name, sw.Elapsed.Minutes,
+                    Logger.Debug("Job '{0}' successfully completed in {1} seconds", timerClass.Name, sw.Elapsed.Minutes,
                                 sw.Elapsed.Seconds);
                 }
                 catch (Exception e)
@@ -201,7 +198,7 @@ namespace NzbDrone.Core.Providers.Jobs
         /// </summary>
         public virtual void Initialize()
         {
-            Logger.Info("Initializing jobs. Count {0}", _jobs.Count());
+            Logger.Debug("Initializing jobs. Count {0}", _jobs.Count());
             var currentTimer = All();
 
             foreach (var timer in _jobs)
