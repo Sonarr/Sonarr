@@ -633,7 +633,7 @@
     <Content Include="Scripts\Notification.js" />
     <Content Include="Views\AddSeries\AddExisting.cshtml" />
     <Content Include="Views\AddSeries\AddNew.cshtml" />
-    <None Include="Views\AddSeries\AddSeriesItem.cshtml" />
+    <Content Include="Views\AddSeries\AddSeriesItem.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
