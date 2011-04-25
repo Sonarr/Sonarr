@@ -14,11 +14,11 @@ namespace NzbDrone.Core
 
         private static readonly Regex[] ReportTitleRegex = new[]
                                 {
-                                    new Regex(@"^(?<title>.+?)?\W?(?<year>\d{4}?)?\W+(?<airyear>\d{4})\W+(?<airmonth>\d{2})\W+(?<airday>\d{2})\W?(?!\\)",
+                                    new Regex(@"^(?<title>.+?)?\W*(?<airyear>\d{4})\W+(?<airmonth>\d{2})\W+(?<airday>\d{2})\W?(?!\\)",
                                         RegexOptions.IgnoreCase | RegexOptions.Compiled),
                                     new Regex(@"^(?<title>.*?)?(?:\W?S?(?<season>\d{1,2}(?!\d+))(?:(?:\-|\.|[ex]|\s|\sto\s){1,2}(?<episode>\d{1,2}(?!\d+)))+)+\W?(?!\\)",
                                         RegexOptions.IgnoreCase | RegexOptions.Compiled),
-                                    new Regex(@"^(?<title>.+?)?\W?(?<year>\d{4}?)?(?:\W(?<season>\d+)(?<episode>\d{2}))+\W?(?!\\)",
+                                    new Regex(@"^(?<title>.+?)?\W?(?:\W(?<season>\d+)(?<episode>\d{2}))+\W?(?!\\)",
                                         RegexOptions.IgnoreCase | RegexOptions.Compiled),
                                     //Supports 103/113 naming
                                     new Regex(@"^(?<title>.*?)?(?:\W?S?(?<season>\d{1,2}(?!\d+))(?:(?:\-|\.|[ex]|\s|to)+(?<episode>\d+))+)+\W?(?!\\)",
