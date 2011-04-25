@@ -84,7 +84,7 @@ namespace NzbDrone.Web.Controllers
 
             ViewData["guid"] = Guid.NewGuid();
             ViewData["path"] = path;
-            ViewData["javaPath"] = path.Replace(Path.DirectorySeparatorChar, '|').Replace(Path.VolumeSeparatorChar, '^');
+            ViewData["javaPath"] = path.Replace(Path.DirectorySeparatorChar, '|').Replace(Path.VolumeSeparatorChar, '^').Replace('\'', '`');
 
             var defaultQuality = _configProvider.DefaultQualityProfile;
             var qualityProfiles = _qualityProvider.GetAllProfiles();
@@ -105,7 +105,7 @@ namespace NzbDrone.Web.Controllers
             //Add the new series to the Database
 
             _seriesProvider.AddSeries(
-                path.Replace('|', Path.DirectorySeparatorChar).Replace('^', Path.VolumeSeparatorChar), seriesId,
+                path.Replace('|', Path.DirectorySeparatorChar).Replace('^', Path.VolumeSeparatorChar).Replace('`', '\''), seriesId,
                 qualityProfileId);
             ScanNewSeries();
             return new JsonResult { Data = "ok" };
