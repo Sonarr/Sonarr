@@ -9,17 +9,17 @@ namespace NzbDrone.Core.Providers
 {
     public class UpcomingEpisodesProvider
     {
-        private readonly IRepository _sonicRepo;
+        private readonly IRepository _repository;
 
-        public UpcomingEpisodesProvider(IRepository sonicRepo)
+        public UpcomingEpisodesProvider(IRepository repository)
         {
-            _sonicRepo = sonicRepo;
+            _repository = repository;
         }
 
         public virtual UpcomingEpisodesModel Upcoming()
         {
             var allEps =
-                _sonicRepo.All<Episode>().Where(
+                _repository.All<Episode>().Where(
                     e => e.AirDate >= DateTime.Today.AddDays(-1) && e.AirDate < DateTime.Today.AddDays(8));
 
             var yesterday = allEps.Where(e => e.AirDate == DateTime.Today.AddDays(-1)).ToList();
@@ -31,18 +31,18 @@ namespace NzbDrone.Core.Providers
 
         public virtual List<Episode> Yesterday()
         {
-            return _sonicRepo.All<Episode>().Where(e => e.AirDate == DateTime.Today.AddDays(-1)).ToList();
+            return _repository.All<Episode>().Where(e => e.AirDate == DateTime.Today.AddDays(-1)).ToList();
         }
 
         public virtual List<Episode> Today()
         {
-            return _sonicRepo.All<Episode>().Where(e => e.AirDate == DateTime.Today).ToList();
+            return _repository.All<Episode>().Where(e => e.AirDate == DateTime.Today).ToList();
         }
 
         public virtual List<Episode> Week()
         {
             return
-                _sonicRepo.All<Episode>().Where(e => e.AirDate > DateTime.Today && e.AirDate < DateTime.Today.AddDays(8))
+                _repository.All<Episode>().Where(e => e.AirDate > DateTime.Today && e.AirDate < DateTime.Today.AddDays(8))
                     .ToList();
         }
     }

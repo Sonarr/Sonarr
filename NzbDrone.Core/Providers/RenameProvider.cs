@@ -12,15 +12,18 @@ namespace NzbDrone.Core.Providers
 {
     public class RenameProvider
     {
+        //TODO: Remove some of these dependencies. we shouldn't have a single class with dependency on the whole app!
+        //TODO: Also upgrade to a job that can run on background thread.
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly ConfigProvider _configProvider;
         private readonly DiskProvider _diskProvider;
         private readonly EpisodeProvider _episodeProvider;
-        private readonly List<EpisodeRenameModel> _epsToRename = new List<EpisodeRenameModel>();
         private readonly ExternalNotificationProvider _externalNotificationProvider;
         private readonly MediaFileProvider _mediaFileProvider;
         private readonly SeasonProvider _seasonProvider;
         private readonly SeriesProvider _seriesProvider;
+
+        private readonly List<EpisodeRenameModel> _epsToRename = new List<EpisodeRenameModel>();
 
         private Thread _renameThread;
 

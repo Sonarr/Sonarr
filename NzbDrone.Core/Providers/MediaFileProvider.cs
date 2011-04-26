@@ -159,6 +159,7 @@ namespace NzbDrone.Core.Providers
         /// <param name = "files">list of files to verify</param>
         public void CleanUp(List<EpisodeFile> files)
         {
+            //TODO: remove orphaned files. in files table but not linked to from episode table.
             foreach (var episodeFile in files)
             {
                 if (!_diskProvider.FileExists(episodeFile.Path))

@@ -13,25 +13,25 @@ namespace NzbDrone.Core.Providers
     public class SabProvider
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private readonly ConfigProvider _config;
-        private readonly HttpProvider _http;
+        private readonly ConfigProvider _configProvider;
+        private readonly HttpProvider _httpProvider;
 
         public SabProvider()
         {
         }
 
-        public SabProvider(ConfigProvider config, HttpProvider http)
+        public SabProvider(ConfigProvider configProvider, HttpProvider httpProvider)
         {
-            _config = config;
-            _http = http;
+            _configProvider = configProvider;
+            _httpProvider = httpProvider;
         }
 
         public virtual bool AddByUrl(string url, string title)
         {
             const string mode = "addurl";
-            string cat = _config.GetValue("SabTvCategory", String.Empty, true);
+            string cat = _configProvider.GetValue("SabTvCategory", String.Empty, true);
             //string cat = "tv";
-            string priority = _config.GetValue("SabTvPriority", String.Empty, false);
+            string priority = _configProvider.GetValue("SabTvPriority", String.Empty, false);
             string name = url.Replace("&", "%26");
             string nzbName = HttpUtility.UrlEncode(title);
 
@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Providers
 
             Logger.Debug("Adding report [{0}] to the queue.", nzbName);
 
-            string response = _http.DownloadString(request).Replace("\n", String.Empty);
+            string response = _httpProvider.DownloadString(request).Replace("\n", String.Empty);
             Logger.Debug("Queue Repsonse: [{0}]", response);
 
             if (response == "ok")
@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Providers
         {
             const string action = "mode=queue&output=xml";
             string request = GetSabRequest(action);
-            string response = _http.DownloadString(request);
+            string response = _httpProvider.DownloadString(request);
 
             XDocument xDoc = XDocument.Parse(response);
 
@@ -84,9 +84,9 @@ namespace NzbDrone.Core.Providers
             //mode=addid&name=333333&pp=3&script=customscript.cmd&cat=Example&priority=-1
 
             const string mode = "addid";
-            string cat = _config.GetValue("SabTvCategory", String.Empty, true);
+            string cat = _configProvider.GetValue("SabTvCategory", String.Empty, true);
             //string cat = "tv";
-            string priority = _config.GetValue("SabTvPriority", String.Empty, false);
+            string priority = _configProvider.GetValue("SabTvPriority", String.Empty, false);
             string nzbName = HttpUtility.UrlEncode(title);
 
             string action = string.Format("mode={0}&name={1}&priority={2}&cat={3}&nzbname={4}", mode, id, priority, cat,
@@ -95,7 +95,7 @@ namespace NzbDrone.Core.Providers
 
             Logger.Debug("Adding report [{0}] to the queue.", nzbName);
 
-            string response = _http.DownloadString(request).Replace("\n", String.Empty);
+            string response = _httpProvider.DownloadString(request).Replace("\n", String.Empty);
             Logger.Debug("Queue Repsonse: [{0}]", response);
 
             if (response == "ok")
@@ -106,11 +106,11 @@ namespace NzbDrone.Core.Providers
 
         private string GetSabRequest(string action)
         {
-            string sabnzbdInfo = _config.GetValue("SabHost", String.Empty, false) + ":" +
-                                 _config.GetValue("SabPort", String.Empty, false);
-            string username = _config.GetValue("SabUsername", String.Empty, false);
-            string password = _config.GetValue("SabPassword", String.Empty, false);
-            string apiKey = _config.GetValue("SabApiKey", String.Empty, false);
+            string sabnzbdInfo = _configProvider.GetValue("SabHost", String.Empty, false) + ":" +
+                                 _configProvider.GetValue("SabPort", String.Empty, false);
+            string username = _configProvider.GetValue("SabUsername", String.Empty, false);
+            string password = _configProvider.GetValue("SabPassword", String.Empty, false);
+            string apiKey = _configProvider.GetValue("SabApiKey", String.Empty, false);
 
             return
                 string.Format(@"http://{0}/api?$Action&apikey={1}&ma_username={2}&ma_password={3}", sabnzbdInfo, apiKey,
