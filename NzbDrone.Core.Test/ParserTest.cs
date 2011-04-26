@@ -123,6 +123,19 @@ namespace NzbDrone.Core.Test
             Assert.IsNull(result.Episodes);
         }
 
+
+        [Test]
+        [Row("30.Rock.Season.04.HDTV.XviD-DIMENSION", "30.Rock", 4)]
+        [Row("Parks.and.Recreation.S02.720p.x264-DIMENSION", "Parks.and.Recreation", 2)]
+        [Row("The.Office.US.S03.720p.x264-DIMENSION", "The.Office.US", 3)]
+        public void full_season_release_parse(string postTitle, string title, int season)
+        {
+            var result = Parser.ParseEpisodeInfo(postTitle);
+            Assert.AreEqual(season, result.SeasonNumber);
+            Assert.AreEqual(Parser.NormalizeTitle(title), result.CleanTitle);
+            Assert.AreEqual(0, result.Episodes.Count);
+        }
+
         [Test]
         [Row("Conan", "conan")]
         [Row("The Tonight Show With Jay Leno", "tonightshowwithjayleno")]
