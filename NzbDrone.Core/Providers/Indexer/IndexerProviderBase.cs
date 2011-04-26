@@ -148,6 +148,7 @@ namespace NzbDrone.Core.Providers.Indexer
                     return;
                 }
 
+                parseResult.EpisodeTitle = episodes[0].Title;
                 var sabTitle = _sabProvider.GetSabTitle(parseResult);
 
                 if (_sabProvider.IsInQueue(sabTitle))
