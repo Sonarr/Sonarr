@@ -29,9 +29,9 @@ namespace NzbDrone.Core.Providers
         public virtual bool AddByUrl(string url, string title)
         {
             const string mode = "addurl";
-            string cat = _configProvider.GetValue("SabTvCategory", String.Empty, true);
+            string cat = _configProvider.SabTvCategory;
             //string cat = "tv";
-            string priority = _configProvider.GetValue("SabTvPriority", String.Empty, false);
+            string priority = _configProvider.SabTvPriority;
             string name = url.Replace("&", "%26");
             string nzbName = HttpUtility.UrlEncode(title);
 
@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Providers
                                           cat, nzbName);
             string request = GetSabRequest(action);
 
-            Logger.Debug("Adding report [{0}] to the queue.", nzbName);
+            Logger.Info("Adding report [{0}] to the queue.", title);
 
             string response = _httpProvider.DownloadString(request).Replace("\n", String.Empty);
             Logger.Debug("Queue Repsonse: [{0}]", response);
@@ -130,7 +130,7 @@ namespace NzbDrone.Core.Providers
 
             var epNumberString = String.Join("-", episodeString);
 
-            var result = String.Format("{0} - {1} - {2} {3}", parseResult.FolderName, epNumberString, parseResult.EpisodeTitle, parseResult.Quality);
+            var result = String.Format("{0} - {1} - {2} [{3}]", parseResult.FolderName, epNumberString, parseResult.EpisodeTitle, parseResult.Quality);
 
             if (parseResult.Proper)
             {
