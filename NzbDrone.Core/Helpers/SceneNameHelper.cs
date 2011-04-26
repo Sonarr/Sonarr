@@ -7,6 +7,8 @@ namespace NzbDrone.Core.Helpers
 {
     public static class SceneNameHelper
     {
+        //Todo: Move this to a publically available location (so updates can be applied without releasing a new version of NzbDrone)
+        //Todo: GoogleDocs? WCF Web Services on NzbDrone.com?
         private static readonly List<SceneNameModel> SceneNameMappings = new List<SceneNameModel>
                                                                              {
                                                                                  new SceneNameModel
@@ -146,11 +148,6 @@ namespace NzbDrone.Core.Helpers
                                                                                      {
                                                                                          SeriesId = 83714,
                                                                                          Name = "Genius with Dave Gorman"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 168161,
-                                                                                         Name = "Law and Order Los Angeles"
                                                                                      },
                                                                                  new SceneNameModel
                                                                                      {

@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using System.ServiceModel.Syndication;
 using NLog;
+using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
@@ -147,17 +148,17 @@ namespace NzbDrone.Core.Providers.Indexer
                     return;
                 }
 
-                //var sabTitle = _sabProvider.GetSabTitle(parseResult);
+                var sabTitle = _sabProvider.GetSabTitle(parseResult);
 
-                //if (_sabProvider.IsInQueue(sabTitle))
-                //{
-                //    return;
-                //}
+                if (_sabProvider.IsInQueue(sabTitle))
+                {
+                    return;
+                }
 
-                //if (!_sabProvider.AddByUrl(NzbDownloadUrl(feedItem), sabTitle))
-                //{
-                //    return;
-                //}
+                if (!_sabProvider.AddByUrl(NzbDownloadUrl(feedItem), sabTitle))
+                {
+                    return;
+                }
 
                 foreach (var episode in episodes)
                 {
@@ -184,6 +185,14 @@ namespace NzbDrone.Core.Providers.Indexer
             if (episodeParseResult == null) return null;
 
             var seriesInfo = _seriesProvider.FindSeries(episodeParseResult.CleanTitle);
+
+            if (seriesInfo == null)
+            {
+                var seriesId = SceneNameHelper.FindByName(episodeParseResult.CleanTitle);
+
+                if (seriesId != 0)
+                    seriesInfo = _seriesProvider.GetSeries(seriesId);
+            }
 
             if (seriesInfo != null)
             {

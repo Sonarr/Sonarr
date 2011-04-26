@@ -99,6 +99,7 @@ namespace NzbDrone.Core
                 _kernel.Bind<JobProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<IndexerProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<WebTimer>().ToSelf().InSingletonScope();
+                _kernel.Bind<AutoConfigureProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<IRepository>().ToMethod(
                     c => new SimpleRepository(dbProvider, SimpleRepositoryOptions.RunMigrations)).InSingletonScope();
 

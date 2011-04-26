@@ -177,6 +177,7 @@
     <Compile Include="Providers\Jobs\IJob.cs" />
     <Compile Include="Providers\Jobs\RssSyncJob.cs" />
     <Compile Include="Providers\Jobs\UpdateInfoJob.cs" />
+    <Compile Include="Providers\StatsProvider.cs" />
     <Compile Include="Repository\JobSetting.cs" />
     <Compile Include="Repository\IndexerSetting.cs" />
     <Compile Include="Model\EpisodeParseResult.cs" />
