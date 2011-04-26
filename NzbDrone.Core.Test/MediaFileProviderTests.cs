@@ -152,8 +152,8 @@ namespace NzbDrone.Core.Test
                 .Setup(r => r.Exists(It.IsAny<Expression<Func<EpisodeFile, Boolean>>>())).Returns(true).Verifiable();
 
             //mocker.GetMock<EpisodeProvider>()
-             //   .Setup(e => e.GetEpisode(fakeSeries.SeriesId, seasonNumber, episodeNumner)).Returns(fakeEpisode)
-               // .Verifiable();
+            //   .Setup(e => e.GetEpisode(fakeSeries.SeriesId, seasonNumber, episodeNumner)).Returns(fakeEpisode)
+            // .Verifiable();
 
             mocker.GetMock<DiskProvider>()
                 .Setup(e => e.GetSize(fileName)).Returns(size).Verifiable();
@@ -224,18 +224,17 @@ namespace NzbDrone.Core.Test
             mocker.GetMock<IRepository>(MockBehavior.Strict)
                 .Setup(r => r.Exists(It.IsAny<Expression<Func<EpisodeFile, Boolean>>>())).Returns(true).Verifiable();
             mocker.GetMock<EpisodeProvider>(MockBehavior.Strict);
-            mocker.GetMock<DiskProvider>(MockBehavior.Strict);
+            mocker.GetMock<DiskProvider>()
+                 .Setup(e => e.GetSize(fileName)).Returns(500000).Verifiable();
 
 
             //Act
             var result = mocker.Resolve<MediaFileProvider>().ImportFile(fakeSeries, fileName);
 
             //Assert
-            mocker.GetMock<IRepository>().VerifyAll();
-            mocker.GetMock<EpisodeProvider>().VerifyAll();
-            mocker.GetMock<DiskProvider>(MockBehavior.Strict).VerifyAll();
             Assert.IsNull(result);
             mocker.GetMock<IRepository>().Verify(r => r.Add(result), Times.Never());
+            mocker.VerifyAllMocks();
         }
 
         [Test]
@@ -262,7 +261,8 @@ namespace NzbDrone.Core.Test
                 .Setup(e => e.GetEpisode(fakeSeries.SeriesId, seasonNumber, episodeNumner)).Returns<Episode>(null).
                 Verifiable();
 
-            mocker.GetMock<DiskProvider>(MockBehavior.Strict);
+            mocker.GetMock<DiskProvider>(MockBehavior.Strict)
+                .Setup(e => e.GetSize(fileName)).Returns(90000000000);
 
 
             //Act
