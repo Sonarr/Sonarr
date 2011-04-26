@@ -75,6 +75,8 @@ namespace NzbDrone.Core.Providers
         /// <returns></returns>
         public virtual bool IsNeeded(EpisodeParseResult parsedReport)
         {
+            //Todo: Fix this so it properly handles multi-epsiode releases (Currently as long as the first episode is needed we download it)
+            //Todo: for small releases this is less of an issue, but for Full Season Releases this could be an issue if we only need the first episode (or first few)
             foreach (var episode in parsedReport.Episodes)
             {
                 var episodeInfo = GetEpisode(parsedReport.SeriesId, parsedReport.SeasonNumber, episode);
@@ -128,7 +130,6 @@ namespace NzbDrone.Core.Providers
                             Logger.Trace("Quality is past cut-off skipping.");
                             continue;
                         }
-
                     }
                 }
 

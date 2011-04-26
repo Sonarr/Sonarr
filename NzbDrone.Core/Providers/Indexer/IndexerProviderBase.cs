@@ -135,6 +135,9 @@ namespace NzbDrone.Core.Providers.Indexer
                     return;
                 }
 
+                //Todo: How to handle full season files? Currently the episode list is completely empty for these releases
+                //Todo: Should we assume that the release contains all the episodes that belong to this season and add them from the DB?
+
                 if (!_episodeProvider.IsNeeded(parseResult))
                 {
                     _logger.Debug("Episode {0} is not needed. skipping.", parseResult);
