@@ -12,21 +12,15 @@ namespace NzbDrone.Core.Providers
     public class EpisodeProvider
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private readonly QualityProvider _qualityProvider;
-        private readonly SeasonProvider _seasons;
-        private readonly SeriesProvider _series;
-        private readonly IRepository _sonicRepo;
-        private readonly TvDbProvider _tvDb;
+        private readonly SeasonProvider _seasonsProvider;
+        private readonly IRepository _repository;
+        private readonly TvDbProvider _tvDbProvider;
 
-        public EpisodeProvider(IRepository sonicRepo, SeriesProvider seriesProvider,
-                               SeasonProvider seasonProvider, TvDbProvider tvDbProvider,
-                               QualityProvider qualityProvider)
+        public EpisodeProvider(IRepository repository, SeasonProvider seasonProviderProvider, TvDbProvider tvDbProviderProvider)
         {
-            _sonicRepo = sonicRepo;
-            _series = seriesProvider;
-            _tvDb = tvDbProvider;
-            _seasons = seasonProvider;
-            _qualityProvider = qualityProvider;
+            _repository = repository;
+            _tvDbProvider = tvDbProviderProvider;
+            _seasonsProvider = seasonProviderProvider;
         }
 
         public EpisodeProvider()
@@ -35,36 +29,36 @@ namespace NzbDrone.Core.Providers
 
         public virtual Episode GetEpisode(long id)
         {
-            return _sonicRepo.Single<Episode>(id);
+            return _repository.Single<Episode>(id);
         }
 
         public virtual Episode GetEpisode(int seriesId, int seasonNumber, int episodeNumber)
         {
             return
-                _sonicRepo.Single<Episode>(
+                _repository.Single<Episode>(
                     c => c.SeriesId == seriesId && c.SeasonNumber == seasonNumber && c.EpisodeNumber == episodeNumber);
         }
 
         public virtual Episode GetEpisode(int seriesId, DateTime date)
         {
             return
-                _sonicRepo.Single<Episode>(
+                _repository.Single<Episode>(
                     c => c.SeriesId == seriesId && c.AirDate == date.Date);
         }
 
         public virtual IList<Episode> GetEpisodeBySeries(long seriesId)
         {
-            return _sonicRepo.Find<Episode>(e => e.SeriesId == seriesId);
+            return _repository.Find<Episode>(e => e.SeriesId == seriesId);
         }
 
         public virtual IList<Episode> GetEpisodeBySeason(long seasonId)
         {
-            return _sonicRepo.Find<Episode>(e => e.SeasonId == seasonId);
+            return _repository.Find<Episode>(e => e.SeasonId == seasonId);
         }
 
         public virtual IList<Episode> GetEpisodeByParseResult(EpisodeParseResult parseResult)
         {
-            var seasonEpisodes = _sonicRepo.All<Episode>().Where(e =>
+            var seasonEpisodes = _repository.All<Episode>().Where(e =>
                                                    e.SeriesId == parseResult.SeriesId &&
                                                    e.SeasonNumber == parseResult.SeasonNumber).ToList();
 
@@ -102,7 +96,7 @@ namespace NzbDrone.Core.Providers
                                           Language = "en"
                                       };
 
-                    _sonicRepo.Add(episodeInfo);
+                    _repository.Add(episodeInfo);
 
                 }
 
@@ -151,7 +145,7 @@ namespace NzbDrone.Core.Providers
             Logger.Info("Starting episode info refresh for series:{0}", seriesId);
             int successCount = 0;
             int failCount = 0;
-            var targetSeries = _tvDb.GetSeries(seriesId, true);
+            var targetSeries = _tvDbProvider.GetSeries(seriesId, true);
 
             var updateList = new List<Episode>();
             var newList = new List<Episode>();
@@ -159,7 +153,7 @@ namespace NzbDrone.Core.Providers
             Logger.Debug("Updating season info for series:{0}", targetSeries.SeriesName);
             targetSeries.Episodes.Select(e => new { e.SeasonId, e.SeasonNumber })
                 .Distinct().ToList()
-                .ForEach(s => _seasons.EnsureSeason(seriesId, s.SeasonId, s.SeasonNumber));
+                .ForEach(s => _seasonsProvider.EnsureSeason(seriesId, s.SeasonId, s.SeasonNumber));
 
             foreach (var episode in targetSeries.Episodes)
             {
@@ -214,8 +208,8 @@ namespace NzbDrone.Core.Providers
                 }
             }
 
-            _sonicRepo.AddMany(newList);
-            _sonicRepo.UpdateMany(updateList);
+            _repository.AddMany(newList);
+            _repository.UpdateMany(updateList);
 
             Logger.Debug("Finished episode refresh for series:{0}. Successful:{1} - Failed:{2} ",
                          targetSeries.SeriesName, successCount, failCount);
@@ -223,12 +217,12 @@ namespace NzbDrone.Core.Providers
 
         public virtual void DeleteEpisode(int episodeId)
         {
-            _sonicRepo.Delete<Episode>(episodeId);
+            _repository.Delete<Episode>(episodeId);
         }
 
         public virtual void UpdateEpisode(Episode episode)
         {
-            _sonicRepo.Update(episode);
+            _repository.Update(episode);
         }
     }
 }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      

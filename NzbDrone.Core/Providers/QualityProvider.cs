@@ -10,48 +10,48 @@ namespace NzbDrone.Core.Providers
     public class QualityProvider
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private readonly IRepository _sonicRepo;
+        private readonly IRepository _repository;
 
         public QualityProvider()
         {
         }
 
-        public QualityProvider(IRepository sonicRepo)
+        public QualityProvider(IRepository repository)
         {
-            _sonicRepo = sonicRepo;
+            _repository = repository;
         }
 
         public virtual int Add(QualityProfile profile)
         {
-            return Convert.ToInt32(_sonicRepo.Add(profile));
+            return Convert.ToInt32(_repository.Add(profile));
         }
 
         public virtual void Update(QualityProfile profile)
         {
-            if (!_sonicRepo.Exists<QualityProfile>(q => q.QualityProfileId == profile.QualityProfileId))
+            if (!_repository.Exists<QualityProfile>(q => q.QualityProfileId == profile.QualityProfileId))
             {
                 Logger.Error("Unable to update non-existing profile");
                 throw new InvalidOperationException("Unable to update non-existing profile");
             }
 
-            _sonicRepo.Update(profile);
+            _repository.Update(profile);
         }
 
         public virtual void Delete(int profileId)
         {
-            _sonicRepo.Delete<QualityProfile>(profileId);
+            _repository.Delete<QualityProfile>(profileId);
         }
 
         public virtual List<QualityProfile> GetAllProfiles()
         {
-            var profiles = _sonicRepo.All<QualityProfile>().ToList();
+            var profiles = _repository.All<QualityProfile>().ToList();
 
             return profiles;
         }
 
         public virtual QualityProfile Find(int profileId)
         {
-            return _sonicRepo.Single<QualityProfile>(q => q.QualityProfileId == profileId);
+            return _repository.Single<QualityProfile>(q => q.QualityProfileId == profileId);
         }
     }
 }

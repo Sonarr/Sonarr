@@ -13,22 +13,18 @@ namespace NzbDrone.Core.Providers
     public class SeriesProvider
     {
         //TODO: Remove parsing of rest of tv show info we just need the show name
-
         //Trims all white spaces and separators from the end of the title.
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private readonly ConfigProvider _config;
-        private readonly QualityProvider _quality;
-        private readonly IRepository _sonioRepo;
-        private readonly TvDbProvider _tvDb;
+        private readonly IRepository _repository;
+        private readonly ConfigProvider _configProvider;
+        private readonly TvDbProvider _tvDbProvider;
 
-        public SeriesProvider(ConfigProvider configProvider,
-                              IRepository dataRepository, TvDbProvider tvDbProvider, QualityProvider quality)
+        public SeriesProvider(ConfigProvider configProviderProvider, IRepository repository, TvDbProvider tvDbProviderProvider)
         {
-            _config = configProvider;
-            _sonioRepo = dataRepository;
-            _tvDb = tvDbProvider;
-            _quality = quality;
+            _configProvider = configProviderProvider;
+            _repository = repository;
+            _tvDbProvider = tvDbProviderProvider;
         }
 
         public SeriesProvider()
@@ -37,12 +33,12 @@ namespace NzbDrone.Core.Providers
 
         public virtual IQueryable<Series> GetAllSeries()
         {
-            return _sonioRepo.All<Series>();
+            return _repository.All<Series>();
         }
 
         public virtual Series GetSeries(int seriesId)
         {
-            return _sonioRepo.Single<Series>(s => s.SeriesId == seriesId);
+            return _repository.Single<Series>(s => s.SeriesId == seriesId);
         }
 
         /// <summary>
@@ -52,12 +48,12 @@ namespace NzbDrone.Core.Providers
         /// <returns>Whether or not the show is monitored</returns>
         public virtual bool IsMonitored(long id)
         {
-            return _sonioRepo.Exists<Series>(c => c.SeriesId == id && c.Monitored);
+            return _repository.Exists<Series>(c => c.SeriesId == id && c.Monitored);
         }
 
         public virtual bool QualityWanted(int seriesId, QualityTypes quality)
         {
-            var series = _sonioRepo.Single<Series>(seriesId);
+            var series = _repository.Single<Series>(seriesId);
             Logger.Trace("Series {0} is using quality profile {1}", seriesId, series.QualityProfile.Name);
             return series.QualityProfile.Allowed.Contains(quality);
         }
@@ -65,17 +61,17 @@ namespace NzbDrone.Core.Providers
         public virtual TvdbSeries MapPathToSeries(string path)
         {
             var seriesPath = new DirectoryInfo(path);
-            var searchResults = _tvDb.GetSeries(seriesPath.Name);
+            var searchResults = _tvDbProvider.GetSeries(seriesPath.Name);
 
             if (searchResults == null)
                 return null;
 
-            return _tvDb.GetSeries(searchResults.Id, false);
+            return _tvDbProvider.GetSeries(searchResults.Id, false);
         }
 
         public virtual Series UpdateSeriesInfo(int seriesId)
         {
-            var tvDbSeries = _tvDb.GetSeries(seriesId, true);
+            var tvDbSeries = _tvDbProvider.GetSeries(seriesId, true);
             var series = GetSeries(seriesId);
 
             series.SeriesId = tvDbSeries.Id;
@@ -102,22 +98,22 @@ namespace NzbDrone.Core.Providers
             repoSeries.Monitored = true; //New shows should be monitored
             repoSeries.QualityProfileId = qualityProfileId;
             if (qualityProfileId == 0)
-                repoSeries.QualityProfileId = Convert.ToInt32(_config.GetValue("DefaultQualityProfile", "1", true));
+                repoSeries.QualityProfileId = Convert.ToInt32(_configProvider.GetValue("DefaultQualityProfile", "1", true));
 
-            repoSeries.SeasonFolder = _config.UseSeasonFolder;
+            repoSeries.SeasonFolder = _configProvider.UseSeasonFolder;
 
-            _sonioRepo.Add(repoSeries);
+            _repository.Add(repoSeries);
         }
 
         public virtual Series FindSeries(string title)
         {
             var normalizeTitle = Parser.NormalizeTitle(title);
-            return _sonioRepo.Single<Series>(s => s.CleanTitle == normalizeTitle);
+            return _repository.Single<Series>(s => s.CleanTitle == normalizeTitle);
         }
 
         public virtual void UpdateSeries(Series series)
         {
-            _sonioRepo.Update(series);
+            _repository.Update(series);
         }
 
         public virtual void DeleteSeries(int seriesId)
@@ -126,22 +122,22 @@ namespace NzbDrone.Core.Providers
 
             try
             {
-                var series = _sonioRepo.Single<Series>(seriesId);
+                var series = _repository.Single<Series>(seriesId);
 
                 //Delete Files, Episdes, Seasons then the Series
                 //Can't use providers because episode provider needs series provider - Cyclic Dependency Injection, this will work
 
                 Logger.Debug("Deleting EpisodeFiles from DB for Series: {0}", series.SeriesId);
-                _sonioRepo.DeleteMany(series.EpisodeFiles);
+                _repository.DeleteMany(series.EpisodeFiles);
 
                 Logger.Debug("Deleting Episodes from DB for Series: {0}", series.SeriesId);
-                _sonioRepo.DeleteMany(series.Episodes);
+                _repository.DeleteMany(series.Episodes);
 
                 Logger.Debug("Deleting Seasons from DB for Series: {0}", series.SeriesId);
-                _sonioRepo.DeleteMany(series.Seasons);
+                _repository.DeleteMany(series.Seasons);
 
                 Logger.Debug("Deleting Series from DB {0}", series.Title);
-                _sonioRepo.Delete<Series>(seriesId);
+                _repository.Delete<Series>(seriesId);
 
                 Logger.Info("Successfully deleted Series [{0}]", seriesId);
             }
@@ -154,7 +150,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual bool SeriesPathExists(string cleanPath)
         {
-            if (_sonioRepo.Exists<Series>(s => s.Path == cleanPath))
+            if (_repository.Exists<Series>(s => s.Path == cleanPath))
                 return true;
 
             return false;

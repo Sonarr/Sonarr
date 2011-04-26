@@ -10,16 +10,16 @@ namespace NzbDrone.Core.Providers.Core
     public class ConfigProvider
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private readonly IRepository _sonicRepo;
+        private readonly IRepository _repository;
 
-        public ConfigProvider(IRepository dataRepository)
+        public ConfigProvider(IRepository repository)
         {
-            _sonicRepo = dataRepository;
+            _repository = repository;
         }
 
         public IList<Config> All()
         {
-            return _sonicRepo.All<Config>().ToList();
+            return _repository.All<Config>().ToList();
         }
 
         public ConfigProvider()
@@ -220,7 +220,7 @@ namespace NzbDrone.Core.Providers.Core
         {
             string value;
 
-            var dbValue = _sonicRepo.Single<Config>(key);
+            var dbValue = _repository.Single<Config>(key);
 
             if (dbValue != null && !String.IsNullOrEmpty(dbValue.Value))
                 return dbValue.Value;
@@ -252,11 +252,11 @@ namespace NzbDrone.Core.Providers.Core
 
             Logger.Debug("Writing Setting to file. Key:'{0}' Value:'{1}'", key, value);
 
-            var dbValue = _sonicRepo.Single<Config>(key);
+            var dbValue = _repository.Single<Config>(key);
 
             if (dbValue == null)
             {
-                _sonicRepo.Add(new Config
+                _repository.Add(new Config
                                    {
                                        Key = key,
                                        Value = value
@@ -265,7 +265,7 @@ namespace NzbDrone.Core.Providers.Core
             else
             {
                 dbValue.Value = value;
-                _sonicRepo.Update(dbValue);
+                _repository.Update(dbValue);
             }
         }
     }

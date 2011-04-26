@@ -11,11 +11,11 @@ namespace NzbDrone.Core.Providers
     public class HistoryProvider
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private readonly IRepository _sonicRepo;
+        private readonly IRepository _repository;
 
-        public HistoryProvider(IRepository sonicRepo)
+        public HistoryProvider(IRepository repository)
         {
-            _sonicRepo = sonicRepo;
+            _repository = repository;
         }
 
         public HistoryProvider()
@@ -24,32 +24,32 @@ namespace NzbDrone.Core.Providers
 
         public virtual IQueryable<History> AllItems()
         {
-            return _sonicRepo.All<History>();
+            return _repository.All<History>();
         }
 
         public virtual void Purge()
         {
-            _sonicRepo.DeleteMany(AllItems());
+            _repository.DeleteMany(AllItems());
             Logger.Info("History has been Purged");
         }
 
         public virtual void Trim()
         {
             var old = AllItems().Where(h => h.Date < DateTime.Now.AddDays(-30));
-            _sonicRepo.DeleteMany(old);
+            _repository.DeleteMany(old);
             Logger.Info("History has been trimmed, items older than 30 days have been removed");
         }
 
         public virtual void Add(History item)
         {
-            _sonicRepo.Add(item);
+            _repository.Add(item);
             Logger.Debug("Item added to history: {0}", item.NzbTitle);
         }
 
         public virtual bool Exists(int episodeId, QualityTypes quality, bool proper)
         {
             //Looks for the existence of this episode in History
-            if (_sonicRepo.Exists<History>(h => h.EpisodeId == episodeId && h.Quality == quality && h.IsProper == proper))
+            if (_repository.Exists<History>(h => h.EpisodeId == episodeId && h.Quality == quality && h.IsProper == proper))
                 return true;
 
             Logger.Debug("Episode not in History. ID:{0} Q:{1} Proper:{2}", episodeId, quality, proper);
