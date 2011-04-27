@@ -1,4 +1,5 @@
-﻿@model NzbDrone.Web.Models.DownloadSettingsModel
+﻿@using NzbDrone.Web.Helpers;
+@model NzbDrone.Web.Models.DownloadSettingsModel
 
 <script type="text/javascript">
     $(document).ready(function () {
@@ -54,7 +55,6 @@
 
 @using (Html.BeginForm("SaveDownloads", "Settings", FormMethod.Post, new { id = "form", name = "form" }))
 {
-    
     <fieldset>
         <legend>Download Settings</legend>
 
@@ -66,16 +66,21 @@
                         <div class="config-title">@Html.LabelFor(m => m.SyncFrequency)</div>
                         <div class="config-value">@Html.TextBoxFor(m => m.SyncFrequency)</div>
                     </div>
-                    <div class="config-validation">@Html.ValidationMessageFor(m => m.SyncFrequency)</div>
+                    <div class="config-group2">
+                        <div class="config-validation">@Html.ValidationMessageFor(m => m.SyncFrequency)</div>
+                        <div class="config-description">@Html.DescriptionFor(m => m.SyncFrequency)</div>
+                    </div>
                 </div>
                     
                 <div class="config-section">
                     <div class="config-group">
                         <div class="config-title">@Html.LabelFor(m => m.DownloadPropers)</div>
-                        <div class="config-value">@Html.CheckBoxFor(m => m.DownloadPropers)</div>
-                    
+                        <div class="config-value">@Html.CheckBoxFor(m => m.DownloadPropers, new { @class = "config-checkbox" })</div>
                     </div>
-                    <div class="config-validation">@Html.ValidationMessageFor(m => m.DownloadPropers)</div>
+                    <div class="config-group2">
+                        <div class="config-validation">@Html.ValidationMessageFor(m => m.DownloadPropers)</div>
+                        <div class="config-description">@Html.DescriptionFor(m => m.DownloadPropers)</div>
+                    </div>
                 </div>
 
                 <div class="config-section">
@@ -83,8 +88,12 @@
                         <div class="config-title">@Html.LabelFor(m => m.Retention)</div>
                         <div class="config-value">@Html.TextBoxFor(m => m.Retention)</div>
                     </div>
-                    <div class="config-validation">@Html.ValidationMessageFor(m => m.Retention)</div>
+                    <div class="config-group2">
+                        <div class="config-validation">@Html.ValidationMessageFor(m => m.Retention)</div>
+                        <div class="config-description">@Html.DescriptionFor(m => m.Retention)</div>
+                    </div>
                 </div>
+
             </fieldset>
 
             <div>
@@ -104,14 +113,17 @@
                 <fieldset class="sub-field">
                     <legend>SABnzbd</legend>
 
-                    <button type="button" onclick="autoConfigureSab()">Auto-Configure</button>
+                    @*<button type="button" onclick="autoConfigureSab()">Auto-Configure</button>*@
 
                     <div class="config-section">
                         <div class="config-group">
                             <div class="config-title">@Html.LabelFor(m => m.SabHost)</div>
                             <div class="config-value">@Html.TextBoxFor(m => m.SabHost)</div>
                         </div>
-                        <div class="config-validation">@Html.ValidationMessageFor(m => m.SabHost)</div>
+                        <div class="config-group2"> 
+                            <div class="config-validation">@Html.ValidationMessageFor(m => m.SabHost)</div>
+                            <div class="config-description">@Html.DescriptionFor(m => m.SabHost)</div>
+                        </div>
                     </div>
 
                     <div class="config-section">
@@ -119,7 +131,10 @@
                             <div class="config-title">@Html.LabelFor(m => m.SabPort)</div>
                             <div class="config-value">@Html.TextBoxFor(m => m.SabPort)</div>
                         </div>
-                        <div class="config-validation">@Html.ValidationMessageFor(m => m.SabPort)</div>
+                        <div class="config-group2">
+                            <div class="config-validation">@Html.ValidationMessageFor(m => m.SabPort)</div>
+                            <div class="config-description">@Html.DescriptionFor(m => m.SabPort)</div>
+                        </div>
                     </div>
 
                     <div class="config-section">
@@ -127,7 +142,10 @@
                             <div class="config-title">@Html.LabelFor(m => m.SabApiKey)</div>
                             <div class="config-value">@Html.TextBoxFor(m => m.SabApiKey)</div>
                         </div>
-                        <div class="config-validation">@Html.ValidationMessageFor(m => m.SabApiKey)</div>
+                        <div class="config-group2">
+                            <div class="config-validation">@Html.ValidationMessageFor(m => m.SabApiKey)</div>
+                            <div class="config-description">@Html.DescriptionFor(m => m.SabApiKey)</div>
+                        </div>
                     </div>
 
                     <div class="config-section">
@@ -135,7 +153,10 @@
                             <div class="config-title">@Html.LabelFor(m => m.SabUsername)</div>
                             <div class="config-value">@Html.TextBoxFor(m => m.SabUsername)</div>
                         </div>
-                        <div class="config-validation">@Html.ValidationMessageFor(m => m.SabUsername)</div>
+                        <div class="config-group2">
+                            <div class="config-validation">@Html.ValidationMessageFor(m => m.SabUsername)</div>
+                            <div class="config-description">@Html.DescriptionFor(m => m.SabUsername)</div>
+                        </div>
                     </div>
 
                     <div class="config-section">
@@ -143,15 +164,21 @@
                             <div class="config-title">@Html.LabelFor(m => m.SabPassword)</div>
                             <div class="config-value">@Html.TextBoxFor(m => m.SabPassword)</div>
                         </div>
-                        <div class="config-validation">@Html.ValidationMessageFor(m => m.SabPassword)</div>
+                        <div class="config-group2">
+                            <div class="config-validation">@Html.ValidationMessageFor(m => m.SabPassword)</div>
+                            <div class="config-description">@Html.DescriptionFor(m => m.SabPassword)</div>
+                        </div>
                     </div>
 
                     <div class="config-section">
                         <div class="config-group">
                             <div class="config-title">@Html.LabelFor(m => m.SabTvCategory)</div>
-                            <div class="config-value">@Html.TextBoxFor(m => m.SabTvCategory)</div>
+                            <div class="config-value">@Html.TextBoxFor(m => m.SabTvPriority)</div>
                         </div>
-                        <div class="config-validation">@Html.ValidationMessageFor(m => m.SabTvCategory)</div>
+                        <div class="config-group2">
+                            <div class="config-validation">@Html.ValidationMessageFor(m => m.SabTvPriority)</div>
+                            <div class="config-description">@Html.DescriptionFor(m => m.SabTvPriority)</div>
+                        </div>
                     </div>
 
                     <div class="config-section">
@@ -159,7 +186,10 @@
                             <div class="config-title">@Html.LabelFor(m => m.SabTvPriority)</div>
                             <div class="config-value">@Html.DropDownListFor(m => m.SabTvPriority, Model.PrioritySelectList)</div>
                         </div>
-                        <div class="config-validation">@Html.ValidationMessageFor(m => m.SabTvPriority)</div>
+                        <div class="config-group2">
+                            <div class="config-validation">@Html.ValidationMessageFor(m => m.SabTvPriority)</div>
+                            <div class="config-description">@Html.DescriptionFor(m => m.SabTvPriority)</div>
+                        </div>
                     </div>
                 </fieldset>
             </div>
@@ -172,14 +202,17 @@
                             <div class="config-title">@Html.LabelFor(m => m.BlackholeDirectory)</div>
                             <div class="config-value">@Html.TextBoxFor(m => m.BlackholeDirectory)</div>
                         </div>
-                        <div class="config-validation">@Html.ValidationMessageFor(m => m.BlackholeDirectory)</div>
+                        <div class="config-group2">
+                            <div class="config-validation">@Html.ValidationMessageFor(m => m.BlackholeDirectory)</div>
+                            <div class="config-description">@Html.DescriptionFor(m => m.BlackholeDirectory)</div>
+                        </div>
                     </div>
 
                 </fieldset>            
             </div>
 
             <input type="submit" id="save_button" value="Save" disabled="disabled" />
-    
+
 
     </fieldset>
 }

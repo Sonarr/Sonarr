@@ -227,7 +227,6 @@
     <Compile Include="Helpers\DescriptionExtension.cs" />
     <Compile Include="Helpers\HtmlPrefixScopeExtensions.cs" />
     <Compile Include="Helpers\IsCurrentActionHelper.cs" />
-    <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\AddExistingManualModel.cs" />
     <Compile Include="Models\AddExistingSeriesModel.cs" />
     <Compile Include="Models\AddNewSeriesModel.cs" />

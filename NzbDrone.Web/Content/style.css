@@ -190,9 +190,9 @@ hr
 /* Config Pages */
 .config-section
 {
-    width: 550px;
+    width: 650px;
+    height: 45px;
     display: block;
-    padding-bottom: 25px;
 }
 
 .config-group
@@ -200,6 +200,15 @@ hr
     width: 300px;
     display: block;
     float: left;
+    height: 20px;
+}
+
+.config-group2
+{
+    width: 300px;
+    display: block;
+    float: right;
+    height: 20px;
 }
 
 .config-title
@@ -217,7 +226,11 @@ hr
 .config-validation
 {
     color: Red;
-    float: right;
+}
+
+.config-description
+{
+    
 }
 
 .sub-field
@@ -227,7 +240,15 @@ hr
     margin-bottom: 10px;
 }
 
+.config-value
+{
+    float: right;
+}
 
+.config-checkbox
+{
+    margin-right: 135px;
+}
 
 button, input[type="button"], input[type="submit"], input[type="reset"]
 {
