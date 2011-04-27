@@ -160,7 +160,11 @@ namespace NzbDrone.Core.Providers.Indexer
                     var folder = !String.IsNullOrEmpty(blackholeDir) ? blackholeDir : Path.Combine(CentralDispatch.AppPath, "App_Data");
                     var fileName = Path.Combine(folder, sabTitle + ".nzb");
                     _logger.Info("Downloading NZB: {0}", sabTitle);
-                    _httpProvider.DownloadFile(NzbDownloadUrl(feedItem), fileName);
+                    if (!_httpProvider.DownloadFile(NzbDownloadUrl(feedItem), fileName))
+                    {
+                        _logger.Info("Failed to download NZB");
+                        return;
+                    }
                 }
 
                 //else send to SAB
