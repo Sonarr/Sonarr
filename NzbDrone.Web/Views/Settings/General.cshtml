@@ -40,7 +40,7 @@
                 <div id="root-dirs">
         @foreach (var item in Model.Directories)
         {
-            Html.RenderPartial("RootDir", item);
+            Html.RenderAction("GetRootDirView", item);
         }
                 </div>
             </div>
@@ -63,23 +63,21 @@
         return false;
     });
 
-    $("a.deleteRow").live("click", function () {
-        $(this).parents("div.rootDirSection:first").remove();
-        return false;
-    });
+    var deleteRootDirUrl = '@Url.Action("DeleteRootDir", "Settings")';
 
-    $(".defaultCheckbox").live("change", function () {
-        var checked = $(this).attr('checked');
+    function deleteRootDir(id) {
+        sendToServer(id);
+        $("#div_" + id).remove();
+    }
 
-        if (checked) {
-            var thisOne = this;
-            $(".defaultCheckbox").attr('checked', false);
-            $(this).attr('checked', true);
-        }
-
-        //Don't let the user uncheck a checkbox (Like a radio button)
-        else {
-            $(this).attr('checked', true);
-        }
-    });
+    function sendToServer(id) {
+        $.ajax({
+            type: "POST",
+            url: deleteRootDirUrl,
+            data: jQuery.param({ rootDirId: id }),
+            error: function (req, status, error) {
+                alert("Sorry! We could not delete your Root Directory at this time. " + error);
+            }
+        });
+    }
 </script>

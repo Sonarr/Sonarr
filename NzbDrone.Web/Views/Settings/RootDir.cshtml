@@ -16,11 +16,12 @@
 {
     var idClean = ViewData.TemplateInfo.HtmlFieldPrefix.Replace('[', '_').Replace(']', '_');
 
-    <div class="rootDirSection">
+
+    <div class="rootDirSection" id="div_@(ViewData["RootDirId"])">
         <fieldset>
             <div>
                 @Html.TextBoxFor(m => m.Path, new { @class = "root_dir_text" })
-                <a href="#" class="deleteRow">
+                <a href="#" class="deleteRow" onclick="deleteRootDir('@ViewData["RootDirId"]')">
                     <img src="../../Content/Images/X.png" alt="Delete" /></a>
             </div>
             <div>

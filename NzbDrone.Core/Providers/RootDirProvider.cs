@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Core.Repository;
 using SubSonic.Repository;
@@ -21,9 +22,9 @@ namespace NzbDrone.Core.Providers
             return _sonioRepo.All<RootDir>().ToList();
         }
 
-        public virtual void Add(RootDir rootDir)
+        public virtual int Add(RootDir rootDir)
         {
-            _sonioRepo.Add(rootDir);
+            return Convert.ToInt32(_sonioRepo.Add(rootDir));
         }
 
         public virtual void Remove(int rootDirId)

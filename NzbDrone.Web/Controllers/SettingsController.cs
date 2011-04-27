@@ -234,7 +234,36 @@ namespace NzbDrone.Web.Controllers
 
         public ViewResult AddRootDir()
         {
-            return View("RootDir", new RootDir());
+            var rootDir = new RootDir { Path = String.Empty };
+
+            var id = _rootDirProvider.Add(rootDir);
+            rootDir.Id = id;
+
+            ViewData["RootDirId"] = id;
+
+            return View("RootDir", rootDir);
+        }
+
+        public ActionResult GetRootDirView(RootDir rootDir)
+        {
+            ViewData["RootDirId"] = rootDir.Id;
+
+            return PartialView("RootDir", rootDir);
+        }
+
+        public JsonResult DeleteRootDir(int rootDirId)
+        {
+            try
+            {
+                _rootDirProvider.Remove(rootDirId);
+            }
+
+            catch (Exception)
+            {
+                return new JsonResult { Data = "failed" };
+            }
+
+            return new JsonResult { Data = "ok" };
         }
 
         public ActionResult SubMenu()
@@ -292,37 +321,21 @@ namespace NzbDrone.Web.Controllers
         [HttpPost]
         public ActionResult SaveGeneral(SettingsModel data)
         {
-            if (data.Directories != null && data.Directories.Count > 0)
+            try
             {
-                //If the Javascript was beaten we need to return an error
-
-                /*   
-                 * Kay.one: I can't see what its doing, all it does it dooesn't let me s.
-                 * if (!data.Directories.Exists(d => d.Default))
-                         return Content(SETTINGS_FAILED);*/
-
-                var currentRootDirs = _rootDirProvider.GetAll();
-
-                foreach (var currentRootDir in currentRootDirs)
-                {
-                    var closureRootDir = currentRootDir;
-                    if (!data.Directories.Exists(d => d.Id == closureRootDir.Id))
-                        _rootDirProvider.Remove(closureRootDir.Id);
-                }
-
                 foreach (var dir in data.Directories)
                 {
-                    if (dir.Id == 0)
-                        _rootDirProvider.Add(dir);
-
-                    else
-                        _rootDirProvider.Update(dir);
+                    _rootDirProvider.Update(dir);
                 }
-
-                return Content(SETTINGS_SAVED);
+            }
+            catch (Exception ex)
+            {
+                Logger.Debug("Failed to save Root Dirs");
+                Logger.DebugException(ex.Message, ex);
+                return Content(SETTINGS_FAILED);
             }
 
-            return Content(SETTINGS_FAILED);
+            return Content(SETTINGS_SAVED);
         }
 
         [HttpPost]
