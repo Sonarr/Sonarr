@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
@@ -76,7 +77,7 @@ namespace NzbDrone.Core.Providers
 
             series.SeriesId = tvDbSeries.Id;
             series.Title = tvDbSeries.SeriesName;
-            series.AirTimes = tvDbSeries.AirsTime;
+            series.AirTimes = CleanAirsTime(tvDbSeries.AirsTime);
             series.AirsDayOfWeek = tvDbSeries.AirsDayOfWeek;
             series.Overview = tvDbSeries.Overview;
             series.Status = tvDbSeries.Status;
@@ -154,6 +155,30 @@ namespace NzbDrone.Core.Providers
                 return true;
 
             return false;
+        }
+
+        /// <summary>
+        ///   Cleans up the AirsTime Component from TheTVDB since it can be garbage that comes in.
+        /// </summary>
+        /// <param name = "input">The TVDB AirsTime</param>
+        /// <returns>String that contains the AirTimes</returns>
+        private string CleanAirsTime(string inputTime)
+        {
+            Regex timeRegex = new Regex(@"^(?<time>\d+:?\d*)\W*(?<meridiem>am|pm)?", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+            var match = timeRegex.Match(inputTime);
+            var time = match.Groups["time"].Value;
+            var meridiem = match.Groups["meridiem"].Value;
+
+            //Lets assume that a string that doesn't contain a Merideim is aired at night... So we'll add it
+            if (String.IsNullOrEmpty(meridiem))
+                meridiem = "PM";
+
+            if (String.IsNullOrEmpty(time))
+                return String.Empty;
+
+            var dateTime = DateTime.Parse(time + " " + meridiem);
+            return dateTime.ToString("hh:mm tt");
         }
     }
 }

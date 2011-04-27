@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using NzbDrone.Core.Providers;
 using NzbDrone.Web.Models;
@@ -34,7 +35,7 @@ namespace NzbDrone.Web.Controllers
                                                                                      EpisodeNumber = e.EpisodeNumber,
                                                                                      Title = e.Title,
                                                                                      Overview = e.Overview,
-                                                                                     AirDate = e.AirDate
+                                                                                     AirDate = e.AirDate.Add(Convert.ToDateTime(e.Series.AirTimes).TimeOfDay)
                                                                                  });
 
             return View(new GridModel(upcoming));
@@ -51,7 +52,7 @@ namespace NzbDrone.Web.Controllers
                                                                                  EpisodeNumber = e.EpisodeNumber,
                                                                                  Title = e.Title,
                                                                                  Overview = e.Overview,
-                                                                                 AirDate = e.AirDate
+                                                                                 AirDate = e.AirDate.Add(Convert.ToDateTime(e.Series.AirTimes).TimeOfDay)
                                                                              });
 
             return View(new GridModel(upcoming));
@@ -68,7 +69,7 @@ namespace NzbDrone.Web.Controllers
                                                                                 EpisodeNumber = e.EpisodeNumber,
                                                                                 Title = e.Title,
                                                                                 Overview = e.Overview,
-                                                                                AirDate = e.AirDate
+                                                                                AirDate = e.AirDate.Add(Convert.ToDateTime(e.Series.AirTimes).TimeOfDay)
                                                                             });
 
             return View(new GridModel(upcoming));
