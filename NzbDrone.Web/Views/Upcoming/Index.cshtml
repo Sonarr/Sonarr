@@ -66,9 +66,37 @@ Upcoming
                 .Render();}
     </div>
     <br />
+    <div id="tomorrow">
+        <h2>
+            Tomorrow</h2>
+        @{Html.Telerik().Grid<UpcomingEpisodeModel>().Name("Tomorrow").NoRecordsTemplate(
+                "No watched shows airing tomorrow")
+                .TableHtmlAttributes(new { @class = "Grid" })
+                .Columns(columns =>
+                             {
+                                 columns.Bound(c => c.SeriesName)
+                                     .ClientTemplate("<a href=" +
+                                                     Url.Action("Details", "Series", new { seriesId = "<#= SeriesId #>" }) +
+                                                     "><#= SeriesName #></a>")
+                                     .Title("Series Name");
+                                 columns.Bound(c => c.SeasonNumber).Title("Season #").Width(40);
+                                 columns.Bound(c => c.EpisodeNumber).Title("Episode #").Width(40);
+                                 columns.Bound(c => c.Title).Title("Episode Title");
+                                 columns.Bound(c => c.AirDate).Title("Air Date").Width(160);
+                             })
+                .DetailView(detailView => detailView.ClientTemplate(
+                    "<fieldset>" +
+                    "<div><b>Overview: </b><#= Overview #></div>" +
+                    "</fieldset>"
+                                              ))
+                .DataBinding(data => data.Ajax().Select("_AjaxBindingTomorrow", "Upcoming"))
+                .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.AirDate).Ascending()).Enabled(true))
+                .Render();}
+    </div>
+    <br />
     <div id="week">
         <h2>
-            7-Day Forecast</h2>
+            Future Forecast</h2>
         @{Html.Telerik().Grid<UpcomingEpisodeModel>().Name("Week").NoRecordsTemplate(
                 "No watched shows airing in the next week...")
                 .TableHtmlAttributes(new { @class = "Grid" })

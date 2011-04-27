@@ -39,10 +39,15 @@ namespace NzbDrone.Core.Providers
             return _repository.All<Episode>().Where(e => e.AirDate == DateTime.Today).ToList();
         }
 
+        public virtual List<Episode> Tomorrow()
+        {
+            return _repository.All<Episode>().Where(e => e.AirDate == DateTime.Today.AddDays(1)).ToList();
+        }
+
         public virtual List<Episode> Week()
         {
             return
-                _repository.All<Episode>().Where(e => e.AirDate > DateTime.Today && e.AirDate < DateTime.Today.AddDays(8))
+                _repository.All<Episode>().Where(e => e.AirDate > DateTime.Today.AddDays(1) && e.AirDate < DateTime.Today.AddDays(8))
                     .ToList();
         }
     }
