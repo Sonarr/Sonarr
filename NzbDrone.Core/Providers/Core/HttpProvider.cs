@@ -50,6 +50,20 @@ namespace NzbDrone.Core.Providers.Core
             return response.GetResponseStream();
         }
 
-
+        public virtual bool DownloadFile(string address, string fileName)
+        {
+            try
+            {
+                var webClient = new WebClient();
+                webClient.DownloadFile(address, fileName);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logger.Warn("Failed to get response from: {0}", address);
+                Logger.TraceException(ex.Message, ex);
+                return false;
+            }
+        }
     }
 }

@@ -154,14 +154,27 @@ namespace NzbDrone.Core.Providers.Indexer
                 parseResult.EpisodeTitle = episodes[0].Title;
                 var sabTitle = _sabProvider.GetSabTitle(parseResult);
 
-                if (_sabProvider.IsInQueue(sabTitle))
+                if (Convert.ToBoolean(_configProvider.UseBlackhole))
                 {
-                    return;
+                    var blackholeDir = _configProvider.BlackholeDirectory;
+                    var folder = !String.IsNullOrEmpty(blackholeDir) ? blackholeDir : Path.Combine(CentralDispatch.AppPath, "App_Data");
+                    var fileName = Path.Combine(folder, sabTitle + ".nzb");
+                    _logger.Info("Downloading NZB: {0}", sabTitle);
+                    _httpProvider.DownloadFile(NzbDownloadUrl(feedItem), fileName);
                 }
 
-                if (!_sabProvider.AddByUrl(NzbDownloadUrl(feedItem), sabTitle))
+                //else send to SAB
+                else
                 {
-                    return;
+                    if (_sabProvider.IsInQueue(sabTitle))
+                    {
+                        return;
+                    }
+
+                    if (!_sabProvider.AddByUrl(NzbDownloadUrl(feedItem), sabTitle))
+                    {
+                        return;
+                    }
                 }
 
                 foreach (var episode in episodes)
