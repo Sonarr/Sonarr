@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Providers.Indexer
 
         protected override string NzbDownloadUrl(SyndicationItem item)
         {
-            return item.Links[0].ToString();
+            return item.Links[0].Uri.ToString();
         }
     }
 }
