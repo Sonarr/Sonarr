@@ -177,7 +177,7 @@ namespace NzbDrone.Core.Providers
             if (String.IsNullOrEmpty(time))
                 return String.Empty;
 
-            var dateTime = DateTime.Parse(time + " " + meridiem);
+            var dateTime = DateTime.Parse(time + " " + meridiem.ToUpper());
             return dateTime.ToString("hh:mm tt");
         }
     }
