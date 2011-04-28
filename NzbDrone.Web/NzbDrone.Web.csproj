@@ -559,10 +559,17 @@
     <Content Include="Content\ajax-loader.gif" />
     <Content Include="Content\ie.css" />
     <Content Include="Content\Images\arrow.png" />
+    <Content Include="Content\Images\favicon.ico" />
+    <Content Include="Content\Images\icon.jpg" />
     <Content Include="Content\Images\img01.jpg" />
     <Content Include="Content\Images\img02.jpg" />
     <Content Include="Content\Images\img03.jpg" />
     <Content Include="Content\Images\img07.jpg" />
+    <Content Include="Content\Images\Indexers\Newzbin.png" />
+    <Content Include="Content\Images\Indexers\NzbMatrix.png" />
+    <Content Include="Content\Images\Indexers\NzbsOrg.png" />
+    <Content Include="Content\Images\Indexers\NzbsRus.png" />
+    <Content Include="Content\Images\Indexers\Unknown.png" />
     <Content Include="Content\Images\Plus.png" />
     <Content Include="Content\Images\spin.gif" />
     <Content Include="Content\Images\ui-bg_diagonals-small_0_aaaaaa_40x40.png" />

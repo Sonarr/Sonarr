@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
@@ -55,7 +56,7 @@ namespace NzbDrone.Web.Controllers
                                                                           Quality = h.Quality.ToString(),
                                                                           IsProper = h.IsProper,
                                                                           Date = h.Date,
-                                                                          Indexer = h.Indexer.ToString()
+                                                                          Indexer = String.IsNullOrEmpty(h.Indexer.ToString()) ? "Unknown" : h.Indexer.ToString()
                                                                       });
 
             return View(new GridModel(history));
