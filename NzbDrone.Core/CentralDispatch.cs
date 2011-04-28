@@ -132,6 +132,7 @@ namespace NzbDrone.Core
             _kernel.Bind<IJob>().To<RssSyncJob>().InTransientScope();
             _kernel.Bind<IJob>().To<NewSeriesUpdate>().InTransientScope();
             _kernel.Bind<IJob>().To<UpdateInfoJob>().InTransientScope();
+            _kernel.Bind<IJob>().To<MediaFileScanJob>().InTransientScope();
 
             _kernel.Get<JobProvider>().Initialize();
             _kernel.Get<WebTimer>().StartTimer(30);
