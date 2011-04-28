@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.ServiceModel.Syndication;
+using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
 using SubSonic.Repository;
 
@@ -33,6 +34,9 @@ namespace NzbDrone.Core.Providers.Indexer
             return item.Id;
         }
 
-
+        protected override IndexerType GetIndexerType()
+        {
+            return IndexerType.NzbsOrg;
+        }
     }
 }

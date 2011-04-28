@@ -52,5 +52,10 @@ namespace NzbDrone.Core.Providers.Indexer
 
             return currentResult;
         }
+
+        protected override IndexerType GetIndexerType()
+        {
+            return IndexerType.Newzbin;
+        }
     }
 }

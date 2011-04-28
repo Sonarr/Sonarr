@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.ServiceModel.Syndication;
+using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
 using SubSonic.Repository;
 
@@ -35,6 +36,11 @@ namespace NzbDrone.Core.Providers.Indexer
         protected override string NzbDownloadUrl(SyndicationItem item)
         {
             return item.Links[0].Uri.ToString();
+        }
+
+        protected override IndexerType GetIndexerType()
+        {
+            return IndexerType.NzbMatrix;
         }
     }
 }

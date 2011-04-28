@@ -49,7 +49,6 @@ namespace NzbDrone.Core.Providers.Indexer
         /// </summary>
         protected abstract string[] Urls { get; }
 
-
         /// <summary>
         /// Gets the credential.
         /// </summary>
@@ -57,7 +56,6 @@ namespace NzbDrone.Core.Providers.Indexer
         {
             get { return null; }
         }
-
 
         public IndexerSetting Settings
         {
@@ -189,7 +187,8 @@ namespace NzbDrone.Core.Providers.Indexer
                         EpisodeId = episode.EpisodeId,
                         IsProper = parseResult.Proper,
                         NzbTitle = feedItem.Title.Text,
-                        Quality = parseResult.Quality
+                        Quality = parseResult.Quality,
+                        Indexer = GetIndexerType()
                     });
                 }
             }
@@ -245,6 +244,15 @@ namespace NzbDrone.Core.Providers.Indexer
         /// <param name = "item">RSS Feed item to generate the link for</param>
         /// <returns>Download link URL</returns>
         protected abstract string NzbDownloadUrl(SyndicationItem item);
+
+        /// <summary>
+        ///   Gets he IndexerType Enum for this indexer
+        /// </summary>
+        /// <returns>IndexerType Enum</returns>
+        protected virtual IndexerType GetIndexerType()
+        {
+            return IndexerType.Other;
+        }
 
         private bool InHistory(IList<Episode> episodes, EpisodeParseResult parseResult, SyndicationItem feedItem)
         {
