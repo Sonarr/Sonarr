@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
+using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Web.Models;
 using Telerik.Web.Mvc;
@@ -53,10 +54,9 @@ namespace NzbDrone.Web.Controllers
                                                                           NzbTitle = h.NzbTitle,
                                                                           Quality = h.Quality.ToString(),
                                                                           IsProper = h.IsProper,
-                                                                          Date = h.Date
+                                                                          Date = h.Date,
+                                                                          Indexer = h.Indexer.ToString()
                                                                       });
-
-            history.ToList();
 
             return View(new GridModel(history));
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using NzbDrone.Core.Model;
 
 namespace NzbDrone.Web.Models
 {
@@ -14,5 +15,6 @@ namespace NzbDrone.Web.Models
         public string Quality { get; set; }
         public DateTime Date { get; set; }
         public bool IsProper { get; set; }
+        public string Indexer { get; set; }
     }
 }

@@ -7,7 +7,7 @@ namespace NzbDrone.Core.Model
 {
     public enum IndexerType
     {
-        Other = 0,
+        Unknown = 0,
         NzbsOrg = 1,
         NzbMatrix = 2,
         NzbsRus = 3,

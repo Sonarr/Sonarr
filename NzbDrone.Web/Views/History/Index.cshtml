@@ -15,11 +15,15 @@ History
            .TableHtmlAttributes(new { @class = "Grid" })
             .Columns(columns =>
                          {
+                             columns.Bound(c => c.Indexer)
+                                    .ClientTemplate("<center><img alt='<#= Indexer #>' src='" + Url.Content("~/Content/Images/") + "<#= Indexer #>.png' /></center>")
+                                    .Title("")
+                                    .Width(20);
                              columns.Bound(c => c.SeriesTitle).Title("Series Name");
                              columns.Bound(c => c.SeasonNumber).Title("Season").Width(1);
                              columns.Bound(c => c.EpisodeNumber).Title("Episode").Width(1);
                              columns.Bound(c => c.EpisodeTitle).Title("Episode Title");
-                             columns.Bound(c => c.Quality).Title("Quality").Width(10);
+                             columns.Bound(c => c.Quality).Title("Quality").Width(50);
                              columns.Bound(c => c.Date).Title("Grabbed on");
                          })
             .DetailView(detailView => detailView.ClientTemplate(

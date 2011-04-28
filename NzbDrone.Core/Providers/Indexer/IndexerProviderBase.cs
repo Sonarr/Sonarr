@@ -251,7 +251,7 @@ namespace NzbDrone.Core.Providers.Indexer
         /// <returns>IndexerType Enum</returns>
         protected virtual IndexerType GetIndexerType()
         {
-            return IndexerType.Other;
+            return IndexerType.Unknown;
         }
 
         private bool InHistory(IList<Episode> episodes, EpisodeParseResult parseResult, SyndicationItem feedItem)
