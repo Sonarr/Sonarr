@@ -9,6 +9,7 @@ using NLog;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
+using NzbDrone.Core.Providers.ExternalNotification;
 using NzbDrone.Core.Providers.Indexer;
 using NzbDrone.Core.Providers.Jobs;
 using NzbDrone.Core.Repository;
@@ -112,10 +113,9 @@ namespace NzbDrone.Core
 
                 BindIndexers();
                 BindJobs();
+                BindExternalNotifications();
             }
         }
-
-
 
         private static void BindIndexers()
         {
@@ -138,6 +138,12 @@ namespace NzbDrone.Core
             _kernel.Get<WebTimer>().StartTimer(30);
         }
 
+        private static void BindExternalNotifications()
+        {
+            _kernel.Bind<ExternalNotificationProviderBase>().To<XbmcNotificationProvider>().InSingletonScope();
+            var notifiers = _kernel.GetAll<ExternalNotificationProviderBase>();
+            _kernel.Get<ExternalNotificationProvider>().InitializeNotifiers(notifiers.ToList());
+        }
 
         private static void ForceMigration(IRepository repository)
         {
@@ -232,7 +238,5 @@ namespace NzbDrone.Core
                 repository.Update(hd);
             }
         }
-
-
     }
 }

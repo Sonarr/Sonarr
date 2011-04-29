@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.ServiceModel.Syndication;
+using System.Linq;
 using NLog;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
+using NzbDrone.Core.Providers.ExternalNotification;
 using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Providers.Indexer
@@ -22,11 +24,13 @@ namespace NzbDrone.Core.Providers.Indexer
         protected readonly SeasonProvider _seasonProvider;
         protected readonly SeriesProvider _seriesProvider;
         protected readonly SabProvider _sabProvider;
+        protected readonly IEnumerable<ExternalNotificationProviderBase> _externalNotificationProvider;
 
         protected IndexerProviderBase(SeriesProvider seriesProvider, SeasonProvider seasonProvider,
                                 EpisodeProvider episodeProvider, ConfigProvider configProvider,
                                 HttpProvider httpProvider, IndexerProvider indexerProvider,
-                                HistoryProvider historyProvider, SabProvider sabProvider)
+                                HistoryProvider historyProvider, SabProvider sabProvider,
+                                IEnumerable<ExternalNotificationProviderBase> externalNotificationProvider)
         {
             _seriesProvider = seriesProvider;
             _seasonProvider = seasonProvider;
@@ -37,6 +41,7 @@ namespace NzbDrone.Core.Providers.Indexer
             _historyProvider = historyProvider;
             _sabProvider = sabProvider;
             _logger = LogManager.GetLogger(GetType().ToString());
+            _externalNotificationProvider = externalNotificationProvider;
         }
 
         /// <summary>
@@ -190,6 +195,12 @@ namespace NzbDrone.Core.Providers.Indexer
                         Quality = parseResult.Quality,
                         Indexer = GetIndexerType()
                     });
+                }
+
+                //Notify!
+                foreach (var notification in _externalNotificationProvider.Where(n => n.Settings.Enabled))
+                {
+                    notification.OnGrab(sabTitle);
                 }
             }
         }

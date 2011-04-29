@@ -1,98 +1,81 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using NLog;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
+using NzbDrone.Core.Providers.ExternalNotification;
+using NzbDrone.Core.Repository;
+using SubSonic.Repository;
 
 namespace NzbDrone.Core.Providers
 {
     public class ExternalNotificationProvider
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private readonly ConfigProvider _configProvider;
-        private readonly XbmcProvider _xbmcProvider;
+        private readonly IRepository _repository;
 
-        public ExternalNotificationProvider(ConfigProvider configProvider, XbmcProvider xbmcProvider)
+        public ExternalNotificationProvider(IRepository repository)
         {
-            _configProvider = configProvider;
-            _xbmcProvider = xbmcProvider;
+            _repository = repository;
         }
 
-        public virtual void OnGrab(string message)
+        public ExternalNotificationProvider()
         {
-            var header = "NzbDrone [TV] - Grabbed";
 
-            if (Convert.ToBoolean(_configProvider.GetValue("XbmcEnabled", false, true)))
-            {
-                if (Convert.ToBoolean(_configProvider.GetValue("XbmcNotifyOnGrab", false, true)))
-                {
-                    Logger.Trace("Sending Notifcation to XBMC");
-                    _xbmcProvider.Notify(header, message);
-                    return;
-                }
-                Logger.Trace("XBMC NotifyOnGrab is not enabled");
-            }
-
-            Logger.Trace("XBMC Notifier is not enabled");
         }
 
-        public virtual void OnDownload(EpisodeRenameModel erm)
+        public virtual List<ExternalNotificationSetting> All()
         {
-            var header = "NzbDrone [TV] - Downloaded";
-            var message = EpisodeRenameHelper.GetNewName(erm);
-
-            if (Convert.ToBoolean(_configProvider.GetValue("XbmcEnabled", false, true)))
-            {
-                if (Convert.ToBoolean(_configProvider.GetValue("XbmcNotifyOnDownload", false, true)))
-                {
-                    Logger.Trace("Sending Notifcation to XBMC");
-                    _xbmcProvider.Notify(header, message);
-                }
-
-                if (Convert.ToBoolean(_configProvider.GetValue("XbmcUpdateOnDownload", false, true)))
-                {
-                    Logger.Trace("Sending Update Request to XBMC");
-                    _xbmcProvider.Update(erm.EpisodeFile.SeriesId);
-                }
-
-                if (Convert.ToBoolean(_configProvider.GetValue("XbmcCleanOnDownload", false, true)))
-                {
-                    Logger.Trace("Sending Clean DB Request to XBMC");
-                    _xbmcProvider.Clean();
-                }
-            }
-
-            Logger.Trace("XBMC Notifier is not enabled");
-
-
-            throw new NotImplementedException();
+            return _repository.All<ExternalNotificationSetting>().ToList();
         }
 
-        public virtual void OnRename(EpisodeRenameModel erm)
+        public virtual void SaveSettings(ExternalNotificationSetting settings)
         {
-            var header = "NzbDrone [TV] - Renamed";
-            var message = EpisodeRenameHelper.GetNewName(erm);
-
-            if (Convert.ToBoolean(_configProvider.GetValue("XbmcNotifyOnRename", false, true)))
+            if (settings.Id == 0)
             {
-                Logger.Trace("Sending Notifcation to XBMC");
-                _xbmcProvider.Notify(header, message);
+                Logger.Debug("Adding External Notification settings for {0}", settings.Name);
+                _repository.Add(settings);
             }
-
-            if (Convert.ToBoolean(_configProvider.GetValue("XbmcUpdateOnRename", false, true)))
+            else
             {
-                Logger.Trace("Sending Update Request to XBMC");
-                _xbmcProvider.Update(erm.EpisodeFile.SeriesId);
+                Logger.Debug("Updating External Notification settings for {0}", settings.Name);
+                _repository.Update(settings);
             }
+        }
 
-            if (Convert.ToBoolean(_configProvider.GetValue("XbmcCleanOnRename", false, true)))
+        public virtual ExternalNotificationSetting GetSettings(Type type)
+        {
+            return _repository.Single<ExternalNotificationSetting>(s => s.NotifierName == type.ToString());
+        }
+
+        public virtual ExternalNotificationSetting GetSettings(int id)
+        {
+            return _repository.Single<ExternalNotificationSetting>(s => s.Id == id);
+        }
+
+        public virtual void InitializeNotifiers(IList<ExternalNotificationProviderBase> notifiers)
+        {
+            Logger.Info("Initializing notifiers. Count {0}", notifiers.Count);
+
+            var currentNotifiers = All();
+
+            foreach (var feedProvider in notifiers)
             {
-                Logger.Trace("Sending Clean DB Request to XBMC");
-                _xbmcProvider.Clean();
+                ExternalNotificationProviderBase externalNotificationProviderLocal = feedProvider;
+                if (!currentNotifiers.Exists(c => c.NotifierName == externalNotificationProviderLocal.GetType().ToString()))
+                {
+                    var settings = new ExternalNotificationSetting()
+                                       {
+                                           Enabled = false,
+                                           NotifierName = externalNotificationProviderLocal.GetType().ToString(),
+                                           Name = externalNotificationProviderLocal.Name
+                                       };
+
+                    SaveSettings(settings);
+                }
             }
-
-
-            throw new NotImplementedException();
         }
     }
 }

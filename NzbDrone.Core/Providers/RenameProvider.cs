@@ -18,7 +18,6 @@ namespace NzbDrone.Core.Providers
         private readonly ConfigProvider _configProvider;
         private readonly DiskProvider _diskProvider;
         private readonly EpisodeProvider _episodeProvider;
-        private readonly ExternalNotificationProvider _externalNotificationProvider;
         private readonly MediaFileProvider _mediaFileProvider;
         private readonly SeasonProvider _seasonProvider;
         private readonly SeriesProvider _seriesProvider;
@@ -29,8 +28,7 @@ namespace NzbDrone.Core.Providers
 
         public RenameProvider(SeriesProvider seriesProvider, SeasonProvider seasonProvider,
                               EpisodeProvider episodeProvider, MediaFileProvider mediaFileProvider,
-                              DiskProvider diskProvider, ConfigProvider configProvider,
-                              ExternalNotificationProvider extenalNotificationProvider)
+                              DiskProvider diskProvider, ConfigProvider configProvider)
         {
             _seriesProvider = seriesProvider;
             _seasonProvider = seasonProvider;
@@ -38,7 +36,6 @@ namespace NzbDrone.Core.Providers
             _mediaFileProvider = mediaFileProvider;
             _diskProvider = diskProvider;
             _configProvider = configProvider;
-            _externalNotificationProvider = extenalNotificationProvider;
         }
 
         public virtual void RenameAll()
@@ -201,11 +198,7 @@ namespace NzbDrone.Core.Providers
                 erm.EpisodeFile.Path = newFilename;
                 _mediaFileProvider.Update(erm.EpisodeFile);
 
-                if (erm.NewDownload)
-                    _externalNotificationProvider.OnDownload(erm);
-
-                else
-                    _externalNotificationProvider.OnRename(erm);
+                throw new NotImplementedException("Rename File");
             }
             catch (Exception ex)
             {

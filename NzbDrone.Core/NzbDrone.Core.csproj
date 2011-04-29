@@ -166,8 +166,11 @@
     <Compile Include="Instrumentation\SubsonicTarget.cs" />
     <Compile Include="Instrumentation\ExceptioneerTarget.cs" />
     <Compile Include="Instrumentation\NlogWriter.cs" />
+    <Compile Include="Model\ExternalNotificationType.cs" />
     <Compile Include="Model\IndexerType.cs" />
     <Compile Include="Model\SabnzbdInfoModel.cs" />
+    <Compile Include="Providers\ExternalNotification\ExternalNotificationProviderBase.cs" />
+    <Compile Include="Providers\ExternalNotification\XbmcNotificationProvider.cs" />
     <Compile Include="Providers\Indexer\SyndicationFeedXmlReader.cs" />
     <Compile Include="Providers\AutoConfigureProvider.cs" />
     <Compile Include="Providers\Indexer\NzbMatrixProvider.cs" />
@@ -180,6 +183,7 @@
     <Compile Include="Providers\Jobs\RssSyncJob.cs" />
     <Compile Include="Providers\Jobs\UpdateInfoJob.cs" />
     <Compile Include="Providers\StatsProvider.cs" />
+    <Compile Include="Repository\ExternalNotificationSetting.cs" />
     <Compile Include="Repository\JobSetting.cs" />
     <Compile Include="Repository\IndexerSetting.cs" />
     <Compile Include="Model\EpisodeParseResult.cs" />
@@ -259,6 +263,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -10,6 +10,7 @@ using MbUnit.Framework;
 using Moq;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
+using NzbDrone.Core.Providers.ExternalNotification;
 using NzbDrone.Core.Providers.Indexer;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
@@ -151,8 +152,13 @@ namespace NzbDrone.Core.Test
 
     public class MockIndexerProvider : IndexerProviderBase
     {
-        public MockIndexerProvider(SeriesProvider seriesProvider, SeasonProvider seasonProvider, EpisodeProvider episodeProvider, ConfigProvider configProvider, HttpProvider httpProvider, IndexerProvider indexerProvider, HistoryProvider historyProvider, SabProvider sabProvider)
-            : base(seriesProvider, seasonProvider, episodeProvider, configProvider, httpProvider, indexerProvider, historyProvider, sabProvider)
+        public MockIndexerProvider(SeriesProvider seriesProvider, SeasonProvider seasonProvider,
+            EpisodeProvider episodeProvider, ConfigProvider configProvider,
+            HttpProvider httpProvider, IndexerProvider indexerProvider,
+            HistoryProvider historyProvider, SabProvider sabProvider, IEnumerable<ExternalNotificationProviderBase> externalNotificationProvider)
+            : base(seriesProvider, seasonProvider, episodeProvider,
+            configProvider, httpProvider, indexerProvider, historyProvider,
+            sabProvider, externalNotificationProvider)
         {
         }
 
@@ -180,8 +186,13 @@ namespace NzbDrone.Core.Test
 
     public class TestUrlIndexer : IndexerProviderBase
     {
-        public TestUrlIndexer(SeriesProvider seriesProvider, SeasonProvider seasonProvider, EpisodeProvider episodeProvider, ConfigProvider configProvider, HttpProvider httpProvider, IndexerProvider indexerProvider, HistoryProvider historyProvider, SabProvider sabProvider)
-            : base(seriesProvider, seasonProvider, episodeProvider, configProvider, httpProvider, indexerProvider, historyProvider, sabProvider)
+        public TestUrlIndexer(SeriesProvider seriesProvider, SeasonProvider seasonProvider,
+            EpisodeProvider episodeProvider, ConfigProvider configProvider,
+            HttpProvider httpProvider, IndexerProvider indexerProvider,
+            HistoryProvider historyProvider, SabProvider sabProvider, IEnumerable<ExternalNotificationProviderBase> externalNotificationProvider)
+            : base(seriesProvider, seasonProvider, episodeProvider,
+            configProvider, httpProvider, indexerProvider, historyProvider,
+            sabProvider, externalNotificationProvider)
         {
         }
 
@@ -203,8 +214,13 @@ namespace NzbDrone.Core.Test
 
     public class CustomParserIndexer : IndexerProviderBase
     {
-        public CustomParserIndexer(SeriesProvider seriesProvider, SeasonProvider seasonProvider, EpisodeProvider episodeProvider, ConfigProvider configProvider, HttpProvider httpProvider, IndexerProvider indexerProvider, HistoryProvider historyProvider, SabProvider sabProvider)
-            : base(seriesProvider, seasonProvider, episodeProvider, configProvider, httpProvider, indexerProvider, historyProvider, sabProvider)
+        public CustomParserIndexer(SeriesProvider seriesProvider, SeasonProvider seasonProvider,
+            EpisodeProvider episodeProvider, ConfigProvider configProvider,
+            HttpProvider httpProvider, IndexerProvider indexerProvider,
+            HistoryProvider historyProvider, SabProvider sabProvider, IEnumerable<ExternalNotificationProviderBase> externalNotificationProvider)
+            : base(seriesProvider, seasonProvider, episodeProvider,
+            configProvider, httpProvider, indexerProvider, historyProvider,
+            sabProvider, externalNotificationProvider)
         {
         }
 
