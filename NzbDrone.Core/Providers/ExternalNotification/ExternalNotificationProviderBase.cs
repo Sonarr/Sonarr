@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Providers.ExternalNotification
         protected readonly ConfigProvider _configProvider;
         protected readonly ExternalNotificationProvider _externalNotificationProvider;
 
-        public ExternalNotificationProviderBase(ConfigProvider configProvider, ExternalNotificationProvider externalNotificationProvider)
+        protected ExternalNotificationProviderBase(ConfigProvider configProvider, ExternalNotificationProvider externalNotificationProvider)
         {
             _configProvider = configProvider;
             _externalNotificationProvider = externalNotificationProvider;

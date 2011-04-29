@@ -40,8 +40,8 @@ namespace NzbDrone.Core.Providers.Indexer
             _indexerProvider = indexerProvider;
             _historyProvider = historyProvider;
             _sabProvider = sabProvider;
-            _logger = LogManager.GetLogger(GetType().ToString());
             _externalNotificationProvider = externalNotificationProvider;
+            _logger = LogManager.GetLogger(GetType().ToString());
         }
 
         /// <summary>
