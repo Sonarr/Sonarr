@@ -82,7 +82,11 @@ namespace NzbDrone.Core.Providers
 
                 if (!_repository.Exists<EpisodeFile>(e => e.Path == Parser.NormalizePath(filePath)))
                 {
-                    var parseResult = Parser.ParseEpisodeInfo(filePath);
+                    //Use only the filename, not the entire path
+                    var parseResult = Parser.ParseEpisodeInfo(new FileInfo(filePath).Name);
+
+                    if (parseResult == null)
+                        return null;
 
                     //Stores the list of episodes to add to the EpisodeFile
                     var episodes = new List<Episode>();
@@ -169,7 +173,6 @@ namespace NzbDrone.Core.Providers
                 }
             }
         }
-
 
         public void DeleteFromDb(int fileId)
         {
