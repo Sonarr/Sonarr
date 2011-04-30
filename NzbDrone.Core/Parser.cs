@@ -26,14 +26,6 @@ namespace NzbDrone.Core
                                         RegexOptions.IgnoreCase | RegexOptions.Compiled) //Supports Season only releases
                                 };
 
-        private static readonly Regex[] SeasonReportTitleRegex = new[]
-                                                                     {
-                                                                         new Regex(
-                                                                             @"(?<title>.+?)?\W?(?<year>\d{4}?)?\W(?:S|Season)?\W?(?<season>\d+)(?!\\)",
-                                                                             RegexOptions.IgnoreCase |
-                                                                             RegexOptions.Compiled),
-                                                                     };
-
         private static readonly Regex NormalizeRegex = new Regex(@"((^|\W)(a|an|the|and|or|of)($|\W))|\W|\b(?!(?:19\d{2}|20\d{2}))\d+\b",
                                                                  RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
@@ -50,7 +42,8 @@ namespace NzbDrone.Core
             {
                 var simpleTitle = Regex.Replace(title, @"480[i|p]|720[i|p]|1080[i|p]|[x|h]264", String.Empty, RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-                var match = regex.Matches(simpleTitle);
+                //Use only the filename, not the entire path
+                var match = regex.Matches(new FileInfo(simpleTitle).Name);
 
                 if (match.Count != 0)
                 {
@@ -250,6 +243,7 @@ namespace NzbDrone.Core
                     case ".avi":
                     case ".xvid":
                     case ".wmv":
+                    case ".mp4":
                         {
                             result = QualityTypes.TV;
                             break;

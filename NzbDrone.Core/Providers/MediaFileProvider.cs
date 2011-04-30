@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Providers
     public class MediaFileProvider
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private static readonly string[] MediaExtentions = new[] { "*.mkv", "*.avi", "*.wmv" };
+        private static readonly string[] MediaExtentions = new[] { "*.mkv", "*.avi", "*.wmv", "*.mp4" };
         private readonly DiskProvider _diskProvider;
         private readonly EpisodeProvider _episodeProvider;
         private readonly IRepository _repository;
@@ -82,8 +82,7 @@ namespace NzbDrone.Core.Providers
 
                 if (!_repository.Exists<EpisodeFile>(e => e.Path == Parser.NormalizePath(filePath)))
                 {
-                    //Use only the filename, not the entire path
-                    var parseResult = Parser.ParseEpisodeInfo(new FileInfo(filePath).Name);
+                    var parseResult = Parser.ParseEpisodeInfo(filePath);
 
                     if (parseResult == null)
                         return null;
