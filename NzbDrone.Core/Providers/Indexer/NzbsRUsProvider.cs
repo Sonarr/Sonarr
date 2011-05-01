@@ -33,11 +33,15 @@ namespace NzbDrone.Core.Providers.Indexer
                            };
             }
         }
-
-
+        
         public override string Name
         {
             get { return "NzbsRUs"; }
+        }
+
+        public override bool SupportsBacklog
+        {
+            get { return false; }
         }
 
         protected override string NzbDownloadUrl(SyndicationItem item)

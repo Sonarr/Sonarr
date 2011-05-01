@@ -36,6 +36,11 @@ namespace NzbDrone.Core.Providers.Indexer
             get { return "Nzbs.org"; }
         }
 
+        public override bool SupportsBacklog
+        {
+            get { return false; }
+        }
+
         protected override string NzbDownloadUrl(SyndicationItem item)
         {
             return item.Id;

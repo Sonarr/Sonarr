@@ -43,6 +43,10 @@ namespace NzbDrone.Core.Providers.Indexer
             get { return "Newzbin"; }
         }
 
+        public override bool SupportsBacklog
+        {
+            get { return false; }
+        }
 
         protected override string NzbDownloadUrl(SyndicationItem item)
         {

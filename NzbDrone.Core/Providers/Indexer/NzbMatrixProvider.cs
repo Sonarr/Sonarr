@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Providers.Indexer
                 return new[]
                            {
                                string.Format(
-                                   "http://rss.nzbmatrix.com/rss.php?page=download&username={0}&apikey={1}&subcat=6,41&english=1&scenename=1",
+                                   "http://rss.nzbmatrix.com/rss.php?page=download&username={0}&apikey={1}&subcat=6,41&english=1&scenename=1&num=50",
                                    _configProvider.NzbMatrixUsername,
                                    _configProvider.NzbMatrixApiKey)
                            };
@@ -38,6 +38,11 @@ namespace NzbDrone.Core.Providers.Indexer
         public override string Name
         {
             get { return "NzbMatrix"; }
+        }
+
+        public override bool SupportsBacklog
+        {
+            get { return true; }
         }
 
         protected override string NzbDownloadUrl(SyndicationItem item)

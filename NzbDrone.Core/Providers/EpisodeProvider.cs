@@ -67,6 +67,13 @@ namespace NzbDrone.Core.Providers
 
         }
 
+        public virtual IList<Episode> EpisodesWithoutFiles(bool includeSpecials)
+        {
+            if (includeSpecials)
+                return _repository.All<Episode>().Where(e => e.EpisodeFileId == 0 && e.AirDate <= DateTime.Today).ToList();
+
+            return _repository.All<Episode>().Where(e => e.EpisodeFileId == 0 && e.AirDate <= DateTime.Today && e.SeasonNumber > 0).ToList();
+        }
 
         /// <summary>
         ///   Comprehensive check on whether or not this episode is needed.
@@ -87,6 +94,7 @@ namespace NzbDrone.Core.Providers
                     //Todo: How do we want to handle this really? Episode could be released before information is on TheTvDB 
                     //(Parks and Rec did this a lot in the first season, from experience)
                     //Keivan: Should automatically add the episode to db with minimal information. then update the description/title when available.
+                    //Mark: Perhaps we should only add the epsiode if its the latest season, sometimes people name things completely wrong (duh!)
                     episodeInfo = new Episode
                                       {
                                           SeriesId = parsedReport.SeriesId,

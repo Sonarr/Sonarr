@@ -40,6 +40,8 @@ namespace NzbDrone.Core.Providers.Indexer
             _indexerProvider = indexerProvider;
             _historyProvider = historyProvider;
             _sabProvider = sabProvider;
+
+            //Todo: IEnumerable yields no results for some reason, yet yields results in other classes
             _externalNotificationProvider = externalNotificationProvider;
             _logger = LogManager.GetLogger(GetType().ToString());
         }
@@ -48,6 +50,11 @@ namespace NzbDrone.Core.Providers.Indexer
         ///   Gets the name for the feed
         /// </summary>
         public abstract string Name { get; }
+
+        /// <summary>
+        ///   Gets a bool to determine if Backlog Searching is Supported
+        /// </summary>
+        public abstract bool SupportsBacklog { get; }
 
         /// <summary>
         ///   Gets the source URL for the feed

@@ -177,6 +177,10 @@ namespace NzbDrone.Core.Test
             get { return "Mocked Indexer"; }
         }
 
+        public override bool SupportsBacklog
+        {
+            get { return false; }
+        }
 
         protected override string NzbDownloadUrl(SyndicationItem item)
         {
@@ -199,6 +203,11 @@ namespace NzbDrone.Core.Test
         public override string Name
         {
             get { return "All Urls"; }
+        }
+
+        public override bool SupportsBacklog
+        {
+            get { return false; }
         }
 
         protected override string[] Urls
@@ -227,6 +236,11 @@ namespace NzbDrone.Core.Test
         public override string Name
         {
             get { return "Custom parser"; }
+        }
+
+        public override bool SupportsBacklog
+        {
+            get { return false; }
         }
 
         protected override string[] Urls
