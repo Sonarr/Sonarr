@@ -215,6 +215,7 @@
     <Compile Include="Controllers\HistoryController.cs" />
     <Compile Include="Controllers\LogController.cs" />
     <Compile Include="Controllers\AddSeriesController.cs" />
+    <Compile Include="Controllers\MissingController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\SeriesController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
@@ -236,6 +237,7 @@
     <Compile Include="Models\IndexerSettingsModel.cs" />
     <Compile Include="Models\MappingModel.cs" />
     <Compile Include="Models\EpisodeModel.cs" />
+    <Compile Include="Models\MissingEpisodeModel.cs" />
     <Compile Include="Models\NotificationSettingsModel.cs" />
     <Compile Include="Models\QualityModel.cs" />
     <Compile Include="Models\SeriesSearchResultModel.cs" />
@@ -829,6 +831,9 @@
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>EditorLocalization.bg-BG.designer.cs</LastGenOutput>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Missing\Index.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
