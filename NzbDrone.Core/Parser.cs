@@ -16,6 +16,8 @@ namespace NzbDrone.Core
                                 {
                                     new Regex(@"^(?<title>.+?)?\W*(?<airyear>\d{4})\W+(?<airmonth>\d{2})\W+(?<airday>\d{2})\W?(?!\\)",
                                         RegexOptions.IgnoreCase | RegexOptions.Compiled),
+                                    new Regex(@"^(?<title>.+?)(?:\WS?(?<season>\d{1,2}(?!\d+))(?:(?:\-|\.|[ex]|\s|\sto\s){1,2}(?<episode>\d{1,2}(?!\d+)))+)+\W?(?!\\)",
+			                            RegexOptions.IgnoreCase | RegexOptions.Compiled),
                                     new Regex(@"^(?<title>.*?)?(?:\W?S?(?<season>\d{1,2}(?!\d+))(?:(?:\-|\.|[ex]|\s|\sto\s){1,2}(?<episode>\d{1,2}(?!\d+)))+)+\W?(?!\\)",
                                         RegexOptions.IgnoreCase | RegexOptions.Compiled),
                                     new Regex(@"^(?<title>.+?)?\W?(?:\W(?<season>\d+)(?<episode>\d{2}))+\W?(?!\\)",
@@ -40,7 +42,7 @@ namespace NzbDrone.Core
 
             foreach (var regex in ReportTitleRegex)
             {
-                var simpleTitle = Regex.Replace(title, @"480[i|p]|720[i|p]|1080[i|p]|[x|h]264", String.Empty, RegexOptions.IgnoreCase | RegexOptions.Compiled);
+                var simpleTitle = Regex.Replace(title, @"480[i|p]|720[i|p]|1080[i|p]|[x|h]264|\\|\/|\<|\>|\?|\*|\:|\|", String.Empty, RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
                 //Use only the filename, not the entire path
                 var match = regex.Matches(new FileInfo(simpleTitle).Name);

@@ -36,6 +36,7 @@ namespace NzbDrone.Core.Test
         //[Row(@"Season 4\07 WS PDTV XviD FUtV", "", 4, 7)]
         [Row("The.Office.S03E115.DVDRip.XviD-OSiTV", "The.Office", 3, 115)]
         [Row(@"Parks and Recreation - S02E21 - 94 Meetings - 720p TV.mkv", "Parks and Recreation", 2, 21)]
+        [Row(@"24-7 Penguins-Capitals- Road to the NHL Winter Classic - S01E03 - Episode 3.mkv", "24-7 Penguins-Capitals- Road to the NHL Winter Classic", 1, 3)]
         public void episode_parse(string postTitle, string title, int season, int episode)
         {
             var result = Parser.ParseEpisodeInfo(postTitle);
