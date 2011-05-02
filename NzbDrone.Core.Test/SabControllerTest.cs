@@ -25,26 +25,26 @@ namespace NzbDrone.Core.Test
             string apikey = "5c770e3197e4fe763423ee7c392c25d1";
             string username = "admin";
             string password = "pass";
-            string priority = "0";
+            string priority = "Normal";
             string category = "tv";
 
 
             var mocker = new AutoMoqer();
 
             var fakeConfig = mocker.GetMock<ConfigProvider>();
-            fakeConfig.Setup(c => c.GetValue("SabHost", String.Empty, false))
+            fakeConfig.Setup(c => c.SabHost)
                 .Returns(sabHost);
-            fakeConfig.Setup(c => c.GetValue("SabPort", String.Empty, false))
+            fakeConfig.Setup(c => c.SabPort)
                 .Returns(sabPort);
-            fakeConfig.Setup(c => c.GetValue("SabApiKey", String.Empty, false))
+            fakeConfig.Setup(c => c.SabApiKey)
                 .Returns(apikey);
-            fakeConfig.Setup(c => c.GetValue("SabUsername", String.Empty, false))
+            fakeConfig.Setup(c => c.SabUsername)
                 .Returns(username);
-            fakeConfig.Setup(c => c.GetValue("SabPassword", String.Empty, false))
+            fakeConfig.Setup(c => c.SabPassword)
                 .Returns(password);
-            fakeConfig.Setup(c => c.GetValue("SabTvPriority", String.Empty, false))
+            fakeConfig.Setup(c => c.SabTvPriority)
                 .Returns(priority);
-            fakeConfig.Setup(c => c.GetValue("SabTvCategory", String.Empty, true))
+            fakeConfig.Setup(c => c.SabTvCategory)
                 .Returns(category);
 
             mocker.GetMock<HttpProvider>()
@@ -71,19 +71,26 @@ namespace NzbDrone.Core.Test
             string apikey = "5c770e3197e4fe763423ee7c392c25d1";
             string username = "admin";
             string password = "pass";
-            string priority = "0";
+            string priority = "Normal";
             string category = "tv";
 
             var mocker = new AutoMoqer();
 
             var fakeConfig = mocker.GetMock<ConfigProvider>();
-            fakeConfig.Setup(c => c.GetValue("SabHost", String.Empty, false)).Returns(sabHost);
-            fakeConfig.Setup(c => c.GetValue("SabPort", String.Empty, false)).Returns(sabPort);
-            fakeConfig.Setup(c => c.GetValue("SabApiKey", String.Empty, false)).Returns(apikey);
-            fakeConfig.Setup(c => c.GetValue("SabUsername", String.Empty, false)).Returns(username);
-            fakeConfig.Setup(c => c.GetValue("SabPassword", String.Empty, false)).Returns(password);
-            fakeConfig.Setup(c => c.GetValue("SabTvPriority", String.Empty, false)).Returns(priority);
-            fakeConfig.Setup(c => c.GetValue("SabTvCategory", String.Empty, true)).Returns(category);
+            fakeConfig.Setup(c => c.SabHost)
+                .Returns(sabHost);
+            fakeConfig.Setup(c => c.SabPort)
+                .Returns(sabPort);
+            fakeConfig.Setup(c => c.SabApiKey)
+                .Returns(apikey);
+            fakeConfig.Setup(c => c.SabUsername)
+                .Returns(username);
+            fakeConfig.Setup(c => c.SabPassword)
+                .Returns(password);
+            fakeConfig.Setup(c => c.SabTvPriority)
+                .Returns(priority);
+            fakeConfig.Setup(c => c.SabTvCategory)
+                .Returns(category);
 
             mocker.GetMock<HttpProvider>()
                 .Setup(

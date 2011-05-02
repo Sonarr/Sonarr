@@ -30,8 +30,7 @@ namespace NzbDrone.Core.Providers
         {
             const string mode = "addurl";
             string cat = _configProvider.SabTvCategory;
-            //string cat = "tv";
-            string priority = _configProvider.SabTvPriority;
+            int priority = (int)Enum.Parse(typeof(SabnzbdPriorityType), _configProvider.SabTvPriority);
             string name = url.Replace("&", "%26");
             string nzbName = HttpUtility.UrlEncode(title);
 
@@ -84,9 +83,8 @@ namespace NzbDrone.Core.Providers
             //mode=addid&name=333333&pp=3&script=customscript.cmd&cat=Example&priority=-1
 
             const string mode = "addid";
-            string cat = _configProvider.GetValue("SabTvCategory", String.Empty, true);
-            //string cat = "tv";
-            string priority = _configProvider.GetValue("SabTvPriority", String.Empty, false);
+            string cat = _configProvider.SabTvCategory;
+            int priority = (int)Enum.Parse(typeof(SabnzbdPriorityType), _configProvider.SabTvPriority);
             string nzbName = HttpUtility.UrlEncode(title);
 
             string action = string.Format("mode={0}&name={1}&priority={2}&cat={3}&nzbname={4}", mode, id, priority, cat,
@@ -106,11 +104,11 @@ namespace NzbDrone.Core.Providers
 
         private string GetSabRequest(string action)
         {
-            string sabnzbdInfo = _configProvider.GetValue("SabHost", String.Empty, false) + ":" +
-                                 _configProvider.GetValue("SabPort", String.Empty, false);
-            string username = _configProvider.GetValue("SabUsername", String.Empty, false);
-            string password = _configProvider.GetValue("SabPassword", String.Empty, false);
-            string apiKey = _configProvider.GetValue("SabApiKey", String.Empty, false);
+            string sabnzbdInfo = _configProvider.SabHost + ":" +
+                                 _configProvider.SabPort;
+            string username = _configProvider.SabUsername;
+            string password = _configProvider.SabPassword;
+            string apiKey = _configProvider.SabApiKey;
 
             return
                 string.Format(@"http://{0}/api?$Action&apikey={1}&ma_username={2}&ma_password={3}", sabnzbdInfo, apiKey,
