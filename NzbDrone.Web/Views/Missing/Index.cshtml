@@ -1,16 +1,22 @@
 ﻿@model List<MissingEpisodeModel>
 @using NzbDrone.Web.Models;
 
+@section TitleContent{
+Missing
+}
+
 @section MainContent{
     @{Html.Telerik().Grid<MissingEpisodeModel>().Name("missing")
            .TableHtmlAttributes(new { @class = "Grid" })
             .Columns(columns =>
                          {
                              columns.Bound(c => c.SeriesTitle).Title("Series Name");
-                             columns.Bound(c => c.SeasonNumber).Title("Season").Width(1);
-                             columns.Bound(c => c.EpisodeNumber).Title("Episode").Width(1);
+                             columns.Bound(c => c.SeasonNumber).Title("Season").Width(40);
+                             columns.Bound(c => c.EpisodeNumber).Title("Episode").Width(40);
                              columns.Bound(c => c.EpisodeTitle).Title("Episode Title");
-                             columns.Bound(c => c.AirDate).Title("Air Date").Width(50);
+                             columns.Bound(c => c.AirDate).Format("{0:d}")
+                                 .Title("Air Date")
+                                 .Width(80);
                          })
             .DetailView(detailView => detailView.ClientTemplate(
                 "<fieldset>" +
@@ -19,10 +25,12 @@
                                           ))
             .DataBinding(data => data.Ajax().Select("_AjaxBinding", "Missing"))
             .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.AirDate).Descending()).Enabled(true))
+            .Filterable(filtering => filtering
+            .Filters(filters => filters
+                .Add(o => o.SeasonNumber).IsGreaterThan(0)))
+
             .Pageable(
                 c =>
                 c.PageSize(20).Position(GridPagerPosition.Bottom).Style(GridPagerStyles.NextPrevious))
-          //.Filterable()
-          //.ClientEvents(c => c.OnRowDataBound("onRowDataBound"))
             .Render();}
 }
