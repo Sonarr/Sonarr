@@ -135,8 +135,6 @@ namespace NzbDrone.Core.Test
 
             //Constants
             const string fileName = @"WEEDS.S03E01.DUAL.BDRip.XviD.AC3.-HELLYWOOD.avi";
-            const int seasonNumber = 3;
-            const int episodeNumner = 1;
             const int size = 12345;
 
             //Fakes

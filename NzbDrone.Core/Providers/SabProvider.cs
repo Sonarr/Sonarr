@@ -42,10 +42,12 @@ namespace NzbDrone.Core.Providers
             Logger.Info("Adding report [{0}] to the queue.", title);
 
             string response = _httpProvider.DownloadString(request).Replace("\n", String.Empty);
-            Logger.Debug("Queue Repsonse: [{0}]", response);
+            Logger.Debug("Queue Response: [{0}]", response);
 
             if (response == "ok")
                 return true;
+
+            Logger.Warn("SAB returned unexpected response '{0}'", response);
 
             return false;
         }

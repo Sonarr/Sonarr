@@ -180,6 +180,7 @@ namespace NzbDrone.Core.Providers.Indexer
 
                     if (!_sabProvider.AddByUrl(NzbDownloadUrl(feedItem), sabTitle))
                     {
+                        _logger.Warn("Unable to add item to SAB queue. {0} {1}", NzbDownloadUrl(feedItem), sabTitle);
                         return;
                     }
                 }
