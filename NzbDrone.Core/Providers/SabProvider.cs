@@ -28,15 +28,13 @@ namespace NzbDrone.Core.Providers
 
         public virtual bool AddByUrl(string url, string title)
         {
-            const string mode = "addurl";
             string cat = _configProvider.SabTvCategory;
-            //string cat = "tv";
             string priority = _configProvider.SabTvPriority;
             string name = url.Replace("&", "%26");
             string nzbName = HttpUtility.UrlEncode(title);
 
-            string action = string.Format("mode={0}&name={1}&priority={2}&cat={3}&nzbname={4}", mode, name, priority,
-                                          cat, nzbName);
+            string action = string.Format("mode=addurl&name={0}&priority={1}&cat={2}&nzbname={3}",
+                name, priority, cat, nzbName);
             string request = GetSabRequest(action);
 
             Logger.Info("Adding report [{0}] to the queue.", title);
@@ -62,11 +60,13 @@ namespace NzbDrone.Core.Providers
 
             //If an Error Occurred, return)
             if (xDoc.Descendants("error").Count() != 0)
-                return false;
+                throw new ApplicationException(xDoc.Descendants("error").FirstOrDefault().Value);
 
             if (xDoc.Descendants("queue").Count() == 0)
+            {
+                Logger.Debug("SAB Queue is empty. retiring false");
                 return false;
-
+            }
             //Get the Count of Items in Queue where 'filename' is Equal to goodName, if not zero, return true (isInQueue)))
             if (
                 (xDoc.Descendants("slot").Where(
@@ -81,42 +81,15 @@ namespace NzbDrone.Core.Providers
             return false; //Not in Queue
         }
 
-        public virtual bool AddById(string id, string title)
-        {
-            //mode=addid&name=333333&pp=3&script=customscript.cmd&cat=Example&priority=-1
-
-            const string mode = "addid";
-            string cat = _configProvider.GetValue("SabTvCategory", String.Empty, true);
-            //string cat = "tv";
-            string priority = _configProvider.GetValue("SabTvPriority", String.Empty, false);
-            string nzbName = HttpUtility.UrlEncode(title);
-
-            string action = string.Format("mode={0}&name={1}&priority={2}&cat={3}&nzbname={4}", mode, id, priority, cat,
-                                          nzbName);
-            string request = GetSabRequest(action);
-
-            Logger.Debug("Adding report [{0}] to the queue.", nzbName);
-
-            string response = _httpProvider.DownloadString(request).Replace("\n", String.Empty);
-            Logger.Debug("Queue Repsonse: [{0}]", response);
-
-            if (response == "ok")
-                return true;
-
-            return false;
-        }
-
         private string GetSabRequest(string action)
         {
-            string sabnzbdInfo = _configProvider.GetValue("SabHost", String.Empty, false) + ":" +
-                                 _configProvider.GetValue("SabPort", String.Empty, false);
-            string username = _configProvider.GetValue("SabUsername", String.Empty, false);
-            string password = _configProvider.GetValue("SabPassword", String.Empty, false);
-            string apiKey = _configProvider.GetValue("SabApiKey", String.Empty, false);
-
-            return
-                string.Format(@"http://{0}/api?$Action&apikey={1}&ma_username={2}&ma_password={3}", sabnzbdInfo, apiKey,
-                              username, password).Replace("$Action", action);
+            return string.Format(@"http://{0}:{1}/api?{2}&apikey={3}&ma_username={4}&ma_password={5}",
+                                 _configProvider.SabHost,
+                                 _configProvider.SabPort,
+                                 action,
+                                 _configProvider.SabApiKey,
+                                 _configProvider.SabUsername,
+                                 _configProvider.SabPassword);
         }
 
         public String GetSabTitle(EpisodeParseResult parseResult)
