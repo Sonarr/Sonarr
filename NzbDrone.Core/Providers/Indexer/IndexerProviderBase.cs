@@ -157,7 +157,7 @@ namespace NzbDrone.Core.Providers.Indexer
                 parseResult.EpisodeTitle = episodes[0].Title;
                 var sabTitle = _sabProvider.GetSabTitle(parseResult);
 
-                if (Convert.ToBoolean(_configProvider.UseBlackhole))
+                if (_configProvider.UseBlackhole)
                 {
                     var blackholeDir = _configProvider.BlackholeDirectory;
                     var folder = !String.IsNullOrEmpty(blackholeDir) ? blackholeDir : Path.Combine(CentralDispatch.AppPath, "App_Data");

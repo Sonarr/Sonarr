@@ -392,7 +392,7 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.SabTvCategory = data.SabTvCategory;
                 _configProvider.SabUsername = data.SabUsername;
                 _configProvider.SabTvPriority = data.SabTvPriority.ToString();
-                _configProvider.UseBlackhole = data.UseBlackHole.ToString();
+                _configProvider.UseBlackhole = data.UseBlackHole;
                 _configProvider.BlackholeDirectory = data.BlackholeDirectory;
 
                 return Content(SETTINGS_SAVED);

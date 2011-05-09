@@ -173,9 +173,9 @@ namespace NzbDrone.Core.Providers.Core
             set { SetValue("SabTvPriority", value); }
         }
 
-        public virtual String UseBlackhole
+        public virtual Boolean UseBlackhole
         {
-            get { return GetValue("UseBlackhole"); }
+            get { return GetValueBoolean("UseBlackhole"); }
 
             set { SetValue("UseBlackhole", value); }
         }
