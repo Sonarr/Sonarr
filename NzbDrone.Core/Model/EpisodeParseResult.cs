@@ -22,6 +22,8 @@ namespace NzbDrone.Core.Model
 
         public QualityTypes Quality { get; set; }
 
+        public LanguageType Language { get; set; }
+
         public override string ToString()
         {
             if (Episodes == null)

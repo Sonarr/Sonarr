@@ -29,7 +29,11 @@ namespace NzbDrone.Core.Providers
         public virtual bool AddByUrl(string url, string title)
         {
             string cat = _configProvider.SabTvCategory;
+<<<<<<< HEAD
             int priority = (int)Enum.Parse(typeof(SabnzbdPriorityType), _configProvider.SabTvPriority);
+=======
+            string priority = _configProvider.SabTvPriority;
+>>>>>>> cb4d0e245018bf547d1d8295a7271c21f26366f8
             string name = url.Replace("&", "%26");
             string nzbName = HttpUtility.UrlEncode(title);
 
@@ -81,6 +85,43 @@ namespace NzbDrone.Core.Providers
             return false; //Not in Queue
         }
 
+<<<<<<< HEAD
+        public virtual bool AddById(string id, string title)
+        {
+            //mode=addid&name=333333&pp=3&script=customscript.cmd&cat=Example&priority=-1
+
+            const string mode = "addid";
+            string cat = _configProvider.SabTvCategory;
+            int priority = (int)Enum.Parse(typeof(SabnzbdPriorityType), _configProvider.SabTvPriority);
+            string nzbName = HttpUtility.UrlEncode(title);
+
+            string action = string.Format("mode={0}&name={1}&priority={2}&cat={3}&nzbname={4}", mode, id, priority, cat,
+                                          nzbName);
+            string request = GetSabRequest(action);
+
+            Logger.Debug("Adding report [{0}] to the queue.", nzbName);
+
+            string response = _httpProvider.DownloadString(request).Replace("\n", String.Empty);
+            Logger.Debug("Queue Repsonse: [{0}]", response);
+
+            if (response == "ok")
+                return true;
+
+            return false;
+        }
+
+        private string GetSabRequest(string action)
+        {
+            string sabnzbdInfo = _configProvider.SabHost + ":" +
+                                 _configProvider.SabPort;
+            string username = _configProvider.SabUsername;
+            string password = _configProvider.SabPassword;
+            string apiKey = _configProvider.SabApiKey;
+
+            return
+                string.Format(@"http://{0}/api?$Action&apikey={1}&ma_username={2}&ma_password={3}", sabnzbdInfo, apiKey,
+                              username, password).Replace("$Action", action);
+=======
         private string GetSabRequest(string action)
         {
             return string.Format(@"http://{0}:{1}/api?{2}&apikey={3}&ma_username={4}&ma_password={5}",
@@ -90,6 +131,7 @@ namespace NzbDrone.Core.Providers
                                  _configProvider.SabApiKey,
                                  _configProvider.SabUsername,
                                  _configProvider.SabPassword);
+>>>>>>> cb4d0e245018bf547d1d8295a7271c21f26366f8
         }
 
         public String GetSabTitle(EpisodeParseResult parseResult)

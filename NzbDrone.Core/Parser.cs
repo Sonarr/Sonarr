@@ -99,7 +99,8 @@ namespace NzbDrone.Core
                             {
                                 Proper = title.ToLower().Contains("proper"),
                                 CleanTitle = seriesName,
-                                AirDate = new DateTime(airyear, airmonth, airday)
+                                AirDate = new DateTime(airyear, airmonth, airday),
+                                Language = ParseLanguage(simpleTitle)
                             };
                         }
 
@@ -262,6 +263,72 @@ namespace NzbDrone.Core
             return result;
         }
 
+        internal static LanguageType ParseLanguage(string title)
+        {
+            if (title.ToLower().Contains("english"))
+                return LanguageType.English;
+
+            if (title.ToLower().Contains("french"))
+                return LanguageType.French;
+
+            if (title.ToLower().Contains("spanish"))
+                return LanguageType.Spanish;
+
+            if (title.ToLower().Contains("german"))
+            {
+                //Make sure it doesn't contain Germany (Since we're not using REGEX for all this)
+                if (!title.ToLower().Contains("germany"))
+                    return LanguageType.German;
+            }
+
+            if (title.ToLower().Contains("italian"))
+                return LanguageType.Italian;
+
+            if (title.ToLower().Contains("danish"))
+                return LanguageType.Danish;
+
+            if (title.ToLower().Contains("dutch"))
+                return LanguageType.Dutch;
+
+            if (title.ToLower().Contains("japanese"))
+                return LanguageType.Japanese;
+
+            if (title.ToLower().Contains("cantonese"))
+                return LanguageType.Cantonese;
+
+            if (title.ToLower().Contains("mandarin"))
+                return LanguageType.Mandarin;
+
+            if (title.ToLower().Contains("korean"))
+                return LanguageType.Korean;
+
+            if (title.ToLower().Contains("russian"))
+                return LanguageType.Russian;
+
+            if (title.ToLower().Contains("polish"))
+                return LanguageType.Polish;
+
+            if (title.ToLower().Contains("vietnamese"))
+                return LanguageType.Vietnamese;
+
+            if (title.ToLower().Contains("swedish"))
+                return LanguageType.Swedish;
+
+            if (title.ToLower().Contains("norwegian"))
+                return LanguageType.Norwegian;
+
+            if (title.ToLower().Contains("finnish"))
+                return LanguageType.Finnish;
+
+            if (title.ToLower().Contains("turkish"))
+                return LanguageType.Turkish;
+
+            if (title.ToLower().Contains("portuguese"))
+                return LanguageType.Portuguese;
+
+            return LanguageType.English;
+        }
+
         /// <summary>
         ///   Normalizes the title. removing all non-word characters as well as common tokens
         ///   such as 'the' and 'and'
@@ -272,7 +339,6 @@ namespace NzbDrone.Core
         {
             return NormalizeRegex.Replace(title, String.Empty).ToLower();
         }
-
 
         public static string NormalizePath(string path)
         {

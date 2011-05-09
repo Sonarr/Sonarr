@@ -43,7 +43,7 @@
                 @Html.LabelFor(model => model.Path)
             </div>
             <div class="editor-field">
-                @Html.TextBoxFor(model => model.Path)
+                @Html.TextBoxFor(model => model.Path, new { style = "width: 250" })
                 @Html.ValidationMessageFor(model => model.Path)
             </div>
             
