@@ -1,9 +1,33 @@
 ﻿@model IEnumerable<NzbDrone.Core.Repository.Config>
 @section TitleContent{
-Config
+Configuration
 }
 @section MainContent{
-    @{Html.Telerik().Grid(Model).Name("Grid")
-            .TableHtmlAttributes(new { @class = "Grid" })
-            .Render();}
+    @(Html.Telerik().Grid<NzbDrone.Core.Repository.Config>()
+        .Name("Grid")
+         .TableHtmlAttributes(new { @class = "Grid" })
+        .DataKeys(keys =>
+        {
+            keys.Add(p => p.Key);
+        })
+        .ToolBar(commands => commands.Insert().ButtonType(GridButtonType.Image))
+        .DataBinding(dataBinding =>
+        {
+            dataBinding.Ajax()
+                .Select("_SelectAjaxEditing", "System")
+                .Insert("_InsertAjaxEditing", "System")
+                .Update("_SaveAjaxEditing", "System");
+        })
+        .Columns(columns =>
+        {
+            columns.Bound(p => p.Key);
+            columns.Bound(p => p.Value);
+            columns.Command(commands =>
+          {
+              commands.Edit().ButtonType(GridButtonType.Image);
+          }).Width(0).Title("Actions");
+        })
+        .Editable(editing => editing.Mode(GridEditMode.InLine))
+        .Sortable()
+)
 }

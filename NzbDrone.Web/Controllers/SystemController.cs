@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.Jobs;
+using Telerik.Web.Mvc;
 
 namespace NzbDrone.Web.Controllers
 {
@@ -39,5 +40,27 @@ namespace NzbDrone.Web.Controllers
         }
 
 
+        [GridAction]
+        public ActionResult _SelectAjaxEditing()
+        {
+            return View(new GridModel(_configProvider.All()));
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        [GridAction]
+        public ActionResult _SaveAjaxEditing(string key, string value)
+        {
+            _configProvider.SetValue(key, value);
+            return View(new GridModel(_configProvider.All()));
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        [GridAction]
+        public ActionResult _InsertAjaxEditing(string key, string value)
+        {
+
+            _configProvider.SetValue(key, value);
+            return View(new GridModel(_configProvider.All()));
+        }
     }
 }
