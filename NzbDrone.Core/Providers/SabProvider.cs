@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Providers
             string name = url.Replace("&", "%26");
             string nzbName = HttpUtility.UrlEncode(title);
 
-            string action = string.Format("mode=addurl&name={0}&priority={1}&cat={2}&nzbname={3}",
+            string action = string.Format("mode=addurl&name={0}&priority={1}&pp=3&cat={2}&nzbname={3}",
                 name, priority, cat, nzbName);
             string request = GetSabRequest(action);
 

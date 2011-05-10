@@ -168,6 +168,7 @@
     <Compile Include="Instrumentation\NlogWriter.cs" />
     <Compile Include="Model\ExternalNotificationType.cs" />
     <Compile Include="Model\IndexerType.cs" />
+    <Compile Include="Model\LanguageType.cs" />
     <Compile Include="Model\SabnzbdInfoModel.cs" />
     <Compile Include="Providers\ExternalNotification\ExternalNotificationProviderBase.cs" />
     <Compile Include="Providers\ExternalNotification\XbmcNotificationProvider.cs" />

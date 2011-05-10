@@ -1,0 +1,29 @@
+﻿@using NzbDrone.Web.Helpers;
+@model NzbDrone.Web.Models.SeriesModel
+
+@{
+    Layout = null;
+}
+
+<div style="width: 435px; margin: 10px;">
+                     
+    <div class="edit-group">
+        <div class="config-title">@Html.LabelFor(m => m.Path)</div>
+        <div class="config-value">@Html.TextBoxFor(m => m.Path, new { style = "width: 300" })</div>
+    </div>
+
+    <div class="edit-group">
+        <div class="config-title">@Html.LabelFor(m => m.Monitored)</div>
+        <div class="config-value">@Html.CheckBoxFor(m => m.Monitored, new { style = "margin-right:287px" })</div>
+    </div>
+
+    <div class="edit-group">
+        <div class="config-title">@Html.LabelFor(m => m.SeasonFolder)</div>
+        <div class="config-value">@Html.CheckBoxFor(m => m.SeasonFolder, new { style = "margin-right:287px" })</div>
+    </div>
+
+    <div class="edit-group">
+        <div class="config-title">@Html.LabelFor(m => m.QualityProfileId)</div>
+        <div class="config-value">@Html.DropDownListFor(model => model.QualityProfileId, (SelectList)ViewData["SelectList"], new { style = "margin-right:216px" })</div>
+    </div>
+</div>

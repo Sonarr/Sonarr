@@ -43,10 +43,11 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult Index()
         {
-            ViewData.Model = _seriesProvider.GetAllSeries().ToList();
+            var profiles = _qualityProvider.GetAllProfiles();
+            ViewData["SelectList"] = new SelectList(profiles, "QualityProfileId", "Name");
+
             return View();
         }
-
 
         public ActionResult RssSync()
         {
@@ -61,6 +62,63 @@ namespace NzbDrone.Web.Controllers
                                                    {
                                                        seriesId
                                                    });
+        }
+
+        [GridAction]
+        public ActionResult _AjaxSeriesGrid()
+        {
+            var series = new List<SeriesModel>();
+            var seriesInDb = _seriesProvider.GetAllSeries().ToList();
+
+            seriesInDb.ForEach(s => series.Add(new SeriesModel
+                               {
+                                   SeriesId = s.SeriesId,
+                                   Title = s.Title,
+                                   AirsDayOfWeek = s.AirsDayOfWeek.ToString(),
+                                   Monitored = s.Monitored,
+                                   Overview = s.Overview,
+                                   Path = s.Path,
+                                   QualityProfileId = s.QualityProfileId,
+                                   QualityProfileName = s.QualityProfile.Name,
+                                   SeasonsCount = s.Seasons.Count,
+                                   SeasonFolder = s.SeasonFolder,
+                                   Status = s.Status
+                               }));
+
+            return View(new GridModel(series));
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        [GridAction]
+        public ActionResult _SaveAjaxSeriesEditing(int id, string path, bool monitored, bool seasonFolder, int qualityProfileId)
+        {
+            var oldSeries = _seriesProvider.GetSeries(id);
+            oldSeries.Path = path;
+            oldSeries.Monitored = monitored;
+            oldSeries.SeasonFolder = monitored;
+            oldSeries.QualityProfileId = qualityProfileId;
+
+            _seriesProvider.UpdateSeries(oldSeries);
+
+            var series = new List<SeriesModel>();
+            var seriesInDb = _seriesProvider.GetAllSeries().ToList();
+
+            seriesInDb.ForEach(s => series.Add(new SeriesModel
+            {
+                SeriesId = s.SeriesId,
+                Title = s.Title,
+                AirsDayOfWeek = s.AirsDayOfWeek.ToString(),
+                Monitored = s.Monitored,
+                Overview = s.Overview,
+                Path = s.Path,
+                QualityProfileId = s.QualityProfileId,
+                QualityProfileName = s.QualityProfile.Name,
+                SeasonsCount = s.Seasons.Count,
+                SeasonFolder = s.SeasonFolder,
+                Status = s.Status
+            }));
+
+            return View(new GridModel(series));
         }
 
         [GridAction]

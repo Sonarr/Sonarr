@@ -1,4 +1,6 @@
-﻿@model IEnumerable<NzbDrone.Core.Repository.Series>
+﻿@using NzbDrone.Core.Repository;
+@using NzbDrone.Web.Models;
+@model IEnumerable<NzbDrone.Core.Repository.Series>
 
 @section TitleContent{
     Series
@@ -9,19 +11,31 @@
 }
 
 @section MainContent{
-    @{Html.Telerik().Grid(Model).Name("Grid")
+    @{Html.Telerik().Grid<SeriesModel>().Name("Grid")
             .TableHtmlAttributes(new { @class = "Grid" })
+            .DataKeys(keys =>
+                          {
+                              keys.Add(p => p.SeriesId);
+                          })
+            .DataBinding(data => data.Ajax()
+                .Select("_AjaxSeriesGrid", "Series")
+                .Update("_SaveAjaxSeriesEditing", "Series"))
             .Columns(columns =>
                          {
-                             columns.Template(c => @Html.ActionLink(c.Title ?? "New Series", "Details",
-                                                                        new {seriesId = c.SeriesId})
-                                                  ).Title("Title");
-                             columns.Bound(o => o.Seasons.Count).Title("Seasons");
-                             columns.Bound(o => o.QualityProfile.Name).Title("Quality");
+                             columns.Bound(o => o.Title)
+                                 .ClientTemplate("<a href=" +
+                                                 Url.Action("Details", "Series", new {seriesId = "<#= SeriesId #>"}) +
+                                                 "><#= Title #></a>");
+                             columns.Bound(o => o.SeasonsCount).Title("Seasons");
+                             columns.Bound(o => o.QualityProfileName).Title("Quality");
                              columns.Bound(o => o.Status);
                              columns.Bound(o => o.AirsDayOfWeek);
                              columns.Bound(o => o.Path);
+                             columns.Command(commands => commands.Edit().ButtonType(GridButtonType.Image)).Title("Edit").Width(50);
+
                          })
-            .Sortable(sort => sort.OrderBy(order => order.Add(o => o.Title).Ascending()).Enabled(false))
+            .Editable(editor => editor.Mode(GridEditMode.PopUp))
+            .Sortable(sort => sort.OrderBy(order => order.Add(o => o.Title).Ascending()).Enabled(true))
+            .DetailView(detailView => detailView.ClientTemplate("<div style=\"width:95%\"><#= Overview #></div>"))
             .Render();}
 }

@@ -295,3 +295,10 @@ button, input[type="button"], input[type="submit"], input[type="reset"]
 {
     font-size: 13px;
 }
+
+.edit-group
+{
+    width: 435px;
+    display: block;
+    height: 25px;
+}
