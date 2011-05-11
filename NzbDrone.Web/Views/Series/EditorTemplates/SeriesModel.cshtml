@@ -23,7 +23,7 @@
     </div>
 
     <div class="edit-group">
-        <div class="config-title">@Html.LabelFor(m => m.QualityProfileId)</div>
-        <div class="config-value">@Html.DropDownListFor(model => model.QualityProfileId, (SelectList)ViewData["SelectList"], new { style = "margin-right:216px" })</div>
+        <b>@Html.LabelFor(m => m.QualityProfileId)</b>
+        @Html.DropDownListFor(model => model.QualityProfileId, (SelectList)ViewData["SelectList"], new { style = "margin-left:40px" })
     </div>
 </div>
