@@ -296,26 +296,18 @@ namespace NzbDrone.Web.Controllers
             return new JsonResult { Data = "ok" };
         }
 
-        public JsonResult AutoConfigureSab(string username, string password)
+        public JsonResult AutoConfigureSab()
         {
-            SabnzbdInfoModel info;
-
             try
             {
-                //info = _autoConfigureProvider.AutoConfigureSab(username, password);
-                info = new SabnzbdInfoModel
-                           {
-                               ApiKey = "123456",
-                               Port = 2222
-                           };
+                var info = _autoConfigureProvider.AutoConfigureSab();
+                return Json(info, JsonRequestBehavior.AllowGet);
             }
 
             catch (Exception)
             {
                 return new JsonResult { Data = "failed" };
             }
-
-            return Json(info);
         }
 
         [HttpPost]

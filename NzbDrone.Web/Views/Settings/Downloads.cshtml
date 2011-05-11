@@ -113,7 +113,7 @@
                 <fieldset class="sub-field">
                     <legend>SABnzbd</legend>
 
-                    @*<button type="button" onclick="autoConfigureSab()">Auto-Configure</button>*@
+                    <button type="button" onclick="autoConfigureSab()">Auto-Configure</button>
 
                     <div class="config-section">
                         <div class="config-group">
@@ -223,9 +223,9 @@
 
     function autoConfigureSab() {
         $.ajax({
-            type: "POST",
+            type: "GET",
             url: autoConfigureSabUrl,
-            data: jQuery.param({ username: $('#SabUsername').val(), password: $('#SabPassword').val() }),
+            //data: jQuery.param({ username: $('#SabUsername').val(), password: $('#SabPassword').val() }),
             error: function (req, status, error) {
                 alert("Sorry! We could not autoconfigure SABnzbd for you");
             },
@@ -233,10 +233,9 @@
         });
 
         function autoConfigureSuccess(data) {
-            $('#SabApiKey').val(data.ApiKey);
+            $('#SabHost').val(data.Host);
             $('#SabPort').val(data.Port);
-            $('#SabUsername').val(data.Username);
-            $('#SabPassword').val(data.Password);
+            $('#SabApiKey').val(data.ApiKey);
         }
     }
 </script>

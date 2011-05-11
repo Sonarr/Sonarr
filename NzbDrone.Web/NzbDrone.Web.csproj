@@ -599,7 +599,6 @@
     <Content Include="Content\jquery.jgrowl.css" />
     <Content Include="Content\notibar.css" />
     <Content Include="Content\style.css" />
-    <Content Include="Content\thickbox.css" />
     <Content Include="Content\XbmcNotification.png" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -643,7 +642,6 @@
     <Content Include="Scripts\jquery-tgc-countdown-1.0.js" />
     <Content Include="Scripts\jquery.simpledropdown.js" />
     <Content Include="Scripts\Notification.js" />
-    <Content Include="Scripts\thickbox-compressed.js" />
     <Content Include="Views\AddSeries\AddExisting.cshtml" />
     <Content Include="Views\AddSeries\AddNew.cshtml" />
     <Content Include="Views\AddSeries\AddSeriesItem.cshtml" />

@@ -5,10 +5,9 @@ using System.Text;
 
 namespace NzbDrone.Core.Model
 {
-    public class SabnzbdInfoModel
+    public class ConnectionInfoModel
     {
-        public string Host { get; set; }
+        public string Address { get; set; }
         public int Port { get; set; }
-        public string ApiKey { get; set; }
     }
 }
