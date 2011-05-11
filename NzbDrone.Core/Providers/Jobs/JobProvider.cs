@@ -208,7 +208,7 @@ namespace NzbDrone.Core.Providers.Jobs
                 {
                     var settings = new JobSetting
                                        {
-                                           Enable = true,
+                                           Enable = timerProviderLocal.DefaultInterval > 0,
                                            TypeName = timer.GetType().ToString(),
                                            Name = timerProviderLocal.Name,
                                            Interval = timerProviderLocal.DefaultInterval,

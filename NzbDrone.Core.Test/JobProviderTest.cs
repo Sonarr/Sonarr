@@ -231,6 +231,40 @@ namespace NzbDrone.Core.Test
 
             //Assert
             Assert.Count(1, timers);
+            Assert.IsTrue(timers[0].Enable);
+        }
+
+
+
+        [Test]
+        public void Init_Timers_sets_interval_0_to_disabled()
+        {
+            var repo = MockLib.GetEmptyRepository();
+
+            for (int i = 0; i < 2; i++)
+            {
+                var disabledJob = new DisabledJob();
+                IEnumerable<IJob> fakeTimers = new List<IJob> { disabledJob };
+                var mocker = new AutoMoqer();
+
+                mocker.SetConstant(repo);
+                mocker.SetConstant(fakeTimers);
+
+                var timerProvider = mocker.Resolve<JobProvider>();
+                timerProvider.Initialize();
+            }
+
+            var mocker2 = new AutoMoqer();
+
+            mocker2.SetConstant(repo);
+            var assertTimerProvider = mocker2.Resolve<JobProvider>();
+
+            var timers = assertTimerProvider.All();
+
+
+            //Assert
+            Assert.Count(1, timers);
+            Assert.IsFalse(timers[0].Enable);
         }
 
 
@@ -247,6 +281,24 @@ namespace NzbDrone.Core.Test
         public int DefaultInterval
         {
             get { return 15; }
+        }
+
+        public void Start(ProgressNotification notification, int targetId)
+        {
+
+        }
+    }
+
+    public class DisabledJob : IJob
+    {
+        public string Name
+        {
+            get { return "DisabledJob"; }
+        }
+
+        public int DefaultInterval
+        {
+            get { return 0; }
         }
 
         public void Start(ProgressNotification notification, int targetId)

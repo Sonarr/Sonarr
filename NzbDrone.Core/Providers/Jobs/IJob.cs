@@ -14,6 +14,8 @@ namespace NzbDrone.Core.Providers.Jobs
         /// <summary>
         /// Default Interval that this job should run at. In seconds.
         /// </summary>
+        /// <remarks>Setting this value to 0 means the job will not be 
+        /// executed by the schedule and is only triggered manually.</remarks>
         int DefaultInterval { get; }
 
 
