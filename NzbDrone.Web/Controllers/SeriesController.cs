@@ -67,23 +67,7 @@ namespace NzbDrone.Web.Controllers
         [GridAction]
         public ActionResult _AjaxSeriesGrid()
         {
-            var series = new List<SeriesModel>();
-            var seriesInDb = _seriesProvider.GetAllSeries().ToList();
-
-            seriesInDb.ForEach(s => series.Add(new SeriesModel
-                               {
-                                   SeriesId = s.SeriesId,
-                                   Title = s.Title,
-                                   AirsDayOfWeek = s.AirsDayOfWeek.ToString(),
-                                   Monitored = s.Monitored,
-                                   Overview = s.Overview,
-                                   Path = s.Path,
-                                   QualityProfileId = s.QualityProfileId,
-                                   QualityProfileName = s.QualityProfile.Name,
-                                   SeasonsCount = s.Seasons.Count,
-                                   SeasonFolder = s.SeasonFolder,
-                                   Status = s.Status
-                               }));
+            var series = GetSeriesModels(_seriesProvider.GetAllSeries().ToList());
 
             return View(new GridModel(series));
         }
@@ -95,29 +79,28 @@ namespace NzbDrone.Web.Controllers
             var oldSeries = _seriesProvider.GetSeries(id);
             oldSeries.Path = path;
             oldSeries.Monitored = monitored;
-            oldSeries.SeasonFolder = monitored;
+            oldSeries.SeasonFolder = seasonFolder;
             oldSeries.QualityProfileId = qualityProfileId;
 
             _seriesProvider.UpdateSeries(oldSeries);
 
-            var series = new List<SeriesModel>();
+            var series = GetSeriesModels(_seriesProvider.GetAllSeries().ToList());
+            return View(new GridModel(series));
+        }
+
+        [GridAction]
+        public ActionResult _DeleteAjaxSeriesEditing(int id)
+        {
+            //Grab the series from the DB so we can remove it from the list we return to the client
             var seriesInDb = _seriesProvider.GetAllSeries().ToList();
 
-            seriesInDb.ForEach(s => series.Add(new SeriesModel
-            {
-                SeriesId = s.SeriesId,
-                Title = s.Title,
-                AirsDayOfWeek = s.AirsDayOfWeek.ToString(),
-                Monitored = s.Monitored,
-                Overview = s.Overview,
-                Path = s.Path,
-                QualityProfileId = s.QualityProfileId,
-                QualityProfileName = s.QualityProfile.Name,
-                SeasonsCount = s.Seasons.Count,
-                SeasonFolder = s.SeasonFolder,
-                Status = s.Status
-            }));
+            //Remove this so we don't send it back to the client (since it hasn't really been deleted yet)
+            seriesInDb.RemoveAll(s => s.SeriesId == id);
 
+            //Start removing this series
+            _jobProvider.BeginExecute(typeof(DeleteSeriesJob), id);
+            
+            var series = GetSeriesModels(seriesInDb);
             return View(new GridModel(series));
         }
 
@@ -264,9 +247,7 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult Delete(int seriesId)
         {
-            //Need to add seriesProvider.Update
-            _seriesProvider.DeleteSeries(seriesId);
-
+            _jobProvider.BeginExecute(typeof(DeleteSeriesJob), seriesId);
             return RedirectToAction("Index", "Series");
         }
 
@@ -320,6 +301,28 @@ namespace NzbDrone.Web.Controllers
 
             //Return the path relative to the Series' Folder
             return file.Path.Replace(file.Series.Path, "").Trim(Path.DirectorySeparatorChar);
+        }
+
+        private List<SeriesModel> GetSeriesModels(List<Series> seriesInDb)
+        {
+            var series = new List<SeriesModel>();
+
+            seriesInDb.ForEach(s => series.Add(new SeriesModel
+            {
+                SeriesId = s.SeriesId,
+                Title = s.Title,
+                AirsDayOfWeek = s.AirsDayOfWeek.ToString(),
+                Monitored = s.Monitored,
+                Overview = s.Overview,
+                Path = s.Path,
+                QualityProfileId = s.QualityProfileId,
+                QualityProfileName = s.QualityProfile.Name,
+                SeasonsCount = s.Seasons.Count,
+                SeasonFolder = s.SeasonFolder,
+                Status = s.Status
+            }));
+
+            return series;
         }
     }
 }

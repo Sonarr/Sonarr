@@ -98,8 +98,6 @@ namespace NzbDrone.Core.Providers.Jobs
             return true;
         }
 
-
-
         /// <summary>
         /// Starts the execution of a job asynchronously
         /// </summary>
@@ -107,7 +105,7 @@ namespace NzbDrone.Core.Providers.Jobs
         /// <param name="targetId">The targetId could be any Id parameter eg. SeriesId. it will be passed to the job implementation
         /// to allow it to filter it's target of execution.</param>
         /// <returns>True if ran, false if skipped</returns>
-        public bool BeginExecute(Type jobType, int targetId = 0)
+        public virtual bool BeginExecute(Type jobType, int targetId = 0)
         {
             lock (ExecutionLock)
             {
