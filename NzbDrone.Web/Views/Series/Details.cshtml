@@ -7,12 +7,6 @@
 @section ActionMenu{
     @{Html.Telerik().Menu().Name("SeriesMenu").Items(items =>
                                                            {
-                                                               items.Add().Text("Edit").Action("Edit", "Series",
-                                                                                               new
-                                                                                                   {
-                                                                                                       seriesId =
-                                                                                                   Model.SeriesId
-                                                                                                   });
                                                                items.Add().Text("Back to Series List").Action("Index",
                                                                                                               "Series");
                                                                items.Add().Text("Scan For Episodes on Disk").Action(

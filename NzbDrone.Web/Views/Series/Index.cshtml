@@ -13,10 +13,7 @@
 @section MainContent{
     @{Html.Telerik().Grid<SeriesModel>().Name("Grid")
             .TableHtmlAttributes(new { @class = "Grid" })
-            .DataKeys(keys =>
-                          {
-                              keys.Add(p => p.SeriesId);
-                          })
+            .DataKeys(keys => keys.Add(p => p.SeriesId))
             .DataBinding(data => data.Ajax()
                 .Select("_AjaxSeriesGrid", "Series")
                 .Update("_SaveAjaxSeriesEditing", "Series")

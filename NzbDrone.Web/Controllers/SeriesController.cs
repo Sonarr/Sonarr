@@ -228,29 +228,6 @@ namespace NzbDrone.Web.Controllers
             return View(series);
         }
 
-        public ActionResult Edit(int seriesId)
-        {
-            var profiles = _qualityProvider.GetAllProfiles();
-            ViewData["SelectList"] = new SelectList(profiles, "QualityProfileId", "Name");
-
-            var series = _seriesProvider.GetSeries(seriesId);
-            return View(series);
-        }
-
-        [HttpPost]
-        public ActionResult Edit(Series series)
-        {
-            //Need to add seriesProvider.Update
-            _seriesProvider.UpdateSeries(series);
-            return Content("Series Updated Successfully");
-        }
-
-        public ActionResult Delete(int seriesId)
-        {
-            _jobProvider.BeginExecute(typeof(DeleteSeriesJob), seriesId);
-            return RedirectToAction("Index", "Series");
-        }
-
         public ActionResult SyncEpisodesOnDisk(int seriesId)
         {
             //Syncs the episodes on disk for the specified series
@@ -317,7 +294,7 @@ namespace NzbDrone.Web.Controllers
                 Path = s.Path,
                 QualityProfileId = s.QualityProfileId,
                 QualityProfileName = s.QualityProfile.Name,
-                SeasonsCount = s.Seasons.Count,
+                SeasonsCount = s.Seasons.Where(x => x.SeasonNumber > 0).Count(),
                 SeasonFolder = s.SeasonFolder,
                 Status = s.Status
             }));

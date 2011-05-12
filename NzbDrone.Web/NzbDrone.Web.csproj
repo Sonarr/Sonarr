@@ -687,7 +687,6 @@
     <Content Include="Views\Log\index.cshtml" />
     <Content Include="Views\Upcoming\Index.cshtml" />
     <Content Include="Views\Series\Details.cshtml" />
-    <Content Include="Views\Series\Edit.cshtml" />
     <Content Include="Views\Series\Index.cshtml" />
     <Content Include="Views\Series\SubMenu.cshtml" />
     <Content Include="Views\Series\SeriesSearchResults.cshtml" />
