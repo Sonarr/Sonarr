@@ -55,5 +55,15 @@ namespace NzbDrone.Core.Providers
             Logger.Debug("Episode not in History. ID:{0} Q:{1} Proper:{2}", episodeId, quality, proper);
             return false;
         }
+
+        public virtual void Delete(int historyId)
+        {
+            _repository.Delete<History>(historyId);
+        }
+
+        public virtual void DeleteForEpisode(int episodeId)
+        {
+            _repository.DeleteMany<History>(h => h.EpisodeId == episodeId);
+        }
     }
 }

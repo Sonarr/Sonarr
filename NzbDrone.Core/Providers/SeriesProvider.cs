@@ -119,38 +119,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual void DeleteSeries(int seriesId)
         {
-            Logger.Warn("Deleting Series [{0}]", seriesId);
-
-            try
-            {
-                var series = _repository.Single<Series>(seriesId);
-
-                //Delete Files, Episdes, Seasons then the Series
-                //Can't use providers because episode provider needs series provider - Cyclic Dependency Injection, this will work
-
-                Logger.Debug("Deleting History Items from DB for Series: {0}", series.SeriesId);
-                var episodes = series.Episodes.Select(e => e.EpisodeId).ToList();
-                episodes.ForEach(e => _repository.DeleteMany<History>(h => h.EpisodeId == e));
-
-                Logger.Debug("Deleting EpisodeFiles from DB for Series: {0}", series.SeriesId);
-                _repository.DeleteMany(series.EpisodeFiles);
-
-                Logger.Debug("Deleting Episodes from DB for Series: {0}", series.SeriesId);
-                _repository.DeleteMany(series.Episodes);
-
-                Logger.Debug("Deleting Seasons from DB for Series: {0}", series.SeriesId);
-                _repository.DeleteMany(series.Seasons);
-
-                Logger.Debug("Deleting Series from DB {0}", series.Title);
-                _repository.Delete<Series>(seriesId);
-
-                Logger.Info("Successfully deleted Series [{0}]", seriesId);
-            }
-            catch (Exception e)
-            {
-                Logger.ErrorException("An error has occurred while deleting series.", e);
-                throw;
-            }
+            _repository.Delete<Series>(seriesId);
         }
 
         public virtual bool SeriesPathExists(string cleanPath)

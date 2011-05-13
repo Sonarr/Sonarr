@@ -11,14 +11,22 @@ namespace NzbDrone.Core.Providers.Jobs
     public class DeleteSeriesJob : IJob
     {
         private readonly SeriesProvider _seriesProvider;
-        private readonly IRepository _repository;
+        private readonly SeasonProvider _seasonProvider;
+        private readonly EpisodeProvider _episodeProvider;
+        private readonly MediaFileProvider _mediaFileProvider;
+        private readonly HistoryProvider _historyProvider;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public DeleteSeriesJob(IRepository repository, SeriesProvider seriesProvider)
+        public DeleteSeriesJob(SeriesProvider seriesProvider, SeasonProvider seasonProvider,
+            EpisodeProvider episodeProvider, MediaFileProvider mediaFileProvider,
+            HistoryProvider historyProvider)
         {
-            _repository = repository;
             _seriesProvider = seriesProvider;
+            _seasonProvider = seasonProvider;
+            _episodeProvider = episodeProvider;
+            _mediaFileProvider = mediaFileProvider;
+            _historyProvider = historyProvider;
         }
 
         public string Name
@@ -42,25 +50,24 @@ namespace NzbDrone.Core.Providers.Jobs
 
             try
             {
-                var series = _repository.Single<Series>(seriesId);
+                var series = _seriesProvider.GetSeries(seriesId);
 
                 notification.CurrentMessage = String.Format("Beginning Delete of Series: {0}", series.Title);
 
                 Logger.Debug("Deleting Series from DB {0}", series.Title);
-                _repository.Delete<Series>(seriesId);
+                _seriesProvider.DeleteSeries(seriesId);
 
                 Logger.Debug("Deleting History Items from DB for Series: {0}", series.SeriesId);
-                var episodes = series.Episodes.Select(e => e.EpisodeId).ToList();
-                episodes.ForEach(e => _repository.DeleteMany<History>(h => h.EpisodeId == e));
+                series.Episodes.ForEach(e => _historyProvider.DeleteForEpisode(e.EpisodeId));
 
                 Logger.Debug("Deleting EpisodeFiles from DB for Series: {0}", series.SeriesId);
-                _repository.DeleteMany(series.EpisodeFiles);
+                series.EpisodeFiles.ForEach(f => _mediaFileProvider.DeleteFromDb(f.EpisodeFileId));
 
                 Logger.Debug("Deleting Episodes from DB for Series: {0}", series.SeriesId);
-                _repository.DeleteMany(series.Episodes);
+                series.Episodes.ForEach(e => _episodeProvider.DeleteEpisode(e.EpisodeId));
 
                 Logger.Debug("Deleting Seasons from DB for Series: {0}", series.SeriesId);
-                _repository.DeleteMany(series.Seasons);
+                series.Seasons.ForEach(s => _seasonProvider.DeleteSeason(s.SeasonId));
 
                 notification.CurrentMessage = String.Format("Successfully deleted Series: {0}", series.Title);
                 Logger.Info("Successfully deleted Series [{0}]", seriesId);
