@@ -155,7 +155,7 @@ namespace NzbDrone.Core.Providers.Jobs
             var timerClass = _jobs.Where(t => t.GetType() == jobType).FirstOrDefault();
             if (timerClass == null)
             {
-                Logger.Error("Unable to locate implantation for '{0}'. Make sure its properly registered.", jobType.ToString());
+                Logger.Error("Unable to locate implementation for '{0}'. Make sure its properly registered.", jobType.ToString());
                 return;
             }
 

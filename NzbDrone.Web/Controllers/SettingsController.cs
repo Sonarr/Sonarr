@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using NLog;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.Indexer;
@@ -25,16 +26,18 @@ namespace NzbDrone.Web.Controllers
         private readonly QualityProvider _qualityProvider;
         private readonly RootDirProvider _rootDirProvider;
         private readonly AutoConfigureProvider _autoConfigureProvider;
+        private readonly NotificationProvider _notificationProvider;
 
         public SettingsController(ConfigProvider configProvider, IndexerProvider indexerProvider,
                                   QualityProvider qualityProvider, RootDirProvider rootDirProvider,
-                                  AutoConfigureProvider autoConfigureProvider)
+                                  AutoConfigureProvider autoConfigureProvider, NotificationProvider notificationProvider)
         {
             _configProvider = configProvider;
             _indexerProvider = indexerProvider;
             _qualityProvider = qualityProvider;
             _rootDirProvider = rootDirProvider;
             _autoConfigureProvider = autoConfigureProvider;
+            _notificationProvider = notificationProvider;
         }
 
         public ActionResult Index(string viewName)
@@ -313,6 +316,10 @@ namespace NzbDrone.Web.Controllers
         [HttpPost]
         public ActionResult SaveGeneral(SettingsModel data)
         {
+            var basicNotification = new BasicNotification();
+            basicNotification.Type = BasicNotificationType.Info;
+            basicNotification.AutoDismiss = true;
+
             try
             {
                 foreach (var dir in data.Directories)
@@ -324,8 +331,15 @@ namespace NzbDrone.Web.Controllers
             {
                 Logger.Debug("Failed to save Root Dirs");
                 Logger.DebugException(ex.Message, ex);
+
+                basicNotification.Title = SETTINGS_FAILED;
+                _notificationProvider.Register(basicNotification);
                 return Content(SETTINGS_FAILED);
             }
+
+            
+            basicNotification.Title = SETTINGS_SAVED;
+            _notificationProvider.Register(basicNotification);
 
             return Content(SETTINGS_SAVED);
         }
@@ -333,6 +347,10 @@ namespace NzbDrone.Web.Controllers
         [HttpPost]
         public ActionResult SaveIndexers(IndexerSettingsModel data)
         {
+            var basicNotification = new BasicNotification();
+            basicNotification.Type = BasicNotificationType.Info;
+            basicNotification.AutoDismiss = true;
+
             if (ModelState.IsValid)
             {
                 var nzbsOrgSettings = _indexerProvider.GetSettings(typeof(NzbsOrgProvider));
@@ -363,15 +381,23 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.NewzbinUsername = data.NewzbinUsername;
                 _configProvider.NewzbinPassword = data.NewzbinPassword;
 
+                basicNotification.Title = SETTINGS_SAVED;
+                _notificationProvider.Register(basicNotification);
                 return Content(SETTINGS_SAVED);
             }
 
+            basicNotification.Title = SETTINGS_FAILED;
+            _notificationProvider.Register(basicNotification);
             return Content(SETTINGS_FAILED);
         }
 
         [HttpPost]
         public ActionResult SaveDownloads(DownloadSettingsModel data)
         {
+            var basicNotification = new BasicNotification();
+            basicNotification.Type = BasicNotificationType.Info;
+            basicNotification.AutoDismiss = true;
+
             if (ModelState.IsValid)
             {
                 _configProvider.SyncFrequency = data.SyncFrequency.ToString();
@@ -387,15 +413,23 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.UseBlackhole = data.UseBlackHole;
                 _configProvider.BlackholeDirectory = data.BlackholeDirectory;
 
+                basicNotification.Title = SETTINGS_SAVED;
+                _notificationProvider.Register(basicNotification);
                 return Content(SETTINGS_SAVED);
             }
 
+            basicNotification.Title = SETTINGS_FAILED;
+            _notificationProvider.Register(basicNotification);
             return Content(SETTINGS_FAILED);
         }
 
         [HttpPost]
         public ActionResult SaveQuality(QualityModel data)
         {
+            var basicNotification = new BasicNotification();
+            basicNotification.Type = BasicNotificationType.Info;
+            basicNotification.AutoDismiss = true;
+
             if (ModelState.IsValid)
             {
                 _configProvider.SetValue("DefaultQualityProfile", data.DefaultQualityProfileId.ToString());
@@ -422,15 +456,23 @@ namespace NzbDrone.Web.Controllers
 
                     _qualityProvider.Update(profile);
                 }
+                basicNotification.Title = SETTINGS_SAVED;
+                _notificationProvider.Register(basicNotification);
                 return Content(SETTINGS_SAVED);
             }
 
+            basicNotification.Title = SETTINGS_FAILED;
+            _notificationProvider.Register(basicNotification);
             return Content(SETTINGS_FAILED);
         }
 
         [HttpPost]
         public ActionResult SaveNotifications(NotificationSettingsModel data)
         {
+            var basicNotification = new BasicNotification();
+            basicNotification.Type = BasicNotificationType.Info;
+            basicNotification.AutoDismiss = true;
+
             if (ModelState.IsValid)
             {
                 _configProvider.SetValue("XbmcEnabled", data.XbmcEnabled.ToString());
@@ -448,15 +490,23 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.SetValue("XbmcUsername", data.XbmcUsername);
                 _configProvider.SetValue("XbmcPassword", data.XbmcPassword);
 
+                basicNotification.Title = SETTINGS_SAVED;
+                _notificationProvider.Register(basicNotification);
                 return Content(SETTINGS_SAVED);
             }
 
+            basicNotification.Title = SETTINGS_FAILED;
+            _notificationProvider.Register(basicNotification);
             return Content(SETTINGS_FAILED);
         }
 
         [HttpPost]
         public ActionResult SaveEpisodeSorting(EpisodeSortingModel data)
         {
+            var basicNotification = new BasicNotification();
+            basicNotification.Type = BasicNotificationType.Info;
+            basicNotification.AutoDismiss = true;
+
             if (ModelState.IsValid)
             {
                 _configProvider.SetValue("Sorting_ShowName", data.ShowName.ToString());
@@ -470,9 +520,13 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.SetValue("Sorting_NumberStyle", data.NumberStyle.ToString());
                 _configProvider.SetValue("Sorting_MultiEpisodeStyle", data.MultiEpisodeStyle.ToString());
 
+                basicNotification.Title = SETTINGS_SAVED;
+                _notificationProvider.Register(basicNotification);
                 return Content(SETTINGS_SAVED);
             }
 
+            basicNotification.Title = SETTINGS_FAILED;
+            _notificationProvider.Register(basicNotification);
             return Content(SETTINGS_FAILED);
         }
     }

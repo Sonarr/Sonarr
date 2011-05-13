@@ -18,9 +18,21 @@ namespace NzbDrone.Web.Controllers
         public JsonResult Index()
         {
             string message = string.Empty;
-            if (_notifications.GetProgressNotifications.Count != 0)
+
+            var basic = _notifications.BasicNotifications;
+
+            if (basic.Count != 0)
             {
-                message = _notifications.GetProgressNotifications[0].CurrentMessage;
+                message = basic[0].Title;
+
+                if (basic[0].AutoDismiss)
+                    _notifications.Dismiss(basic[0].Id);
+            }
+
+            else
+            {
+                if (_notifications.GetProgressNotifications.Count != 0)
+                    message = _notifications.GetProgressNotifications[0].CurrentMessage;
             }
 
             return Json(message, JsonRequestBehavior.AllowGet);
