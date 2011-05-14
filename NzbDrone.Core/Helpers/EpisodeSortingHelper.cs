@@ -56,19 +56,25 @@ namespace NzbDrone.Core.Helpers
                                                                                           {
                                                                                               Id = 0,
                                                                                               Name = "Extend",
-                                                                                              Pattern = ""
+                                                                                              Pattern = "S01E05-06"
                                                                                           },
                                                                                       new EpisodeSortingType
                                                                                           {
                                                                                               Id = 1,
                                                                                               Name = "Duplicate",
-                                                                                              Pattern = ""
+                                                                                              Pattern = "S01E05 - S01E06"
                                                                                           },
                                                                                       new EpisodeSortingType
                                                                                           {
                                                                                               Id = 2,
                                                                                               Name = "Repeat",
-                                                                                              Pattern = ""
+                                                                                              Pattern = "S01E05E06"
+                                                                                          },
+                                                                                        new EpisodeSortingType
+                                                                                          {
+                                                                                              Id = 3,
+                                                                                              Name = "Scene",
+                                                                                              Pattern = "S01E05-E06"
                                                                                           }
                                                                                   };
 

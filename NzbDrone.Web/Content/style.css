@@ -276,6 +276,8 @@ button, input[type="button"], input[type="submit"], input[type="reset"]
     border-bottom-style: solid;
     border-bottom-width: 5px;
     border-bottom-color: #3C3C3C;
+    /* Set padding to prevent fieldset border from moving when button is highlighted... WINNING! */
+    padding-bottom: 2px;
 }
 
 .hiddenResult
