@@ -573,6 +573,7 @@
     <Content Include="Content\Images\Indexers\NzbsOrg.png" />
     <Content Include="Content\Images\Indexers\NzbsRus.png" />
     <Content Include="Content\Images\Indexers\Unknown.png" />
+    <Content Include="Content\Images\indicator.gif" />
     <Content Include="Content\Images\Plus.png" />
     <Content Include="Content\Images\spin.gif" />
     <Content Include="Content\Images\ui-bg_diagonals-small_0_aaaaaa_40x40.png" />
@@ -596,6 +597,7 @@
     <Content Include="Content\jquery-ui-1.8.8.custom.css" />
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\jquery-ui.custom.css" />
+    <Content Include="Content\jquery.autocomplete.css" />
     <Content Include="Content\jquery.jgrowl.css" />
     <Content Include="Content\notibar.css" />
     <Content Include="Content\style.css" />
@@ -637,6 +639,7 @@
     <Content Include="Scripts\jquery-1.5.2.min.js" />
     <Content Include="Scripts\jquery-ui-1.8.8.min.js" />
     <Content Include="Scripts\jquery-ui-1.8.5.custom.min.js" />
+    <Content Include="Scripts\jquery.autocomplete.js" />
     <Content Include="Scripts\jquery.form.js" />
     <Content Include="Scripts\jquery.jgrowl.js" />
     <Content Include="Scripts\jquery-tgc-countdown-1.0.js" />

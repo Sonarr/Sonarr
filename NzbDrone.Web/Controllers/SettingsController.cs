@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 using NLog;
@@ -27,10 +28,12 @@ namespace NzbDrone.Web.Controllers
         private readonly RootDirProvider _rootDirProvider;
         private readonly AutoConfigureProvider _autoConfigureProvider;
         private readonly NotificationProvider _notificationProvider;
+        private readonly DiskProvider _diskProvider;
 
         public SettingsController(ConfigProvider configProvider, IndexerProvider indexerProvider,
                                   QualityProvider qualityProvider, RootDirProvider rootDirProvider,
-                                  AutoConfigureProvider autoConfigureProvider, NotificationProvider notificationProvider)
+                                  AutoConfigureProvider autoConfigureProvider, NotificationProvider notificationProvider,
+                                  DiskProvider diskProvider)
         {
             _configProvider = configProvider;
             _indexerProvider = indexerProvider;
@@ -38,6 +41,7 @@ namespace NzbDrone.Web.Controllers
             _rootDirProvider = rootDirProvider;
             _autoConfigureProvider = autoConfigureProvider;
             _notificationProvider = notificationProvider;
+            _diskProvider = diskProvider;
         }
 
         public ActionResult Index(string viewName)
@@ -311,6 +315,52 @@ namespace NzbDrone.Web.Controllers
             {
                 return new JsonResult { Data = "failed" };
             }
+        }
+
+        public ActionResult AutoCompletePath(string path)
+        {
+            var windowsSep = path.LastIndexOf('\\');
+
+            if (windowsSep > -1)
+            {
+                var start = path.Substring(windowsSep + 1);
+                var dirs = _diskProvider.GetDirectories(path.Substring(0, windowsSep + 1)).Where(d => new DirectoryInfo(d).Name.ToLower().StartsWith(start.ToLower()));
+                return Content(String.Join("\n", dirs));
+            }
+
+            var index = path.LastIndexOf('/');
+
+            if (index > -1)
+            {
+                var start = path.Substring(index + 1);
+                var dirs = _diskProvider.GetDirectories(path.Substring(0, index + 1)).Where(d => new DirectoryInfo(d).Name.ToLower().StartsWith(start.ToLower()));
+                return Content(String.Join("\n", dirs));
+            }
+
+            return Content("");
+        }
+
+        public JsonResult JsonAutoCompletePath(string term)
+        {
+            var windowsSep = term.LastIndexOf('\\');
+
+            if (windowsSep > -1)
+            {
+                var start = term.Substring(windowsSep + 1);
+                var dirs = _diskProvider.GetDirectories(term.Substring(0, windowsSep + 1)).Where(d => new DirectoryInfo(d).Name.ToLower().StartsWith(start.ToLower())).Take(10);
+                return Json(dirs.ToArray(), JsonRequestBehavior.AllowGet);
+            }
+
+            var index = term.LastIndexOf('/');
+
+            if (index > -1)
+            {
+                var start = term.Substring(index + 1);
+                var dirs = _diskProvider.GetDirectories(term.Substring(0, index + 1)).Where(d => new DirectoryInfo(d).Name.ToLower().StartsWith(start.ToLower())).Take(10);
+                return Json(dirs.ToArray(), JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new JsonResult(), JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

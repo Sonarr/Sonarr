@@ -19,7 +19,7 @@
 
     <div class="rootDirSection" id="div_@(ViewData["RootDirId"])">
         <fieldset>
-            <div>
+            <div class="ui-widget">
                 @Html.TextBoxFor(m => m.Path, new { @class = "root_dir_text" })
                 <a href="#" class="deleteRow" onclick="deleteRootDir('@ViewData["RootDirId"]')">
                     <img src="../../Content/Images/X.png" alt="Delete" /></a>

@@ -11,6 +11,13 @@
         };
         $('#form').ajaxForm(options);
         $('#save_button').attr('disabled', '');
+
+        $(".root_dir_text").autocomplete({ url: '@Url.Action("AutoCompletePath", "Settings")', paramName: 'path', minChars: 3, delay: 300, maxCacheLength: 1 });
+
+        $(".root_dir_text").autocomplete({
+            source: '@Url.Action("JsonAutoCompletePath", "Settings")',
+            minLength: 3
+        });
     });
 
     function showRequest(formData, jqForm, options) {
