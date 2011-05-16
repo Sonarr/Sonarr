@@ -31,6 +31,6 @@ namespace NzbDrone.Web.Models
         public bool SeasonFolder { get; set; }
 
         [DisplayName("Monitored")]
-        public bool Monitored { get; set; } 
+        public bool Monitored { get; set; }
     }
 }

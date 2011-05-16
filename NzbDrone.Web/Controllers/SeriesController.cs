@@ -22,6 +22,7 @@ namespace NzbDrone.Web.Controllers
         private readonly SeriesProvider _seriesProvider;
         private readonly TvDbProvider _tvDbProvider;
         private readonly JobProvider _jobProvider;
+        private readonly SeasonProvider _seasonProvider;
         //
         // GET: /Series/
 
@@ -29,7 +30,8 @@ namespace NzbDrone.Web.Controllers
                                 EpisodeProvider episodeProvider,
                                 QualityProvider qualityProvider, MediaFileProvider mediaFileProvider,
                                 RenameProvider renameProvider, RootDirProvider rootDirProvider,
-                                TvDbProvider tvDbProvider, JobProvider jobProvider)
+                                TvDbProvider tvDbProvider, JobProvider jobProvider,
+                                SeasonProvider seasonProvider)
         {
             _seriesProvider = seriesProvider;
             _episodeProvider = episodeProvider;
@@ -39,6 +41,7 @@ namespace NzbDrone.Web.Controllers
             _rootDirProvider = rootDirProvider;
             _tvDbProvider = tvDbProvider;
             _jobProvider = jobProvider;
+            _seasonProvider = seasonProvider;
         }
 
         public ActionResult Index()
@@ -64,6 +67,24 @@ namespace NzbDrone.Web.Controllers
                                                    });
         }
 
+        public ActionResult SeasonEditor(int seriesId)
+        {
+            var model =
+                _seriesProvider.GetSeries(seriesId).Seasons.Select(s => new SeasonEditModel
+                                                                            {
+                                                                                SeasonId = s.SeasonId,
+                                                                                SeasonNumber = s.SeasonNumber,
+                                                                                SeasonString = GetSeasonString(s.SeasonNumber),
+                                                                                Monitored = s.Monitored
+                                                                            }).OrderBy(s=> s.SeasonNumber).ToList();
+            return View(model);
+        }
+
+        public ActionResult GetSingleSeasonView(SeasonEditModel model)
+        {
+            return PartialView("SingleSeason", model);
+        }
+
         [GridAction]
         public ActionResult _AjaxSeriesGrid()
         {
@@ -74,7 +95,7 @@ namespace NzbDrone.Web.Controllers
 
         [AcceptVerbs(HttpVerbs.Post)]
         [GridAction]
-        public ActionResult _SaveAjaxSeriesEditing(int id, string path, bool monitored, bool seasonFolder, int qualityProfileId)
+        public ActionResult _SaveAjaxSeriesEditing(int id, string path, bool monitored, bool seasonFolder, int qualityProfileId, List<SeasonEditModel> seasons)
         {
             var oldSeries = _seriesProvider.GetSeries(id);
             oldSeries.Path = path;
@@ -222,6 +243,19 @@ namespace NzbDrone.Web.Controllers
             return RedirectToAction("UnMapped");
         }
 
+        [HttpPost]
+        public ActionResult SaveSeasons(List<SeasonEditModel> seasons)
+        {
+            foreach (var season in seasons)
+            {
+                var seasonInDb = _seasonProvider.GetSeason(season.SeasonId);
+                seasonInDb.Monitored = season.Monitored;
+                _seasonProvider.SaveSeason(seasonInDb);
+            }
+
+            return Content("Saved");
+        }
+
         public ActionResult Details(int seriesId)
         {
             var series = _seriesProvider.GetSeries(seriesId);
@@ -300,6 +334,14 @@ namespace NzbDrone.Web.Controllers
             }));
 
             return series;
+        }
+
+        private string GetSeasonString(int seasonNumber)
+        {
+            if (seasonNumber == 0)
+                return "Specials";
+
+            return String.Format("Season# {0}", seasonNumber);
         }
     }
 }

@@ -44,6 +44,16 @@ namespace NzbDrone.Web.Controllers
             _diskProvider = diskProvider;
         }
 
+        public ActionResult Test()
+        {
+            return View();
+        }
+
+        public ActionResult TestPartial()
+        {
+            return View();
+        }
+
         public ActionResult Index(string viewName)
         {
             if (viewName != null)
@@ -315,29 +325,6 @@ namespace NzbDrone.Web.Controllers
             {
                 return new JsonResult { Data = "failed" };
             }
-        }
-
-        public ActionResult AutoCompletePath(string path)
-        {
-            var windowsSep = path.LastIndexOf('\\');
-
-            if (windowsSep > -1)
-            {
-                var start = path.Substring(windowsSep + 1);
-                var dirs = _diskProvider.GetDirectories(path.Substring(0, windowsSep + 1)).Where(d => new DirectoryInfo(d).Name.ToLower().StartsWith(start.ToLower()));
-                return Content(String.Join("\n", dirs));
-            }
-
-            var index = path.LastIndexOf('/');
-
-            if (index > -1)
-            {
-                var start = path.Substring(index + 1);
-                var dirs = _diskProvider.GetDirectories(path.Substring(0, index + 1)).Where(d => new DirectoryInfo(d).Name.ToLower().StartsWith(start.ToLower()));
-                return Content(String.Join("\n", dirs));
-            }
-
-            return Content("");
         }
 
         public JsonResult JsonAutoCompletePath(string term)

@@ -1,0 +1,47 @@
+﻿@using NzbDrone.Web.Models;
+@model List<SeasonEditModel>
+
+@{
+    Layout = null;
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var options = {
+            target: '#result',
+            //beforeSubmit: showRequest,
+            success: showResponse,
+            type: 'post',
+            resetForm: false
+        };
+        $('#form').ajaxForm(options);
+        $('#save_button').attr('disabled', '');
+    });
+
+    function showRequest(formData, jqForm, options) {
+        $("#result").empty().html('Saving...');
+        $("#form :input").attr("disabled", true);
+    }
+
+    function showResponse(responseText, statusText, xhr, $form) {
+        //$("#result").empty().html(responseText);
+        $("#form :input").attr("disabled", false);
+        closeSeasonEditor();
+    }            
+</script>
+
+@using (Html.BeginForm("SaveSeasons", "Series", FormMethod.Post, new { id = "form" }))
+{
+    <div style="vertical-align: middle">
+        @foreach (var season in Model)
+        {
+            Html.RenderAction("GetSingleSeasonView", "Series", season);
+        }
+    </div>
+    
+    <div id="buttons" style="padding-top: 20px; position: absolute; bottom: 5;">
+        <button type="submit" class="t-button t-state-default">Save</button>
+        <button type="button" class="t-button t-state-default" onclick="closeSeasonEditor()">Cancel</button>
+    </div>
+}
+<div id="result"></div>

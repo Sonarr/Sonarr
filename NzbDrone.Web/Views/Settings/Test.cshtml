@@ -1,0 +1,106 @@
+﻿    <style type="text/css">
+        
+        #feedback-open-button
+        {
+            height: 32px;
+            margin: 2em 0 4em;
+        }
+        
+        #feedback-form
+        {
+            padding: 0 1em 1em;
+        }
+        
+        #feedback-form label
+        {
+            display: block;
+            line-height: 25px;
+            margin-top: 1em;
+        }
+        
+        #feedback-form input
+        {
+            width: 370px;
+        }
+        
+        .form-actions
+        {
+            padding-top: 1em;
+            overflow: hidden;
+        }
+        
+        .form-actions button
+        {
+            float: right;
+        }
+        
+        .example .t-group
+        {
+            border-width: 1px;
+            border-style: solid;
+            padding: 0 1em 1em;
+        }
+        
+    </style>
+
+@{  Html.Telerik().Window()
+        .Name("Window")
+        .Title("Submit feedback")
+        .LoadContentFrom("TestPartial", "Settings")
+        .Width(400)
+        .Draggable(true)
+        .Modal(true)
+        .Visible(false)
+        .Render();
+} 
+            
+<button id="feedback-open-button" class="t-button t-state-default">Submit feedback...</button>
+@if (ViewData["name"] != null || ViewData["email"] != null || ViewData["comment"] != null) { 
+    <div class="t-group">
+        <h3>Feedback:</h3>
+    
+        <p>
+            Name: @ViewData["name"] <br />
+            E-mail: @ViewData["email"] <br />
+            Comment: @ViewData["comment"] 
+        </p>
+    </div>
+}
+
+@{ Html.Telerik().ScriptRegistrar()
+        .OnDocumentReady(@<text>
+            // open the initially hidden window when the button is clicked
+            
+        </text>); }
+
+
+<script type="text/javascript">
+
+    var windowElement;
+
+    $('#feedback-open-button')
+                .click(function (e) {
+                    e.preventDefault();
+
+                    windowElement = $.telerik.window.create({
+                        title: "Season Edition: ",
+                        contentUrl: '@Url.Action("SeasonEditor", "Series")' + '/?seriesId=10',
+                        width: 400,
+                        height: 500,
+                        modal: true,
+                        resizable: false,
+                        draggable: true,
+                        scrollable: false
+                    });
+
+                    windowElement.data('tWindow').center();
+                });
+    // add button hovers
+    $('.t-button').live('mouseenter', $.telerik.buttonHover)
+                            .live('mouseleave', $.telerik.buttonLeave);
+
+    function closeWindow() {
+        var window = windowElement.data("tWindow");
+        window.close();
+    }
+</script>

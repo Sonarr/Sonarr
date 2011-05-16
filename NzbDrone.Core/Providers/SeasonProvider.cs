@@ -61,7 +61,12 @@ namespace NzbDrone.Core.Providers
 
         public virtual int SaveSeason(Season season)
         {
-            throw new NotImplementedException();
+            if (_repository.Exists<Season>(s => s.SeasonId == season.SeasonId))
+            {
+                return _repository.Update(season);
+            }
+
+            return (int)_repository.Add(season);
         }
 
         public virtual bool IsIgnored(int seasonId)
