@@ -37,8 +37,15 @@ namespace NzbDrone
                 Attach();
 #endif
 
-                Process.Start(IISController.AppUrl);
-
+                try
+                {
+                    Logger.Info("Starting default browser. {0}",IISController.AppUrl);
+                    Process.Start(IISController.AppUrl);
+                }
+                catch(Exception e)
+                {
+                    Logger.ErrorException("Failed to open URL in default browser.", e);
+                }
                 while (true)
                 {
                     Console.ReadLine();

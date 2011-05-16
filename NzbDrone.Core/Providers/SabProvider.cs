@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Providers
         public virtual bool AddByUrl(string url, string title)
         {
             string cat = _configProvider.SabTvCategory;
-            int priority = (int)Enum.Parse(typeof(SabnzbdPriorityType), _configProvider.SabTvPriority);
+            int priority = (int)_configProvider.SabTvPriority;
             string name = url.Replace("&", "%26");
             string nzbName = HttpUtility.UrlEncode(title);
 

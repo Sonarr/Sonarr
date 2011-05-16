@@ -106,20 +106,17 @@ namespace NzbDrone.Web.Controllers
 
             var model = new DownloadSettingsModel
                             {
-                                SyncFrequency = Convert.ToInt32(_configProvider.SyncFrequency),
-                                DownloadPropers = Convert.ToBoolean(_configProvider.DownloadPropers),
-                                Retention = Convert.ToInt32(_configProvider.Retention),
+                                SyncFrequency = _configProvider.SyncFrequency,
+                                DownloadPropers = _configProvider.DownloadPropers,
+                                Retention = _configProvider.Retention,
                                 SabHost = _configProvider.SabHost,
-                                SabPort = Convert.ToInt32(_configProvider.SabPort),
+                                SabPort =_configProvider.SabPort,
                                 SabApiKey = _configProvider.SabApiKey,
                                 SabUsername = _configProvider.SabUsername,
                                 SabPassword = _configProvider.SabPassword,
                                 SabTvCategory = _configProvider.SabTvCategory,
-                                SabTvPriority =
-                                    (SabnzbdPriorityType)
-                                    Enum.Parse(typeof(SabnzbdPriorityType),
-                                               _configProvider.SabTvPriority),
-                                UseBlackHole = Convert.ToBoolean(_configProvider.UseBlackhole),
+                                SabTvPriority = _configProvider.SabTvPriority,
+                                UseBlackHole = _configProvider.UseBlackhole,
                                 BlackholeDirectory = _configProvider.BlackholeDirectory
                             };
 
@@ -374,7 +371,7 @@ namespace NzbDrone.Web.Controllers
                 return Content(SETTINGS_FAILED);
             }
 
-            
+
             basicNotification.Title = SETTINGS_SAVED;
             _notificationProvider.Register(basicNotification);
 
@@ -437,16 +434,16 @@ namespace NzbDrone.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                _configProvider.SyncFrequency = data.SyncFrequency.ToString();
-                _configProvider.DownloadPropers = data.DownloadPropers.ToString();
-                _configProvider.Retention = data.Retention.ToString();
+                _configProvider.SyncFrequency = data.SyncFrequency;
+                _configProvider.DownloadPropers = data.DownloadPropers;
+                _configProvider.Retention = data.Retention;
                 _configProvider.SabHost = data.SabHost;
-                _configProvider.SabPort = data.SabPort.ToString();
+                _configProvider.SabPort = data.SabPort;
                 _configProvider.SabApiKey = data.SabApiKey;
                 _configProvider.SabPassword = data.SabPassword;
                 _configProvider.SabTvCategory = data.SabTvCategory;
                 _configProvider.SabUsername = data.SabUsername;
-                _configProvider.SabTvPriority = data.SabTvPriority.ToString();
+                _configProvider.SabTvPriority = data.SabTvPriority;
                 _configProvider.UseBlackhole = data.UseBlackHole;
                 _configProvider.BlackholeDirectory = data.BlackholeDirectory;
 

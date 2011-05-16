@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository;
 using SubSonic.Repository;
 
@@ -103,23 +104,23 @@ namespace NzbDrone.Core.Providers.Core
             set { SetValue("NewzbinPassword", value); }
         }
 
-        public virtual String SyncFrequency
+        public virtual int SyncFrequency
         {
-            get { return GetValue("SyncFrequency"); }
+            get { return GetValueInt("SyncFrequency"); }
 
             set { SetValue("SyncFrequency", value); }
         }
 
-        public virtual String DownloadPropers
+        public virtual Boolean DownloadPropers
         {
-            get { return GetValue("DownloadPropers"); }
+            get { return GetValueBoolean("DownloadPropers"); }
 
             set { SetValue("DownloadPropers", value); }
         }
 
-        public virtual String Retention
+        public virtual Int32 Retention
         {
-            get { return GetValue("Retention"); }
+            get { return GetValueInt("Retention"); }
 
             set { SetValue("Retention", value); }
         }
@@ -131,9 +132,9 @@ namespace NzbDrone.Core.Providers.Core
             set { SetValue("SabHost", value); }
         }
 
-        public virtual String SabPort
+        public virtual int SabPort
         {
-            get { return GetValue("SabPort"); }
+            get { return GetValueInt("SabPort"); }
 
             set { SetValue("SabPort", value); }
         }
@@ -166,11 +167,11 @@ namespace NzbDrone.Core.Providers.Core
             set { SetValue("SabTvCategory", value); }
         }
 
-        public virtual String SabTvPriority
+        public virtual SabnzbdPriorityType SabTvPriority
         {
-            get { return GetValue("SabTvPriority"); }
+            get { return (SabnzbdPriorityType)GetValueInt("SabTvPriority"); }
 
-            set { SetValue("SabTvPriority", value); }
+            set { SetValue("SabTvPriority", (int)value); }
         }
 
         public virtual Boolean UseBlackhole

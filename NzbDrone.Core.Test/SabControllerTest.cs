@@ -21,11 +21,11 @@ namespace NzbDrone.Core.Test
         {
             //Setup
             string sabHost = "192.168.5.55";
-            string sabPort = "2222";
+            int sabPort = 2222;
             string apikey = "5c770e3197e4fe763423ee7c392c25d1";
             string username = "admin";
             string password = "pass";
-            string priority = "Normal";
+            var priority = SabnzbdPriorityType.Normal;
             string category = "tv";
 
 
@@ -67,11 +67,11 @@ namespace NzbDrone.Core.Test
         {
             //Setup
             string sabHost = "192.168.5.55";
-            string sabPort = "2222";
+            int sabPort = 2222;
             string apikey = "5c770e3197e4fe763423ee7c392c25d1";
             string username = "admin";
             string password = "pass";
-            string priority = "Normal";
+            var priority = SabnzbdPriorityType.Normal;
             string category = "tv";
 
             var mocker = new AutoMoqer();
@@ -108,7 +108,7 @@ namespace NzbDrone.Core.Test
         {
             //Setup
             string sabHost = "192.168.5.55";
-            string sabPort = "2222";
+            int sabPort = 2222;
             string apikey = "5c770e3197e4fe763423ee7c392c25d1";
             string username = "admin";
             string password = "pass";
@@ -143,7 +143,7 @@ namespace NzbDrone.Core.Test
         {
             //Setup
             string sabHost = "192.168.5.55";
-            string sabPort = "2222";
+            int sabPort = 2222;
             string apikey = "5c770e3197e4fe763423ee7c392c25d1";
             string username = "admin";
             string password = "pass";
@@ -179,7 +179,7 @@ namespace NzbDrone.Core.Test
         {
             //Setup
             string sabHost = "192.168.5.55";
-            string sabPort = "2222";
+            int sabPort = 2222;
             string apikey = "5c770e3197e4fe763423ee7c392c25d1";
             string username = "admin";
             string password = "pass";
