@@ -6,7 +6,7 @@
 {
     <fieldset style="display: inline; border-color: lightgrey; width: 26%; margin-bottom: 2px; padding-bottom: 1px; padding-top: 1px;">
         @Html.DisplayFor(m => m.SeasonString)
-        <span style="float: right;">@Html.CheckBoxFor(m => m.Monitored)</span>
+        <span style="float: right;">@Html.CheckBoxFor(m => m.Monitored, new { @class = "chkbox" })</span>
 
         @Html.HiddenFor(m => m.SeasonId)
         @Html.HiddenFor(m => m.SeasonNumber)

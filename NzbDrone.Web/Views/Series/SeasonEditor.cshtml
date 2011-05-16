@@ -45,3 +45,27 @@
     </div>
 }
 <div id="result"></div>
+
+<script type="text/javascript">
+    var lastChecked = null;
+
+    $(document).ready(function () {
+        $('.chkbox').click(function (event) {
+            if (!lastChecked) {
+                lastChecked = this;
+                return;
+            }
+
+            if (event.shiftKey) {
+                var start = $('.chkbox').index(this);
+                var end = $('.chkbox').index(lastChecked);
+
+                for (i = Math.min(start, end); i <= Math.max(start, end); i++) {
+                    $('.chkbox')[i].checked = lastChecked.checked;
+                }
+            }
+
+            lastChecked = this;
+        });
+    });
+    </script>
