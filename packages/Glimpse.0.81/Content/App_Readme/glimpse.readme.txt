@@ -1,0 +1,140 @@
+Release notes moved to bottom of file!
+--------------------------------------
+
+Using Glimpse
+-------------
+Thank you for NuGetting Glimpse, A client side Glimpse into whats going on in your server.
+
+Glimpse is currently in Beta.
+
+If you experience any issues, or have feature requests, please report them to https://github.com/Glimpse/Glimpse/issues
+
+To get started with Glimpse, visit [http://yoursite.com]/Glimpse/Config/ This page hosts the Glimpse bookmarklets, useful for quickly turning on Glimpse.
+
+The following configuration values are allowed for Glimpse in your web.config:
+
+<glimpse on="true" saveRequestCount="5"> <!-- set on to false to completly turn off Glimpse. saveRequestCount specifies the max number of requests Glimpse will save -->
+    <ipAddresses> <!-- List of IP addresses allowed to get Glimpse data.  localhost (IPv4 & IPv6) by default -->
+        <add address="127.0.0.1" />
+        <add address="::1" />
+    </ipAddresses>
+    <contentTypes>
+        <add contentType="text/html"/>
+    </contentTypes>
+    <pluginBlacklist>
+		<add plugin="Glimpse.Net.Plugin.Asp.Request"/>
+		<add plugin="Glimpse.Net.Plugin.Mvc.MetaData"/>
+	</pluginBlacklist>
+</glimpse>
+
+
+For more info, visit the homepage at http://getGlimpse.com or follow #glimpse on Twitter.
+
+
+Overview
+--------
+At its core Glimpse allows you to debug your web site right in the browser. Glimpse allows you to "Glimpse" into what's going on in your web server. In other words what Firebug is to debugging your client side code, Glimpse is to debugging your server within the client.
+
+Fundamentally Glimpse is made up of 3 different parts, all of which are extensible and customizable for any platform:
+
+* Glimpse Server Module 
+* Glimpse Client Side Viewer 
+* Glimpse Protocol
+
+
+How it Works
+------------
+On the Server:
+
+1. Server collects all server side information that will aid in debugging (i.e. application settings, routes, session variables, trace data, etc)
+2. It does this by running through a pipeline of server side data providers that can be dynamically controlled and added to under our plugin architecture
+3. Before the response is send, the server formats this data in accordance with the Glimpse Protocol and serializes it as JSON
+4. Depending on whether it is an Ajax request or not, the server embeds the JSON in the content of the page
+
+On the Client:
+
+5. Depending on whether it is a Ajax request or not, the client picks up the JSON data and displays the it by executing a pipeline of client side data providers that can be dynamically controlled and added to under our plugin architecture
+6. The client side module then dynamically renders a client side UI (similar to Firebug Lite) that lets you view this data
+
+Glimpse can be turned on or off by a series of different mechanisms, but at its core if the Glimpse cookie is present the server will provide the "debug" data - as a security measure, the request for debug data is "authenticated".
+
+ 
+Server Implementations 
+----------------------
+Given the scope of the project and what it can do, the concept isn't restricted to any one platform. Hence, once mature, Glimpse Server Module will be available on all major web platforms. 
+
+Platforms currently supported:
+
+* ASP.Net MVC 
+
+Platforms target to be supported:
+
+* ASP.Net Web Forms 
+* PHP
+* Ruby on Rails 
+
+NOTE - If you would like help develop a Glimpse Server Module for a given platform please let us know.
+
+
+Client Implementations 
+----------------------
+To start with the Glimpse Client Side Viewer is simply a light weight JavaScript "plugin" that understands the Glimpse Protocol and knows how to render the data. From a technology standpoint we currently use jQuery as the client side framework.
+
+Eventually, we would like to have actual browser plugins that provide richer functionality and experience, but the JavaScript version of the Glimpse Client Side Viewer is surprisingly well featured, intuitive and provides a high fidelity experience. We also hope to have a version for mobile ready soon which customizes the viewing/usage experience when using a mobile device.
+
+Protocol
+-------- 
+Details coming soon.
+
+Release Notes
+-------------
+05/08/2011 - 0.81
+- Changed plugin initialization so that SetupInit is only called once.
+- Added list of loaded plugins to Glimpse/Config
+- Added node to configuration to allow for blacklisting unwanted plugins. Configuration takes the form <glimpse><pluginBlacklist><add plugin="[Type.Name.Including.Namespace]"/></pluginBlacklist></glimpse>
+- Updated Binding plugin to have acctual view data
+- Fixed bugs with getting NotImplemented exceptions on trace tab
+- Fixed bugs with users who were extending DefaultModelBinder
+- Added ability to set glimpseState (cookie) to Hidden, which allows Glimpse to record and track remote client requests without rendering UI/Data to their response. (Useful for use with the remote tab)
+- Added GlimpseTrace static facade to simplify tracing
+
+04/28/2011 - 0.80
+- Removed dependency on System.Drawing
+- Fixed bugs related to projects that used custom ControllerActionInvokers
+- Fixed bugs related to projects using custom FilterProviders
+- Added MetaData tab which gives details of primary View Model and primary View Models properties (note this is not recursive at the moment)
+- Environment tab now shows site trust level
+- Performance improvments for supporting virtual directories
+- Glimpse should now work in jQuery noConflict mode 
+- Added Glimpse Warnings tab, used to help debug Glimpse problems going forward
+
+04/20/2011 - 0.79
+- Client bug fixes for popout window
+- Client bug fixes for virtual directories
+- Various javascript fixes
+
+04/16/2011 - 0.78
+- Breaking change is you created custom plugins.  Plugin interface moved from Glimpse.Protocol to Glimpse.Net.Extensibility namespace
+- Fixed bug which threw ReflectionTypeLoadExceptions by using custom SafeDirectoryCatalog (Special thanks to Craig Wagner for helping us track this down!)
+- Fixed pathing issues experienced by users hosting from virtual directories
+- Added Request tab to show form, query string and cookies as the server saw them
+- Added ViewData/ViewBag and TempData info to the details column of the Views tab
+- Added Area support to Routes tab
+- Added Glimpse Warnings tab, which will only appear when a MEF loading issue is thrown
+- Added ability to open Glimpse in popup mode (alpha)
+- Added symbols package to symbolsource.org for simplified debugging by the community
+
+04/14/2011 - 0.77
+- Fixed issues with most InvalidOperationException's/Circular references. Now if there is an issue, handle it more gracefully, and it only affects one tab. (More complete fix coming soon!)
+- /Glimpse/Config is no longer case sensitive, and certain reports of 404’s to this page have been fixed. In addition, this page has been improved to be more understandable.
+- As of right now, Glimpse only supports MVC3.  We have identified the issues with MVC2, and are working to correct them. Special shout out to @rugvedvaidya for providing the (long!) workaround to get Glimpse running on MVC2.
+
+04/13/2011 - 0.76
+- Added "Time Elapsed" column to the Execution tab.
+- Fixed 2 bugs with IE9 client rendering.
+- Fixed bug with CSS text-alignment.
+- Changed to Apache 2 license.
+
+Attribution
+-----------
+Some Icons are Copyright © Yusuke Kamiyamane. [http://p.yusukekamiyamane.com/]

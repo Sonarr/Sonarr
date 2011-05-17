@@ -1,0 +1,14 @@
+﻿<configuration>
+    <configSections>
+        <section name="glimpse" type="Glimpse.Net.Configuration.GlimpseConfiguration" />
+    </configSections>
+    <glimpse on="true" saveRequestCount="5">
+        <ipAddresses>
+            <add address="127.0.0.1" /><!--IPv4-->
+            <add address="::1" /><!--IPv6-->
+        </ipAddresses>
+        <contentTypes>
+            <add contentType="text/html"/>
+        </contentTypes>
+    </glimpse>
+</configuration>
