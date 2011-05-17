@@ -15,7 +15,6 @@ namespace NzbDrone.Core.Test
         [Test]
         public void Run_Jobs_Updates_Last_Execution()
         {
-
             IEnumerable<IJob> fakeTimers = new List<IJob> { new FakeJob() };
             var mocker = new AutoMoqer();
 
@@ -99,7 +98,6 @@ namespace NzbDrone.Core.Test
             Assert.IsTrue(secondRun);
         }
 
-
         [Test]
         //This test will confirm that the concurrency checks are rest
         //after execution so the job can successfully run.
@@ -122,7 +120,6 @@ namespace NzbDrone.Core.Test
 
         }
 
-
         [Test]
         //This test will confirm that the concurrency checks are rest
         //after execution so the job can successfully run.
@@ -143,7 +140,6 @@ namespace NzbDrone.Core.Test
             Assert.IsTrue(firstRun);
             Assert.IsTrue(secondRun);
         }
-
 
         [Test]
         //This test will confirm that the concurrency checks are rest
@@ -234,8 +230,6 @@ namespace NzbDrone.Core.Test
             Assert.IsTrue(timers[0].Enable);
         }
 
-
-
         [Test]
         public void Init_Timers_sets_interval_0_to_disabled()
         {
@@ -267,8 +261,26 @@ namespace NzbDrone.Core.Test
             Assert.IsFalse(timers[0].Enable);
         }
 
+        [Test]
+        public void Get_Next_Execution_Time()
+        {
+            IEnumerable<IJob> fakeTimers = new List<IJob> { new FakeJob() };
+            var mocker = new AutoMoqer();
 
+            mocker.SetConstant(MockLib.GetEmptyRepository());
+            mocker.SetConstant(fakeTimers);
 
+            //Act
+            var timerProvider = mocker.Resolve<JobProvider>();
+            timerProvider.Initialize();
+            timerProvider.RunScheduled();
+            var next = timerProvider.NextScheduledRun(typeof(FakeJob));
+
+            //Assert
+            var settings = timerProvider.All();
+            Assert.IsNotEmpty(settings);
+            Assert.AreEqual(next, settings[0].LastExecution.AddMinutes(15));
+        }
     }
 
     public class FakeJob : IJob

@@ -78,7 +78,6 @@ namespace NzbDrone.Core.Providers.Jobs
 
             try
             {
-
                 var pendingJobs = All().Where(
                     t => t.Enable &&
                          (DateTime.Now - t.LastExecution) > TimeSpan.FromMinutes(t.Interval)
@@ -218,6 +217,19 @@ namespace NzbDrone.Core.Providers.Jobs
             }
         }
 
+        /// <summary>
+        /// Gets the next scheduled run time for the job
+        /// (Estimated due to schedule timer)
+        /// </summary>
+        /// <returns>DateTime of next scheduled job</returns>
+        public virtual DateTime NextScheduledRun(Type jobType)
+        {
+            var job = All().Where(t => t.TypeName == jobType.ToString()).FirstOrDefault();
 
+            if (job == null)
+                return DateTime.Now;
+
+            return job.LastExecution.AddMinutes(job.Interval);
+        }
     }
 }

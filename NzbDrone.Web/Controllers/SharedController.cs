@@ -22,8 +22,7 @@ namespace NzbDrone.Web.Controllers
         [ChildActionOnly]
         public ActionResult Footer()
         {
-            ViewData["RssTimer"] = DateTime.Now.ToString("yyyyMMddHHmmss");
-            //ViewData["RssTimer"] = DateTime.Now.AddMinutes(61).AddSeconds(10).ToString("yyyyMMddHHmmss");
+            ViewData["RssTimer"] = _jobProvider.NextScheduledRun(typeof(RssSyncJob)).ToString("yyyyMMddHHmmss");
             return PartialView();
         }
     }
