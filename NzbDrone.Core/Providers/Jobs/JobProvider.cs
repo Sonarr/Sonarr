@@ -86,7 +86,8 @@ namespace NzbDrone.Core.Providers.Jobs
 
                 foreach (var pendingTimer in pendingJobs)
                 {
-                    var timerClass = _jobs.Where(t => t.GetType().ToString() == pendingTimer.TypeName).FirstOrDefault();
+                    var timer = pendingTimer;
+                    var timerClass = _jobs.Where(t => t.GetType().ToString() == timer.TypeName).FirstOrDefault();
                     Execute(timerClass.GetType());
                 }
             }
@@ -103,7 +104,6 @@ namespace NzbDrone.Core.Providers.Jobs
         /// Starts the execution of a job asynchronously
         /// </summary>
         /// <param name="jobType">Type of the job that should be executed.</param>
-        /// <param name="queueAllowed">If the job is allowed to be queued in case another task is aready running.</param>
         /// <param name="targetId">The targetId could be any Id parameter eg. SeriesId. it will be passed to the job implementation
         /// to allow it to filter it's target of execution.</param>
         /// <returns>True if ran, false if skipped</returns>
@@ -221,8 +221,8 @@ namespace NzbDrone.Core.Providers.Jobs
         /// to allow it to filter it's target of execution</param>
         private void Execute(Type jobType, int targetId = 0)
         {
-            var timerClass = _jobs.Where(t => t.GetType() == jobType).FirstOrDefault();
-            if (timerClass == null)
+            var jobImplementation = _jobs.Where(t => t.GetType() == jobType).FirstOrDefault();
+            if (jobImplementation == null)
             {
                 Logger.Error("Unable to locate implementation for '{0}'. Make sure its properly registered.", jobType.ToString());
                 return;
@@ -230,28 +230,28 @@ namespace NzbDrone.Core.Providers.Jobs
 
             var settings = All().Where(j => j.TypeName == jobType.ToString()).FirstOrDefault();
 
-            using (_notification = new ProgressNotification(timerClass.Name))
+            using (_notification = new ProgressNotification(jobImplementation.Name))
             {
                 try
                 {
                     Logger.Debug("Starting job '{0}'. Last execution {1}", settings.Name, settings.LastExecution);
-                    settings.LastExecution = DateTime.Now;
+                    
                     var sw = Stopwatch.StartNew();
 
                     _notificationProvider.Register(_notification);
-                    timerClass.Start(_notification, targetId);
+                    jobImplementation.Start(_notification, targetId);
                     _notification.Status = ProgressNotificationStatus.Completed;
-
+                    settings.LastExecution = DateTime.Now;//TODO: Should only be updated if targetId is 0.
                     settings.Success = true;
                     sw.Stop();
-                    Logger.Debug("Job '{0}' successfully completed in {1} seconds", timerClass.Name, sw.Elapsed.Minutes,
+                    Logger.Debug("Job '{0}' successfully completed in {1} seconds", jobImplementation.Name, sw.Elapsed.Minutes,
                                 sw.Elapsed.Seconds);
                 }
                 catch (Exception e)
                 {
                     settings.Success = false;
-                    Logger.ErrorException("An error has occurred while executing timer job " + timerClass.Name, e);
-                    _notification.CurrentMessage = timerClass.Name + " Failed.";
+                    Logger.ErrorException("An error has occurred while executing timer job " + jobImplementation.Name, e);
+                    _notification.CurrentMessage = jobImplementation.Name + " Failed.";
                     _notification.Status = ProgressNotificationStatus.Failed;
                 }
             }
