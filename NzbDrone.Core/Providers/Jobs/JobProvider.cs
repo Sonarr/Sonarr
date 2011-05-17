@@ -241,8 +241,11 @@ namespace NzbDrone.Core.Providers.Jobs
                     _notificationProvider.Register(_notification);
                     jobImplementation.Start(_notification, targetId);
                     _notification.Status = ProgressNotificationStatus.Completed;
-                    settings.LastExecution = DateTime.Now;//TODO: Should only be updated if targetId is 0.
-                    settings.Success = true;
+
+                    if (targetId != 0)
+                        settings.LastExecution = DateTime.Now;
+
+                    settings.Success = true; //TODO: Do we consider a job with a targetId as successful?
                     sw.Stop();
                     Logger.Debug("Job '{0}' successfully completed in {1} seconds", jobImplementation.Name, sw.Elapsed.Minutes,
                                 sw.Elapsed.Seconds);
