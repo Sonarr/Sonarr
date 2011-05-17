@@ -313,6 +313,32 @@ namespace NzbDrone.Core.Test
             Assert.IsNotEmpty(settings);
             Assert.AreEqual(next, settings[0].LastExecution.AddMinutes(15));
         }
+
+
+        [Test]
+        public void Disabled_isnt_run_by_scheduler()
+        {
+            var repo = MockLib.GetEmptyRepository();
+
+
+            var disabledJob = new DisabledJob();
+            IEnumerable<IJob> fakeJobs = new List<IJob> { disabledJob };
+            var mocker = new AutoMoqer();
+
+            mocker.SetConstant(repo);
+            mocker.SetConstant(fakeJobs);
+
+            var timerProvider = mocker.Resolve<JobProvider>();
+            timerProvider.Initialize();
+
+            timerProvider.RunScheduled();
+
+            Thread.Sleep(1000);
+
+
+            //Assert
+            Assert.AreEqual(0, disabledJob.ExexutionCount);
+        }
     }
 
     public class FakeJob : IJob
@@ -345,9 +371,11 @@ namespace NzbDrone.Core.Test
             get { return 0; }
         }
 
+        public int ExexutionCount { get; set; }
+
         public void Start(ProgressNotification notification, int targetId)
         {
-
+            ExexutionCount++;
         }
     }
 

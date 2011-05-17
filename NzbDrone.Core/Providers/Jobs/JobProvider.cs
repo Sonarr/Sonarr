@@ -95,6 +95,7 @@ namespace NzbDrone.Core.Providers.Jobs
                 _isRunning = false;
             }
 
+            Logger.Debug("Finished executing scheduled tasks.");
             return true;
         }
 
