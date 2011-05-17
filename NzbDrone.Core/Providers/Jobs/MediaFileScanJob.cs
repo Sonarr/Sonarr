@@ -42,9 +42,9 @@ namespace NzbDrone.Core.Providers.Jobs
 
             foreach (var series in seriesToScan)
             {
-                notification.CurrentMessage = "Scanning for files: " + series.Title;
+                notification.CurrentMessage = string.Format("Scanning disk for '{0}'", series.Title);
                 _mediaFileProvider.Scan(series);
-                notification.CurrentMessage = "Media File Scan completed for " + series.Title;
+                notification.CurrentMessage = string.Format("Media File Scan completed for '{0}'", series.Title);
             }
         }
     }

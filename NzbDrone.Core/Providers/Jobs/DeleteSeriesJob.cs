@@ -40,11 +40,13 @@ namespace NzbDrone.Core.Providers.Jobs
 
             try
             {
-                notification.CurrentMessage = String.Format("Beginning Delete of Series: {0}", seriesId);
+                var title = _seriesProvider.GetSeries(seriesId).Title;
+
+                notification.CurrentMessage = String.Format("Deleting '{0}' from database", title);
 
                 _seriesProvider.DeleteSeries(seriesId);
 
-                notification.CurrentMessage = String.Format("Successfully deleted Series: {0}", seriesId);
+                notification.CurrentMessage = String.Format("Successfully deleted '{0}'", title);
             }
             catch (Exception e)
             {

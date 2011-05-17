@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Test
 
         public static IRepository GetEmptyRepository()
         {
-            return GetEmptyRepository(true);
+            return GetEmptyRepository(false);
         }
 
         public static IRepository GetEmptyRepository(bool enableLogging)

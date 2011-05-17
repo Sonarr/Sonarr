@@ -20,6 +20,7 @@ namespace NzbDrone.Core.Providers.Jobs
         private static readonly object ExecutionLock = new object();
         private Thread _jobThread;
         private static bool _isRunning;
+        private static readonly List<Tuple<Type, Int32>> Queue = new List<Tuple<Type, int>>();
 
         private ProgressNotification _notification;
 
@@ -86,7 +87,7 @@ namespace NzbDrone.Core.Providers.Jobs
                 foreach (var pendingTimer in pendingJobs)
                 {
                     var timerClass = _jobs.Where(t => t.GetType().ToString() == pendingTimer.TypeName).FirstOrDefault();
-                    Execute(timerClass.GetType(), 0);
+                    Execute(timerClass.GetType());
                 }
             }
             finally
@@ -101,29 +102,48 @@ namespace NzbDrone.Core.Providers.Jobs
         /// Starts the execution of a job asynchronously
         /// </summary>
         /// <param name="jobType">Type of the job that should be executed.</param>
+        /// <param name="queueAllowed">If the job is allowed to be queued in case another task is aready running.</param>
         /// <param name="targetId">The targetId could be any Id parameter eg. SeriesId. it will be passed to the job implementation
         /// to allow it to filter it's target of execution.</param>
         /// <returns>True if ran, false if skipped</returns>
-        public virtual bool BeginExecute(Type jobType, int targetId = 0)
+        /// <remarks>Job is only added to the queue if same job with the same targetId doesn't already exist in the queue.</remarks>
+        public virtual bool QueueJob(Type jobType, int targetId = 0)
         {
+            Logger.Debug("Adding job {0} ->{1} to the queue", jobType, targetId);
+            lock (Queue)
+            {
+                var queueTuple = new Tuple<Type, int>(jobType, targetId);
+
+                if (Queue.Contains(queueTuple))
+                {
+                    Logger.Info("Job {0} ->{1} already exists in queue. Skipping.", jobType, targetId);
+                    return false;
+                }
+
+                Queue.Add(queueTuple);
+                Logger.Debug("Job {0} ->{1} added to the queue", jobType, targetId);
+
+            }
+
             lock (ExecutionLock)
             {
                 if (_isRunning)
                 {
-                    Logger.Info("Another job is already running. Ignoring request.");
-                    return false;
+                    Logger.Trace("Queue is already running. Ignoreing request.");
+                    return true;
                 }
-                _isRunning = true;
+
             }
+
             if (_jobThread == null || !_jobThread.IsAlive)
             {
-                Logger.Trace("Initializing background thread");
+                Logger.Trace("Initializing queue processor thread");
 
                 ThreadStart starter = () =>
                 {
                     try
                     {
-                        Execute(jobType, targetId);
+                        ProcessQueue();
                     }
                     finally
                     {
@@ -131,7 +151,7 @@ namespace NzbDrone.Core.Providers.Jobs
                     }
                 };
 
-                _jobThread = new Thread(starter) { Name = "TimerThread", Priority = ThreadPriority.BelowNormal };
+                _jobThread = new Thread(starter) { Name = "JobQueueThread", Priority = ThreadPriority.BelowNormal };
                 _jobThread.Start();
 
             }
@@ -141,6 +161,55 @@ namespace NzbDrone.Core.Providers.Jobs
             }
 
             return true;
+        }
+
+
+        /// <summary>
+        /// Starts processing of queue.
+        /// </summary>
+        private void ProcessQueue()
+        {
+            Tuple<Type, int> job = null;
+
+            try
+            {
+                lock (Queue)
+                {
+                    if (Queue.Count != 0)
+                    {
+                        job = Queue[0];
+                    }
+                }
+
+                if (job != null)
+                {
+                    Execute(job.Item1, job.Item2);
+                }
+
+            }
+            catch (Exception e)
+            {
+                Logger.FatalException("An error has occured while processing queued job.", e);
+            }
+            finally
+            {
+                if (job != null)
+                {
+                    Queue.Remove(job);
+                }
+            }
+
+            //Try to find next job is last run found a job.
+            if (job != null)
+            {
+                ProcessQueue();
+            }
+            else
+            {
+                Logger.Debug("Finished processing jobs in the queue.");
+            }
+
+            return;
         }
 
         /// <summary>
@@ -221,7 +290,7 @@ namespace NzbDrone.Core.Providers.Jobs
         /// Gets the next scheduled run time for the job
         /// (Estimated due to schedule timer)
         /// </summary>
-        /// <returns>DateTime of next scheduled job</returns>
+        /// <returns>DateTime of next scheduled job execution</returns>
         public virtual DateTime NextScheduledRun(Type jobType)
         {
             var job = All().Where(t => t.TypeName == jobType.ToString()).FirstOrDefault();

@@ -36,7 +36,7 @@ namespace NzbDrone.Web.Controllers
         [HttpPost]
         public JsonResult ScanNewSeries()
         {
-            _jobProvider.BeginExecute(typeof(NewSeriesUpdate));
+            _jobProvider.QueueJob(typeof(NewSeriesUpdate));
             return new JsonResult();
         }
 

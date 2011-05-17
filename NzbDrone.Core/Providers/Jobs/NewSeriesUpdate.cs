@@ -39,21 +39,23 @@ namespace NzbDrone.Core.Providers.Jobs
         private void ScanSeries(ProgressNotification notification)
         {
             var syncList = _seriesProvider.GetAllSeries().Where(s => s.LastInfoSync == null).ToList();
-            if (syncList.Count == 0) return;
+            if (syncList.Count == 0)
+            {
+                return;
+            }
 
             foreach (var currentSeries in syncList)
             {
                 try
                 {
-                    notification.CurrentMessage = String.Format("Searching For: {0}", new DirectoryInfo(currentSeries.Path).Name);
+                    notification.CurrentMessage = String.Format("Searching for '{0}'", new DirectoryInfo(currentSeries.Path).Name);
                     var updatedSeries = _seriesProvider.UpdateSeriesInfo(currentSeries.SeriesId);
 
-                    notification.CurrentMessage = String.Format("Downloading episode info For: {0}",
+                    notification.CurrentMessage = String.Format("Downloading episode info for '{0}'",
                                                                           updatedSeries.Title);
                     _episodeProvider.RefreshEpisodeInfo(updatedSeries.SeriesId);
 
-                    notification.CurrentMessage = String.Format("Scanning disk for {0} files",
-                                                                          updatedSeries.Title);
+                    notification.CurrentMessage = String.Format("Scanning disk for '{0}' files", updatedSeries.Title);
                     _mediaFileProvider.Scan(_seriesProvider.GetSeries(updatedSeries.SeriesId));
                 }
 

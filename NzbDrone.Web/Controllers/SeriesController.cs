@@ -54,7 +54,7 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult RssSync()
         {
-            _jobProvider.BeginExecute(typeof(RssSyncJob));
+            _jobProvider.QueueJob(typeof(RssSyncJob));
             return RedirectToAction("Index");
         }
 
@@ -119,7 +119,7 @@ namespace NzbDrone.Web.Controllers
             seriesInDb.RemoveAll(s => s.SeriesId == id);
 
             //Start removing this series
-            _jobProvider.BeginExecute(typeof(DeleteSeriesJob), id);
+            _jobProvider.QueueJob(typeof(DeleteSeriesJob), id);
             
             var series = GetSeriesModels(seriesInDb);
             return View(new GridModel(series));
@@ -274,7 +274,7 @@ namespace NzbDrone.Web.Controllers
         public ActionResult UpdateInfo(int seriesId)
         {
             //Syncs the episodes on disk for the specified series
-            _jobProvider.BeginExecute(typeof(UpdateInfoJob), seriesId);
+            _jobProvider.QueueJob(typeof(UpdateInfoJob), seriesId);
             return RedirectToAction("Details", new { seriesId });
         }
 
