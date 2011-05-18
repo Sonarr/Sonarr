@@ -164,7 +164,6 @@ namespace NzbDrone.Core.Providers.Jobs
             return true;
         }
 
-
         /// <summary>
         /// Starts processing of queue.
         /// </summary>
@@ -235,31 +234,35 @@ namespace NzbDrone.Core.Providers.Jobs
                 try
                 {
                     Logger.Debug("Starting job '{0}'. Last execution {1}", settings.Name, settings.LastExecution);
-                    
+
                     var sw = Stopwatch.StartNew();
 
                     _notificationProvider.Register(_notification);
                     jobImplementation.Start(_notification, targetId);
                     _notification.Status = ProgressNotificationStatus.Completed;
 
-                    if (targetId != 0)
-                        settings.LastExecution = DateTime.Now;
+                    settings.LastExecution = DateTime.Now;
+                    settings.Success = true;
 
-                    settings.Success = true; //TODO: Do we consider a job with a targetId as successful?
                     sw.Stop();
                     Logger.Debug("Job '{0}' successfully completed in {1} seconds", jobImplementation.Name, sw.Elapsed.Minutes,
                                 sw.Elapsed.Seconds);
                 }
                 catch (Exception e)
                 {
+                    settings.LastExecution = DateTime.Now;
                     settings.Success = false;
+
                     Logger.ErrorException("An error has occurred while executing timer job " + jobImplementation.Name, e);
                     _notification.CurrentMessage = jobImplementation.Name + " Failed.";
                     _notification.Status = ProgressNotificationStatus.Failed;
                 }
             }
 
-            SaveSettings(settings);
+            if (targetId == 0)
+            {
+                SaveSettings(settings);
+            }
         }
 
         /// <summary>

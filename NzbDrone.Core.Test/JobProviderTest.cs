@@ -55,7 +55,6 @@ namespace NzbDrone.Core.Test
             Assert.IsFalse(settings[0].Success);
         }
 
-
         [Test]
         //This test will confirm that the concurrency checks are rest
         //after execution so the job can successfully run.
@@ -314,7 +313,6 @@ namespace NzbDrone.Core.Test
             Assert.AreEqual(next, settings[0].LastExecution.AddMinutes(15));
         }
 
-
         [Test]
         public void Disabled_isnt_run_by_scheduler()
         {
@@ -338,6 +336,48 @@ namespace NzbDrone.Core.Test
 
             //Assert
             Assert.AreEqual(0, disabledJob.ExexutionCount);
+        }
+
+        [Test]
+        public void SingleId_do_not_update_last_execution()
+        {
+            IEnumerable<IJob> fakeJobs = new List<IJob> { new FakeJob() };
+            var mocker = new AutoMoqer();
+
+            mocker.SetConstant(MockLib.GetEmptyRepository());
+            mocker.SetConstant(fakeJobs);
+
+            //Act
+            var timerProvider = mocker.Resolve<JobProvider>();
+            timerProvider.Initialize();
+            timerProvider.QueueJob(typeof(FakeJob), 10);
+            Thread.Sleep(1000);
+
+            //Assert
+            var settings = timerProvider.All();
+            Assert.IsNotEmpty(settings);
+            Assert.AreEqual(DateTime.MinValue, settings[0].LastExecution);
+        }
+
+        [Test]
+        public void SingleId_do_not_set_success()
+        {
+            IEnumerable<IJob> fakeJobs = new List<IJob> { new FakeJob() };
+            var mocker = new AutoMoqer();
+
+            mocker.SetConstant(MockLib.GetEmptyRepository());
+            mocker.SetConstant(fakeJobs);
+
+            //Act
+            var timerProvider = mocker.Resolve<JobProvider>();
+            timerProvider.Initialize();
+            timerProvider.QueueJob(typeof(FakeJob), 10);
+            Thread.Sleep(1000);
+
+            //Assert
+            var settings = timerProvider.All();
+            Assert.IsNotEmpty(settings);
+            Assert.IsFalse(settings[0].Success);
         }
     }
 
