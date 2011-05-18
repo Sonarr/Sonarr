@@ -25,9 +25,7 @@ namespace NzbDrone.Core.Providers
             _episodeProvider = episodeProvider;
         }
 
-        public MediaFileProvider()
-        {
-        }
+        public MediaFileProvider() { }
 
         /// <summary>
         ///   Scans the specified series folder for media files
@@ -36,24 +34,6 @@ namespace NzbDrone.Core.Providers
         public List<EpisodeFile> Scan(Series series)
         {
             var mediaFileList = GetMediaFileList(series.Path);
-            var fileList = new List<EpisodeFile>();
-
-            foreach (var filePath in mediaFileList)
-            {
-                var file = ImportFile(series, filePath);
-                if (file != null)
-                    fileList.Add(file);
-            }
-            return fileList;
-        }
-
-        /// <summary>
-        ///   Scans the specified series folder for media files
-        /// </summary>
-        /// <param name = "series">The series to be scanned</param>
-        public List<EpisodeFile> Scan(Series series, string path)
-        {
-            var mediaFileList = GetMediaFileList(path);
             var fileList = new List<EpisodeFile>();
 
             foreach (var filePath in mediaFileList)
@@ -76,10 +56,11 @@ namespace NzbDrone.Core.Providers
                 //If Size is less than 50MB and contains sample. Check for Size to ensure its not an episode with sample in the title
                 if (size < 40000000 && filePath.ToLower().Contains("sample"))
                 {
-                    Logger.Trace("[{0}] appears to be a sample... skipping.", filePath);
+                    Logger.Trace("[{0}] appears to be a sample. skipping.", filePath);
                     return null;
                 }
 
+                //Check to see if file already exists in the database
                 if (!_repository.Exists<EpisodeFile>(e => e.Path == Parser.NormalizePath(filePath)))
                 {
                     var parseResult = Parser.ParseEpisodeInfo(filePath);
@@ -90,6 +71,7 @@ namespace NzbDrone.Core.Providers
                     //Stores the list of episodes to add to the EpisodeFile
                     var episodes = new List<Episode>();
 
+                    //Check for daily shows
                     if (parseResult.Episodes == null)
                     {
                         var episode = _episodeProvider.GetEpisode(series.SeriesId, parseResult.AirDate.Date);
@@ -98,9 +80,10 @@ namespace NzbDrone.Core.Providers
                         {
                             episodes.Add(episode);
                         }
-
                         else
+                        {
                             Logger.Warn("Unable to find '{0}' in the database. File:{1}", parseResult, filePath);
+                        }
                     }
                     else
                     {
@@ -113,14 +96,15 @@ namespace NzbDrone.Core.Providers
                             {
                                 episodes.Add(episode);
                             }
-
                             else
+                            {
                                 Logger.Warn("Unable to find '{0}' in the database. File:{1}", parseResult, filePath);
+                            }
                         }
                     }
 
                     //Return null if no Episodes exist in the DB for the parsed episodes from file
-                    if (episodes.Count < 1)
+                    if (episodes.Count <= 0)
                         return null;
 
                     var episodeFile = new EpisodeFile();
@@ -173,16 +157,7 @@ namespace NzbDrone.Core.Providers
             }
         }
 
-        public void DeleteFromDb(int fileId)
-        {
-            _repository.Delete<EpisodeFile>(fileId);
-        }
 
-        public void DeleteFromDisk(int fileId, string path)
-        {
-            _diskProvider.DeleteFile(path);
-            _repository.Delete<EpisodeFile>(fileId);
-        }
 
         public void Update(EpisodeFile episodeFile)
         {

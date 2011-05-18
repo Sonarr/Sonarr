@@ -203,7 +203,6 @@
     <Compile Include="Providers\HistoryProvider.cs" />
     <Compile Include="Providers\BacklogProvider.cs" />
     <Compile Include="Providers\IndexerProvider.cs" />
-    <Compile Include="Providers\PostProcessingProvider.cs" />
     <Compile Include="Providers\QualityProvider.cs" />
     <Compile Include="Providers\RenameProvider.cs" />
     <Compile Include="Providers\RootDirProvider.cs" />

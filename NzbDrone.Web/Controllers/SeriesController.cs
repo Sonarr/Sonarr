@@ -76,7 +76,7 @@ namespace NzbDrone.Web.Controllers
                                                                                 SeasonNumber = s.SeasonNumber,
                                                                                 SeasonString = GetSeasonString(s.SeasonNumber),
                                                                                 Monitored = s.Monitored
-                                                                            }).OrderBy(s=> s.SeasonNumber).ToList();
+                                                                            }).OrderBy(s => s.SeasonNumber).ToList();
             return View(model);
         }
 
@@ -120,7 +120,7 @@ namespace NzbDrone.Web.Controllers
 
             //Start removing this series
             _jobProvider.QueueJob(typeof(DeleteSeriesJob), id);
-            
+
             var series = GetSeriesModels(seriesInDb);
             return View(new GridModel(series));
         }
@@ -265,8 +265,7 @@ namespace NzbDrone.Web.Controllers
         public ActionResult SyncEpisodesOnDisk(int seriesId)
         {
             //Syncs the episodes on disk for the specified series
-            var series = _seriesProvider.GetSeries(seriesId);
-            _mediaFileProvider.Scan(series);
+            _jobProvider.QueueJob(typeof(MediaFileScanJob), seriesId);
 
             return RedirectToAction("Details", new { seriesId });
         }
