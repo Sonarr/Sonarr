@@ -60,8 +60,22 @@ namespace NzbDrone.Core.Providers.Jobs
 
                     notification.CurrentMessage = String.Format("Scanning disk for '{0}' files", updatedSeries.Title);
                     _mediaFileProvider.Scan(_seriesProvider.GetSeries(updatedSeries.SeriesId));
-                }
 
+                    if (_mediaFileProvider.GetSeriesFiles(currentSeries.SeriesId).Count() != 0)
+                    {
+                        Logger.Debug("Looking for seasons to ignore");
+                        foreach (var season in updatedSeries.Seasons)
+                        {
+                            if (season.SeasonNumber != updatedSeries.Seasons.Max(s => s.SeasonNumber) && _mediaFileProvider.GetSeasonFiles(season.SeasonId).Count() == 0)
+                            {
+                                Logger.Info("Season {0} of {1} doesn't have any files on disk. season will not be monitored.", season.SeasonNumber, updatedSeries.Title);
+                                season.Monitored = false;
+                                _seasonProvider.SaveSeason(season);
+                            }
+                        }
+                   }
+
+                }
                 catch (Exception e)
                 {
                     Logger.ErrorException(e.Message, e);

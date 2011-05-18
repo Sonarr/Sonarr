@@ -182,11 +182,14 @@ namespace NzbDrone.Core.Providers
             return _repository.All<EpisodeFile>().ToList();
         }
 
-        public virtual List<EpisodeFile> GetSeasonFiles(int seasonId)
+        public virtual IEnumerable<EpisodeFile> GetSeasonFiles(int seasonId)
         {
-            var res = _seasonProvider.GetSeason(seasonId).Episodes.Where(c => c.EpisodeFile != null).Select(c => c.EpisodeFile);
+            return _seasonProvider.GetSeason(seasonId).Episodes.Where(c => c.EpisodeFile != null).Select(c => c.EpisodeFile);
+        }
 
-            return res.ToList();
+        public virtual IEnumerable<EpisodeFile> GetSeriesFiles(int seriesId)
+        {
+            return _seriesProvider.GetSeries(seriesId).Episodes.Where(c => c.EpisodeFile != null).Select(c => c.EpisodeFile);
         }
 
         private List<string> GetMediaFileList(string path)
