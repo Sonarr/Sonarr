@@ -188,11 +188,59 @@ namespace NzbDrone.Core.Providers.Core
             set { SetValue("BlackholeDirectory", value); }
         }
 
+        public virtual bool SeriesName
+        {
+            get { return GetValueBoolean("Sorting_SeriesName", true); }
+            set { SetValue("Sorting_SeriesName", value); }
+        }
+
+        public virtual bool EpisodeName
+        {
+            get { return GetValueBoolean("Sorting_EpisodeName", true); }
+            set { SetValue("Sorting_EpisodeName", value); }
+        }
+
+        public virtual bool ReplaceSpaces
+        {
+            get { return GetValueBoolean("Sorting_ReplaceSpaces", true); }
+            set { SetValue("Sorting_ReplaceSpaces", value); }
+        }
+
+        public virtual bool AppendQuality
+        {
+            get { return GetValueBoolean("Sorting_AppendQaulity", true); }
+            set { SetValue("Sorting_AppendQaulity", value); }
+        }
+
         public virtual bool UseSeasonFolder
         {
             get { return GetValueBoolean("Sorting_SeasonFolder", true); }
 
             set { SetValue("Sorting_SeasonFolder", value); }
+        }
+
+        public virtual string SeasonFolderFormat
+        {
+            get { return GetValue("Sorting_SeasonFolderFormat", "Season %s", false); }
+            set { SetValue("Sorting_SeasonFolderFormat", value); }
+        }
+
+        public virtual int SeparatorStyle
+        {
+            get { return GetValueInt("Sorting_SeparatorStyle"); }
+            set { SetValue("Sorting_SeparatorStyle", value); }
+        }
+
+        public virtual int NumberStyle
+        {
+            get { return GetValueInt("Sorting_NumberStyle", 2); }
+            set { SetValue("Sorting_NumberStyle", value); }
+        }
+
+        public virtual int MultiEpisodeStyle
+        {
+            get { return GetValueInt("Sorting_MultiEpisodeStyle"); }
+            set { SetValue("Sorting_MultiEpisodeStyle", value); }
         }
 
         public virtual int DefaultQualityProfile

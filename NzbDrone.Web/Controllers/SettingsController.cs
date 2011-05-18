@@ -182,16 +182,15 @@ namespace NzbDrone.Web.Controllers
 
             var model = new EpisodeSortingModel();
 
-            model.ShowName = Convert.ToBoolean(_configProvider.GetValue("Sorting_ShowName", true, true));
-            model.EpisodeName = Convert.ToBoolean(_configProvider.GetValue("Sorting_EpisodeName", true, true));
-            model.ReplaceSpaces = Convert.ToBoolean(_configProvider.GetValue("Sorting_ReplaceSpaces", false, true));
-            model.AppendQuality = Convert.ToBoolean(_configProvider.GetValue("Sorting_AppendQuality", false, true));
-            model.UseAirByDate = Convert.ToBoolean(_configProvider.GetValue("Sorting_UseAirByDate", true, true));
+            model.SeriesName = _configProvider.SeriesName;
+            model.EpisodeName = _configProvider.EpisodeName;
+            model.ReplaceSpaces = _configProvider.ReplaceSpaces;
+            model.AppendQuality = _configProvider.AppendQuality;
             model.SeasonFolders = _configProvider.UseSeasonFolder;
-            model.SeasonFolderFormat = _configProvider.GetValue("Sorting_SeasonFolderFormat", "Season %s", true);
-            model.SeparatorStyle = Convert.ToInt32(_configProvider.GetValue("Sorting_SeparatorStyle", 0, true));
-            model.NumberStyle = Convert.ToInt32(_configProvider.GetValue("Sorting_NumberStyle", 2, true));
-            model.MultiEpisodeStyle = Convert.ToInt32(_configProvider.GetValue("Sorting_MultiEpisodeStyle", 0, true));
+            model.SeasonFolderFormat = _configProvider.SeasonFolderFormat;
+            model.SeparatorStyle = _configProvider.SeparatorStyle;
+            model.NumberStyle = _configProvider.NumberStyle;
+            model.MultiEpisodeStyle = _configProvider.MultiEpisodeStyle;
 
             model.SeparatorStyles = new SelectList(EpisodeSortingHelper.GetSeparatorStyles(), "Id", "Name");
             model.NumberStyles = new SelectList(EpisodeSortingHelper.GetNumberStyles(), "Id", "Name");
@@ -535,16 +534,15 @@ namespace NzbDrone.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                _configProvider.SetValue("Sorting_ShowName", data.ShowName.ToString());
-                _configProvider.SetValue("Sorting_EpisodeName", data.EpisodeName.ToString());
-                _configProvider.SetValue("Sorting_ReplaceSpaces", data.ReplaceSpaces.ToString());
-                _configProvider.SetValue("Sorting_AppendQuality", data.AppendQuality.ToString());
-                _configProvider.SetValue("Sorting_UseAirByDate", data.UseAirByDate.ToString());
-                _configProvider.SetValue("Sorting_SeasonFolder", data.SeasonFolders.ToString());
-                _configProvider.SetValue("Sorting_SeasonFolderFormat", data.SeasonFolderFormat);
-                _configProvider.SetValue("Sorting_SeparatorStyle", data.SeparatorStyle.ToString());
-                _configProvider.SetValue("Sorting_NumberStyle", data.NumberStyle.ToString());
-                _configProvider.SetValue("Sorting_MultiEpisodeStyle", data.MultiEpisodeStyle.ToString());
+                _configProvider.SeriesName = data.SeriesName;
+                _configProvider.EpisodeName = data.EpisodeName;
+                _configProvider.ReplaceSpaces = data.ReplaceSpaces;
+                _configProvider.AppendQuality = data.AppendQuality;
+                _configProvider.UseSeasonFolder = data.SeasonFolders;
+                _configProvider.SeasonFolderFormat = data.SeasonFolderFormat;
+                _configProvider.SeparatorStyle = data.SeparatorStyle;
+                _configProvider.NumberStyle = data.NumberStyle;
+                _configProvider.MultiEpisodeStyle = data.MultiEpisodeStyle;
 
                 basicNotification.Title = SETTINGS_SAVED;
                 _notificationProvider.Register(basicNotification);
