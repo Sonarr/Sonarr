@@ -15,14 +15,16 @@ namespace NzbDrone.Core.Providers
         private static readonly string[] MediaExtentions = new[] { "*.mkv", "*.avi", "*.wmv", "*.mp4" };
         private readonly DiskProvider _diskProvider;
         private readonly EpisodeProvider _episodeProvider;
+        private readonly SeriesProvider _seriesProvider;
         private readonly IRepository _repository;
 
         public MediaFileProvider(IRepository repository, DiskProvider diskProvider,
-                                 EpisodeProvider episodeProvider)
+                                 EpisodeProvider episodeProvider, SeriesProvider seriesProvider)
         {
             _repository = repository;
             _diskProvider = diskProvider;
             _episodeProvider = episodeProvider;
+            _seriesProvider = seriesProvider;
         }
 
         public MediaFileProvider() { }
@@ -42,6 +44,10 @@ namespace NzbDrone.Core.Providers
                 if (file != null)
                     fileList.Add(file);
             }
+
+            series.LastDiskSync = DateTime.Now;
+            _seriesProvider.UpdateSeries(series);
+
             return fileList;
         }
 

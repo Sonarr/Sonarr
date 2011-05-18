@@ -271,5 +271,19 @@ namespace NzbDrone.Core.Test
             Assert.IsNull(result);
             mocker.GetMock<IRepository>().Verify(r => r.Add(result), Times.Never());
         }
+
+        [Test]
+        public void scan_series_should_update_last_scan_date()
+        {
+
+            var mocker = new AutoMoqer();
+            mocker.GetMock<SeriesProvider>()
+                .Setup(c => c.UpdateSeries(It.Is<Series>(s => s.LastDiskSync != null))).Verifiable();
+
+            mocker.Resolve<MediaFileProvider>().Scan(new Series());
+
+            mocker.VerifyAllMocks();
+
+        }
     }
 }
