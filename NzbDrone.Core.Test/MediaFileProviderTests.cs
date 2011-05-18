@@ -300,12 +300,38 @@ namespace NzbDrone.Core.Test
                 .Setup(c => c.GetAllSeries())
                 .Returns(Builder<Series>.CreateListOfSize(2)
                              .WhereTheFirst(1).Has(c => c.LastInfoSync = DateTime.Now).Build().AsQueryable());
-            mocker.GetMock<MediaFileProvider>( MockBehavior.Strict)
-                .Setup(c=>c.Scan(It.Is<Series>(s=>s.LastInfoSync != null))).Returns(new List<EpisodeFile>()).Verifiable();
+            mocker.GetMock<MediaFileProvider>(MockBehavior.Strict)
+                .Setup(c => c.Scan(It.Is<Series>(s => s.LastInfoSync != null))).Returns(new List<EpisodeFile>()).Verifiable();
 
             mocker.Resolve<MediaFileScanJob>().Start(new ProgressNotification("test"), 0);
 
             mocker.VerifyAllMocks();
+        }
+
+        [Test]
+        public void get_season_files()
+        {
+            var episodes = Builder<Episode>.CreateListOfSize(20)
+                .WhereTheFirst(8)
+                .Has(c => c.EpisodeFile = new EpisodeFile())
+                .AndTheRemaining()
+                .Has(c => c.EpisodeFile = null)
+                .Build().ToList();
+
+            var mocker = new AutoMoqer();
+            mocker.GetMock<SeasonProvider>()
+                .Setup(c => c.GetSeason(12))
+                .Returns(Builder<Season>.CreateNew().With(c => c.Episodes = episodes).Build())
+                .Verifiable();
+
+
+            var result = mocker.Resolve<MediaFileProvider>().GetSeasonFiles(12);
+
+            Assert.Count(8, result);
+            Assert.DoesNotContain(result, null);
+            mocker.VerifyAllMocks();
+
+
         }
     }
 }

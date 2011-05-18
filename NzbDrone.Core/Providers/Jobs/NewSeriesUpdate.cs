@@ -11,14 +11,16 @@ namespace NzbDrone.Core.Providers.Jobs
         private readonly SeriesProvider _seriesProvider;
         private readonly EpisodeProvider _episodeProvider;
         private readonly MediaFileProvider _mediaFileProvider;
+        private readonly SeasonProvider _seasonProvider;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public NewSeriesUpdate(SeriesProvider seriesProvider, EpisodeProvider episodeProvider, MediaFileProvider mediaFileProvider)
+        public NewSeriesUpdate(SeriesProvider seriesProvider, EpisodeProvider episodeProvider, MediaFileProvider mediaFileProvider, SeasonProvider seasonProvider)
         {
             _seriesProvider = seriesProvider;
             _episodeProvider = episodeProvider;
             _mediaFileProvider = mediaFileProvider;
+            _seasonProvider = seasonProvider;
         }
 
         public string Name
@@ -48,11 +50,12 @@ namespace NzbDrone.Core.Providers.Jobs
             {
                 try
                 {
-                    notification.CurrentMessage = String.Format("Searching for '{0}'", new DirectoryInfo(currentSeries.Path).Name);
+                    notification.CurrentMessage = String.Format("Searching for '{0}'",
+                                                                new DirectoryInfo(currentSeries.Path).Name);
                     var updatedSeries = _seriesProvider.UpdateSeriesInfo(currentSeries.SeriesId);
 
                     notification.CurrentMessage = String.Format("Downloading episode info for '{0}'",
-                                                                          updatedSeries.Title);
+                                                                updatedSeries.Title);
                     _episodeProvider.RefreshEpisodeInfo(updatedSeries.SeriesId);
 
                     notification.CurrentMessage = String.Format("Scanning disk for '{0}' files", updatedSeries.Title);

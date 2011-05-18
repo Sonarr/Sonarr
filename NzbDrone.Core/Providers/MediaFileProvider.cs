@@ -16,15 +16,17 @@ namespace NzbDrone.Core.Providers
         private readonly DiskProvider _diskProvider;
         private readonly EpisodeProvider _episodeProvider;
         private readonly SeriesProvider _seriesProvider;
+        private readonly SeasonProvider _seasonProvider;
         private readonly IRepository _repository;
 
         public MediaFileProvider(IRepository repository, DiskProvider diskProvider,
-                                 EpisodeProvider episodeProvider, SeriesProvider seriesProvider)
+                                 EpisodeProvider episodeProvider, SeriesProvider seriesProvider, SeasonProvider seasonProvider)
         {
             _repository = repository;
             _diskProvider = diskProvider;
             _episodeProvider = episodeProvider;
             _seriesProvider = seriesProvider;
+            _seasonProvider = seasonProvider;
         }
 
         public MediaFileProvider() { }
@@ -178,6 +180,13 @@ namespace NzbDrone.Core.Providers
         public virtual List<EpisodeFile> GetEpisodeFiles()
         {
             return _repository.All<EpisodeFile>().ToList();
+        }
+
+        public virtual List<EpisodeFile> GetSeasonFiles(int seasonId)
+        {
+            var res = _seasonProvider.GetSeason(seasonId).Episodes.Where(c => c.EpisodeFile != null).Select(c => c.EpisodeFile);
+
+            return res.ToList();
         }
 
         private List<string> GetMediaFileList(string path)
