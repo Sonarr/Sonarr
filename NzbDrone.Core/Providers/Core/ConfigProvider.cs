@@ -127,14 +127,14 @@ namespace NzbDrone.Core.Providers.Core
 
         public virtual String SabHost
         {
-            get { return GetValue("SabHost"); }
+            get { return GetValue("SabHost", "localhost", true); }
 
             set { SetValue("SabHost", value); }
         }
 
         public virtual int SabPort
         {
-            get { return GetValueInt("SabPort"); }
+            get { return GetValueInt("SabPort", 8080); }
 
             set { SetValue("SabPort", value); }
         }
