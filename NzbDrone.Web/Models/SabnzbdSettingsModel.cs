@@ -6,27 +6,10 @@ using NzbDrone.Core.Model;
 
 namespace NzbDrone.Web.Models
 {
-    public class DownloadSettingsModel
+    public class SabnzbdSettingsModel
     {
         public SelectList PrioritySelectList =
             new SelectList(new[] {"Default", "Paused", "Low", "Normal", "High", "Top"});
-
-        [Required]
-        [Range(15, 120, ErrorMessage = "Must be between 15 and 120 minutes")]
-        [DataType(DataType.Text)]
-        [DisplayName("Sync Frequency")]
-        [Description("Specifies how often NzbDrone should check RSS Feeds (Minutes)")]
-        public int SyncFrequency { get; set; }
-
-        [DisplayName("Download Propers")]
-        [Description("Should NzbDrone download proper releases (to replace non-proper files)?")]
-        public bool DownloadPropers { get; set; }
-
-        [Required(ErrorMessage = "Please enter a valid number")]
-        [DataType(DataType.Text)]
-        [DisplayName("Retention")]
-        [Description("Your newsgroup provider retention (Days)")]
-        public int Retention { get; set; }
 
         [Required(ErrorMessage = "Please enter a valid host")]
         [DataType(DataType.Text)]
@@ -68,15 +51,5 @@ namespace NzbDrone.Web.Models
         [DisplayName("SABnzbd Priority")]
         [Description("Priority to use when sending NZBs to SABnzbd")]
         public SabnzbdPriorityType SabTvPriority { get; set; }
-
-        [DisplayName("Use Blackhole")]
-        [Description("Whether to use the blackhole directory instead of sending NZB to SABnzbd")]
-        public bool UseBlackHole { get; set; }
-
-        [DataType(DataType.Text)]
-        [DisplayFormat(ConvertEmptyStringToNull = false)]
-        [DisplayName("Blackhole Directory")]
-        [Description("Path to the blackhole directory")]
-        public String BlackholeDirectory { get; set; }
     }
 }

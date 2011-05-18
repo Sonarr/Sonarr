@@ -100,15 +100,12 @@ namespace NzbDrone.Web.Controllers
                                      });
         }
 
-        public ActionResult Downloads()
+        public ActionResult Sabnzbd()
         {
-            ViewData["viewName"] = "Downloads";
+            ViewData["viewName"] = "Sabnzbd";
 
-            var model = new DownloadSettingsModel
+            var model = new SabnzbdSettingsModel
                             {
-                                SyncFrequency = _configProvider.SyncFrequency,
-                                DownloadPropers = _configProvider.DownloadPropers,
-                                Retention = _configProvider.Retention,
                                 SabHost = _configProvider.SabHost,
                                 SabPort =_configProvider.SabPort,
                                 SabApiKey = _configProvider.SabApiKey,
@@ -116,8 +113,6 @@ namespace NzbDrone.Web.Controllers
                                 SabPassword = _configProvider.SabPassword,
                                 SabTvCategory = _configProvider.SabTvCategory,
                                 SabTvPriority = _configProvider.SabTvPriority,
-                                UseBlackHole = _configProvider.UseBlackhole,
-                                BlackholeDirectory = _configProvider.BlackholeDirectory
                             };
 
             return View("Index", model);
@@ -139,8 +134,8 @@ namespace NzbDrone.Web.Controllers
             var userProfiles = _qualityProvider.GetAllProfiles().Where(q => q.UserProfile).ToList();
             var profiles = _qualityProvider.GetAllProfiles().ToList();
 
-            var defaultQualityQualityProfileId =
-                Convert.ToInt32(_configProvider.DefaultQualityProfile);
+            var defaultQualityQualityProfileId = Convert.ToInt32(_configProvider.DefaultQualityProfile);
+            var downloadPropers = _configProvider.DownloadPropers;
 
             var selectList = new SelectList(profiles, "QualityProfileId", "Name");
 
@@ -149,6 +144,7 @@ namespace NzbDrone.Web.Controllers
                                 Profiles = profiles,
                                 UserProfiles = userProfiles,
                                 DefaultQualityProfileId = defaultQualityQualityProfileId,
+                                DownloadPropers = downloadPropers,
                                 SelectList = selectList
                             };
 
@@ -426,7 +422,7 @@ namespace NzbDrone.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult SaveDownloads(DownloadSettingsModel data)
+        public ActionResult SaveSabnzbd(SabnzbdSettingsModel data)
         {
             var basicNotification = new BasicNotification();
             basicNotification.Type = BasicNotificationType.Info;
@@ -434,9 +430,6 @@ namespace NzbDrone.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                _configProvider.SyncFrequency = data.SyncFrequency;
-                _configProvider.DownloadPropers = data.DownloadPropers;
-                _configProvider.Retention = data.Retention;
                 _configProvider.SabHost = data.SabHost;
                 _configProvider.SabPort = data.SabPort;
                 _configProvider.SabApiKey = data.SabApiKey;
@@ -444,8 +437,6 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.SabTvCategory = data.SabTvCategory;
                 _configProvider.SabUsername = data.SabUsername;
                 _configProvider.SabTvPriority = data.SabTvPriority;
-                _configProvider.UseBlackhole = data.UseBlackHole;
-                _configProvider.BlackholeDirectory = data.BlackholeDirectory;
 
                 basicNotification.Title = SETTINGS_SAVED;
                 _notificationProvider.Register(basicNotification);
@@ -466,7 +457,8 @@ namespace NzbDrone.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                _configProvider.SetValue("DefaultQualityProfile", data.DefaultQualityProfileId.ToString());
+                _configProvider.DefaultQualityProfile = data.DefaultQualityProfileId;
+                _configProvider.DownloadPropers = data.DownloadPropers;
 
                 //Saves only the Default Quality, skips User Profiles since none exist
                 if (data.UserProfiles == null)

@@ -234,7 +234,7 @@
     <Compile Include="Models\AddExistingManualModel.cs" />
     <Compile Include="Models\AddExistingSeriesModel.cs" />
     <Compile Include="Models\AddNewSeriesModel.cs" />
-    <Compile Include="Models\DownloadSettingsModel.cs" />
+    <Compile Include="Models\SabnzbdSettingsModel.cs" />
     <Compile Include="Models\EpisodeSortingModel.cs" />
     <Compile Include="Models\HistoryModel.cs" />
     <Compile Include="Models\IndexerSettingsModel.cs" />
@@ -677,7 +677,7 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\Settings\Indexers.cshtml" />
     <Content Include="Views\System\Jobs.cshtml" />
-    <Content Include="Views\Settings\Downloads.cshtml" />
+    <Content Include="Views\Settings\Sabnzbd.cshtml" />
     <Content Include="Views\Settings\EpisodeSorting.cshtml" />
     <Content Include="Views\Settings\General.cshtml" />
     <Content Include="Views\Settings\Notifications.cshtml" />
