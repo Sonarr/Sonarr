@@ -108,6 +108,8 @@ namespace NzbDrone.Core
                     InSingletonScope();
                 _kernel.Bind<IRepository>().ToConstant(logRepository).WhenInjectedInto<LogProvider>().InSingletonScope();
 
+                LogConfiguration.Setup();
+
                 ForceMigration(_kernel.Get<IRepository>());
                 SetupDefaultQualityProfiles(_kernel.Get<IRepository>()); //Setup the default QualityProfiles on start-up
 
@@ -154,6 +156,7 @@ namespace NzbDrone.Core
             repository.All<EpisodeFile>().Count();
             repository.All<QualityProfile>().Count();
             repository.All<History>().Count();
+            repository.All<IndexerSetting>().Count();
         }
 
         /// <summary>
