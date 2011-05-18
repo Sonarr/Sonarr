@@ -15,25 +15,27 @@ namespace NzbDrone.Core.Providers
         private static readonly string[] MediaExtentions = new[] { "*.mkv", "*.avi", "*.wmv", "*.mp4" };
         private readonly DiskProvider _diskProvider;
         private readonly EpisodeProvider _episodeProvider;
+        private readonly SeriesProvider _seriesProvider;
+        private readonly SeasonProvider _seasonProvider;
         private readonly IRepository _repository;
 
         public MediaFileProvider(IRepository repository, DiskProvider diskProvider,
-                                 EpisodeProvider episodeProvider)
+                                 EpisodeProvider episodeProvider, SeriesProvider seriesProvider, SeasonProvider seasonProvider)
         {
             _repository = repository;
             _diskProvider = diskProvider;
             _episodeProvider = episodeProvider;
+            _seriesProvider = seriesProvider;
+            _seasonProvider = seasonProvider;
         }
 
-        public MediaFileProvider()
-        {
-        }
+        public MediaFileProvider() { }
 
         /// <summary>
         ///   Scans the specified series folder for media files
         /// </summary>
         /// <param name = "series">The series to be scanned</param>
-        public List<EpisodeFile> Scan(Series series)
+        public virtual List<EpisodeFile> Scan(Series series)
         {
             var mediaFileList = GetMediaFileList(series.Path);
             var fileList = new List<EpisodeFile>();
@@ -44,28 +46,14 @@ namespace NzbDrone.Core.Providers
                 if (file != null)
                     fileList.Add(file);
             }
+
+            series.LastDiskSync = DateTime.Now;
+            _seriesProvider.UpdateSeries(series);
+
             return fileList;
         }
 
-        /// <summary>
-        ///   Scans the specified series folder for media files
-        /// </summary>
-        /// <param name = "series">The series to be scanned</param>
-        public List<EpisodeFile> Scan(Series series, string path)
-        {
-            var mediaFileList = GetMediaFileList(path);
-            var fileList = new List<EpisodeFile>();
-
-            foreach (var filePath in mediaFileList)
-            {
-                var file = ImportFile(series, filePath);
-                if (file != null)
-                    fileList.Add(file);
-            }
-            return fileList;
-        }
-
-        public EpisodeFile ImportFile(Series series, string filePath)
+        public virtual EpisodeFile ImportFile(Series series, string filePath)
         {
             Logger.Trace("Importing file to database [{0}]", filePath);
 
@@ -76,10 +64,11 @@ namespace NzbDrone.Core.Providers
                 //If Size is less than 50MB and contains sample. Check for Size to ensure its not an episode with sample in the title
                 if (size < 40000000 && filePath.ToLower().Contains("sample"))
                 {
-                    Logger.Trace("[{0}] appears to be a sample... skipping.", filePath);
+                    Logger.Trace("[{0}] appears to be a sample. skipping.", filePath);
                     return null;
                 }
 
+                //Check to see if file already exists in the database
                 if (!_repository.Exists<EpisodeFile>(e => e.Path == Parser.NormalizePath(filePath)))
                 {
                     var parseResult = Parser.ParseEpisodeInfo(filePath);
@@ -90,6 +79,7 @@ namespace NzbDrone.Core.Providers
                     //Stores the list of episodes to add to the EpisodeFile
                     var episodes = new List<Episode>();
 
+                    //Check for daily shows
                     if (parseResult.Episodes == null)
                     {
                         var episode = _episodeProvider.GetEpisode(series.SeriesId, parseResult.AirDate.Date);
@@ -98,9 +88,10 @@ namespace NzbDrone.Core.Providers
                         {
                             episodes.Add(episode);
                         }
-
                         else
+                        {
                             Logger.Warn("Unable to find '{0}' in the database. File:{1}", parseResult, filePath);
+                        }
                     }
                     else
                     {
@@ -113,14 +104,15 @@ namespace NzbDrone.Core.Providers
                             {
                                 episodes.Add(episode);
                             }
-
                             else
+                            {
                                 Logger.Warn("Unable to find '{0}' in the database. File:{1}", parseResult, filePath);
+                            }
                         }
                     }
 
                     //Return null if no Episodes exist in the DB for the parsed episodes from file
-                    if (episodes.Count < 1)
+                    if (episodes.Count <= 0)
                         return null;
 
                     var episodeFile = new EpisodeFile();
@@ -160,7 +152,7 @@ namespace NzbDrone.Core.Providers
         ///   Removes files that no longer exist from the database
         /// </summary>
         /// <param name = "files">list of files to verify</param>
-        public void CleanUp(List<EpisodeFile> files)
+        public virtual void CleanUp(List<EpisodeFile> files)
         {
             //TODO: remove orphaned files. in files table but not linked to from episode table.
             foreach (var episodeFile in files)
@@ -173,30 +165,31 @@ namespace NzbDrone.Core.Providers
             }
         }
 
-        public void DeleteFromDb(int fileId)
-        {
-            _repository.Delete<EpisodeFile>(fileId);
-        }
 
-        public void DeleteFromDisk(int fileId, string path)
-        {
-            _diskProvider.DeleteFile(path);
-            _repository.Delete<EpisodeFile>(fileId);
-        }
 
-        public void Update(EpisodeFile episodeFile)
+        public virtual void Update(EpisodeFile episodeFile)
         {
             _repository.Update(episodeFile);
         }
 
-        public EpisodeFile GetEpisodeFile(int episodeFileId)
+        public virtual EpisodeFile GetEpisodeFile(int episodeFileId)
         {
             return _repository.Single<EpisodeFile>(episodeFileId);
         }
 
-        public List<EpisodeFile> GetEpisodeFiles()
+        public virtual List<EpisodeFile> GetEpisodeFiles()
         {
             return _repository.All<EpisodeFile>().ToList();
+        }
+
+        public virtual IEnumerable<EpisodeFile> GetSeasonFiles(int seasonId)
+        {
+            return _seasonProvider.GetSeason(seasonId).Episodes.Where(c => c.EpisodeFile != null).Select(c => c.EpisodeFile);
+        }
+
+        public virtual IEnumerable<EpisodeFile> GetSeriesFiles(int seriesId)
+        {
+            return _seriesProvider.GetSeries(seriesId).Episodes.Where(c => c.EpisodeFile != null).Select(c => c.EpisodeFile);
         }
 
         private List<string> GetMediaFileList(string path)

@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Providers.Jobs
                 seriesToScan = new List<Series>() { _seriesProvider.GetSeries(targetId) };
             }
 
-            foreach (var series in seriesToScan)
+            foreach (var series in seriesToScan.Where(c => c.LastInfoSync != null))
             {
                 notification.CurrentMessage = string.Format("Scanning disk for '{0}'", series.Title);
                 _mediaFileProvider.Scan(series);

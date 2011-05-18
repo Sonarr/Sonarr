@@ -18,9 +18,9 @@ namespace NzbDrone.Core.Repository
         public DayOfWeek? LastDiskSync { get; set; }
 
         [SubSonicToManyRelation]
-        public virtual List<Episode> Episodes { get; protected set; }
+        public virtual List<Episode> Episodes { get; set; }
 
         [SubSonicToOneRelation(ThisClassContainsJoinKey = true)]
-        public virtual Series Series { get; protected set; }
+        public virtual Series Series { get; set; }
     }
 }
