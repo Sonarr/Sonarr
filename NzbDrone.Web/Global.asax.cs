@@ -36,7 +36,6 @@ namespace NzbDrone.Web
         {
             base.OnApplicationStarted();
 
-            LogConfiguration.Setup();
             Logger.Info("NZBDrone Starting up.");
             CentralDispatch.DedicateToHost();
 
