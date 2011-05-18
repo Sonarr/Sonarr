@@ -1,12 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq.Expressions;
+using System.Linq;
 using AutoMoq;
 using FizzWare.NBuilder;
 using MbUnit.Framework;
 using Moq;
 using Moq.Linq;
+using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
+using NzbDrone.Core.Providers.Jobs;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using SubSonic.Repository;
@@ -284,6 +289,23 @@ namespace NzbDrone.Core.Test
 
             mocker.VerifyAllMocks();
 
+        }
+
+
+        [Test]
+        public void scan_media_job_should_not_scan_new_series()
+        {
+            var mocker = new AutoMoqer();
+            mocker.GetMock<SeriesProvider>()
+                .Setup(c => c.GetAllSeries())
+                .Returns(Builder<Series>.CreateListOfSize(2)
+                             .WhereTheFirst(1).Has(c => c.LastInfoSync = DateTime.Now).Build().AsQueryable());
+            mocker.GetMock<MediaFileProvider>( MockBehavior.Strict)
+                .Setup(c=>c.Scan(It.Is<Series>(s=>s.LastInfoSync != null))).Returns(new List<EpisodeFile>()).Verifiable();
+
+            mocker.Resolve<MediaFileScanJob>().Start(new ProgressNotification("test"), 0);
+
+            mocker.VerifyAllMocks();
         }
     }
 }

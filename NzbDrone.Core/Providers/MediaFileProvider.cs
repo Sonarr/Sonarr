@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Providers
         ///   Scans the specified series folder for media files
         /// </summary>
         /// <param name = "series">The series to be scanned</param>
-        public List<EpisodeFile> Scan(Series series)
+        public virtual List<EpisodeFile> Scan(Series series)
         {
             var mediaFileList = GetMediaFileList(series.Path);
             var fileList = new List<EpisodeFile>();
@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Providers
             return fileList;
         }
 
-        public EpisodeFile ImportFile(Series series, string filePath)
+        public virtual EpisodeFile ImportFile(Series series, string filePath)
         {
             Logger.Trace("Importing file to database [{0}]", filePath);
 
@@ -150,7 +150,7 @@ namespace NzbDrone.Core.Providers
         ///   Removes files that no longer exist from the database
         /// </summary>
         /// <param name = "files">list of files to verify</param>
-        public void CleanUp(List<EpisodeFile> files)
+        public virtual void CleanUp(List<EpisodeFile> files)
         {
             //TODO: remove orphaned files. in files table but not linked to from episode table.
             foreach (var episodeFile in files)
@@ -165,17 +165,17 @@ namespace NzbDrone.Core.Providers
 
 
 
-        public void Update(EpisodeFile episodeFile)
+        public virtual void Update(EpisodeFile episodeFile)
         {
             _repository.Update(episodeFile);
         }
 
-        public EpisodeFile GetEpisodeFile(int episodeFileId)
+        public virtual EpisodeFile GetEpisodeFile(int episodeFileId)
         {
             return _repository.Single<EpisodeFile>(episodeFileId);
         }
 
-        public List<EpisodeFile> GetEpisodeFiles()
+        public virtual List<EpisodeFile> GetEpisodeFiles()
         {
             return _repository.All<EpisodeFile>().ToList();
         }
