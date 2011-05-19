@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Runtime.Remoting;
 using System.Timers;
 using System.Xml.Linq;
 using System.Xml.XPath;
@@ -71,7 +72,7 @@ namespace NzbDrone
 
             //Start Ping
             _pingTimer = new Timer(10000) { AutoReset = true };
-            _pingTimer.Elapsed += (Server);
+            _pingTimer.Elapsed += (PingServer);
             _pingTimer.Start();
 
             return IISProcess;
@@ -114,11 +115,16 @@ namespace NzbDrone
             StartServer();
         }
 
-        private static void Server(object sender, ElapsedEventArgs e)
+        private static void PingServer(object sender, ElapsedEventArgs e)
         {
             try
             {
-                new WebClient().DownloadString(AppUrl);
+                var response = new WebClient().DownloadString(AppUrl + "/health");
+                
+                if (!response.Contains("OK"))
+                {
+                    throw new ServerException("Health services responded with an invalid response.");
+                }
                 if (_pingFailCounter > 0)
                 {
                     Logger.Info("Application pool has been successfully recovered.");
