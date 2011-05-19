@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net;
 using System.ServiceModel.Syndication;
-using System.Web;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.ExternalNotification;
-using SubSonic.Repository;
 
 namespace NzbDrone.Core.Providers.Indexer
 {
@@ -50,7 +47,7 @@ namespace NzbDrone.Core.Providers.Indexer
 
         protected override string NzbDownloadUrl(SyndicationItem item)
         {
-            return item.Id;
+            return item.Id + "/nzb";
         }
 
         protected override EpisodeParseResult CustomParser(SyndicationItem item, EpisodeParseResult currentResult)
@@ -64,9 +61,5 @@ namespace NzbDrone.Core.Providers.Indexer
             return currentResult;
         }
 
-        protected override IndexerType GetIndexerType()
-        {
-            return IndexerType.Newzbin;
-        }
     }
 }

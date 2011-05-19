@@ -11,7 +11,7 @@ using NzbDrone.Core.Repository.Quality;
 using SubSonic.DataProviders;
 using SubSonic.Repository;
 
-namespace NzbDrone.Core.Test
+namespace NzbDrone.Core.Test.Framework
 {
     /// <summary>
     ///   Provides the standard Mocks needed for a typical test

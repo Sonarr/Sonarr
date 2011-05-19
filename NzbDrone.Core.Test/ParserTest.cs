@@ -1,19 +1,23 @@
 ﻿using System;
-using System.Threading;
 using MbUnit.Framework;
 using NzbDrone.Core.Repository.Quality;
+using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class ParserTest
+    public class ParserTest : TestBase
     {
         /*Fucked-up hall of shame,
          * WWE.Wrestlemania.27.PPV.HDTV.XviD-KYR
          * The.Kennedys.Part.2.DSR.XviD-SYS
          * Unreported.World.Chinas.Lost.Sons.WS.PDTV.XviD-FTP
          */
+
+
+ 
+        
 
         [Test]
         [Row("Sonny.With.a.Chance.S02E15", "Sonny.With.a.Chance", 2, 15)]

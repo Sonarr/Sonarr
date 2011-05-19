@@ -184,7 +184,7 @@ namespace NzbDrone.Core.Providers.Indexer
                         IsProper = parseResult.Proper,
                         NzbTitle = feedItem.Title.Text,
                         Quality = parseResult.Quality,
-                        Indexer = GetIndexerType()
+                        Indexer = Name
                     });
                 }
 
@@ -246,15 +246,6 @@ namespace NzbDrone.Core.Providers.Indexer
         /// <param name = "item">RSS Feed item to generate the link for</param>
         /// <returns>Download link URL</returns>
         protected abstract string NzbDownloadUrl(SyndicationItem item);
-
-        /// <summary>
-        ///   Gets he IndexerType Enum for this indexer
-        /// </summary>
-        /// <returns>IndexerType Enum</returns>
-        protected virtual IndexerType GetIndexerType()
-        {
-            return IndexerType.Unknown;
-        }
 
         private bool InHistory(IList<Episode> episodes, EpisodeParseResult parseResult, SyndicationItem feedItem)
         {

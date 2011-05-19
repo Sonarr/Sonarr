@@ -1,5 +1,6 @@
 ﻿/// <reference path="jquery-1.5.2-vsdoc.js" />
-$(function () {
+ $(document).ready(function ()
+ {
     var speed = 0;
     var isShown = false;
     refreshNotifications();

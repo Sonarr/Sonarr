@@ -46,9 +46,5 @@ namespace NzbDrone.Core.Providers.Indexer
             return item.Id;
         }
 
-        protected override IndexerType GetIndexerType()
-        {
-            return IndexerType.NzbsOrg;
-        }
-    }
+ }
 }

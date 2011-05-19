@@ -7,26 +7,26 @@ using Moq;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
-using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
+using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class SabControllerTest
+    public class SabProviderTest : TestBase
     {
         [Test]
         public void AddByUrlSuccess()
         {
             //Setup
-            string sabHost = "192.168.5.55";
-            int sabPort = 2222;
-            string apikey = "5c770e3197e4fe763423ee7c392c25d1";
-            string username = "admin";
-            string password = "pass";
-            var priority = SabnzbdPriorityType.Normal;
-            string category = "tv";
+            const string sabHost = "192.168.5.55";
+            const int sabPort = 2222;
+            const string apikey = "5c770e3197e4fe763423ee7c392c25d1";
+            const string username = "admin";
+            const string password = "pass";
+            const SabnzbdPriorityType priority = SabnzbdPriorityType.Normal;
+            const string category = "tv";
 
 
             var mocker = new AutoMoqer();
@@ -101,6 +101,7 @@ namespace NzbDrone.Core.Test
 
             //Assert
             Assert.IsFalse(result);
+            ExceptionVerification.ExcpectedWarns(1);
         }
 
         [Test]

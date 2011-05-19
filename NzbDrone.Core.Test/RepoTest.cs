@@ -6,13 +6,14 @@ using NLog;
 using NLog.Config;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Repository;
+using NzbDrone.Core.Test.Framework;
 using LogLevel = NLog.LogLevel;
 
 namespace NzbDrone.Core.Test
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class RepoTest
+    public class RepoTest : TestBase
     {
         [Test]
         public void to_many__series_to_episode()
@@ -93,6 +94,8 @@ namespace NzbDrone.Core.Test
             Assert.AreEqual(Logger.Name, logItem.Logger);
             Assert.AreEqual(LogLevel.Info.Name, logItem.Level);
             Assert.AreEqual("write_log", logItem.Method);
+
+
         }
 
         [Test]
@@ -126,6 +129,7 @@ namespace NzbDrone.Core.Test
             Assert.AreEqual(LogLevel.Error.Name, logItem.Level);
             Assert.AreEqual(ex.GetType().ToString(), logItem.ExceptionType);
             Assert.AreEqual(ex.ToString(), logItem.Exception);
+            ExceptionVerification.ExcpectedErrors(1);
         }
 
         [Test]
@@ -159,6 +163,7 @@ namespace NzbDrone.Core.Test
             Assert.AreEqual(LogLevel.Error.Name, logItem.Level);
             Assert.AreEqual(ex.GetType().ToString(), logItem.ExceptionType);
             Assert.AreEqual(ex.ToString(), logItem.Exception);
+            ExceptionVerification.ExcpectedErrors(1);
         }
     }
 }

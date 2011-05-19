@@ -130,7 +130,7 @@ namespace NzbDrone.Core.Providers.Jobs
             {
                 if (_isRunning)
                 {
-                    Logger.Trace("Queue is already running. Ignoreing request.");
+                    Logger.Trace("Queue is already running. Ignoring request.");
                     return true;
                 }
 
@@ -189,7 +189,7 @@ namespace NzbDrone.Core.Providers.Jobs
             }
             catch (Exception e)
             {
-                Logger.FatalException("An error has occured while processing queued job.", e);
+                Logger.FatalException("An error has occurred while processing queued job.", e);
             }
             finally
             {
