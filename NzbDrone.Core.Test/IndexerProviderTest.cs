@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.ServiceModel.Syndication;
-using System.Xml;
 using AutoMoq;
 using FizzWare.NBuilder;
 using MbUnit.Framework;
@@ -14,13 +13,13 @@ using NzbDrone.Core.Providers.ExternalNotification;
 using NzbDrone.Core.Providers.Indexer;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
-using SubSonic.Repository;
+using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test
 {
     [TestFixture]
-    public class IndexerProviderTest
     // ReSharper disable InconsistentNaming
+    public class IndexerProviderTest : TestBase
     {
         [Test]
         [Row("nzbsorg.xml")]
@@ -58,7 +57,7 @@ namespace NzbDrone.Core.Test
         {
             var mocker = new AutoMoqer();
 
-            var summary = "My fake summary";
+            const string summary = "My fake summary";
 
             var fakeSettings = Builder<IndexerSetting>.CreateNew().Build();
             mocker.GetMock<IndexerProvider>()
@@ -104,6 +103,7 @@ namespace NzbDrone.Core.Test
             var result = mocker.Resolve<CustomParserIndexer>().ParseFeed(fakeRssItem);
 
             Assert.IsNull(result);
+            ExceptionVerification.ExcpectedWarns(1);
         }
 
 
@@ -130,7 +130,7 @@ namespace NzbDrone.Core.Test
 
             //Act
             var indexerProvider = mocker.Resolve<IndexerProvider>();
-            indexerProvider.InitializeIndexers(new List<IndexerProviderBase>() { mocker.Resolve<MockIndexerProvider>() });
+            indexerProvider.InitializeIndexers(new List<IndexerProviderBase> { mocker.Resolve<MockIndexerProvider>() });
             var indexers = indexerProvider.All();
 
             //Assert

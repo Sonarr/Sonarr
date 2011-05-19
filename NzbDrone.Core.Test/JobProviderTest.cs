@@ -5,12 +5,13 @@ using AutoMoq;
 using MbUnit.Framework;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers.Jobs;
+using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class JobProviderTest
+    public class JobProviderTest : TestBase
     {
         [Test]
         public void Run_Jobs_Updates_Last_Execution()
@@ -53,6 +54,7 @@ namespace NzbDrone.Core.Test
             Assert.IsNotEmpty(settings);
             Assert.AreNotEqual(DateTime.MinValue, settings[0].LastExecution);
             Assert.IsFalse(settings[0].Success);
+            ExceptionVerification.ExcpectedErrors(1);
         }
 
         [Test]
@@ -74,27 +76,6 @@ namespace NzbDrone.Core.Test
             Assert.IsTrue(firstRun);
             Assert.IsTrue(secondRun);
 
-        }
-
-        [Test]
-        //This test will confirm that the concurrency checks are rest
-        //after execution so the job can successfully run.
-        public void can_run_broken_job_again()
-        {
-            IEnumerable<IJob> fakeJobs = new List<IJob> { new BrokenJob() };
-            var mocker = new AutoMoqer();
-
-            mocker.SetConstant(MockLib.GetEmptyRepository());
-            mocker.SetConstant(fakeJobs);
-
-            var timerProvider = mocker.Resolve<JobProvider>();
-            timerProvider.Initialize();
-            var firstRun = timerProvider.RunScheduled();
-            Thread.Sleep(2000);
-            var secondRun = timerProvider.RunScheduled();
-
-            Assert.IsTrue(firstRun);
-            Assert.IsTrue(secondRun);
         }
 
         [Test]
@@ -132,12 +113,14 @@ namespace NzbDrone.Core.Test
 
             var timerProvider = mocker.Resolve<JobProvider>();
             timerProvider.Initialize();
-            var firstRun = timerProvider.QueueJob(typeof(FakeJob));
+            var firstRun = timerProvider.QueueJob(typeof(BrokenJob));
             Thread.Sleep(2000);
-            var secondRun = timerProvider.QueueJob(typeof(FakeJob));
+            var secondRun = timerProvider.QueueJob(typeof(BrokenJob));
 
             Assert.IsTrue(firstRun);
             Assert.IsTrue(secondRun);
+            Thread.Sleep(2000);
+            ExceptionVerification.ExcpectedErrors(2);
         }
 
         [Test]

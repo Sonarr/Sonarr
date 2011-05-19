@@ -10,21 +10,21 @@ namespace AutoMoq.Unity
 {
     internal class AutoMockingBuilderStrategy : BuilderStrategy
     {
-        private readonly IUnityContainer container;
-        private readonly MockFactory mockFactory;
-        private readonly IEnumerable<Type> registeredTypes;
+        private readonly IUnityContainer _container;
+        private readonly MockRepository _mockFactory;
+        private readonly IEnumerable<Type> _registeredTypes;
 
         public AutoMockingBuilderStrategy(IEnumerable<Type> registeredTypes, IUnityContainer container)
         {
             var autoMoqer = container.Resolve<AutoMoqer>();
-            mockFactory = new MockFactory(autoMoqer.DefaultBehavior);
-            this.registeredTypes = registeredTypes;
-            this.container = container;
+            _mockFactory = new MockRepository(autoMoqer.DefaultBehavior);
+            _registeredTypes = registeredTypes;
+            _container = container;
         }
 
         public override void PreBuildUp(IBuilderContext context)
         {
-            var autoMoqer = container.Resolve<AutoMoqer>();
+            var autoMoqer = _container.Resolve<AutoMoqer>();
 
             var type = GetTheTypeFromTheBuilderContext(context);
             if (AMockObjectShouldBeCreatedForThisType(type))
@@ -39,7 +39,7 @@ namespace AutoMoq.Unity
 
         private bool AMockObjectShouldBeCreatedForThisType(Type type)
         {
-            var mocker = container.Resolve<AutoMoqer>();
+            var mocker = _container.Resolve<AutoMoqer>();
             return TypeIsNotRegistered(type) && (mocker.ResolveType == null || mocker.ResolveType != type);
             //return TypeIsNotRegistered(type) && type.IsInterface;
         }
@@ -51,7 +51,7 @@ namespace AutoMoq.Unity
 
         private bool TypeIsNotRegistered(Type type)
         {
-            return registeredTypes.Any(x => x.Equals(type)) == false;
+            return _registeredTypes.Any(x => x.Equals(type)) == false;
         }
 
         private Mock CreateAMockObject(Type type)
@@ -63,12 +63,12 @@ namespace AutoMoq.Unity
 
         private Mock InvokeTheMockCreationMethod(MethodInfo createMethod)
         {
-            return (Mock)createMethod.Invoke(mockFactory, new object[] { new List<object>().ToArray() });
+            return (Mock)createMethod.Invoke(_mockFactory, new object[] { new List<object>().ToArray() });
         }
 
         private MethodInfo GenerateAnInterfaceMockCreationMethod(Type type)
         {
-            var createMethodWithNoParameters = mockFactory.GetType().GetMethod("Create", EmptyArgumentList());
+            var createMethodWithNoParameters = _mockFactory.GetType().GetMethod("Create", EmptyArgumentList());
 
             return createMethodWithNoParameters.MakeGenericMethod(new[] { type });
         }

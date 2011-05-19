@@ -4,17 +4,18 @@ using MbUnit.Framework;
 using Moq;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
+using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class SyncProviderTest
+    public class SyncProviderTest : TestBase
     {
         [Test]
         public void None_existing_folder_returns_empty_list()
         {
-            string path = "d:\\bad folder";
+            const string path = "d:\\bad folder";
 
             var mocker = new AutoMoqer();
             mocker.GetMock<DiskProvider>(MockBehavior.Strict)

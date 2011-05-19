@@ -1,26 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq.Expressions;
 using System.Linq;
 using AutoMoq;
 using FizzWare.NBuilder;
 using MbUnit.Framework;
 using Moq;
-using Moq.Linq;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.Jobs;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
+using NzbDrone.Core.Test.Framework;
 using SubSonic.Repository;
 
 namespace NzbDrone.Core.Test
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class MediaFileProviderTests
+    public class MediaFileProviderTests : TestBase
     {
         [Test]
         [Description("Verifies that a new file imported properly")]
@@ -86,7 +85,7 @@ namespace NzbDrone.Core.Test
 
             //Constants
             const string fileName = @"2011.01.10 - Denis Leary - HD TV.mkv";
-            DateTime airDate = new DateTime(2011, 01, 10);
+            var airDate = new DateTime(2011, 01, 10);
             const int size = 12345;
             //Fakes
             var fakeSeries = Builder<Series>.CreateNew().Build();
@@ -144,9 +143,6 @@ namespace NzbDrone.Core.Test
 
             //Fakes
             var fakeSeries = Builder<Series>.CreateNew().Build();
-            var fakeEpisode = Builder<Episode>.CreateNew()
-                .With(c => c.SeriesId = fakeSeries.SeriesId)
-                .With(c => c.EpisodeFileId = 12).Build();
 
             //Mocks
             var mocker = new AutoMoqer();
@@ -179,7 +175,7 @@ namespace NzbDrone.Core.Test
 
             //Constants
             const string fileName = @"2011.01.10 - Denis Leary - sample - HD TV.mkv";
-            DateTime airDate = new DateTime(2011, 01, 10);
+            var airDate = new DateTime(2011, 01, 10);
             const int size = 12345;
             //Fakes
             var fakeSeries = Builder<Series>.CreateNew().Build();
@@ -275,6 +271,7 @@ namespace NzbDrone.Core.Test
             mocker.VerifyAllMocks();
             Assert.IsNull(result);
             mocker.GetMock<IRepository>().Verify(r => r.Add(result), Times.Never());
+            ExceptionVerification.ExcpectedWarns(1);
         }
 
         [Test]

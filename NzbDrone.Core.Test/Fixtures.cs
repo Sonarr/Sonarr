@@ -3,6 +3,7 @@ using System.IO;
 using MbUnit.Framework;
 using NLog;
 using NLog.Config;
+using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test
 {
@@ -50,6 +51,11 @@ namespace NzbDrone.Core.Test
                 LogManager.Configuration =
                     new XmlLoggingConfiguration(Path.Combine(CentralDispatch.AppPath, "log.config"), false);
                 LogManager.ThrowExceptions = true;
+
+                var exceptionVerification = new ExceptionVerification();
+                LogManager.Configuration.AddTarget("ExceptionVerification", exceptionVerification);
+                LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Info, exceptionVerification));
+                LogManager.Configuration.Reload();
             }
             catch (Exception e)
             {

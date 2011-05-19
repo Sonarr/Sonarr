@@ -3,13 +3,14 @@ using MbUnit.Framework;
 using Moq;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
+using NzbDrone.Core.Test.Framework;
 using SubSonic.Repository;
 
 namespace NzbDrone.Core.Test
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class DbConfigControllerTest
+    public class ConfigProviderTest : TestBase
     {
         [Test]
         public void Overwrite_existing_value()

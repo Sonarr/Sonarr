@@ -1,12 +1,13 @@
 ﻿using System;
 using MbUnit.Framework;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class TvDbControllerTest
+    public class TvDbProviderTest : TestBase
     {
         [Test]
         [Row("The Simpsons")]

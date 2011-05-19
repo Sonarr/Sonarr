@@ -85,34 +85,33 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AutoMoq\AutoMoqer.cs" />
-    <Compile Include="AutoMoq\AutoMoqerTest.cs" />
-    <Compile Include="AutoMoq\Unity\AutoMockingBuilderStrategy.cs">
+    <Compile Include="Framework\AutoMoq\AutoMoqer.cs" />
+    <Compile Include="Framework\AutoMoq\AutoMoqerTest.cs" />
+    <Compile Include="Framework\AutoMoq\Unity\AutoMockingBuilderStrategy.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="AutoMoq\Unity\AutoMockingContainerExtension.cs">
+    <Compile Include="Framework\AutoMoq\Unity\AutoMockingContainerExtension.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Framework\ExceptionVerification.cs" />
+    <Compile Include="Framework\TestBase.cs" />
     <Compile Include="JobProviderTest.cs" />
     <Compile Include="SyncProviderTest.cs" />
     <Compile Include="RootDirProviderTest.cs" />
     <Compile Include="IndexerProviderTest.cs" />
     <Compile Include="HistoryProviderTest.cs" />
     <Compile Include="MediaFileProviderTests.cs" />
-    <Compile Include="DbConfigControllerTest.cs" />
+    <Compile Include="ConfigProviderTest.cs" />
     <Compile Include="EpisodeProviderTest.cs" />
     <Compile Include="Fixtures.cs" />
-    <Compile Include="MockLib.cs" />
-    <Compile Include="Ninject.Moq\ExtensionsForBindingSyntax.cs" />
-    <Compile Include="Ninject.Moq\MockingKernel.cs" />
-    <Compile Include="Ninject.Moq\MockProvider.cs" />
+    <Compile Include="Framework\MockLib.cs" />
     <Compile Include="ParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QualityProfileTest.cs" />
     <Compile Include="RepoTest.cs" />
-    <Compile Include="SabControllerTest.cs" />
+    <Compile Include="SabProviderTest.cs" />
     <Compile Include="SeriesProviderTest.cs" />
-    <Compile Include="TvDbControllerTest.cs" />
+    <Compile Include="TvDbProviderTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NzbDrone.Core\NzbDrone.Core.csproj">
@@ -121,7 +120,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AutoMoq\License.txt" />
+    <Content Include="Framework\AutoMoq\License.txt" />
     <Content Include="Files\Feed.nzbmatrix.com.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

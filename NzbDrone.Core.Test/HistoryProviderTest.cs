@@ -7,28 +7,20 @@ using Moq;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
+using NzbDrone.Core.Test.Framework;
 using SubSonic.Repository;
 
 namespace NzbDrone.Core.Test
 {
     [TestFixture]
-    public class HistoryProviderTest
+    // ReSharper disable InconsistentNaming
+    public class HistoryProviderTest : TestBase
     {
         [Test]
         public void AllItems()
         {
             //Setup
-            var series = new Series
-                               {
-                                   SeriesId = 5656,
-                                   CleanTitle = "rock",
-                                   Monitored = true,
-                                   Overview = "Series Overview",
-                                   QualityProfileId = 1,
-                                   Title = "30 Rock",
-                                   Path = @"C:\Test\TV\30 Rock"
-                               };
-            var season = new Season { SeasonId = 4321, SeasonNumber = 1, SeriesId = 5656, Monitored = true };
+            Season season = new Season { SeasonId = 4321, SeasonNumber = 1, SeriesId = 5656, Monitored = true };
             var episode = new Episode
                               {
                                   AirDate = DateTime.Today.AddDays(-1),
@@ -42,15 +34,17 @@ namespace NzbDrone.Core.Test
                                   SeriesId = 5656
                               };
 
-            var list = new List<History>();
-            list.Add(new History
-                         {
-                             HistoryId = new int(),
-                             Date = DateTime.Now,
-                             IsProper = false,
-                             Quality = QualityTypes.TV,
-                             EpisodeId = episode.EpisodeId
-                         });
+            var list = new List<History>
+                           {
+                               new History
+                                   {
+                                       HistoryId = new int(),
+                                       Date = DateTime.Now,
+                                       IsProper = false,
+                                       Quality = QualityTypes.TV,
+                                       EpisodeId = episode.EpisodeId
+                                   }
+                           };
 
             var repo = new Mock<IRepository>();
             repo.Setup(r => r.All<History>()).Returns(list.AsQueryable());
@@ -68,6 +62,7 @@ namespace NzbDrone.Core.Test
         [Test]
         public void add_item()
         {
+            //Arange
             var mocker = new AutoMoqer();
             var repo = MockLib.GetEmptyRepository();
 
@@ -82,10 +77,22 @@ namespace NzbDrone.Core.Test
                               {
                                   Date = DateTime.Now,
                                   EpisodeId = episode.EpisodeId,
-                                  NzbTitle = "my title"
+                                  NzbTitle = "my title",
+                                  Indexer = "Fake Indexer"
                               };
 
+            //Act
             mocker.Resolve<HistoryProvider>().Add(history);
+
+            //Assert
+            var storedHistory = repo.All<History>();
+            var newHistiory = repo.All<History>().First();
+
+            Assert.Count(1, storedHistory);
+            Assert.AreEqual(history.Date, newHistiory.Date);
+            Assert.AreEqual(history.EpisodeId, newHistiory.EpisodeId);
+            Assert.AreEqual(history.NzbTitle, newHistiory.NzbTitle);
+            Assert.AreEqual(history.Indexer, newHistiory.Indexer);
         }
 
         [Test]
@@ -94,16 +101,6 @@ namespace NzbDrone.Core.Test
         {
             //Todo: This test fails... Moq Setup doesn't return the expected value
             //Setup
-            var series = new Series
-                             {
-                                 SeriesId = 5656,
-                                 CleanTitle = "rock",
-                                 Monitored = true,
-                                 Overview = "Series Overview",
-                                 QualityProfileId = 1,
-                                 Title = "30 Rock",
-                                 Path = @"C:\Test\TV\30 Rock"
-                             };
             var season = new Season { SeasonId = 4321, SeasonNumber = 1, SeriesId = 5656, Monitored = true };
             var episode = new Episode
                               {
@@ -117,16 +114,6 @@ namespace NzbDrone.Core.Test
                                   Season = season,
                                   SeriesId = 5656
                               };
-
-            var list = new List<History>();
-            list.Add(new History
-                         {
-                             HistoryId = new int(),
-                             Date = DateTime.Now,
-                             IsProper = false,
-                             Quality = QualityTypes.TV,
-                             EpisodeId = episode.EpisodeId
-                         });
 
             var proper = false;
 
@@ -150,17 +137,7 @@ namespace NzbDrone.Core.Test
             //Todo: This test fails... Moq Setup doesn't return the expected value
 
             //Setup
-            var series = new Series
-                              {
-                                  SeriesId = 5656,
-                                  CleanTitle = "rock",
-                                  Monitored = true,
-                                  Overview = "Series Overview",
-                                  QualityProfileId = 1,
-                                  Title = "30 Rock",
-                                  Path = @"C:\Test\TV\30 Rock"
-                              };
-            var season = new Season { SeasonId = 4321, SeasonNumber = 1, SeriesId = 5656, Monitored = true };
+           var season = new Season { SeasonId = 4321, SeasonNumber = 1, SeriesId = 5656, Monitored = true };
             var episode = new Episode
                               {
                                   AirDate = DateTime.Today.AddDays(-1),
@@ -174,15 +151,17 @@ namespace NzbDrone.Core.Test
                                   SeriesId = 5656
                               };
 
-            var list = new List<History>();
-            list.Add(new History
-                         {
-                             HistoryId = new int(),
-                             Date = DateTime.Now,
-                             IsProper = false,
-                             Quality = QualityTypes.TV,
-                             EpisodeId = episode.EpisodeId
-                         });
+            var list = new List<History>
+                           {
+                               new History
+                                   {
+                                       HistoryId = new int(),
+                                       Date = DateTime.Now,
+                                       IsProper = false,
+                                       Quality = QualityTypes.TV,
+                                       EpisodeId = episode.EpisodeId
+                                   }
+                           };
 
             var repo = new Mock<IRepository>();
             repo.Setup(r => r.Exists<History>(h => h.Episode == episode && h.IsProper == list[0].IsProper)).Returns(

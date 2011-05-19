@@ -3,13 +3,17 @@ using AutoMoq;
 using MbUnit.Framework;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
+using NzbDrone.Core.Test.Framework;
 using SubSonic.Repository;
 
 namespace NzbDrone.Core.Test
 {
     [TestFixture]
-    public class RootDirProviderTest
+    // ReSharper disable InconsistentNaming
+    public class RootDirProviderTest : TestBase
     {
+ 
+
         [Test]
         public void GetRootDirs()
         {
@@ -38,7 +42,7 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer();
             mocker.SetConstant(MockLib.GetEmptyRepository());
 
-            string path = @"C:\TV\";
+            const string path = @"C:\TV\";
 
             //Act
             var rootDirProvider = mocker.Resolve<RootDirProvider>();
@@ -59,7 +63,7 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer();
             mocker.SetConstant(MockLib.GetEmptyRepository());
 
-            string path = @"C:\TV2";
+            const string path = @"C:\TV2";
 
             //Act
             var rootDirProvider = mocker.Resolve<RootDirProvider>();
@@ -80,8 +84,6 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer();
             mocker.SetConstant(MockLib.GetEmptyRepository());
 
-            string path = @"C:\TV2";
-
             //Act
             var rootDirProvider = mocker.Resolve<RootDirProvider>();
             rootDirProvider.Add(new RootDir {Path = @"C:\TV"});
@@ -99,8 +101,8 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer();
             mocker.SetConstant(MockLib.GetEmptyRepository());
 
-            int id = 1;
-            string path = @"C:\TV";
+            const int id = 1;
+            const string path = @"C:\TV";
 
             //Act
             var rootDirProvider = mocker.Resolve<RootDirProvider>();
