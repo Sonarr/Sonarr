@@ -588,6 +588,7 @@
     <Content Include="Content\Images\Indexers\Unknown.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Images\Loading.gif" />
     <Content Include="Content\Images\Plus.png" />
     <Content Include="Content\Images\spin.gif" />
     <Content Include="Content\Images\ui-bg_diagonals-small_0_aaaaaa_40x40.png" />
