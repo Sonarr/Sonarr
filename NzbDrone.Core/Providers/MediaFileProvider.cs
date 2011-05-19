@@ -72,6 +72,7 @@ namespace NzbDrone.Core.Providers
                 if (!_repository.Exists<EpisodeFile>(e => e.Path == Parser.NormalizePath(filePath)))
                 {
                     var parseResult = Parser.ParseEpisodeInfo(filePath);
+                    parseResult.CleanTitle = series.Title;//replaces the nasty path as title to help with logging
 
                     if (parseResult == null)
                         return null;
@@ -90,7 +91,7 @@ namespace NzbDrone.Core.Providers
                         }
                         else
                         {
-                            Logger.Warn("Unable to find '{0}' in the database. File:{1}", parseResult, filePath);
+                            Logger.Warn("Unable to find [{0}] in the database.[{1}]", parseResult, filePath);
                         }
                     }
                     else
@@ -106,7 +107,7 @@ namespace NzbDrone.Core.Providers
                             }
                             else
                             {
-                                Logger.Warn("Unable to find '{0}' in the database. File:{1}", parseResult, filePath);
+                                Logger.Warn("Unable to find [{0}] in the database.[{1}]", parseResult, filePath);
                             }
                         }
                     }

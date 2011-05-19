@@ -27,10 +27,10 @@ namespace NzbDrone.Core.Model
         public override string ToString()
         {
             if (Episodes == null)
-                return string.Format("Series:{0} Air Date:{1}", CleanTitle, AirDate.Date);
+                return string.Format("{0} - {1}", CleanTitle, AirDate.Date);
 
-            return string.Format("Series:{0} Season:{1} Episode:{2}", CleanTitle, SeasonNumber,
-                                 String.Join(",", Episodes));
+            return string.Format("{0} - S{1:00}E{2}", CleanTitle, SeasonNumber,
+                                 String.Join("-", Episodes));
 
         }
     }
