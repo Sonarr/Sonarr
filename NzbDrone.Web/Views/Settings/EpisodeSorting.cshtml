@@ -1,4 +1,5 @@
-﻿@model NzbDrone.Web.Models.EpisodeSortingModel
+﻿@using NzbDrone.Web.Helpers
+@model NzbDrone.Web.Models.EpisodeSortingModel
 
 <script type="text/javascript">
     $(document).ready(function () {
@@ -30,59 +31,60 @@
 
     <fieldset>
         <legend>Episode Sorting</legend>
-                    
+            
             <div class="config-section">
                 <div class="config-group">
-                    <div class="config-title">@Html.LabelFor(m => m.ShowName)</div>
-                    <div class="config-value">@Html.CheckBoxFor(m => m.ShowName)</div>
-                    
+                    <div class="config-title">@Html.LabelFor(m => m.SeriesName)</div>
+                    <div class="config-value">@Html.CheckBoxFor(m => m.SeriesName)</div>
                 </div>
-                <div class="config-validation">@Html.ValidationMessageFor(m => m.ShowName)</div>
+                <div class="config-group2"> 
+                    <div class="config-validation">@Html.ValidationMessageFor(m => m.SeriesName)</div>
+                    <div class="config-description">@Html.DescriptionFor(m => m.SeriesName)</div>
+                </div>
             </div>
 
             <div class="config-section">
                 <div class="config-group">
                     <div class="config-title">@Html.LabelFor(m => m.EpisodeName)</div>
                     <div class="config-value">@Html.CheckBoxFor(m => m.EpisodeName)</div>
-                    
                 </div>
-                <div class="config-validation">@Html.ValidationMessageFor(m => m.EpisodeName)</div>
+                <div class="config-group2"> 
+                    <div class="config-validation">@Html.ValidationMessageFor(m => m.EpisodeName)</div>
+                    <div class="config-description">@Html.DescriptionFor(m => m.EpisodeName)</div>
+                </div>
             </div>
 
             <div class="config-section">
                 <div class="config-group">
                     <div class="config-title">@Html.LabelFor(m => m.ReplaceSpaces)</div>
                     <div class="config-value">@Html.CheckBoxFor(m => m.ReplaceSpaces)</div>
-                    
                 </div>
-                <div class="config-validation">@Html.ValidationMessageFor(m => m.ReplaceSpaces)</div>
+                <div class="config-group2"> 
+                    <div class="config-validation">@Html.ValidationMessageFor(m => m.ReplaceSpaces)</div>
+                    <div class="config-description">@Html.DescriptionFor(m => m.ReplaceSpaces)</div>
+                </div>
             </div>
 
             <div class="config-section">
                 <div class="config-group">
                     <div class="config-title">@Html.LabelFor(m => m.AppendQuality)</div>
                     <div class="config-value">@Html.CheckBoxFor(m => m.AppendQuality)</div>
-                    
                 </div>
-                <div class="config-validation">@Html.ValidationMessageFor(m => m.AppendQuality)</div>
-            </div>
-
-            <div class="config-section">
-                <div class="config-group">
-                    <div class="config-title">@Html.LabelFor(m => m.UseAirByDate)</div>
-                    <div class="config-value">@Html.CheckBoxFor(m => m.UseAirByDate)</div>
-                    
+                <div class="config-group2"> 
+                    <div class="config-validation">@Html.ValidationMessageFor(m => m.AppendQuality)</div>
+                    <div class="config-description">@Html.DescriptionFor(m => m.AppendQuality)</div>
                 </div>
-                <div class="config-validation">@Html.ValidationMessageFor(m => m.UseAirByDate)</div>
             </div>
 
             <div class="config-section">
                 <div class="config-group">
                     <div class="config-title">@Html.LabelFor(m => m.SeasonFolders)</div>
                     <div class="config-value">@Html.CheckBoxFor(m => m.SeasonFolders)</div>
-                    
                 </div>
-                <div class="config-validation">@Html.ValidationMessageFor(m => m.SeasonFolders)</div>
+                <div class="config-group2"> 
+                    <div class="config-validation">@Html.ValidationMessageFor(m => m.SeasonFolders)</div>
+                    <div class="config-description">@Html.DescriptionFor(m => m.SeasonFolders)</div>
+                </div>
             </div>
 
             <div class="config-section">
@@ -90,7 +92,10 @@
                     <div class="config-title">@Html.LabelFor(m => m.SeasonFolderFormat)</div>
                     <div class="config-value">@Html.TextBoxFor(m => m.SeasonFolderFormat)</div>
                 </div>
-                <div class="config-validation">@Html.ValidationMessageFor(m => m.SeasonFolderFormat)</div>
+                <div class="config-group2"> 
+                    <div class="config-validation">@Html.ValidationMessageFor(m => m.SeasonFolderFormat)</div>
+                    <div class="config-description">@Html.DescriptionFor(m => m.SeasonFolderFormat)</div>
+                </div>
             </div>
 
             <div class="config-section">
@@ -98,7 +103,10 @@
                     <div class="config-title">@Html.LabelFor(m => m.SeparatorStyle)</div>
                     <div class="config-value">@Html.DropDownListFor(m => m.SeparatorStyle, Model.SeparatorStyles)</div>
                 </div>
-                <div class="config-validation">@Html.ValidationMessageFor(m => m.SeparatorStyle)</div>
+                <div class="config-group2"> 
+                    <div class="config-validation">@Html.ValidationMessageFor(m => m.SeparatorStyle)</div>
+                    <div class="config-description">@Html.DescriptionFor(m => m.SeparatorStyle)</div>
+                </div>
             </div>
 
             <div class="config-section">
@@ -106,7 +114,10 @@
                     <div class="config-title">@Html.LabelFor(m => m.NumberStyle)</div>
                     <div class="config-value">@Html.DropDownListFor(m => m.NumberStyle, Model.NumberStyles)</div>
                 </div>
-                <div class="config-validation">@Html.ValidationMessageFor(m => m.NumberStyle)</div>
+                <div class="config-group2"> 
+                    <div class="config-validation">@Html.ValidationMessageFor(m => m.NumberStyle)</div>
+                    <div class="config-description">@Html.DescriptionFor(m => m.NumberStyle)</div>
+                </div>
             </div>
 
             <div class="config-section">
@@ -114,7 +125,10 @@
                     <div class="config-title">@Html.LabelFor(m => m.MultiEpisodeStyle)</div>
                     <div class="config-value">@Html.DropDownListFor(m => m.MultiEpisodeStyle, Model.MultiEpisodeStyles)</div>
                 </div>
-                <div class="config-validation">@Html.ValidationMessageFor(m => m.MultiEpisodeStyle)</div>
+                <div class="config-group2"> 
+                    <div class="config-validation">@Html.ValidationMessageFor(m => m.MultiEpisodeStyle)</div>
+                    <div class="config-description">@Html.DescriptionFor(m => m.MultiEpisodeStyle)</div>
+                </div>
             </div>
 
             <div id="singleEpisodeExample"></div>
