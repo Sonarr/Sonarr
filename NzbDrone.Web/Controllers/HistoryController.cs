@@ -43,7 +43,7 @@ namespace NzbDrone.Web.Controllers
 
             //TODO: possible subsonic bug, IQuarible causes some issues so ToList() is called
             //https://github.com/subsonic/SubSonic-3.0/issues/263
-            
+
             var history = _historyProvider.AllItems().ToList().Select(h => new HistoryModel
                                                                       {
                                                                           HistoryId = h.HistoryId,
@@ -56,7 +56,7 @@ namespace NzbDrone.Web.Controllers
                                                                           Quality = h.Quality.ToString(),
                                                                           IsProper = h.IsProper,
                                                                           Date = h.Date,
-                                                                          Indexer = String.IsNullOrEmpty(h.Indexer.ToString()) ? "Unknown" : h.Indexer.ToString()
+                                                                          Indexer = h.Indexer
                                                                       });
 
             return View(new GridModel(history));

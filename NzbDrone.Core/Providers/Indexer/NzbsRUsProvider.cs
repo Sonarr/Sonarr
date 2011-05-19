@@ -49,9 +49,5 @@ namespace NzbDrone.Core.Providers.Indexer
             return item.Links[0].Uri.ToString();
         }
 
-        protected override IndexerType GetIndexerType()
-        {
-            return IndexerType.NzbsRus;
-        }
     }
 }

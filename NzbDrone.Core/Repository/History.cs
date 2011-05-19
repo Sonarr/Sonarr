@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Repository
         public QualityTypes Quality { get; set; }
         public DateTime Date { get; set; }
         public bool IsProper { get; set; }
-        public IndexerType? Indexer { get; set; }
+        public string Indexer { get; set; }
         
         [SubSonicToOneRelation(ThisClassContainsJoinKey = true)]
         public virtual Episode Episode { get; protected set; }
