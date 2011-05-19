@@ -1,7 +1,7 @@
 ﻿@using NzbDrone.Core.Repository;
 @using NzbDrone.Web.Models;
 @model IEnumerable<NzbDrone.Core.Repository.Series>
-
+           
 @section TitleContent{
     Series
 }
@@ -11,38 +11,43 @@
 }
 
 @section MainContent{
-    @{Html.Telerik().Grid<SeriesModel>().Name("Grid")
-            .TableHtmlAttributes(new { @class = "Grid" })
-            .DataKeys(keys => keys.Add(p => p.SeriesId))
-            .DataBinding(data => data.Ajax()
-                .Select("_AjaxSeriesGrid", "Series")
-                .Update("_SaveAjaxSeriesEditing", "Series")
-                .Delete("_DeleteAjaxSeriesEditing", "Series"))
-                
-            .Columns(columns =>
-                         {
-                             columns.Bound(o => o.Title)
-                                 .ClientTemplate("<a href=" +
-                                                 Url.Action("Details", "Series", new {seriesId = "<#= SeriesId #>"}) +
-                                                 "><#= Title #></a>");
-                             columns.Bound(o => o.SeasonsCount).Title("Seasons")
-                                 .ClientTemplate("<a href=# onclick=\"openSeasonEditor(<#= SeriesId #>, \'<#= Title #>\'); return false;\"><#= SeasonsCount #></a>");
-                             columns.Bound(o => o.QualityProfileName).Title("Quality");
-                             columns.Bound(o => o.Status);
-                             columns.Bound(o => o.AirsDayOfWeek);
-                             columns.Bound(o => o.Path);
-                             columns.Command(commands =>
-                                                 {
-                                                     commands.Edit().ButtonType(GridButtonType.Image);
-                                                     commands.Delete().ButtonType(GridButtonType.Image);
-                                                 }).Title("Actions").Width(80);
+    <div class="grid-container">
+        @{Html.Telerik().Grid<SeriesModel>().Name("Grid")
+                .TableHtmlAttributes(new { @class = "Grid" })
+                .DataKeys(keys => keys.Add(p => p.SeriesId))
+                .DataBinding(data => data.Ajax()
+                    .Select("_AjaxSeriesGrid", "Series")
+                    .Update("_SaveAjaxSeriesEditing", "Series")
+                    .Delete("_DeleteAjaxSeriesEditing", "Series"))
+                .Columns(columns =>
+                             {
+                                 columns.Bound(o => o.Title)
+                                     .ClientTemplate("<a href=" +
+                                                     Url.Action("Details", "Series", new {seriesId = "<#= SeriesId #>"}) +
+                                                     "><#= Title #></a>");
+                                 columns.Bound(o => o.SeasonsCount).Title("Seasons")
+                                     .ClientTemplate("<a href=# onclick=\"openSeasonEditor(<#= SeriesId #>, \'<#= Title #>\'); return false;\"><#= SeasonsCount #></a>");
+                                 columns.Bound(o => o.QualityProfileName).Title("Quality");
+                                 columns.Bound(o => o.Status);
+                                 columns.Bound(o => o.AirsDayOfWeek);
+                                 columns.Bound(o => o.Path);
+                                 columns.Command(commands =>
+                                                     {
+                                                         commands.Edit().ButtonType(GridButtonType.Image);
+                                                         commands.Delete().ButtonType(GridButtonType.Image);
+                                                     }).Title("Actions").Width(80);
 
-                         })
-            .Editable(editor => editor.Mode(GridEditMode.PopUp))
-            .Sortable(sort => sort.OrderBy(order => order.Add(o => o.Title).Ascending()).Enabled(true))
-            .DetailView(detailView => detailView.ClientTemplate("<div style=\"width:95%\"><#= Overview #></div>"))
-            .ClientEvents(clientEvents => clientEvents.OnEdit("grid_edit"))
-            .Render();}
+                             })
+                .Editable(editor => editor.Mode(GridEditMode.PopUp))
+                .Sortable(sort => sort.OrderBy(order => order.Add(o => o.Title).Ascending()).Enabled(true))
+                .DetailView(detailView => detailView.ClientTemplate("<div style=\"width:95%\"><#= Overview #></div>"))
+                .ClientEvents(clientEvents => { clientEvents.OnEdit("grid_edit");
+                                                clientEvents.OnDataBinding("grid_bind");
+                                                clientEvents.OnDataBound("grid_bound");
+                                              })
+                .Render();}
+        <span class="grid-loader"><img src="@Url.Content( "~/Content/Images/Loading.gif" )" alt="Loading"/> Loading...</span>
+    </div>
 }
 
 <script type="text/javascript">
@@ -54,6 +59,14 @@
                 .data("tWindow")
                 .center();
         }
+
+    function grid_bind(args) {
+        $('.grid-container').children('.grid-loader').stop().css("top", "0px").fadeIn('slow');
+    }
+
+    function grid_bound(args) {
+        $('.grid-container').children('.grid-loader').stop().fadeOut('slow');
+    }
 
     function openSeasonEditor(seriesId, seriesName) {
         windowElement = null;

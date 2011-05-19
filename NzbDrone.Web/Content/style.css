@@ -309,3 +309,29 @@ button, input[type="button"], input[type="submit"], input[type="reset"]
     display: block;
     height: 25px;
 }
+
+/* Loading Bar */
+.grid-container  
+    {  
+        position:relative;  
+        margin:auto;  
+        overflow:hidden;  
+    }  
+
+    .grid-loader  
+    {  
+        position: absolute;  
+        width: 100%;
+        height: 100%;
+        top: 400px;  
+        left: 0px;  
+        letter-spacing: -1px;  
+        color: white; font: 48px Berlin Sans FB, Sans-Serif;  
+        background: #4A4D4A;  
+        padding: 20px;  
+        filter:alpha(opacity=80);  
+        -moz-opacity:0.8;  
+        -khtml-opacity: 0.8;  
+        opacity: 0.8;  
+        line-height: 90%  
+    } 
