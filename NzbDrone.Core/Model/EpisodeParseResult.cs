@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 
 namespace NzbDrone.Core.Model
@@ -23,6 +24,8 @@ namespace NzbDrone.Core.Model
         public LanguageType Language { get; set; }
 
         public string NzbUrl { get; set; }
+
+        public Series Series { get; set; }
 
         public override string ToString()
         {

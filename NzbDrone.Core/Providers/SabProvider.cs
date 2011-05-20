@@ -92,7 +92,7 @@ namespace NzbDrone.Core.Providers
                                  _configProvider.SabPassword);
         }
 
-        public String GetSabTitle(EpisodeParseResult parseResult, String folderName)
+        public String GetSabTitle(EpisodeParseResult parseResult)
         {
             //Show Name - 1x01-1x02 - Episode Name
             //Show Name - 1x01 - Episode Name
@@ -105,7 +105,7 @@ namespace NzbDrone.Core.Providers
 
             var epNumberString = String.Join("-", episodeString);
 
-            var result = String.Format("{0} - {1} - {2} [{3}]", folderName, epNumberString, parseResult.EpisodeTitle, parseResult.Quality);
+            var result = String.Format("{0} - {1} - {2} [{3}]", new DirectoryInfo(parseResult.Series.Path).Name, epNumberString, parseResult.EpisodeTitle, parseResult.Quality);
 
             if (parseResult.Proper)
             {

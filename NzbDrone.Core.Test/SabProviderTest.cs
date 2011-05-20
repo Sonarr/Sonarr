@@ -2,11 +2,13 @@
 using System.IO;
 using System.Linq;
 using AutoMoq;
+using FizzWare.NBuilder;
 using MbUnit.Framework;
 using Moq;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
+using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
 
@@ -219,6 +221,10 @@ namespace NzbDrone.Core.Test
         {
             var mocker = new AutoMoqer();
 
+            var series = Builder<Series>.CreateNew()
+                .With(c => c.Path = @"d:\tv shows\My Series Name")
+                .Build();
+
             var parsResult = new EpisodeParseResult()
             {
                 AirDate = DateTime.Now,
@@ -227,10 +233,11 @@ namespace NzbDrone.Core.Test
                 Quality = quality,
                 SeasonNumber = seasons,
                 EpisodeTitle = title,
+                Series = series
             };
-
+            
             //Act
-            var actual = mocker.Resolve<SabProvider>().GetSabTitle(parsResult, "My Series Name");
+            var actual = mocker.Resolve<SabProvider>().GetSabTitle(parsResult);
 
             //Assert
             Assert.AreEqual(excpected, actual);

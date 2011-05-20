@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Test
                 .Build();
 
             base.Setup();
-          
+
         }
 
 
@@ -183,6 +183,45 @@ namespace NzbDrone.Core.Test
             mocker.VerifyAllMocks();
         }
 
+
+        [Test]
+        public void file_in_history_should_be_skipped()
+        {
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+
+            mocker.GetMock<SeriesProvider>()
+                .Setup(p => p.FindSeries(It.IsAny<String>()))
+                .Returns(series);
+
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(p => p.GetEpisode(episode.SeriesId, episode.SeasonNumber, episode.EpisodeNumber))
+                .Returns(episode);
+
+
+            mocker.GetMock<SeriesProvider>()
+               .Setup(p => p.QualityWanted(series.SeriesId, parseResult.Quality))
+               .Returns(true);
+
+            mocker.GetMock<SeasonProvider>()
+                .Setup(p => p.IsIgnored(series.SeriesId, parseResult.SeasonNumber))
+                .Returns(false);
+
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(p => p.IsNeeded(parseResult, episode))
+                .Returns(true);
+
+            mocker.GetMock<HistoryProvider>()
+                .Setup(p => p.Exists(episode.EpisodeId, parseResult.Quality, parseResult.Proper))
+                .Returns(true);
+
+            //Act
+            var result = mocker.Resolve<InventoryProvider>().IsNeeded(parseResult);
+
+            //Assert
+            Assert.IsFalse(result);
+            mocker.VerifyAllMocks();
+        }
+
         [Test]
         public void dailyshow_should_do_daily_lookup()
         {
@@ -254,12 +293,53 @@ namespace NzbDrone.Core.Test
             mocker.GetMock<EpisodeProvider>()
                 .Setup(p => p.IsNeeded(parseResult, It.IsAny<Episode>()))
                 .Returns(false);
-            
+
             //Act
             var result = mocker.Resolve<InventoryProvider>().IsNeeded(parseResult);
 
             //Assert
             Assert.IsFalse(result);
+            mocker.VerifyAllMocks();
+        }
+
+
+        [Test]
+        public void file_needed_should_return_true()
+        {
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+
+            mocker.GetMock<SeriesProvider>()
+                .Setup(p => p.FindSeries(It.IsAny<String>()))
+                .Returns(series);
+
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(p => p.GetEpisode(episode.SeriesId, episode.SeasonNumber, episode.EpisodeNumber))
+                .Returns(episode);
+
+
+            mocker.GetMock<SeriesProvider>()
+               .Setup(p => p.QualityWanted(series.SeriesId, parseResult.Quality))
+               .Returns(true);
+
+            mocker.GetMock<SeasonProvider>()
+                .Setup(p => p.IsIgnored(series.SeriesId, parseResult.SeasonNumber))
+                .Returns(false);
+
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(p => p.IsNeeded(parseResult, episode))
+                .Returns(true);
+
+            mocker.GetMock<HistoryProvider>()
+                .Setup(p => p.Exists(episode.EpisodeId, parseResult.Quality, parseResult.Proper))
+                .Returns(false);
+
+            //Act
+            var result = mocker.Resolve<InventoryProvider>().IsNeeded(parseResult);
+
+            //Assert
+            Assert.IsTrue(result);
+            Assert.IsNotNull(parseResult.Series);
+            Assert.AreEqual(series, parseResult.Series);
             mocker.VerifyAllMocks();
         }
     }

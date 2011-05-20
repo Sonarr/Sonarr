@@ -35,6 +35,8 @@ namespace NzbDrone.Core.Providers.Indexer
                 return false;
             }
 
+            parseResult.Series = series;
+
             foreach (var episodeNumber in parseResult.Episodes)
             {
                 //Todo: How to handle full season files? Currently the episode list is completely empty for these releases
@@ -96,16 +98,8 @@ namespace NzbDrone.Core.Providers.Indexer
                     return false;
                 }
 
-                parseResult.EpisodeTitle = episodeInfo.Title;
-                var sabTitle = _sabProvider.GetSabTitle(parseResult, new DirectoryInfo(series.Path).Name);
-
-                if (_sabProvider.IsInQueue(sabTitle))
-                {
-                    Logger.Debug("Episode {0} is already in sab's queue. skipping.", parseResult);
-                    return false;
-                }
-
                 //Congragulations younge feed item! you have made it this far. you are truly special!!!
+                Logger.Debug("Episode {0} is needed", parseResult);
                 return true;
             }
 

@@ -170,6 +170,7 @@
     <Compile Include="Model\ExternalNotificationType.cs" />
     <Compile Include="Model\LanguageType.cs" />
     <Compile Include="Model\SabnzbdInfoModel.cs" />
+    <Compile Include="Providers\DownloadProvider.cs" />
     <Compile Include="Providers\ExternalNotification\ExternalNotificationProviderBase.cs" />
     <Compile Include="Providers\ExternalNotification\XbmcNotificationProvider.cs" />
     <Compile Include="Providers\Indexer\InventoryProvider.cs" />

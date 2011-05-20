@@ -311,17 +311,5 @@ namespace NzbDrone.Core.Helpers
 
             return map.SeriesId;
         }
-
-        public static List<String> FindById(int seriesId)
-        {
-            List<String> results = new List<string>();
-
-            var maps = SceneNameMappings.Where(s => s.SeriesId == seriesId);
-
-            foreach (var map in maps)
-                results.Add(map.Name);
-
-            return results;
-        }
     }
 }
