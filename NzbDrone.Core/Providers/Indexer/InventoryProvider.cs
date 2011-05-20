@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using NLog;
-using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository;
-using System.ServiceModel.Syndication;
 
 namespace NzbDrone.Core.Providers.Indexer
 {
-    public class IsNeededProvider
+    public class InventoryProvider
     {
         private readonly SeriesProvider _seriesProvider;
         private readonly SeasonProvider _seasonProvider;
@@ -21,7 +16,7 @@ namespace NzbDrone.Core.Providers.Indexer
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public IsNeededProvider(SeriesProvider seriesProvider, SeasonProvider seasonProvider, EpisodeProvider episodeProvider, HistoryProvider historyProvider, SabProvider sabProvider)
+        public InventoryProvider(SeriesProvider seriesProvider, SeasonProvider seasonProvider, EpisodeProvider episodeProvider, HistoryProvider historyProvider, SabProvider sabProvider)
         {
             _seriesProvider = seriesProvider;
             _seasonProvider = seasonProvider;
@@ -30,9 +25,16 @@ namespace NzbDrone.Core.Providers.Indexer
             _sabProvider = sabProvider;
         }
 
-
-        internal bool IsNeeded(EpisodeParseResult parseResult, Series series)
+        internal bool IsNeeded(EpisodeParseResult parseResult)
         {
+            var series = _seriesProvider.FindSeries(parseResult.CleanTitle);
+
+            if (series == null)
+            {
+                Logger.Trace("{0} is not mapped to any series in DB. skipping", parseResult.CleanTitle);
+                return false;
+            }
+
             foreach (var episodeNumber in parseResult.Episodes)
             {
                 //Todo: How to handle full season files? Currently the episode list is completely empty for these releases
@@ -87,7 +89,7 @@ namespace NzbDrone.Core.Providers.Indexer
                     Logger.Debug("Episode {0} is not needed. skipping.", parseResult);
                     return false;
                 }
-                
+
                 if (_historyProvider.Exists(episodeInfo.EpisodeId, parseResult.Quality, parseResult.Proper))
                 {
                     Logger.Debug("Episode {0} is in history. skipping.", parseResult);

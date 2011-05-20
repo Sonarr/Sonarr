@@ -85,6 +85,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InventoryProviderTest.cs" />
     <Compile Include="Framework\AutoMoq\AutoMoqer.cs" />
     <Compile Include="Framework\AutoMoq\AutoMoqerTest.cs" />
     <Compile Include="Framework\AutoMoq\Unity\AutoMockingBuilderStrategy.cs">

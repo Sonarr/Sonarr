@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Model
         internal string CleanTitle { get; set; }
 
         internal int SeasonNumber { get; set; }
-        
+
         internal List<int> Episodes { get; set; }
 
         internal string EpisodeTitle { get; set; }
@@ -21,6 +21,8 @@ namespace NzbDrone.Core.Model
         public QualityTypes Quality { get; set; }
 
         public LanguageType Language { get; set; }
+
+        public string NzbUrl { get; set; }
 
         public override string ToString()
         {
