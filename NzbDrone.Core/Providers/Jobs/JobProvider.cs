@@ -106,7 +106,7 @@ namespace NzbDrone.Core.Providers.Jobs
         /// <param name="jobType">Type of the job that should be executed.</param>
         /// <param name="targetId">The targetId could be any Id parameter eg. SeriesId. it will be passed to the job implementation
         /// to allow it to filter it's target of execution.</param>
-        /// <returns>True if ran, false if skipped</returns>
+        /// <returns>True if queued, false if duplicate and was skipped</returns>
         /// <remarks>Job is only added to the queue if same job with the same targetId doesn't already exist in the queue.</remarks>
         public virtual bool QueueJob(Type jobType, int targetId = 0)
         {
@@ -133,7 +133,7 @@ namespace NzbDrone.Core.Providers.Jobs
                     Logger.Trace("Queue is already running. Ignoring request.");
                     return true;
                 }
-
+                _isRunning = true;
             }
 
             if (_jobThread == null || !_jobThread.IsAlive)
@@ -158,7 +158,8 @@ namespace NzbDrone.Core.Providers.Jobs
             }
             else
             {
-                Logger.Warn("Thread still active. Ignoring request.");
+                Logger.Warn("Execution lock has has fucked up. Thread still active. Ignoring request.");
+                return true;
             }
 
             return true;

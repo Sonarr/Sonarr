@@ -103,6 +103,29 @@ namespace NzbDrone.Core.Test
         [Test]
         //This test will confirm that the concurrency checks are rest
         //after execution so the job can successfully run.
+        public void no_concurent_jobs()
+        {
+            IEnumerable<IJob> fakeJobs = new List<IJob> { new SlowJob() };
+            var mocker = new AutoMoqer();
+
+            mocker.SetConstant(MockLib.GetEmptyRepository());
+            mocker.SetConstant(fakeJobs);
+
+            var timerProvider = mocker.Resolve<JobProvider>();
+            timerProvider.Initialize();
+            var firstRun = timerProvider.QueueJob(typeof(SlowJob),1);
+            var secondRun = timerProvider.QueueJob(typeof(SlowJob),2);
+            var third = timerProvider.QueueJob(typeof(SlowJob),3);
+
+
+            Thread.Sleep(10000);
+
+        }
+
+
+        [Test]
+        //This test will confirm that the concurrency checks are rest
+        //after execution so the job can successfully run.
         public void can_run_broken_async_job_again()
         {
             IEnumerable<IJob> fakeJobs = new List<IJob> { new BrokenJob() };
@@ -436,8 +459,10 @@ namespace NzbDrone.Core.Test
 
         public void Start(ProgressNotification notification, int targetId)
         {
+            Console.WriteLine("Starting Job");
             Thread.Sleep(2000);
             ExexutionCount++;
+            Console.WriteLine("Finishing Job");
         }
     }
 }
