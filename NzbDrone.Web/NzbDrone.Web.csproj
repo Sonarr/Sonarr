@@ -648,6 +648,7 @@
     <Content Include="Scripts\2011.1.315\telerik.treeview.min.js" />
     <Content Include="Scripts\2011.1.315\telerik.upload.min.js" />
     <Content Include="Scripts\2011.1.315\telerik.window.min.js" />
+    <Content Include="Scripts\gridLoad.js" />
     <Content Include="Scripts\jquery-1.5.2-vsdoc.js" />
     <Content Include="Scripts\jquery-1.5.2.js" />
     <Content Include="Scripts\jquery-1.5.2.min.js" />
