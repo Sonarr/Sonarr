@@ -11,13 +11,7 @@ namespace NzbDrone.Core.Providers.Indexer
 {
     public class NzbMatrixProvider : IndexerProviderBase
     {
-        public NzbMatrixProvider(SeriesProvider seriesProvider, SeasonProvider seasonProvider,
-            EpisodeProvider episodeProvider, ConfigProvider configProvider,
-            HttpProvider httpProvider, IndexerProvider indexerProvider,
-            HistoryProvider historyProvider, SabProvider sabProvider, IEnumerable<ExternalNotificationProviderBase> externalNotificationProvider)
-            : base(seriesProvider, seasonProvider, episodeProvider,
-            configProvider, httpProvider, indexerProvider, historyProvider,
-            sabProvider, externalNotificationProvider)
+        public NzbMatrixProvider(HttpProvider httpProvider, ConfigProvider configProvider, IndexerProvider indexerProvider) : base(httpProvider, configProvider, indexerProvider)
         {
         }
 
@@ -40,10 +34,6 @@ namespace NzbDrone.Core.Providers.Indexer
             get { return "NzbMatrix"; }
         }
 
-        public override bool SupportsBacklog
-        {
-            get { return true; }
-        }
 
         protected override string NzbDownloadUrl(SyndicationItem item)
         {

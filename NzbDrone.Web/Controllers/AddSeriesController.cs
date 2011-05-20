@@ -72,7 +72,7 @@ namespace NzbDrone.Web.Controllers
 
             foreach (var folder in _rootFolderProvider.GetAll())
             {
-                unmappedList.AddRange(_syncProvider.GetUnmappedFolders(folder.Path));
+                unmappedList.AddRange(_rootFolderProvider.GetUnmappedFolders(folder.Path));
             }
 
             return View(unmappedList);

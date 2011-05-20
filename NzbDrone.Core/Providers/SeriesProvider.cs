@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
+using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
@@ -108,8 +109,14 @@ namespace NzbDrone.Core.Providers
 
         public virtual Series FindSeries(string title)
         {
-            //TODO:Add series alias support here. if a series is not found in the repo should be tried using its aliases
             var normalizeTitle = Parser.NormalizeTitle(title);
+
+            var seriesId = SceneNameHelper.FindByName(normalizeTitle);
+            if (seriesId != 0)
+            {
+                return GetSeries(seriesId);
+            }
+
             return _repository.Single<Series>(s => s.CleanTitle == normalizeTitle);
         }
 

@@ -168,11 +168,11 @@
     <Compile Include="Instrumentation\NlogWriter.cs" />
     <Compile Include="Model\ConnectionInfoModel.cs" />
     <Compile Include="Model\ExternalNotificationType.cs" />
-    <Compile Include="Model\IndexerType.cs" />
     <Compile Include="Model\LanguageType.cs" />
     <Compile Include="Model\SabnzbdInfoModel.cs" />
     <Compile Include="Providers\ExternalNotification\ExternalNotificationProviderBase.cs" />
     <Compile Include="Providers\ExternalNotification\XbmcNotificationProvider.cs" />
+    <Compile Include="Providers\Indexer\IsNeededProvider.cs" />
     <Compile Include="Providers\Indexer\SyndicationFeedXmlReader.cs" />
     <Compile Include="Providers\AutoConfigureProvider.cs" />
     <Compile Include="Providers\Indexer\NzbMatrixProvider.cs" />

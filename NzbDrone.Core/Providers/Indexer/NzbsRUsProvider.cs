@@ -10,13 +10,7 @@ namespace NzbDrone.Core.Providers.Indexer
 {
     public class NzbsRUsProvider : IndexerProviderBase
     {
-        public NzbsRUsProvider(SeriesProvider seriesProvider, SeasonProvider seasonProvider,
-            EpisodeProvider episodeProvider, ConfigProvider configProvider,
-            HttpProvider httpProvider, IndexerProvider indexerProvider,
-            HistoryProvider historyProvider, SabProvider sabProvider, IEnumerable<ExternalNotificationProviderBase> externalNotificationProvider)
-            : base(seriesProvider, seasonProvider, episodeProvider,
-            configProvider, httpProvider, indexerProvider, historyProvider,
-            sabProvider, externalNotificationProvider)
+        public NzbsRUsProvider(HttpProvider httpProvider, ConfigProvider configProvider, IndexerProvider indexerProvider) : base(httpProvider, configProvider, indexerProvider)
         {
         }
 
@@ -39,12 +33,7 @@ namespace NzbDrone.Core.Providers.Indexer
             get { return "NzbsRUs"; }
         }
 
-        public override bool SupportsBacklog
-        {
-            get { return false; }
-        }
-
-        protected override string NzbDownloadUrl(SyndicationItem item)
+   protected override string NzbDownloadUrl(SyndicationItem item)
         {
             return item.Links[0].Uri.ToString();
         }

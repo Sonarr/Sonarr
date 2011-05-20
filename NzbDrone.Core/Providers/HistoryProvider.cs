@@ -50,8 +50,10 @@ namespace NzbDrone.Core.Providers
         {
             //Looks for the existence of this episode in History
             if (_repository.Exists<History>(h => h.EpisodeId == episodeId && h.Quality == quality && h.IsProper == proper))
+            {
+                Logger.Debug("Episode in History. ID:{0} Q:{1} Proper:{2}", episodeId, quality, proper);
                 return true;
-
+            }
             Logger.Debug("Episode not in History. ID:{0} Q:{1} Proper:{2}", episodeId, quality, proper);
             return false;
         }

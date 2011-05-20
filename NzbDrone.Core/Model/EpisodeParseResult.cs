@@ -7,11 +7,9 @@ namespace NzbDrone.Core.Model
     public class EpisodeParseResult
     {
         internal string CleanTitle { get; set; }
-        public int SeriesId { get; set; }
-
-        public string FolderName { get; set; }
 
         internal int SeasonNumber { get; set; }
+        
         internal List<int> Episodes { get; set; }
 
         internal string EpisodeTitle { get; set; }

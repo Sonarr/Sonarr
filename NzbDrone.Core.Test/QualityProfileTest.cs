@@ -58,6 +58,9 @@ namespace NzbDrone.Core.Test
             var series = Builder<Series>.CreateNew().Build();
             series.QualityProfileId = profileId;
 
+            repo.Add(testProfile);
+            repo.Add(series);
+
             var result = repo.All<Series>();
 
             Assert.Count(1, result);
