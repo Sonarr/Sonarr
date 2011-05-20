@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Test
                 .Setup(c => c.GetSettings(It.IsAny<Type>()))
                 .Returns(fakeSettings);
 
-            var parseResults = mocker.Resolve<MockIndexerProvider>().Fetch();
+            var parseResults = mocker.Resolve<MockIndexer>().Fetch();
 
 
             Assert.IsNotEmpty(parseResults);
@@ -127,7 +127,7 @@ namespace NzbDrone.Core.Test
 
             //Act
             var indexerProvider = mocker.Resolve<IndexerProvider>();
-            indexerProvider.InitializeIndexers(new List<IndexerProviderBase> { mocker.Resolve<MockIndexerProvider>() });
+            indexerProvider.InitializeIndexers(new List<IndexerBase> { mocker.Resolve<MockIndexer>() });
             var indexers = indexerProvider.All();
 
             //Assert
@@ -142,14 +142,14 @@ namespace NzbDrone.Core.Test
                 .Setup(c => c.FindSeries(It.IsAny<String>()))
                 .Returns<Series>(null);
 
-            var indexer = mocker.Resolve<MockIndexerProvider>();
+            var indexer = mocker.Resolve<MockIndexer>();
             //indexer.ProcessItem(new SyndicationItem { Title = new TextSyndicationContent("Adventure.Inc.S01E18.DVDRip.XviD-OSiTV") });
         }
     }
 
-    public class MockIndexerProvider : IndexerProviderBase
+    public class MockIndexer : IndexerBase
     {
-        public MockIndexerProvider(HttpProvider httpProvider, ConfigProvider configProvider, IndexerProvider indexerProvider)
+        public MockIndexer(HttpProvider httpProvider, ConfigProvider configProvider, IndexerProvider indexerProvider)
             : base(httpProvider, configProvider, indexerProvider)
         {
         }
@@ -176,7 +176,7 @@ namespace NzbDrone.Core.Test
         }
     }
 
-    public class TestUrlIndexer : IndexerProviderBase
+    public class TestUrlIndexer : IndexerBase
     {
         public TestUrlIndexer(HttpProvider httpProvider, ConfigProvider configProvider, IndexerProvider indexerProvider)
             : base(httpProvider, configProvider, indexerProvider)
@@ -199,7 +199,7 @@ namespace NzbDrone.Core.Test
         }
     }
 
-    public class CustomParserIndexer : IndexerProviderBase
+    public class CustomParserIndexer : IndexerBase
     {
         public CustomParserIndexer(HttpProvider httpProvider, ConfigProvider configProvider, IndexerProvider indexerProvider)
             : base(httpProvider, configProvider, indexerProvider)

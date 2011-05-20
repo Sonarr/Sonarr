@@ -7,9 +7,9 @@ using NzbDrone.Core.Providers.ExternalNotification;
 
 namespace NzbDrone.Core.Providers.Indexer
 {
-    public class NewzbinProvider : IndexerProviderBase
+    public class Newzbin : IndexerBase
     {
-        public NewzbinProvider(HttpProvider httpProvider, ConfigProvider configProvider, IndexerProvider indexerProvider) : base(httpProvider, configProvider, indexerProvider)
+        public Newzbin(HttpProvider httpProvider, ConfigProvider configProvider, IndexerProvider indexerProvider) : base(httpProvider, configProvider, indexerProvider)
         {
         }
 

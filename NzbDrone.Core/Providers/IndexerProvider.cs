@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Providers
             return _repository.Single<IndexerSetting>(s => s.Id == id);
         }
 
-        public virtual void InitializeIndexers(IList<IndexerProviderBase> indexers)
+        public virtual void InitializeIndexers(IList<IndexerBase> indexers)
         {
             Logger.Info("Initializing indexers. Count {0}", indexers.Count);
 
@@ -61,14 +61,14 @@ namespace NzbDrone.Core.Providers
 
             foreach (var feedProvider in indexers)
             {
-                IndexerProviderBase indexerProviderLocal = feedProvider;
-                if (!currentIndexers.Exists(c => c.IndexProviderType == indexerProviderLocal.GetType().ToString()))
+                IndexerBase indexerLocal = feedProvider;
+                if (!currentIndexers.Exists(c => c.IndexProviderType == indexerLocal.GetType().ToString()))
                 {
                     var settings = new IndexerSetting()
                                        {
                                            Enable = false,
-                                           IndexProviderType = indexerProviderLocal.GetType().ToString(),
-                                           Name = indexerProviderLocal.Name
+                                           IndexProviderType = indexerLocal.GetType().ToString(),
+                                           Name = indexerLocal.Name
                                        };
 
                     SaveSettings(settings);

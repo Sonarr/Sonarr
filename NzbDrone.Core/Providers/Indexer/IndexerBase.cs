@@ -9,14 +9,14 @@ using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Providers.Indexer
 {
-    public abstract class IndexerProviderBase
+    public abstract class IndexerBase
     {
         protected readonly Logger _logger;
         private readonly HttpProvider _httpProvider;
         protected readonly ConfigProvider _configProvider;
         private readonly IndexerProvider _indexerProvider;
 
-        protected IndexerProviderBase(HttpProvider httpProvider, ConfigProvider configProvider, IndexerProvider indexerProvider)
+        protected IndexerBase(HttpProvider httpProvider, ConfigProvider configProvider, IndexerProvider indexerProvider)
         {
             _httpProvider = httpProvider;
             _configProvider = configProvider;

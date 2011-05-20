@@ -8,12 +8,12 @@ namespace NzbDrone.Core.Providers.Jobs
 {
     public class RssSyncJob : IJob
     {
-        private readonly IEnumerable<IndexerProviderBase> _indexers;
+        private readonly IEnumerable<IndexerBase> _indexers;
 
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public RssSyncJob(IEnumerable<IndexerProviderBase> indexers)
+        public RssSyncJob(IEnumerable<IndexerBase> indexers)
         {
             _indexers = indexers;
         }

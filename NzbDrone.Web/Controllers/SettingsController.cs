@@ -93,10 +93,10 @@ namespace NzbDrone.Web.Controllers
                                          NewzbinUsername = _configProvider.NewzbinUsername,
                                          NewzbinPassword = _configProvider.NewzbinPassword,
 
-                                         NzbsOrgEnabled = _indexerProvider.GetSettings(typeof(NzbsOrgProvider)).Enable,
-                                         NzbMatrixEnabled = _indexerProvider.GetSettings(typeof(NzbMatrixProvider)).Enable,
-                                         NzbsRUsEnabled = _indexerProvider.GetSettings(typeof(NzbsRUsProvider)).Enable,
-                                         NewzbinEnabled = _indexerProvider.GetSettings(typeof(NewzbinProvider)).Enable
+                                         NzbsOrgEnabled = _indexerProvider.GetSettings(typeof(NzbsOrg)).Enable,
+                                         NzbMatrixEnabled = _indexerProvider.GetSettings(typeof(NzbMatrix)).Enable,
+                                         NzbsRUsEnabled = _indexerProvider.GetSettings(typeof(NzbsRUs)).Enable,
+                                         NewzbinEnabled = _indexerProvider.GetSettings(typeof(Newzbin)).Enable
                                      });
         }
 
@@ -382,19 +382,19 @@ namespace NzbDrone.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                var nzbsOrgSettings = _indexerProvider.GetSettings(typeof(NzbsOrgProvider));
+                var nzbsOrgSettings = _indexerProvider.GetSettings(typeof(NzbsOrg));
                 nzbsOrgSettings.Enable = data.NzbsOrgEnabled;
                 _indexerProvider.SaveSettings(nzbsOrgSettings);
 
-                var nzbMatrixSettings = _indexerProvider.GetSettings(typeof(NzbMatrixProvider));
+                var nzbMatrixSettings = _indexerProvider.GetSettings(typeof(NzbMatrix));
                 nzbMatrixSettings.Enable = data.NzbMatrixEnabled;
                 _indexerProvider.SaveSettings(nzbMatrixSettings);
 
-                var nzbsRUsSettings = _indexerProvider.GetSettings(typeof(NzbsRUsProvider));
+                var nzbsRUsSettings = _indexerProvider.GetSettings(typeof(NzbsRUs));
                 nzbsRUsSettings.Enable = data.NzbsRUsEnabled;
                 _indexerProvider.SaveSettings(nzbsRUsSettings);
 
-                var newzbinSettings = _indexerProvider.GetSettings(typeof(NewzbinProvider));
+                var newzbinSettings = _indexerProvider.GetSettings(typeof(Newzbin));
                 newzbinSettings.Enable = data.NewzbinEnabled;
                 _indexerProvider.SaveSettings(newzbinSettings);
 

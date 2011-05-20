@@ -8,9 +8,9 @@ using SubSonic.Repository;
 
 namespace NzbDrone.Core.Providers.Indexer
 {
-    public class NzbsOrgProvider : IndexerProviderBase
+    public class NzbsOrg : IndexerBase
     {
-        public NzbsOrgProvider(HttpProvider httpProvider, ConfigProvider configProvider, IndexerProvider indexerProvider) : base(httpProvider, configProvider, indexerProvider)
+        public NzbsOrg(HttpProvider httpProvider, ConfigProvider configProvider, IndexerProvider indexerProvider) : base(httpProvider, configProvider, indexerProvider)
         {
         }
 
