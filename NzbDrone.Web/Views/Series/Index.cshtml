@@ -60,14 +60,6 @@
                 .center();
         }
 
-    function grid_bind(args) {
-        $('.grid-container').children('.grid-loader').stop().css("top", "0px").fadeIn('slow');
-    }
-
-    function grid_bound(args) {
-        $('.grid-container').children('.grid-loader').stop().fadeOut('slow');
-    }
-
     function openSeasonEditor(seriesId, seriesName) {
         windowElement = null;
         windowElement = $.telerik.window.create({

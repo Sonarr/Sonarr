@@ -11,34 +11,37 @@ History
             }).Render();}
 }
 @section MainContent{
-    @{Html.Telerik().Grid<HistoryModel>().Name("history")
-           .TableHtmlAttributes(new { @class = "Grid" })
-            .Columns(columns =>
-                         {
-                             columns.Bound(c => c.Indexer)
-                                    .ClientTemplate("<center><img alt='<#= Indexer #>' src='" + Url.Content("~/Content/Images/Indexers/") + "<#= Indexer #>.png' /></center>")
-                                    .Title("")
-                                    .Width(20);
-                             columns.Bound(c => c.SeriesTitle).Title("Series Name");
-                             columns.Bound(c => c.SeasonNumber).Title("Season").Width(1);
-                             columns.Bound(c => c.EpisodeNumber).Title("Episode").Width(1);
-                             columns.Bound(c => c.EpisodeTitle).Title("Episode Title");
-                             columns.Bound(c => c.Quality).Title("Quality").Width(50);
-                             columns.Bound(c => c.Date).Title("Grabbed on");
-                         })
-            .DetailView(detailView => detailView.ClientTemplate(
-                "<fieldset>" +
-                "<div><b>Overview: </b><#= EpisodeOverview #></div>" +
-                "<div><b>NZB Title: </b><#= NzbTitle #></div>" +
-                "<div><b>Proper: </b><#= IsProper #></div>" +
-                "</fieldset>"
-                                          ))
-            .DataBinding(data => data.Ajax().Select("_AjaxBinding", "History"))
-            .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.Date).Descending()).Enabled(true))
-            .Pageable(
-                c =>
-                c.PageSize(20).Position(GridPagerPosition.Bottom).Style(GridPagerStyles.NextPrevious))
-          //.Filterable()
-          //.ClientEvents(c => c.OnRowDataBound("onRowDataBound"))
-            .Render();}
+    <div class="grid-container">
+        @{Html.Telerik().Grid<HistoryModel>().Name("history")
+               .TableHtmlAttributes(new { @class = "Grid" })
+                .Columns(columns =>
+                             {
+                                 columns.Bound(c => c.Indexer)
+                                        .ClientTemplate("<center><img alt='<#= Indexer #>' src='" + Url.Content("~/Content/Images/Indexers/") + "<#= Indexer #>.png' /></center>")
+                                        .Title("")
+                                        .Width(20);
+                                 columns.Bound(c => c.SeriesTitle).Title("Series Name");
+                                 columns.Bound(c => c.SeasonNumber).Title("Season").Width(1);
+                                 columns.Bound(c => c.EpisodeNumber).Title("Episode").Width(1);
+                                 columns.Bound(c => c.EpisodeTitle).Title("Episode Title");
+                                 columns.Bound(c => c.Quality).Title("Quality").Width(50);
+                                 columns.Bound(c => c.Date).Title("Grabbed on");
+                             })
+                .DetailView(detailView => detailView.ClientTemplate(
+                    "<fieldset>" +
+                    "<div><b>Overview: </b><#= EpisodeOverview #></div>" +
+                    "<div><b>NZB Title: </b><#= NzbTitle #></div>" +
+                    "<div><b>Proper: </b><#= IsProper #></div>" +
+                    "</fieldset>"
+                                              ))
+                .DataBinding(data => data.Ajax().Select("_AjaxBinding", "History"))
+                .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.Date).Descending()).Enabled(true))
+                .Pageable(
+                    c =>
+                    c.PageSize(20).Position(GridPagerPosition.Bottom).Style(GridPagerStyles.NextPrevious))
+              //.Filterable()
+              //.ClientEvents(c => c.OnRowDataBound("onRowDataBound"))
+                .Render();}
+        <span class="grid-loader"><img src="@Url.Content( "~/Content/Images/Loading.gif" )" alt="Loading"/> Loading...</span>
+    </div>
 }
