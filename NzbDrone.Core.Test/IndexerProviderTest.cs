@@ -7,6 +7,7 @@ using AutoMoq;
 using FizzWare.NBuilder;
 using MbUnit.Framework;
 using Moq;
+using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.ExternalNotification;
@@ -22,11 +23,11 @@ namespace NzbDrone.Core.Test
     public class IndexerProviderTest : TestBase
     {
         [Test]
-        [Row("nzbsorg.xml")]
-        [Row("nzbsrus.xml")]
-        [Row("newzbin.xml")]
-        [Row("nzbmatrix.xml")]
-        public void parse_feed_xml(string fileName)
+        [Row("nzbsorg.xml", 0)]
+        [Row("nzbsrus.xml", 6)]
+        [Row("newzbin.xml", 1)]
+        [Row("nzbmatrix.xml", 1)]
+        public void parse_feed_xml(string fileName, int warns)
         {
             var mocker = new AutoMoqer();
 
@@ -39,21 +40,18 @@ namespace NzbDrone.Core.Test
                 .Setup(c => c.GetSettings(It.IsAny<Type>()))
                 .Returns(fakeSettings);
 
-            var exceptions = mocker.Resolve<MockIndexerProvider>().Fetch();
+            var parseResults = mocker.Resolve<MockIndexerProvider>().Fetch();
 
-            foreach (var exception in exceptions)
-            {
-                Console.WriteLine(exception.ToString());
-            }
 
-            Assert.IsEmpty(exceptions);
+            Assert.IsNotEmpty(parseResults);
+            ExceptionVerification.ExcpectedWarns(warns);
         }
 
 
 
         [Test]
         [Row("Adventure.Inc.S03E19.DVDRip.XviD-OSiTV", 3, 19, QualityTypes.DVD)]
-        public void parse_feed_test_success(string title, int season, int episode, QualityTypes quality)
+        public void custome_parser_partial_success(string title, int season, int episode, QualityTypes quality)
         {
             var mocker = new AutoMoqer();
 
@@ -64,10 +62,32 @@ namespace NzbDrone.Core.Test
                 .Setup(c => c.GetSettings(It.IsAny<Type>()))
                 .Returns(fakeSettings);
 
-            mocker.GetMock<SeriesProvider>()
-                .Setup(c => c.FindSeries(It.IsAny<String>()))
-                .Returns(Builder<Series>.CreateNew().Build());
+            var fakeRssItem = Builder<SyndicationItem>.CreateNew()
+                .With(c => c.Title = new TextSyndicationContent(title))
+                .With(c => c.Summary = new TextSyndicationContent(summary))
+                .Build();
 
+            var result = mocker.Resolve<CustomParserIndexer>().ParseFeed(fakeRssItem);
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(summary, result.EpisodeTitle);
+            Assert.AreEqual(season, result.SeasonNumber);
+            Assert.AreEqual(episode, result.Episodes[0]);
+            Assert.AreEqual(quality, result.Quality);
+        }
+
+        [Test]
+        [Row("Adventure.Inc.DVDRip.XviD-OSiTV")]
+        public void custome_parser_full_parse(string title)
+        {
+            var mocker = new AutoMoqer();
+
+            const string summary = "My fake summary";
+
+            var fakeSettings = Builder<IndexerSetting>.CreateNew().Build();
+            mocker.GetMock<IndexerProvider>()
+                .Setup(c => c.GetSettings(It.IsAny<Type>()))
+                .Returns(fakeSettings);
 
             var fakeRssItem = Builder<SyndicationItem>.CreateNew()
                 .With(c => c.Title = new TextSyndicationContent(title))
@@ -78,31 +98,6 @@ namespace NzbDrone.Core.Test
 
             Assert.IsNotNull(result);
             Assert.AreEqual(summary, result.EpisodeTitle);
-        }
-
-        [Test]
-        [Row("Adventure.Inc.DVDRip.XviD-OSiTV")]
-        public void parse_feed_test_fail(string title)
-        {
-            var mocker = new AutoMoqer();
-
-
-
-            var fakeSettings = Builder<IndexerSetting>.CreateNew().Build();
-            mocker.GetMock<IndexerProvider>()
-                .Setup(c => c.GetSettings(It.IsAny<Type>()))
-                .Returns(fakeSettings);
-
-            mocker.GetMock<SeriesProvider>(MockBehavior.Strict);
-
-
-            var fakeRssItem = Builder<SyndicationItem>.CreateNew()
-                .With(c => c.Title = new TextSyndicationContent(title))
-                .Build();
-
-            var result = mocker.Resolve<CustomParserIndexer>().ParseFeed(fakeRssItem);
-
-            Assert.IsNull(result);
             ExceptionVerification.ExcpectedWarns(1);
         }
 
@@ -119,6 +114,8 @@ namespace NzbDrone.Core.Test
                 .Returns(fakeSettings);
 
             mocker.Resolve<TestUrlIndexer>().Fetch();
+
+            ExceptionVerification.IgnoreWarns();
         }
 
         [Test]
@@ -146,19 +143,14 @@ namespace NzbDrone.Core.Test
                 .Returns<Series>(null);
 
             var indexer = mocker.Resolve<MockIndexerProvider>();
-            indexer.ProcessItem(new SyndicationItem { Title = new TextSyndicationContent("Adventure.Inc.S01E18.DVDRip.XviD-OSiTV") });
+            //indexer.ProcessItem(new SyndicationItem { Title = new TextSyndicationContent("Adventure.Inc.S01E18.DVDRip.XviD-OSiTV") });
         }
     }
 
     public class MockIndexerProvider : IndexerProviderBase
     {
-        public MockIndexerProvider(SeriesProvider seriesProvider, SeasonProvider seasonProvider,
-            EpisodeProvider episodeProvider, ConfigProvider configProvider,
-            HttpProvider httpProvider, IndexerProvider indexerProvider,
-            HistoryProvider historyProvider, SabProvider sabProvider, IEnumerable<ExternalNotificationProviderBase> externalNotificationProvider)
-            : base(seriesProvider, seasonProvider, episodeProvider,
-            configProvider, httpProvider, indexerProvider, historyProvider,
-            sabProvider, externalNotificationProvider)
+        public MockIndexerProvider(HttpProvider httpProvider, ConfigProvider configProvider, IndexerProvider indexerProvider)
+            : base(httpProvider, configProvider, indexerProvider)
         {
         }
 
@@ -177,10 +169,6 @@ namespace NzbDrone.Core.Test
             get { return "Mocked Indexer"; }
         }
 
-        public override bool SupportsBacklog
-        {
-            get { return false; }
-        }
 
         protected override string NzbDownloadUrl(SyndicationItem item)
         {
@@ -190,24 +178,14 @@ namespace NzbDrone.Core.Test
 
     public class TestUrlIndexer : IndexerProviderBase
     {
-        public TestUrlIndexer(SeriesProvider seriesProvider, SeasonProvider seasonProvider,
-            EpisodeProvider episodeProvider, ConfigProvider configProvider,
-            HttpProvider httpProvider, IndexerProvider indexerProvider,
-            HistoryProvider historyProvider, SabProvider sabProvider, IEnumerable<ExternalNotificationProviderBase> externalNotificationProvider)
-            : base(seriesProvider, seasonProvider, episodeProvider,
-            configProvider, httpProvider, indexerProvider, historyProvider,
-            sabProvider, externalNotificationProvider)
+        public TestUrlIndexer(HttpProvider httpProvider, ConfigProvider configProvider, IndexerProvider indexerProvider)
+            : base(httpProvider, configProvider, indexerProvider)
         {
         }
 
         public override string Name
         {
             get { return "All Urls"; }
-        }
-
-        public override bool SupportsBacklog
-        {
-            get { return false; }
         }
 
         protected override string[] Urls
@@ -223,13 +201,8 @@ namespace NzbDrone.Core.Test
 
     public class CustomParserIndexer : IndexerProviderBase
     {
-        public CustomParserIndexer(SeriesProvider seriesProvider, SeasonProvider seasonProvider,
-            EpisodeProvider episodeProvider, ConfigProvider configProvider,
-            HttpProvider httpProvider, IndexerProvider indexerProvider,
-            HistoryProvider historyProvider, SabProvider sabProvider, IEnumerable<ExternalNotificationProviderBase> externalNotificationProvider)
-            : base(seriesProvider, seasonProvider, episodeProvider,
-            configProvider, httpProvider, indexerProvider, historyProvider,
-            sabProvider, externalNotificationProvider)
+        public CustomParserIndexer(HttpProvider httpProvider, ConfigProvider configProvider, IndexerProvider indexerProvider)
+            : base(httpProvider, configProvider, indexerProvider)
         {
         }
 
@@ -238,10 +211,7 @@ namespace NzbDrone.Core.Test
             get { return "Custom parser"; }
         }
 
-        public override bool SupportsBacklog
-        {
-            get { return false; }
-        }
+
 
         protected override string[] Urls
         {
@@ -255,6 +225,7 @@ namespace NzbDrone.Core.Test
 
         protected override Model.EpisodeParseResult CustomParser(SyndicationItem item, Model.EpisodeParseResult currentResult)
         {
+            if (currentResult == null) currentResult = new EpisodeParseResult();
             currentResult.EpisodeTitle = item.Summary.Text;
             return currentResult;
         }

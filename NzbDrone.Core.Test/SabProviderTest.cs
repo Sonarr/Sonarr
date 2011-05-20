@@ -221,18 +221,16 @@ namespace NzbDrone.Core.Test
 
             var parsResult = new EpisodeParseResult()
             {
-                SeriesId = 12,
                 AirDate = DateTime.Now,
                 Episodes = episodes.ToList(),
                 Proper = proper,
                 Quality = quality,
                 SeasonNumber = seasons,
                 EpisodeTitle = title,
-                FolderName = "My Series Name"
             };
 
             //Act
-            var actual = mocker.Resolve<SabProvider>().GetSabTitle(parsResult);
+            var actual = mocker.Resolve<SabProvider>().GetSabTitle(parsResult, "My Series Name");
 
             //Assert
             Assert.AreEqual(excpected, actual);

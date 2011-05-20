@@ -69,6 +69,16 @@ namespace NzbDrone.Core.Test.Framework
             Excpected(LogLevel.Warn, count);
         }
 
+        internal static void IgnoreWarns()
+        {
+            Ignore(LogLevel.Warn);
+        }
+
+        internal static void IgnoreErrors()
+        {
+            Ignore(LogLevel.Error);
+        }
+
         private static void Excpected(LogLevel level, int count)
         {
             var levelLogs = _logs.Where(l => l.Level == level).ToList();
@@ -81,6 +91,12 @@ namespace NzbDrone.Core.Test.Framework
                 Assert.Fail(message);
             }
 
+            levelLogs.ForEach(c => _logs.Remove(c));
+        }
+
+        private static void Ignore(LogLevel level)
+        {
+            var levelLogs = _logs.Where(l => l.Level == level).ToList();
             levelLogs.ForEach(c => _logs.Remove(c));
         }
     }
