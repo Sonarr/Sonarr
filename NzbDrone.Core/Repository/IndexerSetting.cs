@@ -13,7 +13,5 @@ namespace NzbDrone.Core.Repository
         public String IndexProviderType { get; set; }
 
         public String Name { get; set; }
-
-        public Boolean SupportsBacklog { get; set; }
     }
 }

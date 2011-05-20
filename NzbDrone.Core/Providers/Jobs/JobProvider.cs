@@ -110,19 +110,19 @@ namespace NzbDrone.Core.Providers.Jobs
         /// <remarks>Job is only added to the queue if same job with the same targetId doesn't already exist in the queue.</remarks>
         public virtual bool QueueJob(Type jobType, int targetId = 0)
         {
-            Logger.Debug("Adding job {0} ->{1} to the queue", jobType, targetId);
+            Logger.Debug("Adding job ({0}:{1}) to the queue", jobType, targetId);
             lock (Queue)
             {
                 var queueTuple = new Tuple<Type, int>(jobType, targetId);
 
                 if (Queue.Contains(queueTuple))
                 {
-                    Logger.Info("Job {0} ->{1} already exists in queue. Skipping.", jobType, targetId);
+                    Logger.Info("Job ({0}:{1}) already exists in queue. Skipping.", jobType, targetId);
                     return false;
                 }
 
                 Queue.Add(queueTuple);
-                Logger.Debug("Job {0} ->{1} added to the queue", jobType, targetId);
+                Logger.Debug("Job ({0}:{1}) added to the queue", jobType, targetId);
 
             }
 
@@ -145,6 +145,10 @@ namespace NzbDrone.Core.Providers.Jobs
                     try
                     {
                         ProcessQueue();
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.ErrorException("Error has occured in queue processor thread", e);
                     }
                     finally
                     {
@@ -251,12 +255,12 @@ namespace NzbDrone.Core.Providers.Jobs
                 }
                 catch (Exception e)
                 {
+                    Logger.ErrorException("An error has occurred while executing timer job " + jobImplementation.Name, e);
+                    _notification.Status = ProgressNotificationStatus.Failed;
+                    _notification.CurrentMessage = jobImplementation.Name + " Failed.";
+
                     settings.LastExecution = DateTime.Now;
                     settings.Success = false;
-
-                    Logger.ErrorException("An error has occurred while executing timer job " + jobImplementation.Name, e);
-                    _notification.CurrentMessage = jobImplementation.Name + " Failed.";
-                    _notification.Status = ProgressNotificationStatus.Failed;
                 }
             }
 
