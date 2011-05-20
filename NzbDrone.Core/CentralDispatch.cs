@@ -75,7 +75,7 @@ namespace NzbDrone.Core
                 var logRepository = new SimpleRepository(logDbProvider, SimpleRepositoryOptions.RunMigrations);
                 //dbProvider.ExecuteQuery(new QueryCommand("VACUUM", dbProvider));
 
-                dbProvider.Log = new NlogWriter();
+                //dbProvider.Log = new NlogWriter();
 
                 _kernel.Bind<QualityProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<TvDbProvider>().ToSelf().InTransientScope();

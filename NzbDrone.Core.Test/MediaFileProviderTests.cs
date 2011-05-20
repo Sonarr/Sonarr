@@ -166,6 +166,40 @@ namespace NzbDrone.Core.Test
             Assert.IsNull(result);
         }
 
+
+        [Test]
+        [Description("Verifies that a un-parsable file isn't imported")]
+        public void import_unparsable_file()
+        {
+            //Arrange
+            /////////////////////////////////////////
+
+            //Constants
+            const string fileName = @"WEEDS.avi";
+            const int size = 12345;
+
+            //Fakes
+            var fakeSeries = Builder<Series>.CreateNew().Build();
+
+            //Mocks
+            var mocker = new AutoMoqer();
+
+            mocker.GetMock<IRepository>(MockBehavior.Strict)
+                .Setup(r => r.Exists(It.IsAny<Expression<Func<EpisodeFile, Boolean>>>())).Returns(false).Verifiable();
+
+            mocker.GetMock<DiskProvider>()
+                .Setup(e => e.GetSize(fileName)).Returns(size).Verifiable();
+
+
+            //Act
+            var result = mocker.Resolve<MediaFileProvider>().ImportFile(fakeSeries, fileName);
+
+            //Assert
+            mocker.VerifyAllMocks();
+            Assert.IsNull(result);
+            ExceptionVerification.ExcpectedWarns(1);
+        }
+
         [Test]
         [Description("Verifies that a new file imported properly")]
         public void import_sample_file()

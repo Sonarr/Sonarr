@@ -72,10 +72,12 @@ namespace NzbDrone.Core.Providers
                 if (!_repository.Exists<EpisodeFile>(e => e.Path == Parser.NormalizePath(filePath)))
                 {
                     var parseResult = Parser.ParseEpisodeInfo(filePath);
-                    parseResult.CleanTitle = series.Title;//replaces the nasty path as title to help with logging
+                   
 
                     if (parseResult == null)
                         return null;
+
+                    parseResult.CleanTitle = series.Title;//replaces the nasty path as title to help with logging
 
                     //Stores the list of episodes to add to the EpisodeFile
                     var episodes = new List<Episode>();

@@ -108,6 +108,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual Series FindSeries(string title)
         {
+            //TODO:Add series alias support here. if a series is not found in the repo should be tried using its aliases
             var normalizeTitle = Parser.NormalizeTitle(title);
             return _repository.Single<Series>(s => s.CleanTitle == normalizeTitle);
         }
