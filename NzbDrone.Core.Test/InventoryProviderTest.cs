@@ -22,24 +22,46 @@ namespace NzbDrone.Core.Test
     // ReSharper disable InconsistentNaming
     public class InventoryProviderTest : TestBase
     {
+        private EpisodeParseResult parseResult;
+        private Series series;
+        private Episode episode;
+
+        [SetUp]
+        public new void Setup()
+        {
+            parseResult = new EpisodeParseResult()
+                               {
+                                   CleanTitle = "Title",
+                                   EpisodeTitle = "EpisodeTitle",
+                                   Language = LanguageType.English,
+                                   Proper = true,
+                                   Quality = QualityTypes.Bluray720,
+                                   Episodes = new List<int> { 3 },
+                                   SeasonNumber = 12,
+                                   AirDate = DateTime.Now.AddDays(-12).Date
+
+                               };
+
+            series = Builder<Series>.CreateNew()
+                .With(c => c.Monitored = true)
+                .With(d => d.CleanTitle = parseResult.CleanTitle)
+                .Build();
+
+            episode = Builder<Episode>.CreateNew()
+                .With(c => c.EpisodeNumber = parseResult.Episodes[0])
+                .With(c => c.SeasonNumber = parseResult.SeasonNumber)
+                .With(c => c.AirDate = parseResult.AirDate)
+                .Build();
+
+            base.Setup();
+          
+        }
+
+
         [Test]
         public void not_monitored_series_should_be_skipped()
         {
-            var parseResult = new EpisodeParseResult()
-            {
-                CleanTitle = "Title",
-                EpisodeTitle = "EpisodeTitle",
-                Language = LanguageType.English,
-                Proper = true,
-                Quality = QualityTypes.Bluray720,
-                Episodes = new List<int> { 3 },
-                SeasonNumber = 12
-            };
-
-            var series = Builder<Series>.CreateNew()
-                .With(c => c.Monitored = false)
-                .With(d => d.CleanTitle = parseResult.CleanTitle)
-                .Build();
+            series.Monitored = false;
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
 
@@ -52,22 +74,13 @@ namespace NzbDrone.Core.Test
 
             //Assert
             Assert.IsFalse(result);
+            mocker.VerifyAllMocks();
         }
 
 
         [Test]
         public void no_db_series_should_be_skipped()
         {
-            var parseResult = new EpisodeParseResult()
-            {
-                CleanTitle = "Title",
-                EpisodeTitle = "EpisodeTitle",
-                Language = LanguageType.English,
-                Proper = true,
-                Quality = QualityTypes.Bluray720,
-                Episodes = new List<int> { 3 },
-                SeasonNumber = 12
-            };
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
 
@@ -80,26 +93,12 @@ namespace NzbDrone.Core.Test
 
             //Assert
             Assert.IsFalse(result);
+            mocker.VerifyAllMocks();
         }
 
         [Test]
         public void unwannted_quality_should_be_skipped()
         {
-            var parseResult = new EpisodeParseResult()
-            {
-                CleanTitle = "Title",
-                EpisodeTitle = "EpisodeTitle",
-                Language = LanguageType.English,
-                Proper = true,
-                Quality = QualityTypes.Bluray720,
-                Episodes = new List<int> { 3 },
-                SeasonNumber = 12
-            };
-
-            var series = Builder<Series>.CreateNew()
-                .With(c => c.Monitored = true)
-                .With(d => d.CleanTitle = parseResult.CleanTitle)
-                .Build();
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
             mocker.GetMock<SeriesProvider>()
@@ -116,35 +115,43 @@ namespace NzbDrone.Core.Test
 
             //Assert
             Assert.IsFalse(result);
+            mocker.VerifyAllMocks();
         }
+
+
+        [Test]
+        public void ignored_season_should_be_skipped()
+        {
+
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+
+            mocker.GetMock<SeriesProvider>()
+                .Setup(p => p.FindSeries(It.IsAny<String>()))
+                .Returns(series);
+
+            mocker.GetMock<SeriesProvider>()
+               .Setup(p => p.QualityWanted(series.SeriesId, parseResult.Quality))
+               .Returns(true);
+
+            mocker.GetMock<SeasonProvider>()
+                .Setup(p => p.IsIgnored(series.SeriesId, parseResult.SeasonNumber))
+                .Returns(true);
+
+            //Act
+            var result = mocker.Resolve<InventoryProvider>().IsNeeded(parseResult);
+
+            //Assert
+            Assert.IsFalse(result);
+            mocker.VerifyAllMocks();
+        }
+
+
+
+
 
         [Test]
         public void unwannted_file_should_be_skipped()
         {
-
-            var parseResult = new EpisodeParseResult()
-                                  {
-                                      CleanTitle = "Title",
-                                      EpisodeTitle = "EpisodeTitle",
-                                      Language = LanguageType.English,
-                                      Proper = true,
-                                      Quality = QualityTypes.Bluray720,
-                                      Episodes = new List<int> { 3 },
-                                      SeasonNumber = 12
-                                  };
-
-            var series = Builder<Series>.CreateNew()
-                .With(c => c.Monitored = true)
-                .With(d => d.CleanTitle = parseResult.CleanTitle)
-                .Build();
-
-            var episode = Builder<Episode>.CreateNew()
-                .With(c => c.EpisodeNumber = parseResult.Episodes[0])
-                .With(c => c.SeasonNumber = parseResult.SeasonNumber)
-                .Build();
-
-
-
             var mocker = new AutoMoqer(MockBehavior.Strict);
 
             mocker.GetMock<SeriesProvider>()
@@ -173,6 +180,87 @@ namespace NzbDrone.Core.Test
 
             //Assert
             Assert.IsFalse(result);
+            mocker.VerifyAllMocks();
+        }
+
+        [Test]
+        public void dailyshow_should_do_daily_lookup()
+        {
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+
+            mocker.GetMock<SeriesProvider>()
+                .Setup(p => p.FindSeries(It.IsAny<String>()))
+                .Returns(series);
+
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(p => p.GetEpisode(episode.SeriesId, episode.SeasonNumber, episode.EpisodeNumber))
+                .Returns<Episode>(null);
+
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(p => p.GetEpisode(episode.SeriesId, episode.AirDate))
+                .Returns(episode);
+
+
+            mocker.GetMock<SeriesProvider>()
+               .Setup(p => p.QualityWanted(series.SeriesId, parseResult.Quality))
+               .Returns(true);
+
+            mocker.GetMock<SeasonProvider>()
+                .Setup(p => p.IsIgnored(series.SeriesId, parseResult.SeasonNumber))
+                .Returns(false);
+
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(p => p.IsNeeded(parseResult, episode))
+                .Returns(false);
+
+            //Act
+            var result = mocker.Resolve<InventoryProvider>().IsNeeded(parseResult);
+
+            //Assert
+            Assert.IsFalse(result);
+            mocker.VerifyAllMocks();
+        }
+
+
+        [Test]
+        public void none_db_episode_should_be_added()
+        {
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+
+            mocker.GetMock<SeriesProvider>()
+                .Setup(p => p.FindSeries(It.IsAny<String>()))
+                .Returns(series);
+
+            mocker.GetMock<SeriesProvider>()
+               .Setup(p => p.QualityWanted(series.SeriesId, parseResult.Quality))
+               .Returns(true);
+
+            mocker.GetMock<SeasonProvider>()
+                .Setup(p => p.IsIgnored(series.SeriesId, parseResult.SeasonNumber))
+                .Returns(false);
+
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(p => p.GetEpisode(episode.SeriesId, episode.SeasonNumber, episode.EpisodeNumber))
+                .Returns<Episode>(null);
+
+            mocker.GetMock<EpisodeProvider>()
+              .Setup(p => p.GetEpisode(episode.SeriesId, episode.AirDate))
+              .Returns<Episode>(null);
+
+            mocker.GetMock<EpisodeProvider>()
+               .Setup(p => p.AddEpisode(It.IsAny<Episode>()))
+               .Returns(12);
+
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(p => p.IsNeeded(parseResult, It.IsAny<Episode>()))
+                .Returns(false);
+            
+            //Act
+            var result = mocker.Resolve<InventoryProvider>().IsNeeded(parseResult);
+
+            //Assert
+            Assert.IsFalse(result);
+            mocker.VerifyAllMocks();
         }
     }
 
