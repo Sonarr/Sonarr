@@ -128,17 +128,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libraries\Exceptioneer.WindowsFormsClient.dll</HintPath>
     </Reference>
-    <Reference Include="Gallio, Version=3.2.0.0, Culture=neutral, PublicKeyToken=eb9cfa67ee6ab36e, processorArchitecture=MSIL" />
-    <Reference Include="MbUnit, Version=3.2.0.0, Culture=neutral, PublicKeyToken=eb9cfa67ee6ab36e, processorArchitecture=MSIL" />
     <Reference Include="Ninject, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Ninject.2.2.1.0\lib\.NetFramework 4.0\Ninject.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL" />
-    <Reference Include="NLog.Extended, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libraries\NLog.Extended.dll</HintPath>
-    </Reference>
     <Reference Include="SubSonic.Core, Version=3.0.0.3, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libraries\SubSonic.Core.dll</HintPath>
@@ -178,8 +172,8 @@
     <Compile Include="Providers\AutoConfigureProvider.cs" />
     <Compile Include="Providers\Indexer\NzbMatrix.cs" />
     <Compile Include="Providers\Jobs\DeleteSeriesJob.cs" />
-    <Compile Include="Providers\Jobs\MediaFileScanJob.cs" />
-    <Compile Include="Providers\Jobs\NewSeriesUpdate.cs" />
+    <Compile Include="Providers\Jobs\DiskScanJob.cs" />
+    <Compile Include="Providers\Jobs\ImportNewSeriesJob.cs" />
     <Compile Include="Providers\Jobs\JobProvider.cs" />
     <Compile Include="Providers\Indexer\Newzbin.cs" />
     <Compile Include="Providers\Indexer\NzbsRUs.cs" />

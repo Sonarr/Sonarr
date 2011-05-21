@@ -16,6 +16,11 @@ namespace NzbDrone.Core.Providers.Jobs
             _episodeProvider = episodeProvider;
         }
 
+        public UpdateInfoJob()
+        {
+            
+        }
+
         public string Name
         {
             get { return "Update Info"; }
@@ -26,7 +31,7 @@ namespace NzbDrone.Core.Providers.Jobs
             get { return 1440; } //Daily
         }
 
-        public void Start(ProgressNotification notification, int targetId)
+        public virtual void Start(ProgressNotification notification, int targetId)
         {
             IList<Series> seriesToUpdate;
             if (targetId == 0)

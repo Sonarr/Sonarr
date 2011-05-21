@@ -131,9 +131,9 @@ namespace NzbDrone.Core
         private static void BindJobs()
         {
             _kernel.Bind<IJob>().To<RssSyncJob>().InTransientScope();
-            _kernel.Bind<IJob>().To<NewSeriesUpdate>().InTransientScope();
+            _kernel.Bind<IJob>().To<ImportNewSeriesJob>().InTransientScope();
             _kernel.Bind<IJob>().To<UpdateInfoJob>().InTransientScope();
-            _kernel.Bind<IJob>().To<MediaFileScanJob>().InTransientScope();
+            _kernel.Bind<IJob>().To<DiskScanJob>().InTransientScope();
             _kernel.Bind<IJob>().To<DeleteSeriesJob>().InTransientScope();
 
             _kernel.Get<JobProvider>().Initialize();

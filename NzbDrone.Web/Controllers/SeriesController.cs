@@ -265,7 +265,7 @@ namespace NzbDrone.Web.Controllers
         public ActionResult SyncEpisodesOnDisk(int seriesId)
         {
             //Syncs the episodes on disk for the specified series
-            _jobProvider.QueueJob(typeof(MediaFileScanJob), seriesId);
+            _jobProvider.QueueJob(typeof(DiskScanJob), seriesId);
 
             return RedirectToAction("Details", new { seriesId });
         }

@@ -85,6 +85,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ImportNewSeriesJobTest.cs" />
+    <Compile Include="DiskScanJobTest.cs" />
     <Compile Include="InventoryProviderTest.cs" />
     <Compile Include="Framework\AutoMoq\AutoMoqer.cs" />
     <Compile Include="Framework\AutoMoq\AutoMoqerTest.cs" />

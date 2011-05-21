@@ -36,6 +36,15 @@ namespace NzbDrone.Core.Repository
 
         public bool Monitored { get; set; }
 
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="Series"/> is hidden.
+        /// </summary>
+        /// <value><c>true</c> if hidden; otherwise, <c>false</c>.</value>
+        /// <remarks>This field will be used for shows that are pending delete or 
+        /// new series that haven't been successfully imported</remarks>
+        public bool Hidden { get; set; }
+
         public virtual int QualityProfileId { get; set; }
 
         public bool SeasonFolder { get; set; }
@@ -48,12 +57,12 @@ namespace NzbDrone.Core.Repository
         public virtual QualityProfile QualityProfile { get; set; }
 
         [SubSonicToManyRelation]
-        public virtual List<Season> Seasons { get; protected set; }
+        public virtual IList<Season> Seasons { get; protected set; }
 
         [SubSonicToManyRelation]
-        public virtual List<Episode> Episodes { get; protected set; }
+        public virtual IList<Episode> Episodes { get; set; }
 
         [SubSonicToManyRelation]
-        public virtual List<EpisodeFile> EpisodeFiles { get; protected set; }
+        public virtual IList<EpisodeFile> EpisodeFiles { get; protected set; }
     }
 }

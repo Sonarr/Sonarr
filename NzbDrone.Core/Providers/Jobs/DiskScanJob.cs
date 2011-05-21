@@ -7,15 +7,19 @@ using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Providers.Jobs
 {
-    public class MediaFileScanJob : IJob
+    public class DiskScanJob : IJob
     {
         private readonly SeriesProvider _seriesProvider;
         private readonly MediaFileProvider _mediaFileProvider;
 
-        public MediaFileScanJob(SeriesProvider seriesProvider, MediaFileProvider mediaFileProvider)
+        public DiskScanJob(SeriesProvider seriesProvider, MediaFileProvider mediaFileProvider)
         {
             _seriesProvider = seriesProvider;
             _mediaFileProvider = mediaFileProvider;
+        }
+
+        public DiskScanJob()
+        {
         }
 
         public string Name
@@ -28,7 +32,7 @@ namespace NzbDrone.Core.Providers.Jobs
             get { return 60; }
         }
 
-        public void Start(ProgressNotification notification, int targetId)
+        public virtual void Start(ProgressNotification notification, int targetId)
         {
             IList<Series> seriesToScan;
             if (targetId == 0)
@@ -40,7 +44,7 @@ namespace NzbDrone.Core.Providers.Jobs
                 seriesToScan = new List<Series>() { _seriesProvider.GetSeries(targetId) };
             }
 
-            foreach (var series in seriesToScan.Where(c => c.LastInfoSync != null))
+            foreach (var series in seriesToScan.Where(c => c.Episodes.Count != 0))
             {
                 notification.CurrentMessage = string.Format("Scanning disk for '{0}'", series.Title);
                 _mediaFileProvider.Scan(series);

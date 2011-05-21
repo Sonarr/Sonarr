@@ -334,7 +334,7 @@ namespace NzbDrone.Core.Test
             mocker.GetMock<MediaFileProvider>(MockBehavior.Strict)
                 .Setup(c => c.Scan(It.Is<Series>(s => s.LastInfoSync != null))).Returns(new List<EpisodeFile>()).Verifiable();
 
-            mocker.Resolve<MediaFileScanJob>().Start(new ProgressNotification("test"), 0);
+            mocker.Resolve<DiskScanJob>().Start(new ProgressNotification("test"), 0);
 
             mocker.VerifyAllMocks();
         }

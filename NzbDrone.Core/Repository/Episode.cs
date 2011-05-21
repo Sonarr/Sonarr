@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Repository
         public virtual EpisodeFile EpisodeFile { get; set; }
 
         [SubSonicToManyRelation]
-        public virtual List<History> Histories { get; protected set; }
+        public virtual IList<History> Histories { get; protected set; }
 
     }
 }
