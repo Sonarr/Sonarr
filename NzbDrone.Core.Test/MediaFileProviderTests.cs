@@ -29,9 +29,9 @@ namespace NzbDrone.Core.Test
             /////////////////////////////////////////
 
             //Constants
-            const string fileName = @"WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD.avi";
+            const string fileName = @"WEEDS.S03E01.DUAL.BDRip.XviD.AC3.-HELLYWOOD.avi";
             const int seasonNumber = 3;
-            const int episodeNumner = 01;
+            const int episodeNumner = 1;
             const int size = 12345;
 
             //Fakes
@@ -41,17 +41,19 @@ namespace NzbDrone.Core.Test
             //Mocks
             var mocker = new AutoMoqer();
 
+            mocker.GetMock<DiskProvider>()
+                .Setup(e => e.GetSize(fileName)).Returns(12345).Verifiable();
+
             mocker.GetMock<IRepository>()
                 .Setup(r => r.Exists(It.IsAny<Expression<Func<EpisodeFile, Boolean>>>())).Returns(false).Verifiable();
+
             mocker.GetMock<IRepository>()
                 .Setup(r => r.Add(It.IsAny<EpisodeFile>())).Returns(0).Verifiable();
 
             mocker.GetMock<EpisodeProvider>()
-                .Setup(e => e.GetEpisode(fakeSeries.SeriesId, seasonNumber, episodeNumner)).Returns(fakeEpisode).
-                Verifiable();
+                .Setup(e => e.GetEpisode(fakeSeries.SeriesId, seasonNumber, episodeNumner)).Returns(fakeEpisode);
 
-            mocker.GetMock<DiskProvider>()
-                .Setup(e => e.GetSize(fileName)).Returns(12345).Verifiable();
+
 
 
             //Act
@@ -59,14 +61,8 @@ namespace NzbDrone.Core.Test
 
             //Assert
             Assert.IsNotNull(result);
-            mocker.GetMock<IRepository>().VerifyAll();
             mocker.GetMock<IRepository>().Verify(r => r.Add(result), Times.Once());
-            mocker.GetMock<EpisodeProvider>().VerifyAll();
-            mocker.GetMock<DiskProvider>().VerifyAll();
-
-            //Currently can't verify this since the list of episodes are loaded
-            //Dynamically by SubSonic
-            //Assert.AreEqual(fakeEpisode, result.Episodes[0]);
+            mocker.VerifyAllMocks();
 
             Assert.AreEqual(fakeEpisode.SeriesId, result.SeriesId);
             Assert.AreEqual(QualityTypes.BDRip, result.Quality);
