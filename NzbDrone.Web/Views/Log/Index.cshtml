@@ -36,14 +36,12 @@ Logs
                              columns.Bound(c => c.Message);
                          })
             .DetailView(detailView => detailView.ClientTemplate(
-                "<div><#= Logger #></div>" +
-                "<div><#= ExceptionType #></div>" +
-                "<div class='stackframe'><#= Exception #></div>"
-                                          )).DataBinding(data => data.Ajax().Select("_AjaxBinding", "Log"))
+                                                                    "<div>Logger: <#= Logger #></div>" +
+                                                                    "<div><#= ExceptionType #></div>" +
+                                                                    "<div class='stackframe'><#= Exception #></div>"
+                                                                )).DataBinding(data => data.Ajax().Select("_AjaxBinding", "Log"))
             .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.Time).Descending()).Enabled(true))
-            .Pageable(
-                c =>
-                c.PageSize(50).Position(GridPagerPosition.Bottom).Style(GridPagerStyles.NextPrevious))
+            .Pageable(c => c.PageSize(50).Position(GridPagerPosition.Bottom).Style(GridPagerStyles.NextPrevious))
             .Filterable()
             .ClientEvents(c => c.OnRowDataBound("onRowDataBound"))
             .Render();}
