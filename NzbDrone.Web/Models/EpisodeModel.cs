@@ -1,4 +1,5 @@
 ﻿using System;
+using NzbDrone.Core.Model;
 
 namespace NzbDrone.Web.Models
 {
@@ -10,6 +11,7 @@ namespace NzbDrone.Web.Models
         public int SeasonNumber { get; set; }
         public string Overview { get; set; }
         public string Path { get; set; }
+        public String Status { get; set; }
         public DateTime AirDate { get; set; }
 
         public String Quality { get; set; }

@@ -15,10 +15,8 @@ namespace NzbDrone.Web.Controllers
     public class SeriesController : Controller
     {
         private readonly EpisodeProvider _episodeProvider;
-        private readonly MediaFileProvider _mediaFileProvider;
         private readonly QualityProvider _qualityProvider;
         private readonly RenameProvider _renameProvider;
-        private readonly RootDirProvider _rootDirProvider;
         private readonly SeriesProvider _seriesProvider;
         private readonly TvDbProvider _tvDbProvider;
         private readonly JobProvider _jobProvider;
@@ -28,17 +26,16 @@ namespace NzbDrone.Web.Controllers
 
         public SeriesController(SeriesProvider seriesProvider,
                                 EpisodeProvider episodeProvider,
-                                QualityProvider qualityProvider, MediaFileProvider mediaFileProvider,
-                                RenameProvider renameProvider, RootDirProvider rootDirProvider,
-                                TvDbProvider tvDbProvider, JobProvider jobProvider,
+                                QualityProvider qualityProvider,
+                                RenameProvider renameProvider,
+                                TvDbProvider tvDbProvider,
+            JobProvider jobProvider,
                                 SeasonProvider seasonProvider)
         {
             _seriesProvider = seriesProvider;
             _episodeProvider = episodeProvider;
             _qualityProvider = qualityProvider;
-            _mediaFileProvider = mediaFileProvider;
             _renameProvider = renameProvider;
-            _rootDirProvider = rootDirProvider;
             _tvDbProvider = tvDbProvider;
             _jobProvider = jobProvider;
             _seasonProvider = seasonProvider;
@@ -137,6 +134,7 @@ namespace NzbDrone.Web.Controllers
                                                                                              Overview = c.Overview,
                                                                                              AirDate = c.AirDate,
                                                                                              Path = GetEpisodePath(c.EpisodeFile),
+                                                                                             Status = c.Status.ToString(),
                                                                                              Quality = c.EpisodeFile == null
                                                                                                      ? String.Empty
                                                                                                      : c.EpisodeFile.Quality.ToString()

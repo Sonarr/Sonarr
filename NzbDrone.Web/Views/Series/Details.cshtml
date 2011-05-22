@@ -77,6 +77,7 @@
                                  columns.Bound(c => c.AirDate).Format("{0:d}").Width(10);
                                  columns.Bound(c => c.Quality).Width(10);
                                  columns.Bound(c => c.Path);
+                                 columns.Bound(c => c.Status);
                              })
                 .DetailView(detailView => detailView.ClientTemplate("<div><#= Overview #> </br><#= Path #> </div>"))
                 .ClientEvents(clientEvents =>

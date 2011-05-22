@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Repository
 
                 if (EpisodeFileId != 0) return EpisodeStatusType.Ready;
 
-                if (DateTime.Now.Date >= AirDate.Date)
+                if (AirDate.Date.Year > 1900 && DateTime.Now.Date >= AirDate.Date)
                 {
                     return EpisodeStatusType.Missing;
                 }

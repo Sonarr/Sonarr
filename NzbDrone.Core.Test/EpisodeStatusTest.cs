@@ -115,5 +115,22 @@ namespace NzbDrone.Core.Test
 
             Assert.AreEqual(status, episode.Status);
         }
+
+
+        [Test]
+        public void low_air_date()
+        {
+            Episode episode = Builder<Episode>.CreateNew()
+                .With(e => e.AirDate = DateTime.Now.AddYears(-200))
+                .With(e => e.Ignored = false)
+                .With(e => e.EpisodeFileId = 0)
+                .With(e=>e.GrabDate =null)
+                .With(e => e.Season = Builder<Season>.CreateNew()
+                                          .With(s => s.Monitored = true).Build())
+                .Build();
+
+         
+            Assert.AreEqual(EpisodeStatusType.NotAired, episode.Status);
+        }
     }
 }
