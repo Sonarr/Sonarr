@@ -1,4 +1,4 @@
-﻿using System;
+﻿// ReSharper disable RedundantUsingDirective
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading;

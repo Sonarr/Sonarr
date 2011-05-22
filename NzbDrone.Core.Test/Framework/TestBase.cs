@@ -3,6 +3,7 @@
 namespace NzbDrone.Core.Test.Framework
 {
     public class TestBase
+    // ReSharper disable InconsistentNaming
     {
 
         [SetUp]

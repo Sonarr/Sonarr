@@ -1,4 +1,4 @@
-﻿using System;
+﻿// ReSharper disable RedundantUsingDirective
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading;
@@ -11,6 +11,7 @@ using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Jobs;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
+using System;
 
 namespace NzbDrone.Core.Test
 {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿// ReSharper disable RedundantUsingDirective
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMoq;
@@ -26,7 +27,6 @@ namespace NzbDrone.Core.Test
                                   AirDate = DateTime.Today.AddDays(-1),
                                   EpisodeId = 1234,
                                   EpisodeNumber = 5,
-                                  Language = "English",
                                   Overview = "This is an Overview",
                                   SeasonNumber = 1,
                                   SeasonId = 4321,
@@ -107,7 +107,6 @@ namespace NzbDrone.Core.Test
                                   AirDate = DateTime.Today.AddDays(-1),
                                   EpisodeId = 1234,
                                   EpisodeNumber = 5,
-                                  Language = "English",
                                   Overview = "This is an Overview",
                                   SeasonNumber = 1,
                                   SeasonId = 4321,
@@ -137,13 +136,12 @@ namespace NzbDrone.Core.Test
             //Todo: This test fails... Moq Setup doesn't return the expected value
 
             //Setup
-           var season = new Season { SeasonId = 4321, SeasonNumber = 1, SeriesId = 5656, Monitored = true };
+            var season = new Season { SeasonId = 4321, SeasonNumber = 1, SeriesId = 5656, Monitored = true };
             var episode = new Episode
                               {
                                   AirDate = DateTime.Today.AddDays(-1),
                                   EpisodeId = 1234,
                                   EpisodeNumber = 5,
-                                  Language = "English",
                                   Overview = "This is an Overview",
                                   SeasonNumber = 1,
                                   SeasonId = 4321,

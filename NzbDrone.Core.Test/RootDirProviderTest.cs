@@ -1,4 +1,5 @@
-﻿using System;
+﻿// ReSharper disable RedundantUsingDirective
+using System;
 using System.Linq;
 using AutoMoq;
 using MbUnit.Framework;
