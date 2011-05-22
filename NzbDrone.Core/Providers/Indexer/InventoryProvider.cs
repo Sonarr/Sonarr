@@ -79,7 +79,6 @@ namespace NzbDrone.Core.Providers.Indexer
                         SeasonNumber = parseResult.SeasonNumber,
                         Title = parseResult.EpisodeTitle,
                         Overview = String.Empty,
-                        Language = "en"
                     };
 
                     _episodeProvider.AddEpisode(episodeInfo);

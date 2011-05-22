@@ -85,6 +85,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EpisodeStatusTest.cs" />
     <Compile Include="ImportNewSeriesJobTest.cs" />
     <Compile Include="DiskScanJobTest.cs" />
     <Compile Include="InventoryProviderTest.cs" />
@@ -99,7 +100,6 @@
     <Compile Include="Framework\ExceptionVerification.cs" />
     <Compile Include="Framework\TestBase.cs" />
     <Compile Include="JobProviderTest.cs" />
-    <Compile Include="SyncProviderTest.cs" />
     <Compile Include="RootDirProviderTest.cs" />
     <Compile Include="IndexerProviderTest.cs" />
     <Compile Include="HistoryProviderTest.cs" />

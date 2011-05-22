@@ -144,14 +144,11 @@ namespace NzbDrone.Core.Providers
                                              AirDate = episode.FirstAired.Date,
                                              TvDbEpisodeId = episode.Id,
                                              EpisodeNumber = episode.EpisodeNumber,
-                                             Language = episode.Language.Abbriviation,
                                              Overview = episode.Overview,
                                              SeasonId = episode.SeasonId,
                                              SeasonNumber = episode.SeasonNumber,
                                              SeriesId = seriesId,
                                              Title = episode.EpisodeName,
-                                             LastInfoSync = DateTime.Now
-
                                          };
 
                     var existingEpisode = GetEpisode(episode.SeriesId, episode.SeasonNumber, episode.EpisodeNumber);
@@ -161,8 +158,6 @@ namespace NzbDrone.Core.Providers
                         //TODO: Write test for this, possibly make it future proof, we should only copy fields that come from tvdb
                         newEpisode.EpisodeId = existingEpisode.EpisodeId;
                         newEpisode.EpisodeFileId = existingEpisode.EpisodeFileId;
-                        newEpisode.LastDiskSync = existingEpisode.LastDiskSync;
-                        newEpisode.Status = existingEpisode.Status;
                         updateList.Add(newEpisode);
                     }
                     else

@@ -2,8 +2,30 @@
 {
     public enum EpisodeStatusType
     {
-        Missing = 0,
-        Grabbed = 1,
-        Downloaded = 2
+        /// <summary>
+        ///   Episode has not aired yet
+        /// </summary>
+        NotAired ,
+
+        /// <summary>
+        /// Episode is ignored
+        /// </summary>
+        Ignored,
+
+        /// <summary>
+        /// Episode has aired but no episode
+        /// files have avilable
+        /// </summary>
+        Missing ,
+        
+        /// <summary>
+        /// Episode is being downloaded
+        /// </summary>
+        Downloading ,
+
+        /// <summary>
+        /// Episode is present in disk
+        /// </summary>
+        Ready
     }
 }
