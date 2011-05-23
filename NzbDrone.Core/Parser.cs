@@ -31,6 +31,9 @@ namespace NzbDrone.Core
         private static readonly Regex NormalizeRegex = new Regex(@"((^|\W)(a|an|the|and|or|of)($|\W))|\W|\b(?!(?:19\d{2}|20\d{2}))\d+\b",
                                                                  RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
+        private static readonly Regex SimpleTitleRegex = new Regex(@"480[i|p]|720[i|p]|1080[i|p]|[x|h]264|\\|\/|\<|\>|\?|\*|\:|\|",
+                                                              RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
         /// <summary>
         ///   Parses a post title into list of episodes it contains
         /// </summary>
@@ -39,11 +42,10 @@ namespace NzbDrone.Core
         internal static EpisodeParseResult ParseEpisodeInfo(string title)
         {
             Logger.Trace("Parsing string '{0}'", title);
+            var simpleTitle = SimpleTitleRegex.Replace(title, String.Empty);
 
             foreach (var regex in ReportTitleRegex)
             {
-                var simpleTitle = Regex.Replace(title, @"480[i|p]|720[i|p]|1080[i|p]|[x|h]264|\\|\/|\<|\>|\?|\*|\:|\|", String.Empty, RegexOptions.IgnoreCase | RegexOptions.Compiled);
-
                 //Use only the filename, not the entire path
                 var match = regex.Matches(new FileInfo(simpleTitle).Name);
 
@@ -51,14 +53,14 @@ namespace NzbDrone.Core
                 {
                     var seriesName = NormalizeTitle(match[0].Groups["title"].Value);
 
-                    var airyear = 0;
+                    int airyear;
                     Int32.TryParse(match[0].Groups["airyear"].Value, out airyear);
 
                     EpisodeParseResult parsedEpisode;
 
                     if (airyear < 1)
                     {
-                        var season = 0;
+                        int season;
                         Int32.TryParse(match[0].Groups["season"].Value, out season);
 
                         parsedEpisode = new EpisodeParseResult
