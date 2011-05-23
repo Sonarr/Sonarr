@@ -106,22 +106,35 @@
         <br />
         <h3>Specials</h3>
         <div class="grid-container">
-            @{Html.Telerik().Grid(specialSeasons.Episodes).Name("seasons_specials")
+            @{Html.Telerik().Grid<EpisodeModel>().Name("seasons_specials")
                     .TableHtmlAttributes(new {@class = "Grid"})
                     .Columns(columns =>
-                                 {
-                                     columns.Bound(c => c.EpisodeNumber).Width(0).Title("Episode");
-                                     columns.Bound(c => c.Title);
-                                     columns.Bound(c => c.AirDate).Format("{0:d}").Width(0);
-                                 })
-                    //.DetailView(detailView => detailView.ClientTemplate("<div><#= Overview #> </br><#= Path #> </div>"))
+                             {
+                                 columns.Bound(o => o.EpisodeId)
+                                     .ClientTemplate(
+                                         "<input type='checkbox' name='checkedEpisodes' value='<#= EpisodeId #>' />")
+                                     .Title("")
+                                     .Width(1)
+                                     .HtmlAttributes(new { style = "text-align:center" });
+
+                                 columns.Bound(c => c.EpisodeNumber).Width(10).Title("Episode");
+                                 columns.Bound(c => c.Title).Title("Title").Width(300);
+                                 columns.Bound(c => c.AirDate).Format("{0:d}").Width(10);
+                                 columns.Bound(c => c.Quality).Width(10);
+                                 columns.Bound(c => c.Path);
+                             })
+                    .DetailView(detailView => detailView.ClientTemplate("<div><#= Overview #> </br><#= Path #> </div>"))
                     .ClientEvents(clientEvents =>
                     {
                         clientEvents.OnDataBinding("grid_bind");
                         clientEvents.OnDataBound("grid_bound");
                     })
-                    .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.EpisodeNumber)).Enabled(false))
-                    .Footer(false)
+                    .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.EpisodeNumber).Descending()).Enabled(true))
+                    .Footer(true)
+                    .DataBinding(
+                        d =>
+                        d.Ajax().Select("_AjaxSeasonGrid", "Series",
+                                        new RouteValueDictionary { { "seasonId", specialSeasons.SeasonId.ToString() } }))
                     .Render(); }
             <span class="grid-loader"><img src="@Url.Content("~/Content/Images/Loading.gif")" alt="Loading"/> Loading...</span>
         </div>
