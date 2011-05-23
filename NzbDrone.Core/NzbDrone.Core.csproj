@@ -128,13 +128,16 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libraries\Exceptioneer.WindowsFormsClient.dll</HintPath>
     </Reference>
-    <Reference Include="Migrator">
+    <Reference Include="Migrator, Version=0.9.0.28138, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\MigratorDotNet.0.9.0.28138\lib\Net40\Migrator.dll</HintPath>
     </Reference>
-    <Reference Include="Migrator.Framework">
+    <Reference Include="Migrator.Framework, Version=0.9.0.26940, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\MigratorDotNet.0.9.0.28138\lib\Net40\Migrator.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="Migrator.Providers">
+    <Reference Include="Migrator.Providers, Version=0.9.0.26941, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\MigratorDotNet.0.9.0.28138\lib\Net40\Migrator.Providers.dll</HintPath>
     </Reference>
     <Reference Include="Ninject, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
@@ -162,6 +165,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Datastore\Connection.cs" />
+    <Compile Include="Datastore\MigrationLogger.cs" />
+    <Compile Include="Datastore\Migrations.cs" />
+    <Compile Include="Datastore\RepositoryProvider.cs" />
     <Compile Include="Helpers\EpisodeRenameHelper.cs" />
     <Compile Include="Helpers\EpisodeSortingHelper.cs" />
     <Compile Include="Helpers\SceneNameHelper.cs" />
@@ -269,7 +276,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

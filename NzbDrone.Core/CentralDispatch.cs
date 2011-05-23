@@ -6,6 +6,7 @@ using System.IO;
 using System.Web.Hosting;
 using Ninject;
 using NLog;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
@@ -43,10 +44,26 @@ namespace NzbDrone.Core
             {
                 if (_kernel == null)
                 {
-                    BindKernel();
+                    InitializeApp();
                 }
                 return _kernel;
             }
+        }
+
+        private static void InitializeApp()
+        {
+            BindKernel();
+            
+            LogConfiguration.Setup();
+            
+            Migrations.Run();
+            ForceMigration(_kernel.Get<IRepository>());
+            
+            SetupDefaultQualityProfiles(_kernel.Get<IRepository>()); //Setup the default QualityProfiles on start-up
+
+            BindIndexers();
+            BindJobs();
+            BindExternalNotifications();
         }
 
         public static void BindKernel()
@@ -56,27 +73,7 @@ namespace NzbDrone.Core
                 Logger.Debug("Binding Ninject's Kernel");
                 _kernel = new StandardKernel();
 
-                //Sqlite
-                var appDataPath = new DirectoryInfo(Path.Combine(AppPath, "App_Data"));
-                if (!appDataPath.Exists) appDataPath.Create();
-
-                string connectionString = String.Format("Data Source={0};Version=3;",
-                                                        Path.Combine(appDataPath.FullName, "nzbdrone.db"));
-                var dbProvider = ProviderFactory.GetProvider(connectionString, "System.Data.SQLite");
-
-                string logConnectionString = String.Format("Data Source={0};Version=3;",
-                                                           Path.Combine(appDataPath.FullName, "log.db"));
-                var logDbProvider = ProviderFactory.GetProvider(logConnectionString, "System.Data.SQLite");
-
-
-                //SQLExpress
-                //string logConnectionString = String.Format(@"server=.\SQLExpress; database=NzbDroneLogs; Trusted_Connection=True;");
-                //var logDbProvider = ProviderFactory.GetProvider(logConnectionString, "System.Data.SqlClient");
-                var logRepository = new SimpleRepository(logDbProvider, SimpleRepositoryOptions.RunMigrations);
-                //dbProvider.ExecuteQuery(new QueryCommand("VACUUM", dbProvider));
-
                 //dbProvider.Log = new NlogWriter();
-
                 _kernel.Bind<QualityProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<TvDbProvider>().ToSelf().InTransientScope();
                 _kernel.Bind<HttpProvider>().ToSelf().InSingletonScope();
@@ -100,21 +97,10 @@ namespace NzbDrone.Core
                 _kernel.Bind<IndexerProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<WebTimer>().ToSelf().InSingletonScope();
                 _kernel.Bind<AutoConfigureProvider>().ToSelf().InSingletonScope();
-                _kernel.Bind<IRepository>().ToMethod(
-                    c => new SimpleRepository(dbProvider, SimpleRepositoryOptions.RunMigrations)).InSingletonScope();
 
-                _kernel.Bind<IRepository>().ToConstant(logRepository).WhenInjectedInto<SubsonicTarget>().
-                    InSingletonScope();
-                _kernel.Bind<IRepository>().ToConstant(logRepository).WhenInjectedInto<LogProvider>().InSingletonScope();
-
-                LogConfiguration.Setup();
-
-                ForceMigration(_kernel.Get<IRepository>());
-                SetupDefaultQualityProfiles(_kernel.Get<IRepository>()); //Setup the default QualityProfiles on start-up
-
-                BindIndexers();
-                BindJobs();
-                BindExternalNotifications();
+                _kernel.Bind<IRepository>().ToConstant(Connection.MainDataRepository).InSingletonScope();
+                _kernel.Bind<IRepository>().ToConstant(Connection.LogDataRepository).WhenInjectedInto<SubsonicTarget>().InSingletonScope();
+                _kernel.Bind<IRepository>().ToConstant(Connection.LogDataRepository).WhenInjectedInto<LogProvider>().InSingletonScope();
             }
         }
 
