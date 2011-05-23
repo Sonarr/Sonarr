@@ -70,8 +70,10 @@ namespace NzbDrone.Core.Test
         [Row("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD", QualityTypes.BDRip)]
         [Row("WEEDS.S03E01-06.DUAL.BDRip.AC3.-HELLYWOOD", QualityTypes.BDRip)]
         [Row("Two.and.a.Half.Men.S08E05.720p.HDTV.X264-DIMENSION", QualityTypes.HDTV)]
+        [Row("this has no extention or periods HDTV", QualityTypes.TV)]
         [Row("Chuck.S04E05.HDTV.XviD-LOL", QualityTypes.TV)]
         [Row("The.Girls.Next.Door.S03E06.DVDRip.XviD-WiDE", QualityTypes.DVD)]
+        [Row("The.Girls.Next.Door.S03E06.HDTV-WiDE", QualityTypes.TV)]
         [Row("Degrassi.S10E27.WS.DSR.XviD-2HD", QualityTypes.TV)]
         [Row("Sonny.With.a.Chance.S02E15.720p.WEB-DL.DD5.1.H.264-SURFER", QualityTypes.WEBDL)]
         [Row("Sonny.With.a.Chance.S02E15.720p", QualityTypes.HDTV)]
@@ -88,9 +90,10 @@ namespace NzbDrone.Core.Test
         [Row("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD.avi", QualityTypes.BDRip)]
         [Row("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD.avi", QualityTypes.BDRip)]
         [Row("Law & Order: Special Victims Unit - 11x11 - Quickie", QualityTypes.Unknown)]
+        [Row("(<a href=\"http://www.newzbin.com/browse/post/6076286/nzb/\">NZB</a>)", QualityTypes.Unknown)]
         public void quality_parse(string postTitle, object quality)
         {
-            var result = Parser.ParseEpisodeInfo(postTitle).Quality;
+            var result = Parser.ParseQuality(postTitle);
             Assert.AreEqual(quality, result);
         }
 

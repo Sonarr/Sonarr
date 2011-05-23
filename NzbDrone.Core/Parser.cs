@@ -239,24 +239,39 @@ namespace NzbDrone.Core
                 return QualityTypes.HDTV;
 
             //Based on extension
-            if (result == QualityTypes.Unknown && Path.HasExtension(name))
+
+
+
+            if (result == QualityTypes.Unknown)
             {
-                switch (Path.GetExtension(name).ToLower())
+                try
                 {
-                    case ".avi":
-                    case ".xvid":
-                    case ".wmv":
-                    case ".mp4":
-                        {
-                            result = QualityTypes.TV;
-                            break;
-                        }
-                    case ".mkv":
-                        {
-                            result = QualityTypes.HDTV;
-                            break;
-                        }
+                    switch (Path.GetExtension(name).ToLower())
+                    {
+                        case ".avi":
+                        case ".xvid":
+                        case ".wmv":
+                        case ".mp4":
+                            {
+                                result = QualityTypes.TV;
+                                break;
+                            }
+                        case ".mkv":
+                            {
+                                result = QualityTypes.HDTV;
+                                break;
+                            }
+                    }
                 }
+                catch (ArgumentException)
+                {
+                    //Swallow exception for cases where string contains illegal 
+                    //path characters.
+                }
+            }
+            if (name.Contains("hdtv"))
+            {
+                return QualityTypes.TV;
             }
 
             Logger.Trace("Quality Parsed:{0} Title:", result, name);

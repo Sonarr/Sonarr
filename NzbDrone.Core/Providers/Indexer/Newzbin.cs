@@ -9,7 +9,8 @@ namespace NzbDrone.Core.Providers.Indexer
 {
     public class Newzbin : IndexerBase
     {
-        public Newzbin(HttpProvider httpProvider, ConfigProvider configProvider, IndexerProvider indexerProvider) : base(httpProvider, configProvider, indexerProvider)
+        public Newzbin(HttpProvider httpProvider, ConfigProvider configProvider, IndexerProvider indexerProvider)
+            : base(httpProvider, configProvider, indexerProvider)
         {
         }
 
@@ -36,17 +37,19 @@ namespace NzbDrone.Core.Providers.Indexer
 
         protected override string NzbDownloadUrl(SyndicationItem item)
         {
-            return item.Id + "/nzb";
+            return item.Id + "nzb";
         }
 
         protected override EpisodeParseResult CustomParser(SyndicationItem item, EpisodeParseResult currentResult)
         {
-            var quality = Parser.ParseQuality(item.Summary.Text);
-            var proper = Parser.ParseProper(item.Summary.Text);
+            if (currentResult != null)
+            {
+                var quality = Parser.ParseQuality(item.Summary.Text);
+                var proper = Parser.ParseProper(item.Summary.Text);
 
-            currentResult.Quality = quality;
-            currentResult.Proper = proper;
-
+                currentResult.Quality = quality;
+                currentResult.Proper = proper;
+            }
             return currentResult;
         }
 

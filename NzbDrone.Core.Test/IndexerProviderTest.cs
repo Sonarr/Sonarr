@@ -43,10 +43,48 @@ namespace NzbDrone.Core.Test
 
             var parseResults = mocker.Resolve<MockIndexer>().Fetch();
 
+            foreach (var episodeParseResult in parseResults)
+            {
+                var Uri = new Uri(episodeParseResult.NzbUrl);
+                Assert.DoesNotContain(Uri.PathAndQuery, "//");
+            }
+
 
             Assert.IsNotEmpty(parseResults);
             ExceptionVerification.ExcpectedWarns(warns);
         }
+
+
+
+        [Test]
+        public void newzbin()
+        {
+            var mocker = new AutoMoqer();
+
+            mocker.GetMock<HttpProvider>()
+                          .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
+                          .Returns(File.OpenRead(".\\Files\\Rss\\newzbin.xml"));
+
+            var fakeSettings = Builder<IndexerSetting>.CreateNew().Build();
+            mocker.GetMock<IndexerProvider>()
+                .Setup(c => c.GetSettings(It.IsAny<Type>()))
+                .Returns(fakeSettings);
+
+            var parseResults = mocker.Resolve<Newzbin>().Fetch();
+
+            foreach (var episodeParseResult in parseResults)
+            {
+                var Uri = new Uri(episodeParseResult.NzbUrl);
+                Assert.DoesNotContain(Uri.PathAndQuery, "//");
+            }
+
+
+            Assert.IsNotEmpty(parseResults);
+            ExceptionVerification.ExcpectedWarns(1);
+        }
+
+
+
 
 
 
