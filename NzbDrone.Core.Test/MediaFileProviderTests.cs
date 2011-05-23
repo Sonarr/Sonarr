@@ -324,12 +324,15 @@ namespace NzbDrone.Core.Test
         public void scan_media_job_should_not_scan_new_series()
         {
             var mocker = new AutoMoqer();
+            IQueryable<Series> fakeSeries = Builder<Series>.CreateListOfSize(2)
+                .WhereTheFirst(1).Has(c => c.Episodes = new List<Episode>())
+                .AndTheNext(1).Has(c => c.Episodes = Builder<Episode>.CreateListOfSize(10).Build())
+                .Build().AsQueryable();
             mocker.GetMock<SeriesProvider>()
-                .Setup(c => c.GetAllSeries())
-                .Returns(Builder<Series>.CreateListOfSize(2)
-                             .WhereTheFirst(1).Has(c => c.LastInfoSync = DateTime.Now).Build().AsQueryable());
+                .Setup(c => c.GetAllSeries()).Returns(fakeSeries);
+
             mocker.GetMock<MediaFileProvider>(MockBehavior.Strict)
-                .Setup(c => c.Scan(It.Is<Series>(s => s.LastInfoSync != null))).Returns(new List<EpisodeFile>()).Verifiable();
+                .Setup(c => c.Scan(fakeSeries.ToList()[1])).Returns(new List<EpisodeFile>()).Verifiable();
 
             mocker.Resolve<DiskScanJob>().Start(new ProgressNotification("test"), 0);
 
