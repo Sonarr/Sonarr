@@ -197,15 +197,15 @@ namespace NzbDrone.Core
             var sd = new QualityProfile
                          {
                              Name = "SD",
-                             Allowed = new List<QualityTypes> { QualityTypes.TV, QualityTypes.DVD },
-                             Cutoff = QualityTypes.TV
+                             Allowed = new List<QualityTypes> { QualityTypes.SDTV, QualityTypes.DVD },
+                             Cutoff = QualityTypes.SDTV
                          };
 
             var hd = new QualityProfile
                          {
                              Name = "HD",
                              Allowed =
-                                 new List<QualityTypes> { QualityTypes.HDTV, QualityTypes.WEBDL, QualityTypes.BDRip, QualityTypes.Bluray720 },
+                                 new List<QualityTypes> { QualityTypes.HDTV, QualityTypes.WEBDL, QualityTypes.Bluray720 },
                              Cutoff = QualityTypes.HDTV
                          };
 

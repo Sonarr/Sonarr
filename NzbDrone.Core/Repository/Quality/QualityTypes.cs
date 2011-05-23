@@ -10,30 +10,32 @@ namespace NzbDrone.Core.Repository.Quality
         ///   Quality is unknown
         /// </summary>
         Unknown = 0,
+        
         /// <summary>
         ///   SD File (Source could be HD)
         /// </summary>
-        TV = 1,
+        SDTV = 1,
+        
         /// <summary>
         ///   SD File (DVD Source)
         /// </summary>
         DVD = 2,
-        /// <summary>
-        ///   SD File (HD Source)
-        /// </summary>
-        BDRip = 3,
+      
         /// <summary>
         ///   HD File (HDTV Source)
         /// </summary>
         HDTV = 4,
+        
         /// <summary>
         ///   HD File (Online Source)
         /// </summary>
         WEBDL = 5,
+        
         /// <summary>
         ///   HD File (720p Blu-ray Source)
         /// </summary>
         Bluray720 = 6,
+        
         /// <summary>
         ///   HD File (1080p Blu-ray Source)
         /// </summary>

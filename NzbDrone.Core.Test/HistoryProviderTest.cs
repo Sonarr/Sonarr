@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Test
                                        HistoryId = new int(),
                                        Date = DateTime.Now,
                                        IsProper = false,
-                                       Quality = QualityTypes.TV,
+                                       Quality = QualityTypes.SDTV,
                                        EpisodeId = episode.EpisodeId
                                    }
                            };
@@ -123,7 +123,7 @@ namespace NzbDrone.Core.Test
             var target = new HistoryProvider(repo.Object);
 
             //Act
-            var result = target.Exists(episode.EpisodeId, QualityTypes.TV, false);
+            var result = target.Exists(episode.EpisodeId, QualityTypes.SDTV, false);
 
             //Assert
             Assert.AreEqual(result, true);
@@ -156,7 +156,7 @@ namespace NzbDrone.Core.Test
                                        HistoryId = new int(),
                                        Date = DateTime.Now,
                                        IsProper = false,
-                                       Quality = QualityTypes.TV,
+                                       Quality = QualityTypes.SDTV,
                                        EpisodeId = episode.EpisodeId
                                    }
                            };
@@ -168,7 +168,7 @@ namespace NzbDrone.Core.Test
             var target = new HistoryProvider(repo.Object);
 
             //Act
-            var result = target.Exists(episode.EpisodeId, QualityTypes.TV, true);
+            var result = target.Exists(episode.EpisodeId, QualityTypes.SDTV, true);
 
             //Assert
             Assert.AreEqual(result, false);

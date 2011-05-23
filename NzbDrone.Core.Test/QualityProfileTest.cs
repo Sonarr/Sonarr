@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Test
             var testProfile = new QualityProfile
                                   {
                                       Name = Guid.NewGuid().ToString(),
-                                      Cutoff = QualityTypes.TV,
+                                      Cutoff = QualityTypes.SDTV,
                                       Allowed = new List<QualityTypes> { QualityTypes.HDTV, QualityTypes.DVD },
                                   };
 
@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Test
             var testProfile = new QualityProfile
                                   {
                                       Name = Guid.NewGuid().ToString(),
-                                      Cutoff = QualityTypes.TV,
+                                      Cutoff = QualityTypes.SDTV,
                                       Allowed = new List<QualityTypes> { QualityTypes.HDTV, QualityTypes.DVD },
                                   };
 

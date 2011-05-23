@@ -205,22 +205,19 @@ namespace NzbDrone.Core
             var result = QualityTypes.Unknown;
             name = name.ToLowerInvariant();
 
-            if (name.Contains("dvd"))
-                return QualityTypes.DVD;
-
-            if (name.Contains("bdrip") || name.Contains("brrip"))
+            if (name.Contains("dvd") || name.Contains("bdrip") || name.Contains("brrip"))
             {
-                return QualityTypes.BDRip;
+                return QualityTypes.DVD;
             }
 
             if (name.Contains("xvid") || name.Contains("divx"))
             {
                 if (name.Contains("bluray"))
                 {
-                    return QualityTypes.BDRip;
+                    return QualityTypes.DVD;
                 }
 
-                return QualityTypes.TV;
+                return QualityTypes.SDTV;
             }
 
             if (name.Contains("bluray"))
@@ -253,7 +250,7 @@ namespace NzbDrone.Core
                         case ".wmv":
                         case ".mp4":
                             {
-                                result = QualityTypes.TV;
+                                result = QualityTypes.SDTV;
                                 break;
                             }
                         case ".mkv":
@@ -271,7 +268,7 @@ namespace NzbDrone.Core
             }
             if (name.Contains("hdtv"))
             {
-                return QualityTypes.TV;
+                return QualityTypes.SDTV;
             }
 
             Logger.Trace("Quality Parsed:{0} Title:", result, name);

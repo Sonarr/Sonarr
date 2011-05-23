@@ -66,7 +66,7 @@ namespace NzbDrone.Core.Test
             mocker.VerifyAllMocks();
 
             Assert.AreEqual(fakeEpisode.SeriesId, result.SeriesId);
-            Assert.AreEqual(QualityTypes.BDRip, result.Quality);
+            Assert.AreEqual(QualityTypes.DVD, result.Quality);
             Assert.AreEqual(Parser.NormalizePath(fileName), result.Path);
             Assert.AreEqual(size, result.Size);
             Assert.AreEqual(false, result.Proper);
