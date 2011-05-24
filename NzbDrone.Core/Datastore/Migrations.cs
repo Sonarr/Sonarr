@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using Migrator.Framework;
 using NLog;
+using NzbDrone.Core.Repository;
 using SubSonic.Extensions;
 using SubSonic.Schema;
 
@@ -43,16 +44,19 @@ namespace NzbDrone.Core.Datastore
             foreach (var repoType in repoTypes)
             {
                 var typeSchema = provider.GetSchemaFromType(repoType);
-                var dbColumns = provider.GetColumnsFromDatabase(Connection.MainConnectionString, typeSchema.Name);
 
-                var deletedColumns = provider.GetDeletedColumns(typeSchema, dbColumns);
-
-                foreach (var deletedColumn in deletedColumns)
+                if (transformationProvider.TableExists(typeSchema.Name))
                 {
-                    Logger.Info("Removing column '{0}' from '{1}'", deletedColumn.Name, repoType.Name);
-                    transformationProvider.RemoveColumn(typeSchema.Name, deletedColumn.Name);
-                }
+                    var dbColumns = provider.GetColumnsFromDatabase(transformationProvider, typeSchema.Name);
 
+                    var deletedColumns = provider.GetDeletedColumns(typeSchema, dbColumns);
+
+                    foreach (var deletedColumn in deletedColumns)
+                    {
+                        Logger.Info("Removing column '{0}' from '{1}'", deletedColumn.Name, repoType.Name);
+                        transformationProvider.RemoveColumn(typeSchema.Name, deletedColumn.Name);
+                    }
+                }
             }
 
         }
@@ -65,14 +69,17 @@ namespace NzbDrone.Core.Datastore
             foreach (var repoType in repoTypes)
             {
                 var typeSchema = provider.GetSchemaFromType(repoType);
-                var dbColumns = provider.GetColumnsFromDatabase(Connection.MainConnectionString, typeSchema.Name);
-
-                var newColumns = provider.GetNewColumns(typeSchema, dbColumns);
-
-                foreach (var newColumn in newColumns)
+                if (transformationProvider.TableExists(typeSchema.Name))
                 {
-                    Logger.Info("Adding column '{0}' to '{1}'", newColumn.Name, repoType.Name);
-                    transformationProvider.AddColumn(typeSchema.Name, newColumn);
+                    var dbColumns = provider.GetColumnsFromDatabase(transformationProvider, typeSchema.Name);
+
+                    var newColumns = provider.GetNewColumns(typeSchema, dbColumns);
+
+                    foreach (var newColumn in newColumns)
+                    {
+                        Logger.Info("Adding column '{0}' to '{1}'", newColumn.Name, repoType.Name);
+                        transformationProvider.AddColumn(typeSchema.Name, newColumn);
+                    }
                 }
 
             }
@@ -86,6 +93,12 @@ namespace NzbDrone.Core.Datastore
     {
         public override void Up()
         {
+            //Remove jobs table forcing it to repopulate
+            var repoProvider = new RepositoryProvider();
+            var jobTable = repoProvider.GetSchemaFromType(typeof(JobSetting));
+
+            Database.RemoveTable(jobTable.Name);
+
             Migrations.RemoveDeletedColumns(Database);
             Migrations.AddNewColumns(Database);
         }

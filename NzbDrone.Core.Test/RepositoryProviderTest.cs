@@ -6,6 +6,7 @@ using Gallio.Framework;
 using MbUnit.Framework;
 using MbUnit.Framework.ContractVerifiers;
 using Migrator.Framework;
+using Migrator.Providers.SQLite;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Repository;
@@ -86,11 +87,12 @@ namespace NzbDrone.Core.Test
             string connectionString = "Data Source=" + Guid.NewGuid() + ".db;Version=3;New=True";
             var dbProvider = ProviderFactory.GetProvider(connectionString, "System.Data.SQLite");
             var repo = new SimpleRepository(dbProvider, SimpleRepositoryOptions.RunMigrations);
+            var sqliteDatabase = new SQLiteTransformationProvider(new SQLiteDialect(), connectionString);
 
             repo.Add(new TestRepoType(){Value = "Dummy"});
 
             var repositoryProvider = new RepositoryProvider();
-            var columns = repositoryProvider.GetColumnsFromDatabase(connectionString, "TestRepoTypes");
+            var columns = repositoryProvider.GetColumnsFromDatabase(sqliteDatabase, "TestRepoTypes");
 
             Assert.Count(3, columns);
 
@@ -102,13 +104,14 @@ namespace NzbDrone.Core.Test
         {
             string connectionString = "Data Source=" + Guid.NewGuid() + ".db;Version=3;New=True";
             var dbProvider = ProviderFactory.GetProvider(connectionString, "System.Data.SQLite");
+            var sqliteDatabase = new SQLiteTransformationProvider(new SQLiteDialect(), connectionString);
             var repo = new SimpleRepository(dbProvider, SimpleRepositoryOptions.RunMigrations);
 
             repo.Add(new TestRepoType(){Value = "Dummy"});
 
             var repositoryProvider = new RepositoryProvider();
             var typeSchema = repositoryProvider.GetSchemaFromType(typeof(TestRepoType2));
-            var columns = repositoryProvider.GetColumnsFromDatabase(connectionString, "TestRepoTypes");
+            var columns = repositoryProvider.GetColumnsFromDatabase(sqliteDatabase, "TestRepoTypes");
 
 
             var deletedColumns = repositoryProvider.GetDeletedColumns(typeSchema, columns);
@@ -125,12 +128,13 @@ namespace NzbDrone.Core.Test
             string connectionString = "Data Source=" + Guid.NewGuid() + ".db;Version=3;New=True";
             var dbProvider = ProviderFactory.GetProvider(connectionString, "System.Data.SQLite");
             var repo = new SimpleRepository(dbProvider, SimpleRepositoryOptions.RunMigrations);
+            var sqliteDatabase = new SQLiteTransformationProvider(new SQLiteDialect(), connectionString);
 
             repo.Add(new TestRepoType2() { Value = "dummy" });
 
             var repositoryProvider = new RepositoryProvider();
             var typeSchema = repositoryProvider.GetSchemaFromType(typeof(TestRepoType));
-            var columns = repositoryProvider.GetColumnsFromDatabase(connectionString, "TestRepoType2s");
+            var columns = repositoryProvider.GetColumnsFromDatabase(sqliteDatabase, "TestRepoType2s");
             
 
             var deletedColumns = repositoryProvider.GetNewColumns(typeSchema, columns);

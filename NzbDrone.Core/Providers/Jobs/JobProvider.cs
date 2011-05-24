@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Providers.Jobs
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IRepository _repository;
         private readonly NotificationProvider _notificationProvider;
-        private readonly IEnumerable<IJob> _jobs;
+        private readonly IList<IJob> _jobs;
 
         private static readonly object ExecutionLock = new object();
         private Thread _jobThread;
@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Providers.Jobs
 
         private ProgressNotification _notification;
 
-        public JobProvider(IRepository repository, NotificationProvider notificationProvider, IEnumerable<IJob> jobs)
+        public JobProvider(IRepository repository, NotificationProvider notificationProvider, IList<IJob> jobs)
         {
             _repository = repository;
             _notificationProvider = notificationProvider;

@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/108/trunk/src/Migrator.Providers/Impl/SQLite
+END
+SQLiteTransformationProvider.cs
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/108/trunk/src/Migrator.Providers/Impl/SQLite/SQLiteTransformationProvider.cs
+END
+SQLiteDialect.cs
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/87/trunk/src/Migrator.Providers/Impl/SQLite/SQLiteDialect.cs
+END

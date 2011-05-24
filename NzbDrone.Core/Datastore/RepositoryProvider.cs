@@ -29,12 +29,9 @@ namespace NzbDrone.Core.Datastore
             return type.ToSchemaTable(Connection.MainDataProvider);
         }
 
-        public virtual Column[] GetColumnsFromDatabase(string connectionString, string tableName)
+        public virtual Column[] GetColumnsFromDatabase(ITransformationProvider database, string tableName)
         {
-            var dialact = new SQLiteDialect();
-            var mig = new SQLiteTransformationProvider(dialact, connectionString);
-
-            return mig.GetColumns(tableName);
+            return database.GetColumns(tableName);
         }
 
 

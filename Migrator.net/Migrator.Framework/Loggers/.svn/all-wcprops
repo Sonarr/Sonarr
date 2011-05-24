@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/120/trunk/src/Migrator.Framework/Loggers
+END
+Logger.cs
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/120/trunk/src/Migrator.Framework/Loggers/Logger.cs
+END
+ConsoleWriter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/73/trunk/src/Migrator.Framework/Loggers/ConsoleWriter.cs
+END
+IAttachableLogger.cs
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/120/trunk/src/Migrator.Framework/Loggers/IAttachableLogger.cs
+END
+SqlScriptFileLogger.cs
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/120/trunk/src/Migrator.Framework/Loggers/SqlScriptFileLogger.cs
+END
+ILogWriter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/120/trunk/src/Migrator.Framework/Loggers/ILogWriter.cs
+END

@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/124/trunk/src/Migrator.Framework/SchemaBuilder
+END
+FluentColumn.cs
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/124/trunk/src/Migrator.Framework/SchemaBuilder/FluentColumn.cs
+END
+IDeleteTableOptions.cs
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/!svn/ver/122/trunk/src/Migrator.Framework/SchemaBuilder/IDeleteTableOptions.cs
+END
+RenameTableExpression.cs
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/124/trunk/src/Migrator.Framework/SchemaBuilder/RenameTableExpression.cs
+END
+AddTableExpression.cs
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/124/trunk/src/Migrator.Framework/SchemaBuilder/AddTableExpression.cs
+END
+ISchemaBuilderExpression.cs
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/!svn/ver/124/trunk/src/Migrator.Framework/SchemaBuilder/ISchemaBuilderExpression.cs
+END
+IColumnOptions.cs
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/124/trunk/src/Migrator.Framework/SchemaBuilder/IColumnOptions.cs
+END
+ForeignKey.cs
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/122/trunk/src/Migrator.Framework/SchemaBuilder/ForeignKey.cs
+END
+IFluentColumn.cs
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/124/trunk/src/Migrator.Framework/SchemaBuilder/IFluentColumn.cs
+END
+AddColumnExpression.cs
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/!svn/ver/124/trunk/src/Migrator.Framework/SchemaBuilder/AddColumnExpression.cs
+END
+SchemaBuilder.cs
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/124/trunk/src/Migrator.Framework/SchemaBuilder/SchemaBuilder.cs
+END
+IForeignKeyOptions.cs
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/122/trunk/src/Migrator.Framework/SchemaBuilder/IForeignKeyOptions.cs
+END
+DeleteTableExpression.cs
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/124/trunk/src/Migrator.Framework/SchemaBuilder/DeleteTableExpression.cs
+END
