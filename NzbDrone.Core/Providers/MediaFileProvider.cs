@@ -83,7 +83,7 @@ namespace NzbDrone.Core.Providers
                     var episodes = new List<Episode>();
 
                     //Check for daily shows
-                    if (parseResult.Episodes == null)
+                    if (parseResult.EpisodeNumbers == null)
                     {
                         var episode = _episodeProvider.GetEpisode(series.SeriesId, parseResult.AirDate.Date);
 
@@ -98,7 +98,7 @@ namespace NzbDrone.Core.Providers
                     }
                     else
                     {
-                        foreach (var episodeNumber in parseResult.Episodes)
+                        foreach (var episodeNumber in parseResult.EpisodeNumbers)
                         {
                             var episode = _episodeProvider.GetEpisode(series.SeriesId, parseResult.SeasonNumber,
                                                                       episodeNumber);

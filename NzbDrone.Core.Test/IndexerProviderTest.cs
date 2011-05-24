@@ -41,7 +41,8 @@ namespace NzbDrone.Core.Test
                 .Setup(c => c.GetSettings(It.IsAny<Type>()))
                 .Returns(fakeSettings);
 
-            var parseResults = mocker.Resolve<MockIndexer>().Fetch();
+            var mockIndexer = mocker.Resolve<MockIndexer>();
+            var parseResults = mockIndexer.Fetch();
 
             foreach (var episodeParseResult in parseResults)
             {
@@ -51,6 +52,11 @@ namespace NzbDrone.Core.Test
 
 
             Assert.IsNotEmpty(parseResults);
+
+            Assert.ForAll(parseResults, s => Assert.AreEqual(mockIndexer.Name, s.Indexer));
+            Assert.ForAll(parseResults, s => Assert.AreNotEqual("", s.NzbTitle));
+            Assert.ForAll(parseResults, s => Assert.AreNotEqual(null, s.NzbTitle));
+
             ExceptionVerification.ExcpectedWarns(warns);
         }
 
@@ -70,7 +76,8 @@ namespace NzbDrone.Core.Test
                 .Setup(c => c.GetSettings(It.IsAny<Type>()))
                 .Returns(fakeSettings);
 
-            var parseResults = mocker.Resolve<Newzbin>().Fetch();
+            var newzbinProvider = mocker.Resolve<Newzbin>();
+            var parseResults = newzbinProvider.Fetch();
 
             foreach (var episodeParseResult in parseResults)
             {
@@ -80,6 +87,10 @@ namespace NzbDrone.Core.Test
 
 
             Assert.IsNotEmpty(parseResults);
+            Assert.ForAll(parseResults, s => Assert.AreEqual(newzbinProvider.Name, s.Indexer));
+            Assert.ForAll(parseResults, s => Assert.AreNotEqual("", s.NzbTitle));
+            Assert.ForAll(parseResults, s => Assert.AreNotEqual(null, s.NzbTitle));
+
             ExceptionVerification.ExcpectedWarns(1);
         }
 
@@ -111,7 +122,7 @@ namespace NzbDrone.Core.Test
             Assert.IsNotNull(result);
             Assert.AreEqual(summary, result.EpisodeTitle);
             Assert.AreEqual(season, result.SeasonNumber);
-            Assert.AreEqual(episode, result.Episodes[0]);
+            Assert.AreEqual(episode, result.EpisodeNumbers[0]);
             Assert.AreEqual(quality, result.Quality);
         }
 

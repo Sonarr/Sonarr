@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using NLog;
 using NzbDrone.Core.Model;
@@ -36,32 +37,28 @@ namespace NzbDrone.Core.Providers.Indexer
             }
 
             parseResult.Series = series;
+            parseResult.Episodes = new List<Episode>();
 
-            foreach (var episodeNumber in parseResult.Episodes)
+            if (!series.Monitored)
             {
-                //Todo: How to handle full season files? Currently the episode list is completely empty for these releases
-                //Todo: Should we assume that the release contains all the episodes that belong to this season and add them from the DB?
-                //Todo: Fix this so it properly handles multi-epsiode releases (Currently as long as the first episode is needed we download it)
-                //Todo: for small releases this is less of an issue, but for Full Season Releases this could be an issue if we only need the first episode (or first few)
+                Logger.Debug("{0} is present in the DB but not tracked. skipping.", parseResult.CleanTitle);
+                return false;
+            }
 
-                if (!series.Monitored)
-                {
-                    Logger.Debug("{0} is present in the DB but not tracked. skipping.", parseResult.CleanTitle);
-                    return false;
-                }
+            if (!_seriesProvider.QualityWanted(series.SeriesId, parseResult.Quality))
+            {
+                Logger.Debug("Post doesn't meet the quality requirements [{0}]. skipping.", parseResult.Quality);
+                return false;
+            }
 
-                if (!_seriesProvider.QualityWanted(series.SeriesId, parseResult.Quality))
-                {
-                    Logger.Debug("Post doesn't meet the quality requirements [{0}]. skipping.", parseResult.Quality);
-                    return false;
-                }
+            if (_seasonProvider.IsIgnored(series.SeriesId, parseResult.SeasonNumber))
+            {
+                Logger.Debug("Season {0} is currently set to ignore. skipping.", parseResult.SeasonNumber);
+                return false;
+            }
 
-                if (_seasonProvider.IsIgnored(series.SeriesId, parseResult.SeasonNumber))
-                {
-                    Logger.Debug("Season {0} is currently set to ignore. skipping.", parseResult.SeasonNumber);
-                    return false;
-                }
-
+            foreach (var episodeNumber in parseResult.EpisodeNumbers)
+            {
                 var episodeInfo = _episodeProvider.GetEpisode(series.SeriesId, parseResult.SeasonNumber, episodeNumber);
                 if (episodeInfo == null)
                 {
@@ -84,21 +81,33 @@ namespace NzbDrone.Core.Providers.Indexer
                     _episodeProvider.AddEpisode(episodeInfo);
                 }
 
+                parseResult.Episodes.Add(episodeInfo);
+            }
 
-                if (!_episodeProvider.IsNeeded(parseResult, episodeInfo))
+            foreach (var episode in parseResult.Episodes)
+            {
+                //Todo: How to handle full season files? Currently the episode list is completely empty for these releases
+                //Todo: Should we assume that the release contains all the episodes that belong to this season and add them from the DB?
+                //Todo: Fix this so it properly handles multi-epsiode releases (Currently as long as the first episode is needed we download it)
+                //Todo: for small releases this is less of an issue, but for Full Season Releases this could be an issue if we only need the first episode (or first few)
+
+
+
+                if (!_episodeProvider.IsNeeded(parseResult, episode))
                 {
                     Logger.Debug("Episode {0} is not needed. skipping.", parseResult);
-                    return false;
+                    continue;
                 }
 
-                if (_historyProvider.Exists(episodeInfo.EpisodeId, parseResult.Quality, parseResult.Proper))
+                if (_historyProvider.Exists(episode.EpisodeId, parseResult.Quality, parseResult.Proper))
                 {
                     Logger.Debug("Episode {0} is in history. skipping.", parseResult);
-                    return false;
+                    continue;
                 }
 
                 //Congragulations younge feed item! you have made it this far. you are truly special!!!
                 Logger.Debug("Episode {0} is needed", parseResult);
+
                 return true;
             }
 

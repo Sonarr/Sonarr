@@ -142,15 +142,14 @@ namespace NzbDrone.Web.Controllers
             return View(new GridModel(episodes));
         }
 
-        [GridAction]
-        public ActionResult _CustomBinding(GridCommand command, int seasonId)
+        //Local Helpers
+        private string GetEpisodePath(EpisodeFile file)
         {
-            IEnumerable<Episode> data = GetData(command);
-            return View(new GridModel
-                            {
-                                Data = data,
-                                Total = data.Count()
-                            });
+            if (file == null)
+                return String.Empty;
+
+            //Return the path relative to the Series' Folder
+            return file.Path.Replace(file.Series.Path, "").Trim(Path.DirectorySeparatorChar);
         }
 
         public ActionResult SearchForSeries(string seriesName)
@@ -172,66 +171,6 @@ namespace NzbDrone.Web.Controllers
             //model.Add(new SeriesSearchResultModel { TvDbId = 65432, TvDbName = "The Office (US)", FirstAired = DateTime.Today.AddDays(-100) });
 
             return PartialView("SeriesSearchResults", model);
-        }
-
-        private IEnumerable<Episode> GetData(GridCommand command)
-        {
-            return null;
-            /*    
-            IQueryable<Episode> data = .Orders;
-            //Apply filtering
-            if (command.FilterDescriptors.Any())
-            {
-                data = data.Where(ExpressionBuilder.Expression<Order>(command.FilterDescriptors));
-            }
-            // Apply sorting
-            foreach (SortDescriptor sortDescriptor in command.SortDescriptors)
-            {
-                if (sortDescriptor.SortDirection == ListSortDirection.Ascending)
-                {
-                    switch (sortDescriptor.Member)
-                    {
-                        case "OrderID":
-                            data = data.OrderBy(ExpressionBuilder.Expression<Order, int>(sortDescriptor.Member));
-                            break;
-                        case "Customer.ContactName":
-                            data = data.OrderBy(order => order.Customer.ContactName);
-                            break;
-                        case "ShipAddress":
-                            data = data.OrderBy(order => order.ShipAddress);
-                            break;
-                        case "OrderDate":
-                            data = data.OrderBy(order => order.OrderDate);
-                            break;
-                    }
-                }
-                else
-                {
-                    switch (sortDescriptor.Member)
-                    {
-                        case "OrderID":
-                            data = data.OrderByDescending(order => order.OrderID);
-                            break;
-                        case "Customer.ContactName":
-                            data = data.OrderByDescending(order => order.Customer.ContactName);
-                            break;
-                        case "ShipAddress":
-                            data = data.OrderByDescending(order => order.ShipAddress);
-                            break;
-                        case "OrderDate":
-                            data = data.OrderByDescending(order => order.OrderDate);
-                            break;
-                    }
-                }
-            }
-            count = data.Count();
-            // ... and paging
-            if (command.PageSize > 0)
-            {
-                data = data.Skip((command.Page - 1) * command.PageSize);
-            }
-            data = data.Take(command.PageSize);
-            return data;*/
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
@@ -299,16 +238,6 @@ namespace NzbDrone.Web.Controllers
             //Todo: Stay of Series Detail... AJAX?
             _renameProvider.RenameEpisode(episodeId);
             return RedirectToAction("Index");
-        }
-
-        //Local Helpers
-        private string GetEpisodePath(EpisodeFile file)
-        {
-            if (file == null)
-                return String.Empty;
-
-            //Return the path relative to the Series' Folder
-            return file.Path.Replace(file.Series.Path, "").Trim(Path.DirectorySeparatorChar);
         }
 
         private List<SeriesModel> GetSeriesModels(List<Series> seriesInDb)

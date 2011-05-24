@@ -13,11 +13,15 @@ namespace NzbDrone.Core.Providers
     public class DownloadProvider
     {
         private readonly SabProvider _sabProvider;
+        private readonly HistoryProvider _historyProvider;
+        private readonly EpisodeProvider _episodeProvider;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public DownloadProvider(SabProvider sabProvider)
+        public DownloadProvider(SabProvider sabProvider, HistoryProvider historyProvider, EpisodeProvider episodeProvider)
         {
             _sabProvider = sabProvider;
+            _historyProvider = historyProvider;
+            _episodeProvider = episodeProvider;
         }
 
         public DownloadProvider()
@@ -34,7 +38,25 @@ namespace NzbDrone.Core.Providers
                 return false;
             }
 
-            return _sabProvider.AddByUrl(parseResult.NzbUrl, sabTitle);
+            var addSuccess = _sabProvider.AddByUrl(parseResult.NzbUrl, sabTitle);
+
+            if (addSuccess)
+            {
+                foreach (var episode in parseResult.Episodes)
+                {
+                    var history = new History();
+                    history.Date = DateTime.Now;
+                    history.Indexer = parseResult.Indexer;
+                    history.IsProper = parseResult.Proper;
+                    history.Quality = parseResult.Quality;
+                    history.NzbTitle = parseResult.NzbTitle;
+                    history.EpisodeId = episode.EpisodeId;
+
+                    _historyProvider.Add(history);
+                }
+            }
+
+            return addSuccess;
         }
     }
 }

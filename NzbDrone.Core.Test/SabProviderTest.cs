@@ -229,7 +229,7 @@ namespace NzbDrone.Core.Test
             var parsResult = new EpisodeParseResult()
             {
                 AirDate = DateTime.Now,
-                Episodes = episodes.ToList(),
+                EpisodeNumbers = episodes.ToList(),
                 Proper = proper,
                 Quality = quality,
                 SeasonNumber = seasons,

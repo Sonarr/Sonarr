@@ -116,7 +116,7 @@ namespace NzbDrone.Core.Test
 
             //Currently can't verify this since the list of episodes are loaded
             //Dynamically by SubSonic
-            //Assert.AreEqual(fakeEpisode, result.Episodes[0]);
+            //Assert.AreEqual(fakeEpisode, result.EpisodeNumbers[0]);
 
             Assert.AreEqual(fakeEpisode.SeriesId, result.SeriesId);
             Assert.AreEqual(QualityTypes.HDTV, result.Quality);

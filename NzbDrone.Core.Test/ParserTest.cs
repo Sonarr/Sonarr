@@ -46,9 +46,9 @@ namespace NzbDrone.Core.Test
         {
             var result = Parser.ParseEpisodeInfo(postTitle);
             Assert.AreEqual(season, result.SeasonNumber);
-            Assert.AreEqual(episode, result.Episodes[0]);
+            Assert.AreEqual(episode, result.EpisodeNumbers[0]);
             Assert.AreEqual(Parser.NormalizeTitle(title), result.CleanTitle);
-            Assert.AreEqual(1, result.Episodes.Count);
+            Assert.AreEqual(1, result.EpisodeNumbers.Count);
         }
 
         [Test]
@@ -60,9 +60,9 @@ namespace NzbDrone.Core.Test
         public void file_path_parse(string path, int season, int episode)
         {
             var result = Parser.ParseEpisodeInfo(path);
-            Assert.Count(1, result.Episodes);
+            Assert.Count(1, result.EpisodeNumbers);
             Assert.AreEqual(season, result.SeasonNumber);
-            Assert.AreEqual(episode, result.Episodes[0]);
+            Assert.AreEqual(episode, result.EpisodeNumbers[0]);
         }
 
 
@@ -110,10 +110,10 @@ namespace NzbDrone.Core.Test
         {
             var result = Parser.ParseEpisodeInfo(postTitle);
             Assert.AreEqual(season, result.SeasonNumber);
-            Assert.Count(episodes.Length, result.Episodes);
-            Assert.AreElementsEqualIgnoringOrder(episodes, result.Episodes);
+            Assert.Count(episodes.Length, result.EpisodeNumbers);
+            Assert.AreElementsEqualIgnoringOrder(episodes, result.EpisodeNumbers);
             Assert.AreEqual(Parser.NormalizeTitle(title), result.CleanTitle);
-            Assert.AreEqual(count, result.Episodes.Count);
+            Assert.AreEqual(count, result.EpisodeNumbers.Count);
         }
 
         [Test]
@@ -129,7 +129,7 @@ namespace NzbDrone.Core.Test
             var airDate = new DateTime(year, month, day);
             Assert.AreEqual(Parser.NormalizeTitle(title), result.CleanTitle);
             Assert.AreEqual(airDate, result.AirDate);
-            Assert.IsNull(result.Episodes);
+            Assert.IsNull(result.EpisodeNumbers);
         }
 
 
@@ -142,7 +142,7 @@ namespace NzbDrone.Core.Test
             var result = Parser.ParseEpisodeInfo(postTitle);
             Assert.AreEqual(season, result.SeasonNumber);
             Assert.AreEqual(Parser.NormalizeTitle(title), result.CleanTitle);
-            Assert.AreEqual(0, result.Episodes.Count);
+            Assert.AreEqual(0, result.EpisodeNumbers.Count);
         }
 
         [Test]

@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Test
         [Test]
         public void Run_Jobs_Updates_Last_Execution()
         {
-            IEnumerable<IJob> fakeJobs = new List<IJob> { new FakeJob() };
+            IList<IJob> fakeJobs = new List<IJob> { new FakeJob() };
             var mocker = new AutoMoqer();
 
             mocker.SetConstant(MockLib.GetEmptyRepository());
@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Test
         public void Run_Jobs_Updates_Last_Execution_Mark_as_unsuccesful()
         {
 
-            IEnumerable<IJob> fakeJobs = new List<IJob> { new BrokenJob() };
+            IList<IJob> fakeJobs = new List<IJob> { new BrokenJob() };
             var mocker = new AutoMoqer();
 
             mocker.SetConstant(MockLib.GetEmptyRepository());
@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Test
         //after execution so the job can successfully run.
         public void can_run_job_again()
         {
-            IEnumerable<IJob> fakeJobs = new List<IJob> { new FakeJob() };
+            IList<IJob> fakeJobs = new List<IJob> { new FakeJob() };
             var mocker = new AutoMoqer();
 
             mocker.SetConstant(MockLib.GetEmptyRepository());
@@ -84,7 +84,7 @@ namespace NzbDrone.Core.Test
         //after execution so the job can successfully run.
         public void can_run_async_job_again()
         {
-            IEnumerable<IJob> fakeJobs = new List<IJob> { new FakeJob() };
+            IList<IJob> fakeJobs = new List<IJob> { new FakeJob() };
             var mocker = new AutoMoqer();
 
             mocker.SetConstant(MockLib.GetEmptyRepository());
@@ -106,7 +106,7 @@ namespace NzbDrone.Core.Test
         //after execution so the job can successfully run.
         public void no_concurent_jobs()
         {
-            IEnumerable<IJob> fakeJobs = new List<IJob> { new SlowJob() };
+            IList<IJob> fakeJobs = new List<IJob> { new SlowJob() };
             var mocker = new AutoMoqer();
 
             mocker.SetConstant(MockLib.GetEmptyRepository());
@@ -129,7 +129,7 @@ namespace NzbDrone.Core.Test
         //after execution so the job can successfully run.
         public void can_run_broken_async_job_again()
         {
-            IEnumerable<IJob> fakeJobs = new List<IJob> { new BrokenJob() };
+            IList<IJob> fakeJobs = new List<IJob> { new BrokenJob() };
             var mocker = new AutoMoqer();
 
             mocker.SetConstant(MockLib.GetEmptyRepository());
@@ -152,7 +152,7 @@ namespace NzbDrone.Core.Test
         //after execution so the job can successfully run.
         public void can_run_two_jobs_at_the_same_time()
         {
-            IEnumerable<IJob> fakeJobs = new List<IJob> { new SlowJob() };
+            IList<IJob> fakeJobs = new List<IJob> { new SlowJob() };
             var mocker = new AutoMoqer();
 
             mocker.SetConstant(MockLib.GetEmptyRepository());
@@ -186,7 +186,7 @@ namespace NzbDrone.Core.Test
         {
             var slowJob = new SlowJob();
 
-            IEnumerable<IJob> fakeJobs = new List<IJob> { slowJob };
+            IList<IJob> fakeJobs = new List<IJob> { slowJob };
             var mocker = new AutoMoqer();
 
             mocker.SetConstant(MockLib.GetEmptyRepository());
@@ -214,7 +214,7 @@ namespace NzbDrone.Core.Test
         public void Init_Jobs()
         {
             var fakeTimer = new FakeJob();
-            IEnumerable<IJob> fakeJobs = new List<IJob> { fakeTimer };
+            IList<IJob> fakeJobs = new List<IJob> { fakeTimer };
             var mocker = new AutoMoqer();
 
             mocker.SetConstant(MockLib.GetEmptyRepository());
@@ -245,7 +245,7 @@ namespace NzbDrone.Core.Test
             for (int i = 0; i < 2; i++)
             {
                 var fakeTimer = new FakeJob();
-                IEnumerable<IJob> fakeJobs = new List<IJob> { fakeTimer };
+                IList<IJob> fakeJobs = new List<IJob> { fakeTimer };
                 var mocker = new AutoMoqer();
 
                 mocker.SetConstant(repo);
@@ -276,7 +276,7 @@ namespace NzbDrone.Core.Test
             for (int i = 0; i < 2; i++)
             {
                 var disabledJob = new DisabledJob();
-                IEnumerable<IJob> fakeJobs = new List<IJob> { disabledJob };
+                IList<IJob> fakeJobs = new List<IJob> { disabledJob };
                 var mocker = new AutoMoqer();
 
                 mocker.SetConstant(repo);
@@ -302,7 +302,7 @@ namespace NzbDrone.Core.Test
         [Test]
         public void Get_Next_Execution_Time()
         {
-            IEnumerable<IJob> fakeJobs = new List<IJob> { new FakeJob() };
+            IList<IJob> fakeJobs = new List<IJob> { new FakeJob() };
             var mocker = new AutoMoqer();
 
             mocker.SetConstant(MockLib.GetEmptyRepository());
@@ -327,7 +327,7 @@ namespace NzbDrone.Core.Test
 
 
             var disabledJob = new DisabledJob();
-            IEnumerable<IJob> fakeJobs = new List<IJob> { disabledJob };
+            IList<IJob> fakeJobs = new List<IJob> { disabledJob };
             var mocker = new AutoMoqer();
 
             mocker.SetConstant(repo);
@@ -348,7 +348,7 @@ namespace NzbDrone.Core.Test
         [Test]
         public void SingleId_do_not_update_last_execution()
         {
-            IEnumerable<IJob> fakeJobs = new List<IJob> { new FakeJob() };
+            IList<IJob> fakeJobs = new List<IJob> { new FakeJob() };
             var mocker = new AutoMoqer();
 
             mocker.SetConstant(MockLib.GetEmptyRepository());
@@ -369,7 +369,7 @@ namespace NzbDrone.Core.Test
         [Test]
         public void SingleId_do_not_set_success()
         {
-            IEnumerable<IJob> fakeJobs = new List<IJob> { new FakeJob() };
+            IList<IJob> fakeJobs = new List<IJob> { new FakeJob() };
             var mocker = new AutoMoqer();
 
             mocker.SetConstant(MockLib.GetEmptyRepository());

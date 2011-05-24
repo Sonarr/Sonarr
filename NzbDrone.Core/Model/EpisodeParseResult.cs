@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Model
 
         internal int SeasonNumber { get; set; }
 
-        internal List<int> Episodes { get; set; }
+        internal List<int> EpisodeNumbers { get; set; }
 
         internal string EpisodeTitle { get; set; }
 
@@ -25,15 +25,21 @@ namespace NzbDrone.Core.Model
 
         public string NzbUrl { get; set; }
 
+        public string NzbTitle { get; set; }
+
         public Series Series { get; set; }
+
+        public IList<Episode> Episodes { get; set; }
+
+        public String Indexer { get; set; }
 
         public override string ToString()
         {
-            if (Episodes == null)
+            if (EpisodeNumbers == null)
                 return string.Format("{0} - {1}", CleanTitle, AirDate.Date);
 
             return string.Format("{0} - S{1:00}E{2}", CleanTitle, SeasonNumber,
-                                 String.Join("-", Episodes));
+                                 String.Join("-", EpisodeNumbers));
 
         }
     }

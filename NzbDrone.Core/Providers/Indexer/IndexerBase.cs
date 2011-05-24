@@ -77,6 +77,8 @@ namespace NzbDrone.Core.Providers.Indexer
                             if (parsedEpisode != null)
                             {
                                 parsedEpisode.NzbUrl = NzbDownloadUrl(item);
+                                parsedEpisode.Indexer = Name;
+                                parsedEpisode.NzbTitle = item.Title.Text;
                                 result.Add(parsedEpisode);
                             }
                         }

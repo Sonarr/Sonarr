@@ -68,7 +68,7 @@ namespace NzbDrone.Core
                             Proper = title.ToLower().Contains("proper"),
                             CleanTitle = seriesName,
                             SeasonNumber = season,
-                            Episodes = new List<int>()
+                            EpisodeNumbers = new List<int>()
                         };
 
                         foreach (Match matchGroup in match)
@@ -83,7 +83,7 @@ namespace NzbDrone.Core
 
                                 for (int i = first; i <= last; i++)
                                 {
-                                    parsedEpisode.Episodes.Add(i);
+                                    parsedEpisode.EpisodeNumbers.Add(i);
                                 }
                             }
                         }

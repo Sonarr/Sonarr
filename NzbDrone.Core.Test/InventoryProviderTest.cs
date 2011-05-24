@@ -23,36 +23,55 @@ namespace NzbDrone.Core.Test
     // ReSharper disable InconsistentNaming
     public class InventoryProviderTest : TestBase
     {
-        private EpisodeParseResult parseResult;
+        private EpisodeParseResult parseResultMulti;
         private Series series;
         private Episode episode;
+        private Episode episode2;
+        private EpisodeParseResult parseResultSingle;
 
         [SetUp]
         public new void Setup()
         {
-            parseResult = new EpisodeParseResult()
+            parseResultMulti = new EpisodeParseResult()
                                {
                                    CleanTitle = "Title",
                                    EpisodeTitle = "EpisodeTitle",
                                    Language = LanguageType.English,
                                    Proper = true,
                                    Quality = QualityTypes.Bluray720,
-                                   Episodes = new List<int> { 3 },
+                                   EpisodeNumbers = new List<int> { 3, 4 },
                                    SeasonNumber = 12,
                                    AirDate = DateTime.Now.AddDays(-12).Date
-
                                };
+
+            parseResultSingle = new EpisodeParseResult()
+            {
+                CleanTitle = "Title",
+                EpisodeTitle = "EpisodeTitle",
+                Language = LanguageType.English,
+                Proper = true,
+                Quality = QualityTypes.Bluray720,
+                EpisodeNumbers = new List<int> { 3 },
+                SeasonNumber = 12,
+                AirDate = DateTime.Now.AddDays(-12).Date
+            };
 
             series = Builder<Series>.CreateNew()
                 .With(c => c.Monitored = true)
-                .With(d => d.CleanTitle = parseResult.CleanTitle)
+                .With(d => d.CleanTitle = parseResultMulti.CleanTitle)
                 .Build();
 
             episode = Builder<Episode>.CreateNew()
-                .With(c => c.EpisodeNumber = parseResult.Episodes[0])
-                .With(c => c.SeasonNumber = parseResult.SeasonNumber)
-                .With(c => c.AirDate = parseResult.AirDate)
+                .With(c => c.EpisodeNumber = parseResultMulti.EpisodeNumbers[0])
+                .With(c => c.SeasonNumber = parseResultMulti.SeasonNumber)
+                .With(c => c.AirDate = parseResultMulti.AirDate)
                 .Build();
+
+            episode2 = Builder<Episode>.CreateNew()
+             .With(c => c.EpisodeNumber = parseResultMulti.EpisodeNumbers[1])
+             .With(c => c.SeasonNumber = parseResultMulti.SeasonNumber)
+             .With(c => c.AirDate = parseResultMulti.AirDate)
+             .Build();
 
             base.Setup();
 
@@ -71,7 +90,7 @@ namespace NzbDrone.Core.Test
                 .Returns(series);
 
             //Act
-            var result = mocker.Resolve<InventoryProvider>().IsNeeded(parseResult);
+            var result = mocker.Resolve<InventoryProvider>().IsNeeded(parseResultMulti);
 
             //Assert
             Assert.IsFalse(result);
@@ -90,7 +109,7 @@ namespace NzbDrone.Core.Test
                 .Returns<Series>(null);
 
             //Act
-            var result = mocker.Resolve<InventoryProvider>().IsNeeded(parseResult);
+            var result = mocker.Resolve<InventoryProvider>().IsNeeded(parseResultMulti);
 
             //Assert
             Assert.IsFalse(result);
@@ -107,12 +126,12 @@ namespace NzbDrone.Core.Test
                 .Returns(series);
 
             mocker.GetMock<SeriesProvider>()
-               .Setup(p => p.QualityWanted(series.SeriesId, parseResult.Quality))
+               .Setup(p => p.QualityWanted(series.SeriesId, parseResultMulti.Quality))
                .Returns(false);
 
 
             //Act
-            var result = mocker.Resolve<InventoryProvider>().IsNeeded(parseResult);
+            var result = mocker.Resolve<InventoryProvider>().IsNeeded(parseResultMulti);
 
             //Assert
             Assert.IsFalse(result);
@@ -131,15 +150,15 @@ namespace NzbDrone.Core.Test
                 .Returns(series);
 
             mocker.GetMock<SeriesProvider>()
-               .Setup(p => p.QualityWanted(series.SeriesId, parseResult.Quality))
+               .Setup(p => p.QualityWanted(series.SeriesId, parseResultMulti.Quality))
                .Returns(true);
 
             mocker.GetMock<SeasonProvider>()
-                .Setup(p => p.IsIgnored(series.SeriesId, parseResult.SeasonNumber))
+                .Setup(p => p.IsIgnored(series.SeriesId, parseResultMulti.SeasonNumber))
                 .Returns(true);
 
             //Act
-            var result = mocker.Resolve<InventoryProvider>().IsNeeded(parseResult);
+            var result = mocker.Resolve<InventoryProvider>().IsNeeded(parseResultMulti);
 
             //Assert
             Assert.IsFalse(result);
@@ -163,21 +182,29 @@ namespace NzbDrone.Core.Test
                 .Setup(p => p.GetEpisode(episode.SeriesId, episode.SeasonNumber, episode.EpisodeNumber))
                 .Returns(episode);
 
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(p => p.GetEpisode(episode2.SeriesId, episode2.SeasonNumber, episode2.EpisodeNumber))
+                .Returns(episode2);
+
 
             mocker.GetMock<SeriesProvider>()
-               .Setup(p => p.QualityWanted(series.SeriesId, parseResult.Quality))
+               .Setup(p => p.QualityWanted(series.SeriesId, parseResultMulti.Quality))
                .Returns(true);
 
             mocker.GetMock<SeasonProvider>()
-                .Setup(p => p.IsIgnored(series.SeriesId, parseResult.SeasonNumber))
+                .Setup(p => p.IsIgnored(series.SeriesId, parseResultMulti.SeasonNumber))
                 .Returns(false);
 
             mocker.GetMock<EpisodeProvider>()
-                .Setup(p => p.IsNeeded(parseResult, episode))
+                .Setup(p => p.IsNeeded(parseResultMulti, episode))
+                .Returns(false);
+
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(p => p.IsNeeded(parseResultMulti, episode2))
                 .Returns(false);
 
             //Act
-            var result = mocker.Resolve<InventoryProvider>().IsNeeded(parseResult);
+            var result = mocker.Resolve<InventoryProvider>().IsNeeded(parseResultMulti);
 
             //Assert
             Assert.IsFalse(result);
@@ -198,25 +225,24 @@ namespace NzbDrone.Core.Test
                 .Setup(p => p.GetEpisode(episode.SeriesId, episode.SeasonNumber, episode.EpisodeNumber))
                 .Returns(episode);
 
-
             mocker.GetMock<SeriesProvider>()
-               .Setup(p => p.QualityWanted(series.SeriesId, parseResult.Quality))
+               .Setup(p => p.QualityWanted(series.SeriesId, parseResultSingle.Quality))
                .Returns(true);
 
             mocker.GetMock<SeasonProvider>()
-                .Setup(p => p.IsIgnored(series.SeriesId, parseResult.SeasonNumber))
+                .Setup(p => p.IsIgnored(series.SeriesId, parseResultSingle.SeasonNumber))
                 .Returns(false);
 
             mocker.GetMock<EpisodeProvider>()
-                .Setup(p => p.IsNeeded(parseResult, episode))
+                .Setup(p => p.IsNeeded(parseResultSingle, episode))
                 .Returns(true);
 
             mocker.GetMock<HistoryProvider>()
-                .Setup(p => p.Exists(episode.EpisodeId, parseResult.Quality, parseResult.Proper))
+                .Setup(p => p.Exists(episode.EpisodeId, parseResultSingle.Quality, parseResultSingle.Proper))
                 .Returns(true);
 
             //Act
-            var result = mocker.Resolve<InventoryProvider>().IsNeeded(parseResult);
+            var result = mocker.Resolve<InventoryProvider>().IsNeeded(parseResultSingle);
 
             //Assert
             Assert.IsFalse(result);
@@ -242,19 +268,19 @@ namespace NzbDrone.Core.Test
 
 
             mocker.GetMock<SeriesProvider>()
-               .Setup(p => p.QualityWanted(series.SeriesId, parseResult.Quality))
+               .Setup(p => p.QualityWanted(series.SeriesId, parseResultSingle.Quality))
                .Returns(true);
 
             mocker.GetMock<SeasonProvider>()
-                .Setup(p => p.IsIgnored(series.SeriesId, parseResult.SeasonNumber))
+                .Setup(p => p.IsIgnored(series.SeriesId, parseResultSingle.SeasonNumber))
                 .Returns(false);
 
             mocker.GetMock<EpisodeProvider>()
-                .Setup(p => p.IsNeeded(parseResult, episode))
+                .Setup(p => p.IsNeeded(parseResultSingle, episode))
                 .Returns(false);
 
             //Act
-            var result = mocker.Resolve<InventoryProvider>().IsNeeded(parseResult);
+            var result = mocker.Resolve<InventoryProvider>().IsNeeded(parseResultSingle);
 
             //Assert
             Assert.IsFalse(result);
@@ -272,11 +298,11 @@ namespace NzbDrone.Core.Test
                 .Returns(series);
 
             mocker.GetMock<SeriesProvider>()
-               .Setup(p => p.QualityWanted(series.SeriesId, parseResult.Quality))
+               .Setup(p => p.QualityWanted(series.SeriesId, parseResultSingle.Quality))
                .Returns(true);
 
             mocker.GetMock<SeasonProvider>()
-                .Setup(p => p.IsIgnored(series.SeriesId, parseResult.SeasonNumber))
+                .Setup(p => p.IsIgnored(series.SeriesId, parseResultSingle.SeasonNumber))
                 .Returns(false);
 
             mocker.GetMock<EpisodeProvider>()
@@ -292,11 +318,11 @@ namespace NzbDrone.Core.Test
                .Returns(12);
 
             mocker.GetMock<EpisodeProvider>()
-                .Setup(p => p.IsNeeded(parseResult, It.IsAny<Episode>()))
+                .Setup(p => p.IsNeeded(parseResultSingle, It.IsAny<Episode>()))
                 .Returns(false);
 
             //Act
-            var result = mocker.Resolve<InventoryProvider>().IsNeeded(parseResult);
+            var result = mocker.Resolve<InventoryProvider>().IsNeeded(parseResultSingle);
 
             //Assert
             Assert.IsFalse(result);
@@ -305,7 +331,7 @@ namespace NzbDrone.Core.Test
 
 
         [Test]
-        public void file_needed_should_return_true()
+        public void first_file_needed_should_return_true()
         {
             var mocker = new AutoMoqer(MockBehavior.Strict);
 
@@ -317,30 +343,83 @@ namespace NzbDrone.Core.Test
                 .Setup(p => p.GetEpisode(episode.SeriesId, episode.SeasonNumber, episode.EpisodeNumber))
                 .Returns(episode);
 
+            mocker.GetMock<EpisodeProvider>()
+             .Setup(p => p.GetEpisode(episode2.SeriesId, episode2.SeasonNumber, episode2.EpisodeNumber))
+             .Returns(episode2);
 
             mocker.GetMock<SeriesProvider>()
-               .Setup(p => p.QualityWanted(series.SeriesId, parseResult.Quality))
+               .Setup(p => p.QualityWanted(series.SeriesId, parseResultMulti.Quality))
                .Returns(true);
 
             mocker.GetMock<SeasonProvider>()
-                .Setup(p => p.IsIgnored(series.SeriesId, parseResult.SeasonNumber))
+                .Setup(p => p.IsIgnored(series.SeriesId, parseResultMulti.SeasonNumber))
                 .Returns(false);
 
             mocker.GetMock<EpisodeProvider>()
-                .Setup(p => p.IsNeeded(parseResult, episode))
+                .Setup(p => p.IsNeeded(parseResultMulti, episode))
                 .Returns(true);
 
             mocker.GetMock<HistoryProvider>()
-                .Setup(p => p.Exists(episode.EpisodeId, parseResult.Quality, parseResult.Proper))
+                .Setup(p => p.Exists(episode.EpisodeId, parseResultMulti.Quality, parseResultMulti.Proper))
                 .Returns(false);
 
             //Act
-            var result = mocker.Resolve<InventoryProvider>().IsNeeded(parseResult);
+            var result = mocker.Resolve<InventoryProvider>().IsNeeded(parseResultMulti);
 
             //Assert
             Assert.IsTrue(result);
-            Assert.IsNotNull(parseResult.Series);
-            Assert.AreEqual(series, parseResult.Series);
+            Assert.Contains(parseResultMulti.Episodes, episode);
+            Assert.Contains(parseResultMulti.Episodes, episode2);
+            Assert.AreEqual(series, parseResultMulti.Series);
+            mocker.VerifyAllMocks();
+        }
+
+        [Test]
+        public void second_file_needed_should_return_true()
+        {
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+
+            mocker.GetMock<SeriesProvider>()
+                .Setup(p => p.FindSeries(It.IsAny<String>()))
+                .Returns(series);
+
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(p => p.GetEpisode(episode.SeriesId, episode.SeasonNumber, episode.EpisodeNumber))
+                .Returns(episode);
+
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(p => p.GetEpisode(episode2.SeriesId, episode2.SeasonNumber, episode2.EpisodeNumber))
+                .Returns(episode2);
+
+
+            mocker.GetMock<SeriesProvider>()
+               .Setup(p => p.QualityWanted(series.SeriesId, parseResultMulti.Quality))
+               .Returns(true);
+
+            mocker.GetMock<SeasonProvider>()
+                .Setup(p => p.IsIgnored(series.SeriesId, parseResultMulti.SeasonNumber))
+                .Returns(false);
+
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(p => p.IsNeeded(parseResultMulti, episode))
+                .Returns(false);
+
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(p => p.IsNeeded(parseResultMulti, episode2))
+                .Returns(true);
+
+            mocker.GetMock<HistoryProvider>()
+                .Setup(p => p.Exists(episode2.EpisodeId, parseResultMulti.Quality, parseResultMulti.Proper))
+                .Returns(false);
+
+            //Act
+            var result = mocker.Resolve<InventoryProvider>().IsNeeded(parseResultMulti);
+
+            //Assert
+            Assert.IsTrue(result);
+            Assert.Contains(parseResultMulti.Episodes, episode);
+            Assert.Contains(parseResultMulti.Episodes, episode2);
+            Assert.AreEqual(series, parseResultMulti.Series);
             mocker.VerifyAllMocks();
         }
     }

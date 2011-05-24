@@ -92,13 +92,13 @@ namespace NzbDrone.Core.Providers
                                  _configProvider.SabPassword);
         }
 
-        public String GetSabTitle(EpisodeParseResult parseResult)
+        public virtual String GetSabTitle(EpisodeParseResult parseResult)
         {
             //Show Name - 1x01-1x02 - Episode Name
             //Show Name - 1x01 - Episode Name
             var episodeString = new List<String>();
 
-            foreach (var episode in parseResult.Episodes)
+            foreach (var episode in parseResult.EpisodeNumbers)
             {
                 episodeString.Add(String.Format("{0}x{1}", parseResult.SeasonNumber, episode));
             }
