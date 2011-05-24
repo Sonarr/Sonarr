@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NLog;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Repository;
 
@@ -11,6 +12,7 @@ namespace NzbDrone.Core.Providers.Jobs
     {
         private readonly SeriesProvider _seriesProvider;
         private readonly MediaFileProvider _mediaFileProvider;
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public DiskScanJob(SeriesProvider seriesProvider, MediaFileProvider mediaFileProvider)
         {
@@ -46,9 +48,16 @@ namespace NzbDrone.Core.Providers.Jobs
 
             foreach (var series in seriesToScan.Where(c => c.Episodes.Count != 0))
             {
-                notification.CurrentMessage = string.Format("Scanning disk for '{0}'", series.Title);
-                _mediaFileProvider.Scan(series);
-                notification.CurrentMessage = string.Format("Media File Scan completed for '{0}'", series.Title);
+                try
+                {
+                    notification.CurrentMessage = string.Format("Scanning disk for '{0}'", series.Title);
+                    _mediaFileProvider.Scan(series);
+                    notification.CurrentMessage = string.Format("Media File Scan completed for '{0}'", series.Title);
+                }
+                catch (Exception e)
+                {
+                    Logger.ErrorException("An error has occured while scanning " + series.Title, e);
+                }
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿// ReSharper disable RedundantUsingDirective
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading;
@@ -93,6 +94,36 @@ namespace NzbDrone.Core.Test
 
 
             mocker.VerifyAllMocks();
+        }
+
+        [Test]
+        public void failed_scan_should_not_terminated_job()
+        {
+            var series = Builder<Series>.CreateListOfSize(2)
+                .WhereTheFirst(1).Has(s => s.SeriesId = 12)
+                .AndTheNext(1).Has(s => s.SeriesId = 15)
+                .WhereAll().Have(s => s.Episodes = Builder<Episode>.CreateListOfSize(10).Build())
+                .Build();
+
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+
+            mocker.GetMock<SeriesProvider>()
+                .Setup(p => p.GetAllSeries())
+                .Returns(series.AsQueryable());
+
+            mocker.GetMock<MediaFileProvider>()
+                .Setup(s => s.Scan(series[0]))
+                .Throws(new InvalidOperationException("Bad Job"));
+
+            mocker.GetMock<MediaFileProvider>()
+                .Setup(s => s.Scan(series[1]))
+                .Throws(new InvalidOperationException("Bad Job"));
+
+            mocker.Resolve<DiskScanJob>().Start(new ProgressNotification("Test"), 0);
+
+
+            mocker.VerifyAllMocks();
+            ExceptionVerification.ExcpectedErrors(2);
         }
 
         [Test]
