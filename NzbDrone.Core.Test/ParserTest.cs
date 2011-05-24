@@ -17,8 +17,8 @@ namespace NzbDrone.Core.Test
          */
 
 
- 
-        
+
+
 
         [Test]
         [Row("Sonny.With.a.Chance.S02E15", "Sonny.With.a.Chance", 2, 15)]
@@ -91,6 +91,9 @@ namespace NzbDrone.Core.Test
         [Row("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD.avi", QualityTypes.DVD)]
         [Row("Law & Order: Special Victims Unit - 11x11 - Quickie", QualityTypes.Unknown)]
         [Row("(<a href=\"http://www.newzbin.com/browse/post/6076286/nzb/\">NZB</a>)", QualityTypes.Unknown)]
+        [Row("S07E23 - [HDTV].mkv ", QualityTypes.HDTV)]
+        [Row("S07E23.mkv ", QualityTypes.HDTV)]
+        [Row("S07E23 .avi ", QualityTypes.SDTV)]
         public void quality_parse(string postTitle, object quality)
         {
             var result = Parser.ParseQuality(postTitle);
@@ -121,7 +124,7 @@ namespace NzbDrone.Core.Test
         [Row("The Tonight Show With Jay Leno 2011 04 15 1080i HDTV DD5 1 MPEG2 TrollHD", "The Tonight Show With Jay Leno", 2011, 04, 15)]
         [Row("The.Daily.Show.2010.10.11.Johnny.Knoxville.iTouch-MW", "The.Daily.Show", 2010, 10, 11)]
         [Row("The Daily Show - 2011-04-12 - Gov. Deval Patrick", "The.Daily.Show", 2011, 04, 12)]
-        [Row("2011.01.10 - Denis Leary - HD TV.mkv","", 2011, 1, 10)]
+        [Row("2011.01.10 - Denis Leary - HD TV.mkv", "", 2011, 1, 10)]
         [Row("2011.03.13 - Denis Leary - HD TV.mkv", "", 2011, 3, 13)]
         public void episode_daily_parse(string postTitle, string title, int year, int month, int day)
         {

@@ -205,7 +205,7 @@ namespace NzbDrone.Core
             Logger.Trace("Trying to parse quality for {0}", name);
 
             var result = QualityTypes.Unknown;
-            name = name.ToLowerInvariant();
+            name = name.ToLowerInvariant().Trim();
 
             if (name.Contains("dvd") || name.Contains("bdrip") || name.Contains("brrip"))
             {
@@ -268,7 +268,8 @@ namespace NzbDrone.Core
                     //path characters.
                 }
             }
-            if (name.Contains("hdtv"))
+
+            if (result == QualityTypes.Unknown && name.Contains("hdtv"))
             {
                 return QualityTypes.SDTV;
             }
