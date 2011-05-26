@@ -70,5 +70,13 @@ namespace NzbDrone.Core.Repository
         [SubSonicToManyRelation]
         public virtual IList<History> Histories { get; protected set; }
 
+        public override string ToString()
+        {
+            if (EpisodeNumber == 0)
+                return string.Format("{0} - {1}", Series.Title, AirDate.Date);
+
+            return string.Format("{0} - S{1:00}E{2}", Series.Title, SeasonNumber, EpisodeNumber);
+
+        }
     }
 }
