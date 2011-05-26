@@ -68,11 +68,13 @@ namespace NzbDrone.Core.Test
 
         [Test]
         [Row("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD", QualityTypes.DVD)]
+        [Row("WEEDS.S03E01-06.DUAL.BDRip.X-viD.AC3.-HELLYWOOD", QualityTypes.DVD)]
         [Row("WEEDS.S03E01-06.DUAL.BDRip.AC3.-HELLYWOOD", QualityTypes.DVD)]
         [Row("Two.and.a.Half.Men.S08E05.720p.HDTV.X264-DIMENSION", QualityTypes.HDTV)]
         [Row("this has no extention or periods HDTV", QualityTypes.SDTV)]
         [Row("Chuck.S04E05.HDTV.XviD-LOL", QualityTypes.SDTV)]
         [Row("The.Girls.Next.Door.S03E06.DVDRip.XviD-WiDE", QualityTypes.DVD)]
+        [Row("The.Girls.Next.Door.S03E06.DVD.Rip.XviD-WiDE", QualityTypes.DVD)]
         [Row("The.Girls.Next.Door.S03E06.HDTV-WiDE", QualityTypes.SDTV)]
         [Row("Degrassi.S10E27.WS.DSR.XviD-2HD", QualityTypes.SDTV)]
         [Row("Sonny.With.a.Chance.S02E15.720p.WEB-DL.DD5.1.H.264-SURFER", QualityTypes.WEBDL)]
@@ -84,20 +86,44 @@ namespace NzbDrone.Core.Test
         [Row("Sonny.With.a.Chance.S02E15", QualityTypes.Unknown)]
         [Row("Chuck - S01E04 - So Old - Playdate - 720p TV.mkv", QualityTypes.HDTV)]
         [Row("Chuck - S22E03 - MoneyBART - HD TV.mkv", QualityTypes.HDTV)]
-        [Row("Chuck - S01E03 - Come Fly With Me - 720p BluRay.mkv", QualityTypes.Bluray720)]
-        [Row("Chuck - S01E03 - Come Fly With Me - 1080p BluRay.mkv", QualityTypes.Bluray1080)]
+        [Row("Chuck - S01E03 - Come Fly With Me - 720p BluRay.mkv", QualityTypes.Bluray720p)]
+        [Row("Chuck - S01E03 - Come Fly With Me - 1080p BluRay.mkv", QualityTypes.Bluray1080p)]
         [Row("Chuck - S11E06 - D-Yikes! - 720p WEB-DL.mkv", QualityTypes.WEBDL)]
         [Row("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD.avi", QualityTypes.DVD)]
         [Row("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD.avi", QualityTypes.DVD)]
         [Row("Law & Order: Special Victims Unit - 11x11 - Quickie", QualityTypes.Unknown)]
         [Row("(<a href=\"http://www.newzbin.com/browse/post/6076286/nzb/\">NZB</a>)", QualityTypes.Unknown)]
         [Row("S07E23 - [HDTV].mkv ", QualityTypes.HDTV)]
+        [Row("S07E23 - [WEBDL].mkv ", QualityTypes.WEBDL)]
         [Row("S07E23.mkv ", QualityTypes.HDTV)]
         [Row("S07E23 .avi ", QualityTypes.SDTV)]
         public void quality_parse(string postTitle, object quality)
         {
             var result = Parser.ParseQuality(postTitle);
             Assert.AreEqual(quality, result);
+        }
+
+        [Test]
+        public void parsing_our_own_quality_enum()
+        {
+            var qualityEnums = Enum.GetValues(typeof(QualityTypes));
+            
+
+            foreach (var qualityEnum in qualityEnums)
+            {
+                if (qualityEnum.ToString() == QualityTypes.Unknown.ToString()) continue;
+
+                var extention = "mkv";
+
+                if (qualityEnum.ToString() ==QualityTypes.SDTV.ToString() || qualityEnum.ToString() ==QualityTypes.DVD.ToString())
+                {
+                    extention = "avi";
+                }
+
+                var fileName = String.Format("My series S01E01 [{0}].{1}", qualityEnum,extention);
+                var result = Parser.ParseQuality(fileName);
+                Assert.AreEqual(qualityEnum, result);
+            }
         }
 
         [Test]

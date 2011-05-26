@@ -34,11 +34,11 @@ namespace NzbDrone.Core.Repository.Quality
         /// <summary>
         ///   HD File (720p Blu-ray Source)
         /// </summary>
-        Bluray720 = 6,
+        Bluray720p = 6,
         
         /// <summary>
         ///   HD File (1080p Blu-ray Source)
         /// </summary>
-        Bluray1080 = 7,
+        Bluray1080p = 7,
     }
 }

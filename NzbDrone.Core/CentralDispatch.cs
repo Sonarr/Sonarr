@@ -191,7 +191,7 @@ namespace NzbDrone.Core
                          {
                              Name = "HD",
                              Allowed =
-                                 new List<QualityTypes> { QualityTypes.HDTV, QualityTypes.WEBDL, QualityTypes.Bluray720 },
+                                 new List<QualityTypes> { QualityTypes.HDTV, QualityTypes.WEBDL, QualityTypes.Bluray720p },
                              Cutoff = QualityTypes.HDTV
                          };
 

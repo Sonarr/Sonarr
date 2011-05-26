@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Test
                                    EpisodeTitle = "EpisodeTitle",
                                    Language = LanguageType.English,
                                    Proper = true,
-                                   Quality = QualityTypes.Bluray720,
+                                   Quality = QualityTypes.Bluray720p,
                                    EpisodeNumbers = new List<int> { 3, 4 },
                                    SeasonNumber = 12,
                                    AirDate = DateTime.Now.AddDays(-12).Date
@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Test
                 EpisodeTitle = "EpisodeTitle",
                 Language = LanguageType.English,
                 Proper = true,
-                Quality = QualityTypes.Bluray720,
+                Quality = QualityTypes.Bluray720p,
                 EpisodeNumbers = new List<int> { 3 },
                 SeasonNumber = 12,
                 AirDate = DateTime.Now.AddDays(-12).Date

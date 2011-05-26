@@ -204,17 +204,18 @@ namespace NzbDrone.Core
         {
             Logger.Trace("Trying to parse quality for {0}", name);
 
+            name = name.Trim();
+            var normilizedName = NormalizeTitle(name);
             var result = QualityTypes.Unknown;
-            name = name.ToLowerInvariant().Trim();
 
-            if (name.Contains("dvd") || name.Contains("bdrip") || name.Contains("brrip"))
+            if (normilizedName.Contains("dvd") || normilizedName.Contains("bdrip") || normilizedName.Contains("brrip"))
             {
                 return QualityTypes.DVD;
             }
 
-            if (name.Contains("xvid") || name.Contains("divx"))
+            if (normilizedName.Contains("xvid") || normilizedName.Contains("divx"))
             {
-                if (name.Contains("bluray"))
+                if (normilizedName.Contains("bluray"))
                 {
                     return QualityTypes.DVD;
                 }
@@ -222,19 +223,19 @@ namespace NzbDrone.Core
                 return QualityTypes.SDTV;
             }
 
-            if (name.Contains("bluray"))
+            if (normilizedName.Contains("bluray"))
             {
-                if (name.Contains("720p"))
-                    return QualityTypes.Bluray720;
+                if (normilizedName.Contains("720p"))
+                    return QualityTypes.Bluray720p;
 
-                if (name.Contains("1080p"))
-                    return QualityTypes.Bluray1080;
+                if (normilizedName.Contains("1080p"))
+                    return QualityTypes.Bluray1080p;
 
-                return QualityTypes.Bluray720;
+                return QualityTypes.Bluray720p;
             }
-            if (name.Contains("web-dl"))
+            if (normilizedName.Contains("webdl"))
                 return QualityTypes.WEBDL;
-            if (name.Contains("x264") || name.Contains("h264") || name.Contains("720p"))
+            if (normilizedName.Contains("x264") || normilizedName.Contains("h264") || normilizedName.Contains("720p"))
                 return QualityTypes.HDTV;
 
             //Based on extension
@@ -269,7 +270,7 @@ namespace NzbDrone.Core
                 }
             }
 
-            if (result == QualityTypes.Unknown && name.Contains("hdtv"))
+            if (normilizedName.Contains("sdtv") || (result == QualityTypes.Unknown && normilizedName.Contains("hdtv")))
             {
                 return QualityTypes.SDTV;
             }
