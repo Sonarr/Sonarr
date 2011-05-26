@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.ServiceModel.Syndication;
 using NzbDrone.Core.Model;
@@ -10,7 +11,7 @@ namespace NzbDrone.Core.Providers.Indexer
 {
     public class NzbsOrg : IndexerBase
     {
-        public NzbsOrg(HttpProvider httpProvider, ConfigProvider configProvider, IndexerProvider indexerProvider) : base(httpProvider, configProvider, indexerProvider)
+        public NzbsOrg(HttpProvider httpProvider, ConfigProvider configProvider) : base(httpProvider, configProvider)
         {
         }
 
@@ -34,6 +35,18 @@ namespace NzbDrone.Core.Providers.Indexer
         protected override string NzbDownloadUrl(SyndicationItem item)
         {
             return item.Id;
+        }
+
+        protected override IList<string> GetSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber)
+        {
+            var searchUrls = new List<String>();
+
+            foreach (var url in Urls)
+            {
+                searchUrls.Add(String.Format("{0}&action=search&q={1}+s{2}e{3:00}", url, seriesTitle, seasonNumber, episodeNumber));
+            }
+
+            return searchUrls;
         }
 
  }

@@ -13,15 +13,17 @@ namespace NzbDrone.Core.Providers.Jobs
         private readonly IEnumerable<IndexerBase> _indexers;
         private readonly InventoryProvider _inventoryProvider;
         private readonly DownloadProvider _downloadProvider;
+        private readonly IndexerProvider _indexerProvider;
 
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public RssSyncJob(IEnumerable<IndexerBase> indexers, InventoryProvider inventoryProvider, DownloadProvider downloadProvider)
+        public RssSyncJob(IEnumerable<IndexerBase> indexers, InventoryProvider inventoryProvider, DownloadProvider downloadProvider, IndexerProvider indexerProvider)
         {
             _indexers = indexers;
             _inventoryProvider = inventoryProvider;
             _downloadProvider = downloadProvider;
+            _indexerProvider = indexerProvider;
         }
 
         public string Name
@@ -38,12 +40,12 @@ namespace NzbDrone.Core.Providers.Jobs
         {
             var reports = new List<EpisodeParseResult>();
 
-            foreach (var indexer in _indexers.Where(i => i.Settings.Enable))
+            foreach (var indexer in _indexers.Where(i => _indexerProvider.GetSettings(i.GetType()).Enable))
             {
                 try
                 {
                     notification.CurrentMessage = "Fetching RSS from " + indexer.Name;
-                    reports.AddRange(indexer.Fetch());
+                    reports.AddRange(indexer.FetchRss());
                 }
                 catch (Exception e)
                 {

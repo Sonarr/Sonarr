@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
-using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.Indexer;
 using NzbDrone.Core.Repository;
 using SubSonic.Repository;

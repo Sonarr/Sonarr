@@ -171,7 +171,7 @@
     <Compile Include="Providers\DownloadProvider.cs" />
     <Compile Include="Providers\ExternalNotification\ExternalNotificationProviderBase.cs" />
     <Compile Include="Providers\ExternalNotification\XbmcNotificationProvider.cs" />
-    <Compile Include="Providers\Indexer\InventoryProvider.cs" />
+    <Compile Include="Providers\InventoryProvider.cs" />
     <Compile Include="Providers\Indexer\SyndicationFeedXmlReader.cs" />
     <Compile Include="Providers\AutoConfigureProvider.cs" />
     <Compile Include="Providers\Indexer\NzbMatrix.cs" />

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository;
 
-namespace NzbDrone.Core.Providers.Indexer
+namespace NzbDrone.Core.Providers
 {
     public class InventoryProvider
     {

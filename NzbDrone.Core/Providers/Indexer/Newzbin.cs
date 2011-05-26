@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.ServiceModel.Syndication;
 using NzbDrone.Core.Model;
@@ -9,8 +10,7 @@ namespace NzbDrone.Core.Providers.Indexer
 {
     public class Newzbin : IndexerBase
     {
-        public Newzbin(HttpProvider httpProvider, ConfigProvider configProvider, IndexerProvider indexerProvider)
-            : base(httpProvider, configProvider, indexerProvider)
+        public Newzbin(HttpProvider httpProvider, ConfigProvider configProvider) : base(httpProvider, configProvider)
         {
         }
 
@@ -25,9 +25,17 @@ namespace NzbDrone.Core.Providers.Indexer
             }
         }
 
+
+
+
         protected override NetworkCredential Credentials
         {
             get { return new NetworkCredential(_configProvider.NewzbinUsername, _configProvider.NewzbinPassword); }
+        }
+
+        protected override IList<string> GetSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber)
+        {
+            return new List<string>();
         }
 
         public override string Name

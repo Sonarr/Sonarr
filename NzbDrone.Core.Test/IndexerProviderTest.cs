@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Test
                 .Returns(fakeSettings);
 
             var mockIndexer = mocker.Resolve<MockIndexer>();
-            var parseResults = mockIndexer.Fetch();
+            var parseResults = mockIndexer.FetchRss();
 
             foreach (var episodeParseResult in parseResults)
             {
@@ -77,7 +77,7 @@ namespace NzbDrone.Core.Test
                 .Returns(fakeSettings);
 
             var newzbinProvider = mocker.Resolve<Newzbin>();
-            var parseResults = newzbinProvider.Fetch();
+            var parseResults = newzbinProvider.FetchRss();
 
             foreach (var episodeParseResult in parseResults)
             {
@@ -163,7 +163,7 @@ namespace NzbDrone.Core.Test
                 .Setup(c => c.GetSettings(It.IsAny<Type>()))
                 .Returns(fakeSettings);
 
-            mocker.Resolve<TestUrlIndexer>().Fetch();
+            mocker.Resolve<TestUrlIndexer>().FetchRss();
 
             ExceptionVerification.IgnoreWarns();
         }
@@ -195,18 +195,50 @@ namespace NzbDrone.Core.Test
             var indexer = mocker.Resolve<MockIndexer>();
             //indexer.ProcessItem(new SyndicationItem { Title = new TextSyndicationContent("Adventure.Inc.S01E18.DVDRip.XviD-OSiTV") });
         }
+
+
+        [Test]
+        public void nzbsorg_search_returns_valid_results()
+        {
+            var mocker = new AutoMoqer();
+
+            mocker.GetMock<ConfigProvider>()
+                .SetupGet(c => c.NzbsOrgUId)
+                .Returns("43516");
+
+            mocker.GetMock<ConfigProvider>()
+                .SetupGet(c => c.NzbsOrgHash)
+                .Returns("bc8edb4cc49d4ae440775adec5ac001f");
+
+
+            mocker.Resolve<HttpProvider>();
+
+            var result = mocker.Resolve<NzbsOrg>().FetchEpisode("Simpsons", 21, 23);
+
+            Assert.IsNotEmpty(result);
+            Assert.ForAll(result, r => r.CleanTitle == "simpsons");
+            Assert.ForAll(result, r => r.SeasonNumber == 21);
+            Assert.ForAll(result, r => r.EpisodeNumbers.Contains(23));
+            
+
+        }
     }
 
     public class MockIndexer : IndexerBase
     {
-        public MockIndexer(HttpProvider httpProvider, ConfigProvider configProvider, IndexerProvider indexerProvider)
-            : base(httpProvider, configProvider, indexerProvider)
+        public MockIndexer(HttpProvider httpProvider, ConfigProvider configProvider)
+            : base(httpProvider, configProvider)
         {
         }
 
         protected override string[] Urls
         {
             get { return new[] { "www.google.com" }; }
+        }
+
+        protected override IList<string> GetSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber)
+        {
+            throw new NotImplementedException();
         }
 
         protected override NetworkCredential Credentials
@@ -228,8 +260,8 @@ namespace NzbDrone.Core.Test
 
     public class TestUrlIndexer : IndexerBase
     {
-        public TestUrlIndexer(HttpProvider httpProvider, ConfigProvider configProvider, IndexerProvider indexerProvider)
-            : base(httpProvider, configProvider, indexerProvider)
+        public TestUrlIndexer(HttpProvider httpProvider, ConfigProvider configProvider)
+            : base(httpProvider, configProvider)
         {
         }
 
@@ -243,6 +275,11 @@ namespace NzbDrone.Core.Test
             get { return new[] { "http://rss.nzbmatrix.com/rss.php?cat=TV" }; }
         }
 
+        protected override IList<string> GetSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber)
+        {
+            throw new NotImplementedException();
+        }
+
         protected override string NzbDownloadUrl(SyndicationItem item)
         {
             return "http://google.com";
@@ -251,8 +288,8 @@ namespace NzbDrone.Core.Test
 
     public class CustomParserIndexer : IndexerBase
     {
-        public CustomParserIndexer(HttpProvider httpProvider, ConfigProvider configProvider, IndexerProvider indexerProvider)
-            : base(httpProvider, configProvider, indexerProvider)
+        public CustomParserIndexer(HttpProvider httpProvider, ConfigProvider configProvider)
+            : base(httpProvider, configProvider)
         {
         }
 
@@ -266,6 +303,11 @@ namespace NzbDrone.Core.Test
         protected override string[] Urls
         {
             get { return new[] { "http://www.google.com" }; }
+        }
+
+        protected override IList<string> GetSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber)
+        {
+            throw new NotImplementedException();
         }
 
         protected override string NzbDownloadUrl(SyndicationItem item)

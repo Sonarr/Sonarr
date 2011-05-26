@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Providers.Indexer
 {
     public class NzbMatrix : IndexerBase
     {
-        public NzbMatrix(HttpProvider httpProvider, ConfigProvider configProvider, IndexerProvider indexerProvider) : base(httpProvider, configProvider, indexerProvider)
+        public NzbMatrix(HttpProvider httpProvider, ConfigProvider configProvider) : base(httpProvider, configProvider)
         {
         }
 
@@ -38,6 +38,11 @@ namespace NzbDrone.Core.Providers.Indexer
         protected override string NzbDownloadUrl(SyndicationItem item)
         {
             return item.Links[0].Uri.ToString();
+        }
+
+        protected override IList<string> GetSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber)
+        {
+            return new List<string>();
         }
 
     }
