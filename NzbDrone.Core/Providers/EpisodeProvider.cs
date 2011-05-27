@@ -65,9 +65,9 @@ namespace NzbDrone.Core.Providers
         public virtual IList<Episode> EpisodesWithoutFiles(bool includeSpecials)
         {
             if (includeSpecials)
-                return _repository.All<Episode>().Where(e => e.EpisodeFileId == 0 && e.AirDate <= DateTime.Today).ToList();
+                return _repository.All<Episode>().Where(e => e.EpisodeFileId == 0 && e.AirDate <= DateTime.Today && e.Series.Monitored && e.Season.Monitored).ToList();
 
-            return _repository.All<Episode>().Where(e => e.EpisodeFileId == 0 && e.AirDate <= DateTime.Today && e.SeasonNumber > 0).ToList();
+            return _repository.All<Episode>().Where(e => e.EpisodeFileId == 0 && e.AirDate <= DateTime.Today && e.SeasonNumber > 0 && e.Series.Monitored && e.Season.Monitored).ToList();
         }
 
         /// <summary>
