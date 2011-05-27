@@ -64,7 +64,7 @@ namespace NzbDrone.Core.Providers.Jobs
 
         public void ProcessResults(ProgressNotification notification, Episode episode, IEnumerable<EpisodeParseResult> reports)
         {
-            foreach (var episodeParseResult in reports.OrderBy(c => c.Quality).ThenBy(c => c.Proper))
+            foreach (var episodeParseResult in reports.OrderByDescending(c => c.Quality).ThenByDescending(c => c.Proper))
             {
                 try
                 {

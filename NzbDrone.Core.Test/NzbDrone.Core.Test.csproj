@@ -86,6 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DownloadProviderTest.cs" />
+    <Compile Include="EpisodeSearchJobTest.cs" />
     <Compile Include="EpisodeStatusTest.cs" />
     <Compile Include="ImportNewSeriesJobTest.cs" />
     <Compile Include="DiskScanJobTest.cs" />

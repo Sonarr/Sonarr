@@ -12,20 +12,23 @@ namespace NzbDrone.Core.Providers
         private readonly SeasonProvider _seasonProvider;
         private readonly EpisodeProvider _episodeProvider;
         private readonly HistoryProvider _historyProvider;
-        private readonly SabProvider _sabProvider;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public InventoryProvider(SeriesProvider seriesProvider, SeasonProvider seasonProvider, EpisodeProvider episodeProvider, HistoryProvider historyProvider, SabProvider sabProvider)
+        public InventoryProvider(SeriesProvider seriesProvider, SeasonProvider seasonProvider, EpisodeProvider episodeProvider, HistoryProvider historyProvider)
         {
             _seriesProvider = seriesProvider;
             _seasonProvider = seasonProvider;
             _episodeProvider = episodeProvider;
             _historyProvider = historyProvider;
-            _sabProvider = sabProvider;
         }
 
-        internal bool IsNeeded(EpisodeParseResult parseResult)
+        public InventoryProvider()
+        {
+            
+        }
+
+        public virtual bool IsNeeded(EpisodeParseResult parseResult)
         {
             var series = _seriesProvider.FindSeries(parseResult.CleanTitle);
 
