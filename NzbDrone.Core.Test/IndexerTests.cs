@@ -187,8 +187,31 @@ namespace NzbDrone.Core.Test
             Assert.ForAll(result, r => r.CleanTitle == "simpsons");
             Assert.ForAll(result, r => r.SeasonNumber == 21);
             Assert.ForAll(result, r => r.EpisodeNumbers.Contains(23));
+        }
 
 
+        [Test]
+        public void nzbsorg_multi_word_search_returns_valid_results()
+        {
+            var mocker = new AutoMoqer();
+
+            mocker.GetMock<ConfigProvider>()
+                .SetupGet(c => c.NzbsOrgUId)
+                .Returns("43516");
+
+            mocker.GetMock<ConfigProvider>()
+                .SetupGet(c => c.NzbsOrgHash)
+                .Returns("bc8edb4cc49d4ae440775adec5ac001f");
+
+
+            mocker.Resolve<HttpProvider>();
+
+            var result = mocker.Resolve<NzbsOrg>().FetchEpisode("Blue Bloods", 1, 19);
+
+            Assert.IsNotEmpty(result);
+            Assert.ForAll(result, r => r.CleanTitle == "bluebloods");
+            Assert.ForAll(result, r => r.SeasonNumber == 1);
+            Assert.ForAll(result, r => r.EpisodeNumbers.Contains(19));
         }
     }
 }

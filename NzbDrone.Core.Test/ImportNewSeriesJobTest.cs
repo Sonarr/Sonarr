@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Test
 
             mocker.GetMock<SeriesProvider>()
                 .Setup(p => p.GetAllSeries())
-                .Returns(series.AsQueryable());
+                .Returns(series);
 
 
             mocker.GetMock<DiskScanJob>()
@@ -95,7 +95,7 @@ namespace NzbDrone.Core.Test
 
             mocker.GetMock<SeriesProvider>()
                 .Setup(p => p.GetAllSeries())
-                .Returns(series.AsQueryable());
+                .Returns(series);
 
             mocker.GetMock<UpdateInfoJob>()
                 .Setup(j => j.Start(notification, series[0].SeriesId))

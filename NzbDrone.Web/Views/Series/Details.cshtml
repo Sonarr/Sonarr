@@ -78,6 +78,8 @@
                                    columns.Bound(c => c.AirDate).Format("{0:d}").Width(0);
                                    columns.Bound(c => c.Quality).Width(0);
                                    columns.Bound(c => c.Status).Width(0);
+                                   columns.Bound(o => o.EpisodeId).Title("")
+                                       .ClientTemplate("<a href='#Search' onClick=\"return searchForEpisode('<#= EpisodeId #>')\" >Search</a>");
                                })
                   .DetailView(detailView => detailView.ClientTemplate("<div><#= Overview #> </br><#= Path #> </div>"))
                   .ClientEvents(clientEvents =>
@@ -149,6 +151,19 @@
     <script type="text/javascript">
         function episodeDetailExpanded(e) {
             $console.log("OnDetailViewExpand :: " + e.masterRow.cells[1].innerHTML);
+        }
+
+        var searchUrl = '@Url.Action("Search", "Episode")';
+
+        function searchForEpisode(id) {
+            $.ajax({
+                type: "POST",
+                url: searchUrl,
+                data: jQuery.param({ episodeId: id }),
+                error: function (req, status, error) {
+                    alert("Sorry! We could search for " + id + " at this time. " + error);
+                }
+            });
         }
     </script>
 }
