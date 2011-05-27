@@ -23,6 +23,11 @@ namespace NzbDrone.Core.Providers.Indexer
             _logger = LogManager.GetLogger(GetType().ToString());
         }
 
+        public IndexerBase()
+        {
+            
+        }
+
         /// <summary>
         ///   Gets the name for the feed
         /// </summary>
@@ -73,7 +78,7 @@ namespace NzbDrone.Core.Providers.Indexer
         /// <summary>
         ///   Fetches RSS feed and process each news item.
         /// </summary>
-        public IList<EpisodeParseResult> FetchRss()
+        public virtual IList<EpisodeParseResult> FetchRss()
         {
             _logger.Debug("Fetching feeds from " + Name);
 
@@ -89,7 +94,7 @@ namespace NzbDrone.Core.Providers.Indexer
         }
 
 
-        public IList<EpisodeParseResult> FetchEpisode(string seriesTitle, int seasonNumber, int episodeNumber)
+        public virtual IList<EpisodeParseResult> FetchEpisode(string seriesTitle, int seasonNumber, int episodeNumber)
         {
             _logger.Debug("Searching {0} for {1}-S{2}E{3:00}", Name, seriesTitle, seasonNumber, episodeNumber);
 

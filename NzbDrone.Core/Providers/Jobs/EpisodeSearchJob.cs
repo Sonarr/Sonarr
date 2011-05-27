@@ -39,16 +39,37 @@ namespace NzbDrone.Core.Providers.Jobs
 
         public void Start(ProgressNotification notification, int targetId)
         {
-            var reports = new List<EpisodeParseResult>();
+            if (targetId <= 0)
+                throw new ArgumentOutOfRangeException("targetId");
+
             var episode = _episodeProvider.GetEpisode(targetId);
+            if (episode == null)
+            {
+                Logger.Error("Unbale to find an episode {0} in database", targetId);
+                return;
+            }
+
             var indexers = _indexerProvider.GetEnabledIndexers();
+            var reports = new List<EpisodeParseResult>();
 
             foreach (var indexer in indexers)
             {
                 try
                 {
                     notification.CurrentMessage = String.Format("Searching for {0} in {1}", episode, indexer.Name);
-                    reports.AddRange(indexer.FetchRss());
+
+                    IList<EpisodeParseResult> indexerResults = new List<EpisodeParseResult>();
+
+                    if (episode.IsDailyEpisode)
+                    {
+                        //TODO:Add support for daily episodes
+                    }
+                    else
+                    {
+                        indexerResults = indexer.FetchEpisode(episode.Series.Title, episode.SeasonNumber, episode.EpisodeNumber);
+                    }
+
+                    reports.AddRange(indexerResults);
                 }
                 catch (Exception e)
                 {
@@ -80,7 +101,7 @@ namespace NzbDrone.Core.Providers.Jobs
                     Logger.ErrorException("An error has occurred while processing parse result items from " + episodeParseResult, e);
                 }
             }
-            
+
             Logger.Warn("Unable to find {0} in any of indexers.", episode);
         }
     }

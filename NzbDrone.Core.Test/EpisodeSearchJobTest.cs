@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
 using AutoMoq;
 using FizzWare.NBuilder;
-using Gallio.Framework;
 using MbUnit.Framework;
-using MbUnit.Framework.ContractVerifiers;
 using Moq;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Providers.Indexer;
 using NzbDrone.Core.Providers.Jobs;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
@@ -33,17 +31,20 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer(MockBehavior.Strict);
 
             mocker.GetMock<InventoryProvider>()
-                .Setup(c => c.IsNeeded(It.IsAny<EpisodeParseResult>())).Returns(true)
-                .AtMostOnce();
+                .Setup(c => c.IsNeeded(It.IsAny<EpisodeParseResult>())).Returns(true);
+
 
             mocker.GetMock<DownloadProvider>()
-                .Setup(c => c.DownloadReport(It.IsAny<EpisodeParseResult>())).Returns(true)
-            .AtMostOnce();
+                .Setup(c => c.DownloadReport(It.IsAny<EpisodeParseResult>())).Returns(true);
+                
 
+            //Act
             mocker.Resolve<EpisodeSearchJob>().ProcessResults(new ProgressNotification("Test"), episode, parseResults);
 
-
+            //Assert
             mocker.VerifyAllMocks();
+            mocker.GetMock<InventoryProvider>().Verify(c => c.IsNeeded(It.IsAny<EpisodeParseResult>()), Times.Once());
+            mocker.GetMock<DownloadProvider>().Verify(c => c.DownloadReport(It.IsAny<EpisodeParseResult>()), Times.Once());
         }
 
 
@@ -60,17 +61,18 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer(MockBehavior.Strict);
 
             mocker.GetMock<InventoryProvider>()
-                .Setup(c => c.IsNeeded(parseResults[0])).Returns(true)
-                .AtMostOnce();
+                .Setup(c => c.IsNeeded(parseResults[0])).Returns(true);
 
             mocker.GetMock<DownloadProvider>()
-                .Setup(c => c.DownloadReport(parseResults[0])).Returns(true)
-            .AtMostOnce();
+                .Setup(c => c.DownloadReport(parseResults[0])).Returns(true);
 
+            //Act
             mocker.Resolve<EpisodeSearchJob>().ProcessResults(new ProgressNotification("Test"), episode, parseResults);
 
-
+            //Assert
             mocker.VerifyAllMocks();
+            mocker.GetMock<InventoryProvider>().Verify(c => c.IsNeeded(parseResults[0]), Times.Once());
+            mocker.GetMock<DownloadProvider>().Verify(c => c.DownloadReport(parseResults[0]), Times.Once());
         }
 
 
@@ -90,17 +92,19 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer(MockBehavior.Strict);
 
             mocker.GetMock<InventoryProvider>()
-                .Setup(c => c.IsNeeded(It.Is<EpisodeParseResult>(p => p.Proper))).Returns(true)
-                .AtMostOnce();
+                .Setup(c => c.IsNeeded(It.Is<EpisodeParseResult>(p => p.Proper))).Returns(true);
 
             mocker.GetMock<DownloadProvider>()
-                .Setup(c => c.DownloadReport(It.Is<EpisodeParseResult>(p => p.Proper))).Returns(true)
-            .AtMostOnce();
+                .Setup(c => c.DownloadReport(It.Is<EpisodeParseResult>(p => p.Proper))).Returns(true);
 
+
+            //Act
             mocker.Resolve<EpisodeSearchJob>().ProcessResults(new ProgressNotification("Test"), episode, parseResults);
 
-
+            //Assert
             mocker.VerifyAllMocks();
+            mocker.GetMock<InventoryProvider>().Verify(c => c.IsNeeded(It.Is<EpisodeParseResult>(p => p.Proper)), Times.Once());
+            mocker.GetMock<DownloadProvider>().Verify(c => c.DownloadReport(It.Is<EpisodeParseResult>(p => p.Proper)), Times.Once());
         }
 
 
@@ -117,18 +121,18 @@ namespace NzbDrone.Core.Test
             mocker.GetMock<InventoryProvider>()
                 .Setup(c => c.IsNeeded(It.IsAny<EpisodeParseResult>())).Returns(false);
 
+            //Act
             mocker.Resolve<EpisodeSearchJob>().ProcessResults(new ProgressNotification("Test"), episode, parseResults);
 
-
+            //Assert
             mocker.VerifyAllMocks();
             mocker.GetMock<InventoryProvider>().Verify(c => c.IsNeeded(It.IsAny<EpisodeParseResult>()), Times.Exactly(4));
-
             ExceptionVerification.ExcpectedWarns(1);
         }
 
 
         [Test]
-        public void failed_is_neede_should_check_the_rest()
+        public void failed_IsNeeded_should_check_the_rest()
         {
             var parseResults = Builder<EpisodeParseResult>.CreateListOfSize(4)
                 .Build();
@@ -140,14 +144,152 @@ namespace NzbDrone.Core.Test
             mocker.GetMock<InventoryProvider>()
                 .Setup(c => c.IsNeeded(It.IsAny<EpisodeParseResult>())).Throws(new Exception());
 
+            //Act
             mocker.Resolve<EpisodeSearchJob>().ProcessResults(new ProgressNotification("Test"), episode, parseResults);
 
-
+            //Assert
             mocker.VerifyAllMocks();
             mocker.GetMock<InventoryProvider>().Verify(c => c.IsNeeded(It.IsAny<EpisodeParseResult>()), Times.Exactly(4));
-
             ExceptionVerification.ExcpectedErrors(4);
             ExceptionVerification.ExcpectedWarns(1);
         }
+
+
+        [Test]
+        [Row(0)]
+        [Row(-1)]
+        [Row(-100)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void target_id_less_than_0_throws_exception(int target)
+        {
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+            mocker.Resolve<EpisodeSearchJob>().Start(new ProgressNotification("Test"), target);
+        }
+
+
+
+        [Test]
+        public void should_search_all_providers()
+        {
+            var parseResults = Builder<EpisodeParseResult>.CreateListOfSize(4)
+                .Build();
+
+            var episode = Builder<Episode>.CreateNew()
+                .With(c => c.Series = Builder<Series>.CreateNew().Build())
+                .With(c => c.SeasonNumber = 12)
+                .Build();
+
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(c => c.GetEpisode(episode.EpisodeId))
+                .Returns(episode);
+
+            var indexer1 = new Mock<IndexerBase>();
+            indexer1.Setup(c => c.FetchEpisode(episode.Series.Title, episode.SeasonNumber, episode.EpisodeNumber))
+                .Returns(parseResults).Verifiable();
+
+
+            var indexer2 = new Mock<IndexerBase>();
+            indexer2.Setup(c => c.FetchEpisode(episode.Series.Title, episode.SeasonNumber, episode.EpisodeNumber))
+                .Returns(parseResults).Verifiable();
+
+            var indexers = new List<IndexerBase> { indexer1.Object, indexer2.Object };
+
+            mocker.GetMock<IndexerProvider>()
+                .Setup(c => c.GetEnabledIndexers())
+                .Returns(indexers);
+
+            mocker.GetMock<InventoryProvider>()
+                .Setup(c => c.IsNeeded(It.IsAny<EpisodeParseResult>())).Returns(false);
+
+            //Act
+            mocker.Resolve<EpisodeSearchJob>().Start(new ProgressNotification("Test"), episode.EpisodeId);
+
+
+            //Assert
+            mocker.VerifyAllMocks();
+            mocker.GetMock<InventoryProvider>().Verify(c => c.IsNeeded(It.IsAny<EpisodeParseResult>()), Times.Exactly(8));
+            ExceptionVerification.ExcpectedWarns(1);
+            indexer1.VerifyAll();
+            indexer2.VerifyAll();
+        }
+
+
+        [Test]
+        public void failed_indexer_should_not_break_job()
+        {
+            var parseResults = Builder<EpisodeParseResult>.CreateListOfSize(4)
+                .Build();
+
+            var episode = Builder<Episode>.CreateNew()
+                .With(c => c.Series = Builder<Series>.CreateNew().Build())
+                .With(c => c.SeasonNumber = 12)
+                .Build();
+
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(c => c.GetEpisode(episode.EpisodeId))
+                .Returns(episode);
+
+            var indexer1 = new Mock<IndexerBase>();
+            indexer1.Setup(c => c.FetchEpisode(episode.Series.Title, episode.SeasonNumber, episode.EpisodeNumber))
+                .Returns(parseResults).Verifiable();
+
+
+            var indexer2 = new Mock<IndexerBase>();
+            indexer2.Setup(c => c.FetchEpisode(episode.Series.Title, episode.SeasonNumber, episode.EpisodeNumber))
+                .Throws(new Exception()).Verifiable();
+
+            var indexer3 = new Mock<IndexerBase>();
+            indexer2.Setup(c => c.FetchEpisode(episode.Series.Title, episode.SeasonNumber, episode.EpisodeNumber))
+                .Returns(parseResults).Verifiable();
+
+
+            var indexers = new List<IndexerBase> { indexer1.Object, indexer2.Object, indexer3.Object };
+
+            mocker.GetMock<IndexerProvider>()
+                .Setup(c => c.GetEnabledIndexers())
+                .Returns(indexers);
+
+            mocker.GetMock<InventoryProvider>()
+                .Setup(c => c.IsNeeded(It.IsAny<EpisodeParseResult>())).Returns(false);
+
+            //Act
+            mocker.Resolve<EpisodeSearchJob>().Start(new ProgressNotification("Test"), episode.EpisodeId);
+
+
+            //Assert
+            mocker.VerifyAllMocks();
+            mocker.GetMock<InventoryProvider>().Verify(c => c.IsNeeded(It.IsAny<EpisodeParseResult>()), Times.Exactly(8));
+
+            ExceptionVerification.ExcpectedWarns(1);
+            ExceptionVerification.ExcpectedErrors(1);
+            indexer1.VerifyAll();
+            indexer2.VerifyAll();
+            indexer3.VerifyAll();
+        }
+
+
+
+        [Test]
+        public void no_episode_found_should_return_with_error_logged()
+        {
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(c => c.GetEpisode(It.IsAny<long>()))
+                .Returns<Episode>(null);
+
+            //Act
+            mocker.Resolve<EpisodeSearchJob>().Start(new ProgressNotification("Test"), 12);
+
+
+            //Assert
+            mocker.VerifyAllMocks();
+            ExceptionVerification.ExcpectedErrors(1);
+        }
+
     }
 }
