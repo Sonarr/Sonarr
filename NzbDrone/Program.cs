@@ -31,12 +31,9 @@ namespace NzbDrone
                 IISController.StopServer();
                 IISController.StartServer();
 
-
-
 #if DEBUG
                 Attach();
 #endif
-
                 try
                 {
                     Logger.Info("Starting default browser. {0}",IISController.AppUrl);
@@ -60,6 +57,7 @@ namespace NzbDrone
             Console.ReadLine();
         }
 
+#if DEBUG
         private static void Attach()
         {
             if (Debugger.IsAttached)
@@ -91,7 +89,7 @@ namespace NzbDrone
                 }
             }
         }
-
+#endif
 
         private static void AppDomainException(object excepion)
         {
