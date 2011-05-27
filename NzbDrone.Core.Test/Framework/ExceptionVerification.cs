@@ -27,17 +27,9 @@ namespace NzbDrone.Core.Test.Framework
 
         internal static void AssertNoError()
         {
-            if (_logs.Count != 0)
-            {
-                string errors = GetLogsString(_logs);
-
-                var message = String.Format("{0} unexpected Fatal/Error/Warning were logged during execution.\n\r Use ExceptionVerification.Excpected methods if errors are excepted for this test.{1}{2}",
-                    _logs.Count,
-                    Environment.NewLine,
-                    errors);
-
-                Assert.Fail(message);
-            }
+            ExcpectedFatals(0);
+            ExcpectedErrors(0);
+            ExcpectedWarns(0);
         }
 
         private static string GetLogsString(IEnumerable<LogEventInfo> logs)
@@ -48,9 +40,9 @@ namespace NzbDrone.Core.Test.Framework
                 string exception = "";
                 if (log.Exception != null)
                 {
-                    exception = log.Exception.ToString();
+                    exception = log.Exception.Message;
                 }
-                errors += Environment.NewLine + String.Format("[{0}] {1}: {2} {3}", log.Level, log.LoggerName, log.FormattedMessage, exception);
+                errors += Environment.NewLine + String.Format("[{0}] {1}: {2} [{3}]", log.Level, log.LoggerName, log.FormattedMessage, exception);
             }
             return errors;
         }
@@ -86,8 +78,14 @@ namespace NzbDrone.Core.Test.Framework
 
             if (levelLogs.Count != count)
             {
+
                 var message = String.Format("{0} {1}(s) were expected but {2} were logged.\n\r{3}",
-                    count, level, _logs.Count, GetLogsString(levelLogs));
+                    count, level, levelLogs.Count, GetLogsString(levelLogs));
+
+                message =
+                    "********************************************************************************************************************************\n\r"
+                    + message +
+                    "\n\r********************************************************************************************************************************";
 
                 Assert.Fail(message);
             }
