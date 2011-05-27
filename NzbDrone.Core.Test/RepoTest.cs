@@ -63,6 +63,9 @@ namespace NzbDrone.Core.Test
         public void enteties_toString()
         {
             Console.WriteLine(new Episode().ToString());
+            Console.WriteLine(new Season().ToString());
+            Console.WriteLine(new Series().ToString());
+            Console.WriteLine(new EpisodeFile().ToString());
         }
 
         [Test]

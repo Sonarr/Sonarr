@@ -13,6 +13,8 @@ namespace NzbDrone.Core.Providers
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IRepository _repository;
 
+        private IList<IndexerBase> _indexers = new List<IndexerBase>();
+
         public IndexerProvider(IRepository repository)
         {
             _repository = repository;
@@ -23,7 +25,13 @@ namespace NzbDrone.Core.Providers
 
         }
 
-        public virtual List<IndexerSetting> All()
+        public virtual IList<IndexerBase> GetEnabledIndexers()
+        {
+            var all = GetAllISettings();
+            return _indexers.Where(i => all.Exists(c => c.IndexProviderType == i.GetType().ToString() && c.Enable)).ToList();
+        }
+
+        public virtual List<IndexerSetting> GetAllISettings()
         {
             return _repository.All<IndexerSetting>().ToList();
         }
@@ -47,23 +55,20 @@ namespace NzbDrone.Core.Providers
             return _repository.Single<IndexerSetting>(s => s.IndexProviderType == type.ToString());
         }
 
-        public virtual IndexerSetting GetSettings(int id)
-        {
-            return _repository.Single<IndexerSetting>(s => s.Id == id);
-        }
-
         public virtual void InitializeIndexers(IList<IndexerBase> indexers)
         {
             Logger.Info("Initializing indexers. Count {0}", indexers.Count);
 
-            var currentIndexers = All();
+            _indexers = indexers;
+
+            var currentIndexers = GetAllISettings();
 
             foreach (var feedProvider in indexers)
             {
                 IndexerBase indexerLocal = feedProvider;
                 if (!currentIndexers.Exists(c => c.IndexProviderType == indexerLocal.GetType().ToString()))
                 {
-                    var settings = new IndexerSetting()
+                    var settings = new IndexerSetting
                                        {
                                            Enable = false,
                                            IndexProviderType = indexerLocal.GetType().ToString(),
