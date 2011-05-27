@@ -80,7 +80,7 @@ namespace NzbDrone.Core.Test
 
             mocker.GetMock<SeriesProvider>()
                 .Setup(p => p.GetAllSeries())
-                .Returns(series.AsQueryable());
+                .Returns(series);
 
             mocker.GetMock<MediaFileProvider>()
                 .Setup(s => s.Scan(series[0]))
@@ -109,7 +109,7 @@ namespace NzbDrone.Core.Test
 
             mocker.GetMock<SeriesProvider>()
                 .Setup(p => p.GetAllSeries())
-                .Returns(series.AsQueryable());
+                .Returns(series);
 
             mocker.GetMock<MediaFileProvider>()
                 .Setup(s => s.Scan(series[0]))
@@ -140,7 +140,7 @@ namespace NzbDrone.Core.Test
 
             mocker.GetMock<SeriesProvider>()
                 .Setup(p => p.GetAllSeries())
-                .Returns(series.AsQueryable());
+                .Returns(series);
 
             mocker.GetMock<MediaFileProvider>()
                 .Setup(s => s.Scan(series[0]))

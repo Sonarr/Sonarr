@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -33,9 +34,9 @@ namespace NzbDrone.Core.Providers
         {
         }
 
-        public virtual IQueryable<Series> GetAllSeries()
+        public virtual IList<Series> GetAllSeries()
         {
-            return _repository.All<Series>();
+            return _repository.All<Series>().ToList();
         }
 
         public virtual Series GetSeries(int seriesId)

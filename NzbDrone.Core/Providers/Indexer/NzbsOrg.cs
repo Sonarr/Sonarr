@@ -11,7 +11,8 @@ namespace NzbDrone.Core.Providers.Indexer
 {
     public class NzbsOrg : IndexerBase
     {
-        public NzbsOrg(HttpProvider httpProvider, ConfigProvider configProvider) : base(httpProvider, configProvider)
+        public NzbsOrg(HttpProvider httpProvider, ConfigProvider configProvider)
+            : base(httpProvider, configProvider)
         {
         }
 
@@ -43,11 +44,11 @@ namespace NzbDrone.Core.Providers.Indexer
 
             foreach (var url in Urls)
             {
-                searchUrls.Add(String.Format("{0}&action=search&q={1}+s{2}e{3:00}", url, seriesTitle, seasonNumber, episodeNumber));
+                searchUrls.Add(String.Format("{0}&action=search&q={1}+s{2:00}e{3:00}", url, GetQueryTitle(seriesTitle), seasonNumber, episodeNumber));
             }
 
             return searchUrls;
         }
 
- }
+    }
 }

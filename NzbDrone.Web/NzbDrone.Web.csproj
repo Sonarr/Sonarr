@@ -215,6 +215,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>UploadLocalization.en-US.resx</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\EpisodeController.cs" />
     <Compile Include="Controllers\HealthController.cs" />
     <Compile Include="Controllers\HistoryController.cs" />
     <Compile Include="Controllers\LogController.cs" />

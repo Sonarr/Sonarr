@@ -110,6 +110,9 @@ namespace NzbDrone.Core
             _kernel.Bind<IndexerBase>().To<NzbMatrix>().InSingletonScope();
             _kernel.Bind<IndexerBase>().To<NzbsRUs>().InSingletonScope();
             _kernel.Bind<IndexerBase>().To<Newzbin>().InSingletonScope();
+
+            var indexers = _kernel.GetAll<IndexerBase>();
+            _kernel.Get<IndexerProvider>().InitializeIndexers(indexers.ToList());
         }
 
         private static void BindJobs()
@@ -119,6 +122,7 @@ namespace NzbDrone.Core
             _kernel.Bind<IJob>().To<UpdateInfoJob>().InTransientScope();
             _kernel.Bind<IJob>().To<DiskScanJob>().InTransientScope();
             _kernel.Bind<IJob>().To<DeleteSeriesJob>().InTransientScope();
+            _kernel.Bind<IJob>().To<EpisodeSearchJob>().InTransientScope();
 
             _kernel.Get<JobProvider>().Initialize();
             _kernel.Get<WebTimer>().StartTimer(30);

@@ -324,10 +324,10 @@ namespace NzbDrone.Core.Test
         public void scan_media_job_should_not_scan_new_series()
         {
             var mocker = new AutoMoqer();
-            IQueryable<Series> fakeSeries = Builder<Series>.CreateListOfSize(2)
+            var fakeSeries = Builder<Series>.CreateListOfSize(2)
                 .WhereTheFirst(1).Has(c => c.Episodes = new List<Episode>())
                 .AndTheNext(1).Has(c => c.Episodes = Builder<Episode>.CreateListOfSize(10).Build())
-                .Build().AsQueryable();
+                .Build();
             mocker.GetMock<SeriesProvider>()
                 .Setup(c => c.GetAllSeries()).Returns(fakeSeries);
 

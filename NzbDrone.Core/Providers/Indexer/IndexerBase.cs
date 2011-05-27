@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Providers.Indexer
 
         public IndexerBase()
         {
-            
+
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace NzbDrone.Core.Providers.Indexer
 
         public virtual IList<EpisodeParseResult> FetchEpisode(string seriesTitle, int seasonNumber, int episodeNumber)
         {
-            _logger.Debug("Searching {0} for {1}-S{2}E{3:00}", Name, seriesTitle, seasonNumber, episodeNumber);
+            _logger.Debug("Searching {0} for {1}-S{2:00}E{3:00}", Name, seriesTitle, seasonNumber, episodeNumber);
 
             var result = new List<EpisodeParseResult>();
 
@@ -161,6 +161,11 @@ namespace NzbDrone.Core.Providers.Indexer
             var episodeParseResult = Parser.ParseEpisodeInfo(item.Title.Text);
 
             return CustomParser(item, episodeParseResult);
+        }
+
+        protected static string GetQueryTitle(string title)
+        {
+            return title.Trim().Replace(' ', '+');
         }
     }
 }
