@@ -31,6 +31,7 @@
     <MvcBuildViews>true</MvcBuildViews>
     <EnableUpdateable>false</EnableUpdateable>
     <ExcludeApp_Data>true</ExcludeApp_Data>
+    <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -223,6 +224,7 @@
     <Compile Include="Controllers\SeriesController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\SharedController.cs" />
+    <Compile Include="Controllers\StreamController.cs" />
     <Compile Include="Controllers\SystemController.cs" />
     <Compile Include="Controllers\UpcomingController.cs" />
     <Compile Include="Global.asax.cs">

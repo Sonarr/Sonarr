@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NLog;
@@ -20,6 +21,8 @@ namespace NzbDrone.Core.Providers.Jobs
         private readonly DiskScanJob _diskScanJob;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        private List<int> _attemptedSeries;
 
         public ImportNewSeriesJob(SeriesProvider seriesProvider, SeasonProvider seasonProvider,
             MediaFileProvider mediaFileProvider, UpdateInfoJob updateInfoJob, DiskScanJob diskScanJob)
@@ -43,12 +46,13 @@ namespace NzbDrone.Core.Providers.Jobs
 
         public void Start(ProgressNotification notification, int targetId)
         {
+            _attemptedSeries = new List<int>();
             ScanSeries(notification);
         }
 
         private void ScanSeries(ProgressNotification notification)
         {
-            var syncList = _seriesProvider.GetAllSeries().Where(s => s.LastInfoSync == null).ToList();
+            var syncList = _seriesProvider.GetAllSeries().Where(s => s.LastInfoSync == null && !_attemptedSeries.Contains(s.SeriesId)).ToList();
             if (syncList.Count == 0)
             {
                 return;
@@ -58,6 +62,7 @@ namespace NzbDrone.Core.Providers.Jobs
             {
                 try
                 {
+                    _attemptedSeries.Add(currentSeries.SeriesId);
                     notification.CurrentMessage = String.Format("Searching for '{0}'", new DirectoryInfo(currentSeries.Path).Name);
 
                     _updateInfoJob.Start(notification, currentSeries.SeriesId);

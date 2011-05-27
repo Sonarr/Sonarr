@@ -24,151 +24,6 @@ namespace NzbDrone.Core.Test
     public class IndexerProviderTest : TestBase
     {
         [Test]
-        [Row("nzbsorg.xml", 0)]
-        [Row("nzbsrus.xml", 6)]
-        [Row("newzbin.xml", 1)]
-        [Row("nzbmatrix.xml", 1)]
-        public void parse_feed_xml(string fileName, int warns)
-        {
-            var mocker = new AutoMoqer();
-
-            mocker.GetMock<HttpProvider>()
-                          .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
-                          .Returns(File.OpenRead(".\\Files\\Rss\\" + fileName));
-
-            var fakeSettings = Builder<IndexerSetting>.CreateNew().Build();
-            mocker.GetMock<IndexerProvider>()
-                .Setup(c => c.GetSettings(It.IsAny<Type>()))
-                .Returns(fakeSettings);
-
-            var mockIndexer = mocker.Resolve<MockIndexer>();
-            var parseResults = mockIndexer.FetchRss();
-
-            foreach (var episodeParseResult in parseResults)
-            {
-                var Uri = new Uri(episodeParseResult.NzbUrl);
-                Assert.DoesNotContain(Uri.PathAndQuery, "//");
-            }
-
-
-            Assert.IsNotEmpty(parseResults);
-
-            Assert.ForAll(parseResults, s => Assert.AreEqual(mockIndexer.Name, s.Indexer));
-            Assert.ForAll(parseResults, s => Assert.AreNotEqual("", s.NzbTitle));
-            Assert.ForAll(parseResults, s => Assert.AreNotEqual(null, s.NzbTitle));
-
-            ExceptionVerification.ExcpectedWarns(warns);
-        }
-
-
-
-        [Test]
-        public void newzbin()
-        {
-            var mocker = new AutoMoqer();
-
-            mocker.GetMock<HttpProvider>()
-                          .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
-                          .Returns(File.OpenRead(".\\Files\\Rss\\newzbin.xml"));
-
-            var fakeSettings = Builder<IndexerSetting>.CreateNew().Build();
-            mocker.GetMock<IndexerProvider>()
-                .Setup(c => c.GetSettings(It.IsAny<Type>()))
-                .Returns(fakeSettings);
-
-            var newzbinProvider = mocker.Resolve<Newzbin>();
-            var parseResults = newzbinProvider.FetchRss();
-
-            foreach (var episodeParseResult in parseResults)
-            {
-                var Uri = new Uri(episodeParseResult.NzbUrl);
-                Assert.DoesNotContain(Uri.PathAndQuery, "//");
-            }
-
-
-            Assert.IsNotEmpty(parseResults);
-            Assert.ForAll(parseResults, s => Assert.AreEqual(newzbinProvider.Name, s.Indexer));
-            Assert.ForAll(parseResults, s => Assert.AreNotEqual("", s.NzbTitle));
-            Assert.ForAll(parseResults, s => Assert.AreNotEqual(null, s.NzbTitle));
-
-            ExceptionVerification.ExcpectedWarns(1);
-        }
-
-
-
-
-
-
-        [Test]
-        [Row("Adventure.Inc.S03E19.DVDRip.XviD-OSiTV", 3, 19, QualityTypes.DVD)]
-        public void custome_parser_partial_success(string title, int season, int episode, QualityTypes quality)
-        {
-            var mocker = new AutoMoqer();
-
-            const string summary = "My fake summary";
-
-            var fakeSettings = Builder<IndexerSetting>.CreateNew().Build();
-            mocker.GetMock<IndexerProvider>()
-                .Setup(c => c.GetSettings(It.IsAny<Type>()))
-                .Returns(fakeSettings);
-
-            var fakeRssItem = Builder<SyndicationItem>.CreateNew()
-                .With(c => c.Title = new TextSyndicationContent(title))
-                .With(c => c.Summary = new TextSyndicationContent(summary))
-                .Build();
-
-            var result = mocker.Resolve<CustomParserIndexer>().ParseFeed(fakeRssItem);
-
-            Assert.IsNotNull(result);
-            Assert.AreEqual(summary, result.EpisodeTitle);
-            Assert.AreEqual(season, result.SeasonNumber);
-            Assert.AreEqual(episode, result.EpisodeNumbers[0]);
-            Assert.AreEqual(quality, result.Quality);
-        }
-
-        [Test]
-        [Row("Adventure.Inc.DVDRip.XviD-OSiTV")]
-        public void custome_parser_full_parse(string title)
-        {
-            var mocker = new AutoMoqer();
-
-            const string summary = "My fake summary";
-
-            var fakeSettings = Builder<IndexerSetting>.CreateNew().Build();
-            mocker.GetMock<IndexerProvider>()
-                .Setup(c => c.GetSettings(It.IsAny<Type>()))
-                .Returns(fakeSettings);
-
-            var fakeRssItem = Builder<SyndicationItem>.CreateNew()
-                .With(c => c.Title = new TextSyndicationContent(title))
-                .With(c => c.Summary = new TextSyndicationContent(summary))
-                .Build();
-
-            var result = mocker.Resolve<CustomParserIndexer>().ParseFeed(fakeRssItem);
-
-            Assert.IsNotNull(result);
-            Assert.AreEqual(summary, result.EpisodeTitle);
-            ExceptionVerification.ExcpectedWarns(1);
-        }
-
-
-        [Test]
-        public void downloadFeed()
-        {
-            var mocker = new AutoMoqer();
-            mocker.SetConstant(new HttpProvider());
-
-            var fakeSettings = Builder<IndexerSetting>.CreateNew().Build();
-            mocker.GetMock<IndexerProvider>()
-                .Setup(c => c.GetSettings(It.IsAny<Type>()))
-                .Returns(fakeSettings);
-
-            mocker.Resolve<TestUrlIndexer>().FetchRss();
-
-            ExceptionVerification.IgnoreWarns();
-        }
-
-        [Test]
         public void Init_indexer_test()
         {
             var mocker = new AutoMoqer();
@@ -178,49 +33,32 @@ namespace NzbDrone.Core.Test
             //Act
             var indexerProvider = mocker.Resolve<IndexerProvider>();
             indexerProvider.InitializeIndexers(new List<IndexerBase> { mocker.Resolve<MockIndexer>() });
-            var indexers = indexerProvider.All();
+            var settings = indexerProvider.GetSettings(typeof(MockIndexer));
+            settings.Enable = true;
+            indexerProvider.SaveSettings(settings);
 
             //Assert
-            Assert.Count(1, indexers);
+            Assert.Count(1, indexerProvider.GetAllISettings());
+            Assert.Count(1, indexerProvider.GetEnabledIndexers());
         }
 
         [Test]
-        public void unmapped_series_shouldnt_call_any_providers()
-        {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
-            mocker.GetMock<SeriesProvider>()
-                .Setup(c => c.FindSeries(It.IsAny<String>()))
-                .Returns<Series>(null);
-
-            var indexer = mocker.Resolve<MockIndexer>();
-            //indexer.ProcessItem(new SyndicationItem { Title = new TextSyndicationContent("Adventure.Inc.S01E18.DVDRip.XviD-OSiTV") });
-        }
-
-
-        [Test]
-        public void nzbsorg_search_returns_valid_results()
+        public void Init_indexer_with_disabled_job()
         {
             var mocker = new AutoMoqer();
 
-            mocker.GetMock<ConfigProvider>()
-                .SetupGet(c => c.NzbsOrgUId)
-                .Returns("43516");
+            mocker.SetConstant(MockLib.GetEmptyRepository());
 
-            mocker.GetMock<ConfigProvider>()
-                .SetupGet(c => c.NzbsOrgHash)
-                .Returns("bc8edb4cc49d4ae440775adec5ac001f");
+            //Act
+            var indexerProvider = mocker.Resolve<IndexerProvider>();
+            indexerProvider.InitializeIndexers(new List<IndexerBase> { mocker.Resolve<MockIndexer>() });
+            var settings = indexerProvider.GetSettings(typeof(MockIndexer));
+            settings.Enable = false;
+            indexerProvider.SaveSettings(settings);
 
-
-            mocker.Resolve<HttpProvider>();
-
-            var result = mocker.Resolve<NzbsOrg>().FetchEpisode("Simpsons", 21, 23);
-
-            Assert.IsNotEmpty(result);
-            Assert.ForAll(result, r => r.CleanTitle == "simpsons");
-            Assert.ForAll(result, r => r.SeasonNumber == 21);
-            Assert.ForAll(result, r => r.EpisodeNumbers.Contains(23));
-            
-
+            //Assert
+            Assert.Count(1, indexerProvider.GetAllISettings());
+            Assert.IsEmpty(indexerProvider.GetEnabledIndexers());
         }
     }
 

@@ -114,13 +114,13 @@ namespace NzbDrone.Core.Test
 
             var timerProvider = mocker.Resolve<JobProvider>();
             timerProvider.Initialize();
-            var firstRun = timerProvider.QueueJob(typeof(SlowJob),1);
-            var secondRun = timerProvider.QueueJob(typeof(SlowJob),2);
-            var third = timerProvider.QueueJob(typeof(SlowJob),3);
+            var firstRun = timerProvider.QueueJob(typeof(SlowJob), 1);
+            var secondRun = timerProvider.QueueJob(typeof(SlowJob), 2);
+            var third = timerProvider.QueueJob(typeof(SlowJob), 3);
 
 
             Thread.Sleep(10000);
-
+            //Asserts are done in ExceptionVerification
         }
 
 

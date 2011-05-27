@@ -89,6 +89,7 @@
     <Compile Include="EpisodeStatusTest.cs" />
     <Compile Include="ImportNewSeriesJobTest.cs" />
     <Compile Include="DiskScanJobTest.cs" />
+    <Compile Include="IndexerTests.cs" />
     <Compile Include="InventoryProviderTest.cs" />
     <Compile Include="Framework\AutoMoq\AutoMoqer.cs" />
     <Compile Include="Framework\AutoMoq\AutoMoqerTest.cs" />

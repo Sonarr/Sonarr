@@ -5,12 +5,12 @@ using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers.Indexer;
+using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Providers.Jobs
 {
     public class EpisodeSearchJob : IJob
     {
-        private readonly IEnumerable<IndexerBase> _indexers;
         private readonly InventoryProvider _inventoryProvider;
         private readonly DownloadProvider _downloadProvider;
         private readonly IndexerProvider _indexerProvider;
@@ -19,9 +19,8 @@ namespace NzbDrone.Core.Providers.Jobs
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public EpisodeSearchJob(IEnumerable<IndexerBase> indexers, InventoryProvider inventoryProvider, DownloadProvider downloadProvider, IndexerProvider indexerProvider, EpisodeProvider episodeProvider)
+        public EpisodeSearchJob(InventoryProvider inventoryProvider, DownloadProvider downloadProvider, IndexerProvider indexerProvider, EpisodeProvider episodeProvider)
         {
-            _indexers = indexers;
             _inventoryProvider = inventoryProvider;
             _downloadProvider = downloadProvider;
             _indexerProvider = indexerProvider;
@@ -42,9 +41,9 @@ namespace NzbDrone.Core.Providers.Jobs
         {
             var reports = new List<EpisodeParseResult>();
             var episode = _episodeProvider.GetEpisode(targetId);
+            var indexers = _indexerProvider.GetEnabledIndexers();
 
-
-            foreach (var indexer in _indexers.Where(i => _indexerProvider.GetSettings(i.GetType()).Enable))
+            foreach (var indexer in indexers)
             {
                 try
                 {
@@ -53,13 +52,18 @@ namespace NzbDrone.Core.Providers.Jobs
                 }
                 catch (Exception e)
                 {
-                    Logger.ErrorException("An error has occured while fetching items from " + indexer.Name, e);
+                    Logger.ErrorException("An error has occurred while fetching items from " + indexer.Name, e);
                 }
             }
 
             Logger.Debug("Finished searching all indexers. Total {0}", reports.Count);
-            notification.CurrentMessage = "Proccessing search results";
+            notification.CurrentMessage = "Processing search results";
 
+            ProcessResults(notification, episode, reports);
+        }
+
+        public void ProcessResults(ProgressNotification notification, Episode episode, IEnumerable<EpisodeParseResult> reports)
+        {
             foreach (var episodeParseResult in reports.OrderBy(c => c.Quality).ThenBy(c => c.Proper))
             {
                 try
@@ -73,13 +77,11 @@ namespace NzbDrone.Core.Providers.Jobs
                 }
                 catch (Exception e)
                 {
-                    Logger.ErrorException("An error has occured while processing parse result items from " + episodeParseResult, e);
+                    Logger.ErrorException("An error has occurred while processing parse result items from " + episodeParseResult, e);
                 }
             }
-
-
+            
             Logger.Warn("Unable to find {0} in any of indexers.", episode);
-
         }
     }
 }

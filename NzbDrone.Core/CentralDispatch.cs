@@ -53,12 +53,12 @@ namespace NzbDrone.Core
         private static void InitializeApp()
         {
             BindKernel();
-            
+
             LogConfiguration.Setup();
-            
+
             Migrations.Run();
             ForceMigration(_kernel.Get<IRepository>());
-            
+
             SetupDefaultQualityProfiles(_kernel.Get<IRepository>()); //Setup the default QualityProfiles on start-up
 
             BindIndexers();
@@ -110,8 +110,6 @@ namespace NzbDrone.Core
             _kernel.Bind<IndexerBase>().To<NzbMatrix>().InSingletonScope();
             _kernel.Bind<IndexerBase>().To<NzbsRUs>().InSingletonScope();
             _kernel.Bind<IndexerBase>().To<Newzbin>().InSingletonScope();
-            var indexers = _kernel.GetAll<IndexerBase>();
-            _kernel.Get<IndexerProvider>().InitializeIndexers(indexers.ToList());
         }
 
         private static void BindJobs()

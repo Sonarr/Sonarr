@@ -6,7 +6,6 @@ using System.Web;
 using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
-using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Providers.Indexer
 {
@@ -36,6 +35,15 @@ namespace NzbDrone.Core.Providers.Indexer
 
 
         /// <summary>
+        /// Gets the credential.
+        /// </summary>
+        protected virtual NetworkCredential Credentials
+        {
+            get { return null; }
+        }
+
+
+        /// <summary>
         /// Gets the rss url for specific episode search
         /// </summary>
         /// <param name="seriesTitle">The series title.</param>
@@ -45,13 +53,22 @@ namespace NzbDrone.Core.Providers.Indexer
         protected abstract IList<String> GetSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber);
 
         /// <summary>
-        /// Gets the credential.
+        /// This method can be overwritten to provide indexer specific info parsing
         /// </summary>
-        protected virtual NetworkCredential Credentials
+        /// <param name="item">RSS item that needs to be parsed</param>
+        /// <param name="currentResult">Result of the built in parse function.</param>
+        /// <returns></returns>
+        protected virtual EpisodeParseResult CustomParser(SyndicationItem item, EpisodeParseResult currentResult)
         {
-            get { return null; }
+            return currentResult;
         }
 
+        /// <summary>
+        ///   Generates direct link to download an NZB
+        /// </summary>
+        /// <param name = "item">RSS Feed item to generate the link for</param>
+        /// <returns>Download link URL</returns>
+        protected abstract string NzbDownloadUrl(SyndicationItem item);
 
         /// <summary>
         ///   Fetches RSS feed and process each news item.
@@ -90,7 +107,7 @@ namespace NzbDrone.Core.Providers.Indexer
 
         }
 
-        private IList<EpisodeParseResult> Fetch(string url)
+        private IEnumerable<EpisodeParseResult> Fetch(string url)
         {
             var result = new List<EpisodeParseResult>();
 
@@ -140,23 +157,5 @@ namespace NzbDrone.Core.Providers.Indexer
 
             return CustomParser(item, episodeParseResult);
         }
-
-        /// <summary>
-        /// This method can be overwritten to provide indexer specific info parsing
-        /// </summary>
-        /// <param name="item">RSS item that needs to be parsed</param>
-        /// <param name="currentResult">Result of the built in parse function.</param>
-        /// <returns></returns>
-        protected virtual EpisodeParseResult CustomParser(SyndicationItem item, EpisodeParseResult currentResult)
-        {
-            return currentResult;
-        }
-
-        /// <summary>
-        ///   Generates direct link to download an NZB
-        /// </summary>
-        /// <param name = "item">RSS Feed item to generate the link for</param>
-        /// <returns>Download link URL</returns>
-        protected abstract string NzbDownloadUrl(SyndicationItem item);
     }
 }
