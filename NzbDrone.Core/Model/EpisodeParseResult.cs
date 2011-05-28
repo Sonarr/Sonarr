@@ -13,13 +13,9 @@ namespace NzbDrone.Core.Model
 
         internal List<int> EpisodeNumbers { get; set; }
 
-        internal string EpisodeTitle { get; set; }
-
         internal DateTime AirDate { get; set; }
-
-        public bool Proper { get; set; }
-
-        public QualityTypes Quality { get; set; }
+        
+        public Quality Quality { get; set; }
 
         public LanguageType Language { get; set; }
 
@@ -36,10 +32,10 @@ namespace NzbDrone.Core.Model
         public override string ToString()
         {
             if (EpisodeNumbers == null)
-                return string.Format("{0} - {1}", CleanTitle, AirDate.Date);
+                return string.Format("{0} - {1} {2}", CleanTitle, AirDate.ToShortDateString(), Quality);
 
-            return string.Format("{0} - S{1:00}E{2}", CleanTitle, SeasonNumber,
-                                 String.Join("-", EpisodeNumbers));
+            return string.Format("{0} - S{1:00}E{2} {3}", CleanTitle, SeasonNumber,
+                                 String.Join("-", EpisodeNumbers),Quality);
 
         }
     }

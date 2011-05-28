@@ -169,6 +169,7 @@
     <Compile Include="Model\ConnectionInfoModel.cs" />
     <Compile Include="Model\ExternalNotificationType.cs" />
     <Compile Include="Model\LanguageType.cs" />
+    <Compile Include="Model\Quality.cs" />
     <Compile Include="Model\SabnzbdInfoModel.cs" />
     <Compile Include="Providers\DownloadProvider.cs" />
     <Compile Include="Providers\ExternalNotification\ExternalNotificationProviderBase.cs" />

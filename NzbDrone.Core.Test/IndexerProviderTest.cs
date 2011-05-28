@@ -156,7 +156,7 @@ namespace NzbDrone.Core.Test
         protected override Model.EpisodeParseResult CustomParser(SyndicationItem item, Model.EpisodeParseResult currentResult)
         {
             if (currentResult == null) currentResult = new EpisodeParseResult();
-            currentResult.EpisodeTitle = item.Summary.Text;
+            currentResult.Language = LanguageType.Finnish;
             return currentResult;
         }
     }

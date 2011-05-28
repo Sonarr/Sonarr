@@ -1,29 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using Castle.DynamicProxy;
 using NzbDrone.Core.Model;
 using SubSonic.SqlGeneration.Schema;
 
 namespace NzbDrone.Core.Repository
 {
-    public class Episode
+    public  class Episode
     {
         [SubSonicPrimaryKey]
         public virtual int EpisodeId { get; set; }
 
-        public int? TvDbEpisodeId { get; set; }
+        public virtual int? TvDbEpisodeId { get; set; }
 
         public virtual int SeriesId { get; set; }
         public virtual int EpisodeFileId { get; set; }
         public virtual int SeasonId { get; set; }
-        public int SeasonNumber { get; set; }
-        public int EpisodeNumber { get; set; }
-        public string Title { get; set; }
-        public DateTime AirDate { get; set; }
+        public virtual int SeasonNumber { get; set; }
+        public virtual int EpisodeNumber { get; set; }
+        public virtual string Title { get; set; }
+        public virtual DateTime AirDate { get; set; }
 
         [SubSonicLongString]
-        public string Overview { get; set; }
+        public virtual string Overview { get; set; }
 
-        public Boolean Ignored { get; set; }
+        public virtual Boolean Ignored { get; set; }
 
         [SubSonicIgnore]
         public Boolean IsDailyEpisode
@@ -41,7 +42,7 @@ namespace NzbDrone.Core.Repository
         /// Used to specify when the episode was grapped.
         /// this filed is used by status as an expirable "Grabbed" status.
         /// </remarks>
-        public DateTime? GrabDate { get; set; }
+        public virtual DateTime? GrabDate { get; set; }
 
         [SubSonicIgnore]
         public EpisodeStatusType Status
@@ -85,7 +86,7 @@ namespace NzbDrone.Core.Repository
             if (IsDailyEpisode)
                 return string.Format("{0} - {1}", seriesTitle, AirDate.Date);
 
-            return string.Format("{0} - S{1:00}E{2}", seriesTitle, SeasonNumber, EpisodeNumber);
+            return string.Format("{0} - S{1:00}E{2:00}", seriesTitle, SeasonNumber, EpisodeNumber);
 
         }
     }

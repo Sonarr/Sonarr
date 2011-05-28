@@ -10,8 +10,10 @@ using Moq;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
+using NzbDrone.Core.Repository.Quality;
 
 // ReSharper disable InconsistentNaming
+
 namespace NzbDrone.Core.Test
 {
     [TestFixture]
@@ -23,10 +25,11 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer(MockBehavior.Strict);
             var parseResult = Builder<EpisodeParseResult>.CreateNew()
                 .With(e => e.Episodes = Builder<Episode>.CreateListOfSize(2)
-                    .WhereTheFirst(1).Has(s => s.EpisodeId = 12)
-                    .AndTheNext(1).Has(s => s.EpisodeId = 99)
-                    .Build())
-                    .Build();
+                                            .WhereTheFirst(1).Has(s => s.EpisodeId = 12)
+                                            .AndTheNext(1).Has(s => s.EpisodeId = 99)
+                                            .Build())
+                                            .With(c => c.Quality = new Quality(QualityTypes.DVD, false))
+                .Build();
 
             const string sabTitle = "My fake sab title";
             mocker.GetMock<SabProvider>()
@@ -38,17 +41,17 @@ namespace NzbDrone.Core.Test
                 .Returns(true);
 
             mocker.GetMock<SabProvider>()
-               .Setup(s => s.GetSabTitle(parseResult))
-               .Returns(sabTitle);
+                .Setup(s => s.GetSabTitle(parseResult))
+                .Returns(sabTitle);
 
             mocker.GetMock<HistoryProvider>()
-                .Setup(s => s.Add(It.Is<History>(h=>h.EpisodeId == 12)));
+                .Setup(s => s.Add(It.Is<History>(h => h.EpisodeId == 12)));
             mocker.GetMock<HistoryProvider>()
-    .Setup(s => s.Add(It.Is<History>(h => h.EpisodeId == 99)));
+                .Setup(s => s.Add(It.Is<History>(h => h.EpisodeId == 99)));
 
             mocker.Resolve<DownloadProvider>().DownloadReport(parseResult);
 
-            
+
             mocker.VerifyAllMocks();
         }
     }

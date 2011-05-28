@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using SubSonic.Repository;
@@ -46,16 +47,11 @@ namespace NzbDrone.Core.Providers
             Logger.Debug("Item added to history: {0}", item.NzbTitle);
         }
 
-        public virtual bool Exists(int episodeId, QualityTypes quality, bool proper)
+        public virtual Quality GetBestQualityInHistory(long episodeId)
         {
-            //Looks for the existence of this episode in History
-            if (_repository.Exists<History>(h => h.EpisodeId == episodeId && h.Quality == quality && h.IsProper == proper))
-            {
-                Logger.Debug("Episode in History. ID:{0} Q:{1} Proper:{2}", episodeId, quality, proper);
-                return true;
-            }
-            Logger.Debug("Episode not in History. ID:{0} Q:{1} Proper:{2}", episodeId, quality, proper);
-            return false;
+            var history = AllItems().Where(c => c.EpisodeId == episodeId).Select(d => new Quality() { QualityType = d.Quality, Proper = d.IsProper }).ToList();
+            history.Sort();
+            return history.FirstOrDefault();
         }
 
         public virtual void Delete(int historyId)

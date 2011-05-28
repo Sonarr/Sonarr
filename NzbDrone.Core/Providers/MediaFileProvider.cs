@@ -123,8 +123,8 @@ namespace NzbDrone.Core.Providers
                     episodeFile.SeriesId = series.SeriesId;
                     episodeFile.Path = Parser.NormalizePath(filePath);
                     episodeFile.Size = size;
-                    episodeFile.Quality = parseResult.Quality;
-                    episodeFile.Proper = Parser.ParseProper(filePath);
+                    episodeFile.Quality = parseResult.Quality.QualityType;
+                    episodeFile.Proper = parseResult.Quality.Proper;
                     var fileId = (int)_repository.Add(episodeFile);
 
                     //This is for logging + updating the episodes that are linked to this EpisodeFile

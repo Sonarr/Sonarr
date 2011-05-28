@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository;
+using NzbDrone.Core.Repository.Quality;
 
 namespace NzbDrone.Core.Providers
 {
@@ -25,10 +26,11 @@ namespace NzbDrone.Core.Providers
 
         public InventoryProvider()
         {
-            
+
         }
 
-        public virtual bool IsNeeded(EpisodeParseResult parseResult)
+
+        public virtual bool IsMonitored(EpisodeParseResult parseResult)
         {
             var series = _seriesProvider.FindSeries(parseResult.CleanTitle);
 
@@ -44,12 +46,6 @@ namespace NzbDrone.Core.Providers
             if (!series.Monitored)
             {
                 Logger.Debug("{0} is present in the DB but not tracked. skipping.", parseResult.CleanTitle);
-                return false;
-            }
-
-            if (!_seriesProvider.QualityWanted(series.SeriesId, parseResult.Quality))
-            {
-                Logger.Debug("Post doesn't meet the quality requirements [{0}]. skipping.", parseResult.Quality);
                 return false;
             }
 
@@ -76,7 +72,7 @@ namespace NzbDrone.Core.Providers
                         AirDate = DateTime.Now.Date,
                         EpisodeNumber = episodeNumber,
                         SeasonNumber = parseResult.SeasonNumber,
-                        Title = parseResult.EpisodeTitle,
+                        Title = "TBD",
                         Overview = String.Empty,
                     };
 
@@ -86,34 +82,79 @@ namespace NzbDrone.Core.Providers
                 parseResult.Episodes.Add(episodeInfo);
             }
 
-            foreach (var episode in parseResult.Episodes)
+            return true;
+        }
+
+        /// <summary>
+        ///   Comprehensive check on whether or not this episode is needed.
+        /// </summary>
+        /// <param name = "parsedReport">Episode that needs to be checked</param>
+        /// <returns>Whether or not the file quality meets the requirements </returns>
+        /// <remarks>for multi episode files, all episodes need to meet the requirement
+        /// before the report is downloaded</remarks>
+        public virtual bool IsQualityNeeded(EpisodeParseResult parsedReport)
+        {
+            Logger.Trace("Checking if report meets quality requirements. {0}", parsedReport.Quality);
+            if (!parsedReport.Series.QualityProfile.Allowed.Contains(parsedReport.Quality.QualityType))
             {
-                //Todo: How to handle full season files? Currently the episode list is completely empty for these releases
-                //Todo: Should we assume that the release contains all the episodes that belong to this season and add them from the DB?
-                //Todo: Fix this so it properly handles multi-epsiode releases (Currently as long as the first episode is needed we download it)
-                //Todo: for small releases this is less of an issue, but for Full Season Releases this could be an issue if we only need the first episode (or first few)
-
-
-
-                if (!_episodeProvider.IsNeeded(parseResult, episode))
-                {
-                    Logger.Debug("Episode {0} is not needed. skipping.", parseResult);
-                    continue;
-                }
-
-                if (_historyProvider.Exists(episode.EpisodeId, parseResult.Quality, parseResult.Proper))
-                {
-                    Logger.Debug("Episode {0} is in history. skipping.", parseResult);
-                    continue;
-                }
-
-                //Congragulations younge feed item! you have made it this far. you are truly special!!!
-                Logger.Debug("Episode {0} is needed", parseResult);
-
-                return true;
+                Logger.Trace("Quality {0} rejected by Series' quality profile", parsedReport.Quality);
+                return false;
             }
 
-            return false;
+            var cutoff = parsedReport.Series.QualityProfile.Cutoff;
+
+            foreach (var episode in parsedReport.Episodes)
+            {
+                //Checking File
+                var file = episode.EpisodeFile;
+                if (file != null)
+                {
+                    Logger.Trace("Comparing file quality with report. Existing file is {0} proper:{1}", file.Quality, file.Proper);
+                    if (!IsUpgrade(new Quality { QualityType = file.Quality, Proper = file.Proper }, parsedReport.Quality, cutoff))
+                        return false;
+                }
+
+                //Checking History
+                var bestQualityInHistory = _historyProvider.GetBestQualityInHistory(episode.EpisodeId);
+                if (bestQualityInHistory != null)
+                {
+                    Logger.Trace("Comparing history quality with report. History is {0}", bestQualityInHistory);
+                    if (!IsUpgrade(bestQualityInHistory, parsedReport.Quality, cutoff))
+                        return false;
+                }
+
+            }
+
+            Logger.Debug("Episode {0} is needed", parsedReport);
+            return true; //If we get to this point and the file has not yet been rejected then accept it
+        }
+
+
+        public static bool IsUpgrade(Quality currentQuality, Quality newQuality, QualityTypes cutOff)
+        {
+            if (currentQuality.QualityType >= cutOff)
+            {
+                Logger.Trace("Existing file meets cut-off. skipping.");
+                return false;
+            }
+
+            if (newQuality > currentQuality)
+                return true;
+
+            if (currentQuality > newQuality)
+            {
+                Logger.Trace("existing item has better quality. skipping");
+                return false;
+            }
+
+            if (currentQuality == newQuality && !newQuality.Proper)
+            {
+                Logger.Trace("same quality. not proper skipping");
+                return false;
+            }
+
+            Logger.Debug("New item has better quality than existing item");
+            return true;
         }
     }
 }

@@ -49,18 +49,18 @@ namespace NzbDrone.Core.Providers.Jobs
                 }
                 catch (Exception e)
                 {
-                    Logger.ErrorException("An error has occured while fetching items from " + indexer.Name, e);
+                    Logger.ErrorException("An error has occurred while fetching items from " + indexer.Name, e);
                 }
             }
 
             Logger.Debug("Finished fetching reports from all indexers. Total {0}", reports.Count);
-            notification.CurrentMessage = "Proccessing downloaded RSS";
+            notification.CurrentMessage = "Processing downloaded RSS";
 
             foreach (var episodeParseResult in reports)
             {
                 try
                 {
-                    if (_inventoryProvider.IsNeeded(episodeParseResult))
+                    if (_inventoryProvider.IsMonitored(episodeParseResult) && _inventoryProvider.IsQualityNeeded(episodeParseResult))
                     {
                         _downloadProvider.DownloadReport(episodeParseResult);
                     }

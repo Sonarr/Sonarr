@@ -85,13 +85,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InventoryProvider_IsMonitoredTest.cs" />
     <Compile Include="DownloadProviderTest.cs" />
     <Compile Include="EpisodeSearchJobTest.cs" />
     <Compile Include="EpisodeStatusTest.cs" />
     <Compile Include="ImportNewSeriesJobTest.cs" />
     <Compile Include="DiskScanJobTest.cs" />
     <Compile Include="IndexerTests.cs" />
-    <Compile Include="InventoryProviderTest.cs" />
+    <Compile Include="InventoryProvider_QualityNeededTest.cs" />
     <Compile Include="Framework\AutoMoq\AutoMoqer.cs" />
     <Compile Include="Framework\AutoMoq\AutoMoqerTest.cs" />
     <Compile Include="Framework\AutoMoq\Unity\AutoMockingBuilderStrategy.cs">
@@ -103,6 +104,7 @@
     <Compile Include="Framework\ExceptionVerification.cs" />
     <Compile Include="Framework\TestBase.cs" />
     <Compile Include="JobProviderTest.cs" />
+    <Compile Include="QualityTest.cs" />
     <Compile Include="RepositoryProviderTest.cs" />
     <Compile Include="RootDirProviderTest.cs" />
     <Compile Include="IndexerProviderTest.cs" />

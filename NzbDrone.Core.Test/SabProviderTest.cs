@@ -1,5 +1,6 @@
 ﻿// ReSharper disable RedundantUsingDirective
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using AutoMoq;
@@ -226,17 +227,20 @@ namespace NzbDrone.Core.Test
                 .With(c => c.Path = @"d:\tv shows\My Series Name")
                 .Build();
 
+            var episode = Builder<Episode>.CreateNew()
+                .With(e => e.Title = title)
+                .Build();
+
             var parsResult = new EpisodeParseResult()
             {
                 AirDate = DateTime.Now,
                 EpisodeNumbers = episodes.ToList(),
-                Proper = proper,
-                Quality = quality,
+                Quality = new Quality(quality,proper),
                 SeasonNumber = seasons,
-                EpisodeTitle = title,
-                Series = series
+                Series = series,
+                Episodes = new List<Episode>() { episode }
             };
-            
+
             //Act
             var actual = mocker.Resolve<SabProvider>().GetSabTitle(parsResult);
 

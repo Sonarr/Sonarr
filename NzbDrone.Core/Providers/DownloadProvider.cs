@@ -47,8 +47,8 @@ namespace NzbDrone.Core.Providers
                     var history = new History();
                     history.Date = DateTime.Now;
                     history.Indexer = parseResult.Indexer;
-                    history.IsProper = parseResult.Proper;
-                    history.Quality = parseResult.Quality;
+                    history.IsProper = parseResult.Quality.Proper;
+                    history.Quality = parseResult.Quality.QualityType;
                     history.NzbTitle = parseResult.NzbTitle;
                     history.EpisodeId = episode.EpisodeId;
 

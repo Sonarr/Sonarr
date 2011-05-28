@@ -53,10 +53,8 @@ namespace NzbDrone.Core.Providers.Indexer
             if (currentResult != null)
             {
                 var quality = Parser.ParseQuality(item.Summary.Text);
-                var proper = Parser.ParseProper(item.Summary.Text);
 
-                currentResult.Quality = quality;
-                currentResult.Proper = proper;
+                currentResult.Quality = quality; 
             }
             return currentResult;
         }

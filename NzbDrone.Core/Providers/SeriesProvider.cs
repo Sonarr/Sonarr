@@ -54,13 +54,6 @@ namespace NzbDrone.Core.Providers
             return _repository.Exists<Series>(c => c.SeriesId == id && c.Monitored);
         }
 
-        public virtual bool QualityWanted(int seriesId, QualityTypes quality)
-        {
-            var series = _repository.Single<Series>(seriesId);
-            Logger.Trace("Series {0} is using quality profile {1}", seriesId, series.QualityProfile.Name);
-            return series.QualityProfile.Allowed.Contains(quality);
-        }
-
         public virtual TvdbSeries MapPathToSeries(string path)
         {
             var seriesPath = new DirectoryInfo(path);

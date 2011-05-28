@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMoq;
+using FizzWare.NBuilder;
 using MbUnit.Framework;
 using Moq;
 using NzbDrone.Core.Providers;
@@ -60,6 +61,38 @@ namespace NzbDrone.Core.Test
 
 
         [Test]
+        public void GetBestQualityInHistory_no_result()
+        {
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+
+            mocker.SetConstant(MockLib.GetEmptyRepository());
+
+            //Act
+            var result = mocker.Resolve<HistoryProvider>().GetBestQualityInHistory(12);
+
+            //Assert
+            Assert.IsNull(result);
+        }
+
+        [Test]
+        public void GetBestQualityInHistory_single_result()
+        {
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+
+
+            var repo = MockLib.GetEmptyRepository();
+            var history = Builder<History>.CreateNew().Build();
+            repo.Add(history);
+            mocker.SetConstant(repo);
+
+            //Act
+            var result = mocker.Resolve<HistoryProvider>().GetBestQualityInHistory(history.EpisodeId);
+
+            //Assert
+            Assert.IsNotNull(result);
+        }
+
+        [Test]
         public void add_item()
         {
             //Arange
@@ -95,83 +128,6 @@ namespace NzbDrone.Core.Test
             Assert.AreEqual(history.Indexer, newHistiory.Indexer);
         }
 
-        [Test]
-        [Ignore]
-        public void Exists_True()
-        {
-            //Todo: This test fails... Moq Setup doesn't return the expected value
-            //Setup
-            var season = new Season { SeasonId = 4321, SeasonNumber = 1, SeriesId = 5656, Monitored = true };
-            var episode = new Episode
-                              {
-                                  AirDate = DateTime.Today.AddDays(-1),
-                                  EpisodeId = 1234,
-                                  EpisodeNumber = 5,
-                                  Overview = "This is an Overview",
-                                  SeasonNumber = 1,
-                                  SeasonId = 4321,
-                                  Season = season,
-                                  SeriesId = 5656
-                              };
 
-            var proper = false;
-
-            var repo = new Mock<IRepository>();
-            repo.Setup(r => r.Exists<History>(h => h.EpisodeId == episode.EpisodeId && h.IsProper == proper)).Returns(
-                true);
-
-            var target = new HistoryProvider(repo.Object);
-
-            //Act
-            var result = target.Exists(episode.EpisodeId, QualityTypes.SDTV, false);
-
-            //Assert
-            Assert.AreEqual(result, true);
-        }
-
-        [Test]
-        [Ignore]
-        public void Exists_False()
-        {
-            //Todo: This test fails... Moq Setup doesn't return the expected value
-
-            //Setup
-            var season = new Season { SeasonId = 4321, SeasonNumber = 1, SeriesId = 5656, Monitored = true };
-            var episode = new Episode
-                              {
-                                  AirDate = DateTime.Today.AddDays(-1),
-                                  EpisodeId = 1234,
-                                  EpisodeNumber = 5,
-                                  Overview = "This is an Overview",
-                                  SeasonNumber = 1,
-                                  SeasonId = 4321,
-                                  Season = season,
-                                  SeriesId = 5656
-                              };
-
-            var list = new List<History>
-                           {
-                               new History
-                                   {
-                                       HistoryId = new int(),
-                                       Date = DateTime.Now,
-                                       IsProper = false,
-                                       Quality = QualityTypes.SDTV,
-                                       EpisodeId = episode.EpisodeId
-                                   }
-                           };
-
-            var repo = new Mock<IRepository>();
-            repo.Setup(r => r.Exists<History>(h => h.Episode == episode && h.IsProper == list[0].IsProper)).Returns(
-                false);
-
-            var target = new HistoryProvider(repo.Object);
-
-            //Act
-            var result = target.Exists(episode.EpisodeId, QualityTypes.SDTV, true);
-
-            //Assert
-            Assert.AreEqual(result, false);
-        }
     }
 }

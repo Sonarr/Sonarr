@@ -100,14 +100,14 @@ namespace NzbDrone.Core.Test
         public void quality_parse(string postTitle, object quality)
         {
             var result = Parser.ParseQuality(postTitle);
-            Assert.AreEqual(quality, result);
+            Assert.AreEqual(quality, result.QualityType);
         }
 
         [Test]
         public void parsing_our_own_quality_enum()
         {
             var qualityEnums = Enum.GetValues(typeof(QualityTypes));
-            
+
 
             foreach (var qualityEnum in qualityEnums)
             {
@@ -115,14 +115,14 @@ namespace NzbDrone.Core.Test
 
                 var extention = "mkv";
 
-                if (qualityEnum.ToString() ==QualityTypes.SDTV.ToString() || qualityEnum.ToString() ==QualityTypes.DVD.ToString())
+                if (qualityEnum.ToString() == QualityTypes.SDTV.ToString() || qualityEnum.ToString() == QualityTypes.DVD.ToString())
                 {
                     extention = "avi";
                 }
 
-                var fileName = String.Format("My series S01E01 [{0}].{1}", qualityEnum,extention);
+                var fileName = String.Format("My series S01E01 [{0}].{1}", qualityEnum, extention);
                 var result = Parser.ParseQuality(fileName);
-                Assert.AreEqual(qualityEnum, result);
+                Assert.AreEqual(qualityEnum, result.QualityType);
             }
         }
 

@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Providers.Jobs
             var episode = _episodeProvider.GetEpisode(targetId);
             if (episode == null)
             {
-                Logger.Error("Unbale to find an episode {0} in database", targetId);
+                Logger.Error("Unable to find an episode {0} in database", targetId);
                 return;
             }
 
@@ -80,19 +80,36 @@ namespace NzbDrone.Core.Providers.Jobs
             Logger.Debug("Finished searching all indexers. Total {0}", reports.Count);
             notification.CurrentMessage = "Processing search results";
 
+            reports.ForEach(c =>
+                                {
+                                    c.Series = episode.Series;
+                                    c.Episodes = new List<Episode> { episode };
+                                });
+
             ProcessResults(notification, episode, reports);
         }
 
         public void ProcessResults(ProgressNotification notification, Episode episode, IEnumerable<EpisodeParseResult> reports)
         {
-            foreach (var episodeParseResult in reports.OrderByDescending(c => c.Quality).ThenByDescending(c => c.Proper))
+            foreach (var episodeParseResult in reports.OrderByDescending(c => c.Quality))
             {
                 try
                 {
-                    if (_inventoryProvider.IsNeeded(episodeParseResult))
+                    Logger.Trace("Analysing report " + episodeParseResult);
+                    if (_inventoryProvider.IsQualityNeeded(episodeParseResult))
                     {
-                        _downloadProvider.DownloadReport(episodeParseResult);
-                        notification.CurrentMessage = String.Format("{0} {1} Added to download queue", episode, episodeParseResult.Quality);
+                        Logger.Debug("Found '{0}'. Adding to download queue.", episodeParseResult);
+                        try
+                        {
+                            _downloadProvider.DownloadReport(episodeParseResult);
+                            notification.CurrentMessage = String.Format("{0} {1} Added to download queue", episode, episodeParseResult.Quality);
+                        }
+                        catch (Exception e)
+                        {
+                            Logger.ErrorException("Unable to add report to download queue." + episodeParseResult, e);
+                            notification.CurrentMessage = String.Format("Unable to add report to download queue. {0}", episodeParseResult);
+                        }
+
                         return;
                     }
                 }
@@ -103,6 +120,7 @@ namespace NzbDrone.Core.Providers.Jobs
             }
 
             Logger.Warn("Unable to find {0} in any of indexers.", episode);
+            notification.CurrentMessage = String.Format("Unable to find {0} in any of indexers.", episode);
         }
     }
 }

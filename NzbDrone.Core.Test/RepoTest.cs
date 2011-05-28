@@ -40,6 +40,36 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
+        public void ToString_test_over_castle_proxy()
+        {
+            //Arrange
+            var fakeSeries = Builder<Series>.CreateNew().With(s => s.SeriesId = 69).Build();
+            var fakeEpisode = Builder<Episode>.CreateNew().With(c => c.SeriesId = 69).Build();
+
+            //Act
+            var repo = MockLib.GetEmptyRepository(true);
+            repo.Add(fakeSeries);
+            repo.Add(fakeEpisode);
+            Console.WriteLine("Getting single");
+            var fetchedEpisode = repo.Single<Episode>(fakeEpisode.EpisodeId);
+
+            //Assert
+            Console.WriteLine("Doing assert");
+            Assert.AreEqual(fakeEpisode.EpisodeId, fetchedEpisode.EpisodeId);
+            Console.WriteLine("Doing assert");
+            Assert.AreEqual(fakeEpisode.Title, fetchedEpisode.Title);
+
+            Console.WriteLine("=======================");
+            var ttt= fetchedEpisode.Series;
+            Console.WriteLine("=======================");
+            var tttd= fetchedEpisode.Series;
+            Console.WriteLine("=======================");
+
+            //Assert.Contains(fetchedEpisode.ToString(), fakeSeries.Title);
+        }
+
+
+        [Test]
         [Description(
             "This test confirms that the tvdb id stored in the db is preserved rather than being replaced by an auto incrementing value"
             )]

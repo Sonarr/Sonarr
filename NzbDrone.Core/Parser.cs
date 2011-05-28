@@ -65,7 +65,6 @@ namespace NzbDrone.Core
 
                         parsedEpisode = new EpisodeParseResult
                         {
-                            Proper = title.ToLower().Contains("proper"),
                             CleanTitle = seriesName,
                             SeasonNumber = season,
                             EpisodeNumbers = new List<int>()
@@ -99,7 +98,6 @@ namespace NzbDrone.Core
 
                             parsedEpisode = new EpisodeParseResult
                             {
-                                Proper = title.ToLower().Contains("proper"),
                                 CleanTitle = seriesName,
                                 AirDate = new DateTime(airyear, airmonth, airday),
                                 Language = ParseLanguage(simpleTitle)
@@ -200,49 +198,65 @@ namespace NzbDrone.Core
             return title.ToLower().Contains("proper");
         }
 
-        internal static QualityTypes ParseQuality(string name)
+        internal static Quality ParseQuality(string name)
         {
             Logger.Trace("Trying to parse quality for {0}", name);
 
             name = name.Trim();
             var normilizedName = NormalizeTitle(name);
-            var result = QualityTypes.Unknown;
+            var result = new Quality { QualityType = QualityTypes.Unknown };
+            result.Proper = normilizedName.Contains("proper");
 
             if (normilizedName.Contains("dvd") || normilizedName.Contains("bdrip") || normilizedName.Contains("brrip"))
             {
-                return QualityTypes.DVD;
+                result.QualityType = QualityTypes.DVD;
+                return result;
             }
 
             if (normilizedName.Contains("xvid") || normilizedName.Contains("divx"))
             {
                 if (normilizedName.Contains("bluray"))
                 {
-                    return QualityTypes.DVD;
+                    result.QualityType = QualityTypes.DVD;
+                    return result;
                 }
 
-                return QualityTypes.SDTV;
+                result.QualityType = QualityTypes.SDTV;
+                return result;
             }
 
             if (normilizedName.Contains("bluray"))
             {
                 if (normilizedName.Contains("720p"))
-                    return QualityTypes.Bluray720p;
+                {
+                    result.QualityType = QualityTypes.Bluray720p;
+                    return result;
+                }
 
                 if (normilizedName.Contains("1080p"))
-                    return QualityTypes.Bluray1080p;
+                {
+                    result.QualityType = QualityTypes.Bluray1080p;
+                    return result;
+                }
 
-                return QualityTypes.Bluray720p;
+                result.QualityType = QualityTypes.Bluray720p;
+                return result;
             }
             if (normilizedName.Contains("webdl"))
-                return QualityTypes.WEBDL;
+            {
+                result.QualityType = QualityTypes.WEBDL;
+                return result;
+            }
             if (normilizedName.Contains("x264") || normilizedName.Contains("h264") || normilizedName.Contains("720p"))
-                return QualityTypes.HDTV;
-
+            {
+                result.QualityType = QualityTypes.HDTV;
+                return result;
+            }
             //Based on extension
 
 
 
-            if (result == QualityTypes.Unknown)
+            if (result.QualityType  == QualityTypes.Unknown)
             {
                 try
                 {
@@ -253,12 +267,12 @@ namespace NzbDrone.Core
                         case ".wmv":
                         case ".mp4":
                             {
-                                result = QualityTypes.SDTV;
+                                result.QualityType = QualityTypes.SDTV;
                                 break;
                             }
                         case ".mkv":
                             {
-                                result = QualityTypes.HDTV;
+                                result.QualityType = QualityTypes.HDTV;
                                 break;
                             }
                     }
@@ -270,14 +284,17 @@ namespace NzbDrone.Core
                 }
             }
 
-            if (normilizedName.Contains("sdtv") || (result == QualityTypes.Unknown && normilizedName.Contains("hdtv")))
+            if (normilizedName.Contains("sdtv") || (result.QualityType == QualityTypes.Unknown && normilizedName.Contains("hdtv")))
             {
-                return QualityTypes.SDTV;
+                result.QualityType = QualityTypes.SDTV;
+                return result;
             }
 
             Logger.Trace("Quality Parsed:{0} Title:", result, name);
             return result;
         }
+
+
 
         internal static LanguageType ParseLanguage(string title)
         {

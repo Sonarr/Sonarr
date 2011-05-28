@@ -10,6 +10,7 @@ using Gallio.Framework;
 using MbUnit.Framework;
 using MbUnit.Framework.ContractVerifiers;
 using Moq;
+using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.Indexer;
@@ -114,10 +115,10 @@ namespace NzbDrone.Core.Test
             var result = mocker.Resolve<CustomParserIndexer>().ParseFeed(fakeRssItem);
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(summary, result.EpisodeTitle);
+            Assert.AreEqual(LanguageType.Finnish, result.Language);
             Assert.AreEqual(season, result.SeasonNumber);
             Assert.AreEqual(episode, result.EpisodeNumbers[0]);
-            Assert.AreEqual(quality, result.Quality);
+            Assert.AreEqual(quality, result.Quality.QualityType);
         }
 
 
@@ -142,7 +143,7 @@ namespace NzbDrone.Core.Test
             var result = mocker.Resolve<CustomParserIndexer>().ParseFeed(fakeRssItem);
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(summary, result.EpisodeTitle);
+            Assert.AreEqual(LanguageType.Finnish, result.Language);
             ExceptionVerification.ExcpectedWarns(1);
         }
 
