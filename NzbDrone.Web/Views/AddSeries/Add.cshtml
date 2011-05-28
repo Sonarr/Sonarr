@@ -27,13 +27,10 @@
         @Html.DisplayText("No Series to Add");
     }
 
-    @Html.DropDownList("masterDropbox", (SelectList) ViewData["qualities"],
-                                                new {style = "width: 100px;", id = "masterDropboxId"})
+    @Html.Telerik().DropDownList().Name("masterDropbox").BindTo((SelectList) ViewData["qualities"]).HtmlAttributes(
+        new {style = "width: 100px; margin-left:5px;"}).ClientEvents(events => events.OnChange("masterChanged"))
 
-    @Html.Telerik().DropDownList().Name("tester").BindTo((SelectList) ViewData["qualities"]).HtmlAttributes(
-        new {style = "width: 100px", @class = "qualityDropbox"})
-
-    <button onclick="openAddNewSeries(); return false;" class="listButton">Add New</button>
+    <button onclick="openAddNewSeries(); return false;" class="listButton" style="margin-left:210px">Add New</button>
 
     @foreach (var path in Model)
     {
@@ -47,19 +44,27 @@
         var windowElement = $('#Window');
 
         windowElement.data('tWindow').center().open();
-    };
+    }
 
     function closeAddNewSeries() {
         var window = $('#Window').data("tWindow");
         window.close();
     }
+    
+    function masterChanged() {
+        var masterQuality = $('#masterDropbox').data("tDropDownList").value();
+        
+        var qualityDropbox = $(".qualityDropbox");
 
-    $("#masterDropboxId").change(function () {
-        var selectedQuality = $('#masterDropboxId').get(0).selectedIndex;
-        //$(".qualityDropbox").data("tComboBox").value(selectedQuality);
-        //$(".qualityDropbox").data("tDropDownList").val(selectedQuality);
-
-        var comboBox = $(".qualityDropbox").data("tDropDownList");
-        comboBox.select(selectedQuality);
-    });
+        qualityDropbox.each(function () {
+            var child = $(this).children("[id^='qualityList']");
+            var comboBox = child.data("tDropDownList");
+            comboBox.value(masterQuality);
+        });
+    }
+    
+    function testValue() {
+        var comboBox = $('#qualityList_tester').data("tDropDownList");
+        comboBox.value('2');
+    }
 </script>
