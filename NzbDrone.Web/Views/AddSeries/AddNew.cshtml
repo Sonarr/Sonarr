@@ -1,98 +1,67 @@
-﻿@model NzbDrone.Web.Models.AddNewSeriesModel
+﻿@using NzbDrone.Web.Models
+@model NzbDrone.Web.Models.AddNewSeriesModel
 
-@section TitleContent{
-    Add New Series
-
-    <script type="text/javascript">
-        jQuery(document).ready(function () {
-            $('#searchButton').attr('disabled', '');
-        });
-    </script>
+@{
+    Layout = null;
 }
 
-@section MainContent{
-    <div style="width: 60%">
-        <div style="display: inline">
-            @Html.Label("Enter a Series Name")
-            @Html.TextBox("new_series_name", String.Empty, new {id = "new_series_id"})
-            <button class="t.button" id="searchButton" disabled="disabled" onclick="searchSeries ()">
-                Search</button>
-        </div>
-        <div style="display: inline; float: right;">
-            @Html.LabelFor(m => m.QualityProfileId)
-            @Html.DropDownListFor(m => m.QualityProfileId, Model.QualitySelectList)
-        </div>
-    </div>
+<div>
+    <fieldset>
+        <legend>Root Directory</legend>
+    
+        @{int d = 0;
 
-    <div id="result"></div>
-
-    <div id="RootDirectories" class="rootDirectories" style="display: none">
-        <fieldset>
-            <legend>Root TV Folders</legend>
-            @{int d = 0;}
-            
-            @foreach (var dir in Model.RootDirectories)
-            {
-                @Html.RadioButton("selectedRootDir", dir.Path, d == 0, new {@class = "dirList examplePart", id = "dirRadio_" + d});
-                @Html.Label(dir.Path)
+          foreach (var dir in ViewData["RootDirs"] as List<RootDirModel>)
+          {
+                <div>
+                    @Html.RadioButton("selectedRootDir", dir.CleanPath, d == 0, new { @class = "dirList examplePart", id = "dirRadio_" + d })
+                    @Html.Label(dir.Path)
+                    @{ d++; }
+                </div>
             }
-        </fieldset>
-        <div id="example">
-        </div>
-        <button class="t.button" onclick="addSeries ()">
-            Add New Series</button>
-    </div>
+        }
+    </fieldset>
+</div>
+<br/>
+<div>
+    @{Html.Telerik().ComboBox()
+    .Name("seriesList_new")
+            .DataBinding(binding => binding.Ajax().Select("_textLookUp", "AddSeries").Delay(400))
+            .Filterable(f => f.FilterMode(AutoCompleteFilterMode.Contains))
+            .HighlightFirstMatch(true)
+            .HtmlAttributes(new { style = "width: 300px;" })
+            .Render();}
+    @Html.Telerik().DropDownList().Name("qualityList_new").BindTo((SelectList)ViewData["quality"]).HtmlAttributes(new { style = "width: 100px", @class = "qualityDropbox" })
+    <button class="listButton" onclick="addNewSeries()">
+        Add</button>
+</div>
 
-    <div id="addResult"></div>
+<script type="text/javascript" language="javascript">
+    var addNewSeriesUrl = '@Url.Action("AddNewSeries", "AddSeries")';
 
-    <script type="text/javascript" language="javascript">
+    function addNewSeries() {
+        var seriesComboBox = $("#seriesList_new").data("tComboBox");
+        var qualityComboBox = $("#qualityList_new").data("tDropDownList");
+        var path = $("input[name='selectedRootDir']:checked").val();
+        
+        sendToServerNew(seriesComboBox.value(), path, seriesComboBox.text(), qualityComboBox.value());
+    }
 
-        $('#new_series_id').bind('keydown', function (e) {
-            if (e.keyCode == 13) {
-                $('#searchButton').click();
+    function sendToServerNew(id, rootPath, seriesName, quality) {
+        $.ajax({
+            type: "POST",
+            url: addNewSeriesUrl,
+            data: jQuery.param({ rootPath: rootPath, seriesName: seriesName, seriesId: id, qualityProfileId: quality }),
+            error: function (req, status, error) {
+                alert("Sorry! We could not add " + path + " at this time. " + error);
+            },
+            success: function (){
+                //Clear the search box
+                $("#seriesList_new").data("tComboBox").text('');
+                
+                //Close the Window!
+                closeAddNewSeries();
             }
         });
-
-        function searchSeries() {
-            var seriesSearch = $('#new_series_id');
-
-            $("#result").text("Searching...");
-            $("#result").load('@Url.Action("SearchForSeries", "Series")', {
-                seriesName: seriesSearch.val()
-            });
-
-            document.getElementById('RootDirectories').style.display = 'inline';
-        }
-
-        function addSeries() {
-            var checkedSeries = $("input[name='selectedSeries']:checked").val();
-            var checkedDir = $("input[name='selectedRootDir']:checked").val();
-            var id = "#" + checkedSeries + "_text";
-            var seriesName = $(id).val();
-            var qualityProfileId = $("#QualityProfileId").val();
-
-            $("#addResult").load('@Url.Action("AddSeries", "AddSeries")', {
-                dir: checkedDir,
-                seriesId: checkedSeries,
-                seriesName: seriesName,
-                qualityProfileId: qualityProfileId
-            });
-        }
-
-        //Need to figure out how to use 'ViewData["DirSep"]' instead of hardcoding '\'
-        $(".examplePart").live("change", function () {
-            var dir = $("input[name='selectedRootDir']:checked").val();
-            var series = $("input[name='selectedSeries']:checked").val();
-
-            var id = "#" + series + "_text";
-            var seriesName = $(id).val();
-
-            var sep = "\\";
-
-            var str = "Target: " + dir + sep + seriesName;
-
-            $('#example').text(str);
-
-        });
-    </script>
-}
+    }
+</script>
