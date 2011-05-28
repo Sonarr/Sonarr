@@ -1,0 +1,65 @@
+﻿@model IEnumerable<String>
+
+<script type="text/javascript" src="../../Scripts/2011.1.315/telerik.window.min.js"></script>
+
+@section TitleContent{
+    Add Existing Series
+}
+
+@section MainContent{
+
+        @{ Html.Telerik().Window()
+    .Name("Window")
+    .Title("Add New Series")
+    .Modal(true)
+    .Buttons(b => b.Close())
+    .Width(500)
+    .Height(200)
+    .Visible(false)
+    .Draggable(true)
+    .Resizable(resizing => resizing.Enabled(false))
+    .LoadContentFrom("AddNew", "AddSeries")
+    .Render();
+}
+
+    @if (Model.Count() == 0)
+    {
+        @Html.DisplayText("No Series to Add");
+    }
+
+    @Html.DropDownList("masterDropbox", (SelectList) ViewData["qualities"],
+                                                new {style = "width: 100px;", id = "masterDropboxId"})
+
+    @Html.Telerik().DropDownList().Name("tester").BindTo((SelectList) ViewData["qualities"]).HtmlAttributes(
+        new {style = "width: 100px", @class = "qualityDropbox"})
+
+    <button onclick="openAddNewSeries(); return false;" class="listButton">Add New</button>
+
+    @foreach (var path in Model)
+    {
+        Html.RenderAction("RenderPartial", "AddSeries", new {path});
+    }
+}
+
+<script type="text/javascript">
+
+    function openAddNewSeries() {
+        var windowElement = $('#Window');
+
+        windowElement.data('tWindow').center().open();
+    };
+
+    function closeAddNewSeries() {
+        var window = $('#Window').data("tWindow");
+        window.close();
+    }
+
+    $("#masterDropboxId").change(function () {
+        var selectedQuality = $('#masterDropboxId').get(0).selectedIndex;
+        //$(".qualityDropbox").data("tComboBox").value(selectedQuality);
+        //$(".qualityDropbox").data("tDropDownList").val(selectedQuality);
+
+        var comboBox = $(".qualityDropbox").data("tDropDownList");
+        comboBox.select(selectedQuality);
+    });
+</script>

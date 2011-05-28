@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Web.Mvc;
+using System.Linq;
+using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.Jobs;
@@ -18,11 +20,13 @@ namespace NzbDrone.Web.Controllers
         private readonly JobProvider _jobProvider;
         private readonly SyncProvider _syncProvider;
         private readonly TvDbProvider _tvDbProvider;
+        private readonly DiskProvider _diskProvider;
 
         public AddSeriesController(SyncProvider syncProvider, RootDirProvider rootFolderProvider,
                                    ConfigProvider configProvider,
                                    QualityProvider qualityProvider, TvDbProvider tvDbProvider,
-                                   SeriesProvider seriesProvider, JobProvider jobProvider)
+                                   SeriesProvider seriesProvider, JobProvider jobProvider,
+                                   DiskProvider diskProvider)
         {
             _syncProvider = syncProvider;
             _rootFolderProvider = rootFolderProvider;
@@ -31,6 +35,7 @@ namespace NzbDrone.Web.Controllers
             _tvDbProvider = tvDbProvider;
             _seriesProvider = seriesProvider;
             _jobProvider = jobProvider;
+            _diskProvider = diskProvider;
         }
 
         [HttpPost]
@@ -42,25 +47,28 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult AddNew()
         {
-            ViewData["RootDirs"] = _rootFolderProvider.GetAll();
-            ViewData["DirSep"] = Path.DirectorySeparatorChar;
+            var rootDirs =_rootFolderProvider.GetAll().Select(r =>
+                        new RootDirModel
+                        {
+                            Path = r.Path,
+                            CleanPath = r.Path.Replace(Path.DirectorySeparatorChar, '|').Replace(Path.VolumeSeparatorChar, '^').Replace('\'', '`')
+                        }).ToList();
+            ViewData["RootDirs"] = rootDirs;
+            ViewData["DirSep"] = Path.DirectorySeparatorChar.ToString().Replace(Path.DirectorySeparatorChar, '|');
 
-            var profiles = _qualityProvider.GetAllProfiles();
-            var selectList = new SelectList(profiles, "QualityProfileId", "Name");
-            var defaultQuality = Convert.ToInt32(_configProvider.DefaultQualityProfile);
+            var defaultQuality = _configProvider.DefaultQualityProfile;
+            var qualityProfiles = _qualityProvider.GetAllProfiles();
 
-            var model = new AddNewSeriesModel
-                            {
-                                DirectorySeparatorChar = Path.DirectorySeparatorChar.ToString(),
-                                RootDirectories = _rootFolderProvider.GetAll(),
-                                QualityProfileId = defaultQuality,
-                                QualitySelectList = selectList
-                            };
+            ViewData["quality"] = new SelectList(
+                qualityProfiles,
+                "QualityProfileId",
+                "Name",
+                defaultQuality);
 
-            return View(model);
+            return View();
         }
 
-        public ActionResult AddExisting()
+        public ActionResult Add()
         {
             var unmappedList = new List<String>();
 
@@ -96,6 +104,20 @@ namespace NzbDrone.Web.Controllers
                 defaultQuality);
 
             return PartialView("AddSeriesItem", suggestions);
+        }
+
+        [HttpPost]
+        public JsonResult AddNewSeries(string rootPath, string seriesName, int seriesId, int qualityProfileId)
+        {
+            var path = rootPath.Replace('|', Path.DirectorySeparatorChar).Replace('^', Path.VolumeSeparatorChar).Replace('`', '\'') +
+                        Path.DirectorySeparatorChar + EpisodeRenameHelper.CleanFilename(seriesName);
+
+            //Create the folder for the new series and then Add it
+            _diskProvider.CreateDirectory(path);
+
+            _seriesProvider.AddSeries(path, seriesId, qualityProfileId);
+            ScanNewSeries();
+            return new JsonResult { Data = "ok" };
         }
 
         public JsonResult AddSeries(string path, int seriesId, int qualityProfileId)
