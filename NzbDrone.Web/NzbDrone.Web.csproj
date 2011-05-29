@@ -237,6 +237,7 @@
     <Compile Include="Models\AddExistingManualModel.cs" />
     <Compile Include="Models\AddExistingSeriesModel.cs" />
     <Compile Include="Models\AddNewSeriesModel.cs" />
+    <Compile Include="Models\QualityTypeModel.cs" />
     <Compile Include="Models\RootDirModel.cs" />
     <Compile Include="Models\SabnzbdSettingsModel.cs" />
     <Compile Include="Models\EpisodeSortingModel.cs" />

@@ -17,6 +17,6 @@ namespace NzbDrone.Web.Models
         [Description("Should NzbDrone download proper releases (to replace non-proper files)?")]
         public bool DownloadPropers { get; set; }
 
-        public SelectList SelectList { get; set; }
+        public SelectList QualityProfileSelectList { get; set; }
     }
 }

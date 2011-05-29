@@ -138,14 +138,14 @@ namespace NzbDrone.Web.Controllers
             var defaultQualityQualityProfileId = Convert.ToInt32(_configProvider.DefaultQualityProfile);
             var downloadPropers = _configProvider.DownloadPropers;
 
-            var selectList = new SelectList(profiles, "QualityProfileId", "Name");
+            var qualityProfileSelectList = new SelectList(profiles, "QualityProfileId", "Name");
 
             var model = new QualityModel
                             {
                                 Profiles = profiles,
                                 DefaultQualityProfileId = defaultQualityQualityProfileId,
                                 DownloadPropers = downloadPropers,
-                                SelectList = selectList
+                                QualityProfileSelectList = qualityProfileSelectList
                             };
 
             return View("Index", model);
@@ -208,7 +208,7 @@ namespace NzbDrone.Web.Controllers
                 qualityTypes.Add(qual);
             }
 
-            ViewData["Qualities"] = qualityTypes;
+            ViewData["Qualities"] = new SelectList(qualityTypes);
 
             var qualityProfile = new QualityProfile
                                      {
@@ -234,6 +234,7 @@ namespace NzbDrone.Web.Controllers
             {
                 qualityTypes.Add(qual);
             }
+
             ViewData["Qualities"] = qualityTypes;
             ViewData["ProfileId"] = profile.QualityProfileId;
 
@@ -286,7 +287,7 @@ namespace NzbDrone.Web.Controllers
                 Convert.ToInt32(_configProvider.GetValue("DefaultQualityProfile", profiles[0].QualityProfileId, true));
             var selectList = new SelectList(profiles, "QualityProfileId", "Name");
 
-            return new QualityModel { DefaultQualityProfileId = defaultQualityQualityProfileId, SelectList = selectList };
+            return new QualityModel { DefaultQualityProfileId = defaultQualityQualityProfileId, QualityProfileSelectList = selectList };
         }
 
         public JsonResult DeleteQualityProfile(int profileId)
@@ -470,6 +471,10 @@ namespace NzbDrone.Web.Controllers
                     Logger.Debug(String.Format("Updating Profile: {0}", profile));
 
                     profile.Allowed = new List<QualityTypes>();
+
+                    //Remove the extra comma from the end and replace double commas with a single one (the Javascript gets a little crazy)
+                    profile.AllowedString = profile.AllowedString.Replace(",,", ",").Trim(',');
+
                     foreach (var quality in profile.AllowedString.Split(','))
                     {
                         var qType = (QualityTypes)Enum.Parse(typeof(QualityTypes), quality);
