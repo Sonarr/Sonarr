@@ -12,7 +12,7 @@
     });
 </script>
 
-@using (Html.BeginCollectionItem("UserProfiles"))
+@using (Html.BeginCollectionItem("Profiles"))
 {
     var idClean = ViewData.TemplateInfo.HtmlFieldPrefix.Replace('[', '_').Replace(']', '_');
     var ugly = ViewData.TemplateInfo.HtmlFieldPrefix;
@@ -64,14 +64,14 @@
         });
     </script>
 
-    <div class="userProfileSectionEditor" id="div_@(ViewData["ProfileId"])">
+    <div class="profileSectionEditor" id="div_@(ViewData["ProfileId"])">
 
         <fieldset style="width:285px; max-width:285px; margin:5px; margin-top: 0px; border-color:#CCCCCD">
         <div id="tester"></div>
 
             <div id="qualityHeader" style="padding-bottom: 5px; margin: 0px;">
                 <h2 style="display:inline; padding-right: 4px; margin-left: 4px;" id="@title">@{Html.DisplayTextFor(m => m.Name);}</h2>
-                <a href="#" id="@Model.QualityProfileId" class="deleteRow" onclick="deleteProfile('@ViewData["ProfileId"]')" style="float:right; padding-top:15px;"><img src="../../Content/Images/X.png" alt="Delete"/></a>
+                <a href="#" id="@Model.QualityProfileId" class="deleteRow" onclick="deleteProfile('@ViewData["ProfileId"]'); return false;" style="float:right; padding-top:15px;"><img src="../../Content/Images/X.png" alt="Delete"/></a>
             </div>
 
             <div class="config-group" style="width: 270px; margin-bottom: 5px; margin-left: 5px;">

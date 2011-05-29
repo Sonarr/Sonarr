@@ -712,7 +712,7 @@
     <Content Include="Views\Series\SubMenu.cshtml" />
     <Content Include="Views\Series\SeriesSearchResults.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Settings\UserProfileSection.cshtml" />
+    <Content Include="Views\Settings\QualityProfileItem.cshtml" />
     <Content Include="Views\System\Indexers.cshtml" />
     <Content Include="Views\System\Config.cshtml" />
   </ItemGroup>
@@ -870,9 +870,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Series\SingleSeason.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\AddSeries\Copy of AddNew.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

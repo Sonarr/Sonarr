@@ -29,11 +29,12 @@ namespace NzbDrone.Web.Controllers
         private readonly AutoConfigureProvider _autoConfigureProvider;
         private readonly NotificationProvider _notificationProvider;
         private readonly DiskProvider _diskProvider;
+        private readonly SeriesProvider _seriesProvider;
 
         public SettingsController(ConfigProvider configProvider, IndexerProvider indexerProvider,
                                   QualityProvider qualityProvider, RootDirProvider rootDirProvider,
                                   AutoConfigureProvider autoConfigureProvider, NotificationProvider notificationProvider,
-                                  DiskProvider diskProvider)
+                                  DiskProvider diskProvider, SeriesProvider seriesProvider)
         {
             _configProvider = configProvider;
             _indexerProvider = indexerProvider;
@@ -42,6 +43,7 @@ namespace NzbDrone.Web.Controllers
             _autoConfigureProvider = autoConfigureProvider;
             _notificationProvider = notificationProvider;
             _diskProvider = diskProvider;
+            _seriesProvider = seriesProvider;
         }
 
         public ActionResult Test()
@@ -131,7 +133,6 @@ namespace NzbDrone.Web.Controllers
 
             ViewData["Qualities"] = qualityTypes;
 
-            var userProfiles = _qualityProvider.GetAllProfiles().Where(q => q.UserProfile).ToList();
             var profiles = _qualityProvider.GetAllProfiles().ToList();
 
             var defaultQualityQualityProfileId = Convert.ToInt32(_configProvider.DefaultQualityProfile);
@@ -142,7 +143,6 @@ namespace NzbDrone.Web.Controllers
             var model = new QualityModel
                             {
                                 Profiles = profiles,
-                                UserProfiles = userProfiles,
                                 DefaultQualityProfileId = defaultQualityQualityProfileId,
                                 DownloadPropers = downloadPropers,
                                 SelectList = selectList
@@ -199,7 +199,7 @@ namespace NzbDrone.Web.Controllers
             return View("Index", model);
         }
 
-        public ViewResult AddUserProfile()
+        public ViewResult AddProfile()
         {
             var qualityTypes = new List<QualityTypes>();
 
@@ -213,7 +213,6 @@ namespace NzbDrone.Web.Controllers
             var qualityProfile = new QualityProfile
                                      {
                                          Name = "New Profile",
-                                         UserProfile = true,
                                          Allowed = new List<QualityTypes> { QualityTypes.Unknown },
                                          Cutoff = QualityTypes.Unknown,
                                      };
@@ -224,7 +223,7 @@ namespace NzbDrone.Web.Controllers
 
             ViewData["ProfileId"] = id;
 
-            return View("UserProfileSection", qualityProfile);
+            return View("QualityProfileItem", qualityProfile);
         }
 
         public ActionResult GetQualityProfileView(QualityProfile profile)
@@ -238,7 +237,7 @@ namespace NzbDrone.Web.Controllers
             ViewData["Qualities"] = qualityTypes;
             ViewData["ProfileId"] = profile.QualityProfileId;
 
-            return PartialView("UserProfileSection", profile);
+            return PartialView("QualityProfileItem", profile);
         }
 
         public ViewResult AddRootDir()
@@ -294,6 +293,9 @@ namespace NzbDrone.Web.Controllers
         {
             try
             {
+                if (_seriesProvider.GetAllSeries().Where(s => s.QualityProfileId == profileId).Count() != 0)
+                    return new JsonResult { Data = "Unable to delete Profile, it is still in use." };
+
                 _qualityProvider.Delete(profileId);
             }
 
@@ -460,12 +462,12 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.DownloadPropers = data.DownloadPropers;
 
                 //Saves only the Default Quality, skips User Profiles since none exist
-                if (data.UserProfiles == null)
+                if (data.Profiles == null)
                     return Content(SETTINGS_SAVED);
 
-                foreach (var profile in data.UserProfiles)
+                foreach (var profile in data.Profiles)
                 {
-                    Logger.Debug(String.Format("Updating User Profile: {0}", profile));
+                    Logger.Debug(String.Format("Updating Profile: {0}", profile));
 
                     profile.Allowed = new List<QualityTypes>();
                     foreach (var quality in profile.AllowedString.Split(','))
