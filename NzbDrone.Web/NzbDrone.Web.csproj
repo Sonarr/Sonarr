@@ -237,6 +237,7 @@
     <Compile Include="Models\AddExistingManualModel.cs" />
     <Compile Include="Models\AddExistingSeriesModel.cs" />
     <Compile Include="Models\AddNewSeriesModel.cs" />
+    <Compile Include="Models\QualityTypeModel.cs" />
     <Compile Include="Models\RootDirModel.cs" />
     <Compile Include="Models\SabnzbdSettingsModel.cs" />
     <Compile Include="Models\EpisodeSortingModel.cs" />
@@ -712,7 +713,7 @@
     <Content Include="Views\Series\SubMenu.cshtml" />
     <Content Include="Views\Series\SeriesSearchResults.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Settings\UserProfileSection.cshtml" />
+    <Content Include="Views\Settings\QualityProfileItem.cshtml" />
     <Content Include="Views\System\Indexers.cshtml" />
     <Content Include="Views\System\Config.cshtml" />
   </ItemGroup>

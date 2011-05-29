@@ -8,7 +8,6 @@ namespace NzbDrone.Web.Models
     public class QualityModel
     {
         public List<QualityProfile> Profiles { get; set; }
-        public List<QualityProfile> UserProfiles { get; set; }
 
         [DisplayName("Default Quality Profile")]
         [Description("The default quality to use when adding series to NzbDrone")]
@@ -18,6 +17,6 @@ namespace NzbDrone.Web.Models
         [Description("Should NzbDrone download proper releases (to replace non-proper files)?")]
         public bool DownloadPropers { get; set; }
 
-        public SelectList SelectList { get; set; }
+        public SelectList QualityProfileSelectList { get; set; }
     }
 }

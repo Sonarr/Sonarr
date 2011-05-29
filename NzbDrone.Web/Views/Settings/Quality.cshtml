@@ -62,7 +62,7 @@
                     <div class="config-section">
                         <div class="config-group">
                             <div class="config-title">@Html.LabelFor(m => m.DefaultQualityProfileId)</div>
-                            <div class="config-value">@Html.DropDownListFor(m => m.DefaultQualityProfileId, Model.SelectList)</div>
+                            <div class="config-value">@Html.DropDownListFor(m => m.DefaultQualityProfileId, Model.QualityProfileSelectList)</div>
                         </div>
                         <div class="config-group2">
                             <div class="config-validation">@Html.ValidationMessageFor(m => m.DefaultQualityProfileId)</div>
@@ -74,13 +74,13 @@
                 <div id="leftSide" style="width:35%;">
                     <div style="padding-top: 10px;">
                         <div style="padding-left: 7px; margin-bottom: 5px;">
-                            <a id="addItem" style="text-decoration:none;" href="@Url.Action("AddUserProfile", "Settings")">
+                            <a id="addItem" style="text-decoration:none;" href="@Url.Action("AddProfile", "Settings")">
                             <img src="../../Content/Images/Plus.png" alt="Add New Profile" />
                             <h4 style="margin-left: 3px; display: inline; color: Black;">Add New Profile</h4></a>
                         </div>
 
-                        <div id="user-profiles">
-                            @foreach (var item in Model.UserProfiles)
+                        <div id="profiles">
+                            @foreach (var item in Model.Profiles)
                             {
                                 Html.RenderAction("GetQualityProfileView", item);
                             }
@@ -103,7 +103,7 @@
             url: this.href,
             cache: false,
             success: function (html) {
-                $("#user-profiles").prepend(html);
+                $("#profiles").prepend(html);
                 
             }
         });
@@ -114,8 +114,6 @@
 
     function deleteProfile(id) {
         sendToServer(id);
-        $("#div_" + id).remove();
-        removeOption(id);
     }
 
     function sendToServer(id) {
@@ -125,6 +123,16 @@
             data: jQuery.param({ profileId: id }),
             error: function (req, status, error) {
                 alert("Sorry! We could not delete your Profile at this time. " + error);
+            },
+            success: function (data, textStatus, jqXHR) {
+                if (data == "ok") {
+                    $("#div_" + id).remove();
+                    removeOption(id);
+                }
+                
+                else {
+                    alert(data);
+                }
             }
         });
     }
