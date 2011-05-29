@@ -66,11 +66,14 @@ namespace NzbDrone.Core.Test
             const int seriesId = 71663;
             var fakeEpisodes = Builder<TvdbSeries>.CreateNew()
                 .With(c => c.Episodes = new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(6).
-                                         WhereAll().Have(l => l.Language = new TvdbLanguage(0, "eng", "a"))
-                                         .WhereTheFirst(3).Have(d => d.SeasonNumber = 1).And(d => d.SeasonId = 11)
-                                         .AndTheRemaining().Have(d => d.SeasonNumber = 2).And(d => d.SeasonId = 22)
-                                        .Build())
-            ).With(c => c.Id = seriesId).Build();
+                                                                  WhereAll().Have(
+                                                                      l => l.Language = new TvdbLanguage(0, "eng", "a"))
+                                                                  .WhereTheFirst(3).Have(d => d.SeasonNumber = 1).And(
+                                                                      d => d.SeasonId = 11)
+                                                                  .AndTheRemaining().Have(d => d.SeasonNumber = 2).And(
+                                                                      d => d.SeasonId = 22)
+                                                                  .Build())
+                ).With(c => c.Id = seriesId).Build();
 
             var fakeSeries = Builder<Series>.CreateNew().With(c => c.SeriesId = seriesId).Build();
 
@@ -97,7 +100,7 @@ namespace NzbDrone.Core.Test
             const int seriesId = 71663;
             var fakeEpisodes = Builder<TvdbSeries>.CreateNew()
                 .With(c => c.Episodes = new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(5).Build())
-            ).With(c => c.Id = seriesId).Build();
+                ).With(c => c.Id = seriesId).Build();
 
             var fakeSeries = Builder<Series>.CreateNew().With(c => c.SeriesId = seriesId).Build();
 
@@ -113,8 +116,10 @@ namespace NzbDrone.Core.Test
             mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
 
             //Assert
-            mocker.GetMock<IRepository>().Verify(c => c.AddMany(It.Is<IEnumerable<Episode>>(e => e.Count() == fakeEpisodes.Episodes.Count)), Times.Once());
-            mocker.GetMock<IRepository>().Verify(c => c.UpdateMany(It.Is<IEnumerable<Episode>>(e => e.Count() == 0)), Times.AtMostOnce());
+            mocker.GetMock<IRepository>().Verify(
+                c => c.AddMany(It.Is<IEnumerable<Episode>>(e => e.Count() == fakeEpisodes.Episodes.Count)), Times.Once());
+            mocker.GetMock<IRepository>().Verify(c => c.UpdateMany(It.Is<IEnumerable<Episode>>(e => e.Count() == 0)),
+                                                 Times.AtMostOnce());
             mocker.VerifyAllMocks();
         }
 
@@ -125,7 +130,7 @@ namespace NzbDrone.Core.Test
             const int seriesId = 71663;
             var fakeEpisodes = Builder<TvdbSeries>.CreateNew()
                 .With(c => c.Episodes = new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(5).Build())
-            ).With(c => c.Id = seriesId).Build();
+                ).With(c => c.Id = seriesId).Build();
 
             var fakeSeries = Builder<Series>.CreateNew().With(c => c.SeriesId = seriesId).Build();
 
@@ -144,9 +149,92 @@ namespace NzbDrone.Core.Test
             mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
 
             //Assert
-            mocker.GetMock<IRepository>().Verify(c => c.AddMany(It.Is<IEnumerable<Episode>>(e => e.Count() == 0)), Times.AtMostOnce());
-            mocker.GetMock<IRepository>().Verify(c => c.UpdateMany(It.Is<IEnumerable<Episode>>(e => e.Count() == fakeEpisodes.Episodes.Count)), Times.Once());
+            mocker.GetMock<IRepository>().Verify(c => c.AddMany(It.Is<IEnumerable<Episode>>(e => e.Count() == 0)),
+                                                 Times.AtMostOnce());
+            mocker.GetMock<IRepository>().Verify(
+                c => c.UpdateMany(It.Is<IEnumerable<Episode>>(e => e.Count() == fakeEpisodes.Episodes.Count)),
+                Times.Once());
             mocker.VerifyAllMocks();
+        }
+
+
+        [Test]
+        public void should_try_to_get_existing_episode_using_tvdbid_first()
+        {
+            const int seriesId = 71663;
+            var fakeEpisodes = Builder<TvdbSeries>.CreateNew()
+                .With(c => c.Id = seriesId)
+                .With(c => c.Episodes = new List<TvdbEpisode>(
+                                                                Builder<TvdbEpisode>.CreateListOfSize(1)
+                                                                .WhereAll().Have(g => g.Id = 99)
+                                                                .Build())
+                                                             )
+                .Build();
+
+            var fakeSeries = Builder<Series>.CreateNew().With(c => c.SeriesId = seriesId).Build();
+
+
+            var mocker = new AutoMoqer();
+
+            var repo = MockLib.GetEmptyRepository();
+            repo.Add<Episode>(
+                Builder<Episode>.CreateNew().With(c => c.TvDbEpisodeId = fakeEpisodes.Episodes[0].Id).Build());
+            mocker.SetConstant(repo);
+
+            mocker.GetMock<TvDbProvider>(MockBehavior.Strict)
+                .Setup(c => c.GetSeries(seriesId, true))
+                .Returns(fakeEpisodes);
+
+            //Act
+            mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
+
+            //Assert
+            mocker.VerifyAllMocks();
+            Assert.Count(1, repo.All<Episode>());
+        }
+
+        [Test]
+        public void should_try_to_get_existing_episode_using_tvdbid_first_then_season_episode()
+        {
+            const int seriesId = 71663;
+            var fakeEpisodes = Builder<TvdbSeries>.CreateNew()
+                .With(c => c.Id = seriesId)
+                .With(c => c.Episodes = new List<TvdbEpisode>{
+                                                                Builder<TvdbEpisode>.CreateNew()
+                                                                .With(g => g.Id = 99)
+                                                                .With(g => g.SeasonNumber = 4)
+                                                                .With(g => g.EpisodeNumber = 15)
+                                                                .With(g=>g.SeriesId = seriesId)
+                                                                .Build()
+                                                               })
+                .Build();
+
+            var localEpisode = Builder<Episode>.CreateNew()
+                .With(c => c.SeriesId = seriesId)
+                .With(c => c.SeasonNumber = 4)
+                .With(c => c.EpisodeNumber = 15)
+                .Build();
+              
+
+            var fakeSeries = Builder<Series>.CreateNew().With(c => c.SeriesId = seriesId).Build();
+
+
+            var mocker = new AutoMoqer();
+
+            var repo = MockLib.GetEmptyRepository();
+            repo.Add<Episode>(localEpisode);
+            mocker.SetConstant(repo);
+
+            mocker.GetMock<TvDbProvider>(MockBehavior.Strict)
+                .Setup(c => c.GetSeries(seriesId, true))
+                .Returns(fakeEpisodes);
+
+            //Act
+            mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
+
+            //Assert
+            mocker.VerifyAllMocks();
+            Assert.Count(1, repo.All<Episode>());
         }
 
 
@@ -156,10 +244,11 @@ namespace NzbDrone.Core.Test
             const int seriesId = 71663;
             var faketvDbResponse = Builder<TvdbSeries>.CreateNew()
                 .With(c => c.Episodes = new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(5).Build())
-            ).With(c => c.Id = seriesId).Build();
+                ).With(c => c.Id = seriesId).Build();
 
             var fakeSeries = Builder<Series>.CreateNew().With(c => c.SeriesId = seriesId).Build();
-            var fakeEpisode = Builder<Episode>.CreateNew().With(c => c.EpisodeFileId = 69).And(c => c.EpisodeId = 99).Build();
+            var fakeEpisode =
+                Builder<Episode>.CreateNew().With(c => c.EpisodeFileId = 69).And(c => c.EpisodeId = 99).Build();
 
             var mocker = new AutoMoqer();
 
@@ -178,25 +267,26 @@ namespace NzbDrone.Core.Test
                 .Returns(faketvDbResponse.Episodes.Count)
                 .Callback<IEnumerable<Episode>>(r => updatedEpisodes = r);
 
-
-
-
             //Act
             mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
 
             //Assert
-            mocker.GetMock<IRepository>().Verify(c => c.AddMany(It.Is<IEnumerable<Episode>>(e => e.Count() == 0)), Times.AtMostOnce());
-            mocker.GetMock<IRepository>().Verify(c => c.UpdateMany(It.Is<IEnumerable<Episode>>(e => e.Count() == faketvDbResponse.Episodes.Count)), Times.Once());
-            mocker.GetMock<IRepository>().Verify(c => c.UpdateMany(It.Is<IEnumerable<Episode>>(e => e.Where(g => g.EpisodeFileId == 69).Count() == faketvDbResponse.Episodes.Count)), Times.Once());
+            mocker.GetMock<IRepository>().Verify(c => c.AddMany(It.Is<IEnumerable<Episode>>(e => e.Count() == 0)),
+                                                 Times.AtMostOnce());
+            mocker.GetMock<IRepository>().Verify(
+                c => c.UpdateMany(It.Is<IEnumerable<Episode>>(e => e.Count() == faketvDbResponse.Episodes.Count)),
+                Times.Once());
+            mocker.GetMock<IRepository>().Verify(
+                c =>
+                c.UpdateMany(
+                    It.Is<IEnumerable<Episode>>(
+                        e => e.Where(g => g.EpisodeFileId == 69).Count() == faketvDbResponse.Episodes.Count)),
+                Times.Once());
 
             Assert.Count(faketvDbResponse.Episodes.Count, updatedEpisodes);
-            Assert.ForAll( updatedEpisodes, c=> Assert.AreEqual(99,c.EpisodeId ));
-            Assert.ForAll( updatedEpisodes, c=> Assert.AreEqual(69,c.EpisodeFileId ));
-
-
+            Assert.ForAll(updatedEpisodes, c => Assert.AreEqual(99, c.EpisodeId));
+            Assert.ForAll(updatedEpisodes, c => Assert.AreEqual(69, c.EpisodeFileId));
         }
-
-
 
 
         [Test]
@@ -219,8 +309,5 @@ namespace NzbDrone.Core.Test
             var episodes = episodeProvider.GetEpisodeBySeries(tvDbSeriesId);
             Assert.IsNotEmpty(episodes);
         }
-
-
-
     }
-}                                                                                                                                                                                                                                                                                                                                                                             
+}
