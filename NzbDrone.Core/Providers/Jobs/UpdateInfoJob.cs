@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Providers.Jobs
             {
                 notification.CurrentMessage = "Updating " + series.Title;
                 _seriesProvider.UpdateSeriesInfo(series.SeriesId);
-                _episodeProvider.RefreshEpisodeInfo(series.SeriesId);
+                _episodeProvider.RefreshEpisodeInfo(series);
                 notification.CurrentMessage = "Update completed for " + series.Title;
             }
         }

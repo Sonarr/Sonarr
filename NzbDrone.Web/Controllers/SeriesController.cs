@@ -55,15 +55,6 @@ namespace NzbDrone.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult LoadEpisodes(int seriesId)
-        {
-            _episodeProvider.RefreshEpisodeInfo(seriesId);
-            return RedirectToAction("Details", new
-                                                   {
-                                                       seriesId
-                                                   });
-        }
-
         public ActionResult SeasonEditor(int seriesId)
         {
             var model =
@@ -149,7 +140,7 @@ namespace NzbDrone.Web.Controllers
                 return String.Empty;
 
             //Return the path relative to the Series' Folder
-            return file.Path.Replace(file.Series.Path, "").Trim(Path.DirectorySeparatorChar);
+            return file.Path;
         }
 
         public ActionResult SearchForSeries(string seriesName)

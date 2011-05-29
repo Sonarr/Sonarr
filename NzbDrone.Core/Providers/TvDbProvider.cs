@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using NLog;
@@ -79,7 +80,32 @@ namespace NzbDrone.Core.Providers
             lock (_handler)
             {
                 Logger.Debug("Fetching SeriesId'{0}' from tvdb", id);
-                return _handler.GetSeries(id, TvdbLanguage.DefaultLanguage, loadEpisodes, false, false);
+                var result = _handler.GetSeries(id, TvdbLanguage.DefaultLanguage, loadEpisodes, false, false);
+
+
+                //Fix American Dad's scene gongshow 
+                if (result != null && result.Id == 73141)
+                {
+                    var seasonOneEpisodeCount = result.Episodes.Where(e => e.SeasonNumber == 0).Count();
+                    var seasonOneId = result.Episodes.Where(e => e.SeasonNumber == 1).First().SeasonId;
+
+                    foreach (var episode in result.Episodes)
+                    {
+                        if (episode.SeasonNumber > 1)
+                        {
+                            if (episode.SeasonNumber == 2)
+                            {
+                                episode.EpisodeNumber = episode.EpisodeNumber + seasonOneEpisodeCount;
+                                episode.SeasonId = seasonOneId;
+                            }
+
+                            episode.SeasonNumber = episode.SeasonNumber - 1;
+                        }
+
+                    }
+                }
+
+                return result;
             }
         }
 
