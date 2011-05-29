@@ -1,58 +1,49 @@
-﻿Hello World
-
-<input type="checkbox" id="id_chk1" class="chkbox" value="1" />Check 1<br/>
-    <input type="checkbox" id="id_chk2" class="chkbox" value="2" />Check 2<br/>
-    <input type="checkbox" id="id_chk3" class="chkbox" value="3" />Check 3<br/>
-    <input type="checkbox" id="id_chk4" class="chkbox" value="4" />Check 4<br/>
-    <input type="checkbox" id="id_chk5" class="chkbox" value="5" />Check 5<br/>
-    <input type="checkbox" id="id_chk6" class="chkbox" value="6" />Check 6<br/>
-    <input type="checkbox" id="id_chk7" class="chkbox" value="7" />Check 7<br/>
-
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3/jquery.min.js"></script>
-    <script type="text/javascript">
-        var lastChecked = null;
-
-        $(document).ready(function () {
-            $('.chkbox').click(function (event) {
-                if (!lastChecked) {
-                    lastChecked = this;
-                    return;
-                }
-
-                if (event.shiftKey) {
-                    var start = $('.chkbox').index(this);
-                    var end = $('.chkbox').index(lastChecked);
-
-                    for (i = Math.min(start, end); i <= Math.max(start, end); i++) {
-                        $('.chkbox')[i].checked = lastChecked.checked;
-                    }
-                }
-
-                lastChecked = this;
-            });
-        });
-    </script>
-
-
-<style>
-	#selectable .ui-selecting { background: #85AEF9; }
-	#selectable .ui-selected { background: #065EFE; color: white; }
-	#selectable { list-style-type: none; margin: 0; padding: 0; width: 110px; }
-	#selectable li { margin: 3px; padding-left: 0.4em; padding-bottom: 1.5em; padding-top: 0em; font-size: 1.2em; height: 6px; }
+﻿<style>
+    .quality-selectee { width: 75px; padding: 1px; padding-left: 5px; margin: 3px; }
+    .quality-selecting { background: #85AEF9; }
+    .quality-selected { background: #065EFE; color: white; }
 </style>
 
-<script type="text/javascript">
-	$(function () {
-	    $("#selectable").selectable();
-	});
-</script>
+<fieldset class="quality-selectee">
+SDTV
+</fieldset>
 
-<ol id="selectable">
-	<li class="ui-widget-content">Unknown</li>
-	<li class="ui-widget-content">SDTV</li>
-	<li class="ui-widget-content">DVD</li>
-	<li class="ui-widget-content">HDTV</li>
-	<li class="ui-widget-content">WEBDL</li>
-	<li class="ui-widget-content">Bluray720p</li>
-	<li class="ui-widget-content">Bluray1080p</li>
-</ol>
+<fieldset class="quality-selectee">
+DVD
+</fieldset>
+
+<fieldset class="quality-selectee">
+HDTV
+</fieldset>
+
+<fieldset class="quality-selectee">
+WEBDL
+</fieldset>
+
+<fieldset class="quality-selectee">
+Bluray720p
+</fieldset>
+
+<fieldset class="quality-selectee">
+Bluray1080p
+</fieldset>
+
+<br />
+
+@Html.TextBox("result", "")
+
+<script type="text/javascript">
+    $('.quality-selectee').click(function () {
+        if ($(this).hasClass('quality-selected'))
+            $(this).removeClass('quality-selected');
+        else
+            $(this).addClass('quality-selected');
+
+        result = "";
+        $(".quality-selected").each(function () {
+            result += this.firstChild.data + ",";
+        });
+
+        $("#result").empty().val(result);
+    });
+</script>

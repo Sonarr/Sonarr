@@ -472,8 +472,8 @@ namespace NzbDrone.Web.Controllers
 
                     profile.Allowed = new List<QualityTypes>();
 
-                    //Remove the extra comma from the end and replace double commas with a single one (the Javascript gets a little crazy)
-                    profile.AllowedString = profile.AllowedString.Replace(",,", ",").Trim(',');
+                    //Remove the extra comma from the end
+                    profile.AllowedString = profile.AllowedString.Trim(',');
 
                     foreach (var quality in profile.AllowedString.Split(','))
                     {
