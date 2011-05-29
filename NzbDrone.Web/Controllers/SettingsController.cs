@@ -134,17 +134,13 @@ namespace NzbDrone.Web.Controllers
             ViewData["Qualities"] = qualityTypes;
 
             var profiles = _qualityProvider.GetAllProfiles().ToList();
-
             var defaultQualityQualityProfileId = Convert.ToInt32(_configProvider.DefaultQualityProfile);
-            var downloadPropers = _configProvider.DownloadPropers;
-
             var qualityProfileSelectList = new SelectList(profiles, "QualityProfileId", "Name");
 
             var model = new QualityModel
                             {
                                 Profiles = profiles,
                                 DefaultQualityProfileId = defaultQualityQualityProfileId,
-                                DownloadPropers = downloadPropers,
                                 QualityProfileSelectList = qualityProfileSelectList
                             };
 
@@ -208,7 +204,7 @@ namespace NzbDrone.Web.Controllers
                 qualityTypes.Add(qual);
             }
 
-            ViewData["Qualities"] = new SelectList(qualityTypes);
+            ViewData["Qualities"] = qualityTypes;
 
             var qualityProfile = new QualityProfile
                                      {
@@ -219,7 +215,6 @@ namespace NzbDrone.Web.Controllers
 
             var id = _qualityProvider.Add(qualityProfile);
             qualityProfile.QualityProfileId = id;
-            qualityProfile.Allowed = null;
 
             ViewData["ProfileId"] = id;
 
@@ -460,7 +455,6 @@ namespace NzbDrone.Web.Controllers
             if (ModelState.IsValid)
             {
                 _configProvider.DefaultQualityProfile = data.DefaultQualityProfileId;
-                _configProvider.DownloadPropers = data.DownloadPropers;
 
                 //Saves only the Default Quality, skips User Profiles since none exist
                 if (data.Profiles == null)
