@@ -894,4 +894,7 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <PropertyGroup>
+    <PreBuildEvent>copy $(SolutionDir)\Libraries\SQLite.Interop.dll  $(TargetDir)</PreBuildEvent>
+  </PropertyGroup>
 </Project>

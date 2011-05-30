@@ -54,7 +54,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.SQLite">
-      <HintPath>..\..\NzbDrone.Core\Libraries\System.Data.SQLite.dll</HintPath>
+      <HintPath>..\..\Libraries\System.Data.SQLite.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml" />
   </ItemGroup>
