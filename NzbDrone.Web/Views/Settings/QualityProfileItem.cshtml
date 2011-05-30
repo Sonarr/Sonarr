@@ -7,11 +7,11 @@
     Layout = null;
 }
 
-<script type="text/javascript">
-    $(document).ready(function () {
-        addOption('@Model.Name', '@ViewData["ProfileId"]');
-    });
-</script>
+<style>
+    .quality-selectee { width: 75px; padding: 1px; padding-left: 3px; padding-right: 3px; margin: 2px; float: left; }
+    .quality-selecting { background: #85AEF9; }
+    .quality-selected { background: #065EFE; color: white; }
+</style>
 
 @using (Html.BeginCollectionItem("Profiles"))
 {
@@ -22,36 +22,7 @@
     string allowedStringName = String.Format("{0}_AllowedString", idClean);
     string title = String.Format("{0}_Title", idClean);
     string nameBox = String.Format("{0}_Name", idClean);
-    string cutoff = String.Format("{0}.Cutoff", ugly);
-
-    <style>
-	    .selectableList .ui-selecting { background: #85AEF9; }
-	    .selectableList .ui-selected { background: #065EFE; color: white; }
-	    .selectableList { list-style-type: none; margin: 0; padding: 0; }
-	    .selectableList li { margin: 3px; margin-left: 10px; padding-left: 0.4em; padding-bottom: 1.5em; padding-top: 0em; float: left; font-size: 1.2em; width: 110px; height: 6px; }
-    </style>
-    
-    <script type="text/javascript">
-        $(function () {
-            $("#@selectable").selectable({
-                create: function () {
-                    var result = "";
-                    $(".ui-selected", this).each(function () {
-                        result +=  this.id + ",";
-                    });
-                    $("#@allowedStringName").empty().val(result);
-                },
-                    
-                stop: function () {
-                    var result = "";
-                    $(".ui-selected", this).each(function () {
-                        result += this.id + ",";
-                    });
-                    $("#@allowedStringName").empty().val(result);
-                }
-            });
-        })
-	</script>
+    string cutoff = String.Format("{0}_Cutoff", idClean);
 
     <div class="profileSectionEditor" id="div_@(ViewData["ProfileId"])">
 
@@ -70,49 +41,81 @@
 
                 <div class="config-group" style="width: 255px; margin-bottom: 5px; margin-left: 5px;">
                     <div class="config-title">@Html.LabelFor(x => x.Cutoff)</div>
-                    <div class="config-value">@Html.DropDownListFor(m => m.Cutoff, new SelectList(ViewData["Qualities"] as IEnumerable, Model.Cutoff))</div>
+                    <div class="config-value">@Html.DropDownListFor(m => m.Cutoff, new SelectList(Model.Allowed, Model.Cutoff))</div>
                     <div class="config-validation">@Html.ValidationMessageFor(x => x.Cutoff)</div>
                 </div>                
             </div>
 
             <div class="selectableDiv" style="margin-top: 30px;">
-                <ol id="@selectable" class="selectableList">
-                    
+                <div id="@selectable">
                     @{var qualitiesList = (List<QualityTypes>)ViewData["Qualities"];}
-
                     @for (int i = 0; i < qualitiesList.Count(); i++)
                     {
+                        if (qualitiesList[i].ToString() == "Unknown")
+                        {
+                            continue;
+                        }
+                        
                         if (Model.Allowed != null)
                         {
                             if (Model.Allowed.Contains(qualitiesList[i]))
                             {
-                                <li class="ui-widget-content ui-selected" id="@qualitiesList[i].ToString()">
-                                    @Html.Label(qualitiesList[i].ToString())
-                                </li>
+                                <fieldset class="quality-selectee quality-selected">@qualitiesList[i].ToString()</fieldset>
                                 continue;
                             }
                         }
                         
-                        <li class="ui-widget-content" id="@qualitiesList[i].ToString()">
-                            @Html.Label(qualitiesList[i].ToString())
-                        </li>
+                        <fieldset class="quality-selectee">@qualitiesList[i].ToString()</fieldset>
                     }
-                </ol>
+                </div>
             </div>
 
-            <div class="hiddenProfileDetails2">
+            <div class="hiddenProfileDetails">
                 @Html.HiddenFor(x => x.QualityProfileId)
                 @Html.HiddenFor(x => x.UserProfile)
                 @Html.HiddenFor(m => m.AllowedString)
             </div>
         </fieldset>
-    </div> 
+    </div>
 
     <script type="text/javascript">
+        $(document).ready(function () {
+            addOption('@Model.Name', '@ViewData["ProfileId"]');
+
+            result = "";
+            $("#@selectable .quality-selected").each(function () {
+                result += this.firstChild.data + ",";
+            });
+
+            $("#@allowedStringName").empty().val(result);
+            $('#@selectable .quality-selectee').disableSelection();
+        });
+
         $("#@nameBox").keyup(function () {
             var value = $(this).val();
             $("#@title").text(value);
             renameOption(value, '@ViewData["ProfileId"]');
         }).keyup();
+
+        $('#@selectable .quality-selectee').click(function () {
+            if ($(this).hasClass('quality-selected'))
+            {
+                $(this).removeClass('quality-selected');
+                var toRemove = this.firstChild.data;
+                $('#@cutoff option').each(function () { if ($(this).text().indexOf(toRemove) > -1) $('#@cutoff option').remove(':contains("' + $(this).text() + '")'); });
+            }
+            
+            else {
+                $(this).addClass('quality-selected');
+                $('<option>' + this.firstChild.data + '</option>').appendTo('#@cutoff');
+            }
+
+            result = "";
+            $("#@selectable .quality-selected").each(function () {
+                result += this.firstChild.data + ",";
+            });
+
+            $("#@allowedStringName").empty().val(result);
+        });
     </script>
 }
