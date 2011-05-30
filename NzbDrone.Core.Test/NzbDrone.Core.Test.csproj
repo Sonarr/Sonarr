@@ -35,10 +35,6 @@
     <Reference Include="Accessibility">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="Castle.Core, Version=2.5.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\NzbDrone.Core\Libraries\Castle.Core.dll</HintPath>
-    </Reference>
     <Reference Include="FizzWare.NBuilder">
       <HintPath>..\packages\NBuilder.2.3.0.0\lib\FizzWare.NBuilder.dll</HintPath>
     </Reference>
@@ -177,7 +173,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>copy $(SolutionDir)\Libraries\SQLite.Interop.dll  $(TargetDir)</PreBuildEvent>
+    <PreBuildEvent>copy "$(SolutionDir)\Libraries\SQLite.Interop.dll"  "$(TargetDir)"</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
