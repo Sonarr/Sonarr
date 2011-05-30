@@ -43,8 +43,8 @@
 </body>
 @RenderSection("Scripts", required: false)
 @{Html.Telerik().ScriptRegistrar().Scripts(
-        c => c.Add("jquery-1.6.1.min.js")
-            .Add("jquery-ui-1.8.8.min.js")
+        c => //c.Add("jquery-1.6.1.min.js")
+            c.Add("jquery-ui-1.8.8.min.js")
                     .Add("jquery.form.js")
                     .Add("jquery.jgrowl.js")
                     .Add("Notification.js")
