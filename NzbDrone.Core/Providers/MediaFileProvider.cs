@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Providers
     public class MediaFileProvider
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private static readonly string[] MediaExtentions = new[] { "*.mkv", "*.avi", "*.wmv", "*.mp4" };
+        private static readonly string[] MediaExtentions = new[] { ".mkv", ".avi", ".wmv", ".mp4" };
         private readonly DiskProvider _diskProvider;
         private readonly EpisodeProvider _episodeProvider;
         private readonly SeriesProvider _seriesProvider;
@@ -72,7 +72,7 @@ namespace NzbDrone.Core.Providers
                 if (!_repository.Exists<EpisodeFile>(e => e.Path == Parser.NormalizePath(filePath)))
                 {
                     var parseResult = Parser.ParseEpisodeInfo(filePath);
-                   
+
 
                     if (parseResult == null)
                         return null;
@@ -199,14 +199,11 @@ namespace NzbDrone.Core.Providers
         {
             Logger.Debug("Scanning '{0}' for episodes", path);
 
-            var mediaFileList = new List<string>();
+            var filesOnDisk = _diskProvider.GetFiles(path, "*.*", SearchOption.AllDirectories);
 
-            foreach (var ext in MediaExtentions)
-            {
-                mediaFileList.AddRange(_diskProvider.GetFiles(path, ext, SearchOption.AllDirectories));
-            }
+            var mediaFileList = filesOnDisk.Where(c => MediaExtentions.Contains(Path.GetExtension(c).ToLower())).ToList();
 
-            Logger.Trace("{0} media files were found in {1}", mediaFileList.Count, path);
+            Logger.Debug("{0} media files were found in {1}", mediaFileList.Count, path);
             return mediaFileList;
         }
     }
