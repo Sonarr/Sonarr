@@ -8,7 +8,7 @@
 }
 
 <style>
-    .quality-selectee { width: 75px; padding: 1px; padding-left: 3px; padding-right: 3px; margin: 2px; float: left; }
+    .quality-selectee { width: 75px; padding: 1px; padding-left: 3px; padding-right: 3px; margin: 2px; float: left; cursor: default; }
     .quality-selecting { background: #85AEF9; }
     .quality-selected { background: #065EFE; color: white; }
 </style>
@@ -24,18 +24,18 @@
     string nameBox = String.Format("{0}_Name", idClean);
     string cutoff = String.Format("{0}_Cutoff", idClean);
 
-    <div class="profileSectionEditor" id="div_@(ViewData["ProfileId"])">
+    <div class="profileSectionEditor" id="profile_@(ViewData["ProfileId"])" style="float: left; height: 175px; width: 285px; margin-bottom: -14px;">
 
         <fieldset style="width:264px; margin:5px; margin-top: 0px; border-color:#CCCCCD">
             <div class="header">
                 <div id="qualityHeader" style="padding-bottom: 5px; margin: 0px;">
                     <h2 style="display:inline; padding-right: 4px; margin-left: 4px;" id="@title">@{Html.DisplayTextFor(m => m.Name);}</h2>
-                    <a href="#" id="@Model.QualityProfileId" class="deleteRow" onclick="deleteProfile('@ViewData["ProfileId"]'); return false;" style="float:right; padding-top:15px; padding-right: 5px;"><img src="../../Content/Images/X.png" alt="Delete"/></a>
+                    <a href="#" id="@Model.QualityProfileId" class="deleteRow" onclick="deleteProfile('@ViewData["ProfileId"]'); return false;" style="float:right; padding-top:8px; padding-right: 5px;"><img src="../../Content/Images/X.png" alt="Delete" width="20px" height="20px"/></a>
                 </div>
 
                 <div class="config-group" style="width: 255px; margin-bottom: 5px; margin-left: 5px;">
                     <div class="config-title">@Html.LabelFor(x => x.Name)</div>
-                    <div class="config-value">@Html.TextBoxFor(x => x.Name, new { maxlength = 16 })</div>
+                    <div class="config-value">@Html.TextBoxFor(x => x.Name, new { maxlength = 15 })</div>
                     <div class="config-validation">@Html.ValidationMessageFor(x => x.Name)</div>
                 </div>
 
@@ -89,6 +89,8 @@
 
             $("#@allowedStringName").empty().val(result);
             $('#@selectable .quality-selectee').disableSelection();
+
+            $('#@cutoff option').each(function () { if ($(this).text().indexOf('Unknown') > -1) $('#@cutoff option').remove(':contains("' + $(this).text() + '")'); });
         });
 
         $("#@nameBox").keyup(function () {

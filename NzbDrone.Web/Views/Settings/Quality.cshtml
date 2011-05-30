@@ -44,10 +44,10 @@
 
 @using (Html.BeginForm("SaveQuality", "Settings", FormMethod.Post, new {id = "form", name = "form"}))
 {
-        <fieldset>
+        <fieldset style="position: relative;">
             <legend>Quality</legend>
 
-                <div class="rightSide" style="float: right; width: 65%;">
+                <div id="top">
                     <div class="config-section">
                         <div class="config-group">
                             <div class="config-title">@Html.LabelFor(m => m.DefaultQualityProfileId)</div>
@@ -59,30 +59,24 @@
                         </div>
                     </div>
                 </div>
-				
-                <div id="leftSide" style="width:35%;">
-                    <div style="padding-top: 10px;">
-                        <div style="padding-left: 7px; margin-bottom: 5px;">
-                            <a id="addItem" style="text-decoration:none;" href="@Url.Action("AddProfile", "Settings")">
-                            <img src="../../Content/Images/Plus.png" alt="Add New Profile" />
-                            <h4 style="margin-left: 3px; display: inline; color: Black;">Add New Profile</h4></a>
-                        </div>
-
-                        <div id="profiles">
-                            @foreach (var item in Model.Profiles)
-                            {
-                                Html.RenderAction("GetQualityProfileView", item);
-                            }
-                        </div>
+                <div id="bottom" style="float: left; padding-bottom: 55px;">
+                    <div style="padding-left: 7px; margin-bottom: 5px;">
+                        <a id="addItem" style="text-decoration:none;" href="@Url.Action("AddProfile", "Settings")">
+                        <img src="../../Content/Images/Plus.png" alt="Add New Profile" width="20px" height="20px" />
+                        <h4 style="margin-left: 3px; display: inline; color: Black;">Add New Profile</h4></a>
                     </div>
 
-                    <div style="margin-top: 10px; padding-left: 5px;">
-                        <input type="submit" id="save_button" value="Save" disabled="disabled" />
+                    <div id="profiles">
+                        @foreach (var item in Model.Profiles)
+                        {
+                            Html.RenderAction("GetQualityProfileView", item);
+                        }
                     </div>
                 </div>
 
-        </fieldset>
-}
+                <input type="submit" id="save_button" value="Save" disabled="disabled" style="position: absolute; bottom: 0px; display: block; padding-left: 5px;"/>
+            </fieldset>
+    }
 <div id="result" class="hiddenResult"></div>
 
 <script type="text/javascript">
@@ -115,7 +109,7 @@
             },
             success: function (data, textStatus, jqXHR) {
                 if (data == "ok") {
-                    $("#div_" + id).remove();
+                    $("#profile_" + id).remove();
                     removeOption(id);
                 }
                 
