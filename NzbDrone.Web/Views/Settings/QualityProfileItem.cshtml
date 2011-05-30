@@ -24,7 +24,7 @@
     string nameBox = String.Format("{0}_Name", idClean);
     string cutoff = String.Format("{0}_Cutoff", idClean);
 
-    <div class="profileSectionEditor" id="div_@(ViewData["ProfileId"])">
+    <div class="profileSectionEditor" id="profile_@(ViewData["ProfileId"])" style="float: left; height: 175px; width: 285px; margin-bottom: -14px;">
 
         <fieldset style="width:264px; margin:5px; margin-top: 0px; border-color:#CCCCCD">
             <div class="header">
@@ -89,6 +89,8 @@
 
             $("#@allowedStringName").empty().val(result);
             $('#@selectable .quality-selectee').disableSelection();
+
+            $('#@cutoff option').each(function () { if ($(this).text().indexOf('Unknown') > -1) $('#@cutoff option').remove(':contains("' + $(this).text() + '")'); });
         });
 
         $("#@nameBox").keyup(function () {
