@@ -85,6 +85,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="dbBenchmark.cs" />
     <Compile Include="InventoryProvider_IsMonitoredTest.cs" />
     <Compile Include="DownloadProviderTest.cs" />
     <Compile Include="EpisodeSearchJobTest.cs" />
