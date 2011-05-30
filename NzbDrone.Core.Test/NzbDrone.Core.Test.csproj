@@ -167,11 +167,6 @@
     <Content Include="Files\QueueError.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Libs\Moq.dll" />
-    <Content Include="Libs\Moq.xml" />
-    <Content Include="Libs\System.Data.SQLite.DLL">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
