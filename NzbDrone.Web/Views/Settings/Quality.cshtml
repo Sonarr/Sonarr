@@ -62,7 +62,7 @@
                 <div id="bottom" style="float: left; padding-bottom: 55px;">
                     <div style="padding-left: 7px; margin-bottom: 5px;">
                         <a id="addItem" style="text-decoration:none;" href="@Url.Action("AddProfile", "Settings")">
-                        <img src="../../Content/Images/Plus.png" alt="Add New Profile" />
+                        <img src="../../Content/Images/Plus.png" alt="Add New Profile" width="20px" height="20px" />
                         <h4 style="margin-left: 3px; display: inline; color: Black;">Add New Profile</h4></a>
                     </div>
 
@@ -109,7 +109,7 @@
             },
             success: function (data, textStatus, jqXHR) {
                 if (data == "ok") {
-                    $("#div_" + id).remove();
+                    $("#profile_" + id).remove();
                     removeOption(id);
                 }
                 
