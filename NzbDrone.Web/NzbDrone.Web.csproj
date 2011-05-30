@@ -57,7 +57,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Ninject.2.2.1.0\lib\.NetFramework 4.0\Ninject.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject.Web.Mvc, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL" />
+    <Reference Include="Ninject.Web.Mvc">
+      <HintPath>..\packages\Ninject.MVC3.2.2.2.0\lib\net40-Full\Ninject.Web.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL" />
     <Reference Include="SubSonic.Core, Version=3.0.0.3, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>D:\My Dropbox\Git\NzbDrone\NzbDrone.Core\Libraries\SubSonic.Core.dll</HintPath>
@@ -108,6 +110,9 @@
     </Reference>
     <Reference Include="TvdbLib">
       <HintPath>..\NzbDrone.Core\Libraries\TvdbLib.dll</HintPath>
+    </Reference>
+    <Reference Include="WebActivator">
+      <HintPath>..\packages\WebActivator.1.4.1\lib\net40\WebActivator.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -619,8 +624,6 @@
     <Content Include="Content\XbmcNotification.png" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="Libraries\Ninject.Web.Mvc.dll" />
-    <Content Include="Libraries\Ninject.Web.Mvc.xml" />
     <Content Include="Scripts\2011.1.315\jquery-1.5.1.min.js" />
     <Content Include="Scripts\2011.1.315\jquery.validate.min.js" />
     <Content Include="Scripts\2011.1.315\telerik.autocomplete.min.js" />

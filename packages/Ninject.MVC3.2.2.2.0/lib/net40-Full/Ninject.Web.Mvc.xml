@@ -794,6 +794,12 @@
             </summary>
             <param name="createKernelCallback">The create kernel callback function.</param>
         </member>
+        <member name="M:Ninject.Web.Mvc.IBootstrapper.InitializeHttpApplication(System.Web.HttpApplication)">
+            <summary>
+            Initializes a HttpApplication instance.
+            </summary>
+            <param name="httpApplication">The HttpApplication instance.</param>
+        </member>
         <member name="M:Ninject.Web.Mvc.IBootstrapper.ShutDown">
             <summary>
             Releases the kernel on application end.
@@ -809,6 +815,12 @@
             Starts the application.
             </summary>
             <param name="createKernelCallback">The create kernel callback function.</param>
+        </member>
+        <member name="M:Ninject.Web.Mvc.Bootstrapper.InitializeHttpApplication(System.Web.HttpApplication)">
+            <summary>
+            Initializes a HttpApplication instance.
+            </summary>
+            <param name="httpApplication">The HttpApplication instance.</param>
         </member>
         <member name="M:Ninject.Web.Mvc.Bootstrapper.ShutDown">
             <summary>
@@ -830,6 +842,17 @@
             <summary>
             Gets the kernel.
             </summary>
+        </member>
+        <member name="T:Ninject.Web.Mvc.HttpApplicationInitializationModule">
+            <summary>
+            Initializes a HttpApplication instance
+            </summary>
+        </member>
+        <member name="M:Ninject.Web.Mvc.HttpApplicationInitializationModule.Init(System.Web.HttpApplication)">
+            <summary>
+            Initializes a module and prepares it to handle requests.
+            </summary>
+            <param name="context">An <see cref="T:System.Web.HttpApplication"/> that provides access to the methods, properties, and events common to all application objects within an ASP.NET application</param>
         </member>
         <member name="T:Ninject.Web.Mvc.NinjectDependencyResolver">
             <summary>
@@ -874,6 +897,11 @@
         <member name="M:Ninject.Web.Mvc.NinjectHttpApplication.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:Ninject.Web.Mvc.NinjectHttpApplication"/> class.
+            </summary>
+        </member>
+        <member name="M:Ninject.Web.Mvc.NinjectHttpApplication.Init">
+            <summary>
+            Executes custom initialization code after all event handler modules have been added.
             </summary>
         </member>
         <member name="M:Ninject.Web.Mvc.NinjectHttpApplication.Application_Start">
