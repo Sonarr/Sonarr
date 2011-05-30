@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Castle.DynamicProxy;
 using NzbDrone.Core.Model;
 using SubSonic.SqlGeneration.Schema;
+
 
 namespace NzbDrone.Core.Repository
 {
