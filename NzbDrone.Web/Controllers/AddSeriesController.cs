@@ -71,19 +71,25 @@ namespace NzbDrone.Web.Controllers
             return View();
         }
 
-        public ActionResult Add()
+        public ActionResult Index()
         {
-            ViewData["RootDirs"] = _rootFolderProvider.GetAll();
-
-            var unmappedList = new List<String>();
+            var rootDirs = _rootFolderProvider.GetAll();
 
             var profiles = _qualityProvider.GetAllProfiles();
             var defaultQuality = Convert.ToInt32(_configProvider.DefaultQualityProfile);
             var selectList = new SelectList(profiles, "QualityProfileId", "Name", defaultQuality);
-
             ViewData["qualities"] = selectList;
 
-            foreach (var folder in _rootFolderProvider.GetAll())
+            return View(rootDirs);
+        }
+
+        public ActionResult AddExisting()
+        {
+            var rootDirs = _rootFolderProvider.GetAll();
+
+            var unmappedList = new List<String>();
+
+            foreach (var folder in rootDirs)
             {
                 unmappedList.AddRange(_rootFolderProvider.GetUnmappedFolders(folder.Path));
             }

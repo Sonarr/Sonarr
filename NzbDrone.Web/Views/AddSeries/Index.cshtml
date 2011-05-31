@@ -1,4 +1,4 @@
-﻿@model IEnumerable<String>
+﻿@model List<RootDir>
 @using NzbDrone.Core.Repository
 
 <script type="text/javascript" src="../../Scripts/2011.1.315/telerik.window.min.js"></script>
@@ -51,11 +51,12 @@
                             </div>
 
                             <div id="root-dirs">
-                                @foreach (var root in ViewData["RootDirs"] as List<RootDir>)
+                                @foreach (var root in Model)
                                 {
                                 Html.RenderAction("GetRootDirView", root);
                                 }
                             </div>
+                            <button onclick="reloadExistingSeries()" style="padding: 2px 10px 2px 10px; margin: 5px; margin-bottom: 10px;">Refresh Unmapped</button>
                         </div>
                     </text>);
         }).Render(); 
@@ -69,15 +70,9 @@
 
     </div>
 
-    @if (Model.Count() == 0)
-    {
-        @Html.DisplayText("No Series to Add");
-    }
-
-    @foreach (var path in Model)
-    {
-        Html.RenderAction("RenderPartial", "AddSeries", new {path});
-    }
+    <div id="existingSeries">
+        @{ Html.RenderAction("AddExisting", "AddSeries"); }
+    </div>
 }
 
 <script type="text/javascript">
@@ -170,5 +165,9 @@
                     alert("An error occurred while saving Root Directory: " + path);
             }
         });
+    }
+
+    function reloadExistingSeries() {
+        $('#existingSeries').load('@Url.Action("AddExisting", "AddSeries")');
     }
 </script>

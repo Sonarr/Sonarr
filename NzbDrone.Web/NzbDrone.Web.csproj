@@ -664,7 +664,7 @@
     <Content Include="Scripts\jquery-tgc-countdown-1.0.js" />
     <Content Include="Scripts\jquery.simpledropdown.js" />
     <Content Include="Scripts\Notification.js" />
-    <Content Include="Views\AddSeries\Add.cshtml" />
+    <Content Include="Views\AddSeries\Index.cshtml" />
     <Content Include="Views\AddSeries\AddNew.cshtml" />
     <Content Include="Views\AddSeries\AddSeriesItem.cshtml" />
     <Content Include="Web.config">
@@ -870,6 +870,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Series\SingleSeason.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\AddSeries\AddExisting.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
