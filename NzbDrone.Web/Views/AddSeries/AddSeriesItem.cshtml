@@ -5,39 +5,16 @@
         <legend>@ViewData["path"].ToString()</legend>
         <div>
             @{Html.Telerik().ComboBox()
-            .Name("seriesList_" + ViewData["guid"].ToString())
+            .Name("seriesList_" + ViewData["guid"])
                   .BindTo(Model)
                   .DataBinding(binding => binding.Ajax().Select("_textLookUp", "AddSeries").Delay(400))
                   .Filterable(f => f.FilterMode(AutoCompleteFilterMode.Contains))
                   .HighlightFirstMatch(true)
                   .HtmlAttributes(new { style = "width: 300px;" })
                   .Render();}
-            @Html.Telerik().DropDownList().Name("qualityList_" + ViewData["guid"].ToString()).BindTo((SelectList)ViewData["quality"]).HtmlAttributes(new { style = "width: 100px", @class = "qualityDropbox" })
+            @Html.Telerik().DropDownList().Name("qualityList_" + ViewData["guid"]).BindTo((SelectList)ViewData["quality"]).HtmlAttributes(new { style = "width: 100px", @class = "qualityDropbox" })
             <button class="listButton" onclick="addSeries('@ViewData["guid"]','@ViewData["javaPath"].ToString()' )">
                 Add</button>
         </div>
     </fieldset>
 </div>
-<script type="text/javascript" language="javascript">
-
-    var addSeriesUrl = '@Url.Action("AddSeries", "AddSeries")';
-
-    function addSeries(guid, path) {
-        var seriesComboBox = $("#seriesList_" + guid).data("tComboBox");
-        var qualityComboBox = $("#qualityList_" + guid).data("tDropDownList");
-        sendToServer(seriesComboBox.value(), path, qualityComboBox.value());
-        $("#div_" + guid).hide();
-    }
-
-    function sendToServer(id, path, quality) {
-        $.ajax({
-            type: "POST",
-            url: addSeriesUrl,
-            data: jQuery.param({ path: path, seriesId: id, qualityProfileId: quality }),
-            error: function (req, status, error) {
-                alert("Sorry! We could not add " + path + " at this time. " + error);
-            }
-        });
-    }
-
-</script>

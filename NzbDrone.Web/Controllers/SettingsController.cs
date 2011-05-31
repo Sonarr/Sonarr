@@ -62,19 +62,9 @@ namespace NzbDrone.Web.Controllers
                 ViewData["viewName"] = viewName;
 
             else
-                return RedirectToAction("General");
+                return RedirectToAction("Indexers");
 
             return View("Index");
-        }
-
-        public ActionResult General()
-        {
-            ViewData["viewName"] = "General";
-
-            return View("Index", new SettingsModel
-                                     {
-                                         Directories = _rootDirProvider.GetAll()
-                                     });
         }
 
         public ActionResult Indexers()
@@ -236,40 +226,6 @@ namespace NzbDrone.Web.Controllers
             return PartialView("QualityProfileItem", profile);
         }
 
-        public ViewResult AddRootDir()
-        {
-            var rootDir = new RootDir { Path = String.Empty };
-
-            var id = _rootDirProvider.Add(rootDir);
-            rootDir.Id = id;
-
-            ViewData["RootDirId"] = id;
-
-            return View("RootDir", rootDir);
-        }
-
-        public ActionResult GetRootDirView(RootDir rootDir)
-        {
-            ViewData["RootDirId"] = rootDir.Id;
-
-            return PartialView("RootDir", rootDir);
-        }
-
-        public JsonResult DeleteRootDir(int rootDirId)
-        {
-            try
-            {
-                _rootDirProvider.Remove(rootDirId);
-            }
-
-            catch (Exception)
-            {
-                return new JsonResult { Data = "failed" };
-            }
-
-            return new JsonResult { Data = "ok" };
-        }
-
         public ActionResult SubMenu()
         {
             return PartialView();
@@ -315,29 +271,6 @@ namespace NzbDrone.Web.Controllers
             {
                 return new JsonResult { Data = "failed" };
             }
-        }
-
-        public JsonResult JsonAutoCompletePath(string term)
-        {
-            var windowsSep = term.LastIndexOf('\\');
-
-            if (windowsSep > -1)
-            {
-                var start = term.Substring(windowsSep + 1);
-                var dirs = _diskProvider.GetDirectories(term.Substring(0, windowsSep + 1)).Where(d => new DirectoryInfo(d).Name.ToLower().StartsWith(start.ToLower())).Take(10);
-                return Json(dirs.ToArray(), JsonRequestBehavior.AllowGet);
-            }
-
-            var index = term.LastIndexOf('/');
-
-            if (index > -1)
-            {
-                var start = term.Substring(index + 1);
-                var dirs = _diskProvider.GetDirectories(term.Substring(0, index + 1)).Where(d => new DirectoryInfo(d).Name.ToLower().StartsWith(start.ToLower())).Take(10);
-                return Json(dirs.ToArray(), JsonRequestBehavior.AllowGet);
-            }
-
-            return Json(new JsonResult(), JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

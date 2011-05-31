@@ -696,10 +696,9 @@
     <Content Include="Views\System\Jobs.cshtml" />
     <Content Include="Views\Settings\Sabnzbd.cshtml" />
     <Content Include="Views\Settings\EpisodeSorting.cshtml" />
-    <Content Include="Views\Settings\General.cshtml" />
     <Content Include="Views\Settings\Notifications.cshtml" />
     <Content Include="Views\Settings\Quality.cshtml" />
-    <Content Include="Views\Settings\RootDir.cshtml" />
+    <Content Include="Views\AddSeries\RootDir.cshtml" />
     <Content Include="Views\Settings\SubMenu.cshtml" />
     <Content Include="Views\Shared\SiteLayout.cshtml" />
     <Content Include="Views\Shared\Footer.cshtml" />
