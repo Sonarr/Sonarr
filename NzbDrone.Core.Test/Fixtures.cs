@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Test
         [FixtureTearDown]
         public void FixtureTearDown()
         {
-            foreach (var file in Directory.GetFiles(Directory.GetCurrentDirectory(), "*.*", SearchOption.AllDirectories)
+            foreach (var file in Directory.GetFiles(Directory.GetCurrentDirectory(), "*.db", SearchOption.AllDirectories)
                 )
             {
                 try
