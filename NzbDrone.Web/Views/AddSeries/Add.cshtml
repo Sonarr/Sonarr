@@ -61,12 +61,13 @@
         }).Render(); 
     }
 
-    <br/>
+    <div style="padding-bottom: 10px; padding-top: 15px;">
+        <button onclick="openAddNewSeries(); return false;" class="listButton" style="margin-left:5px">Add New</button>
 
-    @Html.Telerik().DropDownList().Name("masterDropbox").BindTo((SelectList) ViewData["qualities"]).HtmlAttributes(
-        new {style = "width: 100px; margin-left:5px;"}).ClientEvents(events => events.OnChange("masterChanged"))
+        @Html.Telerik().DropDownList().Name("masterDropbox").BindTo((SelectList) ViewData["qualities"]).HtmlAttributes(
+            new {style = "width: 100px; margin-left:224px;"}).ClientEvents(events => events.OnChange("masterChanged"))
 
-    <button onclick="openAddNewSeries(); return false;" class="listButton" style="margin-left:210px">Add New</button>
+    </div>
 
     @if (Model.Count() == 0)
     {
