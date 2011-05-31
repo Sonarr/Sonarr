@@ -1,6 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<Configuration>
-  <Host>localhost</Host>
-  <Port>8989</Port>
-  <ApiKey>Not-An-API-KEY</ApiKey>
-</Configuration>

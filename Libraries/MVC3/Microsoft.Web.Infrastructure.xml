@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<doc>
+  <assembly>
+    <name>Microsoft.Web.Infrastructure</name>
+  </assembly>
+  <members>
+    <member name="T:Microsoft.Web.Infrastructure.HttpContextHelper"></member>
+    <member name="M:Microsoft.Web.Infrastructure.HttpContextHelper.ExecuteInNullContext(System.Action)"></member>
+    <member name="T:Microsoft.Web.Infrastructure.InfrastructureHelper"></member>
+    <member name="M:Microsoft.Web.Infrastructure.InfrastructureHelper.IsCodeDomDefinedExtension(System.String)"></member>
+    <member name="M:Microsoft.Web.Infrastructure.InfrastructureHelper.UnloadAppDomain"></member>
+    <member name="T:Microsoft.Web.Infrastructure.DynamicModuleHelper.DynamicModuleUtility"></member>
+    <member name="M:Microsoft.Web.Infrastructure.DynamicModuleHelper.DynamicModuleUtility.RegisterModule(System.Type)"></member>
+    <member name="T:Microsoft.Web.Infrastructure.DynamicValidationHelper.ValidationUtility"></member>
+    <member name="M:Microsoft.Web.Infrastructure.DynamicValidationHelper.ValidationUtility.EnableDynamicValidation(System.Web.HttpContext)"></member>
+    <member name="M:Microsoft.Web.Infrastructure.DynamicValidationHelper.ValidationUtility.GetUnvalidatedCollections(System.Web.HttpContext,System.Func`1@,System.Void)"></member>
+    <member name="M:Microsoft.Web.Infrastructure.DynamicValidationHelper.ValidationUtility.IsValidationEnabled(System.Web.HttpContext)"></member>
+  </members>
+</doc>

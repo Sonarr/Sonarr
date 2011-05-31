@@ -1,0 +1,280 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Microsoft.Practices.ServiceLocation</name>
+    </assembly>
+    <members>
+        <member name="T:Microsoft.Practices.ServiceLocation.ActivationException">
+            <summary>
+            The standard exception thrown when a ServiceLocator has an error in resolving an object.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Practices.ServiceLocation.ActivationException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Exception" /> class.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Practices.ServiceLocation.ActivationException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Exception" /> class with a specified error message.
+            </summary>
+            <param name="message">
+            The message that describes the error. 
+             </param>
+        </member>
+        <member name="M:Microsoft.Practices.ServiceLocation.ActivationException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Exception" /> class with a specified error message and a reference to the inner exception that is the cause of this exception.
+            </summary>
+            <param name="message">
+            The error message that explains the reason for the exception. 
+            </param>
+            <param name="innerException">
+            The exception that is the cause of the current exception, or a null reference (Nothing in Visual Basic) if no inner exception is specified. 
+            </param>
+        </member>
+        <member name="M:Microsoft.Practices.ServiceLocation.ActivationException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Exception" /> class with serialized data.
+            </summary>
+            <param name="info">
+            The <see cref="T:System.Runtime.Serialization.SerializationInfo" /> that holds the serialized object data about the exception being thrown. 
+            </param>
+            <param name="context">
+            The <see cref="T:System.Runtime.Serialization.StreamingContext" /> that contains contextual information about the source or destination. 
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+            The <paramref name="info" /> parameter is null. 
+            </exception>
+            <exception cref="T:System.Runtime.Serialization.SerializationException">
+            The class name is null or <see cref="P:System.Exception.HResult" /> is zero (0). 
+            </exception>
+        </member>
+        <member name="T:Microsoft.Practices.ServiceLocation.IServiceLocator">
+            <summary>
+            The generic Service Locator interface. This interface is used
+            to retrieve services (instances identified by type and optional
+            name) from a container.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Practices.ServiceLocation.IServiceLocator.GetInstance(System.Type)">
+            <summary>
+            Get an instance of the given <paramref name="serviceType"/>.
+            </summary>
+            <param name="serviceType">Type of object requested.</param>
+            <exception cref="T:Microsoft.Practices.ServiceLocation.ActivationException">if there is an error resolving
+            the service instance.</exception>
+            <returns>The requested service instance.</returns>
+        </member>
+        <member name="M:Microsoft.Practices.ServiceLocation.IServiceLocator.GetInstance(System.Type,System.String)">
+            <summary>
+            Get an instance of the given named <paramref name="serviceType"/>.
+            </summary>
+            <param name="serviceType">Type of object requested.</param>
+            <param name="key">Name the object was registered with.</param>
+            <exception cref="T:Microsoft.Practices.ServiceLocation.ActivationException">if there is an error resolving
+            the service instance.</exception>
+            <returns>The requested service instance.</returns>
+        </member>
+        <member name="M:Microsoft.Practices.ServiceLocation.IServiceLocator.GetAllInstances(System.Type)">
+            <summary>
+            Get all instances of the given <paramref name="serviceType"/> currently
+            registered in the container.
+            </summary>
+            <param name="serviceType">Type of object requested.</param>
+            <exception cref="T:Microsoft.Practices.ServiceLocation.ActivationException">if there is are errors resolving
+            the service instance.</exception>
+            <returns>A sequence of instances of the requested <paramref name="serviceType"/>.</returns>
+        </member>
+        <member name="M:Microsoft.Practices.ServiceLocation.IServiceLocator.GetInstance``1">
+            <summary>
+            Get an instance of the given <typeparamref name="TService"/>.
+            </summary>
+            <typeparam name="TService">Type of object requested.</typeparam>
+            <exception cref="T:Microsoft.Practices.ServiceLocation.ActivationException">if there is are errors resolving
+            the service instance.</exception>
+            <returns>The requested service instance.</returns>
+        </member>
+        <member name="M:Microsoft.Practices.ServiceLocation.IServiceLocator.GetInstance``1(System.String)">
+            <summary>
+            Get an instance of the given named <typeparamref name="TService"/>.
+            </summary>
+            <typeparam name="TService">Type of object requested.</typeparam>
+            <param name="key">Name the object was registered with.</param>
+            <exception cref="T:Microsoft.Practices.ServiceLocation.ActivationException">if there is are errors resolving
+            the service instance.</exception>
+            <returns>The requested service instance.</returns>
+        </member>
+        <member name="M:Microsoft.Practices.ServiceLocation.IServiceLocator.GetAllInstances``1">
+            <summary>
+            Get all instances of the given <typeparamref name="TService"/> currently
+            registered in the container.
+            </summary>
+            <typeparam name="TService">Type of object requested.</typeparam>
+            <exception cref="T:Microsoft.Practices.ServiceLocation.ActivationException">if there is are errors resolving
+            the service instance.</exception>
+            <returns>A sequence of instances of the requested <typeparamref name="TService"/>.</returns>
+        </member>
+        <member name="T:Microsoft.Practices.ServiceLocation.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.ServiceLocation.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.ServiceLocation.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.ServiceLocation.Properties.Resources.ActivateAllExceptionMessage">
+            <summary>
+              Looks up a localized string similar to Activation error occured while trying to get all instances of type {0}.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Practices.ServiceLocation.Properties.Resources.ActivationExceptionMessage">
+            <summary>
+              Looks up a localized string similar to Activation error occured while trying to get instance of type {0}, key &quot;{1}&quot;.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Practices.ServiceLocation.ServiceLocator">
+            <summary>
+            This class provides the ambient container for this application. If your
+            framework defines such an ambient container, use ServiceLocator.Current
+            to get it.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Practices.ServiceLocation.ServiceLocator.SetLocatorProvider(Microsoft.Practices.ServiceLocation.ServiceLocatorProvider)">
+            <summary>
+            Set the delegate that is used to retrieve the current container.
+            </summary>
+            <param name="newProvider">Delegate that, when called, will return
+            the current ambient container.</param>
+        </member>
+        <member name="P:Microsoft.Practices.ServiceLocation.ServiceLocator.Current">
+            <summary>
+            The current ambient container.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Practices.ServiceLocation.ServiceLocatorImplBase">
+            <summary>
+            This class is a helper that provides a default implementation
+            for most of the methods of <see cref="T:Microsoft.Practices.ServiceLocation.IServiceLocator"/>.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Practices.ServiceLocation.ServiceLocatorImplBase.GetService(System.Type)">
+            <summary>
+            Implementation of <see cref="M:System.IServiceProvider.GetService(System.Type)"/>.
+            </summary>
+            <param name="serviceType">The requested service.</param>
+            <exception cref="T:Microsoft.Practices.ServiceLocation.ActivationException">if there is an error in resolving the service instance.</exception>
+            <returns>The requested object.</returns>
+        </member>
+        <member name="M:Microsoft.Practices.ServiceLocation.ServiceLocatorImplBase.GetInstance(System.Type)">
+            <summary>
+            Get an instance of the given <paramref name="serviceType"/>.
+            </summary>
+            <param name="serviceType">Type of object requested.</param>
+            <exception cref="T:Microsoft.Practices.ServiceLocation.ActivationException">if there is an error resolving
+            the service instance.</exception>
+            <returns>The requested service instance.</returns>
+        </member>
+        <member name="M:Microsoft.Practices.ServiceLocation.ServiceLocatorImplBase.GetInstance(System.Type,System.String)">
+            <summary>
+            Get an instance of the given named <paramref name="serviceType"/>.
+            </summary>
+            <param name="serviceType">Type of object requested.</param>
+            <param name="key">Name the object was registered with.</param>
+            <exception cref="T:Microsoft.Practices.ServiceLocation.ActivationException">if there is an error resolving
+            the service instance.</exception>
+            <returns>The requested service instance.</returns>
+        </member>
+        <member name="M:Microsoft.Practices.ServiceLocation.ServiceLocatorImplBase.GetAllInstances(System.Type)">
+            <summary>
+            Get all instances of the given <paramref name="serviceType"/> currently
+            registered in the container.
+            </summary>
+            <param name="serviceType">Type of object requested.</param>
+            <exception cref="T:Microsoft.Practices.ServiceLocation.ActivationException">if there is are errors resolving
+            the service instance.</exception>
+            <returns>A sequence of instances of the requested <paramref name="serviceType"/>.</returns>
+        </member>
+        <member name="M:Microsoft.Practices.ServiceLocation.ServiceLocatorImplBase.GetInstance``1">
+            <summary>
+            Get an instance of the given <typeparamref name="TService"/>.
+            </summary>
+            <typeparam name="TService">Type of object requested.</typeparam>
+            <exception cref="T:Microsoft.Practices.ServiceLocation.ActivationException">if there is are errors resolving
+            the service instance.</exception>
+            <returns>The requested service instance.</returns>
+        </member>
+        <member name="M:Microsoft.Practices.ServiceLocation.ServiceLocatorImplBase.GetInstance``1(System.String)">
+            <summary>
+            Get an instance of the given named <typeparamref name="TService"/>.
+            </summary>
+            <typeparam name="TService">Type of object requested.</typeparam>
+            <param name="key">Name the object was registered with.</param>
+            <exception cref="T:Microsoft.Practices.ServiceLocation.ActivationException">if there is are errors resolving
+            the service instance.</exception>
+            <returns>The requested service instance.</returns>
+        </member>
+        <member name="M:Microsoft.Practices.ServiceLocation.ServiceLocatorImplBase.GetAllInstances``1">
+            <summary>
+            Get all instances of the given <typeparamref name="TService"/> currently
+            registered in the container.
+            </summary>
+            <typeparam name="TService">Type of object requested.</typeparam>
+            <exception cref="T:Microsoft.Practices.ServiceLocation.ActivationException">if there is are errors resolving
+            the service instance.</exception>
+            <returns>A sequence of instances of the requested <typeparamref name="TService"/>.</returns>
+        </member>
+        <member name="M:Microsoft.Practices.ServiceLocation.ServiceLocatorImplBase.DoGetInstance(System.Type,System.String)">
+            <summary>
+            When implemented by inheriting classes, this method will do the actual work of resolving
+            the requested service instance.
+            </summary>
+            <param name="serviceType">Type of instance requested.</param>
+            <param name="key">Name of registered service you want. May be null.</param>
+            <returns>The requested service instance.</returns>
+        </member>
+        <member name="M:Microsoft.Practices.ServiceLocation.ServiceLocatorImplBase.DoGetAllInstances(System.Type)">
+            <summary>
+            When implemented by inheriting classes, this method will do the actual work of
+            resolving all the requested service instances.
+            </summary>
+            <param name="serviceType">Type of service requested.</param>
+            <returns>Sequence of service instance objects.</returns>
+        </member>
+        <member name="M:Microsoft.Practices.ServiceLocation.ServiceLocatorImplBase.FormatActivationExceptionMessage(System.Exception,System.Type,System.String)">
+            <summary>
+            Format the exception message for use in an <see cref="T:Microsoft.Practices.ServiceLocation.ActivationException"/>
+            that occurs while resolving a single service.
+            </summary>
+            <param name="actualException">The actual exception thrown by the implementation.</param>
+            <param name="serviceType">Type of service requested.</param>
+            <param name="key">Name requested.</param>
+            <returns>The formatted exception message string.</returns>
+        </member>
+        <member name="M:Microsoft.Practices.ServiceLocation.ServiceLocatorImplBase.FormatActivateAllExceptionMessage(System.Exception,System.Type)">
+            <summary>
+            Format the exception message for use in an <see cref="T:Microsoft.Practices.ServiceLocation.ActivationException"/>
+            that occurs while resolving multiple service instances.
+            </summary>
+            <param name="actualException">The actual exception thrown by the implementation.</param>
+            <param name="serviceType">Type of service requested.</param>
+            <returns>The formatted exception message string.</returns>
+        </member>
+        <member name="T:Microsoft.Practices.ServiceLocation.ServiceLocatorProvider">
+            <summary>
+            This delegate type is used to provide a method that will
+            return the current container. Used with the <see cref="T:Microsoft.Practices.ServiceLocation.ServiceLocator"/>
+            static accessor class.
+            </summary>
+            <returns>An <see cref="T:Microsoft.Practices.ServiceLocation.IServiceLocator"/>.</returns>
+        </member>
+    </members>
+</doc>

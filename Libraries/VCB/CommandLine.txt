@@ -1,0 +1,203 @@
+VCB Command-line Utility ver. 3.2
+
+NOTE: Implementation details and latest version of the tool can be found at
+http://www.codeproject.com/KB/macros/versioningcontrolledbuild.aspx
+
+AutoVer.exe is a command-line utility that provides functionality 
+similar to VCB Add-in - it automates versioning of projects in 
+solutions.
+
+Supported workspaces/solutions:
+- Visual C++ 6.0 workspaces (.dsw files)
+- Visual Studio 2002 solutions (.sln files)
+- Visual Studio 2003 solutions (.sln files)
+- Visual Studio 2005 solutions (.sln files)
+- Visual Studio 2008 solutions (.sln files)
+- Visual Studio 2010 solutions (.sln files)
+
+The tool extracts version information (AssemblyVersion,
+AssemblyInformationalVersion and AssemblyFileVersion for .NET projects or
+ProductVersion and FileVersion for VC++ projects) and increments versions
+according to settings in configuration file or according to command-line
+switches that override some settings in configuration file. Configuration file
+is stored in
+  Application Data\Versioning Controlled Build
+folder of user's profile and can be modified by Configurator program.
+
+Basic Syntax:
+
+AUTOVER /?
+AUTOVER [solution] /G
+AUTOVER [solution [version]] [/P:projects] [/C:(E|W)] [/A:(A|M)]
+  [/V:(*|[A][F][P|I])] [/S:(S|I|N)] [/M:([C][F["filename"]]|N)]
+  [/U:(username[,password])]
+
+  /?         Displays command help.
+
+  solution   Solution file (.SLN or .DSW) for which versions should be updated.
+             If solution file is omitted, "Open Solution File" dialog pops-up
+             allowing user to select the file.
+
+  /G         Starts GUI form with a list of all projects. 
+             NOTE: This switch should not be used with any other switch.
+
+             Examples:
+               AUTOVER /G
+               AUTOVER /G "C:\My Projects\My Solution.sln"
+               AUTOVER "C:\My Projects\My Solution.sln" /G
+
+  version    Version pattern to be applied. Version pattern is a sequence of 
+             four dot separated version components: Major, Minor, Build and
+             Revision. Each component may contain number (optionally preceded by
+             '+' character) or '*' character:
+               '*'  character leaves corresponding version component unchanged,
+               '+'  character increments it by amount specified.
+             For example, version pattern "1.2.*.+2" sets Major version to 1 
+             and Minor to 2, leaves Build unchanged and increments Revision by 
+             2.
+             If version is omitted, versions are incremented by the scheme
+             stored in the configuration file. If configuration file does not
+             exist, Revision will be incremented by 1.
+             If configured so, user may enter arbitrary version (e.g. "beta 1")
+             but can apply it to AssemblyInformationalVersion only (using /V:I
+             or /V:I switch).However such a version will not be applied to
+             ProductVersion of VC++ projects. 
+             Arbitrary version must not contain a dot character.
+             NOTE: version pattern cannot be applied in combination with /S
+                   switch.
+
+             Examples:
+               AUTOVER "C:\My Projects\My Solution.sln" "1.0.0.1"
+               AUTOVER "C:\My Projects\My Solution.sln" "1.+1,*.*"
+               AUTOVER "C:\My Projects\My Solution.sln" "beta2" /V:I
+
+  /P         Specifications for individual projects as defined in the list
+             supplied with this switch. If this switch is omitted, all projects
+             in solution are considered, according to settings in configuration
+             file.
+
+  projects   List of comma separated project names. Each project name may be 
+             prefixed by:
+               +    (optional) include project into the list of projects for 
+                    which version may be modified;
+               -    exclude project from the list of projects for which version
+                    may be modified (complement to + prefix);
+               !    include project into list of projects for which version is
+                    always modified.
+             If a project name contains whitespace, you should enclose it with
+             double quotes. Same applies for the case when project name starts
+             with one of prefix characters.
+             NOTE: Version of project that may be versioned will be modified 
+             only if other criteria apply (e.g. project modification has been 
+             detected or /A:A switch has been set).
+             NOTE: Project name may be listed only once, otherwise an error is
+             issued and command is not executed.
+
+             Examples:
+               AUTOVER "My Solution.sln" /P:"ConsoleApp1","ConsoleApp2"
+               AUTOVER "My Solution.sln" /P:-"Xlib"
+               AUTOVER "My Solution.sln" /P:!"ConsoleApp1",-"ConsoleApp2"
+
+  /C         Check if project names provided with /P, /X and /F switches exist
+             in solution. Any invalid name causes:
+               E       Error - command is not executed (default);
+               W       Warning - command is executed ignoring invalid entries.
+
+  /A         Apply version to:
+               A       All projects;
+               M       Modified projects only (default).
+             NOTE: /P and /X switches change the scope of /A switch by limiting
+             the scope to or excluding corresponding projects from scope,
+             respectively.
+             /F switch extends the scope of /A:M switch by including 
+             corresponding projects.
+
+  /V         Version types to modify:
+               A       Assembly version;
+               P or I  Product (i.e. Informational) version;
+               F       File version;
+               *       All version types.
+             If this switch is omitted, settings from configuration file are 
+             applied. If configuration file does not exist, only Assembly
+             version is modified.
+
+             Examples:
+               AUTOVER "My Solution.sln" "1.+1.*.*"/V:AF
+               AUTOVER "My Solution.sln" /V:*
+
+  /S         Synchronization of versions in projects:
+               S       Synchronize (to the highest version);
+               I       Increment and then synchronize;
+               N       Increment versions independently.
+             If this switch is omitted, settings from configuration file are 
+             applied. If configuration file does not exist, versions are
+             incremented independently.
+             NOTE: this switch cannot be used if version pattern is provided.
+
+             Example:
+               AUTOVER "My Solution.sln" /S:I
+
+  /M         Version update summary:
+               C       Output to console (default);
+               F       Write to a file (with optional filename);
+               N       Suppress the summary.
+             If filename is omitted from /M:F switch, name is automatically
+             created from solution filename.
+
+             Example:
+               AUTOVER "My Solution.sln" /M:CF"summary.txt"
+
+  /U         SourceSafe username and password. If username or password are not
+             provided, user will be prompted to enter them if solution is under
+             SourceSafe control. If you do not want to provide password with
+             command stored in a script (e.g. in a BAT file), you may store 
+             username only (without comma after it: /G:username); user will be
+             prompted to enter password when command is run.
+             NOTE: If /U switch is omitted and solution is under SourceSafe
+             control, username and password of the currently logged user is
+             used; if it is not valid, user will be prompted to enter them for
+             each file to be checked out!
+
+             Examples:
+             Provide username and password:
+               AUTOVER "My Solution.sln" /U:john,smith
+             Provide username and empty password:
+               AUTOVER "My Solution.sln" /U:john,
+               AUTOVER "My Solution.sln" /U:john,""
+             Provide username only, user will be prompted to enter password:
+               AUTOVER "My Solution.sln" /U:john
+             User will be prompted to enter username and password:
+               AUTOVER "My Solution.sln" /U
+
+
+EXAMPLE 1:
+
+AUTOVER /V:* /A:M "d:\my projects\MySolution.sln"
+
+This command increments all versions (Assembly, File and Product) of 
+modified projects in MySolution solution, using numbering scheme from
+configuration file (or default scheme if configuration file does not
+exist)
+
+
+EXAMPLE 2:
+
+AUTOVER /V:AF /A:A "d:\my projects\MySolution.sln"
+"2.0.*.+"
+
+This command sets Assembly and File versions for all projects from 
+MySolution solution, using version mask provided: 
+- major version is set to 2
+- minor version is set to 0
+- build is left intact
+- revision is incremented by 1 
+
+
+EXAMPLE 3:
+
+AUTOVER /G
+
+This command first pops-up File Open dialog so that user can browse for 
+a solution file. When user selects a SLN or DSW file, form with a list 
+of all projects is displayed, providing user precise control to set 
+versions for individual projects.

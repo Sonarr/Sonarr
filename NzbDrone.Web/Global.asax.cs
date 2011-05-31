@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Data.SQLite;
+using System.Data.Common;
 using System.Reflection;
 using System.Threading;
 using System.Web;
@@ -74,7 +74,7 @@ namespace NzbDrone.Web
 
             Logger.FatalException(lastError.Message + Environment.NewLine + Request.Url.PathAndQuery, lastError);
 
-            if (lastError is SQLiteException)
+            if (lastError is DbException)
             {
                 Logger.Warn("Restarting application");
                 HttpRuntime.UnloadAppDomain();
