@@ -18,6 +18,6 @@ xcopy NzbDrone.Web\web.config  %TARGET%\NzbDrone.Web\
 
 
 CD "%TARGET%"
-..\Libraries\7zip\7za.exe a -tzip   NzbDrone.zip *
+..\Libraries\7zip\7za.exe a -tzip   NzbDrone.%BUILDNUMBER%.zip *
 ..\Libraries\7zip\7za.exe t NzbDrone.zip 
 cD ..
