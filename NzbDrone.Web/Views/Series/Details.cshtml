@@ -140,18 +140,5 @@
         function episodeDetailExpanded(e) {
             $console.log("OnDetailViewExpand :: " + e.masterRow.cells[1].innerHTML);
         }
-
-        var searchUrl = '@Url.Action("Search", "Episode")';
-
-        function searchForEpisode(id) {
-            $.ajax({
-                type: "POST",
-                url: searchUrl,
-                data: jQuery.param({ episodeId: id }),
-                error: function (req, status, error) {
-                    alert("Sorry! We could search for " + id + " at this time. " + error);
-                }
-            });
-        }
     </script>
 }
