@@ -32,6 +32,9 @@
         <EventHandlerPatternShort>$event$Handler</EventHandlerPatternShort>
       </Naming2>
     </CSharp>
+    <HTML>
+      <FormatSettings />
+    </HTML>
     <JavaScript>
       <FormatSettings />
       <Naming2>
