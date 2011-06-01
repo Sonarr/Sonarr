@@ -67,7 +67,7 @@
                                    columns.Bound(c => c.Quality).Width(0);
                                    columns.Bound(c => c.Status).Width(0);
                                    columns.Bound(o => o.EpisodeId).Title("")
-                                       .ClientTemplate("<a href='#Search' onClick=\"return searchForEpisode('<#= EpisodeId #>')\" >Search</a>");
+                                       .ClientTemplate("<a href='#Search' onClick=\"searchForEpisode('<#= EpisodeId #>'); return false;\" >Search</a>");
                                })
                   .DetailView(detailView => detailView.ClientTemplate("<div><#= Overview #> </br><#= Path #> </div>"))
                   .ClientEvents(clientEvents =>
