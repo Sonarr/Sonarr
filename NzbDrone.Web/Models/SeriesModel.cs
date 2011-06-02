@@ -18,6 +18,8 @@ namespace NzbDrone.Web.Models
         public string AirsDayOfWeek { get; set; }
         public string QualityProfileName { get; set; }
         public string Overview { get; set; }
+        public int Episodes { get; set; }
+        public int EpisodeTotal { get; set; }
 
         //View & Edit
         [DisplayName("Path")]

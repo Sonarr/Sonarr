@@ -640,7 +640,7 @@
     <Content Include="Content\jquery-ui.custom.css" />
     <Content Include="Content\jquery.jgrowl.css" />
     <Content Include="Content\notibar.css" />
-    <Content Include="Content\style.css" />
+    <Content Include="Content\Site.css" />
     <Content Include="Content\Images\XbmcNotification.png" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />

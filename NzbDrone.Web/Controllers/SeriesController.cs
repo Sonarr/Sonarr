@@ -235,20 +235,27 @@ namespace NzbDrone.Web.Controllers
         {
             var series = new List<SeriesModel>();
 
-            seriesInDb.ForEach(s => series.Add(new SeriesModel
+            foreach (var s in seriesInDb)
             {
-                SeriesId = s.SeriesId,
-                Title = s.Title,
-                AirsDayOfWeek = s.AirsDayOfWeek.ToString(),
-                Monitored = s.Monitored,
-                Overview = s.Overview,
-                Path = s.Path,
-                QualityProfileId = s.QualityProfileId,
-                QualityProfileName = s.QualityProfile.Name,
-                SeasonsCount = s.Seasons.Where(x => x.SeasonNumber > 0).Count(),
-                SeasonFolder = s.SeasonFolder,
-                Status = s.Status
-            }));
+                var episodesTotal = s.Episodes;
+
+                series.Add(new SeriesModel
+                               {
+                                   SeriesId = s.SeriesId,
+                                   Title = s.Title,
+                                   AirsDayOfWeek = s.AirsDayOfWeek.ToString(),
+                                   Monitored = s.Monitored,
+                                   Overview = s.Overview,
+                                   Path = s.Path,
+                                   QualityProfileId = s.QualityProfileId,
+                                   QualityProfileName = s.QualityProfile.Name,
+                                   SeasonsCount = s.Seasons.Where(x => x.SeasonNumber > 0).Count(),
+                                   SeasonFolder = s.SeasonFolder,
+                                   Status = s.Status,
+                                   Episodes = episodesTotal.Where(e => e.EpisodeFileId != 0).Count(),
+                                   EpisodeTotal = episodesTotal.Count()
+                               });
+            }
 
             return series;
         }

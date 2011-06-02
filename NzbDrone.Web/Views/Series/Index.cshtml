@@ -6,6 +6,57 @@
     Series
 }
 
+<script>
+    (function ($) {
+        $.fn.episodeProgress = function (episodes, totalEpisodes) {
+            return this.each(
+			    function () {
+			        var div = $(this);
+			        var innerdiv = div.find(".progress");
+
+			        var width = Math.round(episodes / totalEpisodes * 100);
+			        innerdiv.css("width", width + "%");
+			        div.find(".progressText").html(episodes + " / " + totalEpisodes);
+			    }
+		    );
+        };
+    })(jQuery);
+</script>
+
+<style>
+/* progress bar container */
+.progressbar
+{
+    border:1px solid grey;
+    width:125px;
+    height:20px;
+    position:relative;
+    color:black; 
+}
+/* color bar */
+.progressbar div.progress
+{
+    position:absolute;
+    width:0;
+    height:100%;
+    overflow:hidden;
+    background-color:#065EFE;
+}
+/* text on bar */
+.progressbar div.progress .progressText{
+    position:absolute;
+    text-align:center;
+    color:white;
+}
+/* text off bar */
+.progressbar div.progressText{
+    position:absolute;
+    width:100%;
+    height:100%;
+    text-align:center;
+}
+</style>
+
 @section ActionMenu{
     @{Html.RenderPartial("SubMenu");}
 }
@@ -30,6 +81,13 @@
                                  columns.Bound(o => o.QualityProfileName).Title("Quality");
                                  columns.Bound(o => o.Status);
                                  columns.Bound(o => o.AirsDayOfWeek);
+                                 columns.Bound(o => o.Episodes).Title("Episodes").Width(125)
+                                     .ClientTemplate("<div id=\"progressbar_<#= SeriesId #>\" class=\"progressbar\">" +
+                                                            "<div class=\"progressText\"></div>" + 
+                                                            "<div class=\"progress\">" +
+                                                                "<span class=\"progressText\" style=\"width: 125px;\"></span>" +
+                                                            "</div>" +
+                                                     "</div>");
                                  columns.Bound(o => o.Path);
                                  columns.Command(commands =>
                                                      {
@@ -44,6 +102,7 @@
                 .ClientEvents(clientEvents => { clientEvents.OnEdit("grid_edit");
                                                 clientEvents.OnDataBinding("grid_bind");
                                                 clientEvents.OnDataBound("grid_bound");
+                                                clientEvents.OnRowDataBound("grid_rowBound");
                                               })
                 .Render();}
         <span class="grid-loader"><img src="@Url.Content( "~/Content/Images/Loading.gif" )" alt="Loading"/> Loading...</span>
@@ -54,11 +113,22 @@
     var windowElement;
 
     function grid_edit(args) {
-            $(args.form)
-                .closest(".t-window")
-                .data("tWindow")
-                .center();
-        }
+        $(args.form)
+            .closest(".t-window")
+            .data("tWindow")
+            .center();
+    }
+
+    function grid_rowBound(e) {
+        var data = e.dataItem;
+
+        var seriesId = data.SeriesId;
+        var episodes = data.Episodes;
+        var episodeTotal = data.EpisodeTotal;
+
+        $("#progressbar_" + seriesId).episodeProgress(episodes, episodeTotal);
+    }
+
 
     function openSeasonEditor(seriesId, seriesName) {
         windowElement = null;
