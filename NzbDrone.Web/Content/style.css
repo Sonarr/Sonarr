@@ -260,6 +260,11 @@ button, input[type="button"], input[type="submit"], input[type="reset"]
     margin: 10px;
 }
 
+button:active, input[type="button"]:active, input[type="submit"]:active, input[type="reset"]:active
+{
+    border-color: #0C48B6;
+}
+
 .listButton
 {
     padding: 2px 10px 2px 10px;
@@ -334,4 +339,4 @@ button, input[type="button"], input[type="submit"], input[type="reset"]
         -khtml-opacity: 0.8;  
         opacity: 0.8;  
         line-height: 90%  
-    } 
+    }

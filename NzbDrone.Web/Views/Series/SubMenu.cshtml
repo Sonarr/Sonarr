@@ -2,7 +2,7 @@
 
 @{Html.Telerik().Menu().Name("telerikGrid").Items(items =>
                             {
-                                items.Add().Text("Add Series").Action<AddSeriesController>(c => c.Add());
+                                items.Add().Text("Add Series").Action<AddSeriesController>(c => c.Index());
                                 items.Add().Text("Start RSS Sync").Action<SeriesController>(c => c.RssSync());
                                 items.Add().Text("Rename All").Action<SeriesController>(c => c.RenameAll());
                             }).Render();}
