@@ -107,7 +107,7 @@ namespace NzbDrone.Core.Test
             for (int i = 5000; i < 5000 + 1000; i++)
             {
                 count++;
-                var file = repo.Single<Episode>(random.Next(0, COUNT)).EpisodeFile;
+                var file = repo.Single<Episode>(random.Next(10, COUNT - 100)).EpisodeFile;
             }
 
 

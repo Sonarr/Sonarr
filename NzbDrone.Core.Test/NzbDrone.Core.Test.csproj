@@ -39,6 +39,9 @@
     <Reference Include="FizzWare.NBuilder">
       <HintPath>..\packages\NBuilder.2.3.0.0\lib\FizzWare.NBuilder.dll</HintPath>
     </Reference>
+    <Reference Include="FluentAssertions">
+      <HintPath>..\packages\FluentAssertions.1.4.0.0\Lib\.NetFramework 4.0\FluentAssertions.dll</HintPath>
+    </Reference>
     <Reference Include="Gallio, Version=3.2.0.0, Culture=neutral, PublicKeyToken=eb9cfa67ee6ab36e, processorArchitecture=MSIL" />
     <Reference Include="MbUnit, Version=3.2.0.0, Culture=neutral, PublicKeyToken=eb9cfa67ee6ab36e, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -62,6 +65,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit.2.5.10.11092\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.mocks">
+      <HintPath>..\packages\NUnit.2.5.10.11092\lib\nunit.mocks.dll</HintPath>
+    </Reference>
+    <Reference Include="pnunit.framework">
+      <HintPath>..\packages\NUnit.2.5.10.11092\lib\pnunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="SubSonic.Core, Version=3.0.0.3, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\SubSonic.Core.dll</HintPath>
@@ -81,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="dbBenchmark.cs" />
+    <Compile Include="Framework\TestBaseNunit.cs" />
     <Compile Include="InventoryProvider_IsMonitoredTest.cs" />
     <Compile Include="DownloadProviderTest.cs" />
     <Compile Include="EpisodeSearchJobTest.cs" />
