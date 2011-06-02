@@ -1,6 +1,6 @@
 ﻿using AutoMoq;
-using MbUnit.Framework;
 using Moq;
+using NUnit.Framework;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
@@ -57,6 +57,8 @@ namespace NzbDrone.Core.Test
             mocker.GetMock<IRepository>().Verify(r => r.Update(It.IsAny<Config>()), Times.Never());
             mocker.GetMock<IRepository>().Verify(r => r.Add(It.Is<Config>(c => c.Key == key && c.Value == value)),
                                                  Times.Once());
+
+            Assert.Pass();
         }
     }
 }
