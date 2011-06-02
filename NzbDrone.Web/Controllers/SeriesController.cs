@@ -237,7 +237,7 @@ namespace NzbDrone.Web.Controllers
 
             foreach (var s in seriesInDb)
             {
-                var episodesTotal = s.Episodes;
+                var episodesTotal = s.Episodes.Where(e => e.AirDate <= DateTime.Today && e.AirDate > new DateTime(1899, 12, 31));
 
                 series.Add(new SeriesModel
                                {

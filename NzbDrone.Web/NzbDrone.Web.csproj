@@ -633,6 +633,7 @@
     <Content Include="Content\Images\ui-icons_888888_256x240.png" />
     <Content Include="Content\Images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Content\Images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Content\Images\VideoFolder.png" />
     <Content Include="Content\Images\X.png" />
     <Content Include="Content\jquery-simpledropdown.css" />
     <Content Include="Content\jquery-ui-1.8.8.custom.css" />

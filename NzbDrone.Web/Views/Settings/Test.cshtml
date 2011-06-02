@@ -8,6 +8,19 @@
 
 			        var width = Math.round(episodes / totalEpisodes * 100);
 			        innerdiv.css("width", width + "%");
+
+			        if (width > 97) {
+			            innerdiv.css("-khtml-border-top-right-radius", "7px");
+                        innerdiv.css("border-top-right-radius", "7px");
+                        innerdiv.css("-moz-border-top-right-radius", "7px");
+			            innerdiv.css("-webkit-border-top-right-radius", "7px");
+    
+                        innerdiv.css("-khtml-border-bottom-right-radius", "7px");
+                        innerdiv.css("border-bottom-right-radius", "7px");
+                        innerdiv.css("-moz-border-bottom-right-radius", "7px");
+                        innerdiv.css("-webkit-border-bottom-right-radius", "7px");
+			        }
+			        
 			        div.find(".progressText").html(episodes + " / " + totalEpisodes);
 			    }
 		    );
@@ -19,7 +32,6 @@
 /* progress bar container */
 .progressbar
 {
-    z-index: 1;
     border:1px solid grey;
     -khtml-border-radius:8px;
     border-radius:8px;
@@ -28,12 +40,21 @@
     width:125px;
     height:20px;
     position:relative;
-    color:black; 
+    color:black;
 }
 
+/* apply curves to the progress bar */
 .progress
 {
-    z-index: 5;
+    -khtml-border-top-left-radius:7px;
+    border-top-left-radius:7px;
+    -moz-border-top-left-radius:7px;
+    -webkit-border-top-left-radius:7px;
+    
+    -khtml-border-bottom-left-radius:7px;
+    border-bottom-left-radius:7px;
+    -moz-border-bottom-left-radius:7px;
+    -webkit-border-bottom-left-radius:7px;
 }
 
 /* color bar */
@@ -68,5 +89,5 @@
 </div>
 
 <script>
-    $("#progressbar").episodeProgress(100, 200);
+    $("#progressbar").episodeProgress(100, 100);
 </script>
