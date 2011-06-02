@@ -151,13 +151,25 @@
     }
 
     function grid_rowBound(e) {
-        var data = e.dataItem;
+        var dataItem = e.dataItem;
+        var seriesId = dataItem.SeriesId;
+        var getEpisodeCountUrl = '@Url.Action("GetEpisodeCount", "Series")';
 
-        var seriesId = data.SeriesId;
-        var episodes = data.Episodes;
-        var episodeTotal = data.EpisodeTotal;
-
-        $("#progressbar_" + seriesId).episodeProgress(episodes, episodeTotal);
+        $("#progressbar_" + seriesId).episodeProgress(0, 0);
+        
+        $.ajax({
+                type: "GET",
+                url: getEpisodeCountUrl,
+                data: jQuery.param({ seriesId: seriesId }),
+                error: function (req, status, error) {
+                    alert("Sorry! We could search for " + id + " at this time. " + error);
+                },
+                success: function (data, textStatus, jqXHR) {
+                    var episodes = data.Episodes;
+                    var episodeTotal = data.EpisodeTotal;
+                    $("#progressbar_" + seriesId).episodeProgress(episodes, episodeTotal);
+                }
+            });
     }
 
 

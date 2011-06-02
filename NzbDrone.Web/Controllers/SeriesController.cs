@@ -133,6 +133,21 @@ namespace NzbDrone.Web.Controllers
             return View(new GridModel(episodes));
         }
 
+        public JsonResult GetEpisodeCount(int seriesId)
+        {
+            var series = _seriesProvider.GetSeries(seriesId);
+
+            var monitoredSeasons = series.Seasons.Where(e => e.Monitored).Select(e => e.SeasonId);
+            var episodeTotal = series.Episodes.Where(e => monitoredSeasons.Contains(e.SeasonId) && e.AirDate <= DateTime.Today && e.AirDate > new DateTime(1899, 12, 31));
+            var episodes = episodeTotal.Where(e => e.EpisodeFileId > 0);
+
+            return Json(new
+            {
+                Episodes = episodes.Count(),
+                EpisodeTotal = episodeTotal.Count()
+            }, JsonRequestBehavior.AllowGet);
+        }
+
         //Local Helpers
         private string GetEpisodePath(EpisodeFile file)
         {
@@ -237,8 +252,6 @@ namespace NzbDrone.Web.Controllers
 
             foreach (var s in seriesInDb)
             {
-                var episodesTotal = s.Episodes.Where(e => e.AirDate <= DateTime.Today && e.AirDate > new DateTime(1899, 12, 31));
-
                 series.Add(new SeriesModel
                                {
                                    SeriesId = s.SeriesId,
@@ -252,8 +265,8 @@ namespace NzbDrone.Web.Controllers
                                    SeasonsCount = s.Seasons.Where(x => x.SeasonNumber > 0).Count(),
                                    SeasonFolder = s.SeasonFolder,
                                    Status = s.Status,
-                                   Episodes = episodesTotal.Where(e => e.EpisodeFileId != 0).Count(),
-                                   EpisodeTotal = episodesTotal.Count()
+                                   Episodes = 0,
+                                   EpisodeTotal = 0
                                });
             }
 
@@ -265,7 +278,7 @@ namespace NzbDrone.Web.Controllers
             if (seasonNumber == 0)
                 return "Specials";
 
-            return String.Format("Season# {0}", seasonNumber);
+            return String.Format("Season #{0}", seasonNumber);
         }
     }
 }
