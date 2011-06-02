@@ -17,6 +17,8 @@ Missing
                              columns.Bound(c => c.AirDate).Format("{0:d}")
                                  .Title("Air Date")
                                  .Width(80);
+                             columns.Bound(o => o.EpisodeId).Title("")
+                                       .ClientTemplate("<a href='#Search' onClick=\"searchForEpisode('<#= EpisodeId #>'); return false;\" >Search</a>");
                          })
             .DetailView(detailView => detailView.ClientTemplate(
                 "<fieldset>" +
