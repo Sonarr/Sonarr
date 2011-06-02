@@ -49,17 +49,17 @@ namespace NzbDrone.Core.Repository
         {
             get
             {
-                if (EpisodeFileId != 0) return EpisodeStatusType.Ready;
-
-                var season = Season;
-
-                if (Ignored || (season != null && !season.Monitored)) return EpisodeStatusType.Ignored;
-
                 if (GrabDate != null && GrabDate.Value.AddDays(1) >= DateTime.Now)
                 {
                     return EpisodeStatusType.Downloading;
                 }
 
+                if (EpisodeFileId != 0) return EpisodeStatusType.Ready;
+
+                var season = Season;
+
+                if (Ignored || (season != null && !season.Monitored)) return EpisodeStatusType.Ignored;
+                
                 if (AirDate.Date.Year > 1900 && DateTime.Now.Date >= AirDate.Date)
                 {
                     return EpisodeStatusType.Missing;
