@@ -6,8 +6,9 @@ using System.Net;
 using System.ServiceModel.Syndication;
 using AutoMoq;
 using FizzWare.NBuilder;
-using MbUnit.Framework;
+using FluentAssertions;
 using Moq;
+using NUnit.Framework;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
@@ -199,7 +200,7 @@ namespace NzbDrone.Core.Test
             //Assert
             Assert.IsTrue(result);
             Assert.AreSame(series, parseResultSingle.Series);
-            Assert.Count(1, parseResultSingle.Episodes);
+            parseResultSingle.Episodes.Should().HaveCount(1);
             Assert.AreEqual("TBD", parseResultSingle.Episodes[0].Title);
             mocker.VerifyAllMocks();
         }

@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Threading;
 using AutoMoq;
 using FizzWare.NBuilder;
-using MbUnit.Framework;
 using Moq;
+using NUnit.Framework;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Jobs;
@@ -79,7 +79,7 @@ namespace NzbDrone.Core.Test
 
 
         [Test]
-        [Timeout(3)]
+        [Timeout(3000)]
         public void failed_import_should_not_be_stuck_in_loop()
         {
             var series = Builder<Series>.CreateListOfSize(2)

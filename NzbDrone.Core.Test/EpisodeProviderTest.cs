@@ -2,12 +2,12 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq.Expressions;
 using AutoMoq;
 using FizzWare.NBuilder;
-using MbUnit.Framework;
+using FluentAssertions;
 using Moq;
+using NUnit.Framework;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
@@ -53,9 +53,9 @@ namespace NzbDrone.Core.Test
             mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
 
             //Assert
-            var actualCount = mocker.Resolve<EpisodeProvider>().GetEpisodeBySeries(seriesId);
+            var actualCount = mocker.Resolve<EpisodeProvider>().GetEpisodeBySeries(seriesId).Count;
             mocker.GetMock<TvDbProvider>().VerifyAll();
-            Assert.Count(episodeCount, actualCount);
+            actualCount.Should().Be(episodeCount);
             mocker.VerifyAllMocks();
         }
 
@@ -190,7 +190,7 @@ namespace NzbDrone.Core.Test
 
             //Assert
             mocker.VerifyAllMocks();
-            Assert.Count(1, repo.All<Episode>());
+            repo.All<Episode>().Should().HaveCount(1);
         }
 
         [Test]
@@ -214,7 +214,7 @@ namespace NzbDrone.Core.Test
                 .With(c => c.SeasonNumber = 4)
                 .With(c => c.EpisodeNumber = 15)
                 .Build();
-              
+
 
             var fakeSeries = Builder<Series>.CreateNew().With(c => c.SeriesId = seriesId).Build();
 
@@ -234,7 +234,7 @@ namespace NzbDrone.Core.Test
 
             //Assert
             mocker.VerifyAllMocks();
-            Assert.Count(1, repo.All<Episode>());
+            repo.All<Episode>().Should().HaveCount(1);
         }
 
 
@@ -283,9 +283,10 @@ namespace NzbDrone.Core.Test
                         e => e.Where(g => g.EpisodeFileId == 69).Count() == faketvDbResponse.Episodes.Count)),
                 Times.Once());
 
-            Assert.Count(faketvDbResponse.Episodes.Count, updatedEpisodes);
-            Assert.ForAll(updatedEpisodes, c => Assert.AreEqual(99, c.EpisodeId));
-            Assert.ForAll(updatedEpisodes, c => Assert.AreEqual(69, c.EpisodeFileId));
+
+            updatedEpisodes.Should().HaveSameCount(faketvDbResponse.Episodes);
+            updatedEpisodes.Should().OnlyContain(c => c.EpisodeId == 99);
+            updatedEpisodes.Should().OnlyContain(c => c.EpisodeFileId == 69);
         }
 
 
@@ -307,7 +308,7 @@ namespace NzbDrone.Core.Test
 
             //assert
             var episodes = episodeProvider.GetEpisodeBySeries(tvDbSeriesId);
-            Assert.IsNotEmpty(episodes);
+            episodes.Should().NotBeEmpty();
         }
     }
 }

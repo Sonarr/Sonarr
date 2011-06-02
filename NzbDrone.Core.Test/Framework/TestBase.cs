@@ -1,4 +1,5 @@
-﻿using MbUnit.Framework;
+﻿using NUnit;
+using NUnit.Framework;
 
 namespace NzbDrone.Core.Test.Framework
 {
@@ -15,7 +16,7 @@ namespace NzbDrone.Core.Test.Framework
         [TearDown]
         public void TearDown()
         {
-            if (!Assert.IsFailurePending) ExceptionVerification.AssertNoError();
+            ExceptionVerification.AssertNoUnexcpectedLogs();
         }
 
     }

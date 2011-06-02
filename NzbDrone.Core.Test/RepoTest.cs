@@ -2,9 +2,10 @@
 using System;
 using System.Linq;
 using FizzWare.NBuilder;
-using MbUnit.Framework;
+using FluentAssertions;
 using NLog;
 using NLog.Config;
+using NUnit.Framework;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
@@ -33,7 +34,8 @@ namespace NzbDrone.Core.Test
             Assert.AreEqual(fakeSeries.SeriesId, fetchedSeries.SeriesId);
             Assert.AreEqual(fakeSeries.Title, fetchedSeries.Title);
 
-            Assert.IsNotEmpty(fetchedSeries.Episodes);
+
+            fetchedSeries.Episodes.Should().HaveCount(1);
             Assert.AreEqual(fetchedSeries.Episodes[0].EpisodeId, fakeEpisode.EpisodeId);
             Assert.AreEqual(fetchedSeries.Episodes[0].SeriesId, fakeEpisode.SeriesId);
             Assert.AreEqual(fetchedSeries.Episodes[0].Title, fakeEpisode.Title);
@@ -60,9 +62,9 @@ namespace NzbDrone.Core.Test
             Assert.AreEqual(fakeEpisode.Title, fetchedEpisode.Title);
 
             Console.WriteLine("=======================");
-            var ttt= fetchedEpisode.Series;
+            var ttt = fetchedEpisode.Series;
             Console.WriteLine("=======================");
-            var tttd= fetchedEpisode.Series;
+            var tttd = fetchedEpisode.Series;
             Console.WriteLine("=======================");
 
             //Assert.Contains(fetchedEpisode.ToString(), fakeSeries.Title);
@@ -73,20 +75,20 @@ namespace NzbDrone.Core.Test
         [Description(
             "This test confirms that the tvdb id stored in the db is preserved rather than being replaced by an auto incrementing value"
             )]
-        public void tvdbid_is_preserved([RandomNumbers(Minimum = 100, Maximum = 999, Count = 1)] int tvdbId)
+        public void tvdbid_is_preserved()
         {
             //Arrange
             var sonicRepo = MockLib.GetEmptyRepository();
-            var series = Builder<Series>.CreateNew().With(c => c.SeriesId = tvdbId).Build();
+            var series = Builder<Series>.CreateNew().With(c => c.SeriesId = 18).Build();
 
             //Act
             var addId = sonicRepo.Add(series);
 
             //Assert
-            Assert.AreEqual(tvdbId, addId);
+            Assert.AreEqual(18, addId);
             var allSeries = sonicRepo.All<Series>();
-            Assert.IsNotEmpty(allSeries);
-            Assert.AreEqual(tvdbId, allSeries.First().SeriesId);
+            allSeries.Should().HaveCount(1);
+            Assert.AreEqual(18, allSeries.First().SeriesId);
         }
 
         [Test]
@@ -118,8 +120,7 @@ namespace NzbDrone.Core.Test
             Logger.Info(message);
 
             //Assert
-            Assert.IsNotEmpty(sonicRepo.All<Log>());
-            Assert.Count(1, sonicRepo.All<Log>());
+            sonicRepo.All<Log>().Should().HaveCount(1);
 
             var logItem = sonicRepo.All<Log>().First();
             Assert.AreNotEqual(new DateTime(), logItem.Time);
@@ -153,8 +154,7 @@ namespace NzbDrone.Core.Test
             Logger.ErrorException(message, ex);
 
             //Assert
-            Assert.IsNotEmpty(sonicRepo.All<Log>());
-            Assert.Count(1, sonicRepo.All<Log>());
+            sonicRepo.All<Log>().Should().HaveCount(1);
 
             var logItem = sonicRepo.All<Log>().First();
             Assert.AreNotEqual(new DateTime(), logItem.Time);
@@ -187,8 +187,7 @@ namespace NzbDrone.Core.Test
             Logger.ErrorException(message, ex);
 
             //Assert
-            Assert.IsNotEmpty(sonicRepo.All<Log>());
-            Assert.Count(1, sonicRepo.All<Log>());
+            sonicRepo.All<Log>().Should().HaveCount(1);
 
             var logItem = sonicRepo.All<Log>().First();
             Assert.AreNotEqual(new DateTime(), logItem.Time);

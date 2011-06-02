@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMoq;
 using FizzWare.NBuilder;
-using MbUnit.Framework;
+using FluentAssertions;
 using Moq;
+using NUnit.Framework;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
@@ -121,7 +122,7 @@ namespace NzbDrone.Core.Test
             var storedHistory = repo.All<History>();
             var newHistiory = repo.All<History>().First();
 
-            Assert.Count(1, storedHistory);
+            storedHistory.Should().HaveCount(1);
             Assert.AreEqual(history.Date, newHistiory.Date);
             Assert.AreEqual(history.EpisodeId, newHistiory.EpisodeId);
             Assert.AreEqual(history.NzbTitle, newHistiory.NzbTitle);

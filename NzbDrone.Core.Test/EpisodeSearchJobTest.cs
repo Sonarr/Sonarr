@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMoq;
 using FizzWare.NBuilder;
-using MbUnit.Framework;
+using FluentAssertions;
 using Moq;
+using NUnit.Framework;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
@@ -94,7 +95,7 @@ namespace NzbDrone.Core.Test
                 .WhereRandom(1).Has(c => c.Quality = new Quality(QualityTypes.DVD, true))
                 .Build();
 
-            Assert.Count(1, parseResults.Where(c => c.Quality.Proper));
+            parseResults.Where(c => c.Quality.Proper).Should().HaveCount(1);
 
             var episode = Builder<Episode>.CreateNew().Build();
 
@@ -199,9 +200,9 @@ namespace NzbDrone.Core.Test
 
 
         [Test]
-        [Row(0)]
-        [Row(-1)]
-        [Row(-100)]
+        [TestCase(0)]
+        [TestCase(-1)]
+        [TestCase(-100)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void start_target_id_less_than_0_throws_exception(int target)
         {

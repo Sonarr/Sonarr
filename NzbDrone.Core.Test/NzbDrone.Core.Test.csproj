@@ -40,10 +40,8 @@
       <HintPath>..\packages\NBuilder.2.3.0.0\lib\FizzWare.NBuilder.dll</HintPath>
     </Reference>
     <Reference Include="FluentAssertions">
-      <HintPath>..\packages\FluentAssertions.1.4.0.0\Lib\.NetFramework 4.0\FluentAssertions.dll</HintPath>
+      <HintPath>..\Libraries\FluentAssertions.dll</HintPath>
     </Reference>
-    <Reference Include="Gallio, Version=3.2.0.0, Culture=neutral, PublicKeyToken=eb9cfa67ee6ab36e, processorArchitecture=MSIL" />
-    <Reference Include="MbUnit, Version=3.2.0.0, Culture=neutral, PublicKeyToken=eb9cfa67ee6ab36e, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
@@ -93,7 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="dbBenchmark.cs" />
-    <Compile Include="Framework\TestBaseNunit.cs" />
+    <Compile Include="Framework\TestBase.cs" />
     <Compile Include="InventoryProvider_IsMonitoredTest.cs" />
     <Compile Include="DownloadProviderTest.cs" />
     <Compile Include="EpisodeSearchJobTest.cs" />
@@ -111,7 +109,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Framework\ExceptionVerification.cs" />
-    <Compile Include="Framework\TestBase.cs" />
     <Compile Include="JobProviderTest.cs" />
     <Compile Include="QualityTest.cs" />
     <Compile Include="RepositoryProviderTest.cs" />
@@ -121,7 +118,7 @@
     <Compile Include="MediaFileProviderTests.cs" />
     <Compile Include="ConfigProviderTest.cs" />
     <Compile Include="EpisodeProviderTest.cs" />
-    <Compile Include="Fixtures.cs" />
+    <Compile Include="Framework\Fixtures.cs" />
     <Compile Include="Framework\MockLib.cs" />
     <Compile Include="ParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
