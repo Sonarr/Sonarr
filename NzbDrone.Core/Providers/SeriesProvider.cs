@@ -106,7 +106,7 @@ namespace NzbDrone.Core.Providers
             var normalizeTitle = Parser.NormalizeTitle(title);
 
             var seriesId = SceneNameHelper.GetIdByName(normalizeTitle);
-            if (seriesId != 0)
+            if (seriesId != null)
             {
                 return GetSeries(seriesId.Value);
             }

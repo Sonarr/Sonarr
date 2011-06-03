@@ -91,13 +91,6 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
-        public void newzbing_rss_search()
-        {
-            
-        }
-
-
-        [Test]
         [TestCase("Adventure.Inc.S03E19.DVDRip.XviD-OSiTV", 3, 19, QualityTypes.DVD)]
         public void custome_parser_partial_success(string title, int season, int episode, QualityTypes quality)
         {
