@@ -102,24 +102,35 @@
     </div>
 </div>
 
-<script>
-    $(document).ready(function () {
+<div id="progressbar2" class="progressbar">
+    <div class="progressText"></div>
+    <div class="progress">
+        <span class="progressText" style="width: 125px;"></span>
+    </div>
+</div>
 
-        i = 0;
-        max = 50;
+<script>
+    $(document).ready(function() {
+
+        progress(65, 100, 'progressbar');
+        progress(22, 25, 'progressbar2');
+
+    });
+    
+    function progress(episodes, episodeTotal, elementName) {
+        var counter = 0;
+        var max = episodes + 1;
 
         $.doTimeout(20, function () {
-            if (i == max + 1) {
+            if (counter == max) {
                 return false;
             }
 
-            $("#progressbar").episodeProgress(i, 100);
-            i++;
+            $("#" + elementName).episodeProgress(counter, episodeTotal);
+            counter++;
 
             return true;
         });
-
-        //$("#progressbar").episodeProgress(50, 100);
-    });
+    };
     
 </script>
