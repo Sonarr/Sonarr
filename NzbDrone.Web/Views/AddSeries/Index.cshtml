@@ -131,10 +131,10 @@
     var deleteRootDirUrl = '@Url.Action("DeleteRootDir", "AddSeries")';
 
     function deleteRootDir(id) {
-        sendToServer(id);
+        sendDeleteToServer(id);
     }
 
-    function sendToServer(id) {
+    function sendDeleteToServer(id) {
         $.ajax({
             type: "POST",
             url: deleteRootDirUrl,
