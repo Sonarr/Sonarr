@@ -228,6 +228,7 @@ namespace NzbDrone.Core.Test
                 .Setup(c => c.GetEpisode(episode.EpisodeId))
                 .Returns(episode);
 
+
             var indexer1 = new Mock<IndexerBase>();
             indexer1.Setup(c => c.FetchEpisode(episode.Series.Title, episode.SeasonNumber, episode.EpisodeNumber))
                 .Returns(parseResults).Verifiable();
@@ -235,6 +236,54 @@ namespace NzbDrone.Core.Test
 
             var indexer2 = new Mock<IndexerBase>();
             indexer2.Setup(c => c.FetchEpisode(episode.Series.Title, episode.SeasonNumber, episode.EpisodeNumber))
+                .Returns(parseResults).Verifiable();
+
+            var indexers = new List<IndexerBase> { indexer1.Object, indexer2.Object };
+
+            mocker.GetMock<IndexerProvider>()
+                .Setup(c => c.GetEnabledIndexers())
+                .Returns(indexers);
+
+            mocker.GetMock<InventoryProvider>()
+                .Setup(c => c.IsQualityNeeded(It.Is<EpisodeParseResult>(d => d.Series != null && d.Episodes.Count != 0))).Returns(false);
+
+            //Act
+            mocker.Resolve<EpisodeSearchJob>().Start(new ProgressNotification("Test"), episode.EpisodeId);
+
+
+            //Assert
+            mocker.VerifyAllMocks();
+            mocker.GetMock<InventoryProvider>().Verify(c => c.IsQualityNeeded(It.IsAny<EpisodeParseResult>()),
+                                                       Times.Exactly(8));
+            ExceptionVerification.ExcpectedWarns(1);
+            indexer1.VerifyAll();
+            indexer2.VerifyAll();
+        }
+
+        [Test]
+        public void start_should_use_scene_name_to_search()
+        {
+            var parseResults = Builder<EpisodeParseResult>.CreateListOfSize(4)
+                .Build();
+
+            var episode = Builder<Episode>.CreateNew()
+                .With(c => c.Series = Builder<Series>.CreateNew().With(s => s.SeriesId = 71256).Build())
+                .With(c => c.SeasonNumber = 12)
+                .Build();
+
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(c => c.GetEpisode(episode.EpisodeId))
+                .Returns(episode);
+
+            var indexer1 = new Mock<IndexerBase>();
+            indexer1.Setup(c => c.FetchEpisode("The Daily Show", episode.SeasonNumber, episode.EpisodeNumber))
+                .Returns(parseResults).Verifiable();
+
+
+            var indexer2 = new Mock<IndexerBase>();
+            indexer2.Setup(c => c.FetchEpisode("The Daily Show", episode.SeasonNumber, episode.EpisodeNumber))
                 .Returns(parseResults).Verifiable();
 
             var indexers = new List<IndexerBase> { indexer1.Object, indexer2.Object };

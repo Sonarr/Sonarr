@@ -125,6 +125,7 @@
     <Compile Include="QualityProfileTest.cs" />
     <Compile Include="RepoTest.cs" />
     <Compile Include="SabProviderTest.cs" />
+    <Compile Include="SceneNameHelperTest.cs" />
     <Compile Include="SeriesProviderTest.cs" />
     <Compile Include="TvDbProviderTest.cs" />
   </ItemGroup>

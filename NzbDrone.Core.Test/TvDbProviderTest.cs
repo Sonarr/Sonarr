@@ -16,12 +16,9 @@ namespace NzbDrone.Core.Test
         [TestCase("The Simpsons")]
         [TestCase("Family Guy")]
         [TestCase("South Park")]
-        [TestCase("clone high, usa")]
         public void successful_search(string title)
         {
-            var tvCont = new TvDbProvider();
-            var result = tvCont.SearchSeries(title);
-
+            var result = new TvDbProvider().SearchSeries(title);
 
             result.Should().NotBeEmpty();
             result[0].SeriesName.Should().Be(title);

@@ -105,10 +105,10 @@ namespace NzbDrone.Core.Providers
         {
             var normalizeTitle = Parser.NormalizeTitle(title);
 
-            var seriesId = SceneNameHelper.FindByName(normalizeTitle);
+            var seriesId = SceneNameHelper.GetIdByName(normalizeTitle);
             if (seriesId != 0)
             {
-                return GetSeries(seriesId);
+                return GetSeries(seriesId.Value);
             }
 
             return _repository.Single<Series>(s => s.CleanTitle == normalizeTitle);
