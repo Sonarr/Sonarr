@@ -21,6 +21,7 @@ namespace NzbDrone.Web.Controllers
         private readonly TvDbProvider _tvDbProvider;
         private readonly JobProvider _jobProvider;
         private readonly SeasonProvider _seasonProvider;
+        private readonly MediaFileProvider _mediaFileProvider;
         //
         // GET: /Series/
 
@@ -29,8 +30,9 @@ namespace NzbDrone.Web.Controllers
                                 QualityProvider qualityProvider,
                                 RenameProvider renameProvider,
                                 TvDbProvider tvDbProvider,
-            JobProvider jobProvider,
-                                SeasonProvider seasonProvider)
+                                JobProvider jobProvider,
+                                SeasonProvider seasonProvider,
+                                MediaFileProvider mediaFileProvider)
         {
             _seriesProvider = seriesProvider;
             _episodeProvider = episodeProvider;
@@ -39,6 +41,7 @@ namespace NzbDrone.Web.Controllers
             _tvDbProvider = tvDbProvider;
             _jobProvider = jobProvider;
             _seasonProvider = seasonProvider;
+            _mediaFileProvider = mediaFileProvider;
         }
 
         public ActionResult Index()
@@ -135,16 +138,12 @@ namespace NzbDrone.Web.Controllers
 
         public JsonResult GetEpisodeCount(int seriesId)
         {
-            var series = _seriesProvider.GetSeries(seriesId);
-
-            var monitoredSeasons = series.Seasons.Where(e => e.Monitored).Select(e => e.SeasonId);
-            var episodeTotal = series.Episodes.Where(e => monitoredSeasons.Contains(e.SeasonId) && e.AirDate <= DateTime.Today && e.AirDate > new DateTime(1899, 12, 31));
-            var episodes = episodeTotal.Where(e => e.EpisodeFileId > 0);
+            var count = _mediaFileProvider.GetEpisodeFilesCount(seriesId);
 
             return Json(new
             {
-                Episodes = episodes.Count(),
-                EpisodeTotal = episodeTotal.Count()
+                Episodes = count.Item1,
+                EpisodeTotal = count.Item2
             }, JsonRequestBehavior.AllowGet);
         }
 

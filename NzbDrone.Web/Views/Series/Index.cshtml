@@ -169,7 +169,22 @@
             success: function (data, textStatus, jqXHR) {
                 var episodes = data.Episodes;
                 var episodeTotal = data.EpisodeTotal;
-                $("#progressbar_" + seriesId).episodeProgress(episodes, episodeTotal);
+
+                var counter = 0;
+                var max = episodes + 1;
+
+                $.doTimeout(10, function () {
+                    if (counter >= max) {
+                        $("#progressbar_" + seriesId).episodeProgress(episodes, episodeTotal);
+                        return false;
+                    }
+
+                    $("#progressbar_" + seriesId).episodeProgress(counter, episodeTotal);
+
+                    counter += 5;
+
+                    return true;
+                });
             }
         });
     }

@@ -168,8 +168,6 @@ namespace NzbDrone.Core.Providers
             }
         }
 
-
-
         public virtual void Update(EpisodeFile episodeFile)
         {
             _repository.Update(episodeFile);
@@ -193,6 +191,17 @@ namespace NzbDrone.Core.Providers
         public virtual IEnumerable<EpisodeFile> GetSeriesFiles(int seriesId)
         {
             return _seriesProvider.GetSeries(seriesId).Episodes.Where(c => c.EpisodeFile != null).Select(c => c.EpisodeFile);
+        }
+
+        public virtual Tuple<int, int> GetEpisodeFilesCount(int seriesId)
+        {
+            var series = _seriesProvider.GetSeries(seriesId);
+
+            var monitoredSeasons = series.Seasons.Where(e => e.Monitored).Select(e => e.SeasonId);
+            var episodeTotal = series.Episodes.Where(e => monitoredSeasons.Contains(e.SeasonId) && e.AirDate <= DateTime.Today && e.AirDate > new DateTime(1899, 12, 31));
+            var episodes = episodeTotal.Where(e => e.EpisodeFileId > 0);
+
+            return new Tuple<int, int>(episodeTotal.Count(), episodes.Count());
         }
 
         private List<string> GetMediaFileList(string path)
