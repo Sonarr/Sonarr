@@ -6,33 +6,35 @@
     Series
 }
 
+<script type="text/javascript" src="../../Scripts/doTimeout.js"></script>
 <script>
     (function ($) {
         $.fn.episodeProgress = function (episodes, totalEpisodes) {
             return this.each(
-			    function () {
+                function () {
 			        var div = $(this);
-			        var innerdiv = div.find(".progress");
+			        var progressBar = div.find(".progress");
+
 			        var width = Math.round(episodes / totalEpisodes * 100);
-			        innerdiv.css("width", width + "%");
+
+			        progressBar.css("width", width + "%");
 
 			        if (width > 97) {
-			            innerdiv.css("-khtml-border-top-right-radius", "7px");
-			            innerdiv.css("border-top-right-radius", "7px");
-			            innerdiv.css("-moz-border-top-right-radius", "7px");
-			            innerdiv.css("-webkit-border-top-right-radius", "7px");
+			            progressBar.css("-khtml-border-top-right-radius", "7px");
+			            progressBar.css("border-top-right-radius", "7px");
+			            progressBar.css("-moz-border-top-right-radius", "7px");
+			            progressBar.css("-webkit-border-top-right-radius", "7px");
 
-			            innerdiv.css("-khtml-border-bottom-right-radius", "7px");
-			            innerdiv.css("border-bottom-right-radius", "7px");
-			            innerdiv.css("-moz-border-bottom-right-radius", "7px");
-			            innerdiv.css("-webkit-border-bottom-right-radius", "7px");
+			            progressBar.css("-khtml-border-bottom-right-radius", "7px");
+			            progressBar.css("border-bottom-right-radius", "7px");
+			            progressBar.css("-moz-border-bottom-right-radius", "7px");
+			            progressBar.css("-webkit-border-bottom-right-radius", "7px");
 			        }
-			        
+
 			        div.find(".progressText").html(episodes + " / " + totalEpisodes);
-			    }
-		    );
-        };
-    })(jQuery);
+			    });
+            };
+        })(jQuery);
 </script>
 
 <style>
@@ -156,20 +158,20 @@
         var getEpisodeCountUrl = '@Url.Action("GetEpisodeCount", "Series")';
 
         $("#progressbar_" + seriesId).episodeProgress(0, 0);
-        
+
         $.ajax({
-                type: "GET",
-                url: getEpisodeCountUrl,
-                data: jQuery.param({ seriesId: seriesId }),
-                error: function (req, status, error) {
-                    alert("Sorry! We could search for " + id + " at this time. " + error);
-                },
-                success: function (data, textStatus, jqXHR) {
-                    var episodes = data.Episodes;
-                    var episodeTotal = data.EpisodeTotal;
-                    $("#progressbar_" + seriesId).episodeProgress(episodes, episodeTotal);
-                }
-            });
+            type: "GET",
+            url: getEpisodeCountUrl,
+            data: jQuery.param({ seriesId: seriesId }),
+            error: function (req, status, error) {
+                alert("Sorry! We could search for " + id + " at this time. " + error);
+            },
+            success: function (data, textStatus, jqXHR) {
+                var episodes = data.Episodes;
+                var episodeTotal = data.EpisodeTotal;
+                $("#progressbar_" + seriesId).episodeProgress(episodes, episodeTotal);
+            }
+        });
     }
 
 
