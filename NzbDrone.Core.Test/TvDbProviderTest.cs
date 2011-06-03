@@ -1,57 +1,56 @@
 ﻿// ReSharper disable RedundantUsingDirective
 using System;
 using System.Linq;
-using MbUnit.Framework;
+using FluentAssertions;
+using NUnit.Framework;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test
 {
-    [TestFixture]
+    [NUnit.Framework.TestFixture]
     // ReSharper disable InconsistentNaming
     public class TvDbProviderTest : TestBase
     {
         [Test]
-        [Row("The Simpsons")]
-        [Row("Family Guy")]
-        [Row("South Park")]
-        [Row("clone high, usa")]
+        [TestCase("The Simpsons")]
+        [TestCase("Family Guy")]
+        [TestCase("South Park")]
         public void successful_search(string title)
         {
-            var tvCont = new TvDbProvider();
-            var result = tvCont.SearchSeries(title);
+            var result = new TvDbProvider().SearchSeries(title);
 
-            Assert.IsNotEmpty(result);
-            Assert.AreEqual(title, result[0].SeriesName, StringComparison.InvariantCultureIgnoreCase);
+            result.Should().NotBeEmpty();
+            result[0].SeriesName.Should().Be(title);
         }
 
         [Test]
-        [Row("The Simpsons")]
-        [Row("Family Guy")]
-        [Row("South Park")]
+        [TestCase("The Simpsons")]
+        [TestCase("Family Guy")]
+        [TestCase("South Park")]
         public void successful_title_lookup(string title)
         {
             var tvCont = new TvDbProvider();
             var result = tvCont.GetSeries(title);
 
-            Assert.AreEqual(title, result.SeriesName, StringComparison.InvariantCultureIgnoreCase);
+            result.SeriesName.Should().Be(title);
         }
 
 
         [Test]
-        [Row(new object[] { "CAPITAL", "capital", true })]
-        [Row(new object[] { "Something!!", "Something", true })]
-        [Row(new object[] { "Simpsons 2000", "Simpsons", true })]
-        [Row(new object[] { "Simp222sons", "Simpsons", true })]
-        [Row(new object[] { "Simpsons", "The Simpsons", true })]
-        [Row(new object[] { "Law and order", "Law & order", true })]
-        [Row(new object[] { "xxAndxx", "xxxx", false })]
-        [Row(new object[] { "Andxx", "xx", false })]
-        [Row(new object[] { "xxAnd", "xx", false })]
-        [Row(new object[] { "Thexx", "xx", false })]
-        [Row(new object[] { "Thexx", "xx", false })]
-        [Row(new object[] { "xxThexx", "xxxxx", false })]
-        [Row(new object[] { "Simpsons The", "Simpsons", true })]
+        [TestCase(new object[] { "CAPITAL", "capital", true })]
+        [TestCase(new object[] { "Something!!", "Something", true })]
+        [TestCase(new object[] { "Simpsons 2000", "Simpsons", true })]
+        [TestCase(new object[] { "Simp222sons", "Simpsons", true })]
+        [TestCase(new object[] { "Simpsons", "The Simpsons", true })]
+        [TestCase(new object[] { "Law and order", "Law & order", true })]
+        [TestCase(new object[] { "xxAndxx", "xxxx", false })]
+        [TestCase(new object[] { "Andxx", "xx", false })]
+        [TestCase(new object[] { "xxAnd", "xx", false })]
+        [TestCase(new object[] { "Thexx", "xx", false })]
+        [TestCase(new object[] { "Thexx", "xx", false })]
+        [TestCase(new object[] { "xxThexx", "xxxxx", false })]
+        [TestCase(new object[] { "Simpsons The", "Simpsons", true })]
         public void Name_match_test(string a, string b, bool match)
         {
             bool result = TvDbProvider.IsTitleMatch(a, b);
@@ -69,7 +68,7 @@ namespace NzbDrone.Core.Test
             var result = tvdbProvider.SearchSeries(Guid.NewGuid().ToString());
 
             //assert
-            Assert.IsEmpty(result);
+            result.Should().BeEmpty();
         }
 
         [Test]
@@ -114,19 +113,19 @@ namespace NzbDrone.Core.Test
             }
 
             //assert
-            Assert.Count(7, seasons);
-            Assert.Count(23, seasons1);
-            Assert.Count(19, seasons2);
-            Assert.Count(16, seasons3);
-            Assert.Count(20, seasons4);
-            Assert.Count(18, seasons5);
+            seasons.Should().HaveCount(7);
+            seasons1.Should().HaveCount(23);
+            seasons2.Should().HaveCount(19);
+            seasons3.Should().HaveCount(16);
+            seasons4.Should().HaveCount(20);
+            seasons5.Should().HaveCount(18);
 
-            Assert.Distinct(seasons1.Select(s => s.EpisodeNumber));
-            Assert.Distinct(seasons2.Select(s => s.EpisodeNumber));
-            Assert.Distinct(seasons3.Select(s => s.EpisodeNumber));
-            Assert.Distinct(seasons4.Select(s => s.EpisodeNumber));
-            Assert.Distinct(seasons5.Select(s => s.EpisodeNumber));
-            Assert.Distinct(seasons6.Select(s => s.EpisodeNumber));
+            seasons1.Select(s => s.EpisodeNumber).Should().OnlyHaveUniqueItems();
+            seasons2.Select(s => s.EpisodeNumber).Should().OnlyHaveUniqueItems();
+            seasons3.Select(s => s.EpisodeNumber).Should().OnlyHaveUniqueItems();
+            seasons4.Select(s => s.EpisodeNumber).Should().OnlyHaveUniqueItems();
+            seasons5.Select(s => s.EpisodeNumber).Should().OnlyHaveUniqueItems();
+            seasons6.Select(s => s.EpisodeNumber).Should().OnlyHaveUniqueItems();
 
         }
     }

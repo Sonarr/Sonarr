@@ -2,8 +2,9 @@
 using System;
 using System.Linq;
 using AutoMoq;
-using MbUnit.Framework;
+using FluentAssertions;
 using Moq;
+using NUnit.Framework;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
@@ -16,15 +17,15 @@ namespace NzbDrone.Core.Test
     // ReSharper disable InconsistentNaming
     public class RootDirProviderTest : TestBase
     {
- 
+
 
         [Test]
         public void GetRootDirs()
         {
             //Setup
             var sonicRepo = MockLib.GetEmptyRepository();
-            sonicRepo.Add(new RootDir {Path = @"C:\TV"});
-            sonicRepo.Add(new RootDir {Path = @"C:\TV2"});
+            sonicRepo.Add(new RootDir { Path = @"C:\TV" });
+            sonicRepo.Add(new RootDir { Path = @"C:\TV2" });
 
             var mocker = new AutoMoqer();
 
@@ -50,13 +51,14 @@ namespace NzbDrone.Core.Test
 
             //Act
             var rootDirProvider = mocker.Resolve<RootDirProvider>();
-            rootDirProvider.Add(new RootDir {Path = path});
+            rootDirProvider.Add(new RootDir { Path = path });
 
 
             //Assert
             var rootDirs = rootDirProvider.GetAll();
             Assert.IsNotEmpty(rootDirs);
-            Assert.Count(1, rootDirs);
+
+            rootDirs.Should().HaveCount(1);
             Assert.AreEqual(path, rootDirs.First().Path);
         }
 
@@ -71,13 +73,13 @@ namespace NzbDrone.Core.Test
 
             //Act
             var rootDirProvider = mocker.Resolve<RootDirProvider>();
-            rootDirProvider.Add(new RootDir {Path = @"C:\TV"});
-            rootDirProvider.Update(new RootDir {Id = 1, Path = path});
+            rootDirProvider.Add(new RootDir { Path = @"C:\TV" });
+            rootDirProvider.Update(new RootDir { Id = 1, Path = path });
 
             //Assert
             var rootDirs = rootDirProvider.GetAll();
             Assert.IsNotEmpty(rootDirs);
-            Assert.Count(1, rootDirs);
+            rootDirs.Should().HaveCount(1);
             Assert.AreEqual(path, rootDirs.First().Path);
         }
 
@@ -90,12 +92,12 @@ namespace NzbDrone.Core.Test
 
             //Act
             var rootDirProvider = mocker.Resolve<RootDirProvider>();
-            rootDirProvider.Add(new RootDir {Path = @"C:\TV"});
+            rootDirProvider.Add(new RootDir { Path = @"C:\TV" });
             rootDirProvider.Remove(1);
 
             //Assert
             var rootDirs = rootDirProvider.GetAll();
-            Assert.Count(0, rootDirs);
+            rootDirs.Should().BeEmpty();
         }
 
         [Test]
@@ -110,7 +112,7 @@ namespace NzbDrone.Core.Test
 
             //Act
             var rootDirProvider = mocker.Resolve<RootDirProvider>();
-            rootDirProvider.Add(new RootDir {Id = id, Path = path});
+            rootDirProvider.Add(new RootDir { Id = id, Path = path });
 
             //Assert
             var rootDir = rootDirProvider.GetRootDir(id);

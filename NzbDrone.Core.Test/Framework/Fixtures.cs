@@ -1,46 +1,26 @@
-// ReSharper disable RedundantUsingDirective
 using System;
 using System.IO;
-using MbUnit.Framework;
 using NLog;
 using NLog.Config;
+using NUnit.Framework;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test
 {
-    [AssemblyFixture]
+    [SetUpFixture]
     public class Fixtures
     {
         [TearDown]
         public void TearDown()
         {
-            foreach (
-                var file in Directory.GetFiles(Directory.GetCurrentDirectory(), "*.db", SearchOption.AllDirectories))
+            var filesToDelete = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.db", SearchOption.AllDirectories);
+            foreach (var file in filesToDelete)
             {
                 try
                 {
                     File.Delete(file);
                 }
-                catch
-                {
-                }
-            }
-        }
-
-        [FixtureTearDown]
-        public void FixtureTearDown()
-        {
-            foreach (var file in Directory.GetFiles(Directory.GetCurrentDirectory(), "*.db", SearchOption.AllDirectories)
-                )
-            {
-                try
-                {
-
-                    File.Delete(file);
-                }
-                catch
-                {
-                }
+                catch{}
             }
         }
 

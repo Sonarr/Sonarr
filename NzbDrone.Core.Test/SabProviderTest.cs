@@ -5,8 +5,8 @@ using System.IO;
 using System.Linq;
 using AutoMoq;
 using FizzWare.NBuilder;
-using MbUnit.Framework;
 using Moq;
+using NUnit.Framework;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
@@ -179,7 +179,7 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
-        [ExpectedException(typeof(ApplicationException), Message = "API Key Incorrect")]
+        [ExpectedException(typeof(ApplicationException), ExpectedMessage= "API Key Incorrect")]
         public void IsInQueue_False_Error()
         {
             //Setup
@@ -213,12 +213,12 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
-        [Row(1, new[] { 2 }, "My Episode Title", QualityTypes.DVD, false, "My Series Name - 1x2 - My Episode Title [DVD]")]
-        [Row(1, new[] { 2 }, "My Episode Title", QualityTypes.DVD, true, "My Series Name - 1x2 - My Episode Title [DVD] [Proper]")]
-        [Row(1, new[] { 2 }, "", QualityTypes.DVD, true, "My Series Name - 1x2 -  [DVD] [Proper]")]
-        [Row(1, new[] { 2, 4 }, "My Episode Title", QualityTypes.HDTV, false, "My Series Name - 1x2-1x4 - My Episode Title [HDTV]")]
-        [Row(1, new[] { 2, 4 }, "My Episode Title", QualityTypes.HDTV, true, "My Series Name - 1x2-1x4 - My Episode Title [HDTV] [Proper]")]
-        [Row(1, new[] { 2, 4 }, "", QualityTypes.HDTV, true, "My Series Name - 1x2-1x4 -  [HDTV] [Proper]")]
+       [TestCase(1, new[] { 2 }, "My Episode Title", QualityTypes.DVD, false, "My Series Name - 1x2 - My Episode Title [DVD]")]
+       [TestCase(1, new[] { 2 }, "My Episode Title", QualityTypes.DVD, true, "My Series Name - 1x2 - My Episode Title [DVD] [Proper]")]
+       [TestCase(1, new[] { 2 }, "", QualityTypes.DVD, true, "My Series Name - 1x2 -  [DVD] [Proper]")]
+       [TestCase(1, new[] { 2, 4 }, "My Episode Title", QualityTypes.HDTV, false, "My Series Name - 1x2-1x4 - My Episode Title [HDTV]")]
+       [TestCase(1, new[] { 2, 4 }, "My Episode Title", QualityTypes.HDTV, true, "My Series Name - 1x2-1x4 - My Episode Title [HDTV] [Proper]")]
+       [TestCase(1, new[] { 2, 4 }, "", QualityTypes.HDTV, true, "My Series Name - 1x2-1x4 -  [HDTV] [Proper]")]
         public void sab_title(int seasons, int[] episodes, string title, QualityTypes quality, bool proper, string excpected)
         {
             var mocker = new AutoMoqer();

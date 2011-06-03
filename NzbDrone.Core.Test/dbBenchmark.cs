@@ -5,9 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using FizzWare.NBuilder;
-using Gallio.Framework;
-using MbUnit.Framework;
-using MbUnit.Framework.ContractVerifiers;
+using NUnit.Framework;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
 

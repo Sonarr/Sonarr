@@ -3,7 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using AutoMoq;
-using MbUnit.Framework;
+using FluentAssertions;
+using NUnit.Framework;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers.Jobs;
 using NzbDrone.Core.Test.Framework;
@@ -227,7 +228,8 @@ namespace NzbDrone.Core.Test
 
 
             //Assert
-            Assert.Count(1, timers);
+
+            timers.Should().HaveCount(1);
             Assert.AreEqual(fakeTimer.DefaultInterval, timers[0].Interval);
             Assert.AreEqual(fakeTimer.Name, timers[0].Name);
             Assert.AreEqual(fakeTimer.GetType().ToString(), timers[0].TypeName);
@@ -264,7 +266,7 @@ namespace NzbDrone.Core.Test
 
 
             //Assert
-            Assert.Count(1, timers);
+            timers.Should().HaveCount(1);
             Assert.IsTrue(timers[0].Enable);
         }
 
@@ -295,7 +297,7 @@ namespace NzbDrone.Core.Test
 
 
             //Assert
-            Assert.Count(1, timers);
+            timers.Should().HaveCount(1);
             Assert.IsFalse(timers[0].Enable);
         }
 

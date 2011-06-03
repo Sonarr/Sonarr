@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
-using Gallio.Framework;
-using MbUnit.Framework;
-using MbUnit.Framework.ContractVerifiers;
+using FluentAssertions;
 using Migrator.Framework;
 using Migrator.Providers.SQLite;
+using NUnit.Framework;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Repository;
@@ -29,21 +28,22 @@ namespace NzbDrone.Core.Test
             var provider = new RepositoryProvider();
             var types = provider.GetRepositoryTypes();
 
-            Assert.IsNotEmpty(types);
-            Assert.Contains(types, typeof(Config));
-            Assert.Contains(types, typeof(Episode));
-            Assert.Contains(types, typeof(EpisodeFile));
-            Assert.Contains(types, typeof(ExternalNotificationSetting));
-            Assert.Contains(types, typeof(History));
-            Assert.Contains(types, typeof(IndexerSetting));
-            Assert.Contains(types, typeof(JobSetting));
-            Assert.Contains(types, typeof(RootDir));
-            Assert.Contains(types, typeof(Season));
-            Assert.Contains(types, typeof(Series));
+            types.Should().Contain(typeof(Config));
+            types.Should().Contain(typeof(Episode));
+            types.Should().Contain(typeof(EpisodeFile));
+            types.Should().Contain(typeof(ExternalNotificationSetting));
+            types.Should().Contain(typeof(History));
+            types.Should().Contain(typeof(IndexerSetting));
+            types.Should().Contain(typeof(JobSetting));
+            types.Should().Contain(typeof(RootDir));
+            types.Should().Contain(typeof(Season));
+            types.Should().Contain(typeof(Season));
+            types.Should().Contain(typeof(Series));
+            types.Should().Contain(typeof(QualityProfile));
 
-            Assert.Contains(types, typeof(QualityProfile));
+            types.Should().NotContain(typeof(QualityTypes));
 
-            Assert.DoesNotContain(types, typeof(QualityTypes));
+
         }
 
 
@@ -57,7 +57,8 @@ namespace NzbDrone.Core.Test
             var typeTable = provider.GetSchemaFromType(typeof(TestRepoType));
 
             Assert.IsNotNull(typeTable.Columns);
-            Assert.Count(3, typeTable.Columns);
+
+            typeTable.Columns.Should().HaveCount(3);
             Assert.AreEqual("TestRepoTypes", typeTable.Name);
         }
 
@@ -89,12 +90,12 @@ namespace NzbDrone.Core.Test
             var repo = new SimpleRepository(dbProvider, SimpleRepositoryOptions.RunMigrations);
             var sqliteDatabase = new SQLiteTransformationProvider(new SQLiteDialect(), connectionString);
 
-            repo.Add(new TestRepoType(){Value = "Dummy"});
+            repo.Add(new TestRepoType() { Value = "Dummy" });
 
             var repositoryProvider = new RepositoryProvider();
             var columns = repositoryProvider.GetColumnsFromDatabase(sqliteDatabase, "TestRepoTypes");
 
-            Assert.Count(3, columns);
+            columns.Should().HaveCount(3);
 
         }
 
@@ -107,7 +108,7 @@ namespace NzbDrone.Core.Test
             var sqliteDatabase = new SQLiteTransformationProvider(new SQLiteDialect(), connectionString);
             var repo = new SimpleRepository(dbProvider, SimpleRepositoryOptions.RunMigrations);
 
-            repo.Add(new TestRepoType(){Value = "Dummy"});
+            repo.Add(new TestRepoType() { Value = "Dummy" });
 
             var repositoryProvider = new RepositoryProvider();
             var typeSchema = repositoryProvider.GetSchemaFromType(typeof(TestRepoType2));
@@ -117,7 +118,7 @@ namespace NzbDrone.Core.Test
             var deletedColumns = repositoryProvider.GetDeletedColumns(typeSchema, columns);
 
 
-            Assert.Count(1, deletedColumns);
+            deletedColumns.Should().HaveCount(1);
             Assert.AreEqual("NewName", deletedColumns[0].Name.Trim('[', ']'));
         }
 
@@ -135,12 +136,12 @@ namespace NzbDrone.Core.Test
             var repositoryProvider = new RepositoryProvider();
             var typeSchema = repositoryProvider.GetSchemaFromType(typeof(TestRepoType));
             var columns = repositoryProvider.GetColumnsFromDatabase(sqliteDatabase, "TestRepoType2s");
-            
+
 
             var deletedColumns = repositoryProvider.GetNewColumns(typeSchema, columns);
 
 
-            Assert.Count(1, deletedColumns);
+            deletedColumns.Should().HaveCount(1);
             Assert.AreEqual("NewName", deletedColumns[0].Name.Trim('[', ']'));
         }
 

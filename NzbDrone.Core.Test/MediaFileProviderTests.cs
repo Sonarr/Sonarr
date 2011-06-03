@@ -5,8 +5,9 @@ using System.Linq.Expressions;
 using System.Linq;
 using AutoMoq;
 using FizzWare.NBuilder;
-using MbUnit.Framework;
+using FluentAssertions;
 using Moq;
+using NUnit.Framework;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
@@ -358,8 +359,9 @@ namespace NzbDrone.Core.Test
 
             var result = mocker.Resolve<MediaFileProvider>().GetSeasonFiles(12);
 
-            Assert.Count(8, result);
-            Assert.DoesNotContain(result, null);
+
+            result.Should().HaveCount(8);
+            result.Should().NotContainNulls();
             mocker.VerifyAllMocks();
 
 

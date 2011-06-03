@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using NzbDrone.Core.Model;
 
 namespace NzbDrone.Core.Helpers
 {
@@ -9,307 +7,140 @@ namespace NzbDrone.Core.Helpers
     {
         //Todo: Move this to a publically available location (so updates can be applied without releasing a new version of NzbDrone)
         //Todo: GoogleDocs? WCF Web Services on NzbDrone.com?
-        private static readonly List<SceneNameModel> SceneNameMappings = new List<SceneNameModel>
-                                                                             {
-                                                                                 new SceneNameModel
-                                                                                     {SeriesId = 72546, Name = "CSI"},
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 73696,
-                                                                                         Name = "CSI New York"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {SeriesId = 73696, Name = "CSI NY"},
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 110381,
-                                                                                         Name = "Archer"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 83897,
-                                                                                         Name =
-                                                                                             "Life After People The Series"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 83897,
-                                                                                         Name = "Life After People"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 80552,
-                                                                                         Name = "Kitchen Nightmares US"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 71256,
-                                                                                         Name = "The Daily Show"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 71256,
-                                                                                         Name =
-                                                                                             "The Daily Show with Jon Stewart"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 75692,
-                                                                                         Name = "Law and Order SVU"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 75692,
-                                                                                         Name =
-                                                                                             "Law and Order Special Victims Unit"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 71489,
-                                                                                         Name =
-                                                                                             "Law and Order Criminal Intent"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 71489,
-                                                                                         Name = "Law and Order CI"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 79590,
-                                                                                         Name = "Dancing With The Stars US"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 73387,
-                                                                                         Name = "Craig Ferguson"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 85355,
-                                                                                         Name = "Jimmy Fallon"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 75088,
-                                                                                         Name = "David Letterman"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 76706,
-                                                                                         Name = "Big Brother US"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 105521,
-                                                                                         Name = "The Colony"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 105521,
-                                                                                         Name = "The Colony US"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 76235,
-                                                                                         Name =
-                                                                                             "Americas Funniest Home Videos"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {SeriesId = 76235, Name = "AFHV"},
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 139941,
-                                                                                         Name = "Childrens Hospital US"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 139941,
-                                                                                         Name = "Childrens Hospital"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {SeriesId = 83123, Name = "Merlin"},
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 83123,
-                                                                                         Name = "Merlin 2008"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 76779,
-                                                                                         Name = "WWE Monday Night RAW"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 164951,
-                                                                                         Name = "Shit My Dad Says"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 83714,
-                                                                                         Name = "Genius with Dave Gorman"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 168161,
-                                                                                         Name = "Law and Order LA"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 77526,
-                                                                                         Name = "Star Trek TOS"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 72073,
-                                                                                         Name = "Star Trek DS9"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 72194,
-                                                                                         Name = "Ellen Degeneres"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 72194,
-                                                                                         Name = "Ellen Degeneres"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 195831,
-                                                                                         Name = "Drinking Made Easy"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 195831,
-                                                                                         Name =
-                                                                                             "Zane Lampreys Drinking Made Easy"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {SeriesId = 76133, Name = "Poirot"},
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 76133,
-                                                                                         Name = "Agatha Christies Poirot"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 70870,
-                                                                                         Name =
-                                                                                             "The Real World Road Rules Challenge"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 70870,
-                                                                                         Name = "The Challenge Cutthroat"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 77444,
-                                                                                         Name = "This Old House Program"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 73290,
-                                                                                         Name = "60 Minutes US"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {SeriesId = 194751, Name = "Conan"},
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 194751,
-                                                                                         Name = "Conan 2010"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 164451,
-                                                                                         Name = "Carlos 2010"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 70726,
-                                                                                         Name = "Babalon 5"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 70726,
-                                                                                         Name = "Babalon5"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {SeriesId = 83714, Name = "Genius"},
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 83714,
-                                                                                         Name = "Genius With Dave Gormand"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 212571,
-                                                                                         Name = "Come Fly With Me 2010"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 81563,
-                                                                                         Name = "Border Security"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 81563,
-                                                                                         Name =
-                                                                                             "Border Security Australias Frontline"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 172381,
-                                                                                         Name = "Silent Library US"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 131791,
-                                                                                         Name = "Sci-Fi Science"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 80646,
-                                                                                         Name = "Frontline"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 80646,
-                                                                                         Name = "Frontline US"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 189931,
-                                                                                         Name = "RBT AU"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {SeriesId = 73255, Name = "House"},
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 73255,
-                                                                                         Name = "House MD"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 73244,
-                                                                                         Name = "The Office"
-                                                                                     },
-                                                                                 new SceneNameModel
-                                                                                     {
-                                                                                         SeriesId = 73244,
-                                                                                         Name = "The Office US"
-                                                                                     },
-                                                                             };
+        private static readonly Dictionary<String, Int32> SeriesIdLookupList = new Dictionary<string, int>();
+        private static readonly Dictionary<Int32, String> SceneNameLookupList = new Dictionary<Int32, String>();
 
-        public static int FindByName(string cleanSeriesName)
+
+        static SceneNameHelper()
         {
-            var map = SceneNameMappings.Find(s => Parser.NormalizeTitle(s.Name) == cleanSeriesName);
+            //These values are used to match report titles parsed out of RSS to a series in the DB
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("CSI"), 72546);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("CSI New York"), 73696);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("CSI NY"), 73696);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Archer"), 110381);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Life After People The Series"), 83897);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Life After People"), 83897);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Kitchen Nightmares US"), 80552);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("The Daily Show"), 71256);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("The Daily Show with Jon Stewart"), 71256);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Law and Order SVU"), 75692);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Law and Order Special Victims Unit"), 75692);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Law and Order Criminal Intent"), 71489);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Law and Order CI"), 71489);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Dancing With The Stars US"), 79590);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Craig Ferguson"), 73387);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Jimmy Fallon"), 85355);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("David Letterman"), 75088);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Big Brother US"), 76706);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("The Colony"), 105521);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("The Colony US"), 105521);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Americas Funniest Home Videos"), 76235);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("AFHV"), 76235);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Childrens Hospital US"), 139941);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Childrens Hospital"), 139941);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Merlin"), 83123);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Merlin 2008"), 83123);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("WWE Monday Night RAW"), 76779);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Shit My Dad Says"), 164951);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Genius with Dave Gorman"), 83714);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Law and Order LA"), 168161);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Star Trek TOS"), 77526);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Star Trek DS9"), 72073);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Ellen Degeneres"), 72194);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Drinking Made Easy"), 195831);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Zane Lampreys Drinking Made Easy"), 195831);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Poirot"), 76133);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Agatha Christies Poirot"), 76133);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("The Real World Road Rules Challenge"), 70870);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("The Challenge Cutthroat"), 70870);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("This Old House Program"), 77444);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("60 Minutes US"), 73290);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Conan"), 194751);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Conan 2010"), 194751);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Carlos 2010"), 164451);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Babalon 5"), 70726);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Babalon5"), 70726);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Genius"), 83714);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Genius With Dave Gormand"), 83714);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Come Fly With Me 2010"), 212571);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Border Security"), 81563);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Border Security Australias Frontline"), 81563);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Silent Library US"), 172381);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Sci-Fi Science"), 131791);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Frontline"), 80646);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("Frontline US"), 80646);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("RBT AU"), 189931);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("House"), 73255);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("House MD"), 73255);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("The Office"), 73244);
+            SeriesIdLookupList.Add(Parser.NormalizeTitle("The Office US"), 73244);
 
-            if (map == null)
-                return 0;
+            //These values are used when doing an indexer search.
+            SceneNameLookupList.Add(72546, "CSI"); //CSI
+            SceneNameLookupList.Add(73696, "CSI"); //CSI NY
+            SceneNameLookupList.Add(110381, "Archer");
+            SceneNameLookupList.Add(83897, "Life After People");
+            SceneNameLookupList.Add(80552, "Kitchen Nightmares US");
+            SceneNameLookupList.Add(71256, "The Daily Show"); //The Daily Show with Jon Stewart
+            SceneNameLookupList.Add(75692, "Law and Order"); //SVU
+            SceneNameLookupList.Add(71489, "Law and Order");//CI
+            SceneNameLookupList.Add(79590, "Dancing With The Stars US");
+            SceneNameLookupList.Add(73387, "Craig Ferguson");
+            SceneNameLookupList.Add(85355, "Jimmy Fallon");
+            SceneNameLookupList.Add(75088, "David Letterman");
+            SceneNameLookupList.Add(76706, "Big Brother US");
+            SceneNameLookupList.Add(105521, "The Colony");
+            SceneNameLookupList.Add(76235, "Americas Funniest Home Videos");
+            SceneNameLookupList.Add(139941, "Childrens Hospital");
+            SceneNameLookupList.Add(83123, "Merlin");
+            SceneNameLookupList.Add(76779, "WWE Monday Night RAW");
+            SceneNameLookupList.Add(164951, "Shit My Dad Says");
+            SceneNameLookupList.Add(168161, "Law and Order LA");
+            SceneNameLookupList.Add(77526, "Star Trek TOS");
+            SceneNameLookupList.Add(72073, "Star Trek DS9");
+            SceneNameLookupList.Add(72194, "Ellen Degeneres");
+            SceneNameLookupList.Add(195831, "Drinking Made Easy");//Zane Lampreys Drinking Made Easy
+            SceneNameLookupList.Add(76133, "Poirot"); //Agatha Christies Poirot
+            SceneNameLookupList.Add(70870, "The Real World Road Rules Challenge");
+            SceneNameLookupList.Add(77444, "This Old House Program");
+            SceneNameLookupList.Add(73290, "60 Minutes US");
+            SceneNameLookupList.Add(194751, "Conan");
+            SceneNameLookupList.Add(164451, "Carlos 2010");
+            SceneNameLookupList.Add(70726, "Babalon"); //5
+            SceneNameLookupList.Add(83714, "Genius"); //Genius With Dave Gormand
+            SceneNameLookupList.Add(212571, "Come Fly With Me 2010");
+            SceneNameLookupList.Add(81563, "Border Security");
+            SceneNameLookupList.Add(172381, "Silent Library US");
+            SceneNameLookupList.Add(131791, "Sci-Fi Science");
+            SceneNameLookupList.Add(80646, "Frontline");
+            SceneNameLookupList.Add(189931, "RBT AU");
+            SceneNameLookupList.Add(73255, "House");
+            SceneNameLookupList.Add(73244, "The Office");
+        }
 
-            return map.SeriesId;
+
+        public static Nullable<Int32> GetIdByName(string cleanSeriesName)
+        {
+            int id;
+
+            if (SeriesIdLookupList.TryGetValue(Parser.NormalizeTitle(cleanSeriesName), out id))
+            {
+                return id;
+            }
+
+            return null;
+        }
+
+        public static String GetTitleById(int seriesId)
+        {
+            string title;
+
+            if (SceneNameLookupList.TryGetValue(seriesId, out title))
+            {
+                return title;
+            }
+
+            return null;
         }
     }
 }

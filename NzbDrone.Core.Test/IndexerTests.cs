@@ -6,10 +6,9 @@ using System.ServiceModel.Syndication;
 using System.Text;
 using AutoMoq;
 using FizzWare.NBuilder;
-using Gallio.Framework;
-using MbUnit.Framework;
-using MbUnit.Framework.ContractVerifiers;
+using FluentAssertions;
 using Moq;
+using NUnit.Framework;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
@@ -25,10 +24,10 @@ namespace NzbDrone.Core.Test
     public class IndexerTests : TestBase
     {
         [Test]
-        [Row("nzbsorg.xml", 0)]
-        [Row("nzbsrus.xml", 6)]
-        [Row("newzbin.xml", 1)]
-        [Row("nzbmatrix.xml", 1)]
+        [TestCase("nzbsorg.xml", 0)]
+        [TestCase("nzbsrus.xml", 6)]
+        [TestCase("newzbin.xml", 1)]
+        [TestCase("nzbmatrix.xml", 1)]
         public void parse_feed_xml(string fileName, int warns)
         {
             var mocker = new AutoMoqer();
@@ -48,21 +47,19 @@ namespace NzbDrone.Core.Test
             foreach (var episodeParseResult in parseResults)
             {
                 var Uri = new Uri(episodeParseResult.NzbUrl);
-                Assert.DoesNotContain(Uri.PathAndQuery, "//");
+                Uri.PathAndQuery.Should().NotContain("//");
             }
 
 
-            Assert.IsNotEmpty(parseResults);
-
-            Assert.ForAll(parseResults, s => Assert.AreEqual(mockIndexer.Name, s.Indexer));
-            Assert.ForAll(parseResults, s => Assert.AreNotEqual("", s.NzbTitle));
-            Assert.ForAll(parseResults, s => Assert.AreNotEqual(null, s.NzbTitle));
+            parseResults.Should().NotBeEmpty();
+            parseResults.Should().OnlyContain(s => s.Indexer == mockIndexer.Name);
+            parseResults.Should().OnlyContain(s => !String.IsNullOrEmpty(s.NzbTitle));
 
             ExceptionVerification.ExcpectedWarns(warns);
         }
 
         [Test]
-        public void newzbin()
+        public void newzbin_rss_fetch()
         {
             var mocker = new AutoMoqer();
 
@@ -81,21 +78,20 @@ namespace NzbDrone.Core.Test
             foreach (var episodeParseResult in parseResults)
             {
                 var Uri = new Uri(episodeParseResult.NzbUrl);
-                Assert.DoesNotContain(Uri.PathAndQuery, "//");
+                Uri.PathAndQuery.Should().NotContain("//");
             }
 
 
-            Assert.IsNotEmpty(parseResults);
-            Assert.ForAll(parseResults, s => Assert.AreEqual(newzbinProvider.Name, s.Indexer));
-            Assert.ForAll(parseResults, s => Assert.AreNotEqual("", s.NzbTitle));
-            Assert.ForAll(parseResults, s => Assert.AreNotEqual(null, s.NzbTitle));
+            parseResults.Should().NotBeEmpty();
+            parseResults.Should().OnlyContain(s => s.Indexer == newzbinProvider.Name);
+            parseResults.Should().OnlyContain(s => !String.IsNullOrEmpty(s.NzbTitle));
+
 
             ExceptionVerification.ExcpectedWarns(1);
         }
 
-
         [Test]
-        [Row("Adventure.Inc.S03E19.DVDRip.XviD-OSiTV", 3, 19, QualityTypes.DVD)]
+        [TestCase("Adventure.Inc.S03E19.DVDRip.XviD-OSiTV", 3, 19, QualityTypes.DVD)]
         public void custome_parser_partial_success(string title, int season, int episode, QualityTypes quality)
         {
             var mocker = new AutoMoqer();
@@ -123,7 +119,7 @@ namespace NzbDrone.Core.Test
 
 
         [Test]
-        [Row("Adventure.Inc.DVDRip.XviD-OSiTV")]
+        [TestCase("Adventure.Inc.DVDRip.XviD-OSiTV")]
         public void custome_parser_full_parse(string title)
         {
             var mocker = new AutoMoqer();
@@ -184,10 +180,35 @@ namespace NzbDrone.Core.Test
 
             var result = mocker.Resolve<NzbsOrg>().FetchEpisode("Simpsons", 21, 23);
 
-            Assert.IsNotEmpty(result);
-            Assert.ForAll(result, r => r.CleanTitle == "simpsons");
-            Assert.ForAll(result, r => r.SeasonNumber == 21);
-            Assert.ForAll(result, r => r.EpisodeNumbers.Contains(23));
+            result.Should().NotBeEmpty();
+            result.Should().OnlyContain(r => r.CleanTitle == "simpsons");
+            result.Should().OnlyContain(r => r.SeasonNumber == 21);
+            result.Should().OnlyContain(r => r.EpisodeNumbers.Contains(23));
+        }
+
+
+        [Test]
+        public void newzbin_search_returns_valid_results()
+        {
+            var mocker = new AutoMoqer();
+
+            mocker.GetMock<ConfigProvider>()
+                .SetupGet(c => c.NewzbinUsername)
+                .Returns("nzbdrone");
+
+            mocker.GetMock<ConfigProvider>()
+                .SetupGet(c => c.NewzbinPassword)
+                .Returns("smartar39865");
+
+
+            mocker.Resolve<HttpProvider>();
+
+            var result = mocker.Resolve<Newzbin>().FetchEpisode("Simpsons", 21, 23);
+
+            result.Should().NotBeEmpty();
+            result.Should().OnlyContain(r => r.CleanTitle == "simpsons");
+            result.Should().OnlyContain(r => r.SeasonNumber == 21);
+            result.Should().OnlyContain(r => r.EpisodeNumbers.Contains(23));
         }
 
 
@@ -209,10 +230,11 @@ namespace NzbDrone.Core.Test
 
             var result = mocker.Resolve<NzbsOrg>().FetchEpisode("Blue Bloods", 1, 19);
 
-            Assert.IsNotEmpty(result);
-            Assert.ForAll(result, r => r.CleanTitle == "bluebloods");
-            Assert.ForAll(result, r => r.SeasonNumber == 1);
-            Assert.ForAll(result, r => r.EpisodeNumbers.Contains(19));
+            result.Should().NotBeEmpty();
+            result.Should().OnlyContain(r => r.CleanTitle == "bluebloods");
+            result.Should().OnlyContain(r => r.SeasonNumber == 1);
+            result.Should().OnlyContain(r => r.EpisodeNumbers.Contains(19));
+
         }
     }
 }

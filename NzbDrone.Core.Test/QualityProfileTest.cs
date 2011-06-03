@@ -3,7 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using FizzWare.NBuilder;
-using MbUnit.Framework;
+using FluentAssertions;
+using NUnit.Framework;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
@@ -64,7 +65,8 @@ namespace NzbDrone.Core.Test
 
             var result = repo.All<Series>();
 
-            Assert.Count(1, result);
+
+            result.Should().HaveCount(1);
             Assert.AreEqual(result.ToList()[0].QualityProfile.Name, testProfile.Name);
 
             //Act

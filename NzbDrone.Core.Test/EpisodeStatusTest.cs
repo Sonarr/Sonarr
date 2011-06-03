@@ -2,7 +2,7 @@
 // ReSharper disable RedundantUsingDirective
 using System;
 using FizzWare.NBuilder;
-using MbUnit.Framework;
+using NUnit.Framework;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
@@ -14,10 +14,10 @@ namespace NzbDrone.Core.Test
     public class EpisodeStatusTest : TestBase
     {
         [Test]
-        [Row(1, false, false, EpisodeStatusType.NotAired)]
-        [Row(-2, false, false, EpisodeStatusType.Missing)]
-        [Row(1, true, false, EpisodeStatusType.Ready)]
-        [Row(1, false, true, EpisodeStatusType.Ignored)]
+        [TestCase(1, false, false, EpisodeStatusType.NotAired)]
+        [TestCase(-2, false, false, EpisodeStatusType.Missing)]
+        [TestCase(1, true, false, EpisodeStatusType.Ready)]
+        [TestCase(1, false, true, EpisodeStatusType.Ignored)]
         public void no_grab_date(int offsetDays, bool hasEpisodes, bool ignored, EpisodeStatusType status)
         {
             Episode episode = Builder<Episode>.CreateNew()
@@ -39,10 +39,10 @@ namespace NzbDrone.Core.Test
 
 
         [Test]
-        [Row(1, false, false, EpisodeStatusType.NotAired)]
-        [Row(-2, false, false, EpisodeStatusType.Missing)]
-        [Row(1, true, false, EpisodeStatusType.Ready)]
-        [Row(1, false, true, EpisodeStatusType.Ignored)]
+        [TestCase(1, false, false, EpisodeStatusType.NotAired)]
+        [TestCase(-2, false, false, EpisodeStatusType.Missing)]
+        [TestCase(1, true, false, EpisodeStatusType.Ready)]
+        [TestCase(1, false, true, EpisodeStatusType.Ignored)]
         public void old_grab_date(int offsetDays, bool hasEpisodes, bool ignored,
                                                  EpisodeStatusType status)
         {
@@ -65,11 +65,11 @@ namespace NzbDrone.Core.Test
 
 
         [Test]
-        [Row(1, false, false, EpisodeStatusType.Downloading)]
-        [Row(-2, false, false, EpisodeStatusType.Downloading)]
-        [Row(1, true, false, EpisodeStatusType.Downloading)]
-        [Row(1, true, true, EpisodeStatusType.Downloading)]
-        [Row(1, false, true, EpisodeStatusType.Downloading)]
+        [TestCase(1, false, false, EpisodeStatusType.Downloading)]
+        [TestCase(-2, false, false, EpisodeStatusType.Downloading)]
+        [TestCase(1, true, false, EpisodeStatusType.Downloading)]
+        [TestCase(1, true, true, EpisodeStatusType.Downloading)]
+        [TestCase(1, false, true, EpisodeStatusType.Downloading)]
         public void recent_grab_date(int offsetDays, bool hasEpisodes, bool ignored,
                                                     EpisodeStatusType status)
         {
@@ -91,9 +91,9 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
-        [Row(1, false, false, EpisodeStatusType.Ignored)]
-        [Row(-2, false, false, EpisodeStatusType.Ignored)]
-        [Row(1, false, true, EpisodeStatusType.Ignored)]
+        [TestCase(1, false, false, EpisodeStatusType.Ignored)]
+        [TestCase(-2, false, false, EpisodeStatusType.Ignored)]
+        [TestCase(1, false, true, EpisodeStatusType.Ignored)]
         public void skipped_season(int offsetDays, bool hasEpisodes, bool ignored, EpisodeStatusType status)
         {
             Episode episode = Builder<Episode>.CreateNew()

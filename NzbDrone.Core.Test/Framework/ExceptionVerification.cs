@@ -4,7 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using NLog;
 using NLog.Targets;
-using MbUnit.Framework;
+using NUnit.Framework;
 
 namespace NzbDrone.Core.Test.Framework
 {
@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Test.Framework
             _logs = new List<LogEventInfo>();
         }
 
-        internal static void AssertNoError()
+        internal static void AssertNoUnexcpectedLogs()
         {
             ExcpectedFatals(0);
             ExcpectedErrors(0);

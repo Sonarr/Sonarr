@@ -6,8 +6,8 @@ using System.Net;
 using System.ServiceModel.Syndication;
 using AutoMoq;
 using FizzWare.NBuilder;
-using MbUnit.Framework;
 using Moq;
+using NUnit.Framework;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
@@ -16,6 +16,7 @@ using NzbDrone.Core.Providers.Indexer;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
+using FluentAssertions;
 
 namespace NzbDrone.Core.Test
 {
@@ -38,8 +39,11 @@ namespace NzbDrone.Core.Test
             indexerProvider.SaveSettings(settings);
 
             //Assert
-            Assert.Count(1, indexerProvider.GetAllISettings());
-            Assert.Count(1, indexerProvider.GetEnabledIndexers());
+            indexerProvider.GetAllISettings();
+
+
+            indexerProvider.GetAllISettings().Should().HaveCount(1);
+            indexerProvider.GetEnabledIndexers().Should().HaveCount(1);
         }
 
         [Test]
@@ -57,8 +61,9 @@ namespace NzbDrone.Core.Test
             indexerProvider.SaveSettings(settings);
 
             //Assert
-            Assert.Count(1, indexerProvider.GetAllISettings());
-            Assert.IsEmpty(indexerProvider.GetEnabledIndexers());
+
+            indexerProvider.GetAllISettings().Should().HaveCount(1);
+            indexerProvider.GetEnabledIndexers().Should().BeEmpty();
         }
     }
 

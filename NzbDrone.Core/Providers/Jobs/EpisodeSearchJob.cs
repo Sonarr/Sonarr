@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers.Indexer;
@@ -43,14 +44,24 @@ namespace NzbDrone.Core.Providers.Jobs
                 throw new ArgumentOutOfRangeException("targetId");
 
             var episode = _episodeProvider.GetEpisode(targetId);
+        
             if (episode == null)
             {
                 Logger.Error("Unable to find an episode {0} in database", targetId);
                 return;
             }
 
+            var series = episode.Series;
+
             var indexers = _indexerProvider.GetEnabledIndexers();
             var reports = new List<EpisodeParseResult>();
+
+            var title = SceneNameHelper.GetTitleById(series.SeriesId);
+
+            if(string.IsNullOrWhiteSpace(title))
+            {
+                title = series.Title;
+            }
 
             foreach (var indexer in indexers)
             {
@@ -66,7 +77,7 @@ namespace NzbDrone.Core.Providers.Jobs
                     }
                     else
                     {
-                        indexerResults = indexer.FetchEpisode(episode.Series.Title, episode.SeasonNumber, episode.EpisodeNumber);
+                        indexerResults = indexer.FetchEpisode(title, episode.SeasonNumber, episode.EpisodeNumber);
                     }
 
                     reports.AddRange(indexerResults);
@@ -82,7 +93,7 @@ namespace NzbDrone.Core.Providers.Jobs
 
             reports.ForEach(c =>
                                 {
-                                    c.Series = episode.Series;
+                                    c.Series = series;
                                     c.Episodes = new List<Episode> { episode };
                                 });
 
