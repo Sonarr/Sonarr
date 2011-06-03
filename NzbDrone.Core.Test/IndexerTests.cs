@@ -59,7 +59,7 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
-        public void newzbin()
+        public void newzbin_rss_fetch()
         {
             var mocker = new AutoMoqer();
 
@@ -88,6 +88,12 @@ namespace NzbDrone.Core.Test
 
 
             ExceptionVerification.ExcpectedWarns(1);
+        }
+
+        [Test]
+        public void newzbing_rss_search()
+        {
+            
         }
 
 
@@ -180,6 +186,31 @@ namespace NzbDrone.Core.Test
             mocker.Resolve<HttpProvider>();
 
             var result = mocker.Resolve<NzbsOrg>().FetchEpisode("Simpsons", 21, 23);
+
+            result.Should().NotBeEmpty();
+            result.Should().OnlyContain(r => r.CleanTitle == "simpsons");
+            result.Should().OnlyContain(r => r.SeasonNumber == 21);
+            result.Should().OnlyContain(r => r.EpisodeNumbers.Contains(23));
+        }
+
+
+        [Test]
+        public void newzbin_search_returns_valid_results()
+        {
+            var mocker = new AutoMoqer();
+
+            mocker.GetMock<ConfigProvider>()
+                .SetupGet(c => c.NewzbinUsername)
+                .Returns("nzbdrone");
+
+            mocker.GetMock<ConfigProvider>()
+                .SetupGet(c => c.NewzbinPassword)
+                .Returns("smartar39865");
+
+
+            mocker.Resolve<HttpProvider>();
+
+            var result = mocker.Resolve<Newzbin>().FetchEpisode("Simpsons", 21, 23);
 
             result.Should().NotBeEmpty();
             result.Should().OnlyContain(r => r.CleanTitle == "simpsons");

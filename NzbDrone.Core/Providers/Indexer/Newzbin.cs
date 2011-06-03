@@ -10,7 +10,8 @@ namespace NzbDrone.Core.Providers.Indexer
 {
     public class Newzbin : IndexerBase
     {
-        public Newzbin(HttpProvider httpProvider, ConfigProvider configProvider) : base(httpProvider, configProvider)
+        public Newzbin(HttpProvider httpProvider, ConfigProvider configProvider)
+            : base(httpProvider, configProvider)
         {
         }
 
@@ -35,7 +36,8 @@ namespace NzbDrone.Core.Providers.Indexer
 
         protected override IList<string> GetSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber)
         {
-            return new List<string>();
+
+            return new List<string> { String.Format(@"http://www.newzbin.com/search/query/?q={0}+{1}x{2:00}&fpn=p&searchaction=Go&category=8&feed=rss&hauth=1", GetQueryTitle(seriesTitle), seasonNumber, episodeNumber) };
         }
 
         public override string Name
@@ -54,7 +56,7 @@ namespace NzbDrone.Core.Providers.Indexer
             {
                 var quality = Parser.ParseQuality(item.Summary.Text);
 
-                currentResult.Quality = quality; 
+                currentResult.Quality = quality;
             }
             return currentResult;
         }
