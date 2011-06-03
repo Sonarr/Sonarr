@@ -201,7 +201,7 @@ namespace NzbDrone.Core.Providers
             var episodeTotal = series.Episodes.Where(e => monitoredSeasons.Contains(e.SeasonId) && e.AirDate <= DateTime.Today && e.AirDate > new DateTime(1899, 12, 31));
             var episodes = episodeTotal.Where(e => e.EpisodeFileId > 0);
 
-            return new Tuple<int, int>(episodeTotal.Count(), episodes.Count());
+            return new Tuple<int, int>(episodes.Count(), episodeTotal.Count());
         }
 
         private List<string> GetMediaFileList(string path)
