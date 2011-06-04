@@ -30,6 +30,7 @@ namespace NzbDrone.Web.Controllers
             var upcoming = _upcomingEpisodesProvider.Yesterday().Select(e => new UpcomingEpisodeModel
                                                                                  {
                                                                                      SeriesId = e.Series.SeriesId,
+                                                                                     EpisodeId = e.EpisodeId,
                                                                                      SeriesName = e.Series.Title,
                                                                                      SeasonNumber = e.SeasonNumber,
                                                                                      EpisodeNumber = e.EpisodeNumber,

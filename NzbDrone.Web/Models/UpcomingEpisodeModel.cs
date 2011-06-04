@@ -5,6 +5,7 @@ namespace NzbDrone.Web.Models
     public class UpcomingEpisodeModel
     {
         public int SeriesId { get; set; }
+        public int EpisodeId { get; set; }
         public string SeriesName { get; set; }
         public int SeasonNumber { get; set; }
         public int EpisodeNumber { get; set; }
