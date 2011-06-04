@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Datastore
 
         public virtual ITable GetSchemaFromType(Type type)
         {
-            return type.ToSchemaTable(Connection.MainDataProvider);
+            return type.ToSchemaTable(Connection.GetDataProvider(Connection.MainConnectionString));
         }
 
         public virtual Column[] GetColumnsFromDatabase(ITransformationProvider database, string tableName)

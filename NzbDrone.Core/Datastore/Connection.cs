@@ -18,11 +18,16 @@ namespace NzbDrone.Core.Datastore
         }
 
 
+        public static string GetConnectionString(string path)
+        {
+            return String.Format("Data Source={0};Version=3;", path);
+        }
+
         public static String MainConnectionString
         {
             get
             {
-                return String.Format("Data Source={0};Version=3;", Path.Combine(AppDataPath.FullName, "nzbdrone.db"));
+                return GetConnectionString(Path.Combine(AppDataPath.FullName, "nzbdrone.db"));
             }
         }
 
@@ -30,70 +35,19 @@ namespace NzbDrone.Core.Datastore
         {
             get
             {
-                return String.Format("Data Source={0};Version=3;", Path.Combine(AppDataPath.FullName, "log.db"));
+                return GetConnectionString(Path.Combine(AppDataPath.FullName, "log.db"));
             }
         }
 
-
-        private static IDataProvider _mainDataProvider;
-        public static IDataProvider MainDataProvider
+        public static IDataProvider GetDataProvider(string connectionString)
         {
-            get
-            {
-                if (_mainDataProvider == null)
-                {
-                    _mainDataProvider = ProviderFactory.GetProvider(Connection.MainConnectionString, "System.Data.SQLite");
-                }
-                return _mainDataProvider;
-            }
-
+            return ProviderFactory.GetProvider(connectionString, "System.Data.SQLite");
         }
 
-        private static IDataProvider _logDataProvider;
-        public static IDataProvider LogDataProvider
+        public static IRepository CreateSimpleRepository(string connectionString)
         {
-            get
-            {
-                if (_logDataProvider == null)
-                {
-                    _logDataProvider = ProviderFactory.GetProvider(Connection.LogConnectionString, "System.Data.SQLite");
-                }
-                return _logDataProvider;
-            }
-
+            return new SimpleRepository(GetDataProvider(connectionString), SimpleRepositoryOptions.RunMigrations);
         }
-
-
-        private static SimpleRepository _mainDataRepository;
-        public static SimpleRepository MainDataRepository
-        {
-            get
-            {
-                if (_mainDataRepository == null)
-                {
-                    _mainDataRepository = new SimpleRepository(MainDataProvider, SimpleRepositoryOptions.RunMigrations);
-                }
-
-                return _mainDataRepository;
-            }
-
-        }
-
-        private static SimpleRepository _logDataRepository;
-        public static SimpleRepository LogDataRepository
-        {
-            get
-            {
-                if (_logDataRepository == null)
-                {
-                    _logDataRepository = new SimpleRepository(LogDataProvider, SimpleRepositoryOptions.RunMigrations);
-                }
-                return _logDataRepository;
-            }
-
-        }
-
-
 
     }
 }

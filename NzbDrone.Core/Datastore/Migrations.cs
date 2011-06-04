@@ -16,16 +16,16 @@ namespace NzbDrone.Core.Datastore
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public static void Run()
+        public static void Run(string connetionString)
         {
-            Logger.Info("Preparing to migrate databse");
+            Logger.Info("Preparing run database migration");
 
             try
             {
-                var mig = new Migrator.Migrator("Sqlite", Connection.MainConnectionString,
+                var migrator = new Migrator.Migrator("Sqlite", connetionString,
                                                       Assembly.GetAssembly(typeof(Migrations)), true, new MigrationLogger());
 
-                mig.MigrateToLastVersion();
+                migrator.MigrateToLastVersion();
 
                 Logger.Info("Database migration completed");
             }
@@ -111,10 +111,7 @@ namespace NzbDrone.Core.Datastore
     {
         public override void Up()
         {
-            if(Database.TableExists("Seasons"))
-            {
-                Database.RemoveTable("Seasons");
-            }
+            Database.RemoveTable("Seasons");
 
             Migrations.RemoveDeletedColumns(Database);
             Migrations.AddNewColumns(Database);
