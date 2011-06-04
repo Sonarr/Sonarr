@@ -98,6 +98,23 @@ namespace NzbDrone.Core.Datastore
             var jobTable = repoProvider.GetSchemaFromType(typeof(JobSetting));
 
             Database.RemoveTable(jobTable.Name);
+        }
+
+        public override void Down()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    [Migration(20110603)]
+    public class Migration20110603 : Migration
+    {
+        public override void Up()
+        {
+            if(Database.TableExists("Seasons"))
+            {
+                Database.RemoveTable("Seasons");
+            }
 
             Migrations.RemoveDeletedColumns(Database);
             Migrations.AddNewColumns(Database);

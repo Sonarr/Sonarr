@@ -10,16 +10,14 @@ namespace NzbDrone.Core.Providers
     public class InventoryProvider
     {
         private readonly SeriesProvider _seriesProvider;
-        private readonly SeasonProvider _seasonProvider;
         private readonly EpisodeProvider _episodeProvider;
         private readonly HistoryProvider _historyProvider;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public InventoryProvider(SeriesProvider seriesProvider, SeasonProvider seasonProvider, EpisodeProvider episodeProvider, HistoryProvider historyProvider)
+        public InventoryProvider(SeriesProvider seriesProvider, EpisodeProvider episodeProvider, HistoryProvider historyProvider)
         {
             _seriesProvider = seriesProvider;
-            _seasonProvider = seasonProvider;
             _episodeProvider = episodeProvider;
             _historyProvider = historyProvider;
         }
@@ -46,12 +44,6 @@ namespace NzbDrone.Core.Providers
             if (!series.Monitored)
             {
                 Logger.Debug("{0} is present in the DB but not tracked. skipping.", parseResult.CleanTitle);
-                return false;
-            }
-
-            if (_seasonProvider.IsIgnored(series.SeriesId, parseResult.SeasonNumber))
-            {
-                Logger.Debug("Season {0} is currently set to ignore. skipping.", parseResult.SeasonNumber);
                 return false;
             }
 

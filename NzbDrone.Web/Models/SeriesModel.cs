@@ -19,7 +19,8 @@ namespace NzbDrone.Web.Models
         public string QualityProfileName { get; set; }
         public string Overview { get; set; }
         public int Episodes { get; set; }
-        public int EpisodeTotal { get; set; }
+
+        public IList<int> Seasons { get; set; }
 
         //View & Edit
         [DisplayName("Path")]

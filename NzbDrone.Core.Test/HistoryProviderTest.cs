@@ -23,7 +23,6 @@ namespace NzbDrone.Core.Test
         public void AllItems()
         {
             //Setup
-            Season season = new Season { SeasonId = 4321, SeasonNumber = 1, SeriesId = 5656, Monitored = true };
             var episode = new Episode
                               {
                                   AirDate = DateTime.Today.AddDays(-1),
@@ -31,8 +30,6 @@ namespace NzbDrone.Core.Test
                                   EpisodeNumber = 5,
                                   Overview = "This is an Overview",
                                   SeasonNumber = 1,
-                                  SeasonId = 4321,
-                                  Season = season,
                                   SeriesId = 5656
                               };
 

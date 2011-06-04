@@ -61,40 +61,6 @@ namespace NzbDrone.Core.Test
 
 
         [Test]
-        public void EnsureSeason_is_called_once_per_season()
-        {
-            const int seriesId = 71663;
-            var fakeEpisodes = Builder<TvdbSeries>.CreateNew()
-                .With(c => c.Episodes = new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(6).
-                                                                  WhereAll().Have(
-                                                                      l => l.Language = new TvdbLanguage(0, "eng", "a"))
-                                                                  .WhereTheFirst(3).Have(d => d.SeasonNumber = 1).And(
-                                                                      d => d.SeasonId = 11)
-                                                                  .AndTheRemaining().Have(d => d.SeasonNumber = 2).And(
-                                                                      d => d.SeasonId = 22)
-                                                                  .Build())
-                ).With(c => c.Id = seriesId).Build();
-
-            var fakeSeries = Builder<Series>.CreateNew().With(c => c.SeriesId = seriesId).Build();
-
-
-            var mocker = new AutoMoqer();
-
-            mocker.GetMock<TvDbProvider>(MockBehavior.Strict)
-                .Setup(c => c.GetSeries(seriesId, true))
-                .Returns(fakeEpisodes);
-
-            mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
-
-
-            mocker.GetMock<SeasonProvider>().Verify(c => c.EnsureSeason(seriesId, 11, 1), Times.Once());
-            mocker.GetMock<SeasonProvider>().Verify(c => c.EnsureSeason(seriesId, 22, 2), Times.Once());
-
-            mocker.VerifyAllMocks();
-        }
-
-
-        [Test]
         public void new_episodes_only_calls_AddMany()
         {
             const int seriesId = 71663;

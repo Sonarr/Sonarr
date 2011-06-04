@@ -78,7 +78,6 @@ namespace NzbDrone.Core
                 _kernel.Bind<TvDbProvider>().ToSelf().InTransientScope();
                 _kernel.Bind<HttpProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<SeriesProvider>().ToSelf().InSingletonScope();
-                _kernel.Bind<SeasonProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<EpisodeProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<UpcomingEpisodesProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<DiskProvider>().ToSelf().InSingletonScope();
@@ -138,7 +137,6 @@ namespace NzbDrone.Core
         private static void ForceMigration(IRepository repository)
         {
             repository.All<Series>().Count();
-            repository.All<Season>().Count();
             repository.All<Episode>().Count();
             repository.All<EpisodeFile>().Count();
             repository.All<QualityProfile>().Count();

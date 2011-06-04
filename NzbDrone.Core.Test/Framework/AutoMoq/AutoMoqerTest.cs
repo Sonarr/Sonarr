@@ -3,6 +3,7 @@ using AutoMoq;
 using Moq;
 using System;
 using NUnit.Framework;
+using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test
 {
@@ -103,7 +104,7 @@ namespace NzbDrone.Core.Test
             //Arrange
             var mocker = new AutoMoqer();
 
-            var constant = new VirtualDependency {PropValue = Guid.NewGuid().ToString()};
+            var constant = new VirtualDependency { PropValue = Guid.NewGuid().ToString() };
 
             mocker.SetConstant(constant);
 

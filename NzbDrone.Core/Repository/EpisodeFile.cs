@@ -11,6 +11,7 @@ namespace NzbDrone.Core.Repository
         public virtual int EpisodeFileId { get; set; }
 
         public virtual int SeriesId { get; set; }
+        public virtual int SeasonNumber { get; set; }
         public string Path { get; set; }
         public QualityTypes Quality { get; set; }
         public bool Proper { get; set; }

@@ -16,8 +16,6 @@ namespace NzbDrone.Core.Repository.Quality
         [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string Name { get; set; }
 
-        public bool UserProfile { get; set; } //Allows us to tell the difference between default and user profiles
-
         [SubSonicIgnore]
         [DisplayName("Allowed Qualities")]
         public List<QualityTypes> Allowed { get; set; }
