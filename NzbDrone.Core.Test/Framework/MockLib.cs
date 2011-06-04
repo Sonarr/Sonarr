@@ -44,12 +44,15 @@ namespace NzbDrone.Core.Test.Framework
             Console.WriteLine("Creating an empty SQLite database");
             var provider = ProviderFactory.GetProvider("Data Source=" + Guid.NewGuid() + ".db;Version=3;New=True",
                                                        "System.Data.SQLite");
+
+            var repo = new SimpleRepository(provider, SimpleRepositoryOptions.RunMigrations);
+            ForceMigration(repo);
+
             if (enableLogging)
             {
                 provider.Log = new NlogWriter();
             }
-            var repo = new SimpleRepository(provider, SimpleRepositoryOptions.RunMigrations);
-            ForceMigration(repo);
+
             return repo;
         }
 
@@ -99,7 +102,6 @@ namespace NzbDrone.Core.Test.Framework
         private static void ForceMigration(IRepository repository)
         {
             repository.All<Series>().Count();
-            repository.All<Season>().Count();
             repository.All<Episode>().Count();
             repository.All<EpisodeFile>().Count();
             repository.All<QualityProfile>().Count();

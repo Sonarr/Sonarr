@@ -8,7 +8,7 @@
         @Html.DisplayFor(m => m.SeasonString)
         <span style="float: right;">@Html.CheckBoxFor(m => m.Monitored, new { @class = "chkbox" })</span>
 
-        @Html.HiddenFor(m => m.SeasonId)
+        @Html.HiddenFor(m => m.SeasonNumber)
         @Html.HiddenFor(m => m.SeasonNumber)
     </fieldset>
 }

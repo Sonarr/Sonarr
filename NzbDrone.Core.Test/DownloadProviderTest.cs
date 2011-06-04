@@ -9,13 +9,14 @@ using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
+using NzbDrone.Core.Test.Framework;
 
 // ReSharper disable InconsistentNaming
 
 namespace NzbDrone.Core.Test
 {
     [TestFixture]
-    public class DownloadProviderTest
+    public class DownloadProviderTest : TestBase
     {
         [Test]
         public void Download_report_should_send_to_sab_and_add_to_history()

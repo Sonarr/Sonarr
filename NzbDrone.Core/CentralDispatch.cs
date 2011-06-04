@@ -56,7 +56,7 @@ namespace NzbDrone.Core
 
             LogConfiguration.Setup();
 
-            Migrations.Run();
+            Migrations.Run(Connection.MainConnectionString);
             ForceMigration(_kernel.Get<IRepository>());
 
             SetupDefaultQualityProfiles(_kernel.Get<IRepository>()); //Setup the default QualityProfiles on start-up
@@ -78,7 +78,6 @@ namespace NzbDrone.Core
                 _kernel.Bind<TvDbProvider>().ToSelf().InTransientScope();
                 _kernel.Bind<HttpProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<SeriesProvider>().ToSelf().InSingletonScope();
-                _kernel.Bind<SeasonProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<EpisodeProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<UpcomingEpisodesProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<DiskProvider>().ToSelf().InSingletonScope();
@@ -98,9 +97,9 @@ namespace NzbDrone.Core
                 _kernel.Bind<WebTimer>().ToSelf().InSingletonScope();
                 _kernel.Bind<AutoConfigureProvider>().ToSelf().InSingletonScope();
 
-                _kernel.Bind<IRepository>().ToConstant(Connection.MainDataRepository).InSingletonScope();
-                _kernel.Bind<IRepository>().ToConstant(Connection.LogDataRepository).WhenInjectedInto<SubsonicTarget>().InSingletonScope();
-                _kernel.Bind<IRepository>().ToConstant(Connection.LogDataRepository).WhenInjectedInto<LogProvider>().InSingletonScope();
+                _kernel.Bind<IRepository>().ToConstant(Connection.CreateSimpleRepository(Connection.MainConnectionString)).InSingletonScope();
+                _kernel.Bind<IRepository>().ToConstant(Connection.CreateSimpleRepository(Connection.LogConnectionString)).WhenInjectedInto<SubsonicTarget>().InSingletonScope();
+                _kernel.Bind<IRepository>().ToConstant(Connection.CreateSimpleRepository(Connection.LogConnectionString)).WhenInjectedInto<LogProvider>().InSingletonScope();
             }
         }
 
@@ -138,7 +137,6 @@ namespace NzbDrone.Core
         private static void ForceMigration(IRepository repository)
         {
             repository.All<Series>().Count();
-            repository.All<Season>().Count();
             repository.All<Episode>().Count();
             repository.All<EpisodeFile>().Count();
             repository.All<QualityProfile>().Count();

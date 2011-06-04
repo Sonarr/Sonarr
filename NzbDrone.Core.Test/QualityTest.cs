@@ -5,12 +5,13 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository.Quality;
+using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class QualityTest
+    public class QualityTest : TestBase
     {
         [Test]
         [Ignore("No supported asserts are available")]

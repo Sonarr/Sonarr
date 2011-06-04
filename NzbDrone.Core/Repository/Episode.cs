@@ -6,7 +6,7 @@ using SubSonic.SqlGeneration.Schema;
 
 namespace NzbDrone.Core.Repository
 {
-    public  class Episode
+    public class Episode
     {
         [SubSonicPrimaryKey]
         public virtual int EpisodeId { get; set; }
@@ -15,7 +15,6 @@ namespace NzbDrone.Core.Repository
 
         public virtual int SeriesId { get; set; }
         public virtual int EpisodeFileId { get; set; }
-        public virtual int SeasonId { get; set; }
         public virtual int SeasonNumber { get; set; }
         public virtual int EpisodeNumber { get; set; }
         public virtual string Title { get; set; }
@@ -56,10 +55,9 @@ namespace NzbDrone.Core.Repository
 
                 if (EpisodeFileId != 0) return EpisodeStatusType.Ready;
 
-                var season = Season;
 
-                if (Ignored || (season != null && !season.Monitored)) return EpisodeStatusType.Ignored;
-                
+                if (Ignored) return EpisodeStatusType.Ignored;
+
                 if (AirDate.Date.Year > 1900 && DateTime.Now.Date >= AirDate.Date)
                 {
                     return EpisodeStatusType.Missing;
@@ -68,9 +66,6 @@ namespace NzbDrone.Core.Repository
                 return EpisodeStatusType.NotAired;
             }
         }
-
-        [SubSonicToOneRelation(ThisClassContainsJoinKey = true)]
-        public virtual Season Season { get; set; }
 
         [SubSonicToOneRelation(ThisClassContainsJoinKey = true)]
         public virtual Series Series { get; set; }

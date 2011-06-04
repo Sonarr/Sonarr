@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual Series GetSeries(int seriesId)
         {
-            return _repository.Single<Series>(s => s.SeriesId == seriesId);
+            return _repository.Single<Series>(seriesId);
         }
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace NzbDrone.Core.Providers
             Logger.Warn("Deleting Series [{0}]", seriesId);
             var series = _repository.Single<Series>(seriesId);
 
-            //Delete Files, Episdes, Seasons then the Series
+            //Delete Files, Episodes, Seasons then the Series
             //Can't use providers because episode provider needs series provider - Cyclic Dependency Injection, this will work
 
             //Delete History Items for any episodes that belong to this series
@@ -139,10 +139,6 @@ namespace NzbDrone.Core.Providers
             //Delete all episodes for this series from the DB
             Logger.Debug("Deleting Episodes from DB for Series: {0}", series.SeriesId);
             _repository.DeleteMany(series.Episodes);
-
-            //Delete seasons for this series from the DB
-            Logger.Debug("Deleting Seasons from DB for Series: {0}", series.SeriesId);
-            _repository.DeleteMany(series.Seasons);
 
             //Delete the Series
             Logger.Debug("Deleting Series from DB {0}", series.Title);

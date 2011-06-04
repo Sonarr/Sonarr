@@ -16,7 +16,6 @@ namespace NzbDrone.Core.Providers.Jobs
     {
         private readonly SeriesProvider _seriesProvider;
         private readonly MediaFileProvider _mediaFileProvider;
-        private readonly SeasonProvider _seasonProvider;
         private readonly UpdateInfoJob _updateInfoJob;
         private readonly DiskScanJob _diskScanJob;
 
@@ -24,13 +23,12 @@ namespace NzbDrone.Core.Providers.Jobs
 
         private List<int> _attemptedSeries;
 
-        public ImportNewSeriesJob(SeriesProvider seriesProvider, SeasonProvider seasonProvider,
+        public ImportNewSeriesJob(SeriesProvider seriesProvider,
             MediaFileProvider mediaFileProvider, UpdateInfoJob updateInfoJob, DiskScanJob diskScanJob)
         {
             _seriesProvider = seriesProvider;
             _mediaFileProvider = mediaFileProvider;
-            _seasonProvider = seasonProvider;
-            _updateInfoJob = updateInfoJob;
+           _updateInfoJob = updateInfoJob;
             _diskScanJob = diskScanJob;
         }
 
@@ -84,9 +82,22 @@ namespace NzbDrone.Core.Providers.Jobs
 
         private void AutoIgnoreSeasons(Series updatedSeries)
         {
-            if (_mediaFileProvider.GetSeriesFiles(updatedSeries.SeriesId).Count() != 0)
+            var episodeFiles = _mediaFileProvider.GetSeriesFiles(updatedSeries.SeriesId);
+            var episodes = updatedSeries.Episodes;
+            if (episodeFiles.Count() != 0)
             {
-                Logger.Debug("Looking for seasons to ignore");
+                var seasons = episodes.Select(c => c.SeasonNumber).Distinct();
+                var currentSeasons = seasons.Max();
+
+                foreach (var season in seasons)
+                {
+                    if (season!=currentSeasons )
+                    {
+                        
+                    }
+                }
+
+             /*   Logger.Debug("Looking for seasons to ignore");
                 foreach (var season in updatedSeries.Seasons)
                 {
                     if (season.SeasonNumber != updatedSeries.Seasons.Max(s => s.SeasonNumber) && _mediaFileProvider.GetSeasonFiles(season.SeasonId).Count() == 0)
@@ -95,7 +106,7 @@ namespace NzbDrone.Core.Providers.Jobs
                         season.Monitored = false;
                         _seasonProvider.SaveSeason(season);
                     }
-                }
+                }*/
             }
         }
     }

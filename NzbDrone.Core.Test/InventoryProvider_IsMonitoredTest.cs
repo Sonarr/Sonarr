@@ -116,28 +116,7 @@ namespace NzbDrone.Core.Test
             mocker.VerifyAllMocks();
         }
 
-        [Test]
-        public void ignored_season_should_be_skipped()
-        {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
-
-            mocker.GetMock<SeriesProvider>()
-                .Setup(p => p.FindSeries(It.IsAny<String>()))
-                .Returns(series);
-
-            mocker.GetMock<SeasonProvider>()
-                .Setup(p => p.IsIgnored(series.SeriesId, parseResultMulti.SeasonNumber))
-                .Returns(true);
-
-            //Act
-            var result = mocker.Resolve<InventoryProvider>().IsMonitored(parseResultMulti);
-
-            //Assert
-            Assert.IsFalse(result);
-            Assert.AreSame(series, parseResultMulti.Series);
-            mocker.VerifyAllMocks();
-        }
-
+        
         [Test]
         public void IsMonitored_dailyshow_should_do_daily_lookup()
         {
@@ -154,12 +133,6 @@ namespace NzbDrone.Core.Test
             mocker.GetMock<EpisodeProvider>()
                 .Setup(p => p.GetEpisode(episode.SeriesId, episode.AirDate))
                 .Returns(episode);
-
-
-            mocker.GetMock<SeasonProvider>()
-                .Setup(p => p.IsIgnored(series.SeriesId, parseResultSingle.SeasonNumber))
-                .Returns(false);
-
 
             var result = mocker.Resolve<InventoryProvider>().IsMonitored(parseResultSingle);
 
@@ -178,10 +151,6 @@ namespace NzbDrone.Core.Test
                 .Setup(p => p.FindSeries(It.IsAny<String>()))
                 .Returns(series);
 
-            mocker.GetMock<SeasonProvider>()
-                .Setup(p => p.IsIgnored(series.SeriesId, parseResultSingle.SeasonNumber))
-                .Returns(false);
-
             mocker.GetMock<EpisodeProvider>()
                 .Setup(p => p.GetEpisode(episode.SeriesId, episode.SeasonNumber, episode.EpisodeNumber))
                 .Returns<Episode>(null);
@@ -191,8 +160,7 @@ namespace NzbDrone.Core.Test
                 .Returns<Episode>(null);
 
             mocker.GetMock<EpisodeProvider>()
-                .Setup(p => p.AddEpisode(It.IsAny<Episode>()))
-                .Returns(12);
+                .Setup(p => p.AddEpisode(It.IsAny<Episode>()));
 
             //Act
             var result = mocker.Resolve<InventoryProvider>().IsMonitored(parseResultSingle);

@@ -16,17 +16,15 @@ namespace NzbDrone.Core.Providers
         private readonly DiskProvider _diskProvider;
         private readonly EpisodeProvider _episodeProvider;
         private readonly SeriesProvider _seriesProvider;
-        private readonly SeasonProvider _seasonProvider;
         private readonly IRepository _repository;
 
         public MediaFileProvider(IRepository repository, DiskProvider diskProvider,
-                                 EpisodeProvider episodeProvider, SeriesProvider seriesProvider, SeasonProvider seasonProvider)
+                                 EpisodeProvider episodeProvider, SeriesProvider seriesProvider)
         {
             _repository = repository;
             _diskProvider = diskProvider;
             _episodeProvider = episodeProvider;
             _seriesProvider = seriesProvider;
-            _seasonProvider = seasonProvider;
         }
 
         public MediaFileProvider() { }
@@ -125,6 +123,7 @@ namespace NzbDrone.Core.Providers
                     episodeFile.Size = size;
                     episodeFile.Quality = parseResult.Quality.QualityType;
                     episodeFile.Proper = parseResult.Quality.Proper;
+                    episodeFile.SeasonNumber = parseResult.SeasonNumber;
                     var fileId = (int)_repository.Add(episodeFile);
 
                     //This is for logging + updating the episodes that are linked to this EpisodeFile
@@ -183,25 +182,19 @@ namespace NzbDrone.Core.Providers
             return _repository.All<EpisodeFile>().ToList();
         }
 
-        public virtual IEnumerable<EpisodeFile> GetSeasonFiles(int seasonId)
-        {
-            return _seasonProvider.GetSeason(seasonId).Episodes.Where(c => c.EpisodeFile != null).Select(c => c.EpisodeFile);
-        }
-
         public virtual IEnumerable<EpisodeFile> GetSeriesFiles(int seriesId)
         {
-            return _seriesProvider.GetSeries(seriesId).Episodes.Where(c => c.EpisodeFile != null).Select(c => c.EpisodeFile);
+            return _repository.All<EpisodeFile>().Where(c => c.SeriesId == seriesId);
         }
 
         public virtual Tuple<int, int> GetEpisodeFilesCount(int seriesId)
         {
-            var series = _seriesProvider.GetSeries(seriesId);
+            var allEpisodes = _episodeProvider.GetEpisodeBySeries(seriesId);
 
-            var monitoredSeasons = series.Seasons.Where(e => e.Monitored).Select(e => e.SeasonId);
-            var episodeTotal = series.Episodes.Where(e => monitoredSeasons.Contains(e.SeasonId) && e.AirDate <= DateTime.Today && e.AirDate > new DateTime(1899, 12, 31));
-            var episodes = episodeTotal.Where(e => e.EpisodeFileId > 0);
+            var episodeTotal = allEpisodes.Where(e => !e.Ignored && e.AirDate <= DateTime.Today && e.AirDate.Year > 1900).ToList();
+            var avilableEpisodes = episodeTotal.Where(e => e.EpisodeFileId > 0);
 
-            return new Tuple<int, int>(episodes.Count(), episodeTotal.Count());
+            return new Tuple<int, int>(episodeTotal.Count, avilableEpisodes.Count());
         }
 
         private List<string> GetMediaFileList(string path)

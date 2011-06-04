@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Instrumentation
 
         private static void DbAction(string value)
         {
-            Logger.Trace(value);
+            Logger.Trace(value.Replace("`t0`.", ""));
         }
     }
 }

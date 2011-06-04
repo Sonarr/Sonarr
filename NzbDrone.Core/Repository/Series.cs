@@ -57,9 +57,6 @@ namespace NzbDrone.Core.Repository
         public virtual QualityProfile QualityProfile { get; set; }
 
         [SubSonicToManyRelation]
-        public virtual IList<Season> Seasons { get; protected set; }
-
-        [SubSonicToManyRelation]
         public virtual IList<Episode> Episodes { get; set; }
 
         [SubSonicToManyRelation]

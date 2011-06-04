@@ -21,8 +21,6 @@ namespace NzbDrone.Core.Test
         public void no_grab_date(int offsetDays, bool hasEpisodes, bool ignored, EpisodeStatusType status)
         {
             Episode episode = Builder<Episode>.CreateNew()
-                .With(e => e.Season = Builder<Season>.CreateNew()
-                                          .With(s => s.Monitored = true).Build())
                 .With(e => e.AirDate = DateTime.Now.AddDays(offsetDays))
                 .With(e => e.Ignored = ignored)
                 .With(e => e.EpisodeFileId = 0)
@@ -39,7 +37,7 @@ namespace NzbDrone.Core.Test
 
 
         [Test]
-        [TestCase(1, false, false, EpisodeStatusType.NotAired)]
+        [TestCase(1, false, false, EpisodeStatusType.Missing)]
         [TestCase(-2, false, false, EpisodeStatusType.Missing)]
         [TestCase(1, true, false, EpisodeStatusType.Ready)]
         [TestCase(1, false, true, EpisodeStatusType.Ignored)]
@@ -47,10 +45,7 @@ namespace NzbDrone.Core.Test
                                                  EpisodeStatusType status)
         {
             Episode episode = Builder<Episode>.CreateNew()
-                .With(e => e.Season = Builder<Season>.CreateNew()
-                                          .With(s => s.Monitored = true).Build()).With(
-                                              e => e.AirDate = DateTime.Now.AddDays(offsetDays))
-                .With(e => e.Ignored = ignored)
+               .With(e => e.Ignored = ignored)
                 .With(e => e.EpisodeFileId = 0)
                 .With(e => e.GrabDate = DateTime.Now.AddDays(-1).AddHours(-1))
                 .Build();
@@ -74,9 +69,7 @@ namespace NzbDrone.Core.Test
                                                     EpisodeStatusType status)
         {
             Episode episode = Builder<Episode>.CreateNew()
-                .With(e => e.Season = Builder<Season>.CreateNew()
-                                          .With(s => s.Monitored = true).Build())
-                .With(e => e.AirDate = DateTime.Now.AddDays(offsetDays))
+            .With(e => e.AirDate = DateTime.Now.AddDays(offsetDays))
                 .With(e => e.Ignored = ignored)
                 .With(e => e.EpisodeFileId = 0)
                 .With(e => e.GrabDate = DateTime.Now.AddDays(-1))
@@ -91,19 +84,16 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
-        [TestCase(1, false, false, EpisodeStatusType.Ignored)]
-        [TestCase(-2, false, false, EpisodeStatusType.Ignored)]
-        [TestCase(1, false, true, EpisodeStatusType.Ignored)]
-        public void skipped_season(int offsetDays, bool hasEpisodes, bool ignored, EpisodeStatusType status)
+        [TestCase(1, true, false, EpisodeStatusType.Ignored)]
+        [TestCase(-2, true, false, EpisodeStatusType.Ignored)]
+        [TestCase(1, true, true, EpisodeStatusType.Ready)]
+        public void ignored_episode(int offsetDays, bool ignored, bool hasEpisodes, EpisodeStatusType status)
         {
             Episode episode = Builder<Episode>.CreateNew()
                 .With(e => e.AirDate = DateTime.Now.AddDays(offsetDays))
                 .With(e => e.Ignored = ignored)
                 .With(e => e.EpisodeFileId = 0)
                 .With(e => e.GrabDate = null)
-                .With(e => e.Season = Builder<Season>.CreateNew()
-                                          .With(s => s.Monitored == false).Build())
-
                 .Build();
 
             if (hasEpisodes)
@@ -123,8 +113,6 @@ namespace NzbDrone.Core.Test
                 .With(e => e.Ignored = false)
                 .With(e => e.EpisodeFileId = 0)
                 .With(e => e.GrabDate = null)
-                .With(e => e.Season = Builder<Season>.CreateNew()
-                                          .With(s => s.Monitored = true).Build())
                 .Build();
 
 

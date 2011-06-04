@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Test
             var fakeEpisode = Builder<Episode>.CreateNew().With(c => c.SeriesId = 69).Build();
 
             //Act
-            var repo = MockLib.GetEmptyRepository();
+            var repo = MockLib.GetEmptyRepository(true);
             repo.Add(fakeSeries);
             repo.Add(fakeEpisode);
             var fetchedSeries = repo.Single<Series>(fakeSeries.SeriesId);
@@ -42,32 +42,40 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
-        public void ToString_test_over_castle_proxy()
+        [Ignore]
+        public void query_scratch_pad()
         {
-            //Arrange
-            var fakeSeries = Builder<Series>.CreateNew().With(s => s.SeriesId = 69).Build();
-            var fakeEpisode = Builder<Episode>.CreateNew().With(c => c.SeriesId = 69).Build();
+
+            var repo = MockLib.GetEmptyRepository(true);
+
+            repo.All<Episode>().Where(e => !e.Ignored && e.AirDate <= DateTime.Today && e.AirDate.Year > 1900).Select(
+                s => s.Title).ToList();
+        }
+
+
+        [Test]
+        [Ignore]
+        public void episode_proxy_to_string()
+        {
+            var episode = Builder<Episode>.CreateNew()
+                .Build();
+            var series = Builder<Series>.CreateNew()
+                .With(s => s.SeriesId = episode.SeriesId)
+                .Build();
+
+            var repo = MockLib.GetEmptyRepository(true);
+            repo.Add(episode);
+            repo.Add(series);
 
             //Act
-            var repo = MockLib.GetEmptyRepository(true);
-            repo.Add(fakeSeries);
-            repo.Add(fakeEpisode);
-            Console.WriteLine("Getting single");
-            var fetchedEpisode = repo.Single<Episode>(fakeEpisode.EpisodeId);
+
+            var result = repo.Single<Episode>(episode.EpisodeId).ToString();
 
             //Assert
-            Console.WriteLine("Doing assert");
-            Assert.AreEqual(fakeEpisode.EpisodeId, fetchedEpisode.EpisodeId);
-            Console.WriteLine("Doing assert");
-            Assert.AreEqual(fakeEpisode.Title, fetchedEpisode.Title);
-
-            Console.WriteLine("=======================");
-            var ttt = fetchedEpisode.Series;
-            Console.WriteLine("=======================");
-            var tttd = fetchedEpisode.Series;
-            Console.WriteLine("=======================");
-
-            //Assert.Contains(fetchedEpisode.ToString(), fakeSeries.Title);
+            Console.WriteLine(result);
+            result.Should().Contain(series.Title);
+            result.Should().Contain(episode.EpisodeNumber.ToString());
+            result.Should().Contain(episode.SeasonNumber.ToString());
         }
 
 
@@ -78,7 +86,7 @@ namespace NzbDrone.Core.Test
         public void tvdbid_is_preserved()
         {
             //Arrange
-            var sonicRepo = MockLib.GetEmptyRepository();
+            var sonicRepo = MockLib.GetEmptyRepository(true);
             var series = Builder<Series>.CreateNew().With(c => c.SeriesId = 18).Build();
 
             //Act
@@ -95,7 +103,6 @@ namespace NzbDrone.Core.Test
         public void enteties_toString()
         {
             Console.WriteLine(new Episode().ToString());
-            Console.WriteLine(new Season().ToString());
             Console.WriteLine(new Series().ToString());
             Console.WriteLine(new EpisodeFile().ToString());
         }
@@ -106,7 +113,7 @@ namespace NzbDrone.Core.Test
             //setup
             var message = Guid.NewGuid().ToString();
 
-            var sonicRepo = MockLib.GetEmptyRepository();
+            var sonicRepo = MockLib.GetEmptyRepository(true);
 
             var sonicTarget = new SubsonicTarget(sonicRepo);
 
@@ -139,7 +146,7 @@ namespace NzbDrone.Core.Test
             //setup
             var message = Guid.NewGuid().ToString();
 
-            var sonicRepo = MockLib.GetEmptyRepository();
+            var sonicRepo = MockLib.GetEmptyRepository(true);
 
             var sonicTarget = new SubsonicTarget(sonicRepo);
             LogManager.Configuration.AddTarget("DbLogger", sonicTarget);
@@ -172,7 +179,7 @@ namespace NzbDrone.Core.Test
             //setup
             var message = String.Empty;
 
-            var sonicRepo = MockLib.GetEmptyRepository();
+            var sonicRepo = MockLib.GetEmptyRepository(true);
 
             var sonicTarget = new SubsonicTarget(sonicRepo);
             LogManager.Configuration.AddTarget("DbLogger", sonicTarget);

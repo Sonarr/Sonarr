@@ -38,7 +38,10 @@ namespace NzbDrone.Core.Test
 
             //Fakes
             var fakeSeries = Builder<Series>.CreateNew().Build();
-            var fakeEpisode = Builder<Episode>.CreateNew().With(c => c.SeriesId = fakeSeries.SeriesId).Build();
+            var fakeEpisode = Builder<Episode>.CreateNew()
+                .With(c => c.SeriesId = fakeSeries.SeriesId)
+                .With(c => c.SeasonNumber = seasonNumber)
+                .Build();
 
             //Mocks
             var mocker = new AutoMoqer();
@@ -65,6 +68,8 @@ namespace NzbDrone.Core.Test
             Assert.IsNotNull(result);
             mocker.GetMock<IRepository>().Verify(r => r.Add(result), Times.Once());
             mocker.VerifyAllMocks();
+
+            result.SeasonNumber.Should().Be(fakeEpisode.SeasonNumber);
 
             Assert.AreEqual(fakeEpisode.SeriesId, result.SeriesId);
             Assert.AreEqual(QualityTypes.DVD, result.Quality);
@@ -148,10 +153,6 @@ namespace NzbDrone.Core.Test
             mocker.GetMock<IRepository>(MockBehavior.Strict)
                 .Setup(r => r.Exists(It.IsAny<Expression<Func<EpisodeFile, Boolean>>>())).Returns(true).Verifiable();
 
-            //mocker.GetMock<EpisodeProvider>()
-            //   .Setup(e => e.GetEpisode(fakeSeries.SeriesId, seasonNumber, episodeNumner)).Returns(fakeEpisode)
-            // .Verifiable();
-
             mocker.GetMock<DiskProvider>()
                 .Setup(e => e.GetSize(fileName)).Returns(size).Verifiable();
 
@@ -161,7 +162,7 @@ namespace NzbDrone.Core.Test
 
             //Assert
             mocker.VerifyAllMocks();
-            Assert.IsNull(result);
+            result.Should().BeNull();
         }
 
 
@@ -341,30 +342,24 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
-        public void get_season_files()
+        public void get_series_files()
         {
-            var episodes = Builder<Episode>.CreateListOfSize(20)
-                .WhereTheFirst(8)
-                .Has(c => c.EpisodeFile = new EpisodeFile())
-                .AndTheRemaining()
-                .Has(c => c.EpisodeFile = null)
-                .Build().ToList();
+            var firstSeriesFiles = Builder<EpisodeFile>.CreateListOfSize(10)
+                .WhereAll().Have(s => s.SeriesId = 12).Build();
+
+            var secondSeriesFiles = Builder<EpisodeFile>.CreateListOfSize(10)
+                .WhereAll().Have(s => s.SeriesId = 20).Build();
 
             var mocker = new AutoMoqer();
-            mocker.GetMock<SeasonProvider>()
-                .Setup(c => c.GetSeason(12))
-                .Returns(Builder<Season>.CreateNew().With(c => c.Episodes = episodes).Build())
-                .Verifiable();
+            var repo = MockLib.GetEmptyRepository(true);
+            repo.AddMany(firstSeriesFiles);
+            repo.AddMany(secondSeriesFiles);
+            mocker.SetConstant(repo);
+
+            var result = mocker.Resolve<MediaFileProvider>().GetSeriesFiles(12);
 
 
-            var result = mocker.Resolve<MediaFileProvider>().GetSeasonFiles(12);
-
-
-            result.Should().HaveCount(8);
-            result.Should().NotContainNulls();
-            mocker.VerifyAllMocks();
-
-
+            result.Should().HaveSameCount(firstSeriesFiles);
         }
     }
 }

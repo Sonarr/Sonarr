@@ -231,14 +231,12 @@
     <Compile Include="Providers\EpisodeProvider.cs" />
     <Compile Include="Providers\Core\HttpProvider.cs" />
     <Compile Include="Providers\SabProvider.cs" />
-    <Compile Include="Providers\SeasonProvider.cs" />
     <Compile Include="Repository\Episode.cs" />
     <Compile Include="Instrumentation\Log.cs" />
     <Compile Include="Repository\History.cs" />
     <Compile Include="Repository\Config.cs" />
     <Compile Include="Repository\Quality\QualityProfile.cs" />
     <Compile Include="Repository\RootDir.cs" />
-    <Compile Include="Repository\Season.cs" />
     <Compile Include="Repository\Quality\QualityTypes.cs" />
     <Compile Include="Repository\Series.cs" />
     <Compile Include="CentralDispatch.cs" />

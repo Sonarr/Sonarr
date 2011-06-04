@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Test
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class RepositoryProviderTest
+    public class RepositoryProviderTest : TestBase
     {
         [Test]
         public void Get_Assembly_repos()
@@ -36,8 +36,6 @@ namespace NzbDrone.Core.Test
             types.Should().Contain(typeof(IndexerSetting));
             types.Should().Contain(typeof(JobSetting));
             types.Should().Contain(typeof(RootDir));
-            types.Should().Contain(typeof(Season));
-            types.Should().Contain(typeof(Season));
             types.Should().Contain(typeof(Series));
             types.Should().Contain(typeof(QualityProfile));
 
