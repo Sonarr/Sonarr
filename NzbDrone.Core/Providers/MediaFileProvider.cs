@@ -191,10 +191,10 @@ namespace NzbDrone.Core.Providers
         {
             var allEpisodes = _episodeProvider.GetEpisodeBySeries(seriesId);
 
-            var episodeTotal = allEpisodes.Where(e => !e.Ignored && e.AirDate <= DateTime.Today && e.AirDate.Year > 1900).ToList();
+            var episodeTotal = allEpisodes.Where(e => !e.Ignored && e.AirDate <= DateTime.Today && e.AirDate.Year > 1900);
             var avilableEpisodes = episodeTotal.Where(e => e.EpisodeFileId > 0);
 
-            return new Tuple<int, int>(avilableEpisodes.Count(), episodeTotal.Count);
+            return new Tuple<int, int>(avilableEpisodes.Count(), episodeTotal.Count());
         }
 
         private List<string> GetMediaFileList(string path)

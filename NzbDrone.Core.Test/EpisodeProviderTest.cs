@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Test
             mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
 
             //Assert
-            var actualCount = mocker.Resolve<EpisodeProvider>().GetEpisodeBySeries(seriesId).Count;
+            var actualCount = mocker.Resolve<EpisodeProvider>().GetEpisodeBySeries(seriesId).ToList().Count;
             mocker.GetMock<TvDbProvider>().VerifyAll();
             actualCount.Should().Be(episodeCount);
             mocker.VerifyAllMocks();

@@ -29,6 +29,7 @@ namespace NzbDrone.Core.Test
 
 
             base.Setup();
+            int currentFileId = 0;
 
             foreach (var _seriesId in seriesIds)
             {
@@ -44,27 +45,38 @@ namespace NzbDrone.Core.Test
                 {
                     for (int i = 1; i <= Episodes_Per_Season; i++)
                     {
-                        var episode = Builder<Episode>.CreateNew()
-                            .With(e => e.SeriesId = seriesId)
-                            .And(e => e.SeasonNumber = _seasonNumber)
-                            .And(e => e.EpisodeNumber = i)
-                            .And(e => e.Ignored = false)
-                            .And(e => e.TvDbEpisodeId = episodes.Count + 1)
-                            .And(e => e.AirDate = DateTime.Today.AddDays(-20))
-                            .Build();
-
-                        episodes.Add(episode);
+                        var epFileId = 0;
 
                         if (i < 10)
                         {
                             var epFile = Builder<EpisodeFile>.CreateNew()
+                               .With(e => e.SeriesId = seriesId)
                                .With(e => e.SeriesId = seriesId)
                                .And(e => e.SeasonNumber = _seasonNumber)
                                .And(e => e.Path = Guid.NewGuid().ToString())
                                .Build();
 
                             files.Add(epFile);
+
+                            currentFileId++;
+                            epFileId = currentFileId;
+
                         }
+
+
+                        var episode = Builder<Episode>.CreateNew()
+                            .With(e => e.SeriesId = seriesId)
+                            .And(e => e.SeasonNumber = _seasonNumber)
+                            .And(e => e.EpisodeNumber = i)
+                            .And(e => e.Ignored = false)
+                            .And(e => e.TvDbEpisodeId = episodes.Count + 1)
+                            .And(e => e.EpisodeFileId = epFileId)
+                            .And(e => e.AirDate = DateTime.Today.AddDays(-20))
+                            .Build();
+
+                        episodes.Add(episode);
+
+
                     }
                 }
 
@@ -72,8 +84,7 @@ namespace NzbDrone.Core.Test
 
             repo.AddMany(episodes);
             repo.AddMany(files);
-
-            }
+        }
 
 
         [Test]
@@ -177,5 +188,36 @@ namespace NzbDrone.Core.Test
 
             Console.WriteLine("Took " + sw.Elapsed);
         }
+
+
+        [Test]
+        public void get_episode_file_count_x10()
+        {
+            var mocker = new AutoMoq.AutoMoqer();
+            mocker.SetConstant(repo);
+            mocker.SetConstant(mocker.Resolve<EpisodeProvider>());
+            var provider = mocker.Resolve<MediaFileProvider>();
+
+
+            Thread.Sleep(1000);
+
+
+            var random = new Random();
+            Console.WriteLine("Starting Test");
+
+            var sw = Stopwatch.StartNew();
+            for (int i = 0; i < 100; i++)
+            {
+                var result = provider.GetEpisodeFilesCount(random.Next(1, 10));
+                result.Item1.Should().NotBe(0);
+                result.Item2.Should().NotBe(0);
+            }
+
+
+            sw.Stop();
+
+            Console.WriteLine("Took " + sw.Elapsed);
+        }
+
     }
 }
