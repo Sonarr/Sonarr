@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Datastore
 
         public static string GetConnectionString(string path)
         {
-            return String.Format("Data Source={0};Version=3;", path);
+            return String.Format("Data Source={0};Version=3;Cache Size=30000;", path);
         }
 
         public static String MainConnectionString

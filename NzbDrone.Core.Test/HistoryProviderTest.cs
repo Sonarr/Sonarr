@@ -79,7 +79,8 @@ namespace NzbDrone.Core.Test
 
 
             var repo = MockLib.GetEmptyRepository();
-            var history = Builder<History>.CreateNew().Build();
+            var history = Builder<History>.CreateNew()
+                .With(h => h.Quality = QualityTypes.Bluray720p).Build();
             repo.Add(history);
             mocker.SetConstant(repo);
 
@@ -88,6 +89,7 @@ namespace NzbDrone.Core.Test
 
             //Assert
             Assert.IsNotNull(result);
+            result.QualityType.Should().Be(QualityTypes.Bluray720p);
         }
 
         [Test]

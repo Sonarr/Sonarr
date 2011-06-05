@@ -164,6 +164,7 @@
     <Compile Include="Datastore\MigrationLogger.cs" />
     <Compile Include="Datastore\Migrations.cs" />
     <Compile Include="Datastore\RepositoryProvider.cs" />
+    <Compile Include="Datastore\SqliteProvider.cs" />
     <Compile Include="Helpers\EpisodeRenameHelper.cs" />
     <Compile Include="Helpers\EpisodeSortingHelper.cs" />
     <Compile Include="Helpers\SceneNameHelper.cs" />
