@@ -17,8 +17,8 @@ namespace NzbDrone.Core.Test
     public class DbBenchmark : TestBase
     {
         const int Episodes_Per_Season = 20;
-        private readonly List<int> seasonsNumbers = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8 };
-        private readonly List<int> seriesIds = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8 };
+        private readonly List<int> seasonsNumbers = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+        private readonly List<int> seriesIds = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
         private readonly List<Episode> episodes = new List<Episode>();
         private readonly List<EpisodeFile> files = new List<EpisodeFile>();
         private readonly IRepository repo = MockLib.GetEmptyRepository();
@@ -68,15 +68,40 @@ namespace NzbDrone.Core.Test
                     }
                 }
 
-                repo.AddMany(episodes);
-                repo.AddMany(files);
+            }
+
+            repo.AddMany(episodes);
+            repo.AddMany(files);
 
             }
-        }
 
 
         [Test]
-        public void get_episode_by_series_seasons_episode_x1000()
+        public void get_episode_by_series_seasons_episode_x5000()
+        {
+            var epProvider = new EpisodeProvider(repo, null);
+
+
+            Thread.Sleep(1000);
+
+
+            var random = new Random();
+            Console.WriteLine("Starting Test");
+
+            var sw = Stopwatch.StartNew();
+            for (int i = 0; i < 5000; i++)
+            {
+                epProvider.GetEpisode(6, random.Next(2, 5), random.Next(2, Episodes_Per_Season - 10)).Should().NotBeNull();
+            }
+
+
+            sw.Stop();
+
+            Console.WriteLine("Took " + sw.Elapsed);
+        }
+
+        [Test]
+        public void get_episode_by_series_seasons_x1000()
         {
             var epProvider = new EpisodeProvider(repo, null);
 
@@ -90,30 +115,6 @@ namespace NzbDrone.Core.Test
             var sw = Stopwatch.StartNew();
             for (int i = 0; i < 1000; i++)
             {
-                epProvider.GetEpisode(6, random.Next(2, 5), random.Next(2, Episodes_Per_Season - 10)).Should().NotBeNull();
-            }
-
-
-            sw.Stop();
-
-            Console.WriteLine("Took " + sw.Elapsed);
-        }
-
-        [Test]
-        public void get_episode_by_series_seasons_x500()
-        {
-            var epProvider = new EpisodeProvider(repo, null);
-
-
-            Thread.Sleep(1000);
-
-
-            var random = new Random();
-            Console.WriteLine("Starting Test");
-
-            var sw = Stopwatch.StartNew();
-            for (int i = 0; i < 500; i++)
-            {
                 epProvider.GetEpisodesBySeason(6, random.Next(2, 5)).Should().NotBeNull();
             }
 
@@ -124,7 +125,7 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
-        public void get_episode_file_count_x50()
+        public void get_episode_file_count_x100()
         {
             var mocker = new AutoMoq.AutoMoqer();
             mocker.SetConstant(repo);
@@ -139,9 +140,36 @@ namespace NzbDrone.Core.Test
             Console.WriteLine("Starting Test");
 
             var sw = Stopwatch.StartNew();
-            for (int i = 0; i < 50; i++)
+            for (int i = 0; i < 100; i++)
             {
                 mediaProvider.GetEpisodeFilesCount(random.Next(1, 5)).Should().NotBeNull();
+            }
+
+
+            sw.Stop();
+
+            Console.WriteLine("Took " + sw.Elapsed);
+        }
+
+
+        [Test]
+        public void get_season_count_x5000()
+        {
+            var mocker = new AutoMoq.AutoMoqer();
+            mocker.SetConstant(repo);
+            var provider = mocker.Resolve<EpisodeProvider>();
+
+
+            Thread.Sleep(1000);
+
+
+            var random = new Random();
+            Console.WriteLine("Starting Test");
+
+            var sw = Stopwatch.StartNew();
+            for (int i = 0; i < 5000; i++)
+            {
+                provider.GetSeasons(random.Next(1, 10)).Should().HaveSameCount(seasonsNumbers);
             }
 
 

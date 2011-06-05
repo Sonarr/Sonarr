@@ -56,7 +56,7 @@ namespace NzbDrone.Core
 
             LogConfiguration.Setup();
 
-            Migrations.Run(Connection.MainConnectionString);
+            Migrations.Run(Connection.MainConnectionString, true);
             ForceMigration(_kernel.Get<IRepository>());
 
             SetupDefaultQualityProfiles(_kernel.Get<IRepository>()); //Setup the default QualityProfiles on start-up

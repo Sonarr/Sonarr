@@ -16,14 +16,23 @@ namespace NzbDrone.Core.Datastore
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public static void Run(string connetionString)
+        public static void Run(string connetionString, bool trace)
         {
             Logger.Info("Preparing run database migration");
 
             try
             {
-                var migrator = new Migrator.Migrator("Sqlite", connetionString,
-                                                      Assembly.GetAssembly(typeof(Migrations)), true, new MigrationLogger());
+                Migrator.Migrator migrator;
+                if (trace)
+                {
+                    migrator = new Migrator.Migrator("Sqlite", connetionString, Assembly.GetAssembly(typeof(Migrations)), true, new MigrationLogger());
+                }
+                else
+                {
+                    migrator = new Migrator.Migrator("Sqlite", connetionString, Assembly.GetAssembly(typeof(Migrations)));
+                }
+
+
 
                 migrator.MigrateToLastVersion();
 
@@ -93,11 +102,7 @@ namespace NzbDrone.Core.Datastore
     {
         public override void Up()
         {
-            //Remove jobs table forcing it to repopulate
-            var repoProvider = new RepositoryProvider();
-            var jobTable = repoProvider.GetSchemaFromType(typeof(JobSetting));
-
-            Database.RemoveTable(jobTable.Name);
+            Database.RemoveTable(RepositoryProvider.JobsSchema.Name);
         }
 
         public override void Down()
@@ -112,6 +117,34 @@ namespace NzbDrone.Core.Datastore
         public override void Up()
         {
             Database.RemoveTable("Seasons");
+
+            Migrations.RemoveDeletedColumns(Database);
+            Migrations.AddNewColumns(Database);
+        }
+
+        public override void Down()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    [Migration(20110604)]
+    public class Migration20110604 : Migration
+    {
+        public override void Up()
+        {
+            var episodesTable = RepositoryProvider.EpisodesSchema;
+            //Database.AddIndex("idx_episodes_series_season_episode", episodesTable.Name, true,
+            //    episodesTable.GetColumnByPropertyName("SeriesId").Name,
+            //    episodesTable.GetColumnByPropertyName("SeasonNumber").Name,
+            //    episodesTable.GetColumnByPropertyName("EpisodeNumber").Name);
+
+            Database.AddIndex("idx_episodes_series_season", episodesTable.Name, false,
+                episodesTable.GetColumnByPropertyName("SeriesId").Name,
+                episodesTable.GetColumnByPropertyName("SeasonNumber").Name);
+
+            Database.AddIndex("idx_episodes_series", episodesTable.Name, false,
+                             episodesTable.GetColumnByPropertyName("SeriesId").Name);
 
             Migrations.RemoveDeletedColumns(Database);
             Migrations.AddNewColumns(Database);
