@@ -153,10 +153,14 @@
         
         var seriesId = args.dataItem.SeriesId;
         var url = '@Url.Action("SeasonEditor", "Series")';
-        $('#season-editor').load(url, { seriesId: seriesId });
+        $('#season-editor').load(url, { seriesId: seriesId }, function (response, status, xhr) {
+            $('#seasonEditorLoader').hide();
+        });
     }
-    
+
     function grid_save(e) {
+        $('#ajaxSaveWheel').show();
+        
         var seasonEditor = e.form.SeasonEditor_collection;
         var saveSeasonEditUrl = '@Url.Action("SaveSeason", "Series")';
 

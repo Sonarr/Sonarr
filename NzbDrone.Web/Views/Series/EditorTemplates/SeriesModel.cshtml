@@ -31,7 +31,12 @@
     </div>
 
     <div id="seasonEditorSection">
-        <div style="font-weight: bold; padding-right: 15px; padding-bottom: 5px;">@Html.LabelFor(m => m.SeasonEditor)</div>
+        <div style="font-weight: bold; padding-right: 15px; padding-bottom: 5px;">
+            @Html.LabelFor(m => m.SeasonEditor)
+            <span id="seasonEditorLoader"><img src="../../../Content/Images/ajax-loader.gif" width="14px" height="14px" style="margin-bottom: -2px;"/></span>
+        </div>
         <div id="season-editor"></div>
     </div>
+  
 </div>
+<span id="ajaxSaveWheel" style="display: none; float: right; padding-right: 368px; padding-top: 1.5px;"><img src="../../../Content/Images/ajax-loader.gif" width="20px" height="20px"/></span>
