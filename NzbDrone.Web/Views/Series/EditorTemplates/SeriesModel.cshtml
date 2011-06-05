@@ -8,6 +8,8 @@
 
 <div style="width: 435px; margin: 10px;">
                      
+    @Html.HiddenFor(m => m.SeriesId)
+
     <div class="edit-group">
         <div class="config-title">@Html.LabelFor(m => m.Path)</div>
         <div class="config-value">@Html.TextBoxFor(m => m.Path, new { style = "width: 300" })</div>
@@ -26,5 +28,10 @@
     <div class="edit-group">
         <b>@Html.LabelFor(m => m.QualityProfileId)</b>
         @Html.DropDownListFor(model => model.QualityProfileId, (SelectList)ViewData["SelectList"], new { style = "margin-left:40px" })
+    </div>
+
+    <div id="seasonEditorSection">
+        <div style="font-weight: bold; padding-right: 15px; padding-bottom: 5px;">@Html.LabelFor(m => m.SeasonEditor)</div>
+        <div id="season-editor"></div>
     </div>
 </div>

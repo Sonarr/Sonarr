@@ -35,5 +35,8 @@ namespace NzbDrone.Web.Models
 
         [DisplayName("Monitored")]
         public bool Monitored { get; set; }
+
+        [DisplayName("Season Editor")]
+        public List<SeasonEditModel> SeasonEditor { get; set; }
     }
 }
