@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using Migrator.Providers;
 using Migrator.Providers.SQLite;
+using NzbDrone.Core.Repository;
 using SubSonic.DataProviders;
 using SubSonic.Extensions;
 using SubSonic.Schema;
@@ -15,6 +16,12 @@ namespace NzbDrone.Core.Datastore
 {
     public class RepositoryProvider
     {
+        public static readonly ITable EpisodesSchema = new RepositoryProvider().GetSchemaFromType(typeof(Episode));
+        public static readonly ITable SeriesSchema = new RepositoryProvider().GetSchemaFromType(typeof(Series));
+        public static readonly ITable EpisodeFilesSchema = new RepositoryProvider().GetSchemaFromType(typeof(EpisodeFile));
+        public static readonly ITable JobsSchema = new RepositoryProvider().GetSchemaFromType(typeof(JobSetting));
+
+
         public virtual IList<Type> GetRepositoryTypes()
         {
             var coreAssembly = Assembly.GetExecutingAssembly();
@@ -85,5 +92,7 @@ namespace NzbDrone.Core.Datastore
 
             return migColumn;
         }
+
+
     }
 }

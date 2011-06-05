@@ -44,6 +44,11 @@ namespace NzbDrone.Core.Datastore
             return ProviderFactory.GetProvider(connectionString, "System.Data.SQLite");
         }
 
+        public static IRepository CreateSimpleRepository(IDataProvider dataProvider)
+        {
+            return new SimpleRepository(dataProvider, SimpleRepositoryOptions.RunMigrations);
+        }
+
         public static IRepository CreateSimpleRepository(string connectionString)
         {
             return new SimpleRepository(GetDataProvider(connectionString), SimpleRepositoryOptions.RunMigrations);

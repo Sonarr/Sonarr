@@ -1,3 +1,4 @@
+using System;
 using System.Data;
 using Migrator.Framework;
 using ForeignKeyConstraint=Migrator.Framework.ForeignKeyConstraint;
@@ -53,7 +54,12 @@ namespace Migrator.Providers
         {
             // No Op
         }
-        
+
+        public void RemoveIndex(string table, string name)
+        {
+            // No Op
+        }
+
         public void AddTable(string name, params Column[] columns)
         {
             // No Op
@@ -127,6 +133,16 @@ namespace Migrator.Providers
         public void AddColumn(string table, string column, DbType type, int size, ColumnProperty property)
         {
             // No Op
+        }
+
+        public void AddIndex(string name, string table, params string[] columns)
+        {
+            //No Op
+        }
+
+        public void AddIndex(string name, string table, bool unique, params string[] columns)
+        {
+            //No Op
         }
 
         public void AddPrimaryKey(string name, string table, params string[] columns)

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using FizzWare.NBuilder;
 using Moq;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
@@ -34,25 +35,30 @@ namespace NzbDrone.Core.Test.Framework
             }
         }
 
-        public static IRepository GetEmptyRepository()
-        {
-            return GetEmptyRepository(false);
-        }
 
-        public static IRepository GetEmptyRepository(bool enableLogging)
+        public static IRepository GetEmptyRepository(bool enableLogging = false, string fileName = "")
         {
             Console.WriteLine("Creating an empty SQLite database");
-            var provider = ProviderFactory.GetProvider("Data Source=" + Guid.NewGuid() + ".db;Version=3;New=True",
-                                                       "System.Data.SQLite");
 
-            var repo = new SimpleRepository(provider, SimpleRepositoryOptions.RunMigrations);
+            if (String.IsNullOrWhiteSpace(fileName))
+            {
+                fileName = Guid.NewGuid() + ".db";
+            }
+
+
+            var provider = Connection.GetDataProvider(Connection.GetConnectionString(fileName));
+            var repo = Connection.CreateSimpleRepository(provider);
             ForceMigration(repo);
+
+            Migrations.Run(Connection.GetConnectionString(fileName), false);
 
             if (enableLogging)
             {
                 provider.Log = new NlogWriter();
             }
-
+            Console.WriteLine("**********************************************************************************");
+            Console.WriteLine("*****************************REPO IS READY****************************************");
+            Console.WriteLine("**********************************************************************************");
             return repo;
         }
 
