@@ -606,7 +606,7 @@
     <Content Include="Content\Images\Indexers\NzbMatrix.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Images\Indexers\NzbsOrg.png">
+    <Content Include="Content\Images\Indexers\Nzbs.org.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Images\Indexers\NzbsRus.png">

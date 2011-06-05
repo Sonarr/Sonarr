@@ -123,20 +123,7 @@ namespace NzbDrone.Web.Controllers
         [GridAction]
         public ActionResult _AjaxSeasonGrid(int seriesId, int seasonNumber)
         {
-            var episodes = _episodeProvider.GetEpisodesBySeason(seriesId, seasonNumber).Select(c => new EpisodeModel
-                                                                                         {
-                                                                                             EpisodeId = c.EpisodeId,
-                                                                                             EpisodeNumber = c.EpisodeNumber,
-                                                                                             SeasonNumber = c.SeasonNumber,
-                                                                                             Title = c.Title,
-                                                                                             Overview = c.Overview,
-                                                                                             AirDate = c.AirDate,
-                                                                                             Path = GetEpisodePath(c.EpisodeFile),
-                                                                                             Status = c.Status.ToString(),
-                                                                                             Quality = c.EpisodeFile == null
-                                                                                                     ? String.Empty
-                                                                                                     : c.EpisodeFile.Quality.ToString()
-                                                                                         });
+            var episodes = GetEpisodeModels(_episodeProvider.GetEpisodesBySeason(seriesId, seasonNumber));
             return View(new GridModel(episodes));
         }
 
@@ -149,16 +136,6 @@ namespace NzbDrone.Web.Controllers
                 Episodes = count.Item1,
                 EpisodeTotal = count.Item2
             }, JsonRequestBehavior.AllowGet);
-        }
-
-        //Local Helpers
-        private string GetEpisodePath(EpisodeFile file)
-        {
-            if (file == null)
-                return String.Empty;
-
-            //Return the path relative to the Series' Folder
-            return file.Path;
         }
 
         public ActionResult SearchForSeries(string seriesName)
@@ -279,6 +256,42 @@ namespace NzbDrone.Web.Controllers
             }
 
             return series;
+        }
+
+        private List<EpisodeModel> GetEpisodeModels(IList<Episode> episodesInDb)
+        {
+            var episodes = new List<EpisodeModel>();
+
+            foreach (var e in episodesInDb)
+            {
+                var episodeFile = e.EpisodeFile;
+                var episodePath = String.Empty;
+                var episodeFileId = 0;
+                
+                if (episodeFile != null)
+                {
+                    episodePath = episodeFile.Path;
+                    episodeFileId = episodeFile.EpisodeFileId;
+                }
+
+                episodes.Add(new EpisodeModel
+                                 {
+                                     EpisodeId = e.EpisodeId,
+                                     EpisodeNumber = e.EpisodeNumber,
+                                     SeasonNumber = e.SeasonNumber,
+                                     Title = e.Title,
+                                     Overview = e.Overview,
+                                     AirDate = e.AirDate,
+                                     Path = episodePath,
+                                     EpisodeFileId = episodeFileId,
+                                     Status = e.Status.ToString(),
+                                     Quality = e.EpisodeFile == null
+                                                   ? String.Empty
+                                                   : e.EpisodeFile.Quality.ToString()
+                                 });
+            }
+
+            return episodes;
         }
 
         private string GetSeasonString(int seasonNumber)
