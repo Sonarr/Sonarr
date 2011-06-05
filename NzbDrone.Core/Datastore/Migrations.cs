@@ -7,7 +7,9 @@ using System.Text;
 using Migrator.Framework;
 using NLog;
 using NzbDrone.Core.Repository;
+using NzbDrone.Core.Repository.Quality;
 using SubSonic.Extensions;
+using SubSonic.Repository;
 using SubSonic.Schema;
 
 namespace NzbDrone.Core.Datastore
@@ -36,12 +38,26 @@ namespace NzbDrone.Core.Datastore
 
                 migrator.MigrateToLastVersion();
 
+                ForceSubSonicMigration(Connection.CreateSimpleRepository(connetionString));
+
                 Logger.Info("Database migration completed");
+
+
             }
             catch (Exception e)
             {
                 Logger.FatalException("An error has occured while migrating database", e);
             }
+        }
+
+        public static void ForceSubSonicMigration(IRepository repository)
+        {
+            repository.Single<Series>(1);
+            repository.Single<Episode>(1);
+            repository.Single<EpisodeFile>(1);
+            repository.Single<QualityProfile>(1);
+            repository.Single<History>(1);
+            repository.Single<IndexerSetting>(1);
         }
 
 
@@ -133,6 +149,8 @@ namespace NzbDrone.Core.Datastore
     {
         public override void Up()
         {
+            Migrations.ForceSubSonicMigration(Connection.CreateSimpleRepository(Connection.MainConnectionString));
+
             var episodesTable = RepositoryProvider.EpisodesSchema;
             //Database.AddIndex("idx_episodes_series_season_episode", episodesTable.Name, true,
             //    episodesTable.GetColumnByPropertyName("SeriesId").Name,

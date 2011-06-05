@@ -57,7 +57,6 @@ namespace NzbDrone.Core
             LogConfiguration.Setup();
 
             Migrations.Run(Connection.MainConnectionString, true);
-            ForceMigration(_kernel.Get<IRepository>());
 
             SetupDefaultQualityProfiles(_kernel.Get<IRepository>()); //Setup the default QualityProfiles on start-up
 
@@ -132,16 +131,6 @@ namespace NzbDrone.Core
             _kernel.Bind<ExternalNotificationProviderBase>().To<XbmcNotificationProvider>().InSingletonScope();
             var notifiers = _kernel.GetAll<ExternalNotificationProviderBase>();
             _kernel.Get<ExternalNotificationProvider>().InitializeNotifiers(notifiers.ToList());
-        }
-
-        private static void ForceMigration(IRepository repository)
-        {
-            repository.All<Series>().Count();
-            repository.All<Episode>().Count();
-            repository.All<EpisodeFile>().Count();
-            repository.All<QualityProfile>().Count();
-            repository.All<History>().Count();
-            repository.All<IndexerSetting>().Count();
         }
 
         /// <summary>
