@@ -117,7 +117,6 @@ namespace NzbDrone.Core.Test
             Assert.AreEqual(quality, result.Quality.QualityType);
         }
 
-
         [Test]
         [TestCase("Adventure.Inc.DVDRip.XviD-OSiTV")]
         public void custome_parser_full_parse(string title)
@@ -143,8 +142,6 @@ namespace NzbDrone.Core.Test
             ExceptionVerification.ExcpectedWarns(1);
         }
 
-
-
         [Test]
         public void downloadFeed()
         {
@@ -161,7 +158,6 @@ namespace NzbDrone.Core.Test
             ExceptionVerification.IgnoreWarns();
         }
 
-
         [Test]
         public void nzbsorg_search_returns_valid_results()
         {
@@ -175,7 +171,6 @@ namespace NzbDrone.Core.Test
                 .SetupGet(c => c.NzbsOrgHash)
                 .Returns("bc8edb4cc49d4ae440775adec5ac001f");
 
-
             mocker.Resolve<HttpProvider>();
 
             var result = mocker.Resolve<NzbsOrg>().FetchEpisode("Simpsons", 21, 23);
@@ -185,7 +180,6 @@ namespace NzbDrone.Core.Test
             result.Should().OnlyContain(r => r.SeasonNumber == 21);
             result.Should().OnlyContain(r => r.EpisodeNumbers.Contains(23));
         }
-
 
         [Test]
         public void newzbin_search_returns_valid_results()
@@ -200,7 +194,6 @@ namespace NzbDrone.Core.Test
                 .SetupGet(c => c.NewzbinPassword)
                 .Returns("smartar39865");
 
-
             mocker.Resolve<HttpProvider>();
 
             var result = mocker.Resolve<Newzbin>().FetchEpisode("Simpsons", 21, 23);
@@ -211,6 +204,28 @@ namespace NzbDrone.Core.Test
             result.Should().OnlyContain(r => r.EpisodeNumbers.Contains(23));
         }
 
+        [Test]
+        public void nzbmatrix_search_returns_valid_results()
+        {
+            var mocker = new AutoMoqer();
+
+            mocker.GetMock<ConfigProvider>()
+                .SetupGet(c => c.NzbMatrixUsername)
+                .Returns("");
+
+            mocker.GetMock<ConfigProvider>()
+                .SetupGet(c => c.NzbMatrixApiKey)
+                .Returns("");
+
+            mocker.Resolve<HttpProvider>();
+
+            var result = mocker.Resolve<NzbMatrix>().FetchEpisode("Simpsons", 21, 23);
+
+            result.Should().NotBeEmpty();
+            result.Should().OnlyContain(r => r.CleanTitle == "simpsons");
+            result.Should().OnlyContain(r => r.SeasonNumber == 21);
+            result.Should().OnlyContain(r => r.EpisodeNumbers.Contains(23));
+        }
 
         [Test]
         public void nzbsorg_multi_word_search_returns_valid_results()
@@ -225,7 +240,6 @@ namespace NzbDrone.Core.Test
                 .SetupGet(c => c.NzbsOrgHash)
                 .Returns("bc8edb4cc49d4ae440775adec5ac001f");
 
-
             mocker.Resolve<HttpProvider>();
 
             var result = mocker.Resolve<NzbsOrg>().FetchEpisode("Blue Bloods", 1, 19);
@@ -235,6 +249,29 @@ namespace NzbDrone.Core.Test
             result.Should().OnlyContain(r => r.SeasonNumber == 1);
             result.Should().OnlyContain(r => r.EpisodeNumbers.Contains(19));
 
+        }
+
+        [Test]
+        public void nzbmatrix_multi_word_search_returns_valid_results()
+        {
+            var mocker = new AutoMoqer();
+
+            mocker.GetMock<ConfigProvider>()
+                .SetupGet(c => c.NzbMatrixUsername)
+                .Returns("");
+
+            mocker.GetMock<ConfigProvider>()
+                .SetupGet(c => c.NzbMatrixApiKey)
+                .Returns("");
+
+            mocker.Resolve<HttpProvider>();
+
+            var result = mocker.Resolve<NzbMatrix>().FetchEpisode("Blue Bloods", 1, 19);
+
+            result.Should().NotBeEmpty();
+            result.Should().OnlyContain(r => r.CleanTitle == "bluebloods");
+            result.Should().OnlyContain(r => r.SeasonNumber == 1);
+            result.Should().OnlyContain(r => r.EpisodeNumbers.Contains(19));
         }
     }
 }
