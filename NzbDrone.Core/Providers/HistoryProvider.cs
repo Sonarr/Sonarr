@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual Quality GetBestQualityInHistory(long episodeId)
         {
-            var history = AllItems().Where(c => c.EpisodeId == episodeId).Select(d => new Quality(d.Quality, d.IsProper)).OrderBy(c => c);
+            var history = AllItems().Where(c => c.EpisodeId == episodeId).ToList().Select(d => new Quality(d.Quality, d.IsProper)).OrderBy(c => c);
 
             return history.FirstOrDefault();
         }
