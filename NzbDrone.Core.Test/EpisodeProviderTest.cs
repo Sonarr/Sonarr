@@ -257,6 +257,92 @@ namespace NzbDrone.Core.Test
 
 
         [Test]
+        public void IsSeasonIgnored_should_return_true_if_all_episodes_ignored()
+        {
+            var repo = MockLib.GetEmptyRepository();
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+            mocker.SetConstant(repo);
+
+            var episodes = Builder<Episode>.CreateListOfSize(4)
+                .WhereAll()
+                .Have(c => c.Ignored = true)
+                .Have(c => c.SeriesId = 10)
+                .Have(c => c.SeasonNumber = 2)
+                .Build();
+
+            repo.AddMany(episodes);
+
+            //Act
+            var result = mocker.Resolve<EpisodeProvider>().IsIgnored(10, 2);
+
+            //Assert
+            result.Should().BeTrue();
+        }
+
+        [Test]
+        public void IsSeasonIgnored_should_return_false_if_none_of_episodes_are_ignored()
+        {
+            var repo = MockLib.GetEmptyRepository();
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+            mocker.SetConstant(repo);
+
+            var episodes = Builder<Episode>.CreateListOfSize(4)
+                .WhereAll()
+                .Have(c => c.Ignored = false)
+                .Have(c => c.SeriesId = 10)
+                .Have(c => c.SeasonNumber = 2)
+                .Build();
+
+            repo.AddMany(episodes);
+
+            //Act
+            var result = mocker.Resolve<EpisodeProvider>().IsIgnored(10, 2);
+
+            //Assert
+            result.Should().BeFalse();
+        }
+
+        [Test]
+        public void IsSeasonIgnored_should_return_false_if_some_of_episodes_are_ignored()
+        {
+            var repo = MockLib.GetEmptyRepository();
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+            mocker.SetConstant(repo);
+
+            var episodes = Builder<Episode>.CreateListOfSize(4)
+                .WhereAll()
+                .Have(c => c.SeriesId = 10)
+                .Have(c => c.SeasonNumber = 2)
+                 .Have(c => c.Ignored = true)
+                .Build();
+
+            episodes[2].Ignored = false;
+
+
+            repo.AddMany(episodes);
+
+            //Act
+            var result = mocker.Resolve<EpisodeProvider>().IsIgnored(10, 2);
+
+            //Assert
+            result.Should().BeFalse();
+        }
+
+        [Test]
+        public void IsSeasonIgnored_should_return_true_if_invalid_series()
+        {
+            var repo = MockLib.GetEmptyRepository();
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+            mocker.SetConstant(repo);
+
+            //Act
+            var result = mocker.Resolve<EpisodeProvider>().IsIgnored(10, 2);
+
+            //Assert
+            result.Should().BeTrue();
+        }
+
+        [Test]
         [Explicit]
         public void Add_daily_show_episodes()
         {
@@ -276,5 +362,7 @@ namespace NzbDrone.Core.Test
             var episodes = episodeProvider.GetEpisodeBySeries(tvDbSeriesId);
             episodes.Should().NotBeEmpty();
         }
+
+
     }
 }
