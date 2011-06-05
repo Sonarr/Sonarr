@@ -19,6 +19,10 @@ namespace NzbDrone.Web.Helpers
                 string.Format("<input type=\"hidden\" name=\"{0}.index\" autocomplete=\"off\" value=\"{1}\" />",
                               collectionName, itemIndex));
 
+            html.ViewContext.Writer.WriteLine(
+                string.Format("<input type=\"hidden\" name=\"{0}_collection\" autocomplete=\"off\" value=\"{1}\" />",
+                              collectionName, itemIndex));
+
             return BeginHtmlFieldPrefixScope(html, string.Format("{0}[{1}]", collectionName, itemIndex));
         }
 

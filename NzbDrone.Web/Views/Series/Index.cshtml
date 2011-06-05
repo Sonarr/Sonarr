@@ -109,8 +109,7 @@
                                      .ClientTemplate("<a href=" +
                                                      Url.Action("Details", "Series", new {seriesId = "<#= SeriesId #>"}) +
                                                      "><#= Title #></a>");
-                                 columns.Bound(o => o.SeasonsCount).Title("Seasons")
-                                     .ClientTemplate("<a href=# onclick=\"openSeasonEditor(<#= SeriesId #>, \'<#= Title #>\'); return false;\"><#= SeasonsCount #></a>");
+                                 columns.Bound(o => o.SeasonsCount).Title("Seasons");
                                  columns.Bound(o => o.QualityProfileName).Title("Quality");
                                  columns.Bound(o => o.Status);
                                  columns.Bound(o => o.AirsDayOfWeek);
@@ -133,6 +132,7 @@
                 .Sortable(sort => sort.OrderBy(order => order.Add(o => o.Title).Ascending()).Enabled(true))
                 .DetailView(detailView => detailView.ClientTemplate("<div style=\"width:95%\"><#= Overview #></div>"))
                 .ClientEvents(clientEvents => { clientEvents.OnEdit("grid_edit");
+                                                clientEvents.OnSave("grid_save");
                                                 clientEvents.OnDataBinding("grid_bind");
                                                 clientEvents.OnDataBound("grid_bound");
                                                 clientEvents.OnRowDataBound("grid_rowBound");
@@ -150,6 +150,33 @@
             .closest(".t-window")
             .data("tWindow")
             .center();
+        
+        var seriesId = args.dataItem.SeriesId;
+        var url = '@Url.Action("SeasonEditor", "Series")';
+        $('#season-editor').load(url, { seriesId: seriesId });
+    }
+    
+    function grid_save(e) {
+        var seasonEditor = e.form.SeasonEditor_collection;
+        var saveSeasonEditUrl = '@Url.Action("SaveSeason", "Series")';
+
+        jQuery.each(seasonEditor, function() {
+            var guid = $(this).val();
+            var prefix = '#SeasonEditor_' + guid + '__';
+            var seriesId = $(prefix + 'SeriesId').val();
+            var seasonNumber = $(prefix + 'SeasonNumber').val();
+            var monitored = $(prefix + 'Monitored').attr('checked');
+            
+            $.ajax({
+                    type: "POST",
+                    url: saveSeasonEditUrl,
+                    data: jQuery.param({ seriesId: seriesId, seasonNumber: seasonNumber, monitored: monitored }),
+                    error: function(req, status, error) {
+                        alert("Sorry! We could save season changes at this time. " + error);
+                    },
+                    success: function(data, textStatus, jqXHR) { }
+            });
+        });
     }
 
     function grid_rowBound(e) {
@@ -187,28 +214,5 @@
                 });
             }
         });
-    }
-
-
-    function openSeasonEditor(seriesId, seriesName) {
-        windowElement = null;
-        windowElement = $.telerik.window.create({
-            title: "<b>Season Editor: " + seriesName + "</b>",
-            contentUrl: '@Url.Action("SeasonEditor", "Series")' + '/?seriesId=' + seriesId,
-            width: 360,
-            height: 400,
-            modal: true,
-            resizable: false,
-            draggable: true,
-            scrollable: true
-        });
-
-        windowElement.data('tWindow').center();
-    }
-
-    function closeSeasonEditor() {
-        $('#form').remove();
-        var window = windowElement.data("tWindow");
-        window.close();
     }
 </script>

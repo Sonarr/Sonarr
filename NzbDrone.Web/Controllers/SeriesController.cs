@@ -90,7 +90,7 @@ namespace NzbDrone.Web.Controllers
 
         [AcceptVerbs(HttpVerbs.Post)]
         [GridAction]
-        public ActionResult _SaveAjaxSeriesEditing(int id, string path, bool monitored, bool seasonFolder, int qualityProfileId, List<SeasonEditModel> seasons)
+        public ActionResult _SaveAjaxSeriesEditing(int id, string path, bool monitored, bool seasonFolder, int qualityProfileId, List<SeasonEditModel> seasonEditor)
         {
             var oldSeries = _seriesProvider.GetSeries(id);
             oldSeries.Path = path;
@@ -182,25 +182,15 @@ namespace NzbDrone.Web.Controllers
             return PartialView("SeriesSearchResults", model);
         }
 
-        [AcceptVerbs(HttpVerbs.Post)]
-        [GridAction]
-        public ActionResult _SaveAjaxEditing(string id)
-        {
-            return RedirectToAction("UnMapped");
-        }
-
         [HttpPost]
-        public ActionResult SaveSeasons(List<SeasonEditModel> seasons)
+        public JsonResult SaveSeason(int seriesId, int seasonNumber, bool monitored)
         {
-            foreach (var season in seasons)
+            if (_episodeProvider.IsIgnored(seriesId, seasonNumber) == monitored)
             {
-                if (_episodeProvider.IsIgnored(season.SeriesId, season.SeasonNumber) != !season.Monitored)
-                {
-                    _episodeProvider.SetSeasonIgnore(season.SeriesId, season.SeasonNumber, !season.Monitored);
-                }
+                _episodeProvider.SetSeasonIgnore(seriesId, seasonNumber, !monitored);
             }
 
-            return Content("Saved");
+            return new JsonResult { Data = "ok" };
         }
 
         public ActionResult Details(int seriesId)
@@ -284,6 +274,7 @@ namespace NzbDrone.Web.Controllers
                                    QualityProfileName = s.QualityProfile.Name,
                                    SeasonFolder = s.SeasonFolder,
                                    Status = s.Status,
+                                   SeasonsCount = _episodeProvider.GetSeasons(s.SeriesId).Where(n => n != 0).Count()
                                });
             }
 

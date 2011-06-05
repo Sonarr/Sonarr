@@ -2,14 +2,18 @@
 @using NzbDrone.Web.Models;
 @model SeasonEditModel
 
-@using (Html.BeginCollectionItem("seasons"))
+@using (Html.BeginCollectionItem("SeasonEditor"))
 {
-    <fieldset style="display: inline; border-color: lightgrey; width: 26%; margin-bottom: 2px; padding-bottom: 1px; padding-top: 1px;">
+    var idClean = ViewData.TemplateInfo.HtmlFieldPrefix.Replace('[', '_').Replace(']', '_');
+    
+    <fieldset style="display: inline; border-color: lightgrey; width: 20%; margin-bottom: 2px; margin-right: 0px; margin-left: 0px; padding-bottom: 1px; padding-top: 1px;">
+
         @Html.DisplayFor(m => m.SeasonString)
         <span style="float: right;">@Html.CheckBoxFor(m => m.Monitored, new { @class = "chkbox" })</span>
 
+        @Html.HiddenFor(m => m.SeriesId)
         @Html.HiddenFor(m => m.SeasonNumber)
-        @Html.HiddenFor(m => m.SeasonNumber)
+        @Html.Hidden(idClean, new { @class = "cleanId",  })
     </fieldset>
 }
 
