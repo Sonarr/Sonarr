@@ -28,25 +28,30 @@ namespace NzbDrone.Core.Helpers
                                                                                     {
                                                                                         Id = 0,
                                                                                         Name = "1x05",
-                                                                                        Pattern = "%sx%0e"
+                                                                                        Pattern = "%sx%0e",
+                                                                                        EpisodeSeparator = "x"
+
                                                                                     },
                                                                                 new EpisodeSortingType
                                                                                     {
                                                                                         Id = 1,
                                                                                         Name = "01x05",
-                                                                                        Pattern = "%0sx%0e"
+                                                                                        Pattern = "%0sx%0e",
+                                                                                        EpisodeSeparator = "x"
                                                                                     },
                                                                                 new EpisodeSortingType
                                                                                     {
                                                                                         Id = 2,
                                                                                         Name = "S01E05",
-                                                                                        Pattern = "S%0sE%0e"
+                                                                                        Pattern = "S%0sE%0e",
+                                                                                        EpisodeSeparator = "E"
                                                                                     },
                                                                                 new EpisodeSortingType
                                                                                     {
                                                                                         Id = 3,
                                                                                         Name = "s01e05",
-                                                                                        Pattern = "s%0se%0e"
+                                                                                        Pattern = "s%0se%0e",
+                                                                                        EpisodeSeparator = "e"
                                                                                     }
                                                                             };
 
@@ -56,25 +61,25 @@ namespace NzbDrone.Core.Helpers
                                                                                           {
                                                                                               Id = 0,
                                                                                               Name = "Extend",
-                                                                                              Pattern = "S01E05-06"
+                                                                                              Pattern = "-%0e"
                                                                                           },
                                                                                       new EpisodeSortingType
                                                                                           {
                                                                                               Id = 1,
                                                                                               Name = "Duplicate",
-                                                                                              Pattern = "S01E05 - S01E06"
+                                                                                              Pattern = "%p%0s%x%0e"
                                                                                           },
                                                                                       new EpisodeSortingType
                                                                                           {
                                                                                               Id = 2,
                                                                                               Name = "Repeat",
-                                                                                              Pattern = "S01E05E06"
+                                                                                              Pattern = "%x%0e"
                                                                                           },
                                                                                         new EpisodeSortingType
                                                                                           {
                                                                                               Id = 3,
                                                                                               Name = "Scene",
-                                                                                              Pattern = "S01E05-E06"
+                                                                                              Pattern = "-%x%0e"
                                                                                           }
                                                                                   };
 
