@@ -42,6 +42,8 @@
         panelItem.Add()
             .Text("Root Directories")
             .ImageUrl("~/Content/Images/VideoFolder.png")
+            .Selected((bool)ViewData["ShowRootDirs"])
+            .Expanded((bool)ViewData["ShowRootDirs"])
             .Content(@<text>
                         <div style="padding-top: 10px;">
                             <div style="padding-left: 7px; margin-bottom: 5px;">

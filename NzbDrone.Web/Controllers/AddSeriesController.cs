@@ -79,6 +79,11 @@ namespace NzbDrone.Web.Controllers
             var defaultQuality = Convert.ToInt32(_configProvider.DefaultQualityProfile);
             var selectList = new SelectList(profiles, "QualityProfileId", "Name", defaultQuality);
             ViewData["qualities"] = selectList;
+            ViewData["ShowRootDirs"] = false;
+
+            //There are no RootDirs Show the RootDirs Panel
+            if (rootDirs.Count == 0)
+                ViewData["ShowRootDirs"] = true;
 
             return View(rootDirs);
         }
