@@ -90,6 +90,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RenameProviderTest.cs" />
     <Compile Include="dbBenchmark.cs" />
     <Compile Include="Framework\TestBase.cs" />
     <Compile Include="InventoryProvider_IsMonitoredTest.cs" />

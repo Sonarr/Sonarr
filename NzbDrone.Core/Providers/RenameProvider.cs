@@ -25,9 +25,9 @@ namespace NzbDrone.Core.Providers
 
         private Thread _renameThread;
 
-        public RenameProvider(SeriesProvider seriesProvider, 
-                              EpisodeProvider episodeProvider, MediaFileProvider mediaFileProvider,
-                              DiskProvider diskProvider, ConfigProvider configProvider)
+        public RenameProvider(SeriesProvider seriesProvider,EpisodeProvider episodeProvider,
+                                MediaFileProvider mediaFileProvider, DiskProvider diskProvider,
+                                ConfigProvider configProvider)
         {
             _seriesProvider = seriesProvider;
             _episodeProvider = episodeProvider;
@@ -184,6 +184,59 @@ namespace NzbDrone.Core.Providers
                 Logger.DebugException(ex.Message, ex);
                 Logger.Warn("Unable to Rename Episode: {0}", Path.GetFileName(erm.EpisodeFile.Path));
             }
+        }
+
+        public string GetNewFilename(int episodeFileId)
+        {
+            //Get all episodes attached to the episodeFileId
+            //Get the users preferred naming convention for episode
+
+            var episodeFile = _mediaFileProvider.GetEpisodeFile(episodeFileId);
+            var episodes = _episodeProvider.EpisodesByFileId(episodeFileId);
+            var series = _seriesProvider.GetSeries(episodeFile.SeriesId);
+
+            var separatorStyle = EpisodeSortingHelper.GetSeparatorStyle(_configProvider.SeparatorStyle);
+            var numberStyle = EpisodeSortingHelper.GetNumberStyle(_configProvider.NumberStyle);
+            var useSeriesName = _configProvider.SeriesName;
+            var useEpisodeName = _configProvider.EpisodeName;
+            var replaceSpaces = _configProvider.ReplaceSpaces;
+            var appendQuality = _configProvider.AppendQuality;
+
+            if (episodes.Count == 1)
+            {
+                var title = String.Empty;
+
+                if (useSeriesName)
+                {
+                    title += series.Title;
+                    title += separatorStyle.Pattern;
+                }
+
+                var number = numberStyle.Pattern.Replace("%s", String.Format("{0}", episodes[0].SeasonNumber))
+                                .Replace("%0s", String.Format("{0:00}", episodes[0].SeasonNumber))
+                                .Replace("%0e", String.Format("{0:00}", episodes[0].EpisodeNumber));
+
+                title += number;
+                
+                if (useEpisodeName)
+                {
+                    title += separatorStyle.Pattern;
+                    title += episodes[0].Title;
+                }
+
+                if (appendQuality)
+                    title += String.Format(" [{0}]", episodeFile.Quality);
+
+                if (replaceSpaces)
+                    title = title.Replace(' ', '.');
+
+                Logger.Debug("New File Name is: {0}", title);
+                return title;
+            }
+
+            var multiEpisodeStyle = EpisodeSortingHelper.GetMultiEpisodeStyle(_configProvider.MultiEpisodeStyle);
+
+            return String.Empty;
         }
     }
 }
