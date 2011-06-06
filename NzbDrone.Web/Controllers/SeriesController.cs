@@ -207,32 +207,6 @@ namespace NzbDrone.Web.Controllers
             return RedirectToAction("Details", new { seriesId });
         }
 
-        public ActionResult RenameAll()
-        {
-            _renameProvider.RenameAll();
-            return RedirectToAction("Index");
-        }
-
-        public ActionResult RenameSeries(int seriesId)
-        {
-            _renameProvider.RenameSeries(seriesId);
-            return RedirectToAction("Details", new { seriesId });
-        }
-
-        public ActionResult RenameSeason(int seasonId)
-        {
-            //Todo: Stay of Series Detail... AJAX?
-            _renameProvider.RenameSeason(seasonId);
-            return RedirectToAction("Index");
-        }
-
-        public ActionResult RenameEpisode(int episodeId)
-        {
-            //Todo: Stay of Series Detail... AJAX?
-            _renameProvider.RenameEpisode(episodeId);
-            return RedirectToAction("Index");
-        }
-
         private List<SeriesModel> GetSeriesModels(List<Series> seriesInDb)
         {
             var series = new List<SeriesModel>();

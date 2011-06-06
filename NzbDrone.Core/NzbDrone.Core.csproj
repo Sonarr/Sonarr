@@ -184,6 +184,7 @@
     <Compile Include="Providers\Indexer\SyndicationFeedXmlReader.cs" />
     <Compile Include="Providers\AutoConfigureProvider.cs" />
     <Compile Include="Providers\Indexer\NzbMatrix.cs" />
+    <Compile Include="Providers\Jobs\RenameEpisodeJob.cs" />
     <Compile Include="Providers\Jobs\EpisodeSearchJob.cs" />
     <Compile Include="Providers\Jobs\DeleteSeriesJob.cs" />
     <Compile Include="Providers\Jobs\DiskScanJob.cs" />

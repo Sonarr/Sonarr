@@ -27,6 +27,11 @@ namespace NzbDrone.Web.Controllers
             return new JsonResult { Data = "ok" };
         }
 
+        public JsonResult Rename(int episodeFileId)
+        {
+            _jobProvider.QueueJob(typeof(RenameEpisodeJob), episodeFileId);
 
+            return new JsonResult { Data = "ok" };
+        }
     }
 }

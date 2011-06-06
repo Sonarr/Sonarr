@@ -34,11 +34,8 @@ namespace NzbDrone.Core.Test
             fakeConfig.SetupGet(c => c.NumberStyle).Returns(2);
             fakeConfig.SetupGet(c => c.ReplaceSpaces).Returns(false);
 
-            var series = Builder<Series>.CreateNew().With(s => s.Title = "South Park").Build();
-
             var episodeFile = Builder<EpisodeFile>.CreateNew()
                                 .With(e => e.EpisodeFileId = 12345)
-                                .With(e => e.SeriesId = series.SeriesId)
                                 .With(e => e.Quality = QualityTypes.HDTV)
                                 .Build();
 
@@ -47,17 +44,13 @@ namespace NzbDrone.Core.Test
                             .With(e => e.Title = "City Sushi")
                             .With(e => e.SeasonNumber = 15)
                             .With(e => e.EpisodeNumber = 6)
-                            .With(e => e.SeriesId = series.SeriesId)
                             .Build();
 
             var fakeEpisodeProvider = mocker.GetMock<EpisodeProvider>();
             fakeEpisodeProvider.Setup(m => m.EpisodesByFileId(12345)).Returns(new List<Episode> {episode});
 
-            var fakeSeriesProvider = mocker.GetMock<SeriesProvider>();
-            fakeSeriesProvider.Setup(m => m.GetSeries(series.SeriesId)).Returns(series);
-
             //Act
-            string result = mocker.Resolve<RenameProvider>().GetNewFilename(episodeFile);
+            string result = mocker.Resolve<RenameProvider>().GetNewFilename(episodeFile, "South Park");
 
             //Assert
             Assert.AreEqual("South Park - S15E06 - City Sushi [HDTV]", result);
@@ -77,11 +70,8 @@ namespace NzbDrone.Core.Test
             fakeConfig.SetupGet(c => c.NumberStyle).Returns(0);
             fakeConfig.SetupGet(c => c.ReplaceSpaces).Returns(false);
 
-            var series = Builder<Series>.CreateNew().With(s => s.Title = "South Park").Build();
-
             var episodeFile = Builder<EpisodeFile>.CreateNew()
                                 .With(e => e.EpisodeFileId = 12345)
-                                .With(e => e.SeriesId = series.SeriesId)
                                 .With(e => e.Quality = QualityTypes.HDTV)
                                 .Build();
 
@@ -90,17 +80,13 @@ namespace NzbDrone.Core.Test
                             .With(e => e.Title = "City Sushi")
                             .With(e => e.SeasonNumber = 15)
                             .With(e => e.EpisodeNumber = 6)
-                            .With(e => e.SeriesId = series.SeriesId)
                             .Build();
 
             var fakeEpisodeProvider = mocker.GetMock<EpisodeProvider>();
             fakeEpisodeProvider.Setup(m => m.EpisodesByFileId(12345)).Returns(new List<Episode> { episode });
 
-            var fakeSeriesProvider = mocker.GetMock<SeriesProvider>();
-            fakeSeriesProvider.Setup(m => m.GetSeries(series.SeriesId)).Returns(series);
-
             //Act
-            string result = mocker.Resolve<RenameProvider>().GetNewFilename(episodeFile);
+            string result = mocker.Resolve<RenameProvider>().GetNewFilename(episodeFile, "South Park");
 
             //Assert
             Assert.AreEqual("15x06 - City Sushi [HDTV]", result);
@@ -120,11 +106,8 @@ namespace NzbDrone.Core.Test
             fakeConfig.SetupGet(c => c.NumberStyle).Returns(1);
             fakeConfig.SetupGet(c => c.ReplaceSpaces).Returns(false);
 
-            var series = Builder<Series>.CreateNew().With(s => s.Title = "South Park").Build();
-
             var episodeFile = Builder<EpisodeFile>.CreateNew()
                                 .With(e => e.EpisodeFileId = 12345)
-                                .With(e => e.SeriesId = series.SeriesId)
                                 .With(e => e.Quality = QualityTypes.HDTV)
                                 .Build();
 
@@ -133,17 +116,13 @@ namespace NzbDrone.Core.Test
                             .With(e => e.Title = "City Sushi")
                             .With(e => e.SeasonNumber = 5)
                             .With(e => e.EpisodeNumber = 6)
-                            .With(e => e.SeriesId = series.SeriesId)
                             .Build();
 
             var fakeEpisodeProvider = mocker.GetMock<EpisodeProvider>();
             fakeEpisodeProvider.Setup(m => m.EpisodesByFileId(12345)).Returns(new List<Episode> { episode });
 
-            var fakeSeriesProvider = mocker.GetMock<SeriesProvider>();
-            fakeSeriesProvider.Setup(m => m.GetSeries(series.SeriesId)).Returns(series);
-
             //Act
-            string result = mocker.Resolve<RenameProvider>().GetNewFilename(episodeFile);
+            string result = mocker.Resolve<RenameProvider>().GetNewFilename(episodeFile, "South Park");
 
             //Assert
             Assert.AreEqual("South Park 05x06 [HDTV]", result);
@@ -163,11 +142,8 @@ namespace NzbDrone.Core.Test
             fakeConfig.SetupGet(c => c.NumberStyle).Returns(3);
             fakeConfig.SetupGet(c => c.ReplaceSpaces).Returns(false);
 
-            var series = Builder<Series>.CreateNew().With(s => s.Title = "South Park").Build();
-
             var episodeFile = Builder<EpisodeFile>.CreateNew()
                                 .With(e => e.EpisodeFileId = 12345)
-                                .With(e => e.SeriesId = series.SeriesId)
                                 .With(e => e.Quality = QualityTypes.HDTV)
                                 .Build();
 
@@ -176,17 +152,13 @@ namespace NzbDrone.Core.Test
                             .With(e => e.Title = "City Sushi")
                             .With(e => e.SeasonNumber = 5)
                             .With(e => e.EpisodeNumber = 6)
-                            .With(e => e.SeriesId = series.SeriesId)
                             .Build();
 
             var fakeEpisodeProvider = mocker.GetMock<EpisodeProvider>();
             fakeEpisodeProvider.Setup(m => m.EpisodesByFileId(12345)).Returns(new List<Episode> { episode });
 
-            var fakeSeriesProvider = mocker.GetMock<SeriesProvider>();
-            fakeSeriesProvider.Setup(m => m.GetSeries(series.SeriesId)).Returns(series);
-
             //Act
-            string result = mocker.Resolve<RenameProvider>().GetNewFilename(episodeFile);
+            string result = mocker.Resolve<RenameProvider>().GetNewFilename(episodeFile, "South Park");
 
             //Assert
             Assert.AreEqual("South Park s05e06", result);
@@ -206,11 +178,8 @@ namespace NzbDrone.Core.Test
             fakeConfig.SetupGet(c => c.NumberStyle).Returns(3);
             fakeConfig.SetupGet(c => c.ReplaceSpaces).Returns(true);
 
-            var series = Builder<Series>.CreateNew().With(s => s.Title = "South Park").Build();
-
             var episodeFile = Builder<EpisodeFile>.CreateNew()
                                 .With(e => e.EpisodeFileId = 12345)
-                                .With(e => e.SeriesId = series.SeriesId)
                                 .With(e => e.Quality = QualityTypes.HDTV)
                                 .Build();
 
@@ -219,17 +188,13 @@ namespace NzbDrone.Core.Test
                             .With(e => e.Title = "City Sushi")
                             .With(e => e.SeasonNumber = 5)
                             .With(e => e.EpisodeNumber = 6)
-                            .With(e => e.SeriesId = series.SeriesId)
                             .Build();
 
             var fakeEpisodeProvider = mocker.GetMock<EpisodeProvider>();
             fakeEpisodeProvider.Setup(m => m.EpisodesByFileId(12345)).Returns(new List<Episode> { episode });
 
-            var fakeSeriesProvider = mocker.GetMock<SeriesProvider>();
-            fakeSeriesProvider.Setup(m => m.GetSeries(series.SeriesId)).Returns(series);
-
             //Act
-            string result = mocker.Resolve<RenameProvider>().GetNewFilename(episodeFile);
+            string result = mocker.Resolve<RenameProvider>().GetNewFilename(episodeFile, "South Park");
 
             //Assert
             Assert.AreEqual("South.Park.s05e06.City.Sushi", result);
@@ -249,11 +214,8 @@ namespace NzbDrone.Core.Test
             fakeConfig.SetupGet(c => c.NumberStyle).Returns(3);
             fakeConfig.SetupGet(c => c.ReplaceSpaces).Returns(true);
 
-            var series = Builder<Series>.CreateNew().With(s => s.Title = "South Park").Build();
-
             var episodeFile = Builder<EpisodeFile>.CreateNew()
                                 .With(e => e.EpisodeFileId = 12345)
-                                .With(e => e.SeriesId = series.SeriesId)
                                 .With(e => e.Quality = QualityTypes.HDTV)
                                 .Build();
 
@@ -262,17 +224,15 @@ namespace NzbDrone.Core.Test
                             .With(e => e.Title = "City Sushi")
                             .With(e => e.SeasonNumber = 5)
                             .With(e => e.EpisodeNumber = 6)
-                            .With(e => e.SeriesId = series.SeriesId)
                             .Build();
 
             var fakeEpisodeProvider = mocker.GetMock<EpisodeProvider>();
             fakeEpisodeProvider.Setup(m => m.EpisodesByFileId(12345)).Returns(new List<Episode> { episode });
 
             var fakeSeriesProvider = mocker.GetMock<SeriesProvider>();
-            fakeSeriesProvider.Setup(m => m.GetSeries(series.SeriesId)).Returns(series);
 
             //Act
-            string result = mocker.Resolve<RenameProvider>().GetNewFilename(episodeFile);
+            string result = mocker.Resolve<RenameProvider>().GetNewFilename(episodeFile, "South Park");
 
             //Assert
             Assert.AreEqual("South.Park.-.s05e06.-.City.Sushi.[HDTV]", result);
@@ -292,11 +252,8 @@ namespace NzbDrone.Core.Test
             fakeConfig.SetupGet(c => c.NumberStyle).Returns(2);
             fakeConfig.SetupGet(c => c.ReplaceSpaces).Returns(false);
 
-            var series = Builder<Series>.CreateNew().With(s => s.Title = "South Park").Build();
-
             var episodeFile = Builder<EpisodeFile>.CreateNew()
                                 .With(e => e.EpisodeFileId = 12345)
-                                .With(e => e.SeriesId = series.SeriesId)
                                 .With(e => e.Quality = QualityTypes.HDTV)
                                 .Build();
 
@@ -305,17 +262,13 @@ namespace NzbDrone.Core.Test
                             .With(e => e.Title = "City Sushi")
                             .With(e => e.SeasonNumber = 15)
                             .With(e => e.EpisodeNumber = 6)
-                            .With(e => e.SeriesId = series.SeriesId)
                             .Build();
 
             var fakeEpisodeProvider = mocker.GetMock<EpisodeProvider>();
             fakeEpisodeProvider.Setup(m => m.EpisodesByFileId(12345)).Returns(new List<Episode> { episode });
 
-            var fakeSeriesProvider = mocker.GetMock<SeriesProvider>();
-            fakeSeriesProvider.Setup(m => m.GetSeries(series.SeriesId)).Returns(series);
-
             //Act
-            string result = mocker.Resolve<RenameProvider>().GetNewFilename(episodeFile);
+            string result = mocker.Resolve<RenameProvider>().GetNewFilename(episodeFile, "South Park");
 
             //Assert
             Assert.AreEqual("S15E06", result);
@@ -336,11 +289,8 @@ namespace NzbDrone.Core.Test
             fakeConfig.SetupGet(c => c.ReplaceSpaces).Returns(false);
             fakeConfig.SetupGet(c => c.MultiEpisodeStyle).Returns(3);
 
-            var series = Builder<Series>.CreateNew().With(s => s.Title = "The Mentalist").Build();
-
             var episodeFile = Builder<EpisodeFile>.CreateNew()
                                 .With(e => e.EpisodeFileId = 12345)
-                                .With(e => e.SeriesId = series.SeriesId)
                                 .With(e => e.Quality = QualityTypes.HDTV)
                                 .Build();
 
@@ -349,7 +299,6 @@ namespace NzbDrone.Core.Test
                             .With(e => e.Title = "Strawberries and Cream (1)")
                             .With(e => e.SeasonNumber = 3)
                             .With(e => e.EpisodeNumber = 23)
-                            .With(e => e.SeriesId = series.SeriesId)
                             .Build();
 
             var episodeTwo = Builder<Episode>.CreateNew()
@@ -357,17 +306,13 @@ namespace NzbDrone.Core.Test
                             .With(e => e.Title = "Strawberries and Cream (2)")
                             .With(e => e.SeasonNumber = 3)
                             .With(e => e.EpisodeNumber = 24)
-                            .With(e => e.SeriesId = series.SeriesId)
                             .Build();
 
             var fakeEpisodeProvider = mocker.GetMock<EpisodeProvider>();
             fakeEpisodeProvider.Setup(m => m.EpisodesByFileId(12345)).Returns(new List<Episode> { episodeOne, episodeTwo });
 
-            var fakeSeriesProvider = mocker.GetMock<SeriesProvider>();
-            fakeSeriesProvider.Setup(m => m.GetSeries(series.SeriesId)).Returns(series);
-
             //Act
-            string result = mocker.Resolve<RenameProvider>().GetNewFilename(episodeFile);
+            string result = mocker.Resolve<RenameProvider>().GetNewFilename(episodeFile, "The Mentalist");
 
             //Assert
             Assert.AreEqual("The Mentalist - S03E23-E24 - Strawberries and Cream (1) + Strawberries and Cream (2) [HDTV]", result);
@@ -388,11 +333,8 @@ namespace NzbDrone.Core.Test
             fakeConfig.SetupGet(c => c.ReplaceSpaces).Returns(false);
             fakeConfig.SetupGet(c => c.MultiEpisodeStyle).Returns(2);
 
-            var series = Builder<Series>.CreateNew().With(s => s.Title = "The Mentalist").Build();
-
             var episodeFile = Builder<EpisodeFile>.CreateNew()
                                 .With(e => e.EpisodeFileId = 12345)
-                                .With(e => e.SeriesId = series.SeriesId)
                                 .With(e => e.Quality = QualityTypes.HDTV)
                                 .Build();
 
@@ -401,7 +343,6 @@ namespace NzbDrone.Core.Test
                             .With(e => e.Title = "Strawberries and Cream (1)")
                             .With(e => e.SeasonNumber = 3)
                             .With(e => e.EpisodeNumber = 23)
-                            .With(e => e.SeriesId = series.SeriesId)
                             .Build();
 
             var episodeTwo = Builder<Episode>.CreateNew()
@@ -409,17 +350,13 @@ namespace NzbDrone.Core.Test
                             .With(e => e.Title = "Strawberries and Cream (2)")
                             .With(e => e.SeasonNumber = 3)
                             .With(e => e.EpisodeNumber = 24)
-                            .With(e => e.SeriesId = series.SeriesId)
                             .Build();
 
             var fakeEpisodeProvider = mocker.GetMock<EpisodeProvider>();
             fakeEpisodeProvider.Setup(m => m.EpisodesByFileId(12345)).Returns(new List<Episode> { episodeOne, episodeTwo });
 
-            var fakeSeriesProvider = mocker.GetMock<SeriesProvider>();
-            fakeSeriesProvider.Setup(m => m.GetSeries(series.SeriesId)).Returns(series);
-
             //Act
-            string result = mocker.Resolve<RenameProvider>().GetNewFilename(episodeFile);
+            string result = mocker.Resolve<RenameProvider>().GetNewFilename(episodeFile, "The Mentalist");
 
             //Assert
             Assert.AreEqual("3x23x24 - Strawberries and Cream (1) + Strawberries and Cream (2) [HDTV]", result);
@@ -440,11 +377,8 @@ namespace NzbDrone.Core.Test
             fakeConfig.SetupGet(c => c.ReplaceSpaces).Returns(false);
             fakeConfig.SetupGet(c => c.MultiEpisodeStyle).Returns(2);
 
-            var series = Builder<Series>.CreateNew().With(s => s.Title = "The Mentalist").Build();
-
             var episodeFile = Builder<EpisodeFile>.CreateNew()
                                 .With(e => e.EpisodeFileId = 12345)
-                                .With(e => e.SeriesId = series.SeriesId)
                                 .With(e => e.Quality = QualityTypes.HDTV)
                                 .Build();
 
@@ -453,7 +387,6 @@ namespace NzbDrone.Core.Test
                             .With(e => e.Title = "Strawberries and Cream (1)")
                             .With(e => e.SeasonNumber = 3)
                             .With(e => e.EpisodeNumber = 23)
-                            .With(e => e.SeriesId = series.SeriesId)
                             .Build();
 
             var episodeTwo = Builder<Episode>.CreateNew()
@@ -461,17 +394,13 @@ namespace NzbDrone.Core.Test
                             .With(e => e.Title = "Strawberries and Cream (2)")
                             .With(e => e.SeasonNumber = 3)
                             .With(e => e.EpisodeNumber = 24)
-                            .With(e => e.SeriesId = series.SeriesId)
                             .Build();
 
             var fakeEpisodeProvider = mocker.GetMock<EpisodeProvider>();
             fakeEpisodeProvider.Setup(m => m.EpisodesByFileId(12345)).Returns(new List<Episode> { episodeOne, episodeTwo });
 
-            var fakeSeriesProvider = mocker.GetMock<SeriesProvider>();
-            fakeSeriesProvider.Setup(m => m.GetSeries(series.SeriesId)).Returns(series);
-
             //Act
-            string result = mocker.Resolve<RenameProvider>().GetNewFilename(episodeFile);
+            string result = mocker.Resolve<RenameProvider>().GetNewFilename(episodeFile, "The Mentalist");
 
             //Assert
             Assert.AreEqual("3x23x24 Strawberries and Cream (1) + Strawberries and Cream (2) [HDTV]", result);
@@ -492,11 +421,8 @@ namespace NzbDrone.Core.Test
             fakeConfig.SetupGet(c => c.ReplaceSpaces).Returns(true);
             fakeConfig.SetupGet(c => c.MultiEpisodeStyle).Returns(1);
 
-            var series = Builder<Series>.CreateNew().With(s => s.Title = "The Mentalist").Build();
-
             var episodeFile = Builder<EpisodeFile>.CreateNew()
                                 .With(e => e.EpisodeFileId = 12345)
-                                .With(e => e.SeriesId = series.SeriesId)
                                 .With(e => e.Quality = QualityTypes.HDTV)
                                 .Build();
 
@@ -505,7 +431,6 @@ namespace NzbDrone.Core.Test
                             .With(e => e.Title = "Strawberries and Cream (1)")
                             .With(e => e.SeasonNumber = 3)
                             .With(e => e.EpisodeNumber = 23)
-                            .With(e => e.SeriesId = series.SeriesId)
                             .Build();
 
             var episodeTwo = Builder<Episode>.CreateNew()
@@ -513,17 +438,13 @@ namespace NzbDrone.Core.Test
                             .With(e => e.Title = "Strawberries and Cream (2)")
                             .With(e => e.SeasonNumber = 3)
                             .With(e => e.EpisodeNumber = 24)
-                            .With(e => e.SeriesId = series.SeriesId)
                             .Build();
 
             var fakeEpisodeProvider = mocker.GetMock<EpisodeProvider>();
             fakeEpisodeProvider.Setup(m => m.EpisodesByFileId(12345)).Returns(new List<Episode> { episodeOne, episodeTwo });
 
-            var fakeSeriesProvider = mocker.GetMock<SeriesProvider>();
-            fakeSeriesProvider.Setup(m => m.GetSeries(series.SeriesId)).Returns(series);
-
             //Act
-            string result = mocker.Resolve<RenameProvider>().GetNewFilename(episodeFile);
+            string result = mocker.Resolve<RenameProvider>().GetNewFilename(episodeFile, "The Mentalist");
 
             //Assert
             Assert.AreEqual("The.Mentalist.s03e23.s03e24.Strawberries.and.Cream.(1).+.Strawberries.and.Cream.(2)", result);
@@ -544,11 +465,9 @@ namespace NzbDrone.Core.Test
             fakeConfig.SetupGet(c => c.ReplaceSpaces).Returns(true);
             fakeConfig.SetupGet(c => c.MultiEpisodeStyle).Returns(0);
 
-            var series = Builder<Series>.CreateNew().With(s => s.Title = "The Mentalist").Build();
 
             var episodeFile = Builder<EpisodeFile>.CreateNew()
                                 .With(e => e.EpisodeFileId = 12345)
-                                .With(e => e.SeriesId = series.SeriesId)
                                 .With(e => e.Quality = QualityTypes.HDTV)
                                 .Build();
 
@@ -557,7 +476,6 @@ namespace NzbDrone.Core.Test
                             .With(e => e.Title = "Strawberries and Cream (1)")
                             .With(e => e.SeasonNumber = 3)
                             .With(e => e.EpisodeNumber = 23)
-                            .With(e => e.SeriesId = series.SeriesId)
                             .Build();
 
             var episodeTwo = Builder<Episode>.CreateNew()
@@ -565,17 +483,13 @@ namespace NzbDrone.Core.Test
                             .With(e => e.Title = "Strawberries and Cream (2)")
                             .With(e => e.SeasonNumber = 3)
                             .With(e => e.EpisodeNumber = 24)
-                            .With(e => e.SeriesId = series.SeriesId)
                             .Build();
 
             var fakeEpisodeProvider = mocker.GetMock<EpisodeProvider>();
             fakeEpisodeProvider.Setup(m => m.EpisodesByFileId(12345)).Returns(new List<Episode> { episodeOne, episodeTwo });
 
-            var fakeSeriesProvider = mocker.GetMock<SeriesProvider>();
-            fakeSeriesProvider.Setup(m => m.GetSeries(series.SeriesId)).Returns(series);
-
             //Act
-            string result = mocker.Resolve<RenameProvider>().GetNewFilename(episodeFile);
+            string result = mocker.Resolve<RenameProvider>().GetNewFilename(episodeFile, "The Mentalist");
 
             //Assert
             Assert.AreEqual("The.Mentalist.-.S03E23-24", result);
@@ -596,11 +510,8 @@ namespace NzbDrone.Core.Test
             fakeConfig.SetupGet(c => c.ReplaceSpaces).Returns(true);
             fakeConfig.SetupGet(c => c.MultiEpisodeStyle).Returns(2);
 
-            var series = Builder<Series>.CreateNew().With(s => s.Title = "The Mentalist").Build();
-
             var episodeFile = Builder<EpisodeFile>.CreateNew()
                                 .With(e => e.EpisodeFileId = 12345)
-                                .With(e => e.SeriesId = series.SeriesId)
                                 .With(e => e.Quality = QualityTypes.HDTV)
                                 .Build();
 
@@ -609,7 +520,6 @@ namespace NzbDrone.Core.Test
                             .With(e => e.Title = "Strawberries and Cream (1)")
                             .With(e => e.SeasonNumber = 3)
                             .With(e => e.EpisodeNumber = 23)
-                            .With(e => e.SeriesId = series.SeriesId)
                             .Build();
 
             var episodeTwo = Builder<Episode>.CreateNew()
@@ -617,17 +527,13 @@ namespace NzbDrone.Core.Test
                             .With(e => e.Title = "Strawberries and Cream (2)")
                             .With(e => e.SeasonNumber = 3)
                             .With(e => e.EpisodeNumber = 24)
-                            .With(e => e.SeriesId = series.SeriesId)
                             .Build();
 
             var fakeEpisodeProvider = mocker.GetMock<EpisodeProvider>();
             fakeEpisodeProvider.Setup(m => m.EpisodesByFileId(12345)).Returns(new List<Episode> { episodeOne, episodeTwo });
 
-            var fakeSeriesProvider = mocker.GetMock<SeriesProvider>();
-            fakeSeriesProvider.Setup(m => m.GetSeries(series.SeriesId)).Returns(series);
-
             //Act
-            string result = mocker.Resolve<RenameProvider>().GetNewFilename(episodeFile);
+            string result = mocker.Resolve<RenameProvider>().GetNewFilename(episodeFile, "The Mentalist");
 
             //Assert
             Assert.AreEqual("3x23x24", result);
