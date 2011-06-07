@@ -51,5 +51,10 @@ namespace NzbDrone.Core.Providers.Core
         {
             return Path.GetExtension(path);
         }
+
+        public virtual void DeleteFolder(string path, bool recursive)
+        {
+            Directory.Delete(path, recursive);
+        }
     }
 }

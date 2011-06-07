@@ -226,17 +226,12 @@ namespace NzbDrone.Core.Providers
         public virtual List<EpisodeFile> ImportNewFiles(string path, Series series)
         {
             var result = new List<EpisodeFile>();
-            var files = GetMediaFileList(path);
+
+            //Get all the files except those that are considered samples
+            var files = GetMediaFileList(path).Where(f => _diskProvider.GetSize(f) > 40000000 && !f.ToLower().Contains("sample")).ToList();
 
             foreach (var file in files)
             {
-                //If Size is less than 40MB and contains sample. Check for Size to ensure its not an episode with sample in the title
-                if (_diskProvider.GetSize(file) < 40000000 && file.ToLower().Contains("sample"))
-                {
-                    Logger.Trace("[{0}] appears to be a sample. Skipping.", file);
-                    continue;
-                }
-
                 //Parse the filename
                 var parseResult = Parser.ParseEpisodeInfo(Path.GetFileName(file));
                 parseResult.Series = series;
@@ -284,6 +279,14 @@ namespace NzbDrone.Core.Providers
                 //Import into DB
                 result.Add(ImportFile(series, folder + filename));
             }
+
+            //If we have imported all the non-sample files, delete the folder, requires a minimum of 1 file to be imported.
+            if (files.Count() > 0 && files.Count() == result.Count)
+            {
+                Logger.Debug("All non-sample files have been processed, deleting folder: {0}", path);
+                _diskProvider.DeleteFolder(path, true);
+            }
+
             return result;
         }
 

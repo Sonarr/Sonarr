@@ -184,6 +184,7 @@
     <Compile Include="Providers\Indexer\SyndicationFeedXmlReader.cs" />
     <Compile Include="Providers\AutoConfigureProvider.cs" />
     <Compile Include="Providers\Indexer\NzbMatrix.cs" />
+    <Compile Include="Providers\Jobs\PostDownloadScanJob.cs" />
     <Compile Include="Providers\Jobs\RenameEpisodeJob.cs" />
     <Compile Include="Providers\Jobs\EpisodeSearchJob.cs" />
     <Compile Include="Providers\Jobs\DeleteSeriesJob.cs" />
@@ -195,7 +196,6 @@
     <Compile Include="Providers\Jobs\IJob.cs" />
     <Compile Include="Providers\Jobs\RssSyncJob.cs" />
     <Compile Include="Providers\Jobs\UpdateInfoJob.cs" />
-    <Compile Include="Providers\PostProcessingProvider.cs" />
     <Compile Include="Providers\StatsProvider.cs" />
     <Compile Include="Repository\ExternalNotificationSetting.cs" />
     <Compile Include="Repository\JobSetting.cs" />

@@ -4,39 +4,46 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using NLog;
+using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 
-namespace NzbDrone.Core.Providers
+namespace NzbDrone.Core.Providers.Jobs
 {
-    public class PostProcessingProvider
+    public class PostDownloadScanJob : IJob
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
         private readonly ConfigProvider _configProvider;
         private readonly DiskProvider _diskProvider;
-        private readonly SeriesProvider _seriesProvider;
         private readonly MediaFileProvider _mediaFileProvider;
-        private readonly EpisodeProvider _episodeProvider;
+        private readonly SeriesProvider _seriesProvider;
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public PostProcessingProvider(ConfigProvider configProvider, DiskProvider diskProvider,
-                                        SeriesProvider seriesProvider, MediaFileProvider mediaFileProvider,
-                                        EpisodeProvider episodeProvider)
+        public PostDownloadScanJob(ConfigProvider configProvider, DiskProvider diskProvider,
+                                    MediaFileProvider mediaFileProvider, SeriesProvider seriesProvider)
         {
             _configProvider = configProvider;
             _diskProvider = diskProvider;
-            _seriesProvider = seriesProvider;
             _mediaFileProvider = mediaFileProvider;
-            _episodeProvider = episodeProvider;
+            _seriesProvider = seriesProvider;
         }
 
-        //Scan folder
-        //Delete Existing episode(s)
-        //Move file(s)
-        //Import file(s)
-
-        public virtual void Scan()
+        public PostDownloadScanJob()
         {
+        }
+
+        public string Name
+        {
+            get { return "Post Download Media File Scan"; }
+        }
+
+        public int DefaultInterval
+        {
+            get { return 1; }
+        }
+
+        public virtual void Start(ProgressNotification notification, int targetId)
+        {
+            Logger.Debug("Starting New Download Scan Job");
             var dropFolder = _configProvider.SabDropDirectory;
 
             if (String.IsNullOrEmpty(dropFolder))
@@ -47,7 +54,7 @@ namespace NzbDrone.Core.Providers
 
             if (!_diskProvider.FolderExists(dropFolder))
             {
-                Logger.Warn("Unable to Scan for New Downloads - Folder Doesn't Exist");
+                Logger.Warn("Unable to Scan for New Downloads - folder Doesn't exist: {0}", dropFolder);
                 return;
             }
 
@@ -81,6 +88,7 @@ namespace NzbDrone.Core.Providers
 
                 _mediaFileProvider.ImportNewFiles(subfolder, series);
             }
+            Logger.Debug("New Download Scan Job completed successfully");
         }
     }
 }
