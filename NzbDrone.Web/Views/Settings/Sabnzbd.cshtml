@@ -109,6 +109,17 @@
             </div>
         </div>
 
+        <div class="config-section">
+            <div class="config-group">
+                <div class="config-title">@Html.LabelFor(m => m.SabDropDirectory)</div>
+                <div class="config-value">@Html.TextBoxFor(m => m.SabDropDirectory)</div>
+            </div>
+            <div class="config-group2">
+                <div class="config-validation">@Html.ValidationMessageFor(m => m.SabDropDirectory)</div>
+                <div class="config-description">@Html.DescriptionFor(m => m.SabDropDirectory)</div>
+            </div>
+        </div>
+
         <input type="submit" id="save_button" value="Save" disabled="disabled" />
     </fieldset>
 }

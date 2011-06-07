@@ -105,6 +105,7 @@ namespace NzbDrone.Web.Controllers
                                 SabPassword = _configProvider.SabPassword,
                                 SabTvCategory = _configProvider.SabTvCategory,
                                 SabTvPriority = _configProvider.SabTvPriority,
+                                SabDropDirectory = _configProvider.SabDropDirectory
                             };
 
             return View("Index", model);
@@ -367,6 +368,7 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.SabTvCategory = data.SabTvCategory;
                 _configProvider.SabUsername = data.SabUsername;
                 _configProvider.SabTvPriority = data.SabTvPriority;
+                _configProvider.SabDropDirectory = data.SabDropDirectory;
 
                 basicNotification.Title = SETTINGS_SAVED;
                 _notificationProvider.Register(basicNotification);

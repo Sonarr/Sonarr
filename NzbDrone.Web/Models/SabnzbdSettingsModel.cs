@@ -51,5 +51,10 @@ namespace NzbDrone.Web.Models
         [DisplayName("SABnzbd Priority")]
         [Description("Priority to use when sending NZBs to SABnzbd")]
         public SabnzbdPriorityType SabTvPriority { get; set; }
+
+        [DisplayName("SABnzbd TV Directory")]
+        [Description("The directory where SABnzbd stores TV shows (NzbDrone will sort them for you)")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
+        public string SabDropDirectory { get; set; }
     }
 }
