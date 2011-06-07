@@ -90,7 +90,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RenameProviderTest.cs" />
+    <Compile Include="MediaFileProvider_ImportNewDownloadTest.cs" />
+    <Compile Include="MediaFileProvider_GetNewFilenameTest.cs" />
     <Compile Include="dbBenchmark.cs" />
     <Compile Include="Framework\TestBase.cs" />
     <Compile Include="InventoryProvider_IsMonitoredTest.cs" />

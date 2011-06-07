@@ -46,5 +46,10 @@ namespace NzbDrone.Core.Providers.Core
         {
             File.Move(sourcePath, destinationPath);
         }
+
+        public virtual string GetExtension(string path)
+        {
+            return Path.GetExtension(path);
+        }
     }
 }

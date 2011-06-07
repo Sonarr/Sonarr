@@ -16,7 +16,6 @@ namespace NzbDrone.Web.Controllers
     {
         private readonly EpisodeProvider _episodeProvider;
         private readonly QualityProvider _qualityProvider;
-        private readonly RenameProvider _renameProvider;
         private readonly SeriesProvider _seriesProvider;
         private readonly TvDbProvider _tvDbProvider;
         private readonly JobProvider _jobProvider;
@@ -27,7 +26,6 @@ namespace NzbDrone.Web.Controllers
         public SeriesController(SeriesProvider seriesProvider,
                                 EpisodeProvider episodeProvider,
                                 QualityProvider qualityProvider,
-                                RenameProvider renameProvider,
                                 TvDbProvider tvDbProvider,
                                 JobProvider jobProvider,
                                 MediaFileProvider mediaFileProvider)
@@ -35,7 +33,6 @@ namespace NzbDrone.Web.Controllers
             _seriesProvider = seriesProvider;
             _episodeProvider = episodeProvider;
             _qualityProvider = qualityProvider;
-            _renameProvider = renameProvider;
             _tvDbProvider = tvDbProvider;
             _jobProvider = jobProvider;
             _mediaFileProvider = mediaFileProvider;

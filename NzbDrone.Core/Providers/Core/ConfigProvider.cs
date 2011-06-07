@@ -174,6 +174,13 @@ namespace NzbDrone.Core.Providers.Core
             set { SetValue("SabTvPriority", (int)value); }
         }
 
+        public virtual String SabDropDirectory
+        {
+            get { return GetValue("SabTvDropDirectory", "", false); }
+
+            set { SetValue("SabTvDropDirectory", value); }
+        }
+
         public virtual Boolean UseBlackhole
         {
             get { return GetValueBoolean("UseBlackhole"); }

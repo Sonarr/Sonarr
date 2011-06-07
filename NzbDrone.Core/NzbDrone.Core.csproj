@@ -195,6 +195,7 @@
     <Compile Include="Providers\Jobs\IJob.cs" />
     <Compile Include="Providers\Jobs\RssSyncJob.cs" />
     <Compile Include="Providers\Jobs\UpdateInfoJob.cs" />
+    <Compile Include="Providers\PostProcessingProvider.cs" />
     <Compile Include="Providers\StatsProvider.cs" />
     <Compile Include="Repository\ExternalNotificationSetting.cs" />
     <Compile Include="Repository\JobSetting.cs" />
@@ -214,7 +215,6 @@
     <Compile Include="Providers\BacklogProvider.cs" />
     <Compile Include="Providers\IndexerProvider.cs" />
     <Compile Include="Providers\QualityProvider.cs" />
-    <Compile Include="Providers\RenameProvider.cs" />
     <Compile Include="Providers\RootDirProvider.cs" />
     <Compile Include="Providers\UpcomingEpisodesProvider.cs" />
     <Compile Include="Providers\XbmcProvider.cs" />

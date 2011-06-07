@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NLog;
+using NzbDrone.Core.Helpers;
+using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
+using NzbDrone.Core.Repository.Quality;
 using SubSonic.Repository;
 
 namespace NzbDrone.Core.Providers
@@ -17,14 +20,17 @@ namespace NzbDrone.Core.Providers
         private readonly EpisodeProvider _episodeProvider;
         private readonly SeriesProvider _seriesProvider;
         private readonly IRepository _repository;
+        private readonly ConfigProvider _configProvider;
 
         public MediaFileProvider(IRepository repository, DiskProvider diskProvider,
-                                 EpisodeProvider episodeProvider, SeriesProvider seriesProvider)
+                                 EpisodeProvider episodeProvider, SeriesProvider seriesProvider,
+                                 ConfigProvider configProvider)
         {
             _repository = repository;
             _diskProvider = diskProvider;
             _episodeProvider = episodeProvider;
             _seriesProvider = seriesProvider;
+            _configProvider = configProvider;
         }
 
         public MediaFileProvider() { }
@@ -70,7 +76,6 @@ namespace NzbDrone.Core.Providers
                 if (!_repository.Exists<EpisodeFile>(e => e.Path == Parser.NormalizePath(filePath)))
                 {
                     var parseResult = Parser.ParseEpisodeInfo(filePath);
-
 
                     if (parseResult == null)
                         return null;
@@ -162,6 +167,15 @@ namespace NzbDrone.Core.Providers
                 if (!_diskProvider.FileExists(episodeFile.Path))
                 {
                     Logger.Trace("File {0} no longer exists on disk. removing from database.", episodeFile.Path);
+
+                    //Set the EpisodeFileId for each episode attached to this file to 0
+                    foreach (var episode in episodeFile.Episodes)
+                    {
+                        episode.EpisodeFileId = 0;
+                        _episodeProvider.UpdateEpisode(episode);
+                    }
+
+                    //Delete it from the DB
                     _repository.Delete<EpisodeFile>(episodeFile.EpisodeFileId);
                 }
             }
@@ -207,6 +221,205 @@ namespace NzbDrone.Core.Providers
 
             Logger.Debug("{0} media files were found in {1}", mediaFileList.Count, path);
             return mediaFileList;
+        }
+
+        public virtual List<EpisodeFile> ImportNewFiles(string path, Series series)
+        {
+            var result = new List<EpisodeFile>();
+            var files = GetMediaFileList(path);
+
+            foreach (var file in files)
+            {
+                //If Size is less than 40MB and contains sample. Check for Size to ensure its not an episode with sample in the title
+                if (_diskProvider.GetSize(file) < 40000000 && file.ToLower().Contains("sample"))
+                {
+                    Logger.Trace("[{0}] appears to be a sample. Skipping.", file);
+                    continue;
+                }
+
+                //Parse the filename
+                var parseResult = Parser.ParseEpisodeInfo(Path.GetFileName(file));
+                parseResult.Series = series;
+                parseResult.Episodes = _episodeProvider.GetEpisodes(parseResult);
+
+                if (parseResult.Episodes.Count == 0)
+                {
+                    Logger.Error("File '{0}' contains invalid episode information, skipping import", file);
+                    continue;
+                }
+
+                var ext = _diskProvider.GetExtension(file);
+                var filename = GetNewFilename(parseResult.Episodes, series.Title, parseResult.Quality.QualityType) + ext;
+                var folder = series.Path + Path.DirectorySeparatorChar;
+                if (_configProvider.UseSeasonFolder)
+                    folder += _configProvider.SeasonFolderFormat
+                                .Replace("%0s", parseResult.SeasonNumber.ToString("00"))
+                                .Replace("%s", parseResult.SeasonNumber.ToString())
+                                + Path.DirectorySeparatorChar;
+
+                _diskProvider.CreateDirectory(folder);
+
+                //Get a list of episodeFiles that we need to delete and cleanup
+                var episodeFilesToClean = new List<EpisodeFile>();
+
+                foreach (var episode in parseResult.Episodes)
+                {
+                    if (episode.EpisodeFileId > 0)
+                        episodeFilesToClean.Add(episode.EpisodeFile);
+                }
+
+                if (episodeFilesToClean.Count != episodeFilesToClean.Where(e => parseResult.Quality.QualityType >= e.Quality).Count())
+                {
+                    Logger.Debug("Episode isn't an upgrade for all episodes in file: [{0}]. Skipping.", file);
+                    continue;
+                }
+
+                //Delete the files and then cleanup!
+                episodeFilesToClean.ForEach(e => _diskProvider.DeleteFile(e.Path));
+                CleanUp(episodeFilesToClean);
+
+                //Move the file
+                _diskProvider.RenameFile(file, folder + filename);
+                
+                //Import into DB
+                result.Add(ImportFile(series, folder + filename));
+            }
+            return result;
+        }
+
+        public virtual string GetNewFilename(IList<Episode> episodes, string seriesName, QualityTypes quality)
+        {
+            var separatorStyle = EpisodeSortingHelper.GetSeparatorStyle(_configProvider.SeparatorStyle);
+            var numberStyle = EpisodeSortingHelper.GetNumberStyle(_configProvider.NumberStyle);
+            var useSeriesName = _configProvider.SeriesName;
+            var useEpisodeName = _configProvider.EpisodeName;
+            var replaceSpaces = _configProvider.ReplaceSpaces;
+            var appendQuality = _configProvider.AppendQuality;
+
+            var title = String.Empty;
+
+            if (episodes.Count == 1)
+            {
+                if (useSeriesName)
+                {
+                    title += seriesName;
+                    title += separatorStyle.Pattern;
+                }
+
+                title += numberStyle.Pattern.Replace("%s", String.Format("{0}", episodes[0].SeasonNumber))
+                                .Replace("%0s", String.Format("{0:00}", episodes[0].SeasonNumber))
+                                .Replace("%0e", String.Format("{0:00}", episodes[0].EpisodeNumber));
+
+                if (useEpisodeName)
+                {
+                    title += separatorStyle.Pattern;
+                    title += episodes[0].Title;
+                }
+
+                if (appendQuality)
+                    title += String.Format(" [{0}]", quality);
+
+                if (replaceSpaces)
+                    title = title.Replace(' ', '.');
+
+                Logger.Debug("New File Name is: {0}", title);
+                return title;
+            }
+
+            var multiEpisodeStyle = EpisodeSortingHelper.GetMultiEpisodeStyle(_configProvider.MultiEpisodeStyle);
+
+            if (useSeriesName)
+            {
+                title += seriesName;
+                title += separatorStyle.Pattern;
+            }
+
+            title += numberStyle.Pattern.Replace("%s", String.Format("{0}", episodes[0].SeasonNumber))
+                                .Replace("%0s", String.Format("{0:00}", episodes[0].SeasonNumber))
+                                .Replace("%0e", String.Format("{0:00}", episodes[0].EpisodeNumber));
+
+            var numbers = String.Empty;
+            var episodeNames = episodes[0].Title;
+
+            for (int i = 1; i < episodes.Count; i++)
+            {
+                var episode = episodes[i];
+
+                if (multiEpisodeStyle.Name == "Duplicate")
+                {
+                    numbers += separatorStyle.Pattern + numberStyle.Pattern.Replace("%s", String.Format("{0}", episode.SeasonNumber))
+                                .Replace("%0s", String.Format("{0:00}", episode.SeasonNumber))
+                                .Replace("%0e", String.Format("{0:00}", episode.EpisodeNumber));
+                }
+                else
+                {
+                    numbers += multiEpisodeStyle.Pattern.Replace("%s", String.Format("{0}", episode.SeasonNumber))
+                                .Replace("%0s", String.Format("{0:00}", episode.SeasonNumber))
+                                .Replace("%0e", String.Format("{0:00}", episode.EpisodeNumber))
+                                .Replace("%x", numberStyle.EpisodeSeparator)
+                                .Replace("%p", separatorStyle.Pattern);
+                }
+
+                episodeNames += String.Format(" + {0}", episode.Title);
+            }
+
+            title += numbers;
+
+            if (useEpisodeName)
+            {
+                episodeNames = episodeNames.TrimEnd(' ', '+');
+
+                title += separatorStyle.Pattern;
+                title += episodeNames;
+            }
+
+            if (appendQuality)
+                title += String.Format(" [{0}]", quality);
+
+            if (replaceSpaces)
+                title = title.Replace(' ', '.');
+
+            Logger.Debug("New File Name is: {0}", title);
+            return title;
+        }
+
+        public virtual bool RenameEpisodeFile(int episodeFileId, ProgressNotification notification)
+        {
+            var episodeFile = GetEpisodeFile(episodeFileId);
+
+            if (episodeFile == null)
+                return false;
+
+            try
+            {
+                notification.CurrentMessage = String.Format("Renaming '{0}'", episodeFile.Path);
+
+                var series = _seriesProvider.GetSeries(episodeFile.SeriesId);
+                var folder = new FileInfo(episodeFile.Path).DirectoryName;
+                var episodes = _episodeProvider.EpisodesByFileId(episodeFileId);
+                var ext = _diskProvider.GetExtension(episodeFile.Path);
+
+                var newFileName = GetNewFilename(episodes, series.Title, episodeFile.Quality);
+
+                var newFile = folder + Path.DirectorySeparatorChar + newFileName + ext;
+
+                //Do the rename
+                _diskProvider.RenameFile(episodeFile.Path, newFile);
+
+                //Update the filename in the DB
+                episodeFile.Path = newFile;
+                Update(episodeFile);
+
+                notification.CurrentMessage = String.Format("Finished Renaming '{0}'", newFile);
+            }
+
+            catch (Exception e)
+            {
+                notification.CurrentMessage = String.Format("Failed to Rename '{0}'", episodeFile.Path);
+                Logger.ErrorException("An error has occurred while renaming episode: " + episodeFile.Path, e);
+                throw;
+            }
+            return true;
         }
     }
 }

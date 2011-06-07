@@ -19,9 +19,9 @@ namespace NzbDrone.Core.Repository
         public DateTime DateAdded { get; set; }
 
         [SubSonicToManyRelation]
-        public virtual IList<Episode> Episodes { get; private set; }
+        public virtual IList<Episode> Episodes { get; set; }
 
         [SubSonicToOneRelation(ThisClassContainsJoinKey = true)]
-        public virtual Series Series { get; private set; }
+        public virtual Series Series { get; set; }
     }
 }
