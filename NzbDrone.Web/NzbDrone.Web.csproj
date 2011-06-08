@@ -259,6 +259,7 @@
     <Compile Include="Models\AddExistingManualModel.cs" />
     <Compile Include="Models\AddExistingSeriesModel.cs" />
     <Compile Include="Models\AddNewSeriesModel.cs" />
+    <Compile Include="Models\PendingProcessingModel.cs" />
     <Compile Include="Models\QualityTypeModel.cs" />
     <Compile Include="Models\RootDirModel.cs" />
     <Compile Include="Models\SabnzbdSettingsModel.cs" />
@@ -896,6 +897,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\AddSeries\AddExisting.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\System\PendingProcessing.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

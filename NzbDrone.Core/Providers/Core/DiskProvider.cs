@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace NzbDrone.Core.Providers.Core
 {
@@ -55,6 +57,21 @@ namespace NzbDrone.Core.Providers.Core
         public virtual void DeleteFolder(string path, bool recursive)
         {
             Directory.Delete(path, recursive);
+        }
+
+        public virtual DateTime DirectoryDateCreated(string path)
+        {
+            return Directory.GetCreationTime(path);
+        }
+
+        public virtual IEnumerable<FileInfo> GetFileInfos(string path, string pattern, SearchOption searchOption)
+        {
+            return new DirectoryInfo(path).GetFiles(pattern, searchOption);
+        }
+
+        public virtual void MoveDirectory(string source, string destination)
+        {
+            Directory.Move(source, destination);
         }
     }
 }

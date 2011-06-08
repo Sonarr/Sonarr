@@ -1,0 +1,60 @@
+﻿@model List<NzbDrone.Web.Models.PendingProcessingModel>
+@using NzbDrone.Web.Models
+@section TitleContent{
+Pending Processing
+}
+@section ActionMenu{
+    @{Html.Telerik().Menu().Name("historyMenu").Items(items =>
+            {
+                items.Add().Text("Trim History").Action("Trim", "History");
+                items.Add().Text("Purge History").Action("Purge", "History");
+            }).Render();}
+}
+@section MainContent{
+    <div class="grid-container">
+        @{Html.Telerik().Grid<PendingProcessingModel>().Name("PendingProcessingGrid")
+               .TableHtmlAttributes(new { @class = "Grid" })
+                .Columns(columns =>
+                             {
+                                 columns.Bound(c => c.Name);
+                                 columns.Bound(c => c.Created).Title("Creation Date");
+                                 columns.Bound(c => c.Path).Title("")
+                                     .ClientTemplate("<a href='#Rename' onClick=\"renamePending('<#= Path #>'); return false;\">Rename</a>");
+                             })
+                .DetailView(detailView => detailView.ClientTemplate(
+                        "<div><#= Files #></div>"
+                                              ))
+                .DataBinding(data => data.Ajax().Select("_PendingProcessingAjaxBinding", "System"))
+                .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.Name).Ascending()).Enabled(true))
+                .Pageable(
+                    c =>
+                    c.PageSize(20).Position(GridPagerPosition.Bottom).Style(GridPagerStyles.NextPrevious))
+                .ClientEvents(clientEvents =>
+                {
+                    clientEvents.OnDataBinding("grid_bind");
+                    clientEvents.OnDataBound("grid_bound");
+                })
+                .Render();}
+        <span class="grid-loader"><img src="@Url.Content( "~/Content/Images/Loading.gif" )" alt="Loading"/> Loading...</span>
+    </div>
+}
+<script type="text/javascript">
+    var renamePendingUrl = '@Url.Action("RenamePendingProcessing", "System")';
+
+    function renamePending(path) {
+        $.ajax({
+            type: "POST",
+            url: renamePendingUrl,
+            data: jQuery.param({ path: path }),
+            error: function (req, status, error) {
+                alert("Sorry! We could rename " + name + " at this time. " + error);
+            },
+            success: function (data, textStatus, jqXHR) {
+                if (data == "ok") {
+                    var grid = $('#PendingProcessingGrid').data('tGrid');
+                    grid.ajaxRequest();
+                }
+            }
+        });
+    }
+</script>
