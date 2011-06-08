@@ -342,5 +342,109 @@ namespace NzbDrone.Core.Test
             mocker.VerifyAllMocks();
             Assert.AreEqual(0, result.Count);
         }
+
+        [Test]
+        [Description("Verifies that a new download will not import successfully, episode is sample under 40MB")]
+        public void import_new_download_not_imported_episode_sample_under_40MB()
+        {
+            //Alternate Setup
+            episodeFile2.Episodes.Add(episode2);
+            episode2.EpisodeFile = episodeFile2;
+            episodeFile2.Quality = QualityTypes.Bluray720p;
+
+            //Mocks
+            var mocker = new AutoMoqer();
+
+            var diskProvider = mocker.GetMock<DiskProvider>();
+            diskProvider.Setup(d => d.GetFiles(It.IsAny<string>(), "*.*", SearchOption.AllDirectories)).Returns(new string[] { @"C:\Test\30 Rock - 1x05x06 - Episode Title\30.Rock.S01E05.Gibberish.x264-sample.avi" });
+            diskProvider.Setup(d => d.GetSize(It.IsAny<string>())).Returns(30000000);
+
+            //Act
+            var result = mocker.Resolve<MediaFileProvider>().ImportNewFiles(@"C:\Test\30 Rock - 1x05x06 - Episode Title", series);
+
+            //Assert
+            mocker.VerifyAllMocks();
+            Assert.AreEqual(0, result.Count);
+        }
+
+        [Test]
+        [Description("Verifies that a new download will import successfully, even though the episode title contains Sample")]
+        public void import_new_download_imported_contains_sample_over_40MB()
+        {
+            //Mocks
+            var mocker = new AutoMoqer();
+
+            var diskProvider = mocker.GetMock<DiskProvider>();
+            diskProvider.Setup(d => d.GetFiles(It.IsAny<string>(), "*.*", SearchOption.AllDirectories)).Returns(new string[] { @"C:\Test\30 Rock - 1x05 - Episode Title\30.Rock.S01E05.Fourty.Samples.Gibberish.XviD.avi" });
+            diskProvider.Setup(d => d.GetSize(It.IsAny<string>())).Returns(90000000000);
+            diskProvider.Setup(d => d.CreateDirectory(It.IsAny<string>())).Returns("ok");
+            diskProvider.Setup(d => d.RenameFile(It.IsAny<string>(), It.IsAny<string>()));
+            diskProvider.Setup(d => d.GetExtension(It.IsAny<string>())).Returns(".avi");
+
+            var episodeProvider = mocker.GetMock<EpisodeProvider>();
+            episodeProvider.Setup(e => e.GetEpisodes(It.IsAny<EpisodeParseResult>())).Returns(new List<Episode> { episode });
+            episodeProvider.Setup(e => e.GetEpisode(series.SeriesId, 1, 5)).Returns(episode);
+
+            var configProvider = mocker.GetMock<ConfigProvider>();
+            configProvider.SetupGet(c => c.UseSeasonFolder).Returns(true);
+            configProvider.SetupGet(c => c.SeasonFolderFormat).Returns(@"Season %0s");
+            configProvider.SetupGet(c => c.SeriesName).Returns(true);
+            configProvider.SetupGet(c => c.EpisodeName).Returns(true);
+            configProvider.SetupGet(c => c.AppendQuality).Returns(true);
+            configProvider.SetupGet(c => c.SeparatorStyle).Returns(0);
+            configProvider.SetupGet(c => c.NumberStyle).Returns(2);
+            configProvider.SetupGet(c => c.ReplaceSpaces).Returns(false);
+
+            var repo = mocker.GetMock<IRepository>();
+            repo.Setup(r => r.Exists(It.IsAny<Expression<Func<EpisodeFile, Boolean>>>())).Returns(false).Verifiable();
+            repo.Setup(r => r.Add<EpisodeFile>(It.IsAny<EpisodeFile>())).Returns(1);
+
+            //Act
+            var result = mocker.Resolve<MediaFileProvider>().ImportNewFiles(@"C:\Test\30 Rock - 1x05 - Fourty Samples", series);
+
+            //Assert
+            mocker.VerifyAllMocks();
+            Assert.AreEqual(1, result.Count);
+        }
+
+        [Test]
+        [Description("Verifies that a new download will import successfully, even though the efile size is under 40MB")]
+        public void import_new_download_imported_under_40MB()
+        {
+            //Mocks
+            var mocker = new AutoMoqer();
+
+            var diskProvider = mocker.GetMock<DiskProvider>();
+            diskProvider.Setup(d => d.GetFiles(It.IsAny<string>(), "*.*", SearchOption.AllDirectories)).Returns(new string[] { @"C:\Test\30 Rock - 1x05 - Episode Title\30.Rock.S01E05.Gibberish.XviD.avi" });
+            diskProvider.Setup(d => d.GetSize(It.IsAny<string>())).Returns(30000000);
+            diskProvider.Setup(d => d.CreateDirectory(It.IsAny<string>())).Returns("ok");
+            diskProvider.Setup(d => d.RenameFile(It.IsAny<string>(), It.IsAny<string>()));
+            diskProvider.Setup(d => d.GetExtension(It.IsAny<string>())).Returns(".avi");
+
+            var episodeProvider = mocker.GetMock<EpisodeProvider>();
+            episodeProvider.Setup(e => e.GetEpisodes(It.IsAny<EpisodeParseResult>())).Returns(new List<Episode> { episode });
+            episodeProvider.Setup(e => e.GetEpisode(series.SeriesId, 1, 5)).Returns(episode);
+
+            var configProvider = mocker.GetMock<ConfigProvider>();
+            configProvider.SetupGet(c => c.UseSeasonFolder).Returns(true);
+            configProvider.SetupGet(c => c.SeasonFolderFormat).Returns(@"Season %0s");
+            configProvider.SetupGet(c => c.SeriesName).Returns(true);
+            configProvider.SetupGet(c => c.EpisodeName).Returns(true);
+            configProvider.SetupGet(c => c.AppendQuality).Returns(true);
+            configProvider.SetupGet(c => c.SeparatorStyle).Returns(0);
+            configProvider.SetupGet(c => c.NumberStyle).Returns(2);
+            configProvider.SetupGet(c => c.ReplaceSpaces).Returns(false);
+
+            var repo = mocker.GetMock<IRepository>();
+            repo.Setup(r => r.Exists(It.IsAny<Expression<Func<EpisodeFile, Boolean>>>())).Returns(false).Verifiable();
+            repo.Setup(r => r.Add<EpisodeFile>(It.IsAny<EpisodeFile>())).Returns(1);
+
+            //Act
+            var result = mocker.Resolve<MediaFileProvider>().ImportNewFiles(@"C:\Test\30 Rock - 1x05 - Episode Title", series);
+
+            //Assert
+            mocker.VerifyAllMocks();
+            Assert.AreEqual(1, result.Count);
+        }
     }
 }
