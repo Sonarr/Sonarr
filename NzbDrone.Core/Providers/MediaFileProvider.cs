@@ -232,52 +232,67 @@ namespace NzbDrone.Core.Providers
 
             foreach (var file in files)
             {
-                //Parse the filename
-                var parseResult = Parser.ParseEpisodeInfo(Path.GetFileName(file));
-                parseResult.Series = series;
-                parseResult.Episodes = _episodeProvider.GetEpisodes(parseResult);
-
-                if (parseResult.Episodes.Count == 0)
+                try
                 {
-                    Logger.Error("File '{0}' contains invalid episode information, skipping import", file);
-                    continue;
+
+
+                    //Parse the filename
+                    var parseResult = Parser.ParseEpisodeInfo(Path.GetFileName(file));
+                    parseResult.Series = series;
+                    parseResult.Episodes = _episodeProvider.GetEpisodes(parseResult);
+
+                    if (parseResult.Episodes.Count == 0)
+                    {
+                        Logger.Error("File '{0}' contains invalid episode information, skipping import", file);
+                        continue;
+                    }
+
+                    var ext = _diskProvider.GetExtension(file);
+                    var filename = GetNewFilename(parseResult.Episodes, series.Title, parseResult.Quality.QualityType) + ext;
+                    var folder = series.Path + Path.DirectorySeparatorChar;
+                    if (_configProvider.UseSeasonFolder)
+                        folder += _configProvider.SeasonFolderFormat
+                                    .Replace("%0s", parseResult.SeasonNumber.ToString("00"))
+                                    .Replace("%s", parseResult.SeasonNumber.ToString())
+                                    + Path.DirectorySeparatorChar;
+
+                    _diskProvider.CreateDirectory(folder);
+
+                    //Get a list of episodeFiles that we need to delete and cleanup
+                    var episodeFilesToClean = new List<EpisodeFile>();
+
+                    foreach (var episode in parseResult.Episodes)
+                    {
+                        if (episode.EpisodeFileId > 0)
+                            episodeFilesToClean.Add(episode.EpisodeFile);
+                    }
+
+                    if (episodeFilesToClean.Count != episodeFilesToClean.Where(e => parseResult.Quality.QualityType >= e.Quality).Count())
+                    {
+                        Logger.Debug("Episode isn't an upgrade for all episodes in file: [{0}]. Skipping.", file);
+                        continue;
+                    }
+
+                    //Delete the files and then cleanup!
+                    foreach (var e in episodeFilesToClean)
+                    {
+                        if (_diskProvider.FileExists(e.Path))
+                            _diskProvider.DeleteFile(e.Path);
+                    }
+
+                    CleanUp(episodeFilesToClean);
+
+                    //Move the file
+                    _diskProvider.RenameFile(file, folder + filename);
+
+                    //Import into DB
+                    result.Add(ImportFile(series, folder + filename));
                 }
 
-                var ext = _diskProvider.GetExtension(file);
-                var filename = GetNewFilename(parseResult.Episodes, series.Title, parseResult.Quality.QualityType) + ext;
-                var folder = series.Path + Path.DirectorySeparatorChar;
-                if (_configProvider.UseSeasonFolder)
-                    folder += _configProvider.SeasonFolderFormat
-                                .Replace("%0s", parseResult.SeasonNumber.ToString("00"))
-                                .Replace("%s", parseResult.SeasonNumber.ToString())
-                                + Path.DirectorySeparatorChar;
-
-                _diskProvider.CreateDirectory(folder);
-
-                //Get a list of episodeFiles that we need to delete and cleanup
-                var episodeFilesToClean = new List<EpisodeFile>();
-
-                foreach (var episode in parseResult.Episodes)
+                catch (Exception ex)
                 {
-                    if (episode.EpisodeFileId > 0)
-                        episodeFilesToClean.Add(episode.EpisodeFile);
+                    Logger.WarnException("Error importing new download: " + file, ex);
                 }
-
-                if (episodeFilesToClean.Count != episodeFilesToClean.Where(e => parseResult.Quality.QualityType >= e.Quality).Count())
-                {
-                    Logger.Debug("Episode isn't an upgrade for all episodes in file: [{0}]. Skipping.", file);
-                    continue;
-                }
-
-                //Delete the files and then cleanup!
-                episodeFilesToClean.ForEach(e => _diskProvider.DeleteFile(e.Path));
-                CleanUp(episodeFilesToClean);
-
-                //Move the file
-                _diskProvider.RenameFile(file, folder + filename);
-                
-                //Import into DB
-                result.Add(ImportFile(series, folder + filename));
             }
 
             //If we have imported all the non-sample files, delete the folder, requires a minimum of 1 file to be imported.
