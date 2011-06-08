@@ -228,14 +228,12 @@ namespace NzbDrone.Core.Providers
             var result = new List<EpisodeFile>();
 
             //Get all the files except those that are considered samples
-            var files = GetMediaFileList(path).Where(f => _diskProvider.GetSize(f) > 40000000 && !f.ToLower().Contains("sample")).ToList();
+            var files = GetMediaFileList(path).Where(f => _diskProvider.GetSize(f) > 40000000 || !f.ToLower().Contains("sample")).ToList();
 
             foreach (var file in files)
             {
                 try
                 {
-
-
                     //Parse the filename
                     var parseResult = Parser.ParseEpisodeInfo(Path.GetFileName(file));
                     parseResult.Series = series;
