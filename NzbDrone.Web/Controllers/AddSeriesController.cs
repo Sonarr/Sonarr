@@ -184,6 +184,7 @@ namespace NzbDrone.Web.Controllers
             return new SelectList(dataVal, "Id", "SeriesName", selectId);
         }
 
+        //Root Directory
         [HttpPost]
         public JsonResult SaveRootDir(int id, string path)
         {
@@ -202,23 +203,29 @@ namespace NzbDrone.Web.Controllers
             return new JsonResult { Data = "ok" };
         }
 
-        public ViewResult AddRootDir()
+        public PartialViewResult AddRootDir()
         {
             var rootDir = new RootDir { Path = String.Empty };
 
             var id = _rootFolderProvider.Add(rootDir);
             rootDir.Id = id;
 
-            ViewData["RootDirId"] = id;
+            var model = new RootDirModel();
+            model.Id = rootDir.Id;
+            model.Path = rootDir.Path;
+            model.SelectList = new SelectList(new List<string> { rootDir.Path }, rootDir.Path);
 
-            return View("RootDir", rootDir);
+            return PartialView("RootDir", model);
         }
 
         public ActionResult GetRootDirView(RootDir rootDir)
         {
-            ViewData["RootDirId"] = rootDir.Id;
+            var model = new RootDirModel();
+            model.Id = rootDir.Id;
+            model.Path = rootDir.Path;
+            model.SelectList = new SelectList(new List<string> { rootDir.Path }, rootDir.Path);
 
-            return PartialView("RootDir", rootDir);
+            return PartialView("RootDir", model);
         }
 
         public JsonResult DeleteRootDir(int rootDirId)
@@ -234,29 +241,6 @@ namespace NzbDrone.Web.Controllers
             }
 
             return new JsonResult { Data = "ok" };
-        }
-
-        public JsonResult JsonAutoCompletePath(string term)
-        {
-            var windowsSep = term.LastIndexOf('\\');
-
-            if (windowsSep > -1)
-            {
-                var start = term.Substring(windowsSep + 1);
-                var dirs = _diskProvider.GetDirectories(term.Substring(0, windowsSep + 1)).Where(d => new DirectoryInfo(d).Name.ToLower().StartsWith(start.ToLower())).Take(10);
-                return Json(dirs.ToArray(), JsonRequestBehavior.AllowGet);
-            }
-
-            var index = term.LastIndexOf('/');
-
-            if (index > -1)
-            {
-                var start = term.Substring(index + 1);
-                var dirs = _diskProvider.GetDirectories(term.Substring(0, index + 1)).Where(d => new DirectoryInfo(d).Name.ToLower().StartsWith(start.ToLower())).Take(10);
-                return Json(dirs.ToArray(), JsonRequestBehavior.AllowGet);
-            }
-
-            return Json(new JsonResult(), JsonRequestBehavior.AllowGet);
         }
     }
 }

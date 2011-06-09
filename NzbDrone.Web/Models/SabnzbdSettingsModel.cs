@@ -56,5 +56,7 @@ namespace NzbDrone.Web.Models
         [Description("The directory where SABnzbd stores TV shows (NzbDrone will sort them for you)")]
         [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string SabDropDirectory { get; set; }
+
+        public SelectList SabDropDirectorySelectList { get; set; }
     }
 }

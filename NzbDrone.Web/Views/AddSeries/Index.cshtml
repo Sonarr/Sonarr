@@ -153,7 +153,7 @@
     var saveRootDirUrl = '@Url.Action("SaveRootDir", "AddSeries")';
 
     function saveRootDir(id) {
-        var path = $('#path_' + id).val();
+        var path = $("#path_" + id).data("tComboBox").value();
 
         $.ajax({
             type: "POST",

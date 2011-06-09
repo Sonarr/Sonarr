@@ -32,7 +32,7 @@
     
     .indexer_group
     {
-        width: 220px;
+        width: 290px;
     }
     
     .indexer_left
@@ -48,8 +48,10 @@
     
     .indexer_checkbox
     {
-        margin-right: 135px;
+        margin-right: 205px;
+        margin-top: 8px;
     }
+
 </style>
 
 @using (Html.BeginForm("SaveIndexers", "Settings", FormMethod.Post, new { id = "form", name = "form" })) {
@@ -60,7 +62,7 @@
             <div>
                     @{ Html.Telerik().PanelBar()
                     .Name("PanelBar")
-                    .HtmlAttributes(new { style = "width: 300px; margin: 10px;" })
+                    .HtmlAttributes(new { style = "width: 500px; margin: 10px;" })
                     .ExpandMode(PanelBarExpandMode.Single)
                     .SelectedIndex(0)
                     .Items(indexerItem =>

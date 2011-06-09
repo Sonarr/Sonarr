@@ -190,14 +190,14 @@ hr
 /* Config Pages */
 .config-section
 {
-    width: 650px;
+    width: 800px;
     height: 45px;
     display: block;
 }
 
 .config-group
 {
-    width: 300px;
+    width: 385px;
     display: block;
     float: left;
     height: 20px;
@@ -205,7 +205,7 @@ hr
 
 .config-group2
 {
-    width: 300px;
+    width: 385px;
     display: block;
     float: right;
     height: 20px;
@@ -221,6 +221,11 @@ hr
 .config-value
 {
     float: right;
+}
+
+input[type=text]
+{
+    width: 220px;
 }
 
 .config-validation

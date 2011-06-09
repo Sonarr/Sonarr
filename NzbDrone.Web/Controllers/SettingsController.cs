@@ -96,6 +96,9 @@ namespace NzbDrone.Web.Controllers
         {
             ViewData["viewName"] = "Sabnzbd";
 
+            var sabDropDir = _configProvider.SabDropDirectory;
+            var selectList = new SelectList(new List<string> {sabDropDir}, sabDropDir);
+
             var model = new SabnzbdSettingsModel
                             {
                                 SabHost = _configProvider.SabHost,
@@ -105,7 +108,8 @@ namespace NzbDrone.Web.Controllers
                                 SabPassword = _configProvider.SabPassword,
                                 SabTvCategory = _configProvider.SabTvCategory,
                                 SabTvPriority = _configProvider.SabTvPriority,
-                                SabDropDirectory = _configProvider.SabDropDirectory
+                                SabDropDirectory = sabDropDir,
+                                SabDropDirectorySelectList = selectList
                             };
 
             return View("Index", model);
