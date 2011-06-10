@@ -16,11 +16,6 @@ namespace NzbDrone.Web.Controllers
             _diskProvider = diskProvider;
         }
 
-        public ActionResult Test()
-        {
-            return Content("Testing...");
-        }
-
         [HttpPost]
         public ActionResult _autoCompletePath(string text, int? filterMode)
         {
@@ -35,22 +30,29 @@ namespace NzbDrone.Web.Controllers
 
         public SelectList GetDirectories(string text)
         {
-            //Windows (Including UNC)
-            var windowsSep = text.LastIndexOf('\\');
-
-            if (windowsSep > -1)
+            try
             {
-                var dirs = _diskProvider.GetDirectories(text.Substring(0, windowsSep + 1));
-                return new SelectList(dirs, dirs.FirstOrDefault());
+                //Windows (Including UNC)
+                var windowsSep = text.LastIndexOf('\\');
+
+                if (windowsSep > -1)
+                {
+                    var dirs = _diskProvider.GetDirectories(text.Substring(0, windowsSep + 1));
+                    return new SelectList(dirs, dirs.FirstOrDefault());
+                }
+
+                //Unix
+                var index = text.LastIndexOf('/');
+
+                if (index > -1)
+                {
+                    var dirs = _diskProvider.GetDirectories(text.Substring(0, index + 1));
+                    return new SelectList(dirs, dirs.FirstOrDefault());
+                }
             }
-
-            //Unix
-            var index = text.LastIndexOf('/');
-
-            if (index > -1)
+            catch(Exception ex)
             {
-                var dirs = _diskProvider.GetDirectories(text.Substring(0, index + 1));
-                return new SelectList(dirs, dirs.FirstOrDefault());
+                //Swallow the exceptions so proper JSON is returned to the client (Empty results)
             }
 
             return new SelectList(new List<string>());
