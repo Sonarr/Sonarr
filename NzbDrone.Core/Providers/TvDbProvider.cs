@@ -86,7 +86,7 @@ namespace NzbDrone.Core.Providers
                 //Fix American Dad's scene gongshow 
                 if (result != null && result.Id == 73141)
                 {
-                    var seasonOneEpisodeCount = result.Episodes.Where(e => e.SeasonNumber == 0).Count();
+                    var seasonOneEpisodeCount = result.Episodes.Where(e => e.SeasonNumber == 1).Count();
                     var seasonOneId = result.Episodes.Where(e => e.SeasonNumber == 1).First().SeasonId;
 
                     foreach (var episode in result.Episodes)

@@ -5,6 +5,8 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Test.Framework;
+using TvdbLib.Data;
+using System.Collections.Generic;
 
 namespace NzbDrone.Core.Test
 {
@@ -12,7 +14,6 @@ namespace NzbDrone.Core.Test
     // ReSharper disable InconsistentNaming
     public class TvDbProviderTest : TestBase
     {
-        [Test]
         [TestCase("The Simpsons")]
         [TestCase("Family Guy")]
         [TestCase("South Park")]
@@ -24,7 +25,6 @@ namespace NzbDrone.Core.Test
             result[0].SeriesName.Should().Be(title);
         }
 
-        [Test]
         [TestCase("The Simpsons")]
         [TestCase("Family Guy")]
         [TestCase("South Park")]
@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Test
         }
 
 
-        [Test]
+
         [TestCase(new object[] { "CAPITAL", "capital", true })]
         [TestCase(new object[] { "Something!!", "Something", true })]
         [TestCase(new object[] { "Simpsons 2000", "Simpsons", true })]
@@ -94,18 +94,15 @@ namespace NzbDrone.Core.Test
             //act
             var result = tvdbProvider.GetSeries(73141, true);
 
-            var seasons = result.Episodes.Select(e => e.SeasonNumber)
+            var seasonsNumbers = result.Episodes.Select(e => e.SeasonNumber)
                 .Distinct().ToList();
 
+            var seasons = new List<List<TvdbEpisode>>(seasonsNumbers.Count);
 
-
-            var seasons1 = result.Episodes.Where(e => e.SeasonNumber == 1).ToList();
-            var seasons2 = result.Episodes.Where(e => e.SeasonNumber == 2).ToList();
-            var seasons3 = result.Episodes.Where(e => e.SeasonNumber == 3).ToList();
-            var seasons4 = result.Episodes.Where(e => e.SeasonNumber == 4).ToList();
-            var seasons5 = result.Episodes.Where(e => e.SeasonNumber == 5).ToList();
-            var seasons6 = result.Episodes.Where(e => e.SeasonNumber == 6).ToList();
-
+            foreach (var season in seasonsNumbers)
+            {
+                seasons.Insert(season, result.Episodes.Where(e => e.SeasonNumber == season).ToList());
+            }
 
             foreach (var episode in result.Episodes)
             {
@@ -113,19 +110,28 @@ namespace NzbDrone.Core.Test
             }
 
             //assert
-            seasons.Should().HaveCount(7);
-            seasons1.Should().HaveCount(23);
-            seasons2.Should().HaveCount(19);
-            seasons3.Should().HaveCount(16);
-            seasons4.Should().HaveCount(20);
-            seasons5.Should().HaveCount(18);
+            seasonsNumbers.Should().HaveCount(7);
+            seasons[1].Should().HaveCount(23);
+            seasons[2].Should().HaveCount(19);
+            seasons[3].Should().HaveCount(16);
+            seasons[4].Should().HaveCount(20);
+            seasons[5].Should().HaveCount(18);
 
-            seasons1.Select(s => s.EpisodeNumber).Should().OnlyHaveUniqueItems();
-            seasons2.Select(s => s.EpisodeNumber).Should().OnlyHaveUniqueItems();
-            seasons3.Select(s => s.EpisodeNumber).Should().OnlyHaveUniqueItems();
-            seasons4.Select(s => s.EpisodeNumber).Should().OnlyHaveUniqueItems();
-            seasons5.Select(s => s.EpisodeNumber).Should().OnlyHaveUniqueItems();
-            seasons6.Select(s => s.EpisodeNumber).Should().OnlyHaveUniqueItems();
+            foreach (var season in seasons)
+            {
+                season.Should().OnlyHaveUniqueItems();
+            }
+
+            //Make sure no episode number is skipped
+            foreach (var season in seasons)
+            {
+                for (int i = 1; i < season.Count; i++)
+                {
+                    season.Should().Contain(c => c.EpisodeNumber == i, "Can't find Episode S{0:00}E{1:00}",
+                                            season[0].SeasonNumber, i);
+                }
+            }
+
 
         }
     }
