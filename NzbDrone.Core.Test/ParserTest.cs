@@ -17,10 +17,6 @@ namespace NzbDrone.Core.Test
          * Unreported.World.Chinas.Lost.Sons.WS.PDTV.XviD-FTP
          */
 
-
-
-
-
         [Test]
         [TestCase("Sonny.With.a.Chance.S02E15", "Sonny.With.a.Chance", 2, 15)]
         [TestCase("Two.and.a.Half.Me.103.720p.HDTV.X264-DIMENSION", "Two.and.a.Half.Me", 1, 3)]
@@ -137,6 +133,10 @@ namespace NzbDrone.Core.Test
         [TestCase("White.Collar.2x04.2x05.720p.BluRay-FUTV", "White.Collar", 2, new[] { 4, 5 }, 2)]
         [TestCase("Desperate.Housewives.S07E22E23.720p.HDTV.X264-DIMENSION", "Desperate.Housewives", 7, new[] { 22,23 }, 2)]
         //[Row("The.Kennedys.Part.1.and.Part.2.DSR.XviD-SYS", 1, new[] { 1, 2 })]
+        [TestCase("S07E22 - 7x23 - And Lots of Security.. [HDTV].mkv", "", 7, new[] { 22, 23 }, 2)]
+        [TestCase("Desparate Housewives - S07E22 - 7x23 - And Lots of Security.. [HDTV].mkv", "Desparate Housewives", 7, new[] { 22, 23 }, 2)]
+        [TestCase("Desparate Housewives - S07E22 - S07E23 - And Lots of Security.. [HDTV].mkv", "Desparate Housewives", 7, new[] { 22, 23 }, 2)]
+        [TestCase("S03E01.S03E02.720p.HDTV.X264-DIMENSION", "", 3, new[] { 1, 2 }, 2)]
         public void episode_multipart_parse(string postTitle, string title, int season, int[] episodes, int count)
         {
             var result = Parser.ParseEpisodeInfo(postTitle);
