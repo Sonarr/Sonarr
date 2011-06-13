@@ -11,15 +11,15 @@ namespace NzbDrone.Core.Providers
 {
     public class RootDirProvider
     {
-        private readonly IRepository _sonioRepo;
+        private readonly IRepository _repository;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly DiskProvider _diskProvider;
         private readonly SeriesProvider _seriesProvider;
 
 
-        public RootDirProvider(IRepository sonicRepo, SeriesProvider seriesProvider, DiskProvider diskProvider)
+        public RootDirProvider(IRepository repository, SeriesProvider seriesProvider, DiskProvider diskProvider)
         {
-            _sonioRepo = sonicRepo;
+            _repository = repository;
             _diskProvider = diskProvider;
             _seriesProvider = seriesProvider;
         }
@@ -28,27 +28,39 @@ namespace NzbDrone.Core.Providers
 
         public virtual List<RootDir> GetAll()
         {
-            return _sonioRepo.All<RootDir>().ToList();
+            return _repository.All<RootDir>().ToList();
         }
 
         public virtual int Add(RootDir rootDir)
         {
-            return Convert.ToInt32(_sonioRepo.Add(rootDir));
+            ValidatePath(rootDir);
+
+            return (int)_repository.Add(rootDir);
         }
 
         public virtual void Remove(int rootDirId)
         {
-            _sonioRepo.Delete<RootDir>(rootDirId);
+            _repository.Delete<RootDir>(rootDirId);
         }
 
         public virtual void Update(RootDir rootDir)
         {
-            _sonioRepo.Update(rootDir);
+            ValidatePath(rootDir);
+
+            _repository.Update(rootDir);
+        }
+
+        private static void ValidatePath(RootDir rootDir)
+        {
+            if (String.IsNullOrWhiteSpace(rootDir.Path) || !Path.IsPathRooted(rootDir.Path))
+            {
+                throw new ArgumentException("Invalid path");
+            }
         }
 
         public virtual RootDir GetRootDir(int rootDirId)
         {
-            return _sonioRepo.Single<RootDir>(rootDirId);
+            return _repository.Single<RootDir>(rootDirId);
         }
 
         public List<String> GetUnmappedFolders(string path)

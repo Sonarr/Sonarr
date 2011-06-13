@@ -54,11 +54,11 @@ namespace NzbDrone.Core
         {
             BindKernel();
 
-            LogConfiguration.Setup();
+            LogConfiguration.StartDbLogging();
 
             Migrations.Run(Connection.MainConnectionString, true);
 
-            SetupDefaultQualityProfiles(_kernel.Get<IRepository>()); //Setup the default QualityProfiles on start-up
+            _kernel.Get<QualityProvider>().SetupDefaultProfiles();
 
             BindIndexers();
             BindJobs();
@@ -141,11 +141,11 @@ namespace NzbDrone.Core
         {
             try
             {
-                Logger.Debug("Attaching to parent process for automatic termination.");
-                var pc = new PerformanceCounter("Process", "Creating Process ID",
-                                                Process.GetCurrentProcess().ProcessName);
-                var pid = (int)pc.NextValue();
-                var hostProcess = Process.GetProcessById(pid);
+                var pid = Convert.ToInt32(Environment.GetEnvironmentVariable("NZBDRONE_PID"));
+
+                Logger.Debug("Attaching to parent process ({0}) for automatic termination.", pid);
+
+                var hostProcess = Process.GetProcessById(Convert.ToInt32(pid));
 
                 hostProcess.EnableRaisingEvents = true;
                 hostProcess.Exited += (delegate
@@ -154,7 +154,7 @@ namespace NzbDrone.Core
                                                ShutDown();
                                            });
 
-                Logger.Debug("Successfully Attached to host. Process ID: {0}", pid);
+                Logger.Debug("Successfully Attached to host. Process [{0}]", hostProcess.ProcessName);
             }
             catch (Exception e)
             {
@@ -166,56 +166,6 @@ namespace NzbDrone.Core
         {
             Logger.Info("Shutting down application.");
             Process.GetCurrentProcess().Kill();
-        }
-
-        private static void SetupDefaultQualityProfiles(IRepository repository)
-        {
-            var sd = new QualityProfile
-                         {
-                             Name = "SD",
-                             Allowed = new List<QualityTypes> { QualityTypes.SDTV, QualityTypes.DVD },
-                             Cutoff = QualityTypes.SDTV
-                         };
-
-            var hd = new QualityProfile
-                         {
-                             Name = "HD",
-                             Allowed =
-                                 new List<QualityTypes> { QualityTypes.HDTV, QualityTypes.WEBDL, QualityTypes.Bluray720p },
-                             Cutoff = QualityTypes.HDTV
-                         };
-
-            //Add or Update SD
-            Logger.Debug(String.Format("Checking for default QualityProfile: {0}", sd.Name));
-            var sdDb = repository.Single<QualityProfile>(i => i.Name == sd.Name);
-            if (sdDb == null)
-            {
-                Logger.Debug(String.Format("Adding new default QualityProfile: {0}", sd.Name));
-                repository.Add(sd);
-            }
-
-            else
-            {
-                Logger.Debug(String.Format("Updating default QualityProfile: {0}", sd.Name));
-                sd.QualityProfileId = sdDb.QualityProfileId;
-                repository.Update(sd);
-            }
-
-            //Add or Update HD
-            Logger.Debug(String.Format("Checking for default QualityProfile: {0}", hd.Name));
-            var hdDb = repository.Single<QualityProfile>(i => i.Name == hd.Name);
-            if (hdDb == null)
-            {
-                Logger.Debug(String.Format("Adding new default QualityProfile: {0}", hd.Name));
-                repository.Add(hd);
-            }
-
-            else
-            {
-                Logger.Debug(String.Format("Updating default QualityProfile: {0}", hd.Name));
-                hd.QualityProfileId = hdDb.QualityProfileId;
-                repository.Update(hd);
-            }
         }
     }
 }

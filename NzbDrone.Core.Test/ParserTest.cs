@@ -17,7 +17,6 @@ namespace NzbDrone.Core.Test
          * Unreported.World.Chinas.Lost.Sons.WS.PDTV.XviD-FTP
          */
 
-        [Test]
         [TestCase("Sonny.With.a.Chance.S02E15", "Sonny.With.a.Chance", 2, 15)]
         [TestCase("Two.and.a.Half.Me.103.720p.HDTV.X264-DIMENSION", "Two.and.a.Half.Me", 1, 3)]
         [TestCase("Two.and.a.Half.Me.113.720p.HDTV.X264-DIMENSION", "Two.and.a.Half.Me", 1, 13)]
@@ -63,7 +62,6 @@ namespace NzbDrone.Core.Test
         }
 
 
-        [Test]
         [TestCase("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD", QualityTypes.DVD)]
         [TestCase("WEEDS.S03E01-06.DUAL.BDRip.X-viD.AC3.-HELLYWOOD", QualityTypes.DVD)]
         [TestCase("WEEDS.S03E01-06.DUAL.BDRip.AC3.-HELLYWOOD", QualityTypes.DVD)]
@@ -123,7 +121,7 @@ namespace NzbDrone.Core.Test
             }
         }
 
-        [Test]
+      
         [Timeout(1000)]
         [TestCase("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD", "WEEDS", 3, new[] { 1, 2, 3, 4, 5, 6 }, 6)]
         [TestCase("Two.and.a.Half.Men.103.104.720p.HDTV.X264-DIMENSION", "Two.and.a.Half.Men", 1, new[] { 3, 4 }, 2)]
@@ -131,7 +129,7 @@ namespace NzbDrone.Core.Test
         [TestCase("The Borgias S01e01 e02 ShoHD On Demand 1080i DD5 1 ALANiS", "The Borgias", 1, new[] { 1, 2 }, 2)]
         [TestCase("Big Time Rush 1x01 to 10 480i DD2 0 Sianto", "Big Time Rush", 1, new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }, 10)]
         [TestCase("White.Collar.2x04.2x05.720p.BluRay-FUTV", "White.Collar", 2, new[] { 4, 5 }, 2)]
-        [TestCase("Desperate.Housewives.S07E22E23.720p.HDTV.X264-DIMENSION", "Desperate.Housewives", 7, new[] { 22,23 }, 2)]
+        [TestCase("Desperate.Housewives.S07E22E23.720p.HDTV.X264-DIMENSION", "Desperate.Housewives", 7, new[] { 22, 23 }, 2)]
         //[Row("The.Kennedys.Part.1.and.Part.2.DSR.XviD-SYS", 1, new[] { 1, 2 })]
         [TestCase("S07E22 - 7x23 - And Lots of Security.. [HDTV].mkv", "", 7, new[] { 22, 23 }, 2)]
         [TestCase("Desparate Housewives - S07E22 - 7x23 - And Lots of Security.. [HDTV].mkv", "Desparate Housewives", 7, new[] { 22, 23 }, 2)]
@@ -147,7 +145,7 @@ namespace NzbDrone.Core.Test
             Assert.AreEqual(count, result.EpisodeNumbers.Count);
         }
 
-        [Test]
+       
         [TestCase("Conan 2011 04 18 Emma Roberts HDTV XviD BFF", "Conan", 2011, 04, 18)]
         [TestCase("The Tonight Show With Jay Leno 2011 04 15 1080i HDTV DD5 1 MPEG2 TrollHD", "The Tonight Show With Jay Leno", 2011, 04, 15)]
         [TestCase("The.Daily.Show.2010.10.11.Johnny.Knoxville.iTouch-MW", "The.Daily.Show", 2010, 10, 11)]
@@ -164,7 +162,7 @@ namespace NzbDrone.Core.Test
         }
 
 
-        [Test]
+       
         [TestCase("30.Rock.Season.04.HDTV.XviD-DIMENSION", "30.Rock", 4)]
         [TestCase("Parks.and.Recreation.S02.720p.x264-DIMENSION", "Parks.and.Recreation", 2)]
         [TestCase("The.Office.US.S03.720p.x264-DIMENSION", "The.Office.US", 3)]
@@ -176,7 +174,7 @@ namespace NzbDrone.Core.Test
             Assert.AreEqual(0, result.EpisodeNumbers.Count);
         }
 
-        [Test]
+      
         [TestCase("Conan", "conan")]
         [TestCase("The Tonight Show With Jay Leno", "tonightshowwithjayleno")]
         [TestCase("The.Daily.Show", "dailyshow")]
@@ -188,7 +186,7 @@ namespace NzbDrone.Core.Test
             Assert.AreEqual(seriesName, result);
         }
 
-        [Test]
+  
         [TestCase(@"c:\test\", @"c:\test")]
         [TestCase(@"c:\\test\\", @"c:\test")]
         [TestCase(@"C:\\Test\\", @"C:\Test")]
@@ -200,7 +198,7 @@ namespace NzbDrone.Core.Test
             Assert.AreEqual(clean, result);
         }
 
-        [Test]
+      
         [TestCase("CaPitAl", "capital")]
         [TestCase("peri.od", "period")]
         [TestCase("this.^&%^**$%@#$!That", "thisthat")]
@@ -210,7 +208,7 @@ namespace NzbDrone.Core.Test
             Assert.AreEqual(clean, result);
         }
 
-        [Test]
+     
         [TestCase("the")]
         [TestCase("and")]
         [TestCase("or")]
@@ -240,7 +238,7 @@ namespace NzbDrone.Core.Test
 
         }
 
-        [Test]
+ 
         [TestCase("the")]
         [TestCase("and")]
         [TestCase("or")]

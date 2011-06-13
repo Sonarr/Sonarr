@@ -40,14 +40,13 @@ namespace NzbDrone.Core.Test
             Assert.AreEqual(result.Count, 2);
         }
 
-        [Test]
-        public void AddRootDir()
+        [TestCase("D:\\TV Shows\\")]
+        [TestCase("//server//folder")]
+        public void AddRootDir(string path)
         {
             //Setup
             var mocker = new AutoMoqer();
             mocker.SetConstant(MockLib.GetEmptyRepository());
-
-            const string path = @"C:\TV\";
 
             //Act
             var rootDirProvider = mocker.Resolve<RootDirProvider>();
@@ -62,25 +61,26 @@ namespace NzbDrone.Core.Test
             Assert.AreEqual(path, rootDirs.First().Path);
         }
 
-        [Test]
-        public void UpdateRootDir()
+
+        [TestCase("D:\\TV Shows\\")]
+        [TestCase("//server//folder")]
+        public void UpdateRootDir(string newPath)
         {
             //Setup
             var mocker = new AutoMoqer();
             mocker.SetConstant(MockLib.GetEmptyRepository());
 
-            const string path = @"C:\TV2";
 
             //Act
             var rootDirProvider = mocker.Resolve<RootDirProvider>();
             rootDirProvider.Add(new RootDir { Path = @"C:\TV" });
-            rootDirProvider.Update(new RootDir { Id = 1, Path = path });
+            rootDirProvider.Update(new RootDir { Id = 1, Path = newPath });
 
             //Assert
             var rootDirs = rootDirProvider.GetAll();
             Assert.IsNotEmpty(rootDirs);
             rootDirs.Should().HaveCount(1);
-            Assert.AreEqual(path, rootDirs.First().Path);
+            Assert.AreEqual(newPath, rootDirs.First().Path);
         }
 
         [Test]
@@ -143,6 +143,26 @@ namespace NzbDrone.Core.Test
         {
             var mocker = new AutoMoqer();
             mocker.Resolve<RootDirProvider>().GetUnmappedFolders("");
+        }
+
+        [TestCase("")]
+        [TestCase(null)]
+        [TestCase("BAD PATH")]
+        [ExpectedException(typeof(ArgumentException))]
+        public void invalid_folder_path_throws_on_add(string path)
+        {
+            var mocker = new AutoMoqer();
+            mocker.Resolve<RootDirProvider>().Add(new RootDir { Id = 0, Path = path });
+        }
+
+        [TestCase("")]
+        [TestCase(null)]
+        [TestCase("BAD PATH")]
+        [ExpectedException(typeof(ArgumentException))]
+        public void invalid_folder_path_throws_on_update(string path)
+        {
+            var mocker = new AutoMoqer();
+            mocker.Resolve<RootDirProvider>().Update(new RootDir { Id = 2, Path = path });
         }
     }
 }

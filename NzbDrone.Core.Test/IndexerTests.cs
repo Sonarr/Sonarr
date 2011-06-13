@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Test
     // ReSharper disable InconsistentNaming
     public class IndexerTests : TestBase
     {
-        [Test]
+    
         [TestCase("nzbsorg.xml", 0)]
         [TestCase("nzbsrus.xml", 6)]
         [TestCase("newzbin.xml", 1)]
@@ -90,7 +90,7 @@ namespace NzbDrone.Core.Test
             ExceptionVerification.ExcpectedWarns(1);
         }
 
-        [Test]
+     
         [TestCase("Adventure.Inc.S03E19.DVDRip.XviD-OSiTV", 3, 19, QualityTypes.DVD)]
         public void custome_parser_partial_success(string title, int season, int episode, QualityTypes quality)
         {
@@ -117,7 +117,7 @@ namespace NzbDrone.Core.Test
             Assert.AreEqual(quality, result.Quality.QualityType);
         }
 
-        [Test]
+
         [TestCase("Adventure.Inc.DVDRip.XviD-OSiTV")]
         public void custome_parser_full_parse(string title)
         {

@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Test
     // ReSharper disable InconsistentNaming
     public class EpisodeStatusTest : TestBase
     {
-        [Test]
+        
         [TestCase(1, false, false, EpisodeStatusType.NotAired)]
         [TestCase(-2, false, false, EpisodeStatusType.Missing)]
         [TestCase(1, true, false, EpisodeStatusType.Ready)]
@@ -36,7 +36,6 @@ namespace NzbDrone.Core.Test
         }
 
 
-        [Test]
         [TestCase(1, false, false, EpisodeStatusType.Missing)]
         [TestCase(-2, false, false, EpisodeStatusType.Missing)]
         [TestCase(1, true, false, EpisodeStatusType.Ready)]
@@ -59,7 +58,6 @@ namespace NzbDrone.Core.Test
         }
 
 
-        [Test]
         [TestCase(1, false, false, EpisodeStatusType.Downloading)]
         [TestCase(-2, false, false, EpisodeStatusType.Downloading)]
         [TestCase(1, true, false, EpisodeStatusType.Downloading)]
@@ -83,7 +81,7 @@ namespace NzbDrone.Core.Test
             Assert.AreEqual(status, episode.Status);
         }
 
-        [Test]
+    
         [TestCase(1, true, false, EpisodeStatusType.Ignored)]
         [TestCase(-2, true, false, EpisodeStatusType.Ignored)]
         [TestCase(1, true, true, EpisodeStatusType.Ready)]

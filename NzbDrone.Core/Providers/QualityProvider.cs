@@ -53,5 +53,39 @@ namespace NzbDrone.Core.Providers
         {
             return _repository.Single<QualityProfile>(q => q.QualityProfileId == profileId);
         }
+
+        public virtual void SetupDefaultProfiles()
+        {
+            Logger.Info("Setting up default quality profiles");
+
+            var profiles = GetAllProfiles();
+
+            var sd = new QualityProfile { Name = "SD", Allowed = new List<QualityTypes> { QualityTypes.SDTV, QualityTypes.DVD }, Cutoff = QualityTypes.SDTV };
+
+            var hd = new QualityProfile
+            {
+                Name = "HD",
+                Allowed = new List<QualityTypes> { QualityTypes.HDTV, QualityTypes.WEBDL, QualityTypes.Bluray720p },
+                Cutoff = QualityTypes.HDTV
+            };
+
+            //Add or Update SD
+            Logger.Debug(String.Format("Checking for default QualityProfile: {0}", sd.Name));
+            var sdDb = profiles.Where(p => p.Name == sd.Name).FirstOrDefault();
+            if (sdDb == null)
+            {
+                Logger.Debug(String.Format("Adding new default QualityProfile: {0}", sd.Name));
+                Add(sd);
+            }
+
+            //Add or Update HD
+            Logger.Debug(String.Format("Checking for default QualityProfile: {0}", hd.Name));
+            var hdDb = profiles.Where(p => p.Name == hd.Name).FirstOrDefault();
+            if (hdDb == null)
+            {
+                Logger.Debug(String.Format("Adding new default QualityProfile: {0}", hd.Name));
+                Add(hd);
+            }
+        }
     }
 }

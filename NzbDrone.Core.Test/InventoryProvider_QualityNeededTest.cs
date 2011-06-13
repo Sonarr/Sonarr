@@ -205,18 +205,17 @@ namespace NzbDrone.Core.Test
         }
 
         //Should Download
-        [Test]
-       [TestCase(QualityTypes.SDTV, true, QualityTypes.HDTV, false, true)]
-       [TestCase(QualityTypes.DVD, true, QualityTypes.Bluray720p, true, true)]
-       [TestCase(QualityTypes.HDTV, false, QualityTypes.HDTV, true, true)]
-       [TestCase(QualityTypes.HDTV, false, QualityTypes.HDTV, false, false)]
-       [TestCase(QualityTypes.Bluray720p, true, QualityTypes.Bluray1080p, false, false)]
-       [TestCase(QualityTypes.HDTV, true, QualityTypes.Bluray720p, true, true)]
-       [TestCase(QualityTypes.Bluray1080p, true, QualityTypes.Bluray720p, true, false)]
-       [TestCase(QualityTypes.Bluray1080p, true, QualityTypes.Bluray720p, false, false)]
-       [TestCase(QualityTypes.Bluray1080p, false, QualityTypes.Bluray720p, true, false)]
-       [TestCase(QualityTypes.HDTV, false, QualityTypes.Bluray720p, true, true)]
-       [TestCase(QualityTypes.HDTV, true, QualityTypes.HDTV, false, false)]
+        [TestCase(QualityTypes.SDTV, true, QualityTypes.HDTV, false, true)]
+        [TestCase(QualityTypes.DVD, true, QualityTypes.Bluray720p, true, true)]
+        [TestCase(QualityTypes.HDTV, false, QualityTypes.HDTV, true, true)]
+        [TestCase(QualityTypes.HDTV, false, QualityTypes.HDTV, false, false)]
+        [TestCase(QualityTypes.Bluray720p, true, QualityTypes.Bluray1080p, false, false)]
+        [TestCase(QualityTypes.HDTV, true, QualityTypes.Bluray720p, true, true)]
+        [TestCase(QualityTypes.Bluray1080p, true, QualityTypes.Bluray720p, true, false)]
+        [TestCase(QualityTypes.Bluray1080p, true, QualityTypes.Bluray720p, false, false)]
+        [TestCase(QualityTypes.Bluray1080p, false, QualityTypes.Bluray720p, true, false)]
+        [TestCase(QualityTypes.HDTV, false, QualityTypes.Bluray720p, true, true)]
+        [TestCase(QualityTypes.HDTV, true, QualityTypes.HDTV, false, false)]
         public void Is_upgrade(QualityTypes fileQuality, bool isFileProper, QualityTypes reportQuality,
                                bool isReportProper, bool excpected)
         {
