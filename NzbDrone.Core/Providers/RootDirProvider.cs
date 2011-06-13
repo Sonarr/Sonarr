@@ -31,11 +31,11 @@ namespace NzbDrone.Core.Providers
             return _repository.All<RootDir>().ToList();
         }
 
-        public virtual void Add(RootDir rootDir)
+        public virtual int Add(RootDir rootDir)
         {
             ValidatePath(rootDir);
 
-            _repository.Add(rootDir);
+            return (int)_repository.Add(rootDir);
         }
 
         public virtual void Remove(int rootDirId)
