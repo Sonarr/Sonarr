@@ -36,9 +36,6 @@ namespace NzbDrone.Web
         {
             base.OnApplicationStarted();
 
-            Logger.Info("NZBDrone Starting up.");
-            CentralDispatch.DedicateToHost();
-
             RegisterRoutes(RouteTable.Routes);
             //base.OnApplicationStarted();
             AreaRegistration.RegisterAllAreas();
@@ -48,6 +45,10 @@ namespace NzbDrone.Web
 
         protected override IKernel CreateKernel()
         {
+            LogConfiguration.Setup();
+            Logger.Info("NZBDrone Starting up.");
+            CentralDispatch.DedicateToHost();
+
             var kernel = CentralDispatch.NinjectKernel;
 
             // kernel.Bind<IRepository>().ToConstant(kernel.Get<IRepository>("LogDb"));

@@ -49,7 +49,8 @@ namespace NzbDrone
             IISProcess.ErrorDataReceived += (OnErrorDataReceived);
 
             //Set Variables for the config file.
-            Environment.SetEnvironmentVariable("NZBDRONE_PATH", Config.ProjectRoot);
+            IISProcess.StartInfo.EnvironmentVariables.Add("NZBDRONE_PATH", Config.ProjectRoot);
+            IISProcess.StartInfo.EnvironmentVariables.Add("NZBDRONE_PID", Process.GetCurrentProcess().Id.ToString());
 
             try
             {
@@ -120,7 +121,7 @@ namespace NzbDrone
             try
             {
                 var response = new WebClient().DownloadString(AppUrl + "/health");
-                
+
                 if (!response.Contains("OK"))
                 {
                     throw new ServerException("Health services responded with an invalid response.");
@@ -147,6 +148,12 @@ namespace NzbDrone
             if (e == null || String.IsNullOrWhiteSpace(e.Data) || e.Data.StartsWith("Request started:") ||
                 e.Data.StartsWith("Request ended:") || e.Data == ("IncrementMessages called"))
                 return;
+
+            if (e.Data.Contains(" NzbDrone."))
+            {
+                Console.WriteLine(e.Data);
+                return;
+            }
 
             IISLogger.Trace(e.Data);
         }

@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.IO;
 using Ninject;
+using Ninject.Activation;
 using NLog;
 using NLog.Config;
 
@@ -17,12 +18,13 @@ namespace NzbDrone.Core.Instrumentation
 
             LogManager.Configuration = new XmlLoggingConfiguration(Path.Combine(CentralDispatch.AppPath, "log.config"),
                                                                    false);
-            LogManager.ConfigurationReloaded += ((s, e) => BindCustomLoggers());
-            BindCustomLoggers();
+
+            LogManager.ConfigurationReloaded += ((s, e) => StartDbLogging());
         }
 
-        private static void BindCustomLoggers()
+        public static void StartDbLogging()
         {
+
 #if Release
             var exTarget = new ExceptioneerTarget();
             LogManager.Configuration.AddTarget("Exceptioneer", exTarget);
@@ -30,7 +32,7 @@ namespace NzbDrone.Core.Instrumentation
 #endif
             var sonicTarget = CentralDispatch.NinjectKernel.Get<SubsonicTarget>();
             LogManager.Configuration.AddTarget("DbLogger", sonicTarget);
-            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", NLog.LogLevel.Info, sonicTarget));
+            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Info, sonicTarget));
 
             LogManager.Configuration.Reload();
         }
