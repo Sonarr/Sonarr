@@ -13,6 +13,7 @@
     <link href="../../Content/jquery-ui.css" rel="stylesheet" type="text/css" />
     <link href="../../Content/jquery-ui.custom.css" rel="stylesheet" type="text/css" />
     @RenderSection("HeaderContent", required: false)
+    @MvcMiniProfiler.MiniProfiler.RenderIncludes()
 </head>
 <body>
     <div id="centered">

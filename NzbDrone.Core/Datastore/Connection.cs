@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
+using MvcMiniProfiler.Data;
 using SubSonic.DataProviders;
+using SubSonic.DataProviders.SQLite;
 using SubSonic.Repository;
 
 namespace NzbDrone.Core.Datastore
@@ -41,7 +40,7 @@ namespace NzbDrone.Core.Datastore
 
         public static IDataProvider GetDataProvider(string connectionString)
         {
-            return ProviderFactory.GetProvider(connectionString, "System.Data.SQLite");
+            return new ProfiledSQLiteProvider(connectionString, "System.Data.SQLite");
         }
 
         public static IRepository CreateSimpleRepository(IDataProvider dataProvider)
@@ -54,5 +53,20 @@ namespace NzbDrone.Core.Datastore
             return new SimpleRepository(GetDataProvider(connectionString), SimpleRepositoryOptions.RunMigrations);
         }
 
+    }
+
+
+    public class ProfiledSQLiteProvider : SQLiteProvider
+    {
+        public ProfiledSQLiteProvider(string connectionString, string providerName)
+            : base(connectionString, providerName)
+        {
+
+        }
+
+        public override System.Data.Common.DbConnection CreateConnection(string connectionString)
+        {
+            return ProfiledDbConnection.Get(base.CreateConnection(connectionString));
+        }
     }
 }
