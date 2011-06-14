@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using Ninject;
 using NLog;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Providers.Core;
@@ -14,6 +15,7 @@ namespace NzbDrone.Core.Providers
         private readonly ConfigProvider _configProvider;
         private readonly HttpProvider _httpProvider;
 
+        [Inject]
         public XbmcProvider(ConfigProvider configProvider, HttpProvider httpProvider)
         {
             _configProvider = configProvider;

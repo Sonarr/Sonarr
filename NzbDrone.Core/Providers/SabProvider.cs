@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Xml.Linq;
+using Ninject;
 using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
@@ -21,6 +22,7 @@ namespace NzbDrone.Core.Providers
         {
         }
 
+        [Inject]
         public SabProvider(ConfigProvider configProvider, HttpProvider httpProvider)
         {
             _configProvider = configProvider;

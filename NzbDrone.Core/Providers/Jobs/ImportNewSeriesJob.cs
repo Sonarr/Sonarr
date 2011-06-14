@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Ninject;
 using NLog;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Repository;
@@ -23,12 +24,13 @@ namespace NzbDrone.Core.Providers.Jobs
 
         private List<int> _attemptedSeries;
 
+        [Inject]
         public ImportNewSeriesJob(SeriesProvider seriesProvider,
             MediaFileProvider mediaFileProvider, UpdateInfoJob updateInfoJob, DiskScanJob diskScanJob)
         {
             _seriesProvider = seriesProvider;
             _mediaFileProvider = mediaFileProvider;
-           _updateInfoJob = updateInfoJob;
+            _updateInfoJob = updateInfoJob;
             _diskScanJob = diskScanJob;
         }
 
@@ -91,22 +93,22 @@ namespace NzbDrone.Core.Providers.Jobs
 
                 foreach (var season in seasons)
                 {
-                    if (season!=currentSeasons )
+                    if (season != currentSeasons)
                     {
-                        
+
                     }
                 }
 
-             /*   Logger.Debug("Looking for seasons to ignore");
-                foreach (var season in updatedSeries.Seasons)
-                {
-                    if (season.SeasonNumber != updatedSeries.Seasons.Max(s => s.SeasonNumber) && _mediaFileProvider.GetSeasonFiles(season.SeasonId).Count() == 0)
-                    {
-                        Logger.Info("Season {0} of {1} doesn't have any files on disk. season will not be monitored.", season.SeasonNumber, updatedSeries.Title);
-                        season.Monitored = false;
-                        _seasonProvider.SaveSeason(season);
-                    }
-                }*/
+                /*   Logger.Debug("Looking for seasons to ignore");
+                   foreach (var season in updatedSeries.Seasons)
+                   {
+                       if (season.SeasonNumber != updatedSeries.Seasons.Max(s => s.SeasonNumber) && _mediaFileProvider.GetSeasonFiles(season.SeasonId).Count() == 0)
+                       {
+                           Logger.Info("Season {0} of {1} doesn't have any files on disk. season will not be monitored.", season.SeasonNumber, updatedSeries.Title);
+                           season.Monitored = false;
+                           _seasonProvider.SaveSeason(season);
+                       }
+                   }*/
             }
         }
     }

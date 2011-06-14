@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Ninject;
 using NLog;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model.Notification;
@@ -22,6 +23,7 @@ namespace NzbDrone.Core.Providers
         private readonly IRepository _repository;
         private readonly ConfigProvider _configProvider;
 
+        [Inject]
         public MediaFileProvider(IRepository repository, DiskProvider diskProvider,
                                  EpisodeProvider episodeProvider, SeriesProvider seriesProvider,
                                  ConfigProvider configProvider)

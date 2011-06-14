@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 using System.ServiceModel.Syndication;
+using Ninject;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.ExternalNotification;
@@ -10,6 +11,7 @@ namespace NzbDrone.Core.Providers.Indexer
 {
     public class NzbsRUs : IndexerBase
     {
+          [Inject]
         public NzbsRUs(HttpProvider httpProvider, ConfigProvider configProvider) : base(httpProvider, configProvider)
         {
         }

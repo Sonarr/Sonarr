@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Ninject;
 using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository;
@@ -15,6 +16,7 @@ namespace NzbDrone.Core.Providers
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
+        [Inject]
         public InventoryProvider(SeriesProvider seriesProvider, EpisodeProvider episodeProvider, HistoryProvider historyProvider)
         {
             _seriesProvider = seriesProvider;

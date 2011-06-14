@@ -86,7 +86,6 @@ namespace NzbDrone.Core
                 _kernel.Bind<ExternalNotificationProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<XbmcProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<ConfigProvider>().To<ConfigProvider>().InSingletonScope();
-                _kernel.Bind<SyncProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<NotificationProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<LogProvider>().ToSelf().InSingletonScope();
                 _kernel.Bind<MediaFileProvider>().ToSelf().InSingletonScope();

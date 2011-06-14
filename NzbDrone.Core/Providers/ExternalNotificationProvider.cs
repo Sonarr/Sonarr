@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Ninject;
 using NLog;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model;
@@ -16,6 +17,7 @@ namespace NzbDrone.Core.Providers
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IRepository _repository;
 
+          [Inject]
         public ExternalNotificationProvider(IRepository repository)
         {
             _repository = repository;

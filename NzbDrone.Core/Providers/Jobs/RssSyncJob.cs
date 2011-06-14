@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Ninject;
 using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
@@ -18,6 +19,7 @@ namespace NzbDrone.Core.Providers.Jobs
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
+        [Inject]
         public RssSyncJob(IEnumerable<IndexerBase> indexers, InventoryProvider inventoryProvider, DownloadProvider downloadProvider, IndexerProvider indexerProvider)
         {
             _indexers = indexers;

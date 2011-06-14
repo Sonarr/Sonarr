@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
+using Ninject;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Repository;
 
@@ -10,6 +11,7 @@ namespace NzbDrone.Core.Providers.Jobs
         private readonly SeriesProvider _seriesProvider;
         private readonly EpisodeProvider _episodeProvider;
 
+        [Inject]
         public UpdateInfoJob(SeriesProvider seriesProvider, EpisodeProvider episodeProvider)
         {
             _seriesProvider = seriesProvider;
@@ -18,7 +20,7 @@ namespace NzbDrone.Core.Providers.Jobs
 
         public UpdateInfoJob()
         {
-            
+
         }
 
         public string Name

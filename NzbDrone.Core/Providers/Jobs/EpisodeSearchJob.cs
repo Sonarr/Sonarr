@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Ninject;
 using NLog;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model;
@@ -20,6 +21,7 @@ namespace NzbDrone.Core.Providers.Jobs
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
+        [Inject]
         public EpisodeSearchJob(InventoryProvider inventoryProvider, DownloadProvider downloadProvider, IndexerProvider indexerProvider, EpisodeProvider episodeProvider)
         {
             _inventoryProvider = inventoryProvider;
@@ -44,7 +46,7 @@ namespace NzbDrone.Core.Providers.Jobs
                 throw new ArgumentOutOfRangeException("targetId");
 
             var episode = _episodeProvider.GetEpisode(targetId);
-        
+
             if (episode == null)
             {
                 Logger.Error("Unable to find an episode {0} in database", targetId);
@@ -58,7 +60,7 @@ namespace NzbDrone.Core.Providers.Jobs
 
             var title = SceneNameHelper.GetTitleById(series.SeriesId);
 
-            if(string.IsNullOrWhiteSpace(title))
+            if (string.IsNullOrWhiteSpace(title))
             {
                 title = series.Title;
             }

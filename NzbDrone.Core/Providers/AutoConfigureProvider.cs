@@ -13,9 +13,6 @@ namespace NzbDrone.Core.Providers
 {
     public class AutoConfigureProvider
     {
-        public AutoConfigureProvider()
-        {
-        }
 
         public SabnzbdInfoModel AutoConfigureSab()
         {
@@ -29,8 +26,7 @@ namespace NzbDrone.Core.Providers
             var info =
                 ipProperties.GetActiveTcpListeners().Select(
                     p =>
-                    new ConnectionInfoModel
-                        {Address = p.Address.ToString().Replace("0.0.0.0", "127.0.0.1"), Port = p.Port}).Distinct().
+                    new ConnectionInfoModel { Address = p.Address.ToString().Replace("0.0.0.0", "127.0.0.1"), Port = p.Port }).Distinct().
                     ToList();
 
             info.RemoveAll(i => i.Port == 135);
@@ -51,7 +47,8 @@ namespace NzbDrone.Core.Providers
             {
                 var apiKey = GetApiKey(connection.Address, connection.Port);
                 if (!String.IsNullOrEmpty(apiKey))
-                    return new SabnzbdInfoModel {
+                    return new SabnzbdInfoModel
+                    {
                         Host = connection.Address,
                         Port = connection.Port,
                         ApiKey = apiKey

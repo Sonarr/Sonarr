@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Ninject;
 using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
@@ -17,6 +18,7 @@ namespace NzbDrone.Core.Providers
         private readonly EpisodeProvider _episodeProvider;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
+        [Inject]
         public DownloadProvider(SabProvider sabProvider, HistoryProvider historyProvider, EpisodeProvider episodeProvider)
         {
             _sabProvider = sabProvider;
