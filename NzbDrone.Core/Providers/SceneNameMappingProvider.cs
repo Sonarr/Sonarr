@@ -23,6 +23,11 @@ namespace NzbDrone.Core.Providers
             _httpProvider = httpProvider;
         }
 
+        public SceneNameMappingProvider()
+        {
+            
+        }
+
         public virtual bool UpdateMappings()
         {
             try
