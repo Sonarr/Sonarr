@@ -205,12 +205,12 @@ namespace NzbDrone.Core.Providers
 
         public virtual Tuple<int, int> GetEpisodeFilesCount(int seriesId)
         {
-            var allEpisodes = _episodeProvider.GetEpisodeBySeries(seriesId);
+            var allEpisodes = _episodeProvider.GetEpisodeBySeries(seriesId).ToList();
 
-            var episodeTotal = allEpisodes.Where(e => !e.Ignored && e.AirDate <= DateTime.Today && e.AirDate.Year > 1900);
-            var avilableEpisodes = episodeTotal.Where(e => e.EpisodeFileId > 0);
+            var episodeTotal = allEpisodes.Where(e => !e.Ignored && e.AirDate <= DateTime.Today && e.AirDate.Year > 1900).ToList();
+            var avilableEpisodes = episodeTotal.Where(e => e.EpisodeFileId > 0).ToList();
 
-            return new Tuple<int, int>(avilableEpisodes.Count(), episodeTotal.Count());
+            return new Tuple<int, int>(avilableEpisodes.Count, episodeTotal.Count);
         }
 
         private List<string> GetMediaFileList(string path)
