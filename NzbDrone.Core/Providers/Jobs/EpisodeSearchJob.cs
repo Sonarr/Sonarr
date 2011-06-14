@@ -16,16 +16,19 @@ namespace NzbDrone.Core.Providers.Jobs
         private readonly DownloadProvider _downloadProvider;
         private readonly IndexerProvider _indexerProvider;
         private readonly EpisodeProvider _episodeProvider;
-
+        private readonly SceneNameMappingProvider _sceneNameMappingProvider;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public EpisodeSearchJob(InventoryProvider inventoryProvider, DownloadProvider downloadProvider, IndexerProvider indexerProvider, EpisodeProvider episodeProvider)
+        public EpisodeSearchJob(InventoryProvider inventoryProvider, DownloadProvider downloadProvider,
+                                    IndexerProvider indexerProvider, EpisodeProvider episodeProvider,
+                                    SceneNameMappingProvider sceneNameMappingProvider)
         {
             _inventoryProvider = inventoryProvider;
             _downloadProvider = downloadProvider;
             _indexerProvider = indexerProvider;
             _episodeProvider = episodeProvider;
+            _sceneNameMappingProvider = sceneNameMappingProvider;
         }
 
         public string Name
@@ -56,7 +59,7 @@ namespace NzbDrone.Core.Providers.Jobs
             var indexers = _indexerProvider.GetEnabledIndexers();
             var reports = new List<EpisodeParseResult>();
 
-            var title = SceneNameHelper.GetTitleById(series.SeriesId);
+            var title = _sceneNameMappingProvider.GetSceneName(series.SeriesId);
 
             if(string.IsNullOrWhiteSpace(title))
             {

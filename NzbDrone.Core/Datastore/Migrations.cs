@@ -58,6 +58,7 @@ namespace NzbDrone.Core.Datastore
             repository.Single<QualityProfile>(1);
             repository.Single<History>(1);
             repository.Single<IndexerSetting>(1);
+            repository.Single<SceneNameMapping>(1);
         }
 
 

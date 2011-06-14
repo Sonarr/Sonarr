@@ -22,12 +22,15 @@ namespace NzbDrone.Core.Providers
         private readonly IRepository _repository;
         private readonly ConfigProvider _configProvider;
         private readonly TvDbProvider _tvDbProvider;
+        private readonly SceneNameMappingProvider _sceneNameMappingProvider;
 
-        public SeriesProvider(ConfigProvider configProviderProvider, IRepository repository, TvDbProvider tvDbProviderProvider)
+        public SeriesProvider(ConfigProvider configProviderProvider, IRepository repository,
+                                TvDbProvider tvDbProviderProvider, SceneNameMappingProvider sceneNameMappingProvider)
         {
             _configProvider = configProviderProvider;
             _repository = repository;
             _tvDbProvider = tvDbProviderProvider;
+            _sceneNameMappingProvider = sceneNameMappingProvider;
         }
 
         public SeriesProvider()
@@ -105,7 +108,7 @@ namespace NzbDrone.Core.Providers
         {
             var normalizeTitle = Parser.NormalizeTitle(title);
 
-            var seriesId = SceneNameHelper.GetIdByName(normalizeTitle);
+            var seriesId = _sceneNameMappingProvider.GetSeriesId(normalizeTitle);
             if (seriesId != null)
             {
                 return GetSeries(seriesId.Value);
