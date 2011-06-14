@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Ninject;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository;
 using SubSonic.Repository;
@@ -11,6 +12,7 @@ namespace NzbDrone.Core.Providers
     {
         private readonly IRepository _repository;
 
+        [Inject]
         public UpcomingEpisodesProvider(IRepository repository)
         {
             _repository = repository;
@@ -26,7 +28,7 @@ namespace NzbDrone.Core.Providers
             var today = allEps.Where(e => e.AirDate == DateTime.Today).ToList();
             var week = allEps.Where(e => e.AirDate > DateTime.Today).ToList();
 
-            return new UpcomingEpisodesModel {Yesterday = yesterday, Today = today, Week = week};
+            return new UpcomingEpisodesModel { Yesterday = yesterday, Today = today, Week = week };
         }
 
         public virtual List<Episode> Yesterday()

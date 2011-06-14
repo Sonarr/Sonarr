@@ -168,6 +168,7 @@
     </Content>
     <Content Include="Files\Queue.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Files\QueueEmpty.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

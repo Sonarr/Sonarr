@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.ServiceModel.Syndication;
 using System.Web;
+using Ninject;
 using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
@@ -15,6 +16,7 @@ namespace NzbDrone.Core.Providers.Indexer
         private readonly HttpProvider _httpProvider;
         protected readonly ConfigProvider _configProvider;
 
+        [Inject]
         protected IndexerBase(HttpProvider httpProvider, ConfigProvider configProvider)
         {
             _httpProvider = httpProvider;

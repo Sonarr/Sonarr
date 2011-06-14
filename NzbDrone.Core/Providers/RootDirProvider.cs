@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Ninject;
 using NLog;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
@@ -16,7 +17,7 @@ namespace NzbDrone.Core.Providers
         private readonly DiskProvider _diskProvider;
         private readonly SeriesProvider _seriesProvider;
 
-
+        [Inject]
         public RootDirProvider(IRepository repository, SeriesProvider seriesProvider, DiskProvider diskProvider)
         {
             _repository = repository;

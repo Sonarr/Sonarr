@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Ninject;
 using NLog;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model;
@@ -47,7 +48,7 @@ namespace NzbDrone.Core.Providers.Jobs
                 throw new ArgumentOutOfRangeException("targetId");
 
             var episode = _episodeProvider.GetEpisode(targetId);
-        
+
             if (episode == null)
             {
                 Logger.Error("Unable to find an episode {0} in database", targetId);
@@ -61,7 +62,7 @@ namespace NzbDrone.Core.Providers.Jobs
 
             var title = _sceneNameMappingProvider.GetSceneName(series.SeriesId);
 
-            if(string.IsNullOrWhiteSpace(title))
+            if (string.IsNullOrWhiteSpace(title))
             {
                 title = series.Title;
             }

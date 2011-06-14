@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using Ninject;
 using NLog;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Repository;
@@ -24,6 +25,7 @@ namespace NzbDrone.Core.Providers.Jobs
 
         private ProgressNotification _notification;
 
+        [Inject]
         public JobProvider(IRepository repository, NotificationProvider notificationProvider, IList<IJob> jobs)
         {
             _repository = repository;

@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using MvcMiniProfiler;
 using NzbDrone.Core.Providers;
 
 namespace NzbDrone.Web.Controllers
@@ -33,6 +34,12 @@ namespace NzbDrone.Web.Controllers
             {
                 if (_notifications.GetProgressNotifications.Count != 0)
                     message = _notifications.GetProgressNotifications[0].CurrentMessage;
+            }
+
+
+            if (MiniProfiler.Current.DurationMilliseconds < 100)
+            {
+                MiniProfiler.Stop(true);
             }
 
             return Json(message, JsonRequestBehavior.AllowGet);

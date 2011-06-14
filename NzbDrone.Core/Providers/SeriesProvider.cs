@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Ninject;
 using NLog;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Providers.Core;
@@ -15,9 +16,6 @@ namespace NzbDrone.Core.Providers
 {
     public class SeriesProvider
     {
-        //TODO: Remove parsing of rest of tv show info we just need the show name
-        //Trims all white spaces and separators from the end of the title.
-
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IRepository _repository;
         private readonly ConfigProvider _configProvider;

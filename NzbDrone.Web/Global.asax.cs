@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Caching;
 using System.Web.Mvc;
 using System.Web.Routing;
+using MvcMiniProfiler;
 using Ninject;
 using Ninject.Web.Mvc;
 using NLog;
@@ -85,6 +86,12 @@ namespace NzbDrone.Web
         protected void Application_BeginRequest()
         {
             Thread.CurrentThread.Name = "UI";
+            var miniprofiler = MiniProfiler.Start();
+        }
+
+        protected void Application_EndRequest()
+        {
+            MiniProfiler.Stop();
         }
     }
 }

@@ -21,17 +21,16 @@ namespace NzbDrone.Web.Controllers
         private readonly RootDirProvider _rootFolderProvider;
         private readonly SeriesProvider _seriesProvider;
         private readonly JobProvider _jobProvider;
-        private readonly SyncProvider _syncProvider;
         private readonly TvDbProvider _tvDbProvider;
         private readonly DiskProvider _diskProvider;
 
-        public AddSeriesController(SyncProvider syncProvider, RootDirProvider rootFolderProvider,
+        public AddSeriesController(RootDirProvider rootFolderProvider,
                                    ConfigProvider configProvider,
                                    QualityProvider qualityProvider, TvDbProvider tvDbProvider,
                                    SeriesProvider seriesProvider, JobProvider jobProvider,
                                    DiskProvider diskProvider)
         {
-            _syncProvider = syncProvider;
+
             _rootFolderProvider = rootFolderProvider;
             _configProvider = configProvider;
             _qualityProvider = qualityProvider;
@@ -50,7 +49,7 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult AddNew()
         {
-            var rootDirs =_rootFolderProvider.GetAll().Select(r =>
+            var rootDirs = _rootFolderProvider.GetAll().Select(r =>
                         new RootDirModel
                         {
                             Path = r.Path,
@@ -137,10 +136,10 @@ namespace NzbDrone.Web.Controllers
 
                 _seriesProvider.AddSeries(path, seriesId, qualityProfileId);
                 ScanNewSeries();
-                return new JsonResult {Data = "ok"};
+                return new JsonResult { Data = "ok" };
             }
 
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new JsonResult { Data = "failed" };
             }

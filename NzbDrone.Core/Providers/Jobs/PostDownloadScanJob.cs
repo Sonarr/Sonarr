@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Ninject;
 using NLog;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers.Core;
@@ -18,6 +19,7 @@ namespace NzbDrone.Core.Providers.Jobs
         private readonly SeriesProvider _seriesProvider;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
+        [Inject]
         public PostDownloadScanJob(ConfigProvider configProvider, DiskProvider diskProvider,
                                     MediaFileProvider mediaFileProvider, SeriesProvider seriesProvider)
         {

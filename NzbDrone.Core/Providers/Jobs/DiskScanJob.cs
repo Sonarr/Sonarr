@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Ninject;
 using NLog;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Repository;
@@ -14,6 +15,7 @@ namespace NzbDrone.Core.Providers.Jobs
         private readonly MediaFileProvider _mediaFileProvider;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
+        [Inject]
         public DiskScanJob(SeriesProvider seriesProvider, MediaFileProvider mediaFileProvider)
         {
             _seriesProvider = seriesProvider;

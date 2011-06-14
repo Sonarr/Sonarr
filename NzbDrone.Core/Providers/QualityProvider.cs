@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Ninject;
 using NLog;
 using NzbDrone.Core.Repository.Quality;
 using SubSonic.Repository;
@@ -16,6 +17,7 @@ namespace NzbDrone.Core.Providers
         {
         }
 
+        [Inject]
         public QualityProvider(IRepository repository)
         {
             _repository = repository;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Ninject;
 
 namespace NzbDrone.Core.Providers
 {
@@ -9,6 +10,7 @@ namespace NzbDrone.Core.Providers
     {
         private readonly SeriesProvider _seriesProvider;
 
+        [Inject]
         public StatsProvider(SeriesProvider seriesProvider)
         {
             _seriesProvider = seriesProvider;

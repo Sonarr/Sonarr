@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Ninject;
 using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository;
@@ -13,6 +14,7 @@ namespace NzbDrone.Core.Providers.Core
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IRepository _repository;
 
+        [Inject]
         public ConfigProvider(IRepository repository)
         {
             _repository = repository;
