@@ -1,0 +1,80 @@
+This file names who's behind the Castle Team. You can find more about us at http://www.castleproject.org/community/team.html
+
+Committers
+==========
+(ordered by the date when joined the project)
+
+- hammett/Hamilton Verissimo
+- Henry Conceição
+- Kevin Williams
+- Craig Neuwirt
+- Gilles Bayon
+- Andrew Hallock
+- Jason Nelson
+- Dru Sellers
+- John Morales
+- CobraLord
+- Dan
+- Tatham Oddie
+- Fabio David Batista
+- Chad Humphries
+- Ayende Rahien
+- G. Richard Bellamy
+- Roelof Blom
+- Ahmed Ghandour 
+- Josh Robb
+- Ernst Naezer
+- Marc-Andre Cournoyer
+- Fabian Schmied
+- Dave Godfrey
+- Markus Zywitza
+- Lee Henson
+- Ken Egozi
+- Chris Ortman
+- Jonathon Rossi
+- Tuna Toksöz
+- Krzysztof Kozmic
+- Mauricio Scheffer
+- John Simons
+
+Managers 
+========
+
+  Patch Manager
+  -------------
+
+  - Josh Robb
+
+  Documentation Manager
+  ---------------------
+
+  - 
+
+
+PMC Members 
+===========
+(ordered by the date when joined the PMC)
+
+- hammett/Hamilton Verissimo (Chair)
+- Henry Conceição
+- Kevin Williams
+- Craig Neuwirt
+- Gilles Bayon
+- Chad Humphries
+- Ayende Rahien
+- Fabio David Batista
+- Roelof Blom
+- Josh Robb
+- Jonathon Rossi
+
+Emeritus 
+========
+(no longer active committers)
+
+- Gilles Bayon
+- Dan
+- Andrew Hallock
+- John Morales
+- CobraLord
+- Tatham Oddie
+- Ahmed Ghandour 

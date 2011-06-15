@@ -1,0 +1,1335 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MigSharp</name>
+    </assembly>
+    <members>
+        <member name="T:MigSharp.Providers.IProvider">
+            <summary>
+            Represents a type that knows how to provide database-specific DDL statements.
+            </summary>
+        </member>
+        <member name="M:MigSharp.Providers.IProvider.ExistsTable(System.String,System.String)">
+            <summary>
+            Checks whether a user created table exists on the database. The returned SQL command must yield 0 if the table does not exist.
+            </summary>
+            <param name="databaseName">The database name.</param>
+            <param name="tableName">The table name.</param>
+            <returns>The SQL command to be executed.</returns>
+        </member>
+        <member name="M:MigSharp.Providers.IProvider.ConvertToSql(System.Object,System.Data.DbType)">
+            <summary>
+            Converts an object to its SQL representation for scripting.
+            </summary>
+        </member>
+        <member name="M:MigSharp.Providers.IProvider.CreateTable(System.String,System.Collections.Generic.IEnumerable{MigSharp.Providers.CreatedColumn},System.String)">
+            <summary>
+            Creates a tables with the specified <paramref name="columns"/>
+            </summary>
+            <param name="tableName">The name of the new table.</param>
+            <param name="columns">The columns of the new table.</param>
+            <param name="primaryKeyConstraintName">Empty if there are no primary key columns.</param>
+            <returns>The SQL commands to be executed.</returns>
+        </member>
+        <member name="M:MigSharp.Providers.IProvider.DropTable(System.String)">
+            <summary>
+            Drops a table.
+            </summary>
+            <returns>The SQL commands to be executed.</returns>
+        </member>
+        <member name="M:MigSharp.Providers.IProvider.AddColumn(System.String,MigSharp.Providers.Column)">
+            <summary>
+            Adds columns to an existing table.
+            </summary>
+            <returns>The SQL commands to be executed.</returns>
+        </member>
+        <member name="M:MigSharp.Providers.IProvider.RenameTable(System.String,System.String)">
+            <summary>
+            Renames an existing table.
+            </summary>
+            <returns>The SQL commands to be executed.</returns>
+        </member>
+        <member name="M:MigSharp.Providers.IProvider.RenameColumn(System.String,System.String,System.String)">
+            <summary>
+            Renames a column of an existing table.
+            </summary>
+            <returns>The SQL commands to be executed.</returns>
+        </member>
+        <member name="M:MigSharp.Providers.IProvider.DropColumn(System.String,System.String)">
+            <summary>
+            Removes a column from an existing table.
+            </summary>
+            <returns>The SQL commands to be executed.</returns>
+        </member>
+        <member name="M:MigSharp.Providers.IProvider.AlterColumn(System.String,MigSharp.Providers.Column)">
+            <summary>
+            Changes the data type of a column.
+            </summary>
+            <returns>The SQL commands to be executed.</returns>
+        </member>
+        <member name="M:MigSharp.Providers.IProvider.AddIndex(System.String,System.Collections.Generic.IEnumerable{System.String},System.String)">
+            <summary>
+            Adds an index to a table.
+            </summary>
+            <returns>The SQL commands to be executed.</returns>
+        </member>
+        <member name="M:MigSharp.Providers.IProvider.DropIndex(System.String,System.String)">
+            <summary>
+            Drops an index from a table.
+            </summary>
+            <returns>The SQL commands to be executed.</returns>
+        </member>
+        <member name="M:MigSharp.Providers.IProvider.AddForeignKey(System.String,System.String,System.Collections.Generic.IEnumerable{MigSharp.Providers.ColumnReference},System.String)">
+            <summary>
+            Adds a foreign key constraint to a table.
+            </summary>
+            <returns>The SQL commands to be executed.</returns>
+        </member>
+        <member name="M:MigSharp.Providers.IProvider.DropForeignKey(System.String,System.String)">
+            <summary>
+            Drops a foreign key constraint from a table.
+            </summary>
+            <returns>The SQL commands to be executed.</returns>
+        </member>
+        <member name="M:MigSharp.Providers.IProvider.AddPrimaryKey(System.String,System.Collections.Generic.IEnumerable{System.String},System.String)">
+            <summary>
+            Adds a primary key constraint to a table.
+            </summary>
+            <returns>The SQL commands to be executed.</returns>
+        </member>
+        <member name="M:MigSharp.Providers.IProvider.RenamePrimaryKey(System.String,System.String,System.String)">
+            <summary>
+            Renames the primary key.
+            </summary>
+            <returns>The SQL commands to be executed.</returns>
+        </member>
+        <member name="M:MigSharp.Providers.IProvider.DropPrimaryKey(System.String,System.String)">
+            <summary>
+            Drops a primary key constraint from a table.
+            </summary>
+            <returns>The SQL commands to be executed.</returns>
+        </member>
+        <member name="M:MigSharp.Providers.IProvider.AddUniqueConstraint(System.String,System.Collections.Generic.IEnumerable{System.String},System.String)">
+            <summary>
+            Adds an unique constraint to a table.
+            </summary>
+            <returns>The SQL commands to be executed.</returns>
+        </member>
+        <member name="M:MigSharp.Providers.IProvider.DropUniqueConstraint(System.String,System.String)">
+            <summary>
+            Drops a unique constraint from a table.
+            </summary>
+            <returns>The SQL commands to be executed.</returns>
+        </member>
+        <member name="M:MigSharp.Providers.IProvider.DropDefault(System.String,MigSharp.Providers.Column)">
+            <summary>
+            Drops the default value (constraint) from a column.
+            </summary>
+            <returns>The SQL commands to be executed.</returns>
+        </member>
+        <member name="T:MigSharp.Migrator">
+            <summary>
+            Represents the main entry point to perform migrations.
+            </summary>
+        </member>
+        <member name="M:MigSharp.Migrator.#ctor(System.String,System.String,MigSharp.MigrationOptions)">
+            <summary>
+            Initializes a new instance of <see cref="T:MigSharp.Migrator"/>.
+            </summary>
+            <param name="connectionString">Connection string to the database to be migrated.</param>
+            <param name="providerName">The name of the provider that should be used for this migrator (<see cref="T:MigSharp.ProviderNames"/>).</param>
+            <param name="options">Options.</param>
+        </member>
+        <member name="M:MigSharp.Migrator.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of <see cref="T:MigSharp.Migrator"/> for a specific module.
+            </summary>
+            <param name="connectionString">Connection string to the database to be migrated.</param>
+            <param name="providerName">The name of the provider that should be used for this migrator (<see cref="T:MigSharp.ProviderNames"/>).</param>
+            <param name="moduleName">The name of the module whose migrations should be executed.</param>
+        </member>
+        <member name="M:MigSharp.Migrator.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of <see cref="T:MigSharp.Migrator"/> with default options.
+            </summary>
+            <param name="connectionString">Connection string to the database to be migrated.</param>
+            <param name="providerName">The name of the provider that should be used for this migrator (<see cref="T:MigSharp.ProviderNames"/>).</param>
+        </member>
+        <member name="M:MigSharp.Migrator.MigrateAll(System.Reflection.Assembly,System.Reflection.Assembly[])">
+            <summary>
+            Executes all pending migrations found in <paramref name="assembly"/>.
+            </summary>
+            <param name="assembly">The assembly to search for migrations.</param>
+            <param name="additionalAssemblies">Optional assemblies that hold additional migrations.</param>
+        </member>
+        <member name="M:MigSharp.Migrator.MigrateTo(System.Reflection.Assembly,System.Int64,System.Reflection.Assembly[])">
+            <summary>
+            Executes all migrations required to reach <paramref name="timestamp"/>.
+            </summary>
+            <param name="assembly"></param>
+            <param name="timestamp"></param>
+            <param name="additionalAssemblies">Optional assemblies that hold additional migrations.</param>
+        </member>
+        <member name="M:MigSharp.Migrator.FetchMigrations(System.Reflection.Assembly,System.Reflection.Assembly[])">
+            <summary>
+            Retrieves all pending migrations.
+            </summary>
+            <param name="assembly">The assembly that contains the migrations.</param>
+            <param name="additionalAssemblies">Optional assemblies that hold additional migrations.</param>
+        </member>
+        <member name="M:MigSharp.Migrator.FetchMigrationsTo(System.Reflection.Assembly,System.Int64,System.Reflection.Assembly[])">
+            <summary>
+            Retrieves all required migrations to reach <paramref name="timestamp"/>.
+            </summary>
+            <param name="assembly">The assembly that contains the migrations.</param>
+            <param name="timestamp">The timestamp to migrate to.</param>
+            <exception cref="T:MigSharp.IrreversibleMigrationException">When the migration path would require downgrading a migration which is not reversible.</exception>
+            <param name="additionalAssemblies">Optional assemblies that hold additional migrations.</param>
+        </member>
+        <member name="M:MigSharp.Migrator.IsUpToDate(System.Reflection.Assembly,System.Reflection.Assembly[])">
+            <summary>
+            Checks if any migrations are pending to be performed.
+            </summary>
+            <param name="assembly">The assembly that contains the migrations.</param>
+            <param name="additionalAssemblies">Optional assemblies that hold additional migrations.</param>
+        </member>
+        <member name="M:MigSharp.Migrator.UseCustomVersioning(MigSharp.Process.IVersioning)">
+            <summary>
+            Injects a custom version mechanism.
+            </summary>
+        </member>
+        <member name="M:MigSharp.Migrator.UseCustomBootstrapping(MigSharp.Process.IBootstrapper)">
+            <summary>
+            Injects a custom bootstrapping mechanism.
+            </summary>
+        </member>
+        <member name="T:MigSharp.IDatabase">
+            <summary>
+            Represents a database.
+            </summary>
+        </member>
+        <member name="M:MigSharp.IDatabase.CreateTable(System.String,System.String)">
+            <summary>
+            Creates a new table on the database.
+            </summary>
+            <param name="tableName">The name of the new table.</param>
+            <param name="primaryKeyConstraintName">Optionally, the name of the primary key constraint.</param>
+        </member>
+        <member name="M:MigSharp.IDatabase.Execute(System.String)">
+            <summary>
+            Executes a custom query.
+            </summary>
+            <param name="query">Custom SQL which must be understood by all providers that should be supported by this migration.</param>
+        </member>
+        <member name="M:MigSharp.IDatabase.Execute(System.Action{MigSharp.IRuntimeContext})">
+            <summary>
+            Executes a custom action against the <see cref="T:MigSharp.IMigrationContext"/>. Use this method if you need to directly access the
+            underlying <see cref="T:System.Data.IDbConnection"/> or <see cref="T:System.Data.IDbTransaction"/>.
+            </summary>
+        </member>
+        <member name="P:MigSharp.IDatabase.Context">
+            <summary>
+            Gets the context of the migration.
+            </summary>
+        </member>
+        <member name="P:MigSharp.IDatabase.Tables">
+            <summary>
+            Gets existing tables.
+            </summary>
+        </member>
+        <member name="T:MigSharp.DatabaseExtensions">
+            <summary>
+            Contains the extension methods for the <see cref="T:MigSharp.IDatabase"/> interface.
+            </summary>
+        </member>
+        <member name="M:MigSharp.DatabaseExtensions.CreateTable(MigSharp.IDatabase,System.String)">
+            <summary>
+            Creates a new table on the database with a default primary key constraint name.
+            </summary>
+        </member>
+        <member name="T:MigSharp.IMigrationContext">
+            <summary>
+            Represents the context of a migration.
+            </summary>
+        </member>
+        <member name="P:MigSharp.IMigrationContext.ProviderMetadata">
+            <summary>
+            Gets the metadata describing the underlying provider.
+            </summary>
+        </member>
+        <member name="T:MigSharp.IIndex">
+            <summary>
+            Represents an index.
+            </summary>
+        </member>
+        <member name="M:MigSharp.IIndex.Drop">
+            <summary>
+            Drops the index.
+            </summary>
+        </member>
+        <member name="T:MigSharp.IAddedIndex">
+            <summary>
+            Represents an index which is about to be added to a table.
+            </summary>
+        </member>
+        <member name="M:MigSharp.IAddedIndex.OnColumn(System.String)">
+            <summary>
+            Adds the index on the provided column.
+            </summary>
+        </member>
+        <member name="T:MigSharp.IAddedPrimaryKey">
+            <summary>
+            Represents a primary key constraint which is about to be added to a table.
+            </summary>
+        </member>
+        <member name="M:MigSharp.IAddedPrimaryKey.OnColumn(System.String)">
+            <summary>
+            Adds the index on the provided column.
+            </summary>
+        </member>
+        <member name="T:MigSharp.IMigrationBatch">
+            <summary>
+            Represents a batch of <see cref="T:MigSharp.IReversibleMigration"/>s.
+            </summary>
+        </member>
+        <member name="M:MigSharp.IMigrationBatch.Execute">
+            <summary>
+            Performs the migrations contained in this batch.
+            </summary>
+        </member>
+        <member name="E:MigSharp.IMigrationBatch.StepExecuting">
+            <summary>
+            Raised before each migration that will be executed.
+            </summary>
+        </member>
+        <member name="E:MigSharp.IMigrationBatch.StepExecuted">
+            <summary>
+            Raised after each migration that has been executed.
+            </summary>
+        </member>
+        <member name="P:MigSharp.IMigrationBatch.Count">
+            <summary>
+            Gets the number of migrations in this batch.
+            </summary>
+        </member>
+        <member name="P:MigSharp.Process.IRecordedMigration.DataTypes">
+            <summary>
+            Gets a list of <see cref="T:MigSharp.Providers.DataType"/>s that were used to create new objects (excluding primary key columns).
+            </summary>
+        </member>
+        <member name="P:MigSharp.Process.IRecordedMigration.PrimaryKeyDataTypes">
+            <summary>
+            Gets a list of <see cref="T:MigSharp.Providers.DataType"/>s that were used to create primary key columns.
+            </summary>
+        </member>
+        <member name="P:MigSharp.Process.IRecordedMigration.NewObjectNames">
+            <summary>
+            Gets a list of names of any created objects.
+            </summary>
+        </member>
+        <member name="P:MigSharp.Process.IRecordedMigration.Methods">
+            <summary>
+            Gets a list of method names that were used for the migration.
+            </summary>
+        </member>
+        <member name="T:MigSharp.IIndexesCollection">
+            <summary>
+            Represents a collection of existing indexes of a table.
+            </summary>
+        </member>
+        <member name="P:MigSharp.IIndexesCollection.Item(System.String)">
+            <summary>
+            Gets an index by name.
+            </summary>
+        </member>
+        <member name="T:MigSharp.IUniqueConstraint">
+            <summary>
+            Represents an unique constraint.
+            </summary>
+        </member>
+        <member name="M:MigSharp.IUniqueConstraint.Drop">
+            <summary>
+            Drops the unique constraint.
+            </summary>
+        </member>
+        <member name="T:MigSharp.IForeignKey">
+            <summary>
+            Represents a foreign key constraint.
+            </summary>
+        </member>
+        <member name="M:MigSharp.IForeignKey.Drop">
+            <summary>
+            Drops the foreign key constraint.
+            </summary>
+        </member>
+        <member name="M:MigSharp.Process.IMigrationStep.Execute(MigSharp.Process.IVersioning)">
+            <summary>
+            Executes the migration step and updates the versioning information in one transaction.
+            </summary>
+            <param name="versioning">Might be null in the case of a bootstrap step.</param>
+        </member>
+        <member name="M:MigSharp.Process.MigrationStep.Execute(MigSharp.Process.IVersioning)">
+            <summary>
+            Executes the migration step and updates the versioning information in one transaction.
+            </summary>
+        </member>
+        <member name="T:MigSharp.Providers.ColumnReference">
+            <summary>
+            Represents a pair of column names which is used as an element of a foreign key relationship.
+            </summary>
+        </member>
+        <member name="P:MigSharp.Providers.ColumnReference.ColumnName">
+            <summary>
+            Gets the name of the referencing column.
+            </summary>
+        </member>
+        <member name="P:MigSharp.Providers.ColumnReference.ReferencedColumnName">
+            <summary>
+            Gets the name of the referenced column.
+            </summary>
+        </member>
+        <member name="T:MigSharp.Process.IVersioning">
+            <summary>
+            Represents the version of a database containing all information about past migrations.
+            </summary>
+        </member>
+        <member name="M:MigSharp.Process.IVersioning.IsContained(MigSharp.Process.IMigrationMetadata)">
+            <summary>
+            Verifies if a specific migration was executed.
+            <para>
+            It might seems odd that this method does not receive a connection. However, the idea is that the object implementing
+            this interface initializes itself once upon construction and the answers the calls to this method from a cache.
+            Thus, it would not need to do any round-trip to the database which is important as this method is called for each migration.
+            </para>
+            </summary>
+        </member>
+        <member name="M:MigSharp.Process.IVersioning.Update(MigSharp.Process.IMigrationMetadata,System.Data.IDbConnection,System.Data.IDbTransaction,MigSharp.Process.MigrationDirection,MigSharp.IDbCommandExecutor)">
+            <summary>
+            Updates the versioning to include or exclude the migration depending on the provided <paramref name="direction"/>.
+            <para>
+            Post-condition: if <paramref name="direction"/> was <see cref="F:MigSharp.Process.MigrationDirection.Up"/>, <see cref="M:MigSharp.Process.IVersioning.IsContained(MigSharp.Process.IMigrationMetadata)"/> must return <code>true</code>.
+            Otherwise <paramref name="direction"/> was <see cref="F:MigSharp.Process.MigrationDirection.Down"/> and <see cref="M:MigSharp.Process.IVersioning.IsContained(MigSharp.Process.IMigrationMetadata)"/> must return <code>false</code>.
+            </para>
+            </summary>
+            <param name="metadata">The metadata of the migration to be included in the versioning table.</param>
+            <param name="connection">An open connection to the database containing the versioning table.</param>
+            <param name="transaction">The associated transaction.</param>
+            <param name="direction">The direction of the migration.</param>
+            <param name="commandExecutor">Used to execute <see cref="T:System.Data.IDbCommand"/>s.</param>
+        </member>
+        <member name="T:MigSharp.ICreatedTable">
+            <summary>
+            Represents a created table.
+            </summary>
+        </member>
+        <member name="T:MigSharp.ICreatedTableBase">
+            <summary>
+            Represents a created table.
+            </summary>
+        </member>
+        <member name="M:MigSharp.ICreatedTableBase.WithPrimaryKeyColumn(System.String,System.Data.DbType)">
+            <summary>
+            Adds a non-nullable column which is part of the primary key constraint to the table being created.
+            </summary>
+        </member>
+        <member name="M:MigSharp.ICreatedTableBase.WithNotNullableColumn(System.String,System.Data.DbType)">
+            <summary>
+            Adds a non-nullable column to the table being created.
+            </summary>
+        </member>
+        <member name="M:MigSharp.ICreatedTableBase.WithNullableColumn(System.String,System.Data.DbType)">
+            <summary>
+            Adds a nullable column to the table being created.
+            </summary>
+        </member>
+        <member name="P:MigSharp.ICreatedTableBase.TableName">
+            <summary>
+            Gets the name of the table.
+            </summary>
+        </member>
+        <member name="T:MigSharp.IAddedUniqueConstraint">
+            <summary>
+            Represents a unique constraint which is about to be added to a table.
+            </summary>
+        </member>
+        <member name="M:MigSharp.IAddedUniqueConstraint.OnColumn(System.String)">
+            <summary>
+            Adds the unique constraint on the provided column.
+            </summary>
+        </member>
+        <member name="T:MigSharp.Providers.SupportsAttribute">
+            <summary>
+            Declares the support of a specific data type.
+            </summary>
+        </member>
+        <member name="M:MigSharp.Providers.SupportsAttribute.#ctor(System.Data.DbType)">
+            <summary>
+            Initializes a new instance.
+            </summary>
+        </member>
+        <member name="P:MigSharp.Providers.SupportsAttribute.DbType">
+            <summary>
+            Gets the supported data type.
+            </summary>
+        </member>
+        <member name="P:MigSharp.Providers.SupportsAttribute.MaximumSize">
+            <summary>
+            Gets or sets the maximum length for character data types or the maximum total number of decimal digits for numeric data types.
+            </summary>
+        </member>
+        <member name="P:MigSharp.Providers.SupportsAttribute.MaximumScale">
+            <summary>
+            Gets or sets the maximum number of decimal digits that can be stored to the right of the decimal point. Scale is a value from 0 through <see cref="P:MigSharp.Providers.SupportsAttribute.MaximumSize"/>.
+            </summary>
+        </member>
+        <member name="P:MigSharp.Providers.SupportsAttribute.CanBeUsedAsPrimaryKey">
+            <summary>
+            Indicates if the data type can be used in primary key columns. By default, this is false.
+            </summary>
+        </member>
+        <member name="P:MigSharp.Providers.SupportsAttribute.Warning">
+            <summary>
+            Gets or sets a warning message if there are any restrictions when using this <see cref="P:MigSharp.Providers.SupportsAttribute.DbType"/>.
+            The warning message is logged when executing a migration containing this data type.
+            </summary>
+        </member>
+        <member name="P:MigSharp.Providers.SupportsAttribute.IsScriptable">
+            <summary>
+            Indicates if the data type can be scripted.
+            </summary>
+        </member>
+        <member name="T:MigSharp.IExistingTableWithAddedColumn">
+            <summary>
+            Represents an added column on an existing table.
+            </summary>
+        </member>
+        <member name="T:MigSharp.IExistingTableBase">
+            <summary>
+            Represents a table that was created before.
+            </summary>
+        </member>
+        <member name="M:MigSharp.IExistingTableBase.AddNotNullableColumn(System.String,System.Data.DbType)">
+            <summary>
+            Adds a not-nullable column.
+            </summary>
+        </member>
+        <member name="M:MigSharp.IExistingTableBase.AddNullableColumn(System.String,System.Data.DbType)">
+            <summary>
+            Adds a nullable column.
+            </summary>
+        </member>
+        <member name="P:MigSharp.IExistingTableBase.TableName">
+            <summary>
+            Gets the name of the table.
+            </summary>
+        </member>
+        <member name="M:MigSharp.IExistingTableWithAddedColumn.OfSize(System.Int32,System.Int32)">
+            <summary>
+            Specifies the size and the scale of the data type of the column.
+            </summary>
+            <param name="size">The length for character data types or the maximum total number of decimal digits for numeric data types.</param>
+            <param name="scale">The maximum number of decimal digits that can be stored to the right of the decimal point. Scale must be a value from 0 through <paramref name="size"/>.</param>
+        </member>
+        <member name="M:MigSharp.IExistingTableWithAddedColumn.HavingDefault``1(``0)">
+            <summary>
+            Adds a default value to the column.
+            </summary>
+        </member>
+        <member name="M:MigSharp.IExistingTableWithAddedColumn.HavingDefault(System.String)">
+            <summary>
+            Adds a default value to the column.
+            </summary>
+        </member>
+        <member name="M:MigSharp.IExistingTableWithAddedColumn.HavingTemporaryDefault``1(``0)">
+            <summary>
+            Adds a default value to the column which is dropped after adding the column to the table.
+            Use this method to fill a non-nullable column with default values.
+            </summary>
+        </member>
+        <member name="M:MigSharp.IExistingTableWithAddedColumn.HavingTemporaryDefault(System.String)">
+            <summary>
+            Adds a default value to the column which is dropped after adding the column to the table.
+            Use this method to fill a non-nullable column with default values.
+            </summary>
+        </member>
+        <member name="T:MigSharp.ExistingTableWithAddedColumnExtensions">
+            <summary>
+            Contains the extensions methods for the <see cref="T:MigSharp.IExistingTableWithAddedColumn"/> interface.
+            </summary>
+        </member>
+        <member name="M:MigSharp.ExistingTableWithAddedColumnExtensions.OfSize(MigSharp.IExistingTableWithAddedColumn,System.Int32)">
+            <summary>
+            Specifies the size of the data type of the column.
+            </summary>
+            <param name="column"></param>
+            <param name="size">The length for character data types or the maximum total number of decimal digits for numeric data types.</param>
+        </member>
+        <member name="M:MigSharp.ExistingTableWithAddedColumnExtensions.HavingCurrentDateTimeAsDefault(MigSharp.IExistingTableWithAddedColumn)">
+            <summary>
+            Sets the default of the column to be the current system time of the database server.
+            </summary>
+        </member>
+        <member name="T:MigSharp.IProviderMetadata">
+            <summary>
+            Reperesents metadata about an <see cref="T:MigSharp.Providers.IProvider"/>.
+            </summary>
+        </member>
+        <member name="P:MigSharp.IProviderMetadata.Name">
+            <summary>
+            Gets the unique name of this provider.
+            </summary>
+        </member>
+        <member name="P:MigSharp.IProviderMetadata.InvariantName">
+            <summary>
+            Gets the invariant name of the provider needed for <see cref="M:System.Data.Common.DbProviderFactories.GetFactory(System.String)"/>.
+            </summary>
+        </member>
+        <member name="P:MigSharp.IProviderMetadata.SupportsTransactions">
+            <summary>
+            Gets an indication if the underlying provider supports transactions.
+            </summary>
+        </member>
+        <member name="P:MigSharp.IProviderMetadata.ParameterExpression">
+            <summary>
+            Gets an expression that specifies how <see cref="T:System.Data.IDataParameter"/>s are addressed in command texts. The literal 'p' is replaced by the parameter name.
+            </summary>
+        </member>
+        <member name="P:MigSharp.IProviderMetadata.MaximumDbObjectNameLength">
+            <summary>
+            Gets the maximum length of object names within the database. 0 meaning that there is non restriction which is the default.
+            </summary>
+        </member>
+        <member name="T:MigSharp.ICreatedTableWithAddedColumn">
+            <summary>
+            Represents a column on a newly created table.
+            </summary>
+        </member>
+        <member name="M:MigSharp.ICreatedTableWithAddedColumn.OfSize(System.Int32,System.Int32)">
+            <summary>
+            Specifies the size and the scale of the data type of the column.
+            </summary>
+            <param name="size">The length for character data types or the maximum total number of decimal digits for numeric data types.</param>
+            <param name="scale">The maximum number of decimal digits that can be stored to the right of the decimal point. Scale must be a value from 0 through <paramref name="size"/>.</param>
+        </member>
+        <member name="M:MigSharp.ICreatedTableWithAddedColumn.Unique(System.String)">
+            <summary>
+            Puts the column under an unique constraint.
+            </summary>
+            <param name="constraintName">Optionally, specify the name of the unique constraint. If null or empty, a default constraint name will be generated.</param>
+        </member>
+        <member name="M:MigSharp.ICreatedTableWithAddedColumn.AsIdentity">
+            <summary>
+            Makes the column auto-increment.
+            </summary>
+        </member>
+        <member name="M:MigSharp.ICreatedTableWithAddedColumn.HavingDefault``1(``0)">
+            <summary>
+            Adds a default value to the column.
+            </summary>
+        </member>
+        <member name="M:MigSharp.ICreatedTableWithAddedColumn.HavingDefault(System.String)">
+            <summary>
+            Adds a default value to the column.
+            </summary>
+        </member>
+        <member name="P:MigSharp.ICreatedTableWithAddedColumn.ColumnName">
+            <summary>
+            Gets the column name.
+            </summary>
+        </member>
+        <member name="T:MigSharp.IrreversibleMigrationException">
+            <summary>
+            This exception is thrown when a requested downgrade path contains an irreversible migration.
+            </summary>
+        </member>
+        <member name="T:MigSharp.ProviderNames">
+            <summary>
+            Contains the names of the supported providers.
+            </summary>
+        </member>
+        <member name="T:MigSharp.IRuntimeContext">
+            <summary>
+            Represents the run-time context of a migration.
+            </summary>
+        </member>
+        <member name="P:MigSharp.IRuntimeContext.Connection">
+            <summary>
+            Gets the connection which is used to perform the migration.
+            </summary>
+        </member>
+        <member name="P:MigSharp.IRuntimeContext.Transaction">
+            <summary>
+            Gets the transaction which is used to perform the migration.
+            </summary>
+        </member>
+        <member name="P:MigSharp.IRuntimeContext.CommandExecutor">
+            <summary>
+            Gets the <see cref="T:MigSharp.IDbCommandExecutor"/> that should be used to execute database modifying commands.
+            This ensures that they are logged and scripted consistently.
+            </summary>
+        </member>
+        <member name="T:MigSharp.Providers.SpecialDefaultValue">
+            <summary>
+            Lists special default values for columns.
+            </summary>
+        </member>
+        <member name="F:MigSharp.Providers.SpecialDefaultValue.CurrentDateTime">
+            <summary>
+            Represents the current date time of the database server.
+            </summary>
+        </member>
+        <member name="T:MigSharp.SupportedProviders">
+            <summary>
+            Represents a collection of providers that should be supported for all migrations. Validation of migrations is performed
+            against providers contained within this list.
+            </summary>
+        </member>
+        <member name="M:MigSharp.SupportedProviders.#ctor(MigSharp.Providers.IProviderFactory)">
+            <summary>
+            Initializes a new instance used for unit testing.
+            </summary>
+        </member>
+        <member name="M:MigSharp.SupportedProviders.#ctor">
+            <summary>
+            Initializes a new instance which is ready-to-use with the default providers.
+            </summary>
+        </member>
+        <member name="M:MigSharp.SupportedProviders.Add(System.String)">
+            <summary>
+            Adds a provider.
+            </summary>
+        </member>
+        <member name="M:MigSharp.SupportedProviders.Remove(System.String)">
+            <summary>
+            Removes a provider.
+            </summary>
+        </member>
+        <member name="M:MigSharp.SupportedProviders.RemoveAllOdbc">
+            <summary>
+            Removes all ODBC providers.
+            </summary>
+        </member>
+        <member name="M:MigSharp.SupportedProviders.Set(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Sets the collection to a list of providers.
+            </summary>
+        </member>
+        <member name="M:MigSharp.SupportedProviders.Reset">
+            <summary>
+            Resets the collection to support all providers that are delivered with Mig#.
+            </summary>
+        </member>
+        <member name="P:MigSharp.SupportedProviders.Names">
+            <summary>
+            Gets the names of the providers.
+            </summary>
+        </member>
+        <member name="T:MigSharp.IUniqueConstraintCollection">
+            <summary>
+            Represents a collection of existing unique constraints of a table.
+            </summary>
+        </member>
+        <member name="P:MigSharp.IUniqueConstraintCollection.Item(System.String)">
+            <summary>
+            Gets an unique constraint by name.
+            </summary>
+        </member>
+        <member name="T:MigSharp.MigrationExportAttribute">
+            <summary>
+            Use this attribute to mark classes as migrations.
+            </summary>
+        </member>
+        <member name="F:MigSharp.MigrationExportAttribute.MaximumModuleNameLength">
+            <summary>
+            The maximum string length for a module name.
+            </summary>
+        </member>
+        <member name="M:MigSharp.MigrationExportAttribute.#ctor">
+            <summary>
+            Initializes a new instance of the attribute.
+            </summary>
+        </member>
+        <member name="P:MigSharp.MigrationExportAttribute.ModuleName">
+            <summary>
+            Gets the name of the module to which this migration belongs to (see also <seealso cref="F:MigSharp.MigrationExportAttribute.MaximumModuleNameLength"/>).
+            </summary>
+        </member>
+        <member name="P:MigSharp.MigrationExportAttribute.Tag">
+            <summary>
+            Gets the tag associated with this migration.
+            </summary>
+        </member>
+        <member name="T:MigSharp.IReversibleMigration">
+            <summary>
+            Represents a migration that can also be downgraded.
+            </summary>
+        </member>
+        <member name="T:MigSharp.IMigration">
+            <summary>
+            The interface that needs to be implemented in order to define a migration.
+            Additionally, the <see cref="T:MigSharp.MigrationExportAttribute"/> must be applied
+            to a class implementing this interface in order to be recognized as a migration.
+            </summary>
+        </member>
+        <member name="M:MigSharp.IMigration.Up(MigSharp.IDatabase)">
+            <summary>
+            Applies the required changes to the provided <paramref name="db"/> for this migration.
+            </summary>
+        </member>
+        <member name="M:MigSharp.IReversibleMigration.Down(MigSharp.IDatabase)">
+            <summary>
+            Undoes all changes from the <see cref="M:MigSharp.IMigration.Up(MigSharp.IDatabase)"/> method.
+            </summary>
+        </member>
+        <member name="T:MigSharp.IAddedForeignKey">
+            <summary>
+            Represents a foreign key constraint which is about to be added to a table.
+            </summary>
+        </member>
+        <member name="M:MigSharp.IAddedForeignKey.Through(System.String,System.String)">
+            <summary>
+            Specifies the columns on which the foreign key is defined.
+            </summary>
+            <remarks>
+            This method is not called 'On', as 'On' is a reserved language keyword (see FxCop rule "Identifiers should not match keywords").
+            </remarks>
+        </member>
+        <member name="T:MigSharp.Process.IMigrationReport">
+            <summary>
+            Contains information about used data types, longest name, etc. for a specific migration.
+            </summary>
+        </member>
+        <member name="P:MigSharp.Process.IMigrationReport.MigrationName">
+            <summary>
+            Gets the full type name of the migration for this report.
+            </summary>
+        </member>
+        <member name="P:MigSharp.Process.IMigrationReport.Error">
+            <summary>
+            Gets the error message for the migration if there was an <see cref="T:MigSharp.Core.Commands.InvalidCommandException"/>.
+            </summary>
+        </member>
+        <member name="P:MigSharp.Process.IMigrationReport.DataTypes">
+            <summary>
+            Gets a list of <see cref="T:MigSharp.Providers.DataType"/>s that were used to create new objects (including primary key columns).
+            </summary>
+        </member>
+        <member name="P:MigSharp.Process.IMigrationReport.PrimaryKeyDataTypes">
+            <summary>
+            Gets a list of <see cref="T:MigSharp.Providers.DataType"/>s that were used to create primary key columns.
+            </summary>
+        </member>
+        <member name="P:MigSharp.Process.IMigrationReport.LongestName">
+            <summary>
+            Gets the longest name of any created objects.
+            </summary>
+        </member>
+        <member name="P:MigSharp.Process.IMigrationReport.Methods">
+            <summary>
+            Gets a list of used provider method names.
+            </summary>
+        </member>
+        <member name="T:MigSharp.Providers.ProviderExportAttribute">
+            <summary>
+            Marks the class as an provider implementing <see cref="T:MigSharp.Providers.IProvider"/>.
+            </summary>
+        </member>
+        <member name="M:MigSharp.Providers.ProviderExportAttribute.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance.
+            </summary>
+        </member>
+        <member name="P:MigSharp.Providers.ProviderExportAttribute.Name">
+            <summary>
+            Gets the unique name of this provider.
+            </summary>
+        </member>
+        <member name="P:MigSharp.Providers.ProviderExportAttribute.InvariantName">
+            <summary>
+            Gets the invariant name of the provider needed for <see cref="M:System.Data.Common.DbProviderFactories.GetFactory(System.String)"/>.
+            </summary>
+        </member>
+        <member name="P:MigSharp.Providers.ProviderExportAttribute.SupportsTransactions">
+            <summary>
+            Gets or sets an indication if the underlying provider supports transactions. True by default.
+            </summary>
+        </member>
+        <member name="P:MigSharp.Providers.ProviderExportAttribute.ParameterExpression">
+            <summary>
+            Gets an expression that specifies how <see cref="T:System.Data.IDataParameter"/>s are addressed in command texts. The literal 'p' is replaced by the parameter name.
+            The default is '@p'.
+            </summary>
+        </member>
+        <member name="P:MigSharp.Providers.ProviderExportAttribute.MaximumDbObjectNameLength">
+            <summary>
+            Gets or sets the maximum length of object names within the database. 0 meaning that there is non restriction which is the default.
+            </summary>
+        </member>
+        <member name="T:MigSharp.IForeignKeyCollection">
+            <summary>
+            Represents a collection of existing foreign key constraints of a table.
+            </summary>
+        </member>
+        <member name="P:MigSharp.IForeignKeyCollection.Item(System.String)">
+            <summary>
+            Gets an foreign key constraint by name.
+            </summary>
+        </member>
+        <member name="T:MigSharp.IAlteredColumn">
+            <summary>
+            Represents an existing column whose data type is being altered.
+            </summary>
+        </member>
+        <member name="M:MigSharp.IAlteredColumn.OfSize(System.Int32,System.Int32)">
+            <summary>
+            Specifies the size and the scale of the new data type of the column.
+            </summary>
+            <param name="size">The length for character data types or the maximum total number of decimal digits for numeric data types.</param>
+            <param name="scale">The maximum number of decimal digits that can be stored to the right of the decimal point. Scale must be a value from 0 through <paramref name="size"/>.</param>
+        </member>
+        <member name="M:MigSharp.IAlteredColumn.HavingDefault``1(``0)">
+            <summary>
+            Adds a default value to the column.
+            </summary>
+        </member>
+        <member name="M:MigSharp.IAlteredColumn.HavingDefault(System.String)">
+            <summary>
+            Adds a default value to the column.
+            </summary>
+        </member>
+        <member name="T:MigSharp.AlteredColumnExtensions">
+            <summary>
+            Contains the extensions methods for the <see cref="T:MigSharp.IAlteredColumn"/> interface.
+            </summary>
+        </member>
+        <member name="M:MigSharp.AlteredColumnExtensions.OfSize(MigSharp.IAlteredColumn,System.Int32)">
+            <summary>
+            Specifies the size of the new data type of the column.
+            </summary>
+            <param name="column"></param>
+            <param name="size">The length for character data types or the maximum total number of decimal digits for numeric data types.</param>
+        </member>
+        <member name="M:MigSharp.AlteredColumnExtensions.HavingCurrentDateTimeAsDefault(MigSharp.IAlteredColumn)">
+            <summary>
+            Sets the default of the column to be the current system time of the database server.
+            </summary>
+        </member>
+        <member name="T:MigSharp.Providers.SqlServerCe4Provider">
+            <summary>
+            MigSharp provider for Microsoft SQL Compact Edition 4.0.
+            </summary>
+        </member>
+        <member name="T:MigSharp.IExistingTableCollection">
+            <summary>
+            Represents a collection of existing tables.
+            </summary>
+        </member>
+        <member name="P:MigSharp.IExistingTableCollection.Item(System.String)">
+            <summary>
+            Gets a table by its name.
+            </summary>
+        </member>
+        <member name="T:MigSharp.IExistingColumnCollection">
+            <summary>
+            Represents a collection of existing columns.
+            </summary>
+        </member>
+        <member name="P:MigSharp.IExistingColumnCollection.Item(System.String)">
+            <summary>
+            Gets a column by its name.
+            </summary>
+        </member>
+        <member name="T:MigSharp.IExistingColumn">
+            <summary>
+            Represents an existing column.
+            </summary>
+        </member>
+        <member name="M:MigSharp.IExistingColumn.Rename(System.String)">
+            <summary>
+            Renames the column.
+            </summary>
+        </member>
+        <member name="M:MigSharp.IExistingColumn.Drop">
+            <summary>
+            Removes the column from its table.
+            </summary>
+        </member>
+        <member name="M:MigSharp.IExistingColumn.AlterToNullable(System.Data.DbType)">
+            <summary>
+            Alters the column to be a nullable column.
+            </summary>
+            <param name="dbType">A new or the old data type of the column.</param>
+        </member>
+        <member name="M:MigSharp.IExistingColumn.AlterToNotNullable(System.Data.DbType)">
+            <summary>
+            Alters the column to be a nullable column.
+            </summary>
+            <param name="dbType">A new or the old data type of the column.</param>
+        </member>
+        <member name="P:MigSharp.IExistingColumn.ColumnName">
+            <summary>
+            Gets the name of the column.
+            </summary>
+        </member>
+        <member name="P:MigSharp.IExistingColumn.TableName">
+            <summary>
+            Gets the name of the table of the column.
+            </summary>
+        </member>
+        <member name="T:MigSharp.CreatedTableWithAddedColumnExtensions">
+            <summary>
+            Contains the extensions methods for the <see cref="T:MigSharp.ICreatedTableWithAddedColumn"/> interface.
+            </summary>
+        </member>
+        <member name="M:MigSharp.CreatedTableWithAddedColumnExtensions.OfSize(MigSharp.ICreatedTableWithAddedColumn,System.Int32)">
+            <summary>
+            Specifies the size of the data type of the column.
+            </summary>
+            <param name="column"></param>
+            <param name="size">The length for character data types or the maximum total number of decimal digits for numeric data types.</param>
+        </member>
+        <member name="M:MigSharp.CreatedTableWithAddedColumnExtensions.Unique(MigSharp.ICreatedTableWithAddedColumn)">
+            <summary>
+            Puts the column under an unique constraint with a default constraint name.
+            </summary>
+        </member>
+        <member name="M:MigSharp.CreatedTableWithAddedColumnExtensions.HavingCurrentDateTimeAsDefault(MigSharp.ICreatedTableWithAddedColumn)">
+            <summary>
+            Sets the default of the column to be the current system time of the database server.
+            </summary>
+        </member>
+        <member name="T:MigSharp.Core.CommandsToSqlTranslator">
+            <summary>
+            Visits all commands executed against a <see cref="T:MigSharp.IDatabase"/> and translates them into SQL
+            using a specific <see cref="T:MigSharp.Providers.IProvider"/>.
+            </summary>
+        </member>
+        <member name="M:MigSharp.Core.CommandsToSqlTranslator.TranslateToSql(MigSharp.Core.Entities.Database,MigSharp.IRuntimeContext)">
+            <summary>
+            Translates the recorded commands on the <paramref name = "database" /> to SQL commands.
+            </summary>
+        </member>
+        <member name="T:MigSharp.Providers.DataType">
+            <summary>
+            Represents a SQL data type.
+            </summary>
+        </member>
+        <member name="M:MigSharp.Providers.DataType.#ctor(System.Data.DbType,System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance of <see cref="T:MigSharp.Providers.DataType"/>.
+            </summary>
+        </member>
+        <member name="M:MigSharp.Providers.DataType.ToString">
+            <summary>
+            Used in validation messages and for debugging.
+            </summary>
+        </member>
+        <member name="P:MigSharp.Providers.DataType.Size">
+            <summary>
+            Gets the length for character data types or the maximum total number of decimal digits for numeric data types.
+            </summary>
+        </member>
+        <member name="P:MigSharp.Providers.DataType.Scale">
+            <summary>
+            Gets the maximum number of decimal digits that can be stored to the right of the decimal point. Scale is a value from 0 through <see cref="P:MigSharp.Providers.DataType.Size"/>.
+            </summary>
+        </member>
+        <member name="T:MigSharp.MigrationOptions">
+            <summary>
+            Use this class to configure the behaviour of the <see cref="T:MigSharp.Migrator"/>.
+            </summary>
+        </member>
+        <member name="M:MigSharp.MigrationOptions.#ctor">
+            <summary>
+            Initializes an instance of default options.
+            </summary>
+        </member>
+        <member name="M:MigSharp.MigrationOptions.#ctor(System.String)">
+            <summary>
+            Initializes options that select migrations for specific module only.
+            </summary>
+            <param name="moduleName">The name of the selected module. Only migrations for this module will be executed.</param>
+        </member>
+        <member name="M:MigSharp.MigrationOptions.SuppressWarning(System.String,System.Data.DbType,MigSharp.SuppressCondition)">
+            <summary>
+            Suppresses validation warnings for the provider called <paramref name="providerName"/> and the data type <paramref name="type"/> under the <paramref name="condition"/>.
+            </summary>
+        </member>
+        <member name="M:MigSharp.MigrationOptions.OnlyScriptSqlTo(System.IO.DirectoryInfo)">
+            <summary>
+            Outputs the SQL used for the migrations to external files without affecting the database.
+            </summary>
+        </member>
+        <member name="M:MigSharp.MigrationOptions.OnlyScriptSqlTo(System.String)">
+            <summary>
+            Outputs the SQL used for the migrations to external files without affecting the database.
+            </summary>
+        </member>
+        <member name="M:MigSharp.MigrationOptions.ExecuteAndScriptSqlTo(System.IO.DirectoryInfo)">
+            <summary>
+            Outputs the SQL used for the migrations to external files while migrating the database.
+            </summary>
+        </member>
+        <member name="M:MigSharp.MigrationOptions.ExecuteAndScriptSqlTo(System.String)">
+            <summary>
+            Outputs the SQL used for the migrations to external files while migrating the database.
+            </summary>
+        </member>
+        <member name="M:MigSharp.MigrationOptions.SetGeneralTraceLevel(System.Diagnostics.SourceLevels)">
+            <summary>
+             Sets the level of general information being traced.
+            </summary>
+        </member>
+        <member name="M:MigSharp.MigrationOptions.SetSqlTraceLevel(System.Diagnostics.SourceLevels)">
+            <summary>
+             Sets the level of SQL information being traced.
+            </summary>
+        </member>
+        <member name="M:MigSharp.MigrationOptions.SetPerformanceTraceLevel(System.Diagnostics.SourceLevels)">
+            <summary>
+             Sets the level of performance information being traced.
+            </summary>
+        </member>
+        <member name="P:MigSharp.MigrationOptions.VersioningTableName">
+            <summary>
+            Gets or sets the table name of the versioning table.
+            </summary>
+        </member>
+        <member name="P:MigSharp.MigrationOptions.SupportedProviders">
+            <summary>
+            Gets the providers that should be supported for all migrations. Compatibility validation of migrations is performed
+            against the providers in this collection.
+            </summary>
+        </member>
+        <member name="P:MigSharp.MigrationOptions.ModuleSelector">
+            <summary>
+            Gets or sets a function that selects the module based on its name. Only migrations for this module will be executed.
+            </summary>
+        </member>
+        <member name="T:MigSharp.SuppressCondition">
+            <summary>
+            Expresses under which circumstances a warning should be expressed for a given <see cref="T:System.Data.DbType"/> and its OfSize parameters.
+            </summary>
+        </member>
+        <member name="F:MigSharp.SuppressCondition.Always">
+            <summary>
+            Suppresses all warnings for the specified <see cref="T:System.Data.DbType"/>. Use diligently.
+            </summary>
+        </member>
+        <member name="F:MigSharp.SuppressCondition.WhenSpecifiedWithoutSize">
+            <summary>
+            Suppresses warnings for the specified <see cref="T:System.Data.DbType"/> when it is used without a specified size.
+            </summary>
+        </member>
+        <member name="F:MigSharp.SuppressCondition.WhenSpecifiedWithSize">
+            <summary>
+            Suppresses warnings for the specified <see cref="T:System.Data.DbType"/> when it is used with a specified size.
+            </summary>
+        </member>
+        <member name="F:MigSharp.SuppressCondition.WhenSpecifiedWithSizeAndScale">
+            <summary>
+            Suppresses warnings for the specified <see cref="T:System.Data.DbType"/> when it is used with a specified size and a specified scale.
+            </summary>
+        </member>
+        <member name="T:MigSharp.Process.Validator">
+            <summary>
+            Validates <see cref="T:MigSharp.Process.IMigrationReport"/>s against the list of supported providers.
+            </summary>
+        </member>
+        <member name="T:MigSharp.IExistingTable">
+            <summary>
+            Represents a table that was created before.
+            </summary>
+        </member>
+        <member name="M:MigSharp.IExistingTable.PrimaryKey(System.String)">
+            <summary>
+            Gets the primary key constraint of the table.
+            </summary>
+            <param name="constraintName">Optionally, the name of the primary key constraint. If null or empty, the default name will be used.</param>
+        </member>
+        <member name="M:MigSharp.IExistingTable.Rename(System.String)">
+            <summary>
+            Renames the table.
+            </summary>
+        </member>
+        <member name="M:MigSharp.IExistingTable.Drop">
+            <summary>
+            Drops the table.
+            </summary>
+        </member>
+        <member name="M:MigSharp.IExistingTable.AddPrimaryKey(System.String)">
+            <summary>
+            Adds a primary key constraint to the table.
+            </summary>
+            <param name="constraintName">Optionally, the primary key constraint name. If null or empty, a default name will be generated.</param>
+        </member>
+        <member name="M:MigSharp.IExistingTable.AddIndex(System.String)">
+            <summary>
+            Adds an index to the table.
+            </summary>
+            <param name="indexName">Optionally, the index name. If null or empty, a default name will be generated.</param>
+        </member>
+        <member name="M:MigSharp.IExistingTable.AddForeignKeyTo(System.String,System.String)">
+            <summary>
+            Adds a foreign key constraint to another table.
+            </summary>
+            <param name="referencedTableName">The name of the referenced table.</param>
+            <param name="constraintName">Optionally, the name of the foreign key constraint. If null or empty, a default name will be generated.</param>
+        </member>
+        <member name="M:MigSharp.IExistingTable.AddUniqueConstraint(System.String)">
+            <summary>
+            Adds an unique constraint to the table.
+            </summary>
+            <param name="constraintName">Optionally, the name of the unique constraint. If null or empty, a default name will be generated.</param>
+        </member>
+        <member name="P:MigSharp.IExistingTable.Columns">
+            <summary>
+            Gets the columns of the table.
+            </summary>
+        </member>
+        <member name="P:MigSharp.IExistingTable.Indexes">
+            <summary>
+            Gets the unique constraints of the table.
+            </summary>
+        </member>
+        <member name="P:MigSharp.IExistingTable.UniqueConstraints">
+            <summary>
+            Gets the unique constraints of the table.
+            </summary>
+        </member>
+        <member name="P:MigSharp.IExistingTable.ForeignKeys">
+            <summary>
+            Gets the foreign key constraints of the table.
+            </summary>
+        </member>
+        <member name="T:MigSharp.IExistingPrimaryKey">
+            <summary>
+            Represents a primary key constraint.
+            </summary>
+        </member>
+        <member name="M:MigSharp.IExistingPrimaryKey.Drop">
+            <summary>
+            Drops the primary key constraint.
+            </summary>
+        </member>
+        <member name="M:MigSharp.IExistingPrimaryKey.Rename(System.String)">
+            <summary>
+            Renames the primary key constraint and all associated resources (e.g. Oracle maintains an index along with the primary key which is renamed, too).
+            </summary>
+            <param name="newName"></param>
+        </member>
+        <member name="M:MigSharp.Core.StringHelper.Longer(System.String,System.String)">
+            <summary>
+            Returns the longer string.
+            </summary>
+        </member>
+        <member name="M:MigSharp.Core.StringHelper.Longest(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Returns the longest string.
+            </summary>
+        </member>
+        <member name="M:MigSharp.Providers.ObjectNameHelper.GetObjectName(System.String,System.String,System.Int32,System.String[])">
+            <summary>
+            Creates a name with the following structure: '<paramref name="tableName"/>_<paramref name="additionalNames"/>[0]_<paramref name="additionalNames"/>[1]_..._<paramref name="postfix"/>'.
+            The contained names are shortened such that the complete generated name fits <paramref name="maximumNameLength"/> characters.
+            </summary>
+            <param name="tableName">The table name.</param>
+            <param name="postfix">The postfix to be appended to the name. The postfix will *not* be shortened in any way.</param>
+            <param name="maximumNameLength">The maximum length of the generated name.</param>
+            <param name="additionalNames">Additional names that should be included in the result which follow the table name.</param>
+        </member>
+        <member name="T:MigSharp.MigrationEventArgs">
+            <summary>
+            Event arguments for migration events.
+            </summary>
+        </member>
+        <member name="M:MigSharp.MigrationEventArgs.#ctor(MigSharp.Process.IMigrationMetadata,MigSharp.Process.MigrationDirection)">
+            <summary>
+            Initializes a new instance.
+            </summary>
+        </member>
+        <member name="P:MigSharp.MigrationEventArgs.Metadata">
+            <summary>
+            Gets the associated metadata.
+            </summary>
+        </member>
+        <member name="P:MigSharp.MigrationEventArgs.Direction">
+            <summary>
+            Gets the direction of the migration step.
+            </summary>
+        </member>
+        <member name="T:MigSharp.Process.IBootstrapper">
+            <summary>
+            Implements a custom bootstrapping logic which is executed if the versioning table of MigSharp doe not exists yet.
+            </summary>
+        </member>
+        <member name="M:MigSharp.Process.IBootstrapper.BeginBootstrapping(System.Data.IDbConnection,System.Data.IDbTransaction)">
+            <summary>
+            Triggers whatever actions are needed to prepare the custom bootstrapping. This method is called exactly once,
+            before <see cref="M:MigSharp.Process.IBootstrapper.IsContained(MigSharp.Process.IMigrationMetadata)"/> is called any times.
+            </summary>
+            <param name="connection">The connection used to update the versioning table.</param>
+            <param name="transaction">The transaction used to update the versioning table.</param>
+        </member>
+        <member name="M:MigSharp.Process.IBootstrapper.IsContained(MigSharp.Process.IMigrationMetadata)">
+            <summary>
+            Returns true if the migration <paramref name="metadata"/> should be assumed as already executed when bootstrapping the versioning.
+            </summary>
+        </member>
+        <member name="M:MigSharp.Process.IBootstrapper.EndBootstrapping(System.Data.IDbConnection,System.Data.IDbTransaction)">
+            <summary>
+            Triggers whatever actions are needed to finish the custom bootstrapping. This method is called exactly once,
+            after <see cref="M:MigSharp.Process.IBootstrapper.IsContained(MigSharp.Process.IMigrationMetadata)"/> is called any times.
+            </summary>
+            <param name="connection">The connection used to update the versioning table.</param>
+            <param name="transaction">The transaction used to update the versioning table.</param>
+        </member>
+        <member name="T:MigSharp.ExistingTableExtensions">
+            <summary>
+            Contains extension methods for the <see cref="T:MigSharp.IExistingTable"/> interface.
+            </summary>
+        </member>
+        <member name="M:MigSharp.ExistingTableExtensions.PrimaryKey(MigSharp.IExistingTable)">
+            <summary>
+            Gets the primary key constraint of the table with the default name.
+            </summary>
+        </member>
+        <member name="M:MigSharp.ExistingTableExtensions.AddPrimaryKey(MigSharp.IExistingTable)">
+            <summary>
+            Adds a primary key constraint to the table with the default name.
+            </summary>
+        </member>
+        <member name="M:MigSharp.ExistingTableExtensions.AddIndex(MigSharp.IExistingTable)">
+            <summary>
+            Adds an index to the table.
+            </summary>
+        </member>
+        <member name="M:MigSharp.ExistingTableExtensions.AddForeignKeyTo(MigSharp.IExistingTable,System.String)">
+            <summary>
+            Adds a foreign key constraint to another table with the default name.
+            </summary>
+            <param name="table"></param>
+            <param name="referencedTableName">The name of the referenced table.</param>
+        </member>
+        <member name="M:MigSharp.ExistingTableExtensions.AddUniqueConstraint(MigSharp.IExistingTable)">
+            <summary>
+            Adds an unique constraint to the table with the default name.
+            </summary>
+        </member>
+        <member name="M:MigSharp.ExistingTableExtensions.UniqueConstraintOf(MigSharp.IExistingTable,System.String)">
+            <summary>
+            Gets an unique constraint by the name of its first column.
+            </summary>
+        </member>
+        <member name="M:MigSharp.ExistingTableExtensions.ForeignKeyTo(MigSharp.IExistingTable,System.String)">
+            <summary>
+            Gets an foreign key constraint by the name of its referenced table.
+            </summary>
+        </member>
+        <member name="T:MigSharp.Process.Versioning">
+            <summary>
+            Implements <see cref="T:MigSharp.Process.IVersioning"/> without creating a versioning table until it is really needed.
+            </summary>
+        </member>
+    </members>
+</doc>

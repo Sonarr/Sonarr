@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using NzbDrone.Core.Model;
+using PetaPoco;
 using SubSonic.SqlGeneration.Schema;
 
 
 namespace NzbDrone.Core.Repository
 {
+    [PetaPoco.TableName("Episodes")]
     public class Episode
     {
         [SubSonicPrimaryKey]
@@ -26,6 +28,7 @@ namespace NzbDrone.Core.Repository
         public virtual Boolean Ignored { get; set; }
 
         [SubSonicIgnore]
+        [Ignore]
         public Boolean IsDailyEpisode
         {
             get
@@ -44,6 +47,7 @@ namespace NzbDrone.Core.Repository
         public virtual DateTime? GrabDate { get; set; }
 
         [SubSonicIgnore]
+        [Ignore]
         public EpisodeStatusType Status
         {
             get
@@ -68,12 +72,15 @@ namespace NzbDrone.Core.Repository
         }
 
         [SubSonicToOneRelation(ThisClassContainsJoinKey = true)]
+        [Ignore]
         public virtual Series Series { get; set; }
 
         [SubSonicToOneRelation(ThisClassContainsJoinKey = true)]
+        [Ignore]
         public virtual EpisodeFile EpisodeFile { get; set; }
 
         [SubSonicToManyRelation]
+        [Ignore]
         public virtual IList<History> Histories { get; protected set; }
 
         public override string ToString()

@@ -129,6 +129,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\Exceptioneer.WindowsFormsClient.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="MigSharp">
+      <HintPath>..\Libraries\MigSharp.dll</HintPath>
+    </Reference>
     <Reference Include="MvcMiniProfiler">
       <HintPath>..\packages\MiniProfiler.1.2\lib\MvcMiniProfiler.dll</HintPath>
     </Reference>
@@ -139,10 +143,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\NLog.dll</HintPath>
     </Reference>
-    <Reference Include="SubSonic.Core">
+    <Reference Include="SubSonic.Core, Version=3.0.0.3, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\SubSonic.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -165,7 +171,10 @@
   <ItemGroup>
     <Compile Include="Datastore\Connection.cs" />
     <Compile Include="Datastore\MigrationLogger.cs" />
-    <Compile Include="Datastore\Migrations.cs" />
+    <Compile Include="Datastore\MigrationsHelper.cs" />
+    <Compile Include="Datastore\CustomeMapper.cs" />
+    <Compile Include="Datastore\Migrations\MigrationExport.cs" />
+    <Compile Include="Datastore\Migrations\Legacy\Migration.cs" />
     <Compile Include="Datastore\RepositoryProvider.cs" />
     <Compile Include="Datastore\SqliteProvider.cs" />
     <Compile Include="Helpers\EpisodeRenameHelper.cs" />
@@ -176,6 +185,7 @@
     <Compile Include="Instrumentation\SubsonicTarget.cs" />
     <Compile Include="Instrumentation\ExceptioneerTarget.cs" />
     <Compile Include="Instrumentation\NlogWriter.cs" />
+    <Compile Include="Models\PetaPoco.cs" />
     <Compile Include="Model\ConnectionInfoModel.cs" />
     <Compile Include="Model\ExternalNotificationType.cs" />
     <Compile Include="Model\LanguageType.cs" />
@@ -289,6 +299,12 @@
       <Project>{1FEE70A4-AAD7-4C60-BE60-3F7DC03A8C4D}</Project>
       <Name>Migrator</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

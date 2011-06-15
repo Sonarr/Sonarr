@@ -15,6 +15,7 @@ using NzbDrone.Core.Providers.Indexer;
 using NzbDrone.Core.Providers.Jobs;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
+using PetaPoco;
 using SubSonic.DataProviders;
 using SubSonic.Repository;
 
@@ -56,7 +57,7 @@ namespace NzbDrone.Core
 
             LogConfiguration.StartDbLogging();
 
-            Migrations.Run(Connection.MainConnectionString, true);
+            MigrationsHelper.Run(Connection.MainConnectionString, true);
 
             _kernel.Get<QualityProvider>().SetupDefaultProfiles();
 
@@ -95,6 +96,7 @@ namespace NzbDrone.Core
                 _kernel.Bind<AutoConfigureProvider>().ToSelf().InSingletonScope();
 
                 _kernel.Bind<IRepository>().ToConstant(Connection.CreateSimpleRepository(Connection.MainConnectionString)).InSingletonScope();
+                _kernel.Bind<IDatabase>().ToConstant(Connection.GetPetaPocoDb(Connection.MainConnectionString)).InRequestScope();
                 _kernel.Bind<IRepository>().ToConstant(Connection.CreateSimpleRepository(Connection.LogConnectionString)).WhenInjectedInto<SubsonicTarget>().InSingletonScope();
                 _kernel.Bind<IRepository>().ToConstant(Connection.CreateSimpleRepository(Connection.LogConnectionString)).WhenInjectedInto<LogProvider>().InSingletonScope();
             }

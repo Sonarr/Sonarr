@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using Migrator.Framework;
+using MigSharp;
 using NLog;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
@@ -14,7 +15,7 @@ using SubSonic.Schema;
 
 namespace NzbDrone.Core.Datastore
 {
-    public class Migrations
+    public class MigrationsHelper
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
@@ -27,11 +28,11 @@ namespace NzbDrone.Core.Datastore
                 Migrator.Migrator migrator;
                 if (trace)
                 {
-                    migrator = new Migrator.Migrator("Sqlite", connetionString, Assembly.GetAssembly(typeof(Migrations)), true, new MigrationLogger());
+                    migrator = new Migrator.Migrator("Sqlite", connetionString, Assembly.GetAssembly(typeof(MigrationsHelper)), true, new MigrationLogger());
                 }
                 else
                 {
-                    migrator = new Migrator.Migrator("Sqlite", connetionString, Assembly.GetAssembly(typeof(Migrations)));
+                    migrator = new Migrator.Migrator("Sqlite", connetionString, Assembly.GetAssembly(typeof(MigrationsHelper)));
                 }
 
 
@@ -48,6 +49,13 @@ namespace NzbDrone.Core.Datastore
             {
                 Logger.FatalException("An error has occured while migrating database", e);
             }
+        }
+
+
+        public static void MigrateDatabase(string connectionString)
+        {
+            var migrator = new MigSharp.Migrator(connectionString, ProviderNames.SQLite);
+            migrator.MigrateAll(typeof(MigrationsHelper).Assembly);
         }
 
         public static void ForceSubSonicMigration(IRepository repository)
@@ -113,64 +121,5 @@ namespace NzbDrone.Core.Datastore
 
     }
 
-    [Migration(20110523)]
-    public class Migration20110523 : Migration
-    {
-        public override void Up()
-        {
-            Database.RemoveTable(RepositoryProvider.JobsSchema.Name);
-        }
 
-        public override void Down()
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    [Migration(20110603)]
-    public class Migration20110603 : Migration
-    {
-        public override void Up()
-        {
-            Database.RemoveTable("Seasons");
-
-            Migrations.RemoveDeletedColumns(Database);
-            Migrations.AddNewColumns(Database);
-        }
-
-        public override void Down()
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    [Migration(20110604)]
-    public class Migration20110604 : Migration
-    {
-        public override void Up()
-        {
-            Migrations.ForceSubSonicMigration(Connection.CreateSimpleRepository(Connection.MainConnectionString));
-
-            var episodesTable = RepositoryProvider.EpisodesSchema;
-            //Database.AddIndex("idx_episodes_series_season_episode", episodesTable.Name, true,
-            //    episodesTable.GetColumnByPropertyName("SeriesId").Name,
-            //    episodesTable.GetColumnByPropertyName("SeasonNumber").Name,
-            //    episodesTable.GetColumnByPropertyName("EpisodeNumber").Name);
-
-            Database.AddIndex("idx_episodes_series_season", episodesTable.Name, false,
-                episodesTable.GetColumnByPropertyName("SeriesId").Name,
-                episodesTable.GetColumnByPropertyName("SeasonNumber").Name);
-
-            Database.AddIndex("idx_episodes_series", episodesTable.Name, false,
-                             episodesTable.GetColumnByPropertyName("SeriesId").Name);
-
-            Migrations.RemoveDeletedColumns(Database);
-            Migrations.AddNewColumns(Database);
-        }
-
-        public override void Down()
-        {
-            throw new NotImplementedException();
-        }
-    }
 }
