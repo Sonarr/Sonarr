@@ -116,6 +116,11 @@
             Gets the ellapsed milliseconds in this step without any children's durations.
             </summary>
         </member>
+        <member name="P:MvcMiniProfiler.Timing.SqlTimingsDurationMilliseconds">
+            <summary>
+            Gets the aggregate ellapsed milliseconds of all SqlTimings executed in this Timing, excluding Children Timings.
+            </summary>
+        </member>
         <member name="P:MvcMiniProfiler.Timing.IsTrivial">
             <summary>
             Returns true when this <see cref="P:MvcMiniProfiler.Timing.DurationWithoutChildrenMilliseconds"/> is less than the configured
@@ -132,6 +137,11 @@
             Returns true if this Timing step collected sql execution timings.
             </summary>
         </member>
+        <member name="P:MvcMiniProfiler.Timing.HasDuplicateSqlTimings">
+            <summary>
+            Returns true if any <see cref="T:MvcMiniProfiler.SqlTiming"/>s executed in this step are detected as duplicate statements.
+            </summary>
+        </member>
         <member name="P:MvcMiniProfiler.Timing.IsRoot">
             <summary>
             Returns true when this Timing is the first one created in a MiniProfiler session.
@@ -140,6 +150,21 @@
         <member name="P:MvcMiniProfiler.Timing.Depth">
             <summary>
             How far away this Timing is from the Profiler's Root.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.Timing.ExecutedReaders">
+            <summary>
+            How many sql data readers were executed in this Timing step.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.Timing.ExecutedScalars">
+            <summary>
+            How many sql scalar queries were executed in this Timing step.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.Timing.ExecutedNonQueries">
+            <summary>
+            How many sql non-query statements were executed in this Timing step.
             </summary>
         </member>
         <member name="P:MvcMiniProfiler.Data.ProfiledDbCommand.BindByName">
@@ -201,6 +226,11 @@
             Called when database reader is closed, ending profiling for <see cref="F:MvcMiniProfiler.ExecuteType.Reader"/> SqlTimings.
             </summary>
         </member>
+        <member name="M:MvcMiniProfiler.SqlTiming.AddSpacesToParameters(System.String)">
+            <summary>
+            To help with display, put some space around sammiched commas
+            </summary>
+        </member>
         <member name="P:MvcMiniProfiler.SqlTiming.ExecuteType">
             <summary>
             Category of sql statement executed.
@@ -232,6 +262,11 @@
             before all records are fetched and reader is closed.
             </summary>
         </member>
+        <member name="P:MvcMiniProfiler.SqlTiming.IsDuplicate">
+            <summary>
+            True when other identical sql statements have been executed during this MiniProfiler session.
+            </summary>
+        </member>
         <member name="T:MvcMiniProfiler.Helpers.StackTraceSnippet">
             <summary>
             Gets part of a stack trace containing only methods we care about.
@@ -252,6 +287,11 @@
             <summary>
             Starts when this profiler is instantiated. Each <see cref="T:MvcMiniProfiler.Timing"/> step will use this Stopwatch's current ticks as
             their starting time.
+            </summary>
+        </member>
+        <member name="F:MvcMiniProfiler.MiniProfiler._sqlCounts">
+            <summary>
+            
             </summary>
         </member>
         <member name="M:MvcMiniProfiler.MiniProfiler.#ctor(System.String,MvcMiniProfiler.ProfileLevel)">
@@ -294,11 +334,37 @@
             be prematurely stopped and discarded. Useful for when a specific route does not need to be profiled.
             </param>
         </member>
-        <member name="M:MvcMiniProfiler.MiniProfiler.RenderIncludes">
+        <member name="M:MvcMiniProfiler.MiniProfiler.StepStatic(System.String,MvcMiniProfiler.ProfileLevel)">
+            <summary>
+            Returns an <see cref="T:System.IDisposable"/> that will time the code between its creation and disposal. Use this method when you
+            do not wish to include the MvcMiniProfiler namespace for the <see cref="M:MvcMiniProfiler.MiniProfilerExtensions.Step(MvcMiniProfiler.MiniProfiler,System.String,MvcMiniProfiler.ProfileLevel)"/> extension method.
+            </summary>
+            <param name="name">A descriptive name for the code that is encapsulated by the resulting IDisposable's lifetime.</param>
+            <param name="level">This step's visibility level; allows filtering when <see cref="M:MvcMiniProfiler.MiniProfiler.Start(MvcMiniProfiler.ProfileLevel)"/> is called.</param>
+        </member>
+        <member name="M:MvcMiniProfiler.MiniProfiler.RenderIncludes(System.Nullable{MvcMiniProfiler.RenderPosition},System.Boolean,System.Boolean)">
             <summary>
             Returns the css and javascript includes needed to display the MiniProfiler results UI.
             </summary>
+            <param name="position">Which side of the page the profiler popup button should be displayed on (defaults to left)</param>
+            <param name="showTrivial">Whether to show trivial timings by default (defaults to false)</param>
+            <param name="showTimeWithChildren">Whether to show time the time with children column by default (defaults to false)</param>
             <returns>Script and link elements normally; an empty string when there is no active profiling session.</returns>
+        </member>
+        <member name="M:MvcMiniProfiler.MiniProfiler.ToJson">
+            <summary>
+            Renders the current <see cref="T:MvcMiniProfiler.MiniProfiler"/> to json.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.MiniProfiler.ToJson(MvcMiniProfiler.MiniProfiler)">
+            <summary>
+            Renders the parameter <see cref="T:MvcMiniProfiler.MiniProfiler"/> to json.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.MiniProfiler.FromJson(System.String)">
+            <summary>
+            Deserializes the json string parameter to a <see cref="T:MvcMiniProfiler.MiniProfiler"/>.
+            </summary>
         </member>
         <member name="P:MvcMiniProfiler.MiniProfiler.Id">
             <summary>
@@ -350,6 +416,26 @@
         <member name="P:MvcMiniProfiler.MiniProfiler.HasSqlTimings">
             <summary>
             Returns true when we have profiled queries.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.MiniProfiler.HasDuplicateSqlTimings">
+            <summary>
+            Returns true when any child Timings have duplicate queries.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.MiniProfiler.HasTrivialTimings">
+            <summary>
+            Returns true when <see cref="P:MvcMiniProfiler.MiniProfiler.Root"/> or any of its <see cref="P:MvcMiniProfiler.Timing.Children"/> are <see cref="P:MvcMiniProfiler.Timing.IsTrivial"/>.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.MiniProfiler.HasAllTrivialTimings">
+            <summary>
+            Returns true when all child <see cref="T:MvcMiniProfiler.Timing"/>s are <see cref="P:MvcMiniProfiler.Timing.IsTrivial"/>.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.MiniProfiler.TrivialDurationThresholdMilliseconds">
+            <summary>
+            Any Timing step with a duration less than or equal to this will be hidden by default in the UI; defaults to 2.0 ms.
             </summary>
         </member>
         <member name="P:MvcMiniProfiler.MiniProfiler.ElapsedTicks">
@@ -461,7 +547,7 @@
             Returns either includes' css/javascript or results' html.
             </summary>
         </member>
-        <member name="M:MvcMiniProfiler.UI.MiniProfilerHandler.Includes(System.Web.HttpContext)">
+        <member name="M:MvcMiniProfiler.UI.MiniProfilerHandler.Includes(System.Web.HttpContext,System.String)">
             <summary>
             Handles rendering our .js and .less static content files.
             </summary>
@@ -506,6 +592,21 @@
         <member name="F:MvcMiniProfiler.ProfileLevel.Verbose">
             <summary>
             Useful when profiling many items in a loop, but you don't wish to always see this detail.
+            </summary>
+        </member>
+        <member name="T:MvcMiniProfiler.RenderPosition">
+            <summary>
+            Dictates on which side of the page the profiler popup button is displayed; defaults to left.
+            </summary>
+        </member>
+        <member name="F:MvcMiniProfiler.RenderPosition.Left">
+            <summary>
+            Profiler popup button is displayed on the left.
+            </summary>
+        </member>
+        <member name="F:MvcMiniProfiler.RenderPosition.Right">
+            <summary>
+            Profiler popup button is displayed on the right.
             </summary>
         </member>
         <member name="T:MvcMiniProfiler.MiniProfilerExtensions">
