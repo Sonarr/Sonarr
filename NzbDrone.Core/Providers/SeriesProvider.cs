@@ -23,15 +23,19 @@ namespace NzbDrone.Core.Providers
         private readonly TvDbProvider _tvDbProvider;
         private readonly IDatabase _database;
         private readonly QualityProvider _qualityProvider;
+        private readonly SceneNameMappingProvider _sceneNameMappingProvider;
 
+        [Inject]
         public SeriesProvider(ConfigProvider configProviderProvider, IRepository repository,
-        public SeriesProvider(ConfigProvider configProviderProvider, IRepository repository, TvDbProvider tvDbProviderProvider, IDatabase database, QualityProvider qualityProvider)
+                                TvDbProvider tvDbProviderProvider, IDatabase database,
+                                QualityProvider qualityProvider, SceneNameMappingProvider sceneNameMappingProvider)
         {
             _configProvider = configProviderProvider;
             _repository = repository;
             _tvDbProvider = tvDbProviderProvider;
             _database = database;
             _qualityProvider = qualityProvider;
+            _sceneNameMappingProvider = sceneNameMappingProvider;
         }
 
         public SeriesProvider()
