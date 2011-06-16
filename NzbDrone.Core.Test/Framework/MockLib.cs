@@ -10,6 +10,7 @@ using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
+using PetaPoco;
 using SubSonic.DataProviders;
 using SubSonic.Repository;
 
@@ -38,7 +39,7 @@ namespace NzbDrone.Core.Test.Framework
 
         public static IRepository GetEmptyRepository(bool enableLogging = false, string fileName = "")
         {
-            Console.WriteLine("Creating an empty SQLite database");
+            Console.WriteLine("Creating an empty Subsonic repository");
 
             if (String.IsNullOrWhiteSpace(fileName))
             {
@@ -50,7 +51,7 @@ namespace NzbDrone.Core.Test.Framework
             var repo = Connection.CreateSimpleRepository(provider);
             ForceMigration(repo);
 
-            Migrations.Run(Connection.GetConnectionString(fileName), false);
+            //Migrations.Run(Connection.GetConnectionString(fileName), false);
 
             if (enableLogging)
             {
@@ -60,6 +61,24 @@ namespace NzbDrone.Core.Test.Framework
             Console.WriteLine("*****************************REPO IS READY****************************************");
             Console.WriteLine("**********************************************************************************");
             return repo;
+        }
+
+        public static IDatabase GetEmptyDatabase(bool enableLogging = false, string fileName = "")
+        {
+            Console.WriteLine("Creating an empty PetaPoco database");
+
+            if (String.IsNullOrWhiteSpace(fileName))
+            {
+                fileName = Guid.NewGuid() + ".db";
+            }
+            
+            var connectionString = Connection.GetConnectionString(fileName);
+            
+            MigrationsHelper.MigrateDatabase(connectionString);
+            
+            var database = Connection.GetPetaPocoDb(connectionString);
+
+            return database;
         }
 
         public static DiskProvider GetStandardDisk(int seasons, int episodes)

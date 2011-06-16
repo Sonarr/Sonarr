@@ -1,0 +1,145 @@
+2.5.2 (2010-11-15)
+==================
+- fixed DYNPROXY-150 - Finalizer should not be proxied
+- implemented DYNPROXY-149 - Make AllMethodsHook members virtual so it can be used as a base class
+- fixed DYNPROXY-147 - Can't crete class proxies with two non-public methods having same argument types but different return type
+- fixed DYNPROXY-145 Unable to proxy System.Threading.SynchronizationContext (.NET 4.0)
+- fixed DYNPROXY-144 - params argument not supported in constructor
+- fixed DYNPROXY-143 - Permit call to reach "non-proxied" methods of inherited interfaces
+- implemented DYNPROXY-139 - Better error message 
+- fixed DYNPROXY-133 - Debug assertion in ClassProxyInstanceContributor fails when proxying ISerializable with an explicit implementation of GetObjectData
+- fixed CORE-32 - Determining if permission is granted via PermissionUtil does not work in .NET 4
+- applied patch by Alwin Meijs - ExtendedLog4netFactory can be configured with a stream from for example an embedded log4net xml config
+- Upgraded NLog to 2.0 Beta 1
+- Added DefaultXmlSerializer to bridge XPathAdapter with standard Xml Serialization.
+- XPathAdapter for DictionaryAdapter added IXPathSerializer to provide hooks for custom serialization.
+
+2.5.1 (2010-09-21)
+==================
+- Interface proxy with target Interface now accepts null as a valid target value (which can be replaced at a later stage).
+- DictionaryAdapter behavior overrides are now ordered with all other behaviors
+- BREAKING CHANGE: removed web logger so that by default Castle.Core works in .NET 4 client profile
+- added paramter to ModuleScope disabling usage of signed modules. This is to workaround issue DYNPROXY-134. Also a descriptive exception message is being thrown now when the issue is detected.
+- Added IDictionaryBehaviorBuilder to allow grouping behaviors
+- Added GenericDictionaryAdapter to simplify generic value sources
+- fixed issue DYNPROXY-138 - Error message missing space
+- fixed false positive where DynamicProxy would not let you proxy interface with target interface when target object was a COM object.
+- fixed ReflectionBasedDictionaryAdapter when using indexed properties
+
+2.5.0 (2010-08-21)
+==================
+- DynamicProxy will now not replicate non-public attribute types
+- Applied patch from Kenneth Siewers Møller which adds parameterless constructor to DefaultSmtpSender implementation, to be able to configure the inner SmtpClient from the application configuration file (system.net.smtp).
+- added support for .NET 4 and Silverlight 4, updated solution to VisualStudio 2010
+- Removed obsolete overload of CreateClassProxy
+- Added class proxy with taget
+- Added ability to intercept explicitly implemented generic interface methods on class proxy.
+- DynamicProxy does not disallow intercepting members of System.Object anymore. AllMethodsHook will still filter them out though.
+- Added ability to intercept explicitly implemented interface members on class proxy. Does not support generic members.
+- Merged DynamicProxy into Core binary
+- fixed DYNPROXY-ISSUE-132 - "MetaProperty equals implementation incorrect"
+- Fixed bug in DiagnosticsLoggerTestCase, where when running as non-admin, the teardown will throw SecurityException (contributed by maxild)
+- Split IoC specific classes into Castle.Windsor project
+- Merged logging services solution
+- Merged DynamicProxy project
+
+1.2.0 (2010-01-11)
+==================
+
+- Added IEmailSender interface and its default implementation
+
+1.2.0 beta (2009-12-04)
+==================
+
+- BREAKING CHANGE - added ChangeProxyTarget method to IChangeProxyTarget interface
+- added docs to IChangeProxyTarget methods
+- Fixed DYNPROXY-ISSUE-108 - Obtaining replicated custom attributes on proxy may fail when property setter throws exception on default value
+- Moved custom attribute replication from CustomAttributeUtil to new interface - IAttributeDisassembler
+- Exposed IAttributeDisassembler via ProxyGenerationOptions, so that users can plug their implementation for some convoluted scenarios. (for Silverlight)
+- Moved IInterceptorSelector from Dynamic Proxy to Core (IOC-ISSUE-156)
+
+1.1.0 (2009-05-04)
+==================
+
+- Applied Eric Hauser's patch fixing CORE-ISSUE-22
+  "Support for environment variables in resource URI"
+
+- Applied Gauthier Segay's patch fixing CORE-ISSUE-20
+  "Castle.Core.Tests won't build via nant because it use TraceContext without referencing System.Web.dll"
+
+- Added simple interface to ComponentModel to make optional properties required. 
+
+- Applied Mark's -- <mwatts42@gmail.com> -- patch that changes 
+  the Core to support being compiled for Silverlight 2
+
+- Applied Louis DeJardin's patch adding TraceLogger as a new logger implementation
+
+- Applied Chris Bilson's patch fixing CORE-15
+  "WebLogger Throws When Logging Outside of an HttpContext"
+
+Release Candidate 3
+===================
+
+- Added IServiceProviderEx which extends IServiceProvider
+
+- Added Pair<T,S> class. 
+
+- Applied Bill Pierce's patch fixing CORE-9 
+  "Allow CastleComponent Attribute to Specify Lifestyle in Constructor"
+
+- Added UseSingleInterfaceProxy to CompomentModel to control the proxying
+  behavior while maintaining backward compatibility.
+  Added the corresponding ComponentProxyBehaviorAttribute.
+
+- Made NullLogger and IExtnededLogger
+
+- Enabled a new format on ILogger interface, with 6 overloads for each method:
+    Debug(string)
+    Debug(string, Exception)
+    Debug(string, params object[])
+    DebugFormat(string, params object[])
+    DebugFormat(Exception, string, params object[])
+    DebugFormat(IFormatProvider, string, params object[])
+    DebugFormat(IFormatProvider, Exception, string, params object[])
+
+  The "FatalError" overloads where marked as [Obsolete], replaced by "Fatal" and "FatalFormat".
+
+0.0.1.0
+=======
+
+- Included IProxyTargetAccessor
+
+- Removed IMethodInterceptor and IMethodInvocation, that have been replaced
+  by IInterceptor and IInvocation
+
+- Added FindByPropertyInfo to PropertySetCollection
+
+- Made the DependencyModel.IsOptional property writable
+
+- Applied Curtis Schlak's patch fixing IOC-27
+  "assembly resource format only works for resources where the assemblies name and default namespace are the same."
+  
+  Quoting:
+
+  "I chose to preserve backwards compatibility by implementing the code in the 
+  reverse order as suggested by the reporter. Given the following URI for a resource:
+
+  assembly://my.cool.assembly/context/moo/file.xml
+
+  It will initially look for an embedded resource with the manifest name of 
+  "my.cool.assembly.context.moo.file.xml" in the loaded assembly my.cool.assembly.dll. 
+  If it does not find it, then it looks for the embedded resource with the manifest name 
+  of "context.moo.file.xml".
+
+- IServiceEnabledComponent Introduced to be used across the project as
+  a standard way to have access to common services, for example, logger factories
+
+- Added missing log factories
+
+- Refactor StreamLogger and DiagnosticLogger to be more consistent behavior-wise
+
+- Refactored WebLogger to extend LevelFilteredLogger (removed duplication)
+
+- Refactored LoggerLevel order
+
+- Project started

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using MvcMiniProfiler;
 using Ninject;
 using NLog;
 using NzbDrone.Core.Helpers;
@@ -205,12 +206,15 @@ namespace NzbDrone.Core.Providers
 
         public virtual Tuple<int, int> GetEpisodeFilesCount(int seriesId)
         {
-            var allEpisodes = _episodeProvider.GetEpisodeBySeries(seriesId).ToList();
+            using (MiniProfiler.Current.Step("GetEpisodeFilesCount:" + seriesId))
+            {
+                var allEpisodes = _episodeProvider.GetEpisodeBySeries(seriesId);
 
-            var episodeTotal = allEpisodes.Where(e => !e.Ignored && e.AirDate <= DateTime.Today && e.AirDate.Year > 1900).ToList();
-            var avilableEpisodes = episodeTotal.Where(e => e.EpisodeFileId > 0).ToList();
+                var episodeTotal = allEpisodes.Where(e => !e.Ignored && e.AirDate <= DateTime.Today && e.AirDate.Year > 1900).ToList();
+                var avilableEpisodes = episodeTotal.Where(e => e.EpisodeFileId > 0).ToList();
 
-            return new Tuple<int, int>(avilableEpisodes.Count, episodeTotal.Count);
+                return new Tuple<int, int>(avilableEpisodes.Count, episodeTotal.Count);
+            }
         }
 
         private List<string> GetMediaFileList(string path)

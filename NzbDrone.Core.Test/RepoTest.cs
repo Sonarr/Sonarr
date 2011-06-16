@@ -42,7 +42,6 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
-        [Ignore]
         public void query_scratch_pad()
         {
 

@@ -9,6 +9,7 @@ using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
+using PetaPoco;
 using SubSonic.Repository;
 using TvdbLib.Data;
 
@@ -20,15 +21,17 @@ namespace NzbDrone.Core.Providers
         private readonly IRepository _repository;
         private readonly ConfigProvider _configProvider;
         private readonly TvDbProvider _tvDbProvider;
-        private readonly SceneNameMappingProvider _sceneNameMappingProvider;
+        private readonly IDatabase _database;
+        private readonly QualityProvider _qualityProvider;
 
         public SeriesProvider(ConfigProvider configProviderProvider, IRepository repository,
-                                TvDbProvider tvDbProviderProvider, SceneNameMappingProvider sceneNameMappingProvider)
+        public SeriesProvider(ConfigProvider configProviderProvider, IRepository repository, TvDbProvider tvDbProviderProvider, IDatabase database, QualityProvider qualityProvider)
         {
             _configProvider = configProviderProvider;
             _repository = repository;
             _tvDbProvider = tvDbProviderProvider;
-            _sceneNameMappingProvider = sceneNameMappingProvider;
+            _database = database;
+            _qualityProvider = qualityProvider;
         }
 
         public SeriesProvider()
@@ -37,12 +40,14 @@ namespace NzbDrone.Core.Providers
 
         public virtual IList<Series> GetAllSeries()
         {
-            return _repository.All<Series>().ToList();
+            var series = _database.Fetch<Series>();
+            series.ForEach(c => c.QualityProfile = _qualityProvider.Find(c.QualityProfileId));
+            return series;
         }
 
         public virtual Series GetSeries(int seriesId)
         {
-            return _repository.Single<Series>(seriesId);
+            return _database.Single<Series>("WHERE seriesId= @0", seriesId);
         }
 
         /// <summary>
@@ -52,7 +57,7 @@ namespace NzbDrone.Core.Providers
         /// <returns>Whether or not the show is monitored</returns>
         public virtual bool IsMonitored(long id)
         {
-            return _repository.Exists<Series>(c => c.SeriesId == id && c.Monitored);
+            return GetAllSeries().Any(c => c.SeriesId == id && c.Monitored);
         }
 
         public virtual TvdbSeries MapPathToSeries(string path)
@@ -99,7 +104,7 @@ namespace NzbDrone.Core.Providers
 
             repoSeries.SeasonFolder = _configProvider.UseSeasonFolder;
 
-            _repository.Add(repoSeries);
+            _database.Insert(repoSeries);
         }
 
         public virtual Series FindSeries(string title)
@@ -112,12 +117,12 @@ namespace NzbDrone.Core.Providers
                 return GetSeries(seriesId.Value);
             }
 
-            return _repository.Single<Series>(s => s.CleanTitle == normalizeTitle);
+            return _database.Single<Series>("WHERE CleanTitle = @0", normalizeTitle);
         }
 
         public virtual void UpdateSeries(Series series)
         {
-            _repository.Update(series);
+            _database.Update(series);
         }
 
         public virtual void DeleteSeries(int seriesId)
@@ -150,7 +155,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual bool SeriesPathExists(string cleanPath)
         {
-            if (_repository.Exists<Series>(s => s.Path == cleanPath))
+            if (GetAllSeries().Any(s => s.Path == cleanPath))
                 return true;
 
             return false;
