@@ -132,11 +132,12 @@
 
     var deleteRootDirUrl = '@Url.Action("DeleteRootDir", "AddSeries")';
 
-    function deleteRootDir(id) {
-        sendDeleteToServer(id);
+    function deleteRootDir(guid) {
+        var id = $('#id_' + guid).val();
+        sendDeleteToServer(id, guid);
     }
 
-    function sendDeleteToServer(id) {
+    function sendDeleteToServer(id, guid) {
         $.ajax({
             type: "POST",
             url: deleteRootDirUrl,
@@ -145,15 +146,16 @@
                 alert("Sorry! We could not delete your Root Directory at this time. " + error);
             },
             success: function () {
-                $("#rootDir_" + id).remove();
+                $("#rootDir_" + guid).remove();
             }
         });
     }
 
     var saveRootDirUrl = '@Url.Action("SaveRootDir", "AddSeries")';
 
-    function saveRootDir(id) {
-        var path = $("#path_" + id).data("tComboBox").value();
+    function saveRootDir(guid) {
+        var path = $("#path_" + guid).data("tComboBox").value();
+        var id = $("#id_" + guid).val();
 
         $.ajax({
             type: "POST",
@@ -163,8 +165,11 @@
                 alert("Sorry! We could not save " + path + " at this time. " + error);
             },
             success: function (data, textStatus, jqXHR) {
-                if (data != 'ok')
+                if (data == 'failed')
                     alert("An error occurred while saving Root Directory: " + path);
+                else {
+                    $("#id_" + guid).val(data);
+                }
             }
         });
     }
