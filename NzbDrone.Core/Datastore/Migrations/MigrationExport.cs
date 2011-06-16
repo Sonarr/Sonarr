@@ -27,6 +27,25 @@ namespace NzbDrone.Core.Datastore.Migrations
                 .WithNotNullableColumn("SeasonFolder", DbType.Boolean)
                 .WithNullableColumn("LastInfoSync", DbType.DateTime)
                 .WithNullableColumn("LastDiskSync", DbType.DateTime);
+
+
+            db.CreateTable("Episodes")
+                .WithPrimaryKeyColumn("EpisodeId", DbType.Int32).AsIdentity()
+                .WithNullableColumn("TvDbEpisodeId", DbType.Int32)
+
+                .WithNotNullableColumn("SeriesId", DbType.Int32)
+                .WithNotNullableColumn("SeasonNumber", DbType.Int16)
+                .WithNotNullableColumn("EpisodeNumber", DbType.Int16)
+                .WithNotNullableColumn("Title", DbType.String).HavingDefault(String.Empty)
+
+                .WithNotNullableColumn("Overview", DbType.String).HavingDefault(String.Empty)
+                .WithNotNullableColumn("Ignored", DbType.Boolean).HavingDefault(false)
+                .WithNullableColumn("EpisodeFileId", DbType.Int32)
+                .WithNullableColumn("AirDate", DbType.DateTime)
+                .WithNullableColumn("GrabDate", DbType.DateTime);
+
+
+
         }
     }
 }

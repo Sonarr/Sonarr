@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Web.Hosting;
@@ -9,14 +8,10 @@ using NLog;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Providers;
-using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.ExternalNotification;
 using NzbDrone.Core.Providers.Indexer;
 using NzbDrone.Core.Providers.Jobs;
-using NzbDrone.Core.Repository;
-using NzbDrone.Core.Repository.Quality;
 using PetaPoco;
-using SubSonic.DataProviders;
 using SubSonic.Repository;
 
 namespace NzbDrone.Core
@@ -73,30 +68,8 @@ namespace NzbDrone.Core
                 Logger.Debug("Binding Ninject's Kernel");
                 _kernel = new StandardKernel();
 
-                //dbProvider.Log = new NlogWriter();
-                _kernel.Bind<QualityProvider>().ToSelf().InSingletonScope();
-                _kernel.Bind<TvDbProvider>().ToSelf().InTransientScope();
-                _kernel.Bind<HttpProvider>().ToSelf().InSingletonScope();
-                _kernel.Bind<SeriesProvider>().ToSelf().InSingletonScope();
-                _kernel.Bind<EpisodeProvider>().ToSelf().InSingletonScope();
-                _kernel.Bind<UpcomingEpisodesProvider>().ToSelf().InSingletonScope();
-                _kernel.Bind<DiskProvider>().ToSelf().InSingletonScope();
-                _kernel.Bind<SabProvider>().ToSelf().InSingletonScope();
-                _kernel.Bind<HistoryProvider>().ToSelf().InSingletonScope();
-                _kernel.Bind<RootDirProvider>().ToSelf().InSingletonScope();
-                _kernel.Bind<ExternalNotificationProvider>().ToSelf().InSingletonScope();
-                _kernel.Bind<XbmcProvider>().ToSelf().InSingletonScope();
-                _kernel.Bind<ConfigProvider>().To<ConfigProvider>().InSingletonScope();
-                _kernel.Bind<NotificationProvider>().ToSelf().InSingletonScope();
-                _kernel.Bind<LogProvider>().ToSelf().InSingletonScope();
-                _kernel.Bind<MediaFileProvider>().ToSelf().InSingletonScope();
-                _kernel.Bind<JobProvider>().ToSelf().InSingletonScope();
-                _kernel.Bind<IndexerProvider>().ToSelf().InSingletonScope();
-                _kernel.Bind<WebTimer>().ToSelf().InSingletonScope();
-                _kernel.Bind<AutoConfigureProvider>().ToSelf().InSingletonScope();
-
+                _kernel.Bind<IDatabase>().ToMethod(c => Connection.GetPetaPocoDb(Connection.MainConnectionString)).InRequestScope();
                 _kernel.Bind<IRepository>().ToConstant(Connection.CreateSimpleRepository(Connection.MainConnectionString)).InSingletonScope();
-                _kernel.Bind<IDatabase>().ToConstant(Connection.GetPetaPocoDb(Connection.MainConnectionString)).InRequestScope();
                 _kernel.Bind<IRepository>().ToConstant(Connection.CreateSimpleRepository(Connection.LogConnectionString)).WhenInjectedInto<SubsonicTarget>().InSingletonScope();
                 _kernel.Bind<IRepository>().ToConstant(Connection.CreateSimpleRepository(Connection.LogConnectionString)).WhenInjectedInto<LogProvider>().InSingletonScope();
             }
@@ -104,10 +77,10 @@ namespace NzbDrone.Core
 
         private static void BindIndexers()
         {
-            _kernel.Bind<IndexerBase>().To<NzbsOrg>().InSingletonScope();
-            _kernel.Bind<IndexerBase>().To<NzbMatrix>().InSingletonScope();
-            _kernel.Bind<IndexerBase>().To<NzbsRUs>().InSingletonScope();
-            _kernel.Bind<IndexerBase>().To<Newzbin>().InSingletonScope();
+            _kernel.Bind<IndexerBase>().To<NzbsOrg>().InTransientScope();
+            _kernel.Bind<IndexerBase>().To<NzbMatrix>().InTransientScope();
+            _kernel.Bind<IndexerBase>().To<NzbsRUs>().InTransientScope();
+            _kernel.Bind<IndexerBase>().To<Newzbin>().InTransientScope();
 
             var indexers = _kernel.GetAll<IndexerBase>();
             _kernel.Get<IndexerProvider>().InitializeIndexers(indexers.ToList());

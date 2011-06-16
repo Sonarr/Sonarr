@@ -7,7 +7,8 @@ using SubSonic.SqlGeneration.Schema;
 
 namespace NzbDrone.Core.Repository
 {
-    [PetaPoco.TableName("Episodes")]
+    [TableName("Episodes")]
+    [PrimaryKey("EpisodeId", autoIncrement = true)]
     public class Episode
     {
         [SubSonicPrimaryKey]

@@ -14,6 +14,7 @@ namespace NzbDrone.Core.Test
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
+    [Ignore]
     public class DbBenchmark : TestBase
     {
         const int Episodes_Per_Season = 20;
@@ -90,7 +91,7 @@ namespace NzbDrone.Core.Test
         [Test]
         public void get_episode_by_series_seasons_episode_x5000()
         {
-            var epProvider = new EpisodeProvider(repo, null);
+            var epProvider = new EpisodeProvider(null, null);
 
 
             Thread.Sleep(1000);
@@ -114,7 +115,7 @@ namespace NzbDrone.Core.Test
         [Test]
         public void get_episode_by_series_seasons_x1000()
         {
-            var epProvider = new EpisodeProvider(repo, null);
+            var epProvider = new EpisodeProvider( null, null);
 
 
             Thread.Sleep(1000);

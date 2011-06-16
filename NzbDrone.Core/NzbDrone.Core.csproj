@@ -185,7 +185,7 @@
     <Compile Include="Instrumentation\SubsonicTarget.cs" />
     <Compile Include="Instrumentation\ExceptioneerTarget.cs" />
     <Compile Include="Instrumentation\NlogWriter.cs" />
-    <Compile Include="Models\PetaPoco.cs" />
+    <Compile Include="Datastore\PetaPoco\PetaPoco.cs" />
     <Compile Include="Model\ConnectionInfoModel.cs" />
     <Compile Include="Model\ExternalNotificationType.cs" />
     <Compile Include="Model\LanguageType.cs" />
@@ -305,6 +305,9 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

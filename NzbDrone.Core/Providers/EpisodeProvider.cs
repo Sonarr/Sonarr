@@ -14,14 +14,12 @@ namespace NzbDrone.Core.Providers
     public class EpisodeProvider
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private readonly IRepository _repository;
         private readonly TvDbProvider _tvDbProvider;
         private readonly IDatabase _database;
 
         [Inject]
-        public EpisodeProvider(IRepository repository, TvDbProvider tvDbProviderProvider, IDatabase database)
+        public EpisodeProvider(TvDbProvider tvDbProviderProvider, IDatabase database)
         {
-            _repository = repository;
             _tvDbProvider = tvDbProviderProvider;
             _database = database;
         }
@@ -32,36 +30,32 @@ namespace NzbDrone.Core.Providers
 
         public virtual void AddEpisode(Episode episode)
         {
-            _repository.Add(episode);
+            _database.Insert(episode);
         }
 
         public virtual Episode GetEpisode(long id)
         {
-            return _repository.Single<Episode>(id);
+            return _database.Single<Episode>(id);
         }
 
         public virtual Episode GetEpisode(int seriesId, int seasonNumber, int episodeNumber)
         {
-            return
-                _repository.Single<Episode>(
-                    c => c.SeriesId == seriesId && c.SeasonNumber == seasonNumber && c.EpisodeNumber == episodeNumber);
+            return _database.Single<Episode>("WHERE SeriesId = @0 AND SeasonNumber = @2 AND EpisodeNumber = @3", seriesId, seasonNumber, episodeNumber);
         }
 
         public virtual Episode GetEpisode(int seriesId, DateTime date)
         {
-            return
-                _repository.Single<Episode>(
-                    c => c.SeriesId == seriesId && c.AirDate == date.Date);
+            return _database.Single<Episode>("WHERE SeriesId = @0 AND AirDate = @2", seriesId, date.Date);
         }
 
-        public virtual IEnumerable<Episode> GetEpisodeBySeries(long seriesId)
+        public virtual IList<Episode> GetEpisodeBySeries(long seriesId)
         {
-            return _database.Query<Episode>("WHERE SeriesId = @0", seriesId);
+            return _database.Fetch<Episode>("WHERE SeriesId = @0", seriesId);
         }
 
         public virtual IList<Episode> GetEpisodesBySeason(long seriesId, int seasonNumber)
         {
-            return _repository.Find<Episode>(e => e.SeriesId == seriesId && e.SeasonNumber == seasonNumber);
+            return _database.Fetch<Episode>("WHERE SeriesId = @0 AND SeasonNumber = @1", seriesId, seasonNumber);
         }
 
         public virtual List<Episode> GetEpisodes(EpisodeParseResult parseResult)
@@ -89,15 +83,17 @@ namespace NzbDrone.Core.Providers
 
         public virtual IList<Episode> EpisodesWithoutFiles(bool includeSpecials)
         {
+            var episodes = _database.Query<Episode>("WHERE (EpisodeFileId=0 OR EpisodeFileId=NULL) AND AirDate<=@0",
+                                                    DateTime.Now.Date);
             if (includeSpecials)
-                return _repository.All<Episode>().Where(e => e.EpisodeFileId == 0 && e.AirDate <= DateTime.Today && e.AirDate > new DateTime(1899, 12, 31)).ToList();
+                return episodes.Where(e => e.SeasonNumber > 0).ToList();
 
-            return _repository.All<Episode>().Where(e => e.EpisodeFileId == 0 && e.AirDate <= DateTime.Today && e.AirDate > new DateTime(1899, 12, 31) && e.SeasonNumber > 0).ToList();
+            return episodes.ToList();
         }
 
         public virtual IList<Episode> EpisodesByFileId(int episodeFileId)
         {
-            return _repository.All<Episode>().Where(e => e.EpisodeFileId == episodeFileId).ToList();
+            return _database.Fetch<Episode>("WHERE EpisodeFileId = @0", episodeFileId);
         }
 
         public virtual void RefreshEpisodeInfo(Series series)
@@ -107,6 +103,7 @@ namespace NzbDrone.Core.Providers
             int failCount = 0;
             var tvDbSeriesInfo = _tvDbProvider.GetSeries(series.SeriesId, true);
 
+            var seriesEpisodes = GetEpisodeBySeries(series.SeriesId);
             var updateList = new List<Episode>();
             var newList = new List<Episode>();
 
@@ -124,12 +121,12 @@ namespace NzbDrone.Core.Providers
                     Logger.Trace("Updating info for [{0}] - S{1}E{2}", tvDbSeriesInfo.SeriesName, episode.SeasonNumber, episode.EpisodeNumber);
 
                     //first check using tvdbId, this should cover cases when and episode number in a season is changed
-                    var episodeToUpdate = _repository.Single<Episode>(c => c.TvDbEpisodeId == episode.Id);
+                    var episodeToUpdate = seriesEpisodes.Where(e => e.TvDbEpisodeId == episode.Id).FirstOrDefault();
 
                     //not found, try using season/episode number
                     if (episodeToUpdate == null)
                     {
-                        episodeToUpdate = GetEpisode(series.SeriesId, episode.SeasonNumber, episode.EpisodeNumber);
+                        episodeToUpdate = seriesEpisodes.Where(e => e.SeasonNumber == episode.SeasonNumber && e.EpisodeNumber == episode.EpisodeNumber).FirstOrDefault();
                     }
 
                     //Episode doesn't exist locally
@@ -161,31 +158,45 @@ namespace NzbDrone.Core.Providers
                 }
             }
 
-            _repository.AddMany(newList);
-            _repository.UpdateMany(updateList);
+            using (var tran = _database.GetTransaction())
+            {
+                newList.ForEach(episode => _database.Insert(episode));
+                updateList.ForEach(episode => _database.Update(episode));
+#if DEBUG
+                //Shouldn't run if Database is a mock since transaction will be null
+                if (_database.GetType().Namespace != "Castle.Proxies" && tran != null)
+                {
+                    tran.Complete();
+                }
+#else
+                tran.Complete();
+#endif
+
+            }
 
             Logger.Debug("Finished episode refresh for series:{0}. Successful:{1} - Failed:{2} ",
                          tvDbSeriesInfo.SeriesName, successCount, failCount);
         }
 
-        public virtual void DeleteEpisode(int episodeId)
-        {
-            _repository.Delete<Episode>(episodeId);
-        }
+
 
         public virtual void UpdateEpisode(Episode episode)
         {
-            _repository.Update(episode);
+            _database.Update(episode);
         }
 
         public virtual bool IsIgnored(int seriesId, int seasonNumber)
         {
-            return !_repository.Exists<Episode>(e => e.SeriesId == seriesId && e.SeasonNumber == seasonNumber && !e.Ignored);
+
+            var unIgnoredCount = _database.ExecuteScalar<int>(
+                "SELECT COUNT (*) FROM Episodes WHERE SeriesId=@0 AND SeasonNumber=@1 AND Ignored=False");
+
+            return unIgnoredCount != 0;
         }
 
         public virtual IList<int> GetSeasons(int seriesId)
         {
-            return _repository.All<Episode>().Where(e => e.SeriesId == seriesId).Select(s => s.SeasonNumber).Distinct().OrderBy(c => c).ToList();
+            return _database.Fetch<Int32>("SELECT DISTINCT SeasonNumber FROM Episodes WHERE SeriesId=@0", seriesId).OrderBy(c => c).ToList();
         }
 
         public virtual void SetSeasonIgnore(long seriesId, int seasonNumber, bool isIgnored)
@@ -193,14 +204,27 @@ namespace NzbDrone.Core.Providers
             Logger.Info("Setting ignore flag on Series:{0} Season:{1} to {2}", seriesId, seasonNumber, isIgnored);
             var episodes = GetEpisodesBySeason(seriesId, seasonNumber);
 
-            foreach (var episode in episodes)
+            using (var tran = _database.GetTransaction())
             {
-                episode.Ignored = isIgnored;
+                foreach (var episode in episodes)
+                {
+                    episode.Ignored = isIgnored;
+                    _database.Update(episode);
+                }
+
+#if DEBUG
+                //Shouldn't run if Database is a mock since transaction will be null
+                if (_database.GetType().Namespace != "Castle.Proxies" && tran != null)
+                {
+                    tran.Complete();
+                }
+#else
+                tran.Complete();
+#endif
+                Logger.Info("Ignore flag for Series:{0} Season:{1} successfully set to {2}", seriesId, seasonNumber, isIgnored);
             }
 
-            _repository.UpdateMany(episodes);
 
-            Logger.Info("Ignore flag for Series:{0} Season:{1} successfully set to {2}", seriesId, seasonNumber, isIgnored);
         }
     }
 }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      

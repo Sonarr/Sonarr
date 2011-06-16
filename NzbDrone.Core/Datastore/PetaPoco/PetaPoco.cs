@@ -26,7 +26,6 @@ using System.Linq.Expressions;
 
 // ReSharper disable
 namespace PetaPoco
-
 {
     // Poco's marked [Explicit] require all column properties to be marked
     [AttributeUsage(AttributeTargets.Class)]
@@ -354,12 +353,16 @@ namespace PetaPoco
             {
                 _sharedConnection = _factory.CreateConnection();
                 _sharedConnection.ConnectionString = _connectionString;
-                _sharedConnection.Open();
 
                 if (KeepConnectionAlive)
                     _sharedConnectionDepth++;		// Make sure you call Dispose
             }
+
+            if (_sharedConnection.State != ConnectionState.Open)
+                _sharedConnection.Open();
+
             _sharedConnectionDepth++;
+
         }
 
         // Close a previously opened connection
@@ -860,9 +863,6 @@ namespace PetaPoco
                     var pd = PocoData.ForType(typeof(T));
                     try
                     {
-                        if (_sharedConnection.State != ConnectionState.Open)
-                            _sharedConnection.Open();
-                        
                         r = cmd.ExecuteReader();
                         OnExecutedCommand(cmd);
                     }
@@ -1297,9 +1297,7 @@ namespace PetaPoco
                 {
                     using (var cmd = CreateCommand(_sharedConnection, ""))
                     {
-                        if(_sharedConnection.State != ConnectionState.Open)
-                            _sharedConnection.Open();
-
+         
                         var pd = PocoData.ForObject(poco, primaryKeyName);
                         var names = new List<string>();
                         var values = new List<string>();
