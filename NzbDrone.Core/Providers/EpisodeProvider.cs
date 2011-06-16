@@ -162,15 +162,12 @@ namespace NzbDrone.Core.Providers
             {
                 newList.ForEach(episode => _database.Insert(episode));
                 updateList.ForEach(episode => _database.Update(episode));
-#if DEBUG
+
                 //Shouldn't run if Database is a mock since transaction will be null
                 if (_database.GetType().Namespace != "Castle.Proxies" && tran != null)
                 {
                     tran.Complete();
                 }
-#else
-                tran.Complete();
-#endif
 
             }
 
@@ -189,9 +186,9 @@ namespace NzbDrone.Core.Providers
         {
 
             var unIgnoredCount = _database.ExecuteScalar<int>(
-                "SELECT COUNT (*) FROM Episodes WHERE SeriesId=@0 AND SeasonNumber=@1 AND Ignored=False");
+                "SELECT COUNT (*) FROM Episodes WHERE SeriesId=@0 AND SeasonNumber=@1 AND Ignored='0'", seriesId, seasonNumber);
 
-            return unIgnoredCount != 0;
+            return unIgnoredCount == 0;
         }
 
         public virtual IList<int> GetSeasons(int seriesId)
@@ -212,15 +209,12 @@ namespace NzbDrone.Core.Providers
                     _database.Update(episode);
                 }
 
-#if DEBUG
                 //Shouldn't run if Database is a mock since transaction will be null
                 if (_database.GetType().Namespace != "Castle.Proxies" && tran != null)
                 {
                     tran.Complete();
                 }
-#else
-                tran.Complete();
-#endif
+
                 Logger.Info("Ignore flag for Series:{0} Season:{1} successfully set to {2}", seriesId, seasonNumber, isIgnored);
             }
 

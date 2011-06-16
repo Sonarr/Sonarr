@@ -280,9 +280,9 @@ namespace NzbDrone.Core.Test
         [Test]
         public void IsSeasonIgnored_should_return_true_if_all_episodes_ignored()
         {
-            var repo = MockLib.GetEmptyRepository();
+            var db = MockLib.GetEmptyDatabase();
             var mocker = new AutoMoqer(MockBehavior.Strict);
-            mocker.SetConstant(repo);
+            mocker.SetConstant(db);
 
             var episodes = Builder<Episode>.CreateListOfSize(4)
                 .WhereAll()
@@ -291,7 +291,7 @@ namespace NzbDrone.Core.Test
                 .Have(c => c.SeasonNumber = 2)
                 .Build();
 
-            repo.AddMany(episodes);
+            episodes.ToList().ForEach(c => db.Insert(c));
 
             //Act
             var result = mocker.Resolve<EpisodeProvider>().IsIgnored(10, 2);
@@ -303,9 +303,9 @@ namespace NzbDrone.Core.Test
         [Test]
         public void IsSeasonIgnored_should_return_false_if_none_of_episodes_are_ignored()
         {
-            var repo = MockLib.GetEmptyRepository();
+            var db = MockLib.GetEmptyDatabase();
             var mocker = new AutoMoqer(MockBehavior.Strict);
-            mocker.SetConstant(repo);
+            mocker.SetConstant(db);
 
             var episodes = Builder<Episode>.CreateListOfSize(4)
                 .WhereAll()
@@ -314,8 +314,8 @@ namespace NzbDrone.Core.Test
                 .Have(c => c.SeasonNumber = 2)
                 .Build();
 
-            repo.AddMany(episodes);
-
+            episodes.ToList().ForEach(c => db.Insert(c));
+            
             //Act
             var result = mocker.Resolve<EpisodeProvider>().IsIgnored(10, 2);
 
@@ -326,9 +326,9 @@ namespace NzbDrone.Core.Test
         [Test]
         public void IsSeasonIgnored_should_return_false_if_some_of_episodes_are_ignored()
         {
-            var repo = MockLib.GetEmptyRepository();
+            var db = MockLib.GetEmptyDatabase();
             var mocker = new AutoMoqer(MockBehavior.Strict);
-            mocker.SetConstant(repo);
+            mocker.SetConstant(db);
 
             var episodes = Builder<Episode>.CreateListOfSize(4)
                 .WhereAll()
@@ -340,7 +340,7 @@ namespace NzbDrone.Core.Test
             episodes[2].Ignored = false;
 
 
-            repo.AddMany(episodes);
+            episodes.ToList().ForEach(c => db.Insert(c));
 
             //Act
             var result = mocker.Resolve<EpisodeProvider>().IsIgnored(10, 2);
@@ -352,9 +352,9 @@ namespace NzbDrone.Core.Test
         [Test]
         public void IsSeasonIgnored_should_return_true_if_invalid_series()
         {
-            var repo = MockLib.GetEmptyRepository();
+            var db = MockLib.GetEmptyDatabase();
             var mocker = new AutoMoqer(MockBehavior.Strict);
-            mocker.SetConstant(repo);
+            mocker.SetConstant(db);
 
             //Act
             var result = mocker.Resolve<EpisodeProvider>().IsIgnored(10, 2);
