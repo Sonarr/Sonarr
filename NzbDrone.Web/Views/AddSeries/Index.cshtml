@@ -59,6 +59,7 @@
                                 }
                             </div>
                             <button onclick="reloadExistingSeries()" style="padding: 2px 10px 2px 10px; margin: 5px; margin-bottom: 10px;">Refresh Unmapped</button>
+                            <span id="reloadAjax" style="display: none"><img src="../../Content/Images/ajax-loader.gif" width="22px" height="22px" style="margin-bottom: -6px;"/></span>
                         </div>
                     </text>);
         }).Render(); 
@@ -175,6 +176,10 @@
     }
 
     function reloadExistingSeries() {
-        $('#existingSeries').load('@Url.Action("AddExisting", "AddSeries")');
+        $('#reloadAjax').show();
+        $('#existingSeries').load('@Url.Action("AddExisting", "AddSeries")',
+            function (responseText, textStatus, XMLHttpRequest) {
+                $('#reloadAjax').hide();
+            });
     }
 </script>
