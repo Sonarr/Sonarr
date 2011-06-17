@@ -5,47 +5,46 @@ using Ninject;
 using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository;
-using NzbDrone.Core.Repository.Quality;
-using SubSonic.Repository;
+using PetaPoco;
 
 namespace NzbDrone.Core.Providers
 {
     public class HistoryProvider
     {
+        private readonly IDatabase _database;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private readonly IRepository _repository;
+
 
         [Inject]
-        public HistoryProvider(IRepository repository)
+        public HistoryProvider(IDatabase database)
         {
-            _repository = repository;
+            _database = database;
         }
 
         public HistoryProvider()
         {
         }
 
-        public virtual IQueryable<History> AllItems()
+        public virtual IEnumerable<History> AllItems()
         {
-            return _repository.All<History>();
+            return _database.Query<History>("");
         }
 
         public virtual void Purge()
         {
-            _repository.DeleteMany(AllItems());
+            _database.Delete<History>("");
             Logger.Info("History has been Purged");
         }
 
         public virtual void Trim()
         {
-            var old = AllItems().Where(h => h.Date < DateTime.Now.AddDays(-30));
-            _repository.DeleteMany(old);
+            _database.Delete<History>("WHERE Date < @0", DateTime.Now.AddDays(-30).Date);
             Logger.Info("History has been trimmed, items older than 30 days have been removed");
         }
 
         public virtual void Add(History item)
         {
-            _repository.Add(item);
+            _database.Insert(item);
             Logger.Debug("Item added to history: {0}", item.NzbTitle);
         }
 
@@ -54,16 +53,6 @@ namespace NzbDrone.Core.Providers
             var history = AllItems().Where(c => c.EpisodeId == episodeId).ToList().Select(d => new Quality(d.Quality, d.IsProper)).OrderBy(c => c);
 
             return history.FirstOrDefault();
-        }
-
-        public virtual void Delete(int historyId)
-        {
-            _repository.Delete<History>(historyId);
-        }
-
-        public virtual void DeleteForEpisode(int episodeId)
-        {
-            _repository.DeleteMany<History>(h => h.EpisodeId == episodeId);
         }
     }
 }

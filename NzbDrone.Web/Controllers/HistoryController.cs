@@ -12,10 +12,12 @@ namespace NzbDrone.Web.Controllers
     public class HistoryController : Controller
     {
         private readonly HistoryProvider _historyProvider;
+        private readonly EpisodeProvider _episodeProvider;
 
-        public HistoryController(HistoryProvider historyProvider)
+        public HistoryController(HistoryProvider historyProvider, EpisodeProvider episodeProvider)
         {
             _historyProvider = historyProvider;
+            _episodeProvider = episodeProvider;
         }
 
         //
@@ -48,12 +50,11 @@ namespace NzbDrone.Web.Controllers
             var historyDb = _historyProvider.AllItems().ToList();
             
             var history = new List<HistoryModel>();
-            
+
             foreach (var item in historyDb)
             {
-                var episode = item.Episode;
-                var series = episode.Series;
-
+                var episode = _episodeProvider.GetEpisode(item.EpisodeId);
+       
                 history.Add(new HistoryModel
                                             {
                                                 HistoryId = item.HistoryId,
@@ -61,7 +62,7 @@ namespace NzbDrone.Web.Controllers
                                                 EpisodeNumber = episode.EpisodeNumber,
                                                 EpisodeTitle = episode.Title,
                                                 EpisodeOverview = episode.Overview,
-                                                SeriesTitle = series.Title,
+                                                SeriesTitle = episode.Series.Title,
                                                 NzbTitle = item.NzbTitle,
                                                 Quality = item.Quality.ToString(),
                                                 IsProper = item.IsProper,

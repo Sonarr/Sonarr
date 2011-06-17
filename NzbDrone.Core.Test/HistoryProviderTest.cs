@@ -23,38 +23,65 @@ namespace NzbDrone.Core.Test
         public void AllItems()
         {
             //Setup
-            var episode = new Episode
-                              {
-                                  AirDate = DateTime.Today.AddDays(-1),
-                                  EpisodeId = 1234,
-                                  EpisodeNumber = 5,
-                                  Overview = "This is an Overview",
-                                  SeasonNumber = 1,
-                                  SeriesId = 5656
-                              };
+            var historyItem = Builder<History>.CreateListOfSize(10).Build();
 
-            var list = new List<History>
-                           {
-                               new History
-                                   {
-                                       HistoryId = new int(),
-                                       Date = DateTime.Now,
-                                       IsProper = false,
-                                       Quality = QualityTypes.SDTV,
-                                       EpisodeId = episode.EpisodeId
-                                   }
-                           };
+            var mocker = new AutoMoqer();
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
 
-            var repo = new Mock<IRepository>();
-            repo.Setup(r => r.All<History>()).Returns(list.AsQueryable());
+            db.InsertMany(historyItem);
 
-            var target = new HistoryProvider(repo.Object);
 
             //Act
-            var result = target.AllItems();
+            var result = mocker.Resolve<HistoryProvider>().AllItems();
 
             //Assert
-            Assert.AreEqual(result.Count(), 1);
+            result.Should().HaveSameCount(historyItem);
+        }
+
+        [Test]
+        public void PurgeItem()
+        {
+            //Setup
+            var historyItem = Builder<History>.CreateListOfSize(10).Build();
+
+            var mocker = new AutoMoqer();
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            db.InsertMany(historyItem);
+
+
+            //Act
+            db.Fetch<History>().Should().HaveCount(10);
+            mocker.Resolve<HistoryProvider>().Purge();
+
+            //Assert
+            db.Fetch<History>().Should().HaveCount(0);
+        }
+
+        [Test]
+        public void Trim_Items()
+        {
+            //Setup
+            var historyItem = Builder<History>.CreateListOfSize(20)
+                .WhereTheFirst(10).Have(c => c.Date = DateTime.Now)
+                .AndTheNext(10).Have(c => c.Date = DateTime.Now.AddDays(-31))
+                .Build();
+
+            var mocker = new AutoMoqer();
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            db.InsertMany(historyItem);
+
+
+            //Act
+            db.Fetch<History>().Should().HaveCount(20);
+            mocker.Resolve<HistoryProvider>().Trim();
+
+            //Assert
+            db.Fetch<History>().Should().HaveCount(10);
         }
 
 
@@ -63,7 +90,7 @@ namespace NzbDrone.Core.Test
         {
             var mocker = new AutoMoqer(MockBehavior.Strict);
 
-            mocker.SetConstant(MockLib.GetEmptyRepository());
+            mocker.SetConstant(MockLib.GetEmptyDatabase());
 
             //Act
             var result = mocker.Resolve<HistoryProvider>().GetBestQualityInHistory(12);
@@ -77,12 +104,12 @@ namespace NzbDrone.Core.Test
         {
             var mocker = new AutoMoqer(MockBehavior.Strict);
 
-
-            var repo = MockLib.GetEmptyRepository();
+            var db = MockLib.GetEmptyDatabase();
             var history = Builder<History>.CreateNew()
                 .With(h => h.Quality = QualityTypes.Bluray720p).Build();
-            repo.Add(history);
-            mocker.SetConstant(repo);
+
+            db.Insert(history);
+            mocker.SetConstant(db);
 
             //Act
             var result = mocker.Resolve<HistoryProvider>().GetBestQualityInHistory(history.EpisodeId);
@@ -97,35 +124,40 @@ namespace NzbDrone.Core.Test
         {
             //Arange
             var mocker = new AutoMoqer();
-            var repo = MockLib.GetEmptyRepository();
+            var db = MockLib.GetEmptyDatabase();
 
-            mocker.SetConstant(repo);
+            mocker.SetConstant(db);
 
-            var episodes = MockLib.GetFakeEpisodes(1);
-            repo.AddMany(episodes);
+            var episode = Builder<Episode>.CreateNew().Build();
 
-            var episode = episodes[5];
+            const QualityTypes quality = QualityTypes.HDTV;
+            const bool proper = true;
 
             var history = new History
                               {
                                   Date = DateTime.Now,
                                   EpisodeId = episode.EpisodeId,
+                                  SeriesId = episode.SeriesId,
                                   NzbTitle = "my title",
-                                  Indexer = "Fake Indexer"
+                                  Indexer = "Fake Indexer",
+                                  Quality = quality,
+                                  IsProper = proper
                               };
 
             //Act
             mocker.Resolve<HistoryProvider>().Add(history);
 
             //Assert
-            var storedHistory = repo.All<History>();
-            var newHistiory = repo.All<History>().First();
+            var storedHistory = db.Fetch<History>();
 
             storedHistory.Should().HaveCount(1);
-            Assert.AreEqual(history.Date, newHistiory.Date);
-            Assert.AreEqual(history.EpisodeId, newHistiory.EpisodeId);
-            Assert.AreEqual(history.NzbTitle, newHistiory.NzbTitle);
-            Assert.AreEqual(history.Indexer, newHistiory.Indexer);
+            Assert.AreEqual(history.Date, storedHistory.First().Date);
+            Assert.AreEqual(history.EpisodeId, storedHistory.First().EpisodeId);
+            Assert.AreEqual(history.SeriesId, storedHistory.First().SeriesId);
+            Assert.AreEqual(history.NzbTitle, storedHistory.First().NzbTitle);
+            Assert.AreEqual(history.Indexer, storedHistory.First().Indexer);
+            Assert.AreEqual(history.Quality, storedHistory.First().Quality);
+            Assert.AreEqual(history.IsProper, storedHistory.First().IsProper);
         }
 
 

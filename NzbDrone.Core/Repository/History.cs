@@ -1,24 +1,22 @@
 ﻿using System;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository.Quality;
+using PetaPoco;
 using SubSonic.SqlGeneration.Schema;
 
 namespace NzbDrone.Core.Repository
 {
+    [PrimaryKey("HistoryId")]
     public class History
     {
-        [SubSonicPrimaryKey]
-        public virtual int HistoryId { get; set; }
+        public int HistoryId { get; set; }
 
-        public virtual int EpisodeId { get; set; }
+        public int EpisodeId { get; set; }
+        public int SeriesId { get; set; }
         public string NzbTitle { get; set; }
         public QualityTypes Quality { get; set; }
         public DateTime Date { get; set; }
         public bool IsProper { get; set; }
         public string Indexer { get; set; }
-        
-        [SubSonicToOneRelation(ThisClassContainsJoinKey = true)]
-        public virtual Episode Episode { get; protected set; }
-
     }
 }
