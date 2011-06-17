@@ -1,5 +1,5 @@
 ﻿/* PetaPoco v4.0.2 - A Tiny ORMish thing for your POCO's.
- * Copyright Â© 2011 Topten Software.  All Rights Reserved.
+ * Copyright © 2011 Topten Software.  All Rights Reserved.
  * 
  * Apache License 2.0 - http://www.toptensoftware.com/petapoco/license
  * 
@@ -24,7 +24,6 @@ using System.Reflection.Emit;
 using System.Linq.Expressions;
 
 
-// ReSharper disable
 namespace PetaPoco
 {
     // Poco's marked [Explicit] require all column properties to be marked
@@ -182,6 +181,8 @@ namespace PetaPoco
         List<T> Fetch<T>(long page, long itemsPerPage, Sql sql);
         Page<T> Page<T>(long page, long itemsPerPage, string sql, params object[] args);
         Page<T> Page<T>(long page, long itemsPerPage, Sql sql);
+        List<T> SkipTake<T>(long skip, long take, string sql, params object[] args);
+        List<T> SkipTake<T>(long skip, long take, Sql sql);
         List<TRet> Fetch<T1, T2, TRet>(Func<T1, T2, TRet> cb, string sql, params object[] args);
         List<TRet> Fetch<T1, T2, T3, TRet>(Func<T1, T2, T3, TRet> cb, string sql, params object[] args);
         List<TRet> Fetch<T1, T2, T3, T4, TRet>(Func<T1, T2, T3, T4, TRet> cb, string sql, params object[] args);
@@ -221,13 +222,14 @@ namespace PetaPoco
         T FirstOrDefault<T>(Sql sql);
         bool Exists<T>(object primaryKey);
         int OneTimeCommandTimeout { get; set; }
+        bool Exists<T>(string sql, params object[] args);
     }
 
     public interface IDatabase : IDatabaseQuery
     {
         void Dispose();
         IDbConnection Connection { get; }
-        Transaction GetTransaction();
+        ITransaction GetTransaction();
         void BeginTransaction();
         void AbortTransaction();
         void CompleteTransaction();
@@ -240,6 +242,7 @@ namespace PetaPoco
         int Update(object poco, object primaryKeyValue);
         int Update<T>(string sql, params object[] args);
         int Update<T>(Sql sql);
+        void UpdateMany<T>(IEnumerable<T> pocoList);
         int Delete(string tableName, string primaryKeyName, object poco);
         int Delete(string tableName, string primaryKeyName, object poco, object primaryKeyValue);
         int Delete(object poco);
@@ -248,6 +251,8 @@ namespace PetaPoco
         int Delete<T>(object pocoOrPrimaryKey);
         void Save(string tableName, string primaryKeyName, object poco);
         void Save(object poco);
+        void InsertMany<T>(IEnumerable<T> pocoList);
+        void SaveMany<T>(IEnumerable<T> pocoList);
     }
 
     // Database class ... this is where most of the action happens
@@ -353,19 +358,17 @@ namespace PetaPoco
             {
                 _sharedConnection = _factory.CreateConnection();
                 _sharedConnection.ConnectionString = _connectionString;
+                _sharedConnection.Open();
 
                 if (KeepConnectionAlive)
                     _sharedConnectionDepth++;		// Make sure you call Dispose
             }
-
-            if (_sharedConnection.State != ConnectionState.Open)
-                _sharedConnection.Open();
-
             _sharedConnectionDepth++;
-
         }
 
-        // Close a previously opened connection
+        /// <summary>
+        /// Close a previously opened connection
+        /// </summary>
         public void CloseSharedConnection()
         {
             if (_sharedConnectionDepth > 0)
@@ -386,7 +389,7 @@ namespace PetaPoco
         }
 
         // Helper to create a transaction scope
-        public Transaction GetTransaction()
+        public ITransaction GetTransaction()
         {
             return new Transaction(this);
         }
@@ -750,7 +753,7 @@ namespace PetaPoco
 
         static Regex rxColumns = new Regex(@"\A\s*SELECT\s+((?:\((?>\((?<depth>)|\)(?<-depth>)|.?)*(?(depth)(?!))\)|.)*?)(?<!,\s+)\bFROM\b", RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Singleline | RegexOptions.Compiled);
         static Regex rxOrderBy = new Regex(@"\bORDER\s+BY\s+(?:\((?>\((?<depth>)|\)(?<-depth>)|.?)*(?(depth)(?!))\)|[\w\(\)\.])+(?:\s+(?:ASC|DESC))?(?:\s*,\s*(?:\((?>\((?<depth>)|\)(?<-depth>)|.?)*(?(depth)(?!))\)|[\w\(\)\.])+(?:\s+(?:ASC|DESC))?)*", RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Singleline | RegexOptions.Compiled);
-        public static bool SplitSqlForPaging(string sql, out string sqlCount, out string sqlSelectRemoved, out string sqlOrderBy)
+        public static bool SplitSqlForPaging<T>(string sql, out string sqlCount, out string sqlSelectRemoved, out string sqlOrderBy)
         {
             sqlSelectRemoved = null;
             sqlCount = null;
@@ -766,26 +769,32 @@ namespace PetaPoco
             sqlCount = sql.Substring(0, g.Index) + "COUNT(*) " + sql.Substring(g.Index + g.Length);
             sqlSelectRemoved = sql.Substring(g.Index);
 
-            // Look for an "ORDER BY <whatever>" clause
+            // Look for an "ORDER BY <whatever>" clause or primarykey from pocodata
+            var data = PocoData.ForType(typeof(T));
+
             m = rxOrderBy.Match(sqlCount);
-            if (!m.Success)
+            if (!m.Success
+                && (string.IsNullOrEmpty(data.TableInfo.PrimaryKey) ||
+                    (!data.TableInfo.PrimaryKey.Split(',').All(x => data.Columns.Values.Any(y => y.ColumnName.Equals(x, StringComparison.OrdinalIgnoreCase))))))
+            {
                 return false;
+            }
 
             g = m.Groups[0];
-            sqlOrderBy = g.ToString();
+            sqlOrderBy = m.Success ? g.ToString() : "ORDER BY " + data.TableInfo.PrimaryKey;
             sqlCount = sqlCount.Substring(0, g.Index) + sqlCount.Substring(g.Index + g.Length);
 
             return true;
         }
 
-        public void BuildPageQueries<T>(long page, long itemsPerPage, string sql, ref object[] args, out string sqlCount, out string sqlPage)
+        private void BuildPageQueries<T>(long skip, long take, string sql, ref object[] args, out string sqlCount, out string sqlPage)
         {
             // Add auto select clause
             sql = AddSelectClause<T>(sql);
 
             // Split the SQL into the bits we need
             string sqlSelectRemoved, sqlOrderBy;
-            if (!SplitSqlForPaging(sql, out sqlCount, out sqlSelectRemoved, out sqlOrderBy))
+            if (!SplitSqlForPaging<T>(sql, out sqlCount, out sqlSelectRemoved, out sqlOrderBy))
                 throw new Exception("Unable to parse SQL statement for paged query");
             if (_dbType == DBType.Oracle && sqlSelectRemoved.StartsWith("*"))
                 throw new Exception("Query must alias '*' when performing a paged query.\neg. select t.* from table t order by t.id");
@@ -793,20 +802,21 @@ namespace PetaPoco
             // Build the SQL for the actual final result
             if (_dbType == DBType.SqlServer || _dbType == DBType.Oracle)
             {
+                var fromIndex = sqlSelectRemoved.IndexOf("from", StringComparison.OrdinalIgnoreCase);
                 sqlSelectRemoved = rxOrderBy.Replace(sqlSelectRemoved, "");
-                sqlPage = string.Format("SELECT * FROM (SELECT ROW_NUMBER() OVER ({0}) peta_rn, {1}) peta_paged WHERE peta_rn>@{2} AND peta_rn<=@{3}",
-                                        sqlOrderBy, sqlSelectRemoved, args.Length, args.Length + 1);
-                args = args.Concat(new object[] { (page - 1) * itemsPerPage, page * itemsPerPage }).ToArray();
+                sqlPage = string.Format("SELECT * FROM (SELECT {2}, ROW_NUMBER() OVER ({0}) peta_rn {1}) peta_paged WHERE peta_rn>@{3} AND peta_rn<=@{4}",
+                                        sqlOrderBy, sqlSelectRemoved.Substring(fromIndex), sqlSelectRemoved.Substring(0, fromIndex - 1), args.Length, args.Length + 1);
+                args = args.Concat(new object[] { skip, skip + take }).ToArray();
             }
             else if (_dbType == DBType.SqlServerCE)
             {
                 sqlPage = string.Format("{0}\nOFFSET @{1} ROWS FETCH NEXT @{2} ROWS ONLY", sql, args.Length, args.Length + 1);
-                args = args.Concat(new object[] { (page - 1) * itemsPerPage, itemsPerPage }).ToArray();
+                args = args.Concat(new object[] { skip, take }).ToArray();
             }
             else
             {
                 sqlPage = string.Format("{0}\nLIMIT @{1} OFFSET @{2}", sql, args.Length, args.Length + 1);
-                args = args.Concat(new object[] { itemsPerPage, (page - 1) * itemsPerPage }).ToArray();
+                args = args.Concat(new object[] { take, skip }).ToArray();
             }
 
         }
@@ -815,7 +825,11 @@ namespace PetaPoco
         public Page<T> Page<T>(long page, long itemsPerPage, string sql, params object[] args)
         {
             string sqlCount, sqlPage;
-            BuildPageQueries<T>(page, itemsPerPage, sql, ref args, out sqlCount, out sqlPage);
+
+            long skip = (page - 1) * itemsPerPage;
+            long take = itemsPerPage;
+
+            BuildPageQueries<T>(skip, take, sql, ref args, out sqlCount, out sqlPage);
 
             // Save the one-time command time out and use it for both queries
             int saveTimeout = OneTimeCommandTimeout;
@@ -841,6 +855,21 @@ namespace PetaPoco
         public Page<T> Page<T>(long page, long itemsPerPage, Sql sql)
         {
             return Page<T>(page, itemsPerPage, sql.SQL, sql.Arguments);
+        }
+
+        public List<T> SkipTake<T>(long skip, long take, string sql, params object[] args)
+        {
+            string sqlCount, sqlPage;
+
+            BuildPageQueries<T>(skip, take, sql, ref args, out sqlCount, out sqlPage);
+
+            var result = Fetch<T>(sqlPage, args);
+            return result;
+        }
+
+        public List<T> SkipTake<T>(long skip, long take, Sql sql)
+        {
+            return SkipTake<T>(skip, take, sql.SQL, sql.Arguments);
         }
 
         // Return an enumerable collection of pocos
@@ -1213,6 +1242,38 @@ namespace PetaPoco
             var primaryKeyValuePairs = GetPrimaryKeyValues(PocoData.ForType(typeof(T)).TableInfo.PrimaryKey, primaryKey);
             return FirstOrDefault<T>(string.Format("WHERE {0}", BuildPrimaryKeySql(primaryKeyValuePairs, ref index)), primaryKeyValuePairs.Select(x => x.Value).ToArray()) != null;
         }
+
+
+        public bool Exists<T>(string sql, params object[] args)
+        {
+            var poco = PocoData.ForType(typeof(T)).TableInfo;
+
+            string existsTemplate;
+
+            switch (_dbType)
+            {
+                case DBType.SQLite:
+                case DBType.MySql:
+                    {
+                        existsTemplate = "SELECT EXISTS (SELECT 1 FROM {0} WHERE {1})";
+                        break;
+                    }
+
+                case DBType.SqlServer:
+                    {
+                        existsTemplate = "IF EXISTS (SELECT 1 FROM {0} WHERE {1}) SELECT 1 ELSE SELECT 0";
+                        break;
+                    }
+                default:
+                    {
+                        existsTemplate = "SELECT COUNT(*) FROM {0} WHERE {1}";
+                        break;
+                    }
+            }
+
+
+            return ExecuteScalar<int>(string.Format(existsTemplate, poco.TableName, sql), args) != 0;
+        }
         public T Single<T>(object primaryKey)
         {
             var index = 0;
@@ -1297,7 +1358,6 @@ namespace PetaPoco
                 {
                     using (var cmd = CreateCommand(_sharedConnection, ""))
                     {
-         
                         var pd = PocoData.ForObject(poco, primaryKeyName);
                         var names = new List<string>();
                         var values = new List<string>();
@@ -1466,6 +1526,19 @@ namespace PetaPoco
             return Insert(pd.TableInfo.TableName, pd.TableInfo.PrimaryKey, pd.TableInfo.AutoIncrement, poco);
         }
 
+        public void InsertMany<T>(IEnumerable<T> pocoList)
+        {
+            using (var tran = GetTransaction())
+            {
+                foreach (var poco in pocoList)
+                {
+                    Insert(poco);
+                }
+
+                tran.Complete();
+            }
+        }
+
         // Update a record with values from a poco.  primary key value can be either supplied or read from the poco
         public int Update(string tableName, string primaryKeyName, object poco, object primaryKeyValue)
         {
@@ -1617,6 +1690,20 @@ namespace PetaPoco
             return Execute(new Sql(string.Format("UPDATE {0}", EscapeTableName(pd.TableInfo.TableName))).Append(sql));
         }
 
+        public void UpdateMany<T>(IEnumerable<T> pocoList)
+        {
+            using (var tran = GetTransaction())
+            {
+                foreach (var poco in pocoList)
+                {
+                    Update(poco);
+                }
+
+                tran.Complete();
+            }
+        }
+
+
         public int Delete(string tableName, string primaryKeyName, object poco)
         {
             return Delete(tableName, primaryKeyName, poco, null);
@@ -1745,6 +1832,19 @@ namespace PetaPoco
         {
             var pd = PocoData.ForType(poco.GetType());
             Save(pd.TableInfo.TableName, pd.TableInfo.PrimaryKey, poco);
+        }
+
+        public void SaveMany<T>(IEnumerable<T> pocoList)
+        {
+            using (var tran = GetTransaction())
+            {
+                foreach (var poco in pocoList)
+                {
+                    Save(poco);
+                }
+
+                tran.Complete();
+            }
         }
 
         public int CommandTimeout { get; set; }
@@ -2269,7 +2369,12 @@ namespace PetaPoco
     }
 
     // Transaction object helps maintain transaction depth counts
-    public class Transaction : IDisposable
+    public interface ITransaction : IDisposable
+    {
+        void Complete();
+    }
+
+    public class Transaction : ITransaction
     {
         public Transaction(Database db)
         {

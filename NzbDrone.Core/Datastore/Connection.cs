@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Data;
+using System.Data.Common;
 using System.Data.SQLite;
 using System.IO;
 using MvcMiniProfiler.Data;
@@ -58,9 +60,12 @@ namespace NzbDrone.Core.Datastore
         public static IDatabase GetPetaPocoDb(string connectionString)
         {
             var profileConnection = ProfiledDbConnection.Get(new SQLiteConnection(connectionString));
-            PetaPoco.Database.Mapper = new CustomeMapper();
-            var db = new PetaPoco.Database(profileConnection);
-            db.OpenSharedConnection();
+
+            Database.Mapper = new CustomeMapper();
+            var db = new Database(profileConnection);
+
+            if (profileConnection.State != ConnectionState.Open)
+                profileConnection.Open();
 
             return db;
         }
