@@ -108,6 +108,14 @@ namespace NzbDrone.Core.Datastore.Migrations
                                                           new Column("Id", DbType.Int32, ColumnProperty.PrimaryKey),
                                                           new Column("Path", DbType.String, ColumnProperty.NotNull),
                                                       });
+
+            Database.AddTable("ExternalNotificationSettings", "SQLite", new[]
+                                                      {
+                                                          new Column("Id", DbType.Int32, ColumnProperty.PrimaryKey),
+                                                          new Column("Enabled", DbType.Boolean, ColumnProperty.NotNull),
+                                                          new Column("NotifierName", DbType.String, ColumnProperty.NotNull),
+                                                          new Column("Name", DbType.String, ColumnProperty.NotNull)
+                                                      });
         }
 
         public override void Down()

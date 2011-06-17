@@ -2,17 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using SubSonic.SqlGeneration.Schema;
+using PetaPoco;
 
 namespace NzbDrone.Core.Repository
 {
+    [TableName("ExternalNotificationSettings")]
+    [PrimaryKey("Id", autoIncrement = true)]
     public class ExternalNotificationSetting
     {
-        [SubSonicPrimaryKey(true)]
         public int Id { get; set; }
 
         public bool Enabled { get; set; }
+
         public string NotifierName { get; set; }
+
         public string Name { get; set; }
     }
 }

@@ -8,6 +8,7 @@ using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.ExternalNotification;
 using NzbDrone.Core.Repository;
+using PetaPoco;
 using SubSonic.Repository;
 
 namespace NzbDrone.Core.Providers
@@ -15,12 +16,12 @@ namespace NzbDrone.Core.Providers
     public class ExternalNotificationProvider
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private readonly IRepository _repository;
+        private readonly IDatabase _database;
 
           [Inject]
-        public ExternalNotificationProvider(IRepository repository)
+        public ExternalNotificationProvider(IDatabase database)
         {
-            _repository = repository;
+            _database = database;
         }
 
         public ExternalNotificationProvider()
@@ -30,7 +31,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual List<ExternalNotificationSetting> All()
         {
-            return _repository.All<ExternalNotificationSetting>().ToList();
+            return _database.Fetch<ExternalNotificationSetting>();
         }
 
         public virtual void SaveSettings(ExternalNotificationSetting settings)
@@ -38,23 +39,24 @@ namespace NzbDrone.Core.Providers
             if (settings.Id == 0)
             {
                 Logger.Debug("Adding External Notification settings for {0}", settings.Name);
-                _repository.Add(settings);
+                _database.Insert(settings);
             }
+
             else
             {
                 Logger.Debug("Updating External Notification settings for {0}", settings.Name);
-                _repository.Update(settings);
+                _database.Update(settings);
             }
         }
 
         public virtual ExternalNotificationSetting GetSettings(Type type)
         {
-            return _repository.Single<ExternalNotificationSetting>(s => s.NotifierName == type.ToString());
+            return _database.SingleOrDefault<ExternalNotificationSetting>("WHERE NotifierName = @0", type.ToString());
         }
 
         public virtual ExternalNotificationSetting GetSettings(int id)
         {
-            return _repository.Single<ExternalNotificationSetting>(s => s.Id == id);
+            return _database.SingleOrDefault<ExternalNotificationSetting>(id);
         }
 
         public virtual void InitializeNotifiers(IList<ExternalNotificationProviderBase> notifiers)
