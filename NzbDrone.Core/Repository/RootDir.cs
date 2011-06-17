@@ -1,10 +1,11 @@
-﻿using SubSonic.SqlGeneration.Schema;
+﻿using PetaPoco;
 
 namespace NzbDrone.Core.Repository
 {
+    [TableName("RootDirs")]
+    [PrimaryKey("Id", autoIncrement = true)]
     public class RootDir
     {
-        [SubSonicPrimaryKey]
         public virtual int Id { get; set; }
 
         public string Path { get; set; }

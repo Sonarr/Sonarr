@@ -18,20 +18,20 @@ namespace NzbDrone.Core.Test
     public class RootDirProviderTest : TestBase
     {
 
-
         [Test]
         public void GetRootDirs()
         {
             //Setup
-            var sonicRepo = MockLib.GetEmptyRepository();
-            sonicRepo.Add(new RootDir { Path = @"C:\TV" });
-            sonicRepo.Add(new RootDir { Path = @"C:\TV2" });
-
             var mocker = new AutoMoqer();
 
-            mocker.GetMock<IRepository>()
-                .Setup(f => f.All<RootDir>())
-                .Returns(sonicRepo.All<RootDir>);
+            var emptyDatabase = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(emptyDatabase);
+            emptyDatabase.Insert(new RootDir { Path = @"C:\TV" });
+            emptyDatabase.Insert(new RootDir { Path = @"C:\TV2" });
+
+            //mocker.GetMock<IRepository>()
+            //    .Setup(f => f.All<RootDir>())
+            //    .Returns(sonicRepo.All<RootDir>);
 
             //Act
             var result = mocker.Resolve<RootDirProvider>().GetAll();
@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Test
         {
             //Setup
             var mocker = new AutoMoqer();
-            mocker.SetConstant(MockLib.GetEmptyRepository());
+            mocker.SetConstant(MockLib.GetEmptyDatabase());
 
             //Act
             var rootDirProvider = mocker.Resolve<RootDirProvider>();
@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Test
         {
             //Setup
             var mocker = new AutoMoqer();
-            mocker.SetConstant(MockLib.GetEmptyRepository());
+            mocker.SetConstant(MockLib.GetEmptyDatabase());
 
 
             //Act
@@ -88,7 +88,7 @@ namespace NzbDrone.Core.Test
         {
             //Setup
             var mocker = new AutoMoqer();
-            mocker.SetConstant(MockLib.GetEmptyRepository());
+            mocker.SetConstant(MockLib.GetEmptyDatabase());
 
             //Act
             var rootDirProvider = mocker.Resolve<RootDirProvider>();
@@ -105,7 +105,7 @@ namespace NzbDrone.Core.Test
         {
             //Setup
             var mocker = new AutoMoqer();
-            mocker.SetConstant(MockLib.GetEmptyRepository());
+            mocker.SetConstant(MockLib.GetEmptyDatabase());
 
             const int id = 1;
             const string path = @"C:\TV";

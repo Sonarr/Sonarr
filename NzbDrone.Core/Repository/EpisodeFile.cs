@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using NzbDrone.Core.Repository.Quality;
 using PetaPoco;
-using SubSonic.SqlGeneration.Schema;
 
 namespace NzbDrone.Core.Repository
 {
@@ -10,7 +9,6 @@ namespace NzbDrone.Core.Repository
     [PrimaryKey("EpisodeFileId", autoIncrement = true)]
     public class EpisodeFile
     {
-        [SubSonicPrimaryKey]
         public virtual int EpisodeFileId { get; set; }
 
         public virtual int SeriesId { get; set; }
@@ -21,11 +19,9 @@ namespace NzbDrone.Core.Repository
         public long Size { get; set; }
         public DateTime DateAdded { get; set; }
 
-        [SubSonicToManyRelation]
         [Ignore]
         public virtual IList<Episode> Episodes { get; set; }
 
-        [SubSonicToOneRelation(ThisClassContainsJoinKey = true)]
         [Ignore]
         public virtual Series Series { get; set; }
     }

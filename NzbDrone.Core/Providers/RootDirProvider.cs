@@ -6,21 +6,22 @@ using Ninject;
 using NLog;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
+using PetaPoco;
 using SubSonic.Repository;
 
 namespace NzbDrone.Core.Providers
 {
     public class RootDirProvider
     {
-        private readonly IRepository _repository;
+        private readonly IDatabase _database;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly DiskProvider _diskProvider;
         private readonly SeriesProvider _seriesProvider;
 
         [Inject]
-        public RootDirProvider(IRepository repository, SeriesProvider seriesProvider, DiskProvider diskProvider)
+        public RootDirProvider(IDatabase database, SeriesProvider seriesProvider, DiskProvider diskProvider)
         {
-            _repository = repository;
+            _database = database;
             _diskProvider = diskProvider;
             _seriesProvider = seriesProvider;
         }
@@ -29,26 +30,25 @@ namespace NzbDrone.Core.Providers
 
         public virtual List<RootDir> GetAll()
         {
-            return _repository.All<RootDir>().ToList();
+            return _database.Fetch<RootDir>();
         }
 
         public virtual int Add(RootDir rootDir)
         {
             ValidatePath(rootDir);
-
-            return (int)_repository.Add(rootDir);
+            return Convert.ToInt32(_database.Insert(rootDir));
         }
 
         public virtual void Remove(int rootDirId)
         {
-            _repository.Delete<RootDir>(rootDirId);
+            _database.Delete<RootDir>(rootDirId);
         }
 
         public virtual void Update(RootDir rootDir)
         {
             ValidatePath(rootDir);
 
-            _repository.Update(rootDir);
+            _database.Update(rootDir);
         }
 
         private static void ValidatePath(RootDir rootDir)
@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual RootDir GetRootDir(int rootDirId)
         {
-            return _repository.Single<RootDir>(rootDirId);
+            return _database.SingleOrDefault<RootDir>(rootDirId);
         }
 
         public List<String> GetUnmappedFolders(string path)
@@ -77,7 +77,6 @@ namespace NzbDrone.Core.Providers
                 Logger.Debug("Path supplied does not exist: {0}", path);
                 return results;
             }
-
 
             foreach (string seriesFolder in _diskProvider.GetDirectories(path))
             {

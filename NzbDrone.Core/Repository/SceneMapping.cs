@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using PetaPoco;
-using SubSonic.SqlGeneration.Schema;
 
 namespace NzbDrone.Core.Repository
 {
@@ -11,7 +10,6 @@ namespace NzbDrone.Core.Repository
     [PrimaryKey("CleanTitle", autoIncrement = false)]
     public class SceneMapping
     {
-        [SubSonicPrimaryKey]
         public virtual string CleanTitle { get; set; }
 
         public virtual int SeriesId { get; set; }

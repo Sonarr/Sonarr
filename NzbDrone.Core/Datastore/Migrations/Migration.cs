@@ -91,7 +91,7 @@ namespace NzbDrone.Core.Datastore.Migrations
                                                           new Column("Value", DbType.String, ColumnProperty.NotNull),
                                                       });
 
-            Database.AddTable("EpisodeFiles", "SQLite", new[]
+            Database.AddTable("History", "SQLite", new[]
                                                             {
                                                                 new Column("HistoryId", DbType.Int64, ColumnProperty.NotNull),
                                                                 new Column("EpisodeId", DbType.Int32, ColumnProperty.NotNull),
@@ -102,6 +102,12 @@ namespace NzbDrone.Core.Datastore.Migrations
                                                                 new Column("IsProper", DbType.Boolean, ColumnProperty.NotNull),
                                                                 new Column("Indexer", DbType.String, ColumnProperty.NotNull)
                                                             });
+
+            Database.AddTable("RootDirs", "SQLite", new[]
+                                                      {
+                                                          new Column("Id", DbType.Int32, ColumnProperty.PrimaryKey),
+                                                          new Column("Path", DbType.String, ColumnProperty.NotNull),
+                                                      });
         }
 
         public override void Down()
