@@ -75,7 +75,7 @@ namespace NzbDrone.Core.Providers
                 }
 
                 //Check to see if file already exists in the database
-                if (_database.Single<int>("SELECT COUNT (*) FROM EpisodeFiles WHERE Path =@0", Parser.NormalizePath(filePath)) == 0)
+                if (!_database.Exists<EpisodeFile>("Path =@0", Parser.NormalizePath(filePath)))
                 {
                     var parseResult = Parser.ParseEpisodeInfo(filePath);
 

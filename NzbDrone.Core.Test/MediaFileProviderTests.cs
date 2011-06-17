@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Test
                 .Setup(e => e.GetSize(fileName)).Returns(12345).Verifiable();
 
             var database = mocker.GetMock<IDatabase>(MockBehavior.Strict);
-            database.Setup(r => r.Single<int>(It.IsAny<string>(), It.IsAny<object>())).Returns(0).Verifiable();
+            database.Setup(r => r.Exists<EpisodeFile>(It.IsAny<string>(), It.IsAny<object>())).Returns(false).Verifiable();
             database.Setup(r => r.Insert(It.IsAny<EpisodeFile>())).Returns(1).Verifiable();
 
 
@@ -97,7 +97,7 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer();
 
             var database = mocker.GetMock<IDatabase>(MockBehavior.Strict);
-            database.Setup(r => r.Single<int>(It.IsAny<string>(), It.IsAny<object>())).Returns(0).Verifiable();
+            database.Setup(r => r.Exists<EpisodeFile>(It.IsAny<string>(), It.IsAny<object>())).Returns(false).Verifiable();
             database.Setup(r => r.Insert(It.IsAny<EpisodeFile>())).Returns(1).Verifiable();
 
             mocker.GetMock<EpisodeProvider>()
@@ -149,7 +149,7 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer();
 
             mocker.GetMock<IDatabase>(MockBehavior.Strict)
-                .Setup(r => r.Single<int>(It.IsAny<string>(), It.IsAny<object>())).Returns(1).Verifiable();
+                .Setup(r => r.Exists<EpisodeFile>(It.IsAny<string>(), It.IsAny<object>())).Returns(true).Verifiable();
 
             mocker.GetMock<DiskProvider>()
                 .Setup(e => e.GetSize(fileName)).Returns(size).Verifiable();
@@ -181,7 +181,7 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer();
 
             mocker.GetMock<IDatabase>(MockBehavior.Strict)
-                .Setup(r => r.Single<int>(It.IsAny<string>(), It.IsAny<object>())).Returns(0).Verifiable();
+                .Setup(r => r.Exists<EpisodeFile>(It.IsAny<string>(), It.IsAny<object>())).Returns(false).Verifiable();
 
             mocker.GetMock<DiskProvider>()
                 .Setup(e => e.GetSize(fileName)).Returns(size).Verifiable();
@@ -249,7 +249,7 @@ namespace NzbDrone.Core.Test
             //Mocks
             var mocker = new AutoMoqer();
             mocker.GetMock<IDatabase>(MockBehavior.Strict)
-                .Setup(r => r.Single<int>(It.IsAny<string>(), It.IsAny<object>())).Returns(1).Verifiable();
+                .Setup(r => r.Exists<EpisodeFile>(It.IsAny<string>(), It.IsAny<object>())).Returns(true).Verifiable();
 
             mocker.GetMock<EpisodeProvider>(MockBehavior.Strict);
             mocker.GetMock<DiskProvider>()
@@ -283,7 +283,7 @@ namespace NzbDrone.Core.Test
             //Mocks
             var mocker = new AutoMoqer();
             mocker.GetMock<IDatabase>(MockBehavior.Strict)
-                .Setup(r => r.Single<int>(It.IsAny<string>(), It.IsAny<object>())).Returns(0).Verifiable();
+                .Setup(r => r.Exists<EpisodeFile>(It.IsAny<string>(), It.IsAny<object>())).Returns(false).Verifiable();
 
             mocker.GetMock<EpisodeProvider>(MockBehavior.Strict)
                 .Setup(e => e.GetEpisode(fakeSeries.SeriesId, seasonNumber, episodeNumner)).Returns<Episode>(null).
@@ -405,7 +405,7 @@ namespace NzbDrone.Core.Test
             configProvider.SetupGet(c => c.ReplaceSpaces).Returns(false);
 
             var database = mocker.GetMock<IDatabase>(MockBehavior.Strict);
-            database.Setup(r => r.Single<int>(It.IsAny<string>(), It.IsAny<object>())).Returns(0).Verifiable();
+            database.Setup(r => r.Exists<EpisodeFile>(It.IsAny<string>(), It.IsAny<object>())).Returns(false).Verifiable();
             database.Setup(r => r.Insert(It.IsAny<EpisodeFile>())).Returns(1).Verifiable();
 
             //Act
@@ -467,7 +467,7 @@ namespace NzbDrone.Core.Test
             configProvider.SetupGet(c => c.ReplaceSpaces).Returns(false);
 
             var database = mocker.GetMock<IDatabase>(MockBehavior.Strict);
-            database.Setup(r => r.Single<int>(It.IsAny<string>(), It.IsAny<object>())).Returns(0).Verifiable();
+            database.Setup(r => r.Exists<EpisodeFile>(It.IsAny<string>(), It.IsAny<object>())).Returns(false).Verifiable();
             database.Setup(r => r.Insert(It.IsAny<EpisodeFile>())).Returns(1);
             database.Setup(r => r.Delete<EpisodeFile>(It.IsAny<int>())).Returns(1);
 
