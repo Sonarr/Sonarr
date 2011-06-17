@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Test
             IList<IJob> fakeJobs = new List<IJob> { new FakeJob() };
             var mocker = new AutoMoqer();
 
-            mocker.SetConstant(MockLib.GetEmptyRepository());
+            mocker.SetConstant(MockLib.GetEmptyDatabase());
             mocker.SetConstant(fakeJobs);
 
             //Act
@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Test
             IList<IJob> fakeJobs = new List<IJob> { new BrokenJob() };
             var mocker = new AutoMoqer();
 
-            mocker.SetConstant(MockLib.GetEmptyRepository());
+            mocker.SetConstant(MockLib.GetEmptyDatabase());
             mocker.SetConstant(fakeJobs);
 
             //Act
@@ -67,7 +67,7 @@ namespace NzbDrone.Core.Test
             IList<IJob> fakeJobs = new List<IJob> { new FakeJob() };
             var mocker = new AutoMoqer();
 
-            mocker.SetConstant(MockLib.GetEmptyRepository());
+            mocker.SetConstant(MockLib.GetEmptyDatabase());
             mocker.SetConstant(fakeJobs);
 
             var timerProvider = mocker.Resolve<JobProvider>();
@@ -88,7 +88,7 @@ namespace NzbDrone.Core.Test
             IList<IJob> fakeJobs = new List<IJob> { new FakeJob() };
             var mocker = new AutoMoqer();
 
-            mocker.SetConstant(MockLib.GetEmptyRepository());
+            mocker.SetConstant(MockLib.GetEmptyDatabase());
             mocker.SetConstant(fakeJobs);
 
             var timerProvider = mocker.Resolve<JobProvider>();
@@ -110,7 +110,7 @@ namespace NzbDrone.Core.Test
             IList<IJob> fakeJobs = new List<IJob> { new SlowJob() };
             var mocker = new AutoMoqer();
 
-            mocker.SetConstant(MockLib.GetEmptyRepository());
+            mocker.SetConstant(MockLib.GetEmptyDatabase());
             mocker.SetConstant(fakeJobs);
 
             var timerProvider = mocker.Resolve<JobProvider>();
@@ -133,7 +133,7 @@ namespace NzbDrone.Core.Test
             IList<IJob> fakeJobs = new List<IJob> { new BrokenJob() };
             var mocker = new AutoMoqer();
 
-            mocker.SetConstant(MockLib.GetEmptyRepository());
+            mocker.SetConstant(MockLib.GetEmptyDatabase());
             mocker.SetConstant(fakeJobs);
 
             var timerProvider = mocker.Resolve<JobProvider>();
@@ -156,7 +156,7 @@ namespace NzbDrone.Core.Test
             IList<IJob> fakeJobs = new List<IJob> { new SlowJob() };
             var mocker = new AutoMoqer();
 
-            mocker.SetConstant(MockLib.GetEmptyRepository());
+            mocker.SetConstant(MockLib.GetEmptyDatabase());
             mocker.SetConstant(fakeJobs);
 
             var timerProvider = mocker.Resolve<JobProvider>();
@@ -190,7 +190,7 @@ namespace NzbDrone.Core.Test
             IList<IJob> fakeJobs = new List<IJob> { slowJob };
             var mocker = new AutoMoqer();
 
-            mocker.SetConstant(MockLib.GetEmptyRepository());
+            mocker.SetConstant(MockLib.GetEmptyDatabase());
             mocker.SetConstant(fakeJobs);
 
             var timerProvider = mocker.Resolve<JobProvider>();
@@ -218,7 +218,7 @@ namespace NzbDrone.Core.Test
             IList<IJob> fakeJobs = new List<IJob> { fakeTimer };
             var mocker = new AutoMoqer();
 
-            mocker.SetConstant(MockLib.GetEmptyRepository());
+            mocker.SetConstant(MockLib.GetEmptyDatabase());
             mocker.SetConstant(fakeJobs);
 
             var timerProvider = mocker.Resolve<JobProvider>();
@@ -242,7 +242,7 @@ namespace NzbDrone.Core.Test
         [Test]
         public void Init_Timers_only_registers_once()
         {
-            var repo = MockLib.GetEmptyRepository();
+            var repo = MockLib.GetEmptyDatabase();
 
             for (int i = 0; i < 2; i++)
             {
@@ -273,7 +273,7 @@ namespace NzbDrone.Core.Test
         [Test]
         public void Init_Timers_sets_interval_0_to_disabled()
         {
-            var repo = MockLib.GetEmptyRepository();
+            var repo = MockLib.GetEmptyDatabase();
 
             for (int i = 0; i < 2; i++)
             {
@@ -307,7 +307,7 @@ namespace NzbDrone.Core.Test
             IList<IJob> fakeJobs = new List<IJob> { new FakeJob() };
             var mocker = new AutoMoqer();
 
-            mocker.SetConstant(MockLib.GetEmptyRepository());
+            mocker.SetConstant(MockLib.GetEmptyDatabase());
             mocker.SetConstant(fakeJobs);
 
             //Act
@@ -325,7 +325,7 @@ namespace NzbDrone.Core.Test
         [Test]
         public void Disabled_isnt_run_by_scheduler()
         {
-            var repo = MockLib.GetEmptyRepository();
+            var repo = MockLib.GetEmptyDatabase();
 
 
             var disabledJob = new DisabledJob();
@@ -353,7 +353,7 @@ namespace NzbDrone.Core.Test
             IList<IJob> fakeJobs = new List<IJob> { new FakeJob() };
             var mocker = new AutoMoqer();
 
-            mocker.SetConstant(MockLib.GetEmptyRepository());
+            mocker.SetConstant(MockLib.GetEmptyDatabase());
             mocker.SetConstant(fakeJobs);
 
             //Act
@@ -374,7 +374,7 @@ namespace NzbDrone.Core.Test
             IList<IJob> fakeJobs = new List<IJob> { new FakeJob() };
             var mocker = new AutoMoqer();
 
-            mocker.SetConstant(MockLib.GetEmptyRepository());
+            mocker.SetConstant(MockLib.GetEmptyDatabase());
             mocker.SetConstant(fakeJobs);
 
             //Act

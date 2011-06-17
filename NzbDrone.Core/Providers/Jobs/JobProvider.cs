@@ -7,6 +7,7 @@ using Ninject;
 using NLog;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Repository;
+using PetaPoco;
 using SubSonic.Repository;
 
 namespace NzbDrone.Core.Providers.Jobs
@@ -14,7 +15,7 @@ namespace NzbDrone.Core.Providers.Jobs
     public class JobProvider
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private readonly IRepository _repository;
+        private readonly IDatabase _database;
         private readonly NotificationProvider _notificationProvider;
         private readonly IList<IJob> _jobs;
 
@@ -26,9 +27,9 @@ namespace NzbDrone.Core.Providers.Jobs
         private ProgressNotification _notification;
 
         [Inject]
-        public JobProvider(IRepository repository, NotificationProvider notificationProvider, IList<IJob> jobs)
+        public JobProvider(IDatabase database, NotificationProvider notificationProvider, IList<IJob> jobs)
         {
-            _repository = repository;
+            _database = database;
             _notificationProvider = notificationProvider;
             _jobs = jobs;
         }
@@ -42,7 +43,7 @@ namespace NzbDrone.Core.Providers.Jobs
         /// <returns></returns>
         public virtual List<JobSetting> All()
         {
-            return _repository.All<JobSetting>().ToList();
+            return _database.Fetch<JobSetting>().ToList();
         }
 
         /// <summary>
@@ -54,12 +55,12 @@ namespace NzbDrone.Core.Providers.Jobs
             if (settings.Id == 0)
             {
                 Logger.Debug("Adding job settings for {0}", settings.Name);
-                _repository.Add(settings);
+                _database.Insert(settings);
             }
             else
             {
                 Logger.Debug("Updating job settings for {0}", settings.Name);
-                _repository.Update(settings);
+                _database.Update(settings);
             }
         }
 

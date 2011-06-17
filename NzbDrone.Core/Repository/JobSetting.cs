@@ -1,8 +1,11 @@
 ﻿using System;
+using PetaPoco;
 using SubSonic.SqlGeneration.Schema;
 
 namespace NzbDrone.Core.Repository
 {
+    [TableName("JobSettings")]
+    [PrimaryKey("Id", autoIncrement = true)]
     public class JobSetting
     {
         [SubSonicPrimaryKey(true)]

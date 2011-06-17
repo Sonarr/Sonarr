@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Datastore.Migrations
                                                           new Column("QualityProfileId", DbType.Int16, ColumnProperty.NotNull),
                                                           new Column("SeasonFolder", DbType.Boolean, ColumnProperty.NotNull),
                                                           new Column("LastInfoSync", DbType.DateTime, ColumnProperty.Null),
-                                                          new Column("LastDiskSync", DbType.DateTime, ColumnProperty.Null),
+                                                          new Column("LastDiskSync", DbType.DateTime, ColumnProperty.Null)
                                                       });
 
             Database.AddTable("Episodes", "SQLite", new[]
@@ -67,7 +67,7 @@ namespace NzbDrone.Core.Datastore.Migrations
                                                             new Column("Ignored", DbType.Boolean, ColumnProperty.NotNull, false),
                                                             new Column("EpisodeFileId", DbType.Int32, ColumnProperty.Null),
                                                             new Column("AirDate", DbType.DateTime, ColumnProperty.Null),
-                                                            new Column("GrabDate", DbType.DateTime, ColumnProperty.Null),
+                                                            new Column("GrabDate", DbType.DateTime, ColumnProperty.Null)
                                                         });
 
 
@@ -88,7 +88,7 @@ namespace NzbDrone.Core.Datastore.Migrations
             Database.AddTable("Config", "SQLite", new[]
                                                       {
                                                           new Column("Key", DbType.String, ColumnProperty.PrimaryKey),
-                                                          new Column("Value", DbType.String, ColumnProperty.NotNull),
+                                                          new Column("Value", DbType.String, ColumnProperty.NotNull)
                                                       });
 
             Database.AddTable("History", "SQLite", new[]
@@ -106,7 +106,7 @@ namespace NzbDrone.Core.Datastore.Migrations
             Database.AddTable("RootDirs", "SQLite", new[]
                                                       {
                                                           new Column("Id", DbType.Int32, ColumnProperty.PrimaryKey),
-                                                          new Column("Path", DbType.String, ColumnProperty.NotNull),
+                                                          new Column("Path", DbType.String, ColumnProperty.NotNull)
                                                       });
 
             Database.AddTable("ExternalNotificationSettings", "SQLite", new[]
@@ -116,6 +116,17 @@ namespace NzbDrone.Core.Datastore.Migrations
                                                           new Column("NotifierName", DbType.String, ColumnProperty.NotNull),
                                                           new Column("Name", DbType.String, ColumnProperty.NotNull)
                                                       });
+
+            Database.AddTable("JobSettings", "SQLite", new[]
+                                                            {
+                                                                new Column("Id", DbType.Int32, ColumnProperty.PrimaryKey),
+                                                                new Column("Enable", DbType.Boolean, ColumnProperty.NotNull),
+                                                                new Column("TypeName", DbType.String, ColumnProperty.NotNull),
+                                                                new Column("Name", DbType.String, ColumnProperty.NotNull),
+                                                                new Column("Interval", DbType.Int32, ColumnProperty.NotNull),
+                                                                new Column("LastExecution", DbType.DateTime, ColumnProperty.NotNull),
+                                                                new Column("Success", DbType.Boolean, ColumnProperty.NotNull)
+                                                            });
         }
 
         public override void Down()
