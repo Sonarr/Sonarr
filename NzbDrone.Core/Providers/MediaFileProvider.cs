@@ -10,7 +10,7 @@ using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
-using SubSonic.Repository;
+using PetaPoco;
 
 namespace NzbDrone.Core.Providers
 {
@@ -21,19 +21,19 @@ namespace NzbDrone.Core.Providers
         private readonly DiskProvider _diskProvider;
         private readonly EpisodeProvider _episodeProvider;
         private readonly SeriesProvider _seriesProvider;
-        private readonly IRepository _repository;
         private readonly ConfigProvider _configProvider;
+        private readonly IDatabase _database;
 
         [Inject]
-        public MediaFileProvider(IRepository repository, DiskProvider diskProvider,
-                                 EpisodeProvider episodeProvider, SeriesProvider seriesProvider,
-                                 ConfigProvider configProvider)
+        public MediaFileProvider(DiskProvider diskProvider, EpisodeProvider episodeProvider,
+                                    SeriesProvider seriesProvider, ConfigProvider configProvider,
+                                    IDatabase database)
         {
-            _repository = repository;
             _diskProvider = diskProvider;
             _episodeProvider = episodeProvider;
             _seriesProvider = seriesProvider;
             _configProvider = configProvider;
+            _database = database;
         }
 
         public MediaFileProvider() { }
@@ -76,7 +76,7 @@ namespace NzbDrone.Core.Providers
                 }
 
                 //Check to see if file already exists in the database
-                if (!_repository.Exists<EpisodeFile>(e => e.Path == Parser.NormalizePath(filePath)))
+                if (_database.Single<int>("SELECT COUNT (*) FROM EpisodeFiles WHERE Path =@0", Parser.NormalizePath(filePath)) == 0)
                 {
                     var parseResult = Parser.ParseEpisodeInfo(filePath);
 
@@ -132,7 +132,7 @@ namespace NzbDrone.Core.Providers
                     episodeFile.Quality = parseResult.Quality.QualityType;
                     episodeFile.Proper = parseResult.Quality.Proper;
                     episodeFile.SeasonNumber = parseResult.SeasonNumber;
-                    var fileId = (int)_repository.Add(episodeFile);
+                    var fileId = (int)_database.Insert(episodeFile);
 
                     //This is for logging + updating the episodes that are linked to this EpisodeFile
                     string episodeList = String.Empty;
@@ -179,29 +179,29 @@ namespace NzbDrone.Core.Providers
                     }
 
                     //Delete it from the DB
-                    _repository.Delete<EpisodeFile>(episodeFile.EpisodeFileId);
+                    _database.Delete<EpisodeFile>(episodeFile.EpisodeFileId);
                 }
             }
         }
 
         public virtual void Update(EpisodeFile episodeFile)
         {
-            _repository.Update(episodeFile);
+            _database.Update(episodeFile);
         }
 
         public virtual EpisodeFile GetEpisodeFile(int episodeFileId)
         {
-            return _repository.Single<EpisodeFile>(episodeFileId);
+            return _database.Single<EpisodeFile>(episodeFileId);
         }
 
         public virtual List<EpisodeFile> GetEpisodeFiles()
         {
-            return _repository.All<EpisodeFile>().ToList();
+            return _database.Fetch<EpisodeFile>();
         }
 
-        public virtual IEnumerable<EpisodeFile> GetSeriesFiles(int seriesId)
+        public virtual List<EpisodeFile> GetSeriesFiles(int seriesId)
         {
-            return _repository.All<EpisodeFile>().Where(c => c.SeriesId == seriesId);
+            return _database.Fetch<EpisodeFile>("WHERE seriesId= @0", seriesId);
         }
 
         public virtual Tuple<int, int> GetEpisodeFilesCount(int seriesId)

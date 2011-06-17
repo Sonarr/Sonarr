@@ -44,8 +44,15 @@ namespace NzbDrone.Core.Datastore.Migrations
                 .WithNullableColumn("AirDate", DbType.DateTime)
                 .WithNullableColumn("GrabDate", DbType.DateTime);
 
-
-
+            db.CreateTable("EpisodeFiles")
+                .WithPrimaryKeyColumn("EpisodeFileId", DbType.Int32).AsIdentity()
+                .WithNotNullableColumn("SeriesId", DbType.Int32)
+                .WithNotNullableColumn("Path", DbType.String)
+                .WithNotNullableColumn("Quality", DbType.Int16)
+                .WithNotNullableColumn("Proper", DbType.Int16)
+                .WithNotNullableColumn("Size", DbType.Int64)
+                .WithNotNullableColumn("DateAdded", DbType.DateTime)
+                .WithNotNullableColumn("SeasonNumber", DbType.Int16);
         }
     }
 }

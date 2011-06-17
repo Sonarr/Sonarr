@@ -235,14 +235,19 @@ namespace NzbDrone.Web.Controllers
 
             foreach (var e in episodesInDb)
             {
-                var episodeFile = e.EpisodeFile;
-                var episodePath = String.Empty;
                 var episodeFileId = 0;
+                var episodePath = String.Empty;
+                var episodeQuality = String.Empty;
+                EpisodeFile episodeFile = null;
+
+                if (e.EpisodeFileId > 0)
+                    episodeFile = _mediaFileProvider.GetEpisodeFile(e.EpisodeFileId);
                 
                 if (episodeFile != null)
                 {
                     episodePath = episodeFile.Path;
                     episodeFileId = episodeFile.EpisodeFileId;
+                    episodeQuality = episodeFile.Quality.ToString();
                 }
 
                 episodes.Add(new EpisodeModel
@@ -256,9 +261,7 @@ namespace NzbDrone.Web.Controllers
                                      Path = episodePath,
                                      EpisodeFileId = episodeFileId,
                                      Status = e.Status.ToString(),
-                                     Quality = e.EpisodeFile == null
-                                                   ? String.Empty
-                                                   : e.EpisodeFile.Quality.ToString()
+                                     Quality = episodeQuality
                                  });
             }
 
