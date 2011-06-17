@@ -4,10 +4,10 @@
     Layout = null;
 }
 
-<div class="rootDirSection" id="rootDir_@(Model.Id)" style="padding: 7px; padding-left: 3px;">
+<div class="rootDirSection" id="rootDir_@(ViewData["guid"])" style="padding: 7px; padding-left: 3px;">
     <fieldset style="padding: 5px; height: 40px;">
             @{Html.Telerik().ComboBox()
-                  .Name("path_" + Model.Id)
+                  .Name("path_" + ViewData["guid"])
                   .BindTo(Model.SelectList)
                   .DataBinding(binding => binding.Ajax().Select("_autoCompletePath", "Directory").Delay(400).Cache(false))
                   .Filterable(f => f.FilterMode(AutoCompleteFilterMode.StartsWith))
@@ -16,10 +16,10 @@
                   .Render();}
 
 
-            <a href="#RemoveRootDir" class="deleteRow" onclick="deleteRootDir(@Model.Id); return false;">
+            <a href="#RemoveRootDir" class="deleteRow" onclick="deleteRootDir('@ViewData["guid"]'); return false;">
                 <img src="../../Content/Images/X.png" alt="Delete" width="20px" height="20px" style="vertical-align: middle; margin-top: 7px;"/></a>
-                <button style="padding: 2px 10px 2px 10px; vertical-align: middle; margin: 0px; margin-top: 7px;" onclick="saveRootDir(@Model.Id)">Save</button>
+                <button style="padding: 2px 10px 2px 10px; vertical-align: middle; margin: 0px; margin-top: 7px;" onclick="saveRootDir('@ViewData["guid"]')">Save</button>
 
-            @Html.HiddenFor(x => x.Id, new { id = "id_" + Model.Id })
+            @Html.HiddenFor(x => x.Id, new { id = "id_" + ViewData["guid"] })
     </fieldset>
 </div>

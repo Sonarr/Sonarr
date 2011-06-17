@@ -181,7 +181,6 @@
     <Compile Include="Helpers\EpisodeRenameHelper.cs" />
     <Compile Include="Helpers\EpisodeSortingHelper.cs" />
     <Compile Include="Helpers\FileSizeFormatHelpercs.cs" />
-    <Compile Include="Helpers\SceneNameHelper.cs" />
     <Compile Include="Instrumentation\LogProvider.cs" />
     <Compile Include="Instrumentation\SubsonicTarget.cs" />
     <Compile Include="Instrumentation\ExceptioneerTarget.cs" />
@@ -199,6 +198,7 @@
     <Compile Include="Providers\Indexer\SyndicationFeedXmlReader.cs" />
     <Compile Include="Providers\AutoConfigureProvider.cs" />
     <Compile Include="Providers\Indexer\NzbMatrix.cs" />
+    <Compile Include="Providers\Jobs\UpdateSceneMappingsJob.cs" />
     <Compile Include="Providers\Jobs\PostDownloadScanJob.cs" />
     <Compile Include="Providers\Jobs\RenameEpisodeJob.cs" />
     <Compile Include="Providers\Jobs\EpisodeSearchJob.cs" />
@@ -211,6 +211,7 @@
     <Compile Include="Providers\Jobs\IJob.cs" />
     <Compile Include="Providers\Jobs\RssSyncJob.cs" />
     <Compile Include="Providers\Jobs\UpdateInfoJob.cs" />
+    <Compile Include="Providers\SceneNameMappingProvider.cs" />
     <Compile Include="Providers\StatsProvider.cs" />
     <Compile Include="Repository\ExternalNotificationSetting.cs" />
     <Compile Include="Repository\JobSetting.cs" />
@@ -253,6 +254,7 @@
     <Compile Include="Repository\Quality\QualityProfile.cs" />
     <Compile Include="Repository\RootDir.cs" />
     <Compile Include="Repository\Quality\QualityTypes.cs" />
+    <Compile Include="Repository\SceneNameMapping.cs" />
     <Compile Include="Repository\Series.cs" />
     <Compile Include="CentralDispatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

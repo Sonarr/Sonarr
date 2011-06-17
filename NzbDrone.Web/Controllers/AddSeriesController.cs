@@ -187,9 +187,16 @@ namespace NzbDrone.Web.Controllers
         [HttpPost]
         public JsonResult SaveRootDir(int id, string path)
         {
+            if (String.IsNullOrWhiteSpace(path))
+                return new JsonResult { Data = "failed" };
+
             try
             {
-                _rootFolderProvider.Update(new RootDir { Id = id, Path = path });
+                if (id == 0)
+                    id = _rootFolderProvider.Add(new RootDir { Path = path });
+
+                else
+                    _rootFolderProvider.Update(new RootDir { Id = id, Path = path });
             }
             catch (Exception ex)
             {
@@ -199,30 +206,33 @@ namespace NzbDrone.Web.Controllers
                 return new JsonResult { Data = "failed" };
             }
 
-            return new JsonResult { Data = "ok" };
+            return new JsonResult { Data = id };
         }
 
         public PartialViewResult AddRootDir()
         {
-            var rootDir = new RootDir { Path = String.Empty };
+            var model = new RootDirModel
+                            {
+                                Id = 0,
+                                Path = "",
+                                SelectList = new SelectList(new List<string> { "" }, "")
+                            };
 
-            var id = _rootFolderProvider.Add(rootDir);
-            rootDir.Id = id;
-
-            var model = new RootDirModel();
-            model.Id = rootDir.Id;
-            model.Path = rootDir.Path;
-            model.SelectList = new SelectList(new List<string> { rootDir.Path }, rootDir.Path);
+            ViewData["guid"] = Guid.NewGuid();
 
             return PartialView("RootDir", model);
         }
 
         public ActionResult GetRootDirView(RootDir rootDir)
         {
-            var model = new RootDirModel();
-            model.Id = rootDir.Id;
-            model.Path = rootDir.Path;
-            model.SelectList = new SelectList(new List<string> { rootDir.Path }, rootDir.Path);
+            var model = new RootDirModel
+                            {
+                                Id = rootDir.Id,
+                                Path = rootDir.Path,
+                                SelectList = new SelectList(new List<string> { rootDir.Path }, rootDir.Path)
+                            };
+
+            ViewData["guid"] = Guid.NewGuid();
 
             return PartialView("RootDir", model);
         }

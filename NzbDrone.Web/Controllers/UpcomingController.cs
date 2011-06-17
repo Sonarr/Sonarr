@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using NzbDrone.Core.Providers;
@@ -27,17 +28,25 @@ namespace NzbDrone.Web.Controllers
         [GridAction]
         public ActionResult _AjaxBindingYesterday()
         {
-            var upcoming = _upcomingEpisodesProvider.Yesterday().Select(e => new UpcomingEpisodeModel
-                                                                                 {
-                                                                                     SeriesId = e.Series.SeriesId,
-                                                                                     EpisodeId = e.EpisodeId,
-                                                                                     SeriesName = e.Series.Title,
-                                                                                     SeasonNumber = e.SeasonNumber,
-                                                                                     EpisodeNumber = e.EpisodeNumber,
-                                                                                     Title = e.Title,
-                                                                                     Overview = e.Overview,
-                                                                                     AirDate = e.AirDate.Add(Convert.ToDateTime(e.Series.AirTimes).TimeOfDay)
-                                                                                 });
+            var upcomingDb = _upcomingEpisodesProvider.Yesterday();
+            var upcoming = new List<UpcomingEpisodeModel>();
+                
+            foreach (var item in upcomingDb)
+            {
+                var series = item.Series;
+
+                upcoming.Add(new UpcomingEpisodeModel
+                                                    {
+                                                        SeriesId = series.SeriesId,
+                                                        EpisodeId = item.EpisodeId,
+                                                        SeriesName = series.Title,
+                                                        SeasonNumber = item.SeasonNumber,
+                                                        EpisodeNumber = item.EpisodeNumber,
+                                                        Title = item.Title,
+                                                        Overview = item.Overview,
+                                                        AirDate = item.AirDate.Add(Convert.ToDateTime(series.AirTimes).TimeOfDay)
+                                                    });
+            }
 
             return View(new GridModel(upcoming));
         }
@@ -45,16 +54,25 @@ namespace NzbDrone.Web.Controllers
         [GridAction]
         public ActionResult _AjaxBindingToday()
         {
-            var upcoming = _upcomingEpisodesProvider.Today().Select(e => new UpcomingEpisodeModel
-                                                                             {
-                                                                                 SeriesId = e.Series.SeriesId,
-                                                                                 SeriesName = e.Series.Title,
-                                                                                 SeasonNumber = e.SeasonNumber,
-                                                                                 EpisodeNumber = e.EpisodeNumber,
-                                                                                 Title = e.Title,
-                                                                                 Overview = e.Overview,
-                                                                                 AirDate = e.AirDate.Add(Convert.ToDateTime(e.Series.AirTimes).TimeOfDay)
-                                                                             });
+            var upcomingDb = _upcomingEpisodesProvider.Today();
+            var upcoming = new List<UpcomingEpisodeModel>();
+
+            foreach (var item in upcomingDb)
+            {
+                var series = item.Series;
+
+                upcoming.Add(new UpcomingEpisodeModel
+                {
+                    SeriesId = series.SeriesId,
+                    EpisodeId = item.EpisodeId,
+                    SeriesName = series.Title,
+                    SeasonNumber = item.SeasonNumber,
+                    EpisodeNumber = item.EpisodeNumber,
+                    Title = item.Title,
+                    Overview = item.Overview,
+                    AirDate = item.AirDate.Add(Convert.ToDateTime(series.AirTimes).TimeOfDay)
+                });
+            }
 
             return View(new GridModel(upcoming));
         }
@@ -62,16 +80,25 @@ namespace NzbDrone.Web.Controllers
         [GridAction]
         public ActionResult _AjaxBindingTomorrow()
         {
-            var upcoming = _upcomingEpisodesProvider.Tomorrow().Select(e => new UpcomingEpisodeModel
+            var upcomingDb = _upcomingEpisodesProvider.Tomorrow();
+            var upcoming = new List<UpcomingEpisodeModel>();
+
+            foreach (var item in upcomingDb)
             {
-                SeriesId = e.Series.SeriesId,
-                SeriesName = e.Series.Title,
-                SeasonNumber = e.SeasonNumber,
-                EpisodeNumber = e.EpisodeNumber,
-                Title = e.Title,
-                Overview = e.Overview,
-                AirDate = e.AirDate.Add(Convert.ToDateTime(e.Series.AirTimes).TimeOfDay)
-            });
+                var series = item.Series;
+
+                upcoming.Add(new UpcomingEpisodeModel
+                {
+                    SeriesId = series.SeriesId,
+                    EpisodeId = item.EpisodeId,
+                    SeriesName = series.Title,
+                    SeasonNumber = item.SeasonNumber,
+                    EpisodeNumber = item.EpisodeNumber,
+                    Title = item.Title,
+                    Overview = item.Overview,
+                    AirDate = item.AirDate.Add(Convert.ToDateTime(series.AirTimes).TimeOfDay)
+                });
+            }
 
             return View(new GridModel(upcoming));
         }
@@ -79,16 +106,25 @@ namespace NzbDrone.Web.Controllers
         [GridAction]
         public ActionResult _AjaxBindingWeek()
         {
-            var upcoming = _upcomingEpisodesProvider.Week().Select(e => new UpcomingEpisodeModel
-                                                                            {
-                                                                                SeriesId = e.Series.SeriesId,
-                                                                                SeriesName = e.Series.Title,
-                                                                                SeasonNumber = e.SeasonNumber,
-                                                                                EpisodeNumber = e.EpisodeNumber,
-                                                                                Title = e.Title,
-                                                                                Overview = e.Overview,
-                                                                                AirDate = e.AirDate.Add(Convert.ToDateTime(e.Series.AirTimes).TimeOfDay)
-                                                                            });
+            var upcomingDb = _upcomingEpisodesProvider.Week();
+            var upcoming = new List<UpcomingEpisodeModel>();
+
+            foreach (var item in upcomingDb)
+            {
+                var series = item.Series;
+
+                upcoming.Add(new UpcomingEpisodeModel
+                {
+                    SeriesId = series.SeriesId,
+                    EpisodeId = item.EpisodeId,
+                    SeriesName = series.Title,
+                    SeasonNumber = item.SeasonNumber,
+                    EpisodeNumber = item.EpisodeNumber,
+                    Title = item.Title,
+                    Overview = item.Overview,
+                    AirDate = item.AirDate.Add(Convert.ToDateTime(series.AirTimes).TimeOfDay)
+                });
+            }
 
             return View(new GridModel(upcoming));
         }

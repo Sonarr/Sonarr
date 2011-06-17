@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Ninject;
 using NLog;
-using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using PetaPoco;
@@ -18,15 +16,19 @@ namespace NzbDrone.Core.Providers
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly ConfigProvider _configProvider;
         private readonly TvDbProvider _tvDbProvider;
+        private readonly SceneNameMappingProvider _sceneNameMappingProvider;
         private readonly IDatabase _database;
         private readonly QualityProvider _qualityProvider;
+        private static readonly Regex TimeRegex = new Regex(@"^(?<time>\d+:?\d*)\W*(?<meridiem>am|pm)?", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        [Inject]
-        public SeriesProvider(ConfigProvider configProviderProvider, TvDbProvider tvDbProviderProvider, IDatabase database, QualityProvider qualityProvider)
+        public SeriesProvider(IDatabase database, ConfigProvider configProviderProvider, QualityProvider qualityProvider,
+                                TvDbProvider tvDbProviderProvider, SceneNameMappingProvider sceneNameMappingProvider)
         {
+            _database = database;
             _configProvider = configProviderProvider;
             _tvDbProvider = tvDbProviderProvider;
-            _database = database;
+            _sceneNameMappingProvider = sceneNameMappingProvider;
+
             _qualityProvider = qualityProvider;
         }
 
@@ -107,7 +109,7 @@ namespace NzbDrone.Core.Providers
         {
             var normalizeTitle = Parser.NormalizeTitle(title);
 
-            var seriesId = SceneNameHelper.GetIdByName(normalizeTitle);
+            var seriesId = _sceneNameMappingProvider.GetSeriesId(normalizeTitle);
             if (seriesId != null)
             {
                 return GetSeries(seriesId.Value);
@@ -159,13 +161,11 @@ namespace NzbDrone.Core.Providers
         /// <summary>
         ///   Cleans up the AirsTime Component from TheTVDB since it can be garbage that comes in.
         /// </summary>
-        /// <param name = "input">The TVDB AirsTime</param>
+        /// <param name = "rawTime">The TVDB AirsTime</param>
         /// <returns>String that contains the AirTimes</returns>
-        private string CleanAirsTime(string inputTime)
+        private static string CleanAirsTime(string rawTime)
         {
-            Regex timeRegex = new Regex(@"^(?<time>\d+:?\d*)\W*(?<meridiem>am|pm)?", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-
-            var match = timeRegex.Match(inputTime);
+            var match = TimeRegex.Match(rawTime);
             var time = match.Groups["time"].Value;
             var meridiem = match.Groups["meridiem"].Value;
 

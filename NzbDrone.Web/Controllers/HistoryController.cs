@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using NzbDrone.Core.Model;
@@ -44,20 +45,30 @@ namespace NzbDrone.Web.Controllers
             //TODO: possible subsonic bug, IQuarible causes some issues so ToList() is called
             //https://github.com/subsonic/SubSonic-3.0/issues/263
 
-            var history = _historyProvider.AllItems().ToList().Select(h => new HistoryModel
-                                                                      {
-                                                                          HistoryId = h.HistoryId,
-                                                                          SeasonNumber = h.Episode.SeasonNumber,
-                                                                          EpisodeNumber = h.Episode.EpisodeNumber,
-                                                                          EpisodeTitle = h.Episode.Title,
-                                                                          EpisodeOverview = h.Episode.Overview,
-                                                                          SeriesTitle = h.Episode.Series.Title,
-                                                                          NzbTitle = h.NzbTitle,
-                                                                          Quality = h.Quality.ToString(),
-                                                                          IsProper = h.IsProper,
-                                                                          Date = h.Date,
-                                                                          Indexer = h.Indexer
-                                                                      });
+            var historyDb = _historyProvider.AllItems().ToList();
+            
+            var history = new List<HistoryModel>();
+            
+            foreach (var item in historyDb)
+            {
+                var episode = item.Episode;
+                var series = episode.Series;
+
+                history.Add(new HistoryModel
+                                            {
+                                                HistoryId = item.HistoryId,
+                                                SeasonNumber = episode.SeasonNumber,
+                                                EpisodeNumber = episode.EpisodeNumber,
+                                                EpisodeTitle = episode.Title,
+                                                EpisodeOverview = episode.Overview,
+                                                SeriesTitle = series.Title,
+                                                NzbTitle = item.NzbTitle,
+                                                Quality = item.Quality.ToString(),
+                                                IsProper = item.IsProper,
+                                                Date = item.Date,
+                                                Indexer = item.Indexer
+                                            });
+            }
 
             return View(new GridModel(history));
         }
