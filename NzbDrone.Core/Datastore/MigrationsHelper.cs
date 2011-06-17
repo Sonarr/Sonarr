@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Datastore
 
                 migrator.MigrateToLastVersion();
 
-                ForceSubSonicMigration(Connection.CreateSimpleRepository(connetionString));
+                //ForceSubSonicMigration(Connection.CreateSimpleRepository(connetionString));
 
                 Logger.Info("Database migration completed");
 
