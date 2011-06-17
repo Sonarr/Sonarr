@@ -7,9 +7,9 @@ namespace NzbDrone.Core.Providers.Jobs
 {
     public class UpdateSceneMappingsJob : IJob
     {
-        private readonly SceneNameMappingProvider _sceneNameMappingProvider;
+        private readonly SceneMappingProvider _sceneNameMappingProvider;
 
-        public UpdateSceneMappingsJob(SceneNameMappingProvider sceneNameMappingProvider)
+        public UpdateSceneMappingsJob(SceneMappingProvider sceneNameMappingProvider)
         {
             _sceneNameMappingProvider = sceneNameMappingProvider;
         }

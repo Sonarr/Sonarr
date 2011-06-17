@@ -7,23 +7,24 @@ using System.Text;
 using NLog;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
+using PetaPoco;
 using SubSonic.Repository;
 
 namespace NzbDrone.Core.Providers
 {
-    public class SceneNameMappingProvider
+    public class SceneMappingProvider
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private readonly IRepository _repository;
+        private readonly IDatabase _database;
         private readonly HttpProvider _httpProvider;
 
-        public SceneNameMappingProvider(IRepository repository, HttpProvider httpProvider)
+        public SceneMappingProvider(IDatabase database, HttpProvider httpProvider)
         {
-            _repository = repository;
+            _database = database;
             _httpProvider = httpProvider;
         }
 
-        public SceneNameMappingProvider()
+        public SceneMappingProvider()
         {
             
         }
@@ -32,8 +33,8 @@ namespace NzbDrone.Core.Providers
         {
             try
             {
-                var mapping = _httpProvider.DownloadString("http://vps.nzbdrone.com/SceneNameMappings.csv");
-                var newMaps = new List<SceneNameMapping>();
+                var mapping = _httpProvider.DownloadString("http://vps.nzbdrone.com/SceneMappings.csv");
+                var newMaps = new List<SceneMapping>();
 
                 using (var reader = new StringReader(mapping))
                 {
@@ -44,8 +45,8 @@ namespace NzbDrone.Core.Providers
                         var seriesId = 0;
                         Int32.TryParse(split[1], out seriesId);
 
-                        var map = new SceneNameMapping();
-                        map.SceneCleanName = split[0];
+                        var map = new SceneMapping();
+                        map.CleanTitle = split[0];
                         map.SeriesId = seriesId;
                         map.SceneName = split[2];
 
@@ -54,10 +55,10 @@ namespace NzbDrone.Core.Providers
                 }
 
                 Logger.Debug("Deleting all existing Scene Mappings.");
-                _repository.DeleteMany<SceneNameMapping>(GetAll());
+                _database.Delete<SceneMapping>(String.Empty);
 
                 Logger.Debug("Adding Scene Mappings");
-                _repository.AddMany(newMaps);
+                _database.InsertMany(newMaps);
             }
 
             catch (Exception ex)
@@ -68,14 +69,14 @@ namespace NzbDrone.Core.Providers
             return true;
         }
 
-        public virtual List<SceneNameMapping> GetAll()
+        public virtual List<SceneMapping> GetAll()
         {
-            return _repository.All<SceneNameMapping>().ToList();
+            return _database.Fetch<SceneMapping>();
         }
 
         public virtual string GetSceneName(int seriesId)
         {
-            var item = _repository.Single<SceneNameMapping>(s => s.SeriesId == seriesId);
+            var item = _database.SingleOrDefault<SceneMapping>("WHERE SeriesId = @0", seriesId);
 
             if (item == null)
                 return null;
@@ -85,7 +86,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual Nullable<Int32> GetSeriesId(string cleanName)
         {
-            var item  = _repository.Single<SceneNameMapping>(s => s.SceneCleanName == cleanName);
+            var item = _database.SingleOrDefault<SceneMapping>("WHERE CleanTitle = @0", cleanName);
 
             if (item == null)
                 return null;

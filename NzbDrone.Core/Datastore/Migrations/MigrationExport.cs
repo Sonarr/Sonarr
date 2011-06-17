@@ -56,7 +56,12 @@ namespace NzbDrone.Core.Datastore.Migrations
 
             db.CreateTable("Config")
                 .WithNotNullableColumn("Key", DbType.String).Unique()
-                .WithNotNullableColumn("Value", DbType.String);                
+                .WithNotNullableColumn("Value", DbType.String);
+
+            db.CreateTable("SceneMappings")
+                .WithNotNullableColumn("CleanTitle", DbType.String).Unique()
+                .WithNotNullableColumn("SeriesId", DbType.Int32)
+                .WithNotNullableColumn("SceneName", DbType.String);
         }
     }
 }

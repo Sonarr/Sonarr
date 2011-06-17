@@ -18,11 +18,11 @@ namespace NzbDrone.Core.Providers
         private readonly TvDbProvider _tvDbProvider;
         private readonly IDatabase _database;
         private readonly QualityProvider _qualityProvider;
-        private readonly SceneNameMappingProvider _sceneNameMappingProvider;
+        private readonly SceneMappingProvider _sceneNameMappingProvider;
         private static readonly Regex TimeRegex = new Regex(@"^(?<time>\d+:?\d*)\W*(?<meridiem>am|pm)?", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         public SeriesProvider(IDatabase database, ConfigProvider configProviderProvider, QualityProvider qualityProvider,
-                                TvDbProvider tvDbProviderProvider, SceneNameMappingProvider sceneNameMappingProvider)
+                                TvDbProvider tvDbProviderProvider, SceneMappingProvider sceneNameMappingProvider)
         {
             _database = database;
             _configProvider = configProviderProvider;

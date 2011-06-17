@@ -19,25 +19,26 @@ namespace NzbDrone.Core.Test
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class SceneNameHelperTest : TestBase
+    public class SceneMappingTest : TestBase
     {
         [Test]
         public  void GetSceneName_exists()
         {
             //Setup
-            var fakeMap = Builder<SceneNameMapping>.CreateNew()
+            var fakeMap = Builder<SceneMapping>.CreateNew()
+                .With(f => f.CleanTitle = "laworder")
                 .With(f => f.SeriesId = 12345)
                 .With(f => f.SceneName = "Law and Order")
                 .Build();
 
             var mocker = new AutoMoqer();
 
-            mocker.GetMock<IRepository>()
-                .Setup(f => f.Single<SceneNameMapping>(It.IsAny<Expression<Func<SceneNameMapping, bool>>>()))
-                .Returns(fakeMap);
+            var emptyDatabase = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(emptyDatabase);
+            emptyDatabase.Insert(fakeMap);
 
             //Act
-            var sceneName = mocker.Resolve<SceneNameMappingProvider>().GetSceneName(fakeMap.SeriesId);
+            var sceneName = mocker.Resolve<SceneMappingProvider>().GetSceneName(fakeMap.SeriesId);
 
             //Assert
             Assert.AreEqual(fakeMap.SceneName, sceneName);
@@ -47,7 +48,7 @@ namespace NzbDrone.Core.Test
         public  void GetSeriesId_exists()
         {
             //Setup
-            var fakeMap = Builder<SceneNameMapping>.CreateNew()
+            var fakeMap = Builder<SceneMapping>.CreateNew()
                 .With(f => f.SeriesId = 12345)
                 .With(f => f.SceneName = "Law and Order")
                 .With(f => f.SceneName = "laworder")
@@ -55,12 +56,12 @@ namespace NzbDrone.Core.Test
 
             var mocker = new AutoMoqer();
 
-            mocker.GetMock<IRepository>()
-                .Setup(f => f.Single<SceneNameMapping>(It.IsAny<Expression<Func<SceneNameMapping, bool>>>()))
-                .Returns(fakeMap);
+            var emptyDatabase = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(emptyDatabase);
+            emptyDatabase.Insert(fakeMap);
 
             //Act
-            var seriesId = mocker.Resolve<SceneNameMappingProvider>().GetSeriesId(fakeMap.SceneCleanName);
+            var seriesId = mocker.Resolve<SceneMappingProvider>().GetSeriesId(fakeMap.CleanTitle);
 
             //Assert
             Assert.AreEqual(fakeMap.SeriesId, seriesId);
@@ -70,18 +71,20 @@ namespace NzbDrone.Core.Test
         public void GetSceneName_null()
         {
             //Setup
-            var fakeMap = Builder<SceneNameMapping>.CreateNew()
+            var fakeMap = Builder<SceneMapping>.CreateNew()
                 .With(f => f.SeriesId = 12345)
                 .With(f => f.SceneName = "Law and Order")
+                .With(f => f.SceneName = "laworder")
                 .Build();
 
             var mocker = new AutoMoqer();
 
-            mocker.GetMock<IRepository>()
-                .Setup(f => f.Single<SceneNameMapping>(It.IsAny<Expression<Func<SceneNameMapping, bool>>>()));
+            var emptyDatabase = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(emptyDatabase);
+            emptyDatabase.Insert(fakeMap);
 
             //Act
-            var sceneName = mocker.Resolve<SceneNameMappingProvider>().GetSceneName(fakeMap.SeriesId);
+            var sceneName = mocker.Resolve<SceneMappingProvider>().GetSceneName(54321);
 
             //Assert
             Assert.AreEqual(null, sceneName);
@@ -91,19 +94,20 @@ namespace NzbDrone.Core.Test
         public void GetSeriesId_null()
         {
             //Setup
-            var fakeMap = Builder<SceneNameMapping>.CreateNew()
+            var fakeMap = Builder<SceneMapping>.CreateNew()
                 .With(f => f.SeriesId = 12345)
                 .With(f => f.SceneName = "Law and Order")
-                .With(f => f.SceneName = "laworder")
+                .With(f => f.CleanTitle = "laworder")
                 .Build();
 
             var mocker = new AutoMoqer();
 
-            mocker.GetMock<IRepository>()
-                .Setup(f => f.Single<SceneNameMapping>(It.IsAny<Expression<Func<SceneNameMapping, bool>>>()));
+            var emptyDatabase = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(emptyDatabase);
+            emptyDatabase.Insert(fakeMap);
 
             //Act
-            var seriesId = mocker.Resolve<SceneNameMappingProvider>().GetSeriesId(fakeMap.SceneCleanName);
+            var seriesId = mocker.Resolve<SceneMappingProvider>().GetSeriesId("notlaworder");
 
             //Assert
             Assert.AreEqual(null, seriesId);

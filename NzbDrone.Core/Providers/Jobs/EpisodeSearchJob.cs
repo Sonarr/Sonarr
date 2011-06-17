@@ -17,13 +17,13 @@ namespace NzbDrone.Core.Providers.Jobs
         private readonly DownloadProvider _downloadProvider;
         private readonly IndexerProvider _indexerProvider;
         private readonly EpisodeProvider _episodeProvider;
-        private readonly SceneNameMappingProvider _sceneNameMappingProvider;
+        private readonly SceneMappingProvider _sceneNameMappingProvider;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public EpisodeSearchJob(InventoryProvider inventoryProvider, DownloadProvider downloadProvider,
                                     IndexerProvider indexerProvider, EpisodeProvider episodeProvider,
-                                    SceneNameMappingProvider sceneNameMappingProvider)
+                                    SceneMappingProvider sceneNameMappingProvider)
         {
             _inventoryProvider = inventoryProvider;
             _downloadProvider = downloadProvider;

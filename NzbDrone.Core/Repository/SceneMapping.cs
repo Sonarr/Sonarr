@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using PetaPoco;
 using SubSonic.SqlGeneration.Schema;
 
 namespace NzbDrone.Core.Repository
 {
-    public class SceneNameMapping
+    [TableName("SceneMappings")]
+    [PrimaryKey("CleanTitle", autoIncrement = false)]
+    public class SceneMapping
     {
         [SubSonicPrimaryKey]
-        public virtual string SceneCleanName { get; set; }
+        public virtual string CleanTitle { get; set; }
 
         public virtual int SeriesId { get; set; }
 
