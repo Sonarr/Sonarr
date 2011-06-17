@@ -21,6 +21,7 @@
           <Item>unsafe</Item>
           <Item>volatile</Item>
         </MODIFIERS_ORDER>
+        <WRAP_LIMIT>140</WRAP_LIMIT>
       </FormatSettings>
       <UsingsSettings />
       <Naming2>

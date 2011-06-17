@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using Migrator.Framework;
-using MigSharp;
 using NLog;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
@@ -18,6 +17,8 @@ namespace NzbDrone.Core.Datastore
     public class MigrationsHelper
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        public static bool IsMigrated { get; private set; }
 
         public static void Run(string connetionString, bool trace)
         {
@@ -51,20 +52,9 @@ namespace NzbDrone.Core.Datastore
             }
         }
 
-
-        public static void MigrateDatabase(string connectionString)
-        {
-            var migrator = new MigSharp.Migrator(connectionString, ProviderNames.SQLite);
-            migrator.MigrateAll(typeof(MigrationsHelper).Assembly);
-        }
-
         public static void ForceSubSonicMigration(IRepository repository)
         {
-            repository.Single<Series>(1);
-            repository.Single<Episode>(1);
-            repository.Single<EpisodeFile>(1);
             repository.Single<QualityProfile>(1);
-            repository.Single<History>(1);
             repository.Single<IndexerSetting>(1);
             repository.Single<SceneNameMapping>(1);
         }

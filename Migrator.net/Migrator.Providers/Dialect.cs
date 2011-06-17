@@ -9,11 +9,11 @@ namespace Migrator.Providers
     /// <summary>
     /// Defines the implementations specific details for a particular database.
     /// </summary>
-    public abstract class Dialect 
+    public abstract class Dialect
     {
         private readonly Dictionary<ColumnProperty, string> propertyMap = new Dictionary<ColumnProperty, string>();
         private readonly TypeNames typeNames = new TypeNames();
-        
+
         protected Dialect()
         {
             RegisterProperty(ColumnProperty.Null, "NULL");
@@ -26,9 +26,9 @@ namespace Migrator.Providers
 
         public ITransformationProvider NewProviderForDialect(string connectionString)
         {
-            return (ITransformationProvider) Activator.CreateInstance(TransformationProvider, this, connectionString);
+            return (ITransformationProvider)Activator.CreateInstance(TransformationProvider, this, connectionString);
         }
-        
+
         /// <summary>
         /// Subclasses register a typename for the given type code and maximum
         /// column length. <c>$l</c> in the type name will be replaced by the column
@@ -56,9 +56,9 @@ namespace Migrator.Providers
         public ColumnPropertiesMapper GetColumnMapper(Column column)
         {
             string type = column.Size > 0 ? GetTypeName(column.Type, column.Size) : GetTypeName(column.Type);
-            if (! IdentityNeedsType && column.IsIdentity)
+            if (!IdentityNeedsType && column.IsIdentity)
                 type = String.Empty;
-            
+
             return new ColumnPropertiesMapper(this, type);
         }
 
@@ -100,15 +100,15 @@ namespace Migrator.Providers
         public virtual string GetTypeName(DbType type, int length, int precision, int scale)
         {
             string resultWithLength = typeNames.Get(type, length, precision, scale);
-            if (resultWithLength != null) 
+            if (resultWithLength != null)
                 return resultWithLength;
 
             return GetTypeName(type);
         }
-        
+
         public void RegisterProperty(ColumnProperty property, string sql)
         {
-            if (! propertyMap.ContainsKey(property))
+            if (!propertyMap.ContainsKey(property))
             {
                 propertyMap.Add(property, sql);
             }
@@ -128,22 +128,22 @@ namespace Migrator.Providers
         {
             get { return false; }
         }
-        
+
         public virtual bool TableNameNeedsQuote
         {
             get { return false; }
         }
-        
+
         public virtual bool ConstraintNameNeedsQuote
         {
             get { return false; }
         }
-        
+
         public virtual bool IdentityNeedsType
         {
             get { return true; }
         }
-        
+
         public virtual bool NeedsNotNullForIdentity
         {
             get { return true; }
@@ -153,28 +153,40 @@ namespace Migrator.Providers
         {
             get { return true; }
         }
-        
+
         public virtual string Quote(string value)
         {
             return String.Format(QuoteTemplate, value);
         }
-        
+
         public virtual string QuoteTemplate
         {
             get { return "\"{0}\""; }
         }
-        
+
         public virtual string Default(object defaultValue)
         {
+            if (defaultValue is String && defaultValue == String.Empty)
+            {
+                defaultValue = "''";
+            }
+
             return String.Format("DEFAULT {0}", defaultValue);
         }
-        
+
         public ColumnPropertiesMapper GetAndMapColumnProperties(Column column)
         {
             ColumnPropertiesMapper mapper = GetColumnMapper(column);
             mapper.MapColumnProperties(column);
             if (column.DefaultValue != null)
+            {
+                if (column.DefaultValue is String && column.DefaultValue.ToString() == string.Empty)
+                {
+                    column.DefaultValue = @"''";
+                }
+
                 mapper.Default = column.DefaultValue;
+            }
             return mapper;
         }
     }

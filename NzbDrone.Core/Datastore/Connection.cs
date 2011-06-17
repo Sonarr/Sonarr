@@ -59,6 +59,8 @@ namespace NzbDrone.Core.Datastore
 
         public static IDatabase GetPetaPocoDb(string connectionString)
         {
+            MigrationsHelper.Run(connectionString, true);
+
             var profileConnection = ProfiledDbConnection.Get(new SQLiteConnection(connectionString));
 
             Database.Mapper = new CustomeMapper();

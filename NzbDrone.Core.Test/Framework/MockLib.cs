@@ -73,9 +73,7 @@ namespace NzbDrone.Core.Test.Framework
             }
             
             var connectionString = Connection.GetConnectionString(fileName);
-            
-            MigrationsHelper.MigrateDatabase(connectionString);
-            
+          
             var database = Connection.GetPetaPocoDb(connectionString);
 
             return database;
