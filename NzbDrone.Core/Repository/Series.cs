@@ -7,6 +7,7 @@ using SubSonic.SqlGeneration.Schema;
 
 namespace NzbDrone.Core.Repository
 {
+    [PrimaryKey("SeriesId", autoIncrement = false)]
     public class Series
     {
         [SubSonicPrimaryKey(false)]

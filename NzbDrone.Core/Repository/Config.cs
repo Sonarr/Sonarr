@@ -1,11 +1,11 @@
-﻿using SubSonic.SqlGeneration.Schema;
+﻿using PetaPoco;
+using SubSonic.SqlGeneration.Schema;
 
 namespace NzbDrone.Core.Repository
 {
-    [SubSonicTableNameOverride("Config")]
+    [PrimaryKey("Key", autoIncrement = false)]
     public class Config
     {
-        [SubSonicPrimaryKey]
         public string Key { get; set; }
 
         public string Value { get; set; }

@@ -126,8 +126,6 @@ namespace NzbDrone.Core.Test.Framework
 
         private static void ForceMigration(IRepository repository)
         {
-            repository.All<Series>().Count();
-            repository.All<Episode>().Count();
             repository.All<EpisodeFile>().Count();
             repository.All<QualityProfile>().Count();
             repository.All<History>().Count();

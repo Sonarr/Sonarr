@@ -25,10 +25,10 @@ namespace NzbDrone.Core.Providers
         public virtual void Notify(string header, string message)
         {
             //Get time in seconds and convert to ms
-            var time = Convert.ToInt32(_configProvider.GetValue("XbmcDisplayTime", "3", true)) * 1000;
+            var time = Convert.ToInt32(_configProvider.GetValue("XbmcDisplayTime", "3")) * 1000;
             var command = String.Format("ExecBuiltIn(Notification({0},{1},{2}))", header, message, time);
 
-            if (Convert.ToBoolean(_configProvider.GetValue("XbmcNotificationImage", false, true)))
+            if (Convert.ToBoolean(_configProvider.GetValue("XbmcNotificationImage", false)))
             {
                 //Todo: Get the actual port that NzbDrone is running on...
                 var serverInfo = String.Format("http://{0}:{1}", Environment.MachineName, "8989");
@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Providers
                 command = String.Format("ExecBuiltIn(Notification({0},{1},{2}, {3}))", header, message, time, imageUrl);
             }
 
-            foreach (var host in _configProvider.GetValue("XbmcHosts", "localhost:80", true).Split(','))
+            foreach (var host in _configProvider.GetValue("XbmcHosts", "localhost:80").Split(','))
             {
                 Logger.Trace("Sending Notifcation to XBMC Host: {0}", host);
                 SendCommand(host, command);
@@ -46,14 +46,14 @@ namespace NzbDrone.Core.Providers
 
         public virtual void Update(int seriesId)
         {
-            foreach (var host in _configProvider.GetValue("XbmcHosts", "localhost:80", true).Split(','))
+            foreach (var host in _configProvider.GetValue("XbmcHosts", "localhost:80").Split(','))
             {
                 Logger.Trace("Sending Update DB Request to XBMC Host: {0}", host);
                 var xbmcSeriesPath = GetXbmcSeriesPath(host, seriesId);
 
                 //If the path is not found & the user wants to update the entire library, do it now.
                 if (String.IsNullOrEmpty(xbmcSeriesPath) &&
-                    Convert.ToBoolean(_configProvider.GetValue("XbmcFullUpdate", false, true)))
+                    Convert.ToBoolean(_configProvider.GetValue("XbmcFullUpdate", false)))
                 {
                     //Update the entire library
                     Logger.Trace("Series [{0}] doesn't exist on XBMC host: {1}, Updating Entire Library", seriesId, host);
@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual void Clean()
         {
-            foreach (var host in _configProvider.GetValue("XbmcHosts", "localhost:80", true).Split(','))
+            foreach (var host in _configProvider.GetValue("XbmcHosts", "localhost:80").Split(','))
             {
                 Logger.Trace("Sending DB Clean Request to XBMC Host: {0}", host);
                 var command = String.Format("ExecBuiltIn(CleanLibrary(video))");
@@ -78,8 +78,8 @@ namespace NzbDrone.Core.Providers
 
         private string SendCommand(string host, string command)
         {
-            var username = _configProvider.GetValue("XbmcUsername", String.Empty, true);
-            var password = _configProvider.GetValue("XbmcPassword", String.Empty, true);
+            var username = _configProvider.GetValue("XbmcUsername", String.Empty);
+            var password = _configProvider.GetValue("XbmcPassword", String.Empty);
             var url = String.Format("http://{0}/xbmcCmds/xbmcHttp?command={1}", host, command);
 
             if (!String.IsNullOrEmpty(username))

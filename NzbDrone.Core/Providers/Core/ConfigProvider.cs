@@ -5,6 +5,7 @@ using Ninject;
 using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository;
+using PetaPoco;
 using SubSonic.Repository;
 
 namespace NzbDrone.Core.Providers.Core
@@ -12,17 +13,18 @@ namespace NzbDrone.Core.Providers.Core
     public class ConfigProvider
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private readonly IRepository _repository;
+        private readonly IDatabase _database;
+
 
         [Inject]
-        public ConfigProvider(IRepository repository)
+        public ConfigProvider(IDatabase database)
         {
-            _repository = repository;
+            _database = database;
         }
 
         public IList<Config> All()
         {
-            return _repository.All<Config>().ToList();
+            return _database.Fetch<Config>();
         }
 
         public ConfigProvider()
@@ -129,7 +131,7 @@ namespace NzbDrone.Core.Providers.Core
 
         public virtual String SabHost
         {
-            get { return GetValue("SabHost", "localhost", true); }
+            get { return GetValue("SabHost", "localhost"); }
 
             set { SetValue("SabHost", value); }
         }
@@ -164,7 +166,7 @@ namespace NzbDrone.Core.Providers.Core
 
         public virtual String SabTvCategory
         {
-            get { return GetValue("SabTvCategory", "TV", false); }
+            get { return GetValue("SabTvCategory", "TV"); }
 
             set { SetValue("SabTvCategory", value); }
         }
@@ -178,7 +180,7 @@ namespace NzbDrone.Core.Providers.Core
 
         public virtual String SabDropDirectory
         {
-            get { return GetValue("SabTvDropDirectory", "", false); }
+            get { return GetValue("SabTvDropDirectory"); }
 
             set { SetValue("SabTvDropDirectory", value); }
         }
@@ -230,7 +232,7 @@ namespace NzbDrone.Core.Providers.Core
 
         public virtual string SeasonFolderFormat
         {
-            get { return GetValue("Sorting_SeasonFolderFormat", "Season %s", false); }
+            get { return GetValue("Sorting_SeasonFolderFormat", "Season %s"); }
             set { SetValue("Sorting_SeasonFolderFormat", value); }
         }
 
@@ -261,31 +263,29 @@ namespace NzbDrone.Core.Providers.Core
 
         private string GetValue(string key)
         {
-            return GetValue(key, String.Empty, false);
+            return GetValue(key, String.Empty);
         }
 
         private bool GetValueBoolean(string key, bool defaultValue = false)
         {
-            return Convert.ToBoolean(GetValue(key, defaultValue, false));
+            return Convert.ToBoolean(GetValue(key, defaultValue));
         }
 
         private int GetValueInt(string key, int defaultValue = 0)
         {
-            return Convert.ToInt16(GetValue(key, defaultValue, false));
+            return Convert.ToInt16(GetValue(key, defaultValue));
         }
 
-        public virtual string GetValue(string key, object defaultValue, bool makePermanent)
+        public virtual string GetValue(string key, object defaultValue)
         {
             string value;
 
-            var dbValue = _repository.Single<Config>(key);
+            var dbValue = _database.SingleOrDefault<Config>(key);
 
             if (dbValue != null && !String.IsNullOrEmpty(dbValue.Value))
                 return dbValue.Value;
 
             Logger.Debug("Unable to find config key '{0}' defaultValue:'{1}'", key, defaultValue);
-            if (makePermanent)
-                SetValue(key, defaultValue.ToString());
             value = defaultValue.ToString();
 
             return value;
@@ -310,20 +310,16 @@ namespace NzbDrone.Core.Providers.Core
 
             Logger.Debug("Writing Setting to file. Key:'{0}' Value:'{1}'", key, value);
 
-            var dbValue = _repository.Single<Config>(key);
+            var dbValue = _database.SingleOrDefault<Config>("WHERE KEY=@0", key);
 
             if (dbValue == null)
             {
-                _repository.Add(new Config
-                                   {
-                                       Key = key,
-                                       Value = value
-                                   });
+                _database.Insert(new Config { Key = key, Value = value });
             }
             else
             {
                 dbValue.Value = value;
-                _repository.Update(dbValue);
+                _database.Update(dbValue);
             }
         }
     }

@@ -53,6 +53,10 @@ namespace NzbDrone.Core.Datastore.Migrations
                 .WithNotNullableColumn("Size", DbType.Int64)
                 .WithNotNullableColumn("DateAdded", DbType.DateTime)
                 .WithNotNullableColumn("SeasonNumber", DbType.Int16);
+
+            db.CreateTable("Config")
+                .WithNotNullableColumn("Key", DbType.String).Unique()
+                .WithNotNullableColumn("Value", DbType.String);                
         }
     }
 }
