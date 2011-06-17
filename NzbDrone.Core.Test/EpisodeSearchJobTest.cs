@@ -247,7 +247,7 @@ namespace NzbDrone.Core.Test
             mocker.GetMock<InventoryProvider>()
                 .Setup(c => c.IsQualityNeeded(It.Is<EpisodeParseResult>(d => d.Series != null && d.Episodes.Count != 0))).Returns(false);
 
-            mocker.GetMock<SceneNameMappingProvider>()
+            mocker.GetMock<SceneMappingProvider>()
                 .Setup(s => s.GetSceneName(It.IsAny<int>())).Returns("");
 
             //Act
@@ -298,7 +298,7 @@ namespace NzbDrone.Core.Test
             mocker.GetMock<InventoryProvider>()
                 .Setup(c => c.IsQualityNeeded(It.Is<EpisodeParseResult>(d => d.Series != null && d.Episodes.Count != 0))).Returns(false);
 
-            mocker.GetMock<SceneNameMappingProvider>()
+            mocker.GetMock<SceneMappingProvider>()
                 .Setup(s => s.GetSceneName(71256)).Returns("The Daily Show");
 
             //Act
@@ -355,7 +355,7 @@ namespace NzbDrone.Core.Test
             mocker.GetMock<InventoryProvider>()
                 .Setup(c => c.IsQualityNeeded(It.Is<EpisodeParseResult>(d => d.Series != null && d.Episodes.Count != 0))).Returns(false);;
 
-            mocker.GetMock<SceneNameMappingProvider>()
+            mocker.GetMock<SceneMappingProvider>()
                 .Setup(s => s.GetSceneName(It.IsAny<int>())).Returns("");
 
             //Act
