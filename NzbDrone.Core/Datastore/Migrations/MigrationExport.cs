@@ -45,6 +45,12 @@ namespace NzbDrone.Core.Datastore.Migrations
                 .WithNullableColumn("GrabDate", DbType.DateTime);
 
 
+            db.CreateTable("Config")
+                .WithNotNullableColumn("Key", DbType.String).Unique()
+                .WithNotNullableColumn("Value", DbType.String);
+
+            
+
 
         }
     }

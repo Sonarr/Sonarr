@@ -1,4 +1,5 @@
 ﻿using AutoMoq;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Providers.Core;
@@ -13,52 +14,81 @@ namespace NzbDrone.Core.Test
     public class ConfigProviderTest : TestBase
     {
         [Test]
-        public void Overwrite_existing_value()
+        public void Add_new_value_to_database()
         {
             const string key = "MY_KEY";
             const string value = "MY_VALUE";
 
-            //Arrange
-            var config = new Config {Key = key, Value = value};
-
             var mocker = new AutoMoqer();
-
-            mocker.GetMock<IRepository>()
-                .Setup(r => r.Single<Config>(key))
-                .Returns(config);
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
 
             //Act
             mocker.Resolve<ConfigProvider>().SetValue(key, value);
 
             //Assert
-            mocker.GetMock<IRepository>().Verify(c => c.Update(config));
-            mocker.GetMock<IRepository>().Verify(c => c.Add(It.IsAny<Config>()), Times.Never());
+            mocker.Resolve<ConfigProvider>().GetValue(key, "").Should().Be(value);
         }
 
         [Test]
-        public void Add_new_value()
+        public void Get_value_from_database()
         {
             const string key = "MY_KEY";
             const string value = "MY_VALUE";
 
-            //Arrange
             var mocker = new AutoMoqer();
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
 
-            mocker.GetMock<IRepository>()
-                .Setup(r => r.Single<Config>(It.IsAny<string>()))
-                .Returns<Config>(null)
-                .Verifiable();
+            db.Insert(new Config { Key = key, Value = value });
 
             //Act
-            mocker.Resolve<ConfigProvider>().SetValue(key, value);
+            var result = mocker.Resolve<ConfigProvider>().GetValue(key, "");
 
             //Assert
-            mocker.GetMock<IRepository>().Verify();
-            mocker.GetMock<IRepository>().Verify(r => r.Update(It.IsAny<Config>()), Times.Never());
-            mocker.GetMock<IRepository>().Verify(r => r.Add(It.Is<Config>(c => c.Key == key && c.Value == value)),
-                                                 Times.Once());
-
-            Assert.Pass();
+            result.Should().Be(value);
         }
+
+
+        [Test]
+        public void Get_value_should_return_default_when_no_value()
+        {
+            const string key = "MY_KEY";
+            const string value = "MY_VALUE";
+
+            var mocker = new AutoMoqer();
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+
+            //Act
+            var result = mocker.Resolve<ConfigProvider>().GetValue(key, value);
+
+            //Assert
+            result.Should().Be(value);
+        }
+
+        [Test]
+        public void New_value_should_update_old_value()
+        {
+            const string key = "MY_KEY";
+            const string originalValue = "OLD_VALUE";
+            const string newValue = "NEW_VALUE";
+
+            var mocker = new AutoMoqer();
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            db.Insert(new Config { Key = key, Value = originalValue });
+
+            //Act
+            mocker.Resolve<ConfigProvider>().SetValue(key, newValue);
+            var result = mocker.Resolve<ConfigProvider>().GetValue(key, "");
+
+            //Assert
+            result.Should().Be(newValue);
+            db.Fetch<Config>().Should().HaveCount(1);
+        }
+
     }
 }

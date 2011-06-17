@@ -148,20 +148,20 @@ namespace NzbDrone.Web.Controllers
 
             var model = new NotificationSettingsModel
                             {
-                                XbmcEnabled = Convert.ToBoolean(_configProvider.GetValue("XbmcEnabled", false, true)),
-                                XbmcNotifyOnGrab = Convert.ToBoolean(_configProvider.GetValue("XbmcNotifyOnGrab", false, true)),
-                                XbmcNotifyOnDownload = Convert.ToBoolean(_configProvider.GetValue("XbmcNotifyOnDownload", false, true)),
-                                XbmcNotifyOnRename = Convert.ToBoolean(_configProvider.GetValue("XbmcNotifyOnRename", false, true)),
-                                XbmcNotificationImage = Convert.ToBoolean(_configProvider.GetValue("XbmcNotificationImage", false, true)),
-                                XbmcDisplayTime = Convert.ToInt32(_configProvider.GetValue("XbmcDisplayTime", 3, true)),
-                                XbmcUpdateOnDownload = Convert.ToBoolean(_configProvider.GetValue("XbmcUpdateOnDownload ", false, true)),
-                                XbmcUpdateOnRename = Convert.ToBoolean(_configProvider.GetValue("XbmcUpdateOnRename", false, true)),
-                                XbmcFullUpdate = Convert.ToBoolean(_configProvider.GetValue("XbmcFullUpdate", false, true)),
-                                XbmcCleanOnDownload = Convert.ToBoolean(_configProvider.GetValue("XbmcCleanOnDownload", false, true)),
-                                XbmcCleanOnRename = Convert.ToBoolean(_configProvider.GetValue("XbmcCleanOnRename", false, true)),
-                                XbmcHosts = _configProvider.GetValue("XbmcHosts", "localhost:80", true),
-                                XbmcUsername = _configProvider.GetValue("XbmcUsername", String.Empty, true),
-                                XbmcPassword = _configProvider.GetValue("XbmcPassword", String.Empty, true)
+                                XbmcEnabled = Convert.ToBoolean(_configProvider.GetValue("XbmcEnabled", false)),
+                                XbmcNotifyOnGrab = Convert.ToBoolean(_configProvider.GetValue("XbmcNotifyOnGrab", false)),
+                                XbmcNotifyOnDownload = Convert.ToBoolean(_configProvider.GetValue("XbmcNotifyOnDownload", false)),
+                                XbmcNotifyOnRename = Convert.ToBoolean(_configProvider.GetValue("XbmcNotifyOnRename", false)),
+                                XbmcNotificationImage = Convert.ToBoolean(_configProvider.GetValue("XbmcNotificationImage", false)),
+                                XbmcDisplayTime = Convert.ToInt32(_configProvider.GetValue("XbmcDisplayTime", 3)),
+                                XbmcUpdateOnDownload = Convert.ToBoolean(_configProvider.GetValue("XbmcUpdateOnDownload ", false)),
+                                XbmcUpdateOnRename = Convert.ToBoolean(_configProvider.GetValue("XbmcUpdateOnRename", false)),
+                                XbmcFullUpdate = Convert.ToBoolean(_configProvider.GetValue("XbmcFullUpdate", false)),
+                                XbmcCleanOnDownload = Convert.ToBoolean(_configProvider.GetValue("XbmcCleanOnDownload", false)),
+                                XbmcCleanOnRename = Convert.ToBoolean(_configProvider.GetValue("XbmcCleanOnRename", false)),
+                                XbmcHosts = _configProvider.GetValue("XbmcHosts", "localhost:80"),
+                                XbmcUsername = _configProvider.GetValue("XbmcUsername", String.Empty),
+                                XbmcPassword = _configProvider.GetValue("XbmcPassword", String.Empty)
                             };
 
             return View("Index", model);
@@ -240,7 +240,7 @@ namespace NzbDrone.Web.Controllers
         {
             var profiles = _qualityProvider.GetAllProfiles().ToList();
             var defaultQualityQualityProfileId =
-                Convert.ToInt32(_configProvider.GetValue("DefaultQualityProfile", profiles[0].QualityProfileId, true));
+                Convert.ToInt32(_configProvider.GetValue("DefaultQualityProfile", profiles[0].QualityProfileId));
             var selectList = new SelectList(profiles, "QualityProfileId", "Name");
 
             return new QualityModel { DefaultQualityProfileId = defaultQualityQualityProfileId, QualityProfileSelectList = selectList };

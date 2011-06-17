@@ -8,9 +8,7 @@ using NLog;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
-using NzbDrone.Core.Repository.Quality;
 using PetaPoco;
-using SubSonic.Repository;
 using TvdbLib.Data;
 
 namespace NzbDrone.Core.Providers
@@ -18,17 +16,15 @@ namespace NzbDrone.Core.Providers
     public class SeriesProvider
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private readonly IRepository _repository;
         private readonly ConfigProvider _configProvider;
         private readonly TvDbProvider _tvDbProvider;
         private readonly IDatabase _database;
         private readonly QualityProvider _qualityProvider;
 
         [Inject]
-        public SeriesProvider(ConfigProvider configProviderProvider, IRepository repository, TvDbProvider tvDbProviderProvider, IDatabase database, QualityProvider qualityProvider)
+        public SeriesProvider(ConfigProvider configProviderProvider, TvDbProvider tvDbProviderProvider, IDatabase database, QualityProvider qualityProvider)
         {
             _configProvider = configProviderProvider;
-            _repository = repository;
             _tvDbProvider = tvDbProviderProvider;
             _database = database;
             _qualityProvider = qualityProvider;
@@ -100,7 +96,7 @@ namespace NzbDrone.Core.Providers
             repoSeries.Monitored = true; //New shows should be monitored
             repoSeries.QualityProfileId = qualityProfileId;
             if (qualityProfileId == 0)
-                repoSeries.QualityProfileId = Convert.ToInt32(_configProvider.GetValue("DefaultQualityProfile", "1", true));
+                repoSeries.QualityProfileId = Convert.ToInt32(_configProvider.GetValue("DefaultQualityProfile", "1"));
 
             repoSeries.SeasonFolder = _configProvider.UseSeasonFolder;
 
@@ -127,30 +123,29 @@ namespace NzbDrone.Core.Providers
 
         public virtual void DeleteSeries(int seriesId)
         {
-            Logger.Warn("Deleting Series [{0}]", seriesId);
-            var series = _repository.Single<Series>(seriesId);
+            var series = GetSeries(seriesId);
+            Logger.Warn("Deleting Series [{0}]", series.Title);
 
-            //Delete Files, Episodes, Seasons then the Series
-            //Can't use providers because episode provider needs series provider - Cyclic Dependency Injection, this will work
+            using (var tran = _database.GetTransaction())
+            {
+                //Delete History, Files, Episodes, Seasons then the Series
 
-            //Delete History Items for any episodes that belong to this series
-            Logger.Debug("Deleting History Items from DB for Series: {0}", series.SeriesId);
-            var episodes = series.Episodes.Select(e => e.EpisodeId).ToList();
-            episodes.ForEach(e => _repository.DeleteMany<History>(h => h.EpisodeId == e));
+                Logger.Debug("Deleting History Items from DB for Series: {0}", series.Title);
+                _database.Delete<History>("WHERE SeriesId=@0", seriesId);
 
-            //Delete all episode files from the DB for episodes in this series
-            Logger.Debug("Deleting EpisodeFiles from DB for Series: {0}", series.SeriesId);
-            _repository.DeleteMany(series.EpisodeFiles);
+                Logger.Debug("Deleting EpisodeFiles from DB for Series: {0}", series.Title);
+                _database.Delete<EpisodeFile>("WHERE SeriesId=@0", seriesId);
 
-            //Delete all episodes for this series from the DB
-            Logger.Debug("Deleting Episodes from DB for Series: {0}", series.SeriesId);
-            _repository.DeleteMany(series.Episodes);
+                Logger.Debug("Deleting Episodes from DB for Series: {0}", series.Title);
+                _database.Delete<Episode>("WHERE SeriesId=@0", seriesId);
 
-            //Delete the Series
-            Logger.Debug("Deleting Series from DB {0}", series.Title);
-            _repository.Delete<Series>(seriesId);
+                Logger.Debug("Deleting Series from DB {0}", series.Title);
+                _database.Delete<Series>("WHERE SeriesId=@0", seriesId);
 
-            Logger.Info("Successfully deleted Series [{0}]", seriesId);
+                Logger.Info("Successfully deleted Series [{0}]", series.Title);
+
+                tran.Complete();
+            }
         }
 
         public virtual bool SeriesPathExists(string cleanPath)
