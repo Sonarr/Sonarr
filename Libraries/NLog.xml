@@ -1065,11 +1065,11 @@
             into an expression tree.
             </summary>
         </member>
-        <member name="M:NLog.Conditions.ConditionParser.#ctor(System.String,NLog.Config.ConfigurationItemFactory)">
+        <member name="M:NLog.Conditions.ConditionParser.#ctor(NLog.Internal.SimpleStringReader,NLog.Config.ConfigurationItemFactory)">
             <summary>
             Initializes a new instance of the <see cref="T:NLog.Conditions.ConditionParser"/> class.
             </summary>
-            <param name="expressionText">The expression text.</param>
+            <param name="stringReader">The string reader.</param>
             <param name="configurationItemFactory">Instance of <see cref="T:NLog.Config.ConfigurationItemFactory"/> used to resolve references to condition methods and layout renderers.</param>
         </member>
         <member name="M:NLog.Conditions.ConditionParser.ParseExpression(System.String)">
@@ -1088,6 +1088,17 @@
             <param name="expressionText">The expression to be parsed.</param>
             <param name="configurationItemFactories">Instance of <see cref="T:NLog.Config.ConfigurationItemFactory"/> used to resolve references to condition methods and layout renderers.</param>
             <returns>The root of the expression syntax tree which can be used to get the value of the condition in a specified context.</returns>
+        </member>
+        <member name="M:NLog.Conditions.ConditionParser.ParseExpression(NLog.Internal.SimpleStringReader,NLog.Config.ConfigurationItemFactory)">
+            <summary>
+            Parses the specified condition string and turns it into
+            <see cref="T:NLog.Conditions.ConditionExpression"/> tree.
+            </summary>
+            <param name="stringReader">The string reader.</param>
+            <param name="configurationItemFactories">Instance of <see cref="T:NLog.Config.ConfigurationItemFactory"/> used to resolve references to condition methods and layout renderers.</param>
+            <returns>
+            The root of the expression syntax tree which can be used to get the value of the condition in a specified context.
+            </returns>
         </member>
         <member name="T:NLog.Conditions.ConditionRelationalExpression">
             <summary>
@@ -1185,11 +1196,11 @@
             Hand-written tokenizer for conditions.
             </summary>
         </member>
-        <member name="M:NLog.Conditions.ConditionTokenizer.#ctor(System.String)">
+        <member name="M:NLog.Conditions.ConditionTokenizer.#ctor(NLog.Internal.SimpleStringReader)">
             <summary>
             Initializes a new instance of the <see cref="T:NLog.Conditions.ConditionTokenizer"/> class.
             </summary>
-            <param name="expressionText">The expression text.</param>
+            <param name="stringReader">The string reader.</param>
         </member>
         <member name="M:NLog.Conditions.ConditionTokenizer.Expect(NLog.Conditions.ConditionTokenType)">
             <summary>
@@ -1378,6 +1389,17 @@
             <param name="type">The type to register.</param>
             <param name="itemNamePrefix">The item name prefix.</param>
         </member>
+        <member name="M:NLog.Config.ConfigurationItemFactory.BuildDefaultFactory">
+            <summary>
+            Builds the default configuration item factory.
+            </summary>
+            <returns>Default factory.</returns>
+        </member>
+        <member name="M:NLog.Config.ConfigurationItemFactory.RegisterExtendedItems">
+            <summary>
+            Registers items in NLog.Extended.dll using late-bound types, so that we don't need a reference to NLog.Extended.dll.
+            </summary>
+        </member>
         <member name="P:NLog.Config.ConfigurationItemFactory.Default">
             <summary>
             Gets or sets default singleton instance of <see cref="T:NLog.Config.ConfigurationItemFactory"/>.
@@ -1473,14 +1495,6 @@
             <param name="result">The result.</param>
             <returns>True if instance was created successfully, false otherwise.</returns>
         </member>
-        <member name="P:NLog.Config.INamedItemFactory`2.AllRegisteredItems">
-            <summary>
-            Gets a collection of all registered items in the factory.
-            </summary>
-            <returns>Sequence of key/value pairs where each key represents the name 
-            of the item and value is the <typeparamref name="TDefinitionType"/> of
-            the item.</returns>
-        </member>
         <member name="T:NLog.Config.IFactory">
             <summary>
             Provides means to populate factories of named items (such as targets, layouts, layout renderers, etc.).
@@ -1499,6 +1513,13 @@
             </summary>
             <param name="type">The type to register.</param>
             <param name="itemNamePrefix">The item name prefix.</param>
+        </member>
+        <member name="M:NLog.Config.Factory`2.RegisterNamedType(System.String,System.String)">
+            <summary>
+            Registers the item based on a type name.
+            </summary>
+            <param name="itemName">Name of the item.</param>
+            <param name="typeName">Name of the type.</param>
         </member>
         <member name="M:NLog.Config.Factory`2.Clear">
             <summary>
@@ -1534,14 +1555,6 @@
             </summary>
             <param name="name">The name of the item.</param>
             <returns>Created item.</returns>
-        </member>
-        <member name="P:NLog.Config.Factory`2.AllRegisteredItems">
-            <summary>
-            Gets a collection of all registered items in the factory.
-            </summary>
-            <returns>Sequence of key/value pairs where each key represents the name 
-            of the item and value is the <see cref="T:System.Type"/> of
-            the item.</returns>
         </member>
         <member name="T:NLog.Config.IInstallable">
             <summary>
@@ -2067,45 +2080,6 @@
             <summary>
             Attribute used to mark the required parameters for targets,
             layout targets and filters.
-            </summary>
-        </member>
-        <member name="T:NLog.Config.RuntimeOS">
-            <summary>
-            Supported operating systems.
-            </summary>
-            <remarks>
-            If you add anything here, make sure to add the appropriate detection
-            code to <see cref="T:NLog.Internal.PlatformDetector"/>
-            </remarks>
-        </member>
-        <member name="F:NLog.Config.RuntimeOS.Any">
-            <summary>
-            Any operating system.
-            </summary>
-        </member>
-        <member name="F:NLog.Config.RuntimeOS.Unix">
-            <summary>
-            Unix/Linux operating systems.
-            </summary>
-        </member>
-        <member name="F:NLog.Config.RuntimeOS.WindowsCE">
-            <summary>
-            Windows CE.
-            </summary>
-        </member>
-        <member name="F:NLog.Config.RuntimeOS.Windows">
-            <summary>
-            Desktop versions of Windows (95,98,ME).
-            </summary>
-        </member>
-        <member name="F:NLog.Config.RuntimeOS.WindowsNT">
-            <summary>
-            Windows NT, 2000, 2003 and future versions based on NT technology.
-            </summary>
-        </member>
-        <member name="F:NLog.Config.RuntimeOS.Unknown">
-            <summary>
-            Unknown operating system.
             </summary>
         </member>
         <member name="T:NLog.Config.SimpleConfigurator">
@@ -3322,6 +3296,18 @@
             A value of <c>true</c> if the specified level is enabled; otherwise, <c>false</c>.
             </returns>
         </member>
+        <member name="T:NLog.Internal.MessageBoxHelper">
+            <summary>
+            Message Box helper.
+            </summary>
+        </member>
+        <member name="M:NLog.Internal.MessageBoxHelper.Show(System.String,System.String)">
+            <summary>
+            Shows the specified message using platform-specific message box.
+            </summary>
+            <param name="message">The message.</param>
+            <param name="caption">The caption.</param>
+        </member>
         <member name="T:NLog.Internal.MultiFileWatcher">
             <summary>
             Watches multiple files at the same time and raises an event whenever 
@@ -3354,75 +3340,9 @@
             Supports mocking of SMTP Client code.
             </summary>
         </member>
-        <member name="M:NLog.Internal.MySmtpClient.Dispose">
+        <member name="T:NLog.Internal.NetworkSenders.HttpNetworkSender">
             <summary>
-            Sends a QUIT message to the SMTP server, gracefully ends the TCP connection, and releases all resources used by the current instance of the <see cref="T:System.Net.Mail.SmtpClient"/> class.
-            </summary>
-        </member>
-        <member name="M:NLog.Internal.MySmtpClient.NLog#Internal#ISmtpClient#get_Host">
-            <summary>
-            Supports mocking of SMTP Client code.
-            </summary>
-        </member>
-        <member name="M:NLog.Internal.MySmtpClient.NLog#Internal#ISmtpClient#set_Host(System.String)">
-            <summary>
-            Supports mocking of SMTP Client code.
-            </summary>
-        </member>
-        <member name="M:NLog.Internal.MySmtpClient.NLog#Internal#ISmtpClient#get_Port">
-            <summary>
-            Supports mocking of SMTP Client code.
-            </summary>
-        </member>
-        <member name="M:NLog.Internal.MySmtpClient.NLog#Internal#ISmtpClient#set_Port(System.Int32)">
-            <summary>
-            Supports mocking of SMTP Client code.
-            </summary>
-        </member>
-        <member name="M:NLog.Internal.MySmtpClient.NLog#Internal#ISmtpClient#get_Credentials">
-            <summary>
-            Supports mocking of SMTP Client code.
-            </summary>
-        </member>
-        <member name="M:NLog.Internal.MySmtpClient.NLog#Internal#ISmtpClient#set_Credentials(System.Net.ICredentialsByHost)">
-            <summary>
-            Supports mocking of SMTP Client code.
-            </summary>
-        </member>
-        <member name="M:NLog.Internal.MySmtpClient.NLog#Internal#ISmtpClient#get_EnableSsl">
-            <summary>
-            Supports mocking of SMTP Client code.
-            </summary>
-        </member>
-        <member name="M:NLog.Internal.MySmtpClient.NLog#Internal#ISmtpClient#set_EnableSsl(System.Boolean)">
-            <summary>
-            Supports mocking of SMTP Client code.
-            </summary>
-        </member>
-        <member name="M:NLog.Internal.MySmtpClient.NLog#Internal#ISmtpClient#Send(System.Net.Mail.MailMessage)">
-            <summary>
-            Supports mocking of SMTP Client code.
-            </summary>
-        </member>
-        <member name="T:NLog.Internal.NetworkSenders.INetworkSenderFactory">
-            <summary>
-            Creates instances of <see cref="T:NLog.Internal.NetworkSenders.NetworkSender"/> objects for given URLs.
-            </summary>
-        </member>
-        <member name="M:NLog.Internal.NetworkSenders.INetworkSenderFactory.Create(System.String)">
-            <summary>
-            Creates a new instance of the network sender based on a network URL.
-            </summary>
-            <param name="url">
-            URL that determines the network sender to be created.
-            </param>
-            <returns>
-            A newly created network sender.
-            </returns>
-        </member>
-        <member name="T:NLog.Internal.NetworkSenders.ISocket">
-            <summary>
-            Interface for mocking socket calls.
+            Network sender which uses HTTP or HTTPS POST.
             </summary>
         </member>
         <member name="T:NLog.Internal.NetworkSenders.NetworkSender">
@@ -3516,6 +3436,43 @@
         <member name="P:NLog.Internal.NetworkSenders.NetworkSender.LastSendTime">
             <summary>
             Gets the last send time.
+            </summary>
+        </member>
+        <member name="M:NLog.Internal.NetworkSenders.HttpNetworkSender.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:NLog.Internal.NetworkSenders.HttpNetworkSender"/> class.
+            </summary>
+            <param name="url">The network URL.</param>
+        </member>
+        <member name="M:NLog.Internal.NetworkSenders.HttpNetworkSender.DoSend(System.Byte[],System.Int32,System.Int32,NLog.Common.AsyncContinuation)">
+            <summary>
+            Actually sends the given text over the specified protocol.
+            </summary>
+            <param name="bytes">The bytes to be sent.</param>
+            <param name="offset">Offset in buffer.</param>
+            <param name="length">Number of bytes to send.</param>
+            <param name="asyncContinuation">The async continuation to be invoked after the buffer has been sent.</param>
+            <remarks>To be overridden in inheriting classes.</remarks>
+        </member>
+        <member name="T:NLog.Internal.NetworkSenders.INetworkSenderFactory">
+            <summary>
+            Creates instances of <see cref="T:NLog.Internal.NetworkSenders.NetworkSender"/> objects for given URLs.
+            </summary>
+        </member>
+        <member name="M:NLog.Internal.NetworkSenders.INetworkSenderFactory.Create(System.String)">
+            <summary>
+            Creates a new instance of the network sender based on a network URL.
+            </summary>
+            <param name="url">
+            URL that determines the network sender to be created.
+            </param>
+            <returns>
+            A newly created network sender.
+            </returns>
+        </member>
+        <member name="T:NLog.Internal.NetworkSenders.ISocket">
+            <summary>
+            Interface for mocking socket calls.
             </summary>
         </member>
         <member name="T:NLog.Internal.NetworkSenders.NetworkSenderFactory">
@@ -3808,6 +3765,69 @@
             <summary>
             Reflection helpers for accessing properties.
             </summary>
+        </member>
+        <member name="T:NLog.Internal.ReflectionHelpers">
+            <summary>
+            Reflection helpers.
+            </summary>
+        </member>
+        <member name="M:NLog.Internal.ReflectionHelpers.SafeGetTypes(System.Reflection.Assembly)">
+            <summary>
+            Gets all usable exported types from the given assembly.
+            </summary>
+            <param name="assembly">Assembly to scan.</param>
+            <returns>Usable types from the given assembly.</returns>
+            <remarks>Types which cannot be loaded are skipped.</remarks>
+        </member>
+        <member name="T:NLog.Internal.RuntimeOS">
+            <summary>
+            Supported operating systems.
+            </summary>
+            <remarks>
+            If you add anything here, make sure to add the appropriate detection
+            code to <see cref="T:NLog.Internal.PlatformDetector"/>
+            </remarks>
+        </member>
+        <member name="F:NLog.Internal.RuntimeOS.Any">
+            <summary>
+            Any operating system.
+            </summary>
+        </member>
+        <member name="F:NLog.Internal.RuntimeOS.Unix">
+            <summary>
+            Unix/Linux operating systems.
+            </summary>
+        </member>
+        <member name="F:NLog.Internal.RuntimeOS.WindowsCE">
+            <summary>
+            Windows CE.
+            </summary>
+        </member>
+        <member name="F:NLog.Internal.RuntimeOS.Windows">
+            <summary>
+            Desktop versions of Windows (95,98,ME).
+            </summary>
+        </member>
+        <member name="F:NLog.Internal.RuntimeOS.WindowsNT">
+            <summary>
+            Windows NT, 2000, 2003 and future versions based on NT technology.
+            </summary>
+        </member>
+        <member name="F:NLog.Internal.RuntimeOS.Unknown">
+            <summary>
+            Unknown operating system.
+            </summary>
+        </member>
+        <member name="T:NLog.Internal.SimpleStringReader">
+            <summary>
+            Simple character tokenizer.
+            </summary>
+        </member>
+        <member name="M:NLog.Internal.SimpleStringReader.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:NLog.Internal.SimpleStringReader"/> class.
+            </summary>
+            <param name="text">The text to be tokenized.</param>
         </member>
         <member name="T:NLog.Internal.SingleCallContinuation">
             <summary>
@@ -4276,6 +4296,12 @@
             </summary>
             <docgen category='Rendering Options' order='10' />
         </member>
+        <member name="P:NLog.LayoutRenderers.DateLayoutRenderer.UniversalTime">
+            <summary>
+            Gets or sets a value indicating whether to output UTC time instead of local time.
+            </summary>
+            <docgen category='Rendering Options' order='10' />
+        </member>
         <member name="T:NLog.LayoutRenderers.EnvironmentLayoutRenderer">
             <summary>
             The environment variable.
@@ -4338,9 +4364,30 @@
             </summary>
             <docgen category='Rendering Options' order='10' />
         </member>
+        <member name="P:NLog.LayoutRenderers.ExceptionLayoutRenderer.InnerFormat">
+            <summary>
+            Gets or sets the format of the output of inner exceptions. Must be a comma-separated list of exception
+            properties: Message, Type, ShortType, ToString, Method, StackTrace.
+            This parameter value is case-insensitive.
+            </summary>
+            <docgen category='Rendering Options' order='10' />
+        </member>
         <member name="P:NLog.LayoutRenderers.ExceptionLayoutRenderer.Separator">
             <summary>
             Gets or sets the separator used to concatenate parts specified in the Format.
+            </summary>
+            <docgen category='Rendering Options' order='10' />
+        </member>
+        <member name="P:NLog.LayoutRenderers.ExceptionLayoutRenderer.MaxInnerExceptionLevel">
+            <summary>
+            Gets or sets the maximum number of inner exceptions to include in the output.
+            By default inner exceptions are not enabled for compatibility with NLog 1.0.
+            </summary>
+            <docgen category='Rendering Options' order='10' />
+        </member>
+        <member name="P:NLog.LayoutRenderers.ExceptionLayoutRenderer.InnerExceptionSeparator">
+            <summary>
+            Gets or sets the separator between inner exceptions.
             </summary>
             <docgen category='Rendering Options' order='10' />
         </member>
@@ -4515,13 +4562,6 @@
             </summary>
             <docgen category='Rendering Options' order='10' />
         </member>
-        <member name="P:NLog.LayoutRenderers.IdentityLayoutRenderer.FSNormalize">
-            <summary>
-            Gets or sets a value indicating whether to modify the output of this renderer so it can be used as a part of file path
-            (illegal characters are replaced with '_').
-            </summary>
-            <docgen category='Advanced Options' order='10' />
-        </member>
         <member name="T:NLog.LayoutRenderers.InstallContextLayoutRenderer">
             <summary>
             Installation parameter (passed to InstallNLogConfig).
@@ -4656,6 +4696,12 @@
             </summary>
             <docgen category="Payload Options" order="10"/>
         </member>
+        <member name="P:NLog.LayoutRenderers.Log4JXmlEventLayoutRenderer.NdcItemSeparator">
+            <summary>
+            Gets or sets the NDC item separator.
+            </summary>
+            <docgen category='Payload Options' order='10' />
+        </member>
         <member name="P:NLog.LayoutRenderers.Log4JXmlEventLayoutRenderer.NLog#Internal#IUsesStackTrace#StackTraceUsage">
             <summary>
             Gets the level of stack trace information required by the implementing class.
@@ -4690,6 +4736,12 @@
             </summary>
             <param name="builder">The <see cref="T:System.Text.StringBuilder"/> to append the rendered data to.</param>
             <param name="logEvent">Logging event.</param>
+        </member>
+        <member name="P:NLog.LayoutRenderers.LongDateLayoutRenderer.UniversalTime">
+            <summary>
+            Gets or sets a value indicating whether to output UTC time instead of local time.
+            </summary>
+            <docgen category='Rendering Options' order='10' />
         </member>
         <member name="T:NLog.LayoutRenderers.MachineNameLayoutRenderer">
             <summary>
@@ -4731,12 +4783,29 @@
             The formatted log message.
             </summary>
         </member>
+        <member name="M:NLog.LayoutRenderers.MessageLayoutRenderer.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:NLog.LayoutRenderers.MessageLayoutRenderer"/> class.
+            </summary>
+        </member>
         <member name="M:NLog.LayoutRenderers.MessageLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
             <summary>
             Renders the log message including any positional parameters and appends it to the specified <see cref="T:System.Text.StringBuilder"/>.
             </summary>
             <param name="builder">The <see cref="T:System.Text.StringBuilder"/> to append the rendered data to.</param>
             <param name="logEvent">Logging event.</param>
+        </member>
+        <member name="P:NLog.LayoutRenderers.MessageLayoutRenderer.WithException">
+            <summary>
+            Gets or sets a value indicating whether to log exception along with message.
+            </summary>
+            <docgen category='Layout Options' order='10' />
+        </member>
+        <member name="P:NLog.LayoutRenderers.MessageLayoutRenderer.ExceptionSeparator">
+            <summary>
+            Gets or sets the string that separates message from the exception.
+            </summary>
+            <docgen category='Layout Options' order='10' />
         </member>
         <member name="T:NLog.LayoutRenderers.NdcLayoutRenderer">
             <summary>
@@ -5242,30 +5311,11 @@
             <param name="builder">The <see cref="T:System.Text.StringBuilder"/> to append the rendered data to.</param>
             <param name="logEvent">Logging event.</param>
         </member>
-        <member name="T:NLog.LayoutRenderers.SilverlightApplicationInfoOption">
+        <member name="P:NLog.LayoutRenderers.ShortDateLayoutRenderer.UniversalTime">
             <summary>
-            Specifies application information to display in ${sl-appinfo} renderer.
+            Gets or sets a value indicating whether to output UTC time instead of local time.
             </summary>
-        </member>
-        <member name="F:NLog.LayoutRenderers.SilverlightApplicationInfoOption.XapUri">
-            <summary>
-            URI of the current application XAP file.
-            </summary>
-        </member>
-        <member name="F:NLog.LayoutRenderers.SilverlightApplicationInfoOption.IsOutOfBrowser">
-            <summary>
-            Whether application is running out-of-browser.
-            </summary>
-        </member>
-        <member name="F:NLog.LayoutRenderers.SilverlightApplicationInfoOption.InstallState">
-            <summary>
-            Installed state of an application.
-            </summary>
-        </member>
-        <member name="F:NLog.LayoutRenderers.SilverlightApplicationInfoOption.HasElevatedPermissions">
-            <summary>
-            Whether application is running with elevated permissions.
-            </summary>
+            <docgen category='Rendering Options' order='10' />
         </member>
         <member name="T:NLog.LayoutRenderers.SpecialFolderLayoutRenderer">
             <summary>
@@ -5431,6 +5481,24 @@
             <param name="builder">The <see cref="T:System.Text.StringBuilder"/> to append the rendered data to.</param>
             <param name="logEvent">Logging event.</param>
         </member>
+        <member name="T:NLog.LayoutRenderers.TimeLayoutRenderer">
+            <summary>
+            The time in a 24-hour, sortable format HH:mm:ss.mmm.
+            </summary>
+        </member>
+        <member name="M:NLog.LayoutRenderers.TimeLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <summary>
+            Renders time in the 24-h format (HH:mm:ss.mmm) and appends it to the specified <see cref="T:System.Text.StringBuilder"/>.
+            </summary>
+            <param name="builder">The <see cref="T:System.Text.StringBuilder"/> to append the rendered data to.</param>
+            <param name="logEvent">Logging event.</param>
+        </member>
+        <member name="P:NLog.LayoutRenderers.TimeLayoutRenderer.UniversalTime">
+            <summary>
+            Gets or sets a value indicating whether to output UTC time instead of local time.
+            </summary>
+            <docgen category='Rendering Options' order='10' />
+        </member>
         <member name="T:NLog.LayoutRenderers.WindowsIdentityLayoutRenderer">
             <summary>
             Thread Windows identity information (username).
@@ -5538,6 +5606,30 @@
             </summary>
             <docgen category="Caching Options" order="10"/>
         </member>
+        <member name="T:NLog.LayoutRenderers.Wrappers.FileSystemNormalizeLayoutRendererWrapper">
+            <summary>
+            Filters characters not allowed in the file names by replacing them with safe character.
+            </summary>
+        </member>
+        <member name="M:NLog.LayoutRenderers.Wrappers.FileSystemNormalizeLayoutRendererWrapper.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:NLog.LayoutRenderers.Wrappers.FileSystemNormalizeLayoutRendererWrapper"/> class.
+            </summary>
+        </member>
+        <member name="M:NLog.LayoutRenderers.Wrappers.FileSystemNormalizeLayoutRendererWrapper.Transform(System.String)">
+            <summary>
+            Post-processes the rendered message. 
+            </summary>
+            <param name="text">The text to be post-processed.</param>
+            <returns>Padded and trimmed string.</returns>
+        </member>
+        <member name="P:NLog.LayoutRenderers.Wrappers.FileSystemNormalizeLayoutRendererWrapper.FSNormalize">
+            <summary>
+            Gets or sets a value indicating whether to modify the output of this renderer so it can be used as a part of file path
+            (illegal characters are replaced with '_').
+            </summary>
+            <docgen category='Advanced Options' order='10' />
+        </member>
         <member name="T:NLog.LayoutRenderers.Wrappers.LowercaseLayoutRendererWrapper">
             <summary>
             Converts the result of another layout output to lower case.
@@ -5567,6 +5659,27 @@
             Gets or sets the culture used for rendering. 
             </summary>
             <docgen category='Transformation Options' order='10' />
+        </member>
+        <member name="T:NLog.LayoutRenderers.Wrappers.OnExceptionLayoutRendererWrapper">
+            <summary>
+            Only outputs the inner layout when exception has been defined for log message.
+            </summary>
+        </member>
+        <member name="M:NLog.LayoutRenderers.Wrappers.OnExceptionLayoutRendererWrapper.Transform(System.String)">
+            <summary>
+            Transforms the output of another layout.
+            </summary>
+            <param name="text">Output to be transform.</param>
+            <returns>Transformed text.</returns>
+        </member>
+        <member name="M:NLog.LayoutRenderers.Wrappers.OnExceptionLayoutRendererWrapper.RenderInner(NLog.LogEventInfo)">
+            <summary>
+            Renders the inner layout contents.
+            </summary>
+            <param name="logEvent">The log event.</param>
+            <returns>
+            Contents of inner layout.
+            </returns>
         </member>
         <member name="T:NLog.LayoutRenderers.Wrappers.PaddingLayoutRendererWrapper">
             <summary>
@@ -5768,6 +5881,83 @@
             <value>A value of <c>true</c> if space should be translated to '+'; otherwise, <c>false</c>.</value>
             <docgen category='Transformation Options' order='10' />
         </member>
+        <member name="T:NLog.LayoutRenderers.Wrappers.WhenEmptyLayoutRendererWrapper">
+            <summary>
+            Outputs alternative layout when the inner layout produces empty result.
+            </summary>
+        </member>
+        <member name="M:NLog.LayoutRenderers.Wrappers.WhenEmptyLayoutRendererWrapper.Transform(System.String)">
+            <summary>
+            Transforms the output of another layout.
+            </summary>
+            <param name="text">Output to be transform.</param>
+            <returns>Transformed text.</returns>
+        </member>
+        <member name="M:NLog.LayoutRenderers.Wrappers.WhenEmptyLayoutRendererWrapper.RenderInner(NLog.LogEventInfo)">
+            <summary>
+            Renders the inner layout contents.
+            </summary>
+            <param name="logEvent">The log event.</param>
+            <returns>
+            Contents of inner layout.
+            </returns>
+        </member>
+        <member name="P:NLog.LayoutRenderers.Wrappers.WhenEmptyLayoutRendererWrapper.WhenEmpty">
+            <summary>
+            Gets or sets the layout to be rendered when original layout produced empty result.
+            </summary>
+            <docgen category="Transformation Options" order="10"/>
+        </member>
+        <member name="T:NLog.LayoutRenderers.Wrappers.WhenLayoutRendererWrapper">
+            <summary>
+            Only outputs the inner layout when the specified condition has been met.
+            </summary>
+        </member>
+        <member name="M:NLog.LayoutRenderers.Wrappers.WhenLayoutRendererWrapper.Transform(System.String)">
+            <summary>
+            Transforms the output of another layout.
+            </summary>
+            <param name="text">Output to be transform.</param>
+            <returns>Transformed text.</returns>
+        </member>
+        <member name="M:NLog.LayoutRenderers.Wrappers.WhenLayoutRendererWrapper.RenderInner(NLog.LogEventInfo)">
+            <summary>
+            Renders the inner layout contents.
+            </summary>
+            <param name="logEvent">The log event.</param>
+            <returns>
+            Contents of inner layout.
+            </returns>
+        </member>
+        <member name="P:NLog.LayoutRenderers.Wrappers.WhenLayoutRendererWrapper.When">
+            <summary>
+            Gets or sets the condition that must be met for the inner layout to be printed.
+            </summary>
+            <docgen category="Transformation Options" order="10"/>
+        </member>
+        <member name="T:NLog.LayoutRenderers.Wrappers.XmlEncodeLayoutRendererWrapper">
+            <summary>
+            Converts the result of another layout output to be XML-compliant.
+            </summary>
+        </member>
+        <member name="M:NLog.LayoutRenderers.Wrappers.XmlEncodeLayoutRendererWrapper.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:NLog.LayoutRenderers.Wrappers.XmlEncodeLayoutRendererWrapper"/> class.
+            </summary>
+        </member>
+        <member name="M:NLog.LayoutRenderers.Wrappers.XmlEncodeLayoutRendererWrapper.Transform(System.String)">
+            <summary>
+            Post-processes the rendered message. 
+            </summary>
+            <param name="text">The text to be post-processed.</param>
+            <returns>Padded and trimmed string.</returns>
+        </member>
+        <member name="P:NLog.LayoutRenderers.Wrappers.XmlEncodeLayoutRendererWrapper.XmlEncode">
+            <summary>
+            Gets or sets a value indicating whether to apply XML encoding.
+            </summary>
+            <docgen category="Transformation Options" order="10"/>
+        </member>
         <member name="T:NLog.Layouts.CsvColumn">
             <summary>
             A column in the CSV.
@@ -5937,18 +6127,6 @@
             Gets the logging configuration this target is part of.
             </summary>
         </member>
-        <member name="M:NLog.Layouts.LayoutWithHeaderAndFooter.Precalculate(NLog.LogEventInfo)">
-            <summary>
-            Precalculates the layout for the specified log event and stores the result
-            in per-log event cache.
-            </summary>
-            <param name="logEvent">The log event.</param>
-            <remarks>
-            Calling this method enables you to store the log event in a buffer
-            and/or potentially evaluate it in another thread even though the
-            layout may contain thread-dependent renderer.
-            </remarks>
-        </member>
         <member name="M:NLog.Layouts.LayoutWithHeaderAndFooter.GetFormattedMessage(NLog.LogEventInfo)">
             <summary>
             Renders the layout for the specified logging event by invoking layout renderers.
@@ -6082,17 +6260,6 @@
             <summary>
             Parses layout strings.
             </summary>
-        </member>
-        <member name="T:NLog.Layouts.LayoutParser.Tokenizer">
-            <summary>
-            Simple character tokenizer.
-            </summary>
-        </member>
-        <member name="M:NLog.Layouts.LayoutParser.Tokenizer.#ctor(System.String)">
-            <summary>
-            Initializes a new instance of the <see cref="T:NLog.Layouts.LayoutParser.Tokenizer"/> class.
-            </summary>
-            <param name="text">The text to be tokenized.</param>
         </member>
         <member name="T:NLog.Layouts.Log4JXmlEventLayout">
             <summary>
@@ -9481,11 +9648,6 @@
             </summary>
             <param name="result">The result.</param>
         </member>
-        <member name="T:NLog.LogReceiverService.ILogReceiverClientChannel">
-            <summary>
-            Log Receiver Client Channel.
-            </summary>
-        </member>
         <member name="T:NLog.LogReceiverService.ILogReceiverServer">
             <summary>
             Service contract for Log Receiver server.
@@ -9496,6 +9658,34 @@
             Processes the log messages.
             </summary>
             <param name="events">The events.</param>
+        </member>
+        <member name="T:NLog.LogReceiverService.LogReceiverForwardingService">
+            <summary>
+            Implementation of <see cref="T:NLog.LogReceiverService.ILogReceiverServer"/> which forwards received logs through <see cref="T:NLog.LogManager"/> or a given <see cref="T:NLog.LogFactory"/>.
+            </summary>
+        </member>
+        <member name="M:NLog.LogReceiverService.LogReceiverForwardingService.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:NLog.LogReceiverService.LogReceiverForwardingService"/> class.
+            </summary>
+        </member>
+        <member name="M:NLog.LogReceiverService.LogReceiverForwardingService.#ctor(NLog.LogFactory)">
+            <summary>
+            Initializes a new instance of the <see cref="T:NLog.LogReceiverService.LogReceiverForwardingService"/> class.
+            </summary>
+            <param name="logFactory">The log factory.</param>
+        </member>
+        <member name="M:NLog.LogReceiverService.LogReceiverForwardingService.ProcessLogMessages(NLog.LogReceiverService.NLogEvents)">
+            <summary>
+            Processes the log messages.
+            </summary>
+            <param name="events">The events to process.</param>
+        </member>
+        <member name="M:NLog.LogReceiverService.LogReceiverForwardingService.ProcessLogMessages(NLog.LogEventInfo[])">
+            <summary>
+            Processes the log messages.
+            </summary>
+            <param name="logEvents">The log events.</param>
         </member>
         <member name="T:NLog.LogReceiverService.LogReceiverServiceConfig">
             <summary>
@@ -10518,6 +10708,12 @@
             </summary>
             <docgen category="Payload Options" order="10"/>
         </member>
+        <member name="P:NLog.Targets.NLogViewerTarget.NdcItemSeparator">
+            <summary>
+            Gets or sets the NDC item separator.
+            </summary>
+            <docgen category='Payload Options' order='10' />
+        </member>
         <member name="P:NLog.Targets.NLogViewerTarget.Parameters">
             <summary>
             Gets the collection of parameters. Each parameter contains a mapping
@@ -10534,6 +10730,7 @@
             <summary>
             Gets or sets the instance of <see cref="T:NLog.Layouts.Log4JXmlEventLayout"/> that is used to format log messages.
             </summary>
+            <docgen category="Layout Options" order="10"/>
         </member>
         <member name="M:NLog.Targets.ChainsawTarget.#ctor">
             <summary>
@@ -11837,6 +12034,14 @@
             Initializes a new instance of the <see cref="T:NLog.Targets.LogReceiverWebServiceTarget"/> class.
             </summary>
         </member>
+        <member name="M:NLog.Targets.LogReceiverWebServiceTarget.OnSend(NLog.LogReceiverService.NLogEvents,System.Collections.Generic.IEnumerable{NLog.Common.AsyncLogEventInfo})">
+            <summary>
+            Called when log events are being sent (test hook).
+            </summary>
+            <param name="events">The events.</param>
+            <param name="asyncContinuations">The async continuations.</param>
+            <returns>True if events should be sent, false to stop processing them.</returns>
+        </member>
         <member name="M:NLog.Targets.LogReceiverWebServiceTarget.Write(NLog.Common.AsyncLogEventInfo)">
             <summary>
             Writes logging event to the log target. Must be overridden in inheriting
@@ -11884,6 +12089,12 @@
             Gets the list of parameters.
             </summary>
             <value>The parameters.</value>
+            <docgen category='Payload Options' order='10' />
+        </member>
+        <member name="P:NLog.Targets.LogReceiverWebServiceTarget.IncludeEventProperties">
+            <summary>
+            Gets or sets a value indicating whether to include per-event properties in the payload sent to the server.
+            </summary>
             <docgen category='Payload Options' order='10' />
         </member>
         <member name="T:NLog.Targets.MailTarget">
@@ -12206,13 +12417,20 @@
             Initializes a new instance of the <see cref="T:NLog.Targets.MethodCallTargetBase"/> class.
             </summary>
         </member>
-        <member name="M:NLog.Targets.MethodCallTargetBase.Write(NLog.LogEventInfo)">
+        <member name="M:NLog.Targets.MethodCallTargetBase.Write(NLog.Common.AsyncLogEventInfo)">
             <summary>
             Prepares an array of parameters to be passed based on the logging event and calls DoInvoke().
             </summary>
             <param name="logEvent">
             The logging event.
             </param>
+        </member>
+        <member name="M:NLog.Targets.MethodCallTargetBase.DoInvoke(System.Object[],NLog.Common.AsyncContinuation)">
+            <summary>
+            Calls the target method. Must be implemented in concrete classes.
+            </summary>
+            <param name="parameters">Method call parameters.</param>
+            <param name="continuation">The continuation.</param>
         </member>
         <member name="M:NLog.Targets.MethodCallTargetBase.DoInvoke(System.Object[])">
             <summary>
@@ -12914,9 +13132,16 @@
         </member>
         <member name="M:NLog.Targets.WebServiceTarget.DoInvoke(System.Object[])">
             <summary>
+            Calls the target method. Must be implemented in concrete classes.
+            </summary>
+            <param name="parameters">Method call parameters.</param>
+        </member>
+        <member name="M:NLog.Targets.WebServiceTarget.DoInvoke(System.Object[],NLog.Common.AsyncContinuation)">
+            <summary>
             Invokes the web service method.
             </summary>
             <param name="parameters">Parameters to be passed.</param>
+            <param name="continuation">The continuation.</param>
         </member>
         <member name="P:NLog.Targets.WebServiceTarget.Url">
             <summary>
@@ -12939,6 +13164,12 @@
         <member name="P:NLog.Targets.WebServiceTarget.Protocol">
             <summary>
             Gets or sets the protocol to be used when calling web service.
+            </summary>
+            <docgen category='Web Service Options' order='10' />
+        </member>
+        <member name="P:NLog.Targets.WebServiceTarget.Encoding">
+            <summary>
+            Gets or sets the encoding.
             </summary>
             <docgen category='Web Service Options' order='10' />
         </member>
