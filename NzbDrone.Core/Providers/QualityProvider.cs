@@ -4,6 +4,7 @@ using System.Linq;
 using Ninject;
 using NLog;
 using NzbDrone.Core.Repository.Quality;
+using PetaPoco;
 using SubSonic.Repository;
 
 namespace NzbDrone.Core.Providers
@@ -11,49 +12,49 @@ namespace NzbDrone.Core.Providers
     public class QualityProvider
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private readonly IRepository _repository;
+        private readonly IDatabase _database;
 
         public QualityProvider()
         {
         }
 
         [Inject]
-        public QualityProvider(IRepository repository)
+        public QualityProvider(IDatabase database)
         {
-            _repository = repository;
+            _database = database;
         }
 
         public virtual int Add(QualityProfile profile)
         {
-            return Convert.ToInt32(_repository.Add(profile));
+            return Convert.ToInt32(_database.Insert(profile));
         }
 
         public virtual void Update(QualityProfile profile)
         {
-            if (!_repository.Exists<QualityProfile>(q => q.QualityProfileId == profile.QualityProfileId))
+            if (!_database.Exists<QualityProfile>("WHERE QualityProfileid = @0", profile.QualityProfileId))
             {
                 Logger.Error("Unable to update non-existing profile");
                 throw new InvalidOperationException("Unable to update non-existing profile");
             }
 
-            _repository.Update(profile);
+            _database.Update(profile);
         }
 
         public virtual void Delete(int profileId)
         {
-            _repository.Delete<QualityProfile>(profileId);
+            _database.Delete<QualityProfile>(profileId);
         }
 
         public virtual List<QualityProfile> GetAllProfiles()
         {
-            var profiles = _repository.All<QualityProfile>().ToList();
+            var profiles = _database.Fetch<QualityProfile>().ToList();
 
             return profiles;
         }
 
         public virtual QualityProfile Find(int profileId)
         {
-            return _repository.Single<QualityProfile>(q => q.QualityProfileId == profileId);
+            return _database.SingleOrDefault<QualityProfile>(profileId);
         }
 
         public virtual void SetupDefaultProfiles()

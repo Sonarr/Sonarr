@@ -93,7 +93,7 @@ namespace NzbDrone.Core.Datastore.Migrations
 
             Database.AddTable("History", "SQLite", new[]
                                                             {
-                                                                new Column("HistoryId", DbType.Int64, ColumnProperty.NotNull),
+                                                                new Column("HistoryId", DbType.Int64, ColumnProperty.PrimaryKey),
                                                                 new Column("EpisodeId", DbType.Int32, ColumnProperty.NotNull),
                                                                 new Column("SeriesId", DbType.Int32, ColumnProperty.NotNull),
                                                                 new Column("NzbTitle", DbType.String, ColumnProperty.NotNull),
@@ -127,6 +127,14 @@ namespace NzbDrone.Core.Datastore.Migrations
                                                                 new Column("LastExecution", DbType.DateTime, ColumnProperty.NotNull),
                                                                 new Column("Success", DbType.Boolean, ColumnProperty.NotNull)
                                                             });
+
+            Database.AddTable("QualityProfiles", "SQLite", new[]
+                                                      {
+                                                          new Column("QualityProfileId", DbType.Int32, ColumnProperty.PrimaryKey),
+                                                          new Column("Name", DbType.String, ColumnProperty.NotNull),
+                                                          new Column("Cutoff", DbType.Int32, ColumnProperty.NotNull),
+                                                          new Column("SonicAllowed", DbType.String, ColumnProperty.NotNull),
+                                                      });
         }
 
         public override void Down()

@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Test
         public void Test_Storage()
         {
             //Arrange
-            var repo = MockLib.GetEmptyRepository();
+            var database = MockLib.GetEmptyDatabase();
             var testProfile = new QualityProfile
                                   {
                                       Name = Guid.NewGuid().ToString(),
@@ -31,8 +31,8 @@ namespace NzbDrone.Core.Test
                                   };
 
             //Act
-            var id = (int)repo.Add(testProfile);
-            var fetch = repo.Single<QualityProfile>(c => c.QualityProfileId == id);
+            var id = Convert.ToInt32(database.Insert(testProfile));
+            var fetch = database.SingleOrDefault<QualityProfile>(id);
 
             //Assert
             Assert.AreEqual(id, fetch.QualityProfileId);
@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Test
         public void Test_Series_Quality()
         {
             //Arrange
-            var repo = MockLib.GetEmptyRepository();
+            var database = MockLib.GetEmptyDatabase();
 
             var testProfile = new QualityProfile
                                   {
@@ -55,21 +55,20 @@ namespace NzbDrone.Core.Test
                                   };
 
 
-            var profileId = (int)repo.Add(testProfile);
+            var profileId = Convert.ToInt32(database.Insert(testProfile));
 
             var series = Builder<Series>.CreateNew().Build();
             series.QualityProfileId = profileId;
 
-            repo.Add(testProfile);
-            repo.Add(series);
+            database.Insert(testProfile);
+            database.Insert(series);
 
-            var result = repo.All<Series>();
-
+            var result = database.Fetch<Series>();
 
             result.Should().HaveCount(1);
-            Assert.AreEqual(result.ToList()[0].QualityProfile.Name, testProfile.Name);
-
-            //Act
+            var profile = database.SingleOrDefault<QualityProfile>(result[0].QualityProfileId);
+            Assert.AreEqual(profileId, result[0].QualityProfileId);
+            Assert.AreEqual(testProfile.Name, profile.Name);
         }
     }
 }

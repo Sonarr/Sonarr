@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using PetaPoco;
 using SubSonic.SqlGeneration.Schema;
 
 namespace NzbDrone.Core.Repository.Quality
 {
+    [TableName("QualityProfiles")]
+    [PrimaryKey("QualityProfileId", autoIncrement = true)]
     public class QualityProfile
     {
         [SubSonicPrimaryKey]
@@ -16,10 +19,12 @@ namespace NzbDrone.Core.Repository.Quality
         [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string Name { get; set; }
 
+        [Ignore]
         [SubSonicIgnore]
         [DisplayName("Allowed Qualities")]
         public List<QualityTypes> Allowed { get; set; }
 
+        [Ignore]
         [SubSonicIgnore]
         [DisplayName("Allowed Qualities String")]
         [DisplayFormat(ConvertEmptyStringToNull = false)]
@@ -54,6 +59,7 @@ namespace NzbDrone.Core.Repository.Quality
             }
         }
 
+        [Ignore]
         [SubSonicToManyRelation]
         public virtual List<Series> Series { get; private set; }
     }
