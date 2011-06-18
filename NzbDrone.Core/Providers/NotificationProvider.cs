@@ -7,12 +7,12 @@ namespace NzbDrone.Core.Providers
 {
     public class NotificationProvider
     {
-        private readonly Dictionary<Guid, BasicNotification> _basicNotifications =
+        private static readonly Dictionary<Guid, BasicNotification> _basicNotifications =
             new Dictionary<Guid, BasicNotification>();
 
-        private readonly Object _lock = new object();
+        private static readonly Object _lock = new object();
 
-        private readonly Dictionary<Guid, ProgressNotification> _progressNotification =
+        private static readonly Dictionary<Guid, ProgressNotification> _progressNotification =
             new Dictionary<Guid, ProgressNotification>();
 
         public virtual List<BasicNotification> BasicNotifications

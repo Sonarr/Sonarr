@@ -70,7 +70,7 @@ namespace NzbDrone.Core.Test
             .With(e => e.AirDate = DateTime.Now.AddDays(offsetDays))
                 .With(e => e.Ignored = ignored)
                 .With(e => e.EpisodeFileId = 0)
-                .With(e => e.GrabDate = DateTime.Now.AddDays(-1))
+                .With(e => e.GrabDate = DateTime.Now.AddHours(22))
                 .Build();
 
             if (hasEpisodes)
