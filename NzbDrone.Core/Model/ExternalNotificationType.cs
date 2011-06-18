@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace NzbDrone.Core.Model
+﻿namespace NzbDrone.Core.Model
 {
     public enum ExternalNotificationType
     {

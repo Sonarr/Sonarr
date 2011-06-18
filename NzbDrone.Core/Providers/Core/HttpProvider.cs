@@ -3,7 +3,6 @@ using System.IO;
 using System.Net;
 using NLog;
 
-
 namespace NzbDrone.Core.Providers.Core
 {
     public class HttpProvider

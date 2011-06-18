@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NzbDrone.Core.Repository.Quality;
 
 namespace NzbDrone.Core.Model
@@ -22,19 +19,19 @@ namespace NzbDrone.Core.Model
 
         public int CompareTo(Quality other)
         {
-            if (other.QualityType > this.QualityType)
+            if (other.QualityType > QualityType)
                 return -1;
 
-            if (other.QualityType < this.QualityType)
+            if (other.QualityType < QualityType)
                 return 1;
 
-            if (other.QualityType == this.QualityType && other.Proper == this.Proper)
+            if (other.QualityType == QualityType && other.Proper == Proper)
                 return 0;
 
-            if (this.Proper && !other.Proper)
+            if (Proper && !other.Proper)
                 return 1;
 
-            if (!this.Proper && other.Proper)
+            if (!Proper && other.Proper)
                 return -1;
 
             return 0;

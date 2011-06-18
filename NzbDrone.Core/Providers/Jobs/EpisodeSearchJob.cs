@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Ninject;
 using NLog;
-using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
-using NzbDrone.Core.Providers.Indexer;
 using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Providers.Jobs

@@ -114,7 +114,7 @@ namespace NzbDrone.Core.Providers
                 return GetSeries(seriesId.Value);
             }
 
-            return _database.Single<Series>("WHERE CleanTitle = @0", normalizeTitle);
+            return _database.FirstOrDefault<Series>("WHERE CleanTitle = @0", normalizeTitle);
         }
 
         public virtual void UpdateSeries(Series series)

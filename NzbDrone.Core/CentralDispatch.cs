@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Web.Hosting;
 using Ninject;
 using NLog;
@@ -12,7 +12,6 @@ using NzbDrone.Core.Providers.ExternalNotification;
 using NzbDrone.Core.Providers.Indexer;
 using NzbDrone.Core.Providers.Jobs;
 using PetaPoco;
-using SubSonic.Repository;
 
 namespace NzbDrone.Core
 {
@@ -71,8 +70,6 @@ namespace NzbDrone.Core
                 _kernel.Bind<IDatabase>().ToMethod(c => Connection.GetPetaPocoDb(Connection.MainConnectionString)).InRequestScope();
                 _kernel.Bind<IDatabase>().ToMethod(c => Connection.GetPetaPocoDb(Connection.LogConnectionString)).WhenInjectedInto<SubsonicTarget>().InSingletonScope();
                 _kernel.Bind<IDatabase>().ToMethod(c => Connection.GetPetaPocoDb(Connection.LogConnectionString)).WhenInjectedInto<LogProvider>().InRequestScope();
-
-                _kernel.Bind<IRepository>().ToConstant(Connection.CreateSimpleRepository(Connection.MainConnectionString)).InSingletonScope();
             }
         }
 

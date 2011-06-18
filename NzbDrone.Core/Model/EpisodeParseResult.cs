@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using NzbDrone.Core.Repository;
-using NzbDrone.Core.Repository.Quality;
 
 namespace NzbDrone.Core.Model
 {

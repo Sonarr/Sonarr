@@ -4,10 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
-using System.Text;
 using System.Text.RegularExpressions;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Providers.Core;
 
 namespace NzbDrone.Core.Providers
 {

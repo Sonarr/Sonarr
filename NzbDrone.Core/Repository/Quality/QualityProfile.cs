@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using PetaPoco;
-using SubSonic.SqlGeneration.Schema;
 
 namespace NzbDrone.Core.Repository.Quality
 {
@@ -11,7 +10,7 @@ namespace NzbDrone.Core.Repository.Quality
     [PrimaryKey("QualityProfileId", autoIncrement = true)]
     public class QualityProfile
     {
-        [SubSonicPrimaryKey]
+
         public virtual int QualityProfileId { get; set; }
 
         [Required(ErrorMessage = "A Name is Required")]
@@ -20,12 +19,10 @@ namespace NzbDrone.Core.Repository.Quality
         public string Name { get; set; }
 
         [Ignore]
-        [SubSonicIgnore]
         [DisplayName("Allowed Qualities")]
         public List<QualityTypes> Allowed { get; set; }
 
         [Ignore]
-        [SubSonicIgnore]
         [DisplayName("Allowed Qualities String")]
         [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string AllowedString { get; set; }
@@ -60,7 +57,7 @@ namespace NzbDrone.Core.Repository.Quality
         }
 
         [Ignore]
-        [SubSonicToManyRelation]
+
         public virtual List<Series> Series { get; private set; }
     }
 }

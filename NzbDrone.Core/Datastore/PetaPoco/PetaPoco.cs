@@ -13,16 +13,17 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Configuration;
-using System.Data.Common;
 using System.Data;
-using System.Text.RegularExpressions;
+using System.Data.Common;
+using System.Diagnostics;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Linq.Expressions;
-
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace PetaPoco
 {
@@ -485,12 +486,12 @@ namespace PetaPoco
                 }
 
                 // Expand collections to parameter lists
-                if ((arg_val as System.Collections.IEnumerable) != null &&
+                if ((arg_val as IEnumerable) != null &&
                     (arg_val as string) == null &&
                     (arg_val as byte[]) == null)
                 {
                     var sb = new StringBuilder();
-                    foreach (var i in arg_val as System.Collections.IEnumerable)
+                    foreach (var i in arg_val as IEnumerable)
                     {
                         sb.Append((sb.Length == 0 ? "@" : ",@") + args_dest.Count.ToString());
                         args_dest.Add(i);
@@ -510,9 +511,9 @@ namespace PetaPoco
         void AddParam(IDbCommand cmd, object item, string ParameterPrefix)
         {
             // Convert value to from poco type to db type
-            if (Database.Mapper != null && item != null)
+            if (Mapper != null && item != null)
             {
-                var fn = Database.Mapper.GetToDbConverter(item.GetType());
+                var fn = Mapper.GetToDbConverter(item.GetType());
                 if (fn != null)
                     item = fn(item);
             }
@@ -625,8 +626,8 @@ namespace PetaPoco
         // Override this to log/capture exceptions
         public virtual void OnException(Exception x)
         {
-            System.Diagnostics.Debug.WriteLine(x.ToString());
-            System.Diagnostics.Debug.WriteLine(LastCommand);
+            Debug.WriteLine(x.ToString());
+            Debug.WriteLine(LastCommand);
         }
 
         // Override this to log commands, or modify command before execution
@@ -1120,7 +1121,7 @@ namespace PetaPoco
         // Various cached stuff
         static Dictionary<string, object> MultiPocoFactories = new Dictionary<string, object>();
         static Dictionary<string, object> AutoMappers = new Dictionary<string, object>();
-        static System.Threading.ReaderWriterLockSlim RWLock = new System.Threading.ReaderWriterLockSlim();
+        static ReaderWriterLockSlim RWLock = new ReaderWriterLockSlim();
 
         // Get (or create) the multi-poco factory for a query
         Func<IDataReader, object, TRet> GetMultiPocoFactory<TRet>(Type[] types, string sql, IDataReader r)
@@ -1954,7 +1955,7 @@ namespace PetaPoco
 #endif
                 return ForType(t);
             }
-            static System.Threading.ReaderWriterLockSlim RWLock = new System.Threading.ReaderWriterLockSlim();
+            static ReaderWriterLockSlim RWLock = new ReaderWriterLockSlim();
             public static PocoData ForType(Type t)
             {
 #if !PETAPOCO_NO_DYNAMIC
@@ -2018,8 +2019,8 @@ namespace PetaPoco
                 TableInfo.AutoIncrement = TableInfo.AutoIncrement ? !TableInfo.PrimaryKey.Contains(',') : TableInfo.AutoIncrement;
 
                 // Call column mapper
-                if (Database.Mapper != null)
-                    Database.Mapper.GetTableInfo(t, TableInfo);
+                if (Mapper != null)
+                    Mapper.GetTableInfo(t, TableInfo);
 
                 // Work out bound properties
                 bool ExplicitColumns = t.GetCustomAttributes(typeof(ExplicitColumnsAttribute), true).Length > 0;
@@ -2055,7 +2056,7 @@ namespace PetaPoco
                     if (pc.ColumnName == null)
                     {
                         pc.ColumnName = pi.Name;
-                        if (Database.Mapper != null && !Database.Mapper.MapPropertyToColumn(pi, ref pc.ColumnName, ref pc.ResultColumn))
+                        if (Mapper != null && !Mapper.MapPropertyToColumn(pi, ref pc.ColumnName, ref pc.ResultColumn))
                             continue;
                     }
 
@@ -2307,12 +2308,12 @@ namespace PetaPoco
                 Func<object, object> converter = null;
 
                 // Get converter from the mapper
-                if (Database.Mapper != null)
+                if (Mapper != null)
                 {
                     DestinationInfo destinationInfo = pc != null
                                                           ? new DestinationInfo(pc.PropertyInfo)
                                                           : new DestinationInfo(dstType);
-                    converter = Database.Mapper.GetFromDbConverter(destinationInfo, srcType);
+                    converter = Mapper.GetFromDbConverter(destinationInfo, srcType);
                 }
 
                 // Standard DateTime->Utc mapper

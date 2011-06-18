@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Test
         private readonly List<int> seriesIds = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
         private readonly List<Episode> episodes = new List<Episode>();
         private readonly List<EpisodeFile> files = new List<EpisodeFile>();
-        private readonly IRepository repo = MockLib.GetEmptyRepository();
+
 
         [TestFixtureSetUp]
         public new void Setup()
@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Test
                     .With(s => s.Monitored = true)
                     .Build();
 
-                repo.Add(series);
+                //repo.Add(series);
 
                 foreach (var _seasonNumber in seasonsNumbers)
                 {
@@ -83,8 +83,8 @@ namespace NzbDrone.Core.Test
 
             }
 
-            repo.AddMany(episodes);
-            repo.AddMany(files);
+            //repo.AddMany(episodes);
+            //repo.AddMany(files);
         }
 
 
@@ -140,7 +140,7 @@ namespace NzbDrone.Core.Test
         public void get_episode_file_count_x100()
         {
             var mocker = new AutoMoq.AutoMoqer();
-            mocker.SetConstant(repo);
+            //mocker.SetConstant(repo);
             mocker.SetConstant(mocker.Resolve<EpisodeProvider>());
             var mediaProvider = mocker.Resolve<MediaFileProvider>();
 
@@ -168,7 +168,7 @@ namespace NzbDrone.Core.Test
         public void get_season_count_x5000()
         {
             var mocker = new AutoMoq.AutoMoqer();
-            mocker.SetConstant(repo);
+            //mocker.SetConstant(repo);
             var provider = mocker.Resolve<EpisodeProvider>();
 
 
@@ -195,7 +195,7 @@ namespace NzbDrone.Core.Test
         public void get_episode_file_count_x10()
         {
             var mocker = new AutoMoq.AutoMoqer();
-            mocker.SetConstant(repo);
+            //mocker.SetConstant(repo);
             mocker.SetConstant(mocker.Resolve<EpisodeProvider>());
             var provider = mocker.Resolve<MediaFileProvider>();
 

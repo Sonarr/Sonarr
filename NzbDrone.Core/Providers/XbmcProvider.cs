@@ -4,7 +4,6 @@ using System.Linq;
 using System.Xml.Linq;
 using Ninject;
 using NLog;
-using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Providers.Core;
 
 namespace NzbDrone.Core.Providers

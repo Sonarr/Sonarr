@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
 using System.ServiceModel.Syndication;
 using Ninject;
-using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
-using NzbDrone.Core.Providers.ExternalNotification;
-using SubSonic.Repository;
 
 namespace NzbDrone.Core.Providers.Indexer
 {

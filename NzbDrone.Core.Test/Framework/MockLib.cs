@@ -37,32 +37,6 @@ namespace NzbDrone.Core.Test.Framework
         }
 
 
-        public static IRepository GetEmptyRepository(bool enableLogging = false, string fileName = "")
-        {
-            Console.WriteLine("Creating an empty Subsonic repository");
-
-            if (String.IsNullOrWhiteSpace(fileName))
-            {
-                fileName = Guid.NewGuid() + ".db";
-            }
-
-
-            var provider = Connection.GetDataProvider(Connection.GetConnectionString(fileName));
-            var repo = Connection.CreateSimpleRepository(provider);
-            ForceMigration(repo);
-
-            //Migrations.Run(Connection.GetConnectionString(fileName), false);
-
-            if (enableLogging)
-            {
-                provider.Log = new NlogWriter();
-            }
-            Console.WriteLine("**********************************************************************************");
-            Console.WriteLine("*****************************REPO IS READY****************************************");
-            Console.WriteLine("**********************************************************************************");
-            return repo;
-        }
-
         public static IDatabase GetEmptyDatabase(bool enableLogging = false, string fileName = "")
         {
             Console.WriteLine("Creating an empty PetaPoco database");
@@ -71,9 +45,9 @@ namespace NzbDrone.Core.Test.Framework
             {
                 fileName = Guid.NewGuid() + ".db";
             }
-            
+
             var connectionString = Connection.GetConnectionString(fileName);
-          
+
             var database = Connection.GetPetaPocoDb(connectionString);
 
             return database;

@@ -5,7 +5,6 @@ using Ninject;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository;
 using PetaPoco;
-using SubSonic.Repository;
 
 namespace NzbDrone.Core.Providers
 {

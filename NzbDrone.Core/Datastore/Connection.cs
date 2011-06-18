@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Data;
-using System.Data.Common;
 using System.Data.SQLite;
 using System.IO;
 using MvcMiniProfiler.Data;
 using PetaPoco;
-using SubSonic.DataProviders;
-using SubSonic.DataProviders.SQLite;
-using SubSonic.Repository;
 
 namespace NzbDrone.Core.Datastore
 {
@@ -42,21 +38,7 @@ namespace NzbDrone.Core.Datastore
             }
         }
 
-        public static IDataProvider GetDataProvider(string connectionString)
-        {
-            return new ProfiledSQLiteProvider(connectionString, "System.Data.SQLite");
-        }
-
-        public static IRepository CreateSimpleRepository(IDataProvider dataProvider)
-        {
-            return new SimpleRepository(dataProvider, SimpleRepositoryOptions.RunMigrations);
-        }
-
-        public static IRepository CreateSimpleRepository(string connectionString)
-        {
-            return new SimpleRepository(GetDataProvider(connectionString), SimpleRepositoryOptions.RunMigrations);
-        }
-
+        
         public static IDatabase GetPetaPocoDb(string connectionString)
         {
             MigrationsHelper.Run(connectionString, true);
@@ -72,21 +54,5 @@ namespace NzbDrone.Core.Datastore
             return db;
         }
 
-    }
-
-
-    public class ProfiledSQLiteProvider : SQLiteProvider
-    {
-        public ProfiledSQLiteProvider(string connectionString, string providerName)
-            : base(connectionString, providerName)
-        {
-
-        }
-
-        public override System.Data.Common.DbConnection CreateConnection(string connectionString)
-        {
-            return ProfiledDbConnection.Get(base.CreateConnection(connectionString));
-
-        }
     }
 }

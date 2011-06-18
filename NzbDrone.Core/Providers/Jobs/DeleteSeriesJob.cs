@@ -1,11 +1,7 @@
 ﻿using System;
-using System.IO;
-using System.Linq;
 using Ninject;
 using NLog;
 using NzbDrone.Core.Model.Notification;
-using NzbDrone.Core.Repository;
-using SubSonic.Repository;
 
 namespace NzbDrone.Core.Providers.Jobs
 {

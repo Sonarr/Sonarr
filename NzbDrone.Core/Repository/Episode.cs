@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using NzbDrone.Core.Model;
 using PetaPoco;
-using SubSonic.SqlGeneration.Schema;
-
 
 namespace NzbDrone.Core.Repository
 {
@@ -11,7 +9,7 @@ namespace NzbDrone.Core.Repository
     [PrimaryKey("EpisodeId", autoIncrement = true)]
     public class Episode
     {
-        [SubSonicPrimaryKey]
+
         public virtual int EpisodeId { get; set; }
 
         public virtual int? TvDbEpisodeId { get; set; }
@@ -23,12 +21,11 @@ namespace NzbDrone.Core.Repository
         public virtual string Title { get; set; }
         public virtual DateTime AirDate { get; set; }
 
-        [SubSonicLongString]
+
         public virtual string Overview { get; set; }
 
         public virtual Boolean Ignored { get; set; }
 
-        [SubSonicIgnore]
         [Ignore]
         public Boolean IsDailyEpisode
         {
@@ -47,7 +44,7 @@ namespace NzbDrone.Core.Repository
         /// </remarks>
         public virtual DateTime? GrabDate { get; set; }
 
-        [SubSonicIgnore]
+
         [Ignore]
         public EpisodeStatusType Status
         {
@@ -72,15 +69,15 @@ namespace NzbDrone.Core.Repository
             }
         }
 
-        [SubSonicToOneRelation(ThisClassContainsJoinKey = true)]
+
         [Ignore]
         public virtual Series Series { get; set; }
 
-        [SubSonicToOneRelation(ThisClassContainsJoinKey = true)]
+
         [Ignore]
         public virtual EpisodeFile EpisodeFile { get; set; }
 
-        [SubSonicToManyRelation]
+
         [Ignore]
         public virtual IList<History> Histories { get; protected set; }
 

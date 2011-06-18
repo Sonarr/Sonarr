@@ -1,7 +1,4 @@
-﻿using System.Linq;
-using System.Collections.Generic;
-using NzbDrone.Core.Model.Notification;
-using NzbDrone.Core.Repository;
+﻿using NzbDrone.Core.Model.Notification;
 
 namespace NzbDrone.Core.Providers.Jobs
 {

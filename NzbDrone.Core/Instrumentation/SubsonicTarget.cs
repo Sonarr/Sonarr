@@ -2,7 +2,6 @@
 using NLog;
 using NLog.Targets;
 using PetaPoco;
-using SubSonic.Repository;
 
 namespace NzbDrone.Core.Instrumentation
 {
