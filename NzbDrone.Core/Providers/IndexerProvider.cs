@@ -5,21 +5,21 @@ using Ninject;
 using NLog;
 using NzbDrone.Core.Providers.Indexer;
 using NzbDrone.Core.Repository;
-using SubSonic.Repository;
+using PetaPoco;
 
 namespace NzbDrone.Core.Providers
 {
     public class IndexerProvider
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private readonly IRepository _repository;
+        private readonly IDatabase _database;
 
         private IList<IndexerBase> _indexers = new List<IndexerBase>();
 
         [Inject]
-        public IndexerProvider(IRepository repository)
+        public IndexerProvider(IDatabase database)
         {
-            _repository = repository;
+            _database = database;
         }
 
         public IndexerProvider()
@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual List<IndexerSetting> GetAllISettings()
         {
-            return _repository.All<IndexerSetting>().ToList();
+            return _database.Fetch<IndexerSetting>();
         }
 
         public virtual void SaveSettings(IndexerSetting settings)
@@ -43,18 +43,18 @@ namespace NzbDrone.Core.Providers
             if (settings.Id == 0)
             {
                 Logger.Debug("Adding Indexer settings for {0}", settings.Name);
-                _repository.Add(settings);
+                _database.Insert(settings);
             }
             else
             {
                 Logger.Debug("Updating Indexer settings for {0}", settings.Name);
-                _repository.Update(settings);
+                _database.Update(settings);
             }
         }
 
         public virtual IndexerSetting GetSettings(Type type)
         {
-            return _repository.Single<IndexerSetting>(s => s.IndexProviderType == type.ToString());
+            return _database.Single<IndexerSetting>("WHERE IndexProviderType = @0", type.ToString());
         }
 
         public virtual void InitializeIndexers(IList<IndexerBase> indexers)

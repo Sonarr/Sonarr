@@ -1,11 +1,12 @@
 ﻿using System;
-using SubSonic.SqlGeneration.Schema;
+using PetaPoco;
 
 namespace NzbDrone.Core.Repository
 {
+    [TableName("IndexerSettings")]
+    [PrimaryKey("Id", autoIncrement = true)]
     public class IndexerSetting
     {
-        [SubSonicPrimaryKey(true)]
         public int Id { get; set; }
 
         public Boolean Enable { get; set; }

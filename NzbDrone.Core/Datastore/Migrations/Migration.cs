@@ -142,6 +142,14 @@ namespace NzbDrone.Core.Datastore.Migrations
                                                           new Column("Cutoff", DbType.Int32, ColumnProperty.NotNull),
                                                           new Column("SonicAllowed", DbType.String, ColumnProperty.NotNull),
                                                       });
+
+            Database.AddTable("IndexerSettings", "SQLite", new[]
+                                                            {
+                                                                new Column("Id", DbType.Int32, ColumnProperty.PrimaryKey),
+                                                                new Column("Enable", DbType.Boolean, ColumnProperty.NotNull),
+                                                                new Column("IndexProviderType", DbType.String, ColumnProperty.NotNull),
+                                                                new Column("Name", DbType.String, ColumnProperty.NotNull),
+                                                            });
         }
 
         public override void Down()
