@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual Episode GetEpisode(long id)
         {
-            return _database.SingleOrDefault<Episode>(id);
+            return _database.Single<Episode>(id);
         }
 
         public virtual Episode GetEpisode(int seriesId, int seasonNumber, int episodeNumber)

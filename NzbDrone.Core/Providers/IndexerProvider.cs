@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual IndexerSetting GetSettings(Type type)
         {
-            return _database.SingleOrDefault<IndexerSetting>("WHERE IndexProviderType = @0", type.ToString());
+            return _database.Single<IndexerSetting>("WHERE IndexProviderType = @0", type.ToString());
         }
 
         public virtual void InitializeIndexers(IList<IndexerBase> indexers)
