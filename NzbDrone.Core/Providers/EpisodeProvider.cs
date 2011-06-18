@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Ninject;
 using NLog;
 using NzbDrone.Core.Model;
@@ -96,7 +97,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual void RefreshEpisodeInfo(Series series)
         {
-            Logger.Info("Starting episode info refresh for series:{0}", series.SeriesId);
+            Logger.Info("Starting episode info refresh for series: {0}", series.Title.WithDefault(series.SeriesId));
             int successCount = 0;
             int failCount = 0;
             var tvDbSeriesInfo = _tvDbProvider.GetSeries(series.SeriesId, true);
@@ -151,7 +152,7 @@ namespace NzbDrone.Core.Providers
                 catch (Exception e)
                 {
                     Logger.FatalException(
-                        String.Format("An error has occurred while updating episode info for series {0}", series.SeriesId), e);
+                        String.Format("An error has occurred while updating episode info for series {0}", tvDbSeriesInfo.SeriesName), e);
                     failCount++;
                 }
             }
@@ -169,7 +170,7 @@ namespace NzbDrone.Core.Providers
 
             }
 
-            Logger.Debug("Finished episode refresh for series:{0}. Successful:{1} - Failed:{2} ",
+            Logger.Info("Finished episode refresh for series: {0}. Successful: {1} - Failed: {2} ",
                          tvDbSeriesInfo.SeriesName, successCount, failCount);
         }
 

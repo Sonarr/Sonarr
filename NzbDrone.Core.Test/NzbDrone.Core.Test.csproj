@@ -84,6 +84,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FluentTest.cs" />
     <Compile Include="LogProviderTest.cs" />
     <Compile Include="UpcomingEpisodesProviderTest.cs" />
     <Compile Include="MediaFileProvider_ImportNewDownloadTest.cs" />
