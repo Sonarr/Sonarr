@@ -12,6 +12,8 @@ namespace NzbDrone.Core.Datastore
 
         public static void Run(string connetionString, bool trace)
         {
+            if (IsMigrated) return;
+            IsMigrated = true;
             Logger.Info("Preparing run database migration");
 
             try
