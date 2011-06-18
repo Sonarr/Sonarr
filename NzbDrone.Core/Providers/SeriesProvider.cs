@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual Series GetSeries(int seriesId)
         {
-            return _database.Single<Series>("WHERE seriesId= @0", seriesId);
+            return _database.SingleOrDefault<Series>("WHERE seriesId= @0", seriesId);
         }
 
         /// <summary>
