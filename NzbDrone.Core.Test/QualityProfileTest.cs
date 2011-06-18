@@ -40,6 +40,29 @@ namespace NzbDrone.Core.Test
             Assert.AreEqual(testProfile.Allowed, fetch.Allowed);
         }
 
+
+        [Test]
+        public void Test_Storage_no_allowed()
+        {
+            //Arrange
+            var database = MockLib.GetEmptyDatabase();
+            var testProfile = new QualityProfile
+            {
+                Name = Guid.NewGuid().ToString(),
+                Cutoff = QualityTypes.SDTV
+            };
+
+            //Act
+            var id = Convert.ToInt32(database.Insert(testProfile));
+            var fetch = database.SingleOrDefault<QualityProfile>(id);
+
+            //Assert
+            Assert.AreEqual(id, fetch.QualityProfileId);
+            Assert.AreEqual(testProfile.Name, fetch.Name);
+            Assert.AreEqual(testProfile.Cutoff, fetch.Cutoff);
+            fetch.Allowed.Should().HaveCount(0);
+        }
+
         [Test]
         public void Test_Series_Quality()
         {

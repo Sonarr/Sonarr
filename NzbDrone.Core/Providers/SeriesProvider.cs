@@ -38,13 +38,18 @@ namespace NzbDrone.Core.Providers
         public virtual IList<Series> GetAllSeries()
         {
             var series = _database.Fetch<Series>();
-            series.ForEach(c => c.QualityProfile = _qualityProvider.Find(c.QualityProfileId));
+            series.ForEach(c => c.QualityProfile = _qualityProvider.Get(c.QualityProfileId));
             return series;
         }
 
         public virtual Series GetSeries(int seriesId)
         {
-            return _database.SingleOrDefault<Series>("WHERE seriesId= @0", seriesId);
+           var series = _database.SingleOrDefault<Series>("WHERE seriesId= @0", seriesId);
+            if (series != null)
+            {
+               series.QualityProfile = _qualityProvider.Get(series.QualityProfileId);
+            }
+            return series;
         }
 
         /// <summary>

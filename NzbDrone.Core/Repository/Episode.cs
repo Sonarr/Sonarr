@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using NzbDrone.Core.Model;
 using PetaPoco;
 
@@ -9,30 +8,26 @@ namespace NzbDrone.Core.Repository
     [PrimaryKey("EpisodeId", autoIncrement = true)]
     public class Episode
     {
+        public int EpisodeId { get; set; }
 
-        public virtual int EpisodeId { get; set; }
+        public int? TvDbEpisodeId { get; set; }
 
-        public virtual int? TvDbEpisodeId { get; set; }
-
-        public virtual int SeriesId { get; set; }
-        public virtual int EpisodeFileId { get; set; }
-        public virtual int SeasonNumber { get; set; }
-        public virtual int EpisodeNumber { get; set; }
-        public virtual string Title { get; set; }
-        public virtual DateTime AirDate { get; set; }
+        public int SeriesId { get; set; }
+        public int EpisodeFileId { get; set; }
+        public int SeasonNumber { get; set; }
+        public int EpisodeNumber { get; set; }
+        public string Title { get; set; }
+        public DateTime AirDate { get; set; }
 
 
-        public virtual string Overview { get; set; }
+        public string Overview { get; set; }
 
-        public virtual Boolean Ignored { get; set; }
+        public Boolean Ignored { get; set; }
 
         [Ignore]
         public Boolean IsDailyEpisode
         {
-            get
-            {
-                return EpisodeNumber == 0;
-            }
+            get { return EpisodeNumber == 0; }
         }
 
         /// <summary>
@@ -42,7 +37,7 @@ namespace NzbDrone.Core.Repository
         /// Used to specify when the episode was grapped.
         /// this filed is used by status as an expirable "Grabbed" status.
         /// </remarks>
-        public virtual DateTime? GrabDate { get; set; }
+        public DateTime? GrabDate { get; set; }
 
 
         [Ignore]
@@ -71,25 +66,21 @@ namespace NzbDrone.Core.Repository
 
 
         [Ignore]
-        public virtual Series Series { get; set; }
+        public Series Series { get; set; }
 
 
         [Ignore]
-        public virtual EpisodeFile EpisodeFile { get; set; }
+        public EpisodeFile EpisodeFile { get; set; }
 
-
-        [Ignore]
-        public virtual IList<History> Histories { get; protected set; }
 
         public override string ToString()
         {
-            var seriesTitle = Series == null ? "[NULL]" : Series.Title;
+            string seriesTitle = Series == null ? "[NULL]" : Series.Title;
 
             if (IsDailyEpisode)
                 return string.Format("{0} - {1}", seriesTitle, AirDate.Date);
 
             return string.Format("{0} - S{1:00}E{2:00}", seriesTitle, SeasonNumber, EpisodeNumber);
-
         }
     }
 }
