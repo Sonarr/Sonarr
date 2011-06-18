@@ -1,11 +1,9 @@
 ﻿using AutoMoq;
 using FluentAssertions;
-using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
-using SubSonic.Repository;
 
 namespace NzbDrone.Core.Test
 {
@@ -41,6 +39,7 @@ namespace NzbDrone.Core.Test
             mocker.SetConstant(db);
 
             db.Insert(new Config { Key = key, Value = value });
+            db.Insert(new Config { Key = "Other Key", Value = "OtherValue" });
 
             //Act
             var result = mocker.Resolve<ConfigProvider>().GetValue(key, "");
@@ -69,7 +68,7 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
-        public void New_value_should_update_old_value()
+        public void New_value_should_update_old_value_new_value()
         {
             const string key = "MY_KEY";
             const string originalValue = "OLD_VALUE";
@@ -87,6 +86,27 @@ namespace NzbDrone.Core.Test
 
             //Assert
             result.Should().Be(newValue);
+            db.Fetch<Config>().Should().HaveCount(1);
+        }
+
+        [Test]
+        public void New_value_should_update_old_value_same_value()
+        {
+            const string key = "MY_KEY";
+            const string value = "OLD_VALUE";
+
+
+            var mocker = new AutoMoqer();
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            //Act
+            mocker.Resolve<ConfigProvider>().SetValue(key, value);
+            mocker.Resolve<ConfigProvider>().SetValue(key, value);
+            var result = mocker.Resolve<ConfigProvider>().GetValue(key, "");
+
+            //Assert
+            result.Should().Be(value);
             db.Fetch<Config>().Should().HaveCount(1);
         }
 

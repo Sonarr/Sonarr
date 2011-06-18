@@ -4,33 +4,6 @@ using Migrator.Framework;
 
 namespace NzbDrone.Core.Datastore.Migrations
 {
-    [Migration(20110523)]
-    public class Migration20110523 : Migration
-    {
-        public override void Up()
-        {
-            Database.RemoveTable(RepositoryProvider.JobsSchema.Name);
-        }
-
-        public override void Down()
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    [Migration(20110603)]
-    public class Migration20110603 : Migration
-    {
-        public override void Up()
-        {
-            Database.RemoveTable("Seasons");
-        }
-
-        public override void Down()
-        {
-            throw new NotImplementedException();
-        }
-    }
 
     [Migration(20110604)]
     public class Migration20110616 : Migration
@@ -40,13 +13,13 @@ namespace NzbDrone.Core.Datastore.Migrations
             Database.AddTable("Series", new[]
                                             {
                                                 new Column("SeriesId", DbType.Int32, ColumnProperty.PrimaryKey),
-                                                new Column("Title", DbType.String, ColumnProperty.NotNull, String.Empty),
-                                                new Column("CleanTitle", DbType.String, ColumnProperty.NotNull, String.Empty),
+                                                new Column("Title", DbType.String, ColumnProperty.Null),
+                                                new Column("CleanTitle", DbType.String, ColumnProperty.Null),
                                                 new Column("Status", DbType.String, ColumnProperty.Null),
-                                                new Column("Overview", DbType.String, ColumnProperty.NotNull, String.Empty),
+                                                new Column("Overview", DbType.String, ColumnProperty.Null),
                                                 new Column("AirsDayOfWeek", DbType.Int16, ColumnProperty.Null),
-                                                new Column("AirTimes", DbType.String, ColumnProperty.NotNull, String.Empty),
-                                                new Column("Language", DbType.String, ColumnProperty.NotNull, String.Empty),
+                                                new Column("AirTimes", DbType.String, ColumnProperty.Null),
+                                                new Column("Language", DbType.String, ColumnProperty.Null),
                                                 new Column("Path", DbType.String, ColumnProperty.NotNull),
                                                 new Column("Monitored", DbType.Boolean, ColumnProperty.NotNull),
                                                 new Column("QualityProfileId", DbType.Int16, ColumnProperty.NotNull),
@@ -62,9 +35,9 @@ namespace NzbDrone.Core.Datastore.Migrations
                                                   new Column("SeriesId", DbType.Int32, ColumnProperty.NotNull),
                                                   new Column("SeasonNumber", DbType.Int16, ColumnProperty.NotNull),
                                                   new Column("EpisodeNumber", DbType.Int16, ColumnProperty.NotNull),
-                                                  new Column("Title", DbType.String, ColumnProperty.NotNull, String.Empty),
-                                                  new Column("Overview", DbType.String, ColumnProperty.NotNull, String.Empty),
-                                                  new Column("Ignored", DbType.Boolean, ColumnProperty.NotNull, false),
+                                                  new Column("Title", DbType.String, ColumnProperty.Null),
+                                                  new Column("Overview", DbType.String, ColumnProperty.Null),
+                                                  new Column("Ignored", DbType.Boolean, ColumnProperty.NotNull),
                                                   new Column("EpisodeFileId", DbType.Int32, ColumnProperty.Null),
                                                   new Column("AirDate", DbType.DateTime, ColumnProperty.Null),
                                                   new Column("GrabDate", DbType.DateTime, ColumnProperty.Null)

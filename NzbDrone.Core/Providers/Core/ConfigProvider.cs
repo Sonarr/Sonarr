@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Ninject;
 using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository;
 using PetaPoco;
-using SubSonic.Repository;
 
 namespace NzbDrone.Core.Providers.Core
 {
@@ -280,7 +278,7 @@ namespace NzbDrone.Core.Providers.Core
         {
             string value;
 
-            var dbValue = _database.SingleOrDefault<Config>(key);
+            var dbValue = _database.SingleOrDefault<Config>("WHERE Key=@0", key);
 
             if (dbValue != null && !String.IsNullOrEmpty(dbValue.Value))
                 return dbValue.Value;

@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.ServiceModel.Syndication;
-using System.Text;
 using AutoMoq;
 using FizzWare.NBuilder;
 using FluentAssertions;

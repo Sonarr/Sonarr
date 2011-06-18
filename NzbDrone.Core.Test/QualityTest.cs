@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using FluentAssertions;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;

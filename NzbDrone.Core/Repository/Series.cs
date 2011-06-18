@@ -3,35 +3,34 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using NzbDrone.Core.Repository.Quality;
 using PetaPoco;
-using SubSonic.SqlGeneration.Schema;
 
 namespace NzbDrone.Core.Repository
 {
     [PrimaryKey("SeriesId", autoIncrement = false)]
     public class Series
     {
-        [SubSonicPrimaryKey(false)]
+
         public virtual int SeriesId { get; set; }
 
-        [SubSonicNullString]
+
         public string Title { get; set; }
 
-        [SubSonicNullString]
+
         public string CleanTitle { get; set; }
 
-        [SubSonicNullString]
+
         public string Status { get; set; }
 
-        [SubSonicNullString]
+
         public string Overview { get; set; }
 
         [DisplayName("Air on")]
         public DayOfWeek? AirsDayOfWeek { get; set; }
 
-        [SubSonicNullString]
+
         public String AirTimes { get; set; }
 
-        [SubSonicNullString]
+
         public string Language { get; set; }
 
         public string Path { get; set; }
@@ -56,15 +55,12 @@ namespace NzbDrone.Core.Repository
 
         public DateTime? LastDiskSync { get; set; }
 
-        [SubSonicToOneRelation(ThisClassContainsJoinKey = true, JoinKeyName = "QualityProfileId")]
         [Ignore]
         public virtual QualityProfile QualityProfile { get; set; }
 
-        [SubSonicToManyRelation]
         [Ignore]
         public virtual IList<Episode> Episodes { get; set; }
 
-        [SubSonicToManyRelation]
         [Ignore]
         public virtual IList<EpisodeFile> EpisodeFiles { get; protected set; }
     }

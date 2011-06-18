@@ -9,7 +9,6 @@ using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
-using SubSonic.Repository;
 
 namespace NzbDrone.Core.Test
 {

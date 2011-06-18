@@ -75,7 +75,6 @@
     <Reference Include="pnunit.framework">
       <HintPath>..\packages\NUnit.2.5.10.11092\lib\pnunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="SubSonic.Core, Version=3.0.0.3, Culture=neutral, processorArchitecture=x86" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
@@ -116,7 +115,6 @@
     <Compile Include="Framework\ExceptionVerification.cs" />
     <Compile Include="JobProviderTest.cs" />
     <Compile Include="QualityTest.cs" />
-    <Compile Include="RepositoryProviderTest.cs" />
     <Compile Include="RootDirProviderTest.cs" />
     <Compile Include="IndexerProviderTest.cs" />
     <Compile Include="HistoryProviderTest.cs" />
@@ -128,7 +126,6 @@
     <Compile Include="ParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QualityProfileTest.cs" />
-    <Compile Include="RepoTest.cs" />
     <Compile Include="SabProviderTest.cs" />
     <Compile Include="SceneMappingTest.cs" />
     <Compile Include="SeriesProviderTest.cs" />

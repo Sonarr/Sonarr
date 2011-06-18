@@ -1,8 +1,6 @@
 ﻿using System;
-using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository.Quality;
 using PetaPoco;
-using SubSonic.SqlGeneration.Schema;
 
 namespace NzbDrone.Core.Repository
 {

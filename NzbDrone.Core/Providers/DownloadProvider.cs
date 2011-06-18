@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Ninject;
 using NLog;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Providers.Core;
-using NzbDrone.Core.Providers.Indexer;
 using NzbDrone.Core.Repository;
-using SubSonic.Repository;
 
 namespace NzbDrone.Core.Providers
 {

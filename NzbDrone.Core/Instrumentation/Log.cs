@@ -1,6 +1,5 @@
 ﻿using System;
 using PetaPoco;
-using SubSonic.SqlGeneration.Schema;
 
 namespace NzbDrone.Core.Instrumentation
 {

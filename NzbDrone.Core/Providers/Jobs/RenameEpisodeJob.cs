@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using Ninject;
+﻿using Ninject;
 using NLog;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers.Core;

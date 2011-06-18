@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Net;
-using System.Text;
 using NLog;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using PetaPoco;
-using SubSonic.Repository;
 
 namespace NzbDrone.Core.Providers
 {

@@ -154,6 +154,7 @@ namespace NzbDrone.Core.Test
         [TestCase("The Daily Show - 2011-04-12 - Gov. Deval Patrick", "The.Daily.Show", 2011, 04, 12)]
         [TestCase("2011.01.10 - Denis Leary - HD TV.mkv", "", 2011, 1, 10)]
         [TestCase("2011.03.13 - Denis Leary - HD TV.mkv", "", 2011, 3, 13)]
+        [TestCase("The Tonight Show with Jay Leno - 2011-06-16 - Larry David, \"Bachelorette\" Ashley Hebert, Pitbull with Ne-Yo", "The Tonight Show with Jay Leno", 2011, 3, 13)]
         public void episode_daily_parse(string postTitle, string title, int year, int month, int day)
         {
             var result = Parser.ParseEpisodeInfo(postTitle);

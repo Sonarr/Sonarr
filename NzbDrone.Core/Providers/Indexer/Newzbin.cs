@@ -5,7 +5,6 @@ using System.ServiceModel.Syndication;
 using Ninject;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
-using NzbDrone.Core.Providers.ExternalNotification;
 
 namespace NzbDrone.Core.Providers.Indexer
 {

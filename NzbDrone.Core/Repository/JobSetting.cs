@@ -1,6 +1,5 @@
 ﻿using System;
 using PetaPoco;
-using SubSonic.SqlGeneration.Schema;
 
 namespace NzbDrone.Core.Repository
 {
@@ -8,7 +7,6 @@ namespace NzbDrone.Core.Repository
     [PrimaryKey("Id", autoIncrement = true)]
     public class JobSetting
     {
-        [SubSonicPrimaryKey(true)]
         public Int32 Id { get; set; }
 
         public Boolean Enable { get; set; }

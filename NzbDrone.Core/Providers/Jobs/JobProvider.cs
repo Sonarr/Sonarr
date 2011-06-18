@@ -8,7 +8,6 @@ using NLog;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Repository;
 using PetaPoco;
-using SubSonic.Repository;
 
 namespace NzbDrone.Core.Providers.Jobs
 {

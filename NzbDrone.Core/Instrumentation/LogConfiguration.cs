@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using System.IO;
 using Ninject;
-using Ninject.Activation;
 using NLog;
 using NLog.Config;
 

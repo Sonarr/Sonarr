@@ -1,6 +1,4 @@
-﻿using NzbDrone.Core.Repository.Quality;
-
-namespace NzbDrone.Core.Model
+﻿namespace NzbDrone.Core.Model
 {
     public class SeasonParseResult
     {

@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using NLog;
 using PetaPoco;
-using SubSonic.Repository;
 
 namespace NzbDrone.Core.Instrumentation
 {

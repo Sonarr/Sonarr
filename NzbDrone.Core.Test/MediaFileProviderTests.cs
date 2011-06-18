@@ -2,8 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq.Expressions;
 using System.Linq;
+using System.Linq.Expressions;
 using AutoMoq;
 using FizzWare.NBuilder;
 using FluentAssertions;
@@ -18,7 +18,6 @@ using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
 using PetaPoco;
-using SubSonic.Repository;
 
 namespace NzbDrone.Core.Test
 {
@@ -213,10 +212,10 @@ namespace NzbDrone.Core.Test
             //Mocks
             var mocker = new AutoMoqer();
 
-            mocker.GetMock<IRepository>()
-                .Setup(r => r.Exists(It.IsAny<Expression<Func<EpisodeFile, Boolean>>>())).Returns(false).Verifiable();
-            mocker.GetMock<IRepository>()
-                .Setup(r => r.Add(It.IsAny<EpisodeFile>())).Returns(0).Verifiable();
+            mocker.GetMock<IDatabase>()
+                .Setup(r => r.Exists<EpisodeFile>(It.IsAny<string>())).Returns(false).Verifiable();
+            mocker.GetMock<IDatabase>()
+                .Setup(r => r.Insert(It.IsAny<EpisodeFile>())).Returns(0).Verifiable();
 
             mocker.GetMock<EpisodeProvider>()
                 .Setup(e => e.GetEpisode(fakeSeries.SeriesId, airDate)).Returns(fakeEpisode).
@@ -299,7 +298,7 @@ namespace NzbDrone.Core.Test
             //Assert
             mocker.VerifyAllMocks();
             Assert.IsNull(result);
-            mocker.GetMock<IRepository>().Verify(r => r.Add(result), Times.Never());
+            mocker.GetMock<IDatabase>().Verify(r => r.Insert(result), Times.Never());
             ExceptionVerification.ExcpectedWarns(1);
         }
 
