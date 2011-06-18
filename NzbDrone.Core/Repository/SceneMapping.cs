@@ -6,10 +6,10 @@ namespace NzbDrone.Core.Repository
     [PrimaryKey("CleanTitle", autoIncrement = false)]
     public class SceneMapping
     {
-        public virtual string CleanTitle { get; set; }
+        public string CleanTitle { get; set; }
 
-        public virtual int SeriesId { get; set; }
+        public int SeriesId { get; set; }
 
-        public virtual string SceneName { get; set; }
+        public string SceneName { get; set; }
     }
 }

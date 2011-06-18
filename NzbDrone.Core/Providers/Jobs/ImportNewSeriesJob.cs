@@ -16,6 +16,7 @@ namespace NzbDrone.Core.Providers.Jobs
     public class ImportNewSeriesJob : IJob
     {
         private readonly SeriesProvider _seriesProvider;
+        private readonly EpisodeProvider _episodeProvider;
         private readonly MediaFileProvider _mediaFileProvider;
         private readonly UpdateInfoJob _updateInfoJob;
         private readonly DiskScanJob _diskScanJob;
@@ -25,10 +26,11 @@ namespace NzbDrone.Core.Providers.Jobs
         private List<int> _attemptedSeries;
 
         [Inject]
-        public ImportNewSeriesJob(SeriesProvider seriesProvider,
+        public ImportNewSeriesJob(SeriesProvider seriesProvider, EpisodeProvider episodeProvider,
             MediaFileProvider mediaFileProvider, UpdateInfoJob updateInfoJob, DiskScanJob diskScanJob)
         {
             _seriesProvider = seriesProvider;
+            _episodeProvider = episodeProvider;
             _mediaFileProvider = mediaFileProvider;
             _updateInfoJob = updateInfoJob;
             _diskScanJob = diskScanJob;
@@ -85,7 +87,7 @@ namespace NzbDrone.Core.Providers.Jobs
         private void AutoIgnoreSeasons(Series updatedSeries)
         {
             var episodeFiles = _mediaFileProvider.GetSeriesFiles(updatedSeries.SeriesId);
-            var episodes = updatedSeries.Episodes;
+            var episodes = _episodeProvider.GetEpisodeBySeries(updatedSeries.SeriesId);
             if (episodeFiles.Count() != 0)
             {
                 var seasons = episodes.Select(c => c.SeasonNumber).Distinct();
@@ -98,17 +100,6 @@ namespace NzbDrone.Core.Providers.Jobs
 
                     }
                 }
-
-                /*   Logger.Debug("Looking for seasons to ignore");
-                   foreach (var season in updatedSeries.Seasons)
-                   {
-                       if (season.SeasonNumber != updatedSeries.Seasons.Max(s => s.SeasonNumber) && _mediaFileProvider.GetSeasonFiles(season.SeasonId).Count() == 0)
-                       {
-                           Logger.Info("Season {0} of {1} doesn't have any files on disk. season will not be monitored.", season.SeasonNumber, updatedSeries.Title);
-                           season.Monitored = false;
-                           _seasonProvider.SaveSeason(season);
-                       }
-                   }*/
             }
         }
     }

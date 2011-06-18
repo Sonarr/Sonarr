@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using NzbDrone.Core.Repository.Quality;
 using PetaPoco;
@@ -9,7 +8,6 @@ namespace NzbDrone.Core.Repository
     [PrimaryKey("SeriesId", autoIncrement = false)]
     public class Series
     {
-
         public virtual int SeriesId { get; set; }
 
 
@@ -38,6 +36,14 @@ namespace NzbDrone.Core.Repository
         public bool Monitored { get; set; }
 
 
+        public virtual int QualityProfileId { get; set; }
+
+        public bool SeasonFolder { get; set; }
+
+        public DateTime? LastInfoSync { get; set; }
+
+        public DateTime? LastDiskSync { get; set; }
+
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="Series"/> is hidden.
         /// </summary>
@@ -47,21 +53,7 @@ namespace NzbDrone.Core.Repository
         [Ignore]
         public bool Hidden { get; set; }
 
-        public virtual int QualityProfileId { get; set; }
-
-        public bool SeasonFolder { get; set; }
-
-        public DateTime? LastInfoSync { get; set; }
-
-        public DateTime? LastDiskSync { get; set; }
-
         [Ignore]
-        public virtual QualityProfile QualityProfile { get; set; }
-
-        [Ignore]
-        public virtual IList<Episode> Episodes { get; set; }
-
-        [Ignore]
-        public virtual IList<EpisodeFile> EpisodeFiles { get; protected set; }
+        public QualityProfile QualityProfile { get; set; }
     }
 }

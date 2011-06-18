@@ -51,9 +51,9 @@ namespace NzbDrone.Core.Providers
             return profiles;
         }
 
-        public virtual QualityProfile Find(int profileId)
+        public virtual QualityProfile Get(int profileId)
         {
-            return _database.SingleOrDefault<QualityProfile>(profileId);
+            return _database.Single<QualityProfile>(profileId);
         }
 
         public virtual void SetupDefaultProfiles()

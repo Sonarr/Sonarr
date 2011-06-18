@@ -121,10 +121,6 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.Core, Version=2.5.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libraries\Castle.Core.dll</HintPath>
-    </Reference>
     <Reference Include="Exceptioneer.WindowsFormsClient, Version=1.0.0.812, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\Exceptioneer.WindowsFormsClient.dll</HintPath>
@@ -203,7 +199,6 @@
     <Compile Include="Providers\Jobs\RssSyncJob.cs" />
     <Compile Include="Providers\Jobs\UpdateInfoJob.cs" />
     <Compile Include="Providers\SceneMappingProvider.cs" />
-    <Compile Include="Providers\StatsProvider.cs" />
     <Compile Include="Repository\ExternalNotificationSetting.cs" />
     <Compile Include="Repository\JobSetting.cs" />
     <Compile Include="Repository\IndexerSetting.cs" />
@@ -298,9 +293,6 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

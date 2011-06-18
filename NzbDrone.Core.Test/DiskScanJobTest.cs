@@ -22,7 +22,6 @@ namespace NzbDrone.Core.Test
         {
             var series = Builder<Series>.CreateNew()
                 .With(s => s.SeriesId = 12)
-                .With(s => s.Episodes = Builder<Episode>.CreateListOfSize(10).Build())
                 .Build();
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
@@ -44,26 +43,6 @@ namespace NzbDrone.Core.Test
         }
 
 
-        [Test]
-        public void series_with_no_episodes_should_skip_scan()
-        {
-            var series = Builder<Series>.CreateNew()
-                .With(s => s.SeriesId = 12)
-                .With(s => s.Episodes = new List<Episode>())
-                .Build();
-
-            var mocker = new AutoMoqer(MockBehavior.Strict);
-
-            mocker.GetMock<SeriesProvider>()
-                .Setup(p => p.GetSeries(series.SeriesId))
-                .Returns(series);
-
-            //Act
-            mocker.Resolve<DiskScanJob>().Start(new ProgressNotification("Test"), series.SeriesId);
-
-            //Assert
-            mocker.VerifyAllMocks();
-        }
 
         [Test]
         public void job_with_no_target_should_scan_all_series()
@@ -71,7 +50,6 @@ namespace NzbDrone.Core.Test
             var series = Builder<Series>.CreateListOfSize(2)
                 .WhereTheFirst(1).Has(s => s.SeriesId = 12)
                 .AndTheNext(1).Has(s => s.SeriesId = 15)
-                .WhereAll().Have(s => s.Episodes = Builder<Episode>.CreateListOfSize(10).Build())
                 .Build();
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
@@ -100,7 +78,6 @@ namespace NzbDrone.Core.Test
             var series = Builder<Series>.CreateListOfSize(2)
                 .WhereTheFirst(1).Has(s => s.SeriesId = 12)
                 .AndTheNext(1).Has(s => s.SeriesId = 15)
-                .WhereAll().Have(s => s.Episodes = Builder<Episode>.CreateListOfSize(10).Build())
                 .Build();
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
@@ -129,9 +106,7 @@ namespace NzbDrone.Core.Test
         {
             var series = Builder<Series>.CreateListOfSize(2)
                 .WhereTheFirst(1).Has(s => s.SeriesId = 12)
-                .And(s => s.Episodes = Builder<Episode>.CreateListOfSize(10).Build())
                 .AndTheNext(1).Has(s => s.SeriesId = 15)
-                   .And(s => s.Episodes = new List<Episode>())
                 .Build();
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
@@ -144,10 +119,16 @@ namespace NzbDrone.Core.Test
                 .Setup(s => s.Scan(series[0]))
                 .Returns(new List<EpisodeFile>());
 
+            mocker.GetMock<MediaFileProvider>()
+                .Setup(s => s.Scan(series[1]))
+                .Returns(new List<EpisodeFile>());
+
             mocker.Resolve<DiskScanJob>().Start(new ProgressNotification("Test"), 0);
 
 
+
             mocker.VerifyAllMocks();
+            mocker.GetMock<MediaFileProvider>().Verify(s => s.Scan(It.IsAny<Series>()), Times.Exactly(2));
         }
     }
 

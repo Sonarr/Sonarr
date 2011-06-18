@@ -49,9 +49,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\Castle.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Glimpse.Net">
-      <HintPath>..\packages\Glimpse.0.81\lib\net40\Glimpse.Net.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\MVC3\Microsoft.Web.Infrastructure.dll</HintPath>
@@ -281,7 +278,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Readme\glimpse.readme.txt" />
     <Content Include="Content\2011.1.315\Black\editor.png" />
     <Content Include="Content\2011.1.315\Black\imagebrowser.png" />
     <Content Include="Content\2011.1.315\Black\loading.gif" />

@@ -9,10 +9,10 @@ namespace NzbDrone.Core.Repository
     [PrimaryKey("EpisodeFileId", autoIncrement = true)]
     public class EpisodeFile
     {
-        public virtual int EpisodeFileId { get; set; }
+        public int EpisodeFileId { get; set; }
 
-        public virtual int SeriesId { get; set; }
-        public virtual int SeasonNumber { get; set; }
+        public int SeriesId { get; set; }
+        public int SeasonNumber { get; set; }
         public string Path { get; set; }
         public QualityTypes Quality { get; set; }
         public bool Proper { get; set; }
@@ -20,9 +20,9 @@ namespace NzbDrone.Core.Repository
         public DateTime DateAdded { get; set; }
 
         [Ignore]
-        public virtual IList<Episode> Episodes { get; set; }
+        public IList<Episode> Episodes { get; set; }
 
         [Ignore]
-        public virtual Series Series { get; set; }
+        public Series Series { get; set; }
     }
 }

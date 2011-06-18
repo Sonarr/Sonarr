@@ -310,31 +310,17 @@ namespace NzbDrone.Core.Test
             mocker.GetMock<SeriesProvider>()
                 .Setup(c => c.UpdateSeries(It.Is<Series>(s => s.LastDiskSync != null))).Verifiable();
 
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(c => c.GetEpisodeBySeries(It.IsAny<long>()))
+                .Returns(new List<Episode>{new Episode()});
+
             mocker.Resolve<MediaFileProvider>().Scan(new Series());
 
             mocker.VerifyAllMocks();
 
         }
 
-        [Test]
-        public void scan_media_job_should_not_scan_new_series()
-        {
-            var mocker = new AutoMoqer();
-            var fakeSeries = Builder<Series>.CreateListOfSize(2)
-                .WhereTheFirst(1).Has(c => c.Episodes = new List<Episode>())
-                .AndTheNext(1).Has(c => c.Episodes = Builder<Episode>.CreateListOfSize(10).Build())
-                .Build();
-            mocker.GetMock<SeriesProvider>()
-                .Setup(c => c.GetAllSeries()).Returns(fakeSeries);
-
-            mocker.GetMock<MediaFileProvider>(MockBehavior.Strict)
-                .Setup(c => c.Scan(fakeSeries.ToList()[1])).Returns(new List<EpisodeFile>()).Verifiable();
-
-            mocker.Resolve<DiskScanJob>().Start(new ProgressNotification("test"), 0);
-
-            mocker.VerifyAllMocks();
-        }
-
+      
         [Test]
         public void get_series_files()
         {
@@ -390,7 +376,7 @@ namespace NzbDrone.Core.Test
             diskProvider.Setup(d => d.GetExtension(It.IsAny<string>())).Returns(".avi");
 
             var episodeProvider = mocker.GetMock<EpisodeProvider>();
-            episodeProvider.Setup(e => e.GetEpisodes(It.IsAny<EpisodeParseResult>())).Returns(new List<Episode> {fakeEpisode});
+            episodeProvider.Setup(e => e.GetEpisodes(It.IsAny<EpisodeParseResult>())).Returns(new List<Episode> { fakeEpisode });
             episodeProvider.Setup(e => e.GetEpisode(fakeSeries.SeriesId, 1, 5)).Returns(fakeEpisode);
 
             var configProvider = mocker.GetMock<ConfigProvider>();
@@ -436,7 +422,7 @@ namespace NzbDrone.Core.Test
                 .With(e => e.SeriesId = fakeSeries.SeriesId)
                 .With(e => e.EpisodeFileId = 1)
                 .With(e => e.Quality = QualityTypes.SDTV)
-                .With(e => e.Episodes = new List<Episode>{ fakeEpisode })
+                .With(e => e.Episodes = new List<Episode> { fakeEpisode })
                 .Build();
 
             fakeEpisode.EpisodeFile = fakeEpisodeFile;
@@ -477,5 +463,26 @@ namespace NzbDrone.Core.Test
             mocker.VerifyAllMocks();
             Assert.AreEqual(1, result.Count);
         }
+
+
+        [Test]
+        public void Scan_series_should_skip_series_with_no_episodes()
+        {
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(c => c.GetEpisodeBySeries(12))
+                .Returns(new List<Episode>());
+
+            var series = Builder<Series>.CreateNew()
+                .With(s => s.SeriesId = 12).Build();
+
+            //Act
+            mocker.Resolve<MediaFileProvider>().Scan(series);
+
+            //Assert
+            mocker.VerifyAllMocks();
+
+        }
+
     }
 }

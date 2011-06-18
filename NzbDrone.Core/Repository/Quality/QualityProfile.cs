@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -10,7 +11,6 @@ namespace NzbDrone.Core.Repository.Quality
     [PrimaryKey("QualityProfileId", autoIncrement = true)]
     public class QualityProfile
     {
-
         public virtual int QualityProfileId { get; set; }
 
         [Required(ErrorMessage = "A Name is Required")]
@@ -49,15 +49,11 @@ namespace NzbDrone.Core.Repository.Quality
             {
                 var qualities = value.Split('|');
                 Allowed = new List<QualityTypes>(qualities.Length);
-                foreach (var quality in qualities)
+                foreach (var quality in qualities.Where(q => !String.IsNullOrWhiteSpace(q)))
                 {
                     Allowed.Add((QualityTypes)Convert.ToInt32(quality));
                 }
             }
         }
-
-        [Ignore]
-
-        public virtual List<Series> Series { get; private set; }
     }
 }

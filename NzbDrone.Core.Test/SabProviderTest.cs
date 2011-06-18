@@ -333,7 +333,7 @@ namespace NzbDrone.Core.Test
 
             //Act
             bool result = mocker.Resolve<SabProvider>().AddByUrl(
-                "http://www.newzbin.com/browse/post/6107863/nzb", "This is an Nzb");
+                "http://www.newzbin.com/browse/post/6107863/nzb", "Added by unit tests.");
 
             //Assert
             Assert.IsTrue(result);
