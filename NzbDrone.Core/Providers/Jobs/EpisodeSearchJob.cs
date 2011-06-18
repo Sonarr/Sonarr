@@ -70,17 +70,9 @@ namespace NzbDrone.Core.Providers.Jobs
                 {
                     notification.CurrentMessage = String.Format("Searching for {0} in {1}", episode, indexer.Name);
 
-                    IList<EpisodeParseResult> indexerResults = new List<EpisodeParseResult>();
-
-                    if (episode.IsDailyEpisode)
-                    {
-                        //TODO:Add support for daily episodes
-                    }
-                    else
-                    {
-                        indexerResults = indexer.FetchEpisode(title, episode.SeasonNumber, episode.EpisodeNumber);
-                    }
-
+                    //TODO:Add support for daily episodes, maybe search using both date and season/episode?
+                    var indexerResults = indexer.FetchEpisode(title, episode.SeasonNumber, episode.EpisodeNumber);
+                    
                     reports.AddRange(indexerResults);
                 }
                 catch (Exception e)

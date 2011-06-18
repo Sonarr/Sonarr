@@ -24,12 +24,6 @@ namespace NzbDrone.Core.Repository
 
         public Boolean Ignored { get; set; }
 
-        [Ignore]
-        public Boolean IsDailyEpisode
-        {
-            get { return EpisodeNumber == 0; }
-        }
-
         /// <summary>
         /// Gets or sets the grab date.
         /// </summary>
@@ -77,8 +71,8 @@ namespace NzbDrone.Core.Repository
         {
             string seriesTitle = Series == null ? "[NULL]" : Series.Title;
 
-            if (IsDailyEpisode)
-                return string.Format("{0} - {1}", seriesTitle, AirDate.Date);
+            //if (IsDailyEpisode)
+            //    return string.Format("{0} - {1}", seriesTitle, AirDate.Date);
 
             return string.Format("{0} - S{1:00}E{2:00}", seriesTitle, SeasonNumber, EpisodeNumber);
         }
