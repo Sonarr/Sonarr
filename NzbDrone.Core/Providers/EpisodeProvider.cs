@@ -38,12 +38,12 @@ namespace NzbDrone.Core.Providers
 
         public virtual Episode GetEpisode(int seriesId, int seasonNumber, int episodeNumber)
         {
-            return _database.Single<Episode>("WHERE SeriesId = @0 AND SeasonNumber = @2 AND EpisodeNumber = @3", seriesId, seasonNumber, episodeNumber);
+            return _database.Single<Episode>("WHERE SeriesId = @0 AND SeasonNumber = @1 AND EpisodeNumber = @2", seriesId, seasonNumber, episodeNumber);
         }
 
         public virtual Episode GetEpisode(int seriesId, DateTime date)
         {
-            return _database.Single<Episode>("WHERE SeriesId = @0 AND AirDate = @2", seriesId, date.Date);
+            return _database.Single<Episode>("WHERE SeriesId = @0 AND AirDate = @1", seriesId, date.Date);
         }
 
         public virtual IList<Episode> GetEpisodeBySeries(long seriesId)
