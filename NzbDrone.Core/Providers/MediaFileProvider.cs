@@ -43,6 +43,12 @@ namespace NzbDrone.Core.Providers
         /// <param name = "series">The series to be scanned</param>
         public virtual List<EpisodeFile> Scan(Series series)
         {
+            if (_episodeProvider.GetEpisodeBySeries(series.SeriesId).Count == 0)
+            {
+                Logger.Debug("Series {0} has no episodes. skipping", series.Title);
+                return new List<EpisodeFile>();
+            }
+
             var mediaFileList = GetMediaFileList(series.Path);
             var fileList = new List<EpisodeFile>();
 

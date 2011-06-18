@@ -21,11 +21,12 @@ namespace NzbDrone.Core.Test
         public void import_new_series_succesfull()
         {
             var series = Builder<Series>.CreateListOfSize(2)
-                     .WhereAll().Have(s => s.Episodes = Builder<Episode>.CreateListOfSize(10).Build())
                      .WhereAll().Have(s => s.LastInfoSync = null)
                      .WhereTheFirst(1).Has(s => s.SeriesId = 12)
                      .AndTheNext(1).Has(s => s.SeriesId = 15)
                         .Build();
+
+            var episodes = Builder<Episode>.CreateListOfSize(10).Build();
 
             var notification = new ProgressNotification("Test");
 
@@ -63,6 +64,12 @@ namespace NzbDrone.Core.Test
                 .Setup(s => s.GetSeries(series[1].SeriesId)).Returns(series[1]);
 
 
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(s => s.GetEpisodeBySeries(series[0].SeriesId)).Returns(episodes);
+
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(s => s.GetEpisodeBySeries(series[1].SeriesId)).Returns(episodes);
+
             mocker.GetMock<MediaFileProvider>()
                 .Setup(s => s.GetSeriesFiles(It.IsAny<int>())).Returns(new List<EpisodeFile>());
 
@@ -81,11 +88,12 @@ namespace NzbDrone.Core.Test
         public void failed_import_should_not_be_stuck_in_loop()
         {
             var series = Builder<Series>.CreateListOfSize(2)
-                     .WhereAll().Have(s => s.Episodes = Builder<Episode>.CreateListOfSize(10).Build())
                      .WhereAll().Have(s => s.LastInfoSync = null)
                      .WhereTheFirst(1).Has(s => s.SeriesId = 12)
                      .AndTheNext(1).Has(s => s.SeriesId = 15)
                         .Build();
+
+            var episodes = Builder<Episode>.CreateListOfSize(10).Build();
 
             var notification = new ProgressNotification("Test");
 
@@ -116,6 +124,9 @@ namespace NzbDrone.Core.Test
 
             mocker.GetMock<MediaFileProvider>()
                 .Setup(s => s.GetSeriesFiles(It.IsAny<int>())).Returns(new List<EpisodeFile>());
+
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(s => s.GetEpisodeBySeries(It.IsAny<long>())).Returns(episodes);
 
             //Act
             mocker.Resolve<ImportNewSeriesJob>().Start(notification, 0);

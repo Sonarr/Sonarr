@@ -57,11 +57,5 @@ namespace NzbDrone.Core.Repository
 
         [Ignore]
         public virtual QualityProfile QualityProfile { get; set; }
-
-        [Ignore]
-        public virtual IList<Episode> Episodes { get; set; }
-
-        [Ignore]
-        public virtual IList<EpisodeFile> EpisodeFiles { get; protected set; }
     }
 }

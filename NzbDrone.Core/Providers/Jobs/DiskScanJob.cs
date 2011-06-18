@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Providers.Jobs
                 seriesToScan = new List<Series>() { _seriesProvider.GetSeries(targetId) };
             }
 
-            foreach (var series in seriesToScan.Where(c => c.Episodes.Count != 0))
+            foreach (var series in seriesToScan)
             {
                 try
                 {
