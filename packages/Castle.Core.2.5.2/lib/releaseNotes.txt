@@ -1,8 +1,0 @@
-You can find full list of changes in changes.txt, list of breaking changes in breakingchanges.txt (there are no known breaking changes between 2.5.1 and 2.5.2 release).
-
-Issue tracker: 		- http://issues.castleproject.org/dashboard
-Documentation (work in progress):
-Dictionary Adapter	- http://stw.castleproject.org/Tools.Castle-DictionaryAdapter.ashx
-DynamicProxy		- http://stw.castleproject.org/Tools.DynamicProxy.ashx
-Discusssion group: 	- http://groups.google.com/group/castle-project-users
-StackOverflow tags:	- castle-dynamicproxy, castle-dictionaryadapter, castle
