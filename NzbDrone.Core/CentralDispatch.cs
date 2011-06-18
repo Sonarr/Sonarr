@@ -68,7 +68,8 @@ namespace NzbDrone.Core
                 _kernel = new StandardKernel();
 
                 _kernel.Bind<IDatabase>().ToMethod(c => Connection.GetPetaPocoDb(Connection.MainConnectionString)).InRequestScope();
-                _kernel.Bind<IDatabase>().ToMethod(c => Connection.GetPetaPocoDb(Connection.MainConnectionString, false)).WhenInjectedInto<IJob>().InSingletonScope();
+                _kernel.Bind<IDatabase>().ToMethod(c => Connection.GetPetaPocoDb(Connection.MainConnectionString, false)).WhenInjectedInto<IJob>();
+                _kernel.Bind<IDatabase>().ToMethod(c => Connection.GetPetaPocoDb(Connection.MainConnectionString, false)).WhenInjectedInto<JobProvider>();
                 _kernel.Bind<IDatabase>().ToMethod(c => Connection.GetPetaPocoDb(Connection.LogConnectionString, false)).WhenInjectedInto<SubsonicTarget>().InSingletonScope();
                 _kernel.Bind<IDatabase>().ToMethod(c => Connection.GetPetaPocoDb(Connection.LogConnectionString)).WhenInjectedInto<LogProvider>().InRequestScope();
             }
@@ -76,10 +77,10 @@ namespace NzbDrone.Core
 
         private static void BindIndexers()
         {
-            _kernel.Bind<IndexerBase>().To<NzbsOrg>().InTransientScope();
-            _kernel.Bind<IndexerBase>().To<NzbMatrix>().InTransientScope();
-            _kernel.Bind<IndexerBase>().To<NzbsRUs>().InTransientScope();
-            _kernel.Bind<IndexerBase>().To<Newzbin>().InTransientScope();
+            _kernel.Bind<IndexerBase>().To<NzbsOrg>();
+            _kernel.Bind<IndexerBase>().To<NzbMatrix>();
+            _kernel.Bind<IndexerBase>().To<NzbsRUs>();
+            _kernel.Bind<IndexerBase>().To<Newzbin>();
 
             var indexers = _kernel.GetAll<IndexerBase>();
             _kernel.Get<IndexerProvider>().InitializeIndexers(indexers.ToList());
@@ -87,15 +88,15 @@ namespace NzbDrone.Core
 
         private static void BindJobs()
         {
-            _kernel.Bind<IJob>().To<RssSyncJob>().InTransientScope();
-            _kernel.Bind<IJob>().To<ImportNewSeriesJob>().InTransientScope();
-            _kernel.Bind<IJob>().To<UpdateInfoJob>().InTransientScope();
-            _kernel.Bind<IJob>().To<DiskScanJob>().InTransientScope();
-            _kernel.Bind<IJob>().To<DeleteSeriesJob>().InTransientScope();
-            _kernel.Bind<IJob>().To<EpisodeSearchJob>().InTransientScope();
-            _kernel.Bind<IJob>().To<RenameEpisodeJob>().InTransientScope();
-            _kernel.Bind<IJob>().To<PostDownloadScanJob>().InTransientScope();
-            _kernel.Bind<IJob>().To<UpdateSceneMappingsJob>().InTransientScope();
+            _kernel.Bind<IJob>().To<RssSyncJob>().InSingletonScope();
+            _kernel.Bind<IJob>().To<ImportNewSeriesJob>().InSingletonScope();
+            _kernel.Bind<IJob>().To<UpdateInfoJob>().InSingletonScope();
+            _kernel.Bind<IJob>().To<DiskScanJob>().InSingletonScope();
+            _kernel.Bind<IJob>().To<DeleteSeriesJob>().InSingletonScope();
+            _kernel.Bind<IJob>().To<EpisodeSearchJob>().InSingletonScope();
+            _kernel.Bind<IJob>().To<RenameEpisodeJob>().InSingletonScope();
+            _kernel.Bind<IJob>().To<PostDownloadScanJob>().InSingletonScope();
+            _kernel.Bind<IJob>().To<UpdateSceneMappingsJob>().InSingletonScope();
 
             _kernel.Get<JobProvider>().Initialize();
             _kernel.Get<WebTimer>().StartTimer(30);

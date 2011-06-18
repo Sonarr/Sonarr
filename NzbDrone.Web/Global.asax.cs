@@ -41,7 +41,8 @@ namespace NzbDrone.Web
             //base.OnApplicationStarted();
             AreaRegistration.RegisterAllAreas();
             RegisterGlobalFilters(GlobalFilters.Filters);
-            //RegisterRoutes(RouteTable.Routes);
+            
+            Logger.Debug("Fully initialized and ready.");
         }
 
         protected override IKernel CreateKernel()
