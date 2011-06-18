@@ -183,7 +183,7 @@ namespace NzbDrone.Web.Controllers
             }
             model.Overview = series.Overview;
             model.Seasons = _episodeProvider.GetSeasons(seriesId);
-            model.Title = series.Status;
+            model.Title = series.Title;
             model.SeriesId = series.SeriesId;
 
             return View(model);
