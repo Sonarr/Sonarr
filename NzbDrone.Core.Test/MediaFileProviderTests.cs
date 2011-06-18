@@ -106,7 +106,6 @@ namespace NzbDrone.Core.Test
             mocker.GetMock<DiskProvider>()
                 .Setup(e => e.GetSize(fileName)).Returns(size).Verifiable();
 
-
             //Act
             var result = mocker.Resolve<MediaFileProvider>().ImportFile(fakeSeries, fileName);
 

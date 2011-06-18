@@ -119,7 +119,15 @@ namespace NzbDrone.Core.Providers
                 return GetSeries(seriesId.Value);
             }
 
-            return _database.FirstOrDefault<Series>("WHERE CleanTitle = @0", normalizeTitle);
+            var series = _database.FirstOrDefault<Series>("WHERE CleanTitle = @0", normalizeTitle);
+
+            if (series != null)
+            {
+                series.QualityProfile = _qualityProvider.Get(series.QualityProfileId);
+                return series;
+            }
+
+            return null;
         }
 
         public virtual void UpdateSeries(Series series)
