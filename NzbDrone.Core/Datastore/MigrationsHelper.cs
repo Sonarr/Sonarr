@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using NLog;
 
@@ -8,12 +9,13 @@ namespace NzbDrone.Core.Datastore
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public static bool IsMigrated { get; private set; }
+        public static readonly Dictionary<String, String> _migrated = new Dictionary<string, string>();
 
         public static void Run(string connetionString, bool trace)
         {
-            if (IsMigrated) return;
-            IsMigrated = true;
+            if (_migrated.ContainsKey(connetionString)) return;
+            _migrated.Add(connetionString, string.Empty);
+
             Logger.Info("Preparing run database migration");
 
             try

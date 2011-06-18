@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Data.Common;
 using System.Data.SQLite;
 using System.IO;
 using MvcMiniProfiler.Data;
@@ -14,6 +15,7 @@ namespace NzbDrone.Core.Datastore
         static Connection()
         {
             if (!AppDataPath.Exists) AppDataPath.Create();
+            Database.Mapper = new CustomeMapper();
         }
 
 
@@ -38,18 +40,20 @@ namespace NzbDrone.Core.Datastore
             }
         }
 
-        
-        public static IDatabase GetPetaPocoDb(string connectionString)
+
+        public static IDatabase GetPetaPocoDb(string connectionString, Boolean profiled = true)
         {
             MigrationsHelper.Run(connectionString, true);
+            DbConnection connection = new SQLiteConnection(connectionString);
+            if (profiled)
+            {
+                //connection = ProfiledDbConnection.Get(connection);
+            }
 
-            var profileConnection = ProfiledDbConnection.Get(new SQLiteConnection(connectionString));
+            var db = new Database(connection);
 
-            Database.Mapper = new CustomeMapper();
-            var db = new Database(profileConnection);
-
-            if (profileConnection.State != ConnectionState.Open)
-                profileConnection.Open();
+            if (connection.State != ConnectionState.Open)
+                connection.Open();
 
             return db;
         }
