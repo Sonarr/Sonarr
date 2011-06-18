@@ -196,7 +196,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual EpisodeFile GetEpisodeFile(int episodeFileId)
         {
-            return _database.Single<EpisodeFile>(episodeFileId);
+            return _database.SingleOrDefault<EpisodeFile>(episodeFileId);
         }
 
         public virtual List<EpisodeFile> GetEpisodeFiles()
