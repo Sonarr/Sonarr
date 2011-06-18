@@ -1,27 +1,31 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using NLog;
+using PetaPoco;
 using SubSonic.Repository;
 
 namespace NzbDrone.Core.Instrumentation
 {
     public class LogProvider
     {
+        private readonly IDatabase _database;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private readonly IRepository _repository;
 
-        public LogProvider(IRepository repository)
+
+
+        public LogProvider(IDatabase database)
         {
-            _repository = repository;
+            _database = database;
         }
 
-        public IQueryable<Log> GetAllLogs()
+        public IList<Log> GetAllLogs()
         {
-            return _repository.All<Log>();
+            return _database.Fetch<Log>();
         }
 
         public void DeleteAll()
         {
-            _repository.DeleteMany(GetAllLogs());
+            _database.Delete<Log>("");
             Logger.Info("Cleared Log History");
         }
     }

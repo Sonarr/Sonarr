@@ -91,6 +91,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LogProviderTest.cs" />
     <Compile Include="UpcomingEpisodesProviderTest.cs" />
     <Compile Include="MediaFileProvider_ImportNewDownloadTest.cs" />
     <Compile Include="MediaFileProvider_GetNewFilenameTest.cs" />

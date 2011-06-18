@@ -1,14 +1,16 @@
 ﻿using System;
+using PetaPoco;
 using SubSonic.SqlGeneration.Schema;
 
 namespace NzbDrone.Core.Instrumentation
 {
+    [TableName("Logs")]
+    [PrimaryKey("LogId", autoIncrement = true)]
     public class Log
     {
-        [SubSonicPrimaryKey]
-        public int LogId { get; protected set; }
 
-        [SubSonicLongString]
+        public Int64 LogId { get; protected set; }
+
         public string Message { get; set; }
 
         public DateTime Time { get; set; }
@@ -17,11 +19,8 @@ namespace NzbDrone.Core.Instrumentation
 
         public string Method { get; set; }
 
-        [SubSonicNullString]
-        [SubSonicLongString]
         public string Exception { get; set; }
 
-        [SubSonicNullString]
         public string ExceptionType { get; set; }
 
         public String Level { get; set; }

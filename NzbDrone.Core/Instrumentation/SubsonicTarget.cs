@@ -1,17 +1,18 @@
 ﻿using System;
 using NLog;
 using NLog.Targets;
+using PetaPoco;
 using SubSonic.Repository;
 
 namespace NzbDrone.Core.Instrumentation
 {
     public class SubsonicTarget : Target
     {
-        private readonly IRepository _repository;
+        private readonly IDatabase _database;
 
-        public SubsonicTarget(IRepository repository)
+        public SubsonicTarget(IDatabase database)
         {
-            _repository = repository;
+            _database = database;
         }
 
         protected override void Write(LogEventInfo logEvent)
@@ -47,7 +48,7 @@ namespace NzbDrone.Core.Instrumentation
             log.Level = logEvent.Level.Name;
 
 
-            _repository.Add(log);
+            _database.Insert(log);
         }
     }
 }
