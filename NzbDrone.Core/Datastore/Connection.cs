@@ -51,6 +51,7 @@ namespace NzbDrone.Core.Datastore
             }
 
             var db = new Database(connection);
+            db.ForceDateTimesToUtc = false;
 
             if (connection.State != ConnectionState.Open)
                 connection.Open();
