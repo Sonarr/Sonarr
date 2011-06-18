@@ -23,17 +23,6 @@ namespace NzbDrone.Core.Test.Framework
             get { return new[] { "c:\\tv\\the simpsons", "c:\\tv\\family guy", "c:\\tv\\southpark", "c:\\tv\\24" }; }
         }
 
-        public static ConfigProvider StandardConfig
-        {
-            get
-            {
-                var mock = new Mock<ConfigProvider>();
-                mock.SetupGet(c => c.SeriesRoot).Returns("C:\\");
-                return mock.Object;
-            }
-        }
-
-
         public static IDatabase GetEmptyDatabase(bool enableLogging = false, string fileName = "")
         {
             Console.WriteLine("Creating an empty PetaPoco database");
@@ -81,15 +70,6 @@ namespace NzbDrone.Core.Test.Framework
                 .With(c => c.SeriesId = id)
                 .With(c => c.Title = title)
                 .With(c => c.CleanTitle = Parser.NormalizeTitle(title))
-                .Build();
-        }
-
-        public static IList<Episode> GetFakeEpisodes(int seriesId)
-        {
-            var epNumber = new SequentialGenerator<int>();
-            return Builder<Episode>.CreateListOfSize(10)
-                .WhereAll().Have(c => c.SeriesId = seriesId)
-                .WhereAll().Have(c => c.EpisodeNumber = epNumber.Generate())
                 .Build();
         }
     }

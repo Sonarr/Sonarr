@@ -1,5 +1,4 @@
-﻿// ReSharper disable RedundantUsingDirective
-using System;
+﻿using System;
 using System.Linq;
 using AutoMoq;
 using FizzWare.NBuilder;
@@ -15,11 +14,9 @@ using PetaPoco;
 using TvdbLib.Data;
 
 // ReSharper disable InconsistentNaming
-
 namespace NzbDrone.Core.Test
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
     public class SeriesProviderTest : TestBase
     {
         [Test]
@@ -130,10 +127,12 @@ namespace NzbDrone.Core.Test
             var db = MockLib.GetEmptyDatabase();
             mocker.SetConstant(db);
 
-            var fakeSeries = Builder<Series>.CreateNew().With(c => c.QualityProfileId = 1).Build();
+            var fakeSeries = Builder<Series>.CreateNew()
+                .With(c => c.QualityProfileId = 1)
+                .Build();
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
 
-            var id = db.Insert(fakeSeries);
+            db.Insert(fakeSeries);
             db.Insert(fakeQuality);
 
             //Act
@@ -141,9 +140,10 @@ namespace NzbDrone.Core.Test
             var series = mocker.Resolve<SeriesProvider>().GetSeries(1);
 
             //Assert
-            series.ShouldHave().AllPropertiesBut(s => s.QualityProfile, s => s.SeriesId);
+            series.ShouldHave().AllPropertiesBut(s => s.QualityProfile, s => s.SeriesId).EqualTo(fakeSeries);
             series.QualityProfile.Should().NotBeNull();
-            series.QualityProfile.ShouldHave().Properties(q => q.Name, q => q.SonicAllowed, q => q.Cutoff, q => q.AllowedString);
+            series.QualityProfile.ShouldHave().Properties(q => q.Name, q => q.SonicAllowed, q => q.Cutoff, q => q.SonicAllowed).EqualTo(fakeQuality);
+            
         }
 
         [Test]
@@ -239,8 +239,5 @@ namespace NzbDrone.Core.Test
             Assert.IsFalse(provider.IsMonitored(11));
             Assert.IsFalse(provider.IsMonitored(1));
         }
-
-
-
     }
 }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             

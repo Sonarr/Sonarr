@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Datastore
             DbConnection connection = new SQLiteConnection(connectionString);
             if (profiled)
             {
-                //connection = ProfiledDbConnection.Get(connection);
+                connection = ProfiledDbConnection.Get(connection);
             }
 
             var db = new Database(connection);
