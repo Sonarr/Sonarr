@@ -91,6 +91,13 @@ namespace NzbDrone.Core.Datastore.Migrations
                                                           new Column("Value", DbType.String, ColumnProperty.NotNull)
                                                       });
 
+            Database.AddTable("SceneMappings", "SQLite", new[]
+                                                      {
+                                                          new Column("CleanTitle", DbType.String, ColumnProperty.PrimaryKey),
+                                                          new Column("SeriesId", DbType.Int32, ColumnProperty.NotNull),
+                                                          new Column("SceneName", DbType.String, ColumnProperty.NotNull)
+                                                      });
+
             Database.AddTable("History", "SQLite", new[]
                                                             {
                                                                 new Column("HistoryId", DbType.Int64, ColumnProperty.PrimaryKey),
