@@ -13,11 +13,14 @@ namespace NzbDrone.Web.Controllers
     {
         private readonly HistoryProvider _historyProvider;
         private readonly EpisodeProvider _episodeProvider;
+        private readonly SeriesProvider _seriesProvider;
 
-        public HistoryController(HistoryProvider historyProvider, EpisodeProvider episodeProvider)
+        public HistoryController(HistoryProvider historyProvider, EpisodeProvider episodeProvider,
+            SeriesProvider seriesProvider)
         {
             _historyProvider = historyProvider;
             _episodeProvider = episodeProvider;
+            _seriesProvider = seriesProvider;
         }
 
         //
@@ -43,17 +46,14 @@ namespace NzbDrone.Web.Controllers
         [GridAction]
         public ActionResult _AjaxBinding()
         {
-
-            //TODO: possible subsonic bug, IQuarible causes some issues so ToList() is called
-            //https://github.com/subsonic/SubSonic-3.0/issues/263
-
-            var historyDb = _historyProvider.AllItems().ToList();
+            var historyDb = _historyProvider.AllItems();
             
             var history = new List<HistoryModel>();
 
             foreach (var item in historyDb)
             {
                 var episode = _episodeProvider.GetEpisode(item.EpisodeId);
+                var series = _seriesProvider.GetSeries(item.SeriesId);
        
                 history.Add(new HistoryModel
                                             {
@@ -62,7 +62,7 @@ namespace NzbDrone.Web.Controllers
                                                 EpisodeNumber = episode.EpisodeNumber,
                                                 EpisodeTitle = episode.Title,
                                                 EpisodeOverview = episode.Overview,
-                                                SeriesTitle = episode.Series.Title,
+                                                SeriesTitle = series.Title,
                                                 NzbTitle = item.NzbTitle,
                                                 Quality = item.Quality.ToString(),
                                                 IsProper = item.IsProper,

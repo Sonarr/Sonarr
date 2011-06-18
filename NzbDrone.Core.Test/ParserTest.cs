@@ -38,6 +38,8 @@ namespace NzbDrone.Core.Test
         [TestCase("The.Office.S03E115.DVDRip.XviD-OSiTV", "The.Office", 3, 115)]
         [TestCase(@"Parks and Recreation - S02E21 - 94 Meetings - 720p TV.mkv", "Parks and Recreation", 2, 21)]
         [TestCase(@"24-7 Penguins-Capitals- Road to the NHL Winter Classic - S01E03 - Episode 3.mkv", "24-7 Penguins-Capitals- Road to the NHL Winter Classic", 1, 3)]
+        [TestCase("Adventure.Inc.S03E19.DVDRip.\"XviD\"-OSiTV", "Adventure.Inc", 3, 19)]
+        [TestCase("C:/Test/TV/Chuck.4x05.HDTV.XviD-LOL", "Chuck", 4, 5)]
         public void episode_parse(string postTitle, string title, int season, int episode)
         {
             var result = Parser.ParseEpisodeInfo(postTitle);

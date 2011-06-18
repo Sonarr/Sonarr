@@ -11,10 +11,12 @@ namespace NzbDrone.Web.Controllers
     public class UpcomingController : Controller
     {
         private readonly UpcomingEpisodesProvider _upcomingEpisodesProvider;
+        private readonly SeriesProvider _seriesProvider;
 
-        public UpcomingController(UpcomingEpisodesProvider upcomingEpisodesProvider)
+        public UpcomingController(UpcomingEpisodesProvider upcomingEpisodesProvider, SeriesProvider seriesProvider)
         {
             _upcomingEpisodesProvider = upcomingEpisodesProvider;
+            _seriesProvider = seriesProvider;
         }
 
         //
@@ -33,7 +35,7 @@ namespace NzbDrone.Web.Controllers
                 
             foreach (var item in upcomingDb)
             {
-                var series = item.Series;
+                var series = _seriesProvider.GetSeries(item.SeriesId);
 
                 upcoming.Add(new UpcomingEpisodeModel
                                                     {
@@ -59,7 +61,7 @@ namespace NzbDrone.Web.Controllers
 
             foreach (var item in upcomingDb)
             {
-                var series = item.Series;
+                var series = _seriesProvider.GetSeries(item.SeriesId);
 
                 upcoming.Add(new UpcomingEpisodeModel
                 {
@@ -85,7 +87,7 @@ namespace NzbDrone.Web.Controllers
 
             foreach (var item in upcomingDb)
             {
-                var series = item.Series;
+                var series = _seriesProvider.GetSeries(item.SeriesId);
 
                 upcoming.Add(new UpcomingEpisodeModel
                 {
@@ -111,7 +113,7 @@ namespace NzbDrone.Web.Controllers
 
             foreach (var item in upcomingDb)
             {
-                var series = item.Series;
+                var series = _seriesProvider.GetSeries(item.SeriesId);
 
                 upcoming.Add(new UpcomingEpisodeModel
                 {
