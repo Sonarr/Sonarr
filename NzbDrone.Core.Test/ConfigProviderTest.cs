@@ -1,11 +1,9 @@
 ﻿using AutoMoq;
 using FluentAssertions;
-using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
-using SubSonic.Repository;
 
 namespace NzbDrone.Core.Test
 {

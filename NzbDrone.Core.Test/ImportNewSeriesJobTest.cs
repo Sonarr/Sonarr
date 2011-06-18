@@ -1,7 +1,6 @@
 ﻿// ReSharper disable RedundantUsingDirective
-using System.Linq;
+using System;
 using System.Collections.Generic;
-using System.Threading;
 using AutoMoq;
 using FizzWare.NBuilder;
 using Moq;
@@ -11,7 +10,6 @@ using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Jobs;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
-using System;
 
 namespace NzbDrone.Core.Test
 {

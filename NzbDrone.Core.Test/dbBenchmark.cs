@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
+using AutoMoq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
-using SubSonic.Repository;
 
 namespace NzbDrone.Core.Test
 {
@@ -139,7 +139,7 @@ namespace NzbDrone.Core.Test
         [Test]
         public void get_episode_file_count_x100()
         {
-            var mocker = new AutoMoq.AutoMoqer();
+            var mocker = new AutoMoqer();
             //mocker.SetConstant(repo);
             mocker.SetConstant(mocker.Resolve<EpisodeProvider>());
             var mediaProvider = mocker.Resolve<MediaFileProvider>();
@@ -167,7 +167,7 @@ namespace NzbDrone.Core.Test
         [Test]
         public void get_season_count_x5000()
         {
-            var mocker = new AutoMoq.AutoMoqer();
+            var mocker = new AutoMoqer();
             //mocker.SetConstant(repo);
             var provider = mocker.Resolve<EpisodeProvider>();
 
@@ -194,7 +194,7 @@ namespace NzbDrone.Core.Test
         [Test]
         public void get_episode_file_count_x10()
         {
-            var mocker = new AutoMoq.AutoMoqer();
+            var mocker = new AutoMoqer();
             //mocker.SetConstant(repo);
             mocker.SetConstant(mocker.Resolve<EpisodeProvider>());
             var provider = mocker.Resolve<MediaFileProvider>();

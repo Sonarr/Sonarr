@@ -6,13 +6,10 @@ using System.Linq;
 using FizzWare.NBuilder;
 using Moq;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using PetaPoco;
-using SubSonic.DataProviders;
-using SubSonic.Repository;
 
 namespace NzbDrone.Core.Test.Framework
 {
@@ -94,13 +91,6 @@ namespace NzbDrone.Core.Test.Framework
                 .WhereAll().Have(c => c.SeriesId = seriesId)
                 .WhereAll().Have(c => c.EpisodeNumber = epNumber.Generate())
                 .Build();
-        }
-
-        private static void ForceMigration(IRepository repository)
-        {
-            repository.All<EpisodeFile>().Count();
-            repository.All<QualityProfile>().Count();
-            repository.All<History>().Count();
         }
     }
 }

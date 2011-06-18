@@ -1,5 +1,4 @@
-﻿using NUnit;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace NzbDrone.Core.Test.Framework
 {

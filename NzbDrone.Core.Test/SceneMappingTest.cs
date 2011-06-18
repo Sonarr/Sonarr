@@ -1,19 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using AutoMoq;
+﻿using AutoMoq;
 using FizzWare.NBuilder;
-using FluentAssertions;
-using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
-using SubSonic.Repository;
-using TvdbLib.Data;
 
 namespace NzbDrone.Core.Test
 {

@@ -1,16 +1,16 @@
 ﻿// ReSharper disable RedundantUsingDirective
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Test.Framework;
 using TvdbLib.Data;
-using System.Collections.Generic;
 
 namespace NzbDrone.Core.Test
 {
-    [NUnit.Framework.TestFixture]
+    [TestFixture]
     // ReSharper disable InconsistentNaming
     public class TvDbProviderTest : TestBase
     {
