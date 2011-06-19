@@ -46,30 +46,20 @@ namespace NzbDrone.Web.Controllers
         [GridAction]
         public ActionResult _AjaxBinding()
         {
-            var historyDb = _historyProvider.AllItems();
-            
-            var history = new List<HistoryModel>();
-
-            foreach (var item in historyDb)
-            {
-                var episode = _episodeProvider.GetEpisode(item.EpisodeId);
-                var series = _seriesProvider.GetSeries(item.SeriesId);
-       
-                history.Add(new HistoryModel
+            var history = _historyProvider.AllItemsWithRelationships().Select(h => new HistoryModel
                                             {
-                                                HistoryId = item.HistoryId,
-                                                SeasonNumber = episode.SeasonNumber,
-                                                EpisodeNumber = episode.EpisodeNumber,
-                                                EpisodeTitle = episode.Title,
-                                                EpisodeOverview = episode.Overview,
-                                                SeriesTitle = series.Title,
-                                                NzbTitle = item.NzbTitle,
-                                                Quality = item.Quality.ToString(),
-                                                IsProper = item.IsProper,
-                                                Date = item.Date,
-                                                Indexer = item.Indexer
+                                                HistoryId = h.HistoryId,
+                                                SeasonNumber = h.Episode.SeasonNumber,
+                                                EpisodeNumber = h.Episode.EpisodeNumber,
+                                                EpisodeTitle = h.Episode.Title,
+                                                EpisodeOverview = h.Episode.Overview,
+                                                SeriesTitle = h.SeriesTitle,
+                                                NzbTitle = h.NzbTitle,
+                                                Quality = h.Quality.ToString(),
+                                                IsProper = h.IsProper,
+                                                Date = h.Date,
+                                                Indexer = h.Indexer
                                             });
-            }
 
             return View(new GridModel(history));
         }
