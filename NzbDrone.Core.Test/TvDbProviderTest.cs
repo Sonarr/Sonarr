@@ -112,11 +112,11 @@ namespace NzbDrone.Core.Test
             var seasonsNumbers = result.Episodes.Select(e => e.SeasonNumber)
                 .Distinct().ToList();
 
-            var seasons = new List<List<TvdbEpisode>>(seasonsNumbers.Count);
+            var seasons = new Dictionary<int, List<TvdbEpisode>>(seasonsNumbers.Count);
 
             foreach (var season in seasonsNumbers)
             {
-                seasons.Insert(season, result.Episodes.Where(e => e.SeasonNumber == season).ToList());
+                seasons.Add(season, result.Episodes.Where(e => e.SeasonNumber == season).ToList());
             }
 
             foreach (var episode in result.Episodes)
@@ -134,16 +134,16 @@ namespace NzbDrone.Core.Test
 
             foreach (var season in seasons)
             {
-                season.Should().OnlyHaveUniqueItems();
+                season.Value.Should().OnlyHaveUniqueItems();
             }
 
             //Make sure no episode number is skipped
             foreach (var season in seasons)
             {
-                for (int i = 1; i < season.Count; i++)
+                for (int i = 1; i < season.Value.Count; i++)
                 {
-                    season.Should().Contain(c => c.EpisodeNumber == i, "Can't find Episode S{0:00}E{1:00}",
-                                            season[0].SeasonNumber, i);
+                    season.Value.Should().Contain(c => c.EpisodeNumber == i, "Can't find Episode S{0:00}E{1:00}",
+                                            season.Value[0].SeasonNumber, i);
                 }
             }
 
