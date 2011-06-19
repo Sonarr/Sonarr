@@ -84,6 +84,21 @@ namespace NzbDrone.Core.Test
             Assert.IsNull(result);
         }
 
+        [Test]
+        public void none_unique_season_episode_number()
+        {
+            //setup
+            var tvdbProvider = new TvDbProvider();
+
+            //act
+            var result = tvdbProvider.GetSeries(75978, true);//Family guy
+
+            //Asserts that when episodes are grouped by Season/Episode each group contains maximum of
+            //one item.
+            result.Episodes.GroupBy(e => e.SeasonNumber.ToString("000") + e.EpisodeNumber.ToString("000"))
+                .Max(e => e.Count()).Should().Be(1);
+
+        }
 
         [Test]
         public void American_dad_fix()

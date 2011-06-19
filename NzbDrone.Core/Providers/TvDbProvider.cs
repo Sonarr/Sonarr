@@ -105,6 +105,13 @@ namespace NzbDrone.Core.Providers
                     }
                 }
 
+                //Remove duplicated episodes
+                var episodes = result.Episodes.OrderByDescending(e => e.FirstAired).ThenByDescending(e => e.EpisodeName)
+                     .GroupBy(e => e.SeriesId.ToString("000000") + e.SeasonNumber.ToString("000") + e.EpisodeNumber.ToString("000"))
+                     .Select(e => e.First());
+
+                result.Episodes = episodes.ToList();
+
                 return result;
             }
         }
