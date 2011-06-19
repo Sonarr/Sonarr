@@ -106,6 +106,7 @@ namespace NzbDrone.Core.Test
 
 
         [Test]
+        [ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "Sequence contains no elements")]
         public void Get_series_invalid_series_id_should_return_null()
         {
             var mocker = new AutoMoqer();

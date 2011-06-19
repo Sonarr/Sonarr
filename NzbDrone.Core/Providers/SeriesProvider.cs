@@ -44,11 +44,9 @@ namespace NzbDrone.Core.Providers
 
         public virtual Series GetSeries(int seriesId)
         {
-           var series = _database.SingleOrDefault<Series>("WHERE seriesId= @0", seriesId);
-            if (series != null)
-            {
-               series.QualityProfile = _qualityProvider.Get(series.QualityProfileId);
-            }
+            var series = _database.Single<Series>("WHERE seriesId= @0", seriesId);
+            series.QualityProfile = _qualityProvider.Get(series.QualityProfileId);
+
             return series;
         }
 
