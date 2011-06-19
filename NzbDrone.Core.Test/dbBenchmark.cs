@@ -91,7 +91,7 @@ namespace NzbDrone.Core.Test
         [Test]
         public void get_episode_by_series_seasons_episode_x5000()
         {
-            var epProvider = new EpisodeProvider(null, null);
+            var epProvider = new EpisodeProvider(null, null, null);
 
 
             Thread.Sleep(1000);
@@ -115,7 +115,7 @@ namespace NzbDrone.Core.Test
         [Test]
         public void get_episode_by_series_seasons_x1000()
         {
-            var epProvider = new EpisodeProvider( null, null);
+            var epProvider = new EpisodeProvider(null, null, null);
 
 
             Thread.Sleep(1000);
