@@ -8,13 +8,14 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
+using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
+using PetaPoco;
 
 namespace NzbDrone.Core.Test
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    [Ignore]
     public class DbBenchmark : TestBase
     {
         const int Episodes_Per_Season = 20;
@@ -22,6 +23,7 @@ namespace NzbDrone.Core.Test
         private readonly List<int> seriesIds = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
         private readonly List<Episode> episodes = new List<Episode>();
         private readonly List<EpisodeFile> files = new List<EpisodeFile>();
+        private IDatabase db;
 
 
         [TestFixtureSetUp]
@@ -30,7 +32,17 @@ namespace NzbDrone.Core.Test
 
 
             base.Setup();
+            db = MockLib.GetEmptyDatabase();
             int currentFileId = 0;
+
+
+            var qulityProfile = new QualityProfile
+                                    {
+                                        Name = "TestProfile",
+                                        Allowed = new List<QualityTypes> { QualityTypes.DVD, QualityTypes.Bluray1080p },
+                                        Cutoff = QualityTypes.DVD
+                                    };
+            db.Insert(qulityProfile);
 
             foreach (var _seriesId in seriesIds)
             {
@@ -40,7 +52,7 @@ namespace NzbDrone.Core.Test
                     .With(s => s.Monitored = true)
                     .Build();
 
-                //repo.Add(series);
+                db.Insert(series);
 
                 foreach (var _seasonNumber in seasonsNumbers)
                 {
@@ -52,8 +64,7 @@ namespace NzbDrone.Core.Test
                         {
                             var epFile = Builder<EpisodeFile>.CreateNew()
                                .With(e => e.SeriesId = seriesId)
-                               .With(e => e.SeriesId = seriesId)
-                               .And(e => e.SeasonNumber = _seasonNumber)
+                                .And(e => e.SeasonNumber = _seasonNumber)
                                .And(e => e.Path = Guid.NewGuid().ToString())
                                .Build();
 
@@ -83,19 +94,21 @@ namespace NzbDrone.Core.Test
 
             }
 
-            //repo.AddMany(episodes);
-            //repo.AddMany(files);
+            db.InsertMany(episodes);
+            db.InsertMany(files);
         }
 
 
         [Test]
         public void get_episode_by_series_seasons_episode_x5000()
         {
-            var epProvider = new EpisodeProvider(null, null, null);
+            var mocker = new AutoMoqer();
+            mocker.SetConstant(db);
+            mocker.Resolve<SeriesProvider>();
 
+            var epProvider = mocker.Resolve<EpisodeProvider>();
 
             Thread.Sleep(1000);
-
 
             var random = new Random();
             Console.WriteLine("Starting Test");
@@ -103,9 +116,9 @@ namespace NzbDrone.Core.Test
             var sw = Stopwatch.StartNew();
             for (int i = 0; i < 5000; i++)
             {
-                epProvider.GetEpisode(6, random.Next(2, 5), random.Next(2, Episodes_Per_Season - 10)).Should().NotBeNull();
+                var ep = epProvider.GetEpisode(6, random.Next(2, 5), random.Next(2, Episodes_Per_Season - 10));
+                ep.Series.Should().NotBeNull();
             }
-
 
             sw.Stop();
 
@@ -115,7 +128,11 @@ namespace NzbDrone.Core.Test
         [Test]
         public void get_episode_by_series_seasons_x1000()
         {
-            var epProvider = new EpisodeProvider(null, null, null);
+            var mocker = new AutoMoqer();
+            mocker.SetConstant(db);
+            mocker.Resolve<SeriesProvider>();
+
+            var epProvider = mocker.Resolve<EpisodeProvider>();
 
 
             Thread.Sleep(1000);
@@ -140,8 +157,9 @@ namespace NzbDrone.Core.Test
         public void get_episode_file_count_x100()
         {
             var mocker = new AutoMoqer();
-            //mocker.SetConstant(repo);
-            mocker.SetConstant(mocker.Resolve<EpisodeProvider>());
+            mocker.SetConstant(db);
+            mocker.Resolve<SeriesProvider>();
+            mocker.Resolve<EpisodeProvider>();
             var mediaProvider = mocker.Resolve<MediaFileProvider>();
 
 
@@ -163,12 +181,40 @@ namespace NzbDrone.Core.Test
             Console.WriteLine("Took " + sw.Elapsed);
         }
 
+        [Test]
+        public void get_episode_file_count_x1000()
+        {
+            var mocker = new AutoMoqer();
+            mocker.SetConstant(db);
+            mocker.Resolve<SeriesProvider>();
+            mocker.Resolve<EpisodeProvider>();
+            var mediaProvider = mocker.Resolve<MediaFileProvider>();
+
+
+            Thread.Sleep(1000);
+
+
+            var random = new Random();
+            Console.WriteLine("Starting Test");
+
+            var sw = Stopwatch.StartNew();
+            for (int i = 0; i < 1000; i++)
+            {
+                mediaProvider.GetEpisodeFilesCount(random.Next(1, 5)).Should().NotBeNull();
+            }
+
+
+            sw.Stop();
+
+            Console.WriteLine("Took " + sw.Elapsed);
+        }
+
 
         [Test]
         public void get_season_count_x5000()
         {
             var mocker = new AutoMoqer();
-            //mocker.SetConstant(repo);
+            mocker.SetConstant(db);
             var provider = mocker.Resolve<EpisodeProvider>();
 
 
@@ -191,34 +237,6 @@ namespace NzbDrone.Core.Test
         }
 
 
-        [Test]
-        public void get_episode_file_count_x10()
-        {
-            var mocker = new AutoMoqer();
-            //mocker.SetConstant(repo);
-            mocker.SetConstant(mocker.Resolve<EpisodeProvider>());
-            var provider = mocker.Resolve<MediaFileProvider>();
-
-
-            Thread.Sleep(1000);
-
-
-            var random = new Random();
-            Console.WriteLine("Starting Test");
-
-            var sw = Stopwatch.StartNew();
-            for (int i = 0; i < 100; i++)
-            {
-                var result = provider.GetEpisodeFilesCount(random.Next(1, 10));
-                result.Item1.Should().NotBe(0);
-                result.Item2.Should().NotBe(0);
-            }
-
-
-            sw.Stop();
-
-            Console.WriteLine("Took " + sw.Elapsed);
-        }
-
+       
     }
 }
