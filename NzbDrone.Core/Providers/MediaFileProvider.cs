@@ -204,7 +204,7 @@ namespace NzbDrone.Core.Providers
             return _database.Fetch<EpisodeFile>();
         }
 
-        public virtual List<EpisodeFile> GetSeriesFiles(int seriesId)
+        public virtual IList<EpisodeFile> GetSeriesFiles(int seriesId)
         {
             return _database.Fetch<EpisodeFile>("WHERE seriesId= @0", seriesId);
         }

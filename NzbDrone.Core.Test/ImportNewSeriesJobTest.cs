@@ -26,8 +26,6 @@ namespace NzbDrone.Core.Test
                      .AndTheNext(1).Has(s => s.SeriesId = 15)
                         .Build();
 
-            var episodes = Builder<Episode>.CreateListOfSize(10).Build();
-
             var notification = new ProgressNotification("Test");
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
@@ -39,36 +37,27 @@ namespace NzbDrone.Core.Test
 
             mocker.GetMock<DiskScanJob>()
                 .Setup(j => j.Start(notification, series[0].SeriesId))
-                .Callback(() => series[0].LastDiskSync = DateTime.Now)
-                    .AtMostOnce();
+                .Callback(() => series[0].LastDiskSync = DateTime.Now);
+
 
             mocker.GetMock<DiskScanJob>()
                 .Setup(j => j.Start(notification, series[1].SeriesId))
-                .Callback(() => series[1].LastDiskSync = DateTime.Now)
-                    .AtMostOnce();
+                .Callback(() => series[1].LastDiskSync = DateTime.Now);
+
 
             mocker.GetMock<UpdateInfoJob>()
                 .Setup(j => j.Start(notification, series[0].SeriesId))
-                .Callback(() => series[0].LastInfoSync = DateTime.Now)
-                    .AtMostOnce();
+                .Callback(() => series[0].LastInfoSync = DateTime.Now);
 
             mocker.GetMock<UpdateInfoJob>()
                 .Setup(j => j.Start(notification, series[1].SeriesId))
-                .Callback(() => series[1].LastInfoSync = DateTime.Now)
-                .AtMostOnce();
+                .Callback(() => series[1].LastInfoSync = DateTime.Now);
 
             mocker.GetMock<SeriesProvider>()
                 .Setup(s => s.GetSeries(series[0].SeriesId)).Returns(series[0]);
 
             mocker.GetMock<SeriesProvider>()
                 .Setup(s => s.GetSeries(series[1].SeriesId)).Returns(series[1]);
-
-
-            mocker.GetMock<EpisodeProvider>()
-                .Setup(s => s.GetEpisodeBySeries(series[0].SeriesId)).Returns(episodes);
-
-            mocker.GetMock<EpisodeProvider>()
-                .Setup(s => s.GetEpisodeBySeries(series[1].SeriesId)).Returns(episodes);
 
             mocker.GetMock<MediaFileProvider>()
                 .Setup(s => s.GetSeriesFiles(It.IsAny<int>())).Returns(new List<EpisodeFile>());
@@ -78,6 +67,13 @@ namespace NzbDrone.Core.Test
 
             //Assert
             mocker.VerifyAllMocks();
+
+            mocker.GetMock<DiskScanJob>().Verify(j => j.Start(notification, series[0].SeriesId), Times.Once());
+            mocker.GetMock<DiskScanJob>().Verify(j => j.Start(notification, series[1].SeriesId), Times.Once());
+
+            mocker.GetMock<UpdateInfoJob>().Verify(j => j.Start(notification, series[0].SeriesId), Times.Once());
+            mocker.GetMock<UpdateInfoJob>().Verify(j => j.Start(notification, series[1].SeriesId), Times.Once());
+
         }
 
 
@@ -93,8 +89,6 @@ namespace NzbDrone.Core.Test
                      .AndTheNext(1).Has(s => s.SeriesId = 15)
                         .Build();
 
-            var episodes = Builder<Episode>.CreateListOfSize(10).Build();
-
             var notification = new ProgressNotification("Test");
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
@@ -105,18 +99,15 @@ namespace NzbDrone.Core.Test
 
             mocker.GetMock<UpdateInfoJob>()
                 .Setup(j => j.Start(notification, series[0].SeriesId))
-                .Callback(() => series[0].LastInfoSync = DateTime.Now)
-           .AtMostOnce();
+                .Callback(() => series[0].LastInfoSync = DateTime.Now);
 
             mocker.GetMock<UpdateInfoJob>()
                 .Setup(j => j.Start(notification, series[1].SeriesId))
-                .Throws(new InvalidOperationException())
-                .AtMostOnce();
+                .Throws(new InvalidOperationException());
 
             mocker.GetMock<DiskScanJob>()
                 .Setup(j => j.Start(notification, series[0].SeriesId))
-                .Callback(() => series[0].LastDiskSync = DateTime.Now)
-                    .AtMostOnce();
+                .Callback(() => series[0].LastDiskSync = DateTime.Now);
 
 
             mocker.GetMock<SeriesProvider>()
@@ -125,17 +116,98 @@ namespace NzbDrone.Core.Test
             mocker.GetMock<MediaFileProvider>()
                 .Setup(s => s.GetSeriesFiles(It.IsAny<int>())).Returns(new List<EpisodeFile>());
 
-            mocker.GetMock<EpisodeProvider>()
-                .Setup(s => s.GetEpisodeBySeries(It.IsAny<long>())).Returns(episodes);
-
             //Act
             mocker.Resolve<ImportNewSeriesJob>().Start(notification, 0);
 
             //Assert
             mocker.VerifyAllMocks();
+
+            mocker.GetMock<UpdateInfoJob>().Verify(j => j.Start(notification, series[0].SeriesId), Times.Once());
+            mocker.GetMock<UpdateInfoJob>().Verify(j => j.Start(notification, series[1].SeriesId), Times.Once());
+
+            mocker.GetMock<DiskScanJob>().Verify(j => j.Start(notification, series[0].SeriesId), Times.Once());
+
             ExceptionVerification.ExcpectedErrors(1);
+
         }
 
+
+
+        [Test]
+        public void AutoIgnoreSeason_new_series_should_not_ignore_any()
+        {
+            int seriesId = 12;
+
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+            mocker.GetMock<MediaFileProvider>()
+                .Setup(p => p.GetSeriesFiles(seriesId))
+                .Returns(new List<EpisodeFile>());
+
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(p => p.GetSeasons(seriesId))
+                .Returns(new List<int> { 0, 1, 2, 3, 4 });
+
+            mocker.Resolve<ImportNewSeriesJob>().AutoIgnoreSeasons(seriesId);
+
+
+            mocker.GetMock<EpisodeProvider>().Verify(p => p.SetSeasonIgnore(seriesId, It.IsAny<int>(), It.IsAny<Boolean>()), Times.Never());
+        }
+
+        [Test]
+        public void AutoIgnoreSeason_existing_should_not_ignore_currentseason()
+        {
+            int seriesId = 12;
+
+            var episodesFiles = Builder<EpisodeFile>.CreateListOfSize(2)
+            .WhereAll().Have(e => e.SeriesId = seriesId)
+            .Build();
+
+            episodesFiles[0].SeasonNumber = 0;
+            episodesFiles[1].SeasonNumber = 1;
+
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+
+            mocker.GetMock<MediaFileProvider>()
+                .Setup(p => p.GetSeriesFiles(seriesId))
+                .Returns(episodesFiles);
+
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(p => p.GetSeasons(seriesId))
+                .Returns(new List<int> { 0, 1, 2 });
+
+            mocker.Resolve<ImportNewSeriesJob>().AutoIgnoreSeasons(seriesId);
+
+            mocker.GetMock<EpisodeProvider>().Verify(p => p.SetSeasonIgnore(seriesId, 2, It.IsAny<Boolean>()), Times.Never());
+        }
+
+        [Test]
+        public void AutoIgnoreSeason_existing_should_ignore_seasons_with_no_file()
+        {
+            int seriesId = 12;
+
+            var episodesFiles = Builder<EpisodeFile>.CreateListOfSize(2)
+            .WhereAll().Have(e => e.SeriesId = seriesId)
+            .Build();
+
+            episodesFiles[0].SeasonNumber = 1;
+
+            var mocker = new AutoMoqer();
+
+            mocker.GetMock<MediaFileProvider>()
+                .Setup(p => p.GetSeriesFiles(seriesId))
+                .Returns(episodesFiles);
+
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(p => p.GetSeasons(seriesId))
+                .Returns(new List<int> { 0, 1, 2 });
+
+            mocker.Resolve<ImportNewSeriesJob>().AutoIgnoreSeasons(seriesId);
+
+            mocker.GetMock<EpisodeProvider>().Verify(p => p.SetSeasonIgnore(seriesId, 0, true), Times.Once());
+            mocker.GetMock<EpisodeProvider>().Verify(p => p.SetSeasonIgnore(seriesId, 1, true), Times.Never());
+            mocker.GetMock<EpisodeProvider>().Verify(p => p.SetSeasonIgnore(seriesId, 2, It.IsAny<Boolean>()), Times.Never());
+        }
     }
+
 
 }

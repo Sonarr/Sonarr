@@ -71,7 +71,7 @@ namespace NzbDrone.Core.Providers.Jobs
                     _diskScanJob.Start(notification, currentSeries.SeriesId);
 
                     var updatedSeries = _seriesProvider.GetSeries(currentSeries.SeriesId);
-                    AutoIgnoreSeasons(updatedSeries);
+                    AutoIgnoreSeasons(updatedSeries.SeriesId);
 
                 }
                 catch (Exception e)
@@ -84,20 +84,20 @@ namespace NzbDrone.Core.Providers.Jobs
             ScanSeries(notification);
         }
 
-        private void AutoIgnoreSeasons(Series updatedSeries)
+        public void AutoIgnoreSeasons(int seriesId)
         {
-            var episodeFiles = _mediaFileProvider.GetSeriesFiles(updatedSeries.SeriesId);
-            var episodes = _episodeProvider.GetEpisodeBySeries(updatedSeries.SeriesId);
+            var episodeFiles = _mediaFileProvider.GetSeriesFiles(seriesId);
+
             if (episodeFiles.Count() != 0)
             {
-                var seasons = episodes.Select(c => c.SeasonNumber).Distinct();
+                var seasons = _episodeProvider.GetSeasons(seriesId);
                 var currentSeasons = seasons.Max();
 
                 foreach (var season in seasons)
                 {
-                    if (season != currentSeasons)
+                    if (season != currentSeasons && !episodeFiles.Any(e => e.SeasonNumber == season))
                     {
-
+                        _episodeProvider.SetSeasonIgnore(seriesId, season, true);
                     }
                 }
             }
