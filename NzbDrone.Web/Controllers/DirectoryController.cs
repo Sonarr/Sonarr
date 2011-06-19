@@ -50,7 +50,7 @@ namespace NzbDrone.Web.Controllers
                     return new SelectList(dirs, dirs.FirstOrDefault());
                 }
             }
-            catch(Exception ex)
+            catch
             {
                 //Swallow the exceptions so proper JSON is returned to the client (Empty results)
             }

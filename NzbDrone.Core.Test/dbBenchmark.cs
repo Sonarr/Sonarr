@@ -211,7 +211,7 @@ namespace NzbDrone.Core.Test
 
 
         [Test]
-        public void get_season_count_x5000()
+        public void get_season_count_x500()
         {
             var mocker = new AutoMoqer();
             mocker.SetConstant(db);
@@ -225,7 +225,7 @@ namespace NzbDrone.Core.Test
             Console.WriteLine("Starting Test");
 
             var sw = Stopwatch.StartNew();
-            for (int i = 0; i < 5000; i++)
+            for (int i = 0; i < 500; i++)
             {
                 provider.GetSeasons(random.Next(1, 10)).Should().HaveSameCount(seasonsNumbers);
             }

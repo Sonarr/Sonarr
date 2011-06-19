@@ -18,7 +18,6 @@ namespace NzbDrone.Core.Test
         private Episode tomorrow;
         private Episode twoDays;
         private Episode sevenDays;
-        private Episode eightDays;
 
         [SetUp]
         public new void Setup()

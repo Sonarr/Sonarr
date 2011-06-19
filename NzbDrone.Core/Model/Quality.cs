@@ -85,5 +85,31 @@ namespace NzbDrone.Core.Model
 
             return result;
         }
+
+        public override int GetHashCode()
+        {
+            unchecked // Overflow is fine, just wrap
+            {
+                int hash = 17;
+                hash = hash * 23 + Proper.GetHashCode();
+                hash = hash * 23 + QualityType.GetHashCode();
+                return hash;
+            }
+        }
+
+        public bool Equals(Quality other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Equals(other.QualityType, QualityType) && other.Proper.Equals(Proper);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != typeof (Quality)) return false;
+            return Equals((Quality) obj);
+        }
     }
 }
