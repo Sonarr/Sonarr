@@ -29,12 +29,44 @@ namespace NzbDrone.Core.Test
 
             db.InsertMany(historyItem);
 
-
             //Act
             var result = mocker.Resolve<HistoryProvider>().AllItems();
 
             //Assert
             result.Should().HaveSameCount(historyItem);
+        }
+
+        [Test]
+        public void AllItemsWithRelationships()
+        {
+            //Setup
+            var seriesOne = Builder<Series>.CreateNew().With(s => s.SeriesId = 12345).Build();
+            var seriesTwo = Builder<Series>.CreateNew().With(s => s.SeriesId = 54321).Build();
+
+            var episodes = Builder<Episode>.CreateListOfSize(10).Build();
+
+            var historyItems = Builder<History>.CreateListOfSize(10).WhereTheFirst(5).Have(h => h.SeriesId = seriesOne.SeriesId).WhereTheLast(5).Have(h => h.SeriesId = seriesTwo.SeriesId).Build();
+
+            var mocker = new AutoMoqer();
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            db.InsertMany(historyItems);
+            db.InsertMany(episodes);
+            db.Insert(seriesOne);
+            db.Insert(seriesTwo);
+
+            //Act
+            var result = mocker.Resolve<HistoryProvider>().AllItemsWithRelationships();
+
+            //Assert
+            result.Should().HaveSameCount(historyItems);
+
+            foreach (var history in result)
+            {
+                Assert.NotNull(history.Episode);
+                Assert.That(!String.IsNullOrEmpty(history.SeriesTitle));
+            }
         }
 
         [Test]
@@ -157,7 +189,5 @@ namespace NzbDrone.Core.Test
             Assert.AreEqual(history.Quality, storedHistory.First().Quality);
             Assert.AreEqual(history.IsProper, storedHistory.First().IsProper);
         }
-
-
     }
 }
