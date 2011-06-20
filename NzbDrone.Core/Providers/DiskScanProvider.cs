@@ -80,7 +80,7 @@ namespace NzbDrone.Core.Providers
         {
             Logger.Trace("Importing file to database [{0}]", filePath);
 
-            if (_database.Exists<EpisodeFile>("Path =@0", Parser.NormalizePath(filePath)))
+            if (_database.Exists<EpisodeFile>("WHERE Path =@0", Parser.NormalizePath(filePath)))
             {
                 Logger.Trace("[{0}] already exists in the database. skipping.", filePath);
                 return null;

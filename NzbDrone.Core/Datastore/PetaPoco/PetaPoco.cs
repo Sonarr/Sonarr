@@ -316,7 +316,7 @@ namespace PetaPoco
             Oracle,
             SQLite
         }
-        DBType _dbType = DBType.SqlServer;
+        DBType _dbType = DBType.SQLite;
 
         // Common initialization
         private void CommonConstruct()
@@ -1256,18 +1256,18 @@ namespace PetaPoco
                 case DBType.SQLite:
                 case DBType.MySql:
                     {
-                        existsTemplate = "SELECT EXISTS (SELECT 1 FROM {0} WHERE {1})";
+                        existsTemplate = "SELECT EXISTS (SELECT 1 FROM {0} {1})";
                         break;
                     }
 
                 case DBType.SqlServer:
                     {
-                        existsTemplate = "IF EXISTS (SELECT 1 FROM {0} WHERE {1}) SELECT 1 ELSE SELECT 0";
+                        existsTemplate = "IF EXISTS (SELECT 1 FROM {0} {1}) SELECT 1 ELSE SELECT 0";
                         break;
                     }
                 default:
                     {
-                        existsTemplate = "SELECT COUNT(*) FROM {0} WHERE {1}";
+                        existsTemplate = "SELECT COUNT(*) FROM {0} {1}";
                         break;
                     }
             }
