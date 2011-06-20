@@ -349,5 +349,15 @@ namespace NzbDrone.Core.Test
 
         }
 
+        [Test]
+        [TestCase("Law & Order: Criminal Intent - S10E07 - Icarus [HDTV]", "Law & Order- Criminal Intent - S10E07 - Icarus [HDTV]")]
+        public void CleanFileName(string name, string expectedName)
+        {
+            //Act
+            var result = MediaFileProvider.CleanFilename(name);
+
+            //Assert
+            Assert.AreEqual(expectedName, result);
+        }
     }
 }

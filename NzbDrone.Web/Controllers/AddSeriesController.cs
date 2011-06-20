@@ -129,7 +129,7 @@ namespace NzbDrone.Web.Controllers
                 var path =
                     rootPath.Replace('|', Path.DirectorySeparatorChar).Replace('^', Path.VolumeSeparatorChar).Replace(
                         '`', '\'') +
-                    Path.DirectorySeparatorChar + EpisodeRenameHelper.CleanFilename(seriesName);
+                    Path.DirectorySeparatorChar + MediaFileProvider.CleanFilename(seriesName);
 
                 //Create the folder for the new series and then Add it
                 _diskProvider.CreateDirectory(path);

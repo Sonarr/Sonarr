@@ -55,17 +55,5 @@ namespace NzbDrone.Core.Helpers
             return String.Format("{0} - S{1:00}E{2} - {3}", erm.SeriesName, erm.EpisodeFile.Episodes[0].SeasonNumber,
                                  epNumberString, epNameString);
         }
-
-        public static string CleanFilename(string name)
-        {
-	        string result = name;
-	        string[] badCharacters = {"\\", "/", "<", ">", "?", "*", ":", "|", "\""};
-	        string[] goodCharacters = {"+", "+", "{", "}", "!", "@", "-", "#", "`"};
-
-	        for (int i = 0; i < badCharacters.Length; i++)
-		        result = result.Replace(badCharacters[i], goodCharacters[i]);
-
-	        return result.Trim();
-        }
     }
 }

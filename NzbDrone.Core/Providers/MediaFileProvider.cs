@@ -129,6 +129,18 @@ namespace NzbDrone.Core.Providers
                 result = result.Replace(' ', '.');
 
             Logger.Debug("New File Name is: {0}", result.Trim());
+            return CleanFilename(result.Trim());
+        }
+
+        public static string CleanFilename(string name)
+        {
+            string result = name;
+            string[] badCharacters = { "\\", "/", "<", ">", "?", "*", ":", "|", "\"" };
+            string[] goodCharacters = { "+", "+", "{", "}", "!", "@", "-", "#", "`" };
+
+            for (int i = 0; i < badCharacters.Length; i++)
+                result = result.Replace(badCharacters[i], goodCharacters[i]);
+
             return result.Trim();
         }
     }
