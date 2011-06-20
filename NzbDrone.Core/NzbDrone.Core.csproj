@@ -180,6 +180,7 @@
     <Compile Include="Model\LanguageType.cs" />
     <Compile Include="Model\Quality.cs" />
     <Compile Include="Model\SabnzbdInfoModel.cs" />
+    <Compile Include="Providers\DiskScanProvider.cs" />
     <Compile Include="Providers\DownloadProvider.cs" />
     <Compile Include="Providers\ExternalNotification\ExternalNotificationProviderBase.cs" />
     <Compile Include="Providers\ExternalNotification\XbmcNotificationProvider.cs" />

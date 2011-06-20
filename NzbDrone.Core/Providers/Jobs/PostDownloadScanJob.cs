@@ -11,17 +11,17 @@ namespace NzbDrone.Core.Providers.Jobs
     {
         private readonly ConfigProvider _configProvider;
         private readonly DiskProvider _diskProvider;
-        private readonly MediaFileProvider _mediaFileProvider;
+        private readonly DiskScanProvider _diskScanProvider;
         private readonly SeriesProvider _seriesProvider;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         [Inject]
         public PostDownloadScanJob(ConfigProvider configProvider, DiskProvider diskProvider,
-                                    MediaFileProvider mediaFileProvider, SeriesProvider seriesProvider)
+                                    DiskScanProvider diskScanProvider, SeriesProvider seriesProvider)
         {
             _configProvider = configProvider;
             _diskProvider = diskProvider;
-            _mediaFileProvider = mediaFileProvider;
+            _diskScanProvider = diskScanProvider;
             _seriesProvider = seriesProvider;
         }
 
@@ -84,7 +84,7 @@ namespace NzbDrone.Core.Providers.Jobs
                     return;
                 }
 
-                _mediaFileProvider.ImportNewFiles(subfolder, series);
+                _diskScanProvider.Scan(series, subfolder);
             }
             Logger.Debug("New Download Scan Job completed successfully");
         }
