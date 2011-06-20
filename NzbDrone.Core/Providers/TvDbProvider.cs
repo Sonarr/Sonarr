@@ -38,43 +38,6 @@ namespace NzbDrone.Core.Providers
         }
 
 
-        public virtual TvdbSearchResult GetSeries(string title)
-        {
-            lock (_handler)
-            {
-                var searchResults = SearchSeries(title);
-                if (searchResults.Count == 0)
-                    return null;
-
-                foreach (var tvdbSearchResult in searchResults)
-                {
-                    if (IsTitleMatch(tvdbSearchResult.SeriesName, title))
-                    {
-                        Logger.Debug("Search for '{0}' was successful", title);
-                        return tvdbSearchResult;
-                    }
-                }
-            }
-            return null;
-        }
-
-        public virtual int GetBestMatch(List<TvdbSearchResult> searchResults, string title)
-        {
-            if (searchResults.Count == 0)
-                return 0;
-
-            foreach (var tvdbSearchResult in searchResults)
-            {
-                if (IsTitleMatch(tvdbSearchResult.SeriesName, title))
-                {
-                    Logger.Debug("Search for '{0}' was successful", title);
-                    return tvdbSearchResult.Id;
-                }
-            }
-
-            return searchResults[0].Id;
-        }
-
         public virtual TvdbSeries GetSeries(int id, bool loadEpisodes)
         {
             lock (_handler)
@@ -116,34 +79,5 @@ namespace NzbDrone.Core.Providers
             }
         }
 
-        /// <summary>
-        ///   Determines whether a title in a search result is equal to the title searched for.
-        /// </summary>
-        /// <param name = "directoryName">Name of the directory.</param>
-        /// <param name = "tvdbTitle">The TVDB title.</param>
-        /// <returns>
-        ///   <c>true</c> if the titles are found to be same; otherwise, <c>false</c>.
-        /// </returns>
-        public static bool IsTitleMatch(string directoryName, string tvdbTitle)
-        {
-            var result = false;
-
-            if (String.IsNullOrEmpty(directoryName))
-                throw new ArgumentException("directoryName");
-            if (String.IsNullOrEmpty(tvdbTitle))
-                throw new ArgumentException("tvdbTitle");
-
-            if (String.Equals(directoryName, tvdbTitle, StringComparison.CurrentCultureIgnoreCase))
-            {
-                result = true;
-            }
-            else if (String.Equals(CleanUpRegex.Replace(directoryName, ""), CleanUpRegex.Replace(tvdbTitle, ""),
-                                   StringComparison.InvariantCultureIgnoreCase))
-                result = true;
-
-            Logger.Debug("Match between '{0}' and '{1}' was {2}", tvdbTitle, directoryName, result);
-
-            return result;
-        }
     }
 }
