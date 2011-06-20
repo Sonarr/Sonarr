@@ -129,29 +129,22 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
-        [Description("Verifies that a new file imported properly")]
-        public void import_existing_season_file()
+        public void import_existing_season_file_should_skip()
         {
             //Arrange
             /////////////////////////////////////////
 
             //Constants
             const string fileName = @"WEEDS.S03E01.DUAL.BDRip.XviD.AC3.-HELLYWOOD.avi";
-            const int size = 12345;
 
             //Fakes
             var fakeSeries = Builder<Series>.CreateNew().Build();
-            var fakeEpisodeFile = Builder<EpisodeFile>.CreateNew().With(s => s.SeriesId = fakeSeries.SeriesId).Build();
 
             //Mocks
             var mocker = new AutoMoqer();
 
             mocker.GetMock<IDatabase>(MockBehavior.Strict)
                 .Setup(r => r.Exists<EpisodeFile>(It.IsAny<string>(), It.IsAny<object>())).Returns(true).Verifiable();
-
-            mocker.GetMock<DiskProvider>()
-                .Setup(e => e.GetSize(fileName)).Returns(size).Verifiable();
-
 
             //Act
             var result = mocker.Resolve<MediaFileProvider>().ImportFile(fakeSeries, fileName);
@@ -232,33 +225,23 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
-        [Description("Verifies that an existing file will skip import")]
         public void import_existing_file()
         {
-            //Arrange
-            /////////////////////////////////////////
-
-            //Constants
             const string fileName = "WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD.avi";
 
-            //Fakes
             var fakeSeries = Builder<Series>.CreateNew().Build();
 
-            //Mocks
             var mocker = new AutoMoqer();
             mocker.GetMock<IDatabase>(MockBehavior.Strict)
                 .Setup(r => r.Exists<EpisodeFile>(It.IsAny<string>(), It.IsAny<object>())).Returns(true).Verifiable();
 
             mocker.GetMock<EpisodeProvider>(MockBehavior.Strict);
-            mocker.GetMock<DiskProvider>()
-                 .Setup(e => e.GetSize(fileName)).Returns(500000).Verifiable();
-
 
             //Act
             var result = mocker.Resolve<MediaFileProvider>().ImportFile(fakeSeries, fileName);
 
             //Assert
-            Assert.IsNull(result);
+            result.Should().BeNull();
             mocker.GetMock<IDatabase>().Verify(r => r.Insert(result), Times.Never());
             mocker.VerifyAllMocks();
         }
@@ -296,7 +279,7 @@ namespace NzbDrone.Core.Test
 
             //Assert
             mocker.VerifyAllMocks();
-            Assert.IsNull(result);
+            result.Should().BeNull();
             mocker.GetMock<IDatabase>().Verify(r => r.Insert(result), Times.Never());
             ExceptionVerification.ExcpectedWarns(1);
         }
@@ -311,7 +294,7 @@ namespace NzbDrone.Core.Test
 
             mocker.GetMock<EpisodeProvider>()
                 .Setup(c => c.GetEpisodeBySeries(It.IsAny<long>()))
-                .Returns(new List<Episode>{new Episode()});
+                .Returns(new List<Episode> { new Episode() });
 
             mocker.Resolve<MediaFileProvider>().Scan(new Series());
 
@@ -319,7 +302,7 @@ namespace NzbDrone.Core.Test
 
         }
 
-      
+
         [Test]
         public void get_series_files()
         {

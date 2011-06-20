@@ -69,98 +69,90 @@ namespace NzbDrone.Core.Providers
         {
             Logger.Trace("Importing file to database [{0}]", filePath);
 
-            try
+            if (_database.Exists<EpisodeFile>("Path =@0", Parser.NormalizePath(filePath)))
             {
-                var size = _diskProvider.GetSize(filePath);
+                Logger.Trace("[{0}] already exists in the database. skipping.", filePath);
+                return null;
+            }
+            
+            var size = _diskProvider.GetSize(filePath);
 
-                //If Size is less than 50MB and contains sample. Check for Size to ensure its not an episode with sample in the title
-                if (size < 40000000 && filePath.ToLower().Contains("sample"))
+            //If Size is less than 50MB and contains sample. Check for Size to ensure its not an episode with sample in the title
+            if (size < 40000000 && filePath.ToLower().Contains("sample"))
+            {
+                Logger.Trace("[{0}] appears to be a sample. skipping.", filePath);
+                return null;
+            }
+
+            var parseResult = Parser.ParseEpisodeInfo(filePath);
+
+            if (parseResult == null)
+                return null;
+
+            parseResult.CleanTitle = series.Title;//replaces the nasty path as title to help with logging
+
+            //Stores the list of episodes to add to the EpisodeFile
+            var episodes = new List<Episode>();
+
+            //Check for daily shows
+            if (parseResult.EpisodeNumbers == null)
+            {
+                var episode = _episodeProvider.GetEpisode(series.SeriesId, parseResult.AirDate.Date);
+
+                if (episode != null)
                 {
-                    Logger.Trace("[{0}] appears to be a sample. skipping.", filePath);
-                    return null;
+                    episodes.Add(episode);
                 }
-
-                //Check to see if file already exists in the database
-                if (!_database.Exists<EpisodeFile>("Path =@0", Parser.NormalizePath(filePath)))
+                else
                 {
-                    var parseResult = Parser.ParseEpisodeInfo(filePath);
+                    Logger.Warn("Unable to find [{0}] in the database.[{1}]", parseResult, filePath);
+                }
+            }
+            else
+            {
+                foreach (var episodeNumber in parseResult.EpisodeNumbers)
+                {
+                    var episode = _episodeProvider.GetEpisode(series.SeriesId, parseResult.SeasonNumber,
+                                                              episodeNumber);
 
-                    if (parseResult == null)
-                        return null;
-
-                    parseResult.CleanTitle = series.Title;//replaces the nasty path as title to help with logging
-
-                    //Stores the list of episodes to add to the EpisodeFile
-                    var episodes = new List<Episode>();
-
-                    //Check for daily shows
-                    if (parseResult.EpisodeNumbers == null)
+                    if (episode != null)
                     {
-                        var episode = _episodeProvider.GetEpisode(series.SeriesId, parseResult.AirDate.Date);
-
-                        if (episode != null)
-                        {
-                            episodes.Add(episode);
-                        }
-                        else
-                        {
-                            Logger.Warn("Unable to find [{0}] in the database.[{1}]", parseResult, filePath);
-                        }
+                        episodes.Add(episode);
                     }
                     else
                     {
-                        foreach (var episodeNumber in parseResult.EpisodeNumbers)
-                        {
-                            var episode = _episodeProvider.GetEpisode(series.SeriesId, parseResult.SeasonNumber,
-                                                                      episodeNumber);
-
-                            if (episode != null)
-                            {
-                                episodes.Add(episode);
-                            }
-                            else
-                            {
-                                Logger.Warn("Unable to find [{0}] in the database.[{1}]", parseResult, filePath);
-                            }
-                        }
+                        Logger.Warn("Unable to find [{0}] in the database.[{1}]", parseResult, filePath);
                     }
-
-                    //Return null if no Episodes exist in the DB for the parsed episodes from file
-                    if (episodes.Count <= 0)
-                        return null;
-
-                    var episodeFile = new EpisodeFile();
-                    episodeFile.DateAdded = DateTime.Now;
-                    episodeFile.SeriesId = series.SeriesId;
-                    episodeFile.Path = Parser.NormalizePath(filePath);
-                    episodeFile.Size = size;
-                    episodeFile.Quality = parseResult.Quality.QualityType;
-                    episodeFile.Proper = parseResult.Quality.Proper;
-                    episodeFile.SeasonNumber = parseResult.SeasonNumber;
-                    var fileId = Convert.ToInt32(_database.Insert(episodeFile));
-
-                    //This is for logging + updating the episodes that are linked to this EpisodeFile
-                    string episodeList = String.Empty;
-                    foreach (var ep in episodes)
-                    {
-                        ep.EpisodeFileId = fileId;
-                        _episodeProvider.UpdateEpisode(ep);
-                        episodeList += String.Format(", {0}", ep.EpisodeId).Trim(' ', ',');
-                    }
-                    Logger.Trace("File {0}:{1} attached to episode(s): '{2}'", episodeFile.EpisodeFileId, filePath,
-                                 episodeList);
-
-                    return episodeFile;
                 }
+            }
 
-                Logger.Trace("[{0}] already exists in the database. skipping.", filePath);
-            }
-            catch (Exception ex)
+            //Return null if no Episodes exist in the DB for the parsed episodes from file
+            if (episodes.Count <= 0)
+                return null;
+
+            var episodeFile = new EpisodeFile();
+            episodeFile.DateAdded = DateTime.Now;
+            episodeFile.SeriesId = series.SeriesId;
+            episodeFile.Path = Parser.NormalizePath(filePath);
+            episodeFile.Size = size;
+            episodeFile.Quality = parseResult.Quality.QualityType;
+            episodeFile.Proper = parseResult.Quality.Proper;
+            episodeFile.SeasonNumber = parseResult.SeasonNumber;
+            var fileId = Convert.ToInt32(_database.Insert(episodeFile));
+
+            //This is for logging + updating the episodes that are linked to this EpisodeFile
+            string episodeList = String.Empty;
+            foreach (var ep in episodes)
             {
-                Logger.ErrorException("An error has occurred while importing file " + filePath, ex);
-                throw;
+                ep.EpisodeFileId = fileId;
+                _episodeProvider.UpdateEpisode(ep);
+                episodeList += String.Format(", {0}", ep.EpisodeId).Trim(' ', ',');
             }
-            return null;
+            Logger.Trace("File {0}:{1} attached to episode(s): '{2}'", episodeFile.EpisodeFileId, filePath,
+                         episodeList);
+
+            return episodeFile;
+
         }
 
         /// <summary>
@@ -311,7 +303,7 @@ namespace NzbDrone.Core.Providers
             return result;
         }
 
-        public virtual string GetNewFilename(IList<Episode> episodes, string seriesName, QualityTypes quality)
+        public virtual string GetNewFilename(IList<Episode> episodes, string seriesTitle, QualityTypes quality)
         {
             var separatorStyle = EpisodeSortingHelper.GetSeparatorStyle(_configProvider.SeparatorStyle);
             var numberStyle = EpisodeSortingHelper.GetNumberStyle(_configProvider.NumberStyle);
@@ -322,7 +314,7 @@ namespace NzbDrone.Core.Providers
 
             if (_configProvider.SeriesName)
             {
-                result += seriesName + separatorStyle.Pattern;
+                result += seriesTitle + separatorStyle.Pattern;
             }
 
             result += numberStyle.Pattern.Replace("%0e", String.Format("{0:00}", episodes[0].EpisodeNumber));
@@ -369,25 +361,36 @@ namespace NzbDrone.Core.Providers
             return result.Trim();
         }
 
+        public virtual FileInfo CalculateFilePath(Series series, int seasonNumber, string fileName, string extention)
+        {
+            var path = series.Path;
+            if (series.SeasonFolder)
+            {
+                path = Path.Combine(path, "Season " + seasonNumber);
+            }
+
+            path = Path.Combine(path, fileName + extention);
+
+            return new FileInfo(path);
+        }
+
         public virtual bool RenameEpisodeFile(EpisodeFile episodeFile)
         {
             if (episodeFile == null)
                 throw new ArgumentNullException("episodeFile");
 
             var series = _seriesProvider.GetSeries(episodeFile.SeriesId);
-            var folder = new FileInfo(episodeFile.Path).DirectoryName;
             var ext = _diskProvider.GetExtension(episodeFile.Path);
             var episodes = _episodeProvider.GetEpisodesByFileId(episodeFile.EpisodeFileId);
-
             var newFileName = GetNewFilename(episodes, series.Title, episodeFile.Quality);
 
-            var newFile = folder + Path.DirectorySeparatorChar + newFileName + ext;
+            var newFile = CalculateFilePath(series, episodes.First().SeasonNumber, newFileName, ext);
 
             //Do the rename
-            _diskProvider.RenameFile(episodeFile.Path, newFile);
+            _diskProvider.RenameFile(episodeFile.Path, newFile.FullName);
 
             //Update the filename in the DB
-            episodeFile.Path = newFile;
+            episodeFile.Path = newFile.FullName;
             Update(episodeFile);
 
 
