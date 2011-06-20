@@ -166,7 +166,7 @@ namespace Migrator.Providers
 
         public virtual string Default(object defaultValue)
         {
-            if (defaultValue is String && defaultValue == String.Empty)
+            if (defaultValue is String && defaultValue.ToString() == String.Empty)
             {
                 defaultValue = "''";
             }

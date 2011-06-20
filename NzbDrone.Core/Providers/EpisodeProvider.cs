@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Ninject;
 using NLog;
 using NzbDrone.Core.Model;
@@ -15,12 +14,14 @@ namespace NzbDrone.Core.Providers
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly TvDbProvider _tvDbProvider;
         private readonly IDatabase _database;
+        private readonly SeriesProvider _seriesProvider;
 
         [Inject]
-        public EpisodeProvider(TvDbProvider tvDbProviderProvider, IDatabase database)
+        public EpisodeProvider(IDatabase database, SeriesProvider seriesProvider, TvDbProvider tvDbProviderProvider)
         {
             _tvDbProvider = tvDbProviderProvider;
             _database = database;
+            _seriesProvider = seriesProvider;
         }
 
         public EpisodeProvider()
@@ -34,27 +35,27 @@ namespace NzbDrone.Core.Providers
 
         public virtual Episode GetEpisode(long id)
         {
-            return _database.Single<Episode>(id);
+            return AttachSeries(_database.Single<Episode>(id));
         }
 
         public virtual Episode GetEpisode(int seriesId, int seasonNumber, int episodeNumber)
         {
-            return _database.SingleOrDefault<Episode>("WHERE SeriesId = @0 AND SeasonNumber = @1 AND EpisodeNumber = @2", seriesId, seasonNumber, episodeNumber);
+            return AttachSeries(_database.SingleOrDefault<Episode>("WHERE SeriesId = @0 AND SeasonNumber = @1 AND EpisodeNumber = @2", seriesId, seasonNumber, episodeNumber));
         }
 
         public virtual Episode GetEpisode(int seriesId, DateTime date)
         {
-            return _database.SingleOrDefault<Episode>("WHERE SeriesId = @0 AND AirDate = @1", seriesId, date.Date);
+            return AttachSeries(_database.SingleOrDefault<Episode>("WHERE SeriesId = @0 AND AirDate = @1", seriesId, date.Date));
         }
 
         public virtual IList<Episode> GetEpisodeBySeries(long seriesId)
         {
-            return _database.Fetch<Episode>("WHERE SeriesId = @0", seriesId);
+            return AttachSeries(_database.Fetch<Episode>("WHERE SeriesId = @0", seriesId));
         }
 
         public virtual IList<Episode> GetEpisodesBySeason(long seriesId, int seasonNumber)
         {
-            return _database.Fetch<Episode>("WHERE SeriesId = @0 AND SeasonNumber = @1", seriesId, seasonNumber);
+            return AttachSeries(_database.Fetch<Episode>("WHERE SeriesId = @0 AND SeasonNumber = @1", seriesId, seasonNumber));
         }
 
         public virtual List<Episode> GetEpisodes(EpisodeParseResult parseResult)
@@ -87,12 +88,12 @@ namespace NzbDrone.Core.Providers
             if (includeSpecials)
                 return episodes.Where(e => e.SeasonNumber > 0).ToList();
 
-            return episodes.ToList();
+            return AttachSeries(episodes.ToList());
         }
 
         public virtual IList<Episode> EpisodesByFileId(int episodeFileId)
         {
-            return _database.Fetch<Episode>("WHERE EpisodeFileId = @0", episodeFileId);
+            return AttachSeries(_database.Fetch<Episode>("WHERE EpisodeFileId = @0", episodeFileId));
         }
 
         public virtual void RefreshEpisodeInfo(Series series)
@@ -218,6 +219,25 @@ namespace NzbDrone.Core.Providers
             }
 
 
+        }
+
+        public IList<Episode> AttachSeries(IList<Episode> episodes)
+        {
+            if (episodes.Count == 0) return episodes;
+
+            if (episodes.Select(c => c.SeriesId).Distinct().Count() > 1)
+                throw new ArgumentException("Episodes belong to more than one series.");
+
+            var series = _seriesProvider.GetSeries(episodes.First().SeriesId);
+            episodes.ToList().ForEach(c => c.Series = series);
+
+            return episodes;
+        }
+
+        public Episode AttachSeries(Episode episode)
+        {
+            episode.Series = _seriesProvider.GetSeries(episode.SeriesId);
+            return episode;
         }
     }
 }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      

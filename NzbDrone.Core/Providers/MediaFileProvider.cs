@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Providers
                 return new List<EpisodeFile>();
             }
 
-            var mediaFileList = GetMediaFileList(series.Path);
+            var mediaFileList = GetVideoFiles(series.Path);
             var fileList = new List<EpisodeFile>();
 
             foreach (var filePath in mediaFileList)
@@ -137,7 +137,7 @@ namespace NzbDrone.Core.Providers
                     episodeFile.Quality = parseResult.Quality.QualityType;
                     episodeFile.Proper = parseResult.Quality.Proper;
                     episodeFile.SeasonNumber = parseResult.SeasonNumber;
-                    var fileId = (int)_database.Insert(episodeFile);
+                    var fileId = Convert.ToInt32(_database.Insert(episodeFile));
 
                     //This is for logging + updating the episodes that are linked to this EpisodeFile
                     string episodeList = String.Empty;
@@ -192,7 +192,7 @@ namespace NzbDrone.Core.Providers
         public virtual void Update(EpisodeFile episodeFile)
         {
             _database.Update(episodeFile);
-        }
+           }
 
         public virtual EpisodeFile GetEpisodeFile(int episodeFileId)
         {
@@ -204,7 +204,7 @@ namespace NzbDrone.Core.Providers
             return _database.Fetch<EpisodeFile>();
         }
 
-        public virtual List<EpisodeFile> GetSeriesFiles(int seriesId)
+        public virtual IList<EpisodeFile> GetSeriesFiles(int seriesId)
         {
             return _database.Fetch<EpisodeFile>("WHERE seriesId= @0", seriesId);
         }
@@ -219,7 +219,7 @@ namespace NzbDrone.Core.Providers
             return new Tuple<int, int>(avilableEpisodes.Count, episodeTotal.Count);
         }
 
-        private List<string> GetMediaFileList(string path)
+        private List<string> GetVideoFiles(string path)
         {
             Logger.Debug("Scanning '{0}' for episodes", path);
 
@@ -236,7 +236,7 @@ namespace NzbDrone.Core.Providers
             var result = new List<EpisodeFile>();
 
             //Get all the files except those that are considered samples
-            var files = GetMediaFileList(path).Where(f => _diskProvider.GetSize(f) > 40000000 || !f.ToLower().Contains("sample")).ToList();
+            var files = GetVideoFiles(path).Where(f => _diskProvider.GetSize(f) > 40000000 || !f.ToLower().Contains("sample")).ToList();
 
             foreach (var file in files)
             {

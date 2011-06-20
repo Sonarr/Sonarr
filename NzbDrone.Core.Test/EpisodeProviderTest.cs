@@ -19,6 +19,123 @@ namespace NzbDrone.Core.Test
     // ReSharper disable InconsistentNaming
     public class EpisodeProviderTest : TestBase
     {
+        [Test]
+        public void GetEpisodes_exists()
+        {
+            var mocker = new AutoMoqer();
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            var fakeSeries = Builder<Series>.CreateNew().Build();
+            var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
+                .WhereAll().Have(e => e.SeriesId = 1).Build();
+
+
+            db.InsertMany(fakeEpisodes);
+
+            mocker.GetMock<SeriesProvider>()
+                .Setup(p => p.GetSeries(1))
+                .Returns(fakeSeries);
+
+            //Act
+            var episode = mocker.Resolve<EpisodeProvider>().GetEpisode(1);
+
+            //Assert
+            episode.ShouldHave().AllPropertiesBut(e => e.Series).EqualTo(fakeEpisodes.First());
+            episode.Series.ShouldHave().AllProperties().EqualTo(fakeSeries);
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "Sequence contains no elements")]
+        public void GetEpisodes_invalid_series()
+        {
+            var mocker = new AutoMoqer();
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            mocker.Resolve<SeriesProvider>();
+
+            var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
+                    .WhereAll().Have(e => e.SeriesId = 1).Build();
+
+
+            db.InsertMany(fakeEpisodes);
+
+
+            //Act
+            mocker.Resolve<EpisodeProvider>().GetEpisode(1);
+        }
+
+        [Test]
+        public void AttachSeries_empty_list()
+        {
+            var mocker = new AutoMoqer();
+
+
+            //Act
+            var result = mocker.Resolve<EpisodeProvider>().AttachSeries(new List<Episode>());
+
+            //Assert
+            result.Should().HaveCount(0);
+        }
+
+
+        [Test]
+        public void AttachSeries_list_success()
+        {
+            var mocker = new AutoMoqer();
+
+            var fakeSeries = Builder<Series>.CreateNew().With(s => s.SeriesId = 12).Build();
+            var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
+                .WhereAll().Have(e => e.SeriesId = 12).Build();
+
+            mocker.GetMock<SeriesProvider>()
+                .Setup(c => c.GetSeries(12))
+                .Returns(fakeSeries);
+
+            //Act
+
+            fakeEpisodes.Should().OnlyContain(e => e.Series == null);
+            var returnedSeries = mocker.Resolve<EpisodeProvider>().AttachSeries(fakeEpisodes);
+
+            //Assert
+            fakeEpisodes.Should().OnlyContain(e => e.Series == fakeSeries);
+            returnedSeries.Should().BeEquivalentTo(fakeEpisodes);
+        }
+
+        [Test]
+        public void AttachSeries_single_success()
+        {
+            var mocker = new AutoMoqer();
+
+            var fakeSeries = Builder<Series>.CreateNew().With(s => s.SeriesId = 12).Build();
+            var fakeEpisodes = Builder<Episode>.CreateNew().With(e => e.SeriesId = 12).Build();
+
+            mocker.GetMock<SeriesProvider>()
+                .Setup(c => c.GetSeries(12))
+                .Returns(fakeSeries);
+
+            //Act
+            var returnedEpisode = mocker.Resolve<EpisodeProvider>().AttachSeries(fakeEpisodes);
+
+            //Assert
+            fakeEpisodes.Series.Should().Be(fakeSeries);
+            returnedEpisode.Should().Be(fakeEpisodes);
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "Sequence contains no elements")]
+        public void AttachSeries_single_invalid_series()
+        {
+            var mocker = new AutoMoqer();
+            mocker.SetConstant(MockLib.GetEmptyDatabase());
+            mocker.Resolve<SeriesProvider>();
+            var fakeEpisodes = Builder<Episode>.CreateNew().With(e => e.SeriesId = 12).Build();
+
+            //Act
+            var returnedEpisode = mocker.Resolve<EpisodeProvider>().AttachSeries(fakeEpisodes);
+        }
+
 
         [Test]
         public void GetEpisodesBySeason_success()
@@ -311,7 +428,7 @@ namespace NzbDrone.Core.Test
                 .Build();
 
             episodes.ToList().ForEach(c => db.Insert(c));
-            
+
             //Act
             var result = mocker.Resolve<EpisodeProvider>().IsIgnored(10, 2);
 

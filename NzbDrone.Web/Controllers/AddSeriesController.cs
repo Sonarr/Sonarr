@@ -139,7 +139,7 @@ namespace NzbDrone.Web.Controllers
                 return new JsonResult { Data = "ok" };
             }
 
-            catch (Exception ex)
+            catch (Exception)
             {
                 return new JsonResult { Data = "failed" };
             }
