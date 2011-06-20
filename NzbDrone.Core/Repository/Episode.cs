@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Repository
         /// </remarks>
         public DateTime? GrabDate { get; set; }
 
-        [Ignore]
+        [ResultColumn]
         public EpisodeStatusType Status
         {
             get
