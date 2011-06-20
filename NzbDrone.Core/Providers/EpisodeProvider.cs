@@ -38,6 +38,7 @@ namespace NzbDrone.Core.Providers
             var episode =  AttachSeries(_database.Fetch<Episode, EpisodeFile>(@"SELECT * FROM Episodes 
                                                             LEFT JOIN EpisodeFiles ON Episodes.EpisodeFileId = EpisodeFiles.EpisodeFileId
                                                             WHERE EpisodeId = @0", id).Single());
+
             if (episode.EpisodeFileId == 0)
                 episode.EpisodeFile = null;
 

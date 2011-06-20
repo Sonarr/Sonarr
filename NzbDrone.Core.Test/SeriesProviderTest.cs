@@ -19,43 +19,6 @@ namespace NzbDrone.Core.Test
     [TestFixture]
     public class SeriesProviderTest : TestBase
     {
-        [Test]
-        public void Map_path_to_series()
-        {
-            //Arrange
-            var fakeSeries = Builder<TvdbSeries>.CreateNew()
-                .With(f => f.SeriesName = "The Simpsons")
-                .Build();
-
-            var fakeSearch = Builder<TvdbSearchResult>.CreateNew()
-                .With(s => s.Id = fakeSeries.Id)
-                .With(s => s.SeriesName = fakeSeries.SeriesName)
-                .Build();
-
-
-            var mocker = new AutoMoqer();
-
-            mocker.GetMock<IDatabase>()
-                .Setup(f => f.Exists<Series>(It.IsAny<String>()))
-                .Returns(false);
-
-            mocker.GetMock<TvDbProvider>()
-                .Setup(f => f.GetSeries(It.IsAny<String>()))
-                .Returns(fakeSearch);
-            mocker.GetMock<TvDbProvider>()
-                .Setup(f => f.GetSeries(fakeSeries.Id, false))
-                .Returns(fakeSeries)
-                .Verifiable();
-
-            //Act
-
-            var mappedSeries = mocker.Resolve<SeriesProvider>().MapPathToSeries(@"D:\TV Shows\The Simpsons");
-
-            //Assert
-            mocker.GetMock<TvDbProvider>().VerifyAll();
-            Assert.AreEqual(fakeSeries, mappedSeries);
-        }
-
         [TestCase(true)]
         [TestCase(false)]
         public void Add_new_series(bool useSeasonFolder)
@@ -129,6 +92,9 @@ namespace NzbDrone.Core.Test
 
             var fakeSeries = Builder<Series>.CreateNew()
                 .With(c => c.QualityProfileId = 1)
+                .With(c => c.EpisodeCount = 0)
+                .With(c => c.EpisodeFileCount = 0)
+                .With(c => c.SeasonCount = 0)
                 .Build();
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
 
