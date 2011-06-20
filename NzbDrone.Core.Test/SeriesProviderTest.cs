@@ -65,11 +65,13 @@ namespace NzbDrone.Core.Test
             mocker.GetMock<ConfigProvider>()
                 .Setup(c => c.UseSeasonFolder).Returns(useSeasonFolder);
 
-            mocker.SetConstant(MockLib.GetEmptyDatabase());
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
 
+            var fakeProfiles = Builder<QualityProfile>.CreateListOfSize(2).Build();
 
-
-
+            db.InsertMany(fakeProfiles);
+            
             const string path = "C:\\Test\\";
             const int tvDbId = 1234;
             const int qualityProfileId = 2;
@@ -77,8 +79,6 @@ namespace NzbDrone.Core.Test
             //Act
             var seriesProvider = mocker.Resolve<SeriesProvider>();
             seriesProvider.AddSeries(path, tvDbId, qualityProfileId);
-
-
 
             //Assert
             var series = seriesProvider.GetAllSeries();
@@ -103,7 +103,6 @@ namespace NzbDrone.Core.Test
             //Assert
             Assert.IsNull(series);
         }
-
 
         [Test]
         [ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "Sequence contains no elements")]
@@ -233,12 +232,142 @@ namespace NzbDrone.Core.Test
                                                  .With(c => c.SeriesId = 11)
                                                  .Build());
 
+            db.InsertMany(Builder<QualityProfile>.CreateListOfSize(3).Build());
 
             //Act, Assert
             var provider = mocker.Resolve<SeriesProvider>();
             Assert.IsTrue(provider.IsMonitored(12));
             Assert.IsFalse(provider.IsMonitored(11));
             Assert.IsFalse(provider.IsMonitored(1));
+        }
+
+        [Test]
+        public void Get_Series_With_Count()
+        {
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+            var fakeSeries = Builder<Series>.CreateNew().With(e => e.QualityProfileId = fakeQuality.QualityProfileId).Build();
+            var fakeEpisodes = Builder<Episode>.CreateListOfSize(10).WhereAll().Have(e => e.SeriesId = fakeSeries.SeriesId).Have(e => e.Ignored = false).WhereRandom(5).Have(e => e.EpisodeFileId = 0).Build();
+
+            db.Insert(fakeSeries);
+            db.Insert(fakeQuality);
+            db.InsertMany(fakeEpisodes);
+
+            //Act
+            mocker.Resolve<QualityProvider>();
+            var series = mocker.Resolve<SeriesProvider>().GetAllSeriesWithEpisodeCount(true);
+
+            //Assert
+            series.Should().HaveCount(1);
+            Assert.AreEqual(10, series[0].EpisodeCount);
+            Assert.AreEqual(5, series[0].EpisodeFileCount);
+        }
+
+        [Test]
+        public void Get_Series_With_Count_AllIgnored()
+        {
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+            var fakeSeries = Builder<Series>.CreateNew().With(e => e.QualityProfileId = fakeQuality.QualityProfileId).Build();
+            var fakeEpisodes = Builder<Episode>.CreateListOfSize(10).WhereAll().Have(e => e.SeriesId = fakeSeries.SeriesId).Have(e => e.Ignored = true).WhereRandom(5).Have(e => e.EpisodeFileId = 0).Build();
+
+            db.Insert(fakeSeries);
+            db.Insert(fakeQuality);
+            db.InsertMany(fakeEpisodes);
+
+            //Act
+            mocker.Resolve<QualityProvider>();
+            var series = mocker.Resolve<SeriesProvider>().GetAllSeriesWithEpisodeCount(true);
+
+            //Assert
+            series.Should().HaveCount(1);
+            Assert.AreEqual(0, series[0].EpisodeCount);
+            Assert.AreEqual(0, series[0].EpisodeFileCount);
+        }
+
+        [Test]
+        public void Get_Series_With_Count_AllDownloaded()
+        {
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+            var fakeSeries = Builder<Series>.CreateNew().With(e => e.QualityProfileId = fakeQuality.QualityProfileId).Build();
+            var fakeEpisodes = Builder<Episode>.CreateListOfSize(10).WhereAll().Have(e => e.SeriesId = fakeSeries.SeriesId).Have(e => e.Ignored = false).Build();
+
+            db.Insert(fakeSeries);
+            db.Insert(fakeQuality);
+            db.InsertMany(fakeEpisodes);
+
+            //Act
+            mocker.Resolve<QualityProvider>();
+            var series = mocker.Resolve<SeriesProvider>().GetAllSeriesWithEpisodeCount(true);
+
+            //Assert
+            series.Should().HaveCount(1);
+            Assert.AreEqual(10, series[0].EpisodeCount);
+            Assert.AreEqual(10, series[0].EpisodeFileCount);
+        }
+
+        [Test]
+        public void Get_Series_With_Count_Half_Ignored()
+        {
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+            var fakeSeries = Builder<Series>.CreateNew().With(e => e.QualityProfileId = fakeQuality.QualityProfileId).Build();
+            var fakeEpisodes = Builder<Episode>.CreateListOfSize(10)
+                .WhereAll().Have(e => e.SeriesId = fakeSeries.SeriesId)
+                .WhereTheFirst(5).Have(e => e.Ignored = false)
+                .WhereTheLast(5).Have(e => e.Ignored = true)
+                .Build();
+
+            db.Insert(fakeSeries);
+            db.Insert(fakeQuality);
+            db.InsertMany(fakeEpisodes);
+
+            //Act
+            mocker.Resolve<QualityProvider>();
+            var series = mocker.Resolve<SeriesProvider>().GetAllSeriesWithEpisodeCount(true);
+
+            //Assert
+            series.Should().HaveCount(1);
+            Assert.AreEqual(5, series[0].EpisodeCount);
+            Assert.AreEqual(5, series[0].EpisodeFileCount);
+        }
+
+        [Test]
+        public void Get_Single_Series()
+        {
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+            var fakeSeries = Builder<Series>.CreateNew()
+                .With(e => e.QualityProfileId = fakeQuality.QualityProfileId)
+                .With(e => e.SeriesId = 1)
+                .Build();
+
+            db.Insert(fakeSeries);
+            db.Insert(fakeQuality);
+
+            //Act
+            mocker.Resolve<QualityProvider>();
+            var series = mocker.Resolve<SeriesProvider>().GetSeries(1);
+
+            //Assert
+            series.QualityProfile.Should().NotBeNull();
+            series.QualityProfileId.Should().Be(fakeQuality.QualityProfileId);
         }
     }
 }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
