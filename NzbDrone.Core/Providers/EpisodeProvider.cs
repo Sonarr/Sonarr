@@ -143,7 +143,7 @@ namespace NzbDrone.Core.Providers
             return AttachSeries(episodes.ToList());
         }
 
-        public virtual IList<Episode> EpisodesByFileId(int episodeFileId)
+        public virtual IList<Episode> GetEpisodesByFileId(int episodeFileId)
         {
             return AttachSeries(_database.Fetch<Episode>("WHERE EpisodeFileId = @0", episodeFileId));
         }
@@ -288,6 +288,7 @@ namespace NzbDrone.Core.Providers
 
         public Episode AttachSeries(Episode episode)
         {
+            if (episode == null) return episode;
             episode.Series = _seriesProvider.GetSeries(episode.SeriesId);
             return episode;
         }

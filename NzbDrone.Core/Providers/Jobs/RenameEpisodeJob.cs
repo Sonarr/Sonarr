@@ -7,21 +7,17 @@ namespace NzbDrone.Core.Providers.Jobs
 {
     public class RenameEpisodeJob : IJob
     {
-        private readonly DiskProvider _diskProvider;
-        private readonly EpisodeProvider _episodeProvider;
+        private readonly DiskScanProvider _diskScanProvider;
         private readonly MediaFileProvider _mediaFileProvider;
-        private readonly SeriesProvider _seriesProvider;
+
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         [Inject]
-        public RenameEpisodeJob(DiskProvider diskProvider, EpisodeProvider episodeProvider,
-                                MediaFileProvider mediaFileProvider, SeriesProvider seriesProvider)
+        public RenameEpisodeJob(DiskScanProvider diskScanProvider, MediaFileProvider mediaFileProvider)
         {
-            _diskProvider = diskProvider;
-            _episodeProvider = episodeProvider;
+            _diskScanProvider = diskScanProvider;
             _mediaFileProvider = mediaFileProvider;
-            _seriesProvider = seriesProvider;
         }
 
         public string Name
@@ -36,7 +32,8 @@ namespace NzbDrone.Core.Providers.Jobs
 
         public void Start(ProgressNotification notification, int targetId)
         {
-            _mediaFileProvider.RenameEpisodeFile(targetId, notification);
+            var episode = _mediaFileProvider.GetEpisodeFile(targetId);
+            _diskScanProvider.RenameEpisodeFile(episode);
         }
     }
 }

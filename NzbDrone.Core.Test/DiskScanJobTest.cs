@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Test
                 .Setup(p => p.GetSeries(series.SeriesId))
                 .Returns(series);
 
-            mocker.GetMock<MediaFileProvider>()
+            mocker.GetMock<DiskScanProvider>()
                 .Setup(p => p.Scan(series))
                 .Returns(new List<EpisodeFile>());
 
@@ -58,11 +58,11 @@ namespace NzbDrone.Core.Test
                 .Setup(p => p.GetAllSeries())
                 .Returns(series);
 
-            mocker.GetMock<MediaFileProvider>()
+            mocker.GetMock<DiskScanProvider>()
                 .Setup(s => s.Scan(series[0]))
                 .Returns(new List<EpisodeFile>());
 
-            mocker.GetMock<MediaFileProvider>()
+            mocker.GetMock<DiskScanProvider>()
                 .Setup(s => s.Scan(series[1]))
                 .Returns(new List<EpisodeFile>());
 
@@ -86,11 +86,11 @@ namespace NzbDrone.Core.Test
                 .Setup(p => p.GetAllSeries())
                 .Returns(series);
 
-            mocker.GetMock<MediaFileProvider>()
+            mocker.GetMock<DiskScanProvider>()
                 .Setup(s => s.Scan(series[0]))
                 .Throws(new InvalidOperationException("Bad Job"));
 
-            mocker.GetMock<MediaFileProvider>()
+            mocker.GetMock<DiskScanProvider>()
                 .Setup(s => s.Scan(series[1]))
                 .Throws(new InvalidOperationException("Bad Job"));
 
@@ -115,11 +115,11 @@ namespace NzbDrone.Core.Test
                 .Setup(p => p.GetAllSeries())
                 .Returns(series);
 
-            mocker.GetMock<MediaFileProvider>()
+            mocker.GetMock<DiskScanProvider>()
                 .Setup(s => s.Scan(series[0]))
                 .Returns(new List<EpisodeFile>());
 
-            mocker.GetMock<MediaFileProvider>()
+            mocker.GetMock<DiskScanProvider>()
                 .Setup(s => s.Scan(series[1]))
                 .Returns(new List<EpisodeFile>());
 
@@ -128,7 +128,7 @@ namespace NzbDrone.Core.Test
 
 
             mocker.VerifyAllMocks();
-            mocker.GetMock<MediaFileProvider>().Verify(s => s.Scan(It.IsAny<Series>()), Times.Exactly(2));
+            mocker.GetMock<DiskScanProvider>().Verify(s => s.Scan(It.IsAny<Series>()), Times.Exactly(2));
         }
     }
 

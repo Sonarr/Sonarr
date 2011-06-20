@@ -25,38 +25,10 @@ namespace NzbDrone.Core.Test
             result[0].SeriesName.Should().Be(title);
         }
 
-        [TestCase("The Simpsons")]
-        [TestCase("Family Guy")]
-        [TestCase("South Park")]
-        public void successful_title_lookup(string title)
-        {
-            var tvCont = new TvDbProvider();
-            var result = tvCont.GetSeries(title);
-
-            result.SeriesName.Should().Be(title);
-        }
 
 
 
-        [TestCase(new object[] { "CAPITAL", "capital", true })]
-        [TestCase(new object[] { "Something!!", "Something", true })]
-        [TestCase(new object[] { "Simpsons 2000", "Simpsons", true })]
-        [TestCase(new object[] { "Simp222sons", "Simpsons", true })]
-        [TestCase(new object[] { "Simpsons", "The Simpsons", true })]
-        [TestCase(new object[] { "Law and order", "Law & order", true })]
-        [TestCase(new object[] { "xxAndxx", "xxxx", false })]
-        [TestCase(new object[] { "Andxx", "xx", false })]
-        [TestCase(new object[] { "xxAnd", "xx", false })]
-        [TestCase(new object[] { "Thexx", "xx", false })]
-        [TestCase(new object[] { "Thexx", "xx", false })]
-        [TestCase(new object[] { "xxThexx", "xxxxx", false })]
-        [TestCase(new object[] { "Simpsons The", "Simpsons", true })]
-        public void Name_match_test(string a, string b, bool match)
-        {
-            bool result = TvDbProvider.IsTitleMatch(a, b);
 
-            Assert.AreEqual(match, result, "{0} , {1}", a, b);
-        }
 
         [Test]
         public void no_search_result()
@@ -71,18 +43,6 @@ namespace NzbDrone.Core.Test
             result.Should().BeEmpty();
         }
 
-        [Test]
-        public void no_result_title_lookup()
-        {
-            //setup
-            var tvdbProvider = new TvDbProvider();
-
-            //act
-            var result = tvdbProvider.GetSeries("clone high");
-
-            //assert
-            Assert.IsNull(result);
-        }
 
         [Test]
         public void none_unique_season_episode_number()

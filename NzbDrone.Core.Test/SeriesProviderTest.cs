@@ -143,7 +143,7 @@ namespace NzbDrone.Core.Test
             series.ShouldHave().AllPropertiesBut(s => s.QualityProfile, s => s.SeriesId).EqualTo(fakeSeries);
             series.QualityProfile.Should().NotBeNull();
             series.QualityProfile.ShouldHave().Properties(q => q.Name, q => q.SonicAllowed, q => q.Cutoff, q => q.SonicAllowed).EqualTo(fakeQuality);
-            
+
         }
 
         [Test]

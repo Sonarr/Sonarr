@@ -11,14 +11,14 @@ namespace NzbDrone.Core.Providers.Jobs
     public class DiskScanJob : IJob
     {
         private readonly SeriesProvider _seriesProvider;
-        private readonly MediaFileProvider _mediaFileProvider;
+        private readonly DiskScanProvider _diskScanProvider;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         [Inject]
-        public DiskScanJob(SeriesProvider seriesProvider, MediaFileProvider mediaFileProvider)
+        public DiskScanJob(SeriesProvider seriesProvider, DiskScanProvider diskScanProvider)
         {
             _seriesProvider = seriesProvider;
-            _mediaFileProvider = mediaFileProvider;
+            _diskScanProvider = diskScanProvider;
         }
 
         public DiskScanJob()
@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Providers.Jobs
                 try
                 {
                     notification.CurrentMessage = string.Format("Scanning disk for '{0}'", series.Title);
-                    _mediaFileProvider.Scan(series);
+                    _diskScanProvider.Scan(series);
                     notification.CurrentMessage = string.Format("Media File Scan completed for '{0}'", series.Title);
                 }
                 catch (Exception e)

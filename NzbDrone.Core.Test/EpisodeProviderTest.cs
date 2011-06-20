@@ -45,6 +45,51 @@ namespace NzbDrone.Core.Test
             episode.Series.ShouldHave().AllProperties().EqualTo(fakeSeries);
         }
 
+
+        [Test]
+        public void GetEpisodes_by_season_episode_exists()
+        {
+            var mocker = new AutoMoqer();
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            var fakeSeries = Builder<Series>.CreateNew().Build();
+            var fakeEpisodes = Builder<Episode>.CreateNew()
+                .With(e => e.SeriesId = fakeSeries.SeriesId)
+                .With(e => e.EpisodeNumber = 1)
+                .And(e => e.SeasonNumber = 2).Build();
+
+
+            db.Insert(fakeEpisodes);
+
+            mocker.GetMock<SeriesProvider>()
+                .Setup(p => p.GetSeries(1))
+                .Returns(fakeSeries);
+
+            //Act
+            var episode = mocker.Resolve<EpisodeProvider>().GetEpisode(fakeSeries.SeriesId, 2, 1);
+
+            //Assert
+            episode.ShouldHave().AllPropertiesBut(e => e.Series).EqualTo(fakeEpisodes);
+            episode.Series.ShouldHave().AllProperties().EqualTo(fakeSeries);
+        }
+
+        [Test]
+        public void GetEpisodes_by_season_episode_doesnt_exists()
+        {
+            var mocker = new AutoMoqer();
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+     
+
+            //Act
+            var episode = mocker.Resolve<EpisodeProvider>().GetEpisode(1, 1, 1);
+
+            //Assert
+            episode.Should().BeNull();
+        }
+
         [Test]
         public void GetEpisode_with_EpisodeFile()
         {
@@ -129,6 +174,20 @@ namespace NzbDrone.Core.Test
             //Assert
             fakeEpisodes.Should().OnlyContain(e => e.Series == fakeSeries);
             returnedSeries.Should().BeEquivalentTo(fakeEpisodes);
+        }
+
+        [Test]
+        public void AttachSeries_null_episode_should_return_null()
+        {
+            var mocker = new AutoMoqer();
+
+            Episode episode = null;
+
+            //Act
+            var result = mocker.Resolve<EpisodeProvider>().AttachSeries(episode);
+
+            //Assert
+            result.Should().BeNull();
         }
 
         [Test]

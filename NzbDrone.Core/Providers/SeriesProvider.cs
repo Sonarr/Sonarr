@@ -80,17 +80,6 @@ namespace NzbDrone.Core.Providers
             return GetAllSeries().Any(c => c.SeriesId == id && c.Monitored);
         }
 
-        public virtual TvdbSeries MapPathToSeries(string path)
-        {
-            var seriesPath = new DirectoryInfo(path);
-            var searchResults = _tvDbProvider.GetSeries(seriesPath.Name);
-
-            if (searchResults == null)
-                return null;
-
-            return _tvDbProvider.GetSeries(searchResults.Id, false);
-        }
-
         public virtual Series UpdateSeriesInfo(int seriesId)
         {
             var tvDbSeries = _tvDbProvider.GetSeries(seriesId, true);
