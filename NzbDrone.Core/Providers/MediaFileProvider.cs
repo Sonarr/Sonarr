@@ -5,7 +5,6 @@ using System.Linq;
 using Ninject;
 using NLog;
 using NzbDrone.Core.Helpers;
-using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
@@ -16,9 +15,9 @@ namespace NzbDrone.Core.Providers
     public class MediaFileProvider
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private readonly EpisodeProvider _episodeProvider;
         private readonly ConfigProvider _configProvider;
         private readonly IDatabase _database;
+        private readonly EpisodeProvider _episodeProvider;
 
         [Inject]
         public MediaFileProvider(EpisodeProvider episodeProvider, ConfigProvider configProvider, IDatabase database)
@@ -28,15 +27,9 @@ namespace NzbDrone.Core.Providers
             _database = database;
         }
 
-        public MediaFileProvider() { }
-
-
-
-
-
-
-
-
+        public MediaFileProvider()
+        {
+        }
 
         public virtual void Update(EpisodeFile episodeFile)
         {
@@ -70,7 +63,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual FileInfo CalculateFilePath(Series series, int seasonNumber, string fileName, string extention)
         {
-            var path = series.Path;
+            string path = series.Path;
             if (series.SeasonFolder)
             {
                 path = Path.Combine(path, "Season " + seasonNumber);
@@ -81,15 +74,14 @@ namespace NzbDrone.Core.Providers
             return new FileInfo(path);
         }
 
-
         public virtual string GetNewFilename(IList<Episode> episodes, string seriesTitle, QualityTypes quality)
         {
             var separatorStyle = EpisodeSortingHelper.GetSeparatorStyle(_configProvider.SeparatorStyle);
             var numberStyle = EpisodeSortingHelper.GetNumberStyle(_configProvider.NumberStyle);
 
-            var episodeNames = episodes[0].Title;
+            string episodeNames = episodes[0].Title;
 
-            var result = String.Empty;
+            string result = String.Empty;
 
             if (_configProvider.SeriesName)
             {
@@ -139,11 +131,5 @@ namespace NzbDrone.Core.Providers
             Logger.Debug("New File Name is: {0}", result.Trim());
             return result.Trim();
         }
-
-
-
-
-
-
     }
 }

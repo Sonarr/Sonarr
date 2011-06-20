@@ -2,33 +2,28 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using Ninject;
 using NLog;
-using NzbDrone.Core.Helpers;
-using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
-using NzbDrone.Core.Repository.Quality;
 using PetaPoco;
 
 namespace NzbDrone.Core.Providers
 {
     public class DiskScanProvider
     {
-
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private static readonly string[] MediaExtentions = new[] { ".mkv", ".avi", ".wmv", ".mp4" };
+        private static readonly string[] MediaExtentions = new[] {".mkv", ".avi", ".wmv", ".mp4"};
+        private readonly IDatabase _database;
         private readonly DiskProvider _diskProvider;
         private readonly EpisodeProvider _episodeProvider;
-        private readonly SeriesProvider _seriesProvider;
         private readonly MediaFileProvider _mediaFileProvider;
-        private readonly IDatabase _database;
+        private readonly SeriesProvider _seriesProvider;
 
         [Inject]
         public DiskScanProvider(DiskProvider diskProvider, EpisodeProvider episodeProvider,
-                                    SeriesProvider seriesProvider, MediaFileProvider mediaFileProvider,
-                                    IDatabase database)
+                                SeriesProvider seriesProvider, MediaFileProvider mediaFileProvider,
+                                IDatabase database)
         {
             _diskProvider = diskProvider;
             _episodeProvider = episodeProvider;
@@ -40,7 +35,6 @@ namespace NzbDrone.Core.Providers
 
         public DiskScanProvider()
         {
-
         }
 
         /// <summary>
@@ -92,7 +86,7 @@ namespace NzbDrone.Core.Providers
                 return null;
             }
 
-            var size = _diskProvider.GetSize(filePath);
+            long size = _diskProvider.GetSize(filePath);
 
             //If Size is less than 50MB and contains sample. Check for Size to ensure its not an episode with sample in the title
             if (size < 40000000 && filePath.ToLower().Contains("sample"))
@@ -106,7 +100,7 @@ namespace NzbDrone.Core.Providers
             if (parseResult == null)
                 return null;
 
-            parseResult.CleanTitle = series.Title;//replaces the nasty path as title to help with logging
+            parseResult.CleanTitle = series.Title; //replaces the nasty path as title to help with logging
 
             //Stores the list of episodes to add to the EpisodeFile
             var episodes = new List<Episode>();
@@ -155,7 +149,7 @@ namespace NzbDrone.Core.Providers
             episodeFile.Quality = parseResult.Quality.QualityType;
             episodeFile.Proper = parseResult.Quality.Proper;
             episodeFile.SeasonNumber = parseResult.SeasonNumber;
-            var fileId = Convert.ToInt32(_database.Insert(episodeFile));
+            int fileId = Convert.ToInt32(_database.Insert(episodeFile));
 
             //This is for logging + updating the episodes that are linked to this EpisodeFile
             string episodeList = String.Empty;
@@ -169,10 +163,7 @@ namespace NzbDrone.Core.Providers
                          episodeList);
 
             return episodeFile;
-
         }
-
-
 
 
         public virtual bool RenameEpisodeFile(EpisodeFile episodeFile)
@@ -181,9 +172,9 @@ namespace NzbDrone.Core.Providers
                 throw new ArgumentNullException("episodeFile");
 
             var series = _seriesProvider.GetSeries(episodeFile.SeriesId);
-            var ext = _diskProvider.GetExtension(episodeFile.Path);
+            string ext = _diskProvider.GetExtension(episodeFile.Path);
             var episodes = _episodeProvider.GetEpisodesByFileId(episodeFile.EpisodeFileId);
-            var newFileName = _mediaFileProvider.GetNewFilename(episodes, series.Title, episodeFile.Quality);
+            string newFileName = _mediaFileProvider.GetNewFilename(episodes, series.Title, episodeFile.Quality);
 
             var newFile = _mediaFileProvider.CalculateFilePath(series, episodes.First().SeasonNumber, newFileName, ext);
 
@@ -199,9 +190,8 @@ namespace NzbDrone.Core.Providers
         }
 
 
-
         /// <summary>
-        ///   Removes files that no longer exist from the database
+        ///   Removes files that no longer exist on disk from the database
         /// </summary>
         /// <param name = "files">list of files to verify</param>
         public virtual void CleanUp(List<EpisodeFile> files)
@@ -238,6 +228,5 @@ namespace NzbDrone.Core.Providers
             Logger.Debug("{0} media files were found in {1}", mediaFileList.Count, path);
             return mediaFileList;
         }
-
     }
 }
