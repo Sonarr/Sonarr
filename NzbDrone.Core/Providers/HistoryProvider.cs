@@ -25,9 +25,18 @@ namespace NzbDrone.Core.Providers
         {
         }
 
-        public virtual IEnumerable<History> AllItems()
+        public virtual List<History> AllItems()
         {
-            return _database.Query<History>("");
+            return _database.Fetch<History>("");
+        }
+
+        public virtual List<History> AllItemsWithRelationships()
+        {
+            return _database.Fetch<History, Episode>(@"
+                            SELECT History.*, Series.Title as SeriesTitle, Episodes.* FROM History 
+		                    INNER JOIN Series ON History.SeriesId = Series.SeriesId
+                            INNER JOIN Episodes ON History.EpisodeId = Episodes.EpisodeId
+                        ");
         }
 
         public virtual void Purge()

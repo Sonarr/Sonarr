@@ -35,27 +35,73 @@ namespace NzbDrone.Core.Providers
 
         public virtual Episode GetEpisode(long id)
         {
-            return AttachSeries(_database.Single<Episode>(id));
+            var episode =  AttachSeries(_database.Fetch<Episode, EpisodeFile>(@"SELECT * FROM Episodes 
+                                                            LEFT JOIN EpisodeFiles ON Episodes.EpisodeFileId = EpisodeFiles.EpisodeFileId
+                                                            WHERE EpisodeId = @0", id).Single());
+            if (episode.EpisodeFileId == 0)
+                episode.EpisodeFile = null;
+
+            return episode;
         }
 
         public virtual Episode GetEpisode(int seriesId, int seasonNumber, int episodeNumber)
         {
-            return AttachSeries(_database.SingleOrDefault<Episode>("WHERE SeriesId = @0 AND SeasonNumber = @1 AND EpisodeNumber = @2", seriesId, seasonNumber, episodeNumber));
+            var episode = AttachSeries(_database.Fetch<Episode, EpisodeFile>(@"SELECT * FROM Episodes 
+                                                            LEFT JOIN EpisodeFiles ON Episodes.EpisodeFileId = EpisodeFiles.EpisodeFileId
+                                                            WHERE Episodes.SeriesId = @0 AND Episodes.SeasonNumber = @1 AND Episodes.EpisodeNumber = @2", seriesId, seasonNumber, episodeNumber).SingleOrDefault());
+
+            if (episode == null)
+                return null;
+
+            if (episode.EpisodeFileId == 0)
+                episode.EpisodeFile = null;
+
+            return episode;
         }
 
         public virtual Episode GetEpisode(int seriesId, DateTime date)
         {
-            return AttachSeries(_database.SingleOrDefault<Episode>("WHERE SeriesId = @0 AND AirDate = @1", seriesId, date.Date));
+            var episode = AttachSeries(_database.Fetch<Episode, EpisodeFile>(@"SELECT * FROM Episodes 
+                                                            LEFT JOIN EpisodeFiles ON Episodes.EpisodeFileId = EpisodeFiles.EpisodeFileId
+                                                            WHERE Episodes.SeriesId = @0 AND AirDate = @1", seriesId, date.Date)).SingleOrDefault();
+
+            if (episode == null)
+                return null;
+
+            if (episode.EpisodeFileId == 0)
+                episode.EpisodeFile = null;
+
+            return episode;
         }
 
         public virtual IList<Episode> GetEpisodeBySeries(long seriesId)
         {
-            return AttachSeries(_database.Fetch<Episode>("WHERE SeriesId = @0", seriesId));
+            var episodes = AttachSeries(_database.Fetch<Episode, EpisodeFile>(@"SELECT * FROM Episodes 
+                                                            LEFT JOIN EpisodeFiles ON Episodes.EpisodeFileId = EpisodeFiles.EpisodeFileId
+                                                            WHERE Episodes.SeriesId = @0", seriesId));
+
+            foreach (var episode in episodes)
+            {
+                if (episode.EpisodeFileId == 0)
+                    episode.EpisodeFile = null;
+            }
+            
+            return episodes;
         }
 
         public virtual IList<Episode> GetEpisodesBySeason(long seriesId, int seasonNumber)
         {
-            return AttachSeries(_database.Fetch<Episode>("WHERE SeriesId = @0 AND SeasonNumber = @1", seriesId, seasonNumber));
+            var episodes = AttachSeries(_database.Fetch<Episode, EpisodeFile>(@"SELECT * FROM Episodes 
+                                                            LEFT JOIN EpisodeFiles ON Episodes.EpisodeFileId = EpisodeFiles.EpisodeFileId
+                                                            WHERE Episodes.SeriesId = @0 AND Episodes.SeasonNumber = @1", seriesId, seasonNumber));
+
+            foreach (var episode in episodes)
+            {
+                if (episode.EpisodeFileId == 0)
+                    episode.EpisodeFile = null;
+            }
+
+            return episodes;
         }
 
         public virtual List<Episode> GetEpisodes(EpisodeParseResult parseResult)
@@ -76,6 +122,12 @@ namespace NzbDrone.Core.Providers
                     return new List<Episode>();
 
                 episodes.Add(episode);
+            }
+
+            foreach (var episode in episodes)
+            {
+                if (episode.EpisodeFileId == 0)
+                    episode.EpisodeFile = null;
             }
 
             return episodes;

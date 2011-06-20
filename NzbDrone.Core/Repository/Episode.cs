@@ -19,7 +19,6 @@ namespace NzbDrone.Core.Repository
         public string Title { get; set; }
         public DateTime AirDate { get; set; }
 
-
         public string Overview { get; set; }
 
         public Boolean Ignored { get; set; }
@@ -32,7 +31,6 @@ namespace NzbDrone.Core.Repository
         /// this filed is used by status as an expirable "Grabbed" status.
         /// </remarks>
         public DateTime? GrabDate { get; set; }
-
 
         [Ignore]
         public EpisodeStatusType Status
@@ -58,14 +56,11 @@ namespace NzbDrone.Core.Repository
             }
         }
 
-
         [Ignore]
         public Series Series { get; set; }
 
-
-        [Ignore]
+        [ResultColumn]
         public EpisodeFile EpisodeFile { get; set; }
-
 
         public override string ToString()
         {
