@@ -236,6 +236,7 @@ namespace NzbDrone.Core.Providers
 
         public Episode AttachSeries(Episode episode)
         {
+            if (episode == null) return episode;
             episode.Series = _seriesProvider.GetSeries(episode.SeriesId);
             return episode;
         }
