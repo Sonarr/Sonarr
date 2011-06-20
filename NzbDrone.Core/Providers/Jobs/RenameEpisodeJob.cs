@@ -36,7 +36,8 @@ namespace NzbDrone.Core.Providers.Jobs
 
         public void Start(ProgressNotification notification, int targetId)
         {
-            _mediaFileProvider.RenameEpisodeFile(targetId, notification);
+           var episode = _mediaFileProvider.GetEpisodeFile(targetId);
+           _mediaFileProvider.RenameEpisodeFile(episode);
         }
     }
 }
