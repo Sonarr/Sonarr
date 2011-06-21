@@ -69,10 +69,11 @@ namespace NzbDrone.Core.Test
         }
 
         [TestCase(QualityTypes.SDTV, true)]
-        [TestCase(QualityTypes.HDTV, true)]
-        public void import_new_file_with_better_quality(QualityTypes currentFileQuality, bool currentFileProper)
+        [TestCase(QualityTypes.DVD, true)]
+        [TestCase(QualityTypes.HDTV, false)]
+        public void import_new_file_with_better_same_quality(QualityTypes currentFileQuality, bool currentFileProper)
         {
-            const string fileName = @"WEEDS.S03E01.DUAL.1080p.-HELLYWOOD.mkv";
+            const string newFile = @"WEEDS.S03E01.DUAL.1080p.-HELLYWOOD.mkv";
             const int seasonNumber = 3;
             const int episodeNumner = 1;
             const int size = 12345;
@@ -92,7 +93,7 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer();
 
             mocker.GetMock<DiskProvider>()
-                .Setup(e => e.GetSize(fileName)).Returns(12345).Verifiable();
+                .Setup(e => e.GetSize(newFile)).Returns(12345).Verifiable();
 
             var database = mocker.GetMock<IDatabase>(MockBehavior.Strict);
             database.Setup(r => r.Exists<EpisodeFile>(It.IsAny<string>(), It.IsAny<object>())).Returns(false).Verifiable();
@@ -103,7 +104,7 @@ namespace NzbDrone.Core.Test
                 .Setup(e => e.GetEpisode(fakeSeries.SeriesId, seasonNumber, episodeNumner)).Returns(fakeEpisode);
 
             //Act
-            var result = mocker.Resolve<DiskScanProvider>().ImportFile(fakeSeries, fileName);
+            var result = mocker.Resolve<DiskScanProvider>().ImportFile(fakeSeries, newFile);
 
             //Assert
             Assert.IsNotNull(result);
@@ -113,8 +114,8 @@ namespace NzbDrone.Core.Test
             result.SeasonNumber.Should().Be(fakeEpisode.SeasonNumber);
 
             Assert.AreEqual(fakeEpisode.SeriesId, result.SeriesId);
-            Assert.AreEqual(QualityTypes.SDTV, result.Quality);
-            Assert.AreEqual(Parser.NormalizePath(fileName), result.Path);
+            Assert.AreEqual(QualityTypes.HDTV, result.Quality);
+            Assert.AreEqual(Parser.NormalizePath(newFile), result.Path);
             Assert.AreEqual(size, result.Size);
             Assert.AreEqual(false, result.Proper);
             Assert.AreNotEqual(new DateTime(), result.DateAdded);
