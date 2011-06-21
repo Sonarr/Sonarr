@@ -74,24 +74,41 @@ namespace NzbDrone.Core.Providers
             return new FileInfo(path);
         }
 
-        public virtual void CleanEpisodesWithNonExistantFiles()
+        public virtual int RepairLinks()
         {
-            _database.Execute(@"UPDATE Episodes SET EpisodeFileId = 0
+            Logger.Debug("Verifying Episode>Episode file relationships.");
+            var updated = _database.Execute(@"UPDATE Episodes SET EpisodeFileId = 0
                                 WHERE EpisodeFileId IN
                                 (SELECT Episodes.EpisodeFileId FROM Episodes
                                 LEFT OUTER JOIN EpisodeFiles
                                 ON Episodes.EpisodeFileId = EpisodeFiles.EpisodeFileId
                                 WHERE Episodes.EpisodeFileId > 0 AND EpisodeFiles.EpisodeFileId IS null)");
+
+            if (updated > 0)
+            {
+                Logger.Warn("Removed {0} invalid links to episode files.", updated);
+            }
+
+            return updated;
         }
 
-        public virtual void DeleteOrphanedEpisodeFiles()
+        public virtual int DeleteOrphaned()
         {
-            _database.Execute(@"DELETE FROM EpisodeFiles
+            Logger.Debug("Deleting orphaned files.");
+
+            var updated = _database.Execute(@"DELETE FROM EpisodeFiles
                                 WHERE EpisodeFileId IN
                                 (SELECT EpisodeFiles.EpisodeFileId FROM EpisodeFiles
                                 LEFT OUTER JOIN Episodes
                                 ON EpisodeFiles.EpisodeFileId = Episodes.EpisodeFileId
                                 WHERE Episodes.EpisodeFileId IS null)");
+
+            if (updated > 0)
+            {
+                Logger.Warn("Removed {0} orphaned files.", updated);
+            }
+
+            return updated;
         }
 
         public virtual string GetNewFilename(IList<Episode> episodes, string seriesTitle, QualityTypes quality)

@@ -53,11 +53,17 @@ namespace NzbDrone.Core.Providers
         /// <param name="path">Path to scan</param>
         public virtual List<EpisodeFile> Scan(Series series, string path)
         {
+            _mediaFileProvider.DeleteOrphaned();
+            _mediaFileProvider.RepairLinks();
+
             if (_episodeProvider.GetEpisodeBySeries(series.SeriesId).Count == 0)
             {
                 Logger.Debug("Series {0} has no episodes. skipping", series.Title);
                 return new List<EpisodeFile>();
             }
+
+            var seriesFile = _mediaFileProvider.GetSeriesFiles(series.SeriesId);
+            CleanUp(seriesFile);
 
             var mediaFileList = GetVideoFiles(path);
             var importedFiles = new List<EpisodeFile>();
@@ -199,11 +205,8 @@ namespace NzbDrone.Core.Providers
         ///   Removes files that no longer exist on disk from the database
         /// </summary>
         /// <param name = "files">list of files to verify</param>
-        public virtual void CleanUp(List<EpisodeFile> files)
+        public virtual void CleanUp(IList<EpisodeFile> files)
         {
-            _mediaFileProvider.CleanEpisodesWithNonExistantFiles();
-            _mediaFileProvider.DeleteOrphanedEpisodeFiles();
-
             foreach (var episodeFile in files)
             {
                 if (!_diskProvider.FileExists(episodeFile.Path))

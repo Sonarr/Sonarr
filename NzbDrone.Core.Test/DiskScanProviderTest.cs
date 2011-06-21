@@ -373,6 +373,11 @@ namespace NzbDrone.Core.Test
                 .Setup(c => c.GetEpisodeBySeries(It.IsAny<long>()))
                 .Returns(new List<Episode> { new Episode() });
 
+
+            mocker.GetMock<MediaFileProvider>()
+                .Setup(c => c.GetSeriesFiles(It.IsAny<int>()))
+                .Returns(new List<EpisodeFile>());
+
             mocker.Resolve<DiskScanProvider>().Scan(new Series());
 
             mocker.VerifyAllMocks();

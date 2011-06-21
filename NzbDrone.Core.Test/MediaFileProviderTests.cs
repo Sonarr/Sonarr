@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Test
     // ReSharper disable InconsistentNaming
     public class MediaFileProviderTests : TestBase
     {
-       
+
 
 
         [Test]
@@ -59,9 +59,16 @@ namespace NzbDrone.Core.Test
         public void Scan_series_should_skip_series_with_no_episodes()
         {
             var mocker = new AutoMoqer(MockBehavior.Strict);
+            
             mocker.GetMock<EpisodeProvider>()
                 .Setup(c => c.GetEpisodeBySeries(12))
                 .Returns(new List<Episode>());
+
+            mocker.GetMock<MediaFileProvider>()
+                .Setup(e => e.RepairLinks()).Returns(0);
+            mocker.GetMock<MediaFileProvider>()
+                .Setup(e => e.DeleteOrphaned()).Returns(0);
+
 
             var series = Builder<Series>.CreateNew()
                 .With(s => s.SeriesId = 12).Build();
@@ -97,12 +104,14 @@ namespace NzbDrone.Core.Test
             database.InsertMany(episodes);
 
             //Act
-            mocker.Resolve<MediaFileProvider>().CleanEpisodesWithNonExistantFiles();
+            var removedLinks = mocker.Resolve<MediaFileProvider>().RepairLinks();
             var result = database.Fetch<Episode>();
 
             //Assert
             result.Should().HaveSameCount(episodes);
             result.Should().OnlyContain(e => e.EpisodeFileId == 0);
+            removedLinks.Should().Be(10);
+            ExceptionVerification.ExcpectedWarns(1);
         }
 
         [Test]
@@ -119,12 +128,13 @@ namespace NzbDrone.Core.Test
             database.InsertMany(episodeFiles);
 
             //Act
-            mocker.Resolve<MediaFileProvider>().DeleteOrphanedEpisodeFiles();
+            mocker.Resolve<MediaFileProvider>().DeleteOrphaned();
             var result = database.Fetch<EpisodeFile>();
 
             //Assert
             result.Should().HaveCount(5);
             result.Should().OnlyContain(e => e.EpisodeFileId > 0);
+            ExceptionVerification.ExcpectedWarns(1);
         }
     }
 }
