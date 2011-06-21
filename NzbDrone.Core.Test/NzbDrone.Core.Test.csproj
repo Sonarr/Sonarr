@@ -76,6 +76,7 @@
       <HintPath>..\Libraries\System.Data.SQLite.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
+    <Reference Include="System.Drawing" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml" />
     <Reference Include="TvdbLib, Version=0.8.8.0, Culture=neutral, processorArchitecture=MSIL">
@@ -84,6 +85,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DiskScanProviderTest.cs" />
     <Compile Include="FluentTest.cs" />
     <Compile Include="LogProviderTest.cs" />
     <Compile Include="UpcomingEpisodesProviderTest.cs" />
