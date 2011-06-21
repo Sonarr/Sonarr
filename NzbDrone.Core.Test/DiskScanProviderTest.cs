@@ -72,7 +72,7 @@ namespace NzbDrone.Core.Test
         [TestCase(QualityTypes.HDTV, true)]
         public void import_new_file_with_better_quality(QualityTypes currentFileQuality, bool currentFileProper)
         {
-            const string fileName = @"WEEDS.S03E01.DUAL.1080p.XviD.AC3.-HELLYWOOD.avi";
+            const string fileName = @"WEEDS.S03E01.DUAL.1080p.-HELLYWOOD.mkv";
             const int seasonNumber = 3;
             const int episodeNumner = 1;
             const int size = 12345;
