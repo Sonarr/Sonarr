@@ -8,7 +8,9 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
+using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
 using PetaPoco;
 using TvdbLib.Data;
@@ -81,7 +83,7 @@ namespace NzbDrone.Core.Test
             var db = MockLib.GetEmptyDatabase();
             mocker.SetConstant(db);
 
-     
+
 
             //Act
             var episode = mocker.Resolve<EpisodeProvider>().GetEpisode(1, 1, 1);
@@ -101,7 +103,7 @@ namespace NzbDrone.Core.Test
             var fakeFile = Builder<EpisodeFile>.CreateNew().With(f => f.EpisodeFileId).Build();
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
                 .WhereAll().Have(e => e.SeriesId = 1).WhereTheFirst(1).Have(e => e.EpisodeFileId = 1).Have(e => e.EpisodeFile = fakeFile).Build();
-            
+
 
             db.InsertMany(fakeEpisodes);
             db.Insert(fakeFile);
@@ -562,13 +564,21 @@ namespace NzbDrone.Core.Test
         public void Add_daily_show_episodes()
         {
             var mocker = new AutoMoqer();
-            mocker.SetConstant(MockLib.GetEmptyDatabase());
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
             mocker.Resolve<TvDbProvider>();
+
+            mocker.GetMock<ConfigProvider>()
+                .Setup(e => e.DefaultQualityProfile).Returns(1);
+
+            db.Insert(Builder<QualityProfile>.CreateNew().Build());
+
+
             const int tvDbSeriesId = 71256;
             //act
             var seriesProvider = mocker.Resolve<SeriesProvider>();
 
-            seriesProvider.AddSeries("c:\\test\\", tvDbSeriesId, 0);
+            seriesProvider.AddSeries("c:\\test\\", tvDbSeriesId, 1);
 
             var episodeProvider = mocker.Resolve<EpisodeProvider>();
             episodeProvider.RefreshEpisodeInfo(seriesProvider.GetSeries(tvDbSeriesId));
@@ -605,6 +615,8 @@ namespace NzbDrone.Core.Test
             episode.Series.ShouldHave().AllProperties().EqualTo(fakeSeries);
             episode.EpisodeFile.Should().NotBeNull();
         }
+
+
 
         [Test]
         public void GetEpisode_by_Season_Episode_without_EpisodeFile()

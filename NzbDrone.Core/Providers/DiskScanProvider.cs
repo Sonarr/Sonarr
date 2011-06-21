@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Providers
     public class DiskScanProvider
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private static readonly string[] MediaExtentions = new[] {".mkv", ".avi", ".wmv", ".mp4"};
+        private static readonly string[] MediaExtentions = new[] { ".mkv", ".avi", ".wmv", ".mp4" };
         private readonly IDatabase _database;
         private readonly DiskProvider _diskProvider;
         private readonly EpisodeProvider _episodeProvider;
@@ -53,26 +53,32 @@ namespace NzbDrone.Core.Providers
         /// <param name="path">Path to scan</param>
         public virtual List<EpisodeFile> Scan(Series series, string path)
         {
+            _mediaFileProvider.DeleteOrphaned();
+            _mediaFileProvider.RepairLinks();
+
             if (_episodeProvider.GetEpisodeBySeries(series.SeriesId).Count == 0)
             {
                 Logger.Debug("Series {0} has no episodes. skipping", series.Title);
                 return new List<EpisodeFile>();
             }
 
+            var seriesFile = _mediaFileProvider.GetSeriesFiles(series.SeriesId);
+            CleanUp(seriesFile);
+
             var mediaFileList = GetVideoFiles(path);
-            var fileList = new List<EpisodeFile>();
+            var importedFiles = new List<EpisodeFile>();
 
             foreach (var filePath in mediaFileList)
             {
                 var file = ImportFile(series, filePath);
                 if (file != null)
-                    fileList.Add(file);
+                    importedFiles.Add(file);
             }
 
             series.LastDiskSync = DateTime.Now;
             _seriesProvider.UpdateSeries(series);
 
-            return fileList;
+            return importedFiles;
         }
 
 
@@ -88,7 +94,7 @@ namespace NzbDrone.Core.Providers
 
             long size = _diskProvider.GetSize(filePath);
 
-            //If Size is less than 50MB and contains sample. Check for Size to ensure its not an episode with sample in the title
+            //If Size is less than 40MB and contains sample. Check for Size to ensure its not an episode with sample in the title
             if (size < 40000000 && filePath.ToLower().Contains("sample"))
             {
                 Logger.Trace("[{0}] appears to be a sample. skipping.", filePath);
@@ -141,6 +147,13 @@ namespace NzbDrone.Core.Providers
             if (episodes.Count <= 0)
                 return null;
 
+
+            if (episodes.Any(e => e.EpisodeFile != null && e.EpisodeFile.QualityWrapper > parseResult.Quality))
+            {
+                Logger.Info("File with better quality is already attached. skipping {0}", filePath);
+                return null;
+            }
+
             var episodeFile = new EpisodeFile();
             episodeFile.DateAdded = DateTime.Now;
             episodeFile.SeriesId = series.SeriesId;
@@ -172,19 +185,17 @@ namespace NzbDrone.Core.Providers
                 throw new ArgumentNullException("episodeFile");
 
             var series = _seriesProvider.GetSeries(episodeFile.SeriesId);
-            string ext = _diskProvider.GetExtension(episodeFile.Path);
             var episodes = _episodeProvider.GetEpisodesByFileId(episodeFile.EpisodeFileId);
             string newFileName = _mediaFileProvider.GetNewFilename(episodes, series.Title, episodeFile.Quality);
-
-            var newFile = _mediaFileProvider.CalculateFilePath(series, episodes.First().SeasonNumber, newFileName, ext);
+            var newFile = _mediaFileProvider.CalculateFilePath(series, episodes.First().SeasonNumber, newFileName, Path.GetExtension(episodeFile.Path));
 
             //Do the rename
+            Logger.Trace("Attempting to rename {0} to {1}", episodeFile.Path, newFile.FullName);
             _diskProvider.RenameFile(episodeFile.Path, newFile.FullName);
 
             //Update the filename in the DB
             episodeFile.Path = newFile.FullName;
             _mediaFileProvider.Update(episodeFile);
-
 
             return true;
         }
@@ -194,11 +205,8 @@ namespace NzbDrone.Core.Providers
         ///   Removes files that no longer exist on disk from the database
         /// </summary>
         /// <param name = "files">list of files to verify</param>
-        public virtual void CleanUp(List<EpisodeFile> files)
+        public virtual void CleanUp(IList<EpisodeFile> files)
         {
-            _mediaFileProvider.CleanEpisodesWithNonExistantFiles();
-            _mediaFileProvider.DeleteOrphanedEpisodeFiles();
-
             foreach (var episodeFile in files)
             {
                 if (!_diskProvider.FileExists(episodeFile.Path))

@@ -48,11 +48,6 @@ namespace NzbDrone.Core.Providers.Core
             File.Move(sourcePath, destinationPath);
         }
 
-        public virtual string GetExtension(string path)
-        {
-            return Path.GetExtension(path);
-        }
-
         public virtual void DeleteFolder(string path, bool recursive)
         {
             Directory.Delete(path, recursive);

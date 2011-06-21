@@ -43,8 +43,7 @@ namespace NzbDrone.Core.Providers
             lock (_handler)
             {
                 Logger.Debug("Fetching SeriesId'{0}' from tvdb", id);
-                var result = _handler.GetSeries(id, TvdbLanguage.DefaultLanguage, loadEpisodes, false, false);
-
+                var result = _handler.GetSeries(id, TvdbLanguage.DefaultLanguage, loadEpisodes, false, true, true);
 
                 //Fix American Dad's scene gongshow 
                 if (result != null && result.Id == 73141)

@@ -44,9 +44,9 @@ namespace NzbDrone.Core.Providers.Jobs
             Logger.Debug("Starting New Download Scan Job");
             var dropFolder = _configProvider.SabDropDirectory;
 
-            if (String.IsNullOrEmpty(dropFolder))
+            if (String.IsNullOrWhiteSpace(dropFolder))
             {
-                Logger.Warn("Unable to Scan for New Downloads - Folder Name is Empty");
+                Logger.Debug("Skipping drop folder scan. No drop folder is defined.");
                 return;
             }
 
@@ -56,26 +56,24 @@ namespace NzbDrone.Core.Providers.Jobs
                 return;
             }
 
-            var subfolders = _diskProvider.GetDirectories(dropFolder);
-
-            foreach (var subfolder in subfolders)
+            foreach (var subfolder in _diskProvider.GetDirectories(dropFolder))
             {
-                var di = new DirectoryInfo(subfolder);
+                var subfolderInfo = new DirectoryInfo(subfolder);
 
-                if (di.Name.StartsWith("_UNPACK_"))
+                if (subfolderInfo.Name.StartsWith("_UNPACK_", StringComparison.CurrentCultureIgnoreCase))
                 {
-                    Logger.Info("Folder [{0}] is still being unpacked", subfolder);
+                    Logger.Info("Folder [{0}] is still being unpacked. skipping.", subfolder);
                     continue;
                 }
 
-                if (di.Name.StartsWith("_FAILED_"))
+                if (subfolderInfo.Name.StartsWith("_FAILED_", StringComparison.CurrentCultureIgnoreCase))
                 {
-                    Logger.Info("Folder [{0}] is marked as failed", subfolder);
+                    Logger.Info("Folder [{0}] is marked as failed. skipping.", subfolder);
                     continue;
                 }
 
                 //Parse the Folder name
-                var seriesName = Parser.ParseSeriesName(di.Name);
+                var seriesName = Parser.ParseSeriesName(subfolderInfo.Name);
                 var series = _seriesProvider.FindSeries(seriesName);
 
                 if (series == null)
@@ -84,8 +82,10 @@ namespace NzbDrone.Core.Providers.Jobs
                     return;
                 }
 
-                _diskScanProvider.Scan(series, subfolder);
+                var importedFiles = _diskScanProvider.Scan(series, subfolder);
+                importedFiles.ForEach(file => _diskScanProvider.RenameEpisodeFile(file));
             }
+
             Logger.Debug("New Download Scan Job completed successfully");
         }
     }

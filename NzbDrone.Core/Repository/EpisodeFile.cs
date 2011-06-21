@@ -24,5 +24,19 @@ namespace NzbDrone.Core.Repository
 
         [Ignore]
         public Series Series { get; set; }
+
+        [Ignore]
+        public Model.Quality QualityWrapper
+        {
+            get
+            {
+                return new Model.Quality(Quality, Proper);
+            }
+            set
+            {
+                Quality = value.QualityType;
+                Proper = value.Proper;
+            }
+        }
     }
 }
