@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Test
 
             var fakeSeries = Builder<Series>.CreateNew().Build();
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
-                .WhereAll().Have(e => e.SeriesId = 1).Build();
+                .WhereAll().Have(e => e.SeriesId = 1).Have(e => e.EpisodeFileId = 0).Build();
 
 
             db.InsertMany(fakeEpisodes);
@@ -57,8 +57,8 @@ namespace NzbDrone.Core.Test
             var fakeEpisodes = Builder<Episode>.CreateNew()
                 .With(e => e.SeriesId = fakeSeries.SeriesId)
                 .With(e => e.EpisodeNumber = 1)
-                .And(e => e.SeasonNumber = 2).Build();
-
+                .And(e => e.SeasonNumber = 2)
+                .With(e => e.EpisodeFileId = 0).Build();
 
             db.Insert(fakeEpisodes);
 

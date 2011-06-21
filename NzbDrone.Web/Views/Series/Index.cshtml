@@ -186,37 +186,9 @@
     function grid_rowBound(e) {
         var dataItem = e.dataItem;
         var seriesId = dataItem.SeriesId;
-        var getEpisodeCountUrl = '@Url.Action("GetEpisodeCount", "Series")';
+        var episodeCount = dataItem.EpisodeCount;
+        var episodeFileCount = dataItem.EpisodeFileCount;
 
-        $("#progressbar_" + seriesId).episodeProgress(0, 0);
-
-        $.ajax({
-            type: "GET",
-            url: getEpisodeCountUrl,
-            data: jQuery.param({ seriesId: seriesId }),
-            error: function (req, status, error) {
-                alert("Sorry! We could search for " + id + " at this time. " + error);
-            },
-            success: function (data, textStatus, jqXHR) {
-                var episodes = data.Episodes;
-                var episodeTotal = data.EpisodeTotal;
-
-                var counter = 0;
-                var max = episodes + 1;
-
-                $.doTimeout(10, function () {
-                    if (counter >= max) {
-                        $("#progressbar_" + seriesId).episodeProgress(episodes, episodeTotal);
-                        return false;
-                    }
-
-                    $("#progressbar_" + seriesId).episodeProgress(counter, episodeTotal);
-
-                    counter += 5;
-
-                    return true;
-                });
-            }
-        });
+        $("#progressbar_" + seriesId).episodeProgress(episodeFileCount, episodeCount);
     }
 </script>

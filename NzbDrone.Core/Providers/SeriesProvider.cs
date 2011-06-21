@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
+using NzbDrone.Core.Repository.Quality;
 using PetaPoco;
 using TvdbLib.Data;
 
@@ -17,17 +18,15 @@ namespace NzbDrone.Core.Providers
         private readonly ConfigProvider _configProvider;
         private readonly TvDbProvider _tvDbProvider;
         private readonly IDatabase _database;
-        private readonly QualityProvider _qualityProvider;
         private readonly SceneMappingProvider _sceneNameMappingProvider;
         private static readonly Regex TimeRegex = new Regex(@"^(?<time>\d+:?\d*)\W*(?<meridiem>am|pm)?", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        public SeriesProvider(IDatabase database, ConfigProvider configProviderProvider, QualityProvider qualityProvider,
+        public SeriesProvider(IDatabase database, ConfigProvider configProviderProvider,
                                 TvDbProvider tvDbProviderProvider, SceneMappingProvider sceneNameMappingProvider)
         {
             _database = database;
             _configProvider = configProviderProvider;
             _tvDbProvider = tvDbProviderProvider;
-            _qualityProvider = qualityProvider;
             _sceneNameMappingProvider = sceneNameMappingProvider;
         }
 
@@ -37,15 +36,36 @@ namespace NzbDrone.Core.Providers
 
         public virtual IList<Series> GetAllSeries()
         {
-            var series = _database.Fetch<Series>();
-            series.ForEach(c => c.QualityProfile = _qualityProvider.Get(c.QualityProfileId));
+            var series = _database.Fetch<Series, QualityProfile>(@"SELECT * FROM Series 
+                            INNER JOIN QualityProfiles ON Series.QualityProfileId = QualityProfiles.QualityProfileId");
+
+            return series;
+        }
+
+        public virtual IList<Series> GetAllSeriesWithEpisodeCount(bool ignoreSpecials)
+        {
+            var seasonNumber = 0;
+
+            if (!ignoreSpecials)
+                seasonNumber = -1;
+
+            var series = _database.Fetch<Series, QualityProfile>(@"SELECT Series.*, COUNT (NULLIF(Ignored, 1)) AS EpisodeCount,
+                                                    SUM(CASE WHEN Ignored = 0 AND EpisodeFileId > 0 THEN 1 ELSE 0 END) as EpisodeFileCount,
+                                                    COUNT (DISTINCT(NULLIF(SeasonNumber, @0))) as SeasonCount,
+                                                    QualityProfiles.*
+                                                    FROM Series
+                                                    INNER JOIN QualityProfiles ON Series.QualityProfileId = QualityProfiles.QualityProfileId
+                                                    JOIN Episodes ON Series.SeriesId = Episodes.SeriesId
+                                                    GROUP BY seriesId", seasonNumber);
+
             return series;
         }
 
         public virtual Series GetSeries(int seriesId)
         {
-            var series = _database.Single<Series>("WHERE seriesId= @0", seriesId);
-            series.QualityProfile = _qualityProvider.Get(series.QualityProfileId);
+            var series = _database.Fetch<Series, QualityProfile>(@"SELECT * FROM Series
+                            INNER JOIN QualityProfiles ON Series.QualityProfileId = QualityProfiles.QualityProfileId
+                            WHERE seriesId= @0", seriesId).Single();
 
             return series;
         }
@@ -106,15 +126,11 @@ namespace NzbDrone.Core.Providers
                 return GetSeries(seriesId.Value);
             }
 
-            var series = _database.FirstOrDefault<Series>("WHERE CleanTitle = @0", normalizeTitle);
+            var series = _database.Fetch<Series, QualityProfile>(@"SELECT * FROM Series
+                            INNER JOIN QualityProfiles ON Series.QualityProfileId = QualityProfiles.QualityProfileId
+                            WHERE CleanTitle = @0", normalizeTitle).FirstOrDefault();
 
-            if (series != null)
-            {
-                series.QualityProfile = _qualityProvider.Get(series.QualityProfileId);
-                return series;
-            }
-
-            return null;
+            return series;
         }
 
         public virtual void UpdateSeries(Series series)

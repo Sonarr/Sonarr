@@ -74,5 +74,57 @@ namespace NzbDrone.Core.Test
 
         }
 
+        [Test]
+        [TestCase("Law & Order: Criminal Intent - S10E07 - Icarus [HDTV]", "Law & Order- Criminal Intent - S10E07 - Icarus [HDTV]")]
+        public void CleanFileName(string name, string expectedName)
+        {
+            //Act
+            var result = MediaFileProvider.CleanFilename(name);
+
+            //Assert
+            Assert.AreEqual(expectedName, result);
+        }
+
+        [Test]
+        public void CleanEpisodesWithNonExistantFiles()
+        {
+            //Setup
+            var episodes = Builder<Episode>.CreateListOfSize(10).Build();
+
+            var mocker = new AutoMoqer();
+            var database = MockLib.GetEmptyDatabase(true);
+            mocker.SetConstant(database);
+            database.InsertMany(episodes);
+
+            //Act
+            mocker.Resolve<MediaFileProvider>().CleanEpisodesWithNonExistantFiles();
+            var result = database.Fetch<Episode>();
+
+            //Assert
+            result.Should().HaveSameCount(episodes);
+            result.Should().OnlyContain(e => e.EpisodeFileId == 0);
+        }
+
+        [Test]
+        public void DeleteOrphanedEpisodeFiles()
+        {
+            //Setup
+            var episodeFiles = Builder<EpisodeFile>.CreateListOfSize(10).Build();
+            var episodes = Builder<Episode>.CreateListOfSize(5).Build();
+
+            var mocker = new AutoMoqer();
+            var database = MockLib.GetEmptyDatabase(true);
+            mocker.SetConstant(database);
+            database.InsertMany(episodes);
+            database.InsertMany(episodeFiles);
+
+            //Act
+            mocker.Resolve<MediaFileProvider>().DeleteOrphanedEpisodeFiles();
+            var result = database.Fetch<EpisodeFile>();
+
+            //Assert
+            result.Should().HaveCount(5);
+            result.Should().OnlyContain(e => e.EpisodeFileId > 0);
+        }
     }
 }

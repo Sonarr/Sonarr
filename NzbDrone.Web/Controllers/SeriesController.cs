@@ -80,8 +80,7 @@ namespace NzbDrone.Web.Controllers
         [GridAction]
         public ActionResult _AjaxSeriesGrid()
         {
-            var series = GetSeriesModels(_seriesProvider.GetAllSeries().ToList());
-
+            var series = GetSeriesModels(_seriesProvider.GetAllSeriesWithEpisodeCount(true).ToList());
             return View(new GridModel(series));
         }
 
@@ -122,17 +121,6 @@ namespace NzbDrone.Web.Controllers
         {
             var episodes = GetEpisodeModels(_episodeProvider.GetEpisodesBySeason(seriesId, seasonNumber));
             return View(new GridModel(episodes));
-        }
-
-        public JsonResult GetEpisodeCount(int seriesId)
-        {
-            var count = _mediaFileProvider.GetEpisodeFilesCount(seriesId);
-
-            return Json(new
-            {
-                Episodes = count.Item1,
-                EpisodeTotal = count.Item2
-            }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult SearchForSeries(string seriesName)
@@ -206,25 +194,22 @@ namespace NzbDrone.Web.Controllers
 
         private List<SeriesModel> GetSeriesModels(List<Series> seriesInDb)
         {
-            var series = new List<SeriesModel>();
-
-            foreach (var s in seriesInDb)
-            {
-                series.Add(new SeriesModel
-                               {
-                                   SeriesId = s.SeriesId,
-                                   Title = s.Title,
-                                   AirsDayOfWeek = s.AirsDayOfWeek.ToString(),
-                                   Monitored = s.Monitored,
-                                   Overview = s.Overview,
-                                   Path = s.Path,
-                                   QualityProfileId = s.QualityProfileId,
-                                   QualityProfileName = s.QualityProfile.Name,
-                                   SeasonFolder = s.SeasonFolder,
-                                   Status = s.Status,
-                                   SeasonsCount = _episodeProvider.GetSeasons(s.SeriesId).Where(n => n != 0).Count()
-                               });
-            }
+            var series = seriesInDb.Select(s => new SeriesModel
+                                                    {
+                                                        SeriesId = s.SeriesId,
+                                                        Title = s.Title,
+                                                        AirsDayOfWeek = s.AirsDayOfWeek.ToString(),
+                                                        Monitored = s.Monitored,
+                                                        Overview = s.Overview,
+                                                        Path = s.Path,
+                                                        QualityProfileId = s.QualityProfileId,
+                                                        QualityProfileName = s.QualityProfile.Name,
+                                                        SeasonFolder = s.SeasonFolder,
+                                                        Status = s.Status,
+                                                        SeasonsCount = s.SeasonCount,
+                                                        EpisodeCount = s.EpisodeCount,
+                                                        EpisodeFileCount = s.EpisodeFileCount
+                                                    }).ToList();
 
             return series;
         }

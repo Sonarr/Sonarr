@@ -14,6 +14,8 @@ namespace NzbDrone.Web.Models
         //View Only
         public string Title { get; set; }
         public int SeasonsCount { get; set; }
+        public int EpisodeCount { get; set; }
+        public int EpisodeFileCount { get; set; }
         public string Status { get; set; }
         public string AirsDayOfWeek { get; set; }
         public string QualityProfileName { get; set; }

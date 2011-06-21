@@ -74,6 +74,26 @@ namespace NzbDrone.Core.Providers
             return new FileInfo(path);
         }
 
+        public virtual void CleanEpisodesWithNonExistantFiles()
+        {
+            _database.Execute(@"UPDATE Episodes SET EpisodeFileId = 0
+                                WHERE EpisodeFileId IN
+                                (SELECT Episodes.EpisodeFileId FROM Episodes
+                                LEFT OUTER JOIN EpisodeFiles
+                                ON Episodes.EpisodeFileId = EpisodeFiles.EpisodeFileId
+                                WHERE Episodes.EpisodeFileId > 0 AND EpisodeFiles.EpisodeFileId IS null)");
+        }
+
+        public virtual void DeleteOrphanedEpisodeFiles()
+        {
+            _database.Execute(@"DELETE FROM EpisodeFiles
+                                WHERE EpisodeFileId IN
+                                (SELECT EpisodeFiles.EpisodeFileId FROM EpisodeFiles
+                                LEFT OUTER JOIN Episodes
+                                ON EpisodeFiles.EpisodeFileId = Episodes.EpisodeFileId
+                                WHERE Episodes.EpisodeFileId IS null)");
+        }
+
         public virtual string GetNewFilename(IList<Episode> episodes, string seriesTitle, QualityTypes quality)
         {
             var separatorStyle = EpisodeSortingHelper.GetSeparatorStyle(_configProvider.SeparatorStyle);
@@ -129,6 +149,18 @@ namespace NzbDrone.Core.Providers
                 result = result.Replace(' ', '.');
 
             Logger.Debug("New File Name is: {0}", result.Trim());
+            return CleanFilename(result.Trim());
+        }
+
+        public static string CleanFilename(string name)
+        {
+            string result = name;
+            string[] badCharacters = { "\\", "/", "<", ">", "?", "*", ":", "|", "\"" };
+            string[] goodCharacters = { "+", "+", "{", "}", "!", "@", "-", "#", "`" };
+
+            for (int i = 0; i < badCharacters.Length; i++)
+                result = result.Replace(badCharacters[i], goodCharacters[i]);
+
             return result.Trim();
         }
     }
