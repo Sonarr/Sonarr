@@ -196,7 +196,9 @@ namespace NzbDrone.Core.Providers
         /// <param name = "files">list of files to verify</param>
         public virtual void CleanUp(List<EpisodeFile> files)
         {
-            //TODO: remove orphaned files. in files table but not linked to from episode table.
+            _mediaFileProvider.CleanEpisodesWithNonExistantFiles();
+            _mediaFileProvider.DeleteOrphanedEpisodeFiles();
+
             foreach (var episodeFile in files)
             {
                 if (!_diskProvider.FileExists(episodeFile.Path))
