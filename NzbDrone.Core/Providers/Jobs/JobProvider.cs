@@ -53,12 +53,12 @@ namespace NzbDrone.Core.Providers.Jobs
         {
             if (settings.Id == 0)
             {
-                Logger.Debug("Adding job settings for {0}", settings.Name);
+                Logger.Trace("Adding job settings for {0}", settings.Name);
                 _database.Insert(settings);
             }
             else
             {
-                Logger.Debug("Updating job settings for {0}", settings.Name);
+                Logger.Trace("Updating job settings for {0}", settings.Name);
                 _database.Update(settings);
             }
         }
@@ -98,7 +98,7 @@ namespace NzbDrone.Core.Providers.Jobs
                 _isRunning = false;
             }
 
-            Logger.Debug("Finished executing scheduled tasks.");
+            Logger.Trace("Finished executing scheduled tasks.");
             return true;
         }
 
@@ -124,7 +124,7 @@ namespace NzbDrone.Core.Providers.Jobs
                 }
 
                 Queue.Add(queueTuple);
-                Logger.Debug("Job ({0}:{1}) added to the queue", jobType, targetId);
+                Logger.Trace("Job ({0}:{1}) added to the queue", jobType, targetId);
 
             }
 
@@ -213,7 +213,7 @@ namespace NzbDrone.Core.Providers.Jobs
             }
             else
             {
-                Logger.Debug("Finished processing jobs in the queue.");
+                Logger.Trace("Finished processing jobs in the queue.");
             }
 
             return;

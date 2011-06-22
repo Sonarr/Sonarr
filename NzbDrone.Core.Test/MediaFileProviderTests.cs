@@ -106,8 +106,7 @@ namespace NzbDrone.Core.Test
             result.Should().HaveSameCount(episodes);
             result.Should().OnlyContain(e => e.EpisodeFileId == 0);
             removedLinks.Should().Be(10);
-            ExceptionVerification.ExcpectedWarns(1);
-        }
+          }
 
         [Test]
         public void DeleteOrphanedEpisodeFiles()
@@ -129,7 +128,6 @@ namespace NzbDrone.Core.Test
             //Assert
             result.Should().HaveCount(5);
             result.Should().OnlyContain(e => e.EpisodeFileId > 0);
-            ExceptionVerification.ExcpectedWarns(1);
         }
 
         [Test]

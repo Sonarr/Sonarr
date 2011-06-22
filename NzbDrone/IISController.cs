@@ -72,7 +72,7 @@ namespace NzbDrone
             IISProcess.BeginOutputReadLine();
 
             //Start Ping
-            _pingTimer = new Timer(30000) { AutoReset = true };
+            _pingTimer = new Timer(300000) { AutoReset = true };
             _pingTimer.Elapsed += (PingServer);
             _pingTimer.Start();
 
