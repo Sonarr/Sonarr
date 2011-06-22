@@ -228,8 +228,6 @@ namespace NzbDrone.Core.Providers
                          tvDbSeriesInfo.SeriesName, successCount, failCount);
         }
 
-
-
         public virtual void UpdateEpisode(Episode episode)
         {
             _database.Update(episode);
