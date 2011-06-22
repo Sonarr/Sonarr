@@ -80,7 +80,7 @@ namespace NzbDrone.Web.Controllers
         [GridAction]
         public ActionResult _AjaxSeriesGrid()
         {
-            var series = GetSeriesModels(_seriesProvider.GetAllSeriesWithEpisodeCount(true).ToList());
+            var series = GetSeriesModels(_seriesProvider.GetAllSeriesWithEpisodeCount(true));
             return View(new GridModel(series));
         }
 
@@ -96,7 +96,7 @@ namespace NzbDrone.Web.Controllers
 
             _seriesProvider.UpdateSeries(oldSeries);
 
-            var series = GetSeriesModels(_seriesProvider.GetAllSeries().ToList());
+            var series = GetSeriesModels(_seriesProvider.GetAllSeriesWithEpisodeCount(true));
             return View(new GridModel(series));
         }
 
@@ -192,7 +192,7 @@ namespace NzbDrone.Web.Controllers
             return RedirectToAction("Details", new { seriesId });
         }
 
-        private List<SeriesModel> GetSeriesModels(List<Series> seriesInDb)
+        private List<SeriesModel> GetSeriesModels(IList<Series> seriesInDb)
         {
             var series = seriesInDb.Select(s => new SeriesModel
                                                     {

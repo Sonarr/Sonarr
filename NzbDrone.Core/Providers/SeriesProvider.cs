@@ -42,11 +42,11 @@ namespace NzbDrone.Core.Providers
             return series;
         }
 
-        public virtual IList<Series> GetAllSeriesWithEpisodeCount(bool ignoreSpecials)
+        public virtual IList<Series> GetAllSeriesWithEpisodeCount(bool ignoreSpecialsInSeasonCount)
         {
             var seasonNumber = 0;
 
-            if (!ignoreSpecials)
+            if (!ignoreSpecialsInSeasonCount)
                 seasonNumber = -1;
 
             var series = _database.Fetch<Series, QualityProfile>(@"SELECT Series.*, COUNT (NULLIF(Ignored, 1)) AS EpisodeCount,
