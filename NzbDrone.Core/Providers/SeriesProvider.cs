@@ -135,10 +135,11 @@ namespace NzbDrone.Core.Providers
                 return series;
             }
 
-            //This will catch InvalidOperationExceptions that may be thrown for GetSeries due to the series being in SceneMapping, but not in the users Database
-            catch (InvalidOperationException ex)
+
+            catch (InvalidOperationException)
             {
-                Logger.DebugException(ex.Message, ex);
+                //This will catch InvalidOperationExceptions(Sequence contains no element) 
+                //that may be thrown for GetSeries due to the series being in SceneMapping, but not in the users Database
                 return null;
             }
         }

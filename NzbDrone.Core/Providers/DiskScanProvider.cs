@@ -143,7 +143,7 @@ namespace NzbDrone.Core.Providers
         }
 
 
-        public virtual bool RenameEpisodeFile(EpisodeFile episodeFile)
+        public virtual bool MoveEpisodeFile(EpisodeFile episodeFile)
         {
             if (episodeFile == null)
                 throw new ArgumentNullException("episodeFile");
