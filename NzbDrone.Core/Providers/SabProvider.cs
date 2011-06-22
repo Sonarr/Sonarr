@@ -126,7 +126,7 @@ namespace NzbDrone.Core.Providers
 
             var epNumberString = String.Join("-", episodeString);
 
-            var result = String.Format("{0} - {1} - {2} [{3}]", new DirectoryInfo(parseResult.Series.Path).Name, epNumberString, parseResult.Episodes.FirstOrDefault().Title, parseResult.Quality.QualityType);
+            var result = String.Format("{0} - {1} - {2} [{3}]", new DirectoryInfo(parseResult.Series.Path).Name, epNumberString, parseResult.EpisodeTitle, parseResult.Quality.QualityType);
 
             if (parseResult.Quality.Proper)
             {

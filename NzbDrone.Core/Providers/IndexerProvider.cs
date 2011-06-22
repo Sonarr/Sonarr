@@ -14,12 +14,13 @@ namespace NzbDrone.Core.Providers
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IDatabase _database;
 
-        private IList<IndexerBase> _indexers = new List<IndexerBase>();
+        private IEnumerable<IndexerBase> _indexers;
 
         [Inject]
-        public IndexerProvider(IDatabase database)
+        public IndexerProvider(IDatabase database, IEnumerable<IndexerBase> indexers)
         {
             _database = database;
+            _indexers = indexers;
         }
 
         public IndexerProvider()

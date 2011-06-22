@@ -259,7 +259,7 @@ namespace NzbDrone.Core.Test
             mocker.Resolve<SabProvider>().IsInQueue(String.Empty);
         }
 
-
+        [Test]
         [TestCase(1, new[] { 2 }, "My Episode Title", QualityTypes.DVD, false, "My Series Name - 1x2 - My Episode Title [DVD]")]
         [TestCase(1, new[] { 2 }, "My Episode Title", QualityTypes.DVD, true, "My Series Name - 1x2 - My Episode Title [DVD] [Proper]")]
         [TestCase(1, new[] { 2 }, "", QualityTypes.DVD, true, "My Series Name - 1x2 -  [DVD] [Proper]")]
@@ -274,10 +274,6 @@ namespace NzbDrone.Core.Test
                 .With(c => c.Path = @"d:\tv shows\My Series Name")
                 .Build();
 
-            var episode = Builder<Episode>.CreateNew()
-                .With(e => e.Title = title)
-                .Build();
-
             var parsResult = new EpisodeParseResult()
             {
                 AirDate = DateTime.Now,
@@ -285,7 +281,7 @@ namespace NzbDrone.Core.Test
                 Quality = new Quality(quality, proper),
                 SeasonNumber = seasons,
                 Series = series,
-                Episodes = new List<Episode>() { episode }
+                EpisodeTitle =  title
             };
 
             //Act

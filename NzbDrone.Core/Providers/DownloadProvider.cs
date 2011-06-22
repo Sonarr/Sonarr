@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Providers
 
             if (addSuccess)
             {
-                foreach (var episode in parseResult.Episodes)
+                foreach (var episode in _episodeProvider.GetEpisodesByParseResult(parseResult))
                 {
                     var history = new History();
                     history.Date = DateTime.Now;

@@ -589,6 +589,22 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
+        public void GetEpisode_by_Season_Episode_none_existing()
+        {
+            var mocker = new AutoMoqer();
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+        
+            //Act
+            var episode = mocker.Resolve<EpisodeProvider>().GetEpisode(1, 1, 1);
+
+            //Assert
+            episode.Should().BeNull();
+        }
+
+
+        [Test]
         public void GetEpisode_by_Season_Episode_with_EpisodeFile()
         {
             var mocker = new AutoMoqer();
@@ -644,6 +660,9 @@ namespace NzbDrone.Core.Test
             episode.EpisodeFile.Should().BeNull();
         }
 
+        
+
+
         [Test]
         public void GetEpisode_by_AirDate_with_EpisodeFile()
         {
@@ -697,5 +716,8 @@ namespace NzbDrone.Core.Test
             episode.Series.ShouldHave().AllProperties().EqualTo(fakeSeries);
             episode.EpisodeFile.Should().BeNull();
         }
+
+
+ 
     }
 }

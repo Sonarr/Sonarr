@@ -126,6 +126,18 @@
       <HintPath>..\Libraries\Exceptioneer.WindowsFormsClient.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Migrator, Version=0.9.1.26254, Culture=neutral, PublicKeyToken=3b3586e9632ecfce, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libraries\Migrator.NET\Migrator.dll</HintPath>
+    </Reference>
+    <Reference Include="Migrator.Framework, Version=0.0.0.0, Culture=neutral, PublicKeyToken=3b3586e9632ecfce, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libraries\Migrator.NET\Migrator.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Migrator.Providers, Version=0.0.0.0, Culture=neutral, PublicKeyToken=3b3586e9632ecfce, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libraries\Migrator.NET\Migrator.Providers.dll</HintPath>
+    </Reference>
     <Reference Include="MvcMiniProfiler, Version=2.1.4183.14740, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\MiniProfiler.1.3\lib\MvcMiniProfiler.dll</HintPath>
@@ -278,20 +290,6 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Properties\AnalysisRules.ruleset" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Migrator.net\Migrator.Framework\Migrator.Framework.csproj">
-      <Project>{5270F048-E580-486C-B14C-E5B9F6E539D4}</Project>
-      <Name>Migrator.Framework</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Migrator.net\Migrator.Providers\Migrator.Providers.csproj">
-      <Project>{D58C68E4-D789-40F7-9078-C9F587D4363C}</Project>
-      <Name>Migrator.Providers</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Migrator.net\Migrator\Migrator.csproj">
-      <Project>{1FEE70A4-AAD7-4C60-BE60-3F7DC03A8C4D}</Project>
-      <Name>Migrator</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

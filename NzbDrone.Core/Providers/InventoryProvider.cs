@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Ninject;
 using NLog;
 using NzbDrone.Core.Model;
@@ -41,7 +42,6 @@ namespace NzbDrone.Core.Providers
             }
 
             parseResult.Series = series;
-            parseResult.Episodes = new List<Episode>();
 
             if (!series.Monitored)
             {
@@ -49,34 +49,16 @@ namespace NzbDrone.Core.Providers
                 return false;
             }
 
-            foreach (var episodeNumber in parseResult.EpisodeNumbers)
+            var episodes = _episodeProvider.GetEpisodesByParseResult(parseResult, true);
+
+            //return monitored if any of the episodes are monitored
+            if (episodes.Any(episode => !episode.Ignored))
             {
-                var episodeInfo = _episodeProvider.GetEpisode(series.SeriesId, parseResult.SeasonNumber, episodeNumber);
-                if (episodeInfo == null)
-                {
-                    episodeInfo = _episodeProvider.GetEpisode(series.SeriesId, parseResult.AirDate);
-                }
-                //if still null we should add the temp episode
-                if (episodeInfo == null)
-                {
-                    Logger.Debug("Episode {0} doesn't exist in db. adding it now.", parseResult);
-                    episodeInfo = new Episode
-                    {
-                        SeriesId = series.SeriesId,
-                        AirDate = DateTime.Now.Date,
-                        EpisodeNumber = episodeNumber,
-                        SeasonNumber = parseResult.SeasonNumber,
-                        Title = "TBD",
-                        Overview = String.Empty,
-                    };
-
-                    _episodeProvider.AddEpisode(episodeInfo);
-                }
-
-                parseResult.Episodes.Add(episodeInfo);
+                return true;
             }
 
-            return true;
+            Logger.Debug("All episodes are ignored. skipping.");
+            return false;
         }
 
         /// <summary>
@@ -97,7 +79,7 @@ namespace NzbDrone.Core.Providers
 
             var cutoff = parsedReport.Series.QualityProfile.Cutoff;
 
-            foreach (var episode in parsedReport.Episodes)
+            foreach (var episode in _episodeProvider.GetEpisodesByParseResult(parsedReport, true))
             {
                 //Checking File
                 var file = episode.EpisodeFile;

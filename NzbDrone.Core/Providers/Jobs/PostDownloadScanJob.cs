@@ -83,7 +83,7 @@ namespace NzbDrone.Core.Providers.Jobs
                 }
 
                 var importedFiles = _diskScanProvider.Scan(series, subfolder);
-                importedFiles.ForEach(file => _diskScanProvider.RenameEpisodeFile(file));
+                importedFiles.ForEach(file => _diskScanProvider.MoveEpisodeFile(file));
             }
 
             Logger.Debug("New Download Scan Job completed successfully");

@@ -85,6 +85,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EpisodeProviderTest_GetEpisodesByParseResult.cs" />
     <Compile Include="DiskScanProviderTest.cs" />
     <Compile Include="FluentTest.cs" />
     <Compile Include="LogProviderTest.cs" />
@@ -128,18 +129,6 @@
     <Compile Include="TvDbProviderTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Migrator.net\Migrator.Framework\Migrator.Framework.csproj">
-      <Project>{5270F048-E580-486C-B14C-E5B9F6E539D4}</Project>
-      <Name>Migrator.Framework</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Migrator.net\Migrator.Providers\Migrator.Providers.csproj">
-      <Project>{D58C68E4-D789-40F7-9078-C9F587D4363C}</Project>
-      <Name>Migrator.Providers</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Migrator.net\Migrator\Migrator.csproj">
-      <Project>{1FEE70A4-AAD7-4C60-BE60-3F7DC03A8C4D}</Project>
-      <Name>Migrator</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NzbDrone.Core\NzbDrone.Core.csproj">
       <Project>{FF5EE3B6-913B-47CE-9CEB-11C51B4E1205}</Project>
       <Name>NzbDrone.Core</Name>
