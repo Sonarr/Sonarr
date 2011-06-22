@@ -97,7 +97,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual int RepairLinks()
         {
-            Logger.Debug("Verifying Episode>Episode file relationships.");
+            Logger.Trace("Verifying Episode>Episode file relationships.");
             var updated = _database.Execute(@"UPDATE Episodes SET EpisodeFileId = 0
                                 WHERE EpisodeFileId IN
                                 (SELECT Episodes.EpisodeFileId FROM Episodes
@@ -107,7 +107,7 @@ namespace NzbDrone.Core.Providers
 
             if (updated > 0)
             {
-                Logger.Warn("Removed {0} invalid links to episode files.", updated);
+                Logger.Debug("Removed {0} invalid links to episode files.", updated);
             }
 
             return updated;
@@ -115,7 +115,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual int DeleteOrphaned()
         {
-            Logger.Debug("Deleting orphaned files.");
+            Logger.Trace("Deleting orphaned files.");
 
             var updated = _database.Execute(@"DELETE FROM EpisodeFiles
                                 WHERE EpisodeFileId IN
@@ -126,7 +126,7 @@ namespace NzbDrone.Core.Providers
 
             if (updated > 0)
             {
-                Logger.Warn("Removed {0} orphaned files.", updated);
+                Logger.Debug("Removed {0} orphaned files.", updated);
             }
 
             return updated;
@@ -186,7 +186,7 @@ namespace NzbDrone.Core.Providers
             if (_configProvider.ReplaceSpaces)
                 result = result.Replace(' ', '.');
 
-            Logger.Debug("New File Name is: {0}", result.Trim());
+            Logger.Trace("New File Name is: {0}", result.Trim());
             return CleanFilename(result.Trim());
         }
 
