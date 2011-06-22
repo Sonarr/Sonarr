@@ -355,16 +355,19 @@ namespace PetaPoco
         // Open a connection (can be nested)
         public void OpenSharedConnection()
         {
-            if (_sharedConnectionDepth == 0)
+            using (MvcMiniProfiler.MiniProfiler.StepStatic("OpenSharedConnection"))
             {
-                _sharedConnection = _factory.CreateConnection();
-                _sharedConnection.ConnectionString = _connectionString;
-                _sharedConnection.Open();
+                if (_sharedConnectionDepth == 0)
+                {
+                    _sharedConnection = _factory.CreateConnection();
+                    _sharedConnection.ConnectionString = _connectionString;
+                    _sharedConnection.Open();
 
-                if (KeepConnectionAlive)
-                    _sharedConnectionDepth++;		// Make sure you call Dispose
+                    if (KeepConnectionAlive)
+                        _sharedConnectionDepth++; // Make sure you call Dispose
+                }
+                _sharedConnectionDepth++;
             }
-            _sharedConnectionDepth++;
         }
 
         /// <summary>

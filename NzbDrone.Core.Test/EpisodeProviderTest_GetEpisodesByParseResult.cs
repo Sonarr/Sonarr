@@ -51,6 +51,7 @@ namespace NzbDrone.Core.Test
             var ep = mocker.Resolve<EpisodeProvider>().GetEpisodesByParseResult(parseResult);
 
             ep.Should().HaveCount(1);
+            parseResult.EpisodeTitle.Should().Be(fakeEpisode.Title);
             ep.First().ShouldHave().AllPropertiesBut(e => e.Series);
         }
 
@@ -138,6 +139,7 @@ namespace NzbDrone.Core.Test
             ep.Should().HaveCount(2);
             db.Fetch<Episode>().Should().HaveCount(2);
             ep.First().ShouldHave().AllPropertiesBut(e => e.Series);
+            parseResult.EpisodeTitle.Should().Be(fakeEpisode.Title);
         }
 
         [Test]
