@@ -12,15 +12,10 @@ namespace NzbDrone.Web.Controllers
     public class HistoryController : Controller
     {
         private readonly HistoryProvider _historyProvider;
-        private readonly EpisodeProvider _episodeProvider;
-        private readonly SeriesProvider _seriesProvider;
 
-        public HistoryController(HistoryProvider historyProvider, EpisodeProvider episodeProvider,
-            SeriesProvider seriesProvider)
+        public HistoryController(HistoryProvider historyProvider)
         {
             _historyProvider = historyProvider;
-            _episodeProvider = episodeProvider;
-            _seriesProvider = seriesProvider;
         }
 
         //
