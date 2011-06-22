@@ -179,7 +179,7 @@ namespace NzbDrone.Core.Providers
                     Logger.Trace("File {0} no longer exists on disk. removing from database.", episodeFile.Path);
 
                     //Set the EpisodeFileId for each episode attached to this file to 0
-                    foreach (var episode in episodeFile.Episodes)
+                    foreach (var episode in _episodeProvider.GetEpisodesByFileId(episodeFile.EpisodeFileId))
                     {
                         episode.EpisodeFileId = 0;
                         _episodeProvider.UpdateEpisode(episode);

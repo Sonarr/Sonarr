@@ -38,11 +38,9 @@ namespace NzbDrone.Core.Test
 
             var database = MockLib.GetEmptyDatabase(true);
 
-            foreach (var file in firstSeriesFiles)
-                database.Insert(file);
 
-            foreach (var file in secondSeriesFiles)
-                database.Insert(file);
+            database.InsertMany(firstSeriesFiles);
+            database.InsertMany(secondSeriesFiles);
 
             mocker.SetConstant(database);
 
@@ -56,7 +54,7 @@ namespace NzbDrone.Core.Test
         public void Scan_series_should_skip_series_with_no_episodes()
         {
             var mocker = new AutoMoqer(MockBehavior.Strict);
-            
+
             mocker.GetMock<EpisodeProvider>()
                 .Setup(c => c.GetEpisodeBySeries(12))
                 .Returns(new List<Episode>());

@@ -85,8 +85,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EpisodeProviderTest_GetEpisodesByParseResult.cs" />
     <Compile Include="DiskScanProviderTest.cs" />
+    <Compile Include="EpisodeProviderTest_GetEpisodesByParseResult.cs" />
+    <Compile Include="DiskScanProviderTest_ImportFile.cs" />
     <Compile Include="FluentTest.cs" />
     <Compile Include="LogProviderTest.cs" />
     <Compile Include="UpcomingEpisodesProviderTest.cs" />

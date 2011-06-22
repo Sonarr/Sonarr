@@ -20,12 +20,6 @@ namespace NzbDrone.Core.Repository
         public DateTime DateAdded { get; set; }
 
         [Ignore]
-        public IList<Episode> Episodes { get; set; }
-
-        [Ignore]
-        public Series Series { get; set; }
-
-        [Ignore]
         public Model.Quality QualityWrapper
         {
             get

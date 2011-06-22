@@ -180,7 +180,6 @@
     <Compile Include="Datastore\Migrations\Migration20110616.cs" />
     <Compile Include="Datastore\SqliteProvider.cs" />
     <Compile Include="Fluent.cs" />
-    <Compile Include="Helpers\EpisodeRenameHelper.cs" />
     <Compile Include="Helpers\EpisodeSortingHelper.cs" />
     <Compile Include="Helpers\FileSizeFormatHelpercs.cs" />
     <Compile Include="Instrumentation\LogProvider.cs" />

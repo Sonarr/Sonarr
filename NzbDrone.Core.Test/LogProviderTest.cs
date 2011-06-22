@@ -6,6 +6,7 @@ using NLog;
 using NLog.Config;
 using NUnit.Framework;
 using NzbDrone.Core.Instrumentation;
+using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test
@@ -146,5 +147,22 @@ namespace NzbDrone.Core.Test
             Assert.AreEqual(ex.ToString(), logItem.Exception);
             ExceptionVerification.ExcpectedErrors(1);
         }
+
+
+       
+
+
+        [Test]
+        public void null_string_as_arg_should_not_fail()
+        {
+            //setup
+           
+            Logger Logger = LogManager.GetCurrentClassLogger();
+            var epFile = new EpisodeFile();
+            Logger.Trace("File {0} no longer exists on disk. removing from database.", epFile.Path);
+
+            epFile.Path.Should().BeNull();
+        }
+
     }
 }
