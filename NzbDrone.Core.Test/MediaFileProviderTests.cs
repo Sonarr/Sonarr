@@ -154,5 +154,25 @@ namespace NzbDrone.Core.Test
             //Assert
             Assert.AreEqual(expectedPath, result.FullName);
         }
+
+        [Test]
+        public void DeleteEpisodeFile()
+        {
+            //Setup
+            var episodeFiles = Builder<EpisodeFile>.CreateListOfSize(10).Build();
+
+            var mocker = new AutoMoqer();
+            var database = MockLib.GetEmptyDatabase(true);
+            mocker.SetConstant(database);
+            database.InsertMany(episodeFiles);
+
+            //Act
+            mocker.Resolve<MediaFileProvider>().Delete(1);
+            var result = database.Fetch<EpisodeFile>();
+
+            //Assert
+            result.Should().HaveCount(9);
+            result.Should().NotContain(e => e.EpisodeFileId == 1);
+        }
     }
 }

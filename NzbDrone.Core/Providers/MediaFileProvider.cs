@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual void Delete(int episodeFileId)
         {
-            _database.Delete(episodeFileId);
+            _database.Delete<EpisodeFile>(episodeFileId);
         }
 
         public virtual bool Exists(string path)
