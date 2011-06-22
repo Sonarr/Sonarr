@@ -142,7 +142,6 @@ namespace NzbDrone.Core.Providers
             return episodeFile;
         }
 
-
         public virtual bool MoveEpisodeFile(EpisodeFile episodeFile)
         {
             if (episodeFile == null)
@@ -152,6 +151,9 @@ namespace NzbDrone.Core.Providers
             var episodes = _episodeProvider.GetEpisodesByFileId(episodeFile.EpisodeFileId);
             string newFileName = _mediaFileProvider.GetNewFilename(episodes, series.Title, episodeFile.Quality);
             var newFile = _mediaFileProvider.CalculateFilePath(series, episodes.First().SeasonNumber, newFileName, Path.GetExtension(episodeFile.Path));
+
+            //Ensure the folder Exists before trying to move it (No error is thrown if the folder already exists)
+            _diskProvider.CreateDirectory(newFile.DirectoryName);
 
             //Do the rename
             Logger.Trace("Attempting to rename {0} to {1}", episodeFile.Path, newFile.FullName);
@@ -163,7 +165,6 @@ namespace NzbDrone.Core.Providers
 
             return true;
         }
-
 
         /// <summary>
         ///   Removes files that no longer exist on disk from the database

@@ -83,7 +83,11 @@ namespace NzbDrone.Core.Providers
             string path = series.Path;
             if (series.SeasonFolder)
             {
-                path = Path.Combine(path, "Season " + seasonNumber);
+                var seasonFolder = _configProvider.SeasonFolderFormat
+                    .Replace("%0s", seasonNumber.ToString("00"))
+                    .Replace("%s", seasonNumber.ToString());
+
+                path = Path.Combine(path, seasonFolder);
             }
 
             path = Path.Combine(path, fileName + extention);
