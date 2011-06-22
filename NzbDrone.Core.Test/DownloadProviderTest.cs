@@ -24,6 +24,7 @@ namespace NzbDrone.Core.Test
                 .With(e => e.Episodes = Builder<Episode>.CreateListOfSize(2)
                                             .WhereTheFirst(1).Has(s => s.EpisodeId = 12)
                                             .AndTheNext(1).Has(s => s.EpisodeId = 99)
+                                            .WhereAll().Has(s => s.SeriesId = 5)
                                             .Build())
                                             .With(c => c.Quality = new Quality(QualityTypes.DVD, false))
                 .Build();
@@ -42,12 +43,11 @@ namespace NzbDrone.Core.Test
                 .Returns(sabTitle);
 
             mocker.GetMock<HistoryProvider>()
-                .Setup(s => s.Add(It.Is<History>(h => h.EpisodeId == 12)));
+                .Setup(s => s.Add(It.Is<History>(h => h.EpisodeId == 12 && h.SeriesId == 5)));
             mocker.GetMock<HistoryProvider>()
-                .Setup(s => s.Add(It.Is<History>(h => h.EpisodeId == 99)));
+                .Setup(s => s.Add(It.Is<History>(h => h.EpisodeId == 99 && h.SeriesId == 5)));
 
             mocker.Resolve<DownloadProvider>().DownloadReport(parseResult);
-
 
             mocker.VerifyAllMocks();
         }
