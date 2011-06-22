@@ -1,7 +1,13 @@
 ﻿@model List<RootDir>
 @using NzbDrone.Core.Repository
 
-<script type="text/javascript" src="../../Scripts/2011.1.315/telerik.window.min.js"></script>
+@{ Html.Telerik().ScriptRegistrar().DefaultGroup(group => group
+                                        .Add("telerik.common.min.js")
+                                        .Add("telerik.draganddrop.min.js")
+                                        .Add("telerik.window.min.js")
+                                        .Add("telerik.panelbar.min.js")
+                                        .Add("telerik.list.min.js")
+                                        .Add("telerik.combobox.min.js")); }
 
 <style>
 .root_dir_text

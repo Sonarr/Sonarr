@@ -215,6 +215,7 @@ namespace NzbDrone.Web.Controllers
                             {
                                 Id = 0,
                                 Path = "",
+                                CleanPath = "",
                                 SelectList = new SelectList(new List<string> { "" }, "")
                             };
 

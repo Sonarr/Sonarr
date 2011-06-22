@@ -11,12 +11,10 @@ namespace NzbDrone.Web.Controllers
     public class UpcomingController : Controller
     {
         private readonly UpcomingEpisodesProvider _upcomingEpisodesProvider;
-        private readonly SeriesProvider _seriesProvider;
 
-        public UpcomingController(UpcomingEpisodesProvider upcomingEpisodesProvider, SeriesProvider seriesProvider)
+        public UpcomingController(UpcomingEpisodesProvider upcomingEpisodesProvider)
         {
             _upcomingEpisodesProvider = upcomingEpisodesProvider;
-            _seriesProvider = seriesProvider;
         }
 
         //

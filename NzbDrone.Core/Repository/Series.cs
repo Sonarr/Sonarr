@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Repository
         [Ignore]
         public bool Hidden { get; set; }
 
-        [Ignore]
+        [ResultColumn]
         public QualityProfile QualityProfile { get; set; }
 
         [ResultColumn]

@@ -118,19 +118,29 @@ namespace NzbDrone.Core.Providers
 
         public virtual Series FindSeries(string title)
         {
-            var normalizeTitle = Parser.NormalizeTitle(title);
-
-            var seriesId = _sceneNameMappingProvider.GetSeriesId(normalizeTitle);
-            if (seriesId != null)
+            try
             {
-                return GetSeries(seriesId.Value);
-            }
+                var normalizeTitle = Parser.NormalizeTitle(title);
 
-            var series = _database.Fetch<Series, QualityProfile>(@"SELECT * FROM Series
+                var seriesId = _sceneNameMappingProvider.GetSeriesId(normalizeTitle);
+                if (seriesId != null)
+                {
+                    return GetSeries(seriesId.Value);
+                }
+
+                var series = _database.Fetch<Series, QualityProfile>(@"SELECT * FROM Series
                             INNER JOIN QualityProfiles ON Series.QualityProfileId = QualityProfiles.QualityProfileId
                             WHERE CleanTitle = @0", normalizeTitle).FirstOrDefault();
 
-            return series;
+                return series;
+            }
+
+            //This will catch InvalidOperationExceptions that may be thrown for GetSeries due to the series being in SceneMapping, but not in the users Database
+            catch (InvalidOperationException ex)
+            {
+                Logger.DebugException(ex.Message, ex);
+                return null;
+            }
         }
 
         public virtual void UpdateSeries(Series series)
