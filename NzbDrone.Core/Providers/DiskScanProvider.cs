@@ -110,13 +110,13 @@ namespace NzbDrone.Core.Providers
 
             if (episodes.Count <= 0)
             {
-                Logger.Debug("Can't find any matching episodes in the database. skipping");
+                Logger.Debug("Can't find any matching episodes in the database. skipping. {0}", filePath);
                 return null;
             }
 
             if (episodes.Any(e => e.EpisodeFile != null && e.EpisodeFile.QualityWrapper > parseResult.Quality))
             {
-                Logger.Info("File with better quality is already attached. skipping {0}", filePath);
+                Logger.Trace("File with better quality is already attached. skipping {0}", filePath);
                 return null;
             }
 
@@ -135,7 +135,7 @@ namespace NzbDrone.Core.Providers
             {
                 ep.EpisodeFileId = fileId;
                 _episodeProvider.UpdateEpisode(ep);
-                Logger.Trace("Linking file {0} to {1}", filePath, ep);
+                Logger.Debug("Linking file {0} to {1}", filePath, ep);
             }
 
 
@@ -156,7 +156,7 @@ namespace NzbDrone.Core.Providers
             _diskProvider.CreateDirectory(newFile.DirectoryName);
 
             //Do the rename
-            Logger.Trace("Attempting to rename {0} to {1}", episodeFile.Path, newFile.FullName);
+            Logger.Debug("Moving file [{0}] > [1]", episodeFile.Path, newFile.FullName);
             _diskProvider.MoveFile(episodeFile.Path, newFile.FullName);
 
             //Update the filename in the DB
@@ -200,7 +200,7 @@ namespace NzbDrone.Core.Providers
 
             var mediaFileList = filesOnDisk.Where(c => MediaExtentions.Contains(Path.GetExtension(c).ToLower())).ToList();
 
-            Logger.Debug("{0} media files were found in {1}", mediaFileList.Count, path);
+            Logger.Trace("{0} video files were found in {1}", mediaFileList.Count, path);
             return mediaFileList;
         }
     }
