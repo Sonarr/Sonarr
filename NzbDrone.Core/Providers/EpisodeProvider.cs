@@ -137,6 +137,7 @@ namespace NzbDrone.Core.Providers
                 if (episodeInfo != null)
                 {
                     result.Add(episodeInfo);
+                    parseResult.EpisodeTitle = episodeInfo.Title;
                 }
                 else
                 {
