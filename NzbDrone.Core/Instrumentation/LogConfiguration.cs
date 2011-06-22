@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Instrumentation
 #endif
             var sonicTarget = CentralDispatch.NinjectKernel.Get<SubsonicTarget>();
             LogManager.Configuration.AddTarget("DbLogger", sonicTarget);
-            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Info, sonicTarget));
+            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Debug, sonicTarget));
 
             LogManager.Configuration.Reload();
         }

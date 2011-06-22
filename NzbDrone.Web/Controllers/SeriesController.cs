@@ -223,16 +223,14 @@ namespace NzbDrone.Web.Controllers
                 var episodeFileId = 0;
                 var episodePath = String.Empty;
                 var episodeQuality = String.Empty;
-                EpisodeFile episodeFile = null;
 
-                if (e.EpisodeFileId > 0)
-                    episodeFile = _mediaFileProvider.GetEpisodeFile(e.EpisodeFileId);
-                
-                if (episodeFile != null)
+
+
+                if (e.EpisodeFile != null)
                 {
-                    episodePath = episodeFile.Path;
-                    episodeFileId = episodeFile.EpisodeFileId;
-                    episodeQuality = episodeFile.Quality.ToString();
+                    episodePath = e.EpisodeFile.Path;
+                    episodeFileId = e.EpisodeFile.EpisodeFileId;
+                    episodeQuality = e.EpisodeFile.Quality.ToString();
                 }
 
                 episodes.Add(new EpisodeModel

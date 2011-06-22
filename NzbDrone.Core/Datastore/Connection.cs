@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Datastore
 
         public static string GetConnectionString(string path)
         {
-            return String.Format("Data Source={0};Version=3;Cache Size=30000;", path);
+            return String.Format("Data Source={0};Version=3;Cache Size=30000;Pooling=true;Default Timeout=2", path);
         }
 
         public static String MainConnectionString
@@ -44,10 +44,12 @@ namespace NzbDrone.Core.Datastore
         public static IDatabase GetPetaPocoDb(string connectionString, Boolean profiled = true)
         {
             MigrationsHelper.Run(connectionString, true);
-            DbConnection connection = new SQLiteConnection(connectionString);
+            var sqliteConnection = new SQLiteConnection(connectionString);
+            DbConnection connection = sqliteConnection;
+            
             if (profiled)
             {
-                connection = ProfiledDbConnection.Get(connection);
+                connection = ProfiledDbConnection.Get(sqliteConnection);
             }
 
             var db = new Database(connection);
