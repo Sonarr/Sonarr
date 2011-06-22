@@ -110,9 +110,9 @@ namespace NzbDrone.Core.Test
             mocker.VerifyAllMocks();
         }
 
-        
+
         [Test]
-        public void IsMonitored_dailyshow_should_do_daily_lookup()
+        public void IsMonitored_should_return_true()
         {
             var mocker = new AutoMoqer(MockBehavior.Strict);
 
@@ -121,23 +121,22 @@ namespace NzbDrone.Core.Test
                 .Returns(series);
 
             mocker.GetMock<EpisodeProvider>()
-                .Setup(p => p.GetEpisode(episode.SeriesId, episode.SeasonNumber, episode.EpisodeNumber))
-                .Returns<Episode>(null);
+                .Setup(p => p.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>(), true))
+                .Returns(new List<Episode> { episode });
 
-            mocker.GetMock<EpisodeProvider>()
-                .Setup(p => p.GetEpisode(episode.SeriesId, episode.AirDate))
-                .Returns(episode);
+            parseResultSingle.Series.Should().BeNull();
 
             var result = mocker.Resolve<InventoryProvider>().IsMonitored(parseResultSingle);
 
             //Assert
-            Assert.IsTrue(result);
-            Assert.AreSame(series, parseResultSingle.Series);
+            result.Should().BeTrue();
+            parseResultSingle.Series.Should().Be(series);
             mocker.VerifyAllMocks();
         }
 
+
         [Test]
-        public void none_db_episode_should_be_added()
+        public void IsMonitored_ignored_single_episode_should_return_false()
         {
             var mocker = new AutoMoqer(MockBehavior.Strict);
 
@@ -146,25 +145,100 @@ namespace NzbDrone.Core.Test
                 .Returns(series);
 
             mocker.GetMock<EpisodeProvider>()
-                .Setup(p => p.GetEpisode(episode.SeriesId, episode.SeasonNumber, episode.EpisodeNumber))
-                .Returns<Episode>(null);
+                .Setup(p => p.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>(), true))
+                .Returns(new List<Episode> { episode });
 
-            mocker.GetMock<EpisodeProvider>()
-                .Setup(p => p.GetEpisode(episode.SeriesId, episode.AirDate))
-                .Returns<Episode>(null);
+            episode.Ignored = true;
 
-            mocker.GetMock<EpisodeProvider>()
-                .Setup(p => p.AddEpisode(It.IsAny<Episode>()));
+            parseResultSingle.Series.Should().BeNull();
 
-            //Act
             var result = mocker.Resolve<InventoryProvider>().IsMonitored(parseResultSingle);
 
             //Assert
-            Assert.IsTrue(result);
-            Assert.AreSame(series, parseResultSingle.Series);
-            parseResultSingle.Episodes.Should().HaveCount(1);
-            Assert.AreEqual("TBD", parseResultSingle.Episodes[0].Title);
+            result.Should().BeFalse();
+            parseResultSingle.Series.Should().Be(series);
             mocker.VerifyAllMocks();
         }
+
+        [Test]
+        public void IsMonitored_multi_some_episodes_ignored_should_return_true()
+        {
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+
+            mocker.GetMock<SeriesProvider>()
+                .Setup(p => p.FindSeries(It.IsAny<String>()))
+                .Returns(series);
+
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(p => p.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>(), true))
+                .Returns(new List<Episode> { episode, episode2 });
+
+            episode.Ignored = true;
+            episode2.Ignored = false;
+
+            parseResultMulti.Series.Should().BeNull();
+
+            var result = mocker.Resolve<InventoryProvider>().IsMonitored(parseResultMulti);
+
+            //Assert
+            result.Should().BeTrue();
+            parseResultMulti.Series.Should().Be(series);
+            mocker.VerifyAllMocks();
+        }
+
+        [Test]
+        public void IsMonitored_multi_all_episodes_ignored_should_return_false()
+        {
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+
+            mocker.GetMock<SeriesProvider>()
+                .Setup(p => p.FindSeries(It.IsAny<String>()))
+                .Returns(series);
+
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(p => p.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>(), true))
+                .Returns(new List<Episode> { episode, episode2 });
+
+            episode.Ignored = true;
+            episode2.Ignored = true;
+
+            parseResultSingle.Series.Should().BeNull();
+
+            var result = mocker.Resolve<InventoryProvider>().IsMonitored(parseResultMulti);
+
+            //Assert
+            result.Should().BeFalse();
+            parseResultMulti.Series.Should().Be(series);
+            mocker.VerifyAllMocks();
+        }
+
+
+        [Test]
+        public void IsMonitored_multi_no_episodes_ignored_should_return_true()
+        {
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+
+            mocker.GetMock<SeriesProvider>()
+                .Setup(p => p.FindSeries(It.IsAny<String>()))
+                .Returns(series);
+
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(p => p.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>(), true))
+                .Returns(new List<Episode> { episode, episode2 });
+
+            episode.Ignored = false;
+            episode2.Ignored = false;
+
+            parseResultSingle.Series.Should().BeNull();
+
+            var result = mocker.Resolve<InventoryProvider>().IsMonitored(parseResultMulti);
+
+            //Assert
+            result.Should().BeTrue();
+            parseResultMulti.Series.Should().Be(series);
+            mocker.VerifyAllMocks();
+        }
+
+
     }
 }

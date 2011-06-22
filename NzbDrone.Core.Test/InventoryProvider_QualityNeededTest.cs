@@ -37,7 +37,6 @@ namespace NzbDrone.Core.Test
                                        EpisodeNumbers = new List<int> { 3, 4 },
                                        SeasonNumber = 12,
                                        AirDate = DateTime.Now.AddDays(-12).Date,
-                                       Episodes = new List<Episode>()
                                    };
 
             parseResultSingle = new EpisodeParseResult
@@ -48,7 +47,6 @@ namespace NzbDrone.Core.Test
                                         EpisodeNumbers = new List<int> { 3 },
                                         SeasonNumber = 12,
                                         AirDate = DateTime.Now.AddDays(-12).Date,
-                                        Episodes = new List<Episode>()
                                     };
 
             episodeFile = Builder<EpisodeFile>.CreateNew().With(c => c.Quality = QualityTypes.DVD).Build();
@@ -99,9 +97,9 @@ namespace NzbDrone.Core.Test
             parseResultMulti.Series = series;
             parseResultSingle.Series = series;
 
-            parseResultSingle.Episodes.Add(episode);
-            parseResultMulti.Episodes.Add(episode);
-            parseResultMulti.Episodes.Add(episode2);
+            /*            parseResultSingle.Episodes.Add(episode);
+                        parseResultMulti.Episodes.Add(episode);
+                        parseResultMulti.Episodes.Add(episode2);*/
 
 
             base.Setup();
@@ -129,8 +127,14 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer(MockBehavior.Strict);
 
             parseResultMulti.Series.QualityProfile = hdProfile;
-            parseResultMulti.Episodes[0].EpisodeFile.Quality = QualityTypes.Bluray720p;
+
             parseResultMulti.Quality = new Quality(QualityTypes.HDTV, true);
+
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(p => p.GetEpisodesByParseResult(parseResultMulti, true))
+                .Returns(new List<Episode> { episode, episode2 });
+
+            episode.EpisodeFile.Quality = QualityTypes.Bluray720p;
 
             //Act
             bool result = mocker.Resolve<InventoryProvider>().IsQualityNeeded(parseResultMulti);
@@ -147,12 +151,17 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer(MockBehavior.Strict);
 
             parseResultSingle.Series.QualityProfile = sdProfile;
-            parseResultSingle.Episodes[0].EpisodeFile.Quality = QualityTypes.SDTV;
             parseResultSingle.Quality.QualityType = QualityTypes.DVD;
 
             mocker.GetMock<HistoryProvider>()
                 .Setup(p => p.GetBestQualityInHistory(episode.EpisodeId))
                 .Returns(new Quality(QualityTypes.DVD, true));
+
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(p => p.GetEpisodesByParseResult(parseResultSingle, true))
+                .Returns(new List<Episode> { episode });
+
+            episode.EpisodeFile.Quality = QualityTypes.SDTV;
 
             //Act
             bool result = mocker.Resolve<InventoryProvider>().IsQualityNeeded(parseResultSingle);
@@ -168,12 +177,17 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer(MockBehavior.Strict);
 
             parseResultSingle.Series.QualityProfile = sdProfile;
-            parseResultSingle.Episodes[0].EpisodeFile.Quality = QualityTypes.SDTV;
             parseResultSingle.Quality.QualityType = QualityTypes.DVD;
 
             mocker.GetMock<HistoryProvider>()
                 .Setup(p => p.GetBestQualityInHistory(episode.EpisodeId))
                 .Returns(new Quality(QualityTypes.SDTV, true));
+
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(p => p.GetEpisodesByParseResult(parseResultSingle, true))
+                .Returns(new List<Episode> { episode });
+
+            episode.EpisodeFile.Quality = QualityTypes.SDTV;
 
             //Act
             bool result = mocker.Resolve<InventoryProvider>().IsQualityNeeded(parseResultSingle);
@@ -189,13 +203,18 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer(MockBehavior.Strict);
 
             parseResultSingle.Series.QualityProfile = sdProfile;
-            parseResultSingle.Episodes[0].EpisodeFile.Quality = QualityTypes.SDTV;
             parseResultSingle.Quality.QualityType = QualityTypes.DVD;
 
             mocker.GetMock<HistoryProvider>()
                 .Setup(p => p.GetBestQualityInHistory(episode.EpisodeId))
                 .Returns<Quality>(null);
 
+
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(p => p.GetEpisodesByParseResult(parseResultSingle, true))
+                .Returns(new List<Episode> { episode });
+
+            episode.EpisodeFile.Quality = QualityTypes.SDTV;
             //Act
             bool result = mocker.Resolve<InventoryProvider>().IsQualityNeeded(parseResultSingle);
 

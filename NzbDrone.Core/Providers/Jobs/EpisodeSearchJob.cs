@@ -68,11 +68,11 @@ namespace NzbDrone.Core.Providers.Jobs
             {
                 try
                 {
-                    notification.CurrentMessage = String.Format("Searching for {0} in {1}", episode, indexer.Name);
+                    //notification.CurrentMessage = String.Format("Searching for {0} in {1}", episode, indexer.Name);
 
                     //TODO:Add support for daily episodes, maybe search using both date and season/episode?
                     var indexerResults = indexer.FetchEpisode(title, episode.SeasonNumber, episode.EpisodeNumber);
-                    
+
                     reports.AddRange(indexerResults);
                 }
                 catch (Exception e)
@@ -84,10 +84,12 @@ namespace NzbDrone.Core.Providers.Jobs
             Logger.Debug("Finished searching all indexers. Total {0}", reports.Count);
             notification.CurrentMessage = "Processing search results";
 
+
+            //TODO:fix this so when search returns more than one episode
+            //TODO:-its populated with more than the original episode.
             reports.ForEach(c =>
                                 {
                                     c.Series = series;
-                                    c.Episodes = new List<Episode> { episode };
                                 });
 
             ProcessResults(notification, episode, reports);

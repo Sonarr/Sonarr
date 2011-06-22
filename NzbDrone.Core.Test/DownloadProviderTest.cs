@@ -21,12 +21,13 @@ namespace NzbDrone.Core.Test
         {
             var mocker = new AutoMoqer(MockBehavior.Strict);
             var parseResult = Builder<EpisodeParseResult>.CreateNew()
-                .With(e => e.Episodes = Builder<Episode>.CreateListOfSize(2)
+                .With(c => c.Quality = new Quality(QualityTypes.DVD, false))
+                .Build();
+            var episodes = Builder<Episode>.CreateListOfSize(2)
                                             .WhereTheFirst(1).Has(s => s.EpisodeId = 12)
                                             .AndTheNext(1).Has(s => s.EpisodeId = 99)
-                                            .Build())
-                                            .With(c => c.Quality = new Quality(QualityTypes.DVD, false))
-                .Build();
+                                            .Build();
+
 
             const string sabTitle = "My fake sab title";
             mocker.GetMock<SabProvider>()
@@ -45,6 +46,9 @@ namespace NzbDrone.Core.Test
                 .Setup(s => s.Add(It.Is<History>(h => h.EpisodeId == 12)));
             mocker.GetMock<HistoryProvider>()
                 .Setup(s => s.Add(It.Is<History>(h => h.EpisodeId == 99)));
+
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(c => c.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>(), false)).Returns(episodes);
 
             mocker.Resolve<DownloadProvider>().DownloadReport(parseResult);
 

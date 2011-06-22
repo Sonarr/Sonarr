@@ -199,7 +199,7 @@ namespace NzbDrone.Core.Test
         }
 
 
-    
+
         [TestCase(0)]
         [TestCase(-1)]
         [TestCase(-100)]
@@ -245,7 +245,7 @@ namespace NzbDrone.Core.Test
                 .Returns(indexers);
 
             mocker.GetMock<InventoryProvider>()
-                .Setup(c => c.IsQualityNeeded(It.Is<EpisodeParseResult>(d => d.Series != null && d.Episodes.Count != 0))).Returns(false);
+                .Setup(c => c.IsQualityNeeded(It.IsAny<EpisodeParseResult>())).Returns(false);
 
             mocker.GetMock<SceneMappingProvider>()
                 .Setup(s => s.GetSceneName(It.IsAny<int>())).Returns("");
@@ -296,7 +296,7 @@ namespace NzbDrone.Core.Test
                 .Returns(indexers);
 
             mocker.GetMock<InventoryProvider>()
-                .Setup(c => c.IsQualityNeeded(It.Is<EpisodeParseResult>(d => d.Series != null && d.Episodes.Count != 0))).Returns(false);
+                .Setup(c => c.IsQualityNeeded(It.IsAny<EpisodeParseResult>())).Returns(false);
 
             mocker.GetMock<SceneMappingProvider>()
                 .Setup(s => s.GetSceneName(71256)).Returns("The Daily Show");
@@ -326,7 +326,7 @@ namespace NzbDrone.Core.Test
                 .With(c => c.SeasonNumber = 12)
                 .Build();
 
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            var mocker = new AutoMoqer();
 
             mocker.GetMock<EpisodeProvider>()
                 .Setup(c => c.GetEpisode(episode.EpisodeId))
@@ -342,7 +342,7 @@ namespace NzbDrone.Core.Test
                 .Throws(new Exception()).Verifiable();
 
             var indexer3 = new Mock<IndexerBase>();
-            indexer2.Setup(c => c.FetchEpisode(episode.Series.Title, episode.SeasonNumber, episode.EpisodeNumber))
+            indexer3.Setup(c => c.FetchEpisode(episode.Series.Title, episode.SeasonNumber, episode.EpisodeNumber))
                 .Returns(parseResults).Verifiable();
 
 
@@ -353,7 +353,7 @@ namespace NzbDrone.Core.Test
                 .Returns(indexers);
 
             mocker.GetMock<InventoryProvider>()
-                .Setup(c => c.IsQualityNeeded(It.Is<EpisodeParseResult>(d => d.Series != null && d.Episodes.Count != 0))).Returns(false);;
+                .Setup(c => c.IsQualityNeeded(It.IsAny<EpisodeParseResult>())).Returns(false);
 
             mocker.GetMock<SceneMappingProvider>()
                 .Setup(s => s.GetSceneName(It.IsAny<int>())).Returns("");

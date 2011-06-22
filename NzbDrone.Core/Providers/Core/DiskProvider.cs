@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Providers.Core
             File.Delete(path);
         }
 
-        public virtual void RenameFile(string sourcePath, string destinationPath)
+        public virtual void MoveFile(string sourcePath, string destinationPath)
         {
             File.Move(sourcePath, destinationPath);
         }

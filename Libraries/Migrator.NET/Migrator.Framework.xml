@@ -1,0 +1,914 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Migrator.Framework</name>
+    </assembly>
+    <members>
+        <member name="T:Migrator.Framework.Migration">
+            <summary>
+            A migration is a group of transformation applied to the database schema
+            (or sometimes data) to port the database from one version to another.
+            The <c>Up()</c> method must apply the modifications (eg.: create a table)
+            and the <c>Down()</c> method must revert, or rollback the modifications
+            (eg.: delete a table).
+            <para>
+            Each migration must be decorated with the <c>[Migration(0)]</c> attribute.
+            Each migration number (0) must be unique, or else a 
+            <c>DuplicatedVersionException</c> will be trown.
+            </para>
+            <para>
+            All migrations are executed inside a transaction. If an exception is
+            thrown, the transaction will be rolledback and transformations wont be
+            applied.
+            </para>
+            <para>
+            It is best to keep a limited number of transformation inside a migration
+            so you can easely move from one version of to another with fine grain
+            modifications.
+            You should give meaningful name to the migration class and prepend the
+            migration number to the filename so they keep ordered, eg.: 
+            <c>002_CreateTableTest.cs</c>.
+            </para>
+            <para>
+            Use the <c>Database</c> property to apply transformation and the
+            <c>Logger</c> property to output informations in the console (or other).
+            For more details on transformations see
+            <see cref="T:Migrator.Framework.ITransformationProvider">ITransformationProvider</see>.
+            </para>
+            </summary>
+            <example>
+            The following migration creates a new Customer table.
+            (File <c>003_AddCustomerTable.cs</c>)
+            <code>
+            [Migration(3)]
+            public class AddCustomerTable : Migration
+            {
+            	public override void Up()
+            	{
+            		Database.AddTable("Customer",
+            	                  new Column("Name", typeof(string), 50),
+            	                  new Column("Address", typeof(string), 100)
+            	                 );
+            	}
+            	public override void Down()
+            	{
+            		Database.RemoveTable("Customer");
+            	}
+            }
+            </code>
+            </example>
+        </member>
+        <member name="M:Migrator.Framework.IMigration.Up">
+            <summary>
+            Defines tranformations to port the database to the current version.
+            </summary>
+        </member>
+        <member name="M:Migrator.Framework.IMigration.AfterUp">
+            <summary>
+            This is run after the Up transaction has been committed
+            </summary>
+        </member>
+        <member name="M:Migrator.Framework.IMigration.Down">
+            <summary>
+            Defines transformations to revert things done in <c>Up</c>.
+            </summary>
+        </member>
+        <member name="M:Migrator.Framework.IMigration.AfterDown">
+            <summary>
+            This is run after the Down transaction has been committed
+            </summary>
+        </member>
+        <member name="M:Migrator.Framework.IMigration.InitializeOnce(System.String[])">
+            <summary>
+            This gets called once on the first migration object.
+            </summary>
+        </member>
+        <member name="P:Migrator.Framework.IMigration.Database">
+            <summary>
+            Represents the database.
+            <see cref="T:Migrator.Framework.ITransformationProvider"></see>.
+            </summary>
+            <seealso cref="T:Migrator.Framework.ITransformationProvider">Migration.Framework.ITransformationProvider</seealso>
+        </member>
+        <member name="M:Migrator.Framework.Migration.Up">
+            <summary>
+            Defines tranformations to port the database to the current version.
+            </summary>
+        </member>
+        <member name="M:Migrator.Framework.Migration.AfterUp">
+            <summary>
+            This is run after the Up transaction has been committed
+            </summary>
+        </member>
+        <member name="M:Migrator.Framework.Migration.Down">
+            <summary>
+            Defines transformations to revert things done in <c>Up</c>.
+            </summary>
+        </member>
+        <member name="M:Migrator.Framework.Migration.AfterDown">
+            <summary>
+            This is run after the Down transaction has been committed
+            </summary>
+        </member>
+        <member name="M:Migrator.Framework.Migration.InitializeOnce(System.String[])">
+            <summary>
+            This gets called once on the first migration object.
+            </summary>
+        </member>
+        <member name="P:Migrator.Framework.Migration.Database">
+            <summary>
+            Represents the database.
+            <see cref="T:Migrator.Framework.ITransformationProvider"></see>.
+            </summary>
+            <seealso cref="T:Migrator.Framework.ITransformationProvider">Migration.Framework.ITransformationProvider</seealso>
+        </member>
+        <member name="M:Migrator.Framework.ILogger.Started(System.Collections.Generic.List{System.Int64},System.Int64)">
+            <summary>
+            Log that we have started a migration
+            </summary>
+            <param name="currentVersion">Start list of versions</param>
+            <param name="finalVersion">Final Version</param>
+        </member>
+        <member name="M:Migrator.Framework.ILogger.MigrateUp(System.Int64,System.String)">
+            <summary>
+            Log that we are migrating up
+            </summary>
+            <param name="version">Version we are migrating to</param>
+            <param name="migrationName">Migration name</param>
+        </member>
+        <member name="M:Migrator.Framework.ILogger.MigrateDown(System.Int64,System.String)">
+            <summary>
+            Log that we are migrating down
+            </summary>
+            <param name="version">Version we are migrating to</param>
+            <param name="migrationName">Migration name</param>
+        </member>
+        <member name="M:Migrator.Framework.ILogger.Skipping(System.Int64)">
+            <summary>
+            Inform that a migration corresponding to the number of
+            version is untraceable (not found?) and will be ignored.
+            </summary>
+            <param name="version">Version we couldnt find</param>
+        </member>
+        <member name="M:Migrator.Framework.ILogger.RollingBack(System.Int64)">
+            <summary>
+            Log that we are rolling back to version
+            </summary>
+            <param name="originalVersion">
+            version
+            </param>
+        </member>
+        <member name="M:Migrator.Framework.ILogger.ApplyingDBChange(System.String)">
+            <summary>
+            Log a Sql statement that changes the schema or content of the database as part of a migration
+            </summary>
+            <remarks>
+            SELECT statements should not be logged using this method as they do not alter the data or schema of the
+            database.
+            </remarks>
+            <param name="sql">The Sql statement to log</param>
+        </member>
+        <member name="M:Migrator.Framework.ILogger.Exception(System.Int64,System.String,System.Exception)">
+            <summary>
+            Log that we had an exception on a migration
+            </summary>
+            <param name="version">The version of the migration that caused the exception.</param>
+            <param name="migrationName">The name of the migration that caused the exception.</param>
+            <param name="ex">The exception itself</param>
+        </member>
+        <member name="M:Migrator.Framework.ILogger.Exception(System.String,System.Exception)">
+            <summary>
+            Log that we had an exception on a migration
+            </summary>
+            <param name="message">An informative message to show to the user.</param>
+            <param name="ex">The exception itself</param>
+        </member>
+        <member name="M:Migrator.Framework.ILogger.Finished(System.Collections.Generic.List{System.Int64},System.Int64)">
+            <summary>
+            Log that we have finished a migration
+            </summary>
+            <param name="currentVersion">List of versions with which we started</param>
+            <param name="finalVersion">Final Version</param>
+        </member>
+        <member name="M:Migrator.Framework.ILogger.Log(System.String,System.Object[])">
+            <summary>
+            Log a message
+            </summary>
+            <param name="format">The format string ("{0}, blabla {1}").</param>
+            <param name="args">Parameters to apply to the format string.</param>
+        </member>
+        <member name="M:Migrator.Framework.ILogger.Warn(System.String,System.Object[])">
+            <summary>
+            Log a Warning
+            </summary>
+            <param name="format">The format string ("{0}, blabla {1}").</param>
+            <param name="args">Parameters to apply to the format string.</param>
+        </member>
+        <member name="M:Migrator.Framework.ILogger.Trace(System.String,System.Object[])">
+            <summary>
+            Log a Trace Message
+            </summary>
+            <param name="format">The format string ("{0}, blabla {1}").</param>
+            <param name="args">Parameters to apply to the format string.</param>
+        </member>
+        <member name="T:Migrator.Framework.MigrationException">
+            <summary>
+            Base class for migration errors.
+            </summary>
+        </member>
+        <member name="M:Migrator.Framework.Support.Inflector.Pluralize(System.String)">
+            <summary>
+            Return the plural of a word.
+            </summary>
+            <param name="word">The singular form</param>
+            <returns>The plural form of <paramref name="word"/></returns>
+        </member>
+        <member name="M:Migrator.Framework.Support.Inflector.Singularize(System.String)">
+            <summary>
+            Return the singular of a word.
+            </summary>
+            <param name="word">The plural form</param>
+            <returns>The singular form of <paramref name="word"/></returns>
+        </member>
+        <member name="M:Migrator.Framework.Support.Inflector.Capitalize(System.String)">
+            <summary>
+            Capitalizes a word.
+            </summary>
+            <param name="word">The word to be capitalized.</param>
+            <returns><paramref name="word"/> capitalized.</returns>
+        </member>
+        <member name="M:Migrator.Framework.StringUtils.ToHumanName(System.String)">
+            <summary>
+            Convert a classname to something more readable.
+            ex.: CreateATable => Create a table
+            </summary>
+            <param name="className"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Migrator.Framework.StringUtils.ReplaceOnce(System.String,System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="template"></param>
+            <param name="placeholder"></param>
+            <param name="replacement"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Migrator.Framework.Loggers.ILogWriter">
+            <summary>
+            Handles writing a message to the log medium (i.e. file, console)
+            </summary>
+        </member>
+        <member name="M:Migrator.Framework.Loggers.ILogWriter.Write(System.String,System.Object[])">
+            <summary>
+            Write this message
+            </summary>
+            <param name="message"></param>
+            <param name="args"></param>
+        </member>
+        <member name="M:Migrator.Framework.Loggers.ILogWriter.WriteLine(System.String,System.Object[])">
+            <summary>
+            Write this message, as a line
+            </summary>
+            <param name="message"></param>
+            <param name="args"></param>
+        </member>
+        <member name="T:Migrator.Framework.ColumnProperty">
+            <summary>
+            Represents a table column properties.
+            </summary>
+        </member>
+        <member name="F:Migrator.Framework.ColumnProperty.Null">
+            <summary>
+            Null is allowable
+            </summary>
+        </member>
+        <member name="F:Migrator.Framework.ColumnProperty.NotNull">
+            <summary>
+            Null is not allowable
+            </summary>
+        </member>
+        <member name="F:Migrator.Framework.ColumnProperty.Identity">
+            <summary>
+            Identity column, autoinc
+            </summary>
+        </member>
+        <member name="F:Migrator.Framework.ColumnProperty.Unique">
+            <summary>
+            Unique Column
+            </summary>
+        </member>
+        <member name="F:Migrator.Framework.ColumnProperty.Indexed">
+            <summary>
+            Indexed Column
+            </summary>
+        </member>
+        <member name="F:Migrator.Framework.ColumnProperty.Unsigned">
+            <summary>
+            Unsigned Column
+            </summary>
+        </member>
+        <member name="F:Migrator.Framework.ColumnProperty.ForeignKey">
+            <summary>
+            Foreign Key
+            </summary>
+        </member>
+        <member name="F:Migrator.Framework.ColumnProperty.PrimaryKey">
+            <summary>
+            Primary Key
+            </summary>
+        </member>
+        <member name="F:Migrator.Framework.ColumnProperty.PrimaryKeyWithIdentity">
+            <summary>
+            Primary key. Make the column a PrimaryKey and unsigned
+            </summary>
+        </member>
+        <member name="T:Migrator.Framework.JoiningTableTransformationProviderExtensions">
+            <summary>
+            A set of extension methods for the transformation provider to make it easier to
+            build many-to-many joining tables (takes care of adding the joining table and foreign
+            key constraints as necessary.
+            <remarks>This functionality was useful when bootstrapping a number of projects a few years ago, but
+            now that most changes are brown-field I'm thinking of removing these methods as it's easier to maintain
+            code that creates the tables etc. directly within migration.</remarks>
+            </summary>
+        </member>
+        <member name="T:Migrator.Framework.MigrationAttribute">
+            <summary>
+            Describe a migration
+            </summary>
+        </member>
+        <member name="M:Migrator.Framework.MigrationAttribute.#ctor(System.Int64)">
+            <summary>
+            Describe the migration
+            </summary>
+            <param name="version">The unique version of the migration.</param>	
+        </member>
+        <member name="P:Migrator.Framework.MigrationAttribute.Version">
+            <summary>
+            The version reflected by the migration
+            </summary>
+        </member>
+        <member name="P:Migrator.Framework.MigrationAttribute.Ignore">
+            <summary>
+            Set to <c>true</c> to ignore this migration.
+            </summary>
+        </member>
+        <member name="T:Migrator.Framework.ITransformationProvider">
+            <summary>
+            The main interface to use in Migrations to make changes on a database schema.
+            </summary>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.AddColumn(System.String,System.String,System.Data.DbType,System.Int32,Migrator.Framework.ColumnProperty,System.Object)">
+            <summary>
+            Add a column to an existing table
+            </summary>
+            <param name="table">The name of the table that will get the new column</param>
+            <param name="column">The name of the new column</param>
+            <param name="type">The data type for the new columnd</param>
+            <param name="size">The precision or size of the column</param>
+            <param name="property">Properties that can be ORed together</param>
+            <param name="defaultValue">The default value of the column if no value is given in a query</param>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.AddColumn(System.String,System.String,System.Data.DbType)">
+            <summary>
+            Add a column to an existing table
+            </summary>
+            <param name="table">The name of the table that will get the new column</param>
+            <param name="column">The name of the new column</param>
+            <param name="type">The data type for the new columnd</param>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.AddColumn(System.String,System.String,System.Data.DbType,System.Int32)">
+            <summary>
+            Add a column to an existing table
+            </summary>
+            <param name="table">The name of the table that will get the new column</param>
+            <param name="column">The name of the new column</param>
+            <param name="type">The data type for the new columnd</param>
+            <param name="size">The precision or size of the column</param>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.AddColumn(System.String,System.String,System.Data.DbType,System.Int32,Migrator.Framework.ColumnProperty)">
+            <summary>
+            Add a column to an existing table
+            </summary>
+            <param name="table">The name of the table that will get the new column</param>
+            <param name="column">The name of the new column</param>
+            <param name="type">The data type for the new columnd</param>
+            <param name="size">The precision or size of the column</param>
+            <param name="property">Properties that can be ORed together</param>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.AddColumn(System.String,System.String,System.Data.DbType,Migrator.Framework.ColumnProperty)">
+            <summary>
+            Add a column to an existing table
+            </summary>
+            <param name="table">The name of the table that will get the new column</param>
+            <param name="column">The name of the new column</param>
+            <param name="type">The data type for the new columnd</param>
+            <param name="property">Properties that can be ORed together</param>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.AddColumn(System.String,System.String,System.Data.DbType,System.Object)">
+            <summary>
+            Add a column to an existing table with the default column size.
+            </summary>
+            <param name="table">The name of the table that will get the new column</param>
+            <param name="column">The name of the new column</param>
+            <param name="type">The data type for the new columnd</param>
+            <param name="defaultValue">The default value of the column if no value is given in a query</param>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.AddColumn(System.String,Migrator.Framework.Column)">
+            <summary>
+            Add a column to an existing table
+            </summary>
+            <param name="table">The name of the table that will get the new column</param>
+            <param name="column">An instance of a <see cref="T:Migrator.Framework.Column">Column</see> with the specified properties</param>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.AddForeignKey(System.String,System.String,System.String[],System.String,System.String[])">
+            <summary>
+            Add a foreign key constraint
+            </summary>
+            <param name="name">The name of the foreign key. e.g. FK_TABLE_REF</param>
+            <param name="foreignTable">The table that the foreign key will be created in (eg. Table.FK_id)</param>
+            <param name="foreignColumns">The columns that are the foreign keys (eg. FK_id)</param>
+            <param name="primaryTable">The table that holds the primary keys (eg. Table.PK_id)</param>
+            <param name="primaryColumns">The columns that are the primary keys (eg. PK_id)</param>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.AddForeignKey(System.String,System.String,System.String[],System.String,System.String[],Migrator.Framework.ForeignKeyConstraint)">
+            <summary>
+            Add a foreign key constraint
+            </summary>
+            <param name="name">The name of the foreign key. e.g. FK_TABLE_REF</param>
+            <param name="foreignTable">The table that the foreign key will be created in (eg. Table.FK_id)</param>
+            <param name="foreignColumns">The columns that are the foreign keys (eg. FK_id)</param>
+            <param name="primaryTable">The table that holds the primary keys (eg. Table.PK_id)</param>
+            <param name="primaryColumns">The columns that are the primary keys (eg. PK_id)</param>
+            <param name="constraint">Constraint parameters</param>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.AddForeignKey(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Add a foreign key constraint
+            </summary>
+            
+            <param name="name">The name of the foreign key. e.g. FK_TABLE_REF</param>
+            <param name="foreignTable">The table that the foreign key will be created in (eg. Table.FK_id)</param>
+            <param name="foreignColumn">The column that is the foreign key (eg. FK_id)</param>
+            <param name="primaryTable">The table that holds the primary keys (eg. Table.PK_id)</param>
+            <param name="primaryColumn">The column that is the primary key (eg. PK_id)</param>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.AddForeignKey(System.String,System.String,System.String,System.String,System.String,Migrator.Framework.ForeignKeyConstraint)">
+            <summary>
+            Add a foreign key constraint
+            </summary>
+            <param name="name">The name of the foreign key. e.g. FK_TABLE_REF</param>
+            <param name="foreignTable">The table that the foreign key will be created in (eg. Table.FK_id)</param>
+            <param name="foreignColumn">The column that is the foreign key (eg. FK_id)</param>
+            <param name="primaryTable">The table that holds the primary key (eg. Table.PK_id)</param>
+            <param name="primaryColumn">The column that is the primary key (eg. PK_id)</param>
+            <param name="constraint">Constraint parameters</param>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.GenerateForeignKey(System.String,System.String,System.String,System.String)">
+            <summary>
+            Add a foreign key constraint when you don't care about the name of the constraint.
+            Warning: This will prevent you from dropping the constraint since you won't know the name.
+            </summary>
+            <param name="foreignTable">The table that the foreign key will be created in (eg. Table.FK_id)</param>
+            <param name="foreignColumn">The column that is the foreign key (eg. FK_id)</param>
+            <param name="primaryTable">The table that holds the primary key (eg. Table.PK_id)</param>
+            <param name="primaryColumn">The column that is the primary key (eg. PK_id)</param>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.GenerateForeignKey(System.String,System.String[],System.String,System.String[])">
+            <summary>
+            Add a foreign key constraint when you don't care about the name of the constraint.
+            Warning: This will prevent you from dropping the constraint since you won't know the name.
+            </summary>
+            <param name="foreignTable">The table that the foreign key will be created in (eg. Table.FK_id)</param>
+            <param name="foreignColumns">The columns that are the foreign keys (eg. FK_id)</param>
+            <param name="primaryTable">The table that holds the primary key (eg. Table.PK_id)</param>
+            <param name="primaryColumns">The column that is the primary key (eg. PK_id)</param>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.GenerateForeignKey(System.String,System.String[],System.String,System.String[],Migrator.Framework.ForeignKeyConstraint)">
+            <summary>
+            Add a foreign key constraint when you don't care about the name of the constraint.
+            Warning: This will prevent you from dropping the constraint since you won't know the name.
+            </summary>
+            <param name="foreignTable">The table that the foreign key will be created in (eg. Table.FK_id)</param>
+            <param name="foreignColumns">The columns that are the foreign keys (eg. FK_id)</param>
+            <param name="primaryTable">The table that holds the primary key (eg. Table.PK_id)</param>
+            <param name="primaryColumns">The columns that are the primary keys (eg. PK_id)</param>
+            <param name="constraint">Constraint parameters</param>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.GenerateForeignKey(System.String,System.String,System.String,System.String,Migrator.Framework.ForeignKeyConstraint)">
+            <summary>
+            Add a foreign key constraint when you don't care about the name of the constraint.
+            Warning: This will prevent you from dropping the constraint since you won't know the name.
+            </summary>
+            <param name="foreignTable">The table that the foreign key will be created in (eg. Table.FK_id)</param>
+            <param name="foreignColumn">The columns that are the foreign keys (eg. FK_id)</param>
+            <param name="primaryTable">The table that holds the primary key (eg. Table.PK_id)</param>
+            <param name="primaryColumn">The column that is the primary key (eg. PK_id)</param>
+            <param name="constraint">Constraint parameters</param>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.GenerateForeignKey(System.String,System.String)">
+             <summary>
+             Add a foreign key constraint when you don't care about the name of the constraint.
+             Warning: This will prevent you from dropping the constraint since you won't know the name.
+            
+             The current expectations are that there is a column named the same as the foreignTable present in
+             the table. This is subject to change because I think it's not a good convention.
+             </summary>
+             <param name="foreignTable">The table that the foreign key will be created in (eg. Table.FK_id)</param>
+             <param name="primaryTable">The table that holds the primary key (eg. Table.PK_id)</param>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.GenerateForeignKey(System.String,System.String,Migrator.Framework.ForeignKeyConstraint)">
+             <summary>
+             Add a foreign key constraint when you don't care about the name of the constraint.
+             Warning: This will prevent you from dropping the constraint since you won't know the name.
+            
+             The current expectations are that there is a column named the same as the foreignTable present in
+             the table. This is subject to change because I think it's not a good convention.
+             </summary>
+             <param name="foreignTable">The table that the foreign key will be created in (eg. Table.FK_id)</param>
+             <param name="primaryTable">The table that holds the primary key (eg. Table.PK_id)</param>
+             <param name="constraint"></param>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.AddPrimaryKey(System.String,System.String,System.String[])">
+            <summary>
+            Add a primary key to a table
+            </summary>
+            <param name="name">The name of the primary key to add.</param>
+            <param name="table">The name of the table that will get the primary key.</param>
+            <param name="columns">The name of the column or columns that are in the primary key.</param>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.AddUniqueConstraint(System.String,System.String,System.String[])">
+            <summary>
+            Add a constraint to a table
+            </summary>
+            <param name="name">The name of the constraint to add.</param>
+            <param name="table">The name of the table that will get the constraint</param>
+            <param name="columns">The name of the column or columns that will get the constraint.</param>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.AddCheckConstraint(System.String,System.String,System.String)">
+            <summary>
+            Add a constraint to a table
+            </summary>
+            <param name="name">The name of the constraint to add.</param>
+            <param name="table">The name of the table that will get the constraint</param>
+            <param name="checkSql">The check constraint definition.</param>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.AddTable(System.String,Migrator.Framework.Column[])">
+            <summary>
+            Add a table
+            </summary>
+            <param name="name">The name of the table to add.</param>
+            <param name="columns">The columns that are part of the table.</param>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.AddTable(System.String,System.String,Migrator.Framework.Column[])">
+            <summary>
+            Add a table
+            </summary>
+            <param name="name">The name of the table to add.</param>
+            <param name="engine">The name of the database engine to use. (MySQL)</param>
+            <param name="columns">The columns that are part of the table.</param>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.BeginTransaction">
+            <summary>
+            Start a transction
+            </summary>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.ChangeColumn(System.String,Migrator.Framework.Column)">
+            <summary>
+            Change the definition of an existing column.
+            </summary>
+            <param name="table">The name of the table that will get the new column</param>
+            <param name="column">An instance of a <see cref="T:Migrator.Framework.Column">Column</see> with the specified properties and the name of an existing column</param>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.ColumnExists(System.String,System.String)">
+            <summary>
+            Check to see if a column exists
+            </summary>
+            <param name="table"></param>
+            <param name="column"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.Commit">
+            <summary>
+            Commit the running transction
+            </summary>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.ConstraintExists(System.String,System.String)">
+            <summary>
+            Check to see if a constraint exists
+            </summary>
+            <param name="name">The name of the constraint</param>
+            <param name="table">The table that the constraint lives on.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.PrimaryKeyExists(System.String,System.String)">
+            <summary>
+            Check to see if a primary key constraint exists on the table
+            </summary>
+            <param name="name">The name of the primary key</param>
+            <param name="table">The table that the constraint lives on.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.ExecuteNonQuery(System.String)">
+            <summary>
+            Execute an arbitrary SQL query
+            </summary>
+            <param name="sql">The SQL to execute.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.ExecuteQuery(System.String)">
+            <summary>
+            Execute an arbitrary SQL query
+            </summary>
+            <param name="sql">The SQL to execute.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.ExecuteScalar(System.String)">
+            <summary>
+            Execute an arbitrary SQL query
+            </summary>
+            <param name="sql">The SQL to execute.</param>
+            <returns>A single value that is returned.</returns>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.GetColumns(System.String)">
+            <summary>
+            Get the information about the columns in a table
+            </summary>
+            <param name="table">The table name that you want the columns for.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.GetColumnByName(System.String,System.String)">
+            <summary>
+            Get information about a single column in a table
+            </summary>
+            <param name="table">The table name that you want the columns for.</param>
+            <param name="column">The column name for which you want information.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.GetTables">
+            <summary>
+            Get the names of all of the tables
+            </summary>
+            <returns>The names of all the tables.</returns>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.Insert(System.String,System.String[],System.Object[])">
+            <summary>
+            Insert data into a table
+            </summary>
+            <param name="table">The table that will get the new data</param>
+            <param name="columns">The names of the columns</param>
+            <param name="values">The values in the same order as the columns</param>
+            <returns></returns>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.Delete(System.String,System.String[],System.String[])">
+            <summary>
+            Delete data from a table
+            </summary>
+            <param name="table">The table that will have the data deleted</param>
+            <param name="columns">The names of the columns used in a where clause</param>
+            <param name="values">The values in the same order as the columns</param>
+            <returns></returns>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.Delete(System.String,System.String,System.String)">
+            <summary>
+            Delete data from a table
+            </summary>
+            <param name="table">The table that will have the data deleted</param>
+            <param name="whereColumn">The name of the column used in a where clause</param>
+            <param name="whereValue">The value for the where clause</param>
+            <returns></returns>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.MigrationApplied(System.Int64)">
+            <summary>
+            Marks a Migration version number as having been applied
+            </summary>
+            <param name="version">The version number of the migration that was applied</param>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.MigrationUnApplied(System.Int64)">
+            <summary>
+            Marks a Migration version number as having been rolled back from the database
+            </summary>
+            <param name="version">The version number of the migration that was removed</param>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.RemoveColumn(System.String,System.String)">
+            <summary>
+            Remove an existing column from a table
+            </summary>
+            <param name="table">The name of the table to remove the column from</param>
+            <param name="column">The column to remove</param>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.RemoveForeignKey(System.String,System.String)">
+            <summary>
+            Remove an existing foreign key constraint
+            </summary>
+            <param name="table">The table that contains the foreign key.</param>
+            <param name="name">The name of the foreign key to remove</param>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.RemoveConstraint(System.String,System.String)">
+            <summary>
+            Remove an existing constraint
+            </summary>
+            <param name="table">The table that contains the foreign key.</param>
+            <param name="name">The name of the constraint to remove</param>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.RemoveTable(System.String)">
+            <summary>
+            Remove an existing table
+            </summary>
+            <param name="tableName">The name of the table</param>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.RenameTable(System.String,System.String)">
+            <summary>
+            Rename an existing table
+            </summary>
+            <param name="oldName">The old name of the table</param>
+            <param name="newName">The new name of the table</param>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.RenameColumn(System.String,System.String,System.String)">
+            <summary>
+            Rename an existing table
+            </summary>
+            <param name="tableName">The name of the table</param>
+            <param name="oldColumnName">The old name of the column</param>
+            <param name="newColumnName">The new name of the column</param>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.Rollback">
+            <summary>
+            Rollback the currently running transaction.
+            </summary>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.Select(System.String,System.String,System.String)">
+            <summary>
+            Get values from a table
+            </summary>
+            <param name="what">The columns to select</param>
+            <param name="from">The table to select from</param>
+            <param name="where">The where clause to limit the selection</param>
+            <returns></returns>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.Select(System.String,System.String)">
+            <summary>
+            Get values from a table
+            </summary>
+            <param name="what">The columns to select</param>
+            <param name="from">The table to select from</param>
+            <returns></returns>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.SelectScalar(System.String,System.String,System.String)">
+            <summary>
+            Get a single value from a table
+            </summary>
+            <param name="what">The columns to select</param>
+            <param name="from">The table to select from</param>
+            <param name="where"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.SelectScalar(System.String,System.String)">
+            <summary>
+            Get a single value from a table
+            </summary>
+            <param name="what">The columns to select</param>
+            <param name="from">The table to select from</param>
+            <returns></returns>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.TableExists(System.String)">
+            <summary>
+            Check if a table already exists
+            </summary>
+            <param name="tableName">The name of the table that you want to check on.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.Update(System.String,System.String[],System.String[])">
+            <summary>
+            Update the values in a table
+            </summary>
+            <param name="table">The name of the table to update</param>
+            <param name="columns">The names of the columns.</param>
+            <param name="columnValues">The values for the columns in the same order as the names.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.Update(System.String,System.String[],System.String[],System.String)">
+            <summary>
+            Update the values in a table
+            </summary>
+            <param name="table">The name of the table to update</param>
+            <param name="columns">The names of the columns.</param>
+            <param name="values">The values for the columns in the same order as the names.</param>
+            <param name="where">A where clause to limit the update</param>
+            <returns></returns>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.GetCommand">
+            <summary>
+            Get a command instance
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.ExecuteSchemaBuilder(Migrator.Framework.SchemaBuilder.SchemaBuilder)">
+            <summary>
+            Execute a schema builder
+            </summary>
+            <param name="schemaBuilder"></param>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.QuoteColumnNamesIfRequired(System.String[])">
+            <summary>
+            Quote a multiple column names, if required
+            </summary>
+            <param name="columnNames"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.QuoteColumnNameIfRequired(System.String)">
+            <summary>
+            Quaote column if required
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.QuoteTableNameIfRequired(System.String)">
+            <summary>
+            Quote table name if required
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Migrator.Framework.ITransformationProvider.Encode(System.Guid)">
+            <summary>
+            Encodes a guid value as a string, suitable for inclusion in sql statement
+            </summary>
+            <param name="guid"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Migrator.Framework.ITransformationProvider.Item(System.String)">
+            <summary>
+            Get this provider or a NoOp provider if you are not running in the context of 'provider'.
+            </summary>
+        </member>
+        <member name="P:Migrator.Framework.ITransformationProvider.AppliedMigrations">
+            <summary>
+            The list of Migrations currently applied to the database.
+            </summary>
+        </member>
+        <member name="P:Migrator.Framework.ITransformationProvider.Logger">
+            <summary>
+            Logger used to log details of operations performed during migration
+            </summary>
+        </member>
+        <member name="T:Migrator.Framework.Loggers.IAttachableLogger">
+            <summary>
+            ILogger interface. 
+            Implicit in this interface is that the logger will delegate actual
+            logging to the <see cref="T:Migrator.Framework.Loggers.ILogWriter"/>(s) that have been attached
+            </summary>
+        </member>
+        <member name="M:Migrator.Framework.Loggers.IAttachableLogger.Attach(Migrator.Framework.Loggers.ILogWriter)">
+            <summary>
+            Attach an <see cref="T:Migrator.Framework.Loggers.ILogWriter"/>
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="M:Migrator.Framework.Loggers.IAttachableLogger.Detach(Migrator.Framework.Loggers.ILogWriter)">
+            <summary>
+            Detach an <see cref="T:Migrator.Framework.Loggers.ILogWriter"/>
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="T:Migrator.Framework.Column">
+            <summary>
+            Represents a table column.
+            </summary>
+        </member>
+        <member name="M:Migrator.Framework.SchemaBuilder.SchemaBuilder.AddTable(System.String)">
+            <summary>
+            Adds a Table to be created to the Schema
+            </summary>
+            <param name="name">Table name to be created</param>
+            <returns>SchemaBuilder for chaining</returns>
+        </member>
+        <member name="M:Migrator.Framework.SchemaBuilder.SchemaBuilder.WithTable(System.String)">
+            <summary>
+            Reference an existing table.
+            </summary>
+            <param name="name">Table to reference</param>
+            <returns>SchemaBuilder for chaining</returns>
+        </member>
+        <member name="M:Migrator.Framework.SchemaBuilder.SchemaBuilder.RenameTable(System.String)">
+            <summary>
+            Reference an existing table.
+            </summary>
+            <param name="newName">Table to reference</param>
+            <returns>SchemaBuilder for chaining</returns>
+        </member>
+        <member name="M:Migrator.Framework.SchemaBuilder.SchemaBuilder.AddColumn(System.String)">
+            <summary>
+            Adds a Column to be created
+            </summary>
+            <param name="name">Column name to be added</param>
+            <returns>IColumnOptions to restrict chaining</returns>
+        </member>
+        <member name="T:Migrator.Framework.Loggers.Logger">
+            <summary>
+            Text logger for the migration mediator
+            </summary>
+        </member>
+    </members>
+</doc>

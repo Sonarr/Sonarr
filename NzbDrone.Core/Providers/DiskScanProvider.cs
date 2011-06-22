@@ -14,7 +14,6 @@ namespace NzbDrone.Core.Providers
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static readonly string[] MediaExtentions = new[] { ".mkv", ".avi", ".wmv", ".mp4" };
-        private readonly IDatabase _database;
         private readonly DiskProvider _diskProvider;
         private readonly EpisodeProvider _episodeProvider;
         private readonly MediaFileProvider _mediaFileProvider;
@@ -22,14 +21,12 @@ namespace NzbDrone.Core.Providers
 
         [Inject]
         public DiskScanProvider(DiskProvider diskProvider, EpisodeProvider episodeProvider,
-                                SeriesProvider seriesProvider, MediaFileProvider mediaFileProvider,
-                                IDatabase database)
+                                SeriesProvider seriesProvider, MediaFileProvider mediaFileProvider)
         {
             _diskProvider = diskProvider;
             _episodeProvider = episodeProvider;
             _seriesProvider = seriesProvider;
             _mediaFileProvider = mediaFileProvider;
-            _database = database;
         }
 
 
@@ -86,7 +83,7 @@ namespace NzbDrone.Core.Providers
         {
             Logger.Trace("Importing file to database [{0}]", filePath);
 
-            if (_database.Exists<EpisodeFile>("WHERE Path =@0", Parser.NormalizePath(filePath)))
+            if (_mediaFileProvider.Exists(filePath))
             {
                 Logger.Trace("[{0}] already exists in the database. skipping.", filePath);
                 return null;
@@ -107,46 +104,15 @@ namespace NzbDrone.Core.Providers
                 return null;
 
             parseResult.CleanTitle = series.Title; //replaces the nasty path as title to help with logging
+            parseResult.Series = series;
 
-            //Stores the list of episodes to add to the EpisodeFile
-            var episodes = new List<Episode>();
+            var episodes = _episodeProvider.GetEpisodesByParseResult(parseResult);
 
-            //Check for daily shows
-            if (parseResult.EpisodeNumbers == null)
-            {
-                var episode = _episodeProvider.GetEpisode(series.SeriesId, parseResult.AirDate.Date);
-
-                if (episode != null)
-                {
-                    episodes.Add(episode);
-                }
-                else
-                {
-                    Logger.Warn("Unable to find [{0}] in the database.[{1}]", parseResult, filePath);
-                }
-            }
-            else
-            {
-                foreach (var episodeNumber in parseResult.EpisodeNumbers)
-                {
-                    var episode = _episodeProvider.GetEpisode(series.SeriesId, parseResult.SeasonNumber,
-                                                              episodeNumber);
-
-                    if (episode != null)
-                    {
-                        episodes.Add(episode);
-                    }
-                    else
-                    {
-                        Logger.Warn("Unable to find [{0}] in the database.[{1}]", parseResult, filePath);
-                    }
-                }
-            }
-
-            //Return null if no Episodes exist in the DB for the parsed episodes from file
             if (episodes.Count <= 0)
+            {
+                Logger.Debug("Can't find any matching episodes in the database. skipping");
                 return null;
-
+            }
 
             if (episodes.Any(e => e.EpisodeFile != null && e.EpisodeFile.QualityWrapper > parseResult.Quality))
             {
@@ -162,18 +128,16 @@ namespace NzbDrone.Core.Providers
             episodeFile.Quality = parseResult.Quality.QualityType;
             episodeFile.Proper = parseResult.Quality.Proper;
             episodeFile.SeasonNumber = parseResult.SeasonNumber;
-            int fileId = Convert.ToInt32(_database.Insert(episodeFile));
+            var fileId = _mediaFileProvider.Add(episodeFile);
 
-            //This is for logging + updating the episodes that are linked to this EpisodeFile
-            string episodeList = String.Empty;
+            //Link file to all episodes
             foreach (var ep in episodes)
             {
                 ep.EpisodeFileId = fileId;
                 _episodeProvider.UpdateEpisode(ep);
-                episodeList += String.Format(", {0}", ep.EpisodeId).Trim(' ', ',');
+                Logger.Trace("Linking file {0} to {1}", filePath, ep);
             }
-            Logger.Trace("File {0}:{1} attached to episode(s): '{2}'", episodeFile.EpisodeFileId, filePath,
-                         episodeList);
+
 
             return episodeFile;
         }
@@ -191,7 +155,7 @@ namespace NzbDrone.Core.Providers
 
             //Do the rename
             Logger.Trace("Attempting to rename {0} to {1}", episodeFile.Path, newFile.FullName);
-            _diskProvider.RenameFile(episodeFile.Path, newFile.FullName);
+            _diskProvider.MoveFile(episodeFile.Path, newFile.FullName);
 
             //Update the filename in the DB
             episodeFile.Path = newFile.FullName;
@@ -221,7 +185,7 @@ namespace NzbDrone.Core.Providers
                     }
 
                     //Delete it from the DB
-                    _database.Delete<EpisodeFile>(episodeFile.EpisodeFileId);
+                    _mediaFileProvider.Delete(episodeFile.EpisodeFileId);
                 }
             }
         }

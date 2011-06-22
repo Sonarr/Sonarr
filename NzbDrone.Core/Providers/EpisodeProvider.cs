@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual Episode GetEpisode(long id)
         {
-            var episode =  AttachSeries(_database.Fetch<Episode, EpisodeFile>(@"SELECT * FROM Episodes 
+            var episode = AttachSeries(_database.Fetch<Episode, EpisodeFile>(@"SELECT * FROM Episodes 
                                                             LEFT JOIN EpisodeFiles ON Episodes.EpisodeFileId = EpisodeFiles.EpisodeFileId
                                                             WHERE EpisodeId = @0", id).Single());
 
@@ -86,7 +86,7 @@ namespace NzbDrone.Core.Providers
                 if (episode.EpisodeFileId == 0)
                     episode.EpisodeFile = null;
             }
-            
+
             return episodes;
         }
 
@@ -105,33 +105,46 @@ namespace NzbDrone.Core.Providers
             return episodes;
         }
 
-        public virtual List<Episode> GetEpisodes(EpisodeParseResult parseResult)
+
+        public virtual IList<Episode> GetEpisodesByParseResult(EpisodeParseResult parseResult, Boolean autoAddNew = false)
         {
-            if (parseResult.Series == null)
+            var result = new List<Episode>();
+
+            foreach (var episodeNumber in parseResult.EpisodeNumbers)
             {
-                Logger.Debug("Episode Parse Result is Invalid, skipping");
-                return new List<Episode>();
+                var episodeInfo = GetEpisode(parseResult.Series.SeriesId, parseResult.SeasonNumber, episodeNumber);
+                if (episodeInfo == null)
+                {
+                    episodeInfo = GetEpisode(parseResult.Series.SeriesId, parseResult.AirDate);
+                }
+                //if still null we should add the temp episode
+                if (episodeInfo == null && autoAddNew)
+                {
+                    Logger.Debug("Episode {0} doesn't exist in db. adding it now.", parseResult);
+                    episodeInfo = new Episode
+                    {
+                        SeriesId = parseResult.Series.SeriesId,
+                        AirDate = DateTime.Now.Date,
+                        EpisodeNumber = episodeNumber,
+                        SeasonNumber = parseResult.SeasonNumber,
+                        Title = "TBD",
+                        Overview = String.Empty,
+                    };
+
+                    AddEpisode(episodeInfo);
+                }
+
+                if (episodeInfo != null)
+                {
+                    result.Add(episodeInfo);
+                }
+                else
+                {
+                    Logger.Debug("Unable to file {0}-S{1:00}E{2:00}", parseResult.Series.Title, parseResult.SeasonNumber, episodeNumber);
+                }
             }
 
-            var episodes = new List<Episode>();
-
-            foreach (var ep in parseResult.EpisodeNumbers)
-            {
-                var episode = GetEpisode(parseResult.Series.SeriesId, parseResult.SeasonNumber, ep);
-
-                if (episode == null)
-                    return new List<Episode>();
-
-                episodes.Add(episode);
-            }
-
-            foreach (var episode in episodes)
-            {
-                if (episode.EpisodeFileId == 0)
-                    episode.EpisodeFile = null;
-            }
-
-            return episodes;
+            return result;
         }
 
         public virtual IList<Episode> EpisodesWithoutFiles(bool includeSpecials)

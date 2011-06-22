@@ -31,9 +31,26 @@ namespace NzbDrone.Core.Providers
         {
         }
 
+
+
+        public virtual int Add(EpisodeFile episodeFile)
+        {
+            return Convert.ToInt32(_database.Insert(episodeFile));
+        }
+
         public virtual void Update(EpisodeFile episodeFile)
         {
             _database.Update(episodeFile);
+        }
+
+        public virtual void Delete(int episodeFileId)
+        {
+            _database.Delete(episodeFileId);
+        }
+
+        public virtual bool Exists(string path)
+        {
+            return _database.Exists<EpisodeFile>("WHERE Path =@0", Parser.NormalizePath(path));
         }
 
         public virtual EpisodeFile GetEpisodeFile(int episodeFileId)
