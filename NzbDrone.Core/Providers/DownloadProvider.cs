@@ -48,6 +48,7 @@ namespace NzbDrone.Core.Providers
                     history.Quality = parseResult.Quality.QualityType;
                     history.NzbTitle = parseResult.NzbTitle;
                     history.EpisodeId = episode.EpisodeId;
+                    history.SeriesId = episode.SeriesId;
 
                     _historyProvider.Add(history);
                 }
