@@ -64,7 +64,6 @@ namespace NzbDrone.Core.Test
             Assert.AreEqual(episode, result.EpisodeNumbers[0]);
         }
 
-
         [TestCase("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD", QualityTypes.DVD)]
         [TestCase("WEEDS.S03E01-06.DUAL.BDRip.X-viD.AC3.-HELLYWOOD", QualityTypes.DVD)]
         [TestCase("WEEDS.S03E01-06.DUAL.BDRip.AC3.-HELLYWOOD", QualityTypes.DVD)]
@@ -125,8 +124,7 @@ namespace NzbDrone.Core.Test
                 Assert.AreEqual(qualityEnum, result.QualityType);
             }
         }
-
-      
+    
         [Timeout(1000)]
         [TestCase("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD", "WEEDS", 3, new[] { 1, 2, 3, 4, 5, 6 }, 6)]
         [TestCase("Two.and.a.Half.Men.103.104.720p.HDTV.X264-DIMENSION", "Two.and.a.Half.Men", 1, new[] { 3, 4 }, 2)]
@@ -167,7 +165,6 @@ namespace NzbDrone.Core.Test
             Assert.IsNull(result.EpisodeNumbers);
         }
 
-
        
         [TestCase("30.Rock.Season.04.HDTV.XviD-DIMENSION", "30.Rock", 4)]
         [TestCase("Parks.and.Recreation.S02.720p.x264-DIMENSION", "Parks.and.Recreation", 2)]
@@ -179,7 +176,6 @@ namespace NzbDrone.Core.Test
             Assert.AreEqual(Parser.NormalizeTitle(title), result.CleanTitle);
             Assert.AreEqual(0, result.EpisodeNumbers.Count);
         }
-
       
         [TestCase("Conan", "conan")]
         [TestCase("The Tonight Show With Jay Leno", "tonightshowwithjayleno")]
@@ -192,7 +188,6 @@ namespace NzbDrone.Core.Test
             Assert.AreEqual(seriesName, result);
         }
 
-  
         [TestCase(@"c:\test\", @"c:\test")]
         [TestCase(@"c:\\test\\", @"c:\test")]
         [TestCase(@"C:\\Test\\", @"C:\Test")]
@@ -203,7 +198,6 @@ namespace NzbDrone.Core.Test
             var result = Parser.NormalizePath(dirty);
             Assert.AreEqual(clean, result);
         }
-
       
         [TestCase("CaPitAl", "capital")]
         [TestCase("peri.od", "period")]
@@ -244,7 +238,6 @@ namespace NzbDrone.Core.Test
 
         }
 
- 
         [TestCase("the")]
         [TestCase("and")]
         [TestCase("or")]
@@ -273,6 +266,7 @@ namespace NzbDrone.Core.Test
 
         [TestCase("Chuck - 4x05 - Title", "Chuck")]
         [TestCase("Law & Order - 4x05 - Title", "laworder")]
+        [TestCase("This Isn't a Valid Post", "")]
         public void parse_series_name(string postTitle, string title)
         {
             var result = Parser.ParseSeriesName(postTitle);
@@ -293,7 +287,7 @@ namespace NzbDrone.Core.Test
         [TestCase("Castle.2009.S01E14.Spanish.HDTV.XviD-LOL", LanguageType.Spanish)]
         [TestCase("Castle.2009.S01E14.German.HDTV.XviD-LOL", LanguageType.German)]
         [TestCase("Castle.2009.S01E14.Germany.HDTV.XviD-LOL", LanguageType.English)]
-        [TestCase("Castle.2009.S01E14.English.HDTV.XviD-LOL", LanguageType.Italian)]
+        [TestCase("Castle.2009.S01E14.Italian.HDTV.XviD-LOL", LanguageType.Italian)]
         [TestCase("Castle.2009.S01E14.Danish.HDTV.XviD-LOL", LanguageType.Danish)]
         [TestCase("Castle.2009.S01E14.Dutch.HDTV.XviD-LOL", LanguageType.Dutch)]
         [TestCase("Castle.2009.S01E14.Japanese.HDTV.XviD-LOL", LanguageType.Japanese)]
@@ -308,6 +302,7 @@ namespace NzbDrone.Core.Test
         [TestCase("Castle.2009.S01E14.Finnish.HDTV.XviD-LOL", LanguageType.Finnish)]
         [TestCase("Castle.2009.S01E14.Turkish.HDTV.XviD-LOL", LanguageType.Turkish)]
         [TestCase("Castle.2009.S01E14.Portuguese.HDTV.XviD-LOL", LanguageType.Portuguese)]
+        [TestCase("Castle.2009.S01E14.HDTV.XviD-LOL", LanguageType.English)]
         public void parse_language(string postTitle, LanguageType language)
         {
             var result = Parser.ParseLanguage(postTitle);
@@ -337,6 +332,14 @@ namespace NzbDrone.Core.Test
 
             Assert.AreEqual(Parser.NormalizeTitle(seriesName), result.SeriesTitle);
             Assert.AreEqual(seasonNumber, result.SeasonNumber);
+        }
+
+        [Test]
+        public void parse_season_info_null()
+        {
+            var result = Parser.ParseSeasonInfo("This is not a valid post");
+
+            Assert.AreEqual(null, result);
         }
     }
 }

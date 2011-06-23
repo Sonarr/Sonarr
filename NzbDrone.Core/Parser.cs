@@ -106,22 +106,15 @@ namespace NzbDrone.Core
                     else
                     {
                         //Try to Parse as a daily show
-                        if (airyear > 0)
+                        var airmonth = Convert.ToInt32(match[0].Groups["airmonth"].Value);
+                        var airday = Convert.ToInt32(match[0].Groups["airday"].Value);
+
+                        parsedEpisode = new EpisodeParseResult
                         {
-                            var airmonth = Convert.ToInt32(match[0].Groups["airmonth"].Value);
-                            var airday = Convert.ToInt32(match[0].Groups["airday"].Value);
-
-                            parsedEpisode = new EpisodeParseResult
-                            {
-                                CleanTitle = seriesName,
-                                AirDate = new DateTime(airyear, airmonth, airday),
-                                Language = ParseLanguage(simpleTitle)
-                            };
-                        }
-
-                        //Something went wrong with this one... return null
-                        else
-                            return null;
+                            CleanTitle = seriesName,
+                            AirDate = new DateTime(airyear, airmonth, airday),
+                            Language = ParseLanguage(simpleTitle)
+                        };
                     }
 
                     parsedEpisode.Quality = ParseQuality(title);
