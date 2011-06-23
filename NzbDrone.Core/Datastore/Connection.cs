@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data;
 using System.Data.Common;
-using System.Data.SQLite;
 using System.Data.SqlServerCe;
 using System.IO;
 using MvcMiniProfiler.Data;
