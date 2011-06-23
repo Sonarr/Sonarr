@@ -42,22 +42,21 @@ namespace NzbDrone.Core.Providers
             return series;
         }
 
-        public virtual IList<Series> GetAllSeriesWithEpisodeCount(bool ignoreSpecialsInSeasonCount)
+        public virtual IList<Series> GetAllSeriesWithEpisodeCount()
         {
-            var seasonNumber = 0;
-
-            if (!ignoreSpecialsInSeasonCount)
-                seasonNumber = -1;
-
             var series = _database
-      .Fetch<Series, QualityProfile>(@"SELECT Series.*, SUM(CASE WHEN Ignored = 0 THEN 1 ELSE 0 END) AS EpisodeCount,
-SUM(CASE WHEN Ignored = 0 AND EpisodeFileId > 0 THEN 1 ELSE 0 END) as EpisodeFileCount,
-COUNT (DISTINCT(CASE WHEN SeasonNumber = 0 THEN null ELSE SeasonNumber END)) as SeasonCount,
-QualityProfiles.*
-FROM Series
-INNER JOIN QualityProfiles ON Series.QualityProfileId = QualityProfiles.QualityProfileId
-JOIN Episodes ON Series.SeriesId = Episodes.SeriesId
-GROUP BY seriesId");
+          .Fetch<Series, QualityProfile>(@"SELECT Series.SeriesId, Series.Title, Series.CleanTitle, Series.Status, Series.Overview, Series.AirsDayOfWeek,Series.AirTimes,
+                                            Series.Language, Series.Path, Series.Monitored, Series.QualityProfileId, Series.SeasonFolder,
+                                            SUM(CASE WHEN Ignored = 0 THEN 1 ELSE 0 END) AS EpisodeCount,
+                                            SUM(CASE WHEN Episodes.Ignored = 0 AND Episodes.EpisodeFileId > 0 THEN 1 ELSE 0 END) as EpisodeFileCount,
+                                            MAX(Episodes.SeasonNumber) as SeasonCount,
+                                            QualityProfiles.QualityProfileId, QualityProfiles.Name, QualityProfiles.Cutoff, QualityProfiles.SonicAllowed
+                                            FROM Series
+                                            INNER JOIN QualityProfiles ON Series.QualityProfileId = QualityProfiles.QualityProfileId
+                                            LEFT JOIN Episodes ON Series.SeriesId = Episodes.SeriesId
+                                            GROUP BY Series.SeriesId, Series.Title, Series.CleanTitle, Series.Status, Series.Overview, Series.AirsDayOfWeek,Series.AirTimes,
+                                            Series.Language, Series.Path, Series.Monitored, Series.QualityProfileId, Series.SeasonFolder,
+                                            QualityProfiles.QualityProfileId, QualityProfiles.Name, QualityProfiles.Cutoff, QualityProfiles.SonicAllowed");
 
             return series;
         }

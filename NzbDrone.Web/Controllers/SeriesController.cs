@@ -81,7 +81,7 @@ namespace NzbDrone.Web.Controllers
         [GridAction]
         public ActionResult _AjaxSeriesGrid()
         {
-            var series = GetSeriesModels(_seriesProvider.GetAllSeriesWithEpisodeCount(true));
+            var series = GetSeriesModels(_seriesProvider.GetAllSeriesWithEpisodeCount());
             return View(new GridModel(series));
         }
 
@@ -97,7 +97,7 @@ namespace NzbDrone.Web.Controllers
 
             _seriesProvider.UpdateSeries(oldSeries);
 
-            var series = GetSeriesModels(_seriesProvider.GetAllSeriesWithEpisodeCount(true));
+            var series = GetSeriesModels(_seriesProvider.GetAllSeriesWithEpisodeCount());
             return View(new GridModel(series));
         }
 
@@ -237,6 +237,11 @@ namespace NzbDrone.Web.Controllers
                     episodeQuality = e.EpisodeFile.Quality.ToString();
                 }
 
+                var airDate = String.Empty;
+
+                if (e.AirDate != null)
+                    airDate = e.AirDate.Value.ToShortDateString();
+
                 episodes.Add(new EpisodeModel
                                  {
                                      EpisodeId = e.EpisodeId,
@@ -244,7 +249,7 @@ namespace NzbDrone.Web.Controllers
                                      SeasonNumber = e.SeasonNumber,
                                      Title = e.Title,
                                      Overview = e.Overview,
-                                     AirDate = e.AirDate.Value,
+                                     AirDate = airDate,
                                      Path = episodePath,
                                      EpisodeFileId = episodeFileId,
                                      Status = e.Status.ToString(),

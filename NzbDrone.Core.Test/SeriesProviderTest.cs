@@ -224,7 +224,7 @@ namespace NzbDrone.Core.Test
 
             //Act
             mocker.Resolve<QualityProvider>();
-            var series = mocker.Resolve<SeriesProvider>().GetAllSeriesWithEpisodeCount(true);
+            var series = mocker.Resolve<SeriesProvider>().GetAllSeriesWithEpisodeCount();
 
             //Assert
             series.Should().HaveCount(1);
@@ -249,7 +249,7 @@ namespace NzbDrone.Core.Test
 
             //Act
             mocker.Resolve<QualityProvider>();
-            var series = mocker.Resolve<SeriesProvider>().GetAllSeriesWithEpisodeCount(true);
+            var series = mocker.Resolve<SeriesProvider>().GetAllSeriesWithEpisodeCount();
 
             //Assert
             series.Should().HaveCount(1);
@@ -274,7 +274,7 @@ namespace NzbDrone.Core.Test
 
             //Act
             mocker.Resolve<QualityProvider>();
-            var series = mocker.Resolve<SeriesProvider>().GetAllSeriesWithEpisodeCount(true);
+            var series = mocker.Resolve<SeriesProvider>().GetAllSeriesWithEpisodeCount();
 
             //Assert
             series.Should().HaveCount(1);
@@ -303,7 +303,7 @@ namespace NzbDrone.Core.Test
 
             //Act
             mocker.Resolve<QualityProvider>();
-            var series = mocker.Resolve<SeriesProvider>().GetAllSeriesWithEpisodeCount(true);
+            var series = mocker.Resolve<SeriesProvider>().GetAllSeriesWithEpisodeCount();
 
             //Assert
             series.Should().HaveCount(1);
