@@ -1,10 +1,12 @@
 ﻿using System;
 using NLog;
 using NLog.Targets;
+using NLog.Targets.Wrappers;
 using PetaPoco;
 
 namespace NzbDrone.Core.Instrumentation
 {
+
     public class SubsonicTarget : Target
     {
         private readonly IDatabase _database;
@@ -14,6 +16,8 @@ namespace NzbDrone.Core.Instrumentation
             _database = database;
         }
 
+       
+        
         protected override void Write(LogEventInfo logEvent)
         {
             var log = new Log();

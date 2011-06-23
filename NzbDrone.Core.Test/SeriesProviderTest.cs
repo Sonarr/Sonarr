@@ -202,7 +202,7 @@ namespace NzbDrone.Core.Test
 
             //Act, Assert
             var provider = mocker.Resolve<SeriesProvider>();
-            Assert.IsTrue(provider.IsMonitored(12));
+            provider.IsMonitored(12).Should().BeTrue();
             Assert.IsFalse(provider.IsMonitored(11));
             Assert.IsFalse(provider.IsMonitored(1));
         }

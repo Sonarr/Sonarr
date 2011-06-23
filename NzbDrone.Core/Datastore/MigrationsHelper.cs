@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlServerCe;
+using System.IO;
 using System.Reflection;
 using NLog;
 
@@ -16,6 +18,8 @@ namespace NzbDrone.Core.Datastore
             if (_migrated.ContainsKey(connetionString)) return;
             _migrated.Add(connetionString, string.Empty);
 
+            EnsureDatabase(connetionString);
+
             Logger.Info("Preparing run database migration");
 
             try
@@ -23,11 +27,11 @@ namespace NzbDrone.Core.Datastore
                 Migrator.Migrator migrator;
                 if (trace)
                 {
-                    migrator = new Migrator.Migrator("Sqlite", connetionString, Assembly.GetAssembly(typeof(MigrationsHelper)), true, new MigrationLogger());
+                    migrator = new Migrator.Migrator("sqlserverce", connetionString, Assembly.GetAssembly(typeof(MigrationsHelper)), true, new MigrationLogger());
                 }
                 else
                 {
-                    migrator = new Migrator.Migrator("Sqlite", connetionString, Assembly.GetAssembly(typeof(MigrationsHelper)));
+                    migrator = new Migrator.Migrator("sqlserverce", connetionString, Assembly.GetAssembly(typeof(MigrationsHelper)));
                 }
 
 
@@ -46,8 +50,18 @@ namespace NzbDrone.Core.Datastore
             }
         }
 
-
+        private static void EnsureDatabase(string constr)
+        {
+            var connection = new SqlCeConnection(constr);
+            if (!File.Exists(connection.Database))
+            {
+                var engine = new SqlCeEngine(constr);
+                engine.CreateDatabase();
+            }
+        }
     }
+
+
 
 
 }

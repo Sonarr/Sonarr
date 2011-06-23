@@ -4,9 +4,14 @@
         <name>Migrator.Providers</name>
     </assembly>
     <members>
-        <member name="T:Migrator.Providers.SQLite.SQLiteTransformationProvider">
+        <member name="T:Migrator.Providers.SqlServer.SqlServerCeTransformationProvider">
             <summary>
-            Summary description for SQLiteTransformationProvider.
+            Migration transformations provider for Microsoft SQL Server Compact Edition.
+            </summary>
+        </member>
+        <member name="T:Migrator.Providers.SqlServer.SqlServerTransformationProvider">
+            <summary>
+            Migration transformations provider for Microsoft SQL Server.
             </summary>
         </member>
         <member name="T:Migrator.Providers.TransformationProvider">
@@ -185,23 +190,6 @@
             The list of Migrations currently applied to the database.
             </summary>
         </member>
-        <member name="M:Migrator.Providers.SQLite.SQLiteTransformationProvider.ParseSqlForColumnNames(System.String)">
-            <summary>
-            Turn something like 'columnName INTEGER NOT NULL' into just 'columnName'
-            </summary>
-        </member>
-        <member name="M:Migrator.Providers.SQLite.SQLiteTransformationProvider.ExtractNameFromColumnDef(System.String)">
-            <summary>
-            Name is the first value before the space.
-            </summary>
-            <param name="columnDef"></param>
-            <returns></returns>
-        </member>
-        <member name="T:Migrator.Providers.NoOpTransformationProvider">
-            <summary>
-            No Op (Null Object Pattern) implementation of the ITransformationProvider
-            </summary>
-        </member>
         <member name="T:Migrator.Providers.Dialect">
             <summary>
             Defines the implementations specific details for a particular database.
@@ -262,16 +250,6 @@
             </summary>
             <param name="type">The DbType</param>
             <returns>True if the database type has an unsigned variant, otherwise false</returns>
-        </member>
-        <member name="T:Migrator.Providers.SqlServer.SqlServerCeTransformationProvider">
-            <summary>
-            Migration transformations provider for Microsoft SQL Server.
-            </summary>
-        </member>
-        <member name="T:Migrator.Providers.SqlServer.SqlServerTransformationProvider">
-            <summary>
-            Migration transformations provider for Microsoft SQL Server.
-            </summary>
         </member>
         <member name="T:Migrator.Providers.PostgreSQL.PostgreSQLTransformationProvider">
             <summary>
@@ -383,6 +361,28 @@
         <member name="T:Migrator.Providers.Mysql.MySqlTransformationProvider">
             <summary>
             Summary description for MySqlTransformationProvider.
+            </summary>
+        </member>
+        <member name="T:Migrator.Providers.SQLite.SQLiteTransformationProvider">
+            <summary>
+            Summary description for SQLiteTransformationProvider.
+            </summary>
+        </member>
+        <member name="M:Migrator.Providers.SQLite.SQLiteTransformationProvider.ParseSqlForColumnNames(System.String)">
+            <summary>
+            Turn something like 'columnName INTEGER NOT NULL' into just 'columnName'
+            </summary>
+        </member>
+        <member name="M:Migrator.Providers.SQLite.SQLiteTransformationProvider.ExtractNameFromColumnDef(System.String)">
+            <summary>
+            Name is the first value before the space.
+            </summary>
+            <param name="columnDef"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Migrator.Providers.NoOpTransformationProvider">
+            <summary>
+            No Op (Null Object Pattern) implementation of the ITransformationProvider
             </summary>
         </member>
     </members>

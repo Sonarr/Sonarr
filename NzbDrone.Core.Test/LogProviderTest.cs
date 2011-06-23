@@ -39,10 +39,9 @@ namespace NzbDrone.Core.Test
             //Assert
             db.Fetch<Log>().Should().HaveCount(1);
 
-            var logItem =  db.Fetch<Log>().First();
+            var logItem = db.Fetch<Log>().First();
             Assert.AreNotEqual(new DateTime(), logItem.Time);
             Assert.AreEqual(message, logItem.Message);
-            Assert.AreEqual(Logger.Name, logItem.Logger);
             Assert.AreEqual(Logger.Name, logItem.Logger);
             Assert.AreEqual(LogLevel.Info.Name, logItem.Level);
             Assert.AreEqual("write_log", logItem.Method);
@@ -149,14 +148,14 @@ namespace NzbDrone.Core.Test
         }
 
 
-       
+
 
 
         [Test]
         public void null_string_as_arg_should_not_fail()
         {
             //setup
-           
+
             Logger Logger = LogManager.GetCurrentClassLogger();
             var epFile = new EpisodeFile();
             Logger.Trace("File {0} no longer exists on disk. removing from database.", epFile.Path);

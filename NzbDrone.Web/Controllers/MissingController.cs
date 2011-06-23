@@ -37,7 +37,7 @@ namespace NzbDrone.Web.Controllers
                 EpisodeTitle = e.Title,
                 Overview = e.Overview,
                 SeriesTitle = e.Series.Title,
-                AirDate = e.AirDate,
+                AirDate = e.AirDate.Value,
             });
 
             return View(new GridModel(missing));

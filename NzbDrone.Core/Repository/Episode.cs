@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Repository
         public int SeasonNumber { get; set; }
         public int EpisodeNumber { get; set; }
         public string Title { get; set; }
-        public DateTime AirDate { get; set; }
+        public DateTime? AirDate { get; set; }
 
         public string Overview { get; set; }
 
@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Repository
 
                 if (Ignored) return EpisodeStatusType.Ignored;
 
-                if (AirDate.Date.Year > 1900 && DateTime.Now.Date >= AirDate.Date)
+                if (AirDate != null && AirDate.Value.Date < DateTime.Now)
                 {
                     return EpisodeStatusType.Missing;
                 }

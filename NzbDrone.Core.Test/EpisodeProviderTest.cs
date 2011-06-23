@@ -285,6 +285,46 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
+        public void RefreshEpisodeInfo_should_set_older_than_1900_to_null()
+        {
+            //Arrange
+            const int seriesId = 71663;
+
+            var fakeEpisodes = Builder<TvdbSeries>.CreateNew().With(
+                c => c.Episodes =
+                     new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(10).
+                                               WhereAll()
+                                               .Have(l => l.Language = new TvdbLanguage(0, "eng", "a"))
+                                               .WhereTheFirst(7).Have(e => e.FirstAired = new DateTime(1800, 1, 1))
+                                               .AndTheRemaining().Have(e => e.FirstAired = DateTime.Now)
+                                               .Build())
+                ).With(c => c.Id = seriesId).Build();
+
+            var fakeSeries = Builder<Series>.CreateNew().With(c => c.SeriesId = seriesId).Build();
+
+
+            var mocker = new AutoMoqer();
+
+            mocker.SetConstant(MockLib.GetEmptyDatabase());
+
+            mocker.GetMock<TvDbProvider>()
+                .Setup(c => c.GetSeries(seriesId, true))
+                .Returns(fakeEpisodes);
+
+
+            //Act
+            mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
+
+            //Assert
+            var storedEpisodes = mocker.Resolve<EpisodeProvider>().GetEpisodeBySeries(seriesId).ToList();
+            storedEpisodes.Should().HaveCount(10);
+            storedEpisodes.Where(e => e.AirDate == null).Should().HaveCount(7);
+            storedEpisodes.Where(e => e.AirDate != null).Should().HaveCount(3);
+
+            mocker.VerifyAllMocks();
+        }
+
+        [Test]
         public void new_episodes_only_calls_Insert()
         {
             const int seriesId = 71663;
@@ -595,7 +635,7 @@ namespace NzbDrone.Core.Test
             var db = MockLib.GetEmptyDatabase();
             mocker.SetConstant(db);
 
-        
+
             //Act
             var episode = mocker.Resolve<EpisodeProvider>().GetEpisode(1, 1, 1);
 
@@ -660,7 +700,7 @@ namespace NzbDrone.Core.Test
             episode.EpisodeFile.Should().BeNull();
         }
 
-        
+
 
 
         [Test]
@@ -683,7 +723,7 @@ namespace NzbDrone.Core.Test
                 .Returns(fakeSeries);
 
             //Act
-            var episode = mocker.Resolve<EpisodeProvider>().GetEpisode(1, fakeEpisodes[0].AirDate);
+            var episode = mocker.Resolve<EpisodeProvider>().GetEpisode(1, fakeEpisodes[0].AirDate.Value);
 
             //Assert
             episode.ShouldHave().AllPropertiesBut(e => e.Series, e => e.EpisodeFile).EqualTo(fakeEpisodes.First());
@@ -709,7 +749,7 @@ namespace NzbDrone.Core.Test
                 .Returns(fakeSeries);
 
             //Act
-            var episode = mocker.Resolve<EpisodeProvider>().GetEpisode(1, fakeEpisodes[0].AirDate);
+            var episode = mocker.Resolve<EpisodeProvider>().GetEpisode(1, fakeEpisodes[0].AirDate.Value);
 
             //Assert
             episode.ShouldHave().AllPropertiesBut(e => e.Series).EqualTo(fakeEpisodes.First());
@@ -718,6 +758,6 @@ namespace NzbDrone.Core.Test
         }
 
 
- 
+
     }
 }

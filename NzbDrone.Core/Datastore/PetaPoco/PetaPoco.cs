@@ -24,6 +24,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using MvcMiniProfiler;
 
 namespace PetaPoco
 {
@@ -316,7 +317,7 @@ namespace PetaPoco
             Oracle,
             SQLite
         }
-        DBType _dbType = DBType.SQLite;
+        DBType _dbType = DBType.SqlServerCE;
 
         // Common initialization
         private void CommonConstruct()
@@ -645,27 +646,30 @@ namespace PetaPoco
 
         public int Execute(Sql sql)
         {
-            try
+            using (MiniProfiler.StepStatic("Peta Execute SQL"))
             {
-                OpenSharedConnection();
                 try
                 {
-                    using (var cmd = CreateCommand(_sharedConnection, sql))
+                    OpenSharedConnection();
+                    try
                     {
-                        var result = cmd.ExecuteNonQuery();
-                        OnExecutedCommand(cmd);
-                        return result;
+                        using (var cmd = CreateCommand(_sharedConnection, sql))
+                        {
+                            var result = cmd.ExecuteNonQuery();
+                            OnExecutedCommand(cmd);
+                            return result;
+                        }
+                    }
+                    finally
+                    {
+                        CloseSharedConnection();
                     }
                 }
-                finally
+                catch (Exception x)
                 {
-                    CloseSharedConnection();
+                    OnException(x);
+                    throw;
                 }
-            }
-            catch (Exception x)
-            {
-                OnException(x);
-                throw;
             }
         }
 
@@ -677,27 +681,30 @@ namespace PetaPoco
 
         public T ExecuteScalar<T>(Sql sql)
         {
-            try
+            using (MiniProfiler.StepStatic("Peta ExecuteScalar<T>"))
             {
-                OpenSharedConnection();
                 try
                 {
-                    using (var cmd = CreateCommand(_sharedConnection, sql))
+                    OpenSharedConnection();
+                    try
                     {
-                        object val = cmd.ExecuteScalar();
-                        OnExecutedCommand(cmd);
-                        return (T)Convert.ChangeType(val, typeof(T));
+                        using (var cmd = CreateCommand(_sharedConnection, sql))
+                        {
+                            object val = cmd.ExecuteScalar();
+                            OnExecutedCommand(cmd);
+                            return (T)Convert.ChangeType(val, typeof(T));
+                        }
+                    }
+                    finally
+                    {
+                        CloseSharedConnection();
                     }
                 }
-                finally
+                catch (Exception x)
                 {
-                    CloseSharedConnection();
+                    OnException(x);
+                    throw;
                 }
-            }
-            catch (Exception x)
-            {
-                OnException(x);
-                throw;
             }
         }
 
@@ -887,50 +894,55 @@ namespace PetaPoco
 
         public IEnumerable<T> Query<T>(Sql sql)
         {
-            OpenSharedConnection();
-            try
+            using (MiniProfiler.StepStatic("Peta Query SQL"))
             {
-                using (var cmd = CreateCommand(_sharedConnection, sql))
+                OpenSharedConnection();
+                try
                 {
-                    IDataReader r;
-                    var pd = PocoData.ForType(typeof(T));
-                    try
+                    using (var cmd = CreateCommand(_sharedConnection, sql))
                     {
-                        r = cmd.ExecuteReader();
-                        OnExecutedCommand(cmd);
-                    }
-                    catch (Exception x)
-                    {
-                        OnException(x);
-                        throw;
-                    }
-
-                    using (r)
-                    {
-                        var factory = pd.GetFactory(cmd.CommandText, _sharedConnection.ConnectionString, ForceDateTimesToUtc, 0, r.FieldCount, r) as Func<IDataReader, T>;
-                        while (true)
+                        IDataReader r;
+                        var pd = PocoData.ForType(typeof(T));
+                        try
                         {
-                            T poco;
-                            try
-                            {
-                                if (!r.Read())
-                                    yield break;
-                                poco = factory(r);
-                            }
-                            catch (Exception x)
-                            {
-                                OnException(x);
-                                throw;
-                            }
+                            r = cmd.ExecuteReader();
+                            OnExecutedCommand(cmd);
+                        }
+                        catch (Exception x)
+                        {
+                            OnException(x);
+                            throw;
+                        }
 
-                            yield return poco;
+                        using (r)
+                        {
+                            var factory =
+                                pd.GetFactory(cmd.CommandText, _sharedConnection.ConnectionString, ForceDateTimesToUtc, 0, r.FieldCount, r)
+                                as Func<IDataReader, T>;
+                            while (true)
+                            {
+                                T poco;
+                                try
+                                {
+                                    if (!r.Read())
+                                        yield break;
+                                    poco = factory(r);
+                                }
+                                catch (Exception x)
+                                {
+                                    OnException(x);
+                                    throw;
+                                }
+
+                                yield return poco;
+                            }
                         }
                     }
                 }
-            }
-            finally
-            {
-                CloseSharedConnection();
+                finally
+                {
+                    CloseSharedConnection();
+                }
             }
         }
 
@@ -1181,62 +1193,65 @@ namespace PetaPoco
         // Actual implementation of the multi-poco query
         public IEnumerable<TRet> Query<TRet>(Type[] types, object cb, string sql, params object[] args)
         {
-            OpenSharedConnection();
-            try
+            using (MiniProfiler.StepStatic("Peta Query Type[]"))
             {
-                using (var cmd = CreateCommand(_sharedConnection, sql, args))
+                OpenSharedConnection();
+                try
                 {
-                    IDataReader r;
-                    try
+                    using (var cmd = CreateCommand(_sharedConnection, sql, args))
                     {
-                        r = cmd.ExecuteReader();
-                        OnExecutedCommand(cmd);
-                    }
-                    catch (Exception x)
-                    {
-                        OnException(x);
-                        throw;
-                    }
-                    var factory = GetMultiPocoFactory<TRet>(types, sql, r);
-                    if (cb == null)
-                        cb = GetAutoMapper(types.ToArray());
-                    bool bNeedTerminator = false;
-                    using (r)
-                    {
-                        while (true)
+                        IDataReader r;
+                        try
                         {
-                            TRet poco;
-                            try
-                            {
-                                if (!r.Read())
-                                    break;
-                                poco = factory(r, cb);
-                            }
-                            catch (Exception x)
-                            {
-                                OnException(x);
-                                throw;
-                            }
-
-                            if (poco != null)
-                                yield return poco;
-                            else
-                                bNeedTerminator = true;
+                            r = cmd.ExecuteReader();
+                            OnExecutedCommand(cmd);
                         }
-                        if (bNeedTerminator)
+                        catch (Exception x)
                         {
-                            var poco = (TRet)(cb as Delegate).DynamicInvoke(new object[types.Length]);
-                            if (poco != null)
-                                yield return poco;
-                            else
-                                yield break;
+                            OnException(x);
+                            throw;
+                        }
+                        var factory = GetMultiPocoFactory<TRet>(types, sql, r);
+                        if (cb == null)
+                            cb = GetAutoMapper(types.ToArray());
+                        bool bNeedTerminator = false;
+                        using (r)
+                        {
+                            while (true)
+                            {
+                                TRet poco;
+                                try
+                                {
+                                    if (!r.Read())
+                                        break;
+                                    poco = factory(r, cb);
+                                }
+                                catch (Exception x)
+                                {
+                                    OnException(x);
+                                    throw;
+                                }
+
+                                if (poco != null)
+                                    yield return poco;
+                                else
+                                    bNeedTerminator = true;
+                            }
+                            if (bNeedTerminator)
+                            {
+                                var poco = (TRet)(cb as Delegate).DynamicInvoke(new object[types.Length]);
+                                if (poco != null)
+                                    yield return poco;
+                                else
+                                    yield break;
+                            }
                         }
                     }
                 }
-            }
-            finally
-            {
-                CloseSharedConnection();
+                finally
+                {
+                    CloseSharedConnection();
+                }
             }
         }
 
@@ -1355,171 +1370,174 @@ namespace PetaPoco
         // the new id is returned.
         public object Insert(string tableName, string primaryKeyName, bool autoIncrement, object poco)
         {
-            try
+            using (MiniProfiler.StepStatic("Peta Insert " + tableName))
             {
-                OpenSharedConnection();
                 try
                 {
-                    using (var cmd = CreateCommand(_sharedConnection, ""))
+                    OpenSharedConnection();
+                    try
                     {
-                        var pd = PocoData.ForObject(poco, primaryKeyName);
-                        var names = new List<string>();
-                        var values = new List<string>();
-                        var index = 0;
-                        var versionName = "";
-
-                        foreach (var i in pd.Columns)
+                        using (var cmd = CreateCommand(_sharedConnection, ""))
                         {
-                            // Don't insert result columns
-                            if (i.Value.ResultColumn)
-                                continue;
+                            var pd = PocoData.ForObject(poco, primaryKeyName);
+                            var names = new List<string>();
+                            var values = new List<string>();
+                            var index = 0;
+                            var versionName = "";
 
-                            // Don't insert the primary key (except under oracle where we need bring in the next sequence value)
-                            if (autoIncrement && primaryKeyName != null && string.Compare(i.Key, primaryKeyName, true) == 0)
+                            foreach (var i in pd.Columns)
                             {
-                                if (_dbType == DBType.Oracle && !string.IsNullOrEmpty(pd.TableInfo.SequenceName))
+                                // Don't insert result columns
+                                if (i.Value.ResultColumn)
+                                    continue;
+
+                                // Don't insert the primary key (except under oracle where we need bring in the next sequence value)
+                                if (autoIncrement && primaryKeyName != null && string.Compare(i.Key, primaryKeyName, true) == 0)
                                 {
-                                    names.Add(i.Key);
-                                    values.Add(string.Format("{0}.nextval", pd.TableInfo.SequenceName));
+                                    if (_dbType == DBType.Oracle && !string.IsNullOrEmpty(pd.TableInfo.SequenceName))
+                                    {
+                                        names.Add(i.Key);
+                                        values.Add(string.Format("{0}.nextval", pd.TableInfo.SequenceName));
+                                    }
+                                    continue;
                                 }
-                                continue;
+
+                                names.Add(EscapeSqlIdentifier(i.Key));
+                                values.Add(string.Format("{0}{1}", _paramPrefix, index++));
+
+                                object val = i.Value.GetValue(poco);
+                                if (i.Value.VersionColumn)
+                                {
+                                    val = 1;
+                                    versionName = i.Key;
+                                }
+
+                                AddParam(cmd, val, _paramPrefix);
                             }
 
-                            names.Add(EscapeSqlIdentifier(i.Key));
-                            values.Add(string.Format("{0}{1}", _paramPrefix, index++));
-
-                            object val = i.Value.GetValue(poco);
-                            if (i.Value.VersionColumn)
-                            {
-                                val = 1;
-                                versionName = i.Key;
-                            }
-
-                            AddParam(cmd, val, _paramPrefix);
-                        }
-
-                        cmd.CommandText = string.Format("INSERT INTO {0} ({1}) VALUES ({2})",
-                                EscapeTableName(tableName),
-                                string.Join(",", names.ToArray()),
-                                string.Join(",", values.ToArray())
+                            cmd.CommandText = string.Format("INSERT INTO {0} ({1}) VALUES ({2})",
+                                                            EscapeTableName(tableName),
+                                                            string.Join(",", names.ToArray()),
+                                                            string.Join(",", values.ToArray())
                                 );
 
-                        if (!autoIncrement)
-                        {
-                            DoPreExecute(cmd);
-                            cmd.ExecuteNonQuery();
-                            OnExecutedCommand(cmd);
-                            return true;
-                        }
-
-                        object id;
-
-                        switch (_dbType)
-                        {
-                            case DBType.SqlServerCE:
+                            if (!autoIncrement)
+                            {
                                 DoPreExecute(cmd);
                                 cmd.ExecuteNonQuery();
                                 OnExecutedCommand(cmd);
-                                id = ExecuteScalar<object>("SELECT @@@IDENTITY AS NewID;");
-                                break;
-                            case DBType.SqlServer:
-                                cmd.CommandText += ";\nSELECT SCOPE_IDENTITY() AS NewID;";
-                                DoPreExecute(cmd);
-                                id = cmd.ExecuteScalar();
-                                OnExecutedCommand(cmd);
-                                break;
-                            case DBType.PostgreSQL:
-                                if (primaryKeyName != null)
-                                {
-                                    cmd.CommandText += string.Format("returning {0} as NewID", EscapeSqlIdentifier(primaryKeyName));
+                                return true;
+                            }
+
+                            object id;
+
+                            switch (_dbType)
+                            {
+                                case DBType.SqlServerCE:
+                                    DoPreExecute(cmd);
+                                    cmd.ExecuteNonQuery();
+                                    OnExecutedCommand(cmd);
+                                    id = ExecuteScalar<object>("SELECT @@@IDENTITY AS NewID;");
+                                    break;
+                                case DBType.SqlServer:
+                                    cmd.CommandText += ";\nSELECT SCOPE_IDENTITY() AS NewID;";
                                     DoPreExecute(cmd);
                                     id = cmd.ExecuteScalar();
-                                }
-                                else
-                                {
-                                    id = -1;
-                                    DoPreExecute(cmd);
-                                    cmd.ExecuteNonQuery();
-                                }
-                                OnExecutedCommand(cmd);
-                                break;
-                            case DBType.Oracle:
-                                if (primaryKeyName != null)
-                                {
-                                    cmd.CommandText += string.Format(" returning {0} into :newid", EscapeSqlIdentifier(primaryKeyName));
-                                    var param = cmd.CreateParameter();
-                                    param.ParameterName = ":newid";
-                                    param.Value = DBNull.Value;
-                                    param.Direction = ParameterDirection.ReturnValue;
-                                    param.DbType = DbType.Int64;
-                                    cmd.Parameters.Add(param);
-                                    DoPreExecute(cmd);
-                                    cmd.ExecuteNonQuery();
-                                    id = param.Value;
-                                }
-                                else
-                                {
-                                    id = -1;
-                                    DoPreExecute(cmd);
-                                    cmd.ExecuteNonQuery();
-                                }
-                                OnExecutedCommand(cmd);
-                                break;
-                            case DBType.SQLite:
-                                if (primaryKeyName != null)
-                                {
-                                    cmd.CommandText += ";\nSELECT last_insert_rowid();";
+                                    OnExecutedCommand(cmd);
+                                    break;
+                                case DBType.PostgreSQL:
+                                    if (primaryKeyName != null)
+                                    {
+                                        cmd.CommandText += string.Format("returning {0} as NewID", EscapeSqlIdentifier(primaryKeyName));
+                                        DoPreExecute(cmd);
+                                        id = cmd.ExecuteScalar();
+                                    }
+                                    else
+                                    {
+                                        id = -1;
+                                        DoPreExecute(cmd);
+                                        cmd.ExecuteNonQuery();
+                                    }
+                                    OnExecutedCommand(cmd);
+                                    break;
+                                case DBType.Oracle:
+                                    if (primaryKeyName != null)
+                                    {
+                                        cmd.CommandText += string.Format(" returning {0} into :newid", EscapeSqlIdentifier(primaryKeyName));
+                                        var param = cmd.CreateParameter();
+                                        param.ParameterName = ":newid";
+                                        param.Value = DBNull.Value;
+                                        param.Direction = ParameterDirection.ReturnValue;
+                                        param.DbType = DbType.Int64;
+                                        cmd.Parameters.Add(param);
+                                        DoPreExecute(cmd);
+                                        cmd.ExecuteNonQuery();
+                                        id = param.Value;
+                                    }
+                                    else
+                                    {
+                                        id = -1;
+                                        DoPreExecute(cmd);
+                                        cmd.ExecuteNonQuery();
+                                    }
+                                    OnExecutedCommand(cmd);
+                                    break;
+                                case DBType.SQLite:
+                                    if (primaryKeyName != null)
+                                    {
+                                        cmd.CommandText += ";\nSELECT last_insert_rowid();";
+                                        DoPreExecute(cmd);
+                                        id = cmd.ExecuteScalar();
+                                    }
+                                    else
+                                    {
+                                        id = -1;
+                                        DoPreExecute(cmd);
+                                        cmd.ExecuteNonQuery();
+                                    }
+                                    OnExecutedCommand(cmd);
+                                    break;
+                                default:
+                                    cmd.CommandText += ";\nSELECT @@IDENTITY AS NewID;";
                                     DoPreExecute(cmd);
                                     id = cmd.ExecuteScalar();
-                                }
-                                else
+                                    OnExecutedCommand(cmd);
+                                    break;
+                            }
+
+                            // Assign the ID back to the primary key property
+                            if (primaryKeyName != null)
+                            {
+                                PocoColumn pc;
+                                if (pd.Columns.TryGetValue(primaryKeyName, out pc))
                                 {
-                                    id = -1;
-                                    DoPreExecute(cmd);
-                                    cmd.ExecuteNonQuery();
+                                    pc.SetValue(poco, pc.ChangeType(id));
                                 }
-                                OnExecutedCommand(cmd);
-                                break;
-                            default:
-                                cmd.CommandText += ";\nSELECT @@IDENTITY AS NewID;";
-                                DoPreExecute(cmd);
-                                id = cmd.ExecuteScalar();
-                                OnExecutedCommand(cmd);
-                                break;
-                        }
-
-                        // Assign the ID back to the primary key property
-                        if (primaryKeyName != null)
-                        {
-                            PocoColumn pc;
-                            if (pd.Columns.TryGetValue(primaryKeyName, out pc))
-                            {
-                                pc.SetValue(poco, pc.ChangeType(id));
                             }
-                        }
 
-                        // Assign the Version column
-                        if (!string.IsNullOrEmpty(versionName))
-                        {
-                            PocoColumn pc;
-                            if (pd.Columns.TryGetValue(versionName, out pc))
+                            // Assign the Version column
+                            if (!string.IsNullOrEmpty(versionName))
                             {
-                                pc.SetValue(poco, pc.ChangeType(1));
+                                PocoColumn pc;
+                                if (pd.Columns.TryGetValue(versionName, out pc))
+                                {
+                                    pc.SetValue(poco, pc.ChangeType(1));
+                                }
                             }
-                        }
 
-                        return id;
+                            return id;
+                        }
+                    }
+                    finally
+                    {
+                        CloseSharedConnection();
                     }
                 }
-                finally
+                catch (Exception x)
                 {
-                    CloseSharedConnection();
+                    OnException(x);
+                    throw;
                 }
-            }
-            catch (Exception x)
-            {
-                OnException(x);
-                throw;
             }
         }
 
@@ -1546,94 +1564,101 @@ namespace PetaPoco
         // Update a record with values from a poco.  primary key value can be either supplied or read from the poco
         public int Update(string tableName, string primaryKeyName, object poco, object primaryKeyValue)
         {
-            try
+            using (MiniProfiler.StepStatic("Peta Update " + tableName))
             {
-                OpenSharedConnection();
                 try
                 {
-                    using (var cmd = CreateCommand(_sharedConnection, ""))
+                    OpenSharedConnection();
+                    try
                     {
-                        var sb = new StringBuilder();
-                        var index = 0;
-                        var pd = PocoData.ForObject(poco, primaryKeyName);
-                        string versionName = null;
-                        object versionValue = null;
-
-                        var primaryKeyValuePairs = GetPrimaryKeyValues(primaryKeyName, primaryKeyValue);
-
-                        foreach (var i in pd.Columns)
+                        using (var cmd = CreateCommand(_sharedConnection, ""))
                         {
-                            // Don't update the primary key, but grab the value if we don't have it
-                            if (primaryKeyValue == null && primaryKeyValuePairs.ContainsKey(i.Key))
+                            var sb = new StringBuilder();
+                            var index = 0;
+                            var pd = PocoData.ForObject(poco, primaryKeyName);
+                            string versionName = null;
+                            object versionValue = null;
+
+                            var primaryKeyValuePairs = GetPrimaryKeyValues(primaryKeyName, primaryKeyValue);
+
+                            foreach (var i in pd.Columns)
                             {
-                                primaryKeyValuePairs[i.Key] = i.Value.PropertyInfo.GetValue(poco, null);
-                                continue;
+                                // Don't update the primary key, but grab the value if we don't have it
+                                if (primaryKeyValue == null && primaryKeyValuePairs.ContainsKey(i.Key))
+                                {
+                                    primaryKeyValuePairs[i.Key] = i.Value.PropertyInfo.GetValue(poco, null);
+                                    continue;
+                                }
+
+                                // Dont update result only columns
+                                if (i.Value.ResultColumn)
+                                    continue;
+
+                                object value = i.Value.PropertyInfo.GetValue(poco, null);
+
+                                if (i.Value.VersionColumn)
+                                {
+                                    versionName = i.Key;
+                                    versionValue = value;
+                                    value = Convert.ToInt64(value) + 1;
+                                }
+
+                                // Build the sql
+                                if (index > 0)
+                                    sb.Append(", ");
+                                sb.AppendFormat("{0} = {1}{2}", EscapeSqlIdentifier(i.Key), _paramPrefix, index++);
+
+                                // Store the parameter in the command
+                                AddParam(cmd, value, _paramPrefix);
                             }
 
-                            // Dont update result only columns
-                            if (i.Value.ResultColumn)
-                                continue;
+                            cmd.CommandText = string.Format("UPDATE {0} SET {1} WHERE {2}",
+                                                            EscapeSqlIdentifier(tableName), sb.ToString(),
+                                                            BuildPrimaryKeySql(primaryKeyValuePairs, ref index));
 
-                            object value = i.Value.PropertyInfo.GetValue(poco, null);
-
-                            if (i.Value.VersionColumn)
+                            foreach (var keyValue in primaryKeyValuePairs)
                             {
-                                versionName = i.Key;
-                                versionValue = value;
-                                value = Convert.ToInt64(value) + 1;
+                                AddParam(cmd, keyValue.Value, _paramPrefix);
                             }
 
-                            // Build the sql
-                            if (index > 0)
-                                sb.Append(", ");
-                            sb.AppendFormat("{0} = {1}{2}", EscapeSqlIdentifier(i.Key), _paramPrefix, index++);
-
-                            // Store the parameter in the command
-                            AddParam(cmd, value, _paramPrefix);
-                        }
-
-                        cmd.CommandText = string.Format("UPDATE {0} SET {1} WHERE {2}",
-                                            EscapeSqlIdentifier(tableName), sb.ToString(), BuildPrimaryKeySql(primaryKeyValuePairs, ref index));
-
-                        foreach (var keyValue in primaryKeyValuePairs)
-                        {
-                            AddParam(cmd, keyValue.Value, _paramPrefix);
-                        }
-
-                        if (!string.IsNullOrEmpty(versionName))
-                        {
-                            cmd.CommandText += string.Format(" AND {0} = {1}{2}", EscapeSqlIdentifier(versionName), _paramPrefix, index++);
-                            AddParam(cmd, versionValue, _paramPrefix);
-                        }
-
-                        DoPreExecute(cmd);
-
-                        // Do it
-                        var result = cmd.ExecuteNonQuery();
-                        OnExecutedCommand(cmd);
-
-                        // Set Version
-                        if (!string.IsNullOrEmpty(versionName))
-                        {
-                            PocoColumn pc;
-                            if (pd.Columns.TryGetValue(versionName, out pc))
+                            if (!string.IsNullOrEmpty(versionName))
                             {
-                                pc.PropertyInfo.SetValue(poco, Convert.ChangeType(Convert.ToInt64(versionValue) + 1, pc.PropertyInfo.PropertyType), null);
+                                cmd.CommandText += string.Format(" AND {0} = {1}{2}", EscapeSqlIdentifier(versionName), _paramPrefix,
+                                                                 index++);
+                                AddParam(cmd, versionValue, _paramPrefix);
                             }
-                        }
 
-                        return result;
+                            DoPreExecute(cmd);
+
+                            // Do it
+                            var result = cmd.ExecuteNonQuery();
+                            OnExecutedCommand(cmd);
+
+                            // Set Version
+                            if (!string.IsNullOrEmpty(versionName))
+                            {
+                                PocoColumn pc;
+                                if (pd.Columns.TryGetValue(versionName, out pc))
+                                {
+                                    pc.PropertyInfo.SetValue(poco,
+                                                             Convert.ChangeType(Convert.ToInt64(versionValue) + 1,
+                                                                                pc.PropertyInfo.PropertyType), null);
+                                }
+                            }
+
+                            return result;
+                        }
+                    }
+                    finally
+                    {
+                        CloseSharedConnection();
                     }
                 }
-                finally
+                catch (Exception x)
                 {
-                    CloseSharedConnection();
+                    OnException(x);
+                    throw;
                 }
-            }
-            catch (Exception x)
-            {
-                OnException(x);
-                throw;
             }
         }
 

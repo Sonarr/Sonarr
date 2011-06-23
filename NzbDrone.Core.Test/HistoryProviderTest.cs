@@ -145,14 +145,13 @@ namespace NzbDrone.Core.Test
             var result = mocker.Resolve<HistoryProvider>().GetBestQualityInHistory(history.EpisodeId);
 
             //Assert
-            Assert.IsNotNull(result);
+            result.Should().NotBeNull();
             result.QualityType.Should().Be(QualityTypes.Bluray720p);
         }
 
         [Test]
         public void add_item()
         {
-            //Arange
             var mocker = new AutoMoqer();
             var db = MockLib.GetEmptyDatabase();
 
@@ -181,13 +180,14 @@ namespace NzbDrone.Core.Test
             var storedHistory = db.Fetch<History>();
 
             storedHistory.Should().HaveCount(1);
-            Assert.AreEqual(history.Date, storedHistory.First().Date);
-            Assert.AreEqual(history.EpisodeId, storedHistory.First().EpisodeId);
-            Assert.AreEqual(history.SeriesId, storedHistory.First().SeriesId);
-            Assert.AreEqual(history.NzbTitle, storedHistory.First().NzbTitle);
-            Assert.AreEqual(history.Indexer, storedHistory.First().Indexer);
-            Assert.AreEqual(history.Quality, storedHistory.First().Quality);
-            Assert.AreEqual(history.IsProper, storedHistory.First().IsProper);
+            history.Date.Should().BeWithin(TimeSpan.FromMinutes(1)).Before(storedHistory.First().Date);
+           
+            history.EpisodeId.Should().Be(storedHistory.First().EpisodeId);
+            history.SeriesId.Should().Be(storedHistory.First().SeriesId);
+            history.NzbTitle.Should().Be(storedHistory.First().NzbTitle);
+            history.Indexer.Should().Be(storedHistory.First().Indexer);
+            history.Quality.Should().Be(storedHistory.First().Quality);
+            history.IsProper.Should().Be(storedHistory.First().IsProper);
         }
     }
 }
