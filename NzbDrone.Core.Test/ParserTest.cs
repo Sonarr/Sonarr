@@ -2,6 +2,7 @@
 using System;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
 
@@ -94,6 +95,8 @@ namespace NzbDrone.Core.Test
         [TestCase("S07E23 - [WEBDL].mkv ", QualityTypes.WEBDL)]
         [TestCase("S07E23.mkv ", QualityTypes.HDTV)]
         [TestCase("S07E23 .avi ", QualityTypes.SDTV)]
+        [TestCase("WEEDS.S03E01-06.DUAL.XviD.Bluray.AC3.-HELLYWOOD.avi", QualityTypes.DVD)]
+        [TestCase("WEEDS.S03E01-06.DUAL.Bluray.AC3.-HELLYWOOD.avi", QualityTypes.Bluray720p)]
         public void quality_parse(string postTitle, object quality)
         {
             var result = Parser.ParseQuality(postTitle);
@@ -266,6 +269,74 @@ namespace NzbDrone.Core.Test
                 Assert.AreEqual("word" + word.ToLower() + "word", Parser.NormalizeTitle(dirty));
             }
 
+        }
+
+        [TestCase("Chuck - 4x05 - Title", "Chuck")]
+        [TestCase("Law & Order - 4x05 - Title", "laworder")]
+        public void parse_series_name(string postTitle, string title)
+        {
+            var result = Parser.ParseSeriesName(postTitle);
+            Assert.AreEqual(Parser.NormalizeTitle(title), result);
+        }
+
+        [TestCase("Chuck - 4x05 - Title [Proper]", true)]
+        [TestCase("Law & Order - 4x05 - Title", false)]
+        [TestCase("30.Rock.S04E05.asdjasdj.proper.", true)]
+        public void parse_proper(string postTitle, bool proper)
+        {
+            var result = Parser.ParseProper(postTitle);
+            Assert.AreEqual(proper, result);
+        }
+
+        [TestCase("Castle.2009.S01E14.English.HDTV.XviD-LOL", LanguageType.English)]
+        [TestCase("Castle.2009.S01E14.French.HDTV.XviD-LOL", LanguageType.French)]
+        [TestCase("Castle.2009.S01E14.Spanish.HDTV.XviD-LOL", LanguageType.Spanish)]
+        [TestCase("Castle.2009.S01E14.German.HDTV.XviD-LOL", LanguageType.German)]
+        [TestCase("Castle.2009.S01E14.Germany.HDTV.XviD-LOL", LanguageType.English)]
+        [TestCase("Castle.2009.S01E14.English.HDTV.XviD-LOL", LanguageType.Italian)]
+        [TestCase("Castle.2009.S01E14.Danish.HDTV.XviD-LOL", LanguageType.Danish)]
+        [TestCase("Castle.2009.S01E14.Dutch.HDTV.XviD-LOL", LanguageType.Dutch)]
+        [TestCase("Castle.2009.S01E14.Japanese.HDTV.XviD-LOL", LanguageType.Japanese)]
+        [TestCase("Castle.2009.S01E14.Cantonese.HDTV.XviD-LOL", LanguageType.Cantonese)]
+        [TestCase("Castle.2009.S01E14.Mandarin.HDTV.XviD-LOL", LanguageType.Mandarin)]
+        [TestCase("Castle.2009.S01E14.Korean.HDTV.XviD-LOL", LanguageType.Korean)]
+        [TestCase("Castle.2009.S01E14.Russian.HDTV.XviD-LOL", LanguageType.Russian)]
+        [TestCase("Castle.2009.S01E14.Polish.HDTV.XviD-LOL", LanguageType.Polish)]
+        [TestCase("Castle.2009.S01E14.Vietnamese.HDTV.XviD-LOL", LanguageType.Vietnamese)]
+        [TestCase("Castle.2009.S01E14.Swedish.HDTV.XviD-LOL", LanguageType.Swedish)]
+        [TestCase("Castle.2009.S01E14.Norwegian.HDTV.XviD-LOL", LanguageType.Norwegian)]
+        [TestCase("Castle.2009.S01E14.Finnish.HDTV.XviD-LOL", LanguageType.Finnish)]
+        [TestCase("Castle.2009.S01E14.Turkish.HDTV.XviD-LOL", LanguageType.Turkish)]
+        [TestCase("Castle.2009.S01E14.Portuguese.HDTV.XviD-LOL", LanguageType.Portuguese)]
+        public void parse_language(string postTitle, LanguageType language)
+        {
+            var result = Parser.ParseLanguage(postTitle);
+            Assert.AreEqual(language, result);
+        }
+        [Test]
+        [ExpectedException(typeof(ArgumentException), ExpectedMessage = "Path can not be null or empty")]
+        public void normalize_path_exception_empty()
+        {
+            Parser.NormalizePath("");
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException), ExpectedMessage = "Path can not be null or empty")]
+        public void normalize_path_exception_null()
+        {
+            Parser.NormalizePath(null);
+        }
+
+        [TestCase("Hawaii Five 0 S01E19 720p WEB DL DD5 1 H 264 NT", "Hawaii Five", 1)]
+        [TestCase("Chuck.4x05.HDTV.XviD-LOL", "Chuck", 4)]
+        [TestCase("S03E09 WS PDTV XviD FUtV", "", 3)]
+        [TestCase("5x10 WS PDTV XviD FUtV", "", 5)]
+        public void parse_season_info(string postTitle, string seriesName, int seasonNumber)
+        {
+            var result = Parser.ParseSeasonInfo(postTitle);
+
+            Assert.AreEqual(Parser.NormalizeTitle(seriesName), result.SeriesTitle);
+            Assert.AreEqual(seasonNumber, result.SeasonNumber);
         }
     }
 }
