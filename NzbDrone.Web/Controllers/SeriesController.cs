@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
+using MvcMiniProfiler;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Jobs;
 using NzbDrone.Core.Repository;
@@ -119,8 +120,11 @@ namespace NzbDrone.Web.Controllers
         [GridAction]
         public ActionResult _AjaxSeasonGrid(int seriesId, int seasonNumber)
         {
-            var episodes = GetEpisodeModels(_episodeProvider.GetEpisodesBySeason(seriesId, seasonNumber));
-            return View(new GridModel(episodes));
+            using (MiniProfiler.StepStatic("Controller"))
+            {
+                var episodes = GetEpisodeModels(_episodeProvider.GetEpisodesBySeason(seriesId, seasonNumber));
+                return View(new GridModel(episodes));
+            }
         }
 
         public ActionResult SearchForSeries(string seriesName)
@@ -240,7 +244,7 @@ namespace NzbDrone.Web.Controllers
                                      SeasonNumber = e.SeasonNumber,
                                      Title = e.Title,
                                      Overview = e.Overview,
-                                     AirDate = e.AirDate,
+                                     AirDate = e.AirDate.Value,
                                      Path = episodePath,
                                      EpisodeFileId = episodeFileId,
                                      Status = e.Status.ToString(),

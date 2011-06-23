@@ -72,7 +72,7 @@ namespace NzbDrone.Core.Providers
         {
             var allEpisodes = _episodeProvider.GetEpisodeBySeries(seriesId).ToList();
 
-            var episodeTotal = allEpisodes.Where(e => !e.Ignored && e.AirDate <= DateTime.Today && e.AirDate.Year > 1900).ToList();
+            var episodeTotal = allEpisodes.Where(e => !e.Ignored && e.AirDate != null && e.AirDate <= DateTime.Today).ToList();
             var avilableEpisodes = episodeTotal.Where(e => e.EpisodeFileId > 0).ToList();
 
             return new Tuple<int, int>(avilableEpisodes.Count, episodeTotal.Count);

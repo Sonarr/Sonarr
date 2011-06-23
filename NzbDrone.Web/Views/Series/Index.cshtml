@@ -6,36 +6,7 @@
     Series
 }
 
-<script type="text/javascript" src="../../Scripts/doTimeout.js"></script>
-<script>
-    (function ($) {
-        $.fn.episodeProgress = function (episodes, totalEpisodes) {
-            return this.each(
-                function () {
-			        var div = $(this);
-			        var progressBar = div.find(".progress");
 
-			        var width = Math.round(episodes / totalEpisodes * 100);
-
-			        progressBar.css("width", width + "%");
-
-			        if (width > 97) {
-			            progressBar.css("-khtml-border-top-right-radius", "7px");
-			            progressBar.css("border-top-right-radius", "7px");
-			            progressBar.css("-moz-border-top-right-radius", "7px");
-			            progressBar.css("-webkit-border-top-right-radius", "7px");
-
-			            progressBar.css("-khtml-border-bottom-right-radius", "7px");
-			            progressBar.css("border-bottom-right-radius", "7px");
-			            progressBar.css("-moz-border-bottom-right-radius", "7px");
-			            progressBar.css("-webkit-border-bottom-right-radius", "7px");
-			        }
-
-			        div.find(".progressText").html(episodes + " / " + totalEpisodes);
-			    });
-            };
-        })(jQuery);
-</script>
 
 <style>
 /* progress bar container */
@@ -191,4 +162,35 @@
 
         $("#progressbar_" + seriesId).episodeProgress(episodeFileCount, episodeCount);
     }
+</script>
+
+<script type="text/javascript" src="../../Scripts/doTimeout.js"></script>
+<script>
+    (function ($) {
+        $.fn.episodeProgress = function (episodes, totalEpisodes) {
+            return this.each(
+                function () {
+                    var div = $(this);
+                    var progressBar = div.find(".progress");
+
+                    var width = Math.round(episodes / totalEpisodes * 100);
+
+                    progressBar.css("width", width + "%");
+
+                    if (width > 97) {
+                        progressBar.css("-khtml-border-top-right-radius", "7px");
+                        progressBar.css("border-top-right-radius", "7px");
+                        progressBar.css("-moz-border-top-right-radius", "7px");
+                        progressBar.css("-webkit-border-top-right-radius", "7px");
+
+                        progressBar.css("-khtml-border-bottom-right-radius", "7px");
+                        progressBar.css("border-bottom-right-radius", "7px");
+                        progressBar.css("-moz-border-bottom-right-radius", "7px");
+                        progressBar.css("-webkit-border-bottom-right-radius", "7px");
+                    }
+
+                    div.find(".progressText").html(episodes + " / " + totalEpisodes);
+                });
+        };
+    })(jQuery);
 </script>

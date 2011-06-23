@@ -113,9 +113,9 @@ namespace NzbDrone.Core.Providers
             foreach (var episodeNumber in parseResult.EpisodeNumbers)
             {
                 var episodeInfo = GetEpisode(parseResult.Series.SeriesId, parseResult.SeasonNumber, episodeNumber);
-                if (episodeInfo == null)
+                if (episodeInfo == null && parseResult.AirDate != null)
                 {
-                    episodeInfo = GetEpisode(parseResult.Series.SeriesId, parseResult.AirDate);
+                    episodeInfo = GetEpisode(parseResult.Series.SeriesId, parseResult.AirDate.Value);
                 }
                 //if still null we should add the temp episode
                 if (episodeInfo == null && autoAddNew)
@@ -209,11 +209,15 @@ namespace NzbDrone.Core.Providers
 
                     episodeToUpdate.SeriesId = series.SeriesId;
                     episodeToUpdate.TvDbEpisodeId = episode.Id;
-                    episodeToUpdate.AirDate = episode.FirstAired.Date;
                     episodeToUpdate.EpisodeNumber = episode.EpisodeNumber;
                     episodeToUpdate.SeasonNumber = episode.SeasonNumber;
                     episodeToUpdate.Title = episode.EpisodeName;
                     episodeToUpdate.Overview = episode.Overview;
+
+                    if (episode.FirstAired.Year > 1900)
+                    {
+                        episodeToUpdate.AirDate = episode.FirstAired.Date;
+                    }
 
                     successCount++;
                 }

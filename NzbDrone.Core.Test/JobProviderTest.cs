@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Test
             var settings = timerProvider.All();
             Assert.IsNotEmpty(settings);
             Assert.AreNotEqual(DateTime.MinValue, settings[0].LastExecution);
-            Assert.IsTrue(settings[0].Success);
+            settings[0].Success.Should().BeTrue();
         }
 
         [Test]
@@ -75,9 +75,8 @@ namespace NzbDrone.Core.Test
             var firstRun = timerProvider.RunScheduled();
             var secondRun = timerProvider.RunScheduled();
 
-            Assert.IsTrue(firstRun);
-            Assert.IsTrue(secondRun);
-
+            firstRun.Should().BeTrue();
+            secondRun.Should().BeTrue();
         }
 
         [Test]
@@ -97,9 +96,8 @@ namespace NzbDrone.Core.Test
             Thread.Sleep(2000);
             var secondRun = timerProvider.QueueJob(typeof(FakeJob));
 
-            Assert.IsTrue(firstRun);
-            Assert.IsTrue(secondRun);
-
+            firstRun.Should().BeTrue();
+            secondRun.Should().BeTrue();
         }
 
         [Test]
@@ -142,8 +140,8 @@ namespace NzbDrone.Core.Test
             Thread.Sleep(2000);
             var secondRun = timerProvider.QueueJob(typeof(BrokenJob));
 
-            Assert.IsTrue(firstRun);
-            Assert.IsTrue(secondRun);
+            firstRun.Should().BeTrue();
+            secondRun.Should().BeTrue();
             Thread.Sleep(2000);
             ExceptionVerification.ExcpectedErrors(2);
         }
@@ -174,7 +172,7 @@ namespace NzbDrone.Core.Test
             thread1.Join();
             thread2.Join();
 
-            Assert.IsTrue(firstRun);
+            firstRun.Should().BeTrue();
             Assert.IsFalse(secondRun);
 
         }
@@ -230,13 +228,11 @@ namespace NzbDrone.Core.Test
             //Assert
 
             timers.Should().HaveCount(1);
-            Assert.AreEqual(fakeTimer.DefaultInterval, timers[0].Interval);
-            Assert.AreEqual(fakeTimer.Name, timers[0].Name);
-            Assert.AreEqual(fakeTimer.GetType().ToString(), timers[0].TypeName);
-            Assert.AreEqual(DateTime.MinValue, timers[0].LastExecution);
-            Assert.IsTrue(timers[0].Enable);
-
-
+            timers[0].Interval.Should().Be(fakeTimer.DefaultInterval);
+            timers[0].Name.Should().Be(fakeTimer.Name);
+            timers[0].TypeName.Should().Be(fakeTimer.GetType().ToString());
+            timers[0].LastExecution.Should().HaveYear(2000);
+            timers[0].Enable.Should().BeTrue();
         }
 
         [Test]
@@ -267,7 +263,7 @@ namespace NzbDrone.Core.Test
 
             //Assert
             timers.Should().HaveCount(1);
-            Assert.IsTrue(timers[0].Enable);
+            timers[0].Enable.Should().BeTrue();
         }
 
         [Test]
@@ -364,8 +360,8 @@ namespace NzbDrone.Core.Test
 
             //Assert
             var settings = timerProvider.All();
-            Assert.IsNotEmpty(settings);
-            Assert.AreEqual(DateTime.MinValue, settings[0].LastExecution);
+            settings.Should().NotBeEmpty();
+            settings[0].LastExecution.Should().HaveYear(2000);
         }
 
         [Test]

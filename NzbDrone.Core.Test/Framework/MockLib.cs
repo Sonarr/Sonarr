@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Test.Framework
 
             if (String.IsNullOrWhiteSpace(fileName))
             {
-                fileName = Guid.NewGuid() + ".db";
+                fileName = Guid.NewGuid() + ".sdf";
             }
 
             var connectionString = Connection.GetConnectionString(fileName);

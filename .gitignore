@@ -34,3 +34,4 @@ _ReSharper*/
 *.db
 *Web.Publish.xml
 NzbDrone.Web/NzbDrone.Web.Publish.xml
+*.sdf

@@ -49,14 +49,15 @@ namespace NzbDrone.Core.Providers
             if (!ignoreSpecials)
                 seasonNumber = -1;
 
-            var series = _database.Fetch<Series, QualityProfile>(@"SELECT Series.*, COUNT (NULLIF(Ignored, 1)) AS EpisodeCount,
-                                                    SUM(CASE WHEN Ignored = 0 AND EpisodeFileId > 0 THEN 1 ELSE 0 END) as EpisodeFileCount,
-                                                    COUNT (DISTINCT(NULLIF(SeasonNumber, @0))) as SeasonCount,
-                                                    QualityProfiles.*
-                                                    FROM Series
-                                                    INNER JOIN QualityProfiles ON Series.QualityProfileId = QualityProfiles.QualityProfileId
-                                                    JOIN Episodes ON Series.SeriesId = Episodes.SeriesId
-                                                    GROUP BY seriesId", seasonNumber);
+            var series = _database
+      .Fetch<Series, QualityProfile>(@"SELECT Series.*, SUM(CASE WHEN Ignored = 0 THEN 1 ELSE 0 END) AS EpisodeCount,
+SUM(CASE WHEN Ignored = 0 AND EpisodeFileId > 0 THEN 1 ELSE 0 END) as EpisodeFileCount,
+COUNT (DISTINCT(CASE WHEN SeasonNumber = 0 THEN null ELSE SeasonNumber END)) as SeasonCount,
+QualityProfiles.*
+FROM Series
+INNER JOIN QualityProfiles ON Series.QualityProfileId = QualityProfiles.QualityProfileId
+JOIN Episodes ON Series.SeriesId = Episodes.SeriesId
+GROUP BY seriesId");
 
             return series;
         }

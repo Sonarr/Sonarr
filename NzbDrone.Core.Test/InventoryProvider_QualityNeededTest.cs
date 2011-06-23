@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using AutoMoq;
 using FizzWare.NBuilder;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Model;
@@ -193,7 +194,7 @@ namespace NzbDrone.Core.Test
             bool result = mocker.Resolve<InventoryProvider>().IsQualityNeeded(parseResultSingle);
 
             //Assert
-            Assert.IsTrue(result);
+            result.Should().BeTrue();
             mocker.VerifyAllMocks();
         }
 
@@ -219,7 +220,7 @@ namespace NzbDrone.Core.Test
             bool result = mocker.Resolve<InventoryProvider>().IsQualityNeeded(parseResultSingle);
 
             //Assert
-            Assert.IsTrue(result);
+            result.Should().BeTrue();
             mocker.VerifyAllMocks();
         }
 

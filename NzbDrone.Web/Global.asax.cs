@@ -12,6 +12,7 @@ using Ninject.Web.Mvc;
 using NLog;
 using NzbDrone.Core;
 using NzbDrone.Core.Instrumentation;
+using Telerik.Web.Mvc;
 
 namespace NzbDrone.Web
 {
@@ -36,7 +37,7 @@ namespace NzbDrone.Web
         protected override void OnApplicationStarted()
         {
             base.OnApplicationStarted();
-
+            WebAssetDefaultSettings.UseTelerikContentDeliveryNetwork = true;
             RegisterRoutes(RouteTable.Routes);
             //base.OnApplicationStarted();
             AreaRegistration.RegisterAllAreas();

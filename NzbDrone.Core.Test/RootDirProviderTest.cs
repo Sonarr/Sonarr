@@ -54,10 +54,9 @@ namespace NzbDrone.Core.Test
 
             //Assert
             var rootDirs = rootDirProvider.GetAll();
-            Assert.IsNotEmpty(rootDirs);
-
+            rootDirs.Should().NotBeEmpty();
             rootDirs.Should().HaveCount(1);
-            Assert.AreEqual(path, rootDirs.First().Path);
+            path.Should().Be(rootDirs.First().Path);
         }
 
 
@@ -77,9 +76,8 @@ namespace NzbDrone.Core.Test
 
             //Assert
             var rootDirs = rootDirProvider.GetAll();
-            Assert.IsNotEmpty(rootDirs);
             rootDirs.Should().HaveCount(1);
-            Assert.AreEqual(newPath, rootDirs.First().Path);
+            newPath.Should().Be(rootDirs.First().Path);
         }
 
         [Test]
@@ -115,8 +113,8 @@ namespace NzbDrone.Core.Test
 
             //Assert
             var rootDir = rootDirProvider.GetRootDir(id);
-            Assert.AreEqual(1, rootDir.Id);
-            Assert.AreEqual(path, rootDir.Path);
+            rootDir.Id.Should().Be(1);
+            rootDir.Path.Should().Be(path);
         }
 
         [Test]
@@ -130,8 +128,8 @@ namespace NzbDrone.Core.Test
 
             var result = mocker.Resolve<RootDirProvider>().GetUnmappedFolders(path);
 
-            Assert.IsNotNull(result);
-            Assert.IsEmpty(result);
+            result.Should().NotBeNull();
+            result.Should().BeEmpty();
 
             mocker.VerifyAllMocks();
         }

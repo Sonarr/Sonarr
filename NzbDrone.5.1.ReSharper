@@ -70,4 +70,75 @@
       <Abbreviation Text="SQ" />
     </Naming2>
   </CodeStyleSettings>
+  <CustomStructuralPatterns>
+    <Pattern Severity="SUGGESTION">
+      <Comment>Replace with FluentAssertion</Comment>
+      <ReplacePattern>$arg$.Should().BeTrue();</ReplacePattern>
+      <SearchPattern><![CDATA[Assert.IsTrue($arg$);
+]]></SearchPattern>
+      <Params />
+      <Placeholders>
+        <ArgumentPlaceholder Name="excpected" Minimal="1" Maximal="1" />
+      </Placeholders>
+    </Pattern>
+    <Pattern Severity="SUGGESTION">
+      <Comment>Replace with FluentAssertion</Comment>
+      <ReplacePattern>$arg$.Should().BeFalse();</ReplacePattern>
+      <SearchPattern><![CDATA[Assert.IsFalse($arg$);
+]]></SearchPattern>
+      <Params />
+      <Placeholders>
+        <ArgumentPlaceholder Name="excpected" Minimal="1" Maximal="1" />
+      </Placeholders>
+    </Pattern>
+    <Pattern Severity="SUGGESTION">
+      <ReplacePattern>$actual$.Should().Be($excpected$);</ReplacePattern>
+      <SearchPattern><![CDATA[Assert.AreEqual($actual$, $excpected$);
+]]></SearchPattern>
+      <Params>
+        <IgnoreBracesInSingleStatementBlocks>False</IgnoreBracesInSingleStatementBlocks>
+        <IgnoreParanthesisInExpressions>False</IgnoreParanthesisInExpressions>
+        <SmartMatchAssociativeExpressions>False</SmartMatchAssociativeExpressions>
+        <TreatReversedBinaryExpressionsEquivalent>Never</TreatReversedBinaryExpressionsEquivalent>
+      </Params>
+      <Placeholders>
+        <ArgumentPlaceholder Name="excpected" Minimal="1" Maximal="1" />
+        <ArgumentPlaceholder Name="actual" Minimal="1" Maximal="1" />
+      </Placeholders>
+    </Pattern>
+    <Pattern Severity="HINT">
+      <ReplacePattern>$excpected$.Should().Be($actual$);</ReplacePattern>
+      <SearchPattern><![CDATA[$actual$.Should().Be($excpected$);
+]]></SearchPattern>
+      <Params />
+      <Placeholders>
+        <ArgumentPlaceholder Name="excpected" Minimal="1" Maximal="1" />
+        <ArgumentPlaceholder Name="actual" Minimal="1" Maximal="1" />
+      </Placeholders>
+    </Pattern>
+    <Pattern Severity="SUGGESTION">
+      <ReplacePattern>$arg$.Should().NotBeNull();</ReplacePattern>
+      <SearchPattern>Assert.IsNotNull($arg$);</SearchPattern>
+      <Params />
+      <Placeholders>
+        <ArgumentPlaceholder Name="arg" Minimal="1" Maximal="1" />
+      </Placeholders>
+    </Pattern>
+    <Pattern Severity="SUGGESTION">
+      <ReplacePattern>$arg$.Should().NotBeEmpty();</ReplacePattern>
+      <SearchPattern>Assert.IsNotEmpty($arg$);</SearchPattern>
+      <Params />
+      <Placeholders>
+        <ArgumentPlaceholder Name="arg" Minimal="1" Maximal="1" />
+      </Placeholders>
+    </Pattern>
+    <Pattern Severity="SUGGESTION">
+      <ReplacePattern>$arg$.Should().BeEmpty();</ReplacePattern>
+      <SearchPattern>Assert.IsEmpty($arg$);</SearchPattern>
+      <Params />
+      <Placeholders>
+        <ArgumentPlaceholder Name="arg" Minimal="1" Maximal="1" />
+      </Placeholders>
+    </Pattern>
+  </CustomStructuralPatterns>
 </Configuration>

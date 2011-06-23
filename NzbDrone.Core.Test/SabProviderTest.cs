@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using AutoMoq;
 using FizzWare.NBuilder;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Model;
@@ -63,7 +64,7 @@ namespace NzbDrone.Core.Test
                 "http://www.nzbclub.com/nzb_download.aspx?mid=1950232", "This is an Nzb");
 
             //Assert
-            Assert.IsTrue(result);
+            result.Should().BeTrue();
         }
 
 
@@ -110,7 +111,7 @@ namespace NzbDrone.Core.Test
                 "http://www.newzbin.com/browse/post/6107863/nzb", "This is an Nzb");
 
             //Assert
-            Assert.IsTrue(result);
+            result.Should().BeTrue();
         }
 
         [Test]
@@ -187,7 +188,7 @@ namespace NzbDrone.Core.Test
             bool result = mocker.Resolve<SabProvider>().IsInQueue("Ubuntu Test");
 
             //Assert
-            Assert.IsTrue(result);
+            result.Should().BeTrue();
         }
 
         [Test]
@@ -332,7 +333,7 @@ namespace NzbDrone.Core.Test
                 "http://www.newzbin.com/browse/post/6107863/nzb", "Added by unit tests.");
 
             //Assert
-            Assert.IsTrue(result);
+            result.Should().BeTrue();
         }
     }
 }

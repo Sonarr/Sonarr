@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Test
         [TearDown]
         public void TearDown()
         {
-            var filesToDelete = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.db", SearchOption.AllDirectories);
+            var filesToDelete = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.sdf", SearchOption.AllDirectories);
             foreach (var file in filesToDelete)
             {
                 try

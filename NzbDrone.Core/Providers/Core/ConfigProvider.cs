@@ -278,7 +278,7 @@ namespace NzbDrone.Core.Providers.Core
         {
             string value;
 
-            var dbValue = _database.SingleOrDefault<Config>("WHERE Key=@0", key);
+            var dbValue = _database.SingleOrDefault<Config>("WHERE [Key] =@0", key);
 
             if (dbValue != null && !String.IsNullOrEmpty(dbValue.Value))
                 return dbValue.Value;
@@ -308,7 +308,7 @@ namespace NzbDrone.Core.Providers.Core
 
             Logger.Debug("Writing Setting to file. Key:'{0}' Value:'{1}'", key, value);
 
-            var dbValue = _database.SingleOrDefault<Config>("WHERE KEY=@0", key);
+            var dbValue = _database.SingleOrDefault<Config>("WHERE [KEY]=@0", key);
 
             if (dbValue == null)
             {
@@ -317,7 +317,11 @@ namespace NzbDrone.Core.Providers.Core
             else
             {
                 dbValue.Value = value;
-                _database.Update(dbValue);
+                using (var tran = _database.GetTransaction())
+                {
+                    _database.Update(dbValue);
+                    tran.Complete();
+                }
             }
         }
     }

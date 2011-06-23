@@ -2,6 +2,7 @@
 // ReSharper disable RedundantUsingDirective
 using System;
 using FizzWare.NBuilder;
+using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository;
@@ -107,14 +108,14 @@ namespace NzbDrone.Core.Test
         public void low_air_date()
         {
             Episode episode = Builder<Episode>.CreateNew()
-                .With(e => e.AirDate = DateTime.Now.AddYears(-200))
+                .With(e => e.AirDate = DateTime.Now.AddDays(20))
                 .With(e => e.Ignored = false)
                 .With(e => e.EpisodeFileId = 0)
                 .With(e => e.GrabDate = null)
                 .Build();
 
 
-            Assert.AreEqual(EpisodeStatusType.NotAired, episode.Status);
+            episode.Status.Should().Be(EpisodeStatusType.NotAired);
         }
     }
 }

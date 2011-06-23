@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using FluentAssertions;
+using NUnit.Framework;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
@@ -55,9 +56,9 @@ namespace NzbDrone.Core.Test
             var first = new Quality(QualityTypes.Bluray1080p, true);
             var second = new Quality(QualityTypes.Bluray1080p, true);
 
-            Assert.IsTrue(first == second);
-            Assert.IsTrue(first >= second);
-            Assert.IsTrue(first <= second);
+            (first == second).Should().BeTrue();
+            (first >= second).Should().BeTrue();
+            (first <= second).Should().BeTrue();
         }
 
         [Test]
@@ -66,7 +67,7 @@ namespace NzbDrone.Core.Test
             var first = new Quality(QualityTypes.Bluray1080p, true);
             var second = new Quality(QualityTypes.Unknown, true);
 
-            Assert.IsFalse(first == second);
+            (first == second).Should().BeFalse();
         }
 
         [Test]
@@ -75,7 +76,7 @@ namespace NzbDrone.Core.Test
             var first = new Quality(QualityTypes.Bluray1080p, true);
             var second = new Quality(QualityTypes.Bluray1080p, false);
 
-            Assert.IsFalse(first == second);
+            (first == second).Should().BeFalse();
         }
 
 
@@ -94,7 +95,7 @@ namespace NzbDrone.Core.Test
             var first = new Quality(QualityTypes.Bluray1080p, true);
             var second = new Quality(QualityTypes.Unknown, true);
 
-            Assert.IsTrue(first != second);
+            (first != second).Should().BeTrue();
         }
 
         [Test]
@@ -103,7 +104,7 @@ namespace NzbDrone.Core.Test
             var first = new Quality(QualityTypes.Bluray1080p, true);
             var second = new Quality(QualityTypes.Bluray1080p, false);
 
-            Assert.IsTrue(first != second);
+            (first != second).Should().BeTrue();
         }
 
         [Test]
@@ -112,8 +113,8 @@ namespace NzbDrone.Core.Test
             var first = new Quality(QualityTypes.DVD, true);
             var second = new Quality(QualityTypes.Bluray1080p, true);
 
-            Assert.IsTrue(first < second);
-            Assert.IsTrue(first <= second);
+            (first < second).Should().BeTrue();
+            (first <= second).Should().BeTrue();
         }
 
         [Test]
@@ -122,8 +123,8 @@ namespace NzbDrone.Core.Test
             var first = new Quality(QualityTypes.DVD, true);
             var second = new Quality(QualityTypes.Bluray1080p, true);
 
-            Assert.IsTrue(second > first);
-            Assert.IsTrue(second >= first);
+            (second > first).Should().BeTrue();
+            (second >= first).Should().BeTrue();
         }
 
     }

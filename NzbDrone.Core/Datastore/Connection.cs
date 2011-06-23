@@ -2,6 +2,7 @@
 using System.Data;
 using System.Data.Common;
 using System.Data.SQLite;
+using System.Data.SqlServerCe;
 using System.IO;
 using MvcMiniProfiler.Data;
 using PetaPoco;
@@ -21,14 +22,15 @@ namespace NzbDrone.Core.Datastore
 
         public static string GetConnectionString(string path)
         {
-            return String.Format("Data Source={0};Version=3;Cache Size=30000;Pooling=true;Default Timeout=2", path);
+            //return String.Format("Data Source={0};Version=3;Cache Size=30000;Pooling=true;Default Timeout=2", path);
+            return String.Format("Data Source={0}", path);
         }
 
         public static String MainConnectionString
         {
             get
             {
-                return GetConnectionString(Path.Combine(AppDataPath.FullName, "nzbdrone.db"));
+                return GetConnectionString(Path.Combine(AppDataPath.FullName, "nzbdrone.sdf"));
             }
         }
 
@@ -36,7 +38,7 @@ namespace NzbDrone.Core.Datastore
         {
             get
             {
-                return GetConnectionString(Path.Combine(AppDataPath.FullName, "log.db"));
+                return GetConnectionString(Path.Combine(AppDataPath.FullName, "log.sdf"));
             }
         }
 
@@ -44,9 +46,9 @@ namespace NzbDrone.Core.Datastore
         public static IDatabase GetPetaPocoDb(string connectionString, Boolean profiled = true)
         {
             MigrationsHelper.Run(connectionString, true);
-            var sqliteConnection = new SQLiteConnection(connectionString);
+            var sqliteConnection = new SqlCeConnection(connectionString);
             DbConnection connection = sqliteConnection;
-            
+
             if (profiled)
             {
                 connection = ProfiledDbConnection.Get(sqliteConnection);
