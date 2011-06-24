@@ -142,7 +142,7 @@
 
 <script type="text/javascript">
 
-    $('#ShowName').live('change', function () { createExamples(); });
+    $('#SeriesName').live('change', function () { createExamples(); });
     $('#EpisodeName').live('change', function () { createExamples(); });
     $('#ReplaceSpaces').live('change', function () { createExamples(); });
     $('#AppendQuality').live('change', function () { createExamples(); });
@@ -163,8 +163,8 @@
         if ($("#SeparatorStyle option:selected").val() == 1)
             separator = ' ';
 
-        if ($('#ShowName').attr('checked')) {
-            result += 'Show Name';
+        if ($('#SeriesName').attr('checked')) {
+            result += 'Series Name';
             result += separator;
         }
         
@@ -194,8 +194,8 @@
         if ($("#SeparatorStyle option:selected").val() == 1)
             separator = ' ';
 
-        if ($('#ShowName').attr('checked')) {
-            result += 'Show Name';
+        if ($('#SeriesName').attr('checked')) {
+            result += 'Series Name';
             result += separator;
         }
         

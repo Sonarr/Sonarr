@@ -106,22 +106,15 @@ namespace NzbDrone.Core
                     else
                     {
                         //Try to Parse as a daily show
-                        if (airyear > 0)
+                        var airmonth = Convert.ToInt32(match[0].Groups["airmonth"].Value);
+                        var airday = Convert.ToInt32(match[0].Groups["airday"].Value);
+
+                        parsedEpisode = new EpisodeParseResult
                         {
-                            var airmonth = Convert.ToInt32(match[0].Groups["airmonth"].Value);
-                            var airday = Convert.ToInt32(match[0].Groups["airday"].Value);
-
-                            parsedEpisode = new EpisodeParseResult
-                            {
-                                CleanTitle = seriesName,
-                                AirDate = new DateTime(airyear, airmonth, airday),
-                                Language = ParseLanguage(simpleTitle)
-                            };
-                        }
-
-                        //Something went wrong with this one... return null
-                        else
-                            return null;
+                            CleanTitle = seriesName,
+                            AirDate = new DateTime(airyear, airmonth, airday),
+                            Language = ParseLanguage(simpleTitle)
+                        };
                     }
 
                     parsedEpisode.Quality = ParseQuality(title);
@@ -313,65 +306,67 @@ namespace NzbDrone.Core
 
         internal static LanguageType ParseLanguage(string title)
         {
-            if (title.ToLower().Contains("english"))
+            var lowerTitle = title.ToLower();
+
+            if (lowerTitle.Contains("english"))
                 return LanguageType.English;
 
-            if (title.ToLower().Contains("french"))
+            if (lowerTitle.Contains("french"))
                 return LanguageType.French;
 
-            if (title.ToLower().Contains("spanish"))
+            if (lowerTitle.Contains("spanish"))
                 return LanguageType.Spanish;
 
-            if (title.ToLower().Contains("german"))
+            if (lowerTitle.Contains("german"))
             {
                 //Make sure it doesn't contain Germany (Since we're not using REGEX for all this)
-                if (!title.ToLower().Contains("germany"))
+                if (!lowerTitle.Contains("germany"))
                     return LanguageType.German;
             }
 
-            if (title.ToLower().Contains("italian"))
+            if (lowerTitle.Contains("italian"))
                 return LanguageType.Italian;
 
-            if (title.ToLower().Contains("danish"))
+            if (lowerTitle.Contains("danish"))
                 return LanguageType.Danish;
 
-            if (title.ToLower().Contains("dutch"))
+            if (lowerTitle.Contains("dutch"))
                 return LanguageType.Dutch;
 
-            if (title.ToLower().Contains("japanese"))
+            if (lowerTitle.Contains("japanese"))
                 return LanguageType.Japanese;
 
-            if (title.ToLower().Contains("cantonese"))
+            if (lowerTitle.Contains("cantonese"))
                 return LanguageType.Cantonese;
 
-            if (title.ToLower().Contains("mandarin"))
+            if (lowerTitle.Contains("mandarin"))
                 return LanguageType.Mandarin;
 
-            if (title.ToLower().Contains("korean"))
+            if (lowerTitle.Contains("korean"))
                 return LanguageType.Korean;
 
-            if (title.ToLower().Contains("russian"))
+            if (lowerTitle.Contains("russian"))
                 return LanguageType.Russian;
 
-            if (title.ToLower().Contains("polish"))
+            if (lowerTitle.Contains("polish"))
                 return LanguageType.Polish;
 
-            if (title.ToLower().Contains("vietnamese"))
+            if (lowerTitle.Contains("vietnamese"))
                 return LanguageType.Vietnamese;
 
-            if (title.ToLower().Contains("swedish"))
+            if (lowerTitle.Contains("swedish"))
                 return LanguageType.Swedish;
 
-            if (title.ToLower().Contains("norwegian"))
+            if (lowerTitle.Contains("norwegian"))
                 return LanguageType.Norwegian;
 
-            if (title.ToLower().Contains("finnish"))
+            if (lowerTitle.Contains("finnish"))
                 return LanguageType.Finnish;
 
-            if (title.ToLower().Contains("turkish"))
+            if (lowerTitle.Contains("turkish"))
                 return LanguageType.Turkish;
 
-            if (title.ToLower().Contains("portuguese"))
+            if (lowerTitle.Contains("portuguese"))
                 return LanguageType.Portuguese;
 
             return LanguageType.English;

@@ -126,10 +126,10 @@ namespace NzbDrone.Web.Controllers
         {
             try
             {
-                var path =
-                    rootPath.Replace('|', Path.DirectorySeparatorChar).Replace('^', Path.VolumeSeparatorChar).Replace(
-                        '`', '\'') +
-                    Path.DirectorySeparatorChar + MediaFileProvider.CleanFilename(seriesName);
+                var path = Path.Combine(rootPath.Replace('|', Path.DirectorySeparatorChar)
+                                            .Replace('^', Path.VolumeSeparatorChar)
+                                            .Replace('`', '\''),
+                                            MediaFileProvider.CleanFilename(seriesName));
 
                 //Create the folder for the new series and then Add it
                 _diskProvider.CreateDirectory(path);
