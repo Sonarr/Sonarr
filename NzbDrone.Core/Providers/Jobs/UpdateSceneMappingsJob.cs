@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Providers.Jobs
 
         public UpdateSceneMappingsJob()
         {
-            
+
         }
 
         public string Name
@@ -28,12 +28,7 @@ namespace NzbDrone.Core.Providers.Jobs
 
         public virtual void Start(ProgressNotification notification, int targetId)
         {
-            notification.CurrentMessage = "Updating Scene Mappings";
-            if (_sceneNameMappingProvider.UpdateMappings())
-                notification.CurrentMessage = "Scene Mappings Completed";
-
-            else
-                notification.CurrentMessage = "Scene Mappings Failed";
+            _sceneNameMappingProvider.UpdateMappings();
         }
     }
 }

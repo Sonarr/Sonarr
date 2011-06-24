@@ -1,1 +1,0 @@
-"C:\Program Files\Gallio\bin\Gallio.Echo.exe" /rt:XHTML /sr /rfp:AttachmentContentDisposition=Inline /rnf:mtest-report /rd:c:\report\ /v:Quiet /np NzbDrone.Core.Test\bin\Release\NzbDrone.Core.Test.dll

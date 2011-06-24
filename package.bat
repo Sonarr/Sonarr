@@ -15,6 +15,7 @@ xcopy NzbDrone.Web\Views\*.*  %TARGET%\NzbDrone.Web\Views\ /E /V /I /Y
 
 del %TARGET%\NzbDrone.Web\bin\*.xml /q
 del %TARGET%\NzbDrone.Web\bin\ninject*.pdb /q
+del %TARGET%\NzbDrone.Web\bin\Mvc*.pdb /q
 
 xcopy NzbDrone.Web\log.config  %TARGET%\NzbDrone.Web\
 xcopy NzbDrone.Web\Global.asax  %TARGET%\NzbDrone.Web\
