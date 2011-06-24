@@ -4,123 +4,43 @@
         <name>Migrator.Framework</name>
     </assembly>
     <members>
-        <member name="T:Migrator.Framework.Migration">
+        <member name="T:Migrator.Framework.MigrationAttribute">
             <summary>
-            A migration is a group of transformation applied to the database schema
-            (or sometimes data) to port the database from one version to another.
-            The <c>Up()</c> method must apply the modifications (eg.: create a table)
-            and the <c>Down()</c> method must revert, or rollback the modifications
-            (eg.: delete a table).
-            <para>
-            Each migration must be decorated with the <c>[Migration(0)]</c> attribute.
-            Each migration number (0) must be unique, or else a 
-            <c>DuplicatedVersionException</c> will be trown.
-            </para>
-            <para>
-            All migrations are executed inside a transaction. If an exception is
-            thrown, the transaction will be rolledback and transformations wont be
-            applied.
-            </para>
-            <para>
-            It is best to keep a limited number of transformation inside a migration
-            so you can easely move from one version of to another with fine grain
-            modifications.
-            You should give meaningful name to the migration class and prepend the
-            migration number to the filename so they keep ordered, eg.: 
-            <c>002_CreateTableTest.cs</c>.
-            </para>
-            <para>
-            Use the <c>Database</c> property to apply transformation and the
-            <c>Logger</c> property to output informations in the console (or other).
-            For more details on transformations see
-            <see cref="T:Migrator.Framework.ITransformationProvider">ITransformationProvider</see>.
-            </para>
-            </summary>
-            <example>
-            The following migration creates a new Customer table.
-            (File <c>003_AddCustomerTable.cs</c>)
-            <code>
-            [Migration(3)]
-            public class AddCustomerTable : Migration
-            {
-            	public override void Up()
-            	{
-            		Database.AddTable("Customer",
-            	                  new Column("Name", typeof(string), 50),
-            	                  new Column("Address", typeof(string), 100)
-            	                 );
-            	}
-            	public override void Down()
-            	{
-            		Database.RemoveTable("Customer");
-            	}
-            }
-            </code>
-            </example>
-        </member>
-        <member name="M:Migrator.Framework.IMigration.Up">
-            <summary>
-            Defines tranformations to port the database to the current version.
+            Describe a migration
             </summary>
         </member>
-        <member name="M:Migrator.Framework.IMigration.AfterUp">
+        <member name="M:Migrator.Framework.MigrationAttribute.#ctor(System.Int64)">
             <summary>
-            This is run after the Up transaction has been committed
+            Describe the migration
+            </summary>
+            <param name="version">The unique version of the migration.</param>	
+        </member>
+        <member name="P:Migrator.Framework.MigrationAttribute.Version">
+            <summary>
+            The version reflected by the migration
             </summary>
         </member>
-        <member name="M:Migrator.Framework.IMigration.Down">
+        <member name="P:Migrator.Framework.MigrationAttribute.Ignore">
             <summary>
-            Defines transformations to revert things done in <c>Up</c>.
+            Set to <c>true</c> to ignore this migration.
             </summary>
         </member>
-        <member name="M:Migrator.Framework.IMigration.AfterDown">
+        <member name="M:Migrator.Framework.StringUtils.ToHumanName(System.String)">
             <summary>
-            This is run after the Down transaction has been committed
+            Convert a classname to something more readable.
+            ex.: CreateATable => Create a table
             </summary>
+            <param name="className"></param>
+            <returns></returns>
         </member>
-        <member name="M:Migrator.Framework.IMigration.InitializeOnce(System.String[])">
+        <member name="M:Migrator.Framework.StringUtils.ReplaceOnce(System.String,System.String,System.String)">
             <summary>
-            This gets called once on the first migration object.
+            
             </summary>
-        </member>
-        <member name="P:Migrator.Framework.IMigration.Database">
-            <summary>
-            Represents the database.
-            <see cref="T:Migrator.Framework.ITransformationProvider"></see>.
-            </summary>
-            <seealso cref="T:Migrator.Framework.ITransformationProvider">Migration.Framework.ITransformationProvider</seealso>
-        </member>
-        <member name="M:Migrator.Framework.Migration.Up">
-            <summary>
-            Defines tranformations to port the database to the current version.
-            </summary>
-        </member>
-        <member name="M:Migrator.Framework.Migration.AfterUp">
-            <summary>
-            This is run after the Up transaction has been committed
-            </summary>
-        </member>
-        <member name="M:Migrator.Framework.Migration.Down">
-            <summary>
-            Defines transformations to revert things done in <c>Up</c>.
-            </summary>
-        </member>
-        <member name="M:Migrator.Framework.Migration.AfterDown">
-            <summary>
-            This is run after the Down transaction has been committed
-            </summary>
-        </member>
-        <member name="M:Migrator.Framework.Migration.InitializeOnce(System.String[])">
-            <summary>
-            This gets called once on the first migration object.
-            </summary>
-        </member>
-        <member name="P:Migrator.Framework.Migration.Database">
-            <summary>
-            Represents the database.
-            <see cref="T:Migrator.Framework.ITransformationProvider"></see>.
-            </summary>
-            <seealso cref="T:Migrator.Framework.ITransformationProvider">Migration.Framework.ITransformationProvider</seealso>
+            <param name="template"></param>
+            <param name="placeholder"></param>
+            <param name="replacement"></param>
+            <returns></returns>
         </member>
         <member name="M:Migrator.Framework.ILogger.Started(System.Collections.Generic.List{System.Int64},System.Int64)">
             <summary>
@@ -210,149 +130,6 @@
             </summary>
             <param name="format">The format string ("{0}, blabla {1}").</param>
             <param name="args">Parameters to apply to the format string.</param>
-        </member>
-        <member name="T:Migrator.Framework.MigrationException">
-            <summary>
-            Base class for migration errors.
-            </summary>
-        </member>
-        <member name="M:Migrator.Framework.Support.Inflector.Pluralize(System.String)">
-            <summary>
-            Return the plural of a word.
-            </summary>
-            <param name="word">The singular form</param>
-            <returns>The plural form of <paramref name="word"/></returns>
-        </member>
-        <member name="M:Migrator.Framework.Support.Inflector.Singularize(System.String)">
-            <summary>
-            Return the singular of a word.
-            </summary>
-            <param name="word">The plural form</param>
-            <returns>The singular form of <paramref name="word"/></returns>
-        </member>
-        <member name="M:Migrator.Framework.Support.Inflector.Capitalize(System.String)">
-            <summary>
-            Capitalizes a word.
-            </summary>
-            <param name="word">The word to be capitalized.</param>
-            <returns><paramref name="word"/> capitalized.</returns>
-        </member>
-        <member name="M:Migrator.Framework.StringUtils.ToHumanName(System.String)">
-            <summary>
-            Convert a classname to something more readable.
-            ex.: CreateATable => Create a table
-            </summary>
-            <param name="className"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Migrator.Framework.StringUtils.ReplaceOnce(System.String,System.String,System.String)">
-            <summary>
-            
-            </summary>
-            <param name="template"></param>
-            <param name="placeholder"></param>
-            <param name="replacement"></param>
-            <returns></returns>
-        </member>
-        <member name="T:Migrator.Framework.Loggers.ILogWriter">
-            <summary>
-            Handles writing a message to the log medium (i.e. file, console)
-            </summary>
-        </member>
-        <member name="M:Migrator.Framework.Loggers.ILogWriter.Write(System.String,System.Object[])">
-            <summary>
-            Write this message
-            </summary>
-            <param name="message"></param>
-            <param name="args"></param>
-        </member>
-        <member name="M:Migrator.Framework.Loggers.ILogWriter.WriteLine(System.String,System.Object[])">
-            <summary>
-            Write this message, as a line
-            </summary>
-            <param name="message"></param>
-            <param name="args"></param>
-        </member>
-        <member name="T:Migrator.Framework.ColumnProperty">
-            <summary>
-            Represents a table column properties.
-            </summary>
-        </member>
-        <member name="F:Migrator.Framework.ColumnProperty.Null">
-            <summary>
-            Null is allowable
-            </summary>
-        </member>
-        <member name="F:Migrator.Framework.ColumnProperty.NotNull">
-            <summary>
-            Null is not allowable
-            </summary>
-        </member>
-        <member name="F:Migrator.Framework.ColumnProperty.Identity">
-            <summary>
-            Identity column, autoinc
-            </summary>
-        </member>
-        <member name="F:Migrator.Framework.ColumnProperty.Unique">
-            <summary>
-            Unique Column
-            </summary>
-        </member>
-        <member name="F:Migrator.Framework.ColumnProperty.Indexed">
-            <summary>
-            Indexed Column
-            </summary>
-        </member>
-        <member name="F:Migrator.Framework.ColumnProperty.Unsigned">
-            <summary>
-            Unsigned Column
-            </summary>
-        </member>
-        <member name="F:Migrator.Framework.ColumnProperty.ForeignKey">
-            <summary>
-            Foreign Key
-            </summary>
-        </member>
-        <member name="F:Migrator.Framework.ColumnProperty.PrimaryKey">
-            <summary>
-            Primary Key
-            </summary>
-        </member>
-        <member name="F:Migrator.Framework.ColumnProperty.PrimaryKeyWithIdentity">
-            <summary>
-            Primary key. Make the column a PrimaryKey and unsigned
-            </summary>
-        </member>
-        <member name="T:Migrator.Framework.JoiningTableTransformationProviderExtensions">
-            <summary>
-            A set of extension methods for the transformation provider to make it easier to
-            build many-to-many joining tables (takes care of adding the joining table and foreign
-            key constraints as necessary.
-            <remarks>This functionality was useful when bootstrapping a number of projects a few years ago, but
-            now that most changes are brown-field I'm thinking of removing these methods as it's easier to maintain
-            code that creates the tables etc. directly within migration.</remarks>
-            </summary>
-        </member>
-        <member name="T:Migrator.Framework.MigrationAttribute">
-            <summary>
-            Describe a migration
-            </summary>
-        </member>
-        <member name="M:Migrator.Framework.MigrationAttribute.#ctor(System.Int64)">
-            <summary>
-            Describe the migration
-            </summary>
-            <param name="version">The unique version of the migration.</param>	
-        </member>
-        <member name="P:Migrator.Framework.MigrationAttribute.Version">
-            <summary>
-            The version reflected by the migration
-            </summary>
-        </member>
-        <member name="P:Migrator.Framework.MigrationAttribute.Ignore">
-            <summary>
-            Set to <c>true</c> to ignore this migration.
-            </summary>
         </member>
         <member name="T:Migrator.Framework.ITransformationProvider">
             <summary>
@@ -853,6 +630,109 @@
             Logger used to log details of operations performed during migration
             </summary>
         </member>
+        <member name="M:Migrator.Framework.Support.Inflector.Pluralize(System.String)">
+            <summary>
+            Return the plural of a word.
+            </summary>
+            <param name="word">The singular form</param>
+            <returns>The plural form of <paramref name="word"/></returns>
+        </member>
+        <member name="M:Migrator.Framework.Support.Inflector.Singularize(System.String)">
+            <summary>
+            Return the singular of a word.
+            </summary>
+            <param name="word">The plural form</param>
+            <returns>The singular form of <paramref name="word"/></returns>
+        </member>
+        <member name="M:Migrator.Framework.Support.Inflector.Capitalize(System.String)">
+            <summary>
+            Capitalizes a word.
+            </summary>
+            <param name="word">The word to be capitalized.</param>
+            <returns><paramref name="word"/> capitalized.</returns>
+        </member>
+        <member name="M:Migrator.Framework.IMigration.Up">
+            <summary>
+            Defines tranformations to port the database to the current version.
+            </summary>
+        </member>
+        <member name="M:Migrator.Framework.IMigration.AfterUp">
+            <summary>
+            This is run after the Up transaction has been committed
+            </summary>
+        </member>
+        <member name="M:Migrator.Framework.IMigration.Down">
+            <summary>
+            Defines transformations to revert things done in <c>Up</c>.
+            </summary>
+        </member>
+        <member name="M:Migrator.Framework.IMigration.AfterDown">
+            <summary>
+            This is run after the Down transaction has been committed
+            </summary>
+        </member>
+        <member name="M:Migrator.Framework.IMigration.InitializeOnce(System.String[])">
+            <summary>
+            This gets called once on the first migration object.
+            </summary>
+        </member>
+        <member name="P:Migrator.Framework.IMigration.Database">
+            <summary>
+            Represents the database.
+            <see cref="T:Migrator.Framework.ITransformationProvider"></see>.
+            </summary>
+            <seealso cref="T:Migrator.Framework.ITransformationProvider">Migration.Framework.ITransformationProvider</seealso>
+        </member>
+        <member name="T:Migrator.Framework.ColumnProperty">
+            <summary>
+            Represents a table column properties.
+            </summary>
+        </member>
+        <member name="F:Migrator.Framework.ColumnProperty.Null">
+            <summary>
+            Null is allowable
+            </summary>
+        </member>
+        <member name="F:Migrator.Framework.ColumnProperty.NotNull">
+            <summary>
+            Null is not allowable
+            </summary>
+        </member>
+        <member name="F:Migrator.Framework.ColumnProperty.Identity">
+            <summary>
+            Identity column, autoinc
+            </summary>
+        </member>
+        <member name="F:Migrator.Framework.ColumnProperty.Unique">
+            <summary>
+            Unique Column
+            </summary>
+        </member>
+        <member name="F:Migrator.Framework.ColumnProperty.Indexed">
+            <summary>
+            Indexed Column
+            </summary>
+        </member>
+        <member name="F:Migrator.Framework.ColumnProperty.Unsigned">
+            <summary>
+            Unsigned Column
+            </summary>
+        </member>
+        <member name="F:Migrator.Framework.ColumnProperty.ForeignKey">
+            <summary>
+            Foreign Key
+            </summary>
+        </member>
+        <member name="F:Migrator.Framework.ColumnProperty.PrimaryKey">
+            <summary>
+            Primary Key
+            </summary>
+        </member>
+        <member name="F:Migrator.Framework.ColumnProperty.PrimaryKeyWithIdentity">
+            <summary>
+            Primary key. Make the column a PrimaryKey and unsigned
+            </summary>
+        </member>
         <member name="T:Migrator.Framework.Loggers.IAttachableLogger">
             <summary>
             ILogger interface. 
@@ -876,6 +756,116 @@
             <summary>
             Represents a table column.
             </summary>
+        </member>
+        <member name="T:Migrator.Framework.MigrationException">
+            <summary>
+            Base class for migration errors.
+            </summary>
+        </member>
+        <member name="T:Migrator.Framework.Loggers.ILogWriter">
+            <summary>
+            Handles writing a message to the log medium (i.e. file, console)
+            </summary>
+        </member>
+        <member name="M:Migrator.Framework.Loggers.ILogWriter.Write(System.String,System.Object[])">
+            <summary>
+            Write this message
+            </summary>
+            <param name="message"></param>
+            <param name="args"></param>
+        </member>
+        <member name="M:Migrator.Framework.Loggers.ILogWriter.WriteLine(System.String,System.Object[])">
+            <summary>
+            Write this message, as a line
+            </summary>
+            <param name="message"></param>
+            <param name="args"></param>
+        </member>
+        <member name="T:Migrator.Framework.Migration">
+            <summary>
+            A migration is a group of transformation applied to the database schema
+            (or sometimes data) to port the database from one version to another.
+            The <c>Up()</c> method must apply the modifications (eg.: create a table)
+            and the <c>Down()</c> method must revert, or rollback the modifications
+            (eg.: delete a table).
+            <para>
+            Each migration must be decorated with the <c>[Migration(0)]</c> attribute.
+            Each migration number (0) must be unique, or else a 
+            <c>DuplicatedVersionException</c> will be trown.
+            </para>
+            <para>
+            All migrations are executed inside a transaction. If an exception is
+            thrown, the transaction will be rolledback and transformations wont be
+            applied.
+            </para>
+            <para>
+            It is best to keep a limited number of transformation inside a migration
+            so you can easely move from one version of to another with fine grain
+            modifications.
+            You should give meaningful name to the migration class and prepend the
+            migration number to the filename so they keep ordered, eg.: 
+            <c>002_CreateTableTest.cs</c>.
+            </para>
+            <para>
+            Use the <c>Database</c> property to apply transformation and the
+            <c>Logger</c> property to output informations in the console (or other).
+            For more details on transformations see
+            <see cref="T:Migrator.Framework.ITransformationProvider">ITransformationProvider</see>.
+            </para>
+            </summary>
+            <example>
+            The following migration creates a new Customer table.
+            (File <c>003_AddCustomerTable.cs</c>)
+            <code>
+            [Migration(3)]
+            public class AddCustomerTable : Migration
+            {
+            	public override void Up()
+            	{
+            		Database.AddTable("Customer",
+            	                  new Column("Name", typeof(string), 50),
+            	                  new Column("Address", typeof(string), 100)
+            	                 );
+            	}
+            	public override void Down()
+            	{
+            		Database.RemoveTable("Customer");
+            	}
+            }
+            </code>
+            </example>
+        </member>
+        <member name="M:Migrator.Framework.Migration.Up">
+            <summary>
+            Defines tranformations to port the database to the current version.
+            </summary>
+        </member>
+        <member name="M:Migrator.Framework.Migration.AfterUp">
+            <summary>
+            This is run after the Up transaction has been committed
+            </summary>
+        </member>
+        <member name="M:Migrator.Framework.Migration.Down">
+            <summary>
+            Defines transformations to revert things done in <c>Up</c>.
+            </summary>
+        </member>
+        <member name="M:Migrator.Framework.Migration.AfterDown">
+            <summary>
+            This is run after the Down transaction has been committed
+            </summary>
+        </member>
+        <member name="M:Migrator.Framework.Migration.InitializeOnce(System.String[])">
+            <summary>
+            This gets called once on the first migration object.
+            </summary>
+        </member>
+        <member name="P:Migrator.Framework.Migration.Database">
+            <summary>
+            Represents the database.
+            <see cref="T:Migrator.Framework.ITransformationProvider"></see>.
+            </summary>
+            <seealso cref="T:Migrator.Framework.ITransformationProvider">Migration.Framework.ITransformationProvider</seealso>
         </member>
         <member name="M:Migrator.Framework.SchemaBuilder.SchemaBuilder.AddTable(System.String)">
             <summary>
@@ -904,6 +894,16 @@
             </summary>
             <param name="name">Column name to be added</param>
             <returns>IColumnOptions to restrict chaining</returns>
+        </member>
+        <member name="T:Migrator.Framework.JoiningTableTransformationProviderExtensions">
+            <summary>
+            A set of extension methods for the transformation provider to make it easier to
+            build many-to-many joining tables (takes care of adding the joining table and foreign
+            key constraints as necessary.
+            <remarks>This functionality was useful when bootstrapping a number of projects a few years ago, but
+            now that most changes are brown-field I'm thinking of removing these methods as it's easier to maintain
+            code that creates the tables etc. directly within migration.</remarks>
+            </summary>
         </member>
         <member name="T:Migrator.Framework.Loggers.Logger">
             <summary>
