@@ -2,21 +2,21 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head runat="server">
-    @MvcMiniProfiler.MiniProfiler.RenderIncludes()
+
     <link rel="SHORTCUT ICON" href="../../favicon.ico" />
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <title>NZBDrone</title>
     @{Html.Telerik().StyleSheetRegistrar().DefaultGroup(group => group.Add("telerik.common.css")
                                                                            .Add("telerik.sitefinity.css")
-                                                                           .Add("notibar.css"))
+                                                                           .Add("notibar.css")
+                                                                           .Add("Site.css")
+                                                                           .Add("jquery-ui.css")
+                                                                           .Add("jquery-ui.custom.css").Compress(true))
                                                                            .Render();}
-    <link href="../../Content/Site.css" rel="stylesheet" type="text/css" />
-    <link href="../../Content/jquery-ui.css" rel="stylesheet" type="text/css" />
-    <link href="../../Content/jquery-ui.custom.css" rel="stylesheet" type="text/css" />
+    @MvcMiniProfiler.MiniProfiler.RenderIncludes()
     @RenderSection("HeaderContent", required: false)
- </head>
+</head>
 <body>
-
     <div id="centered">
         <div id="menu">
             <ul>
@@ -48,17 +48,17 @@
         c => c.AddGroup("CDN", group => group
                     .Add("http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js")
                     .Add("http://ajax.aspnetcdn.com/ajax/4.0/1/MicrosoftAjax.js"))
-              
+
                     .AddGroup("3rdParty", group => group
                     .Add("jquery.form.js")
                     .Add("jquery.jgrowl.js")
                     .Add("jquery-tgc-countdown-1.0.js")
-                    .Add("MicrosoftMvcValidation.js").Combined(true).Compress(true))               
-                    
+                    .Add("MicrosoftMvcValidation.js").Combined(true).Compress(true))
+
                     .AddGroup("NzbDrone", group => group
                                         .Add("Notification.js")
                                         .Add("gridLoad.js")
                                         .Add("episodeSearch.js"))
-                                        
+
                                         ).Render();}
 </html>
