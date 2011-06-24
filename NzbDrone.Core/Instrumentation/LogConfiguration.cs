@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Instrumentation
             LogManager.Configuration.AddTarget("Exceptioneer", exTarget);
             LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", NLog.LogLevel.Error, exTarget));
 #endif
-            var sonicTarget = CentralDispatch.NinjectKernel.Get<SubsonicTarget>();
+            var sonicTarget = CentralDispatch.NinjectKernel.Get<DatabaseTarget>();
             LogManager.Configuration.AddTarget("DbLogger", sonicTarget);
             LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Debug, sonicTarget));
 

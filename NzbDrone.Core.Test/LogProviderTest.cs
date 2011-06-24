@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Test
 
             var db = MockLib.GetEmptyDatabase(true);
 
-            var sonicTarget = new SubsonicTarget(db);
+            var sonicTarget = new DatabaseTarget(db);
 
             LogManager.Configuration.AddTarget("DbLogger", sonicTarget);
             LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Info, sonicTarget));
@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Test
             //setup
             var db = MockLib.GetEmptyDatabase(true);
 
-            var sonicTarget = new SubsonicTarget(db);
+            var sonicTarget = new DatabaseTarget(db);
 
             LogManager.Configuration.AddTarget("DbLogger", sonicTarget);
             LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Info, sonicTarget));
@@ -87,7 +87,7 @@ namespace NzbDrone.Core.Test
 
             var db = MockLib.GetEmptyDatabase(true);
 
-            var sonicTarget = new SubsonicTarget(db);
+            var sonicTarget = new DatabaseTarget(db);
 
             LogManager.Configuration.AddTarget("DbLogger", sonicTarget);
             LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Info, sonicTarget));
@@ -121,7 +121,7 @@ namespace NzbDrone.Core.Test
 
             var db = MockLib.GetEmptyDatabase(true);
 
-            var sonicTarget = new SubsonicTarget(db);
+            var sonicTarget = new DatabaseTarget(db);
 
             LogManager.Configuration.AddTarget("DbLogger", sonicTarget);
             LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Info, sonicTarget));

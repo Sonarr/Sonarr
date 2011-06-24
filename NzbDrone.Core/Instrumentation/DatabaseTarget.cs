@@ -7,11 +7,11 @@ using PetaPoco;
 namespace NzbDrone.Core.Instrumentation
 {
 
-    public class SubsonicTarget : Target
+    public class DatabaseTarget : Target
     {
         private readonly IDatabase _database;
 
-        public SubsonicTarget(IDatabase database)
+        public DatabaseTarget(IDatabase database)
         {
             _database = database;
         }

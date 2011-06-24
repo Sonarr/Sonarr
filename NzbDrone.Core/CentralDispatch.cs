@@ -70,7 +70,7 @@ namespace NzbDrone.Core
                 _kernel.Bind<IDatabase>().ToMethod(c => Connection.GetPetaPocoDb(Connection.MainConnectionString)).InRequestScope();
                 _kernel.Bind<IDatabase>().ToMethod(c => Connection.GetPetaPocoDb(Connection.MainConnectionString, false)).WhenInjectedInto<IJob>();
                 _kernel.Bind<IDatabase>().ToMethod(c => Connection.GetPetaPocoDb(Connection.MainConnectionString, false)).WhenInjectedInto<JobProvider>();
-                _kernel.Bind<IDatabase>().ToMethod(c => Connection.GetPetaPocoDb(Connection.LogConnectionString, false)).WhenInjectedInto<SubsonicTarget>().InSingletonScope();
+                _kernel.Bind<IDatabase>().ToMethod(c => Connection.GetPetaPocoDb(Connection.LogConnectionString, false)).WhenInjectedInto<DatabaseTarget>().InSingletonScope();
                 _kernel.Bind<IDatabase>().ToMethod(c => Connection.GetPetaPocoDb(Connection.LogConnectionString)).WhenInjectedInto<LogProvider>().InRequestScope();
             }
         }
