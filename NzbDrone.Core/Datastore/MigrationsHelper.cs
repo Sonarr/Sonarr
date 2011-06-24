@@ -59,6 +59,11 @@ namespace NzbDrone.Core.Datastore
                 engine.CreateDatabase();
             }
         }
+
+        public static string GetIndexName(string tableName, params string[] columns)
+        {
+            return String.Format("IX_{0}_{1}", tableName, String.Join("_", columns));
+        }
     }
 
 

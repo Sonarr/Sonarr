@@ -43,6 +43,18 @@ namespace NzbDrone.Core.Datastore.Migrations
                                                   new Column("GrabDate", DbType.DateTime, ColumnProperty.Null)
                                               });
 
+            var indexName = MigrationsHelper.GetIndexName("Episodes", "SeriesId");
+            Database.AddIndex(indexName, "Episodes", "SeriesId");
+
+            indexName = MigrationsHelper.GetIndexName("Episodes", "EpisodeFileId");
+            Database.AddIndex(indexName, "Episodes", "EpisodeFileId");
+
+            indexName = MigrationsHelper.GetIndexName("Episodes", "AirDate");
+            Database.AddIndex(indexName, "Episodes", "AirDate");
+
+            indexName = MigrationsHelper.GetIndexName("Episodes", "TvDbEpisodeId");
+            Database.AddIndex(indexName, "Episodes", "TvDbEpisodeId");
+
 
             Database.AddTable("EpisodeFiles", new[]
                                                   {
@@ -56,6 +68,9 @@ namespace NzbDrone.Core.Datastore.Migrations
                                                       new Column("DateAdded", DbType.DateTime, ColumnProperty.NotNull),
                                                       new Column("SeasonNumber", DbType.Int32, ColumnProperty.NotNull)
                                                   });
+
+            indexName = MigrationsHelper.GetIndexName("EpisodeFiles", "SeriesId");
+            Database.AddIndex(indexName, "Episodes", "SeriesId");
 
 
             Database.AddTable("Config", new[]
@@ -82,6 +97,12 @@ namespace NzbDrone.Core.Datastore.Migrations
                                                  new Column("IsProper", DbType.Boolean, ColumnProperty.NotNull),
                                                  new Column("Indexer", DbType.String, ColumnProperty.NotNull)
                                              });
+
+            indexName = MigrationsHelper.GetIndexName("History", "EpisodeId");
+            Database.AddIndex(indexName, "History", "EpisodeId");
+
+            indexName = MigrationsHelper.GetIndexName("History", "SeriesId");
+            Database.AddIndex(indexName, "History", "SeriesId");
 
             Database.AddTable("RootDirs", new[]
                                               {
