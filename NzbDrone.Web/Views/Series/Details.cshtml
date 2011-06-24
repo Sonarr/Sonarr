@@ -31,7 +31,7 @@
         <div class="display-label">
             AirTimes</div>
         <div class="display-field">
-            @Model.AirsDayOfWeek.ToString()</div>
+            @Model.AirsDayOfWeek</div>
         <div class="display-label">
             Language</div>
         <div class="display-label">
@@ -39,10 +39,8 @@
         <div class="display-field">
             @Model.Path</div>
     </fieldset>
-    @*Todo: This breaks when using SQLServer... thoughts?*@ @*Easy, don't use SQL Server!!!*@
     @foreach (var season in Model.Seasons.Where(s => s > 0).Reverse())
     {
-
         <br />
         <h3>
             Season @season</h3>
