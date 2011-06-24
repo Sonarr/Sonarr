@@ -283,7 +283,7 @@ namespace NzbDrone.Core.Providers.Core
             if (dbValue != null && !String.IsNullOrEmpty(dbValue.Value))
                 return dbValue.Value;
 
-            Logger.Debug("Unable to find config key '{0}' defaultValue:'{1}'", key, defaultValue);
+            Logger.Trace("Unable to find config key '{0}' defaultValue:'{1}'", key, defaultValue);
             value = defaultValue.ToString();
 
             return value;
@@ -306,7 +306,7 @@ namespace NzbDrone.Core.Providers.Core
             if (value == null)
                 throw new ArgumentNullException("key");
 
-            Logger.Debug("Writing Setting to file. Key:'{0}' Value:'{1}'", key, value);
+            Logger.Trace("Writing Setting to file. Key:'{0}' Value:'{1}'", key, value);
 
             var dbValue = _database.SingleOrDefault<Config>("WHERE [KEY]=@0", key);
 
