@@ -2,12 +2,12 @@
 @using NzbDrone.Core.Repository
 
 @{ Html.Telerik().ScriptRegistrar().DefaultGroup(group => group
-                                        .Add("telerik.common.min.js")
-                                        .Add("telerik.draganddrop.min.js")
-                                        .Add("telerik.window.min.js")
-                                        .Add("telerik.panelbar.min.js")
-                                        .Add("telerik.list.min.js")
-                                        .Add("telerik.combobox.min.js")); }
+                                        .Add("telerik.common.js")
+                                        .Add("telerik.draganddrop.js")
+                                        .Add("telerik.window.js")
+                                        .Add("telerik.panelbar.js")
+                                        .Add("telerik.list.js")
+                                        .Add("telerik.combobox.js")); }
 
 <style>
 .root_dir_text
@@ -25,7 +25,7 @@
 
 @section MainContent{
 
-        @{ Html.Telerik().Window()
+    @{ Html.Telerik().Window()
     .Name("Window")
     .Title("Add New Series")
     .Modal(true)
@@ -86,9 +86,10 @@
 
 <script type="text/javascript">
     function openAddNewSeries() {
-        var windowElement = $('#Window');
+        var window = $('#Window').data('tWindow');
+        window.center().open();
+        window.refresh();
 
-        windowElement.data('tWindow').center().open();
     }
 
     function closeAddNewSeries() {
