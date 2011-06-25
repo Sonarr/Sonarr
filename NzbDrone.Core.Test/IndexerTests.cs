@@ -179,8 +179,9 @@ namespace NzbDrone.Core.Test
             result.Should().OnlyContain(r => r.EpisodeNumbers.Contains(23));
         }
 
-        [Test]
-        public void newzbin_search_returns_valid_results()
+        [TestCase("simpsons",21,23)]
+        [TestCase("Hawaii Five-0", 1, 5)]
+        public void newzbin_search_returns_valid_results(string title, int season, int episode)
         {
             var mocker = new AutoMoqer();
 
@@ -194,12 +195,12 @@ namespace NzbDrone.Core.Test
 
             mocker.Resolve<HttpProvider>();
 
-            var result = mocker.Resolve<Newzbin>().FetchEpisode("Simpsons", 21, 23);
+            var result = mocker.Resolve<Newzbin>().FetchEpisode(title, season, episode);
 
             result.Should().NotBeEmpty();
-            result.Should().OnlyContain(r => r.CleanTitle == "simpsons");
-            result.Should().OnlyContain(r => r.SeasonNumber == 21);
-            result.Should().OnlyContain(r => r.EpisodeNumbers.Contains(23));
+            result.Should().OnlyContain(r => r.CleanTitle == title);
+            result.Should().OnlyContain(r => r.SeasonNumber == season);
+            result.Should().OnlyContain(r => r.EpisodeNumbers.Contains(episode));
         }
 
         [Test]

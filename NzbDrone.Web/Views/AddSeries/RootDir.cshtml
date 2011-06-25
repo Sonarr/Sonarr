@@ -9,7 +9,7 @@
             @{Html.Telerik().ComboBox()
                   .Name("path_" + ViewData["guid"])
                   .BindTo(Model.SelectList)
-                  .DataBinding(binding => binding.Ajax().Select("_autoCompletePath", "Directory").Delay(400).Cache(false))
+                  .DataBinding(binding => binding.Ajax().Select("_autoCompletePath", "Directory").Delay(400).Cache(true))
                   .Filterable(f => f.FilterMode(AutoCompleteFilterMode.StartsWith))
                   .HighlightFirstMatch(true)
                   .HtmlAttributes(new { style = "width: 300px;" })

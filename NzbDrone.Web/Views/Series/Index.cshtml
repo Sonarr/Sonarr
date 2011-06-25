@@ -1,70 +1,49 @@
 ﻿@using NzbDrone.Core.Repository;
 @using NzbDrone.Web.Models;
 @model IEnumerable<NzbDrone.Core.Repository.Series>
-           
 @section TitleContent{
-    Series
+Series
 }
-
-
-
 <style>
-/* progress bar container */
-.progressbar
-{
-    border:1px solid grey;
-    -khtml-border-radius:8px;
-    border-radius:8px;
-    -moz-border-radius:8px;
-    -webkit-border-radius:8px;
-    width:125px;
-    height:20px;
-    position:relative;
-    color:black;
-}
-
-/* apply curves to the progress bar */
-.progress
-{
-    -khtml-border-top-left-radius:7px;
-    border-top-left-radius:7px;
-    -moz-border-top-left-radius:7px;
-    -webkit-border-top-left-radius:7px;
+    /* progress bar container */
+    .progressbar
+    {
+        border: 1px solid #065EFE;
+        width: 125px;
+        height: 20px;
+        position: relative;
+        color: black;
+    }
     
-    -khtml-border-bottom-left-radius:7px;
-    border-bottom-left-radius:7px;
-    -moz-border-bottom-left-radius:7px;
-    -webkit-border-bottom-left-radius:7px;
-}
-
-/* color bar */
-.progressbar div.progress
-{
-    position:absolute;
-    width:0;
-    height:100%;
-    overflow:hidden;
-    background-color:#065EFE;
-}
-/* text on bar */
-.progressbar div.progress .progressText{
-    position:absolute;
-    text-align:center;
-    color:white;
-}
-/* text off bar */
-.progressbar div.progressText{
-    position:absolute;
-    width:100%;
-    height:100%;
-    text-align:center;
-}
+    
+    /* color bar */
+    .progressbar div.progress
+    {
+        position: absolute;
+        width: 0;
+        height: 100%;
+        overflow: hidden;
+        background-color: #065EFE;
+    }
+    /* text on bar */
+    .progressbar div.progress .progressText
+    {
+        position: absolute;
+        text-align: center;
+        color: white;
+    }
+    /* text off bar */
+    .progressbar div.progressText
+    {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+    }
 </style>
-
 @section ActionMenu{
     @{Html.RenderPartial("SubMenu");}
 }
-
 @section MainContent{
     <div class="grid-container">
         @{Html.Telerik().Grid<SeriesModel>().Name("Grid")
@@ -76,9 +55,15 @@
                     .Delete("_DeleteAjaxSeriesEditing", "Series"))
                 .Columns(columns =>
                              {
+                                 columns.Command(commands =>
+                                 {
+                                     commands.Edit().ButtonType(GridButtonType.Image);
+                                     commands.Delete().ButtonType(GridButtonType.Image);
+                                 }).Title("Actions").Width(80);
+
                                  columns.Bound(o => o.Title)
                                      .ClientTemplate("<a href=" +
-                                                     Url.Action("Details", "Series", new {seriesId = "<#= SeriesId #>"}) +
+                                                     Url.Action("Details", "Series", new { seriesId = "<#= SeriesId #>" }) +
                                                      "><#= Title #></a>");
                                  columns.Bound(o => o.SeasonsCount).Title("Seasons");
                                  columns.Bound(o => o.QualityProfileName).Title("Quality");
@@ -86,33 +71,30 @@
                                  columns.Bound(o => o.AirsDayOfWeek);
                                  columns.Bound(o => o.Episodes).Title("Episodes").Width(125)
                                      .ClientTemplate("<div id=\"progressbar_<#= SeriesId #>\" class=\"progressbar\">" +
-                                                            "<div class=\"progressText\"></div>" + 
+                                                            "<div class=\"progressText\"></div>" +
                                                             "<div class=\"progress\">" +
                                                                 "<span class=\"progressText\" style=\"width: 125px;\"></span>" +
                                                             "</div>" +
                                                      "</div>");
-                                 columns.Bound(o => o.Path);
-                                 columns.Command(commands =>
-                                                     {
-                                                         commands.Edit().ButtonType(GridButtonType.Image);
-                                                         commands.Delete().ButtonType(GridButtonType.Image);
-                                                     }).Title("Actions").Width(80);
-
+                              
                              })
                 .Editable(editor => editor.Mode(GridEditMode.PopUp))
                 .Sortable(sort => sort.OrderBy(order => order.Add(o => o.Title).Ascending()).Enabled(true))
                 .DetailView(detailView => detailView.ClientTemplate("<div style=\"width:95%\"><#= Overview #></div>"))
-                .ClientEvents(clientEvents => { clientEvents.OnEdit("grid_edit");
-                                                clientEvents.OnSave("grid_save");
-                                                clientEvents.OnDataBinding("grid_bind");
-                                                clientEvents.OnDataBound("grid_bound");
-                                                clientEvents.OnRowDataBound("grid_rowBound");
-                                              })
+                .ClientEvents(clientEvents =>
+                {
+                    clientEvents.OnEdit("grid_edit");
+                    clientEvents.OnSave("grid_save");
+                    clientEvents.OnDataBinding("grid_bind");
+                    clientEvents.OnDataBound("grid_bound");
+                    clientEvents.OnRowDataBound("grid_rowBound");
+                })
                 .Render();}
-        <span class="grid-loader"><img src="@Url.Content( "~/Content/Images/Loading.gif" )" alt="Loading"/> Loading...</span>
+        <span class="grid-loader">
+            <img src="@Url.Content("~/Content/Images/Loading.gif")" alt="Loading"/>
+            Loading...</span>
     </div>
 }
-
 <script type="text/javascript">
     var windowElement;
 
@@ -121,7 +103,7 @@
             .closest(".t-window")
             .data("tWindow")
             .center();
-        
+
         var seriesId = args.dataItem.SeriesId;
         var url = '@Url.Action("SeasonEditor", "Series")';
         $('#season-editor').load(url, { seriesId: seriesId }, function (response, status, xhr) {
@@ -131,25 +113,25 @@
 
     function grid_save(e) {
         $('#ajaxSaveWheel').show();
-        
+
         var seasonEditor = e.form.SeasonEditor_collection;
         var saveSeasonEditUrl = '@Url.Action("SaveSeason", "Series")';
 
-        jQuery.each(seasonEditor, function() {
+        jQuery.each(seasonEditor, function () {
             var guid = $(this).val();
             var prefix = '#SeasonEditor_' + guid + '__';
             var seriesId = $(prefix + 'SeriesId').val();
             var seasonNumber = $(prefix + 'SeasonNumber').val();
             var monitored = $(prefix + 'Monitored').attr('checked');
-            
+
             $.ajax({
-                    type: "POST",
-                    url: saveSeasonEditUrl,
-                    data: jQuery.param({ seriesId: seriesId, seasonNumber: seasonNumber, monitored: monitored }),
-                    error: function(req, status, error) {
-                        alert("Sorry! We could save season changes at this time. " + error);
-                    },
-                    success: function(data, textStatus, jqXHR) { }
+                type: "POST",
+                url: saveSeasonEditUrl,
+                data: jQuery.param({ seriesId: seriesId, seasonNumber: seasonNumber, monitored: monitored }),
+                error: function (req, status, error) {
+                    alert("Sorry! We could save season changes at this time. " + error);
+                },
+                success: function (data, textStatus, jqXHR) { }
             });
         });
     }
@@ -163,7 +145,6 @@
         $("#progressbar_" + seriesId).episodeProgress(episodeFileCount, episodeCount);
     }
 </script>
-
 <script type="text/javascript" src="../../Scripts/doTimeout.js"></script>
 <script>
     (function ($) {
@@ -177,17 +158,7 @@
 
                     progressBar.css("width", width + "%");
 
-                    if (width > 97) {
-                        progressBar.css("-khtml-border-top-right-radius", "7px");
-                        progressBar.css("border-top-right-radius", "7px");
-                        progressBar.css("-moz-border-top-right-radius", "7px");
-                        progressBar.css("-webkit-border-top-right-radius", "7px");
 
-                        progressBar.css("-khtml-border-bottom-right-radius", "7px");
-                        progressBar.css("border-bottom-right-radius", "7px");
-                        progressBar.css("-moz-border-bottom-right-radius", "7px");
-                        progressBar.css("-webkit-border-bottom-right-radius", "7px");
-                    }
 
                     div.find(".progressText").html(episodes + " / " + totalEpisodes);
                 });

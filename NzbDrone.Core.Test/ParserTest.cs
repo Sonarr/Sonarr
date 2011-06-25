@@ -41,6 +41,8 @@ namespace NzbDrone.Core.Test
         [TestCase(@"24-7 Penguins-Capitals- Road to the NHL Winter Classic - S01E03 - Episode 3.mkv", "24-7 Penguins-Capitals- Road to the NHL Winter Classic", 1, 3)]
         [TestCase("Adventure.Inc.S03E19.DVDRip.\"XviD\"-OSiTV", "Adventure.Inc", 3, 19)]
         [TestCase("C:/Test/TV/Chuck.4x05.HDTV.XviD-LOL", "Chuck", 4, 5)]
+        [TestCase("Hawaii Five-0 (2010) - 1x05 - Nalowale (Forgotten/Missing)", "Hawaii Five-0 (2010)", 1, 5)]
+        [TestCase("Hawaii Five-0 (2010) - 1x05 - Title", "Hawaii Five-0 (2010)", 1, 5)]
         public void episode_parse(string postTitle, string title, int season, int episode)
         {
             var result = Parser.ParseEpisodeInfo(postTitle);
@@ -202,6 +204,7 @@ namespace NzbDrone.Core.Test
         [TestCase("CaPitAl", "capital")]
         [TestCase("peri.od", "period")]
         [TestCase("this.^&%^**$%@#$!That", "thisthat")]
+        [TestCase("test/test", "testtest")]
         public void Normalize_Title(string dirty, string clean)
         {
             var result = Parser.NormalizeTitle(dirty);
