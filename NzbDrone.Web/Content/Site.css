@@ -19,28 +19,6 @@ fieldset
     border-width: 1px;
 }
 
-h1
-{
-    font-size: 52px;
-}
-
-h2
-{
-    font-size: 26px;
-}
-
-h3
-{
-    font-size: 18px;
-}
-
-p, ul, ol
-{
-    line-height: 240%;
-    text-align: justify;
-}
-
-
 a
 {
     color: #065EFE;
@@ -51,8 +29,6 @@ a:hover
     text-decoration: none;
 }
 
-
-
 hr
 {
     display: none;
@@ -60,17 +36,12 @@ hr
 
 /* Menu */
 
-#menu
-{
-    height: 60px;
-}
+
 
 #menu ul
 {
-    margin: 0;
-    padding: 8px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
     list-style: none;
-    line-height: normal;
 }
 
 #menu li
@@ -83,8 +54,7 @@ hr
 {
     display: block;
     float: left;
-    height: 28px;
-    padding: 7px 30px 0px 35px;
+    padding: 9px 30px 0px 35px;
     letter-spacing: -1px;
     text-decoration: none;
     text-align: center;
@@ -92,6 +62,7 @@ hr
     font-size: 17px;
     font-weight: normal;
     vertical-align: middle;
+    height: 28px;
 }
 
 #menu a:hover
@@ -230,12 +201,6 @@ button:active, input[type="button"]:active, input[type="submit"]:active, input[t
 .rootDirectories
 {
     width: 400px;
-}
-
-/* Set the font size for Grids */
-.Grid
-{
-    font-size: 13px;
 }
 
 .edit-group

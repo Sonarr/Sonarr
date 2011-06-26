@@ -1,25 +1,23 @@
 ﻿@using Helpers;
-
-<html lang="en-US" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en-US" xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <link rel="SHORTCUT ICON" href="../../favicon.ico" />
-    <meta http-equiv="X-UA-Compatible" content="IE=9"/>
     <title>NZBDrone</title>
-    @{Html.Telerik().StyleSheetRegistrar().DefaultGroup(group => group.Add("telerik.common.css")
-          //.Add("Blueprint/screen.css")
-          //.Add("Blueprint/ie.css")
-                                                                           .Add("telerik.sitefinity.css")
-          //.Add("notibar.css")
-          //.Add("Site.css")
-          //.Add("jquery-ui.css")
-          //.Add("jquery-ui.custom.css").Compress(true))
-                                                                           ).Render();}
+    <link href="/Content/Blueprint/screen.css" rel="stylesheet" type="text/css" />
+    <link href="/Content/Blueprint/ie.css" rel="stylesheet" type="text/css" />
+    <link type="text/css" href="http://aspnet-skins.telerikstatic.com/mvcz/2011.1.414/telerik.common.min.css"
+        rel="stylesheet" />
+    <link type="text/css" href="http://aspnet-skins.telerikstatic.com/mvcz/2011.1.414/telerik.sitefinity.min.css"
+        rel="stylesheet" />
+    <link type="text/css" href="http://aspnet-skins.telerikstatic.com/mvcz/2011.1.414/telerik.rtl.min.css"
+        rel="stylesheet" />
+    <link href="/Content/Site.css" rel="stylesheet" type="text/css" />
     @MvcMiniProfiler.MiniProfiler.RenderIncludes()
     @RenderSection("HeaderContent", required: false)
 </head>
 <body>
     <div class="container">
-        <div id="menu" class="span-24 last">
+        <div id="menu" class="span-24 last prepend-top append-bottom">
             <ul>
                 @MvcHtmlString.Create(Html.CurrentActionLink("Series", "Index", "Series"))
                 @MvcHtmlString.Create(Html.CurrentActionLink("Upcoming", "Index", "Upcoming"))
@@ -29,14 +27,18 @@
             </ul>
         </div>
         <hr />
-        <div id="logo" class="span-24 last">
-            @RenderSection("TitleContent", required: false)
+        <div class="span-24 last">
+            <div id="logo">
+                @RenderSection("TitleContent", required: false)
+            </div>
         </div>
         <hr />
-        <div id="page" class="span-24 last">
-            @RenderSection("ActionMenu", required: false)
-            @RenderSection("MainContent", required: false)
-            @RenderBody()
+        <div class="span-24 last">
+            <div id="page">
+                @RenderSection("ActionMenu", required: false)
+                @RenderSection("MainContent", required: false)
+                @RenderBody()
+            </div>
         </div>
         <hr />
         <div id="footer" class="span-24 last">
