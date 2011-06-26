@@ -54,7 +54,7 @@ namespace NzbDrone.Web.Controllers
                         {
                             Path = r.Path,
                             CleanPath = r.Path.Replace(Path.DirectorySeparatorChar, '|').Replace(Path.VolumeSeparatorChar, '^').Replace('\'', '`')
-                        }).ToList();
+                        });
             ViewData["RootDirs"] = rootDirs;
             ViewData["DirSep"] = Path.DirectorySeparatorChar.ToString().Replace(Path.DirectorySeparatorChar, '|');
 
