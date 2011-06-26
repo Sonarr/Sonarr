@@ -1,24 +1,25 @@
 ﻿@using Helpers;
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head runat="server">
 
+<html lang="en-US" xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
     <link rel="SHORTCUT ICON" href="../../favicon.ico" />
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=9"/>
     <title>NZBDrone</title>
     @{Html.Telerik().StyleSheetRegistrar().DefaultGroup(group => group.Add("telerik.common.css")
+          //.Add("Blueprint/screen.css")
+          //.Add("Blueprint/ie.css")
                                                                            .Add("telerik.sitefinity.css")
-                                                                           .Add("notibar.css")
-                                                                           .Add("Site.css")
-                                                                           .Add("jquery-ui.css")
-                                                                           .Add("jquery-ui.custom.css").Compress(true))
-                                                                           .Render();}
+          //.Add("notibar.css")
+          //.Add("Site.css")
+          //.Add("jquery-ui.css")
+          //.Add("jquery-ui.custom.css").Compress(true))
+                                                                           ).Render();}
     @MvcMiniProfiler.MiniProfiler.RenderIncludes()
     @RenderSection("HeaderContent", required: false)
 </head>
 <body>
-    <div id="centered">
-        <div id="menu">
+    <div class="container">
+        <div id="menu" class="span-24 last">
             <ul>
                 @MvcHtmlString.Create(Html.CurrentActionLink("Series", "Index", "Series"))
                 @MvcHtmlString.Create(Html.CurrentActionLink("Upcoming", "Index", "Upcoming"))
@@ -27,15 +28,18 @@
                 @MvcHtmlString.Create(Html.CurrentActionLink("Logs", "Index", "Log"))
             </ul>
         </div>
-        <div id="logo">
+        <hr />
+        <div id="logo" class="span-24 last">
             @RenderSection("TitleContent", required: false)
         </div>
-        <div id="page">
+        <hr />
+        <div id="page" class="span-24 last">
             @RenderSection("ActionMenu", required: false)
             @RenderSection("MainContent", required: false)
             @RenderBody()
         </div>
-        <div id="footer">
+        <hr />
+        <div id="footer" class="span-24 last">
             @{Html.RenderAction("Footer", "Shared");}
         </div>
     </div>

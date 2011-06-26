@@ -1,12 +1,10 @@
 h1, h2, h3
 {
-    margin: 0;
     color: #000000;
 }
 
 body
 {
-    padding: 0;
     background: #191919 url(images/img07.jpg) no-repeat right top;
     font-family: "Segoe UI" , "Segoe UI Light" , Tahoma, Geneva, sans-serif;
     font-size: 13px;
@@ -38,14 +36,10 @@ h3
 
 p, ul, ol
 {
-    margin-top: 0;
     line-height: 240%;
     text-align: justify;
 }
 
-ul, ol
-{
-}
 
 a
 {
@@ -57,10 +51,6 @@ a:hover
     text-decoration: none;
 }
 
-a img
-{
-    border: none;
-}
 
 
 hr
@@ -125,21 +115,12 @@ hr
 
 #page
 {
-    margin: 0 auto 10px;
-    overflow: hidden;
     background-color: White;
     padding: 10px 20px 20px 20px;
     min-height: 300px;
 }
 
 
-#centered
-{
-    margin-right: auto;
-    width: 85%;
-    margin-left: auto;
-    min-width: 800px;
-}
 
 /** LOGO */
 
@@ -169,10 +150,6 @@ hr
     border-color: #EEEEEE;
 }
 
-.t-combobox, .t-dropdown
-{
-    vertical-align: middle;
-}
 
 /* Footer */
 .timer
@@ -187,56 +164,7 @@ hr
     text-align: center;
 }
 
-/* Config Pages */
-.config-section
-{
-    width: 800px;
-    height: 45px;
-    display: block;
-}
 
-.config-group
-{
-    width: 385px;
-    display: block;
-    float: left;
-    height: 20px;
-}
-
-.config-group2
-{
-    width: 385px;
-    display: block;
-    float: right;
-    height: 20px;
-}
-
-.config-title
-{
-    font-weight: bold;
-    padding-right: 15px;
-    float: left;
-}
-
-.config-value
-{
-    float: right;
-}
-
-input[type=text]
-{
-    width: 220px;
-}
-
-.config-validation
-{
-    color: Red;
-}
-
-.config-description
-{
-    
-}
 
 .sub-field
 {
@@ -277,9 +205,6 @@ button:active, input[type="button"]:active, input[type="submit"]:active, input[t
     margin: 0px;
 }
 
-#save_button
-{
-}
 
 #save_button:hover
 {
@@ -319,29 +244,3 @@ button:active, input[type="button"]:active, input[type="submit"]:active, input[t
     display: block;
     height: 25px;
 }
-
-/* Loading Bar */
-.grid-container  
-    {  
-        position:relative;  
-        margin:auto;  
-        overflow:hidden;  
-    }  
-
-    .grid-loader  
-    {  
-        position: absolute;  
-        width: 100%;
-        height: 100%;
-        top: 400px;  
-        left: 0px;  
-        letter-spacing: -1px;  
-        color: white; font: 48px Berlin Sans FB, Sans-Serif;  
-        background: #4A4D4A;  
-        padding: 20px;  
-        filter:alpha(opacity=80);  
-        -moz-opacity:0.8;  
-        -khtml-opacity: 0.8;  
-        opacity: 0.8;  
-        line-height: 90%  
-    }
