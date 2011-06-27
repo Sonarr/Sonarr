@@ -85,7 +85,7 @@ namespace NzbDrone.Core.Test
             }
 
             //assert
-            seasonsNumbers.Should().HaveCount(7);
+            seasonsNumbers.Should().HaveCount(8);
             seasons[1].Should().HaveCount(23);
             seasons[2].Should().HaveCount(19);
             seasons[3].Should().HaveCount(16);
