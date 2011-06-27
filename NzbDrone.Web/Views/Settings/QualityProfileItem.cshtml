@@ -29,7 +29,6 @@
 @using (Html.BeginCollectionItem("Profiles"))
 {
     var idClean = ViewData.TemplateInfo.HtmlFieldPrefix.Replace('[', '_').Replace(']', '_');
-    var ugly = ViewData.TemplateInfo.HtmlFieldPrefix;
 
     string selectable = String.Format("{0}_selectable", idClean);
     string allowedStringName = String.Format("{0}_AllowedString", idClean);
@@ -92,7 +91,7 @@
         $(document).ready(function () {
             addOption('@Model.Name', '@ViewData["ProfileId"]');
 
-            result = "";
+            var result = "";
             $("#@selectable .quality-selected").each(function () {
                 result += this.firstChild.data + ",";
             });
@@ -121,7 +120,7 @@
                 $('<option>' + this.firstChild.data + '</option>').appendTo('#@cutoff');
             }
 
-            result = "";
+            var result = "";
             $("#@selectable .quality-selected").each(function () {
                 result += this.firstChild.data + ",";
             });

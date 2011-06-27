@@ -591,6 +591,7 @@
     <Content Include="Content\2011.1.315\Windows7\sprite.png" />
     <Content Include="Content\Blueprint\ie.css" />
     <Content Include="Content\Blueprint\screen.css" />
+    <Content Include="Content\Blueprint\liquid.css" />
     <Content Include="Content\Images\ajax-loader.gif" />
     <Content Include="Content\ie.css" />
     <Content Include="Content\Images\arrow.png" />

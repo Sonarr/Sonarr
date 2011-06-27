@@ -146,7 +146,7 @@ Series
     }
 </script>
 <script type="text/javascript" src="../../Scripts/doTimeout.js"></script>
-<script>
+<script type="text/javascript">
     (function ($) {
         $.fn.episodeProgress = function (episodes, totalEpisodes) {
             return this.each(
@@ -157,9 +157,6 @@ Series
                     var width = Math.round(episodes / totalEpisodes * 100);
 
                     progressBar.css("width", width + "%");
-
-
-
                     div.find(".progressText").html(episodes + " / " + totalEpisodes);
                 });
         };

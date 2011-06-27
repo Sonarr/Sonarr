@@ -3,6 +3,7 @@
 <head runat="server">
     <link rel="SHORTCUT ICON" href="../../favicon.ico" />
     <title>NZBDrone</title>
+    @MvcMiniProfiler.MiniProfiler.RenderIncludes()
     <link href="/Content/Blueprint/screen.css" rel="stylesheet" type="text/css" />
     <link href="/Content/Blueprint/ie.css" rel="stylesheet" type="text/css" />
     <link type="text/css" href="http://aspnet-skins.telerikstatic.com/mvcz/2011.1.414/telerik.common.min.css"
@@ -12,7 +13,7 @@
     <link type="text/css" href="http://aspnet-skins.telerikstatic.com/mvcz/2011.1.414/telerik.rtl.min.css"
         rel="stylesheet" />
     <link href="/Content/Site.css" rel="stylesheet" type="text/css" />
-    @MvcMiniProfiler.MiniProfiler.RenderIncludes()
+    <link href="/Content/Notibar.css" rel="stylesheet" type="text/css" />
     @RenderSection("HeaderContent", required: false)
 </head>
 <body>
