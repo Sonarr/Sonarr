@@ -1,253 +1,242 @@
 ﻿@using NzbDrone.Web.Helpers
 @model NzbDrone.Web.Models.EpisodeSortingModel
-
-<script type="text/javascript">
-    $(document).ready(function () {
-        var options = {
-            target: '#result',
-            beforeSubmit: showRequest,
-            success: showResponse,
-            type: 'post',
-            resetForm: false
-        };
-        $('#form').ajaxForm(options);
-        $('#save_button').attr('disabled', '');
-        createExamples();
-    });
-
-    function showRequest(formData, jqForm, options) {
-        $("#result").empty().html('Saving...');
-        $("#form :input").attr("disabled", true);
-    }
-
-    function showResponse(responseText, statusText, xhr, $form) {
-        $("#result").empty().html(responseText);
-        $("#form :input").attr("disabled", false);
-    }                
-</script>
 @using (Html.BeginForm("SaveEpisodeSorting", "Settings", FormMethod.Post, new { id = "form", name = "form" }))
 {
     @Html.ValidationSummary(true, "Unable to save your settings. Please correct the errors and try again.")
 
     <fieldset>
         <legend>Episode Sorting</legend>
-            
-            <div class="config-section">
-                <div class="config-group">
-                    <div class="config-title">@Html.LabelFor(m => m.SeriesName)</div>
-                    <div class="config-value">@Html.CheckBoxFor(m => m.SeriesName)</div>
-                </div>
-                <div class="config-group2"> 
-                    <div class="config-validation">@Html.ValidationMessageFor(m => m.SeriesName)</div>
-                    <div class="config-description">@Html.DescriptionFor(m => m.SeriesName)</div>
-                </div>
+        <div class="config-section">
+            <div class="config-group">
+                <div class="config-title">@Html.LabelFor(m => m.SeriesName)</div>
+                <div class="config-value">@Html.CheckBoxFor(m => m.SeriesName)</div>
             </div>
-
-            <div class="config-section">
-                <div class="config-group">
-                    <div class="config-title">@Html.LabelFor(m => m.EpisodeName)</div>
-                    <div class="config-value">@Html.CheckBoxFor(m => m.EpisodeName)</div>
-                </div>
-                <div class="config-group2"> 
-                    <div class="config-validation">@Html.ValidationMessageFor(m => m.EpisodeName)</div>
-                    <div class="config-description">@Html.DescriptionFor(m => m.EpisodeName)</div>
-                </div>
+            <div class="config-group2">
+                <div class="config-validation">@Html.ValidationMessageFor(m => m.SeriesName)</div>
+                <div class="config-description">@Html.DescriptionFor(m => m.SeriesName)</div>
             </div>
-
-            <div class="config-section">
-                <div class="config-group">
-                    <div class="config-title">@Html.LabelFor(m => m.ReplaceSpaces)</div>
-                    <div class="config-value">@Html.CheckBoxFor(m => m.ReplaceSpaces)</div>
-                </div>
-                <div class="config-group2"> 
-                    <div class="config-validation">@Html.ValidationMessageFor(m => m.ReplaceSpaces)</div>
-                    <div class="config-description">@Html.DescriptionFor(m => m.ReplaceSpaces)</div>
-                </div>
+        </div>
+        <div class="config-section">
+            <div class="config-group">
+                <div class="config-title">@Html.LabelFor(m => m.EpisodeName)</div>
+                <div class="config-value">@Html.CheckBoxFor(m => m.EpisodeName)</div>
             </div>
-
-            <div class="config-section">
-                <div class="config-group">
-                    <div class="config-title">@Html.LabelFor(m => m.AppendQuality)</div>
-                    <div class="config-value">@Html.CheckBoxFor(m => m.AppendQuality)</div>
-                </div>
-                <div class="config-group2"> 
-                    <div class="config-validation">@Html.ValidationMessageFor(m => m.AppendQuality)</div>
-                    <div class="config-description">@Html.DescriptionFor(m => m.AppendQuality)</div>
-                </div>
+            <div class="config-group2">
+                <div class="config-validation">@Html.ValidationMessageFor(m => m.EpisodeName)</div>
+                <div class="config-description">@Html.DescriptionFor(m => m.EpisodeName)</div>
             </div>
-
-            <div class="config-section">
-                <div class="config-group">
-                    <div class="config-title">@Html.LabelFor(m => m.SeasonFolders)</div>
-                    <div class="config-value">@Html.CheckBoxFor(m => m.SeasonFolders)</div>
-                </div>
-                <div class="config-group2"> 
-                    <div class="config-validation">@Html.ValidationMessageFor(m => m.SeasonFolders)</div>
-                    <div class="config-description">@Html.DescriptionFor(m => m.SeasonFolders)</div>
-                </div>
+        </div>
+        <div class="config-section">
+            <div class="config-group">
+                <div class="config-title">@Html.LabelFor(m => m.ReplaceSpaces)</div>
+                <div class="config-value">@Html.CheckBoxFor(m => m.ReplaceSpaces)</div>
             </div>
-
-            <div class="config-section">
-                <div class="config-group">
-                    <div class="config-title">@Html.LabelFor(m => m.SeasonFolderFormat)</div>
-                    <div class="config-value">@Html.TextBoxFor(m => m.SeasonFolderFormat)</div>
-                </div>
-                <div class="config-group2"> 
-                    <div class="config-validation">@Html.ValidationMessageFor(m => m.SeasonFolderFormat)</div>
-                    <div class="config-description">@Html.DescriptionFor(m => m.SeasonFolderFormat)</div>
-                </div>
+            <div class="config-group2">
+                <div class="config-validation">@Html.ValidationMessageFor(m => m.ReplaceSpaces)</div>
+                <div class="config-description">@Html.DescriptionFor(m => m.ReplaceSpaces)</div>
             </div>
-
-            <div class="config-section">
-                <div class="config-group">
-                    <div class="config-title">@Html.LabelFor(m => m.SeparatorStyle)</div>
-                    <div class="config-value">@Html.DropDownListFor(m => m.SeparatorStyle, Model.SeparatorStyles)</div>
-                </div>
-                <div class="config-group2"> 
-                    <div class="config-validation">@Html.ValidationMessageFor(m => m.SeparatorStyle)</div>
-                    <div class="config-description">@Html.DescriptionFor(m => m.SeparatorStyle)</div>
-                </div>
+        </div>
+        <div class="config-section">
+            <div class="config-group">
+                <div class="config-title">@Html.LabelFor(m => m.AppendQuality)</div>
+                <div class="config-value">@Html.CheckBoxFor(m => m.AppendQuality)</div>
             </div>
-
-            <div class="config-section">
-                <div class="config-group">
-                    <div class="config-title">@Html.LabelFor(m => m.NumberStyle)</div>
-                    <div class="config-value">@Html.DropDownListFor(m => m.NumberStyle, Model.NumberStyles)</div>
-                </div>
-                <div class="config-group2"> 
-                    <div class="config-validation">@Html.ValidationMessageFor(m => m.NumberStyle)</div>
-                    <div class="config-description">@Html.DescriptionFor(m => m.NumberStyle)</div>
-                </div>
+            <div class="config-group2">
+                <div class="config-validation">@Html.ValidationMessageFor(m => m.AppendQuality)</div>
+                <div class="config-description">@Html.DescriptionFor(m => m.AppendQuality)</div>
             </div>
-
-            <div class="config-section">
-                <div class="config-group">
-                    <div class="config-title">@Html.LabelFor(m => m.MultiEpisodeStyle)</div>
-                    <div class="config-value">@Html.DropDownListFor(m => m.MultiEpisodeStyle, Model.MultiEpisodeStyles)</div>
-                </div>
-                <div class="config-group2"> 
-                    <div class="config-validation">@Html.ValidationMessageFor(m => m.MultiEpisodeStyle)</div>
-                    <div class="config-description">@Html.DescriptionFor(m => m.MultiEpisodeStyle)</div>
-                </div>
+        </div>
+        <div class="config-section">
+            <div class="config-group">
+                <div class="config-title">@Html.LabelFor(m => m.SeasonFolders)</div>
+                <div class="config-value">@Html.CheckBoxFor(m => m.SeasonFolders)</div>
             </div>
-
-            <div id="singleEpisodeExample"></div>
-            <div id="multiEpisodeExample"></div>
-
-            <input type="submit" id="save_button" value="Save" disabled="disabled" />
-
+            <div class="config-group2">
+                <div class="config-validation">@Html.ValidationMessageFor(m => m.SeasonFolders)</div>
+                <div class="config-description">@Html.DescriptionFor(m => m.SeasonFolders)</div>
+            </div>
+        </div>
+        <div class="config-section">
+            <div class="config-group">
+                <div class="config-title">@Html.LabelFor(m => m.SeasonFolderFormat)</div>
+                <div class="config-value">@Html.TextBoxFor(m => m.SeasonFolderFormat)</div>
+            </div>
+            <div class="config-group2">
+                <div class="config-validation">@Html.ValidationMessageFor(m => m.SeasonFolderFormat)</div>
+                <div class="config-description">@Html.DescriptionFor(m => m.SeasonFolderFormat)</div>
+            </div>
+        </div>
+        <div class="config-section">
+            <div class="config-group">
+                <div class="config-title">@Html.LabelFor(m => m.SeparatorStyle)</div>
+                <div class="config-value">@Html.DropDownListFor(m => m.SeparatorStyle, Model.SeparatorStyles)</div>
+            </div>
+            <div class="config-group2">
+                <div class="config-validation">@Html.ValidationMessageFor(m => m.SeparatorStyle)</div>
+                <div class="config-description">@Html.DescriptionFor(m => m.SeparatorStyle)</div>
+            </div>
+        </div>
+        <div class="config-section">
+            <div class="config-group">
+                <div class="config-title">@Html.LabelFor(m => m.NumberStyle)</div>
+                <div class="config-value">@Html.DropDownListFor(m => m.NumberStyle, Model.NumberStyles)</div>
+            </div>
+            <div class="config-group2">
+                <div class="config-validation">@Html.ValidationMessageFor(m => m.NumberStyle)</div>
+                <div class="config-description">@Html.DescriptionFor(m => m.NumberStyle)</div>
+            </div>
+        </div>
+        <div class="config-section">
+            <div class="config-group">
+                <div class="config-title">@Html.LabelFor(m => m.MultiEpisodeStyle)</div>
+                <div class="config-value">@Html.DropDownListFor(m => m.MultiEpisodeStyle, Model.MultiEpisodeStyles)</div>
+            </div>
+            <div class="config-group2">
+                <div class="config-validation">@Html.ValidationMessageFor(m => m.MultiEpisodeStyle)</div>
+                <div class="config-description">@Html.DescriptionFor(m => m.MultiEpisodeStyle)</div>
+            </div>
+        </div>
+        <div id="singleEpisodeExample">
+        </div>
+        <div id="multiEpisodeExample">
+        </div>
+        <input type="submit" id="save_button" value="Save" disabled="disabled" />
     </fieldset>
 }
-<div id="result" class="hiddenResult"></div>
+<div id="result" class="hiddenResult">
+</div>
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var options = {
+                target: '#result',
+                beforeSubmit: showRequest,
+                success: showResponse,
+                type: 'post',
+                resetForm: false
+            };
+            $('#form').ajaxForm(options);
+            $('#save_button').attr('disabled', '');
+            createExamples();
+        });
 
-<script type="text/javascript">
-
-    $('#SeriesName').live('change', function () { createExamples(); });
-    $('#EpisodeName').live('change', function () { createExamples(); });
-    $('#ReplaceSpaces').live('change', function () { createExamples(); });
-    $('#AppendQuality').live('change', function () { createExamples(); });
-    $('#SeparatorStyle').live('change', function () { createExamples(); });
-    $('#NumberStyle').live('change', function () { createExamples(); });
-    $('#MultiEpisodeStyle').live('change', function () { createExamples(); }); 
-    
-    function createExamples() {
-        createSingleEpisodeExample();
-        createMultiEpisodeExample();
-    }
-    
-    function createSingleEpisodeExample() {
-        var result = '';
-
-        var separator = ' - ';
-
-        if ($("#SeparatorStyle option:selected").val() == 1)
-            separator = ' ';
-
-        if ($('#SeriesName').attr('checked')) {
-            result += 'Series Name';
-            result += separator;
-        }
-        
-        result += $("#NumberStyle option:selected").text();
-
-        if ($('#EpisodeName').attr('checked')) {
-            result += separator;
-            result += 'Episode Name';
+        function showRequest(formData, jqForm, options) {
+            $("#result").empty().html('Saving...');
+            $("#form :input").attr("disabled", true);
         }
 
-        if ($('#AppendQuality').attr('checked'))
-            result += ' [TV]';
-       
-        if ($('#ReplaceSpaces').attr('checked'))
-            result = result.replace(/\s/g, '.');
-        
-        result = '<b>Single Episode Example: </b>' + result;
-
-        $('#singleEpisodeExample').html(result);
-    }
-
-    function createMultiEpisodeExample() {
-        var result = '';
-
-        var separator = ' - ';
-
-        if ($("#SeparatorStyle option:selected").val() == 1)
-            separator = ' ';
-
-        if ($('#SeriesName').attr('checked')) {
-            result += 'Series Name';
-            result += separator;
-        }
-        
-        var numberStyle = $("#NumberStyle option:selected").text();
-        var numberId = $("#NumberStyle option:selected").val();
-        var style = $("#MultiEpisodeStyle option:selected").val();
-
-        result += numberStyle;
-
-        if (style == 0)
-            result += '-06';
-
-        if (style == 1) {
-            result += separator;
-            result += numberStyle.replace('5', '6');
-        }
-        
-        if (style == 2) {
-            if (numberId <= 1)
-                result += 'x06';
-
-            if (numberId == 2)
-                result += 'E06';
-
-            if (numberId == 3)
-                result += 'e06';
+        function showResponse(responseText, statusText, xhr, $form) {
+            $("#result").empty().html(responseText);
+            $("#form :input").attr("disabled", false);
         }
 
-        if (style == 3) {
-            if (numberId <= 1)
-                result += '-x06';
+        $('#SeriesName').live('change', function () { createExamples(); });
+        $('#EpisodeName').live('change', function () { createExamples(); });
+        $('#ReplaceSpaces').live('change', function () { createExamples(); });
+        $('#AppendQuality').live('change', function () { createExamples(); });
+        $('#SeparatorStyle').live('change', function () { createExamples(); });
+        $('#NumberStyle').live('change', function () { createExamples(); });
+        $('#MultiEpisodeStyle').live('change', function () { createExamples(); });
 
-            if (numberId == 2)
-                result += '-E06';
-
-            if (numberId == 3)
-                result += '-e06';
+        function createExamples() {
+            createSingleEpisodeExample();
+            createMultiEpisodeExample();
         }
 
-        if ($('#EpisodeName').attr('checked')) {
-            result += separator;
-            result += 'Episode Name';
+        function createSingleEpisodeExample() {
+            var result = '';
+
+            var separator = ' - ';
+
+            if ($("#SeparatorStyle option:selected").val() == 1)
+                separator = ' ';
+
+            if ($('#SeriesName').attr('checked')) {
+                result += 'Series Name';
+                result += separator;
+            }
+
+            result += $("#NumberStyle option:selected").text();
+
+            if ($('#EpisodeName').attr('checked')) {
+                result += separator;
+                result += 'Episode Name';
+            }
+
+            if ($('#AppendQuality').attr('checked'))
+                result += ' [TV]';
+
+            if ($('#ReplaceSpaces').attr('checked'))
+                result = result.replace(/\s/g, '.');
+
+            result = '<b>Single Episode Example: </b>' + result;
+
+            $('#singleEpisodeExample').html(result);
         }
 
-        if ($('#AppendQuality').attr('checked'))
-            result += ' [TV]';
+        function createMultiEpisodeExample() {
+            var result = '';
 
-        if ($('#ReplaceSpaces').attr('checked'))
-            result = result.replace(/\s/g, '.');
+            var separator = ' - ';
 
-        result = '<b>Multi-Episode Example: </b>' + result;
+            if ($("#SeparatorStyle option:selected").val() == 1)
+                separator = ' ';
 
-        $('#multiEpisodeExample').html(result);
-    }
-</script>
+            if ($('#SeriesName').attr('checked')) {
+                result += 'Series Name';
+                result += separator;
+            }
+
+            var numberStyle = $("#NumberStyle option:selected").text();
+            var numberId = $("#NumberStyle option:selected").val();
+            var style = $("#MultiEpisodeStyle option:selected").val();
+
+            result += numberStyle;
+
+            if (style == 0)
+                result += '-06';
+
+            if (style == 1) {
+                result += separator;
+                result += numberStyle.replace('5', '6');
+            }
+
+            if (style == 2) {
+                if (numberId <= 1)
+                    result += 'x06';
+
+                if (numberId == 2)
+                    result += 'E06';
+
+                if (numberId == 3)
+                    result += 'e06';
+            }
+
+            if (style == 3) {
+                if (numberId <= 1)
+                    result += '-x06';
+
+                if (numberId == 2)
+                    result += '-E06';
+
+                if (numberId == 3)
+                    result += '-e06';
+            }
+
+            if ($('#EpisodeName').attr('checked')) {
+                result += separator;
+                result += 'Episode Name';
+            }
+
+            if ($('#AppendQuality').attr('checked'))
+                result += ' [TV]';
+
+            if ($('#ReplaceSpaces').attr('checked'))
+                result = result.replace(/\s/g, '.');
+
+            result = '<b>Multi-Episode Example: </b>' + result;
+
+            $('#multiEpisodeExample').html(result);
+        }
+    </script>
+}

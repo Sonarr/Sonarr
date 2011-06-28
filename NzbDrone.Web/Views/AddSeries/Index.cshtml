@@ -1,30 +1,18 @@
 ﻿@model List<RootDir>
 @using NzbDrone.Core.Repository
-
-@{ Html.Telerik().ScriptRegistrar().DefaultGroup(group => group
-                                        .Add("telerik.common.js")
-                                        .Add("telerik.draganddrop.js")
-                                        .Add("telerik.window.js")
-                                        .Add("telerik.panelbar.js")
-                                        .Add("telerik.list.js")
-                                        .Add("telerik.combobox.js")); }
-
 <style>
-.root_dir_text
-{
-    width: 300px;
-    margin-top: 8px;
-    margin-left: 3px;
-    vertical-align: middle;
-}
+    .root_dir_text
+    {
+        width: 300px;
+        margin-top: 8px;
+        margin-left: 3px;
+        vertical-align: middle;
+    }
 </style>
-
 @section TitleContent{
-    Add Series
+Add Series
 }
-
 @section MainContent{
-
     @{ Html.Telerik().Window()
     .Name("Window")
     .Title("Add New Series")
@@ -37,8 +25,7 @@
     .Resizable(resizing => resizing.Enabled(false))
     .LoadContentFrom("AddNew", "AddSeries")
     .Render();
-}
-    
+    }
     @{ Html.Telerik().PanelBar()
     .Name("RootDirPanel")
     .HtmlAttributes(new { style = "margin: 0px;" })
@@ -51,142 +38,146 @@
             .Selected((bool)ViewData["ShowRootDirs"])
             .Expanded((bool)ViewData["ShowRootDirs"])
             .Content(@<text>
-                        <div style="padding-top: 10px;">
-                            <div style="padding-left: 7px; margin-bottom: 5px;">
-                                <a id="addItem" style="text-decoration:none;" href="@Url.Action("AddRootDir", "AddSeries")">
-                                <img src="../../Content/Images/Plus.png" alt="Add New Profile" width="20px" height="20px" />
-                                <h4 style="margin-left: 3px; display: inline; color: Black;">Add New Root Directory</h4></a>
-                            </div>
-
-                            <div id="root-dirs">
-                                @foreach (var root in Model)
-                                {
-                                Html.RenderAction("GetRootDirView", root);
-                                }
-                            </div>
-                            <button onclick="reloadExistingSeries()" style="padding: 2px 10px 2px 10px; margin: 5px; margin-bottom: 10px;">Refresh Unmapped</button>
-                            <span id="reloadAjax" style="display: none"><img src="../../Content/Images/ajax-loader.gif" width="22px" height="22px" style="margin-bottom: -6px;"/></span>
-                        </div>
-                    </text>);
-        }).Render(); 
+        <div style="padding-top: 10px;">
+            <div style="padding-left: 7px; margin-bottom: 5px;">
+                <a id="addItem" style="text-decoration:none;" href="@Url.Action("AddRootDir", "AddSeries")">
+                    <img src="../../Content/Images/Plus.png" alt="Add New Profile" width="20px" height="20px" />
+                    <h4 style="margin-left: 3px; display: inline; color: Black;">
+                        Add New Root Directory</h4>
+                </a>
+            </div>
+            <div id="root-dirs">
+                @foreach (var root in Model)
+                {
+                    Html.RenderAction("GetRootDirView", root);
+                }
+            </div>
+            <button onclick="reloadExistingSeries()" style="padding: 2px 10px 2px 10px; margin: 5px;
+                margin-bottom: 10px;">
+                Refresh Unmapped</button>
+            <span id="reloadAjax" style="display: none">
+                <img src="../../Content/Images/ajax-loader.gif" width="22px" height="22px" style="margin-bottom: -6px;" /></span>
+        </div>
+        </text>);
+    }).Render(); 
     }
-
     <div style="padding-bottom: 10px; padding-top: 15px;">
-        <button onclick="openAddNewSeries(); return false;" class="listButton" style="margin-left:5px">Add New</button>
-
-        @Html.Telerik().DropDownList().Name("masterDropbox").BindTo((SelectList) ViewData["qualities"]).HtmlAttributes(
-            new {style = "width: 100px; margin-left:224px;"}).ClientEvents(events => events.OnChange("masterChanged"))
-
+        <button onclick="openAddNewSeries(); return false;" class="listButton" style="margin-left: 5px">
+            Add New</button>
+        @Html.Telerik().DropDownList().Name("masterDropbox").BindTo((SelectList)ViewData["qualities"]).HtmlAttributes(
+            new { style = "width: 100px; margin-left:224px;" }).ClientEvents(events => events.OnChange("masterChanged"))
     </div>
-
     <div id="existingSeries">
         @{ Html.RenderAction("AddExisting", "AddSeries"); }
     </div>
 }
 
-<script type="text/javascript">
-    function openAddNewSeries() {
-        var window = $('#Window').data('tWindow');
-        window.center().open();
-        window.refresh();
+@section Scripts
+{
+    <script type="text/javascript">
+        function openAddNewSeries() {
+            var window = $('#Window').data('tWindow');
+            window.center().open();
+            window.refresh();
 
-    }
+        }
 
-    function closeAddNewSeries() {
-        var window = $('#Window').data("tWindow");
-        window.close();
-    }
-    
-    function masterChanged() {
-        var masterQuality = $('#masterDropbox').data("tDropDownList").value();
-        
-        var qualityDropbox = $(".qualityDropbox");
+        function closeAddNewSeries() {
+            var window = $('#Window').data("tWindow");
+            window.close();
+        }
 
-        qualityDropbox.each(function () {
-            var child = $(this).children("[id^='qualityList']");
-            var comboBox = child.data("tDropDownList");
-            comboBox.value(masterQuality);
-        });
-    }
+        function masterChanged() {
+            var masterQuality = $('#masterDropbox').data("tDropDownList").value();
 
-    var addSeriesUrl = '@Url.Action("AddSeries", "AddSeries")';
+            var qualityDropbox = $(".qualityDropbox");
 
-    function addSeries(guid, path) {
-        var seriesComboBox = $("#seriesList_" + guid).data("tComboBox");
-        var qualityComboBox = $("#qualityList_" + guid).data("tDropDownList");
-        sendToServer(seriesComboBox.value(), path, qualityComboBox.value());
-        $("#div_" + guid).hide();
-    }
+            qualityDropbox.each(function () {
+                var child = $(this).children("[id^='qualityList']");
+                var comboBox = child.data("tDropDownList");
+                comboBox.value(masterQuality);
+            });
+        }
 
-    function sendToServer(id, path, quality) {
-        $.ajax({
-            type: "POST",
-            url: addSeriesUrl,
-            data: jQuery.param({ path: path, seriesId: id, qualityProfileId: quality }),
-            error: function (req, status, error) {
-                alert("Sorry! We could not add " + path + " at this time. " + error);
-            }
-        });
-    }
+        var addSeriesUrl = '@Url.Action("AddSeries", "AddSeries")';
 
-    $("#addItem").click(function () {
-        $.ajax({
-            url: this.href,
-            cache: false,
-            success: function (html) { $("#root-dirs").append(html); }
-        });
-        return false;
-    });
+        function addSeries(guid, path) {
+            var seriesComboBox = $("#seriesList_" + guid).data("tComboBox");
+            var qualityComboBox = $("#qualityList_" + guid).data("tDropDownList");
+            sendToServer(seriesComboBox.value(), path, qualityComboBox.value());
+            $("#div_" + guid).hide();
+        }
 
-    var deleteRootDirUrl = '@Url.Action("DeleteRootDir", "AddSeries")';
-
-    function deleteRootDir(guid) {
-        var id = $('#id_' + guid).val();
-        sendDeleteToServer(id, guid);
-    }
-
-    function sendDeleteToServer(id, guid) {
-        $.ajax({
-            type: "POST",
-            url: deleteRootDirUrl,
-            data: jQuery.param({ rootDirId: id }),
-            error: function (req, status, error) {
-                alert("Sorry! We could not delete your Root Directory at this time. " + error);
-            },
-            success: function () {
-                $("#rootDir_" + guid).remove();
-            }
-        });
-    }
-
-    var saveRootDirUrl = '@Url.Action("SaveRootDir", "AddSeries")';
-
-    function saveRootDir(guid) {
-        var path = $("#path_" + guid).data("tComboBox").value();
-        var id = $("#id_" + guid).val();
-
-        $.ajax({
-            type: "POST",
-            url: saveRootDirUrl,
-            data: jQuery.param({ id: id, path: path }),
-            error: function (req, status, error) {
-                alert("Sorry! We could not save " + path + " at this time. " + error);
-            },
-            success: function (data, textStatus, jqXHR) {
-                if (data == 'failed')
-                    alert("An error occurred while saving Root Directory: " + path);
-                else {
-                    $("#id_" + guid).val(data);
+        function sendToServer(id, path, quality) {
+            $.ajax({
+                type: "POST",
+                url: addSeriesUrl,
+                data: jQuery.param({ path: path, seriesId: id, qualityProfileId: quality }),
+                error: function (req, status, error) {
+                    alert("Sorry! We could not add " + path + " at this time. " + error);
                 }
-            }
-        });
-    }
+            });
+        }
 
-    function reloadExistingSeries() {
-        $('#reloadAjax').show();
-        $('#existingSeries').load('@Url.Action("AddExisting", "AddSeries")',
+        $("#addItem").click(function () {
+            $.ajax({
+                url: this.href,
+                cache: false,
+                success: function (html) { $("#root-dirs").append(html); }
+            });
+            return false;
+        });
+
+        var deleteRootDirUrl = '@Url.Action("DeleteRootDir", "AddSeries")';
+
+        function deleteRootDir(guid) {
+            var id = $('#id_' + guid).val();
+            sendDeleteToServer(id, guid);
+        }
+
+        function sendDeleteToServer(id, guid) {
+            $.ajax({
+                type: "POST",
+                url: deleteRootDirUrl,
+                data: jQuery.param({ rootDirId: id }),
+                error: function (req, status, error) {
+                    alert("Sorry! We could not delete your Root Directory at this time. " + error);
+                },
+                success: function () {
+                    $("#rootDir_" + guid).remove();
+                }
+            });
+        }
+
+        var saveRootDirUrl = '@Url.Action("SaveRootDir", "AddSeries")';
+
+        function saveRootDir(guid) {
+            var path = $("#path_" + guid).data("tComboBox").value();
+            var id = $("#id_" + guid).val();
+
+            $.ajax({
+                type: "POST",
+                url: saveRootDirUrl,
+                data: jQuery.param({ id: id, path: path }),
+                error: function (req, status, error) {
+                    alert("Sorry! We could not save " + path + " at this time. " + error);
+                },
+                success: function (data, textStatus, jqXHR) {
+                    if (data == 'failed')
+                        alert("An error occurred while saving Root Directory: " + path);
+                    else {
+                        $("#id_" + guid).val(data);
+                    }
+                }
+            });
+        }
+
+        function reloadExistingSeries() {
+            $('#reloadAjax').show();
+            $('#existingSeries').load('@Url.Action("AddExisting", "AddSeries")',
             function (responseText, textStatus, XMLHttpRequest) {
                 $('#reloadAjax').hide();
             });
-    }
-</script>
+        }
+    </script>
+}

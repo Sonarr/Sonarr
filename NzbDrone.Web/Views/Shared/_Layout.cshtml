@@ -51,26 +51,23 @@
     <div id="msgBox">
         <span id="msgText">Scanning Series Folder...</span>
     </div>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js" />
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js" />
-    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/4.0/1/MicrosoftAjax.js" />
-    <script type="text/javascript" src="http://aspnet-scripts.telerikstatic.com/mvcz/2011.1.414/telerik.common.min.js" />
-    <script type="text/javascript" src="http://aspnet-scripts.telerikstatic.com/mvcz/2011.1.414/telerik.textbox.min.js" />
-    <script type="text/javascript" src="http://aspnet-scripts.telerikstatic.com/mvcz/2011.1.414/telerik.grid.min.js" />
-    <script type="text/javascript" src="http://aspnet-scripts.telerikstatic.com/mvcz/2011.1.414/telerik.grid.filtering.min.js" />
-    <script type="text/javascript" src="http://aspnet-scripts.telerikstatic.com/mvcz/2011.1.414/telerik.grid.grouping.min.js" />
-    <script type="text/javascript" src="http://aspnet-scripts.telerikstatic.com/mvcz/2011.1.414/telerik.tabstrip.min.js" />
-    <script type="text/javascript" src="http://aspnet-scripts.telerikstatic.com/mvcz/2011.1.414/telerik.panelbar.min.js" />
-    <script type="text/javascript" src="http://aspnet-scripts.telerikstatic.com/mvcz/2011.1.414/telerik.list.min.js" />
-    <script type="text/javascript" src="http://aspnet-scripts.telerikstatic.com/mvcz/2011.1.414/telerik.combobox.min.js" />
-    <script type="text/javascript" src="http://aspnet-scripts.telerikstatic.com/mvcz/2011.1.414/telerik.menu.min.js" />
-    <script type="text/javascript" src="/Scripts/jquery-tgc-countdown-1.0.js" />
-    <script type="text/javascript" src="/Scripts/jquery.form.js" />
-    <script type="text/javascript" src="/Scripts/jquery.jgrowl.js" />
-    <script type="text/javascript" src="/Scripts/Notification.js" />
-    <script type="text/javascript" src="/Scripts/MicrosoftMvcValidation.js" />
-    <script type="text/javascript" src="/Scripts/episodeSearch.js" />
-    
+    @(Html.Telerik().ScriptRegistrar().jQuery(true).Scripts(
+        c => c.AddGroup("CDN", group => group
+                    .Add("http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js")
+                    .Add("http://ajax.aspnetcdn.com/ajax/4.0/1/MicrosoftAjax.js"))
+              
+                    .AddGroup("3rdParty", group => group
+                    .Add("jquery.form.js")
+                    .Add("jquery.jgrowl.js")
+                    .Add("jquery-tgc-countdown-1.0.js")
+                    .Add("MicrosoftMvcValidation.js").Combined(true).Compress(true))               
+                    
+                    .AddGroup("NzbDrone", group => group
+                                        .Add("Notification.js")
+                                        .Add("gridLoad.js")
+                                        .Add("episodeSearch.js"))
+                                        
+                                        ))
     <script type="text/javascript">
         jQuery(document).ready(function () {
 

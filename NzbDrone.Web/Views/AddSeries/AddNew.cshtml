@@ -1,27 +1,24 @@
 ﻿@using NzbDrone.Web.Models
-
 @{
     Layout = null;
 }
-
 <div>
     <fieldset>
         <legend>Root Directory</legend>
-    
         @{int d = 0;
 
           foreach (var dir in ViewData["RootDirs"] as List<RootDirModel>)
           {
-                <div>
-                    @Html.RadioButton("selectedRootDir", dir.CleanPath, d == 0, new { @class = "dirList examplePart", id = "dirRadio_" + d })
-                    @Html.Label(dir.Path)
-                    @{ d++; }
-                </div>
-            }
+            <div>
+                @Html.RadioButton("selectedRootDir", dir.CleanPath, d == 0, new { @class = "dirList examplePart", id = "dirRadio_" + d })
+                @Html.Label(dir.Path)
+                @{ d++; }
+            </div>
+          }
         }
     </fieldset>
 </div>
-<br/>
+<br />
 <div>
     @{Html.Telerik().ComboBox()
     .Name("seriesList_new")
@@ -34,37 +31,38 @@
     <button class="listButton" onclick="addNewSeries()">
         Add</button>
 </div>
+@section Scripts{
+    <script type="text/javascript" language="javascript">
+        var addNewSeriesUrl = '@Url.Action("AddNewSeries", "AddSeries")';
 
-<script type="text/javascript" language="javascript">
-    var addNewSeriesUrl = '@Url.Action("AddNewSeries", "AddSeries")';
+        function addNewSeries() {
+            var seriesComboBox = $("#seriesList_new").data("tComboBox");
+            var qualityComboBox = $("#qualityList_new").data("tDropDownList");
+            var path = $("input[name='selectedRootDir']:checked").val();
 
-    function addNewSeries() {
-        var seriesComboBox = $("#seriesList_new").data("tComboBox");
-        var qualityComboBox = $("#qualityList_new").data("tDropDownList");
-        var path = $("input[name='selectedRootDir']:checked").val();
-        
-        sendToServerNew(seriesComboBox.value(), path, seriesComboBox.text(), qualityComboBox.value());
-    }
+            sendToServerNew(seriesComboBox.value(), path, seriesComboBox.text(), qualityComboBox.value());
+        }
 
-    function sendToServerNew(id, rootPath, seriesName, quality) {
-        $.ajax({
-            type: "POST",
-            url: addNewSeriesUrl,
-            data: jQuery.param({ rootPath: rootPath, seriesName: seriesName, seriesId: id, qualityProfileId: quality }),
-            error: function (req, status, error) {
-                alert("Sorry! We could not add " + seriesName + " at this time. " + error);
-            },
-            success: function (data, textStatus, jqXHR){
-                //Clear the search box
-                $("#seriesList_new").data("tComboBox").text('');
-                
-                //Through up an alert if we failed to add the series
-                if (data != 'ok')
-                    alert("Sorry! We could not add " + seriesName + ", does it already exist?");
-                                
-                else
-                    closeAddNewSeries(); //Close the Window!
-            }
-        });
-    }
-</script>
+        function sendToServerNew(id, rootPath, seriesName, quality) {
+            $.ajax({
+                type: "POST",
+                url: addNewSeriesUrl,
+                data: jQuery.param({ rootPath: rootPath, seriesName: seriesName, seriesId: id, qualityProfileId: quality }),
+                error: function (req, status, error) {
+                    alert("Sorry! We could not add " + seriesName + " at this time. " + error);
+                },
+                success: function (data, textStatus, jqXHR) {
+                    //Clear the search box
+                    $("#seriesList_new").data("tComboBox").text('');
+
+                    //Through up an alert if we failed to add the series
+                    if (data != 'ok')
+                        alert("Sorry! We could not add " + seriesName + ", does it already exist?");
+
+                    else
+                        closeAddNewSeries(); //Close the Window!
+                }
+            });
+        }
+    </script>
+}

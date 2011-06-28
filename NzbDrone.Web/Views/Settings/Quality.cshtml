@@ -1,122 +1,121 @@
 ﻿@using NzbDrone.Web.Helpers;
 @model NzbDrone.Web.Models.QualityModel
-
-<script type="text/javascript">
-    $(document).ready(function () {
-        var options = {
-            target: '#result',
-            beforeSubmit: showRequest,
-            success: showResponse,
-            type: 'post',
-            resetForm: false
-        };
-        $('#form').ajaxForm(options);
-        $('#save_button').attr('disabled', '');
-    });
-
-    function showRequest(formData, jqForm, options) {
-        $("#result").empty().html('Saving...');
-        $("#form :input").attr("disabled", true);
-    }
-
-    function showResponse(responseText, statusText, xhr, $form) {
-        $("#result").empty().html(responseText);
-        $("#form :input").attr("disabled", false);
-    }
-
-    function addOption(text, value) {
-        var myCombo = $('#DefaultQualityProfileId');
-
-        var exists = $("#DefaultQualityProfileId option[value='" + value + "']");
-        
-        if (exists.length == 0)
-            myCombo.append($('\<option\> \</option\>').val(value).html(text));
-    }
-
-    function removeOption(value) {
-        $("#DefaultQualityProfileId option[value='" + value + "']").remove();
-    }
-
-    function renameOption(text, value) {
-        $("#DefaultQualityProfileId option[value='" + value + "']").html(text);
-    }
-    </script>
-
-@using (Html.BeginForm("SaveQuality", "Settings", FormMethod.Post, new {id = "form", name = "form"}))
+@using (Html.BeginForm("SaveQuality", "Settings", FormMethod.Post, new { id = "form", name = "form" }))
 {
-        <fieldset style="position: relative;">
-            <legend>Quality</legend>
-
-                <div id="top">
-                    <div class="config-section">
-                        <div class="config-group">
-                            <div class="config-title">@Html.LabelFor(m => m.DefaultQualityProfileId)</div>
-                            <div class="config-value">@Html.DropDownListFor(m => m.DefaultQualityProfileId, Model.QualityProfileSelectList)</div>
-                        </div>
-                        <div class="config-group2">
-                            <div class="config-validation">@Html.ValidationMessageFor(m => m.DefaultQualityProfileId)</div>
-                            <div class="config-description">@Html.DescriptionFor(m => m.DefaultQualityProfileId)</div>
-                        </div>
-                    </div>
+    <fieldset style="position: relative;">
+        <legend>Quality</legend>
+        <div id="top">
+            <div class="config-section">
+                <div class="config-group">
+                    <div class="config-title">@Html.LabelFor(m => m.DefaultQualityProfileId)</div>
+                    <div class="config-value">@Html.DropDownListFor(m => m.DefaultQualityProfileId, Model.QualityProfileSelectList)</div>
                 </div>
-                <div id="bottom" style="float: left; padding-bottom: 55px;">
-                    <div style="padding-left: 7px; margin-bottom: 5px;">
-                        <a id="addItem" style="text-decoration:none;" href="@Url.Action("AddProfile", "Settings")">
-                        <img src="../../Content/Images/Plus.png" alt="Add New Profile" width="20px" height="20px" />
-                        <h4 style="margin-left: 3px; display: inline; color: Black;">Add New Profile</h4></a>
-                    </div>
-
-                    <div id="profiles">
-                        @foreach (var item in Model.Profiles)
-                        {
-                            Html.RenderAction("GetQualityProfileView", item);
-                        }
-                    </div>
+                <div class="config-group2">
+                    <div class="config-validation">@Html.ValidationMessageFor(m => m.DefaultQualityProfileId)</div>
+                    <div class="config-description">@Html.DescriptionFor(m => m.DefaultQualityProfileId)</div>
                 </div>
-
-                <input type="submit" id="save_button" value="Save" disabled="disabled" style="position: absolute; bottom: 0px; display: block; padding-left: 5px;"/>
-            </fieldset>
-    }
-<div id="result" class="hiddenResult"></div>
-
-<script type="text/javascript">
-
-    $("#addItem").click(function () {
-        $.ajax({
-            url: this.href,
-            cache: false,
-            success: function (html) {
-                $("#profiles").append(html);
-                
-            }
-        });
-        return false;
-    });
-
-    var deleteQualityProfileUrl = '@Url.Action("DeleteQualityProfile", "Settings")';
-
-    function deleteProfile(id) {
-        sendToServer(id);
-    }
-
-    function sendToServer(id) {
-        $.ajax({
-            type: "POST",
-            url: deleteQualityProfileUrl,
-            data: jQuery.param({ profileId: id }),
-            error: function (req, status, error) {
-                alert("Sorry! We could not delete your Profile at this time. " + error);
-            },
-            success: function (data, textStatus, jqXHR) {
-                if (data == "ok") {
-                    $("#profile_" + id).remove();
-                    removeOption(id);
+            </div>
+        </div>
+        <div id="bottom" style="float: left; padding-bottom: 55px;">
+            <div style="padding-left: 7px; margin-bottom: 5px;">
+                <a id="addItem" style="text-decoration:none;" href="@Url.Action("AddProfile", "Settings")">
+                    <img src="../../Content/Images/Plus.png" alt="Add New Profile" width="20px" height="20px" />
+                    <h4 style="margin-left: 3px; display: inline; color: Black;">
+                        Add New Profile</h4>
+                </a>
+            </div>
+            <div id="profiles">
+                @foreach (var item in Model.Profiles)
+                {
+                    Html.RenderAction("GetQualityProfileView", item);
                 }
-                
-                else {
-                    alert(data);
-                }
-            }
+            </div>
+        </div>
+        <input type="submit" id="save_button" value="Save" disabled="disabled" style="position: absolute;
+            bottom: 0px; display: block; padding-left: 5px;" />
+    </fieldset>
+}
+<div id="result" class="hiddenResult">
+</div>
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var options = {
+                target: '#result',
+                beforeSubmit: showRequest,
+                success: showResponse,
+                type: 'post',
+                resetForm: false
+            };
+            $('#form').ajaxForm(options);
+            $('#save_button').attr('disabled', '');
         });
-    }
-</script>
+
+        function showRequest(formData, jqForm, options) {
+            $("#result").empty().html('Saving...');
+            $("#form :input").attr("disabled", true);
+        }
+
+        function showResponse(responseText, statusText, xhr, $form) {
+            $("#result").empty().html(responseText);
+            $("#form :input").attr("disabled", false);
+        }
+
+        function addOption(text, value) {
+            var myCombo = $('#DefaultQualityProfileId');
+
+            var exists = $("#DefaultQualityProfileId option[value='" + value + "']");
+
+            if (exists.length == 0)
+                myCombo.append($('\<option\> \</option\>').val(value).html(text));
+        }
+
+        function removeOption(value) {
+            $("#DefaultQualityProfileId option[value='" + value + "']").remove();
+        }
+
+        function renameOption(text, value) {
+            $("#DefaultQualityProfileId option[value='" + value + "']").html(text);
+        }
+
+
+        $("#addItem").click(function () {
+            $.ajax({
+                url: this.href,
+                cache: false,
+                success: function (html) {
+                    $("#profiles").append(html);
+
+                }
+            });
+            return false;
+        });
+
+        var deleteQualityProfileUrl = '@Url.Action("DeleteQualityProfile", "Settings")';
+
+        function deleteProfile(id) {
+            sendToServer(id);
+        }
+
+        function sendToServer(id) {
+            $.ajax({
+                type: "POST",
+                url: deleteQualityProfileUrl,
+                data: jQuery.param({ profileId: id }),
+                error: function (req, status, error) {
+                    alert("Sorry! We could not delete your Profile at this time. " + error);
+                },
+                success: function (data, textStatus, jqXHR) {
+                    if (data == "ok") {
+                        $("#profile_" + id).remove();
+                        removeOption(id);
+                    }
+
+                    else {
+                        alert(data);
+                    }
+                }
+            });
+        }
+    </script>
+}
