@@ -76,7 +76,7 @@ Series
                                                                 "<span class=\"progressText\" style=\"width: 125px;\"></span>" +
                                                             "</div>" +
                                                      "</div>");
-                              
+
                              })
                 .Editable(editor => editor.Mode(GridEditMode.PopUp))
                 .Sortable(sort => sort.OrderBy(order => order.Add(o => o.Title).Ascending()).Enabled(true))
@@ -95,61 +95,63 @@ Series
             Loading...</span>
     </div>
 }
-<script type="text/javascript">
-    var windowElement;
 
-    function grid_edit(args) {
-        $(args.form)
+@section Scripts{
+    <script type="text/javascript">
+        var windowElement;
+
+        function grid_edit(args) {
+            $(args.form)
             .closest(".t-window")
             .data("tWindow")
             .center();
 
-        var seriesId = args.dataItem.SeriesId;
-        var url = '@Url.Action("SeasonEditor", "Series")';
-        $('#season-editor').load(url, { seriesId: seriesId }, function (response, status, xhr) {
-            $('#seasonEditorLoader').hide();
-        });
-    }
-
-    function grid_save(e) {
-        $('#ajaxSaveWheel').show();
-
-        var seasonEditor = e.form.SeasonEditor_collection;
-        var saveSeasonEditUrl = '@Url.Action("SaveSeason", "Series")';
-
-        jQuery.each(seasonEditor, function () {
-            var guid = $(this).val();
-            var prefix = '#SeasonEditor_' + guid + '__';
-            var seriesId = $(prefix + 'SeriesId').val();
-            var seasonNumber = $(prefix + 'SeasonNumber').val();
-            var monitored = $(prefix + 'Monitored').attr('checked');
-
-            $.ajax({
-                type: "POST",
-                url: saveSeasonEditUrl,
-                data: jQuery.param({ seriesId: seriesId, seasonNumber: seasonNumber, monitored: monitored }),
-                error: function (req, status, error) {
-                    alert("Sorry! We could save season changes at this time. " + error);
-                },
-                success: function (data, textStatus, jqXHR) { }
+            var seriesId = args.dataItem.SeriesId;
+            var url = '@Url.Action("SeasonEditor", "Series")';
+            $('#season-editor').load(url, { seriesId: seriesId }, function (response, status, xhr) {
+                $('#seasonEditorLoader').hide();
             });
-        });
-    }
+        }
 
-    function grid_rowBound(e) {
-        var dataItem = e.dataItem;
-        var seriesId = dataItem.SeriesId;
-        var episodeCount = dataItem.EpisodeCount;
-        var episodeFileCount = dataItem.EpisodeFileCount;
+        function grid_save(e) {
+            $('#ajaxSaveWheel').show();
 
-        $("#progressbar_" + seriesId).episodeProgress(episodeFileCount, episodeCount);
-    }
-</script>
-<script type="text/javascript" src="../../Scripts/doTimeout.js"></script>
-<script type="text/javascript">
-    (function ($) {
-        $.fn.episodeProgress = function (episodes, totalEpisodes) {
-            return this.each(
+            var seasonEditor = e.form.SeasonEditor_collection;
+            var saveSeasonEditUrl = '@Url.Action("SaveSeason", "Series")';
+
+            jQuery.each(seasonEditor, function () {
+                var guid = $(this).val();
+                var prefix = '#SeasonEditor_' + guid + '__';
+                var seriesId = $(prefix + 'SeriesId').val();
+                var seasonNumber = $(prefix + 'SeasonNumber').val();
+                var monitored = $(prefix + 'Monitored').attr('checked');
+
+                $.ajax({
+                    type: "POST",
+                    url: saveSeasonEditUrl,
+                    data: jQuery.param({ seriesId: seriesId, seasonNumber: seasonNumber, monitored: monitored }),
+                    error: function (req, status, error) {
+                        alert("Sorry! We could save season changes at this time. " + error);
+                    },
+                    success: function (data, textStatus, jqXHR) { }
+                });
+            });
+        }
+
+        function grid_rowBound(e) {
+            var dataItem = e.dataItem;
+            var seriesId = dataItem.SeriesId;
+            var episodeCount = dataItem.EpisodeCount;
+            var episodeFileCount = dataItem.EpisodeFileCount;
+
+            $("#progressbar_" + seriesId).episodeProgress(episodeFileCount, episodeCount);
+        }
+    </script>
+    <script type="text/javascript" src="../../Scripts/doTimeout.js"></script>
+    <script type="text/javascript">
+        (function ($) {
+            $.fn.episodeProgress = function (episodes, totalEpisodes) {
+                return this.each(
                 function () {
                     var div = $(this);
                     var progressBar = div.find(".progress");
@@ -159,6 +161,7 @@ Series
                     progressBar.css("width", width + "%");
                     div.find(".progressText").html(episodes + " / " + totalEpisodes);
                 });
-        };
-    })(jQuery);
-</script>
+            };
+        })(jQuery);
+    </script>
+}
