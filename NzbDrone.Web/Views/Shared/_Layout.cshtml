@@ -55,18 +55,22 @@
         c => c.AddGroup("CDN", group => group
                     .Add("http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js")
                     .Add("http://ajax.aspnetcdn.com/ajax/4.0/1/MicrosoftAjax.js"))
-              
-                    .AddGroup("3rdParty", group => group
+                    .Add("2011.1.414/telerik.list.min.js")
+                    .Add("2011.1.414/telerik.combobox.min.js")
+                    .Add("2011.1.414/telerik.textbox.min.js")
+                    .Add("2011.1.414/telerik.window.min.js")
+                    .Add("2011.1.414/telerik.autocomplete.min.js")
+                   .AddGroup("3rdParty", group => group
                     .Add("jquery.form.js")
                     .Add("jquery.jgrowl.js")
                     .Add("jquery-tgc-countdown-1.0.js")
-                    .Add("MicrosoftMvcValidation.js").Combined(true).Compress(true))               
-                    
+                    .Add("MicrosoftMvcValidation.js"))
+
                     .AddGroup("NzbDrone", group => group
                                         .Add("Notification.js")
                                         .Add("gridLoad.js")
                                         .Add("episodeSearch.js"))
-                                        
+
                                         ))
     <script type="text/javascript">
         jQuery(document).ready(function () {
