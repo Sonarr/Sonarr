@@ -35,21 +35,19 @@ namespace NzbDrone.Core.Test
         [TestCase("5x10 WS PDTV XviD FUtV", "", 5, 10)]
         [TestCase("Castle.2009.S01E14.HDTV.XviD-LOL", "Castle 2009", 1, 14)]
         [TestCase("Pride.and.Prejudice.1995.S03E20.HDTV.XviD-LOL", "Pride and Prejudice 1995", 3, 20)]
-        //[Row(@"Season 4\07 WS PDTV XviD FUtV", "", 4, 7)]
         [TestCase("The.Office.S03E115.DVDRip.XviD-OSiTV", "The.Office", 3, 115)]
         [TestCase(@"Parks and Recreation - S02E21 - 94 Meetings - 720p TV.mkv", "Parks and Recreation", 2, 21)]
         [TestCase(@"24-7 Penguins-Capitals- Road to the NHL Winter Classic - S01E03 - Episode 3.mkv", "24-7 Penguins-Capitals- Road to the NHL Winter Classic", 1, 3)]
         [TestCase("Adventure.Inc.S03E19.DVDRip.\"XviD\"-OSiTV", "Adventure.Inc", 3, 19)]
-        [TestCase("C:/Test/TV/Chuck.4x05.HDTV.XviD-LOL", "Chuck", 4, 5)]
         [TestCase("Hawaii Five-0 (2010) - 1x05 - Nalowale (Forgotten/Missing)", "Hawaii Five-0 (2010)", 1, 5)]
         [TestCase("Hawaii Five-0 (2010) - 1x05 - Title", "Hawaii Five-0 (2010)", 1, 5)]
-        public void episode_parse(string postTitle, string title, int season, int episode)
+        public void ParseTitle_single(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
-            var result = Parser.ParseEpisodeInfo(postTitle);
-            Assert.AreEqual(season, result.SeasonNumber);
-            Assert.AreEqual(episode, result.EpisodeNumbers[0]);
-            Assert.AreEqual(Parser.NormalizeTitle(title), result.CleanTitle);
-            Assert.AreEqual(1, result.EpisodeNumbers.Count);
+            var result = Parser.ParseTitle(postTitle);
+            result.SeasonNumber.Should().Be(seasonNumber);
+            result.EpisodeNumbers[0].Should().Be(episodeNumber);
+            result.CleanTitle.Should().Be(Parser.NormalizeTitle(title));
+            result.EpisodeNumbers.Count.Should().Be(1);
         }
 
         [Test]
@@ -58,12 +56,13 @@ namespace NzbDrone.Core.Test
         [TestCase(@"z:\tv shows\robot chicken\Specials\S00E16 - Dear Consumer - SD TV.avi", 0, 16)]
         [TestCase(@"D:\shares\TV Shows\Parks And Recreation\Season 2\S02E21 - 94 Meetings - 720p TV.mkv", 2, 21)]
         [TestCase(@"D:\shares\TV Shows\Battlestar Galactica (2003)\Season 2\S02E21.avi", 2, 21)]
-        public void file_path_parse(string path, int season, int episode)
+        [TestCase("C:/Test/TV/Chuck.4x05.HDTV.XviD-LOL", "Chuck", 4, 5)]
+        public void PathParse_tests(string path, int season, int episode)
         {
-            var result = Parser.ParseEpisodeInfo(path);
+            var result = Parser.ParsePath(path);
             result.EpisodeNumbers.Should().HaveCount(1);
-            Assert.AreEqual(season, result.SeasonNumber);
-            Assert.AreEqual(episode, result.EpisodeNumbers[0]);
+            result.SeasonNumber.Should().Be(season);
+            result.EpisodeNumbers[0].Should().Be(episode);
         }
 
         [TestCase("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD", QualityTypes.DVD)]
@@ -101,7 +100,7 @@ namespace NzbDrone.Core.Test
         public void quality_parse(string postTitle, object quality)
         {
             var result = Parser.ParseQuality(postTitle);
-            Assert.AreEqual(quality, result.QualityType);
+            result.QualityType.Should().Be(quality);
         }
 
         [Test]
@@ -123,7 +122,7 @@ namespace NzbDrone.Core.Test
 
                 var fileName = String.Format("My series S01E01 [{0}].{1}", qualityEnum, extention);
                 var result = Parser.ParseQuality(fileName);
-                Assert.AreEqual(qualityEnum, result.QualityType);
+                result.QualityType.Should().Be(qualityEnum);
             }
         }
     
@@ -135,19 +134,18 @@ namespace NzbDrone.Core.Test
         [TestCase("Big Time Rush 1x01 to 10 480i DD2 0 Sianto", "Big Time Rush", 1, new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }, 10)]
         [TestCase("White.Collar.2x04.2x05.720p.BluRay-FUTV", "White.Collar", 2, new[] { 4, 5 }, 2)]
         [TestCase("Desperate.Housewives.S07E22E23.720p.HDTV.X264-DIMENSION", "Desperate.Housewives", 7, new[] { 22, 23 }, 2)]
-        //[Row("The.Kennedys.Part.1.and.Part.2.DSR.XviD-SYS", 1, new[] { 1, 2 })]
         [TestCase("S07E22 - 7x23 - And Lots of Security.. [HDTV].mkv", "", 7, new[] { 22, 23 }, 2)]
         [TestCase("Desparate Housewives - S07E22 - 7x23 - And Lots of Security.. [HDTV].mkv", "Desparate Housewives", 7, new[] { 22, 23 }, 2)]
         [TestCase("Desparate Housewives - S07E22 - S07E23 - And Lots of Security.. [HDTV].mkv", "Desparate Housewives", 7, new[] { 22, 23 }, 2)]
         [TestCase("S03E01.S03E02.720p.HDTV.X264-DIMENSION", "", 3, new[] { 1, 2 }, 2)]
-        public void episode_multipart_parse(string postTitle, string title, int season, int[] episodes, int count)
+        public void TitleParse_multi(string postTitle, string title, int season, int[] episodes, int count)
         {
-            var result = Parser.ParseEpisodeInfo(postTitle);
-            Assert.AreEqual(season, result.SeasonNumber);
+            var result = Parser.ParseTitle(postTitle);
+            result.SeasonNumber.Should().Be(season);
             result.EpisodeNumbers.Should().HaveSameCount(episodes);
             result.EpisodeNumbers.Should().BeEquivalentTo(result.EpisodeNumbers);
-            Assert.AreEqual(Parser.NormalizeTitle(title), result.CleanTitle);
-            Assert.AreEqual(count, result.EpisodeNumbers.Count);
+            result.CleanTitle.Should().Be(Parser.NormalizeTitle(title));
+            result.EpisodeNumbers.Count.Should().Be(count);
         }
 
        
@@ -160,10 +158,10 @@ namespace NzbDrone.Core.Test
         [TestCase("The Tonight Show with Jay Leno - 2011-06-16 - Larry David, \"Bachelorette\" Ashley Hebert, Pitbull with Ne-Yo", "The Tonight Show with Jay Leno", 2011, 6, 16)]
         public void episode_daily_parse(string postTitle, string title, int year, int month, int day)
         {
-            var result = Parser.ParseEpisodeInfo(postTitle);
+            var result = Parser.ParseTitle(postTitle);
             var airDate = new DateTime(year, month, day);
-            Assert.AreEqual(Parser.NormalizeTitle(title), result.CleanTitle);
-            Assert.AreEqual(airDate, result.AirDate);
+            result.CleanTitle.Should().Be(Parser.NormalizeTitle(title));
+            result.AirDate.Should().Be(airDate);
             Assert.IsNull(result.EpisodeNumbers);
         }
 
@@ -173,10 +171,10 @@ namespace NzbDrone.Core.Test
         [TestCase("The.Office.US.S03.720p.x264-DIMENSION", "The.Office.US", 3)]
         public void full_season_release_parse(string postTitle, string title, int season)
         {
-            var result = Parser.ParseEpisodeInfo(postTitle);
-            Assert.AreEqual(season, result.SeasonNumber);
-            Assert.AreEqual(Parser.NormalizeTitle(title), result.CleanTitle);
-            Assert.AreEqual(0, result.EpisodeNumbers.Count);
+            var result = Parser.ParseTitle(postTitle);
+            result.SeasonNumber.Should().Be(season);
+            result.CleanTitle.Should().Be(Parser.NormalizeTitle(title));
+            result.EpisodeNumbers.Count.Should().Be(0);
         }
       
         [TestCase("Conan", "conan")]
@@ -187,7 +185,7 @@ namespace NzbDrone.Core.Test
         public void series_name_normalize(string parsedSeriesName, string seriesName)
         {
             var result = Parser.NormalizeTitle(parsedSeriesName);
-            Assert.AreEqual(seriesName, result);
+            result.Should().Be(seriesName);
         }
 
         [TestCase(@"c:\test\", @"c:\test")]
@@ -198,7 +196,7 @@ namespace NzbDrone.Core.Test
         public void Normalize_Path(string dirty, string clean)
         {
             var result = Parser.NormalizePath(dirty);
-            Assert.AreEqual(clean, result);
+            result.Should().Be(clean);
         }
       
         [TestCase("CaPitAl", "capital")]
@@ -208,7 +206,7 @@ namespace NzbDrone.Core.Test
         public void Normalize_Title(string dirty, string clean)
         {
             var result = Parser.NormalizeTitle(dirty);
-            Assert.AreEqual(clean, result);
+            result.Should().Be(clean);
         }
 
      
@@ -236,7 +234,7 @@ namespace NzbDrone.Core.Test
             foreach (var s in dirtyFormat)
             {
                 var dirty = String.Format(s, word);
-                Assert.AreEqual("wordword", Parser.NormalizeTitle(dirty));
+                Parser.NormalizeTitle(dirty).Should().Be("wordword");
             }
 
         }
@@ -262,7 +260,7 @@ namespace NzbDrone.Core.Test
             foreach (var s in dirtyFormat)
             {
                 var dirty = String.Format(s, word);
-                Assert.AreEqual("word" + word.ToLower() + "word", Parser.NormalizeTitle(dirty));
+                Parser.NormalizeTitle(dirty).Should().Be(("word" + word.ToLower() + "word"));
             }
 
         }
@@ -273,17 +271,9 @@ namespace NzbDrone.Core.Test
         public void parse_series_name(string postTitle, string title)
         {
             var result = Parser.ParseSeriesName(postTitle);
-            Assert.AreEqual(Parser.NormalizeTitle(title), result);
+            result.Should().Be(Parser.NormalizeTitle(title));
         }
 
-        [TestCase("Chuck - 4x05 - Title [Proper]", true)]
-        [TestCase("Law & Order - 4x05 - Title", false)]
-        [TestCase("30.Rock.S04E05.asdjasdj.proper.", true)]
-        public void parse_proper(string postTitle, bool proper)
-        {
-            var result = Parser.ParseProper(postTitle);
-            Assert.AreEqual(proper, result);
-        }
 
         [TestCase("Castle.2009.S01E14.English.HDTV.XviD-LOL", LanguageType.English)]
         [TestCase("Castle.2009.S01E14.French.HDTV.XviD-LOL", LanguageType.French)]
@@ -309,7 +299,7 @@ namespace NzbDrone.Core.Test
         public void parse_language(string postTitle, LanguageType language)
         {
             var result = Parser.ParseLanguage(postTitle);
-            Assert.AreEqual(language, result);
+            result.Should().Be(language);
         }
         [Test]
         [ExpectedException(typeof(ArgumentException), ExpectedMessage = "Path can not be null or empty")]
@@ -333,8 +323,8 @@ namespace NzbDrone.Core.Test
         {
             var result = Parser.ParseSeasonInfo(postTitle);
 
-            Assert.AreEqual(Parser.NormalizeTitle(seriesName), result.SeriesTitle);
-            Assert.AreEqual(seasonNumber, result.SeasonNumber);
+            result.SeriesTitle.Should().Be(Parser.NormalizeTitle(seriesName));
+            result.SeasonNumber.Should().Be(seasonNumber);
         }
 
         [Test]
@@ -342,7 +332,7 @@ namespace NzbDrone.Core.Test
         {
             var result = Parser.ParseSeasonInfo("This is not a valid post");
 
-            Assert.AreEqual(null, result);
+            result.Should().BeNull();
         }
     }
 }

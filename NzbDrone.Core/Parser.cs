@@ -49,12 +49,24 @@ namespace NzbDrone.Core
         private static readonly Regex SimpleTitleRegex = new Regex(@"480[i|p]|720[i|p]|1080[i|p]|[x|h]264|\<|\>|\?|\*|\:|\||""",
                                                               RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
+
+        /// <summary>
+        ///   Parses a file path into list of episodes it contains
+        /// </summary>
+        /// <param name = "path">Path of the file to parse</param>
+        /// <returns>List of episodes contained in the file</returns>
+        internal static EpisodeParseResult ParsePath(string path)
+        {
+            var fileInfo = new FileInfo(path);
+            return ParseTitle(fileInfo.Name);
+        }
+
         /// <summary>
         ///   Parses a post title into list of episodes it contains
         /// </summary>
         /// <param name = "title">Title of the report</param>
-        /// <returns>List of episodes contained to the post</returns>
-        internal static EpisodeParseResult ParseEpisodeInfo(string title)
+        /// <returns>List of episodes contained in the post</returns>
+        internal static EpisodeParseResult ParseTitle(string title)
         {
             Logger.Trace("Parsing string '{0}'", title);
             var simpleTitle = SimpleTitleRegex.Replace(title, String.Empty);
@@ -62,7 +74,7 @@ namespace NzbDrone.Core
             foreach (var regex in ReportTitleRegex)
             {
                 //Use only the filename, not the entire path
-                var match = regex.Matches(new FileInfo(simpleTitle).Name);
+                var match = regex.Matches(simpleTitle);
 
                 if (match.Count != 0)
                 {
@@ -196,16 +208,6 @@ namespace NzbDrone.Core
             return String.Empty;
         }
 
-        /// <summary>
-        ///   Parses proper status out of a report title
-        /// </summary>
-        /// <param name = "title">Title of the report</param>
-        /// <returns></returns>
-        internal static bool ParseProper(string title)
-        {
-            return title.ToLower().Contains("proper");
-        }
-
         internal static Quality ParseQuality(string name)
         {
             Logger.Trace("Trying to parse quality for {0}", name);
@@ -264,7 +266,7 @@ namespace NzbDrone.Core
 
 
 
-            if (result.QualityType  == QualityTypes.Unknown)
+            if (result.QualityType == QualityTypes.Unknown)
             {
                 try
                 {
