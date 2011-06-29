@@ -39,12 +39,6 @@ History
                 .Pageable(
                     c =>
                     c.PageSize(20).Position(GridPagerPosition.Bottom).Style(GridPagerStyles.NextPrevious))
-                .ClientEvents(clientEvents =>
-                {
-                    clientEvents.OnDataBinding("grid_bind");
-                    clientEvents.OnDataBound("grid_bound");
-                })
                 .Render();}
-        <span class="grid-loader"><img src="@Url.Content( "~/Content/Images/Loading.gif" )" alt="Loading"/> Loading...</span>
     </div>
 }

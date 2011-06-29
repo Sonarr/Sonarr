@@ -55,12 +55,6 @@ Series
                     .Delete("_DeleteAjaxSeriesEditing", "Series"))
                 .Columns(columns =>
                              {
-                                 columns.Command(commands =>
-                                 {
-                                     commands.Edit().ButtonType(GridButtonType.Image);
-                                     commands.Delete().ButtonType(GridButtonType.Image);
-                                 }).Title("Actions").Width(80);
-
                                  columns.Bound(o => o.Title)
                                      .ClientTemplate("<a href=" +
                                                      Url.Action("Details", "Series", new { seriesId = "<#= SeriesId #>" }) +
@@ -76,6 +70,11 @@ Series
                                                                 "<span class=\"progressText\" style=\"width: 125px;\"></span>" +
                                                             "</div>" +
                                                      "</div>");
+                                 columns.Command(commands =>
+                                 {
+                                     commands.Edit().ButtonType(GridButtonType.Image);
+                                     commands.Delete().ButtonType(GridButtonType.Image);
+                                 }).Title("Actions").Width(80);
 
                              })
                 .Editable(editor => editor.Mode(GridEditMode.PopUp))
@@ -85,14 +84,9 @@ Series
                 {
                     clientEvents.OnEdit("grid_edit");
                     clientEvents.OnSave("grid_save");
-                    clientEvents.OnDataBinding("grid_bind");
-                    clientEvents.OnDataBound("grid_bound");
                     clientEvents.OnRowDataBound("grid_rowBound");
                 })
                 .Render();}
-        <span class="grid-loader">
-            <img src="@Url.Content("~/Content/Images/Loading.gif")" alt="Loading"/>
-            Loading...</span>
     </div>
 }
 
@@ -147,7 +141,7 @@ Series
             $("#progressbar_" + seriesId).episodeProgress(episodeFileCount, episodeCount);
         }
     </script>
-    <script type="text/javascript" src="../../Scripts/doTimeout.js"></script>
+    <script src="../../Scripts/doTimeout.js" type="text/javascript"></script>
     <script type="text/javascript">
         (function ($) {
             $.fn.episodeProgress = function (episodes, totalEpisodes) {
