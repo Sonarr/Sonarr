@@ -68,11 +68,6 @@
                                                     "<a href='#Rename' onClick=\"renameEpisode('<#= EpisodeFileId #>'); return false;\">Rename</a>");
                          })
             .DetailView(detailView => detailView.ClientTemplate("<div><#= Overview #> </br><#= Path #> </div>"))
-            .ClientEvents(clientEvents =>
-            {
-                clientEvents.OnDataBinding("grid_bind");
-                clientEvents.OnDataBound("grid_bound");
-            })
             .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.EpisodeNumber).Descending()).Enabled(true))
             .Footer(true)
             .DataBinding(
@@ -84,9 +79,6 @@
                 c.Custom().Text("Rename Season").Action("RenameSeason", "Series", new { seasonId = season })
                     .ButtonType(GridButtonType.Text))
             .Render();}
-            <span class="grid-loader">
-                <img src="@Url.Content("~/Content/Images/Loading.gif")" alt="Loading"/>
-                Loading...</span>
         </div>
     }
     @if (Model.Seasons.Any(s => s == 0))
@@ -114,11 +106,6 @@
                                  columns.Bound(c => c.Status).Width(10);
                              })
                     .DetailView(detailView => detailView.ClientTemplate("<div><#= Overview #> </br><#= Path #> </div>"))
-                    .ClientEvents(clientEvents =>
-                    {
-                        clientEvents.OnDataBinding("grid_bind");
-                        clientEvents.OnDataBound("grid_bound");
-                    })
                     .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.EpisodeNumber).Descending()).Enabled(true))
                     .Footer(true)
                     .DataBinding(
@@ -126,9 +113,6 @@
                         d.Ajax().Select("_AjaxSeasonGrid", "Series",
                                         new RouteValueDictionary { { "seriesId", Model.SeriesId }, { "seasonNumber", 0 } }
             )).Render(); }
-            <span class="grid-loader">
-                <img src="@Url.Content("~/Content/Images/Loading.gif")" alt="Loading"/>
-                Loading...</span>
         </div>
     }
 }

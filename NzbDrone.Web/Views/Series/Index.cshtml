@@ -1,4 +1,4 @@
-﻿@using NzbDrone.Core.Repository;
+@using NzbDrone.Core.Repository;
 @using NzbDrone.Web.Models;
 @model IEnumerable<NzbDrone.Core.Repository.Series>
 @section TitleContent{
@@ -55,12 +55,6 @@ Series
                     .Delete("_DeleteAjaxSeriesEditing", "Series"))
                 .Columns(columns =>
                              {
-                                 columns.Command(commands =>
-                                 {
-                                     commands.Edit().ButtonType(GridButtonType.Image);
-                                     commands.Delete().ButtonType(GridButtonType.Image);
-                                 }).Title("Actions").Width(80);
-
                                  columns.Bound(o => o.Title)
                                      .ClientTemplate("<a href=" +
                                                      Url.Action("Details", "Series", new { seriesId = "<#= SeriesId #>" }) +
@@ -76,46 +70,30 @@ Series
                                                                 "<span class=\"progressText\" style=\"width: 125px;\"></span>" +
                                                             "</div>" +
                                                      "</div>");
+                                 columns.Command(commands =>
+                                 {
+                                     commands.Edit().ButtonType(GridButtonType.Image);
+                                     commands.Delete().ButtonType(GridButtonType.Image);
+                                 }).Title("Actions").Width(80);
 
                              })
                 .Editable(editor => editor.Mode(GridEditMode.PopUp))
                 .Sortable(sort => sort.OrderBy(order => order.Add(o => o.Title).Ascending()).Enabled(true))
-                .DetailView(detailView => detailView.ClientTemplate("<div style=\"width:95%\"><#= Overview #></div>"))
+                .DetailView(detailView => detailView.ClientTemplate("<#= Overview #>"))
                 .ClientEvents(clientEvents =>
                 {
                     clientEvents.OnEdit("grid_edit");
                     clientEvents.OnSave("grid_save");
-                    clientEvents.OnDataBinding("grid_bind");
-                    clientEvents.OnDataBound("grid_bound");
                     clientEvents.OnRowDataBound("grid_rowBound");
                 })
                 .Render();}
-        <span class="grid-loader">
-            <img src="@Url.Content("~/Content/Images/Loading.gif")" alt="Loading"/>
-            Loading...</span>
     </div>
 }
 
 @section Scripts{
     <script type="text/javascript">
         var windowElement;
-        
-        (function ($) {
-            $.fn.episodeProgress = function (episodes, totalEpisodes) {
-                return this.each(
-                function () {
-                    var div = $(this);
-                    var progressBar = div.find(".progress");
 
-                    var width = Math.round(episodes / totalEpisodes * 100);
-
-                    progressBar.css("width", width + "%");
-                    div.find(".progressText").html(episodes + " / " + totalEpisodes);
-                });
-            };
-        })(jQuery);
-        
-        
         function grid_edit(args) {
             $(args.form)
             .closest(".t-window")
@@ -162,7 +140,22 @@ Series
 
             $("#progressbar_" + seriesId).episodeProgress(episodeFileCount, episodeCount);
         }
-        
+    </script>
+    <script src="../../Scripts/doTimeout.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        (function ($) {
+            $.fn.episodeProgress = function (episodes, totalEpisodes) {
+                return this.each(
+                function () {
+                    var div = $(this);
+                    var progressBar = div.find(".progress");
 
+                    var width = Math.round(episodes / totalEpisodes * 100);
+
+                    progressBar.css("width", width + "%");
+                    div.find(".progressText").html(episodes + " / " + totalEpisodes);
+                });
+            };
+        })(jQuery);
     </script>
 }

@@ -1,136 +1,94 @@
-﻿<script>
-    /*
-    * jQuery doTimeout: Like setTimeout, but better! - v1.0 - 3/3/2010
-    * http://benalman.com/projects/jquery-dotimeout-plugin/
-    * 
-    * Copyright (c) 2010 "Cowboy" Ben Alman
-    * Dual licensed under the MIT and GPL licenses.
-    * http://benalman.com/about/license/
-    */
-    (function ($) { var a = {}, c = "doTimeout", d = Array.prototype.slice; $[c] = function () { return b.apply(window, [0].concat(d.call(arguments))) }; $.fn[c] = function () { var f = d.call(arguments), e = b.apply(this, [c + f[0]].concat(f)); return typeof f[0] === "number" || typeof f[1] === "number" ? this : e }; function b(l) { var m = this, h, k = {}, g = l ? $.fn : $, n = arguments, i = 4, f = n[1], j = n[2], p = n[3]; if (typeof f !== "string") { i--; f = l = 0; j = n[1]; p = n[2] } if (l) { h = m.eq(0); h.data(l, k = h.data(l) || {}) } else { if (f) { k = a[f] || (a[f] = {}) } } k.id && clearTimeout(k.id); delete k.id; function e() { if (l) { h.removeData(l) } else { if (f) { delete a[f] } } } function o() { k.id = setTimeout(function () { k.fn() }, j) } if (p) { k.fn = function (q) { if (typeof p === "string") { p = g[p] } p.apply(m, d.call(n, i)) === true && !q ? o() : e() }; o() } else { if (k.fn) { j === undefined ? e() : k.fn(j === false); return true } else { e() } } } })(jQuery);
-</script>
-
-<script>
-    (function ($) {
-        $.fn.episodeProgress = function (episodes, totalEpisodes) {
-            return this.each(
-			    function () {
-			        var div = $(this);
-			        var progressBar = div.find(".progress");
-
-			        var width = Math.round(episodes / totalEpisodes * 100);
-
-			        progressBar.css("width", width + "%");
-
-			        if (width > 97) {
-			            progressBar.css("-khtml-border-top-right-radius", "7px");
-			            progressBar.css("border-top-right-radius", "7px");
-			            progressBar.css("-moz-border-top-right-radius", "7px");
-			            progressBar.css("-webkit-border-top-right-radius", "7px");
-
-			            progressBar.css("-khtml-border-bottom-right-radius", "7px");
-			            progressBar.css("border-bottom-right-radius", "7px");
-			            progressBar.css("-moz-border-bottom-right-radius", "7px");
-			            progressBar.css("-webkit-border-bottom-right-radius", "7px");
-			        }
-
-			        div.find(".progressText").html(episodes + " / " + totalEpisodes);
-			    }
-		    );
-        };
-    })(jQuery);
-</script>
-
-<style>
-/* progress bar container */
-.progressbar
-{
-    border:1px solid grey;
-    -khtml-border-radius:8px;
-    border-radius:8px;
-    -moz-border-radius:8px;
-    -webkit-border-radius:8px;
-    width:125px;
-    height:20px;
-    position:relative;
-    color:black;
+﻿<style>
+/*body{
+font-family:"Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
+font-size:12px;
+}
+p, h1, form, button{border:0; margin:0; padding:0;}*/
+.spacer{clear:both; height:1px;}
+/* ----------- My Form ----------- */
+.myform{
+margin:0 auto;
+width:400px;
+padding:14px;
 }
 
-/* apply curves to the progress bar */
-.progress
-{
-    -khtml-border-top-left-radius:7px;
-    border-top-left-radius:7px;
-    -moz-border-top-left-radius:7px;
-    -webkit-border-top-left-radius:7px;
-    
-    -khtml-border-bottom-left-radius:7px;
-    border-bottom-left-radius:7px;
-    -moz-border-bottom-left-radius:7px;
-    -webkit-border-bottom-left-radius:7px;
+/* ----------- stylized ----------- */
+#stylized{
+border:solid 2px #b7ddf2;
+background:#ebf4fb;
 }
-
-/* color bar */
-.progressbar div.progress
-{
-    position:absolute;
-    width:0;
-    height:100%;
-    overflow:hidden;
-    background-color:#065EFE;
+#stylized h1 {
+font-size:14px;
+font-weight:bold;
+margin-bottom:8px;
 }
-/* text on bar */
-.progressbar div.progress .progressText{
-    position:absolute;
-    text-align:center;
-    color:white;
+#stylized p{
+font-size:11px;
+color:#666666;
+margin-bottom:20px;
+border-bottom:solid 1px #b7ddf2;
+padding-bottom:10px;
 }
-
-/* text off bar */
-.progressbar div.progressText{
-    position:absolute;
-    width:100%;
-    height:100%;
-    text-align:center;
+#stylized label{
+display:block;
+font-weight:bold;
+text-align:right;
+width:140px;
+float:left;
+}
+#stylized .small{
+color:#666666;
+display:block;
+font-size:11px;
+font-weight:normal;
+text-align:right;
+width:140px;
+}
+#stylized input{
+float:left;
+font-size:12px;
+padding:4px 2px;
+border:solid 1px #aacfe4;
+width:200px;
+margin:2px 0 20px 10px;
+}
+#stylized button{
+clear:both;
+margin-left:150px;
+width:125px;
+height:31px;
+background:#666666 url(img/button.png) no-repeat;
+text-align:center;
+line-height:31px;
+color:#FFFFFF;
+font-size:11px;
+font-weight:bold;
 }
 </style>
 
-<div id="progressbar" class="progressbar">
-    <div class="progressText"></div>
-    <div class="progress">
-        <span class="progressText" style="width: 125px;"></span>
-    </div>
+<div id="stylized" class="myform">
+    <form id="form" name="form" method="post">
+    <fieldset>
+        <h1>Sign-up form</h1>
+        <p>This is the basic look of my form without table</p>
+
+        <label>Name
+        <span class="small">Add your name</span>
+        </label>
+        <input type="text" name="name" id="name" />
+
+        <label>Email
+        <span class="small">Add a valid address</span>
+        </label>
+        <input type="text" name="email" id="email" />
+
+        <label>Password
+        <span class="small">Min. size 6 chars</span>
+        </label>
+        <input type="text" name="password" id="password" />
+
+        <button type="submit">Sign-up</button>
+        <div class="spacer"></div>
+        </fieldset>
+    </form>
 </div>
-
-<div id="progressbar2" class="progressbar">
-    <div class="progressText"></div>
-    <div class="progress">
-        <span class="progressText" style="width: 125px;"></span>
-    </div>
-</div>
-
-<script>
-    $(document).ready(function() {
-
-        progress(65, 100, 'progressbar');
-        progress(22, 25, 'progressbar2');
-
-    });
-    
-    function progress(episodes, episodeTotal, elementName) {
-        var counter = 0;
-        var max = episodes + 1;
-
-        $.doTimeout(20, function () {
-            if (counter == max) {
-                return false;
-            }
-
-            $("#" + elementName).episodeProgress(counter, episodeTotal);
-            counter++;
-
-            return true;
-        });
-    };
-    
-</script>

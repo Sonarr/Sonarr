@@ -31,18 +31,12 @@ Upcoming
                         "<div><b>Overview: </b><#= Overview #></div>" +
                         "</fieldset>"
                                                     ))
-                    .ClientEvents(clientEvents =>
-                    {
-                        clientEvents.OnDataBinding("grid_bind");
-                        clientEvents.OnDataBound("grid_bound");
-                    })
                     .DataBinding(data => data.Ajax().Select("_AjaxBindingYesterday", "Upcoming"))
                     .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.AirDate).Ascending()).Enabled(true))
                     //.Pageable(c => c.PageSize(20).Position(GridPagerPosition.Both).Style(GridPagerStyles.PageInput | GridPagerStyles.NextPreviousAndNumeric))
                     //.Filterable()
                     //.ClientEvents(c => c.OnRowDataBound("onRowDataBound"))
                     .Render();}
-            <span class="grid-loader"><img src="@Url.Content( "~/Content/Images/Loading.gif" )" alt="Loading"/> Loading...</span>
         </div>
     </div>
     <br />
@@ -68,15 +62,9 @@ Upcoming
                         "<div><b>Overview: </b><#= Overview #></div>" +
                         "</fieldset>"
                                                     ))
-                    .ClientEvents(clientEvents =>
-                    {
-                        clientEvents.OnDataBinding("grid_bind");
-                        clientEvents.OnDataBound("grid_bound");
-                    })
                     .DataBinding(data => data.Ajax().Select("_AjaxBindingToday", "Upcoming"))
                     .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.AirDate).Ascending()).Enabled(true))
                     .Render();}
-            <span class="grid-loader"><img src="@Url.Content( "~/Content/Images/Loading.gif" )" alt="Loading"/> Loading...</span>
         </div>
     </div>
     <br />
@@ -103,15 +91,10 @@ Upcoming
                         "<div><b>Overview: </b><#= Overview #></div>" +
                         "</fieldset>"
                                                   ))
-                    .ClientEvents(clientEvents =>
-                    {
-                        clientEvents.OnDataBinding("grid_bind");
-                        clientEvents.OnDataBound("grid_bound");
-                    })
+
                     .DataBinding(data => data.Ajax().Select("_AjaxBindingTomorrow", "Upcoming"))
                     .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.AirDate).Ascending()).Enabled(true))
                     .Render();}
-            <span class="grid-loader"><img src="@Url.Content( "~/Content/Images/Loading.gif" )" alt="Loading"/> Loading...</span>
         </div>
     </div>
     <br />
@@ -138,15 +121,9 @@ Upcoming
                         "<div><b>Overview: </b><#= Overview #></div>" +
                         "</fieldset>"
                                                   ))
-                    .ClientEvents(clientEvents =>
-                    {
-                        clientEvents.OnDataBinding("grid_bind");
-                        clientEvents.OnDataBound("grid_bound");
-                    })
                     .DataBinding(data => data.Ajax().Select("_AjaxBindingWeek", "Upcoming"))
                     .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.AirDate).Ascending()).Enabled(true))
                     .Render();}
-            <span class="grid-loader"><img src="@Url.Content( "~/Content/Images/Loading.gif" )" alt="Loading"/> Loading...</span>
         </div>
     </div>
 }

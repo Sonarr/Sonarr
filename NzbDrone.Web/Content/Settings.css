@@ -1,0 +1,100 @@
+﻿body 
+{
+    /*font-family:"Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
+    font-size:12px;*/
+}
+
+p, h1, form, button{border:0; margin:0; padding:0;}
+.spacer{clear:both; height:1px;}
+
+.settingsForm
+{
+    /*margin:0 auto;*/
+    width: 600px;
+    padding: 14px;
+}
+
+#stylized
+{
+    border:solid 2px #b7ddf2;
+    /*background:#ebf4fb;*/
+}
+
+#stylized h1
+{
+    font-size:20px;
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+#stylized p
+{
+    font-size:11px;
+    color:#666666;
+    margin-bottom:20px;
+    border-bottom:solid 1px #b7ddf2;
+    padding-bottom:10px;
+}
+
+#stylized label
+{
+    display:block;
+    font-weight:bold;
+    text-align:right;
+    width:340px;
+    float:left;
+}
+
+#stylized .small
+{
+    color:#666666;
+    display:block;
+    font-size:11px;
+    font-weight:normal;
+    text-align:right;
+    width:340px;
+}
+
+#stylized input, select
+{
+    float:left;
+    font-size:12px;
+    padding:4px 2px;
+    border:solid 1px #aacfe4;
+    width:200px;
+    margin:2px 0 20px 10px;
+}
+
+#stylized button
+{
+    clear:both;
+    margin-left:220px;
+    margin-bottom: 10px;
+    width:125px;
+    height:31px;
+    background:#666666 url(img/button.png) no-repeat;
+    text-align:center;
+    line-height:31px;
+    color:#FFFFFF;
+    font-size:11px;
+    font-weight:bold;
+}
+
+#save_button:hover
+{
+    border-bottom-style: solid;
+    border-bottom-width: 4px;
+    border-color: #3C3C3C;
+    /* Set padding to prevent fieldset border from moving when button is highlighted... WINNING! */
+    padding-bottom: 0px;
+    padding-top: 4px;
+}
+
+#saveAjax
+{
+    padding-left: 6px;
+    margin-bottom: -7px;
+    width: 20px;
+    height: 20px;
+    display: none;
+}

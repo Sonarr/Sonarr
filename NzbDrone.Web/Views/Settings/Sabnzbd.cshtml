@@ -1,105 +1,82 @@
 ﻿@using NzbDrone.Web.Helpers;
 @model NzbDrone.Web.Models.SabnzbdSettingsModel
-@using (Html.BeginForm("SaveSabnzbd", "Settings", FormMethod.Post, new { id = "form", name = "form" }))
-{
-    <fieldset>
-        <legend>SABnzbd</legend>
-        <button type="button" onclick="autoConfigureSab()">
-            Auto-Configure</button>
-        <div class="config-section">
-            <div class="config-group">
-                <div class="config-title">@Html.LabelFor(m => m.SabHost)</div>
-                <div class="config-value">@Html.TextBoxFor(m => m.SabHost)</div>
-            </div>
-            <div class="config-group2">
-                <div class="config-validation">@Html.ValidationMessageFor(m => m.SabHost)</div>
-                <div class="config-description">@Html.DescriptionFor(m => m.SabHost)</div>
-            </div>
-        </div>
-        <div class="config-section">
-            <div class="config-group">
-                <div class="config-title">@Html.LabelFor(m => m.SabPort)</div>
-                <div class="config-value">@Html.TextBoxFor(m => m.SabPort)</div>
-            </div>
-            <div class="config-group2">
-                <div class="config-validation">@Html.ValidationMessageFor(m => m.SabPort)</div>
-                <div class="config-description">@Html.DescriptionFor(m => m.SabPort)</div>
-            </div>
-        </div>
-        <div class="config-section">
-            <div class="config-group">
-                <div class="config-title">@Html.LabelFor(m => m.SabApiKey)</div>
-                <div class="config-value">@Html.TextBoxFor(m => m.SabApiKey)</div>
-            </div>
-            <div class="config-group2">
-                <div class="config-validation">@Html.ValidationMessageFor(m => m.SabApiKey)</div>
-                <div class="config-description">@Html.DescriptionFor(m => m.SabApiKey)</div>
-            </div>
-        </div>
-        <div class="config-section">
-            <div class="config-group">
-                <div class="config-title">@Html.LabelFor(m => m.SabUsername)</div>
-                <div class="config-value">@Html.TextBoxFor(m => m.SabUsername)</div>
-            </div>
-            <div class="config-group2">
-                <div class="config-validation">@Html.ValidationMessageFor(m => m.SabUsername)</div>
-                <div class="config-description">@Html.DescriptionFor(m => m.SabUsername)</div>
-            </div>
-        </div>
-        <div class="config-section">
-            <div class="config-group">
-                <div class="config-title">@Html.LabelFor(m => m.SabPassword)</div>
-                <div class="config-value">@Html.TextBoxFor(m => m.SabPassword)</div>
-            </div>
-            <div class="config-group2">
-                <div class="config-validation">@Html.ValidationMessageFor(m => m.SabPassword)</div>
-                <div class="config-description">@Html.DescriptionFor(m => m.SabPassword)</div>
-            </div>
-        </div>
-        <div class="config-section">
-            <div class="config-group">
-                <div class="config-title">@Html.LabelFor(m => m.SabTvCategory)</div>
-                <div class="config-value">@Html.TextBoxFor(m => m.SabTvCategory)</div>
-            </div>
-            <div class="config-group2">
-                <div class="config-validation">@Html.ValidationMessageFor(m => m.SabTvCategory)</div>
-                <div class="config-description">@Html.DescriptionFor(m => m.SabTvCategory)</div>
-            </div>
-        </div>
-        <div class="config-section">
-            <div class="config-group">
-                <div class="config-title">@Html.LabelFor(m => m.SabTvPriority)</div>
-                <div class="config-value">@Html.DropDownListFor(m => m.SabTvPriority, Model.PrioritySelectList)</div>
-            </div>
-            <div class="config-group2">
-                <div class="config-validation">@Html.ValidationMessageFor(m => m.SabTvPriority)</div>
-                <div class="config-description">@Html.DescriptionFor(m => m.SabTvPriority)</div>
-            </div>
-        </div>
-        <div class="config-section">
-            <div class="config-group">
-                <div class="config-title">@Html.LabelFor(m => m.SabDropDirectory)</div>
-                <div class="config-value">
-                    @{Html.Telerik().ComboBoxFor(m => m.SabDropDirectory)
-                  .BindTo(Model.SabDropDirectorySelectList)
-                  .DataBinding(binding => binding.Ajax().Select("_autoCompletePath", "Directory").Delay(400).Cache(false))
-                  .Filterable(f => f.FilterMode(AutoCompleteFilterMode.StartsWith))
-                  .HighlightFirstMatch(true)
-                  .HtmlAttributes(new { style = "margin-left: -2px; width: 220px;" })
-                  .Render();}
-                </div>
-            </div>
-            <div class="config-group2">
-                <div class="config-validation">@Html.ValidationMessageFor(m => m.SabDropDirectory)</div>
-                <div class="config-description">@Html.DescriptionFor(m => m.SabDropDirectory)</div>
-            </div>
-        </div>
-        <input type="submit" id="save_button" value="Save" disabled="disabled" />
-    </fieldset>
+
+@section HeaderContent{
+    <link rel="stylesheet" type="text/css" href="../../Content/Settings.css" />
 }
-<div id="result" class="hiddenResult">
-</div>
+
+@section TitleContent{
+    Settings
+}
+
+@section ActionMenu{
+    @{Html.RenderPartial("SubMenu");}
+}
+
+@section MainContent{
+    <div id="stylized">
+    
+    @using (Html.BeginForm("SaveSabnzbd", "Settings", FormMethod.Post, new { id = "form", name = "form", @class = "settingsForm" }))
+    {
+        <h1>SABnzbd</h1>
+        <p></p>
+    
+        <label>Auto-Configure
+        <span class="small">If no Username and Password is set and SABnzbd is on the same system as NzbDrone, you cna auto-configure it</span>
+        </label>
+        <input type="button" onclick="autoConfigureSab(); return false;" value="Auto-Configure" />
+
+        <label>@Html.LabelFor(m => m.SabHost)
+        <span class="small">@Html.DescriptionFor(m => m.SabHost)</span>
+        </label>
+        @Html.TextBoxFor(m => m.SabHost)
+
+        <label>@Html.LabelFor(m => m.SabPort)
+        <span class="small">@Html.DescriptionFor(m => m.SabPort)</span>
+        </label>
+        @Html.TextBoxFor(m => m.SabPort)
+
+        <label>@Html.LabelFor(m => m.SabApiKey)
+        <span class="small">@Html.DescriptionFor(m => m.SabApiKey)</span>
+        </label>
+        @Html.TextBoxFor(m => m.SabApiKey)
+
+        <label>@Html.LabelFor(m => m.SabUsername)
+        <span class="small">@Html.DescriptionFor(m => m.SabUsername)</span>
+        </label>
+        @Html.TextBoxFor(m => m.SabUsername)
+
+        <label>@Html.LabelFor(m => m.SabPassword)
+        <span class="small">@Html.DescriptionFor(m => m.SabPassword)</span>
+        </label>
+        @Html.TextBoxFor(m => m.SabPassword)
+
+        <label>@Html.LabelFor(m => m.SabTvCategory)
+        <span class="small">@Html.DescriptionFor(m => m.SabTvCategory)</span>
+        </label>
+        @Html.TextBoxFor(m => m.SabTvCategory)
+
+        <label>@Html.LabelFor(m => m.SabTvPriority)
+        <span class="small">@Html.DescriptionFor(m => m.SabTvPriority)</span>
+        </label>
+        @Html.DropDownListFor(m => m.SabTvPriority, Model.PrioritySelectList)
+
+        <label>@Html.LabelFor(m => m.SabDropDirectory)
+        <span class="small">@Html.DescriptionFor(m => m.SabDropDirectory)</span>
+        </label>
+        @Html.TextBoxFor(m => m.SabDropDirectory)
+
+        <button type="submit" id="save_button" >Save</button><img src="../../Content/Images/ajax-loader.gif" alt="Loader" id="saveAjax"/>
+    }
+    </div>
+
+    <div id="result" class="hiddenResult"></div>
+}
+
 @section Scripts{
+    <script src="/Scripts/MicrosoftAjax.js" type="text/javascript"></script>
+    <script src="/Scripts/MicrosoftMvcValidation.js" type="text/javascript"></script>
+
     <script type="text/javascript">
         var autoConfigureSabUrl = '@Url.Action("AutoConfigureSab", "Settings")';
 
@@ -130,17 +107,18 @@
                 resetForm: false
             };
             $('#form').ajaxForm(options);
-            $('#save_button').attr('disabled', '');
         });
 
         function showRequest(formData, jqForm, options) {
             $("#result").empty().html('Saving...');
             $("#form :input").attr("disabled", true);
+            $('#saveAjax').show();
         }
 
         function showResponse(responseText, statusText, xhr, $form) {
             $("#result").empty().html(responseText);
             $("#form :input").attr("disabled", false);
-        }             
+            $('#saveAjax').hide();
+        }
     </script>
 }
