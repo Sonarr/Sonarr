@@ -171,31 +171,3 @@
     </fieldset>
 }
 <div id="result" class="hiddenResult"></div>
-
-
-@section Scripts{
-<script type="text/javascript">
-    $(document).ready(function () {
-        var options = {
-            target: '#result',
-            beforeSubmit: showRequest,
-            success: showResponse,
-            type: 'post',
-            resetForm: false
-        };
-        $('#form').ajaxForm(options);
-        $('#save_button').attr('disabled', '');
-    });
-
-    function showRequest(formData, jqForm, options) {
-        $("#result").empty().html('Saving...');
-        $("#form :input").attr("disabled", true);
-    }
-
-    function showResponse(responseText, statusText, xhr, $form) {
-        $("#result").empty().html(responseText);
-        $("#form :input").attr("disabled", false);
-    }
-</script>
-
-}

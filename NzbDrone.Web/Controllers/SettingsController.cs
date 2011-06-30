@@ -94,8 +94,6 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult Sabnzbd()
         {
-            ViewData["viewName"] = "Sabnzbd";
-
             var sabDropDir = _configProvider.SabDropDirectory;
             var selectList = new SelectList(new List<string> {sabDropDir}, sabDropDir);
 
@@ -112,13 +110,11 @@ namespace NzbDrone.Web.Controllers
                                 SabDropDirectorySelectList = selectList
                             };
 
-            return View("Index", model);
+            return View(model);
         }
 
         public ActionResult Quality()
         {
-            ViewData["viewName"] = "Quality";
-
             var qualityTypes = new List<QualityTypes>();
 
             foreach (QualityTypes qual in Enum.GetValues(typeof(QualityTypes)))
@@ -139,7 +135,7 @@ namespace NzbDrone.Web.Controllers
                                 QualityProfileSelectList = qualityProfileSelectList
                             };
 
-            return View("Index", model);
+            return View(model);
         }
 
         public ActionResult Notifications()

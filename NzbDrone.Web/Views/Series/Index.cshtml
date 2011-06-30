@@ -79,7 +79,7 @@ Series
                              })
                 .Editable(editor => editor.Mode(GridEditMode.PopUp))
                 .Sortable(sort => sort.OrderBy(order => order.Add(o => o.Title).Ascending()).Enabled(true))
-                .DetailView(detailView => detailView.ClientTemplate("<div style=\"width:95%\"><#= Overview #></div>"))
+                .DetailView(detailView => detailView.ClientTemplate("<#= Overview #>"))
                 .ClientEvents(clientEvents =>
                 {
                     clientEvents.OnEdit("grid_edit");
