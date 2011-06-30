@@ -1,0 +1,23 @@
+﻿.actionButton
+{
+    margin: 5px 0px;
+    padding: 5px 10px 5px 10px;
+    background-repeat: no-repeat;
+    background-position: 5px center;
+    background-color: #dbe4e9;
+    margin-bottom: 10px;
+    display: inline-block;
+    font-size: 15px;
+}
+
+.actionButton img
+{
+    cursor: pointer;
+    vertical-align: middle;
+    position: relative;
+    bottom: 1px;
+}
+
+.delete
+{
+}

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using NzbDrone.Core.Providers.Core;
 
@@ -28,26 +29,28 @@ namespace NzbDrone.Web.Controllers
             };
         }
 
-        public SelectList GetDirectories(string text)
+        [HttpGet]
+        public JsonResult GetDirectories(string q)
         {
             try
             {
                 //Windows (Including UNC)
-                var windowsSep = text.LastIndexOf('\\');
+                var windowsSep = q.LastIndexOf('\\');
 
                 if (windowsSep > -1)
                 {
-                    var dirs = _diskProvider.GetDirectories(text.Substring(0, windowsSep + 1));
-                    return new SelectList(dirs, dirs.FirstOrDefault());
+                    var dirs = _diskProvider.GetDirectories(q.Substring(0, windowsSep + 1));
+                    return Json(dirs, JsonRequestBehavior.AllowGet);
                 }
 
+                return Json(new string[] { }, JsonRequestBehavior.AllowGet);
                 //Unix
-                var index = text.LastIndexOf('/');
+                var index = q.LastIndexOf('/');
 
                 if (index > -1)
                 {
-                    var dirs = _diskProvider.GetDirectories(text.Substring(0, index + 1));
-                    return new SelectList(dirs, dirs.FirstOrDefault());
+                    var dirs = _diskProvider.GetDirectories(q.Substring(0, index + 1));
+                    //return new SelectList(dirs, dirs.FirstOrDefault());
                 }
             }
             catch
@@ -55,7 +58,7 @@ namespace NzbDrone.Web.Controllers
                 //Swallow the exceptions so proper JSON is returned to the client (Empty results)
             }
 
-            return new SelectList(new List<string>());
+            return Json(new string[]{}, JsonRequestBehavior.AllowGet);
         }
     }
 }

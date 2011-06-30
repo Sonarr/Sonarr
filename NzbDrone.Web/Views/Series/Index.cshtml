@@ -99,7 +99,23 @@ Series
 @section Scripts{
     <script type="text/javascript">
         var windowElement;
+        
+        (function ($) {
+            $.fn.episodeProgress = function (episodes, totalEpisodes) {
+                return this.each(
+                function () {
+                    var div = $(this);
+                    var progressBar = div.find(".progress");
 
+                    var width = Math.round(episodes / totalEpisodes * 100);
+
+                    progressBar.css("width", width + "%");
+                    div.find(".progressText").html(episodes + " / " + totalEpisodes);
+                });
+            };
+        })(jQuery);
+        
+        
         function grid_edit(args) {
             $(args.form)
             .closest(".t-window")
@@ -146,22 +162,7 @@ Series
 
             $("#progressbar_" + seriesId).episodeProgress(episodeFileCount, episodeCount);
         }
-    </script>
-    <script type="text/javascript" src="../../Scripts/doTimeout.js"></script>
-    <script type="text/javascript">
-        (function ($) {
-            $.fn.episodeProgress = function (episodes, totalEpisodes) {
-                return this.each(
-                function () {
-                    var div = $(this);
-                    var progressBar = div.find(".progress");
+        
 
-                    var width = Math.round(episodes / totalEpisodes * 100);
-
-                    progressBar.css("width", width + "%");
-                    div.find(".progressText").html(episodes + " / " + totalEpisodes);
-                });
-            };
-        })(jQuery);
     </script>
 }

@@ -87,6 +87,12 @@ namespace NzbDrone.Web.Controllers
             return View(rootDirs);
         }
 
+
+        public ActionResult Test()
+        {
+            return View();
+        }
+
         public ActionResult AddExisting()
         {
             var rootDirs = _rootFolderProvider.GetAll();
@@ -185,18 +191,15 @@ namespace NzbDrone.Web.Controllers
 
         //Root Directory
         [HttpPost]
-        public JsonResult SaveRootDir(int id, string path)
+        public JsonResult SaveRootDir(string path)
         {
             if (String.IsNullOrWhiteSpace(path))
                 return new JsonResult { Data = "failed" };
 
             try
             {
-                if (id == 0)
-                    id = _rootFolderProvider.Add(new RootDir { Path = path });
+                _rootFolderProvider.Add(new RootDir { Path = path });
 
-                else
-                    _rootFolderProvider.Update(new RootDir { Id = id, Path = path });
             }
             catch (Exception ex)
             {
@@ -206,7 +209,7 @@ namespace NzbDrone.Web.Controllers
                 return new JsonResult { Data = "failed" };
             }
 
-            return new JsonResult { Data = id };
+            return new JsonResult { };
         }
 
         public PartialViewResult AddRootDir()
@@ -238,11 +241,19 @@ namespace NzbDrone.Web.Controllers
             return PartialView("RootDir", model);
         }
 
-        public JsonResult DeleteRootDir(int rootDirId)
+
+        public ActionResult RootDir()
+        {
+            var rootDir = _rootFolderProvider.GetAll().Select(c => c.Path);
+            return PartialView("RootDir", rootDir);
+        }
+
+        public JsonResult DeleteRootDir(string path)
         {
             try
             {
-                _rootFolderProvider.Remove(rootDirId);
+                var id = _rootFolderProvider.GetAll().Where(c => c.Path == path).First().Id;
+                _rootFolderProvider.Remove(id);
             }
 
             catch (Exception)

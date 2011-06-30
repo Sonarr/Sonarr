@@ -1,0 +1,14 @@
+﻿@{
+    ViewBag.Title = "Test";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{Html.RenderAction("RootDir");}
+
+
+@(Html.Telerik().ScriptRegistrar().Scripts(c => c.AddGroup("TestGroup", group => group
+       .Add("telerik.common.js")
+       .Add("telerik.combobox.js")
+       .Add("telerik.list.js")
+       .Add("telerik.autocomplete.js")
+          )))

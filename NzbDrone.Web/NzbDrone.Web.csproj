@@ -490,6 +490,7 @@
     <Content Include="Content\2011.1.414\Windows7\slider-vs-right.gif" />
     <Content Include="Content\2011.1.414\Windows7\sprite-vertical.png" />
     <Content Include="Content\2011.1.414\Windows7\sprite.png" />
+    <Content Include="Content\ActionButton.css" />
     <Content Include="Content\Blueprint\ie.css" />
     <Content Include="Content\Blueprint\screen.css" />
     <Content Include="Content\Blueprint\liquid.css" />
@@ -681,6 +682,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\System\PendingProcessing.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\AddSeries\Test.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

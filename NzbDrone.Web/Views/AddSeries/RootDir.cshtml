@@ -1,25 +1,44 @@
-﻿@model NzbDrone.Web.Models.RootDirModel
-
+﻿@using NzbDrone.Web.Models
+@model IEnumerable<String>
 @{
     Layout = null;
 }
-
-<div class="rootDirSection" id="rootDir_@(ViewData["guid"])" style="padding: 7px; padding-left: 3px;">
-    <fieldset style="padding: 5px; height: 40px;">
-            @{Html.Telerik().ComboBox()
-                  .Name("path_" + ViewData["guid"])
-                  .BindTo(Model.SelectList)
-                  .DataBinding(binding => binding.Ajax().Select("_autoCompletePath", "Directory").Delay(400).Cache(true))
-                  .Filterable(f => f.FilterMode(AutoCompleteFilterMode.StartsWith))
-                  .HighlightFirstMatch(true)
-                  .HtmlAttributes(new { style = "width: 300px;" })
-                  .Render();}
-
-
-            <a href="#RemoveRootDir" class="deleteRow" onclick="deleteRootDir('@ViewData["guid"]'); return false;">
-                <img src="../../Content/Images/X.png" alt="Delete" width="20px" height="20px" style="vertical-align: middle; margin-top: 7px;"/></a>
-                <button style="padding: 2px 10px 2px 10px; vertical-align: middle; margin: 0px; margin-top: 7px;" onclick="saveRootDir('@ViewData["guid"]')">Save</button>
-
-            @Html.HiddenFor(x => x.Id, new { id = "id_" + ViewData["guid"] })
-    </fieldset>
+<div id="rootDirs">
+    @foreach (var root in Model)
+    {
+        <div class="actionButton delete">
+            <img src="/Content/Images/x_16.png" alt="delete" id='@root'/>
+            <span>@root</span>
+        </div>
+    }
 </div>
+<br />
+<label for="ac-input">
+    Enter a GitHub username:</label>
+<input id="rootDirInput" type="text" style="width: 100px" />
+<button id="saveDir">
+    Save</button>
+@(Html.Telerik().ScriptRegistrar().DefaultGroup(c => c.Add("http://ajax.googleapis.com/ajax/libs/yui/3.3.0/build/yui/yui-min.js")
+                                                                                          .Add("AutoComplete.js")
+                                                                 ).OnDocumentReady("bindFolderAutoComplete('#rootDirInput')"))
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#saveDir').click(saveRootDir);
+
+        function saveRootDir() {
+            var path = $("#rootDirInput").val();
+            $.post("/AddSeries/SaveRootDir", { Path: path });
+        }
+    });
+
+
+    $(document).ready(function () {
+        $('#rootDirs .actionButton img').live('click',
+            function (image) {
+                var path = $(image.srcElement).attr('id');
+                $.post("/AddSeries/DeleteRootDir", { Path: path });
+            });
+    });
+    
+</script>
