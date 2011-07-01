@@ -98,7 +98,7 @@ namespace NzbDrone.Core.Providers
                 return null;
             }
 
-            var parseResult = Parser.ParseEpisodeInfo(filePath);
+            var parseResult = Parser.ParsePath(filePath);
 
             if (parseResult == null)
                 return null;

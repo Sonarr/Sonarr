@@ -160,7 +160,7 @@ namespace NzbDrone.Core.Providers.Indexer
         /// <returns>Detailed episode info</returns>
         public EpisodeParseResult ParseFeed(SyndicationItem item)
         {
-            var episodeParseResult = Parser.ParseEpisodeInfo(item.Title.Text);
+            var episodeParseResult = Parser.ParseTitle(item.Title.Text);
 
             return CustomParser(item, episodeParseResult);
         }
