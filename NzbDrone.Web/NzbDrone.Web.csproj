@@ -629,7 +629,6 @@
     <Content Include="Views\Settings\SubMenu.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Shared\Footer.cshtml" />
-    <Content Include="Views\Settings\Index.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\History\Index.cshtml" />
     <Content Include="Views\Log\index.cshtml" />

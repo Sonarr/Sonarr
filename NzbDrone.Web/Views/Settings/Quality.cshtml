@@ -62,7 +62,7 @@
     <script src="../../Scripts/settingsForm.js" type="text/javascript"></script>
 
     <script type="text/javascript">
-        $("#addItem").click(function () {
+        $("#addItem").live('click', function () {
             $.ajax({
                 url: this.href,
                 cache: false,
