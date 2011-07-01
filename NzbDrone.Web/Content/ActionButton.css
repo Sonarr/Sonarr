@@ -1,11 +1,10 @@
 ﻿.actionButton
 {
-    margin: 5px 0px;
+    margin: 5px 5px 5px 5px;
     padding: 5px 10px 5px 10px;
     background-repeat: no-repeat;
     background-position: 5px center;
     background-color: #cccccc;
-    margin-bottom: 10px;
     display: inline-block;
     font-size: 15px;
 }

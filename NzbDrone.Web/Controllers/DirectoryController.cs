@@ -32,6 +32,7 @@ namespace NzbDrone.Web.Controllers
         [HttpGet]
         public JsonResult GetDirectories(string q)
         {
+            string[] dirs = null;
             try
             {
                 //Windows (Including UNC)
@@ -39,18 +40,16 @@ namespace NzbDrone.Web.Controllers
 
                 if (windowsSep > -1)
                 {
-                    var dirs = _diskProvider.GetDirectories(q.Substring(0, windowsSep + 1));
-                    return Json(dirs, JsonRequestBehavior.AllowGet);
+                    dirs = _diskProvider.GetDirectories(q.Substring(0, windowsSep + 1));
+
                 }
 
-                return Json(new string[] { }, JsonRequestBehavior.AllowGet);
                 //Unix
                 var index = q.LastIndexOf('/');
 
                 if (index > -1)
                 {
-                    var dirs = _diskProvider.GetDirectories(q.Substring(0, index + 1));
-                    //return new SelectList(dirs, dirs.FirstOrDefault());
+                    dirs = _diskProvider.GetDirectories(q.Substring(0, index + 1));
                 }
             }
             catch
@@ -58,7 +57,7 @@ namespace NzbDrone.Web.Controllers
                 //Swallow the exceptions so proper JSON is returned to the client (Empty results)
             }
 
-            return Json(new string[]{}, JsonRequestBehavior.AllowGet);
+            return Json(dirs, JsonRequestBehavior.AllowGet);
         }
     }
 }

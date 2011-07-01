@@ -55,7 +55,7 @@ namespace NzbDrone.Web.Controllers
                             Path = r.Path,
                             CleanPath = r.Path.Replace(Path.DirectorySeparatorChar, '|').Replace(Path.VolumeSeparatorChar, '^').Replace('\'', '`')
                         });
-            ViewData["RootDirs"] = rootDirs;
+            ViewData["RootDirs"] = rootDirs.ToList();
             ViewData["DirSep"] = Path.DirectorySeparatorChar.ToString().Replace(Path.DirectorySeparatorChar, '|');
 
             var defaultQuality = _configProvider.DefaultQualityProfile;
@@ -87,11 +87,6 @@ namespace NzbDrone.Web.Controllers
             return View(rootDirs);
         }
 
-
-        public ActionResult Test()
-        {
-            return View();
-        }
 
         public ActionResult AddExisting()
         {

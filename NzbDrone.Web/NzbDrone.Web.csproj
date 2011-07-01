@@ -670,12 +670,6 @@
     <Content Include="Views\Series\EditorTemplates\SeriesModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Settings\Test.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Settings\TestPartial.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Series\SeasonEditor.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -688,10 +682,11 @@
     <Content Include="Views\System\PendingProcessing.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\AddSeries\Test.cshtml" />
+    <Content Include="Views\AddSeries\RootList.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\AddSeries\RootList.cshtml" />
+    <Content Include="Views\Settings\Test.cshtml" />
+    <Content Include="Views\Settings\TestPartial.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
