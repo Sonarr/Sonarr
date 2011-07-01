@@ -494,6 +494,7 @@
     <Content Include="Content\Blueprint\ie.css" />
     <Content Include="Content\Blueprint\screen.css" />
     <Content Include="Content\Blueprint\liquid.css" />
+    <Content Include="Content\QualitySettings.css" />
     <Content Include="Content\Overrides.css" />
     <Content Include="Content\Images\ajax-loader.gif" />
     <Content Include="Content\ie.css" />

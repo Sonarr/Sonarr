@@ -3,61 +3,14 @@
            
 @section HeaderContent{
     <link rel="stylesheet" type="text/css" href="../../Content/Settings.css" />
-}
+    <link href="../../Content/QualitySettings.css" rel="stylesheet" type="text/css" />
 
-@section TitleContent{
-    Settings
-}
-
-@section ActionMenu{
-    @{Html.RenderPartial("SubMenu");}
-}
-
-@section MainContent{
-@using (Html.BeginForm("SaveQuality", "Settings", FormMethod.Post, new { id = "form", name = "form" }))
-{
-    <fieldset style="position: relative;">
-        <legend>Quality</legend>
-        <div id="top">
-            <div class="config-section">
-                <div class="config-group">
-                    <div class="config-title">@Html.LabelFor(m => m.DefaultQualityProfileId)</div>
-                    <div class="config-value">@Html.DropDownListFor(m => m.DefaultQualityProfileId, Model.QualityProfileSelectList)</div>
-                </div>
-                <div class="config-group2">
-                    <div class="config-validation">@Html.ValidationMessageFor(m => m.DefaultQualityProfileId)</div>
-                    <div class="config-description">@Html.DescriptionFor(m => m.DefaultQualityProfileId)</div>
-                </div>
-            </div>
-        </div>
-        <div id="bottom" style="float: left; padding-bottom: 55px;">
-            <div style="padding-left: 7px; margin-bottom: 5px;">
-                <a id="addItem" style="text-decoration:none;" href="@Url.Action("AddProfile", "Settings")">
-                    <img src="../../Content/Images/Plus.png" alt="Add New Profile" width="20px" height="20px" />
-                    <h4 style="margin-left: 3px; display: inline; color: Black;">
-                        Add New Profile</h4>
-                </a>
-            </div>
-            <div id="profiles">
-                @foreach (var item in Model.Profiles)
-                {
-                    Html.RenderAction("GetQualityProfileView", item);
-                }
-            </div>
-        </div>
-        <input type="submit" id="save_button" value="Save" style="position: absolute;
-            bottom: 0px; display: block; padding-left: 5px;" />
-    </fieldset>
-}
-<div id="result" class="hiddenResult">
-</div>
-}
-
-@section Scripts{
-    <script src="/Scripts/MicrosoftAjax.js" type="text/javascript"></script>
-    <script src="/Scripts/MicrosoftMvcValidation.js" type="text/javascript"></script>
-
+    <script src="../../Scripts/jquery-1.6.1.js" type="text/javascript"></script>
     <script type="text/javascript">
+        function renameOption(text, value) {
+            $("#DefaultQualityProfileId option[value='" + value + "']").html(text);
+        }
+
         function addOption(text, value) {
             var myCombo = $('#DefaultQualityProfileId');
 
@@ -70,11 +23,59 @@
         function removeOption(value) {
             $("#DefaultQualityProfileId option[value='" + value + "']").remove();
         }
+    </script>
+}
 
-        function renameOption(text, value) {
-            $("#DefaultQualityProfileId option[value='" + value + "']").html(text);
-        }
+@section TitleContent{
+    Settings
+}
 
+@section ActionMenu{
+    @{Html.RenderPartial("SubMenu");}
+}
+
+@section MainContent{
+<div id="stylized">
+    @using (Html.BeginForm("SaveQuality", "Settings", FormMethod.Post, new { id = "form", name = "form" }))
+    {
+            <div id="top" class="settingsForm clearfix">
+                <h1>Quality</h1>
+                <p></p>
+                <label class="labelClass">@Html.LabelFor(m => m.DefaultQualityProfileId)
+                <span class="small">@Html.DescriptionFor(m => m.DefaultQualityProfileId)</span>
+                </label>
+                @Html.DropDownListFor(m => m.DefaultQualityProfileId, Model.QualityProfileSelectList, new { @class = "inputClass" })
+            </div>
+
+            <div id="bottom" class="clearfix">
+                <div id="profileContainer">
+                    <div id="profileHeader">
+                        <a id="addItem" href="@Url.Action("AddProfile", "Settings")">
+                            <img src="../../Content/Images/Plus.png" alt="Add New Profile" width="20px" height="20px" /> Add New Profile</a>
+                    </div>
+                    
+                    <div id="profiles" class="clearfix">
+                        @foreach (var item in Model.Profiles)
+                        {
+                            Html.RenderAction("GetQualityProfileView", item);
+                        }
+                    </div>
+                </div>
+
+                <button type="submit" id="save_button" >Save</button><img src="../../Content/Images/ajax-loader.gif" alt="Loader" id="saveAjax"/>
+            </div>
+        
+    }
+</div>
+
+<div id="result" class="hiddenResult"></div>
+}
+
+@section Scripts{
+    <script src="/Scripts/MicrosoftAjax.js" type="text/javascript"></script>
+    <script src="/Scripts/MicrosoftMvcValidation.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
         $("#addItem").click(function () {
             $.ajax({
                 url: this.href,
@@ -136,5 +137,53 @@
             $("#form :input").attr("disabled", false);
             $('#saveAjax').hide();
         }
+        
+        function getProfileId(obj) {
+            var parentProfileSection = $(obj).parents('.profileSection');
+            return parentProfileSection.children('.qualityProfileId').val();
+        }
+
+        function getCleanId(obj) {
+            var parentProfileSection = $(obj).parents('.profileSection');
+            return parentProfileSection.children('.cleanId').val();
+        }
+
+        $(".profileName_textbox").live('keyup', function () {
+            var value = $(this).val();
+            var profileId = getProfileId(this);
+            $("#title_" + profileId).text(value);
+            renameOption(value, profileId);
+        }).keyup();
+
+        $('.quality-selectee').live('click', function () {
+            var profileId = getProfileId(this);
+            var cleanId = getCleanId(this);
+            var cutoff = '#' + cleanId + '_Cutoff';
+            var allowedString = '#' + cleanId + '_AllowedString';
+
+            $(cutoff + ' option').each(function () { if ($(this).text().indexOf('Unknown') > -1) $(cutoff + ' option').remove(':contains("' + $(this).text() + '")'); });
+
+            if ($(this).hasClass('quality-selected')) {
+                $(this).removeClass('quality-selected');
+                var toRemove = this.firstChild.data;
+
+                $(cutoff + ' option').each(function () {
+                    if ($(this).text().indexOf(toRemove) > -1)
+                        $(cutoff + ' option').remove(':contains("' + $(this).text() + '")');
+                });
+            }
+
+            else {
+                $(this).addClass('quality-selected');
+                $('<option>' + this.firstChild.data + '</option>').appendTo(cutoff);
+            }
+
+            var result = "";
+            $("#selectable_" + profileId + " .quality-selected").each(function () {
+                result += this.firstChild.data + ",";
+            });
+
+            $(allowedString).empty().val(result);
+        });
     </script>
 }

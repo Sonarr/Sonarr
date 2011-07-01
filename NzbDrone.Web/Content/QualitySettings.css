@@ -1,0 +1,116 @@
+﻿#bottom
+{
+    margin-top: -25px;
+    margin-left: 15px;
+}
+        
+#addItem
+{
+    text-decoration: none;
+    font-size:16px;
+    color: black;
+    font-weight:bold;
+}
+        
+#profileHeader
+{
+    margin-bottom: 5px;
+}
+
+/* QualityProfileItem */
+.quality-selectee
+{
+    border-color: #065EFE;
+    border-style: solid;
+    border-width: 1px;
+    width: 75px;
+    padding: 1px;
+    padding-left: 3px;
+    padding-right: 3px;
+    margin: 2px;
+    float: left;
+    cursor: default;
+}
+.quality-selecting
+{
+    background: #85AEF9;
+}
+.quality-selected
+{
+    background: #065EFE;
+    color: white;
+}
+    
+.profileSection
+{
+    float: left;
+    height: 157px;
+    width: 270px;
+    margin: 2px;
+    border:solid 1px #CCCCCD;
+    display: inline-block;
+    overflow: hidden;
+}
+    
+.profileOptions label
+{
+    margin-top: 10px;
+    margin-left: 7px;
+    margin-right: 25px;
+    float: left;
+    font-weight: bold;
+    width: 50px;
+}
+    
+.profileOptions input, .profileOptions select
+{
+    font-size:12px;
+    padding:4px 2px;
+    border:solid 1px #aacfe4;
+    width:170px;
+    margin-right: 2px;
+}
+    
+.profileOptions select
+{
+    width:176px;
+}
+    
+.qualitySelector
+{
+    padding-left: 5px;
+}
+    
+.deleteProfile
+{
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+    
+.titleText
+{
+    font-size: 1.5em;
+    line-height: 1;
+    margin-bottom: 1em;
+    display:inline;
+    position: absolute;
+    top: -1px;
+    left: 2px;
+    padding-bottom: 0px;
+    white-space:nowrap;
+}
+    
+.qualityHeader
+{
+    background: #d7e6f2; /* Old browsers */
+    background: -moz-linear-gradient(left, #d7e6f2 0%, #57a9c6 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, right top, color-stop(0%,#d7e6f2), color-stop(100%,#57a9c6)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(left, #d7e6f2 0%,#57a9c6 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(left, #d7e6f2 0%,#57a9c6 100%); /* Opera11.10+ */
+    background: -ms-linear-gradient(left, #d7e6f2 0%,#57a9c6 100%); /* IE10+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d7e6f2', endColorstr='#57a9c6',GradientType=1 ); /* IE6-9 */
+    background: linear-gradient(left, #d7e6f2 0%,#57a9c6 100%); /* W3C */
+    min-height: 23px;
+    position: relative;
+}
