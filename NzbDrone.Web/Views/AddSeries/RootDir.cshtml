@@ -1,7 +1,4 @@
-﻿@{
-    Layout = null;
-}
-<div>
+﻿<div>
     <input id="rootDirInput" type="text" style="width: 400px" />
     <button id="saveDir">
         Add</button>
@@ -9,27 +6,21 @@
 <div id="rootDirs">
     @{Html.RenderAction("RootList");}
 </div>
-@(Html.Telerik().ScriptRegistrar().DefaultGroup(c => c.Add("http://ajax.googleapis.com/ajax/libs/yui/3.3.0/build/yui/yui-min.js")
-                                                                                          .Add("AutoComplete.js")
-                                                                 ).OnDocumentReady("bindFolderAutoComplete('#rootDirInput')"))
-
-@(Html.Telerik().ScriptRegistrar().OnDocumentReady("onRootReady()"))
-
 <script type="text/javascript">
 
-
-    function onRootReady() {
-
+    jQuery(document).ready(function() {
         $.ajaxSetup({
-            cache: false
-        });
+                cache: false
+            });
+
+        bindFolderAutoComplete('#rootDirInput');
 
         $('#rootDirInput').watermark('Start typing to add new root folder...');
 
         $('#rootDirs .actionButton img').live('click',
-            function (image) {
+            function(image) {
                 var path = $(image.srcElement).attr('id');
-                $.post('@Url.Action("DeleteRootDir", "AddSeries")', { Path: path }, function () {
+                $.post('@Url.Action("DeleteRootDir", "AddSeries")', { Path: path }, function() {
                     refreshRoot();
                 });
             });
@@ -38,7 +29,7 @@
 
         function saveRootDir() {
             var path = $("#rootDirInput").val();
-            $.post('@Url.Action("SaveRootDir", "AddSeries")', { Path: path }, function () {
+            $.post('@Url.Action("SaveRootDir", "AddSeries")', { Path: path }, function() {
                 refreshRoot();
                 $("#rootDirInput").val('');
             });
@@ -47,10 +38,10 @@
 
 
         function refreshRoot() {
-            $.get('@Url.Action("RootList", "AddSeries")', function (data) {
+            $.get('@Url.Action("RootList", "AddSeries")', function(data) {
                 $('#rootDirs').html(data);
             });
         }
-    }
+    });
     
 </script>

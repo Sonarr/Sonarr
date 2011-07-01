@@ -5,17 +5,25 @@
     <link rel="SHORTCUT ICON" href="../../favicon.ico" />
     <title>NZBDrone</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link href="/Content/Blueprint/screen.css" rel="stylesheet" type="text/css" />
-    <link type="text/css" href="http://aspnet-skins.telerikstatic.com/mvcz/2011.1.414/telerik.common.min.css"
-        rel="stylesheet" />
-    <link type="text/css" href="http://aspnet-skins.telerikstatic.com/mvcz/2011.1.414/telerik.sitefinity.min.css"
-        rel="stylesheet" />
-    <link type="text/css" href="http://aspnet-skins.telerikstatic.com/mvcz/2011.1.414/telerik.rtl.min.css"
-        rel="stylesheet" />
-    <link href="/Content/Site.css" rel="stylesheet" type="text/css" />
-    <link href="/Content/Notibar.css" rel="stylesheet" type="text/css" />
-    <link href="/Content/ActionButton.css" rel="stylesheet" type="text/css" />
-    <link href="/Content/overrides.css" rel="stylesheet" type="text/css" />
+    <link type="text/css" rel="stylesheet" href="/Content/Blueprint/screen.css" />
+    <link type="text/css" rel="stylesheet" href="http://aspnet-skins.telerikstatic.com/mvcz/2011.1.414/telerik.common.min.css" />
+    <link type="text/css" rel="stylesheet" href="http://aspnet-skins.telerikstatic.com/mvcz/2011.1.414/telerik.sitefinity.min.css" />
+    <link type="text/css" rel="stylesheet" href="http://aspnet-skins.telerikstatic.com/mvcz/2011.1.414/telerik.rtl.min.css" />
+    <link type="text/css" rel="stylesheet" href="/Content/Site.css" />
+    <link type="text/css" rel="stylesheet" href="/Content/Notibar.css" />
+    <link type="text/css" rel="stylesheet" href="/Content/ActionButton.css" />
+    <link type="text/css" rel="stylesheet" href="/Content/overrides.css" />
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js" />
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js" />
+    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/4.0/1/MicrosoftAjax.js" />
+    <script type="text/javascript" src="/Scripts/jquery.form.js"></script>
+    <script type="text/javascript" src="/Scripts/jquery.jgrowl.js"></script>
+    <script type="text/javascript" src="/Scripts/jquery-tgc-countdown-1.0.js"></script>
+    <script type="text/javascript" src="/Scripts/MicrosoftMvcValidation.debug.js"></script>
+    <script type="text/javascript" src="/Scripts/Notification.js"></script>
+    <script type="text/javascript" src="/Scripts/episodeSearch.js"></script>
+    <script type="text/javascript" src="/Scripts/autocomplete.js"></script>
+    <script type="text/javascript" src="/Scripts/jquery.watermark.min.js"></script>
     @RenderSection("HeaderContent", required: false)
 </head>
 <body>
@@ -49,39 +57,9 @@
         </div>
     </div>
     <div id="msgBox">
-        <span id="msgText">Scanning Series Folder...</span>
+        <span id="msgText">background notification</span>
     </div>
-    @(Html.Telerik().ScriptRegistrar().Scripts(
-        c => c.AddGroup("CDN", group => group
-                    .Add("http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js")
-            //.Add("http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js")
-                    .Add("http://ajax.aspnetcdn.com/ajax/4.0/1/MicrosoftAjax.js"))
-                    .AddGroup("3rdParty", group => group
-                    .Add("jquery.form.js")
-                    .Add("jquery.jgrowl.js")
-                    .Add("jquery-tgc-countdown-1.0.js")
-                                    .Add("jquery.watermark.min.js")
-                    .Add("MicrosoftMvcValidation.js"))
-
-                    .AddGroup("NzbDrone", group => group
-                                        .Add("Notification.js")
-                                        .Add("episodeSearch.js"))
-
-                                        ))
-    <script type="text/javascript">
-        jQuery(document).ready(function () {
-
-            document.getElementById('syncTimer').style.display = 'inline'; //Show the timer after the page loads, prevents FOUC (Flash of Unstyled Content)
-
-            $('#syncTimer').tgcCountdown({
-                counter: '<div style="color: #065EFE;">[H]:[M]:[S]</div>',
-                counter_warning: '<div style="color: #065EFE;">[H]:[M]:[S]</div>',
-                counter_expired: '<div style="color: #FFFFFF;">00:00:00</div>',
-                interval: 1000,
-                warnonminutesleft: 1
-            });
-        });
-    </script>
+    @(Html.Telerik().ScriptRegistrar().jQuery(false))
     @RenderSection("Scripts", required: false)
 </body>
 </html>

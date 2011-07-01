@@ -2,13 +2,8 @@
     ViewBag.Title = "Test";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+@section HeaderContent
+{
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/yui/3.3.0/build/yui/yui-min.js"></script>
+}
 @{Html.RenderAction("RootDir");}
-
-
-@(Html.Telerik().ScriptRegistrar().Scripts(c => c.AddGroup("TestGroup", group => group
-       .Add("telerik.common.js")
-       .Add("telerik.combobox.js")
-       .Add("telerik.list.js")
-       .Add("telerik.autocomplete.js")
-          )))
