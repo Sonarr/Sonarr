@@ -56,22 +56,14 @@ namespace NzbDrone.Web.Controllers
             return View();
         }
 
-        public ActionResult Index(string viewName)
+        public ActionResult Index()
         {
-            if (viewName != null)
-                ViewData["viewName"] = viewName;
-
-            else
-                return RedirectToAction("Indexers");
-
-            return View("Index");
+            return RedirectToAction("Indexers");
         }
 
         public ActionResult Indexers()
         {
-            ViewData["viewName"] = "Indexers";
-
-            return View("Index", new IndexerSettingsModel
+            return View(new IndexerSettingsModel
                                      {
                                          NzbMatrixUsername = _configProvider.NzbMatrixUsername,
                                          NzbMatrixApiKey = _configProvider.NzbMatrixApiKey,
@@ -146,8 +138,6 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult Notifications()
         {
-            ViewData["viewName"] = "Notifications";
-
             var model = new NotificationSettingsModel
                             {
                                 XbmcEnabled = Convert.ToBoolean(_configProvider.GetValue("XbmcEnabled", false)),
@@ -166,13 +156,11 @@ namespace NzbDrone.Web.Controllers
                                 XbmcPassword = _configProvider.GetValue("XbmcPassword", String.Empty)
                             };
 
-            return View("Index", model);
+            return View(model);
         }
 
         public ActionResult EpisodeSorting()
         {
-            ViewData["viewName"] = "EpisodeSorting";
-
             var model = new EpisodeSortingModel();
 
             model.SeriesName = _configProvider.SeriesName;
@@ -189,7 +177,7 @@ namespace NzbDrone.Web.Controllers
             model.NumberStyles = new SelectList(EpisodeSortingHelper.GetNumberStyles(), "Id", "Name");
             model.MultiEpisodeStyles = new SelectList(EpisodeSortingHelper.GetMultiEpisodeStyles(), "Id", "Name");
 
-            return View("Index", model);
+            return View(model);
         }
 
         public ViewResult AddProfile()

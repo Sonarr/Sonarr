@@ -43,6 +43,7 @@ p, h1, form, button{border:0; margin:0; padding:0;}
     text-align:right;
     width:340px;
     float:left;
+    margin-bottom: -10px;
 }
 
 #stylized .small
@@ -67,6 +68,11 @@ p, h1, form, button{border:0; margin:0; padding:0;}
 #stylized .selectClass
 {
     width: 206px;
+}
+
+#stylized .checkClass
+{
+    margin:10px 0 10px 10px;
 }
 
 #stylized button

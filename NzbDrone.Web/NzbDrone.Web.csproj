@@ -581,6 +581,7 @@
     <Content Include="Scripts\2011.1.414\telerik.upload.min.js" />
     <Content Include="Scripts\2011.1.414\telerik.window.min.js" />
     <Content Include="Scripts\AutoComplete.js" />
+        <Content Include="Scripts\settingsForm.js" />
     <Content Include="Scripts\doTimeout.js" />
     <Content Include="Scripts\episodeSearch.js" />
     <Content Include="Scripts\jquery-1.6.1-vsdoc.js" />
@@ -632,7 +633,6 @@
     <Content Include="Views\Settings\SubMenu.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Shared\Footer.cshtml" />
-    <Content Include="Views\Settings\Index.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\History\Index.cshtml" />
     <Content Include="Views\Log\index.cshtml" />
