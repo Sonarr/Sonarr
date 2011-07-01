@@ -5,127 +5,49 @@
 @{
     Layout = null;
 }
-<style>
-    .quality-selectee
-    {
-        width: 75px;
-        padding: 1px;
-        padding-left: 3px;
-        padding-right: 3px;
-        margin: 2px;
-        float: left;
-        cursor: default;
-    }
-    .quality-selecting
-    {
-        background: #85AEF9;
-    }
-    .quality-selected
-    {
-        background: #065EFE;
-        color: white;
-    }
-</style>
+
 @using (Html.BeginCollectionItem("Profiles"))
 {
     var idClean = ViewData.TemplateInfo.HtmlFieldPrefix.Replace('[', '_').Replace(']', '_');
 
-    string selectable = String.Format("{0}_selectable", idClean);
-    string allowedStringName = String.Format("{0}_AllowedString", idClean);
-    string title = String.Format("{0}_Title", idClean);
-    string nameBox = String.Format("{0}_Name", idClean);
-    string cutoff = String.Format("{0}_Cutoff", idClean);
+    <div class="profileSection" id="profile_@(Model.QualityProfileId)">
+        <div class="qualityHeader">
+            <span class="titleText" id="title_@(Model.QualityProfileId)">
+                @Model.Name
+            </span>
+            <a href="#" id="@Model.QualityProfileId" class="deleteProfile" onclick=" deleteProfile('@(Model.QualityProfileId)'); return false;">
+                <img src="../../Content/Images/X.png" alt="Delete" width="22px" height="22px" /></a>
+        </div>
+        <div class="profileOptions">
+            @Html.LabelFor(x => x.Name)
+            @Html.TextBoxFor(x => x.Name, new {@class = "profileName_textbox"})
 
-    <div class="profileSectionEditor" id="profile_@(ViewData["ProfileId"])" style="float: left; height: 175px; width: 285px; margin-bottom: -14px;">
-        <fieldset style="width: 264px; margin: 5px; margin-top: 0px; border-color: #CCCCCD">
-            <div class="header">
-                <div id="qualityHeader" style="padding-bottom: 5px; margin: 0px;">
-                    <h2 style="display:inline; padding-right: 4px; margin-left: 4px;" id="@title">
-                        @{Html.DisplayTextFor(m => m.Name);}
-                    </h2>
-                    <a href="#" id="@Model.QualityProfileId" class="deleteRow" onclick="deleteProfile('@ViewData["ProfileId"]'); return false;" style="float:right; padding-top:8px; padding-right: 5px;">
-                        <img src="../../Content/Images/X.png" alt="Delete" width="20px" height="20px" /></a>
-                </div>
-                <div class="config-group" style="width: 255px; margin-bottom: 5px; margin-left: 5px;">
-                    <div class="config-title">@Html.LabelFor(x => x.Name)</div>
-                    <div class="config-value">@Html.TextBoxFor(x => x.Name, new { maxlength = 15, style="width: 150px" })</div>
-                    <div class="config-validation">@Html.ValidationMessageFor(x => x.Name)</div>
-                </div>
-                <div class="config-group" style="width: 255px; margin-bottom: 5px; margin-left: 5px;">
-                    <div class="config-title">@Html.LabelFor(x => x.Cutoff)</div>
-                    <div class="config-value">@Html.DropDownListFor(m => m.Cutoff, new SelectList(Model.Allowed, Model.Cutoff))</div>
-                    <div class="config-validation">@Html.ValidationMessageFor(x => x.Cutoff)</div>
-                </div>
-            </div>
-            <div class="selectableDiv" style="margin-top: 30px;">
-                <div id="@selectable">
-                    @{var qualitiesList = (List<QualityTypes>)ViewData["Qualities"];}
-                    @for (int i = 0; i < qualitiesList.Count(); i++)
+            @Html.LabelFor(x => x.Cutoff)
+            @Html.DropDownListFor(m => m.Cutoff, new SelectList(Model.Allowed, Model.Cutoff))
+        </div>
+        <div id = "selectable_@(Model.QualityProfileId)" class="qualitySelector">
+            @{ var qualitiesList = (List<QualityTypes>) ViewData["Qualities"]; }
+            @for (int i = 0; i < qualitiesList.Count(); i++)
+            {
+                if (qualitiesList[i].ToString() == "Unknown")
+                {
+                    continue;
+                }
+
+                if (Model.Allowed != null)
+                {
+                    if (Model.Allowed.Contains(qualitiesList[i]))
                     {
-                        if (qualitiesList[i].ToString() == "Unknown")
-                        {
-                            continue;
-                        }
-
-                        if (Model.Allowed != null)
-                        {
-                            if (Model.Allowed.Contains(qualitiesList[i]))
-                            {
-                        <fieldset class="quality-selectee quality-selected">@qualitiesList[i].ToString()</fieldset>
-                                continue;
-                            }
-                        }
-                        
-                        <fieldset class="quality-selectee">@qualitiesList[i].ToString()</fieldset>
+                        <div class="quality-selectee quality-selected">@qualitiesList[i].ToString()</div>
+                        continue;
                     }
-                </div>
-            </div>
-            <div class="hiddenProfileDetails">
-                @Html.HiddenFor(x => x.QualityProfileId)
-                @Html.HiddenFor(m => m.AllowedString)
-            </div>
-        </fieldset>
+                }
+
+                <div class="quality-selectee">@qualitiesList[i].ToString()</div>
+            }
+        </div>
+        @Html.HiddenFor(x => x.QualityProfileId, new {@class = "qualityProfileId"})
+        @Html.HiddenFor(m => m.AllowedString)
+        @Html.Hidden("cleanId", idClean, new {@class = "cleanId"})
     </div>
-
-    <script type="text/javascript">
-        $(document).ready(function () {
-            addOption('@Model.Name', '@ViewData["ProfileId"]');
-
-            var result = "";
-            $("#@selectable .quality-selected").each(function () {
-                result += this.firstChild.data + ",";
-            });
-
-            $("#@allowedStringName").empty().val(result);
-            $('#@selectable .quality-selectee').disableSelection();
-
-            $('#@cutoff option').each(function () { if ($(this).text().indexOf('Unknown') > -1) $('#@cutoff option').remove(':contains("' + $(this).text() + '")'); });
-        });
-
-        $("#@nameBox").keyup(function () {
-            var value = $(this).val();
-            $("#@title").text(value);
-            renameOption(value, '@ViewData["ProfileId"]');
-        }).keyup();
-
-        $('#@selectable .quality-selectee').click(function () {
-            if ($(this).hasClass('quality-selected')) {
-                $(this).removeClass('quality-selected');
-                var toRemove = this.firstChild.data;
-                $('#@cutoff option').each(function () { if ($(this).text().indexOf(toRemove) > -1) $('#@cutoff option').remove(':contains("' + $(this).text() + '")'); });
-            }
-
-            else {
-                $(this).addClass('quality-selected');
-                $('<option>' + this.firstChild.data + '</option>').appendTo('#@cutoff');
-            }
-
-            var result = "";
-            $("#@selectable .quality-selected").each(function () {
-                result += this.firstChild.data + ",";
-            });
-
-            $("#@allowedStringName").empty().val(result);
-        });
-    </script>
 }

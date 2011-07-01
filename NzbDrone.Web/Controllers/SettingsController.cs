@@ -125,6 +125,12 @@ namespace NzbDrone.Web.Controllers
             ViewData["Qualities"] = qualityTypes;
 
             var profiles = _qualityProvider.GetAllProfiles().ToList();
+
+            foreach (var qualityProfile in profiles)
+            {
+                qualityProfile.AllowedString = string.Join(",", qualityProfile.Allowed);
+            }
+
             var defaultQualityQualityProfileId = Convert.ToInt32(_configProvider.DefaultQualityProfile);
             var qualityProfileSelectList = new SelectList(profiles, "QualityProfileId", "Name");
 
@@ -201,11 +207,12 @@ namespace NzbDrone.Web.Controllers
                                      {
                                          Name = "New Profile",
                                          Allowed = new List<QualityTypes> { QualityTypes.Unknown },
-                                         Cutoff = QualityTypes.Unknown,
+                                         Cutoff = QualityTypes.Unknown
                                      };
 
             var id = _qualityProvider.Add(qualityProfile);
             qualityProfile.QualityProfileId = id;
+            qualityProfile.AllowedString = "Unknown";
 
             ViewData["ProfileId"] = id;
 

@@ -36,7 +36,7 @@ p, h1, form, button{border:0; margin:0; padding:0;}
     padding-bottom:10px;
 }
 
-#stylized label
+#stylized .labelClass
 {
     display:block;
     font-weight:bold;
@@ -55,7 +55,7 @@ p, h1, form, button{border:0; margin:0; padding:0;}
     width:340px;
 }
 
-#stylized input, select
+#stylized .inputClass
 {
     float:left;
     font-size:12px;
@@ -63,6 +63,11 @@ p, h1, form, button{border:0; margin:0; padding:0;}
     border:solid 1px #aacfe4;
     width:200px;
     margin:2px 0 20px 10px;
+}
+
+#stylized .selectClass
+{
+    width: 206px;
 }
 
 #stylized button
