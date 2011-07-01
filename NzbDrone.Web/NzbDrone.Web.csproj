@@ -578,6 +578,7 @@
     <Content Include="Scripts\2011.1.414\telerik.treeview.min.js" />
     <Content Include="Scripts\2011.1.414\telerik.upload.min.js" />
     <Content Include="Scripts\2011.1.414\telerik.window.min.js" />
+    <Content Include="Scripts\settingsForm.js" />
     <Content Include="Scripts\doTimeout.js" />
     <Content Include="Scripts\episodeSearch.js" />
     <Content Include="Scripts\jquery-1.6.1-vsdoc.js" />

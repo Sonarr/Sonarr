@@ -1,136 +1,136 @@
-﻿@model NzbDrone.Web.Models.NotificationSettingsModel
-@using (Html.BeginForm("SaveNotifications", "Settings", FormMethod.Post, new { id = "form", name = "form" }))
-{
-    <fieldset>
-        <legend>Notification Settings</legend>
-        <fieldset class="sub-field">
-            <legend>XBMC</legend>
-            <div class="config-section">
-                <div class="config-group">
-                    <div class="config-title">@Html.LabelFor(m => m.XbmcEnabled)</div>
-                    <div class="config-value">@Html.CheckBoxFor(m => m.XbmcEnabled)</div>
-                </div>
-                <div class="config-validation">@Html.ValidationMessageFor(m => m.XbmcEnabled)</div>
-            </div>
-            <div class="config-section">
-                <div class="config-group">
-                    <div class="config-title">@Html.LabelFor(m => m.XbmcNotifyOnGrab)</div>
-                    <div class="config-value">@Html.CheckBoxFor(m => m.XbmcNotifyOnGrab)</div>
-                </div>
-                <div class="config-validation">@Html.ValidationMessageFor(m => m.XbmcNotifyOnGrab)</div>
-            </div>
-            <div class="config-section">
-                <div class="config-group">
-                    <div class="config-title">@Html.LabelFor(m => m.XbmcNotifyOnDownload)</div>
-                    <div class="config-value">@Html.CheckBoxFor(m => m.XbmcNotifyOnDownload)</div>
-                </div>
-                <div class="config-validation">@Html.ValidationMessageFor(m => m.XbmcNotifyOnDownload)</div>
-            </div>
-            <div class="config-section">
-                <div class="config-group">
-                    <div class="config-title">@Html.LabelFor(m => m.XbmcNotifyOnRename)</div>
-                    <div class="config-value">@Html.CheckBoxFor(m => m.XbmcNotifyOnRename)</div>
-                </div>
-                <div class="config-validation">@Html.ValidationMessageFor(m => m.XbmcNotifyOnRename)</div>
-            </div>
-            <div class="config-section">
-                <div class="config-group">
-                    <div class="config-title">@Html.LabelFor(m => m.XbmcNotificationImage)</div>
-                    <div class="config-value">@Html.CheckBoxFor(m => m.XbmcNotificationImage)</div>
-                </div>
-                <div class="config-validation">@Html.ValidationMessageFor(m => m.XbmcNotificationImage)</div>
-            </div>
-            <div class="config-section">
-                <div class="config-group">
-                    <div class="config-title">@Html.LabelFor(m => m.XbmcDisplayTime)</div>
-                    <div class="config-value">@Html.TextBoxFor(m => m.XbmcDisplayTime)</div>
-                </div>
-                <div class="config-validation">@Html.ValidationMessageFor(m => m.XbmcDisplayTime)</div>
-            </div>
-            <div class="config-section">
-                <div class="config-group">
-                    <div class="config-title">@Html.LabelFor(m => m.XbmcUpdateOnDownload)</div>
-                    <div class="config-value">@Html.CheckBoxFor(m => m.XbmcUpdateOnDownload)</div>
-                </div>
-                <div class="config-validation">@Html.ValidationMessageFor(m => m.XbmcUpdateOnDownload)</div>
-            </div>
-            <div class="config-section">
-                <div class="config-group">
-                    <div class="config-title">@Html.LabelFor(m => m.XbmcUpdateOnRename)</div>
-                    <div class="config-value">@Html.CheckBoxFor(m => m.XbmcUpdateOnRename)</div>
-                </div>
-                <div class="config-validation">@Html.ValidationMessageFor(m => m.XbmcUpdateOnRename)</div>
-            </div>
-            <div class="config-section">
-                <div class="config-group">
-                    <div class="config-title">@Html.LabelFor(m => m.XbmcFullUpdate)</div>
-                    <div class="config-value">@Html.CheckBoxFor(m => m.XbmcFullUpdate)</div>
-                </div>
-                <div class="config-validation">@Html.ValidationMessageFor(m => m.XbmcFullUpdate)</div>
-            </div>
-            <div class="config-section">
-                <div class="config-group">
-                    <div class="config-title">@Html.LabelFor(m => m.XbmcCleanOnDownload)</div>
-                    <div class="config-value">@Html.CheckBoxFor(m => m.XbmcCleanOnDownload)</div>
-                </div>
-                <div class="config-validation">@Html.ValidationMessageFor(m => m.XbmcCleanOnDownload)</div>
-            </div>
-            <div class="config-section">
-                <div class="config-group">
-                    <div class="config-title">@Html.LabelFor(m => m.XbmcCleanOnRename)</div>
-                    <div class="config-value">@Html.CheckBoxFor(m => m.XbmcCleanOnRename)</div>
-                </div>
-                <div class="config-validation">@Html.ValidationMessageFor(m => m.XbmcCleanOnRename)</div>
-            </div>
-            <div class="config-section">
-                <div class="config-group">
-                    <div class="config-title">@Html.LabelFor(m => m.XbmcHosts)</div>
-                    <div class="config-value">@Html.TextBoxFor(m => m.XbmcHosts)</div>
-                </div>
-                <div class="config-validation">@Html.ValidationMessageFor(m => m.XbmcHosts)</div>
-            </div>
-            <div class="config-section">
-                <div class="config-group">
-                    <div class="config-title">@Html.LabelFor(m => m.XbmcUsername)</div>
-                    <div class="config-value">@Html.TextBoxFor(m => m.XbmcUsername)</div>
-                </div>
-                <div class="config-validation">@Html.ValidationMessageFor(m => m.XbmcUsername)</div>
-            </div>
-            <div class="config-section">
-                <div class="config-group">
-                    <div class="config-title">@Html.LabelFor(m => m.XbmcPassword)</div>
-                    <div class="config-value">@Html.TextBoxFor(m => m.XbmcPassword)</div>
-                </div>
-                <div class="config-validation">@Html.ValidationMessageFor(m => m.XbmcPassword)</div>
-            </div>
-        </fieldset>
-        <input type="submit" id="save_button" value="Save" disabled="disabled" />
-    </fieldset>
-}
-<div id="result" class="hiddenResult">
-</div>
-@section Scripts{
-    <script type="text/javascript">
-        $(document).ready(function () {
-            var options = {
-                target: '#result',
-                beforeSubmit: showRequest,
-                success: showResponse,
-                type: 'post',
-                resetForm: false
-            };
-            $('#form').ajaxForm(options);
-            $('#save_button').attr('disabled', '');
-        });
+﻿@using NzbDrone.Web.Helpers
+@model NzbDrone.Web.Models.NotificationSettingsModel
+           
+@section HeaderContent{
+    <link rel="stylesheet" type="text/css" href="../../Content/Settings.css" />
 
-        function showRequest(formData, jqForm, options) {
-            $("#result").empty().html('Saving...');
-            $("#form :input").attr("disabled", true);
+    <style>
+        .notifier
+        {
+            width: 560px;
+            border:solid 2px #CCCCCD;
+            padding: 5px;
+            margin-bottom: 10px;
         }
+        
+        .notifier h4
+        {
+            font-weight: bold;
+            margin-bottom: 0px;
+            padding-left: 5px;
+            padding-top: 3px;
+        }
+        
+        .notifierLine
+        {
+            font-size:11px;
+            color:#666666;
+            margin-bottom:20px;
+            border-bottom:solid 1px #CCCCCD;
+            padding-bottom:10px;
+        }
+    </style>
+}
 
-        function showResponse(responseText, statusText, xhr, $form) {
-            $("#result").empty().html(responseText);
-            $("#form :input").attr("disabled", false);
-        }                
-    </script>
+@section TitleContent{
+    Settings
+}
+
+@section ActionMenu{
+    @{Html.RenderPartial("SubMenu");}
+}
+
+@section MainContent{
+    <div id="stylized">
+        @using (Html.BeginForm("SaveNotifications", "Settings", FormMethod.Post, new { id = "form", name = "form", @class = "settingsForm" }))
+        {
+            <h1>Notifications</h1>
+            <p></p>
+            
+            <div id="xbmc" class="notifier clearfix">
+                <h4>XBMC</h4>
+                <div class="notifierLine"></div>
+
+                <label class="labelClass">@Html.LabelFor(m => m.XbmcEnabled)
+                <span class="small">@Html.DescriptionFor(m => m.XbmcEnabled)</span>
+                </label>
+                @Html.CheckBoxFor(m => m.XbmcEnabled, new { @class = "inputClass checkClass" })
+
+                <label class="labelClass">@Html.LabelFor(m => m.XbmcNotifyOnGrab)
+                <span class="small">@Html.DescriptionFor(m => m.XbmcNotifyOnGrab)</span>
+                </label>
+                @Html.CheckBoxFor(m => m.XbmcNotifyOnGrab, new { @class = "inputClass checkClass" })
+
+                <label class="labelClass">@Html.LabelFor(m => m.XbmcNotifyOnDownload)
+                <span class="small">@Html.DescriptionFor(m => m.XbmcNotifyOnDownload)</span>
+                </label>
+                @Html.CheckBoxFor(m => m.XbmcNotifyOnDownload, new { @class = "inputClass checkClass" })
+
+                <label class="labelClass">@Html.LabelFor(m => m.XbmcNotifyOnRename)
+                <span class="small">@Html.DescriptionFor(m => m.XbmcNotifyOnRename)</span>
+                </label>
+                @Html.CheckBoxFor(m => m.XbmcNotifyOnRename, new { @class = "inputClass checkClass" })
+
+                <label class="labelClass">@Html.LabelFor(m => m.XbmcNotificationImage)
+                <span class="small">@Html.DescriptionFor(m => m.XbmcNotificationImage)</span>
+                </label>
+                @Html.CheckBoxFor(m => m.XbmcNotificationImage, new { @class = "inputClass checkClass" })
+
+                <label class="labelClass">@Html.LabelFor(m => m.XbmcDisplayTime)
+                <span class="small">@Html.DescriptionFor(m => m.XbmcDisplayTime)</span>
+                </label>
+                @Html.TextBoxFor(m => m.XbmcDisplayTime, new { @class = "inputClass" })
+
+                <label class="labelClass">@Html.LabelFor(m => m.XbmcUpdateOnDownload)
+                <span class="small">@Html.DescriptionFor(m => m.XbmcUpdateOnDownload)</span>
+                </label>
+                @Html.CheckBoxFor(m => m.XbmcUpdateOnDownload, new { @class = "inputClass checkClass" })
+
+                <label class="labelClass">@Html.LabelFor(m => m.XbmcUpdateOnRename)
+                <span class="small">@Html.DescriptionFor(m => m.XbmcUpdateOnRename)</span>
+                </label>
+                @Html.CheckBoxFor(m => m.XbmcUpdateOnRename, new { @class = "inputClass checkClass" })
+
+                <label class="labelClass">@Html.LabelFor(m => m.XbmcFullUpdate)
+                <span class="small">@Html.DescriptionFor(m => m.XbmcFullUpdate)</span>
+                </label>
+                @Html.CheckBoxFor(m => m.XbmcFullUpdate, new { @class = "inputClass checkClass" })
+
+                <label class="labelClass">@Html.LabelFor(m => m.XbmcCleanOnDownload)
+                <span class="small">@Html.DescriptionFor(m => m.XbmcCleanOnDownload)</span>
+                </label>
+                @Html.CheckBoxFor(m => m.XbmcCleanOnDownload, new { @class = "inputClass checkClass" })
+
+                <label class="labelClass">@Html.LabelFor(m => m.XbmcCleanOnRename)
+                <span class="small">@Html.DescriptionFor(m => m.XbmcCleanOnRename)</span>
+                </label>
+                @Html.CheckBoxFor(m => m.XbmcCleanOnRename, new { @class = "inputClass checkClass" })
+            
+                <label class="labelClass">@Html.LabelFor(m => m.XbmcHosts)
+                <span class="small">@Html.DescriptionFor(m => m.XbmcHosts)</span>
+                </label>
+                @Html.TextBoxFor(m => m.XbmcHosts, new { @class = "inputClass" })
+
+                <label class="labelClass">@Html.LabelFor(m => m.XbmcUsername)
+                <span class="small">@Html.DescriptionFor(m => m.XbmcUsername)</span>
+                </label>
+                @Html.TextBoxFor(m => m.XbmcUsername, new { @class = "inputClass" })
+
+                <label class="labelClass">@Html.LabelFor(m => m.XbmcPassword)
+                <span class="small">@Html.DescriptionFor(m => m.XbmcPassword)</span>
+                </label>
+                @Html.TextBoxFor(m => m.XbmcPassword, new { @class = "inputClass" })
+            </div>
+            
+            <button type="submit" id="save_button" >Save</button><img src="../../Content/Images/ajax-loader.gif" alt="Loader" id="saveAjax"/>
+        }
+    </div>
+
+    <div id="result" class="hiddenResult"></div>
+}
+
+@section Scripts{
+    <script src="/Scripts/MicrosoftAjax.js" type="text/javascript"></script>
+    <script src="/Scripts/MicrosoftMvcValidation.js" type="text/javascript"></script>
+    <script src="../../Scripts/settingsForm.js" type="text/javascript"></script>
 }

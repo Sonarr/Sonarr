@@ -1,173 +1,139 @@
-﻿@model NzbDrone.Web.Models.IndexerSettingsModel
+﻿@using NzbDrone.Web.Helpers
+@model NzbDrone.Web.Models.IndexerSettingsModel
 
 
-<style>
-    
-    .section_content
-    {
-        padding-left: 15px;
-    }
-    
-   
-    .indexer_left
-    {
-        width: 80px;
-        float:left;
-    }
+
+
+
+@section HeaderContent{
+    <link rel="stylesheet" type="text/css" href="../../Content/Settings.css" />
+
+    <style>
+        .indexerPanel
+        {
+            padding-top: 20px;
+        }
 
 </style>
-
-@using (Html.BeginForm("SaveIndexers", "Settings", FormMethod.Post, new { id = "form", name = "form" })) {
-    @Html.ValidationSummary(true, "Unable to save your settings. Please correct the errors and try again.")
-
-        <fieldset>
-            <legend>Indexers</legend>
-            <div>
-                    @{ Html.Telerik().PanelBar()
-                    .Name("PanelBar")
-                    .HtmlAttributes(new { style = "width: 500px; margin: 10px;" })
-                    .ExpandMode(PanelBarExpandMode.Single)
-                    .SelectedIndex(0)
-                    .Items(indexerItem =>
-                    {
-                        indexerItem.Add()
-                            .Text("NZBs.org")
-                            .ImageUrl("~/Content/Images/Indexers/Nzbs.org.png")
-                            .Content(@<text>
-                                <div class="section_content">
-                                    <div class="indexer_group">
-                                        <div class="indexer_left">
-                                            Enabled
-                                        </div>
-                                        <div class="indexer_right">
-                                            @Html.CheckBoxFor(m => m.NzbsOrgEnabled, new { @class = "indexer_checkbox" })
-                                        </div>
-                                    </div>
-
-                                    <div class="indexer_group">
-                                        <div class="indexer_left">
-                                            @Html.LabelFor(m => m.NzbsOrgUId)
-                                        </div>
-                                        <div class="indexer_right">
-                                            @Html.TextBoxFor(m => m.NzbsOrgUId)
-                                        </div>
-                                    </div>
-                                    <div class="indexer_group">
-                                        <div class="indexer_left">
-                                            @Html.LabelFor(m => m.NzbsOrgHash)
-                                        </div>
-                                        <div class="indexer_right">
-                                            @Html.TextBoxFor(m => m.NzbsOrgHash)
-                                        </div>
-                                    </div>
-                                </div>
-                            </text>);
-                        indexerItem.Add()
-                            .Text("NZB Matrix")
-                            .ImageUrl("~/Content/Images/Indexers/NzbMatrix.png")
-                            .Content(@<text>
-                                <div class="section_content">
-
-                                    <div class="indexer_group">
-                                        <div class="indexer_left">
-                                            Enabled
-                                        </div>
-                                        <div class="indexer_right">
-                                            @Html.CheckBoxFor(m => m.NzbMatrixEnabled, new { @class = "indexer_checkbox" })
-                                        </div>
-                                    </div>
-
-                                    <div class="indexer_group">
-                                        <div class="indexer_left">
-                                            @Html.LabelFor(m => m.NzbMatrixUsername)
-                                        </div>
-                                        <div class="indexer_right">
-                                            @Html.TextBoxFor(m => m.NzbMatrixUsername)
-                                        </div>
-                                    </div>
-                                    <div class="indexer_group">
-                                        <div class="indexer_left">
-                                            @Html.LabelFor(m => m.NzbMatrixApiKey)
-                                        </div>
-                                        <div class="indexer_right">
-                                            @Html.TextBoxFor(m => m.NzbMatrixApiKey)
-                                        </div>
-                                    </div>
-                                </div>
-                            </text>);
-                        indexerItem.Add()
-                            .Text("NZBsRus")
-                            .ImageUrl("~/Content/Images/Indexers/NzbsRus.png")
-                            .Content(@<text>
-                                <div class="section_content">
-
-                                    <div class="indexer_group">
-                                        <div class="indexer_left">
-                                            Enabled
-                                        </div>
-                                        <div class="indexer_right">
-                                            @Html.CheckBoxFor(m => m.NzbsRUsEnabled, new { @class = "indexer_checkbox" })
-                                        </div>
-                                    </div>
-
-                                    <div class="indexer_group">
-                                        <div class="indexer_left">
-                                            @Html.LabelFor(m => m.NzbsrusUId)
-                                        </div>
-                                        <div class="indexer_right">
-                                            @Html.TextBoxFor(m => m.NzbsrusUId)
-                                        </div>
-                                    </div>
-                                    <div class="indexer_group">
-                                        <div class="indexer_left">
-                                            @Html.LabelFor(m => m.NzbsrusHash)
-                                        </div>
-                                        <div class="indexer_right">
-                                            @Html.TextBoxFor(m => m.NzbsrusHash)
-                                        </div>
-                                    </div>
-                                </div>
-                            </text>);
-                        indexerItem.Add()
-                            .Text("Newzbin")
-                            .ImageUrl("~/Content/Images/Indexers/Newzbin.png")
-                            .Content(@<text>
-                                <div class="section_content">
-
-                                    <div class="indexer_group">
-                                        <div class="indexer_left">
-                                            Enabled
-                                        </div>
-                                        <div class="indexer_right">
-                                            @Html.CheckBoxFor(m => m.NewzbinEnabled, new { @class = "indexer_checkbox" })
-                                        </div>
-                                    </div>
-
-                                    <div class="indexer_group">
-                                        <div class="indexer_left">
-                                            @Html.LabelFor(m => m.NewzbinUsername)
-                                        </div>
-                                        <div class="indexer_right">
-                                            @Html.TextBoxFor(m => m.NewzbinUsername)
-                                        </div>
-                                    </div>
-                                    <div class="indexer_group">
-                                        <div class="indexer_left">
-                                            @Html.LabelFor(m => m.NewzbinPassword)
-                                        </div>
-                                        <div class="indexer_right">
-                                            @Html.TextBoxFor(m => m.NewzbinPassword)
-                                        </div>
-                                    </div>
-                                </div>
-                            </text>);
-                    }).Render(); 
-                }
-        </div>
-        
-        <div id="save_button_div">
-            <input type="submit" id="save_button" value="Save" disabled="disabled" />
-        </div>
-    </fieldset>
 }
-<div id="result" class="hiddenResult"></div>
+
+@section TitleContent{
+    Settings
+}
+
+@section ActionMenu{
+    @{Html.RenderPartial("SubMenu");}
+}
+
+@section MainContent{
+    <div id="stylized">
+
+@using (Html.BeginForm("SaveIndexers", "Settings", FormMethod.Post, new { id = "form", name = "form", @class = "settingsForm" }))
+{
+    <h1>Indexer</h1>
+        <p></p>
+    
+    @Html.ValidationSummary(true, "Unable to save your settings. Please correct the errors and try again.")
+    <div>
+            @{ Html.Telerik().PanelBar()
+            .Name("PanelBar")
+            //.HtmlAttributes(new { style = "width: 500px; margin: 10px;" })
+            .ExpandMode(PanelBarExpandMode.Single)
+            .SelectedIndex(0)
+            .Items(indexerItem =>
+            {
+                indexerItem.Add()
+                    .Text("NZBs.org")
+                    .ImageUrl("~/Content/Images/Indexers/Nzbs.org.png")
+                    .Content(@<text>
+                        <div class="indexerPanel clearfix">
+                            <label class="labelClass">@Html.LabelFor(m => m.NzbsOrgEnabled)
+                            <span class="small">@Html.DescriptionFor(m => m.NzbsOrgEnabled)</span>
+                            </label>
+                            @Html.CheckBoxFor(m => m.NzbsOrgEnabled, new { @class = "inputClass checkClass" })
+
+                            <label class="labelClass">@Html.LabelFor(m => m.NzbsOrgUId)
+                            <span class="small">@Html.DescriptionFor(m => m.NzbsOrgUId)</span>
+                            </label>
+                            @Html.TextBoxFor(m => m.NzbsOrgUId, new { @class = "inputClass" })
+
+                            <label class="labelClass">@Html.LabelFor(m => m.NzbsOrgHash)
+                            <span class="small">@Html.DescriptionFor(m => m.NzbsOrgHash)</span>
+                            </label>
+                            @Html.TextBoxFor(m => m.NzbsOrgHash, new { @class = "inputClass" })
+                        </div>
+                    </text>);
+                indexerItem.Add()
+                    .Text("NZB Matrix")
+                    .ImageUrl("~/Content/Images/Indexers/NzbMatrix.png")
+                    .Content(@<text>
+                        <div class="indexerPanel clearfix">
+                            <label class="labelClass">@Html.LabelFor(m => m.NzbMatrixEnabled)
+                            <span class="small">@Html.DescriptionFor(m => m.NzbMatrixEnabled)</span>
+                            </label>
+                            @Html.CheckBoxFor(m => m.NzbMatrixEnabled, new { @class = "inputClass checkClass" })
+
+                            <label class="labelClass">@Html.LabelFor(m => m.NzbMatrixUsername)
+                            <span class="small">@Html.DescriptionFor(m => m.NzbMatrixUsername)</span>
+                            </label>
+                            @Html.TextBoxFor(m => m.NzbMatrixUsername, new { @class = "inputClass" })
+
+                            <label class="labelClass">@Html.LabelFor(m => m.NzbMatrixApiKey)
+                            <span class="small">@Html.DescriptionFor(m => m.NzbMatrixApiKey)</span>
+                            </label>
+                            @Html.TextBoxFor(m => m.NzbMatrixApiKey, new { @class = "inputClass" })
+                        </div>
+                    </text>);
+                indexerItem.Add()
+                    .Text("NZBsRus")
+                    .ImageUrl("~/Content/Images/Indexers/NzbsRus.png")
+                    .Content(@<text>
+                        <div class="indexerPanel clearfix">
+                            <label class="labelClass">@Html.LabelFor(m => m.NzbsRUsEnabled)
+                            <span class="small">@Html.DescriptionFor(m => m.NzbsRUsEnabled)</span>
+                            </label>
+                            @Html.CheckBoxFor(m => m.NzbsRUsEnabled, new { @class = "inputClass checkClass" })
+
+                            <label class="labelClass">@Html.LabelFor(m => m.NzbsrusUId)
+                            <span class="small">@Html.DescriptionFor(m => m.NzbsrusUId)</span>
+                            </label>
+                            @Html.TextBoxFor(m => m.NzbsrusUId, new { @class = "inputClass" })
+
+                            <label class="labelClass">@Html.LabelFor(m => m.NzbsrusHash)
+                            <span class="small">@Html.DescriptionFor(m => m.NzbsrusHash)</span>
+                            </label>
+                            @Html.TextBoxFor(m => m.NzbsrusHash, new { @class = "inputClass" })
+                        </div>
+                    </text>);
+                indexerItem.Add()
+                    .Text("Newzbin")
+                    .ImageUrl("~/Content/Images/Indexers/Newzbin.png")
+                    .Content(@<text>
+                        <div class="indexerPanel clearfix">
+                            <label class="labelClass">@Html.LabelFor(m => m.NewzbinEnabled)
+                            <span class="small">@Html.DescriptionFor(m => m.NewzbinEnabled)</span>
+                            </label>
+                            @Html.CheckBoxFor(m => m.NewzbinEnabled, new { @class = "inputClass checkClass" })
+
+                            <label class="labelClass">@Html.LabelFor(m => m.NewzbinUsername)
+                            <span class="small">@Html.DescriptionFor(m => m.NewzbinUsername)</span>
+                            </label>
+                            @Html.TextBoxFor(m => m.NewzbinUsername, new { @class = "inputClass" })
+
+                            <label class="labelClass">@Html.LabelFor(m => m.NewzbinPassword)
+                            <span class="small">@Html.DescriptionFor(m => m.NewzbinPassword)</span>
+                            </label>
+                            @Html.TextBoxFor(m => m.NewzbinPassword, new { @class = "inputClass" })
+                        </div>
+                    </text>);
+            }).Render(); 
+        }
+</div>
+    <br/>
+    <button type="submit" id="save_button" >Save</button><img src="../../Content/Images/ajax-loader.gif" alt="Loader" id="saveAjax"/>
+}
+
+    </div>
+
+    <div id="result" class="hiddenResult"></div>
+}
