@@ -19,7 +19,7 @@
 
         $('#rootDirs .actionButton img').live('click',
             function(image) {
-                var path = $(image.srcElement).attr('id');
+                var path = $(image.target).attr('id');
                 $.post('@Url.Action("DeleteRootDir", "AddSeries")', { Path: path }, function() {
                     refreshRoot();
                 });
