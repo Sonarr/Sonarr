@@ -5,9 +5,7 @@
     <link rel="SHORTCUT ICON" href="../../favicon.ico" />
     <title>NZBDrone</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-
     <link href="/Content/Blueprint/screen.css" rel="stylesheet" type="text/css" />
-    <link href="/Content/Blueprint/ie.css" rel="stylesheet" type="text/css" />
     <link type="text/css" href="http://aspnet-skins.telerikstatic.com/mvcz/2011.1.414/telerik.common.min.css"
         rel="stylesheet" />
     <link type="text/css" href="http://aspnet-skins.telerikstatic.com/mvcz/2011.1.414/telerik.sitefinity.min.css"
@@ -16,7 +14,8 @@
         rel="stylesheet" />
     <link href="/Content/Site.css" rel="stylesheet" type="text/css" />
     <link href="/Content/Notibar.css" rel="stylesheet" type="text/css" />
-        <link href="/Content/ActionButton.css" rel="stylesheet" type="text/css" />
+    <link href="/Content/ActionButton.css" rel="stylesheet" type="text/css" />
+    <link href="/Content/overrides.css" rel="stylesheet" type="text/css" />
     @RenderSection("HeaderContent", required: false)
 </head>
 <body>
@@ -55,12 +54,13 @@
     @(Html.Telerik().ScriptRegistrar().Scripts(
         c => c.AddGroup("CDN", group => group
                     .Add("http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js")
-                    //.Add("http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js")
+            //.Add("http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js")
                     .Add("http://ajax.aspnetcdn.com/ajax/4.0/1/MicrosoftAjax.js"))
                     .AddGroup("3rdParty", group => group
                     .Add("jquery.form.js")
                     .Add("jquery.jgrowl.js")
                     .Add("jquery-tgc-countdown-1.0.js")
+                                    .Add("jquery.watermark.min.js")
                     .Add("MicrosoftMvcValidation.js"))
 
                     .AddGroup("NzbDrone", group => group

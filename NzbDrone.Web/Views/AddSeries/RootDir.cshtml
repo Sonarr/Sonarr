@@ -1,44 +1,52 @@
-﻿@using NzbDrone.Web.Models
-@model IEnumerable<String>
-@{
+﻿@{
     Layout = null;
 }
-<div id="rootDirs">
-    @foreach (var root in Model)
-    {
-        <div class="actionButton delete">
-            <img src="/Content/Images/x_16.png" alt="delete" id='@root'/>
-            <span>@root</span>
-        </div>
-    }
+<div>
+    <input id="rootDirInput" type="text" style="width: 400px" />
+    <button id="saveDir">
+        Add</button>
 </div>
-<br />
-<label for="ac-input">
-    Enter a GitHub username:</label>
-<input id="rootDirInput" type="text" style="width: 100px" />
-<button id="saveDir">
-    Save</button>
+<div id="rootDirs">
+    @{Html.RenderAction("RootList");}
+</div>
 @(Html.Telerik().ScriptRegistrar().DefaultGroup(c => c.Add("http://ajax.googleapis.com/ajax/libs/yui/3.3.0/build/yui/yui-min.js")
                                                                                           .Add("AutoComplete.js")
                                                                  ).OnDocumentReady("bindFolderAutoComplete('#rootDirInput')"))
+
+@(Html.Telerik().ScriptRegistrar().OnDocumentReady("onRootReady()"))
+
 <script type="text/javascript">
 
-    $(document).ready(function () {
+
+    function onRootReady() {
+
+        $('#rootDirInput').watermark('Start typing to add new root folder...');
+
+        $('#rootDirs .actionButton img').live('click',
+            function (image) {
+                var path = $(image.srcElement).attr('id');
+                $.post('@Url.Action("DeleteRootDir", "AddSeries")', { Path: path }, function () {
+                    refreshRoot();
+                });
+            });
+
         $('#saveDir').click(saveRootDir);
 
         function saveRootDir() {
             var path = $("#rootDirInput").val();
-            $.post("/AddSeries/SaveRootDir", { Path: path });
-        }
-    });
-
-
-    $(document).ready(function () {
-        $('#rootDirs .actionButton img').live('click',
-            function (image) {
-                var path = $(image.srcElement).attr('id');
-                $.post("/AddSeries/DeleteRootDir", { Path: path });
+            $.post('@Url.Action("SaveRootDir", "AddSeries")', { Path: path }, function () {
+                refreshRoot();
+                $("#rootDirInput").val('');
             });
-    });
+
+        }
+
+
+        function refreshRoot() {
+            $.get('@Url.Action("RootList", "AddSeries")', function (data) {
+                $('#rootDirs').html(data);
+            });
+        }
+    }
     
 </script>

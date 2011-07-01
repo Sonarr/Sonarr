@@ -6,7 +6,7 @@ h1, h2, h3
 body
 {
     background: #191919 url(images/img07.jpg) no-repeat right top;
-    font-family: "Segoe UI" , "Segoe UI Light" , Tahoma, Geneva, sans-serif;
+    font-family: "Segoe UI" , "Segoe UI Light" , Tahoma, Geneva, sans-serif !important;
     font-size: 13px;
     color: #3C3C3C;
     background-attachment: fixed;
@@ -169,6 +169,21 @@ button:active, input[type="button"]:active, input[type="submit"]:active, input[t
     border-color: #0C48B6;
 }
 
+input, select
+{
+    font-size: larger;
+    padding: 4px 2px;
+    border: solid 1px #aacfe4;
+    width: 200px;
+    margin: 2px 0 20px 10px;
+    height: 20px;
+}
+
+select
+{
+    height: 30px;
+}
+
 .listButton
 {
     padding: 2px 10px 2px 10px;
@@ -181,8 +196,7 @@ button:active, input[type="button"]:active, input[type="submit"]:active, input[t
 {
     border-bottom-style: solid;
     border-bottom-width: 5px;
-    border-bottom-color: #3C3C3C;
-    /* Set padding to prevent fieldset border from moving when button is highlighted... WINNING! */
+    border-bottom-color: #3C3C3C; /* Set padding to prevent fieldset border from moving when button is highlighted... WINNING! */
     padding-bottom: 2px;
 }
 

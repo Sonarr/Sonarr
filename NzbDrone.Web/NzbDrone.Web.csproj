@@ -494,6 +494,7 @@
     <Content Include="Content\Blueprint\ie.css" />
     <Content Include="Content\Blueprint\screen.css" />
     <Content Include="Content\Blueprint\liquid.css" />
+    <Content Include="Content\Overrides.css" />
     <Content Include="Content\Images\ajax-loader.gif" />
     <Content Include="Content\ie.css" />
     <Content Include="Content\Images\arrow.png" />
@@ -589,6 +590,7 @@
     <Content Include="Scripts\jquery.jgrowl.js" />
     <Content Include="Scripts\jquery-tgc-countdown-1.0.js" />
     <Content Include="Scripts\jquery.simpledropdown.js" />
+    <Content Include="Scripts\jquery.watermark.min.js" />
     <Content Include="Scripts\Notification.js" />
     <Content Include="Views\AddSeries\Index.cshtml" />
     <Content Include="Views\AddSeries\AddNew.cshtml" />
@@ -685,6 +687,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\AddSeries\Test.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\AddSeries\RootList.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

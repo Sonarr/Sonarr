@@ -1,0 +1,11 @@
+﻿/*YUI dropdown*/
+.yui3-aclist
+{
+    z-index: 100 !important;
+    width: auto !important;
+}
+
+.yui3-aclist-item-active
+{
+    background: #065EFE !important;
+}

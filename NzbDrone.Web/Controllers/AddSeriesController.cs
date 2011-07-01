@@ -242,10 +242,15 @@ namespace NzbDrone.Web.Controllers
         }
 
 
-        public ActionResult RootDir()
+        public ActionResult RootList()
         {
             var rootDir = _rootFolderProvider.GetAll().Select(c => c.Path);
-            return PartialView("RootDir", rootDir);
+            return PartialView("RootList", rootDir);
+        }
+
+        public ActionResult RootDir()
+        {
+            return PartialView("RootDir");
         }
 
         public JsonResult DeleteRootDir(string path)
