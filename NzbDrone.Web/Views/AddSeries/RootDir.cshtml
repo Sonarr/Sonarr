@@ -20,6 +20,10 @@
 
     function onRootReady() {
 
+        $.ajaxSetup({
+            cache: false
+        });
+
         $('#rootDirInput').watermark('Start typing to add new root folder...');
 
         $('#rootDirs .actionButton img').live('click',

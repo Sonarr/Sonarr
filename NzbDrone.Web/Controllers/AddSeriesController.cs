@@ -244,7 +244,7 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult RootList()
         {
-            var rootDir = _rootFolderProvider.GetAll().Select(c => c.Path);
+            IEnumerable<String> rootDir = _rootFolderProvider.GetAll().Select(c => c.Path).OrderBy(e => e);
             return PartialView("RootList", rootDir);
         }
 
