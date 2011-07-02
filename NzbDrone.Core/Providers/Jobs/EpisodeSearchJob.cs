@@ -51,6 +51,8 @@ namespace NzbDrone.Core.Providers.Jobs
                 Logger.Error("Unable to find an episode {0} in database", targetId);
                 return;
             }
+            notification.CurrentMessage = "Searching for " + episode;
+
 
             var series = episode.Series;
 

@@ -1,30 +1,27 @@
-﻿/// <reference path="jquery-1.5.2-vsdoc.js" />
- $(document).ready(function ()
- {
-    var speed = 0;
+﻿$(window).load(function () {
+    var speed = 700;
     var isShown = false;
-    refreshNotifications();
+    var currentMessage = "";
 
-    var timer = window.setInterval(function () {
-        speed = 1000;
-        refreshNotifications();
-    }, 2000);
+    $.doTimeout(200, refreshNotifications);
+
+
 
     function refreshNotifications() {
-        $.ajax({
-            url: '/Notification',
-            success: notificationCallback
-        });
+        $.get('/notification/Comet', { message: currentMessage }, notificationCallback);
     }
 
     function notificationCallback(data) {
+        currentMessage = data;
 
         if (data === "") {
-            CloseMsg();
+            closeMsg();
         }
         else {
-            DisplayMsg(data);
+            displayMsg(data);
         }
+
+        refreshNotifications();
     }
 
     //SetupNotifications();
@@ -32,32 +29,20 @@
 
 
 
-    function DisplayMsg(sMsg) {
+    function displayMsg(sMsg) {
         //set the message text
-
-
-        //$("#msgText").text(sMsg);
-        $("#msgText").showHtml(sMsg, 200);
-
+        $("#msgText").showHtml(sMsg, 150);
 
         if (!isShown) {
-            isShown = true;
-            if (speed === 0) {
-                $('#msgBox').show();
-            }
-            else {
-                $('#msgBox').show("slide", { direction: "right" }, speed);
-            }
-
+            $('#msgBox').show("slide", { direction: "right" }, speed / 2);
         }
+
+        isShown = true;
     }
 
-    function CloseMsg() {
+    function closeMsg() {
         //hide the message
-        if (isShown) {
-            $('#msgBox').hide("slide", { direction: "right" }, speed);
-        }
-
+        $('#msgBox').hide("slide", { direction: "right" }, speed);
         isShown = false;
     }
 });

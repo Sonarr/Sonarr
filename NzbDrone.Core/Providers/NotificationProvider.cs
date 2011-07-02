@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Providers
             get { return new List<BasicNotification>(_basicNotifications.Values); }
         }
 
-        public virtual List<ProgressNotification> GetProgressNotifications
+        public virtual List<ProgressNotification> ProgressNotifications
         {
             get
             {

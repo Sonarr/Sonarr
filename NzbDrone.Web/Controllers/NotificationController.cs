@@ -1,4 +1,7 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Diagnostics;
+using System.Threading;
+using System.Web.Mvc;
 using MvcMiniProfiler;
 using NzbDrone.Core.Providers;
 
@@ -32,8 +35,8 @@ namespace NzbDrone.Web.Controllers
 
             else
             {
-                if (_notifications.GetProgressNotifications.Count != 0)
-                    message = _notifications.GetProgressNotifications[0].CurrentMessage;
+                if (_notifications.ProgressNotifications.Count != 0)
+                    message = _notifications.ProgressNotifications[0].CurrentMessage;
             }
 
 
@@ -43,6 +46,34 @@ namespace NzbDrone.Web.Controllers
             }
 
             return Json(message, JsonRequestBehavior.AllowGet);
+        }
+
+
+        [HttpGet]
+        public JsonResult Comet(string message)
+        {
+            var requestTimer = Stopwatch.StartNew();
+
+            MiniProfiler.Stop(true);
+
+            var currentMessage = GetCurrentMessage();
+
+            while (message == currentMessage && requestTimer.Elapsed.TotalSeconds < 10)
+            {
+                Thread.Sleep(250);
+                currentMessage = GetCurrentMessage();
+            }
+
+            return Json(currentMessage, JsonRequestBehavior.AllowGet);
+        }
+
+        private string GetCurrentMessage()
+        {
+            if (_notifications.ProgressNotifications.Count != 0)
+                return _notifications.ProgressNotifications[0].CurrentMessage;
+
+
+            return string.Empty;
         }
     }
 }
