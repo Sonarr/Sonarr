@@ -52,13 +52,11 @@ namespace NzbDrone.Web.Controllers
         [HttpGet]
         public JsonResult Comet(string message)
         {
-            var requestTimer = Stopwatch.StartNew();
-
             MiniProfiler.Stop(true);
 
             var currentMessage = GetCurrentMessage();
 
-            while (message == currentMessage && requestTimer.Elapsed.TotalSeconds < 10)
+            while (message == currentMessage)
             {
                 Thread.Sleep(250);
                 currentMessage = GetCurrentMessage();

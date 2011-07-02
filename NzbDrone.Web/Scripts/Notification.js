@@ -41,9 +41,11 @@
     }
 
     function closeMsg() {
-        //hide the message
-        $('#msgBox').hide("slide", { direction: "right" }, speed);
-        isShown = false;
+        //hide the message      
+        if (isShown) {
+            $('#msgBox').hide("slide", { direction: "right" }, speed);
+            isShown = false;
+        }
     }
 });
 

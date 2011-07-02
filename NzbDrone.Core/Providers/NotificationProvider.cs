@@ -24,28 +24,40 @@ namespace NzbDrone.Core.Providers
         {
             get
             {
-
-                var activeNotification = _progressNotification.Values.Where(p => p.Status == ProgressNotificationStatus.InProgress).ToList();
-
-                if (activeNotification.Count == 0)
+                lock (_lock)
                 {
-                    //Get notifications that were recently done
-                    activeNotification = _progressNotification.Values.Where(p => p.CompletedTime >= DateTime.Now.AddSeconds(-3)).OrderByDescending(c => c.CompletedTime).ToList();
+                    var activeNotification =
+                        _progressNotification.Values.Where(p => p.Status == ProgressNotificationStatus.InProgress).
+                            ToList();
 
+                    if (activeNotification.Count == 0)
+                    {
+                        //Get notifications that were recently done
+                        activeNotification =
+                            _progressNotification.Values.Where(p => p.CompletedTime >= DateTime.Now.AddSeconds(-3)).
+                                OrderByDescending(c => c.CompletedTime).ToList();
+
+                    }
+
+                    return activeNotification.ToList();
                 }
-
-                return activeNotification.ToList();
             }
         }
 
         public virtual void Register(ProgressNotification notification)
         {
-            _progressNotification.Add(notification.Id, notification);
+            lock (_lock)
+            {
+                _progressNotification.Add(notification.Id, notification);
+            }
         }
 
         public virtual void Register(BasicNotification notification)
         {
-            _basicNotifications.Add(notification.Id, notification);
+            lock (_lock)
+            {
+                _basicNotifications.Add(notification.Id, notification);
+            }
         }
 
         public virtual void Dismiss(Guid notificationId)
