@@ -60,26 +60,6 @@ namespace NzbDrone.Core.Test
         }
 
 
-        [TestCase("D:\\TV Shows\\")]
-        [TestCase("//server//folder")]
-        public void UpdateRootDir(string newPath)
-        {
-            //Setup
-            var mocker = new AutoMoqer();
-            mocker.SetConstant(MockLib.GetEmptyDatabase());
-
-
-            //Act
-            var rootDirProvider = mocker.Resolve<RootDirProvider>();
-            rootDirProvider.Add(new RootDir { Path = @"C:\TV" });
-            rootDirProvider.Update(new RootDir { Id = 1, Path = newPath });
-
-            //Assert
-            var rootDirs = rootDirProvider.GetAll();
-            rootDirs.Should().HaveCount(1);
-            newPath.Should().Be(rootDirs.First().Path);
-        }
-
         [Test]
         public void RemoveRootDir()
         {
@@ -152,14 +132,5 @@ namespace NzbDrone.Core.Test
             mocker.Resolve<RootDirProvider>().Add(new RootDir { Id = 0, Path = path });
         }
 
-        [TestCase("")]
-        [TestCase(null)]
-        [TestCase("BAD PATH")]
-        [ExpectedException(typeof(ArgumentException))]
-        public void invalid_folder_path_throws_on_update(string path)
-        {
-            var mocker = new AutoMoqer();
-            mocker.Resolve<RootDirProvider>().Update(new RootDir { Id = 2, Path = path });
-        }
     }
 }

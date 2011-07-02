@@ -329,7 +329,7 @@ namespace PetaPoco
 			Oracle,
             SQLite
 		}
-		DBType _dbType = DBType.SqlServer;
+		DBType _dbType = DBType.SqlServerCE;
 
 		// Common initialization
 		private void CommonConstruct()

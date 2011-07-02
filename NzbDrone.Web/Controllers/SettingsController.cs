@@ -269,37 +269,7 @@ namespace NzbDrone.Web.Controllers
             }
         }
 
-        [HttpPost]
-        public ActionResult SaveGeneral(SettingsModel data)
-        {
-            var basicNotification = new BasicNotification();
-            basicNotification.Type = BasicNotificationType.Info;
-            basicNotification.AutoDismiss = true;
-
-            try
-            {
-                foreach (var dir in data.Directories)
-                {
-                    _rootDirProvider.Update(dir);
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Debug("Failed to save Root Dirs");
-                Logger.DebugException(ex.Message, ex);
-
-                basicNotification.Title = SETTINGS_FAILED;
-                _notificationProvider.Register(basicNotification);
-                return Content(SETTINGS_FAILED);
-            }
-
-
-            basicNotification.Title = SETTINGS_SAVED;
-            _notificationProvider.Register(basicNotification);
-
-            return Content(SETTINGS_SAVED);
-        }
-
+       
         [HttpPost]
         public ActionResult SaveIndexers(IndexerSettingsModel data)
         {
