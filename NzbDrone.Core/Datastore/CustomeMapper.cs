@@ -1,17 +1,18 @@
 ﻿using System;
+using System.Reflection;
 using PetaPoco;
 
 namespace NzbDrone.Core.Datastore
 {
     public class CustomeMapper : DefaultMapper
     {
-        public override Func<object, object> GetFromDbConverter(DestinationInfo destinationInfo, Type sourceType)
+        public override Func<object, object> GetFromDbConverter(Type destinationType, Type sourceType)
         {
 
-            if ((sourceType == typeof(Int32) || sourceType == typeof(Int64)) && destinationInfo.Type.IsGenericType && destinationInfo.Type.GetGenericTypeDefinition() == typeof(Nullable<>))
+            if ((sourceType == typeof(Int32) || sourceType == typeof(Int64)) && destinationType.IsGenericType && destinationType.GetGenericTypeDefinition() == typeof(Nullable<>))
             {
                 // If it is NULLABLE, then get the underlying type. eg if "Nullable<int>" then this will return just "int"
-                Type genericArgument = destinationInfo.Type.GetGenericArguments()[0];
+                Type genericArgument = destinationType.GetGenericArguments()[0];
                 if (genericArgument == typeof(DayOfWeek))
                 {
                     return delegate(object s)
@@ -30,7 +31,14 @@ namespace NzbDrone.Core.Datastore
                            };
             }
 
-            return base.GetFromDbConverter(destinationInfo, sourceType);
+            return base.GetFromDbConverter(destinationType, sourceType);
+        }
+
+        public override Func<object, object> GetFromDbConverter(PropertyInfo propertyInfo, Type sourceType)
+        {
+            return GetFromDbConverter(propertyInfo.PropertyType, sourceType);
         }
     }
+
+    
 }
