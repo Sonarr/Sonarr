@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Test
     // ReSharper disable InconsistentNaming
     public class IndexerTests : TestBase
     {
-    
+
         [TestCase("nzbsorg.xml", 0)]
         [TestCase("nzbsrus.xml", 6)]
         [TestCase("newzbin.xml", 1)]
@@ -60,15 +60,19 @@ namespace NzbDrone.Core.Test
         public void newzbin_rss_fetch()
         {
             var mocker = new AutoMoqer();
-
-            mocker.GetMock<HttpProvider>()
-                          .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
-                          .Returns(File.OpenRead(".\\Files\\Rss\\newzbin.xml"));
-
+            mocker.Resolve<HttpProvider>();
             var fakeSettings = Builder<IndexerSetting>.CreateNew().Build();
             mocker.GetMock<IndexerProvider>()
                 .Setup(c => c.GetSettings(It.IsAny<Type>()))
                 .Returns(fakeSettings);
+
+            mocker.GetMock<ConfigProvider>()
+             .SetupGet(c => c.NewzbinUsername)
+             .Returns("nzbdrone");
+
+            mocker.GetMock<ConfigProvider>()
+                .SetupGet(c => c.NewzbinPassword)
+                .Returns("smartar39865");
 
             var newzbinProvider = mocker.Resolve<Newzbin>();
             var parseResults = newzbinProvider.FetchRss();
@@ -84,11 +88,10 @@ namespace NzbDrone.Core.Test
             parseResults.Should().OnlyContain(s => s.Indexer == newzbinProvider.Name);
             parseResults.Should().OnlyContain(s => !String.IsNullOrEmpty(s.NzbTitle));
 
-
-            ExceptionVerification.ExcpectedWarns(1);
+            ExceptionVerification.IgnoreWarns();
         }
 
-     
+
         [TestCase("Adventure.Inc.S03E19.DVDRip.XviD-OSiTV", 3, 19, QualityTypes.DVD)]
         public void custome_parser_partial_success(string title, int season, int episode, QualityTypes quality)
         {
@@ -179,8 +182,8 @@ namespace NzbDrone.Core.Test
             result.Should().OnlyContain(r => r.EpisodeNumbers.Contains(23));
         }
 
-        [TestCase("simpsons",21,23)]
-        [TestCase("Hawaii Five-0", 1, 5)]
+        [TestCase("simpsons", 21, 23)]
+        [TestCase("Hawaii Five-0 2010", 1, 5)]
         public void newzbin_search_returns_valid_results(string title, int season, int episode)
         {
             var mocker = new AutoMoqer();
@@ -198,7 +201,7 @@ namespace NzbDrone.Core.Test
             var result = mocker.Resolve<Newzbin>().FetchEpisode(title, season, episode);
 
             result.Should().NotBeEmpty();
-            result.Should().OnlyContain(r => r.CleanTitle == title);
+            result.Should().OnlyContain(r => r.CleanTitle == Parser.NormalizeTitle(title));
             result.Should().OnlyContain(r => r.SeasonNumber == season);
             result.Should().OnlyContain(r => r.EpisodeNumbers.Contains(episode));
         }
