@@ -1,9 +1,9 @@
-﻿$(window).load(function () {
+﻿$(document).ready(function () {
     var speed = 700;
     var isShown = false;
     var currentMessage = "";
 
-    $.doTimeout(200, refreshNotifications);
+    $.doTimeout(500, refreshNotifications);
 
 
 
