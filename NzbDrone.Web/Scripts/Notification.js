@@ -67,7 +67,7 @@
             // Preserve the original values of width and height - they'll need 
             // to be modified during the animation, but can be restored once
             // the animation has completed.
-            var finish = { width: this.style.width, height: this.style.height };
+            var finish = { width: 'auto', height: 'auto' };
 
             // The original width and height represented as pixel values.
             // These will only be the same as `finish` if this element had its
