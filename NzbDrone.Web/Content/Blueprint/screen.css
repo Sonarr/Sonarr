@@ -243,10 +243,10 @@ th, td, caption
 {
     padding: 4px 10px 4px 5px;
 }
-tbody tr:nth-child(even) td, tbody tr.even td
+/*tbody tr:nth-child(even) td, tbody tr.even td
 {
     background: #e5ecf9;
-}
+}*/
 tfoot
 {
     font-style: italic;
