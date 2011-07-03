@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.ServiceModel.Syndication;
@@ -159,8 +160,9 @@ namespace NzbDrone.Core.Test
             ExceptionVerification.IgnoreWarns();
         }
 
-        [Test]
-        public void nzbsorg_search_returns_valid_results()
+        [TestCase("simpsons", 21, 23)]
+        [TestCase("Hawaii Five-0 (2010)", 1, 5)]
+        public void nzbsorg_search_returns_valid_results(string title, int season, int episode)
         {
             var mocker = new AutoMoqer();
 
@@ -174,16 +176,16 @@ namespace NzbDrone.Core.Test
 
             mocker.Resolve<HttpProvider>();
 
-            var result = mocker.Resolve<NzbsOrg>().FetchEpisode("Simpsons", 21, 23);
+            var result = mocker.Resolve<NzbsOrg>().FetchEpisode(title, season, episode);
 
             result.Should().NotBeEmpty();
-            result.Should().OnlyContain(r => r.CleanTitle == "simpsons");
-            result.Should().OnlyContain(r => r.SeasonNumber == 21);
-            result.Should().OnlyContain(r => r.EpisodeNumbers.Contains(23));
+            result.Should().OnlyContain(r => r.CleanTitle == Parser.NormalizeTitle(title));
+            result.Should().OnlyContain(r => r.SeasonNumber == season);
+            result.Should().OnlyContain(r => r.EpisodeNumbers.Contains(episode));
         }
 
         [TestCase("simpsons", 21, 23)]
-        [TestCase("Hawaii Five-0 2010", 1, 5)]
+        [TestCase("Hawaii Five-0 (2010)", 1, 5)]
         public void newzbin_search_returns_valid_results(string title, int season, int episode)
         {
             var mocker = new AutoMoqer();
@@ -275,5 +277,20 @@ namespace NzbDrone.Core.Test
             result.Should().OnlyContain(r => r.SeasonNumber == 1);
             result.Should().OnlyContain(r => r.EpisodeNumbers.Contains(19));
         }
+
+
+        [TestCase("hawaii five-0 (2010)", "hawaii+five+0+2010")]
+        [TestCase("this& that", "this+that")]
+        [TestCase("this&    that", "this+that")]
+        public void get_query_title(string raw, string clean)
+        {
+            var result = IndexerBase.GetQueryTitle(raw);
+
+            result.Should().Be(clean);
+        }
+
     }
+
+
+
 }

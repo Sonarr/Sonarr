@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.ServiceModel.Syndication;
+using System.Text.RegularExpressions;
 using System.Web;
 using Ninject;
 using NLog;
@@ -15,6 +16,8 @@ namespace NzbDrone.Core.Providers.Indexer
         protected readonly Logger _logger;
         private readonly HttpProvider _httpProvider;
         protected readonly ConfigProvider _configProvider;
+
+        private static readonly Regex TitleSearchRegex = new Regex(@"[\W]", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         [Inject]
         protected IndexerBase(HttpProvider httpProvider, ConfigProvider configProvider)
@@ -58,6 +61,7 @@ namespace NzbDrone.Core.Providers.Indexer
         /// <param name="episodeNumber">The episode number.</param>
         /// <returns></returns>
         protected abstract IList<String> GetSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber);
+        public abstract IList<String> GetSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber);
 
         /// <summary>
         /// This method can be overwritten to provide indexer specific info parsing
@@ -102,7 +106,7 @@ namespace NzbDrone.Core.Providers.Indexer
 
             var result = new List<EpisodeParseResult>();
 
-            var searchUrls = GetSearchUrls(HttpUtility.UrlDecode(seriesTitle), seasonNumber, episodeNumber);
+            var searchUrls = GetSearchUrls(GetQueryTitle(seriesTitle), seasonNumber, episodeNumber);
 
             foreach (var url in searchUrls)
             {
@@ -165,9 +169,13 @@ namespace NzbDrone.Core.Providers.Indexer
             return CustomParser(item, episodeParseResult);
         }
 
-        protected static string GetQueryTitle(string title)
+        public static string GetQueryTitle(string title)
         {
-            return title.Trim().Replace(' ', '+');
+            var cleanTitle = TitleSearchRegex.Replace(title, "+").Trim('+', ' ');
+
+            //remove any repeating +s
+            cleanTitle = Regex.Replace(cleanTitle, @"\+{1,100}", "+");
+            return cleanTitle;
         }
     }
 }
