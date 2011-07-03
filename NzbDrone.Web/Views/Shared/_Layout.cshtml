@@ -5,25 +5,26 @@
     <link rel="SHORTCUT ICON" href="../../favicon.ico" />
     <title>NZBDrone</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link type="text/css" rel="stylesheet" href="/Content/Blueprint/screen.css" />
     <link type="text/css" rel="stylesheet" href="http://aspnet-skins.telerikstatic.com/mvcz/2011.1.414/telerik.common.min.css" />
     <link type="text/css" rel="stylesheet" href="http://aspnet-skins.telerikstatic.com/mvcz/2011.1.414/telerik.sitefinity.min.css" />
-    <link type="text/css" rel="stylesheet" href="http://aspnet-skins.telerikstatic.com/mvcz/2011.1.414/telerik.rtl.min.css" />
-    <link type="text/css" rel="stylesheet" href="/Content/Site.css" />
+    <link type="text/css" rel="stylesheet" href="/Content/Blueprint/screen.css" />
+    <link type="text/css" rel="stylesheet" href="/Content/jQueryUI/jquery-ui-1.8.14.nzbdrone.css" />
+    <link type="text/css" rel="stylesheet" href="/Content/NzbDrone.css" />
     <link type="text/css" rel="stylesheet" href="/Content/Notibar.css" />
     <link type="text/css" rel="stylesheet" href="/Content/ActionButton.css" />
     <link type="text/css" rel="stylesheet" href="/Content/overrides.css" />
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js" ></script>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js" ></script>
-    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/4.0/1/MicrosoftAjax.js" ></script>
-    <script type="text/javascript" src="/Scripts/jquery.form.js"></script>
-    <script type="text/javascript" src="/Scripts/jquery.jgrowl.js"></script>
-    <script type="text/javascript" src="/Scripts/jquery-tgc-countdown-1.0.js"></script>
-    <script type="text/javascript" src="/Scripts/MicrosoftMvcValidation.debug.js"></script>
-    <script type="text/javascript" src="/Scripts/Notification.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/4.0/1/MicrosoftAjax.js"></script>
+    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/mvc/3.0/MicrosoftMvcAjax.js"></script>
+    <script type="text/javascript" src="/Scripts/Plugins/jquery.form.js"></script>
+    <script type="text/javascript" src="/Scripts/Plugins/jquery.jgrowl.js"></script>
+    <script type="text/javascript" src="/Scripts/Plugins/jquery-tgc-countdown-1.0.js"></script>
+    <script type="text/javascript" src="/Scripts/Plugins/jquery.watermark.min.js"></script>
+    <script type="text/javascript" src="/Scripts/Plugins/doTimeout.js"></script>
     <script type="text/javascript" src="/Scripts/episodeSearch.js"></script>
     <script type="text/javascript" src="/Scripts/autocomplete.js"></script>
-    <script type="text/javascript" src="/Scripts/jquery.watermark.min.js"></script>
+    @MvcMiniProfiler.MiniProfiler.RenderIncludes()
     @RenderSection("HeaderContent", required: false)
 </head>
 <body>
@@ -60,6 +61,7 @@
         <span id="msgText">background notification</span>
     </div>
     @(Html.Telerik().ScriptRegistrar().jQuery(false))
+    <script type="text/javascript" src="/Scripts/Notification.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

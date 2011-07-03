@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Model.Notification
         ///   Gets or sets the title for this notification.
         /// </summary>
         /// <value>The title.</value>
-        public String Title { get; set; }
+        public String Title { get; private set; }
 
         /// <summary>
         ///   Gets or sets the current status of this task. this field could be use to show the currently processing item in a long running task.

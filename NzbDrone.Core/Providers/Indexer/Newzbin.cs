@@ -10,11 +10,13 @@ namespace NzbDrone.Core.Providers.Indexer
 {
     public class Newzbin : IndexerBase
     {
-          [Inject]
+        [Inject]
         public Newzbin(HttpProvider httpProvider, ConfigProvider configProvider)
             : base(httpProvider, configProvider)
         {
         }
+
+        private const string UrlParams = "feed=rss&hauth=1&ps_rb_language=4096";
 
         protected override string[] Urls
         {
@@ -22,7 +24,7 @@ namespace NzbDrone.Core.Providers.Indexer
             {
                 return new[]
                                    {
-                                       "http://www.newzbin.com/browse/category/p/tv?feed=rss&hauth=1"
+                                       "http://www.newzbin.com/browse/category/p/tv?" + UrlParams
                                    };
             }
         }
@@ -38,7 +40,7 @@ namespace NzbDrone.Core.Providers.Indexer
         protected override IList<string> GetSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber)
         {
 
-            return new List<string> { String.Format(@"http://www.newzbin.com/search/query/?q={0}+{1}x{2:00}&fpn=p&searchaction=Go&category=8&feed=rss&hauth=1", GetQueryTitle(seriesTitle), seasonNumber, episodeNumber) };
+            return new List<string> { String.Format(@"http://www.newzbin.com/search/query/?q={0}+{1}x{2:00}&fpn=p&searchaction=Go&category=8&{3}", GetQueryTitle(seriesTitle), seasonNumber, episodeNumber, UrlParams) };
         }
 
         public override string Name

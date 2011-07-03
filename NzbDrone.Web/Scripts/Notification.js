@@ -1,30 +1,27 @@
-﻿/// <reference path="jquery-1.5.2-vsdoc.js" />
- $(document).ready(function ()
- {
-    var speed = 0;
+﻿$(document).ready(function () {
+    var speed = 700;
     var isShown = false;
-    refreshNotifications();
+    var currentMessage = "";
 
-    var timer = window.setInterval(function () {
-        speed = 1000;
-        refreshNotifications();
-    }, 2000);
+    $.doTimeout(500, refreshNotifications);
+
+
 
     function refreshNotifications() {
-        $.ajax({
-            url: '/Notification',
-            success: notificationCallback
-        });
+        $.get('/notification/Comet', { message: currentMessage }, notificationCallback);
     }
 
     function notificationCallback(data) {
+        currentMessage = data;
 
         if (data === "") {
-            CloseMsg();
+            closeMsg();
         }
         else {
-            DisplayMsg(data);
+            displayMsg(data);
         }
+
+        refreshNotifications();
     }
 
     //SetupNotifications();
@@ -32,33 +29,23 @@
 
 
 
-    function DisplayMsg(sMsg) {
+    function displayMsg(sMsg) {
         //set the message text
-
-
-        //$("#msgText").text(sMsg);
-        $("#msgText").showHtml(sMsg, 200);
-
+        $("#msgText").showHtml(sMsg, 150);
 
         if (!isShown) {
-            isShown = true;
-            if (speed === 0) {
-                $('#msgBox').show();
-            }
-            else {
-                $('#msgBox').show("slide", { direction: "right" }, speed);
-            }
-
+            $('#msgBox').show("slide", { direction: "right" }, speed / 2);
         }
+
+        isShown = true;
     }
 
-    function CloseMsg() {
-        //hide the message
+    function closeMsg() {
+        //hide the message      
         if (isShown) {
             $('#msgBox').hide("slide", { direction: "right" }, speed);
+            isShown = false;
         }
-
-        isShown = false;
     }
 });
 
@@ -80,7 +67,7 @@
             // Preserve the original values of width and height - they'll need 
             // to be modified during the animation, but can be restored once
             // the animation has completed.
-            var finish = { width: this.style.width, height: this.style.height };
+            var finish = { width: 'auto', height: 'auto' };
 
             // The original width and height represented as pixel values.
             // These will only be the same as `finish` if this element had its

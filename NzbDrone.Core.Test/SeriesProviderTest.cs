@@ -10,8 +10,6 @@ using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
-using PetaPoco;
-using TvdbLib.Data;
 
 // ReSharper disable InconsistentNaming
 namespace NzbDrone.Core.Test

@@ -42,13 +42,6 @@ namespace NzbDrone.Core.Providers
             _database.Delete<RootDir>(rootDirId);
         }
 
-        public virtual void Update(RootDir rootDir)
-        {
-            ValidatePath(rootDir);
-
-            _database.Update(rootDir);
-        }
-
         private static void ValidatePath(RootDir rootDir)
         {
             if (String.IsNullOrWhiteSpace(rootDir.Path) || !Path.IsPathRooted(rootDir.Path))

@@ -14,9 +14,6 @@ namespace NzbDrone.Core.Providers
         private const string TVDB_APIKEY = "5D2D188E86E07F4F";
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        private static readonly Regex CleanUpRegex = new Regex(@"((\s|^)the(\s|$))|((\s|^)and(\s|$))|[^a-z]",
-                                                               RegexOptions.IgnoreCase | RegexOptions.Compiled);
-
         private readonly TvdbHandler _handler;
 
         public TvDbProvider()
@@ -48,6 +45,8 @@ namespace NzbDrone.Core.Providers
                 //Fix American Dad's scene gongshow 
                 if (result != null && result.Id == 73141)
                 {
+                    result.Episodes = result.Episodes.Where(e => e.SeasonNumber == 0 || e.EpisodeNumber > 0).ToList();
+
                     var seasonOneEpisodeCount = result.Episodes.Where(e => e.SeasonNumber == 1).Count();
                     var seasonOneId = result.Episodes.Where(e => e.SeasonNumber == 1).First().SeasonId;
 
