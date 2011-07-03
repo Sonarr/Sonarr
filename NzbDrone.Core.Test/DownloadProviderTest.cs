@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Test
     public class DownloadProviderTest : TestBase
     {
         [Test]
-        public void Download_report_should_send_to_sab_and_add_to_history()
+        public void Download_report_should_send_to_sab_add_to_history_mark_as_grabbed()
         {
             var mocker = new AutoMoqer(MockBehavior.Strict);
             var parseResult = Builder<EpisodeParseResult>.CreateNew()
@@ -51,6 +51,13 @@ namespace NzbDrone.Core.Test
 
             mocker.GetMock<EpisodeProvider>()
                 .Setup(c => c.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>(), false)).Returns(episodes);
+
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(c => c.MarkEpisodeAsFetched(12));
+
+
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(c => c.MarkEpisodeAsFetched(99));
 
             mocker.Resolve<DownloadProvider>().DownloadReport(parseResult);
 

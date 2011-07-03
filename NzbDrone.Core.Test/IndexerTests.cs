@@ -185,7 +185,7 @@ namespace NzbDrone.Core.Test
         }
 
         [TestCase("simpsons", 21, 23)]
-        [TestCase("Hawaii Five-0 (2010)", 1, 5)]
+        [TestCase("Hawaii Five-0 (2010)", 1, 1)]
         public void newzbin_search_returns_valid_results(string title, int season, int episode)
         {
             var mocker = new AutoMoqer();

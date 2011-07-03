@@ -757,6 +757,31 @@ namespace NzbDrone.Core.Test
             episode.EpisodeFile.Should().BeNull();
         }
 
+        [Test]
+        public void MarkEpisodeAsFetched()
+        {
+            var mocker = new AutoMoqer();
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
+                .WhereAll().Have(e => e.GrabDate = null)
+                .Build();
+
+            db.InsertMany(fakeEpisodes);
+
+            //Act
+            mocker.Resolve<EpisodeProvider>().MarkEpisodeAsFetched(2);
+            var episodes = db.Fetch<Episode>();
+
+            //Assert
+            episodes.Where(e => e.EpisodeId == 2).Single().GrabDate.Should().BeWithin(TimeSpan.FromSeconds(5)).Before(
+                DateTime.Now);
+
+            episodes.Where(e => e.GrabDate == null).Should().HaveCount(4);
+        }
+
+
 
 
     }

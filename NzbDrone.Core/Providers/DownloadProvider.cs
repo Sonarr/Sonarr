@@ -51,6 +51,7 @@ namespace NzbDrone.Core.Providers
                     history.SeriesId = episode.SeriesId;
 
                     _historyProvider.Add(history);
+                    _episodeProvider.MarkEpisodeAsFetched(episode.EpisodeId);
                 }
             }
 

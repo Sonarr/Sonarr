@@ -61,7 +61,6 @@ namespace NzbDrone.Core.Providers.Indexer
         /// <param name="episodeNumber">The episode number.</param>
         /// <returns></returns>
         protected abstract IList<String> GetSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber);
-        public abstract IList<String> GetSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber);
 
         /// <summary>
         /// This method can be overwritten to provide indexer specific info parsing
