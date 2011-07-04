@@ -106,6 +106,13 @@ namespace NzbDrone.Core.Providers
         }
 
 
+        public virtual void MarkEpisodeAsFetched(int episodeId)
+        {
+            Logger.Trace("Marking episode {0} as fetched.", episodeId);
+            _database.Execute("UPDATE Episodes SET GrabDate=@0 WHERE EpisodeId=@1", DateTime.Now, episodeId);
+        }
+
+
         public virtual IList<Episode> GetEpisodesByParseResult(EpisodeParseResult parseResult, Boolean autoAddNew = false)
         {
             var result = new List<Episode>();

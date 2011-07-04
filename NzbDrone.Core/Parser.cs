@@ -300,7 +300,6 @@ namespace NzbDrone.Core
                 return result;
             }
 
-            Logger.Trace("Quality Parsed:{0} Title:", result, name);
             return result;
         }
 

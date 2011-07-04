@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Data.Common;
 using System.Reflection;
 using System.Threading;
@@ -41,6 +42,11 @@ namespace NzbDrone.Web
             RegisterRoutes(RouteTable.Routes);
             //base.OnApplicationStarted();
             AreaRegistration.RegisterAllAreas();
+
+            var razor =ViewEngines.Engines.Where(e => e.GetType() == typeof (RazorViewEngine)).Single();
+            ViewEngines.Engines.Clear();
+            ViewEngines.Engines.Add(razor);
+
             RegisterGlobalFilters(GlobalFilters.Filters);
             
             Logger.Debug("Fully initialized and ready.");

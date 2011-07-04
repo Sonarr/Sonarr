@@ -110,7 +110,7 @@ namespace NzbDrone.Core.Providers
         {
             if (currentQuality.QualityType >= cutOff)
             {
-                Logger.Trace("Existing file meets cut-off. skipping.");
+                Logger.Trace("Existing item meets cut-off. skipping.");
                 return false;
             }
 
