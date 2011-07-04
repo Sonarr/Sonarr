@@ -31,12 +31,13 @@ Logs
             .TableHtmlAttributes(new { @class = "Grid" })
             .Columns(columns =>
                          {
-                             columns.Bound(c => c.Time).Title("Time").Width(190);
+                             columns.Bound(c => c.Time).Title("Time").Width(0);
                              columns.Bound(c => c.Level).Title("Level").Width(0);
+                             columns.Bound(c => c.Logger).Title("Source").Width(0);
                              columns.Bound(c => c.Message);
                          })
             .DetailView(detailView => detailView.ClientTemplate(
-                                                                    "<div>Logger: <#= Logger #></div>" +
+                                                                    "<div>Method: <#= Method #></div>" +
                                                                     "<div><#= ExceptionType #></div>" +
                                                                     "<div class='stackframe'><#= Exception #></div>"
                                                                 )).DataBinding(data => data.Ajax().Select("_AjaxBinding", "Log"))

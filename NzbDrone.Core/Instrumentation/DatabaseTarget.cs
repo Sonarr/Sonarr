@@ -33,6 +33,11 @@ namespace NzbDrone.Core.Instrumentation
 
             log.Logger = logEvent.LoggerName;
 
+            if (log.Logger.StartsWith("NzbDrone."))
+            {
+                log.Logger = log.Logger.Remove(0, 9);
+            }
+
             if (logEvent.Exception != null)
             {
                 if (String.IsNullOrWhiteSpace(log.Message))
