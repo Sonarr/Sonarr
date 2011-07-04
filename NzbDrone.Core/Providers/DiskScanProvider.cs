@@ -156,7 +156,7 @@ namespace NzbDrone.Core.Providers
             _diskProvider.CreateDirectory(newFile.DirectoryName);
 
             //Do the rename
-            Logger.Debug("Moving file [{0}] > [1]", episodeFile.Path, newFile.FullName);
+            Logger.Debug("Moving file [{0}] > [{1}]", episodeFile.Path, newFile.FullName);
             _diskProvider.MoveFile(episodeFile.Path, newFile.FullName);
 
             //Update the filename in the DB

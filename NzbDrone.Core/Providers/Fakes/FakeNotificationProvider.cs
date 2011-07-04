@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Providers.Fakes
                 fakeNotification.Status = ProgressNotificationStatus.InProgress;
                 fakeNotification2.CurrentMessage = DateTime.UtcNow.ToString();
                 fakeNotification.CurrentMessage = DateTime.Now.ToString();
-                return new List<ProgressNotification> {fakeNotification};
+                return new List<ProgressNotification> { fakeNotification };
             }
         }
 
@@ -45,19 +45,5 @@ namespace NzbDrone.Core.Providers.Fakes
             _basicNotifications.Add(notification.Id, notification);
         }
 
-        public void Dismiss(Guid notificationId)
-        {
-            lock (_lock)
-            {
-                if (_basicNotifications.ContainsKey(notificationId))
-                {
-                    _basicNotifications.Remove(notificationId);
-                }
-                else if (_progressNotification.ContainsKey(notificationId))
-                {
-                    _progressNotification.Remove(notificationId);
-                }
-            }
-        }
     }
 }
