@@ -8,15 +8,14 @@ namespace NzbDrone.Core.Instrumentation
 {
     public class ExceptioneerTarget : Target
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         protected override void Write(LogEventInfo logEvent)
         {
-            if (logEvent.Exception == null)
-                throw new InvalidOperationException(
-                    @"Missing Exception Object.. Please Use Logger.FatalException() or Logger.ErrorException() rather
-                than Logger.Fatal() and Logger.Error()");
-
             if (!Debugger.IsAttached)
             {
+                Logger.Trace("Sending Exception to Exceptioneer");
+
                 new Client
                     {
                         ApiKey = "43BBF60A-EB2A-4C1C-B09E-422ADF637265",

@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Instrumentation
         public static void StartDbLogging()
         {
 
-#if Release
+#if RELEASE
             var exTarget = new ExceptioneerTarget();
             LogManager.Configuration.AddTarget("Exceptioneer", exTarget);
             LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", NLog.LogLevel.Error, exTarget));

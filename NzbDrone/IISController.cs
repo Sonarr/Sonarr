@@ -71,8 +71,6 @@ namespace NzbDrone
             IISProcess.BeginErrorReadLine();
             IISProcess.BeginOutputReadLine();
 
-            IISProcess.PriorityClass = ProcessPriorityClass.AboveNormal;
-
             //Start Ping
             _pingTimer = new Timer(300000) { AutoReset = true };
             _pingTimer.Elapsed += (PingServer);

@@ -12,21 +12,25 @@ namespace NzbDrone
 
         private static void Main()
         {
-            Logger.Info(Process.GetCurrentProcess().Id);
-
             try
             {
+                Config.ConfigureNlog();
+                Logger.Info("Starting NZBDrone. Start-up Path:'{0}'", Config.ProjectRoot);
                 Thread.CurrentThread.Name = "Host";
+
+                Process currentProcess = Process.GetCurrentProcess();
+                if (currentProcess.PriorityClass < ProcessPriorityClass.Normal)
+                {
+                    Logger.Info("Promoting process priority from {0} to {1}", currentProcess.PriorityClass, ProcessPriorityClass.Normal);
+                    currentProcess.PriorityClass = ProcessPriorityClass.Normal;
+                }
+
+                currentProcess.EnableRaisingEvents = true;
+                currentProcess.Exited += ProgramExited;
 
                 AppDomain.CurrentDomain.UnhandledException += ((s, e) => AppDomainException(e));
                 AppDomain.CurrentDomain.ProcessExit += ProgramExited;
                 AppDomain.CurrentDomain.DomainUnload += ProgramExited;
-                Process.GetCurrentProcess().EnableRaisingEvents = true;
-                Process.GetCurrentProcess().Exited += ProgramExited;
-
-                Config.ConfigureNlog();
-
-                Logger.Info("Starting NZBDrone. Start-up Path:'{0}'", Config.ProjectRoot);
 
                 IISController.StopServer();
                 IISController.StartServer();
