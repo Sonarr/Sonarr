@@ -39,32 +39,7 @@ namespace NzbDrone.Core.Test.Framework
             return database;
         }
 
-        public static DiskProvider GetStandardDisk(int seasons, int episodes)
-        {
-            var mock = new Mock<DiskProvider>();
-            mock.Setup(c => c.GetDirectories(It.IsAny<String>())).Returns(StandardSeries);
-            mock.Setup(c => c.FolderExists(It.Is<String>(d => StandardSeries.Contains(d)))).Returns(true);
-
-
-            foreach (var series in StandardSeries)
-            {
-                var file = new List<String>();
-                for (int s = 0; s < seasons; s++)
-                {
-                    for (int e = 0; e < episodes; e++)
-                    {
-                        file.Add(String.Format("{0}\\Seasons {1}\\myepname.S{1:00}E{2:00}.avi", series, s, e));
-                    }
-                }
-
-                string series1 = series;
-                mock.Setup(c => c.GetFiles(series1, "*.avi", SearchOption.AllDirectories)).Returns(file.ToArray());
-            }
-
-            return mock.Object;
-        }
-
-        public static Series GetFakeSeries(int id, string title)
+       public static Series GetFakeSeries(int id, string title)
         {
             return Builder<Series>.CreateNew()
                 .With(c => c.SeriesId = id)

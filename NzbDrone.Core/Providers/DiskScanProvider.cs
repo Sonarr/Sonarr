@@ -196,7 +196,7 @@ namespace NzbDrone.Core.Providers
         {
             Logger.Debug("Scanning '{0}' for episodes", path);
 
-            var filesOnDisk = _diskProvider.GetFiles(path, "*.*", SearchOption.AllDirectories);
+            var filesOnDisk = _diskProvider.GetFiles(path, SearchOption.AllDirectories);
 
             var mediaFileList = filesOnDisk.Where(c => MediaExtentions.Contains(Path.GetExtension(c).ToLower())).ToList();
 
