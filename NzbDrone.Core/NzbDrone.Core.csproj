@@ -176,6 +176,7 @@
     <Compile Include="Datastore\MigrationLogger.cs" />
     <Compile Include="Datastore\MigrationsHelper.cs" />
     <Compile Include="Datastore\CustomeMapper.cs" />
+    <Compile Include="Datastore\Migrations\Migration20110703.cs" />
     <Compile Include="Datastore\Migrations\Migration20110622.cs" />
     <Compile Include="Datastore\SqliteProvider.cs" />
     <Compile Include="Fluent.cs" />

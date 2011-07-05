@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Web.Hosting;
 using Ninject;
 using NLog;
@@ -20,6 +21,12 @@ namespace NzbDrone.Core
         private static StandardKernel _kernel;
         private static readonly Object KernelLock = new object();
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+
+        public static Version Version
+        {
+            get { return Assembly.GetExecutingAssembly().GetName().Version; }
+        }
 
         public static String AppPath
         {

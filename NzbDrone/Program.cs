@@ -103,7 +103,7 @@ namespace NzbDrone
             Console.WriteLine("EPIC FAIL: {0}", excepion);
             Logger.Fatal("EPIC FAIL: {0}", excepion);
 
-#if Release
+#if RELEASE
             new Client
             {
                 ApiKey = "43BBF60A-EB2A-4C1C-B09E-422ADF637265",

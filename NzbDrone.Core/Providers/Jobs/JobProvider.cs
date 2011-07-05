@@ -252,7 +252,7 @@ namespace NzbDrone.Core.Providers.Jobs
                     settings.Success = true;
 
                     sw.Stop();
-                    Logger.Debug("Job '{0}' successfully completed in {1} seconds", jobImplementation.Name, sw.Elapsed.Minutes,
+                    Logger.Debug("Job '{0}' successfully completed in {1}.{2} seconds.", jobImplementation.Name, sw.Elapsed.Seconds,sw.Elapsed.Milliseconds/100,
                                 sw.Elapsed.Seconds);
                 }
                 catch (Exception e)
