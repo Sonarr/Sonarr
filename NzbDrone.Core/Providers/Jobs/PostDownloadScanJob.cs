@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Providers.Jobs
 
         public string Name
         {
-            get { return "Post Download Media File Scan"; }
+            get { return "Drop folder monitor"; }
         }
 
         public int DefaultInterval
@@ -58,36 +58,43 @@ namespace NzbDrone.Core.Providers.Jobs
 
             foreach (var subfolder in _diskProvider.GetDirectories(dropFolder))
             {
-                var subfolderInfo = new DirectoryInfo(subfolder);
-
-                if (subfolderInfo.Name.StartsWith("_UNPACK_", StringComparison.CurrentCultureIgnoreCase))
+                try
                 {
-                    Logger.Info("Folder [{0}] is still being unpacked. skipping.", subfolder);
-                    continue;
-                }
+                    var subfolderInfo = new DirectoryInfo(subfolder);
 
-                if (subfolderInfo.Name.StartsWith("_FAILED_", StringComparison.CurrentCultureIgnoreCase))
+                    if (subfolderInfo.Name.StartsWith("_UNPACK_", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        Logger.Info("Folder [{0}] is still being unpacked. skipping.", subfolder);
+                        continue;
+                    }
+
+                    if (subfolderInfo.Name.StartsWith("_FAILED_", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        Logger.Info("Folder [{0}] is marked as failed. skipping.", subfolder);
+                        continue;
+                    }
+
+                    //Parse the Folder name
+                    var seriesName = Parser.ParseSeriesName(subfolderInfo.Name);
+                    var series = _seriesProvider.FindSeries(seriesName);
+
+                    if (series == null)
+                    {
+                        Logger.Warn("Unable to Import new download, series is not being watched");
+                        return;
+                    }
+
+                    var importedFiles = _diskScanProvider.Scan(series, subfolder);
+                    importedFiles.ForEach(file => _diskScanProvider.MoveEpisodeFile(file));
+
+                    //Delete the folder only if all files were removed
+                    if (_diskProvider.GetFiles(subfolder, "*.*", SearchOption.AllDirectories).Length == 0)
+                        _diskProvider.DeleteFolder(subfolder, false);
+                }
+                catch (Exception e)
                 {
-                    Logger.Info("Folder [{0}] is marked as failed. skipping.", subfolder);
-                    continue;
+                    Logger.ErrorException("An error has occurred while importing " + subfolder, e);
                 }
-
-                //Parse the Folder name
-                var seriesName = Parser.ParseSeriesName(subfolderInfo.Name);
-                var series = _seriesProvider.FindSeries(seriesName);
-
-                if (series == null)
-                {
-                    Logger.Warn("Unable to Import new download, series is not being watched");
-                    return;
-                }
-
-                var importedFiles = _diskScanProvider.Scan(series, subfolder);
-                importedFiles.ForEach(file => _diskScanProvider.MoveEpisodeFile(file));
-
-                //Delete the folder only if all files were removed
-                if (_diskProvider.GetFiles(subfolder, "*.*", SearchOption.AllDirectories).Length == 0)
-                    _diskProvider.DeleteFolder(subfolder, false);
             }
 
             Logger.Debug("New Download Scan Job completed successfully");
