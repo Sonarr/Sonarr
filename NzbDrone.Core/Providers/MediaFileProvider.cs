@@ -115,7 +115,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual int DeleteOrphaned()
         {
-            Logger.Trace("Deleting orphaned files.");
+            Logger.Trace("Deleting orphan files.");
 
             var updated = _database.Execute(@"DELETE FROM EpisodeFiles
                                 WHERE EpisodeFileId IN
@@ -126,7 +126,7 @@ namespace NzbDrone.Core.Providers
 
             if (updated > 0)
             {
-                Logger.Debug("Removed {0} orphaned files.", updated);
+                Logger.Debug("Removed {0} orphan file(s) from database.S", updated);
             }
 
             return updated;
@@ -186,7 +186,7 @@ namespace NzbDrone.Core.Providers
             if (_configProvider.ReplaceSpaces)
                 result = result.Replace(' ', '.');
 
-            Logger.Trace("New File Name is: {0}", result.Trim());
+            Logger.Trace("New File Name is: [{0}]", result.Trim());
             return CleanFilename(result.Trim());
         }
 

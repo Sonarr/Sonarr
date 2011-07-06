@@ -158,7 +158,7 @@ namespace NzbDrone.Core.Providers.Jobs
                     }
                 };
 
-                _jobThread = new Thread(starter) { Name = "JobQueueThread" };
+                _jobThread = new Thread(starter) { Name = "JobQueueThread", Priority = ThreadPriority.BelowNormal };
                 _jobThread.Start();
 
             }
