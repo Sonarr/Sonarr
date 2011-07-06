@@ -135,7 +135,7 @@ namespace NzbDrone.Core.Providers
             {
                 ep.EpisodeFileId = fileId;
                 _episodeProvider.UpdateEpisode(ep);
-                Logger.Debug("Linking file {0} to {1}", filePath, ep);
+                Logger.Debug("Linking [{0}] > [{1}]", filePath, ep);
             }
 
 
@@ -156,7 +156,7 @@ namespace NzbDrone.Core.Providers
             _diskProvider.CreateDirectory(newFile.DirectoryName);
 
             //Do the rename
-            Logger.Debug("Moving file [{0}] > [{1}]", episodeFile.Path, newFile.FullName);
+            Logger.Debug("Moving [{0}] > [{1}]", episodeFile.Path, newFile.FullName);
             _diskProvider.MoveFile(episodeFile.Path, newFile.FullName);
 
             //Update the filename in the DB
@@ -176,7 +176,7 @@ namespace NzbDrone.Core.Providers
             {
                 if (!_diskProvider.FileExists(episodeFile.Path))
                 {
-                    Logger.Trace("File {0} no longer exists on disk. removing from database.", episodeFile.Path);
+                    Logger.Trace("File [{0}] no longer exists on disk. removing from db", episodeFile.Path);
 
                     //Set the EpisodeFileId for each episode attached to this file to 0
                     foreach (var episode in _episodeProvider.GetEpisodesByFileId(episodeFile.EpisodeFileId))

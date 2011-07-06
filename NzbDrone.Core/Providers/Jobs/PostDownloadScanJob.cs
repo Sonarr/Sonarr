@@ -41,18 +41,17 @@ namespace NzbDrone.Core.Providers.Jobs
 
         public virtual void Start(ProgressNotification notification, int targetId)
         {
-            Logger.Debug("Starting New Download Scan Job");
             var dropFolder = _configProvider.SabDropDirectory;
 
             if (String.IsNullOrWhiteSpace(dropFolder))
             {
-                Logger.Debug("Skipping drop folder scan. No drop folder is defined.");
+                Logger.Debug("No drop folder is defined. Skipping.");
                 return;
             }
 
             if (!_diskProvider.FolderExists(dropFolder))
             {
-                Logger.Warn("Unable to Scan for New Downloads - folder Doesn't exist: {0}", dropFolder);
+                Logger.Warn("Unable to Scan for New Downloads - folder Doesn't exist: [{0}]", dropFolder);
                 return;
             }
 
@@ -64,13 +63,13 @@ namespace NzbDrone.Core.Providers.Jobs
 
                     if (subfolderInfo.Name.StartsWith("_UNPACK_", StringComparison.CurrentCultureIgnoreCase))
                     {
-                        Logger.Info("Folder [{0}] is still being unpacked. skipping.", subfolder);
+                        Logger.Debug("Folder [{0}] is still being unpacked. skipping.", subfolder);
                         continue;
                     }
 
                     if (subfolderInfo.Name.StartsWith("_FAILED_", StringComparison.CurrentCultureIgnoreCase))
                     {
-                        Logger.Info("Folder [{0}] is marked as failed. skipping.", subfolder);
+                        Logger.Debug("Folder [{0}] is marked as failed. skipping.", subfolder);
                         continue;
                     }
 
@@ -80,7 +79,7 @@ namespace NzbDrone.Core.Providers.Jobs
 
                     if (series == null)
                     {
-                        Logger.Warn("Unable to Import new download, series is not being watched");
+                        Logger.Warn("Unable to Import new download, series doesn't exist in database.");
                         return;
                     }
 
@@ -96,8 +95,6 @@ namespace NzbDrone.Core.Providers.Jobs
                     Logger.ErrorException("An error has occurred while importing " + subfolder, e);
                 }
             }
-
-            Logger.Debug("New Download Scan Job completed successfully");
         }
     }
 }

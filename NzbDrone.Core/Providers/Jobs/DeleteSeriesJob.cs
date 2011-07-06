@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Providers.Jobs
 
                 _seriesProvider.DeleteSeries(seriesId);
 
-                notification.CurrentMessage = String.Format("Successfully deleted '{0}'", title);
+                notification.CurrentMessage = String.Format("Successfully deleted '{0}' from database", title);
             }
             catch (Exception e)
             {
