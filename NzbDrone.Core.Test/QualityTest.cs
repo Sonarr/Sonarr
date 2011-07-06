@@ -11,43 +11,39 @@ namespace NzbDrone.Core.Test
     public class QualityTest : TestBase
     {
         [Test]
-        [Ignore("No supported asserts are available")]
         public void Icomparer_greater_test()
         {
             var first = new Quality(QualityTypes.DVD, true);
             var second = new Quality(QualityTypes.Bluray1080p, true);
 
-            //Assert.GreaterThan(second, first);
+            second.Should().BeGreaterThan(first);
         }
 
         [Test]
-        [Ignore("No supported asserts are available")]
         public void Icomparer_greater_proper()
         {
             var first = new Quality(QualityTypes.Bluray1080p, false);
             var second = new Quality(QualityTypes.Bluray1080p, true);
 
-            //Assert.GreaterThan(second, first);
+            second.Should().BeGreaterThan(first);
         }
 
         [Test]
-        [Ignore("No supported asserts are available")]
         public void Icomparer_lesser()
         {
             var first = new Quality(QualityTypes.DVD, true);
             var second = new Quality(QualityTypes.Bluray1080p, true);
 
-            //Assert.LessThan(first, second);
+            first.Should().BeLessThan(second);
         }
 
         [Test]
-        [Ignore("No supported asserts are available")]
         public void Icomparer_lesser_proper()
         {
             var first = new Quality(QualityTypes.DVD, false);
             var second = new Quality(QualityTypes.DVD, true);
 
-            //Assert.LessThan(first, second);
+            first.Should().BeLessThan(second);
         }
 
         [Test]
@@ -86,7 +82,7 @@ namespace NzbDrone.Core.Test
             var first = new Quality(QualityTypes.Bluray1080p, true);
             var second = new Quality(QualityTypes.Bluray1080p, true);
 
-            Assert.IsFalse(first != second);
+            (first != second).Should().BeFalse();
         }
 
         [Test]
