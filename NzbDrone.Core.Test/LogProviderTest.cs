@@ -50,6 +50,38 @@ namespace NzbDrone.Core.Test
             Assert.AreEqual("write_log", logItem.Method);
         }
 
+        [Test]
+        public void write_long_log()
+        {
+            //setup
+            var message = String.Empty;
+            for (int i = 0; i < 100; i++)
+            {
+                message += Guid.NewGuid();
+            }
+
+            var db = MockLib.GetEmptyDatabase(true);
+
+            var sonicTarget = new DatabaseTarget(db);
+
+            LogManager.Configuration.AddTarget("DbLogger", sonicTarget);
+            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Info, sonicTarget));
+            LogManager.Configuration.Reload();
+
+            Logger Logger = LogManager.GetCurrentClassLogger();
+            //Act
+
+            Logger.Info(message);
+
+            //Assert
+            db.Fetch<Log>().Should().HaveCount(1);
+
+            var logItem = db.Fetch<Log>().First();
+
+            logItem.Message.Should().HaveLength(message.Length);
+            Assert.AreEqual(message, logItem.Message);
+        }
+
 
         [Test]
         public void clearLog()

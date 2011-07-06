@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Datastore
 
             EnsureDatabase(connetionString);
 
-            Logger.Info("Preparing run database migration");
+            Logger.Info("Preparing to run database migration");
 
             try
             {
@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Datastore
             }
             catch (Exception e)
             {
-                Logger.FatalException("An error has occured while migrating database", e);
+                Logger.FatalException("An error has occurred while migrating database", e);
             }
         }
 
