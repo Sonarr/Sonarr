@@ -223,3 +223,10 @@ select
     display: block;
     height: 25px;
 }
+
+
+.dialog
+{
+    margin-left: auto;
+    margin-right: auto;
+}

@@ -9,3 +9,10 @@
 {
     background: #065EFE !important;
 }
+
+
+/*jQuery UI*/
+.ui-widget-header
+{
+    font-weight: normal;
+}
