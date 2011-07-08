@@ -83,7 +83,7 @@ namespace NzbDrone.Core.Providers
             string path = series.Path;
             if (series.SeasonFolder)
             {
-                var seasonFolder = _configProvider.SeasonFolderFormat
+                var seasonFolder = _configProvider.SortingSeasonFolderFormat
                     .Replace("%0s", seasonNumber.ToString("00"))
                     .Replace("%s", seasonNumber.ToString());
 
@@ -132,16 +132,17 @@ namespace NzbDrone.Core.Providers
             return updated;
         }
 
+
         public virtual string GetNewFilename(IList<Episode> episodes, string seriesTitle, QualityTypes quality)
         {
-            var separatorStyle = EpisodeSortingHelper.GetSeparatorStyle(_configProvider.SeparatorStyle);
-            var numberStyle = EpisodeSortingHelper.GetNumberStyle(_configProvider.NumberStyle);
+            var separatorStyle = EpisodeSortingHelper.GetSeparatorStyle(_configProvider.SortingSeparatorStyle);
+            var numberStyle = EpisodeSortingHelper.GetNumberStyle(_configProvider.SortingNumberStyle);
 
             string episodeNames = episodes[0].Title;
 
             string result = String.Empty;
 
-            if (_configProvider.SeriesName)
+            if (_configProvider.SortingIncludeSeriesName)
             {
                 result += seriesTitle + separatorStyle.Pattern;
             }
@@ -150,7 +151,7 @@ namespace NzbDrone.Core.Providers
 
             if (episodes.Count > 1)
             {
-                var multiEpisodeStyle = EpisodeSortingHelper.GetMultiEpisodeStyle(_configProvider.MultiEpisodeStyle);
+                var multiEpisodeStyle = EpisodeSortingHelper.GetMultiEpisodeStyle(_configProvider.SortingMultiEpisodeStyle);
 
                 foreach (var episode in episodes.OrderBy(e => e.EpisodeNumber).Skip(1))
                 {
@@ -174,16 +175,16 @@ namespace NzbDrone.Core.Providers
                 .Replace("%x", numberStyle.EpisodeSeparator)
                 .Replace("%p", separatorStyle.Pattern);
 
-            if (_configProvider.EpisodeName)
+            if (_configProvider.SortingEpisodeName)
             {
                 episodeNames = episodeNames.TrimEnd(' ', '+');
                 result += separatorStyle.Pattern + episodeNames;
             }
 
-            if (_configProvider.AppendQuality)
+            if (_configProvider.SortingAppendQuality)
                 result += String.Format(" [{0}]", quality);
 
-            if (_configProvider.ReplaceSpaces)
+            if (_configProvider.SortingReplaceSpaces)
                 result = result.Replace(' ', '.');
 
             Logger.Trace("New File Name is: [{0}]", result.Trim());

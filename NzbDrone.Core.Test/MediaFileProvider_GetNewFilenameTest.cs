@@ -22,12 +22,12 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer();
 
             var fakeConfig = mocker.GetMock<ConfigProvider>();
-            fakeConfig.SetupGet(c => c.SeriesName).Returns(true);
-            fakeConfig.SetupGet(c => c.EpisodeName).Returns(true);
-            fakeConfig.SetupGet(c => c.AppendQuality).Returns(true);
-            fakeConfig.SetupGet(c => c.SeparatorStyle).Returns(0);
-            fakeConfig.SetupGet(c => c.NumberStyle).Returns(2);
-            fakeConfig.SetupGet(c => c.ReplaceSpaces).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingEpisodeName).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingSeparatorStyle).Returns(0);
+            fakeConfig.SetupGet(c => c.SortingNumberStyle).Returns(2);
+            fakeConfig.SetupGet(c => c.SortingReplaceSpaces).Returns(false);
 
             var episode = Builder<Episode>.CreateNew()
                             .With(e => e.Title = "City Sushi")
@@ -49,12 +49,12 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer();
 
             var fakeConfig = mocker.GetMock<ConfigProvider>();
-            fakeConfig.SetupGet(c => c.SeriesName).Returns(false);
-            fakeConfig.SetupGet(c => c.EpisodeName).Returns(true);
-            fakeConfig.SetupGet(c => c.AppendQuality).Returns(true);
-            fakeConfig.SetupGet(c => c.SeparatorStyle).Returns(0);
-            fakeConfig.SetupGet(c => c.NumberStyle).Returns(0);
-            fakeConfig.SetupGet(c => c.ReplaceSpaces).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingEpisodeName).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingSeparatorStyle).Returns(0);
+            fakeConfig.SetupGet(c => c.SortingNumberStyle).Returns(0);
+            fakeConfig.SetupGet(c => c.SortingReplaceSpaces).Returns(false);
 
             var episode = Builder<Episode>.CreateNew()
                             .With(e => e.Title = "City Sushi")
@@ -76,12 +76,12 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer();
 
             var fakeConfig = mocker.GetMock<ConfigProvider>();
-            fakeConfig.SetupGet(c => c.SeriesName).Returns(true);
-            fakeConfig.SetupGet(c => c.EpisodeName).Returns(false);
-            fakeConfig.SetupGet(c => c.AppendQuality).Returns(true);
-            fakeConfig.SetupGet(c => c.SeparatorStyle).Returns(1);
-            fakeConfig.SetupGet(c => c.NumberStyle).Returns(1);
-            fakeConfig.SetupGet(c => c.ReplaceSpaces).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingEpisodeName).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingSeparatorStyle).Returns(1);
+            fakeConfig.SetupGet(c => c.SortingNumberStyle).Returns(1);
+            fakeConfig.SetupGet(c => c.SortingReplaceSpaces).Returns(false);
 
             var episode = Builder<Episode>.CreateNew()
                             .With(e => e.Title = "City Sushi")
@@ -103,12 +103,12 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer();
 
             var fakeConfig = mocker.GetMock<ConfigProvider>();
-            fakeConfig.SetupGet(c => c.SeriesName).Returns(true);
-            fakeConfig.SetupGet(c => c.EpisodeName).Returns(false);
-            fakeConfig.SetupGet(c => c.AppendQuality).Returns(false);
-            fakeConfig.SetupGet(c => c.SeparatorStyle).Returns(1);
-            fakeConfig.SetupGet(c => c.NumberStyle).Returns(3);
-            fakeConfig.SetupGet(c => c.ReplaceSpaces).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingEpisodeName).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingSeparatorStyle).Returns(1);
+            fakeConfig.SetupGet(c => c.SortingNumberStyle).Returns(3);
+            fakeConfig.SetupGet(c => c.SortingReplaceSpaces).Returns(false);
 
 
             var episode = Builder<Episode>.CreateNew()
@@ -131,12 +131,12 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer();
 
             var fakeConfig = mocker.GetMock<ConfigProvider>();
-            fakeConfig.SetupGet(c => c.SeriesName).Returns(true);
-            fakeConfig.SetupGet(c => c.EpisodeName).Returns(true);
-            fakeConfig.SetupGet(c => c.AppendQuality).Returns(false);
-            fakeConfig.SetupGet(c => c.SeparatorStyle).Returns(1);
-            fakeConfig.SetupGet(c => c.NumberStyle).Returns(3);
-            fakeConfig.SetupGet(c => c.ReplaceSpaces).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingEpisodeName).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingSeparatorStyle).Returns(1);
+            fakeConfig.SetupGet(c => c.SortingNumberStyle).Returns(3);
+            fakeConfig.SetupGet(c => c.SortingReplaceSpaces).Returns(true);
 
             var episode = Builder<Episode>.CreateNew()
                             .With(e => e.Title = "City Sushi")
@@ -158,12 +158,12 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer();
 
             var fakeConfig = mocker.GetMock<ConfigProvider>();
-            fakeConfig.SetupGet(c => c.SeriesName).Returns(true);
-            fakeConfig.SetupGet(c => c.EpisodeName).Returns(true);
-            fakeConfig.SetupGet(c => c.AppendQuality).Returns(true);
-            fakeConfig.SetupGet(c => c.SeparatorStyle).Returns(0);
-            fakeConfig.SetupGet(c => c.NumberStyle).Returns(3);
-            fakeConfig.SetupGet(c => c.ReplaceSpaces).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingEpisodeName).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingSeparatorStyle).Returns(0);
+            fakeConfig.SetupGet(c => c.SortingNumberStyle).Returns(3);
+            fakeConfig.SetupGet(c => c.SortingReplaceSpaces).Returns(true);
 
             var episode = Builder<Episode>.CreateNew()
                             .With(e => e.Title = "City Sushi")
@@ -185,12 +185,12 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer();
 
             var fakeConfig = mocker.GetMock<ConfigProvider>();
-            fakeConfig.SetupGet(c => c.SeriesName).Returns(false);
-            fakeConfig.SetupGet(c => c.EpisodeName).Returns(false);
-            fakeConfig.SetupGet(c => c.AppendQuality).Returns(false);
-            fakeConfig.SetupGet(c => c.SeparatorStyle).Returns(0);
-            fakeConfig.SetupGet(c => c.NumberStyle).Returns(2);
-            fakeConfig.SetupGet(c => c.ReplaceSpaces).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingEpisodeName).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingSeparatorStyle).Returns(0);
+            fakeConfig.SetupGet(c => c.SortingNumberStyle).Returns(2);
+            fakeConfig.SetupGet(c => c.SortingReplaceSpaces).Returns(false);
 
 
             var episode = Builder<Episode>.CreateNew()
@@ -213,13 +213,13 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer();
 
             var fakeConfig = mocker.GetMock<ConfigProvider>();
-            fakeConfig.SetupGet(c => c.SeriesName).Returns(true);
-            fakeConfig.SetupGet(c => c.EpisodeName).Returns(true);
-            fakeConfig.SetupGet(c => c.AppendQuality).Returns(true);
-            fakeConfig.SetupGet(c => c.SeparatorStyle).Returns(0);
-            fakeConfig.SetupGet(c => c.NumberStyle).Returns(2);
-            fakeConfig.SetupGet(c => c.ReplaceSpaces).Returns(false);
-            fakeConfig.SetupGet(c => c.MultiEpisodeStyle).Returns(3);
+            fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingEpisodeName).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingSeparatorStyle).Returns(0);
+            fakeConfig.SetupGet(c => c.SortingNumberStyle).Returns(2);
+            fakeConfig.SetupGet(c => c.SortingReplaceSpaces).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingMultiEpisodeStyle).Returns(3);
 
             var episodeOne = Builder<Episode>.CreateNew()
                             .With(e => e.Title = "Strawberries and Cream (1)")
@@ -247,13 +247,13 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer();
 
             var fakeConfig = mocker.GetMock<ConfigProvider>();
-            fakeConfig.SetupGet(c => c.SeriesName).Returns(false);
-            fakeConfig.SetupGet(c => c.EpisodeName).Returns(true);
-            fakeConfig.SetupGet(c => c.AppendQuality).Returns(true);
-            fakeConfig.SetupGet(c => c.SeparatorStyle).Returns(0);
-            fakeConfig.SetupGet(c => c.NumberStyle).Returns(0);
-            fakeConfig.SetupGet(c => c.ReplaceSpaces).Returns(false);
-            fakeConfig.SetupGet(c => c.MultiEpisodeStyle).Returns(2);
+            fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingEpisodeName).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingSeparatorStyle).Returns(0);
+            fakeConfig.SetupGet(c => c.SortingNumberStyle).Returns(0);
+            fakeConfig.SetupGet(c => c.SortingReplaceSpaces).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingMultiEpisodeStyle).Returns(2);
 
             var episodeOne = Builder<Episode>.CreateNew()
                             .With(e => e.Title = "Strawberries and Cream (1)")
@@ -281,13 +281,13 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer();
 
             var fakeConfig = mocker.GetMock<ConfigProvider>();
-            fakeConfig.SetupGet(c => c.SeriesName).Returns(false);
-            fakeConfig.SetupGet(c => c.EpisodeName).Returns(true);
-            fakeConfig.SetupGet(c => c.AppendQuality).Returns(true);
-            fakeConfig.SetupGet(c => c.SeparatorStyle).Returns(1);
-            fakeConfig.SetupGet(c => c.NumberStyle).Returns(0);
-            fakeConfig.SetupGet(c => c.ReplaceSpaces).Returns(false);
-            fakeConfig.SetupGet(c => c.MultiEpisodeStyle).Returns(2);
+            fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingEpisodeName).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingSeparatorStyle).Returns(1);
+            fakeConfig.SetupGet(c => c.SortingNumberStyle).Returns(0);
+            fakeConfig.SetupGet(c => c.SortingReplaceSpaces).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingMultiEpisodeStyle).Returns(2);
 
             var episodeOne = Builder<Episode>.CreateNew()
                             .With(e => e.Title = "Strawberries and Cream (1)")
@@ -315,13 +315,13 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer();
 
             var fakeConfig = mocker.GetMock<ConfigProvider>();
-            fakeConfig.SetupGet(c => c.SeriesName).Returns(true);
-            fakeConfig.SetupGet(c => c.EpisodeName).Returns(true);
-            fakeConfig.SetupGet(c => c.AppendQuality).Returns(false);
-            fakeConfig.SetupGet(c => c.SeparatorStyle).Returns(1);
-            fakeConfig.SetupGet(c => c.NumberStyle).Returns(3);
-            fakeConfig.SetupGet(c => c.ReplaceSpaces).Returns(true);
-            fakeConfig.SetupGet(c => c.MultiEpisodeStyle).Returns(1);
+            fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingEpisodeName).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingSeparatorStyle).Returns(1);
+            fakeConfig.SetupGet(c => c.SortingNumberStyle).Returns(3);
+            fakeConfig.SetupGet(c => c.SortingReplaceSpaces).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingMultiEpisodeStyle).Returns(1);
 
             var episodeOne = Builder<Episode>.CreateNew()
                             .With(e => e.Title = "Strawberries and Cream (1)")
@@ -349,13 +349,13 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer();
 
             var fakeConfig = mocker.GetMock<ConfigProvider>();
-            fakeConfig.SetupGet(c => c.SeriesName).Returns(true);
-            fakeConfig.SetupGet(c => c.EpisodeName).Returns(false);
-            fakeConfig.SetupGet(c => c.AppendQuality).Returns(false);
-            fakeConfig.SetupGet(c => c.SeparatorStyle).Returns(0);
-            fakeConfig.SetupGet(c => c.NumberStyle).Returns(2);
-            fakeConfig.SetupGet(c => c.ReplaceSpaces).Returns(true);
-            fakeConfig.SetupGet(c => c.MultiEpisodeStyle).Returns(0);
+            fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingEpisodeName).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingSeparatorStyle).Returns(0);
+            fakeConfig.SetupGet(c => c.SortingNumberStyle).Returns(2);
+            fakeConfig.SetupGet(c => c.SortingReplaceSpaces).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingMultiEpisodeStyle).Returns(0);
 
             var episodeOne = Builder<Episode>.CreateNew()
                             .With(e => e.Title = "Strawberries and Cream (1)")
@@ -383,13 +383,13 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer();
 
             var fakeConfig = mocker.GetMock<ConfigProvider>();
-            fakeConfig.SetupGet(c => c.SeriesName).Returns(false);
-            fakeConfig.SetupGet(c => c.EpisodeName).Returns(false);
-            fakeConfig.SetupGet(c => c.AppendQuality).Returns(false);
-            fakeConfig.SetupGet(c => c.SeparatorStyle).Returns(0);
-            fakeConfig.SetupGet(c => c.NumberStyle).Returns(0);
-            fakeConfig.SetupGet(c => c.ReplaceSpaces).Returns(true);
-            fakeConfig.SetupGet(c => c.MultiEpisodeStyle).Returns(2);
+            fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingEpisodeName).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingSeparatorStyle).Returns(0);
+            fakeConfig.SetupGet(c => c.SortingNumberStyle).Returns(0);
+            fakeConfig.SetupGet(c => c.SortingReplaceSpaces).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingMultiEpisodeStyle).Returns(2);
 
             var episodeOne = Builder<Episode>.CreateNew()
                             .With(e => e.Title = "Strawberries and Cream (1)")

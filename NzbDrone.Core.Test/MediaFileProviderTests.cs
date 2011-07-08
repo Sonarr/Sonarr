@@ -146,7 +146,7 @@ namespace NzbDrone.Core.Test
                 .Build();
 
             var mocker = new AutoMoqer();
-            mocker.GetMock<ConfigProvider>().Setup(e => e.SeasonFolderFormat).Returns(seasonFolderFormat);
+            mocker.GetMock<ConfigProvider>().Setup(e => e.SortingSeasonFolderFormat).Returns(seasonFolderFormat);
 
             //Act
             var result = mocker.Resolve<MediaFileProvider>().CalculateFilePath(fakeSeries, 1, filename, ".mkv");
