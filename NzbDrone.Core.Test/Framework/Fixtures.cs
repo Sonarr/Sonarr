@@ -13,15 +13,7 @@ namespace NzbDrone.Core.Test
         [TearDown]
         public void TearDown()
         {
-            var filesToDelete = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.sdf", SearchOption.AllDirectories);
-            foreach (var file in filesToDelete)
-            {
-                try
-                {
-                    File.Delete(file);
-                }
-                catch{}
-            }
+
         }
 
         [SetUp]
@@ -41,6 +33,17 @@ namespace NzbDrone.Core.Test
             catch (Exception e)
             {
                 Console.WriteLine("Unable to configure logging. " + e);
+            }
+
+
+            var filesToDelete = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.sdf", SearchOption.AllDirectories);
+            foreach (var file in filesToDelete)
+            {
+                try
+                {
+                    File.Delete(file);
+                }
+                catch { }
             }
         }
     }

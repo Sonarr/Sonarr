@@ -30,11 +30,11 @@ namespace NzbDrone.Core.Providers
 
         public virtual IList<IndexerBase> GetEnabledIndexers()
         {
-            var all = GetAllISettings();
+            var all = All();
             return _indexers.Where(i => all.Exists(c => c.IndexProviderType == i.GetType().ToString() && c.Enable)).ToList();
         }
 
-        public virtual List<IndexerDefinition> GetAllISettings()
+        public virtual List<IndexerDefinition> All()
         {
             return _database.Fetch<IndexerDefinition>();
         }
@@ -64,7 +64,7 @@ namespace NzbDrone.Core.Providers
 
             _indexers = indexers;
 
-            var currentIndexers = GetAllISettings();
+            var currentIndexers = All();
 
             foreach (var feedProvider in indexers)
             {

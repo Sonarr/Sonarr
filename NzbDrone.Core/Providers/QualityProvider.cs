@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Providers
             _database.Delete<QualityProfile>(profileId);
         }
 
-        public virtual List<QualityProfile> GetAllProfiles()
+        public virtual List<QualityProfile> All()
         {
             var profiles = _database.Fetch<QualityProfile>().ToList();
 
@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual void SetupDefaultProfiles()
         {
-            if (GetAllProfiles().Count != 0)
+            if (All().Count != 0)
                 return;
 
             Logger.Info("Setting up default quality profiles");

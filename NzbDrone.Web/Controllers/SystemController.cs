@@ -33,7 +33,7 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult Indexers()
         {
-            return View(_indexerProvider.GetAllISettings());
+            return View(_indexerProvider.All());
         }
 
 

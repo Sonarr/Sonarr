@@ -52,7 +52,7 @@ namespace NzbDrone.Core
             }
         }
 
-        private static void InitializeApp()
+        public static void InitializeApp()
         {
             BindKernel();
 
@@ -67,7 +67,7 @@ namespace NzbDrone.Core
             BindExternalNotifications();
         }
 
-        public static void BindKernel()
+        private static void BindKernel()
         {
             lock (KernelLock)
             {

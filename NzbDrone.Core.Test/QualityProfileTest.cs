@@ -17,9 +17,6 @@ namespace NzbDrone.Core.Test
     // ReSharper disable InconsistentNaming
     public class QualityProfileTest : TestBase
     {
-        ///<summary>
-        ///  Test_s the storage.
-        ///</summary>
         [Test]
         public void Test_Storage()
         {
@@ -141,7 +138,7 @@ namespace NzbDrone.Core.Test
             mocker.Resolve<QualityProvider>().SetupDefaultProfiles();
 
             //Assert
-            var profiles = mocker.Resolve<QualityProvider>().GetAllProfiles();
+            var profiles = mocker.Resolve<QualityProvider>().All();
 
 
             profiles.Should().HaveCount(2);
@@ -165,7 +162,7 @@ namespace NzbDrone.Core.Test
             mocker.Resolve<QualityProvider>().SetupDefaultProfiles();
 
             //Assert
-            var profiles = mocker.Resolve<QualityProvider>().GetAllProfiles();
+            var profiles = mocker.Resolve<QualityProvider>().All();
 
 
             profiles.Should().HaveCount(1);

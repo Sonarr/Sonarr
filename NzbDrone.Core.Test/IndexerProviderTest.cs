@@ -33,10 +33,10 @@ namespace NzbDrone.Core.Test
             indexerProvider.SaveSettings(settings);
 
             //Assert
-            indexerProvider.GetAllISettings();
+            indexerProvider.All();
 
 
-            indexerProvider.GetAllISettings().Should().HaveCount(1);
+            indexerProvider.All().Should().HaveCount(1);
             indexerProvider.GetEnabledIndexers().Should().HaveCount(1);
         }
 
@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Test
 
             //Assert
 
-            indexerProvider.GetAllISettings().Should().HaveCount(1);
+            indexerProvider.All().Should().HaveCount(1);
             indexerProvider.GetEnabledIndexers().Should().BeEmpty();
         }
     }

@@ -116,7 +116,7 @@ namespace NzbDrone.Web.Controllers
 
             ViewData["Qualities"] = qualityTypes;
 
-            var profiles = _qualityProvider.GetAllProfiles().ToList();
+            var profiles = _qualityProvider.All().ToList();
 
             foreach (var qualityProfile in profiles)
             {
@@ -229,7 +229,7 @@ namespace NzbDrone.Web.Controllers
 
         public QualityModel GetUpdatedProfileList()
         {
-            var profiles = _qualityProvider.GetAllProfiles().ToList();
+            var profiles = _qualityProvider.All().ToList();
             var defaultQualityQualityProfileId =
                 Convert.ToInt32(_configProvider.GetValue("DefaultQualityProfile", profiles[0].QualityProfileId));
             var selectList = new SelectList(profiles, "QualityProfileId", "Name");
