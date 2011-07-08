@@ -176,8 +176,7 @@
     <Compile Include="Datastore\MigrationLogger.cs" />
     <Compile Include="Datastore\MigrationsHelper.cs" />
     <Compile Include="Datastore\CustomeMapper.cs" />
-    <Compile Include="Datastore\Migrations\Migration20110705.cs" />
-    <Compile Include="Datastore\Migrations\Migration20110622.cs" />
+    <Compile Include="Datastore\Migrations\Migration20110707.cs" />
     <Compile Include="Datastore\SqliteProvider.cs" />
     <Compile Include="Fluent.cs" />
     <Compile Include="Helpers\EpisodeSortingHelper.cs" />
@@ -215,8 +214,8 @@
     <Compile Include="Providers\Jobs\UpdateInfoJob.cs" />
     <Compile Include="Providers\SceneMappingProvider.cs" />
     <Compile Include="Repository\ExternalNotificationSetting.cs" />
-    <Compile Include="Repository\JobSetting.cs" />
-    <Compile Include="Repository\IndexerSetting.cs" />
+    <Compile Include="Repository\JobDefinition.cs" />
+    <Compile Include="Repository\IndexerDefinition.cs" />
     <Compile Include="Model\EpisodeParseResult.cs" />
     <Compile Include="Model\EpisodeRenameModel.cs" />
     <Compile Include="Model\EpisodeSortingType.cs" />

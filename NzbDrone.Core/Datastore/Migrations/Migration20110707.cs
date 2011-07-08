@@ -5,8 +5,8 @@ using Migrator.Framework;
 namespace NzbDrone.Core.Datastore.Migrations
 {
 
-    [Migration(20110622)]
-    public class Migration20110622 : Migration
+    [Migration(20110707)]
+    public class Migration20110707 : Migration
     {
         public override void Up()
         {
@@ -16,11 +16,11 @@ namespace NzbDrone.Core.Datastore.Migrations
                                                 new Column("Title", DbType.String, ColumnProperty.Null),
                                                 new Column("CleanTitle", DbType.String, ColumnProperty.Null),
                                                 new Column("Status", DbType.String, ColumnProperty.Null),
-                                                new Column("Overview", DbType.String, ColumnProperty.Null),
+                                                new Column("Overview", DbType.String,4000, ColumnProperty.Null),
                                                 new Column("AirsDayOfWeek", DbType.Int32, ColumnProperty.Null),
                                                 new Column("AirTimes", DbType.String, ColumnProperty.Null),
                                                 new Column("Language", DbType.String, ColumnProperty.Null),
-                                                new Column("Path", DbType.String, ColumnProperty.NotNull),
+                                                new Column("Path", DbType.String,4000, ColumnProperty.NotNull),
                                                 new Column("Monitored", DbType.Boolean, ColumnProperty.NotNull),
                                                 new Column("QualityProfileId", DbType.Int32, ColumnProperty.NotNull),
                                                 new Column("SeasonFolder", DbType.Boolean, ColumnProperty.NotNull),
@@ -35,8 +35,8 @@ namespace NzbDrone.Core.Datastore.Migrations
                                                   new Column("SeriesId", DbType.Int32, ColumnProperty.NotNull),
                                                   new Column("SeasonNumber", DbType.Int32, ColumnProperty.NotNull),
                                                   new Column("EpisodeNumber", DbType.Int32, ColumnProperty.NotNull),
-                                                  new Column("Title", DbType.String, ColumnProperty.Null),
-                                                  new Column("Overview", DbType.String, ColumnProperty.Null),
+                                                  new Column("Title", DbType.String,100, ColumnProperty.Null),
+                                                  new Column("Overview", DbType.String,4000, ColumnProperty.Null),
                                                   new Column("Ignored", DbType.Boolean, ColumnProperty.NotNull),
                                                   new Column("EpisodeFileId", DbType.Int32, ColumnProperty.Null),
                                                   new Column("AirDate", DbType.DateTime, ColumnProperty.Null),
@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Datastore.Migrations
                                                       new Column("EpisodeFileId", DbType.Int32,
                                                                  ColumnProperty.PrimaryKeyWithIdentity),
                                                       new Column("SeriesId", DbType.Int32, ColumnProperty.NotNull),
-                                                      new Column("Path", DbType.String, ColumnProperty.NotNull),
+                                                      new Column("Path", DbType.String,4000, ColumnProperty.NotNull),
                                                       new Column("Quality", DbType.Int32, ColumnProperty.NotNull),
                                                       new Column("Proper", DbType.Int32, ColumnProperty.NotNull),
                                                       new Column("Size", DbType.Int64, ColumnProperty.NotNull),
@@ -107,7 +107,7 @@ namespace NzbDrone.Core.Datastore.Migrations
             Database.AddTable("RootDirs", new[]
                                               {
                                                   new Column("Id", DbType.Int32, ColumnProperty.PrimaryKeyWithIdentity),
-                                                  new Column("Path", DbType.String, ColumnProperty.NotNull)
+                                                  new Column("Path", DbType.String, 4000, ColumnProperty.NotNull)
                                               });
 
             Database.AddTable("ExternalNotificationSettings", new[]
@@ -118,7 +118,7 @@ namespace NzbDrone.Core.Datastore.Migrations
                                                                       new Column("Name", DbType.String, ColumnProperty.NotNull)
                                                                   });
 
-            Database.AddTable("JobSettings", new[]
+            Database.AddTable("JobDefinitions", new[]
                                                  {
                                                      new Column("Id", DbType.Int32, ColumnProperty.PrimaryKeyWithIdentity),
                                                      new Column("Enable", DbType.Boolean, ColumnProperty.NotNull),
@@ -140,16 +140,16 @@ namespace NzbDrone.Core.Datastore.Migrations
             Database.AddTable("Logs", new[]
                                           {
                                               new Column("LogId", DbType.Int64, ColumnProperty.PrimaryKeyWithIdentity),
-                                              new Column("Message", DbType.String, ColumnProperty.NotNull),
+                                              new Column("Message", DbType.String,4000, ColumnProperty.NotNull),
                                               new Column("Time", DbType.DateTime, ColumnProperty.NotNull),
                                               new Column("Logger", DbType.String, ColumnProperty.NotNull),
                                               new Column("Method", DbType.String, ColumnProperty.NotNull),
-                                              new Column("Exception", DbType.String, ColumnProperty.Null),
+                                              new Column("Exception", DbType.String,4000, ColumnProperty.Null),
                                               new Column("ExceptionType", DbType.String, ColumnProperty.Null),
                                               new Column("Level", DbType.String, ColumnProperty.NotNull)
                                           });
 
-            Database.AddTable("IndexerSettings", new[]
+            Database.AddTable("IndexerDefinitions", new[]
                                                      {
                                                          new Column("Id", DbType.Int32, ColumnProperty.PrimaryKeyWithIdentity),
                                                          new Column("Enable", DbType.Boolean, ColumnProperty.NotNull),

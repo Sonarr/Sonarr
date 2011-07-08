@@ -40,26 +40,26 @@ namespace NzbDrone.Core.Providers.Jobs
         /// Returns a list of all registered jobs
         /// </summary>
         /// <returns></returns>
-        public virtual List<JobSetting> All()
+        public virtual List<JobDefinition> All()
         {
-            return _database.Fetch<JobSetting>().ToList();
+            return _database.Fetch<JobDefinition>().ToList();
         }
 
         /// <summary>
-        /// Creates/Updates settings for a job
+        /// Creates/Updates definitions for a job
         /// </summary>
-        /// <param name="settings">Settings to be created/updated</param>
-        public virtual void SaveSettings(JobSetting settings)
+        /// <param name="definitions">Settings to be created/updated</param>
+        public virtual void SaveSettings(JobDefinition definitions)
         {
-            if (settings.Id == 0)
+            if (definitions.Id == 0)
             {
-                Logger.Trace("Adding job settings for {0}", settings.Name);
-                _database.Insert(settings);
+                Logger.Trace("Adding job definitions for {0}", definitions.Name);
+                _database.Insert(definitions);
             }
             else
             {
-                Logger.Trace("Updating job settings for {0}", settings.Name);
-                _database.Update(settings);
+                Logger.Trace("Updating job definitions for {0}", definitions.Name);
+                _database.Update(definitions);
             }
         }
 
@@ -286,7 +286,7 @@ namespace NzbDrone.Core.Providers.Jobs
                 var timerProviderLocal = timer;
                 if (!currentTimer.Exists(c => c.TypeName == timerProviderLocal.GetType().ToString()))
                 {
-                    var settings = new JobSetting
+                    var settings = new JobDefinition
                                        {
                                            Enable = timerProviderLocal.DefaultInterval > 0,
                                            TypeName = timer.GetType().ToString(),

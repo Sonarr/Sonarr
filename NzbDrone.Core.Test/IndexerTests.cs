@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Test
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
                           .Returns(File.OpenRead(".\\Files\\Rss\\" + fileName));
 
-            var fakeSettings = Builder<IndexerSetting>.CreateNew().Build();
+            var fakeSettings = Builder<IndexerDefinition>.CreateNew().Build();
             mocker.GetMock<IndexerProvider>()
                 .Setup(c => c.GetSettings(It.IsAny<Type>()))
                 .Returns(fakeSettings);
@@ -62,7 +62,7 @@ namespace NzbDrone.Core.Test
         {
             var mocker = new AutoMoqer();
             mocker.Resolve<HttpProvider>();
-            var fakeSettings = Builder<IndexerSetting>.CreateNew().Build();
+            var fakeSettings = Builder<IndexerDefinition>.CreateNew().Build();
             mocker.GetMock<IndexerProvider>()
                 .Setup(c => c.GetSettings(It.IsAny<Type>()))
                 .Returns(fakeSettings);
@@ -100,7 +100,7 @@ namespace NzbDrone.Core.Test
 
             const string summary = "My fake summary";
 
-            var fakeSettings = Builder<IndexerSetting>.CreateNew().Build();
+            var fakeSettings = Builder<IndexerDefinition>.CreateNew().Build();
             mocker.GetMock<IndexerProvider>()
                 .Setup(c => c.GetSettings(It.IsAny<Type>()))
                 .Returns(fakeSettings);
@@ -127,7 +127,7 @@ namespace NzbDrone.Core.Test
 
             const string summary = "My fake summary";
 
-            var fakeSettings = Builder<IndexerSetting>.CreateNew().Build();
+            var fakeSettings = Builder<IndexerDefinition>.CreateNew().Build();
             mocker.GetMock<IndexerProvider>()
                 .Setup(c => c.GetSettings(It.IsAny<Type>()))
                 .Returns(fakeSettings);
@@ -150,7 +150,7 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer();
             mocker.SetConstant(new HttpProvider());
 
-            var fakeSettings = Builder<IndexerSetting>.CreateNew().Build();
+            var fakeSettings = Builder<IndexerDefinition>.CreateNew().Build();
             mocker.GetMock<IndexerProvider>()
                 .Setup(c => c.GetSettings(It.IsAny<Type>()))
                 .Returns(fakeSettings);

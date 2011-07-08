@@ -49,17 +49,12 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult AddNew()
         {
-            var rootDirs = _rootFolderProvider.GetAll().Select(r =>
-                        new RootDirModel
-                        {
-                            Path = r.Path,
-                            CleanPath = r.Path.Replace(Path.DirectorySeparatorChar, '|').Replace(Path.VolumeSeparatorChar, '^').Replace('\'', '`')
-                        });
-            ViewData["RootDirs"] = rootDirs.ToList();
-            ViewData["DirSep"] = Path.DirectorySeparatorChar.ToString().Replace(Path.DirectorySeparatorChar, '|');
+            ViewData["RootDirs"] = _rootFolderProvider.GetAll().Select(c => c.Path).OrderBy(e => e).ToList();
 
             var defaultQuality = _configProvider.DefaultQualityProfile;
             var qualityProfiles = _qualityProvider.GetAllProfiles();
+
+            ViewData["qualityList"] = qualityProfiles;
 
             ViewData["quality"] = new SelectList(
                 qualityProfiles,
