@@ -1,6 +1,7 @@
 // ReSharper disable RedundantUsingDirective
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using AutoMoq;
 using FizzWare.NBuilder;
 using FluentAssertions;
@@ -73,7 +74,7 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer();
             var db = MockLib.GetEmptyDatabase();
             mocker.SetConstant(db);
-           
+
             var testProfile = new QualityProfile
             {
                 Name = Guid.NewGuid().ToString(),
@@ -95,7 +96,7 @@ namespace NzbDrone.Core.Test
             updated.Name.Should().Be(currentProfile.Name);
             updated.Cutoff.Should().Be(QualityTypes.Bluray720p);
             updated.AllowedString.Should().Be(currentProfile.AllowedString);
-   
+
         }
 
         [Test]
@@ -126,6 +127,48 @@ namespace NzbDrone.Core.Test
             var profile = database.SingleOrDefault<QualityProfile>(result[0].QualityProfileId);
             Assert.AreEqual(profileId, result[0].QualityProfileId);
             Assert.AreEqual(testProfile.Name, profile.Name);
+        }
+
+
+        [Test]
+        public void SetupInitial_should_add_two_profiles()
+        {
+            var mocker = new AutoMoqer();
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            //Act
+            mocker.Resolve<QualityProvider>().SetupDefaultProfiles();
+
+            //Assert
+            var profiles = mocker.Resolve<QualityProvider>().GetAllProfiles();
+
+
+            profiles.Should().HaveCount(2);
+            profiles.Should().Contain(e => e.Name == "HD");
+            profiles.Should().Contain(e => e.Name == "SD");
+
+        }
+
+        [Test]
+        //This confirms that new profiles are added only if no other profiles exists.
+        //We don't want to keep adding them back if a user deleted them on purpose.
+        public void SetupInitial_should_skip_if_any_profile_exists()
+        {
+            var mocker = new AutoMoqer();
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+            var fakeProfile = Builder<QualityProfile>.CreateNew().Build();
+
+            //Act
+            mocker.Resolve<QualityProvider>().Add(fakeProfile);
+            mocker.Resolve<QualityProvider>().SetupDefaultProfiles();
+
+            //Assert
+            var profiles = mocker.Resolve<QualityProvider>().GetAllProfiles();
+
+
+            profiles.Should().HaveCount(1);
         }
     }
 }
