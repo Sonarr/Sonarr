@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Test
 
             var fakeConfig = mocker.GetMock<ConfigProvider>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
-            fakeConfig.SetupGet(c => c.SortingEpisodeName).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(true);
             fakeConfig.SetupGet(c => c.SortingSeparatorStyle).Returns(0);
             fakeConfig.SetupGet(c => c.SortingNumberStyle).Returns(2);
@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Test
 
             var fakeConfig = mocker.GetMock<ConfigProvider>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(false);
-            fakeConfig.SetupGet(c => c.SortingEpisodeName).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(true);
             fakeConfig.SetupGet(c => c.SortingSeparatorStyle).Returns(0);
             fakeConfig.SetupGet(c => c.SortingNumberStyle).Returns(0);
@@ -77,7 +77,7 @@ namespace NzbDrone.Core.Test
 
             var fakeConfig = mocker.GetMock<ConfigProvider>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
-            fakeConfig.SetupGet(c => c.SortingEpisodeName).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(false);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(true);
             fakeConfig.SetupGet(c => c.SortingSeparatorStyle).Returns(1);
             fakeConfig.SetupGet(c => c.SortingNumberStyle).Returns(1);
@@ -104,7 +104,7 @@ namespace NzbDrone.Core.Test
 
             var fakeConfig = mocker.GetMock<ConfigProvider>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
-            fakeConfig.SetupGet(c => c.SortingEpisodeName).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(false);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(false);
             fakeConfig.SetupGet(c => c.SortingSeparatorStyle).Returns(1);
             fakeConfig.SetupGet(c => c.SortingNumberStyle).Returns(3);
@@ -132,7 +132,7 @@ namespace NzbDrone.Core.Test
 
             var fakeConfig = mocker.GetMock<ConfigProvider>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
-            fakeConfig.SetupGet(c => c.SortingEpisodeName).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(false);
             fakeConfig.SetupGet(c => c.SortingSeparatorStyle).Returns(1);
             fakeConfig.SetupGet(c => c.SortingNumberStyle).Returns(3);
@@ -159,7 +159,7 @@ namespace NzbDrone.Core.Test
 
             var fakeConfig = mocker.GetMock<ConfigProvider>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
-            fakeConfig.SetupGet(c => c.SortingEpisodeName).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(true);
             fakeConfig.SetupGet(c => c.SortingSeparatorStyle).Returns(0);
             fakeConfig.SetupGet(c => c.SortingNumberStyle).Returns(3);
@@ -186,7 +186,7 @@ namespace NzbDrone.Core.Test
 
             var fakeConfig = mocker.GetMock<ConfigProvider>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(false);
-            fakeConfig.SetupGet(c => c.SortingEpisodeName).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(false);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(false);
             fakeConfig.SetupGet(c => c.SortingSeparatorStyle).Returns(0);
             fakeConfig.SetupGet(c => c.SortingNumberStyle).Returns(2);
@@ -214,7 +214,7 @@ namespace NzbDrone.Core.Test
 
             var fakeConfig = mocker.GetMock<ConfigProvider>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
-            fakeConfig.SetupGet(c => c.SortingEpisodeName).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(true);
             fakeConfig.SetupGet(c => c.SortingSeparatorStyle).Returns(0);
             fakeConfig.SetupGet(c => c.SortingNumberStyle).Returns(2);
@@ -248,7 +248,7 @@ namespace NzbDrone.Core.Test
 
             var fakeConfig = mocker.GetMock<ConfigProvider>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(false);
-            fakeConfig.SetupGet(c => c.SortingEpisodeName).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(true);
             fakeConfig.SetupGet(c => c.SortingSeparatorStyle).Returns(0);
             fakeConfig.SetupGet(c => c.SortingNumberStyle).Returns(0);
@@ -282,7 +282,7 @@ namespace NzbDrone.Core.Test
 
             var fakeConfig = mocker.GetMock<ConfigProvider>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(false);
-            fakeConfig.SetupGet(c => c.SortingEpisodeName).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(true);
             fakeConfig.SetupGet(c => c.SortingSeparatorStyle).Returns(1);
             fakeConfig.SetupGet(c => c.SortingNumberStyle).Returns(0);
@@ -316,7 +316,7 @@ namespace NzbDrone.Core.Test
 
             var fakeConfig = mocker.GetMock<ConfigProvider>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
-            fakeConfig.SetupGet(c => c.SortingEpisodeName).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(false);
             fakeConfig.SetupGet(c => c.SortingSeparatorStyle).Returns(1);
             fakeConfig.SetupGet(c => c.SortingNumberStyle).Returns(3);
@@ -350,7 +350,7 @@ namespace NzbDrone.Core.Test
 
             var fakeConfig = mocker.GetMock<ConfigProvider>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
-            fakeConfig.SetupGet(c => c.SortingEpisodeName).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(false);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(false);
             fakeConfig.SetupGet(c => c.SortingSeparatorStyle).Returns(0);
             fakeConfig.SetupGet(c => c.SortingNumberStyle).Returns(2);
@@ -384,7 +384,7 @@ namespace NzbDrone.Core.Test
 
             var fakeConfig = mocker.GetMock<ConfigProvider>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(false);
-            fakeConfig.SetupGet(c => c.SortingEpisodeName).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(false);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(false);
             fakeConfig.SetupGet(c => c.SortingSeparatorStyle).Returns(0);
             fakeConfig.SetupGet(c => c.SortingNumberStyle).Returns(0);

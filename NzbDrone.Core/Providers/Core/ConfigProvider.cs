@@ -197,13 +197,13 @@ namespace NzbDrone.Core.Providers.Core
             set { SetValue("BlackholeDirectory", value); }
         }
 
-        public virtual bool SortingSeriesName
+        public virtual bool SortingIncludeSeriesName
         {
             get { return GetValueBoolean("Sorting_SeriesName", true); }
             set { SetValue("Sorting_SeriesName", value); }
         }
 
-        public virtual bool SortingEpisodeName
+        public virtual bool SortingIncludeEpisodeTitle
         {
             get { return GetValueBoolean("Sorting_EpisodeName", true); }
             set { SetValue("Sorting_EpisodeName", value); }
@@ -211,7 +211,7 @@ namespace NzbDrone.Core.Providers.Core
 
         public virtual bool SortingReplaceSpaces
         {
-            get { return GetValueBoolean("Sorting_ReplaceSpaces", true); }
+            get { return GetValueBoolean("Sorting_ReplaceSpaces"); }
             set { SetValue("Sorting_ReplaceSpaces", value); }
         }
 

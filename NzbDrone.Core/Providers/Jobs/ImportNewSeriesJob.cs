@@ -73,7 +73,7 @@ namespace NzbDrone.Core.Providers.Jobs
                     var updatedSeries = _seriesProvider.GetSeries(currentSeries.SeriesId);
                     AutoIgnoreSeasons(updatedSeries.SeriesId);
 
-                    notification.CurrentMessage = String.Format("'{0}' was successfully imported", currentSeries.Title);
+                    notification.CurrentMessage = String.Format("{0} was successfully imported", updatedSeries.Title);
 
                 }
                 catch (Exception e)

@@ -175,7 +175,7 @@ namespace NzbDrone.Core.Providers
                 .Replace("%x", numberStyle.EpisodeSeparator)
                 .Replace("%p", separatorStyle.Pattern);
 
-            if (_configProvider.SortingEpisodeName)
+            if (_configProvider.SortingIncludeEpisodeTitle)
             {
                 episodeNames = episodeNames.TrimEnd(' ', '+');
                 result += separatorStyle.Pattern + episodeNames;

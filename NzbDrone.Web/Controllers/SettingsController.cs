@@ -164,7 +164,7 @@ namespace NzbDrone.Web.Controllers
             var model = new EpisodeSortingModel();
 
             model.SeriesName = _configProvider.SortingIncludeSeriesName;
-            model.EpisodeName = _configProvider.SortingEpisodeName;
+            model.EpisodeName = _configProvider.SortingIncludeEpisodeTitle;
             model.ReplaceSpaces = _configProvider.SortingReplaceSpaces;
             model.AppendQuality = _configProvider.SortingAppendQuality;
             model.SeasonFolders = _configProvider.UseSeasonFolder;
@@ -436,7 +436,7 @@ namespace NzbDrone.Web.Controllers
             if (ModelState.IsValid)
             {
                 _configProvider.SortingIncludeSeriesName = data.SeriesName;
-                _configProvider.SortingEpisodeName = data.EpisodeName;
+                _configProvider.SortingIncludeEpisodeTitle = data.EpisodeName;
                 _configProvider.SortingReplaceSpaces = data.ReplaceSpaces;
                 _configProvider.SortingAppendQuality = data.AppendQuality;
                 _configProvider.UseSeasonFolder = data.SeasonFolders;
