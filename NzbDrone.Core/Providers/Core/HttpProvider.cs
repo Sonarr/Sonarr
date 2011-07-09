@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Text;
 using NLog;
 
 namespace NzbDrone.Core.Providers.Core
@@ -63,6 +64,34 @@ namespace NzbDrone.Core.Providers.Core
                 Logger.TraceException(ex.Message, ex);
                 return false;
             }
+        }
+
+        public virtual string PostCommand(string address, string username, string password, string command)
+        {
+            address += "/jsonrpc";
+
+            byte[] byteArray = Encoding.ASCII.GetBytes(command);
+
+            var request = WebRequest.Create(address);
+            request.Method = "POST";
+            request.Credentials = new NetworkCredential(username, password);
+            request.ContentLength = byteArray.Length;
+            request.ContentType = "application/x-www-form-urlencoded";
+            var dataStream = request.GetRequestStream();
+            dataStream.Write(byteArray, 0, byteArray.Length);
+            dataStream.Close();
+
+            var response = request.GetResponse();
+            dataStream = response.GetResponseStream();
+            var reader = new StreamReader(dataStream);
+            // Read the content.
+            string responseFromServer = reader.ReadToEnd();
+
+            reader.Close();
+            dataStream.Close();
+            response.Close();
+
+            return responseFromServer.Replace("&nbsp;", " ");
         }
     }
 }

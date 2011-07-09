@@ -1,4 +1,5 @@
-﻿using NLog;
+﻿using System;
+using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
@@ -37,10 +38,19 @@ namespace NzbDrone.Core.Providers.ExternalNotification
                 OnGrab(message);
 
             else if (type == ExternalNotificationType.Download)
-                OnDownload(message, seriesId);
+            {
+                throw new NotImplementedException();
+                var series = new Series();
+                OnDownload(message, series);
+            }
+
 
             else if (type == ExternalNotificationType.Rename)
-                OnRename(message, seriesId);
+            {
+                throw new NotImplementedException();
+                var series = new Series();
+                OnRename(message, series);
+            }
         }
 
         /// <summary>
@@ -53,14 +63,14 @@ namespace NzbDrone.Core.Providers.ExternalNotification
         ///   Performs the on download action
         /// </summary>
         /// <param name = "message">The message to send to the receiver</param>
-        /// <param name = "seriesId">The Series ID for the new download</param>
-        public abstract void OnDownload(string message, int seriesId);
+        /// <param name = "series">The Series for the new download</param>
+        public abstract void OnDownload(string message, Series series);
 
         /// <summary>
         ///   Performs the on rename action
         /// </summary>
         /// <param name = "message">The message to send to the receiver</param>
-        /// <param name = "seriesId">The Series ID for the new download</param>
-        public abstract void OnRename(string message, int seriesId);
+        /// <param name = "series">The Series for the new download</param>
+        public abstract void OnRename(string message, Series series);
     }
 }

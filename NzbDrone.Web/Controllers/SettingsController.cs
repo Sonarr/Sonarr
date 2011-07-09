@@ -140,20 +140,14 @@ namespace NzbDrone.Web.Controllers
         {
             var model = new NotificationSettingsModel
                             {
-                                XbmcEnabled = Convert.ToBoolean(_configProvider.GetValue("XbmcEnabled", false)),
-                                XbmcNotifyOnGrab = Convert.ToBoolean(_configProvider.GetValue("XbmcNotifyOnGrab", false)),
-                                XbmcNotifyOnDownload = Convert.ToBoolean(_configProvider.GetValue("XbmcNotifyOnDownload", false)),
-                                XbmcNotifyOnRename = Convert.ToBoolean(_configProvider.GetValue("XbmcNotifyOnRename", false)),
-                                XbmcNotificationImage = Convert.ToBoolean(_configProvider.GetValue("XbmcNotificationImage", false)),
-                                XbmcDisplayTime = Convert.ToInt32(_configProvider.GetValue("XbmcDisplayTime", 3)),
-                                XbmcUpdateOnDownload = Convert.ToBoolean(_configProvider.GetValue("XbmcUpdateOnDownload ", false)),
-                                XbmcUpdateOnRename = Convert.ToBoolean(_configProvider.GetValue("XbmcUpdateOnRename", false)),
-                                XbmcFullUpdate = Convert.ToBoolean(_configProvider.GetValue("XbmcFullUpdate", false)),
-                                XbmcCleanOnDownload = Convert.ToBoolean(_configProvider.GetValue("XbmcCleanOnDownload", false)),
-                                XbmcCleanOnRename = Convert.ToBoolean(_configProvider.GetValue("XbmcCleanOnRename", false)),
-                                XbmcHosts = _configProvider.GetValue("XbmcHosts", "localhost:80"),
-                                XbmcUsername = _configProvider.GetValue("XbmcUsername", String.Empty),
-                                XbmcPassword = _configProvider.GetValue("XbmcPassword", String.Empty)
+                                XbmcEnabled = _configProvider.XbmcEnabled,
+                                XbmcNotifyOnGrab = _configProvider.XbmcNotifyOnGrab,
+                                XbmcNotifyOnDownload = _configProvider.XbmcNotifyOnDownload,
+                                XbmcUpdateLibrary = _configProvider.XbmcUpdateLibrary,
+                                XbmcCleanLibrary = _configProvider.XbmcCleanLibrary,
+                                XbmcHosts = _configProvider.XbmcHosts,
+                                XbmcUsername = _configProvider.XbmcUsername,
+                                XbmcPassword = _configProvider.XbmcPassword
                             };
 
             return View(model);
@@ -401,20 +395,14 @@ namespace NzbDrone.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                _configProvider.SetValue("XbmcEnabled", data.XbmcEnabled.ToString());
-                _configProvider.SetValue("XbmcNotifyOnGrab", data.XbmcNotifyOnGrab.ToString());
-                _configProvider.SetValue("XbmcNotifyOnDownload", data.XbmcNotifyOnDownload.ToString());
-                _configProvider.SetValue("XbmcNotifyOnRename", data.XbmcNotifyOnRename.ToString());
-                _configProvider.SetValue("XbmcNotificationImage", data.XbmcNotificationImage.ToString());
-                _configProvider.SetValue("XbmcDisplayTime", data.XbmcDisplayTime.ToString());
-                _configProvider.SetValue("XbmcUpdateOnDownload", data.XbmcUpdateOnDownload.ToString());
-                _configProvider.SetValue("XbmcUpdateOnRename", data.XbmcUpdateOnRename.ToString());
-                _configProvider.SetValue("XbmcFullUpdate", data.XbmcFullUpdate.ToString());
-                _configProvider.SetValue("XbmcCleanOnDownload", data.XbmcCleanOnDownload.ToString());
-                _configProvider.SetValue("XbmcCleanOnRename", data.XbmcCleanOnRename.ToString());
-                _configProvider.SetValue("XbmcHosts", data.XbmcHosts);
-                _configProvider.SetValue("XbmcUsername", data.XbmcUsername);
-                _configProvider.SetValue("XbmcPassword", data.XbmcPassword);
+                _configProvider.XbmcEnabled = data.XbmcEnabled;
+                _configProvider.XbmcNotifyOnGrab = data.XbmcNotifyOnGrab;
+                _configProvider.XbmcNotifyOnDownload = data.XbmcNotifyOnDownload;
+                _configProvider.XbmcUpdateLibrary = data.XbmcUpdateLibrary;
+                _configProvider.XbmcCleanLibrary = data.XbmcCleanLibrary;
+                _configProvider.XbmcHosts = data.XbmcHosts;
+                _configProvider.XbmcUsername = data.XbmcUsername;
+                _configProvider.XbmcPassword = data.XbmcPassword;
 
                 basicNotification.Title = SETTINGS_SAVED;
                 _notificationProvider.Register(basicNotification);

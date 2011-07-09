@@ -66,45 +66,15 @@
                 </label>
                 @Html.CheckBoxFor(m => m.XbmcNotifyOnDownload, new { @class = "inputClass checkClass" })
 
-                <label class="labelClass">@Html.LabelFor(m => m.XbmcNotifyOnRename)
-                <span class="small">@Html.DescriptionFor(m => m.XbmcNotifyOnRename)</span>
+                <label class="labelClass">@Html.LabelFor(m => m.XbmcUpdateLibrary)
+                <span class="small">@Html.DescriptionFor(m => m.XbmcUpdateLibrary)</span>
                 </label>
-                @Html.CheckBoxFor(m => m.XbmcNotifyOnRename, new { @class = "inputClass checkClass" })
+                @Html.CheckBoxFor(m => m.XbmcUpdateLibrary, new { @class = "inputClass checkClass" })
 
-                <label class="labelClass">@Html.LabelFor(m => m.XbmcNotificationImage)
-                <span class="small">@Html.DescriptionFor(m => m.XbmcNotificationImage)</span>
+                <label class="labelClass">@Html.LabelFor(m => m.XbmcCleanLibrary)
+                <span class="small">@Html.DescriptionFor(m => m.XbmcCleanLibrary)</span>
                 </label>
-                @Html.CheckBoxFor(m => m.XbmcNotificationImage, new { @class = "inputClass checkClass" })
-
-                <label class="labelClass">@Html.LabelFor(m => m.XbmcDisplayTime)
-                <span class="small">@Html.DescriptionFor(m => m.XbmcDisplayTime)</span>
-                </label>
-                @Html.TextBoxFor(m => m.XbmcDisplayTime, new { @class = "inputClass" })
-
-                <label class="labelClass">@Html.LabelFor(m => m.XbmcUpdateOnDownload)
-                <span class="small">@Html.DescriptionFor(m => m.XbmcUpdateOnDownload)</span>
-                </label>
-                @Html.CheckBoxFor(m => m.XbmcUpdateOnDownload, new { @class = "inputClass checkClass" })
-
-                <label class="labelClass">@Html.LabelFor(m => m.XbmcUpdateOnRename)
-                <span class="small">@Html.DescriptionFor(m => m.XbmcUpdateOnRename)</span>
-                </label>
-                @Html.CheckBoxFor(m => m.XbmcUpdateOnRename, new { @class = "inputClass checkClass" })
-
-                <label class="labelClass">@Html.LabelFor(m => m.XbmcFullUpdate)
-                <span class="small">@Html.DescriptionFor(m => m.XbmcFullUpdate)</span>
-                </label>
-                @Html.CheckBoxFor(m => m.XbmcFullUpdate, new { @class = "inputClass checkClass" })
-
-                <label class="labelClass">@Html.LabelFor(m => m.XbmcCleanOnDownload)
-                <span class="small">@Html.DescriptionFor(m => m.XbmcCleanOnDownload)</span>
-                </label>
-                @Html.CheckBoxFor(m => m.XbmcCleanOnDownload, new { @class = "inputClass checkClass" })
-
-                <label class="labelClass">@Html.LabelFor(m => m.XbmcCleanOnRename)
-                <span class="small">@Html.DescriptionFor(m => m.XbmcCleanOnRename)</span>
-                </label>
-                @Html.CheckBoxFor(m => m.XbmcCleanOnRename, new { @class = "inputClass checkClass" })
+                @Html.CheckBoxFor(m => m.XbmcCleanLibrary, new { @class = "inputClass checkClass" })
             
                 <label class="labelClass">@Html.LabelFor(m => m.XbmcHosts)
                 <span class="small">@Html.DescriptionFor(m => m.XbmcHosts)</span>

@@ -120,13 +120,6 @@ namespace NzbDrone.Core.Providers.Core
             set { SetValue("DownloadPropers", value); }
         }
 
-        public virtual Int32 Retention
-        {
-            get { return GetValueInt("Retention"); }
-
-            set { SetValue("Retention", value); }
-        }
-
         public virtual String SabHost
         {
             get { return GetValue("SabHost", "localhost"); }
@@ -257,6 +250,59 @@ namespace NzbDrone.Core.Providers.Core
             get { return GetValueInt("DefaultQualityProfile", 1); }
 
             set { SetValue("DefaultQualityProfile", value); }
+        }
+
+        public virtual Boolean XbmcEnabled
+        {
+            get { return GetValueBoolean("XbmcEnabled"); }
+
+            set { SetValue("XbmcEnabled", value); }
+        }
+
+        public virtual Boolean XbmcNotifyOnGrab
+        {
+            get { return GetValueBoolean("XbmcNotifyOnGrab"); }
+
+            set { SetValue("XbmcNotifyOnGrab", value); }
+        }
+
+        public virtual Boolean XbmcNotifyOnDownload
+        {
+            get { return GetValueBoolean("XbmcNotifyOnDownload"); }
+
+            set { SetValue("XbmcNotifyOnDownload", value); }
+        }
+
+        public virtual Boolean XbmcUpdateLibrary
+        {
+            get { return GetValueBoolean("XbmcUpdateLibrary"); }
+
+            set { SetValue("XbmcUpdateLibrary", value); }
+        }
+
+        public virtual Boolean XbmcCleanLibrary
+        {
+            get { return GetValueBoolean("XbmcCleanLibrary"); }
+
+            set { SetValue("XbmcCleanLibrary", value); }
+        }
+
+        public virtual string XbmcHosts
+        {
+            get { return GetValue("XbmcHosts", "localhost:8080"); }
+            set { SetValue("XbmcHosts", value); }
+        }
+
+        public virtual string XbmcUsername
+        {
+            get { return GetValue("XbmcUsername", "xbmc"); }
+            set { SetValue("XbmcUsername", value); }
+        }
+
+        public virtual string XbmcPassword
+        {
+            get { return GetValue("XbmcPassword", String.Empty); }
+            set { SetValue("XbmcPassword", value); }
         }
 
         private string GetValue(string key)
