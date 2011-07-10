@@ -61,8 +61,8 @@ namespace NzbDrone.Core.Test
 
         [TestCase(1, false, false, EpisodeStatusType.Downloading)]
         [TestCase(-2, false, false, EpisodeStatusType.Downloading)]
-        [TestCase(1, true, false, EpisodeStatusType.Downloading)]
-        [TestCase(1, true, true, EpisodeStatusType.Downloading)]
+        [TestCase(1, true, false, EpisodeStatusType.Ready)]
+        [TestCase(1, true, true, EpisodeStatusType.Ready)]
         [TestCase(1, false, true, EpisodeStatusType.Downloading)]
         public void recent_grab_date(int offsetDays, bool hasEpisodes, bool ignored,
                                                     EpisodeStatusType status)

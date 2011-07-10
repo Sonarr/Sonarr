@@ -37,14 +37,14 @@ namespace NzbDrone.Core.Repository
         {
             get
             {
+
+                if (EpisodeFileId != 0) return EpisodeStatusType.Ready;
+
                 if (GrabDate != null && GrabDate.Value.AddDays(1) >= DateTime.Now)
                 {
                     return EpisodeStatusType.Downloading;
                 }
-
-                if (EpisodeFileId != 0) return EpisodeStatusType.Ready;
-
-
+                
                 if (Ignored) return EpisodeStatusType.Ignored;
 
                 if (AirDate != null && AirDate.Value.Date < DateTime.Now)
