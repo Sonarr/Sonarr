@@ -196,7 +196,6 @@
     <Compile Include="Model\Xbmc\ErrorResult.cs" />
     <Compile Include="Model\Xbmc\IconType.cs" />
     <Compile Include="Providers\Core\UdpProvider.cs" />
-    <None Include="Providers\Xbmc\EventClient_old.cs" />
     <Compile Include="Providers\Xbmc\ResourceManager.cs" />
     <Compile Include="Model\Xbmc\TvShowResult.cs" />
     <Compile Include="Model\Xbmc\Params.cs" />

@@ -214,7 +214,15 @@ namespace NzbDrone.Core.Test
 
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
             var fakeSeries = Builder<Series>.CreateNew().With(e => e.QualityProfileId = fakeQuality.QualityProfileId).Build();
-            var fakeEpisodes = Builder<Episode>.CreateListOfSize(10).WhereAll().Have(e => e.SeriesId = fakeSeries.SeriesId).Have(e => e.Ignored = false).WhereRandom(5).Have(e => e.EpisodeFileId = 0).Build();
+            var fakeEpisodes = Builder<Episode>.CreateListOfSize(10)
+                .WhereAll().Have(e => e.SeriesId = fakeSeries.SeriesId)
+                .Have(e => e.Ignored = false)
+                .Have(e => e.AirDate = DateTime.Today)
+                .WhereTheFirst(5)
+                .Have(e => e.EpisodeFileId = 0)
+                .WhereTheLast(2)
+                .Have(e => e.AirDate = DateTime.Today.AddDays(1))
+                .Build();
 
             db.Insert(fakeSeries);
             db.Insert(fakeQuality);
@@ -226,8 +234,8 @@ namespace NzbDrone.Core.Test
 
             //Assert
             series.Should().HaveCount(1);
-            Assert.AreEqual(10, series[0].EpisodeCount);
-            Assert.AreEqual(5, series[0].EpisodeFileCount);
+            Assert.AreEqual(8, series[0].EpisodeCount);
+            Assert.AreEqual(3, series[0].EpisodeFileCount);
         }
 
         [Test]
