@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.ServiceModel.Syndication;
+using System.Text.RegularExpressions;
 using Ninject;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
@@ -60,6 +61,10 @@ namespace NzbDrone.Core.Providers.Indexer
                 var quality = Parser.ParseQuality(item.Summary.Text);
 
                 currentResult.Quality = quality;
+
+                var languageString = Regex.Match(item.Summary.Text, @"Language - \w*", RegexOptions.IgnoreCase).Value;
+
+                currentResult.Language = Parser.ParseLanguage(languageString);
             }
             return currentResult;
         }

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Net;
 using System.ServiceModel.Syndication;
@@ -111,6 +112,8 @@ namespace NzbDrone.Core.Providers.Indexer
             {
                 result.AddRange(Fetch(url));
             }
+
+            result = result.Where(e => e.CleanTitle == Parser.NormalizeTitle(seriesTitle)).ToList();
 
             _logger.Info("Finished searching {0} for {1}-S{2}E{3:00}, Found {4}", Name, seriesTitle, seasonNumber, episodeNumber, result.Count);
             return result;

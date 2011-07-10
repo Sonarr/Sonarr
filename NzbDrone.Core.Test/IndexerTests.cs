@@ -58,6 +58,31 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
+        public void newzbin_parses_languae()
+        {
+            var mocker = new AutoMoqer();
+
+            mocker.GetMock<HttpProvider>()
+                          .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
+                          .Returns(File.OpenRead(".\\Files\\Rss\\newbin_none_english.xml"));
+
+            
+
+            var newzbin = mocker.Resolve<Newzbin>();
+            var parseResults = newzbin.FetchRss();
+
+            foreach (var episodeParseResult in parseResults)
+            {
+                var Uri = new Uri(episodeParseResult.NzbUrl);
+                Uri.PathAndQuery.Should().NotContain("//");
+            }
+
+
+            parseResults.Should().NotBeEmpty();
+            parseResults.Should().NotContain(e => e.Language == LanguageType.English);
+        }
+
+        [Test]
         public void newzbin_rss_fetch()
         {
             var mocker = new AutoMoqer();
@@ -162,6 +187,7 @@ namespace NzbDrone.Core.Test
 
         [TestCase("simpsons", 21, 23)]
         [TestCase("Hawaii Five-0 (2010)", 1, 5)]
+        [TestCase("In plain Sight", 1, 4)]
         public void nzbsorg_search_returns_valid_results(string title, int season, int episode)
         {
             var mocker = new AutoMoqer();

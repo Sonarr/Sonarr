@@ -305,7 +305,7 @@ namespace NzbDrone.Core
 
 
 
-        internal static LanguageType ParseLanguage(string title)
+        public static LanguageType ParseLanguage(string title)
         {
             var lowerTitle = title.ToLower();
 

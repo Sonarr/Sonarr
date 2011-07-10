@@ -140,6 +140,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Files\RSS\newbin_none_english.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Framework\AutoMoq\License.txt" />
     <Content Include="Files\Feed.nzbmatrix.com.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
