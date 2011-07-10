@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Web.Script.Serialization;
 using System.Xml.Linq;
 using Ninject;
 using NLog;
+using NzbDrone.Core.Model.Xbmc;
 using NzbDrone.Core.Providers.Core;
+using NzbDrone.Core.Providers.Xbmc;
+using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Providers
 {
@@ -13,72 +18,134 @@ namespace NzbDrone.Core.Providers
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly ConfigProvider _configProvider;
         private readonly HttpProvider _httpProvider;
+        private readonly EventClientProvider _eventClientProvider;
 
         [Inject]
-        public XbmcProvider(ConfigProvider configProvider, HttpProvider httpProvider)
+        public XbmcProvider(ConfigProvider configProvider, HttpProvider httpProvider, EventClientProvider eventClientProvider)
         {
             _configProvider = configProvider;
             _httpProvider = httpProvider;
+            _eventClientProvider = eventClientProvider;
         }
 
         public virtual void Notify(string header, string message)
         {
-            //Get time in seconds and convert to ms
-            var time = Convert.ToInt32(_configProvider.GetValue("XbmcDisplayTime", "3")) * 1000;
-            var command = String.Format("ExecBuiltIn(Notification({0},{1},{2}))", header, message, time);
-
-            if (Convert.ToBoolean(_configProvider.GetValue("XbmcNotificationImage", false)))
-            {
-                //Todo: Get the actual port that NzbDrone is running on...
-                var serverInfo = String.Format("http://{0}:{1}", Environment.MachineName, "8989");
-
-                var imageUrl = String.Format("{0}/Content/XbmcNotification.png", serverInfo);
-                command = String.Format("ExecBuiltIn(Notification({0},{1},{2}, {3}))", header, message, time, imageUrl);
-            }
-
-            foreach (var host in _configProvider.GetValue("XbmcHosts", "localhost:80").Split(','))
+            //Always use EventServer, until Json has real support for it
+            foreach (var host in _configProvider.XbmcHosts.Split(','))
             {
                 Logger.Trace("Sending Notifcation to XBMC Host: {0}", host);
-                SendCommand(host, command);
+                _eventClientProvider.SendNotification(header, message, IconType.Jpeg, "NzbDrone.jpg", GetHostWithoutPort(host));
             }
         }
 
-        public virtual void Update(int seriesId)
+        public XbmcProvider()
         {
-            foreach (var host in _configProvider.GetValue("XbmcHosts", "localhost:80").Split(','))
-            {
-                Logger.Trace("Sending Update DB Request to XBMC Host: {0}", host);
-                var xbmcSeriesPath = GetXbmcSeriesPath(host, seriesId);
+            
+        }
 
-                //If the path is not found & the user wants to update the entire library, do it now.
-                if (String.IsNullOrEmpty(xbmcSeriesPath) &&
-                    Convert.ToBoolean(_configProvider.GetValue("XbmcFullUpdate", false)))
+        public virtual void Update(Series series)
+        {
+            //Use Json for Eden/Nightly or depricated HTTP for 10.x (Dharma) to get the proper path
+            //Perform update with EventServer (Json currently doesn't support updating a specific path only - July 2011)
+
+            var username = _configProvider.XbmcUsername;
+            var password = _configProvider.XbmcPassword;
+
+            foreach (var host in _configProvider.XbmcHosts.Split(','))
+            {
+                Logger.Trace("Determining version of XBMC Host: {0}", host);
+                var version = GetJsonVersion(host, username, password);
+
+                //If Dharma
+                if (version == 2)
+                    UpdateWithHttp(series, host, username, password);
+
+                //If Eden or newer (attempting to make it future compatible)
+                else if (version >= 3)
+                    UpdateWithJson(series, password, host, username);
+            }
+        }
+
+        public virtual bool UpdateWithJson(Series series, string host, string username, string password)
+        {
+            try
+            {
+                //Use Json!
+                var xbmcShows = GetTvShowsJson(host, username, password);
+                var path = xbmcShows.Where(s => s.ImdbNumber == series.SeriesId || s.Label == series.Title).FirstOrDefault();
+
+                var hostOnly = GetHostWithoutPort(host);
+
+                if (path != null)
                 {
-                    //Update the entire library
-                    Logger.Trace("Series [{0}] doesn't exist on XBMC host: {1}, Updating Entire Library", seriesId, host);
-                    SendCommand(host, "ExecBuiltIn(UpdateLibrary(video))");
-                    return;
+                    Logger.Trace("Updating series [{0}] on XBMC host: {1}", series.Title, host);
+                    var command = String.Format("ExecBuiltIn(UpdateLibrary(video,{0}))", path.File);
+                    _eventClientProvider.SendAction(hostOnly, ActionType.ExecBuiltin, command);
                 }
 
-                var command = String.Format("ExecBuiltIn(UpdateLibrary(video,{0}))", xbmcSeriesPath);
-                SendCommand(host, command);
+                else
+                {
+                    Logger.Trace("Series [{0}] doesn't exist on XBMC host: {1}, Updating Entire Library", series.Title, host);
+                    var command = String.Format("ExecBuiltIn(UpdateLibrary(video))");
+                    _eventClientProvider.SendAction(hostOnly, ActionType.ExecBuiltin, command);
+                }
             }
+
+            catch (Exception ex)
+            {
+                Logger.DebugException(ex.Message, ex);
+                return false;
+            }
+
+            return true;
+        }
+
+        public virtual bool UpdateWithHttp(Series series, string host, string username, string password)
+        {
+            try
+            {
+                Logger.Trace("Sending Update DB Request to XBMC Host: {0}", host);
+                var xbmcSeriesPath = GetXbmcSeriesPath(host, series.SeriesId, username, password);
+
+                //If the path is found update it, else update the whole library
+                if (!String.IsNullOrEmpty(xbmcSeriesPath))
+                {
+                    Logger.Trace("Updating series [{0}] on XBMC host: {1}", series.Title, host);
+                    var command = String.Format("ExecBuiltIn(UpdateLibrary(video,{0}))", xbmcSeriesPath);
+                    SendCommand(host, command, username, password);
+                }
+
+                else
+                {
+                    //Update the entire library
+                    Logger.Trace("Series [{0}] doesn't exist on XBMC host: {1}, Updating Entire Library", series.Title, host);
+                    SendCommand(host, "ExecBuiltIn(UpdateLibrary(video))", username, password);
+                }
+            }
+
+            catch (Exception ex)
+            {
+                Logger.DebugException(ex.Message, ex);
+                return false;
+            }
+            
+            return true;
         }
 
         public virtual void Clean()
         {
-            foreach (var host in _configProvider.GetValue("XbmcHosts", "localhost:80").Split(','))
+            //Use EventServer, once Dharma is extinct use Json?
+
+            foreach (var host in _configProvider.XbmcHosts.Split(','))
             {
                 Logger.Trace("Sending DB Clean Request to XBMC Host: {0}", host);
-                var command = String.Format("ExecBuiltIn(CleanLibrary(video))");
-                SendCommand(host, command);
+                var command = "ExecBuiltIn(CleanLibrary(video))";
+                _eventClientProvider.SendAction(GetHostWithoutPort(host), ActionType.ExecBuiltin, command);
             }
         }
 
-        private string SendCommand(string host, string command)
+        public virtual string SendCommand(string host, string command, string username, string password)
         {
-            var username = _configProvider.GetValue("XbmcUsername", String.Empty);
-            var password = _configProvider.GetValue("XbmcPassword", String.Empty);
             var url = String.Format("http://{0}/xbmcCmds/xbmcHttp?command={1}", host, command);
 
             if (!String.IsNullOrEmpty(username))
@@ -89,7 +156,7 @@ namespace NzbDrone.Core.Providers
             return _httpProvider.DownloadString(url);
         }
 
-        private string GetXbmcSeriesPath(string host, int seriesId)
+        public virtual string GetXbmcSeriesPath(string host, int seriesId, string username, string password)
         {
             var query =
                 String.Format(
@@ -97,13 +164,13 @@ namespace NzbDrone.Core.Providers
                     seriesId);
             var command = String.Format("QueryVideoDatabase({0})", query);
 
-            var setResponseCommand =
+            const string setResponseCommand =
                 "SetResponseFormat(webheader;false;webfooter;false;header;<xml>;footer;</xml>;opentag;<tag>;closetag;</tag>;closefinaltag;false)";
-            var resetResponseCommand = "SetResponseFormat()";
+            const string resetResponseCommand = "SetResponseFormat()";
 
-            SendCommand(host, setResponseCommand);
-            var response = SendCommand(host, command);
-            SendCommand(host, resetResponseCommand);
+            SendCommand(host, setResponseCommand, username, password);
+            var response = SendCommand(host, command, username, password);
+            SendCommand(host, resetResponseCommand, username, password);
 
             if (String.IsNullOrEmpty(response))
                 return String.Empty;
@@ -120,6 +187,110 @@ namespace NzbDrone.Core.Providers
                 return String.Empty;
 
             return field.Value;
+        }
+
+        public virtual int GetJsonVersion(string host, string username, string password)
+        {
+            //2 = Dharma
+            //3 = Eden/Nightly (as of July 2011)
+
+            var version = 0;
+
+            try
+            {
+                var command = new Command { id = 10, method = "JSONRPC.Version" };
+                var serializer = new JavaScriptSerializer();
+                var serialized = serializer.Serialize(command);
+                var response = _httpProvider.PostCommand(host, username, password, serialized);
+
+                if (CheckForJsonError(response))
+                    return version;
+
+                var result = serializer.Deserialize<VersionResult>(response);
+                result.Result.TryGetValue("version", out version);
+            }
+
+            catch (Exception ex)
+            {
+                Logger.DebugException(ex.Message, ex);
+            }
+
+            return version;
+        }
+
+        public virtual Dictionary<string, bool> GetActivePlayers(string host, string username, string password)
+        {
+            //2 = Dharma
+            //3 = Eden/Nightly (as of July 2011)
+
+            try
+            {
+                var command = new Command { id = 10, method = "Player.GetActivePlayers" };
+                var serializer = new JavaScriptSerializer();
+                var serialized = serializer.Serialize(command);
+                var response = _httpProvider.PostCommand(host, username, password, serialized);
+
+                if (CheckForJsonError(response))
+                    return null;
+
+                var result = serializer.Deserialize<ActivePlayersResult>(response);
+
+                return result.Result;
+            }
+
+            catch (Exception ex)
+            {
+                Logger.DebugException(ex.Message, ex);
+            }
+
+            return null;
+        }
+
+        public virtual List<TvShow> GetTvShowsJson(string host, string username, string password)
+        {
+            try
+            {
+                var fields = new string[] { "file", "imdbnumber" };
+                var xbmcParams = new Params { fields = fields };
+                var command = new Command { id = 10, method = "VideoLibrary.GetTvShows", @params = xbmcParams };
+                var serializer = new JavaScriptSerializer();
+                var serialized = serializer.Serialize(command);
+                var response = _httpProvider.PostCommand(host, username, password, serialized);
+
+                if (CheckForJsonError(response))
+                    return null;
+
+                var result = serializer.Deserialize<TvShowResult>(response);
+                var shows = result.Result["tvshows"];
+
+                return shows;
+            }
+            catch (Exception ex)
+            {
+                Logger.DebugException(ex.Message, ex);
+            }
+            return null;
+        }
+
+        public virtual bool CheckForJsonError(string response)
+        {
+            if (response.StartsWith("{\"error\""))
+            {
+                var serializer = new JavaScriptSerializer();
+                var error = serializer.Deserialize<ErrorResult>(response);
+                var code = error.Error["code"];
+                var message = error.Error["message"];
+
+                Logger.Debug("XBMC Json Error. Code = {0}, Message: {1}", code, message);
+                return true;
+            }
+
+            return false;
+        }
+
+        private string GetHostWithoutPort(string address)
+        {
+            return address.Split(':')[0];
         }
     }
 }

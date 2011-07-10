@@ -17,43 +17,17 @@ namespace NzbDrone.Web.Models
         [Description("Send notification when episode is downloaded?")]
         public bool XbmcNotifyOnDownload { get; set; }
 
-        [DisplayName("Notify on Rename")]
-        [Description("Send notification when episode is renamed?")]
-        public bool XbmcNotifyOnRename { get; set; }
+        [DisplayName("Update on Download and Rename")]
+        [Description("Update XBMC library after episode is downloaded or renamed?")]
+        public bool XbmcUpdateLibrary { get; set; }
 
-        [DisplayName("Image with Notification")]
-        [Description("Display NzbDrone image on notifications?")]
-        public bool XbmcNotificationImage { get; set; }
-
-        [Required]
-        [Range(3, 10, ErrorMessage = "Must be between 3 and 10 seconds")]
-        [DisplayName("Display Time")]
-        [Description("How long the notification should be displayed")]
-        public int XbmcDisplayTime { get; set; }
-
-        [DisplayName("Update on Download")]
-        [Description("Update XBMC library after episode download?")]
-        public bool XbmcUpdateOnDownload { get; set; }
-
-        [DisplayName("Update on Rename")]
-        [Description("Update XBMC library after episode is renamed?")]
-        public bool XbmcUpdateOnRename { get; set; }
-
-        [DisplayName("Full Update")]
-        [Description("Perform a full update is series update fails?")]
-        public bool XbmcFullUpdate { get; set; }
-
-        [DisplayName("Clean on Download")]
-        [Description("Clean XBMC library after episode download?")]
-        public bool XbmcCleanOnDownload { get; set; }
-
-        [DisplayName("Clean on Rename")]
-        [Description("Clean XBMC library after episode is renamed?")]
-        public bool XbmcCleanOnRename { get; set; }
+        [DisplayName("Clean on Download/Rename")]
+        [Description("Clean XBMC library after an episode is downloaded or renamed?")]
+        public bool XbmcCleanLibrary { get; set; }
 
         [DataType(DataType.Text)]
         [DisplayName("Hosts")]
-        [Description("XBMC hosts with port, comma separ")]
+        [Description("XBMC hosts with port, comma separated")]
         [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string XbmcHosts { get; set; }
 

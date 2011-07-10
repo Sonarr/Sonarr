@@ -190,6 +190,17 @@
     <Compile Include="Model\LanguageType.cs" />
     <Compile Include="Model\Quality.cs" />
     <Compile Include="Model\SabnzbdInfoModel.cs" />
+    <Compile Include="Model\Xbmc\ActionType.cs" />
+    <Compile Include="Model\Xbmc\ActivePlayersResult.cs" />
+    <Compile Include="Model\Xbmc\ErrorResult.cs" />
+    <Compile Include="Model\Xbmc\IconType.cs" />
+    <Compile Include="Providers\Core\UdpProvider.cs" />
+    <Compile Include="Providers\Xbmc\ResourceManager.cs" />
+    <Compile Include="Model\Xbmc\TvShowResult.cs" />
+    <Compile Include="Model\Xbmc\Params.cs" />
+    <Compile Include="Model\Xbmc\Command.cs" />
+    <Compile Include="Model\Xbmc\TvShow.cs" />
+    <Compile Include="Model\Xbmc\VersionResult.cs" />
     <Compile Include="Providers\DiskScanProvider.cs" />
     <Compile Include="Providers\DownloadProvider.cs" />
     <Compile Include="Providers\ExternalNotification\ExternalNotificationProviderBase.cs" />
@@ -212,6 +223,7 @@
     <Compile Include="Providers\Jobs\RssSyncJob.cs" />
     <Compile Include="Providers\Jobs\UpdateInfoJob.cs" />
     <Compile Include="Providers\SceneMappingProvider.cs" />
+    <Compile Include="Providers\Xbmc\EventClientProvider.cs" />
     <Compile Include="Repository\ExternalNotificationSetting.cs" />
     <Compile Include="Repository\JobDefinition.cs" />
     <Compile Include="Repository\IndexerDefinition.cs" />
@@ -290,6 +302,9 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="NzbDrone.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

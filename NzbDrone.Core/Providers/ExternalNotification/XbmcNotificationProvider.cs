@@ -1,5 +1,6 @@
 ﻿using System;
 using NzbDrone.Core.Providers.Core;
+using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Providers.ExternalNotification
 {
@@ -37,7 +38,7 @@ namespace NzbDrone.Core.Providers.ExternalNotification
             _logger.Trace("XBMC Notifier is not enabled");
         }
 
-        public override void OnDownload(string message, int seriesId)
+        public override void OnDownload(string message, Series series)
         {
             const string header = "NzbDrone [TV] - Downloaded";
 
@@ -52,7 +53,7 @@ namespace NzbDrone.Core.Providers.ExternalNotification
                 if (Convert.ToBoolean(_configProvider.GetValue("XbmcUpdateOnDownload", false)))
                 {
                     _logger.Trace("Sending Update Request to XBMC");
-                    _xbmcProvider.Update(seriesId);
+                    _xbmcProvider.Update(series);
                 }
 
                 if (Convert.ToBoolean(_configProvider.GetValue("XbmcCleanOnDownload", false)))
@@ -65,7 +66,7 @@ namespace NzbDrone.Core.Providers.ExternalNotification
             _logger.Trace("XBMC Notifier is not enabled");
         }
 
-        public override void OnRename(string message, int seriesId)
+        public override void OnRename(string message, Series series)
         {
             const string header = "NzbDrone [TV] - Renamed";
 
@@ -78,7 +79,7 @@ namespace NzbDrone.Core.Providers.ExternalNotification
             if (Convert.ToBoolean(_configProvider.GetValue("XbmcUpdateOnRename", false)))
             {
                 _logger.Trace("Sending Update Request to XBMC");
-                _xbmcProvider.Update(seriesId);
+                _xbmcProvider.Update(series);
             }
 
             if (Convert.ToBoolean(_configProvider.GetValue("XbmcCleanOnRename", false)))

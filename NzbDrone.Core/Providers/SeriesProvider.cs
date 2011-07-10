@@ -47,8 +47,8 @@ namespace NzbDrone.Core.Providers
             var series = _database
           .Fetch<Series, QualityProfile>(@"SELECT Series.SeriesId, Series.Title, Series.CleanTitle, Series.Status, Series.Overview, Series.AirsDayOfWeek,Series.AirTimes,
                                             Series.Language, Series.Path, Series.Monitored, Series.QualityProfileId, Series.SeasonFolder,
-                                            SUM(CASE WHEN Ignored = 0 THEN 1 ELSE 0 END) AS EpisodeCount,
-                                            SUM(CASE WHEN Episodes.Ignored = 0 AND Episodes.EpisodeFileId > 0 THEN 1 ELSE 0 END) as EpisodeFileCount,
+                                            SUM(CASE WHEN Ignored = 0 AND Airdate <= @0 THEN 1 ELSE 0 END) AS EpisodeCount,
+                                            SUM(CASE WHEN Episodes.Ignored = 0 AND Episodes.EpisodeFileId > 0 AND Episodes.AirDate <= @0 THEN 1 ELSE 0 END) as EpisodeFileCount,
                                             MAX(Episodes.SeasonNumber) as SeasonCount,
                                             QualityProfiles.QualityProfileId, QualityProfiles.Name, QualityProfiles.Cutoff, QualityProfiles.SonicAllowed
                                             FROM Series
@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Providers
                                             LEFT JOIN Episodes ON Series.SeriesId = Episodes.SeriesId
                                             GROUP BY Series.SeriesId, Series.Title, Series.CleanTitle, Series.Status, Series.Overview, Series.AirsDayOfWeek,Series.AirTimes,
                                             Series.Language, Series.Path, Series.Monitored, Series.QualityProfileId, Series.SeasonFolder,
-                                            QualityProfiles.QualityProfileId, QualityProfiles.Name, QualityProfiles.Cutoff, QualityProfiles.SonicAllowed");
+                                            QualityProfiles.QualityProfileId, QualityProfiles.Name, QualityProfiles.Cutoff, QualityProfiles.SonicAllowed", DateTime.Today);
 
             return series;
         }
