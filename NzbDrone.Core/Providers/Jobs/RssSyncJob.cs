@@ -69,9 +69,11 @@ namespace NzbDrone.Core.Providers.Jobs
                 }
                 catch (Exception e)
                 {
-                    Logger.ErrorException("An error has occured while processing parse result items from " + episodeParseResult, e);
+                    Logger.ErrorException("An error has occurred while processing parse result items from " + episodeParseResult, e);
                 }
             }
+
+            notification.CurrentMessage = "RSS Sync Completed";
 
         }
     }

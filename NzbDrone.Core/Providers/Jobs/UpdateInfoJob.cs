@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Providers.Jobs
 
         public string Name
         {
-            get { return "Update Info"; }
+            get { return "Update Episode Info"; }
         }
 
         public int DefaultInterval

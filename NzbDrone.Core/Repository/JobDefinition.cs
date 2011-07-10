@@ -3,9 +3,9 @@ using PetaPoco;
 
 namespace NzbDrone.Core.Repository
 {
-    [TableName("JobSettings")]
+    [TableName("JobDefinitions")]
     [PrimaryKey("Id", autoIncrement = true)]
-    public class JobSetting
+    public class JobDefinition
     {
         public Int32 Id { get; set; }
 

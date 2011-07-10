@@ -41,7 +41,7 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult Index()
         {
-            var profiles = _qualityProvider.GetAllProfiles();
+            var profiles = _qualityProvider.All();
             ViewData["SelectList"] = new SelectList(profiles, "QualityProfileId", "Name");
 
             return View();

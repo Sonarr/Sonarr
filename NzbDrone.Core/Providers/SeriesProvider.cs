@@ -109,7 +109,7 @@ namespace NzbDrone.Core.Providers
             repoSeries.Monitored = true; //New shows should be monitored
             repoSeries.QualityProfileId = qualityProfileId;
             if (qualityProfileId == 0)
-                repoSeries.QualityProfileId = Convert.ToInt32(_configProvider.GetValue("DefaultQualityProfile", "1"));
+                repoSeries.QualityProfileId = _configProvider.DefaultQualityProfile;
 
             repoSeries.SeasonFolder = _configProvider.UseSeasonFolder;
 

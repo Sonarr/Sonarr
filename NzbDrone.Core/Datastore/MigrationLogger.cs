@@ -67,7 +67,7 @@ namespace NzbDrone.Core.Datastore
 
         public void Trace(string format, params object[] args)
         {
-            Logger.Trace(format, args);
+            //Logger.Trace(format, args);
         }
     }
 }

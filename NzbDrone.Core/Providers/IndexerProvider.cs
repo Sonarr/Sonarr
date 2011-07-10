@@ -30,32 +30,32 @@ namespace NzbDrone.Core.Providers
 
         public virtual IList<IndexerBase> GetEnabledIndexers()
         {
-            var all = GetAllISettings();
+            var all = All();
             return _indexers.Where(i => all.Exists(c => c.IndexProviderType == i.GetType().ToString() && c.Enable)).ToList();
         }
 
-        public virtual List<IndexerSetting> GetAllISettings()
+        public virtual List<IndexerDefinition> All()
         {
-            return _database.Fetch<IndexerSetting>();
+            return _database.Fetch<IndexerDefinition>();
         }
 
-        public virtual void SaveSettings(IndexerSetting settings)
+        public virtual void SaveSettings(IndexerDefinition definitions)
         {
-            if (settings.Id == 0)
+            if (definitions.Id == 0)
             {
-                Logger.Debug("Adding Indexer settings for {0}", settings.Name);
-                _database.Insert(settings);
+                Logger.Debug("Adding Indexer definitions for {0}", definitions.Name);
+                _database.Insert(definitions);
             }
             else
             {
-                Logger.Debug("Updating Indexer settings for {0}", settings.Name);
-                _database.Update(settings);
+                Logger.Debug("Updating Indexer definitions for {0}", definitions.Name);
+                _database.Update(definitions);
             }
         }
 
-        public virtual IndexerSetting GetSettings(Type type)
+        public virtual IndexerDefinition GetSettings(Type type)
         {
-            return _database.Single<IndexerSetting>("WHERE IndexProviderType = @0", type.ToString());
+            return _database.Single<IndexerDefinition>("WHERE IndexProviderType = @0", type.ToString());
         }
 
         public virtual void InitializeIndexers(IList<IndexerBase> indexers)
@@ -64,14 +64,14 @@ namespace NzbDrone.Core.Providers
 
             _indexers = indexers;
 
-            var currentIndexers = GetAllISettings();
+            var currentIndexers = All();
 
             foreach (var feedProvider in indexers)
             {
                 IndexerBase indexerLocal = feedProvider;
                 if (!currentIndexers.Exists(c => c.IndexProviderType == indexerLocal.GetType().ToString()))
                 {
-                    var settings = new IndexerSetting
+                    var settings = new IndexerDefinition
                                        {
                                            Enable = false,
                                            IndexProviderType = indexerLocal.GetType().ToString(),

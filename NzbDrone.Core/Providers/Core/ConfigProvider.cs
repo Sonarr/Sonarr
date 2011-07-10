@@ -190,25 +190,25 @@ namespace NzbDrone.Core.Providers.Core
             set { SetValue("BlackholeDirectory", value); }
         }
 
-        public virtual bool SeriesName
+        public virtual bool SortingIncludeSeriesName
         {
             get { return GetValueBoolean("Sorting_SeriesName", true); }
             set { SetValue("Sorting_SeriesName", value); }
         }
 
-        public virtual bool EpisodeName
+        public virtual bool SortingIncludeEpisodeTitle
         {
             get { return GetValueBoolean("Sorting_EpisodeName", true); }
             set { SetValue("Sorting_EpisodeName", value); }
         }
 
-        public virtual bool ReplaceSpaces
+        public virtual bool SortingReplaceSpaces
         {
-            get { return GetValueBoolean("Sorting_ReplaceSpaces", true); }
+            get { return GetValueBoolean("Sorting_ReplaceSpaces"); }
             set { SetValue("Sorting_ReplaceSpaces", value); }
         }
 
-        public virtual bool AppendQuality
+        public virtual bool SortingAppendQuality
         {
             get { return GetValueBoolean("Sorting_AppendQaulity", true); }
             set { SetValue("Sorting_AppendQaulity", value); }
@@ -216,30 +216,30 @@ namespace NzbDrone.Core.Providers.Core
 
         public virtual bool UseSeasonFolder
         {
-            get { return GetValueBoolean("Sorting_SeasonFolder", true); }
+            get { return GetValueBoolean("UseSeasonFolder", true); }
 
-            set { SetValue("Sorting_SeasonFolder", value); }
+            set { SetValue("UseSeasonFolder", value); }
         }
 
-        public virtual string SeasonFolderFormat
+        public virtual string SortingSeasonFolderFormat
         {
             get { return GetValue("Sorting_SeasonFolderFormat", "Season %s"); }
             set { SetValue("Sorting_SeasonFolderFormat", value); }
         }
 
-        public virtual int SeparatorStyle
+        public virtual int SortingSeparatorStyle
         {
             get { return GetValueInt("Sorting_SeparatorStyle"); }
             set { SetValue("Sorting_SeparatorStyle", value); }
         }
 
-        public virtual int NumberStyle
+        public virtual int SortingNumberStyle
         {
             get { return GetValueInt("Sorting_NumberStyle", 2); }
             set { SetValue("Sorting_NumberStyle", value); }
         }
 
-        public virtual int MultiEpisodeStyle
+        public virtual int SortingMultiEpisodeStyle
         {
             get { return GetValueInt("Sorting_MultiEpisodeStyle"); }
             set { SetValue("Sorting_MultiEpisodeStyle", value); }

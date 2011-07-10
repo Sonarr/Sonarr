@@ -3,9 +3,9 @@ using PetaPoco;
 
 namespace NzbDrone.Core.Repository
 {
-    [TableName("IndexerSettings")]
+    [TableName("IndexerDefinitions")]
     [PrimaryKey("Id", autoIncrement = true)]
-    public class IndexerSetting
+    public class IndexerDefinition
     {
         public int Id { get; set; }
 

@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Providers
 
         public SceneMappingProvider()
         {
-            
+
         }
 
         public virtual bool UpdateMappings()
@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Providers
                     while ((line = reader.ReadLine()) != null)
                     {
                         var split = line.Split(',');
-                        var seriesId = 0;
+                        int seriesId;
                         Int32.TryParse(split[1], out seriesId);
 
                         var map = new SceneMapping();

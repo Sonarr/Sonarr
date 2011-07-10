@@ -116,7 +116,7 @@ namespace NzbDrone.Web.Controllers
 
             ViewData["Qualities"] = qualityTypes;
 
-            var profiles = _qualityProvider.GetAllProfiles().ToList();
+            var profiles = _qualityProvider.All().ToList();
 
             foreach (var qualityProfile in profiles)
             {
@@ -157,15 +157,15 @@ namespace NzbDrone.Web.Controllers
         {
             var model = new EpisodeSortingModel();
 
-            model.SeriesName = _configProvider.SeriesName;
-            model.EpisodeName = _configProvider.EpisodeName;
-            model.ReplaceSpaces = _configProvider.ReplaceSpaces;
-            model.AppendQuality = _configProvider.AppendQuality;
+            model.SeriesName = _configProvider.SortingIncludeSeriesName;
+            model.EpisodeName = _configProvider.SortingIncludeEpisodeTitle;
+            model.ReplaceSpaces = _configProvider.SortingReplaceSpaces;
+            model.AppendQuality = _configProvider.SortingAppendQuality;
             model.SeasonFolders = _configProvider.UseSeasonFolder;
-            model.SeasonFolderFormat = _configProvider.SeasonFolderFormat;
-            model.SeparatorStyle = _configProvider.SeparatorStyle;
-            model.NumberStyle = _configProvider.NumberStyle;
-            model.MultiEpisodeStyle = _configProvider.MultiEpisodeStyle;
+            model.SeasonFolderFormat = _configProvider.SortingSeasonFolderFormat;
+            model.SeparatorStyle = _configProvider.SortingSeparatorStyle;
+            model.NumberStyle = _configProvider.SortingNumberStyle;
+            model.MultiEpisodeStyle = _configProvider.SortingMultiEpisodeStyle;
 
             model.SeparatorStyles = new SelectList(EpisodeSortingHelper.GetSeparatorStyles(), "Id", "Name");
             model.NumberStyles = new SelectList(EpisodeSortingHelper.GetNumberStyles(), "Id", "Name");
@@ -223,7 +223,7 @@ namespace NzbDrone.Web.Controllers
 
         public QualityModel GetUpdatedProfileList()
         {
-            var profiles = _qualityProvider.GetAllProfiles().ToList();
+            var profiles = _qualityProvider.All().ToList();
             var defaultQualityQualityProfileId =
                 Convert.ToInt32(_configProvider.GetValue("DefaultQualityProfile", profiles[0].QualityProfileId));
             var selectList = new SelectList(profiles, "QualityProfileId", "Name");
@@ -423,15 +423,15 @@ namespace NzbDrone.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                _configProvider.SeriesName = data.SeriesName;
-                _configProvider.EpisodeName = data.EpisodeName;
-                _configProvider.ReplaceSpaces = data.ReplaceSpaces;
-                _configProvider.AppendQuality = data.AppendQuality;
+                _configProvider.SortingIncludeSeriesName = data.SeriesName;
+                _configProvider.SortingIncludeEpisodeTitle = data.EpisodeName;
+                _configProvider.SortingReplaceSpaces = data.ReplaceSpaces;
+                _configProvider.SortingAppendQuality = data.AppendQuality;
                 _configProvider.UseSeasonFolder = data.SeasonFolders;
-                _configProvider.SeasonFolderFormat = data.SeasonFolderFormat;
-                _configProvider.SeparatorStyle = data.SeparatorStyle;
-                _configProvider.NumberStyle = data.NumberStyle;
-                _configProvider.MultiEpisodeStyle = data.MultiEpisodeStyle;
+                _configProvider.SortingSeasonFolderFormat = data.SeasonFolderFormat;
+                _configProvider.SortingSeparatorStyle = data.SeparatorStyle;
+                _configProvider.SortingNumberStyle = data.NumberStyle;
+                _configProvider.SortingMultiEpisodeStyle = data.MultiEpisodeStyle;
 
                 basicNotification.Title = SETTINGS_SAVED;
                 _notificationProvider.Register(basicNotification);

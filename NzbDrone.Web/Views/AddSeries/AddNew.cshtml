@@ -1,22 +1,11 @@
-﻿@using NzbDrone.Web.Models
-@{
-    Layout = null;
-}
+﻿@using System.Collections
+@using NzbDrone.Web.Models
+@{ Layout = null; }
 <div>
-    <fieldset>
-        <legend>Root Directory</legend>
-        @{int d = 0;
-
-          foreach (var dir in ViewData["RootDirs"] as List<RootDirModel>)
-          {
-            <div>
-                @Html.RadioButton("selectedRootDir", dir.CleanPath, d == 0, new { @class = "dirList examplePart", id = "dirRadio_" + d })
-                @Html.Label(dir.Path)
-                @{ d++; }
-            </div>
-          }
-        }
-    </fieldset>
+    @Html.Label("Root Directory")
+    @Html.DropDownList("rootDirList", new SelectList((IList)ViewData["RootDirs"]))
+    @Html.Label("Quality")
+    @Html.DropDownList("qualityList", new SelectList((IList)ViewData["QualityList"], "QualityProfileId", "Name"))
 </div>
 <br />
 <div>

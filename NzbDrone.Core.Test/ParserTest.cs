@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Test
         [TestCase(@"z:\tv shows\robot chicken\Specials\S00E16 - Dear Consumer - SD TV.avi", 0, 16)]
         [TestCase(@"D:\shares\TV Shows\Parks And Recreation\Season 2\S02E21 - 94 Meetings - 720p TV.mkv", 2, 21)]
         [TestCase(@"D:\shares\TV Shows\Battlestar Galactica (2003)\Season 2\S02E21.avi", 2, 21)]
-        [TestCase("C:/Test/TV/Chuck.4x05.HDTV.XviD-LOL", "Chuck", 4, 5)]
+        [TestCase("C:/Test/TV/Chuck.4x05.HDTV.XviD-LOL", 4, 5)]
         public void PathParse_tests(string path, int season, int episode)
         {
             var result = Parser.ParsePath(path);
@@ -125,7 +125,7 @@ namespace NzbDrone.Core.Test
                 result.QualityType.Should().Be(qualityEnum);
             }
         }
-    
+
         [Timeout(1000)]
         [TestCase("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD", "WEEDS", 3, new[] { 1, 2, 3, 4, 5, 6 }, 6)]
         [TestCase("Two.and.a.Half.Men.103.104.720p.HDTV.X264-DIMENSION", "Two.and.a.Half.Men", 1, new[] { 3, 4 }, 2)]
@@ -148,7 +148,7 @@ namespace NzbDrone.Core.Test
             result.EpisodeNumbers.Count.Should().Be(count);
         }
 
-       
+
         [TestCase("Conan 2011 04 18 Emma Roberts HDTV XviD BFF", "Conan", 2011, 04, 18)]
         [TestCase("The Tonight Show With Jay Leno 2011 04 15 1080i HDTV DD5 1 MPEG2 TrollHD", "The Tonight Show With Jay Leno", 2011, 04, 15)]
         [TestCase("The.Daily.Show.2010.10.11.Johnny.Knoxville.iTouch-MW", "The.Daily.Show", 2010, 10, 11)]
@@ -165,7 +165,7 @@ namespace NzbDrone.Core.Test
             Assert.IsNull(result.EpisodeNumbers);
         }
 
-       
+
         [TestCase("30.Rock.Season.04.HDTV.XviD-DIMENSION", "30.Rock", 4)]
         [TestCase("Parks.and.Recreation.S02.720p.x264-DIMENSION", "Parks.and.Recreation", 2)]
         [TestCase("The.Office.US.S03.720p.x264-DIMENSION", "The.Office.US", 3)]
@@ -176,7 +176,7 @@ namespace NzbDrone.Core.Test
             result.CleanTitle.Should().Be(Parser.NormalizeTitle(title));
             result.EpisodeNumbers.Count.Should().Be(0);
         }
-      
+
         [TestCase("Conan", "conan")]
         [TestCase("The Tonight Show With Jay Leno", "tonightshowwithjayleno")]
         [TestCase("The.Daily.Show", "dailyshow")]
@@ -198,7 +198,7 @@ namespace NzbDrone.Core.Test
             var result = Parser.NormalizePath(dirty);
             result.Should().Be(clean);
         }
-      
+
         [TestCase("CaPitAl", "capital")]
         [TestCase("peri.od", "period")]
         [TestCase("this.^&%^**$%@#$!That", "thisthat")]
@@ -209,7 +209,7 @@ namespace NzbDrone.Core.Test
             result.Should().Be(clean);
         }
 
-     
+
         [TestCase("the")]
         [TestCase("and")]
         [TestCase("or")]

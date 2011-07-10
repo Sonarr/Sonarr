@@ -53,11 +53,11 @@ namespace NzbDrone.Core.Providers.Jobs
                 {
                     notification.CurrentMessage = string.Format("Scanning disk for '{0}'", series.Title);
                     _diskScanProvider.Scan(series);
-                    notification.CurrentMessage = string.Format("Media File Scan completed for '{0}'", series.Title);
+                    notification.CurrentMessage = string.Format("Disk Scan completed for '{0}'", series.Title);
                 }
                 catch (Exception e)
                 {
-                    Logger.ErrorException("An error has occured while scanning " + series.Title, e);
+                    Logger.ErrorException("An error has occurred while scanning " + series.Title, e);
                 }
             }
         }

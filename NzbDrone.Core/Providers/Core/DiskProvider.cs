@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 
@@ -21,9 +22,14 @@ namespace NzbDrone.Core.Providers.Core
             return Directory.GetDirectories(path);
         }
 
-        public virtual string[] GetFiles(string path, string pattern, SearchOption searchOption)
+        public virtual string[] GetFiles(string path, SearchOption searchOption)
         {
-            return Directory.GetFiles(path, pattern, searchOption);
+            return Directory.GetFiles(path, "*.*", searchOption);
+        }
+
+        public virtual long GetDirectorySize(string path)
+        {
+            return GetFiles(path, SearchOption.AllDirectories).Sum(e => new FileInfo(e).Length);
         }
 
         public virtual long GetSize(string path)

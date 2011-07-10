@@ -1,45 +1,40 @@
 ﻿@model List<RootDir>
 @using NzbDrone.Core.Repository
-
 @section HeaderContent
 {
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/yui/3.3.0/build/yui/yui-min.js"></script>
 }
-
 @section TitleContent{
 Add Series
 }
 @section MainContent{
-    @{ Html.Telerik().Window()
-    .Name("Window")
-    .Title("Add New Series")
-    .Modal(true)
-    .Buttons(b => b.Close())
-    .Width(500)
-    .Height(200)
-    .Visible(false)
-    .Draggable(true)
-    .Resizable(resizing => resizing.Enabled(false))
-    .LoadContentFrom("AddNew", "AddSeries")
-    .Render();
-    }
-    <div style="padding-bottom: 10px; padding-top: 15px;">
-        <button onclick="openAddNewSeries(); return false;" class="listButton" style="margin-left: 5px">
-            Add New</button>
-        @Html.Telerik().DropDownList().Name("masterDropbox").BindTo((SelectList)ViewData["qualities"]).HtmlAttributes(
-            new { style = "width: 100px; margin-left:224px;" }).ClientEvents(events => events.OnChange("masterChanged"))
+    <div id="addNewWindow" class="dialog">
+     @{ Html.RenderAction("AddNew", "AddSeries"); }
     </div>
-
     @{Html.RenderAction("RootDir");}
     <div id="existingSeries">
+        <div style="padding-bottom: 10px; padding-top: 15px;">
+            <button onclick="openAddNewSeries(); return false;" class="listButton" style="margin-left: 5px">
+                Add New</button>
+            @Html.Telerik().DropDownList().Name("masterDropbox").BindTo((SelectList)ViewData["qualities"]).HtmlAttributes(
+            new { style = "width: 100px; margin-left:224px;" }).ClientEvents(events => events.OnChange("masterChanged"))
+        </div>
         @{ Html.RenderAction("AddExisting", "AddSeries"); }
     </div>
 }
-
-
 @section Scripts
 {
     <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#addNewWindow").dialog({
+                title: 'add new series',
+                height: '500',
+                width: '700',
+                modal: true
+            });
+        });
+
         function openAddNewSeries() {
             var window = $('#Window').data('tWindow');
             window.center().open();

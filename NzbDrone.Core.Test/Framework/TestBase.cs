@@ -10,6 +10,8 @@ namespace NzbDrone.Core.Test.Framework
         public void Setup()
         {
             ExceptionVerification.Reset();
+
+
         }
 
         [TearDown]

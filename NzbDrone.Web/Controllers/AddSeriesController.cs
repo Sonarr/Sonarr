@@ -49,17 +49,12 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult AddNew()
         {
-            var rootDirs = _rootFolderProvider.GetAll().Select(r =>
-                        new RootDirModel
-                        {
-                            Path = r.Path,
-                            CleanPath = r.Path.Replace(Path.DirectorySeparatorChar, '|').Replace(Path.VolumeSeparatorChar, '^').Replace('\'', '`')
-                        });
-            ViewData["RootDirs"] = rootDirs.ToList();
-            ViewData["DirSep"] = Path.DirectorySeparatorChar.ToString().Replace(Path.DirectorySeparatorChar, '|');
+            ViewData["RootDirs"] = _rootFolderProvider.GetAll().Select(c => c.Path).OrderBy(e => e).ToList();
 
             var defaultQuality = _configProvider.DefaultQualityProfile;
-            var qualityProfiles = _qualityProvider.GetAllProfiles();
+            var qualityProfiles = _qualityProvider.All();
+
+            ViewData["qualityList"] = qualityProfiles;
 
             ViewData["quality"] = new SelectList(
                 qualityProfiles,
@@ -74,7 +69,7 @@ namespace NzbDrone.Web.Controllers
         {
             var rootDirs = _rootFolderProvider.GetAll();
 
-            var profiles = _qualityProvider.GetAllProfiles();
+            var profiles = _qualityProvider.All();
             var defaultQuality = Convert.ToInt32(_configProvider.DefaultQualityProfile);
             var selectList = new SelectList(profiles, "QualityProfileId", "Name", defaultQuality);
             ViewData["qualities"] = selectList;
@@ -111,7 +106,7 @@ namespace NzbDrone.Web.Controllers
             ViewData["javaPath"] = path.Replace(Path.DirectorySeparatorChar, '|').Replace(Path.VolumeSeparatorChar, '^').Replace('\'', '`');
 
             var defaultQuality = _configProvider.DefaultQualityProfile;
-            var qualityProfiles = _qualityProvider.GetAllProfiles();
+            var qualityProfiles = _qualityProvider.All();
 
             ViewData["quality"] = new SelectList(
                 qualityProfiles,

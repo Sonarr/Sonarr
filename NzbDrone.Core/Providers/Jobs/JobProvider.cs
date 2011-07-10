@@ -40,26 +40,26 @@ namespace NzbDrone.Core.Providers.Jobs
         /// Returns a list of all registered jobs
         /// </summary>
         /// <returns></returns>
-        public virtual List<JobSetting> All()
+        public virtual List<JobDefinition> All()
         {
-            return _database.Fetch<JobSetting>().ToList();
+            return _database.Fetch<JobDefinition>().ToList();
         }
 
         /// <summary>
-        /// Creates/Updates settings for a job
+        /// Creates/Updates definitions for a job
         /// </summary>
-        /// <param name="settings">Settings to be created/updated</param>
-        public virtual void SaveSettings(JobSetting settings)
+        /// <param name="definitions">Settings to be created/updated</param>
+        public virtual void SaveSettings(JobDefinition definitions)
         {
-            if (settings.Id == 0)
+            if (definitions.Id == 0)
             {
-                Logger.Trace("Adding job settings for {0}", settings.Name);
-                _database.Insert(settings);
+                Logger.Trace("Adding job definitions for {0}", definitions.Name);
+                _database.Insert(definitions);
             }
             else
             {
-                Logger.Trace("Updating job settings for {0}", settings.Name);
-                _database.Update(settings);
+                Logger.Trace("Updating job definitions for {0}", definitions.Name);
+                _database.Update(definitions);
             }
         }
 
@@ -73,7 +73,7 @@ namespace NzbDrone.Core.Providers.Jobs
             {
                 if (_isRunning)
                 {
-                    Logger.Info("Another instance of this job is already running. Ignoring request.");
+                    Logger.Trace("Queue is already running. Ignoring scheduler's request.");
                     return false;
                 }
                 _isRunning = true;
@@ -112,19 +112,19 @@ namespace NzbDrone.Core.Providers.Jobs
         /// <remarks>Job is only added to the queue if same job with the same targetId doesn't already exist in the queue.</remarks>
         public virtual bool QueueJob(Type jobType, int targetId = 0)
         {
-            Logger.Debug("Adding job ({0}:{1}) to the queue", jobType, targetId);
+            Logger.Debug("Adding [{0}:{1}] to the queue", jobType.Name, targetId);
             lock (Queue)
             {
                 var queueTuple = new Tuple<Type, int>(jobType, targetId);
 
                 if (Queue.Contains(queueTuple))
                 {
-                    Logger.Info("Job ({0}:{1}) already exists in queue. Skipping.", jobType, targetId);
+                    Logger.Info("[{0}:{1}] already exists in job queue. Skipping.", jobType.Name, targetId);
                     return false;
                 }
 
                 Queue.Add(queueTuple);
-                Logger.Trace("Job ({0}:{1}) added to the queue", jobType, targetId);
+                Logger.Trace("Job [{0}:{1}] added to the queue", jobType.Name, targetId);
 
             }
 
@@ -132,7 +132,7 @@ namespace NzbDrone.Core.Providers.Jobs
             {
                 if (_isRunning)
                 {
-                    Logger.Trace("Queue is already running. Ignoring request.");
+                    Logger.Trace("Queue is already running. No need to start it up.");
                     return true;
                 }
                 _isRunning = true;
@@ -150,7 +150,7 @@ namespace NzbDrone.Core.Providers.Jobs
                     }
                     catch (Exception e)
                     {
-                        Logger.ErrorException("Error has occured in queue processor thread", e);
+                        Logger.ErrorException("Error has occurred in queue processor thread", e);
                     }
                     finally
                     {
@@ -164,7 +164,7 @@ namespace NzbDrone.Core.Providers.Jobs
             }
             else
             {
-                Logger.Warn("Execution lock has has fucked up. Thread still active. Ignoring request.");
+                Logger.Error("Execution lock has fucked up. Thread still active. Ignoring request.");
                 return true;
             }
 
@@ -230,7 +230,7 @@ namespace NzbDrone.Core.Providers.Jobs
             var jobImplementation = _jobs.Where(t => t.GetType() == jobType).FirstOrDefault();
             if (jobImplementation == null)
             {
-                Logger.Error("Unable to locate implementation for '{0}'. Make sure its properly registered.", jobType.ToString());
+                Logger.Error("Unable to locate implementation for '{0}'. Make sure it is properly registered.", jobType);
                 return;
             }
 
@@ -240,7 +240,7 @@ namespace NzbDrone.Core.Providers.Jobs
             {
                 try
                 {
-                    Logger.Debug("Starting job '{0}'. Last execution {1}", settings.Name, settings.LastExecution);
+                    Logger.Debug("Starting '{0}' job. Last execution {1}", settings.Name, settings.LastExecution);
 
                     var sw = Stopwatch.StartNew();
 
@@ -252,12 +252,12 @@ namespace NzbDrone.Core.Providers.Jobs
                     settings.Success = true;
 
                     sw.Stop();
-                    Logger.Debug("Job '{0}' successfully completed in {1} seconds", jobImplementation.Name, sw.Elapsed.Minutes,
+                    Logger.Debug("Job '{0}' successfully completed in {1}.{2} seconds.", jobImplementation.Name, sw.Elapsed.Seconds, sw.Elapsed.Milliseconds / 100,
                                 sw.Elapsed.Seconds);
                 }
                 catch (Exception e)
                 {
-                    Logger.ErrorException("An error has occurred while executing timer job " + jobImplementation.Name, e);
+                    Logger.ErrorException("An error has occurred while executing job " + jobImplementation.Name, e);
                     _notification.Status = ProgressNotificationStatus.Failed;
                     _notification.CurrentMessage = jobImplementation.Name + " Failed.";
 
@@ -286,7 +286,7 @@ namespace NzbDrone.Core.Providers.Jobs
                 var timerProviderLocal = timer;
                 if (!currentTimer.Exists(c => c.TypeName == timerProviderLocal.GetType().ToString()))
                 {
-                    var settings = new JobSetting
+                    var settings = new JobDefinition
                                        {
                                            Enable = timerProviderLocal.DefaultInterval > 0,
                                            TypeName = timer.GetType().ToString(),

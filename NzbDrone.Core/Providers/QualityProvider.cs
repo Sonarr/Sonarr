@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Providers
             _database.Delete<QualityProfile>(profileId);
         }
 
-        public virtual List<QualityProfile> GetAllProfiles()
+        public virtual List<QualityProfile> All()
         {
             var profiles = _database.Fetch<QualityProfile>().ToList();
 
@@ -58,9 +58,10 @@ namespace NzbDrone.Core.Providers
 
         public virtual void SetupDefaultProfiles()
         {
-            Logger.Info("Setting up default quality profiles");
+            if (All().Count != 0)
+                return;
 
-            var profiles = GetAllProfiles();
+            Logger.Info("Setting up default quality profiles");
 
             var sd = new QualityProfile { Name = "SD", Allowed = new List<QualityTypes> { QualityTypes.SDTV, QualityTypes.DVD }, Cutoff = QualityTypes.SDTV };
 
@@ -71,23 +72,9 @@ namespace NzbDrone.Core.Providers
                 Cutoff = QualityTypes.HDTV
             };
 
-            //Add or Update SD
-            Logger.Debug(String.Format("Checking for default QualityProfile: {0}", sd.Name));
-            var sdDb = profiles.Where(p => p.Name == sd.Name).FirstOrDefault();
-            if (sdDb == null)
-            {
-                Logger.Debug(String.Format("Adding new default QualityProfile: {0}", sd.Name));
-                Add(sd);
-            }
+            Add(sd);
+            Add(hd);
 
-            //Add or Update HD
-            Logger.Debug(String.Format("Checking for default QualityProfile: {0}", hd.Name));
-            var hdDb = profiles.Where(p => p.Name == hd.Name).FirstOrDefault();
-            if (hdDb == null)
-            {
-                Logger.Debug(String.Format("Adding new default QualityProfile: {0}", hd.Name));
-                Add(hd);
-            }
         }
     }
 }

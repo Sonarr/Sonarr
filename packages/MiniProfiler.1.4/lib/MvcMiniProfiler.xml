@@ -1,0 +1,1109 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MvcMiniProfiler</name>
+    </assembly>
+    <members>
+        <member name="T:MvcMiniProfiler.SqlFormatters.InlineFormatter">
+            <summary>
+            Formats any SQL query with inline parameters, optionally including the value type
+            </summary>
+        </member>
+        <member name="T:MvcMiniProfiler.ISqlFormatter">
+            <summary>
+            Takes a SqlTiming and returns a formatted SQL string, for parameter replacement, etc.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.ISqlFormatter.FormatSql(MvcMiniProfiler.SqlTiming)">
+            <summary>
+            Return SQL the way you want it to look on the in the trace. Usually used to format parameters 
+            </summary>
+            <param name="timing"></param>
+            <returns>Formatted SQL</returns>
+        </member>
+        <member name="M:MvcMiniProfiler.SqlFormatters.InlineFormatter.#ctor(System.Boolean)">
+            <summary>
+            Creates a new Inline SQL Formatter, optionally including the parameter type info in comments beside the replaced value
+            </summary>
+            <param name="includeTypeInfo">whether to include a comment after the value, indicating the type, e.g. /* @myParam DbType.Int32 */</param>
+        </member>
+        <member name="M:MvcMiniProfiler.SqlFormatters.InlineFormatter.FormatSql(MvcMiniProfiler.SqlTiming)">
+            <summary>
+            Formats the SQL in a generic frieldly format, including the parameter type information in a comment if it was specified in the InlineFormatter constructor
+            </summary>
+            <param name="timing">The SqlTiming to format</param>
+            <returns>A formatted SQL string</returns>
+        </member>
+        <member name="M:MvcMiniProfiler.SqlFormatters.InlineFormatter.GetParameterValue(MvcMiniProfiler.SqlTimingParameter)">
+            <summary>
+            Returns a string representation of the parameter's value, including the type
+            </summary>
+            <param name="p">The parameter to get a value for</param>
+            <returns></returns>
+        </member>
+        <member name="T:MvcMiniProfiler.MiniProfiler">
+            <summary>
+            A single MiniProfiler can be used to represent any number of steps/levels in a call-graph, via Step()
+            </summary>
+            <remarks>Totally baller.</remarks>
+        </member>
+        <member name="F:MvcMiniProfiler.MiniProfiler._watch">
+            <summary>
+            Starts when this profiler is instantiated. Each <see cref="T:MvcMiniProfiler.Timing"/> step will use this Stopwatch's current ticks as
+            their starting time.
+            </summary>
+        </member>
+        <member name="F:MvcMiniProfiler.MiniProfiler._sqlCounts">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.MiniProfiler.#ctor(System.String,MvcMiniProfiler.ProfileLevel)">
+            <summary>
+            Creates and starts a new MiniProfiler for the root <paramref name="url"/>, filtering <see cref="T:MvcMiniProfiler.Timing"/> steps to <paramref name="level"/>.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.MiniProfiler.#ctor">
+            <summary>
+            Obsolete - used for serialization.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.MiniProfiler.GetTimingHierarchy">
+            <summary>
+            Walks the <see cref="T:MvcMiniProfiler.Timing"/> hierarchy contained in this profiler, starting with <see cref="P:MvcMiniProfiler.MiniProfiler.Root"/>, and returns each Timing found.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.MiniProfiler.GetSqlTimings">
+            <summary>
+            Returns all <see cref="T:MvcMiniProfiler.SqlTiming"/> results contained in all child <see cref="T:MvcMiniProfiler.Timing"/> steps.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.MiniProfiler.GetRoundedMilliseconds(System.Int64)">
+            <summary>
+            Returns milliseconds based on Stopwatch's Frequency.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.MiniProfiler.Start(MvcMiniProfiler.ProfileLevel)">
+            <summary>
+            Starts a new MiniProfiler for the current Request. This new profiler can be accessed by
+            <see cref="P:MvcMiniProfiler.MiniProfiler.Current"/>
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.MiniProfiler.Stop(System.Boolean)">
+            <summary>
+            Ends the current profiling session, if one exists.
+            </summary>
+            <param name="discardResults">
+            When true, clears the <see cref="P:MvcMiniProfiler.MiniProfiler.Current"/> for this HttpContext, allowing profiling to 
+            be prematurely stopped and discarded. Useful for when a specific route does not need to be profiled.
+            </param>
+        </member>
+        <member name="M:MvcMiniProfiler.MiniProfiler.StepStatic(System.String,MvcMiniProfiler.ProfileLevel)">
+            <summary>
+            Returns an <see cref="T:System.IDisposable"/> that will time the code between its creation and disposal. Use this method when you
+            do not wish to include the MvcMiniProfiler namespace for the <see cref="M:MvcMiniProfiler.MiniProfilerExtensions.Step(MvcMiniProfiler.MiniProfiler,System.String,MvcMiniProfiler.ProfileLevel)"/> extension method.
+            </summary>
+            <param name="name">A descriptive name for the code that is encapsulated by the resulting IDisposable's lifetime.</param>
+            <param name="level">This step's visibility level; allows filtering when <see cref="M:MvcMiniProfiler.MiniProfiler.Start(MvcMiniProfiler.ProfileLevel)"/> is called.</param>
+        </member>
+        <member name="M:MvcMiniProfiler.MiniProfiler.RenderIncludes(System.Nullable{MvcMiniProfiler.RenderPosition},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Int32})">
+            <summary>
+            Returns the css and javascript includes needed to display the MiniProfiler results UI.
+            </summary>
+            <param name="position">Which side of the page the profiler popup button should be displayed on (defaults to left)</param>
+            <param name="showTrivial">Whether to show trivial timings by default (defaults to false)</param>
+            <param name="showTimeWithChildren">Whether to show time the time with children column by default (defaults to false)</param>
+            <param name="maxTracesToShow">The maximum number of trace popups to show before removing the oldest (defaults to 15)</param>
+            <returns>Script and link elements normally; an empty string when there is no active profiling session.</returns>
+        </member>
+        <member name="M:MvcMiniProfiler.MiniProfiler.ToJson">
+            <summary>
+            Renders the current <see cref="T:MvcMiniProfiler.MiniProfiler"/> to json.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.MiniProfiler.ToJson(MvcMiniProfiler.MiniProfiler)">
+            <summary>
+            Renders the parameter <see cref="T:MvcMiniProfiler.MiniProfiler"/> to json.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.MiniProfiler.FromJson(System.String)">
+            <summary>
+            Deserializes the json string parameter to a <see cref="T:MvcMiniProfiler.MiniProfiler"/>.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.MiniProfiler.Clone">
+            <summary>
+            Create a DEEP clone of this object
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:MvcMiniProfiler.MiniProfiler.Id">
+            <summary>
+            Identifies this Profiler so it may be stored/cached.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.MiniProfiler.Name">
+            <summary>
+            A display name for this profiling session.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.MiniProfiler.Started">
+            <summary>
+            When this profiler was instantiated.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.MiniProfiler.MachineName">
+            <summary>
+            Where this profiler was run.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.MiniProfiler.Level">
+            <summary>
+            Allows filtering of <see cref="T:MvcMiniProfiler.Timing"/> steps based on what <see cref="T:MvcMiniProfiler.ProfileLevel"/> 
+            the steps are created with.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.MiniProfiler.Root">
+            <summary>
+            The first <see cref="T:MvcMiniProfiler.Timing"/> that is created and started when this profiler is instantiated.
+            All other <see cref="T:MvcMiniProfiler.Timing"/>s will be children of this one.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.MiniProfiler.SqlProfiler">
+            <summary>
+            Contains information about queries executed during this profiling session.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.MiniProfiler.DurationMilliseconds">
+            <summary>
+            Milliseconds, to one decimal place, that this MiniProfiler ran.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.MiniProfiler.DurationMillisecondsInSql">
+            <summary>
+            Milliseconds, to one decimal place, that this MiniProfiler was executing sql.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.MiniProfiler.HasSqlTimings">
+            <summary>
+            Returns true when we have profiled queries.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.MiniProfiler.HasDuplicateSqlTimings">
+            <summary>
+            Returns true when any child Timings have duplicate queries.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.MiniProfiler.HasTrivialTimings">
+            <summary>
+            Returns true when <see cref="P:MvcMiniProfiler.MiniProfiler.Root"/> or any of its <see cref="P:MvcMiniProfiler.Timing.Children"/> are <see cref="P:MvcMiniProfiler.Timing.IsTrivial"/>.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.MiniProfiler.HasAllTrivialTimings">
+            <summary>
+            Returns true when all child <see cref="T:MvcMiniProfiler.Timing"/>s are <see cref="P:MvcMiniProfiler.Timing.IsTrivial"/>.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.MiniProfiler.TrivialDurationThresholdMilliseconds">
+            <summary>
+            Any Timing step with a duration less than or equal to this will be hidden by default in the UI; defaults to 2.0 ms.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.MiniProfiler.ElapsedTicks">
+            <summary>
+            Ticks since this MiniProfiler was started.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.MiniProfiler.Head">
+            <summary>
+            Points to the currently executing Timing.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.MiniProfiler.Current">
+            <summary>
+            Gets the currently running MiniProfiler for the current HttpContext; null if no MiniProfiler was <see cref="M:MvcMiniProfiler.MiniProfiler.Start(MvcMiniProfiler.ProfileLevel)"/>ed.
+            </summary>
+        </member>
+        <member name="T:MvcMiniProfiler.MiniProfiler.Settings">
+            <summary>
+            Various configuration properties.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.MiniProfiler.Settings.EnsureStorageStrategies">
+            <summary>
+            Ensures that <see cref="P:MvcMiniProfiler.MiniProfiler.Settings.ShortTermStorage"/> and <see cref="P:MvcMiniProfiler.MiniProfiler.Settings.LongTermStorage"/> objects are initialized. Null values will
+            be initialized to use the default <see cref="T:MvcMiniProfiler.Storage.HttpRuntimeCacheStorage"/> strategy.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.MiniProfiler.Settings.WriteScriptsToResponseOnStop">
+            <summary>
+            When true, link and script tags will be written to the response stream when MiniProfiler.Stop is called.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.MiniProfiler.Settings.TrivialDurationThresholdMilliseconds">
+            <summary>
+            Any Timing step with a duration less than or equal to this will be hidden by default in the UI; defaults to 2.0 ms.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.MiniProfiler.Settings.PopupShowTimeWithChildren">
+            <summary>
+            Dictates if the "time with children" column is displayed by default, defaults to false.
+            For a per-page override you can use .RenderIncludes(showTimeWithChildren: true/false)
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.MiniProfiler.Settings.PopupShowTrivial">
+            <summary>
+            Dictates if trivial timings are displayed by default, defaults to false.
+            For a per-page override you can use .RenderIncludes(showTrivial: true/false)
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.MiniProfiler.Settings.PopupMaxTracesToShow">
+            <summary>
+            Determines how many traces to show before removing the oldest; defaults to 15.
+            For a per-page override you can use .RenderIncludes(maxTracesToShow: 10)
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.MiniProfiler.Settings.PopupRenderPosition">
+            <summary>
+            Dictates on which side of the page the profiler popup button is displayed; defaults to left.
+            For a per-page override you can use .RenderIncludes(position: RenderPosition.Left/Right)
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.MiniProfiler.Settings.IgnoredRootPaths">
+            <summary>
+            When <see cref="M:MvcMiniProfiler.MiniProfiler.Start(MvcMiniProfiler.ProfileLevel)"/> is called, if the current request url starts with this property,
+            no profiler will be instantiated and no results will be displayed.  
+            Default value is { "/mini-profiler-includes.js", "/mini-profiler-includes.less", "/mini-profiler-results", "/content/", "/scripts/" }.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.MiniProfiler.Settings.RouteBasePath">
+            <summary>
+            The path under which ALL routes are registered in, defaults to the application root.  For example, "~/myDirectory/" would yield
+            "/myDirectory/mini-profiler-includes.js" rather than just "/mini-profiler-includes.js"
+            Any setting here should be in APP RELATIVE FORM, e.g. "~/myDirectory/"
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.MiniProfiler.Settings.ShortTermStorage">
+            <summary>
+            Understands how to save and load MiniProfilers for a very limited time. Used for caching between when
+            a profiling session ends and results can be fetched to the client.
+            </summary>
+            <remarks>
+            The normal profiling session life-cycle is as follows:
+            1) request begins
+            2) profiler is started
+            3) normal page/controller/request execution
+            4) profiler is stopped
+            5) profiler is cached with <see cref="P:MvcMiniProfiler.MiniProfiler.Settings.ShortTermStorage"/>'s implementation of <see cref="M:MvcMiniProfiler.Storage.IStorage.SaveMiniProfiler(System.Guid,MvcMiniProfiler.MiniProfiler)"/>
+            6) request ends
+            7) page is displayed and profiling results are ajax-fetched down, pulling cached results from 
+               <see cref="P:MvcMiniProfiler.MiniProfiler.Settings.ShortTermStorage"/>'s implementation of <see cref="M:MvcMiniProfiler.Storage.IStorage.LoadMiniProfiler(System.Guid)"/>
+            </remarks>
+        </member>
+        <member name="P:MvcMiniProfiler.MiniProfiler.Settings.LongTermStorage">
+            <summary>
+            Understands how to save and load MiniProfilers for an extended (even indefinite) time, allowing results to be
+            shared with other developers or even tracked over time.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.MiniProfiler.Settings.SqlFormatter">
+            <summary>
+            The formatter applied to the SQL being rendered (used only for UI)
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.MiniProfiler.Settings.Version">
+            <summary>
+            Assembly version of this dank MiniProfiler.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.MiniProfiler.Settings.Results_Authorize">
+            <summary>
+            A function that determines who can access the MiniProfiler results url.  It should return true when
+            the request client has access, false for a 401 to be returned. HttpRequest parameter is the current request and
+            MiniProfiler parameter is the results that were profiled.
+            </summary>
+            <remarks>
+            Both the HttpRequest and MiniProfiler parameters that will be passed into this function should never be null.
+            </remarks>
+        </member>
+        <member name="T:MvcMiniProfiler.ProfileLevel">
+            <summary>
+            Categorizes individual <see cref="T:MvcMiniProfiler.Timing"/> steps to allow filtering.
+            </summary>
+        </member>
+        <member name="F:MvcMiniProfiler.ProfileLevel.Info">
+            <summary>
+            Default level given to Timings.
+            </summary>
+        </member>
+        <member name="F:MvcMiniProfiler.ProfileLevel.Verbose">
+            <summary>
+            Useful when profiling many items in a loop, but you don't wish to always see this detail.
+            </summary>
+        </member>
+        <member name="T:MvcMiniProfiler.RenderPosition">
+            <summary>
+            Dictates on which side of the page the profiler popup button is displayed; defaults to left.
+            </summary>
+        </member>
+        <member name="F:MvcMiniProfiler.RenderPosition.Left">
+            <summary>
+            Profiler popup button is displayed on the left.
+            </summary>
+        </member>
+        <member name="F:MvcMiniProfiler.RenderPosition.Right">
+            <summary>
+            Profiler popup button is displayed on the right.
+            </summary>
+        </member>
+        <member name="T:MvcMiniProfiler.MiniProfilerExtensions">
+            <summary>
+            Contains helper methods that ease working with null <see cref="T:MvcMiniProfiler.MiniProfiler"/>s.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.MiniProfilerExtensions.Inline``1(MvcMiniProfiler.MiniProfiler,System.Func{``0},System.String)">
+            <summary>
+            Wraps <paramref name="selector"/> in a <see cref="M:MvcMiniProfiler.MiniProfilerExtensions.Step(MvcMiniProfiler.MiniProfiler,System.String,MvcMiniProfiler.ProfileLevel)"/> call and executes it, returning its result.
+            </summary>
+            <param name="profiler">The current profiling session or null.</param>
+            <param name="selector">Method to execute and profile.</param>
+            <param name="name">The <see cref="T:MvcMiniProfiler.Timing"/> step name used to label the profiler results.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MvcMiniProfiler.MiniProfilerExtensions.Step(MvcMiniProfiler.MiniProfiler,System.String,MvcMiniProfiler.ProfileLevel)">
+            <summary>
+            Returns an <see cref="T:System.IDisposable"/> that will time the code between its creation and disposal.
+            </summary>
+            <param name="profiler">The current profiling session or null.</param>
+            <param name="name">A descriptive name for the code that is encapsulated by the resulting IDisposable's lifetime.</param>
+            <param name="level">This step's visibility level; allows filtering when <see cref="M:MvcMiniProfiler.MiniProfiler.Start(MvcMiniProfiler.ProfileLevel)"/> is called.</param>
+        </member>
+        <member name="M:MvcMiniProfiler.MiniProfilerExtensions.AddProfilerResults(MvcMiniProfiler.MiniProfiler,MvcMiniProfiler.MiniProfiler)">
+            <summary>
+            Adds <paramref name="externalProfiler"/>'s <see cref="T:MvcMiniProfiler.Timing"/> hierarchy to this profiler's current Timing step,
+            allowing other threads, remote calls, etc. to be profiled and joined into this profiling session.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.MiniProfilerExtensions.Render(MvcMiniProfiler.MiniProfiler)">
+            <summary>
+            Returns an html-encoded string with a text-representation of <paramref name="profiler"/>; returns "" when profiler is null.
+            </summary>
+            <param name="profiler">The current profiling session or null.</param>
+        </member>
+        <member name="M:MvcMiniProfiler.Helpers.SqlMapper.Execute(System.Data.IDbConnection,System.String,System.Object,System.Data.IDbTransaction,System.Nullable{System.Int32},System.Nullable{System.Data.CommandType})">
+            <summary>
+            Execute parameterized SQL  
+            </summary>
+            <returns>Number of rows affected</returns>
+        </member>
+        <member name="M:MvcMiniProfiler.Helpers.SqlMapper.Query(System.Data.IDbConnection,System.String,System.Object,System.Data.IDbTransaction,System.Boolean,System.Nullable{System.Int32},System.Nullable{System.Data.CommandType})">
+            <summary>
+            Return a list of dynamic objects, reader is closed after the call
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.Helpers.SqlMapper.QueryMultiple(System.Data.IDbConnection,System.String,System.Object,System.Data.IDbTransaction,System.Nullable{System.Int32},System.Nullable{System.Data.CommandType})">
+            <summary>
+            Execute a command that returns multiple result sets, and access each in turn
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.Helpers.SqlMapper.QueryInternal``1(System.Data.IDbConnection,System.String,System.Object,System.Data.IDbTransaction,System.Nullable{System.Int32},System.Nullable{System.Data.CommandType})">
+            <summary>
+            Return a typed list of objects, reader is closed after the call
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.Helpers.SqlMapper.Query``3(System.Data.IDbConnection,System.String,System.Func{``0,``1,``2},System.Object,System.Data.IDbTransaction,System.Boolean,System.String,System.Nullable{System.Int32},System.Nullable{System.Data.CommandType})">
+            <summary>
+            Maps a query to objects
+            </summary>
+            <typeparam name="T">The return type</typeparam>
+            <typeparam name="U"></typeparam>
+            <param name="cnn"></param>
+            <param name="sql"></param>
+            <param name="map"></param>
+            <param name="param"></param>
+            <param name="transaction"></param>
+            <param name="buffered"></param>
+            <param name="splitOn">The Field we should split and read the second object from (default: id)</param>
+            <param name="commandTimeout">Number of seconds before command execution timeout</param>
+            <returns></returns>
+        </member>
+        <member name="T:MvcMiniProfiler.Helpers.SqlMapper.Link`2">
+            <summary>
+            This is a micro-cache; suitable when the number of terms is controllable (a few hundred, for example),
+            and strictly append-only; you cannot change existing values. All key matches are on **REFERENCE**
+            equality. The type is fully thread-safe.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.Helpers.SqlMapper.GridReader.Read``1">
+            <summary>
+            Read the next grid of results
+            </summary>
+        </member>
+        <member name="T:MvcMiniProfiler.Data.Link`2">
+            <summary>
+            This is a micro-cache; suitable when the number of terms is controllable (a few hundred, for example),
+            and strictly append-only; you cannot change existing values. All key matches are on **REFERENCE**
+            equality. The type is fully thread-safe.
+            </summary>
+        </member>
+        <member name="T:MvcMiniProfiler.Storage.IStorage">
+            <summary>
+            Provides saving and loading <see cref="T:MvcMiniProfiler.MiniProfiler"/>s to a storage medium.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.Storage.IStorage.SaveMiniProfiler(System.Guid,MvcMiniProfiler.MiniProfiler)">
+            <summary>
+            Stores <paramref name="profiler"/> under <paramref name="id"/>, which is also its <see cref="P:MvcMiniProfiler.MiniProfiler.Id"/>.
+            </summary>
+            <param name="id">
+            The Guid that identifies the MiniProfiler; subsequent calls to <see cref="M:MvcMiniProfiler.Storage.IStorage.LoadMiniProfiler(System.Guid)"/>
+            will pass this Guid.
+            </param>
+            <param name="profiler">The results of a profiling session.</param>
+            <remarks>
+            Should be able to be called multiple times on the same profiler.
+            </remarks>
+        </member>
+        <member name="M:MvcMiniProfiler.Storage.IStorage.LoadMiniProfiler(System.Guid)">
+            <summary>
+            Returns a <see cref="T:MvcMiniProfiler.MiniProfiler"/> from storage based on <paramref name="id"/>.
+            </summary>
+        </member>
+        <member name="T:MvcMiniProfiler.SqlFormatters.OracleFormatter">
+            <summary>
+            NOT IMPLEMENTED - will format statements with paramters in an Oracle friendly way
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.SqlFormatters.OracleFormatter.FormatSql(MvcMiniProfiler.SqlTiming)">
+            <summary>
+            Does NOTHING, implement me!
+            </summary>
+        </member>
+        <member name="T:MvcMiniProfiler.Storage.SqlServerStorage">
+            <summary>
+            Understands how to store a <see cref="T:MvcMiniProfiler.MiniProfiler"/> to a MSSQL database.
+            </summary>
+        </member>
+        <member name="T:MvcMiniProfiler.Storage.DatabaseStorageBase">
+            <summary>
+            Understands how to save MiniProfiler results to a MSSQL database, allowing more permanent storage and
+            querying of slow results.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.Storage.DatabaseStorageBase.#ctor(System.String)">
+            <summary>
+            Returns a new SqlServerDatabaseStorage object that will insert into the database identified by connectionString.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.Storage.DatabaseStorageBase.SaveMiniProfiler(System.Guid,MvcMiniProfiler.MiniProfiler)">
+            <summary>
+            Saves 'profiler' to a database under 'id'.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.Storage.DatabaseStorageBase.LoadMiniProfiler(System.Guid)">
+            <summary>
+            Returns the MiniProfiler identified by 'id' from the database or null when no MiniProfiler exists under that 'id'.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.Storage.DatabaseStorageBase.GetConnection">
+            <summary>
+            Returns a DbConnection for your specific provider.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.Storage.DatabaseStorageBase.GetOpenConnection">
+            <summary>
+            Returns a DbConnection already opened for execution.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.Storage.DatabaseStorageBase.MapTimings(MvcMiniProfiler.MiniProfiler,System.Collections.Generic.List{MvcMiniProfiler.Timing},System.Collections.Generic.List{MvcMiniProfiler.SqlTiming},System.Collections.Generic.List{MvcMiniProfiler.SqlTimingParameter})">
+            <summary>
+            Giving freshly selected collections, this method puts them in the correct
+            hierarchy under the 'result' MiniProfiler.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.Storage.DatabaseStorageBase.ConnectionString">
+            <summary>
+            How we connect to the database used to save/load MiniProfiler results.
+            </summary>
+        </member>
+        <member name="F:MvcMiniProfiler.Storage.SqlServerStorage.TableCreationScript">
+            <summary>
+            Creates needed tables. Run this once on your database.
+            </summary>
+            <remarks>
+            Works in sql server and sqlite (with documented removals).
+            TODO: add indexes
+            </remarks>
+        </member>
+        <member name="M:MvcMiniProfiler.Storage.SqlServerStorage.#ctor(System.String)">
+            <summary>
+            Returns a new <see cref="T:MvcMiniProfiler.Storage.SqlServerStorage"/>.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.Storage.SqlServerStorage.SaveMiniProfiler(System.Guid,MvcMiniProfiler.MiniProfiler)">
+            <summary>
+            Stores 'profiler' to dbo.MiniProfilers under 'id'; stores all child Timings and SqlTimings to their respective tables.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.Storage.SqlServerStorage.SaveTiming(System.Data.Common.DbConnection,MvcMiniProfiler.MiniProfiler,MvcMiniProfiler.Timing)">
+            <summary>
+            Saves parameter Timing to the dbo.MiniProfilerTimings table.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.Storage.SqlServerStorage.SaveSqlTiming(System.Data.Common.DbConnection,MvcMiniProfiler.MiniProfiler,MvcMiniProfiler.SqlTiming)">
+            <summary>
+            Saves parameter SqlTiming to the dbo.MiniProfilerSqlTimings table.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.Storage.SqlServerStorage.SaveSqlTimingParameters(System.Data.Common.DbConnection,MvcMiniProfiler.MiniProfiler,MvcMiniProfiler.SqlTiming)">
+            <summary>
+            Saves any SqlTimingParameters used in the profiled SqlTiming to the dbo.MiniProfilerSqlTimingParameters table.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.Storage.SqlServerStorage.LoadMiniProfiler(System.Guid)">
+            <summary>
+            Loads the MiniProfiler identifed by 'id' from the database.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.Storage.SqlServerStorage.GetConnection">
+            <summary>
+            Returns a connection to Sql Server.
+            </summary>
+        </member>
+        <member name="T:MvcMiniProfiler.Timing">
+            <summary>
+            An individual profiling step that can contain child steps.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.Timing.RebuildParentTimings">
+            <summary>
+            Rebuilds all the parent timings on deserialization calls
+            </summary>
+        </member>
+        <member name="F:MvcMiniProfiler.Timing._startTicks">
+            <summary>
+            Offset from parent MiniProfiler's creation that this Timing was created.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.Timing.#ctor(MvcMiniProfiler.MiniProfiler,MvcMiniProfiler.Timing,System.String)">
+            <summary>
+            Creates a new Timing named 'name' in the 'profiler's session, with 'parent' as this Timing's immediate ancestor.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.Timing.#ctor">
+            <summary>
+            Obsolete - used for serialization.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.Timing.ToString">
+            <summary>
+            Returns this Timing's Name.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.Timing.AddKeyValue(System.String,System.String)">
+            <summary>
+            Adds arbitrary string 'value' under 'key', allowing custom properties to be stored in this Timing step.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.Timing.Stop">
+            <summary>
+            Completes this Timing's duration and sets the MiniProfiler's Head up one level.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.Timing.AddChild(MvcMiniProfiler.Timing)">
+            <summary>
+            Add the parameter 'timing' to this Timing's Children collection.
+            </summary>
+            <remarks>
+            Used outside this assembly for custom deserialization when creating an <see cref="T:MvcMiniProfiler.Storage.IStorage"/> implementation.
+            </remarks>
+        </member>
+        <member name="M:MvcMiniProfiler.Timing.AddSqlTiming(MvcMiniProfiler.SqlTiming)">
+            <summary>
+            Adds the parameter 'sqlTiming' to this Timing's SqlTimings collection.
+            </summary>
+            <param name="sqlTiming">A sql statement profiling that was executed in this Timing step.</param>
+            <remarks>
+            Used outside this assembly for custom deserialization when creating an <see cref="T:MvcMiniProfiler.Storage.IStorage"/> implementation.
+            </remarks>
+        </member>
+        <member name="P:MvcMiniProfiler.Timing.Id">
+            <summary>
+            Unique identifer for this timing; set during construction.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.Timing.Name">
+            <summary>
+            Text displayed when this Timing is rendered.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.Timing.DurationMilliseconds">
+            <summary>
+            How long this Timing step took in ms; includes any <see cref="P:MvcMiniProfiler.Timing.Children"/> Timings' durations.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.Timing.StartMilliseconds">
+            <summary>
+            The offset from the start of profiling.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.Timing.Children">
+            <summary>
+            All sub-steps that occur within this Timing step. Add new children through <see cref="M:MvcMiniProfiler.Timing.AddChild(MvcMiniProfiler.Timing)"/>
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.Timing.KeyValues">
+            <summary>
+            Stores arbitrary key/value strings on this Timing step. Add new tuples through <see cref="M:MvcMiniProfiler.Timing.AddKeyValue(System.String,System.String)"/>.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.Timing.SqlTimings">
+            <summary>
+            Any queries that occurred during this Timing step.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.Timing.ParentTimingId">
+            <summary>
+            Needed for database deserialization and JSON serialization.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.Timing.ParentTiming">
+            <summary>
+            Which Timing this Timing is under - the duration that this step takes will be added to its parent's duration.
+            </summary>
+            <remarks>This will be null for the root (initial) Timing.</remarks>
+        </member>
+        <member name="P:MvcMiniProfiler.Timing.DurationWithoutChildrenMilliseconds">
+            <summary>
+            Gets the ellapsed milliseconds in this step without any children's durations.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.Timing.SqlTimingsDurationMilliseconds">
+            <summary>
+            Gets the aggregate ellapsed milliseconds of all SqlTimings executed in this Timing, excluding Children Timings.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.Timing.IsTrivial">
+            <summary>
+            Returns true when this <see cref="P:MvcMiniProfiler.Timing.DurationWithoutChildrenMilliseconds"/> is less than the configured
+            <see cref="P:MvcMiniProfiler.MiniProfiler.Settings.TrivialDurationThresholdMilliseconds"/>, by default 2.0 ms.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.Timing.Profiler">
+            <summary>
+            Reference to the containing profiler, allowing this Timing to affect the Head and get Stopwatch readings.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.Timing.HasChildren">
+            <summary>
+            Returns true when this Timing has inner Timing steps.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.Timing.HasSqlTimings">
+            <summary>
+            Returns true if this Timing step collected sql execution timings.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.Timing.HasDuplicateSqlTimings">
+            <summary>
+            Returns true if any <see cref="T:MvcMiniProfiler.SqlTiming"/>s executed in this step are detected as duplicate statements.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.Timing.IsRoot">
+            <summary>
+            Returns true when this Timing is the first one created in a MiniProfiler session.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.Timing.Depth">
+            <summary>
+            How far away this Timing is from the Profiler's Root.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.Timing.ExecutedReaders">
+            <summary>
+            How many sql data readers were executed in this Timing step.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.Timing.ExecutedScalars">
+            <summary>
+            How many sql scalar queries were executed in this Timing step.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.Timing.ExecutedNonQueries">
+            <summary>
+            How many sql non-query statements were executed in this Timing step.
+            </summary>
+        </member>
+        <member name="T:MvcMiniProfiler.ExecuteType">
+            <summary>
+            Categories of sql statements.
+            </summary>
+        </member>
+        <member name="F:MvcMiniProfiler.ExecuteType.None">
+            <summary>
+            Unknown
+            </summary>
+        </member>
+        <member name="F:MvcMiniProfiler.ExecuteType.NonQuery">
+            <summary>
+            DML statements that alter database state, e.g. INSERT, UPDATE
+            </summary>
+        </member>
+        <member name="F:MvcMiniProfiler.ExecuteType.Scalar">
+            <summary>
+            Statements that return a single record
+            </summary>
+        </member>
+        <member name="F:MvcMiniProfiler.ExecuteType.Reader">
+            <summary>
+            Statements that iterate over a result set
+            </summary>
+        </member>
+        <member name="T:MvcMiniProfiler.SqlProfiler">
+            <summary>
+            Contains helper code to time sql statements.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.SqlProfiler.#ctor(MvcMiniProfiler.MiniProfiler)">
+            <summary>
+            Returns a new SqlProfiler to be used in the 'profiler' session.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.SqlProfiler.ExecuteStartImpl(System.Data.Common.DbCommand,MvcMiniProfiler.ExecuteType)">
+            <summary>
+            Tracks when 'command' is started.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.SqlProfiler.ExecuteFinishImpl(System.Data.Common.DbCommand,MvcMiniProfiler.ExecuteType,System.Data.Common.DbDataReader)">
+            <summary>
+            Finishes profiling for 'command', recording durations.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.SqlProfiler.ReaderFinishedImpl(System.Data.Common.DbDataReader)">
+            <summary>
+            Called when 'reader' finishes its iterations and is closed.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.SqlProfiler.Profiler">
+            <summary>
+            The profiling session this SqlProfiler is part of.
+            </summary>
+        </member>
+        <member name="T:MvcMiniProfiler.SqlProfilerExtensions">
+            <summary>
+            Helper methods that allow operation on SqlProfilers, regardless of their instantiation.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.SqlProfilerExtensions.ExecuteStart(MvcMiniProfiler.SqlProfiler,System.Data.Common.DbCommand,MvcMiniProfiler.ExecuteType)">
+            <summary>
+            Tracks when 'command' is started.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.SqlProfilerExtensions.ExecuteFinish(MvcMiniProfiler.SqlProfiler,System.Data.Common.DbCommand,MvcMiniProfiler.ExecuteType,System.Data.Common.DbDataReader)">
+            <summary>
+            Finishes profiling for 'command', recording durations.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.SqlProfilerExtensions.ReaderFinish(MvcMiniProfiler.SqlProfiler,System.Data.Common.DbDataReader)">
+            <summary>
+            Called when 'reader' finishes its iterations and is closed.
+            </summary>
+        </member>
+        <member name="T:MvcMiniProfiler.UI.MiniProfilerHandler">
+            <summary>
+            Understands how to route and respond to MiniProfiler UI urls.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.UI.MiniProfilerHandler.GetHttpHandler(System.Web.Routing.RequestContext)">
+            <summary>
+            Returns this <see cref="T:MvcMiniProfiler.UI.MiniProfilerHandler"/> to handle <paramref name="requestContext"/>.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.UI.MiniProfilerHandler.ProcessRequest(System.Web.HttpContext)">
+            <summary>
+            Returns either includes' css/javascript or results' html.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.UI.MiniProfilerHandler.Includes(System.Web.HttpContext,System.String)">
+            <summary>
+            Handles rendering static content files.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.UI.MiniProfilerHandler.Results(System.Web.HttpContext)">
+            <summary>
+            Handles rendering a previous MiniProfiler session, identified by its "?id=GUID" on the query.
+            </summary>
+        </member>
+        <member name="F:MvcMiniProfiler.UI.MiniProfilerHandler._ResourceCache">
+            <summary>
+            Embedded resource contents keyed by filename.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.UI.MiniProfilerHandler.NotFound(System.Web.HttpContext,System.String,System.String)">
+            <summary>
+            Helper method that sets a proper 404 response code.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.UI.MiniProfilerHandler.IsReusable">
+            <summary>
+            Try to keep everything static so we can easily be reused.
+            </summary>
+        </member>
+        <member name="T:MvcMiniProfiler.SqlFormatters.SqlServerFormatter">
+            <summary>
+            Formats SQL server queries with a DECLARE up top for parameter values
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.SqlFormatters.SqlServerFormatter.FormatSql(MvcMiniProfiler.SqlTiming)">
+            <summary>
+            Formats the SQL in a SQL-Server friendly way, with DECLARE statements for the parameters up top.
+            </summary>
+            <param name="timing">The SqlTiming to format</param>
+            <returns>A formatted SQL string</returns>
+        </member>
+        <member name="T:MvcMiniProfiler.Helpers.ExtensionMethods">
+            <summary>
+            Common extension methods to use only in this project
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.Helpers.ExtensionMethods.IsNullOrEmpty(System.String)">
+            <summary>
+            Answers true if this String is either null or empty.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.Helpers.ExtensionMethods.HasValue(System.String)">
+            <summary>
+            Answers true if this String is neither null or empty.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.Helpers.ExtensionMethods.EnsureTrailingSlash(System.String)">
+            <summary>
+            Removes trailing / characters from a path and leaves just one
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.Helpers.ExtensionMethods.RemoveLeadingSlash(System.String)">
+            <summary>
+            Removes any leading / characters from a path
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.Helpers.ExtensionMethods.RemoveTrailingSlash(System.String)">
+            <summary>
+            Removes any leading / characters from a path
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.Data.ProfiledDbProviderFactory.System#IServiceProvider#GetService(System.Type)">
+            <summary>
+            Extension mechanism for additional services;  
+            </summary>
+            <returns>requested service provider or null.</returns>
+        </member>
+        <member name="T:MvcMiniProfiler.Data.ProfiledDbConnection">
+            <summary>
+            Wraps a database connection, allowing sql execution timings to be collected when a <see cref="T:MvcMiniProfiler.MiniProfiler"/> session is started.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.Data.ProfiledDbConnection.Get(System.Data.Common.DbConnection)">
+            <summary>
+            Returns a new <see cref="T:MvcMiniProfiler.Data.ProfiledDbConnection"/> that wraps <paramref name="connection"/>, 
+            providing query execution profiling.
+            </summary>
+            <param name="connection">Your provider-specific flavor of connection, e.g. SqlConnection, OracleConnection</param>
+        </member>
+        <member name="M:MvcMiniProfiler.Data.ProfiledDbConnection.Get(System.Data.Common.DbConnection,MvcMiniProfiler.MiniProfiler)">
+            <summary>
+            Returns a new <see cref="T:MvcMiniProfiler.Data.ProfiledDbConnection"/> that wraps <paramref name="connection"/>, 
+            providing query execution profiling.
+            </summary>
+            <param name="connection">Your provider-specific flavor of connection, e.g. SqlConnection, OracleConnection</param>
+            <param name="profiler">The currently started <see cref="T:MvcMiniProfiler.MiniProfiler"/> or null.</param>
+        </member>
+        <member name="M:MvcMiniProfiler.Data.ProfiledDbConnection.#ctor(System.Data.Common.DbConnection,MvcMiniProfiler.MiniProfiler)">
+            <summary>
+            Returns a new <see cref="T:MvcMiniProfiler.Data.ProfiledDbConnection"/> that wraps <paramref name="connection"/>, 
+            providing query execution profiling.  If profiler is null, no profiling will occur.
+            </summary>
+            <param name="connection">Your provider-specific flavor of connection, e.g. SqlConnection, OracleConnection</param>
+            <param name="profiler">The currently started <see cref="T:MvcMiniProfiler.MiniProfiler"/> or null.</param>
+        </member>
+        <member name="T:MvcMiniProfiler.SqlTimingParameter">
+            <summary>
+            Information about a DbParameter used in the sql statement profiled by SqlTiming.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.SqlTimingParameter.ParentSqlTimingId">
+            <summary>
+            Which SqlTiming this Parameter was executed with.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.SqlTimingParameter.Name">
+            <summary>
+            Parameter name, e.g. "@routeName"
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.SqlTimingParameter.Value">
+            <summary>
+            The value submitted to the database.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.SqlTimingParameter.DbType">
+            <summary>
+            System.Data.DbType, e.g. "String", "Bit"
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.SqlTimingParameter.Size">
+            <summary>
+            How large the type is, e.g. for string, size could be 4000
+            </summary>
+        </member>
+        <member name="T:MvcMiniProfiler.SqlTiming">
+            <summary>
+            Profiles a single sql execution.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.SqlTiming.#ctor(System.Data.Common.DbCommand,MvcMiniProfiler.ExecuteType,MvcMiniProfiler.MiniProfiler)">
+            <summary>
+            Creates a new SqlTiming to profile 'command'.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.SqlTiming.#ctor">
+            <summary>
+            Obsolete - used for serialization.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.SqlTiming.ExecutionComplete(System.Boolean)">
+            <summary>
+            Called when command execution is finished to determine this SqlTiming's duration.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.SqlTiming.ReaderFetchComplete">
+            <summary>
+            Called when database reader is closed, ending profiling for <see cref="F:MvcMiniProfiler.ExecuteType.Reader"/> SqlTimings.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.SqlTiming.AddSpacesToParameters(System.String)">
+            <summary>
+            To help with display, put some space around sammiched commas
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.SqlTiming.Id">
+            <summary>
+            Unique identifier for this SqlTiming.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.SqlTiming.ExecuteType">
+            <summary>
+            Category of sql statement executed.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.SqlTiming.CommandString">
+            <summary>
+            The sql that was executed.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.SqlTiming.RawCommandString">
+            <summary>
+            The sql that was executed.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.SqlTiming.FormattedCommandString">
+            <summary>
+            The command string with special formatting applied based on MiniProfiler.Settings.SqlFormatter
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.SqlTiming.StackTraceSnippet">
+            <summary>
+            Roughly where in the calling code that this sql was executed.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.SqlTiming.StartMilliseconds">
+            <summary>
+            Offset from main MiniProfiler start that this sql began.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.SqlTiming.DurationMilliseconds">
+            <summary>
+            How long this sql statement took to execute.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.SqlTiming.FirstFetchDurationMilliseconds">
+            <summary>
+            When executing readers, how long it took to come back initially from the database, 
+            before all records are fetched and reader is closed.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.SqlTiming.Parameters">
+            <summary>
+            Stores any parameter names and values used by the profiled DbCommand.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.SqlTiming.ParentTimingId">
+            <summary>
+            Id of the Timing this statement was executed in.
+            </summary>
+            <remarks>
+            Needed for database deserialization.
+            </remarks>
+        </member>
+        <member name="P:MvcMiniProfiler.SqlTiming.ParentTiming">
+            <summary>
+            The Timing step that this sql execution occurred in.
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.SqlTiming.IsDuplicate">
+            <summary>
+            True when other identical sql statements have been executed during this MiniProfiler session.
+            </summary>
+        </member>
+        <member name="T:MvcMiniProfiler.Helpers.StackTraceSnippet">
+            <summary>
+            Gets part of a stack trace containing only methods we care about.
+            </summary>
+        </member>
+        <member name="F:MvcMiniProfiler.Helpers.StackTraceSnippet.TypesToExclude">
+            <summary>
+            Contains the default list of full type names we don't want in any stack trace snippets.
+            </summary>
+        </member>
+        <member name="T:MvcMiniProfiler.Storage.HttpRuntimeCacheStorage">
+            <summary>
+            Understands how to store a <see cref="T:MvcMiniProfiler.MiniProfiler"/> to the <see cref="P:System.Web.HttpRuntime.Cache"/> with absolute expiration.
+            </summary>
+        </member>
+        <member name="F:MvcMiniProfiler.Storage.HttpRuntimeCacheStorage.CacheKeyPrefix">
+            <summary>
+            The string that prefixes all keys that MiniProfilers are saved under, e.g.
+            "mini-profiler-ecfb0050-7ce8-4bf1-bf82-2cb38e90e31e".
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.Storage.HttpRuntimeCacheStorage.#ctor(System.TimeSpan)">
+            <summary>
+            Returns a new HttpRuntimeCacheStorage class that will cache MiniProfilers for the specified duration.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.Storage.HttpRuntimeCacheStorage.SaveMiniProfiler(System.Guid,MvcMiniProfiler.MiniProfiler)">
+            <summary>
+            Saves <paramref name="profiler"/> to the HttpRuntime.Cache under a key concated with <see cref="F:MvcMiniProfiler.Storage.HttpRuntimeCacheStorage.CacheKeyPrefix"/>
+            and <paramref name="id"/>.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.Storage.HttpRuntimeCacheStorage.LoadMiniProfiler(System.Guid)">
+            <summary>
+            Returns the originally-stored <see cref="T:MvcMiniProfiler.MiniProfiler"/> 
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="P:MvcMiniProfiler.Storage.HttpRuntimeCacheStorage.CacheDuration">
+            <summary>
+            How long to cache each <see cref="T:MvcMiniProfiler.MiniProfiler"/> for (i.e. the absolute expiration parameter of 
+            <see cref="M:System.Web.Caching.Cache.Insert(System.String,System.Object,System.Web.Caching.CacheDependency,System.DateTime,System.TimeSpan,System.Web.Caching.CacheItemUpdateCallback)"/>)
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.Data.ProfiledDbCommand.BindByName">
+            <summary>
+            If the underlying command supports BindByName, this sets/clears the underlying
+            implementation accordingly. This is required to support OracleCommand from dapper-dot-net
+            </summary>
+        </member>
+    </members>
+</doc>
