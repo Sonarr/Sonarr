@@ -68,7 +68,7 @@ namespace NzbDrone
             Process currentProcess = Process.GetCurrentProcess();
             if (currentProcess.PriorityClass < ProcessPriorityClass.Normal)
             {
-                Logger.Info("Promoting process priority from {0} to {1}", currentProcess.PriorityClass,
+                Logger.Info("Promoting Nzbdrone.exe process priority from {0} to {1}", currentProcess.PriorityClass,
                             ProcessPriorityClass.Normal);
                 currentProcess.PriorityClass = ProcessPriorityClass.Normal;
             }
@@ -76,7 +76,7 @@ namespace NzbDrone
             
             if (IISController.IISProcess!=null && IISController.IISProcess.PriorityClass < ProcessPriorityClass.Normal)
             {
-                Logger.Info("Promoting process priority from {0} to {1}", IISController.IISProcess.PriorityClass,
+                Logger.Info("Promoting IISExpress process priority from {0} to {1}", IISController.IISProcess.PriorityClass,
                             ProcessPriorityClass.Normal);
                 IISController.IISProcess.PriorityClass = ProcessPriorityClass.Normal;
             }
