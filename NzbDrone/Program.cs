@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading;
+using System.Timers;
 using Exceptioneer.WindowsFormsClient;
 using NLog;
-
 namespace NzbDrone
 {
     internal static class Program
@@ -20,7 +20,9 @@ namespace NzbDrone
 
                 Process currentProcess = Process.GetCurrentProcess();
 
-                FixPriorities();
+                var prioCheckTimer = new System.Timers.Timer(5000);
+                prioCheckTimer.Elapsed += prioCheckTimer_Elapsed;
+                prioCheckTimer.Enabled = true;
 
                 currentProcess.EnableRaisingEvents = true;
                 currentProcess.Exited += ProgramExited;
@@ -35,7 +37,6 @@ namespace NzbDrone
 #if DEBUG
                 Attach();
 #endif
-                FixPriorities();
 
                 if (Environment.UserInteractive)
                 {
@@ -63,7 +64,7 @@ namespace NzbDrone
             Console.ReadLine();
         }
 
-        private static void FixPriorities()
+        static void prioCheckTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             Process currentProcess = Process.GetCurrentProcess();
             if (currentProcess.PriorityClass < ProcessPriorityClass.Normal)
@@ -73,14 +74,16 @@ namespace NzbDrone
                 currentProcess.PriorityClass = ProcessPriorityClass.Normal;
             }
 
-            
-            if (IISController.IISProcess!=null && IISController.IISProcess.PriorityClass < ProcessPriorityClass.Normal)
+
+            if (IISController.IISProcess != null && IISController.IISProcess.PriorityClass < ProcessPriorityClass.Normal)
             {
                 Logger.Info("Promoting IISExpress process priority from {0} to {1}", IISController.IISProcess.PriorityClass,
                             ProcessPriorityClass.Normal);
                 IISController.IISProcess.PriorityClass = ProcessPriorityClass.Normal;
             }
         }
+
+
 
 #if DEBUG
         private static void Attach()
