@@ -21,7 +21,9 @@ namespace NzbDrone.Core.Providers.Jobs
         private static readonly object ExecutionLock = new object();
         private Thread _jobThread;
         private static bool _isRunning;
-        private static readonly List<Tuple<Type, Int32>> Queue = new List<Tuple<Type, int>>();
+        public static readonly List<Tuple<Type, Int32>> Queue = new List<Tuple<Type, int>>();
+
+
 
         private ProgressNotification _notification;
 
@@ -34,7 +36,6 @@ namespace NzbDrone.Core.Providers.Jobs
         }
 
         public JobProvider() { }
-
 
         /// <summary>
         /// Returns a list of all registered jobs
@@ -158,7 +159,7 @@ namespace NzbDrone.Core.Providers.Jobs
                     }
                 };
 
-                _jobThread = new Thread(starter) { Name = "JobQueueThread", Priority = ThreadPriority.BelowNormal };
+                _jobThread = new Thread(starter) { Name = "JobQueueThread" };
                 _jobThread.Start();
 
             }
@@ -176,45 +177,41 @@ namespace NzbDrone.Core.Providers.Jobs
         /// </summary>
         private void ProcessQueue()
         {
-            Tuple<Type, int> job = null;
-
-            try
+            do
             {
-                lock (Queue)
+                Tuple<Type, int> job = null;
+
+                try
                 {
-                    if (Queue.Count != 0)
+                    lock (Queue)
                     {
-                        job = Queue[0];
+                        if (Queue.Count != 0)
+                        {
+                            job = Queue.First();
+                        }
+                    }
+
+                    if (job != null)
+                    {
+                        Execute(job.Item1, job.Item2);
+                    }
+
+                }
+                catch (Exception e)
+                {
+                    Logger.FatalException("An error has occurred while processing queued job.", e);
+                }
+                finally
+                {
+                    if (job != null)
+                    {
+                        Queue.Remove(job);
                     }
                 }
 
-                if (job != null)
-                {
-                    Execute(job.Item1, job.Item2);
-                }
+            } while (Queue.Count != 0);
 
-            }
-            catch (Exception e)
-            {
-                Logger.FatalException("An error has occurred while processing queued job.", e);
-            }
-            finally
-            {
-                if (job != null)
-                {
-                    Queue.Remove(job);
-                }
-            }
-
-            //Try to find next job is last run found a job.
-            if (job != null)
-            {
-                ProcessQueue();
-            }
-            else
-            {
-                Logger.Trace("Finished processing jobs in the queue.");
-            }
+            Logger.Trace("Finished processing jobs in the queue.");
 
             return;
         }

@@ -98,6 +98,7 @@ namespace NzbDrone.Core.Test
 
             firstRun.Should().BeTrue();
             secondRun.Should().BeTrue();
+            JobProvider.Queue.Should().BeEmpty();
         }
 
         [Test]
@@ -113,12 +114,13 @@ namespace NzbDrone.Core.Test
 
             var timerProvider = mocker.Resolve<JobProvider>();
             timerProvider.Initialize();
-            var firstRun = timerProvider.QueueJob(typeof(SlowJob), 1);
-            var secondRun = timerProvider.QueueJob(typeof(SlowJob), 2);
-            var third = timerProvider.QueueJob(typeof(SlowJob), 3);
+            timerProvider.QueueJob(typeof(SlowJob), 1);
+            timerProvider.QueueJob(typeof(SlowJob), 2);
+            timerProvider.QueueJob(typeof(SlowJob), 3);
 
 
             Thread.Sleep(10000);
+            JobProvider.Queue.Should().BeEmpty();
             //Asserts are done in ExceptionVerification
         }
 
@@ -143,6 +145,7 @@ namespace NzbDrone.Core.Test
             firstRun.Should().BeTrue();
             secondRun.Should().BeTrue();
             Thread.Sleep(2000);
+            JobProvider.Queue.Should().BeEmpty();
             ExceptionVerification.ExcpectedErrors(2);
         }
 
@@ -206,6 +209,7 @@ namespace NzbDrone.Core.Test
             Thread.Sleep(5000);
 
             Assert.AreEqual(1, slowJob.ExexutionCount);
+            JobProvider.Queue.Should().BeEmpty();
 
         }
 
@@ -362,6 +366,7 @@ namespace NzbDrone.Core.Test
             var settings = timerProvider.All();
             settings.Should().NotBeEmpty();
             settings[0].LastExecution.Should().HaveYear(2000);
+            JobProvider.Queue.Should().BeEmpty();
         }
 
         [Test]

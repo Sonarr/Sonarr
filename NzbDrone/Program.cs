@@ -19,11 +19,8 @@ namespace NzbDrone
                 Thread.CurrentThread.Name = "Host";
 
                 Process currentProcess = Process.GetCurrentProcess();
-                if (currentProcess.PriorityClass < ProcessPriorityClass.Normal)
-                {
-                    Logger.Info("Promoting process priority from {0} to {1}", currentProcess.PriorityClass, ProcessPriorityClass.Normal);
-                    currentProcess.PriorityClass = ProcessPriorityClass.Normal;
-                }
+
+                FixPriorities();
 
                 currentProcess.EnableRaisingEvents = true;
                 currentProcess.Exited += ProgramExited;
@@ -38,6 +35,8 @@ namespace NzbDrone
 #if DEBUG
                 Attach();
 #endif
+                FixPriorities();
+
                 if (Environment.UserInteractive)
                 {
                     try
@@ -62,6 +61,25 @@ namespace NzbDrone
 
             Console.WriteLine("Press enter to exit.");
             Console.ReadLine();
+        }
+
+        private static void FixPriorities()
+        {
+            Process currentProcess = Process.GetCurrentProcess();
+            if (currentProcess.PriorityClass < ProcessPriorityClass.Normal)
+            {
+                Logger.Info("Promoting process priority from {0} to {1}", currentProcess.PriorityClass,
+                            ProcessPriorityClass.Normal);
+                currentProcess.PriorityClass = ProcessPriorityClass.Normal;
+            }
+
+            
+            if (IISController.IISProcess!=null && IISController.IISProcess.PriorityClass < ProcessPriorityClass.Normal)
+            {
+                Logger.Info("Promoting process priority from {0} to {1}", IISController.IISProcess.PriorityClass,
+                            ProcessPriorityClass.Normal);
+                IISController.IISProcess.PriorityClass = ProcessPriorityClass.Normal;
+            }
         }
 
 #if DEBUG
