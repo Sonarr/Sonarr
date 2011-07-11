@@ -1,11 +1,16 @@
-﻿$(document).ready(function () {
+﻿$(window).load(function () {
     var speed = 700;
     var isShown = false;
     var currentMessage = "";
 
-    $.doTimeout(500, refreshNotifications);
-
-
+    //workaround for the infinite browser load in chrome
+    if ($.browser.webkit) {
+        $.doTimeout(1000, refreshNotifications);
+    }
+    else {
+        refreshNotifications();
+    }
+    
 
     function refreshNotifications() {
         $.get('/notification/Comet', { message: currentMessage }, notificationCallback);
