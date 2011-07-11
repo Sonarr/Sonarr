@@ -17,6 +17,12 @@ namespace NzbDrone.Core.Test
     // ReSharper disable InconsistentNaming
     public class JobProviderTest : TestBase
     {
+        [TestFixtureSetUp]
+        public void Setup()
+        {
+            JobProvider.Queue.Clear();
+        }
+
         [Test]
         public void Run_Jobs_Updates_Last_Execution()
         {
@@ -62,7 +68,7 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
-       public void scheduler_skips_jobs_that_arent_mature_yet()
+        public void scheduler_skips_jobs_that_arent_mature_yet()
         {
             var fakeJob = new FakeJob();
             var mocker = new AutoMoqer();
@@ -88,8 +94,8 @@ namespace NzbDrone.Core.Test
         {
             var fakeJob = new FakeJob();
             var mocker = new AutoMoqer();
-            
-            IList<IJob> fakeJobs = new List<IJob> {fakeJob};
+
+            IList<IJob> fakeJobs = new List<IJob> { fakeJob };
             mocker.SetConstant(MockLib.GetEmptyDatabase());
             mocker.SetConstant(fakeJobs);
 
