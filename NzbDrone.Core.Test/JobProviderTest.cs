@@ -1,9 +1,11 @@
 ﻿// ReSharper disable RedundantUsingDirective
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using AutoMoq;
 using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers.Jobs;
@@ -31,9 +33,8 @@ namespace NzbDrone.Core.Test
 
             //Assert
             var settings = timerProvider.All();
-            Assert.IsNotEmpty(settings);
+
             Assert.AreNotEqual(DateTime.MinValue, settings[0].LastExecution);
-            settings[0].Success.Should().BeTrue();
         }
 
         [Test]
@@ -51,32 +52,33 @@ namespace NzbDrone.Core.Test
             timerProvider.Initialize();
             timerProvider.RunScheduled();
 
+            Thread.Sleep(1000);
+
             //Assert
             var settings = timerProvider.All();
-            Assert.IsNotEmpty(settings);
             Assert.AreNotEqual(DateTime.MinValue, settings[0].LastExecution);
-            Assert.IsFalse(settings[0].Success);
+            settings[0].Success.Should().BeFalse();
             ExceptionVerification.ExcpectedErrors(1);
         }
 
         [Test]
-        //This test will confirm that the concurrency checks are rest
-        //after execution so the job can successfully run.
-        public void can_run_job_again()
+       public void scheduler_skips_jobs_that_arent_mature_yet()
         {
-            IList<IJob> fakeJobs = new List<IJob> { new FakeJob() };
+            var fakeJob = new FakeJob();
             var mocker = new AutoMoqer();
 
+            IList<IJob> fakeJobs = new List<IJob> { fakeJob };
             mocker.SetConstant(MockLib.GetEmptyDatabase());
             mocker.SetConstant(fakeJobs);
 
             var timerProvider = mocker.Resolve<JobProvider>();
             timerProvider.Initialize();
-            var firstRun = timerProvider.RunScheduled();
-            var secondRun = timerProvider.RunScheduled();
+            timerProvider.RunScheduled();
+            Thread.Sleep(500);
+            timerProvider.RunScheduled();
+            Thread.Sleep(500);
 
-            firstRun.Should().BeTrue();
-            secondRun.Should().BeTrue();
+            fakeJob.ExexutionCount.Should().Be(1);
         }
 
         [Test]
@@ -84,21 +86,21 @@ namespace NzbDrone.Core.Test
         //after execution so the job can successfully run.
         public void can_run_async_job_again()
         {
-            IList<IJob> fakeJobs = new List<IJob> { new FakeJob() };
+            var fakeJob = new FakeJob();
             var mocker = new AutoMoqer();
-
+            
+            IList<IJob> fakeJobs = new List<IJob> {fakeJob};
             mocker.SetConstant(MockLib.GetEmptyDatabase());
             mocker.SetConstant(fakeJobs);
 
             var timerProvider = mocker.Resolve<JobProvider>();
             timerProvider.Initialize();
-            var firstRun = timerProvider.QueueJob(typeof(FakeJob));
-            Thread.Sleep(2000);
-            var secondRun = timerProvider.QueueJob(typeof(FakeJob));
-
-            firstRun.Should().BeTrue();
-            secondRun.Should().BeTrue();
+            timerProvider.QueueJob(typeof(FakeJob));
+            Thread.Sleep(1000);
+            timerProvider.QueueJob(typeof(FakeJob));
+            Thread.Sleep(1000);
             JobProvider.Queue.Should().BeEmpty();
+            fakeJob.ExexutionCount.Should().Be(2);
         }
 
         [Test]
@@ -130,7 +132,8 @@ namespace NzbDrone.Core.Test
         //after execution so the job can successfully run.
         public void can_run_broken_async_job_again()
         {
-            IList<IJob> fakeJobs = new List<IJob> { new BrokenJob() };
+            var brokenJob = new BrokenJob();
+            IList<IJob> fakeJobs = new List<IJob> { brokenJob };
             var mocker = new AutoMoqer();
 
             mocker.SetConstant(MockLib.GetEmptyDatabase());
@@ -138,14 +141,14 @@ namespace NzbDrone.Core.Test
 
             var timerProvider = mocker.Resolve<JobProvider>();
             timerProvider.Initialize();
-            var firstRun = timerProvider.QueueJob(typeof(BrokenJob));
+            timerProvider.QueueJob(typeof(BrokenJob));
             Thread.Sleep(2000);
-            var secondRun = timerProvider.QueueJob(typeof(BrokenJob));
+            timerProvider.QueueJob(typeof(BrokenJob));
 
-            firstRun.Should().BeTrue();
-            secondRun.Should().BeTrue();
+
             Thread.Sleep(2000);
             JobProvider.Queue.Should().BeEmpty();
+            brokenJob.ExexutionCount.Should().Be(2);
             ExceptionVerification.ExcpectedErrors(2);
         }
 
@@ -154,7 +157,8 @@ namespace NzbDrone.Core.Test
         //after execution so the job can successfully run.
         public void can_run_two_jobs_at_the_same_time()
         {
-            IList<IJob> fakeJobs = new List<IJob> { new SlowJob() };
+            var slowJob = new SlowJob();
+            IList<IJob> fakeJobs = new List<IJob> { slowJob };
             var mocker = new AutoMoqer();
 
             mocker.SetConstant(MockLib.GetEmptyDatabase());
@@ -163,20 +167,18 @@ namespace NzbDrone.Core.Test
             var timerProvider = mocker.Resolve<JobProvider>();
             timerProvider.Initialize();
 
-            bool firstRun = false;
-            bool secondRun = false;
 
-            var thread1 = new Thread(() => firstRun = timerProvider.RunScheduled());
+            var thread1 = new Thread(() => timerProvider.RunScheduled());
             thread1.Start();
             Thread.Sleep(1000);
-            var thread2 = new Thread(() => secondRun = timerProvider.RunScheduled());
+            var thread2 = new Thread(() => timerProvider.RunScheduled());
             thread2.Start();
 
             thread1.Join();
             thread2.Join();
 
-            firstRun.Should().BeTrue();
-            Assert.IsFalse(secondRun);
+
+            slowJob.ExexutionCount = 2;
 
         }
 
@@ -389,6 +391,61 @@ namespace NzbDrone.Core.Test
             Assert.IsNotEmpty(settings);
             Assert.IsFalse(settings[0].Success);
         }
+
+
+        [Test]
+        public void existing_queue_should_start_queue_if_not_running()
+        {
+            var mocker = new AutoMoqer();
+
+            var fakeJob = new FakeJob();
+            IList<IJob> fakeJobs = new List<IJob> { fakeJob };
+
+
+            mocker.SetConstant(MockLib.GetEmptyDatabase());
+            mocker.SetConstant(fakeJobs);
+
+            var fakeQueueItem = new Tuple<Type, int>(fakeJob.GetType(), 12);
+            //Act
+            var jobProvider = mocker.Resolve<JobProvider>();
+            jobProvider.Initialize();
+            JobProvider.Queue.Add(fakeQueueItem);
+            jobProvider.QueueJob(fakeJob.GetType(), 12);
+            Thread.Sleep(1000);
+
+            //Assert
+            fakeJob.ExexutionCount.Should().Be(1);
+        }
+
+
+        [Test]
+        public void Item_added_to_queue_while_scheduler_runs_is_executed()
+        {
+            var mocker = new AutoMoqer();
+
+            var slowJob = new SlowJob();
+            var disabledJob = new DisabledJob();
+            IList<IJob> fakeJobs = new List<IJob> { slowJob, disabledJob };
+
+            mocker.SetConstant(MockLib.GetEmptyDatabase());
+            mocker.SetConstant(fakeJobs);
+
+            mocker.Resolve<JobProvider>().Initialize();
+
+            var _jobThread = new Thread(() => mocker.Resolve<JobProvider>().RunScheduled());
+            _jobThread.Start();
+
+            Thread.Sleep(200);
+
+            mocker.Resolve<JobProvider>().QueueJob(typeof(DisabledJob), 12);
+
+            Thread.Sleep(3000);
+
+            //Assert
+            JobProvider.Queue.Should().BeEmpty();
+            slowJob.ExexutionCount.Should().Be(1);
+            disabledJob.ExexutionCount.Should().Be(1);
+        }
     }
 
     public class FakeJob : IJob
@@ -403,9 +460,11 @@ namespace NzbDrone.Core.Test
             get { return 15; }
         }
 
+        public int ExexutionCount { get; set; }
+
         public void Start(ProgressNotification notification, int targetId)
         {
-
+            ExexutionCount++;
         }
     }
 
@@ -441,8 +500,11 @@ namespace NzbDrone.Core.Test
             get { return 15; }
         }
 
+        public int ExexutionCount { get; set; }
+
         public void Start(ProgressNotification notification, int targetId)
         {
+            ExexutionCount++;
             throw new ApplicationException("Broken job is broken");
         }
     }

@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using NzbDrone.Core.Providers.Jobs;
 
 namespace NzbDrone.Core.Test.Framework
 {
@@ -17,6 +18,7 @@ namespace NzbDrone.Core.Test.Framework
         [TearDown]
         public void TearDown()
         {
+            JobProvider.Queue.Clear();
             ExceptionVerification.AssertNoUnexcpectedLogs();
         }
 

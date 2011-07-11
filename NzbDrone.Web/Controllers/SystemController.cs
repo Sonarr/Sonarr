@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Web.Mvc;
@@ -28,6 +29,7 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult Jobs()
         {
+            ViewData["Queue"] = JobProvider.Queue.Select(c => new Tuple<String, int>(c.Item1.Name, c.Item2));
             return View(_jobProvider.All());
         }
 

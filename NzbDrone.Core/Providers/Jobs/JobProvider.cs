@@ -67,40 +67,31 @@ namespace NzbDrone.Core.Providers.Jobs
         /// <summary>
         /// Iterates through all registered jobs and executed any that are due for an execution.
         /// </summary>
-        /// <returns>True if ran, false if skipped</returns>
-        public virtual bool RunScheduled()
+        public virtual void RunScheduled()
         {
             lock (ExecutionLock)
             {
                 if (_isRunning)
                 {
                     Logger.Trace("Queue is already running. Ignoring scheduler's request.");
-                    return false;
-                }
-                _isRunning = true;
-            }
-
-            try
-            {
-                var pendingJobs = All().Where(
-                    t => t.Enable &&
-                         (DateTime.Now - t.LastExecution) > TimeSpan.FromMinutes(t.Interval)
-                    );
-
-                foreach (var pendingTimer in pendingJobs)
-                {
-                    var timer = pendingTimer;
-                    var timerClass = _jobs.Where(t => t.GetType().ToString() == timer.TypeName).FirstOrDefault();
-                    Execute(timerClass.GetType());
+                    return;
                 }
             }
-            finally
+
+            var counter = 0;
+
+            var pendingJobs = All().Where(
+                t => t.Enable &&
+                     (DateTime.Now - t.LastExecution) > TimeSpan.FromMinutes(t.Interval)
+                ).Select(c => _jobs.Where(t => t.GetType().ToString() == c.TypeName).Single());
+
+            foreach (var job in pendingJobs)
             {
-                _isRunning = false;
+                QueueJob(job.GetType());
+                counter++;
             }
 
-            Logger.Trace("Finished executing scheduled tasks.");
-            return true;
+            Logger.Trace("{0} Scheduled tasks have been added to the queue", counter);
         }
 
         /// <summary>
@@ -109,32 +100,33 @@ namespace NzbDrone.Core.Providers.Jobs
         /// <param name="jobType">Type of the job that should be executed.</param>
         /// <param name="targetId">The targetId could be any Id parameter eg. SeriesId. it will be passed to the job implementation
         /// to allow it to filter it's target of execution.</param>
-        /// <returns>True if queued, false if duplicate and was skipped</returns>
         /// <remarks>Job is only added to the queue if same job with the same targetId doesn't already exist in the queue.</remarks>
-        public virtual bool QueueJob(Type jobType, int targetId = 0)
+        public virtual void QueueJob(Type jobType, int targetId = 0)
         {
             Logger.Debug("Adding [{0}:{1}] to the queue", jobType.Name, targetId);
-            lock (Queue)
-            {
-                var queueTuple = new Tuple<Type, int>(jobType, targetId);
-
-                if (Queue.Contains(queueTuple))
-                {
-                    Logger.Info("[{0}:{1}] already exists in job queue. Skipping.", jobType.Name, targetId);
-                    return false;
-                }
-
-                Queue.Add(queueTuple);
-                Logger.Trace("Job [{0}:{1}] added to the queue", jobType.Name, targetId);
-
-            }
 
             lock (ExecutionLock)
             {
+                lock (Queue)
+                {
+                    var queueTuple = new Tuple<Type, int>(jobType, targetId);
+
+                    if (!Queue.Contains(queueTuple))
+                    {
+                        Queue.Add(queueTuple);
+                        Logger.Trace("Job [{0}:{1}] added to the queue", jobType.Name, targetId);
+
+                    }
+                    else
+                    {
+                        Logger.Info("[{0}:{1}] already exists in job queue. Skipping.", jobType.Name, targetId);
+                    }
+                }
+
                 if (_isRunning)
                 {
                     Logger.Trace("Queue is already running. No need to start it up.");
-                    return true;
+                    return;
                 }
                 _isRunning = true;
             }
@@ -166,10 +158,8 @@ namespace NzbDrone.Core.Providers.Jobs
             else
             {
                 Logger.Error("Execution lock has fucked up. Thread still active. Ignoring request.");
-                return true;
             }
 
-            return true;
         }
 
         /// <summary>
