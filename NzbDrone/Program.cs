@@ -64,23 +64,33 @@ namespace NzbDrone
             Console.ReadLine();
         }
 
-        static void prioCheckTimer_Elapsed(object sender, ElapsedEventArgs e)
+        private static void prioCheckTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             Process currentProcess = Process.GetCurrentProcess();
-            if (currentProcess.PriorityClass < ProcessPriorityClass.Normal)
+            if (currentProcess.PriorityClass != ProcessPriorityClass.Normal)
             {
-                Logger.Info("Promoting Nzbdrone.exe process priority from {0} to {1}", currentProcess.PriorityClass,
-                            ProcessPriorityClass.Normal);
-                currentProcess.PriorityClass = ProcessPriorityClass.Normal;
+                SetPriority(currentProcess);
             }
 
 
-            if (IISController.IISProcess != null && IISController.IISProcess.PriorityClass < ProcessPriorityClass.Normal)
+            if (IISController.IISProcess != null)
             {
-                Logger.Info("Promoting IISExpress process priority from {0} to {1}", IISController.IISProcess.PriorityClass,
-                            ProcessPriorityClass.Normal);
-                IISController.IISProcess.PriorityClass = ProcessPriorityClass.Normal;
+                IISController.IISProcess.Refresh();
+
+                if (IISController.IISProcess.PriorityClass != ProcessPriorityClass.Normal && IISController.IISProcess.PriorityClass != ProcessPriorityClass.AboveNormal)
+                {
+                    SetPriority(IISController.IISProcess);
+                }
             }
+        }
+
+        private static void SetPriority(Process process)
+        {
+            Logger.Info("Updating [{0}] process priority from {1} to {2}",
+                          process.ProcessName,
+                          IISController.IISProcess.PriorityClass,
+                          ProcessPriorityClass.Normal);
+            process.PriorityClass = ProcessPriorityClass.Normal;
         }
 
 
