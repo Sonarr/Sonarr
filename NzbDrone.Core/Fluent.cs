@@ -20,9 +20,14 @@ namespace NzbDrone.Core
         }
 
 
-        public static double Megabytes(this int megabytes)
+        public static Int64 Megabytes(this int megabytes)
         {
             return megabytes * 1048576;
+        }
+
+        public static Int64 Gigabytes(this int gigabytes)
+        {
+            return gigabytes * 1073741824;
         }
     }
 }
