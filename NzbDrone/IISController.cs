@@ -65,7 +65,7 @@ namespace NzbDrone
             Logger.Info("Starting process. [{0}]", IISProcess.StartInfo.FileName);
 
 
-
+            IISProcess.PriorityClass = ProcessPriorityClass.AboveNormal;
             IISProcess.Start();
 
             IISProcess.BeginErrorReadLine();

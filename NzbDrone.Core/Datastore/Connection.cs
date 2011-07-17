@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Datastore
                 connection = ProfiledDbConnection.Get(sqliteConnection);
             }
 
-            var db = new Database(connection);
+            var db = new Database(connection, Database.DBType.SqlServerCE);
             db.ForceDateTimesToUtc = false;
 
             if (connection.State != ConnectionState.Open)

@@ -18,5 +18,11 @@ namespace NzbDrone.Core
 
             return actual;
         }
+
+
+        public static double Megabytes(this int megabytes)
+        {
+            return megabytes * 1048576;
+        }
     }
 }
