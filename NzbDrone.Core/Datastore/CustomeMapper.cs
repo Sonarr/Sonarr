@@ -36,6 +36,10 @@ namespace NzbDrone.Core.Datastore
 
         public override Func<object, object> GetFromDbConverter(PropertyInfo propertyInfo, Type sourceType)
         {
+            //Only needed if using dynamic as the return type from DB, not implemented currently as it has no use right now
+            //if (propertyInfo == null)
+            //    return null;
+
             return GetFromDbConverter(propertyInfo.PropertyType, sourceType);
         }
     }
