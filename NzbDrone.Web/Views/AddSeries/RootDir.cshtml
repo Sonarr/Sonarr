@@ -1,26 +1,18 @@
 ﻿<span>
-    <input id="rootDirInput" type="text" style="width: 400px" />
+    <input id="rootDirInput" class="folderLookup" type="text" style="width: 400px" />
     <button id="saveDir">
         Add</button>
-</span>
-<span id="rootDirs">
+</span><span id="rootDirs">
     @{Html.RenderAction("RootList");}
 </span>
 <script type="text/javascript">
-
-    jQuery(document).ready(function() {
-        $.ajaxSetup({
-                cache: false
-            });
-
-        bindFolderAutoComplete('#rootDirInput');
-
+    jQuery(document).ready(function () {
         $('#rootDirInput').watermark('Start typing to add new root folder...');
 
         $('#rootDirs .actionButton img').live('click',
-            function(image) {
+            function (image) {
                 var path = $(image.target).attr('id');
-                $.post('@Url.Action("DeleteRootDir", "AddSeries")', { Path: path }, function() {
+                $.post('@Url.Action("DeleteRootDir", "AddSeries")', { Path: path }, function () {
                     refreshRoot();
                 });
             });
@@ -29,18 +21,20 @@
 
         function saveRootDir() {
             var path = $("#rootDirInput").val();
-            $.post('@Url.Action("SaveRootDir", "AddSeries")', { Path: path }, function() {
-                refreshRoot();
-                $("#rootDirInput").val('');
-            });
-
+            if (path) {
+                $.post('@Url.Action("SaveRootDir", "AddSeries")', { Path: path }, function () {
+                    refreshRoot();
+                    $("#rootDirInput").val('');
+                });
+            }
         }
 
 
         function refreshRoot() {
-            $.get('@Url.Action("RootList", "AddSeries")', function(data) {
+            $.get('@Url.Action("RootList", "AddSeries")', function (data) {
                 $('#rootDirs').html(data);
             });
+            reloadExistingSeries();
         }
     });
     

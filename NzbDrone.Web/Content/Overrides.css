@@ -16,3 +16,8 @@
 {
     font-weight: normal;
 }
+
+.t-combobox .t-input
+{
+   line-height: 25px;
+}

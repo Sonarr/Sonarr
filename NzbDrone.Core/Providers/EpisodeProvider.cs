@@ -195,12 +195,12 @@ namespace NzbDrone.Core.Providers
                     Logger.Trace("Updating info for [{0}] - S{1}E{2}", tvDbSeriesInfo.SeriesName, episode.SeasonNumber, episode.EpisodeNumber);
 
                     //first check using tvdbId, this should cover cases when and episode number in a season is changed
-                    var episodeToUpdate = seriesEpisodes.Where(e => e.TvDbEpisodeId == episode.Id).FirstOrDefault();
+                    var episodeToUpdate = seriesEpisodes.Where(e => e.TvDbEpisodeId == episode.Id).SingleOrDefault();
 
                     //not found, try using season/episode number
                     if (episodeToUpdate == null)
                     {
-                        episodeToUpdate = seriesEpisodes.Where(e => e.SeasonNumber == episode.SeasonNumber && e.EpisodeNumber == episode.EpisodeNumber).FirstOrDefault();
+                        episodeToUpdate = seriesEpisodes.Where(e => e.SeasonNumber == episode.SeasonNumber && e.EpisodeNumber == episode.EpisodeNumber).SingleOrDefault();
                     }
 
                     //Episode doesn't exist locally

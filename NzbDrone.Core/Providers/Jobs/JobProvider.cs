@@ -171,31 +171,34 @@ namespace NzbDrone.Core.Providers.Jobs
             {
                 Tuple<Type, int> job = null;
 
-                try
+                using (NestedDiagnosticsContext.Push(Guid.NewGuid().ToString()))
                 {
-                    lock (Queue)
+                   try
                     {
-                        if (Queue.Count != 0)
+                        lock (Queue)
                         {
-                            job = Queue.First();
+                            if (Queue.Count != 0)
+                            {
+                                job = Queue.First();
+                            }
                         }
-                    }
 
-                    if (job != null)
-                    {
-                        Execute(job.Item1, job.Item2);
-                    }
+                        if (job != null)
+                        {
+                            Execute(job.Item1, job.Item2);
+                        }
 
-                }
-                catch (Exception e)
-                {
-                    Logger.FatalException("An error has occurred while processing queued job.", e);
-                }
-                finally
-                {
-                    if (job != null)
+                    }
+                    catch (Exception e)
                     {
-                        Queue.Remove(job);
+                        Logger.FatalException("An error has occurred while processing queued job.", e);
+                    }
+                    finally
+                    {
+                        if (job != null)
+                        {
+                            Queue.Remove(job);
+                        }
                     }
                 }
 
@@ -214,14 +217,14 @@ namespace NzbDrone.Core.Providers.Jobs
         /// to allow it to filter it's target of execution</param>
         private void Execute(Type jobType, int targetId = 0)
         {
-            var jobImplementation = _jobs.Where(t => t.GetType() == jobType).FirstOrDefault();
+            var jobImplementation = _jobs.Where(t => t.GetType() == jobType).Single();
             if (jobImplementation == null)
             {
                 Logger.Error("Unable to locate implementation for '{0}'. Make sure it is properly registered.", jobType);
                 return;
             }
 
-            var settings = All().Where(j => j.TypeName == jobType.ToString()).FirstOrDefault();
+            var settings = All().Where(j => j.TypeName == jobType.ToString()).Single();
 
             using (_notification = new ProgressNotification(jobImplementation.Name))
             {
@@ -294,11 +297,7 @@ namespace NzbDrone.Core.Providers.Jobs
         /// <returns>DateTime of next scheduled job execution</returns>
         public virtual DateTime NextScheduledRun(Type jobType)
         {
-            var job = All().Where(t => t.TypeName == jobType.ToString()).FirstOrDefault();
-
-            if (job == null)
-                return DateTime.Now;
-
+            var job = All().Where(t => t.TypeName == jobType.ToString()).Single();
             return job.LastExecution.AddMinutes(job.Interval);
         }
     }

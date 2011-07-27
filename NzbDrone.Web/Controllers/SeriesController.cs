@@ -90,7 +90,6 @@ namespace NzbDrone.Web.Controllers
         public ActionResult _SaveAjaxSeriesEditing(int id, string path, bool monitored, bool seasonFolder, int qualityProfileId, List<SeasonEditModel> seasonEditor)
         {
             var oldSeries = _seriesProvider.GetSeries(id);
-            oldSeries.Path = path;
             oldSeries.Monitored = monitored;
             oldSeries.SeasonFolder = seasonFolder;
             oldSeries.QualityProfileId = qualityProfileId;

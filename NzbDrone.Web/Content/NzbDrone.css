@@ -1,16 +1,24 @@
-h1, h2, h3
+
+*
 {
-    color: #000000;
+    font-family: "Segoe UI" , "Segoe UI Light" , Tahoma, Geneva, sans-serif;
 }
 
 body
 {
     background: #191919 url(images/img07.jpg) no-repeat right top;
-    font-family: "Segoe UI" , "Segoe UI Light" , Tahoma, Geneva, sans-serif !important;
     font-size: 13px;
     color: #3C3C3C;
     background-attachment: fixed;
 }
+
+h1, h2, h3, h4, h5, h6
+{
+    font-family: "Segoe UI Light" , "Segoe UI" , Tahoma, Geneva, sans-serif;
+    color: #3C3C3C;
+    font-weight: 300;
+}
+
 
 fieldset
 {
@@ -60,7 +68,6 @@ hr
     text-align: center;
     text-transform: lowercase;
     font-size: 17px;
-    font-weight: normal;
     vertical-align: middle;
     height: 28px;
 }
@@ -160,8 +167,6 @@ button, input[type="button"], input[type="submit"], input[type="reset"]
     background-color: #065EFE;
     border-style: solid;
     border-color: #065EFE;
-    padding: 5px 10px 5px 10px;
-    margin: 10px;
 }
 
 button:active, input[type="button"]:active, input[type="submit"]:active, input[type="reset"]:active
@@ -171,17 +176,20 @@ button:active, input[type="button"]:active, input[type="submit"]:active, input[t
 
 input[type=text], select
 {
-    font-size: larger;
-    padding: 4px 2px;
+    font-size: small;
+    padding: 2px 2px;
     border: solid 1px #aacfe4;
     width: 200px;
-    margin: 2px 0 10px 10px;
+    margin: 2px 0 10px 0px;
     height: 20px;
 }
 
-select
+
+select, button, input[type="button"], input[type="submit"], input[type="reset"]
 {
-    height: 30px;
+    height: 26px;
+    min-width: 50px;
+    margin-left: 10px;
 }
 
 .listButton
@@ -229,4 +237,11 @@ select
 {
     margin-left: auto;
     margin-right: auto;
+}
+
+
+.qualitySelector
+{
+    min-width: 60px;
+    width: auto;
 }
