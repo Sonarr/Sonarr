@@ -46,7 +46,6 @@ table
 caption, th, td
 {
     text-align: left;
-    font-weight: normal;
     float: none !important;
 }
 table, th, td
@@ -80,11 +79,9 @@ body
     font-size: 75%;
     color: #222;
     background: #fff;
-    font-family: "Helvetica Neue" , Arial, Helvetica, sans-serif;
 }
 h1, h2, h3, h4, h5, h6
 {
-    font-weight: normal;
     color: #111;
 }
 h1
@@ -100,21 +97,19 @@ h2
 }
 h3
 {
+    margin-top: 0.75em;
     font-size: 1.5em;
     line-height: 1;
-    margin-bottom: 1em;
 }
 h4
 {
     font-size: 1.2em;
     line-height: 1.25;
-    margin-bottom: 1.25em;
 }
 h5
 {
     font-size: 1em;
     font-weight: bold;
-    margin-bottom: 1.5em;
 }
 h6
 {
@@ -162,10 +157,7 @@ blockquote
     color: #666;
     font-style: italic;
 }
-strong, dfn
-{
-    font-weight: bold;
-}
+
 em, dfn
 {
     font-style: italic;
@@ -192,11 +184,7 @@ pre
     margin: 1.5em 0;
     white-space: pre;
 }
-pre, code, tt
-{
-    font: 1em 'andale mono' , 'lucida console' , monospace;
-    line-height: 1.5;
-}
+
 li ul, li ol
 {
     margin: 0;
@@ -218,10 +206,7 @@ dl
 {
     margin: 0 0 1.5em 0;
 }
-dl dt
-{
-    font-weight: bold;
-}
+
 dd
 {
     margin-left: 1.5em;
@@ -231,10 +216,7 @@ table
     margin-bottom: 1.4em;
     width: 100%;
 }
-th
-{
-    font-weight: bold;
-}
+
 thead th
 {
     background: #c3d9ff;
@@ -323,7 +305,6 @@ fieldset
 }
 legend
 {
-    font-weight: bold;
     font-size: 1.2em;
     margin-top: -0.2em;
     margin-bottom: 1em;

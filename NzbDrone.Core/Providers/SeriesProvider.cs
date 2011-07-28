@@ -130,7 +130,7 @@ namespace NzbDrone.Core.Providers
 
                 var series = _database.Fetch<Series, QualityProfile>(@"SELECT * FROM Series
                             INNER JOIN QualityProfiles ON Series.QualityProfileId = QualityProfiles.QualityProfileId
-                            WHERE CleanTitle = @0", normalizeTitle).FirstOrDefault();
+                            WHERE CleanTitle = @0", normalizeTitle).SingleOrDefault();
 
                 return series;
             }

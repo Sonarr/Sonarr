@@ -74,7 +74,9 @@ namespace NzbDrone.Core.Providers
                 var cleanPath = Parser.NormalizePath(new DirectoryInfo(seriesFolder).FullName);
 
                 if (!_seriesProvider.SeriesPathExists(cleanPath))
+                {
                     results.Add(cleanPath);
+                }
             }
 
             Logger.Debug("{0} unmapped folders detected.", results.Count);

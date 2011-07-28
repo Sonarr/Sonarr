@@ -64,7 +64,7 @@
         <label class="labelClass">@Html.LabelFor(m => m.SabDropDirectory)
         <span class="small">@Html.DescriptionFor(m => m.SabDropDirectory)</span>
         </label>
-        @Html.TextBoxFor(m => m.SabDropDirectory, new { @class = "inputClass" })
+        @Html.TextBoxFor(m => m.SabDropDirectory, new { @class = "inputClass folderLookup" })
 
         <button type="submit" id="save_button" >Save</button><img src="../../Content/Images/ajax-loader.gif" alt="Loader" id="saveAjax"/>
     }

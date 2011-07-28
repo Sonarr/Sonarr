@@ -51,9 +51,9 @@
       <HintPath>..\Libraries\MVC3\Microsoft.Web.Infrastructure.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MvcMiniProfiler, Version=1.4.4195.37960, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="MvcMiniProfiler, Version=1.6.0.0, Culture=neutral, PublicKeyToken=b44f9351044011a3, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MiniProfiler.1.4\lib\MvcMiniProfiler.dll</HintPath>
+      <HintPath>..\packages\MiniProfiler.1.6\lib\MvcMiniProfiler.dll</HintPath>
     </Reference>
     <Reference Include="Ninject, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\packages\Ninject.2.2.1.4\lib\net40-Full\Ninject.dll</HintPath>
@@ -156,8 +156,7 @@
     <Compile Include="Helpers\DescriptionExtension.cs" />
     <Compile Include="Helpers\HtmlPrefixScopeExtensions.cs" />
     <Compile Include="Helpers\IsCurrentActionHelper.cs" />
-    <Compile Include="Models\AddExistingManualModel.cs" />
-    <Compile Include="Models\AddExistingSeriesModel.cs" />
+    <Compile Include="Models\ExistingSeriesModel.cs" />
     <Compile Include="Models\AddNewSeriesModel.cs" />
     <Compile Include="Models\PendingProcessingModel.cs" />
     <Compile Include="Models\QualityTypeModel.cs" />
@@ -251,6 +250,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\AutoComplete.js" />
+    <Content Include="Scripts\Plugins\jquery.livequery.js" />
     <Content Include="Scripts\settingsForm.js" />
     <Content Include="Scripts\Plugins\doTimeout.js" />
     <Content Include="Scripts\episodeSearch.js" />
@@ -261,7 +261,6 @@
     <Content Include="Scripts\Notification.js" />
     <Content Include="Views\AddSeries\Index.cshtml" />
     <Content Include="Views\AddSeries\AddNew.cshtml" />
-    <Content Include="Views\AddSeries\AddSeriesItem.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -325,7 +324,7 @@
     <Content Include="Views\Series\SingleSeason.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\AddSeries\AddExisting.cshtml" />
+    <Content Include="Views\AddSeries\ExistingSeries.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\System\PendingProcessing.cshtml" />

@@ -14,6 +14,7 @@ namespace NzbDrone.Web.Controllers
         [HttpGet]
         public JsonResult Index()
         {
+            MvcMiniProfiler.MiniProfiler.Stop(true);
             return Json("OK", JsonRequestBehavior.AllowGet);
         }
 

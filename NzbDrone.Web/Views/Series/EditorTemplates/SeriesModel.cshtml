@@ -1,42 +1,35 @@
 ﻿@using NzbDrone.Web.Helpers;
 @using NzbDrone.Web.Models;
 @model NzbDrone.Web.Models.SeriesModel
-
 @{
     Layout = null;
 }
 
-<div style="width: 435px; margin: 10px;">
-                     
+<div class=".settingsForm">
     @Html.HiddenFor(m => m.SeriesId)
-
-    <div class="edit-group">
-        <div class="config-title">@Html.LabelFor(m => m.Path)</div>
-        <div class="config-value">@Html.TextBoxFor(m => m.Path, new { style = "width: 300" })</div>
-    </div>
-
-    <div class="edit-group">
-        <div class="config-title">@Html.LabelFor(m => m.Monitored)</div>
-        <div class="config-value">@Html.CheckBoxFor(m => m.Monitored, new { style = "margin-right:287px" })</div>
-    </div>
-
-    <div class="edit-group">
-        <div class="config-title">@Html.LabelFor(m => m.SeasonFolder)</div>
-        <div class="config-value">@Html.CheckBoxFor(m => m.SeasonFolder, new { style = "margin-right:287px" })</div>
-    </div>
-
-    <div class="edit-group">
-        <b>@Html.LabelFor(m => m.QualityProfileId)</b>
-        @Html.DropDownListFor(model => model.QualityProfileId, (SelectList)ViewData["SelectList"], new { style = "margin-left:40px" })
-    </div>
-
+    <label class="labelClass">@Html.LabelFor(m => m.Monitored)
+        <span class="small">@Html.DescriptionFor(m => m.Monitored)</span>
+    </label>
+    @Html.CheckBoxFor(m => m.Monitored, new { @class = "inputClass checkClass" })
+    <label class="labelClass">@Html.LabelFor(m => m.SeasonFolder)
+        <span class="small">@Html.DescriptionFor(m => m.SeasonFolder)</span>
+    </label>
+    @Html.CheckBoxFor(m => m.SeasonFolder, new { @class = "inputClass checkClass" })
+    <label class="labelClass">@Html.LabelFor(m => m.QualityProfileId)
+        <span class="small">@Html.DescriptionFor(m => m.QualityProfileId)</span>
+    </label>
+    @Html.DropDownListFor(m => m.QualityProfileId, (SelectList)ViewData["SelectList"], new { @class = "inputClass" })
+  
     <div id="seasonEditorSection">
         <div style="font-weight: bold; padding-right: 15px; padding-bottom: 5px;">
             @Html.LabelFor(m => m.SeasonEditor)
-            <span id="seasonEditorLoader"><img src="../../../Content/Images/ajax-loader.gif" width="14px" height="14px" style="margin-bottom: -2px;"/></span>
+            <span id="seasonEditorLoader">
+                <img src="../../../Content/Images/ajax-loader.gif" width="14px" height="14px" style="margin-bottom: -2px;" /></span>
         </div>
-        <div id="season-editor"></div>
+        <div id="season-editor">
+        </div>
     </div>
-  
 </div>
-<span id="ajaxSaveWheel" style="display: none; float: right; padding-right: 368px; padding-top: 1.5px;"><img src="../../../Content/Images/ajax-loader.gif" width="20px" height="20px"/></span>
+<span id="ajaxSaveWheel" style="display: none; float: right; padding-right: 368px;
+    padding-top: 1.5px;">
+    <img src="../../../Content/Images/ajax-loader.gif" width="20px" height="20px" /></span>

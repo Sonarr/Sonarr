@@ -1,90 +1,18 @@
-﻿@model List<RootDir>
-@using NzbDrone.Core.Repository
-@section HeaderContent
-{
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/yui/3.3.0/build/yui/yui-min.js"></script>
-}
+﻿@using NzbDrone.Core.Repository
 @section TitleContent{
 Add Series
 }
 @section MainContent{
-    <div id="addNewWindow" class="dialog">
-     @{ Html.RenderAction("AddNew", "AddSeries"); }
-    </div>
+    <h2>
+        Add New Series</h2>
+    @{ Html.RenderAction("AddNew", "AddSeries"); }
+    <h2>
+        Add Series Already on Disk</h2>
+    <h3>
+        Manage Root Folders
+    </h3>
     @{Html.RenderAction("RootDir");}
     <div id="existingSeries">
-        <div style="padding-bottom: 10px; padding-top: 15px;">
-            <button onclick="openAddNewSeries(); return false;" class="listButton" style="margin-left: 5px">
-                Add New</button>
-            @Html.Telerik().DropDownList().Name("masterDropbox").BindTo((SelectList)ViewData["qualities"]).HtmlAttributes(
-            new { style = "width: 100px; margin-left:224px;" }).ClientEvents(events => events.OnChange("masterChanged"))
-        </div>
-        @{ Html.RenderAction("AddExisting", "AddSeries"); }
+        @{ Html.RenderAction("ExistingSeries", "AddSeries"); }
     </div>
-}
-@section Scripts
-{
-    <script type="text/javascript">
-
-        $(document).ready(function () {
-            $("#addNewWindow").dialog({
-                title: 'add new series',
-                height: '500',
-                width: '700',
-                modal: true
-            });
-        });
-
-        function openAddNewSeries() {
-            var window = $('#Window').data('tWindow');
-            window.center().open();
-            window.refresh();
-
-        }
-
-        function closeAddNewSeries() {
-            var window = $('#Window').data("tWindow");
-            window.close();
-        }
-
-        function masterChanged() {
-            var masterQuality = $('#masterDropbox').data("tDropDownList").value();
-
-            var qualityDropbox = $(".qualityDropbox");
-
-            qualityDropbox.each(function () {
-                var child = $(this).children("[id^='qualityList']");
-                var comboBox = child.data("tDropDownList");
-                comboBox.value(masterQuality);
-            });
-        }
-
-        var addSeriesUrl = '@Url.Action("AddSeries", "AddSeries")';
-
-        function addSeries(guid, path) {
-            var seriesComboBox = $("#seriesList_" + guid).data("tComboBox");
-            var qualityComboBox = $("#qualityList_" + guid).data("tDropDownList");
-            sendToServer(seriesComboBox.value(), path, qualityComboBox.value());
-            $("#div_" + guid).hide();
-        }
-
-        function sendToServer(id, path, quality) {
-            $.ajax({
-                type: "POST",
-                url: addSeriesUrl,
-                data: jQuery.param({ path: path, seriesId: id, qualityProfileId: quality }),
-                error: function (req, status, error) {
-                    alert("Sorry! We could not add " + path + " at this time. " + error);
-                }
-            });
-        }
-
-        function reloadExistingSeries() {
-            $('#reloadAjax').show();
-            $('#existingSeries').load('@Url.Action("AddExisting", "AddSeries")',
-            function (responseText, textStatus, XMLHttpRequest) {
-                $('#reloadAjax').hide();
-            });
-        }
-    </script>
 }

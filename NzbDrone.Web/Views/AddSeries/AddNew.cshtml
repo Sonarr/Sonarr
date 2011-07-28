@@ -2,56 +2,44 @@
 @using NzbDrone.Web.Models
 @{ Layout = null; }
 <div>
-    @Html.Label("Root Directory")
-    @Html.DropDownList("rootDirList", new SelectList((IList)ViewData["RootDirs"]))
-    @Html.Label("Quality")
-    @Html.DropDownList("qualityList", new SelectList((IList)ViewData["QualityList"], "QualityProfileId", "Name"))
-</div>
-<br />
-<div>
-    @{Html.Telerik().ComboBox()
-    .Name("seriesList_new")
-            .DataBinding(binding => binding.Ajax().Select("_textLookUp", "AddSeries").Delay(400))
-            .Filterable(f => f.FilterMode(AutoCompleteFilterMode.Contains))
-            .HighlightFirstMatch(true)
-            .HtmlAttributes(new { style = "width: 300px;" })
-            .Render();}
-    @Html.Telerik().DropDownList().Name("qualityList_new").BindTo((SelectList)ViewData["quality"]).HtmlAttributes(new { style = "width: 100px", @class = "qualityDropbox" })
-    <button class="listButton" onclick="addNewSeries()">
+    <div>
+        <input id="newSeriesLookup" class="seriesLookup" type="text" style="width: 400px" />
+    </div>
+    <input id="newSeriesPath" class="folderLookup" type="text" style="width: 400px" />
+    @Html.DropDownList("qualityList", new SelectList((IList)ViewData["QualityList"], "QualityProfileId", "Name"), new { @class = "qualitySelector" })
+    <button id="saveNewSeries">
         Add</button>
 </div>
-@section Scripts{
-    <script type="text/javascript" language="javascript">
-        var addNewSeriesUrl = '@Url.Action("AddNewSeries", "AddSeries")';
+<br />
+<script type="text/javascript" language="javascript">
+    jQuery(document).ready(function () {
 
-        function addNewSeries() {
-            var seriesComboBox = $("#seriesList_new").data("tDropDownList");
-            var qualityComboBox = $("#qualityList_new").data("tDropDownList");
-            var path = $("input[name='selectedRootDir']:checked").val();
+        $('#newSeriesPath').watermark('Path for the new series...');
+        $('#newSeriesLookup').watermark('Title of the series you want to add...');
 
-            sendToServerNew(seriesComboBox.value(), path, seriesComboBox.text(), qualityComboBox.value());
-        }
+        $('#saveNewSeries').click(function () {
 
-        function sendToServerNew(id, rootPath, seriesName, quality) {
+            var addSeriesUrl = '@Url.Action("AddNewSeries", "AddSeries")';
+            var seriesTitle = $("#newSeriesLookup").val();
+            var qualityId = $("#qualityList").val();
+            var path = $('#newSeriesPath').val();
+
             $.ajax({
                 type: "POST",
-                url: addNewSeriesUrl,
-                data: jQuery.param({ rootPath: rootPath, seriesName: seriesName, seriesId: id, qualityProfileId: quality }),
+                url: addSeriesUrl,
+                data: jQuery.param({ path: path, seriesName: seriesTitle, qualityProfileId: qualityId }),
                 error: function (req, status, error) {
-                    alert("Sorry! We could not add " + seriesName + " at this time. " + error);
+                    alert("Sorry! We could not add " + path + " at this time. " + error);
                 },
-                success: function (data, textStatus, jqXHR) {
-                    //Clear the search box
-                    $("#seriesList_new").data("tComboBox").text('');
-
-                    //Through up an alert if we failed to add the series
-                    if (data != 'ok')
-                        alert("Sorry! We could not add " + seriesName + ", does it already exist?");
-
-                    else
-                        closeAddNewSeries(); //Close the Window!
+                success: function () {
+                    $("#newSeriesLookup").val("");
+                    $('#newSeriesPath').val("");
                 }
             });
-        }
-    </script>
-}
+
+
+        });
+    });
+
+
+</script>

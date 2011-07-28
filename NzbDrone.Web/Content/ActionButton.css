@@ -1,7 +1,7 @@
 ﻿.actionButton
 {
-    margin: 5px 5px 5px 5px;
-    padding: 5px 10px 5px 10px;
+    margin: 5px;
+    padding: 2px 5px;
     background-repeat: no-repeat;
     background-position: 5px center;
     background-color: #cccccc;
@@ -14,7 +14,7 @@
     cursor: pointer;
     vertical-align: middle;
     position: relative;
-    bottom: 1px;
+    bottom: 3px;
 }
 
 .delete

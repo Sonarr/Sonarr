@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Net;
 using System.Threading;
 using System.Timers;
 using Exceptioneer.WindowsFormsClient;
@@ -38,7 +39,18 @@ namespace NzbDrone
                 Attach();
 #endif
 
-                if (Environment.UserInteractive)
+                if (!Environment.UserInteractive)
+                {
+                    try
+                    {
+                        new WebClient().DownloadString(IISController.AppUrl);
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.ErrorException("Failed to load home page.", e);
+                    }
+                }
+                else
                 {
                     try
                     {

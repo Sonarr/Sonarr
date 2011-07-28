@@ -1,0 +1,96 @@
+﻿@using System.Collections
+@using NzbDrone.Web.Models
+@using System.Web.Mvc.Html
+@model ExistingSeriesModel
+@{
+    Layout = null;
+}
+@if (Model.ExistingSeries.Count == 0)
+{
+    <h3 style="color: tomato">
+        No series available. Try adding a new Root Folder.
+    </h3>
+}
+else
+{
+    <h3>
+        Series Ready to be added.
+        @Html.DropDownList(Guid.NewGuid().ToString(), Model.Quality, new { @class = "qualitySelector masterQualitySelector" })
+    </h3>
+    <div>
+
+    </div>
+
+}
+@foreach (var series in Model.ExistingSeries)
+{
+    <span class="existingSeries">
+        <div>
+            <span class="seriesPathValue">
+                @Html.Label(series.Item1)
+            </span>
+        </div>
+        <div>
+            <input class="seriesLookup" type="text" style="width: 400px" value="@series.Item2" />
+            @Html.DropDownList(Guid.NewGuid().ToString(), Model.Quality, new { @class = "qualitySelector" })
+            <button class="addExistingButton">
+                Add</button>
+        </div>
+    </span>
+}
+
+<style>
+    .existingSeries
+    {
+        border-color: #f2f2f2;
+        border-width: 1px;
+        border-style: solid;
+        background-color: #f2f2f2;
+        margin: 0px 10px 10px 0px;
+        padding-left: 10px;
+        padding-right: 10px;
+        display: inline-block;
+    }
+    .masterQualitySelector
+    {
+        left: 202px;
+        position: relative;      
+    }
+</style>
+<script type="text/javascript">
+
+    jQuery(document).ready(function () {
+
+        $(".masterQualitySelector").change(function () {
+
+            var profileId = $(this).val();
+            $("#existingSeries").find(".qualitySelector").each(function () {
+                $(this).val(profileId);
+            });
+        });
+
+        $(".addExistingButton").click(function () {
+
+            var root = $(this).parents(".existingSeries");
+
+            var addSeriesUrl = '@Url.Action("AddExistingSeries", "AddSeries")';
+            var title = $(this).siblings(".seriesLookup").val();
+            var qualityId = $(this).siblings(".qualitySelector").val();
+
+            var path = root.find(".seriesPathValue Label").text();
+
+            $.ajax({
+                type: "POST",
+                url: addSeriesUrl,
+                data: jQuery.param({ path: path, seriesName: title, qualityProfileId: qualityId }),
+                error: function (req, status, error) {
+                    alert("Sorry! We could not add " + path + " at this time. " + error);
+                },
+                success: function () {
+                    root.hide('highlight', 'fast');
+                }
+            });
+
+        });
+    });
+</script>
