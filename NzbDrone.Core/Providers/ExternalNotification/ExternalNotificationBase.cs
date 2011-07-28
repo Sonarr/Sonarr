@@ -6,16 +6,14 @@ using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Providers.ExternalNotification
 {
-    public abstract class ExternalNotificationProviderBase
+    public abstract class ExternalNotificationBase
     {
         protected readonly Logger _logger;
         protected readonly ConfigProvider _configProvider;
-        protected readonly ExternalNotificationProvider _externalNotificationProvider;
 
-        protected ExternalNotificationProviderBase(ConfigProvider configProvider, ExternalNotificationProvider externalNotificationProvider)
+        protected ExternalNotificationBase(ConfigProvider configProvider)
         {
             _configProvider = configProvider;
-            _externalNotificationProvider = externalNotificationProvider;
             _logger = LogManager.GetLogger(GetType().ToString());
         }
 
@@ -23,35 +21,6 @@ namespace NzbDrone.Core.Providers.ExternalNotification
         ///   Gets the name for the notification provider
         /// </summary>
         public abstract string Name { get; }
-
-        public ExternalNotificationSetting Settings
-        {
-            get
-            {
-                return _externalNotificationProvider.GetSettings(GetType());
-            }
-        }
-
-        public virtual void Notify(ExternalNotificationType type, string message, int seriesId = 0)
-        {
-            if (type == ExternalNotificationType.Grab)
-                OnGrab(message);
-
-            else if (type == ExternalNotificationType.Download)
-            {
-                throw new NotImplementedException();
-                var series = new Series();
-                OnDownload(message, series);
-            }
-
-
-            else if (type == ExternalNotificationType.Rename)
-            {
-                throw new NotImplementedException();
-                var series = new Series();
-                OnRename(message, series);
-            }
-        }
 
         /// <summary>
         ///   Performs the on grab action

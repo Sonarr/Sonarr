@@ -18,17 +18,21 @@ namespace NzbDrone.Core.Providers
         private readonly EpisodeProvider _episodeProvider;
         private readonly MediaFileProvider _mediaFileProvider;
         private readonly SeriesProvider _seriesProvider;
+        private readonly ExternalNotificationProvider _externalNotificationProvider;
+        private readonly SabProvider _sabProvider;
 
         [Inject]
         public DiskScanProvider(DiskProvider diskProvider, EpisodeProvider episodeProvider,
-                                SeriesProvider seriesProvider, MediaFileProvider mediaFileProvider)
+                                SeriesProvider seriesProvider, MediaFileProvider mediaFileProvider,
+                                ExternalNotificationProvider externalNotificationProvider, SabProvider sabProvider)
         {
             _diskProvider = diskProvider;
             _episodeProvider = episodeProvider;
             _seriesProvider = seriesProvider;
             _mediaFileProvider = mediaFileProvider;
+            _externalNotificationProvider = externalNotificationProvider;
+            _sabProvider = sabProvider;
         }
-
 
         public DiskScanProvider()
         {
@@ -142,7 +146,7 @@ namespace NzbDrone.Core.Providers
             return episodeFile;
         }
 
-        public virtual bool MoveEpisodeFile(EpisodeFile episodeFile)
+        public virtual bool MoveEpisodeFile(EpisodeFile episodeFile, bool newDownload = false)
         {
             if (episodeFile == null)
                 throw new ArgumentNullException("episodeFile");
@@ -162,6 +166,18 @@ namespace NzbDrone.Core.Providers
             //Update the filename in the DB
             episodeFile.Path = newFile.FullName;
             _mediaFileProvider.Update(episodeFile);
+
+            //ExternalNotification
+            var parseResult = Parser.ParsePath(episodeFile.Path);
+            parseResult.Series = series;
+
+            var message = _sabProvider.GetSabTitle(parseResult);
+            
+            if (newDownload)
+                _externalNotificationProvider.OnDownload(message, series);
+
+            else
+                _externalNotificationProvider.OnRename(message, series);
 
             return true;
         }

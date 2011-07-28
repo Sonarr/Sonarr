@@ -84,7 +84,7 @@ namespace NzbDrone.Core.Providers.Jobs
                     }
 
                     var importedFiles = _diskScanProvider.Scan(series, subfolder);
-                    importedFiles.ForEach(file => _diskScanProvider.MoveEpisodeFile(file));
+                    importedFiles.ForEach(file => _diskScanProvider.MoveEpisodeFile(file, true));
 
                     //Delete the folder only if folder is small enough
                     if (_diskProvider.GetDirectorySize(subfolder) < 10.Megabytes())

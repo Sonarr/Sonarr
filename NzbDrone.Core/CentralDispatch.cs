@@ -62,9 +62,9 @@ namespace NzbDrone.Core
 
             _kernel.Get<QualityProvider>().SetupDefaultProfiles();
 
+            BindExternalNotifications();
             BindIndexers();
             BindJobs();
-            BindExternalNotifications();
         }
 
         private static void BindKernel()
@@ -111,8 +111,9 @@ namespace NzbDrone.Core
 
         private static void BindExternalNotifications()
         {
-            _kernel.Bind<ExternalNotificationProviderBase>().To<XbmcNotificationProvider>().InSingletonScope();
-            var notifiers = _kernel.GetAll<ExternalNotificationProviderBase>();
+            _kernel.Bind<ExternalNotificationBase>().To<Xbmc>();
+
+            var notifiers = _kernel.GetAll<ExternalNotificationBase>();
             _kernel.Get<ExternalNotificationProvider>().InitializeNotifiers(notifiers.ToList());
         }
 

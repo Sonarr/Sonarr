@@ -9,6 +9,7 @@ using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
+using NzbDrone.Core.Providers.ExternalNotification;
 using NzbDrone.Core.Providers.Indexer;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
@@ -30,12 +31,15 @@ namespace NzbDrone.Web.Controllers
         private readonly NotificationProvider _notificationProvider;
         private readonly DiskProvider _diskProvider;
         private readonly SeriesProvider _seriesProvider;
+        private readonly ExternalNotificationProvider _externalNotificationProvider;
 
         public SettingsController(ConfigProvider configProvider, IndexerProvider indexerProvider,
                                   QualityProvider qualityProvider, RootDirProvider rootDirProvider,
                                   AutoConfigureProvider autoConfigureProvider, NotificationProvider notificationProvider,
-                                  DiskProvider diskProvider, SeriesProvider seriesProvider)
+                                  DiskProvider diskProvider, SeriesProvider seriesProvider,
+                                  ExternalNotificationProvider externalNotificationProvider)
         {
+            _externalNotificationProvider = externalNotificationProvider;
             _configProvider = configProvider;
             _indexerProvider = indexerProvider;
             _qualityProvider = qualityProvider;
@@ -140,7 +144,7 @@ namespace NzbDrone.Web.Controllers
         {
             var model = new NotificationSettingsModel
                             {
-                                XbmcEnabled = _configProvider.XbmcEnabled,
+                                XbmcEnabled = _externalNotificationProvider.GetSettings(typeof(Xbmc)).Enable,
                                 XbmcNotifyOnGrab = _configProvider.XbmcNotifyOnGrab,
                                 XbmcNotifyOnDownload = _configProvider.XbmcNotifyOnDownload,
                                 XbmcUpdateLibrary = _configProvider.XbmcUpdateLibrary,
@@ -262,7 +266,6 @@ namespace NzbDrone.Web.Controllers
                 return new JsonResult { Data = "failed" };
             }
         }
-
        
         [HttpPost]
         public ActionResult SaveIndexers(IndexerSettingsModel data)
@@ -395,7 +398,11 @@ namespace NzbDrone.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                _configProvider.XbmcEnabled = data.XbmcEnabled;
+                //XBMC Enabled
+                var xbmcSettings = _externalNotificationProvider.GetSettings(typeof(Xbmc));
+                xbmcSettings.Enable = data.XbmcEnabled;
+                _externalNotificationProvider.SaveSettings(xbmcSettings);
+
                 _configProvider.XbmcNotifyOnGrab = data.XbmcNotifyOnGrab;
                 _configProvider.XbmcNotifyOnDownload = data.XbmcNotifyOnDownload;
                 _configProvider.XbmcUpdateLibrary = data.XbmcUpdateLibrary;

@@ -11,14 +11,18 @@ namespace NzbDrone.Core.Providers
         private readonly SabProvider _sabProvider;
         private readonly HistoryProvider _historyProvider;
         private readonly EpisodeProvider _episodeProvider;
+        private readonly ExternalNotificationProvider _externalNotificationProvider;
+
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         [Inject]
-        public DownloadProvider(SabProvider sabProvider, HistoryProvider historyProvider, EpisodeProvider episodeProvider)
+        public DownloadProvider(SabProvider sabProvider, HistoryProvider historyProvider,
+            EpisodeProvider episodeProvider, ExternalNotificationProvider externalNotificationProvider)
         {
             _sabProvider = sabProvider;
             _historyProvider = historyProvider;
             _episodeProvider = episodeProvider;
+            _externalNotificationProvider = externalNotificationProvider;
         }
 
         public DownloadProvider()
@@ -54,6 +58,8 @@ namespace NzbDrone.Core.Providers
                     _episodeProvider.MarkEpisodeAsFetched(episode.EpisodeId);
                 }
             }
+
+            _externalNotificationProvider.OnGrab(sabTitle);
 
             return addSuccess;
         }
