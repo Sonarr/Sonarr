@@ -10,6 +10,7 @@ using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
+using PetaPoco;
 
 // ReSharper disable InconsistentNaming
 namespace NzbDrone.Core.Test
@@ -349,6 +350,130 @@ namespace NzbDrone.Core.Test
             //Assert
             series.QualityProfile.Should().NotBeNull();
             series.QualityProfileId.Should().Be(fakeQuality.QualityProfileId);
+        }
+
+        [Test]
+        public void SeriesPathExists_exact_match()
+        {
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            var path = @"C:\Test\TV\30 Rock";
+
+            var fakeSeries = Builder<Series>.CreateListOfSize(10)
+                .WhereAll()
+                .Have(c => c.QualityProfileId = 1)
+                .WhereTheFirst(1)
+                .Have(c => c.Path = path)
+                .Build();
+            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+
+            db.InsertMany(fakeSeries);
+            db.Insert(fakeQuality);
+
+            //Act
+            mocker.Resolve<QualityProvider>();
+            //mocker.GetMock<IDatabase>().Setup(s => s.Fetch<Series, QualityProfile>(It.IsAny<string>())).Returns(
+                //fakeSeries.ToList());
+
+            var result = mocker.Resolve<SeriesProvider>().SeriesPathExists(path);
+
+            //Assert
+            result.Should().BeTrue();
+        }
+
+        [Test]
+        public void SeriesPathExists_match()
+        {
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            var path = @"C:\Test\TV\30 Rock";
+
+            var fakeSeries = Builder<Series>.CreateListOfSize(10)
+                .WhereAll()
+                .Have(c => c.QualityProfileId = 1)
+                .WhereTheFirst(1)
+                .Have(c => c.Path = path)
+                .Build();
+            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+
+            db.InsertMany(fakeSeries);
+            db.Insert(fakeQuality);
+
+            //Act
+            mocker.Resolve<QualityProvider>();
+            //mocker.GetMock<IDatabase>().Setup(s => s.Fetch<Series, QualityProfile>(It.IsAny<string>())).Returns(
+            //fakeSeries.ToList());
+
+            var result = mocker.Resolve<SeriesProvider>().SeriesPathExists(path.ToUpper());
+
+            //Assert
+            result.Should().BeTrue();
+        }
+
+        [Test]
+        public void SeriesPathExists_match_alt()
+        {
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            var path = @"C:\Test\TV\The Simpsons";
+
+            var fakeSeries = Builder<Series>.CreateListOfSize(10)
+                .WhereAll()
+                .Have(c => c.QualityProfileId = 1)
+                .WhereTheFirst(1)
+                .Have(c => c.Path = path)
+                .Build();
+            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+
+            db.InsertMany(fakeSeries);
+            db.Insert(fakeQuality);
+
+            //Act
+            mocker.Resolve<QualityProvider>();
+            //mocker.GetMock<IDatabase>().Setup(s => s.Fetch<Series, QualityProfile>(It.IsAny<string>())).Returns(
+            //fakeSeries.ToList());
+
+            var result = mocker.Resolve<SeriesProvider>().SeriesPathExists(@"c:\Test\Tv\the sIMpsons");
+
+            //Assert
+            result.Should().BeTrue();
+        }
+
+        [Test]
+        public void SeriesPathExists_match_false()
+        {
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            var path = @"C:\Test\TV\30 Rock";
+
+            var fakeSeries = Builder<Series>.CreateListOfSize(10)
+                .WhereAll()
+                .Have(c => c.QualityProfileId = 1)
+                .WhereTheFirst(1)
+                .Have(c => c.Path = path)
+                .Build();
+            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+
+            db.InsertMany(fakeSeries);
+            db.Insert(fakeQuality);
+
+            //Act
+            mocker.Resolve<QualityProvider>();
+            //mocker.GetMock<IDatabase>().Setup(s => s.Fetch<Series, QualityProfile>(It.IsAny<string>())).Returns(
+            //fakeSeries.ToList());
+
+            var result = mocker.Resolve<SeriesProvider>().SeriesPathExists(@"C:\Test\TV\Not A match");
+
+            //Assert
+            result.Should().BeFalse();
         }
     }
 }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
