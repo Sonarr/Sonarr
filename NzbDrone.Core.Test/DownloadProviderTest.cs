@@ -55,9 +55,11 @@ namespace NzbDrone.Core.Test
             mocker.GetMock<EpisodeProvider>()
                 .Setup(c => c.MarkEpisodeAsFetched(12));
 
-
             mocker.GetMock<EpisodeProvider>()
                 .Setup(c => c.MarkEpisodeAsFetched(99));
+
+            mocker.GetMock<ExternalNotificationProvider>()
+                .Setup(c => c.OnGrab(It.IsAny<string>()));
 
             mocker.Resolve<DownloadProvider>().DownloadReport(parseResult);
 
