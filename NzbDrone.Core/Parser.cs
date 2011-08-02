@@ -381,6 +381,7 @@ namespace NzbDrone.Core
         /// <returns></returns>
         public static string NormalizeTitle(string title)
         {
+            //Todo: Find a better way to do this hack
             if (title == "90210" || title == "24")
                 return title;
             return NormalizeRegex.Replace(title, String.Empty).ToLower();
