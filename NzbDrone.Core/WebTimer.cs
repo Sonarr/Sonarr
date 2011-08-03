@@ -30,7 +30,7 @@ namespace NzbDrone.Core
 
         public void DoWork(string k, object v, CacheItemRemovedReason r)
         {
-            _jobProvider.RunScheduled();
+            _jobProvider.QueueScheduled();
             StartTimer(Convert.ToInt32(v));
         }
     }
