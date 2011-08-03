@@ -227,8 +227,6 @@ namespace NzbDrone.Web.Controllers
                 var episodePath = String.Empty;
                 var episodeQuality = String.Empty;
 
-
-
                 if (e.EpisodeFile != null)
                 {
                     episodePath = e.EpisodeFile.Path;
@@ -252,7 +250,8 @@ namespace NzbDrone.Web.Controllers
                                      Path = episodePath,
                                      EpisodeFileId = episodeFileId,
                                      Status = e.Status.ToString(),
-                                     Quality = episodeQuality
+                                     Quality = episodeQuality,
+                                     Ignored = e.Ignored
                                  });
             }
 

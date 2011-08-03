@@ -183,6 +183,8 @@
     <Content Include="Content\Blueprint\ie.css" />
     <Content Include="Content\Blueprint\screen.css" />
     <Content Include="Content\Blueprint\liquid.css" />
+    <Content Include="Content\Images\ignored.png" />
+    <Content Include="Content\Images\notIgnored.png" />
     <Content Include="Content\Images\x_16.png" />
     <Content Include="Content\jQueryUI\images\ui-bg_diagonals-thick_30_a32d00_40x40.png" />
     <Content Include="Content\jQueryUI\images\ui-bg_flat_0_065efe_40x100.png" />
@@ -250,6 +252,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\AutoComplete.js" />
+    <Content Include="Scripts\seriesDetails.js" />
     <Content Include="Scripts\Plugins\jquery.livequery.js" />
     <Content Include="Scripts\settingsForm.js" />
     <Content Include="Scripts\Plugins\doTimeout.js" />

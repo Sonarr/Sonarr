@@ -15,5 +15,6 @@ namespace NzbDrone.Web.Models
         public String Status { get; set; }
         public string AirDate { get; set; }
         public String Quality { get; set; }
+        public bool Ignored { get; set; }
     }
 }
