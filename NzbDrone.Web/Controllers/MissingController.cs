@@ -26,10 +26,9 @@ namespace NzbDrone.Web.Controllers
         [GridAction]
         public ActionResult _AjaxBinding()
         {
-            //TODO: possible subsonic bug, IQuarible causes some issues so ToList() is called
-            //https://github.com/subsonic/SubSonic-3.0/issues/263
+            var missingEpisodes = _episodeProvider.EpisodesWithoutFiles(false);
 
-            var missing = _episodeProvider.EpisodesWithoutFiles(true).Select(e => new MissingEpisodeModel
+            var missing = missingEpisodes.Select(e => new MissingEpisodeModel
             {
                 EpisodeId = e.EpisodeId,
                 SeasonNumber = e.SeasonNumber,

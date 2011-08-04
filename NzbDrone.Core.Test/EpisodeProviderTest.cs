@@ -1103,5 +1103,120 @@ namespace NzbDrone.Core.Test
 
             mocker.VerifyAllMocks();
         }
+
+        [Test]
+        public void IgnoreSeason_Ignore_Half()
+        {
+            var db = MockLib.GetEmptyDatabase();
+            var mocker = new AutoMoqer();
+            mocker.SetConstant(db);
+
+            var episodes = Builder<Episode>.CreateListOfSize(4)
+                .WhereAll()
+                .Have(c => c.SeriesId = 10)
+                .Have(c => c.SeasonNumber = 1)
+                .WhereTheFirst(2)
+                .Have(c => c.Ignored = false)
+                .AndTheRemaining()
+                .Have(c => c.Ignored = true)
+                .Build().ToList();
+
+            episodes.ForEach(c => db.Insert(c));
+
+            //Act
+            mocker.Resolve<EpisodeProvider>().SetSeasonIgnore(10, 1, true);
+
+            //Assert
+            var episodesInDb = db.Fetch<Episode>(@"SELECT * FROM Episodes");
+
+            episodesInDb.Should().HaveCount(4);
+            episodesInDb.Where(e => e.Ignored).Should().HaveCount(4);
+
+            mocker.VerifyAllMocks();
+        }
+
+        [Test]
+        public void EpisodesWithoutFiles_no_specials()
+        {
+            var db = MockLib.GetEmptyDatabase();
+            var mocker = new AutoMoqer();
+            mocker.SetConstant(db);
+
+            var series = Builder<Series>.CreateNew()
+                .With(s => s.SeriesId = 10)
+                .Build();
+
+            var episodes = Builder<Episode>.CreateListOfSize(4)
+                .WhereAll()
+                .Have(c => c.SeriesId = 10)
+                .Have(c => c.SeasonNumber = 1)
+                .Have(c => c.AirDate = DateTime.Today.AddDays(-4))
+                .WhereTheFirst(2)
+                .Have(c => c.EpisodeFileId = 0)
+                .Build().ToList();
+
+            var specials = Builder<Episode>.CreateListOfSize(2)
+                .WhereAll()
+                .Have(c => c.SeriesId = 10)
+                .Have(c => c.SeasonNumber = 0)
+                .Have(c => c.AirDate = DateTime.Today.AddDays(-4))
+                .Have(c => c.EpisodeFileId = 0)
+                .Build().ToList();
+
+            db.Insert(series);
+            db.InsertMany(episodes);
+            db.InsertMany(specials);
+
+            //Act
+            var missingFiles= mocker.Resolve<EpisodeProvider>().EpisodesWithoutFiles(false);
+
+            //Assert
+            missingFiles.Should().HaveCount(2);
+            missingFiles.Where(e => e.EpisodeFileId == 0).Should().HaveCount(2);
+
+            mocker.VerifyAllMocks();
+        }
+
+        [Test]
+        public void EpisodesWithoutFiles_with_specials()
+        {
+            var db = MockLib.GetEmptyDatabase();
+            var mocker = new AutoMoqer();
+            mocker.SetConstant(db);
+
+            var series = Builder<Series>.CreateNew()
+                .With(s => s.SeriesId = 10)
+                .Build();
+
+            var episodes = Builder<Episode>.CreateListOfSize(4)
+                .WhereAll()
+                .Have(c => c.SeriesId = 10)
+                .Have(c => c.SeasonNumber = 1)
+                .Have(c => c.AirDate = DateTime.Today.AddDays(-4))
+                .WhereTheFirst(2)
+                .Have(c => c.EpisodeFileId = 0)
+                .Build().ToList();
+
+            var specials = Builder<Episode>.CreateListOfSize(2)
+                .WhereAll()
+                .Have(c => c.SeriesId = 10)
+                .Have(c => c.SeasonNumber = 0)
+                .Have(c => c.AirDate = DateTime.Today.AddDays(-4))
+                .Have(c => c.EpisodeFileId = 0)
+                .Build().ToList();
+
+            db.Insert(series);
+            db.InsertMany(episodes);
+            db.InsertMany(specials);
+
+            //Act
+            var missingFiles = mocker.Resolve<EpisodeProvider>().EpisodesWithoutFiles(true);
+
+            //Assert
+            missingFiles.Should().HaveCount(4);
+            missingFiles.Where(e => e.EpisodeFileId == 0).Should().HaveCount(4);
+
+            mocker.VerifyAllMocks();
+        }
     }
 }

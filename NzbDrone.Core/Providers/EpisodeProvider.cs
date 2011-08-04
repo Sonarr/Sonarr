@@ -159,12 +159,15 @@ namespace NzbDrone.Core.Providers
 
         public virtual IList<Episode> EpisodesWithoutFiles(bool includeSpecials)
         {
-            var episodes = _database.Query<Episode>("WHERE (EpisodeFileId=0 OR EpisodeFileId=NULL) AND AirDate<=@0",
+            var episodes = _database.Query<Episode, Series>(@"SELECT Episodes.*, Series.Title FROM Episodes
+                                                        INNER JOIN Series
+                                                        ON Episodes.SeriesId = Series.SeriesId
+                                                        WHERE (EpisodeFileId=0 OR EpisodeFileId=NULL) AND AirDate<=@0",
                                                     DateTime.Now.Date);
-            if (includeSpecials)
+            if (!includeSpecials)
                 return episodes.Where(e => e.SeasonNumber > 0).ToList();
 
-            return AttachSeries(episodes.ToList());
+            return episodes.ToList();
         }
 
         public virtual IList<Episode> GetEpisodesByFileId(int episodeFileId)
@@ -298,8 +301,8 @@ namespace NzbDrone.Core.Providers
             Logger.Info("Setting ignore flag on Series:{0} Season:{1} to {2}", seriesId, seasonNumber, isIgnored);
 
             _database.Execute(@"UPDATE Episodes SET Ignored = @0
-                                WHERE SeriesId = @1 AND SeasonNumber = @2",
-                isIgnored, seriesId, seasonNumber);
+                                WHERE SeriesId = @1 AND SeasonNumber = @2 AND Ignored = @3",
+                isIgnored, seriesId, seasonNumber, !isIgnored);
 
                 Logger.Info("Ignore flag for Series:{0} Season:{1} successfully set to {2}", seriesId, seasonNumber, isIgnored);
         }
