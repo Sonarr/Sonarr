@@ -5,31 +5,29 @@
     Layout = null;
 }
 
-<div class=".settingsForm">
-    @Html.HiddenFor(m => m.SeriesId)
-    <label class="labelClass">@Html.LabelFor(m => m.Monitored)
-        <span class="small">@Html.DescriptionFor(m => m.Monitored)</span>
-    </label>
-    @Html.CheckBoxFor(m => m.Monitored, new { @class = "inputClass checkClass" })
-    <label class="labelClass">@Html.LabelFor(m => m.SeasonFolder)
-        <span class="small">@Html.DescriptionFor(m => m.SeasonFolder)</span>
-    </label>
-    @Html.CheckBoxFor(m => m.SeasonFolder, new { @class = "inputClass checkClass" })
-    <label class="labelClass">@Html.LabelFor(m => m.QualityProfileId)
-        <span class="small">@Html.DescriptionFor(m => m.QualityProfileId)</span>
-    </label>
-    @Html.DropDownListFor(m => m.QualityProfileId, (SelectList)ViewData["SelectList"], new { @class = "inputClass" })
-  
-    <div id="seasonEditorSection">
-        <div style="font-weight: bold; padding-right: 15px; padding-bottom: 5px;">
-            @Html.LabelFor(m => m.SeasonEditor)
-            <span id="seasonEditorLoader">
-                <img src="../../../Content/Images/ajax-loader.gif" width="14px" height="14px" style="margin-bottom: -2px;" /></span>
-        </div>
-        <div id="season-editor">
-        </div>
+<link rel="stylesheet" type="text/css" href="../../../Content/Settings.css" />
+
+<div id="stylized" style="border-color: transparent;">
+    <div class="settingsForm clearfix">
+        @Html.HiddenFor(m => m.SeriesId)
+        <label class="labelClass">@Html.LabelFor(m => m.Monitored)
+            <span class="small">@Html.DescriptionFor(m => m.Monitored)</span>
+        </label>
+        @Html.CheckBoxFor(m => m.Monitored, new { @class = "inputClass checkClass" })
+        <label class="labelClass">@Html.LabelFor(m => m.SeasonFolder)
+            <span class="small">@Html.DescriptionFor(m => m.SeasonFolder)</span>
+        </label>
+        @Html.CheckBoxFor(m => m.SeasonFolder, new { @class = "inputClass checkClass" })
+        <label class="labelClass">@Html.LabelFor(m => m.QualityProfileId)
+            <span class="small">@Html.DescriptionFor(m => m.QualityProfileId)</span>
+        </label>
+        @Html.DropDownListFor(m => m.QualityProfileId, (SelectList)ViewData["SelectList"], new { @class = "inputClass" })
+        <label class="labelClass">@Html.LabelFor(m => m.Path)
+        <span class="small">@Html.DescriptionFor(m => m.Path)</span>
+        </label>
+        @Html.TextBoxFor(m => m.Path, new { @class = "inputClass" })
     </div>
 </div>
-<span id="ajaxSaveWheel" style="display: none; float: right; padding-right: 368px;
+<span id="ajaxSaveWheel" style="display: none; float: right; padding-right: 550px;
     padding-top: 1.5px;">
     <img src="../../../Content/Images/ajax-loader.gif" width="20px" height="20px" /></span>

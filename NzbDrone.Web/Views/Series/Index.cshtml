@@ -4,6 +4,7 @@
 @section TitleContent{
 NZBDrone
 }
+
 <style>
     /* progress bar container */
     .progressbar
@@ -46,6 +47,7 @@ NZBDrone
         background: #E5ECF9;
     }
 </style>
+
 @section ActionMenu{
     @{Html.RenderPartial("SubMenu");}
 }
@@ -103,37 +105,10 @@ NZBDrone
             .closest(".t-window")
             .data("tWindow")
             .center();
-
-            var seriesId = args.dataItem.SeriesId;
-            var url = '@Url.Action("SeasonEditor", "Series")';
-            $('#season-editor').load(url, { seriesId: seriesId }, function (response, status, xhr) {
-                $('#seasonEditorLoader').hide();
-            });
         }
 
         function grid_save(e) {
             $('#ajaxSaveWheel').show();
-
-            var seasonEditor = e.form.SeasonEditor_collection;
-            var saveSeasonEditUrl = '@Url.Action("SaveSeason", "Series")';
-
-            jQuery.each(seasonEditor, function () {
-                var guid = $(this).val();
-                var prefix = '#SeasonEditor_' + guid + '__';
-                var seriesId = $(prefix + 'SeriesId').val();
-                var seasonNumber = $(prefix + 'SeasonNumber').val();
-                var monitored = $(prefix + 'Monitored').attr('checked');
-
-                $.ajax({
-                    type: "POST",
-                    url: saveSeasonEditUrl,
-                    data: jQuery.param({ seriesId: seriesId, seasonNumber: seasonNumber, monitored: monitored }),
-                    error: function (req, status, error) {
-                        alert("Sorry! We could save season changes at this time. " + error);
-                    },
-                    success: function (data, textStatus, jqXHR) { }
-                });
-            });
         }
 
         function grid_rowBound(e) {

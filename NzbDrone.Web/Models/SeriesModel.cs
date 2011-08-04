@@ -26,16 +26,20 @@ namespace NzbDrone.Web.Models
 
         //View & Edit
         [DisplayName("Path")]
+        [Description("Where should NzbDrone store episodes for this series?")]
         public string Path { get; set; }
 
         [DisplayName("Quality Profile")]
+        [Description("Which Quality Profile should NzbDrone use to download episodes?")]
         public virtual int QualityProfileId { get; set; }
 
         //Editing Only
         [DisplayName("Use Season Folder")]
+        [Description("Should downloaded episodes be stored in season folders?")]
         public bool SeasonFolder { get; set; }
 
         [DisplayName("Monitored")]
+        [Description("Should NzbDrone download episodes for this series?")]
         public bool Monitored { get; set; }
 
         [DisplayName("Season Editor")]
