@@ -162,7 +162,7 @@ namespace NzbDrone.Core.Providers
             var episodes = _database.Query<Episode, Series>(@"SELECT Episodes.*, Series.Title FROM Episodes
                                                         INNER JOIN Series
                                                         ON Episodes.SeriesId = Series.SeriesId
-                                                        WHERE (EpisodeFileId=0 OR EpisodeFileId=NULL) AND AirDate<=@0",
+                                                        WHERE (EpisodeFileId=0 OR EpisodeFileId=NULL) AND Ignored = 0 AND AirDate<=@0",
                                                     DateTime.Now.Date);
             if (!includeSpecials)
                 return episodes.Where(e => e.SeasonNumber > 0).ToList();

@@ -1151,8 +1151,11 @@ namespace NzbDrone.Core.Test
                 .Have(c => c.SeriesId = 10)
                 .Have(c => c.SeasonNumber = 1)
                 .Have(c => c.AirDate = DateTime.Today.AddDays(-4))
+                .Have(c => c.Ignored = true)
                 .WhereTheFirst(2)
                 .Have(c => c.EpisodeFileId = 0)
+                .WhereSection(1, 2)
+                .Have(c => c.Ignored = false)
                 .Build().ToList();
 
             var specials = Builder<Episode>.CreateListOfSize(2)
@@ -1161,6 +1164,10 @@ namespace NzbDrone.Core.Test
                 .Have(c => c.SeasonNumber = 0)
                 .Have(c => c.AirDate = DateTime.Today.AddDays(-4))
                 .Have(c => c.EpisodeFileId = 0)
+                .WhereTheFirst(1)
+                .Have(c => c.Ignored = true)
+                .AndTheRemaining()
+                .Have(c => c.Ignored = false)
                 .Build().ToList();
 
             db.Insert(series);
@@ -1171,8 +1178,8 @@ namespace NzbDrone.Core.Test
             var missingFiles= mocker.Resolve<EpisodeProvider>().EpisodesWithoutFiles(false);
 
             //Assert
-            missingFiles.Should().HaveCount(2);
-            missingFiles.Where(e => e.EpisodeFileId == 0).Should().HaveCount(2);
+            missingFiles.Should().HaveCount(1);
+            missingFiles.Where(e => e.EpisodeFileId == 0).Should().HaveCount(1);
 
             mocker.VerifyAllMocks();
         }
@@ -1193,8 +1200,11 @@ namespace NzbDrone.Core.Test
                 .Have(c => c.SeriesId = 10)
                 .Have(c => c.SeasonNumber = 1)
                 .Have(c => c.AirDate = DateTime.Today.AddDays(-4))
+                .Have(c => c.Ignored = true)
                 .WhereTheFirst(2)
                 .Have(c => c.EpisodeFileId = 0)
+                .WhereSection(1,2)
+                .Have(c => c.Ignored = false)
                 .Build().ToList();
 
             var specials = Builder<Episode>.CreateListOfSize(2)
@@ -1203,6 +1213,10 @@ namespace NzbDrone.Core.Test
                 .Have(c => c.SeasonNumber = 0)
                 .Have(c => c.AirDate = DateTime.Today.AddDays(-4))
                 .Have(c => c.EpisodeFileId = 0)
+                .WhereTheFirst(1)
+                .Have(c => c.Ignored = true)
+                .AndTheRemaining()
+                .Have(c => c.Ignored = false)
                 .Build().ToList();
 
             db.Insert(series);
@@ -1213,8 +1227,8 @@ namespace NzbDrone.Core.Test
             var missingFiles = mocker.Resolve<EpisodeProvider>().EpisodesWithoutFiles(true);
 
             //Assert
-            missingFiles.Should().HaveCount(4);
-            missingFiles.Where(e => e.EpisodeFileId == 0).Should().HaveCount(4);
+            missingFiles.Should().HaveCount(2);
+            missingFiles.Where(e => e.EpisodeFileId == 0).Should().HaveCount(2);
 
             mocker.VerifyAllMocks();
         }
