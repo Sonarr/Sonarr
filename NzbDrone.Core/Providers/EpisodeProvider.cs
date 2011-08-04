@@ -296,26 +296,23 @@ namespace NzbDrone.Core.Providers
         public virtual void SetSeasonIgnore(long seriesId, int seasonNumber, bool isIgnored)
         {
             Logger.Info("Setting ignore flag on Series:{0} Season:{1} to {2}", seriesId, seasonNumber, isIgnored);
-            var episodes = GetEpisodesBySeason(seriesId, seasonNumber);
 
-            using (var tran = _database.GetTransaction())
-            {
-                foreach (var episode in episodes)
-                {
-                    episode.Ignored = isIgnored;
-                    _database.Update(episode);
-                }
-
-                //Shouldn't run if Database is a mock since transaction will be null
-                if (_database.GetType().Namespace != "Castle.Proxies" && tran != null)
-                {
-                    tran.Complete();
-                }
+            _database.Execute(@"UPDATE Episodes SET Ignored = @0
+                                WHERE SeriesId = @1 AND SeasonNumber = @2",
+                isIgnored, seriesId, seasonNumber);
 
                 Logger.Info("Ignore flag for Series:{0} Season:{1} successfully set to {2}", seriesId, seasonNumber, isIgnored);
-            }
+        }
 
+        public virtual void SetEpisodeIgnore(int episodeId, bool isIgnored)
+        {
+            Logger.Info("Setting ignore flag on Episode:{0} to {1}", episodeId, isIgnored);
 
+            _database.Execute(@"UPDATE Episodes SET Ignored = @0
+                                WHERE EpisodeId = @1",
+                isIgnored, episodeId);
+
+            Logger.Info("Ignore flag for Episode:{0} successfully set to {1}", episodeId, isIgnored);
         }
 
         public IList<Episode> AttachSeries(IList<Episode> episodes)

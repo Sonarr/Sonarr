@@ -991,5 +991,117 @@ namespace NzbDrone.Core.Test
 
             mocker.VerifyAllMocks();
         }
+
+        [Test]
+        public void IgnoreEpisode_Ignore()
+        {
+            var db = MockLib.GetEmptyDatabase();
+            var mocker = new AutoMoqer();
+            mocker.SetConstant(db);
+
+            var episodes = Builder<Episode>.CreateListOfSize(4)
+                .WhereAll()
+                .Have(c => c.SeriesId = 10)
+                .Have(c => c.SeasonNumber = 1)
+                .Have(c => c.Ignored = false)
+                .Build().ToList();
+
+            episodes.ForEach(c => db.Insert(c));
+
+            //Act
+            mocker.Resolve<EpisodeProvider>().SetEpisodeIgnore(1, true);
+
+            //Assert
+            var episodesInDb = db.Fetch<Episode>(@"SELECT * FROM Episodes");
+
+            episodesInDb.Should().HaveCount(4);
+            episodesInDb.Where(e => e.Ignored).Should().HaveCount(1);
+
+            mocker.VerifyAllMocks();
+        }
+
+        [Test]
+        public void IgnoreEpisode_RemoveIgnore()
+        {
+            var db = MockLib.GetEmptyDatabase();
+            var mocker = new AutoMoqer();
+            mocker.SetConstant(db);
+
+            var episodes = Builder<Episode>.CreateListOfSize(4)
+                .WhereAll()
+                .Have(c => c.SeriesId = 10)
+                .Have(c => c.SeasonNumber = 1)
+                .Have(c => c.Ignored = true)
+                .Build().ToList();
+
+            episodes.ForEach(c => db.Insert(c));
+
+            //Act
+            mocker.Resolve<EpisodeProvider>().SetEpisodeIgnore(1, false);
+
+            //Assert
+            var episodesInDb = db.Fetch<Episode>(@"SELECT * FROM Episodes");
+
+            episodesInDb.Should().HaveCount(4);
+            episodesInDb.Where(e => !e.Ignored).Should().HaveCount(1);
+
+            mocker.VerifyAllMocks();
+        }
+
+        [Test]
+        public void IgnoreSeason_Ignore()
+        {
+            var db = MockLib.GetEmptyDatabase();
+            var mocker = new AutoMoqer();
+            mocker.SetConstant(db);
+
+            var episodes = Builder<Episode>.CreateListOfSize(4)
+                .WhereAll()
+                .Have(c => c.SeriesId = 10)
+                .Have(c => c.SeasonNumber = 1)
+                .Have(c => c.Ignored = false)
+                .Build().ToList();
+
+            episodes.ForEach(c => db.Insert(c));
+
+            //Act
+            mocker.Resolve<EpisodeProvider>().SetSeasonIgnore(10, 1, true);
+
+            //Assert
+            var episodesInDb = db.Fetch<Episode>(@"SELECT * FROM Episodes");
+
+            episodesInDb.Should().HaveCount(4);
+            episodesInDb.Where(e => e.Ignored).Should().HaveCount(4);
+
+            mocker.VerifyAllMocks();
+        }
+
+        [Test]
+        public void IgnoreSeason_RemoveIgnore()
+        {
+            var db = MockLib.GetEmptyDatabase();
+            var mocker = new AutoMoqer();
+            mocker.SetConstant(db);
+
+            var episodes = Builder<Episode>.CreateListOfSize(4)
+                .WhereAll()
+                .Have(c => c.SeriesId = 10)
+                .Have(c => c.SeasonNumber = 1)
+                .Have(c => c.Ignored = true)
+                .Build().ToList();
+
+            episodes.ForEach(c => db.Insert(c));
+
+            //Act
+            mocker.Resolve<EpisodeProvider>().SetSeasonIgnore(10, 1, false);
+
+            //Assert
+            var episodesInDb = db.Fetch<Episode>(@"SELECT * FROM Episodes");
+
+            episodesInDb.Should().HaveCount(4);
+            episodesInDb.Where(e => !e.Ignored).Should().HaveCount(4);
+
+            mocker.VerifyAllMocks();
+        }
     }
 }

@@ -1,5 +1,8 @@
 ﻿var notIgnoredImage = '../../Content/Images/notIgnored.png';
 var ignoredImage = '../../Content/Images/ignored.png';
+var seriesId = 0;
+var saveSeasonIgnoreUrl = '../Series/SaveSeasonIgnore';
+var saveEpisodeIgnoreUrl = '../Series/SaveEpisodeIgnore';
 
 $(".ignoreEpisode").live("click", function () {
     var toggle = $(this);
@@ -15,17 +18,31 @@ $(".ignoreEpisode").live("click", function () {
         toggle.attr('src', ignoredImage);
     }
 
+    var seasonNumber = 0;
+    
+    //Flip the ignored to the new state (We want the new value moving forward)
+    ignored = !ignored;
+
     if (toggle.hasClass('ignoredEpisodesMaster')) {
-        var seasonNumber = toggle.attr('id').replace('master_', '');
+        seasonNumber = toggle.attr('id').replace('master_', '');
 
         toggleChildren(seasonNumber, ignored);
+        saveSeasonIgnore(seasonNumber, ignored);
+    }
+
+    else {
+        //Check to see if this is the last one ignored or the first not ignored
+        seasonNumber = toggle.attr('class').split(/\s+/)[1].replace('ignoreEpisode_', '');
+        var episodeId = toggle.attr('id');
+        toggleMaster(seasonNumber, ignored);
+        saveEpisodeIgnore(episodeId, ignored);
     }
 });
 
 function toggleChildren(seasonNumber, ignored) {
     var ignoreEpisodes = $('.ignoreEpisode_' + seasonNumber);
 
-    if (!ignored) {
+    if (ignored) {
         ignoreEpisodes.each(function (index) {
             $(this).addClass('ignored');
             $(this).attr('src', ignoredImage);
@@ -37,9 +54,26 @@ function toggleChildren(seasonNumber, ignored) {
             $(this).removeClass('ignored');
             $(this).attr('src', notIgnoredImage);
         });
-    } 
+    }
 }
 
+function toggleMaster(seasonNumber) {
+    var ignoreEpisodes = $('.ignoreEpisode_' + seasonNumber);
+    var ignoredCount = ignoreEpisodes.filter('.ignored').length;
+    var master = $('#master_' + seasonNumber);
+    
+    if (ignoreEpisodes.length == ignoredCount) {
+        master.attr('src', ignoredImage);
+        master.addClass('ignored');
+    }
+
+    else {
+        master.attr('src', notIgnoredImage);
+        master.removeClass('ignored');
+    }
+}
+
+//Functions called by the Telerik Season Grid 
 function grid_rowBound(e) {
     var dataItem = e.dataItem;
     var ignored = dataItem.Ignored;
@@ -55,6 +89,9 @@ function grid_rowBound(e) {
         ignoredIcon.attr('src', notIgnoredImage);
         ignoredIcon.removeClass('ignored');
     }
+    
+    if (seriesId == 0)
+        seriesId = dataItem.SeriesId
 }
 
 function grid_dataBound(e) {
@@ -63,13 +100,7 @@ function grid_dataBound(e) {
     var ignoreEpisodes = $('.ignoreEpisode_' + seasonNumber);
     var master = $('#master_' + seasonNumber);
     var count = ignoreEpisodes.length;
-    var ignoredCount = 0;
-
-    ignoreEpisodes.each(function (index) {
-        if ($(this).hasClass('ignored')) {
-            ignoredCount++;
-        }
-    });
+    var ignoredCount = ignoreEpisodes.filter('.ignored').length;
 
     if (ignoredCount == count) {
         master.attr('src', ignoredImage);
@@ -80,4 +111,26 @@ function grid_dataBound(e) {
         master.attr('src', notIgnoredImage);
         master.removeClass('ignored');
     }
+}
+
+function saveSeasonIgnore(seasonNumber, ignored) {
+    $.ajax({
+        type: "POST",
+        url: saveSeasonIgnoreUrl,
+        data: jQuery.param({ seriesId: seriesId, seasonNumber: seasonNumber, ignored: ignored }),
+        error: function (req, status, error) {
+            alert("Sorry! We could save the ignore settings for Series: " + seriesId + ", Season: " + seasonNumber + " at this time. " + error);
+        }
+    });
+}
+
+function saveEpisodeIgnore(episodeId, ignored) {
+    $.ajax({
+        type: "POST",
+        url: saveEpisodeIgnoreUrl,
+        data: jQuery.param({ episodeId: episodeId, ignored: ignored }),
+        error: function (req, status, error) {
+            alert("Sorry! We could save the ignore settings for Episode: " + episodeId + " at this time. " + error);
+        }
+    });
 }
