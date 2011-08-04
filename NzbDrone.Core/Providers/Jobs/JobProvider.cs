@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -11,6 +12,10 @@ using PetaPoco;
 
 namespace NzbDrone.Core.Providers.Jobs
 {
+    /// <summary>
+    /// Provides a background task runner, tasks could be queue either by the scheduler using QueueScheduled()
+    /// or by explicitly calling QueueJob(type,int)
+    /// </summary>
     public class JobProvider
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
@@ -21,9 +26,8 @@ namespace NzbDrone.Core.Providers.Jobs
         private static readonly object ExecutionLock = new object();
         private Thread _jobThread;
         private static bool _isRunning;
-        public static readonly List<Tuple<Type, Int32>> Queue = new List<Tuple<Type, int>>();
 
-
+        private static readonly List<Tuple<Type, Int32>> _queue = new List<Tuple<Type, int>>();
 
         private ProgressNotification _notification;
 
@@ -35,22 +39,38 @@ namespace NzbDrone.Core.Providers.Jobs
             _jobs = jobs;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JobProvider"/> class. by AutoMoq
+        /// </summary>
+        /// <remarks>Should only be used by AutoMoq</remarks>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public JobProvider() { }
+
+
+        /// <summary>
+        /// Gets the active queue.
+        /// </summary>
+        public static List<Tuple<Type, Int32>> Queue
+        {
+            get
+            {
+                return _queue;
+            }
+        }
 
         /// <summary>
         /// Returns a list of all registered jobs
         /// </summary>
-        /// <returns></returns>
         public virtual List<JobDefinition> All()
         {
             return _database.Fetch<JobDefinition>().ToList();
         }
 
         /// <summary>
-        /// Creates/Updates definitions for a job
+        /// Adds/Updates definitions for a job
         /// </summary>
-        /// <param name="definitions">Settings to be created/updated</param>
-        public virtual void SaveSettings(JobDefinition definitions)
+        /// <param name="definitions">Settings to be added/updated</param>
+        public virtual void SaveDefinition(JobDefinition definitions)
         {
             if (definitions.Id == 0)
             {
@@ -65,9 +85,10 @@ namespace NzbDrone.Core.Providers.Jobs
         }
 
         /// <summary>
-        /// Iterates through all registered jobs and executed any that are due for an execution.
+        /// Iterates through all registered jobs and queues any that are due for an execution.
         /// </summary>
-        public virtual void RunScheduled()
+        /// <remarks>Will ignore request if queue is already running.</remarks>
+        public virtual void QueueScheduled()
         {
             lock (ExecutionLock)
             {
@@ -95,9 +116,9 @@ namespace NzbDrone.Core.Providers.Jobs
         }
 
         /// <summary>
-        /// Starts the execution of a job asynchronously
+        /// Queues the execution of a job asynchronously
         /// </summary>
-        /// <param name="jobType">Type of the job that should be executed.</param>
+        /// <param name="jobType">Type of the job that should be queued.</param>
         /// <param name="targetId">The targetId could be any Id parameter eg. SeriesId. it will be passed to the job implementation
         /// to allow it to filter it's target of execution.</param>
         /// <remarks>Job is only added to the queue if same job with the same targetId doesn't already exist in the queue.</remarks>
@@ -119,7 +140,7 @@ namespace NzbDrone.Core.Providers.Jobs
                     }
                     else
                     {
-                        Logger.Info("[{0}:{1}] already exists in job queue. Skipping.", jobType.Name, targetId);
+                        Logger.Info("[{0}:{1}] already exists in the queue. Skipping.", jobType.Name, targetId);
                     }
                 }
 
@@ -163,7 +184,7 @@ namespace NzbDrone.Core.Providers.Jobs
         }
 
         /// <summary>
-        /// Starts processing of queue.
+        /// Starts processing of queue synchronously.
         /// </summary>
         private void ProcessQueue()
         {
@@ -173,7 +194,7 @@ namespace NzbDrone.Core.Providers.Jobs
 
                 using (NestedDiagnosticsContext.Push(Guid.NewGuid().ToString()))
                 {
-                   try
+                    try
                     {
                         lock (Queue)
                         {
@@ -210,7 +231,7 @@ namespace NzbDrone.Core.Providers.Jobs
         }
 
         /// <summary>
-        /// Executes the job
+        /// Executes the job synchronously
         /// </summary>
         /// <param name="jobType">Type of the job that should be executed</param>
         /// <param name="targetId">The targetId could be any Id parameter eg. SeriesId. it will be passed to the timer implementation
@@ -256,15 +277,16 @@ namespace NzbDrone.Core.Providers.Jobs
                 }
             }
 
+            //Only update last execution status if was triggered by the scheduler
             if (targetId == 0)
             {
-                SaveSettings(settings);
+                SaveDefinition(settings);
             }
         }
 
         /// <summary>
         /// Initializes jobs in the database using the IJob instances that are
-        /// registered in CentralDispatch
+        /// registered using ninject
         /// </summary>
         public virtual void Initialize()
         {
@@ -285,13 +307,13 @@ namespace NzbDrone.Core.Providers.Jobs
                                            LastExecution = new DateTime(2000, 1, 1)
                                        };
 
-                    SaveSettings(settings);
+                    SaveDefinition(settings);
                 }
             }
         }
 
         /// <summary>
-        /// Gets the next scheduled run time for the job
+        /// Gets the next scheduled run time for a specific job
         /// (Estimated due to schedule timer)
         /// </summary>
         /// <returns>DateTime of next scheduled job execution</returns>

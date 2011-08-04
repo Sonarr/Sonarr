@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Test
             //Act
             var timerProvider = mocker.Resolve<JobProvider>();
             timerProvider.Initialize();
-            timerProvider.RunScheduled();
+            timerProvider.QueueScheduled();
 
             //Assert
             var settings = timerProvider.All();
@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Test
             //Act
             var timerProvider = mocker.Resolve<JobProvider>();
             timerProvider.Initialize();
-            timerProvider.RunScheduled();
+            timerProvider.QueueScheduled();
 
             Thread.Sleep(1000);
 
@@ -79,9 +79,9 @@ namespace NzbDrone.Core.Test
 
             var timerProvider = mocker.Resolve<JobProvider>();
             timerProvider.Initialize();
-            timerProvider.RunScheduled();
+            timerProvider.QueueScheduled();
             Thread.Sleep(500);
-            timerProvider.RunScheduled();
+            timerProvider.QueueScheduled();
             Thread.Sleep(500);
 
             fakeJob.ExexutionCount.Should().Be(1);
@@ -174,10 +174,10 @@ namespace NzbDrone.Core.Test
             timerProvider.Initialize();
 
 
-            var thread1 = new Thread(() => timerProvider.RunScheduled());
+            var thread1 = new Thread(() => timerProvider.QueueScheduled());
             thread1.Start();
             Thread.Sleep(1000);
-            var thread2 = new Thread(() => timerProvider.RunScheduled());
+            var thread2 = new Thread(() => timerProvider.QueueScheduled());
             thread2.Start();
 
             thread1.Join();
@@ -321,7 +321,7 @@ namespace NzbDrone.Core.Test
             //Act
             var timerProvider = mocker.Resolve<JobProvider>();
             timerProvider.Initialize();
-            timerProvider.RunScheduled();
+            timerProvider.QueueScheduled();
             var next = timerProvider.NextScheduledRun(typeof(FakeJob));
 
             //Assert
@@ -346,7 +346,7 @@ namespace NzbDrone.Core.Test
             var timerProvider = mocker.Resolve<JobProvider>();
             timerProvider.Initialize();
 
-            timerProvider.RunScheduled();
+            timerProvider.QueueScheduled();
 
             Thread.Sleep(1000);
 
@@ -438,7 +438,7 @@ namespace NzbDrone.Core.Test
 
             mocker.Resolve<JobProvider>().Initialize();
 
-            var _jobThread = new Thread(() => mocker.Resolve<JobProvider>().RunScheduled());
+            var _jobThread = new Thread(() => mocker.Resolve<JobProvider>().QueueScheduled());
             _jobThread.Start();
 
             Thread.Sleep(200);
