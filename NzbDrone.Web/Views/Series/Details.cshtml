@@ -71,9 +71,9 @@
             .Columns(columns =>
                          {
                              columns.Bound(o => o.Ignored)
-                                 .Title("<img src='../../Content/Images/ignored.png' class='ignoredEpisodesMaster ignoreEpisode' id='master_" + season + "' />")
+                                 .Title("<img src='../../Content/Images/ignoredNeutral.png' class='ignoredEpisodesMaster ignoreEpisode' id='master_" + season + "' />")
                                  .ClientTemplate(
-                                     "<img src='../../Content/Images/ignored.png' class='ignoreEpisode ignoreEpisode_" + season + " ignored' id='<#= EpisodeId #>' />")
+                                     "<img src='../../Content/Images/ignoredNeutral.png' class='ignoreEpisode ignoreEpisode_" + season + " ignored' id='<#= EpisodeId #>' />")
                                  .Width(20)
                                  .HtmlAttributes(new { style = "text-align:center" });
 
@@ -117,9 +117,9 @@
                     .Columns(columns =>
                              {
                                  columns.Bound(o => o.Ignored)
-                                     .Title("<img src='../../Content/Images/ignored.png' class='ignoredEpisodesMaster ignoreEpisode' id='master_0' />")
+                                     .Title("<img src='../../Content/Images/ignoredNeutral.png' class='ignoredEpisodesMaster ignoreEpisode' id='master_0' />")
                                      .ClientTemplate(
-                                         "<img src='../../Content/Images/ignored.png' class='ignoreEpisode ignoreEpisode_0 ignored' id='<#= EpisodeId #>' />")
+                                         "<img src='../../Content/Images/ignoredNeutral.png' class='ignoreEpisode ignoreEpisode_0 ignored' id='<#= EpisodeId #>' />")
                                      .Width(20)
                                      .HtmlAttributes(new { style = "text-align:center" });
 
