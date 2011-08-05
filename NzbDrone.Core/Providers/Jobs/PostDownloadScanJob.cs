@@ -79,8 +79,8 @@ namespace NzbDrone.Core.Providers.Jobs
 
                     if (series == null)
                     {
-                        Logger.Warn("Unable to Import new download, series doesn't exist in database.");
-                        return;
+                        Logger.Warn("Unable to Import new download [{0}], series doesn't exist in database.", subfolder);
+                        continue;
                     }
 
                     var importedFiles = _diskScanProvider.Scan(series, subfolder);
