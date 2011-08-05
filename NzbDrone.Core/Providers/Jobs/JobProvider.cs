@@ -1,4 +1,5 @@
-﻿using System;
+﻿//https://github.com/kayone/NzbDrone/blob/master/NzbDrone.Core/Providers/Jobs/JobProvider.cs
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -201,6 +202,7 @@ namespace NzbDrone.Core.Providers.Jobs
                             if (Queue.Count != 0)
                             {
                                 job = Queue.First();
+                                Queue.Remove(job);
                             }
                         }
 
@@ -213,13 +215,6 @@ namespace NzbDrone.Core.Providers.Jobs
                     catch (Exception e)
                     {
                         Logger.FatalException("An error has occurred while processing queued job.", e);
-                    }
-                    finally
-                    {
-                        if (job != null)
-                        {
-                            Queue.Remove(job);
-                        }
                     }
                 }
 
