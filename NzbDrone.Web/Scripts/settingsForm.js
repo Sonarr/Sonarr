@@ -7,6 +7,7 @@
         resetForm: false
     };
     $('#form').ajaxForm(options);
+    $('#save_button').removeAttr('disabled');
 });
 
 function showRequest(formData, jqForm, options) {

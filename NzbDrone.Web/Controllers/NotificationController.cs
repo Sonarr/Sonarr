@@ -67,6 +67,8 @@ namespace NzbDrone.Web.Controllers
 
         private string GetCurrentMessage()
         {
+            var notes = _notifications.ProgressNotifications;
+
             if (_notifications.ProgressNotifications.Count != 0)
                 return _notifications.ProgressNotifications[0].CurrentMessage;
 

@@ -6,7 +6,7 @@ namespace NzbDrone.Core.Model.Notification
     {
         public BasicNotification()
         {
-            Id = Guid.Empty;
+            Id = Guid.NewGuid();
         }
 
         /// <summary>

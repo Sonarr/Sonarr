@@ -1,20 +1,17 @@
-﻿<div id="image" value="5">
-    <img src='../../Content/Images/watched.png' class='ignoreEpisode watched' value='5' />
-</div>
-
-<script type="text/javascript">
-    $(".ignoreEpisode").live("click", function () {
-        var toggle = $(this);
-
-        if (toggle.hasClass('watched')) {
-            toggle.removeClass('watched');
-            toggle.attr('src', '../../Content/Images/unwatched.png');
-        }
-
-        else {
-            toggle.addClass('watched');
-            toggle.attr('src', '../../Content/Images/watched.png');
-        }
+﻿<script type="text/javascript">
+    $(document).ready(function () {
+        //$('#save_button').attr('disabled', '');
     });
 </script>
 
+<style>
+    #save_button[disabled="disabled"]
+    {      
+        padding: 0px 6px 0px 6px;
+        border: 2px outset ButtonFace;
+        color: GrayText;
+        cursor: inherit;
+    }
+</style>
+
+<button type="submit" id="save_button" disabled="disabled">Save</button>

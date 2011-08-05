@@ -32,6 +32,7 @@ namespace NzbDrone.Web.Controllers
         private readonly DiskProvider _diskProvider;
         private readonly SeriesProvider _seriesProvider;
         private readonly ExternalNotificationProvider _externalNotificationProvider;
+        private readonly ProgressNotification _progressNotification;
 
         public SettingsController(ConfigProvider configProvider, IndexerProvider indexerProvider,
                                   QualityProvider qualityProvider, RootDirProvider rootDirProvider,
@@ -48,6 +49,8 @@ namespace NzbDrone.Web.Controllers
             _notificationProvider = notificationProvider;
             _diskProvider = diskProvider;
             _seriesProvider = seriesProvider;
+
+            _progressNotification = new ProgressNotification("Settings");
         }
 
         public ActionResult Test()
@@ -270,9 +273,7 @@ namespace NzbDrone.Web.Controllers
         [HttpPost]
         public ActionResult SaveIndexers(IndexerSettingsModel data)
         {
-            var basicNotification = new BasicNotification();
-            basicNotification.Type = BasicNotificationType.Info;
-            basicNotification.AutoDismiss = true;
+            _notificationProvider.Register(_progressNotification);
 
             if (ModelState.IsValid)
             {
@@ -304,22 +305,20 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.NewzbinUsername = data.NewzbinUsername;
                 _configProvider.NewzbinPassword = data.NewzbinPassword;
 
-                basicNotification.Title = SETTINGS_SAVED;
-                _notificationProvider.Register(basicNotification);
+                _progressNotification.CurrentMessage = SETTINGS_SAVED;
+                _progressNotification.Status = ProgressNotificationStatus.Completed;
                 return Content(SETTINGS_SAVED);
             }
 
-            basicNotification.Title = SETTINGS_FAILED;
-            _notificationProvider.Register(basicNotification);
+            _progressNotification.CurrentMessage = SETTINGS_FAILED;
+            _progressNotification.Status = ProgressNotificationStatus.Completed;
             return Content(SETTINGS_FAILED);
         }
 
         [HttpPost]
         public ActionResult SaveSabnzbd(SabnzbdSettingsModel data)
         {
-            var basicNotification = new BasicNotification();
-            basicNotification.Type = BasicNotificationType.Info;
-            basicNotification.AutoDismiss = true;
+            _notificationProvider.Register(_progressNotification);
 
             if (ModelState.IsValid)
             {
@@ -332,22 +331,20 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.SabTvPriority = data.SabTvPriority;
                 _configProvider.SabDropDirectory = data.SabDropDirectory;
 
-                basicNotification.Title = SETTINGS_SAVED;
-                _notificationProvider.Register(basicNotification);
+                _progressNotification.CurrentMessage = SETTINGS_SAVED;
+                _progressNotification.Status = ProgressNotificationStatus.Completed;
                 return Content(SETTINGS_SAVED);
             }
 
-            basicNotification.Title = SETTINGS_FAILED;
-            _notificationProvider.Register(basicNotification);
+            _progressNotification.CurrentMessage = SETTINGS_FAILED;
+            _progressNotification.Status = ProgressNotificationStatus.Completed;
             return Content(SETTINGS_FAILED);
         }
 
         [HttpPost]
         public ActionResult SaveQuality(QualityModel data)
         {
-            var basicNotification = new BasicNotification();
-            basicNotification.Type = BasicNotificationType.Info;
-            basicNotification.AutoDismiss = true;
+            _notificationProvider.Register(_progressNotification);
 
             if (ModelState.IsValid)
             {
@@ -379,22 +376,21 @@ namespace NzbDrone.Web.Controllers
 
                     _qualityProvider.Update(profile);
                 }
-                basicNotification.Title = SETTINGS_SAVED;
-                _notificationProvider.Register(basicNotification);
+
+                _progressNotification.CurrentMessage = SETTINGS_SAVED;
+                _progressNotification.Status = ProgressNotificationStatus.Completed;
                 return Content(SETTINGS_SAVED);
             }
 
-            basicNotification.Title = SETTINGS_FAILED;
-            _notificationProvider.Register(basicNotification);
+            _progressNotification.CurrentMessage = SETTINGS_FAILED;
+            _progressNotification.Status = ProgressNotificationStatus.Completed;
             return Content(SETTINGS_FAILED);
         }
 
         [HttpPost]
         public ActionResult SaveNotifications(NotificationSettingsModel data)
         {
-            var basicNotification = new BasicNotification();
-            basicNotification.Type = BasicNotificationType.Info;
-            basicNotification.AutoDismiss = true;
+            _notificationProvider.Register(_progressNotification);
 
             if (ModelState.IsValid)
             {
@@ -411,22 +407,20 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.XbmcUsername = data.XbmcUsername;
                 _configProvider.XbmcPassword = data.XbmcPassword;
 
-                basicNotification.Title = SETTINGS_SAVED;
-                _notificationProvider.Register(basicNotification);
+                _progressNotification.CurrentMessage = SETTINGS_SAVED;
+                _progressNotification.Status = ProgressNotificationStatus.Completed;
                 return Content(SETTINGS_SAVED);
             }
 
-            basicNotification.Title = SETTINGS_FAILED;
-            _notificationProvider.Register(basicNotification);
+            _progressNotification.CurrentMessage = SETTINGS_FAILED;
+            _progressNotification.Status = ProgressNotificationStatus.Completed;
             return Content(SETTINGS_FAILED);
         }
 
         [HttpPost]
         public ActionResult SaveEpisodeSorting(EpisodeSortingModel data)
         {
-            var basicNotification = new BasicNotification();
-            basicNotification.Type = BasicNotificationType.Info;
-            basicNotification.AutoDismiss = true;
+            _notificationProvider.Register(_progressNotification);
 
             if (ModelState.IsValid)
             {
@@ -440,13 +434,13 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.SortingNumberStyle = data.NumberStyle;
                 _configProvider.SortingMultiEpisodeStyle = data.MultiEpisodeStyle;
 
-                basicNotification.Title = SETTINGS_SAVED;
-                _notificationProvider.Register(basicNotification);
+                _progressNotification.CurrentMessage = SETTINGS_SAVED;
+                _progressNotification.Status = ProgressNotificationStatus.Completed;
                 return Content(SETTINGS_SAVED);
             }
 
-            basicNotification.Title = SETTINGS_FAILED;
-            _notificationProvider.Register(basicNotification);
+            _progressNotification.CurrentMessage = SETTINGS_FAILED;
+            _progressNotification.Status = ProgressNotificationStatus.Completed;
             return Content(SETTINGS_FAILED);
         }
     }
