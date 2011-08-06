@@ -32,7 +32,6 @@ namespace NzbDrone.Web.Controllers
         private readonly DiskProvider _diskProvider;
         private readonly SeriesProvider _seriesProvider;
         private readonly ExternalNotificationProvider _externalNotificationProvider;
-        private readonly ProgressNotification _progressNotification;
 
         public SettingsController(ConfigProvider configProvider, IndexerProvider indexerProvider,
                                   QualityProvider qualityProvider, RootDirProvider rootDirProvider,
@@ -49,8 +48,6 @@ namespace NzbDrone.Web.Controllers
             _notificationProvider = notificationProvider;
             _diskProvider = diskProvider;
             _seriesProvider = seriesProvider;
-
-            _progressNotification = new ProgressNotification("Settings");
         }
 
         public ActionResult Test()
@@ -273,7 +270,8 @@ namespace NzbDrone.Web.Controllers
         [HttpPost]
         public ActionResult SaveIndexers(IndexerSettingsModel data)
         {
-            _notificationProvider.Register(_progressNotification);
+            var progressNotification = new ProgressNotification("Settings");
+            _notificationProvider.Register(progressNotification);
 
             if (ModelState.IsValid)
             {
@@ -305,20 +303,21 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.NewzbinUsername = data.NewzbinUsername;
                 _configProvider.NewzbinPassword = data.NewzbinPassword;
 
-                _progressNotification.CurrentMessage = SETTINGS_SAVED;
-                _progressNotification.Status = ProgressNotificationStatus.Completed;
+                progressNotification.CurrentMessage = SETTINGS_SAVED;
+                progressNotification.Status = ProgressNotificationStatus.Completed;
                 return Content(SETTINGS_SAVED);
             }
 
-            _progressNotification.CurrentMessage = SETTINGS_FAILED;
-            _progressNotification.Status = ProgressNotificationStatus.Completed;
+            progressNotification.CurrentMessage = SETTINGS_FAILED;
+            progressNotification.Status = ProgressNotificationStatus.Completed;
             return Content(SETTINGS_FAILED);
         }
 
         [HttpPost]
         public ActionResult SaveSabnzbd(SabnzbdSettingsModel data)
         {
-            _notificationProvider.Register(_progressNotification);
+            var progressNotification = new ProgressNotification("Settings");
+            _notificationProvider.Register(progressNotification);
 
             if (ModelState.IsValid)
             {
@@ -331,20 +330,21 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.SabTvPriority = data.SabTvPriority;
                 _configProvider.SabDropDirectory = data.SabDropDirectory;
 
-                _progressNotification.CurrentMessage = SETTINGS_SAVED;
-                _progressNotification.Status = ProgressNotificationStatus.Completed;
+                progressNotification.CurrentMessage = SETTINGS_SAVED;
+                progressNotification.Status = ProgressNotificationStatus.Completed;
                 return Content(SETTINGS_SAVED);
             }
 
-            _progressNotification.CurrentMessage = SETTINGS_FAILED;
-            _progressNotification.Status = ProgressNotificationStatus.Completed;
+            progressNotification.CurrentMessage = SETTINGS_FAILED;
+            progressNotification.Status = ProgressNotificationStatus.Completed;
             return Content(SETTINGS_FAILED);
         }
 
         [HttpPost]
         public ActionResult SaveQuality(QualityModel data)
         {
-            _notificationProvider.Register(_progressNotification);
+            var progressNotification = new ProgressNotification("Settings");
+            _notificationProvider.Register(progressNotification);
 
             if (ModelState.IsValid)
             {
@@ -377,20 +377,21 @@ namespace NzbDrone.Web.Controllers
                     _qualityProvider.Update(profile);
                 }
 
-                _progressNotification.CurrentMessage = SETTINGS_SAVED;
-                _progressNotification.Status = ProgressNotificationStatus.Completed;
+                progressNotification.CurrentMessage = SETTINGS_SAVED;
+                progressNotification.Status = ProgressNotificationStatus.Completed;
                 return Content(SETTINGS_SAVED);
             }
 
-            _progressNotification.CurrentMessage = SETTINGS_FAILED;
-            _progressNotification.Status = ProgressNotificationStatus.Completed;
+            progressNotification.CurrentMessage = SETTINGS_FAILED;
+            progressNotification.Status = ProgressNotificationStatus.Completed;
             return Content(SETTINGS_FAILED);
         }
 
         [HttpPost]
         public ActionResult SaveNotifications(NotificationSettingsModel data)
         {
-            _notificationProvider.Register(_progressNotification);
+            var progressNotification = new ProgressNotification("Settings");
+            _notificationProvider.Register(progressNotification);
 
             if (ModelState.IsValid)
             {
@@ -407,20 +408,21 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.XbmcUsername = data.XbmcUsername;
                 _configProvider.XbmcPassword = data.XbmcPassword;
 
-                _progressNotification.CurrentMessage = SETTINGS_SAVED;
-                _progressNotification.Status = ProgressNotificationStatus.Completed;
+                progressNotification.CurrentMessage = SETTINGS_SAVED;
+                progressNotification.Status = ProgressNotificationStatus.Completed;
                 return Content(SETTINGS_SAVED);
             }
 
-            _progressNotification.CurrentMessage = SETTINGS_FAILED;
-            _progressNotification.Status = ProgressNotificationStatus.Completed;
+            progressNotification.CurrentMessage = SETTINGS_FAILED;
+            progressNotification.Status = ProgressNotificationStatus.Completed;
             return Content(SETTINGS_FAILED);
         }
 
         [HttpPost]
         public ActionResult SaveEpisodeSorting(EpisodeSortingModel data)
         {
-            _notificationProvider.Register(_progressNotification);
+            var progressNotification = new ProgressNotification("Settings");
+            _notificationProvider.Register(progressNotification);
 
             if (ModelState.IsValid)
             {
@@ -434,13 +436,13 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.SortingNumberStyle = data.NumberStyle;
                 _configProvider.SortingMultiEpisodeStyle = data.MultiEpisodeStyle;
 
-                _progressNotification.CurrentMessage = SETTINGS_SAVED;
-                _progressNotification.Status = ProgressNotificationStatus.Completed;
+                progressNotification.CurrentMessage = SETTINGS_SAVED;
+                progressNotification.Status = ProgressNotificationStatus.Completed;
                 return Content(SETTINGS_SAVED);
             }
 
-            _progressNotification.CurrentMessage = SETTINGS_FAILED;
-            _progressNotification.Status = ProgressNotificationStatus.Completed;
+            progressNotification.CurrentMessage = SETTINGS_FAILED;
+            progressNotification.Status = ProgressNotificationStatus.Completed;
             return Content(SETTINGS_FAILED);
         }
     }
