@@ -1,13 +1,9 @@
-﻿@{Html.Telerik().Menu().Name("SubMenu").Items(items =>
-        {
-            items.Add().Text("Indexers").Action("Indexers", "Settings");
-            items.Add().Text("SABnzbd").Action("Sabnzbd", "Settings");
-            items.Add().Text("Quality").Action("Quality", "Settings");
-            items.Add().Text("Episode Sorting").Action("EpisodeSorting",
-                                                    "Settings");
-            items.Add().Text("Notifications").Action("Notifications",
-                                                    "Settings");
-        }).Render();
-}
+﻿<ul id="sub-menu">
+        <li>@Html.ActionLink("Indexers", "Indexers", "Settings")</li>
+        <li>@Html.ActionLink("SABnzbd", "Sabnzbd", "Settings")</li>
+        <li>@Html.ActionLink("Quality", "Quality", "Settings")</li>
+        <li>@Html.ActionLink("Episode Sorting", "EpisodeSorting", "Settings")</li>
+        <li>@Html.ActionLink("Notifications", "Notifications", "Settings")</li>
+    </ul>
 
 <div style="margin-bottom: 10px"></div>

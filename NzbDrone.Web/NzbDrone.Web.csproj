@@ -135,6 +135,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Menu.css" />
+    <Compile Include="Controllers\CommandController.cs" />
     <Compile Include="Controllers\DirectoryController.cs" />
     <Compile Include="Controllers\EpisodeController.cs" />
     <Compile Include="Controllers\HealthController.cs" />
@@ -152,6 +154,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\MenuExtension.cs" />
     <Compile Include="Helpers\ValueExtension.cs" />
     <Compile Include="Helpers\DescriptionExtension.cs" />
     <Compile Include="Helpers\HtmlPrefixScopeExtensions.cs" />
@@ -287,11 +290,10 @@
     <Content Include="Views\Shared\Footer.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\History\Index.cshtml" />
-    <Content Include="Views\Log\index.cshtml" />
+    <Content Include="Views\Log\Index.cshtml" />
     <Content Include="Views\Upcoming\Index.cshtml" />
     <Content Include="Views\Series\Details.cshtml" />
     <Content Include="Views\Series\Index.cshtml" />
-    <Content Include="Views\Series\SubMenu.cshtml" />
     <Content Include="Views\Series\SeriesSearchResults.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Settings\QualityProfileItem.cshtml" />

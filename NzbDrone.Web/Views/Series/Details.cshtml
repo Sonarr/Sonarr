@@ -25,43 +25,16 @@
 </style>
 
 @section ActionMenu{
-    @{Html.Telerik().Menu().Name("SeriesMenu").Items(items =>
-                                                           {
-                                                               items.Add().Text("Back to Series List").Action("Index", "Series");
-                                                               items.Add().Text("Scan For Episodes on Disk")
-                                                                   .Action("SyncEpisodesOnDisk", "Series", new { seriesId = Model.SeriesId });
-                                                               items.Add().Text("Update Info").Action("UpdateInfo", "Series", new { seriesId = Model.SeriesId });
-                                                               items.Add().Text("Rename Series").Action("RenameSeries", "Series", new { seriesId = Model.SeriesId });
-                                                           }).Render();}
+   <ul id="sub-menu">
+        <li>@Html.ActionLink("Back to Series List", "Index", "Series")</li>
+        <li>@Ajax.ActionLink("Scan For Episodes on Disk", "SyncEpisodesOnDisk", "Command", new { seriesId = Model.SeriesId }, null)</li>
+        <li>@Ajax.ActionLink("Update Info", "UpdateInfo", "Command", new { seriesId = Model.SeriesId }, null)</li>
+        <li>@Ajax.ActionLink("Rename Series", "RenameSeries", "Command", new { seriesId = Model.SeriesId }, null)</li>
+    </ul>
 }
 @section MainContent{
-    <fieldset>
-        <div class="display-label">
-            ID</div>
-        <div class="display-field">
-            @Model.SeriesId</div>
-        <div class="display-label">
-            Overview</div>
-        <div class="display-field">
-            @Model.Overview</div>
-        <div class="display-label">
-            Status</div>
-        <div class="display-field">
-            @Model.Status</div>
-        <div class="display-label">
-            AirTimes</div>
-        <div class="display-field">
-            @Model.AirsDayOfWeek</div>
-        <div class="display-label">
-            Language</div>
-        <div class="display-label">
-            Location</div>
-        <div class="display-field">
-            @Model.Path</div>
-    </fieldset>
     @foreach (var season in Model.Seasons.Where(s => s > 0).Reverse())
     {
-        <br />
         <h3>
             Season @season</h3>
         <div class="grid-container">

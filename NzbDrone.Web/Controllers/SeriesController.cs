@@ -47,12 +47,6 @@ namespace NzbDrone.Web.Controllers
             return View();
         }
 
-        public ActionResult RssSync()
-        {
-            _jobProvider.QueueJob(typeof(RssSyncJob));
-            return RedirectToAction("Index");
-        }
-
         public ActionResult SeasonEditor(int seriesId)
         {
             var model = new List<SeasonEditModel>();
@@ -183,21 +177,6 @@ namespace NzbDrone.Web.Controllers
             model.SeriesId = series.SeriesId;
 
             return View(model);
-        }
-
-        public ActionResult SyncEpisodesOnDisk(int seriesId)
-        {
-            //Syncs the episodes on disk for the specified series
-            _jobProvider.QueueJob(typeof(DiskScanJob), seriesId);
-
-            return RedirectToAction("Details", new { seriesId });
-        }
-
-        public ActionResult UpdateInfo(int seriesId)
-        {
-            //Syncs the episodes on disk for the specified series
-            _jobProvider.QueueJob(typeof(UpdateInfoJob), seriesId);
-            return RedirectToAction("Details", new { seriesId });
         }
 
         private List<SeriesModel> GetSeriesModels(IList<Series> seriesInDb)

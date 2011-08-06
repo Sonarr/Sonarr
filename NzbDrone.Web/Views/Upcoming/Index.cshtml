@@ -4,8 +4,9 @@
 Upcoming
 }
 @section ActionMenu{
-    @{Html.Telerik().Menu().Name("historyMenu").Items(
-            items => { items.Add().Text("Start RSS Sync").Action("RssSync", "Series"); }).Render();}
+        <ul id="sub-menu">
+        <li>@Ajax.ActionLink("Start RSS Sync", "RssSync", "Command", null, null)</li>
+    </ul>
 }
 @section MainContent{
     <div id="yesterday">

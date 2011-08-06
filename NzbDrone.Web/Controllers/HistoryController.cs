@@ -26,16 +26,16 @@ namespace NzbDrone.Web.Controllers
             return View();
         }
 
-        public ActionResult Trim()
+        public JsonResult Trim()
         {
             _historyProvider.Trim();
-            return RedirectToAction("Index");
+            return new JsonResult { Data = "ok" };
         }
 
-        public ActionResult Purge()
+        public JsonResult Purge()
         {
             _historyProvider.Purge();
-            return RedirectToAction("Index");
+            return new JsonResult { Data = "ok" };
         }
 
         [GridAction]

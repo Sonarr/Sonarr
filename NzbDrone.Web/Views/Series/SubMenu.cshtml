@@ -1,7 +1,0 @@
-﻿@using NzbDrone.Web.Controllers
-
-@{Html.Telerik().Menu().Name("telerikGrid").Items(items =>
-                            {
-                                items.Add().Text("Add Series").Action<AddSeriesController>(c => c.Index());
-                                items.Add().Text("Start RSS Sync").Action<SeriesController>(c => c.RssSync());
-                            }).Render();}
