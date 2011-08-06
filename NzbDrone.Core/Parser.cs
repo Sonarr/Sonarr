@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Core.Model;
@@ -19,11 +20,15 @@ namespace NzbDrone.Core
                                         RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                                     //Multi-Part episodes without a title (S01E05.S01E06)
-                                    new Regex(@"^(?:\W*S?(?<season>\d{1,2}(?!\d+))(?:(?:\-|\.|[ex]|\s){1,2}(?<episode>\d{1,2}(?!\d+)))+){2,}\W?(?!\\)",
+                                    new Regex(@"^(?:\W*S?(?<season>\d{1,2}(?!\d+))(?:(?:\-|\.|[ex]|\s|\sto\s){1,2}(?<episode>\d{1,2}(?!\d+)))+){2,}\W?(?!\\)",
 			                            RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
-                                    //Single episodes or multi-episode (S01E05E06, S01E05-06, etc)
-                                    new Regex(@"^(?<title>.+?)(?:\W+S?(?<season>\d{1,2}(?!\d+))(?:(?:\-|\.|[ex]|\s){1,2}(?<episode>\d{1,2}(?!\d+)))+)+\W?(?!\\)",
+                                    //Multi-episode (S01E05E06, S01E05-06, etc)
+                                    new Regex(@"^(?<title>.+?)(?:\W+S?(?<season>\d{1,2}(?!\d+))(?:(?:\-|\.|[ex]|\s|\sto\s){1,2}(?<episode>\d{1,2}(?!\d+)))+){2,}\W?(?!\\)",
+		                                RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
+                                    //Single episodes (S01E05, 1x056, etc)
+                                    new Regex(@"^(?<title>.+?)(?:\W+S?(?<season>\d{1,2}(?!\d+))(?:(?:\-|\.|[ex]|\s|\sto\s){1,2}(?<episode>\d{1,2}(?!\d+)))+)\W?(?!\\)",
 		                                RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                                     //No Title - Single episodes or multi-episode (S01E05E06, S01E05-06, etc)
@@ -35,7 +40,7 @@ namespace NzbDrone.Core
                                         RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                                     //Episodes over 99 (3-digits or more)
-                                    new Regex(@"^(?<title>.*?)(?:\W?S?(?<season>\d{1,2}(?!\d+))(?:(?:\-|\.|[ex]|\s|to)+(?<episode>\d+))+)+\W?(?!\\)",
+                                    new Regex(@"^(?<title>.*?)(?:\W?S?(?<season>\d{1,2}(?!\d+))(?:(?:\-|\.|[ex]|\s|\sto\s)+(?<episode>\d+))+)+\W?(?!\\)",
                                         RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                                     //Supports Season only releases
@@ -87,8 +92,20 @@ namespace NzbDrone.Core
 
                     if (airyear < 1)
                     {
-                        int season;
-                        Int32.TryParse(match[0].Groups["season"].Value, out season);
+                        var seasons = new List<int>();
+
+                        foreach (Capture seasonCapture in match[0].Groups["season"].Captures)
+                        {
+                            int s;
+                            if (Int32.TryParse(seasonCapture.Value, out s))
+                                seasons.Add(s);
+                        }
+
+                        //If more than 1 season was parsed go to the next REGEX (A multi-season release is unlikely)
+                        if (seasons.Distinct().Count() != 1)
+                            continue;
+
+                        var season = seasons[0];
 
                         parsedEpisode = new EpisodeParseResult
                         {
@@ -302,8 +319,6 @@ namespace NzbDrone.Core
 
             return result;
         }
-
-
 
         public static LanguageType ParseLanguage(string title)
         {
