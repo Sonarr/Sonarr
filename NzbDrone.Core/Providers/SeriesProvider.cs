@@ -178,7 +178,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual bool SeriesPathExists(string cleanPath)
         {
-            if (GetAllSeries().Any(s => s.Path == cleanPath))
+            if (GetAllSeries().Any(s => s.Path.ToLower() == cleanPath.ToLower()))
                 return true;
 
             return false;

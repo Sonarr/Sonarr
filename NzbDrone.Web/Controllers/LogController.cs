@@ -18,11 +18,11 @@ namespace NzbDrone.Web.Controllers
             return View();
         }
 
-
-        public ActionResult Clear()
+        public JsonResult Clear()
         {
             _logProvider.DeleteAll();
-            return RedirectToAction("Index");
+
+            return new JsonResult { Data = "ok" };
         }
 
         [GridAction]

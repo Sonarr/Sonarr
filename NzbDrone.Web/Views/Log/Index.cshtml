@@ -22,10 +22,13 @@
 @section TitleContent{
 Logs
 }
+
 @section ActionMenu{
-    @{Html.Telerik().Menu().Name("logMenu").Items(items => items.Add().Text("Clear Logs").Action("Clear", "Log"))
-        .Render();}
+    <ul id="sub-menu">
+        <li>@Ajax.ActionLink("Clear Logs", "Clear", "Log", new AjaxOptions{ OnSuccess = "reloadGrid" })</li>
+    </ul>        
 }
+
 @section MainContent{
     @{Html.Telerik().Grid(Model).Name("logsGrid")
             .TableHtmlAttributes(new { @class = "Grid" })
@@ -47,3 +50,10 @@ Logs
             .ClientEvents(c => c.OnRowDataBound("onRowDataBound"))
             .Render();}
 }
+
+<script type="text/javascript">
+    function reloadGrid() {
+        var grid = $('#logsGrid').data('tGrid');
+        grid.rebind();
+    }
+</script>

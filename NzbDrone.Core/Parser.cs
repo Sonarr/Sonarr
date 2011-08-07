@@ -19,11 +19,11 @@ namespace NzbDrone.Core
                                         RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                                     //Multi-Part episodes without a title (S01E05.S01E06)
-                                    new Regex(@"^(?:\W*S?(?<season>\d{1,2}(?!\d+))(?:(?:\-|\.|[ex]|\s|\sto\s){1,2}(?<episode>\d{1,2}(?!\d+)))+){2,}\W?(?!\\)",
+                                    new Regex(@"^(?:\W*S?(?<season>\d{1,2}(?!\d+))(?:(?:\-|\.|[ex]|\s){1,2}(?<episode>\d{1,2}(?!\d+)))+){2,}\W?(?!\\)",
 			                            RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                                     //Single episodes or multi-episode (S01E05E06, S01E05-06, etc)
-                                    new Regex(@"^(?<title>.+?)(?:\W+S?(?<season>\d{1,2}(?!\d+))(?:(?:\-|\.|[ex]|\s|\sto\s){1,2}(?<episode>\d{1,2}(?!\d+)))+)+\W?(?!\\)",
+                                    new Regex(@"^(?<title>.+?)(?:\W+S?(?<season>\d{1,2}(?!\d+))(?:(?:\-|\.|[ex]|\s){1,2}(?<episode>\d{1,2}(?!\d+)))+)+\W?(?!\\)",
 		                                RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                                     //No Title - Single episodes or multi-episode (S01E05E06, S01E05-06, etc)
@@ -381,6 +381,9 @@ namespace NzbDrone.Core
         /// <returns></returns>
         public static string NormalizeTitle(string title)
         {
+            //Todo: Find a better way to do this hack
+            if (title == "90210" || title == "24")
+                return title;
             return NormalizeRegex.Replace(title, String.Empty).ToLower();
         }
 

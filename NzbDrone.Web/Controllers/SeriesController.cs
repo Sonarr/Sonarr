@@ -47,12 +47,6 @@ namespace NzbDrone.Web.Controllers
             return View();
         }
 
-        public ActionResult RssSync()
-        {
-            _jobProvider.QueueJob(typeof(RssSyncJob));
-            return RedirectToAction("Index");
-        }
-
         public ActionResult SeasonEditor(int seriesId)
         {
             var model = new List<SeasonEditModel>();
@@ -148,12 +142,17 @@ namespace NzbDrone.Web.Controllers
         }
 
         [HttpPost]
-        public JsonResult SaveSeason(int seriesId, int seasonNumber, bool monitored)
+        public JsonResult SaveSeasonIgnore(int seriesId, int seasonNumber, bool ignored)
         {
-            if (_episodeProvider.IsIgnored(seriesId, seasonNumber) == monitored)
-            {
-                _episodeProvider.SetSeasonIgnore(seriesId, seasonNumber, !monitored);
-            }
+            _episodeProvider.SetSeasonIgnore(seriesId, seasonNumber, ignored);
+
+            return new JsonResult { Data = "ok" };
+        }
+
+        [HttpPost]
+        public JsonResult SaveEpisodeIgnore(int episodeId, bool ignored)
+        {
+            _episodeProvider.SetEpisodeIgnore(episodeId, ignored);
 
             return new JsonResult { Data = "ok" };
         }
@@ -178,21 +177,6 @@ namespace NzbDrone.Web.Controllers
             model.SeriesId = series.SeriesId;
 
             return View(model);
-        }
-
-        public ActionResult SyncEpisodesOnDisk(int seriesId)
-        {
-            //Syncs the episodes on disk for the specified series
-            _jobProvider.QueueJob(typeof(DiskScanJob), seriesId);
-
-            return RedirectToAction("Details", new { seriesId });
-        }
-
-        public ActionResult UpdateInfo(int seriesId)
-        {
-            //Syncs the episodes on disk for the specified series
-            _jobProvider.QueueJob(typeof(UpdateInfoJob), seriesId);
-            return RedirectToAction("Details", new { seriesId });
         }
 
         private List<SeriesModel> GetSeriesModels(IList<Series> seriesInDb)
@@ -227,8 +211,6 @@ namespace NzbDrone.Web.Controllers
                 var episodePath = String.Empty;
                 var episodeQuality = String.Empty;
 
-
-
                 if (e.EpisodeFile != null)
                 {
                     episodePath = e.EpisodeFile.Path;
@@ -252,7 +234,8 @@ namespace NzbDrone.Web.Controllers
                                      Path = episodePath,
                                      EpisodeFileId = episodeFileId,
                                      Status = e.Status.ToString(),
-                                     Quality = episodeQuality
+                                     Quality = episodeQuality,
+                                     Ignored = e.Ignored
                                  });
             }
 

@@ -9,8 +9,7 @@
         {
             padding-top: 20px;
         }
-
-</style>
+    </style>
 }
 
 @section TitleContent{
@@ -26,7 +25,7 @@
 
 @using (Html.BeginForm("SaveIndexers", "Settings", FormMethod.Post, new { id = "form", name = "form", @class = "settingsForm" }))
 {
-    <h1>Indexer</h1>
+    <h1>Indexers</h1>
         <p></p>
     
     @Html.ValidationSummary(true, "Unable to save your settings. Please correct the errors and try again.")
@@ -126,10 +125,14 @@
         }
 </div>
     <br/>
-    <button type="submit" id="save_button" >Save</button><img src="../../Content/Images/ajax-loader.gif" alt="Loader" id="saveAjax"/>
+    <button type="submit" id="save_button" disabled="disabled">Save</button><img src="../../Content/Images/ajax-loader.gif" alt="Loader" id="saveAjax"/>
 }
 
     </div>
 
     <div id="result" class="hiddenResult"></div>
+}
+
+@section Scripts{
+    <script src="/Scripts/settingsForm.js" type="text/javascript"></script>
 }

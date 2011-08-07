@@ -4,11 +4,10 @@
 History
 }
 @section ActionMenu{
-    @{Html.Telerik().Menu().Name("historyMenu").Items(items =>
-            {
-                items.Add().Text("Trim History").Action("Trim", "History");
-                items.Add().Text("Purge History").Action("Purge", "History");
-            }).Render();}
+    <ul id="sub-menu">
+        <li>@Ajax.ActionLink("Trim History", "Trim", "History", new AjaxOptions{ OnSuccess = "reloadGrid" })</li>
+        <li>@Ajax.ActionLink("Purge History", "Purge", "History", new AjaxOptions{ OnSuccess = "reloadGrid" })</li>
+    </ul>
 }
 @section MainContent{
     <div class="grid-container">
@@ -42,3 +41,12 @@ History
                 .Render();}
     </div>
 }
+
+<script type="text/javascript">
+
+function reloadGrid() {
+    var grid = $('#history').data('tGrid');
+    grid.rebind();
+}
+
+</script>

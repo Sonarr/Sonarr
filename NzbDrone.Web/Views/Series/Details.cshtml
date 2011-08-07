@@ -4,44 +4,37 @@
 @section TitleContent{
     @Model.Title
 }
+
+<script src="../../Scripts/seriesDetails.js" type="text/javascript"></script>
+
+<style>
+    .ignoreEpisode
+    {
+        width: 18px;
+        height: 18px;
+        padding-bottom: -6px;
+    }
+    
+    .ignoredEpisodesMaster
+    {
+        width: 18px;
+        height: 18px;
+        padding-left: 18px;
+        padding-right: -18px;
+    }
+</style>
+
 @section ActionMenu{
-    @{Html.Telerik().Menu().Name("SeriesMenu").Items(items =>
-                                                           {
-                                                               items.Add().Text("Back to Series List").Action("Index", "Series");
-                                                               items.Add().Text("Scan For Episodes on Disk")
-                                                                   .Action("SyncEpisodesOnDisk", "Series", new { seriesId = Model.SeriesId });
-                                                               items.Add().Text("Update Info").Action("UpdateInfo", "Series", new { seriesId = Model.SeriesId });
-                                                               items.Add().Text("Rename Series").Action("RenameSeries", "Series", new { seriesId = Model.SeriesId });
-                                                           }).Render();}
+   <ul id="sub-menu">
+        <li>@Html.ActionLink("Back to Series List", "Index", "Series")</li>
+        <li>@Ajax.ActionLink("Scan For Episodes on Disk", "SyncEpisodesOnDisk", "Command", new { seriesId = Model.SeriesId }, null)</li>
+        <li>@Ajax.ActionLink("Update Info", "UpdateInfo", "Command", new { seriesId = Model.SeriesId }, null)</li>
+        <li>@Ajax.ActionLink("Rename Series", "RenameSeries", "Command", new { seriesId = Model.SeriesId }, null)</li>
+    </ul>
 }
 @section MainContent{
-    <fieldset>
-        <div class="display-label">
-            ID</div>
-        <div class="display-field">
-            @Model.SeriesId</div>
-        <div class="display-label">
-            Overview</div>
-        <div class="display-field">
-            @Model.Overview</div>
-        <div class="display-label">
-            Status</div>
-        <div class="display-field">
-            @Model.Status</div>
-        <div class="display-label">
-            AirTimes</div>
-        <div class="display-field">
-            @Model.AirsDayOfWeek</div>
-        <div class="display-label">
-            Language</div>
-        <div class="display-label">
-            Location</div>
-        <div class="display-field">
-            @Model.Path</div>
-    </fieldset>
     @foreach (var season in Model.Seasons.Where(s => s > 0).Reverse())
     {
-        <br />
         <h3>
             Season @season</h3>
         <div class="grid-container">
@@ -50,11 +43,11 @@
             .TableHtmlAttributes(new { @class = "Grid" })
             .Columns(columns =>
                          {
-                             columns.Bound(o => o.EpisodeId)
+                             columns.Bound(o => o.Ignored)
+                                 .Title("<img src='../../Content/Images/ignoredNeutral.png' class='ignoredEpisodesMaster ignoreEpisode' id='master_" + season + "' />")
                                  .ClientTemplate(
-                                     "<input type='checkbox' name='checkedEpisodes' value='<#= EpisodeId #>' />")
-                                 .Title("")
-                                 .Width(1)
+                                     "<img src='../../Content/Images/ignoredNeutral.png' class='ignoreEpisode ignoreEpisode_" + season + " ignored' id='<#= EpisodeId #>' />")
+                                 .Width(20)
                                  .HtmlAttributes(new { style = "text-align:center" });
 
                              columns.Bound(c => c.EpisodeNumber).Width(0).Title("Episode");
@@ -68,7 +61,7 @@
                                                     "<a href='#Rename' onClick=\"renameEpisode('<#= EpisodeFileId #>'); return false;\">Rename</a>");
                          })
             .DetailView(detailView => detailView.ClientTemplate("<div><#= Overview #> </br><#= Path #> </div>"))
-            .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.EpisodeNumber).Descending()).Enabled(true))
+            .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.EpisodeNumber).Descending()).Enabled(false))
             .Footer(true)
             .DataBinding(
                 d =>
@@ -78,12 +71,16 @@
                 c =>
                 c.Custom().Text("Rename Season").Action("RenameSeason", "Series", new { seasonId = season })
                     .ButtonType(GridButtonType.Text))
+            .ClientEvents(clientEvents =>
+                              {
+                                  clientEvents.OnRowDataBound("grid_rowBound");
+                                  clientEvents.OnDataBound("grid_dataBound");
+                              })
             .Render();}
         </div>
     }
     @if (Model.Seasons.Any(s => s == 0))
     {
-
         <br />
         <h3>
             Specials</h3>
@@ -92,11 +89,11 @@
                     .TableHtmlAttributes(new { @class = "Grid" })
                     .Columns(columns =>
                              {
-                                 columns.Bound(o => o.EpisodeId)
+                                 columns.Bound(o => o.Ignored)
+                                     .Title("<img src='../../Content/Images/ignoredNeutral.png' class='ignoredEpisodesMaster ignoreEpisode' id='master_0' />")
                                      .ClientTemplate(
-                                         "<input type='checkbox' name='checkedEpisodes' value='<#= EpisodeId #>' />")
-                                     .Title("")
-                                     .Width(1)
+                                         "<img src='../../Content/Images/ignoredNeutral.png' class='ignoreEpisode ignoreEpisode_0 ignored' id='<#= EpisodeId #>' />")
+                                     .Width(20)
                                      .HtmlAttributes(new { style = "text-align:center" });
 
                                  columns.Bound(c => c.EpisodeNumber).Width(10).Title("Episode");
@@ -106,7 +103,7 @@
                                  columns.Bound(c => c.Status).Width(10);
                              })
                     .DetailView(detailView => detailView.ClientTemplate("<div><#= Overview #> </br><#= Path #> </div>"))
-                    .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.EpisodeNumber).Descending()).Enabled(true))
+                    .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.EpisodeNumber).Descending()).Enabled(false))
                     .Footer(true)
                     .DataBinding(
                         d =>
@@ -134,6 +131,8 @@
                 }
             });
         }
+
+        seriesId = @Model.SeriesId;
    
     </script>
 }

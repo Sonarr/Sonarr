@@ -108,3 +108,11 @@ p, h1, form, button{border:0; margin:0; padding:0;}
     height: 20px;
     display: none;
 }
+
+#save_button[disabled="disabled"]
+{      
+    padding: 0px 6px 0px 6px;
+    border: 2px outset ButtonFace;
+    color: lightgrey;
+    cursor: progress;
+}

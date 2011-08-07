@@ -176,6 +176,7 @@
     <Compile Include="Datastore\MigrationLogger.cs" />
     <Compile Include="Datastore\MigrationsHelper.cs" />
     <Compile Include="Datastore\CustomeMapper.cs" />
+    <Compile Include="Datastore\Migrations\Migration20110726.cs" />
     <Compile Include="Datastore\Migrations\Migration20110707.cs" />
     <Compile Include="Fluent.cs" />
     <Compile Include="Helpers\EpisodeSortingHelper.cs" />
@@ -203,8 +204,8 @@
     <Compile Include="Model\Xbmc\VersionResult.cs" />
     <Compile Include="Providers\DiskScanProvider.cs" />
     <Compile Include="Providers\DownloadProvider.cs" />
-    <Compile Include="Providers\ExternalNotification\ExternalNotificationProviderBase.cs" />
-    <Compile Include="Providers\ExternalNotification\XbmcNotificationProvider.cs" />
+    <Compile Include="Providers\ExternalNotification\ExternalNotificationBase.cs" />
+    <Compile Include="Providers\ExternalNotification\Xbmc.cs" />
     <Compile Include="Providers\InventoryProvider.cs" />
     <Compile Include="Providers\Indexer\SyndicationFeedXmlReader.cs" />
     <Compile Include="Providers\AutoConfigureProvider.cs" />
@@ -224,7 +225,7 @@
     <Compile Include="Providers\Jobs\UpdateInfoJob.cs" />
     <Compile Include="Providers\SceneMappingProvider.cs" />
     <Compile Include="Providers\Xbmc\EventClientProvider.cs" />
-    <Compile Include="Repository\ExternalNotificationSetting.cs" />
+    <Compile Include="Repository\ExternalNotificationDefinition.cs" />
     <Compile Include="Repository\JobDefinition.cs" />
     <Compile Include="Repository\IndexerDefinition.cs" />
     <Compile Include="Model\EpisodeParseResult.cs" />

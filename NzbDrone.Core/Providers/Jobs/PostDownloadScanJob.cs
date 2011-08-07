@@ -79,12 +79,12 @@ namespace NzbDrone.Core.Providers.Jobs
 
                     if (series == null)
                     {
-                        Logger.Warn("Unable to Import new download, series doesn't exist in database.");
-                        return;
+                        Logger.Warn("Unable to Import new download [{0}], series doesn't exist in database.", subfolder);
+                        continue;
                     }
 
                     var importedFiles = _diskScanProvider.Scan(series, subfolder);
-                    importedFiles.ForEach(file => _diskScanProvider.MoveEpisodeFile(file));
+                    importedFiles.ForEach(file => _diskScanProvider.MoveEpisodeFile(file, true));
 
                     //Delete the folder only if folder is small enough
                     if (_diskProvider.GetDirectorySize(subfolder) < 10.Megabytes())
