@@ -56,9 +56,9 @@ namespace NzbDrone.Core
         {
             BindKernel();
 
-            LogConfiguration.StartDbLogging();
-
             MigrationsHelper.Run(Connection.MainConnectionString, true);
+            
+            LogConfiguration.StartDbLogging();
 
             _kernel.Get<QualityProvider>().SetupDefaultProfiles();
 

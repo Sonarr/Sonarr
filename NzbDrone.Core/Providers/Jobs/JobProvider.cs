@@ -191,12 +191,12 @@ namespace NzbDrone.Core.Providers.Jobs
         {
             do
             {
-                Tuple<Type, int> job = null;
-
                 using (NestedDiagnosticsContext.Push(Guid.NewGuid().ToString()))
                 {
                     try
                     {
+                        Tuple<Type, int> job = null;
+
                         lock (Queue)
                         {
                             if (Queue.Count != 0)
