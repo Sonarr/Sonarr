@@ -1,8 +1,8 @@
 ﻿$(document).ready(function () {
     var options = {
         target: '#result',
-        beforeSubmit: showRequest,
-        success: showResponse,
+        //beforeSubmit: showRequest,
+        //success: showResponse,
         type: 'post',
         resetForm: false
     };

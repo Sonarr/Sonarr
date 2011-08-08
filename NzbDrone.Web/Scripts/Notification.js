@@ -1,4 +1,57 @@
-﻿$(window).load(function () {
+﻿
+(function ($) {
+
+    $.extend($.gritter.options, {
+        fade_in_speed: 'medium', // how fast notifications fade in (string or int)
+        fade_out_speed: 'medium', // how fast the notices fade out
+        time: 3000, // hang on the screen for...
+        sticky: false
+    });
+
+
+    $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
+
+        jqXHR.success(function (data) {
+            //Check if the response is a message type,
+            if (data.IsMessage) {
+                if (data.NotificationType === 0) {
+                    $.gritter.add({
+                        title: data.Title,
+                        text: data.Text,
+                        image: '/content/images/success.png',
+                        class_name: 'gritter-success'
+                    });
+                }
+                else {
+                    $.gritter.add({
+                        title: data.Title,
+                        text: data.Text,
+                        image: '/content/images/error.png',
+                        class_name: 'gritter-fail'
+                    });
+                }
+            }
+        });
+
+        jqXHR.error(function (xhr, ajaxOptions, thrownError) {
+            //ignore notification errors.
+            if (this.url.indexOf("/notification/Comet") !== 0) {
+                $.gritter.add({
+                    title: 'Request failed',
+                    text: this.url,
+                    image: '/content/images/error.png',
+                    class_name: 'gritter-fail'
+                });
+            }
+        });
+
+    });
+
+
+} (jQuery));
+
+
+$(window).load(function () {
     var speed = 700;
     var isShown = false;
     var currentMessage = "";
@@ -10,7 +63,7 @@
     else {
         refreshNotifications();
     }
-    
+
 
     function refreshNotifications() {
         $.get('/notification/Comet', { message: currentMessage }, notificationCallback);

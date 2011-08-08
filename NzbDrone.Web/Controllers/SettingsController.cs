@@ -20,37 +20,24 @@ namespace NzbDrone.Web.Controllers
     [HandleError]
     public class SettingsController : Controller
     {
-        private const string SETTINGS_SAVED = "Settings Saved.";
-        private const string SETTINGS_FAILED = "Error Saving Settings, please fix any errors";
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly ConfigProvider _configProvider;
         private readonly IndexerProvider _indexerProvider;
         private readonly QualityProvider _qualityProvider;
-        private readonly RootDirProvider _rootDirProvider;
         private readonly AutoConfigureProvider _autoConfigureProvider;
-        private readonly NotificationProvider _notificationProvider;
-        private readonly DiskProvider _diskProvider;
         private readonly SeriesProvider _seriesProvider;
         private readonly ExternalNotificationProvider _externalNotificationProvider;
-        private readonly ProgressNotification _progressNotification;
 
         public SettingsController(ConfigProvider configProvider, IndexerProvider indexerProvider,
-                                  QualityProvider qualityProvider, RootDirProvider rootDirProvider,
-                                  AutoConfigureProvider autoConfigureProvider, NotificationProvider notificationProvider,
-                                  DiskProvider diskProvider, SeriesProvider seriesProvider,
-                                  ExternalNotificationProvider externalNotificationProvider)
+                                  QualityProvider qualityProvider, AutoConfigureProvider autoConfigureProvider,
+                                  SeriesProvider seriesProvider, ExternalNotificationProvider externalNotificationProvider)
         {
             _externalNotificationProvider = externalNotificationProvider;
             _configProvider = configProvider;
             _indexerProvider = indexerProvider;
             _qualityProvider = qualityProvider;
-            _rootDirProvider = rootDirProvider;
             _autoConfigureProvider = autoConfigureProvider;
-            _notificationProvider = notificationProvider;
-            _diskProvider = diskProvider;
             _seriesProvider = seriesProvider;
-
-            _progressNotification = new ProgressNotification("Settings");
         }
 
         public ActionResult Test()
@@ -71,35 +58,35 @@ namespace NzbDrone.Web.Controllers
         public ActionResult Indexers()
         {
             return View(new IndexerSettingsModel
-                                     {
-                                         NzbMatrixUsername = _configProvider.NzbMatrixUsername,
-                                         NzbMatrixApiKey = _configProvider.NzbMatrixApiKey,
+                            {
+                                NzbMatrixUsername = _configProvider.NzbMatrixUsername,
+                                NzbMatrixApiKey = _configProvider.NzbMatrixApiKey,
 
-                                         NzbsrusUId = _configProvider.NzbsrusUId,
-                                         NzbsrusHash = _configProvider.NzbsrusHash,
+                                NzbsrusUId = _configProvider.NzbsrusUId,
+                                NzbsrusHash = _configProvider.NzbsrusHash,
 
-                                         NzbsOrgHash = _configProvider.NzbsOrgHash,
-                                         NzbsOrgUId = _configProvider.NzbsOrgUId,
+                                NzbsOrgHash = _configProvider.NzbsOrgHash,
+                                NzbsOrgUId = _configProvider.NzbsOrgUId,
 
-                                         NewzbinUsername = _configProvider.NewzbinUsername,
-                                         NewzbinPassword = _configProvider.NewzbinPassword,
+                                NewzbinUsername = _configProvider.NewzbinUsername,
+                                NewzbinPassword = _configProvider.NewzbinPassword,
 
-                                         NzbsOrgEnabled = _indexerProvider.GetSettings(typeof(NzbsOrg)).Enable,
-                                         NzbMatrixEnabled = _indexerProvider.GetSettings(typeof(NzbMatrix)).Enable,
-                                         NzbsRUsEnabled = _indexerProvider.GetSettings(typeof(NzbsRUs)).Enable,
-                                         NewzbinEnabled = _indexerProvider.GetSettings(typeof(Newzbin)).Enable
-                                     });
+                                NzbsOrgEnabled = _indexerProvider.GetSettings(typeof(NzbsOrg)).Enable,
+                                NzbMatrixEnabled = _indexerProvider.GetSettings(typeof(NzbMatrix)).Enable,
+                                NzbsRUsEnabled = _indexerProvider.GetSettings(typeof(NzbsRUs)).Enable,
+                                NewzbinEnabled = _indexerProvider.GetSettings(typeof(Newzbin)).Enable
+                            });
         }
 
         public ActionResult Sabnzbd()
         {
             var sabDropDir = _configProvider.SabDropDirectory;
-            var selectList = new SelectList(new List<string> {sabDropDir}, sabDropDir);
+            var selectList = new SelectList(new List<string> { sabDropDir }, sabDropDir);
 
             var model = new SabnzbdSettingsModel
                             {
                                 SabHost = _configProvider.SabHost,
-                                SabPort =_configProvider.SabPort,
+                                SabPort = _configProvider.SabPort,
                                 SabApiKey = _configProvider.SabApiKey,
                                 SabUsername = _configProvider.SabUsername,
                                 SabPassword = _configProvider.SabPassword,
@@ -269,12 +256,10 @@ namespace NzbDrone.Web.Controllers
                 return new JsonResult { Data = "failed" };
             }
         }
-       
-        [HttpPost]
-        public ActionResult SaveIndexers(IndexerSettingsModel data)
-        {
-            _notificationProvider.Register(_progressNotification);
 
+        [HttpPost]
+        public JsonResult SaveIndexers(IndexerSettingsModel data)
+        {
             if (ModelState.IsValid)
             {
                 var nzbsOrgSettings = _indexerProvider.GetSettings(typeof(NzbsOrg));
@@ -305,21 +290,15 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.NewzbinUsername = data.NewzbinUsername;
                 _configProvider.NewzbinPassword = data.NewzbinPassword;
 
-                _progressNotification.CurrentMessage = SETTINGS_SAVED;
-                _progressNotification.Status = ProgressNotificationStatus.Completed;
-                return Content(SETTINGS_SAVED);
+                return GetSuccessResult();
             }
 
-            _progressNotification.CurrentMessage = SETTINGS_FAILED;
-            _progressNotification.Status = ProgressNotificationStatus.Completed;
-            return Content(SETTINGS_FAILED);
+            return GetInvalidModelResult();
         }
 
         [HttpPost]
-        public ActionResult SaveSabnzbd(SabnzbdSettingsModel data)
+        public JsonResult SaveSabnzbd(SabnzbdSettingsModel data)
         {
-            _notificationProvider.Register(_progressNotification);
-
             if (ModelState.IsValid)
             {
                 _configProvider.SabHost = data.SabHost;
@@ -331,28 +310,26 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.SabTvPriority = data.SabTvPriority;
                 _configProvider.SabDropDirectory = data.SabDropDirectory;
 
-                _progressNotification.CurrentMessage = SETTINGS_SAVED;
-                _progressNotification.Status = ProgressNotificationStatus.Completed;
-                return Content(SETTINGS_SAVED);
+
+                return GetSuccessResult();
             }
 
-            _progressNotification.CurrentMessage = SETTINGS_FAILED;
-            _progressNotification.Status = ProgressNotificationStatus.Completed;
-            return Content(SETTINGS_FAILED);
+            return
+                Json(new NotificationResult() { Title = "Failed", Text = "Invalid request data.", NotificationType = NotificationType.Error });
         }
+
+
 
         [HttpPost]
         public ActionResult SaveQuality(QualityModel data)
         {
-            _notificationProvider.Register(_progressNotification);
-
             if (ModelState.IsValid)
             {
                 _configProvider.DefaultQualityProfile = data.DefaultQualityProfileId;
 
                 //Saves only the Default Quality, skips User Profiles since none exist
                 if (data.Profiles == null)
-                    return Content(SETTINGS_SAVED);
+                    return GetSuccessResult();
 
                 foreach (var profile in data.Profiles)
                 {
@@ -377,21 +354,15 @@ namespace NzbDrone.Web.Controllers
                     _qualityProvider.Update(profile);
                 }
 
-                _progressNotification.CurrentMessage = SETTINGS_SAVED;
-                _progressNotification.Status = ProgressNotificationStatus.Completed;
-                return Content(SETTINGS_SAVED);
+                return GetSuccessResult();
             }
 
-            _progressNotification.CurrentMessage = SETTINGS_FAILED;
-            _progressNotification.Status = ProgressNotificationStatus.Completed;
-            return Content(SETTINGS_FAILED);
+            return GetInvalidModelResult();
         }
 
         [HttpPost]
         public ActionResult SaveNotifications(NotificationSettingsModel data)
         {
-            _notificationProvider.Register(_progressNotification);
-
             if (ModelState.IsValid)
             {
                 //XBMC Enabled
@@ -407,21 +378,15 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.XbmcUsername = data.XbmcUsername;
                 _configProvider.XbmcPassword = data.XbmcPassword;
 
-                _progressNotification.CurrentMessage = SETTINGS_SAVED;
-                _progressNotification.Status = ProgressNotificationStatus.Completed;
-                return Content(SETTINGS_SAVED);
+                return GetSuccessResult();
             }
 
-            _progressNotification.CurrentMessage = SETTINGS_FAILED;
-            _progressNotification.Status = ProgressNotificationStatus.Completed;
-            return Content(SETTINGS_FAILED);
+            return GetInvalidModelResult();
         }
 
         [HttpPost]
         public ActionResult SaveEpisodeSorting(EpisodeSortingModel data)
         {
-            _notificationProvider.Register(_progressNotification);
-
             if (ModelState.IsValid)
             {
                 _configProvider.SortingIncludeSeriesName = data.SeriesName;
@@ -434,14 +399,20 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.SortingNumberStyle = data.NumberStyle;
                 _configProvider.SortingMultiEpisodeStyle = data.MultiEpisodeStyle;
 
-                _progressNotification.CurrentMessage = SETTINGS_SAVED;
-                _progressNotification.Status = ProgressNotificationStatus.Completed;
-                return Content(SETTINGS_SAVED);
+                return GetSuccessResult();
             }
 
-            _progressNotification.CurrentMessage = SETTINGS_FAILED;
-            _progressNotification.Status = ProgressNotificationStatus.Completed;
-            return Content(SETTINGS_FAILED);
+            return GetInvalidModelResult();
+        }
+
+        private JsonResult GetSuccessResult()
+        {
+            return Json(new NotificationResult() { Title = "Settings Saved" });
+        }
+
+        private JsonResult GetInvalidModelResult()
+        {
+            return Json(new NotificationResult() { Title = "Unable to save setting", Text = "Invalid post data", NotificationType = NotificationType.Error });
         }
     }
 }
