@@ -51,9 +51,9 @@
       <HintPath>..\Libraries\MVC3\Microsoft.Web.Infrastructure.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MvcMiniProfiler, Version=1.6.0.0, Culture=neutral, PublicKeyToken=b44f9351044011a3, processorArchitecture=MSIL">
+    <Reference Include="MvcMiniProfiler, Version=1.7.0.0, Culture=neutral, PublicKeyToken=b44f9351044011a3, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MiniProfiler.1.6\lib\MvcMiniProfiler.dll</HintPath>
+      <HintPath>..\packages\MiniProfiler.1.7\lib\MvcMiniProfiler.dll</HintPath>
     </Reference>
     <Reference Include="Ninject, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\packages\Ninject.2.2.1.4\lib\net40-Full\Ninject.dll</HintPath>
@@ -135,6 +135,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Images\close.png" />
+    <Content Include="Content\Images\error.png" />
+    <Content Include="Content\Images\gritter.png" />
+    <Content Include="Content\Images\success.png" />
+    <Content Include="Content\jquery.gritter.css" />
     <Content Include="Content\Menu.css" />
     <Compile Include="Controllers\CommandController.cs" />
     <Compile Include="Controllers\DirectoryController.cs" />
@@ -160,6 +165,7 @@
     <Compile Include="Helpers\IsCurrentActionHelper.cs" />
     <Compile Include="Models\ExistingSeriesModel.cs" />
     <Compile Include="Models\AddNewSeriesModel.cs" />
+    <Compile Include="Models\NotificationResult.cs" />
     <Compile Include="Models\PendingProcessingModel.cs" />
     <Compile Include="Models\QualityTypeModel.cs" />
     <Compile Include="Models\RootDirModel.cs" />
@@ -247,7 +253,6 @@
     <Content Include="Content\Images\ui-icons_ffffff_256x240.png" />
     <Content Include="Content\Images\VideoFolder.png" />
     <Content Include="Content\Images\X.png" />
-    <Content Include="Content\jquery.jgrowl.css" />
     <Content Include="Content\notibar.css" />
     <Content Include="Content\Settings.css" />
     <Content Include="Content\NzbDrone.css" />
@@ -255,13 +260,13 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\AutoComplete.js" />
+    <Content Include="Scripts\Plugins\jquery.gritter.js" />
     <Content Include="Scripts\seriesDetails.js" />
     <Content Include="Scripts\Plugins\jquery.livequery.js" />
     <Content Include="Scripts\settingsForm.js" />
     <Content Include="Scripts\Plugins\doTimeout.js" />
     <Content Include="Scripts\episodeSearch.js" />
     <Content Include="Scripts\Plugins\jquery.form.js" />
-    <Content Include="Scripts\Plugins\jquery.jgrowl.js" />
     <Content Include="Scripts\Plugins\jquery-tgc-countdown-1.0.js" />
     <Content Include="Scripts\Plugins\jquery.watermark.min.js" />
     <Content Include="Scripts\Notification.js" />

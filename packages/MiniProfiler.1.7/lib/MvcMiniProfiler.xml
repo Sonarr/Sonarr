@@ -668,6 +668,21 @@
             proxy
             </summary>
         </member>
+        <member name="T:MvcMiniProfiler.MVCHelpers.ProfilingActionFilter">
+            <summary>
+            This filter can be applied globally to hook up automatic action profiling
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.MVCHelpers.ProfilingActionFilter.OnActionExecuting(System.Web.Mvc.ActionExecutingContext)">
+            <summary>
+            Happens before the action starts running
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.MVCHelpers.ProfilingActionFilter.OnActionExecuted(System.Web.Mvc.ActionExecutedContext)">
+            <summary>
+            Happens after the action executes
+            </summary>
+        </member>
         <member name="T:MvcMiniProfiler.ProfileLevel">
             <summary>
             Categorizes individual <see cref="T:MvcMiniProfiler.Timing"/> steps to allow filtering.
@@ -1291,6 +1306,32 @@
         <member name="P:MvcMiniProfiler.SqlTimingParameter.Size">
             <summary>
             How large the type is, e.g. for string, size could be 4000
+            </summary>
+        </member>
+        <member name="T:MvcMiniProfiler.MVCHelpers.ProfilingViewEngine">
+            <summary>
+            You can wrap your view engines with this view to enable profiling on views and partial
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.MVCHelpers.ProfilingViewEngine.#ctor(System.Web.Mvc.IViewEngine)">
+            <summary>
+            Create a wrapped view engine, which will profile partials an non-partial views
+            </summary>
+            <param name="wrapped"></param>
+        </member>
+        <member name="M:MvcMiniProfiler.MVCHelpers.ProfilingViewEngine.FindPartialView(System.Web.Mvc.ControllerContext,System.String,System.Boolean)">
+            <summary>
+            Find a partial view
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.MVCHelpers.ProfilingViewEngine.FindView(System.Web.Mvc.ControllerContext,System.String,System.String,System.Boolean)">
+            <summary>
+            Fined a view
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.MVCHelpers.ProfilingViewEngine.ReleaseView(System.Web.Mvc.ControllerContext,System.Web.Mvc.IView)">
+            <summary>
+            Release view
             </summary>
         </member>
         <member name="T:MvcMiniProfiler.UI.MiniProfilerHandler">
