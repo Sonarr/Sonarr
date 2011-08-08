@@ -260,7 +260,6 @@ namespace NzbDrone.Web.Controllers
         [HttpPost]
         public JsonResult SaveIndexers(IndexerSettingsModel data)
         {
-            _notificationProvider.Register(progressNotification);
             if (ModelState.IsValid)
             {
                 var nzbsOrgSettings = _indexerProvider.GetSettings(typeof(NzbsOrg));
@@ -300,7 +299,6 @@ namespace NzbDrone.Web.Controllers
         [HttpPost]
         public JsonResult SaveSabnzbd(SabnzbdSettingsModel data)
         {
-            _notificationProvider.Register(progressNotification);
             if (ModelState.IsValid)
             {
                 _configProvider.SabHost = data.SabHost;
@@ -325,7 +323,6 @@ namespace NzbDrone.Web.Controllers
         [HttpPost]
         public ActionResult SaveQuality(QualityModel data)
         {
-            _notificationProvider.Register(progressNotification);
             if (ModelState.IsValid)
             {
                 _configProvider.DefaultQualityProfile = data.DefaultQualityProfileId;
@@ -366,7 +363,6 @@ namespace NzbDrone.Web.Controllers
         [HttpPost]
         public ActionResult SaveNotifications(NotificationSettingsModel data)
         {
-            _notificationProvider.Register(progressNotification);
             if (ModelState.IsValid)
             {
                 //XBMC Enabled
@@ -391,7 +387,6 @@ namespace NzbDrone.Web.Controllers
         [HttpPost]
         public ActionResult SaveEpisodeSorting(EpisodeSortingModel data)
         {
-            _notificationProvider.Register(progressNotification);
             if (ModelState.IsValid)
             {
                 _configProvider.SortingIncludeSeriesName = data.SeriesName;
