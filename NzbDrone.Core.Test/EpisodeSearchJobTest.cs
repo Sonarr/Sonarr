@@ -207,7 +207,7 @@ namespace NzbDrone.Core.Test
         public void start_target_id_less_than_0_throws_exception(int target)
         {
             var mocker = new AutoMoqer(MockBehavior.Strict);
-            mocker.Resolve<EpisodeSearchJob>().Start(new ProgressNotification("Test"), target);
+            mocker.Resolve<EpisodeSearchJob>().Start(new ProgressNotification("Test"), target, 0);
         }
 
 
@@ -251,7 +251,7 @@ namespace NzbDrone.Core.Test
                 .Setup(s => s.GetSceneName(It.IsAny<int>())).Returns("");
 
             //Act
-            mocker.Resolve<EpisodeSearchJob>().Start(new ProgressNotification("Test"), episode.EpisodeId);
+            mocker.Resolve<EpisodeSearchJob>().Start(new ProgressNotification("Test"), episode.EpisodeId, 0);
 
 
             //Assert
@@ -302,7 +302,7 @@ namespace NzbDrone.Core.Test
                 .Setup(s => s.GetSceneName(71256)).Returns("The Daily Show");
 
             //Act
-            mocker.Resolve<EpisodeSearchJob>().Start(new ProgressNotification("Test"), episode.EpisodeId);
+            mocker.Resolve<EpisodeSearchJob>().Start(new ProgressNotification("Test"), episode.EpisodeId, 0);
 
 
             //Assert
@@ -359,7 +359,7 @@ namespace NzbDrone.Core.Test
                 .Setup(s => s.GetSceneName(It.IsAny<int>())).Returns("");
 
             //Act
-            mocker.Resolve<EpisodeSearchJob>().Start(new ProgressNotification("Test"), episode.EpisodeId);
+            mocker.Resolve<EpisodeSearchJob>().Start(new ProgressNotification("Test"), episode.EpisodeId, 0);
 
 
             //Assert
@@ -385,7 +385,7 @@ namespace NzbDrone.Core.Test
                 .Returns<Episode>(null);
 
             //Act
-            mocker.Resolve<EpisodeSearchJob>().Start(new ProgressNotification("Test"), 12);
+            mocker.Resolve<EpisodeSearchJob>().Start(new ProgressNotification("Test"), 12, 0);
 
 
             //Assert

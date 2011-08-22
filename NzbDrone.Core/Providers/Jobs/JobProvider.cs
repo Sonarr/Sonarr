@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading;
 using Ninject;
 using NLog;
+using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Repository;
 using PetaPoco;
@@ -28,7 +29,7 @@ namespace NzbDrone.Core.Providers.Jobs
         private Thread _jobThread;
         private static bool _isRunning;
 
-        private static readonly List<Tuple<Type, Int32>> _queue = new List<Tuple<Type, int>>();
+        private static readonly List<JobQueueItem> _queue = new List<JobQueueItem>();
 
         private ProgressNotification _notification;
 
@@ -51,7 +52,7 @@ namespace NzbDrone.Core.Providers.Jobs
         /// <summary>
         /// Gets the active queue.
         /// </summary>
-        public static List<Tuple<Type, Int32>> Queue
+        public static List<JobQueueItem> Queue
         {
             get
             {
@@ -122,8 +123,10 @@ namespace NzbDrone.Core.Providers.Jobs
         /// <param name="jobType">Type of the job that should be queued.</param>
         /// <param name="targetId">The targetId could be any Id parameter eg. SeriesId. it will be passed to the job implementation
         /// to allow it to filter it's target of execution.</param>
+        /// /// <param name="secondaryTargetId">The secondaryTargetId could be any Id parameter eg. SeasonNumber. it will be passed to 
+        /// the timer implementation to further allow it to filter it's target of execution</param>
         /// <remarks>Job is only added to the queue if same job with the same targetId doesn't already exist in the queue.</remarks>
-        public virtual void QueueJob(Type jobType, int targetId = 0)
+        public virtual void QueueJob(Type jobType, int targetId = 0, int secondaryTargetId = 0)
         {
             Logger.Debug("Adding [{0}:{1}] to the queue", jobType.Name, targetId);
 
@@ -131,11 +134,16 @@ namespace NzbDrone.Core.Providers.Jobs
             {
                 lock (Queue)
                 {
-                    var queueTuple = new Tuple<Type, int>(jobType, targetId);
+                    var queueItem = new JobQueueItem
+                                        {
+                                            JobType = jobType,
+                                            TargetId = targetId,
+                                            SecondaryTargetId = secondaryTargetId
+                                        };
 
-                    if (!Queue.Contains(queueTuple))
+                    if (!Queue.Contains(queueItem))
                     {
-                        Queue.Add(queueTuple);
+                        Queue.Add(queueItem);
                         Logger.Trace("Job [{0}:{1}] added to the queue", jobType.Name, targetId);
 
                     }
@@ -195,7 +203,7 @@ namespace NzbDrone.Core.Providers.Jobs
                 {
                     try
                     {
-                        Tuple<Type, int> job = null;
+                        JobQueueItem job = null;
 
                         lock (Queue)
                         {
@@ -208,7 +216,7 @@ namespace NzbDrone.Core.Providers.Jobs
 
                         if (job != null)
                         {
-                            Execute(job.Item1, job.Item2);
+                            Execute(job.JobType, job.TargetId, job.SecondaryTargetId);
                         }
 
                     }
@@ -231,7 +239,9 @@ namespace NzbDrone.Core.Providers.Jobs
         /// <param name="jobType">Type of the job that should be executed</param>
         /// <param name="targetId">The targetId could be any Id parameter eg. SeriesId. it will be passed to the timer implementation
         /// to allow it to filter it's target of execution</param>
-        private void Execute(Type jobType, int targetId = 0)
+        /// /// <param name="secondaryTargetId">The secondaryTargetId could be any Id parameter eg. SeasonNumber. it will be passed to 
+        /// the timer implementation to further allow it to filter it's target of execution</param>
+        private void Execute(Type jobType, int targetId = 0, int secondaryTargetId = 0)
         {
             var jobImplementation = _jobs.Where(t => t.GetType() == jobType).Single();
             if (jobImplementation == null)
@@ -251,7 +261,7 @@ namespace NzbDrone.Core.Providers.Jobs
                     var sw = Stopwatch.StartNew();
 
                     _notificationProvider.Register(_notification);
-                    jobImplementation.Start(_notification, targetId);
+                    jobImplementation.Start(_notification, targetId, secondaryTargetId);
                     _notification.Status = ProgressNotificationStatus.Completed;
 
                     settings.LastExecution = DateTime.Now;

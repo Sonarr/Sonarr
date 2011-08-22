@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Providers.Jobs
             get { return 720; } //Every 12 hours
         }
 
-        public virtual void Start(ProgressNotification notification, int targetId)
+        public virtual void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
         {
             _sceneNameMappingProvider.UpdateMappings();
         }

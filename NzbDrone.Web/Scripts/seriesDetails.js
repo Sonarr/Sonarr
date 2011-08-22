@@ -3,7 +3,11 @@ var ignoredImage = '../../Content/Images/ignored.png';
 var seriesId = 0;
 var saveSeasonIgnoreUrl = '../Series/SaveSeasonIgnore';
 var saveEpisodeIgnoreUrl = '../Series/SaveEpisodeIgnore';
+var renameEpisodeUrl = '../Episode/Rename';
+var renameSeasonUrl = '../Episode/RenameSeason';
+var searchSeasonUrl = '../Episode/SearchSeason';
 
+//Episode Ignore Functions
 $(".ignoreEpisode").live("click", function () {
     var toggle = $(this);
     var ignored = toggle.hasClass('ignored');
@@ -123,6 +127,7 @@ function grid_dataBound(e) {
     toggleMaster(seasonNumber);
 }
 
+//Episode Ignore Saving
 function saveSeasonIgnore(seasonNumber, ignored) {
     $.ajax({
         type: "POST",
@@ -141,6 +146,41 @@ function saveEpisodeIgnore(episodeId, ignored) {
         data: jQuery.param({ episodeId: episodeId, ignored: ignored }),
         error: function (req, status, error) {
             alert("Sorry! We could save the ignore settings for Episode: " + episodeId + " at this time. " + error);
+        }
+    });
+}
+
+//Episode Renaming
+function renameEpisode(id) {
+    $.ajax({
+        type: "POST",
+        url: renameEpisodeUrl,
+        data: jQuery.param({ episodeFileId: id }),
+        error: function (req, status, error) {
+            alert("Sorry! We could rename " + id + " at this time. " + error);
+        }
+    });
+}
+
+function renameSeason(seriesId, seasonNumber) {
+    $.ajax({
+        type: "POST",
+        url: renameSeasonUrl,
+        data: jQuery.param({ seriesId: seriesId, seasonNumber: seasonNumber }),
+        error: function (req, status, error) {
+            alert("Sorry! We could rename series: " + seriesId + " season: " + seasonNumber + " at this time. " + error);
+        }
+    });
+}
+
+//Season Search
+function searchSeason(seriesId, seasonNumber) {
+    $.ajax({
+        type: "POST",
+        url: searchSeasonUrl,
+        data: jQuery.param({ seriesId: seriesId, seasonNumber: seasonNumber }),
+        error: function (req, status, error) {
+            alert("Sorry! We could search for series: " + seriesId + " season: " + seasonNumber + " at this time. " + error);
         }
     });
 }

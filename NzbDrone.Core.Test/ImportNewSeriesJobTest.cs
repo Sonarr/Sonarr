@@ -36,21 +36,21 @@ namespace NzbDrone.Core.Test
 
 
             mocker.GetMock<DiskScanJob>()
-                .Setup(j => j.Start(notification, series[0].SeriesId))
+                .Setup(j => j.Start(notification, series[0].SeriesId, 0))
                 .Callback(() => series[0].LastDiskSync = DateTime.Now);
 
 
             mocker.GetMock<DiskScanJob>()
-                .Setup(j => j.Start(notification, series[1].SeriesId))
+                .Setup(j => j.Start(notification, series[1].SeriesId, 0))
                 .Callback(() => series[1].LastDiskSync = DateTime.Now);
 
 
             mocker.GetMock<UpdateInfoJob>()
-                .Setup(j => j.Start(notification, series[0].SeriesId))
+                .Setup(j => j.Start(notification, series[0].SeriesId, 0))
                 .Callback(() => series[0].LastInfoSync = DateTime.Now);
 
             mocker.GetMock<UpdateInfoJob>()
-                .Setup(j => j.Start(notification, series[1].SeriesId))
+                .Setup(j => j.Start(notification, series[1].SeriesId, 0))
                 .Callback(() => series[1].LastInfoSync = DateTime.Now);
 
             mocker.GetMock<SeriesProvider>()
@@ -63,16 +63,16 @@ namespace NzbDrone.Core.Test
                 .Setup(s => s.GetSeriesFiles(It.IsAny<int>())).Returns(new List<EpisodeFile>());
 
             //Act
-            mocker.Resolve<ImportNewSeriesJob>().Start(notification, 0);
+            mocker.Resolve<ImportNewSeriesJob>().Start(notification, 0, 0);
 
             //Assert
             mocker.VerifyAllMocks();
 
-            mocker.GetMock<DiskScanJob>().Verify(j => j.Start(notification, series[0].SeriesId), Times.Once());
-            mocker.GetMock<DiskScanJob>().Verify(j => j.Start(notification, series[1].SeriesId), Times.Once());
+            mocker.GetMock<DiskScanJob>().Verify(j => j.Start(notification, series[0].SeriesId, 0), Times.Once());
+            mocker.GetMock<DiskScanJob>().Verify(j => j.Start(notification, series[1].SeriesId, 0), Times.Once());
 
-            mocker.GetMock<UpdateInfoJob>().Verify(j => j.Start(notification, series[0].SeriesId), Times.Once());
-            mocker.GetMock<UpdateInfoJob>().Verify(j => j.Start(notification, series[1].SeriesId), Times.Once());
+            mocker.GetMock<UpdateInfoJob>().Verify(j => j.Start(notification, series[0].SeriesId, 0), Times.Once());
+            mocker.GetMock<UpdateInfoJob>().Verify(j => j.Start(notification, series[1].SeriesId, 0), Times.Once());
 
         }
 
@@ -98,15 +98,15 @@ namespace NzbDrone.Core.Test
                 .Returns(series);
 
             mocker.GetMock<UpdateInfoJob>()
-                .Setup(j => j.Start(notification, series[0].SeriesId))
+                .Setup(j => j.Start(notification, series[0].SeriesId, 0))
                 .Callback(() => series[0].LastInfoSync = DateTime.Now);
 
             mocker.GetMock<UpdateInfoJob>()
-                .Setup(j => j.Start(notification, series[1].SeriesId))
+                .Setup(j => j.Start(notification, series[1].SeriesId, 0))
                 .Throws(new InvalidOperationException());
 
             mocker.GetMock<DiskScanJob>()
-                .Setup(j => j.Start(notification, series[0].SeriesId))
+                .Setup(j => j.Start(notification, series[0].SeriesId, 0))
                 .Callback(() => series[0].LastDiskSync = DateTime.Now);
 
 
@@ -117,15 +117,15 @@ namespace NzbDrone.Core.Test
                 .Setup(s => s.GetSeriesFiles(It.IsAny<int>())).Returns(new List<EpisodeFile>());
 
             //Act
-            mocker.Resolve<ImportNewSeriesJob>().Start(notification, 0);
+            mocker.Resolve<ImportNewSeriesJob>().Start(notification, 0, 0);
 
             //Assert
             mocker.VerifyAllMocks();
 
-            mocker.GetMock<UpdateInfoJob>().Verify(j => j.Start(notification, series[0].SeriesId), Times.Once());
-            mocker.GetMock<UpdateInfoJob>().Verify(j => j.Start(notification, series[1].SeriesId), Times.Once());
+            mocker.GetMock<UpdateInfoJob>().Verify(j => j.Start(notification, series[0].SeriesId, 0), Times.Once());
+            mocker.GetMock<UpdateInfoJob>().Verify(j => j.Start(notification, series[1].SeriesId, 0), Times.Once());
 
-            mocker.GetMock<DiskScanJob>().Verify(j => j.Start(notification, series[0].SeriesId), Times.Once());
+            mocker.GetMock<DiskScanJob>().Verify(j => j.Start(notification, series[0].SeriesId, 0), Times.Once());
 
             ExceptionVerification.ExcpectedErrors(1);
 

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Web.Mvc;
 using NzbDrone.Core.Helpers;
+using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.Jobs;
@@ -29,7 +30,11 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult Jobs()
         {
-            ViewData["Queue"] = JobProvider.Queue.Select(c => new Tuple<String, int>(c.Item1.Name, c.Item2));
+            ViewData["Queue"] = JobProvider.Queue.Select(c => new JobQueueItemModel {
+                                                                                        Name = c.JobType.Name,
+                                                                                        TargetId = c.TargetId,
+                                                                                        SecondaryTargetId = c.SecondaryTargetId
+                                                                                    });
             return View(_jobProvider.All());
         }
 

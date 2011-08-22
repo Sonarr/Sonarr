@@ -51,6 +51,35 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
+        public void get_season_files()
+        {
+            var firstSeriesFiles = Builder<EpisodeFile>.CreateListOfSize(10)
+                .WhereAll()
+                .Have(s => s.SeriesId = 12)
+                .Have(s => s.SeasonNumber = 1)
+                .Build();
+
+            var secondSeriesFiles = Builder<EpisodeFile>.CreateListOfSize(10)
+                .WhereAll()
+                .Have(s => s.SeriesId = 12)
+                .Have(s => s.SeasonNumber = 2)
+                .Build();
+
+            var mocker = new AutoMoqer();
+
+            var database = MockLib.GetEmptyDatabase(true);
+
+            database.InsertMany(firstSeriesFiles);
+            database.InsertMany(secondSeriesFiles);
+
+            mocker.SetConstant(database);
+
+            var result = mocker.Resolve<MediaFileProvider>().GetSeasonFiles(12, 1);
+
+            result.Should().HaveSameCount(firstSeriesFiles);
+        }
+
+        [Test]
         public void Scan_series_should_skip_series_with_no_episodes()
         {
             var mocker = new AutoMoqer(MockBehavior.Strict);

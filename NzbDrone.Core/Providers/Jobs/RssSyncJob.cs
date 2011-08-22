@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Providers.Jobs
             get { return 15; }
         }
 
-        public void Start(ProgressNotification notification, int targetId)
+        public void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
         {
             var reports = new List<EpisodeParseResult>();
 

@@ -11,9 +11,7 @@ namespace NzbDrone.Web.Controllers
 {
     public class EpisodeController : Controller
     {
-
         private readonly JobProvider _jobProvider;
-
 
         public EpisodeController(JobProvider jobProvider)
         {
@@ -21,15 +19,30 @@ namespace NzbDrone.Web.Controllers
             _jobProvider = jobProvider;
         }
 
+        [HttpPost]
         public JsonResult Search(int episodeId)
         {
             _jobProvider.QueueJob(typeof(EpisodeSearchJob), episodeId);
             return new JsonResult { Data = "ok" };
         }
 
+        [HttpPost]
+        public JsonResult SearchSeason(int seriesId, int seasonNumber)
+        {
+            _jobProvider.QueueJob(typeof(SeasonSearchJob), seriesId, seasonNumber);
+            return new JsonResult { Data = "ok" };
+        }
+
         public JsonResult Rename(int episodeFileId)
         {
             _jobProvider.QueueJob(typeof(RenameEpisodeJob), episodeFileId);
+
+            return new JsonResult { Data = "ok" };
+        }
+
+        public JsonResult RenameSeason(int seriesId, int seasonNumber)
+        {
+            _jobProvider.QueueJob(typeof(RenameSeasonJob), seriesId, seasonNumber);
 
             return new JsonResult { Data = "ok" };
         }

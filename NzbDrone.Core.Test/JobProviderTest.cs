@@ -7,6 +7,7 @@ using AutoMoq;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers.Jobs;
 using NzbDrone.Core.Test.Framework;
@@ -84,7 +85,7 @@ namespace NzbDrone.Core.Test
             timerProvider.QueueScheduled();
             Thread.Sleep(500);
 
-            fakeJob.ExexutionCount.Should().Be(1);
+            fakeJob.ExecutionCount.Should().Be(1);
         }
 
         [Test]
@@ -106,7 +107,7 @@ namespace NzbDrone.Core.Test
             timerProvider.QueueJob(typeof(FakeJob));
             Thread.Sleep(1000);
             JobProvider.Queue.Should().BeEmpty();
-            fakeJob.ExexutionCount.Should().Be(2);
+            fakeJob.ExecutionCount.Should().Be(2);
         }
 
         [Test]
@@ -154,7 +155,7 @@ namespace NzbDrone.Core.Test
 
             Thread.Sleep(2000);
             JobProvider.Queue.Should().BeEmpty();
-            brokenJob.ExexutionCount.Should().Be(2);
+            brokenJob.ExecutionCount.Should().Be(2);
             ExceptionVerification.ExcpectedErrors(2);
         }
 
@@ -184,7 +185,7 @@ namespace NzbDrone.Core.Test
             thread2.Join();
 
 
-            slowJob.ExexutionCount = 2;
+            slowJob.ExecutionCount = 2;
 
         }
 
@@ -216,7 +217,7 @@ namespace NzbDrone.Core.Test
 
             Thread.Sleep(5000);
 
-            Assert.AreEqual(1, slowJob.ExexutionCount);
+            Assert.AreEqual(1, slowJob.ExecutionCount);
             JobProvider.Queue.Should().BeEmpty();
 
         }
@@ -352,7 +353,7 @@ namespace NzbDrone.Core.Test
 
 
             //Assert
-            Assert.AreEqual(0, disabledJob.ExexutionCount);
+            Assert.AreEqual(0, disabledJob.ExecutionCount);
         }
 
         [Test]
@@ -411,7 +412,13 @@ namespace NzbDrone.Core.Test
             mocker.SetConstant(MockLib.GetEmptyDatabase());
             mocker.SetConstant(fakeJobs);
 
-            var fakeQueueItem = new Tuple<Type, int>(fakeJob.GetType(), 12);
+            var fakeQueueItem = new JobQueueItem
+                                    {
+                                        JobType = fakeJob.GetType(),
+                                        TargetId = 12,
+                                        SecondaryTargetId = 0
+                                    };
+            
             //Act
             var jobProvider = mocker.Resolve<JobProvider>();
             jobProvider.Initialize();
@@ -420,7 +427,7 @@ namespace NzbDrone.Core.Test
             Thread.Sleep(1000);
 
             //Assert
-            fakeJob.ExexutionCount.Should().Be(1);
+            fakeJob.ExecutionCount.Should().Be(1);
         }
 
 
@@ -449,8 +456,8 @@ namespace NzbDrone.Core.Test
 
             //Assert
             JobProvider.Queue.Should().BeEmpty();
-            slowJob.ExexutionCount.Should().Be(1);
-            disabledJob.ExexutionCount.Should().Be(1);
+            slowJob.ExecutionCount.Should().Be(1);
+            disabledJob.ExecutionCount.Should().Be(1);
         }
     }
 
@@ -466,11 +473,11 @@ namespace NzbDrone.Core.Test
             get { return 15; }
         }
 
-        public int ExexutionCount { get; set; }
+        public int ExecutionCount { get; set; }
 
-        public void Start(ProgressNotification notification, int targetId)
+        public void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
         {
-            ExexutionCount++;
+            ExecutionCount++;
         }
     }
 
@@ -486,11 +493,11 @@ namespace NzbDrone.Core.Test
             get { return 0; }
         }
 
-        public int ExexutionCount { get; set; }
+        public int ExecutionCount { get; set; }
 
-        public void Start(ProgressNotification notification, int targetId)
+        public void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
         {
-            ExexutionCount++;
+            ExecutionCount++;
         }
     }
 
@@ -506,11 +513,11 @@ namespace NzbDrone.Core.Test
             get { return 15; }
         }
 
-        public int ExexutionCount { get; set; }
+        public int ExecutionCount { get; set; }
 
-        public void Start(ProgressNotification notification, int targetId)
+        public void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
         {
-            ExexutionCount++;
+            ExecutionCount++;
             throw new ApplicationException("Broken job is broken");
         }
     }
@@ -527,13 +534,13 @@ namespace NzbDrone.Core.Test
             get { return 15; }
         }
 
-        public int ExexutionCount { get; set; }
+        public int ExecutionCount { get; set; }
 
-        public void Start(ProgressNotification notification, int targetId)
+        public void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
         {
             Console.WriteLine("Starting Job");
             Thread.Sleep(2000);
-            ExexutionCount++;
+            ExecutionCount++;
             Console.WriteLine("Finishing Job");
         }
     }

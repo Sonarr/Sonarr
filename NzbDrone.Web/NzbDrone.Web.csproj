@@ -165,6 +165,7 @@
     <Compile Include="Helpers\IsCurrentActionHelper.cs" />
     <Compile Include="Models\ExistingSeriesModel.cs" />
     <Compile Include="Models\AddNewSeriesModel.cs" />
+    <Compile Include="Models\JobQueueItemModel.cs" />
     <Compile Include="Models\NotificationResult.cs" />
     <Compile Include="Models\PendingProcessingModel.cs" />
     <Compile Include="Models\QualityTypeModel.cs" />

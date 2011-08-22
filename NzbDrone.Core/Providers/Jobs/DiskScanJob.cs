@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Providers.Jobs
             get { return 60; }
         }
 
-        public virtual void Start(ProgressNotification notification, int targetId)
+        public virtual void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
         {
             IList<Series> seriesToScan;
             if (targetId == 0)

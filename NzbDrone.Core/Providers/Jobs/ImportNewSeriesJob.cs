@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Providers.Jobs
             get { return 1; }
         }
 
-        public void Start(ProgressNotification notification, int targetId)
+        public void Start(ProgressNotification notification, int targetId, int secondaryTargetId )
         {
             _attemptedSeries = new List<int>();
             ScanSeries(notification);
@@ -67,8 +67,8 @@ namespace NzbDrone.Core.Providers.Jobs
                     _attemptedSeries.Add(currentSeries.SeriesId);
                     notification.CurrentMessage = String.Format("Searching for '{0}'", new DirectoryInfo(currentSeries.Path).Name);
 
-                    _updateInfoJob.Start(notification, currentSeries.SeriesId);
-                    _diskScanJob.Start(notification, currentSeries.SeriesId);
+                    _updateInfoJob.Start(notification, currentSeries.SeriesId, 0);
+                    _diskScanJob.Start(notification, currentSeries.SeriesId, 0);
 
                     var updatedSeries = _seriesProvider.GetSeries(currentSeries.SeriesId);
                     AutoIgnoreSeasons(updatedSeries.SeriesId);

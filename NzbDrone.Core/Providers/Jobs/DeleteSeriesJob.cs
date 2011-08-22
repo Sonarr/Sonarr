@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Providers.Jobs
             get { return 0; }
         }
 
-        public void Start(ProgressNotification notification, int targetId)
+        public void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
         {
             DeleteSeries(notification, targetId);
         }

@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Providers.Jobs
             get { return 1440; } //Daily
         }
 
-        public virtual void Start(ProgressNotification notification, int targetId)
+        public virtual void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
         {
             IList<Series> seriesToUpdate;
             if (targetId == 0)

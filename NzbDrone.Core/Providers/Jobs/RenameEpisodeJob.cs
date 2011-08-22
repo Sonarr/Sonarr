@@ -1,4 +1,5 @@
-﻿using Ninject;
+﻿using System;
+using Ninject;
 using NLog;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers.Core;
@@ -30,10 +31,14 @@ namespace NzbDrone.Core.Providers.Jobs
             get { return 0; }
         }
 
-        public void Start(ProgressNotification notification, int targetId)
+        public void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
         {
+            if (targetId <= 0)
+                throw new ArgumentOutOfRangeException("targetId");
+
             var episode = _mediaFileProvider.GetEpisodeFile(targetId);
             _diskScanProvider.MoveEpisodeFile(episode);
+            notification.CurrentMessage = String.Format("Episode rename completed for: {0} ", targetId);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿@using System.Collections
+@using NzbDrone.Web.Models
 @model IEnumerable<NzbDrone.Core.Repository.JobDefinition>
 @section TitleContent{
 Jobs
@@ -9,7 +10,9 @@ Jobs
 
     Items currently in queue
 
-    @{Html.Telerik().Grid((IEnumerable<Tuple<String, int>>)ViewData["Queue"]).Name("QueueGrid")
-          .Columns(c => c.Bound(g => g.Item1).Title("Type").Width(100)).Columns(c => c.Bound(g => g.Item2).Title("Target"))
+    @{Html.Telerik().Grid((IEnumerable<JobQueueItemModel>)ViewData["Queue"]).Name("QueueGrid")
+          .Columns(c => c.Bound(g => g.Name).Title("Type").Width(100))
+          .Columns(c => c.Bound(g => g.TargetId).Title("Target"))
+          .Columns(c => c.Bound(g => g.SecondaryTargetId).Title("Secondary Target"))
         .Render();}
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using Ninject;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Repository;
@@ -18,6 +19,7 @@ namespace NzbDrone.Core.Providers.Jobs
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
+        [Inject]
         public EpisodeSearchJob(InventoryProvider inventoryProvider, DownloadProvider downloadProvider,
                                     IndexerProvider indexerProvider, EpisodeProvider episodeProvider,
                                     SceneMappingProvider sceneNameMappingProvider)
@@ -27,6 +29,11 @@ namespace NzbDrone.Core.Providers.Jobs
             _indexerProvider = indexerProvider;
             _episodeProvider = episodeProvider;
             _sceneNameMappingProvider = sceneNameMappingProvider;
+        }
+
+        public EpisodeSearchJob()
+        {
+            
         }
 
         public string Name
@@ -39,7 +46,7 @@ namespace NzbDrone.Core.Providers.Jobs
             get { return 0; }
         }
 
-        public void Start(ProgressNotification notification, int targetId)
+        public virtual void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
         {
             if (targetId <= 0)
                 throw new ArgumentOutOfRangeException("targetId");

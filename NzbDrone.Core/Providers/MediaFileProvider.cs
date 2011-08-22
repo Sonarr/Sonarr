@@ -31,8 +31,6 @@ namespace NzbDrone.Core.Providers
         {
         }
 
-
-
         public virtual int Add(EpisodeFile episodeFile)
         {
             return Convert.ToInt32(_database.Insert(episodeFile));
@@ -65,7 +63,12 @@ namespace NzbDrone.Core.Providers
 
         public virtual IList<EpisodeFile> GetSeriesFiles(int seriesId)
         {
-            return _database.Fetch<EpisodeFile>("WHERE seriesId= @0", seriesId);
+            return _database.Fetch<EpisodeFile>("WHERE SeriesId= @0", seriesId);
+        }
+
+        public virtual IList<EpisodeFile> GetSeasonFiles(int seriesId, int seasonNumber)
+        {
+            return _database.Fetch<EpisodeFile>("WHERE SeriesId= @0 AND SeasonNumber = @1", seriesId, seasonNumber);
         }
 
         public virtual Tuple<int, int> GetEpisodeFilesCount(int seriesId)
@@ -131,7 +134,6 @@ namespace NzbDrone.Core.Providers
 
             return updated;
         }
-
 
         public virtual string GetNewFilename(IList<Episode> episodes, string seriesTitle, QualityTypes quality)
         {

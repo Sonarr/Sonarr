@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Providers.Jobs
             get { return 1; }
         }
 
-        public virtual void Start(ProgressNotification notification, int targetId)
+        public virtual void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
         {
             var dropFolder = _configProvider.SabDropDirectory;
 
