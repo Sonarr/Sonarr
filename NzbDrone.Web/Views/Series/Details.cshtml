@@ -30,16 +30,7 @@
     }
     
     .seasonToggleTop
-    {
-        @*float: left;
-        border-width: 1px;
-        border-style: solid;
-        border-color: grey;
-        margin: 5px;
-        padding: 3px;
-        padding-top: 0px;
-        padding-bottom: 0px;*@
-        
+    {       
         background-color: #F1EDED;
         background-position: 5px center;
         background-repeat: no-repeat;
@@ -60,6 +51,12 @@
         padding-left: 0px;
         padding-right: 0px;
         margin-bottom: -4px;
+    }
+
+    .statusImage
+    {
+        width: 18px;
+        height: 18px;
     }
 </style>
 
@@ -84,13 +81,15 @@
         }
     </div>
 
-    @foreach (var s in Model.Seasons.Where(s => s > 0).Reverse())
+    @foreach (var s in Model.Seasons.Reverse())
     {
         var seriesId = @Model.SeriesId;
         var season = s;
         
         <h3>
-            Season @season</h3>
+            @(season == 0 ? "Specials" : "Season " + season)
+        </h3>
+        
         <div class="grid-container">
             @{
         Html.Telerik().Grid<EpisodeModel>().Name("seasons_" + season)
@@ -98,9 +97,9 @@
             .Columns(columns =>
             {
                 columns.Bound(o => o.Ignored)
-                    .Title("<img src='../../Content/Images/ignoredNeutral.png' class='ignoredEpisodesMaster ignoreEpisode ignoreSeason_" + season + "'/>")
+                    .Title("<img src='../../Content/Images/ignoredNeutral.png' class='ignoredEpisodesMaster ignoreEpisode ignoreSeason_" + season + "' title='Click to toggle season ignore status' />")
                     .ClientTemplate(
-                        "<img src='../../Content/Images/ignoredNeutral.png' class='ignoreEpisode ignoreEpisode_" + season + " ignored' id='<#= EpisodeId #>' />")
+                        "<img src='../../Content/Images/ignoredNeutral.png' class='ignoreEpisode ignoreEpisode_" + season + " ignored' id='<#= EpisodeId #>' title='Click to toggle episode  ignore status' />")
                     .Width(20)
                     .HtmlAttributes(new { style = "text-align:center" });
 
@@ -108,7 +107,10 @@
                 columns.Bound(c => c.Title).Title("Title");
                 columns.Bound(c => c.AirDate).Width(0);
                 columns.Bound(c => c.Quality).Width(0);
-                columns.Bound(c => c.Status).Width(0);
+                columns.Bound(c => c.Status)
+                    .ClientTemplate("<img src='../../Content/Images/<#= Status #>.png' alt='<#= Status #>' title='<#= Status #>' class='statusImage' />")
+                    .Width(20)
+                    .HtmlAttributes(new { style = "text-align:center" });
                 columns.Bound(o => o.EpisodeId).Title("")
                     .ClientTemplate("<a href=\"../Episode/Season?episodeId=<#= EpisodeId #>\" onclick=\"searchForEpisode('<#= EpisodeId #>'); return false;\">Search</a>"
 	                                + " | " +
@@ -134,44 +136,6 @@
                 clientEvents.OnDataBound("grid_dataBound");
             })
             .Render();}
-        </div>
-    }
-    @if (Model.Seasons.Any(s => s == 0))
-    {
-        <br />
-        <h3>
-            Specials</h3>
-        <div class="grid-container">
-            @{Html.Telerik().Grid<EpisodeModel>().Name("seasons_0")
-                    .TableHtmlAttributes(new { @class = "Grid" })
-                    .Columns(columns =>
-                    {
-                        columns.Bound(o => o.Ignored)
-                            .Title("<img src='../../Content/Images/ignoredNeutral.png' class='ignoredEpisodesMaster ignoreEpisode ignoreSeason_0' />")
-                            .ClientTemplate(
-                                "<img src='../../Content/Images/ignoredNeutral.png' class='ignoreEpisode ignoreEpisode_0 ignored' id='<#= EpisodeId #>' />")
-                            .Width(20)
-                            .HtmlAttributes(new { style = "text-align:center" });
-
-                        columns.Bound(c => c.EpisodeNumber).Width(10).Title("Episode");
-                        columns.Bound(c => c.Title).Title("Title").Width(10000);
-                        columns.Bound(c => c.AirDate).Width(10);
-                        columns.Bound(c => c.Quality).Width(10);
-                        columns.Bound(c => c.Status).Width(10);
-                    })
-                    .DetailView(detailView => detailView.ClientTemplate("<div><#= Overview #> </br><#= Path #> </div>"))
-                    .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.EpisodeNumber).Descending()).Enabled(false))
-                    .Footer(true)
-                    .DataBinding(
-                        d =>
-                        d.Ajax().Select("_AjaxSeasonGrid", "Series",
-                                        new RouteValueDictionary { { "seriesId", Model.SeriesId }, { "seasonNumber", 0 } }))
-                    .ClientEvents(clientEvents =>
-                    {
-                        clientEvents.OnRowDataBound("grid_rowBound");
-                        clientEvents.OnDataBound("grid_dataBound");
-                    })
-                    .Render(); }
         </div>
     }
 }

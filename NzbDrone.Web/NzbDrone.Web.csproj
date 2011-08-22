@@ -136,8 +136,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Images\close.png" />
+    <Content Include="Content\Images\Downloading.png" />
     <Content Include="Content\Images\error.png" />
     <Content Include="Content\Images\gritter.png" />
+    <Content Include="Content\Images\Missing.png" />
+    <Content Include="Content\Images\NotAired.png" />
+    <Content Include="Content\Images\Ready.png" />
     <Content Include="Content\Images\success.png" />
     <Content Include="Content\jquery.gritter.css" />
     <Content Include="Content\Menu.css" />

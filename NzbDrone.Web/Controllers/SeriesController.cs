@@ -47,31 +47,6 @@ namespace NzbDrone.Web.Controllers
             return View();
         }
 
-        public ActionResult SeasonEditor(int seriesId)
-        {
-            var model = new List<SeasonEditModel>();
-
-            var seasons = _episodeProvider.GetSeasons(seriesId);
-
-            foreach (var season in seasons)
-            {
-                var seasonEdit = new SeasonEditModel();
-                seasonEdit.Monitored = !_episodeProvider.IsIgnored(seriesId, season);
-                seasonEdit.SeasonNumber = season;
-                seasonEdit.SeriesId = seriesId;
-                seasonEdit.SeasonString = GetSeasonString(season);
-
-                model.Add(seasonEdit);
-            }
-
-            return View(model);
-        }
-
-        public ActionResult GetSingleSeasonView(SeasonEditModel model)
-        {
-            return PartialView("SingleSeason", model);
-        }
-
         [GridAction]
         public ActionResult _AjaxSeriesGrid()
         {
