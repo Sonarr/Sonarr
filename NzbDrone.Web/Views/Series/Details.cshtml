@@ -64,7 +64,7 @@
 </style>
 
 @section ActionMenu{
-   <ul id="sub-menu">
+   <ul class="sub-menu">
         <li>@Html.ActionLink("Back to Series List", "Index", "Series")</li>
         <li>@Ajax.ActionLink("Scan For Episodes on Disk", "SyncEpisodesOnDisk", "Command", new { seriesId = Model.SeriesId }, null)</li>
         <li>@Ajax.ActionLink("Update Info", "UpdateInfo", "Command", new { seriesId = Model.SeriesId }, null)</li>
@@ -123,11 +123,10 @@
                 d.Ajax().Select("_AjaxSeasonGrid", "Series",
                                new RouteValueDictionary { { "seriesId", Model.SeriesId }, { "seasonNumber", season } }))
             .ToolBar(toolbar => toolbar.Template(@<text>
-                                                    <div>
-                                                        <a href="../Episode/SearchSeason?seriesId=@seriesId&seasonNumber=@season" onclick="searchSeason('@seriesId', @season); return false;">Search for Season</a>
-                                                         | 
-                                                        <a href="../Episode/RenameSeason?seriesId=@seriesId&seasonNumber=@season" onclick="renameSeason('@seriesId', @season); return false;">Rename Season</a>
-                                                    </div>
+                                                    <ul class="sub-menu">
+                                                        <li><a href="../Episode/SearchSeason?seriesId=@seriesId&seasonNumber=@season" onclick="searchSeason('@seriesId', @season); return false;">Search for Season</a></li>
+                                                        <li><a href="../Episode/RenameSeason?seriesId=@seriesId&seasonNumber=@season" onclick="renameSeason('@seriesId', @season); return false;">Rename Season</a></li>
+                                                    </ul>
                                                   </text>))
             .ClientEvents(clientEvents =>
             {

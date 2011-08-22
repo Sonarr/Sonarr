@@ -4,7 +4,7 @@
 History
 }
 @section ActionMenu{
-    <ul id="sub-menu">
+    <ul class="sub-menu">
         <li>@Ajax.ActionLink("Trim History", "Trim", "History", new AjaxOptions{ OnSuccess = "reloadHistoryGrid" })</li>
         <li>@Ajax.ActionLink("Purge History", "Purge", "History", new AjaxOptions { OnSuccess = "reloadHistoryGrid"})</li>
     </ul>

@@ -1,9 +1,9 @@
-﻿#sub-menu
+﻿.sub-menu
 {
     padding-left: 5px;
 }
     
-#sub-menu li
+.sub-menu li
 {
     display: inline;
     list-style-type: none;
@@ -13,8 +13,14 @@
     border-right: 1px solid #F0F0F0;
 }
     
-#sub-menu a
+.sub-menu a
 {
     text-decoration: none;
     color: #105CD6;
+}
+
+.t-grid .sub-menu
+{
+    margin-left: -10px;
+    margin-bottom: 0px;
 }
