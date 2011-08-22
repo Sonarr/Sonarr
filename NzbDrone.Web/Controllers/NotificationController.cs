@@ -19,37 +19,6 @@ namespace NzbDrone.Web.Controllers
         }
 
         [HttpGet]
-        public JsonResult Index()
-        {
-            string message = string.Empty;
-
-            var basic = _notifications.BasicNotifications;
-
-            if (basic.Count != 0)
-            {
-                message = basic[0].Title;
-
-                if (basic[0].AutoDismiss)
-                    _notifications.Dismiss(basic[0].Id);
-            }
-
-            else
-            {
-                if (_notifications.ProgressNotifications.Count != 0)
-                    message = _notifications.ProgressNotifications[0].CurrentMessage;
-            }
-
-
-            if (MiniProfiler.Current.DurationMilliseconds < 100)
-            {
-                MiniProfiler.Stop(true);
-            }
-
-            return Json(message, JsonRequestBehavior.AllowGet);
-        }
-
-
-        [HttpGet]
         public JsonResult Comet(string message)
         {
             MiniProfiler.Stop(true);
