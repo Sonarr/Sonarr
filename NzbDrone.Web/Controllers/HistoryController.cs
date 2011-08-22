@@ -29,13 +29,13 @@ namespace NzbDrone.Web.Controllers
         public JsonResult Trim()
         {
             _historyProvider.Trim();
-            return new JsonResult { Data = "ok" };
+            return Json(new NotificationResult() { Title = "Trimmed History items"});
         }
 
         public JsonResult Purge()
         {
             _historyProvider.Purge();
-            return new JsonResult { Data = "ok" };
+            return Json(new NotificationResult() { Title = "History Cleared" });
         }
 
         [GridAction]

@@ -321,7 +321,7 @@ namespace NzbDrone.Web.Controllers
 
 
         [HttpPost]
-        public ActionResult SaveQuality(QualityModel data)
+        public JsonResult SaveQuality(QualityModel data)
         {
             if (ModelState.IsValid)
             {
@@ -348,7 +348,7 @@ namespace NzbDrone.Web.Controllers
 
                     //If the Cutoff value selected is not in the allowed list then use the last allowed value, this should be validated on submit
                     if (!profile.Allowed.Contains(profile.Cutoff))
-                        return Content("Error Saving Settings, please fix any errors");
+                        return GetInvalidModelResult();
                     //profile.Cutoff = profile.Allowed.Last();
 
                     _qualityProvider.Update(profile);
@@ -361,7 +361,7 @@ namespace NzbDrone.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult SaveNotifications(NotificationSettingsModel data)
+        public JsonResult SaveNotifications(NotificationSettingsModel data)
         {
             if (ModelState.IsValid)
             {
@@ -385,7 +385,7 @@ namespace NzbDrone.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult SaveEpisodeSorting(EpisodeSortingModel data)
+        public JsonResult SaveEpisodeSorting(EpisodeSortingModel data)
         {
             if (ModelState.IsValid)
             {

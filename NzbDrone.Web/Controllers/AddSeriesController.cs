@@ -123,12 +123,12 @@ namespace NzbDrone.Web.Controllers
 
                 _seriesProvider.AddSeries(path, series.Id, qualityProfileId);
                 ScanNewSeries();
-                return new JsonResult { Data = "ok" };
+                return Json(new NotificationResult() { Title = seriesName, Text = "Was added successfully" });
             }
 
-            catch (Exception)
+            catch (Exception ex)
             {
-                return new JsonResult { Data = "failed" };
+                return Json(new NotificationResult() { Title = "Failed", Text  = ex.Message, NotificationType = NotificationType.Error});
             }
         }
 
