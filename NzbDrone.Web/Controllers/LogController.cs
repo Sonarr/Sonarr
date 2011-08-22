@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
 using NzbDrone.Core.Instrumentation;
+using NzbDrone.Web.Models;
 using Telerik.Web.Mvc;
 
 namespace NzbDrone.Web.Controllers
@@ -22,7 +23,7 @@ namespace NzbDrone.Web.Controllers
         {
             _logProvider.DeleteAll();
 
-            return new JsonResult { Data = "ok" };
+            return Json(new NotificationResult() { Title = "Logs Cleared" });
         }
 
         [GridAction]

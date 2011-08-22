@@ -13,6 +13,8 @@
 
         jqXHR.success(function (data) {
             //Check if the response is a message type,
+
+            console.log(this.url);
             if (data.IsMessage) {
                 if (data.NotificationType === 0) {
                     $.gritter.add({
