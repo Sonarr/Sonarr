@@ -396,9 +396,12 @@ namespace NzbDrone.Core
         /// <returns></returns>
         public static string NormalizeTitle(string title)
         {
-            //Todo: Find a better way to do this hack
-            if (title == "90210" || title == "24")
+            long number = 0;
+
+            //If Title only contains numbers return it as is.
+            if (Int64.TryParse(title, out number))
                 return title;
+
             return NormalizeRegex.Replace(title, String.Empty).ToLower();
         }
 
