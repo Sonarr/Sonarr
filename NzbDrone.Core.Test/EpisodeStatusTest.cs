@@ -13,12 +13,10 @@ namespace NzbDrone.Core.Test
     [TestFixture]
     // ReSharper disable InconsistentNaming
     public class EpisodeStatusTest : TestBase
-    {
-        
+    {        
         [TestCase(1, false, false, EpisodeStatusType.NotAired)]
         [TestCase(-2, false, false, EpisodeStatusType.Missing)]
         [TestCase(1, true, false, EpisodeStatusType.Ready)]
-        [TestCase(1, false, true, EpisodeStatusType.Ignored)]
         public void no_grab_date(int offsetDays, bool hasEpisodes, bool ignored, EpisodeStatusType status)
         {
             Episode episode = Builder<Episode>.CreateNew()
@@ -36,11 +34,9 @@ namespace NzbDrone.Core.Test
             Assert.AreEqual(status, episode.Status);
         }
 
-
         [TestCase(1, false, false, EpisodeStatusType.Missing)]
         [TestCase(-2, false, false, EpisodeStatusType.Missing)]
         [TestCase(1, true, false, EpisodeStatusType.Ready)]
-        [TestCase(1, false, true, EpisodeStatusType.Ignored)]
         public void old_grab_date(int offsetDays, bool hasEpisodes, bool ignored,
                                                  EpisodeStatusType status)
         {
@@ -57,7 +53,6 @@ namespace NzbDrone.Core.Test
 
             Assert.AreEqual(status, episode.Status);
         }
-
 
         [TestCase(1, false, false, EpisodeStatusType.Downloading)]
         [TestCase(-2, false, false, EpisodeStatusType.Downloading)]
@@ -82,9 +77,6 @@ namespace NzbDrone.Core.Test
             Assert.AreEqual(status, episode.Status);
         }
 
-    
-        [TestCase(1, true, false, EpisodeStatusType.Ignored)]
-        [TestCase(-2, true, false, EpisodeStatusType.Ignored)]
         [TestCase(1, true, true, EpisodeStatusType.Ready)]
         public void ignored_episode(int offsetDays, bool ignored, bool hasEpisodes, EpisodeStatusType status)
         {
@@ -102,7 +94,6 @@ namespace NzbDrone.Core.Test
 
             Assert.AreEqual(status, episode.Status);
         }
-
 
         [Test]
         public void low_air_date()
