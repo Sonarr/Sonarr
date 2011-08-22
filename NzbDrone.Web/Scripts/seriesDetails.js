@@ -19,14 +19,16 @@ $(".ignoreEpisode").live("click", function () {
     }
 
     var seasonNumber = 0;
-    
+
     //Flip the ignored to the new state (We want the new value moving forward)
     ignored = !ignored;
 
     if (toggle.hasClass('ignoredEpisodesMaster')) {
-        seasonNumber = toggle.attr('id').replace('master_', '');
+        //seasonNumber = toggle.attr('id').replace('master_', '');
+        seasonNumber = toggle.attr('class').split(/\s+/)[2].replace('ignoreSeason_', '');
 
         toggleChildren(seasonNumber, ignored);
+        toggleMasters(seasonNumber, ignored);
         saveSeasonIgnore(seasonNumber, ignored);
     }
 
@@ -60,16 +62,36 @@ function toggleChildren(seasonNumber, ignored) {
 function toggleMaster(seasonNumber) {
     var ignoreEpisodes = $('.ignoreEpisode_' + seasonNumber);
     var ignoredCount = ignoreEpisodes.filter('.ignored').length;
-    var master = $('#master_' + seasonNumber);
-    
-    if (ignoreEpisodes.length == ignoredCount) {
-        master.attr('src', ignoredImage);
-        master.addClass('ignored');
+    var masters = $('.ignoreSeason_' + seasonNumber);
+
+    masters.each(function (index) {
+        if (ignoreEpisodes.length == ignoredCount) {
+            $(this).attr('src', ignoredImage);
+            $(this).addClass('ignored');
+        }
+
+        else {
+            $(this).attr('src', notIgnoredImage);
+            $(this).removeClass('ignored');
+        }
+    });
+}
+
+function toggleMasters(seasonNumber, ignored) {
+    var masters = $('.ignoreSeason_' + seasonNumber);
+
+    if (ignored) {
+        masters.each(function (index) {
+            $(this).addClass('ignored');
+            $(this).attr('src', ignoredImage);
+        });
     }
 
     else {
-        master.attr('src', notIgnoredImage);
-        master.removeClass('ignored');
+        masters.each(function (index) {
+            $(this).removeClass('ignored');
+            $(this).attr('src', notIgnoredImage);
+        });
     }
 }
 
@@ -89,28 +111,16 @@ function grid_rowBound(e) {
         ignoredIcon.attr('src', notIgnoredImage);
         ignoredIcon.removeClass('ignored');
     }
-    
+
     if (seriesId == 0)
-        seriesId = dataItem.SeriesId
+        seriesId = dataItem.SeriesId;
 }
 
 function grid_dataBound(e) {
     var id = $(this).attr('id');
     var seasonNumber = id.replace('seasons_', '');
-    var ignoreEpisodes = $('.ignoreEpisode_' + seasonNumber);
-    var master = $('#master_' + seasonNumber);
-    var count = ignoreEpisodes.length;
-    var ignoredCount = ignoreEpisodes.filter('.ignored').length;
 
-    if (ignoredCount == count) {
-        master.attr('src', ignoredImage);
-        master.addClass('ignored');
-    }
-
-    else {
-        master.attr('src', notIgnoredImage);
-        master.removeClass('ignored');
-    }
+    toggleMaster(seasonNumber);
 }
 
 function saveSeasonIgnore(seasonNumber, ignored) {
