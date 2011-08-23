@@ -106,6 +106,8 @@ namespace NzbDrone.Core
             _kernel.Bind<IJob>().To<UpdateSceneMappingsJob>().InSingletonScope();
             _kernel.Bind<IJob>().To<SeasonSearchJob>().InSingletonScope();
             _kernel.Bind<IJob>().To<RenameSeasonJob>().InSingletonScope();
+            _kernel.Bind<IJob>().To<SeriesSearchJob>().InSingletonScope();
+            _kernel.Bind<IJob>().To<RenameSeriesJob>().InSingletonScope();
 
             _kernel.Get<JobProvider>().Initialize();
             _kernel.Get<WebTimer>().StartTimer(30);

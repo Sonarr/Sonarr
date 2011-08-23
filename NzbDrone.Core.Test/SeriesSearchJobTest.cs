@@ -19,30 +19,29 @@ namespace NzbDrone.Core.Test
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class SeasonSearchJobTest : TestBase
+    public class SeriesSearchJobTest : TestBase
     {
         [Test]
-        public void SeasonSearch_success()
+        public void SeriesSearch_success()
         {
             var episodes = Builder<Episode>.CreateListOfSize(5)
                 .WhereAll()
                 .Have(e => e.SeriesId = 1)
-                .Have(e => e.SeasonNumber = 1)
                 .Have(e => e.Ignored = false)
                 .Build();
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
 
-            var notification = new ProgressNotification("Season Search");
+            var notification = new ProgressNotification("Series Search");
 
             mocker.GetMock<EpisodeProvider>()
-                .Setup(c => c.GetEpisodesBySeason(1, 1)).Returns(episodes);
+                .Setup(c => c.GetEpisodeBySeries(1)).Returns(episodes);
 
             mocker.GetMock<EpisodeSearchJob>()
                 .Setup(c => c.Start(notification, It.IsAny<int>(), 0)).Verifiable();
 
             //Act
-            mocker.Resolve<SeasonSearchJob>().Start(notification, 1, 1);
+            mocker.Resolve<SeriesSearchJob>().Start(notification, 1, 0);
 
             //Assert
             mocker.VerifyAllMocks();
@@ -51,17 +50,17 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
-        public void SeasonSearch_no_episodes()
+        public void SeriesSearch_no_episodes()
         {
             var mocker = new AutoMoqer(MockBehavior.Strict);
-            var notification = new ProgressNotification("Season Search");
+            var notification = new ProgressNotification("Series Search");
             List<Episode> nullList = null;
 
             mocker.GetMock<EpisodeProvider>()
-                .Setup(c => c.GetEpisodesBySeason(1, 1)).Returns(nullList);
+                .Setup(c => c.GetEpisodeBySeries(1)).Returns(nullList);
 
             //Act
-            mocker.Resolve<SeasonSearchJob>().Start(notification, 1, 1);
+            mocker.Resolve<SeriesSearchJob>().Start(notification, 1, 0);
 
             //Assert
             mocker.VerifyAllMocks();
@@ -71,12 +70,11 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
-        public void SeasonSearch_skip_ignored()
+        public void SeriesSearch_skip_ignored()
         {
             var episodes = Builder<Episode>.CreateListOfSize(10)
                 .WhereAll()
                 .Have(e => e.SeriesId = 1)
-                .Have(e => e.SeasonNumber = 1)
                 .WhereTheFirst(5)
                 .Have(e => e.Ignored = false)
                 .AndTheRemaining()
@@ -85,16 +83,16 @@ namespace NzbDrone.Core.Test
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
 
-            var notification = new ProgressNotification("Season Search");
+            var notification = new ProgressNotification("Series Search");
 
             mocker.GetMock<EpisodeProvider>()
-                .Setup(c => c.GetEpisodesBySeason(1, 1)).Returns(episodes);
+                .Setup(c => c.GetEpisodeBySeries(1)).Returns(episodes);
 
             mocker.GetMock<EpisodeSearchJob>()
                 .Setup(c => c.Start(notification, It.IsAny<int>(), 0)).Verifiable();
 
             //Act
-            mocker.Resolve<SeasonSearchJob>().Start(notification, 1, 1);
+            mocker.Resolve<SeriesSearchJob>().Start(notification, 1, 0);
 
             //Assert
             mocker.VerifyAllMocks();

@@ -6,7 +6,7 @@ using NzbDrone.Core.Providers.Core;
 
 namespace NzbDrone.Core.Providers.Jobs
 {
-    public class RenameSeasonJob : IJob
+    public class RenameSeriesJob : IJob
     {
         private readonly MediaFileProvider _mediaFileProvider;
         private readonly DiskScanProvider _diskScanProvider;
@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Providers.Jobs
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         [Inject]
-        public RenameSeasonJob(MediaFileProvider mediaFileProvider, DiskScanProvider diskScanProvider)
+        public RenameSeriesJob(MediaFileProvider mediaFileProvider, DiskScanProvider diskScanProvider)
         {
             _mediaFileProvider = mediaFileProvider;
             _diskScanProvider = diskScanProvider;
@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Providers.Jobs
 
         public string Name
         {
-            get { return "Rename Season"; }
+            get { return "Rename Series"; }
         }
 
         public int DefaultInterval
@@ -36,15 +36,12 @@ namespace NzbDrone.Core.Providers.Jobs
             if (targetId <= 0)
                 throw new ArgumentOutOfRangeException("targetId");
 
-            if (secondaryTargetId <= 0)
-                throw new ArgumentOutOfRangeException("secondaryTargetId");
-
-            Logger.Debug("Getting episodes from database for series: {0} and season: {1}", targetId, secondaryTargetId);
-            var episodeFiles = _mediaFileProvider.GetSeasonFiles(targetId, secondaryTargetId);
+            Logger.Debug("Getting episodes from database for series: {0}", targetId);
+            var episodeFiles = _mediaFileProvider.GetSeriesFiles(targetId);
 
             if (episodeFiles == null || episodeFiles.Count == 0)
             {
-                Logger.Warn("No episodes in database found for series: {0} and season: {1}.", targetId, secondaryTargetId);
+                Logger.Warn("No episodes in database found for series: {0}", targetId);
                 return;
             }
 
@@ -53,7 +50,7 @@ namespace NzbDrone.Core.Providers.Jobs
                 _diskScanProvider.MoveEpisodeFile(episodeFile);
             }
 
-            notification.CurrentMessage = String.Format("Season rename completed for Series: {0} Season: {1}", targetId, secondaryTargetId);
+            notification.CurrentMessage = String.Format("Series rename completed for Series: {0}", targetId);
         }
     }
 }

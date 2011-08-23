@@ -37,13 +37,5 @@ namespace NzbDrone.Web.Controllers
 
             return new JsonResult { Data = "ok", JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
-
-        public JsonResult RenameSeries(int seriesId)
-        {
-            //Syncs the episodes on disk for the specified series
-            //_jobProvider.QueueJob(typeof(UpdateInfoJob), seriesId);
-
-            return new JsonResult { Data = "ok", JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-        }
     }
 }

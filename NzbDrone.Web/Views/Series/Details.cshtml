@@ -86,7 +86,8 @@
         <li>@Html.ActionLink("Back to Series List", "Index", "Series")</li>
         <li>@Ajax.ActionLink("Scan For Episodes on Disk", "SyncEpisodesOnDisk", "Command", new { seriesId = Model.SeriesId }, null)</li>
         <li>@Ajax.ActionLink("Update Info", "UpdateInfo", "Command", new { seriesId = Model.SeriesId }, null)</li>
-        <li>@Ajax.ActionLink("Rename Series", "RenameSeries", "Command", new { seriesId = Model.SeriesId }, null)</li>
+        <li>@Ajax.ActionLink("Search for Series", "SearchSeries", "Episode", new { seriesId = Model.SeriesId }, null)</li>
+        <li>@Ajax.ActionLink("Rename Series", "RenameSeries", "Episode", new { seriesId = Model.SeriesId }, null)</li>
     </ul>
 }
 @section MainContent{
@@ -120,7 +121,7 @@
                 //columns.Bound(o => o.Ignored)
                 //    .Title("<img src='../../Content/Images/ignoredNeutral.png' class='ignoredEpisodesMaster ignoreEpisode ignoreSeason_" + season + "' title='Click to toggle season ignore status' />")
                 //    .ClientTemplate(
-                //        "<img src='../../Content/Images/ignoredNeutral.png' class='ignoreEpisode ignoreEpisode_" + season + " ignored' id='<#= EpisodeId #>' title='Click to toggle episode  ignore status' />")
+                //        "<img src='../../Content/Images/ignoredNeutral.png' class='ignoreEpisode ignoreEpisode_" + season + " ignored' id='<#= EpisodeId #>' title='Click to toggle episode ignore status' />")
                 //    .Width(20)
                 //    .HtmlAttributes(new { style = "text-align:center" });
 
