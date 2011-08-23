@@ -72,7 +72,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual string GetSceneName(int seriesId)
         {
-            var item = _database.SingleOrDefault<SceneMapping>("WHERE SeriesId = @0", seriesId);
+            var item = _database.FirstOrDefault<SceneMapping>("WHERE SeriesId = @0", seriesId);
 
             if (item == null)
                 return null;

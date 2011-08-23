@@ -102,5 +102,38 @@ namespace NzbDrone.Core.Test
             //Assert
             Assert.AreEqual(null, seriesId);
         }
+
+        [Test]
+        public void GetSceneName_multiple_clean_names()
+        {
+            //Test that ensures a series with clean names (office, officeus) can be looked up by seriesId
+
+            //Setup
+            var fakeMap = Builder<SceneMapping>.CreateNew()
+                .With(f => f.CleanTitle = "office")
+                .With(f => f.SeriesId = 12345)
+                .With(f => f.SceneName = "The Office")
+                .Build();
+
+            var fakeMap2 = Builder<SceneMapping>.CreateNew()
+                .With(f => f.CleanTitle = "officeus")
+                .With(f => f.SeriesId = 12345)
+                .With(f => f.SceneName = "The Office")
+                .Build();
+
+            var mocker = new AutoMoqer();
+
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            db.Insert(fakeMap);
+            db.Insert(fakeMap2);
+
+            //Act
+            var sceneName = mocker.Resolve<SceneMappingProvider>().GetSceneName(fakeMap.SeriesId);
+
+            //Assert
+            Assert.AreEqual(fakeMap.SceneName, sceneName);
+        }
     }
 }
