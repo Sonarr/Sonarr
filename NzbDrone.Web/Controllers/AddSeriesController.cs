@@ -166,7 +166,7 @@ namespace NzbDrone.Web.Controllers
                 return new JsonResult { Data = "failed" };
             }
 
-            return new JsonResult { };
+            return new JsonResult { Data = "ok" };
         }
 
         [HttpGet]

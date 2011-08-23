@@ -2,10 +2,16 @@
 @section TitleContent{
 Add Series
 }
+
+@section HeaderContent{
+    <script src="../../Scripts/addSeries.js" type="text/javascript"></script>
+}
+
 @section MainContent{
-    <h2>
-        Add New Series</h2>
-    @{ Html.RenderAction("AddNew", "AddSeries"); }
+    <h2>Add New Series</h2>
+    <div id="addNewSeries">
+        @{ Html.RenderAction("AddNew", "AddSeries"); }
+    </div>
     <h2>
         Add Series Already on Disk</h2>
     <h3>

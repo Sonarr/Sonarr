@@ -5,37 +5,3 @@
 </span><span id="rootDirs">
     @{Html.RenderAction("RootList");}
 </span>
-<script type="text/javascript">
-    jQuery(document).ready(function () {
-        $('#rootDirInput').watermark('Start typing to add new root folder...');
-
-        $('#rootDirs .actionButton img').live('click',
-            function (image) {
-                var path = $(image.target).attr('id');
-                $.post('@Url.Action("DeleteRootDir", "AddSeries")', { Path: path }, function () {
-                    refreshRoot();
-                });
-            });
-
-        $('#saveDir').click(saveRootDir);
-
-        function saveRootDir() {
-            var path = $("#rootDirInput").val();
-            if (path) {
-                $.post('@Url.Action("SaveRootDir", "AddSeries")', { Path: path }, function () {
-                    refreshRoot();
-                    $("#rootDirInput").val('');
-                });
-            }
-        }
-
-
-        function refreshRoot() {
-            $.get('@Url.Action("RootList", "AddSeries")', function (data) {
-                $('#rootDirs').html(data);
-            });
-            reloadExistingSeries();
-        }
-    });
-    
-</script>

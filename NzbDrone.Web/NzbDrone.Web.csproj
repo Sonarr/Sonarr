@@ -267,6 +267,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\AutoComplete.js" />
+    <Content Include="Scripts\addSeries.js" />
     <Content Include="Scripts\Plugins\jquery.gritter.js" />
     <Content Include="Scripts\seriesDetails.js" />
     <Content Include="Scripts\Plugins\jquery.livequery.js" />
