@@ -7,22 +7,7 @@
 
 <script src="../../Scripts/seriesDetails.js" type="text/javascript"></script>
 
-<style>
-    .ignoreEpisode
-    {
-        width: 18px;
-        height: 18px;
-        padding-bottom: -6px;
-    }
-    
-    .ignoredEpisodesMaster
-    {
-        width: 18px;
-        height: 18px;
-        padding-left: 18px;
-        padding-right: -18px;
-    }
-    
+<style>   
     .seasonToggleTopGroup
     {
         overflow: hidden;
@@ -51,12 +36,48 @@
         padding-left: 0px;
         padding-right: 0px;
         margin-bottom: -4px;
+        border-style: none;
     }
 
-    .statusImage
+    .statusImage, .searchImage, .renameImage, .ignoreEpisode, .ignoreEpisodesMaster
     {
         width: 18px;
         height: 18px;
+        padding: 1px;
+        margin: 2px;
+        border-width: 1px;
+        border-style: dashed;
+        border-color: lightgray;
+    }
+    
+    .searchImage:hover, .renameImage:hover, .ignoreEpisode:hover, .ignoreEpisodesMaster:hover
+    {
+        background-color: #065EFE;
+    }
+    
+    .t-grid td
+    {
+        line-height: 0.6em;
+    }
+    
+    .t-grid .t-header
+    {
+        line-height: 1.8em;
+    }
+    
+    .t-grid-header .t-header .t-link
+    {
+        padding: 0.3em 0.9em 1.0em 0.6em;
+    }
+    
+    .t-grid .t-alt
+    {
+        /*background: #E5ECF9;*/
+    }
+    
+    .t-grid .t-detail-cell
+    {
+        line-height: 1.5em;
     }
 </style>
 
@@ -96,26 +117,32 @@
             .TableHtmlAttributes(new { @class = "Grid" })
             .Columns(columns =>
             {
-                columns.Bound(o => o.Ignored)
-                    .Title("<img src='../../Content/Images/ignoredNeutral.png' class='ignoredEpisodesMaster ignoreEpisode ignoreSeason_" + season + "' title='Click to toggle season ignore status' />")
-                    .ClientTemplate(
-                        "<img src='../../Content/Images/ignoredNeutral.png' class='ignoreEpisode ignoreEpisode_" + season + " ignored' id='<#= EpisodeId #>' title='Click to toggle episode  ignore status' />")
-                    .Width(20)
-                    .HtmlAttributes(new { style = "text-align:center" });
+                //columns.Bound(o => o.Ignored)
+                //    .Title("<img src='../../Content/Images/ignoredNeutral.png' class='ignoredEpisodesMaster ignoreEpisode ignoreSeason_" + season + "' title='Click to toggle season ignore status' />")
+                //    .ClientTemplate(
+                //        "<img src='../../Content/Images/ignoredNeutral.png' class='ignoreEpisode ignoreEpisode_" + season + " ignored' id='<#= EpisodeId #>' title='Click to toggle episode  ignore status' />")
+                //    .Width(20)
+                //    .HtmlAttributes(new { style = "text-align:center" });
 
                 columns.Bound(c => c.EpisodeNumber).Width(0).Title("Episode");
                 columns.Bound(c => c.Title).Title("Title");
                 columns.Bound(c => c.AirDate).Width(0);
                 columns.Bound(c => c.Quality).Width(0);
                 columns.Bound(c => c.Status)
-                    .ClientTemplate("<img src='../../Content/Images/<#= Status #>.png' alt='<#= Status #>' title='<#= Status #>' class='statusImage' />")
-                    .Width(20)
-                    .HtmlAttributes(new { style = "text-align:center" });
-                columns.Bound(o => o.EpisodeId).Title("")
-                    .ClientTemplate("<a href=\"../Episode/Season?episodeId=<#= EpisodeId #>\" onclick=\"searchForEpisode('<#= EpisodeId #>'); return false;\">Search</a>"
-	                                + " | " +
-	                                "<a href=\"../Episode/Rename?episodeFileId=<#= EpisodeId #>\" onclick=\"renameEpisode('<#= EpisodeFileId #>'); return false;\">Rename</a>"
-                                    );
+                    .Title("<img src='../../Content/Images/ignoredNeutral.png' class='ignoredEpisodesMaster ignoreEpisode ignoreSeason_" + season + "' title='Click to toggle season ignore status' />" +
+                           "<img src='../../Content/Images/Missing.png' alt='Status' title='Season Status' class='statusImage statusImageMaster' />" +
+                           "<a href=\"../Episode/SearchSeason?seriesId=" + @seriesId + "&seasonNumber=" + @season + "\" onclick=\"searchSeason(" + @seriesId + ", "+ @season + "); return false;\"><img src='../../Content/Images/Search.png' alt='Search' title='Search for all episodes in this season' class='searchImage searchImageMaster' /></a>" +
+                           "<a href=\"../Episode/RenameSeason?seriesId=" + @seriesId + "&seasonNumber=" + @season + "\" onclick=\"renameSeason(" + @seriesId + ", " + @season + "); return false;\"><img src='../../Content/Images/Rename.png' alt='Rename' title='Rename all episodes in this season' class=renameImage renameImageMaster' /></a>")
+                    .ClientTemplate("<img src='../../Content/Images/ignoredNeutral.png' class='ignoreEpisode ignoreEpisode_" + season + " ignored' id='<#= EpisodeId #>' title='Click to toggle episode  ignore status' />" +
+                                    "<img src='../../Content/Images/<#= Status #>.png' alt='<#= Status #>' title='<#= Status #>' class='statusImage status-<#= Status #>' />" +
+                                    "<a href=\"../Episode/Season?episodeId=<#= EpisodeId #>\" onclick=\"searchForEpisode('<#= EpisodeId #>'); return false;\"><img src='../../Content/Images/Search.png' alt='Search' title='Search for episode' class='searchImage' /></a>" +
+                                    "<a href=\"../Episode/Rename?episodeFileId=<#= EpisodeId #>\" onclick=\"renameEpisode('<#= EpisodeFileId #>'); return false;\"><img src='../../Content/Images/Rename.png' alt='Rename' title='Rename episode' class='renameImage' />")
+                    .Width(80);
+                //columns.Bound(o => o.EpisodeId).Title("")
+                //    .ClientTemplate("<a href=\"../Episode/Season?episodeId=<#= EpisodeId #>\" onclick=\"searchForEpisode('<#= EpisodeId #>'); return false;\">Search</a>"
+                //                    + " | " +
+                //                    "<a href=\"../Episode/Rename?episodeFileId=<#= EpisodeId #>\" onclick=\"renameEpisode('<#= EpisodeFileId #>'); return false;\">Rename</a>"
+                //                    );
             })
             .DetailView(detailView => detailView.ClientTemplate("<div><#= Overview #> </br><#= Path #> </div>"))
             .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.EpisodeNumber).Descending()).Enabled(false))
@@ -124,12 +151,12 @@
                 d =>
                 d.Ajax().Select("_AjaxSeasonGrid", "Series",
                                new RouteValueDictionary { { "seriesId", Model.SeriesId }, { "seasonNumber", season } }))
-            .ToolBar(toolbar => toolbar.Template(@<text>
+            @*.ToolBar(toolbar => toolbar.Template(@<text>
                                                     <ul class="sub-menu">
                                                         <li><a href="../Episode/SearchSeason?seriesId=@seriesId&seasonNumber=@season" onclick="searchSeason('@seriesId', @season); return false;">Search for Season</a></li>
                                                         <li><a href="../Episode/RenameSeason?seriesId=@seriesId&seasonNumber=@season" onclick="renameSeason('@seriesId', @season); return false;">Rename Season</a></li>
                                                     </ul>
-                                                  </text>))
+                                                  </text>))*@
             .ClientEvents(clientEvents =>
             {
                 clientEvents.OnRowDataBound("grid_rowBound");

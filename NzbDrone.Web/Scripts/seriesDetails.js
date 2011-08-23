@@ -1,5 +1,9 @@
 ﻿var notIgnoredImage = '../../Content/Images/notIgnored.png';
 var ignoredImage = '../../Content/Images/ignored.png';
+var notAiredImage = '../../Content/Images/NotAired.png';
+var readyImage = '../../Content/Images/Ready.png';
+var downloadingImage = '../../Content/Images/Downloading.png';
+
 var seriesId = 0;
 var saveSeasonIgnoreUrl = '../Series/SaveSeasonIgnore';
 var saveEpisodeIgnoreUrl = '../Series/SaveEpisodeIgnore';
@@ -64,6 +68,8 @@ function toggleChildren(seasonNumber, ignored) {
 }
 
 function toggleMaster(seasonNumber) {
+    //Toggles all master toggles when the childen changes or the grid is loaded
+    
     var ignoreEpisodes = $('.ignoreEpisode_' + seasonNumber);
     var ignoredCount = ignoreEpisodes.filter('.ignored').length;
     var masters = $('.ignoreSeason_' + seasonNumber);
@@ -82,6 +88,7 @@ function toggleMaster(seasonNumber) {
 }
 
 function toggleMasters(seasonNumber, ignored) {
+    //Toggles the other master(s) to match the one that was just changed
     var masters = $('.ignoreSeason_' + seasonNumber);
 
     if (ignored) {
@@ -125,6 +132,7 @@ function grid_dataBound(e) {
     var seasonNumber = id.replace('seasons_', '');
 
     toggleMaster(seasonNumber);
+    setMasterStatus(this);
 }
 
 //Episode Ignore Saving
@@ -183,4 +191,33 @@ function searchSeason(seriesId, seasonNumber) {
             alert("Sorry! We could search for series: " + seriesId + " season: " + seasonNumber + " at this time. " + error);
         }
     });
+}
+
+//Set master status to match children
+function setMasterStatus(grid) {
+    //Get children of this grid
+    var masterStatus = $(grid).find('.statusImageMaster');
+    var statuses = $(grid).find('.statusImage').filter(':not(.statusImageMaster)');
+    var episodeCount = statuses.length;
+    
+    //Get missing count
+    if (statuses.filter('.status-Missing').length == episodeCount) {
+        //Leave as is (default is missing)
+        return;
+    }
+
+    if (statuses.filter('.status-NotAired').length == episodeCount) {
+        masterStatus.attr('src', notAiredImage);
+        return;
+    }
+
+    if (statuses.filter('.status-Ready').length == episodeCount) {
+        masterStatus.attr('src', readyImage);
+        return;
+    }
+
+    if (statuses.filter('.status-Downloading').length == episodeCount) {
+        masterStatus.attr('src', downloadingImage);
+        return;
+    }
 }

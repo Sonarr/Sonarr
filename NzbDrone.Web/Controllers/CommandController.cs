@@ -19,7 +19,7 @@ namespace NzbDrone.Web.Controllers
         public JsonResult RssSync()
         {
             _jobProvider.QueueJob(typeof(RssSyncJob));
-            return new JsonResult { Data = "ok" };
+            return new JsonResult { Data = "ok", JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         public JsonResult SyncEpisodesOnDisk(int seriesId)
@@ -27,7 +27,7 @@ namespace NzbDrone.Web.Controllers
             //Syncs the episodes on disk for the specified series
             _jobProvider.QueueJob(typeof(DiskScanJob), seriesId);
 
-            return new JsonResult { Data = "ok" };
+            return new JsonResult { Data = "ok", JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         public JsonResult UpdateInfo(int seriesId)
@@ -35,7 +35,7 @@ namespace NzbDrone.Web.Controllers
             //Syncs the episodes on disk for the specified series
             _jobProvider.QueueJob(typeof(UpdateInfoJob), seriesId);
 
-            return new JsonResult { Data = "ok" };
+            return new JsonResult { Data = "ok", JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         public JsonResult RenameSeries(int seriesId)
@@ -43,7 +43,7 @@ namespace NzbDrone.Web.Controllers
             //Syncs the episodes on disk for the specified series
             //_jobProvider.QueueJob(typeof(UpdateInfoJob), seriesId);
 
-            return new JsonResult { Data = "ok" };
+            return new JsonResult { Data = "ok", JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
     }
 }

@@ -142,6 +142,8 @@
     <Content Include="Content\Images\Missing.png" />
     <Content Include="Content\Images\NotAired.png" />
     <Content Include="Content\Images\Ready.png" />
+    <Content Include="Content\Images\Rename.png" />
+    <Content Include="Content\Images\Search.png" />
     <Content Include="Content\Images\success.png" />
     <Content Include="Content\jquery.gritter.css" />
     <Content Include="Content\Menu.css" />
