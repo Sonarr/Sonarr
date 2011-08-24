@@ -187,7 +187,14 @@ namespace NzbDrone.Core.Providers.Jobs
             }
             else
             {
-                Logger.Error("Execution lock has fucked up. Thread still active. Ignoring request.");
+                var messge = "Job Thread is null";
+
+                if (_jobThread != null)
+                {
+                    messge = "Job Thread State: " + _jobThread.ThreadState;
+                }
+
+                Logger.Error("Execution lock has fucked up. {0}. Ignoring request.", messge);
             }
 
         }
