@@ -56,12 +56,13 @@ namespace NzbDrone.Web.Controllers
 
         [AcceptVerbs(HttpVerbs.Post)]
         [GridAction]
-        public ActionResult _SaveAjaxSeriesEditing(int id, string path, bool monitored, bool seasonFolder, int qualityProfileId, List<SeasonEditModel> seasonEditor)
+        public ActionResult _SaveAjaxSeriesEditing(int id, string path, bool monitored, bool seasonFolder, int qualityProfileId)
         {
             var oldSeries = _seriesProvider.GetSeries(id);
             oldSeries.Monitored = monitored;
             oldSeries.SeasonFolder = seasonFolder;
             oldSeries.QualityProfileId = qualityProfileId;
+            oldSeries.Path = path;
 
             _seriesProvider.UpdateSeries(oldSeries);
 
