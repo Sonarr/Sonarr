@@ -82,7 +82,6 @@ namespace NzbDrone.Core.Providers
             return importedFiles;
         }
 
-
         public virtual EpisodeFile ImportFile(Series series, string filePath)
         {
             Logger.Trace("Importing file to database [{0}]", filePath);
@@ -114,13 +113,22 @@ namespace NzbDrone.Core.Providers
 
             if (episodes.Count <= 0)
             {
-                Logger.Debug("Can't find any matching episodes in the database. skipping. {0}", filePath);
+                Logger.Debug("Can't find any matching episodes in the database. Skipping {0}", filePath);
                 return null;
             }
 
-            if (episodes.Any(e => e.EpisodeFile != null && e.EpisodeFile.QualityWrapper > parseResult.Quality))
+            //Make sure this file is an upgrade for ALL episodes already on disk
+            if (episodes.All(e => e.EpisodeFile == null || e.EpisodeFile.QualityWrapper <= parseResult.Quality))
             {
-                Logger.Trace("File with better quality is already attached. skipping {0}", filePath);
+                Logger.Debug("Deleting the existing file(s) on disk to upgrade to: {0}", filePath);
+                //Do the delete for files where there is already an episode on disk
+                episodes.Where(e => e.EpisodeFile != null).Select(e => e.EpisodeFile.Path).Distinct().ToList().ForEach(p => _diskProvider.DeleteFile(p));
+            }
+
+            else
+            {
+                //Skip this file because its not an upgrade
+                Logger.Trace("This file isn't an upgrade for all episodes. Skipping {0}", filePath);
                 return null;
             }
 

@@ -73,6 +73,12 @@ namespace NzbDrone.Core.Providers.Jobs
                         continue;
                     }
 
+                    if (subfolderInfo.Name.StartsWith("_NzbDrone_", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        Logger.Debug("Folder [{0}] is marked as already processedby NzbDrone. skipping.", subfolder);
+                        continue;
+                    }
+
                     //Parse the Folder name
                     var seriesName = Parser.ParseSeriesName(subfolderInfo.Name);
                     var series = _seriesProvider.FindSeries(seriesName);
@@ -88,10 +94,13 @@ namespace NzbDrone.Core.Providers.Jobs
 
                     //Delete the folder only if folder is small enough
                     if (_diskProvider.GetDirectorySize(subfolder) < 10.Megabytes())
-                    {
                         _diskProvider.DeleteFolder(subfolder, true);
-                    }
+
+                    //Otherwise rename the folder to say it was already processed once by NzbDrone so it will not be continually processed
+                    else
+                        _diskProvider.MoveDirectory(subfolderInfo.FullName, Path.Combine(subfolderInfo.Parent.FullName, "_NzbDrone_" + subfolderInfo.Name));
                 }
+
                 catch (Exception e)
                 {
                     Logger.ErrorException("An error has occurred while importing " + subfolder, e);
