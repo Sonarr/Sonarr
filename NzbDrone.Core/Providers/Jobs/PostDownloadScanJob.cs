@@ -98,7 +98,7 @@ namespace NzbDrone.Core.Providers.Jobs
 
                     //Otherwise rename the folder to say it was already processed once by NzbDrone so it will not be continually processed
                     else
-                        _diskProvider.MoveDirectory(subfolderInfo.FullName, Path.Combine(subfolderInfo.Parent.FullName, "_NzbDrone_" + subfolderInfo.Name));
+                        _diskProvider.MoveDirectory(subfolderInfo.FullName,Path.Combine(subfolderInfo.Parent.FullName, "_NzbDrone_" + subfolderInfo.Name));
                 }
 
                 catch (Exception e)

@@ -54,7 +54,7 @@
         <label class="labelClass">@Html.LabelFor(m => m.SabTvCategory)
         <span class="small">@Html.DescriptionFor(m => m.SabTvCategory)</span>
         </label>
-        @Html.TextBoxFor(m => m.SabTvCategory, new { @class = "inputClass" })
+        @Html.DropDownListFor(m => m.SabTvCategory, Model.SabTvCategorySelectList, new { @class = "inputClass selectClass" })
 
         <label class="labelClass">@Html.LabelFor(m => m.SabTvPriority)
         <span class="small">@Html.DescriptionFor(m => m.SabTvPriority)</span>
@@ -96,5 +96,44 @@
                 $('#SabApiKey').val(data.ApiKey);
             }
         }
+        var sabCategoryUrl = '../Command/GetSabnzbdCategories';
+
+        $('#SabTvCategory').focus(function () {
+            var host = $('#SabHost').val();
+            var port = $('#SabPort').val();
+            var apiKey = $('#SabApiKey').val();
+            var username = $('#SabUsername').val();
+            var password = $('#SabPassword').val();
+
+            $.ajax({
+                type: "POST",
+                url: sabCategoryUrl,
+                data: jQuery.param({ host: host, port: port, apiKey: apiKey, username: username, password: password }),
+                error: function (req, status, error) {
+                    $.each($('#SabTvCategory option'), function () {
+                        $(this).remove();
+                    });
+
+                    $('#SabTvCategory').append($('<option />').val('tv').text('Please check your SABnzbd Settings'));
+                },
+                success: function (data, textStatus, jqXHR) {
+                    //Get the current value
+                    var currentlySelected = $('#SabTvCategory').val();
+
+                    //Remove all existing options
+                    $.each($('#SabTvCategory option'), function () {
+                        $(this).remove();
+                    });
+
+                    //Add the new ones
+                    $.each(data.categories, function () {
+                        $('#SabTvCategory').append($('<option />').val(this.toString()).text(this.toString()));
+                    });
+
+                    //Attempt to reset to the preiously selected value (change to lower-case)
+                    $("#SabTvCategory").val(currentlySelected.toLowerCase());
+                }
+            });
+        });
     </script>
 }

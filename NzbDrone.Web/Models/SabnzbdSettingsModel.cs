@@ -57,6 +57,6 @@ namespace NzbDrone.Web.Models
         [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string SabDropDirectory { get; set; }
 
-        public SelectList SabDropDirectorySelectList { get; set; }
+        public SelectList SabTvCategorySelectList { get; set; }
     }
 }

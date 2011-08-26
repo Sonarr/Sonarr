@@ -292,7 +292,6 @@ namespace NzbDrone.Core.Test
             Assert.AreEqual(excpected, actual);
         }
 
-
         [Test]
         [Explicit]
         public void AddNewzbingByUrlSuccess()
@@ -334,6 +333,68 @@ namespace NzbDrone.Core.Test
 
             //Assert
             result.Should().BeTrue();
+        }
+
+        [Test]
+        public void Get_Categories_Success_Passed_Values()
+        {
+            //Setup
+            const string host = "192.168.5.55";
+            const int port = 2222;
+            const string apikey = "5c770e3197e4fe763423ee7c392c25d1";
+            const string username = "admin";
+            const string password = "pass";
+
+            var mocker = new AutoMoqer();
+
+            mocker.GetMock<HttpProvider>(MockBehavior.Strict)
+                .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=get_cats&output=json&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
+                .Returns(File.ReadAllText(@".\Files\Categories_json.txt"));
+
+            //Act
+            var result = mocker.Resolve<SabProvider>().GetCategories(host, port, apikey, username, password);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.categories.Should().HaveCount(c => c > 0);
+            result.categories.Should().NotContain("*");
+        }
+
+        [Test]
+        public void Get_Categories_Success_Config_Values()
+        {
+            //Setup
+            const string host = "192.168.5.55";
+            const int port = 2222;
+            const string apikey = "5c770e3197e4fe763423ee7c392c25d1";
+            const string username = "admin";
+            const string password = "pass";
+
+            var mocker = new AutoMoqer();
+
+            var fakeConfig = mocker.GetMock<ConfigProvider>();
+            fakeConfig.SetupGet(c => c.SabHost)
+                .Returns(host);
+            fakeConfig.SetupGet(c => c.SabPort)
+                .Returns(port);
+            fakeConfig.SetupGet(c => c.SabApiKey)
+                .Returns(apikey);
+            fakeConfig.SetupGet(c => c.SabUsername)
+                .Returns(username);
+            fakeConfig.SetupGet(c => c.SabPassword)
+                .Returns(password);
+
+            mocker.GetMock<HttpProvider>(MockBehavior.Strict)
+                .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=get_cats&output=json&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
+                .Returns(File.ReadAllText(@".\Files\Categories_json.txt"));
+
+            //Act
+            var result = mocker.Resolve<SabProvider>().GetCategories();
+
+            //Assert
+            result.Should().NotBeNull();
+            result.categories.Should().HaveCount(c => c > 0);
+            result.categories.Should().NotContain("*");
         }
     }
 }

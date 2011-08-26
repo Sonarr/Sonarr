@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
+using System.Web.Script.Serialization;
 using System.Xml.Linq;
 using Ninject;
 using NLog;
@@ -102,17 +103,6 @@ namespace NzbDrone.Core.Providers
             return false; //Not in Queue
         }
 
-        private string GetSabRequest(string action)
-        {
-            return string.Format(@"http://{0}:{1}/api?{2}&apikey={3}&ma_username={4}&ma_password={5}",
-                                 _configProvider.SabHost,
-                                 _configProvider.SabPort,
-                                 action,
-                                 _configProvider.SabApiKey,
-                                 _configProvider.SabUsername,
-                                 _configProvider.SabPassword);
-        }
-
         public virtual String GetSabTitle(EpisodeParseResult parseResult)
         {
             //Show Name - 1x01-1x02 - Episode Name
@@ -134,6 +124,52 @@ namespace NzbDrone.Core.Providers
             }
 
             return result;
+        }
+
+        public virtual SabnzbdCategoryModel GetCategories(string host = null, int port = 0, string apiKey = null, string username = null, string password = null)
+        {
+            //Get saved values if any of these are defaults
+            if (host == null)
+                host = _configProvider.SabHost;
+
+            if (port == 0)
+                port = _configProvider.SabPort;
+
+            if (apiKey == null)
+                apiKey = _configProvider.SabApiKey;
+
+            if (username == null)
+                username = _configProvider.SabUsername;
+
+            if (password == null)
+                password = _configProvider.SabPassword;
+
+            const string action = "mode=get_cats&output=json";
+
+            var command = string.Format(@"http://{0}:{1}/api?{2}&apikey={3}&ma_username={4}&ma_password={5}",
+                                 host, port, action, apiKey, username, password);
+
+            var response = _httpProvider.DownloadString(command);
+
+            if (String.IsNullOrWhiteSpace(response))
+                return new SabnzbdCategoryModel{categories = new List<string>()};
+
+            var deserialized =  new JavaScriptSerializer().Deserialize<SabnzbdCategoryModel>(response);
+
+            deserialized.categories.Remove("*");
+
+            return deserialized;
+        }
+
+        private string GetSabRequest(string action)
+        {
+            return string.Format(@"http://{0}:{1}/api?{2}&apikey={3}&ma_username={4}&ma_password={5}",
+                                 _configProvider.SabHost,
+                                 _configProvider.SabPort,
+                                 action,
+                                 _configProvider.SabApiKey,
+                                 _configProvider.SabUsername,
+                                 _configProvider.SabPassword);
         }
     }
 }

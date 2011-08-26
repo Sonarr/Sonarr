@@ -80,8 +80,8 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult Sabnzbd()
         {
-            var sabDropDir = _configProvider.SabDropDirectory;
-            var selectList = new SelectList(new List<string> { sabDropDir }, sabDropDir);
+            var tvCategory = _configProvider.SabTvCategory;
+            var tvCategorySelectList = new SelectList(new[] { tvCategory });
 
             var model = new SabnzbdSettingsModel
                             {
@@ -92,8 +92,8 @@ namespace NzbDrone.Web.Controllers
                                 SabPassword = _configProvider.SabPassword,
                                 SabTvCategory = _configProvider.SabTvCategory,
                                 SabTvPriority = _configProvider.SabTvPriority,
-                                SabDropDirectory = sabDropDir,
-                                SabDropDirectorySelectList = selectList
+                                SabDropDirectory = _configProvider.SabDropDirectory,
+                                SabTvCategorySelectList = tvCategorySelectList
                             };
 
             return View(model);

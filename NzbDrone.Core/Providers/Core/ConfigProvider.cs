@@ -157,7 +157,7 @@ namespace NzbDrone.Core.Providers.Core
 
         public virtual String SabTvCategory
         {
-            get { return GetValue("SabTvCategory", "TV"); }
+            get { return GetValue("SabTvCategory", "tv"); }
 
             set { SetValue("SabTvCategory", value); }
         }

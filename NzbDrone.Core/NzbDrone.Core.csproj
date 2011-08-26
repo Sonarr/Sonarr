@@ -191,6 +191,7 @@
     <Compile Include="Model\JobQueueItem.cs" />
     <Compile Include="Model\LanguageType.cs" />
     <Compile Include="Model\Quality.cs" />
+    <Compile Include="Model\SabnzbdCategoryModel.cs" />
     <Compile Include="Model\SabnzbdInfoModel.cs" />
     <Compile Include="Model\Xbmc\ActionType.cs" />
     <Compile Include="Model\Xbmc\ActivePlayersResult.cs" />
