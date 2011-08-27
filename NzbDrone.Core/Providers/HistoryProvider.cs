@@ -63,5 +63,10 @@ namespace NzbDrone.Core.Providers
 
             return history.FirstOrDefault();
         }
+
+        public virtual void Delete(int historyId)
+        {
+            _database.Delete<History>(historyId);
+        }
     }
 }

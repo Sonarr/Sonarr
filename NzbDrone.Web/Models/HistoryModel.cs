@@ -16,5 +16,6 @@ namespace NzbDrone.Web.Models
         public DateTime Date { get; set; }
         public bool IsProper { get; set; }
         public string Indexer { get; set; }
+        public int EpisodeId { get; set; }
     }
 }

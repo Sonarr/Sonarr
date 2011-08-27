@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Mvc;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Providers.Jobs;
 using NzbDrone.Web.Models;
 using Telerik.Web.Mvc;
 
@@ -12,10 +13,12 @@ namespace NzbDrone.Web.Controllers
     public class HistoryController : Controller
     {
         private readonly HistoryProvider _historyProvider;
+        private readonly JobProvider _jobProvider;
 
-        public HistoryController(HistoryProvider historyProvider)
+        public HistoryController(HistoryProvider historyProvider, JobProvider jobProvider)
         {
             _historyProvider = historyProvider;
+            _jobProvider = jobProvider;
         }
 
         //
@@ -38,6 +41,27 @@ namespace NzbDrone.Web.Controllers
             return Json(new NotificationResult() { Title = "History Cleared" });
         }
 
+        [HttpPost]
+        public JsonResult Delete(int historyId)
+        {
+            //Delete the existing item from history
+            _historyProvider.Delete(historyId);
+
+            return Json(new NotificationResult() { Title = "History Item Deleted" });
+        }
+
+        [HttpPost]
+        public JsonResult Redownload(int historyId, int episodeId)
+        {
+            //Delete the existing item from history
+            _historyProvider.Delete(historyId);
+
+            //Queue a job to download the replacement episode
+            _jobProvider.QueueJob(typeof(EpisodeSearchJob), episodeId);
+
+            return Json(new NotificationResult() { Title = "Episode Redownload Started" });
+        }
+
         [GridAction]
         public ActionResult _AjaxBinding()
         {
@@ -53,7 +77,8 @@ namespace NzbDrone.Web.Controllers
                                                 Quality = h.Quality.ToString(),
                                                 IsProper = h.IsProper,
                                                 Date = h.Date,
-                                                Indexer = h.Indexer
+                                                Indexer = h.Indexer,
+                                                EpisodeId = h.EpisodeId
                                             });
 
             return View(new GridModel(history));
