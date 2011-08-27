@@ -163,49 +163,6 @@ namespace NzbDrone.Core
         }
 
         /// <summary>
-        ///   Parses a post title into season it contains
-        /// </summary>
-        /// <param name = "title">Title of the report</param>
-        /// <returns>Season information contained in the post</returns>
-        internal static SeasonParseResult ParseSeasonInfo(string title)
-        {
-            Logger.Trace("Parsing string '{0}'", title);
-
-            foreach (var regex in ReportTitleRegex)
-            {
-                var match = regex.Matches(title);
-
-                if (match.Count != 0)
-                {
-                    var seriesName = NormalizeTitle(match[0].Groups["title"].Value);
-                    int year;
-                    Int32.TryParse(match[0].Groups["year"].Value, out year);
-
-                    if (year < 1900 || year > DateTime.Now.Year + 1)
-                    {
-                        year = 0;
-                    }
-
-                    var seasonNumber = Convert.ToInt32(match[0].Groups["season"].Value);
-
-                    var result = new SeasonParseResult
-                                     {
-                                         SeriesTitle = seriesName,
-                                         SeasonNumber = seasonNumber,
-                                         Year = year,
-                                         Quality = ParseQuality(title)
-                                     };
-
-
-                    Logger.Trace("Season Parsed. {0}", result);
-                    return result;
-                }
-            }
-
-            return null; //Return null
-        }
-
-        /// <summary>
         ///   Parses a post title to find the series that relates to it
         /// </summary>
         /// <param name = "title">Title of the report</param>

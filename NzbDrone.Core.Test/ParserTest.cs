@@ -320,24 +320,19 @@ namespace NzbDrone.Core.Test
             Parser.NormalizePath(null);
         }
 
-        [TestCase("Hawaii Five 0 S01E19 720p WEB DL DD5 1 H 264 NT", "Hawaii Five", 1)]
-        [TestCase("Chuck.4x05.HDTV.XviD-LOL", "Chuck", 4)]
-        [TestCase("S03E09 WS PDTV XviD FUtV", "", 3)]
-        [TestCase("5x10 WS PDTV XviD FUtV", "", 5)]
+        [TestCase("Hawaii Five 0 S01 720p WEB DL DD5 1 H 264 NT", "Hawaii Five", 1)]
+        [TestCase("30 Rock S03 WS PDTV XviD FUtV", "30 Rock", 3)]
+        [TestCase("The Office Season 4 WS PDTV XviD FUtV", "The Office", 4)]
+        [TestCase("Eureka Season 1 720p WEB DL DD 5 1 h264 TjHD", "Eureka", 1)]
+        [TestCase("The Office Season4 WS PDTV XviD FUtV", "The Office", 4)]
+        [TestCase("Eureka S 01 720p WEB DL DD 5 1 h264 TjHD", "Eureka", 1)]
         public void parse_season_info(string postTitle, string seriesName, int seasonNumber)
         {
-            var result = Parser.ParseSeasonInfo(postTitle);
+            var result = Parser.ParseTitle(postTitle);
 
-            result.SeriesTitle.Should().Be(Parser.NormalizeTitle(seriesName));
+            result.CleanTitle.Should().Be(Parser.NormalizeTitle(seriesName));
             result.SeasonNumber.Should().Be(seasonNumber);
-        }
-
-        [Test]
-        public void parse_season_info_null()
-        {
-            var result = Parser.ParseSeasonInfo("This is not a valid post");
-
-            result.Should().BeNull();
+            result.FullSeason.Should().BeTrue();
         }
     }
 }

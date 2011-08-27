@@ -28,6 +28,8 @@ namespace NzbDrone.Core.Model
 
         public String Indexer { get; set; }
 
+        public bool FullSeason { get; set; }
+
         public override string ToString()
         {
             if (AirDate != null && EpisodeNumbers == null)
