@@ -67,7 +67,7 @@ namespace NzbDrone.Core.Test
                 .Setup(c => c.GetSeries(1)).Returns(series);
 
             mocker.GetMock<EpisodeProvider>()
-                .Setup(c => c.GetEpisodesBySeason(1, 1)).Returns(episodes);
+                .Setup(c => c.GetEpisodeNumbersBySeason(1, 1)).Returns(episodes.Select(e => e.EpisodeNumber).ToList());
 
             mocker.GetMock<SceneMappingProvider>()
                 .Setup(s => s.GetSceneName(1)).Returns(String.Empty);
@@ -128,16 +128,10 @@ namespace NzbDrone.Core.Test
                 .Setup(c => c.GetSeries(1)).Returns(series);
 
             mocker.GetMock<EpisodeProvider>()
-                .Setup(c => c.GetEpisodesBySeason(1, 1)).Returns(episodes);
+                .Setup(c => c.GetEpisodeNumbersBySeason(1, 1)).Returns(episodes.Select(e => e.EpisodeNumber).ToList());
 
             mocker.GetMock<SceneMappingProvider>()
                 .Setup(s => s.GetSceneName(1)).Returns(String.Empty);
-
-            //mocker.GetMock<InventoryProvider>()
-            //    .Setup(s => s.IsQualityNeeded(It.IsAny<EpisodeParseResult>())).Returns(true);
-
-            //mocker.GetMock<DownloadProvider>()
-            //    .Setup(s => s.DownloadReport(It.IsAny<EpisodeParseResult>())).Returns(true);
 
             //Act
             mocker.Resolve<SearchProvider>().SeasonSearch(notification, 1, 1);

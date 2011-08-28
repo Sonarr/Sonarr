@@ -33,6 +33,9 @@ namespace NzbDrone.Core.Test
             mocker.GetMock<EpisodeProvider>()
                 .Setup(c => c.GetSeasons(1)).Returns(seasons);
 
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(c => c.IsIgnored(It.IsAny<int>(), It.IsAny<int>())).Returns(false);
+
             mocker.GetMock<SeasonSearchJob>()
                 .Setup(c => c.Start(notification, 1, It.IsAny<int>())).Verifiable();
 
