@@ -5,6 +5,7 @@ using System.ServiceModel.Syndication;
 using System.Text.RegularExpressions;
 using Ninject;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Model.Search;
 using NzbDrone.Core.Providers.Core;
 
 namespace NzbDrone.Core.Providers.Indexer
@@ -38,10 +39,25 @@ namespace NzbDrone.Core.Providers.Indexer
             get { return new NetworkCredential(_configProvider.NewzbinUsername, _configProvider.NewzbinPassword); }
         }
 
-        protected override IList<string> GetSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber)
+        protected override IList<string> GetSearchUrls(SearchModel searchModel)
         {
+            if (searchModel.SearchType == SearchType.EpisodeSearch)
+            {
+                return new List<string>
+                           {
+                               String.Format(
+                                   @"http://www.newzbin.com/search/query/?q={0}+{1}x{2:00}&fpn=p&searchaction=Go&category=8&{3}",
+                                   searchModel.SeriesTitle, searchModel.SeasonNumber,
+                                   searchModel.EpisodeNumber, UrlParams)
+                           };
+            }
 
-            return new List<string> { String.Format(@"http://www.newzbin.com/search/query/?q={0}+{1}x{2:00}&fpn=p&searchaction=Go&category=8&{3}", GetQueryTitle(seriesTitle), seasonNumber, episodeNumber, UrlParams) };
+            return new List<string>
+                           {
+                               String.Format(
+                                   @"http://www.newzbin.com/search/query/?q={0}+Season+{1}&fpn=p&searchaction=Go&category=8&{2}",
+                                   searchModel.SeriesTitle, searchModel.SeasonNumber, UrlParams)
+                           };
         }
 
         public override string Name

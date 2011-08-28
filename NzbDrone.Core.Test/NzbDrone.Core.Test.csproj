@@ -88,8 +88,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SearchJobTest.cs" />
     <Compile Include="SeriesSearchJobTest.cs" />
-    <Compile Include="SeasonSearchJobTest.cs" />
+    <Compile Include="SearchProviderTest_Season.cs" />
     <Compile Include="EventClientProviderTest.cs" />
     <Compile Include="CentralDispatchTest.cs" />
     <Compile Include="XbmcProviderTest.cs" />
@@ -104,7 +105,7 @@
     <Compile Include="Framework\TestBase.cs" />
     <Compile Include="InventoryProvider_IsMonitoredTest.cs" />
     <Compile Include="DownloadProviderTest.cs" />
-    <Compile Include="EpisodeSearchJobTest.cs" />
+    <Compile Include="SearchProviderTest_Episode.cs" />
     <Compile Include="EpisodeStatusTest.cs" />
     <Compile Include="ImportNewSeriesJobTest.cs" />
     <Compile Include="DiskScanJobTest.cs" />

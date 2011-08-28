@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel.Syndication;
 using Ninject;
+using NzbDrone.Core.Model.Search;
 using NzbDrone.Core.Providers.Core;
 
 namespace NzbDrone.Core.Providers.Indexer
@@ -36,7 +37,7 @@ namespace NzbDrone.Core.Providers.Indexer
             return item.Links[0].Uri.ToString();
         }
 
-        protected override IList<string> GetSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber)
+        protected override IList<string> GetSearchUrls(SearchModel searchModel)
         {
             return new List<string>();
         }

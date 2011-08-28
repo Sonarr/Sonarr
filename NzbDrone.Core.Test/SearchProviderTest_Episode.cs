@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Test
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class EpisodeSearchJobTest : TestBase
+    public class SearchProviderTest_Episode : TestBase
     {
         [Test]
         public void processResults_ParseResult_should_return_after_match()
@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Test
 
 
             //Act
-            mocker.Resolve<EpisodeSearchJob>().ProcessResults(new ProgressNotification("Test"), episode, parseResults);
+            mocker.Resolve<SearchProvider>().ProcessEpisodeSearchResults(new ProgressNotification("Test"), episode, parseResults);
 
             //Assert
             mocker.VerifyAllMocks();
@@ -76,7 +76,7 @@ namespace NzbDrone.Core.Test
                 .Returns(true);
 
             //Act
-            mocker.Resolve<EpisodeSearchJob>().ProcessResults(new ProgressNotification("Test"), episode, parseResults);
+            mocker.Resolve<SearchProvider>().ProcessEpisodeSearchResults(new ProgressNotification("Test"), episode, parseResults);
 
             //Assert
             mocker.VerifyAllMocks();
@@ -109,7 +109,7 @@ namespace NzbDrone.Core.Test
 
 
             //Act
-            mocker.Resolve<EpisodeSearchJob>().ProcessResults(new ProgressNotification("Test"), episode, parseResults);
+            mocker.Resolve<SearchProvider>().ProcessEpisodeSearchResults(new ProgressNotification("Test"), episode, parseResults);
 
             //Assert
             mocker.VerifyAllMocks();
@@ -134,7 +134,7 @@ namespace NzbDrone.Core.Test
                 .Setup(c => c.IsQualityNeeded(It.IsAny<EpisodeParseResult>())).Returns(false);
 
             //Act
-            mocker.Resolve<EpisodeSearchJob>().ProcessResults(new ProgressNotification("Test"), episode, parseResults);
+            mocker.Resolve<SearchProvider>().ProcessEpisodeSearchResults(new ProgressNotification("Test"), episode, parseResults);
 
             //Assert
             mocker.VerifyAllMocks();
@@ -158,7 +158,7 @@ namespace NzbDrone.Core.Test
                 .Setup(c => c.IsQualityNeeded(It.IsAny<EpisodeParseResult>())).Throws(new Exception());
 
             //Act
-            mocker.Resolve<EpisodeSearchJob>().ProcessResults(new ProgressNotification("Test"), episode, parseResults);
+            mocker.Resolve<SearchProvider>().ProcessEpisodeSearchResults(new ProgressNotification("Test"), episode, parseResults);
 
             //Assert
             mocker.VerifyAllMocks();
@@ -185,7 +185,7 @@ namespace NzbDrone.Core.Test
                 .Setup(c => c.DownloadReport(It.IsAny<EpisodeParseResult>())).Throws(new Exception());
 
             //Act
-            mocker.Resolve<EpisodeSearchJob>().ProcessResults(new ProgressNotification("Test"), episode, parseResults);
+            mocker.Resolve<SearchProvider>().ProcessEpisodeSearchResults(new ProgressNotification("Test"), episode, parseResults);
 
             //Assert
             mocker.VerifyAllMocks();
@@ -200,25 +200,7 @@ namespace NzbDrone.Core.Test
 
 
 
-        [TestCase(0)]
-        [TestCase(-1)]
-        [TestCase(-100)]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void start_target_id_less_than_0_throws_exception(int target)
-        {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
-            mocker.Resolve<EpisodeSearchJob>().Start(new ProgressNotification("Test"), target, 0);
-        }
-
-        [TestCase(0)]
-        [TestCase(-1)]
-        [TestCase(-100)]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void start_secondary_target_id_less_than_0_throws_exception(int target)
-        {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
-            mocker.Resolve<SeasonSearchJob>().Start(new ProgressNotification("Test"), 0, target);
-        }
+        
 
         [Test]
         public void start_should_search_all_providers()
@@ -237,11 +219,9 @@ namespace NzbDrone.Core.Test
                 .Setup(c => c.GetEpisode(episode.EpisodeId))
                 .Returns(episode);
 
-
             var indexer1 = new Mock<IndexerBase>();
             indexer1.Setup(c => c.FetchEpisode(episode.Series.Title, episode.SeasonNumber, episode.EpisodeNumber))
                 .Returns(parseResults).Verifiable();
-
 
             var indexer2 = new Mock<IndexerBase>();
             indexer2.Setup(c => c.FetchEpisode(episode.Series.Title, episode.SeasonNumber, episode.EpisodeNumber))
@@ -260,7 +240,7 @@ namespace NzbDrone.Core.Test
                 .Setup(s => s.GetSceneName(It.IsAny<int>())).Returns("");
 
             //Act
-            mocker.Resolve<EpisodeSearchJob>().Start(new ProgressNotification("Test"), episode.EpisodeId, 0);
+            mocker.Resolve<SearchProvider>().EpisodeSearch(new ProgressNotification("Test"), episode.EpisodeId);
 
 
             //Assert
@@ -311,7 +291,7 @@ namespace NzbDrone.Core.Test
                 .Setup(s => s.GetSceneName(71256)).Returns("The Daily Show");
 
             //Act
-            mocker.Resolve<EpisodeSearchJob>().Start(new ProgressNotification("Test"), episode.EpisodeId, 0);
+            mocker.Resolve<SearchProvider>().EpisodeSearch(new ProgressNotification("Test"), episode.EpisodeId);
 
 
             //Assert
@@ -368,7 +348,7 @@ namespace NzbDrone.Core.Test
                 .Setup(s => s.GetSceneName(It.IsAny<int>())).Returns("");
 
             //Act
-            mocker.Resolve<EpisodeSearchJob>().Start(new ProgressNotification("Test"), episode.EpisodeId, 0);
+            mocker.Resolve<SearchProvider>().EpisodeSearch(new ProgressNotification("Test"), episode.EpisodeId);
 
 
             //Assert
@@ -394,7 +374,7 @@ namespace NzbDrone.Core.Test
                 .Returns<Episode>(null);
 
             //Act
-            mocker.Resolve<EpisodeSearchJob>().Start(new ProgressNotification("Test"), 12, 0);
+            mocker.Resolve<SearchProvider>().EpisodeSearch(new ProgressNotification("Test"), 12);
 
 
             //Assert

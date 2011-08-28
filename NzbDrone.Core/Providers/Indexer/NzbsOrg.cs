@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ServiceModel.Syndication;
 using Ninject;
+using NzbDrone.Core.Model.Search;
 using NzbDrone.Core.Providers.Core;
 
 namespace NzbDrone.Core.Providers.Indexer
@@ -36,13 +37,23 @@ namespace NzbDrone.Core.Providers.Indexer
             return item.Id;
         }
 
-        protected override IList<string> GetSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber)
+        protected override IList<string> GetSearchUrls(SearchModel searchModel)
         {
             var searchUrls = new List<String>();
 
             foreach (var url in Urls)
             {
-                searchUrls.Add(String.Format("{0}&action=search&q={1}+s{2:00}e{3:00}", url, GetQueryTitle(seriesTitle), seasonNumber, episodeNumber));
+                if (searchModel.SearchType == SearchType.EpisodeSearch)
+                {
+                    searchUrls.Add(String.Format("{0}&action=search&q={1}+s{2:00}e{3:00}", url,
+                                                 searchModel.SeriesTitle, searchModel.SeasonNumber, searchModel.EpisodeNumber));
+                }
+
+                else
+                {
+                    searchUrls.Add(String.Format("{0}&action=search&q={1}+Season", url,
+                                                 searchModel.SeriesTitle));
+                }
             }
 
             return searchUrls;

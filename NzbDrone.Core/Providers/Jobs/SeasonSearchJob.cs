@@ -10,15 +10,18 @@ namespace NzbDrone.Core.Providers.Jobs
 {
     public class SeasonSearchJob : IJob
     {
-        private readonly EpisodeProvider _episodeProvider;
+        private readonly SearchProvider _searchProvider;
         private readonly EpisodeSearchJob _episodeSearchJob;
+        private readonly EpisodeProvider _episodeProvider;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public SeasonSearchJob(EpisodeProvider episodeProvider, EpisodeSearchJob episodeSearchJob)
+        public SeasonSearchJob(SearchProvider searchProvider, EpisodeSearchJob episodeSearchJob,
+                                EpisodeProvider episodeProvider)
         {
-            _episodeProvider = episodeProvider;
+            _searchProvider = searchProvider;
             _episodeSearchJob = episodeSearchJob;
+            _episodeProvider = episodeProvider;
         }
 
         public string Name
@@ -39,6 +42,9 @@ namespace NzbDrone.Core.Providers.Jobs
             if (secondaryTargetId <= 0)
                 throw new ArgumentOutOfRangeException("secondaryTargetId");
 
+            if (_searchProvider.SeasonSearch(notification, targetId, secondaryTargetId))
+                return;
+
             Logger.Debug("Getting episodes from database for series: {0} and season: {1}", targetId, secondaryTargetId);
             var episodes = _episodeProvider.GetEpisodesBySeason(targetId, secondaryTargetId);
 
@@ -47,8 +53,6 @@ namespace NzbDrone.Core.Providers.Jobs
                 Logger.Warn("No episodes in database found for series: {0} and season: {1}.", targetId, secondaryTargetId);
                 return;
             }
-
-            //Todo: Search for a full season NZB before individual episodes
 
             foreach (var episode in episodes.Where(e => !e.Ignored))
             {

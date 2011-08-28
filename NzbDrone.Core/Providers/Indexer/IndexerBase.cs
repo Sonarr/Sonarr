@@ -8,6 +8,7 @@ using System.Web;
 using Ninject;
 using NLog;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Model.Search;
 using NzbDrone.Core.Providers.Core;
 
 namespace NzbDrone.Core.Providers.Indexer
@@ -57,11 +58,9 @@ namespace NzbDrone.Core.Providers.Indexer
         /// <summary>
         /// Gets the rss url for specific episode search
         /// </summary>
-        /// <param name="seriesTitle">The series title.</param>
-        /// <param name="seasonNumber">The season number.</param>
-        /// <param name="episodeNumber">The episode number.</param>
+        /// <param name="searchModel">SearchModel containing episode information</param>
         /// <returns></returns>
-        protected abstract IList<String> GetSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber);
+        protected abstract IList<String> GetSearchUrls(SearchModel searchModel);
 
         /// <summary>
         /// This method can be overwritten to provide indexer specific info parsing
@@ -99,6 +98,31 @@ namespace NzbDrone.Core.Providers.Indexer
             return result;
         }
 
+        public virtual IList<EpisodeParseResult> FetchSeason(string seriesTitle, int seasonNumber)
+        {
+            _logger.Debug("Searching {0} for {1}-Season {2}", Name, seriesTitle, seasonNumber);
+
+            var result = new List<EpisodeParseResult>();
+
+            var searchModel = new SearchModel
+            {
+                SeriesTitle = GetQueryTitle(seriesTitle),
+                SeasonNumber = seasonNumber,
+                SearchType = SearchType.SeasonSearch
+            };
+
+            var searchUrls = GetSearchUrls(searchModel);
+
+            foreach (var url in searchUrls)
+            {
+                result.AddRange(Fetch(url));
+            }
+
+            result = result.Where(e => e.CleanTitle == Parser.NormalizeTitle(seriesTitle)).ToList();
+
+            _logger.Info("Finished searching {0} for {1}-S{2}, Found {3}", Name, seriesTitle, seasonNumber, result.Count);
+            return result;
+        }
 
         public virtual IList<EpisodeParseResult> FetchEpisode(string seriesTitle, int seasonNumber, int episodeNumber)
         {
@@ -106,7 +130,15 @@ namespace NzbDrone.Core.Providers.Indexer
 
             var result = new List<EpisodeParseResult>();
 
-            var searchUrls = GetSearchUrls(GetQueryTitle(seriesTitle), seasonNumber, episodeNumber);
+            var searchModel = new SearchModel
+                                  {
+                                      SeriesTitle = GetQueryTitle(seriesTitle),
+                                      SeasonNumber = seasonNumber,
+                                      EpisodeNumber = episodeNumber,
+                                      SearchType = SearchType.EpisodeSearch
+                                  };
+
+            var searchUrls = GetSearchUrls(searchModel);
 
             foreach (var url in searchUrls)
             {

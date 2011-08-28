@@ -7,6 +7,7 @@ using AutoMoq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Model.Search;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.Indexer;
@@ -73,7 +74,7 @@ namespace NzbDrone.Core.Test
             get { return new[] { "www.google.com" }; }
         }
 
-        protected override IList<string> GetSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber)
+        protected override IList<string> GetSearchUrls(SearchModel searchModel)
         {
             throw new NotImplementedException();
         }
@@ -112,7 +113,7 @@ namespace NzbDrone.Core.Test
             get { return new[] { "http://rss.nzbmatrix.com/rss.php?cat=TV" }; }
         }
 
-        protected override IList<string> GetSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber)
+        protected override IList<string> GetSearchUrls(SearchModel searchModel)
         {
             throw new NotImplementedException();
         }
@@ -135,14 +136,12 @@ namespace NzbDrone.Core.Test
             get { return "Custom parser"; }
         }
 
-
-
         protected override string[] Urls
         {
             get { return new[] { "http://www.google.com" }; }
         }
 
-        protected override IList<string> GetSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber)
+        protected override IList<string> GetSearchUrls(SearchModel searchModel)
         {
             throw new NotImplementedException();
         }
