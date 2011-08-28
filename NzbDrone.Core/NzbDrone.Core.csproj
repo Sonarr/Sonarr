@@ -178,6 +178,7 @@
     <Compile Include="Datastore\CustomeMapper.cs" />
     <Compile Include="Datastore\Migrations\Migration20110726.cs" />
     <Compile Include="Datastore\Migrations\Migration20110707.cs" />
+    <Compile Include="Datastore\PetaDbProviderFactory.cs" />
     <Compile Include="Fluent.cs" />
     <Compile Include="Helpers\EpisodeSortingHelper.cs" />
     <Compile Include="Helpers\FileSizeFormatHelpercs.cs" />

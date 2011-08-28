@@ -282,7 +282,7 @@ namespace PetaPoco
         {
             _sharedConnection = connection;
             _connectionString = connection.ConnectionString;
-            _sharedConnectionDepth = 2;		// Prevent closing external connection
+
             _dbType = dbType;
             CommonConstruct();
         }
@@ -294,10 +294,11 @@ namespace PetaPoco
             CommonConstruct();
         }
 
-        public Database(string connectionString, DbProviderFactory provider)
+        public Database(string connectionString, DbProviderFactory provider, DBType dbType)
         {
             _connectionString = connectionString;
             _factory = provider;
+            _dbType = dbType;
             CommonConstruct();
         }
 
@@ -375,6 +376,7 @@ namespace PetaPoco
         {
             // Automatically close one open connection reference
             //  (Works with KeepConnectionAlive and manually opening a shared connection)
+            KeepConnectionAlive = false;
             CloseSharedConnection();
         }
 
@@ -384,18 +386,14 @@ namespace PetaPoco
         // Open a connection (can be nested)
         public void OpenSharedConnection()
         {
-            if (_sharedConnectionDepth == 0)
+            if (_sharedConnection == null || _sharedConnection.State == ConnectionState.Closed || _sharedConnection.State == ConnectionState.Broken)
             {
                 _sharedConnection = _factory.CreateConnection();
                 _sharedConnection.ConnectionString = _connectionString;
                 _sharedConnection.Open();
 
                 _sharedConnection = OnConnectionOpened(_sharedConnection);
-
-                if (KeepConnectionAlive)
-                    _sharedConnectionDepth++;		// Make sure you call Dispose
             }
-            _sharedConnectionDepth++;
         }
 
         /// <summary>
@@ -404,15 +402,11 @@ namespace PetaPoco
         // Close a previously opened connection
         public void CloseSharedConnection()
         {
-            if (_sharedConnectionDepth > 0)
+            if (!KeepConnectionAlive && _sharedConnection != null)
             {
-                _sharedConnectionDepth--;
-                if (_sharedConnectionDepth == 0)
-                {
-                    OnConnectionClosing(_sharedConnection);
-                    _sharedConnection.Dispose();
-                    _sharedConnection = null;
-                }
+                OnConnectionClosing(_sharedConnection);
+                _sharedConnection.Dispose();
+                _sharedConnection = null;
             }
         }
 
@@ -2530,7 +2524,6 @@ namespace PetaPoco
         DbProviderFactory _factory;
         IDbConnection _sharedConnection;
         IDbTransaction _transaction;
-        int _sharedConnectionDepth;
         int _transactionDepth;
         bool _transactionCancelled;
         string _lastSql;

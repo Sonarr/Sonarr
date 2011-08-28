@@ -45,19 +45,17 @@ namespace NzbDrone.Core.Datastore
         public static IDatabase GetPetaPocoDb(string connectionString, Boolean profiled = true)
         {
             MigrationsHelper.Run(connectionString, true);
-            var sqliteConnection = new SqlCeConnection(connectionString);
-            DbConnection connection = sqliteConnection;
 
-            if (profiled)
-            {
-                connection = ProfiledDbConnection.Get(sqliteConnection);
-            }
+            var factory = new PetaDbProviderFactory
+                              {
+                                  IsProfiled = profiled
+                              };
 
-            var db = new Database(connection, Database.DBType.SqlServerCE);
-            db.ForceDateTimesToUtc = false;
-
-            if (connection.State != ConnectionState.Open)
-                connection.Open();
+            var db = new Database(connectionString, factory, Database.DBType.SqlServerCE)
+                         {
+                             KeepConnectionAlive = true,
+                             ForceDateTimesToUtc = false,
+                         };
 
             return db;
         }
