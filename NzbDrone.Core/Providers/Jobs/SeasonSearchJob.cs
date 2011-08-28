@@ -24,6 +24,11 @@ namespace NzbDrone.Core.Providers.Jobs
             _episodeProvider = episodeProvider;
         }
 
+        public SeasonSearchJob()
+        {
+            
+        }
+
         public string Name
         {
             get { return "Season Search"; }
@@ -34,7 +39,7 @@ namespace NzbDrone.Core.Providers.Jobs
             get { return 0; }
         }
 
-        public void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
+        public virtual void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
         {
             if (targetId <= 0)
                 throw new ArgumentOutOfRangeException("targetId");

@@ -24,80 +24,46 @@ namespace NzbDrone.Core.Test
         [Test]
         public void SeriesSearch_success()
         {
-            var episodes = Builder<Episode>.CreateListOfSize(5)
-                .WhereAll()
-                .Have(e => e.SeriesId = 1)
-                .Have(e => e.Ignored = false)
-                .Build();
+            var seasons = new List<int> { 1, 2, 3, 4, 5 };
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
 
             var notification = new ProgressNotification("Series Search");
 
             mocker.GetMock<EpisodeProvider>()
-                .Setup(c => c.GetEpisodeBySeries(1)).Returns(episodes);
+                .Setup(c => c.GetSeasons(1)).Returns(seasons);
 
-            mocker.GetMock<EpisodeSearchJob>()
-                .Setup(c => c.Start(notification, It.IsAny<int>(), 0)).Verifiable();
+            mocker.GetMock<SeasonSearchJob>()
+                .Setup(c => c.Start(notification, 1, It.IsAny<int>())).Verifiable();
 
             //Act
             mocker.Resolve<SeriesSearchJob>().Start(notification, 1, 0);
 
             //Assert
             mocker.VerifyAllMocks();
-            mocker.GetMock<EpisodeSearchJob>().Verify(c => c.Start(notification, It.IsAny<int>(), 0),
-                                                       Times.Exactly(episodes.Count));
+            mocker.GetMock<SeasonSearchJob>().Verify(c => c.Start(notification, 1, It.IsAny<int>()),
+                                                       Times.Exactly(seasons.Count));
         }
 
         [Test]
-        public void SeriesSearch_no_episodes()
+        public void SeriesSearch_no_seasons()
         {
+            var seasons = new List<int>();
+
             var mocker = new AutoMoqer(MockBehavior.Strict);
+
             var notification = new ProgressNotification("Series Search");
-            List<Episode> nullList = null;
 
             mocker.GetMock<EpisodeProvider>()
-                .Setup(c => c.GetEpisodeBySeries(1)).Returns(nullList);
+                .Setup(c => c.GetSeasons(1)).Returns(seasons);
 
             //Act
             mocker.Resolve<SeriesSearchJob>().Start(notification, 1, 0);
 
             //Assert
             mocker.VerifyAllMocks();
-            mocker.GetMock<EpisodeSearchJob>().Verify(c => c.Start(notification, It.IsAny<int>(), 0),
+            mocker.GetMock<SeasonSearchJob>().Verify(c => c.Start(notification, 1, It.IsAny<int>()),
                                                        Times.Never());
-            ExceptionVerification.ExcpectedWarns(1);
-        }
-
-        [Test]
-        public void SeriesSearch_skip_ignored()
-        {
-            var episodes = Builder<Episode>.CreateListOfSize(10)
-                .WhereAll()
-                .Have(e => e.SeriesId = 1)
-                .WhereTheFirst(5)
-                .Have(e => e.Ignored = false)
-                .AndTheRemaining()
-                .Have(e => e.Ignored = true)
-                .Build();
-
-            var mocker = new AutoMoqer(MockBehavior.Strict);
-
-            var notification = new ProgressNotification("Series Search");
-
-            mocker.GetMock<EpisodeProvider>()
-                .Setup(c => c.GetEpisodeBySeries(1)).Returns(episodes);
-
-            mocker.GetMock<EpisodeSearchJob>()
-                .Setup(c => c.Start(notification, It.IsAny<int>(), 0)).Verifiable();
-
-            //Act
-            mocker.Resolve<SeriesSearchJob>().Start(notification, 1, 0);
-
-            //Assert
-            mocker.VerifyAllMocks();
-            mocker.GetMock<EpisodeSearchJob>().Verify(c => c.Start(notification, It.IsAny<int>(), 0),
-                                                       Times.Exactly(5));
         }
     }
 }

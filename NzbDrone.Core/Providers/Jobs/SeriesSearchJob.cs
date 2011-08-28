@@ -11,14 +11,14 @@ namespace NzbDrone.Core.Providers.Jobs
     public class SeriesSearchJob : IJob
     {
         private readonly EpisodeProvider _episodeProvider;
-        private readonly EpisodeSearchJob _episodeSearchJob;
+        private readonly SeasonSearchJob _seasonSearchJob;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public SeriesSearchJob(EpisodeProvider episodeProvider, EpisodeSearchJob episodeSearchJob)
+        public SeriesSearchJob(EpisodeProvider episodeProvider, SeasonSearchJob seasonSearchJob)
         {
             _episodeProvider = episodeProvider;
-            _episodeSearchJob = episodeSearchJob;
+            _seasonSearchJob = seasonSearchJob;
         }
 
         public string Name
@@ -36,20 +36,16 @@ namespace NzbDrone.Core.Providers.Jobs
             if (targetId <= 0)
                 throw new ArgumentOutOfRangeException("targetId");
 
-            Logger.Debug("Getting episodes from database for series: {0}.", targetId);
-            var episodes = _episodeProvider.GetEpisodeBySeries(targetId);
+            Logger.Debug("Getting seasons from database for series: {0}", targetId);
+            var seasons = _episodeProvider.GetSeasons(targetId);
 
-            if (episodes == null)
+            foreach (var season in seasons)
             {
-                Logger.Warn("No episodes in database found for series: {0}.", targetId);
-                return;
-            }
+                //Skip ignored seasons
+                if (_episodeProvider.IsIgnored(targetId, season))
+                    continue;
 
-            //Todo: Search for a full season NZB before individual episodes
-
-            foreach (var episode in episodes.Where(e => !e.Ignored))
-            {
-                _episodeSearchJob.Start(notification, episode.EpisodeId, 0);
+                _seasonSearchJob.Start(notification, targetId, season);
             }
         }
     }
