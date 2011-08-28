@@ -200,6 +200,7 @@
     <Compile Include="Model\Xbmc\ErrorResult.cs" />
     <Compile Include="Model\Xbmc\IconType.cs" />
     <Compile Include="Providers\Core\UdpProvider.cs" />
+    <Compile Include="Providers\Jobs\BacklogSearchJob.cs" />
     <Compile Include="Providers\Jobs\RenameSeriesJob.cs" />
     <Compile Include="Providers\Jobs\SeriesSearchJob.cs" />
     <Compile Include="Providers\Jobs\RenameSeasonJob.cs" />

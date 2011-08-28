@@ -296,6 +296,11 @@ namespace NzbDrone.Core.Providers
             return _database.Fetch<Int32>("SELECT DISTINCT SeasonNumber FROM Episodes WHERE SeriesId=@0", seriesId).OrderBy(c => c).ToList();
         }
 
+        public virtual IList<int> GetEpisodeNumbersBySeason(int seriesId, int seasonNumber)
+        {
+            return _database.Fetch<int>("SELECT EpisodeNumber FROM Episodes WHERE SeriesId=@0 AND SeasonNumber=@1", seriesId, seasonNumber).OrderBy(c => c).ToList();
+        }
+
         public virtual void SetSeasonIgnore(long seriesId, int seasonNumber, bool isIgnored)
         {
             Logger.Info("Setting ignore flag on Series:{0} Season:{1} to {2}", seriesId, seasonNumber, isIgnored);

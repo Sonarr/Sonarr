@@ -82,16 +82,13 @@ namespace NzbDrone.Core.Providers
                 return false;
 
             Logger.Debug("Getting episodes from database for series: {0} and season: {1}", seriesId, seasonNumber);
-            var episodes = _episodeProvider.GetEpisodesBySeason(seriesId, seasonNumber);
+            var episodeNumbers = _episodeProvider.GetEpisodeNumbersBySeason(seriesId, seasonNumber);
 
-            if (episodes == null)
+            if (episodeNumbers == null || episodeNumbers.Count == 0)
             {
                 Logger.Warn("No episodes in database found for series: {0} and season: {1}.", seriesId, seasonNumber);
                 return false;
             }
-
-            var episodeNumbers = new List<int>();
-            episodeNumbers.AddRange(episodes.Select(e => e.EpisodeNumber));
 
             notification.CurrentMessage = "Processing search results";
 
@@ -100,7 +97,7 @@ namespace NzbDrone.Core.Providers
             reportsToProcess.ForEach(c =>
             {
                 c.Series = series;
-                c.EpisodeNumbers = episodeNumbers;
+                c.EpisodeNumbers = episodeNumbers.ToList();
             });
 
             return ProcessSeasonSearchResults(notification, series, seasonNumber, reportsToProcess);

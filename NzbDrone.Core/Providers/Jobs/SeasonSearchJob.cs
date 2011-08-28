@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Providers.Jobs
             Logger.Debug("Getting episodes from database for series: {0} and season: {1}", targetId, secondaryTargetId);
             var episodes = _episodeProvider.GetEpisodesBySeason(targetId, secondaryTargetId);
 
-            if (episodes == null)
+            if (episodes == null || episodes.Count == 0)
             {
                 Logger.Warn("No episodes in database found for series: {0} and season: {1}.", targetId, secondaryTargetId);
                 return;
