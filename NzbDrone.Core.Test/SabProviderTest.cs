@@ -267,7 +267,7 @@ namespace NzbDrone.Core.Test
         [TestCase(1, new[] { 2, 4 }, "My Episode Title", QualityTypes.HDTV, false, "My Series Name - 1x2-1x4 - My Episode Title [HDTV]")]
         [TestCase(1, new[] { 2, 4 }, "My Episode Title", QualityTypes.HDTV, true, "My Series Name - 1x2-1x4 - My Episode Title [HDTV] [Proper]")]
         [TestCase(1, new[] { 2, 4 }, "", QualityTypes.HDTV, true, "My Series Name - 1x2-1x4 -  [HDTV] [Proper]")]
-        public void sab_title(int seasons, int[] episodes, string title, QualityTypes quality, bool proper, string excpected)
+        public void sab_title(int seasons, int[] episodes, string title, QualityTypes quality, bool proper, string expected)
         {
             var mocker = new AutoMoqer();
 
@@ -289,7 +289,34 @@ namespace NzbDrone.Core.Test
             var actual = mocker.Resolve<SabProvider>().GetSabTitle(parsResult);
 
             //Assert
-            Assert.AreEqual(excpected, actual);
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestCase(true, "My Series Name - Season 1 [Bluray720p] [Proper]")]
+        [TestCase(false, "My Series Name - Season 1 [Bluray720p]")]
+        public void sab_season_title(bool proper, string expected)
+        {
+            var mocker = new AutoMoqer();
+
+            var series = Builder<Series>.CreateNew()
+                .With(c => c.Path = @"d:\tv shows\My Series Name")
+                .Build();
+
+            var parsResult = new EpisodeParseResult()
+            {
+                AirDate = DateTime.Now,
+                Quality = new Quality(QualityTypes.Bluray720p, proper),
+                SeasonNumber = 1,
+                Series = series,
+                EpisodeTitle = "My Episode Title",
+                FullSeason = true
+            };
+
+            //Act
+            var actual = mocker.Resolve<SabProvider>().GetSabTitle(parsResult);
+
+            //Assert
+            Assert.AreEqual(expected, actual);
         }
 
         [Test]

@@ -105,6 +105,18 @@ namespace NzbDrone.Core.Providers
 
         public virtual String GetSabTitle(EpisodeParseResult parseResult)
         {
+            //Handle Full Naming
+            if (parseResult.FullSeason)
+            {
+                var seasonResult =  String.Format("{0} - Season {1} [{2}]", new DirectoryInfo(parseResult.Series.Path).Name,
+                                     parseResult.SeasonNumber, parseResult.Quality.QualityType);
+
+                if (parseResult.Quality.Proper)
+                    seasonResult += " [Proper]";
+
+                return seasonResult;
+            }
+
             //Show Name - 1x01-1x02 - Episode Name
             //Show Name - 1x01 - Episode Name
             var episodeString = new List<String>();
