@@ -342,7 +342,6 @@ namespace PetaPoco
         // Common initialization
         private void CommonConstruct()
         {
-            _transactionDepth = 0;
             ForceDateTimesToUtc = true;
             EnableAutoSelect = true;
 
@@ -407,6 +406,7 @@ namespace PetaPoco
                 OnConnectionClosing(_sharedConnection);
                 _sharedConnection.Dispose();
                 _sharedConnection = null;
+                _transaction = null;
             }
         }
 
@@ -441,15 +441,11 @@ namespace PetaPoco
         // Use `using (var scope=db.Transaction) { scope.Complete(); }` to ensure correct semantics
         public void BeginTransaction(IsolationLevel? isolationLevel)
         {
-            _transactionDepth++;
+            OpenSharedConnection();
+            _transaction = isolationLevel == null ? _sharedConnection.BeginTransaction() : _sharedConnection.BeginTransaction(isolationLevel.Value);
+            _transactionCancelled = false;
+            OnBeginTransaction();
 
-            if (_transactionDepth == 1)
-            {
-                OpenSharedConnection();
-                _transaction = isolationLevel == null ? _sharedConnection.BeginTransaction() : _sharedConnection.BeginTransaction(isolationLevel.Value);
-                _transactionCancelled = false;
-                OnBeginTransaction();
-            }
 
         }
 
@@ -473,15 +469,13 @@ namespace PetaPoco
         public void AbortTransaction()
         {
             _transactionCancelled = true;
-            if ((--_transactionDepth) == 0)
-                CleanupTransaction();
+            CleanupTransaction();
         }
 
         // Complete the transaction
         public void CompleteTransaction()
         {
-            if ((--_transactionDepth) == 0)
-                CleanupTransaction();
+            CleanupTransaction();
         }
 
         // Helper to handle named parameters from object properties
@@ -2524,7 +2518,6 @@ namespace PetaPoco
         DbProviderFactory _factory;
         IDbConnection _sharedConnection;
         IDbTransaction _transaction;
-        int _transactionDepth;
         bool _transactionCancelled;
         string _lastSql;
         object[] _lastArgs;
