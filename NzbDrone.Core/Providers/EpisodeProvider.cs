@@ -241,17 +241,8 @@ namespace NzbDrone.Core.Providers
                 }
             }
 
-            using (var tran = _database.GetTransaction())
-            {
-                newList.ForEach(AddEpisode);
-                updateList.ForEach(episode => _database.Update(episode));
-
-                //Shouldn't run if Database is a mock since transaction will be null
-                if (_database.GetType().Namespace != "Castle.Proxies" && tran != null)
-                {
-                    tran.Complete();
-                }
-            }
+            _database.InsertMany(newList);
+            _database.UpdateMany(updateList);
 
             Logger.Info("Finished episode refresh for series: {0}. Successful: {1} - Failed: {2} ",
                          tvDbSeriesInfo.SeriesName, successCount, failCount);
@@ -264,7 +255,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual bool IsIgnored(int seriesId, int seasonNumber)
         {
-            var episodes =_database.Fetch<Episode>(@"SELECT * FROM Episodes WHERE SeriesId=@0 AND SeasonNumber=@1", seriesId, seasonNumber);
+            var episodes = _database.Fetch<Episode>(@"SELECT * FROM Episodes WHERE SeriesId=@0 AND SeasonNumber=@1", seriesId, seasonNumber);
 
             if (episodes == null || episodes.Count == 0)
             {
@@ -276,10 +267,10 @@ namespace NzbDrone.Core.Providers
                     return false;
 
                 //else
-                var lastSeasonsEpisodes =_database.Fetch<Episode>(@"SELECT * FROM Episodes 
+                var lastSeasonsEpisodes = _database.Fetch<Episode>(@"SELECT * FROM Episodes 
                                                                      WHERE SeriesId=@0 AND SeasonNumber=@1", seriesId, seasonNumber - 1);
 
-                if (lastSeasonsEpisodes !=null && lastSeasonsEpisodes.Count > 0 && lastSeasonsEpisodes.Count == lastSeasonsEpisodes.Where(e => e.Ignored).Count())
+                if (lastSeasonsEpisodes != null && lastSeasonsEpisodes.Count > 0 && lastSeasonsEpisodes.Count == lastSeasonsEpisodes.Where(e => e.Ignored).Count())
                     return true;
 
                 return false;
@@ -309,7 +300,7 @@ namespace NzbDrone.Core.Providers
                                 WHERE SeriesId = @1 AND SeasonNumber = @2 AND Ignored = @3",
                 isIgnored, seriesId, seasonNumber, !isIgnored);
 
-                Logger.Info("Ignore flag for Series:{0} Season:{1} successfully set to {2}", seriesId, seasonNumber, isIgnored);
+            Logger.Info("Ignore flag for Series:{0} Season:{1} successfully set to {2}", seriesId, seasonNumber, isIgnored);
         }
 
         public virtual void SetEpisodeIgnore(int episodeId, bool isIgnored)

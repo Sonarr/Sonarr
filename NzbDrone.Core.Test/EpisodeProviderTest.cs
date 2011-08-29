@@ -388,8 +388,8 @@ namespace NzbDrone.Core.Test
             mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
 
             //Assert
-            mocker.GetMock<IDatabase>().Verify(c => c.Insert(It.IsAny<Object>()), Times.Never());
-            mocker.GetMock<IDatabase>().Verify(c => c.Update(It.IsAny<Object>()), Times.Exactly(tvdbSeries.Episodes.Count));
+            mocker.GetMock<IDatabase>().Verify(c => c.InsertMany(It.Is<IEnumerable<Episode>>(l => l.Count() == 0)), Times.Once());
+            mocker.GetMock<IDatabase>().Verify(c => c.UpdateMany(It.Is<IEnumerable<Episode>>(l => l.Count() == 5)), Times.Once());
             mocker.VerifyAllMocks();
         }
 
@@ -499,9 +499,8 @@ namespace NzbDrone.Core.Test
                  .Returns(currentEpisodes);
 
             mocker.GetMock<IDatabase>()
-                .Setup(c => c.Update(It.IsAny<Episode>()))
-                .Returns(1)
-                .Callback<Episode>(ep => updatedEpisodes.Add(ep));
+                .Setup(c => c.UpdateMany(It.IsAny<IEnumerable<Episode>>()))
+                .Callback<IEnumerable<Episode>>(ep => updatedEpisodes =ep.ToList());
 
             //Act
             mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
@@ -1175,7 +1174,7 @@ namespace NzbDrone.Core.Test
             db.InsertMany(specials);
 
             //Act
-            var missingFiles= mocker.Resolve<EpisodeProvider>().EpisodesWithoutFiles(false);
+            var missingFiles = mocker.Resolve<EpisodeProvider>().EpisodesWithoutFiles(false);
 
             //Assert
             missingFiles.Should().HaveCount(1);
@@ -1203,7 +1202,7 @@ namespace NzbDrone.Core.Test
                 .Have(c => c.Ignored = true)
                 .WhereTheFirst(2)
                 .Have(c => c.EpisodeFileId = 0)
-                .WhereSection(1,2)
+                .WhereSection(1, 2)
                 .Have(c => c.Ignored = false)
                 .Build().ToList();
 
