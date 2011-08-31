@@ -352,8 +352,8 @@ namespace NzbDrone.Core.Test
             mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
 
             //Assert
-            mocker.GetMock<IDatabase>().Verify(c => c.Insert(It.IsAny<Object>()), Times.Exactly(tvdbSeries.Episodes.Count));
-            mocker.GetMock<IDatabase>().Verify(c => c.Update(It.IsAny<Object>()), Times.Never());
+            mocker.GetMock<IDatabase>().Verify(c => c.InsertMany(It.Is<IEnumerable<Episode>>(l => l.Count() == 5)), Times.Once());
+            mocker.GetMock<IDatabase>().Verify(c => c.Update(It.IsAny<IEnumerable<Episode>>()), Times.Never());
 
             mocker.VerifyAllMocks();
         }
@@ -423,7 +423,7 @@ namespace NzbDrone.Core.Test
 
             //Assert
             mocker.VerifyAllMocks();
-            mocker.GetMock<IDatabase>().Verify(c => c.Update(fakeEpisodeList[0]), Times.Once());
+            mocker.GetMock<IDatabase>().Verify(c => c.UpdateMany(fakeEpisodeList), Times.Once());
         }
 
         [Test]
@@ -467,7 +467,7 @@ namespace NzbDrone.Core.Test
 
             //Assert
             mocker.VerifyAllMocks();
-            mocker.GetMock<IDatabase>().Verify(c => c.Update(localEpisode), Times.Once());
+            mocker.GetMock<IDatabase>().Verify(c => c.UpdateMany(new List<Episode>{localEpisode}), Times.Once());
         }
 
         [Test]

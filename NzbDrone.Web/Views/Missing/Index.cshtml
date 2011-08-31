@@ -38,7 +38,7 @@ Missing
                                  .Width(80);
                              columns.Bound(c => c.EpisodeId)
                                      .Title("Actions")
-                                     .ClientTemplate("<a href=\"../Episode/Season?episodeId=<#= EpisodeId #>\" onClick=\"searchForEpisode('<#= EpisodeId #>'); return false;\"><img src='../../Content/Images/Search.png' alt='Search' title='Search for Episode' class='searchImage' /></a>")
+                                     .ClientTemplate("<a href=\"../Episode/Season?episodeId=<#= EpisodeId #>\" onClick=\"searchForEpisode(<#= EpisodeId #>); return false;\"><img src='../../Content/Images/Search.png' alt='Search' title='Search for Episode' class='searchImage' /></a>")
                                      .Width("40");
                          })
             .DetailView(detailView => detailView.ClientTemplate(
