@@ -4,6 +4,7 @@ using System.Linq;
 using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
+using NzbDrone.Core.Model.Search;
 using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Providers.Jobs
@@ -36,9 +37,9 @@ namespace NzbDrone.Core.Providers.Jobs
 
         public void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
         {
-            var missingEpisodes =
-                _episodeProvider.EpisodesWithoutFiles(true).GroupBy(e => new { e.SeriesId, e.SeasonNumber });
-
+            var missingEpisodes = _episodeProvider.EpisodesWithoutFiles(true)
+                .GroupBy(e => new { e.SeriesId, e.SeasonNumber });
+          
             var individualEpisodes = new List<Episode>();
 
             Logger.Trace("Processing missing episodes list");

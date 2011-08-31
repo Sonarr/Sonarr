@@ -31,6 +31,7 @@ namespace NzbDrone.Web.Controllers
             var missing = missingEpisodes.Select(e => new MissingEpisodeModel
             {
                 EpisodeId = e.EpisodeId,
+                SeriesId = e.SeriesId,
                 SeasonNumber = e.SeasonNumber,
                 EpisodeNumber = e.EpisodeNumber,
                 EpisodeTitle = e.Title,

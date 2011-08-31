@@ -6,6 +6,7 @@ namespace NzbDrone.Web.Models
     public class HistoryModel
     {
         public int HistoryId { get; set; }
+        public int SeriesId { get; set; }
         public string SeriesTitle { get; set; }
         public int SeasonNumber { get; set; }
         public int EpisodeNumber { get; set; }

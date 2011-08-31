@@ -68,6 +68,7 @@ namespace NzbDrone.Web.Controllers
             var history = _historyProvider.AllItemsWithRelationships().Select(h => new HistoryModel
                                             {
                                                 HistoryId = h.HistoryId,
+                                                SeriesId = h.SeriesId,
                                                 SeasonNumber = h.Episode.SeasonNumber,
                                                 EpisodeNumber = h.Episode.EpisodeNumber,
                                                 EpisodeTitle = h.Episode.Title,

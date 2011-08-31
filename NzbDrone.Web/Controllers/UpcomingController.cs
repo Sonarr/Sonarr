@@ -32,7 +32,7 @@ namespace NzbDrone.Web.Controllers
             {
                 SeriesId = u.Series.SeriesId,
                 EpisodeId = u.EpisodeId,
-                SeriesName = u.Series.Title,
+                SeriesTitle = u.Series.Title,
                 SeasonNumber = u.SeasonNumber,
                 EpisodeNumber = u.EpisodeNumber,
                 Title = u.Title,
@@ -50,7 +50,7 @@ namespace NzbDrone.Web.Controllers
             {
                 SeriesId = u.Series.SeriesId,
                 EpisodeId = u.EpisodeId,
-                SeriesName = u.Series.Title,
+                SeriesTitle = u.Series.Title,
                 SeasonNumber = u.SeasonNumber,
                 EpisodeNumber = u.EpisodeNumber,
                 Title = u.Title,
@@ -68,7 +68,7 @@ namespace NzbDrone.Web.Controllers
             {
                 SeriesId = u.Series.SeriesId,
                 EpisodeId = u.EpisodeId,
-                SeriesName = u.Series.Title,
+                SeriesTitle = u.Series.Title,
                 SeasonNumber = u.SeasonNumber,
                 EpisodeNumber = u.EpisodeNumber,
                 Title = u.Title,
@@ -86,7 +86,7 @@ namespace NzbDrone.Web.Controllers
             {
                 SeriesId = u.Series.SeriesId,
                 EpisodeId = u.EpisodeId,
-                SeriesName = u.Series.Title,
+                SeriesTitle = u.Series.Title,
                 SeasonNumber = u.SeasonNumber,
                 EpisodeNumber = u.EpisodeNumber,
                 Title = u.Title,

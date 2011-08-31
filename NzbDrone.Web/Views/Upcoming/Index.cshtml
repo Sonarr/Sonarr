@@ -17,11 +17,11 @@ Upcoming
                     .TableHtmlAttributes(new { @class = "Grid" })
                     .Columns(columns =>
                                     {
-                                        columns.Bound(c => c.SeriesName)
+                                        columns.Bound(c => c.SeriesTitle)
                                             .ClientTemplate("<a href=" +
                                                             Url.Action("Details", "Series", new { seriesId = "<#= SeriesId #>" }) +
-                                                            "><#= SeriesName #></a>")
-                                            .Title("Series Name");
+                                                            "><#= SeriesTitle #></a>")
+                                            .Title("Series Title");
                                         columns.Bound(c => c.SeasonNumber).Title("Season #").Width(40);
                                         columns.Bound(c => c.EpisodeNumber).Title("Episode #").Width(40);
                                         columns.Bound(c => c.Title).Title("Episode Title");
@@ -48,7 +48,7 @@ Upcoming
                     .TableHtmlAttributes(new { @class = "Grid" })
                     .Columns(columns =>
                                     {
-                                        columns.Bound(c => c.SeriesName)
+                                        columns.Bound(c => c.SeriesTitle)
                                             .ClientTemplate("<a href=" +
                                                             Url.Action("Details", "Series", new { seriesId = "<#= SeriesId #>" }) +
                                                             "><#= SeriesName #></a>")
@@ -77,7 +77,7 @@ Upcoming
                     .TableHtmlAttributes(new { @class = "Grid" })
                     .Columns(columns =>
                                  {
-                                     columns.Bound(c => c.SeriesName)
+                                     columns.Bound(c => c.SeriesTitle)
                                          .ClientTemplate("<a href=" +
                                                          Url.Action("Details", "Series", new { seriesId = "<#= SeriesId #>" }) +
                                                          "><#= SeriesName #></a>")
@@ -107,7 +107,7 @@ Upcoming
                     .TableHtmlAttributes(new { @class = "Grid" })
                     .Columns(columns =>
                                  {
-                                     columns.Bound(c => c.SeriesName)
+                                     columns.Bound(c => c.SeriesTitle)
                                          .ClientTemplate("<a href=" +
                                                          Url.Action("Details", "Series", new { seriesId = "<#= SeriesId #>" }) +
                                                          "><#= SeriesName #></a>")

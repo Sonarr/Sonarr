@@ -7,7 +7,14 @@
     <style>
         #examples
         {
+            clear: both;
+            margin-top: 15px;
             margin-bottom: 15px;
+        }
+        
+        #singleEpisodeExample, #multiEpisodeExample
+        {
+            float: left
         }
     </style>
 }
@@ -74,6 +81,7 @@
         </label>
         @Html.DropDownListFor(m => m.MultiEpisodeStyle, Model.MultiEpisodeStyles, new { @class = "inputClass selectClass" })  
         
+        <br/>
         <div id ="examples" class="clearfix">
             <div id="singleEpisodeExample">
             </div>
@@ -90,6 +98,10 @@
     <script src="/Scripts/settingsForm.js" type="text/javascript"></script>
 
     <script type="text/javascript">
+        $(document).ready(function () {
+            createExamples();
+        });
+
         $('#SeriesName').live('change', function () { createExamples(); });
         $('#EpisodeName').live('change', function () { createExamples(); });
         $('#ReplaceSpaces').live('change', function () { createExamples(); });

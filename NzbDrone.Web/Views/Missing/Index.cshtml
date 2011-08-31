@@ -5,20 +5,41 @@
 Missing
 }
 
+<style>
+    .searchImage
+    {
+        width: 18px;
+        height: 18px;
+        padding: 1px;
+        margin: 2px;
+    }
+    
+    .searchImage:hover
+    {
+        background-color: #065EFE;
+    }
+</style>
+
 @section MainContent{
     @{Html.Telerik().Grid<MissingEpisodeModel>().Name("missing")
            .TableHtmlAttributes(new { @class = "Grid" })
             .Columns(columns =>
                          {
-                             columns.Bound(c => c.SeriesTitle).Title("Series Name");
+                             columns.Bound(c => c.SeriesTitle)
+                                            .ClientTemplate("<a href=" +
+                                                            Url.Action("Details", "Series", new { seriesId = "<#= SeriesId #>" }) +
+                                                            "><#= SeriesTitle #></a>")
+                                            .Title("Series Title");
                              columns.Bound(c => c.SeasonNumber).Title("Season").Width(40);
                              columns.Bound(c => c.EpisodeNumber).Title("Episode").Width(40);
                              columns.Bound(c => c.EpisodeTitle).Title("Episode Title");
                              columns.Bound(c => c.AirDate).Format("{0:d}")
                                  .Title("Air Date")
                                  .Width(80);
-                             columns.Bound(o => o.EpisodeId).Title("")
-                                       .ClientTemplate("<a href='#Search' onClick=\"searchForEpisode('<#= EpisodeId #>'); return false;\" >Search</a>");
+                             columns.Bound(c => c.EpisodeId)
+                                     .Title("Actions")
+                                     .ClientTemplate("<a href=\"../Episode/Season?episodeId=<#= EpisodeId #>\" onClick=\"searchForEpisode('<#= EpisodeId #>'); return false;\"><img src='../../Content/Images/Search.png' alt='Search' title='Search for Episode' class='searchImage' /></a>")
+                                     .Width("40");
                          })
             .DetailView(detailView => detailView.ClientTemplate(
                 "<fieldset>" +

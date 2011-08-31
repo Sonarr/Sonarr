@@ -118,13 +118,6 @@
             .TableHtmlAttributes(new { @class = "Grid" })
             .Columns(columns =>
             {
-                //columns.Bound(o => o.Ignored)
-                //    .Title("<img src='../../Content/Images/ignoredNeutral.png' class='ignoredEpisodesMaster ignoreEpisode ignoreSeason_" + season + "' title='Click to toggle season ignore status' />")
-                //    .ClientTemplate(
-                //        "<img src='../../Content/Images/ignoredNeutral.png' class='ignoreEpisode ignoreEpisode_" + season + " ignored' id='<#= EpisodeId #>' title='Click to toggle episode ignore status' />")
-                //    .Width(20)
-                //    .HtmlAttributes(new { style = "text-align:center" });
-
                 columns.Bound(c => c.EpisodeNumber).Width(0).Title("Episode");
                 columns.Bound(c => c.Title).Title("Title");
                 columns.Bound(c => c.AirDate).Width(0);
@@ -139,11 +132,6 @@
                                     "<a href=\"../Episode/Season?episodeId=<#= EpisodeId #>\" onclick=\"searchForEpisode('<#= EpisodeId #>'); return false;\"><img src='../../Content/Images/Search.png' alt='Search' title='Search for episode' class='searchImage' /></a>" +
                                     "<a href=\"../Episode/Rename?episodeFileId=<#= EpisodeId #>\" onclick=\"renameEpisode('<#= EpisodeFileId #>'); return false;\"><img src='../../Content/Images/Rename.png' alt='Rename' title='Rename episode' class='renameImage' />")
                     .Width(80);
-                //columns.Bound(o => o.EpisodeId).Title("")
-                //    .ClientTemplate("<a href=\"../Episode/Season?episodeId=<#= EpisodeId #>\" onclick=\"searchForEpisode('<#= EpisodeId #>'); return false;\">Search</a>"
-                //                    + " | " +
-                //                    "<a href=\"../Episode/Rename?episodeFileId=<#= EpisodeId #>\" onclick=\"renameEpisode('<#= EpisodeFileId #>'); return false;\">Rename</a>"
-                //                    );
             })
             .DetailView(detailView => detailView.ClientTemplate("<div><#= Overview #> </br><#= Path #> </div>"))
             .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.EpisodeNumber).Descending()).Enabled(false))

@@ -7,6 +7,7 @@ namespace NzbDrone.Web.Models
 {
     public class MissingEpisodeModel
     {
+        public int SeriesId { get; set; }
         public int EpisodeId { get; set; }
         public string SeriesTitle { get; set; }
         public int SeasonNumber { get; set; }
