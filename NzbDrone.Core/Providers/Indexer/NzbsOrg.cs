@@ -51,8 +51,8 @@ namespace NzbDrone.Core.Providers.Indexer
 
                 else
                 {
-                    searchUrls.Add(String.Format("{0}&action=search&q={1}+Season", url,
-                                                 searchModel.SeriesTitle));
+                    searchUrls.Add(String.Format("{0}&action=search&q={1}+Season", url, searchModel.SeriesTitle));
+                    searchUrls.Add(String.Format("{0}&action=search&q={1}+S{2:00}", url, searchModel.SeriesTitle, searchModel.SeasonNumber));
                 }
             }
 
