@@ -124,6 +124,33 @@ namespace NzbDrone.Core.Providers.Indexer
             return result;
         }
 
+        public virtual IList<EpisodeParseResult> FetchPartialSeason(string seriesTitle, int seasonNumber, int episodePrefix)
+        {
+            _logger.Debug("Searching {0} for {1}-Season {2}, Prefix: {3}", Name, seriesTitle, seasonNumber, episodePrefix);
+
+            var result = new List<EpisodeParseResult>();
+
+            var searchModel = new SearchModel
+            {
+                SeriesTitle = GetQueryTitle(seriesTitle),
+                SeasonNumber = seasonNumber,
+                EpisodePrefix = episodePrefix,
+                SearchType = SearchType.PartialSeasonSearch
+            };
+
+            var searchUrls = GetSearchUrls(searchModel);
+
+            foreach (var url in searchUrls)
+            {
+                result.AddRange(Fetch(url));
+            }
+
+            result = result.Where(e => e.CleanTitle == Parser.NormalizeTitle(seriesTitle)).ToList();
+
+            _logger.Info("Finished searching {0} for {1}-S{2}, Found {3}", Name, seriesTitle, seasonNumber, result.Count);
+            return result;
+        }
+
         public virtual IList<EpisodeParseResult> FetchEpisode(string seriesTitle, int seasonNumber, int episodeNumber)
         {
             _logger.Debug("Searching {0} for {1}-S{2:00}E{3:00}", Name, seriesTitle, seasonNumber, episodeNumber);

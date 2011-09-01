@@ -9,6 +9,7 @@ namespace NzbDrone.Core.Model.Search
     {
         EpisodeSearch = 0,
         DailySearch = 1,
-        SeasonSearch = 2
+        PartialSeasonSearch = 2,
+        SeasonSearch = 3
     }
 }

@@ -229,5 +229,106 @@ namespace NzbDrone.Core.Providers
 
             return false;
         }
+
+        public virtual List<int> PartialSeasonSearch(ProgressNotification notification, int seriesId, int seasonNumber)
+        {
+            //This method will search for episodes in a season in groups of 10 episodes S01E0, S01E1, S01E2, etc 
+
+            var series = _seriesProvider.GetSeries(seriesId);
+
+            if (series == null)
+            {
+                Logger.Error("Unable to find an series {0} in database", seriesId);
+                return new List<int>();
+            }
+
+            notification.CurrentMessage = String.Format("Searching for {0} Season {1}", series, seasonNumber);
+
+            var indexers = _indexerProvider.GetEnabledIndexers();
+            var reports = new List<EpisodeParseResult>();
+
+            var title = _sceneMappingProvider.GetSceneName(series.SeriesId);
+
+            if (string.IsNullOrWhiteSpace(title))
+            {
+                title = series.Title;
+            }
+
+            var episodes = _episodeProvider.GetEpisodesBySeason(seriesId, seasonNumber);
+            var episodeCount = episodes.Count;
+            var episodePrefix = 0;
+
+            while(episodeCount >= 0)
+            {
+                //Do the actual search for each indexer
+                foreach (var indexer in indexers)
+                {
+                    try
+                    {
+                        var indexerResults = indexer.FetchPartialSeason(title, seasonNumber, episodePrefix);
+
+                        reports.AddRange(indexerResults);
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.ErrorException("An error has occurred while fetching items from " + indexer.Name, e);
+                    }
+                }
+
+                episodePrefix++;
+                episodeCount -= 10;
+            }
+
+            Logger.Debug("Finished searching all indexers. Total {0}", reports.Count);
+
+            if (reports.Count == 0)
+                return new List<int>();
+
+            notification.CurrentMessage = "Processing search results";
+
+            reports.ForEach(c =>
+            {
+                c.Series = series;
+            });
+
+            return  ProcessPartialSeasonSearchResults(notification, reports);
+        }
+
+        public List<int> ProcessPartialSeasonSearchResults(ProgressNotification notification, IEnumerable<EpisodeParseResult> reports)
+        {
+            var successes = new List<int>();
+
+            foreach (var episodeParseResult in reports.OrderByDescending(c => c.Quality))
+            {
+                try
+                {
+                    Logger.Trace("Analysing report " + episodeParseResult);
+                    if (_inventoryProvider.IsQualityNeeded(episodeParseResult))
+                    {
+                        Logger.Debug("Found '{0}'. Adding to download queue.", episodeParseResult);
+                        try
+                        {
+                            _downloadProvider.DownloadReport(episodeParseResult);
+                            notification.CurrentMessage = String.Format("{0} - S{1:00}E{2:00} {3}Added to download queue",
+                                episodeParseResult.Series.Title, episodeParseResult.SeasonNumber, episodeParseResult.EpisodeNumbers[0], episodeParseResult.Quality);
+
+                            //Add the list of episode numbers from this release
+                            successes.AddRange(episodeParseResult.EpisodeNumbers);
+                        }
+                        catch (Exception e)
+                        {
+                            Logger.ErrorException("Unable to add report to download queue." + episodeParseResult, e);
+                            notification.CurrentMessage = String.Format("Unable to add report to download queue. {0}", episodeParseResult);
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Logger.ErrorException("An error has occurred while processing parse result items from " + episodeParseResult, e);
+                }
+            }
+
+            return successes;
+        }
     }
 }

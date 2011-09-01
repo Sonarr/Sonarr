@@ -19,10 +19,10 @@ namespace NzbDrone.Core.Test
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class SearchProviderTest_Season : TestBase
+    public class SearchProviderTest_PartialSeason : TestBase
     {
         [Test]
-        public void SeasonSearch_season_success()
+        public void SeasonPartialSearch_season_success()
         {
             var series = Builder<Series>.CreateNew()
                 .With(s => s.SeriesId = 1)
@@ -38,11 +38,8 @@ namespace NzbDrone.Core.Test
                 .Build();
 
             var parseResults = Builder<EpisodeParseResult>.CreateListOfSize(4)
-                .WhereTheFirst(1)
-                .Has(p => p.CleanTitle = "title")
-                .Has(p => p.SeasonNumber = 1)
-                .Has(p => p.FullSeason = true)
-                .Has(p => p.EpisodeNumbers = null)
+                .WhereAll()
+                .Have(e => e.EpisodeNumbers = Builder<int>.CreateListOfSize(2).Build().ToList())
                 .Build();
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
@@ -50,11 +47,11 @@ namespace NzbDrone.Core.Test
             var notification = new ProgressNotification("Season Search");
 
             var indexer1 = new Mock<IndexerBase>();
-            indexer1.Setup(c => c.FetchSeason(episodes[0].Series.Title, episodes[0].SeasonNumber))
+            indexer1.Setup(c => c.FetchPartialSeason(episodes[0].Series.Title, episodes[0].SeasonNumber, 0))
                 .Returns(parseResults).Verifiable();
 
             var indexer2 = new Mock<IndexerBase>();
-            indexer2.Setup(c => c.FetchSeason(episodes[0].Series.Title, episodes[0].SeasonNumber))
+            indexer2.Setup(c => c.FetchPartialSeason(episodes[0].Series.Title, episodes[0].SeasonNumber, 0))
                 .Returns(parseResults).Verifiable();
 
             var indexers = new List<IndexerBase> { indexer1.Object, indexer2.Object };
@@ -67,7 +64,7 @@ namespace NzbDrone.Core.Test
                 .Setup(c => c.GetSeries(1)).Returns(series);
 
             mocker.GetMock<EpisodeProvider>()
-                .Setup(c => c.GetEpisodeNumbersBySeason(1, 1)).Returns(episodes.Select(e => e.EpisodeNumber).ToList());
+                .Setup(c => c.GetEpisodesBySeason(1, 1)).Returns(episodes);
 
             mocker.GetMock<SceneMappingProvider>()
                 .Setup(s => s.GetSceneName(1)).Returns(String.Empty);
@@ -79,15 +76,16 @@ namespace NzbDrone.Core.Test
                 .Setup(s => s.DownloadReport(It.IsAny<EpisodeParseResult>())).Returns(true);
 
             //Act
-            var result = mocker.Resolve<SearchProvider>().SeasonSearch(notification, 1, 1);
+            var result = mocker.Resolve<SearchProvider>().PartialSeasonSearch(notification, 1, 1);
 
             //Assert
-            result.Should().BeTrue();
+            result.Should().HaveCount(16);
             mocker.VerifyAllMocks();
+            mocker.GetMock<DownloadProvider>().Verify(c => c.DownloadReport(It.IsAny<EpisodeParseResult>()), Times.Exactly(8));
         }
 
         [Test]
-        public void SeasonSearch_season_failure()
+        public void SeasonPartialSearch_season_no_results()
         {
             var series = Builder<Series>.CreateNew()
                 .With(s => s.SeriesId = 1)
@@ -103,6 +101,8 @@ namespace NzbDrone.Core.Test
                 .Build();
 
             var parseResults = Builder<EpisodeParseResult>.CreateListOfSize(4)
+                .WhereAll()
+                .Have(e => e.EpisodeNumbers = Builder<int>.CreateListOfSize(2).Build().ToList())
                 .Build();
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
@@ -110,12 +110,12 @@ namespace NzbDrone.Core.Test
             var notification = new ProgressNotification("Season Search");
 
             var indexer1 = new Mock<IndexerBase>();
-            indexer1.Setup(c => c.FetchSeason(episodes[0].Series.Title, episodes[0].SeasonNumber))
-                .Returns(parseResults).Verifiable();
+            indexer1.Setup(c => c.FetchPartialSeason(episodes[0].Series.Title, episodes[0].SeasonNumber, 0))
+                .Returns(new List<EpisodeParseResult>()).Verifiable();
 
             var indexer2 = new Mock<IndexerBase>();
-            indexer2.Setup(c => c.FetchSeason(episodes[0].Series.Title, episodes[0].SeasonNumber))
-                .Returns(parseResults).Verifiable();
+            indexer2.Setup(c => c.FetchPartialSeason(episodes[0].Series.Title, episodes[0].SeasonNumber, 0))
+                .Returns(new List<EpisodeParseResult>()).Verifiable();
 
             var indexers = new List<IndexerBase> { indexer1.Object, indexer2.Object };
 
@@ -127,22 +127,22 @@ namespace NzbDrone.Core.Test
                 .Setup(c => c.GetSeries(1)).Returns(series);
 
             mocker.GetMock<EpisodeProvider>()
-                .Setup(c => c.GetEpisodeNumbersBySeason(1, 1)).Returns(episodes.Select(e => e.EpisodeNumber).ToList());
+                .Setup(c => c.GetEpisodesBySeason(1, 1)).Returns(episodes);
 
             mocker.GetMock<SceneMappingProvider>()
                 .Setup(s => s.GetSceneName(1)).Returns(String.Empty);
 
             //Act
-            var result = mocker.Resolve<SearchProvider>().SeasonSearch(notification, 1, 1);
+            var result = mocker.Resolve<SearchProvider>().PartialSeasonSearch(notification, 1, 1);
 
             //Assert
-            ExceptionVerification.ExcpectedWarns(1);
-            result.Should().BeFalse();
+            result.Should().HaveCount(0);
             mocker.VerifyAllMocks();
+            mocker.GetMock<DownloadProvider>().Verify(c => c.DownloadReport(It.IsAny<EpisodeParseResult>()), Times.Never());
         }
 
         [Test]
-        public void ProcessSeasonSearchResults_success()
+        public void ProcessPartialSeasonSearchResults_success()
         {
             var series = Builder<Series>.CreateNew()
                 .With(s => s.SeriesId = 1)
@@ -150,11 +150,9 @@ namespace NzbDrone.Core.Test
                 .Build();
 
             var parseResults = Builder<EpisodeParseResult>.CreateListOfSize(4)
-                .WhereTheFirst(1)
-                .Has(p => p.CleanTitle = "title")
-                .Has(p => p.SeasonNumber = 1)
-                .Has(p => p.FullSeason = true)
-                .Has(p => p.EpisodeNumbers = null)
+                .WhereAll()
+                .Have(e => e.EpisodeNumbers = Builder<int>.CreateListOfSize(2).Build().ToList())
+                .Have(e => e.Series = series)
                 .Build();
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
@@ -168,15 +166,17 @@ namespace NzbDrone.Core.Test
                 .Setup(s => s.DownloadReport(It.IsAny<EpisodeParseResult>())).Returns(true);
 
             //Act
-            var result = mocker.Resolve<SearchProvider>().ProcessSeasonSearchResults(notification, series, 1, parseResults);
+            var result = mocker.Resolve<SearchProvider>().ProcessPartialSeasonSearchResults(notification, parseResults);
 
             //Assert
-            result.Should().BeTrue();
+            result.Should().HaveCount(8);
             mocker.VerifyAllMocks();
+            mocker.GetMock<DownloadProvider>().Verify(c => c.DownloadReport(It.IsAny<EpisodeParseResult>()), Times.Exactly(4));
+
         }
 
         [Test]
-        public void ProcessSeasonSearchResults_failure()
+        public void ProcessPartialSeasonSearchResults_failure()
         {
             var series = Builder<Series>.CreateNew()
                 .With(s => s.SeriesId = 1)
@@ -199,12 +199,12 @@ namespace NzbDrone.Core.Test
                 .Setup(s => s.IsQualityNeeded(It.IsAny<EpisodeParseResult>())).Returns(false);
 
             //Act
-            var result = mocker.Resolve<SearchProvider>().ProcessSeasonSearchResults(notification, series, 1, parseResults);
+            var result = mocker.Resolve<SearchProvider>().ProcessPartialSeasonSearchResults(notification, parseResults);
 
             //Assert
-            result.Should().BeFalse();
-            ExceptionVerification.ExcpectedWarns(1);
+            result.Should().HaveCount(0);
             mocker.VerifyAllMocks();
+            mocker.GetMock<DownloadProvider>().Verify(c => c.DownloadReport(It.IsAny<EpisodeParseResult>()), Times.Never());
         }
     }
 }

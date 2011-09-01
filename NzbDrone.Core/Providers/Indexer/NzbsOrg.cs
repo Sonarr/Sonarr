@@ -49,7 +49,13 @@ namespace NzbDrone.Core.Providers.Indexer
                                                  searchModel.SeriesTitle, searchModel.SeasonNumber, searchModel.EpisodeNumber));
                 }
 
-                else
+                if (searchModel.SearchType == SearchType.PartialSeasonSearch)
+                {
+                    searchUrls.Add(String.Format("{0}&action=search&q={1}+S{2:00}E{3}",
+                        url, searchModel.SeriesTitle, searchModel.SeasonNumber, searchModel.EpisodePrefix));
+                }
+
+                if (searchModel.SearchType == SearchType.SeasonSearch)
                 {
                     searchUrls.Add(String.Format("{0}&action=search&q={1}+Season", url, searchModel.SeriesTitle));
                     searchUrls.Add(String.Format("{0}&action=search&q={1}+S{2:00}", url, searchModel.SeriesTitle, searchModel.SeasonNumber));

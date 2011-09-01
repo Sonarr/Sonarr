@@ -59,7 +59,21 @@ namespace NzbDrone.Core.Providers.Jobs
                 return;
             }
 
-            foreach (var episode in episodes.Where(e => !e.Ignored))
+            //Perform a Partial Season Search
+            var addedSeries = _searchProvider.PartialSeasonSearch(notification, targetId, secondaryTargetId);
+
+            addedSeries.Distinct().ToList().Sort();
+            var episodeNumbers = episodes.Select(s => s.EpisodeNumber).ToList();
+            episodeNumbers.Sort();
+
+            if (addedSeries.SequenceEqual(episodeNumbers))
+                return;
+            
+            //Get the list of episodes that weren't downloaded
+            var missingEpisodes = episodeNumbers.Except(addedSeries).ToList();
+
+            //Only process episodes that is in missing episodes (To ensure we double check if the episode is available)
+            foreach (var episode in episodes.Where(e => !e.Ignored && missingEpisodes.Contains(e.EpisodeNumber)))
             {
                 _episodeSearchJob.Start(notification, episode.EpisodeId, 0);
             }

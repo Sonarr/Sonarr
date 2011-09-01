@@ -10,6 +10,7 @@ namespace NzbDrone.Core.Model.Search
         public string SeriesTitle { get; set; }
         public int EpisodeNumber { get; set; }
         public int SeasonNumber { get; set; }
+        public int EpisodePrefix { get; set; }
         public DateTime AirDate { get; set; }
         public SearchType SearchType { get; set; }
     }

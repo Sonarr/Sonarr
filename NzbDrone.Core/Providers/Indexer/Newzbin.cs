@@ -52,12 +52,27 @@ namespace NzbDrone.Core.Providers.Indexer
                            };
             }
 
-            return new List<string>
+            if (searchModel.SearchType == SearchType.SeasonSearch)
+            {
+                return new List<string>
                            {
                                String.Format(
                                    @"http://www.newzbin.com/search/query/?q={0}+Season+{1}&fpn=p&searchaction=Go&category=8&{2}",
                                    searchModel.SeriesTitle, searchModel.SeasonNumber, UrlParams)
                            };
+            }
+
+            if (searchModel.SearchType == SearchType.PartialSeasonSearch)
+            {
+                return new List<string>
+                           {
+                               String.Format(
+                                   @"http://www.newzbin.com/search/query/?q={0}+{1}x{2}&fpn=p&searchaction=Go&category=8&{3}",
+                                   searchModel.SeriesTitle, searchModel.SeasonNumber, searchModel.EpisodePrefix, UrlParams)
+                           };
+            }
+
+            return new List<string>();
         }
 
         public override string Name
