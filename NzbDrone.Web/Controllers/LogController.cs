@@ -26,10 +26,12 @@ namespace NzbDrone.Web.Controllers
             return Json(new NotificationResult() { Title = "Logs Cleared" });
         }
 
-        [GridAction]
-        public ActionResult _AjaxBinding()
+        [GridAction(EnableCustomBinding = true)]
+        public ActionResult _AjaxBinding(GridCommand gridCommand)
         {
-            return View(new GridModel(_logProvider.GetAllLogs()));
+            var logs = _logProvider.GetPagedLogs(gridCommand.Page, gridCommand.PageSize);
+
+            return View(new GridModel{ Data = logs.Items, Total = (int)logs.TotalItems });
         }
     }
 }

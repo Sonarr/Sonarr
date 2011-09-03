@@ -21,6 +21,11 @@ namespace NzbDrone.Core.Instrumentation
             return _database.Fetch<Log>();
         }
 
+        public Page<Log> GetPagedLogs(int pageNumber, int pageSize)
+        {
+            return _database.Page<Log>(pageNumber, pageSize, "SELECT * FROM Logs ORDER BY Time DESC");
+        }
+
         public void DeleteAll()
         {
             _database.Delete<Log>("");
