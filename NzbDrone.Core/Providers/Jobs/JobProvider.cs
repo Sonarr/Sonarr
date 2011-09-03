@@ -11,6 +11,7 @@ using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Repository;
 using PetaPoco;
+using ThreadState = System.Threading.ThreadState;
 
 namespace NzbDrone.Core.Providers.Jobs
 {
@@ -161,7 +162,7 @@ namespace NzbDrone.Core.Providers.Jobs
                 _isRunning = true;
             }
 
-            if (_jobThread == null || !_jobThread.IsAlive)
+            if (_jobThread == null || _jobThread.ThreadState != ThreadState.Running)
             {
                 Logger.Trace("Initializing queue processor thread");
 
@@ -178,6 +179,8 @@ namespace NzbDrone.Core.Providers.Jobs
                     finally
                     {
                         _isRunning = false;
+                        _jobThread.Abort();
+
                     }
                 };
 
