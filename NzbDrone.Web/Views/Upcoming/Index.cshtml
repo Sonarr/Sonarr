@@ -51,7 +51,7 @@ Upcoming
                                         columns.Bound(c => c.SeriesTitle)
                                             .ClientTemplate("<a href=" +
                                                             Url.Action("Details", "Series", new { seriesId = "<#= SeriesId #>" }) +
-                                                            "><#= SeriesName #></a>")
+                                                            "><#= SeriesTitle #></a>")
                                             .Title("Series Name");
                                         columns.Bound(c => c.SeasonNumber).Title("Season #").Width(40);
                                         columns.Bound(c => c.EpisodeNumber).Title("Episode #").Width(40);
@@ -80,7 +80,7 @@ Upcoming
                                      columns.Bound(c => c.SeriesTitle)
                                          .ClientTemplate("<a href=" +
                                                          Url.Action("Details", "Series", new { seriesId = "<#= SeriesId #>" }) +
-                                                         "><#= SeriesName #></a>")
+                                                         "><#= SeriesTitle #></a>")
                                          .Title("Series Name");
                                      columns.Bound(c => c.SeasonNumber).Title("Season #").Width(40);
                                      columns.Bound(c => c.EpisodeNumber).Title("Episode #").Width(40);
@@ -110,7 +110,7 @@ Upcoming
                                      columns.Bound(c => c.SeriesTitle)
                                          .ClientTemplate("<a href=" +
                                                          Url.Action("Details", "Series", new { seriesId = "<#= SeriesId #>" }) +
-                                                         "><#= SeriesName #></a>")
+                                                         "><#= SeriesTitle #></a>")
                                          .Title("Series Name");
                                      columns.Bound(c => c.SeasonNumber).Title("Season #").Width(40);
                                      columns.Bound(c => c.EpisodeNumber).Title("Episode #").Width(40);
