@@ -32,19 +32,15 @@ namespace NzbDrone.Core.Test
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
                 .WhereAll().Have(e => e.SeriesId = 1).Have(e => e.EpisodeFileId = 0).Build();
 
-
+            db.Insert(fakeSeries);
             db.InsertMany(fakeEpisodes);
-
-            mocker.GetMock<SeriesProvider>()
-                .Setup(p => p.GetSeries(1))
-                .Returns(fakeSeries);
 
             //Act
             var episode = mocker.Resolve<EpisodeProvider>().GetEpisode(1);
 
             //Assert
             episode.ShouldHave().AllPropertiesBut(e => e.Series, e => e.EpisodeFile).EqualTo(fakeEpisodes.First());
-            episode.Series.ShouldHave().AllProperties().EqualTo(fakeSeries);
+            episode.Series.ShouldHave().AllPropertiesBut(s => s.EpisodeCount, s => s.EpisodeFileCount, s => s.SeasonCount).EqualTo(fakeSeries);
         }
 
         [Test]
@@ -54,25 +50,24 @@ namespace NzbDrone.Core.Test
             var db = MockLib.GetEmptyDatabase();
             mocker.SetConstant(db);
 
-            var fakeSeries = Builder<Series>.CreateNew().Build();
+            var fakeSeries = Builder<Series>.CreateNew()
+                .With(s => s.SeriesId = 1)
+                .Build();
             var fakeEpisodes = Builder<Episode>.CreateNew()
-                .With(e => e.SeriesId = fakeSeries.SeriesId)
+                .With(e => e.SeriesId = 1)
                 .With(e => e.EpisodeNumber = 1)
                 .And(e => e.SeasonNumber = 2)
                 .With(e => e.EpisodeFileId = 0).Build();
 
+            db.Insert(fakeSeries);
             db.Insert(fakeEpisodes);
-
-            mocker.GetMock<SeriesProvider>()
-                .Setup(p => p.GetSeries(1))
-                .Returns(fakeSeries);
-
+            
             //Act
             var episode = mocker.Resolve<EpisodeProvider>().GetEpisode(fakeSeries.SeriesId, 2, 1);
 
             //Assert
             episode.ShouldHave().AllPropertiesBut(e => e.Series).EqualTo(fakeEpisodes);
-            episode.Series.ShouldHave().AllProperties().EqualTo(fakeSeries);
+            episode.Series.ShouldHave().AllPropertiesBut(s => s.EpisodeCount, s => s.EpisodeFileCount, s => s.SeasonCount).EqualTo(fakeSeries);
         }
 
         [Test]
@@ -103,20 +98,16 @@ namespace NzbDrone.Core.Test
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
                 .WhereAll().Have(e => e.SeriesId = 1).WhereTheFirst(1).Have(e => e.EpisodeFileId = 1).Have(e => e.EpisodeFile = fakeFile).Build();
 
-
+            db.Insert(fakeSeries);
             db.InsertMany(fakeEpisodes);
             db.Insert(fakeFile);
-
-            mocker.GetMock<SeriesProvider>()
-                .Setup(p => p.GetSeries(1))
-                .Returns(fakeSeries);
 
             //Act
             var episode = mocker.Resolve<EpisodeProvider>().GetEpisode(1);
 
             //Assert
             episode.ShouldHave().AllPropertiesBut(e => e.Series, e => e.EpisodeFile).EqualTo(fakeEpisodes.First());
-            episode.Series.ShouldHave().AllProperties().EqualTo(fakeSeries);
+            episode.Series.ShouldHave().AllPropertiesBut(s => s.EpisodeCount, s => s.EpisodeFileCount, s => s.SeasonCount).EqualTo(fakeSeries);
             episode.EpisodeFile.Should().NotBeNull();
         }
 
@@ -760,19 +751,16 @@ namespace NzbDrone.Core.Test
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
                 .WhereAll().Have(e => e.SeriesId = 1).WhereTheFirst(1).Have(e => e.EpisodeFileId = 1).Have(e => e.EpisodeFile = fakeFile).Build();
 
+            db.Insert(fakeSeries);
             db.InsertMany(fakeEpisodes);
             db.Insert(fakeFile);
-
-            mocker.GetMock<SeriesProvider>()
-                .Setup(p => p.GetSeries(1))
-                .Returns(fakeSeries);
 
             //Act
             var episode = mocker.Resolve<EpisodeProvider>().GetEpisode(1, 1, 1);
 
             //Assert
             episode.ShouldHave().AllPropertiesBut(e => e.Series, e => e.EpisodeFile).EqualTo(fakeEpisodes.First());
-            episode.Series.ShouldHave().AllProperties().EqualTo(fakeSeries);
+            episode.Series.ShouldHave().AllPropertiesBut(s => s.EpisodeCount, s => s.EpisodeFileCount, s => s.SeasonCount).EqualTo(fakeSeries);
             episode.EpisodeFile.Should().NotBeNull();
         }
 
@@ -787,18 +775,15 @@ namespace NzbDrone.Core.Test
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
                 .WhereAll().Have(e => e.SeriesId = 1).WhereTheFirst(1).Have(e => e.EpisodeFileId = 0).Build();
 
+            db.Insert(fakeSeries);
             db.InsertMany(fakeEpisodes);
-
-            mocker.GetMock<SeriesProvider>()
-                .Setup(p => p.GetSeries(1))
-                .Returns(fakeSeries);
 
             //Act
             var episode = mocker.Resolve<EpisodeProvider>().GetEpisode(1, 1, 1);
 
             //Assert
             episode.ShouldHave().AllPropertiesBut(e => e.Series).EqualTo(fakeEpisodes.First());
-            episode.Series.ShouldHave().AllProperties().EqualTo(fakeSeries);
+            episode.Series.ShouldHave().AllPropertiesBut(s => s.EpisodeCount, s => s.EpisodeFileCount, s => s.SeasonCount).EqualTo(fakeSeries);
             episode.EpisodeFile.Should().BeNull();
         }
 
@@ -814,19 +799,16 @@ namespace NzbDrone.Core.Test
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
                 .WhereAll().Have(e => e.SeriesId = 1).WhereTheFirst(1).Have(e => e.EpisodeFileId = 1).Have(e => e.EpisodeFile = fakeFile).Build();
 
+            db.Insert(fakeSeries);
             db.InsertMany(fakeEpisodes);
             db.Insert(fakeFile);
-
-            mocker.GetMock<SeriesProvider>()
-                .Setup(p => p.GetSeries(1))
-                .Returns(fakeSeries);
 
             //Act
             var episode = mocker.Resolve<EpisodeProvider>().GetEpisode(1, fakeEpisodes[0].AirDate.Value);
 
             //Assert
             episode.ShouldHave().AllPropertiesBut(e => e.Series, e => e.EpisodeFile).EqualTo(fakeEpisodes.First());
-            episode.Series.ShouldHave().AllProperties().EqualTo(fakeSeries);
+            episode.Series.ShouldHave().AllPropertiesBut(s => s.EpisodeCount, s => s.EpisodeFileCount, s => s.SeasonCount).EqualTo(fakeSeries);
             episode.EpisodeFile.Should().NotBeNull();
         }
 
@@ -842,17 +824,14 @@ namespace NzbDrone.Core.Test
                 .WhereAll().Have(e => e.SeriesId = 1).WhereTheFirst(1).Have(e => e.EpisodeFileId = 0).Build();
 
             db.InsertMany(fakeEpisodes);
-
-            mocker.GetMock<SeriesProvider>()
-                .Setup(p => p.GetSeries(1))
-                .Returns(fakeSeries);
+            db.Insert(fakeSeries);
 
             //Act
             var episode = mocker.Resolve<EpisodeProvider>().GetEpisode(1, fakeEpisodes[0].AirDate.Value);
 
             //Assert
             episode.ShouldHave().AllPropertiesBut(e => e.Series).EqualTo(fakeEpisodes.First());
-            episode.Series.ShouldHave().AllProperties().EqualTo(fakeSeries);
+            episode.Series.ShouldHave().AllPropertiesBut(s => s.EpisodeCount, s => s.EpisodeFileCount, s => s.SeasonCount).EqualTo(fakeSeries);
             episode.EpisodeFile.Should().BeNull();
         }
 

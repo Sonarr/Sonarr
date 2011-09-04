@@ -39,9 +39,10 @@ namespace NzbDrone.Core.Providers
 
         public virtual Episode GetEpisode(long id)
         {
-            var episode = AttachSeries(_database.Fetch<Episode, EpisodeFile>(@"SELECT * FROM Episodes 
+            var episode = _database.Fetch<Episode, Series, EpisodeFile>(@"SELECT * FROM Episodes
+                                                            INNER JOIN Series ON Episodes.SeriesId = Series.SeriesId
                                                             LEFT JOIN EpisodeFiles ON Episodes.EpisodeFileId = EpisodeFiles.EpisodeFileId
-                                                            WHERE EpisodeId = @0", id).Single());
+                                                            WHERE EpisodeId = @0", id).Single();
 
             if (episode.EpisodeFileId == 0)
                 episode.EpisodeFile = null;
@@ -51,9 +52,10 @@ namespace NzbDrone.Core.Providers
 
         public virtual Episode GetEpisode(int seriesId, int seasonNumber, int episodeNumber)
         {
-            var episode = AttachSeries(_database.Fetch<Episode, EpisodeFile>(@"SELECT * FROM Episodes 
+            var episode = _database.Fetch<Episode, Series, EpisodeFile>(@"SELECT * FROM Episodes 
+                                                            INNER JOIN Series ON Episodes.SeriesId = Series.SeriesId
                                                             LEFT JOIN EpisodeFiles ON Episodes.EpisodeFileId = EpisodeFiles.EpisodeFileId
-                                                            WHERE Episodes.SeriesId = @0 AND Episodes.SeasonNumber = @1 AND Episodes.EpisodeNumber = @2", seriesId, seasonNumber, episodeNumber).SingleOrDefault());
+                                                            WHERE Episodes.SeriesId = @0 AND Episodes.SeasonNumber = @1 AND Episodes.EpisodeNumber = @2", seriesId, seasonNumber, episodeNumber).SingleOrDefault();
 
             if (episode == null)
                 return null;
@@ -66,9 +68,10 @@ namespace NzbDrone.Core.Providers
 
         public virtual Episode GetEpisode(int seriesId, DateTime date)
         {
-            var episode = AttachSeries(_database.Fetch<Episode, EpisodeFile>(@"SELECT * FROM Episodes 
+            var episode = _database.Fetch<Episode, Series, EpisodeFile>(@"SELECT * FROM Episodes
+                                                            INNER JOIN Series ON Episodes.SeriesId = Series.SeriesId
                                                             LEFT JOIN EpisodeFiles ON Episodes.EpisodeFileId = EpisodeFiles.EpisodeFileId
-                                                            WHERE Episodes.SeriesId = @0 AND AirDate = @1", seriesId, date.Date)).SingleOrDefault();
+                                                            WHERE Episodes.SeriesId = @0 AND AirDate = @1", seriesId, date.Date).SingleOrDefault();
 
             if (episode == null)
                 return null;
