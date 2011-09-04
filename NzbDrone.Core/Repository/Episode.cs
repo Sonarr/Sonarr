@@ -53,14 +53,11 @@ namespace NzbDrone.Core.Repository
             }
         }
 
-        [Ignore]
+        [ResultColumn]
         public Series Series { get; set; }
 
         [ResultColumn]
         public EpisodeFile EpisodeFile { get; set; }
-
-        [ResultColumn]
-        public string SeriesTitle { get; set; }
 
         public override string ToString()
         {

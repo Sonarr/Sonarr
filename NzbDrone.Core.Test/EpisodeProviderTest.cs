@@ -1272,7 +1272,7 @@ namespace NzbDrone.Core.Test
             foreach (var withFile in withFiles)
             {
                 withFile.EpisodeFile.Should().NotBeNull();
-                withFile.SeriesTitle.Should().NotBeNullOrEmpty();
+                withFile.Series.Title.Should().NotBeNullOrEmpty();
             }
 
             mocker.VerifyAllMocks();

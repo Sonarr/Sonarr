@@ -22,6 +22,10 @@ namespace NzbDrone.Core.Test
         public void no_misnamed_files()
         {
             //Setup
+            var series = Builder<Series>.CreateNew()
+                .With(s => s.Title = "SeriesTitle")
+                .Build();
+
             var episodeFiles = Builder<EpisodeFile>.CreateListOfSize(2)
                 .WhereTheFirst(1)
                 .Has(f => f.EpisodeFileId = 1)
@@ -32,14 +36,14 @@ namespace NzbDrone.Core.Test
                 .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(2)
+                .WhereAll()
+                .Have(e => e.Series = series)
                 .WhereTheFirst(1)
                 .Has(e => e.EpisodeFileId = 1)
                 .Has(e => e.EpisodeFile = episodeFiles[0])
-                .Has(e => e.SeriesTitle = "SeriesTitle1")
                 .AndTheNext(1)
                 .Has(e => e.EpisodeFileId = 2)
                 .Has(e => e.EpisodeFile = episodeFiles[1])
-                .Has(e => e.SeriesTitle = "SeriesTitle2")
                 .Build();
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
@@ -48,11 +52,11 @@ namespace NzbDrone.Core.Test
                 .Setup(c => c.EpisodesWithFiles()).Returns(episodes);
 
             mocker.GetMock<MediaFileProvider>()
-                .Setup(c => c.GetNewFilename(new List<Episode> {episodes[0]}, "SeriesTitle1", It.IsAny<QualityTypes>()))
+                .Setup(c => c.GetNewFilename(new List<Episode> {episodes[0]}, "SeriesTitle", It.IsAny<QualityTypes>()))
                 .Returns("Title1");
 
             mocker.GetMock<MediaFileProvider>()
-                .Setup(c => c.GetNewFilename(new List<Episode> {episodes[1]}, "SeriesTitle2", It.IsAny<QualityTypes>()))
+                .Setup(c => c.GetNewFilename(new List<Episode> {episodes[1]}, "SeriesTitle", It.IsAny<QualityTypes>()))
                 .Returns("Title2");
 
             //Act
@@ -67,6 +71,10 @@ namespace NzbDrone.Core.Test
         public void all_misnamed_files()
         {
             //Setup
+            var series = Builder<Series>.CreateNew()
+                .With(s => s.Title = "SeriesTitle")
+                .Build();
+
             var episodeFiles = Builder<EpisodeFile>.CreateListOfSize(2)
                 .WhereTheFirst(1)
                 .Has(f => f.EpisodeFileId = 1)
@@ -77,14 +85,14 @@ namespace NzbDrone.Core.Test
                 .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(2)
+                .WhereAll()
+                .Have(e => e.Series = series)
                 .WhereTheFirst(1)
                 .Has(e => e.EpisodeFileId = 1)
                 .Has(e => e.EpisodeFile = episodeFiles[0])
-                .Has(e => e.SeriesTitle = "SeriesTitle1")
                 .AndTheNext(1)
                 .Has(e => e.EpisodeFileId = 2)
                 .Has(e => e.EpisodeFile = episodeFiles[1])
-                .Has(e => e.SeriesTitle = "SeriesTitle2")
                 .Build();
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
@@ -93,11 +101,11 @@ namespace NzbDrone.Core.Test
                 .Setup(c => c.EpisodesWithFiles()).Returns(episodes);
 
             mocker.GetMock<MediaFileProvider>()
-                .Setup(c => c.GetNewFilename(new List<Episode> { episodes[0] }, "SeriesTitle1", It.IsAny<QualityTypes>()))
+                .Setup(c => c.GetNewFilename(new List<Episode> { episodes[0] }, "SeriesTitle", It.IsAny<QualityTypes>()))
                 .Returns("New Title 1");
 
             mocker.GetMock<MediaFileProvider>()
-                .Setup(c => c.GetNewFilename(new List<Episode> { episodes[1] }, "SeriesTitle2", It.IsAny<QualityTypes>()))
+                .Setup(c => c.GetNewFilename(new List<Episode> { episodes[1] }, "SeriesTitle", It.IsAny<QualityTypes>()))
                 .Returns("New Title 2");
 
             //Act
@@ -112,6 +120,10 @@ namespace NzbDrone.Core.Test
         public void one_misnamed_file()
         {
             //Setup
+            var series = Builder<Series>.CreateNew()
+                .With(s => s.Title = "SeriesTitle")
+                .Build();
+
             var episodeFiles = Builder<EpisodeFile>.CreateListOfSize(2)
                 .WhereTheFirst(1)
                 .Has(f => f.EpisodeFileId = 1)
@@ -122,14 +134,14 @@ namespace NzbDrone.Core.Test
                 .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(2)
+                .WhereAll()
+                .Have(e => e.Series = series)
                 .WhereTheFirst(1)
                 .Has(e => e.EpisodeFileId = 1)
                 .Has(e => e.EpisodeFile = episodeFiles[0])
-                .Has(e => e.SeriesTitle = "SeriesTitle1")
                 .AndTheNext(1)
                 .Has(e => e.EpisodeFileId = 2)
                 .Has(e => e.EpisodeFile = episodeFiles[1])
-                .Has(e => e.SeriesTitle = "SeriesTitle2")
                 .Build();
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
@@ -138,11 +150,11 @@ namespace NzbDrone.Core.Test
                 .Setup(c => c.EpisodesWithFiles()).Returns(episodes);
 
             mocker.GetMock<MediaFileProvider>()
-                .Setup(c => c.GetNewFilename(new List<Episode> { episodes[0] }, "SeriesTitle1", It.IsAny<QualityTypes>()))
+                .Setup(c => c.GetNewFilename(new List<Episode> { episodes[0] }, "SeriesTitle", It.IsAny<QualityTypes>()))
                 .Returns("New Title 1");
 
             mocker.GetMock<MediaFileProvider>()
-                .Setup(c => c.GetNewFilename(new List<Episode> { episodes[1] }, "SeriesTitle2", It.IsAny<QualityTypes>()))
+                .Setup(c => c.GetNewFilename(new List<Episode> { episodes[1] }, "SeriesTitle", It.IsAny<QualityTypes>()))
                 .Returns("Title2");
 
             //Act
@@ -159,6 +171,10 @@ namespace NzbDrone.Core.Test
         public void misnamed_multi_episode_file()
         {
             //Setup
+            var series = Builder<Series>.CreateNew()
+                .With(s => s.Title = "SeriesTitle")
+                .Build();
+
             var episodeFiles = Builder<EpisodeFile>.CreateListOfSize(2)
                 .WhereTheFirst(1)
                 .Has(f => f.EpisodeFileId = 1)
@@ -169,14 +185,14 @@ namespace NzbDrone.Core.Test
                 .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(3)
+                .WhereAll()
+                .Have(e => e.Series = series)
                 .WhereTheFirst(2)
                 .Has(e => e.EpisodeFileId = 1)
                 .Has(e => e.EpisodeFile = episodeFiles[0])
-                .Has(e => e.SeriesTitle = "SeriesTitle1")
                 .AndTheNext(1)
                 .Has(e => e.EpisodeFileId = 2)
                 .Has(e => e.EpisodeFile = episodeFiles[1])
-                .Has(e => e.SeriesTitle = "SeriesTitle2")
                 .Build();
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
@@ -185,11 +201,11 @@ namespace NzbDrone.Core.Test
                 .Setup(c => c.EpisodesWithFiles()).Returns(episodes);
 
             mocker.GetMock<MediaFileProvider>()
-                .Setup(c => c.GetNewFilename(new List<Episode> { episodes[0], episodes[1] }, "SeriesTitle1", It.IsAny<QualityTypes>()))
+                .Setup(c => c.GetNewFilename(new List<Episode> { episodes[0], episodes[1] }, "SeriesTitle", It.IsAny<QualityTypes>()))
                 .Returns("New Title 1");
 
             mocker.GetMock<MediaFileProvider>()
-                .Setup(c => c.GetNewFilename(new List<Episode> { episodes[2] }, "SeriesTitle2", It.IsAny<QualityTypes>()))
+                .Setup(c => c.GetNewFilename(new List<Episode> { episodes[2] }, "SeriesTitle", It.IsAny<QualityTypes>()))
                 .Returns("Title2");
 
             //Act
@@ -206,6 +222,10 @@ namespace NzbDrone.Core.Test
         public void no_misnamed_multi_episode_file()
         {
             //Setup
+            var series = Builder<Series>.CreateNew()
+                .With(s => s.Title = "SeriesTitle")
+                .Build();
+
             var episodeFiles = Builder<EpisodeFile>.CreateListOfSize(2)
                 .WhereTheFirst(1)
                 .Has(f => f.EpisodeFileId = 1)
@@ -216,14 +236,14 @@ namespace NzbDrone.Core.Test
                 .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(3)
+                .WhereAll()
+                .Have(e => e.Series = series)
                 .WhereTheFirst(2)
                 .Has(e => e.EpisodeFileId = 1)
                 .Has(e => e.EpisodeFile = episodeFiles[0])
-                .Has(e => e.SeriesTitle = "SeriesTitle1")
                 .AndTheNext(1)
                 .Has(e => e.EpisodeFileId = 2)
                 .Has(e => e.EpisodeFile = episodeFiles[1])
-                .Has(e => e.SeriesTitle = "SeriesTitle2")
                 .Build();
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
@@ -232,11 +252,11 @@ namespace NzbDrone.Core.Test
                 .Setup(c => c.EpisodesWithFiles()).Returns(episodes);
 
             mocker.GetMock<MediaFileProvider>()
-                .Setup(c => c.GetNewFilename(new List<Episode> { episodes[0], episodes[1] }, "SeriesTitle1", It.IsAny<QualityTypes>()))
+                .Setup(c => c.GetNewFilename(new List<Episode> { episodes[0], episodes[1] }, "SeriesTitle", It.IsAny<QualityTypes>()))
                 .Returns("Title1");
 
             mocker.GetMock<MediaFileProvider>()
-                .Setup(c => c.GetNewFilename(new List<Episode> { episodes[2] }, "SeriesTitle2", It.IsAny<QualityTypes>()))
+                .Setup(c => c.GetNewFilename(new List<Episode> { episodes[2] }, "SeriesTitle", It.IsAny<QualityTypes>()))
                 .Returns("Title2");
 
             //Act

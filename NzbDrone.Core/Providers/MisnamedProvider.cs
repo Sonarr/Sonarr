@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Providers
             var misnamedFilesSelect = episodesWithFiles.AsParallel().Where(
                 w =>
                 w.First().EpisodeFile.Path !=
-                _mediaFileProvider.GetNewFilename(w.Select(e => e).ToList(), w.First().SeriesTitle,
+                _mediaFileProvider.GetNewFilename(w.Select(e => e).ToList(), w.First().Series.Title,
                                                   w.First().EpisodeFile.Quality)).Skip(Math.Max(pageSize * (pageNumber - 1), 0)).Take(pageSize);
 
             //Process the episodes
@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Providers
                                                           var episodes = f.Select(e => e).ToList();
                                                           var firstEpisode = episodes[0];
                                                           var properName = _mediaFileProvider.GetNewFilename(episodes,
-                                                                                                             firstEpisode.SeriesTitle,
+                                                                                                             firstEpisode.Series.Title,
                                                                                                              firstEpisode.EpisodeFile.Quality);
 
                                                           var currentName = Path.GetFileNameWithoutExtension(firstEpisode.EpisodeFile.Path);
@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Providers
                                                                   EpisodeFileId = firstEpisode.EpisodeFileId,
                                                                   ProperName = properName,
                                                                   SeriesId = firstEpisode.SeriesId,
-                                                                  SeriesTitle = firstEpisode.SeriesTitle
+                                                                  SeriesTitle = firstEpisode.Series.Title
                                                               });
                                                           }
                                                       });

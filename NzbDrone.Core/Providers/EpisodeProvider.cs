@@ -177,7 +177,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual IList<Episode> EpisodesWithFiles()
         {
-            var episodes = _database.Fetch<Episode, EpisodeFile>(@"SELECT Episodes.*, Series.Title as SeriesTitle, EpisodeFiles.* FROM Episodes
+            var episodes = _database.Fetch<Episode, Series, EpisodeFile>(@"SELECT Episodes.*, Series.*, EpisodeFiles.* FROM Episodes
                                                                     INNER JOIN Series ON Episodes.SeriesId = Series.SeriesId
                                                                     INNER JOIN EpisodeFiles ON Episodes.EpisodeFileId = EpisodeFiles.EpisodeFileId");
 
