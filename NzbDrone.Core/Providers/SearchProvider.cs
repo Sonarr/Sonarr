@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Providers
                 return false;
             }
 
-            notification.CurrentMessage = String.Format("Searching for {0} Season {1}", series, seasonNumber);
+            notification.CurrentMessage = String.Format("Searching for {0} Season {1}", series.Title, seasonNumber);
 
             var indexers = _indexerProvider.GetEnabledIndexers();
             var reports = new List<EpisodeParseResult>();
@@ -242,7 +242,7 @@ namespace NzbDrone.Core.Providers
                 return new List<int>();
             }
 
-            notification.CurrentMessage = String.Format("Searching for {0} Season {1}", series, seasonNumber);
+            notification.CurrentMessage = String.Format("Searching for {0} Season {1}", series.Title, seasonNumber);
 
             var indexers = _indexerProvider.GetEnabledIndexers();
             var reports = new List<EpisodeParseResult>();
