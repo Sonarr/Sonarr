@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Web.Mvc;
 using System.Linq;
+using System.Web.Mvc;
 using NLog;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Providers;

@@ -1,0 +1,70 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Diagnostics;
+using NLog;
+using NzbDrone.Core.Model;
+using NzbDrone.Core.Repository;
+
+namespace NzbDrone.Core.Providers
+{
+    public class MisnamedProvider
+    {
+        private readonly MediaFileProvider _mediaFileProvider;
+        private readonly EpisodeProvider _episodeProvider;
+
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        public MisnamedProvider(MediaFileProvider mediaFileProvider, EpisodeProvider episodeProvider)
+        {
+            _mediaFileProvider = mediaFileProvider;
+            _episodeProvider = episodeProvider;
+        }
+
+        public virtual List<MisnamedEpisodeModel> MisnamedFiles(int pageNumber, int pageSize, out int totalItems)
+        {       
+            var misnamedFiles = new List<MisnamedEpisodeModel>();
+
+            var episodesWithFiles = _episodeProvider.EpisodesWithFiles().GroupBy(e => e.EpisodeFileId).ToList();
+            totalItems = episodesWithFiles.Count();
+
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            var misnamedFilesSelect = episodesWithFiles.AsParallel().Where(
+                w =>
+                w.First().EpisodeFile.Path !=
+                _mediaFileProvider.GetNewFilename(w.Select(e => e).ToList(), w.First().SeriesTitle,
+                                                  w.First().EpisodeFile.Quality)).Skip(Math.Max(pageSize * (pageNumber - 1), 0)).Take(pageSize);
+
+            //Process the episodes
+            misnamedFilesSelect.AsParallel().ForAll(f =>
+                                                      {
+                                                          var episodes = f.Select(e => e).ToList();
+                                                          var firstEpisode = episodes[0];
+                                                          var properName = _mediaFileProvider.GetNewFilename(episodes,
+                                                                                                             firstEpisode.SeriesTitle,
+                                                                                                             firstEpisode.EpisodeFile.Quality);
+
+                                                          var currentName = Path.GetFileNameWithoutExtension(firstEpisode.EpisodeFile.Path);
+
+                                                          if (properName != currentName)
+                                                          {
+                                                              misnamedFiles.Add(new MisnamedEpisodeModel
+                                                              {
+                                                                  CurrentName = currentName,
+                                                                  EpisodeFileId = firstEpisode.EpisodeFileId,
+                                                                  ProperName = properName,
+                                                                  SeriesId = firstEpisode.SeriesId,
+                                                                  SeriesTitle = firstEpisode.SeriesTitle
+                                                              });
+                                                          }
+                                                      });
+
+            stopwatch.Stop();
+            return misnamedFiles.OrderBy(e => e.SeriesTitle).ToList();
+        }
+    }
+}

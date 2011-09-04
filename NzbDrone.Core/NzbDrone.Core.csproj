@@ -182,6 +182,7 @@
     <Compile Include="Fluent.cs" />
     <Compile Include="Helpers\EpisodeSortingHelper.cs" />
     <Compile Include="Helpers\FileSizeFormatHelpercs.cs" />
+    <Compile Include="Helpers\LinqPageExtension.cs" />
     <Compile Include="Instrumentation\LogProvider.cs" />
     <Compile Include="Instrumentation\DatabaseTarget.cs" />
     <Compile Include="Instrumentation\ExceptioneerTarget.cs" />
@@ -191,6 +192,7 @@
     <Compile Include="Model\ExternalNotificationType.cs" />
     <Compile Include="Model\JobQueueItem.cs" />
     <Compile Include="Model\LanguageType.cs" />
+    <Compile Include="Model\MisnamedEpisodeModel.cs" />
     <Compile Include="Model\Quality.cs" />
     <Compile Include="Model\SabnzbdCategoryModel.cs" />
     <Compile Include="Model\SabnzbdInfoModel.cs" />
@@ -206,6 +208,7 @@
     <Compile Include="Providers\Jobs\SeriesSearchJob.cs" />
     <Compile Include="Providers\Jobs\RenameSeasonJob.cs" />
     <Compile Include="Providers\Jobs\SeasonSearchJob.cs" />
+    <Compile Include="Providers\MisnamedProvider.cs" />
     <Compile Include="Providers\SearchProvider.cs" />
     <Compile Include="Providers\Xbmc\ResourceManager.cs" />
     <Compile Include="Model\Xbmc\TvShowResult.cs" />

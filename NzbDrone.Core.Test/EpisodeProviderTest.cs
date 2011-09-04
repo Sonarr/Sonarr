@@ -1231,5 +1231,83 @@ namespace NzbDrone.Core.Test
 
             mocker.VerifyAllMocks();
         }
+
+        [Test]
+        public void EpisodesWithFiles_success()
+        {
+            var db = MockLib.GetEmptyDatabase();
+            var mocker = new AutoMoqer();
+            mocker.SetConstant(db);
+
+            var series = Builder<Series>.CreateNew()
+                .With(s => s.SeriesId = 10)
+                .Build();
+
+            var episodeFile = Builder<EpisodeFile>.CreateNew()
+                .With(c => c.EpisodeFileId = 1)
+                .Build();
+
+            var episodes = Builder<Episode>.CreateListOfSize(2)
+                .WhereAll()
+                .Have(c => c.SeriesId = 10)
+                .Have(c => c.SeasonNumber = 1)
+                .Have(c => c.AirDate = DateTime.Today.AddDays(-4))
+                .Have(c => c.Ignored = true)
+                .Have(c => c.EpisodeFile = episodeFile)
+                .Have(c => c.EpisodeFileId = episodeFile.EpisodeFileId)
+                .Build().ToList();
+
+            db.Insert(series);
+            db.Insert(episodeFile);
+            db.InsertMany(episodes);
+
+            //Act
+            var withFiles = mocker.Resolve<EpisodeProvider>().EpisodesWithFiles();
+
+            //Assert
+            withFiles.Should().HaveCount(2);
+            withFiles.Where(e => e.EpisodeFileId == 0).Should().HaveCount(0);
+            withFiles.Where(e => e.EpisodeFile == null).Should().HaveCount(0);
+
+            foreach (var withFile in withFiles)
+            {
+                withFile.EpisodeFile.Should().NotBeNull();
+                withFile.SeriesTitle.Should().NotBeNullOrEmpty();
+            }
+
+            mocker.VerifyAllMocks();
+        }
+
+        [Test]
+        public void EpisodesWithFiles_no_files()
+        {
+            var db = MockLib.GetEmptyDatabase();
+            var mocker = new AutoMoqer();
+            mocker.SetConstant(db);
+
+            var series = Builder<Series>.CreateNew()
+                .With(s => s.SeriesId = 10)
+                .Build();
+
+            var episodes = Builder<Episode>.CreateListOfSize(2)
+                .WhereAll()
+                .Have(c => c.SeriesId = 10)
+                .Have(c => c.SeasonNumber = 1)
+                .Have(c => c.AirDate = DateTime.Today.AddDays(-4))
+                .Have(c => c.Ignored = true)
+                .Have(c => c.EpisodeFileId = 0)
+                .Build().ToList();
+
+            db.Insert(series);
+            db.InsertMany(episodes);
+
+            //Act
+            var withFiles = mocker.Resolve<EpisodeProvider>().EpisodesWithFiles();
+
+            //Assert
+            withFiles.Should().HaveCount(0);
+
+            mocker.VerifyAllMocks();
+        }
     }
 }

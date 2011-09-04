@@ -175,6 +175,15 @@ namespace NzbDrone.Core.Providers
             return AttachSeries(_database.Fetch<Episode>("WHERE EpisodeFileId = @0", episodeFileId));
         }
 
+        public virtual IList<Episode> EpisodesWithFiles()
+        {
+            var episodes = _database.Fetch<Episode, EpisodeFile>(@"SELECT Episodes.*, Series.Title as SeriesTitle, EpisodeFiles.* FROM Episodes
+                                                                    INNER JOIN Series ON Episodes.SeriesId = Series.SeriesId
+                                                                    INNER JOIN EpisodeFiles ON Episodes.EpisodeFileId = EpisodeFiles.EpisodeFileId");
+
+            return episodes;
+        }
+
         public virtual void RefreshEpisodeInfo(Series series)
         {
             Logger.Info("Starting episode info refresh for series: {0}", series.Title.WithDefault(series.SeriesId));

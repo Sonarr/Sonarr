@@ -59,6 +59,9 @@ namespace NzbDrone.Core.Repository
         [ResultColumn]
         public EpisodeFile EpisodeFile { get; set; }
 
+        [ResultColumn]
+        public string SeriesTitle { get; set; }
+
         public override string ToString()
         {
             string seriesTitle = Series == null ? "[NULL]" : Series.Title;

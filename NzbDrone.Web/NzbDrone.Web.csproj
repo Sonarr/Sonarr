@@ -154,6 +154,7 @@
     <Compile Include="Controllers\HistoryController.cs" />
     <Compile Include="Controllers\LogController.cs" />
     <Compile Include="Controllers\AddSeriesController.cs" />
+    <Compile Include="Controllers\MisnamedController.cs" />
     <Compile Include="Controllers\MissingController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\SeriesController.cs" />
@@ -350,6 +351,9 @@
   <ItemGroup>
     <Content Include="Views\Settings\Test.cshtml" />
     <Content Include="Views\Settings\TestPartial.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Misnamed\Index.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
