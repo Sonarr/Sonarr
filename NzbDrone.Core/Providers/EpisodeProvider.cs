@@ -84,9 +84,10 @@ namespace NzbDrone.Core.Providers
 
         public virtual IList<Episode> GetEpisodeBySeries(long seriesId)
         {
-            var episodes = AttachSeries(_database.Fetch<Episode, EpisodeFile>(@"SELECT * FROM Episodes 
+            var episodes = _database.Fetch<Episode, Series, EpisodeFile>(@"SELECT * FROM Episodes
+                                                            INNER JOIN Series ON Episodes.SeriesId = Series.SeriesId
                                                             LEFT JOIN EpisodeFiles ON Episodes.EpisodeFileId = EpisodeFiles.EpisodeFileId
-                                                            WHERE Episodes.SeriesId = @0", seriesId));
+                                                            WHERE Episodes.SeriesId = @0", seriesId);
 
             foreach (var episode in episodes)
             {
@@ -99,9 +100,10 @@ namespace NzbDrone.Core.Providers
 
         public virtual IList<Episode> GetEpisodesBySeason(long seriesId, int seasonNumber)
         {
-            var episodes = AttachSeries(_database.Fetch<Episode, EpisodeFile>(@"SELECT * FROM Episodes 
+            var episodes = _database.Fetch<Episode, Series, EpisodeFile>(@"SELECT * FROM Episodes
+                                                            INNER JOIN Series ON Episodes.SeriesId = Series.SeriesId
                                                             LEFT JOIN EpisodeFiles ON Episodes.EpisodeFileId = EpisodeFiles.EpisodeFileId
-                                                            WHERE Episodes.SeriesId = @0 AND Episodes.SeasonNumber = @1", seriesId, seasonNumber));
+                                                            WHERE Episodes.SeriesId = @0 AND Episodes.SeasonNumber = @1", seriesId, seasonNumber);
 
             foreach (var episode in episodes)
             {
@@ -175,7 +177,9 @@ namespace NzbDrone.Core.Providers
 
         public virtual IList<Episode> GetEpisodesByFileId(int episodeFileId)
         {
-            return AttachSeries(_database.Fetch<Episode>("WHERE EpisodeFileId = @0", episodeFileId));
+            return _database.Fetch<Episode, Series>(@"SELECT * FROM Episodes
+                                                        INNER JOIN Series ON Episodes.SeriesId = Series.SeriesId
+                                                        WHERE EpisodeFileId = @0", episodeFileId);
         }
 
         public virtual IList<Episode> EpisodesWithFiles()

@@ -218,6 +218,10 @@ namespace NzbDrone.Core.Test
         [Test]
         public void GetEpisodesBySeason_success()
         {
+            var fakeSeries = Builder<Series>.CreateNew()
+                .With(s => s.SeriesId = 12)
+                .Build();
+
             var episodes = Builder<Episode>.CreateListOfSize(10)
                 .WhereAll().Have(c => c.SeriesId = 12)
                 .WhereTheFirst(5).Have(c => c.SeasonNumber = 1)
@@ -227,7 +231,8 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer();
             mocker.SetConstant(db);
 
-            episodes.ToList().ForEach(c => db.Insert(c));
+            db.Insert(fakeSeries);
+            db.InsertMany(episodes);
 
             //Act
             var seasonEposodes = mocker.Resolve<EpisodeProvider>().GetEpisodesBySeason(12, 2);
@@ -257,7 +262,10 @@ namespace NzbDrone.Core.Test
 
             var mocker = new AutoMoqer();
 
-            mocker.SetConstant(MockLib.GetEmptyDatabase());
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            db.Insert(fakeSeries);
 
             mocker.GetMock<TvDbProvider>()
                 .Setup(c => c.GetSeries(seriesId, true))
@@ -292,10 +300,12 @@ namespace NzbDrone.Core.Test
 
             var fakeSeries = Builder<Series>.CreateNew().With(c => c.SeriesId = seriesId).Build();
 
-
             var mocker = new AutoMoqer();
 
-            mocker.SetConstant(MockLib.GetEmptyDatabase());
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            db.Insert(fakeSeries);
 
             mocker.GetMock<TvDbProvider>()
                 .Setup(c => c.GetSeries(seriesId, true))
@@ -335,7 +345,7 @@ namespace NzbDrone.Core.Test
                 .Returns(tvdbSeries);
 
             mocker.GetMock<IDatabase>()
-                .Setup(d => d.Fetch<Episode, EpisodeFile>(It.IsAny<String>(), It.IsAny<Object[]>()))
+                .Setup(d => d.Fetch<Episode, Series, EpisodeFile>(It.IsAny<String>(), It.IsAny<Object[]>()))
                 .Returns(currentEpisodes);
 
 
@@ -362,7 +372,7 @@ namespace NzbDrone.Core.Test
             var currentEpisodes = new List<Episode>();
             foreach (var tvDbEpisode in tvdbSeries.Episodes)
             {
-                currentEpisodes.Add(new Episode { TvDbEpisodeId = tvDbEpisode.Id });
+                currentEpisodes.Add(new Episode { TvDbEpisodeId = tvDbEpisode.Id, Series = fakeSeries });
             }
 
             var mocker = new AutoMoqer();
@@ -372,7 +382,7 @@ namespace NzbDrone.Core.Test
                 .Returns(tvdbSeries);
 
             mocker.GetMock<IDatabase>()
-                .Setup(d => d.Fetch<Episode, EpisodeFile>(It.IsAny<String>(), It.IsAny<Object[]>()))
+                .Setup(d => d.Fetch<Episode, Series, EpisodeFile>(It.IsAny<String>(), It.IsAny<Object[]>()))
                 .Returns(currentEpisodes);
 
             //Act
@@ -397,12 +407,12 @@ namespace NzbDrone.Core.Test
                                                              )
                 .Build();
 
-            var fakeEpisodeList = new List<Episode> { new Episode { TvDbEpisodeId = 99, SeasonNumber = 10, EpisodeNumber = 10 } };
             var fakeSeries = Builder<Series>.CreateNew().With(c => c.SeriesId = seriesId).Build();
-
+            var fakeEpisodeList = new List<Episode> { new Episode { TvDbEpisodeId = 99, SeasonNumber = 10, EpisodeNumber = 10, Series = fakeSeries} };
+            
             var mocker = new AutoMoqer();
             mocker.GetMock<IDatabase>()
-                .Setup(d => d.Fetch<Episode, EpisodeFile>(It.IsAny<String>(), It.IsAny<Object[]>()))
+                .Setup(d => d.Fetch<Episode, Series, EpisodeFile>(It.IsAny<String>(), It.IsAny<Object[]>()))
                 .Returns(fakeEpisodeList);
 
             mocker.GetMock<TvDbProvider>()
@@ -442,7 +452,6 @@ namespace NzbDrone.Core.Test
 
             var fakeSeries = Builder<Series>.CreateNew().With(c => c.SeriesId = seriesId).Build();
 
-
             var mocker = new AutoMoqer();
 
             mocker.GetMock<TvDbProvider>(MockBehavior.Strict)
@@ -450,7 +459,7 @@ namespace NzbDrone.Core.Test
                 .Returns(tvdbSeries);
 
             mocker.GetMock<IDatabase>()
-               .Setup(d => d.Fetch<Episode, EpisodeFile>(It.IsAny<String>(), It.IsAny<Object[]>()))
+               .Setup(d => d.Fetch<Episode, Series, EpisodeFile>(It.IsAny<String>(), It.IsAny<Object[]>()))
                 .Returns(new List<Episode> { localEpisode });
 
             //Act
@@ -474,7 +483,7 @@ namespace NzbDrone.Core.Test
             var currentEpisodes = new List<Episode>();
             foreach (var tvDbEpisode in tvdbSeries.Episodes)
             {
-                currentEpisodes.Add(new Episode { TvDbEpisodeId = tvDbEpisode.Id, EpisodeId = 99, EpisodeFileId = 69, Ignored = true });
+                currentEpisodes.Add(new Episode { TvDbEpisodeId = tvDbEpisode.Id, EpisodeId = 99, EpisodeFileId = 69, Ignored = true, Series = fakeSeries});
             }
 
             var mocker = new AutoMoqer();
@@ -486,7 +495,7 @@ namespace NzbDrone.Core.Test
             var updatedEpisodes = new List<Episode>();
 
             mocker.GetMock<IDatabase>()
-                 .Setup(d => d.Fetch<Episode, EpisodeFile>(It.IsAny<String>(), It.IsAny<Object[]>()))
+                 .Setup(d => d.Fetch<Episode, Series, EpisodeFile>(It.IsAny<String>(), It.IsAny<Object[]>()))
                  .Returns(currentEpisodes);
 
             mocker.GetMock<IDatabase>()
@@ -1286,6 +1295,64 @@ namespace NzbDrone.Core.Test
             //Assert
             withFiles.Should().HaveCount(0);
 
+            mocker.VerifyAllMocks();
+        }
+
+        [Test]
+        public void GetEpisodesByFileId_multi_episodes()
+        {
+            var db = MockLib.GetEmptyDatabase();
+            var mocker = new AutoMoqer();
+            mocker.SetConstant(db);
+
+            var series = Builder<Series>.CreateNew()
+                .With(s => s.SeriesId = 10)
+                .Build();
+
+            var fakeEpisodes = Builder<Episode>.CreateListOfSize(2)
+                .WhereAll()
+                .Have(c => c.SeriesId = 10)
+                .Have(c => c.SeasonNumber = 1)
+                .Have(c => c.EpisodeFileId = 12345)
+                .Build();
+
+            db.Insert(series);
+            db.InsertMany(fakeEpisodes);
+
+            //Act
+            var episodes = mocker.Resolve<EpisodeProvider>().GetEpisodesByFileId(12345);
+
+            //Assert
+            episodes.Should().HaveCount(2);
+            mocker.VerifyAllMocks();
+        }
+
+        [Test]
+        public void GetEpisodesByFileId_single_episode()
+        {
+            var db = MockLib.GetEmptyDatabase();
+            var mocker = new AutoMoqer();
+            mocker.SetConstant(db);
+
+            var series = Builder<Series>.CreateNew()
+                .With(s => s.SeriesId = 10)
+                .Build();
+
+            var fakeEpisode = Builder<Episode>.CreateNew()
+                .With(c => c.SeriesId = 10)
+                .With(c => c.SeasonNumber = 1)
+                .With(c => c.EpisodeFileId = 12345)
+                .Build();
+
+            db.Insert(series);
+            db.Insert(fakeEpisode);
+
+            //Act
+            var episodes = mocker.Resolve<EpisodeProvider>().GetEpisodesByFileId(12345);
+
+            //Assert
+            episodes.Should().HaveCount(1);
+            episodes.First().ShouldHave().AllPropertiesBut(e => e.Series).EqualTo(fakeEpisode);
             mocker.VerifyAllMocks();
         }
     }
