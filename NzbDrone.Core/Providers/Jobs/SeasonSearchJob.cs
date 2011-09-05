@@ -73,7 +73,7 @@ namespace NzbDrone.Core.Providers.Jobs
             var missingEpisodes = episodeNumbers.Except(addedSeries).ToList();
 
             //Only process episodes that is in missing episodes (To ensure we double check if the episode is available)
-            foreach (var episode in episodes.Where(e => !e.Ignored && missingEpisodes.Contains(e.EpisodeNumber)))
+            foreach (var episode in episodes.Where(e => !e.Ignored && missingEpisodes.Contains(e.EpisodeNumber)).OrderBy(o => o.EpisodeNumber))
             {
                 _episodeSearchJob.Start(notification, episode.EpisodeId, 0);
             }
