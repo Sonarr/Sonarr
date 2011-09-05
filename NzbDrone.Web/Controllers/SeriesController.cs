@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 using MvcMiniProfiler;
+using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Jobs;
 using NzbDrone.Core.Repository;
@@ -50,7 +51,7 @@ namespace NzbDrone.Web.Controllers
         [GridAction]
         public ActionResult _AjaxSeriesGrid()
         {
-            var series = GetSeriesModels(_seriesProvider.GetAllSeriesWithEpisodeCount());
+            var series = GetSeriesModels(_seriesProvider.GetAllSeriesWithEpisodeCount()).OrderBy(o => SortHelper.SkipArticles(o.Title));
             return View(new GridModel(series));
         }
 

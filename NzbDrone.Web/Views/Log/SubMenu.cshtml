@@ -1,0 +1,7 @@
+﻿<ul class="sub-menu">
+        <li>@Html.ActionLink("Top", "Index", "Log")</li>
+        <li>@Html.ActionLink("All", "All", "Log")</li>
+        <li>@Ajax.ActionLink("Clear Logs", "Clear", "Log", new AjaxOptions{ OnSuccess = "reloadGrid" })</li>
+    </ul>
+
+<div style="margin-bottom: 10px"></div>

@@ -1,5 +1,4 @@
-@using NzbDrone.Core.Repository;
-@using NzbDrone.Web.Controllers
+@using NzbDrone.Core.Helpers;
 @using NzbDrone.Web.Models;
 @model IEnumerable<NzbDrone.Core.Repository.Series>
 @section TitleContent{
@@ -89,7 +88,7 @@ NZBDrone
 
                              })
                 .Editable(editor => editor.Mode(GridEditMode.PopUp))
-                .Sortable(sort => sort.OrderBy(order => order.Add(o => o.Title).Ascending()).Enabled(true))
+                //.Sortable(sort => sort.OrderBy(order => order.Add(o => o.Title).Ascending()).Enabled(true))
                 .DetailView(detailView => detailView.ClientTemplate("<#= Overview #>"))
                 .ClientEvents(clientEvents =>
                 {

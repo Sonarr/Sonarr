@@ -182,6 +182,7 @@
     <Compile Include="Fluent.cs" />
     <Compile Include="Helpers\EpisodeSortingHelper.cs" />
     <Compile Include="Helpers\FileSizeFormatHelpercs.cs" />
+    <Compile Include="Helpers\SortHelper.cs" />
     <Compile Include="Instrumentation\LogProvider.cs" />
     <Compile Include="Instrumentation\DatabaseTarget.cs" />
     <Compile Include="Instrumentation\ExceptioneerTarget.cs" />
