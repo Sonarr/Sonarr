@@ -150,8 +150,7 @@ namespace NzbDrone.Core.Providers
             }
             notification.CurrentMessage = "Searching for " + episode;
 
-
-            var series = episode.Series;
+            var series = _seriesProvider.GetSeries(episode.SeriesId);
 
             var indexers = _indexerProvider.GetEnabledIndexers();
             var reports = new List<EpisodeParseResult>();

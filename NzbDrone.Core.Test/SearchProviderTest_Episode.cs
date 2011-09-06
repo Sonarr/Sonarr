@@ -198,10 +198,6 @@ namespace NzbDrone.Core.Test
             ExceptionVerification.ExcpectedErrors(1);
         }
 
-
-
-        
-
         [Test]
         public void start_should_search_all_providers()
         {
@@ -232,6 +228,10 @@ namespace NzbDrone.Core.Test
             mocker.GetMock<IndexerProvider>()
                 .Setup(c => c.GetEnabledIndexers())
                 .Returns(indexers);
+
+            mocker.GetMock<SeriesProvider>()
+                .Setup(c => c.GetSeries(It.IsAny<int>()))
+                .Returns(episode.Series);
 
             mocker.GetMock<InventoryProvider>()
                 .Setup(c => c.IsQualityNeeded(It.IsAny<EpisodeParseResult>())).Returns(false);
@@ -273,7 +273,6 @@ namespace NzbDrone.Core.Test
             indexer1.Setup(c => c.FetchEpisode("The Daily Show", episode.SeasonNumber, episode.EpisodeNumber))
                 .Returns(parseResults).Verifiable();
 
-
             var indexer2 = new Mock<IndexerBase>();
             indexer2.Setup(c => c.FetchEpisode("The Daily Show", episode.SeasonNumber, episode.EpisodeNumber))
                 .Returns(parseResults).Verifiable();
@@ -283,6 +282,10 @@ namespace NzbDrone.Core.Test
             mocker.GetMock<IndexerProvider>()
                 .Setup(c => c.GetEnabledIndexers())
                 .Returns(indexers);
+
+            mocker.GetMock<SeriesProvider>()
+                .Setup(c => c.GetSeries(It.IsAny<int>()))
+                .Returns(episode.Series);
 
             mocker.GetMock<InventoryProvider>()
                 .Setup(c => c.IsQualityNeeded(It.IsAny<EpisodeParseResult>())).Returns(false);
@@ -302,7 +305,6 @@ namespace NzbDrone.Core.Test
             indexer1.VerifyAll();
             indexer2.VerifyAll();
         }
-
 
         [Test]
         public void start_failed_indexer_should_not_break_job()
@@ -341,6 +343,10 @@ namespace NzbDrone.Core.Test
                 .Setup(c => c.GetEnabledIndexers())
                 .Returns(indexers);
 
+            mocker.GetMock<SeriesProvider>()
+                .Setup(c => c.GetSeries(It.IsAny<int>()))
+                .Returns(episode.Series);
+
             mocker.GetMock<InventoryProvider>()
                 .Setup(c => c.IsQualityNeeded(It.IsAny<EpisodeParseResult>())).Returns(false);
 
@@ -363,7 +369,6 @@ namespace NzbDrone.Core.Test
             indexer3.VerifyAll();
         }
 
-
         [Test]
         public void start_no_episode_found_should_return_with_error_logged()
         {
@@ -380,6 +385,52 @@ namespace NzbDrone.Core.Test
             //Assert
             mocker.VerifyAllMocks();
             ExceptionVerification.ExcpectedErrors(1);
+        }
+
+        [Test]
+        public void episode_search_should_call_get_series()
+        {
+            var parseResults = Builder<EpisodeParseResult>.CreateListOfSize(4)
+                .Build();
+
+            var episode = Builder<Episode>.CreateNew()
+                .With(c => c.Series = Builder<Series>.CreateNew().Build())
+                .With(c => c.SeasonNumber = 12)
+                .Build();
+
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(c => c.GetEpisode(episode.EpisodeId))
+                .Returns(episode);
+
+            var indexer1 = new Mock<IndexerBase>();
+            indexer1.Setup(c => c.FetchEpisode(episode.Series.Title, episode.SeasonNumber, episode.EpisodeNumber))
+                .Returns(parseResults).Verifiable();
+
+            var indexers = new List<IndexerBase> { indexer1.Object };
+
+            mocker.GetMock<IndexerProvider>()
+                .Setup(c => c.GetEnabledIndexers())
+                .Returns(indexers);
+
+            mocker.GetMock<InventoryProvider>()
+                .Setup(c => c.IsQualityNeeded(It.IsAny<EpisodeParseResult>())).Returns(false);
+
+            mocker.GetMock<SceneMappingProvider>()
+                .Setup(s => s.GetSceneName(It.IsAny<int>())).Returns("");
+
+            mocker.GetMock<SeriesProvider>()
+                .Setup(s => s.GetSeries(It.IsAny<int>())).Returns(episode.Series);
+
+            //Act
+            mocker.Resolve<SearchProvider>().EpisodeSearch(new ProgressNotification("Test"), episode.EpisodeId);
+
+
+            //Assert
+            mocker.VerifyAllMocks();
+            ExceptionVerification.ExcpectedWarns(1);
+            indexer1.VerifyAll();
         }
     }
 }
