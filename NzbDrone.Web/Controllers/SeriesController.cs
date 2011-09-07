@@ -67,7 +67,7 @@ namespace NzbDrone.Web.Controllers
 
             _seriesProvider.UpdateSeries(oldSeries);
 
-            var series = GetSeriesModels(_seriesProvider.GetAllSeriesWithEpisodeCount());
+            var series = GetSeriesModels(_seriesProvider.GetAllSeriesWithEpisodeCount()).OrderBy(o => SortHelper.SkipArticles(o.Title));
             return View(new GridModel(series));
         }
 
@@ -75,7 +75,7 @@ namespace NzbDrone.Web.Controllers
         public ActionResult _DeleteAjaxSeriesEditing(int id)
         {
             //Grab the series from the DB so we can remove it from the list we return to the client
-            var seriesInDb = _seriesProvider.GetAllSeries().ToList();
+            var seriesInDb = _seriesProvider.GetAllSeriesWithEpisodeCount().ToList();
 
             //Remove this so we don't send it back to the client (since it hasn't really been deleted yet)
             seriesInDb.RemoveAll(s => s.SeriesId == id);
@@ -83,7 +83,7 @@ namespace NzbDrone.Web.Controllers
             //Start removing this series
             _jobProvider.QueueJob(typeof(DeleteSeriesJob), id);
 
-            var series = GetSeriesModels(seriesInDb);
+            var series = GetSeriesModels(seriesInDb).OrderBy(o => SortHelper.SkipArticles(o.Title));
             return View(new GridModel(series));
         }
 
