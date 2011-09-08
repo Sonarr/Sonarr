@@ -33,9 +33,9 @@ Logs
             .TableHtmlAttributes(new { @class = "Grid" })
             .Columns(columns =>
                          {
-                             columns.Bound(c => c.Time).Title("Time").Width(0);
-                             columns.Bound(c => c.Level).Title("Level").Width(0);
-                             columns.Bound(c => c.Logger).Title("Source").Width(0);
+                             columns.Bound(c => c.Time).Title("Time").Width(170);
+                             columns.Bound(c => c.Level).Title("Level");
+                             columns.Bound(c => c.Logger).Title("Source");
                              columns.Bound(c => c.Message);
                          })
             .DetailView(detailView => detailView.ClientTemplate(
