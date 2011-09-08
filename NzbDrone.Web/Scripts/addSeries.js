@@ -48,8 +48,6 @@ function reloadExistingSeries() {
 }
 
 //RootDir
-//$('#rootDirInput').watermark('Start typing to add new root folder...');
-
 $('#rootDirs .actionButton img').live('click', function (image) {
     var path = $(image.target).attr('id');
     $.post(deleteRootDirUrl, { Path: path }, function () {
@@ -79,9 +77,6 @@ function refreshRoot() {
 
 
 //AddNew
-//$('#newSeriesPath').watermark('Path for the new series...');
-//$('#newSeriesLookup').watermark('Title of the series you want to add...');
-
 $('#saveNewSeries').live('click', function () {
     var seriesTitle = $("#newSeriesLookup").val();
     var qualityId = $("#qualityList").val();
@@ -111,9 +106,8 @@ function reloadAddNew() {
 //On load
 jQuery(document).ready(function () {
     //RootDir
-    $('#rootDirInput').watermark('Start typing to add new root folder...');
+    $('#rootDirInput').watermark('Enter your new root folder path...');
 
     //AddNew
-    $('#newSeriesPath').watermark('Path for the new series...');
     $('#newSeriesLookup').watermark('Title of the series you want to add...');
 });
