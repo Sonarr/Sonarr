@@ -103,7 +103,7 @@
         </member>
         <member name="M:MvcMiniProfiler.MiniProfiler.Start(MvcMiniProfiler.ProfileLevel)">
             <summary>
-            Starts a new MiniProfiler for the current Request. This new profiler can be accessed by
+            Starts a new MiniProfiler based on the current <see cref="T:MvcMiniProfiler.IProfilerProvider"/>. This new profiler can be accessed by
             <see cref="P:MvcMiniProfiler.MiniProfiler.Current"/>
             </summary>
         </member>
@@ -116,11 +116,6 @@
             be prematurely stopped and discarded. Useful for when a specific route does not need to be profiled.
             </param>
         </member>
-        <member name="M:MvcMiniProfiler.MiniProfiler.EnsureName(MvcMiniProfiler.MiniProfiler,System.Web.HttpRequest)">
-            <summary>
-            Makes sure 'profiler' has a Name, pulling it from route data or url.
-            </summary>
-        </member>
         <member name="M:MvcMiniProfiler.MiniProfiler.StepStatic(System.String,MvcMiniProfiler.ProfileLevel)">
             <summary>
             Returns an <see cref="T:System.IDisposable"/> that will time the code between its creation and disposal. Use this method when you
@@ -129,7 +124,7 @@
             <param name="name">A descriptive name for the code that is encapsulated by the resulting IDisposable's lifetime.</param>
             <param name="level">This step's visibility level; allows filtering when <see cref="M:MvcMiniProfiler.MiniProfiler.Start(MvcMiniProfiler.ProfileLevel)"/> is called.</param>
         </member>
-        <member name="M:MvcMiniProfiler.MiniProfiler.RenderIncludes(System.Nullable{MvcMiniProfiler.RenderPosition},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Int32})">
+        <member name="M:MvcMiniProfiler.MiniProfiler.RenderIncludes(System.Nullable{MvcMiniProfiler.RenderPosition},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Boolean)">
             <summary>
             Returns the css and javascript includes needed to display the MiniProfiler results UI.
             </summary>
@@ -137,6 +132,7 @@
             <param name="showTrivial">Whether to show trivial timings by default (defaults to false)</param>
             <param name="showTimeWithChildren">Whether to show time the time with children column by default (defaults to false)</param>
             <param name="maxTracesToShow">The maximum number of trace popups to show before removing the oldest (defaults to 15)</param>
+            <param name="xhtml">xhtml rendering mode, ensure script tag is closed ... etc</param>
             <returns>Script and link elements normally; an empty string when there is no active profiling session.</returns>
         </member>
         <member name="M:MvcMiniProfiler.MiniProfiler.ToJson">
@@ -258,7 +254,7 @@
         </member>
         <member name="P:MvcMiniProfiler.MiniProfiler.Head">
             <summary>
-            Points to the currently executing Timing.
+            Points to the currently executing Timing. 
             </summary>
         </member>
         <member name="P:MvcMiniProfiler.MiniProfiler.Current">
@@ -395,6 +391,12 @@
             Assembly version of this dank MiniProfiler.
             </summary>
         </member>
+        <member name="P:MvcMiniProfiler.MiniProfiler.Settings.ProfilerProvider">
+            <summary>
+            The provider used to provider the current instance of a provider
+            This is also 
+            </summary>
+        </member>
         <member name="P:MvcMiniProfiler.MiniProfiler.Settings.Results_Authorize">
             <summary>
             A function that determines who can access the MiniProfiler results url.  It should return true when
@@ -459,20 +461,15 @@
             Wraps a database connection, allowing sql execution timings to be collected when a <see cref="T:MvcMiniProfiler.MiniProfiler"/> session is started.
             </summary>
         </member>
-        <member name="M:MvcMiniProfiler.Data.ProfiledDbConnection.Get(System.Data.Common.DbConnection)">
+        <member name="F:MvcMiniProfiler.Data.ProfiledDbConnection._conn">
             <summary>
-            Returns a new <see cref="T:MvcMiniProfiler.Data.ProfiledDbConnection"/> that wraps <paramref name="connection"/>, 
-            providing query execution profiling.
+            Current unwrapped connection
             </summary>
-            <param name="connection">Your provider-specific flavor of connection, e.g. SqlConnection, OracleConnection</param>
         </member>
-        <member name="M:MvcMiniProfiler.Data.ProfiledDbConnection.Get(System.Data.Common.DbConnection,MvcMiniProfiler.Data.IDbProfiler)">
+        <member name="F:MvcMiniProfiler.Data.ProfiledDbConnection._profiler">
             <summary>
-            Returns a new <see cref="T:MvcMiniProfiler.Data.ProfiledDbConnection"/> that wraps <paramref name="connection"/>, 
-            providing query execution profiling.
+            The current profiler instance
             </summary>
-            <param name="connection">Your provider-specific flavor of connection, e.g. SqlConnection, OracleConnection</param>
-            <param name="profiler">The currently started <see cref="T:MvcMiniProfiler.MiniProfiler"/> or null.</param>
         </member>
         <member name="M:MvcMiniProfiler.Data.ProfiledDbConnection.#ctor(System.Data.Common.DbConnection,MvcMiniProfiler.Data.IDbProfiler)">
             <summary>
@@ -482,23 +479,10 @@
             <param name="connection">Your provider-specific flavor of connection, e.g. SqlConnection, OracleConnection</param>
             <param name="profiler">The currently started <see cref="T:MvcMiniProfiler.MiniProfiler"/> or null.</param>
         </member>
-        <member name="T:MvcMiniProfiler.Data.ProfiledDbConnectionFactory">
+        <member name="P:MvcMiniProfiler.Data.ProfiledDbConnection.WrappedConnection">
             <summary>
-            Connection factory used for EF Code First DbContext API
+            The raw connection this is wrapping
             </summary>
-        </member>
-        <member name="M:MvcMiniProfiler.Data.ProfiledDbConnectionFactory.#ctor(System.Data.Entity.Infrastructure.IDbConnectionFactory)">
-            <summary>
-            Create a profiled connection factory
-            </summary>
-            <param name="wrapped">The underlying connection that needs to be profiled</param>
-        </member>
-        <member name="M:MvcMiniProfiler.Data.ProfiledDbConnectionFactory.CreateConnection(System.String)">
-            <summary>
-            Create a wrapped connection for profiling purposes 
-            </summary>
-            <param name="nameOrConnectionString"></param>
-            <returns></returns>
         </member>
         <member name="T:MvcMiniProfiler.Storage.DatabaseStorageBase">
             <summary>
@@ -657,16 +641,86 @@
             proxy
             </summary>
         </member>
-        <member name="M:MvcMiniProfiler.Data.ProfiledDbProviderFactory.System#IServiceProvider#GetService(System.Type)">
-            <summary>
-            Extension mechanism for additional services;  
-            </summary>
-            <returns>requested service provider or null.</returns>
-        </member>
         <member name="P:MvcMiniProfiler.Data.ProfiledDbProviderFactory.CanCreateDataSourceEnumerator">
             <summary>
             proxy
             </summary>
+        </member>
+        <member name="T:MvcMiniProfiler.BaseProfilerProvider">
+            <summary>
+            BaseProfilerProvider.  This providers some helper methods which provide access to
+            internals not otherwise available.
+            To use, override the <see cref="M:MvcMiniProfiler.BaseProfilerProvider.Start(MvcMiniProfiler.ProfileLevel)"/>, <see cref="M:MvcMiniProfiler.BaseProfilerProvider.Stop(System.Boolean)"/> and <see cref="M:MvcMiniProfiler.BaseProfilerProvider.GetCurrentProfiler"/>
+            methods.
+            </summary>
+        </member>
+        <member name="T:MvcMiniProfiler.IProfilerProvider">
+            <summary>
+            A provider used to create <see cref="T:MvcMiniProfiler.MiniProfiler"/> instances and maintain the current instance.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.IProfilerProvider.Start(MvcMiniProfiler.ProfileLevel)">
+            <summary>
+            Starts a new MiniProfiler and sets it to be current.  By the end of this method
+            <see cref="M:MvcMiniProfiler.IProfilerProvider.GetCurrentProfiler"/> should return the new MiniProfiler.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.IProfilerProvider.Stop(System.Boolean)">
+            <summary>
+            Ends the current profiling session, if one exists.
+            </summary>
+            <param name="discardResults">
+            When true, clears the <see cref="P:MvcMiniProfiler.MiniProfiler.Current"/> for this HttpContext, allowing profiling to 
+            be prematurely stopped and discarded. Useful for when a specific route does not need to be profiled.
+            </param>
+        </member>
+        <member name="M:MvcMiniProfiler.IProfilerProvider.GetCurrentProfiler">
+            <summary>
+            Returns the current MiniProfiler.  This is used by <see cref="P:MvcMiniProfiler.MiniProfiler.Current"/>.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MvcMiniProfiler.BaseProfilerProvider.Start(MvcMiniProfiler.ProfileLevel)">
+            <summary>
+            Starts a new MiniProfiler and sets it to be current.  By the end of this method
+            <see cref="M:MvcMiniProfiler.BaseProfilerProvider.GetCurrentProfiler"/> should return the new MiniProfiler.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.BaseProfilerProvider.Stop(System.Boolean)">
+            <summary>
+            Stops the current MiniProfiler (if any is currently running).
+            <see cref="M:MvcMiniProfiler.BaseProfilerProvider.SaveProfiler(MvcMiniProfiler.MiniProfiler)"/> should be called if <paramref name="discardResults"/> is false
+            </summary>
+            <param name="discardResults">If true, any current results will be thrown away and nothing saved</param>
+        </member>
+        <member name="M:MvcMiniProfiler.BaseProfilerProvider.GetCurrentProfiler">
+            <summary>
+            Returns the current MiniProfiler.  This is used by <see cref="P:MvcMiniProfiler.MiniProfiler.Current"/>.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MvcMiniProfiler.BaseProfilerProvider.SetProfilerActive(MvcMiniProfiler.MiniProfiler)">
+            <summary>
+            Sets <paramref name="profiler"/> to be active (read to start profiling)
+            This should be called once a new MiniProfiler has been created.
+            </summary>
+            <param name="profiler">The profiler to set to active</param>
+            <exception cref="T:System.ArgumentNullException">If <paramref name="profiler"/> is null</exception>
+        </member>
+        <member name="M:MvcMiniProfiler.BaseProfilerProvider.StopProfiler(MvcMiniProfiler.MiniProfiler)">
+            <summary>
+            Stops the profiler and marks it as inactive.
+            </summary>
+            <param name="profiler">The profiler to stop</param>
+            <returns>True if successful, false if Stop had previously been called on this profiler</returns>
+            <exception cref="T:System.ArgumentNullException">If <paramref name="profiler"/> is null</exception>
+        </member>
+        <member name="M:MvcMiniProfiler.BaseProfilerProvider.SaveProfiler(MvcMiniProfiler.MiniProfiler)">
+            <summary>
+            Calls <see cref="M:MvcMiniProfiler.MiniProfiler.Settings.EnsureStorageStrategy"/> to save the current
+            profiler using the current storage settings
+            </summary>
+            <param name="current"></param>
         </member>
         <member name="T:MvcMiniProfiler.MVCHelpers.ProfilingActionFilter">
             <summary>
@@ -803,12 +857,57 @@
             <see cref="M:System.Web.Caching.Cache.Insert(System.String,System.Object,System.Web.Caching.CacheDependency,System.DateTime,System.TimeSpan,System.Web.Caching.CacheItemUpdateCallback)"/>)
             </summary>
         </member>
-        <member name="M:MvcMiniProfiler.Data.ProfiledDbProviderServices.CreateCommandDefinition(System.Data.Common.DbCommand)">
+        <member name="T:MvcMiniProfiler.WebRequestProfilerProvider">
             <summary>
-            Get DB command definition
+            HttpContext based profiler provider.  This is the default provider to use in a web context.
+            The current profiler is associated with a HttpContext.Current ensuring that profilers are 
+            specific to a individual HttpRequest.
             </summary>
-            <param name="prototype"></param>
+        </member>
+        <member name="M:MvcMiniProfiler.WebRequestProfilerProvider.#ctor">
+            <summary>
+            Public constructor.  This also registers any UI routes needed to display results
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.WebRequestProfilerProvider.Start(MvcMiniProfiler.ProfileLevel)">
+            <summary>
+            Starts a new MiniProfiler and associates it with the current <see cref="P:System.Web.HttpContext.Current"/>.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.WebRequestProfilerProvider.Stop(System.Boolean)">
+            <summary>
+            Ends the current profiling session, if one exists.
+            </summary>
+            <param name="discardResults">
+            When true, clears the <see cref="P:MvcMiniProfiler.MiniProfiler.Current"/> for this HttpContext, allowing profiling to 
+            be prematurely stopped and discarded. Useful for when a specific route does not need to be profiled.
+            </param>
+        </member>
+        <member name="M:MvcMiniProfiler.WebRequestProfilerProvider.EnsureName(MvcMiniProfiler.MiniProfiler,System.Web.HttpRequest)">
+            <summary>
+            Makes sure 'profiler' has a Name, pulling it from route data or url.
+            </summary>
+        </member>
+        <member name="M:MvcMiniProfiler.WebRequestProfilerProvider.GetCurrentProfiler">
+            <summary>
+            Returns the current profiler
+            </summary>
             <returns></returns>
+        </member>
+        <member name="P:MvcMiniProfiler.WebRequestProfilerProvider.Current">
+            <summary>
+            Gets the currently running MiniProfiler for the current HttpContext; null if no MiniProfiler was <see cref="M:MvcMiniProfiler.WebRequestProfilerProvider.Start(MvcMiniProfiler.ProfileLevel)"/>ed.
+            </summary>
+        </member>
+        <member name="T:MvcMiniProfiler.WebRequestProfilerProvider.Settings">
+            <summary>
+            WebRequestProfilerProvider specific configurations
+            </summary>
+        </member>
+        <member name="P:MvcMiniProfiler.WebRequestProfilerProvider.Settings.UserProvider">
+            <summary>
+            Provides user identification for a given profiling request.
+            </summary>
         </member>
         <member name="T:MvcMiniProfiler.Timing">
             <summary>
@@ -1315,23 +1414,23 @@
         </member>
         <member name="M:MvcMiniProfiler.MVCHelpers.ProfilingViewEngine.#ctor(System.Web.Mvc.IViewEngine)">
             <summary>
-            Create a wrapped view engine, which will profile partials an non-partial views
+            Wrap your view engines with this to allow profiling
             </summary>
             <param name="wrapped"></param>
         </member>
         <member name="M:MvcMiniProfiler.MVCHelpers.ProfilingViewEngine.FindPartialView(System.Web.Mvc.ControllerContext,System.String,System.Boolean)">
             <summary>
-            Find a partial view
+            Find a partial
             </summary>
         </member>
         <member name="M:MvcMiniProfiler.MVCHelpers.ProfilingViewEngine.FindView(System.Web.Mvc.ControllerContext,System.String,System.String,System.Boolean)">
             <summary>
-            Fined a view
+            Find a view
             </summary>
         </member>
         <member name="M:MvcMiniProfiler.MVCHelpers.ProfilingViewEngine.ReleaseView(System.Web.Mvc.ControllerContext,System.Web.Mvc.IView)">
             <summary>
-            Release view
+            Find a partial
             </summary>
         </member>
         <member name="T:MvcMiniProfiler.UI.MiniProfilerHandler">

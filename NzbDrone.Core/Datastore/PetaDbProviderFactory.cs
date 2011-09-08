@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlServerCe;
 using System.Text;
+using MvcMiniProfiler;
 using MvcMiniProfiler.Data;
 
 namespace NzbDrone.Core.Datastore
@@ -18,7 +19,7 @@ namespace NzbDrone.Core.Datastore
 
             if (IsProfiled)
             {
-                connection = ProfiledDbConnection.Get(sqliteConnection);
+                connection = new ProfiledDbConnection(sqliteConnection, MiniProfiler.Current);
             }
 
             return connection;
