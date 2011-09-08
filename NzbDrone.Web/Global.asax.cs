@@ -38,7 +38,7 @@ namespace NzbDrone.Web
         protected override void OnApplicationStarted()
         {
             base.OnApplicationStarted();
-            WebAssetDefaultSettings.UseTelerikContentDeliveryNetwork = true;
+            //WebAssetDefaultSettings.UseTelerikContentDeliveryNetwork = true;
             RegisterRoutes(RouteTable.Routes);
             //base.OnApplicationStarted();
             AreaRegistration.RegisterAllAreas();
