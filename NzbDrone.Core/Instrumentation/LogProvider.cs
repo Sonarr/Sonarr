@@ -22,15 +22,15 @@ namespace NzbDrone.Core.Instrumentation
             return _database.Fetch<Log>();
         }
 
-        public IList<Log> TopLogs()
+        public IList<Log> TopLogs(int count)
         {
-            var logs = _database.Fetch<Log>("SELECT TOP 7500 * FROM Logs ORDER BY Time Desc");
+            var logs = _database.Fetch<Log>("SELECT TOP " + count + " * FROM Logs ORDER BY Time Desc");
             logs.Add(new Log
                          {
                              Time = DateTime.Now.AddYears(-100),
                              Level = "Info",
-                             Logger = "NzbDrone.Core.Instrumentation.LogProvider",
-                             Message = String.Format("Number of logs currently shown: 7500. More may exist, check 'All' to see everything")
+                             Logger = "Core.Instrumentation.LogProvider",
+                             Message = String.Format("Number of logs currently shown: {0}. More may exist, check 'All' to see everything", Math.Min(count, logs.Count))
                          });
 
             return logs;

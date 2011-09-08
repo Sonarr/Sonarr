@@ -35,7 +35,7 @@ namespace NzbDrone.Web.Controllers
         [GridAction]
         public ActionResult _TopAjaxBinding()
         {
-            var logs = _logProvider.TopLogs();
+            var logs = _logProvider.TopLogs(5000);
 
             return View(new GridModel(logs));
         }

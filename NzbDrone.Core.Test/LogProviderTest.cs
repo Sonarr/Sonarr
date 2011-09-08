@@ -1,12 +1,17 @@
 ﻿// ReSharper disable RedundantUsingDirective
 using System;
 using System.Linq;
+using AutoMoq;
+using FizzWare.NBuilder;
 using FluentAssertions;
+using Moq;
 using NLog;
 using NLog.Config;
 using NUnit.Framework;
 using NzbDrone.Core.Instrumentation;
+using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
+using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test
@@ -112,8 +117,6 @@ namespace NzbDrone.Core.Test
             provider.GetAllLogs().Should().HaveCount(1);
         }
 
-
-
         [Test]
         public void write_log_exception()
         {
@@ -182,10 +185,6 @@ namespace NzbDrone.Core.Test
             ExceptionVerification.ExcpectedErrors(1);
         }
 
-
-
-
-
         [Test]
         public void null_string_as_arg_should_not_fail()
         {
@@ -198,5 +197,72 @@ namespace NzbDrone.Core.Test
             epFile.Path.Should().BeNull();
         }
 
+        [Test]
+        public void top_logs()
+        {
+            //Setup
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            var fakeLogs = Builder<Log>.CreateListOfSize(510)
+
+                .Build();
+
+            db.InsertMany(fakeLogs);
+
+            //Act
+            var logs = mocker.Resolve<LogProvider>().TopLogs(500);
+
+            //Assert
+            logs.Should().HaveCount(501);
+            logs.Last().Message.Should().Be(
+                "Number of logs currently shown: 500. More may exist, check 'All' to see everything");
+        }
+
+        [Test]
+        public void top_logs_less_than_number_wanted()
+        {
+            //Setup
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            var fakeLogs = Builder<Log>.CreateListOfSize(100)
+
+                .Build();
+
+            db.InsertMany(fakeLogs);
+
+            //Act
+            var logs = mocker.Resolve<LogProvider>().TopLogs(500);
+
+            //Assert
+            logs.Should().HaveCount(101);
+            logs.Last().Message.Should().Be(
+                "Number of logs currently shown: 100. More may exist, check 'All' to see everything");
+        }
+
+        [Test]
+        public void pagedLogs()
+        {
+            //Setup
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            var fakeLogs = Builder<Log>.CreateListOfSize(100)
+
+                .Build();
+
+            db.InsertMany(fakeLogs);
+
+            //Act
+            var logs = mocker.Resolve<LogProvider>().GetPagedLogs(1, 50);
+
+            //Assert
+            logs.Items.Should().HaveCount(50);
+            logs.TotalItems.Should().Be(100);
+        }
     }
 }
