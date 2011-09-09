@@ -3,46 +3,51 @@
         cache: false
     });
 
-    $('.folderLookup').livequery(function () {
-        bindFolderAutoComplete(".folderLookup");
-    });
-    
-    $('.seriesLookup').livequery(function () {
-        bindSeriesAutoComplete(".seriesLookup");
-    });
-
-
+    bindFolderAutoComplete(".folderLookup");
+    bindSeriesAutoComplete(".seriesLookup");
 });
 
 function bindFolderAutoComplete(selector) {
-
+    
     $(selector).each(function (index, element) {
-
-        YUI().use("autocomplete", "autocomplete-highlighters", 'autocomplete-filters', function (Y) {
-            Y.one('body').addClass('yui3-skin-sam');
-            Y.one(element).plug(Y.Plugin.AutoComplete, {
-                resultHighlighter: 'startsWith',
-                resultFilters: 'phraseMatch',
-                source: '/Directory/GetDirectories/?q={query}'
-            });
+        $(element).autocomplete({
+            //source: "/Directory/GetDirectories",
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Directory/GetDirectories",
+                    dataType: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        var re = $.ui.autocomplete.escapeRegex(request.term);
+                        var matcher = new RegExp("^" + re, "i");
+                        response($.grep(data, function (item) { return matcher.test(item); }));
+                    }
+                });
+            },
+            minLength: 3
         });
     });
-
 }
 
 function bindSeriesAutoComplete(selector) {
 
     $(selector).each(function (index, element) {
-        YUI().use("autocomplete", "autocomplete-highlighters", 'autocomplete-filters', function (Y) {
-            Y.one('body').addClass('yui3-skin-sam');
-            Y.one(element).plug(Y.Plugin.AutoComplete, {
-                resultHighlighter: 'startsWith',
-                resultFilters: 'phraseMatch',
-                resultTextLocator: 'Value',
-                minQueryLength: 3,
-                queryDelay: 500,
-                source: '/AddSeries/LookupSeries/?q={query}'
-            });
-        });
+        $(element).autocomplete({
+            source: "/AddSeries/LookupSeries",
+            minLength: 3,
+            delay: 500,
+            select: function (event, ui) {
+                $(this).val(ui.item.Title);
+                return false;
+            }
+        })
+	    .data("autocomplete")._renderItem = function (ul, item) {
+	        return $("<li></li>")
+			.data("item.autocomplete", item)
+			.append("<a><strong>" + item.Title + "</strong><br>" + item.FirstAired + "</a>")
+			.appendTo(ul);
+	    };
     });
 }

@@ -29,26 +29,26 @@ namespace NzbDrone.Web.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetDirectories(string q)
+        public JsonResult GetDirectories(string term)
         {
             string[] dirs = null;
             try
             {
                 //Windows (Including UNC)
-                var windowsSep = q.LastIndexOf('\\');
+                var windowsSep = term.LastIndexOf('\\');
 
                 if (windowsSep > -1)
                 {
-                    dirs = _diskProvider.GetDirectories(q.Substring(0, windowsSep + 1));
+                    dirs = _diskProvider.GetDirectories(term.Substring(0, windowsSep + 1));
 
                 }
 
                 //Unix
-                var index = q.LastIndexOf('/');
+                var index = term.LastIndexOf('/');
 
                 if (index > -1)
                 {
-                    dirs = _diskProvider.GetDirectories(q.Substring(0, index + 1));
+                    dirs = _diskProvider.GetDirectories(term.Substring(0, index + 1));
                 }
             }
             catch

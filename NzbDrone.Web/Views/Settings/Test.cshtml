@@ -1,38 +1,33 @@
-﻿@Html.DropDownList("SabTvCategory", new SelectList(new List<string> { "TV" }))
-
-
+﻿<style>
+	.ui-autocomplete-loading { background: white url('images/ui-anim_basic_16x16.gif') right center no-repeat; }
+</style>
 <script>
-    var sabCategoryUrl = '../Command/GetSabnzbdCategories';
-
-    $('#SabTvCategory').focus(function () {
-        $.ajax({
-            type: "POST",
-            url: sabCategoryUrl,
-            data: jQuery.param({ host: '192.168.5.55', port: 2222, apiKey: '5c770e3197e4fe763423ee7c392c25d1', username: 'admin', password: 'pass' }),
-            error: function (req, status, error) {
-                $.each($('#SabTvCategory option'), function () {
-                    $(this).remove();
-                });
-
-                $('#SabTvCategory').append($('<option />').val('tv').text('Please check your SABnzbd Settings'));
-            },
-            success: function (data, textStatus, jqXHR) {
-                //Get the current value
-                var currentlySelected = $('#SabTvCategory').val();
-
-                //Remove all existing options
-                $.each($('#SabTvCategory option'), function () {
-                    $(this).remove();
-                });
-
-                //Add the new ones
-                $.each(data.categories, function () {
-                    $('#SabTvCategory').append($('<option />').val(this.toString()).text(this.toString()));
-                });
-
-                //Attempt to reset to the preiously selected value (change to lower-case)
-                $("#SabTvCategory").val(currentlySelected.toLowerCase());
+    $(function () {
+        $("#birds").autocomplete({
+            source: "/Settings/TestResults",
+            minLength: 3,
+            delay: 500,
+            select: function (event, ui) {
+                $(this).val(ui.item.Title);
+                return false;
             }
-        });
+        })
+	    .data("autocomplete")._renderItem = function (ul, item) {
+	        return $("<li></li>")
+			.data("item.autocomplete", item)
+			.append("<a><strong>" + item.Title + "</strong><br>" + item.FirstAired + "</a>")
+			.appendTo(ul);
+	    };
     });
 </script>
+
+
+
+<div class="demo">
+
+<div class="ui-widget">
+	<label for="birds">Birds: </label>
+	<input id="birds" />
+</div>
+
+</div><!-- End demo -->

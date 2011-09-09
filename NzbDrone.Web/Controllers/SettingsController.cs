@@ -45,9 +45,13 @@ namespace NzbDrone.Web.Controllers
             return View();
         }
 
-        public ActionResult TestPartial()
+        public JsonResult TestResults(string q)
         {
-            return View();
+            var results = new List<TvDbSearchResultModel>();
+            results.Add(new TvDbSearchResultModel { Id = 1, Title = "30 Rock", FirstAired = DateTime.Today.ToShortDateString() });
+            results.Add(new TvDbSearchResultModel { Id = 2, Title = "The Office", FirstAired = DateTime.Today.AddDays(-1).ToShortDateString() });
+
+            return Json(results, JsonRequestBehavior.AllowGet );
         }
 
         public ActionResult Index()

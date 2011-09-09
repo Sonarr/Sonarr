@@ -509,7 +509,7 @@
     <Compile Include="Models\SeriesModel.cs" />
     <Compile Include="Models\SeriesSearchResultModel.cs" />
     <Compile Include="Models\SettingsModels.cs" />
-    <Compile Include="Models\TestModel.cs" />
+    <Compile Include="Models\TvDbSearchResultModel.cs" />
     <Compile Include="Models\UpcomingEpisodeModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -764,7 +764,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Settings\Test.cshtml" />
-    <Content Include="Views\Settings\TestPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Misnamed\Index.cshtml" />

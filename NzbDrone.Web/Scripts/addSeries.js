@@ -107,7 +107,4 @@ function reloadAddNew() {
 jQuery(document).ready(function () {
     //RootDir
     $('#rootDirInput').watermark('Enter your new root folder path...');
-
-    //AddNew
-    $('#newSeriesLookup').watermark('Title of the series you want to add...');
 });

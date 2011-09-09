@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 using NLog;
-using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.Jobs;
@@ -170,12 +169,16 @@ namespace NzbDrone.Web.Controllers
         }
 
         [HttpGet]
-        public JsonResult LookupSeries(string q)
+        public JsonResult LookupSeries(string term)
         {
+            var tvDbResults = _tvDbProvider.SearchSeries(term).Select(r => new TvDbSearchResultModel
+                    {
+                        Id = r.Id,
+                        Title = r.SeriesName,
+                        FirstAired = r.FirstAired.ToShortDateString()
+                    }).ToList();
 
-            var dataVal = _tvDbProvider.SearchSeries(q);
-
-            return Json(dataVal.Select(c => new KeyValuePair<int, string>(c.Id, c.SeriesName)), JsonRequestBehavior.AllowGet);
+            return Json(tvDbResults, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult RootList()
