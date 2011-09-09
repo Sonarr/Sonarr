@@ -108,6 +108,11 @@ namespace NzbDrone.Web.Controllers
         public JsonResult AddNewSeries(string path, string seriesName, int seriesId, int qualityProfileId)
         {
             path = Path.Combine(path, MediaFileProvider.CleanFilename(seriesName));
+
+            //Create the folder for the new series
+            //Use the created folder name when adding the series
+            path = _diskProvider.CreateDirectory(path);
+
             return AddExistingSeries(path, seriesName, seriesId, qualityProfileId);
         }
 
@@ -116,9 +121,6 @@ namespace NzbDrone.Web.Controllers
         {
             try
             {
-                //Create the folder for the new series and then Add it
-                _diskProvider.CreateDirectory(path);
-
                 _seriesProvider.AddSeries(path, seriesId, qualityProfileId);
                 ScanNewSeries();
                 return Json(new NotificationResult() { Title = seriesName, Text = "Was added successfully" });
