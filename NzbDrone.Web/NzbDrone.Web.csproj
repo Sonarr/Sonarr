@@ -683,9 +683,7 @@
     <Content Include="Scripts\Plugins\MicrosoftAjax.js" />
     <Content Include="Scripts\Plugins\MicrosoftMvcAjax.debug.js" />
     <Content Include="Scripts\Plugins\MicrosoftMvcAjax.js" />
-    <Content Include="Scripts\Plugins\yui-min.js" />
     <Content Include="Scripts\seriesDetails.js" />
-    <Content Include="Scripts\Plugins\jquery.livequery.js" />
     <Content Include="Scripts\settingsForm.js" />
     <Content Include="Scripts\Plugins\doTimeout.js" />
     <Content Include="Scripts\episodeSearch.js" />

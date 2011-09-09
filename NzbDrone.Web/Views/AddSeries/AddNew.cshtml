@@ -4,8 +4,8 @@
 <div>
     <div>
         <input id="newSeriesLookup" class="seriesLookup" type="text" style="width: 400px" />
+        @Html.Hidden("newSeriesId", 0, new { @class = "seriesId" })
     </div>
-    @*<input id="newSeriesPath" class="folderLookup" type="text" style="width: 400px" />*@
     @Html.DropDownList("newSeriesPath", new SelectList((IList)ViewData["RootDirs"]), new { style = "width: 406px; margin-left: 0px;" })
     @Html.DropDownList("qualityList", new SelectList((IList)ViewData["QualityList"], "QualityProfileId", "Name"), new { @class = "qualitySelector" })
     <button id="saveNewSeries">

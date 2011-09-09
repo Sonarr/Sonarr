@@ -23,6 +23,7 @@ $(".addExistingButton").live('click', function () {
     var root = $(this).parents(".existingSeries");
 
     var title = $(this).siblings(".seriesLookup").val();
+    var seriesId = $(this).siblings(".seriesId").val();
     var qualityId = $(this).siblings(".qualitySelector").val();
 
     var path = root.find(".seriesPathValue Label").text();
@@ -30,7 +31,7 @@ $(".addExistingButton").live('click', function () {
     $.ajax({
         type: "POST",
         url: addSeriesUrl,
-        data: jQuery.param({ path: path, seriesName: title, qualityProfileId: qualityId }),
+        data: jQuery.param({ path: path, seriesName: title, seriesId: seriesId, qualityProfileId: qualityId }),
         error: function (req, status, error) {
             alert("Sorry! We could not add " + path + " at this time. " + error);
         },
@@ -79,13 +80,14 @@ function refreshRoot() {
 //AddNew
 $('#saveNewSeries').live('click', function () {
     var seriesTitle = $("#newSeriesLookup").val();
+    var seriesId = $("#newSeriesId").val();
     var qualityId = $("#qualityList").val();
     var path = $('#newSeriesPath').val();
 
     $.ajax({
         type: "POST",
         url: addNewSeriesUrl,
-        data: jQuery.param({ path: path, seriesName: seriesTitle, qualityProfileId: qualityId }),
+        data: jQuery.param({ path: path, seriesName: seriesTitle, seriesId: seriesId, qualityProfileId: qualityId }),
         error: function (req, status, error) {
             alert("Sorry! We could not add " + path + " at this time. " + error);
         },

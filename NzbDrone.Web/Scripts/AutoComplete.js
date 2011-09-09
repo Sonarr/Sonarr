@@ -40,6 +40,7 @@ function bindSeriesAutoComplete(selector) {
             delay: 500,
             select: function (event, ui) {
                 $(this).val(ui.item.Title);
+                $(this).siblings('.seriesId').val(ui.item.Id);
                 return false;
             }
         })

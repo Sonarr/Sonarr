@@ -8,6 +8,6 @@ namespace NzbDrone.Web.Models
     {
         public SelectList Quality { get; set; }
 
-        public List<Tuple<string, string>> ExistingSeries { get; set; }
+        public List<Tuple<string, string, int>> ExistingSeries { get; set; }
     }
 }

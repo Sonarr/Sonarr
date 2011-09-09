@@ -69,7 +69,6 @@ namespace NzbDrone.Web.Controllers
             return View();
         }
 
-
         public ActionResult ExistingSeries()
         {
             var result = new ExistingSeriesModel();
@@ -81,7 +80,7 @@ namespace NzbDrone.Web.Controllers
                 unmappedList.AddRange(_rootFolderProvider.GetUnmappedFolders(folder.Path));
             }
 
-            result.ExistingSeries = new List<Tuple<string, string>>();
+            result.ExistingSeries = new List<Tuple<string, string, int>>();
 
             foreach (var folder in unmappedList)
             {
@@ -89,12 +88,14 @@ namespace NzbDrone.Web.Controllers
                 var tvdbResult = _tvDbProvider.SearchSeries(foldername).FirstOrDefault();
 
                 var title = String.Empty;
+                var seriesId = 0;
                 if (tvdbResult != null)
                 {
                     title = tvdbResult.SeriesName;
+                    seriesId = tvdbResult.Id;
                 }
 
-                result.ExistingSeries.Add(new Tuple<string, string>(folder, title));
+                result.ExistingSeries.Add(new Tuple<string, string, int>(folder, title, seriesId));
             }
 
             var defaultQuality = Convert.ToInt32(_configProvider.DefaultQualityProfile);
@@ -104,23 +105,21 @@ namespace NzbDrone.Web.Controllers
         }
 
         [HttpPost]
-        public JsonResult AddNewSeries(string path, string seriesName, int qualityProfileId)
+        public JsonResult AddNewSeries(string path, string seriesName, int seriesId, int qualityProfileId)
         {
             path = Path.Combine(path, MediaFileProvider.CleanFilename(seriesName));
-            return AddExistingSeries(path, seriesName, qualityProfileId);
+            return AddExistingSeries(path, seriesName, seriesId, qualityProfileId);
         }
 
         [HttpPost]
-        public JsonResult AddExistingSeries(string path, string seriesName, int qualityProfileId)
+        public JsonResult AddExistingSeries(string path, string seriesName, int seriesId, int qualityProfileId)
         {
             try
             {
                 //Create the folder for the new series and then Add it
                 _diskProvider.CreateDirectory(path);
 
-                var series = _tvDbProvider.SearchSeries(seriesName).Where(s => s.SeriesName == seriesName).Single();
-
-                _seriesProvider.AddSeries(path, series.Id, qualityProfileId);
+                _seriesProvider.AddSeries(path, seriesId, qualityProfileId);
                 ScanNewSeries();
                 return Json(new NotificationResult() { Title = seriesName, Text = "Was added successfully" });
             }

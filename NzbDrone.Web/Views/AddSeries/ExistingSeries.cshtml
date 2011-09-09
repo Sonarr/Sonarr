@@ -42,7 +42,7 @@ else
     </div>
 
 }
-@foreach (var series in Model.ExistingSeries)
+@foreach (var series in Model.ExistingSeries)   
 {
     <span class="existingSeries">
         <div>
@@ -52,6 +52,7 @@ else
         </div>
         <div>
             <input class="seriesLookup" type="text" style="width: 400px" value="@series.Item2" />
+            @Html.Hidden("seriesId", series.Item3, new { @class = "seriesId" })
             @Html.DropDownList(Guid.NewGuid().ToString(), Model.Quality, new { @class = "qualitySelector" })
             <button class="addExistingButton">
                 Add</button>
