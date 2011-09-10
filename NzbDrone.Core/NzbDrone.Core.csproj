@@ -176,6 +176,7 @@
     <Compile Include="Datastore\MigrationLogger.cs" />
     <Compile Include="Datastore\MigrationsHelper.cs" />
     <Compile Include="Datastore\CustomeMapper.cs" />
+    <Compile Include="Datastore\Migrations\Migration20110909.cs" />
     <Compile Include="Datastore\Migrations\Migration20110726.cs" />
     <Compile Include="Datastore\Migrations\Migration20110707.cs" />
     <Compile Include="Datastore\PetaDbProviderFactory.cs" />
@@ -204,6 +205,7 @@
     <Compile Include="Model\Xbmc\IconType.cs" />
     <Compile Include="Providers\Core\UdpProvider.cs" />
     <Compile Include="Providers\Jobs\BacklogSearchJob.cs" />
+    <Compile Include="Providers\Jobs\BannerDownloadJob.cs" />
     <Compile Include="Providers\Jobs\RenameSeriesJob.cs" />
     <Compile Include="Providers\Jobs\SeriesSearchJob.cs" />
     <Compile Include="Providers\Jobs\RenameSeasonJob.cs" />

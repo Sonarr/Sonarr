@@ -89,6 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BacklogSearchJobTest.cs" />
+    <Compile Include="BannerDownloadJobTest.cs" />
     <Compile Include="MisnamedProviderTest.cs" />
     <Compile Include="SeasonSearchJobTest.cs" />
     <Compile Include="SearchProviderTest_PartialSeason.cs" />

@@ -94,6 +94,8 @@ namespace NzbDrone.Core.Providers
             series.Language = tvDbSeries.Language != null ? tvDbSeries.Language.Abbriviation : string.Empty;
             series.CleanTitle = Parser.NormalizeTitle(tvDbSeries.SeriesName);
             series.LastInfoSync = DateTime.Now;
+            series.Runtime = (int)tvDbSeries.Runtime;
+            series.BannerUrl = tvDbSeries.BannerPath;
 
             UpdateSeries(series);
             return series;

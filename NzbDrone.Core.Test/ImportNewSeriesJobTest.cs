@@ -44,6 +44,8 @@ namespace NzbDrone.Core.Test
                 .Setup(j => j.Start(notification, series[1].SeriesId, 0))
                 .Callback(() => series[1].LastDiskSync = DateTime.Now);
 
+            mocker.GetMock<BannerDownloadJob>()
+                .Setup(j => j.Start(notification, It.IsAny<int>(), 0));
 
             mocker.GetMock<UpdateInfoJob>()
                 .Setup(j => j.Start(notification, series[0].SeriesId, 0))
@@ -109,6 +111,8 @@ namespace NzbDrone.Core.Test
                 .Setup(j => j.Start(notification, series[0].SeriesId, 0))
                 .Callback(() => series[0].LastDiskSync = DateTime.Now);
 
+            mocker.GetMock<BannerDownloadJob>()
+                .Setup(j => j.Start(notification, series[0].SeriesId, 0));
 
             mocker.GetMock<SeriesProvider>()
                 .Setup(s => s.GetSeries(series[0].SeriesId)).Returns(series[0]);

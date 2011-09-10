@@ -20,6 +20,7 @@ namespace NzbDrone.Core.Providers.Jobs
         private readonly MediaFileProvider _mediaFileProvider;
         private readonly UpdateInfoJob _updateInfoJob;
         private readonly DiskScanJob _diskScanJob;
+        private readonly BannerDownloadJob _bannerDownloadJob;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
@@ -27,13 +28,15 @@ namespace NzbDrone.Core.Providers.Jobs
 
         [Inject]
         public ImportNewSeriesJob(SeriesProvider seriesProvider, EpisodeProvider episodeProvider,
-            MediaFileProvider mediaFileProvider, UpdateInfoJob updateInfoJob, DiskScanJob diskScanJob)
+                                    MediaFileProvider mediaFileProvider, UpdateInfoJob updateInfoJob,
+                                    DiskScanJob diskScanJob, BannerDownloadJob bannerDownloadJob)
         {
             _seriesProvider = seriesProvider;
             _episodeProvider = episodeProvider;
             _mediaFileProvider = mediaFileProvider;
             _updateInfoJob = updateInfoJob;
             _diskScanJob = diskScanJob;
+            _bannerDownloadJob = bannerDownloadJob;
         }
 
         public string Name
@@ -73,9 +76,12 @@ namespace NzbDrone.Core.Providers.Jobs
                     var updatedSeries = _seriesProvider.GetSeries(currentSeries.SeriesId);
                     AutoIgnoreSeasons(updatedSeries.SeriesId);
 
-                    notification.CurrentMessage = String.Format("{0} was successfully imported", updatedSeries.Title);
+                    //Download the banner for the new series
+                    _bannerDownloadJob.Start(notification, updatedSeries.SeriesId, 0);
 
+                    notification.CurrentMessage = String.Format("{0} was successfully imported", updatedSeries.Title);
                 }
+
                 catch (Exception e)
                 {
                     Logger.ErrorException(e.Message, e);
