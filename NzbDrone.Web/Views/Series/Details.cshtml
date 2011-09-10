@@ -1,5 +1,4 @@
-﻿@model NzbDrone.Web.Models.SeriesModel
-@using NzbDrone.Core.Repository
+﻿@model SeriesModel
 @using NzbDrone.Web.Models
 @section TitleContent{
     @Model.Title
@@ -79,6 +78,18 @@
     {
         line-height: 1.5em;
     }
+    
+    #banner-container
+    {
+        
+        width: 758px;
+        height: 140px;
+        padding: 0px;
+        margin-top: 10px;
+        margin-bottom: 15px;
+        margin-left: auto;
+        margin-right: auto;
+    }
 </style>
 
 @section ActionMenu{
@@ -91,6 +102,17 @@
     </ul>
 }
 @section MainContent{
+    <div id="banner-container">
+        @{
+            var bannerUrl = "../../Content/Images/img03.jpg";
+            
+            if(Model.HasBanner)
+            {
+                bannerUrl = "../../Content/Images/Banners/" + Model.SeriesId + ".jpg";
+            }
+        }
+        <img src="@bannerUrl" alt="Banner"/>
+    </div>
 
     <div class="seasonToggleTopGroup">
         @foreach (var season in Model.Seasons)

@@ -152,6 +152,7 @@ namespace NzbDrone.Web.Controllers
             model.Seasons = _episodeProvider.GetSeasons(seriesId);
             model.Title = series.Title;
             model.SeriesId = series.SeriesId;
+            model.HasBanner = !String.IsNullOrEmpty(series.BannerUrl);
 
             return View(model);
         }

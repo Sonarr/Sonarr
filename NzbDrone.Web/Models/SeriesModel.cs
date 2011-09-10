@@ -20,6 +20,7 @@ namespace NzbDrone.Web.Models
         public string QualityProfileName { get; set; }
         public string Overview { get; set; }
         public int Episodes { get; set; }
+        public bool HasBanner { get; set; }
 
         public IList<int> Seasons { get; set; }
 
