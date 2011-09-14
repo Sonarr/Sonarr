@@ -90,6 +90,7 @@
   <ItemGroup>
     <Compile Include="BacklogSearchJobTest.cs" />
     <Compile Include="BannerDownloadJobTest.cs" />
+    <Compile Include="QualityTypeProviderTest.cs" />
     <Compile Include="MisnamedProviderTest.cs" />
     <Compile Include="SeasonSearchJobTest.cs" />
     <Compile Include="SearchProviderTest_PartialSeason.cs" />
@@ -154,6 +155,18 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Files\Categories_json.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\RSS\SizeParsing\newzbin.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\RSS\SizeParsing\nzbmatrix.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\RSS\SizeParsing\nzbsorg.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\RSS\SizeParsing\nzbsrus.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Framework\AutoMoq\License.txt" />

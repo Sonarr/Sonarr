@@ -316,8 +316,72 @@ namespace NzbDrone.Core.Test
             result.Should().Be(clean);
         }
 
+        [Test]
+        public void size_newzbin()
+        {
+            //Setup
+            var mocker = new AutoMoqer();
+
+            mocker.GetMock<HttpProvider>()
+                          .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
+                          .Returns(File.OpenRead(".\\Files\\Rss\\SizeParsing\\newzbin.xml"));
+
+            //Act
+            var parseResults = mocker.Resolve<Newzbin>().FetchRss();
+
+            parseResults.Should().HaveCount(1);
+            parseResults[0].Size.Should().Be(1295620506);
+        }
+
+        [Test]
+        public void size_nzbmatrix()
+        {
+            //Setup
+            var mocker = new AutoMoqer();
+
+            mocker.GetMock<HttpProvider>()
+                          .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
+                          .Returns(File.OpenRead(".\\Files\\Rss\\SizeParsing\\nzbmatrix.xml"));
+
+            //Act
+            var parseResults = mocker.Resolve<NzbMatrix>().FetchRss();
+
+            parseResults.Should().HaveCount(1);
+            parseResults[0].Size.Should().Be(1331439862);
+        }
+
+        [Test]
+        public void size_nzbsorg()
+        {
+            //Setup
+            var mocker = new AutoMoqer();
+
+            mocker.GetMock<HttpProvider>()
+                          .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
+                          .Returns(File.OpenRead(".\\Files\\Rss\\SizeParsing\\nzbsorg.xml"));
+
+            //Act
+            var parseResults = mocker.Resolve<NzbsOrg>().FetchRss();
+
+            parseResults.Should().HaveCount(1);
+            parseResults[0].Size.Should().Be(1793148846);
+        }
+
+        [Test]
+        public void size_nzbsrus()
+        {
+            //Setup
+            var mocker = new AutoMoqer();
+
+            mocker.GetMock<HttpProvider>()
+                          .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
+                          .Returns(File.OpenRead(".\\Files\\Rss\\SizeParsing\\nzbsrus.xml"));
+
+            //Act
+            var parseResults = mocker.Resolve<NzbsRUs>().FetchRss();
+
+            parseResults.Should().HaveCount(1);
+            parseResults[0].Size.Should().Be(1793148846);
+        }
     }
-
-
-
 }

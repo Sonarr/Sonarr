@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel.Syndication;
+using System.Text.RegularExpressions;
 using Ninject;
+using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Search;
 using NzbDrone.Core.Providers.Core;
 
@@ -40,6 +42,17 @@ namespace NzbDrone.Core.Providers.Indexer
         protected override IList<string> GetSearchUrls(SearchModel searchModel)
         {
             return new List<string>();
+        }
+
+        protected override EpisodeParseResult CustomParser(SyndicationItem item, EpisodeParseResult currentResult)
+        {
+            if (currentResult != null)
+            {
+                var sizeString = Regex.Match(item.Summary.Text, @"\d+\.\d{1,2} \w{3}", RegexOptions.IgnoreCase).Value;
+
+                currentResult.Size = Parser.GetReportSize(sizeString);
+            }
+            return currentResult;
         }
     }
 }

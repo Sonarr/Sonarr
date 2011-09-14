@@ -30,6 +30,8 @@ namespace NzbDrone.Core.Model
 
         public bool FullSeason { get; set; }
 
+        public long Size { get; set; }
+
         public override string ToString()
         {
             if (AirDate != null && EpisodeNumbers == null)

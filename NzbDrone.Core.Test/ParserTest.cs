@@ -338,5 +338,18 @@ namespace NzbDrone.Core.Test
             result.SeasonNumber.Should().Be(seasonNumber);
             result.FullSeason.Should().BeTrue();
         }
+
+        [TestCase("5.64 GB", 6055903887)]
+        [TestCase("5.54 GiB", 5948529705)]
+        [TestCase("398.62 MiB", 417983365)]
+        [TestCase("7,162.1MB", 7510006170)]
+        [TestCase("162.1MB", 169974170)]
+        [TestCase("398.62 MB", 417983365)]
+        public void parse_size(string sizeString, long expectedSize)
+        {
+            var result = Parser.GetReportSize(sizeString);
+
+            result.Should().Be(expectedSize);
+        }
     }
 }

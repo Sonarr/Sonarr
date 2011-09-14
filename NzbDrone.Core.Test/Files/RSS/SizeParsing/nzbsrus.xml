@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+<rss version="2.0">
+  <channel>
+    <title>NZBsRus.com</title>
+    <description>This is the NZBs'R'US RSS feed.</description>
+    <link>http://www.nzbsrus.com</link>
+    <language>en-US</language>
+    <ttl>5</ttl>
+
+    <item>
+      <title>Shameless.S08E17.720p.HDTV.x264-BiA</title>
+      <pubDate>Wed, 14 Sep 2011 01:06:49 am</pubDate>
+      <category>TV - HD</category>
+      <link>http://www.nzbsrus.com/nzbdownload_rss.php/457967/68614/4182562f71f29cd36b9e7495d00abcff/</link>
+      <description>
+        Size 1.67 GiB (42 files)
+        Files: 34
+        Par2s: 8
+
+      </description>
+    </item>
+  </channel>
+</rss>

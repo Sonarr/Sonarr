@@ -61,6 +61,7 @@ namespace NzbDrone.Core
             LogConfiguration.StartDbLogging();
 
             _kernel.Get<QualityProvider>().SetupDefaultProfiles();
+            _kernel.Get<QualityTypeProvider>().SetupDefault();
 
             BindExternalNotifications();
             BindIndexers();

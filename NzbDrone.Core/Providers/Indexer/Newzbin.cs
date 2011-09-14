@@ -96,6 +96,10 @@ namespace NzbDrone.Core.Providers.Indexer
                 var languageString = Regex.Match(item.Summary.Text, @"Language - \w*", RegexOptions.IgnoreCase).Value;
 
                 currentResult.Language = Parser.ParseLanguage(languageString);
+
+                var sizeString = Regex.Match(item.Summary.Text, @"\(Size: \d*\,?\d+\.\d{1,2}\w{2}\)", RegexOptions.IgnoreCase).Value;
+
+                currentResult.Size = Parser.GetReportSize(sizeString);
             }
             return currentResult;
         }
