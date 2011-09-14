@@ -135,6 +135,10 @@ namespace NzbDrone.Core.Test
                 .Setup(p => p.GetEpisodesByParseResult(parseResultMulti, true))
                 .Returns(new List<Episode> { episode, episode2 });
 
+            mocker.GetMock<QualityTypeProvider>()
+                .Setup(s => s.Get(It.IsAny<int>()))
+                .Returns(new QualityType { MaxSize = 10.Gigabytes(), MinSize = 0 });
+
             episode.EpisodeFile.Quality = QualityTypes.Bluray720p;
 
             //Act
@@ -144,7 +148,6 @@ namespace NzbDrone.Core.Test
             Assert.IsFalse(result);
             mocker.VerifyAllMocks();
         }
-
 
         [Test]
         public void IsQualityNeeded_file_in_history_should_be_skipped()
@@ -161,6 +164,14 @@ namespace NzbDrone.Core.Test
             mocker.GetMock<EpisodeProvider>()
                 .Setup(p => p.GetEpisodesByParseResult(parseResultSingle, true))
                 .Returns(new List<Episode> { episode });
+
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(p => p.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(false);
+
+            mocker.GetMock<QualityTypeProvider>()
+                .Setup(s => s.Get(It.IsAny<int>()))
+                .Returns(new QualityType { MaxSize = 10.Gigabytes(), MinSize = 0 });
 
             episode.EpisodeFile.Quality = QualityTypes.SDTV;
 
@@ -188,6 +199,14 @@ namespace NzbDrone.Core.Test
                 .Setup(p => p.GetEpisodesByParseResult(parseResultSingle, true))
                 .Returns(new List<Episode> { episode });
 
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(p => p.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(false);
+
+            mocker.GetMock<QualityTypeProvider>()
+                .Setup(s => s.Get(It.IsAny<int>()))
+                .Returns(new QualityType { MaxSize = 10.Gigabytes(), MinSize = 0 });
+
             episode.EpisodeFile.Quality = QualityTypes.SDTV;
 
             //Act
@@ -210,10 +229,17 @@ namespace NzbDrone.Core.Test
                 .Setup(p => p.GetBestQualityInHistory(episode.EpisodeId))
                 .Returns<Quality>(null);
 
-
             mocker.GetMock<EpisodeProvider>()
                 .Setup(p => p.GetEpisodesByParseResult(parseResultSingle, true))
                 .Returns(new List<Episode> { episode });
+
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(p => p.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(false);
+
+            mocker.GetMock<QualityTypeProvider>()
+                .Setup(s => s.Get(It.IsAny<int>()))
+                .Returns(new QualityType { MaxSize = 10.Gigabytes(), MinSize = 0 });
 
             episode.EpisodeFile.Quality = QualityTypes.SDTV;
             //Act

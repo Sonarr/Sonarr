@@ -19,6 +19,11 @@ namespace NzbDrone.Core.Providers
             _database = database;
         }
 
+        public QualityTypeProvider()
+        {
+            
+        }
+
         public virtual void Update(QualityType qualityType)
         {
             _database.Update(qualityType);

@@ -330,6 +330,21 @@ namespace NzbDrone.Core.Providers
             Logger.Info("Ignore flag for Episode:{0} successfully set to {1}", episodeId, isIgnored);
         }
 
+        public virtual bool IsFirstOrLastEpisodeOfSeason(int seriesId, int seasonNumber, int episodeNumber)
+        {
+            var episodes = GetEpisodesBySeason(seriesId, seasonNumber).OrderBy(e => e.EpisodeNumber);
+
+            if (episodes.Count() == 0)
+                return false;
+
+            //Ensure that this is either the first episode
+            //or is the last episode in a season that has 10 or more episodes
+            if (episodes.First().EpisodeNumber == episodeNumber || (episodes.Count() >= 10 && episodes.Last().EpisodeNumber == episodeNumber))
+                return true;
+
+            return false;
+        }
+
         public IList<Episode> AttachSeries(IList<Episode> episodes)
         {
             if (episodes.Count == 0) return episodes;

@@ -1355,5 +1355,71 @@ namespace NzbDrone.Core.Test
             episodes.First().ShouldHave().AllPropertiesBut(e => e.Series).EqualTo(fakeEpisode);
             mocker.VerifyAllMocks();
         }
+
+        [Test]
+        public void IsFirstOrLastEpisodeInSeason_false()
+        {
+            var db = MockLib.GetEmptyDatabase();
+            var mocker = new AutoMoqer();
+            mocker.SetConstant(db);
+
+            var fakeEpisodes = Builder<Episode>.CreateListOfSize(10)
+                .WhereAll()
+                .Have(c => c.SeriesId = 10)
+                .Have(c => c.SeasonNumber = 1)
+                .Build();
+
+            db.InsertMany(fakeEpisodes);
+
+            //Act
+            var result = mocker.Resolve<EpisodeProvider>().IsFirstOrLastEpisodeOfSeason(10, 1, 5);
+
+            //Assert
+            result.Should().BeFalse();
+        }
+
+        [Test]
+        public void IsFirstOrLastEpisodeInSeason_true_first()
+        {
+            var db = MockLib.GetEmptyDatabase();
+            var mocker = new AutoMoqer();
+            mocker.SetConstant(db);
+
+            var fakeEpisodes = Builder<Episode>.CreateListOfSize(10)
+                .WhereAll()
+                .Have(c => c.SeriesId = 10)
+                .Have(c => c.SeasonNumber = 1)
+                .Build();
+
+            db.InsertMany(fakeEpisodes);
+
+            //Act
+            var result = mocker.Resolve<EpisodeProvider>().IsFirstOrLastEpisodeOfSeason(10, 1, 1);
+
+            //Assert
+            result.Should().BeFalse();
+        }
+
+        [Test]
+        public void IsFirstOrLastEpisodeInSeason_true_last()
+        {
+            var db = MockLib.GetEmptyDatabase();
+            var mocker = new AutoMoqer();
+            mocker.SetConstant(db);
+
+            var fakeEpisodes = Builder<Episode>.CreateListOfSize(10)
+                .WhereAll()
+                .Have(c => c.SeriesId = 10)
+                .Have(c => c.SeasonNumber = 1)
+                .Build();
+
+            db.InsertMany(fakeEpisodes);
+
+            //Act
+            var result = mocker.Resolve<EpisodeProvider>().IsFirstOrLastEpisodeOfSeason(10, 1, 10);
+
+            //Assert
+            result.Should().BeFalse();
+        }
     }
 }
