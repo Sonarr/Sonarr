@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using AutoMoq;
 using FizzWare.NBuilder;
 using FluentAssertions;
@@ -94,7 +95,7 @@ namespace NzbDrone.Core.Test
             var fakeSeries = Builder<Series>.CreateListOfSize(10)
                 .Build();
 
-            const string path = @"C:\Users\mark.mcdowall\Dropbox\Visual Studio 2010\NzbDrone\NzbDrone.Core.Test\bin\Debug\Content\Images\Banners\";
+            var path = Path.Combine(CentralDispatch.AppPath, "Content", "Images", "Banners");
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
 
@@ -105,43 +106,43 @@ namespace NzbDrone.Core.Test
                 .Returns(fakeSeries);
 
             mocker.GetMock<HttpProvider>()
-                .Setup(s => s.DownloadFile(It.IsAny<string>(), path + "1.jpg"))
+                .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(path, "1.jpg")))
                 .Returns(false);
 
             mocker.GetMock<HttpProvider>()
-                .Setup(s => s.DownloadFile(It.IsAny<string>(), path + "2.jpg"))
+                .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(path, "2.jpg")))
                 .Returns(true);
 
             mocker.GetMock<HttpProvider>()
-                .Setup(s => s.DownloadFile(It.IsAny<string>(), path + "3.jpg"))
+                .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(path, "3.jpg")))
                 .Returns(false);
 
             mocker.GetMock<HttpProvider>()
-                .Setup(s => s.DownloadFile(It.IsAny<string>(), path + "4.jpg"))
+                .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(path, "4.jpg")))
                 .Returns(true);
 
             mocker.GetMock<HttpProvider>()
-                .Setup(s => s.DownloadFile(It.IsAny<string>(), path + "5.jpg"))
+                .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(path, "5.jpg")))
                 .Returns(false);
 
             mocker.GetMock<HttpProvider>()
-                .Setup(s => s.DownloadFile(It.IsAny<string>(), path + "6.jpg"))
+                .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(path, "6.jpg")))
                 .Returns(true);
 
             mocker.GetMock<HttpProvider>()
-                .Setup(s => s.DownloadFile(It.IsAny<string>(), path + "7.jpg"))
+                .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(path, "7.jpg")))
                 .Returns(false);
 
             mocker.GetMock<HttpProvider>()
-                .Setup(s => s.DownloadFile(It.IsAny<string>(), path + "8.jpg"))
+                .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(path, "8.jpg")))
                 .Returns(true);
 
             mocker.GetMock<HttpProvider>()
-                .Setup(s => s.DownloadFile(It.IsAny<string>(), path + "9.jpg"))
+                .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(path, "9.jpg")))
                 .Returns(false);
 
             mocker.GetMock<HttpProvider>()
-                .Setup(s => s.DownloadFile(It.IsAny<string>(), path + "10.jpg"))
+                .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(path, "10.jpg")))
                 .Returns(true);
 
             mocker.GetMock<DiskProvider>()
