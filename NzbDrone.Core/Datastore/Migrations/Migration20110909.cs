@@ -17,8 +17,8 @@ namespace NzbDrone.Core.Datastore.Migrations
                                             {
                                                 new Column("QualityTypeId", DbType.Int32, ColumnProperty.PrimaryKey),
                                                 new Column("Name", DbType.String, ColumnProperty.NotNull),
-                                                new Column("MinSize", DbType.Int64, ColumnProperty.NotNull),
-                                                new Column("MaxSize", DbType.Int64, ColumnProperty.NotNull)
+                                                new Column("MinSize", DbType.Int32, ColumnProperty.NotNull),
+                                                new Column("MaxSize", DbType.Int32, ColumnProperty.NotNull)
                                             });
         }
 

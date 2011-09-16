@@ -106,3 +106,14 @@
     min-height: 23px;
     position: relative;
 }
+
+.sliders
+{
+    clear: both;
+    padding-bottom: 20px;
+}
+
+.slider-container
+{
+    margin-bottom: 10px;
+}

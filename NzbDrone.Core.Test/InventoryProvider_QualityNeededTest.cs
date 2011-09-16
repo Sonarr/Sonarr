@@ -137,7 +137,7 @@ namespace NzbDrone.Core.Test
 
             mocker.GetMock<QualityTypeProvider>()
                 .Setup(s => s.Get(It.IsAny<int>()))
-                .Returns(new QualityType { MaxSize = 10.Gigabytes(), MinSize = 0 });
+                .Returns(new QualityType { MaxSize = 100, MinSize = 0 });
 
             episode.EpisodeFile.Quality = QualityTypes.Bluray720p;
 
@@ -171,7 +171,7 @@ namespace NzbDrone.Core.Test
 
             mocker.GetMock<QualityTypeProvider>()
                 .Setup(s => s.Get(It.IsAny<int>()))
-                .Returns(new QualityType { MaxSize = 10.Gigabytes(), MinSize = 0 });
+                .Returns(new QualityType { MaxSize = 100, MinSize = 0 });
 
             episode.EpisodeFile.Quality = QualityTypes.SDTV;
 
@@ -205,7 +205,7 @@ namespace NzbDrone.Core.Test
 
             mocker.GetMock<QualityTypeProvider>()
                 .Setup(s => s.Get(It.IsAny<int>()))
-                .Returns(new QualityType { MaxSize = 10.Gigabytes(), MinSize = 0 });
+                .Returns(new QualityType { MaxSize = 100, MinSize = 0 });
 
             episode.EpisodeFile.Quality = QualityTypes.SDTV;
 
@@ -239,7 +239,7 @@ namespace NzbDrone.Core.Test
 
             mocker.GetMock<QualityTypeProvider>()
                 .Setup(s => s.Get(It.IsAny<int>()))
-                .Returns(new QualityType { MaxSize = 10.Gigabytes(), MinSize = 0 });
+                .Returns(new QualityType { MaxSize = 100, MinSize = 0 });
 
             episode.EpisodeFile.Quality = QualityTypes.SDTV;
             //Act

@@ -27,12 +27,15 @@ namespace NzbDrone.Web.Controllers
         private readonly AutoConfigureProvider _autoConfigureProvider;
         private readonly SeriesProvider _seriesProvider;
         private readonly ExternalNotificationProvider _externalNotificationProvider;
+        private readonly QualityTypeProvider _qualityTypeProvider;
 
         public SettingsController(ConfigProvider configProvider, IndexerProvider indexerProvider,
                                   QualityProvider qualityProvider, AutoConfigureProvider autoConfigureProvider,
-                                  SeriesProvider seriesProvider, ExternalNotificationProvider externalNotificationProvider)
+                                  SeriesProvider seriesProvider, ExternalNotificationProvider externalNotificationProvider,
+                                  QualityTypeProvider qualityTypeProvider)
         {
             _externalNotificationProvider = externalNotificationProvider;
+            _qualityTypeProvider = qualityTypeProvider;
             _configProvider = configProvider;
             _indexerProvider = indexerProvider;
             _qualityProvider = qualityProvider;
@@ -123,12 +126,19 @@ namespace NzbDrone.Web.Controllers
 
             var defaultQualityQualityProfileId = Convert.ToInt32(_configProvider.DefaultQualityProfile);
             var qualityProfileSelectList = new SelectList(profiles, "QualityProfileId", "Name");
+            var qualityTypesFromDb = _qualityTypeProvider.All();
 
             var model = new QualityModel
                             {
                                 Profiles = profiles,
                                 DefaultQualityProfileId = defaultQualityQualityProfileId,
-                                QualityProfileSelectList = qualityProfileSelectList
+                                QualityProfileSelectList = qualityProfileSelectList,
+                                SdtvMaxSize = qualityTypesFromDb.Single(q => q.QualityTypeId == 1).MaxSize,
+                                DvdMaxSize = qualityTypesFromDb.Single(q => q.QualityTypeId == 2).MaxSize,
+                                HdtvMaxSize = qualityTypesFromDb.Single(q => q.QualityTypeId == 4).MaxSize,
+                                WebdlMaxSize = qualityTypesFromDb.Single(q => q.QualityTypeId == 5).MaxSize,
+                                Bluray720pMaxSize = qualityTypesFromDb.Single(q => q.QualityTypeId == 6).MaxSize,
+                                Bluray1080pMaxSize = qualityTypesFromDb.Single(q => q.QualityTypeId == 7).MaxSize
                             };
 
             return View(model);
@@ -322,8 +332,6 @@ namespace NzbDrone.Web.Controllers
                 Json(new NotificationResult() { Title = "Failed", Text = "Invalid request data.", NotificationType = NotificationType.Error });
         }
 
-
-
         [HttpPost]
         public JsonResult SaveQuality(QualityModel data)
         {
@@ -357,6 +365,17 @@ namespace NzbDrone.Web.Controllers
 
                     _qualityProvider.Update(profile);
                 }
+
+                var qualityTypesFromDb = _qualityTypeProvider.All();
+
+                qualityTypesFromDb.Single(q => q.QualityTypeId == 1).MaxSize = data.SdtvMaxSize;
+                qualityTypesFromDb.Single(q => q.QualityTypeId == 2).MaxSize = data.DvdMaxSize;
+                qualityTypesFromDb.Single(q => q.QualityTypeId == 4).MaxSize = data.HdtvMaxSize;
+                qualityTypesFromDb.Single(q => q.QualityTypeId == 5).MaxSize = data.WebdlMaxSize;
+                qualityTypesFromDb.Single(q => q.QualityTypeId == 6).MaxSize = data.Bluray720pMaxSize;
+                qualityTypesFromDb.Single(q => q.QualityTypeId == 7).MaxSize = data.Bluray1080pMaxSize;
+
+                _qualityTypeProvider.UpdateAll(qualityTypesFromDb);
 
                 return GetSuccessResult();
             }

@@ -14,5 +14,12 @@ namespace NzbDrone.Web.Models
         public int DefaultQualityProfileId { get; set; }
 
         public SelectList QualityProfileSelectList { get; set; }
+
+        public int SdtvMaxSize { get; set; }
+        public int DvdMaxSize { get; set; }
+        public int HdtvMaxSize { get; set; }
+        public int WebdlMaxSize { get; set; }
+        public int Bluray720pMaxSize { get; set; }
+        public int Bluray1080pMaxSize { get; set; }
     }
 }

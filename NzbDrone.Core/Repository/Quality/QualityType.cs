@@ -13,8 +13,8 @@ namespace NzbDrone.Core.Repository.Quality
     {
         public int QualityTypeId { get; set; }
         public string Name { get; set; }
-        public long MinSize { get; set; }
-        public long MaxSize { get; set; }
+        public int MinSize { get; set; }
+        public int MaxSize { get; set; }
 
         public override string ToString()
         {

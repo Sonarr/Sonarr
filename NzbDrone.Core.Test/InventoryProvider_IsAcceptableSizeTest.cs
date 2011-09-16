@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Test
 
             qualityType = Builder<QualityType>.CreateNew()
                 .With(q => q.MinSize = 0)
-                .With(q => q.MaxSize = 314572800)
+                .With(q => q.MaxSize = 10)
                 .With(q => q.QualityTypeId = 1)
                 .Build();
 
@@ -116,7 +116,7 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer(MockBehavior.Strict);
 
             parseResultSingle.Series = series30minutes;
-            parseResultSingle.Size = 1184572800;
+            parseResultSingle.Size = 10000.Megabytes();
 
             mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 
@@ -137,7 +137,7 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer(MockBehavior.Strict);
 
             parseResultSingle.Series = series60minutes;
-            parseResultSingle.Size = 1368572800;
+            parseResultSingle.Size = 10000.Megabytes();
 
             mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 
@@ -200,7 +200,7 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer(MockBehavior.Strict);
 
             parseResultMulti.Series = series30minutes;
-            parseResultMulti.Size = 1184572800;
+            parseResultMulti.Size = 10000.Megabytes();
 
             mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 
@@ -221,7 +221,7 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer(MockBehavior.Strict);
 
             parseResultMulti.Series = series60minutes;
-            parseResultMulti.Size = 1368572800;
+            parseResultMulti.Size = 10000.Megabytes();
 
             mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 
@@ -284,7 +284,7 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer(MockBehavior.Strict);
 
             parseResultSingle.Series = series30minutes;
-            parseResultSingle.Size = 1184572800;
+            parseResultSingle.Size = 10000.Megabytes();
 
             mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 
@@ -305,7 +305,7 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer(MockBehavior.Strict);
 
             parseResultSingle.Series = series60minutes;
-            parseResultSingle.Size = 1368572800;
+            parseResultSingle.Size = 10000.Megabytes();
 
             mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 
@@ -318,6 +318,50 @@ namespace NzbDrone.Core.Test
 
             //Assert
             result.Should().BeFalse();
+        }
+
+        [Test]
+        public void IsAcceptableSize_true_unlimited_30_minute()
+        {
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+
+            parseResultSingle.Series = series30minutes;
+            parseResultSingle.Size = 18457280000;
+            qualityType.MaxSize = 0;
+
+            mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
+
+            mocker.GetMock<EpisodeProvider>().Setup(
+                s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(true);
+
+            //Act
+            bool result = mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultSingle);
+
+            //Assert
+            result.Should().BeTrue();
+        }
+
+        [Test]
+        public void IsAcceptableSize_true_unlimited_60_minute()
+        {
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+
+            parseResultSingle.Series = series60minutes;
+            parseResultSingle.Size = 36857280000;
+            qualityType.MaxSize = 0;
+
+            mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
+
+            mocker.GetMock<EpisodeProvider>().Setup(
+                s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(true);
+
+            //Act
+            bool result = mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultSingle);
+
+            //Assert
+            result.Should().BeTrue();
         }
     }
 }

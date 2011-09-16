@@ -111,7 +111,6 @@ namespace NzbDrone.Core.Providers
             return true; //If we get to this point and the file has not yet been rejected then accept it
         }
 
-
         public static bool IsUpgrade(Quality currentQuality, Quality newQuality, QualityTypes cutOff)
         {
             if (currentQuality.QualityType >= cutOff)
@@ -147,12 +146,15 @@ namespace NzbDrone.Core.Providers
             //Is it a multi-episode release?
             //Is it the first or last series of a season?
 
-            var maxSize = qualityType.MaxSize;
+            //0 will be treated as unlimited
+            if (qualityType.MaxSize == 0)
+                return true;
+
+            var maxSize = qualityType.MaxSize.Megabytes();
             var series = parseResult.Series;
 
-            //If this is an hour long episode (between 50 and 65 minutes) then multiply by 2
-            if (series.Runtime >= 50 && series.Runtime <= 65)
-                maxSize = maxSize * 2;
+            //Multiply maxSize by Series.Runtime
+            maxSize = maxSize * series.Runtime;
 
             //Multiply maxSize by the number of episodes parsed
             maxSize = maxSize * parseResult.EpisodeNumbers.Count;

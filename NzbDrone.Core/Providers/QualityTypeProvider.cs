@@ -60,12 +60,12 @@ namespace NzbDrone.Core.Providers
             Logger.Info("Setting up default quality types");
 
             var qualityTypes = new List<QualityType>();
-            qualityTypes.Add(new QualityType { QualityTypeId = 1, Name = "SDTV", MinSize = 0, MaxSize = 10.Gigabytes() });
-            qualityTypes.Add(new QualityType { QualityTypeId = 2, Name = "DVD", MinSize = 0, MaxSize = 10.Gigabytes() });
-            qualityTypes.Add(new QualityType { QualityTypeId = 4, Name = "HDTV", MinSize = 0, MaxSize = 10.Gigabytes() });
-            qualityTypes.Add(new QualityType { QualityTypeId = 5, Name = "WEBDL", MinSize = 0, MaxSize = 10.Gigabytes() });
-            qualityTypes.Add(new QualityType { QualityTypeId = 6, Name = "Bluray720p", MinSize = 0, MaxSize = 10.Gigabytes() });
-            qualityTypes.Add(new QualityType { QualityTypeId = 7, Name = "Bluray1080p", MinSize = 0, MaxSize = 10.Gigabytes() });
+            qualityTypes.Add(new QualityType { QualityTypeId = 1, Name = "SDTV", MinSize = 0, MaxSize = 100 });
+            qualityTypes.Add(new QualityType { QualityTypeId = 2, Name = "DVD", MinSize = 0, MaxSize = 100 });
+            qualityTypes.Add(new QualityType { QualityTypeId = 4, Name = "HDTV", MinSize = 0, MaxSize = 100 });
+            qualityTypes.Add(new QualityType { QualityTypeId = 5, Name = "WEBDL", MinSize = 0, MaxSize = 100 });
+            qualityTypes.Add(new QualityType { QualityTypeId = 6, Name = "Bluray720p", MinSize = 0, MaxSize = 100 });
+            qualityTypes.Add(new QualityType { QualityTypeId = 7, Name = "Bluray1080p", MinSize = 0, MaxSize = 100 });
 
             _database.InsertMany(qualityTypes);
         }
