@@ -47,6 +47,7 @@ namespace NzbDrone.Core.Test
         [TestCase("House - S06E13 - 5 to 9 [DVD]", "House", 6, 13)]
         [TestCase("The Mentalist - S02E21 - 18-5-4", "The Mentalist", 2, 21)]
         [TestCase("Breaking.In.S01E07.21.0.Jump.Street.720p.WEB-DL.DD5.1.h.264-KiNGS", "Breaking In", 1, 7)]
+        [TestCase("CSI525", "CSI", 5, 25)]
         public void ParseTitle_single(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
             var result = Parser.ParseTitle(postTitle);
