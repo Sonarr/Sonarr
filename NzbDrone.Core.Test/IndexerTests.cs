@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Test
     {
 
         [TestCase("nzbsorg.xml", 2)]
-        [TestCase("nzbsrus.xml", 9)]
+        [TestCase("nzbsrus.xml", 7)]
         [TestCase("newzbin.xml", 1)]
         [TestCase("nzbmatrix.xml", 2)]
         public void parse_feed_xml(string fileName, int warns)

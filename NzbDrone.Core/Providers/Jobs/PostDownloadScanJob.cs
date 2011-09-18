@@ -86,6 +86,9 @@ namespace NzbDrone.Core.Providers.Jobs
                     if (series == null)
                     {
                         Logger.Warn("Unable to Import new download [{0}], series doesn't exist in database.", subfolder);
+
+                        //Rename the Directory so it's not processed again.
+                        _diskProvider.MoveDirectory(subfolderInfo.FullName, Path.Combine(subfolderInfo.Parent.FullName, "_NzbDrone_" + subfolderInfo.Name));
                         continue;
                     }
 
