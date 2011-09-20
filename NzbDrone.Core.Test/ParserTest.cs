@@ -331,6 +331,7 @@ namespace NzbDrone.Core.Test
         [TestCase("Eureka Season 1 720p WEB DL DD 5 1 h264 TjHD", "Eureka", 1)]
         [TestCase("The Office Season4 WS PDTV XviD FUtV", "The Office", 4)]
         [TestCase("Eureka S 01 720p WEB DL DD 5 1 h264 TjHD", "Eureka", 1)]
+        [TestCase("Doctor Who Confidential   Season 3", "Doctor Who Confidential", 3)]
         public void parse_season_info(string postTitle, string seriesName, int seasonNumber)
         {
             var result = Parser.ParseTitle(postTitle);

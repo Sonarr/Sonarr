@@ -44,7 +44,7 @@ namespace NzbDrone.Core
                                         RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                                     //Supports Season only releases
-                                    new Regex(@"^(?<title>.+?)\W(?:S|Season)\W?(?<season>\d{1,2}(?!\d+))\W(?<extras>EXTRAS)?(?!\\)",
+                                    new Regex(@"^(?<title>.+?)\W(?:S|Season)\W?(?<season>\d{1,2}(?!\d+))\W?(?<extras>EXTRAS)?(?!\\)",
                                         RegexOptions.IgnoreCase | RegexOptions.Compiled)
                                 };
 
