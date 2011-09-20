@@ -352,5 +352,15 @@ namespace NzbDrone.Core.Test
 
             result.Should().Be(expectedSize);
         }
+
+        [TestCase("Acropolis Now S05 EXTRAS DVDRip XviD RUNNER")]
+        [TestCase("Punky Brewster S01 EXTRAS DVDRip XviD RUNNER")]
+        [TestCase("Instant Star S03 EXTRAS DVDRip XviD OSiTV")]
+        public void parse_season_extras(string postTitle)
+        {
+            var result = Parser.ParseTitle(postTitle);
+
+            result.Should().BeNull();
+        }
     }
 }
