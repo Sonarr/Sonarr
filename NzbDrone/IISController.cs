@@ -175,8 +175,14 @@ namespace NzbDrone
             bindings.Add(
                 new XElement("binding",
                              new XAttribute("protocol", "http"),
-                             new XAttribute("bindingInformation", String.Format("*:{0}:", Config.Port))
+                             new XAttribute("bindingInformation", String.Format("*:{0}:localhost", Config.Port))
                     ));
+
+            bindings.Add(
+            new XElement("binding",
+                         new XAttribute("protocol", "http"),
+                         new XAttribute("bindingInformation", String.Format("*:{0}:", Config.Port))
+                ));
 
             configXml.Save(configPath);
         }
