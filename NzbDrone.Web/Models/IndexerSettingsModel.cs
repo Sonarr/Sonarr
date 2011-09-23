@@ -57,19 +57,19 @@ namespace NzbDrone.Web.Models
         public String NewzbinPassword { get; set; }
 
         [DisplayName("NZBs.org")]
-        [Description("Scan Nzbs.org for new epsiodes")]
+        [Description("Enable downloading episodes from Nzbs.org")]
         public bool NzbsOrgEnabled { get; set; }
 
         [DisplayName("NZB Matrix")]
-        [Description("Scan NZB Matrix for new epsiodes")]
+        [Description("Enable downloading episodes from NZB Matrix")]
         public bool NzbMatrixEnabled { get; set; }
 
         [DisplayName("NZBsRUs")]
-        [Description("Scan NZBsRus for new epsiodes")]
+        [Description("Enable downloading episodes from NZBsRus")]
         public bool NzbsRUsEnabled { get; set; }
 
         [DisplayName("Newzbin")]
-        [Description("Scan Newzbin for new epsiodes")]
+        [Description("Enable downloading episodes from Newzbin")]
         public bool NewzbinEnabled { get; set; }
     }
 }

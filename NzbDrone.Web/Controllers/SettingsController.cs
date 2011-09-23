@@ -28,14 +28,16 @@ namespace NzbDrone.Web.Controllers
         private readonly SeriesProvider _seriesProvider;
         private readonly ExternalNotificationProvider _externalNotificationProvider;
         private readonly QualityTypeProvider _qualityTypeProvider;
+        private readonly RootDirProvider _rootDirProvider;
 
         public SettingsController(ConfigProvider configProvider, IndexerProvider indexerProvider,
                                   QualityProvider qualityProvider, AutoConfigureProvider autoConfigureProvider,
                                   SeriesProvider seriesProvider, ExternalNotificationProvider externalNotificationProvider,
-                                  QualityTypeProvider qualityTypeProvider)
+                                  QualityTypeProvider qualityTypeProvider, RootDirProvider rootDirProvider)
         {
             _externalNotificationProvider = externalNotificationProvider;
             _qualityTypeProvider = qualityTypeProvider;
+            _rootDirProvider = rootDirProvider;
             _configProvider = configProvider;
             _indexerProvider = indexerProvider;
             _qualityProvider = qualityProvider;
@@ -315,6 +317,12 @@ namespace NzbDrone.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                //Check to see if the TV Directory matches any RootDirs (Ignoring Case), if it does, return an error to the user
+                //This prevents a user from finding a way to delete their entire TV Library
+                var rootDirs = _rootDirProvider.GetAll();
+                if (rootDirs.Any(r => r.Path.Equals(data.SabDropDirectory, StringComparison.InvariantCultureIgnoreCase)))
+                    Json(new NotificationResult { Title = "Failed", Text = "Invalid TV Directory", NotificationType = NotificationType.Error });
+
                 _configProvider.SabHost = data.SabHost;
                 _configProvider.SabPort = data.SabPort;
                 _configProvider.SabApiKey = data.SabApiKey;

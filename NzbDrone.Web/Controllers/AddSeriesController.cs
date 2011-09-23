@@ -153,6 +153,10 @@ namespace NzbDrone.Web.Controllers
             if (String.IsNullOrWhiteSpace(path))
                 return new JsonResult { Data = "failed" };
 
+            //Don't let a user add a rootDir that is the same as their SABnzbd TV Directory
+            if (path.Equals(_configProvider.SabDropDirectory, StringComparison.InvariantCultureIgnoreCase))
+                return new JsonResult { Data = "failed" };
+
             try
             {
                 _rootFolderProvider.Add(new RootDir { Path = path });
