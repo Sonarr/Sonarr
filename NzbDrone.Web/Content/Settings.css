@@ -95,9 +95,7 @@ p, h1, form, button{border:0; margin:0; padding:0;}
     border-bottom-style: solid;
     border-bottom-width: 4px;
     border-color: #3C3C3C;
-    /* Set padding to prevent fieldset border from moving when button is highlighted... WINNING! */
-    padding-bottom: 0px;
-    padding-top: 4px;
+    padding-bottom: 2px;
 }
 
 #saveAjax
