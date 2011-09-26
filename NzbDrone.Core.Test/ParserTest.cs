@@ -363,5 +363,15 @@ namespace NzbDrone.Core.Test
 
             result.Should().BeNull();
         }
+
+        [TestCase("Lie.to.Me.S03.SUBPACK.DVDRip.XviD-REWARD")]
+        [TestCase("The.Middle.S02.SUBPACK.DVDRip.XviD-REWARD")]
+        [TestCase("CSI.S11.SUBPACK.DVDRip.XviD-REWARD")]
+        public void parse_season_subpack(string postTitle)
+        {
+            var result = Parser.ParseTitle(postTitle);
+
+            result.Should().BeNull();
+        }
     }
 }

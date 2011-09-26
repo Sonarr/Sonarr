@@ -44,7 +44,7 @@ namespace NzbDrone.Core
                                         RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                                     //Supports Season only releases
-                                    new Regex(@"^(?<title>.+?)\W(?:S|Season)\W?(?<season>\d{1,2}(?!\d+))\W?(?<extras>EXTRAS)?(?!\\)",
+                                    new Regex(@"^(?<title>.+?)\W(?:S|Season)\W?(?<season>\d{1,2}(?!\d+))\W?(?<extras>EXTRAS|SUBPACK)?(?!\\)",
                                         RegexOptions.IgnoreCase | RegexOptions.Compiled)
                                 };
 
@@ -135,7 +135,7 @@ namespace NzbDrone.Core
 
                             else
                             {
-                                //Check to see if this is an "Extras" pack, if it is, return NULL
+                                //Check to see if this is an "Extras" or "SUBPACK" release, if it is, return NULL
                                 //Todo: Set a "Extras" flag in EpisodeParseResult if we want to download them ever
                                 if (!String.IsNullOrEmpty(match[0].Groups["extras"].Value))
                                     return null;
