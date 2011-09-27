@@ -56,6 +56,18 @@ namespace NzbDrone.Core.Providers
                 Logger.Trace("Determining version of XBMC Host: {0}", host);
                 var version = GetJsonVersion(host, username, password);
 
+                Logger.Trace("Determining if there are any active players on XBMC host: {0}", host);
+                var activePlayers = GetActivePlayers(host, username, password);
+
+                //If video is currently playing, then skip update
+                if (activePlayers["video"])
+                {
+                    Logger.Debug("Video is currently playing, skipping library update");
+                    continue;
+                }
+
+                Logger.Trace("No video playing, proceeding with library update");
+
                 //If Dharma
                 if (version == 2)
                     UpdateWithHttp(series, host, username, password);
@@ -206,6 +218,7 @@ namespace NzbDrone.Core.Providers
                 if (CheckForJsonError(response))
                     return version;
 
+                Logger.Trace("Getting version from response");
                 var result = serializer.Deserialize<VersionResult>(response);
                 result.Result.TryGetValue("version", out version);
             }
@@ -274,6 +287,8 @@ namespace NzbDrone.Core.Providers
 
         public virtual bool CheckForJsonError(string response)
         {
+            Logger.Trace("Looking for error in response: {0}", response);
+
             if (response.StartsWith("{\"error\""))
             {
                 var serializer = new JavaScriptSerializer();

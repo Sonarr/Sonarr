@@ -70,6 +70,8 @@ namespace NzbDrone.Core.Providers.Core
         {
             address += "/jsonrpc";
 
+            Logger.Trace("Posting command: {0}, to {1}", command, address);
+
             byte[] byteArray = Encoding.ASCII.GetBytes(command);
 
             var request = WebRequest.Create(address);
