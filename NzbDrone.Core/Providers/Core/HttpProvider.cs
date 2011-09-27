@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Providers.Core
 
         public virtual string PostCommand(string address, string username, string password, string command)
         {
-            address += "/jsonrpc";
+            address = String.Format("http://{0}/jsonrpc", address);
 
             Logger.Trace("Posting command: {0}, to {1}", command, address);
 
