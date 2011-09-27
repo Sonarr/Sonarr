@@ -300,6 +300,12 @@ namespace NzbDrone.Core.Providers
                 return true;
             }
 
+            if (String.IsNullOrWhiteSpace(response))
+            {
+                Logger.Debug("Invalid response from XBMC, the response is not valid JSON");
+                return true;
+            }
+
             return false;
         }
 

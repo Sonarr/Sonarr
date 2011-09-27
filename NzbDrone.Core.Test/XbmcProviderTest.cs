@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Test
     public class XbmcProviderTest : TestBase
     {
         [Test]
-        public void JsonEror_true()
+        public void JsonError_true()
         {
             //Setup
             var mocker = new AutoMoqer();
@@ -36,7 +36,21 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
-        public void JsonEror_false()
+        public void JsonError_true_empty_response()
+        {
+            //Setup
+            var mocker = new AutoMoqer();
+            var response = String.Empty;
+
+            //Act
+            var result = mocker.Resolve<XbmcProvider>().CheckForJsonError(response);
+
+            //Assert
+            Assert.AreEqual(true, result);
+        }
+
+        [Test]
+        public void JsonError_false()
         {
             //Setup
             var mocker = new AutoMoqer();

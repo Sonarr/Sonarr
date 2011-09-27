@@ -74,24 +74,31 @@ namespace NzbDrone.Core.Providers.Core
 
             byte[] byteArray = Encoding.ASCII.GetBytes(command);
 
-            var request = WebRequest.Create(address);
+            var request = (HttpWebRequest)WebRequest.Create(address);
             request.Method = "POST";
             request.Credentials = new NetworkCredential(username, password);
-            request.ContentLength = byteArray.Length;
-            request.ContentType = "application/x-www-form-urlencoded";
-            var dataStream = request.GetRequestStream();
-            dataStream.Write(byteArray, 0, byteArray.Length);
-            dataStream.Close();
+            request.ContentType = "application/json";
+            request.Timeout = 2000;
+            request.KeepAlive = false;
 
-            var response = request.GetResponse();
-            dataStream = response.GetResponseStream();
-            var reader = new StreamReader(dataStream);
-            // Read the content.
-            string responseFromServer = reader.ReadToEnd();
+            //Used to hold the JSON response
+            string responseFromServer;
 
-            reader.Close();
-            dataStream.Close();
-            response.Close();
+            using (var requestStream = request.GetRequestStream())
+            {
+                requestStream.Write(byteArray, 0, byteArray.Length);
+
+                using (var response = request.GetResponse())
+                {
+                    using (var responseStream = response.GetResponseStream())
+                    {
+                        using (var reader = new StreamReader(responseStream))
+                        {
+                            responseFromServer = reader.ReadToEnd();
+                        }
+                    }
+                }
+            }
 
             return responseFromServer.Replace("&nbsp;", " ");
         }
