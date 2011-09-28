@@ -105,7 +105,7 @@ namespace NzbDrone.Core.Test
             var series = mocker.Resolve<SeriesProvider>().GetSeries(1);
 
             //Assert
-            series.ShouldHave().AllPropertiesBut(s => s.QualityProfile, s => s.SeriesId).EqualTo(fakeSeries);
+            series.ShouldHave().AllPropertiesBut(s => s.QualityProfile, s => s.SeriesId, s => s.NextAiring).EqualTo(fakeSeries);
             series.QualityProfile.Should().NotBeNull();
             series.QualityProfile.ShouldHave().Properties(q => q.Name, q => q.SonicAllowed, q => q.Cutoff, q => q.SonicAllowed).EqualTo(fakeQuality);
 
@@ -474,6 +474,127 @@ namespace NzbDrone.Core.Test
 
             //Assert
             result.Should().BeFalse();
+        }
+
+        [Test]
+        public void Get_Series_NextAiring_Today()
+        {
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+            var fakeSeries = Builder<Series>.CreateNew().With(e => e.QualityProfileId = fakeQuality.QualityProfileId).Build();
+            var fakeEpisodes = Builder<Episode>.CreateListOfSize(2)
+                .WhereAll()
+                .Have(e => e.SeriesId = fakeSeries.SeriesId)
+                .WhereTheFirst(1)
+                .Have(e => e.AirDate = DateTime.Today)
+                .AndTheRemaining()
+                .Have(e => e.AirDate = DateTime.Today.AddDays(1))
+                .Build();
+
+            db.Insert(fakeSeries);
+            db.Insert(fakeQuality);
+            db.InsertMany(fakeEpisodes);
+
+            //Act
+            mocker.Resolve<QualityProvider>();
+            var series = mocker.Resolve<SeriesProvider>().GetAllSeriesWithEpisodeCount();
+
+            //Assert
+            series.Should().HaveCount(1);
+            series[0].NextAiring.Should().Be(DateTime.Today);
+        }
+
+        [Test]
+        public void Get_Series_NextAiring_Tomorrow_Last_Aired_Yesterday()
+        {
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+            var fakeSeries = Builder<Series>.CreateNew().With(e => e.QualityProfileId = fakeQuality.QualityProfileId).Build();
+            var fakeEpisodes = Builder<Episode>.CreateListOfSize(2)
+                .WhereAll()
+                .Have(e => e.SeriesId = fakeSeries.SeriesId)
+                .WhereTheFirst(1)
+                .Have(e => e.AirDate = DateTime.Today.AddDays(-1))
+                .AndTheRemaining()
+                .Have(e => e.AirDate = DateTime.Today.AddDays(1))
+                .Build();
+
+            db.Insert(fakeSeries);
+            db.Insert(fakeQuality);
+            db.InsertMany(fakeEpisodes);
+
+            //Act
+            mocker.Resolve<QualityProvider>();
+            var series = mocker.Resolve<SeriesProvider>().GetAllSeriesWithEpisodeCount();
+
+            //Assert
+            series.Should().HaveCount(1);
+            series[0].NextAiring.Should().Be(DateTime.Today.AddDays(1));
+        }
+
+        [Test]
+        public void Get_Series_NextAiring_Unknown()
+        {
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+            var fakeSeries = Builder<Series>.CreateNew().With(e => e.QualityProfileId = fakeQuality.QualityProfileId).Build();
+            var fakeEpisodes = Builder<Episode>.CreateListOfSize(2)
+                .WhereAll()
+                .Have(e => e.SeriesId = fakeSeries.SeriesId)
+                .Have(e => e.AirDate = null)
+                .Build();
+
+            db.Insert(fakeSeries);
+            db.Insert(fakeQuality);
+            db.InsertMany(fakeEpisodes);
+
+            //Act
+            mocker.Resolve<QualityProvider>();
+            var series = mocker.Resolve<SeriesProvider>().GetAllSeriesWithEpisodeCount();
+
+            //Assert
+            series.Should().HaveCount(1);
+            series[0].NextAiring.Should().NotHaveValue();
+        }
+
+        [Test]
+        public void Get_Series_NextAiring_1_month()
+        {
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+            var fakeSeries = Builder<Series>.CreateNew().With(e => e.QualityProfileId = fakeQuality.QualityProfileId).Build();
+            var fakeEpisodes = Builder<Episode>.CreateListOfSize(2)
+                .WhereAll()
+                .Have(e => e.SeriesId = fakeSeries.SeriesId)
+                .WhereTheFirst(1)
+                .Have(e => e.AirDate = DateTime.Today.AddDays(-1))
+                .AndTheRemaining()
+                .Have(e => e.AirDate = DateTime.Today.AddMonths(1))
+                .Build();
+
+            db.Insert(fakeSeries);
+            db.Insert(fakeQuality);
+            db.InsertMany(fakeEpisodes);
+
+            //Act
+            mocker.Resolve<QualityProvider>();
+            var series = mocker.Resolve<SeriesProvider>().GetAllSeriesWithEpisodeCount();
+
+            //Assert
+            series.Should().HaveCount(1);
+            series[0].NextAiring.Should().Be(DateTime.Today.AddMonths(1));
         }
     }
 }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             

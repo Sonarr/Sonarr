@@ -61,5 +61,8 @@ namespace NzbDrone.Core.Repository
 
         [ResultColumn]
         public int SeasonCount { get; set; }
+
+        [ResultColumn]
+        public DateTime? NextAiring { get; set; }
     }
 }

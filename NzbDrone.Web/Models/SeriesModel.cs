@@ -21,6 +21,7 @@ namespace NzbDrone.Web.Models
         public string Overview { get; set; }
         public int Episodes { get; set; }
         public bool HasBanner { get; set; }
+        public string NextAiring { get; set; }
 
         public IList<int> Seasons { get; set; }
 

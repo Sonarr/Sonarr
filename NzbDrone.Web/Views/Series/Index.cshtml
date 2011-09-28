@@ -72,7 +72,8 @@ NZBDrone
                                  columns.Bound(o => o.SeasonsCount).Title("Seasons");
                                  columns.Bound(o => o.QualityProfileName).Title("Quality");
                                  columns.Bound(o => o.Status);
-                                 columns.Bound(o => o.AirsDayOfWeek);
+                                 //columns.Bound(o => o.AirsDayOfWeek);
+                                 columns.Bound(o => o.NextAiring);
                                  columns.Bound(o => o.Episodes).Title("Episodes").Width(125)
                                      .ClientTemplate("<div id=\"progressbar_<#= SeriesId #>\" class=\"progressbar\">" +
                                                             "<div class=\"progressText\"></div>" +
@@ -89,7 +90,12 @@ NZBDrone
                              })
                 .Editable(editor => editor.Mode(GridEditMode.PopUp))
                 //.Sortable(sort => sort.OrderBy(order => order.Add(o => o.Title).Ascending()).Enabled(true))
-                .DetailView(detailView => detailView.ClientTemplate("<#= Overview #>"))
+                .DetailView(detailView => detailView.ClientTemplate(
+                                                                        "<b>Airs Day of Week:</b> " + "<#= AirsDayOfWeek #>" +
+                                                                        "<br />" +
+                                                                        "<b>Overview:</b> " +
+                                                                        "<#= Overview #>"
+                                                                    ))
                 .ClientEvents(clientEvents =>
                 {
                     clientEvents.OnEdit("grid_edit");

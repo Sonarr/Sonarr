@@ -174,7 +174,8 @@ namespace NzbDrone.Web.Controllers
                                                         Status = s.Status,
                                                         SeasonsCount = s.SeasonCount,
                                                         EpisodeCount = s.EpisodeCount,
-                                                        EpisodeFileCount = s.EpisodeFileCount
+                                                        EpisodeFileCount = s.EpisodeFileCount,
+                                                        NextAiring = s.NextAiring == null ? String.Empty : s.NextAiring.Value.ToBestDateString()
                                                     }).ToList();
 
             return series;
