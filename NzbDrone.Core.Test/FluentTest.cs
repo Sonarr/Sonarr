@@ -38,6 +38,58 @@ namespace NzbDrone.Core.Test
             "test".WithDefault(null);
         }
 
+        [Test]
+        public void ToBestDateTime_Yesterday()
+        {
+            var dateTime = DateTime.Today.AddDays(-1);
 
+            dateTime.ToBestDateString().Should().Be("Yesterday");
+        }
+
+        [Test]
+        public void ToBestDateTime_Today()
+        {
+            var dateTime = DateTime.Today;
+
+            dateTime.ToBestDateString().Should().Be("Today");
+        }
+
+        [Test]
+        public void ToBestDateTime_Tomorrow()
+        {
+            var dateTime = DateTime.Today.AddDays(1);
+
+            dateTime.ToBestDateString().Should().Be("Tomorrow");
+        }
+
+        [Test]
+        public void ToBestDateTime_DayOfWeek()
+        {
+            for (int i = 2; i < 7; i++)
+            {
+                var dateTime = DateTime.Today.AddDays(i);
+
+                Console.WriteLine(dateTime.DayOfWeek);
+                dateTime.ToBestDateString().Should().Be(dateTime.DayOfWeek.ToString());
+            }
+        }
+
+        [Test]
+        public void ToBestDateTime_Over_One_Week()
+        {
+            var dateTime = DateTime.Today.AddDays(8);
+
+            Console.WriteLine(dateTime.DayOfWeek);
+            dateTime.ToBestDateString().Should().Be(dateTime.ToShortDateString());
+        }
+
+        [Test]
+        public void ToBestDateTime_Before_Yesterday()
+        {
+            var dateTime = DateTime.Today.AddDays(-2);
+
+            Console.WriteLine(dateTime.DayOfWeek);
+            dateTime.ToBestDateString().Should().Be(dateTime.ToShortDateString());
+        }
     }
 }
