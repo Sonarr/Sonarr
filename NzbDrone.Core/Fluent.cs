@@ -28,5 +28,22 @@ namespace NzbDrone.Core
         {
             return gigabytes * 1073741824L;
         }
+
+        public static string ToBestDateString(this DateTime dateTime)
+        {
+            if (dateTime == DateTime.Today.AddDays(-1))
+                return "Yesterday";
+
+            if (dateTime == DateTime.Today)
+                return "Today";
+
+            if (dateTime == DateTime.Today.AddDays(1))
+                return "Tomorrow";
+
+            if (dateTime > DateTime.Today.AddDays(1) && dateTime < DateTime.Today.AddDays(7))
+                return dateTime.DayOfWeek.ToString();
+
+            return dateTime.ToShortDateString();
+        }
     }
 }

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 using MvcMiniProfiler;
+using NzbDrone.Core;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Jobs;
@@ -199,7 +200,7 @@ namespace NzbDrone.Web.Controllers
                 var airDate = String.Empty;
 
                 if (e.AirDate != null)
-                    airDate = e.AirDate.Value.ToShortDateString();
+                    airDate = e.AirDate.Value.ToBestDateString();
 
                 episodes.Add(new EpisodeModel
                                  {
