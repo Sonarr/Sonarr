@@ -272,6 +272,39 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
+        public void GetXbmcSeriesPath_special_characters()
+        {
+            //Setup
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+
+            var queryResult = @"<xml><record><field>smb://xbmc:xbmc@HOMESERVER/TV/Law & Order- Special Victims Unit/</field></record></xml>";
+
+            var host = "localhost:8080";
+            var username = "xbmc";
+            var password = "xbmc";
+
+            var setResponseUrl = "http://localhost:8080/xbmcCmds/xbmcHttp?command=SetResponseFormat(webheader;false;webfooter;false;header;<xml>;footer;</xml>;opentag;<tag>;closetag;</tag>;closefinaltag;false)";
+            var resetResponseUrl = "http://localhost:8080/xbmcCmds/xbmcHttp?command=SetResponseFormat()";
+            var query = String.Format("http://localhost:8080/xbmcCmds/xbmcHttp?command=QueryVideoDatabase(select path.strPath from path, tvshow, tvshowlinkpath where tvshow.c12 = 79488 and tvshowlinkpath.idShow = tvshow.idShow and tvshowlinkpath.idPath = path.idPath)");
+
+
+            //var fakeUdpProvider = mocker.GetMock<EventClient>();
+            var fakeHttp = mocker.GetMock<HttpProvider>();
+            fakeHttp.Setup(s => s.DownloadString(setResponseUrl, username, password)).Returns("<xml><tag>OK</xml>");
+            fakeHttp.Setup(s => s.DownloadString(resetResponseUrl, username, password)).Returns(@"<html>
+                                                                                                    <li>OK
+                                                                                                    </html>");
+            fakeHttp.Setup(s => s.DownloadString(query, username, password)).Returns(queryResult);
+
+            //Act
+            var result = mocker.Resolve<XbmcProvider>().GetXbmcSeriesPath(host, 79488, username, username);
+
+            //Assert
+            mocker.VerifyAllMocks();
+            result.Should().Be("smb://xbmc:xbmc@HOMESERVER/TV/Law & Order- Special Victims Unit/");
+        }
+
+        [Test]
         public void Clean()
         {
             //Setup

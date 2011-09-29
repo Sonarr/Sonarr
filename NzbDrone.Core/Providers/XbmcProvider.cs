@@ -187,7 +187,7 @@ namespace NzbDrone.Core.Providers
             if (String.IsNullOrEmpty(response))
                 return String.Empty;
 
-            var xDoc = XDocument.Load(new StringReader(response));
+            var xDoc = XDocument.Load(new StringReader(response.Replace("&", "&amp;")));
             var xml = (from x in xDoc.Descendants("xml") select x).FirstOrDefault();
 
             if (xml == null)
