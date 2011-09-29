@@ -1,4 +1,5 @@
 ﻿using System;
+using NzbDrone.Core.Model;
 
 namespace NzbDrone.Web.Models
 {
@@ -11,6 +12,9 @@ namespace NzbDrone.Web.Models
         public int EpisodeNumber { get; set; }
         public string Title { get; set; }
         public string Overview { get; set; }
-        public DateTime AirDate { get; set; }
+        public DateTime AirDateTime { get; set; }
+        public string AirDate { get; set; }
+        public string AirTime { get; set; }
+        public string Status { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 // ReSharper disable RedundantUsingDirective
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using AutoMoq;
 using FizzWare.NBuilder;
 using FluentAssertions;
@@ -15,50 +16,27 @@ namespace NzbDrone.Core.Test
     // ReSharper disable InconsistentNaming
     public class UpcomingEpisodesProviderTest : TestBase
     {
-        private Episode yesterday;
-        private Episode today;
-        private Episode tomorrow;
-        private Episode twoDays;
-        private Episode sevenDays;
+        private IList<Episode> episodes;
         private Series series;
 
         [SetUp]
         public new void Setup()
         {
-            yesterday = Builder<Episode>.CreateNew()
-                .With(c => c.AirDate = DateTime.Today.AddDays(-1))
-                .With(c => c.Title = "Yesterday")
-                .With(c => c.SeriesId = 1)
-                .Build();
-
-            today = Builder<Episode>.CreateNew()
-                .With(c => c.AirDate = DateTime.Today)
-                .With(c => c.Title = "Today")
-                .With(c => c.SeriesId = 1)
-                .Build();
-
-            tomorrow = Builder<Episode>.CreateNew()
-                .With(c => c.AirDate = DateTime.Today.AddDays(1))
-                .With(c => c.Title = "Tomorrow")
-                .With(c => c.SeriesId = 1)
-                .Build();
-
-            twoDays = Builder<Episode>.CreateNew()
-                .With(c => c.AirDate = DateTime.Today.AddDays(2))
-                .With(c => c.Title = "Two Days")
-                .With(c => c.SeriesId = 1)
-                .Build();
-
-            sevenDays = Builder<Episode>.CreateNew()
-                .With(c => c.AirDate = DateTime.Today.AddDays(7))
-                .With(c => c.Title = "Seven Days")
-                .With(c => c.SeriesId = 1)
-                .Build();
-
-            sevenDays = Builder<Episode>.CreateNew()
-                .With(c => c.AirDate = DateTime.Today.AddDays(8))
-                .With(c => c.Title = "Eight Days")
-                .With(c => c.SeriesId = 1)
+            episodes = Builder<Episode>.CreateListOfSize(6)
+                .WhereAll()
+                .Have(e => e.SeriesId = 1)
+                .WhereTheFirst(1)
+                .Has(e => e.AirDate = DateTime.Today.AddDays(-1))
+                .AndTheNext(1)
+                .Has(e => e.AirDate = DateTime.Today)
+                .AndTheNext(1)
+                .Has(e => e.AirDate = DateTime.Today.AddDays(1))
+                .AndTheNext(1)
+                .Has(e => e.AirDate = DateTime.Today.AddDays(2))
+                .AndTheNext(1)
+                .Has(e => e.AirDate = DateTime.Today.AddDays(7))
+                .AndTheNext(1)
+                .Has(e => e.AirDate = DateTime.Today.AddDays(9))
                 .Build();
 
             series = Builder<Series>.CreateNew().With(s => s.SeriesId = 1).Build();
@@ -74,21 +52,17 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer();
             mocker.SetConstant(database);
 
-            database.Insert(yesterday);
-            database.Insert(today);
-            database.Insert(tomorrow);
-            database.Insert(twoDays);
-            database.Insert(sevenDays);
+            database.InsertMany(episodes);
             database.Insert(series);
 
             //Act
             var result = mocker.Resolve<UpcomingEpisodesProvider>().Yesterday();
 
             //Assert
-            Assert.AreEqual(1, result.Count);
-            Assert.AreEqual(yesterday.Title, result[0].Title);
-            result[0].Series.Should().NotBeNull();
-            result[0].Series.SeriesId.Should().NotBe(0);
+            result.Should().HaveCount(1);
+            result.First().Title.Should().Be(episodes.Where(e => e.AirDate == DateTime.Today.AddDays(-1)).First().Title);
+            result.First().Series.Should().NotBeNull();
+            result.First().Series.SeriesId.Should().NotBe(0);
         }
 
         [Test]
@@ -99,21 +73,17 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer();
             mocker.SetConstant(database);
 
-            database.Insert(yesterday);
-            database.Insert(today);
-            database.Insert(tomorrow);
-            database.Insert(twoDays);
-            database.Insert(sevenDays);
+            database.InsertMany(episodes);
             database.Insert(series);
 
             //Act
             var result = mocker.Resolve<UpcomingEpisodesProvider>().Today();
 
             //Assert
-            Assert.AreEqual(1, result.Count);
-            Assert.AreEqual(today.Title, result[0].Title);
-            result[0].Series.Should().NotBeNull();
-            result[0].Series.SeriesId.Should().NotBe(0);
+            result.Should().HaveCount(1);
+            result.First().Title.Should().Be(episodes.Where(e => e.AirDate == DateTime.Today).First().Title);
+            result.First().Series.Should().NotBeNull();
+            result.First().Series.SeriesId.Should().NotBe(0);
         }
 
         [Test]
@@ -124,21 +94,17 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer();
             mocker.SetConstant(database);
 
-            database.Insert(yesterday);
-            database.Insert(today);
-            database.Insert(tomorrow);
-            database.Insert(twoDays);
-            database.Insert(sevenDays);
+            database.InsertMany(episodes);
             database.Insert(series);
 
             //Act
             var result = mocker.Resolve<UpcomingEpisodesProvider>().Tomorrow();
 
             //Assert
-            Assert.AreEqual(1, result.Count);
-            Assert.AreEqual(tomorrow.Title, result[0].Title);
-            result[0].Series.Should().NotBeNull();
-            result[0].Series.SeriesId.Should().NotBe(0);
+            result.Should().HaveCount(1);
+            result.First().Title.Should().Be(episodes.Where(e => e.AirDate == DateTime.Today.AddDays(1)).First().Title);
+            result.First().Series.Should().NotBeNull();
+            result.First().Series.SeriesId.Should().NotBe(0);
         }
 
         [Test]
@@ -149,22 +115,18 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer();
             mocker.SetConstant(database);
 
-            database.Insert(yesterday);
-            database.Insert(today);
-            database.Insert(tomorrow);
-            database.Insert(twoDays);
-            database.Insert(sevenDays);
+            database.InsertMany(episodes);
             database.Insert(series);
 
             //Act
             var result = mocker.Resolve<UpcomingEpisodesProvider>().Week();
 
             //Assert
-            Assert.AreEqual(2, result.Count);
-            result[0].Series.Should().NotBeNull();
-            result[0].Series.SeriesId.Should().NotBe(0);
-            result[1].Series.Should().NotBeNull();
-            result[1].Series.SeriesId.Should().NotBe(0);
+            result.Should().HaveCount(2);
+            result.First().Series.Should().NotBeNull();
+            result.First().Series.SeriesId.Should().NotBe(0);
+            result.Last().Series.Should().NotBeNull();
+            result.Last().Series.SeriesId.Should().NotBe(0);
         }
     }
 }

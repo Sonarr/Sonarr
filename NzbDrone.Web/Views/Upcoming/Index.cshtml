@@ -3,6 +3,50 @@
 @section TitleContent{
 Upcoming
 }
+
+<style>
+    .statusImage, .searchImage, .renameImage, .ignoreEpisode, .ignoreEpisodesMaster
+    {
+        width: 18px;
+        height: 18px;
+        padding: 1px;
+        margin: 2px;
+        border-width: 1px;
+        border-style: dashed;
+        border-color: lightgray;
+    }
+    
+    .searchImage:hover, .renameImage:hover, .ignoreEpisode:hover, .ignoreEpisodesMaster:hover
+    {
+        background-color: #065EFE;
+    }
+    
+    .t-grid td
+    {
+        line-height: 0.6em;
+    }
+    
+    .t-grid .t-header
+    {
+        line-height: 1.8em;
+    }
+    
+    .t-grid-header .t-header .t-link
+    {
+        padding: 0.3em 0.9em 1.0em 0.6em;
+    }
+    
+    .t-grid .t-detail-cell
+    {
+        line-height: 1.5em;
+    }
+    
+    .t-grid td 
+    {
+        padding: 0 0.6em;
+    }
+</style>
+
 @section ActionMenu{
         <ul class="sub-menu">
         <li>@Ajax.ActionLink("Start RSS Sync", "RssSync", "Command", null, null)</li>
@@ -25,7 +69,13 @@ Upcoming
                                         columns.Bound(c => c.SeasonNumber).Title("Season #").Width(40);
                                         columns.Bound(c => c.EpisodeNumber).Title("Episode #").Width(40);
                                         columns.Bound(c => c.Title).Title("Episode Title");
-                                        columns.Bound(c => c.AirDate).Title("Air Date").Width(160);
+                                        columns.Bound(c => c.AirDateTime).Title("Air Time")
+                                         .ClientTemplate("<#= AirTime #>")
+                                         .Width(160);
+                                        columns.Bound(c => c.Status)
+                                            .ClientTemplate("<img src='../../Content/Images/<#= Status #>.png' alt='<#= Status #>' title='<#= Status #>' class='statusImage status-<#= Status #>' />" +
+                                                            "<a href=\"../Episode/Season?episodeId=<#= EpisodeId #>\" onclick=\"searchForEpisode('<#= EpisodeId #>'); return false;\"><img src='../../Content/Images/Search.png' alt='Search' title='Search for episode' class='searchImage' /></a>"
+                                                            );
                                     })
                     .DetailView(detailView => detailView.ClientTemplate(
                         "<fieldset>" +
@@ -33,7 +83,7 @@ Upcoming
                         "</fieldset>"
                                                     ))
                     .DataBinding(data => data.Ajax().Select("_AjaxBindingYesterday", "Upcoming"))
-                    .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.AirDate).Ascending()).Enabled(true))
+                    .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.AirDateTime).Ascending()).Enabled(true))
                     //.Pageable(c => c.PageSize(20).Position(GridPagerPosition.Both).Style(GridPagerStyles.PageInput | GridPagerStyles.NextPreviousAndNumeric))
                     //.Filterable()
                     //.ClientEvents(c => c.OnRowDataBound("onRowDataBound"))
@@ -56,7 +106,13 @@ Upcoming
                                         columns.Bound(c => c.SeasonNumber).Title("Season #").Width(40);
                                         columns.Bound(c => c.EpisodeNumber).Title("Episode #").Width(40);
                                         columns.Bound(c => c.Title).Title("Episode Title");
-                                        columns.Bound(c => c.AirDate).Title("Air Date").Width(160);
+                                        columns.Bound(c => c.AirDateTime).Title("Air Time")
+                                         .ClientTemplate("<#= AirTime #>")
+                                         .Width(160);
+                                        columns.Bound(c => c.Status)
+                                            .ClientTemplate("<img src='../../Content/Images/<#= Status #>.png' alt='<#= Status #>' title='<#= Status #>' class='statusImage status-<#= Status #>' />" +
+                                                            "<a href=\"../Episode/Season?episodeId=<#= EpisodeId #>\" onclick=\"searchForEpisode('<#= EpisodeId #>'); return false;\"><img src='../../Content/Images/Search.png' alt='Search' title='Search for episode' class='searchImage' /></a>"
+                                                            );
                                     })
                     .DetailView(detailView => detailView.ClientTemplate(
                         "<fieldset>" +
@@ -64,7 +120,7 @@ Upcoming
                         "</fieldset>"
                                                     ))
                     .DataBinding(data => data.Ajax().Select("_AjaxBindingToday", "Upcoming"))
-                    .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.AirDate).Ascending()).Enabled(true))
+                    .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.AirDateTime).Ascending()).Enabled(true))
                     .Render();}
         </div>
     </div>
@@ -85,7 +141,13 @@ Upcoming
                                      columns.Bound(c => c.SeasonNumber).Title("Season #").Width(40);
                                      columns.Bound(c => c.EpisodeNumber).Title("Episode #").Width(40);
                                      columns.Bound(c => c.Title).Title("Episode Title");
-                                     columns.Bound(c => c.AirDate).Title("Air Date").Width(160);
+                                     columns.Bound(c => c.AirDateTime).Title("Air Time")
+                                         .ClientTemplate("<#= AirTime #>")
+                                         .Width(160);
+                                     columns.Bound(c => c.Status)
+                                            .ClientTemplate("<img src='../../Content/Images/<#= Status #>.png' alt='<#= Status #>' title='<#= Status #>' class='statusImage status-<#= Status #>' />" +
+                                                            "<a href=\"../Episode/Season?episodeId=<#= EpisodeId #>\" onclick=\"searchForEpisode('<#= EpisodeId #>'); return false;\"><img src='../../Content/Images/Search.png' alt='Search' title='Search for episode' class='searchImage' /></a>"
+                                                            );
                                  })
                     .DetailView(detailView => detailView.ClientTemplate(
                         "<fieldset>" +
@@ -94,7 +156,7 @@ Upcoming
                                                   ))
 
                     .DataBinding(data => data.Ajax().Select("_AjaxBindingTomorrow", "Upcoming"))
-                    .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.AirDate).Ascending()).Enabled(true))
+                    .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.AirDateTime).Ascending()).Enabled(true))
                     .Render();}
         </div>
     </div>
@@ -115,7 +177,13 @@ Upcoming
                                      columns.Bound(c => c.SeasonNumber).Title("Season #").Width(40);
                                      columns.Bound(c => c.EpisodeNumber).Title("Episode #").Width(40);
                                      columns.Bound(c => c.Title).Title("Episode Title");
-                                     columns.Bound(c => c.AirDate).Title("Air Date").Width(160);
+                                     columns.Bound(c => c.AirDateTime).Title("Air Date/Time")
+                                         .ClientTemplate("<#= AirDate #> at <#= AirTime #>")
+                                         .Width(160);
+                                     columns.Bound(c => c.Status)
+                                            .ClientTemplate("<img src='../../Content/Images/<#= Status #>.png' alt='<#= Status #>' title='<#= Status #>' class='statusImage status-<#= Status #>' />" +
+                                                            "<a href=\"../Episode/Season?episodeId=<#= EpisodeId #>\" onclick=\"searchForEpisode('<#= EpisodeId #>'); return false;\"><img src='../../Content/Images/Search.png' alt='Search' title='Search for episode' class='searchImage' /></a>"
+                                                            );
                                  })
                     .DetailView(detailView => detailView.ClientTemplate(
                         "<fieldset>" +
@@ -123,7 +191,7 @@ Upcoming
                         "</fieldset>"
                                                   ))
                     .DataBinding(data => data.Ajax().Select("_AjaxBindingWeek", "Upcoming"))
-                    .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.AirDate).Ascending()).Enabled(true))
+                    .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.AirDateTime).Ascending()).Enabled(true))
                     .Render();}
         </div>
     </div>

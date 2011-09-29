@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using NzbDrone.Core;
 using NzbDrone.Core.Providers;
 using NzbDrone.Web.Models;
 using Telerik.Web.Mvc;
@@ -37,7 +38,10 @@ namespace NzbDrone.Web.Controllers
                 EpisodeNumber = u.EpisodeNumber,
                 Title = u.Title,
                 Overview = u.Overview,
-                AirDate = u.AirDate.Value.Add(Convert.ToDateTime(u.Series.AirTimes).TimeOfDay)
+                AirDateTime = u.AirDate.Value.Add(Convert.ToDateTime(u.Series.AirTimes).TimeOfDay),
+                AirDate = u.AirDate.Value.ToBestDateString(),
+                AirTime = Convert.ToDateTime(u.Series.AirTimes).ToShortTimeString(),
+                Status = u.Status.ToString()
             });
 
             return View(new GridModel(upcoming));
@@ -55,7 +59,10 @@ namespace NzbDrone.Web.Controllers
                 EpisodeNumber = u.EpisodeNumber,
                 Title = u.Title,
                 Overview = u.Overview,
-                AirDate = u.AirDate.Value.Add(Convert.ToDateTime(u.Series.AirTimes).TimeOfDay)
+                AirDateTime = u.AirDate.Value.Add(Convert.ToDateTime(u.Series.AirTimes).TimeOfDay),
+                AirDate = u.AirDate.Value.ToBestDateString(),
+                AirTime = Convert.ToDateTime(u.Series.AirTimes).ToShortTimeString(),
+                Status = u.Status.ToString()
             });
 
             return View(new GridModel(upcoming));
@@ -73,7 +80,10 @@ namespace NzbDrone.Web.Controllers
                 EpisodeNumber = u.EpisodeNumber,
                 Title = u.Title,
                 Overview = u.Overview,
-                AirDate = u.AirDate.Value.Add(Convert.ToDateTime(u.Series.AirTimes).TimeOfDay)
+                AirDateTime = u.AirDate.Value.Add(Convert.ToDateTime(u.Series.AirTimes).TimeOfDay),
+                AirDate = u.AirDate.Value.ToBestDateString(),
+                AirTime = Convert.ToDateTime(u.Series.AirTimes).ToShortTimeString(),
+                Status = u.Status.ToString()
             });
 
             return View(new GridModel(upcoming));
@@ -91,7 +101,10 @@ namespace NzbDrone.Web.Controllers
                 EpisodeNumber = u.EpisodeNumber,
                 Title = u.Title,
                 Overview = u.Overview,
-                AirDate = u.AirDate.Value.Add(Convert.ToDateTime(u.Series.AirTimes).TimeOfDay)
+                AirDateTime = u.AirDate.Value.Add(Convert.ToDateTime(u.Series.AirTimes).TimeOfDay),
+                AirDate = u.AirDate.Value.ToBestDateString(),
+                AirTime = Convert.ToDateTime(u.Series.AirTimes).ToShortTimeString(),
+                Status = u.Status.ToString()
             });
 
             return View(new GridModel(upcoming));
