@@ -82,7 +82,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual Series UpdateSeriesInfo(int seriesId)
         {
-            var tvDbSeries = _tvDbProvider.GetSeries(seriesId, true);
+            var tvDbSeries = _tvDbProvider.GetSeries(seriesId, false);
             var series = GetSeries(seriesId);
 
             series.SeriesId = tvDbSeries.Id;

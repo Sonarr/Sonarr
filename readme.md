@@ -31,6 +31,7 @@ NZBDrone makes use of the following projects:
 * [MVC Mini Profiler](http://code.google.com/p/mvc-mini-profiler/)
 * [Migrator.NET](https://github.com/kayone/Migrator.NET)
 * [Telerik Extensions for ASP.NET MVC](http://www.telerik.com/products/aspnet-mvc.aspx)
+
 ## Development Tools
 * [Visual Studio 2010](http://www.microsoft.com/visualstudio/en-us/products/2010-editions)
 * [ReSharper 6](http://www.jetbrains.com/resharper/index.html)

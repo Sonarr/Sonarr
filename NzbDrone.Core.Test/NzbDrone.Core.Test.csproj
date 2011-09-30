@@ -90,6 +90,7 @@
   <ItemGroup>
     <Compile Include="BacklogSearchJobTest.cs" />
     <Compile Include="BannerDownloadJobTest.cs" />
+    <Compile Include="EpisodeProviderTest_DeleteInvalidEpisodes.cs" />
     <Compile Include="InventoryProvider_IsAcceptableSizeTest.cs" />
     <Compile Include="QualityTypeProviderTest.cs" />
     <Compile Include="MisnamedProviderTest.cs" />
