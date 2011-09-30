@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using NzbDrone.Core;
 using NzbDrone.Core.Providers;
 using NzbDrone.Web.Models;
 using Telerik.Web.Mvc;
@@ -38,6 +39,7 @@ namespace NzbDrone.Web.Controllers
                 Overview = e.Overview,
                 SeriesTitle = e.Series.Title,
                 AirDate = e.AirDate.Value,
+                AirDateString = e.AirDate.Value.ToBestDateString()
             });
 
             return View(new GridModel(missing));

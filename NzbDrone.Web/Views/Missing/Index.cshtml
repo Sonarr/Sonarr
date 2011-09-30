@@ -20,7 +20,8 @@ Missing
                              columns.Bound(c => c.SeasonNumber).Title("Season").Width(40);
                              columns.Bound(c => c.EpisodeNumber).Title("Episode").Width(40);
                              columns.Bound(c => c.EpisodeTitle).Title("Episode Title");
-                             columns.Bound(c => c.AirDate).Format("{0:d}")
+                             columns.Bound(c => c.AirDate)
+                                 .ClientTemplate("<#= AirDateString #>")
                                  .Title("Air Date")
                                  .Width(80);
                              columns.Bound(c => c.EpisodeId)
