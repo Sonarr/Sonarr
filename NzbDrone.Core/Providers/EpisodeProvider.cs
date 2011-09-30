@@ -373,22 +373,6 @@ namespace NzbDrone.Core.Providers
         {
             Logger.Info("Starting deletion of invalid episode for series: {0}", series.Title.WithDefault(series.SeriesId));
 
-            var seasons = tvDbSeriesInfo.Episodes.Select(e => e.SeasonNumber).Distinct();
-
-            foreach (var s in seasons)
-            {
-                //Avoiding accessing modified closure
-                var season = s;
-                Logger.Trace("Processing invalid episodes for {0}, Season: {1}", series.SeriesId, season);
-
-                var episodesInSeason = tvDbSeriesInfo.Episodes.Where(e => e.SeasonNumber == season).Select(e => e.EpisodeNumber);
-                var episodesString = String.Join(", ", episodesInSeason);
-                var seasonQuery = String.Format("DELETE FROM Episodes WHERE SeriesId = {0} AND SeasonNumber = {1} AND EpisodeNumber NOT IN ({2})",
-                                            series.SeriesId, season, episodesString);
-
-                _database.Execute(seasonQuery);
-            }
-
             //Delete Episodes not matching TvDbIds for this series
             var tvDbIds = tvDbSeriesInfo.Episodes.Select(e => e.Id);
             var tvDbIdString = String.Join(", ", tvDbIds);
