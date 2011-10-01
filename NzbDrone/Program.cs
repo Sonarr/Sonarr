@@ -16,6 +16,7 @@ namespace NzbDrone
             try
             {
                 Config.ConfigureNlog();
+                Config.CreateDefaultConfigFile();
                 Logger.Info("Starting NZBDrone. Start-up Path:'{0}'", Config.ProjectRoot);
                 Thread.CurrentThread.Name = "Host";
 
@@ -39,7 +40,7 @@ namespace NzbDrone
                 Attach();
 #endif
 
-                if (!Environment.UserInteractive)
+                if (!Environment.UserInteractive || !Config.LaunchBrowser)
                 {
                     try
                     {

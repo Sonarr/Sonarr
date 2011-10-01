@@ -90,6 +90,7 @@
   <ItemGroup>
     <Compile Include="BacklogSearchJobTest.cs" />
     <Compile Include="BannerDownloadJobTest.cs" />
+    <Compile Include="ConfigFileProviderTest.cs" />
     <Compile Include="EpisodeProviderTest_DeleteInvalidEpisodes.cs" />
     <Compile Include="InventoryProvider_IsAcceptableSizeTest.cs" />
     <Compile Include="QualityTypeProviderTest.cs" />
@@ -153,6 +154,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\Config.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\History.xml" />
     <Content Include="Files\RSS\newbin_none_english.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
