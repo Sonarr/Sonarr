@@ -510,6 +510,7 @@
     <Compile Include="Models\SeriesModel.cs" />
     <Compile Include="Models\SeriesSearchResultModel.cs" />
     <Compile Include="Models\SettingsModels.cs" />
+    <Compile Include="Models\SystemSettingsModel.cs" />
     <Compile Include="Models\TvDbSearchResultModel.cs" />
     <Compile Include="Models\UpcomingEpisodeModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -922,6 +923,9 @@
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>EditorLocalization.bg-BG.designer.cs</LastGenOutput>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Settings\System.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

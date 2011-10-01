@@ -29,15 +29,18 @@ namespace NzbDrone.Web.Controllers
         private readonly ExternalNotificationProvider _externalNotificationProvider;
         private readonly QualityTypeProvider _qualityTypeProvider;
         private readonly RootDirProvider _rootDirProvider;
+        private readonly ConfigFileProvider _configFileProvider;
 
         public SettingsController(ConfigProvider configProvider, IndexerProvider indexerProvider,
                                   QualityProvider qualityProvider, AutoConfigureProvider autoConfigureProvider,
                                   SeriesProvider seriesProvider, ExternalNotificationProvider externalNotificationProvider,
-                                  QualityTypeProvider qualityTypeProvider, RootDirProvider rootDirProvider)
+                                  QualityTypeProvider qualityTypeProvider, RootDirProvider rootDirProvider,
+                                  ConfigFileProvider configFileProvider)
         {
             _externalNotificationProvider = externalNotificationProvider;
             _qualityTypeProvider = qualityTypeProvider;
             _rootDirProvider = rootDirProvider;
+            _configFileProvider = configFileProvider;
             _configProvider = configProvider;
             _indexerProvider = indexerProvider;
             _qualityProvider = qualityProvider;
@@ -180,6 +183,15 @@ namespace NzbDrone.Web.Controllers
             model.SeparatorStyles = new SelectList(EpisodeSortingHelper.GetSeparatorStyles(), "Id", "Name");
             model.NumberStyles = new SelectList(EpisodeSortingHelper.GetNumberStyles(), "Id", "Name");
             model.MultiEpisodeStyles = new SelectList(EpisodeSortingHelper.GetMultiEpisodeStyles(), "Id", "Name");
+
+            return View(model);
+        }
+
+        public ActionResult System()
+        {
+            var model = new SystemSettingsModel();
+            model.Port = _configFileProvider.Port;
+            model.LaunchBrowser = _configFileProvider.LaunchBrowser;
 
             return View(model);
         }
@@ -429,6 +441,20 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.SortingSeparatorStyle = data.SeparatorStyle;
                 _configProvider.SortingNumberStyle = data.NumberStyle;
                 _configProvider.SortingMultiEpisodeStyle = data.MultiEpisodeStyle;
+
+                return GetSuccessResult();
+            }
+
+            return GetInvalidModelResult();
+        }
+
+        [HttpPost]
+        public JsonResult SaveSystem(SystemSettingsModel data)
+        {
+            if (ModelState.IsValid)
+            {
+                _configFileProvider.Port = data.Port;
+                _configFileProvider.LaunchBrowser = data.LaunchBrowser;
 
                 return GetSuccessResult();
             }

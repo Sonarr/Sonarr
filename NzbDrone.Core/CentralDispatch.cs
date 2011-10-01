@@ -9,6 +9,7 @@ using NLog;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.ExternalNotification;
 using NzbDrone.Core.Providers.Indexer;
 using NzbDrone.Core.Providers.Jobs;
@@ -62,6 +63,7 @@ namespace NzbDrone.Core
 
             _kernel.Get<QualityProvider>().SetupDefaultProfiles();
             _kernel.Get<QualityTypeProvider>().SetupDefault();
+            _kernel.Get<ConfigFileProvider>().CreateDefaultConfigFile();
 
             BindExternalNotifications();
             BindIndexers();

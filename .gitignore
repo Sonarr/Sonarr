@@ -29,6 +29,7 @@ _ReSharper*/
 [Nn]zbs
 [Bb]uild/
 [Ll]ogs/
+[Aa]pp_Data/
 /[Pp]ackage/
 #NZBDrone specific
 *.db

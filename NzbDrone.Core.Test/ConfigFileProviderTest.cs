@@ -1,4 +1,5 @@
-﻿using AutoMoq;
+﻿using System.IO;
+using AutoMoq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Providers.Core;
@@ -11,6 +12,17 @@ namespace NzbDrone.Core.Test
     // ReSharper disable InconsistentNaming
     public class ConfigFileProviderTest : TestBase
     {
+        [SetUp]
+        public void SetUp()
+        {
+            //Reset config file
+            var mocker = new AutoMoqer();
+            var configFile = mocker.Resolve<ConfigFileProvider>().ConfigFile;
+            File.Delete(configFile);
+
+            mocker.Resolve<ConfigFileProvider>().CreateDefaultConfigFile();
+        }
+
         [Test]
         public void GetValue_Success()
         {
@@ -78,6 +90,38 @@ namespace NzbDrone.Core.Test
             var result = mocker.Resolve<ConfigFileProvider>().Port;
 
             //Assert
+            result.Should().Be(value);
+        }
+
+        [Test]
+        public void SetValue_bool()
+        {
+            const string key = "LaunchBrowser";
+            const bool value = false;
+
+            var mocker = new AutoMoqer();
+
+            //Act
+            mocker.Resolve<ConfigFileProvider>().SetValue(key, value);
+
+            //Assert
+            var result = mocker.Resolve<ConfigFileProvider>().LaunchBrowser;
+            result.Should().Be(value);
+        }
+
+        [Test]
+        public void SetValue_int()
+        {
+            const string key = "Port";
+            const int value = 12345;
+
+            var mocker = new AutoMoqer();
+
+            //Act
+            mocker.Resolve<ConfigFileProvider>().SetValue(key, value);
+
+            //Assert
+            var result = mocker.Resolve<ConfigFileProvider>().Port;
             result.Should().Be(value);
         }
     }
