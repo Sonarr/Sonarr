@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Providers
                                             Series.Language, Series.Path, Series.Monitored, Series.QualityProfileId, Series.SeasonFolder,
                                             SUM(CASE WHEN Ignored = 0 AND Airdate <= @0 THEN 1 ELSE 0 END) AS EpisodeCount,
                                             SUM(CASE WHEN Episodes.Ignored = 0 AND Episodes.EpisodeFileId > 0 AND Episodes.AirDate <= @0 THEN 1 ELSE 0 END) as EpisodeFileCount,
-                                            MAX(Episodes.SeasonNumber) as SeasonCount, MIN(CASE WHEN AirDate < @0 THEN NULL ELSE AirDate END) as NextAiring,
+                                            MAX(Episodes.SeasonNumber) as SeasonCount, MIN(CASE WHEN AirDate < @0 OR Ignored = 1 THEN NULL ELSE AirDate END) as NextAiring,
                                             QualityProfiles.QualityProfileId, QualityProfiles.Name, QualityProfiles.Cutoff, QualityProfiles.SonicAllowed
                                             FROM Series
                                             INNER JOIN QualityProfiles ON Series.QualityProfileId = QualityProfiles.QualityProfileId

@@ -488,6 +488,7 @@ namespace NzbDrone.Core.Test
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(2)
                 .WhereAll()
                 .Have(e => e.SeriesId = fakeSeries.SeriesId)
+                .Have(e => e.Ignored = false)
                 .WhereTheFirst(1)
                 .Have(e => e.AirDate = DateTime.Today)
                 .AndTheRemaining()
@@ -519,6 +520,7 @@ namespace NzbDrone.Core.Test
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(2)
                 .WhereAll()
                 .Have(e => e.SeriesId = fakeSeries.SeriesId)
+                .Have(e => e.Ignored = false)
                 .WhereTheFirst(1)
                 .Have(e => e.AirDate = DateTime.Today.AddDays(-1))
                 .AndTheRemaining()
@@ -551,6 +553,7 @@ namespace NzbDrone.Core.Test
                 .WhereAll()
                 .Have(e => e.SeriesId = fakeSeries.SeriesId)
                 .Have(e => e.AirDate = null)
+                .Have(e => e.Ignored = false)
                 .Build();
 
             db.Insert(fakeSeries);
@@ -578,10 +581,44 @@ namespace NzbDrone.Core.Test
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(2)
                 .WhereAll()
                 .Have(e => e.SeriesId = fakeSeries.SeriesId)
+                .Have(e => e.Ignored = false)
                 .WhereTheFirst(1)
                 .Have(e => e.AirDate = DateTime.Today.AddDays(-1))
                 .AndTheRemaining()
                 .Have(e => e.AirDate = DateTime.Today.AddMonths(1))
+                .Build();
+
+            db.Insert(fakeSeries);
+            db.Insert(fakeQuality);
+            db.InsertMany(fakeEpisodes);
+
+            //Act
+            mocker.Resolve<QualityProvider>();
+            var series = mocker.Resolve<SeriesProvider>().GetAllSeriesWithEpisodeCount();
+
+            //Assert
+            series.Should().HaveCount(1);
+            series[0].NextAiring.Should().Be(DateTime.Today.AddMonths(1));
+        }
+
+        [Test]
+        public void Get_Series_NextAiring_skip_ignored()
+        {
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+            var fakeSeries = Builder<Series>.CreateNew().With(e => e.QualityProfileId = fakeQuality.QualityProfileId).Build();
+            var fakeEpisodes = Builder<Episode>.CreateListOfSize(2)
+                .WhereAll()
+                .Have(e => e.SeriesId = fakeSeries.SeriesId)
+                .WhereTheFirst(1)
+                .Have(e => e.AirDate = DateTime.Today.AddDays(1))
+                .Have(e => e.Ignored = true)
+                .AndTheRemaining()
+                .Have(e => e.AirDate = DateTime.Today.AddMonths(1))
+                .Have(e => e.Ignored = false)
                 .Build();
 
             db.Insert(fakeSeries);
