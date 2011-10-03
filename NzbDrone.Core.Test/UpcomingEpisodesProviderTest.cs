@@ -25,6 +25,7 @@ namespace NzbDrone.Core.Test
             episodes = Builder<Episode>.CreateListOfSize(6)
                 .WhereAll()
                 .Have(e => e.SeriesId = 1)
+                .Have(e => e.Ignored = false)
                 .WhereTheFirst(1)
                 .Has(e => e.AirDate = DateTime.Today.AddDays(-1))
                 .AndTheNext(1)
@@ -127,6 +128,88 @@ namespace NzbDrone.Core.Test
             result.First().Series.SeriesId.Should().NotBe(0);
             result.Last().Series.Should().NotBeNull();
             result.Last().Series.SeriesId.Should().NotBe(0);
+        }
+
+        [Test]
+        public void Get_Yesterday_skip_ingored()
+        {
+            //Setup
+            var database = MockLib.GetEmptyDatabase();
+            var mocker = new AutoMoqer();
+            mocker.SetConstant(database);
+
+            episodes.Where(e => e.AirDate == DateTime.Today.AddDays(-1)).Single().Ignored = true;
+
+            database.InsertMany(episodes);
+            database.Insert(series);
+
+            //Act
+            var result = mocker.Resolve<UpcomingEpisodesProvider>().Yesterday();
+
+            //Assert
+            result.Should().BeEmpty();
+        }
+
+        [Test]
+        public void Get_Today_skip_ingored()
+        {
+            //Setup
+            var database = MockLib.GetEmptyDatabase();
+            var mocker = new AutoMoqer();
+            mocker.SetConstant(database);
+
+            episodes.Where(e => e.AirDate == DateTime.Today).Single().Ignored = true;
+
+            database.InsertMany(episodes);
+            database.Insert(series);
+
+            //Act
+            var result = mocker.Resolve<UpcomingEpisodesProvider>().Today();
+
+            //Assert
+            result.Should().BeEmpty();
+        }
+
+        [Test]
+        public void Get_Tomorrow_skip_ingored()
+        {
+            //Setup
+            var database = MockLib.GetEmptyDatabase();
+            var mocker = new AutoMoqer();
+            mocker.SetConstant(database);
+
+            episodes.Where(e => e.AirDate == DateTime.Today.AddDays(1)).Single().Ignored = true;
+
+            database.InsertMany(episodes);
+            database.Insert(series);
+
+            //Act
+            var result = mocker.Resolve<UpcomingEpisodesProvider>().Tomorrow();
+
+            //Assert
+            result.Should().BeEmpty();
+        }
+
+        [Test]
+        public void Get_Week_skip_ingored()
+        {
+            //Setup
+            var database = MockLib.GetEmptyDatabase();
+            var mocker = new AutoMoqer();
+            mocker.SetConstant(database);
+
+            episodes.Where(e => e.AirDate == DateTime.Today.AddDays(2)).Single().Ignored = true;
+
+            database.InsertMany(episodes);
+            database.Insert(series);
+
+            //Act
+            var result = mocker.Resolve<UpcomingEpisodesProvider>().Week();
+
+            //Assert
+            result.Should().HaveCount(1);
+            result.First().Series.Should().NotBeNull();
+            result.First().Series.SeriesId.Should().NotBe(0);
         }
     }
 }

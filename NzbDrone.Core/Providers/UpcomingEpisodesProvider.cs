@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Providers
         {
             var allEps = _database.Fetch<Episode, Series>(@"SELECT * FROM Episodes 
                                                         INNER JOIN Series ON Episodes.SeriesId = Series.SeriesId
-                                                        WHERE AirDate BETWEEN @0 AND @1",
+                                                        WHERE Ignored = 0 AND AirDate BETWEEN @0 AND @1",
                                                         DateTime.Today.AddDays(-1), DateTime.Today.AddDays(8));
 
             var yesterday = allEps.Where(e => e.AirDate == DateTime.Today.AddDays(-1)).ToList();
@@ -36,28 +36,28 @@ namespace NzbDrone.Core.Providers
         {
             return _database.Fetch<Episode, Series>(@"SELECT * FROM Episodes 
                                                         INNER JOIN Series ON Episodes.SeriesId = Series.SeriesId
-                                                        WHERE AirDate = @0", DateTime.Today.AddDays(-1));
+                                                        WHERE Ignored = 0 AND AirDate = @0", DateTime.Today.AddDays(-1));
         }
 
         public virtual List<Episode> Today()
         {
             return _database.Fetch<Episode, Series>(@"SELECT * FROM Episodes 
                                                         INNER JOIN Series ON Episodes.SeriesId = Series.SeriesId
-                                                        WHERE AirDate = @0", DateTime.Today);
+                                                        WHERE Ignored = 0 AND AirDate = @0", DateTime.Today);
         }
 
         public virtual List<Episode> Tomorrow()
         {
             return _database.Fetch<Episode, Series>(@"SELECT * FROM Episodes 
                                                         INNER JOIN Series ON Episodes.SeriesId = Series.SeriesId
-                                                        WHERE AirDate = @0", DateTime.Today.AddDays(1));
+                                                        WHERE Ignored = 0 AND AirDate = @0", DateTime.Today.AddDays(1));
         }
 
         public virtual List<Episode> Week()
         {
             return _database.Fetch<Episode, Series>(@"SELECT * FROM Episodes 
                                                         INNER JOIN Series ON Episodes.SeriesId = Series.SeriesId
-                                                        WHERE AirDate BETWEEN @0 AND @1", DateTime.Today.AddDays(2), DateTime.Today.AddDays(8));
+                                                        WHERE Ignored = 0 AND AirDate BETWEEN @0 AND @1", DateTime.Today.AddDays(2), DateTime.Today.AddDays(8));
         }
     }
 }
