@@ -146,6 +146,9 @@ namespace NzbDrone.Core.Providers
                         Overview = String.Empty,
                     };
 
+                    if (parseResult.EpisodeNumbers.Count == 1 && parseResult.EpisodeNumbers.First() == 0)
+                        episodeInfo.Ignored = true;
+
                     AddEpisode(episodeInfo);
                 }
 
@@ -230,7 +233,15 @@ namespace NzbDrone.Core.Providers
                     {
                         episodeToUpdate = new Episode();
                         newList.Add(episodeToUpdate);
+
+                        //We need to check if this episode should be ignored based on IsIgnored rules
+                        IsIgnored(series.SeriesId, episode.SeasonNumber);
+
+                        //If it is Episode Zero Ignore it, since it is new
+                        if (episode.EpisodeNumber == 0)
+                            episodeToUpdate.Ignored = true;
                     }
+
                     else
                     {
                         updateList.Add(episodeToUpdate);

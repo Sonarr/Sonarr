@@ -188,5 +188,52 @@ namespace NzbDrone.Core.Test
             db.Fetch<Episode>().Should().HaveCount(2);
         }
 
+        [Test]
+        public void Get_Episode_Zero_Doesnt_Exist_Should_add_ignored()
+        {
+            var mocker = new AutoMoqer();
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            var fakeSeries = Builder<Series>.CreateNew().Build();
+
+
+            var parseResult = new EpisodeParseResult
+            {
+                Series = fakeSeries,
+                SeasonNumber = 2,
+                EpisodeNumbers = new List<int> { 0 }
+            };
+
+            var ep = mocker.Resolve<EpisodeProvider>().GetEpisodesByParseResult(parseResult, true);
+
+            ep.Should().HaveCount(1);
+            db.Fetch<Episode>().Should().HaveCount(1);
+            ep.First().Ignored.Should().BeTrue();
+        }
+
+        [Test]
+        public void Get_Multi_Episode_Zero_Doesnt_Exist_Should_not_add_ignored()
+        {
+            var mocker = new AutoMoqer();
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            var fakeSeries = Builder<Series>.CreateNew().Build();
+
+
+            var parseResult = new EpisodeParseResult
+            {
+                Series = fakeSeries,
+                SeasonNumber = 2,
+                EpisodeNumbers = new List<int> { 0, 1 }
+            };
+
+            var ep = mocker.Resolve<EpisodeProvider>().GetEpisodesByParseResult(parseResult, true);
+
+            ep.Should().HaveCount(2);
+            db.Fetch<Episode>().Should().HaveCount(2);
+            ep.First().Ignored.Should().BeFalse();
+        }
     }
 }

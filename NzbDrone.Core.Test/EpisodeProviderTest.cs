@@ -325,6 +325,49 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
+        public void RefreshEpisodeInfo_ignore_episode_zero()
+        {
+            //Arrange
+            const int seriesId = 71663;
+            const int episodeCount = 10;
+
+            var fakeEpisodes = Builder<TvdbSeries>.CreateNew().With(
+                c => c.Episodes =
+                     new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(episodeCount).
+                                               WhereAll()
+                                               .Have(l => l.Language = new TvdbLanguage(0, "eng", "a"))
+                                               .WhereTheFirst(1)
+                                               .Has(e => e.EpisodeNumber = 0)
+                                               .Has(e => e.SeasonNumber = 15)
+                                               .Build())
+                ).With(c => c.Id = seriesId).Build();
+
+            var fakeSeries = Builder<Series>.CreateNew().With(c => c.SeriesId = seriesId).Build();
+
+            var mocker = new AutoMoqer();
+
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            db.Insert(fakeSeries);
+
+            mocker.GetMock<TvDbProvider>()
+                .Setup(c => c.GetSeries(seriesId, true))
+                .Returns(fakeEpisodes);
+
+
+            //Act
+            mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
+
+            //Assert
+            var result = mocker.Resolve<EpisodeProvider>().GetEpisodeBySeries(seriesId).ToList();
+            mocker.GetMock<TvDbProvider>().VerifyAll();
+            result.Should().HaveCount(episodeCount);
+            mocker.VerifyAllMocks();
+            result.Where(e => e.EpisodeNumber == 0 && e.SeasonNumber == 15).Single().Ignored.Should().BeTrue();
+        }
+
+        [Test]
         public void new_episodes_only_calls_Insert()
         {
             const int seriesId = 71663;
