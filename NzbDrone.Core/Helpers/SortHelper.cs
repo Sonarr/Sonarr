@@ -9,6 +9,9 @@ namespace NzbDrone.Core.Helpers
     {
         public static string SkipArticles(string input)
         {
+            if (String.IsNullOrEmpty(input))
+                return String.Empty;
+
             var articles = new List<string> { "The ", "An ", "A " };
 
             foreach (string article in articles)
