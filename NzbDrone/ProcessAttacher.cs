@@ -10,17 +10,12 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using EnvDTE;
 using EnvDTE80;
-using NLog;
 using Thread = System.Threading.Thread;
 
 namespace NzbDrone
 {
     public class ProcessAttacher
     {
-
-        private static readonly Logger Logger = LogManager.GetLogger("Application");
-
-
         public static void Attach()
         {
             DTE2 dte2;

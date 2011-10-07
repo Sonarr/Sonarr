@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Net;
 using System.Threading;
-using System.Timers;
 using NLog;
 using NzbDrone.Providers;
 
 namespace NzbDrone
 {
-    internal class Application
+    public class Application
     {
         private static readonly Logger Logger = LogManager.GetLogger("Application");
 
@@ -36,22 +34,14 @@ namespace NzbDrone
             Logger.Info("Starting NZBDrone. Start-up Path:'{0}'", _configProvider.ApplicationRoot);
             Thread.CurrentThread.Name = "Host";
 
-            AppDomain.CurrentDomain.UnhandledException += ((s, e) => AppDomainException(e));
-
-            AppDomain.CurrentDomain.ProcessExit += ProgramExited;
-            AppDomain.CurrentDomain.DomainUnload += ProgramExited;
         }
 
-        internal void Start()
+        public void Start()
         {
             _iisProvider.StopServer();
             _iisProvider.StartServer();
-            
-            _debuggerProvider.Attach();
 
-            var prioCheckTimer = new System.Timers.Timer(5000);
-            prioCheckTimer.Elapsed += EnsurePriority;
-            prioCheckTimer.Enabled = true;
+            _debuggerProvider.Attach();
 
             if (_enviromentProvider.IsUserInteractive && _configProvider.LaunchBrowser)
             {
@@ -79,51 +69,10 @@ namespace NzbDrone
             }
         }
 
-        internal void Stop()
+        public void Stop()
         {
 
         }
-
-
-        private void AppDomainException(object excepion)
-        {
-            Console.WriteLine("EPIC FAIL: {0}", excepion);
-            Logger.Fatal("EPIC FAIL: {0}", excepion);
-
-#if RELEASE
-            new Client
-            {
-                ApiKey = "43BBF60A-EB2A-4C1C-B09E-422ADF637265",
-                ApplicationName = "NZBDrone",
-                CurrentException = excepion as Exception
-            }.Submit();
-#endif
-        }
-
-
-        internal void EnsurePriority(object sender, ElapsedEventArgs e)
-        {
-            var currentProcessId = _processProvider.GetCurrentProcessId();
-            if (_processProvider.GetProcessPriority(currentProcessId) != ProcessPriorityClass.Normal)
-            {
-                _processProvider.SetPriority(_processProvider.GetCurrentProcessId(), ProcessPriorityClass.Normal);
-            }
-
-            var iisProcessPriority = _processProvider.GetProcessPriority(_iisProvider.IISProcessId);
-            if (iisProcessPriority != ProcessPriorityClass.Normal && iisProcessPriority != ProcessPriorityClass.AboveNormal)
-            {
-                _processProvider.SetPriority(_iisProvider.IISProcessId, ProcessPriorityClass.Normal);
-            }
-        }
-
-        private void ProgramExited(object sender, EventArgs e)
-        {
-            _iisProvider.StopServer();
-        }
-
     }
-
-
-
 }
 

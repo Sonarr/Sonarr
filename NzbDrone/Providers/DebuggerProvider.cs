@@ -1,20 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using NLog;
 
 namespace NzbDrone.Providers
 {
-    internal class DebuggerProvider
+    public class DebuggerProvider
     {
 
         private static readonly Logger Logger = LogManager.GetLogger("DebuggerProvider");
 
 
-        internal virtual void Attach()
+        public virtual void Attach()
         {
 #if DEBUG
             if (Debugger.IsAttached)

@@ -1,10 +1,11 @@
 ﻿using System;
 using NLog;
 using Ninject;
+using NzbDrone.Providers;
 
 namespace NzbDrone
 {
-    internal static class Program
+    public static class Program
     {
         public static readonly StandardKernel Kernel = new StandardKernel();
 
@@ -14,8 +15,20 @@ namespace NzbDrone
         {
             try
             {
+                Kernel.Bind<ConfigProvider>().ToSelf().InSingletonScope();
+                Kernel.Bind<ConsoleProvider>().ToSelf().InSingletonScope();
+                Kernel.Bind<DebuggerProvider>().ToSelf().InSingletonScope();
+                Kernel.Bind<EnviromentProvider>().ToSelf().InSingletonScope();
+                Kernel.Bind<IISProvider>().ToSelf().InSingletonScope();
+                Kernel.Bind<MonitoringProvider>().ToSelf().InSingletonScope();
+                Kernel.Bind<ProcessProvider>().ToSelf().InSingletonScope();
+                Kernel.Bind<ServiceProvider>().ToSelf().InSingletonScope();
+                Kernel.Bind<WebClientProvider>().ToSelf().InSingletonScope();
+
                 Console.WriteLine("Starting Console.");
+                Kernel.Get<MonitoringProvider>().Start();
                 Kernel.Get<Application>().Start();
+               
             }
             catch (Exception e)
             {

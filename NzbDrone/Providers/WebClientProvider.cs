@@ -6,7 +6,7 @@ using System.Text;
 
 namespace NzbDrone.Providers
 {
-    internal class WebClientProvider
+    public class WebClientProvider
     {
 
         public virtual string DownloadString(string url)

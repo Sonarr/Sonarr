@@ -3,15 +3,17 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
+using System.Xml.XPath;
 using NLog;
 using NLog.Config;
 
 namespace NzbDrone.Providers
 {
-    internal class ConfigProvider
+    public class ConfigProvider
     {
+        private static readonly Logger Logger = LogManager.GetLogger("ConfigProvider");
 
-        internal virtual string ApplicationRoot
+        public virtual string ApplicationRoot
         {
             get
             {
@@ -27,38 +29,74 @@ namespace NzbDrone.Providers
             }
         }
 
-        internal virtual int Port
+        public virtual int Port
         {
             get { return GetValueInt("Port"); }
         }
 
-        internal virtual bool LaunchBrowser
+        public virtual bool LaunchBrowser
         {
             get { return GetValueBoolean("LaunchBrowser"); }
         }
 
-        internal virtual string AppDataDirectory
+        public virtual string AppDataDirectory
         {
             get { return Path.Combine(ApplicationRoot, "NzbDrone.Web", "App_Data"); }
         }
 
-        internal virtual string ConfigFile
+        public virtual string ConfigFile
         {
             get { return Path.Combine(AppDataDirectory, "Config.xml"); }
         }
 
-        internal virtual string IISFolder
+        public virtual string IISFolder
         {
             get { return Path.Combine(ApplicationRoot, @"IISExpress\"); }
         }
 
-        internal virtual void ConfigureNlog()
+        public virtual string IISExePath
+        {
+            get { return IISFolder + @"iisexpress.exe"; }
+        }
+
+        public virtual string IISConfigPath
+        {
+            get { return Path.Combine(IISFolder, "AppServer", "applicationhost.config"); }
+        }
+
+        public virtual void ConfigureNlog()
         {
             LogManager.Configuration = new XmlLoggingConfiguration(
                 Path.Combine(ApplicationRoot, "NzbDrone.Web\\log.config"), false);
         }
 
-        internal virtual void CreateDefaultConfigFile()
+        public virtual void UpdateIISConfig(string configPath)
+        {
+            Logger.Info(@"Server configuration file: {0}", configPath);
+            Logger.Info(@"Configuring server to: [http://localhost:{0}]", Port);
+
+            var configXml = XDocument.Load(configPath);
+
+            var bindings =
+                configXml.XPathSelectElement("configuration/system.applicationHost/sites").Elements("site").Where(
+                    d => d.Attribute("name").Value.ToLowerInvariant() == "nzbdrone").First().Element("bindings");
+            bindings.Descendants().Remove();
+            bindings.Add(
+                new XElement("binding",
+                             new XAttribute("protocol", "http"),
+                             new XAttribute("bindingInformation", String.Format("*:{0}:localhost", Port))
+                    ));
+
+            bindings.Add(
+            new XElement("binding",
+                         new XAttribute("protocol", "http"),
+                         new XAttribute("bindingInformation", String.Format("*:{0}:", Port))
+                ));
+
+            configXml.Save(configPath);
+        }
+
+        public virtual void CreateDefaultConfigFile()
         {
             //Create the config file here
             Directory.CreateDirectory(AppDataDirectory);
@@ -69,7 +107,7 @@ namespace NzbDrone.Providers
             }
         }
 
-        internal virtual void WriteDefaultConfig()
+        public virtual void WriteDefaultConfig()
         {
             var xDoc = new XDocument(new XDeclaration("1.0", "utf-8", "yes"));
 
