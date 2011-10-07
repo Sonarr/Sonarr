@@ -10,21 +10,16 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using EnvDTE;
 using EnvDTE80;
-using NLog;
 using Thread = System.Threading.Thread;
 
 namespace NzbDrone
 {
     public class ProcessAttacher
     {
-
-        private static readonly Logger Logger = LogManager.GetLogger("Application");
-
-
         public static void Attach()
         {
             DTE2 dte2;
-            dte2 = (DTE2)Marshal.
+            dte2 = (DTE2) Marshal.
                               GetActiveObject("VisualStudio.DTE.10.0");
 
             var pa = new ProcessAttacher(dte2, "iisexpress", 10);
@@ -32,7 +27,6 @@ namespace NzbDrone
             return;
 
             // Get an instance of the currently running Visual Studio IDE.
-
         }
 
         #region private
@@ -93,9 +87,9 @@ namespace NzbDrone
 
         private AttachResult PessimisticAttach(AttachType attachType)
         {
-            AttachResult res = Attach(attachType);
+            var res = Attach(attachType);
 
-            DateTime timeout = DateTime.Now.AddSeconds(_waitTimeout);
+            var timeout = DateTime.Now.AddSeconds(_waitTimeout);
 
             while (res == AttachResult.NotRunning && timeout > DateTime.Now)
             {
@@ -107,8 +101,6 @@ namespace NzbDrone
 
         private bool IsBeingDebugged()
         {
-
-
             if (_dte.Debugger.DebuggedProcesses != null)
             {
                 foreach (Process process in _dte.Debugger.DebuggedProcesses)

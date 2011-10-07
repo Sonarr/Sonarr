@@ -87,4 +87,9 @@
       <Abbreviation Text="IIS" />
     </Naming2>
   </CodeStyleSettings>
+  <Daemon.SolutionSettings>
+    <SkipFilesAndFolders>
+      <Item>43BD3BBD-1531-4D8F-9C08-E1CD544AB2CD/d:Content</Item>
+    </SkipFilesAndFolders>
+  </Daemon.SolutionSettings>
 </Configuration>
