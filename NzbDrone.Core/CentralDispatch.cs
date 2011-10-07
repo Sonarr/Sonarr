@@ -113,6 +113,7 @@ namespace NzbDrone.Core
             _kernel.Bind<IJob>().To<RenameSeriesJob>().InSingletonScope();
             _kernel.Bind<IJob>().To<BacklogSearchJob>().InSingletonScope();
             _kernel.Bind<IJob>().To<BannerDownloadJob>().InSingletonScope();
+            _kernel.Bind<IJob>().To<ConvertEpisodeJob>().InSingletonScope();
 
             _kernel.Get<JobProvider>().Initialize();
             _kernel.Get<WebTimer>().StartTimer(30);

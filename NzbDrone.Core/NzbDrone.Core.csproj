@@ -189,6 +189,8 @@
     <Compile Include="Instrumentation\ExceptioneerTarget.cs" />
     <Compile Include="Instrumentation\NlogWriter.cs" />
     <Compile Include="Datastore\PetaPoco\PetaPoco.cs" />
+    <Compile Include="Model\AtomicParsleyTitleType.cs" />
+    <Compile Include="Model\AuthenticationType.cs" />
     <Compile Include="Model\ConnectionInfoModel.cs" />
     <Compile Include="Model\ExternalNotificationType.cs" />
     <Compile Include="Model\JobQueueItem.cs" />
@@ -203,10 +205,13 @@
     <Compile Include="Model\Xbmc\ActivePlayersResult.cs" />
     <Compile Include="Model\Xbmc\ErrorResult.cs" />
     <Compile Include="Model\Xbmc\IconType.cs" />
+    <Compile Include="Providers\Converting\AtomicParsleyProvider.cs" />
+    <Compile Include="Providers\Converting\HandbrakeProvider.cs" />
     <Compile Include="Providers\Core\ConfigFileProvider.cs" />
     <Compile Include="Providers\Core\UdpProvider.cs" />
     <Compile Include="Providers\Jobs\BacklogSearchJob.cs" />
     <Compile Include="Providers\Jobs\BannerDownloadJob.cs" />
+    <Compile Include="Providers\Jobs\ConvertEpisodeJob.cs" />
     <Compile Include="Providers\Jobs\RenameSeriesJob.cs" />
     <Compile Include="Providers\Jobs\SeriesSearchJob.cs" />
     <Compile Include="Providers\Jobs\RenameSeasonJob.cs" />

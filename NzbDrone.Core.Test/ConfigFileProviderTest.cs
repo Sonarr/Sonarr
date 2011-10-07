@@ -2,6 +2,7 @@
 using AutoMoq;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
@@ -32,7 +33,7 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer();
 
             //Act
-            var result = mocker.Resolve<ConfigFileProvider>().GetValue(key);
+            var result = mocker.Resolve<ConfigFileProvider>().GetValue(key, value);
 
             //Assert
             result.Should().Be(value);
@@ -47,7 +48,7 @@ namespace NzbDrone.Core.Test
             var mocker = new AutoMoqer();
 
             //Act
-            var result = mocker.Resolve<ConfigFileProvider>().GetValueInt(key);
+            var result = mocker.Resolve<ConfigFileProvider>().GetValueInt(key, value);
 
             //Assert
             result.Should().Be(value);
@@ -57,11 +58,12 @@ namespace NzbDrone.Core.Test
         public void GetBool_Success()
         {
             const string key = "LaunchBrowser";
+            const bool value = true;
 
             var mocker = new AutoMoqer();
 
             //Act
-            var result = mocker.Resolve<ConfigFileProvider>().GetValueBoolean(key);
+            var result = mocker.Resolve<ConfigFileProvider>().GetValueBoolean(key, value);
 
             //Assert
             result.Should().BeTrue();
@@ -123,6 +125,61 @@ namespace NzbDrone.Core.Test
             //Assert
             var result = mocker.Resolve<ConfigFileProvider>().Port;
             result.Should().Be(value);
+        }
+
+        [Test]
+        public void GetValue_New_Key()
+        {
+            const string key = "Hello";
+            const string value = "World";
+
+            var mocker = new AutoMoqer();
+
+            //Act
+            var result = mocker.Resolve<ConfigFileProvider>().GetValue(key, value);
+
+            //Assert
+            result.Should().Be(value);
+        }
+
+        [Test]
+        public void GetValue_New_Key_with_new_parent()
+        {
+            const string key = "Hello";
+            const string value = "World";
+
+            var mocker = new AutoMoqer();
+
+            //Act
+            var result = mocker.Resolve<ConfigFileProvider>().GetValue(key, value, "Universe");
+
+            //Assert
+            result.Should().Be(value);
+        }
+
+        [Test]
+        public void GetAuthenticationType_No_Existing_Value()
+        {
+            var mocker = new AutoMoqer();
+
+            //Act
+            var result = mocker.Resolve<ConfigFileProvider>().AuthenticationType;
+
+            //Assert
+            result.Should().Be(AuthenticationType.Anonymous);
+        }
+
+        [Test]
+        public void GetAuthenticationType_Windows()
+        {
+            var mocker = new AutoMoqer();
+            mocker.Resolve<ConfigFileProvider>().SetValue("AuthenticationType", 1);
+
+            //Act
+            var result = mocker.Resolve<ConfigFileProvider>().AuthenticationType;
+
+            //Assert
+            result.Should().Be(AuthenticationType.Windows);
         }
     }
 }
