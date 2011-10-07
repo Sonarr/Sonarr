@@ -11,11 +11,11 @@ using NLog;
 
 namespace NzbDrone.Providers
 {
-    internal class IISControllerProvider
+    internal class IISProvider
     {
         private readonly ConfigProvider _configProvider;
         private static readonly Logger IISLogger = LogManager.GetLogger("IISExpress");
-        private static readonly Logger Logger = LogManager.GetLogger("IISControllerProvider");
+        private static readonly Logger Logger = LogManager.GetLogger("IISProvider");
 
         private readonly string IISExe;
         private readonly string IISConfigPath;
@@ -23,10 +23,10 @@ namespace NzbDrone.Providers
         private static Timer _pingTimer;
         private static int _pingFailCounter;
 
-        public static Process IISProcess { get; private set; }
+        private static Process _iisProcess;
 
 
-        public IISControllerProvider(ConfigProvider configProvider)
+        public IISProvider(ConfigProvider configProvider)
         {
             _configProvider = configProvider;
             IISExe = Path.Combine(_configProvider.IISFolder, @"iisexpress.exe");
@@ -38,27 +38,40 @@ namespace NzbDrone.Providers
             get { return string.Format("http://localhost:{0}/", _configProvider.Port); }
         }
 
+        internal int IISProcessId
+        {
+            get
+            {
+                if (_iisProcess == null)
+                {
+                    throw new InvalidOperationException("IIS Process isn't running yet.");
+                }
+
+                return _iisProcess.Id;
+            }
+        }
+
         internal Process StartServer()
         {
             Logger.Info("Preparing IISExpress Server...");
-            IISProcess = new Process();
+            _iisProcess = new Process();
 
-            IISProcess.StartInfo.FileName = IISExe;
-            IISProcess.StartInfo.Arguments = String.Format("/config:\"{0}\" /trace:i", IISConfigPath);//"/config:"""" /trace:i";
-            IISProcess.StartInfo.WorkingDirectory = _configProvider.ApplicationRoot;
+            _iisProcess.StartInfo.FileName = IISExe;
+            _iisProcess.StartInfo.Arguments = String.Format("/config:\"{0}\" /trace:i", IISConfigPath);//"/config:"""" /trace:i";
+            _iisProcess.StartInfo.WorkingDirectory = _configProvider.ApplicationRoot;
 
-            IISProcess.StartInfo.UseShellExecute = false;
-            IISProcess.StartInfo.RedirectStandardOutput = true;
-            IISProcess.StartInfo.RedirectStandardError = true;
-            IISProcess.StartInfo.CreateNoWindow = true;
+            _iisProcess.StartInfo.UseShellExecute = false;
+            _iisProcess.StartInfo.RedirectStandardOutput = true;
+            _iisProcess.StartInfo.RedirectStandardError = true;
+            _iisProcess.StartInfo.CreateNoWindow = true;
 
 
-            IISProcess.OutputDataReceived += (OnOutputDataReceived);
-            IISProcess.ErrorDataReceived += (OnErrorDataReceived);
+            _iisProcess.OutputDataReceived += (OnOutputDataReceived);
+            _iisProcess.ErrorDataReceived += (OnErrorDataReceived);
 
             //Set Variables for the config file.
-            IISProcess.StartInfo.EnvironmentVariables.Add("NZBDRONE_PATH", _configProvider.ApplicationRoot);
-            IISProcess.StartInfo.EnvironmentVariables.Add("NZBDRONE_PID", Process.GetCurrentProcess().Id.ToString());
+            _iisProcess.StartInfo.EnvironmentVariables.Add("NZBDRONE_PATH", _configProvider.ApplicationRoot);
+            _iisProcess.StartInfo.EnvironmentVariables.Add("NZBDRONE_PID", Process.GetCurrentProcess().Id.ToString());
 
             try
             {
@@ -70,22 +83,22 @@ namespace NzbDrone.Providers
             }
 
 
-            Logger.Info("Starting process. [{0}]", IISProcess.StartInfo.FileName);
+            Logger.Info("Starting process. [{0}]", _iisProcess.StartInfo.FileName);
 
 
 
-            IISProcess.Start();
-            IISProcess.PriorityClass = ProcessPriorityClass.AboveNormal;
+            _iisProcess.Start();
+            _iisProcess.PriorityClass = ProcessPriorityClass.AboveNormal;
 
-            IISProcess.BeginErrorReadLine();
-            IISProcess.BeginOutputReadLine();
+            _iisProcess.BeginErrorReadLine();
+            _iisProcess.BeginOutputReadLine();
 
             //Start Ping
             _pingTimer = new Timer(300000) { AutoReset = true };
             _pingTimer.Elapsed += (PingServer);
             _pingTimer.Start();
 
-            return IISProcess;
+            return _iisProcess;
         }
 
         private static void OnErrorDataReceived(object sender, DataReceivedEventArgs e)
@@ -98,7 +111,7 @@ namespace NzbDrone.Providers
 
         internal void StopServer()
         {
-            KillProcess(IISProcess);
+            KillProcess(_iisProcess);
 
             Logger.Info("Finding orphaned IIS Processes.");
             foreach (var process in Process.GetProcessesByName("IISExpress"))
