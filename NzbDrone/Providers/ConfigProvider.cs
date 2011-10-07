@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -7,60 +6,59 @@ using System.Xml.Linq;
 using NLog;
 using NLog.Config;
 
-namespace NzbDrone
+namespace NzbDrone.Providers
 {
-    internal class Config
+    internal class ConfigProvider
     {
-        private static string _projectRoot = string.Empty;
 
-        internal static string ProjectRoot
+        internal virtual string ApplicationRoot
         {
             get
             {
-                if (string.IsNullOrEmpty(_projectRoot))
+                var appDir = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory;
+
+                while (appDir.GetDirectories("iisexpress").Length == 0)
                 {
-                    var appDir = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory;
-
-                    while (appDir.GetDirectories("iisexpress").Length == 0)
-                    {
-                        if (appDir.Parent == null) throw new ApplicationException("Can't fine IISExpress folder.");
-                        appDir = appDir.Parent;
-                    }
-
-                    _projectRoot = appDir.FullName;
+                    if (appDir.Parent == null) throw new ApplicationException("Can't fine IISExpress folder.");
+                    appDir = appDir.Parent;
                 }
 
-                return _projectRoot;
+                return appDir.FullName;
             }
         }
 
-        internal static int Port
+        internal virtual int Port
         {
             get { return GetValueInt("Port"); }
         }
 
-        internal static bool LaunchBrowser
+        internal virtual bool LaunchBrowser
         {
             get { return GetValueBoolean("LaunchBrowser"); }
         }
 
-        internal static string AppDataDirectory
+        internal virtual string AppDataDirectory
         {
-            get { return Path.Combine(ProjectRoot, "NzbDrone.Web", "App_Data"); }
+            get { return Path.Combine(ApplicationRoot, "NzbDrone.Web", "App_Data"); }
         }
 
-        internal static string ConfigFile
+        internal virtual string ConfigFile
         {
             get { return Path.Combine(AppDataDirectory, "Config.xml"); }
         }
 
-        internal static void ConfigureNlog()
+        internal virtual string IISFolder
         {
-            LogManager.Configuration = new XmlLoggingConfiguration(
-                Path.Combine(ProjectRoot, "NzbDrone.Web\\log.config"), false);
+            get { return Path.Combine(ApplicationRoot, @"IISExpress\"); }
         }
 
-        internal static void CreateDefaultConfigFile()
+        internal virtual void ConfigureNlog()
+        {
+            LogManager.Configuration = new XmlLoggingConfiguration(
+                Path.Combine(ApplicationRoot, "NzbDrone.Web\\log.config"), false);
+        }
+
+        internal virtual void CreateDefaultConfigFile()
         {
             //Create the config file here
             Directory.CreateDirectory(AppDataDirectory);
@@ -71,7 +69,7 @@ namespace NzbDrone
             }
         }
 
-        internal static void WriteDefaultConfig()
+        internal virtual void WriteDefaultConfig()
         {
             var xDoc = new XDocument(new XDeclaration("1.0", "utf-8", "yes"));
 
@@ -84,7 +82,7 @@ namespace NzbDrone
             xDoc.Save(ConfigFile);
         }
 
-        private static string GetValue(string key, string parent = null)
+        private string GetValue(string key, string parent = null)
         {
             var xDoc = XDocument.Load(ConfigFile);
             var config = xDoc.Descendants("Config").Single();
@@ -99,12 +97,12 @@ namespace NzbDrone
             return value;
         }
 
-        private static int GetValueInt(string key, string parent = null)
+        private int GetValueInt(string key, string parent = null)
         {
             return Convert.ToInt32(GetValue(key, parent));
         }
 
-        private static bool GetValueBoolean(string key, string parent = null)
+        private bool GetValueBoolean(string key, string parent = null)
         {
             return Convert.ToBoolean(GetValue(key, parent));
         }

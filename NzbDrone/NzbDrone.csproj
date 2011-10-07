@@ -30,7 +30,7 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -73,18 +73,25 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Providers\EnviromentProvider.cs" />
+    <Compile Include="NzbDroneService.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ProcessAttacher.cs" />
-    <Compile Include="Config.cs" />
-    <Compile Include="IISController.cs" />
+    <Compile Include="Providers\ConfigProvider.cs" />
+    <Compile Include="Providers\IISControllerProvider.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\ServiceProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

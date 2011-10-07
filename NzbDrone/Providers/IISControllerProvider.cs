@@ -9,15 +9,16 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 using NLog;
 
-namespace NzbDrone
+namespace NzbDrone.Providers
 {
-    internal class IISController
+    internal class IISControllerProvider
     {
+        private readonly ConfigProvider _configProvider;
         private static readonly Logger IISLogger = LogManager.GetLogger("IISExpress");
-        private static readonly Logger Logger = LogManager.GetLogger("IISController");
-        private static readonly string IISFolder = Path.Combine(Config.ProjectRoot, @"IISExpress\");
-        private static readonly string IISExe = Path.Combine(IISFolder, @"iisexpress.exe");
-        private static readonly string IISConfigPath = Path.Combine(IISFolder, "AppServer", "applicationhost.config");
+        private static readonly Logger Logger = LogManager.GetLogger("IISControllerProvider");
+
+        private readonly string IISExe;
+        private readonly string IISConfigPath;
 
         private static Timer _pingTimer;
         private static int _pingFailCounter;
@@ -25,19 +26,26 @@ namespace NzbDrone
         public static Process IISProcess { get; private set; }
 
 
-        internal static string AppUrl
+        public IISControllerProvider(ConfigProvider configProvider)
         {
-            get { return string.Format("http://localhost:{0}/", Config.Port); }
+            _configProvider = configProvider;
+            IISExe = Path.Combine(_configProvider.IISFolder, @"iisexpress.exe");
+            IISConfigPath = Path.Combine(_configProvider.IISFolder, "AppServer", "applicationhost.config");
         }
 
-        internal static Process StartServer()
+        internal string AppUrl
+        {
+            get { return string.Format("http://localhost:{0}/", _configProvider.Port); }
+        }
+
+        internal Process StartServer()
         {
             Logger.Info("Preparing IISExpress Server...");
             IISProcess = new Process();
 
             IISProcess.StartInfo.FileName = IISExe;
             IISProcess.StartInfo.Arguments = String.Format("/config:\"{0}\" /trace:i", IISConfigPath);//"/config:"""" /trace:i";
-            IISProcess.StartInfo.WorkingDirectory = Config.ProjectRoot;
+            IISProcess.StartInfo.WorkingDirectory = _configProvider.ApplicationRoot;
 
             IISProcess.StartInfo.UseShellExecute = false;
             IISProcess.StartInfo.RedirectStandardOutput = true;
@@ -49,7 +57,7 @@ namespace NzbDrone
             IISProcess.ErrorDataReceived += (OnErrorDataReceived);
 
             //Set Variables for the config file.
-            IISProcess.StartInfo.EnvironmentVariables.Add("NZBDRONE_PATH", Config.ProjectRoot);
+            IISProcess.StartInfo.EnvironmentVariables.Add("NZBDRONE_PATH", _configProvider.ApplicationRoot);
             IISProcess.StartInfo.EnvironmentVariables.Add("NZBDRONE_PID", Process.GetCurrentProcess().Id.ToString());
 
             try
@@ -88,7 +96,7 @@ namespace NzbDrone
             IISLogger.Error(e.Data);
         }
 
-        internal static void StopServer()
+        internal void StopServer()
         {
             KillProcess(IISProcess);
 
@@ -109,7 +117,7 @@ namespace NzbDrone
             }
         }
 
-        private static void RestartServer()
+        private void RestartServer()
         {
             _pingTimer.Stop();
             Logger.Warn("Attempting to restart server.");
@@ -117,7 +125,7 @@ namespace NzbDrone
             StartServer();
         }
 
-        private static void PingServer(object sender, ElapsedEventArgs e)
+        private void PingServer(object sender, ElapsedEventArgs e)
         {
             try
             {
@@ -144,7 +152,7 @@ namespace NzbDrone
             }
         }
 
-        private static void OnOutputDataReceived(object s, DataReceivedEventArgs e)
+        private void OnOutputDataReceived(object s, DataReceivedEventArgs e)
         {
             if (e == null || String.IsNullOrWhiteSpace(e.Data) || e.Data.StartsWith("Request started:") ||
                 e.Data.StartsWith("Request ended:") || e.Data == ("IncrementMessages called"))
@@ -159,12 +167,12 @@ namespace NzbDrone
             IISLogger.Trace(e.Data);
         }
 
-        private static void UpdateIISConfig()
+        private void UpdateIISConfig()
         {
-            string configPath = Path.Combine(IISFolder, @"AppServer\applicationhost.config");
+            string configPath = Path.Combine(_configProvider.IISFolder, @"AppServer\applicationhost.config");
 
             Logger.Info(@"Server configuration file: {0}", configPath);
-            Logger.Info(@"Configuring server to: [http://localhost:{0}]", Config.Port);
+            Logger.Info(@"Configuring server to: [http://localhost:{0}]", _configProvider.Port);
 
             var configXml = XDocument.Load(configPath);
 
@@ -175,19 +183,19 @@ namespace NzbDrone
             bindings.Add(
                 new XElement("binding",
                              new XAttribute("protocol", "http"),
-                             new XAttribute("bindingInformation", String.Format("*:{0}:localhost", Config.Port))
+                             new XAttribute("bindingInformation", String.Format("*:{0}:localhost", _configProvider.Port))
                     ));
 
             bindings.Add(
             new XElement("binding",
                          new XAttribute("protocol", "http"),
-                         new XAttribute("bindingInformation", String.Format("*:{0}:", Config.Port))
+                         new XAttribute("bindingInformation", String.Format("*:{0}:", _configProvider.Port))
                 ));
 
             configXml.Save(configPath);
         }
 
-        private static void KillProcess(Process process)
+        private void KillProcess(Process process)
         {
             if (process != null && !process.HasExited)
             {
@@ -199,7 +207,7 @@ namespace NzbDrone
             }
         }
 
-        public static string NormalizePath(string path)
+        public string NormalizePath(string path)
         {
             if (String.IsNullOrWhiteSpace(path))
                 throw new ArgumentException("Path can not be null or empty");

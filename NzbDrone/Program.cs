@@ -5,19 +5,26 @@ using System.Threading;
 using System.Timers;
 using Exceptioneer.WindowsFormsClient;
 using NLog;
+using NzbDrone.Providers;
+
 namespace NzbDrone
 {
-    internal static class Program
+    internal static class Program 
     {
         private static readonly Logger Logger = LogManager.GetLogger("Application");
+
+       static readonly ConfigProvider ConfigProvider = new ConfigProvider();
+       static readonly IISControllerProvider IISController = new IISControllerProvider(ConfigProvider);
 
         private static void Main()
         {
             try
             {
-                Config.ConfigureNlog();
-                Config.CreateDefaultConfigFile();
-                Logger.Info("Starting NZBDrone. Start-up Path:'{0}'", Config.ProjectRoot);
+   
+
+                ConfigProvider.ConfigureNlog();
+                ConfigProvider.CreateDefaultConfigFile();
+                Logger.Info("Starting NZBDrone. Start-up Path:'{0}'", ConfigProvider.ApplicationRoot);
                 Thread.CurrentThread.Name = "Host";
 
                 Process currentProcess = Process.GetCurrentProcess();
@@ -40,7 +47,7 @@ namespace NzbDrone
                 Attach();
 #endif
 
-                if (!Environment.UserInteractive || !Config.LaunchBrowser)
+                if (!Environment.UserInteractive || !ConfigProvider.LaunchBrowser)
                 {
                     try
                     {
@@ -86,13 +93,13 @@ namespace NzbDrone
             }
 
 
-            if (IISController.IISProcess != null)
+            if (IISControllerProvider.IISProcess != null)
             {
-                IISController.IISProcess.Refresh();
+                IISControllerProvider.IISProcess.Refresh();
 
-                if (IISController.IISProcess.PriorityClass != ProcessPriorityClass.Normal && IISController.IISProcess.PriorityClass != ProcessPriorityClass.AboveNormal)
+                if (IISControllerProvider.IISProcess.PriorityClass != ProcessPriorityClass.Normal && IISControllerProvider.IISProcess.PriorityClass != ProcessPriorityClass.AboveNormal)
                 {
-                    SetPriority(IISController.IISProcess);
+                    SetPriority(IISControllerProvider.IISProcess);
                 }
             }
         }
@@ -101,7 +108,7 @@ namespace NzbDrone
         {
             Logger.Info("Updating [{0}] process priority from {1} to {2}",
                           process.ProcessName,
-                          IISController.IISProcess.PriorityClass,
+                          IISControllerProvider.IISProcess.PriorityClass,
                           ProcessPriorityClass.Normal);
             process.PriorityClass = ProcessPriorityClass.Normal;
         }
