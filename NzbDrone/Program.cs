@@ -28,7 +28,6 @@ namespace NzbDrone
                 Console.WriteLine("Starting Console.");
                 Kernel.Get<MonitoringProvider>().Start();
                 Kernel.Get<Application>().Start();
-               
             }
             catch (Exception e)
             {

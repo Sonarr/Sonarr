@@ -88,10 +88,10 @@ namespace NzbDrone.Providers
                     ));
 
             bindings.Add(
-            new XElement("binding",
-                         new XAttribute("protocol", "http"),
-                         new XAttribute("bindingInformation", String.Format("*:{0}:", Port))
-                ));
+                new XElement("binding",
+                             new XAttribute("protocol", "http"),
+                             new XAttribute("bindingInformation", String.Format("*:{0}:", Port))
+                    ));
 
             configXml.Save(configPath);
         }
@@ -112,10 +112,10 @@ namespace NzbDrone.Providers
             var xDoc = new XDocument(new XDeclaration("1.0", "utf-8", "yes"));
 
             xDoc.Add(new XElement("Config",
-                                    new XElement("Port", 8989),
-                                    new XElement("LaunchBrowser", true)
-                                 )
-                    );
+                                  new XElement("Port", 8989),
+                                  new XElement("LaunchBrowser", true)
+                         )
+                );
 
             xDoc.Save(ConfigFile);
         }
@@ -130,7 +130,7 @@ namespace NzbDrone.Providers
             if (parent != null)
                 parentContainer = config.Descendants(parent).Single();
 
-            var value = parentContainer.Descendants(key).Single().Value;
+            string value = parentContainer.Descendants(key).Single().Value;
 
             return value;
         }

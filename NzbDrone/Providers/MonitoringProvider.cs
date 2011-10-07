@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Net;
 using System.Runtime.Remoting;
 using System.Timers;
 using NLog;
@@ -14,15 +13,22 @@ namespace NzbDrone.Providers
 
         private readonly IISProvider _iisProvider;
         private readonly ProcessProvider _processProvider;
+        private readonly WebClientProvider _webClientProvider;
 
         private int _pingFailCounter;
         private Timer _pingTimer;
 
         [Inject]
-        public MonitoringProvider(ProcessProvider processProvider, IISProvider iisProvider)
+        public MonitoringProvider(ProcessProvider processProvider, IISProvider iisProvider,
+                                  WebClientProvider webClientProvider)
         {
             _processProvider = processProvider;
             _iisProvider = iisProvider;
+            _webClientProvider = webClientProvider;
+        }
+
+        public MonitoringProvider()
+        {
         }
 
         public void Start()
@@ -36,13 +42,9 @@ namespace NzbDrone.Providers
             prioCheckTimer.Elapsed += EnsurePriority;
             prioCheckTimer.Enabled = true;
 
-            _pingTimer = new Timer(60000) { AutoReset = true };
+            _pingTimer = new Timer(60000) {AutoReset = true};
             _pingTimer.Elapsed += (PingServer);
             _pingTimer.Start();
-        }
-
-        public MonitoringProvider()
-        {
         }
 
 
@@ -68,16 +70,18 @@ namespace NzbDrone.Providers
 
             try
             {
-                string response = new WebClient().DownloadString(_iisProvider.AppUrl + "/health");
+                string response = _webClientProvider.DownloadString(_iisProvider.AppUrl + "/health");
 
                 if (!response.Contains("OK"))
                 {
                     throw new ServerException("Health services responded with an invalid response.");
                 }
+
                 if (_pingFailCounter > 0)
                 {
                     Logger.Info("Application pool has been successfully recovered.");
                 }
+
                 _pingFailCounter = 0;
             }
             catch (Exception ex)

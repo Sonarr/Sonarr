@@ -14,11 +14,11 @@ namespace NzbDrone.Providers
 
         private static readonly Logger Logger = LogManager.GetLogger("Host.ServiceManager");
 
-        
+
         public bool ServiceExist(string name)
         {
             return
-                System.ServiceProcess.ServiceController.GetServices().Any(
+                ServiceController.GetServices().Any(
                     s => String.Equals(s.ServiceName, name, StringComparison.InvariantCultureIgnoreCase));
         }
 
@@ -36,7 +36,7 @@ namespace NzbDrone.Providers
             var serviceInstaller = new ServiceInstaller();
 
 
-            String[] cmdline = { @"/assemblypath=" + Assembly.GetExecutingAssembly().Location };
+            String[] cmdline = {@"/assemblypath=" + Assembly.GetExecutingAssembly().Location};
 
             var context = new InstallContext("service_install.log", cmdline);
             serviceInstaller.Context = context;

@@ -76,11 +76,11 @@ namespace NzbDrone.Providers
             if (process == null) return null;
 
             return new ProcessInfo
-                           {
-                               Id = process.Id,
-                               Priority = process.PriorityClass,
-                               StartPath = process.MainModule.FileName
-                           };
+                       {
+                           Id = process.Id,
+                           Priority = process.PriorityClass,
+                           StartPath = process.MainModule.FileName
+                       };
         }
     }
 }

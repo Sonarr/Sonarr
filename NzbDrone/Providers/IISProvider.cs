@@ -8,10 +8,10 @@ namespace NzbDrone.Providers
 {
     public class IISProvider
     {
-        private readonly ConfigProvider _configProvider;
-        private readonly ProcessProvider _processProvider;
         private static readonly Logger IISLogger = LogManager.GetLogger("Host.IISExpress");
         private static readonly Logger Logger = LogManager.GetLogger("Host.IISProvider");
+        private readonly ConfigProvider _configProvider;
+        private readonly ProcessProvider _processProvider;
 
 
         [Inject]
@@ -19,12 +19,10 @@ namespace NzbDrone.Providers
         {
             _configProvider = configProvider;
             _processProvider = processProvider;
-
         }
 
         public IISProvider()
         {
-
         }
 
         public string AppUrl
@@ -141,7 +139,5 @@ namespace NzbDrone.Providers
 
             return info.FullName.Trim('/', '\\', ' ').ToLower();
         }
-
-
     }
 }

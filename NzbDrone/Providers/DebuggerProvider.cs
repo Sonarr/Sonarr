@@ -7,7 +7,6 @@ namespace NzbDrone.Providers
 {
     public class DebuggerProvider
     {
-
         private static readonly Logger Logger = LogManager.GetLogger("Host.DebuggerProvider");
 
 
@@ -18,7 +17,7 @@ namespace NzbDrone.Providers
             {
                 Logger.Info("Trying to attach to debugger");
 
-                var count = 0;
+                int count = 0;
 
                 while (true)
                 {
@@ -38,14 +37,10 @@ namespace NzbDrone.Providers
                         }
 
                         Thread.Sleep(100);
-
                     }
                 }
             }
 #endif
         }
-
-
-
     }
 }

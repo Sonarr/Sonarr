@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
+﻿using System.Diagnostics;
 
 namespace NzbDrone
 {
@@ -13,6 +9,5 @@ namespace NzbDrone
         public string StartPath { get; set; }
 
         public bool HasExited { get; set; }
-
     }
 }

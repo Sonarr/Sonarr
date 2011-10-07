@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.ServiceProcess;
-using System.Text;
+﻿using System.ServiceProcess;
 
 namespace NzbDrone
 {
-    class NzbDroneService : ServiceBase
+    internal class NzbDroneService : ServiceBase
     {
-
         protected override void OnStart(string[] args)
         {
             base.OnStart(args);
@@ -18,6 +13,5 @@ namespace NzbDrone
         {
             base.OnStop();
         }
-
     }
 }

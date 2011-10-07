@@ -11,15 +11,17 @@ namespace NzbDrone
         private static readonly Logger Logger = LogManager.GetLogger("Host.App");
 
         private readonly ConfigProvider _configProvider;
-        private readonly WebClient _webClient;
-        private readonly IISProvider _iisProvider;
         private readonly ConsoleProvider _consoleProvider;
         private readonly DebuggerProvider _debuggerProvider;
         private readonly EnviromentProvider _enviromentProvider;
+        private readonly IISProvider _iisProvider;
         private readonly ProcessProvider _processProvider;
+        private readonly WebClient _webClient;
 
-        public Application(ConfigProvider configProvider, WebClient webClient, IISProvider iisProvider, ConsoleProvider consoleProvider,
-            DebuggerProvider debuggerProvider, EnviromentProvider enviromentProvider, ProcessProvider processProvider)
+        public Application(ConfigProvider configProvider, WebClient webClient, IISProvider iisProvider,
+                           ConsoleProvider consoleProvider,
+                           DebuggerProvider debuggerProvider, EnviromentProvider enviromentProvider,
+                           ProcessProvider processProvider)
         {
             _configProvider = configProvider;
             _webClient = webClient;
@@ -33,7 +35,6 @@ namespace NzbDrone
             _configProvider.CreateDefaultConfigFile();
             Logger.Info("Starting NZBDrone. Start-up Path:'{0}'", _configProvider.ApplicationRoot);
             Thread.CurrentThread.Name = "Host";
-
         }
 
         public void Start()
@@ -71,8 +72,6 @@ namespace NzbDrone
 
         public void Stop()
         {
-
         }
     }
 }
-
