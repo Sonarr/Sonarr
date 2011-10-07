@@ -11,7 +11,7 @@ namespace NzbDrone.Providers
 {
     public class ConfigProvider
     {
-        private static readonly Logger Logger = LogManager.GetLogger("ConfigProvider");
+        private static readonly Logger Logger = LogManager.GetLogger("Host.ConfigProvider");
 
         public virtual string ApplicationRoot
         {

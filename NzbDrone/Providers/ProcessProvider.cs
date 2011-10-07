@@ -7,7 +7,7 @@ namespace NzbDrone.Providers
 {
     public class ProcessProvider
     {
-        private static readonly Logger Logger = LogManager.GetLogger("ProcessProvider");
+        private static readonly Logger Logger = LogManager.GetLogger("Host.ProcessProvider");
 
 
         public virtual ProcessInfo GetCurrentProcess()

@@ -12,7 +12,7 @@ namespace NzbDrone.Providers
     {
         public const string NzbDroneServiceName = "NzbDrone";
 
-        private static readonly Logger Logger = LogManager.GetLogger("ServiceManager");
+        private static readonly Logger Logger = LogManager.GetLogger("Host.ServiceManager");
 
         
         public bool ServiceExist(string name)

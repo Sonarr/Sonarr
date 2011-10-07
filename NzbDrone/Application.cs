@@ -8,7 +8,7 @@ namespace NzbDrone
 {
     public class Application
     {
-        private static readonly Logger Logger = LogManager.GetLogger("Application");
+        private static readonly Logger Logger = LogManager.GetLogger("Host.App");
 
         private readonly ConfigProvider _configProvider;
         private readonly WebClient _webClient;

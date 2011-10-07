@@ -10,7 +10,7 @@ namespace NzbDrone.Providers
 {
     public class MonitoringProvider
     {
-        private static readonly Logger Logger = LogManager.GetLogger("MonitoringProvider");
+        private static readonly Logger Logger = LogManager.GetLogger("Host.MonitoringProvider");
 
         private readonly IISProvider _iisProvider;
         private readonly ProcessProvider _processProvider;

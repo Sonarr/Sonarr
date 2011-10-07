@@ -9,7 +9,7 @@ namespace NzbDrone
     {
         public static readonly StandardKernel Kernel = new StandardKernel();
 
-        private static readonly Logger Logger = LogManager.GetLogger("Main");
+        private static readonly Logger Logger = LogManager.GetLogger("Host.Main");
 
         private static void Main()
         {

@@ -8,7 +8,7 @@ namespace NzbDrone.Providers
     public class DebuggerProvider
     {
 
-        private static readonly Logger Logger = LogManager.GetLogger("DebuggerProvider");
+        private static readonly Logger Logger = LogManager.GetLogger("Host.DebuggerProvider");
 
 
         public virtual void Attach()
