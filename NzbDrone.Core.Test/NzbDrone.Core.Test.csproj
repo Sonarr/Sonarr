@@ -91,6 +91,7 @@
     <Compile Include="BacklogSearchJobTest.cs" />
     <Compile Include="BannerDownloadJobTest.cs" />
     <Compile Include="ConfigFileProviderTest.cs" />
+    <Compile Include="SortHelperTest.cs" />
     <Compile Include="EpisodeProviderTest_DeleteInvalidEpisodes.cs" />
     <Compile Include="InventoryProvider_IsAcceptableSizeTest.cs" />
     <Compile Include="QualityTypeProviderTest.cs" />
