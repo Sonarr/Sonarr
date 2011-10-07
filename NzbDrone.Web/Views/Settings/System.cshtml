@@ -31,6 +31,11 @@
         <span class="small">@Html.DescriptionFor(m => m.Port)</span>
         </label>
         @Html.TextBoxFor(m => m.Port, new { @class = "inputClass" })
+
+        <label class="labelClass">@Html.LabelFor(m => m.AuthenticationType)
+        <span class="small">@Html.DescriptionFor(m => m.AuthenticationType)</span>
+        </label>
+        @Html.DropDownListFor(m => m.AuthenticationType, Model.AuthTypeSelectList, new { @class = "inputClass" })
         
         <button type="submit" id="save_button" disabled="disabled">Save</button>
     }

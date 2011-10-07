@@ -189,9 +189,21 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult System()
         {
+            var selectedAuthenticationType = _configFileProvider.AuthenticationType;
+            var authenticationTypes = new List<AuthenticationType>();
+
+            foreach (AuthenticationType authenticationType in Enum.GetValues(typeof(AuthenticationType)))
+            {
+                authenticationTypes.Add(authenticationType);
+            }
+
+            var authTypeSelectList = new SelectList(authenticationTypes, selectedAuthenticationType);
+
             var model = new SystemSettingsModel();
             model.Port = _configFileProvider.Port;
             model.LaunchBrowser = _configFileProvider.LaunchBrowser;
+            model.AuthenticationType = selectedAuthenticationType;
+            model.AuthTypeSelectList = authTypeSelectList;
 
             return View(model);
         }
@@ -455,6 +467,7 @@ namespace NzbDrone.Web.Controllers
             {
                 _configFileProvider.Port = data.Port;
                 _configFileProvider.LaunchBrowser = data.LaunchBrowser;
+                _configFileProvider.AuthenticationType = data.AuthenticationType;
 
                 return GetSuccessResult();
             }
