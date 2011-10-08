@@ -86,6 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Application.cs" />
+    <Compile Include="Model\AuthenticationType.cs" />
     <Compile Include="ProcessInfo.cs" />
     <Compile Include="Providers\ConsoleProvider.cs" />
     <Compile Include="Providers\DebuggerProvider.cs" />
@@ -132,6 +133,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
