@@ -73,7 +73,7 @@ namespace NzbDrone.Providers
 
         private static ProcessInfo ConvertToProcessInfo(Process process)
         {
-            if (process == null) return null;
+            if (process == null || process.Id <= 0) return null;
 
             return new ProcessInfo
                        {

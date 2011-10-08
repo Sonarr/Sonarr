@@ -43,6 +43,14 @@ namespace NzbDrone.App.Test
             dummyProcess.HasExited.Should().BeTrue();
         }
 
+        [TestCase(0)]
+        [TestCase(-1)]
+        [TestCase(9999)]
+        public void GetProcessById_should_return_null_for_invalid_process(int processId)
+        {
+            _processProvider.GetProcessById(processId).Should().BeNull();
+        }
+
 
         public Process StartDummyProcess()
         {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using NLog;
 using Ninject;
 using NzbDrone.Providers;
@@ -25,7 +26,7 @@ namespace NzbDrone
                 Kernel.Bind<ServiceProvider>().ToSelf().InSingletonScope();
                 Kernel.Bind<WebClientProvider>().ToSelf().InSingletonScope();
 
-                Console.WriteLine("Starting Console.");
+                Console.WriteLine("Starting NzbDrone Console. Version " + Assembly.GetExecutingAssembly().GetName().Version);
                 Kernel.Get<MonitoringProvider>().Start();
                 Kernel.Get<Application>().Start();
             }
