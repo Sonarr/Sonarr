@@ -1,35 +1,31 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using NLog;
 using NLog.Config;
+using Ninject;
 
 namespace NzbDrone.Providers
 {
     public class ConfigProvider
     {
+        private readonly EnviromentProvider _enviromentProvider;
         private static readonly Logger Logger = LogManager.GetLogger("Host.ConfigProvider");
 
-        public virtual string ApplicationRoot
+        [Inject]
+        public ConfigProvider(EnviromentProvider enviromentProvider)
         {
-            get
-            {
-                var appDir = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory;
-
-                while (appDir.GetDirectories("iisexpress").Length == 0)
-                {
-                    if (appDir.Parent == null) throw new ApplicationException("Can't fine IISExpress folder.");
-                    appDir = appDir.Parent;
-                }
-
-                return appDir.FullName;
-            }
+            _enviromentProvider = enviromentProvider;
         }
 
-        public virtual int Port
+        public ConfigProvider()
+        {
+
+        }
+
+        public virtual int PortNumber
         {
             get { return GetValueInt("Port"); }
         }
@@ -39,9 +35,24 @@ namespace NzbDrone.Providers
             get { return GetValueBoolean("LaunchBrowser"); }
         }
 
+        public virtual string IISDirectory
+        {
+            get { return Path.Combine(_enviromentProvider.ApplicationPath, "IISExpress"); }
+        }
+
+        public virtual string IISExePath
+        {
+            get { return Path.Combine(IISDirectory, "iisexpress.exe"); }
+        }
+
+        public virtual string IISConfigPath
+        {
+            get { return Path.Combine(IISDirectory, "AppServer", "applicationhost.config"); }
+        }
+
         public virtual string AppDataDirectory
         {
-            get { return Path.Combine(ApplicationRoot, "NzbDrone.Web", "App_Data"); }
+            get { return Path.Combine(_enviromentProvider.ApplicationPath, "NzbDrone.Web", "App_Data"); }
         }
 
         public virtual string ConfigFile
@@ -49,31 +60,21 @@ namespace NzbDrone.Providers
             get { return Path.Combine(AppDataDirectory, "Config.xml"); }
         }
 
-        public virtual string IISFolder
+        public virtual string NlogConfigPath
         {
-            get { return Path.Combine(ApplicationRoot, @"IISExpress\"); }
+            get { return Path.Combine(_enviromentProvider.ApplicationPath, "NzbDrone.Web\\log.config"); }
         }
 
-        public virtual string IISExePath
-        {
-            get { return IISFolder + @"iisexpress.exe"; }
-        }
-
-        public virtual string IISConfigPath
-        {
-            get { return Path.Combine(IISFolder, "AppServer", "applicationhost.config"); }
-        }
 
         public virtual void ConfigureNlog()
         {
-            LogManager.Configuration = new XmlLoggingConfiguration(
-                Path.Combine(ApplicationRoot, "NzbDrone.Web\\log.config"), false);
+            LogManager.Configuration = new XmlLoggingConfiguration(NlogConfigPath, false);
         }
 
         public virtual void UpdateIISConfig(string configPath)
         {
             Logger.Info(@"Server configuration file: {0}", configPath);
-            Logger.Info(@"Configuring server to: [http://localhost:{0}]", Port);
+            Logger.Info(@"Configuring server to: [http://localhost:{0}]", PortNumber);
 
             var configXml = XDocument.Load(configPath);
 
@@ -84,13 +85,13 @@ namespace NzbDrone.Providers
             bindings.Add(
                 new XElement("binding",
                              new XAttribute("protocol", "http"),
-                             new XAttribute("bindingInformation", String.Format("*:{0}:localhost", Port))
+                             new XAttribute("bindingInformation", String.Format("*:{0}:localhost", PortNumber))
                     ));
 
             bindings.Add(
                 new XElement("binding",
                              new XAttribute("protocol", "http"),
-                             new XAttribute("bindingInformation", String.Format("*:{0}:", Port))
+                             new XAttribute("bindingInformation", String.Format("*:{0}:", PortNumber))
                     ));
 
             configXml.Save(configPath);
@@ -107,7 +108,7 @@ namespace NzbDrone.Providers
             }
         }
 
-        public virtual void WriteDefaultConfig()
+        private void WriteDefaultConfig()
         {
             var xDoc = new XDocument(new XDeclaration("1.0", "utf-8", "yes"));
 

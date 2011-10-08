@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Reflection;
 
 namespace NzbDrone.Providers
 {
@@ -12,6 +14,22 @@ namespace NzbDrone.Providers
         public virtual bool IsUserInteractive
         {
             get { return Environment.UserInteractive; }
+        }
+
+        public virtual string ApplicationPath
+        {
+            get
+            {
+                var dir = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory;
+
+                while (dir.GetDirectories("iisexpress").Length == 0)
+                {
+                    if (dir.Parent == null) throw new ApplicationException("Can't fine IISExpress folder.");
+                    dir = dir.Parent;
+                }
+
+                return dir.FullName;
+            }
         }
     }
 }
