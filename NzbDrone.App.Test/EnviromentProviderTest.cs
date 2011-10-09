@@ -9,7 +9,7 @@ using NzbDrone.Providers;
 namespace NzbDrone.App.Test
 {
     [TestFixture]
-    public class EnviromentControllerTest
+    public class EnviromentProviderTest
     {
 
         [Test]

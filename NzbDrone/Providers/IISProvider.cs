@@ -12,13 +12,15 @@ namespace NzbDrone.Providers
         private static readonly Logger Logger = LogManager.GetLogger("Host.IISProvider");
         private readonly ConfigProvider _configProvider;
         private readonly ProcessProvider _processProvider;
+        private readonly EnviromentProvider _enviromentProvider;
 
 
         [Inject]
-        public IISProvider(ConfigProvider configProvider, ProcessProvider processProvider)
+        public IISProvider(ConfigProvider configProvider, ProcessProvider processProvider, EnviromentProvider enviromentProvider)
         {
             _configProvider = configProvider;
             _processProvider = processProvider;
+            _enviromentProvider = enviromentProvider;
         }
 
         public IISProvider()
@@ -27,7 +29,7 @@ namespace NzbDrone.Providers
 
         public string AppUrl
         {
-            get { return string.Format("http://localhost:{0}/", _configProvider.Port); }
+            get { return string.Format("http://localhost:{0}/", _configProvider.PortNumber); }
         }
 
         public int IISProcessId { get; private set; }
@@ -42,7 +44,7 @@ namespace NzbDrone.Providers
 
             startInfo.FileName = _configProvider.IISExePath;
             startInfo.Arguments = String.Format("/config:\"{0}\" /trace:i", _configProvider.IISConfigPath);
-            startInfo.WorkingDirectory = _configProvider.ApplicationRoot;
+            startInfo.WorkingDirectory = _enviromentProvider.ApplicationPath;
 
             startInfo.UseShellExecute = false;
             startInfo.RedirectStandardOutput = true;
@@ -50,7 +52,7 @@ namespace NzbDrone.Providers
             startInfo.CreateNoWindow = true;
 
             //Set Variables for the config file.
-            startInfo.EnvironmentVariables.Add("NZBDRONE_PATH", _configProvider.ApplicationRoot);
+            startInfo.EnvironmentVariables.Add("NZBDRONE_PATH", _enviromentProvider.ApplicationPath);
             startInfo.EnvironmentVariables.Add("NZBDRONE_PID", Process.GetCurrentProcess().Id.ToString());
 
             try

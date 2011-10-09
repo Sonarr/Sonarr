@@ -33,7 +33,7 @@ namespace NzbDrone
 
             _configProvider.ConfigureNlog();
             _configProvider.CreateDefaultConfigFile();
-            Logger.Info("Starting NZBDrone. Start-up Path:'{0}'", _configProvider.ApplicationRoot);
+            Logger.Info("Starting NZBDrone. Start-up Path:'{0}'", _enviromentProvider.ApplicationPath);
             Thread.CurrentThread.Name = "Host";
         }
 
