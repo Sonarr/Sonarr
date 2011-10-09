@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using NLog;
 using Ninject;
+using NzbDrone.Model;
 using NzbDrone.Providers;
 
 namespace NzbDrone

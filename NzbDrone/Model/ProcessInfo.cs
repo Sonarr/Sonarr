@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace NzbDrone
+namespace NzbDrone.Model
 {
     public class ProcessInfo
     {

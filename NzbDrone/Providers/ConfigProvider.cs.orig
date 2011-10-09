@@ -5,8 +5,11 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 using NLog;
 using NLog.Config;
+<<<<<<< HEAD
 using Ninject;
+=======
 using NzbDrone.Model;
+>>>>>>> markus
 
 namespace NzbDrone.Providers
 {
@@ -66,10 +69,14 @@ namespace NzbDrone.Providers
             get { return Path.Combine(_enviromentProvider.ApplicationPath, "NzbDrone.Web\\log.config"); }
         }
 
+<<<<<<< HEAD
+=======
         public virtual AuthenticationType AuthenticationType
         {
             get { return (AuthenticationType)GetValueInt("AuthenticationType", 0); }
+            set { SetValue("AuthenticationType", (int)value); }
         }
+>>>>>>> markus
 
         public virtual void ConfigureNlog()
         {
@@ -132,7 +139,11 @@ namespace NzbDrone.Providers
             }
         }
 
+<<<<<<< HEAD
+        private void WriteDefaultConfig()
+=======
         public virtual string GetValue(string key, object defaultValue, string parent = null)
+>>>>>>> markus
         {
             var xDoc = XDocument.Load(ConfigFile);
             var config = xDoc.Descendants("Config").Single();
