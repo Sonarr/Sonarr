@@ -73,5 +73,12 @@ namespace NzbDrone.Core.Providers.Core
         {
             Directory.Move(source, destination);
         }
+
+        public virtual void InheritFolderPermissions(string filename)
+        {
+            var fs = File.GetAccessControl(filename);
+            fs.SetAccessRuleProtection(false, false);
+            File.SetAccessControl(filename, fs);
+        }
     }
 }

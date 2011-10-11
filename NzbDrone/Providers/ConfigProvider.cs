@@ -132,7 +132,7 @@ namespace NzbDrone.Providers
             }
         }
 
-        public virtual string GetValue(string key, object defaultValue, string parent = null)
+        private string GetValue(string key, object defaultValue, string parent = null)
         {
             var xDoc = XDocument.Load(ConfigFile);
             var config = xDoc.Descendants("Config").Single();

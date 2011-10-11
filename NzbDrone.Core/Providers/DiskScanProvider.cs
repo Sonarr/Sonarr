@@ -171,6 +171,9 @@ namespace NzbDrone.Core.Providers
             Logger.Debug("Moving [{0}] > [{1}]", episodeFile.Path, newFile.FullName);
             _diskProvider.MoveFile(episodeFile.Path, newFile.FullName);
 
+            //Make the file inherit parent permissions
+            _diskProvider.InheritFolderPermissions(newFile.FullName);
+
             //Update the filename in the DB
             episodeFile.Path = newFile.FullName;
             _mediaFileProvider.Update(episodeFile);
