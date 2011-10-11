@@ -37,3 +37,4 @@ _ReSharper*/
 NzbDrone.Web/NzbDrone.Web.Publish.xml
 *.sdf
 [Bb]anners
+*.orig
