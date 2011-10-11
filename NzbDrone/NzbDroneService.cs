@@ -12,6 +12,6 @@ namespace NzbDrone
         protected override void OnStop()
         {
             base.OnStop();
-        }
+        } 
     }
 }

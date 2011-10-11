@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using NLog;
+using NzbDrone.Model;
 
 namespace NzbDrone.Providers
 {

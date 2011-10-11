@@ -8,8 +8,13 @@ namespace NzbDrone.Providers
         {
             while (true)
             {
-                Console.ReadLine();
+                System.Console.ReadLine();
             }
+        }
+
+        public virtual void PrintHelp()
+        {
+            System.Console.WriteLine("Help");
         }
     }
 }

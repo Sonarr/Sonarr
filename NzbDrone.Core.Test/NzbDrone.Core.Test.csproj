@@ -122,7 +122,6 @@
     <Compile Include="IndexerTests.cs" />
     <Compile Include="InventoryProvider_QualityNeededTest.cs" />
     <Compile Include="Framework\AutoMoq\AutoMoqer.cs" />
-    <Compile Include="Framework\AutoMoq\AutoMoqerTest.cs" />
     <Compile Include="Framework\AutoMoq\Unity\AutoMockingBuilderStrategy.cs">
       <SubType>Code</SubType>
     </Compile>

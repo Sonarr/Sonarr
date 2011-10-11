@@ -86,9 +86,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Application.cs" />
-    <Compile Include="Model\ApplicationMode.cs" />
+<<<<<<< HEAD
+    <Compile Include="ApplicationMode.cs" />
+=======
     <Compile Include="Model\AuthenticationType.cs" />
-    <Compile Include="Model\ProcessInfo.cs" />
+>>>>>>> markus
+    <Compile Include="ProcessInfo.cs" />
     <Compile Include="Providers\ConsoleProvider.cs" />
     <Compile Include="Providers\DebuggerProvider.cs" />
     <Compile Include="Providers\EnviromentProvider.cs" />

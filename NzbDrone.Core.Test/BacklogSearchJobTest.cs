@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Test
     public class BacklogSearchJobTest
     {
         [Test]
-        public void no_missing_epsiodes()
+        public void no_missing_epsiodes_should_not_trigger_any_search()
         {
             //Setup
             var notification = new ProgressNotification("Backlog Search Job Test");
@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
-        public void individual_missing_episode_only()
+        public void individual_missing_episode()
         {
             //Setup
             var notification = new ProgressNotification("Backlog Search Job Test");
