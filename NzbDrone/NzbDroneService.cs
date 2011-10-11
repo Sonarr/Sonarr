@@ -1,4 +1,5 @@
 ﻿using System.ServiceProcess;
+using Ninject;
 
 namespace NzbDrone
 {
@@ -6,12 +7,12 @@ namespace NzbDrone
     {
         protected override void OnStart(string[] args)
         {
-            base.OnStart(args);
+            CentralDispatch.Kernel.Get<ApplicationServer>().Start();
         }
 
         protected override void OnStop()
         {
-            base.OnStop();
-        } 
+            CentralDispatch.Kernel.Get<ApplicationServer>().Stop();
+        }
     }
 }

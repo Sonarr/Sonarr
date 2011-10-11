@@ -9,27 +9,24 @@ namespace NzbDrone
 {
     class Router
     {
-        private readonly Application _application;
+        private readonly ApplicationServer _applicationServer;
         private readonly ServiceProvider _serviceProvider;
         private readonly ConsoleProvider _consoleProvider;
-        private readonly ApplicationMode _applicationMode;
 
-
-        public Router(Application application, ServiceProvider serviceProvider, ConsoleProvider consoleProvider, ApplicationMode applicationMode)
+        public Router(ApplicationServer applicationServer, ServiceProvider serviceProvider, ConsoleProvider consoleProvider)
         {
-            _application = application;
+            _applicationServer = applicationServer;
             _serviceProvider = serviceProvider;
-            _consoleProvider = consoleProvider;
-            _applicationMode = applicationMode;
+            _consoleProvider = consoleProvider;          
         }
 
         public void Route()
         {
-            switch (_applicationMode)
+            switch (CentralDispatch.ApplicationMode)
             {
                 case ApplicationMode.Console:
                     {
-                        _application.Start();
+                        _applicationServer.Start();
                         _consoleProvider.WaitForClose();
                         break;
                     }

@@ -49,6 +49,7 @@
     <Reference Include="Moq">
       <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
     </Reference>
+    <Reference Include="Ninject, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL" />
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.5.10.11092\lib\nunit.framework.dll</HintPath>
     </Reference>
@@ -72,6 +73,7 @@
     <Compile Include="AutoMoq\AutoMoqerTest.cs" />
     <Compile Include="AutoMoq\Unity\AutoMockingBuilderStrategy.cs" />
     <Compile Include="AutoMoq\Unity\AutoMockingContainerExtension.cs" />
+    <Compile Include="CentralDispatchTests.cs" />
     <Compile Include="ProgramTest.cs" />
     <Compile Include="MonitoringProviderTest.cs" />
     <Compile Include="ConfigProviderTest.cs" />

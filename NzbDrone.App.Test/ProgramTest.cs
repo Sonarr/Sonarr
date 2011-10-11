@@ -29,7 +29,7 @@ namespace NzbDrone.App.Test
         [TestCase("-u", ApplicationMode.UninstallService)]
         public void GetApplicationMode_single_arg(string arg, ApplicationMode mode)
         {
-            Console.GetApplicationMode(new[] { arg }).Should().Be(mode);
+            NzbDroneConsole.GetApplicationMode(new[] { arg }).Should().Be(mode);
         }
 
         [TestCase("", "", ApplicationMode.Console)]
@@ -37,7 +37,7 @@ namespace NzbDrone.App.Test
         [TestCase("i", "n", ApplicationMode.Help)]
         public void GetApplicationMode_two_args(string a, string b, ApplicationMode mode)
         {
-            Console.GetApplicationMode(new[] { a, b }).Should().Be(mode);
+            NzbDroneConsole.GetApplicationMode(new[] { a, b }).Should().Be(mode);
         }
     }
 }
