@@ -90,5 +90,11 @@ namespace NzbDrone.Core.Test
         {
             CentralDispatch.Version.Should().NotBeNull();
         }
+
+        [Test]
+        public void BuildDate_should_be_today()
+        {
+            CentralDispatch.BuildDateTime.Should().BeWithin(TimeSpan.FromHours(10));
+        }
     }
 }

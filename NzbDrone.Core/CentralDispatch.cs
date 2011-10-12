@@ -29,6 +29,17 @@ namespace NzbDrone.Core
             get { return Assembly.GetExecutingAssembly().GetName().Version; }
         }
 
+
+        public static DateTime BuildDateTime
+        {
+            get
+            {
+                var fileLocation = Assembly.GetCallingAssembly().Location;
+                return new FileInfo(fileLocation).CreationTime;
+            }
+
+        }
+
         public static String AppPath
         {
             get
@@ -53,12 +64,13 @@ namespace NzbDrone.Core
             }
         }
 
+
         public static void InitializeApp()
         {
             BindKernel();
 
             MigrationsHelper.Run(Connection.MainConnectionString, true);
-            
+
             LogConfiguration.StartDbLogging();
 
             _kernel.Get<QualityProvider>().SetupDefaultProfiles();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using NLog;
 using Ninject;
 using NzbDrone.Model;
 using NzbDrone.Providers;
@@ -12,6 +13,7 @@ namespace NzbDrone
     public static class CentralDispatch
     {
         private static StandardKernel _kernel;
+        private static readonly Logger Logger = LogManager.GetLogger("Host.CentralDispatch");
 
         static CentralDispatch()
         {
