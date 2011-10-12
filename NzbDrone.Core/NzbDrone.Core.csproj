@@ -176,6 +176,7 @@
     <Compile Include="Datastore\MigrationLogger.cs" />
     <Compile Include="Datastore\MigrationsHelper.cs" />
     <Compile Include="Datastore\CustomeMapper.cs" />
+    <Compile Include="Datastore\Migrations\Migration20111011.cs" />
     <Compile Include="Datastore\Migrations\Migration20110909.cs" />
     <Compile Include="Datastore\Migrations\Migration20110726.cs" />
     <Compile Include="Datastore\Migrations\Migration20110707.cs" />
@@ -192,6 +193,7 @@
     <Compile Include="Model\AtomicParsleyTitleType.cs" />
     <Compile Include="Model\AuthenticationType.cs" />
     <Compile Include="Model\ConnectionInfoModel.cs" />
+    <Compile Include="Model\PostDownloadStatusType.cs" />
     <Compile Include="Model\ExternalNotificationType.cs" />
     <Compile Include="Model\JobQueueItem.cs" />
     <Compile Include="Model\LanguageType.cs" />

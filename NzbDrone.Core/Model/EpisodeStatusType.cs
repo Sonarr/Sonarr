@@ -5,7 +5,7 @@
         /// <summary>
         ///   Episode has not aired yet
         /// </summary>
-        NotAired ,
+        NotAired,
 
         /// <summary>
         /// Episode is ignored
@@ -16,12 +16,22 @@
         /// Episode has aired but no episode
         /// files have avilable
         /// </summary>
-        Missing ,
+        Missing,
         
         /// <summary>
         /// Episode is being downloaded
         /// </summary>
-        Downloading ,
+        Downloading,
+
+        /// <summary>
+        /// Episode has been downloaded and is unpacking (_UNPACK_)
+        /// </summary>
+        Unpacking,
+
+        /// <summary>
+        /// Episode has failed to download properly (_FAILED_)
+        /// </summary>
+        Failed,
 
         /// <summary>
         /// Episode is present in disk

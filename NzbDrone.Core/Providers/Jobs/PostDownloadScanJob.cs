@@ -2,6 +2,7 @@
 using System.IO;
 using Ninject;
 using NLog;
+using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers.Core;
 
@@ -13,16 +14,19 @@ namespace NzbDrone.Core.Providers.Jobs
         private readonly DiskProvider _diskProvider;
         private readonly DiskScanProvider _diskScanProvider;
         private readonly SeriesProvider _seriesProvider;
+        private readonly EpisodeProvider _episodeProvider;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         [Inject]
         public PostDownloadScanJob(ConfigProvider configProvider, DiskProvider diskProvider,
-                                    DiskScanProvider diskScanProvider, SeriesProvider seriesProvider)
+                                    DiskScanProvider diskScanProvider, SeriesProvider seriesProvider,
+                                    EpisodeProvider episodeProvider)
         {
             _configProvider = configProvider;
             _diskProvider = diskProvider;
             _diskScanProvider = diskScanProvider;
             _seriesProvider = seriesProvider;
+            _episodeProvider = episodeProvider;
         }
 
         public PostDownloadScanJob()
@@ -63,12 +67,14 @@ namespace NzbDrone.Core.Providers.Jobs
 
                     if (subfolderInfo.Name.StartsWith("_UNPACK_", StringComparison.CurrentCultureIgnoreCase))
                     {
+                        _episodeProvider.SetPostDownloadStatus(subfolderInfo.Name.Substring(8), PostDownloadStatusType.Unpacking);
                         Logger.Debug("Folder [{0}] is still being unpacked. skipping.", subfolder);
                         continue;
                     }
 
                     if (subfolderInfo.Name.StartsWith("_FAILED_", StringComparison.CurrentCultureIgnoreCase))
                     {
+                        _episodeProvider.SetPostDownloadStatus(subfolderInfo.Name.Substring(8), PostDownloadStatusType.Failed);
                         Logger.Debug("Folder [{0}] is marked as failed. skipping.", subfolder);
                         continue;
                     }

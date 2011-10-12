@@ -108,5 +108,27 @@ namespace NzbDrone.Core.Test
 
             episode.Status.Should().Be(EpisodeStatusType.NotAired);
         }
+
+        [TestCase(false, false, EpisodeStatusType.Failed, PostDownloadStatusType.Failed)]
+        [TestCase(false, false, EpisodeStatusType.Unpacking, PostDownloadStatusType.Unpacking)]
+        [TestCase(true, false, EpisodeStatusType.Ready, PostDownloadStatusType.Failed)]
+        [TestCase(true, true, EpisodeStatusType.Ready, PostDownloadStatusType.Unpacking)]
+        public void episode_downloaded_post_download_status_is_used(bool hasEpisodes, bool ignored,
+                                                    EpisodeStatusType status, PostDownloadStatusType postDownloadStatus)
+        {
+            Episode episode = Builder<Episode>.CreateNew()
+                .With(e => e.Ignored = ignored)
+                .With(e => e.EpisodeFileId = 0)
+                .With(e => e.GrabDate = DateTime.Now.AddHours(22))
+                .With(e => e.PostDownloadStatus = postDownloadStatus)
+                .Build();
+
+            if (hasEpisodes)
+            {
+                episode.EpisodeFileId = 12;
+            }
+
+            Assert.AreEqual(status, episode.Status);
+        }
     }
 }

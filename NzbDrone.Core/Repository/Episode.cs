@@ -23,6 +23,8 @@ namespace NzbDrone.Core.Repository
 
         public Boolean Ignored { get; set; }
 
+        public PostDownloadStatusType PostDownloadStatus { get; set; }
+
         /// <summary>
         /// Gets or sets the grab date.
         /// </summary>
@@ -39,15 +41,23 @@ namespace NzbDrone.Core.Repository
             {
                 if (EpisodeFileId != 0) return EpisodeStatusType.Ready;
 
-                if (GrabDate != null && GrabDate.Value.AddDays(1) >= DateTime.Now)
+                if (GrabDate != null)
                 {
-                    return EpisodeStatusType.Downloading;
+                    if (PostDownloadStatus == PostDownloadStatusType.Unpacking)
+                        return EpisodeStatusType.Unpacking;
+
+                    if (PostDownloadStatus == PostDownloadStatusType.Failed)
+                        return EpisodeStatusType.Failed;
+
+                    if (GrabDate.Value.AddDays(1) >= DateTime.Now)
+                        return EpisodeStatusType.Downloading;
                 }
 
+                if (GrabDate != null && GrabDate.Value.AddDays(1) >= DateTime.Now)
+                    return EpisodeStatusType.Downloading;
+
                 if (AirDate != null && AirDate.Value.Date < DateTime.Now)
-                {
                     return EpisodeStatusType.Missing;
-                }
 
                 return EpisodeStatusType.NotAired;
             }

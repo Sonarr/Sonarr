@@ -7,6 +7,7 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
@@ -1463,6 +1464,43 @@ namespace NzbDrone.Core.Test
 
             //Assert
             result.Should().BeFalse();
+        }
+
+        [TestCase("The Office (US) - S01E05 - Episode Title", PostDownloadStatusType.Unpacking, 1)]
+        [TestCase("The Office (US) - S01E05 - Episode Title", PostDownloadStatusType.Failed, 1)]
+        [TestCase("The Office (US) - S01E05E06 - Episode Title", PostDownloadStatusType.Unpacking, 2)]
+        [TestCase("The Office (US) - S01E05E06 - Episode Title", PostDownloadStatusType.Failed, 2)]
+        [TestCase("The Office (US) - Season 01 - Episode Title", PostDownloadStatusType.Unpacking, 10)]
+        [TestCase("The Office (US) - Season 01 - Episode Title", PostDownloadStatusType.Failed, 10)]
+        public void SetPostDownloadStatus(string folderName, PostDownloadStatusType postDownloadStatus, int episodeCount)
+        {
+            var db = MockLib.GetEmptyDatabase();
+            var mocker = new AutoMoqer();
+            mocker.SetConstant(db);
+
+            var fakeSeries = Builder<Series>.CreateNew()
+                .With(s => s.SeriesId = 12345)
+                .With(s => s.CleanTitle = "officeus")
+                .Build();
+
+            var fakeEpisodes = Builder<Episode>.CreateListOfSize(10)
+                .WhereAll()
+                .Have(c => c.SeriesId = 12345)
+                .Have(c => c.SeasonNumber = 1)
+                .Have(c => c.PostDownloadStatus = PostDownloadStatusType.Unknown)
+                .Build();
+
+            db.Insert(fakeSeries);
+            db.InsertMany(fakeEpisodes);
+
+            mocker.GetMock<SeriesProvider>().Setup(s => s.FindSeries("officeus")).Returns(fakeSeries);
+
+            //Act
+            mocker.Resolve<EpisodeProvider>().SetPostDownloadStatus(folderName, postDownloadStatus);
+
+            //Assert
+            var result = db.Fetch<Episode>();
+            result.Where(e => e.PostDownloadStatus == postDownloadStatus).Count().Should().Be(episodeCount);
         }
     }
 }

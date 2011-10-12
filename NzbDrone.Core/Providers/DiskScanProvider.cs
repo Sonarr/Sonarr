@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Ninject;
 using NLog;
+using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using PetaPoco;
@@ -146,6 +147,7 @@ namespace NzbDrone.Core.Providers
             foreach (var ep in episodes)
             {
                 ep.EpisodeFileId = fileId;
+                ep.PostDownloadStatus = PostDownloadStatusType.Processed;
                 _episodeProvider.UpdateEpisode(ep);
                 Logger.Debug("Linking [{0}] > [{1}]", filePath, ep);
             }

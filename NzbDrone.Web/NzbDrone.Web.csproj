@@ -333,6 +333,7 @@
     <Content Include="Content\Images\close.png" />
     <Content Include="Content\Images\Downloading.png" />
     <Content Include="Content\Images\error.png" />
+    <Content Include="Content\Images\Failed.png" />
     <Content Include="Content\Images\gritter.png" />
     <Content Include="Content\Images\Missing.png" />
     <Content Include="Content\Images\NotAired.png" />
@@ -340,6 +341,7 @@
     <Content Include="Content\Images\Rename.png" />
     <Content Include="Content\Images\Search.png" />
     <Content Include="Content\Images\success.png" />
+    <Content Include="Content\Images\Unpacking.png" />
     <Content Include="Content\jquery.gritter.css" />
     <Content Include="Content\Menu.css" />
     <Compile Include="App_GlobalResources\EditorLocalization.bg-BG.designer.cs">

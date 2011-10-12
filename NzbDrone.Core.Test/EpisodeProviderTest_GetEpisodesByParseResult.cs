@@ -101,7 +101,6 @@ namespace NzbDrone.Core.Test
             db.Fetch<Episode>().Should().HaveCount(1);
         }
 
-
         [Test]
         public void Multi_GetSeason_Episode_Exists()
         {
@@ -234,6 +233,70 @@ namespace NzbDrone.Core.Test
             ep.Should().HaveCount(2);
             db.Fetch<Episode>().Should().HaveCount(2);
             ep.First().Ignored.Should().BeFalse();
+        }
+
+        [Test]
+        public void Full_Season_return_all_episodes_for_season()
+        {
+            var mocker = new AutoMoqer();
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            var fakeSeries = Builder<Series>.CreateNew().Build();
+
+            var fakeEpisodes = Builder<Episode>.CreateListOfSize(10)
+                .WhereAll()
+                .Have(e => e.SeriesId = fakeSeries.SeriesId)
+                .Have(e => e.SeasonNumber = 2)
+                .Build();
+
+            db.Insert(fakeSeries);
+            db.InsertMany(fakeEpisodes);
+
+            var parseResult = new EpisodeParseResult
+            {
+                Series = fakeSeries,
+                SeasonNumber = 2,
+                EpisodeNumbers = new List<int>(),
+                FullSeason = true
+            };
+
+            var ep = mocker.Resolve<EpisodeProvider>().GetEpisodesByParseResult(parseResult);
+
+            ep.Should().HaveCount(10);
+            db.Fetch<Episode>().Should().HaveCount(10);
+        }
+
+        [Test]
+        public void No_Episodes_Not_a_proper_full_season_release()
+        {
+            var mocker = new AutoMoqer();
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            var fakeSeries = Builder<Series>.CreateNew().Build();
+
+            var fakeEpisodes = Builder<Episode>.CreateListOfSize(10)
+                .WhereAll()
+                .Have(e => e.SeriesId = fakeSeries.SeriesId)
+                .Have(e => e.SeasonNumber = 2)
+                .Build();
+
+            db.Insert(fakeSeries);
+            db.InsertMany(fakeEpisodes);
+
+            var parseResult = new EpisodeParseResult
+            {
+                Series = fakeSeries,
+                SeasonNumber = 2,
+                EpisodeNumbers = new List<int>(),
+                FullSeason = false
+            };
+
+            var ep = mocker.Resolve<EpisodeProvider>().GetEpisodesByParseResult(parseResult);
+
+            ep.Should().HaveCount(0);
+            db.Fetch<Episode>().Should().HaveCount(10);
         }
     }
 }
