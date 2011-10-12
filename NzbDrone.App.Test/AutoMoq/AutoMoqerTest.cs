@@ -4,7 +4,7 @@ using AutoMoq;
 using Moq;
 using NUnit.Framework;
 
-namespace NzbDrone.Core.Test
+namespace NzbDrone.App.Test
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
