@@ -7,7 +7,7 @@ using NzbDrone.Providers;
 
 namespace NzbDrone
 {
-    public class Application
+    public class ApplicationServer
     {
         private static readonly Logger Logger = LogManager.GetLogger("Host.App");
 
@@ -19,7 +19,7 @@ namespace NzbDrone
         private readonly WebClient _webClient;
 
         [Inject]
-        public Application(ConfigProvider configProvider, WebClient webClient, IISProvider iisProvider,
+        public ApplicationServer(ConfigProvider configProvider, WebClient webClient, IISProvider iisProvider,
                            DebuggerProvider debuggerProvider, EnviromentProvider enviromentProvider,
                            ProcessProvider processProvider)
         {
@@ -29,14 +29,9 @@ namespace NzbDrone
             _debuggerProvider = debuggerProvider;
             _enviromentProvider = enviromentProvider;
             _processProvider = processProvider;
-
-            _configProvider.ConfigureNlog();
-            _configProvider.CreateDefaultConfigFile();
-            Logger.Info("Starting NZBDrone. Start-up Path:'{0}'", _enviromentProvider.ApplicationPath);
-            Thread.CurrentThread.Name = "Host";
         }
 
-        public Application()
+        public ApplicationServer()
         {
         }
 
