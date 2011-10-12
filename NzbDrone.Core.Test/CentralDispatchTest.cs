@@ -92,9 +92,9 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
-        public void BuildDate_should_be_today()
+        public void BuildDate_should_be_within_the_hour()
         {
-            CentralDispatch.BuildDateTime.Should().BeWithin(TimeSpan.FromHours(10));
+            CentralDispatch.BuildDateTime.Should().BeWithin(TimeSpan.FromHours(1));
         }
     }
 }
