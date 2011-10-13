@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using NLog;
 using Ninject;
 using NzbDrone.Model;
@@ -14,10 +16,12 @@ namespace NzbDrone
 
         private static readonly Logger Logger = LogManager.GetLogger("Host.Main");
 
-        private static void Main(string[] args)
+        public static void Main(string[] args)
         {
             try
             {
+                //while (!Debugger.IsAttached) Thread.Sleep(100);
+
                 Console.WriteLine("Starting NzbDrone Console. Version " + Assembly.GetExecutingAssembly().GetName().Version);
 
                 CentralDispatch.ApplicationMode = GetApplicationMode(args);
@@ -29,9 +33,6 @@ namespace NzbDrone
                 Console.WriteLine(e.ToString());
                 Logger.Fatal(e.ToString());
             }
-
-            Console.WriteLine("Press enter to exit.");
-            Console.ReadLine();
         }
 
         public static ApplicationMode GetApplicationMode(IEnumerable<string> args)

@@ -18,6 +18,8 @@ namespace NzbDrone
         static CentralDispatch()
         {
             _kernel = new StandardKernel();
+            BindKernel();
+            InitilizeApp();
         }
 
         public static ApplicationMode ApplicationMode { get; set; }
@@ -33,6 +35,7 @@ namespace NzbDrone
         private static void BindKernel()
         {
             _kernel = new StandardKernel();
+            _kernel.Bind<ApplicationServer>().ToSelf().InSingletonScope();
             _kernel.Bind<ConfigProvider>().ToSelf().InSingletonScope();
             _kernel.Bind<ConsoleProvider>().ToSelf().InSingletonScope();
             _kernel.Bind<DebuggerProvider>().ToSelf().InSingletonScope();
@@ -42,6 +45,7 @@ namespace NzbDrone
             _kernel.Bind<ProcessProvider>().ToSelf().InSingletonScope();
             _kernel.Bind<ServiceProvider>().ToSelf().InSingletonScope();
             _kernel.Bind<WebClientProvider>().ToSelf().InSingletonScope();
+
         }
 
         private static void InitilizeApp()

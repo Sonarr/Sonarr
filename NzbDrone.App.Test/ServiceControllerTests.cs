@@ -46,5 +46,16 @@ namespace NzbDrone.App.Test
             serviceController.UnInstall();
             serviceController.ServiceExist(ServiceProvider.NzbDroneServiceName).Should().BeFalse();
         }
+
+        [Test]
+        [Explicit]
+        public void UnInstallService()
+        {
+            var serviceController = new ServiceProvider();
+
+            //Act
+            serviceController.UnInstall();
+            serviceController.ServiceExist(ServiceProvider.NzbDroneServiceName).Should().BeFalse();
+        }
     }
 }

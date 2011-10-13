@@ -43,6 +43,8 @@ namespace NzbDrone.Providers
             serviceInstaller.DisplayName = NzbDroneServiceName;
             serviceInstaller.ServiceName = NzbDroneServiceName;
             serviceInstaller.StartType = ServiceStartMode.Automatic;
+            
+            
             serviceInstaller.Parent = installer;
 
             serviceInstaller.Install(new ListDictionary());
@@ -54,7 +56,7 @@ namespace NzbDrone.Providers
         {
             var serviceInstaller = new ServiceInstaller();
 
-            var context = new InstallContext("install.log", null);
+            var context = new InstallContext("service_uninstall.log", null);
             serviceInstaller.Context = context;
             serviceInstaller.ServiceName = NzbDroneServiceName;
             serviceInstaller.Uninstall(null);

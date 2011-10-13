@@ -53,6 +53,9 @@
   <PropertyGroup>
     <ApplicationIcon>NzbDrone.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>NzbDrone.NzbDroneConsole</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accessibility">
       <EmbedInteropTypes>True</EmbedInteropTypes>

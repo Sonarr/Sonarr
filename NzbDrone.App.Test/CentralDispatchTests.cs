@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NUnit.Framework;
 using Ninject;
-using NzbDrone.Providers;
 
 namespace NzbDrone.App.Test
 {
@@ -34,6 +28,15 @@ namespace NzbDrone.App.Test
             var appServer = CentralDispatch.Kernel.Get<ApplicationServer>();
 
             appServer.Should().NotBeNull();
+        }
+
+        [Test]
+        public void Kernel_should_resolve_same_ApplicationServer_instance()
+        {
+            var appServer1 = CentralDispatch.Kernel.Get<ApplicationServer>();
+            var appServer2 = CentralDispatch.Kernel.Get<ApplicationServer>();
+
+            appServer1.Should().BeSameAs(appServer2);
         }
 
     }
