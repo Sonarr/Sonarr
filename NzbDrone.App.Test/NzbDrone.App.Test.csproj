@@ -77,7 +77,7 @@
     <Compile Include="AutoMoq\Unity\AutoMockingBuilderStrategy.cs" />
     <Compile Include="AutoMoq\Unity\AutoMockingContainerExtension.cs" />
     <Compile Include="CentralDispatchTests.cs" />
-    <Compile Include="ProgramTest.cs" />
+    <Compile Include="RouterTest.cs" />
     <Compile Include="MonitoringProviderTest.cs" />
     <Compile Include="ConfigProviderTest.cs" />
     <Compile Include="IISProviderTest.cs" />

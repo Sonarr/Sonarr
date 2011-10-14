@@ -20,5 +20,10 @@ namespace NzbDrone.Providers
             Logger.Info("Printing Help");
             Console.WriteLine("Help");
         }
+
+        public virtual void PrintServiceAlreadyExist()
+        {
+            Console.WriteLine("A service with the same name ({0}) already exists. Aborting installation", ServiceProvider.NzbDroneServiceName);
+        }
     }
 }

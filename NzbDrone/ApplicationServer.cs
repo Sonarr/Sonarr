@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.ServiceProcess;
 using System.Threading;
 using NLog;
 using Ninject;
@@ -7,7 +8,7 @@ using NzbDrone.Providers;
 
 namespace NzbDrone
 {
-    public class ApplicationServer
+    public class ApplicationServer : ServiceBase
     {
         private static readonly Logger Logger = LogManager.GetLogger("Host.App");
 
@@ -17,6 +18,13 @@ namespace NzbDrone
         private readonly IISProvider _iisProvider;
         private readonly ProcessProvider _processProvider;
         private readonly WebClient _webClient;
+
+        public void IsRunningAsService()
+        {
+            Logger.Warn(base.Container);
+            Logger.Warn(base.ServiceName);
+            
+        }
 
         [Inject]
         public ApplicationServer(ConfigProvider configProvider, WebClient webClient, IISProvider iisProvider,
@@ -33,6 +41,13 @@ namespace NzbDrone
 
         public ApplicationServer()
         {
+
+        }
+
+        public virtual void StartService()
+        {
+            Start();
+            Run(this);
         }
 
         public virtual void Start()
@@ -67,7 +82,12 @@ namespace NzbDrone
             }
         }
 
-        public virtual void Stop()
+        protected override void OnStop()
+        {
+            StopServer();
+        }
+
+        public void StopServer()
         {
             Logger.Info("Attempting to stop application.");
             _iisProvider.StopServer();

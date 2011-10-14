@@ -22,8 +22,6 @@ namespace NzbDrone
             InitilizeApp();
         }
 
-        public static ApplicationMode ApplicationMode { get; set; }
-
         public static StandardKernel Kernel
         {
             get

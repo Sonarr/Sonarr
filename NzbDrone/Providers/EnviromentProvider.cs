@@ -16,6 +16,22 @@ namespace NzbDrone.Providers
             get { return Environment.UserInteractive; }
         }
 
+        public virtual bool IsRunningAsService
+        {
+            get
+            {
+                try
+                {
+                    Console.Write("");
+                    return false;
+                }
+                catch (Exception)
+                {
+                    return true;
+                }
+            }
+        }
+
         public virtual string ApplicationPath
         {
             get
@@ -29,13 +45,13 @@ namespace NzbDrone.Providers
                 }
 
                 dir = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory;
-                
+
                 while (dir.GetDirectories("iisexpress").Length == 0)
                 {
                     if (dir.Parent == null) throw new ApplicationException("Can't fine IISExpress folder.");
                     dir = dir.Parent;
                 }
-                
+
                 return dir.FullName;
             }
         }
