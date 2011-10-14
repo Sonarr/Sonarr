@@ -193,6 +193,7 @@
     <Compile Include="Model\AtomicParsleyTitleType.cs" />
     <Compile Include="Model\AuthenticationType.cs" />
     <Compile Include="Model\ConnectionInfoModel.cs" />
+    <Compile Include="Model\PostDownloadInfoModel.cs" />
     <Compile Include="Model\PostDownloadStatusType.cs" />
     <Compile Include="Model\ExternalNotificationType.cs" />
     <Compile Include="Model\JobQueueItem.cs" />

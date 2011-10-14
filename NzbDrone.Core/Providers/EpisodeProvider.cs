@@ -405,12 +405,8 @@ namespace NzbDrone.Core.Providers
             Logger.Trace("Finished deleting invalid episodes for {0}", series.SeriesId);
         }
 
-        public virtual void SetPostDownloadStatus(string folderName, PostDownloadStatusType postDownloadStatus)
+        public virtual void SetPostDownloadStatus(IEnumerable<int> episodeIds, PostDownloadStatusType postDownloadStatus)
         {
-            var parseResult = Parser.ParseTitle(folderName);
-            parseResult.Series = _seriesProvider.FindSeries(parseResult.CleanTitle);
-
-            var episodeIds = GetEpisodesByParseResult(parseResult).Select(e => e.EpisodeId);
             var episodeIdString = String.Join(", ", episodeIds);
 
             var episodeIdQuery = String.Format(@"UPDATE Episodes SET PostDownloadStatus = {0}

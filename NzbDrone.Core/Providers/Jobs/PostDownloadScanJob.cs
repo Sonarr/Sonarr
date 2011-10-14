@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Providers.Jobs
 
         public virtual void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
         {
-            _postDownloadProvider.Start(notification);
+            _postDownloadProvider.ScanDropFolder(notification);
         }
     }
 }

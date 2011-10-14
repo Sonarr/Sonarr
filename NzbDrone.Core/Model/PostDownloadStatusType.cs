@@ -20,6 +20,16 @@
         /// <summary>
         /// Processed
         /// </summary>
-        Processed = 3
+        Processed = 3,
+
+        /// <summary>
+        /// InvalidSeries
+        /// </summary>
+        InvalidSeries = 4,
+
+        /// <summary>
+        /// ParseError
+        /// </summary>
+        ParseError = 5
     }
 }
