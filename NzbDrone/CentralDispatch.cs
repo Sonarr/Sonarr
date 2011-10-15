@@ -50,7 +50,7 @@ namespace NzbDrone
         {
             _kernel.Get<ConfigProvider>().ConfigureNlog();
             _kernel.Get<ConfigProvider>().CreateDefaultConfigFile();
-            Logger.Info("Starting NZBDrone. Start-up Path:'{0}'", _kernel.Get<EnviromentProvider>().ApplicationPath);
+            Logger.Info("Start-up Path:'{0}'", _kernel.Get<EnviromentProvider>().ApplicationPath);
             Thread.CurrentThread.Name = "Host";
         }
     }

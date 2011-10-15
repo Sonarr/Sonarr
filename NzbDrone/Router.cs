@@ -36,18 +36,9 @@ namespace NzbDrone
         {
             Logger.Info("Application mode: {0}", applicationMode);
 
-            _applicationServer.IsRunningAsService();
-
-            while (!Debugger.IsAttached)
+            if (!_enviromentProvider.IsUserInteractive)
             {
-                Thread.Sleep(1000);
-            }
-
-
-            if (_enviromentProvider.IsRunningAsService)
-            {
-                _applicationServer.StartService();
-
+                _serviceProvider.Run(_applicationServer);
             }
             else
             {
@@ -74,7 +65,15 @@ namespace NzbDrone
                         }
                     case ApplicationMode.UninstallService:
                         {
-                            _serviceProvider.UnInstall();
+                            if (!_serviceProvider.ServiceExist(ServiceProvider.NzbDroneServiceName))
+                            {
+                                _consoleProvider.PrintServiceDoestExist();
+                            }
+                            else
+                            {
+                                _serviceProvider.UnInstall();
+                            }
+                            
                             break;
                         }
                     default:

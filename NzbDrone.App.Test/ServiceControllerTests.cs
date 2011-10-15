@@ -40,7 +40,7 @@ namespace NzbDrone.App.Test
             var serviceController = new ServiceProvider();
 
             //Act
-            serviceController.ServiceExist(ServiceProvider.NzbDroneServiceName).Should().BeFalse();
+            serviceController.ServiceExist(ServiceProvider.NzbDroneServiceName).Should().BeFalse("Service already installed");
             serviceController.Install();
             serviceController.ServiceExist(ServiceProvider.NzbDroneServiceName).Should().BeTrue();
             serviceController.UnInstall();

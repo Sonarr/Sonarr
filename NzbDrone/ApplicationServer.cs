@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net;
+using System.Reflection;
 using System.ServiceProcess;
 using System.Threading;
 using NLog;
@@ -17,19 +19,13 @@ namespace NzbDrone
         private readonly EnviromentProvider _enviromentProvider;
         private readonly IISProvider _iisProvider;
         private readonly ProcessProvider _processProvider;
+        private readonly MonitoringProvider _monitoringProvider;
         private readonly WebClient _webClient;
-
-        public void IsRunningAsService()
-        {
-            Logger.Warn(base.Container);
-            Logger.Warn(base.ServiceName);
-            
-        }
 
         [Inject]
         public ApplicationServer(ConfigProvider configProvider, WebClient webClient, IISProvider iisProvider,
                            DebuggerProvider debuggerProvider, EnviromentProvider enviromentProvider,
-                           ProcessProvider processProvider)
+                           ProcessProvider processProvider, MonitoringProvider monitoringProvider)
         {
             _configProvider = configProvider;
             _webClient = webClient;
@@ -37,6 +33,7 @@ namespace NzbDrone
             _debuggerProvider = debuggerProvider;
             _enviromentProvider = enviromentProvider;
             _processProvider = processProvider;
+            _monitoringProvider = monitoringProvider;
         }
 
         public ApplicationServer()
@@ -44,10 +41,9 @@ namespace NzbDrone
 
         }
 
-        public virtual void StartService()
+        protected override void OnStart(string[] args)
         {
             Start();
-            Run(this);
         }
 
         public virtual void Start()
@@ -80,14 +76,11 @@ namespace NzbDrone
                     Logger.ErrorException("Failed to load home page.", e);
                 }
             }
+
+            _monitoringProvider.Start();
         }
 
         protected override void OnStop()
-        {
-            StopServer();
-        }
-
-        public void StopServer()
         {
             Logger.Info("Attempting to stop application.");
             _iisProvider.StopServer();

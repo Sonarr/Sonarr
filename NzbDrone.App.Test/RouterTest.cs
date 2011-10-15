@@ -1,4 +1,5 @@
-﻿using AutoMoq;
+﻿using System.ServiceProcess;
+using AutoMoq;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -47,20 +48,23 @@ namespace NzbDrone.App.Test
             var mocker = new AutoMoqer(MockBehavior.Strict);
             var serviceProviderMock = mocker.GetMock<ServiceProvider>();
             serviceProviderMock.Setup(c => c.Install());
-            mocker.GetMock<EnviromentProvider>().SetupGet(c => c.IsRunningAsService).Returns(false);
+            serviceProviderMock.Setup(c => c.ServiceExist(ServiceProvider.NzbDroneServiceName)).Returns(false);
+            mocker.GetMock<EnviromentProvider>().SetupGet(c => c.IsUserInteractive).Returns(true);
 
             mocker.Resolve<Router>().Route(ApplicationMode.InstallService);
 
             serviceProviderMock.Verify(c => c.Install(), Times.Once());
         }
 
+        
         [Test]
         public void Route_should_call_uninstall_service_when_application_mode_is_uninstall()
         {
             var mocker = new AutoMoqer(MockBehavior.Strict);
             var serviceProviderMock = mocker.GetMock<ServiceProvider>();
             serviceProviderMock.Setup(c => c.UnInstall());
-            mocker.GetMock<EnviromentProvider>().SetupGet(c => c.IsRunningAsService).Returns(false);
+            mocker.GetMock<EnviromentProvider>().SetupGet(c => c.IsUserInteractive).Returns(true);
+            serviceProviderMock.Setup(c => c.ServiceExist(ServiceProvider.NzbDroneServiceName)).Returns(true);
 
             mocker.Resolve<Router>().Route(ApplicationMode.UninstallService);
 
@@ -75,7 +79,7 @@ namespace NzbDrone.App.Test
             var appServerProvider = mocker.GetMock<ApplicationServer>();
             consoleProvider.Setup(c => c.WaitForClose());
             appServerProvider.Setup(c => c.Start());
-            mocker.GetMock<EnviromentProvider>().SetupGet(c => c.IsRunningAsService).Returns(false);
+            mocker.GetMock<EnviromentProvider>().SetupGet(c => c.IsUserInteractive).Returns(true);
 
             mocker.Resolve<Router>().Route(ApplicationMode.Console);
 
@@ -91,14 +95,15 @@ namespace NzbDrone.App.Test
         {
             var mocker = new AutoMoqer(MockBehavior.Strict);
             var envMock = mocker.GetMock<EnviromentProvider>();
-            var appServerMock = mocker.GetMock<ApplicationServer>();
+            var serviceProvider = mocker.GetMock<ServiceProvider>();
 
-            envMock.SetupGet(c => c.IsRunningAsService).Returns(true);
-            appServerMock.Setup(c => c.StartService());
+            envMock.SetupGet(c => c.IsUserInteractive).Returns(false);
+
+            serviceProvider.Setup(c => c.Run(It.IsAny<ServiceBase>()));
 
             mocker.Resolve<Router>().Route(applicationMode);
 
-            appServerMock.Verify(c => c.StartService(), Times.Once());
+            serviceProvider.Verify(c => c.Run(It.IsAny<ServiceBase>()), Times.Once());
         }
 
 
@@ -108,12 +113,28 @@ namespace NzbDrone.App.Test
             var mocker = new AutoMoqer(MockBehavior.Strict);
             var consoleMock = mocker.GetMock<ConsoleProvider>();
             var serviceMock = mocker.GetMock<ServiceProvider>();
-            mocker.GetMock<EnviromentProvider>().SetupGet(c => c.IsRunningAsService).Returns(false);
+            mocker.GetMock<EnviromentProvider>().SetupGet(c => c.IsUserInteractive).Returns(true);
 
             consoleMock.Setup(c => c.PrintServiceAlreadyExist());
             serviceMock.Setup(c => c.ServiceExist(ServiceProvider.NzbDroneServiceName)).Returns(true);
 
             mocker.Resolve<Router>().Route(ApplicationMode.InstallService);
+
+            mocker.VerifyAllMocks();
+        }
+
+        [Test]
+        public void show_error_on_uninstall_if_service_doesnt_exist()
+        {
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+            var consoleMock = mocker.GetMock<ConsoleProvider>();
+            var serviceMock = mocker.GetMock<ServiceProvider>();
+            mocker.GetMock<EnviromentProvider>().SetupGet(c => c.IsUserInteractive).Returns(true);
+
+            consoleMock.Setup(c => c.PrintServiceDoestExist());
+            serviceMock.Setup(c => c.ServiceExist(ServiceProvider.NzbDroneServiceName)).Returns(false);
+
+            mocker.Resolve<Router>().Route(ApplicationMode.UninstallService);
 
             mocker.VerifyAllMocks();
         }

@@ -15,7 +15,7 @@ namespace NzbDrone.Providers
         private static readonly Logger Logger = LogManager.GetLogger("Host.ServiceManager");
 
 
-     
+
 
         public virtual bool ServiceExist(string name)
         {
@@ -32,7 +32,7 @@ namespace NzbDrone.Providers
 
             var installer = new ServiceProcessInstaller
                                 {
-                                    Account = ServiceAccount.NetworkService
+                                    Account = ServiceAccount.LocalSystem
                                 };
 
             var serviceInstaller = new ServiceInstaller();
@@ -44,8 +44,8 @@ namespace NzbDrone.Providers
             serviceInstaller.Context = context;
             serviceInstaller.DisplayName = NzbDroneServiceName;
             serviceInstaller.ServiceName = NzbDroneServiceName;
+            serviceInstaller.Description = "NzbDrone Application Server";
             serviceInstaller.StartType = ServiceStartMode.Automatic;
-
 
             serviceInstaller.Parent = installer;
 
@@ -62,6 +62,12 @@ namespace NzbDrone.Providers
             serviceInstaller.Context = context;
             serviceInstaller.ServiceName = NzbDroneServiceName;
             serviceInstaller.Uninstall(null);
+        }
+
+
+        public virtual void Run(ServiceBase service)
+        {
+            ServiceBase.Run(service);
         }
     }
 }
