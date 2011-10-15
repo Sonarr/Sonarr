@@ -20,9 +20,19 @@ namespace NzbDrone.Providers
         {
             get
             {
-                var dir = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory;
+                var dir = new FileInfo(Environment.CurrentDirectory).Directory;
 
-                while (dir.GetDirectories("iisexpress").Length == 0)
+                while (!ContainsIIS(dir))
+                {
+                    if (dir.Parent == null) break;
+                    dir = dir.Parent;
+                }
+
+                if (ContainsIIS(dir)) return dir.FullName;
+
+                dir = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory;
+
+                while (!ContainsIIS(dir))
                 {
                     if (dir.Parent == null) throw new ApplicationException("Can't fine IISExpress folder.");
                     dir = dir.Parent;
@@ -30,6 +40,11 @@ namespace NzbDrone.Providers
 
                 return dir.FullName;
             }
+        }
+
+        private static bool ContainsIIS(DirectoryInfo dir)
+        {
+            return dir.GetDirectories("iisexpress").Length != 0;
         }
     }
 }

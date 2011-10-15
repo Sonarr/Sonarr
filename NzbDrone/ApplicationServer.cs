@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Net;
-using System.Threading;
+using System.ServiceProcess;
 using NLog;
 using Ninject;
 using NzbDrone.Providers;
 
 namespace NzbDrone
 {
-    public class ApplicationServer
+    public class ApplicationServer : ServiceBase
     {
         private static readonly Logger Logger = LogManager.GetLogger("Host.App");
 
@@ -16,12 +16,13 @@ namespace NzbDrone
         private readonly EnviromentProvider _enviromentProvider;
         private readonly IISProvider _iisProvider;
         private readonly ProcessProvider _processProvider;
+        private readonly MonitoringProvider _monitoringProvider;
         private readonly WebClient _webClient;
 
         [Inject]
         public ApplicationServer(ConfigProvider configProvider, WebClient webClient, IISProvider iisProvider,
                            DebuggerProvider debuggerProvider, EnviromentProvider enviromentProvider,
-                           ProcessProvider processProvider)
+                           ProcessProvider processProvider, MonitoringProvider monitoringProvider)
         {
             _configProvider = configProvider;
             _webClient = webClient;
@@ -29,10 +30,17 @@ namespace NzbDrone
             _debuggerProvider = debuggerProvider;
             _enviromentProvider = enviromentProvider;
             _processProvider = processProvider;
+            _monitoringProvider = monitoringProvider;
         }
 
         public ApplicationServer()
         {
+
+        }
+
+        protected override void OnStart(string[] args)
+        {
+            Start();
         }
 
         public virtual void Start()
@@ -65,9 +73,11 @@ namespace NzbDrone
                     Logger.ErrorException("Failed to load home page.", e);
                 }
             }
+
+            _monitoringProvider.Start();
         }
 
-        public virtual void Stop()
+        protected override void OnStop()
         {
             Logger.Info("Attempting to stop application.");
             _iisProvider.StopServer();

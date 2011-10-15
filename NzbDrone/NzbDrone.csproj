@@ -53,6 +53,9 @@
   <PropertyGroup>
     <ApplicationIcon>NzbDrone.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>NzbDrone.AppMain</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accessibility">
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -85,7 +88,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplicationServer.cs" />
+    <Compile Include="ApplicationServer.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="CentralDispatch.cs" />
     <Compile Include="Model\ApplicationMode.cs" />
     <Compile Include="Model\AuthenticationType.cs" />
@@ -93,13 +98,10 @@
     <Compile Include="Providers\ConsoleProvider.cs" />
     <Compile Include="Providers\DebuggerProvider.cs" />
     <Compile Include="Providers\EnviromentProvider.cs" />
-    <Compile Include="NzbDroneService.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="ProcessAttacher.cs" />
     <Compile Include="Providers\ConfigProvider.cs" />
     <Compile Include="Providers\IISProvider.cs" />
-    <Compile Include="NzbDroneConsole.cs" />
+    <Compile Include="AppMain.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\MonitoringProvider.cs" />
     <Compile Include="Providers\ProcessProvider.cs" />
