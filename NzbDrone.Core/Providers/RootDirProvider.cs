@@ -83,6 +83,26 @@ namespace NzbDrone.Core.Providers
             return results;
         }
 
+        public virtual string GetMostFreeRootDir()
+        {
+            ulong maxSize = 0;
+            var maxPath = String.Empty;
+
+            var rootDirs = GetAll();
+
+            foreach (var rootDir in rootDirs)
+            {
+                rootDir.FreeSpace = new DirectoryInfo(rootDir.Path).FreeDiskSpace();
+                if (rootDir.FreeSpace > maxSize)
+                {
+                    maxPath = rootDir.Path;
+                    maxSize = rootDir.FreeSpace;
+                }
+            }
+
+            return maxPath;
+        }
+
         #endregion
     }
 }
