@@ -97,7 +97,7 @@ namespace NzbDrone.Core.Test
         public void FreeDiskSpace()
         {
             //Checks to ensure that the free space on the first is greater than 0 (It should be in 99.99999999999999% of cases... I hope)
-            var di = DriveInfo.GetDrives().First().RootDirectory;
+            var di = new DirectoryInfo(Directory.GetCurrentDirectory());
             di.FreeDiskSpace().Should().BeGreaterThan(0);
         }
     }
