@@ -125,14 +125,6 @@ namespace NzbDrone.Core.Providers
         {
             var result = new List<Episode>();
 
-            if (parseResult.EpisodeNumbers.Count == 0 && parseResult.FullSeason)
-            {
-                result.AddRange(GetEpisodesBySeason(parseResult.Series.SeriesId, parseResult.SeasonNumber));
-
-                //Return now as no further processing is required
-                return result;
-            }
-
             foreach (var episodeNumber in parseResult.EpisodeNumbers)
             {
                 var episodeInfo = GetEpisode(parseResult.Series.SeriesId, parseResult.SeasonNumber, episodeNumber);

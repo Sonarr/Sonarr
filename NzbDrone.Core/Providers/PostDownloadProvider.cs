@@ -180,7 +180,15 @@ namespace NzbDrone.Core.Providers
             var parseResult = Parser.ParseTitle(directoryInfo.Name.Substring(8));
             parseResult.Series = _seriesProvider.FindSeries(parseResult.CleanTitle);
 
-            var episodeIds = _episodeProvider.GetEpisodesByParseResult(parseResult).Select(e => e.EpisodeId);
+            var episodeIds = new List<int>();
+
+            if (parseResult.EpisodeNumbers.Count == 0 && parseResult.FullSeason)
+                episodeIds =
+                    _episodeProvider.GetEpisodesBySeason(parseResult.Series.SeriesId, parseResult.SeasonNumber)
+                    .Select(e => e.EpisodeId).ToList();
+
+            else
+                episodeIds = _episodeProvider.GetEpisodesByParseResult(parseResult).Select(e => e.EpisodeId).ToList();
 
             _episodeProvider.SetPostDownloadStatus(episodeIds, postDownloadStatus);
         }
