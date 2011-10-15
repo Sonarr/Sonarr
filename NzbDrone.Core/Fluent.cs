@@ -1,11 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace NzbDrone.Core
 {
     public static class Fluent
     {
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool GetDiskFreeSpaceEx(string lpDirectoryName,
+        out ulong lpFreeBytesAvailable,
+        out ulong lpTotalNumberOfBytes,
+        out ulong lpTotalNumberOfFreeBytes);
+
         public static string WithDefault(this string actual, object defaultValue)
         {
             if (defaultValue == null)
@@ -17,7 +26,6 @@ namespace NzbDrone.Core
 
             return actual;
         }
-
 
         public static Int64 Megabytes(this int megabytes)
         {
@@ -44,6 +52,20 @@ namespace NzbDrone.Core
                 return dateTime.DayOfWeek.ToString();
 
             return dateTime.ToShortDateString();
+        }
+
+        public static ulong FreeDiskSpace(this DirectoryInfo directoryInfo)
+        {
+            ulong freeBytesAvailable;
+            ulong totalNumberOfBytes;
+            ulong totalNumberOfFreeBytes;
+
+            bool success = GetDiskFreeSpaceEx(directoryInfo.FullName, out freeBytesAvailable, out totalNumberOfBytes,
+                               out totalNumberOfFreeBytes);
+            if (!success)
+                throw new System.ComponentModel.Win32Exception();
+
+            return freeBytesAvailable;
         }
     }
 }
