@@ -120,7 +120,7 @@ namespace NzbDrone.Providers
 
             if (e.Data.Contains(" NzbDrone."))
             {
-                System.Console.WriteLine(e.Data);
+                Console.WriteLine(e.Data);
                 return;
             }
 

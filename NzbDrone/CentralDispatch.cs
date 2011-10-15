@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using NLog;
+﻿using NLog;
 using Ninject;
-using NzbDrone.Model;
 using NzbDrone.Providers;
 
 namespace NzbDrone
@@ -51,7 +45,6 @@ namespace NzbDrone
             _kernel.Get<ConfigProvider>().ConfigureNlog();
             _kernel.Get<ConfigProvider>().CreateDefaultConfigFile();
             Logger.Info("Start-up Path:'{0}'", _kernel.Get<EnviromentProvider>().ApplicationPath);
-            Thread.CurrentThread.Name = "Host";
         }
     }
 }

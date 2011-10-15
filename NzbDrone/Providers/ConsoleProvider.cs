@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Reflection;
-using NLog;
 
 namespace NzbDrone.Providers
 {

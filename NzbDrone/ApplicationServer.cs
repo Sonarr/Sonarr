@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Net;
-using System.Reflection;
 using System.ServiceProcess;
-using System.Threading;
 using NLog;
 using Ninject;
 using NzbDrone.Providers;

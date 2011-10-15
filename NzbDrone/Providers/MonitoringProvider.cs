@@ -103,7 +103,7 @@ namespace NzbDrone.Providers
 
         private static void AppDomainException(object excepion)
         {
-            System.Console.WriteLine("EPIC FAIL: {0}", excepion);
+            Console.WriteLine("EPIC FAIL: {0}", excepion);
             Logger.Fatal("EPIC FAIL: {0}", excepion);
 
 #if RELEASE
