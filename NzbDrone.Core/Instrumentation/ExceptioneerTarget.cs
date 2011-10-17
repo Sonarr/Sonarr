@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Instrumentation
 
         protected override void Write(LogEventInfo logEvent)
         {
-            if (!Debugger.IsAttached)
+            if (!Debugger.IsAttached && !Process.GetCurrentProcess().ProcessName.Contains("JetBrains"))
             {
                 Logger.Trace("Sending Exception to Exceptioneer. {0}", Process.GetCurrentProcess().ProcessName);
 
