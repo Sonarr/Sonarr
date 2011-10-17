@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Datastore
 
             EnsureDatabase(connetionString);
 
-            Logger.Info("Preparing to run database migration");
+            Logger.Trace("Preparing to run database migration");
 
             try
             {
