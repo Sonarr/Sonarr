@@ -92,4 +92,19 @@
       <Item>43BD3BBD-1531-4D8F-9C08-E1CD544AB2CD/d:Content</Item>
     </SkipFilesAndFolders>
   </Daemon.SolutionSettings>
+  <SharedSolutionTemplateManager>
+    <LiveTemplates>
+      <Template uid="3ec01bf0-ad83-4b4c-a0b2-381f28e3c369" shortcut="Test" description="Test Method" text="[NUnit.Framework.Test]&#xD;&#xA;[NUnit.Framework.Description(&quot;$TEST_NAME$&quot;)]&#xD;&#xA;public void $TEST_METHOD_NAME$() &#xD;&#xA;{&#xD;&#xA;    //Act&#xD;&#xA;&#xD;&#xA;    //Assert&#xD;&#xA;&#xD;&#xA;}" reformat="True" shortenQualifiedReferences="True">
+        <Scopes>
+          <Scope type="InCSharpTypeMember" minimumLanguageVersion="2.0" />
+        </Scopes>
+        <Categories />
+        <Variables>
+          <Variable name="TEST_NAME" expression="" initialRange="0" />
+          <Variable name="TEST_METHOD_NAME" expression="spacestounderstrokes(TEST_NAME)" initialRange="-1" />
+        </Variables>
+        <CustomProperties />
+      </Template>
+    </LiveTemplates>
+  </SharedSolutionTemplateManager>
 </Configuration>
