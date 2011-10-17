@@ -17,19 +17,18 @@ namespace NzbDrone.Core.Test.Framework
     /// </summary>
     internal static class MockLib
     {
-        public static string[] StandardSeries
-        {
-            get { return new[] { "c:\\tv\\the simpsons", "c:\\tv\\family guy", "c:\\tv\\southpark", "c:\\tv\\24" }; }
-        }
+        private const string DbTemplateName = "_dbtemplate.sdf";
 
         public static IDatabase GetEmptyDatabase(bool enableLogging = false, string fileName = "")
         {
-            Console.WriteLine("Creating an empty PetaPoco database");
+            Console.WriteLine("Cloning database from template.");
 
             if (String.IsNullOrWhiteSpace(fileName))
             {
                 fileName = Guid.NewGuid() + ".sdf";
             }
+
+            File.Copy(DbTemplateName, fileName);
 
             var connectionString = Connection.GetConnectionString(fileName);
 
@@ -38,7 +37,15 @@ namespace NzbDrone.Core.Test.Framework
             return database;
         }
 
-       public static Series GetFakeSeries(int id, string title)
+        public static void CreateDataBaseTemplate()
+        {
+            Console.WriteLine("Creating an empty PetaPoco database");
+            var connectionString = Connection.GetConnectionString(DbTemplateName);
+            var database = Connection.GetPetaPocoDb(connectionString);
+            database.Dispose();
+        }
+
+        public static Series GetFakeSeries(int id, string title)
         {
             return Builder<Series>.CreateNew()
                 .With(c => c.SeriesId = id)

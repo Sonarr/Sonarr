@@ -21,8 +21,7 @@ namespace NzbDrone.Core.Test
         {
             try
             {
-                LogManager.Configuration =
-                    new XmlLoggingConfiguration(Path.Combine(CentralDispatch.AppPath, "log.config"), false);
+                LogManager.Configuration = new XmlLoggingConfiguration(Path.Combine(CentralDispatch.AppPath, "log.config"), false);
                 LogManager.ThrowExceptions = true;
 
                 var exceptionVerification = new ExceptionVerification();
@@ -35,7 +34,6 @@ namespace NzbDrone.Core.Test
                 Console.WriteLine("Unable to configure logging. " + e);
             }
 
-
             var filesToDelete = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.sdf", SearchOption.AllDirectories);
             foreach (var file in filesToDelete)
             {
@@ -45,6 +43,8 @@ namespace NzbDrone.Core.Test
                 }
                 catch { }
             }
+
+            MockLib.CreateDataBaseTemplate();
         }
     }
 }

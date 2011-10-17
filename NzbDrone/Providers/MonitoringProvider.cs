@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Runtime.Remoting;
 using System.Timers;
+using Exceptioneer.WindowsFormsClient;
 using NLog;
 using Ninject;
 
@@ -33,7 +34,7 @@ namespace NzbDrone.Providers
 
         public void Start()
         {
-            AppDomain.CurrentDomain.UnhandledException += ((s, e) => AppDomainException(e));
+            AppDomain.CurrentDomain.UnhandledException += ((s, e) => AppDomainException(e.ExceptionObject as Exception));
 
             AppDomain.CurrentDomain.ProcessExit += ProgramExited;
             AppDomain.CurrentDomain.DomainUnload += ProgramExited;
@@ -42,7 +43,7 @@ namespace NzbDrone.Providers
             prioCheckTimer.Elapsed += EnsurePriority;
             prioCheckTimer.Enabled = true;
 
-            _pingTimer = new Timer(60000) {AutoReset = true};
+            _pingTimer = new Timer(60000) { AutoReset = true };
             _pingTimer.Elapsed += (PingServer);
             _pingTimer.Start();
         }
@@ -101,12 +102,12 @@ namespace NzbDrone.Providers
         }
 
 
-        private static void AppDomainException(object excepion)
+        public static void AppDomainException(Exception excepion)
         {
             Console.WriteLine("EPIC FAIL: {0}", excepion);
-            Logger.Fatal("EPIC FAIL: {0}", excepion);
 
-#if RELEASE
+#if DEBUG
+#else
             new Client
             {
                 ApiKey = "43BBF60A-EB2A-4C1C-B09E-422ADF637265",
@@ -114,6 +115,8 @@ namespace NzbDrone.Providers
                 CurrentException = excepion as Exception
             }.Submit();
 #endif
+
+            Logger.Fatal("EPIC FAIL: {0}", excepion);
         }
     }
 }

@@ -72,8 +72,22 @@ namespace NzbDrone.Core.Test.Framework
             Ignore(LogLevel.Error);
         }
 
+        internal static void MarkInconclusive(Type exception)
+        {
+            var inconclusiveLogs = _logs.Where(l => l.Exception.GetType() == exception).ToList();
+
+            if (inconclusiveLogs.Count != 0)
+            {
+                inconclusiveLogs.ForEach(c => _logs.Remove(c));
+                Assert.Inconclusive(GetLogsString(inconclusiveLogs));
+
+            }
+        }
+
         private static void Excpected(LogLevel level, int count)
         {
+
+
             var levelLogs = _logs.Where(l => l.Level == level).ToList();
 
             if (levelLogs.Count != count)
@@ -82,8 +96,7 @@ namespace NzbDrone.Core.Test.Framework
                 var message = String.Format("{0} {1}(s) were expected but {2} were logged.\n\r{3}",
                     count, level, levelLogs.Count, GetLogsString(levelLogs));
 
-                message =
-                    "********************************************************************************************************************************\n\r"
+                message = "********************************************************************************************************************************\n\r"
                     + message +
                     "\n\r********************************************************************************************************************************";
 
