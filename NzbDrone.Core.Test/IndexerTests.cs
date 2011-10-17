@@ -208,6 +208,8 @@ namespace NzbDrone.Core.Test
             result.Should().OnlyContain(r => r.CleanTitle == Parser.NormalizeTitle(title));
             result.Should().OnlyContain(r => r.SeasonNumber == season);
             result.Should().OnlyContain(r => r.EpisodeNumbers.Contains(episode));
+
+            ExceptionVerification.MarkInconclusive(typeof(WebException));
         }
 
         [TestCase("simpsons", 21, 23)]
@@ -233,6 +235,8 @@ namespace NzbDrone.Core.Test
             result.Should().OnlyContain(r => r.CleanTitle == Parser.NormalizeTitle(title));
             result.Should().OnlyContain(r => r.SeasonNumber == season);
             result.Should().OnlyContain(r => r.EpisodeNumbers.Contains(episode));
+
+            ExceptionVerification.MarkInconclusive(typeof(WebException));
         }
 
         [Test]
@@ -256,6 +260,8 @@ namespace NzbDrone.Core.Test
             result.Should().OnlyContain(r => r.CleanTitle == "simpsons");
             result.Should().OnlyContain(r => r.SeasonNumber == 21);
             result.Should().OnlyContain(r => r.EpisodeNumbers.Contains(23));
+
+            ExceptionVerification.MarkInconclusive(typeof(WebException));
         }
 
         [Test]
@@ -280,6 +286,8 @@ namespace NzbDrone.Core.Test
             result.Should().OnlyContain(r => r.SeasonNumber == 1);
             result.Should().OnlyContain(r => r.EpisodeNumbers.Contains(19));
 
+            ExceptionVerification.MarkInconclusive(typeof(WebException));
+
         }
 
         [Test]
@@ -303,6 +311,8 @@ namespace NzbDrone.Core.Test
             result.Should().OnlyContain(r => r.CleanTitle == "bluebloods");
             result.Should().OnlyContain(r => r.SeasonNumber == 1);
             result.Should().OnlyContain(r => r.EpisodeNumbers.Contains(19));
+
+            ExceptionVerification.MarkInconclusive(typeof(WebException));
         }
 
 
