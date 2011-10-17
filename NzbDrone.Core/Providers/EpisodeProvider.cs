@@ -397,8 +397,10 @@ namespace NzbDrone.Core.Providers
             Logger.Trace("Finished deleting invalid episodes for {0}", series.SeriesId);
         }
 
-        public virtual void SetPostDownloadStatus(IEnumerable<int> episodeIds, PostDownloadStatusType postDownloadStatus)
+        public virtual void SetPostDownloadStatus(List<int> episodeIds, PostDownloadStatusType postDownloadStatus)
         {
+            if (episodeIds.Count == 0) throw new ArgumentException("episodeIds should contain one or more episode ids.");
+
             var episodeIdString = String.Join(", ", episodeIds);
 
             var episodeIdQuery = String.Format(@"UPDATE Episodes SET PostDownloadStatus = {0}

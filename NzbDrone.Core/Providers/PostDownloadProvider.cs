@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using NLog;
 using Ninject;
 using NzbDrone.Core.Model;
@@ -23,7 +22,7 @@ namespace NzbDrone.Core.Providers
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private static readonly List<PostDownloadInfoModel> InfoList = new List<PostDownloadInfoModel>();
-            
+
         [Inject]
         public PostDownloadProvider(ConfigProvider configProvider, DiskProvider diskProvider,
                                     DiskScanProvider diskScanProvider, SeriesProvider seriesProvider,
@@ -38,7 +37,7 @@ namespace NzbDrone.Core.Providers
 
         PostDownloadProvider()
         {
-            
+
         }
 
         public virtual void ScanDropFolder(ProgressNotification notification)
@@ -85,7 +84,7 @@ namespace NzbDrone.Core.Providers
                     if (subfolderInfo.Name.StartsWith("_NzbDrone_"))
                     {
                         if (subfolderInfo.Name.StartsWith("_NzbDrone_InvalidSeries_"))
-                            ReProcessDownload(new PostDownloadInfoModel{ Name = subfolderInfo.FullName, Status = PostDownloadStatusType.InvalidSeries });
+                            ReProcessDownload(new PostDownloadInfoModel { Name = subfolderInfo.FullName, Status = PostDownloadStatusType.InvalidSeries });
 
                         else if (subfolderInfo.Name.StartsWith("_NzbDrone_ParseError_"))
                             ReProcessDownload(new PostDownloadInfoModel { Name = subfolderInfo.FullName, Status = PostDownloadStatusType.ParseError });
@@ -169,26 +168,31 @@ namespace NzbDrone.Core.Providers
                 InfoList.Remove(model);
                 return;
             }
-                
+
             //Add to InfoList for possible later processing
-            InfoList.Add(new PostDownloadInfoModel{ Name = directoryInfo.FullName,
-                                                    Added = DateTime.Now,
-                                                    Status = postDownloadStatus 
-                                                   });
+            InfoList.Add(new PostDownloadInfoModel
+            {
+                Name = directoryInfo.FullName,
+                Added = DateTime.Now,
+                Status = postDownloadStatus
+            });
 
             //Remove the first 8 characters of the folder name (removes _UNPACK_ or _FAILED_) before processing
             var parseResult = Parser.ParseTitle(directoryInfo.Name.Substring(8));
             parseResult.Series = _seriesProvider.FindSeries(parseResult.CleanTitle);
 
-            var episodeIds = new List<int>();
+            List<int> episodeIds;
 
             if (parseResult.EpisodeNumbers.Count == 0 && parseResult.FullSeason)
+            {
                 episodeIds =
                     _episodeProvider.GetEpisodesBySeason(parseResult.Series.SeriesId, parseResult.SeasonNumber)
-                    .Select(e => e.EpisodeId).ToList();
-
+                        .Select(e => e.EpisodeId).ToList();
+            }
             else
+            {
                 episodeIds = _episodeProvider.GetEpisodesByParseResult(parseResult).Select(e => e.EpisodeId).ToList();
+            }
 
             _episodeProvider.SetPostDownloadStatus(episodeIds, postDownloadStatus);
         }

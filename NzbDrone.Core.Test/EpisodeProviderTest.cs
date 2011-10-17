@@ -62,7 +62,7 @@ namespace NzbDrone.Core.Test
 
             db.Insert(fakeSeries);
             db.Insert(fakeEpisodes);
-            
+
             //Act
             var episode = mocker.Resolve<EpisodeProvider>().GetEpisode(fakeSeries.SeriesId, 2, 1);
 
@@ -452,8 +452,8 @@ namespace NzbDrone.Core.Test
                 .Build();
 
             var fakeSeries = Builder<Series>.CreateNew().With(c => c.SeriesId = seriesId).Build();
-            var fakeEpisodeList = new List<Episode> { new Episode { TvDbEpisodeId = 99, SeasonNumber = 10, EpisodeNumber = 10, Series = fakeSeries} };
-            
+            var fakeEpisodeList = new List<Episode> { new Episode { TvDbEpisodeId = 99, SeasonNumber = 10, EpisodeNumber = 10, Series = fakeSeries } };
+
             var mocker = new AutoMoqer();
             mocker.GetMock<IDatabase>()
                 .Setup(d => d.Fetch<Episode, Series, EpisodeFile>(It.IsAny<String>(), It.IsAny<Object[]>()))
@@ -511,7 +511,7 @@ namespace NzbDrone.Core.Test
 
             //Assert
             mocker.VerifyAllMocks();
-            mocker.GetMock<IDatabase>().Verify(c => c.UpdateMany(new List<Episode>{localEpisode}), Times.Once());
+            mocker.GetMock<IDatabase>().Verify(c => c.UpdateMany(new List<Episode> { localEpisode }), Times.Once());
         }
 
         [Test]
@@ -527,7 +527,7 @@ namespace NzbDrone.Core.Test
             var currentEpisodes = new List<Episode>();
             foreach (var tvDbEpisode in tvdbSeries.Episodes)
             {
-                currentEpisodes.Add(new Episode { TvDbEpisodeId = tvDbEpisode.Id, EpisodeId = 99, EpisodeFileId = 69, Ignored = true, Series = fakeSeries});
+                currentEpisodes.Add(new Episode { TvDbEpisodeId = tvDbEpisode.Id, EpisodeId = 99, EpisodeFileId = 69, Ignored = true, Series = fakeSeries });
             }
 
             var mocker = new AutoMoqer();
@@ -544,7 +544,7 @@ namespace NzbDrone.Core.Test
 
             mocker.GetMock<IDatabase>()
                 .Setup(c => c.UpdateMany(It.IsAny<IEnumerable<Episode>>()))
-                .Callback<IEnumerable<Episode>>(ep => updatedEpisodes =ep.ToList());
+                .Callback<IEnumerable<Episode>>(ep => updatedEpisodes = ep.ToList());
 
             //Act
             mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
@@ -1496,11 +1496,19 @@ namespace NzbDrone.Core.Test
             mocker.GetMock<SeriesProvider>().Setup(s => s.FindSeries("officeus")).Returns(fakeSeries);
 
             //Act
-            mocker.Resolve<EpisodeProvider>().SetPostDownloadStatus(fakeEpisodes.Select(e => e.EpisodeId), postDownloadStatus);
+            mocker.Resolve<EpisodeProvider>().SetPostDownloadStatus(fakeEpisodes.Select(e => e.EpisodeId).ToList(), postDownloadStatus);
 
             //Assert
             var result = db.Fetch<Episode>();
             result.Where(e => e.PostDownloadStatus == postDownloadStatus).Count().Should().Be(episodeCount);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException))]
+        public void SetPostDownloadStatus_should_throw_if_episode_list_is_empty()
+        {
+            var mocker = new AutoMoqer();
+            mocker.Resolve<EpisodeProvider>().SetPostDownloadStatus(new List<int>(), PostDownloadStatusType.Failed);
         }
     }
 }
