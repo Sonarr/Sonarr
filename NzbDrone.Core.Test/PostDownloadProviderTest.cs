@@ -73,18 +73,22 @@ namespace NzbDrone.Core.Test
             var postDownloadStatus = PostDownloadStatusType.Failed;
 
             var postDownloadProvider = new PostDownloadProvider();
-            postDownloadProvider.Add(new PostDownloadInfoModel
-                                         {
-                                             Name = path,
-                                             Status = postDownloadStatus,
-                                             Added = DateTime.Now.AddMinutes(-5)
-                                         });
+
+            var model = new PostDownloadInfoModel
+                            {
+                                Name = path,
+                                Status = postDownloadStatus,
+                                Added = DateTime.Now.AddMinutes(-5)
+                            };
+
+            postDownloadProvider.Add(model);
 
             //Act
             mocker.Resolve<PostDownloadProvider>().ProcessFailedOrUnpackingDownload(new DirectoryInfo(Path.Combine(Directory.GetCurrentDirectory(), path)), postDownloadStatus);
 
             //Assert
             mocker.VerifyAllMocks();
+            postDownloadProvider.Remove(model);
         }
 
         [Test]

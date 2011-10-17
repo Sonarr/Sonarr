@@ -19,7 +19,9 @@ namespace NzbDrone.Core.Test
             //Reset config file
             var mocker = new AutoMoqer();
             var configFile = mocker.Resolve<ConfigFileProvider>().ConfigFile;
-            File.Delete(configFile);
+
+            if (File.Exists(configFile))
+                File.Delete(configFile);
 
             mocker.Resolve<ConfigFileProvider>().CreateDefaultConfigFile();
         }
