@@ -81,9 +81,9 @@ namespace NzbDrone.Core.Test.Framework
 
         private static void Excpected(LogLevel level, int count)
         {
-            var _inconclusiveLogs = _logs.Where(l => _inconclusive.Any(c => c.IsAssignableFrom(l.Exception.GetType()))).ToList();
+            var inconclusiveLogs = _logs.Where(l => _inconclusive.Any(c => c == l.Exception.GetType())).ToList();
 
-            var levelLogs = _logs.Except(_inconclusiveLogs).Where(l => l.Level == level).ToList();
+            var levelLogs = _logs.Except(inconclusiveLogs).Where(l => l.Level == level).ToList();
 
             if (levelLogs.Count != count)
             {
@@ -98,9 +98,9 @@ namespace NzbDrone.Core.Test.Framework
                 Assert.Fail(message);
             }
 
-            if (_inconclusiveLogs.Count != 0)
+            if (inconclusiveLogs.Count != 0)
             {
-                Assert.Inconclusive(GetLogsString(_inconclusiveLogs));
+                Assert.Inconclusive(GetLogsString(inconclusiveLogs));
             }
 
             levelLogs.ForEach(c => _logs.Remove(c));

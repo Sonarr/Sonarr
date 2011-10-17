@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Instrumentation
         {
             if (!Debugger.IsAttached)
             {
-                Logger.Trace("Sending Exception to Exceptioneer");
+                Logger.Trace("Sending Exception to Exceptioneer. {0}", Process.GetCurrentProcess().ProcessName);
 
                 new Client
                     {
