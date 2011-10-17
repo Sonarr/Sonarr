@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Test.Framework.AutoMoq
         public void Test_should_pass_when_exception_type_is_ignored()
         {
             Logger.ErrorException("bad exception", new WebException("Test"));
-            ExceptionVerification.MarkForInconclusive(typeof(WebException));
+            ExceptionVerification.MarkInconclusive(typeof(WebException));
         }
     }
 }

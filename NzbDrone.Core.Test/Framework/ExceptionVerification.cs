@@ -11,7 +11,6 @@ namespace NzbDrone.Core.Test.Framework
     public class ExceptionVerification : Target
     {
         private static List<LogEventInfo> _logs = new List<LogEventInfo>();
-        private static List<Type> _inconclusive = new List<Type>();
 
         protected override void Write(LogEventInfo logEvent)
         {
@@ -24,7 +23,6 @@ namespace NzbDrone.Core.Test.Framework
         internal static void Reset()
         {
             _logs = new List<LogEventInfo>();
-            _inconclusive = new List<Type>();
         }
 
         internal static void AssertNoUnexcpectedLogs()
@@ -74,16 +72,23 @@ namespace NzbDrone.Core.Test.Framework
             Ignore(LogLevel.Error);
         }
 
-        internal static void MarkForInconclusive(Type exception)
+        internal static void MarkInconclusive(Type exception)
         {
-            _inconclusive.Add(exception);
+            var inconclusiveLogs = _logs.Where(l => l.Exception.GetType() == exception).ToList();
+
+            if (inconclusiveLogs.Count != 0)
+            {
+                inconclusiveLogs.ForEach(c => _logs.Remove(c));
+                Assert.Inconclusive(GetLogsString(inconclusiveLogs));
+
+            }
         }
 
         private static void Excpected(LogLevel level, int count)
         {
-            var inconclusiveLogs = _logs.Where(l => _inconclusive.Any(c => c == l.Exception.GetType())).ToList();
 
-            var levelLogs = _logs.Except(inconclusiveLogs).Where(l => l.Level == level).ToList();
+
+            var levelLogs = _logs.Where(l => l.Level == level).ToList();
 
             if (levelLogs.Count != count)
             {
@@ -96,11 +101,6 @@ namespace NzbDrone.Core.Test.Framework
                     "\n\r********************************************************************************************************************************";
 
                 Assert.Fail(message);
-            }
-
-            if (inconclusiveLogs.Count != 0)
-            {
-                Assert.Inconclusive(GetLogsString(inconclusiveLogs));
             }
 
             levelLogs.ForEach(c => _logs.Remove(c));
