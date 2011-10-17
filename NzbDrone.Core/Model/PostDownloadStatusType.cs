@@ -30,6 +30,11 @@
         /// <summary>
         /// ParseError
         /// </summary>
-        ParseError = 5
+        ParseError = 5,
+
+        /// <summary>
+        /// InvalidEpisode
+        /// </summary>
+        InvalidEpisode = 6,
     }
 }

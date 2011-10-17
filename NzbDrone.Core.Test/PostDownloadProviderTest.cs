@@ -23,13 +23,13 @@ namespace NzbDrone.Core.Test
     // ReSharper disable InconsistentNaming
     public class PostDownloadProviderTest : TestBase
     {
-        [TestCase("The Office (US) - S01E05 - Episode Title", PostDownloadStatusType.Unpacking, 1)]
-        [TestCase("The Office (US) - S01E05 - Episode Title", PostDownloadStatusType.Failed, 1)]
-        [TestCase("The Office (US) - S01E05E06 - Episode Title", PostDownloadStatusType.Unpacking, 2)]
-        [TestCase("The Office (US) - S01E05E06 - Episode Title", PostDownloadStatusType.Failed, 2)]
-        [TestCase("The Office (US) - Season 01 - Episode Title", PostDownloadStatusType.Unpacking, 10)]
-        [TestCase("The Office (US) - Season 01 - Episode Title", PostDownloadStatusType.Failed, 10)]
-        public void SetPostDownloadStatus(string folderName, PostDownloadStatusType postDownloadStatus, int episodeCount)
+        [TestCase("_UNPACK_The Office (US) - S01E01 - Episode Title", PostDownloadStatusType.Unpacking, 1)]
+        [TestCase("_FAILED_The Office (US) - S01E01 - Episode Title", PostDownloadStatusType.Failed, 1)]
+        [TestCase("_UNPACK_The Office (US) - S01E01E02 - Episode Title", PostDownloadStatusType.Unpacking, 2)]
+        [TestCase("_FAILED_The Office (US) - S01E01E02 - Episode Title", PostDownloadStatusType.Failed, 2)]
+        [TestCase("_UNPACK_The Office (US) - Season 01 - Episode Title", PostDownloadStatusType.Unpacking, 10)]
+        [TestCase("_FAILED_The Office (US) - Season 01 - Episode Title", PostDownloadStatusType.Failed, 10)]
+        public void ProcessFailedOrUnpackingDownload(string folderName, PostDownloadStatusType postDownloadStatus, int episodeCount)
         {
             var db = MockLib.GetEmptyDatabase();
             var mocker = new AutoMoqer();
@@ -40,24 +40,78 @@ namespace NzbDrone.Core.Test
                 .With(s => s.CleanTitle = "officeus")
                 .Build();
 
-            var fakeEpisodes = Builder<Episode>.CreateListOfSize(10)
+            var fakeEpisodes = Builder<Episode>.CreateListOfSize(episodeCount)
                 .WhereAll()
                 .Have(c => c.SeriesId = 12345)
                 .Have(c => c.SeasonNumber = 1)
                 .Have(c => c.PostDownloadStatus = PostDownloadStatusType.Unknown)
                 .Build();
 
-            db.Insert(fakeSeries);
-            db.InsertMany(fakeEpisodes);
+            var expectedEpisodesNumbers = fakeEpisodes.Select(e => e.EpisodeId);
 
             mocker.GetMock<SeriesProvider>().Setup(s => s.FindSeries("officeus")).Returns(fakeSeries);
+            mocker.GetMock<EpisodeProvider>().Setup(s => s.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>(), false)).Returns(fakeEpisodes);
+            mocker.GetMock<EpisodeProvider>().Setup(s => s.GetEpisodesBySeason(12345, 1)).Returns(fakeEpisodes);
+            mocker.GetMock<EpisodeProvider>().Setup(
+                s => s.SetPostDownloadStatus(expectedEpisodesNumbers, postDownloadStatus)).Verifiable();
 
             //Act
-            //mocker.Resolve<EpisodeProvider>().SetPostDownloadStatus(folderName, postDownloadStatus);
+            mocker.Resolve<PostDownloadProvider>().ProcessFailedOrUnpackingDownload(new DirectoryInfo(Path.Combine(Directory.GetCurrentDirectory(), folderName)),postDownloadStatus);
 
             //Assert
-            var result = db.Fetch<Episode>();
-            result.Where(e => e.PostDownloadStatus == postDownloadStatus).Count().Should().Be(episodeCount);
+            mocker.GetMock<EpisodeProvider>().Verify(c => c.SetPostDownloadStatus(expectedEpisodesNumbers, postDownloadStatus), Times.Once());
+        }
+
+        [Test]
+        public void ProcessFailedOrUnpackingDownload_Already_Existing_Time_Not_Passed()
+        {
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+
+            var path = Path.Combine(Directory.GetCurrentDirectory(),
+                                    "_FAILED_The Office (US) - S01E01 - Episode Provider");
+
+            var postDownloadStatus = PostDownloadStatusType.Failed;
+
+            var postDownloadProvider = new PostDownloadProvider();
+            postDownloadProvider.Add(new PostDownloadInfoModel
+                                         {
+                                             Name = path,
+                                             Status = postDownloadStatus,
+                                             Added = DateTime.Now.AddMinutes(-5)
+                                         });
+
+            //Act
+            mocker.Resolve<PostDownloadProvider>().ProcessFailedOrUnpackingDownload(new DirectoryInfo(Path.Combine(Directory.GetCurrentDirectory(), path)), postDownloadStatus);
+
+            //Assert
+            mocker.VerifyAllMocks();
+        }
+
+        [Test]
+        public void ProcessFailedOrUnpackingDownload_Invalid_Episode()
+        {
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+
+            var path = Path.Combine(Directory.GetCurrentDirectory(),
+                                    "_FAILED_The Office (US) - S01E01 - Episode Provider");
+
+            var postDownloadStatus = PostDownloadStatusType.Failed;
+
+            var fakeSeries = Builder<Series>.CreateNew()
+                .With(s => s.SeriesId = 12345)
+                .With(s => s.CleanTitle = "officeus")
+                .Build();
+
+            mocker.GetMock<SeriesProvider>().Setup(s => s.FindSeries("officeus")).Returns(fakeSeries);
+            mocker.GetMock<EpisodeProvider>().Setup(s => s.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>(), false)).Returns(new List<Episode>());
+            mocker.GetMock<DiskProvider>().Setup(s => s.MoveDirectory(It.IsAny<string>(), It.IsAny<string>()));
+
+            //Act
+            mocker.Resolve<PostDownloadProvider>().ProcessFailedOrUnpackingDownload(new DirectoryInfo(Path.Combine(Directory.GetCurrentDirectory(), path)), postDownloadStatus);
+
+            //Assert
+            ExceptionVerification.ExcpectedWarns(1);
+            mocker.VerifyAllMocks();
         }
 
         [TestCase(PostDownloadStatusType.Unpacking, 8)]

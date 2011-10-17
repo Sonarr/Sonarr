@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Providers
             _episodeProvider = episodeProvider;
         }
 
-        PostDownloadProvider()
+        public PostDownloadProvider()
         {
             
         }
@@ -157,27 +157,24 @@ namespace NzbDrone.Core.Providers
         public virtual void ProcessFailedOrUnpackingDownload(DirectoryInfo directoryInfo, PostDownloadStatusType postDownloadStatus)
         {
             //Check to see if its already in InfoList, if it is, check if enough time has passed to process
-            if (InfoList.Any(i => i.Name == directoryInfo.FullName))
-            {
-                var model = InfoList.Single(i => i.Name == directoryInfo.FullName);
+            var model = CheckForExisting(directoryInfo.FullName);
 
+            if (model != null)
+            {
                 //Process if 30 minutes has passed
                 if (model.Added > DateTime.Now.AddMinutes(30))
+                {
                     ReProcessDownload(model);
 
-                //If everything processed successfully up until now, remove it from InfoList
-                InfoList.Remove(model);
+                    //If everything processed successfully up until now, remove it from InfoList
+                    Remove(model);
+                }
+
                 return;
             }
                 
-            //Add to InfoList for possible later processing
-            InfoList.Add(new PostDownloadInfoModel{ Name = directoryInfo.FullName,
-                                                    Added = DateTime.Now,
-                                                    Status = postDownloadStatus 
-                                                   });
-
-            //Remove the first 8 characters of the folder name (removes _UNPACK_ or _FAILED_) before processing
-            var parseResult = Parser.ParseTitle(directoryInfo.Name.Substring(8));
+            //Remove the error prefix before processing
+            var parseResult = Parser.ParseTitle(directoryInfo.Name.Substring(GetPrefixLength(postDownloadStatus)));
             parseResult.Series = _seriesProvider.FindSeries(parseResult.CleanTitle);
 
             var episodeIds = new List<int>();
@@ -190,7 +187,27 @@ namespace NzbDrone.Core.Providers
             else
                 episodeIds = _episodeProvider.GetEpisodesByParseResult(parseResult).Select(e => e.EpisodeId).ToList();
 
+            if (episodeIds.Count == 0)
+            {
+                //Mark as InvalidEpisode
+                Logger.Warn("Unable to Import new download [{0}], no episode(s) found in database.", directoryInfo.FullName);
+                _diskProvider.MoveDirectory(directoryInfo.FullName,
+                                            Path.Combine(directoryInfo.Parent.FullName,
+                                                         "_NzbDrone_InvalidEpisode_" + directoryInfo.Name.Substring(GetPrefixLength(postDownloadStatus))));
+
+                return;
+            }
+
+            //Set the PostDownloadStatus for all found episodes
             _episodeProvider.SetPostDownloadStatus(episodeIds, postDownloadStatus);
+
+            //Add to InfoList for possible later processing
+            Add(new PostDownloadInfoModel
+            {
+                Name = directoryInfo.FullName,
+                Added = DateTime.Now,
+                Status = postDownloadStatus
+            });
         }
 
         public virtual void ReProcessDownload(PostDownloadInfoModel model)
@@ -225,6 +242,21 @@ namespace NzbDrone.Core.Providers
 
             //Default to zero
             return 0;
+        }
+
+        public void Add(PostDownloadInfoModel model)
+        {
+            InfoList.Add(model);
+        }
+
+        public void Remove(PostDownloadInfoModel model)
+        {
+            InfoList.Remove(model);
+        }
+
+        public PostDownloadInfoModel CheckForExisting(string path)
+        {
+            return InfoList.SingleOrDefault(i => i.Name == path);
         }
     }
 }

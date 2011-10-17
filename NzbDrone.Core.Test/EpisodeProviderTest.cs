@@ -1,6 +1,7 @@
 ﻿// ReSharper disable RedundantUsingDirective
 using System;
 using System.Collections.Generic;
+using System.Data.SqlServerCe;
 using System.Linq;
 using AutoMoq;
 using FizzWare.NBuilder;
@@ -1501,6 +1502,75 @@ namespace NzbDrone.Core.Test
             //Assert
             var result = db.Fetch<Episode>();
             result.Where(e => e.PostDownloadStatus == postDownloadStatus).Count().Should().Be(episodeCount);
+        }
+
+        [Test]
+        public void SetPostDownloadStatus_Invalid_EpisodeId()
+        {
+            var db = MockLib.GetEmptyDatabase();
+            var mocker = new AutoMoqer();
+            mocker.SetConstant(db);
+
+            var postDownloadStatus = PostDownloadStatusType.Failed;
+
+            var fakeSeries = Builder<Series>.CreateNew()
+                .With(s => s.SeriesId = 12345)
+                .With(s => s.CleanTitle = "officeus")
+                .Build();
+
+            var fakeEpisodes = Builder<Episode>.CreateListOfSize(1)
+                .WhereAll()
+                .Have(c => c.SeriesId = 12345)
+                .Have(c => c.SeasonNumber = 1)
+                .Have(c => c.PostDownloadStatus = PostDownloadStatusType.Unknown)
+                .Build();
+
+            db.Insert(fakeSeries);
+            db.InsertMany(fakeEpisodes);
+
+            mocker.GetMock<SeriesProvider>().Setup(s => s.FindSeries("officeus")).Returns(fakeSeries);
+
+            //Act
+            mocker.Resolve<EpisodeProvider>().SetPostDownloadStatus(new List<int>{300}, postDownloadStatus);
+
+            //Assert
+            var result = db.Fetch<Episode>();
+            result.Where(e => e.PostDownloadStatus == postDownloadStatus).Count().Should().Be(0);
+        }
+
+        [Test]
+        [ExpectedException(typeof(SqlCeException))]
+        public void SetPostDownloadStatus_No_EpisodeId_In_Database()
+        {
+            var db = MockLib.GetEmptyDatabase();
+            var mocker = new AutoMoqer();
+            mocker.SetConstant(db);
+
+            var postDownloadStatus = PostDownloadStatusType.Failed;
+
+            var fakeSeries = Builder<Series>.CreateNew()
+                .With(s => s.SeriesId = 12345)
+                .With(s => s.CleanTitle = "officeus")
+                .Build();
+
+            var fakeEpisodes = Builder<Episode>.CreateListOfSize(1)
+                .WhereAll()
+                .Have(c => c.SeriesId = 12345)
+                .Have(c => c.SeasonNumber = 1)
+                .Have(c => c.PostDownloadStatus = PostDownloadStatusType.Unknown)
+                .Build();
+
+            db.Insert(fakeSeries);
+            db.InsertMany(fakeEpisodes);
+
+            mocker.GetMock<SeriesProvider>().Setup(s => s.FindSeries("officeus")).Returns(fakeSeries);
+
+            //Act
+            mocker.Resolve<EpisodeProvider>().SetPostDownloadStatus(new List<int>(), postDownloadStatus);
+
+            //Assert
+            var result = db.Fetch<Episode>();
+            result.Where(e => e.PostDownloadStatus == postDownloadStatus).Count().Should().Be(0);
         }
     }
 }
