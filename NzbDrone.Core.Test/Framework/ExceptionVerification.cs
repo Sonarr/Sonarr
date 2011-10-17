@@ -11,6 +11,7 @@ namespace NzbDrone.Core.Test.Framework
     public class ExceptionVerification : Target
     {
         private static List<LogEventInfo> _logs = new List<LogEventInfo>();
+        private static List<Type> _inconclusive = new List<Type>();
 
         protected override void Write(LogEventInfo logEvent)
         {
@@ -23,6 +24,7 @@ namespace NzbDrone.Core.Test.Framework
         internal static void Reset()
         {
             _logs = new List<LogEventInfo>();
+            _inconclusive = new List<Type>();
         }
 
         internal static void AssertNoUnexcpectedLogs()
@@ -72,9 +74,16 @@ namespace NzbDrone.Core.Test.Framework
             Ignore(LogLevel.Error);
         }
 
+        internal static void MarkForInconclusive(Type exception)
+        {
+            _inconclusive.Add(exception);
+        }
+
         private static void Excpected(LogLevel level, int count)
         {
-            var levelLogs = _logs.Where(l => l.Level == level).ToList();
+            var _inconclusiveLogs = _logs.Where(l => _inconclusive.Any(c => c.IsAssignableFrom(l.Exception.GetType()))).ToList();
+
+            var levelLogs = _logs.Except(_inconclusiveLogs).Where(l => l.Level == level).ToList();
 
             if (levelLogs.Count != count)
             {
@@ -82,12 +91,16 @@ namespace NzbDrone.Core.Test.Framework
                 var message = String.Format("{0} {1}(s) were expected but {2} were logged.\n\r{3}",
                     count, level, levelLogs.Count, GetLogsString(levelLogs));
 
-                message =
-                    "********************************************************************************************************************************\n\r"
+                message = "********************************************************************************************************************************\n\r"
                     + message +
                     "\n\r********************************************************************************************************************************";
 
                 Assert.Fail(message);
+            }
+
+            if (_inconclusiveLogs.Count != 0)
+            {
+                Assert.Inconclusive(GetLogsString(_inconclusiveLogs));
             }
 
             levelLogs.ForEach(c => _logs.Remove(c));
