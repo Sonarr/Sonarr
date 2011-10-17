@@ -66,7 +66,7 @@ namespace NzbDrone.Core.Test
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
                           .Returns(File.OpenRead(".\\Files\\Rss\\newbin_none_english.xml"));
 
-            
+
 
             var newzbin = mocker.Resolve<Newzbin>();
             var parseResults = newzbin.FetchRss();
@@ -204,12 +204,12 @@ namespace NzbDrone.Core.Test
 
             var result = mocker.Resolve<NzbsOrg>().FetchEpisode(title, season, episode);
 
+            ExceptionVerification.MarkInconclusive(typeof(WebException));
+
             result.Should().NotBeEmpty();
             result.Should().OnlyContain(r => r.CleanTitle == Parser.NormalizeTitle(title));
             result.Should().OnlyContain(r => r.SeasonNumber == season);
             result.Should().OnlyContain(r => r.EpisodeNumbers.Contains(episode));
-
-            ExceptionVerification.MarkInconclusive(typeof(WebException));
         }
 
         [TestCase("simpsons", 21, 23)]
@@ -231,12 +231,12 @@ namespace NzbDrone.Core.Test
 
             var result = mocker.Resolve<Newzbin>().FetchEpisode(title, season, episode);
 
+            ExceptionVerification.MarkInconclusive(typeof(WebException));
+
             result.Should().NotBeEmpty();
             result.Should().OnlyContain(r => r.CleanTitle == Parser.NormalizeTitle(title));
             result.Should().OnlyContain(r => r.SeasonNumber == season);
             result.Should().OnlyContain(r => r.EpisodeNumbers.Contains(episode));
-
-            ExceptionVerification.MarkInconclusive(typeof(WebException));
         }
 
         [Test]
@@ -256,12 +256,12 @@ namespace NzbDrone.Core.Test
 
             var result = mocker.Resolve<NzbMatrix>().FetchEpisode("Simpsons", 21, 23);
 
+            ExceptionVerification.MarkInconclusive(typeof(WebException));
+
             result.Should().NotBeEmpty();
             result.Should().OnlyContain(r => r.CleanTitle == "simpsons");
             result.Should().OnlyContain(r => r.SeasonNumber == 21);
             result.Should().OnlyContain(r => r.EpisodeNumbers.Contains(23));
-
-            ExceptionVerification.MarkInconclusive(typeof(WebException));
         }
 
         [Test]
@@ -281,13 +281,12 @@ namespace NzbDrone.Core.Test
 
             var result = mocker.Resolve<NzbsOrg>().FetchEpisode("Blue Bloods", 1, 19);
 
+            ExceptionVerification.MarkInconclusive(typeof(WebException));
+
             result.Should().NotBeEmpty();
             result.Should().OnlyContain(r => r.CleanTitle == "bluebloods");
             result.Should().OnlyContain(r => r.SeasonNumber == 1);
             result.Should().OnlyContain(r => r.EpisodeNumbers.Contains(19));
-
-            ExceptionVerification.MarkInconclusive(typeof(WebException));
-
         }
 
         [Test]
@@ -307,12 +306,12 @@ namespace NzbDrone.Core.Test
 
             var result = mocker.Resolve<NzbMatrix>().FetchEpisode("Blue Bloods", 1, 19);
 
+            ExceptionVerification.MarkInconclusive(typeof(WebException));
+
             result.Should().NotBeEmpty();
             result.Should().OnlyContain(r => r.CleanTitle == "bluebloods");
             result.Should().OnlyContain(r => r.SeasonNumber == 1);
             result.Should().OnlyContain(r => r.EpisodeNumbers.Contains(19));
-
-            ExceptionVerification.MarkInconclusive(typeof(WebException));
         }
 
 
