@@ -36,5 +36,10 @@
         /// InvalidEpisode
         /// </summary>
         InvalidEpisode = 6,
+
+        /// <summary>
+        /// NoError
+        /// </summary>
+        NoError = 7,
     }
 }

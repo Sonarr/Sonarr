@@ -67,31 +67,27 @@ namespace NzbDrone.Core.Providers
                 {
                     var subfolderInfo = new DirectoryInfo(subfolder);
 
-                    if (subfolderInfo.Name.StartsWith("_UNPACK_"))
+                    var folderStatus = GetPostDownloadStatusForFolder(subfolderInfo.Name);
+
+                    if (folderStatus == PostDownloadStatusType.Unpacking)
                     {
                         ProcessFailedOrUnpackingDownload(subfolderInfo, PostDownloadStatusType.Unpacking);
                         Logger.Debug("Folder [{0}] is still being unpacked. skipping.", subfolder);
                         continue;
                     }
 
-                    if (subfolderInfo.Name.StartsWith("_FAILED_"))
+                    if (folderStatus == PostDownloadStatusType.Failed)
                     {
                         ProcessFailedOrUnpackingDownload(subfolderInfo, PostDownloadStatusType.Failed);
                         Logger.Debug("Folder [{0}] is marked as failed. skipping.", subfolder);
                         continue;
                     }
 
-                    if (subfolderInfo.Name.StartsWith("_NzbDrone_"))
+                    if (folderStatus != PostDownloadStatusType.Unknown)
                     {
-                        if (subfolderInfo.Name.StartsWith("_NzbDrone_InvalidSeries_"))
-                            ReProcessDownload(new PostDownloadInfoModel { Name = subfolderInfo.FullName, Status = PostDownloadStatusType.InvalidSeries });
-
-                        else if (subfolderInfo.Name.StartsWith("_NzbDrone_ParseError_"))
-                            ReProcessDownload(new PostDownloadInfoModel { Name = subfolderInfo.FullName, Status = PostDownloadStatusType.ParseError });
-
-                        else
-                            ReProcessDownload(new PostDownloadInfoModel { Name = subfolderInfo.FullName, Status = PostDownloadStatusType.Unknown });
-
+                        //Retry processing on the download
+                        ReProcessDownload(new PostDownloadInfoModel{ Name = subfolderInfo.FullName, Status = folderStatus });
+                        
                         continue;
                     }
 
@@ -172,12 +168,6 @@ namespace NzbDrone.Core.Providers
                 return;
             }
 
-            //Add to InfoList for possible later processing
-            InfoList.Add(new PostDownloadInfoModel{ Name = directoryInfo.FullName,
-                                                    Added = DateTime.Now,
-                                                    Status = postDownloadStatus 
-                                                   });
-
             //Remove the error prefix before processing
             var parseResult = Parser.ParseTitle(directoryInfo.Name.Substring(GetPrefixLength(postDownloadStatus)));
 
@@ -198,9 +188,9 @@ namespace NzbDrone.Core.Providers
             {
                 //Mark as InvalidEpisode
                 Logger.Warn("Unable to Import new download [{0}], no episode(s) found in database.", directoryInfo.FullName);
-                _diskProvider.MoveDirectory(directoryInfo.FullName,
-                                            Path.Combine(directoryInfo.Parent.FullName,
-                                                         "_NzbDrone_InvalidEpisode_" + directoryInfo.Name.Substring(GetPrefixLength(postDownloadStatus))));
+
+                var newPath = GetNewFolderNameWithPostDownloadStatus(directoryInfo, PostDownloadStatusType.InvalidEpisode);
+                _diskProvider.MoveDirectory(directoryInfo.FullName, newPath);
 
                 return;
             }
@@ -220,7 +210,7 @@ namespace NzbDrone.Core.Providers
         public virtual void ReProcessDownload(PostDownloadInfoModel model)
         {
             var directoryInfo = new DirectoryInfo(model.Name);
-            var newName = Path.Combine(directoryInfo.Parent.FullName, directoryInfo.Name.Substring(GetPrefixLength(model.Status)));
+            var newName = GetNewFolderNameWithPostDownloadStatus(directoryInfo, PostDownloadStatusType.NoError);
 
             _diskProvider.MoveDirectory(directoryInfo.FullName, newName);
 
@@ -235,20 +225,17 @@ namespace NzbDrone.Core.Providers
             if (postDownloadStatus == PostDownloadStatusType.Unpacking || postDownloadStatus == PostDownloadStatusType.Failed)
                 return 8;
 
-            //_NzbDrone_InvalidSeries_ - Length = 24
-            if (postDownloadStatus == PostDownloadStatusType.InvalidSeries)
-                return 24;
-
-            //_NzbDrone_ParseError_ - Length = 
-            if (postDownloadStatus == PostDownloadStatusType.ParseError)
-                return 21;
-
-            //_NzbDrone_ - Length = 10
             if (postDownloadStatus == PostDownloadStatusType.Unknown)
                 return 10;
 
-            //Default to zero
-            return 0;
+            if (postDownloadStatus == PostDownloadStatusType.Processed)
+                return 0;
+
+            if (postDownloadStatus == PostDownloadStatusType.NoError)
+                return 0;
+
+            //Return the 11 (_NzbDrone_) + trailing underscore + postDownloadStatus length
+            return 11 + postDownloadStatus.ToString().Length;
         }
 
         public void Add(PostDownloadInfoModel model)
@@ -264,6 +251,52 @@ namespace NzbDrone.Core.Providers
         public PostDownloadInfoModel CheckForExisting(string path)
         {
             return InfoList.SingleOrDefault(i => i.Name == path);
+        }
+
+        public PostDownloadStatusType GetPostDownloadStatusForFolder(string folderName)
+        {
+            if (folderName.StartsWith("_UNPACK_"))
+                return PostDownloadStatusType.Unpacking;
+
+            if (folderName.StartsWith("_FAILED_"))
+                return PostDownloadStatusType.Failed;
+
+            foreach (PostDownloadStatusType postDownloadStatusType in Enum.GetValues(typeof(PostDownloadStatusType)))
+            {
+                var startsWith = String.Format("_NzbDrone_{0}_", postDownloadStatusType.ToString());
+
+                if (folderName.StartsWith(startsWith))
+                    return postDownloadStatusType;
+            }
+
+            if (folderName.StartsWith("_NzbDrone_"))
+                return PostDownloadStatusType.Unknown;
+
+            return PostDownloadStatusType.NoError;
+        }
+
+        public string GetNewFolderNameWithPostDownloadStatus(DirectoryInfo directoryInfo, PostDownloadStatusType postDownloadStatus)
+        {
+            var existingError = GetPostDownloadStatusForFolder(directoryInfo.Name);
+            var newFolderName = directoryInfo.Name;
+            var error = String.Format("_NzbDrone_{0}_", postDownloadStatus.ToString());
+
+            if (existingError != PostDownloadStatusType.NoError)
+                newFolderName = directoryInfo.Name.Substring(GetPrefixLength(existingError));
+
+            if (postDownloadStatus == PostDownloadStatusType.Unknown)
+                error = "_NzbDrone_";
+
+            if (postDownloadStatus == PostDownloadStatusType.NoError)
+                error = String.Empty;
+
+            if (postDownloadStatus == PostDownloadStatusType.Processed)
+                error = String.Empty;
+
+            var parent = directoryInfo.Parent.FullName;
+            var newName = error + newFolderName;
+
+            return Path.Combine(parent, newName);
         }
     }
 }
