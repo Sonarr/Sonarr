@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Test
         public void processResults_higher_quality_should_be_called_first()
         {
             var parseResults = Builder<EpisodeParseResult>.CreateListOfSize(10)
-                .WhereAll().Have(c => c.Quality = new Quality(QualityTypes.DVD, true))
+                .All().With(c => c.Quality = new Quality(QualityTypes.DVD, true))
                 .WhereRandom(1).Has(c => c.Quality = new Quality(QualityTypes.Bluray1080p, true))
                 .Build();
 
@@ -91,7 +91,7 @@ namespace NzbDrone.Core.Test
         public void processResults_when_same_quality_proper_should_be_called_first()
         {
             var parseResults = Builder<EpisodeParseResult>.CreateListOfSize(20)
-                .WhereAll().Have(c => c.Quality = new Quality(QualityTypes.DVD, false))
+                .All().With(c => c.Quality = new Quality(QualityTypes.DVD, false))
                 .WhereRandom(1).Has(c => c.Quality = new Quality(QualityTypes.DVD, true))
                 .Build();
 

@@ -28,10 +28,10 @@ namespace NzbDrone.Core.Test
         public void get_series_files()
         {
             var firstSeriesFiles = Builder<EpisodeFile>.CreateListOfSize(10)
-                .WhereAll().Have(s => s.SeriesId = 12).Build();
+                .All().With(s => s.SeriesId = 12).Build();
 
             var secondSeriesFiles = Builder<EpisodeFile>.CreateListOfSize(10)
-                .WhereAll().Have(s => s.SeriesId = 20).Build();
+                .All().With(s => s.SeriesId = 20).Build();
 
             var mocker = new AutoMoqer();
 
@@ -53,15 +53,15 @@ namespace NzbDrone.Core.Test
         public void get_season_files()
         {
             var firstSeriesFiles = Builder<EpisodeFile>.CreateListOfSize(10)
-                .WhereAll()
-                .Have(s => s.SeriesId = 12)
-                .Have(s => s.SeasonNumber = 1)
+                .All()
+                .With(s => s.SeriesId = 12)
+                .With(s => s.SeasonNumber = 1)
                 .Build();
 
             var secondSeriesFiles = Builder<EpisodeFile>.CreateListOfSize(10)
-                .WhereAll()
-                .Have(s => s.SeriesId = 12)
-                .Have(s => s.SeasonNumber = 2)
+                .All()
+                .With(s => s.SeriesId = 12)
+                .With(s => s.SeasonNumber = 2)
                 .Build();
 
             var mocker = new AutoMoqer();

@@ -21,8 +21,8 @@ namespace NzbDrone.Core.Test
         public void import_new_series_succesfull()
         {
             var series = Builder<Series>.CreateListOfSize(2)
-                     .WhereAll().Have(s => s.LastInfoSync = null)
-                     .WhereTheFirst(1).Has(s => s.SeriesId = 12)
+                     .All().With(s => s.LastInfoSync = null)
+                     .TheFirst(1).Has(s => s.SeriesId = 12)
                      .AndTheNext(1).Has(s => s.SeriesId = 15)
                         .Build();
 
@@ -86,8 +86,8 @@ namespace NzbDrone.Core.Test
         public void failed_import_should_not_be_stuck_in_loop()
         {
             var series = Builder<Series>.CreateListOfSize(2)
-                     .WhereAll().Have(s => s.LastInfoSync = null)
-                     .WhereTheFirst(1).Has(s => s.SeriesId = 12)
+                     .All().With(s => s.LastInfoSync = null)
+                     .TheFirst(1).Has(s => s.SeriesId = 12)
                      .AndTheNext(1).Has(s => s.SeriesId = 15)
                         .Build();
 
@@ -163,7 +163,7 @@ namespace NzbDrone.Core.Test
             int seriesId = 12;
 
             var episodesFiles = Builder<EpisodeFile>.CreateListOfSize(2)
-            .WhereAll().Have(e => e.SeriesId = seriesId)
+            .All().With(e => e.SeriesId = seriesId)
             .Build();
 
             episodesFiles[0].SeasonNumber = 0;
@@ -190,7 +190,7 @@ namespace NzbDrone.Core.Test
             int seriesId = 12;
 
             var episodesFiles = Builder<EpisodeFile>.CreateListOfSize(2)
-            .WhereAll().Have(e => e.SeriesId = seriesId)
+            .All().With(e => e.SeriesId = seriesId)
             .Build();
 
             episodesFiles[0].SeasonNumber = 1;

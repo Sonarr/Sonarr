@@ -25,9 +25,9 @@ namespace NzbDrone.Core.Test
                 .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(2)
-                                            .WhereTheFirst(1).Has(s => s.EpisodeId = 12)
+                                            .TheFirst(1).Has(s => s.EpisodeId = 12)
                                             .AndTheNext(1).Has(s => s.EpisodeId = 99)
-                                            .WhereAll().Has(s => s.SeriesId = 5)
+                                            .All().Has(s => s.SeriesId = 5)
                                             .Build();
 
 

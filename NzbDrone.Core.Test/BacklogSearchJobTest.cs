@@ -102,9 +102,9 @@ namespace NzbDrone.Core.Test
             var notification = new ProgressNotification("Backlog Search Job Test");
 
             var episodes = Builder<Episode>.CreateListOfSize(5)
-                .WhereAll()
-                .Have(e => e.SeriesId = 1)
-                .Have(e => e.SeasonNumber = 1)
+                .All()
+                .With(e => e.SeriesId = 1)
+                .With(e => e.SeasonNumber = 1)
                 .Build();
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
@@ -136,9 +136,9 @@ namespace NzbDrone.Core.Test
             var notification = new ProgressNotification("Backlog Search Job Test");
 
             var episodes = Builder<Episode>.CreateListOfSize(5)
-                .WhereAll()
-                .Have(e => e.SeriesId = 1)
-                .Have(e => e.SeasonNumber = 1)
+                .All()
+                .With(e => e.SeriesId = 1)
+                .With(e => e.SeasonNumber = 1)
                 .Build();
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
@@ -170,9 +170,9 @@ namespace NzbDrone.Core.Test
             var notification = new ProgressNotification("Backlog Search Job Test");
 
             var episodes = Builder<Episode>.CreateListOfSize(10)
-                .WhereTheFirst(5)
-                .Have(e => e.SeriesId = 1)
-                .Have(e => e.SeasonNumber = 1)
+                .TheFirst(5)
+                .With(e => e.SeriesId = 1)
+                .With(e => e.SeasonNumber = 1)
                 .Build();
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
