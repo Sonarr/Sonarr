@@ -114,8 +114,7 @@ namespace NzbDrone.Core.Providers
 
                 //Rename the Directory so it's not processed again.
                 _diskProvider.MoveDirectory(subfolderInfo.FullName,
-                                            Path.Combine(subfolderInfo.Parent.FullName,
-                                                         "_NzbDrone_InvalidSeries_" + subfolderInfo.Name));
+                    GetNewFolderNameWithPostDownloadStatus(subfolderInfo, PostDownloadStatusType.InvalidSeries));
                 return;
             }
 
@@ -132,9 +131,8 @@ namespace NzbDrone.Core.Providers
                 if (importedFiles.Count == 0)
                 {
                     Logger.Warn("Unable to Import new download [{0}], unable to parse episode file(s).", subfolderInfo.FullName);
-                    _diskProvider.MoveDirectory(subfolderInfo.FullName,
-                                                Path.Combine(subfolderInfo.Parent.FullName,
-                                                             "_NzbDrone_ParseError_" + subfolderInfo.Name));
+                    _diskProvider.MoveDirectory(subfolderInfo.FullName, 
+                        GetNewFolderNameWithPostDownloadStatus(subfolderInfo, PostDownloadStatusType.ParseError));
                 }
 
                 //Unknown Error Importing (Possibly a lesser quality than episode currently on disk)
@@ -142,9 +140,7 @@ namespace NzbDrone.Core.Providers
                 {
                     Logger.Warn("Unable to Import new download [{0}].", subfolderInfo.FullName);
 
-                    _diskProvider.MoveDirectory(subfolderInfo.FullName,
-                                                Path.Combine(subfolderInfo.Parent.FullName,
-                                                             "_NzbDrone_" + subfolderInfo.Name));
+                    _diskProvider.MoveDirectory(subfolderInfo.FullName, GetNewFolderNameWithPostDownloadStatus(subfolderInfo, PostDownloadStatusType.Unknown));
                 }
             }
         }
