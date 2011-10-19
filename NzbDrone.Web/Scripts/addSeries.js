@@ -1,6 +1,7 @@
 ﻿//URLs
 var addSeriesUrl = '../AddSeries/AddExistingSeries';
 var addNewSeriesUrl = '../AddSeries/AddNewSeries';
+var quickAddNewSeriesUrl = '../AddSeries/QuickAddNewSeries';
 var existingSeriesUrl = '../AddSeries/ExistingSeries';
 var addNewUrl = '../AddSeries/AddNew';
 
@@ -104,6 +105,26 @@ function reloadAddNew() {
     });
 }
 
+
+//QuickAddNew
+$('#quickAddNew').live('click', function () {
+    var seriesTitle = $("#newSeriesLookup").val();
+    var seriesId = $("#newSeriesId").val();
+    var qualityId = $("#qualityList").val();
+
+    $.ajax({
+        type: "POST",
+        url: quickAddNewSeriesUrl,
+        data: jQuery.param({ seriesName: seriesTitle, seriesId: seriesId, qualityProfileId: qualityId }),
+        error: function (req, status, error) {
+            alert("Sorry! We could not add " + path + " at this time. " + error);
+        },
+        success: function () {
+            $("#newSeriesLookup").val("");
+            //$('#newSeriesPath').val("");
+        }
+    });
+});
 
 //On load
 jQuery(document).ready(function () {

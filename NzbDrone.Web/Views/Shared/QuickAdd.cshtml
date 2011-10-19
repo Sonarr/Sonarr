@@ -1,0 +1,15 @@
+﻿@using System.Collections
+@using NzbDrone.Core
+<div id="quickAdd">
+    <input id="quickSeriesLookup" class="seriesLookup" type="text" style="width: 400px" />
+        @Html.Hidden("newSeriesId", 0, new { @class = "seriesId" })
+    @Html.DropDownList("qualityList", (SelectList)ViewData["QualityProfiles"], new { @class = "qualitySelector" })
+    <button id="quickAddNew">Add</button>
+</div>
+
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        //AddNew
+        $('#quickSeriesLookup').watermark('Title of the series you want to add...');
+    });
+</script>

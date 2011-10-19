@@ -7,7 +7,7 @@
         @Html.Hidden("newSeriesId", 0, new { @class = "seriesId" })
     </div>
     @Html.DropDownList("newSeriesPath", new SelectList((IList)ViewData["RootDirs"]), new { style = "width: 406px; margin-left: 0px;" })
-    @Html.DropDownList("qualityList", new SelectList((IList)ViewData["QualityList"], "QualityProfileId", "Name"), new { @class = "qualitySelector" })
+    @Html.DropDownList("qualityList", (SelectList)ViewData["QualityProfiles"], new { @class = "qualitySelector" })
     <button id="saveNewSeries">
         Add</button>
 </div>
