@@ -5,6 +5,7 @@
 
     bindFolderAutoComplete(".folderLookup");
     bindSeriesAutoComplete(".seriesLookup");
+    bindLocalSeriesAutoComplete(".localSeriesLookup");
 });
 
 function bindFolderAutoComplete(selector) {
@@ -48,6 +49,26 @@ function bindSeriesAutoComplete(selector) {
 	        return $("<li></li>")
 			.data("item.autocomplete", item)
 			.append("<a><strong>" + item.Title + "</strong><br>" + item.FirstAired + "</a>")
+			.appendTo(ul);
+	    };
+    });
+}
+
+function bindLocalSeriesAutoComplete(selector) {
+
+    $(selector).each(function (index, element) {
+        $(element).autocomplete({
+            source: "/Series/LocalSearch",
+            minLength: 3,
+            delay: 500,
+            select: function (event, ui) {
+                window.location = "../Series/Details?seriesId=" + ui.item.Id;
+            }
+        })
+	    .data("autocomplete")._renderItem = function (ul, item) {
+	        return $("<li></li>")
+			.data("item.autocomplete", item)
+			.append("<a><strong>" + item.Title + "</strong><br>" + "</a>")
 			.appendTo(ul);
 	    };
     });

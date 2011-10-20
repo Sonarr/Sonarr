@@ -4,8 +4,8 @@ namespace NzbDrone.Web.Models
 {
     public class SeriesSearchResultModel
     {
-        public int TvDbId { get; set; }
-        public string TvDbName { get; set; }
+        public int Id { get; set; }
+        public string Title { get; set; }
         public DateTime FirstAired { get; set; }
     }
 }

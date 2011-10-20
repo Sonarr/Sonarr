@@ -186,6 +186,21 @@ namespace NzbDrone.Core.Providers
             return false;
         }
 
+        public virtual List<Series> SearchForSeries(string title)
+        {
+            var query = String.Format(@"SELECT * FROM Series
+                                INNER JOIN QualityProfiles ON Series.QualityProfileId = QualityProfiles.QualityProfileId
+                                WHERE Title LIKE '{0}%'", title);
+
+//            var series = _database.Fetch<Series, QualityProfile>(@"SELECT * FROM Series
+//                            INNER JOIN QualityProfiles ON Series.QualityProfileId = QualityProfiles.QualityProfileId
+//                            WHERE Title LIKE '@0%'", title);
+
+            var series = _database.Fetch<Series, QualityProfile>(query);
+
+            return series;
+        }
+
         /// <summary>
         ///   Cleans up the AirsTime Component from TheTVDB since it can be garbage that comes in.
         /// </summary>

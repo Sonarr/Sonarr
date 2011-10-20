@@ -329,6 +329,7 @@
     <Content Include="Content\2011.2.712\Windows7\slider-v.gif" />
     <Content Include="Content\2011.2.712\Windows7\sprite-vertical.png" />
     <Content Include="Content\2011.2.712\Windows7\sprite.png" />
+    <Content Include="Content\Slider.css" />
     <Content Include="Content\Grid.css" />
     <Content Include="Content\Images\close.png" />
     <Content Include="Content\Images\Downloading.png" />
@@ -677,6 +678,7 @@
     <Content Include="Scripts\2011.2.712\telerik.window.min.js" />
     <Content Include="Scripts\AutoComplete.js" />
     <Content Include="Scripts\addSeries.js" />
+    <Content Include="Scripts\slider.js" />
     <Content Include="Scripts\Plugins\jquery-1.6.3-vsdoc.js" />
     <Content Include="Scripts\Plugins\jquery-1.6.3.js" />
     <Content Include="Scripts\Plugins\jquery-1.6.3.min.js" />
@@ -723,7 +725,6 @@
     <Content Include="Views\Upcoming\Index.cshtml" />
     <Content Include="Views\Series\Details.cshtml" />
     <Content Include="Views\Series\Index.cshtml" />
-    <Content Include="Views\Series\SeriesSearchResults.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Settings\QualityProfileItem.cshtml" />
     <Content Include="Views\System\Indexers.cshtml" />
@@ -931,6 +932,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\QuickAdd.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\LocalSearch.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

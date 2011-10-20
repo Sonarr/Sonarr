@@ -25,5 +25,11 @@ namespace NzbDrone.Web.Controllers
             ViewData["RssTimer"] = _jobProvider.NextScheduledRun(typeof(RssSyncJob)).ToString("yyyyMMddHHmmss");
             return PartialView();
         }
+
+        [ChildActionOnly]
+        public ActionResult LocalSearch()
+        {
+            return PartialView();
+        }
     }
 }
