@@ -18,12 +18,6 @@ namespace NzbDrone.Core.Test
     public class BacklogSearchJobTest
     {
         [Test]
-        public void broken_test()
-        {
-            throw new NotImplementedException();
-        }
-
-        [Test]
         public void no_missing_epsiodes_should_not_trigger_any_search()
         {
             //Setup
