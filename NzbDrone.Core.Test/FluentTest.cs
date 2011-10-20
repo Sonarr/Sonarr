@@ -1,19 +1,7 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
-using System.Net;
-using System.ServiceModel.Syndication;
-using AutoMoq;
-using FizzWare.NBuilder;
 using FluentAssertions;
-using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.Model;
-using NzbDrone.Core.Providers;
-using NzbDrone.Core.Providers.Core;
-using NzbDrone.Core.Providers.Indexer;
-using NzbDrone.Core.Repository;
-using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test

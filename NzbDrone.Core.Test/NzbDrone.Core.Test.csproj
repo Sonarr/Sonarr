@@ -88,41 +88,41 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BacklogSearchJobTest.cs" />
-    <Compile Include="BannerDownloadJobTest.cs" />
-    <Compile Include="ConfigFileProviderTest.cs" />
+    <Compile Include="JobTests\BacklogSearchJobTest.cs" />
+    <Compile Include="JobTests\BannerDownloadJobTest.cs" />
+    <Compile Include="ProviderTests\ConfigFileProviderTest.cs" />
     <Compile Include="Framework\AutoMoq\TestBaseTests.cs" />
-    <Compile Include="PostDownloadProviderTest.cs" />
+    <Compile Include="ProviderTests\PostDownloadProviderTest.cs" />
+    <Compile Include="JobTests\SearchJobTest.cs" />
     <Compile Include="SortHelperTest.cs" />
-    <Compile Include="EpisodeProviderTest_DeleteInvalidEpisodes.cs" />
-    <Compile Include="InventoryProvider_IsAcceptableSizeTest.cs" />
-    <Compile Include="QualityTypeProviderTest.cs" />
-    <Compile Include="MisnamedProviderTest.cs" />
-    <Compile Include="SeasonSearchJobTest.cs" />
-    <Compile Include="SearchProviderTest_PartialSeason.cs" />
-    <Compile Include="SearchJobTest.cs" />
-    <Compile Include="SeriesSearchJobTest.cs" />
-    <Compile Include="SearchProviderTest_Season.cs" />
-    <Compile Include="EventClientProviderTest.cs" />
+    <Compile Include="ProviderTests\EpisodeProviderTest_DeleteInvalidEpisodes.cs" />
+    <Compile Include="ProviderTests\InventoryProvider_IsAcceptableSizeTest.cs" />
+    <Compile Include="ProviderTests\QualityTypeProviderTest.cs" />
+    <Compile Include="ProviderTests\MisnamedProviderTest.cs" />
+    <Compile Include="JobTests\SeasonSearchJobTest.cs" />
+    <Compile Include="ProviderTests\SearchProviderTest_PartialSeason.cs" />
+    <Compile Include="JobTests\SeriesSearchJobTest.cs" />
+    <Compile Include="ProviderTests\SearchProviderTest_Season.cs" />
+    <Compile Include="ProviderTests\EventClientProviderTest.cs" />
     <Compile Include="CentralDispatchTest.cs" />
-    <Compile Include="XbmcProviderTest.cs" />
-    <Compile Include="DiskScanProviderTest.cs" />
-    <Compile Include="EpisodeProviderTest_GetEpisodesByParseResult.cs" />
-    <Compile Include="DiskScanProviderTest_ImportFile.cs" />
+    <Compile Include="ProviderTests\XbmcProviderTest.cs" />
+    <Compile Include="ProviderTests\DiskScanProviderTest.cs" />
+    <Compile Include="ProviderTests\EpisodeProviderTest_GetEpisodesByParseResult.cs" />
+    <Compile Include="ProviderTests\DiskScanProviderTest_ImportFile.cs" />
     <Compile Include="FluentTest.cs" />
-    <Compile Include="LogProviderTest.cs" />
-    <Compile Include="UpcomingEpisodesProviderTest.cs" />
-    <Compile Include="MediaFileProvider_GetNewFilenameTest.cs" />
+    <Compile Include="ProviderTests\LogProviderTest.cs" />
+    <Compile Include="ProviderTests\UpcomingEpisodesProviderTest.cs" />
+    <Compile Include="ProviderTests\MediaFileProvider_GetNewFilenameTest.cs" />
     <Compile Include="dbBenchmark.cs" />
     <Compile Include="Framework\TestBase.cs" />
-    <Compile Include="InventoryProvider_IsMonitoredTest.cs" />
-    <Compile Include="DownloadProviderTest.cs" />
-    <Compile Include="SearchProviderTest_Episode.cs" />
+    <Compile Include="ProviderTests\InventoryProvider_IsMonitoredTest.cs" />
+    <Compile Include="ProviderTests\DownloadProviderTest.cs" />
+    <Compile Include="ProviderTests\SearchProviderTest_Episode.cs" />
     <Compile Include="EpisodeStatusTest.cs" />
-    <Compile Include="ImportNewSeriesJobTest.cs" />
-    <Compile Include="DiskScanJobTest.cs" />
+    <Compile Include="JobTests\ImportNewSeriesJobTest.cs" />
+    <Compile Include="JobTests\DiskScanJobTest.cs" />
     <Compile Include="IndexerTests.cs" />
-    <Compile Include="InventoryProvider_QualityNeededTest.cs" />
+    <Compile Include="ProviderTests\InventoryProvider_QualityNeededTest.cs" />
     <Compile Include="Framework\AutoMoq\AutoMoqer.cs" />
     <Compile Include="Framework\AutoMoq\Unity\AutoMockingBuilderStrategy.cs">
       <SubType>Code</SubType>
@@ -131,23 +131,23 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Framework\ExceptionVerification.cs" />
-    <Compile Include="JobProviderTest.cs" />
+    <Compile Include="ProviderTests\JobProviderTest.cs" />
     <Compile Include="QualityTest.cs" />
-    <Compile Include="RootDirProviderTest.cs" />
-    <Compile Include="IndexerProviderTest.cs" />
-    <Compile Include="HistoryProviderTest.cs" />
-    <Compile Include="MediaFileProviderTests.cs" />
-    <Compile Include="ConfigProviderTest.cs" />
-    <Compile Include="EpisodeProviderTest.cs" />
+    <Compile Include="ProviderTests\RootDirProviderTest.cs" />
+    <Compile Include="ProviderTests\IndexerProviderTest.cs" />
+    <Compile Include="ProviderTests\HistoryProviderTest.cs" />
+    <Compile Include="ProviderTests\MediaFileProviderTests.cs" />
+    <Compile Include="ProviderTests\ConfigProviderTest.cs" />
+    <Compile Include="ProviderTests\EpisodeProviderTest.cs" />
     <Compile Include="Framework\Fixtures.cs" />
     <Compile Include="Framework\MockLib.cs" />
     <Compile Include="ParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QualityProfileTest.cs" />
-    <Compile Include="SabProviderTest.cs" />
+    <Compile Include="ProviderTests\SabProviderTest.cs" />
     <Compile Include="SceneMappingTest.cs" />
-    <Compile Include="SeriesProviderTest.cs" />
-    <Compile Include="TvDbProviderTest.cs" />
+    <Compile Include="ProviderTests\SeriesProviderTest.cs" />
+    <Compile Include="ProviderTests\TvDbProviderTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NzbDrone.Core\NzbDrone.Core.csproj">
