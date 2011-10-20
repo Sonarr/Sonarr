@@ -31,8 +31,8 @@ namespace NzbDrone.Core.Test
             var tvDbSeries = Builder<TvdbSeries>.CreateNew().With(
                 c => c.Episodes =
                      new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(episodeCount).
-                                               WhereAll()
-                                               .Have(l => l.Language = new TvdbLanguage(0, "eng", "a"))
+                                               All()
+                                               .With(l => l.Language = new TvdbLanguage(0, "eng", "a"))
                                                .Build())
                 ).With(c => c.Id = seriesId).Build();
 
@@ -71,8 +71,8 @@ namespace NzbDrone.Core.Test
             var tvDbSeries = Builder<TvdbSeries>.CreateNew().With(
                 c => c.Episodes =
                      new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(episodeCount).
-                                               WhereAll()
-                                               .Have(l => l.Language = new TvdbLanguage(0, "eng", "a"))
+                                               All()
+                                               .With(l => l.Language = new TvdbLanguage(0, "eng", "a"))
                                                .Build())
                 ).With(c => c.Id = seriesId).Build();
 
@@ -111,8 +111,8 @@ namespace NzbDrone.Core.Test
             var tvDbSeries = Builder<TvdbSeries>.CreateNew().With(
                 c => c.Episodes =
                      new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(episodeCount).
-                                               WhereAll()
-                                               .Have(l => l.Language = new TvdbLanguage(0, "eng", "a"))
+                                               All()
+                                               .With(l => l.Language = new TvdbLanguage(0, "eng", "a"))
                                                .Build())
                 ).With(c => c.Id = seriesId).Build();
 
@@ -151,8 +151,8 @@ namespace NzbDrone.Core.Test
             var tvDbSeries = Builder<TvdbSeries>.CreateNew().With(
                 c => c.Episodes =
                      new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(episodeCount).
-                                               WhereAll()
-                                               .Have(l => l.Language = new TvdbLanguage(0, "eng", "a"))
+                                               All()
+                                               .With(l => l.Language = new TvdbLanguage(0, "eng", "a"))
                                                .Build())
                 ).With(c => c.Id = seriesId).Build();
 
@@ -194,8 +194,8 @@ namespace NzbDrone.Core.Test
             var tvDbSeries = Builder<TvdbSeries>.CreateNew().With(
                 c => c.Episodes =
                      new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(episodeCount).
-                                               WhereAll()
-                                               .Have(l => l.Language = new TvdbLanguage(0, "eng", "a"))
+                                               All()
+                                               .With(l => l.Language = new TvdbLanguage(0, "eng", "a"))
                                                .Build())
                 ).With(c => c.Id = seriesId).Build();
 

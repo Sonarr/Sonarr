@@ -102,9 +102,9 @@ namespace NzbDrone.Core.Test
             var notification = new ProgressNotification("Backlog Search Job Test");
 
             var episodes = Builder<Episode>.CreateListOfSize(5)
-                .WhereAll()
-                .Have(e => e.SeriesId = 1)
-                .Have(e => e.SeasonNumber = 1)
+                .All()
+                .With(e => e.SeriesId = 1)
+                .With(e => e.SeasonNumber = 1)
                 .Build();
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
@@ -116,7 +116,7 @@ namespace NzbDrone.Core.Test
                 .Setup(s => s.Start(notification, It.IsAny<int>(), 0)).Verifiable();
 
             mocker.GetMock<EpisodeProvider>()
-                .Setup(s => s.GetEpisodeNumbersBySeason(1, 1)).Returns(new List<int> {1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
+                .Setup(s => s.GetEpisodeNumbersBySeason(1, 1)).Returns(new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
 
             //Act
             mocker.Resolve<BacklogSearchJob>().Start(notification, 0, 0);
@@ -136,9 +136,9 @@ namespace NzbDrone.Core.Test
             var notification = new ProgressNotification("Backlog Search Job Test");
 
             var episodes = Builder<Episode>.CreateListOfSize(5)
-                .WhereAll()
-                .Have(e => e.SeriesId = 1)
-                .Have(e => e.SeasonNumber = 1)
+                .All()
+                .With(e => e.SeriesId = 1)
+                .With(e => e.SeasonNumber = 1)
                 .Build();
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
@@ -170,9 +170,9 @@ namespace NzbDrone.Core.Test
             var notification = new ProgressNotification("Backlog Search Job Test");
 
             var episodes = Builder<Episode>.CreateListOfSize(10)
-                .WhereTheFirst(5)
-                .Have(e => e.SeriesId = 1)
-                .Have(e => e.SeasonNumber = 1)
+                .TheFirst(5)
+                .With(e => e.SeriesId = 1)
+                .With(e => e.SeasonNumber = 1)
                 .Build();
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
@@ -187,7 +187,7 @@ namespace NzbDrone.Core.Test
                 .Setup(s => s.Start(notification, It.IsAny<int>(), 0)).Verifiable();
 
             mocker.GetMock<EpisodeProvider>()
-                .Setup(s => s.GetEpisodeNumbersBySeason(1, 1)).Returns(new List<int>{ 1, 2, 3, 4, 5 });
+                .Setup(s => s.GetEpisodeNumbersBySeason(1, 1)).Returns(new List<int> { 1, 2, 3, 4, 5 });
 
             //Act
             mocker.Resolve<BacklogSearchJob>().Start(notification, 0, 0);

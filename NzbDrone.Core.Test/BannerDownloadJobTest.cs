@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Test
             //Setup
             var fakeSeries = Builder<Series>.CreateListOfSize(10)
                 .WhereRandom(2)
-                .Have(s => s.BannerUrl = null)
+                .With(s => s.BannerUrl = null)
                 .Build();
 
             var mocker = new AutoMoqer(MockBehavior.Strict);

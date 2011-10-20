@@ -125,6 +125,9 @@ namespace NzbDrone.Core.Providers
         {
             var result = new List<Episode>();
 
+            if (parseResult.EpisodeNumbers == null)
+                return result;
+
             foreach (var episodeNumber in parseResult.EpisodeNumbers)
             {
                 var episodeInfo = GetEpisode(parseResult.Series.SeriesId, parseResult.SeasonNumber, episodeNumber);
@@ -159,7 +162,7 @@ namespace NzbDrone.Core.Providers
                 }
                 else
                 {
-                    Logger.Debug("Unable to file {0}-S{1:00}E{2:00}", parseResult.Series.Title, parseResult.SeasonNumber, episodeNumber);
+                    Logger.Debug("Unable to find {0}-S{1:00}E{2:00}", parseResult.Series.Title, parseResult.SeasonNumber, episodeNumber);
                 }
             }
 

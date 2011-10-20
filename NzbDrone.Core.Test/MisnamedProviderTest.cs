@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Test
                 .Build();
 
             var episodeFiles = Builder<EpisodeFile>.CreateListOfSize(2)
-                .WhereTheFirst(1)
+                .TheFirst(1)
                 .Has(f => f.EpisodeFileId = 1)
                 .Has(f => f.Path = @"C:\Test\Title1.avi")
                 .AndTheNext(1)
@@ -36,9 +36,9 @@ namespace NzbDrone.Core.Test
                 .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(2)
-                .WhereAll()
-                .Have(e => e.Series = series)
-                .WhereTheFirst(1)
+                .All()
+                .With(e => e.Series = series)
+                .TheFirst(1)
                 .Has(e => e.EpisodeFileId = 1)
                 .Has(e => e.EpisodeFile = episodeFiles[0])
                 .AndTheNext(1)
@@ -76,7 +76,7 @@ namespace NzbDrone.Core.Test
                 .Build();
 
             var episodeFiles = Builder<EpisodeFile>.CreateListOfSize(2)
-                .WhereTheFirst(1)
+                .TheFirst(1)
                 .Has(f => f.EpisodeFileId = 1)
                 .Has(f => f.Path = @"C:\Test\Title1.avi")
                 .AndTheNext(1)
@@ -85,9 +85,9 @@ namespace NzbDrone.Core.Test
                 .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(2)
-                .WhereAll()
-                .Have(e => e.Series = series)
-                .WhereTheFirst(1)
+                .All()
+                .With(e => e.Series = series)
+                .TheFirst(1)
                 .Has(e => e.EpisodeFileId = 1)
                 .Has(e => e.EpisodeFile = episodeFiles[0])
                 .AndTheNext(1)
@@ -125,7 +125,7 @@ namespace NzbDrone.Core.Test
                 .Build();
 
             var episodeFiles = Builder<EpisodeFile>.CreateListOfSize(2)
-                .WhereTheFirst(1)
+                .TheFirst(1)
                 .Has(f => f.EpisodeFileId = 1)
                 .Has(f => f.Path = @"C:\Test\Title1.avi")
                 .AndTheNext(1)
@@ -134,9 +134,9 @@ namespace NzbDrone.Core.Test
                 .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(2)
-                .WhereAll()
-                .Have(e => e.Series = series)
-                .WhereTheFirst(1)
+                .All()
+                .With(e => e.Series = series)
+                .TheFirst(1)
                 .Has(e => e.EpisodeFileId = 1)
                 .Has(e => e.EpisodeFile = episodeFiles[0])
                 .AndTheNext(1)
@@ -176,7 +176,7 @@ namespace NzbDrone.Core.Test
                 .Build();
 
             var episodeFiles = Builder<EpisodeFile>.CreateListOfSize(2)
-                .WhereTheFirst(1)
+                .TheFirst(1)
                 .Has(f => f.EpisodeFileId = 1)
                 .Has(f => f.Path = @"C:\Test\Title1.avi")
                 .AndTheNext(1)
@@ -185,9 +185,9 @@ namespace NzbDrone.Core.Test
                 .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(3)
-                .WhereAll()
-                .Have(e => e.Series = series)
-                .WhereTheFirst(2)
+                .All()
+                .With(e => e.Series = series)
+                .TheFirst(2)
                 .Has(e => e.EpisodeFileId = 1)
                 .Has(e => e.EpisodeFile = episodeFiles[0])
                 .AndTheNext(1)
@@ -227,7 +227,7 @@ namespace NzbDrone.Core.Test
                 .Build();
 
             var episodeFiles = Builder<EpisodeFile>.CreateListOfSize(2)
-                .WhereTheFirst(1)
+                .TheFirst(1)
                 .Has(f => f.EpisodeFileId = 1)
                 .Has(f => f.Path = @"C:\Test\Title1.avi")
                 .AndTheNext(1)
@@ -236,9 +236,9 @@ namespace NzbDrone.Core.Test
                 .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(3)
-                .WhereAll()
-                .Have(e => e.Series = series)
-                .WhereTheFirst(2)
+                .All()
+                .With(e => e.Series = series)
+                .TheFirst(2)
                 .Has(e => e.EpisodeFileId = 1)
                 .Has(e => e.EpisodeFile = episodeFiles[0])
                 .AndTheNext(1)

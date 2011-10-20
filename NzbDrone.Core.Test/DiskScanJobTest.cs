@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Test
         public void job_with_no_target_should_scan_all_series()
         {
             var series = Builder<Series>.CreateListOfSize(2)
-                .WhereTheFirst(1).Has(s => s.SeriesId = 12)
+                .TheFirst(1).Has(s => s.SeriesId = 12)
                 .AndTheNext(1).Has(s => s.SeriesId = 15)
                 .Build();
 
@@ -76,7 +76,7 @@ namespace NzbDrone.Core.Test
         public void failed_scan_should_not_terminated_job()
         {
             var series = Builder<Series>.CreateListOfSize(2)
-                .WhereTheFirst(1).Has(s => s.SeriesId = 12)
+                .TheFirst(1).Has(s => s.SeriesId = 12)
                 .AndTheNext(1).Has(s => s.SeriesId = 15)
                 .Build();
 
@@ -105,7 +105,7 @@ namespace NzbDrone.Core.Test
         public void job_with_no_target_should_scan_series_with_episodes()
         {
             var series = Builder<Series>.CreateListOfSize(2)
-                .WhereTheFirst(1).Has(s => s.SeriesId = 12)
+                .TheFirst(1).Has(s => s.SeriesId = 12)
                 .AndTheNext(1).Has(s => s.SeriesId = 15)
                 .Build();
 

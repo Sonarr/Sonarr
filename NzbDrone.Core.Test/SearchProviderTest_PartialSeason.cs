@@ -30,16 +30,16 @@ namespace NzbDrone.Core.Test
                 .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(5)
-                .WhereAll()
-                .Have(e => e.Series = series)
-                .Have(e => e.SeriesId = 1)
-                .Have(e => e.SeasonNumber = 1)
-                .Have(e => e.Ignored = false)
+                .All()
+                .With(e => e.Series = series)
+                .With(e => e.SeriesId = 1)
+                .With(e => e.SeasonNumber = 1)
+                .With(e => e.Ignored = false)
                 .Build();
 
             var parseResults = Builder<EpisodeParseResult>.CreateListOfSize(4)
-                .WhereAll()
-                .Have(e => e.EpisodeNumbers = Builder<int>.CreateListOfSize(2).Build().ToList())
+                .All()
+                .With(e => e.EpisodeNumbers = Builder<int>.CreateListOfSize(2).Build().ToList())
                 .Build();
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
@@ -93,16 +93,16 @@ namespace NzbDrone.Core.Test
                 .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(5)
-                .WhereAll()
-                .Have(e => e.Series = series)
-                .Have(e => e.SeriesId = 1)
-                .Have(e => e.SeasonNumber = 1)
-                .Have(e => e.Ignored = false)
+                .All()
+                .With(e => e.Series = series)
+                .With(e => e.SeriesId = 1)
+                .With(e => e.SeasonNumber = 1)
+                .With(e => e.Ignored = false)
                 .Build();
 
             var parseResults = Builder<EpisodeParseResult>.CreateListOfSize(4)
-                .WhereAll()
-                .Have(e => e.EpisodeNumbers = Builder<int>.CreateListOfSize(2).Build().ToList())
+                .All()
+                .With(e => e.EpisodeNumbers = Builder<int>.CreateListOfSize(2).Build().ToList())
                 .Build();
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
@@ -150,9 +150,9 @@ namespace NzbDrone.Core.Test
                 .Build();
 
             var parseResults = Builder<EpisodeParseResult>.CreateListOfSize(4)
-                .WhereAll()
-                .Have(e => e.EpisodeNumbers = Builder<int>.CreateListOfSize(2).Build().ToList())
-                .Have(e => e.Series = series)
+                .All()
+                .With(e => e.EpisodeNumbers = Builder<int>.CreateListOfSize(2).Build().ToList())
+                .With(e => e.Series = series)
                 .Build();
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
@@ -184,7 +184,7 @@ namespace NzbDrone.Core.Test
                 .Build();
 
             var parseResults = Builder<EpisodeParseResult>.CreateListOfSize(4)
-                .WhereTheFirst(1)
+                .TheFirst(1)
                 .Has(p => p.CleanTitle = "title")
                 .Has(p => p.SeasonNumber = 1)
                 .Has(p => p.FullSeason = true)

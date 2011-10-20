@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Test
 
             var fakeSeries = Builder<Series>.CreateNew().Build();
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
-                .WhereAll().Have(e => e.SeriesId = 1).Have(e => e.EpisodeFileId = 0).Build();
+                .All().With(e => e.SeriesId = 1).With(e => e.EpisodeFileId = 0).Build();
 
             db.Insert(fakeSeries);
             db.InsertMany(fakeEpisodes);
@@ -98,7 +98,7 @@ namespace NzbDrone.Core.Test
             var fakeSeries = Builder<Series>.CreateNew().Build();
             var fakeFile = Builder<EpisodeFile>.CreateNew().With(f => f.EpisodeFileId).Build();
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
-                .WhereAll().Have(e => e.SeriesId = 1).WhereTheFirst(1).Have(e => e.EpisodeFileId = 1).Have(e => e.EpisodeFile = fakeFile).Build();
+                .All().With(e => e.SeriesId = 1).TheFirst(1).With(e => e.EpisodeFileId = 1).With(e => e.EpisodeFile = fakeFile).Build();
 
             db.Insert(fakeSeries);
             db.InsertMany(fakeEpisodes);
@@ -124,7 +124,7 @@ namespace NzbDrone.Core.Test
             mocker.Resolve<SeriesProvider>();
 
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
-                    .WhereAll().Have(e => e.SeriesId = 1).Build();
+                    .All().With(e => e.SeriesId = 1).Build();
 
 
             db.InsertMany(fakeEpisodes);
@@ -154,7 +154,7 @@ namespace NzbDrone.Core.Test
 
             var fakeSeries = Builder<Series>.CreateNew().With(s => s.SeriesId = 12).Build();
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
-                .WhereAll().Have(e => e.SeriesId = 12).Build();
+                .All().With(e => e.SeriesId = 12).Build();
 
             mocker.GetMock<SeriesProvider>()
                 .Setup(c => c.GetSeries(12))
@@ -225,9 +225,9 @@ namespace NzbDrone.Core.Test
                 .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(10)
-                .WhereAll().Have(c => c.SeriesId = 12)
-                .WhereTheFirst(5).Have(c => c.SeasonNumber = 1)
-                .AndTheRemaining().Have(c => c.SeasonNumber = 2).Build();
+                .All().With(c => c.SeriesId = 12).And(c => c.SeasonNumber = 2)
+                .TheFirst(5).With(c => c.SeasonNumber = 1)
+                .Build();
 
             var db = MockLib.GetEmptyDatabase();
             var mocker = new AutoMoqer();
@@ -254,8 +254,8 @@ namespace NzbDrone.Core.Test
             var fakeEpisodes = Builder<TvdbSeries>.CreateNew().With(
                 c => c.Episodes =
                      new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(episodeCount).
-                                               WhereAll()
-                                               .Have(l => l.Language = new TvdbLanguage(0, "eng", "a"))
+                                               All()
+                                               .With(l => l.Language = new TvdbLanguage(0, "eng", "a"))
                                                .Build())
                 ).With(c => c.Id = seriesId).Build();
 
@@ -293,10 +293,9 @@ namespace NzbDrone.Core.Test
             var fakeEpisodes = Builder<TvdbSeries>.CreateNew().With(
                 c => c.Episodes =
                      new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(10).
-                                               WhereAll()
-                                               .Have(l => l.Language = new TvdbLanguage(0, "eng", "a"))
-                                               .WhereTheFirst(7).Have(e => e.FirstAired = new DateTime(1800, 1, 1))
-                                               .AndTheRemaining().Have(e => e.FirstAired = DateTime.Now)
+                                               All()
+                                               .With(l => l.Language = new TvdbLanguage(0, "eng", "a")).And(e => e.FirstAired = DateTime.Now)
+                                               .TheFirst(7).With(e => e.FirstAired = new DateTime(1800, 1, 1))
                                                .Build())
                 ).With(c => c.Id = seriesId).Build();
 
@@ -336,9 +335,9 @@ namespace NzbDrone.Core.Test
             var fakeEpisodes = Builder<TvdbSeries>.CreateNew().With(
                 c => c.Episodes =
                      new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(episodeCount).
-                                               WhereAll()
-                                               .Have(l => l.Language = new TvdbLanguage(0, "eng", "a"))
-                                               .WhereTheFirst(1)
+                                               All()
+                                               .With(l => l.Language = new TvdbLanguage(0, "eng", "a"))
+                                               .TheFirst(1)
                                                .Has(e => e.EpisodeNumber = 0)
                                                .Has(e => e.SeasonNumber = 15)
                                                .Build())
@@ -447,7 +446,7 @@ namespace NzbDrone.Core.Test
                 .With(c => c.Id = seriesId)
                 .With(c => c.Episodes = new List<TvdbEpisode>(
                                                                 Builder<TvdbEpisode>.CreateListOfSize(1)
-                                                                .WhereAll().Have(g => g.Id = 99)
+                                                                .All().With(g => g.Id = 99)
                                                                 .Build())
                                                              )
                 .Build();
@@ -565,10 +564,10 @@ namespace NzbDrone.Core.Test
             mocker.SetConstant(db);
 
             var episodes = Builder<Episode>.CreateListOfSize(4)
-                .WhereAll()
-                .Have(c => c.Ignored = true)
-                .Have(c => c.SeriesId = 10)
-                .Have(c => c.SeasonNumber = 2)
+                .All()
+                .With(c => c.Ignored = true)
+                .With(c => c.SeriesId = 10)
+                .With(c => c.SeasonNumber = 2)
                 .Build();
 
             episodes.ToList().ForEach(c => db.Insert(c));
@@ -588,10 +587,10 @@ namespace NzbDrone.Core.Test
             mocker.SetConstant(db);
 
             var episodes = Builder<Episode>.CreateListOfSize(4)
-                .WhereAll()
-                .Have(c => c.Ignored = false)
-                .Have(c => c.SeriesId = 10)
-                .Have(c => c.SeasonNumber = 2)
+                .All()
+                .With(c => c.Ignored = false)
+                .With(c => c.SeriesId = 10)
+                .With(c => c.SeasonNumber = 2)
                 .Build();
 
             episodes.ToList().ForEach(c => db.Insert(c));
@@ -611,10 +610,10 @@ namespace NzbDrone.Core.Test
             mocker.SetConstant(db);
 
             var episodes = Builder<Episode>.CreateListOfSize(4)
-                .WhereAll()
-                .Have(c => c.SeriesId = 10)
-                .Have(c => c.SeasonNumber = 2)
-                 .Have(c => c.Ignored = true)
+                .All()
+                .With(c => c.SeriesId = 10)
+                .With(c => c.SeasonNumber = 2)
+                 .With(c => c.Ignored = true)
                 .Build();
 
             episodes[2].Ignored = false;
@@ -637,10 +636,10 @@ namespace NzbDrone.Core.Test
             mocker.SetConstant(db);
 
             var episodes = Builder<Episode>.CreateListOfSize(4)
-                .WhereAll()
-                .Have(c => c.SeriesId = 10)
-                .Have(c => c.SeasonNumber = 3)
-                 .Have(c => c.Ignored = true)
+                .All()
+                .With(c => c.SeriesId = 10)
+                .With(c => c.SeasonNumber = 3)
+                 .With(c => c.Ignored = true)
                 .Build();
 
             episodes.ToList().ForEach(c => db.Insert(c));
@@ -660,10 +659,10 @@ namespace NzbDrone.Core.Test
             mocker.SetConstant(db);
 
             var episodes = Builder<Episode>.CreateListOfSize(4)
-                .WhereAll()
-                .Have(c => c.SeriesId = 10)
-                .Have(c => c.SeasonNumber = 3)
-                .Have(c => c.Ignored = true)
+                .All()
+                .With(c => c.SeriesId = 10)
+                .With(c => c.SeasonNumber = 3)
+                .With(c => c.Ignored = true)
                 .Build();
 
             episodes.ToList().ForEach(c => db.Insert(c));
@@ -683,10 +682,10 @@ namespace NzbDrone.Core.Test
             mocker.SetConstant(db);
 
             var episodes = Builder<Episode>.CreateListOfSize(4)
-                .WhereAll()
-                .Have(c => c.SeriesId = 10)
-                .Have(c => c.SeasonNumber = 3)
-                .Have(c => c.Ignored = false)
+                .All()
+                .With(c => c.SeriesId = 10)
+                .With(c => c.SeasonNumber = 3)
+                .With(c => c.Ignored = false)
                 .Build();
 
             episodes.ToList().ForEach(c => db.Insert(c));
@@ -734,10 +733,10 @@ namespace NzbDrone.Core.Test
             mocker.SetConstant(db);
 
             var episodes = Builder<Episode>.CreateListOfSize(4)
-                .WhereAll()
-                .Have(c => c.SeriesId = 10)
-                .Have(c => c.SeasonNumber = 0)
-                .Have(c => c.Ignored = false)
+                .All()
+                .With(c => c.SeriesId = 10)
+                .With(c => c.SeasonNumber = 0)
+                .With(c => c.Ignored = false)
                 .Build();
 
             episodes.ToList().ForEach(c => db.Insert(c));
@@ -803,7 +802,7 @@ namespace NzbDrone.Core.Test
             var fakeSeries = Builder<Series>.CreateNew().Build();
             var fakeFile = Builder<EpisodeFile>.CreateNew().With(f => f.EpisodeFileId).Build();
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
-                .WhereAll().Have(e => e.SeriesId = 1).WhereTheFirst(1).Have(e => e.EpisodeFileId = 1).Have(e => e.EpisodeFile = fakeFile).Build();
+                .All().With(e => e.SeriesId = 1).TheFirst(1).With(e => e.EpisodeFileId = 1).With(e => e.EpisodeFile = fakeFile).Build();
 
             db.Insert(fakeSeries);
             db.InsertMany(fakeEpisodes);
@@ -827,7 +826,7 @@ namespace NzbDrone.Core.Test
 
             var fakeSeries = Builder<Series>.CreateNew().Build();
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
-                .WhereAll().Have(e => e.SeriesId = 1).WhereTheFirst(1).Have(e => e.EpisodeFileId = 0).Build();
+                .All().With(e => e.SeriesId = 1).TheFirst(1).With(e => e.EpisodeFileId = 0).Build();
 
             db.Insert(fakeSeries);
             db.InsertMany(fakeEpisodes);
@@ -851,7 +850,7 @@ namespace NzbDrone.Core.Test
             var fakeSeries = Builder<Series>.CreateNew().Build();
             var fakeFile = Builder<EpisodeFile>.CreateNew().With(f => f.EpisodeFileId).Build();
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
-                .WhereAll().Have(e => e.SeriesId = 1).WhereTheFirst(1).Have(e => e.EpisodeFileId = 1).Have(e => e.EpisodeFile = fakeFile).Build();
+                .All().With(e => e.SeriesId = 1).TheFirst(1).With(e => e.EpisodeFileId = 1).With(e => e.EpisodeFile = fakeFile).Build();
 
             db.Insert(fakeSeries);
             db.InsertMany(fakeEpisodes);
@@ -875,7 +874,7 @@ namespace NzbDrone.Core.Test
 
             var fakeSeries = Builder<Series>.CreateNew().Build();
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
-                .WhereAll().Have(e => e.SeriesId = 1).WhereTheFirst(1).Have(e => e.EpisodeFileId = 0).Build();
+                .All().With(e => e.SeriesId = 1).TheFirst(1).With(e => e.EpisodeFileId = 0).Build();
 
             db.InsertMany(fakeEpisodes);
             db.Insert(fakeSeries);
@@ -897,7 +896,7 @@ namespace NzbDrone.Core.Test
             mocker.SetConstant(db);
 
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
-                .WhereAll().Have(e => e.GrabDate = null)
+                .All().With(e => e.GrabDate = null)
                 .Build();
 
             db.InsertMany(fakeEpisodes);
@@ -921,10 +920,10 @@ namespace NzbDrone.Core.Test
             mocker.SetConstant(db);
 
             var episodes = Builder<Episode>.CreateListOfSize(4)
-                .WhereAll()
-                .Have(c => c.SeriesId = 10)
-                .Have(c => c.SeasonNumber = 1)
-                .Have(c => c.Ignored = true)
+                .All()
+                .With(c => c.SeriesId = 10)
+                .With(c => c.SeasonNumber = 1)
+                .With(c => c.Ignored = true)
                 .Build().ToList();
 
             episodes.ForEach(c => db.Insert(c));
@@ -957,10 +956,10 @@ namespace NzbDrone.Core.Test
             mocker.SetConstant(db);
 
             var episodes = Builder<Episode>.CreateListOfSize(4)
-                .WhereAll()
-                .Have(c => c.SeriesId = 10)
-                .Have(c => c.SeasonNumber = 1)
-                .Have(c => c.Ignored = false)
+                .All()
+                .With(c => c.SeriesId = 10)
+                .With(c => c.SeasonNumber = 1)
+                .With(c => c.Ignored = false)
                 .Build().ToList();
 
             episodes.ForEach(c => db.Insert(c));
@@ -993,14 +992,13 @@ namespace NzbDrone.Core.Test
             mocker.SetConstant(db);
 
             var episodes = Builder<Episode>.CreateListOfSize(4)
-                .WhereAll()
-                .Have(c => c.SeriesId = 10)
-                .Have(c => c.SeasonNumber = 1)
-                .WhereTheFirst(2)
-                .Have(c => c.Ignored = false)
-                .AndTheRemaining()
-                .Have(c => c.Ignored = true)
-                .Build().ToList();
+                .All()
+                .With(c => c.SeriesId = 10)
+                .And(c => c.SeasonNumber = 1)
+                .And(c => c.Ignored = true)
+                .TheFirst(2)
+                .With(c => c.Ignored = false)
+               .Build().ToList();
 
             episodes.ForEach(c => db.Insert(c));
 
@@ -1032,10 +1030,10 @@ namespace NzbDrone.Core.Test
             mocker.SetConstant(db);
 
             var episodes = Builder<Episode>.CreateListOfSize(4)
-                .WhereAll()
-                .Have(c => c.SeriesId = 10)
-                .Have(c => c.SeasonNumber = 1)
-                .Have(c => c.Ignored = false)
+                .All()
+                .With(c => c.SeriesId = 10)
+                .With(c => c.SeasonNumber = 1)
+                .With(c => c.Ignored = false)
                 .Build().ToList();
 
             episodes.ForEach(c => db.Insert(c));
@@ -1060,10 +1058,10 @@ namespace NzbDrone.Core.Test
             mocker.SetConstant(db);
 
             var episodes = Builder<Episode>.CreateListOfSize(4)
-                .WhereAll()
-                .Have(c => c.SeriesId = 10)
-                .Have(c => c.SeasonNumber = 1)
-                .Have(c => c.Ignored = true)
+                .All()
+                .With(c => c.SeriesId = 10)
+                .With(c => c.SeasonNumber = 1)
+                .With(c => c.Ignored = true)
                 .Build().ToList();
 
             episodes.ForEach(c => db.Insert(c));
@@ -1088,10 +1086,10 @@ namespace NzbDrone.Core.Test
             mocker.SetConstant(db);
 
             var episodes = Builder<Episode>.CreateListOfSize(4)
-                .WhereAll()
-                .Have(c => c.SeriesId = 10)
-                .Have(c => c.SeasonNumber = 1)
-                .Have(c => c.Ignored = false)
+                .All()
+                .With(c => c.SeriesId = 10)
+                .With(c => c.SeasonNumber = 1)
+                .With(c => c.Ignored = false)
                 .Build().ToList();
 
             episodes.ForEach(c => db.Insert(c));
@@ -1116,10 +1114,10 @@ namespace NzbDrone.Core.Test
             mocker.SetConstant(db);
 
             var episodes = Builder<Episode>.CreateListOfSize(4)
-                .WhereAll()
-                .Have(c => c.SeriesId = 10)
-                .Have(c => c.SeasonNumber = 1)
-                .Have(c => c.Ignored = true)
+                .All()
+                .With(c => c.SeriesId = 10)
+                .With(c => c.SeasonNumber = 1)
+                .With(c => c.Ignored = true)
                 .Build().ToList();
 
             episodes.ForEach(c => db.Insert(c));
@@ -1144,13 +1142,12 @@ namespace NzbDrone.Core.Test
             mocker.SetConstant(db);
 
             var episodes = Builder<Episode>.CreateListOfSize(4)
-                .WhereAll()
-                .Have(c => c.SeriesId = 10)
-                .Have(c => c.SeasonNumber = 1)
-                .WhereTheFirst(2)
-                .Have(c => c.Ignored = false)
-                .AndTheRemaining()
-                .Have(c => c.Ignored = true)
+                .All()
+                .With(c => c.SeriesId = 10)
+                .With(c => c.SeasonNumber = 1)
+                .With(c => c.Ignored = true)
+                .TheFirst(2)
+                .With(c => c.Ignored = false)
                 .Build().ToList();
 
             episodes.ForEach(c => db.Insert(c));
@@ -1179,27 +1176,25 @@ namespace NzbDrone.Core.Test
                 .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(4)
-                .WhereAll()
-                .Have(c => c.SeriesId = 10)
-                .Have(c => c.SeasonNumber = 1)
-                .Have(c => c.AirDate = DateTime.Today.AddDays(-4))
-                .Have(c => c.Ignored = true)
-                .WhereTheFirst(2)
-                .Have(c => c.EpisodeFileId = 0)
+                .All()
+                .With(c => c.SeriesId = 10)
+                .With(c => c.SeasonNumber = 1)
+                .With(c => c.AirDate = DateTime.Today.AddDays(-4))
+                .With(c => c.Ignored = true)
+                .TheFirst(2)
+                .With(c => c.EpisodeFileId = 0)
                 .WhereSection(1, 2)
-                .Have(c => c.Ignored = false)
+                .With(c => c.Ignored = false)
                 .Build().ToList();
 
             var specials = Builder<Episode>.CreateListOfSize(2)
-                .WhereAll()
-                .Have(c => c.SeriesId = 10)
-                .Have(c => c.SeasonNumber = 0)
-                .Have(c => c.AirDate = DateTime.Today.AddDays(-4))
-                .Have(c => c.EpisodeFileId = 0)
-                .WhereTheFirst(1)
-                .Have(c => c.Ignored = true)
-                .AndTheRemaining()
-                .Have(c => c.Ignored = false)
+                .All()
+                .With(c => c.SeriesId = 10)
+                .With(c => c.SeasonNumber = 0)
+                .With(c => c.AirDate = DateTime.Today.AddDays(-4))
+                .With(c => c.EpisodeFileId = 0)
+                .With(c => c.Ignored = false)
+                .TheFirst(1).With(c => c.Ignored = true)
                 .Build().ToList();
 
             db.Insert(series);
@@ -1228,27 +1223,26 @@ namespace NzbDrone.Core.Test
                 .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(4)
-                .WhereAll()
-                .Have(c => c.SeriesId = 10)
-                .Have(c => c.SeasonNumber = 1)
-                .Have(c => c.AirDate = DateTime.Today.AddDays(-4))
-                .Have(c => c.Ignored = true)
-                .WhereTheFirst(2)
-                .Have(c => c.EpisodeFileId = 0)
+                .All()
+                .With(c => c.SeriesId = 10)
+                .With(c => c.SeasonNumber = 1)
+                .With(c => c.AirDate = DateTime.Today.AddDays(-4))
+                .With(c => c.Ignored = true)
+                .TheFirst(2)
+                .With(c => c.EpisodeFileId = 0)
                 .WhereSection(1, 2)
-                .Have(c => c.Ignored = false)
+                .With(c => c.Ignored = false)
                 .Build().ToList();
 
             var specials = Builder<Episode>.CreateListOfSize(2)
-                .WhereAll()
-                .Have(c => c.SeriesId = 10)
-                .Have(c => c.SeasonNumber = 0)
-                .Have(c => c.AirDate = DateTime.Today.AddDays(-4))
-                .Have(c => c.EpisodeFileId = 0)
-                .WhereTheFirst(1)
-                .Have(c => c.Ignored = true)
-                .AndTheRemaining()
-                .Have(c => c.Ignored = false)
+                .All()
+                .With(c => c.SeriesId = 10)
+                .With(c => c.SeasonNumber = 0)
+                .With(c => c.AirDate = DateTime.Today.AddDays(-4))
+                .With(c => c.EpisodeFileId = 0)
+                .With(c => c.Ignored = false)
+                .TheFirst(1)
+                .With(c => c.Ignored = true)
                 .Build().ToList();
 
             db.Insert(series);
@@ -1281,13 +1275,13 @@ namespace NzbDrone.Core.Test
                 .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(2)
-                .WhereAll()
-                .Have(c => c.SeriesId = 10)
-                .Have(c => c.SeasonNumber = 1)
-                .Have(c => c.AirDate = DateTime.Today.AddDays(-4))
-                .Have(c => c.Ignored = true)
-                .Have(c => c.EpisodeFile = episodeFile)
-                .Have(c => c.EpisodeFileId = episodeFile.EpisodeFileId)
+                .All()
+                .With(c => c.SeriesId = 10)
+                .With(c => c.SeasonNumber = 1)
+                .With(c => c.AirDate = DateTime.Today.AddDays(-4))
+                .With(c => c.Ignored = true)
+                .With(c => c.EpisodeFile = episodeFile)
+                .With(c => c.EpisodeFileId = episodeFile.EpisodeFileId)
                 .Build().ToList();
 
             db.Insert(series);
@@ -1323,12 +1317,12 @@ namespace NzbDrone.Core.Test
                 .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(2)
-                .WhereAll()
-                .Have(c => c.SeriesId = 10)
-                .Have(c => c.SeasonNumber = 1)
-                .Have(c => c.AirDate = DateTime.Today.AddDays(-4))
-                .Have(c => c.Ignored = true)
-                .Have(c => c.EpisodeFileId = 0)
+                .All()
+                .With(c => c.SeriesId = 10)
+                .With(c => c.SeasonNumber = 1)
+                .With(c => c.AirDate = DateTime.Today.AddDays(-4))
+                .With(c => c.Ignored = true)
+                .With(c => c.EpisodeFileId = 0)
                 .Build().ToList();
 
             db.Insert(series);
@@ -1355,10 +1349,10 @@ namespace NzbDrone.Core.Test
                 .Build();
 
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(2)
-                .WhereAll()
-                .Have(c => c.SeriesId = 10)
-                .Have(c => c.SeasonNumber = 1)
-                .Have(c => c.EpisodeFileId = 12345)
+                .All()
+                .With(c => c.SeriesId = 10)
+                .With(c => c.SeasonNumber = 1)
+                .With(c => c.EpisodeFileId = 12345)
                 .Build();
 
             db.Insert(series);
@@ -1409,9 +1403,9 @@ namespace NzbDrone.Core.Test
             mocker.SetConstant(db);
 
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(10)
-                .WhereAll()
-                .Have(c => c.SeriesId = 10)
-                .Have(c => c.SeasonNumber = 1)
+                .All()
+                .With(c => c.SeriesId = 10)
+                .With(c => c.SeasonNumber = 1)
                 .Build();
 
             db.InsertMany(fakeEpisodes);
@@ -1431,9 +1425,9 @@ namespace NzbDrone.Core.Test
             mocker.SetConstant(db);
 
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(10)
-                .WhereAll()
-                .Have(c => c.SeriesId = 10)
-                .Have(c => c.SeasonNumber = 1)
+                .All()
+                .With(c => c.SeriesId = 10)
+                .With(c => c.SeasonNumber = 1)
                 .Build();
 
             db.InsertMany(fakeEpisodes);
@@ -1453,9 +1447,9 @@ namespace NzbDrone.Core.Test
             mocker.SetConstant(db);
 
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(10)
-                .WhereAll()
-                .Have(c => c.SeriesId = 10)
-                .Have(c => c.SeasonNumber = 1)
+                .All()
+                .With(c => c.SeriesId = 10)
+                .With(c => c.SeasonNumber = 1)
                 .Build();
 
             db.InsertMany(fakeEpisodes);
@@ -1485,10 +1479,10 @@ namespace NzbDrone.Core.Test
                 .Build();
 
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(episodeCount)
-                .WhereAll()
-                .Have(c => c.SeriesId = 12345)
-                .Have(c => c.SeasonNumber = 1)
-                .Have(c => c.PostDownloadStatus = PostDownloadStatusType.Unknown)
+                .All()
+                .With(c => c.SeriesId = 12345)
+                .With(c => c.SeasonNumber = 1)
+                .With(c => c.PostDownloadStatus = PostDownloadStatusType.Unknown)
                 .Build();
 
             db.Insert(fakeSeries);
@@ -1519,10 +1513,10 @@ namespace NzbDrone.Core.Test
                 .Build();
 
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(1)
-                .WhereAll()
-                .Have(c => c.SeriesId = 12345)
-                .Have(c => c.SeasonNumber = 1)
-                .Have(c => c.PostDownloadStatus = PostDownloadStatusType.Unknown)
+                .All()
+                .With(c => c.SeriesId = 12345)
+                .With(c => c.SeasonNumber = 1)
+                .With(c => c.PostDownloadStatus = PostDownloadStatusType.Unknown)
                 .Build();
 
             db.Insert(fakeSeries);
@@ -1531,7 +1525,7 @@ namespace NzbDrone.Core.Test
             mocker.GetMock<SeriesProvider>().Setup(s => s.FindSeries("officeus")).Returns(fakeSeries);
 
             //Act
-            mocker.Resolve<EpisodeProvider>().SetPostDownloadStatus(new List<int>{300}, postDownloadStatus);
+            mocker.Resolve<EpisodeProvider>().SetPostDownloadStatus(new List<int> { 300 }, postDownloadStatus);
 
             //Assert
             var result = db.Fetch<Episode>();

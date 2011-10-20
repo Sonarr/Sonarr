@@ -254,8 +254,8 @@ namespace NzbDrone.Core.Test
             var fakeSeries = Builder<Series>.CreateNew().Build();
 
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(2)
-                .WhereAll()
-                .Have(e => e.EpisodeFile = Builder<EpisodeFile>.CreateNew()
+                .All()
+                .With(e => e.EpisodeFile = Builder<EpisodeFile>.CreateNew()
                                                .With(f => f.Quality = QualityTypes.SDTV)
                                                .Build())
                 .Build();
@@ -289,8 +289,8 @@ namespace NzbDrone.Core.Test
             var fakeSeries = Builder<Series>.CreateNew().Build();
 
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(2)
-                .WhereAll()
-                .Have(e => e.EpisodeFile = Builder<EpisodeFile>.CreateNew()
+                .All()
+                .With(e => e.EpisodeFile = Builder<EpisodeFile>.CreateNew()
                                                .With(f => f.Quality = QualityTypes.Bluray720p)
                                                .Build())
                 .Build();
@@ -324,8 +324,8 @@ namespace NzbDrone.Core.Test
             var fakeSeries = Builder<Series>.CreateNew().Build();
 
             var fakeEpisodeFiles = Builder<EpisodeFile>.CreateListOfSize(2)
-                .WhereAll()
-                .Have(e => e.Quality = QualityTypes.SDTV)
+                .All()
+                .With(e => e.Quality = QualityTypes.SDTV)
                 .Build();
 
             var fakeEpisode1 = Builder<Episode>.CreateNew()

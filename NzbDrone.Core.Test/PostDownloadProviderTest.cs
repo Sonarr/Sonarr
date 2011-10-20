@@ -41,10 +41,10 @@ namespace NzbDrone.Core.Test
                 .Build();
 
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(episodeCount)
-                .WhereAll()
-                .Have(c => c.SeriesId = 12345)
-                .Have(c => c.SeasonNumber = 1)
-                .Have(c => c.PostDownloadStatus = PostDownloadStatusType.Unknown)
+                .All()
+                .With(c => c.SeriesId = 12345)
+                .With(c => c.SeasonNumber = 1)
+                .With(c => c.PostDownloadStatus = PostDownloadStatusType.Unknown)
                 .Build();
 
             var expectedEpisodesNumbers = fakeEpisodes.Select(e => e.EpisodeId).ToList();
@@ -200,8 +200,8 @@ namespace NzbDrone.Core.Test
                 .Build();
 
             var fakeEpisodeFiles = Builder<EpisodeFile>.CreateListOfSize(2)
-                .WhereAll()
-                .Have(f => f.SeriesId = fakeSeries.SeriesId)
+                .All()
+                .With(f => f.SeriesId = fakeSeries.SeriesId)
                 .Build().ToList();
 
             //Act
@@ -230,8 +230,8 @@ namespace NzbDrone.Core.Test
                 .Build();
 
             var fakeEpisodeFiles = Builder<EpisodeFile>.CreateListOfSize(2)
-                .WhereAll()
-                .Have(f => f.SeriesId = fakeSeries.SeriesId)
+                .All()
+                .With(f => f.SeriesId = fakeSeries.SeriesId)
                 .Build().ToList();
 
             //Act

@@ -45,9 +45,9 @@ namespace NzbDrone.Core.Test
         public void SeasonSearch_partial_season_success()
         {
             var episodes = Builder<Episode>.CreateListOfSize(5)
-                .WhereAll()
-                .Have(e => e.SeriesId = 1)
-                .Have(e => e.SeasonNumber = 1)
+                .All()
+                .With(e => e.SeriesId = 1)
+                .With(e => e.SeasonNumber = 1)
                 .Build();
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
@@ -78,10 +78,10 @@ namespace NzbDrone.Core.Test
         public void SeasonSearch_partial_season_failure()
         {
             var episodes = Builder<Episode>.CreateListOfSize(5)
-                .WhereAll()
-                .Have(e => e.SeriesId = 1)
-                .Have(e => e.SeasonNumber = 1)
-                .Have(e => e.Ignored = false)
+                .All()
+                .With(e => e.SeriesId = 1)
+                .With(e => e.SeasonNumber = 1)
+                .With(e => e.Ignored = false)
                 .Build();
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
