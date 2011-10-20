@@ -18,6 +18,12 @@ namespace NzbDrone.Core.Test
     public class BacklogSearchJobTest
     {
         [Test]
+        public void broken_test()
+        {
+            throw new NotImplementedException();
+        }
+
+        [Test]
         public void no_missing_epsiodes_should_not_trigger_any_search()
         {
             //Setup
@@ -116,7 +122,7 @@ namespace NzbDrone.Core.Test
                 .Setup(s => s.Start(notification, It.IsAny<int>(), 0)).Verifiable();
 
             mocker.GetMock<EpisodeProvider>()
-                .Setup(s => s.GetEpisodeNumbersBySeason(1, 1)).Returns(new List<int> {1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
+                .Setup(s => s.GetEpisodeNumbersBySeason(1, 1)).Returns(new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
 
             //Act
             mocker.Resolve<BacklogSearchJob>().Start(notification, 0, 0);
@@ -187,7 +193,7 @@ namespace NzbDrone.Core.Test
                 .Setup(s => s.Start(notification, It.IsAny<int>(), 0)).Verifiable();
 
             mocker.GetMock<EpisodeProvider>()
-                .Setup(s => s.GetEpisodeNumbersBySeason(1, 1)).Returns(new List<int>{ 1, 2, 3, 4, 5 });
+                .Setup(s => s.GetEpisodeNumbersBySeason(1, 1)).Returns(new List<int> { 1, 2, 3, 4, 5 });
 
             //Act
             mocker.Resolve<BacklogSearchJob>().Start(notification, 0, 0);
