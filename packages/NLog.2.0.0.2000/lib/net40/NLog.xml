@@ -1348,6 +1348,13 @@
             <param name="section">Section XML node.</param>
             <returns>The created section handler object.</returns>
         </member>
+        <member name="T:NLog.Config.ConfigurationItemCreator">
+            <summary>
+            Constructs a new instance the configuration item (target, layout, layout renderer, etc.) given its type.
+            </summary>
+            <param name="itemType">Type of the item.</param>
+            <returns>Created object of the specified type.</returns>
+        </member>
         <member name="T:NLog.Config.ConfigurationItemFactory">
             <summary>
             Provides registration information for named items (targets, layouts, layout renderers, etc.) managed by NLog.
@@ -1404,6 +1411,14 @@
             <summary>
             Gets or sets default singleton instance of <see cref="T:NLog.Config.ConfigurationItemFactory"/>.
             </summary>
+        </member>
+        <member name="P:NLog.Config.ConfigurationItemFactory.CreateInstance">
+            <summary>
+            Gets or sets the creator delegate used to instantiate configuration objects.
+            </summary>
+            <remarks>
+            By overriding this property, one can enable dependency injection or interception for created objects.
+            </remarks>
         </member>
         <member name="P:NLog.Config.ConfigurationItemFactory.Targets">
             <summary>
@@ -2500,7 +2515,7 @@
             Gets the Global Diagnostics Context named item.
             </summary>
             <param name="item">Item name.</param>
-            <returns>The item value of String.Empty if the value is not present.</returns>
+            <returns>The item value of string.Empty if the value is not present.</returns>
         </member>
         <member name="M:NLog.GDC.Contains(System.String)">
             <summary>
@@ -2537,7 +2552,7 @@
             Gets the Global Diagnostics Context named item.
             </summary>
             <param name="item">Item name.</param>
-            <returns>The item value of String.Empty if the value is not present.</returns>
+            <returns>The item value of string.Empty if the value is not present.</returns>
         </member>
         <member name="M:NLog.GlobalDiagnosticsContext.Contains(System.String)">
             <summary>
@@ -2701,7 +2716,7 @@
             Gets or sets the <see cref="T:System.Object"/> with the specified key.
             </summary>
             <param name="key">Dictionary key.</param>
-            <value>Value corresponding to key or null if not found</value>
+            <returns>Value corresponding to key or null if not found</returns>
         </member>
         <member name="T:NLog.Internal.DictionaryAdapter`2.MyEnumerator">
             <summary>
@@ -3668,6 +3683,26 @@
             Detects the platform the NLog is running on.
             </summary>
         </member>
+        <member name="P:NLog.Internal.PlatformDetector.CurrentOS">
+            <summary>
+            Gets the current runtime OS.
+            </summary>
+        </member>
+        <member name="P:NLog.Internal.PlatformDetector.IsDesktopWin32">
+            <summary>
+            Gets a value indicating whether current OS is a desktop version of Windows.
+            </summary>
+        </member>
+        <member name="P:NLog.Internal.PlatformDetector.IsWin32">
+            <summary>
+            Gets a value indicating whether current OS is Win32-based (desktop or mobile).
+            </summary>
+        </member>
+        <member name="P:NLog.Internal.PlatformDetector.IsUnix">
+            <summary>
+            Gets a value indicating whether current OS is Unix-based.
+            </summary>
+        </member>
         <member name="T:NLog.Internal.PortableFileInfoHelper">
             <summary>
             Portable implementation of <see cref="T:NLog.Internal.FileInfoHelper"/>.
@@ -3913,6 +3948,27 @@
             Gets or sets the next <see cref="T:NLog.Internal.TargetWithFilterChain"/> item in the chain.
             </summary>
             <value>The next item in the chain.</value>
+        </member>
+        <member name="T:NLog.Internal.ThreadLocalStorageHelper">
+            <summary>
+            Helper for dealing with thread-local storage.
+            </summary>
+        </member>
+        <member name="M:NLog.Internal.ThreadLocalStorageHelper.AllocateDataSlot">
+            <summary>
+            Allocates the data slot for storing thread-local information.
+            </summary>
+            <returns>Allocated slot key.</returns>
+        </member>
+        <member name="M:NLog.Internal.ThreadLocalStorageHelper.GetDataForSlot``1(System.Object)">
+            <summary>
+            Gets the data for a slot in thread-local storage.
+            </summary>
+            <typeparam name="T">Type of the data.</typeparam>
+            <param name="slot">The slot to get data for.</param>
+            <returns>
+            Slot data (will create T if null).
+            </returns>
         </member>
         <member name="T:NLog.Internal.TimeoutContinuation">
             <summary>
@@ -5630,6 +5686,29 @@
             </summary>
             <docgen category='Advanced Options' order='10' />
         </member>
+        <member name="T:NLog.LayoutRenderers.Wrappers.JsonEncodeLayoutRendererWrapper">
+            <summary>
+            Escapes output of another layout using JSON rules.
+            </summary>
+        </member>
+        <member name="M:NLog.LayoutRenderers.Wrappers.JsonEncodeLayoutRendererWrapper.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:NLog.LayoutRenderers.Wrappers.JsonEncodeLayoutRendererWrapper"/> class.
+            </summary>
+        </member>
+        <member name="M:NLog.LayoutRenderers.Wrappers.JsonEncodeLayoutRendererWrapper.Transform(System.String)">
+            <summary>
+            Post-processes the rendered message. 
+            </summary>
+            <param name="text">The text to be post-processed.</param>
+            <returns>JSON-encoded string.</returns>
+        </member>
+        <member name="P:NLog.LayoutRenderers.Wrappers.JsonEncodeLayoutRendererWrapper.JsonEncode">
+            <summary>
+            Gets or sets a value indicating whether to apply JSON encoding.
+            </summary>
+            <docgen category="Transformation Options" order="10"/>
+        </member>
         <member name="T:NLog.LayoutRenderers.Wrappers.LowercaseLayoutRendererWrapper">
             <summary>
             Converts the result of another layout output to lower case.
@@ -6121,6 +6200,16 @@
             </summary>
             <param name="logEvent">The logging event.</param>
             <returns>The rendered layout.</returns>
+        </member>
+        <member name="P:NLog.Layouts.Layout.IsThreadAgnostic">
+            <summary>
+            Gets a value indicating whether this layout is thread-agnostic (can be rendered on any thread).
+            </summary>
+            <remarks>
+            Layout is thread-agnostic if it has been marked with [ThreadAgnostic] attribute and all its children are
+            like that as well.
+            Thread-agnostic layouts only use contents of <see cref="T:NLog.LogEventInfo"/> for its output.
+            </remarks>
         </member>
         <member name="P:NLog.Layouts.Layout.LoggingConfiguration">
             <summary>
@@ -9931,7 +10020,7 @@
             Gets the current thread MDC named item.
             </summary>
             <param name="item">Item name.</param>
-            <returns>The item value of String.Empty if the value is not present.</returns>
+            <returns>The item value of string.Empty if the value is not present.</returns>
         </member>
         <member name="M:NLog.MappedDiagnosticsContext.Contains(System.String)">
             <summary>
@@ -9968,7 +10057,7 @@
             Gets the current thread MDC named item.
             </summary>
             <param name="item">Item name.</param>
-            <returns>The item value of String.Empty if the value is not present.</returns>
+            <returns>The item value of string.Empty if the value is not present.</returns>
         </member>
         <member name="M:NLog.MDC.Contains(System.String)">
             <summary>
@@ -10565,7 +10654,7 @@
             <img src="examples/targets/Screenshots/Network/Output.gif" />
             <p>
             NOTE: If your receiver application is ever likely to be off-line, don't use TCP protocol
-            or you'll get TCP timeouts and your application will crawl. 
+            or you'll get TCP timeouts and your application will be very slow. 
             Either switch to UDP transport or use <a href="target.AsyncWrapper.html">AsyncWrapper</a> target
             so that your application threads will not be blocked by the timing-out connection attempts.
             </p>
@@ -10616,14 +10705,16 @@
             <remarks>
             The network address can be:
             <ul>
-            <li>tcp://host:port - TCP (auto select IPv4/IPv6)</li>
-            <li>tcp4://host:port - force TCP/IPv4</li>
-            <li>tcp6://host:port - force TCP/IPv6</li>
-            <li>udp://host:port - UDP (auto select IPv4/IPv6, not supported on Silverlight)</li>
-            <li>udp4://host:port - force UDP/IPv4 (not supported on Silverlight)</li>
-            <li>udp6://host:port - force UDP/IPv6  (not supported on Silverlight)</li>
+            <li>tcp://host:port - TCP (auto select IPv4/IPv6) (not supported on Windows Phone 7.0)</li>
+            <li>tcp4://host:port - force TCP/IPv4 (not supported on Windows Phone 7.0)</li>
+            <li>tcp6://host:port - force TCP/IPv6 (not supported on Windows Phone 7.0)</li>
+            <li>udp://host:port - UDP (auto select IPv4/IPv6, not supported on Silverlight and on Windows Phone 7.0)</li>
+            <li>udp4://host:port - force UDP/IPv4 (not supported on Silverlight and on Windows Phone 7.0)</li>
+            <li>udp6://host:port - force UDP/IPv6  (not supported on Silverlight and on Windows Phone 7.0)</li>
+            <li>http://host:port/pageName - HTTP using POST verb</li>
+            <li>https://host:port/pageName - HTTPS using POST verb</li>
             </ul>
-            For HTTP Support use WebService target.
+            For SOAP-based webservice support over HTTP use WebService target.
             </remarks>
             <docgen category='Connection Options' order='10' />
         </member>
