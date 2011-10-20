@@ -234,5 +234,31 @@ namespace NzbDrone.Core.Test
             db.Fetch<Episode>().Should().HaveCount(2);
             ep.First().Ignored.Should().BeFalse();
         }
+
+        [Test]
+        [Description("GetEpisodeParseResult should return empty list if episode list is null")]
+        public void GetEpisodeParseResult_should_return_empty_list_if_episode_list_is_null()
+        {
+            var mocker = new AutoMoqer();
+            //Act
+            var episodes = mocker.Resolve<EpisodeProvider>().GetEpisodesByParseResult(new EpisodeParseResult());
+            //Assert
+            episodes.Should().NotBeNull();
+            episodes.Should().BeEmpty();
+        }
+
+        [Test]
+        [Description("GetEpisodeParseResult should return empty list if episode list is empty")]
+        public void GetEpisodeParseResult_should_return_empty_list_if_episode_list_is_empty()
+        {
+            var mocker = new AutoMoqer();
+            //Act
+            var episodes = mocker.Resolve<EpisodeProvider>().GetEpisodesByParseResult(new EpisodeParseResult{EpisodeNumbers = new List<int>()});
+            //Assert
+            episodes.Should().NotBeNull();
+            episodes.Should().BeEmpty();
+        }
+
+
     }
 }
