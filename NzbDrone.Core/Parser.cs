@@ -39,8 +39,12 @@ namespace NzbDrone.Core
                                     new Regex(@"^(?<title>.*?)(?:\W?S?(?<season>\d{1,2}(?!\d+))(?:(?:\-|[ex]|\s)+(?<episode>\d+))+)+\W?(?!\\)",
                                         RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
+                                    //Supports 1103/1113 naming
+                                    new Regex(@"^(?<title>.+?)?(?:\W?(?<season>\d{2})(?<episode>\d{2}))+\W?(?!\\)",
+                                        RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
                                     //Supports 103/113 naming
-                                    new Regex(@"^(?<title>.+?)?(?:\W?(?<season>\d+)(?<episode>\d{2}))+\W?(?!\\)",
+                                    new Regex(@"^(?<title>.+?)?(?:\W?(?<season>\d{1})(?<episode>\d{2}))+\W?(?!\\)",
                                         RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                                     //Supports Season only releases
