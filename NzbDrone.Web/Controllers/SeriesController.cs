@@ -98,25 +98,17 @@ namespace NzbDrone.Web.Controllers
             }
         }
 
-        public ActionResult SearchForSeries(string seriesName)
+        public JsonResult LocalSearch(string term)
         {
-            var model = new List<SeriesSearchResultModel>();
+            //Get Results from the local DB and return
 
-            //Get Results from TvDb and convert them to something we can use.
-            foreach (var tvdbSearchResult in _tvDbProvider.SearchSeries(seriesName))
-            {
-                model.Add(new SeriesSearchResultModel
-                              {
-                                  TvDbId = tvdbSearchResult.Id,
-                                  TvDbName = tvdbSearchResult.SeriesName,
-                                  FirstAired = tvdbSearchResult.FirstAired
-                              });
-            }
+            var results = _seriesProvider.SearchForSeries(term).Select(s => new SeriesSearchResultModel
+                                                                   {
+                                                                       Id = s.SeriesId,
+                                                                       Title = s.Title
+                                                                   }).ToList();
 
-            //model.Add(new SeriesSearchResultModel{ TvDbId = 12345, TvDbName = "30 Rock", FirstAired = DateTime.Today });
-            //model.Add(new SeriesSearchResultModel { TvDbId = 65432, TvDbName = "The Office (US)", FirstAired = DateTime.Today.AddDays(-100) });
-
-            return PartialView("SeriesSearchResults", model);
+            return Json(results, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

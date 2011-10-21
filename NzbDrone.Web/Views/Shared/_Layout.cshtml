@@ -15,6 +15,7 @@
     <link type="text/css" rel="stylesheet" href="/Content/ActionButton.css" />
     <link type="text/css" rel="stylesheet" href="/Content/overrides.css" />
     <link type="text/css" rel="stylesheet" href="/Content/Menu.css" />
+    <link type="text/css" rel="stylesheet" href="/Content/Slider.css" />
 
     <script type="text/javascript" src="/Scripts/Plugins/jquery-1.6.3.min.js"></script>
     <script type="text/javascript" src="/Scripts/Plugins/jquery-ui-1.8.16.min.js"></script>
@@ -27,12 +28,15 @@
     <script type="text/javascript" src="/Scripts/Plugins/doTimeout.js"></script>
     <script type="text/javascript" src="/Scripts/episodeSearch.js"></script>
     <script type="text/javascript" src="/Scripts/autocomplete.js"></script>
+    <script type="text/javascript" src="/Scripts/addSeries.js"></script>
+    <script type="text/javascript" src="/Scripts/slider.js"></script>
 
     @MvcMiniProfiler.MiniProfiler.RenderIncludes()
     @RenderSection("HeaderContent", required: false)
 </head>
 <body>
     <div class="container">
+        @{Html.RenderAction("LocalSearch", "Shared");}
         <div id="menu" class="span-24 last prepend-top append-bottom">
             <ul>
                 @MvcHtmlString.Create(Html.CurrentActionLink("Series", "Index", "Series"))

@@ -628,5 +628,51 @@ namespace NzbDrone.Core.Test.ProviderTests
             series.Should().HaveCount(1);
             series[0].NextAiring.Should().Be(DateTime.Today.AddMonths(1));
         }
+
+        [Test]
+        public void SearchForSeries_should_return_results_that_start_with_query()
+        {
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+            var fakeSeries = Builder<Series>.CreateListOfSize(10)
+                .WhereAll()
+                .Have(e => e.QualityProfileId = fakeQuality.QualityProfileId)
+                .Build();
+
+            db.InsertMany(fakeSeries);
+            db.Insert(fakeQuality);
+
+            //Act
+            var series = mocker.Resolve<SeriesProvider>().SearchForSeries("Titl");
+
+            //Assert
+            series.Should().HaveCount(10);
+        }
+
+        [Test]
+        public void SearchForSeries_should_not_return_results_that_do_not_start_with_query()
+        {
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+            var fakeSeries = Builder<Series>.CreateListOfSize(10)
+                .WhereAll()
+                .Have(e => e.QualityProfileId = fakeQuality.QualityProfileId)
+                .Build();
+
+            db.InsertMany(fakeSeries);
+            db.Insert(fakeQuality);
+
+            //Act
+            var series = mocker.Resolve<SeriesProvider>().SearchForSeries("NotATitle");
+
+            //Assert
+            series.Should().HaveCount(0);
+        }
     }
 }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             

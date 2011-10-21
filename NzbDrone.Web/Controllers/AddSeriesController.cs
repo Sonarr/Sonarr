@@ -53,9 +53,7 @@ namespace NzbDrone.Web.Controllers
             var defaultQuality = _configProvider.DefaultQualityProfile;
             var qualityProfiles = _qualityProvider.All();
 
-            ViewData["qualityList"] = qualityProfiles;
-
-            ViewData["quality"] = new SelectList(
+            ViewData["qualityProfiles"] = new SelectList(
                 qualityProfiles,
                 "QualityProfileId",
                 "Name",
@@ -132,6 +130,19 @@ namespace NzbDrone.Web.Controllers
             }
         }
 
+        [HttpPost]
+        public JsonResult QuickAddNewSeries(string seriesName, int seriesId, int qualityProfileId)
+        {
+            var path = _rootFolderProvider.GetMostFreeRootDir();
+            path = Path.Combine(path, MediaFileProvider.CleanFilename(seriesName));
+
+            //Create the folder for the new series
+            //Use the created folder name when adding the series
+            path = _diskProvider.CreateDirectory(path);
+
+            return AddExistingSeries(path, seriesName, seriesId, qualityProfileId);
+        }
+
         public JsonResult AddSeries(string path, int seriesId, int qualityProfileId)
         {
             //Get TVDB Series Name
@@ -143,6 +154,21 @@ namespace NzbDrone.Web.Controllers
                 qualityProfileId);
             ScanNewSeries();
             return new JsonResult { Data = "ok" };
+        }
+
+        [ChildActionOnly]
+        public ActionResult QuickAdd()
+        {
+            var defaultQuality = _configProvider.DefaultQualityProfile;
+            var qualityProfiles = _qualityProvider.All();
+
+            ViewData["qualityProfiles"] = new SelectList(
+                qualityProfiles,
+                "QualityProfileId",
+                "Name",
+                defaultQuality);
+
+            return PartialView();
         }
 
 
