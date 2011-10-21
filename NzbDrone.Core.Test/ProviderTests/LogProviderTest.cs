@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var logItem = db.Fetch<Log>().First();
             Assert.AreNotEqual(new DateTime(), logItem.Time);
             Assert.AreEqual(message, logItem.Message);
-            Assert.AreEqual("Core.Test.LogProviderTest", logItem.Logger);
+            Assert.AreEqual("Core.Test.ProviderTests.LogProviderTest", logItem.Logger);
 
             Logger.Name.Should().EndWith(logItem.Logger);
 
@@ -143,7 +143,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var logItem = db.Fetch<Log>().First();
             Assert.AreNotEqual(new DateTime(), logItem.Time);
             Assert.AreEqual(message + ": " + ex.Message, logItem.Message);
-            Assert.AreEqual("Core.Test.LogProviderTest", logItem.Logger);
+            Assert.AreEqual("Core.Test.ProviderTests.LogProviderTest", logItem.Logger);
             Assert.AreEqual(LogLevel.Error.Name, logItem.Level);
             Assert.AreEqual(ex.GetType().ToString(), logItem.ExceptionType);
             Assert.AreEqual(ex.ToString(), logItem.Exception);
@@ -177,7 +177,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var logItem = db.Fetch<Log>().First();
             Assert.AreNotEqual(new DateTime(), logItem.Time);
             Assert.AreEqual(ex.Message, logItem.Message);
-            Assert.AreEqual("Core.Test.LogProviderTest", logItem.Logger);
+            Assert.AreEqual("Core.Test.ProviderTests.LogProviderTest", logItem.Logger);
             Assert.AreEqual(LogLevel.Error.Name, logItem.Level);
             Assert.AreEqual(ex.GetType().ToString(), logItem.ExceptionType);
             Assert.AreEqual(ex.ToString(), logItem.Exception);
