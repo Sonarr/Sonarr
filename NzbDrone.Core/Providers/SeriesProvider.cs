@@ -190,11 +190,7 @@ namespace NzbDrone.Core.Providers
         {
             var query = String.Format(@"SELECT * FROM Series
                                 INNER JOIN QualityProfiles ON Series.QualityProfileId = QualityProfiles.QualityProfileId
-                                WHERE Title LIKE '{0}%'", title);
-
-//            var series = _database.Fetch<Series, QualityProfile>(@"SELECT * FROM Series
-//                            INNER JOIN QualityProfiles ON Series.QualityProfileId = QualityProfiles.QualityProfileId
-//                            WHERE Title LIKE '@0%'", title);
+                                WHERE Title LIKE '%{0}%'", title);
 
             var series = _database.Fetch<Series, QualityProfile>(query);
 

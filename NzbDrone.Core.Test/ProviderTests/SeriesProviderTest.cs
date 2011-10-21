@@ -653,7 +653,53 @@ namespace NzbDrone.Core.Test.ProviderTests
         }
 
         [Test]
-        public void SearchForSeries_should_not_return_results_that_do_not_start_with_query()
+        public void SearchForSeries_should_return_results_that_contain_the_query()
+        {
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+            var fakeSeries = Builder<Series>.CreateListOfSize(10)
+                .WhereAll()
+                .Have(e => e.QualityProfileId = fakeQuality.QualityProfileId)
+                .Build();
+
+            db.InsertMany(fakeSeries);
+            db.Insert(fakeQuality);
+
+            //Act
+            var series = mocker.Resolve<SeriesProvider>().SearchForSeries("itl");
+
+            //Assert
+            series.Should().HaveCount(10);
+        }
+
+        [Test]
+        public void SearchForSeries_should_return_results_that_end_with_the_query()
+        {
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+            var fakeSeries = Builder<Series>.CreateListOfSize(10)
+                .WhereAll()
+                .Have(e => e.QualityProfileId = fakeQuality.QualityProfileId)
+                .Build();
+
+            db.InsertMany(fakeSeries);
+            db.Insert(fakeQuality);
+
+            //Act
+            var series = mocker.Resolve<SeriesProvider>().SearchForSeries("2");
+
+            //Assert
+            series.Should().HaveCount(1);
+        }
+
+        [Test]
+        public void SearchForSeries_should_not_return_results_that_do_not_contain_the_query()
         {
             var mocker = new AutoMoqer(MockBehavior.Strict);
             var db = MockLib.GetEmptyDatabase();
