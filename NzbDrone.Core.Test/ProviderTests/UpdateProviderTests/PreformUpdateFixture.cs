@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
 
 
         [Test]
-        public void Should_call_download_file_using_correct_arguments()
+        public void Should_call_download_and_extract_using_correct_arguments()
         {
             //Act
             var updatePackage = new UpdatePackage
@@ -37,7 +37,11 @@ namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
                                     };
 
             _mocker.GetMock<HttpProvider>().Setup(
-                c => c.DownloadFile(updatePackage.Url, Path.Combine(TempFolder, updatePackage.FileName)));
+                c => c.DownloadFile(updatePackage.Url, Path.Combine(TempFolder, UpdateProvider.SandboxFolderName ,updatePackage.FileName)));
+
+            _mocker.GetMock<DiskProvider>().Setup(
+               c => c.ExtractArchive(Path.Combine(TempFolder, UpdateProvider.SandboxFolderName, updatePackage.FileName),
+                   Path.Combine(TempFolder, UpdateProvider.SandboxFolderName)));
 
             _mocker.Resolve<UpdateProvider>().PreformUpdate(updatePackage);
         }
