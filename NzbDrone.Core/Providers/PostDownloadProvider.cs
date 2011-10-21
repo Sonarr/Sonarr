@@ -83,7 +83,7 @@ namespace NzbDrone.Core.Providers
                         continue;
                     }
 
-                    if (folderStatus != PostDownloadStatusType.Unknown)
+                    if (folderStatus != PostDownloadStatusType.NoError)
                     {
                         //Retry processing on the download
                         ReProcessDownload(new PostDownloadInfoModel{ Name = subfolderInfo.FullName, Status = folderStatus });
