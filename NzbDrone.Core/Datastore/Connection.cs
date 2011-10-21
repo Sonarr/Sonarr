@@ -4,13 +4,14 @@ using System.Data.Common;
 using System.Data.SqlServerCe;
 using System.IO;
 using MvcMiniProfiler.Data;
+using NzbDrone.Core.Providers;
 using PetaPoco;
 
 namespace NzbDrone.Core.Datastore
 {
     public static class Connection
     {
-        private static readonly DirectoryInfo AppDataPath = new DirectoryInfo(Path.Combine(CentralDispatch.AppPath, "App_Data"));
+        private static readonly DirectoryInfo AppDataPath = new DirectoryInfo(Path.Combine(new EnviromentProvider().AppPath, "App_Data"));
 
         static Connection()
         {

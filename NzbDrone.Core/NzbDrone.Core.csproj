@@ -125,6 +125,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\Exceptioneer.WindowsFormsClient.dll</HintPath>
     </Reference>
+    <Reference Include="Ionic.Zip">
+      <HintPath>..\packages\DotNetZip.1.9.1.8\lib\net20\Ionic.Zip.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Migrator, Version=0.9.1.26254, Culture=neutral, PublicKeyToken=3b3586e9632ecfce, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -203,12 +206,14 @@
     <Compile Include="Model\SabnzbdInfoModel.cs" />
     <Compile Include="Model\Search\SearchModel.cs" />
     <Compile Include="Model\Search\SearchType.cs" />
+    <Compile Include="Model\UpdatePackage.cs" />
     <Compile Include="Model\Xbmc\ActionType.cs" />
     <Compile Include="Model\Xbmc\ActivePlayersResult.cs" />
     <Compile Include="Model\Xbmc\ErrorResult.cs" />
     <Compile Include="Model\Xbmc\IconType.cs" />
     <Compile Include="Providers\Converting\AtomicParsleyProvider.cs" />
     <Compile Include="Providers\Converting\HandbrakeProvider.cs" />
+    <Compile Include="Providers\EnviromentProvider.cs" />
     <Compile Include="Providers\Core\ConfigFileProvider.cs" />
     <Compile Include="Providers\Core\UdpProvider.cs" />
     <Compile Include="Providers\Jobs\BacklogSearchJob.cs" />
@@ -222,6 +227,7 @@
     <Compile Include="Providers\PostDownloadProvider.cs" />
     <Compile Include="Providers\QualityTypeProvider.cs" />
     <Compile Include="Providers\SearchProvider.cs" />
+    <Compile Include="Providers\UpdateProvider.cs" />
     <Compile Include="Providers\Xbmc\ResourceManager.cs" />
     <Compile Include="Model\Xbmc\TvShowResult.cs" />
     <Compile Include="Model\Xbmc\Params.cs" />

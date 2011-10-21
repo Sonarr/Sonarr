@@ -3,6 +3,7 @@ using System.IO;
 using Ninject;
 using NLog;
 using NLog.Config;
+using NzbDrone.Core.Providers;
 
 namespace NzbDrone.Core.Instrumentation
 {
@@ -15,7 +16,7 @@ namespace NzbDrone.Core.Instrumentation
                 LogManager.ThrowExceptions = true;
             }
 
-            LogManager.Configuration = new XmlLoggingConfiguration(Path.Combine(CentralDispatch.AppPath, "log.config"),
+            LogManager.Configuration = new XmlLoggingConfiguration(Path.Combine(new EnviromentProvider().AppPath, "log.config"),
                                                                    false);
 
             LogManager.ConfigurationReloaded += ((s, e) => StartDbLogging());

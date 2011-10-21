@@ -11,14 +11,14 @@ namespace NzbDrone.Core.Providers.Core
 {
     public class ConfigFileProvider
     {
-        private string _configFile = Path.Combine(CentralDispatch.AppPath, "App_Data", "Config.xml");
+        private string _configFile = Path.Combine(new EnviromentProvider().AppPath, "App_Data", "Config.xml");
 
         public string ConfigFile
         {
             get { return _configFile; }
             set { _configFile = value; }
         }
-        
+
         public virtual int Port
         {
             get { return GetValueInt("Port", 8989); }
@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Providers.Core
             }
 
             var valueHolder = parentContainer.Descendants(key).ToList();
-            
+
             if (valueHolder.Count() == 1)
                 return valueHolder.First().Value;
 
@@ -113,7 +113,7 @@ namespace NzbDrone.Core.Providers.Core
         public virtual void CreateDefaultConfigFile()
         {
             //Create the config file here
-            Directory.CreateDirectory(Path.Combine(CentralDispatch.AppPath, "App_Data"));
+            Directory.CreateDirectory(Path.Combine(new EnviromentProvider().AppPath, "App_Data"));
 
             if (!File.Exists(ConfigFile))
             {

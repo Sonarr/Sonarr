@@ -84,17 +84,5 @@ namespace NzbDrone.Core.Test
         {
             CentralDispatch.NinjectKernel.Get<QualityProvider>().All().Should().HaveCount(2);
         }
-
-        [Test]
-        public void get_version()
-        {
-            CentralDispatch.Version.Should().NotBeNull();
-        }
-
-        [Test]
-        public void BuildDate_should_be_within_the_hour()
-        {
-            CentralDispatch.BuildDateTime.Should().BeWithin(TimeSpan.FromHours(1));
-        }
     }
 }
