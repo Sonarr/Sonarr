@@ -105,6 +105,15 @@
         </Variables>
         <CustomProperties />
       </Template>
+      <Template uid="26915659-690b-46fa-a776-0d5995a33936" shortcut="Logger" description="" text="private static readonly Logger Logger = LogManager.GetCurrentClassLogger();" reformat="True" shortenQualifiedReferences="True">
+        <Scopes>
+          <Scope type="Everywhere" />
+          <Scope type="InCSharpTypeMember" minimumLanguageVersion="2.0" />
+        </Scopes>
+        <Categories />
+        <Variables />
+        <CustomProperties />
+      </Template>
     </LiveTemplates>
   </SharedSolutionTemplateManager>
 </Configuration>
