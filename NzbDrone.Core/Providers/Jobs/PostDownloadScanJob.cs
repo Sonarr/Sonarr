@@ -1,10 +1,5 @@
-﻿using System;
-using System.IO;
-using Ninject;
-using NLog;
-using NzbDrone.Core.Model;
+﻿using Ninject;
 using NzbDrone.Core.Model.Notification;
-using NzbDrone.Core.Providers.Core;
 
 namespace NzbDrone.Core.Providers.Jobs
 {

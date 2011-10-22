@@ -91,7 +91,6 @@
     <Compile Include="JobTests\BacklogSearchJobTest.cs" />
     <Compile Include="JobTests\BannerDownloadJobTest.cs" />
     <Compile Include="ProviderTests\ConfigFileProviderTest.cs" />
-    <Compile Include="Framework\AutoMoq\TestBaseTests.cs" />
     <Compile Include="ProviderTests\DiskProviderTests\ExtractArchiveFixture.cs" />
     <Compile Include="ProviderTests\PostDownloadProviderTest.cs" />
     <Compile Include="JobTests\SearchJobTest.cs" />

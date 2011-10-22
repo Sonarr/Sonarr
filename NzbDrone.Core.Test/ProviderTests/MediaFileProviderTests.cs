@@ -82,10 +82,14 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             mocker.GetMock<MediaFileProvider>()
                 .Setup(e => e.RepairLinks()).Returns(0);
+
             mocker.GetMock<MediaFileProvider>()
                 .Setup(e => e.DeleteOrphaned()).Returns(0);
 
-
+            mocker.GetMock<DiskProvider>()
+                .Setup(c => c.FolderExists(It.IsAny<string>()))
+                .Returns(true);
+            
             var series = Builder<Series>.CreateNew()
                 .With(s => s.SeriesId = 12).Build();
 
@@ -127,7 +131,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             result.Should().HaveSameCount(episodes);
             result.Should().OnlyContain(e => e.EpisodeFileId == 0);
             removedLinks.Should().Be(10);
-          }
+        }
 
         [Test]
         public void DeleteOrphanedEpisodeFiles()

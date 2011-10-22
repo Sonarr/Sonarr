@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Test.ProviderTests
     public class DiskScanProviderTest : TestBase
     {
         [Test]
-        public void scan_series_should_update_last_scan_date()
+        public void scan_series_should_update_the_last_scan_date()
         {
 
             var mocker = new AutoMoqer();
@@ -25,6 +25,8 @@ namespace NzbDrone.Core.Test.ProviderTests
             mocker.GetMock<EpisodeProvider>()
                 .Setup(c => c.GetEpisodeBySeries(It.IsAny<long>()))
                 .Returns(new List<Episode> { new Episode() });
+
+            mocker.GetMock<DiskProvider>().Setup(c => c.FolderExists(It.IsAny<string>())).Returns(true);
 
 
             mocker.GetMock<MediaFileProvider>()

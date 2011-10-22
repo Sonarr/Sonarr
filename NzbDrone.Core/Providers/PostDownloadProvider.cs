@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using NLog;
 using Ninject;
 using NzbDrone.Core.Model;
@@ -20,6 +21,8 @@ namespace NzbDrone.Core.Providers
         private readonly SeriesProvider _seriesProvider;
         private readonly EpisodeProvider _episodeProvider;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        private static readonly Regex StatusRegex = new Regex(@"^_[\w_]*_", RegexOptions.Compiled);
 
         private static readonly List<PostDownloadInfoModel> InfoList = new List<PostDownloadInfoModel>();
 
@@ -69,6 +72,8 @@ namespace NzbDrone.Core.Providers
 
                     var folderStatus = GetPostDownloadStatusForFolder(subfolderInfo.Name);
 
+
+
                     if (folderStatus == PostDownloadStatusType.Unpacking)
                     {
                         ProcessFailedOrUnpackingDownload(subfolderInfo, PostDownloadStatusType.Unpacking);
@@ -86,8 +91,7 @@ namespace NzbDrone.Core.Providers
                     if (folderStatus != PostDownloadStatusType.NoError)
                     {
                         //Retry processing on the download
-                        ReProcessDownload(new PostDownloadInfoModel{ Name = subfolderInfo.FullName, Status = folderStatus });
-                        
+                        ReProcessDownload(new PostDownloadInfoModel { Name = subfolderInfo.FullName, Status = folderStatus });
                         continue;
                     }
 
@@ -131,7 +135,7 @@ namespace NzbDrone.Core.Providers
                 if (importedFiles.Count == 0)
                 {
                     Logger.Warn("Unable to Import new download [{0}], unable to parse episode file(s).", subfolderInfo.FullName);
-                    _diskProvider.MoveDirectory(subfolderInfo.FullName, 
+                    _diskProvider.MoveDirectory(subfolderInfo.FullName,
                         GetNewFolderNameWithPostDownloadStatus(subfolderInfo, PostDownloadStatusType.ParseError));
                 }
 
@@ -165,7 +169,7 @@ namespace NzbDrone.Core.Providers
             }
 
             //Remove the error prefix before processing
-            var parseResult = Parser.ParseTitle(directoryInfo.Name.Substring(GetPrefixLength(postDownloadStatus)));
+            var parseResult = Parser.ParseTitle(RemoveStatusFromFolderName(directoryInfo.Name));
 
             parseResult.Series = _seriesProvider.FindSeries(parseResult.CleanTitle);
 
@@ -215,25 +219,6 @@ namespace NzbDrone.Core.Providers
             ProcessDownload(directoryInfo);
         }
 
-        public int GetPrefixLength(PostDownloadStatusType postDownloadStatus)
-        {
-            //_UNPACK_ & _FAILED_ have a length of 8
-            if (postDownloadStatus == PostDownloadStatusType.Unpacking || postDownloadStatus == PostDownloadStatusType.Failed)
-                return 8;
-
-            if (postDownloadStatus == PostDownloadStatusType.Unknown)
-                return 10;
-
-            if (postDownloadStatus == PostDownloadStatusType.Processed)
-                return 0;
-
-            if (postDownloadStatus == PostDownloadStatusType.NoError)
-                return 0;
-
-            //Return the 11 (_NzbDrone_) + trailing underscore + postDownloadStatus length
-            return 11 + postDownloadStatus.ToString().Length;
-        }
-
         public void Add(PostDownloadInfoModel model)
         {
             InfoList.Add(model);
@@ -278,7 +263,7 @@ namespace NzbDrone.Core.Providers
             var error = String.Format("_NzbDrone_{0}_", postDownloadStatus.ToString());
 
             if (existingError != PostDownloadStatusType.NoError)
-                newFolderName = directoryInfo.Name.Substring(GetPrefixLength(existingError));
+                newFolderName = RemoveStatusFromFolderName(directoryInfo.Name);
 
             if (postDownloadStatus == PostDownloadStatusType.Unknown)
                 error = "_NzbDrone_";
@@ -293,6 +278,11 @@ namespace NzbDrone.Core.Providers
             var newName = error + newFolderName;
 
             return Path.Combine(parent, newName);
+        }
+
+        public static string RemoveStatusFromFolderName(string folderName)
+        {
+            return StatusRegex.Replace(folderName, string.Empty);
         }
     }
 }

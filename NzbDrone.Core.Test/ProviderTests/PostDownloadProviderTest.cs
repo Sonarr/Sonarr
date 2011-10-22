@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 s => s.SetPostDownloadStatus(expectedEpisodesNumbers, postDownloadStatus)).Verifiable();
 
             //Act
-            mocker.Resolve<PostDownloadProvider>().ProcessFailedOrUnpackingDownload(new DirectoryInfo(Path.Combine(Directory.GetCurrentDirectory(), folderName)),postDownloadStatus);
+            mocker.Resolve<PostDownloadProvider>().ProcessFailedOrUnpackingDownload(new DirectoryInfo(Path.Combine(Directory.GetCurrentDirectory(), folderName)), postDownloadStatus);
 
             //Assert
             mocker.GetMock<EpisodeProvider>().Verify(c => c.SetPostDownloadStatus(expectedEpisodesNumbers, postDownloadStatus), Times.Once());
@@ -114,26 +114,6 @@ namespace NzbDrone.Core.Test.ProviderTests
             //Assert
             ExceptionVerification.ExcpectedWarns(1);
             mocker.VerifyAllMocks();
-        }
-
-        [TestCase(PostDownloadStatusType.Unpacking, 8)]
-        [TestCase(PostDownloadStatusType.Failed, 8)]
-        [TestCase(PostDownloadStatusType.InvalidSeries, 24)]
-        [TestCase(PostDownloadStatusType.ParseError, 21)]
-        [TestCase(PostDownloadStatusType.Unknown, 10)]
-        [TestCase(PostDownloadStatusType.Processed, 0)]
-        [TestCase(PostDownloadStatusType.InvalidEpisode, 25)]
-        [TestCase(PostDownloadStatusType.NoError, 0)]
-        public void GetPrefixLength(PostDownloadStatusType postDownloadStatus, int expected)
-        {
-            //Setup
-            var mocker = new AutoMoqer();
-            
-            //Act
-            var result = mocker.Resolve<PostDownloadProvider>().GetPrefixLength(postDownloadStatus);
-            
-            //Assert
-            result.Should().Be(expected);
         }
 
         [Test]
@@ -345,6 +325,15 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             //Assert
             result.Should().Be(expectedResult);
+        }
+
+        [TestCase("_NzbDrone_ParseError_The Office (US) - S01E01 - Episode Title", "The Office (US) - S01E01 - Episode Title")]
+        [TestCase("_Status_The Office (US) - S01E01 - Episode Title", "The Office (US) - S01E01 - Episode Title")]
+        [TestCase("The Office (US) - S01E01 - Episode Title", "The Office (US) - S01E01 - Episode Title")]
+        [TestCase("_The Office (US) - S01E01 - Episode Title", "_The Office (US) - S01E01 - Episode Title")]
+        public void RemoveStatus_should_remove_status_string_from_folder_name(string folderName, string cleanFolderName)
+        {
+            PostDownloadProvider.RemoveStatusFromFolderName(folderName).Should().Be(cleanFolderName);
         }
     }
 }
