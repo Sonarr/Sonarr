@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
+using Ninject;
 using TvdbLib;
 using TvdbLib.Cache;
 using TvdbLib.Data;
@@ -11,14 +12,22 @@ namespace NzbDrone.Core.Providers
 {
     public class TvDbProvider
     {
+        private readonly EnviromentProvider _enviromentProvider;
         private const string TVDB_APIKEY = "5D2D188E86E07F4F";
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private readonly TvdbHandler _handler;
 
+        [Inject]
+        public TvDbProvider(EnviromentProvider enviromentProvider)
+        {
+            _enviromentProvider = enviromentProvider;
+            _handler = new TvdbHandler(new XmlCacheProvider(_enviromentProvider.AppPath + @"\cache\tvdb"), TVDB_APIKEY);
+        }
+
         public TvDbProvider()
         {
-            _handler = new TvdbHandler(new XmlCacheProvider(CentralDispatch.AppPath + @"\cache\tvdb"), TVDB_APIKEY);
+            
         }
 
         public virtual IList<TvdbSearchResult> SearchSeries(string title)

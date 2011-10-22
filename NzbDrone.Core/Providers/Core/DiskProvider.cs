@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Ionic.Zip;
+using NLog;
 
 namespace NzbDrone.Core.Providers.Core
 {
     public class DiskProvider
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         public virtual bool FolderExists(string path)
         {
             return Directory.Exists(path);
@@ -72,6 +76,18 @@ namespace NzbDrone.Core.Providers.Core
         public virtual void MoveDirectory(string source, string destination)
         {
             Directory.Move(source, destination);
+        }
+
+        public virtual void ExtractArchive(string compressedFile, string destination)
+        {
+            Logger.Trace("Extracting archive [{0}] to [{1}]", compressedFile, destination);
+
+            using (ZipFile zipFile = ZipFile.Read(compressedFile))
+            {
+                zipFile.ExtractAll(destination);
+            }
+
+            Logger.Trace("Extraction complete.");
         }
 
         public virtual void InheritFolderPermissions(string filename)

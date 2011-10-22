@@ -305,6 +305,12 @@ namespace NzbDrone.Core.Providers.Core
             set { SetValue("XbmcPassword", value); }
         }
 
+        public virtual string UpdateUrl
+        {
+            get { return GetValue("UpdateUrl", @"http://update.nzbdrone.com/master/"); }
+            set { SetValue("UpdateUrl", value); }
+        }
+
         private string GetValue(string key)
         {
             return GetValue(key, String.Empty);

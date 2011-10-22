@@ -4,6 +4,7 @@ using NLog;
 using NLog.Config;
 using NUnit.Framework;
 using NzbDrone.Core;
+using NzbDrone.Core.Providers;
 using NzbDrone.Core.Test.Framework;
 
 [SetUpFixture]
@@ -20,7 +21,7 @@ public class Fixtures
     {
         try
         {
-            LogManager.Configuration = new XmlLoggingConfiguration(Path.Combine(CentralDispatch.AppPath, "log.config"), false);
+            LogManager.Configuration = new XmlLoggingConfiguration(Path.Combine(new EnviromentProvider().AppPath, "log.config"), false);
             LogManager.ThrowExceptions = true;
 
             var exceptionVerification = new ExceptionVerification();

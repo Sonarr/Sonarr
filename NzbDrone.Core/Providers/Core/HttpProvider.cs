@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -50,19 +51,29 @@ namespace NzbDrone.Core.Providers.Core
             return response.GetResponseStream();
         }
 
-        public virtual bool DownloadFile(string address, string fileName)
+        public virtual void DownloadFile(string url, string fileName)
         {
             try
             {
+                var fileInfo = new FileInfo(fileName);
+                if (!fileInfo.Directory.Exists)
+                {
+                    fileInfo.Directory.Create();
+                }
+
+                Logger.Trace("Downloading [{0}] to [{1}]", url, fileName);
+
+                var stopWatch = Stopwatch.StartNew();
                 var webClient = new WebClient();
-                webClient.DownloadFile(address, fileName);
-                return true;
+                webClient.DownloadFile(url, fileName);
+                stopWatch.Stop();
+                Logger.Trace("Downloading Completed. took {0:0}s", stopWatch.Elapsed.Seconds);
             }
             catch (Exception ex)
             {
-                Logger.Warn("Failed to get response from: {0}", address);
+                Logger.Warn("Failed to get response from: {0}", url);
                 Logger.TraceException(ex.Message, ex);
-                return false;
+                throw;
             }
         }
 

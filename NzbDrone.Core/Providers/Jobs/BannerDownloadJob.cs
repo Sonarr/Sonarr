@@ -15,17 +15,19 @@ namespace NzbDrone.Core.Providers.Jobs
         private readonly SeriesProvider _seriesProvider;
         private readonly HttpProvider _httpProvider;
         private readonly DiskProvider _diskProvider;
+        private readonly EnviromentProvider _enviromentProvider;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private string _bannerPath = "";
         private const string _bannerUrlPrefix = "http://www.thetvdb.com/banners/";
 
         [Inject]
-        public BannerDownloadJob(SeriesProvider seriesProvider, HttpProvider httpProvider, DiskProvider diskProvider)
+        public BannerDownloadJob(SeriesProvider seriesProvider, HttpProvider httpProvider, DiskProvider diskProvider, EnviromentProvider enviromentProvider)
         {
             _seriesProvider = seriesProvider;
             _httpProvider = httpProvider;
             _diskProvider = diskProvider;
+            _enviromentProvider = enviromentProvider;
         }
 
         public BannerDownloadJob()
@@ -47,7 +49,7 @@ namespace NzbDrone.Core.Providers.Jobs
         {
             Logger.Debug("Starting banner download job");
 
-            _bannerPath = Path.Combine(CentralDispatch.AppPath, "Content", "Images", "Banners");
+            _bannerPath = Path.Combine(_enviromentProvider.AppPath, "Content", "Images", "Banners");
             _diskProvider.CreateDirectory(_bannerPath);
 
             if (targetId > 0)
@@ -76,10 +78,12 @@ namespace NzbDrone.Core.Providers.Jobs
 
             notification.CurrentMessage = string.Format("Downloading banner for '{0}'", series.Title);
 
-            if (_httpProvider.DownloadFile(_bannerUrlPrefix + series.BannerUrl, bannerFilename))
+            try
+            {
+                _httpProvider.DownloadFile(_bannerUrlPrefix + series.BannerUrl, bannerFilename);
                 notification.CurrentMessage = string.Format("Successfully download banner for '{0}'", series.Title);
-
-            else
+            }
+            catch (Exception)
             {
                 Logger.Debug("Failed to download banner for '{0}'", series.Title);
                 notification.CurrentMessage = string.Format("Failed to download banner for '{0}'", series.Title);

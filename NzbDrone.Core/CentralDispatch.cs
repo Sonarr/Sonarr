@@ -23,35 +23,6 @@ namespace NzbDrone.Core
         private static readonly Object KernelLock = new object();
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-
-        public static Version Version
-        {
-            get { return Assembly.GetExecutingAssembly().GetName().Version; }
-        }
-
-
-        public static DateTime BuildDateTime
-        {
-            get
-            {
-                var fileLocation = Assembly.GetCallingAssembly().Location;
-                return new FileInfo(fileLocation).CreationTime;
-            }
-
-        }
-
-        public static String AppPath
-        {
-            get
-            {
-                if (!String.IsNullOrWhiteSpace(HostingEnvironment.ApplicationPhysicalPath))
-                {
-                    return HostingEnvironment.ApplicationPhysicalPath;
-                }
-                return Directory.GetCurrentDirectory();
-            }
-        }
-
         public static StandardKernel NinjectKernel
         {
             get

@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [TestCase("South Park")]
         public void successful_search(string title)
         {
-            var result = new TvDbProvider().SearchSeries(title);
+            var result = new TvDbProvider(new EnviromentProvider()).SearchSeries(title);
 
             result.Should().NotBeEmpty();
             result[0].SeriesName.Should().Be(title);
@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void no_search_result()
         {
             //setup
-            var tvdbProvider = new TvDbProvider();
+            var tvdbProvider = new TvDbProvider(new EnviromentProvider());
 
             //act
             var result = tvdbProvider.SearchSeries(Guid.NewGuid().ToString());
@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void none_unique_season_episode_number()
         {
             //setup
-            var tvdbProvider = new TvDbProvider();
+            var tvdbProvider = new TvDbProvider(new EnviromentProvider());
 
             //act
             var result = tvdbProvider.GetSeries(75978, true);//Family guy
@@ -65,7 +65,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void American_dad_fix()
         {
             //setup
-            var tvdbProvider = new TvDbProvider();
+            var tvdbProvider = new TvDbProvider(new EnviromentProvider());
 
             //act
             var result = tvdbProvider.GetSeries(73141, true);

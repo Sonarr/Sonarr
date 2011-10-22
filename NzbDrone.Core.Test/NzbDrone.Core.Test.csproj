@@ -92,8 +92,11 @@
     <Compile Include="JobTests\BannerDownloadJobTest.cs" />
     <Compile Include="ProviderTests\ConfigFileProviderTest.cs" />
     <Compile Include="Framework\AutoMoq\TestBaseTests.cs" />
+    <Compile Include="ProviderTests\DiskProviderTests\ExtractArchiveFixture.cs" />
     <Compile Include="ProviderTests\PostDownloadProviderTest.cs" />
     <Compile Include="JobTests\SearchJobTest.cs" />
+    <Compile Include="ProviderTests\UpdateProviderTests\PreformUpdateFixture.cs" />
+    <Compile Include="ProviderTests\UpdateProviderTests\GetAvilableUpdateFixture.cs" />
     <Compile Include="SortHelperTest.cs" />
     <Compile Include="ProviderTests\EpisodeProviderTest_DeleteInvalidEpisodes.cs" />
     <Compile Include="ProviderTests\InventoryProvider_IsAcceptableSizeTest.cs" />
@@ -213,6 +216,9 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Files\TestArchive.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
