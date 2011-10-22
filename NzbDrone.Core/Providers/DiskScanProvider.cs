@@ -58,6 +58,12 @@ namespace NzbDrone.Core.Providers
             _mediaFileProvider.DeleteOrphaned();
             _mediaFileProvider.RepairLinks();
 
+            if (!_diskProvider.FolderExists(path))
+            {
+                Logger. Warn("Series folder doesn't exist: {0}", path);
+                return new List<EpisodeFile>();
+            }
+
             if (_episodeProvider.GetEpisodeBySeries(series.SeriesId).Count == 0)
             {
                 Logger.Debug("Series {0} has no episodes. skipping", series.Title);

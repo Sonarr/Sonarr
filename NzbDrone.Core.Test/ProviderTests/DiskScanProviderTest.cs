@@ -14,7 +14,6 @@ namespace NzbDrone.Core.Test.ProviderTests
     // ReSharper disable InconsistentNaming
     public class DiskScanProviderTest : TestBase
     {
-
         [Test]
         public void scan_series_should_update_last_scan_date()
         {
@@ -37,7 +36,6 @@ namespace NzbDrone.Core.Test.ProviderTests
             mocker.VerifyAllMocks();
 
         }
-
 
         [Test]
         public void cleanup_should_skip_existing_files()
@@ -89,7 +87,6 @@ namespace NzbDrone.Core.Test.ProviderTests
 
         }
 
-
         [Test]
         public void cleanup_should_delete_none_existing_files_remove_links_to_episodes()
         {
@@ -131,7 +128,34 @@ namespace NzbDrone.Core.Test.ProviderTests
 
         }
 
+        [Test]
+        public void scan_series_should_log_warning_if_path_doesnt_exist_on_disk()
+        {
+            //Setup
+            var mocker = new AutoMoqer(MockBehavior.Strict);
 
+            var series = Builder<Series>.CreateNew()
+                .With(s => s.Path = @"C:\Test\TV\SeriesName\")
+                .Build();
 
+            mocker.GetMock<MediaFileProvider>()
+                .Setup(c => c.DeleteOrphaned())
+                .Returns(0);
+
+            mocker.GetMock<MediaFileProvider>()
+                .Setup(c => c.RepairLinks())
+                .Returns(0);    
+
+            mocker.GetMock<DiskProvider>()
+                .Setup(c => c.FolderExists(series.Path))
+                .Returns(false);
+
+            //Act
+            mocker.Resolve<DiskScanProvider>().Scan(series, series.Path);
+
+            //Assert
+            mocker.VerifyAllMocks();
+            ExceptionVerification.ExcpectedWarns(1);
+        }
     }
 }
