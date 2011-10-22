@@ -753,9 +753,6 @@
     <Content Include="Views\Series\EditorTemplates\SeriesModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Series\SingleSeason.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\AddSeries\ExistingSeries.cshtml" />
   </ItemGroup>
   <ItemGroup>
