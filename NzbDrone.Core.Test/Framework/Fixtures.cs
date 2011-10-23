@@ -3,7 +3,6 @@ using System.IO;
 using NLog;
 using NLog.Config;
 using NUnit.Framework;
-using NzbDrone.Core;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Test.Framework;
 

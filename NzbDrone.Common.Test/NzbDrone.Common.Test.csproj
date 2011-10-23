@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{C0EA1A40-91AD-4EEB-BD16-2DDDEBD20AE5}</ProjectGuid>
+    <ProjectGuid>{BEC74619-DDBB-4FBA-B517-D3E20AFC9997}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NzbDrone.App.Test</RootNamespace>
-    <AssemblyName>NzbDrone.App.Test</AssemblyName>
+    <RootNamespace>NzbDrone.Common.Test</RootNamespace>
+    <AssemblyName>NzbDrone.Common.Test</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -21,7 +21,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -32,26 +31,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FizzWare.NBuilder">
-      <HintPath>..\packages\NBuilder.3.0.1\lib\FizzWare.NBuilder.dll</HintPath>
-    </Reference>
-    <Reference Include="FluentAssertions, Version=1.5.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+    <Reference Include="FluentAssertions">
       <HintPath>..\packages\FluentAssertions.1.5.0.0\Lib\.NetFramework 4.0\FluentAssertions.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.ServiceLocation">
-      <HintPath>..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.Unity">
-      <HintPath>..\packages\Unity.2.1.505.0\lib\NET35\Microsoft.Practices.Unity.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.Unity.Configuration">
-      <HintPath>..\packages\Unity.2.1.505.0\lib\NET35\Microsoft.Practices.Unity.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Moq">
       <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject">
-      <HintPath>..\packages\Ninject.2.2.1.4\lib\net40-Full\Ninject.dll</HintPath>
+    <Reference Include="NLog">
+      <HintPath>..\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.5.10.11092\lib\nunit.framework.dll</HintPath>
@@ -72,18 +59,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AutoMoq\AutoMoqer.cs" />
-    <Compile Include="AutoMoq\AutoMoqerTest.cs" />
-    <Compile Include="AutoMoq\Unity\AutoMockingBuilderStrategy.cs" />
-    <Compile Include="AutoMoq\Unity\AutoMockingContainerExtension.cs" />
-    <Compile Include="CentralDispatchTests.cs" />
-    <Compile Include="RouterTest.cs" />
-    <Compile Include="MonitoringProviderTest.cs" />
-    <Compile Include="ConfigProviderTest.cs" />
-    <Compile Include="IISProviderTest.cs" />
+    <Compile Include="EnviromentProviderTest.cs" />
     <Compile Include="ProcessProviderTests.cs" />
-    <Compile Include="ServiceControllerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServiceControllerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -97,13 +76,9 @@
       <Project>{FAFB5948-A222-4CF6-AD14-026BE7564802}</Project>
       <Name>NzbDrone.Test.Dummy</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NzbDrone\NzbDrone.csproj">
-      <Project>{D12F7F2F-8A3C-415F-88FA-6DD061A84869}</Project>
-      <Name>NzbDrone</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AutoMoq\License.txt" />
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

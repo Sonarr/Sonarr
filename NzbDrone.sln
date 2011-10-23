@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NzbDrone.Update.Test", "Nzb
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NzbDrone.Common", "NzbDrone.Common\NzbDrone.Common.csproj", "{F2BE0FDF-6E47-4827-A420-DD4EF82407F8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NzbDrone.Common.Test", "NzbDrone.Common.Test\NzbDrone.Common.Test.csproj", "{BEC74619-DDBB-4FBA-B517-D3E20AFC9997}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -147,6 +149,18 @@ Global
 		{F2BE0FDF-6E47-4827-A420-DD4EF82407F8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{F2BE0FDF-6E47-4827-A420-DD4EF82407F8}.Release|x64.ActiveCfg = Release|Any CPU
 		{F2BE0FDF-6E47-4827-A420-DD4EF82407F8}.Release|x86.ActiveCfg = Release|Any CPU
+		{BEC74619-DDBB-4FBA-B517-D3E20AFC9997}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEC74619-DDBB-4FBA-B517-D3E20AFC9997}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEC74619-DDBB-4FBA-B517-D3E20AFC9997}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BEC74619-DDBB-4FBA-B517-D3E20AFC9997}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BEC74619-DDBB-4FBA-B517-D3E20AFC9997}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BEC74619-DDBB-4FBA-B517-D3E20AFC9997}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BEC74619-DDBB-4FBA-B517-D3E20AFC9997}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEC74619-DDBB-4FBA-B517-D3E20AFC9997}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEC74619-DDBB-4FBA-B517-D3E20AFC9997}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{BEC74619-DDBB-4FBA-B517-D3E20AFC9997}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{BEC74619-DDBB-4FBA-B517-D3E20AFC9997}.Release|x64.ActiveCfg = Release|Any CPU
+		{BEC74619-DDBB-4FBA-B517-D3E20AFC9997}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -156,6 +170,7 @@ Global
 		{C0EA1A40-91AD-4EEB-BD16-2DDDEBD20AE5} = {57A04B72-8088-4F75-A582-1158CF8291F7}
 		{FAFB5948-A222-4CF6-AD14-026BE7564802} = {57A04B72-8088-4F75-A582-1158CF8291F7}
 		{35388E8E-0CDB-4A84-AD16-E4B6EFDA5D97} = {57A04B72-8088-4F75-A582-1158CF8291F7}
+		{BEC74619-DDBB-4FBA-B517-D3E20AFC9997} = {57A04B72-8088-4F75-A582-1158CF8291F7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35
