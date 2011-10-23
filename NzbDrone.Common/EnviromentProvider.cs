@@ -2,7 +2,7 @@
 using System.IO;
 using System.Reflection;
 
-namespace NzbDrone.Providers
+namespace NzbDrone.Common
 {
     public class EnviromentProvider
     {
@@ -39,6 +39,14 @@ namespace NzbDrone.Providers
                 }
 
                 return dir.FullName;
+            }
+        }
+
+        public virtual string StartUpPath
+        {
+            get
+            {
+                return new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName;
             }
         }
 

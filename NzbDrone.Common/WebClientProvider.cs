@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace NzbDrone.Providers
+namespace NzbDrone.Common
 {
     public class WebClientProvider
     {

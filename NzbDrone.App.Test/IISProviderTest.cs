@@ -7,6 +7,7 @@ using AutoMoq;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Common;
 using NzbDrone.Providers;
 
 namespace NzbDrone.App.Test
@@ -14,9 +15,6 @@ namespace NzbDrone.App.Test
     [TestFixture]
     public class IISProviderTest
     {
-
-
-
         [Test]
         public void start_should_set_IISProccessId_property()
         {

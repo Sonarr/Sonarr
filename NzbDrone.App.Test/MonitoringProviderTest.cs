@@ -8,6 +8,8 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Common;
+using NzbDrone.Common.Model;
 using NzbDrone.Model;
 using NzbDrone.Providers;
 

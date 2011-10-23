@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Common;
 using NzbDrone.Providers;
 
 namespace NzbDrone.App.Test

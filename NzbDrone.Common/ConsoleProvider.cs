@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace NzbDrone.Providers
+namespace NzbDrone.Common
 {
     public class ConsoleProvider
     {
@@ -31,6 +31,11 @@ namespace NzbDrone.Providers
         public virtual void PrintServiceDoestExist()
         {
             Console.WriteLine("Can't find service ({0})", ServiceProvider.NzbDroneServiceName);
+        }
+
+        public virtual void UpdateFolderDoestExist(string path)
+        {
+            Console.WriteLine("Unable to find update package in '{0}'", path);
         }
     }
 }

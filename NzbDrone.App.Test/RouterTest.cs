@@ -3,8 +3,8 @@ using AutoMoq;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Common;
 using NzbDrone.Model;
-using NzbDrone.Providers;
 
 namespace NzbDrone.App.Test
 {

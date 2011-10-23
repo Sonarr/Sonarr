@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
+﻿using System.Diagnostics;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Providers;
+using NzbDrone.Common;
 
 namespace NzbDrone.App.Test
 {

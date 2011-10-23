@@ -2,9 +2,9 @@
 using System.Diagnostics;
 using System.Linq;
 using NLog;
-using NzbDrone.Model;
+using NzbDrone.Common.Model;
 
-namespace NzbDrone.Providers
+namespace NzbDrone.Common
 {
     public class ProcessProvider
     {

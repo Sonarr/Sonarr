@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Common;
 using NzbDrone.Model;
-using NzbDrone.Providers;
 
 namespace NzbDrone
 {

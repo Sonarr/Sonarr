@@ -1,5 +1,6 @@
 ﻿using NLog;
 using Ninject;
+using NzbDrone.Common;
 using NzbDrone.Providers;
 
 namespace NzbDrone

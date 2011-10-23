@@ -6,6 +6,7 @@ using System.Xml.XPath;
 using NLog;
 using NLog.Config;
 using Ninject;
+using NzbDrone.Common;
 using NzbDrone.Model;
 
 namespace NzbDrone.Providers
