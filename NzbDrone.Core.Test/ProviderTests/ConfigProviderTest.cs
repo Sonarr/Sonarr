@@ -1,9 +1,14 @@
-﻿using AutoMoq;
+﻿using System;
+using System.Linq;
+using System.Reflection;
+using AutoMoq;
 using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
+using PetaPoco;
 
 namespace NzbDrone.Core.Test.ProviderTests
 {
@@ -110,5 +115,54 @@ namespace NzbDrone.Core.Test.ProviderTests
             db.Fetch<Config>().Should().HaveCount(1);
         }
 
+        [Test]
+        [Description("This test will use reflection to ensure each config property read/writes to a unique key")]
+        public void config_properties_should_write_and_read_using_same_key()
+        {
+
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            var configProvider = mocker.Resolve<ConfigProvider>();
+            var allProperties = typeof(ConfigProvider).GetProperties();
+
+
+            //Act
+            foreach (var propertyInfo in allProperties)
+            {
+                object value = null;
+
+                if (propertyInfo.PropertyType == typeof(string))
+                {
+                    value = new Guid().ToString();
+                }
+                else if (propertyInfo.PropertyType == typeof(int))
+                {
+                    value = DateTime.Now.Millisecond;
+                }
+                else if (propertyInfo.PropertyType == typeof(bool))
+                {
+                    value = true;
+                }
+                else if (propertyInfo.PropertyType.BaseType == typeof(Enum))
+                {
+                    value = 0;
+                }
+
+                propertyInfo.GetSetMethod().Invoke(configProvider, new[] { value });
+                var returnValue = propertyInfo.GetGetMethod().Invoke(configProvider, null);
+
+                if (propertyInfo.PropertyType.BaseType == typeof(Enum))
+                {
+                    returnValue = (int)returnValue;
+                }
+
+                returnValue.Should().Be(value, propertyInfo.Name);
+            }
+
+            db.Fetch<Config>().Should()
+                .HaveSameCount(allProperties, "two different properties are writing to the same key in db. Copy/Past fail.");
+        }
     }
 }

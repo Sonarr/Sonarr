@@ -20,34 +20,13 @@ namespace NzbDrone.Core.Providers.Core
             _database = database;
         }
 
-        public IList<Config> All()
-        {
-            return _database.Fetch<Config>();
-        }
-
         public ConfigProvider()
         {
         }
 
-        public virtual String ApiKey
+        public IList<Config> All()
         {
-            get { return GetValue("ApiKey"); }
-
-            set { SetValue("ApiKey", value); }
-        }
-
-        public virtual String EpisodeNameFormat
-        {
-            get { return GetValue("EpisodeNameFormat"); }
-
-            set { SetValue("EpisodeNameFormat", value); }
-        }
-
-        public virtual String SeriesRoot
-        {
-            get { return GetValue("SeriesRoots"); }
-
-            set { SetValue("SeriesRoots", value); }
+            return _database.Fetch<Config>();
         }
 
         public virtual String NzbMatrixUsername
@@ -106,20 +85,6 @@ namespace NzbDrone.Core.Providers.Core
             set { SetValue("NewzbinPassword", value); }
         }
 
-        public virtual int SyncFrequency
-        {
-            get { return GetValueInt("SyncFrequency"); }
-
-            set { SetValue("SyncFrequency", value); }
-        }
-
-        public virtual Boolean DownloadPropers
-        {
-            get { return GetValueBoolean("DownloadPropers"); }
-
-            set { SetValue("DownloadPropers", value); }
-        }
-
         public virtual String SabHost
         {
             get { return GetValue("SabHost", "localhost"); }
@@ -174,20 +139,6 @@ namespace NzbDrone.Core.Providers.Core
             get { return GetValue("SabTvDropDirectory"); }
 
             set { SetValue("SabTvDropDirectory", value); }
-        }
-
-        public virtual Boolean UseBlackhole
-        {
-            get { return GetValueBoolean("UseBlackhole"); }
-
-            set { SetValue("UseBlackhole", value); }
-        }
-
-        public virtual String BlackholeDirectory
-        {
-            get { return GetValue("BlackholeDirectory"); }
-
-            set { SetValue("BlackholeDirectory", value); }
         }
 
         public virtual bool SortingIncludeSeriesName
@@ -250,13 +201,6 @@ namespace NzbDrone.Core.Providers.Core
             get { return GetValueInt("DefaultQualityProfile", 1); }
 
             set { SetValue("DefaultQualityProfile", value); }
-        }
-
-        public virtual Boolean XbmcEnabled
-        {
-            get { return GetValueBoolean("XbmcEnabled"); }
-
-            set { SetValue("XbmcEnabled", value); }
         }
 
         public virtual Boolean XbmcNotifyOnGrab
@@ -328,30 +272,26 @@ namespace NzbDrone.Core.Providers.Core
 
         public virtual string GetValue(string key, object defaultValue)
         {
-            string value;
-
             var dbValue = _database.SingleOrDefault<Config>("WHERE [Key] =@0", key);
 
             if (dbValue != null && !String.IsNullOrEmpty(dbValue.Value))
                 return dbValue.Value;
 
             Logger.Trace("Unable to find config key '{0}' defaultValue:'{1}'", key, defaultValue);
-            value = defaultValue.ToString();
-
-            return value;
+            return defaultValue.ToString();
         }
 
-        public virtual void SetValue(string key, Boolean value)
+        private void SetValue(string key, Boolean value)
         {
             SetValue(key, value.ToString());
         }
 
-        public virtual void SetValue(string key, int value)
+        private void SetValue(string key, int value)
         {
             SetValue(key, value.ToString());
         }
 
-        public virtual void SetValue(string key, string value)
+        public void SetValue(string key, string value)
         {
             if (String.IsNullOrEmpty(key))
                 throw new ArgumentOutOfRangeException("key");
