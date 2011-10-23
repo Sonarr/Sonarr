@@ -76,6 +76,9 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             var mocker = new AutoMoqer(MockBehavior.Strict);
 
+            var series = Builder<Series>.CreateNew()
+                .With(s => s.SeriesId = 12).Build();
+
             mocker.GetMock<EpisodeProvider>()
                 .Setup(c => c.GetEpisodeBySeries(12))
                 .Returns(new List<Episode>());
@@ -85,9 +88,9 @@ namespace NzbDrone.Core.Test.ProviderTests
             mocker.GetMock<MediaFileProvider>()
                 .Setup(e => e.DeleteOrphaned()).Returns(0);
 
-
-            var series = Builder<Series>.CreateNew()
-                .With(s => s.SeriesId = 12).Build();
+            mocker.GetMock<DiskProvider>()
+                .Setup(s => s.FolderExists(series.Path))
+                .Returns(true);
 
             //Act
             mocker.Resolve<DiskScanProvider>().Scan(series);
