@@ -104,14 +104,12 @@ namespace NzbDrone.Core.Test.ProviderTests
             timerProvider.QueueJob(typeof(FakeJob));
             Thread.Sleep(1000);
             timerProvider.QueueJob(typeof(FakeJob));
-            Thread.Sleep(1000);
+            Thread.Sleep(2000);
             JobProvider.Queue.Should().BeEmpty();
             fakeJob.ExecutionCount.Should().Be(2);
         }
 
         [Test]
-        //This test will confirm that the concurrency checks are rest
-        //after execution so the job can successfully run.
         public void no_concurent_jobs()
         {
             IList<IJob> fakeJobs = new List<IJob> { new SlowJob() };
@@ -127,7 +125,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             timerProvider.QueueJob(typeof(SlowJob), 3);
 
 
-            Thread.Sleep(10000);
+            Thread.Sleep(5000);
             JobProvider.Queue.Should().BeEmpty();
             //Asserts are done in ExceptionVerification
         }
@@ -538,7 +536,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
         {
             Console.WriteLine("Starting Job");
-            Thread.Sleep(2000);
+            Thread.Sleep(1000);
             ExecutionCount++;
             Console.WriteLine("Finishing Job");
         }

@@ -1,16 +1,25 @@
-﻿using Ninject;
+﻿using System;
+using NLog;
+using Ninject;
 using NzbDrone.Core.Model.Notification;
+using NzbDrone.Core.Providers.Core;
 
 namespace NzbDrone.Core.Providers.Jobs
 {
     public class PostDownloadScanJob : IJob
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         private readonly PostDownloadProvider _postDownloadProvider;
+        private readonly ConfigProvider _configProvider;
+        private readonly DiskProvider _diskProvider;
 
         [Inject]
-        public PostDownloadScanJob(PostDownloadProvider postDownloadProvider)
+        public PostDownloadScanJob(PostDownloadProvider postDownloadProvider,ConfigProvider configProvider, DiskProvider diskProvider)
         {
             _postDownloadProvider = postDownloadProvider;
+            _configProvider = configProvider;
+            _diskProvider = diskProvider;
         }
 
         public PostDownloadScanJob()
@@ -29,7 +38,21 @@ namespace NzbDrone.Core.Providers.Jobs
 
         public virtual void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
         {
-            _postDownloadProvider.ScanDropFolder(notification);
+            var dropFolder = _configProvider.SabDropDirectory;
+
+            if (String.IsNullOrWhiteSpace(dropFolder))
+            {
+                Logger.Debug("No drop folder is defined. Skipping.");
+                return;
+            }
+
+            if (!_diskProvider.FolderExists(dropFolder))
+            {
+                Logger.Warn("Unable to Scan for New Downloads - folder Doesn't exist: [{0}]", dropFolder);
+                return;
+            }
+
+            _postDownloadProvider.ProcessDropFolder(dropFolder);
         }
     }
 }

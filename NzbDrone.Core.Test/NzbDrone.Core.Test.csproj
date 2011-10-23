@@ -92,8 +92,9 @@
     <Compile Include="JobTests\BannerDownloadJobTest.cs" />
     <Compile Include="ProviderTests\ConfigFileProviderTest.cs" />
     <Compile Include="ProviderTests\DiskProviderTests\ExtractArchiveFixture.cs" />
-    <Compile Include="ProviderTests\PostDownloadProviderTest.cs" />
+    <Compile Include="ProviderTests\PostDownloadProviderTests\PostDownloadProviderFixture.cs" />
     <Compile Include="JobTests\SearchJobTest.cs" />
+    <Compile Include="ProviderTests\PostDownloadProviderTests\ProcessDownloadFixture.cs" />
     <Compile Include="ProviderTests\UpdateProviderTests\PreformUpdateFixture.cs" />
     <Compile Include="ProviderTests\UpdateProviderTests\GetAvilableUpdateFixture.cs" />
     <Compile Include="SortHelperTest.cs" />

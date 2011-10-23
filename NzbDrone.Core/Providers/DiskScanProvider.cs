@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Providers
 
             if (!_diskProvider.FolderExists(path))
             {
-                Logger. Warn("Series folder doesn't exist: {0}", path);
+                Logger.Warn("Series folder doesn't exist: {0}", path);
                 return new List<EpisodeFile>();
             }
 
@@ -80,7 +80,9 @@ namespace NzbDrone.Core.Providers
             {
                 var file = ImportFile(series, filePath);
                 if (file != null)
+                {
                     importedFiles.Add(file);
+                }
             }
 
             series.LastDiskSync = DateTime.Now;
@@ -153,7 +155,7 @@ namespace NzbDrone.Core.Providers
             foreach (var ep in episodes)
             {
                 ep.EpisodeFileId = fileId;
-                ep.PostDownloadStatus = PostDownloadStatusType.Processed;
+                ep.PostDownloadStatus = PostDownloadStatusType.NoError;
                 _episodeProvider.UpdateEpisode(ep);
                 Logger.Debug("Linking [{0}] > [{1}]", filePath, ep);
             }
@@ -191,12 +193,15 @@ namespace NzbDrone.Core.Providers
             parseResult.Series = series;
 
             var message = _sabProvider.GetSabTitle(parseResult);
-            
-            if (newDownload)
-                _externalNotificationProvider.OnDownload(message, series);
 
+            if (newDownload)
+            {
+                _externalNotificationProvider.OnDownload(message, series);
+            }
             else
+            {
                 _externalNotificationProvider.OnRename(message, series);
+            }
 
             return true;
         }
