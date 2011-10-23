@@ -48,7 +48,6 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Providers\DiskProvider.cs" />
     <Compile Include="Providers\UpdateProvider.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConsoleProvider.cs" />
+    <Compile Include="DiskProvider.cs" />
     <Compile Include="EnviromentProvider.cs" />
     <Compile Include="Model\ProcessInfo.cs" />
     <Compile Include="ProcessProvider.cs" />

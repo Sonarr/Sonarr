@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using AutoMoq;
 using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Update.Providers;
@@ -58,6 +59,20 @@ namespace NzbDrone.Update.Test
 
             Assert.Throws<DirectoryNotFoundException>(() => mocker.Resolve<UpdateProvider>().Verify(targetFolder))
                 .Message.Should().StartWith("Update folder doesn't exist");
+        }
+
+        [Test]
+        public void verify_should_pass_if_update_folder_and_target_folder_both_exist()
+        {
+            const string targetFolder = "c:\\NzbDrone\\";
+
+            mocker.GetMock<DiskProvider>()
+               .Setup(c => c.FolderExists(It.IsAny<string>()))
+               .Returns(true);
+
+            mocker.Resolve<UpdateProvider>().Verify(targetFolder);
+
+            mocker.VerifyAllMocks();
         }
     }
 }

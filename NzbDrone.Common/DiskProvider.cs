@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using NLog;
 
-namespace NzbDrone.Update.Providers
+namespace NzbDrone.Common
 {
     public class DiskProvider
     {
