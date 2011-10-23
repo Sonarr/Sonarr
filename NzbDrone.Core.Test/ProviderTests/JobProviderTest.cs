@@ -17,13 +17,6 @@ namespace NzbDrone.Core.Test.ProviderTests
     // ReSharper disable InconsistentNaming
     public class JobProviderTest : TestBase
     {
-        [TestFixtureSetUp]
-        public override void Setup()
-        {
-            base.Setup();
-            JobProvider.Queue.Clear();
-        }
-
         [Test]
         public void Run_Jobs_Updates_Last_Execution()
         {
@@ -100,13 +93,13 @@ namespace NzbDrone.Core.Test.ProviderTests
             mocker.SetConstant(MockLib.GetEmptyDatabase());
             mocker.SetConstant(fakeJobs);
 
-            var timerProvider = mocker.Resolve<JobProvider>();
-            timerProvider.Initialize();
-            timerProvider.QueueJob(typeof(FakeJob));
+            var jobProvider = mocker.Resolve<JobProvider>();
+            jobProvider.Initialize();
+            jobProvider.QueueJob(typeof(FakeJob));
             Thread.Sleep(1000);
-            timerProvider.QueueJob(typeof(FakeJob));
+            jobProvider.QueueJob(typeof(FakeJob));
             Thread.Sleep(2000);
-            JobProvider.Queue.Should().BeEmpty();
+            jobProvider.Queue.Should().BeEmpty();
             fakeJob.ExecutionCount.Should().Be(2);
         }
 
@@ -119,15 +112,15 @@ namespace NzbDrone.Core.Test.ProviderTests
             mocker.SetConstant(MockLib.GetEmptyDatabase());
             mocker.SetConstant(fakeJobs);
 
-            var timerProvider = mocker.Resolve<JobProvider>();
-            timerProvider.Initialize();
-            timerProvider.QueueJob(typeof(SlowJob), 1);
-            timerProvider.QueueJob(typeof(SlowJob), 2);
-            timerProvider.QueueJob(typeof(SlowJob), 3);
+            var jobProvider = mocker.Resolve<JobProvider>();
+            jobProvider.Initialize();
+            jobProvider.QueueJob(typeof(SlowJob), 1);
+            jobProvider.QueueJob(typeof(SlowJob), 2);
+            jobProvider.QueueJob(typeof(SlowJob), 3);
 
 
             Thread.Sleep(5000);
-            JobProvider.Queue.Should().BeEmpty();
+            jobProvider.Queue.Should().BeEmpty();
             //Asserts are done in ExceptionVerification
         }
 
@@ -144,15 +137,15 @@ namespace NzbDrone.Core.Test.ProviderTests
             mocker.SetConstant(MockLib.GetEmptyDatabase());
             mocker.SetConstant(fakeJobs);
 
-            var timerProvider = mocker.Resolve<JobProvider>();
-            timerProvider.Initialize();
-            timerProvider.QueueJob(typeof(BrokenJob));
+            var jobProvider = mocker.Resolve<JobProvider>();
+            jobProvider.Initialize();
+            jobProvider.QueueJob(typeof(BrokenJob));
             Thread.Sleep(2000);
-            timerProvider.QueueJob(typeof(BrokenJob));
+            jobProvider.QueueJob(typeof(BrokenJob));
 
 
             Thread.Sleep(2000);
-            JobProvider.Queue.Should().BeEmpty();
+            jobProvider.Queue.Should().BeEmpty();
             brokenJob.ExecutionCount.Should().Be(2);
             ExceptionVerification.ExcpectedErrors(2);
         }
@@ -201,11 +194,11 @@ namespace NzbDrone.Core.Test.ProviderTests
             mocker.SetConstant(MockLib.GetEmptyDatabase());
             mocker.SetConstant(fakeJobs);
 
-            var timerProvider = mocker.Resolve<JobProvider>();
-            timerProvider.Initialize();
+            var jobProvider = mocker.Resolve<JobProvider>();
+            jobProvider.Initialize();
 
-            var thread1 = new Thread(() => timerProvider.QueueJob(typeof(SlowJob)));
-            var thread2 = new Thread(() => timerProvider.QueueJob(typeof(SlowJob)));
+            var thread1 = new Thread(() => jobProvider.QueueJob(typeof(SlowJob)));
+            var thread2 = new Thread(() => jobProvider.QueueJob(typeof(SlowJob)));
 
             thread1.Start();
             thread2.Start();
@@ -216,7 +209,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             Thread.Sleep(5000);
 
             Assert.AreEqual(1, slowJob.ExecutionCount);
-            JobProvider.Queue.Should().BeEmpty();
+            jobProvider.Queue.Should().BeEmpty();
 
         }
 
@@ -364,16 +357,16 @@ namespace NzbDrone.Core.Test.ProviderTests
             mocker.SetConstant(fakeJobs);
 
             //Act
-            var timerProvider = mocker.Resolve<JobProvider>();
-            timerProvider.Initialize();
-            timerProvider.QueueJob(typeof(FakeJob), 10);
+            var jobProvider = mocker.Resolve<JobProvider>();
+            jobProvider.Initialize();
+            jobProvider.QueueJob(typeof(FakeJob), 10);
             Thread.Sleep(1000);
 
             //Assert
-            var settings = timerProvider.All();
+            var settings = jobProvider.All();
             settings.Should().NotBeEmpty();
             settings[0].LastExecution.Should().HaveYear(2000);
-            JobProvider.Queue.Should().BeEmpty();
+            jobProvider.Queue.Should().BeEmpty();
         }
 
         [Test]
@@ -386,13 +379,13 @@ namespace NzbDrone.Core.Test.ProviderTests
             mocker.SetConstant(fakeJobs);
 
             //Act
-            var timerProvider = mocker.Resolve<JobProvider>();
-            timerProvider.Initialize();
-            timerProvider.QueueJob(typeof(FakeJob), 10);
+            var jobProvider = mocker.Resolve<JobProvider>();
+            jobProvider.Initialize();
+            jobProvider.QueueJob(typeof(FakeJob), 10);
             Thread.Sleep(1000);
 
             //Assert
-            var settings = timerProvider.All();
+            var settings = jobProvider.All();
             Assert.IsNotEmpty(settings);
             Assert.IsFalse(settings[0].Success);
         }
@@ -420,7 +413,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             //Act
             var jobProvider = mocker.Resolve<JobProvider>();
             jobProvider.Initialize();
-            JobProvider.Queue.Add(fakeQueueItem);
+            jobProvider.Queue.Add(fakeQueueItem);
             jobProvider.QueueJob(fakeJob.GetType(), 12);
             Thread.Sleep(1000);
 
@@ -441,19 +434,21 @@ namespace NzbDrone.Core.Test.ProviderTests
             mocker.SetConstant(MockLib.GetEmptyDatabase());
             mocker.SetConstant(fakeJobs);
 
-            mocker.Resolve<JobProvider>().Initialize();
+            var jobProvider = mocker.Resolve<JobProvider>();
 
-            var _jobThread = new Thread(() => mocker.Resolve<JobProvider>().QueueScheduled());
+            jobProvider.Initialize();
+
+            var _jobThread = new Thread(() => jobProvider.QueueScheduled());
             _jobThread.Start();
 
             Thread.Sleep(200);
 
-            mocker.Resolve<JobProvider>().QueueJob(typeof(DisabledJob), 12);
+            jobProvider.QueueJob(typeof(DisabledJob), 12);
 
             Thread.Sleep(3000);
 
             //Assert
-            JobProvider.Queue.Should().BeEmpty();
+            jobProvider.Queue.Should().BeEmpty();
             slowJob.ExecutionCount.Should().Be(1);
             disabledJob.ExecutionCount.Should().Be(1);
         }

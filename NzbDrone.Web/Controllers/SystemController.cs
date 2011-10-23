@@ -30,7 +30,7 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult Jobs()
         {
-            ViewData["Queue"] = JobProvider.Queue.Select(c => new JobQueueItemModel {
+            ViewData["Queue"] = _jobProvider.Queue.Select(c => new JobQueueItemModel {
                                                                                         Name = c.JobType.Name,
                                                                                         TargetId = c.TargetId,
                                                                                         SecondaryTargetId = c.SecondaryTargetId

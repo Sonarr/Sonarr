@@ -21,7 +21,6 @@ namespace NzbDrone.Core.Test.Framework
         [TearDown]
         public void TearDown()
         {
-            JobProvider.Queue.Clear();
             ExceptionVerification.AssertNoUnexcpectedLogs();
         }
 

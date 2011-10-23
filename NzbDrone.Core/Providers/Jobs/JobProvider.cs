@@ -26,11 +26,11 @@ namespace NzbDrone.Core.Providers.Jobs
         private readonly NotificationProvider _notificationProvider;
         private readonly IList<IJob> _jobs;
 
-        private static readonly object ExecutionLock = new object();
         private Thread _jobThread;
-        private static bool _isRunning;
 
-        private static readonly List<JobQueueItem> _queue = new List<JobQueueItem>();
+        private readonly object ExecutionLock = new object();
+        private bool _isRunning;
+        private readonly List<JobQueueItem> _queue = new List<JobQueueItem>();
 
         private ProgressNotification _notification;
 
@@ -49,11 +49,10 @@ namespace NzbDrone.Core.Providers.Jobs
         [EditorBrowsable(EditorBrowsableState.Never)]
         public JobProvider() { }
 
-
         /// <summary>
         /// Gets the active queue.
         /// </summary>
-        public static List<JobQueueItem> Queue
+        public List<JobQueueItem> Queue
         {
             get
             {

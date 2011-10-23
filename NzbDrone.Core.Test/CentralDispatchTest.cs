@@ -84,5 +84,14 @@ namespace NzbDrone.Core.Test
         {
             CentralDispatch.NinjectKernel.Get<QualityProvider>().All().Should().HaveCount(2);
         }
+
+        [Test]
+        public void JobProvider_should_be_singletone()
+        {
+            var first = CentralDispatch.NinjectKernel.Get<JobProvider>();
+            var second = CentralDispatch.NinjectKernel.Get<JobProvider>();
+
+            first.Should().BeSameAs(second);
+        }
     }
 }
