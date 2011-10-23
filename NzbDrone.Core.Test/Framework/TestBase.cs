@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Test.Framework
     {
 
         [SetUp]
-        public void Setup()
+        public virtual void Setup()
         {
             ExceptionVerification.Reset();
             if (Directory.Exists(TempFolder))

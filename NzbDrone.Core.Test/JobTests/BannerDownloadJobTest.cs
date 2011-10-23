@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Test.JobTests
         {
             //Setup
             var fakeSeries = Builder<Series>.CreateListOfSize(10)
-                .WhereRandom(2)
+                .Random(2)
                 .With(s => s.BannerUrl = null)
                 .Build();
 

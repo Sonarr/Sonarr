@@ -220,7 +220,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(e => e.AirDate = DateTime.Today)
                 .TheFirst(5)
                 .With(e => e.EpisodeFileId = 0)
-                .WhereTheLast(2)
+                .TheLast(2)
                 .With(e => e.AirDate = DateTime.Today.AddDays(1))
                 .Build();
 
@@ -247,7 +247,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
             var fakeSeries = Builder<Series>.CreateNew().With(e => e.QualityProfileId = fakeQuality.QualityProfileId).Build();
-            var fakeEpisodes = Builder<Episode>.CreateListOfSize(10).All().With(e => e.SeriesId = fakeSeries.SeriesId).With(e => e.Ignored = true).WhereRandom(5).With(e => e.EpisodeFileId = 0).Build();
+            var fakeEpisodes = Builder<Episode>.CreateListOfSize(10).All().With(e => e.SeriesId = fakeSeries.SeriesId).With(e => e.Ignored = true).Random(5).With(e => e.EpisodeFileId = 0).Build();
 
             db.Insert(fakeSeries);
             db.Insert(fakeQuality);
@@ -308,7 +308,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(e => e.AirDate = DateTime.Today.AddDays(-1))
                 .TheFirst(5)
                 .With(e => e.Ignored = false)
-                .WhereTheLast(5)
+                .TheLast(5)
                 .With(e => e.Ignored = true)
                 .Build();
 
@@ -638,8 +638,8 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
             var fakeSeries = Builder<Series>.CreateListOfSize(10)
-                .WhereAll()
-                .Have(e => e.QualityProfileId = fakeQuality.QualityProfileId)
+                .All()
+                .With(e => e.QualityProfileId = fakeQuality.QualityProfileId)
                 .Build();
 
             db.InsertMany(fakeSeries);
@@ -661,8 +661,8 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
             var fakeSeries = Builder<Series>.CreateListOfSize(10)
-                .WhereAll()
-                .Have(e => e.QualityProfileId = fakeQuality.QualityProfileId)
+                .All()
+                .With(e => e.QualityProfileId = fakeQuality.QualityProfileId)
                 .Build();
 
             db.InsertMany(fakeSeries);
@@ -684,8 +684,8 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
             var fakeSeries = Builder<Series>.CreateListOfSize(10)
-                .WhereAll()
-                .Have(e => e.QualityProfileId = fakeQuality.QualityProfileId)
+                .All()
+                .With(e => e.QualityProfileId = fakeQuality.QualityProfileId)
                 .Build();
 
             db.InsertMany(fakeSeries);
@@ -707,8 +707,8 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
             var fakeSeries = Builder<Series>.CreateListOfSize(10)
-                .WhereAll()
-                .Have(e => e.QualityProfileId = fakeQuality.QualityProfileId)
+                .All()
+                .With(e => e.QualityProfileId = fakeQuality.QualityProfileId)
                 .Build();
 
             db.InsertMany(fakeSeries);

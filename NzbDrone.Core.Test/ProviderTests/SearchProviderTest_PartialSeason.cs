@@ -183,10 +183,10 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var parseResults = Builder<EpisodeParseResult>.CreateListOfSize(4)
                 .TheFirst(1)
-                .Has(p => p.CleanTitle = "title")
-                .Has(p => p.SeasonNumber = 1)
-                .Has(p => p.FullSeason = true)
-                .Has(p => p.EpisodeNumbers = null)
+                .With(p => p.CleanTitle = "title")
+                .With(p => p.SeasonNumber = 1)
+                .With(p => p.FullSeason = true)
+                .With(p => p.EpisodeNumbers = null)
                 .Build();
 
             var mocker = new AutoMoqer(MockBehavior.Strict);

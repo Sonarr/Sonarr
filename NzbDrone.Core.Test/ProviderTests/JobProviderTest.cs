@@ -18,8 +18,9 @@ namespace NzbDrone.Core.Test.ProviderTests
     public class JobProviderTest : TestBase
     {
         [TestFixtureSetUp]
-        public void Setup()
+        public override void Setup()
         {
+            base.Setup();
             JobProvider.Queue.Clear();
         }
 
@@ -415,7 +416,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                                         TargetId = 12,
                                         SecondaryTargetId = 0
                                     };
-            
+
             //Act
             var jobProvider = mocker.Resolve<JobProvider>();
             jobProvider.Initialize();

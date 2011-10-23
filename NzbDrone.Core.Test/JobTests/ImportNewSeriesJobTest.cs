@@ -23,8 +23,8 @@ namespace NzbDrone.Core.Test.JobTests
         {
             var series = Builder<Series>.CreateListOfSize(2)
                      .All().With(s => s.LastInfoSync = null)
-                     .TheFirst(1).Has(s => s.SeriesId = 12)
-                     .AndTheNext(1).Has(s => s.SeriesId = 15)
+                     .TheFirst(1).With(s => s.SeriesId = 12)
+                     .TheNext(1).With(s => s.SeriesId = 15)
                         .Build();
 
             var notification = new ProgressNotification("Test");
@@ -88,8 +88,8 @@ namespace NzbDrone.Core.Test.JobTests
         {
             var series = Builder<Series>.CreateListOfSize(2)
                      .All().With(s => s.LastInfoSync = null)
-                     .TheFirst(1).Has(s => s.SeriesId = 12)
-                     .AndTheNext(1).Has(s => s.SeriesId = 15)
+                     .TheFirst(1).With(s => s.SeriesId = 12)
+                     .TheNext(1).With(s => s.SeriesId = 15)
                         .Build();
 
             var notification = new ProgressNotification("Test");

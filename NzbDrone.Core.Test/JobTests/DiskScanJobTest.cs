@@ -49,8 +49,8 @@ namespace NzbDrone.Core.Test.JobTests
         public void job_with_no_target_should_scan_all_series()
         {
             var series = Builder<Series>.CreateListOfSize(2)
-                .TheFirst(1).Has(s => s.SeriesId = 12)
-                .AndTheNext(1).Has(s => s.SeriesId = 15)
+                .TheFirst(1).With(s => s.SeriesId = 12)
+                .TheNext(1).With(s => s.SeriesId = 15)
                 .Build();
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
@@ -77,8 +77,8 @@ namespace NzbDrone.Core.Test.JobTests
         public void failed_scan_should_not_terminated_job()
         {
             var series = Builder<Series>.CreateListOfSize(2)
-                .TheFirst(1).Has(s => s.SeriesId = 12)
-                .AndTheNext(1).Has(s => s.SeriesId = 15)
+                .TheFirst(1).With(s => s.SeriesId = 12)
+                .TheNext(1).With(s => s.SeriesId = 15)
                 .Build();
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
@@ -106,8 +106,8 @@ namespace NzbDrone.Core.Test.JobTests
         public void job_with_no_target_should_scan_series_with_episodes()
         {
             var series = Builder<Series>.CreateListOfSize(2)
-                .TheFirst(1).Has(s => s.SeriesId = 12)
-                .AndTheNext(1).Has(s => s.SeriesId = 15)
+                .TheFirst(1).With(s => s.SeriesId = 12)
+                .TheNext(1).With(s => s.SeriesId = 15)
                 .Build();
 
             var mocker = new AutoMoqer(MockBehavior.Strict);

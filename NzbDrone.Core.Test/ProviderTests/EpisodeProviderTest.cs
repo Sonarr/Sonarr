@@ -338,8 +338,8 @@ namespace NzbDrone.Core.Test.ProviderTests
                                                All()
                                                .With(l => l.Language = new TvdbLanguage(0, "eng", "a"))
                                                .TheFirst(1)
-                                               .Has(e => e.EpisodeNumber = 0)
-                                               .Has(e => e.SeasonNumber = 15)
+                                               .With(e => e.EpisodeNumber = 0)
+                                               .With(e => e.SeasonNumber = 15)
                                                .Build())
                 ).With(c => c.Id = seriesId).Build();
 
@@ -1183,7 +1183,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(c => c.Ignored = true)
                 .TheFirst(2)
                 .With(c => c.EpisodeFileId = 0)
-                .WhereSection(1, 2)
+                .Section(1, 2)
                 .With(c => c.Ignored = false)
                 .Build().ToList();
 
@@ -1230,7 +1230,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(c => c.Ignored = true)
                 .TheFirst(2)
                 .With(c => c.EpisodeFileId = 0)
-                .WhereSection(1, 2)
+                .Section(1, 2)
                 .With(c => c.Ignored = false)
                 .Build().ToList();
 

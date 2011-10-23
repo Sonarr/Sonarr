@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var episodes = Builder<Episode>.CreateListOfSize(10).Build();
 
-            var historyItems = Builder<History>.CreateListOfSize(10).TheFirst(5).With(h => h.SeriesId = seriesOne.SeriesId).WhereTheLast(5).With(h => h.SeriesId = seriesTwo.SeriesId).Build();
+            var historyItems = Builder<History>.CreateListOfSize(10).TheFirst(5).With(h => h.SeriesId = seriesOne.SeriesId).TheLast(5).With(h => h.SeriesId = seriesTwo.SeriesId).Build();
 
             var mocker = new AutoMoqer();
             var db = MockLib.GetEmptyDatabase();
@@ -95,7 +95,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             //Setup
             var historyItem = Builder<History>.CreateListOfSize(20)
                 .TheFirst(10).With(c => c.Date = DateTime.Now)
-                .AndTheNext(10).With(c => c.Date = DateTime.Now.AddDays(-31))
+                .TheNext(10).With(c => c.Date = DateTime.Now.AddDays(-31))
                 .Build();
 
             var mocker = new AutoMoqer();

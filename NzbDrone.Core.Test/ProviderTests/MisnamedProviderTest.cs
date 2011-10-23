@@ -23,22 +23,22 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var episodeFiles = Builder<EpisodeFile>.CreateListOfSize(2)
                 .TheFirst(1)
-                .Has(f => f.EpisodeFileId = 1)
-                .Has(f => f.Path = @"C:\Test\Title1.avi")
-                .AndTheNext(1)
-                .Has(f => f.EpisodeFileId = 2)
-                .Has(f => f.Path = @"C:\Test\Title2.avi")
+                .With(f => f.EpisodeFileId = 1)
+                .With(f => f.Path = @"C:\Test\Title1.avi")
+                .TheNext(1)
+                .With(f => f.EpisodeFileId = 2)
+                .With(f => f.Path = @"C:\Test\Title2.avi")
                 .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(2)
                 .All()
                 .With(e => e.Series = series)
                 .TheFirst(1)
-                .Has(e => e.EpisodeFileId = 1)
-                .Has(e => e.EpisodeFile = episodeFiles[0])
-                .AndTheNext(1)
-                .Has(e => e.EpisodeFileId = 2)
-                .Has(e => e.EpisodeFile = episodeFiles[1])
+                .With(e => e.EpisodeFileId = 1)
+                .With(e => e.EpisodeFile = episodeFiles[0])
+                .TheNext(1)
+                .With(e => e.EpisodeFileId = 2)
+                .With(e => e.EpisodeFile = episodeFiles[1])
                 .Build();
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
@@ -72,22 +72,22 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var episodeFiles = Builder<EpisodeFile>.CreateListOfSize(2)
                 .TheFirst(1)
-                .Has(f => f.EpisodeFileId = 1)
-                .Has(f => f.Path = @"C:\Test\Title1.avi")
-                .AndTheNext(1)
-                .Has(f => f.EpisodeFileId = 2)
-                .Has(f => f.Path = @"C:\Test\Title2.avi")
+                .With(f => f.EpisodeFileId = 1)
+                .With(f => f.Path = @"C:\Test\Title1.avi")
+                .TheNext(1)
+                .With(f => f.EpisodeFileId = 2)
+                .With(f => f.Path = @"C:\Test\Title2.avi")
                 .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(2)
                 .All()
                 .With(e => e.Series = series)
                 .TheFirst(1)
-                .Has(e => e.EpisodeFileId = 1)
-                .Has(e => e.EpisodeFile = episodeFiles[0])
-                .AndTheNext(1)
-                .Has(e => e.EpisodeFileId = 2)
-                .Has(e => e.EpisodeFile = episodeFiles[1])
+                .With(e => e.EpisodeFileId = 1)
+                .With(e => e.EpisodeFile = episodeFiles[0])
+                .TheNext(1)
+                .With(e => e.EpisodeFileId = 2)
+                .With(e => e.EpisodeFile = episodeFiles[1])
                 .Build();
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
@@ -121,22 +121,22 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var episodeFiles = Builder<EpisodeFile>.CreateListOfSize(2)
                 .TheFirst(1)
-                .Has(f => f.EpisodeFileId = 1)
-                .Has(f => f.Path = @"C:\Test\Title1.avi")
-                .AndTheNext(1)
-                .Has(f => f.EpisodeFileId = 2)
-                .Has(f => f.Path = @"C:\Test\Title2.avi")
+                .With(f => f.EpisodeFileId = 1)
+                .With(f => f.Path = @"C:\Test\Title1.avi")
+                .TheNext(1)
+                .With(f => f.EpisodeFileId = 2)
+                .With(f => f.Path = @"C:\Test\Title2.avi")
                 .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(2)
                 .All()
                 .With(e => e.Series = series)
                 .TheFirst(1)
-                .Has(e => e.EpisodeFileId = 1)
-                .Has(e => e.EpisodeFile = episodeFiles[0])
-                .AndTheNext(1)
-                .Has(e => e.EpisodeFileId = 2)
-                .Has(e => e.EpisodeFile = episodeFiles[1])
+                .With(e => e.EpisodeFileId = 1)
+                .With(e => e.EpisodeFile = episodeFiles[0])
+                .TheNext(1)
+                .With(e => e.EpisodeFileId = 2)
+                .With(e => e.EpisodeFile = episodeFiles[1])
                 .Build();
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
@@ -172,22 +172,22 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var episodeFiles = Builder<EpisodeFile>.CreateListOfSize(2)
                 .TheFirst(1)
-                .Has(f => f.EpisodeFileId = 1)
-                .Has(f => f.Path = @"C:\Test\Title1.avi")
-                .AndTheNext(1)
-                .Has(f => f.EpisodeFileId = 2)
-                .Has(f => f.Path = @"C:\Test\Title2.avi")
+                .With(f => f.EpisodeFileId = 1)
+                .With(f => f.Path = @"C:\Test\Title1.avi")
+                .TheNext(1)
+                .With(f => f.EpisodeFileId = 2)
+                .With(f => f.Path = @"C:\Test\Title2.avi")
                 .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(3)
                 .All()
                 .With(e => e.Series = series)
                 .TheFirst(2)
-                .Has(e => e.EpisodeFileId = 1)
-                .Has(e => e.EpisodeFile = episodeFiles[0])
-                .AndTheNext(1)
-                .Has(e => e.EpisodeFileId = 2)
-                .Has(e => e.EpisodeFile = episodeFiles[1])
+                .With(e => e.EpisodeFileId = 1)
+                .With(e => e.EpisodeFile = episodeFiles[0])
+                .TheNext(1)
+                .With(e => e.EpisodeFileId = 2)
+                .With(e => e.EpisodeFile = episodeFiles[1])
                 .Build();
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
@@ -223,22 +223,22 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var episodeFiles = Builder<EpisodeFile>.CreateListOfSize(2)
                 .TheFirst(1)
-                .Has(f => f.EpisodeFileId = 1)
-                .Has(f => f.Path = @"C:\Test\Title1.avi")
-                .AndTheNext(1)
-                .Has(f => f.EpisodeFileId = 2)
-                .Has(f => f.Path = @"C:\Test\Title2.avi")
+                .With(f => f.EpisodeFileId = 1)
+                .With(f => f.Path = @"C:\Test\Title1.avi")
+                .TheNext(1)
+                .With(f => f.EpisodeFileId = 2)
+                .With(f => f.Path = @"C:\Test\Title2.avi")
                 .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(3)
                 .All()
                 .With(e => e.Series = series)
                 .TheFirst(2)
-                .Has(e => e.EpisodeFileId = 1)
-                .Has(e => e.EpisodeFile = episodeFiles[0])
-                .AndTheNext(1)
-                .Has(e => e.EpisodeFileId = 2)
-                .Has(e => e.EpisodeFile = episodeFiles[1])
+                .With(e => e.EpisodeFileId = 1)
+                .With(e => e.EpisodeFile = episodeFiles[0])
+                .TheNext(1)
+                .With(e => e.EpisodeFileId = 2)
+                .With(e => e.EpisodeFile = episodeFiles[1])
                 .Build();
 
             var mocker = new AutoMoqer(MockBehavior.Strict);

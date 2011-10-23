@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             var parseResults = Builder<EpisodeParseResult>.CreateListOfSize(10)
                 .All().With(c => c.Quality = new Quality(QualityTypes.DVD, true))
-                .WhereRandom(1).Has(c => c.Quality = new Quality(QualityTypes.Bluray1080p, true))
+                .Random(1).With(c => c.Quality = new Quality(QualityTypes.Bluray1080p, true))
                 .Build();
 
             var episode = Builder<Episode>.CreateNew().Build();
@@ -91,7 +91,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             var parseResults = Builder<EpisodeParseResult>.CreateListOfSize(20)
                 .All().With(c => c.Quality = new Quality(QualityTypes.DVD, false))
-                .WhereRandom(1).Has(c => c.Quality = new Quality(QualityTypes.DVD, true))
+                .Random(1).With(c => c.Quality = new Quality(QualityTypes.DVD, true))
                 .Build();
 
             parseResults.Where(c => c.Quality.Proper).Should().HaveCount(1);
