@@ -1,33 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
 using Ninject;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers.Core;
 
 namespace NzbDrone.Core.Providers
 {
     public class PostDownloadProvider
     {
-
-        private readonly DiskProvider _diskProvider;
-        private readonly EpisodeProvider _episodeProvider;
-        private readonly DiskScanProvider _diskScanProvider;
-        private readonly SeriesProvider _seriesProvider;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private static readonly Regex StatusRegex = new Regex(@"^_[\w_]*_", RegexOptions.Compiled);
+        private readonly DiskProvider _diskProvider;
+        private readonly DiskScanProvider _diskScanProvider;
+        private readonly SeriesProvider _seriesProvider;
 
         [Inject]
-        public PostDownloadProvider(DiskProvider diskProvider, EpisodeProvider episodeProvider,
-                                    DiskScanProvider diskScanProvider, SeriesProvider seriesProvider)
+        public PostDownloadProvider(DiskProvider diskProvider, DiskScanProvider diskScanProvider,
+                                    SeriesProvider seriesProvider)
         {
             _diskProvider = diskProvider;
-            _episodeProvider = episodeProvider;
             _diskScanProvider = diskScanProvider;
             _seriesProvider = seriesProvider;
         }
@@ -53,21 +47,19 @@ namespace NzbDrone.Core.Providers
 
         public virtual void ProcessDownload(DirectoryInfo subfolderInfo)
         {
-
             if (subfolderInfo.Name.StartsWith("_") && subfolderInfo.LastWriteTimeUtc.AddMinutes(1) > DateTime.UtcNow)
             {
                 Logger.Trace("[{0}] is too fresh. skipping", subfolderInfo.Name);
                 return;
             }
 
-            var seriesName = Parser.ParseSeriesName(RemoveStatusFromFolderName(subfolderInfo.Name));
+            string seriesName = Parser.ParseSeriesName(RemoveStatusFromFolderName(subfolderInfo.Name));
             var series = _seriesProvider.FindSeries(seriesName);
 
             if (series == null)
             {
-                Logger.Warn("Unable to Import new download [{0}], Can't find matching series in database.", subfolderInfo.Name);
-
-                //Rename the Directory so it's not processed again.
+                Logger.Warn("Unable to Import new download [{0}], Can't find matching series in database.",
+                            subfolderInfo.Name);
                 TagFolder(subfolderInfo, PostDownloadStatusType.UnknownSeries);
                 return;
             }
@@ -82,15 +74,15 @@ namespace NzbDrone.Core.Providers
             }
             else
             {
-                //Otherwise rename the folder to say it was already processed once by NzbDrone
                 if (importedFiles.Count == 0)
                 {
-                    Logger.Warn("Unable to Import new download [{0}], no importable files were found..", subfolderInfo.Name);
+                    Logger.Warn("Unable to Import new download [{0}], no importable files were found..",
+                                subfolderInfo.Name);
                     TagFolder(subfolderInfo, PostDownloadStatusType.ParseError);
                 }
-                    //Unknown Error Importing (Possibly a lesser quality than episode currently on disk)
                 else
                 {
+                    //Unknown Error Importing (Possibly a lesser quality than episode currently on disk)
                     Logger.Warn("Unable to Import new download [{0}].", subfolderInfo.Name);
                     TagFolder(subfolderInfo, PostDownloadStatusType.Unknown);
                 }
@@ -107,9 +99,8 @@ namespace NzbDrone.Core.Providers
             if (status == PostDownloadStatusType.NoError)
                 throw new InvalidOperationException("Can't tag a folder with a None-error status. " + status);
 
-            var cleanName = RemoveStatusFromFolderName(directoryInfo.Name);
-
-            var newName = string.Format("_{0}_{1}", status, cleanName);
+            string cleanName = RemoveStatusFromFolderName(directoryInfo.Name);
+            string newName = string.Format("_{0}_{1}", status, cleanName);
 
             return Path.Combine(directoryInfo.Parent.FullName, newName);
         }
