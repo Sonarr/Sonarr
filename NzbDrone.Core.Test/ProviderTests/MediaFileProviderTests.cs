@@ -1,4 +1,4 @@
-﻿// ReSharper disable RedundantUsingDirective
+// ReSharper disable RedundantUsingDirective
 
 using System.Collections.Generic;
 using AutoMoq;

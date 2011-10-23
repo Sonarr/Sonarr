@@ -26,8 +26,9 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Setup(c => c.GetEpisodeBySeries(It.IsAny<long>()))
                 .Returns(new List<Episode> { new Episode() });
 
-            mocker.GetMock<DiskProvider>().Setup(c => c.FolderExists(It.IsAny<string>())).Returns(true);
-
+            mocker.GetMock<DiskProvider>()
+                .Setup(c => c.FolderExists(It.IsAny<string>()))
+                .Returns(true);
 
             mocker.GetMock<MediaFileProvider>()
                 .Setup(c => c.GetSeriesFiles(It.IsAny<int>()))
