@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿// ReSharper disable InconsistentNaming
+using System.Diagnostics;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;

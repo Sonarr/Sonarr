@@ -10,6 +10,7 @@ namespace NzbDrone.Common
     {
         private static readonly Logger Logger = LogManager.GetLogger("Host.ProcessProvider");
 
+        public static readonly string NzbDroneProccessName = "NzbDrone";
 
         public virtual ProcessInfo GetCurrentProcess()
         {

@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Linq;
 using NLog;
 using NzbDrone.Common;
 
@@ -10,36 +12,52 @@ namespace NzbDrone.Update.Providers
         private readonly EnviromentProvider _enviromentProvider;
         private readonly ConsoleProvider _consoleProvider;
         private readonly ServiceProvider _serviceProvider;
+        private readonly ProcessProvider _processProvider;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public UpdateProvider(DiskProvider diskProvider, EnviromentProvider enviromentProvider, ConsoleProvider consoleProvider,
-            ServiceProvider serviceProvider)
+            ServiceProvider serviceProvider, ProcessProvider processProvider)
         {
             _diskProvider = diskProvider;
             _enviromentProvider = enviromentProvider;
             _consoleProvider = consoleProvider;
             _serviceProvider = serviceProvider;
+            _processProvider = processProvider;
         }
 
-        public void Start()
+        public void Verify(string targetFolder)
         {
+            Logger.Info("Verifying requirements before update...");
+
+            if (String.IsNullOrWhiteSpace(targetFolder))
+                throw new ArgumentException("Target folder can not be null or empty");
+
+            if (!_diskProvider.FolderExists(targetFolder))
+                throw new DirectoryNotFoundException("Target folder doesn't exist" + targetFolder);
+
             var sandboxFolder = Path.Combine(_enviromentProvider.StartUpPath, "nzbdrone_update");
-            Logger.Info("Looking for update package at {0}", sandboxFolder);
 
             Logger.Info("Verifying Update Folder");
             if (!_diskProvider.FolderExists(sandboxFolder))
-            {
-                Logger.Error("Update folder doesn't exist {0}", sandboxFolder);
-                _consoleProvider.UpdateFolderDoestExist(sandboxFolder);
-                return;
-            }
+                throw new DirectoryNotFoundException("Update folder doesn't exist" + sandboxFolder);
 
+        }
+
+        public void Start(string installationFolder)
+        {
+            Logger.Info("Stopping all running services");
             if (_serviceProvider.ServiceExist(ServiceProvider.NzbDroneServiceName))
             {
                 _serviceProvider.Stop(ServiceProvider.NzbDroneServiceName);
             }
 
-            //Stop NzbDrone Process
+            Logger.Info("Killing all running processes");
+            var processes = _processProvider.GetProcessByName(ProcessProvider.NzbDroneProccessName);
+            foreach (var processInfo in processes)
+            {
+                _processProvider.Kill(processInfo.Id);
+            }
+
 
             //Create backup of current folder
 

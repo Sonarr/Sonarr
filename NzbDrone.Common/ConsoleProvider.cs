@@ -32,10 +32,5 @@ namespace NzbDrone.Common
         {
             Console.WriteLine("Can't find service ({0})", ServiceProvider.NzbDroneServiceName);
         }
-
-        public virtual void UpdateFolderDoestExist(string path)
-        {
-            Console.WriteLine("Unable to find update package in '{0}'", path);
-        }
     }
 }
