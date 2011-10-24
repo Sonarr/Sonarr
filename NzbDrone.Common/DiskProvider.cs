@@ -77,6 +77,25 @@ namespace NzbDrone.Common
             Directory.Move(source, destination);
         }
 
+        public virtual void CopyDirectory(string source, string target)
+        {
+            Logger.Trace("Copying {0} -> {1}", source, target);
+
+            var sourceFolder = new DirectoryInfo(source);
+            var targetFolder = new DirectoryInfo(target);
+
+            if (!targetFolder.Exists)
+            {
+                targetFolder.Create();
+            }
+
+            foreach (var file in sourceFolder.GetFiles("*.*", SearchOption.AllDirectories))
+            {
+                var destFile = Path.Combine(target, file.Name);
+                file.CopyTo(destFile, true);
+            }
+        }
+
         public virtual void InheritFolderPermissions(string filename)
         {
             var fs = File.GetAccessControl(filename);

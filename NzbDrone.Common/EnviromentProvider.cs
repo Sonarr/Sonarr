@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 
@@ -14,6 +15,23 @@ namespace NzbDrone.Common
         public virtual bool IsUserInteractive
         {
             get { return Environment.UserInteractive; }
+        }
+
+        public static bool IsProduction
+        {
+            get
+            {
+                if (Debugger.IsAttached) return false;
+
+                var processName = Process.GetCurrentProcess().ProcessName.ToLower();
+
+                Console.WriteLine(processName);
+                if (processName.Contains("nunit")) return false;
+                if (processName.Contains("jetbrain")) return false;
+                if (processName.Contains("resharper")) return false;
+
+                return true;
+            }
         }
 
         public virtual string ApplicationPath

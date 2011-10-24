@@ -120,7 +120,7 @@ namespace NzbDrone.Providers
                 e.Data.StartsWith("Request ended:") || e.Data == ("IncrementMessages called"))
                 return;
 
-            if (e.Data.Contains(" NzbDrone."))
+            //if (e.Data.Contains(" NzbDrone."))
             {
                 Console.WriteLine(e.Data);
                 return;

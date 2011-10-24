@@ -3,6 +3,7 @@ using Ninject;
 using NLog;
 using NLog.Targets;
 using NLog.Targets.Wrappers;
+using NzbDrone.Common;
 using PetaPoco;
 
 namespace NzbDrone.Core.Instrumentation
@@ -18,19 +19,15 @@ namespace NzbDrone.Core.Instrumentation
             _database = database;
         }
 
-       
         
+
         protected override void Write(LogEventInfo logEvent)
         {
             var log = new Log();
             log.Time = logEvent.TimeStamp;
             log.Message = logEvent.FormattedMessage;
 
-            if (logEvent.UserStackFrame != null)
-            {
-                log.Method = logEvent.UserStackFrame.GetMethod().Name;
-            }
-
+            log.Method = logEvent.UserStackFrame.GetMethod().Name;
             log.Logger = logEvent.LoggerName;
 
             if (log.Logger.StartsWith("NzbDrone."))
@@ -56,7 +53,6 @@ namespace NzbDrone.Core.Instrumentation
 
 
             log.Level = logEvent.Level.Name;
-
 
             _database.Insert(log);
         }

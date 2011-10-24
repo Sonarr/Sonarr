@@ -10,17 +10,15 @@ namespace NzbDrone.Update.Providers
     {
         private readonly DiskProvider _diskProvider;
         private readonly EnviromentProvider _enviromentProvider;
-        private readonly ConsoleProvider _consoleProvider;
         private readonly ServiceProvider _serviceProvider;
         private readonly ProcessProvider _processProvider;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public UpdateProvider(DiskProvider diskProvider, EnviromentProvider enviromentProvider, ConsoleProvider consoleProvider,
+        public UpdateProvider(DiskProvider diskProvider, EnviromentProvider enviromentProvider,
             ServiceProvider serviceProvider, ProcessProvider processProvider)
         {
             _diskProvider = diskProvider;
             _enviromentProvider = enviromentProvider;
-            _consoleProvider = consoleProvider;
             _serviceProvider = serviceProvider;
             _processProvider = processProvider;
         }

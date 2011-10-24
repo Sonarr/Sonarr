@@ -12,6 +12,8 @@ using NUnit.Framework;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Test.Common;
+using PetaPoco;
 
 namespace NzbDrone.Core.Test.ProviderTests
 {
@@ -20,25 +22,24 @@ namespace NzbDrone.Core.Test.ProviderTests
     public class LogProviderTest : TestBase
     {
 
-        private const string loggerName ="Core.Test.ProviderTests.LogProviderTest";
+        private const string loggerName = "Core.Test.ProviderTests.LogProviderTest";
 
+        private static IDatabase db;
+        Logger Logger;
+
+        [SetUp]
+        public void Setup()
+        {
+            db = MockLib.GetEmptyDatabase(true);
+            LogConfiguration.RegisterDatabaseLogger(new DatabaseTarget(db));
+            Logger = LogManager.GetCurrentClassLogger();
+        }
 
         [Test]
         public void write_log()
         {
             //setup
             var message = Guid.NewGuid().ToString();
-
-            var db = MockLib.GetEmptyDatabase(true);
-
-            var sonicTarget = new DatabaseTarget(db);
-
-            LogManager.Configuration.AddTarget("DbLogger", sonicTarget);
-            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Info, sonicTarget));
-            LogManager.Configuration.Reload();
-
-            Logger Logger = LogManager.GetCurrentClassLogger();
-            //Act
 
             Logger.Info(message);
 
@@ -66,17 +67,8 @@ namespace NzbDrone.Core.Test.ProviderTests
                 message += Guid.NewGuid();
             }
 
-            var db = MockLib.GetEmptyDatabase(true);
 
-            var sonicTarget = new DatabaseTarget(db);
-
-            LogManager.Configuration.AddTarget("DbLogger", sonicTarget);
-            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Info, sonicTarget));
-            LogManager.Configuration.Reload();
-
-            Logger Logger = LogManager.GetCurrentClassLogger();
             //Act
-
             Logger.Info(message);
 
             //Assert
@@ -92,24 +84,11 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void clearLog()
         {
-            //setup
-            var db = MockLib.GetEmptyDatabase(true);
-
-            var sonicTarget = new DatabaseTarget(db);
-
-            LogManager.Configuration.AddTarget("DbLogger", sonicTarget);
-            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Info, sonicTarget));
-            LogManager.Configuration.Reload();
-
-            Logger Logger = LogManager.GetCurrentClassLogger();
             //Act
-
             for (int i = 0; i < 10; i++)
             {
                 Logger.Info("Test");
             }
-
-
 
             //Assert
             var provider = new LogProvider(db);
@@ -123,16 +102,6 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             //setup
             var message = Guid.NewGuid().ToString();
-
-            var db = MockLib.GetEmptyDatabase(true);
-
-            var sonicTarget = new DatabaseTarget(db);
-
-            LogManager.Configuration.AddTarget("DbLogger", sonicTarget);
-            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Info, sonicTarget));
-            LogManager.Configuration.Reload();
-
-            Logger Logger = LogManager.GetCurrentClassLogger();
 
             var ex = new InvalidOperationException("Fake Exception");
             //Act
@@ -158,16 +127,6 @@ namespace NzbDrone.Core.Test.ProviderTests
             //setup
             var message = String.Empty;
 
-            var db = MockLib.GetEmptyDatabase(true);
-
-            var sonicTarget = new DatabaseTarget(db);
-
-            LogManager.Configuration.AddTarget("DbLogger", sonicTarget);
-            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Info, sonicTarget));
-            LogManager.Configuration.Reload();
-
-            Logger Logger = LogManager.GetCurrentClassLogger();
-
             var ex = new InvalidOperationException("Fake Exception");
             //Act
 
@@ -189,9 +148,6 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void null_string_as_arg_should_not_fail()
         {
-            //setup
-
-            Logger Logger = LogManager.GetCurrentClassLogger();
             var epFile = new EpisodeFile();
             Logger.Trace("File {0} no longer exists on disk. removing from database.", epFile.Path);
 

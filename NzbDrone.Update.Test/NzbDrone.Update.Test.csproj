@@ -44,15 +44,6 @@
     <Reference Include="FluentAssertions">
       <HintPath>..\packages\FluentAssertions.1.5.0.0\Lib\.NetFramework 4.0\FluentAssertions.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Practices.ServiceLocation">
-      <HintPath>..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.Unity">
-      <HintPath>..\packages\Unity.2.1.505.0\lib\NET35\Microsoft.Practices.Unity.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.Unity.Configuration">
-      <HintPath>..\packages\Unity.2.1.505.0\lib\NET35\Microsoft.Practices.Unity.Configuration.dll</HintPath>
-    </Reference>
     <Reference Include="Moq">
       <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
     </Reference>
@@ -74,10 +65,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AutoMoq\AutoMoqer.cs" />
-    <Compile Include="AutoMoq\AutoMoqerTest.cs" />
-    <Compile Include="AutoMoq\Unity\AutoMockingBuilderStrategy.cs" />
-    <Compile Include="AutoMoq\Unity\AutoMockingContainerExtension.cs" />
+    <Compile Include="Fixtures.cs" />
     <Compile Include="UpdateProviderVerifyTest.cs" />
     <Compile Include="UpdateProviderStartTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -90,13 +78,14 @@
       <Project>{F2BE0FDF-6E47-4827-A420-DD4EF82407F8}</Project>
       <Name>NzbDrone.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NzbDrone.Test.Common\NzbDrone.Test.Common.csproj">
+      <Project>{CADDFCE0-7509-4430-8364-2074E1EEFCA2}</Project>
+      <Name>NzbDrone.Test.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NzbDrone.Update\NzbDrone.Update.csproj">
       <Project>{4CCC53CD-8D5E-4CC4-97D2-5C9312AC2BD7}</Project>
       <Name>NzbDrone.Update</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="AutoMoq\License.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

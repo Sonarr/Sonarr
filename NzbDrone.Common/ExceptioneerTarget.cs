@@ -3,7 +3,7 @@ using Exceptioneer.WindowsFormsClient;
 using NLog;
 using NLog.Targets;
 
-namespace NzbDrone.Core.Instrumentation
+namespace NzbDrone.Common
 {
     public class ExceptioneerTarget : Target
     {

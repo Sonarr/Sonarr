@@ -12,9 +12,6 @@ using PetaPoco;
 
 namespace NzbDrone.Core.Test.Framework
 {
-    /// <summary>
-    ///   Provides the standard Mocks needed for a typical test
-    /// </summary>
     internal static class MockLib
     {
         private const string DbTemplateName = "_dbtemplate.sdf";

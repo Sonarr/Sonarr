@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         private QualityType qualityType;
 
         [SetUp]
-        public new void Setup()
+        public void Setup()
         {
             parseResultMulti = new EpisodeParseResult
                                    {
@@ -66,7 +66,6 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(q => q.QualityTypeId = 1)
                 .Build();
 
-            base.Setup();
         }
 
         [Test]

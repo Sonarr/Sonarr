@@ -72,11 +72,6 @@ namespace NzbDrone.Providers
             get { return (AuthenticationType)GetValueInt("AuthenticationType", 0); }
         }
 
-        public virtual void ConfigureNlog()
-        {
-            LogManager.Configuration = new XmlLoggingConfiguration(NlogConfigPath, false);
-        }
-
         public virtual void UpdateIISConfig(string configPath)
         {
             Logger.Info(@"Server configuration file: {0}", configPath);

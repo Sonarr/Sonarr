@@ -43,17 +43,6 @@
     <Reference Include="FluentAssertions, Version=1.5.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentAssertions.1.5.0.0\Lib\.NetFramework 4.0\FluentAssertions.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.Unity, Version=2.1.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Unity.2.1.505.0\lib\NET35\Microsoft.Practices.Unity.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.Unity.Configuration, Version=2.1.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Unity.2.1.505.0\lib\NET35\Microsoft.Practices.Unity.Configuration.dll</HintPath>
-    </Reference>
     <Reference Include="Moq, Version=4.0.10827.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
     </Reference>
@@ -126,14 +115,6 @@
     <Compile Include="JobTests\DiskScanJobTest.cs" />
     <Compile Include="IndexerTests.cs" />
     <Compile Include="ProviderTests\InventoryProvider_QualityNeededTest.cs" />
-    <Compile Include="Framework\AutoMoq\AutoMoqer.cs" />
-    <Compile Include="Framework\AutoMoq\Unity\AutoMockingBuilderStrategy.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Framework\AutoMoq\Unity\AutoMockingContainerExtension.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Framework\ExceptionVerification.cs" />
     <Compile Include="ProviderTests\JobProviderTest.cs" />
     <Compile Include="QualityTest.cs" />
     <Compile Include="ProviderTests\RootDirProviderTest.cs" />
@@ -153,9 +134,17 @@
     <Compile Include="ProviderTests\TvDbProviderTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\NzbDrone.Common\NzbDrone.Common.csproj">
+      <Project>{F2BE0FDF-6E47-4827-A420-DD4EF82407F8}</Project>
+      <Name>NzbDrone.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NzbDrone.Core\NzbDrone.Core.csproj">
       <Project>{FF5EE3B6-913B-47CE-9CEB-11C51B4E1205}</Project>
       <Name>NzbDrone.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NzbDrone.Test.Common\NzbDrone.Test.Common.csproj">
+      <Project>{CADDFCE0-7509-4430-8364-2074E1EEFCA2}</Project>
+      <Name>NzbDrone.Test.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -181,7 +170,6 @@
     <Content Include="Files\RSS\SizeParsing\nzbsrus.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Framework\AutoMoq\License.txt" />
     <Content Include="Files\Feed.nzbmatrix.com.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

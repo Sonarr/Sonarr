@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Exceptioneer.WindowsFormsClient">
+      <HintPath>..\Libraries\Exceptioneer.WindowsFormsClient.dll</HintPath>
+    </Reference>
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
     </Reference>
@@ -48,6 +52,8 @@
     <Compile Include="ConsoleProvider.cs" />
     <Compile Include="DiskProvider.cs" />
     <Compile Include="EnviromentProvider.cs" />
+    <Compile Include="ExceptioneerTarget.cs" />
+    <Compile Include="LogConfiguration.cs" />
     <Compile Include="Model\ProcessInfo.cs" />
     <Compile Include="ProcessProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
