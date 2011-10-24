@@ -42,7 +42,7 @@ namespace NzbDrone.Core
 
             MigrationsHelper.Run(Connection.MainConnectionString, true);
 
-            LogConfiguration.StartDbLogging();
+            LogConfiguration.RegisterDatabaseLogger(_kernel.Get<DatabaseTarget>());
 
             _kernel.Get<QualityProvider>().SetupDefaultProfiles();
             _kernel.Get<QualityTypeProvider>().SetupDefault();

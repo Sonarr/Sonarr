@@ -102,9 +102,6 @@ namespace NzbDrone.Core.Test.ProviderTests
             /*            parseResultSingle.Episodes.Add(episode);
                         parseResultMulti.Episodes.Add(episode);
                         parseResultMulti.Episodes.Add(episode2);*/
-
-
-            base.Setup();
         }
 
         [Test]

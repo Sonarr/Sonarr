@@ -68,8 +68,6 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(c => c.Monitored = true)
                 .With(d => d.CleanTitle = parseResultMulti.CleanTitle)
                 .Build();
-
-            base.Setup();
         }
 
 

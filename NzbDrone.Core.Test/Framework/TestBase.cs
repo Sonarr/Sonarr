@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using NUnit.Framework;
-using NzbDrone.Core.Providers.Jobs;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.Framework
 {
@@ -9,17 +9,19 @@ namespace NzbDrone.Core.Test.Framework
     {
 
         [SetUp]
-        public virtual void Setup()
+        public virtual void SetupBase()
         {
             ExceptionVerification.Reset();
             if (Directory.Exists(TempFolder))
             {
                 Directory.Delete(TempFolder, true);
             }
+
+            Directory.CreateDirectory(TempFolder);
         }
 
         [TearDown]
-        public void TearDown()
+        public void TearDownBase()
         {
             ExceptionVerification.AssertNoUnexcpectedLogs();
         }
@@ -27,7 +29,7 @@ namespace NzbDrone.Core.Test.Framework
 
         protected string TempFolder
         {
-            get { return Path.Combine(Directory.GetCurrentDirectory(), "_temp"); }
+            get { return Path.Combine(Directory.GetCurrentDirectory(), "temp"); }
         }
 
         protected string GetTestFilePath(string fileName)

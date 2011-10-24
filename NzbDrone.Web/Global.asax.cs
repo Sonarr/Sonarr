@@ -49,7 +49,7 @@ namespace NzbDrone.Web
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             
-            Logger.Debug("Fully initialized and ready.");
+            Logger.Info("Fully initialized and ready.");
         }
 
         protected override IKernel CreateKernel()

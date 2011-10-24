@@ -1,40 +1,17 @@
-using System;
 using System.IO;
-using NLog;
-using NLog.Config;
+// ReSharper disable CheckNamespace
 using NUnit.Framework;
-using NzbDrone.Core.Providers;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Test.Common;
 
 [SetUpFixture]
-public class Fixtures
+public class Fixtures : LoggingFixtures
 {
-    [TearDown]
-    public void TearDown()
-    {
-
-    }
-
     [SetUp]
     public void SetUp()
     {
-        try
-        {
-            LogManager.Configuration = new XmlLoggingConfiguration(Path.Combine(new EnviromentProvider().AppPath, "log.config"), false);
-            LogManager.ThrowExceptions = true;
-
-            var exceptionVerification = new ExceptionVerification();
-            LogManager.Configuration.AddTarget("ExceptionVerification", exceptionVerification);
-            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Info, exceptionVerification));
-            LogManager.Configuration.Reload();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine("Unable to configure logging. " + e);
-        }
-
-        var filesToDelete = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.sdf", SearchOption.AllDirectories);
-        foreach (var file in filesToDelete)
+        var oldDbFiles = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.sdf", SearchOption.AllDirectories);
+        foreach (var file in oldDbFiles)
         {
             try
             {

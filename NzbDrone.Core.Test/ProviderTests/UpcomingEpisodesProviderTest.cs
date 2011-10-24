@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         private Series series;
 
         [SetUp]
-        public new void Setup()
+        public void Setup()
         {
             episodes = Builder<Episode>.CreateListOfSize(6)
                 .All()
@@ -42,8 +42,6 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Build();
 
             series = Builder<Series>.CreateNew().With(s => s.SeriesId = 1).Build();
-
-            base.Setup();
         }
 
         [Test]

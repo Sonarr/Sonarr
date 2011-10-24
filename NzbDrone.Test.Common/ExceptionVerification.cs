@@ -1,4 +1,5 @@
 ﻿// ReSharper disable RedundantUsingDirective
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using NLog;
 using NLog.Targets;
 using NUnit.Framework;
 
-namespace NzbDrone.Core.Test.Framework
+namespace NzbDrone.Test.Common
 {
     public class ExceptionVerification : Target
     {
@@ -20,12 +21,12 @@ namespace NzbDrone.Core.Test.Framework
             }
         }
 
-        internal static void Reset()
+        public static void Reset()
         {
             _logs = new List<LogEventInfo>();
         }
 
-        internal static void AssertNoUnexcpectedLogs()
+        public static void AssertNoUnexcpectedLogs()
         {
             ExcpectedFatals(0);
             ExcpectedErrors(0);
@@ -47,32 +48,32 @@ namespace NzbDrone.Core.Test.Framework
             return errors;
         }
 
-        internal static void ExcpectedErrors(int count)
+        public static void ExcpectedErrors(int count)
         {
             Excpected(LogLevel.Error, count);
         }
 
-        internal static void ExcpectedFatals(int count)
+        public static void ExcpectedFatals(int count)
         {
             Excpected(LogLevel.Fatal, count);
         }
 
-        internal static void ExcpectedWarns(int count)
+        public static void ExcpectedWarns(int count)
         {
             Excpected(LogLevel.Warn, count);
         }
 
-        internal static void IgnoreWarns()
+        public static void IgnoreWarns()
         {
             Ignore(LogLevel.Warn);
         }
 
-        internal static void IgnoreErrors()
+        public static void IgnoreErrors()
         {
             Ignore(LogLevel.Error);
         }
 
-        internal static void MarkInconclusive(Type exception)
+        public static void MarkInconclusive(Type exception)
         {
             var inconclusiveLogs = _logs.Where(l => l.Exception.GetType() == exception).ToList();
 

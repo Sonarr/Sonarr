@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.IO;
+﻿using System.IO;
 using Ninject;
 using NLog;
 using NLog.Config;
@@ -9,32 +8,27 @@ namespace NzbDrone.Core.Instrumentation
 {
     public static class LogConfiguration
     {
+
         public static void Setup()
         {
-            if (Debugger.IsAttached)
+            if (Common.EnviromentProvider.IsProduction)
             {
-                LogManager.ThrowExceptions = true;
+                LogManager.ThrowExceptions = false;
             }
 
-            LogManager.Configuration = new XmlLoggingConfiguration(Path.Combine(new EnviromentProvider().AppPath, "log.config"),
-                                                                   false);
+            LogManager.Configuration = new XmlLoggingConfiguration(Path.Combine(new EnviromentProvider().AppPath, "log.config"), false);
 
-            LogManager.ConfigurationReloaded += ((s, e) => StartDbLogging());
+            Common.LogConfiguration.RegisterConsoleLogger(LogLevel.Info, "NzbDrone.Web.MvcApplication");
+            Common.LogConfiguration.RegisterConsoleLogger(LogLevel.Info, "NzbDrone.Core.CentralDispatch");
+
+            LogManager.ConfigurationReloaded += ((s, e) => RegisterDatabaseLogger(CentralDispatch.NinjectKernel.Get<DatabaseTarget>()));
         }
 
-        public static void StartDbLogging()
+        public static void RegisterDatabaseLogger(DatabaseTarget databaseTarget)
         {
-#if DEBUG
-#else
-            var exTarget = new ExceptioneerTarget();
-            LogManager.Configuration.AddTarget("Exceptioneer", exTarget);
-            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", NLog.LogLevel.Error, exTarget));
-#endif
-            var sonicTarget = CentralDispatch.NinjectKernel.Get<DatabaseTarget>();
-            LogManager.Configuration.AddTarget("DbLogger", sonicTarget);
-            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Debug, sonicTarget));
-
-            LogManager.Configuration.Reload();
+            LogManager.Configuration.AddTarget("DbLogger", databaseTarget);
+            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Debug, databaseTarget));
+            Common.LogConfiguration.Reload();
         }
     }
 }

@@ -40,5 +40,11 @@ namespace NzbDrone.Common.Test
             enviromentController.ApplicationPath.Should().NotBeBlank();
             Path.IsPathRooted(enviromentController.ApplicationPath).Should().BeTrue("Path is not rooted");
         }
+
+        [Test]
+        public void IsProduction_should_return_false_when_run_within_nunit()
+        {
+            EnviromentProvider.IsProduction.Should().BeFalse();
+        }
     }
 }

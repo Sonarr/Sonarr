@@ -43,7 +43,8 @@ namespace NzbDrone
 
         private static void InitilizeApp()
         {
-            _kernel.Get<ConfigProvider>().ConfigureNlog();
+            LogConfiguration.RegisterConsoleLogger(LogLevel.Debug);
+            LogConfiguration.RegisterUdpLogger();
             _kernel.Get<ConfigProvider>().CreateDefaultConfigFile();
             Logger.Info("Start-up Path:'{0}'", _kernel.Get<EnviromentProvider>().ApplicationPath);
         }
