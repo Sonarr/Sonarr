@@ -25,20 +25,17 @@
     -webkit-border-bottom-left-radius: 8px;
 }
 
-.openCloseWrapper {
-    width: 100%;
-    text-align: center;        
-    font-size:12px;
-    font-weight:bold;
-    color:#FFFFFF;
-}
-
-.sliderButtonContainer {
+.sliderButton {
     width: 70px;
     margin-left:auto;
     margin-right:auto;
     background-color:#333333;
     cursor:pointer;
+    font-size:12px;
+    font-weight:bold;
+    text-align: center;
+    color:#FFFFFF;
+    
 
     @*Rounded Edges*@
     border: 1px solid #444444;
