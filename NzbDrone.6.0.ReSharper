@@ -9,6 +9,13 @@
     </CSS>
     <CSharp>
       <FormatSettings>
+        <ALIGN_FIRST_ARG_BY_PAREN>True</ALIGN_FIRST_ARG_BY_PAREN>
+        <ALIGN_MULTILINE_FOR_STMT>False</ALIGN_MULTILINE_FOR_STMT>
+        <CONTINUOUS_INDENT_MULTIPLIER>2</CONTINUOUS_INDENT_MULTIPLIER>
+        <FORCE_ATTRIBUTE_STYLE>SEPARATE</FORCE_ATTRIBUTE_STYLE>
+        <INDENT_NESTED_FIXED_STMT>True</INDENT_NESTED_FIXED_STMT>
+        <INDENT_NESTED_USINGS_STMT>True</INDENT_NESTED_USINGS_STMT>
+        <LINE_FEED_AT_FILE_END>True</LINE_FEED_AT_FILE_END>
         <MODIFIERS_ORDER IsNull="False">
           <Item>public</Item>
           <Item>protected</Item>
@@ -25,8 +32,30 @@
           <Item>unsafe</Item>
           <Item>volatile</Item>
         </MODIFIERS_ORDER>
+        <SPACE_AFTER_TYPECAST_PARENTHESES>False</SPACE_AFTER_TYPECAST_PARENTHESES>
+        <SPACE_AROUND_ARROW_OP>True</SPACE_AROUND_ARROW_OP>
+        <SPACE_AROUND_MULTIPLICATIVE_OP>True</SPACE_AROUND_MULTIPLICATIVE_OP>
+        <SPACE_BEFORE_CATCH_PARENTHESES>False</SPACE_BEFORE_CATCH_PARENTHESES>
+        <SPACE_BEFORE_FIXED_PARENTHESES>False</SPACE_BEFORE_FIXED_PARENTHESES>
+        <SPACE_BEFORE_FOR_PARENTHESES>False</SPACE_BEFORE_FOR_PARENTHESES>
+        <SPACE_BEFORE_FOR_SEMICOLON>True</SPACE_BEFORE_FOR_SEMICOLON>
+        <SPACE_BEFORE_FOREACH_PARENTHESES>False</SPACE_BEFORE_FOREACH_PARENTHESES>
+        <SPACE_BEFORE_IF_PARENTHESES>False</SPACE_BEFORE_IF_PARENTHESES>
+        <SPACE_BEFORE_LOCK_PARENTHESES>False</SPACE_BEFORE_LOCK_PARENTHESES>
+        <SPACE_BEFORE_SIZEOF_PARENTHESES>False</SPACE_BEFORE_SIZEOF_PARENTHESES>
+        <SPACE_BEFORE_SWITCH_PARENTHESES>False</SPACE_BEFORE_SWITCH_PARENTHESES>
+        <SPACE_BEFORE_TYPE_PARAMETER_ANGLE>True</SPACE_BEFORE_TYPE_PARAMETER_ANGLE>
+        <SPACE_BEFORE_TYPE_PARAMETER_CONSTRAINT_COLON>False</SPACE_BEFORE_TYPE_PARAMETER_CONSTRAINT_COLON>
+        <SPACE_BEFORE_TYPEOF_PARENTHESES>False</SPACE_BEFORE_TYPEOF_PARENTHESES>
+        <SPACE_BEFORE_USING_PARENTHESES>False</SPACE_BEFORE_USING_PARENTHESES>
+        <SPACE_BEFORE_WHILE_PARENTHESES>False</SPACE_BEFORE_WHILE_PARENTHESES>
+        <STICK_COMMENT>False</STICK_COMMENT>
       </FormatSettings>
-      <UsingsSettings />
+      <UsingsSettings>
+        <MandatoryImports IsNull="False">
+          <Item>System.Linq</Item>
+        </MandatoryImports>
+      </UsingsSettings>
       <Naming2>
         <EventHandlerPatternLong>$object$_On$event$</EventHandlerPatternLong>
         <EventHandlerPatternShort>$event$Handler</EventHandlerPatternShort>
@@ -79,8 +108,8 @@
       <PredefinedRule Inspect="True" Prefix="_" Suffix="" Style="aaBb" ElementKind="PublicFields" />
       <PredefinedRule Inspect="True" Prefix="_" Suffix="" Style="aaBb" ElementKind="PrivateInstanceFields" />
       <PredefinedRule Inspect="True" Prefix="_" Suffix="" Style="aaBb" ElementKind="PrivateStaticFields" />
-      <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="AaBb" ElementKind="Constants" />
-      <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="AaBb" ElementKind="PrivateConstants" />
+      <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="AA_BB" ElementKind="Constants" />
+      <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="AA_BB" ElementKind="PrivateConstants" />
       <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="AaBb" ElementKind="StaticReadonly" />
       <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="AaBb" ElementKind="EnumMember" />
       <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="AaBb" ElementKind="Other" />

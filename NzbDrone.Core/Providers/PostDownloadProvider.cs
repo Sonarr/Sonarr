@@ -76,7 +76,7 @@ namespace NzbDrone.Core.Providers
             {
                 if (importedFiles.Count == 0)
                 {
-                    Logger.Warn("Unable to Import new download [{0}], no importable files were found..",
+                    Logger.Warn("Unable to Import new download [{0}], no importable files were found.",
                                 subfolderInfo.Name);
                     TagFolder(subfolderInfo, PostDownloadStatusType.ParseError);
                 }
@@ -89,12 +89,17 @@ namespace NzbDrone.Core.Providers
             }
         }
 
-        public void TagFolder(DirectoryInfo directory, PostDownloadStatusType status)
+        private void TagFolder(DirectoryInfo directory, PostDownloadStatusType status)
         {
-            _diskProvider.MoveDirectory(directory.FullName, GetFolderNameWithStatus(directory, status));
+            var target = GetTaggedFolderName(directory, status);
+
+            if (!String.Equals(Parser.NormalizePath(target), Parser.NormalizePath(directory.FullName), StringComparison.InvariantCultureIgnoreCase))
+            {
+                _diskProvider.MoveDirectory(directory.FullName, target);
+            }
         }
 
-        public static string GetFolderNameWithStatus(DirectoryInfo directoryInfo, PostDownloadStatusType status)
+        public static string GetTaggedFolderName(DirectoryInfo directoryInfo, PostDownloadStatusType status)
         {
             if (status == PostDownloadStatusType.NoError)
                 throw new InvalidOperationException("Can't tag a folder with a None-error status. " + status);

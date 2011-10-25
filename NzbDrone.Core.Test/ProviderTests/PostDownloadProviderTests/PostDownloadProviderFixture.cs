@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [TestCase(@"c:\Root\Test Title", @"c:\Root\_ParseError_Test Title", PostDownloadStatusType.ParseError)]
         public void GetFolderNameWithStatus_should_return_a_string_with_the_error_removing_existing_error(string currentName, string excpectedName, PostDownloadStatusType status)
         {
-            PostDownloadProvider.GetFolderNameWithStatus(new DirectoryInfo(currentName), status).Should().Be(
+            PostDownloadProvider.GetTaggedFolderName(new DirectoryInfo(currentName), status).Should().Be(
                 excpectedName);
         }
 
@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [ExpectedException(typeof(InvalidOperationException))]
         public void GetFolderNameWithStatus_should_throw_if_status_is_not_an_error(PostDownloadStatusType status)
         {
-            PostDownloadProvider.GetFolderNameWithStatus(new DirectoryInfo(TempFolder), status);
+            PostDownloadProvider.GetTaggedFolderName(new DirectoryInfo(TempFolder), status);
         }
 
 

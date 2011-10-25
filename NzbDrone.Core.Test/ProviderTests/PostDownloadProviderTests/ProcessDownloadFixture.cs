@@ -122,7 +122,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
             var mocker = new AutoMoqer(MockBehavior.Strict);
             var droppedFolder = new DirectoryInfo(@"C:\Test\Unsorted TV\The Office - Season 01");
 
-            var taggedFolder = PostDownloadProvider.GetFolderNameWithStatus(droppedFolder, PostDownloadStatusType.Unknown);
+            var taggedFolder = PostDownloadProvider.GetTaggedFolderName(droppedFolder, PostDownloadStatusType.Unknown);
 
             var fakeSeries = Builder<Series>.CreateNew()
                 .With(s => s.Title = "The Office")
@@ -144,6 +144,50 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 
             //Assert
             mocker.VerifyAllMocks();
+            ExceptionVerification.ExcpectedWarns(1);
+        }
+
+        [TestCase(@"\_UnknownSeries_The Office - S01E01 - Episode Title")]
+        [TestCase(@"\_UnknownSeries_The Office - S01E01 - Episode Title\")]
+        [TestCase("\\Test\\_UnknownSeries_The Office - S01E01 - Episode Title\\")]
+        [TestCase("\\Test\\_UnknownSeries_The Office - S01E01 - Episode Title")]
+        public void folder_shouldnt_be_tagged_with_same_tag_again(string path)
+        {
+            //Setup
+            var mocker = new AutoMoqer();
+            var droppedFolder = new DirectoryInfo(TempFolder + path);
+            droppedFolder.Create();
+            droppedFolder.LastWriteTime = DateTime.Now.AddHours(-1);
+
+            //Act
+            mocker.GetMock<SeriesProvider>().Setup(s => s.FindSeries(It.IsAny<String>())).Returns<Series>(null);
+            mocker.Resolve<PostDownloadProvider>().ProcessDownload(droppedFolder);
+
+            //Assert
+            mocker.VerifyAllMocks();
+            mocker.GetMock<DiskProvider>().Verify(c => c.MoveDirectory(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
+            ExceptionVerification.ExcpectedWarns(1);
+        }
+
+        [Test]
+        public void folder_should_be_tagged_if_existing_tag_is_diffrent()
+        {
+            //Setup
+            var mocker = new AutoMoqer();
+            var droppedFolder = new DirectoryInfo(TempFolder + @"\_UnknownEpisode_The Office - S01E01 - Episode Title");
+            droppedFolder.Create();
+            droppedFolder.LastWriteTime = DateTime.Now.AddHours(-1);
+
+            var taggedFolder = TempFolder + @"\_UnknownSeries_The Office - S01E01 - Episode Title";
+
+            mocker.GetMock<SeriesProvider>().Setup(s => s.FindSeries(It.IsAny<String>())).Returns<Series>(null);
+
+            //Act
+            mocker.Resolve<PostDownloadProvider>().ProcessDownload(droppedFolder);
+
+            //Assert
+            mocker.VerifyAllMocks();
+            mocker.GetMock<DiskProvider>().Verify(c => c.MoveDirectory(droppedFolder.FullName, taggedFolder), Times.Once());
             ExceptionVerification.ExcpectedWarns(1);
         }
 
