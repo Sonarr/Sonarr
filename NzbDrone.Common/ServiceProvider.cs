@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Specialized;
 using System.Configuration.Install;
+using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 using System.ServiceProcess;
 using NLog;
-using TimeoutException = System.TimeoutException;
 
 namespace NzbDrone.Common
 {
@@ -37,7 +36,7 @@ namespace NzbDrone.Common
             var serviceInstaller = new ServiceInstaller();
 
 
-            String[] cmdline = { @"/assemblypath=" + Assembly.GetExecutingAssembly().Location };
+            String[] cmdline = { @"/assemblypath=" + Process.GetCurrentProcess().StartInfo.FileName };
 
             var context = new InstallContext("service_install.log", cmdline);
             serviceInstaller.Context = context;
@@ -86,6 +85,7 @@ namespace NzbDrone.Common
             if (service == null)
             {
                 Logger.Warn("Unable to stop {0}. no service with that name exists.", serviceName);
+                return;
             }
 
             Logger.Info("Service is currently {0}", service.Status);
