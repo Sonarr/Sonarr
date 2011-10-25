@@ -116,7 +116,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var mocker = new AutoMoqer(MockBehavior.Strict);
 
             parseResultSingle.Series = series30minutes;
-            parseResultSingle.Size = 10000.Megabytes();
+            parseResultSingle.Size = 1.Gigabytes();
 
             mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 
@@ -137,7 +137,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var mocker = new AutoMoqer(MockBehavior.Strict);
 
             parseResultSingle.Series = series60minutes;
-            parseResultSingle.Size = 10000.Megabytes();
+            parseResultSingle.Size = 1.Gigabytes();
 
             mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 
@@ -200,7 +200,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var mocker = new AutoMoqer(MockBehavior.Strict);
 
             parseResultMulti.Series = series30minutes;
-            parseResultMulti.Size = 10000.Megabytes();
+            parseResultMulti.Size = 1.Gigabytes();
 
             mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 
@@ -221,7 +221,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var mocker = new AutoMoqer(MockBehavior.Strict);
 
             parseResultMulti.Series = series60minutes;
-            parseResultMulti.Size = 10000.Megabytes();
+            parseResultMulti.Size = 10.Gigabytes();
 
             mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 
@@ -284,7 +284,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var mocker = new AutoMoqer(MockBehavior.Strict);
 
             parseResultSingle.Series = series30minutes;
-            parseResultSingle.Size = 10000.Megabytes();
+            parseResultSingle.Size = 1.Gigabytes();
 
             mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 
@@ -305,7 +305,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var mocker = new AutoMoqer(MockBehavior.Strict);
 
             parseResultSingle.Series = series60minutes;
-            parseResultSingle.Size = 10000.Megabytes();
+            parseResultSingle.Size = 10.Gigabytes();
 
             mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 

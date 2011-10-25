@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Providers
             importedFiles.ForEach(file => _diskScanProvider.MoveEpisodeFile(file, true));
 
             //Delete the folder only if folder is small enough
-            if (_diskProvider.GetDirectorySize(subfolderInfo.FullName) < 10.Megabytes())
+            if (_diskProvider.GetDirectorySize(subfolderInfo.FullName) < Constants.IgnoreFileSize)
             {
                 _diskProvider.DeleteFolder(subfolderInfo.FullName, true);
             }
