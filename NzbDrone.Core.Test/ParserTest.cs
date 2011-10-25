@@ -48,6 +48,7 @@ namespace NzbDrone.Core.Test
         [TestCase("The Mentalist - S02E21 - 18-5-4", "The Mentalist", 2, 21)]
         [TestCase("Breaking.In.S01E07.21.0.Jump.Street.720p.WEB-DL.DD5.1.h.264-KiNGS", "Breaking In", 1, 7)]
         [TestCase("CSI525", "CSI", 5, 25)]
+        [TestCase("King of the Hill - 10x12 - 24 Hour Propane People [SDTV]", "King of the Hill", 10, 12)]
         public void ParseTitle_single(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
             var result = Parser.ParseTitle(postTitle);
@@ -66,6 +67,7 @@ namespace NzbDrone.Core.Test
         [TestCase("C:/Test/TV/Chuck.4x05.HDTV.XviD-LOL", 4, 5)]
         [TestCase(@"P:\TV Shows\House\Season 6\S06E13 - 5 to 9 - 720p BluRay.mkv", 6, 13)]
         [TestCase(@"S:\TV Drop\House - 10x11 - Title [SDTV]\1011 - Title.avi", 10, 11)]
+        [TestCase(@"S:\TV Drop\King of the Hill - 10x12 - 24 Hour Propane People [SDTV]\1012 - 24 Hour Propane People.avi", 10, 12)]
         public void PathParse_tests(string path, int season, int episode)
         {
             var result = Parser.ParsePath(path);
