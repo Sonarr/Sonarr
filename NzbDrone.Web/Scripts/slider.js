@@ -12,7 +12,7 @@ function sliderToggle(sliderButton) {
     sliderContent.slideToggle('slow');
     
     //Change the slider Image
-    $(".sliderButtonContainer").children('.sliderImage').toggleClass('sliderOpened sliderClosed');
+    $(sliderButton).children('.sliderImage').toggleClass('sliderOpened sliderClosed');
 
     //Focus in the search box
     $(sliderContent).children('.localSeriesLookup').focus();
