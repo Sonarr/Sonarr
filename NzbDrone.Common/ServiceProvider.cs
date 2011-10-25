@@ -36,7 +36,7 @@ namespace NzbDrone.Common
             var serviceInstaller = new ServiceInstaller();
 
 
-            String[] cmdline = { @"/assemblypath=" + Process.GetCurrentProcess().StartInfo.FileName };
+            String[] cmdline = { @"/assemblypath=" + Process.GetCurrentProcess().MainModule.FileName };
 
             var context = new InstallContext("service_install.log", cmdline);
             serviceInstaller.Context = context;
