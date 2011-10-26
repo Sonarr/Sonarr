@@ -69,8 +69,6 @@
     <Compile Include="MonitoringProviderTest.cs" />
     <Compile Include="ConfigProviderTest.cs" />
     <Compile Include="IISProviderTest.cs" />
-    <Compile Include="ProcessProviderTests.cs" />
-    <Compile Include="ServiceControllerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

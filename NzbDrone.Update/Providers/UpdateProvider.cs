@@ -44,9 +44,9 @@ namespace NzbDrone.Update.Providers
         public void Start(string installationFolder)
         {
             Logger.Info("Stopping all running services");
-            if (_serviceProvider.ServiceExist(ServiceProvider.NzbDroneServiceName))
+            if (_serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME))
             {
-                _serviceProvider.Stop(ServiceProvider.NzbDroneServiceName);
+                _serviceProvider.Stop(ServiceProvider.NZBDRONE_SERVICE_NAME);
             }
 
             Logger.Info("Killing all running processes");

@@ -10,7 +10,7 @@ namespace NzbDrone.Common
 {
     public class ServiceProvider
     {
-        public const string NzbDroneServiceName = "NzbDrone";
+        public const string NZBDRONE_SERVICE_NAME = "NzbDrone";
 
         private static readonly Logger Logger = LogManager.GetLogger("Host.ServiceManager");
 
@@ -23,9 +23,9 @@ namespace NzbDrone.Common
         }
 
 
-        public virtual void Install()
+        public virtual void Install(string serviceName)
         {
-            Logger.Info("Installing service '{0}'", NzbDroneServiceName);
+            Logger.Info("Installing service '{0}'", serviceName);
 
 
             var installer = new ServiceProcessInstaller
@@ -40,8 +40,8 @@ namespace NzbDrone.Common
 
             var context = new InstallContext("service_install.log", cmdline);
             serviceInstaller.Context = context;
-            serviceInstaller.DisplayName = NzbDroneServiceName;
-            serviceInstaller.ServiceName = NzbDroneServiceName;
+            serviceInstaller.DisplayName = serviceName;
+            serviceInstaller.ServiceName = serviceName;
             serviceInstaller.Description = "NzbDrone Application Server";
             serviceInstaller.StartType = ServiceStartMode.Automatic;
 
@@ -52,17 +52,17 @@ namespace NzbDrone.Common
             Logger.Info("Service Has installed successfully.");
         }
 
-        public virtual void UnInstall()
+        public virtual void UnInstall(string serviceName)
         {
-            Logger.Info("Uninstalling NzbDrone service");
+            Logger.Info("Uninstalling {0} service", serviceName);
             var serviceInstaller = new ServiceInstaller();
 
             var context = new InstallContext("service_uninstall.log", null);
             serviceInstaller.Context = context;
-            serviceInstaller.ServiceName = NzbDroneServiceName;
+            serviceInstaller.ServiceName = serviceName;
             serviceInstaller.Uninstall(null);
 
-            Logger.Info("NzbDrone successfully uninstalled");
+            Logger.Info("{0} successfully uninstalled", serviceName);
         }
 
 

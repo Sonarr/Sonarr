@@ -50,25 +50,25 @@ namespace NzbDrone
                         }
                     case ApplicationMode.InstallService:
                         {
-                            if (_serviceProvider.ServiceExist(ServiceProvider.NzbDroneServiceName))
+                            if (_serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME))
                             {
                                 _consoleProvider.PrintServiceAlreadyExist();
                             }
                             else
                             {
-                                _serviceProvider.Install();
+                                _serviceProvider.Install(ServiceProvider.NZBDRONE_SERVICE_NAME);
                             }
                             break;
                         }
                     case ApplicationMode.UninstallService:
                         {
-                            if (!_serviceProvider.ServiceExist(ServiceProvider.NzbDroneServiceName))
+                            if (!_serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME))
                             {
                                 _consoleProvider.PrintServiceDoestExist();
                             }
                             else
                             {
-                                _serviceProvider.UnInstall();
+                                _serviceProvider.UnInstall(ServiceProvider.NZBDRONE_SERVICE_NAME);
                             }
                             
                             break;

@@ -10,6 +10,7 @@ namespace NzbDrone.Common.Test
     public class ServiceControllerTests
     {
         private const string ALWAYS_INSTALLED_SERVICE = "SCardSvr"; //Smart Card
+        private const string TEMP_SERVICE_NAME = "NzbDrone_Nunit"; //Smart Card
         private ServiceProvider serviceProvider;
 
 
@@ -17,6 +18,20 @@ namespace NzbDrone.Common.Test
         public void Setup()
         {
             serviceProvider = new ServiceProvider();
+
+            if (serviceProvider.ServiceExist(TEMP_SERVICE_NAME))
+            {
+                serviceProvider.UnInstall(TEMP_SERVICE_NAME);
+            }
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            if (serviceProvider.ServiceExist(TEMP_SERVICE_NAME))
+            {
+                serviceProvider.UnInstall(TEMP_SERVICE_NAME);
+            }
         }
 
         [Test]
@@ -42,11 +57,11 @@ namespace NzbDrone.Common.Test
         public void Service_should_be_installed_and_then_uninstalled()
         {
             //Act
-            serviceProvider.ServiceExist(ServiceProvider.NzbDroneServiceName).Should().BeFalse("Service already installed");
-            serviceProvider.Install();
-            serviceProvider.ServiceExist(ServiceProvider.NzbDroneServiceName).Should().BeTrue();
-            serviceProvider.UnInstall();
-            serviceProvider.ServiceExist(ServiceProvider.NzbDroneServiceName).Should().BeFalse();
+            serviceProvider.ServiceExist(TEMP_SERVICE_NAME).Should().BeFalse("Service already installed");
+            serviceProvider.Install(TEMP_SERVICE_NAME);
+            serviceProvider.ServiceExist(TEMP_SERVICE_NAME).Should().BeTrue();
+            serviceProvider.UnInstall(TEMP_SERVICE_NAME);
+            serviceProvider.ServiceExist(TEMP_SERVICE_NAME).Should().BeFalse();
         }
 
         [Test]
@@ -54,8 +69,8 @@ namespace NzbDrone.Common.Test
         public void UnInstallService()
         {
             //Act
-            serviceProvider.UnInstall();
-            serviceProvider.ServiceExist(ServiceProvider.NzbDroneServiceName).Should().BeFalse();
+            serviceProvider.UnInstall(ServiceProvider.NZBDRONE_SERVICE_NAME);
+            serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME).Should().BeFalse();
         }
 
         [Test]

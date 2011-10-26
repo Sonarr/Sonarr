@@ -23,14 +23,14 @@ namespace NzbDrone.Update.Test
         public void should_stop_nzbdrone_service_if_installed()
         {
             mocker.GetMock<ServiceProvider>()
-                .Setup(c => c.ServiceExist(ServiceProvider.NzbDroneServiceName))
+                .Setup(c => c.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME))
                 .Returns(true);
 
             //Act
             mocker.Resolve<UpdateProvider>().Start(null);
 
             //Assert
-            mocker.GetMock<ServiceProvider>().Verify(c => c.Stop(ServiceProvider.NzbDroneServiceName), Times.Once());
+            mocker.GetMock<ServiceProvider>().Verify(c => c.Stop(ServiceProvider.NZBDRONE_SERVICE_NAME), Times.Once());
             mocker.VerifyAllMocks();
         }
 
