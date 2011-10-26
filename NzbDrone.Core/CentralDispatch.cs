@@ -105,6 +105,7 @@ namespace NzbDrone.Core
         private static void BindExternalNotifications()
         {
             _kernel.Bind<ExternalNotificationBase>().To<Xbmc>();
+            _kernel.Bind<ExternalNotificationBase>().To<Smtp>();
 
             var notifiers = _kernel.GetAll<ExternalNotificationBase>();
             _kernel.Get<ExternalNotificationProvider>().InitializeNotifiers(notifiers.ToList());

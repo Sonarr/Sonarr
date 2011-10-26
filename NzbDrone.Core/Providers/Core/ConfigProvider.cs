@@ -255,6 +255,63 @@ namespace NzbDrone.Core.Providers.Core
             set { SetValue("UpdateUrl", value); }
         }
 
+        public virtual Boolean SmtpNotifyOnGrab
+        {
+            get { return GetValueBoolean("SmtpNotifyOnGrab"); }
+
+            set { SetValue("SmtpNotifyOnGrab", value); }
+        }
+
+        public virtual Boolean SmtpNotifyOnDownload
+        {
+            get { return GetValueBoolean("SmtpNotifyOnDownload"); }
+
+            set { SetValue("SmtpNotifyOnDownload", value); }
+        }
+
+        public virtual string SmtpServer
+        {
+            get { return GetValue("SmtpServer", String.Empty); }
+            set { SetValue("SmtpServer", value); }
+        }
+
+        public virtual int SmtpPort
+        {
+            get { return GetValueInt("SmtpPort", 25); }
+            set { SetValue("SmtpPort", value); }
+        }
+
+        public virtual Boolean SmtpUseSsl
+        {
+            get { return GetValueBoolean("SmtpUseSsl"); }
+
+            set { SetValue("SmtpUseSsl", value); }
+        }
+
+        public virtual string SmtpUsername
+        {
+            get { return GetValue("SmtpUsername", String.Empty); }
+            set { SetValue("SmtpUsername", value); }
+        }
+
+        public virtual string SmtpPassword
+        {
+            get { return GetValue("SmtpPassword", String.Empty); }
+            set { SetValue("SmtpPassword", value); }
+        }
+
+        public virtual string SmtpFromAddress
+        {
+            get { return GetValue("SmtpFromAddress", String.Empty); }
+            set { SetValue("SmtpFromAddress", value); }
+        }
+
+        public virtual string SmtpToAddresses
+        {
+            get { return GetValue("SmtpToAddresses", String.Empty); }
+            set { SetValue("SmtpToAddresses", value); }
+        }
+
         private string GetValue(string key)
         {
             return GetValue(key, String.Empty);

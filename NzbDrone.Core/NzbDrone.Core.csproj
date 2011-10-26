@@ -215,6 +215,7 @@
     <Compile Include="Providers\EnviromentProvider.cs" />
     <Compile Include="Providers\Core\ConfigFileProvider.cs" />
     <Compile Include="Providers\Core\UdpProvider.cs" />
+    <Compile Include="Providers\ExternalNotification\Smtp.cs" />
     <Compile Include="Providers\Jobs\BacklogSearchJob.cs" />
     <Compile Include="Providers\Jobs\BannerDownloadJob.cs" />
     <Compile Include="Providers\Jobs\ConvertEpisodeJob.cs" />
@@ -226,6 +227,7 @@
     <Compile Include="Providers\PostDownloadProvider.cs" />
     <Compile Include="Providers\QualityTypeProvider.cs" />
     <Compile Include="Providers\SearchProvider.cs" />
+    <Compile Include="Providers\SmtpProvider.cs" />
     <Compile Include="Providers\UpdateProvider.cs" />
     <Compile Include="Providers\Xbmc\ResourceManager.cs" />
     <Compile Include="Model\Xbmc\TvShowResult.cs" />
