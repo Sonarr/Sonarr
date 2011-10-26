@@ -1,7 +1,7 @@
 SET PACKAGEROOT=_rawPackage
 SET TARGET=%PACKAGEROOT%\NzbDrone
 
-RM %TARGET% /S /Q
+rd %TARGET% /S /Q
 del nzbdrone*.zip /Q /F
 
 xcopy IISExpress %TARGET%\IISExpress /E /V /I /Y
