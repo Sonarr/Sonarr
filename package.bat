@@ -1,11 +1,14 @@
 SET PACKAGEROOT=_rawPackage
 SET TARGET=%PACKAGEROOT%\NzbDrone
 
+RM %TARGET% /S /Q
+del nzbdrone*.zip /Q /F
+
 xcopy IISExpress %TARGET%\IISExpress /E /V /I /Y
 xcopy NzbDrone\bin\Release\*.*  %TARGET%\ /E /V /I /Y
 
-del %TARGET%\nlog.xml
-del %TARGET%\*.vshost.exe.*
+del %TARGET%\nlog.xml /Q /F
+del %TARGET%\*.vshost.exe.* /Q /F
 
 xcopy NzbDrone.Web\bin\*.*  %TARGET%\NzbDrone.Web\bin\ /E /V /I /Y
 xcopy NzbDrone.Web\App_GlobalResources\*.*  %TARGET%\NzbDrone.Web\App_GlobalResources\ /E /V /I /Y
