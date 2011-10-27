@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
+using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Jobs;
@@ -13,11 +14,16 @@ namespace NzbDrone.Web.Controllers
     {
         private readonly JobProvider _jobProvider;
         private readonly SabProvider _sabProvider;
+        private readonly SmtpProvider _smtpProvider;
 
-        public CommandController(JobProvider jobProvider, SabProvider sabProvider)
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        public CommandController(JobProvider jobProvider, SabProvider sabProvider,
+                                    SmtpProvider smtpProvider)
         {
             _jobProvider = jobProvider;
             _sabProvider = sabProvider;
+            _smtpProvider = smtpProvider;
         }
 
         public JsonResult RssSync()
@@ -58,9 +64,19 @@ namespace NzbDrone.Web.Controllers
 
             catch (Exception ex)
             {
-                //Todo: Log the error
-                throw;
+                Logger.Warn("Unable to get Categories from SABnzbd");
+                Logger.DebugException(ex.Message, ex);
+                return Json(new NotificationResult { Title = "Failed", Text = "Unable to get SABnzbd Categories", NotificationType = NotificationType.Error });
             }
+        }
+
+        [HttpPost]
+        public JsonResult SendTestEmail(string server, int port, bool ssl, string username, string password, string fromAddress, string toAddresses)
+        {
+            if (_smtpProvider.SendTestEmail(server, port, ssl, username, password, fromAddress, toAddresses))
+                return Json(new NotificationResult { Title = "Successfully sent test email." });
+
+            return Json(new NotificationResult { Title = "Failed", Text = "Unable to send Email, please check your settings", NotificationType = NotificationType.Error });
         }
     }
 }

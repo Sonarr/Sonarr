@@ -10,7 +10,7 @@
             width: 560px;
             border:solid 2px #CCCCCD;
             padding: 5px;
-            margin-bottom: 10px;
+            margin-left: -8px;
         }
         
         .notifier h4
@@ -28,6 +28,11 @@
             margin-bottom:20px;
             border-bottom:solid 1px #CCCCCD;
             padding-bottom:10px;
+        }
+        
+        #save_button
+        {
+            margin-top: 10px;
         }
     </style>
 }
@@ -47,58 +52,30 @@
             <h1>Notifications</h1>
             <p></p>
             
-            <div id="xbmc" class="notifier clearfix">
-                <h4>XBMC</h4>
-                <div class="notifierLine"></div>
-
-                <label class="labelClass">@Html.LabelFor(m => m.XbmcEnabled)
-                <span class="small">@Html.DescriptionFor(m => m.XbmcEnabled)</span>
-                </label>
-                @Html.CheckBoxFor(m => m.XbmcEnabled, new { @class = "inputClass checkClass" })
-
-                <label class="labelClass">@Html.LabelFor(m => m.XbmcNotifyOnGrab)
-                <span class="small">@Html.DescriptionFor(m => m.XbmcNotifyOnGrab)</span>
-                </label>
-                @Html.CheckBoxFor(m => m.XbmcNotifyOnGrab, new { @class = "inputClass checkClass" })
-
-                <label class="labelClass">@Html.LabelFor(m => m.XbmcNotifyOnDownload)
-                <span class="small">@Html.DescriptionFor(m => m.XbmcNotifyOnDownload)</span>
-                </label>
-                @Html.CheckBoxFor(m => m.XbmcNotifyOnDownload, new { @class = "inputClass checkClass" })
-
-                <label class="labelClass">@Html.LabelFor(m => m.XbmcUpdateLibrary)
-                <span class="small">@Html.DescriptionFor(m => m.XbmcUpdateLibrary)</span>
-                </label>
-                @Html.CheckBoxFor(m => m.XbmcUpdateLibrary, new { @class = "inputClass checkClass" })
-
-                <label class="labelClass">@Html.LabelFor(m => m.XbmcCleanLibrary)
-                <span class="small">@Html.DescriptionFor(m => m.XbmcCleanLibrary)</span>
-                </label>
-                @Html.CheckBoxFor(m => m.XbmcCleanLibrary, new { @class = "inputClass checkClass" })
-            
-                <label class="labelClass">@Html.LabelFor(m => m.XbmcHosts)
-                <span class="small">@Html.DescriptionFor(m => m.XbmcHosts)</span>
-                </label>
-                @Html.TextBoxFor(m => m.XbmcHosts, new { @class = "inputClass" })
-
-                <label class="labelClass">@Html.LabelFor(m => m.XbmcUsername)
-                <span class="small">@Html.DescriptionFor(m => m.XbmcUsername)</span>
-                </label>
-                @Html.TextBoxFor(m => m.XbmcUsername, new { @class = "inputClass" })
-
-                <label class="labelClass">@Html.LabelFor(m => m.XbmcPassword)
-                <span class="small">@Html.DescriptionFor(m => m.XbmcPassword)</span>
-                </label>
-                @Html.TextBoxFor(m => m.XbmcPassword, new { @class = "inputClass" })
+            <div id="tabs">
+	            <ul>
+		            <li><a href="#tabs-xbmc">XBMC</a></li>
+		            <li><a href="#tabs-smtp">SMTP</a></li>
+	            </ul>
+	            <div id="tabs-xbmc">
+                    @{Html.RenderPartial("Xbmc", Model);}
+	            </div>
+	            <div id="tabs-smtp">
+		            @{Html.RenderPartial("Smtp", Model);}
+	            </div>
             </div>
             
             <button type="submit" id="save_button" disabled="disabled">Save</button>
         }
     </div>
-
-    <div id="result" class="hiddenResult"></div>
 }
 
 @section Scripts{
     <script src="/Scripts/settingsForm.js" type="text/javascript"></script>
+
+    <script>
+        $(function () {
+            $("#tabs").tabs();
+        });
+	</script>
 }

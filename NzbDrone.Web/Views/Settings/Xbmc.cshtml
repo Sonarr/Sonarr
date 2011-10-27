@@ -1,0 +1,48 @@
+﻿@using NzbDrone.Web.Helpers
+@model NzbDrone.Web.Models.NotificationSettingsModel
+
+@{
+    Layout = null;
+}
+
+<div id="xbmc" class="notifier clearfix">
+    <label class="labelClass">@Html.LabelFor(m => m.XbmcEnabled)
+    <span class="small">@Html.DescriptionFor(m => m.XbmcEnabled)</span>
+    </label>
+    @Html.CheckBoxFor(m => m.XbmcEnabled, new { @class = "inputClass checkClass" })
+
+    <label class="labelClass">@Html.LabelFor(m => m.XbmcNotifyOnGrab)
+    <span class="small">@Html.DescriptionFor(m => m.XbmcNotifyOnGrab)</span>
+    </label>
+    @Html.CheckBoxFor(m => m.XbmcNotifyOnGrab, new { @class = "inputClass checkClass" })
+
+    <label class="labelClass">@Html.LabelFor(m => m.XbmcNotifyOnDownload)
+    <span class="small">@Html.DescriptionFor(m => m.XbmcNotifyOnDownload)</span>
+    </label>
+    @Html.CheckBoxFor(m => m.XbmcNotifyOnDownload, new { @class = "inputClass checkClass" })
+
+    <label class="labelClass">@Html.LabelFor(m => m.XbmcUpdateLibrary)
+    <span class="small">@Html.DescriptionFor(m => m.XbmcUpdateLibrary)</span>
+    </label>
+    @Html.CheckBoxFor(m => m.XbmcUpdateLibrary, new { @class = "inputClass checkClass" })
+
+    <label class="labelClass">@Html.LabelFor(m => m.XbmcCleanLibrary)
+    <span class="small">@Html.DescriptionFor(m => m.XbmcCleanLibrary)</span>
+    </label>
+    @Html.CheckBoxFor(m => m.XbmcCleanLibrary, new { @class = "inputClass checkClass" })
+            
+    <label class="labelClass">@Html.LabelFor(m => m.XbmcHosts)
+    <span class="small">@Html.DescriptionFor(m => m.XbmcHosts)</span>
+    </label>
+    @Html.TextBoxFor(m => m.XbmcHosts, new { @class = "inputClass" })
+
+    <label class="labelClass">@Html.LabelFor(m => m.XbmcUsername)
+    <span class="small">@Html.DescriptionFor(m => m.XbmcUsername)</span>
+    </label>
+    @Html.TextBoxFor(m => m.XbmcUsername, new { @class = "inputClass" })
+
+    <label class="labelClass">@Html.LabelFor(m => m.XbmcPassword)
+    <span class="small">@Html.DescriptionFor(m => m.XbmcPassword)</span>
+    </label>
+    @Html.TextBoxFor(m => m.XbmcPassword, new { @class = "inputClass" })
+</div>
