@@ -97,5 +97,18 @@ namespace NzbDrone.Web.Models
         [Description("Comma separated list of addresses to email")]
         [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string SmtpToAddresses { get; set; }
+
+        //Twitter
+        [DisplayName("Enabled")]
+        [Description("Enable notifications for Twitter?")]
+        public bool TwitterEnabled { get; set; }
+
+        [DisplayName("Notify on Grab")]
+        [Description("Send notification when episode is sent to SABnzbd?")]
+        public bool TwitterNotifyOnGrab { get; set; }
+
+        [DisplayName("Notify on Download")]
+        [Description("Send notification when episode is downloaded?")]
+        public bool TwitterNotifyOnDownload { get; set; }
     }
 }

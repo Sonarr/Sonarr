@@ -54,9 +54,13 @@
             
             <div id="tabs">
 	            <ul>
+                    <li><a href="#tabs-twitter">Twitter</a></li>
 		            <li><a href="#tabs-xbmc">XBMC</a></li>
 		            <li><a href="#tabs-smtp">SMTP</a></li>
 	            </ul>
+                <div id="tabs-twitter">
+                    @{Html.RenderPartial("Twitter", Model);}
+	            </div>
 	            <div id="tabs-xbmc">
                     @{Html.RenderPartial("Xbmc", Model);}
 	            </div>

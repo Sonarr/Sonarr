@@ -312,6 +312,18 @@ namespace NzbDrone.Core.Providers.Core
             set { SetValue("SmtpToAddresses", value); }
         }
 
+        public virtual string TwitterAccessToken
+        {
+            get { return GetValue("TwitterAccessToken", String.Empty); }
+            set { SetValue("TwitterAccessToken", value); }
+        }
+
+        public virtual string TwitterAccessTokenSecret
+        {
+            get { return GetValue("TwitterAccessTokenSecret", String.Empty); }
+            set { SetValue("TwitterAccessTokenSecret", value); }
+        }
+
         private string GetValue(string key)
         {
             return GetValue(key, String.Empty);

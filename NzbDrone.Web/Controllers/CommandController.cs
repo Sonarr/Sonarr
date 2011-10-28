@@ -4,6 +4,7 @@ using System.Web;
 using System.Web.Mvc;
 using NLog;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Model.Twitter;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Jobs;
 using NzbDrone.Web.Models;
@@ -15,15 +16,17 @@ namespace NzbDrone.Web.Controllers
         private readonly JobProvider _jobProvider;
         private readonly SabProvider _sabProvider;
         private readonly SmtpProvider _smtpProvider;
+        private readonly TwitterProvider _twitterProvider;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public CommandController(JobProvider jobProvider, SabProvider sabProvider,
-                                    SmtpProvider smtpProvider)
+                                    SmtpProvider smtpProvider, TwitterProvider twitterProvider)
         {
             _jobProvider = jobProvider;
             _sabProvider = sabProvider;
             _smtpProvider = smtpProvider;
+            _twitterProvider = twitterProvider;
         }
 
         public JsonResult RssSync()
@@ -77,6 +80,26 @@ namespace NzbDrone.Web.Controllers
                 return Json(new NotificationResult { Title = "Successfully sent test email." });
 
             return Json(new NotificationResult { Title = "Failed", Text = "Unable to send Email, please check your settings", NotificationType = NotificationType.Error });
+        }
+
+        public JsonResult GetTwitterAuthorization()
+        {
+            var result = _twitterProvider.GetAuthorization();
+
+            if (result == null)
+                return Json(new NotificationResult { Title = "Failed", Text = "Unable to get Twitter Authorization", NotificationType = NotificationType.Error }, JsonRequestBehavior.AllowGet);
+
+            return new JsonResult { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        public JsonResult VerifyTwitterAuthorization(string token, string verifier)
+        {
+            var result = _twitterProvider.GetAndSaveAccessToken(token, verifier);
+
+            if (!result)
+                return Json(new NotificationResult { Title = "Failed", Text = "Unable to verify Twitter Authorization", NotificationType = NotificationType.Error }, JsonRequestBehavior.AllowGet);
+
+            return Json(new NotificationResult { Title = "Successfully verified Twitter Authorization." }, JsonRequestBehavior.AllowGet);
         }
     }
 }
