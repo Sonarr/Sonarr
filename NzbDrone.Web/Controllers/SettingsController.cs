@@ -170,7 +170,10 @@ namespace NzbDrone.Web.Controllers
                                 SmtpUsername = _configProvider.SmtpUsername,
                                 SmtpPassword = _configProvider.SmtpPassword,
                                 SmtpFromAddress = _configProvider.SmtpFromAddress,
-                                SmtpToAddresses = _configProvider.SmtpToAddresses
+                                SmtpToAddresses = _configProvider.SmtpToAddresses,
+                                TwitterEnabled = _externalNotificationProvider.GetSettings(typeof(Twitter)).Enable,
+                                TwitterNotifyOnGrab = _configProvider.TwitterNotifyOnGrab,
+                                TwitterNotifyOnDownload = _configProvider.TwitterNotifyOnDownload
                             };
 
             return View(model);
@@ -449,7 +452,7 @@ namespace NzbDrone.Web.Controllers
                 _externalNotificationProvider.SaveSettings(smtpSettings);
 
                 _configProvider.SmtpNotifyOnGrab = data.SmtpNotifyOnGrab;
-                _configProvider.SmtpNotifyOnGrab = data.SmtpNotifyOnDownload;
+                _configProvider.SmtpNotifyOnDownload = data.SmtpNotifyOnDownload;
                 _configProvider.SmtpServer = data.SmtpServer;
                 _configProvider.SmtpPort = data.SmtpPort;
                 _configProvider.SmtpUseSsl = data.SmtpUseSsl;
@@ -457,6 +460,14 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.SmtpPassword = data.SmtpPassword;
                 _configProvider.SmtpFromAddress = data.SmtpFromAddress;
                 _configProvider.SmtpToAddresses = data.SmtpToAddresses;
+
+                //Twitter
+                var twitterSettings = _externalNotificationProvider.GetSettings(typeof(Twitter));
+                twitterSettings.Enable = data.TwitterEnabled;
+                _externalNotificationProvider.SaveSettings(twitterSettings);
+
+                _configProvider.TwitterNotifyOnGrab = data.TwitterNotifyOnGrab;
+                _configProvider.TwitterNotifyOnDownload = data.TwitterNotifyOnDownload;
 
                 return GetSuccessResult();
             }

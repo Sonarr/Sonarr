@@ -312,6 +312,20 @@ namespace NzbDrone.Core.Providers.Core
             set { SetValue("SmtpToAddresses", value); }
         }
 
+        public virtual Boolean TwitterNotifyOnGrab
+        {
+            get { return GetValueBoolean("TwitterNotifyOnGrab"); }
+
+            set { SetValue("TwitterNotifyOnGrab", value); }
+        }
+
+        public virtual Boolean TwitterNotifyOnDownload
+        {
+            get { return GetValueBoolean("TwitterNotifyOnDownload"); }
+
+            set { SetValue("TwitterNotifyOnDownload", value); }
+        }
+
         public virtual string TwitterAccessToken
         {
             get { return GetValue("TwitterAccessToken", String.Empty); }
