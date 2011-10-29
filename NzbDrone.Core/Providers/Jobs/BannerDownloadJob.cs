@@ -4,9 +4,11 @@ using System.IO;
 using System.Linq;
 using Ninject;
 using NLog;
+using NzbDrone.Common;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
+using DiskProvider = NzbDrone.Core.Providers.Core.DiskProvider;
 
 namespace NzbDrone.Core.Providers.Jobs
 {
@@ -49,7 +51,7 @@ namespace NzbDrone.Core.Providers.Jobs
         {
             Logger.Debug("Starting banner download job");
 
-            _bannerPath = Path.Combine(_enviromentProvider.AppPath, "Content", "Images", "Banners");
+            _bannerPath = Path.Combine(_enviromentProvider.WebRoot, "Content", "Images", "Banners");
             _diskProvider.CreateDirectory(_bannerPath);
 
             if (targetId > 0)

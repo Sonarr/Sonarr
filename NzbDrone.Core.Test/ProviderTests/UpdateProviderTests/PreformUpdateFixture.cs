@@ -4,10 +4,12 @@ using AutoMoq;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Common;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Test.Framework;
+using DiskProvider = NzbDrone.Core.Providers.Core.DiskProvider;
 
 namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
 {

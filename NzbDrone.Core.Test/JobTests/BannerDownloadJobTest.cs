@@ -4,12 +4,14 @@ using AutoMoq;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Common;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.Jobs;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
+using DiskProvider = NzbDrone.Core.Providers.Core.DiskProvider;
 
 namespace NzbDrone.Core.Test.JobTests
 {
@@ -90,7 +92,7 @@ namespace NzbDrone.Core.Test.JobTests
             var fakeSeries = Builder<Series>.CreateListOfSize(10)
                 .Build();
 
-            var path = Path.Combine(new EnviromentProvider().AppPath, "Content", "Images", "Banners");
+            var path = Path.Combine(new EnviromentProvider().WebRoot, "Content", "Images", "Banners");
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
             mocker.Resolve<EnviromentProvider>();

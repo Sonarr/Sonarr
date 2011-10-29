@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
 using Ninject;
+using NzbDrone.Common;
 using TvdbLib;
 using TvdbLib.Cache;
 using TvdbLib.Data;
@@ -22,7 +23,7 @@ namespace NzbDrone.Core.Providers
         public TvDbProvider(EnviromentProvider enviromentProvider)
         {
             _enviromentProvider = enviromentProvider;
-            _handler = new TvdbHandler(new XmlCacheProvider(_enviromentProvider.AppPath + @"\cache\tvdb"), TVDB_APIKEY);
+            _handler = new TvdbHandler(new XmlCacheProvider(_enviromentProvider.AppDataPath + @"\cache\tvdb"), TVDB_APIKEY);
         }
 
         public TvDbProvider()

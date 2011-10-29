@@ -67,11 +67,55 @@ namespace NzbDrone.Common
             }
         }
 
+        public virtual string WebRoot
+        {
+            get
+            {
+                return Path.Combine(ApplicationPath, "NzbDrone.Web");
+            }
+        }
+
+        public virtual string AppDataPath
+        {
+            get
+            {
+                var path = Path.Combine(WebRoot, "App_data");
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
+
+                return path;
+            }
+        }
+
         public virtual string StartUpPath
         {
             get
             {
                 return new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName;
+            }
+        }
+
+        public virtual Version Version
+        {
+            get { return Assembly.GetExecutingAssembly().GetName().Version; }
+        }
+
+        public virtual DateTime BuildDateTime
+        {
+            get
+            {
+                var fileLocation = Assembly.GetCallingAssembly().Location;
+                return new FileInfo(fileLocation).CreationTime;
+            }
+
+        }
+
+
+        public virtual String TempPath
+        {
+            get
+            {
+                return Path.GetTempPath();
             }
         }
 

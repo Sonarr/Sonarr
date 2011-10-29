@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Xml.Linq;
+using NzbDrone.Common;
 using NzbDrone.Core.Model;
 
 namespace NzbDrone.Core.Providers.Core
 {
     public class ConfigFileProvider
     {
-        private string _configFile = Path.Combine(new EnviromentProvider().AppPath, "App_Data", "Config.xml");
+        private string _configFile = Path.Combine(new EnviromentProvider().AppDataPath, "Config.xml");
 
         public string ConfigFile
         {
@@ -112,22 +110,14 @@ namespace NzbDrone.Core.Providers.Core
 
         public virtual void CreateDefaultConfigFile()
         {
-            //Create the config file here
-            Directory.CreateDirectory(Path.Combine(new EnviromentProvider().AppPath, "App_Data"));
-
             if (!File.Exists(ConfigFile))
             {
-                WriteDefaultConfig();
+                var xDoc = new XDocument(new XDeclaration("1.0", "utf-8", "yes"));
+
+                xDoc.Add(new XElement("Config"));
+
+                xDoc.Save(ConfigFile);
             }
-        }
-
-        public virtual void WriteDefaultConfig()
-        {
-            var xDoc = new XDocument(new XDeclaration("1.0", "utf-8", "yes"));
-
-            xDoc.Add(new XElement("Config"));
-
-            xDoc.Save(ConfigFile);
         }
     }
 }

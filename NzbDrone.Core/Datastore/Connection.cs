@@ -4,6 +4,7 @@ using System.Data.Common;
 using System.Data.SqlServerCe;
 using System.IO;
 using MvcMiniProfiler.Data;
+using NzbDrone.Common;
 using NzbDrone.Core.Providers;
 using PetaPoco;
 
@@ -11,11 +12,10 @@ namespace NzbDrone.Core.Datastore
 {
     public static class Connection
     {
-        private static readonly DirectoryInfo AppDataPath = new DirectoryInfo(Path.Combine(new EnviromentProvider().AppPath, "App_Data"));
+        private static EnviromentProvider _enviromentProvider = new EnviromentProvider();
 
         static Connection()
         {
-            if (!AppDataPath.Exists) AppDataPath.Create();
             Database.Mapper = new CustomeMapper();
         }
 
@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Datastore
         {
             get
             {
-                return GetConnectionString(Path.Combine(AppDataPath.FullName, "nzbdrone.sdf"));
+                return GetConnectionString(Path.Combine(_enviromentProvider.AppDataPath, "nzbdrone.sdf"));
             }
         }
 
@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Datastore
         {
             get
             {
-                return GetConnectionString(Path.Combine(AppDataPath.FullName, "log.sdf"));
+                return GetConnectionString(Path.Combine(_enviromentProvider.AppDataPath, "log.sdf"));
             }
         }
 
