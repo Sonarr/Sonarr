@@ -2,6 +2,7 @@
 using Ninject;
 using NLog;
 using NLog.Config;
+using NzbDrone.Common;
 using NzbDrone.Core.Providers;
 
 namespace NzbDrone.Core.Instrumentation
@@ -16,7 +17,7 @@ namespace NzbDrone.Core.Instrumentation
                 LogManager.ThrowExceptions = false;
             }
 
-            LogManager.Configuration = new XmlLoggingConfiguration(Path.Combine(new EnviromentProvider().AppPath, "log.config"), false);
+            LogManager.Configuration = new XmlLoggingConfiguration(Path.Combine(new EnviromentProvider().WebRoot, "log.config"), false);
 
             Common.LogConfiguration.RegisterConsoleLogger(LogLevel.Info, "NzbDrone.Web.MvcApplication");
             Common.LogConfiguration.RegisterConsoleLogger(LogLevel.Info, "NzbDrone.Core.CentralDispatch");

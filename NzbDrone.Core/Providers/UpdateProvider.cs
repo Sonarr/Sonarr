@@ -6,8 +6,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using NLog;
 using Ninject;
+using NzbDrone.Common;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
+using DiskProvider = NzbDrone.Core.Providers.Core.DiskProvider;
 
 namespace NzbDrone.Core.Providers
 {

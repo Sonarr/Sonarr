@@ -7,23 +7,20 @@ namespace NzbDrone.Common
 {
     public class EnviromentProvider
     {
-        public virtual String LogPath
-        {
-            get { return Environment.CurrentDirectory; }
-        }
 
-        public virtual bool IsUserInteractive
-        {
-            get { return Environment.UserInteractive; }
-        }
+#if DEBUG
+        private static readonly bool isInDebug = true;
+#else
+        private static readonly bool isInDebug = false; 
+#endif
+
+        private static readonly string processName = Process.GetCurrentProcess().ProcessName.ToLower();
 
         public static bool IsProduction
         {
             get
             {
-                if (Debugger.IsAttached) return false;
-
-                var processName = Process.GetCurrentProcess().ProcessName.ToLower();
+                if (isInDebug || Debugger.IsAttached) return false;
 
                 Console.WriteLine(processName);
                 if (processName.Contains("nunit")) return false;
@@ -32,6 +29,16 @@ namespace NzbDrone.Common
 
                 return true;
             }
+        }
+
+        public virtual String LogPath
+        {
+            get { return Environment.CurrentDirectory; }
+        }
+
+        public virtual bool IsUserInteractive
+        {
+            get { return Environment.UserInteractive; }
         }
 
         public virtual string ApplicationPath
@@ -60,11 +67,55 @@ namespace NzbDrone.Common
             }
         }
 
+        public virtual string WebRoot
+        {
+            get
+            {
+                return Path.Combine(ApplicationPath, "NzbDrone.Web");
+            }
+        }
+
+        public virtual string AppDataPath
+        {
+            get
+            {
+                var path = Path.Combine(WebRoot, "App_data");
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
+
+                return path;
+            }
+        }
+
         public virtual string StartUpPath
         {
             get
             {
                 return new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName;
+            }
+        }
+
+        public virtual Version Version
+        {
+            get { return Assembly.GetExecutingAssembly().GetName().Version; }
+        }
+
+        public virtual DateTime BuildDateTime
+        {
+            get
+            {
+                var fileLocation = Assembly.GetCallingAssembly().Location;
+                return new FileInfo(fileLocation).CreationTime;
+            }
+
+        }
+
+
+        public virtual String TempPath
+        {
+            get
+            {
+                return Path.GetTempPath();
             }
         }
 

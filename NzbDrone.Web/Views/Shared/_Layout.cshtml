@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 @using Helpers;
+@using NzbDrone.Common
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <link rel="SHORTCUT ICON" href="../../favicon.ico" />
@@ -16,7 +17,6 @@
     <link type="text/css" rel="stylesheet" href="/Content/overrides.css" />
     <link type="text/css" rel="stylesheet" href="/Content/Menu.css" />
     <link type="text/css" rel="stylesheet" href="/Content/Slider.css" />
-
     <script type="text/javascript" src="/Scripts/Plugins/jquery-1.6.3.min.js"></script>
     <script type="text/javascript" src="/Scripts/Plugins/jquery-ui-1.8.16.min.js"></script>
     <script type="text/javascript" src="/Scripts/Plugins/MicrosoftAjax.js"></script>
@@ -30,7 +30,6 @@
     <script type="text/javascript" src="/Scripts/autocomplete.js"></script>
     <script type="text/javascript" src="/Scripts/addSeries.js"></script>
     <script type="text/javascript" src="/Scripts/slider.js"></script>
-
     @MvcMiniProfiler.MiniProfiler.RenderIncludes()
     @RenderSection("HeaderContent", required: false)
 </head>
@@ -72,5 +71,21 @@
     @(Html.Telerik().ScriptRegistrar().jQuery(false))
     @RenderSection("Scripts", required: false)
     <script type="text/javascript" src="/Scripts/Notification.js"></script>
+    @if (EnviromentProvider.IsProduction)
+    {
+        <script type="text/javascript">
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-8318723-7']);
+            _gaq.push(['_setDomainName', 'none']);
+            _gaq.push(['_setAllowLinker', true]);
+            _gaq.push(['_trackPageview']);
+
+            (function () {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+        </script>
+    }
 </body>
 </html>

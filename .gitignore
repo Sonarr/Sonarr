@@ -38,3 +38,5 @@ NzbDrone.Web/NzbDrone.Web.Publish.xml
 *.sdf
 [Bb]anners
 *.orig
+_rawPackage/
+NzbDrone.zip

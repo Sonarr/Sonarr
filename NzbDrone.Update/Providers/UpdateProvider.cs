@@ -61,8 +61,8 @@ namespace NzbDrone.Update.Providers
 
             //Copy update folder on top of the existing folder
 
-            //Happy: Start Service, Process?
             //Happy: Cleanup
+            //Happy: Start Service, Process?
 
             //Sad: delete fucked up folder
             //Sad: restore backup
