@@ -234,11 +234,13 @@ namespace NzbDrone.Core.Test
             var result = mocker.Resolve<Newzbin>().FetchEpisode(title, season, episode);
 
             ExceptionVerification.MarkInconclusive(typeof(WebException));
-
+            ExceptionVerification.IgnoreWarns();
             result.Should().NotBeEmpty();
             result.Should().OnlyContain(r => r.CleanTitle == Parser.NormalizeTitle(title));
             result.Should().OnlyContain(r => r.SeasonNumber == season);
             result.Should().OnlyContain(r => r.EpisodeNumbers.Contains(episode));
+
+
         }
 
         [Test]
