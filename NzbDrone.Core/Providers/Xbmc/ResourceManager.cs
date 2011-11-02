@@ -37,7 +37,7 @@
 
         public static System.Drawing.Bitmap GetIconAsImage(string Name)
         {
-            System.IO.Stream stm = typeof(ResourceManager).Assembly.GetManifestResourceStream(string.Format("{0}.Icons.{1}.ico", typeof(ResourceManager).Namespace, Name));
+            System.IO.Stream stm = typeof(ResourceManager).Assembly.GetManifestResourceStream(string.Format("NzbDrone.Core.{0}.ico", Name));
             if (stm == null) return null;
             System.Drawing.Bitmap bmp;
             using (System.Drawing.Icon ico = new System.Drawing.Icon(stm))

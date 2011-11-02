@@ -338,6 +338,32 @@ namespace NzbDrone.Core.Providers.Core
             set { SetValue("TwitterAccessTokenSecret", value); }
         }
 
+        public virtual Boolean GrowlNotifyOnGrab
+        {
+            get { return GetValueBoolean("GrowlNotifyOnGrab"); }
+
+            set { SetValue("GrowlNotifyOnGrab", value); }
+        }
+
+        public virtual Boolean GrowlNotifyOnDownload
+        {
+            get { return GetValueBoolean("GrowlNotifyOnDownload"); }
+
+            set { SetValue("GrowlNotifyOnDownload", value); }
+        }
+
+        public virtual string GrowlHost
+        {
+            get { return GetValue("GrowlHost", String.Empty); }
+            set { SetValue("GrowlHost", value); }
+        }
+
+        public virtual string GrowlPassword
+        {
+            get { return GetValue("GrowlPassword", String.Empty); }
+            set { SetValue("GrowlPassword", value); }
+        }
+
         private string GetValue(string key)
         {
             return GetValue(key, String.Empty);

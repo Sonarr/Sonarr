@@ -35,7 +35,6 @@ namespace NzbDrone.Core
             }
         }
 
-
         public static void InitializeApp()
         {
             BindKernel();
@@ -107,6 +106,7 @@ namespace NzbDrone.Core
             _kernel.Bind<ExternalNotificationBase>().To<Xbmc>();
             _kernel.Bind<ExternalNotificationBase>().To<Smtp>();
             _kernel.Bind<ExternalNotificationBase>().To<Twitter>();
+            _kernel.Bind<ExternalNotificationBase>().To<Growl>();
 
             var notifiers = _kernel.GetAll<ExternalNotificationBase>();
             _kernel.Get<ExternalNotificationProvider>().InitializeNotifiers(notifiers.ToList());

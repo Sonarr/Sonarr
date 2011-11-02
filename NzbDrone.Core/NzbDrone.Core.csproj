@@ -125,6 +125,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\Exceptioneer.WindowsFormsClient.dll</HintPath>
     </Reference>
+    <Reference Include="Growl.Connector">
+      <HintPath>..\packages\Growl.0.6\lib\Growl.Connector.dll</HintPath>
+    </Reference>
+    <Reference Include="Growl.CoreLibrary">
+      <HintPath>..\packages\Growl.0.6\lib\Growl.CoreLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\DotNetZip.1.9.1.8\lib\net20\Ionic.Zip.dll</HintPath>
     </Reference>
@@ -221,8 +227,10 @@
     <Compile Include="Providers\Converting\HandbrakeProvider.cs" />
     <Compile Include="Providers\Core\ConfigFileProvider.cs" />
     <Compile Include="Providers\Core\UdpProvider.cs" />
+    <Compile Include="Providers\ExternalNotification\Growl.cs" />
     <Compile Include="Providers\ExternalNotification\Twitter.cs" />
     <Compile Include="Providers\ExternalNotification\Smtp.cs" />
+    <Compile Include="Providers\GrowlProvider.cs" />
     <Compile Include="Providers\Jobs\BacklogSearchJob.cs" />
     <Compile Include="Providers\Jobs\BannerDownloadJob.cs" />
     <Compile Include="Providers\Jobs\ConvertEpisodeJob.cs" />
@@ -351,6 +359,10 @@
       <Project>{F2BE0FDF-6E47-4827-A420-DD4EF82407F8}</Project>
       <Name>NzbDrone.Common</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="NzbDrone.ico" />
+    <Content Include="license.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
