@@ -354,7 +354,7 @@ namespace NzbDrone.Core.Providers.Core
 
         public virtual string GrowlHost
         {
-            get { return GetValue("GrowlHost", String.Empty); }
+            get { return GetValue("GrowlHost", "localhost:23053"); }
             set { SetValue("GrowlHost", value); }
         }
 

@@ -1,0 +1,33 @@
+﻿@using NzbDrone.Web.Helpers
+@model NzbDrone.Web.Models.NotificationSettingsModel
+
+@{
+    Layout = null;
+}
+
+<div id="growl" class="notifier clearfix">
+    <label class="labelClass">@Html.LabelFor(m => m.GrowlEnabled)
+    <span class="small">@Html.DescriptionFor(m => m.GrowlEnabled)</span>
+    </label>
+    @Html.CheckBoxFor(m => m.GrowlEnabled, new { @class = "inputClass checkClass" })
+
+    <label class="labelClass">@Html.LabelFor(m => m.GrowlNotifyOnGrab)
+    <span class="small">@Html.DescriptionFor(m => m.GrowlNotifyOnGrab)</span>
+    </label>
+    @Html.CheckBoxFor(m => m.GrowlNotifyOnGrab, new { @class = "inputClass checkClass" })
+
+    <label class="labelClass">@Html.LabelFor(m => m.GrowlNotifyOnDownload)
+    <span class="small">@Html.DescriptionFor(m => m.GrowlNotifyOnDownload)</span>
+    </label>
+    @Html.CheckBoxFor(m => m.GrowlNotifyOnDownload, new { @class = "inputClass checkClass" })
+            
+    <label class="labelClass">@Html.LabelFor(m => m.GrowlHost)
+    <span class="small">@Html.DescriptionFor(m => m.GrowlHost)</span>
+    </label>
+    @Html.TextBoxFor(m => m.GrowlHost, new { @class = "inputClass" })
+
+    <label class="labelClass">@Html.LabelFor(m => m.GrowlPassword)
+    <span class="small">@Html.DescriptionFor(m => m.GrowlPassword)</span>
+    </label>
+    @Html.TextBoxFor(m => m.GrowlPassword, new { @class = "inputClass" })
+</div>

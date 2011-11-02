@@ -110,5 +110,26 @@ namespace NzbDrone.Web.Models
         [DisplayName("Notify on Download")]
         [Description("Send notification when episode is downloaded?")]
         public bool TwitterNotifyOnDownload { get; set; }
+
+        //Growl
+        [DisplayName("Enabled")]
+        [Description("Enable notifications for Growl?")]
+        public bool GrowlEnabled { get; set; }
+
+        [DisplayName("Notify on Grab")]
+        [Description("Send notification when episode is sent to SABnzbd?")]
+        public bool GrowlNotifyOnGrab { get; set; }
+
+        [DisplayName("Notify on Download")]
+        [Description("Send notification when episode is downloaded?")]
+        public bool GrowlNotifyOnDownload { get; set; }
+
+        [DisplayName("Host running Growl")]
+        [Description("Host or IP Address:Port")]
+        public string GrowlHost { get; set; }
+
+        [DisplayName("Growl host Password")]
+        [Description("Password is required if Growl is running on another system")]
+        public string GrowlPassword { get; set; }
     }
 }

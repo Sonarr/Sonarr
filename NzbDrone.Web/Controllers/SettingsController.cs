@@ -173,7 +173,12 @@ namespace NzbDrone.Web.Controllers
                                 SmtpToAddresses = _configProvider.SmtpToAddresses,
                                 TwitterEnabled = _externalNotificationProvider.GetSettings(typeof(Twitter)).Enable,
                                 TwitterNotifyOnGrab = _configProvider.TwitterNotifyOnGrab,
-                                TwitterNotifyOnDownload = _configProvider.TwitterNotifyOnDownload
+                                TwitterNotifyOnDownload = _configProvider.TwitterNotifyOnDownload,
+                                GrowlEnabled = _externalNotificationProvider.GetSettings(typeof(Growl)).Enable,
+                                GrowlNotifyOnGrab = _configProvider.GrowlNotifyOnGrab,
+                                GrowlNotifyOnDownload = _configProvider.GrowlNotifyOnDownload,
+                                GrowlHost = _configProvider.GrowlHost,
+                                GrowlPassword = _configProvider.GrowlPassword
                             };
 
             return View(model);
@@ -468,6 +473,16 @@ namespace NzbDrone.Web.Controllers
 
                 _configProvider.TwitterNotifyOnGrab = data.TwitterNotifyOnGrab;
                 _configProvider.TwitterNotifyOnDownload = data.TwitterNotifyOnDownload;
+
+                //Growl
+                var growlSettings = _externalNotificationProvider.GetSettings(typeof(Growl));
+                growlSettings.Enable = data.GrowlEnabled;
+                _externalNotificationProvider.SaveSettings(growlSettings);
+
+                _configProvider.GrowlNotifyOnGrab = data.GrowlNotifyOnGrab;
+                _configProvider.GrowlNotifyOnDownload = data.GrowlNotifyOnDownload;
+                _configProvider.GrowlHost = data.GrowlHost;
+                _configProvider.GrowlPassword = data.GrowlPassword;
 
                 return GetSuccessResult();
             }
