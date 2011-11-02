@@ -4,7 +4,6 @@ using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using NLog;
-using NLog.Config;
 using Ninject;
 using NzbDrone.Common;
 using NzbDrone.Model;
