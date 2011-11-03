@@ -78,7 +78,7 @@ namespace NzbDrone.Core.Providers.Jobs
 
         public virtual void DownloadBanner(ProgressNotification notification, Series series)
         {
-            var bannerFilename = Path.Combine(_pathProvider.BannerPath, series.SeriesId.ToString(), ".jpg");
+            var bannerFilename = Path.Combine(_pathProvider.BannerPath, series.SeriesId.ToString()) + ".jpg";
 
             notification.CurrentMessage = string.Format("Downloading banner for '{0}'", series.Title);
 

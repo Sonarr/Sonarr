@@ -15,6 +15,7 @@ using PetaPoco;
 namespace NzbDrone.Core.Test
 {
     [TestFixture]
+    [Explicit]
     [Category("Benchmark")]
     // ReSharper disable InconsistentNaming
     public class DbBenchmark : TestBase

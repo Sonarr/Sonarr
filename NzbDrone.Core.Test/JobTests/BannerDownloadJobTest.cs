@@ -19,6 +19,14 @@ namespace NzbDrone.Core.Test.JobTests
     // ReSharper disable InconsistentNaming
     public class BannerDownloadJobTest : TestBase
     {
+
+        [SetUp]
+        public void Setup()
+        {
+            WithStrictMocker();
+            WithTempAsStartUpPath();
+        }
+
         [Test]
         public void BannerDownload_all()
         {
@@ -26,28 +34,25 @@ namespace NzbDrone.Core.Test.JobTests
             var fakeSeries = Builder<Series>.CreateListOfSize(10)
                 .Build();
 
-            var mocker = new AutoMoqer(MockBehavior.Strict);
-            mocker.Resolve<EnviromentProvider>();
-
             var notification = new ProgressNotification("Banner Download");
 
-            mocker.GetMock<SeriesProvider>()
+            Mocker.GetMock<SeriesProvider>()
                 .Setup(c => c.GetAllSeries())
                 .Returns(fakeSeries);
 
-            mocker.GetMock<HttpProvider>()
+            Mocker.GetMock<HttpProvider>()
                 .Setup(s => s.DownloadFile(It.IsAny<string>(), It.IsAny<string>()));
 
-            mocker.GetMock<DiskProvider>()
+            Mocker.GetMock<DiskProvider>()
                 .Setup(S => S.CreateDirectory(It.IsAny<string>()))
                 .Returns("");
 
             //Act
-            mocker.Resolve<BannerDownloadJob>().Start(notification, 0, 0);
+            Mocker.Resolve<BannerDownloadJob>().Start(notification, 0, 0);
 
             //Assert
-            mocker.VerifyAllMocks();
-            mocker.GetMock<HttpProvider>().Verify(s => s.DownloadFile(It.IsAny<string>(), It.IsAny<string>()),
+            Mocker.VerifyAllMocks();
+            Mocker.GetMock<HttpProvider>().Verify(s => s.DownloadFile(It.IsAny<string>(), It.IsAny<string>()),
                                                        Times.Exactly(fakeSeries.Count));
         }
 
@@ -60,28 +65,25 @@ namespace NzbDrone.Core.Test.JobTests
                 .With(s => s.BannerUrl = null)
                 .Build();
 
-            var mocker = new AutoMoqer(MockBehavior.Strict);
-            mocker.Resolve<EnviromentProvider>();
+          var notification = new ProgressNotification("Banner Download");
 
-            var notification = new ProgressNotification("Banner Download");
-
-            mocker.GetMock<SeriesProvider>()
+            Mocker.GetMock<SeriesProvider>()
                 .Setup(c => c.GetAllSeries())
                 .Returns(fakeSeries);
 
-            mocker.GetMock<HttpProvider>()
+            Mocker.GetMock<HttpProvider>()
                 .Setup(s => s.DownloadFile(It.IsAny<string>(), It.IsAny<string>()));
 
-            mocker.GetMock<DiskProvider>()
+            Mocker.GetMock<DiskProvider>()
                 .Setup(S => S.CreateDirectory(It.IsAny<string>()))
                 .Returns("");
 
             //Act
-            mocker.Resolve<BannerDownloadJob>().Start(notification, 0, 0);
+            Mocker.Resolve<BannerDownloadJob>().Start(notification, 0, 0);
 
             //Assert
-            mocker.VerifyAllMocks();
-            mocker.GetMock<HttpProvider>().Verify(s => s.DownloadFile(It.IsAny<string>(), It.IsAny<string>()),
+            Mocker.VerifyAllMocks();
+            Mocker.GetMock<HttpProvider>().Verify(s => s.DownloadFile(It.IsAny<string>(), It.IsAny<string>()),
                                                        Times.Exactly(8));
         }
 
@@ -92,67 +94,64 @@ namespace NzbDrone.Core.Test.JobTests
             var fakeSeries = Builder<Series>.CreateListOfSize(10)
                 .Build();
 
-          
-            var pathProvider = Mocker.Resolve<PathProvider>();
 
-            var mocker = new AutoMoqer(MockBehavior.Strict);
-            mocker.Resolve<EnviromentProvider>();
+            var pathProvider = Mocker.Resolve<PathProvider>();
 
             var notification = new ProgressNotification("Banner Download");
 
-            mocker.GetMock<SeriesProvider>()
+            Mocker.GetMock<SeriesProvider>()
                 .Setup(c => c.GetAllSeries())
                 .Returns(fakeSeries);
 
-            mocker.GetMock<HttpProvider>()
+            Mocker.GetMock<HttpProvider>()
                 .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(pathProvider.BannerPath, "1.jpg")))
                 .Throws(new WebException());
 
-            mocker.GetMock<HttpProvider>()
+            Mocker.GetMock<HttpProvider>()
                 .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(pathProvider.BannerPath, "2.jpg")));
 
-            mocker.GetMock<HttpProvider>()
+            Mocker.GetMock<HttpProvider>()
                 .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(pathProvider.BannerPath, "3.jpg")))
                 .Throws(new WebException());
 
-            mocker.GetMock<HttpProvider>()
+            Mocker.GetMock<HttpProvider>()
                 .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(pathProvider.BannerPath, "4.jpg")));
 
 
-            mocker.GetMock<HttpProvider>()
+            Mocker.GetMock<HttpProvider>()
                 .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(pathProvider.BannerPath, "5.jpg")))
                 .Throws(new WebException());
 
-            mocker.GetMock<HttpProvider>()
+            Mocker.GetMock<HttpProvider>()
                 .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(pathProvider.BannerPath, "6.jpg")));
 
 
-            mocker.GetMock<HttpProvider>()
+            Mocker.GetMock<HttpProvider>()
                 .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(pathProvider.BannerPath, "7.jpg")))
                 .Throws(new WebException());
 
-            mocker.GetMock<HttpProvider>()
+            Mocker.GetMock<HttpProvider>()
                 .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(pathProvider.BannerPath, "8.jpg")));
 
 
-            mocker.GetMock<HttpProvider>()
+            Mocker.GetMock<HttpProvider>()
                 .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(pathProvider.BannerPath, "9.jpg")))
                 .Throws(new WebException());
 
-            mocker.GetMock<HttpProvider>()
+            Mocker.GetMock<HttpProvider>()
                 .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(pathProvider.BannerPath, "10.jpg")));
 
 
-            mocker.GetMock<DiskProvider>()
+            Mocker.GetMock<DiskProvider>()
                 .Setup(S => S.CreateDirectory(It.IsAny<string>()))
                 .Returns("");
 
             //Act
-            mocker.Resolve<BannerDownloadJob>().Start(notification, 0, 0);
+            Mocker.Resolve<BannerDownloadJob>().Start(notification, 0, 0);
 
             //Assert
-            mocker.VerifyAllMocks();
-            mocker.GetMock<HttpProvider>().Verify(s => s.DownloadFile(It.IsAny<string>(), It.IsAny<string>()),
+            Mocker.VerifyAllMocks();
+            Mocker.GetMock<HttpProvider>().Verify(s => s.DownloadFile(It.IsAny<string>(), It.IsAny<string>()),
                                                        Times.Exactly(fakeSeries.Count));
         }
 
@@ -163,29 +162,26 @@ namespace NzbDrone.Core.Test.JobTests
             var fakeSeries = Builder<Series>.CreateListOfSize(10)
                 .Build();
 
-            var mocker = new AutoMoqer(MockBehavior.Strict);
-            mocker.Resolve<EnviromentProvider>();
-
             var notification = new ProgressNotification("Banner Download");
 
-            mocker.GetMock<SeriesProvider>()
+            Mocker.GetMock<SeriesProvider>()
                 .Setup(c => c.GetAllSeries())
                 .Returns(fakeSeries);
 
-            mocker.GetMock<HttpProvider>()
+            Mocker.GetMock<HttpProvider>()
                 .Setup(s => s.DownloadFile(It.IsAny<string>(), It.IsAny<string>()))
                 .Throws(new WebException());
 
-            mocker.GetMock<DiskProvider>()
+            Mocker.GetMock<DiskProvider>()
                 .Setup(S => S.CreateDirectory(It.IsAny<string>()))
                 .Returns("");
 
             //Act
-            mocker.Resolve<BannerDownloadJob>().Start(notification, 0, 0);
+            Mocker.Resolve<BannerDownloadJob>().Start(notification, 0, 0);
 
             //Assert
-            mocker.VerifyAllMocks();
-            mocker.GetMock<HttpProvider>().Verify(s => s.DownloadFile(It.IsAny<string>(), It.IsAny<string>()),
+            Mocker.VerifyAllMocks();
+            Mocker.GetMock<HttpProvider>().Verify(s => s.DownloadFile(It.IsAny<string>(), It.IsAny<string>()),
                                                        Times.Exactly(fakeSeries.Count));
         }
 
@@ -197,29 +193,26 @@ namespace NzbDrone.Core.Test.JobTests
                 .With(s => s.SeriesId = 1)
                 .Build();
 
-            var mocker = new AutoMoqer(MockBehavior.Strict);
-            mocker.Resolve<EnviromentProvider>();
-
             var notification = new ProgressNotification("Banner Download");
 
-            mocker.GetMock<SeriesProvider>()
+            Mocker.GetMock<SeriesProvider>()
                 .Setup(c => c.GetSeries(1))
                 .Returns(fakeSeries);
 
-            mocker.GetMock<HttpProvider>()
+            Mocker.GetMock<HttpProvider>()
                 .Setup(s => s.DownloadFile(It.IsAny<string>(), It.IsAny<string>()))
                 .Throws(new WebException());
 
-            mocker.GetMock<DiskProvider>()
+            Mocker.GetMock<DiskProvider>()
                 .Setup(S => S.CreateDirectory(It.IsAny<string>()))
                 .Returns("");
 
             //Act
-            mocker.Resolve<BannerDownloadJob>().Start(notification, 1, 0);
+            Mocker.Resolve<BannerDownloadJob>().Start(notification, 1, 0);
 
             //Assert
-            mocker.VerifyAllMocks();
-            mocker.GetMock<HttpProvider>().Verify(s => s.DownloadFile(It.IsAny<string>(), It.IsAny<string>()),
+            Mocker.VerifyAllMocks();
+            Mocker.GetMock<HttpProvider>().Verify(s => s.DownloadFile(It.IsAny<string>(), It.IsAny<string>()),
                                                        Times.Once());
         }
 
@@ -231,20 +224,18 @@ namespace NzbDrone.Core.Test.JobTests
                 .With(s => s.SeriesId = 1)
                 .Build();
 
-            var mocker = new AutoMoqer(MockBehavior.Strict);
-
             var notification = new ProgressNotification("Banner Download");
 
-            mocker.GetMock<HttpProvider>()
+            Mocker.GetMock<HttpProvider>()
                 .Setup(s => s.DownloadFile(It.IsAny<string>(), It.IsAny<string>()))
                 .Throws(new WebException());
 
             //Act
-            mocker.Resolve<BannerDownloadJob>().DownloadBanner(notification, fakeSeries);
+            Mocker.Resolve<BannerDownloadJob>().DownloadBanner(notification, fakeSeries);
 
             //Assert
-            mocker.VerifyAllMocks();
-            mocker.GetMock<HttpProvider>().Verify(s => s.DownloadFile(It.IsAny<string>(), It.IsAny<string>()),
+            Mocker.VerifyAllMocks();
+            Mocker.GetMock<HttpProvider>().Verify(s => s.DownloadFile(It.IsAny<string>(), It.IsAny<string>()),
                                                        Times.Once());
         }
     }

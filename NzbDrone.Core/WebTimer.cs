@@ -18,6 +18,7 @@ namespace NzbDrone.Core
             _jobProvider = jobProvider;
         }
 
+        //TODO: Make timer doesn't keep running during unit tests.
         public void StartTimer(int secondInterval)
         {
             _onCacheRemove = new CacheItemRemovedCallback(DoWork);

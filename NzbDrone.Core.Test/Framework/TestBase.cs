@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using AutoMoq;
+using Moq;
 using NUnit.Framework;
 using Ninject;
 using NzbDrone.Common;
@@ -10,7 +11,6 @@ namespace NzbDrone.Core.Test.Framework
     public class TestBase : LoggingTest
     // ReSharper disable InconsistentNaming
     {
-
         static TestBase()
         {
             InitLogging();
@@ -57,10 +57,16 @@ namespace NzbDrone.Core.Test.Framework
             Mocker = new AutoMoqer();
         }
 
+        protected void WithStrictMocker()
+        {
+            Mocker = new AutoMoqer(MockBehavior.Strict);
+        }
+
         [TearDown]
         public void TearDownBase()
         {
             ExceptionVerification.AssertNoUnexcpectedLogs();
+            Mocker = new AutoMoqer(MockBehavior.Strict);
         }
 
 
