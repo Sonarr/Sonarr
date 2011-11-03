@@ -7,6 +7,7 @@ namespace NzbDrone.Common
 {
     public class EnviromentProvider
     {
+        public const string IIS_FOLDER_NAME = "iisexpress";
 
 #if DEBUG
         private static readonly bool isInDebug = true;
@@ -45,7 +46,7 @@ namespace NzbDrone.Common
         {
             get
             {
-                var dir = new FileInfo(Environment.CurrentDirectory).Directory;
+                var dir = new DirectoryInfo(Environment.CurrentDirectory);
 
                 while (!ContainsIIS(dir))
                 {
@@ -79,7 +80,7 @@ namespace NzbDrone.Common
         {
             get
             {
-                var path = Path.Combine(WebRoot, "App_data");
+                var path = Path.Combine(WebRoot, "App_Data");
                 if (!Directory.Exists(path))
                     Directory.CreateDirectory(path);
 
@@ -121,7 +122,7 @@ namespace NzbDrone.Common
 
         private static bool ContainsIIS(DirectoryInfo dir)
         {
-            return dir.GetDirectories("iisexpress").Length != 0;
+            return dir.GetDirectories(IIS_FOLDER_NAME).Length != 0;
         }
     }
 }
