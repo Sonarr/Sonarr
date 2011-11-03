@@ -160,7 +160,20 @@ namespace NzbDrone.Web.Controllers
                                 XbmcCleanLibrary = _configProvider.XbmcCleanLibrary,
                                 XbmcHosts = _configProvider.XbmcHosts,
                                 XbmcUsername = _configProvider.XbmcUsername,
-                                XbmcPassword = _configProvider.XbmcPassword
+                                XbmcPassword = _configProvider.XbmcPassword,
+                                SmtpEnabled = _externalNotificationProvider.GetSettings(typeof(Smtp)).Enable,
+                                SmtpNotifyOnGrab = _configProvider.SmtpNotifyOnGrab,
+                                SmtpNotifyOnDownload = _configProvider.SmtpNotifyOnGrab,
+                                SmtpServer = _configProvider.SmtpServer,
+                                SmtpPort = _configProvider.SmtpPort,
+                                SmtpUseSsl = _configProvider.SmtpUseSsl,
+                                SmtpUsername = _configProvider.SmtpUsername,
+                                SmtpPassword = _configProvider.SmtpPassword,
+                                SmtpFromAddress = _configProvider.SmtpFromAddress,
+                                SmtpToAddresses = _configProvider.SmtpToAddresses,
+                                TwitterEnabled = _externalNotificationProvider.GetSettings(typeof(Twitter)).Enable,
+                                TwitterNotifyOnGrab = _configProvider.TwitterNotifyOnGrab,
+                                TwitterNotifyOnDownload = _configProvider.TwitterNotifyOnDownload
                             };
 
             return View(model);
@@ -432,6 +445,29 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.XbmcHosts = data.XbmcHosts;
                 _configProvider.XbmcUsername = data.XbmcUsername;
                 _configProvider.XbmcPassword = data.XbmcPassword;
+
+                //SMTP
+                var smtpSettings = _externalNotificationProvider.GetSettings(typeof (Smtp));
+                smtpSettings.Enable = data.SmtpEnabled;
+                _externalNotificationProvider.SaveSettings(smtpSettings);
+
+                _configProvider.SmtpNotifyOnGrab = data.SmtpNotifyOnGrab;
+                _configProvider.SmtpNotifyOnDownload = data.SmtpNotifyOnDownload;
+                _configProvider.SmtpServer = data.SmtpServer;
+                _configProvider.SmtpPort = data.SmtpPort;
+                _configProvider.SmtpUseSsl = data.SmtpUseSsl;
+                _configProvider.SmtpUsername = data.SmtpUsername;
+                _configProvider.SmtpPassword = data.SmtpPassword;
+                _configProvider.SmtpFromAddress = data.SmtpFromAddress;
+                _configProvider.SmtpToAddresses = data.SmtpToAddresses;
+
+                //Twitter
+                var twitterSettings = _externalNotificationProvider.GetSettings(typeof(Twitter));
+                twitterSettings.Enable = data.TwitterEnabled;
+                _externalNotificationProvider.SaveSettings(twitterSettings);
+
+                _configProvider.TwitterNotifyOnGrab = data.TwitterNotifyOnGrab;
+                _configProvider.TwitterNotifyOnDownload = data.TwitterNotifyOnDownload;
 
                 return GetSuccessResult();
             }

@@ -81,6 +81,7 @@
     <Compile Include="JobTests\BacklogSearchJobTest.cs" />
     <Compile Include="JobTests\BannerDownloadJobTest.cs" />
     <Compile Include="ProviderTests\ConfigFileProviderTest.cs" />
+    <Compile Include="ProviderTests\GrowlProviderTest.cs" />
     <Compile Include="ProviderTests\DiskProviderTests\ExtractArchiveFixture.cs" />
     <Compile Include="ProviderTests\PostDownloadProviderTests\PostDownloadProviderFixture.cs" />
     <Compile Include="JobTests\SearchJobTest.cs" />

@@ -1,0 +1,76 @@
+﻿@using NzbDrone.Web.Helpers
+@model NzbDrone.Web.Models.NotificationSettingsModel
+
+@{
+    Layout = null;
+}
+
+<div id="twitter" class="notifier clearfix">
+    <label class="labelClass">@Html.LabelFor(m => m.TwitterEnabled)
+    <span class="small">@Html.DescriptionFor(m => m.TwitterEnabled)</span>
+    </label>
+    @Html.CheckBoxFor(m => m.TwitterEnabled, new { @class = "inputClass checkClass" })
+
+    <label class="labelClass">@Html.LabelFor(m => m.TwitterNotifyOnGrab)
+    <span class="small">@Html.DescriptionFor(m => m.TwitterNotifyOnGrab)</span>
+    </label>
+    @Html.CheckBoxFor(m => m.TwitterNotifyOnGrab, new { @class = "inputClass checkClass" })
+
+    <label class="labelClass">@Html.LabelFor(m => m.TwitterNotifyOnDownload)
+    <span class="small">@Html.DescriptionFor(m => m.TwitterNotifyOnDownload)</span>
+    </label>
+    @Html.CheckBoxFor(m => m.TwitterNotifyOnDownload, new { @class = "inputClass checkClass" })
+
+    <label class="labelClass">Request Authorization
+    <span class="small">Begin Twitter authorization for NzbDrone</span>
+    </label>
+    <input type="button" onclick="requestTwitterAuthorization();" value="Requestion Authorization" class="inputClass"/>
+
+    <label class="labelClass">Verification PIN
+    <span class="small">PIN from Twitter to provide authorization to NzbDrone</span>
+    </label>
+    @Html.TextBox("twitterVerification", "", new { @class = "inputClass" })
+
+    <label class="labelClass">Verify & Test Authorization
+    <span class="small">Verify & Test Twitter authorization for NzbDrone (Send a test tweet)</span>
+    </label>
+    <input type="button" onclick="verifyTwitterAuthorization();" value="Test Authorization" class="inputClass"/>
+
+    @Html.Hidden("authorizationRequestToken")
+</div>
+
+<script type="text/javascript">
+    getAuthorizationUrl = '../Command/GetTwitterAuthorization';
+    verifyAuthorizationUrl = '../Command/VerifyTwitterAuthorization';
+
+    function requestTwitterAuthorization() {
+        $.ajax({
+                type: "GET",
+                url: getAuthorizationUrl,
+                error: function(req, status, error) {
+                    alert("Sorry! We could get Twitter Authorization at this time. " + error);
+                },
+                success: function(data, textStatus, jqXHR) {
+                    if (data.IsMessage)
+                        return false;
+
+                    $('#authorizationRequestToken').val(data.Token);
+                    window.open(data.Url);
+                }
+            });
+    }
+
+    function verifyTwitterAuthorization() {
+        var token = $('#authorizationRequestToken').val();
+        var verifier = $('#twitterVerification').val();
+
+        $.ajax({
+                type: "GET",
+                url: verifyAuthorizationUrl,
+                data: jQuery.param({ token: token, verifier: verifier }),
+                error: function(req, status, error) {
+                    alert("Sorry! We could verify Twitter Authorization at this time. " + error);
+                }
+            });
+    }
+</script>

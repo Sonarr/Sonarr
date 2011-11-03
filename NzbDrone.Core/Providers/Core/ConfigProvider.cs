@@ -255,6 +255,115 @@ namespace NzbDrone.Core.Providers.Core
             set { SetValue("UpdateUrl", value); }
         }
 
+        public virtual Boolean SmtpNotifyOnGrab
+        {
+            get { return GetValueBoolean("SmtpNotifyOnGrab"); }
+
+            set { SetValue("SmtpNotifyOnGrab", value); }
+        }
+
+        public virtual Boolean SmtpNotifyOnDownload
+        {
+            get { return GetValueBoolean("SmtpNotifyOnDownload"); }
+
+            set { SetValue("SmtpNotifyOnDownload", value); }
+        }
+
+        public virtual string SmtpServer
+        {
+            get { return GetValue("SmtpServer", String.Empty); }
+            set { SetValue("SmtpServer", value); }
+        }
+
+        public virtual int SmtpPort
+        {
+            get { return GetValueInt("SmtpPort", 25); }
+            set { SetValue("SmtpPort", value); }
+        }
+
+        public virtual Boolean SmtpUseSsl
+        {
+            get { return GetValueBoolean("SmtpUseSsl"); }
+
+            set { SetValue("SmtpUseSsl", value); }
+        }
+
+        public virtual string SmtpUsername
+        {
+            get { return GetValue("SmtpUsername", String.Empty); }
+            set { SetValue("SmtpUsername", value); }
+        }
+
+        public virtual string SmtpPassword
+        {
+            get { return GetValue("SmtpPassword", String.Empty); }
+            set { SetValue("SmtpPassword", value); }
+        }
+
+        public virtual string SmtpFromAddress
+        {
+            get { return GetValue("SmtpFromAddress", String.Empty); }
+            set { SetValue("SmtpFromAddress", value); }
+        }
+
+        public virtual string SmtpToAddresses
+        {
+            get { return GetValue("SmtpToAddresses", String.Empty); }
+            set { SetValue("SmtpToAddresses", value); }
+        }
+
+        public virtual Boolean TwitterNotifyOnGrab
+        {
+            get { return GetValueBoolean("TwitterNotifyOnGrab"); }
+
+            set { SetValue("TwitterNotifyOnGrab", value); }
+        }
+
+        public virtual Boolean TwitterNotifyOnDownload
+        {
+            get { return GetValueBoolean("TwitterNotifyOnDownload"); }
+
+            set { SetValue("TwitterNotifyOnDownload", value); }
+        }
+
+        public virtual string TwitterAccessToken
+        {
+            get { return GetValue("TwitterAccessToken", String.Empty); }
+            set { SetValue("TwitterAccessToken", value); }
+        }
+
+        public virtual string TwitterAccessTokenSecret
+        {
+            get { return GetValue("TwitterAccessTokenSecret", String.Empty); }
+            set { SetValue("TwitterAccessTokenSecret", value); }
+        }
+
+        public virtual Boolean GrowlNotifyOnGrab
+        {
+            get { return GetValueBoolean("GrowlNotifyOnGrab"); }
+
+            set { SetValue("GrowlNotifyOnGrab", value); }
+        }
+
+        public virtual Boolean GrowlNotifyOnDownload
+        {
+            get { return GetValueBoolean("GrowlNotifyOnDownload"); }
+
+            set { SetValue("GrowlNotifyOnDownload", value); }
+        }
+
+        public virtual string GrowlHost
+        {
+            get { return GetValue("GrowlHost", String.Empty); }
+            set { SetValue("GrowlHost", value); }
+        }
+
+        public virtual string GrowlPassword
+        {
+            get { return GetValue("GrowlPassword", String.Empty); }
+            set { SetValue("GrowlPassword", value); }
+        }
+
         private string GetValue(string key)
         {
             return GetValue(key, String.Empty);

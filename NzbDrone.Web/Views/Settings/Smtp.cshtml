@@ -1,0 +1,103 @@
+﻿@using NzbDrone.Web.Helpers
+@model NzbDrone.Web.Models.NotificationSettingsModel
+
+@{
+    Layout = null;
+}
+
+<div id="smtp" class="notifier clearfix">
+    <label class="labelClass">@Html.LabelFor(m => m.SmtpEnabled)
+    <span class="small">@Html.DescriptionFor(m => m.SmtpEnabled)</span>
+    </label>
+    @Html.CheckBoxFor(m => m.SmtpEnabled, new { @class = "inputClass checkClass" })
+
+    <label class="labelClass">@Html.LabelFor(m => m.SmtpNotifyOnGrab)
+    <span class="small">@Html.DescriptionFor(m => m.SmtpNotifyOnGrab)</span>
+    </label>
+    @Html.CheckBoxFor(m => m.SmtpNotifyOnGrab, new { @class = "inputClass checkClass" })
+
+    <label class="labelClass">@Html.LabelFor(m => m.SmtpNotifyOnDownload)
+    <span class="small">@Html.DescriptionFor(m => m.SmtpNotifyOnDownload)</span>
+    </label>
+    @Html.CheckBoxFor(m => m.SmtpNotifyOnDownload, new { @class = "inputClass checkClass" })
+
+    <label class="labelClass">@Html.LabelFor(m => m.SmtpServer)
+    <span class="small">@Html.DescriptionFor(m => m.SmtpServer)</span>
+    </label>
+    @Html.TextBoxFor(m => m.SmtpServer, new { @class = "inputClass" })
+
+    <label class="labelClass">@Html.LabelFor(m => m.SmtpPort)
+    <span class="small">@Html.DescriptionFor(m => m.SmtpPort)</span>
+    </label>
+    @Html.TextBoxFor(m => m.SmtpPort, new { @class = "inputClass" })
+
+    <label class="labelClass">@Html.LabelFor(m => m.SmtpUseSsl)
+    <span class="small">@Html.DescriptionFor(m => m.SmtpUseSsl)</span>
+    </label>
+    @Html.CheckBoxFor(m => m.SmtpUseSsl, new { @class = "inputClass checkClass" })
+
+    <label class="labelClass">@Html.LabelFor(m => m.SmtpUsername)
+    <span class="small">@Html.DescriptionFor(m => m.SmtpUsername)</span>
+    </label>
+    @Html.TextBoxFor(m => m.SmtpUsername, new { @class = "inputClass" })
+
+    <label class="labelClass">@Html.LabelFor(m => m.SmtpPassword)
+    <span class="small">@Html.DescriptionFor(m => m.SmtpPassword)</span>
+    </label>
+    @Html.TextBoxFor(m => m.SmtpPassword, new { @class = "inputClass" })
+
+    <label class="labelClass">@Html.LabelFor(m => m.SmtpFromAddress)
+    <span class="small">@Html.DescriptionFor(m => m.SmtpFromAddress)</span>
+    </label>
+    @Html.TextBoxFor(m => m.SmtpFromAddress, new { @class = "inputClass" })
+
+    <label class="labelClass">@Html.LabelFor(m => m.SmtpToAddresses)
+    <span class="small">@Html.DescriptionFor(m => m.SmtpToAddresses)</span>
+    </label>
+    @Html.TextBoxFor(m => m.SmtpToAddresses, new { @class = "inputClass" })
+</div>
+
+<input type="button" onclick="testSmtpSettings();" value="Test SMTP" id="smtpTest"/>
+
+@*Move this somewhere better*@
+<style>
+    #smtpTest
+    {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        margin-left: 220px;
+    }
+</style>
+
+<script type="text/javascript">
+    function testSmtpSettings() {
+        //Get the variables
+        var server = $('#SmtpServer').val();
+        var port = $('#SmtpPort').val();
+        var ssl = $('#SmtpUseSsl').val();
+        var username = $('#SmtpUsername').val();
+        var password = $('#SmtpPassword').val();
+        var fromAddress = $('#SmtpFromAddress').val();
+        var toAddresses = $('#SmtpToAddresses').val();
+
+        //Send the data!
+        $.ajax({
+            type: "POST",
+            url: '../Command/SendTestEmail',
+            data: jQuery.param({
+                server: server,
+                port: port,
+                ssl: ssl,
+                username: username,
+                password: password,
+                fromAddress: fromAddress,
+                toAddresses: toAddresses
+            }),
+            error: function (req, status, error) {
+                alert("Sorry! We could send a test email at this time. " + error);
+            }
+        });
+
+        return false;
+    }
+</script>
