@@ -125,12 +125,16 @@ namespace NzbDrone.Web.Models
         [Description("Send notification when episode is downloaded?")]
         public bool GrowlNotifyOnDownload { get; set; }
 
+        [DataType(DataType.Text)]
         [DisplayName("Host running Growl")]
         [Description("Host or IP Address:Port")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string GrowlHost { get; set; }
 
+        [DataType(DataType.Text)]
         [DisplayName("Growl host Password")]
         [Description("Password is required if Growl is running on another system")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string GrowlPassword { get; set; }
 
 
@@ -147,12 +151,16 @@ namespace NzbDrone.Web.Models
         [Description("Send notification when episode is downloaded?")]
         public bool ProwlNotifyOnDownload { get; set; }
 
+        [DataType(DataType.Text)]
         [DisplayName("API Keys")]
         [Description("Comma-Separated list of API Keys")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string ProwlApiKeys { get; set; }
 
+        [DataType(DataType.Text)]
         [DisplayName("Priority")]
         [Description("Priority to send alerts to Prowl with")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
         public int ProwlPriority { get; set; }
 
         public SelectList ProwlPrioritySelectList { get; set; }

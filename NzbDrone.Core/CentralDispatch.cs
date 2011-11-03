@@ -107,6 +107,7 @@ namespace NzbDrone.Core
             _kernel.Bind<ExternalNotificationBase>().To<Smtp>();
             _kernel.Bind<ExternalNotificationBase>().To<Twitter>();
             _kernel.Bind<ExternalNotificationBase>().To<Providers.ExternalNotification.Growl>();
+            _kernel.Bind<ExternalNotificationBase>().To<Prowl>();
 
             var notifiers = _kernel.GetAll<ExternalNotificationBase>();
             _kernel.Get<ExternalNotificationProvider>().InitializeNotifiers(notifiers.ToList());

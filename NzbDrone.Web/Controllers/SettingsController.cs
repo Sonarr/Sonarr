@@ -490,6 +490,16 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.GrowlHost = data.GrowlHost;
                 _configProvider.GrowlPassword = data.GrowlPassword;
 
+                //Prowl
+                var prowlSettings = _externalNotificationProvider.GetSettings(typeof(Prowl));
+                prowlSettings.Enable = data.ProwlEnabled;
+                _externalNotificationProvider.SaveSettings(prowlSettings);
+
+                _configProvider.ProwlNotifyOnGrab = data.ProwlNotifyOnGrab;
+                _configProvider.ProwlNotifyOnDownload = data.ProwlNotifyOnDownload;
+                _configProvider.ProwlApiKeys = data.ProwlApiKeys;
+                _configProvider.ProwlPriority = data.ProwlPriority;
+
                 return GetSuccessResult();
             }
 
