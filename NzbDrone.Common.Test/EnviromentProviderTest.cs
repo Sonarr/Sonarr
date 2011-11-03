@@ -18,14 +18,6 @@ namespace NzbDrone.Common.Test
         }
 
         [Test]
-        public void Log_path_should_not_be_empty()
-        {
-            enviromentController.LogPath.Should().NotBeBlank();
-            Path.IsPathRooted(enviromentController.LogPath).Should().BeTrue("Path is not rooted");
-
-        }
-
-        [Test]
         public void StartupPath_should_not_be_empty()
         {
             enviromentController.StartUpPath.Should().NotBeBlank();

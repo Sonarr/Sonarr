@@ -2,6 +2,7 @@
 using AutoMoq;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Common;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Test.Framework;
@@ -15,14 +16,15 @@ namespace NzbDrone.Core.Test.ProviderTests
         [SetUp]
         public void SetUp()
         {
+            WithTempAsStartUpPath();
+
             //Reset config file
-            var mocker = new AutoMoqer();
-            var configFile = mocker.Resolve<ConfigFileProvider>().ConfigFile;
+            var configFile = Mocker.Resolve<PathProvider>().AppConfigFile;
 
             if (File.Exists(configFile))
                 File.Delete(configFile);
 
-            mocker.Resolve<ConfigFileProvider>().CreateDefaultConfigFile();
+            Mocker.Resolve<ConfigFileProvider>().CreateDefaultConfigFile();
         }
 
         [Test]
@@ -31,10 +33,8 @@ namespace NzbDrone.Core.Test.ProviderTests
             const string key = "Port";
             const string value = "8989";
 
-            var mocker = new AutoMoqer();
-
             //Act
-            var result = mocker.Resolve<ConfigFileProvider>().GetValue(key, value);
+            var result = Mocker.Resolve<ConfigFileProvider>().GetValue(key, value);
 
             //Assert
             result.Should().Be(value);
@@ -46,10 +46,8 @@ namespace NzbDrone.Core.Test.ProviderTests
             const string key = "Port";
             const int value = 8989;
 
-            var mocker = new AutoMoqer();
-
             //Act
-            var result = mocker.Resolve<ConfigFileProvider>().GetValueInt(key, value);
+            var result = Mocker.Resolve<ConfigFileProvider>().GetValueInt(key, value);
 
             //Assert
             result.Should().Be(value);
@@ -64,7 +62,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var mocker = new AutoMoqer();
 
             //Act
-            var result = mocker.Resolve<ConfigFileProvider>().GetValueBoolean(key, value);
+            var result = Mocker.Resolve<ConfigFileProvider>().GetValueBoolean(key, value);
 
             //Assert
             result.Should().BeTrue();
@@ -76,7 +74,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var mocker = new AutoMoqer();
 
             //Act
-            var result = mocker.Resolve<ConfigFileProvider>().LaunchBrowser;
+            var result = Mocker.Resolve<ConfigFileProvider>().LaunchBrowser;
 
             //Assert
             result.Should().Be(true);
@@ -87,10 +85,8 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             const int value = 8989;
 
-            var mocker = new AutoMoqer();
-
             //Act
-            var result = mocker.Resolve<ConfigFileProvider>().Port;
+            var result = Mocker.Resolve<ConfigFileProvider>().Port;
 
             //Assert
             result.Should().Be(value);
@@ -102,13 +98,11 @@ namespace NzbDrone.Core.Test.ProviderTests
             const string key = "LaunchBrowser";
             const bool value = false;
 
-            var mocker = new AutoMoqer();
-
             //Act
-            mocker.Resolve<ConfigFileProvider>().SetValue(key, value);
+            Mocker.Resolve<ConfigFileProvider>().SetValue(key, value);
 
             //Assert
-            var result = mocker.Resolve<ConfigFileProvider>().LaunchBrowser;
+            var result = Mocker.Resolve<ConfigFileProvider>().LaunchBrowser;
             result.Should().Be(value);
         }
 
@@ -118,13 +112,11 @@ namespace NzbDrone.Core.Test.ProviderTests
             const string key = "Port";
             const int value = 12345;
 
-            var mocker = new AutoMoqer();
-
             //Act
-            mocker.Resolve<ConfigFileProvider>().SetValue(key, value);
+            Mocker.Resolve<ConfigFileProvider>().SetValue(key, value);
 
             //Assert
-            var result = mocker.Resolve<ConfigFileProvider>().Port;
+            var result = Mocker.Resolve<ConfigFileProvider>().Port;
             result.Should().Be(value);
         }
 
@@ -134,10 +126,8 @@ namespace NzbDrone.Core.Test.ProviderTests
             const string key = "Hello";
             const string value = "World";
 
-            var mocker = new AutoMoqer();
-
             //Act
-            var result = mocker.Resolve<ConfigFileProvider>().GetValue(key, value);
+            var result = Mocker.Resolve<ConfigFileProvider>().GetValue(key, value);
 
             //Assert
             result.Should().Be(value);
@@ -149,10 +139,8 @@ namespace NzbDrone.Core.Test.ProviderTests
             const string key = "Hello";
             const string value = "World";
 
-            var mocker = new AutoMoqer();
-
             //Act
-            var result = mocker.Resolve<ConfigFileProvider>().GetValue(key, value, "Universe");
+            var result = Mocker.Resolve<ConfigFileProvider>().GetValue(key, value, "Universe");
 
             //Assert
             result.Should().Be(value);
@@ -161,10 +149,9 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void GetAuthenticationType_No_Existing_Value()
         {
-            var mocker = new AutoMoqer();
 
             //Act
-            var result = mocker.Resolve<ConfigFileProvider>().AuthenticationType;
+            var result = Mocker.Resolve<ConfigFileProvider>().AuthenticationType;
 
             //Assert
             result.Should().Be(AuthenticationType.Anonymous);
@@ -173,11 +160,11 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void GetAuthenticationType_Windows()
         {
-            var mocker = new AutoMoqer();
-            mocker.Resolve<ConfigFileProvider>().SetValue("AuthenticationType", 1);
+
+            Mocker.Resolve<ConfigFileProvider>().SetValue("AuthenticationType", 1);
 
             //Act
-            var result = mocker.Resolve<ConfigFileProvider>().AuthenticationType;
+            var result = Mocker.Resolve<ConfigFileProvider>().AuthenticationType;
 
             //Assert
             result.Should().Be(AuthenticationType.Windows);

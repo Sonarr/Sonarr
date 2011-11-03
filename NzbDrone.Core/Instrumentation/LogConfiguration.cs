@@ -7,17 +7,23 @@ using NzbDrone.Core.Providers;
 
 namespace NzbDrone.Core.Instrumentation
 {
-    public static class LogConfiguration
+    public class LogConfiguration
     {
+        private readonly PathProvider _pathProvider;
 
-        public static void Setup()
+        public LogConfiguration(PathProvider pathProvider)
+        {
+            _pathProvider = pathProvider;
+        }
+
+        public void Setup()
         {
             if (Common.EnviromentProvider.IsProduction)
             {
                 LogManager.ThrowExceptions = false;
             }
 
-            LogManager.Configuration = new XmlLoggingConfiguration(Path.Combine(new EnviromentProvider().WebRoot, "log.config"), false);
+            LogManager.Configuration = new XmlLoggingConfiguration(_pathProvider.LogConfigFile, false);
 
             Common.LogConfiguration.RegisterConsoleLogger(LogLevel.Info, "NzbDrone.Web.MvcApplication");
             Common.LogConfiguration.RegisterConsoleLogger(LogLevel.Info, "NzbDrone.Core.CentralDispatch");

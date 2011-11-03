@@ -92,7 +92,8 @@ namespace NzbDrone.Core.Test.JobTests
             var fakeSeries = Builder<Series>.CreateListOfSize(10)
                 .Build();
 
-            var path = Path.Combine(new EnviromentProvider().WebRoot, "Content", "Images", "Banners");
+          
+            var pathProvider = Mocker.Resolve<PathProvider>();
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
             mocker.Resolve<EnviromentProvider>();
@@ -104,42 +105,42 @@ namespace NzbDrone.Core.Test.JobTests
                 .Returns(fakeSeries);
 
             mocker.GetMock<HttpProvider>()
-                .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(path, "1.jpg")))
+                .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(pathProvider.BannerPath, "1.jpg")))
                 .Throws(new WebException());
 
             mocker.GetMock<HttpProvider>()
-                .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(path, "2.jpg")));
+                .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(pathProvider.BannerPath, "2.jpg")));
 
             mocker.GetMock<HttpProvider>()
-                .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(path, "3.jpg")))
+                .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(pathProvider.BannerPath, "3.jpg")))
                 .Throws(new WebException());
 
             mocker.GetMock<HttpProvider>()
-                .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(path, "4.jpg")));
+                .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(pathProvider.BannerPath, "4.jpg")));
 
 
             mocker.GetMock<HttpProvider>()
-                .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(path, "5.jpg")))
+                .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(pathProvider.BannerPath, "5.jpg")))
                 .Throws(new WebException());
 
             mocker.GetMock<HttpProvider>()
-                .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(path, "6.jpg")));
+                .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(pathProvider.BannerPath, "6.jpg")));
 
 
             mocker.GetMock<HttpProvider>()
-                .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(path, "7.jpg")))
+                .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(pathProvider.BannerPath, "7.jpg")))
                 .Throws(new WebException());
 
             mocker.GetMock<HttpProvider>()
-                .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(path, "8.jpg")));
+                .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(pathProvider.BannerPath, "8.jpg")));
 
 
             mocker.GetMock<HttpProvider>()
-                .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(path, "9.jpg")))
+                .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(pathProvider.BannerPath, "9.jpg")))
                 .Throws(new WebException());
 
             mocker.GetMock<HttpProvider>()
-                .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(path, "10.jpg")));
+                .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(pathProvider.BannerPath, "10.jpg")));
 
 
             mocker.GetMock<DiskProvider>()

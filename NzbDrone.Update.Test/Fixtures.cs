@@ -3,6 +3,6 @@ using NUnit.Framework;
 using NzbDrone.Test.Common;
 
 [SetUpFixture]
-public class Fixtures : LoggingFixtures
+public class Fixtures : LoggingTest
 {
 }

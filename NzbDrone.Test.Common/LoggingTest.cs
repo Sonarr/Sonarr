@@ -5,11 +5,9 @@ using NzbDrone.Common;
 
 namespace NzbDrone.Test.Common
 {
-    public abstract class LoggingFixtures
+    public abstract class LoggingTest
     {
-
-        [SetUp]
-        public void SetUpBase()
+        protected static void InitLogging()
         {
             LogConfiguration.RegisterConsoleLogger(LogLevel.Trace);
             LogConfiguration.RegisterUdpLogger();

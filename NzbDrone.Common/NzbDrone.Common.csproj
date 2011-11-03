@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConsoleProvider.cs" />
+    <Compile Include="PathProvider.cs" />
     <Compile Include="DiskProvider.cs" />
     <Compile Include="EnviromentProvider.cs" />
     <Compile Include="ExceptioneerTarget.cs" />

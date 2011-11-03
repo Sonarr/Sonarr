@@ -39,7 +39,9 @@ namespace NzbDrone.Core
         {
             BindKernel();
 
-            MigrationsHelper.Run(Connection.MainConnectionString, true);
+            var mainConnectionString = _kernel.Get<Connection>().MainConnectionString;
+
+            MigrationsHelper.Run(mainConnectionString, true);
 
             LogConfiguration.RegisterDatabaseLogger(_kernel.Get<DatabaseTarget>());
 
@@ -59,9 +61,11 @@ namespace NzbDrone.Core
                 Logger.Debug("Binding Ninject's Kernel");
                 _kernel = new StandardKernel();
 
-                _kernel.Bind<IDatabase>().ToMethod(c => Connection.GetPetaPocoDb(Connection.MainConnectionString)).InTransientScope();
-                _kernel.Bind<IDatabase>().ToMethod(c => Connection.GetPetaPocoDb(Connection.LogConnectionString, false)).WhenInjectedInto<DatabaseTarget>().InSingletonScope();
-                _kernel.Bind<IDatabase>().ToMethod(c => Connection.GetPetaPocoDb(Connection.LogConnectionString)).WhenInjectedInto<LogProvider>().InSingletonScope();
+                var connection = _kernel.Get<Connection>();
+
+                _kernel.Bind<IDatabase>().ToMethod(c => connection.GetMainPetaPocoDb()).InTransientScope();
+                _kernel.Bind<IDatabase>().ToMethod(c => connection.GetLogPetaPocoDb(false)).WhenInjectedInto<DatabaseTarget>().InSingletonScope();
+                _kernel.Bind<IDatabase>().ToMethod(c => connection.GetLogPetaPocoDb()).WhenInjectedInto<LogProvider>().InSingletonScope();
 
                 _kernel.Bind<JobProvider>().ToSelf().InSingletonScope();
             }

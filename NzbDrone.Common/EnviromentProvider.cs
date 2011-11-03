@@ -32,11 +32,6 @@ namespace NzbDrone.Common
             }
         }
 
-        public virtual String LogPath
-        {
-            get { return Environment.CurrentDirectory; }
-        }
-
         public virtual bool IsUserInteractive
         {
             get { return Environment.UserInteractive; }
@@ -68,26 +63,7 @@ namespace NzbDrone.Common
             }
         }
 
-        public virtual string WebRoot
-        {
-            get
-            {
-                return Path.Combine(ApplicationPath, "NzbDrone.Web");
-            }
-        }
-
-        public virtual string AppDataPath
-        {
-            get
-            {
-                var path = Path.Combine(WebRoot, "App_Data");
-                if (!Directory.Exists(path))
-                    Directory.CreateDirectory(path);
-
-                return path;
-            }
-        }
-
+        
         public virtual string StartUpPath
         {
             get
@@ -109,15 +85,6 @@ namespace NzbDrone.Common
                 return new FileInfo(fileLocation).CreationTime;
             }
 
-        }
-
-
-        public virtual String TempPath
-        {
-            get
-            {
-                return Path.GetTempPath();
-            }
         }
 
         private static bool ContainsIIS(DirectoryInfo dir)
