@@ -12,7 +12,6 @@ namespace NzbDrone.Common.Test
         readonly EnviromentProvider enviromentController = new EnviromentProvider();
 
         [Test]
-
         public void Is_user_interactive_should_be_false()
         {
             enviromentController.IsUserInteractive.Should().BeTrue();
@@ -39,6 +38,14 @@ namespace NzbDrone.Common.Test
         {
             enviromentController.ApplicationPath.Should().NotBeBlank();
             Path.IsPathRooted(enviromentController.ApplicationPath).Should().BeTrue("Path is not rooted");
+        }
+
+
+        [Test]
+        public void ApplicationPath_should_find_iis_in_current_folder()
+        {
+            Directory.CreateDirectory(EnviromentProvider.IIS_FOLDER_NAME);
+            enviromentController.ApplicationPath.Should().BeEquivalentTo(Directory.GetCurrentDirectory());
         }
 
         [Test]
