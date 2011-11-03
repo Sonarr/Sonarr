@@ -102,7 +102,7 @@ namespace NzbDrone.Web.Controllers
                                 SabApiKey = _configProvider.SabApiKey,
                                 SabUsername = _configProvider.SabUsername,
                                 SabPassword = _configProvider.SabPassword,
-                                SabTvCategory = _configProvider.SabTvCategory,
+                                SabTvCategory = tvCategory,
                                 SabTvPriority = _configProvider.SabTvPriority,
                                 SabDropDirectory = _configProvider.SabDropDirectory,
                                 SabTvCategorySelectList = tvCategorySelectList
@@ -178,7 +178,13 @@ namespace NzbDrone.Web.Controllers
                                 GrowlNotifyOnGrab = _configProvider.GrowlNotifyOnGrab,
                                 GrowlNotifyOnDownload = _configProvider.GrowlNotifyOnDownload,
                                 GrowlHost = _configProvider.GrowlHost,
-                                GrowlPassword = _configProvider.GrowlPassword
+                                GrowlPassword = _configProvider.GrowlPassword,
+                                ProwlEnabled = _externalNotificationProvider.GetSettings(typeof(Prowl)).Enable,
+                                ProwlNotifyOnGrab = _configProvider.ProwlNotifyOnGrab,
+                                ProwlNotifyOnDownload = _configProvider.ProwlNotifyOnDownload,
+                                ProwlApiKeys = _configProvider.ProwlApiKeys,
+                                ProwlPriority = _configProvider.ProwlPriority,
+                                ProwlPrioritySelectList = GetProwlPrioritySelectList()
                             };
 
             return View(model);
@@ -534,6 +540,18 @@ namespace NzbDrone.Web.Controllers
         private JsonResult GetInvalidModelResult()
         {
             return Json(new NotificationResult() { Title = "Unable to save setting", Text = "Invalid post data", NotificationType = NotificationType.Error });
+        }
+
+        private SelectList GetProwlPrioritySelectList()
+        {
+            var list = new List<ProwlPrioritySelectListModel>();
+            list.Add(new ProwlPrioritySelectListModel{ Name = "Very Low", Value = -2 });
+            list.Add(new ProwlPrioritySelectListModel { Name = "Moderate", Value = -1 });
+            list.Add(new ProwlPrioritySelectListModel { Name = "Normal", Value = 0 });
+            list.Add(new ProwlPrioritySelectListModel { Name = "High", Value = 1 });
+            list.Add(new ProwlPrioritySelectListModel { Name = "Emergency", Value = 2 });
+
+            return new SelectList(list, "Value", "Name");
         }
     }
 }

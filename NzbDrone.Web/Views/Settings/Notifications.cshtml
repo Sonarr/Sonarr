@@ -58,6 +58,7 @@
 		            <li><a href="#tabs-smtp">SMTP</a></li>
                     <li><a href="#tabs-twitter">Twitter</a></li>
                     <li><a href="#tabs-growl">Growl</a></li>
+                    <li><a href="#tabs-growl">Prowl</a></li>
 	            </ul>
 	            <div id="tabs-xbmc">
                     @{Html.RenderPartial("Xbmc", Model);}
@@ -70,6 +71,9 @@
 	            </div>
                 <div id="tabs-growl">
                     @{Html.RenderPartial("Growl", Model);}
+	            </div>
+                <div id="tabs-prowl">
+                    @{Html.RenderPartial("Prowl", Model);}
 	            </div>
             </div>
             

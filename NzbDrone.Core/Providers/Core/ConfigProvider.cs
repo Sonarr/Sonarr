@@ -13,7 +13,6 @@ namespace NzbDrone.Core.Providers.Core
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IDatabase _database;
 
-
         [Inject]
         public ConfigProvider(IDatabase database)
         {
@@ -362,6 +361,32 @@ namespace NzbDrone.Core.Providers.Core
         {
             get { return GetValue("GrowlPassword", String.Empty); }
             set { SetValue("GrowlPassword", value); }
+        }
+
+        public virtual Boolean ProwlNotifyOnGrab
+        {
+            get { return GetValueBoolean("ProwlNotifyOnGrab"); }
+
+            set { SetValue("ProwlNotifyOnGrab", value); }
+        }
+
+        public virtual Boolean ProwlNotifyOnDownload
+        {
+            get { return GetValueBoolean("ProwlNotifyOnDownload"); }
+
+            set { SetValue("ProwlNotifyOnDownload", value); }
+        }
+
+        public virtual string ProwlApiKeys
+        {
+            get { return GetValue("ProwlApiKeys", String.Empty); }
+            set { SetValue("ProwlApiKeys", value); }
+        }
+
+        public virtual int ProwlPriority
+        {
+            get { return GetValueInt("ProwlPriority", 0); }
+            set { SetValue("ProwlPriority", value); }
         }
 
         private string GetValue(string key)

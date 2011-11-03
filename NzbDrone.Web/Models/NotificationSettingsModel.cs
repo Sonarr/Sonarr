@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
 namespace NzbDrone.Web.Models
 {
@@ -131,5 +132,29 @@ namespace NzbDrone.Web.Models
         [DisplayName("Growl host Password")]
         [Description("Password is required if Growl is running on another system")]
         public string GrowlPassword { get; set; }
+
+
+        //Prowl
+        [DisplayName("Enabled")]
+        [Description("Enable notifications for Prowl?")]
+        public bool ProwlEnabled { get; set; }
+
+        [DisplayName("Notify on Grab")]
+        [Description("Send notification when episode is sent to SABnzbd?")]
+        public bool ProwlNotifyOnGrab { get; set; }
+
+        [DisplayName("Notify on Download")]
+        [Description("Send notification when episode is downloaded?")]
+        public bool ProwlNotifyOnDownload { get; set; }
+
+        [DisplayName("API Keys")]
+        [Description("Comma-Separated list of API Keys")]
+        public string ProwlApiKeys { get; set; }
+
+        [DisplayName("Priority")]
+        [Description("Priority to send alerts to Prowl with")]
+        public int ProwlPriority { get; set; }
+
+        public SelectList ProwlPrioritySelectList { get; set; }
     }
 }

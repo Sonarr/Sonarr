@@ -160,6 +160,9 @@
     <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="Prowlin">
+      <HintPath>..\packages\Prowlin 0.9.4163.39219\Prowlin.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -225,6 +228,8 @@
     <Compile Include="Model\Xbmc\IconType.cs" />
     <Compile Include="Providers\Converting\AtomicParsleyProvider.cs" />
     <Compile Include="Providers\Converting\HandbrakeProvider.cs" />
+    <Compile Include="Providers\ExternalNotification\Prowl.cs" />
+    <Compile Include="Providers\ProwlProvider.cs" />
     <Compile Include="Providers\Core\ConfigFileProvider.cs" />
     <Compile Include="Providers\Core\UdpProvider.cs" />
     <Compile Include="Providers\ExternalNotification\Growl.cs" />

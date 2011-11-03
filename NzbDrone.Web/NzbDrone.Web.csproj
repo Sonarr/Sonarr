@@ -491,6 +491,7 @@
     <Compile Include="Models\JobQueueItemModel.cs" />
     <Compile Include="Models\NotificationResult.cs" />
     <Compile Include="Models\PendingProcessingModel.cs" />
+    <Compile Include="Models\ProwlPrioritySelectListModel.cs" />
     <Compile Include="Models\QualityTypeModel.cs" />
     <Compile Include="Models\RootDirModel.cs" />
     <Compile Include="Models\SabnzbdSettingsModel.cs" />
@@ -941,6 +942,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Settings\Growl.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Settings\Prowl.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
