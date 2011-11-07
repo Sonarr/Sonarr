@@ -147,6 +147,7 @@ namespace NzbDrone.Core
         private static void ShutDown()
         {
             Logger.Info("Shutting down application.");
+            WebTimer.Stop();
             Process.GetCurrentProcess().Kill();
         }
     }

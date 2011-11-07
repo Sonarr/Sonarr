@@ -11,7 +11,6 @@ using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Repository;
 using PetaPoco;
-using ThreadState = System.Threading.ThreadState;
 
 namespace NzbDrone.Core.Providers.Jobs
 {
@@ -21,15 +20,15 @@ namespace NzbDrone.Core.Providers.Jobs
     /// </summary>
     public class JobProvider
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         private readonly IDatabase _database;
         private readonly NotificationProvider _notificationProvider;
         private readonly IList<IJob> _jobs;
 
         private Thread _jobThread;
+        private Stopwatch _jobThreadStopWatch;
 
-        private readonly object ExecutionLock = new object();
-        private bool _isRunning;
+        private readonly object executionLock = new object();
         private readonly List<JobQueueItem> _queue = new List<JobQueueItem>();
 
         private ProgressNotification _notification;
@@ -40,6 +39,7 @@ namespace NzbDrone.Core.Providers.Jobs
             _database = database;
             _notificationProvider = notificationProvider;
             _jobs = jobs;
+            ResetThread();
         }
 
         /// <summary>
@@ -69,242 +69,12 @@ namespace NzbDrone.Core.Providers.Jobs
         }
 
         /// <summary>
-        /// Adds/Updates definitions for a job
-        /// </summary>
-        /// <param name="definitions">Settings to be added/updated</param>
-        public virtual void SaveDefinition(JobDefinition definitions)
-        {
-            if (definitions.Id == 0)
-            {
-                Logger.Trace("Adding job definitions for {0}", definitions.Name);
-                _database.Insert(definitions);
-            }
-            else
-            {
-                Logger.Trace("Updating job definitions for {0}", definitions.Name);
-                _database.Update(definitions);
-            }
-        }
-
-        /// <summary>
-        /// Iterates through all registered jobs and queues any that are due for an execution.
-        /// </summary>
-        /// <remarks>Will ignore request if queue is already running.</remarks>
-        public virtual void QueueScheduled()
-        {
-            lock (ExecutionLock)
-            {
-                if (_isRunning)
-                {
-                    Logger.Trace("Queue is already running. Ignoring scheduler's request.");
-                    return;
-                }
-            }
-
-            var counter = 0;
-
-            var pendingJobs = All().Where(
-                t => t.Enable &&
-                     (DateTime.Now - t.LastExecution) > TimeSpan.FromMinutes(t.Interval)
-                ).Select(c => _jobs.Where(t => t.GetType().ToString() == c.TypeName).Single());
-
-            foreach (var job in pendingJobs)
-            {
-                QueueJob(job.GetType());
-                counter++;
-            }
-
-            Logger.Trace("{0} Scheduled tasks have been added to the queue", counter);
-        }
-
-        /// <summary>
-        /// Queues the execution of a job asynchronously
-        /// </summary>
-        /// <param name="jobType">Type of the job that should be queued.</param>
-        /// <param name="targetId">The targetId could be any Id parameter eg. SeriesId. it will be passed to the job implementation
-        /// to allow it to filter it's target of execution.</param>
-        /// /// <param name="secondaryTargetId">The secondaryTargetId could be any Id parameter eg. SeasonNumber. it will be passed to 
-        /// the timer implementation to further allow it to filter it's target of execution</param>
-        /// <remarks>Job is only added to the queue if same job with the same targetId doesn't already exist in the queue.</remarks>
-        public virtual void QueueJob(Type jobType, int targetId = 0, int secondaryTargetId = 0)
-        {
-            Logger.Debug("Adding [{0}:{1}] to the queue", jobType.Name, targetId);
-
-            lock (ExecutionLock)
-            {
-                lock (Queue)
-                {
-                    var queueItem = new JobQueueItem
-                                        {
-                                            JobType = jobType,
-                                            TargetId = targetId,
-                                            SecondaryTargetId = secondaryTargetId
-                                        };
-
-                    if (!Queue.Contains(queueItem))
-                    {
-                        Queue.Add(queueItem);
-                        Logger.Trace("Job [{0}:{1}] added to the queue", jobType.Name, targetId);
-
-                    }
-                    else
-                    {
-                        Logger.Info("[{0}:{1}] already exists in the queue. Skipping.", jobType.Name, targetId);
-                    }
-                }
-
-                if (_isRunning)
-                {
-                    Logger.Trace("Queue is already running. No need to start it up.");
-                    return;
-                }
-                _isRunning = true;
-            }
-
-            if (_jobThread == null || _jobThread.ThreadState != ThreadState.Running)
-            {
-                Logger.Trace("Initializing queue processor thread");
-
-                ThreadStart starter = () =>
-                {
-                    try
-                    {
-                        ProcessQueue();
-                    }
-                    catch (Exception e)
-                    {
-                        Logger.ErrorException("Error has occurred in queue processor thread", e);
-                    }
-                    finally
-                    {
-                        _isRunning = false;
-                        _jobThread.Abort();
-
-                    }
-                };
-
-                _jobThread = new Thread(starter) { Name = "JobQueueThread" };
-                _jobThread.Start();
-
-            }
-            else
-            {
-                var messge = "Job Thread is null";
-
-                if (_jobThread != null)
-                {
-                    messge = "Job Thread State: " + _jobThread.ThreadState;
-                }
-
-                Logger.Error("Execution lock has fucked up. {0}. Ignoring request.", messge);
-            }
-
-        }
-
-        /// <summary>
-        /// Starts processing of queue synchronously.
-        /// </summary>
-        private void ProcessQueue()
-        {
-            do
-            {
-                using (NestedDiagnosticsContext.Push(Guid.NewGuid().ToString()))
-                {
-                    try
-                    {
-                        JobQueueItem job = null;
-
-                        lock (Queue)
-                        {
-                            if (Queue.Count != 0)
-                            {
-                                job = Queue.First();
-                                Queue.Remove(job);
-                            }
-                        }
-
-                        if (job != null)
-                        {
-                            Execute(job.JobType, job.TargetId, job.SecondaryTargetId);
-                        }
-
-                    }
-                    catch (Exception e)
-                    {
-                        Logger.FatalException("An error has occurred while processing queued job.", e);
-                    }
-                }
-
-            } while (Queue.Count != 0);
-
-            Logger.Trace("Finished processing jobs in the queue.");
-
-            return;
-        }
-
-        /// <summary>
-        /// Executes the job synchronously
-        /// </summary>
-        /// <param name="jobType">Type of the job that should be executed</param>
-        /// <param name="targetId">The targetId could be any Id parameter eg. SeriesId. it will be passed to the timer implementation
-        /// to allow it to filter it's target of execution</param>
-        /// /// <param name="secondaryTargetId">The secondaryTargetId could be any Id parameter eg. SeasonNumber. it will be passed to 
-        /// the timer implementation to further allow it to filter it's target of execution</param>
-        private void Execute(Type jobType, int targetId = 0, int secondaryTargetId = 0)
-        {
-            var jobImplementation = _jobs.Where(t => t.GetType() == jobType).Single();
-            if (jobImplementation == null)
-            {
-                Logger.Error("Unable to locate implementation for '{0}'. Make sure it is properly registered.", jobType);
-                return;
-            }
-
-            var settings = All().Where(j => j.TypeName == jobType.ToString()).Single();
-
-            using (_notification = new ProgressNotification(jobImplementation.Name))
-            {
-                try
-                {
-                    Logger.Debug("Starting '{0}' job. Last execution {1}", settings.Name, settings.LastExecution);
-
-                    var sw = Stopwatch.StartNew();
-
-                    _notificationProvider.Register(_notification);
-                    jobImplementation.Start(_notification, targetId, secondaryTargetId);
-                    _notification.Status = ProgressNotificationStatus.Completed;
-
-                    settings.LastExecution = DateTime.Now;
-                    settings.Success = true;
-
-                    sw.Stop();
-                    Logger.Debug("Job '{0}' successfully completed in {1:0}.{2} seconds.", jobImplementation.Name, sw.Elapsed.TotalSeconds, sw.Elapsed.Milliseconds / 100,
-                                sw.Elapsed.Seconds);
-                }
-                catch (Exception e)
-                {
-                    Logger.ErrorException("An error has occurred while executing job " + jobImplementation.Name, e);
-                    _notification.Status = ProgressNotificationStatus.Failed;
-                    _notification.CurrentMessage = jobImplementation.Name + " Failed.";
-
-                    settings.LastExecution = DateTime.Now;
-                    settings.Success = false;
-                }
-            }
-
-            //Only update last execution status if was triggered by the scheduler
-            if (targetId == 0)
-            {
-                SaveDefinition(settings);
-            }
-        }
-
-        /// <summary>
         /// Initializes jobs in the database using the IJob instances that are
         /// registered using ninject
         /// </summary>
         public virtual void Initialize()
         {
-            Logger.Debug("Initializing jobs. Count {0}", _jobs.Count());
+            logger.Debug("Initializing jobs. Count {0}", _jobs.Count());
             var currentTimer = All();
 
             foreach (var timer in _jobs)
@@ -327,6 +97,47 @@ namespace NzbDrone.Core.Providers.Jobs
         }
 
         /// <summary>
+        /// Adds/Updates definitions for a job
+        /// </summary>
+        /// <param name="definitions">Settings to be added/updated</param>
+        public virtual void SaveDefinition(JobDefinition definitions)
+        {
+            if (definitions.Id == 0)
+            {
+                logger.Trace("Adding job definitions for {0}", definitions.Name);
+                _database.Insert(definitions);
+            }
+            else
+            {
+                logger.Trace("Updating job definitions for {0}", definitions.Name);
+                _database.Update(definitions);
+            }
+        }
+
+        public virtual void QueueScheduled()
+        {
+            lock (executionLock)
+            {
+                VerifyThreadTime();
+
+                if (_jobThread.IsAlive)
+                {
+                    logger.Trace("Queue is already running. Ignoring scheduler's request.");
+                    return;
+                }
+            }
+
+            var pendingJobTypes = All().Where(
+                t => t.Enable &&
+                     (DateTime.Now - t.LastExecution) > TimeSpan.FromMinutes(t.Interval)
+                ).Select(c => _jobs.Where(t => t.GetType().ToString() == c.TypeName).Single().GetType()).ToList();
+
+
+            pendingJobTypes.ForEach(jobType => QueueJob(jobType));
+            logger.Trace("{0} Scheduled tasks have been added to the queue", pendingJobTypes.Count);
+        }
+
+        /// <summary>
         /// Gets the next scheduled run time for a specific job
         /// (Estimated due to schedule timer)
         /// </summary>
@@ -336,5 +147,179 @@ namespace NzbDrone.Core.Providers.Jobs
             var job = All().Where(t => t.TypeName == jobType.ToString()).Single();
             return job.LastExecution.AddMinutes(job.Interval);
         }
+
+        public virtual void QueueJob(Type jobType, int targetId = 0, int secondaryTargetId = 0)
+        {
+            var queueItem = new JobQueueItem
+            {
+                JobType = jobType,
+                TargetId = targetId,
+                SecondaryTargetId = secondaryTargetId
+            };
+
+            logger.Debug("Attempting to queue {0}", queueItem);
+
+            lock (executionLock)
+            {
+                VerifyThreadTime();
+
+                lock (Queue)
+                {
+                    if (!Queue.Contains(queueItem))
+                    {
+                        Queue.Add(queueItem);
+                        logger.Trace("Job {0} added to the queue. current items in queue: {1}", queueItem, Queue.Count);
+                    }
+                    else
+                    {
+                        logger.Info("{0} already exists in the queue. Skipping. current items in queue: {1}", queueItem, Queue.Count);
+                    }
+                }
+
+                if (_jobThread.IsAlive)
+                {
+                    logger.Trace("Queue is already running. No need to start it up.");
+                    return;
+                }
+
+                ResetThread();
+                _jobThreadStopWatch = Stopwatch.StartNew();
+                _jobThread.Start();
+            }
+
+        }
+
+        private void ProcessQueue()
+        {
+            try
+            {
+                do
+                {
+                    using (NestedDiagnosticsContext.Push(Guid.NewGuid().ToString()))
+                    {
+                        try
+                        {
+                            JobQueueItem job = null;
+
+                            lock (Queue)
+                            {
+                                if (Queue.Count != 0)
+                                {
+                                    job = Queue.First();
+                                    Queue.Remove(job);
+                                    logger.Debug("Popping {0} from the queue.", job);
+                                }
+                            }
+
+                            if (job != null)
+                            {
+                                Execute(job);
+                            }
+                        }
+                        catch (ThreadAbortException)
+                        {
+                            throw;
+                        }
+                        catch (Exception e)
+                        {
+                            logger.FatalException("An error has occurred while executing job.", e);
+                        }
+                    }
+
+                } while (Queue.Count != 0);
+
+                logger.Trace("Finished processing jobs in the queue.");
+
+                return;
+            }
+
+            catch (ThreadAbortException e)
+            {
+                logger.Warn(e.Message);
+            }
+            catch (Exception e)
+            {
+                logger.ErrorException("Error has occurred in queue processor thread", e);
+            }
+            finally
+            {
+                ResetThread();
+            }
+        }
+
+        private void Execute(JobQueueItem queueItem)
+        {
+            var jobImplementation = _jobs.Where(t => t.GetType() == queueItem.JobType).SingleOrDefault();
+            if (jobImplementation == null)
+            {
+                logger.Error("Unable to locate implementation for '{0}'. Make sure it is properly registered.", queueItem.JobType);
+                return;
+            }
+
+            var settings = All().Where(j => j.TypeName == queueItem.JobType.ToString()).Single();
+
+            using (_notification = new ProgressNotification(jobImplementation.Name))
+            {
+                try
+                {
+                    logger.Debug("Starting {0}. Last execution {1}", queueItem, settings.LastExecution);
+
+                    var sw = Stopwatch.StartNew();
+
+                    _notificationProvider.Register(_notification);
+                    jobImplementation.Start(_notification, queueItem.TargetId, queueItem.SecondaryTargetId);
+                    _notification.Status = ProgressNotificationStatus.Completed;
+
+                    settings.LastExecution = DateTime.Now;
+                    settings.Success = true;
+
+                    sw.Stop();
+                    logger.Debug("Job '{0}' successfully completed in {1:0}.{2} seconds.", queueItem, sw.Elapsed.TotalSeconds, sw.Elapsed.Milliseconds / 100,
+                                 sw.Elapsed.Seconds);
+                }
+                catch (ThreadAbortException)
+                {
+                    throw;
+                }
+                catch (Exception e)
+                {
+                    logger.ErrorException("An error has occurred while executing job [" + jobImplementation.Name + "].", e);
+                    _notification.Status = ProgressNotificationStatus.Failed;
+                    _notification.CurrentMessage = jobImplementation.Name + " Failed.";
+
+                    settings.LastExecution = DateTime.Now;
+                    settings.Success = false;
+                }
+            }
+
+            //Only update last execution status if was triggered by the scheduler
+            if (queueItem.TargetId == 0)
+            {
+                SaveDefinition(settings);
+            }
+        }
+
+        private void VerifyThreadTime()
+        {
+            if (_jobThreadStopWatch.Elapsed.TotalHours > 1)
+            {
+                logger.Warn("Thread job has been running for more than an hour. fuck it!");
+                ResetThread();
+            }
+        }
+
+        private void ResetThread()
+        {
+            if (_jobThread != null)
+            {
+                _jobThread.Abort();
+            }
+
+            logger.Trace("resetting queue processor thread");
+            _jobThread = new Thread(ProcessQueue) { Name = "JobQueueThread" };
+            _jobThreadStopWatch = new Stopwatch();
+        }
+
+
     }
 }

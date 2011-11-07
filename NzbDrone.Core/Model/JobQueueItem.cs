@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace NzbDrone.Core.Model
 {
@@ -12,13 +10,13 @@ namespace NzbDrone.Core.Model
 
         public bool Equals(JobQueueItem other)
         {
-            if (JobType == other.JobType && TargetId == other.TargetId
-                && SecondaryTargetId == other.SecondaryTargetId)
-            {
-                return true;
-            }
+            return (JobType == other.JobType && TargetId == other.TargetId
+                && SecondaryTargetId == other.SecondaryTargetId);
+        }
 
-            return false;
+        public override string ToString()
+        {
+            return string.Format("[{0}({1}, {2})]", JobType.Name, TargetId, SecondaryTargetId);
         }
     }
 }

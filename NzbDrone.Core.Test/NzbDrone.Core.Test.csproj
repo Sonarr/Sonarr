@@ -86,6 +86,7 @@
     <Compile Include="ProviderTests\PostDownloadProviderTests\PostDownloadProviderFixture.cs" />
     <Compile Include="JobTests\SearchJobTest.cs" />
     <Compile Include="ProviderTests\PostDownloadProviderTests\ProcessDownloadFixture.cs" />
+    <Compile Include="ProviderTests\JobProviderTests\TestJobs.cs" />
     <Compile Include="ProviderTests\UpdateProviderTests\PreformUpdateFixture.cs" />
     <Compile Include="ProviderTests\UpdateProviderTests\GetAvilableUpdateFixture.cs" />
     <Compile Include="SortHelperTest.cs" />
@@ -117,7 +118,7 @@
     <Compile Include="JobTests\DiskScanJobTest.cs" />
     <Compile Include="IndexerTests.cs" />
     <Compile Include="ProviderTests\InventoryProvider_QualityNeededTest.cs" />
-    <Compile Include="ProviderTests\JobProviderTest.cs" />
+    <Compile Include="ProviderTests\JobProviderTests\JobProviderTest.cs" />
     <Compile Include="QualityTest.cs" />
     <Compile Include="ProviderTests\RootDirProviderTest.cs" />
     <Compile Include="ProviderTests\IndexerProviderTest.cs" />

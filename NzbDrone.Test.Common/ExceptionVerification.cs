@@ -41,9 +41,10 @@ namespace NzbDrone.Test.Common
                 string exception = "";
                 if (log.Exception != null)
                 {
-                    exception = log.Exception.Message;
+                    exception = "[" + log.Exception.Message + "]";
                 }
-                errors += Environment.NewLine + String.Format("[{0}] {1}: {2} [{3}]", log.Level, log.LoggerName, log.FormattedMessage, exception);
+
+                errors += Environment.NewLine + String.Format("[{0}] {1}: {2} {3}", log.Level, log.LoggerName, log.FormattedMessage, exception);
             }
             return errors;
         }
@@ -87,8 +88,6 @@ namespace NzbDrone.Test.Common
 
         private static void Excpected(LogLevel level, int count)
         {
-
-
             var levelLogs = _logs.Where(l => l.Level == level).ToList();
 
             if (levelLogs.Count != count)
@@ -97,9 +96,9 @@ namespace NzbDrone.Test.Common
                 var message = String.Format("{0} {1}(s) were expected but {2} were logged.\n\r{3}",
                     count, level, levelLogs.Count, GetLogsString(levelLogs));
 
-                message = "********************************************************************************************************************************\n\r"
+                message = "\n\r****************************************************************************************\n\r"
                     + message +
-                    "\n\r********************************************************************************************************************************";
+                    "\n\r****************************************************************************************";
 
                 Assert.Fail(message);
             }

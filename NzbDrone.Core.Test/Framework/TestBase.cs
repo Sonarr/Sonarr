@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Ninject;
 using NzbDrone.Common;
 using NzbDrone.Test.Common;
+using PetaPoco;
 
 namespace NzbDrone.Core.Test.Framework
 {
@@ -30,6 +31,7 @@ namespace NzbDrone.Core.Test.Framework
 
         protected StandardKernel LiveKernel = null;
         protected AutoMoqer Mocker = null;
+        protected IDatabase Db = null;
 
         protected string VirtualPath
         {
@@ -60,6 +62,16 @@ namespace NzbDrone.Core.Test.Framework
         protected void WithStrictMocker()
         {
             Mocker = new AutoMoqer(MockBehavior.Strict);
+            if (Db != null)
+            {
+                Mocker.SetConstant(Db);
+            }
+        }
+
+        protected void WithRealDb()
+        {
+            Db = MockLib.GetEmptyDatabase();
+            Mocker.SetConstant(Db);
         }
 
         [TearDown]
@@ -67,6 +79,7 @@ namespace NzbDrone.Core.Test.Framework
         {
             ExceptionVerification.AssertNoUnexcpectedLogs();
             Mocker = new AutoMoqer(MockBehavior.Strict);
+            WebTimer.Stop();
         }
 
 
