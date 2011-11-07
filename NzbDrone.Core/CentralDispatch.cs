@@ -39,6 +39,8 @@ namespace NzbDrone.Core
         {
             BindKernel();
 
+            _kernel.Get<LogConfiguration>().Setup();
+
             var mainConnectionString = _kernel.Get<Connection>().MainConnectionString;
 
             MigrationsHelper.Run(mainConnectionString, true);

@@ -55,7 +55,6 @@ namespace NzbDrone.Web
         protected override IKernel CreateKernel()
         {
             var kernel = CentralDispatch.NinjectKernel;
-            kernel.Get<LogConfiguration>().Setup();
             Logger.Info("NZBDrone Starting up.");
 
             CentralDispatch.DedicateToHost();

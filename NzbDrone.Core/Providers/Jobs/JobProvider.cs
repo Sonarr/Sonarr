@@ -274,7 +274,7 @@ namespace NzbDrone.Core.Providers.Jobs
                     settings.Success = true;
 
                     sw.Stop();
-                    logger.Debug("Job '{0}' successfully completed in {1:0}.{2} seconds.", queueItem, sw.Elapsed.TotalSeconds, sw.Elapsed.Milliseconds / 100,
+                    logger.Debug("Job {0} successfully completed in {1:0}.{2} seconds.", queueItem, sw.Elapsed.TotalSeconds, sw.Elapsed.Milliseconds / 100,
                                  sw.Elapsed.Seconds);
                 }
                 catch (ThreadAbortException)
