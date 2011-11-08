@@ -99,7 +99,7 @@
     <Compile Include="JobTests\SeriesSearchJobTest.cs" />
     <Compile Include="ProviderTests\SearchProviderTest_Season.cs" />
     <Compile Include="ProviderTests\EventClientProviderTest.cs" />
-    <Compile Include="CentralDispatchTest.cs" />
+    <Compile Include="CentralDispatchFixture.cs" />
     <Compile Include="ProviderTests\XbmcProviderTest.cs" />
     <Compile Include="ProviderTests\DiskScanProviderTest.cs" />
     <Compile Include="ProviderTests\EpisodeProviderTest_GetEpisodesByParseResult.cs" />

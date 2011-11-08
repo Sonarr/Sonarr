@@ -12,12 +12,6 @@ namespace NzbDrone.Common.Test
         readonly EnviromentProvider enviromentController = new EnviromentProvider();
 
         [Test]
-        public void Is_user_interactive_should_be_false()
-        {
-            enviromentController.IsUserInteractive.Should().BeTrue();
-        }
-
-        [Test]
         public void StartupPath_should_not_be_empty()
         {
             enviromentController.StartUpPath.Should().NotBeBlank();

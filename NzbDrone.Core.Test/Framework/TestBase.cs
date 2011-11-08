@@ -14,8 +14,6 @@ namespace NzbDrone.Core.Test.Framework
     {
         static TestBase()
         {
-            InitLogging();
-
             var oldDbFiles = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.sdf", SearchOption.AllDirectories);
             foreach (var file in oldDbFiles)
             {
@@ -47,6 +45,8 @@ namespace NzbDrone.Core.Test.Framework
         [SetUp]
         public virtual void SetupBase()
         {
+            InitLogging();
+
             ExceptionVerification.Reset();
             if (Directory.Exists(TempFolder))
             {

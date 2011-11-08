@@ -1,6 +1,5 @@
 using NLog;
 using NLog.Config;
-using NUnit.Framework;
 using NzbDrone.Common;
 
 namespace NzbDrone.Test.Common
@@ -9,10 +8,14 @@ namespace NzbDrone.Test.Common
     {
         protected static void InitLogging()
         {
-            LogConfiguration.RegisterConsoleLogger(LogLevel.Trace);
-            LogConfiguration.RegisterUdpLogger();
+            if (LogManager.Configuration == null || LogManager.Configuration is XmlLoggingConfiguration)
+            {
+                LogManager.Configuration = new LoggingConfiguration();
+                LogConfiguration.RegisterConsoleLogger(LogLevel.Trace);
+                LogConfiguration.RegisterUdpLogger();
 
-            RegisterExceptionVerification();
+                RegisterExceptionVerification();
+            }
         }
 
         private static void RegisterExceptionVerification()
