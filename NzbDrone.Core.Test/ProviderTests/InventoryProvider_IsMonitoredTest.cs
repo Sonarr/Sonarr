@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         private EpisodeParseResult parseResultSingle;
 
         [SetUp]
-        public new void Setup()
+        public void Setup()
         {
             parseResultMulti = new EpisodeParseResult()
                                    {

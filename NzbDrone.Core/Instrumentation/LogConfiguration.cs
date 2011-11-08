@@ -10,10 +10,12 @@ namespace NzbDrone.Core.Instrumentation
     public class LogConfiguration
     {
         private readonly PathProvider _pathProvider;
+        private readonly DatabaseTarget _databaseTarget;
 
-        public LogConfiguration(PathProvider pathProvider)
+        public LogConfiguration(PathProvider pathProvider, DatabaseTarget databaseTarget)
         {
             _pathProvider = pathProvider;
+            _databaseTarget = databaseTarget;
         }
 
         public void Setup()
@@ -28,7 +30,7 @@ namespace NzbDrone.Core.Instrumentation
             Common.LogConfiguration.RegisterConsoleLogger(LogLevel.Info, "NzbDrone.Web.MvcApplication");
             Common.LogConfiguration.RegisterConsoleLogger(LogLevel.Info, "NzbDrone.Core.CentralDispatch");
 
-            LogManager.ConfigurationReloaded += ((s, e) => RegisterDatabaseLogger(CentralDispatch.NinjectKernel.Get<DatabaseTarget>()));
+            LogManager.ConfigurationReloaded += ((s, e) => RegisterDatabaseLogger(_databaseTarget));
         }
 
         public static void RegisterDatabaseLogger(DatabaseTarget databaseTarget)

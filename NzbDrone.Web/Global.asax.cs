@@ -54,13 +54,14 @@ namespace NzbDrone.Web
 
         protected override IKernel CreateKernel()
         {
-            var kernel = CentralDispatch.NinjectKernel;
+
+            var dispatch = new CentralDispatch();
             Logger.Info("NzbDrone Starting up.");
 
-            CentralDispatch.DedicateToHost();
+            dispatch.DedicateToHost();
 
-            kernel.Load(Assembly.GetExecutingAssembly());
-            return kernel;
+            dispatch.Kernel.Load(Assembly.GetExecutingAssembly());
+            return dispatch.Kernel;
         }
 
 

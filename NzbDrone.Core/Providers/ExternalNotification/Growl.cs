@@ -9,8 +9,6 @@ namespace NzbDrone.Core.Providers.ExternalNotification
     {
         private readonly GrowlProvider _growlProvider;
 
-        private readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
         public Growl(ConfigProvider configProvider, GrowlProvider growlProvider)
             : base(configProvider)
         {
@@ -41,7 +39,7 @@ namespace NzbDrone.Core.Providers.ExternalNotification
 
             catch (Exception ex)
             {
-                Logger.WarnException(ex.Message, ex);
+                _logger.WarnException(ex.Message, ex);
                 throw;
             }
         }
@@ -65,7 +63,7 @@ namespace NzbDrone.Core.Providers.ExternalNotification
 
             catch (Exception ex)
             {
-                Logger.WarnException(ex.Message, ex);
+                _logger.WarnException(ex.Message, ex);
                 throw;
             }
         }
