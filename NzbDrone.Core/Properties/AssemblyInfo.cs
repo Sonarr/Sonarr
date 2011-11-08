@@ -12,3 +12,9 @@ using System.Runtime.InteropServices;
 [assembly: Guid("3C29FEF7-4B07-49ED-822E-1C29DC49BFAB")]
 
 [assembly: InternalsVisibleTo("NzbDrone.Core.Test")]
+
+// You can specify all the values or you can default the Build and Revision Numbers 
+// by using the '*' as shown below:
+
+[assembly: AssemblyVersion("0.6.0.*")]
+[assembly: AssemblyFileVersion("0.6.0.*")]
