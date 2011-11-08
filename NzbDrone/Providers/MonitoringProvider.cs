@@ -112,7 +112,7 @@ namespace NzbDrone.Providers
             new Client
             {
                 ApiKey = "43BBF60A-EB2A-4C1C-B09E-422ADF637265",
-                ApplicationName = "NZBDrone",
+                ApplicationName = "NzbDrone",
                 CurrentException = excepion as Exception
             }.Submit();
 #endif

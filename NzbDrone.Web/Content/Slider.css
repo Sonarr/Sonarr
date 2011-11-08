@@ -17,7 +17,6 @@
     margin: 0px;
     display: none;
 
-    @*Rounded Edges*@
     border:1px solid #444444;
     -moz-border-radius-bottomright: 8px;
     -webkit-border-bottom-right-radius: 8px;
@@ -37,7 +36,6 @@
     color:#FFFFFF;
     
 
-    @*Rounded Edges*@
     border: 1px solid #444444;
     border-top: 0px;
     -moz-border-radius-bottomright: 10px;

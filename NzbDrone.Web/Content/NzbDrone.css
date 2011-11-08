@@ -130,15 +130,10 @@ hr
 
 
 /* Footer */
-.timer
+.footer
 {
-    text-align: center;
+    padding: 1px 1px 1px 1px;
     color: #065EFE;
-}
-
-#footer
-{
-    padding: 1px, 1px, 1px, 1px;
     text-align: center;
 }
 
