@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using NLog;
 using Prowlin;
 
@@ -9,12 +7,7 @@ namespace NzbDrone.Core.Providers
 {
     public class ProwlProvider
     {
-        private readonly Logger Logger = LogManager.GetLogger("ProwlProvider");
-
-        public ProwlProvider()
-        {
-
-        }
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public virtual bool Verify(string apiKey)
         {
@@ -32,7 +25,7 @@ namespace NzbDrone.Core.Providers
                     return true;
             }
 
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.TraceException(ex.Message, ex);
                 Logger.Warn("Invalid API Key: {0}", apiKey);
@@ -47,11 +40,11 @@ namespace NzbDrone.Core.Providers
             {
                 var notification = new Notification
                                    {
-                                           Application = "NzbDrone",
-                                           Description = message,
-                                           Event = title,
-                                           Priority = priority,
-                                           Url = url
+                                       Application = "NzbDrone",
+                                       Description = message,
+                                       Event = title,
+                                       Priority = priority,
+                                       Url = url
                                    };
 
                 foreach (var apiKey in apiKeys.Split(','))
@@ -67,7 +60,7 @@ namespace NzbDrone.Core.Providers
                     return true;
             }
 
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.TraceException(ex.Message, ex);
                 Logger.Warn("Invalid API Key(s): {0}", apiKeys);
