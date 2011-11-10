@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Web.Hosting;
 using Ninject;
 using NLog;
 using NzbDrone.Core.Datastore;
@@ -17,106 +14,106 @@ using PetaPoco;
 
 namespace NzbDrone.Core
 {
-    public static class CentralDispatch
+    public class CentralDispatch
     {
-        private static StandardKernel _kernel;
-        private static readonly Object KernelLock = new object();
+        private readonly Object KernelLock = new object();
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public static StandardKernel NinjectKernel
+        public CentralDispatch()
         {
-            get
-            {
-                if (_kernel == null)
-                {
-                    InitializeApp();
-                }
-                return _kernel;
-            }
+            InitializeApp();
         }
 
-        public static void InitializeApp()
+        public StandardKernel Kernel { get; private set; }
+
+        private void InitializeApp()
         {
             BindKernel();
 
-            MigrationsHelper.Run(Connection.MainConnectionString, true);
+            Kernel.Get<LogConfiguration>().Setup();
 
-            LogConfiguration.RegisterDatabaseLogger(_kernel.Get<DatabaseTarget>());
+            var mainConnectionString = Kernel.Get<Connection>().MainConnectionString;
 
-            _kernel.Get<QualityProvider>().SetupDefaultProfiles();
-            _kernel.Get<QualityTypeProvider>().SetupDefault();
-            _kernel.Get<ConfigFileProvider>().CreateDefaultConfigFile();
+            MigrationsHelper.Run(mainConnectionString, true);
+
+            LogConfiguration.RegisterDatabaseLogger(Kernel.Get<DatabaseTarget>());
+
+            Kernel.Get<QualityProvider>().SetupDefaultProfiles();
+            Kernel.Get<QualityTypeProvider>().SetupDefault();
+            Kernel.Get<ConfigFileProvider>().CreateDefaultConfigFile();
 
             BindExternalNotifications();
             BindIndexers();
             BindJobs();
         }
 
-        private static void BindKernel()
+        private void BindKernel()
         {
             lock (KernelLock)
             {
                 Logger.Debug("Binding Ninject's Kernel");
-                _kernel = new StandardKernel();
+                Kernel = new StandardKernel();
 
-                _kernel.Bind<IDatabase>().ToMethod(c => Connection.GetPetaPocoDb(Connection.MainConnectionString)).InTransientScope();
-                _kernel.Bind<IDatabase>().ToMethod(c => Connection.GetPetaPocoDb(Connection.LogConnectionString, false)).WhenInjectedInto<DatabaseTarget>().InSingletonScope();
-                _kernel.Bind<IDatabase>().ToMethod(c => Connection.GetPetaPocoDb(Connection.LogConnectionString)).WhenInjectedInto<LogProvider>().InSingletonScope();
+                var connection = Kernel.Get<Connection>();
 
-                _kernel.Bind<JobProvider>().ToSelf().InSingletonScope();
+                Kernel.Bind<IDatabase>().ToMethod(c => connection.GetMainPetaPocoDb()).InTransientScope();
+                Kernel.Bind<IDatabase>().ToMethod(c => connection.GetLogPetaPocoDb(false)).WhenInjectedInto<DatabaseTarget>().InSingletonScope();
+                Kernel.Bind<IDatabase>().ToMethod(c => connection.GetLogPetaPocoDb()).WhenInjectedInto<LogProvider>().InSingletonScope();
+
+                Kernel.Bind<JobProvider>().ToSelf().InSingletonScope();
             }
         }
 
-        private static void BindIndexers()
+        private void BindIndexers()
         {
-            _kernel.Bind<IndexerBase>().To<NzbsOrg>();
-            _kernel.Bind<IndexerBase>().To<NzbMatrix>();
-            _kernel.Bind<IndexerBase>().To<NzbsRUs>();
-            _kernel.Bind<IndexerBase>().To<Newzbin>();
+            Kernel.Bind<IndexerBase>().To<NzbsOrg>();
+            Kernel.Bind<IndexerBase>().To<NzbMatrix>();
+            Kernel.Bind<IndexerBase>().To<NzbsRUs>();
+            Kernel.Bind<IndexerBase>().To<Newzbin>();
 
-            var indexers = _kernel.GetAll<IndexerBase>();
-            _kernel.Get<IndexerProvider>().InitializeIndexers(indexers.ToList());
+            var indexers = Kernel.GetAll<IndexerBase>();
+            Kernel.Get<IndexerProvider>().InitializeIndexers(indexers.ToList());
         }
 
-        private static void BindJobs()
+        private void BindJobs()
         {
-            _kernel.Bind<IJob>().To<RssSyncJob>().InSingletonScope();
-            _kernel.Bind<IJob>().To<ImportNewSeriesJob>().InSingletonScope();
-            _kernel.Bind<IJob>().To<UpdateInfoJob>().InSingletonScope();
-            _kernel.Bind<IJob>().To<DiskScanJob>().InSingletonScope();
-            _kernel.Bind<IJob>().To<DeleteSeriesJob>().InSingletonScope();
-            _kernel.Bind<IJob>().To<EpisodeSearchJob>().InSingletonScope();
-            _kernel.Bind<IJob>().To<RenameEpisodeJob>().InSingletonScope();
-            _kernel.Bind<IJob>().To<PostDownloadScanJob>().InSingletonScope();
-            _kernel.Bind<IJob>().To<UpdateSceneMappingsJob>().InSingletonScope();
-            _kernel.Bind<IJob>().To<SeasonSearchJob>().InSingletonScope();
-            _kernel.Bind<IJob>().To<RenameSeasonJob>().InSingletonScope();
-            _kernel.Bind<IJob>().To<SeriesSearchJob>().InSingletonScope();
-            _kernel.Bind<IJob>().To<RenameSeriesJob>().InSingletonScope();
-            _kernel.Bind<IJob>().To<BacklogSearchJob>().InSingletonScope();
-            _kernel.Bind<IJob>().To<BannerDownloadJob>().InSingletonScope();
-            _kernel.Bind<IJob>().To<ConvertEpisodeJob>().InSingletonScope();
+            Kernel.Bind<IJob>().To<RssSyncJob>().InSingletonScope();
+            Kernel.Bind<IJob>().To<ImportNewSeriesJob>().InSingletonScope();
+            Kernel.Bind<IJob>().To<UpdateInfoJob>().InSingletonScope();
+            Kernel.Bind<IJob>().To<DiskScanJob>().InSingletonScope();
+            Kernel.Bind<IJob>().To<DeleteSeriesJob>().InSingletonScope();
+            Kernel.Bind<IJob>().To<EpisodeSearchJob>().InSingletonScope();
+            Kernel.Bind<IJob>().To<RenameEpisodeJob>().InSingletonScope();
+            Kernel.Bind<IJob>().To<PostDownloadScanJob>().InSingletonScope();
+            Kernel.Bind<IJob>().To<UpdateSceneMappingsJob>().InSingletonScope();
+            Kernel.Bind<IJob>().To<SeasonSearchJob>().InSingletonScope();
+            Kernel.Bind<IJob>().To<RenameSeasonJob>().InSingletonScope();
+            Kernel.Bind<IJob>().To<SeriesSearchJob>().InSingletonScope();
+            Kernel.Bind<IJob>().To<RenameSeriesJob>().InSingletonScope();
+            Kernel.Bind<IJob>().To<BacklogSearchJob>().InSingletonScope();
+            Kernel.Bind<IJob>().To<BannerDownloadJob>().InSingletonScope();
+            Kernel.Bind<IJob>().To<ConvertEpisodeJob>().InSingletonScope();
 
-            _kernel.Get<JobProvider>().Initialize();
-            _kernel.Get<WebTimer>().StartTimer(30);
+            Kernel.Get<JobProvider>().Initialize();
+            Kernel.Get<WebTimer>().StartTimer(30);
         }
 
-        private static void BindExternalNotifications()
+        private void BindExternalNotifications()
         {
-            _kernel.Bind<ExternalNotificationBase>().To<Xbmc>();
-            _kernel.Bind<ExternalNotificationBase>().To<Smtp>();
-            _kernel.Bind<ExternalNotificationBase>().To<Twitter>();
-            _kernel.Bind<ExternalNotificationBase>().To<Providers.ExternalNotification.Growl>();
-            _kernel.Bind<ExternalNotificationBase>().To<Prowl>();
+            Kernel.Bind<ExternalNotificationBase>().To<Xbmc>();
+            Kernel.Bind<ExternalNotificationBase>().To<Smtp>();
+            Kernel.Bind<ExternalNotificationBase>().To<Twitter>();
+            Kernel.Bind<ExternalNotificationBase>().To<Providers.ExternalNotification.Growl>();
+            Kernel.Bind<ExternalNotificationBase>().To<Prowl>();
 
-            var notifiers = _kernel.GetAll<ExternalNotificationBase>();
-            _kernel.Get<ExternalNotificationProvider>().InitializeNotifiers(notifiers.ToList());
+            var notifiers = Kernel.GetAll<ExternalNotificationBase>();
+            Kernel.Get<ExternalNotificationProvider>().InitializeNotifiers(notifiers.ToList());
         }
 
         /// <summary>
         ///   Forces IISExpress process to exit with the host application
         /// </summary>
-        public static void DedicateToHost()
+        public void DedicateToHost()
         {
             try
             {
@@ -144,6 +141,7 @@ namespace NzbDrone.Core
         private static void ShutDown()
         {
             Logger.Info("Shutting down application.");
+            WebTimer.Stop();
             Process.GetCurrentProcess().Kill();
         }
     }

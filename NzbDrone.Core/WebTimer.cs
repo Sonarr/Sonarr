@@ -6,18 +6,23 @@ using NzbDrone.Core.Providers.Jobs;
 
 namespace NzbDrone.Core
 {
-    class WebTimer
+    public class WebTimer
     {
         private readonly JobProvider _jobProvider;
 
         private static CacheItemRemovedCallback _onCacheRemove;
+        private static bool _stop;
+
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+
 
         public WebTimer(JobProvider jobProvider)
         {
             _jobProvider = jobProvider;
         }
 
+        //TODO: Make timer doesn't keep running during unit tests.
         public void StartTimer(int secondInterval)
         {
             _onCacheRemove = new CacheItemRemovedCallback(DoWork);
@@ -30,8 +35,17 @@ namespace NzbDrone.Core
 
         public void DoWork(string k, object v, CacheItemRemovedReason r)
         {
-            _jobProvider.QueueScheduled();
-            StartTimer(Convert.ToInt32(v));
+            if (!_stop)
+            {
+                _jobProvider.QueueScheduled();
+                StartTimer(Convert.ToInt32(v));
+            }
+        }
+
+        public static void Stop()
+        {
+            Logger.Info("Stopping Web Timer");
+            _stop = true;
         }
     }
 }

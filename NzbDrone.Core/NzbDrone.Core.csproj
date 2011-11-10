@@ -189,6 +189,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\NzbDrone.Common\Properties\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Constants.cs" />
     <Compile Include="Datastore\Connection.cs" />
     <Compile Include="Datastore\MigrationLogger.cs" />

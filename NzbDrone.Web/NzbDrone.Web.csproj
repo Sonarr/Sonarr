@@ -338,6 +338,9 @@
     <Content Include="Content\Images\Unpacking.png" />
     <Content Include="Content\jquery.gritter.css" />
     <Content Include="Content\Menu.css" />
+    <Compile Include="..\NzbDrone.Common\Properties\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="App_GlobalResources\EditorLocalization.bg-BG.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -486,6 +489,7 @@
     <Compile Include="Helpers\DescriptionExtension.cs" />
     <Compile Include="Helpers\HtmlPrefixScopeExtensions.cs" />
     <Compile Include="Helpers\IsCurrentActionHelper.cs" />
+    <Compile Include="Models\CodeFile1.cs" />
     <Compile Include="Models\ExistingSeriesModel.cs" />
     <Compile Include="Models\AddNewSeriesModel.cs" />
     <Compile Include="Models\JobQueueItemModel.cs" />

@@ -18,18 +18,20 @@ namespace NzbDrone.Core.Providers.Jobs
         private readonly HttpProvider _httpProvider;
         private readonly DiskProvider _diskProvider;
         private readonly EnviromentProvider _enviromentProvider;
+        private readonly PathProvider _pathProvider;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        private string _bannerPath = "";
         private const string _bannerUrlPrefix = "http://www.thetvdb.com/banners/";
 
         [Inject]
-        public BannerDownloadJob(SeriesProvider seriesProvider, HttpProvider httpProvider, DiskProvider diskProvider, EnviromentProvider enviromentProvider)
+        public BannerDownloadJob(SeriesProvider seriesProvider, HttpProvider httpProvider, DiskProvider diskProvider,
+            EnviromentProvider enviromentProvider, PathProvider pathProvider)
         {
             _seriesProvider = seriesProvider;
             _httpProvider = httpProvider;
             _diskProvider = diskProvider;
             _enviromentProvider = enviromentProvider;
+            _pathProvider = pathProvider;
         }
 
         public BannerDownloadJob()
@@ -51,8 +53,8 @@ namespace NzbDrone.Core.Providers.Jobs
         {
             Logger.Debug("Starting banner download job");
 
-            _bannerPath = Path.Combine(_enviromentProvider.WebRoot, "Content", "Images", "Banners");
-            _diskProvider.CreateDirectory(_bannerPath);
+
+            _diskProvider.CreateDirectory(_pathProvider.BannerPath);
 
             if (targetId > 0)
             {
@@ -76,7 +78,7 @@ namespace NzbDrone.Core.Providers.Jobs
 
         public virtual void DownloadBanner(ProgressNotification notification, Series series)
         {
-            var bannerFilename = String.Format("{0}{1}{2}.jpg", _bannerPath, Path.DirectorySeparatorChar, series.SeriesId);
+            var bannerFilename = Path.Combine(_pathProvider.BannerPath, series.SeriesId.ToString()) + ".jpg";
 
             notification.CurrentMessage = string.Format("Downloading banner for '{0}'", series.Title);
 

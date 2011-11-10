@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using FluentAssertions;
-using NLog;
 using NUnit.Framework;
-using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Indexer;
 using NzbDrone.Core.Providers.Jobs;
@@ -16,16 +13,23 @@ namespace NzbDrone.Core.Test
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    class CentralDispatchTest : TestBase
+    class CentralDispatchFixture : TestBase
     {
         readonly IList<Type> indexers = typeof(CentralDispatch).Assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(IndexerBase))).ToList();
         readonly IList<Type> jobs = typeof(CentralDispatch).Assembly.GetTypes().Where(t => t.GetInterfaces().Contains(typeof(IJob))).ToList();
 
+        private CentralDispatch centralDispatch;
+
+        [SetUp]
+        public void Setup()
+        {
+            centralDispatch = new CentralDispatch();
+        }
 
         [Test]
         public void InitAppTest()
         {
-            CentralDispatch.NinjectKernel.Should().NotBeNull();
+            centralDispatch.Kernel.Should().NotBeNull();
         }
 
         [Test]
@@ -38,7 +42,7 @@ namespace NzbDrone.Core.Test
             foreach (var provider in providers)
             {
                 Console.WriteLine("Resolving " + provider.Name);
-                CentralDispatch.NinjectKernel.Get(provider).Should().NotBeNull();
+                centralDispatch.Kernel.Get(provider).Should().NotBeNull();
             }
         }
 
@@ -48,7 +52,7 @@ namespace NzbDrone.Core.Test
         {
             //Assert
 
-            var registeredJobs = CentralDispatch.NinjectKernel.GetAll<IJob>();
+            var registeredJobs = centralDispatch.Kernel.GetAll<IJob>();
 
             jobs.Should().NotBeEmpty();
 
@@ -61,7 +65,7 @@ namespace NzbDrone.Core.Test
         {
             //Assert
 
-            var registeredIndexers = CentralDispatch.NinjectKernel.GetAll<IndexerBase>();
+            var registeredIndexers = centralDispatch.Kernel.GetAll<IndexerBase>();
 
             indexers.Should().NotBeEmpty();
 
@@ -72,26 +76,26 @@ namespace NzbDrone.Core.Test
         [Test]
         public void jobs_are_initialized()
         {
-            CentralDispatch.NinjectKernel.Get<JobProvider>().All().Should().HaveSameCount(jobs);
+            centralDispatch.Kernel.Get<JobProvider>().All().Should().HaveSameCount(jobs);
         }
 
         [Test]
         public void indexers_are_initialized()
         {
-            CentralDispatch.NinjectKernel.Get<IndexerProvider>().All().Should().HaveSameCount(indexers);
+            centralDispatch.Kernel.Get<IndexerProvider>().All().Should().HaveSameCount(indexers);
         }
 
         [Test]
         public void quality_profile_initialized()
         {
-            CentralDispatch.NinjectKernel.Get<QualityProvider>().All().Should().HaveCount(2);
+            centralDispatch.Kernel.Get<QualityProvider>().All().Should().HaveCount(2);
         }
 
         [Test]
         public void JobProvider_should_be_singletone()
         {
-            var first = CentralDispatch.NinjectKernel.Get<JobProvider>();
-            var second = CentralDispatch.NinjectKernel.Get<JobProvider>();
+            var first = centralDispatch.Kernel.Get<JobProvider>();
+            var second = centralDispatch.Kernel.Get<JobProvider>();
 
             first.Should().BeSameAs(second);
         }

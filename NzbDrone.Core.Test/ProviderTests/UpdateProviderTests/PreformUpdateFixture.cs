@@ -22,8 +22,8 @@ namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
         public void setup()
         {
             _mocker = new AutoMoqer(MockBehavior.Strict);
-            _mocker.GetMock<EnviromentProvider>()
-                .SetupGet(c => c.TempPath).Returns(TempFolder);
+            _mocker.GetMock<PathProvider>()
+                .SetupGet(c => c.SystemTemp).Returns(TempFolder);
         }
 
 
@@ -39,11 +39,11 @@ namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
                                     };
 
             _mocker.GetMock<HttpProvider>().Setup(
-                c => c.DownloadFile(updatePackage.Url, Path.Combine(TempFolder, UpdateProvider.SandboxFolderName ,updatePackage.FileName)));
+                c => c.DownloadFile(updatePackage.Url, Path.Combine(TempFolder, PathProvider.UPDATE_SANDBOX_FOLDER_NAME, updatePackage.FileName)));
 
             _mocker.GetMock<DiskProvider>().Setup(
-               c => c.ExtractArchive(Path.Combine(TempFolder, UpdateProvider.SandboxFolderName, updatePackage.FileName),
-                   Path.Combine(TempFolder, UpdateProvider.SandboxFolderName)));
+               c => c.ExtractArchive(Path.Combine(TempFolder, PathProvider.UPDATE_SANDBOX_FOLDER_NAME, updatePackage.FileName),
+                   Path.Combine(TempFolder, PathProvider.UPDATE_SANDBOX_FOLDER_NAME)));
 
             _mocker.Resolve<UpdateProvider>().PreformUpdate(updatePackage);
         }
@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
         public void Should_download_and_extract_to_temp_folder()
         {
 
-            var updateSubFolder = new DirectoryInfo(Path.Combine(TempFolder, UpdateProvider.SandboxFolderName));
+            var updateSubFolder = new DirectoryInfo(Path.Combine(TempFolder, PathProvider.UPDATE_SANDBOX_FOLDER_NAME));
 
             var updatePackage = new UpdatePackage
                                     {

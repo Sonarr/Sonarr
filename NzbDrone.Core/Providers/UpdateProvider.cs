@@ -18,19 +18,22 @@ namespace NzbDrone.Core.Providers
         private readonly HttpProvider _httpProvider;
         private readonly ConfigProvider _configProvider;
         private readonly EnviromentProvider _enviromentProvider;
+        private readonly PathProvider _pathProvider;
         private readonly DiskProvider _diskProvider;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private static readonly Regex ParseRegex = new Regex(@"(?:\>)(?<filename>NzbDrone.+?(?<version>\d+\.\d+\.\d+\.\d+).+?)(?:\<\/A\>)", RegexOptions.IgnoreCase);
 
-        public const string SandboxFolderName = "nzbdrone_update";
+
 
         [Inject]
-        public UpdateProvider(HttpProvider httpProvider, ConfigProvider configProvider, EnviromentProvider enviromentProvider, DiskProvider diskProvider)
+        public UpdateProvider(HttpProvider httpProvider, ConfigProvider configProvider, EnviromentProvider enviromentProvider,
+            PathProvider pathProvider, DiskProvider diskProvider)
         {
             _httpProvider = httpProvider;
             _configProvider = configProvider;
             _enviromentProvider = enviromentProvider;
+            _pathProvider = pathProvider;
             _diskProvider = diskProvider;
         }
 
@@ -73,15 +76,14 @@ namespace NzbDrone.Core.Providers
 
         public virtual void PreformUpdate(UpdatePackage updatePackage)
         {
-            var tempSubFolder = Path.Combine(_enviromentProvider.TempPath, SandboxFolderName);
-            var packageDestination = Path.Combine(tempSubFolder, updatePackage.FileName);
+            var packageDestination = Path.Combine(_pathProvider.UpdateSandboxFolder, updatePackage.FileName);
 
             Logger.Info("Downloading update package from [{0}] to [{1}]", updatePackage.Url, packageDestination);
             _httpProvider.DownloadFile(updatePackage.Url, packageDestination);
             Logger.Info("Download completed for update package from [{0}]", updatePackage.FileName);
 
             Logger.Info("Extracting Update package");
-            _diskProvider.ExtractArchive(packageDestination, tempSubFolder);
+            _diskProvider.ExtractArchive(packageDestination, _pathProvider.UpdateSandboxFolder);
             Logger.Info("Update package extracted successfully");
         }
 

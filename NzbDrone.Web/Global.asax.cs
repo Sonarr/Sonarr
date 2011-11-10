@@ -43,26 +43,25 @@ namespace NzbDrone.Web
             //base.OnApplicationStarted();
             AreaRegistration.RegisterAllAreas();
 
-            var razor =ViewEngines.Engines.Where(e => e.GetType() == typeof (RazorViewEngine)).Single();
+            var razor = ViewEngines.Engines.Where(e => e.GetType() == typeof(RazorViewEngine)).Single();
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(razor);
 
             RegisterGlobalFilters(GlobalFilters.Filters);
-            
+
             Logger.Info("Fully initialized and ready.");
         }
 
         protected override IKernel CreateKernel()
         {
-            LogConfiguration.Setup();
-            Logger.Info("NZBDrone Starting up.");
-            CentralDispatch.DedicateToHost();
 
-            var kernel = CentralDispatch.NinjectKernel;
+            var dispatch = new CentralDispatch();
+            Logger.Info("NzbDrone Starting up.");
 
-            // kernel.Bind<IRepository>().ToConstant(kernel.Get<IRepository>("LogDb"));
-            kernel.Load(Assembly.GetExecutingAssembly());
-            return kernel;
+            dispatch.DedicateToHost();
+
+            dispatch.Kernel.Load(Assembly.GetExecutingAssembly());
+            return dispatch.Kernel;
         }
 
 

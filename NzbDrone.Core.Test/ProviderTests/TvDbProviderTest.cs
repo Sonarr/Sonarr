@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
+using Ninject;
 using NzbDrone.Common;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Test.Framework;
@@ -16,30 +17,31 @@ namespace NzbDrone.Core.Test.ProviderTests
     // ReSharper disable InconsistentNaming
     public class TvDbProviderTest : TestBase
     {
+        private TvDbProvider tvDbProvider;
+
+        [SetUp]
+        public void Setup()
+        {
+            tvDbProvider = LiveKernel.Get<TvDbProvider>();
+        }
+
         [TestCase("The Simpsons")]
         [TestCase("Family Guy")]
         [TestCase("South Park")]
         public void successful_search(string title)
         {
-            var result = new TvDbProvider(new EnviromentProvider()).SearchSeries(title);
+            var result = tvDbProvider.SearchSeries(title);
 
             result.Should().NotBeEmpty();
             result[0].SeriesName.Should().Be(title);
         }
 
 
-
-
-
-
         [Test]
         public void no_search_result()
         {
-            //setup
-            var tvdbProvider = new TvDbProvider(new EnviromentProvider());
-
             //act
-            var result = tvdbProvider.SearchSeries(Guid.NewGuid().ToString());
+            var result = tvDbProvider.SearchSeries(Guid.NewGuid().ToString());
 
             //assert
             result.Should().BeEmpty();
@@ -49,11 +51,8 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void none_unique_season_episode_number()
         {
-            //setup
-            var tvdbProvider = new TvDbProvider(new EnviromentProvider());
-
             //act
-            var result = tvdbProvider.GetSeries(75978, true);//Family guy
+            var result = tvDbProvider.GetSeries(75978, true);//Family guy
 
             //Asserts that when episodes are grouped by Season/Episode each group contains maximum of
             //one item.
@@ -65,11 +64,8 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void American_dad_fix()
         {
-            //setup
-            var tvdbProvider = new TvDbProvider(new EnviromentProvider());
-
             //act
-            var result = tvdbProvider.GetSeries(73141, true);
+            var result = tvDbProvider.GetSeries(73141, true);
 
             var seasonsNumbers = result.Episodes.Select(e => e.SeasonNumber)
                 .Distinct().ToList();

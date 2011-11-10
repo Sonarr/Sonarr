@@ -54,6 +54,8 @@ namespace NzbDrone.Core
             return dateTime.ToShortDateString();
         }
 
+
+        //TODO: this should be moved to DiskProvider
         public static ulong FreeDiskSpace(this DirectoryInfo directoryInfo)
         {
             ulong freeBytesAvailable;

@@ -18,6 +18,7 @@ namespace NzbDrone.Core.Test.Framework
 
         public static IDatabase GetEmptyDatabase(bool enableLogging = false, string fileName = "")
         {
+            Console.WriteLine("====================DataBase====================");
             Console.WriteLine("Cloning database from template.");
 
             if (String.IsNullOrWhiteSpace(fileName))
@@ -30,6 +31,10 @@ namespace NzbDrone.Core.Test.Framework
             var connectionString = Connection.GetConnectionString(fileName);
 
             var database = Connection.GetPetaPocoDb(connectionString);
+
+            Console.WriteLine("====================DataBase====================");
+            Console.WriteLine();
+            Console.WriteLine();
 
             return database;
         }

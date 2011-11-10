@@ -69,7 +69,7 @@
     <Compile Include="AutoMoq\Unity\AutoMockingBuilderStrategy.cs" />
     <Compile Include="AutoMoq\Unity\AutoMockingContainerExtension.cs" />
     <Compile Include="ExceptionVerification.cs" />
-    <Compile Include="LoggingFixtures.cs" />
+    <Compile Include="LoggingTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -9,12 +9,13 @@ namespace NzbDrone.Core.Providers.Core
 {
     public class ConfigFileProvider
     {
-        private string _configFile = Path.Combine(new EnviromentProvider().AppDataPath, "Config.xml");
+        private readonly PathProvider _pathProvider;
 
-        public string ConfigFile
+        private readonly string _configFile;
+        public ConfigFileProvider(PathProvider pathProvider)
         {
-            get { return _configFile; }
-            set { _configFile = value; }
+            _pathProvider = pathProvider;
+            _configFile = _pathProvider.AppConfigFile;
         }
 
         public virtual int Port
@@ -37,7 +38,7 @@ namespace NzbDrone.Core.Providers.Core
 
         public virtual string GetValue(string key, object defaultValue, string parent = null)
         {
-            var xDoc = XDocument.Load(ConfigFile);
+            var xDoc = XDocument.Load(_configFile);
             var config = xDoc.Descendants("Config").Single();
 
             var parentContainer = config;
@@ -50,7 +51,7 @@ namespace NzbDrone.Core.Providers.Core
                     SetValue(key, defaultValue, parent);
 
                     //Reload the configFile
-                    xDoc = XDocument.Load(ConfigFile);
+                    xDoc = XDocument.Load(_configFile);
                     config = xDoc.Descendants("Config").Single();
                 }
 
@@ -81,7 +82,7 @@ namespace NzbDrone.Core.Providers.Core
 
         public virtual void SetValue(string key, object value, string parent = null)
         {
-            var xDoc = XDocument.Load(ConfigFile);
+            var xDoc = XDocument.Load(_configFile);
             var config = xDoc.Descendants("Config").Single();
 
             var parentContainer = config;
@@ -105,18 +106,18 @@ namespace NzbDrone.Core.Providers.Core
             else
                 parentContainer.Descendants(key).Single().Value = value.ToString();
 
-            xDoc.Save(ConfigFile);
+            xDoc.Save(_configFile);
         }
 
         public virtual void CreateDefaultConfigFile()
         {
-            if (!File.Exists(ConfigFile))
+            if (!File.Exists(_configFile))
             {
                 var xDoc = new XDocument(new XDeclaration("1.0", "utf-8", "yes"));
 
                 xDoc.Add(new XElement("Config"));
 
-                xDoc.Save(ConfigFile);
+                xDoc.Save(_configFile);
             }
         }
     }

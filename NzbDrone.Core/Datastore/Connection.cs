@@ -10,38 +10,51 @@ using PetaPoco;
 
 namespace NzbDrone.Core.Datastore
 {
-    public static class Connection
+    public class Connection
     {
-        private static EnviromentProvider _enviromentProvider = new EnviromentProvider();
+        private readonly PathProvider _pathProvider;
+
+        public Connection(PathProvider pathProvider)
+        {
+            _pathProvider = pathProvider;
+        }
 
         static Connection()
         {
             Database.Mapper = new CustomeMapper();
         }
 
+        public String MainConnectionString
+        {
+            get
+            {
+                return GetConnectionString(_pathProvider.NzbDronoeDbFile);
+            }
+        }
+
+        public String LogConnectionString
+        {
+            get
+            {
+                return GetConnectionString(_pathProvider.LogDbFile);
+            }
+        }
 
         public static string GetConnectionString(string path)
         {
             //return String.Format("Data Source={0};Version=3;Cache Size=30000;Pooling=true;Default Timeout=2", path);
             return String.Format("Data Source={0}", path);
         }
-
-        public static String MainConnectionString
+        
+        public IDatabase GetMainPetaPocoDb(Boolean profiled = true)
         {
-            get
-            {
-                return GetConnectionString(Path.Combine(_enviromentProvider.AppDataPath, "nzbdrone.sdf"));
-            }
+            return GetPetaPocoDb(MainConnectionString, profiled);
         }
 
-        public static String LogConnectionString
+        public IDatabase GetLogPetaPocoDb(Boolean profiled = true)
         {
-            get
-            {
-                return GetConnectionString(Path.Combine(_enviromentProvider.AppDataPath, "log.sdf"));
-            }
+            return GetPetaPocoDb(LogConnectionString, profiled);
         }
-
 
         public static IDatabase GetPetaPocoDb(string connectionString, Boolean profiled = true)
         {
