@@ -51,6 +51,8 @@ History
                     c =>
                     c.PageSize(20).Position(GridPagerPosition.Bottom).Style(GridPagerStyles.NextPrevious))
                 .Render();}
+
+                <button onclick="reloadHistoryGrid();">Reload Grid</button>
     </div>
 }
 
@@ -60,8 +62,7 @@ History
 
     function reloadHistoryGrid() {
         var grid = $('#history').data('tGrid');
-        grid.rebind();
-        grid.sort("Date-desc");
+        grid.ajaxRequest();
     }
 
     function deleteHistoryRow(historyId) {
