@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Providers
 {
     public class ProwlProvider
     {
-        private readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private readonly Logger Logger = LogManager.GetLogger("ProwlProvider");
 
         public ProwlProvider()
         {

@@ -10,8 +10,6 @@ namespace NzbDrone.Core.Providers.ExternalNotification
     {
         private readonly ProwlProvider _prowlProvider;
 
-        private readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
         public Prowl(ConfigProvider configProvider, ProwlProvider prowlProvider)
             : base(configProvider)
         {
@@ -41,8 +39,7 @@ namespace NzbDrone.Core.Providers.ExternalNotification
 
             catch (Exception ex)
             {
-                Logger.WarnException(ex.Message, ex);
-                throw;
+                _logger.WarnException(ex.Message, ex);
             }
         }
 
@@ -64,8 +61,7 @@ namespace NzbDrone.Core.Providers.ExternalNotification
 
             catch (Exception ex)
             {
-                Logger.WarnException(ex.Message, ex);
-                throw;
+                _logger.WarnException(ex.Message, ex);
             }
         }
 
