@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Growl.Connector;
 using NLog;
 
@@ -9,7 +8,7 @@ namespace NzbDrone.Core.Providers
 {
     public class GrowlProvider
     {
-        private readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private readonly Application _growlApplication = new Application("NzbDrone");
         private GrowlConnector _growlConnector;
