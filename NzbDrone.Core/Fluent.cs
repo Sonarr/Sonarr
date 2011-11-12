@@ -49,7 +49,7 @@ namespace NzbDrone.Core
 
         public static string ParentUriString(this Uri uri)
         {
-            return uri.AbsoluteUri.Remove(uri.AbsoluteUri.Length - String.Join("", uri.Segments).Length);
+            return uri.AbsoluteUri.Remove(uri.AbsoluteUri.Length - String.Join("", uri.Segments).Length - uri.Query.Length);
         }
     }
 }
