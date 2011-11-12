@@ -14,6 +14,9 @@ function sliderToggle(sliderButton) {
     //Change the slider Image
     $(sliderButton).children('.sliderImage').toggleClass('sliderOpened sliderClosed');
 
+    //Clear the search box
+    $(sliderContent).children('.localSeriesLookup').val('');
+    
     //Focus in the search box
     $(sliderContent).children('.localSeriesLookup').focus();
 
@@ -34,3 +37,10 @@ function hideSliders(newlyOpenedSlider) {
             $(this).slideUp();
     });
 }
+
+//Hide slider when text box loses focus
+$('.localSeriesLookup').live('blur', function () {
+    $('.sliderContent').each(function (index, value) {
+         $(this).slideUp();
+    });
+});

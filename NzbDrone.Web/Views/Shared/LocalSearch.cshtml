@@ -25,3 +25,15 @@
         Search<div class="sliderImage sliderClosed"></div>
     </div>
 </div>
+
+<script type="text/javascript">
+    //Ctrl+Shift+F to open the slider
+    $(document).bind('keydown', 'ctrl+shift+f', function () {
+        $('#localSeriesSlider').children('.sliderButton').click();
+    });
+
+    //Use ESC to close the slider
+    $('.localSeriesLookup').bind('keydown', 'esc', function () {
+        $(this).parent('.sliderContent').slideUp();
+    });
+</script>
