@@ -117,7 +117,7 @@ namespace NzbDrone.Providers
         private void OnOutputDataReceived(object s, DataReceivedEventArgs e)
         {
             if (e == null || String.IsNullOrWhiteSpace(e.Data) || e.Data.StartsWith("Request started:") ||
-                e.Data.StartsWith("Request ended:") || e.Data == ("IncrementMessages called"))
+                e.Data.StartsWith("Request ended:") || e.Data == ("IncrementMessages called") || e.Data == "iisexpress")
                 return;
 
             //if (e.Data.Contains(" NzbDrone."))
