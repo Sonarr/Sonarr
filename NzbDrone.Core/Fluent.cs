@@ -8,13 +8,6 @@ namespace NzbDrone.Core
 {
     public static class Fluent
     {
-        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool GetDiskFreeSpaceEx(string lpDirectoryName,
-        out ulong lpFreeBytesAvailable,
-        out ulong lpTotalNumberOfBytes,
-        out ulong lpTotalNumberOfFreeBytes);
-
         public static string WithDefault(this string actual, object defaultValue)
         {
             if (defaultValue == null)
@@ -54,20 +47,9 @@ namespace NzbDrone.Core
             return dateTime.ToShortDateString();
         }
 
-
-        //TODO: this should be moved to DiskProvider
-        public static ulong FreeDiskSpace(this DirectoryInfo directoryInfo)
+        public static string ParentUriString(this Uri uri)
         {
-            ulong freeBytesAvailable;
-            ulong totalNumberOfBytes;
-            ulong totalNumberOfFreeBytes;
-
-            bool success = GetDiskFreeSpaceEx(directoryInfo.FullName, out freeBytesAvailable, out totalNumberOfBytes,
-                               out totalNumberOfFreeBytes);
-            if (!success)
-                throw new System.ComponentModel.Win32Exception();
-
-            return freeBytesAvailable;
+            return uri.AbsoluteUri.Remove(uri.AbsoluteUri.Length - String.Join("", uri.Segments).Length);
         }
     }
 }

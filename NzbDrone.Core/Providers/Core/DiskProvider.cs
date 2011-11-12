@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Ionic.Zip;
 using NLog;
 
@@ -9,6 +10,13 @@ namespace NzbDrone.Core.Providers.Core
 {
     public class DiskProvider
     {
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool GetDiskFreeSpaceEx(string lpDirectoryName,
+        out ulong lpFreeBytesAvailable,
+        out ulong lpTotalNumberOfBytes,
+        out ulong lpTotalNumberOfFreeBytes);
+
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public virtual bool FolderExists(string path)
@@ -95,6 +103,20 @@ namespace NzbDrone.Core.Providers.Core
             var fs = File.GetAccessControl(filename);
             fs.SetAccessRuleProtection(false, false);
             File.SetAccessControl(filename, fs);
+        }
+
+        public virtual ulong FreeDiskSpace(DirectoryInfo directoryInfo)
+        {
+            ulong freeBytesAvailable;
+            ulong totalNumberOfBytes;
+            ulong totalNumberOfFreeBytes;
+
+            bool success = GetDiskFreeSpaceEx(directoryInfo.FullName, out freeBytesAvailable, out totalNumberOfBytes,
+                               out totalNumberOfFreeBytes);
+            if (!success)
+                throw new System.ComponentModel.Win32Exception();
+
+            return freeBytesAvailable;
         }
     }
 }
