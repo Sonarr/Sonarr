@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Test
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class QualityProfileTest : TestBase
+    public class QualityProfileTest : CoreTest
     {
         [Test]
         public void Test_Storage()

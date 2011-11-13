@@ -12,15 +12,15 @@ namespace NzbDrone.Providers
     {
         private static readonly Logger IISLogger = LogManager.GetLogger("Host.IISExpress");
         private static readonly Logger Logger = LogManager.GetLogger("Host.IISProvider");
-        private readonly ConfigProvider _configProvider;
+        private readonly ConfigFileProvider _configFileProvider;
         private readonly ProcessProvider _processProvider;
         private readonly EnviromentProvider _enviromentProvider;
 
 
         [Inject]
-        public IISProvider(ConfigProvider configProvider, ProcessProvider processProvider, EnviromentProvider enviromentProvider)
+        public IISProvider(ConfigFileProvider configFileProvider, ProcessProvider processProvider, EnviromentProvider enviromentProvider)
         {
-            _configProvider = configProvider;
+            _configFileProvider = configFileProvider;
             _processProvider = processProvider;
             _enviromentProvider = enviromentProvider;
         }
@@ -31,7 +31,7 @@ namespace NzbDrone.Providers
 
         public string AppUrl
         {
-            get { return string.Format("http://localhost:{0}/", _configProvider.PortNumber); }
+            get { return string.Format("http://localhost:{0}/", _configFileProvider.Port); }
         }
 
         public int IISProcessId { get; private set; }
@@ -44,8 +44,8 @@ namespace NzbDrone.Providers
 
             var startInfo = new ProcessStartInfo();
 
-            startInfo.FileName = _configProvider.IISExePath;
-            startInfo.Arguments = String.Format("/config:\"{0}\" /trace:i", _configProvider.IISConfigPath);
+            startInfo.FileName = _enviromentProvider.GetIISExe();
+            startInfo.Arguments = String.Format("/config:\"{0}\" /trace:i", _enviromentProvider.GetIISExe());
             startInfo.WorkingDirectory = _enviromentProvider.ApplicationPath;
 
             startInfo.UseShellExecute = false;
@@ -59,7 +59,7 @@ namespace NzbDrone.Providers
 
             try
             {
-                _configProvider.UpdateIISConfig(_configProvider.IISConfigPath);
+                _configFileProvider.UpdateIISConfig(_enviromentProvider.GetIISConfigPath());
             }
             catch (Exception e)
             {
@@ -94,7 +94,7 @@ namespace NzbDrone.Providers
             foreach (var process in _processProvider.GetProcessByName("IISExpress"))
             {
                 Logger.Info("[{0}]IIS Process found. Path:{1}", process.Id, process.StartPath);
-                if (NormalizePath(process.StartPath) == NormalizePath(_configProvider.IISExePath))
+                if (NormalizePath(process.StartPath) == NormalizePath(_enviromentProvider.GetIISExe()))
                 {
                     Logger.Info("[{0}]Process is considered orphaned.", process.Id);
                     _processProvider.Kill(process.Id);

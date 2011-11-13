@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Test
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class SceneMappingTest : TestBase
+    public class SceneMappingTest : CoreTest
     {
         [Test]
         public  void GetSceneName_exists()

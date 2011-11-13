@@ -17,7 +17,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Core.Test.ProviderTests
 {
     // ReSharper disable InconsistentNaming
-    public class DiskScanProviderTest_ImportFile : TestBase
+    public class DiskScanProviderTest_ImportFile : CoreTest
     {
         [Test]
         public void import_new_file_should_succeed()

@@ -10,7 +10,7 @@ using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
 {
-    class GetAvilableUpdateFixture : TestBase
+    class GetAvilableUpdateFixture : CoreTest
     {
         private AutoMoqer _mocker = null;
 

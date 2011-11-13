@@ -14,7 +14,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.ProviderTests.DiskProviderTests
 {
     [TestFixture]
-    public class FreeDiskSpaceTest : TestBase
+    public class FreeDiskSpaceTest : CoreTest
     {
         [Test]
         public void FreeDiskSpace()

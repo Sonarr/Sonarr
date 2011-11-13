@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class RootDirProviderTest : TestBase
+    public class RootDirProviderTest : CoreTest
     {
 
         [Test]

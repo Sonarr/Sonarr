@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class InventoryProvider_QualityNeededTest : TestBase
+    public class InventoryProvider_QualityNeededTest : CoreTest
     {
         private Episode episode;
         private Episode episode2;

@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class JobProviderTest : TestBase
+    public class JobProviderTest : CoreTest
     {
         [Test]
         public void Run_Jobs_Updates_Last_Execution()

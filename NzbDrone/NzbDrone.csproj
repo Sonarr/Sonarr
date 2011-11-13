@@ -85,10 +85,8 @@
     </Compile>
     <Compile Include="CentralDispatch.cs" />
     <Compile Include="Model\ApplicationMode.cs" />
-    <Compile Include="Model\AuthenticationType.cs" />
     <Compile Include="Providers\DebuggerProvider.cs" />
     <Compile Include="ProcessAttacher.cs" />
-    <Compile Include="Providers\ConfigProvider.cs" />
     <Compile Include="Providers\IISProvider.cs" />
     <Compile Include="AppMain.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

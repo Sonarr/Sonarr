@@ -29,7 +29,7 @@ namespace NzbDrone
         {
             _kernel = new StandardKernel();
             _kernel.Bind<ApplicationServer>().ToSelf().InSingletonScope();
-            _kernel.Bind<ConfigProvider>().ToSelf().InSingletonScope();
+            _kernel.Bind<ConfigFileProvider>().ToSelf().InSingletonScope();
             _kernel.Bind<ConsoleProvider>().ToSelf().InSingletonScope();
             _kernel.Bind<DebuggerProvider>().ToSelf().InSingletonScope();
             _kernel.Bind<EnviromentProvider>().ToSelf().InSingletonScope();
@@ -45,7 +45,9 @@ namespace NzbDrone
         {
             LogConfiguration.RegisterConsoleLogger(LogLevel.Debug);
             LogConfiguration.RegisterUdpLogger();
-            _kernel.Get<ConfigProvider>().CreateDefaultConfigFile();
+            LogConfiguration.RegisterExceptioneer();
+            LogConfiguration.Reload();
+            _kernel.Get<ConfigFileProvider>().CreateDefaultConfigFile();
             Logger.Info("Start-up Path:'{0}'", _kernel.Get<EnviromentProvider>().ApplicationPath);
         }
     }

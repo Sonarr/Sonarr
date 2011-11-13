@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Test.JobTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class SeasonSearchJobTest : TestBase
+    public class SeasonSearchJobTest : CoreTest
     {
         [Test]
         public void SeasonSearch_full_season_success()

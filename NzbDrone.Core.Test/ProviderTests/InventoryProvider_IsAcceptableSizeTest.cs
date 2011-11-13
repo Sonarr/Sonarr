@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class InventoryProvider_IsAcceptableSizeTest : TestBase
+    public class InventoryProvider_IsAcceptableSizeTest : CoreTest
     {
         private EpisodeParseResult parseResultMulti;
         private EpisodeParseResult parseResultSingle;

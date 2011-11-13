@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class IndexerProviderTest : TestBase
+    public class IndexerProviderTest : CoreTest
     {
         [Test]
         public void Init_indexer_test()

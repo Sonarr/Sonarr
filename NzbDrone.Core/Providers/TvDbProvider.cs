@@ -13,15 +13,17 @@ namespace NzbDrone.Core.Providers
 {
     public class TvDbProvider
     {
+        private readonly EnviromentProvider _enviromentProvider;
         private const string TVDB_APIKEY = "5D2D188E86E07F4F";
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private readonly TvdbHandler _handler;
 
         [Inject]
-        public TvDbProvider(PathProvider pathProvider)
+        public TvDbProvider(EnviromentProvider enviromentProvider)
         {
-            _handler = new TvdbHandler(new XmlCacheProvider(pathProvider.CacheFolder), TVDB_APIKEY);
+            _enviromentProvider = enviromentProvider;
+            _handler = new TvdbHandler(new XmlCacheProvider(_enviromentProvider.GetCacheFolder()), TVDB_APIKEY);
         }
 
         public TvDbProvider()

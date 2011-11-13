@@ -68,8 +68,6 @@
     <Compile Include="Fixtures.cs" />
     <Compile Include="RouterTest.cs" />
     <Compile Include="MonitoringProviderTest.cs" />
-    <Compile Include="ConfigProviderTest.cs" />
-    <Compile Include="IISProviderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class SabProviderTest : TestBase
+    public class SabProviderTest : CoreTest
     {
         [Test]
         public void AddByUrlSuccess()

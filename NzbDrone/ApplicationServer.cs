@@ -6,13 +6,14 @@ using Ninject;
 using NzbDrone.Common;
 using NzbDrone.Providers;
 
+
 namespace NzbDrone
 {
     public class ApplicationServer : ServiceBase
     {
         private static readonly Logger Logger = LogManager.GetLogger("Host.App");
 
-        private readonly ConfigProvider _configProvider;
+        private readonly ConfigFileProvider _configFileProvider;
         private readonly DebuggerProvider _debuggerProvider;
         private readonly EnviromentProvider _enviromentProvider;
         private readonly IISProvider _iisProvider;
@@ -21,11 +22,11 @@ namespace NzbDrone
         private readonly WebClient _webClient;
 
         [Inject]
-        public ApplicationServer(ConfigProvider configProvider, WebClient webClient, IISProvider iisProvider,
+        public ApplicationServer(ConfigFileProvider configFileProvider, WebClient webClient, IISProvider iisProvider,
                            DebuggerProvider debuggerProvider, EnviromentProvider enviromentProvider,
                            ProcessProvider processProvider, MonitoringProvider monitoringProvider)
         {
-            _configProvider = configProvider;
+            _configFileProvider = configFileProvider;
             _webClient = webClient;
             _iisProvider = iisProvider;
             _debuggerProvider = debuggerProvider;
@@ -51,7 +52,7 @@ namespace NzbDrone
 
             _debuggerProvider.Attach();
 
-            if (_enviromentProvider.IsUserInteractive && _configProvider.LaunchBrowser)
+            if (_enviromentProvider.IsUserInteractive && _configFileProvider.LaunchBrowser)
             {
                 try
                 {

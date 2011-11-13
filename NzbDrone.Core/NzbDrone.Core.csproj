@@ -197,7 +197,6 @@
     <Compile Include="Instrumentation\NlogWriter.cs" />
     <Compile Include="Datastore\PetaPoco\PetaPoco.cs" />
     <Compile Include="Model\AtomicParsleyTitleType.cs" />
-    <Compile Include="Model\AuthenticationType.cs" />
     <Compile Include="Model\ConnectionInfoModel.cs" />
     <Compile Include="Model\PostDownloadStatusType.cs" />
     <Compile Include="Model\ExternalNotificationType.cs" />
@@ -219,7 +218,6 @@
     <Compile Include="Providers\Converting\HandbrakeProvider.cs" />
     <Compile Include="Providers\ExternalNotification\Prowl.cs" />
     <Compile Include="Providers\ProwlProvider.cs" />
-    <Compile Include="Providers\Core\ConfigFileProvider.cs" />
     <Compile Include="Providers\Core\UdpProvider.cs" />
     <Compile Include="Providers\ExternalNotification\Growl.cs" />
     <Compile Include="Providers\ExternalNotification\Twitter.cs" />
@@ -311,7 +309,7 @@
     <Compile Include="Repository\Series.cs" />
     <Compile Include="CentralDispatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Providers\Core\DiskProvider.cs" />
+    <Compile Include="Providers\Core\ArchiveProvider.cs" />
     <Compile Include="Providers\SeriesProvider.cs" />
     <Compile Include="Providers\TvDbProvider.cs" />
     <Compile Include="WebTimer.cs" />

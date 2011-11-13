@@ -11,16 +11,16 @@ namespace NzbDrone.Update.Providers
         private readonly DiskProvider _diskProvider;
         private readonly ServiceProvider _serviceProvider;
         private readonly ProcessProvider _processProvider;
-        private readonly PathProvider _pathProvider;
+        private readonly EnviromentProvider _enviromentProvider;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public UpdateProvider(DiskProvider diskProvider,ServiceProvider serviceProvider,
-            ProcessProvider processProvider, PathProvider pathProvider)
+            ProcessProvider processProvider, EnviromentProvider enviromentProvider)
         {
             _diskProvider = diskProvider;
             _serviceProvider = serviceProvider;
             _processProvider = processProvider;
-            _pathProvider = pathProvider;
+            _enviromentProvider = enviromentProvider;
         }
 
         private void Verify(string targetFolder)
@@ -34,8 +34,8 @@ namespace NzbDrone.Update.Providers
                 throw new DirectoryNotFoundException("Target folder doesn't exist " + targetFolder);
 
             logger.Info("Verifying Update Folder");
-            if (!_diskProvider.FolderExists(_pathProvider.GetUpdatePackageFolder()))
-                throw new DirectoryNotFoundException("Update folder doesn't exist " + _pathProvider.GetUpdatePackageFolder());
+            if (!_diskProvider.FolderExists(_enviromentProvider.GetUpdatePackageFolder()))
+                throw new DirectoryNotFoundException("Update folder doesn't exist " + _enviromentProvider.GetUpdatePackageFolder());
 
         }
 
@@ -62,14 +62,14 @@ namespace NzbDrone.Update.Providers
             }
 
             logger.Info("Creating backup of existing installation");
-            _diskProvider.CopyDirectory(targetFolder, _pathProvider.GetUpdateBackUpFolder());
+            _diskProvider.CopyDirectory(targetFolder, _enviromentProvider.GetUpdateBackUpFolder());
 
 
             logger.Info("Copying update package to target");
 
             try
             {
-                _diskProvider.CopyDirectory(_pathProvider.GetUpdatePackageFolder(), targetFolder);
+                _diskProvider.CopyDirectory(_enviromentProvider.GetUpdatePackageFolder(), targetFolder);
             }
             catch (Exception e)
             {
@@ -85,7 +85,7 @@ namespace NzbDrone.Update.Providers
         private void RollBack(string targetFolder)
         {
             logger.Info("Attempting to rollback upgrade");
-            _diskProvider.CopyDirectory(_pathProvider.GetUpdateBackUpFolder(), targetFolder);
+            _diskProvider.CopyDirectory(_enviromentProvider.GetUpdateBackUpFolder(), targetFolder);
         }
 
 

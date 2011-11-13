@@ -15,7 +15,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.ProviderTests
 {
     [TestFixture]
-    public class SeriesProviderTest : TestBase
+    public class SeriesProviderTest : CoreTest
     {
         [TestCase(true)]
         [TestCase(false)]

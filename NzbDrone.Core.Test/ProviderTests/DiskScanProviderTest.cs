@@ -14,7 +14,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Core.Test.ProviderTests
 {
     // ReSharper disable InconsistentNaming
-    public class DiskScanProviderTest : TestBase
+    public class DiskScanProviderTest : CoreTest
     {
         [Test]
         public void scan_series_should_update_the_last_scan_date()

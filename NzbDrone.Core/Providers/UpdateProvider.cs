@@ -17,24 +17,20 @@ namespace NzbDrone.Core.Providers
         private readonly HttpProvider _httpProvider;
         private readonly ConfigProvider _configProvider;
         private readonly EnviromentProvider _enviromentProvider;
-        private readonly PathProvider _pathProvider;
-        private readonly DiskProvider _diskProvider;
         private readonly ArchiveProvider _archiveProvider;
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        private static readonly Regex ParseRegex = new Regex(@"(?:\>)(?<filename>NzbDrone.+?(?<version>\d+\.\d+\.\d+\.\d+).+?)(?:\<\/A\>)", RegexOptions.IgnoreCase);
+        private static readonly Regex parseRegex = new Regex(@"(?:\>)(?<filename>NzbDrone.+?(?<version>\d+\.\d+\.\d+\.\d+).+?)(?:\<\/A\>)", RegexOptions.IgnoreCase);
 
 
 
         [Inject]
-        public UpdateProvider(HttpProvider httpProvider, ConfigProvider configProvider, EnviromentProvider enviromentProvider,
-            PathProvider pathProvider, DiskProvider diskProvider, ArchiveProvider archiveProvider)
+        public UpdateProvider(HttpProvider httpProvider, ConfigProvider configProvider,
+            EnviromentProvider enviromentProvider, ArchiveProvider archiveProvider)
         {
             _httpProvider = httpProvider;
             _configProvider = configProvider;
             _enviromentProvider = enviromentProvider;
-            _pathProvider = pathProvider;
-            _diskProvider = diskProvider;
             _archiveProvider = archiveProvider;
         }
 
@@ -47,7 +43,7 @@ namespace NzbDrone.Core.Providers
         {
             var updateList = new List<UpdatePackage>();
             var rawUpdateList = _httpProvider.DownloadString(_configProvider.UpdateUrl);
-            var matches = ParseRegex.Matches(rawUpdateList);
+            var matches = parseRegex.Matches(rawUpdateList);
 
             foreach (Match match in matches)
             {
@@ -67,25 +63,25 @@ namespace NzbDrone.Core.Providers
 
             if (latestAvailable != null && latestAvailable.Version > _enviromentProvider.Version)
             {
-                Logger.Debug("An update is available ({0}) => ({1})", _enviromentProvider.Version, latestAvailable.Version);
+                logger.Debug("An update is available ({0}) => ({1})", _enviromentProvider.Version, latestAvailable.Version);
                 return latestAvailable;
             }
 
-            Logger.Trace("No updates available");
+            logger.Trace("No updates available");
             return null;
         }
 
         public virtual void StartUpgrade(UpdatePackage updatePackage)
         {
-            var packageDestination = Path.Combine(_pathProvider.GetUpdateSandboxFolder(), updatePackage.FileName);
+            var packageDestination = Path.Combine(_enviromentProvider.GetUpdateSandboxFolder(), updatePackage.FileName);
 
-            Logger.Info("Downloading update package from [{0}] to [{1}]", updatePackage.Url, packageDestination);
+            logger.Info("Downloading update package from [{0}] to [{1}]", updatePackage.Url, packageDestination);
             _httpProvider.DownloadFile(updatePackage.Url, packageDestination);
-            Logger.Info("Download completed for update package from [{0}]", updatePackage.FileName);
+            logger.Info("Download completed for update package from [{0}]", updatePackage.FileName);
 
-            Logger.Info("Extracting Update package");
-            _archiveProvider.ExtractArchive(packageDestination, _pathProvider.GetUpdateSandboxFolder());
-            Logger.Info("Update package extracted successfully");
+            logger.Info("Extracting Update package");
+            _archiveProvider.ExtractArchive(packageDestination, _enviromentProvider.GetUpdateSandboxFolder());
+            logger.Info("Update package extracted successfully");
         }
 
     }

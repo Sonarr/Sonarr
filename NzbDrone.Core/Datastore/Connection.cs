@@ -1,22 +1,16 @@
 ﻿using System;
-using System.Data;
-using System.Data.Common;
-using System.Data.SqlServerCe;
-using System.IO;
-using MvcMiniProfiler.Data;
 using NzbDrone.Common;
-using NzbDrone.Core.Providers;
 using PetaPoco;
 
 namespace NzbDrone.Core.Datastore
 {
     public class Connection
     {
-        private readonly PathProvider _pathProvider;
+        private readonly EnviromentProvider _enviromentProvider;
 
-        public Connection(PathProvider pathProvider)
+        public Connection(EnviromentProvider enviromentProvider)
         {
-            _pathProvider = pathProvider;
+            _enviromentProvider = enviromentProvider;
         }
 
         static Connection()
@@ -28,7 +22,7 @@ namespace NzbDrone.Core.Datastore
         {
             get
             {
-                return GetConnectionString(_pathProvider.NzbDronoeDbFile);
+                return GetConnectionString(_enviromentProvider.GetNzbDronoeDbFile());
             }
         }
 
@@ -36,7 +30,7 @@ namespace NzbDrone.Core.Datastore
         {
             get
             {
-                return GetConnectionString(_pathProvider.LogDbFile);
+               return GetConnectionString(_enviromentProvider.GetLogDbFileDbFile());
             }
         }
 
@@ -45,7 +39,7 @@ namespace NzbDrone.Core.Datastore
             //return String.Format("Data Source={0};Version=3;Cache Size=30000;Pooling=true;Default Timeout=2", path);
             return String.Format("Data Source={0}", path);
         }
-        
+
         public IDatabase GetMainPetaPocoDb(Boolean profiled = true)
         {
             return GetPetaPocoDb(MainConnectionString, profiled);

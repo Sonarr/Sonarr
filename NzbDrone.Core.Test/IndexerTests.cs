@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Test
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class IndexerTests : TestBase
+    public class IndexerTests : CoreTest
     {
 
         [TestCase("nzbsorg.xml", 2)]

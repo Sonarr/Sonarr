@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class EpisodeProviderTest : TestBase
+    public class EpisodeProviderTest : CoreTest
     {
         [Test]
         public void GetEpisodes_exists()

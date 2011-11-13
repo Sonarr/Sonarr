@@ -33,7 +33,6 @@ namespace NzbDrone.Common
                 consoleTarget.Layout = "${message} ${exception}";
                 LogManager.Configuration.AddTarget(consoleTarget.GetType().Name, consoleTarget);
                 LogManager.Configuration.LoggingRules.Add(new LoggingRule(loggerNamePattern, minLevel, consoleTarget));
-                Reload();
             }
             catch (Exception e)
             {
@@ -57,7 +56,6 @@ namespace NzbDrone.Common
                 udpTarget.IncludeNdc = true;
                 LogManager.Configuration.AddTarget(udpTarget.GetType().Name, udpTarget);
                 LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, udpTarget));
-                Reload();
             }
             catch (Exception e)
             {
@@ -71,16 +69,18 @@ namespace NzbDrone.Common
 
         public static void RegisterExceptioneer()
         {
-            try
+            if (EnviromentProvider.IsProduction)
             {
-                var exTarget = new ExceptioneerTarget();
-                LogManager.Configuration.AddTarget("Exceptioneer", exTarget);
-                LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Error, exTarget));
-                Reload();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
+                try
+                {
+                    var exTarget = new ExceptioneerTarget();
+                    LogManager.Configuration.AddTarget("Exceptioneer", exTarget);
+                    LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Error, exTarget));
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
             }
         }
 

@@ -14,7 +14,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.ProviderTests
 {
     [TestFixture]
-    public class DownloadProviderTest : TestBase
+    public class DownloadProviderTest : CoreTest
     {
         [Test]
         public void Download_report_should_send_to_sab_add_to_history_mark_as_grabbed()

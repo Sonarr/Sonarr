@@ -72,6 +72,14 @@ namespace NzbDrone.Common
             }
         }
 
+        public virtual String SystemTemp
+        {
+            get
+            {
+                return Path.GetTempPath();
+            }
+        }
+
         public virtual Version Version
         {
             get { return Assembly.GetExecutingAssembly().GetName().Version; }

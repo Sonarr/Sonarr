@@ -11,7 +11,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
 {
     [TestFixture]
-    internal class PreformUpdateFixture : TestBase
+    internal class PreformUpdateFixture : CoreTest
     {
 
 
@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
         [Test]
         public void Should_call_download_and_extract_using_correct_arguments()
         {
-            Mocker.GetMock<PathProvider>().SetupGet(c => c.SystemTemp).Returns(@"C:\Temp\");
+            Mocker.GetMock<EnviromentProvider>().SetupGet(c => c.SystemTemp).Returns(@"C:\Temp\");
 
             var updatePackage = new UpdatePackage
                                     {
@@ -54,9 +54,9 @@ namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
         public void Should_download_and_extract_to_temp_folder()
         {
 
-            Mocker.GetMock<PathProvider>().SetupGet(c => c.SystemTemp).Returns(TempFolder);
+            Mocker.GetMock<EnviromentProvider>().SetupGet(c => c.SystemTemp).Returns(TempFolder);
 
-            var updateSubFolder = new DirectoryInfo(Mocker.GetMock<PathProvider>().Object.GetUpdateSandboxFolder());
+            var updateSubFolder = new DirectoryInfo(Mocker.GetMock<EnviromentProvider>().Object.GetUpdateSandboxFolder());
 
             var updatePackage = new UpdatePackage
                                     {
