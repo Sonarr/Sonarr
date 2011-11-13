@@ -17,11 +17,12 @@ namespace NzbDrone.Common
         private const string NZBDRONE_DB_FILE = "nzbdrone.sdf";
         private const string LOG_DB_FILE = "log.sdf";
 
-        public const string UPDATE_SANDBOX_FOLDER_NAME = "nzbdrone_update";
+        private const string UPDATE_SANDBOX_FOLDER_NAME = "nzbdrone_update";
+        private const string UPDATE_BACKUP_FOLDER_NAME = "nzbdrone_backup";
 
         private readonly string _applicationPath;
 
-        
+
         public PathProvider(EnviromentProvider enviromentProvider)
         {
             _applicationPath = enviromentProvider.ApplicationPath;
@@ -29,7 +30,7 @@ namespace NzbDrone.Common
 
         public PathProvider()
         {
-            
+
         }
 
         public virtual String LogPath
@@ -103,9 +104,19 @@ namespace NzbDrone.Common
             get { return Path.Combine(AppData, "Cache"); }
         }
 
-        public string UpdateSandboxFolder
+        public virtual string UpdateSandboxFolder
         {
             get { return Path.Combine(SystemTemp, UPDATE_SANDBOX_FOLDER_NAME); }
+        }
+
+        public virtual string UpdatePackageFolder
+        {
+            get { return Path.Combine(UPDATE_SANDBOX_FOLDER_NAME, "NzbDrone"); }
+        }
+
+        public virtual string UpdateBackUpFolder
+        {
+            get { return Path.Combine(UpdateSandboxFolder, UPDATE_BACKUP_FOLDER_NAME); }
         }
     }
 }

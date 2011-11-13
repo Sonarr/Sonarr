@@ -12,10 +12,10 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskProviderTests
         [Test]
         public void Should_extract_to_correct_folder()
         {
-            var diskProvider = new DiskProvider();
+            var archiveProvider = new ArchiveProvider();
 
             var destination = Path.Combine(TempFolder, "destination");
-            diskProvider.ExtractArchive(GetTestFilePath("TestArchive.zip"), destination);
+            archiveProvider.ExtractArchive(GetTestFilePath("TestArchive.zip"), destination);
 
 
             var destinationFolder = new DirectoryInfo(destination);

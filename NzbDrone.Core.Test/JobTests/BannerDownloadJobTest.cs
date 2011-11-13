@@ -11,7 +11,6 @@ using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.Jobs;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
-using DiskProvider = NzbDrone.Core.Providers.Core.DiskProvider;
 
 namespace NzbDrone.Core.Test.JobTests
 {

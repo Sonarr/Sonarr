@@ -2,12 +2,20 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using NLog;
 
 namespace NzbDrone.Common
 {
     public class DiskProvider
     {
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool GetDiskFreeSpaceEx(string lpDirectoryName,
+        out ulong lpFreeBytesAvailable,
+        out ulong lpTotalNumberOfBytes,
+        out ulong lpTotalNumberOfFreeBytes);
+
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public virtual bool FolderExists(string path)
@@ -47,6 +55,25 @@ namespace NzbDrone.Common
             return Directory.CreateDirectory(path).FullName;
         }
 
+        public virtual void CopyDirectory(string source, string target)
+        {
+            Logger.Trace("Copying {0} -> {1}", source, target);
+
+            var sourceFolder = new DirectoryInfo(source);
+            var targetFolder = new DirectoryInfo(target);
+
+            if (!targetFolder.Exists)
+            {
+                targetFolder.Create();
+            }
+
+            foreach (var file in sourceFolder.GetFiles("*.*", SearchOption.AllDirectories))
+            {
+                var destFile = Path.Combine(target, file.Name);
+                file.CopyTo(destFile, true);
+            }
+        }
+
         public virtual void DeleteFile(string path)
         {
             File.Delete(path);
@@ -77,30 +104,25 @@ namespace NzbDrone.Common
             Directory.Move(source, destination);
         }
 
-        public virtual void CopyDirectory(string source, string target)
-        {
-            Logger.Trace("Copying {0} -> {1}", source, target);
-
-            var sourceFolder = new DirectoryInfo(source);
-            var targetFolder = new DirectoryInfo(target);
-
-            if (!targetFolder.Exists)
-            {
-                targetFolder.Create();
-            }
-
-            foreach (var file in sourceFolder.GetFiles("*.*", SearchOption.AllDirectories))
-            {
-                var destFile = Path.Combine(target, file.Name);
-                file.CopyTo(destFile, true);
-            }
-        }
-
         public virtual void InheritFolderPermissions(string filename)
         {
             var fs = File.GetAccessControl(filename);
             fs.SetAccessRuleProtection(false, false);
             File.SetAccessControl(filename, fs);
+        }
+
+        public virtual ulong FreeDiskSpace(DirectoryInfo directoryInfo)
+        {
+            ulong freeBytesAvailable;
+            ulong totalNumberOfBytes;
+            ulong totalNumberOfFreeBytes;
+
+            bool success = GetDiskFreeSpaceEx(directoryInfo.FullName, out freeBytesAvailable, out totalNumberOfBytes,
+                               out totalNumberOfFreeBytes);
+            if (!success)
+                throw new System.ComponentModel.Win32Exception();
+
+            return freeBytesAvailable;
         }
     }
 }

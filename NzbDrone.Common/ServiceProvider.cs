@@ -22,6 +22,16 @@ namespace NzbDrone.Common
                     s => String.Equals(s.ServiceName, name, StringComparison.InvariantCultureIgnoreCase));
         }
 
+        public virtual bool IsServiceRunning(string name)
+        {
+            Logger.Debug("Checking if '{0}' service is running", name);
+
+            var service = ServiceController.GetServices()
+                .SingleOrDefault(s => String.Equals(s.ServiceName, name, StringComparison.InvariantCultureIgnoreCase));
+
+            return service != null && service.Status == ServiceControllerStatus.Running;
+        }
+
 
         public virtual void Install(string serviceName)
         {

@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using NLog;
 using Ninject;
 using NzbDrone.Common;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
-using DiskProvider = NzbDrone.Core.Providers.Core.DiskProvider;
+
 
 namespace NzbDrone.Core.Providers
 {
@@ -20,6 +19,7 @@ namespace NzbDrone.Core.Providers
         private readonly EnviromentProvider _enviromentProvider;
         private readonly PathProvider _pathProvider;
         private readonly DiskProvider _diskProvider;
+        private readonly ArchiveProvider _archiveProvider;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private static readonly Regex ParseRegex = new Regex(@"(?:\>)(?<filename>NzbDrone.+?(?<version>\d+\.\d+\.\d+\.\d+).+?)(?:\<\/A\>)", RegexOptions.IgnoreCase);
@@ -28,13 +28,14 @@ namespace NzbDrone.Core.Providers
 
         [Inject]
         public UpdateProvider(HttpProvider httpProvider, ConfigProvider configProvider, EnviromentProvider enviromentProvider,
-            PathProvider pathProvider, DiskProvider diskProvider)
+            PathProvider pathProvider, DiskProvider diskProvider, ArchiveProvider archiveProvider)
         {
             _httpProvider = httpProvider;
             _configProvider = configProvider;
             _enviromentProvider = enviromentProvider;
             _pathProvider = pathProvider;
             _diskProvider = diskProvider;
+            _archiveProvider = archiveProvider;
         }
 
         public UpdateProvider()
@@ -74,7 +75,7 @@ namespace NzbDrone.Core.Providers
             return null;
         }
 
-        public virtual void PreformUpdate(UpdatePackage updatePackage)
+        public virtual void StartUpgrade(UpdatePackage updatePackage)
         {
             var packageDestination = Path.Combine(_pathProvider.UpdateSandboxFolder, updatePackage.FileName);
 
@@ -83,7 +84,7 @@ namespace NzbDrone.Core.Providers
             Logger.Info("Download completed for update package from [{0}]", updatePackage.FileName);
 
             Logger.Info("Extracting Update package");
-            _diskProvider.ExtractArchive(packageDestination, _pathProvider.UpdateSandboxFolder);
+            _archiveProvider.ExtractArchive(packageDestination, _pathProvider.UpdateSandboxFolder);
             Logger.Info("Update package extracted successfully");
         }
 
