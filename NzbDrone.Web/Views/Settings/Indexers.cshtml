@@ -3,6 +3,7 @@
 
 @section HeaderContent{
     <link rel="stylesheet" type="text/css" href="../../Content/Settings.css" />
+    <link rel="stylesheet" type="text/css" href="../../Content/IndexerSettings.css" />
 
     <style>
         .indexerPanel
@@ -32,7 +33,7 @@
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             <div>
             @{ Html.Telerik().PanelBar()
             .Name("PanelBar")
-            //.HtmlAttributes(new { style = "width: 500px; margin: 10px;" })
+                   //.HtmlAttributes(new { style = "width: 500px; margin: 10px;" })
             .ExpandMode(PanelBarExpandMode.Single)
             .SelectedIndex(0)
             .Items(indexerItem =>
@@ -121,6 +122,27 @@
                             @Html.TextBoxFor(m => m.NewzbinPassword, new { @class = "inputClass" })
                         </div>
                     </text>);
+                indexerItem.Add()
+                    .Text("Newznzb")
+                    .ImageUrl("~/Content/Images/Indexers/Newznab.png")
+                    .Content(@<text>
+                        <div class="indexerPanel clearfix">
+                            <label class="labelClass">Enable
+                            <span class="small">@Html.DescriptionFor(m => m.NewznabEnabled)</span>
+                            </label>
+                            @Html.CheckBoxFor(m => m.NewznabEnabled, new { @class = "inputClass checkClass" })
+                        </div>
+                        <p></p>
+                        <a id="addItem" href="@Url.Action("AddNewznabProvider", "Settings")">
+                            <img src="../../Content/Images/Plus.png" alt="Add Newznab Provider" width="20px" height="20px" />
+                            Add Newznab Provider</a>
+                        <div id="newznabProviders">
+                            @foreach (var provider in Model.NewznabDefinitions)
+                            {
+                                Html.RenderAction("GetNewznabProviderView", provider);
+                            }
+                        </div>
+                    </text>);
             }).Render(); 
         }
 </div>
@@ -133,4 +155,51 @@
 
 @section Scripts{
     <script src="../../Scripts/NzbDrone/settingsForm.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        $("#addItem").live('click', function () {
+            $.ajax({
+                url: this.href,
+                cache: false,
+                success: function (html) {
+                    $("#newznabProviders").append(html);
+                }
+            });
+            return false;
+        });
+
+        var deleteNewznabProviderUrl = '@Url.Action("DeleteNewznabProvider", "Settings")';
+
+        function deleteProvider(id) {
+            $.ajax({
+                type: "POST",
+                url: deleteNewznabProviderUrl,
+                data: jQuery.param({ providerId: id }),
+                error: function (req, status, error) {
+                    alert("Sorry! We could not delete your Provider at this time. " + error);
+                },
+                success: function (data, textStatus, jqXHR) {
+                    if (data == "ok") {
+                        $("#provider_" + id).remove();
+                    }
+
+                    else {
+                        alert(data);
+                    }
+                }
+            });
+        }
+
+        function getProviderId(obj) {
+            var parentProviderSection = $(obj).parents('.providerSection');
+            return parentProviderSection.children('.newznabProviderId').val();
+        }
+
+        $(".providerName_textbox").live('keyup', function () {
+            var value = $(this).val();
+            var profileId = getProviderId(this);
+            $("#title_" + profileId).text(value);
+        }).keyup();
+        
+    </script>
 }

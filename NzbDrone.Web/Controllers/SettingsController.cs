@@ -30,17 +30,19 @@ namespace NzbDrone.Web.Controllers
         private readonly QualityTypeProvider _qualityTypeProvider;
         private readonly RootDirProvider _rootDirProvider;
         private readonly ConfigFileProvider _configFileProvider;
+        private readonly NewznabProvider _newznabProvider;
 
         public SettingsController(ConfigProvider configProvider, IndexerProvider indexerProvider,
                                   QualityProvider qualityProvider, AutoConfigureProvider autoConfigureProvider,
                                   SeriesProvider seriesProvider, ExternalNotificationProvider externalNotificationProvider,
                                   QualityTypeProvider qualityTypeProvider, RootDirProvider rootDirProvider,
-                                  ConfigFileProvider configFileProvider)
+                                  ConfigFileProvider configFileProvider, NewznabProvider newznabProvider)
         {
             _externalNotificationProvider = externalNotificationProvider;
             _qualityTypeProvider = qualityTypeProvider;
             _rootDirProvider = rootDirProvider;
             _configFileProvider = configFileProvider;
+            _newznabProvider = newznabProvider;
             _configProvider = configProvider;
             _indexerProvider = indexerProvider;
             _qualityProvider = qualityProvider;
@@ -86,7 +88,10 @@ namespace NzbDrone.Web.Controllers
                                 NzbsOrgEnabled = _indexerProvider.GetSettings(typeof(NzbsOrg)).Enable,
                                 NzbMatrixEnabled = _indexerProvider.GetSettings(typeof(NzbMatrix)).Enable,
                                 NzbsRUsEnabled = _indexerProvider.GetSettings(typeof(NzbsRUs)).Enable,
-                                NewzbinEnabled = _indexerProvider.GetSettings(typeof(Newzbin)).Enable
+                                NewzbinEnabled = _indexerProvider.GetSettings(typeof(Newzbin)).Enable,
+                                NewznabEnabled = _indexerProvider.GetSettings(typeof(Newzbin)).Enable,
+
+                                NewznabDefinitions = _newznabProvider.All(),
                             });
         }
 
@@ -274,21 +279,6 @@ namespace NzbDrone.Web.Controllers
             return PartialView("QualityProfileItem", profile);
         }
 
-        public ActionResult SubMenu()
-        {
-            return PartialView();
-        }
-
-        public QualityModel GetUpdatedProfileList()
-        {
-            var profiles = _qualityProvider.All().ToList();
-            var defaultQualityQualityProfileId =
-                Convert.ToInt32(_configProvider.GetValue("DefaultQualityProfile", profiles[0].QualityProfileId));
-            var selectList = new SelectList(profiles, "QualityProfileId", "Name");
-
-            return new QualityModel { DefaultQualityProfileId = defaultQualityQualityProfileId, QualityProfileSelectList = selectList };
-        }
-
         public JsonResult DeleteQualityProfile(int profileId)
         {
             try
@@ -306,6 +296,59 @@ namespace NzbDrone.Web.Controllers
 
             return new JsonResult { Data = "ok" };
         }
+
+        public ViewResult AddNewznabProvider()
+        {
+            var newznab = new NewznabDefinition
+            {
+                Enable = false,
+                Name = "Newznab Provider"
+            };
+
+            var id = _newznabProvider.Save(newznab);
+            newznab.Id = id;
+
+            ViewData["ProviderId"] = id;
+
+            return View("NewznabProvider", newznab);
+        }
+
+        public ActionResult GetNewznabProviderView(NewznabDefinition provider)
+        {
+            ViewData["ProviderId"] = provider.Id;
+
+            return PartialView("NewznabProvider", provider);
+        }
+
+        public JsonResult DeleteNewznabProvider(int providerId)
+        {
+            try
+            {
+                _newznabProvider.Delete(providerId);
+            }
+
+            catch (Exception)
+            {
+                return new JsonResult { Data = "failed" };
+            }
+
+            return new JsonResult { Data = "ok" };
+        }
+
+        public ActionResult SubMenu()
+        {
+            return PartialView();
+        }
+
+        public QualityModel GetUpdatedProfileList()
+        {
+            var profiles = _qualityProvider.All().ToList();
+            var defaultQualityQualityProfileId =
+                Convert.ToInt32(_configProvider.GetValue("DefaultQualityProfile", profiles[0].QualityProfileId));
+            var selectList = new SelectList(profiles, "QualityProfileId", "Name");
+
+            return new QualityModel { DefaultQualityProfileId = defaultQualityQualityProfileId, QualityProfileSelectList = selectList };
+        }    
 
         public JsonResult AutoConfigureSab()
         {
@@ -353,6 +396,9 @@ namespace NzbDrone.Web.Controllers
 
                 _configProvider.NewzbinUsername = data.NewzbinUsername;
                 _configProvider.NewzbinPassword = data.NewzbinPassword;
+
+                if (data.NewznabDefinitions != null)
+                    _newznabProvider.SaveAll(data.NewznabDefinitions);
 
                 return GetSuccessResult();
             }

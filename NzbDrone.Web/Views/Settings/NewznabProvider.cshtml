@@ -1,0 +1,38 @@
+﻿@model NzbDrone.Core.Repository.NewznabDefinition
+@using System.Collections
+@using NzbDrone.Core.Repository.Quality
+@using NzbDrone.Web.Helpers
+@{
+    Layout = null;
+}
+
+@using (Html.BeginCollectionItem("NewznabDefinitions"))
+{
+    var idClean = ViewData.TemplateInfo.HtmlFieldPrefix.Replace('[', '_').Replace(']', '_');
+
+    <div class="providerSection" id="provider_@(Model.Id)">
+        <div class="providerHeader">
+            <span class="titleText" id="title_@(Model.Id)">
+                @Model.Name
+            </span>
+            <a href="#" id="@Model.Id" class="deleteProvider" onclick="deleteProvider('@(Model.Id)'); return false;">
+                <img src="../../Content/Images/X.png" alt="Delete" width="22px" height="22px" /></a>
+        </div>
+        <div class="providerOptions">
+            @Html.Label("Enabled")
+            @Html.CheckBoxFor(m => m.Enable)
+
+            @Html.LabelFor(x => x.Name)
+            @Html.TextBoxFor(x => x.Name, new {@class = "providerName_textbox"})
+
+            @Html.LabelFor(x => x.Url)
+            @Html.TextBoxFor(m => m.Url)
+
+            @Html.LabelFor(x => x.ApiKey)
+            @Html.TextBoxFor(m => m.ApiKey)
+        </div>
+
+        @Html.HiddenFor(x => x.Id, new {@class = "newznabProviderId"})
+        @Html.Hidden("cleanId", idClean, new {@class = "cleanId"})
+    </div>
+}

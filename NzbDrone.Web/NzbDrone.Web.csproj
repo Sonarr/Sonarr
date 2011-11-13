@@ -327,6 +327,7 @@
     <Content Include="Content\2011.2.712\Windows7\slider-v.gif" />
     <Content Include="Content\2011.2.712\Windows7\sprite-vertical.png" />
     <Content Include="Content\2011.2.712\Windows7\sprite.png" />
+    <Content Include="Content\IndexerSettings.css" />
     <Content Include="Content\Slider.css" />
     <Content Include="Content\Grid.css" />
     <Content Include="Content\Images\close.png" />
@@ -960,6 +961,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Settings\Prowl.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Settings\NewznabProvider.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

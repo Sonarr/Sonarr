@@ -197,6 +197,7 @@
     <Compile Include="Datastore\MigrationLogger.cs" />
     <Compile Include="Datastore\MigrationsHelper.cs" />
     <Compile Include="Datastore\CustomeMapper.cs" />
+    <Compile Include="Datastore\Migrations\Migration20111112.cs" />
     <Compile Include="Datastore\Migrations\Migration20111011.cs" />
     <Compile Include="Datastore\Migrations\Migration20110909.cs" />
     <Compile Include="Datastore\Migrations\Migration20110726.cs" />
@@ -231,6 +232,8 @@
     <Compile Include="Model\Xbmc\IconType.cs" />
     <Compile Include="Providers\Converting\AtomicParsleyProvider.cs" />
     <Compile Include="Providers\Converting\HandbrakeProvider.cs" />
+    <Compile Include="Providers\Indexer\Newznab.cs" />
+    <Compile Include="Providers\NewznzbProvider.cs" />
     <Compile Include="Providers\ExternalNotification\Prowl.cs" />
     <Compile Include="Providers\ProwlProvider.cs" />
     <Compile Include="Providers\Core\ConfigFileProvider.cs" />
@@ -282,6 +285,7 @@
     <Compile Include="Providers\Jobs\UpdateInfoJob.cs" />
     <Compile Include="Providers\SceneMappingProvider.cs" />
     <Compile Include="Providers\Xbmc\EventClientProvider.cs" />
+    <Compile Include="Repository\NewznabDefinition.cs" />
     <Compile Include="Repository\ExternalNotificationDefinition.cs" />
     <Compile Include="Repository\JobDefinition.cs" />
     <Compile Include="Repository\IndexerDefinition.cs" />

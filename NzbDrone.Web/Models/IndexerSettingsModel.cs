@@ -71,5 +71,11 @@ namespace NzbDrone.Web.Models
         [DisplayName("Newzbin")]
         [Description("Enable downloading episodes from Newzbin")]
         public bool NewzbinEnabled { get; set; }
+
+        [DisplayName("Newznab")]
+        [Description("Enable downloading episodes from Newznab Providers")]
+        public bool NewznabEnabled { get; set; }
+
+        public List<NewznabDefinition> NewznabDefinitions { get; set; }
     }
 }
