@@ -3,11 +3,12 @@
 using System.ServiceProcess;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Common.Test
 {
     [TestFixture]
-    public class ServiceControllerTests
+    public class ServiceControllerTests:TestBase
     {
         private const string ALWAYS_INSTALLED_SERVICE = "SCardSvr"; //Smart Card
         private const string TEMP_SERVICE_NAME = "NzbDrone_Nunit"; //Smart Card
@@ -74,7 +75,7 @@ namespace NzbDrone.Common.Test
         }
 
         [Test]
-        [Timeout(10000)]
+        //[Timeout(10000)]
         public void Should_be_able_to_start_and_stop_service()
         {
             serviceProvider.GetService(ALWAYS_INSTALLED_SERVICE).Status

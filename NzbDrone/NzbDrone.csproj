@@ -57,19 +57,13 @@
     <StartupObject>NzbDrone.AppMain</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Accessibility">
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
     <Reference Include="EnvDTE, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="EnvDTE80, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="Exceptioneer.WindowsFormsClient, Version=1.0.0.812, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libraries\Exceptioneer.WindowsFormsClient.dll</HintPath>
-    </Reference>
+    <Reference Include="Exceptioneer.WindowsFormsClient, Version=1.0.0.812, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="Ninject">
       <HintPath>..\packages\Ninject.2.2.1.4\lib\net40-Full\Ninject.dll</HintPath>
     </Reference>
@@ -77,13 +71,9 @@
       <HintPath>..\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -95,10 +85,8 @@
     </Compile>
     <Compile Include="CentralDispatch.cs" />
     <Compile Include="Model\ApplicationMode.cs" />
-    <Compile Include="Model\AuthenticationType.cs" />
     <Compile Include="Providers\DebuggerProvider.cs" />
     <Compile Include="ProcessAttacher.cs" />
-    <Compile Include="Providers\ConfigProvider.cs" />
     <Compile Include="Providers\IISProvider.cs" />
     <Compile Include="AppMain.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

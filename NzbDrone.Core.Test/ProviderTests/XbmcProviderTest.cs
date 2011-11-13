@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class XbmcProviderTest : TestBase
+    public class XbmcProviderTest : CoreTest
     {
         [Test]
         public void JsonError_true()

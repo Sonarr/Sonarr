@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class ConfigProviderTest : TestBase
+    public class ConfigProviderTest : CoreTest
     {
         [Test]
         public void Add_new_value_to_database()

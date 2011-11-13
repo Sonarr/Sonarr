@@ -4,11 +4,12 @@ using System;
 using System.IO;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Common.Test
 {
     [TestFixture]
-    public class EnviromentProviderTest
+    public class EnviromentProviderTest : TestBase
     {
         readonly EnviromentProvider enviromentProvider = new EnviromentProvider();
 

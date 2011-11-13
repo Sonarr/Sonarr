@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class EventClientProviderTest : TestBase
+    public class EventClientProviderTest : CoreTest
     {
         [Test]
         public void SendNotification_true()

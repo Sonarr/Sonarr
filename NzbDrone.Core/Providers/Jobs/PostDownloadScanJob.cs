@@ -1,6 +1,7 @@
 ﻿using System;
 using NLog;
 using Ninject;
+using NzbDrone.Common;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers.Core;
 

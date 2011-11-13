@@ -9,64 +9,100 @@ namespace NzbDrone.Update.Providers
     public class UpdateProvider
     {
         private readonly DiskProvider _diskProvider;
-        private readonly EnviromentProvider _enviromentProvider;
         private readonly ServiceProvider _serviceProvider;
         private readonly ProcessProvider _processProvider;
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private readonly EnviromentProvider _enviromentProvider;
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public UpdateProvider(DiskProvider diskProvider, EnviromentProvider enviromentProvider,
-            ServiceProvider serviceProvider, ProcessProvider processProvider)
+        public UpdateProvider(DiskProvider diskProvider, ServiceProvider serviceProvider,
+            ProcessProvider processProvider, EnviromentProvider enviromentProvider)
         {
             _diskProvider = diskProvider;
-            _enviromentProvider = enviromentProvider;
             _serviceProvider = serviceProvider;
             _processProvider = processProvider;
+            _enviromentProvider = enviromentProvider;
         }
 
-        public void Verify(string targetFolder)
+        public UpdateProvider()
         {
-            Logger.Info("Verifying requirements before update...");
+        }
+
+        private void Verify(string targetFolder)
+        {
+            logger.Info("Verifying requirements before update...");
 
             if (String.IsNullOrWhiteSpace(targetFolder))
                 throw new ArgumentException("Target folder can not be null or empty");
 
             if (!_diskProvider.FolderExists(targetFolder))
-                throw new DirectoryNotFoundException("Target folder doesn't exist" + targetFolder);
+                throw new DirectoryNotFoundException("Target folder doesn't exist " + targetFolder);
 
-            var sandboxFolder = Path.Combine(_enviromentProvider.StartUpPath, "nzbdrone_update");
-
-            Logger.Info("Verifying Update Folder");
-            if (!_diskProvider.FolderExists(sandboxFolder))
-                throw new DirectoryNotFoundException("Update folder doesn't exist" + sandboxFolder);
+            logger.Info("Verifying Update Folder");
+            if (!_diskProvider.FolderExists(_enviromentProvider.GetUpdatePackageFolder()))
+                throw new DirectoryNotFoundException("Update folder doesn't exist " + _enviromentProvider.GetUpdatePackageFolder());
 
         }
 
-        public void Start(string installationFolder)
+        public virtual void Start(string targetFolder)
         {
-            Logger.Info("Stopping all running services");
+            Verify(targetFolder);
+            bool isService = false;
+
+            logger.Info("Stopping all running services");
             if (_serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME))
             {
+                if (_serviceProvider.IsServiceRunning(ServiceProvider.NZBDRONE_SERVICE_NAME))
+                {
+                    isService = true;
+                }
                 _serviceProvider.Stop(ServiceProvider.NZBDRONE_SERVICE_NAME);
             }
 
-            Logger.Info("Killing all running processes");
+            logger.Info("Killing all running processes");
             var processes = _processProvider.GetProcessByName(ProcessProvider.NzbDroneProccessName);
             foreach (var processInfo in processes)
             {
                 _processProvider.Kill(processInfo.Id);
             }
 
+            logger.Info("Creating backup of existing installation");
+            _diskProvider.CopyDirectory(targetFolder, _enviromentProvider.GetUpdateBackUpFolder());
 
-            //Create backup of current folder
 
-            //Copy update folder on top of the existing folder
+            logger.Info("Copying update package to target");
 
-            //Happy: Cleanup
-            //Happy: Start Service, Process?
+            try
+            {
+                _diskProvider.CopyDirectory(_enviromentProvider.GetUpdatePackageFolder(), targetFolder);
+            }
+            catch (Exception e)
+            {
+                RollBack(targetFolder);
+                logger.FatalException("Failed to copy upgrade package to target folder.", e);
+            }
+            finally
+            {
+                StartNzbDrone(isService, targetFolder);
+            }
+        }
 
-            //Sad: delete fucked up folder
-            //Sad: restore backup
-            //Sad: start service, process
+        private void RollBack(string targetFolder)
+        {
+            logger.Info("Attempting to rollback upgrade");
+            _diskProvider.CopyDirectory(_enviromentProvider.GetUpdateBackUpFolder(), targetFolder);
+        }
+
+
+        private void StartNzbDrone(bool isService, string targetFolder)
+        {
+            if (isService)
+            {
+                _serviceProvider.Start(ServiceProvider.NZBDRONE_SERVICE_NAME);
+            }
+            else
+            {
+                _processProvider.Start(Path.Combine(targetFolder, "nzbdrone.exe"));
+            }
         }
     }
 }

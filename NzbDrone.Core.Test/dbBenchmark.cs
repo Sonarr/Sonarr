@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Test
     [Explicit]
     [Category("Benchmark")]
     // ReSharper disable InconsistentNaming
-    public class DbBenchmark : TestBase
+    public class DbBenchmark : CoreTest
     {
         const int Episodes_Per_Season = 20;
         private readonly List<int> seasonsNumbers = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };

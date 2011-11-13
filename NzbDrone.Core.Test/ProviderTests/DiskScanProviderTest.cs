@@ -4,6 +4,7 @@ using AutoMoq;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Common;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
@@ -13,7 +14,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Core.Test.ProviderTests
 {
     // ReSharper disable InconsistentNaming
-    public class DiskScanProviderTest : TestBase
+    public class DiskScanProviderTest : CoreTest
     {
         [Test]
         public void scan_series_should_update_the_last_scan_date()

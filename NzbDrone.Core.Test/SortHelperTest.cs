@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Test
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class SortHelperTest : TestBase
+    public class SortHelperTest : CoreTest
     {
         //American Gladiators
         //Ancient Apocalypse

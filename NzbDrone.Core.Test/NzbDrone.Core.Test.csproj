@@ -84,7 +84,6 @@
   <ItemGroup>
     <Compile Include="JobTests\BacklogSearchJobTest.cs" />
     <Compile Include="JobTests\BannerDownloadJobTest.cs" />
-    <Compile Include="ProviderTests\ConfigFileProviderTest.cs" />
     <Compile Include="ProviderTests\DiskProviderTests\FreeDiskSpaceTest.cs" />
     <Compile Include="ProviderTests\ProwlProviderTest.cs" />
     <Compile Include="ProviderTests\GrowlProviderTest.cs" />
@@ -115,7 +114,7 @@
     <Compile Include="ProviderTests\UpcomingEpisodesProviderTest.cs" />
     <Compile Include="ProviderTests\MediaFileProvider_GetNewFilenameTest.cs" />
     <Compile Include="dbBenchmark.cs" />
-    <Compile Include="Framework\TestBase.cs" />
+    <Compile Include="Framework\CoreTest.cs" />
     <Compile Include="ProviderTests\InventoryProvider_IsMonitoredTest.cs" />
     <Compile Include="ProviderTests\DownloadProviderTest.cs" />
     <Compile Include="ProviderTests\SearchProviderTest_Episode.cs" />

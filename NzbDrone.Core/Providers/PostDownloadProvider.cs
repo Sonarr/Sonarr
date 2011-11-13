@@ -3,6 +3,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using NLog;
 using Ninject;
+using NzbDrone.Common;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
 

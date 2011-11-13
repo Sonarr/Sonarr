@@ -1,36 +1,36 @@
 ﻿using System;
 using System.IO;
-using AutoMoq;
 using FluentAssertions;
-using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Test.Framework;
-using DiskProvider = NzbDrone.Core.Providers.Core.DiskProvider;
 
 namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
 {
     [TestFixture]
-    internal class PreformUpdateFixture : TestBase
+    internal class PreformUpdateFixture : CoreTest
     {
-        private AutoMoqer _mocker = null;
+
+
+        private const string SANDBOX_FOLDER = @"C:\Temp\nzbdrone_update\";
 
         [SetUp]
         public void setup()
         {
-            _mocker = new AutoMoqer(MockBehavior.Strict);
-            _mocker.GetMock<PathProvider>()
-                .SetupGet(c => c.SystemTemp).Returns(TempFolder);
+            WithStrictMocker();
+
+           
         }
 
 
         [Test]
         public void Should_call_download_and_extract_using_correct_arguments()
         {
-            //Act
+            Mocker.GetMock<EnviromentProvider>().SetupGet(c => c.SystemTemp).Returns(@"C:\Temp\");
+
             var updatePackage = new UpdatePackage
                                     {
                                         FileName = "NzbDrone.kay.one.0.6.0.2031.zip",
@@ -38,21 +38,25 @@ namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
                                         Version = new Version("0.6.0.2031")
                                     };
 
-            _mocker.GetMock<HttpProvider>().Setup(
-                c => c.DownloadFile(updatePackage.Url, Path.Combine(TempFolder, PathProvider.UPDATE_SANDBOX_FOLDER_NAME, updatePackage.FileName)));
+            var updateArchive = Path.Combine(SANDBOX_FOLDER, updatePackage.FileName);
 
-            _mocker.GetMock<DiskProvider>().Setup(
-               c => c.ExtractArchive(Path.Combine(TempFolder, PathProvider.UPDATE_SANDBOX_FOLDER_NAME, updatePackage.FileName),
-                   Path.Combine(TempFolder, PathProvider.UPDATE_SANDBOX_FOLDER_NAME)));
+            Mocker.GetMock<HttpProvider>().Setup(
+                c => c.DownloadFile(updatePackage.Url, updateArchive));
 
-            _mocker.Resolve<UpdateProvider>().PreformUpdate(updatePackage);
+            Mocker.GetMock<ArchiveProvider>().Setup(
+               c => c.ExtractArchive(updateArchive, SANDBOX_FOLDER));
+
+            //Act
+            Mocker.Resolve<UpdateProvider>().StartUpgrade(updatePackage);
         }
 
         [Test]
         public void Should_download_and_extract_to_temp_folder()
         {
 
-            var updateSubFolder = new DirectoryInfo(Path.Combine(TempFolder, PathProvider.UPDATE_SANDBOX_FOLDER_NAME));
+            Mocker.GetMock<EnviromentProvider>().SetupGet(c => c.SystemTemp).Returns(TempFolder);
+
+            var updateSubFolder = new DirectoryInfo(Mocker.GetMock<EnviromentProvider>().Object.GetUpdateSandboxFolder());
 
             var updatePackage = new UpdatePackage
                                     {
@@ -65,9 +69,10 @@ namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
             //Act
             updateSubFolder.Exists.Should().BeFalse();
 
-            _mocker.Resolve<HttpProvider>();
-            _mocker.Resolve<DiskProvider>();
-            _mocker.Resolve<UpdateProvider>().PreformUpdate(updatePackage);
+            Mocker.Resolve<HttpProvider>();
+            Mocker.Resolve<DiskProvider>();
+            Mocker.Resolve<ArchiveProvider>();
+            Mocker.Resolve<UpdateProvider>().StartUpgrade(updatePackage);
             updateSubFolder.Refresh();
             //Assert
 

@@ -1,11 +1,12 @@
 ﻿// ReSharper disable InconsistentNaming
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Common.Test
 {
     [TestFixture]
-    public class WebClientTests
+    public class WebClientTests : TestBase
     {
         [Test]
         public void DownloadString_should_be_able_to_download_jquery()

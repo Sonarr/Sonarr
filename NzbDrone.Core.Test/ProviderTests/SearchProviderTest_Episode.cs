@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class SearchProviderTest_Episode : TestBase
+    public class SearchProviderTest_Episode : CoreTest
     {
         [Test]
         public void processResults_ParseResult_should_return_after_match()

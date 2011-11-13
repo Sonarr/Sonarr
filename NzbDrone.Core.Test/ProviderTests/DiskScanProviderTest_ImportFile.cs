@@ -5,6 +5,7 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Common;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
@@ -16,7 +17,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Core.Test.ProviderTests
 {
     // ReSharper disable InconsistentNaming
-    public class DiskScanProviderTest_ImportFile : TestBase
+    public class DiskScanProviderTest_ImportFile : CoreTest
     {
         [Test]
         public void import_new_file_should_succeed()

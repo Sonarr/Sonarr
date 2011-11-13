@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Test.JobTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class DiskScanJobTest : TestBase
+    public class DiskScanJobTest : CoreTest
     {
         [Test]
         public void series_specific_scan_should_scan_series()

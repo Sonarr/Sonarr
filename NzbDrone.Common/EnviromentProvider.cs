@@ -63,12 +63,20 @@ namespace NzbDrone.Common
             }
         }
 
-        
+
         public virtual string StartUpPath
         {
             get
             {
                 return new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName;
+            }
+        }
+
+        public virtual String SystemTemp
+        {
+            get
+            {
+                return Path.GetTempPath();
             }
         }
 
@@ -84,7 +92,19 @@ namespace NzbDrone.Common
                 var fileLocation = Assembly.GetCallingAssembly().Location;
                 return new FileInfo(fileLocation).CreationTime;
             }
+        }
 
+        public virtual int NzbDroneProcessIdFromEnviroment
+        {
+            get
+            {
+                var id = Convert.ToInt32(Environment.GetEnvironmentVariable("NZBDRONE_PID"));
+
+                if (id == 0)
+                    throw new InvalidOperationException("NZBDRONE_PID isn't a valid environment variable.");
+
+                return id;
+            }
         }
 
         private static bool ContainsIIS(DirectoryInfo dir)

@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class LogProviderTest : TestBase
+    public class LogProviderTest : CoreTest
     {
 
         private const string loggerName = "Core.Test.ProviderTests.LogProviderTest";

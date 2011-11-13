@@ -1,11 +1,12 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
 using Ninject;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.App.Test
 {
     [TestFixture]
-    public class CentralDispatchTests
+    public class CentralDispatchTests : TestBase
     {
         [Test]
         public void Kernel_can_get_kernel()

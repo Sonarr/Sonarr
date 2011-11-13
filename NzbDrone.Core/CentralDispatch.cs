@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using Ninject;
 using NLog;
+using NzbDrone.Common;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Providers;
@@ -11,6 +12,7 @@ using NzbDrone.Core.Providers.ExternalNotification;
 using NzbDrone.Core.Providers.Indexer;
 using NzbDrone.Core.Providers.Jobs;
 using PetaPoco;
+using LogConfiguration = NzbDrone.Core.Instrumentation.LogConfiguration;
 
 namespace NzbDrone.Core
 {
@@ -37,6 +39,7 @@ namespace NzbDrone.Core
             MigrationsHelper.Run(mainConnectionString, true);
 
             LogConfiguration.RegisterDatabaseLogger(Kernel.Get<DatabaseTarget>());
+            LogConfiguration.Reload();
 
             Kernel.Get<QualityProvider>().SetupDefaultProfiles();
             Kernel.Get<QualityTypeProvider>().SetupDefault();
@@ -118,7 +121,7 @@ namespace NzbDrone.Core
         {
             try
             {
-                var pid = Convert.ToInt32(Environment.GetEnvironmentVariable("NZBDRONE_PID"));
+                var pid = new EnviromentProvider().NzbDroneProcessIdFromEnviroment;
 
                 Logger.Debug("Attaching to parent process ({0}) for automatic termination.", pid);
 
@@ -135,7 +138,7 @@ namespace NzbDrone.Core
             }
             catch (Exception e)
             {
-                Logger.Fatal(e);
+                Logger.FatalException("An error has occurred while dedicating to host.", e);
             }
         }
 

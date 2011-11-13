@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Web;
-using System.Web.Helpers;
-using System.Web.Mvc;
-using NzbDrone.Core.Providers.Core;
+﻿using System.Web.Mvc;
+using NzbDrone.Common;
 
 namespace NzbDrone.Web.Controllers
 {

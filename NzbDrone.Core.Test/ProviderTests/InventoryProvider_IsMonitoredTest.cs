@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class InventoryProvider_IsMonitoredTest : TestBase
+    public class InventoryProvider_IsMonitoredTest : CoreTest
     {
         private EpisodeParseResult parseResultMulti;
         private Series series;

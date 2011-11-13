@@ -61,9 +61,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigFileProviderTest.cs" />
+    <Compile Include="PathExtentionFixture.cs" />
     <Compile Include="DiskProviderTests.cs" />
     <Compile Include="EnviromentProviderTest.cs" />
-    <Compile Include="Fixtures.cs" />
     <Compile Include="ProcessProviderTests.cs" />
     <Compile Include="ServiceControllerTests.cs" />
     <Compile Include="WebClientTests.cs" />

@@ -8,7 +8,6 @@ using NzbDrone.Common;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
-using DiskProvider = NzbDrone.Core.Providers.Core.DiskProvider;
 
 namespace NzbDrone.Core.Providers.Jobs
 {
@@ -18,20 +17,18 @@ namespace NzbDrone.Core.Providers.Jobs
         private readonly HttpProvider _httpProvider;
         private readonly DiskProvider _diskProvider;
         private readonly EnviromentProvider _enviromentProvider;
-        private readonly PathProvider _pathProvider;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private const string _bannerUrlPrefix = "http://www.thetvdb.com/banners/";
 
         [Inject]
         public BannerDownloadJob(SeriesProvider seriesProvider, HttpProvider httpProvider, DiskProvider diskProvider,
-            EnviromentProvider enviromentProvider, PathProvider pathProvider)
+            EnviromentProvider enviromentProvider)
         {
             _seriesProvider = seriesProvider;
             _httpProvider = httpProvider;
             _diskProvider = diskProvider;
             _enviromentProvider = enviromentProvider;
-            _pathProvider = pathProvider;
         }
 
         public BannerDownloadJob()
@@ -54,7 +51,7 @@ namespace NzbDrone.Core.Providers.Jobs
             Logger.Debug("Starting banner download job");
 
 
-            _diskProvider.CreateDirectory(_pathProvider.BannerPath);
+            _diskProvider.CreateDirectory(_enviromentProvider.GetBannerPath());
 
             if (targetId > 0)
             {
@@ -78,7 +75,7 @@ namespace NzbDrone.Core.Providers.Jobs
 
         public virtual void DownloadBanner(ProgressNotification notification, Series series)
         {
-            var bannerFilename = Path.Combine(_pathProvider.BannerPath, series.SeriesId.ToString()) + ".jpg";
+            var bannerFilename = Path.Combine(_enviromentProvider.GetBannerPath(), series.SeriesId.ToString()) + ".jpg";
 
             notification.CurrentMessage = string.Format("Downloading banner for '{0}'", series.Title);
 

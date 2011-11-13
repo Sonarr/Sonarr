@@ -4,11 +4,12 @@ using System.IO;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Common.Test
 {
     [TestFixture]
-    public class DiskProviderTests
+    public class DiskProviderTests : TestBase
     {
         DirectoryInfo BinFolder;
         DirectoryInfo BinFolderCopy;

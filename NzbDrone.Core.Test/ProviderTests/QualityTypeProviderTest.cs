@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class QualityTypeProviderTest : TestBase
+    public class QualityTypeProviderTest : CoreTest
     {
         [Test]
         public void SetupDefault_should_add_six_profiles()

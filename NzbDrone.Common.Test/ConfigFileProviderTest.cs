@@ -3,9 +3,9 @@ using AutoMoq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common;
-using NzbDrone.Core.Model;
-using NzbDrone.Core.Providers.Core;
-using NzbDrone.Core.Test.Framework;
+using NzbDrone.Common.Model;
+using NzbDrone.Test.Common;
+
 
 namespace NzbDrone.Core.Test.ProviderTests
 {
@@ -16,10 +16,10 @@ namespace NzbDrone.Core.Test.ProviderTests
         [SetUp]
         public void SetUp()
         {
-            WithTempAsStartUpPath();
+            WithTempAsAppPath();
 
             //Reset config file
-            var configFile = Mocker.Resolve<PathProvider>().AppConfigFile;
+            var configFile = Mocker.Resolve<EnviromentProvider>().GetConfigPath();
 
             if (File.Exists(configFile))
                 File.Delete(configFile);

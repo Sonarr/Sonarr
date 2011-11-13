@@ -7,13 +7,14 @@ using AutoMoq;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Common;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.ProviderTests.DiskProviderTests
 {
     [TestFixture]
-    public class FreeDiskSpaceTest : TestBase
+    public class FreeDiskSpaceTest : CoreTest
     {
         [Test]
         public void FreeDiskSpace()

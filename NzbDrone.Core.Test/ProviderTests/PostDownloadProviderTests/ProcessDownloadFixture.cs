@@ -7,6 +7,7 @@ using AutoMoq;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Common;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
@@ -17,7 +18,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 {
     [TestFixture]
-    public class ProcessDownloadFixture : TestBase
+    public class ProcessDownloadFixture : CoreTest
     {
         [Test]
         public void should_skip_if_folder_is_tagged_and_too_fresh()

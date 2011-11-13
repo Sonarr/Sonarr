@@ -2,20 +2,24 @@
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using NzbDrone.Common;
-using NzbDrone.Core.Model;
+using System.Xml.XPath;
+using NLog;
+using NzbDrone.Common.Model;
 
-namespace NzbDrone.Core.Providers.Core
+namespace NzbDrone.Common
 {
     public class ConfigFileProvider
     {
-        private readonly PathProvider _pathProvider;
+        private readonly EnviromentProvider _enviromentProvider;
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
+
+       
         private readonly string _configFile;
-        public ConfigFileProvider(PathProvider pathProvider)
+        public ConfigFileProvider(EnviromentProvider enviromentProvider)
         {
-            _pathProvider = pathProvider;
-            _configFile = _pathProvider.AppConfigFile;
+            _enviromentProvider = enviromentProvider;
+            _configFile = _enviromentProvider.GetConfigPath();
         }
 
         public virtual int Port
@@ -119,6 +123,53 @@ namespace NzbDrone.Core.Providers.Core
 
                 xDoc.Save(_configFile);
             }
+        }
+
+
+
+        public virtual void UpdateIISConfig(string configPath)
+        {
+            logger.Info(@"Server configuration file: {0}", configPath);
+            logger.Info(@"Configuring server to: [http://localhost:{0}]", Port);
+
+            var configXml = XDocument.Load(configPath);
+
+            var bindings =
+                configXml.XPathSelectElement("configuration/system.applicationHost/sites").Elements("site").Where(
+                    d => d.Attribute("name").Value.ToLowerInvariant() == "nzbdrone").First().Element("bindings");
+            bindings.Descendants().Remove();
+            bindings.Add(
+                new XElement("binding",
+                             new XAttribute("protocol", "http"),
+                             new XAttribute("bindingInformation", String.Format("*:{0}:localhost", Port))
+                    ));
+
+            bindings.Add(
+                new XElement("binding",
+                             new XAttribute("protocol", "http"),
+                             new XAttribute("bindingInformation", String.Format("*:{0}:", Port))
+                    ));
+
+            //Update the authenticationTypes
+
+            var location = configXml.XPathSelectElement("configuration").Elements("location").Where(
+                    d => d.Attribute("path").Value.ToLowerInvariant() == "nzbdrone").First();
+
+
+            var authenticationTypes = location.XPathSelectElements("system.webServer/security/authentication").First().Descendants();
+
+            //Set all authentication types enabled to false
+            foreach (var child in authenticationTypes)
+            {
+                child.Attribute("enabled").Value = "false";
+            }
+
+            var configuredAuthType = String.Format("{0}Authentication", AuthenticationType.ToString()).ToLowerInvariant();
+
+            //Set the users authenticationType to true
+            authenticationTypes.Where(t => t.Name.ToString().ToLowerInvariant() == configuredAuthType).Single().Attribute("enabled").Value = "true";
+
+            configXml.Save(configPath);
         }
     }
 }

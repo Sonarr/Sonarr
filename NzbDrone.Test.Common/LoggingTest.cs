@@ -1,5 +1,6 @@
 using NLog;
 using NLog.Config;
+using NUnit.Framework;
 using NzbDrone.Common;
 
 namespace NzbDrone.Test.Common
@@ -15,6 +16,7 @@ namespace NzbDrone.Test.Common
                 LogConfiguration.RegisterUdpLogger();
 
                 RegisterExceptionVerification();
+                LogConfiguration.Reload();
             }
         }
 
@@ -23,7 +25,19 @@ namespace NzbDrone.Test.Common
             var exceptionVerification = new ExceptionVerification();
             LogManager.Configuration.AddTarget("ExceptionVerification", exceptionVerification);
             LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, exceptionVerification));
-            LogConfiguration.Reload();
+        }
+
+        [SetUp]
+        public void LoggingTestSetup()
+        {
+            InitLogging();
+            ExceptionVerification.Reset();
+        }
+
+        [TearDown]
+        public void LoggingDownBase()
+        {
+            ExceptionVerification.AssertNoUnexcpectedLogs();
         }
     }
 }

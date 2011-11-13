@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
+using NLog;
 using NUnit.Framework;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Indexer;
@@ -13,7 +14,7 @@ namespace NzbDrone.Core.Test
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    class CentralDispatchFixture : TestBase
+    class CentralDispatchFixture : CoreTest
     {
         readonly IList<Type> indexers = typeof(CentralDispatch).Assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(IndexerBase))).ToList();
         readonly IList<Type> jobs = typeof(CentralDispatch).Assembly.GetTypes().Where(t => t.GetInterfaces().Contains(typeof(IJob))).ToList();
@@ -98,6 +99,13 @@ namespace NzbDrone.Core.Test
             var second = centralDispatch.Kernel.Get<JobProvider>();
 
             first.Should().BeSameAs(second);
+        }
+
+        [TearDown]
+        public void TearDownBase()
+        {
+            WebTimer.Stop();
+
         }
     }
 }

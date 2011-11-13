@@ -42,15 +42,14 @@
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceProcess" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigFileProvider.cs" />
     <Compile Include="ConsoleProvider.cs" />
-    <Compile Include="PathProvider.cs" />
+    <Compile Include="Model\AuthenticationType.cs" />
+    <Compile Include="PathExtentions.cs" />
     <Compile Include="DiskProvider.cs" />
     <Compile Include="EnviromentProvider.cs" />
     <Compile Include="ExceptioneerTarget.cs" />

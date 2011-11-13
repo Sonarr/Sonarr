@@ -48,6 +48,7 @@
     <Reference Include="Moq">
       <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
     </Reference>
+    <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL" />
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.5.10.11092\lib\nunit.framework.dll</HintPath>
     </Reference>
@@ -66,9 +67,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Fixtures.cs" />
-    <Compile Include="UpdateProviderVerifyTest.cs" />
-    <Compile Include="UpdateProviderStartTest.cs" />
+    <Compile Include="ProgramFixture.cs" />
+    <Compile Include="UpdateProviderVerifyFixture.cs" />
+    <Compile Include="UpdateProviderStartFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

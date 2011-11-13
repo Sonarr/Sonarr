@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 using NLog;
+using NzbDrone.Common;
+using NzbDrone.Common.Model;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;

@@ -5,11 +5,12 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Model;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.App.Test
 {
     [TestFixture]
-    public class RouterTest
+    public class RouterTest : TestBase
     {
 
         [TestCase(null, ApplicationMode.Console)]

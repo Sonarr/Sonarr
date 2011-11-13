@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Test
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class ParserTest : TestBase
+    public class ParserTest : CoreTest
     {
         /*Fucked-up hall of shame,
          * WWE.Wrestlemania.27.PPV.HDTV.XviD-KYR

@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class SearchProviderTest_PartialSeason : TestBase
+    public class SearchProviderTest_PartialSeason : CoreTest
     {
         [Test]
         public void SeasonPartialSearch_season_success()
