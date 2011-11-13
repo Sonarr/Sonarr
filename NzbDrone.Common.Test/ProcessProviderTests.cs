@@ -3,11 +3,12 @@ using System.Diagnostics;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Common.Test
 {
     [TestFixture]
-    public class ProcessProviderTests
+    public class ProcessProviderTests : TestBase
     {
         private const string DummyProccessName = "NzbDrone.Test.Dummy";
         ProcessProvider _processProvider;

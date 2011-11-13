@@ -116,16 +116,16 @@ namespace NzbDrone.Common
 
         public virtual void Start(string serviceName)
         {
-            Logger.Info("Starting {0} Service...");
+            Logger.Info("Starting {0} Service...", serviceName);
             var service = GetService(serviceName);
             if (service == null)
             {
                 Logger.Warn("Unable to start '{0}' no service with that name exists.", serviceName);
             }
 
-            if (service.Status != ServiceControllerStatus.Paused || service.Status != ServiceControllerStatus.Stopped)
+            if (service.Status != ServiceControllerStatus.Paused && service.Status != ServiceControllerStatus.Stopped)
             {
-                Logger.Warn("Service is in a state that can't be started {0}", service.Status);
+                Logger.Warn("Service is in a state that can't be started. Current status: {0}", service.Status);
             }
 
             service.Start();
@@ -135,7 +135,7 @@ namespace NzbDrone.Common
 
             if (service.Status == ServiceControllerStatus.Running)
             {
-                Logger.Info("{0} has started successfully.");
+                Logger.Info("{0} has started successfully.", serviceName);
             }
             else
             {

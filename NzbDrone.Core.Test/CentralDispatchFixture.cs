@@ -105,7 +105,7 @@ namespace NzbDrone.Core.Test
         public void TearDownBase()
         {
             WebTimer.Stop();
-            
+
         }
     }
 }

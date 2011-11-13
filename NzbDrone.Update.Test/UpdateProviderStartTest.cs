@@ -5,12 +5,13 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Common.Model;
+using NzbDrone.Test.Common;
 using NzbDrone.Update.Providers;
 
 namespace NzbDrone.Update.Test
 {
     [TestFixture]
-    class UpdateProviderStartTest
+    class UpdateProviderStartTest : TestBase
     {
         AutoMoqer mocker = new AutoMoqer();
 
@@ -108,6 +109,8 @@ namespace NzbDrone.Update.Test
             diskprovider.Setup(c => c.CopyDirectory(UPDATE_FOLDER, TARGET_FOLDER)).Throws(new IOException());
 
             mocker.Resolve<UpdateProvider>().Start(TARGET_FOLDER);
+
+            ExceptionVerification.ExcpectedFatals(1);
 
             mocker.VerifyAllMocks();
         }

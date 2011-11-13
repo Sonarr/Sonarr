@@ -65,7 +65,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CentralDispatchTests.cs" />
-    <Compile Include="Fixtures.cs" />
     <Compile Include="RouterTest.cs" />
     <Compile Include="MonitoringProviderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

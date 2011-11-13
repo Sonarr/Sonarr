@@ -39,6 +39,7 @@ namespace NzbDrone.Core
             MigrationsHelper.Run(mainConnectionString, true);
 
             LogConfiguration.RegisterDatabaseLogger(Kernel.Get<DatabaseTarget>());
+            LogConfiguration.Reload();
 
             Kernel.Get<QualityProvider>().SetupDefaultProfiles();
             Kernel.Get<QualityTypeProvider>().SetupDefault();

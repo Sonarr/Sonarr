@@ -6,12 +6,13 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Test.Common;
 using NzbDrone.Update.Providers;
 
 namespace NzbDrone.Update.Test
 {
     [TestFixture]
-    class UpdateProviderVerifyTest
+    class UpdateProviderVerifyTest : TestBase
     {
 
         AutoMoqer mocker = new AutoMoqer();

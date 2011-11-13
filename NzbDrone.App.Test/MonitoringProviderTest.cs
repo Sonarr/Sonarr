@@ -1,22 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using AutoMoq;
 using FizzWare.NBuilder;
-using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Common.Model;
-using NzbDrone.Model;
 using NzbDrone.Providers;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.App.Test
 {
     [TestFixture]
-    public class MonitoringProviderTest
+    public class MonitoringProviderTest : TestBase
     {
 
         [Test]

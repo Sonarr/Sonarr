@@ -31,13 +31,18 @@ namespace NzbDrone.Core.Instrumentation
             Common.LogConfiguration.RegisterConsoleLogger(LogLevel.Info, "NzbDrone.Core.CentralDispatch");
 
             LogManager.ConfigurationReloaded += ((s, e) => RegisterDatabaseLogger(_databaseTarget));
-            Common.LogConfiguration.Reload();
+            
         }
 
         public static void RegisterDatabaseLogger(DatabaseTarget databaseTarget)
         {
             LogManager.Configuration.AddTarget("DbLogger", databaseTarget);
             LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Debug, databaseTarget));
+            Reload();
+        }
+
+        public static void Reload()
+        {
             Common.LogConfiguration.Reload();
         }
     }

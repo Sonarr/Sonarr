@@ -86,8 +86,12 @@ namespace NzbDrone.Common
 
         public static void Reload()
         {
+            var sw = Stopwatch.StartNew();
             LogManager.Configuration.Reload();
             LogManager.ReconfigExistingLoggers();
+            sw.Stop();
+
+            Console.WriteLine("Reload: " + sw.Elapsed.TotalSeconds);
         }
     }
 }

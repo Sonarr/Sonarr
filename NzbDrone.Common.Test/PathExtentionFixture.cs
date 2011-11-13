@@ -2,11 +2,12 @@
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.App.Test
 {
     [TestFixture]
-    public class PathExtentionFixture
+    public class PathExtentionFixture : TestBase
     {
 
         private EnviromentProvider GetEnviromentProvider()
