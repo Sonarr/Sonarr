@@ -24,7 +24,7 @@ namespace NzbDrone.Test.Common
         }
 
         [SetUp]
-        public virtual void TestBaseSetup()
+        public void TestBaseSetup()
         {
             if (Directory.Exists(TempFolder))
             {
@@ -34,6 +34,12 @@ namespace NzbDrone.Test.Common
             Directory.CreateDirectory(TempFolder);
 
             Mocker = new AutoMoqer();
+        }
+
+        [TearDown]
+        public void TestBaseTearDown()
+        {
+            Mocker.VerifyAllMocks();
         }
 
         protected virtual void WithStrictMocker()
