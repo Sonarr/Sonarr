@@ -54,9 +54,9 @@
 }
 
 .sliderClosed {
-    background:url('../../Content/Images/ui-icons_2e83ff_256x240.png') -64px -16px no-repeat;
+    background:url('../Content/Images/ui-icons_2e83ff_256x240.png') -64px -16px no-repeat;
 }
 
 .sliderOpened {
-    background:url('../../Content/Images/ui-icons_2e83ff_256x240.png') 0px -16px no-repeat;
+    background:url('../Content/Images/ui-icons_2e83ff_256x240.png') 0px -16px no-repeat;
 }
