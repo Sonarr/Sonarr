@@ -14,23 +14,21 @@ namespace NzbDrone.Update.Test
     {
         AutoMoqer mocker = new AutoMoqer();
 
-        private const string UPDATE_FOLDER = @"C:\Temp\NzbDrone_update\NzbDrone";
-        private const string BACKUP_FOLDER = @"C:\Temp\NzbDrone_update\NzbDrone_Backup";
+        private const string UPDATE_FOLDER = @"C:\Temp\nzbdrone_update\nzbdrone\";
+        private const string BACKUP_FOLDER = @"C:\Temp\nzbdrone_update\nzbdrone_backup\";
         private const string TARGET_FOLDER = @"C:\NzbDrone\";
 
-        Mock<PathProvider> _pathProvider = null;
+        Mock<PathProvider> _pathProvider;
 
 
         [SetUp]
         public void Setup()
         {
             mocker = new AutoMoqer();
-
-
+            
             _pathProvider = mocker.GetMock<PathProvider>();
 
-            _pathProvider.SetupGet(c => c.UpdateBackUpFolder).Returns(BACKUP_FOLDER);
-            _pathProvider.SetupGet(c => c.UpdatePackageFolder).Returns(UPDATE_FOLDER);
+            _pathProvider.SetupGet(c => c.SystemTemp).Returns(@"C:\Temp\");
 
             mocker.GetMock<DiskProvider>()
                .Setup(c => c.FolderExists(UPDATE_FOLDER))

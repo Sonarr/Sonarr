@@ -23,6 +23,9 @@ namespace NzbDrone.Update.Test
 
             mocker.GetMock<EnviromentProvider>()
                 .Setup(c => c.StartUpPath).Returns(@"C:\Temp\NzbDrone_update\");
+
+            mocker.GetMock<PathProvider>()
+                .Setup(c => c.SystemTemp).Returns(@"C:\Temp\");
         }
 
         [TestCase(null)]

@@ -103,20 +103,5 @@ namespace NzbDrone.Common
         {
             get { return Path.Combine(AppData, "Cache"); }
         }
-
-        public virtual string UpdateSandboxFolder
-        {
-            get { return Path.Combine(SystemTemp, UPDATE_SANDBOX_FOLDER_NAME); }
-        }
-
-        public virtual string UpdatePackageFolder
-        {
-            get { return Path.Combine(UPDATE_SANDBOX_FOLDER_NAME, "NzbDrone"); }
-        }
-
-        public virtual string UpdateBackUpFolder
-        {
-            get { return Path.Combine(UpdateSandboxFolder, UPDATE_BACKUP_FOLDER_NAME); }
-        }
     }
 }

@@ -77,14 +77,14 @@ namespace NzbDrone.Core.Providers
 
         public virtual void StartUpgrade(UpdatePackage updatePackage)
         {
-            var packageDestination = Path.Combine(_pathProvider.UpdateSandboxFolder, updatePackage.FileName);
+            var packageDestination = Path.Combine(_pathProvider.GetUpdateSandboxFolder(), updatePackage.FileName);
 
             Logger.Info("Downloading update package from [{0}] to [{1}]", updatePackage.Url, packageDestination);
             _httpProvider.DownloadFile(updatePackage.Url, packageDestination);
             Logger.Info("Download completed for update package from [{0}]", updatePackage.FileName);
 
             Logger.Info("Extracting Update package");
-            _archiveProvider.ExtractArchive(packageDestination, _pathProvider.UpdateSandboxFolder);
+            _archiveProvider.ExtractArchive(packageDestination, _pathProvider.GetUpdateSandboxFolder());
             Logger.Info("Update package extracted successfully");
         }
 
