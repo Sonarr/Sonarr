@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Runtime.Remoting;
 using System.Timers;
+using Exceptioneer.WindowsFormsClient;
 using NLog;
 using Ninject;
 using NzbDrone.Common;
@@ -106,15 +107,15 @@ namespace NzbDrone.Providers
         {
             Console.WriteLine("EPIC FAIL: {0}", excepion);
 
-#if DEBUG
-#else
-            new Client
+            if (EnviromentProvider.IsProduction)
             {
-                ApiKey = "43BBF60A-EB2A-4C1C-B09E-422ADF637265",
-                ApplicationName = "NzbDrone",
-                CurrentException = excepion as Exception
-            }.Submit();
-#endif
+                new Client
+                    {
+                        ApiKey = "43BBF60A-EB2A-4C1C-B09E-422ADF637265",
+                        ApplicationName = "NzbDrone",
+                        CurrentException = excepion as Exception
+                    }.Submit();
+            }
 
             Logger.Fatal("EPIC FAIL: {0}", excepion);
         }
