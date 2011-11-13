@@ -20,7 +20,7 @@
                     $.gritter.add({
                         title: data.Title,
                         text: data.Text,
-                        image: '/content/images/success.png',
+                        image: '../../content/images/success.png',
                         class_name: 'gritter-success'
                     });
                 }
@@ -28,7 +28,7 @@
                     $.gritter.add({
                         title: data.Title,
                         text: data.Text,
-                        image: '/content/images/error.png',
+                        image: '../../content/images/error.png',
                         class_name: 'gritter-fail'
                     });
                 }
@@ -41,7 +41,7 @@
                 $.gritter.add({
                     title: 'Request failed',
                     text: this.url,
-                    image: '/content/images/error.png',
+                    image: '../../content/images/error.png',
                     class_name: 'gritter-fail'
                 });
             }

@@ -92,7 +92,7 @@ namespace NzbDrone.Core.Providers
 
             foreach (var rootDir in rootDirs)
             {
-                rootDir.FreeSpace = new DirectoryInfo(rootDir.Path).FreeDiskSpace();
+                rootDir.FreeSpace = _diskProvider.FreeDiskSpace(new DirectoryInfo(rootDir.Path));
                 if (rootDir.FreeSpace > maxSize)
                 {
                     maxPath = rootDir.Path;

@@ -60,8 +60,7 @@ History
 
     function reloadHistoryGrid() {
         var grid = $('#history').data('tGrid');
-        grid.rebind();
-        grid.sort("Date-desc");
+        grid.ajaxRequest();
     }
 
     function deleteHistoryRow(historyId) {

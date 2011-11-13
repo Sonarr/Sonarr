@@ -40,7 +40,6 @@ namespace NzbDrone.Core.Providers.ExternalNotification
             catch (Exception ex)
             {
                 _logger.WarnException(ex.Message, ex);
-                throw;
             }
         }
 
@@ -63,7 +62,6 @@ namespace NzbDrone.Core.Providers.ExternalNotification
             catch (Exception ex)
             {
                 _logger.WarnException(ex.Message, ex);
-                throw;
             }
         }
 

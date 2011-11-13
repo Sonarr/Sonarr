@@ -46,6 +46,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
     <Reference Include="MvcMiniProfiler, Version=1.9.0.0, Culture=neutral, PublicKeyToken=b44f9351044011a3, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\MiniProfiler.1.9\lib\net40\MvcMiniProfiler.dll</HintPath>
@@ -123,8 +127,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\TvdbLib.dll</HintPath>
     </Reference>
-    <Reference Include="WebActivator, Version=1.4.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\WebActivator.1.4.2\lib\net40\WebActivator.dll</HintPath>
+    <Reference Include="WebActivator, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\WebActivator.1.5\lib\net40\WebActivator.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -674,27 +679,33 @@
     <Content Include="Scripts\2011.2.712\telerik.treeview.min.js" />
     <Content Include="Scripts\2011.2.712\telerik.upload.min.js" />
     <Content Include="Scripts\2011.2.712\telerik.window.min.js" />
-    <Content Include="Scripts\AutoComplete.js" />
-    <Content Include="Scripts\addSeries.js" />
-    <Content Include="Scripts\slider.js" />
-    <Content Include="Scripts\Plugins\jquery-1.6.3-vsdoc.js" />
-    <Content Include="Scripts\Plugins\jquery-1.6.3.js" />
-    <Content Include="Scripts\Plugins\jquery-1.6.3.min.js" />
-    <Content Include="Scripts\Plugins\jquery-ui-1.8.16.js" />
-    <Content Include="Scripts\Plugins\jquery-ui-1.8.16.min.js" />
-    <Content Include="Scripts\Plugins\jquery.gritter.js" />
-    <Content Include="Scripts\Plugins\MicrosoftAjax.debug.js" />
-    <Content Include="Scripts\Plugins\MicrosoftAjax.js" />
-    <Content Include="Scripts\Plugins\MicrosoftMvcAjax.debug.js" />
-    <Content Include="Scripts\Plugins\MicrosoftMvcAjax.js" />
-    <Content Include="Scripts\seriesDetails.js" />
-    <Content Include="Scripts\settingsForm.js" />
-    <Content Include="Scripts\Plugins\doTimeout.js" />
-    <Content Include="Scripts\episodeSearch.js" />
-    <Content Include="Scripts\Plugins\jquery.form.js" />
-    <Content Include="Scripts\Plugins\jquery-tgc-countdown-1.0.js" />
-    <Content Include="Scripts\Plugins\jquery.watermark.min.js" />
-    <Content Include="Scripts\Notification.js" />
+    <Content Include="Scripts\jquery.hotkeys.js" />
+    <Content Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\NzbDrone\addSeries.js" />
+    <Content Include="Scripts\NzbDrone\AutoComplete.js" />
+    <Content Include="Scripts\NzbDrone\episodeSearch.js" />
+    <Content Include="Scripts\NzbDrone\Notification.js" />
+    <Content Include="Scripts\NzbDrone\seriesDetails.js" />
+    <Content Include="Scripts\NzbDrone\settingsForm.js" />
+    <Content Include="Scripts\NzbDrone\slider.js" />
+    <Content Include="Scripts\jquery-1.6.3-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.6.3.js" />
+    <Content Include="Scripts\jquery-1.6.3.min.js" />
+    <Content Include="Scripts\jquery-ui-1.8.16.js" />
+    <Content Include="Scripts\jquery-ui-1.8.16.min.js" />
+    <Content Include="Scripts\jquery.gritter.js" />
+    <Content Include="Scripts\MicrosoftAjax.debug.js" />
+    <Content Include="Scripts\MicrosoftAjax.js" />
+    <Content Include="Scripts\MicrosoftMvcAjax.debug.js" />
+    <Content Include="Scripts\MicrosoftMvcAjax.js" />
+    <Content Include="Scripts\doTimeout.js" />
+    <Content Include="Scripts\jquery.form.js" />
+    <Content Include="Scripts\jquery-tgc-countdown-1.0.js" />
+    <Content Include="Scripts\jquery.watermark.min.js" />
     <Content Include="Views\AddSeries\Index.cshtml" />
     <Content Include="Views\AddSeries\AddNew.cshtml" />
     <Content Include="Web.config">
