@@ -45,7 +45,7 @@ namespace NzbDrone.Providers
             var startInfo = new ProcessStartInfo();
 
             startInfo.FileName = _enviromentProvider.GetIISExe();
-            startInfo.Arguments = String.Format("/config:\"{0}\" /trace:i", _enviromentProvider.GetIISExe());
+            startInfo.Arguments = String.Format("/config:\"{0}\" /trace:i", _enviromentProvider.GetIISConfigPath());
             startInfo.WorkingDirectory = _enviromentProvider.ApplicationPath;
 
             startInfo.UseShellExecute = false;
