@@ -12,7 +12,7 @@ using NzbDrone.Update.Providers;
 namespace NzbDrone.Update.Test
 {
     [TestFixture]
-    class UpdateProviderVerifyTest : TestBase
+    class UpdateProviderVerifyFixture : TestBase
     {
 
         AutoMoqer mocker = new AutoMoqer();

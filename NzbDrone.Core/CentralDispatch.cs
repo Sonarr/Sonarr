@@ -120,7 +120,7 @@ namespace NzbDrone.Core
         {
             try
             {
-                var pid = Convert.ToInt32(Environment.GetEnvironmentVariable("NZBDRONE_PID"));
+                var pid = new EnviromentProvider().NzbDroneProcessIdFromEnviroment;
 
                 Logger.Debug("Attaching to parent process ({0}) for automatic termination.", pid);
 

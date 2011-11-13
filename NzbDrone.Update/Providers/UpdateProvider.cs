@@ -14,13 +14,17 @@ namespace NzbDrone.Update.Providers
         private readonly EnviromentProvider _enviromentProvider;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public UpdateProvider(DiskProvider diskProvider,ServiceProvider serviceProvider,
+        public UpdateProvider(DiskProvider diskProvider, ServiceProvider serviceProvider,
             ProcessProvider processProvider, EnviromentProvider enviromentProvider)
         {
             _diskProvider = diskProvider;
             _serviceProvider = serviceProvider;
             _processProvider = processProvider;
             _enviromentProvider = enviromentProvider;
+        }
+
+        public UpdateProvider()
+        {
         }
 
         private void Verify(string targetFolder)
@@ -39,7 +43,7 @@ namespace NzbDrone.Update.Providers
 
         }
 
-        public void Start(string targetFolder)
+        public virtual void Start(string targetFolder)
         {
             Verify(targetFolder);
             bool isService = false;
@@ -49,7 +53,7 @@ namespace NzbDrone.Update.Providers
             {
                 if (_serviceProvider.IsServiceRunning(ServiceProvider.NZBDRONE_SERVICE_NAME))
                 {
-                   isService = true; 
+                    isService = true;
                 }
                 _serviceProvider.Stop(ServiceProvider.NZBDRONE_SERVICE_NAME);
             }
