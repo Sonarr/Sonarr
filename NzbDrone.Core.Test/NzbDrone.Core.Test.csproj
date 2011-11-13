@@ -84,6 +84,7 @@
   <ItemGroup>
     <Compile Include="JobTests\BacklogSearchJobTest.cs" />
     <Compile Include="JobTests\BannerDownloadJobTest.cs" />
+    <Compile Include="ProviderTests\NewznabProviderTest.cs" />
     <Compile Include="ProviderTests\DiskProviderTests\FreeDiskSpaceTest.cs" />
     <Compile Include="ProviderTests\ProwlProviderTest.cs" />
     <Compile Include="ProviderTests\GrowlProviderTest.cs" />

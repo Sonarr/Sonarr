@@ -41,3 +41,4 @@ NzbDrone.Web/NzbDrone.Web.Publish.xml
 _rawPackage/
 NzbDrone.zip
 NzbDrone.sln.DotSettings.user*
+config.xml
