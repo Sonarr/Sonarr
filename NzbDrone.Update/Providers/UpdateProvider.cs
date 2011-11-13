@@ -78,7 +78,7 @@ namespace NzbDrone.Update.Providers
             catch (Exception e)
             {
                 RollBack(targetFolder);
-                logger.Fatal("Failed to copy upgrade package to target folder.", e);
+                logger.FatalException("Failed to copy upgrade package to target folder.", e);
             }
             finally
             {

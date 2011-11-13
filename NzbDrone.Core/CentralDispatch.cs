@@ -137,7 +137,7 @@ namespace NzbDrone.Core
             }
             catch (Exception e)
             {
-                Logger.Fatal(e);
+                Logger.FatalException("An error has occurred while dedicating to host.", e);
             }
         }
 

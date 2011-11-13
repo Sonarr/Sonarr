@@ -90,8 +90,6 @@ namespace NzbDrone.Common
             LogManager.Configuration.Reload();
             LogManager.ReconfigExistingLoggers();
             sw.Stop();
-
-            Console.WriteLine("Reload: " + sw.Elapsed.TotalSeconds);
         }
     }
 }
