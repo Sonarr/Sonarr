@@ -9,17 +9,15 @@ namespace NzbDrone.Update.Providers
     public class UpdateProvider
     {
         private readonly DiskProvider _diskProvider;
-        private readonly EnviromentProvider _enviromentProvider;
         private readonly ServiceProvider _serviceProvider;
         private readonly ProcessProvider _processProvider;
         private readonly PathProvider _pathProvider;
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public UpdateProvider(DiskProvider diskProvider, EnviromentProvider enviromentProvider,
-            ServiceProvider serviceProvider, ProcessProvider processProvider, PathProvider pathProvider)
+        public UpdateProvider(DiskProvider diskProvider,ServiceProvider serviceProvider,
+            ProcessProvider processProvider, PathProvider pathProvider)
         {
             _diskProvider = diskProvider;
-            _enviromentProvider = enviromentProvider;
             _serviceProvider = serviceProvider;
             _processProvider = processProvider;
             _pathProvider = pathProvider;
@@ -27,7 +25,7 @@ namespace NzbDrone.Update.Providers
 
         private void Verify(string installationFolder)
         {
-            Logger.Info("Verifying requirements before update...");
+            logger.Info("Verifying requirements before update...");
 
             if (String.IsNullOrWhiteSpace(installationFolder))
                 throw new ArgumentException("Target folder can not be null or empty");
@@ -35,7 +33,7 @@ namespace NzbDrone.Update.Providers
             if (!_diskProvider.FolderExists(installationFolder))
                 throw new DirectoryNotFoundException("Target folder doesn't exist" + installationFolder);
 
-            Logger.Info("Verifying Update Folder");
+            logger.Info("Verifying Update Folder");
             if (!_diskProvider.FolderExists(_pathProvider.UpdatePackageFolder))
                 throw new DirectoryNotFoundException("Update folder doesn't exist" + _pathProvider.UpdateSandboxFolder);
 
@@ -46,7 +44,7 @@ namespace NzbDrone.Update.Providers
             Verify(targetFolder);
             bool isService = false;
 
-            Logger.Info("Stopping all running services");
+            logger.Info("Stopping all running services");
             if (_serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME))
             {
                 if (_serviceProvider.IsServiceRunning(ServiceProvider.NZBDRONE_SERVICE_NAME))
@@ -56,18 +54,18 @@ namespace NzbDrone.Update.Providers
                 _serviceProvider.Stop(ServiceProvider.NZBDRONE_SERVICE_NAME);
             }
 
-            Logger.Info("Killing all running processes");
+            logger.Info("Killing all running processes");
             var processes = _processProvider.GetProcessByName(ProcessProvider.NzbDroneProccessName);
             foreach (var processInfo in processes)
             {
                 _processProvider.Kill(processInfo.Id);
             }
 
-            Logger.Info("Creating backup of existing installation");
+            logger.Info("Creating backup of existing installation");
             _diskProvider.CopyDirectory(targetFolder, _pathProvider.UpdateBackUpFolder);
 
 
-            Logger.Info("Copying update package to target");
+            logger.Info("Copying update package to target");
 
             try
             {
@@ -76,7 +74,7 @@ namespace NzbDrone.Update.Providers
             catch (Exception e)
             {
                 RollBack(targetFolder);
-                Logger.Fatal("Failed to copy upgrade package to target folder.", e);
+                logger.Fatal("Failed to copy upgrade package to target folder.", e);
             }
             finally
             {
@@ -86,7 +84,7 @@ namespace NzbDrone.Update.Providers
 
         private void RollBack(string targetFolder)
         {
-            Logger.Info("Attempting to rollback upgrade");
+            logger.Info("Attempting to rollback upgrade");
             _diskProvider.CopyDirectory(_pathProvider.UpdateBackUpFolder, targetFolder);
         }
 

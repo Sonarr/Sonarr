@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Runtime.Remoting;
 using System.Timers;
-using Exceptioneer.WindowsFormsClient;
 using NLog;
 using Ninject;
 using NzbDrone.Common;
