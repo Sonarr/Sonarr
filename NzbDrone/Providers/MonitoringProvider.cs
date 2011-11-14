@@ -117,7 +117,7 @@ namespace NzbDrone.Providers
                     }.Submit();
             }
 
-            Logger.FatalException("EPIC FAIL: {0}", excepion);
+            Logger.FatalException("EPIC FAIL: " + excepion.Message, excepion);
         }
     }
 }

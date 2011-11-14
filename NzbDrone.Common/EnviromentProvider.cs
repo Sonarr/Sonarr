@@ -9,6 +9,9 @@ namespace NzbDrone.Common
     {
         public const string IIS_FOLDER_NAME = "iisexpress";
 
+        public const string NZBDRONE_PATH = "NZBDRONE_PATH";
+        public const string NZBDRONE_PID = "NZBDRONE_PID";
+
 #if DEBUG
         private static readonly bool isInDebug = true;
 #else
@@ -98,7 +101,7 @@ namespace NzbDrone.Common
         {
             get
             {
-                var id = Convert.ToInt32(Environment.GetEnvironmentVariable("NZBDRONE_PID"));
+                var id = Convert.ToInt32(Environment.GetEnvironmentVariable(NZBDRONE_PID));
 
                 if (id == 0)
                     throw new InvalidOperationException("NZBDRONE_PID isn't a valid environment variable.");
