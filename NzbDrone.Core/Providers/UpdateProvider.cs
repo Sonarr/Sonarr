@@ -21,6 +21,7 @@ namespace NzbDrone.Core.Providers
         private readonly EnviromentProvider _enviromentProvider;
         private readonly ArchiveProvider _archiveProvider;
         private readonly ProcessProvider _processProvider;
+        private readonly DiskProvider _diskProvider;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         private static readonly Regex parseRegex = new Regex(@"(?:\>)(?<filename>NzbDrone.+?(?<version>\d+\.\d+\.\d+\.\d+).+?)(?:\<\/A\>)", RegexOptions.IgnoreCase);
@@ -29,7 +30,7 @@ namespace NzbDrone.Core.Providers
 
         [Inject]
         public UpdateProvider(HttpProvider httpProvider, ConfigProvider configProvider, ConfigFileProvider configFileProvider,
-            EnviromentProvider enviromentProvider, ArchiveProvider archiveProvider, ProcessProvider processProvider)
+            EnviromentProvider enviromentProvider, ArchiveProvider archiveProvider, ProcessProvider processProvider, DiskProvider diskProvider)
         {
             _httpProvider = httpProvider;
             _configProvider = configProvider;
@@ -37,6 +38,7 @@ namespace NzbDrone.Core.Providers
             _enviromentProvider = enviromentProvider;
             _archiveProvider = archiveProvider;
             _processProvider = processProvider;
+            _diskProvider = diskProvider;
         }
 
         public UpdateProvider()
@@ -88,8 +90,11 @@ namespace NzbDrone.Core.Providers
             _archiveProvider.ExtractArchive(packageDestination, _enviromentProvider.GetUpdateSandboxFolder());
             logger.Info("Update package extracted successfully");
 
-            logger.Info("Starting update client");
+            logger.Info("Preparing client");
+            _diskProvider.CopyDirectory(_enviromentProvider.GetUpdateClientFolder(), _enviromentProvider.GetUpdateSandboxFolder());
 
+
+            logger.Info("Starting update client");
             var startInfo = new ProcessStartInfo()
             {
                 FileName = _enviromentProvider.GetUpdateClientExePath(),

@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
         }
 
         [Test]
-        public void Should_call_download_and_extract_using_correct_arguments()
+        public void Should_extract_update_package()
         {
             var updateArchive = Path.Combine(SANDBOX_FOLDER, updatePackage.FileName);
 
@@ -60,6 +60,19 @@ namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
             //Assert
             Mocker.GetMock<ArchiveProvider>().Verify(
                c => c.ExtractArchive(updateArchive, SANDBOX_FOLDER));
+        }
+
+        [Test]
+        public void Should_copy_update_client_to_root_of_sandbox()
+        {
+            var updateClientFolder = Mocker.GetMock<EnviromentProvider>().Object.GetUpdateClientFolder();
+
+            //Act
+            Mocker.Resolve<UpdateProvider>().StartUpgrade(updatePackage);
+
+            //Assert
+            Mocker.GetMock<DiskProvider>().Verify(
+               c => c.CopyDirectory(updateClientFolder, SANDBOX_FOLDER));
         }
 
         [Test]
