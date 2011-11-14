@@ -1,4 +1,5 @@
 ﻿// ReSharper disable RedundantUsingDirective
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using Microsoft.Practices.ObjectBuilder2;
 using Microsoft.Practices.Unity;
 using Moq;
 
-namespace AutoMoq.Unity
+namespace NzbDrone.Test.Common.AutoMoq.Unity
 {
     internal class AutoMockingBuilderStrategy : BuilderStrategy
     {

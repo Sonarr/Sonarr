@@ -1,15 +1,19 @@
 ﻿using System.Linq;
 using System.IO;
-using AutoMoq;
+
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Test.Common.AutoMoq;
 
 namespace NzbDrone.Test.Common
 {
     public class TestBase : LoggingTest
     // ReSharper disable InconsistentNaming
     {
+
+        protected const string IntegrationTest = "Integration Test";
+
         protected AutoMoqer Mocker;
 
         protected string VirtualPath

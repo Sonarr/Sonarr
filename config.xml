@@ -1,2 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<Config />
+<Config>
+  <Port>8989</Port>
+  <AuthenticationType>0</AuthenticationType>
+  <LaunchBrowser>true</LaunchBrowser>
+</Config>

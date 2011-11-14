@@ -1,5 +1,6 @@
 ﻿// ReSharper disable RedundantUsingDirective
 
+using System.Linq;
 using System;
 using System.IO;
 using FluentAssertions;
@@ -8,7 +9,7 @@ using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Test.Framework;
 
-namespace NzbDrone.Core.Test.ProviderTests
+namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming

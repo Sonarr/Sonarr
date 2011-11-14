@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using System.Net;
-using AutoMoq;
+
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;

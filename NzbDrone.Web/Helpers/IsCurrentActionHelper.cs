@@ -1,8 +1,9 @@
-﻿using System;
+﻿using System.Linq;
+using System;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
 
-namespace Helpers
+namespace NzbDrone.Web.Helpers
 {
     public static class IsCurrentActionHelper
     {

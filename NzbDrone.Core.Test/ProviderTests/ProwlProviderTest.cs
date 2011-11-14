@@ -1,5 +1,5 @@
 ﻿using System;
-using AutoMoq;
+
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
@@ -10,6 +10,7 @@ using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
+using NzbDrone.Test.Common.AutoMoq;
 using Prowlin;
 
 // ReSharper disable InconsistentNaming

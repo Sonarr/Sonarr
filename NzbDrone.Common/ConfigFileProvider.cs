@@ -13,13 +13,27 @@ namespace NzbDrone.Common
         private readonly EnviromentProvider _enviromentProvider;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-
-       
         private readonly string _configFile;
         public ConfigFileProvider(EnviromentProvider enviromentProvider)
         {
             _enviromentProvider = enviromentProvider;
             _configFile = _enviromentProvider.GetConfigPath();
+
+            CreateDefaultConfigFile();
+        }
+
+        public virtual Guid Guid
+        {
+            get
+            {
+                var key = "Guid";
+                if (string.IsNullOrWhiteSpace(GetValue(key, string.Empty)))
+                {
+                    SetValue(key, Guid.NewGuid().ToString());
+                }
+
+                return Guid.Parse(GetValue(key, string.Empty));
+            }
         }
 
         public virtual int Port
@@ -40,27 +54,23 @@ namespace NzbDrone.Common
             set { SetValue("AuthenticationType", (int)value); }
         }
 
-        public virtual string GetValue(string key, object defaultValue, string parent = null)
+        public virtual int GetValueInt(string key, int defaultValue)
+        {
+            return Convert.ToInt32(GetValue(key, defaultValue));
+        }
+
+        public virtual bool GetValueBoolean(string key, bool defaultValue)
+        {
+            return Convert.ToBoolean(GetValue(key, defaultValue));
+        }
+
+        public virtual string GetValue(string key, object defaultValue)
         {
             var xDoc = XDocument.Load(_configFile);
             var config = xDoc.Descendants("Config").Single();
 
             var parentContainer = config;
 
-            if (!String.IsNullOrEmpty(parent))
-            {
-                //Add the parent
-                if (config.Descendants(parent).Count() != 1)
-                {
-                    SetValue(key, defaultValue, parent);
-
-                    //Reload the configFile
-                    xDoc = XDocument.Load(_configFile);
-                    config = xDoc.Descendants("Config").Single();
-                }
-
-                parentContainer = config.Descendants(parent).Single();
-            }
 
             var valueHolder = parentContainer.Descendants(key).ToList();
 
@@ -68,39 +78,19 @@ namespace NzbDrone.Common
                 return valueHolder.First().Value;
 
             //Save the value
-            SetValue(key, defaultValue, parent);
+            SetValue(key, defaultValue);
 
             //return the default value
             return defaultValue.ToString();
         }
 
-        public virtual int GetValueInt(string key, int defaultValue, string parent = null)
-        {
-            return Convert.ToInt32(GetValue(key, defaultValue, parent));
-        }
 
-        public virtual bool GetValueBoolean(string key, bool defaultValue, string parent = null)
-        {
-            return Convert.ToBoolean(GetValue(key, defaultValue, parent));
-        }
-
-        public virtual void SetValue(string key, object value, string parent = null)
+        public virtual void SetValue(string key, object value)
         {
             var xDoc = XDocument.Load(_configFile);
             var config = xDoc.Descendants("Config").Single();
 
             var parentContainer = config;
-
-            if (!String.IsNullOrEmpty(parent))
-            {
-                //Add the parent container if it doesn't already exist
-                if (config.Descendants(parent).Count() != 1)
-                {
-                    config.Add(new XElement(parent));
-                }
-
-                parentContainer = config.Descendants(parent).Single();
-            }
 
             var keyHolder = parentContainer.Descendants(key);
 
@@ -113,7 +103,7 @@ namespace NzbDrone.Common
             xDoc.Save(_configFile);
         }
 
-        public virtual void CreateDefaultConfigFile()
+        private void CreateDefaultConfigFile()
         {
             if (!File.Exists(_configFile))
             {
@@ -124,8 +114,6 @@ namespace NzbDrone.Common
                 xDoc.Save(_configFile);
             }
         }
-
-
 
         public virtual void UpdateIISConfig(string configPath)
         {

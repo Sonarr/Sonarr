@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using Ninject;
 using NLog;
@@ -7,68 +8,58 @@ using NzbDrone.Common;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Providers;
-using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.ExternalNotification;
 using NzbDrone.Core.Providers.Indexer;
 using NzbDrone.Core.Providers.Jobs;
 using PetaPoco;
-using LogConfiguration = NzbDrone.Core.Instrumentation.LogConfiguration;
 
 namespace NzbDrone.Core
 {
     public class CentralDispatch
     {
-        private readonly Object KernelLock = new object();
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
-        public CentralDispatch()
-        {
-            InitializeApp();
-        }
 
         public StandardKernel Kernel { get; private set; }
 
-        private void InitializeApp()
+        public CentralDispatch()
         {
-            BindKernel();
+            Logger.Debug("Initializing Kernel:");
+            Kernel = new StandardKernel();
 
-            Kernel.Get<LogConfiguration>().Setup();
+            InitDatabase();
 
-            var mainConnectionString = Kernel.Get<Connection>().MainConnectionString;
+            InitQuality();
+            InitExternalNotifications();
+            InitIndexers();
+            InitJobs();
+        }
+        
+        private void InitDatabase()
+        {
+            Logger.Info("Initializing Database...");
 
-            MigrationsHelper.Run(mainConnectionString, true);
+            var appDataPath = new EnviromentProvider().GetAppDataPath();
+            if (!Directory.Exists(appDataPath)) Directory.CreateDirectory(appDataPath);
 
-            LogConfiguration.RegisterDatabaseLogger(Kernel.Get<DatabaseTarget>());
+            var connection = Kernel.Get<Connection>();
+            Kernel.Bind<IDatabase>().ToMethod(c => connection.GetMainPetaPocoDb()).InTransientScope();
+            Kernel.Bind<IDatabase>().ToMethod(c => connection.GetLogPetaPocoDb(false)).WhenInjectedInto<DatabaseTarget>().InSingletonScope();
+            Kernel.Bind<IDatabase>().ToMethod(c => connection.GetLogPetaPocoDb()).WhenInjectedInto<LogProvider>().InSingletonScope();
+
+            Kernel.Get<DatabaseTarget>().Register();
             LogConfiguration.Reload();
+        }
 
+        private void InitQuality()
+        {
+            Logger.Info("Initializing Quality...");
             Kernel.Get<QualityProvider>().SetupDefaultProfiles();
             Kernel.Get<QualityTypeProvider>().SetupDefault();
-            Kernel.Get<ConfigFileProvider>().CreateDefaultConfigFile();
-
-            BindExternalNotifications();
-            BindIndexers();
-            BindJobs();
         }
 
-        private void BindKernel()
+        private void InitIndexers()
         {
-            lock (KernelLock)
-            {
-                Logger.Debug("Binding Ninject's Kernel");
-                Kernel = new StandardKernel();
-
-                var connection = Kernel.Get<Connection>();
-
-                Kernel.Bind<IDatabase>().ToMethod(c => connection.GetMainPetaPocoDb()).InTransientScope();
-                Kernel.Bind<IDatabase>().ToMethod(c => connection.GetLogPetaPocoDb(false)).WhenInjectedInto<DatabaseTarget>().InSingletonScope();
-                Kernel.Bind<IDatabase>().ToMethod(c => connection.GetLogPetaPocoDb()).WhenInjectedInto<LogProvider>().InSingletonScope();
-
-                Kernel.Bind<JobProvider>().ToSelf().InSingletonScope();
-            }
-        }
-
-        private void BindIndexers()
-        {
+            Logger.Info("Initializing Indexers...");
             Kernel.Bind<IndexerBase>().To<NzbsOrg>();
             Kernel.Bind<IndexerBase>().To<NzbMatrix>();
             Kernel.Bind<IndexerBase>().To<NzbsRUs>();
@@ -78,8 +69,12 @@ namespace NzbDrone.Core
             Kernel.Get<IndexerProvider>().InitializeIndexers(indexers.ToList());
         }
 
-        private void BindJobs()
+        private void InitJobs()
         {
+            Logger.Info("Initializing Background Jobs...");
+
+            Kernel.Bind<JobProvider>().ToSelf().InSingletonScope();
+
             Kernel.Bind<IJob>().To<RssSyncJob>().InSingletonScope();
             Kernel.Bind<IJob>().To<ImportNewSeriesJob>().InSingletonScope();
             Kernel.Bind<IJob>().To<UpdateInfoJob>().InSingletonScope();
@@ -101,8 +96,9 @@ namespace NzbDrone.Core
             Kernel.Get<WebTimer>().StartTimer(30);
         }
 
-        private void BindExternalNotifications()
+        private void InitExternalNotifications()
         {
+            Logger.Info("Initializing External Notifications...");
             Kernel.Bind<ExternalNotificationBase>().To<Xbmc>();
             Kernel.Bind<ExternalNotificationBase>().To<Smtp>();
             Kernel.Bind<ExternalNotificationBase>().To<Twitter>();
@@ -113,9 +109,6 @@ namespace NzbDrone.Core
             Kernel.Get<ExternalNotificationProvider>().InitializeNotifiers(notifiers.ToList());
         }
 
-        /// <summary>
-        ///   Forces IISExpress process to exit with the host application
-        /// </summary>
         public void DedicateToHost()
         {
             try
@@ -143,7 +136,7 @@ namespace NzbDrone.Core
 
         private static void ShutDown()
         {
-            Logger.Info("Shutting down application.");
+            Logger.Info("Shutting down application...");
             WebTimer.Stop();
             Process.GetCurrentProcess().Kill();
         }

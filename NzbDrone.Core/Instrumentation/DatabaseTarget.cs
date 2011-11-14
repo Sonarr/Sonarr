@@ -1,4 +1,5 @@
 ﻿using System;
+using NLog.Config;
 using Ninject;
 using NLog;
 using NLog.Targets;
@@ -19,6 +20,15 @@ namespace NzbDrone.Core.Instrumentation
             _database = database;
         }
 
+
+        public void Register()
+        {
+            LogManager.Configuration.AddTarget("DbLogger", this);
+            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Debug, this));
+
+            LogManager.ConfigurationReloaded += (sender, args) => Register();
+            LogConfiguration.Reload();
+        }
         
 
         protected override void Write(LogEventInfo logEvent)

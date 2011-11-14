@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
-using AutoMoq;
+
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Jobs;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Test.Common.AutoMoq;
 
 namespace NzbDrone.Core.Test.JobTests
 {

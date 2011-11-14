@@ -1,10 +1,12 @@
 ﻿// ReSharper disable RedundantUsingDirective
+
+using System.Linq;
 using System;
 using System.Collections.Generic;
 using Microsoft.Practices.Unity;
 using Microsoft.Practices.Unity.ObjectBuilder;
 
-namespace AutoMoq.Unity
+namespace NzbDrone.Test.Common.AutoMoq.Unity
 {
     internal class AutoMockingContainerExtension : UnityContainerExtension
     {

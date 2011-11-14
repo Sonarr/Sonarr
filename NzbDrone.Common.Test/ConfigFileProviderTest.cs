@@ -1,13 +1,13 @@
-﻿using System.IO;
-using AutoMoq;
+﻿using System.Linq;
+using System.IO;
+
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common;
 using NzbDrone.Common.Model;
 using NzbDrone.Test.Common;
+using NzbDrone.Test.Common.AutoMoq;
 
-
-namespace NzbDrone.Core.Test.ProviderTests
+namespace NzbDrone.Common.Test
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
@@ -23,8 +23,6 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             if (File.Exists(configFile))
                 File.Delete(configFile);
-
-            Mocker.Resolve<ConfigFileProvider>().CreateDefaultConfigFile();
         }
 
         [Test]
@@ -134,19 +132,6 @@ namespace NzbDrone.Core.Test.ProviderTests
         }
 
         [Test]
-        public void GetValue_New_Key_with_new_parent()
-        {
-            const string key = "Hello";
-            const string value = "World";
-
-            //Act
-            var result = Mocker.Resolve<ConfigFileProvider>().GetValue(key, value, "Universe");
-
-            //Assert
-            result.Should().Be(value);
-        }
-
-        [Test]
         public void GetAuthenticationType_No_Existing_Value()
         {
 
@@ -168,6 +153,18 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             //Assert
             result.Should().Be(AuthenticationType.Windows);
+        }
+
+        [Test]
+        public void Guid_should_return_the_same_every_time()
+        {
+            //Act
+            var firstResponse = Mocker.Resolve<ConfigFileProvider>().Guid;
+            var secondResponse = Mocker.Resolve<ConfigFileProvider>().Guid;
+
+
+            //Assert
+            secondResponse.Should().Be(firstResponse);
         }
     }
 }

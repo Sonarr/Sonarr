@@ -1,5 +1,5 @@
 ﻿using System;
-using AutoMoq;
+
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -7,6 +7,7 @@ using NzbDrone.Common;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Test.Common.AutoMoq;
 
 namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
 {

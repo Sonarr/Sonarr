@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
-using AutoMoq;
+
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
@@ -10,6 +10,7 @@ using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Test.Common.AutoMoq;
 using PetaPoco;
 
 namespace NzbDrone.Core.Test
