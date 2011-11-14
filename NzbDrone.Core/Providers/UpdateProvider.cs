@@ -78,7 +78,7 @@ namespace NzbDrone.Core.Providers
             return null;
         }
 
-        public virtual void StartUpgrade(UpdatePackage updatePackage)
+        public virtual void StartUpdate(UpdatePackage updatePackage)
         {
             var packageDestination = Path.Combine(_enviromentProvider.GetUpdateSandboxFolder(), updatePackage.FileName);
 
@@ -104,7 +104,7 @@ namespace NzbDrone.Core.Providers
             var startInfo = new ProcessStartInfo()
             {
                 FileName = _enviromentProvider.GetUpdateClientExePath(),
-                Arguments = string.Format("/{0} /{1}", _enviromentProvider.NzbDroneProcessIdFromEnviroment, _configFileProvider.Guid)
+                Arguments = string.Format("{0} {1}", _enviromentProvider.NzbDroneProcessIdFromEnviroment, _configFileProvider.Guid)
             };
 
             _processProvider.Start(startInfo);

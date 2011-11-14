@@ -14,7 +14,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
 {
     [TestFixture]
-    internal class PreformUpdateFixture : CoreTest
+    internal class StartUpdateFixture : CoreTest
     {
         private const string SANDBOX_FOLDER = @"C:\Temp\nzbdrone_update\";
 
@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
             Mocker.GetMock<DiskProvider>().Setup(c => c.FolderExists(SANDBOX_FOLDER)).Returns(true);
 
             //Act
-            Mocker.Resolve<UpdateProvider>().StartUpgrade(updatePackage);
+            Mocker.Resolve<UpdateProvider>().StartUpdate(updatePackage);
 
             //Assert
             Mocker.GetMock<DiskProvider>().Verify(c => c.DeleteFolder(SANDBOX_FOLDER, true));
@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
             Mocker.GetMock<DiskProvider>().Setup(c => c.FolderExists(SANDBOX_FOLDER)).Returns(false);
 
             //Act
-            Mocker.Resolve<UpdateProvider>().StartUpgrade(updatePackage);
+            Mocker.Resolve<UpdateProvider>().StartUpdate(updatePackage);
 
             //Assert
             Mocker.GetMock<DiskProvider>().Verify(c => c.DeleteFolder(SANDBOX_FOLDER, true), Times.Never());
@@ -65,7 +65,7 @@ namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
             var updateArchive = Path.Combine(SANDBOX_FOLDER, updatePackage.FileName);
 
             //Act
-            Mocker.Resolve<UpdateProvider>().StartUpgrade(updatePackage);
+            Mocker.Resolve<UpdateProvider>().StartUpdate(updatePackage);
 
             //Assert
             Mocker.GetMock<HttpProvider>().Verify(
@@ -78,7 +78,7 @@ namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
             var updateArchive = Path.Combine(SANDBOX_FOLDER, updatePackage.FileName);
 
             //Act
-            Mocker.Resolve<UpdateProvider>().StartUpgrade(updatePackage);
+            Mocker.Resolve<UpdateProvider>().StartUpdate(updatePackage);
 
             //Assert
             Mocker.GetMock<ArchiveProvider>().Verify(
@@ -91,7 +91,7 @@ namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
             var updateClientFolder = Mocker.GetMock<EnviromentProvider>().Object.GetUpdateClientFolder();
 
             //Act
-            Mocker.Resolve<UpdateProvider>().StartUpgrade(updatePackage);
+            Mocker.Resolve<UpdateProvider>().StartUpdate(updatePackage);
 
             //Assert
             Mocker.GetMock<DiskProvider>().Verify(
@@ -108,13 +108,13 @@ namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
                 .SetupGet(c => c.NzbDroneProcessIdFromEnviroment).Returns(12);
 
             //Act
-            Mocker.Resolve<UpdateProvider>().StartUpgrade(updatePackage);
+            Mocker.Resolve<UpdateProvider>().StartUpdate(updatePackage);
 
             //Assert
             Mocker.GetMock<ProcessProvider>().Verify(
                c => c.Start(It.Is<ProcessStartInfo>(p =>
                        p.FileName == updateClientPath &&
-                       p.Arguments == "/12 /" + _clientGuid.ToString())
+                       p.Arguments == "12 " + _clientGuid.ToString())
                        ));
         }
 
@@ -134,7 +134,7 @@ namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
             Mocker.Resolve<HttpProvider>();
             Mocker.Resolve<DiskProvider>();
             Mocker.Resolve<ArchiveProvider>();
-            Mocker.Resolve<UpdateProvider>().StartUpgrade(updatePackage);
+            Mocker.Resolve<UpdateProvider>().StartUpdate(updatePackage);
             updateSubFolder.Refresh();
             //Assert
 

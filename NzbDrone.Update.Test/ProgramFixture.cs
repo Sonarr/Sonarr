@@ -64,7 +64,7 @@ namespace NzbDrone.Update.Test
             _program.Start(new[] { "12", "" });
 
             //Assert
-            Mocker.GetMock<UpdateProvider>().Verify(c => c.Start(ProcessPath), Times.Once());
+            Mocker.GetMock<UpdateProvider>().Verify(c => c.Start(@"C:\NzbDrone"), Times.Once());
         }
 
 

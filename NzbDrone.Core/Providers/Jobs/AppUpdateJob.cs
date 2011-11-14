@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Providers.Jobs
 
             var updatePackage = _updateProvider.GetAvilableUpdate();
 
-            _updateProvider.StartUpgrade(updatePackage);
+            _updateProvider.StartUpdate(updatePackage);
         }
     }
 }
