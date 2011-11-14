@@ -53,15 +53,9 @@ namespace NzbDrone.Providers
             startInfo.RedirectStandardError = true;
             startInfo.CreateNoWindow = true;
 
-            if (!startInfo.EnvironmentVariables.ContainsKey(EnviromentProvider.NZBDRONE_PATH))
-            {
-                startInfo.EnvironmentVariables.Add(EnviromentProvider.NZBDRONE_PATH, _enviromentProvider.ApplicationPath);
-            }
 
-            if (!startInfo.EnvironmentVariables.ContainsKey(EnviromentProvider.NZBDRONE_PID))
-            {
-                startInfo.EnvironmentVariables.Add(EnviromentProvider.NZBDRONE_PID, Process.GetCurrentProcess().Id.ToString());
-            }
+            startInfo.EnvironmentVariables[EnviromentProvider.NZBDRONE_PATH] = _enviromentProvider.ApplicationPath;
+            startInfo.EnvironmentVariables[EnviromentProvider.NZBDRONE_PID] = Process.GetCurrentProcess().Id.ToString();
 
             try
             {

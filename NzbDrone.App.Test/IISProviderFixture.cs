@@ -16,13 +16,13 @@ namespace NzbDrone.App.Test
     public class IISProviderFixture : TestBase
     {
         [Test]
-        public void should_not_set_env_varibles_twice()
+        public void should_update_pid_env_varibles()
         {
             WithTempAsAppPath();
 
             var dummy = StartDummyProcess();
 
-            Environment.SetEnvironmentVariable(EnviromentProvider.NZBDRONE_PID, "Test");
+            Environment.SetEnvironmentVariable(EnviromentProvider.NZBDRONE_PID, "0");
             Environment.SetEnvironmentVariable(EnviromentProvider.NZBDRONE_PATH, "Test");
 
             Mocker.GetMock<ProcessProvider>()
