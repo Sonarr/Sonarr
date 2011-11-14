@@ -292,7 +292,6 @@
     <Compile Include="Providers\XbmcProvider.cs" />
     <Compile Include="Repository\EpisodeFile.cs" />
     <Compile Include="Model\Notification\ProgressNotificationStatus.cs" />
-    <Compile Include="Instrumentation\LogConfiguration.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Providers\MediaFileProvider.cs" />
     <Compile Include="Model\Notification\ProgressNotification.cs" />

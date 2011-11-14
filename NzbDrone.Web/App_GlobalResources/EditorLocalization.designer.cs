@@ -7,7 +7,7 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-
+// ReSharper disable CheckNamespace
 namespace Resources {
     using System;
     

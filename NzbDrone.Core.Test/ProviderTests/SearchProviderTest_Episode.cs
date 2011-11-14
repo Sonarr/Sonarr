@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AutoMoq;
+
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
@@ -14,6 +14,7 @@ using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
+using NzbDrone.Test.Common.AutoMoq;
 
 namespace NzbDrone.Core.Test.ProviderTests
 {

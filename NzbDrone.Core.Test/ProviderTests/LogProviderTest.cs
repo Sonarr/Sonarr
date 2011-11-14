@@ -2,7 +2,7 @@
 
 using System;
 using System.Linq;
-using AutoMoq;
+
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
@@ -13,6 +13,7 @@ using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
+using NzbDrone.Test.Common.AutoMoq;
 using PetaPoco;
 
 namespace NzbDrone.Core.Test.ProviderTests
@@ -31,7 +32,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Setup()
         {
             db = MockLib.GetEmptyDatabase(true);
-            LogConfiguration.RegisterDatabaseLogger(new DatabaseTarget(db));
+            new DatabaseTarget(db).Register();
             Logger = LogManager.GetCurrentClassLogger();
         }
 

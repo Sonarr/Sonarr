@@ -47,7 +47,6 @@ namespace NzbDrone
             LogConfiguration.RegisterUdpLogger();
             LogConfiguration.RegisterExceptioneer();
             LogConfiguration.Reload();
-            _kernel.Get<ConfigFileProvider>().CreateDefaultConfigFile();
             Logger.Info("Start-up Path:'{0}'", _kernel.Get<EnviromentProvider>().ApplicationPath);
         }
     }

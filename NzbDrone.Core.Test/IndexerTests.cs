@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.ServiceModel.Syndication;
-using AutoMoq;
+
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
@@ -17,6 +17,7 @@ using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Test.ProviderTests;
 using NzbDrone.Test.Common;
+using NzbDrone.Test.Common.AutoMoq;
 
 namespace NzbDrone.Core.Test
 {

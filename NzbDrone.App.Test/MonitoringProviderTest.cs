@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Linq;
-using AutoMoq;
+
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
@@ -8,6 +8,7 @@ using NzbDrone.Common;
 using NzbDrone.Common.Model;
 using NzbDrone.Providers;
 using NzbDrone.Test.Common;
+using NzbDrone.Test.Common.AutoMoq;
 
 namespace NzbDrone.App.Test
 {

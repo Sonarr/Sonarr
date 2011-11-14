@@ -1,11 +1,11 @@
 ﻿using System.ServiceProcess;
-using AutoMoq;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Model;
 using NzbDrone.Test.Common;
+using NzbDrone.Test.Common.AutoMoq;
 
 namespace NzbDrone.App.Test
 {

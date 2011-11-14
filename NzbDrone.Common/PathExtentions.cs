@@ -19,21 +19,7 @@ namespace NzbDrone.Common
         private const string UPDATE_SANDBOX_FOLDER_NAME = "nzbdrone_update\\";
         private const string UPDATE_PACKAGE_FOLDER_NAME = "nzbdrone\\";
         private const string UPDATE_BACKUP_FOLDER_NAME = "nzbdrone_backup\\";
-
-        public static string GetUpdateSandboxFolder(this EnviromentProvider enviromentProvider)
-        {
-            return Path.Combine(enviromentProvider.SystemTemp, UPDATE_SANDBOX_FOLDER_NAME);
-        }
-
-        public static string GetUpdateBackUpFolder(this EnviromentProvider enviromentProvider)
-        {
-            return Path.Combine(enviromentProvider.GetUpdateSandboxFolder(), UPDATE_BACKUP_FOLDER_NAME);
-        }
-
-        public static string GetUpdatePackageFolder(this EnviromentProvider enviromentProvider)
-        {
-            return Path.Combine(enviromentProvider.GetUpdateSandboxFolder(), UPDATE_PACKAGE_FOLDER_NAME);
-        }
+        private const string UPDATE_CLIENT_EXE = "nzbdrone.update.exe";
 
         public static string GetIISFolder(this EnviromentProvider enviromentProvider)
         {
@@ -88,6 +74,26 @@ namespace NzbDrone.Common
         public static string GetCacheFolder(this EnviromentProvider enviromentProvider)
         {
             return Path.Combine(enviromentProvider.GetWebRoot(), "Cache");
+        }
+
+        public static string GetUpdateSandboxFolder(this EnviromentProvider enviromentProvider)
+        {
+            return Path.Combine(enviromentProvider.SystemTemp, UPDATE_SANDBOX_FOLDER_NAME);
+        }
+
+        public static string GetUpdateBackUpFolder(this EnviromentProvider enviromentProvider)
+        {
+            return Path.Combine(enviromentProvider.GetUpdateSandboxFolder(), UPDATE_BACKUP_FOLDER_NAME);
+        }
+
+        public static string GetUpdatePackageFolder(this EnviromentProvider enviromentProvider)
+        {
+            return Path.Combine(enviromentProvider.GetUpdateSandboxFolder(), UPDATE_PACKAGE_FOLDER_NAME);
+        }
+
+        public static string GetUpdateClientExePath(this EnviromentProvider enviromentProvider)
+        {
+            return Path.Combine(enviromentProvider.GetUpdateSandboxFolder(), UPDATE_CLIENT_EXE);
         }
     }
 }

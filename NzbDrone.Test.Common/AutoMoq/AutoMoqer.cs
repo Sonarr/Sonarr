@@ -1,17 +1,18 @@
 // ReSharper disable RedundantUsingDirective
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
-using AutoMoq.Unity;
 using Microsoft.Practices.Unity;
 using Moq;
 using Moq.Language.Flow;
+using NzbDrone.Test.Common.AutoMoq.Unity;
 
 [assembly: InternalsVisibleTo("AutoMoq.Tests")]
 
-namespace AutoMoq
+namespace NzbDrone.Test.Common.AutoMoq
 {
     public class AutoMoqer
     {

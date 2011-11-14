@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using FluentAssertions;
 using NLog;
 using NUnit.Framework;
+using NzbDrone.Common;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Indexer;
 using NzbDrone.Core.Providers.Jobs;

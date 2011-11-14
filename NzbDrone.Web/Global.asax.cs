@@ -8,9 +8,11 @@ using System.Web.Caching;
 using System.Web.Mvc;
 using System.Web.Routing;
 using MvcMiniProfiler;
+using NLog.Config;
 using Ninject;
 using Ninject.Web.Mvc;
 using NLog;
+using NzbDrone.Common;
 using NzbDrone.Core;
 using NzbDrone.Core.Instrumentation;
 using Telerik.Web.Mvc;
@@ -54,6 +56,12 @@ namespace NzbDrone.Web
 
         protected override IKernel CreateKernel()
         {
+            Common.LogConfiguration.RegisterUdpLogger();
+            Common.LogConfiguration.RegisterExceptioneer();
+            Common.LogConfiguration.RegisterConsoleLogger(LogLevel.Info, "NzbDrone.Web.MvcApplication");
+            Common.LogConfiguration.RegisterConsoleLogger(LogLevel.Info, "NzbDrone.Core.CentralDispatch");
+
+            LogManager.Configuration = new XmlLoggingConfiguration(new EnviromentProvider().GetNlogConfigPath(), false);
 
             var dispatch = new CentralDispatch();
             Logger.Info("NzbDrone Starting up.");

@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using NUnit.Framework;
 using Ninject;
+using NzbDrone.Common;
 using NzbDrone.Test.Common;
 using PetaPoco;
 
@@ -11,6 +12,7 @@ namespace NzbDrone.Core.Test.Framework
     {
         static CoreTest()
         {
+            //Delete old db files
             var oldDbFiles = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.sdf", SearchOption.AllDirectories);
             foreach (var file in oldDbFiles)
             {
@@ -19,6 +21,14 @@ namespace NzbDrone.Core.Test.Framework
                     File.Delete(file);
                 }
                 catch { }
+            }
+
+            //Delete App_data folder
+            var appData = new EnviromentProvider().GetAppDataPath();
+
+            if (Directory.Exists(appData))
+            {
+                Directory.Delete(appData, true);
             }
 
             MockLib.CreateDataBaseTemplate();

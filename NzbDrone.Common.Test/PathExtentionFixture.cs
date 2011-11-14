@@ -1,10 +1,10 @@
-﻿using FluentAssertions;
+﻿using System.Linq;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common;
 using NzbDrone.Test.Common;
 
-namespace NzbDrone.App.Test
+namespace NzbDrone.Common.Test
 {
     [TestFixture]
     public class PathExtentionFixture : TestBase
@@ -16,7 +16,7 @@ namespace NzbDrone.App.Test
             envMoq.SetupGet(c => c.ApplicationPath).Returns(@"C:\NzbDrone\");
 
             return envMoq.Object;
-            }
+        }
 
 
         [Test]

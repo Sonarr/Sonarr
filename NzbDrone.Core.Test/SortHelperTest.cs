@@ -1,7 +1,7 @@
 ﻿// ReSharper disable RedundantUsingDirective
 using System;
 using System.Collections.Generic;
-using AutoMoq;
+
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;

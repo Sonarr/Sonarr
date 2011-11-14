@@ -1,13 +1,14 @@
 ﻿// ReSharper disable RedundantUsingDirective
 
 using System;
-using AutoMoq;
+
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Model.Xbmc;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.Xbmc;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Test.Common.AutoMoq;
 
 namespace NzbDrone.Core.Test.ProviderTests
 {

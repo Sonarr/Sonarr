@@ -1,12 +1,13 @@
 ﻿// ReSharper disable InconsistentNaming
 using System;
 using System.IO;
-using AutoMoq;
+
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Test.Common;
+using NzbDrone.Test.Common.AutoMoq;
 using NzbDrone.Update.Providers;
 
 namespace NzbDrone.Update.Test

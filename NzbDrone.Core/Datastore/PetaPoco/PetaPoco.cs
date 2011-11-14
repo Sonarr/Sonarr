@@ -9,6 +9,7 @@
  */
 
 //#define PETAPOCO_NO_DYNAMIC //in your project settings on .NET 3.5
+// ReSharper disable CheckNamespace
 
 using System;
 using System.Collections;
@@ -22,7 +23,6 @@ using System.Text.RegularExpressions;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Linq.Expressions;
-
 
 namespace PetaPoco
 {

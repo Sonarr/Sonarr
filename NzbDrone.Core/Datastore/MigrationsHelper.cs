@@ -53,6 +53,7 @@ namespace NzbDrone.Core.Datastore
         private static void EnsureDatabase(string constr)
         {
             var connection = new SqlCeConnection(constr);
+
             if (!File.Exists(connection.Database))
             {
                 var engine = new SqlCeEngine(constr);

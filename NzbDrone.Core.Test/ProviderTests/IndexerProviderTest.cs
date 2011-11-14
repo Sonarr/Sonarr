@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.ServiceModel.Syndication;
-using AutoMoq;
+
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Model;
@@ -13,6 +13,7 @@ using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.Indexer;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Test.Common.AutoMoq;
 
 namespace NzbDrone.Core.Test.ProviderTests
 {
