@@ -53,9 +53,9 @@ namespace NzbDrone.Providers
             startInfo.RedirectStandardError = true;
             startInfo.CreateNoWindow = true;
 
-            //Set Variables for the config file.
-            startInfo.EnvironmentVariables.Add("NZBDRONE_PATH", _enviromentProvider.ApplicationPath);
-            startInfo.EnvironmentVariables.Add("NZBDRONE_PID", Process.GetCurrentProcess().Id.ToString());
+
+            startInfo.EnvironmentVariables[EnviromentProvider.NZBDRONE_PATH] = _enviromentProvider.ApplicationPath;
+            startInfo.EnvironmentVariables[EnviromentProvider.NZBDRONE_PID] = Process.GetCurrentProcess().Id.ToString();
 
             try
             {

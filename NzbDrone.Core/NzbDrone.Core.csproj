@@ -220,6 +220,7 @@
     <Compile Include="Providers\Indexer\Newznab.cs" />
     <Compile Include="Providers\NewznzbProvider.cs" />
     <Compile Include="Providers\ExternalNotification\Prowl.cs" />
+    <Compile Include="Providers\Jobs\AppUpdateJob.cs" />
     <Compile Include="Providers\ProwlProvider.cs" />
     <Compile Include="Providers\Core\UdpProvider.cs" />
     <Compile Include="Providers\ExternalNotification\Growl.cs" />

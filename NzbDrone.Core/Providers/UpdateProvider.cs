@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -12,12 +13,15 @@ using NzbDrone.Core.Providers.Core;
 
 namespace NzbDrone.Core.Providers
 {
-    class UpdateProvider
+    public class UpdateProvider
     {
         private readonly HttpProvider _httpProvider;
         private readonly ConfigProvider _configProvider;
+        private readonly ConfigFileProvider _configFileProvider;
         private readonly EnviromentProvider _enviromentProvider;
         private readonly ArchiveProvider _archiveProvider;
+        private readonly ProcessProvider _processProvider;
+        private readonly DiskProvider _diskProvider;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         private static readonly Regex parseRegex = new Regex(@"(?:\>)(?<filename>NzbDrone.+?(?<version>\d+\.\d+\.\d+\.\d+).+?)(?:\<\/A\>)", RegexOptions.IgnoreCase);
@@ -25,13 +29,16 @@ namespace NzbDrone.Core.Providers
 
 
         [Inject]
-        public UpdateProvider(HttpProvider httpProvider, ConfigProvider configProvider,
-            EnviromentProvider enviromentProvider, ArchiveProvider archiveProvider)
+        public UpdateProvider(HttpProvider httpProvider, ConfigProvider configProvider, ConfigFileProvider configFileProvider,
+            EnviromentProvider enviromentProvider, ArchiveProvider archiveProvider, ProcessProvider processProvider, DiskProvider diskProvider)
         {
             _httpProvider = httpProvider;
             _configProvider = configProvider;
+            _configFileProvider = configFileProvider;
             _enviromentProvider = enviromentProvider;
             _archiveProvider = archiveProvider;
+            _processProvider = processProvider;
+            _diskProvider = diskProvider;
         }
 
         public UpdateProvider()
@@ -71,9 +78,15 @@ namespace NzbDrone.Core.Providers
             return null;
         }
 
-        public virtual void StartUpgrade(UpdatePackage updatePackage)
+        public virtual void StartUpdate(UpdatePackage updatePackage)
         {
             var packageDestination = Path.Combine(_enviromentProvider.GetUpdateSandboxFolder(), updatePackage.FileName);
+
+            if (_diskProvider.FolderExists(_enviromentProvider.GetUpdateSandboxFolder()))
+            {
+                logger.Info("Deleting old update files");
+                _diskProvider.DeleteFolder(_enviromentProvider.GetUpdateSandboxFolder(), true);
+            }
 
             logger.Info("Downloading update package from [{0}] to [{1}]", updatePackage.Url, packageDestination);
             _httpProvider.DownloadFile(updatePackage.Url, packageDestination);
@@ -82,6 +95,20 @@ namespace NzbDrone.Core.Providers
             logger.Info("Extracting Update package");
             _archiveProvider.ExtractArchive(packageDestination, _enviromentProvider.GetUpdateSandboxFolder());
             logger.Info("Update package extracted successfully");
+
+            logger.Info("Preparing client");
+            _diskProvider.CopyDirectory(_enviromentProvider.GetUpdateClientFolder(), _enviromentProvider.GetUpdateSandboxFolder());
+
+
+            logger.Info("Starting update client");
+            var startInfo = new ProcessStartInfo()
+            {
+                FileName = _enviromentProvider.GetUpdateClientExePath(),
+                Arguments = string.Format("{0} {1}", _enviromentProvider.NzbDroneProcessIdFromEnviroment, _configFileProvider.Guid)
+            };
+
+            _processProvider.Start(startInfo);
+
         }
 
     }

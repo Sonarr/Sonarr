@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
@@ -52,7 +53,8 @@ namespace NzbDrone.Update
             VerfityArguments(args);
             int processId = ParseProcessId(args);
 
-            string appPath = _processProvider.GetProcessById(processId).StartPath;
+            FileInfo exeFileInfo = new FileInfo(_processProvider.GetProcessById(processId).StartPath);
+            string appPath = exeFileInfo.Directory.FullName;
 
             logger.Info("Starting update process");
             _updateProvider.Start(appPath);

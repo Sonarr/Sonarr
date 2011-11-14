@@ -4,26 +4,27 @@ using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Test.Common;
+using NzbDrone.Test.Dummy;
 
 namespace NzbDrone.Common.Test
 {
     [TestFixture]
     public class ProcessProviderTests : TestBase
     {
-        private const string DummyProccessName = "NzbDrone.Test.Dummy";
+
         ProcessProvider _processProvider;
 
         [SetUp]
         public void Setup()
         {
-            Process.GetProcessesByName(DummyProccessName).ToList().ForEach(c => c.Kill());
+            Process.GetProcessesByName(DummyApp.DUMMY_PROCCESS_NAME).ToList().ForEach(c => c.Kill());
             _processProvider = new ProcessProvider();
         }
 
         [TearDown]
         public void TearDown()
         {
-            Process.GetProcessesByName(DummyProccessName).ToList().ForEach(c => c.Kill());
+            Process.GetProcessesByName(DummyApp.DUMMY_PROCCESS_NAME).ToList().ForEach(c => c.Kill());
         }
 
         [TestCase(0)]
@@ -58,20 +59,20 @@ namespace NzbDrone.Common.Test
         [Test]
         public void Should_be_able_to_start_process()
         {
-            var startInfo = new ProcessStartInfo(DummyProccessName + ".exe");
+            var startInfo = new ProcessStartInfo(DummyApp.DUMMY_PROCCESS_NAME + ".exe");
 
             //Act/Assert
-            _processProvider.GetProcessByName(DummyProccessName).Should()
+            _processProvider.GetProcessByName(DummyApp.DUMMY_PROCCESS_NAME).Should()
                 .BeEmpty("Dummy process is already running");
             _processProvider.Start(startInfo).Should().NotBeNull();
 
-            _processProvider.GetProcessByName(DummyProccessName).Should()
+            _processProvider.GetProcessByName(DummyApp.DUMMY_PROCCESS_NAME).Should()
                 .HaveCount(1, "excepted one dummy process to be already running");
         }
 
         public Process StartDummyProcess()
         {
-            var startInfo = new ProcessStartInfo(DummyProccessName + ".exe");
+            var startInfo = new ProcessStartInfo(DummyApp.DUMMY_PROCCESS_NAME + ".exe");
             return _processProvider.Start(startInfo);
         }
 

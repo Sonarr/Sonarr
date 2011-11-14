@@ -13,7 +13,10 @@ namespace NzbDrone.Common.Test
         private EnviromentProvider GetEnviromentProvider()
         {
             var envMoq = new Mock<EnviromentProvider>();
+            
             envMoq.SetupGet(c => c.ApplicationPath).Returns(@"C:\NzbDrone\");
+
+            envMoq.SetupGet(c => c.SystemTemp).Returns(@"C:\Temp\");
 
             return envMoq.Object;
         }
@@ -48,6 +51,30 @@ namespace NzbDrone.Common.Test
         public void NlogConfig_path_test()
         {
             GetEnviromentProvider().GetNlogConfigPath().Should().BeEquivalentTo(@"C:\NzbDrone\NzbDrone.Web\log.config");
+        }
+
+        [Test]
+        public void Sanbox()
+        {
+            GetEnviromentProvider().GetUpdateSandboxFolder().Should().BeEquivalentTo(@"C:\Temp\Nzbdrone_update\");
+        }
+
+        [Test]
+        public void GetUpdatePackageFolder()
+        {
+            GetEnviromentProvider().GetUpdatePackageFolder().Should().BeEquivalentTo(@"C:\Temp\Nzbdrone_update\NzbDrone\");
+        }
+
+        [Test]
+        public void GetUpdateClientFolder()
+        {
+            GetEnviromentProvider().GetUpdateClientFolder().Should().BeEquivalentTo(@"C:\Temp\Nzbdrone_update\NzbDrone\NzbDrone.Update\");
+        }
+
+        [Test]
+        public void GetUpdateClientExePath()
+        {
+            GetEnviromentProvider().GetUpdateClientExePath().Should().BeEquivalentTo(@"C:\Temp\Nzbdrone_update\NzbDrone\NzbDrone.Update\NzbDrone.Update.exe");
         }
     }
 }

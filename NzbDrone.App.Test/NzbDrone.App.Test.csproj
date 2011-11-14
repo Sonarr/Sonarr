@@ -30,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="FizzWare.NBuilder">
@@ -65,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CentralDispatchTests.cs" />
+    <Compile Include="IISProviderFixture.cs" />
     <Compile Include="RouterTest.cs" />
     <Compile Include="MonitoringProviderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

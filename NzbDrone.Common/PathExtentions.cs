@@ -20,6 +20,7 @@ namespace NzbDrone.Common
         private const string UPDATE_PACKAGE_FOLDER_NAME = "nzbdrone\\";
         private const string UPDATE_BACKUP_FOLDER_NAME = "nzbdrone_backup\\";
         private const string UPDATE_CLIENT_EXE = "nzbdrone.update.exe";
+        private const string UPDATE_CLIENT_FOLDER_NAME = "NzbDrone.Update\\";
 
         public static string GetIISFolder(this EnviromentProvider enviromentProvider)
         {
@@ -91,9 +92,14 @@ namespace NzbDrone.Common
             return Path.Combine(enviromentProvider.GetUpdateSandboxFolder(), UPDATE_PACKAGE_FOLDER_NAME);
         }
 
+        public static string GetUpdateClientFolder(this EnviromentProvider enviromentProvider)
+        {
+            return Path.Combine(enviromentProvider.GetUpdatePackageFolder(), UPDATE_CLIENT_FOLDER_NAME);
+        }
+
         public static string GetUpdateClientExePath(this EnviromentProvider enviromentProvider)
         {
-            return Path.Combine(enviromentProvider.GetUpdateSandboxFolder(), UPDATE_CLIENT_EXE);
+            return Path.Combine(enviromentProvider.GetUpdateClientFolder(), UPDATE_CLIENT_EXE);
         }
     }
 }

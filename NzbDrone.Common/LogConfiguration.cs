@@ -50,12 +50,18 @@ namespace NzbDrone.Common
         {
             try
             {
-                var udpTarget = new ChainsawTarget();
+                var udpTarget = new NLogViewerTarget();
                 udpTarget.Address = "udp://127.0.0.1:20480";
                 udpTarget.IncludeCallSite = true;
                 udpTarget.IncludeSourceInfo = true;
                 udpTarget.IncludeNLogData = true;
                 udpTarget.IncludeNdc = true;
+                udpTarget.Parameters.Add(new NLogViewerParameterInfo
+                                             {
+                                                 Name = "Exception",
+                                                 Layout = "${exception:format=ToString}"
+                                             });
+
                 LogManager.Configuration.AddTarget(udpTarget.GetType().Name, udpTarget);
                 LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, udpTarget));
 
@@ -68,7 +74,6 @@ namespace NzbDrone.Common
                 if (LogManager.ThrowExceptions)
                     throw;
             }
-
         }
 
         public static void RegisterExceptioneer()
