@@ -35,6 +35,29 @@ namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
         }
 
 
+        [Test]
+        public void should_delete_sandbox_before_update_if_folder_exists()
+        {
+            Mocker.GetMock<DiskProvider>().Setup(c => c.FolderExists(SANDBOX_FOLDER)).Returns(true);
+
+            //Act
+            Mocker.Resolve<UpdateProvider>().StartUpgrade(updatePackage);
+
+            //Assert
+            Mocker.GetMock<DiskProvider>().Verify(c => c.DeleteFolder(SANDBOX_FOLDER, true));
+        }
+
+        [Test]
+        public void should_not_delete_sandbox_before_update_if_folder_doesnt_exists()
+        {
+            Mocker.GetMock<DiskProvider>().Setup(c => c.FolderExists(SANDBOX_FOLDER)).Returns(false);
+
+            //Act
+            Mocker.Resolve<UpdateProvider>().StartUpgrade(updatePackage);
+
+            //Assert
+            Mocker.GetMock<DiskProvider>().Verify(c => c.DeleteFolder(SANDBOX_FOLDER, true), Times.Never());
+        }
 
         [Test]
         public void Should_download_update_package()

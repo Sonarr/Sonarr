@@ -13,7 +13,7 @@ using NzbDrone.Core.Providers.Core;
 
 namespace NzbDrone.Core.Providers
 {
-    class UpdateProvider
+    public class UpdateProvider
     {
         private readonly HttpProvider _httpProvider;
         private readonly ConfigProvider _configProvider;
@@ -81,6 +81,12 @@ namespace NzbDrone.Core.Providers
         public virtual void StartUpgrade(UpdatePackage updatePackage)
         {
             var packageDestination = Path.Combine(_enviromentProvider.GetUpdateSandboxFolder(), updatePackage.FileName);
+
+            if (_diskProvider.FolderExists(_enviromentProvider.GetUpdateSandboxFolder()))
+            {
+                logger.Info("Deleting old update files");
+                _diskProvider.DeleteFolder(_enviromentProvider.GetUpdateSandboxFolder(), true);
+            }
 
             logger.Info("Downloading update package from [{0}] to [{1}]", updatePackage.Url, packageDestination);
             _httpProvider.DownloadFile(updatePackage.Url, packageDestination);

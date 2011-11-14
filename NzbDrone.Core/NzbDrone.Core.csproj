@@ -217,6 +217,7 @@
     <Compile Include="Providers\Converting\AtomicParsleyProvider.cs" />
     <Compile Include="Providers\Converting\HandbrakeProvider.cs" />
     <Compile Include="Providers\ExternalNotification\Prowl.cs" />
+    <Compile Include="Providers\Jobs\AppUpdateJob.cs" />
     <Compile Include="Providers\ProwlProvider.cs" />
     <Compile Include="Providers\Core\UdpProvider.cs" />
     <Compile Include="Providers\ExternalNotification\Growl.cs" />
