@@ -68,7 +68,6 @@ namespace NzbDrone.Common
                 if (LogManager.ThrowExceptions)
                     throw;
             }
-
         }
 
         public static void RegisterExceptioneer()

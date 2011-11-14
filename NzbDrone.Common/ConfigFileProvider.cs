@@ -4,6 +4,7 @@ using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using NLog;
+using Ninject;
 using NzbDrone.Common.Model;
 
 namespace NzbDrone.Common
@@ -14,12 +15,19 @@ namespace NzbDrone.Common
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         private readonly string _configFile;
+        
+        [Inject]
         public ConfigFileProvider(EnviromentProvider enviromentProvider)
         {
             _enviromentProvider = enviromentProvider;
             _configFile = _enviromentProvider.GetConfigPath();
 
             CreateDefaultConfigFile();
+        }
+
+        public ConfigFileProvider()
+        {
+            
         }
 
         public virtual Guid Guid

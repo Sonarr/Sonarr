@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -16,8 +17,10 @@ namespace NzbDrone.Core.Providers
     {
         private readonly HttpProvider _httpProvider;
         private readonly ConfigProvider _configProvider;
+        private readonly ConfigFileProvider _configFileProvider;
         private readonly EnviromentProvider _enviromentProvider;
         private readonly ArchiveProvider _archiveProvider;
+        private readonly ProcessProvider _processProvider;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         private static readonly Regex parseRegex = new Regex(@"(?:\>)(?<filename>NzbDrone.+?(?<version>\d+\.\d+\.\d+\.\d+).+?)(?:\<\/A\>)", RegexOptions.IgnoreCase);
@@ -25,13 +28,15 @@ namespace NzbDrone.Core.Providers
 
 
         [Inject]
-        public UpdateProvider(HttpProvider httpProvider, ConfigProvider configProvider,
-            EnviromentProvider enviromentProvider, ArchiveProvider archiveProvider)
+        public UpdateProvider(HttpProvider httpProvider, ConfigProvider configProvider, ConfigFileProvider configFileProvider,
+            EnviromentProvider enviromentProvider, ArchiveProvider archiveProvider, ProcessProvider processProvider)
         {
             _httpProvider = httpProvider;
             _configProvider = configProvider;
+            _configFileProvider = configFileProvider;
             _enviromentProvider = enviromentProvider;
             _archiveProvider = archiveProvider;
+            _processProvider = processProvider;
         }
 
         public UpdateProvider()
@@ -82,6 +87,17 @@ namespace NzbDrone.Core.Providers
             logger.Info("Extracting Update package");
             _archiveProvider.ExtractArchive(packageDestination, _enviromentProvider.GetUpdateSandboxFolder());
             logger.Info("Update package extracted successfully");
+
+            logger.Info("Starting update client");
+
+            var startInfo = new ProcessStartInfo()
+            {
+                FileName = _enviromentProvider.GetUpdateClientExePath(),
+                Arguments = string.Format("/{0} /{1}", _enviromentProvider.NzbDroneProcessIdFromEnviroment, _configFileProvider.Guid)
+            };
+
+            _processProvider.Start(startInfo);
+
         }
 
     }
