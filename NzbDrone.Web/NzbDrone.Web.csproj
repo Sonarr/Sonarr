@@ -50,6 +50,7 @@
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="MvcMiniProfiler, Version=1.9.0.0, Culture=neutral, PublicKeyToken=b44f9351044011a3, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\MiniProfiler.1.9\lib\net40\MvcMiniProfiler.dll</HintPath>
@@ -463,6 +464,7 @@
     <Compile Include="Controllers\StreamController.cs" />
     <Compile Include="Controllers\SystemController.cs" />
     <Compile Include="Controllers\UpcomingController.cs" />
+    <Compile Include="Controllers\UpdateController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -939,7 +941,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Settings\NewznabProvider.cshtml" />
-  </ItemGroup>
+    <Content Include="Views\Update\Index.cshtml" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
