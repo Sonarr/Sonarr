@@ -35,11 +35,7 @@ namespace NzbDrone.Common.Test
             diskProvider.CopyDirectory(BinFolder.FullName, BinFolderCopy.FullName);
 
             //Assert
-            BinFolder.Refresh();
-            BinFolderCopy.Refresh();
-
-            BinFolder.GetFiles("*.*", SearchOption.AllDirectories)
-                .Should().HaveSameCount(BinFolderCopy.GetFiles("*.*", SearchOption.AllDirectories));
+            VerifyCopy();
         }
 
         [Test]
@@ -51,16 +47,24 @@ namespace NzbDrone.Common.Test
             diskProvider.CopyDirectory(BinFolder.FullName, BinFolderCopy.FullName);
 
             //Delete Random File
-            BinFolderCopy.GetFiles().First().Delete();
+            BinFolderCopy.Refresh();
+            BinFolderCopy.GetFiles("*.*", SearchOption.AllDirectories).First().Delete();
 
             diskProvider.CopyDirectory(BinFolder.FullName, BinFolderCopy.FullName);
 
             //Assert
+            VerifyCopy();
+        }
+
+        private void VerifyCopy()
+        {
             BinFolder.Refresh();
             BinFolderCopy.Refresh();
 
-            BinFolder.GetFiles("*.*", SearchOption.AllDirectories)
-                .Should().HaveSameCount(BinFolderCopy.GetFiles("*.*", SearchOption.AllDirectories));
+            BinFolderCopy.GetFiles("*.*", SearchOption.AllDirectories)
+               .Should().HaveSameCount(BinFolder.GetFiles("*.*", SearchOption.AllDirectories));
+
+            BinFolderCopy.GetDirectories().Should().HaveSameCount(BinFolder.GetDirectories());
         }
     }
 }

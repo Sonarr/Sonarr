@@ -67,7 +67,12 @@ namespace NzbDrone.Common
                 targetFolder.Create();
             }
 
-            foreach (var file in sourceFolder.GetFiles("*.*", SearchOption.AllDirectories))
+            foreach (var subDir in sourceFolder.GetDirectories())
+            {
+                CopyDirectory(subDir.FullName, Path.Combine(target, subDir.Name));
+            }
+
+            foreach (var file in sourceFolder.GetFiles("*.*", SearchOption.TopDirectoryOnly))
             {
                 var destFile = Path.Combine(target, file.Name);
                 file.CopyTo(destFile, true);
