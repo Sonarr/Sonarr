@@ -2,6 +2,8 @@
 using System.IO;
 using System.Linq;
 using NLog;
+using NLog.Config;
+using NLog.Targets;
 using NzbDrone.Common;
 using NzbDrone.Update.Providers;
 
@@ -26,10 +28,7 @@ namespace NzbDrone.Update
             {
                 Console.WriteLine("Starting NzbDrone Update Client");
 
-                LogConfiguration.RegisterConsoleLogger(LogLevel.Trace);
-                LogConfiguration.RegisterUdpLogger();
-                LogConfiguration.RegisterExceptioneer();
-                LogConfiguration.Reload();
+                InitLoggers();
 
                 logger.Info("Initializing update application");
 
@@ -46,6 +45,26 @@ namespace NzbDrone.Update
             {
                 logger.FatalException("An error has occurred while applying update package.", e);
             }
+        }
+
+        private static void InitLoggers()
+        {
+            LogConfiguration.RegisterConsoleLogger(LogLevel.Trace);
+            LogConfiguration.RegisterUdpLogger();
+            LogConfiguration.RegisterExceptioneer();
+
+            var fileTarget = new FileTarget();
+            fileTarget.AutoFlush = true;
+            fileTarget.ConcurrentWrites = false;
+            fileTarget.DeleteOldFileOnStartup = true;
+            fileTarget.FileName = "upgrade.log";
+            fileTarget.KeepFileOpen =false;
+            
+            fileTarget.Layout = "${logger}: ${message} ${exception}";
+            LogManager.Configuration.AddTarget(fileTarget.GetType().Name, fileTarget);
+            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, fileTarget));
+            
+            LogConfiguration.Reload();
         }
 
         public void Start(string[] args)

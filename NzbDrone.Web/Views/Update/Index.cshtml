@@ -1,0 +1,16 @@
+﻿@model NzbDrone.Core.Model.UpdatePackage
+@section TitleContent{
+Update
+}
+@if (Model == null)
+{
+    <h2>
+        There are no updates available.</h2>
+}
+else
+{
+    <h2>
+        Available Update: @Model.Version
+        @Ajax.ActionLink("Update", "StartUpdate", "Update", null)
+    </h2> 
+}

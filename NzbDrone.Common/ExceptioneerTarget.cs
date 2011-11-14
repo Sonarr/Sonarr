@@ -14,7 +14,7 @@ namespace NzbDrone.Common
             if (logEvent == null || logEvent.Exception == null) return;
             if (Debugger.IsAttached || Process.GetCurrentProcess().ProcessName.Contains("JetBrains")) return;
 
-            Logger.Trace("Sending Exception to Exceptioneer. {0}", Process.GetCurrentProcess().ProcessName);
+            Logger.Trace("Sending Exception to Exceptioneer. Process Name: {0}", Process.GetCurrentProcess().ProcessName);
 
             logEvent.Exception.Data.Add("Message", logEvent.Message);
 
