@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using AutoMoq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
