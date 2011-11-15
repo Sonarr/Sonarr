@@ -37,8 +37,9 @@ namespace NzbDrone.Core.Providers
 
         public virtual int Save(NewznabDefinition definition)
         {
-            //Cleanup the URL
-            definition.Url = (new Uri(definition.Url).ParentUriString());
+            //Cleanup the URL if it is not null or whitespace
+            if (!String.IsNullOrWhiteSpace(definition.Url))
+                definition.Url = (new Uri(definition.Url).ParentUriString());
 
             if (definition.Id == 0)
             {

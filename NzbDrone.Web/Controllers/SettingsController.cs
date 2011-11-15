@@ -299,7 +299,7 @@ namespace NzbDrone.Web.Controllers
             return new JsonResult { Data = "ok" };
         }
 
-        public ViewResult AddNewznabProvider()
+        public PartialViewResult AddNewznabProvider()
         {
             var newznab = new NewznabDefinition
             {
@@ -312,7 +312,7 @@ namespace NzbDrone.Web.Controllers
 
             ViewData["ProviderId"] = id;
 
-            return View("NewznabProvider", newznab);
+            return PartialView("NewznabProvider", newznab);
         }
 
         public ActionResult GetNewznabProviderView(NewznabDefinition provider)
