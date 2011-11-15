@@ -100,17 +100,24 @@ namespace NzbDrone.Common
 
             Logger.Info("Service is currently {0}", service.Status);
 
-            service.Stop();
-            service.WaitForStatus(ServiceControllerStatus.Stopped, TimeSpan.FromSeconds(60));
-
-            service.Refresh();
-            if (service.Status == ServiceControllerStatus.Stopped)
+            if (service.Status != ServiceControllerStatus.Stopped)
             {
-                Logger.Info("{0} has stopped successfully.");
+                service.Stop();
+                service.WaitForStatus(ServiceControllerStatus.Stopped, TimeSpan.FromSeconds(60));
+
+                service.Refresh();
+                if (service.Status == ServiceControllerStatus.Stopped)
+                {
+                    Logger.Info("{0} has stopped successfully.");
+                }
+                else
+                {
+                    Logger.Error("Service stop request has timed out. {0}", service.Status);
+                }
             }
             else
             {
-                Logger.Error("Service stop request has timed out. {0}", service.Status);
+                Logger.Warn("Service {0} is already in stopped state.", service.ServiceName);
             }
         }
 

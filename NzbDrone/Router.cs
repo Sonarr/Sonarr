@@ -33,6 +33,7 @@ namespace NzbDrone
         {
             Logger.Info("Application mode: {0}", applicationMode);
 
+            //TODO:move this outside, it should be one of application modes (ApplicationMode.Service?)
             if (!_enviromentProvider.IsUserInteractive)
             {
                 _serviceProvider.Run(_applicationServer);

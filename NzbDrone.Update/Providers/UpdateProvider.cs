@@ -49,15 +49,14 @@ namespace NzbDrone.Update.Providers
             bool isService = false;
 
             logger.Info("Stopping all running services");
-            if (_serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME))
+    
+            if (_serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME)
+               && _serviceProvider.IsServiceRunning(ServiceProvider.NZBDRONE_SERVICE_NAME))
             {
-                if (_serviceProvider.IsServiceRunning(ServiceProvider.NZBDRONE_SERVICE_NAME))
-                {
-                    isService = true;
-                }
+                isService = true;
                 _serviceProvider.Stop(ServiceProvider.NZBDRONE_SERVICE_NAME);
             }
-
+    
             logger.Info("Killing all running processes");
             var processes = _processProvider.GetProcessByName(ProcessProvider.NzbDroneProccessName);
             foreach (var processInfo in processes)

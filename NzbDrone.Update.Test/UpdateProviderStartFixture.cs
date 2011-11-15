@@ -51,15 +51,29 @@ namespace NzbDrone.Update.Test
         }
 
         [Test]
-        public void should_stop_nzbdrone_service_if_installed()
+        public void should_stop_nzbdrone_service_if_installed_and_running()
         {
             WithInstalledService();
+            WithServiceRunning(true);
 
             //Act
             Mocker.Resolve<UpdateProvider>().Start(TARGET_FOLDER);
 
             //Assert
             Mocker.GetMock<ServiceProvider>().Verify(c => c.Stop(ServiceProvider.NZBDRONE_SERVICE_NAME), Times.Once());
+        }
+
+        [Test]
+        public void should_not_stop_nzbdrone_service_if_installed_but_not_running()
+        {
+            WithInstalledService();
+            WithServiceRunning(false);
+
+            //Act
+            Mocker.Resolve<UpdateProvider>().Start(TARGET_FOLDER);
+
+            //Assert
+            Mocker.GetMock<ServiceProvider>().Verify(c => c.Stop(ServiceProvider.NZBDRONE_SERVICE_NAME), Times.Never());
         }
 
         [Test]

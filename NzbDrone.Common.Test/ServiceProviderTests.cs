@@ -8,10 +8,10 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Common.Test
 {
     [TestFixture]
-    public class ServiceControllerTests:TestBase
+    public class ServiceProviderTests : TestBase
     {
         private const string ALWAYS_INSTALLED_SERVICE = "SCardSvr"; //Smart Card
-        private const string TEMP_SERVICE_NAME = "NzbDrone_Nunit"; //Smart Card
+        private const string TEMP_SERVICE_NAME = "NzbDrone_Nunit";
         private ServiceProvider serviceProvider;
 
 
@@ -90,6 +90,22 @@ namespace NzbDrone.Common.Test
 
             serviceProvider.GetService(ALWAYS_INSTALLED_SERVICE).Status
                 .Should().Be(ServiceControllerStatus.Stopped);
+        }
+
+        [Test]
+        public void Should_log_warn_if_on_stop_if_service_is_already_stopped()
+        {
+            serviceProvider.GetService(ALWAYS_INSTALLED_SERVICE).Status
+                .Should().NotBe(ServiceControllerStatus.Running);
+
+            //Act
+            serviceProvider.Stop(ALWAYS_INSTALLED_SERVICE);
+
+            //Assert
+            serviceProvider.GetService(ALWAYS_INSTALLED_SERVICE).Status
+                .Should().Be(ServiceControllerStatus.Stopped);
+
+            ExceptionVerification.ExcpectedWarns(1);
         }
     }
 }

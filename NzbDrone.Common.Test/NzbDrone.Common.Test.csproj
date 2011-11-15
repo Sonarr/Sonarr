@@ -67,7 +67,7 @@
     <Compile Include="DiskProviderTests.cs" />
     <Compile Include="EnviromentProviderTest.cs" />
     <Compile Include="ProcessProviderTests.cs" />
-    <Compile Include="ServiceControllerTests.cs" />
+    <Compile Include="ServiceProviderTests.cs" />
     <Compile Include="WebClientTests.cs" />
   </ItemGroup>
   <ItemGroup>
