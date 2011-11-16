@@ -101,6 +101,10 @@ namespace NzbDrone.Core.Test.ProviderTests
             {
                 for (int i = 1; i < season.Value.Count; i++)
                 {
+                    //Skip specials, because someone decided 1,3,4,6,7,21 is how you count...
+                    if (season.Key == 0)
+                        continue;
+
                     season.Value.Should().Contain(c => c.EpisodeNumber == i, "Can't find Episode S{0:00}E{1:00}",
                                             season.Value[0].SeasonNumber, i);
                 }
