@@ -91,7 +91,7 @@ namespace NzbDrone.Web.Controllers
                                 NzbMatrixEnabled = _indexerProvider.GetSettings(typeof(NzbMatrix)).Enable,
                                 NzbsRUsEnabled = _indexerProvider.GetSettings(typeof(NzbsRUs)).Enable,
                                 NewzbinEnabled = _indexerProvider.GetSettings(typeof(Newzbin)).Enable,
-                                NewznabEnabled = _indexerProvider.GetSettings(typeof(Newzbin)).Enable,
+                                NewznabEnabled = _indexerProvider.GetSettings(typeof(Newznab)).Enable,
 
                                 NewznabDefinitions = _newznabProvider.All(),
                             });
@@ -386,6 +386,10 @@ namespace NzbDrone.Web.Controllers
                 var newzbinSettings = _indexerProvider.GetSettings(typeof(Newzbin));
                 newzbinSettings.Enable = data.NewzbinEnabled;
                 _indexerProvider.SaveSettings(newzbinSettings);
+
+                var newznabSettings = _indexerProvider.GetSettings(typeof(Newznab));
+                newznabSettings.Enable = data.NewznabEnabled;
+                _indexerProvider.SaveSettings(newznabSettings);
 
                 _configProvider.NzbsOrgUId = data.NzbsOrgUId;
                 _configProvider.NzbsOrgHash = data.NzbsOrgHash;
