@@ -26,16 +26,18 @@ namespace NzbDrone.Core.Providers.Jobs
         private readonly IList<IJob> _jobs;
 
         private Thread _jobThread;
-        private Stopwatch _jobThreadStopWatch;
+        public Stopwatch StopWatch { get; private set; }
 
         private readonly object executionLock = new object();
         private readonly List<JobQueueItem> _queue = new List<JobQueueItem>();
 
         private ProgressNotification _notification;
 
+
         [Inject]
         public JobProvider(IDatabase database, NotificationProvider notificationProvider, IList<IJob> jobs)
         {
+            StopWatch = new Stopwatch();
             _database = database;
             _notificationProvider = notificationProvider;
             _jobs = jobs;
@@ -183,7 +185,7 @@ namespace NzbDrone.Core.Providers.Jobs
                 }
 
                 ResetThread();
-                _jobThreadStopWatch = Stopwatch.StartNew();
+                StopWatch = Stopwatch.StartNew();
                 _jobThread.Start();
             }
 
@@ -227,12 +229,7 @@ namespace NzbDrone.Core.Providers.Jobs
                     }
 
                 } while (Queue.Count != 0);
-
-                logger.Trace("Finished processing jobs in the queue.");
-
-                return;
             }
-
             catch (ThreadAbortException e)
             {
                 logger.Warn(e.Message);
@@ -243,7 +240,8 @@ namespace NzbDrone.Core.Providers.Jobs
             }
             finally
             {
-                ResetThread();
+                StopWatch.Stop();
+                logger.Trace("Finished processing jobs in the queue.");
             }
         }
 
@@ -301,7 +299,7 @@ namespace NzbDrone.Core.Providers.Jobs
 
         private void VerifyThreadTime()
         {
-            if (_jobThreadStopWatch.Elapsed.TotalHours > 1)
+            if (StopWatch.Elapsed.TotalHours > 1)
             {
                 logger.Warn("Thread job has been running for more than an hour. fuck it!");
                 ResetThread();
@@ -317,7 +315,6 @@ namespace NzbDrone.Core.Providers.Jobs
 
             logger.Trace("resetting queue processor thread");
             _jobThread = new Thread(ProcessQueue) { Name = "JobQueueThread" };
-            _jobThreadStopWatch = new Stopwatch();
         }
 
 
