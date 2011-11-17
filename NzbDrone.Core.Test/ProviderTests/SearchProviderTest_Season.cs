@@ -78,6 +78,9 @@ namespace NzbDrone.Core.Test.ProviderTests
             mocker.GetMock<DownloadProvider>()
                 .Setup(s => s.DownloadReport(It.IsAny<EpisodeParseResult>())).Returns(true);
 
+            mocker.GetMock<SeriesProvider>()
+                    .Setup(s => s.FindSeries(It.IsAny<string>())).Returns(series);
+
             //Act
             var result = mocker.Resolve<SearchProvider>().SeasonSearch(notification, 1, 1);
 
@@ -167,6 +170,9 @@ namespace NzbDrone.Core.Test.ProviderTests
             mocker.GetMock<DownloadProvider>()
                 .Setup(s => s.DownloadReport(It.IsAny<EpisodeParseResult>())).Returns(true);
 
+            mocker.GetMock<SeriesProvider>()
+                    .Setup(s => s.FindSeries(It.IsAny<string>())).Returns(series);
+
             //Act
             var result = mocker.Resolve<SearchProvider>().ProcessSeasonSearchResults(notification, series, 1, parseResults);
 
@@ -176,7 +182,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         }
 
         [Test]
-        public void ProcessSeasonSearchResults_failure()
+        public void ProcessSeasonSearchResults_should_return_false_when_quality_is_not_wanted()
         {
             var series = Builder<Series>.CreateNew()
                 .With(s => s.SeriesId = 1)
@@ -197,6 +203,113 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             mocker.GetMock<InventoryProvider>()
                 .Setup(s => s.IsQualityNeeded(It.IsAny<EpisodeParseResult>())).Returns(false);
+
+            mocker.GetMock<SeriesProvider>()
+                    .Setup(s => s.FindSeries(It.IsAny<string>())).Returns(series);
+
+            //Act
+            var result = mocker.Resolve<SearchProvider>().ProcessSeasonSearchResults(notification, series, 1, parseResults);
+
+            //Assert
+            result.Should().BeFalse();
+            ExceptionVerification.ExcpectedWarns(1);
+            mocker.VerifyAllMocks();
+        }
+
+        [Test]
+        public void ProcessSeasonSearchResults_should_return_false_when_series_is_null()
+        {
+            var series = Builder<Series>.CreateNew()
+                .With(s => s.SeriesId = 1)
+                .With(s => s.Title = "Title1")
+                .Build();
+
+            Series findSeries = null;
+
+            var parseResults = Builder<EpisodeParseResult>.CreateListOfSize(4)
+                .TheFirst(1)
+                .With(p => p.CleanTitle = "title")
+                .With(p => p.SeasonNumber = 1)
+                .With(p => p.FullSeason = true)
+                .With(p => p.EpisodeNumbers = null)
+                .Build();
+
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+
+            var notification = new ProgressNotification("Season Search");
+
+            mocker.GetMock<SeriesProvider>()
+                    .Setup(s => s.FindSeries(It.IsAny<string>())).Returns(findSeries);
+
+            //Act
+            var result = mocker.Resolve<SearchProvider>().ProcessSeasonSearchResults(notification, series, 1, parseResults);
+
+            //Assert
+            result.Should().BeFalse();
+            ExceptionVerification.ExcpectedWarns(1);
+            mocker.VerifyAllMocks();
+        }
+
+        [Test]
+        public void ProcessSeasonSearchResults_should_return_false_when_series_doesnt_match()
+        {
+            var series = Builder<Series>.CreateNew()
+                .With(s => s.SeriesId = 1)
+                .With(s => s.Title = "Title1")
+                .Build();
+
+            Series findSeries = Builder<Series>.CreateNew()
+                .With(s => s.SeriesId = 2)
+                .With(s => s.Title = "Title1")
+                .Build();
+
+            var parseResults = Builder<EpisodeParseResult>.CreateListOfSize(4)
+                .TheFirst(1)
+                .With(p => p.CleanTitle = "title")
+                .With(p => p.SeasonNumber = 1)
+                .With(p => p.FullSeason = true)
+                .With(p => p.EpisodeNumbers = null)
+                .Build();
+
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+
+            var notification = new ProgressNotification("Season Search");
+
+            mocker.GetMock<SeriesProvider>()
+                    .Setup(s => s.FindSeries(It.IsAny<string>())).Returns(findSeries);
+
+            //Act
+            var result = mocker.Resolve<SearchProvider>().ProcessSeasonSearchResults(notification, series, 1, parseResults);
+
+            //Assert
+            result.Should().BeFalse();
+            ExceptionVerification.ExcpectedWarns(1);
+            mocker.VerifyAllMocks();
+        }
+
+        [Test]
+        public void ProcessSeasonSearchResults_should_return_false_when_seasonNumber_doesnt_match()
+        {
+            var series = Builder<Series>.CreateNew()
+                .With(s => s.SeriesId = 1)
+                .With(s => s.Title = "Title1")
+                .Build();
+
+            var parseResults = Builder<EpisodeParseResult>.CreateListOfSize(4)
+                .All()
+                .With(p => p.SeasonNumber = 2)
+                .TheFirst(1)
+                .With(p => p.CleanTitle = "title")
+                .With(p => p.FullSeason = true)
+                .With(p => p.EpisodeNumbers = null)
+                .Build();
+
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+
+            var notification = new ProgressNotification("Season Search");
+
+            mocker.GetMock<SeriesProvider>()
+                    .Setup(s => s.FindSeries(It.IsAny<string>())).Returns(series);
 
             //Act
             var result = mocker.Resolve<SearchProvider>().ProcessSeasonSearchResults(notification, series, 1, parseResults);

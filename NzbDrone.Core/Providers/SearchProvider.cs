@@ -92,15 +92,15 @@ namespace NzbDrone.Core.Providers
 
             notification.CurrentMessage = "Processing search results";
 
-            var reportsToProcess = reports.Where(p => p.FullSeason && p.SeasonNumber == seasonNumber).ToList();
+            var fullSeasonReportsToProcess = reports.Where(p => p.FullSeason && p.SeasonNumber == seasonNumber).ToList();
 
-            reportsToProcess.ForEach(c =>
+            fullSeasonReportsToProcess.ForEach(c =>
             {
-                c.Series = series;
                 c.EpisodeNumbers = episodeNumbers.ToList();
             });
 
-            return ProcessSeasonSearchResults(notification, series, seasonNumber, reportsToProcess);
+            //Todo: Handle non-full season reports
+            return ProcessSeasonSearchResults(notification, series, seasonNumber, fullSeasonReportsToProcess);
         }
 
         public bool ProcessSeasonSearchResults(ProgressNotification notification, Series series, int seasonNumber, IEnumerable<EpisodeParseResult> reports)
@@ -110,6 +110,18 @@ namespace NzbDrone.Core.Providers
                 try
                 {
                     Logger.Trace("Analysing report " + episodeParseResult);
+
+                    //Get the matching series
+                    episodeParseResult.Series = _seriesProvider.FindSeries(episodeParseResult.CleanTitle);
+
+                    //If series is null or doesn't match the series we're looking for return
+                    if (episodeParseResult.Series == null || episodeParseResult.Series.SeriesId != series.SeriesId)
+                        continue;
+
+                    //If SeasonNumber doesn't match or episode is not in the in the list in the parse result, skip it.
+                    if (episodeParseResult.SeasonNumber != seasonNumber)
+                        continue;
+
                     if (_inventoryProvider.IsQualityNeeded(episodeParseResult))
                     {
                         Logger.Debug("Found '{0}'. Adding to download queue.", episodeParseResult);
@@ -200,6 +212,18 @@ namespace NzbDrone.Core.Providers
                 try
                 {
                     Logger.Trace("Analysing report " + episodeParseResult);
+
+                    //Get the matching series
+                    var series = _seriesProvider.FindSeries(episodeParseResult.CleanTitle);
+
+                    //If series is null or doesn't match the series we're looking for return
+                    if (series == null || series.SeriesId != episode.SeriesId)
+                        continue;
+
+                    //If SeasonNumber doesn't match or episode is not in the in the list in the parse result, skip it.
+                    if (episodeParseResult.SeasonNumber != episode.SeasonNumber || !episodeParseResult.EpisodeNumbers.Contains(episode.EpisodeNumber))
+                        continue;
+
                     if (_inventoryProvider.IsQualityNeeded(episodeParseResult))
                     {
                         Logger.Debug("Found '{0}'. Adding to download queue.", episodeParseResult);
@@ -285,15 +309,10 @@ namespace NzbDrone.Core.Providers
 
             notification.CurrentMessage = "Processing search results";
 
-            reports.ForEach(c =>
-            {
-                c.Series = series;
-            });
-
-            return  ProcessPartialSeasonSearchResults(notification, reports);
+            return  ProcessPartialSeasonSearchResults(notification, reports, series, seasonNumber);
         }
 
-        public List<int> ProcessPartialSeasonSearchResults(ProgressNotification notification, IEnumerable<EpisodeParseResult> reports)
+        public List<int> ProcessPartialSeasonSearchResults(ProgressNotification notification, IEnumerable<EpisodeParseResult> reports, Series series, int seasonNumber)
         {
             var successes = new List<int>();
 
@@ -302,6 +321,18 @@ namespace NzbDrone.Core.Providers
                 try
                 {
                     Logger.Trace("Analysing report " + episodeParseResult);
+
+                    //Get the matching series
+                    episodeParseResult.Series = _seriesProvider.FindSeries(episodeParseResult.CleanTitle);
+
+                    //If series is null or doesn't match the series we're looking for return
+                    if (episodeParseResult.Series == null || episodeParseResult.Series.SeriesId != series.SeriesId)
+                        continue;
+
+                    //If SeasonNumber doesn't match or episode is not in the in the list in the parse result, skip it.
+                    if (episodeParseResult.SeasonNumber != seasonNumber)
+                        continue;
+
                     if (_inventoryProvider.IsQualityNeeded(episodeParseResult))
                     {
                         Logger.Debug("Found '{0}'. Adding to download queue.", episodeParseResult);
