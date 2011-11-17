@@ -21,18 +21,20 @@ namespace NzbDrone.Core.Test
         readonly IList<Type> indexers = typeof(CentralDispatch).Assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(IndexerBase))).ToList();
         readonly IList<Type> jobs = typeof(CentralDispatch).Assembly.GetTypes().Where(t => t.GetInterfaces().Contains(typeof(IJob))).ToList();
 
-        private CentralDispatch centralDispatch;
+        private IKernel kernel;
 
-        [SetUp]
-        public void Setup()
+        public CentralDispatchFixture()
         {
-            centralDispatch = new CentralDispatch();
+            InitLogging();
+            kernel = new CentralDispatch().Kernel;
+            WebTimer.Stop();
         }
 
         [Test]
         public void InitAppTest()
         {
-            centralDispatch.Kernel.Should().NotBeNull();
+            kernel.Should().NotBeNull();
+
         }
 
         [Test]
@@ -45,7 +47,7 @@ namespace NzbDrone.Core.Test
             foreach (var provider in providers)
             {
                 Console.WriteLine("Resolving " + provider.Name);
-                centralDispatch.Kernel.Get(provider).Should().NotBeNull();
+                kernel.Get(provider).Should().NotBeNull();
             }
         }
 
@@ -55,7 +57,7 @@ namespace NzbDrone.Core.Test
         {
             //Assert
 
-            var registeredJobs = centralDispatch.Kernel.GetAll<IJob>();
+            var registeredJobs = kernel.GetAll<IJob>();
 
             jobs.Should().NotBeEmpty();
 
@@ -68,7 +70,7 @@ namespace NzbDrone.Core.Test
         {
             //Assert
 
-            var registeredIndexers = centralDispatch.Kernel.GetAll<IndexerBase>();
+            var registeredIndexers = kernel.GetAll<IndexerBase>();
 
             indexers.Should().NotBeEmpty();
 
@@ -79,35 +81,29 @@ namespace NzbDrone.Core.Test
         [Test]
         public void jobs_are_initialized()
         {
-            centralDispatch.Kernel.Get<JobProvider>().All().Should().HaveSameCount(jobs);
+            kernel.Get<JobProvider>().All().Should().HaveSameCount(jobs);
         }
 
         [Test]
         public void indexers_are_initialized()
         {
-            centralDispatch.Kernel.Get<IndexerProvider>().All().Should().HaveSameCount(indexers);
+            kernel.Get<IndexerProvider>().All().Should().HaveSameCount(indexers);
         }
 
         [Test]
         public void quality_profile_initialized()
         {
-            centralDispatch.Kernel.Get<QualityProvider>().All().Should().HaveCount(2);
+            kernel.Get<QualityProvider>().All().Should().HaveCount(2);
         }
 
         [Test]
         public void JobProvider_should_be_singletone()
         {
-            var first = centralDispatch.Kernel.Get<JobProvider>();
-            var second = centralDispatch.Kernel.Get<JobProvider>();
+            var first = kernel.Get<JobProvider>();
+            var second = kernel.Get<JobProvider>();
 
             first.Should().BeSameAs(second);
         }
 
-        [TearDown]
-        public void TearDownBase()
-        {
-            WebTimer.Stop();
-
-        }
     }
 }
