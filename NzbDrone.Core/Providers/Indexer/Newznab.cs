@@ -43,13 +43,13 @@ namespace NzbDrone.Core.Providers.Indexer
             {
                 if (searchModel.SearchType == SearchType.EpisodeSearch)
                 {
-                    searchUrls.Add(String.Format("{0}&q={1}&season{2}&ep{3}", url,
+                    searchUrls.Add(String.Format("{0}&limit=100&q={1}&season{2}&ep{3}", url,
                                                  searchModel.SeriesTitle, searchModel.SeasonNumber, searchModel.EpisodeNumber));
                 }
 
                 if (searchModel.SearchType == SearchType.SeasonSearch)
                 {
-                    searchUrls.Add(String.Format("{0}&q={1}&season{2}", url, searchModel.SeriesTitle, searchModel.SeasonNumber));
+                    searchUrls.Add(String.Format("{0}&limit=100&q={1}&season{2}", url, searchModel.SeriesTitle, searchModel.SeasonNumber));
                 }
             }
 
