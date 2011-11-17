@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
 
             while (stopWatch.IsRunning)
             {
-                Thread.Sleep(100);
+                Thread.Sleep(10);
             }
         }
 

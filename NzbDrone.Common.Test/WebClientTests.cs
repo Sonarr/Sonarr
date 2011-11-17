@@ -9,12 +9,12 @@ namespace NzbDrone.Common.Test
     public class WebClientTests : TestBase
     {
         [Test]
-        public void DownloadString_should_be_able_to_download_jquery()
+        public void DownloadString_should_be_able_to_dowload_text_file()
         {
-            var jquery = new WebClientProvider().DownloadString("http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js");
+            var jquery = new WebClientProvider().DownloadString("http://www.google.com/robots.txt");
 
             jquery.Should().NotBeBlank();
-            jquery.Should().Contain("function(a,b)");
+            jquery.Should().Contain("Sitemap");
         }
 
         [TestCase("")]
