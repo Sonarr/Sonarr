@@ -57,6 +57,46 @@ namespace NzbDrone.Core.Test.ProviderTests
         }
 
         [Test]
+        public void Save_should_clean_url_before_inserting_when_url_is_not_empty()
+        {
+            //Setup
+            var newznab = new NewznabDefinition { Name = "Newznab Provider", Enable = true, Url = "" };
+            var expectedUrl = "";
+
+            var mocker = new AutoMoqer();
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            //Act
+            var result = mocker.Resolve<NewznabProvider>().Save(newznab);
+
+            //Assert
+            db.Single<NewznabDefinition>(result).Url.Should().Be(expectedUrl);
+        }
+
+        [Test]
+        public void Save_should_clean_url_before_updating_when_url_is_not_empty()
+        {
+            //Setup
+            var newznab = new NewznabDefinition { Name = "Newznab Provider", Enable = true, Url = "http://www.nzbdrone.com" };
+            var expectedUrl = "";
+            var newUrl = "";
+
+            var mocker = new AutoMoqer();
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            newznab.Id = Convert.ToInt32(db.Insert(newznab));
+            newznab.Url = newUrl;
+
+            //Act
+            var result = mocker.Resolve<NewznabProvider>().Save(newznab);
+
+            //Assert
+            db.Single<NewznabDefinition>(result).Url.Should().Be(expectedUrl);
+        }
+
+        [Test]
         public void SaveAll_should_clean_urls_before_updating()
         {
             //Setup
