@@ -1,116 +1,85 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Indexer;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
-using NzbDrone.Test.Common.AutoMoq;
 
 namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
 {
     public class PerformSearchFixture : CoreTest
     {
-        private Mock<IndexerBase> _episodeIndexer1 = null;
-        private Mock<IndexerBase> _episodeIndexer2 = null;
-        private Mock<IndexerBase> _seasonIndexer1 = null;
-        private Mock<IndexerBase> _seasonIndexer2 = null;
-        private Mock<IndexerBase> _partialSeasonIndexer1 = null;
-        private Mock<IndexerBase> _partialSeasonIndexer2 = null;
-        private Mock<IndexerBase> _brokenIndexer = null;
-        private Mock<IndexerBase> _nullIndexer = null;
+        private const string SCENE_NAME = "Scene Name";
+        private const int SEASON_NUMBER = 5;
+        private const int PARSE_RESULT_COUNT = 10;
+
+        private Mock<IndexerBase> _episodeIndexer1;
+        private Mock<IndexerBase> _episodeIndexer2;
+        private Mock<IndexerBase> _brokenIndexer;
+        private Mock<IndexerBase> _nullIndexer;
 
         private List<IndexerBase> _indexers;
 
-        private IList<EpisodeParseResult> _parseResults;
         private Series _series;
-        private IList<Episode> _episodes = null;
-            
+        private IList<Episode> _episodes;
+
         [SetUp]
         public void Setup()
         {
-            _parseResults = Builder<EpisodeParseResult>.CreateListOfSize(10)
+            var parseResults = Builder<EpisodeParseResult>.CreateListOfSize(PARSE_RESULT_COUNT)
                 .Build();
 
             _series = Builder<Series>.CreateNew()
                 .Build();
 
-            BuildIndexers();
+            _episodes = Builder<Episode>.CreateListOfSize(1)
+                .Build();
+
+            BuildIndexers(parseResults);
+
+            _indexers = new List<IndexerBase> { _episodeIndexer1.Object, _episodeIndexer2.Object };
+
+            Mocker.GetMock<IndexerProvider>()
+                .Setup(c => c.GetEnabledIndexers())
+                .Returns(_indexers);
         }
 
-        private void BuildIndexers()
+        private void BuildIndexers(IList<EpisodeParseResult> parseResults)
         {
             _episodeIndexer1 = new Mock<IndexerBase>();
             _episodeIndexer1.Setup(c => c.FetchEpisode(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
-                .Returns(_parseResults);
+                .Returns(parseResults);
+            _episodeIndexer1.Setup(c => c.FetchSeason(It.IsAny<string>(), It.IsAny<int>()))
+                .Returns(parseResults);
+            _episodeIndexer1.Setup(c => c.FetchPartialSeason(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(parseResults);
+
 
             _episodeIndexer2 = new Mock<IndexerBase>();
             _episodeIndexer2.Setup(c => c.FetchEpisode(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
-                .Returns(_parseResults);
-
-            _seasonIndexer1 = new Mock<IndexerBase>();
-            _seasonIndexer1.Setup(c => c.FetchSeason(It.IsAny<string>(), It.IsAny<int>()))
-                .Returns(_parseResults);
-
-            _seasonIndexer2 = new Mock<IndexerBase>();
-            _seasonIndexer2.Setup(c => c.FetchSeason(It.IsAny<string>(), It.IsAny<int>()))
-                .Returns(_parseResults);
-
-            _partialSeasonIndexer1 = new Mock<IndexerBase>();
-            _partialSeasonIndexer1.Setup(c => c.FetchPartialSeason(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
-                .Returns(_parseResults);
-
-            _partialSeasonIndexer2 = new Mock<IndexerBase>();
-            _partialSeasonIndexer2.Setup(c => c.FetchPartialSeason(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
-                .Returns(_parseResults);
+                .Returns(parseResults);
+            _episodeIndexer2.Setup(c => c.FetchSeason(It.IsAny<string>(), It.IsAny<int>()))
+                .Returns(parseResults);
+            _episodeIndexer2.Setup(c => c.FetchPartialSeason(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(parseResults);
 
             _brokenIndexer = new Mock<IndexerBase>();
             _brokenIndexer.Setup(c => c.FetchEpisode(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Throws(new Exception());
 
-            List<EpisodeParseResult> nullResult = null;
-
             _nullIndexer = new Mock<IndexerBase>();
             _nullIndexer.Setup(c => c.FetchEpisode(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
-                .Returns(nullResult);
+                .Returns<List<EpisodeParseResult>>(null);
         }
 
-        private void WithEpisodeIndexers()
-        {
-            _indexers = new List<IndexerBase>{ _episodeIndexer1.Object, _episodeIndexer2.Object };
-
-            Mocker.GetMock<IndexerProvider>()
-                .Setup(c => c.GetEnabledIndexers())
-                .Returns(_indexers);
-        }
-
-        private void WithPartialSeasonIndexers()
-        {
-            _indexers = new List<IndexerBase> { _partialSeasonIndexer1.Object, _partialSeasonIndexer2.Object };
-
-            Mocker.GetMock<IndexerProvider>()
-                .Setup(c => c.GetEnabledIndexers())
-                .Returns(_indexers);
-        }
-
-        private void WithSeasonIndexers()
-        {
-            _indexers = new List<IndexerBase> { _seasonIndexer1.Object, _seasonIndexer2.Object };
-
-            Mocker.GetMock<IndexerProvider>()
-                .Setup(c => c.GetEnabledIndexers())
-                .Returns(_indexers);
-        }
-
-        private void WithBrokenIndexer()
+        private void WithTwoGoodOneBrokenIndexer()
         {
             _indexers = new List<IndexerBase> { _episodeIndexer1.Object, _brokenIndexer.Object, _episodeIndexer2.Object };
 
@@ -131,16 +100,10 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
         private void WithSceneName()
         {
             Mocker.GetMock<SceneMappingProvider>()
-                .Setup(s => s.GetSceneName(It.IsAny<int>())).Returns("Scene Name");
+                .Setup(s => s.GetSceneName(_series.SeriesId)).Returns(SCENE_NAME);
         }
 
-        private void WithSingleEpisode()
-        {
-            _episodes = Builder<Episode>.CreateListOfSize(1)
-                .Build();
-        }
-
-        private void WithMultipleEpisodes()
+        private void With30Episodes()
         {
             _episodes = Builder<Episode>.CreateListOfSize(30)
                 .Build();
@@ -153,100 +116,96 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
 
         private void VerifyFetchEpisode(Times times)
         {
-            _episodeIndexer1.Verify(v => v.FetchEpisode(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>())
+            _episodeIndexer1.Verify(v => v.FetchEpisode(_series.Title, SEASON_NUMBER, It.IsAny<int>())
                 , times);
 
-            _episodeIndexer2.Verify(v => v.FetchEpisode(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>())
+            _episodeIndexer2.Verify(v => v.FetchEpisode(_series.Title, SEASON_NUMBER, It.IsAny<int>())
+                , times);
+        }
+
+        private void VerifyFetchEpisodeWithSceneName(Times times)
+        {
+            _episodeIndexer1.Verify(v => v.FetchEpisode(SCENE_NAME, SEASON_NUMBER, It.IsAny<int>())
+                , times);
+
+            _episodeIndexer2.Verify(v => v.FetchEpisode(SCENE_NAME, SEASON_NUMBER, It.IsAny<int>())
                 , times);
         }
 
         private void VerifyFetchEpisodeBrokenIndexer(Times times)
         {
-            _brokenIndexer.Verify(v => v.FetchEpisode(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>())
+            _brokenIndexer.Verify(v => v.FetchEpisode(It.IsAny<string>(), SEASON_NUMBER, It.IsAny<int>())
                 , times);
         }
 
         private void VerifyFetchPartialSeason(Times times)
         {
-            _partialSeasonIndexer1.Verify(v => v.FetchPartialSeason(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>())
+            _episodeIndexer1.Verify(v => v.FetchPartialSeason(_series.Title, SEASON_NUMBER, It.IsAny<int>())
                 , times);
 
-            _partialSeasonIndexer2.Verify(v => v.FetchPartialSeason(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>())
+            _episodeIndexer2.Verify(v => v.FetchPartialSeason(_series.Title, SEASON_NUMBER, It.IsAny<int>())
                 , times);
         }
 
         private void VerifyFetchSeason(Times times)
         {
-            _seasonIndexer1.Verify(v => v.FetchSeason(It.IsAny<string>(), It.IsAny<int>())
-                , times);
-
-            _seasonIndexer1.Verify(v => v.FetchSeason(It.IsAny<string>(), It.IsAny<int>())
-                , times);
+            _episodeIndexer1.Verify(v => v.FetchSeason(_series.Title, SEASON_NUMBER), times);
+            _episodeIndexer1.Verify(v => v.FetchSeason(_series.Title, SEASON_NUMBER), times);
         }
 
         [Test]
         public void PerformSearch_should_search_all_enabled_providers()
         {
-            //Setup
-            WithEpisodeIndexers();
-            WithSingleEpisode();
-
             //Act
-            var result = Mocker.Resolve<SearchProvider>().PerformSearch(new ProgressNotification("Test"), _series, 1, _episodes);
+            var result = Mocker.Resolve<SearchProvider>().PerformSearch(MockNotification, _series, SEASON_NUMBER, _episodes);
 
             //Assert
             VerifyFetchEpisode(Times.Once());
-            result.Should().HaveCount(20);
+            result.Should().HaveCount(PARSE_RESULT_COUNT * 2);
         }
 
         [Test]
         public void PerformSearch_should_look_for_scene_name_to_search()
         {
-            //Setup
             WithSceneName();
-            WithEpisodeIndexers();
-            WithSingleEpisode();
 
             //Act
-            var result = Mocker.Resolve<SearchProvider>().PerformSearch(new ProgressNotification("Test"), _series, 1, _episodes);
+            Mocker.Resolve<SearchProvider>().PerformSearch(MockNotification, _series, 1, _episodes);
 
             //Assert
-            Mocker.GetMock<SceneMappingProvider>().Verify(c => c.GetSceneName(It.IsAny<int>()),
+            Mocker.GetMock<SceneMappingProvider>().Verify(c => c.GetSceneName(_series.SeriesId),
                                                       Times.Once());
         }
 
         [Test]
-        public void PerformSearch_broken_indexer_should_not_break_job()
+        public void broken_indexer_should_not_block_other_indexers()
         {
             //Setup
-            WithBrokenIndexer();
-            WithSingleEpisode();
+            WithTwoGoodOneBrokenIndexer();
 
             //Act
-            var result = Mocker.Resolve<SearchProvider>().PerformSearch(new ProgressNotification("Test"), _series, 1, _episodes);
+            var result = Mocker.Resolve<SearchProvider>().PerformSearch(MockNotification, _series, SEASON_NUMBER, _episodes);
 
             //Assert
-            result.Should().HaveCount(20);
-            ExceptionVerification.ExcpectedErrors(1);
+            result.Should().HaveCount(PARSE_RESULT_COUNT * 2);
+
             VerifyFetchEpisode(Times.Once());
             VerifyFetchEpisodeBrokenIndexer(Times.Once());
 
-            Mocker.GetMock<SceneMappingProvider>().Verify(c => c.GetSceneName(It.IsAny<int>()),
+            Mocker.GetMock<SceneMappingProvider>().Verify(c => c.GetSceneName(_series.SeriesId),
                                                       Times.Once());
+
+            ExceptionVerification.ExcpectedErrors(1);
         }
 
         [Test]
         public void PerformSearch_for_episode_should_call_FetchEpisode()
         {
-            //Setup
-            WithEpisodeIndexers();
-            WithSingleEpisode();
-
             //Act
-            var result = Mocker.Resolve<SearchProvider>().PerformSearch(new ProgressNotification("Test"), _series, 1, _episodes);
+            var result = Mocker.Resolve<SearchProvider>().PerformSearch(MockNotification, _series, SEASON_NUMBER, _episodes);
 
             //Assert
-            result.Should().HaveCount(20);
+            result.Should().HaveCount(PARSE_RESULT_COUNT * 2);
 
             VerifyFetchEpisode(Times.Once());
         }
@@ -254,12 +213,10 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
         [Test]
         public void PerformSearch_for_partial_season_should_call_FetchPartialSeason()
         {
-            //Setup
-            WithPartialSeasonIndexers();
-            WithMultipleEpisodes();
+            With30Episodes();
 
             //Act
-            var result = Mocker.Resolve<SearchProvider>().PerformSearch(new ProgressNotification("Test"), _series, 1, _episodes);
+            var result = Mocker.Resolve<SearchProvider>().PerformSearch(MockNotification, _series, SEASON_NUMBER, _episodes);
 
             //Assert
             result.Should().HaveCount(80);
@@ -269,12 +226,10 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
         [Test]
         public void PerformSearch_for_season_should_call_FetchSeason()
         {
-            //Setup
-            WithSeasonIndexers();
             WithNullEpisodes();
 
             //Act
-            var result = Mocker.Resolve<SearchProvider>().PerformSearch(new ProgressNotification("Test"), _series, 1, _episodes);
+            var result = Mocker.Resolve<SearchProvider>().PerformSearch(MockNotification, _series, SEASON_NUMBER, _episodes);
 
             //Assert
             result.Should().HaveCount(20);
@@ -286,14 +241,24 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
         {
             //Setup
             WithNullIndexers();
-            WithSingleEpisode();
 
             //Act
-            var result = Mocker.Resolve<SearchProvider>().PerformSearch(new ProgressNotification("Test"), _series, 1, _episodes);
+            var result = Mocker.Resolve<SearchProvider>().PerformSearch(MockNotification, _series, SEASON_NUMBER, _episodes);
 
             //Assert
-            ExceptionVerification.ExcpectedErrors(2);
             result.Should().HaveCount(0);
+            ExceptionVerification.ExcpectedErrors(2);
         }
+
+        [Test]
+        public void should_use_scene_name_to_search_for_episode_when_avilable()
+        {
+            WithSceneName();
+
+            Mocker.Resolve<SearchProvider>().PerformSearch(MockNotification, _series, SEASON_NUMBER, _episodes);
+
+            VerifyFetchEpisodeWithSceneName(Times.Once());
+        }
+
     }
 }
