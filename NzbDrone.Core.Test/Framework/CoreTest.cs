@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Ninject;
 using NzbDrone.Common;
+using NzbDrone.Core.Model.Notification;
 using NzbDrone.Test.Common;
 using PetaPoco;
 
@@ -39,7 +40,7 @@ namespace NzbDrone.Core.Test.Framework
 
 
         [SetUp]
-        public virtual void SetupBase()
+        public virtual void CoreTestSetup()
         {
             LiveKernel = new StandardKernel();
         }
@@ -58,6 +59,15 @@ namespace NzbDrone.Core.Test.Framework
         {
             Db = MockLib.GetEmptyDatabase();
             Mocker.SetConstant(Db);
+        }
+
+
+        protected ProgressNotification MockNotification
+        {
+            get
+            {
+                return new ProgressNotification("Mock notification");
+            }
         }
     }
 }

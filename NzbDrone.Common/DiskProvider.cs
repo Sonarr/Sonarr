@@ -106,7 +106,16 @@ namespace NzbDrone.Common
 
         public virtual void MoveDirectory(string source, string destination)
         {
-            Directory.Move(source, destination);
+            try
+            {
+                Directory.Move(source, destination);
+            }
+            catch (Exception e)
+            {
+                e.Data.Add("Source", source);
+                e.Data.Add("Destination", destination);
+                throw;
+            }
         }
 
         public virtual void InheritFolderPermissions(string filename)
