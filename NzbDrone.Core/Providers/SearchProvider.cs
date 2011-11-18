@@ -52,29 +52,7 @@ namespace NzbDrone.Core.Providers
 
             notification.CurrentMessage = String.Format("Searching for {0} Season {1}", series.Title, seasonNumber);
 
-            var indexers = _indexerProvider.GetEnabledIndexers();
-            var reports = new List<EpisodeParseResult>();
-
-            var title = _sceneMappingProvider.GetSceneName(series.SeriesId);
-
-            if (string.IsNullOrWhiteSpace(title))
-            {
-                title = series.Title;
-            }
-
-            foreach (var indexer in indexers)
-            {
-                try
-                {
-                    var indexerResults = indexer.FetchSeason(title, seasonNumber);
-
-                    reports.AddRange(indexerResults);
-                }
-                catch (Exception e)
-                {
-                    Logger.ErrorException("An error has occurred while fetching items from " + indexer.Name, e);
-                }
-            }
+            var reports = PerformSearch(notification, series, seasonNumber);
 
             Logger.Debug("Finished searching all indexers. Total {0}", reports.Count);
 
@@ -92,63 +70,46 @@ namespace NzbDrone.Core.Providers
 
             notification.CurrentMessage = "Processing search results";
 
-            var fullSeasonReportsToProcess = reports.Where(p => p.FullSeason && p.SeasonNumber == seasonNumber).ToList();
+            reports.Where(p => p.FullSeason && p.SeasonNumber == seasonNumber).ToList().ForEach(
+                e => e.EpisodeNumbers = episodeNumbers.ToList()
+                );
 
-            fullSeasonReportsToProcess.ForEach(c =>
-            {
-                c.EpisodeNumbers = episodeNumbers.ToList();
-            });
+            var downloadedEpisodes = ProcessSearchResults(notification, reports, series, seasonNumber);
 
-            //Todo: Handle non-full season reports
-            return ProcessSeasonSearchResults(notification, series, seasonNumber, fullSeasonReportsToProcess);
+            downloadedEpisodes.Sort();
+            episodeNumbers.ToList().Sort();
+
+            //Returns true if the list of downloaded episodes matches the list of episode numbers
+            //(either a full season release was grabbed or all individual episodes)
+            return (downloadedEpisodes.SequenceEqual(episodeNumbers));
         }
 
-        public bool ProcessSeasonSearchResults(ProgressNotification notification, Series series, int seasonNumber, IEnumerable<EpisodeParseResult> reports)
+        public virtual List<int> PartialSeasonSearch(ProgressNotification notification, int seriesId, int seasonNumber)
         {
-            foreach (var episodeParseResult in reports.OrderByDescending(c => c.Quality))
+            //This method will search for episodes in a season in groups of 10 episodes S01E0, S01E1, S01E2, etc 
+
+            var series = _seriesProvider.GetSeries(seriesId);
+
+            if (series == null)
             {
-                try
-                {
-                    Logger.Trace("Analysing report " + episodeParseResult);
-
-                    //Get the matching series
-                    episodeParseResult.Series = _seriesProvider.FindSeries(episodeParseResult.CleanTitle);
-
-                    //If series is null or doesn't match the series we're looking for return
-                    if (episodeParseResult.Series == null || episodeParseResult.Series.SeriesId != series.SeriesId)
-                        continue;
-
-                    //If SeasonNumber doesn't match or episode is not in the in the list in the parse result, skip it.
-                    if (episodeParseResult.SeasonNumber != seasonNumber)
-                        continue;
-
-                    if (_inventoryProvider.IsQualityNeeded(episodeParseResult))
-                    {
-                        Logger.Debug("Found '{0}'. Adding to download queue.", episodeParseResult);
-                        try
-                        {
-                            _downloadProvider.DownloadReport(episodeParseResult);
-                            notification.CurrentMessage = String.Format("{0} Season {1} {2} Added to download queue", series.Title, seasonNumber, episodeParseResult.Quality);
-                        }
-                        catch (Exception e)
-                        {
-                            Logger.ErrorException("Unable to add report to download queue." + episodeParseResult, e);
-                            notification.CurrentMessage = String.Format("Unable to add report to download queue. {0}", episodeParseResult);
-                        }
-
-                        return true;
-                    }
-                }
-                catch (Exception e)
-                {
-                    Logger.ErrorException("An error has occurred while processing parse result items from " + episodeParseResult, e);
-                }
+                Logger.Error("Unable to find an series {0} in database", seriesId);
+                return new List<int>();
             }
 
-            Logger.Warn("Unable to find {0} Season {1} in any of indexers.", series.Title, seasonNumber);
-            notification.CurrentMessage = String.Format("Unable to find {0} Season {1} in any of indexers.", series.Title, seasonNumber);
+            notification.CurrentMessage = String.Format("Searching for {0} Season {1}", series.Title, seasonNumber);
 
-            return false;
+            var episodes = _episodeProvider.GetEpisodesBySeason(seriesId, seasonNumber);
+
+            var reports = PerformSearch(notification, series, seasonNumber, episodes);
+
+            Logger.Debug("Finished searching all indexers. Total {0}", reports.Count);
+
+            if (reports.Count == 0)
+                return new List<int>();
+
+            notification.CurrentMessage = "Processing search results";
+
+            return ProcessSearchResults(notification, reports, series, seasonNumber);
         }
 
         public virtual bool EpisodeSearch(ProgressNotification notification, int episodeId)
@@ -202,70 +163,12 @@ namespace NzbDrone.Core.Providers
                 c.Series = series;
             });
 
-            return ProcessEpisodeSearchResults(notification, episode, reports);
+            return (ProcessSearchResults(notification, reports, series, episode.SeasonNumber, episode.EpisodeNumber).Count == 1);
         }
 
-        public bool ProcessEpisodeSearchResults(ProgressNotification notification, Episode episode, IEnumerable<EpisodeParseResult> reports)
+        public List<EpisodeParseResult> PerformSearch(ProgressNotification notification, Series series, int seasonNumber, IList<Episode> episodes = null)
         {
-            foreach (var episodeParseResult in reports.OrderByDescending(c => c.Quality))
-            {
-                try
-                {
-                    Logger.Trace("Analysing report " + episodeParseResult);
-
-                    //Get the matching series
-                    var series = _seriesProvider.FindSeries(episodeParseResult.CleanTitle);
-
-                    //If series is null or doesn't match the series we're looking for return
-                    if (series == null || series.SeriesId != episode.SeriesId)
-                        continue;
-
-                    //If SeasonNumber doesn't match or episode is not in the in the list in the parse result, skip it.
-                    if (episodeParseResult.SeasonNumber != episode.SeasonNumber || !episodeParseResult.EpisodeNumbers.Contains(episode.EpisodeNumber))
-                        continue;
-
-                    if (_inventoryProvider.IsQualityNeeded(episodeParseResult))
-                    {
-                        Logger.Debug("Found '{0}'. Adding to download queue.", episodeParseResult);
-                        try
-                        {
-                            _downloadProvider.DownloadReport(episodeParseResult);
-                            notification.CurrentMessage = String.Format("{0} {1} Added to download queue", episode, episodeParseResult.Quality);
-                        }
-                        catch (Exception e)
-                        {
-                            Logger.ErrorException("Unable to add report to download queue." + episodeParseResult, e);
-                            notification.CurrentMessage = String.Format("Unable to add report to download queue. {0}", episodeParseResult);
-                        }
-
-                        return true;
-                    }
-                }
-                catch (Exception e)
-                {
-                    Logger.ErrorException("An error has occurred while processing parse result items from " + episodeParseResult, e);
-                }
-            }
-
-            Logger.Warn("Unable to find {0} in any of indexers.", episode);
-            notification.CurrentMessage = String.Format("Unable to find {0} in any of indexers.", episode);
-
-            return false;
-        }
-
-        public virtual List<int> PartialSeasonSearch(ProgressNotification notification, int seriesId, int seasonNumber)
-        {
-            //This method will search for episodes in a season in groups of 10 episodes S01E0, S01E1, S01E2, etc 
-
-            var series = _seriesProvider.GetSeries(seriesId);
-
-            if (series == null)
-            {
-                Logger.Error("Unable to find an series {0} in database", seriesId);
-                return new List<int>();
-            }
-
-            notification.CurrentMessage = String.Format("Searching for {0} Season {1}", series.Title, seasonNumber);
+            //If single episode, do a single episode search, if full season then do a full season search, otherwise, do a partial search
 
             var indexers = _indexerProvider.GetEnabledIndexers();
             var reports = new List<EpisodeParseResult>();
@@ -277,42 +180,38 @@ namespace NzbDrone.Core.Providers
                 title = series.Title;
             }
 
-            var episodes = _episodeProvider.GetEpisodesBySeason(seriesId, seasonNumber);
-            var episodeCount = episodes.Count;
-            var episodePrefix = 0;
-
-            while(episodeCount >= 0)
+            foreach(var indexer in indexers)
             {
-                //Do the actual search for each indexer
-                foreach (var indexer in indexers)
+                try
                 {
-                    try
-                    {
-                        var indexerResults = indexer.FetchPartialSeason(title, seasonNumber, episodePrefix);
+                    if (episodes == null)
+                        reports.AddRange(indexer.FetchSeason(title, seasonNumber));
 
-                        reports.AddRange(indexerResults);
-                    }
-                    catch (Exception e)
+                    else if(episodes.Count == 1)
+                        reports.AddRange(indexer.FetchEpisode(title, seasonNumber, episodes.First().EpisodeNumber));
+
+                    //Treat as Partial Season
+                    else
                     {
-                        Logger.ErrorException("An error has occurred while fetching items from " + indexer.Name, e);
+                        var prefixes = GetEpisodeNumberPrefixes(episodes.Select(s => s.EpisodeNumber));
+
+                        foreach(var episodePrefix in prefixes)
+                        {
+                            reports.AddRange(indexer.FetchPartialSeason(title, seasonNumber, episodePrefix));
+                        }
                     }
                 }
 
-                episodePrefix++;
-                episodeCount -= 10;
+                catch (Exception e)
+                {
+                    Logger.ErrorException("An error has occurred while fetching items from " + indexer.Name, e);
+                }
             }
 
-            Logger.Debug("Finished searching all indexers. Total {0}", reports.Count);
-
-            if (reports.Count == 0)
-                return new List<int>();
-
-            notification.CurrentMessage = "Processing search results";
-
-            return  ProcessPartialSeasonSearchResults(notification, reports, series, seasonNumber);
+            return reports;
         }
 
-        public List<int> ProcessPartialSeasonSearchResults(ProgressNotification notification, IEnumerable<EpisodeParseResult> reports, Series series, int seasonNumber)
+        public List<int> ProcessSearchResults(ProgressNotification notification, IEnumerable<EpisodeParseResult> reports, Series series, int seasonNumber, int? episodeNumber = null)
         {
             var successes = new List<int>();
 
@@ -329,8 +228,16 @@ namespace NzbDrone.Core.Providers
                     if (episodeParseResult.Series == null || episodeParseResult.Series.SeriesId != series.SeriesId)
                         continue;
 
-                    //If SeasonNumber doesn't match or episode is not in the in the list in the parse result, skip it.
+                    //If SeasonNumber doesn't match or episode is not in the in the list in the parse result, skip the report.
                     if (episodeParseResult.SeasonNumber != seasonNumber)
+                        continue;
+
+                    //If the EpisodeNumber was passed in and it is not contained in the parseResult, skip the report.
+                    if (episodeNumber.HasValue && !episodeParseResult.EpisodeNumbers.Contains(episodeNumber.Value))
+                        continue;
+
+                    //Make sure we haven't already downloaded a report with this episodenumber, if we have, skip the report.
+                    if (successes.Intersect(episodeParseResult.EpisodeNumbers).Count() > 0)
                         continue;
 
                     if (_inventoryProvider.IsQualityNeeded(episodeParseResult))
@@ -338,12 +245,16 @@ namespace NzbDrone.Core.Providers
                         Logger.Debug("Found '{0}'. Adding to download queue.", episodeParseResult);
                         try
                         {
-                            _downloadProvider.DownloadReport(episodeParseResult);
-                            notification.CurrentMessage = String.Format("{0} - S{1:00}E{2:00} {3}Added to download queue",
-                                episodeParseResult.Series.Title, episodeParseResult.SeasonNumber, episodeParseResult.EpisodeNumbers[0], episodeParseResult.Quality);
+                            if (_downloadProvider.DownloadReport(episodeParseResult))
+                            {
+                                notification.CurrentMessage =
+                                        String.Format("{0} - S{1:00}E{2:00} {3}Added to download queue",
+                                                      episodeParseResult.Series.Title, episodeParseResult.SeasonNumber,
+                                                      episodeParseResult.EpisodeNumbers[0], episodeParseResult.Quality);
 
-                            //Add the list of episode numbers from this release
-                            successes.AddRange(episodeParseResult.EpisodeNumbers);
+                                //Add the list of episode numbers from this release
+                                successes.AddRange(episodeParseResult.EpisodeNumbers);
+                            }
                         }
                         catch (Exception e)
                         {
@@ -359,6 +270,18 @@ namespace NzbDrone.Core.Providers
             }
 
             return successes;
+        }
+
+        private List<int> GetEpisodeNumberPrefixes(IEnumerable<int> episodeNumbers)
+        {
+            var results = new List<int>();
+
+            foreach (var i in episodeNumbers)
+            {
+                results.Add(i / 10);
+            }
+
+            return results.Distinct().ToList();
         }
     }
 }
