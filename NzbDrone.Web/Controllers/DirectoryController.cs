@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Web.Mvc;
 using NzbDrone.Common;
 
 namespace NzbDrone.Web.Controllers
@@ -27,7 +28,7 @@ namespace NzbDrone.Web.Controllers
         [HttpGet]
         public JsonResult GetDirectories(string term)
         {
-            string[] dirs = null;
+            IEnumerable<string> dirs = null;
             try
             {
                 //Windows (Including UNC)

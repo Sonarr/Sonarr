@@ -9,6 +9,12 @@ namespace NzbDrone.Common
 {
     public class DiskProvider
     {
+        enum TransferAction
+        {
+            Copy,
+            Move
+        }
+
         [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool GetDiskFreeSpaceEx(string lpDirectoryName,
@@ -28,14 +34,14 @@ namespace NzbDrone.Common
             return File.Exists(path);
         }
 
-        public virtual string[] GetDirectories(string path)
+        public virtual IEnumerable<string> GetDirectories(string path)
         {
-            return Directory.GetDirectories(path);
+            return Directory.EnumerateDirectories(path);
         }
 
-        public virtual string[] GetFiles(string path, SearchOption searchOption)
+        public virtual IEnumerable<string> GetFiles(string path, SearchOption searchOption)
         {
-            return Directory.GetFiles(path, "*.*", searchOption);
+            return Directory.EnumerateFiles(path, "*.*", searchOption);
         }
 
         public virtual long GetDirectorySize(string path)
@@ -57,7 +63,27 @@ namespace NzbDrone.Common
 
         public virtual void CopyDirectory(string source, string target)
         {
-            Logger.Trace("Copying {0} -> {1}", source, target);
+            TransferDirectory(source, target, TransferAction.Copy);
+        }
+
+        public virtual void MoveDirectory(string source, string destination)
+        {
+            try
+            {
+                TransferDirectory(source, destination, TransferAction.Move);
+                Directory.Delete(source, true);
+            }
+            catch (Exception e)
+            {
+                e.Data.Add("Source", source);
+                e.Data.Add("Destination", destination);
+                throw;
+            }
+        }
+
+        private void TransferDirectory(string source, string target, TransferAction transferAction)
+        {
+            Logger.Trace("{0} {1} -> {2}", transferAction, source, target);
 
             var sourceFolder = new DirectoryInfo(source);
             var targetFolder = new DirectoryInfo(target);
@@ -69,13 +95,31 @@ namespace NzbDrone.Common
 
             foreach (var subDir in sourceFolder.GetDirectories())
             {
-                CopyDirectory(subDir.FullName, Path.Combine(target, subDir.Name));
+                TransferDirectory(subDir.FullName, Path.Combine(target, subDir.Name), transferAction);
             }
 
             foreach (var file in sourceFolder.GetFiles("*.*", SearchOption.TopDirectoryOnly))
             {
                 var destFile = Path.Combine(target, file.Name);
-                file.CopyTo(destFile, true);
+
+                switch (transferAction)
+                {
+                    case TransferAction.Copy:
+                        {
+                            file.CopyTo(destFile, true);
+                            break;
+                        }
+                    case TransferAction.Move:
+                        {
+                            if (FileExists(destFile))
+                            {
+                                File.Delete(destFile);
+                            }
+                            file.MoveTo(destFile);
+                            break;
+                        }
+                }
+
             }
         }
 
@@ -101,21 +145,7 @@ namespace NzbDrone.Common
 
         public virtual IEnumerable<FileInfo> GetFileInfos(string path, string pattern, SearchOption searchOption)
         {
-            return new DirectoryInfo(path).GetFiles(pattern, searchOption);
-        }
-
-        public virtual void MoveDirectory(string source, string destination)
-        {
-            try
-            {
-                Directory.Move(source, destination);
-            }
-            catch (Exception e)
-            {
-                e.Data.Add("Source", source);
-                e.Data.Add("Destination", destination);
-                throw;
-            }
+            return new DirectoryInfo(path).EnumerateFiles(pattern, searchOption);
         }
 
         public virtual void InheritFolderPermissions(string filename)

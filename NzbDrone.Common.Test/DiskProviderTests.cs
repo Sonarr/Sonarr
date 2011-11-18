@@ -13,6 +13,7 @@ namespace NzbDrone.Common.Test
     {
         DirectoryInfo BinFolder;
         DirectoryInfo BinFolderCopy;
+        DirectoryInfo BinFolderMove;
 
         [SetUp]
         public void Setup()
@@ -20,10 +21,16 @@ namespace NzbDrone.Common.Test
             var binRoot = new DirectoryInfo(Directory.GetCurrentDirectory()).Parent.Parent;
             BinFolder = new DirectoryInfo(Path.Combine(binRoot.FullName, "bin"));
             BinFolderCopy = new DirectoryInfo(Path.Combine(binRoot.FullName, "bin_copy"));
+            BinFolderMove = new DirectoryInfo(Path.Combine(binRoot.FullName, "bin_move"));
 
             if (BinFolderCopy.Exists)
             {
                 BinFolderCopy.Delete(true);
+            }
+
+            if (BinFolderMove.Exists)
+            {
+                BinFolderMove.Delete(true);
             }
         }
 
@@ -56,6 +63,22 @@ namespace NzbDrone.Common.Test
             VerifyCopy();
         }
 
+        [Test]
+        public void MoveFolder_should_overright_existing_folder()
+        {
+            var diskProvider = new DiskProvider();
+
+            diskProvider.CopyDirectory(BinFolder.FullName, BinFolderCopy.FullName);
+            diskProvider.CopyDirectory(BinFolder.FullName, BinFolderMove.FullName);
+            VerifyCopy();
+
+            //Act
+            diskProvider.MoveDirectory(BinFolderCopy.FullName, BinFolderMove.FullName);
+
+            //Assert
+            VerifyMove();
+        }
+
         private void VerifyCopy()
         {
             BinFolder.Refresh();
@@ -65,6 +88,20 @@ namespace NzbDrone.Common.Test
                .Should().HaveSameCount(BinFolder.GetFiles("*.*", SearchOption.AllDirectories));
 
             BinFolderCopy.GetDirectories().Should().HaveSameCount(BinFolder.GetDirectories());
+        }
+
+        private void VerifyMove()
+        {
+            BinFolder.Refresh();
+            BinFolderCopy.Refresh();
+            BinFolderMove.Refresh();
+
+            BinFolderCopy.Exists.Should().BeFalse();
+
+            BinFolderMove.GetFiles("*.*", SearchOption.AllDirectories)
+               .Should().HaveSameCount(BinFolder.GetFiles("*.*", SearchOption.AllDirectories));
+
+            BinFolderMove.GetDirectories().Should().HaveSameCount(BinFolder.GetDirectories());
         }
     }
 }
