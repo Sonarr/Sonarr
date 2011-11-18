@@ -281,6 +281,8 @@ namespace NzbDrone.Core.Test
         [TestCase("Chuck - 4x05 - Title", "Chuck")]
         [TestCase("Law & Order - 4x05 - Title", "laworder")]
         [TestCase("This Isn't a Valid Post", "")]
+        [TestCase("Mad Men - Season 1 [Bluray720p]", "madmen")]
+        [TestCase("Mad Men - Season 1 [Bluray1080p]", "madmen")]
         public void parse_series_name(string postTitle, string title)
         {
             var result = Parser.ParseSeriesName(postTitle);
