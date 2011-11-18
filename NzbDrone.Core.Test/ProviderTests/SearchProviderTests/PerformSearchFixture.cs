@@ -50,37 +50,37 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
         {
             _episodeIndexer1 = new Mock<IndexerBase>();
             _episodeIndexer1.Setup(c => c.FetchEpisode(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
-                .Returns(_parseResults).Verifiable();
+                .Returns(_parseResults);
 
             _episodeIndexer2 = new Mock<IndexerBase>();
             _episodeIndexer2.Setup(c => c.FetchEpisode(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
-                .Returns(_parseResults).Verifiable();
+                .Returns(_parseResults);
 
             _seasonIndexer1 = new Mock<IndexerBase>();
             _seasonIndexer1.Setup(c => c.FetchSeason(It.IsAny<string>(), It.IsAny<int>()))
-                .Returns(_parseResults).Verifiable();
+                .Returns(_parseResults);
 
             _seasonIndexer2 = new Mock<IndexerBase>();
             _seasonIndexer2.Setup(c => c.FetchSeason(It.IsAny<string>(), It.IsAny<int>()))
-                .Returns(_parseResults).Verifiable();
+                .Returns(_parseResults);
 
             _partialSeasonIndexer1 = new Mock<IndexerBase>();
             _partialSeasonIndexer1.Setup(c => c.FetchPartialSeason(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
-                .Returns(_parseResults).Verifiable();
+                .Returns(_parseResults);
 
             _partialSeasonIndexer2 = new Mock<IndexerBase>();
             _partialSeasonIndexer2.Setup(c => c.FetchPartialSeason(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
-                .Returns(_parseResults).Verifiable();
+                .Returns(_parseResults);
 
             _brokenIndexer = new Mock<IndexerBase>();
             _brokenIndexer.Setup(c => c.FetchEpisode(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
-                .Throws(new Exception()).Verifiable();
+                .Throws(new Exception());
 
             List<EpisodeParseResult> nullResult = null;
 
             _nullIndexer = new Mock<IndexerBase>();
             _nullIndexer.Setup(c => c.FetchEpisode(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
-                .Returns(nullResult).Verifiable();
+                .Returns(nullResult);
         }
 
         private void WithEpisodeIndexers()
@@ -151,6 +151,39 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
             _episodes = null;
         }
 
+        private void VerifyFetchEpisode(Times times)
+        {
+            _episodeIndexer1.Verify(v => v.FetchEpisode(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>())
+                , times);
+
+            _episodeIndexer2.Verify(v => v.FetchEpisode(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>())
+                , times);
+        }
+
+        private void VerifyFetchEpisodeBrokenIndexer(Times times)
+        {
+            _brokenIndexer.Verify(v => v.FetchEpisode(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>())
+                , times);
+        }
+
+        private void VerifyFetchPartialSeason(Times times)
+        {
+            _partialSeasonIndexer1.Verify(v => v.FetchPartialSeason(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>())
+                , times);
+
+            _partialSeasonIndexer2.Verify(v => v.FetchPartialSeason(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>())
+                , times);
+        }
+
+        private void VerifyFetchSeason(Times times)
+        {
+            _seasonIndexer1.Verify(v => v.FetchSeason(It.IsAny<string>(), It.IsAny<int>())
+                , times);
+
+            _seasonIndexer1.Verify(v => v.FetchSeason(It.IsAny<string>(), It.IsAny<int>())
+                , times);
+        }
+
         [Test]
         public void PerformSearch_should_search_all_enabled_providers()
         {
@@ -162,9 +195,8 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
             var result = Mocker.Resolve<SearchProvider>().PerformSearch(new ProgressNotification("Test"), _series, 1, _episodes);
 
             //Assert
+            VerifyFetchEpisode(Times.Once());
             result.Should().HaveCount(20);
-            _episodeIndexer1.VerifyAll();
-            _episodeIndexer1.VerifyAll();
         }
 
         [Test]
@@ -179,10 +211,6 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
             var result = Mocker.Resolve<SearchProvider>().PerformSearch(new ProgressNotification("Test"), _series, 1, _episodes);
 
             //Assert
-            result.Should().HaveCount(20);
-            _episodeIndexer1.VerifyAll();
-            _episodeIndexer2.VerifyAll();
-            
             Mocker.GetMock<SceneMappingProvider>().Verify(c => c.GetSceneName(It.IsAny<int>()),
                                                       Times.Once());
         }
@@ -200,9 +228,8 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
             //Assert
             result.Should().HaveCount(20);
             ExceptionVerification.ExcpectedErrors(1);
-            _episodeIndexer1.VerifyAll();
-            _episodeIndexer2.VerifyAll();
-            _brokenIndexer.VerifyAll();
+            VerifyFetchEpisode(Times.Once());
+            VerifyFetchEpisodeBrokenIndexer(Times.Once());
 
             Mocker.GetMock<SceneMappingProvider>().Verify(c => c.GetSceneName(It.IsAny<int>()),
                                                       Times.Once());
@@ -221,11 +248,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
             //Assert
             result.Should().HaveCount(20);
 
-            _episodeIndexer1.Verify(v => v.FetchEpisode(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>())
-                , Times.Once());
-
-            _episodeIndexer2.Verify(v => v.FetchEpisode(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>())
-                , Times.Once());
+            VerifyFetchEpisode(Times.Once());
         }
 
         [Test]
@@ -240,12 +263,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
 
             //Assert
             result.Should().HaveCount(80);
-
-            _partialSeasonIndexer1.Verify(v => v.FetchPartialSeason(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>())
-                , Times.Exactly(4));
-
-            _partialSeasonIndexer2.Verify(v => v.FetchPartialSeason(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>())
-                , Times.Exactly(4));
+            VerifyFetchPartialSeason(Times.Exactly(4));
         }
 
         [Test]
@@ -260,12 +278,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
 
             //Assert
             result.Should().HaveCount(20);
-
-            _seasonIndexer1.Verify(v => v.FetchSeason(It.IsAny<string>(), It.IsAny<int>())
-                , Times.Once());
-
-            _seasonIndexer1.Verify(v => v.FetchSeason(It.IsAny<string>(), It.IsAny<int>())
-                , Times.Once());
+            VerifyFetchSeason(Times.Once());
         }
 
         [Test]
