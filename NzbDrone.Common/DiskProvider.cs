@@ -98,24 +98,20 @@ namespace NzbDrone.Common
                 TransferDirectory(subDir.FullName, Path.Combine(target, subDir.Name), transferAction);
             }
 
-            foreach (var file in sourceFolder.GetFiles("*.*", SearchOption.TopDirectoryOnly))
+            foreach (var sourceFile in sourceFolder.GetFiles("*.*", SearchOption.TopDirectoryOnly))
             {
-                var destFile = Path.Combine(target, file.Name);
+                var destFile = Path.Combine(target, sourceFile.Name);
 
                 switch (transferAction)
                 {
                     case TransferAction.Copy:
                         {
-                            file.CopyTo(destFile, true);
+                            sourceFile.CopyTo(destFile, true);
                             break;
                         }
                     case TransferAction.Move:
                         {
-                            if (FileExists(destFile))
-                            {
-                                File.Delete(destFile);
-                            }
-                            file.MoveTo(destFile);
+                            MoveFile(sourceFile.FullName, destFile);
                             break;
                         }
                 }
@@ -130,6 +126,11 @@ namespace NzbDrone.Common
 
         public virtual void MoveFile(string sourcePath, string destinationPath)
         {
+            if (FileExists(destinationPath))
+            {
+                DeleteFile(destinationPath);
+            }
+
             File.Move(sourcePath, destinationPath);
         }
 
