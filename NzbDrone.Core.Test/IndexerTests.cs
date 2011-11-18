@@ -269,30 +269,6 @@ namespace NzbDrone.Core.Test
             result.Should().OnlyContain(r => r.EpisodeNumbers.Contains(23));
         }
 
-        [Test]
-        public void nzbsorg_multi_word_search_returns_valid_results()
-        {
-            var mocker = new AutoMoqer();
-
-            mocker.GetMock<ConfigProvider>()
-                .SetupGet(c => c.NzbsOrgUId)
-                .Returns("43516");
-
-            mocker.GetMock<ConfigProvider>()
-                .SetupGet(c => c.NzbsOrgHash)
-                .Returns("bc8edb4cc49d4ae440775adec5ac001f");
-
-            mocker.Resolve<HttpProvider>();
-
-            var result = mocker.Resolve<NzbsOrg>().FetchEpisode("Blue Bloods", 1, 19);
-
-            ExceptionVerification.MarkInconclusive(typeof(WebException));
-
-            result.Should().NotBeEmpty();
-            result.Should().OnlyContain(r => r.CleanTitle == "bluebloods");
-            result.Should().OnlyContain(r => r.SeasonNumber == 1);
-            result.Should().OnlyContain(r => r.EpisodeNumbers.Contains(19));
-        }
 
         [Test]
         public void nzbmatrix_multi_word_search_returns_valid_results()

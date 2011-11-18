@@ -34,7 +34,6 @@ namespace NzbDrone.Core.Test
         public void InitAppTest()
         {
             kernel.Should().NotBeNull();
-
         }
 
         [Test]
