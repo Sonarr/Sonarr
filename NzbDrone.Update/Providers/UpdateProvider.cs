@@ -68,11 +68,11 @@ namespace NzbDrone.Update.Providers
             _diskProvider.CopyDirectory(targetFolder, _enviromentProvider.GetUpdateBackUpFolder());
 
 
-            logger.Info("Copying update package to target");
+            logger.Info("Moving update package to target");
 
             try
             {
-                _diskProvider.CopyDirectory(_enviromentProvider.GetUpdatePackageFolder(), targetFolder);
+                _diskProvider.MoveDirectory(_enviromentProvider.GetUpdatePackageFolder(), targetFolder);
             }
             catch (Exception e)
             {
