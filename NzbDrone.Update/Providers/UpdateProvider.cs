@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NLog;
@@ -77,6 +78,12 @@ namespace NzbDrone.Update.Providers
             catch (Exception e)
             {
                 RollBack(targetFolder);
+
+                foreach(var key in e.Data.Keys)
+                {
+                    logger.Trace("Key: {0}, Value: {1}", key, e.Data[key]);
+                }
+
                 logger.FatalException("Failed to copy upgrade package to target folder.", e);
             }
             finally
