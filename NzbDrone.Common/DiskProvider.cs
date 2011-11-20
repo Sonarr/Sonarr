@@ -121,6 +121,7 @@ namespace NzbDrone.Common
 
         public virtual void DeleteFile(string path)
         {
+            Logger.Trace("Deleting file: {0}", path);
             File.Delete(path);
         }
 
