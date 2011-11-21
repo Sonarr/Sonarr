@@ -41,7 +41,7 @@ namespace NzbDrone.Test.Common
                 string exception = "";
                 if (log.Exception != null)
                 {
-                    exception = "[" + log.Exception.Message + "]";
+                    exception = String.Format("[{0}: {1}]", log.Exception.GetType(), log.Exception.Message);
                 }
 
                 errors += Environment.NewLine + String.Format("[{0}] {1}: {2} {3}", log.Level, log.LoggerName, log.FormattedMessage, exception);
@@ -76,7 +76,7 @@ namespace NzbDrone.Test.Common
 
         public static void MarkInconclusive(Type exception)
         {
-            var inconclusiveLogs = _logs.Where(l => l.Exception.GetType() == exception).ToList();
+            var inconclusiveLogs = _logs.Where(l => l.Exception != null && l.Exception.GetType() == exception).ToList();
 
             if (inconclusiveLogs.Count != 0)
             {
