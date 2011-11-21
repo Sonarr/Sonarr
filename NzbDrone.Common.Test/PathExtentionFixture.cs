@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -13,12 +14,38 @@ namespace NzbDrone.Common.Test
         private EnviromentProvider GetEnviromentProvider()
         {
             var envMoq = new Mock<EnviromentProvider>();
-            
+
             envMoq.SetupGet(c => c.ApplicationPath).Returns(@"C:\NzbDrone\");
 
             envMoq.SetupGet(c => c.SystemTemp).Returns(@"C:\Temp\");
 
             return envMoq.Object;
+        }
+
+        [TestCase(@"c:\test\", @"c:\test")]
+        [TestCase(@"c:\\test\\", @"c:\test")]
+        [TestCase(@"C:\\Test\\", @"C:\Test")]
+        [TestCase(@"C:\\Test\\Test\", @"C:\Test\Test")]
+        [TestCase(@"\\Testserver\Test\", @"\\Testserver\Test")]
+        public void Normalize_Path(string dirty, string clean)
+        {
+            var result = dirty.NormalizePath();
+            result.Should().Be(clean);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException), ExpectedMessage = "Path can not be null or empty")]
+        public void normalize_path_exception_empty()
+        {
+            "".NormalizePath();
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException), ExpectedMessage = "Path can not be null or empty")]
+        public void normalize_path_exception_null()
+        {
+            string nullPath = null;
+            nullPath.NormalizePath();
         }
 
 

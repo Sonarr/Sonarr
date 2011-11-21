@@ -9,6 +9,7 @@ using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using PetaPoco;
+using NzbDrone.Common;
 
 namespace NzbDrone.Core.Providers
 {
@@ -48,7 +49,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual bool Exists(string path)
         {
-            return _database.Exists<EpisodeFile>("WHERE Path =@0", Parser.NormalizePath(path));
+            return _database.Exists<EpisodeFile>("WHERE Path =@0", path.NormalizePath());
         }
 
         public virtual EpisodeFile GetEpisodeFile(int episodeFileId)

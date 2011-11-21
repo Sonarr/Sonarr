@@ -94,7 +94,7 @@ namespace NzbDrone.Providers
             foreach (var process in _processProvider.GetProcessByName("IISExpress"))
             {
                 Logger.Info("[{0}]IIS Process found. Path:{1}", process.Id, process.StartPath);
-                if (NormalizePath(process.StartPath) == NormalizePath(_enviromentProvider.GetIISExe()))
+                if (process.StartPath.NormalizePath() == _enviromentProvider.GetIISExe().NormalizePath())
                 {
                     Logger.Info("[{0}]Process is considered orphaned.", process.Id);
                     _processProvider.Kill(process.Id);
@@ -129,19 +129,5 @@ namespace NzbDrone.Providers
             IISLogger.Trace(e.Data);
         }
 
-        private string NormalizePath(string path)
-        {
-            if (String.IsNullOrWhiteSpace(path))
-                throw new ArgumentException("Path can not be null or empty");
-
-            var info = new FileInfo(path);
-
-            if (info.FullName.StartsWith(@"\\")) //UNC
-            {
-                return info.FullName.TrimEnd('/', '\\', ' ');
-            }
-
-            return info.FullName.Trim('/', '\\', ' ').ToLower();
-        }
     }
 }

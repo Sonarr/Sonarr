@@ -199,16 +199,7 @@ namespace NzbDrone.Core.Test
             result.Should().Be(seriesName);
         }
 
-        [TestCase(@"c:\test\", @"c:\test")]
-        [TestCase(@"c:\\test\\", @"c:\test")]
-        [TestCase(@"C:\\Test\\", @"C:\Test")]
-        [TestCase(@"C:\\Test\\Test\", @"C:\Test\Test")]
-        [TestCase(@"\\Testserver\Test\", @"\\Testserver\Test")]
-        public void Normalize_Path(string dirty, string clean)
-        {
-            var result = Parser.NormalizePath(dirty);
-            result.Should().Be(clean);
-        }
+
 
         [TestCase("CaPitAl", "capital")]
         [TestCase("peri.od", "period")]
@@ -315,19 +306,6 @@ namespace NzbDrone.Core.Test
         {
             var result = Parser.ParseLanguage(postTitle);
             result.Should().Be(language);
-        }
-        [Test]
-        [ExpectedException(typeof(ArgumentException), ExpectedMessage = "Path can not be null or empty")]
-        public void normalize_path_exception_empty()
-        {
-            Parser.NormalizePath("");
-        }
-
-        [Test]
-        [ExpectedException(typeof(ArgumentException), ExpectedMessage = "Path can not be null or empty")]
-        public void normalize_path_exception_null()
-        {
-            Parser.NormalizePath(null);
         }
 
         [TestCase("Hawaii Five 0 S01 720p WEB DL DD5 1 H 264 NT", "Hawaii Five", 1)]

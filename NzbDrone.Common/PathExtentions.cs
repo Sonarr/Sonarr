@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace NzbDrone.Common
 {
@@ -21,6 +22,22 @@ namespace NzbDrone.Common
         private const string UPDATE_BACKUP_FOLDER_NAME = "nzbdrone_backup\\";
         private const string UPDATE_CLIENT_EXE = "nzbdrone.update.exe";
         private const string UPDATE_CLIENT_FOLDER_NAME = "NzbDrone.Update\\";
+
+        public static string NormalizePath(this string path)
+        {
+            if (String.IsNullOrWhiteSpace(path))
+                throw new ArgumentException("Path can not be null or empty");
+
+            var info = new FileInfo(path);
+
+            if (info.FullName.StartsWith(@"\\")) //UNC
+            {
+                return info.FullName.TrimEnd('/', '\\', ' ');
+            }
+
+            return info.FullName.Trim('/', '\\', ' ');
+        }
+
 
         public static string GetIISFolder(this EnviromentProvider enviromentProvider)
         {

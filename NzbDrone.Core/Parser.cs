@@ -379,21 +379,6 @@ namespace NzbDrone.Core
             return NormalizeRegex.Replace(title, String.Empty).ToLower();
         }
 
-        public static string NormalizePath(string path)
-        {
-            if (String.IsNullOrWhiteSpace(path))
-                throw new ArgumentException("Path can not be null or empty");
-
-            var info = new FileInfo(path);
-
-            if (info.FullName.StartsWith(@"\\")) //UNC
-            {
-                return info.FullName.TrimEnd('/', '\\', ' ');
-            }
-
-            return info.FullName.Trim('/', '\\', ' ');
-        }
-
         public static long GetReportSize(string sizeString)
         {
             var match = ReportSizeRegex.Matches(sizeString);

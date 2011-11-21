@@ -145,7 +145,7 @@ namespace NzbDrone.Core.Providers
             var episodeFile = new EpisodeFile();
             episodeFile.DateAdded = DateTime.Now;
             episodeFile.SeriesId = series.SeriesId;
-            episodeFile.Path = Parser.NormalizePath(filePath);
+            episodeFile.Path = filePath.NormalizePath();
             episodeFile.Size = size;
             episodeFile.Quality = parseResult.Quality.QualityType;
             episodeFile.Proper = parseResult.Quality.Proper;

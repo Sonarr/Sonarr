@@ -94,7 +94,7 @@ namespace NzbDrone.Core.Providers
         {
             var target = GetTaggedFolderName(directory, status);
 
-            if (!String.Equals(Parser.NormalizePath(target), Parser.NormalizePath(directory.FullName), StringComparison.InvariantCultureIgnoreCase))
+            if (!String.Equals(target.NormalizePath(), directory.FullName.NormalizePath(), StringComparison.InvariantCultureIgnoreCase))
             {
                 _diskProvider.MoveDirectory(directory.FullName, target);
             }
