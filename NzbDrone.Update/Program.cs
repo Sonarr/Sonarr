@@ -36,8 +36,9 @@ namespace NzbDrone.Update
                 var processProvider = new ProcessProvider();
                 var serviceProvider = new ServiceProvider();
                 var diskProvider = new DiskProvider();
+                var iisProvider = new IISProvider();
 
-                var updateProvider = new UpdateProvider(diskProvider, serviceProvider, processProvider, enviromentProvider);
+                var updateProvider = new UpdateProvider(diskProvider, serviceProvider, processProvider, enviromentProvider, iisProvider);
 
                 new Program(updateProvider, processProvider).Start(args);
             }
@@ -58,12 +59,12 @@ namespace NzbDrone.Update
             fileTarget.ConcurrentWrites = false;
             fileTarget.DeleteOldFileOnStartup = true;
             fileTarget.FileName = "upgrade.log";
-            fileTarget.KeepFileOpen =false;
-            
+            fileTarget.KeepFileOpen = false;
+
             fileTarget.Layout = "${logger}: ${message} ${exception}";
             LogManager.Configuration.AddTarget(fileTarget.GetType().Name, fileTarget);
             LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, fileTarget));
-            
+
             LogConfiguration.Reload();
         }
 

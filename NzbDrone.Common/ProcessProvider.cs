@@ -46,18 +46,21 @@ namespace NzbDrone.Common
 
         public virtual void Kill(int processId)
         {
-            if (processId == 0) return;
-            if (!Process.GetProcesses().Any(p => p.Id == processId)) return;
+            if (processId == 0 || !Process.GetProcesses().Any(p => p.Id == processId))
+            {
+                Logger.Warn("Cannot find process with id: {0}", processId);
+                return;
+            }
 
             var process = Process.GetProcessById(processId);
 
             if (!process.HasExited)
             {
-                Logger.Info("[{0}]Killing process", process.Id);
+                Logger.Info("[{0}]: Killing process", process.Id);
                 process.Kill();
-                Logger.Info("[{0}]Waiting for exit", process.Id);
+                Logger.Info("[{0}]: Waiting for exit", process.Id);
                 process.WaitForExit();
-                Logger.Info("[{0}]Process terminated successfully", process.Id);
+                Logger.Info("[{0}]: Process terminated successfully", process.Id);
             }
         }
 
@@ -84,5 +87,6 @@ namespace NzbDrone.Common
                            StartPath = process.MainModule.FileName
                        };
         }
+
     }
 }

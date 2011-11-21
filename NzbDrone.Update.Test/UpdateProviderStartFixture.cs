@@ -118,6 +118,15 @@ namespace NzbDrone.Update.Test
         }
 
         [Test]
+        public void should_stop_orphan_iisexpress_instances()
+        {
+            Mocker.Resolve<UpdateProvider>().Start(TARGET_FOLDER);
+
+            //Assert
+            Mocker.GetMock<IISProvider>().Verify(c => c.StopServer(), Times.Once());
+        }
+
+        [Test]
         public void should_create_backup_of_current_installation()
         {
             Mocker.GetMock<DiskProvider>()

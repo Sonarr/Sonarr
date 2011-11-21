@@ -1,10 +1,10 @@
-﻿using System;
+﻿using System.Linq;
+using System;
 using System.Diagnostics;
 using NLog;
 using Ninject;
-using NzbDrone.Common;
 
-namespace NzbDrone.Providers
+namespace NzbDrone.Common
 {
     public class IISProvider
     {
@@ -84,7 +84,17 @@ namespace NzbDrone.Providers
             IISLogger.Error(e.Data);
         }
 
-        public void StopServer()
+
+        public void RestartServer()
+        {
+            ServerStarted = false;
+            Logger.Warn("Attempting to restart server.");
+            StopServer();
+            StartServer();
+        }
+
+
+        public virtual void StopServer()
         {
             _processProvider.Kill(IISProcessId);
 
@@ -104,13 +114,6 @@ namespace NzbDrone.Providers
             }
         }
 
-        public void RestartServer()
-        {
-            ServerStarted = false;
-            Logger.Warn("Attempting to restart server.");
-            StopServer();
-            StartServer();
-        }
 
         private void OnOutputDataReceived(object s, DataReceivedEventArgs e)
         {
@@ -118,13 +121,7 @@ namespace NzbDrone.Providers
                 e.Data.StartsWith("Request ended:") || e.Data == ("IncrementMessages called") || e.Data == "iisexpress")
                 return;
 
-            //if (e.Data.Contains(" NzbDrone."))
-            {
-                Console.WriteLine(e.Data);
-                return;
-            }
-
-            IISLogger.Trace(e.Data);
+            Console.WriteLine(e.Data);
         }
 
     }

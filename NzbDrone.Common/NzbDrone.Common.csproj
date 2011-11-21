@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="ConfigFileProvider.cs" />
     <Compile Include="ConsoleProvider.cs" />
+    <Compile Include="IISProvider.cs" />
     <Compile Include="Model\AuthenticationType.cs" />
     <Compile Include="PathExtentions.cs" />
     <Compile Include="DiskProvider.cs" />
