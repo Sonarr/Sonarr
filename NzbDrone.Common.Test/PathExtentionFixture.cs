@@ -103,5 +103,17 @@ namespace NzbDrone.Common.Test
         {
             GetEnviromentProvider().GetUpdateClientExePath().Should().BeEquivalentTo(@"C:\Temp\Nzbdrone_update\NzbDrone\NzbDrone.Update\NzbDrone.Update.exe");
         }
+
+        [Test]
+        public void GetSandboxLogFolder()
+        {
+            GetEnviromentProvider().GetSandboxLogFolder().Should().BeEquivalentTo(@"C:\Temp\Nzbdrone_update\UpdateLogs\");
+        }
+
+        [Test]
+        public void GetUpdateLogFolder()
+        {
+            GetEnviromentProvider().GetUpdateLogFolder().Should().BeEquivalentTo(@"C:\NzbDrone\UpdateLogs\");
+        }
     }
 }

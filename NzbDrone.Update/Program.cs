@@ -65,11 +65,10 @@ namespace NzbDrone.Update
             LogConfiguration.RegisterConsoleLogger(LogLevel.Trace);
             LogConfiguration.RegisterUdpLogger();
 
-
             var lastUpgradeLog = new FileTarget();
             lastUpgradeLog.AutoFlush = true;
             lastUpgradeLog.ConcurrentWrites = false;
-            lastUpgradeLog.FileName = Path.Combine(PathExtentions.UPDATE_LOG_FOLDER_NAME, DateTime.Now.ToString("yyyy.MM.dd-H-mm") + ".txt");
+            lastUpgradeLog.FileName = Path.Combine(new EnviromentProvider().GetSandboxLogFolder(), DateTime.Now.ToString("yyyy.MM.dd-H-mm") + ".txt");
             lastUpgradeLog.KeepFileOpen = false;
             lastUpgradeLog.Layout = "${longdate} - ${logger}: ${message} ${exception:format=ToString}";
 

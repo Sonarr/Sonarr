@@ -22,7 +22,7 @@ namespace NzbDrone.Common
         private const string UPDATE_BACKUP_FOLDER_NAME = "nzbdrone_backup\\";
         private const string UPDATE_CLIENT_EXE = "nzbdrone.update.exe";
         private const string UPDATE_CLIENT_FOLDER_NAME = "NzbDrone.Update\\";
-        public const string UPDATE_LOG_FOLDER_NAME = "UpdateLogs\\";
+        private const string UPDATE_LOG_FOLDER_NAME = "UpdateLogs\\";
 
         public static string NormalizePath(this string path)
         {
