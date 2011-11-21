@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
@@ -43,7 +42,6 @@ namespace NzbDrone.Common
                 if (LogManager.ThrowExceptions)
                     throw;
             }
-
         }
 
         public static void RegisterUdpLogger()
@@ -97,10 +95,8 @@ namespace NzbDrone.Common
 
         public static void Reload()
         {
-            var sw = Stopwatch.StartNew();
             LogManager.Configuration.Reload();
             LogManager.ReconfigExistingLoggers();
-            sw.Stop();
         }
     }
 }
