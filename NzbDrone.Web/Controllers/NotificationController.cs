@@ -9,13 +9,14 @@ namespace NzbDrone.Web.Controllers
 {
     public class NotificationController : Controller
     {
-        private readonly NotificationProvider _notifications;
+        private readonly NotificationProvider _notificationProvider;
+
         //
         // GET: /Notification/
 
         public NotificationController(NotificationProvider notificationProvider)
         {
-            _notifications = notificationProvider;
+            _notificationProvider = notificationProvider;
         }
 
         [HttpGet]
@@ -36,11 +37,10 @@ namespace NzbDrone.Web.Controllers
 
         private string GetCurrentMessage()
         {
-            var notes = _notifications.ProgressNotifications;
+            var notification = _notificationProvider.GetCurrent();
 
-            if (_notifications.ProgressNotifications.Count > 0)
-                return _notifications.ProgressNotifications[0].CurrentMessage;
-
+            if (notification != null)
+                return notification.CurrentMessage;
 
             return string.Empty;
         }

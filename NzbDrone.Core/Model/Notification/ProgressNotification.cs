@@ -79,7 +79,7 @@ namespace NzbDrone.Core.Model.Notification
         /// <summary>
         /// Gets the completed time.
         /// </summary>
-        public DateTime CompletedTime { get; private set; }
+        public Nullable<DateTime> CompletedTime { get; private set; }
 
         #region IDisposable Members
 
