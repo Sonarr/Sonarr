@@ -4,6 +4,7 @@ using System.Linq;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
+using Ninject;
 using NzbDrone.Common;
 using NzbDrone.Update.Providers;
 
@@ -13,6 +14,7 @@ namespace NzbDrone.Update
     {
         private readonly UpdateProvider _updateProvider;
         private readonly ProcessProvider _processProvider;
+        private static StandardKernel _kernel;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -29,18 +31,10 @@ namespace NzbDrone.Update
                 Console.WriteLine("Starting NzbDrone Update Client");
 
                 InitLoggers();
-
                 logger.Info("Initializing update application");
 
-                var enviromentProvider = new EnviromentProvider();
-                var processProvider = new ProcessProvider();
-                var serviceProvider = new ServiceProvider();
-                var diskProvider = new DiskProvider();
-                var iisProvider = new IISProvider();
-
-                var updateProvider = new UpdateProvider(diskProvider, serviceProvider, processProvider, enviromentProvider, iisProvider);
-
-                new Program(updateProvider, processProvider).Start(args);
+                _kernel = new StandardKernel();
+                _kernel.Get<Program>().Start(args);
             }
             catch (Exception e)
             {
@@ -55,8 +49,8 @@ namespace NzbDrone.Update
         {
             try
             {
-                var enviromentProvider = new EnviromentProvider();
-                var diskProvider = new DiskProvider();
+                var enviromentProvider = _kernel.Get<EnviromentProvider>();
+                var diskProvider = _kernel.Get<DiskProvider>();
                 logger.Info("Copying log tiles to application directory.");
                 diskProvider.CopyDirectory(enviromentProvider.GetSandboxLogFolder(), enviromentProvider.GetUpdateLogFolder());
             }
@@ -70,18 +64,19 @@ namespace NzbDrone.Update
         {
             LogConfiguration.RegisterConsoleLogger(LogLevel.Trace);
             LogConfiguration.RegisterUdpLogger();
-            LogConfiguration.RegisterExceptioneer();
+
 
             var lastUpgradeLog = new FileTarget();
             lastUpgradeLog.AutoFlush = true;
             lastUpgradeLog.ConcurrentWrites = false;
             lastUpgradeLog.FileName = Path.Combine(PathExtentions.UPDATE_LOG_FOLDER_NAME, DateTime.Now.ToString("yyyy.MM.dd-H-mm") + ".txt");
             lastUpgradeLog.KeepFileOpen = false;
-            lastUpgradeLog.Layout = "${longdate} - ${logger}: ${message} ${exception}";
+            lastUpgradeLog.Layout = "${longdate} - ${logger}: ${message} ${exception:format=ToString}";
 
             LogManager.Configuration.AddTarget(lastUpgradeLog.GetType().Name, lastUpgradeLog);
             LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, lastUpgradeLog));
 
+            LogConfiguration.RegisterExceptioneer();
             LogConfiguration.Reload();
         }
 

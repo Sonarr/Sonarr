@@ -77,39 +77,5 @@ namespace NzbDrone.Core.Providers
             logger.Trace("No updates available");
             return null;
         }
-
-        public virtual void StartUpdate(UpdatePackage updatePackage)
-        {
-            var packageDestination = Path.Combine(_enviromentProvider.GetUpdateSandboxFolder(), updatePackage.FileName);
-
-            if (_diskProvider.FolderExists(_enviromentProvider.GetUpdateSandboxFolder()))
-            {
-                logger.Info("Deleting old update files");
-                _diskProvider.DeleteFolder(_enviromentProvider.GetUpdateSandboxFolder(), true);
-            }
-
-            logger.Info("Downloading update package from [{0}] to [{1}]", updatePackage.Url, packageDestination);
-            _httpProvider.DownloadFile(updatePackage.Url, packageDestination);
-            logger.Info("Download completed for update package from [{0}]", updatePackage.FileName);
-
-            logger.Info("Extracting Update package");
-            _archiveProvider.ExtractArchive(packageDestination, _enviromentProvider.GetUpdateSandboxFolder());
-            logger.Info("Update package extracted successfully");
-
-            logger.Info("Preparing client");
-            _diskProvider.CopyDirectory(_enviromentProvider.GetUpdateClientFolder(), _enviromentProvider.GetUpdateSandboxFolder());
-
-
-            logger.Info("Starting update client");
-            var startInfo = new ProcessStartInfo()
-            {
-                FileName = _enviromentProvider.GetUpdateClientExePath(),
-                Arguments = string.Format("{0} {1}", _enviromentProvider.NzbDroneProcessIdFromEnviroment, _configFileProvider.Guid)
-            };
-
-            _processProvider.Start(startInfo);
-
-        }
-
     }
 }

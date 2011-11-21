@@ -1,20 +1,21 @@
-﻿using System;
+﻿using System.Linq;
+using System;
 using System.Diagnostics;
 using System.IO;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using Ninject.Activation.Strategies;
 using NzbDrone.Common;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
+using NzbDrone.Core.Providers.Jobs;
 using NzbDrone.Core.Test.Framework;
 
-namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
+namespace NzbDrone.Core.Test.JobTests
 {
     [TestFixture]
-    internal class StartUpdateFixture : CoreTest
+    internal class AppUpdateJobFixture : CoreTest
     {
         private const string SANDBOX_FOLDER = @"C:\Temp\nzbdrone_update\";
 
@@ -32,6 +33,7 @@ namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
         {
             Mocker.GetMock<EnviromentProvider>().SetupGet(c => c.SystemTemp).Returns(@"C:\Temp\");
             Mocker.GetMock<ConfigFileProvider>().SetupGet(c => c.Guid).Returns(_clientGuid);
+            Mocker.GetMock<UpdateProvider>().Setup(c => c.GetAvilableUpdate()).Returns(updatePackage);
         }
 
 
@@ -41,7 +43,7 @@ namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
             Mocker.GetMock<DiskProvider>().Setup(c => c.FolderExists(SANDBOX_FOLDER)).Returns(true);
 
             //Act
-            Mocker.Resolve<UpdateProvider>().StartUpdate(updatePackage);
+            StartUpdate();
 
             //Assert
             Mocker.GetMock<DiskProvider>().Verify(c => c.DeleteFolder(SANDBOX_FOLDER, true));
@@ -53,7 +55,7 @@ namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
             Mocker.GetMock<DiskProvider>().Setup(c => c.FolderExists(SANDBOX_FOLDER)).Returns(false);
 
             //Act
-            Mocker.Resolve<UpdateProvider>().StartUpdate(updatePackage);
+            StartUpdate();
 
             //Assert
             Mocker.GetMock<DiskProvider>().Verify(c => c.DeleteFolder(SANDBOX_FOLDER, true), Times.Never());
@@ -65,7 +67,7 @@ namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
             var updateArchive = Path.Combine(SANDBOX_FOLDER, updatePackage.FileName);
 
             //Act
-            Mocker.Resolve<UpdateProvider>().StartUpdate(updatePackage);
+            StartUpdate();
 
             //Assert
             Mocker.GetMock<HttpProvider>().Verify(
@@ -78,7 +80,7 @@ namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
             var updateArchive = Path.Combine(SANDBOX_FOLDER, updatePackage.FileName);
 
             //Act
-            Mocker.Resolve<UpdateProvider>().StartUpdate(updatePackage);
+            StartUpdate();
 
             //Assert
             Mocker.GetMock<ArchiveProvider>().Verify(
@@ -91,7 +93,7 @@ namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
             var updateClientFolder = Mocker.GetMock<EnviromentProvider>().Object.GetUpdateClientFolder();
 
             //Act
-            Mocker.Resolve<UpdateProvider>().StartUpdate(updatePackage);
+            StartUpdate();
 
             //Assert
             Mocker.GetMock<DiskProvider>().Verify(
@@ -108,7 +110,7 @@ namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
                 .SetupGet(c => c.NzbDroneProcessIdFromEnviroment).Returns(12);
 
             //Act
-            Mocker.Resolve<UpdateProvider>().StartUpdate(updatePackage);
+            StartUpdate();
 
             //Assert
             Mocker.GetMock<ProcessProvider>().Verify(
@@ -134,7 +136,7 @@ namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
             Mocker.Resolve<HttpProvider>();
             Mocker.Resolve<DiskProvider>();
             Mocker.Resolve<ArchiveProvider>();
-            Mocker.Resolve<UpdateProvider>().StartUpdate(updatePackage);
+            StartUpdate();
             updateSubFolder.Refresh();
             //Assert
 
@@ -142,6 +144,11 @@ namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
             updateSubFolder.GetDirectories("nzbdrone").Should().HaveCount(1);
             updateSubFolder.GetDirectories().Should().HaveCount(1);
             updateSubFolder.GetFiles().Should().HaveCount(1);
+        }
+
+        private void StartUpdate()
+        {
+            Mocker.Resolve<AppUpdateJob>().Start(MockNotification, 0, 0);
         }
     }
 }
