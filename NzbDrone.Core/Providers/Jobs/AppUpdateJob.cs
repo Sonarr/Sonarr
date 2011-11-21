@@ -79,7 +79,7 @@ namespace NzbDrone.Core.Providers.Jobs
             };
 
             var updateProcess = _processProvider.Start(startInfo);
-            logger.Info("Update in progress. NzbDrone will restart shortly.");
+            notification.CurrentMessage = "Update in progress. NzbDrone will restart shortly.";
         }
     }
 }
