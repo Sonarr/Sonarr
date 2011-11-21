@@ -117,6 +117,7 @@ namespace NzbDrone.Core.Test
             parseResults.Should().OnlyContain(s => s.Indexer == newzbinProvider.Name);
             parseResults.Should().OnlyContain(s => !String.IsNullOrEmpty(s.NzbTitle));
 
+            ExceptionVerification.MarkInconclusive(typeof(WebException));
             ExceptionVerification.IgnoreWarns();
         }
 
@@ -372,6 +373,12 @@ namespace NzbDrone.Core.Test
 
             parseResults.Should().HaveCount(1);
             parseResults[0].Size.Should().Be(1793148846);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            ExceptionVerification.MarkInconclusive(typeof(WebException));
         }
     }
 }
