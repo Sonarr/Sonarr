@@ -46,6 +46,24 @@ namespace NzbDrone.Update
             {
                 logger.FatalException("An error has occurred while applying update package.", e);
             }
+
+            TransferUpdateLogs();
+
+        }
+
+        private static void TransferUpdateLogs()
+        {
+            try
+            {
+                var enviromentProvider = new EnviromentProvider();
+                var diskProvider = new DiskProvider();
+                logger.Info("Copying log tiles to application directory.");
+                diskProvider.CopyDirectory(enviromentProvider.GetSandboxLogFolder(), enviromentProvider.GetUpdateLogFolder());
+            }
+            catch (Exception e)
+            {
+                logger.FatalException("Can't copy upgrade log files to target folder", e);
+            }
         }
 
         private static void InitLoggers()
@@ -57,7 +75,7 @@ namespace NzbDrone.Update
             var lastUpgradeLog = new FileTarget();
             lastUpgradeLog.AutoFlush = true;
             lastUpgradeLog.ConcurrentWrites = false;
-            lastUpgradeLog.FileName = Path.Combine("UpgradeLog", DateTime.Now.ToString("yyyy.MM.dd-H-mm") + ".txt");
+            lastUpgradeLog.FileName = Path.Combine(PathExtentions.UPDATE_LOG_FOLDER_NAME, DateTime.Now.ToString("yyyy.MM.dd-H-mm") + ".txt");
             lastUpgradeLog.KeepFileOpen = false;
             lastUpgradeLog.Layout = "${longdate} - ${logger}: ${message} ${exception}";
 
