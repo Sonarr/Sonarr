@@ -7,7 +7,7 @@ namespace NzbDrone.Common
     {
         private const string WEB_FOLDER = "NzbDrone.Web\\";
         private const string APP_DATA = "App_Data\\";
-        public const string IIS_FOLDER = EnviromentProvider.IIS_FOLDER_NAME;
+        public const string IIS_FOLDER = "IISExpress";
         public const string IIS_EXE = "iisexpress.exe";
 
 

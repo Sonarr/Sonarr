@@ -7,10 +7,9 @@ namespace NzbDrone.Common
 {
     public class EnviromentProvider
     {
-        public const string IIS_FOLDER_NAME = "iisexpress";
-
         public const string NZBDRONE_PATH = "NZBDRONE_PATH";
         public const string NZBDRONE_PID = "NZBDRONE_PID";
+        public const string ROOT_MARKER = "NzbDrone.Web";
 
 #if DEBUG
         private static readonly bool isInDebug = true;
@@ -46,15 +45,20 @@ namespace NzbDrone.Common
             {
                 string applicationPath;
 
-                applicationPath = GetApplicationPath(Environment.CurrentDirectory);
+                applicationPath = CrawlToRoot(StartUpPath);
                 if (!string.IsNullOrWhiteSpace(applicationPath))
                     return applicationPath;
 
-                applicationPath = GetApplicationPath(StartUpPath);
+
+                applicationPath = CrawlToRoot(Environment.CurrentDirectory);
                 if (!string.IsNullOrWhiteSpace(applicationPath))
                     return applicationPath;
 
-                applicationPath = GetApplicationPath(NzbDronePathFromEnviroment);
+                applicationPath = CrawlToRoot(StartUpPath);
+                if (!string.IsNullOrWhiteSpace(applicationPath))
+                    return applicationPath;
+
+                applicationPath = CrawlToRoot(NzbDronePathFromEnviroment);
                 if (!string.IsNullOrWhiteSpace(applicationPath))
                     return applicationPath;
 
@@ -62,22 +66,22 @@ namespace NzbDrone.Common
             }
         }
 
-        private string GetApplicationPath(string dir)
+        public string CrawlToRoot(string dir)
         {
             var directoryInfo = new DirectoryInfo(dir);
 
-            while (!ContainsIIS(directoryInfo))
+            while (!IsRoot(directoryInfo))
             {
-                if (directoryInfo.Parent == null) break;
+                if (directoryInfo.Parent == null) return null;
                 directoryInfo = directoryInfo.Parent;
             }
 
             return directoryInfo.FullName;
         }
 
-        private static bool ContainsIIS(DirectoryInfo dir)
+        private static bool IsRoot(DirectoryInfo dir)
         {
-            return dir.GetDirectories(IIS_FOLDER_NAME).Length != 0;
+            return dir.GetDirectories(ROOT_MARKER).Length != 0;
         }
 
 
@@ -132,6 +136,6 @@ namespace NzbDrone.Common
             }
         }
 
-    
+
     }
 }

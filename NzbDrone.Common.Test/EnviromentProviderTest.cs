@@ -30,12 +30,24 @@ namespace NzbDrone.Common.Test
 
 
         [Test]
-        public void ApplicationPath_should_find_iis_in_current_folder()
+        public void ApplicationPath_should_find_root_in_current_folder()
         {
-            Directory.CreateDirectory(EnviromentProvider.IIS_FOLDER_NAME);
+            Directory.CreateDirectory(EnviromentProvider.ROOT_MARKER);
             enviromentProvider.ApplicationPath.Should().BeEquivalentTo(Directory.GetCurrentDirectory());
         }
 
+        [Test]
+        public void crawl_should_return_null_if_cant_find_root()
+        {
+            enviromentProvider.CrawlToRoot("C:\\").Should().BeNullOrEmpty();
+        }
+
+        [Test]
+        public void should_go_up_the_tree_to_find_iis()
+        {
+            enviromentProvider.ApplicationPath.Should().NotBe(Environment.CurrentDirectory);
+            enviromentProvider.ApplicationPath.Should().NotBe(enviromentProvider.StartUpPath);
+        }
         [Test]
         public void IsProduction_should_return_false_when_run_within_nunit()
         {
@@ -47,6 +59,13 @@ namespace NzbDrone.Common.Test
         public void Application_version_should_not_be_default(string version)
         {
             enviromentProvider.Version.Should().NotBe(new Version(version));
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            if (Directory.Exists(EnviromentProvider.ROOT_MARKER))
+                Directory.Delete(EnviromentProvider.ROOT_MARKER);
         }
     }
 }

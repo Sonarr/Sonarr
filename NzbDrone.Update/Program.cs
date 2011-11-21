@@ -31,9 +31,9 @@ namespace NzbDrone.Update
                 Console.WriteLine("Starting NzbDrone Update Client");
 
                 InitLoggers();
-                logger.Info("Initializing update application");
-
                 _kernel = new StandardKernel();
+
+                logger.Info("Updating NzbDrone to version {0}", _kernel.Get<EnviromentProvider>().Version);
                 _kernel.Get<Program>().Start(args);
             }
             catch (Exception e)

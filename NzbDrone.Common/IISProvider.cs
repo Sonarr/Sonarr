@@ -118,7 +118,7 @@ namespace NzbDrone.Common
         private void OnOutputDataReceived(object s, DataReceivedEventArgs e)
         {
             if (e == null || String.IsNullOrWhiteSpace(e.Data) || e.Data.StartsWith("Request started:") ||
-                e.Data.StartsWith("Request ended:") || e.Data == ("IncrementMessages called") || e.Data == "iisexpress")
+                e.Data.StartsWith("Request ended:") || e.Data == ("IncrementMessages called") || e.Data == "iisexpress" || e.Data == "nzbdrone")
                 return;
 
             Console.WriteLine(e.Data);
