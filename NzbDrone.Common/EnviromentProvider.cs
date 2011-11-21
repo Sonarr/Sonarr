@@ -44,26 +44,40 @@ namespace NzbDrone.Common
         {
             get
             {
-                var dir = new DirectoryInfo(Environment.CurrentDirectory);
+                string applicationPath;
 
-                while (!ContainsIIS(dir))
-                {
-                    if (dir.Parent == null) break;
-                    dir = dir.Parent;
-                }
+                applicationPath = GetApplicationPath(Environment.CurrentDirectory);
+                if (!string.IsNullOrWhiteSpace(applicationPath))
+                    return applicationPath;
 
-                if (ContainsIIS(dir)) return dir.FullName;
+                applicationPath = GetApplicationPath(StartUpPath);
+                if (!string.IsNullOrWhiteSpace(applicationPath))
+                    return applicationPath;
 
-                dir = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory;
+                applicationPath = GetApplicationPath(NzbDronePathFromEnviroment);
+                if (!string.IsNullOrWhiteSpace(applicationPath))
+                    return applicationPath;
 
-                while (!ContainsIIS(dir))
-                {
-                    if (dir.Parent == null) throw new ApplicationException("Can't fine IISExpress folder.");
-                    dir = dir.Parent;
-                }
-
-                return dir.FullName;
+                throw new ApplicationException("Can't fine IISExpress folder.");
             }
+        }
+
+        private string GetApplicationPath(string dir)
+        {
+            var directoryInfo = new DirectoryInfo(dir);
+
+            while (!ContainsIIS(directoryInfo))
+            {
+                if (directoryInfo.Parent == null) break;
+                directoryInfo = directoryInfo.Parent;
+            }
+
+            return directoryInfo.FullName;
+        }
+
+        private static bool ContainsIIS(DirectoryInfo dir)
+        {
+            return dir.GetDirectories(IIS_FOLDER_NAME).Length != 0;
         }
 
 
@@ -110,9 +124,14 @@ namespace NzbDrone.Common
             }
         }
 
-        private static bool ContainsIIS(DirectoryInfo dir)
+        public virtual string NzbDronePathFromEnviroment
         {
-            return dir.GetDirectories(IIS_FOLDER_NAME).Length != 0;
+            get
+            {
+                return Environment.GetEnvironmentVariable(NZBDRONE_PATH);
+            }
         }
+
+    
     }
 }

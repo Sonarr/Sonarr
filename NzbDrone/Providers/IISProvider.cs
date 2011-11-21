@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;
 using NLog;
 using Ninject;
 using NzbDrone.Common;
-using NzbDrone.Common.Model;
 
 namespace NzbDrone.Providers
 {
