@@ -143,6 +143,9 @@ namespace NzbDrone.Update.Test
             Mocker.GetMock<DiskProvider>()
                 .Setup(c => c.CopyDirectory(UPDATE_FOLDER, TARGET_FOLDER));
 
+            Mocker.GetMock<DiskProvider>()
+                .Setup(c => c.DeleteFolder(UPDATE_FOLDER, true));
+
             Mocker.Resolve<UpdateProvider>().Start(TARGET_FOLDER);
         }
 

@@ -79,6 +79,7 @@ namespace NzbDrone.Update.Providers
             try
             {
                 _diskProvider.CopyDirectory(_enviromentProvider.GetUpdatePackageFolder(), targetFolder);
+                _diskProvider.DeleteFolder(_enviromentProvider.GetUpdatePackageFolder(), true);
             }
             catch (Exception e)
             {
