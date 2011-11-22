@@ -141,7 +141,7 @@ namespace NzbDrone.Update.Test
         public void should_copy_update_package_to_target()
         {
             Mocker.GetMock<DiskProvider>()
-                .Setup(c => c.MoveDirectory(UPDATE_FOLDER, TARGET_FOLDER));
+                .Setup(c => c.CopyDirectory(UPDATE_FOLDER, TARGET_FOLDER));
 
             Mocker.Resolve<UpdateProvider>().Start(TARGET_FOLDER);
         }
@@ -150,7 +150,7 @@ namespace NzbDrone.Update.Test
         public void should_restore_if_update_fails()
         {
             Mocker.GetMock<DiskProvider>()
-                .Setup(c => c.MoveDirectory(UPDATE_FOLDER, TARGET_FOLDER))
+                .Setup(c => c.CopyDirectory(UPDATE_FOLDER, TARGET_FOLDER))
                 .Throws(new IOException());
 
             //Act
@@ -195,7 +195,7 @@ namespace NzbDrone.Update.Test
             WithServiceRunning(true);
 
             Mocker.GetMock<DiskProvider>()
-                .Setup(c => c.MoveDirectory(UPDATE_FOLDER, TARGET_FOLDER))
+                .Setup(c => c.CopyDirectory(UPDATE_FOLDER, TARGET_FOLDER))
                 .Throws(new IOException());
 
             //Act
@@ -213,7 +213,7 @@ namespace NzbDrone.Update.Test
             WithServiceRunning(false);
 
             Mocker.GetMock<DiskProvider>()
-                .Setup(c => c.MoveDirectory(UPDATE_FOLDER, TARGET_FOLDER))
+                .Setup(c => c.CopyDirectory(UPDATE_FOLDER, TARGET_FOLDER))
                 .Throws(new IOException());
 
             //Act
