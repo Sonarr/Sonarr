@@ -218,6 +218,7 @@
     <Compile Include="Providers\Converting\AtomicParsleyProvider.cs" />
     <Compile Include="Providers\Converting\HandbrakeProvider.cs" />
     <Compile Include="Providers\Indexer\Newznab.cs" />
+    <Compile Include="Providers\Jobs\TrimLogsJob.cs" />
     <Compile Include="Providers\NewznzbProvider.cs" />
     <Compile Include="Providers\ExternalNotification\Prowl.cs" />
     <Compile Include="Providers\Jobs\AppUpdateJob.cs" />
