@@ -122,7 +122,7 @@ namespace NzbDrone.Common
 
         public static string GetUpdateClientExePath(this EnviromentProvider enviromentProvider)
         {
-            return Path.Combine(enviromentProvider.GetUpdateClientFolder(), UPDATE_CLIENT_EXE);
+            return Path.Combine(enviromentProvider.GetUpdateSandboxFolder(), UPDATE_CLIENT_EXE);
         }
 
         public static string GetSandboxLogFolder(this EnviromentProvider enviromentProvider)
