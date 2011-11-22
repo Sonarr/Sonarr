@@ -97,7 +97,7 @@ namespace NzbDrone.Core.Test.JobTests
 
             //Assert
             Mocker.GetMock<DiskProvider>().Verify(
-               c => c.CopyDirectory(updateClientFolder, SANDBOX_FOLDER));
+               c => c.MoveDirectory(updateClientFolder, SANDBOX_FOLDER));
         }
 
         [Test]

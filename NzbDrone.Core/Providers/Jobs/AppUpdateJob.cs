@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Providers.Jobs
 
             logger.Info("Preparing client");
             notification.CurrentMessage = "Preparing to start Update";
-            _diskProvider.CopyDirectory(_enviromentProvider.GetUpdateClientFolder(), _enviromentProvider.GetUpdateSandboxFolder());
+            _diskProvider.MoveDirectory(_enviromentProvider.GetUpdateClientFolder(), _enviromentProvider.GetUpdateSandboxFolder());
 
 
             logger.Info("Starting update client");
