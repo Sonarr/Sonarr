@@ -31,6 +31,7 @@ namespace NzbDrone.Common
 
         public virtual bool FileExists(string path)
         {
+            Logger.Trace("Checking if File Exists: {0}", path);
             return File.Exists(path);
         }
 
