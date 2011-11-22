@@ -222,5 +222,28 @@ namespace NzbDrone.Core.Test.ProviderTests
             logs.Items.Should().HaveCount(50);
             logs.TotalItems.Should().Be(100);
         }
+
+        [Test]
+        public void Trim_Logs_should_clear_logs_older_than_30_days()
+        {
+            //Setup
+            var historyItem = Builder<Log>.CreateListOfSize(20)
+                .TheFirst(10).With(c => c.Time = DateTime.Now)
+                .TheNext(10).With(c => c.Time = DateTime.Now.AddDays(-31))
+                .Build();
+
+            var mocker = new AutoMoqer();
+            var db = MockLib.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            db.InsertMany(historyItem);
+
+            //Act
+            db.Fetch<Log>().Should().HaveCount(20);
+            mocker.Resolve<LogProvider>().Trim();
+
+            //Assert
+            db.Fetch<Log>().Should().HaveCount(10);
+        }
     }
 }

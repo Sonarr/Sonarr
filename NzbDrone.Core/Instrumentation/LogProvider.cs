@@ -46,5 +46,11 @@ namespace NzbDrone.Core.Instrumentation
             _database.Delete<Log>("");
             Logger.Info("Cleared Log History");
         }
+
+        public void Trim()
+        {
+            _database.Delete<Log>("WHERE Time < @0", DateTime.Now.AddDays(-30).Date);
+            Logger.Info("Logs have been trimmed, events older than 30 days have been removed");
+        }
     }
 }
