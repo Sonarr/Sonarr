@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -17,10 +18,8 @@ namespace NzbDrone.Core.Providers
     {
         private readonly HttpProvider _httpProvider;
         private readonly ConfigProvider _configProvider;
-        private readonly ConfigFileProvider _configFileProvider;
         private readonly EnviromentProvider _enviromentProvider;
-        private readonly ArchiveProvider _archiveProvider;
-        private readonly ProcessProvider _processProvider;
+
         private readonly DiskProvider _diskProvider;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -29,15 +28,12 @@ namespace NzbDrone.Core.Providers
 
 
         [Inject]
-        public UpdateProvider(HttpProvider httpProvider, ConfigProvider configProvider, ConfigFileProvider configFileProvider,
-            EnviromentProvider enviromentProvider, ArchiveProvider archiveProvider, ProcessProvider processProvider, DiskProvider diskProvider)
+        public UpdateProvider(HttpProvider httpProvider, ConfigProvider configProvider,
+            EnviromentProvider enviromentProvider, DiskProvider diskProvider)
         {
             _httpProvider = httpProvider;
             _configProvider = configProvider;
-            _configFileProvider = configFileProvider;
             _enviromentProvider = enviromentProvider;
-            _archiveProvider = archiveProvider;
-            _processProvider = processProvider;
             _diskProvider = diskProvider;
         }
 
@@ -76,6 +72,24 @@ namespace NzbDrone.Core.Providers
 
             logger.Trace("No updates available");
             return null;
+        }
+
+        public virtual Dictionary<DateTime, string> UpdateLogFile()
+        {
+            var list = new Dictionary<DateTime, string>();
+            CultureInfo provider = CultureInfo.InvariantCulture;
+
+            if (_diskProvider.FolderExists(_enviromentProvider.GetUpdateLogFolder()))
+            {
+                var files = _diskProvider.GetFiles(_enviromentProvider.GetUpdateLogFolder(), SearchOption.TopDirectoryOnly).ToList();
+
+                foreach (var file in files.Select(c => new FileInfo(c)).OrderByDescending(c=>c.Name))
+                {
+                    list.Add(DateTime.ParseExact(file.Name.Replace(file.Extension, string.Empty), "yyyy.MM.dd-H-mm", provider), file.FullName);
+                }
+            }
+
+            return list;
         }
     }
 }

@@ -497,6 +497,7 @@
     <Compile Include="Models\SystemSettingsModel.cs" />
     <Compile Include="Models\TvDbSearchResultModel.cs" />
     <Compile Include="Models\UpcomingEpisodeModel.cs" />
+    <Compile Include="Models\UpdateModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -944,6 +945,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Update\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Update\ViewLog.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

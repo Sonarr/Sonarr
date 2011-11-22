@@ -40,12 +40,10 @@ namespace NzbDrone.Web
         protected override void OnApplicationStarted()
         {
             base.OnApplicationStarted();
-            //WebAssetDefaultSettings.UseTelerikContentDeliveryNetwork = true;
             RegisterRoutes(RouteTable.Routes);
-            //base.OnApplicationStarted();
             AreaRegistration.RegisterAllAreas();
 
-            var razor = ViewEngines.Engines.Where(e => e.GetType() == typeof(RazorViewEngine)).Single();
+            var razor = ViewEngines.Engines.Single(e => e is RazorViewEngine);
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(razor);
 
@@ -57,12 +55,12 @@ namespace NzbDrone.Web
         protected override IKernel CreateKernel()
         {
             LogManager.Configuration = new XmlLoggingConfiguration(new EnviromentProvider().GetNlogConfigPath(), false);
-            
-            Common.LogConfiguration.RegisterUdpLogger();
-            Common.LogConfiguration.RegisterExceptioneer();
-            Common.LogConfiguration.RegisterConsoleLogger(LogLevel.Info, "NzbDrone.Web.MvcApplication");
-            Common.LogConfiguration.RegisterConsoleLogger(LogLevel.Info, "NzbDrone.Core.CentralDispatch");
-            
+
+            LogConfiguration.RegisterUdpLogger();
+            LogConfiguration.RegisterExceptioneer();
+            LogConfiguration.RegisterConsoleLogger(LogLevel.Info, "NzbDrone.Web.MvcApplication");
+            LogConfiguration.RegisterConsoleLogger(LogLevel.Info, "NzbDrone.Core.CentralDispatch");
+
 
             var dispatch = new CentralDispatch();
             Logger.Info("NzbDrone Starting up.");
