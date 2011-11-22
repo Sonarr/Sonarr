@@ -97,6 +97,7 @@
     <Compile Include="ProviderTests\PostDownloadProviderTests\ProcessDownloadFixture.cs" />
     <Compile Include="ProviderTests\JobProviderTests\TestJobs.cs" />
     <Compile Include="JobTests\AppUpdateJobFixture.cs" />
+    <Compile Include="ProviderTests\UpdateProviderTests\GetUpdateLogFixture.cs" />
     <Compile Include="ProviderTests\UpdateProviderTests\GetAvilableUpdateFixture.cs" />
     <Compile Include="SortHelperTest.cs" />
     <Compile Include="ProviderTests\EpisodeProviderTest_DeleteInvalidEpisodes.cs" />

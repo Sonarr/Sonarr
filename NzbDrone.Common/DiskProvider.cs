@@ -170,5 +170,10 @@ namespace NzbDrone.Common
 
             return freeBytesAvailable;
         }
+
+        public virtual string ReadAllText(string filePath)
+        {
+            return File.ReadAllText(filePath);
+        }
     }
 }

@@ -1,8 +1,8 @@
-﻿@model NzbDrone.Core.Model.UpdatePackage
+﻿@model NzbDrone.Web.Models.UpdateModel
 @section TitleContent{
 Update
 }
-@if (Model == null)
+@if (Model.UpdatePackage == null)
 {
     <h2>
         There are no updates available.</h2>
@@ -10,7 +10,21 @@ Update
 else
 {
     <h2>
-        Available Update: @Model.Version
+        Available Update: @Model.UpdatePackage.Version
         @Ajax.ActionLink("Update", "StartUpdate", "Update", null)
     </h2> 
+}
+@if (Model.LogFiles.Count != 0)
+{
+    <h3>
+        Update Logs (@Model.LogFolder)
+    </h3>
+    <br />
+    foreach (var log in Model.LogFiles)
+    {
+    <div>
+        <a href="@Url.Action("ViewLog", "Update", new { filePath = log.Value })">
+            @log.Key.ToString("MMM dd, hh:mm tt")</a>
+    </div>
+    }
 }

@@ -43,7 +43,7 @@ namespace NzbDrone.Test.Common
         [TearDown]
         public void TestBaseTearDown()
         {
-            Mocker.VerifyAllMocks();
+
         }
 
         protected virtual void WithStrictMocker()
