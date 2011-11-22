@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Ninject;
+using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Repository;
 
@@ -38,7 +39,7 @@ namespace NzbDrone.Core.Providers.Jobs
             IList<Series> seriesToUpdate;
             if (targetId == 0)
             {
-                seriesToUpdate = _seriesProvider.GetAllSeries().ToList();
+                seriesToUpdate = _seriesProvider.GetAllSeries().OrderBy(o => SortHelper.SkipArticles(o.Title)).ToList();
             }
             else
             {
