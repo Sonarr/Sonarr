@@ -10,6 +10,15 @@
         {
             padding-top: 20px;
         }
+        
+        .additionalInfo
+        {
+            float: right;
+            margin-top: 20px;
+            margin-right: 40px;
+            font-size: 120%;
+            font-weight: bold;
+        }
     </style>
 }
 
@@ -24,11 +33,16 @@
 @section MainContent{
     <div id="stylized">
 
+    <div class="additionalInfo">
+        NzbDrone checks all Indexers every 15 minutes
+    </div>
+    
+
         @using (Html.BeginForm("SaveIndexers", "Settings", FormMethod.Post, new { id = "form", name = "form", @class = "settingsForm" }))
         {
             <h1>Indexers</h1>
                 <p></p>
-    
+
             @Html.ValidationSummary(true, "Unable to save your settings. Please correct the errors and try again.")
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             <div>
             @{ Html.Telerik().PanelBar()

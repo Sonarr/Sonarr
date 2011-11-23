@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Ninject;
 using NLog;
+using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Repository;
 
@@ -40,7 +41,7 @@ namespace NzbDrone.Core.Providers.Jobs
             IList<Series> seriesToScan;
             if (targetId == 0)
             {
-                seriesToScan = _seriesProvider.GetAllSeries().ToList();
+                seriesToScan = _seriesProvider.GetAllSeries().OrderBy(o => SortHelper.SkipArticles(o.Title)).ToList();
             }
             else
             {
