@@ -227,8 +227,8 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Trim_Logs_should_clear_logs_older_than_30_days()
         {
             //Setup
-            var historyItem = Builder<Log>.CreateListOfSize(20)
-                .TheFirst(10).With(c => c.Time = DateTime.Now)
+            var historyItem = Builder<Log>.CreateListOfSize(30)
+                .TheFirst(20).With(c => c.Time = DateTime.Now)
                 .TheNext(10).With(c => c.Time = DateTime.Now.AddDays(-31))
                 .Build();
 
@@ -239,11 +239,13 @@ namespace NzbDrone.Core.Test.ProviderTests
             db.InsertMany(historyItem);
 
             //Act
-            db.Fetch<Log>().Should().HaveCount(20);
+            db.Fetch<Log>().Should().HaveCount(30);
             mocker.Resolve<LogProvider>().Trim();
 
             //Assert
-            db.Fetch<Log>().Should().HaveCount(10);
+            var result = db.Fetch<Log>();
+            result.Should().HaveCount(20);
+            result.Should().OnlyContain(s => s.Time > DateTime.Now.AddDays(-30));
         }
     }
 }

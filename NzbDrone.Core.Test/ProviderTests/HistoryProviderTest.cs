@@ -94,9 +94,9 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Trim_Items()
         {
             //Setup
-            var historyItem = Builder<History>.CreateListOfSize(20)
+            var historyItem = Builder<History>.CreateListOfSize(30)
                 .TheFirst(10).With(c => c.Date = DateTime.Now)
-                .TheNext(10).With(c => c.Date = DateTime.Now.AddDays(-31))
+                .TheNext(20).With(c => c.Date = DateTime.Now.AddDays(-31))
                 .Build();
 
             var mocker = new AutoMoqer();
@@ -107,11 +107,13 @@ namespace NzbDrone.Core.Test.ProviderTests
 
 
             //Act
-            db.Fetch<History>().Should().HaveCount(20);
+            db.Fetch<History>().Should().HaveCount(30);
             mocker.Resolve<HistoryProvider>().Trim();
 
             //Assert
-            db.Fetch<History>().Should().HaveCount(10);
+            var result =  db.Fetch<History>();
+            result.Should().HaveCount(10);
+            result.Should().OnlyContain(s => s.Date > DateTime.Now.AddDays(-30));
         }
 
 
