@@ -23,11 +23,9 @@
 @section TitleContent{
 Logs
 }
-
 @section ActionMenu{
     @{Html.RenderPartial("SubMenu");}
 }
-
 @section MainContent{
     @{Html.Telerik().Grid<Log>().Name("logsGrid")
             .TableHtmlAttributes(new { @class = "Grid" })
@@ -43,17 +41,17 @@ Logs
                                                                     "<div><#= ExceptionType #></div>" +
                                                                     "<div class='stackframe'><#= Exception #></div>"
                                                                 ))
-            .DataBinding(data => data
-                .Ajax()
-                    .OperationMode(GridOperationMode.Client)
-                    .Select("_AjaxBinding", "Log"))
+            .DataBinding(data =>
+            {
+                data.Server().Select("AjaxBinding", "Log", new { ajax = true });
+                data.Ajax().Select("AjaxBinding", "Log").Enabled(true);
+            })
             .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.Time).Descending()).Enabled(true))
             .Pageable(c => c.PageSize(50).Position(GridPagerPosition.Bottom).Style(GridPagerStyles.NextPrevious))
             .Filterable()
             .ClientEvents(c => c.OnRowDataBound("onRowDataBound"))
             .Render();}
 }
-
 <script type="text/javascript">
     function reloadGrid() {
         var grid = $('#logsGrid').data('tGrid');

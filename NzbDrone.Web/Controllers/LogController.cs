@@ -27,7 +27,7 @@ namespace NzbDrone.Web.Controllers
         }
 
         [GridAction]
-        public ActionResult _AjaxBinding()
+        public ActionResult AjaxBinding()
         {
             return View(new GridModel(_logProvider.GetAllLogs()));
         }
