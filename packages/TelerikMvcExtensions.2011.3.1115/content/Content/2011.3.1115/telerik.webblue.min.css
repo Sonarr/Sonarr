@@ -1,0 +1,83 @@
+/* WebBlue theme*/.t-widget,.t-input{border-color:#768ca5;/*font-size:.75em;/* 12px base,if there are no inherited font-sizes(MVC default) */background-color:#fff}
+/* .small .t-widget{font-size:.687em}
+/* 11px base,if there are no inherited font-sizes(MVC default) */.t-header,.t-grid-header{border-color:#426682;background:#718ca1 url('WebBlue/sprite.png') repeat-x 0 -752px}
+.t-icon{background-image:url('WebBlue/sprite.png')}
+.t-editor .t-tool-icon{background-image:url('WebBlue/editor.png')}
+.t-loading,.t-widget .t-loading{background:transparent url('WebBlue/loading.gif') no-repeat 0 0}
+.t-widget,.t-link,.t-popup{color:#333}
+.t-header,.t-header .t-link,.t-state-active .t-header .t-state-default .t-link /*nested tabstrips*/{color:#fff}
+.t-header .t-group,.t-group .t-link{color:#333}
+.t-group,.t-content,.t-editable-area{border-color:#426682;background-color:#fff}
+.t-colorpicker .t-arrow-down{border-color:#768ca5}
+.t-separator{border-color:#8aa0b1;background-color:#516273}
+.t-alt{background-color:#dae2e8}
+.t-state-default{border-color:#426682}
+.t-active-filter{background-color:#8dc1d7}
+.t-state-active{background-color:#fff;border-color:#426682}
+.t-state-active,.t-state-active .t-link,.t-state-active .t-tabstrip .t-state-active .t-link /*nested tabstrips*/{color:#333}
+.t-state-active .t-header{color:#fff}
+.t-state-active .t-state-hover{color:#333}
+.t-state-selected{background-color:#3e94b4}
+.t-state-focused{background-color:#9bacbe}
+.t-state-selected,.t-state-selected .t-link,.t-state-selected.t-link{color:#fff}
+.t-state-hover,.t-state-hover .t-link,.t-state-hover.t-link,.t-header .t-state-hover,.t-group .t-state-hover{color:#333}
+.t-state-hover,.t-state-hover:hover{background-color:#acd4e3;border-color:#5d9fb7;/*426682*/}
+.t-state-error,.t-widget.input-validation-error,.t-widget .input-validation-error{border-color:#f00;background-color:#ffc0cb}
+.t-button{border-color:#426682;color:#0d202b}
+.t-button,button.t-button.t-state-disabled:hover,a.t-button.t-state-disabled:hover,.t-state-disabled .t-button:hover{background:#d6e1e7 url('WebBlue/sprite.png') repeat-x 0 -560px}
+.t-button:hover{background-position:0 -624px;background-color:#bee3f6;color:#0e3d4f}
+.t-state-disabled,.t-state-disabled:hover,.t-state-disabled .t-link{color:#bbb}
+.t-button.t-state-disabled,.t-button.t-state-disabled:hover,.t-state-disabled .t-button{color:#657c8c}
+.t-header .t-state-disabled,.t-header .t-state-disabled .t-link{color:#abc0d3}
+.t-toolbar,.t-grouping-header,.t-grid-pager,.t-widget .t-status{border-color:#a2b3c7;background-color:#dae2e8}
+.t-panelbar .t-link{border-color:#333}
+.t-grid-header-wrap{border-color:#426682}
+.t-grid-footer-wrap{border-color:#a2b3c7}
+.t-grid td{border-color:#dae2e8}
+.t-grouping-row td{background:#fff url('WebBlue/sprite.png') repeat-x 0 -48px}
+.t-footer-template td{background-color:#dae2e8;border-color:#a2b3c7 #dae2e8 #fff}
+.t-group-footer td{background-color:#dae2e8;border-color:#a2b3c7}
+.t-grid-footer,.t-grid-footer-wrap table{background-color:#dae2e8;border-color:#a2b3c7}
+.t-grouping-header .t-group-indicator{color:#333;border-color:#aaa}
+.t-grouping-dropclue{background:url('WebBlue/sprite.png') no-repeat -48px -288px}
+.t-grouping-row .t-group-cell,.t-grouping-row p{background:#fff}
+.t-treeview .t-drop-clue{background-image:url('WebBlue/sprite.png');background-position:0 -358px}
+.t-treeview .t-state-selected{border-color:#133C44}
+.t-editor-button .t-state-active{background-color:#a2b9c9}
+.t-calendar th{background-color:#dfeeff;border-color:#a7c0df}
+.t-other-month .t-link{color:#777}
+.t-treeview-lines .t-top,.t-treeview-lines .t-mid,.t-treeview-lines .t-bot{background-image:url('WebBlue/treeview-nodes.png')}
+.t-rtl .t-treeview-lines .t-top,.t-rtl .t-treeview-lines .t-mid,.t-rtl .t-treeview-lines .t-bot{background-image:url('WebBlue/treeview-nodes-rtl.png')}
+.t-treeview-lines .t-item{background-image:url('WebBlue/treeview-line.png')}
+.t-treeview-lines .t-last{background-image:none}
+.t-editor-button .t-state-hover{border-color:#5f7c95 #3b576f #3b576f #5f7c95;background-color:#5f7c95}
+.t-editor-button .t-state-active{border-color:#5b758e #97b5c7 #97b5c7 #5b758e;background-color:#8ca5b8}
+/*Slider*/.t-slider .t-draghandle{background-image:url('WebBlue/sprite.png');color:#768ca5}
+.t-slider-track{border-color:#c1cbd6}
+.t-slider-horizontal .t-slider-track,.t-slider-horizontal .t-slider-selection{background-image:url('WebBlue/sprite.png')}
+.t-slider-vertical .t-slider-track,.t-slider-vertical .t-slider-selection{background-image:url('WebBlue/sprite-vertical.png')}
+.t-slider-horizontal .t-tick{background-image:url('WebBlue/slider-h.gif')}
+.t-slider-vertical .t-tick{background-image:url('WebBlue/slider-v.gif')}
+/*Tooltip*/.t-tooltip{border-color:#a7c0df;background:#c4d4dd 0 -96px repeat-x url('WebBlue/sprite.png');color:#0d202b}
+.t-callout{background-image:url('WebBlue/sprite.png')}
+/* Splitter */.t-splitter{border-color:#a2b3c7}
+.t-splitbar-vertical,.t-splitbar-horizontal{background-color:#b4c5d9;border-color:#a2b3c7}
+.t-splitbar-vertical,.t-ghost-splitbar-vertical{background-image:url('WebBlue/sprite.png')}
+.t-splitbar-horizontal,.t-ghost-splitbar-horizontal{background-image:url('WebBlue/sprite-vertical.png')}
+/* Upload */.t-dropzone-active,.t-upload-files{border-color:#a2b3c7}
+.t-dropzone-hovered,.t-upload-files{background-color:#dae2e8}
+.t-dropzone em{color:#8a98a8}
+.t-progress,.t-progress-status{background-image:url('WebBlue/sprite.png')}
+.t-progress{background-position:0 -465px;border-color:#92a4b8 #adbac9 #a2b3c7}
+.t-progress-status{background-position:0 -472px;border-color:#a4ff91 transparent #5aff62}
+/* ImageBrowser */.t-imagebrowser .t-content{background:#dae2e8}
+.t-toolbar .t-upload .t-button,.t-breadcrumbs .t-link,.t-tiles-arrange,.t-tiles-arrange a{color:#0e3d4f}
+.t-breadcrumbs .t-first,.t-breadcrumbs .t-first:hover,.t-search-wrap label{color:#8a98a8}
+.t-tiles{border-color:#a2b3c7;background:#fff}
+.t-tile{border-color:#fff;background:0 100px repeat-x url('WebBlue/imagebrowser.png');color:#0e3d4f}
+.t-tiles li.t-state-hover{border-color:#4a70ae;background-position:0 0}
+.t-tiles li.t-state-selected{border-color:#768ca5;background-position:0 -100px;color:#fff}
+.t-tile .t-folder{background-image:url('WebBlue/imagebrowser.png')}
+.t-tile em,.t-tile .t-filesize{color:#8a98a8}
+.t-tiles li.t-state-selected em,.t-tiles li.t-state-selected .t-filesize{color:#b2c5d2}
+.t-tile-empty strong{color:#b3c6d3}

@@ -1,0 +1,95 @@
+/* Metro theme*/.t-widget,.t-input{border-color:#e5e5e5;/*font-size:.75em;/* 12px base,if there are no inherited font-sizes(MVC default) */background-color:#fff}
+/* .small .t-widget{font-size:.687em}
+/* 11px base,if there are no inherited font-sizes(MVC default) */.t-header,.t-grid-header{border-color:#25a0da;background:#25a0da;color:#fff}
+.t-icon{background-image:url('Metro/sprite.png')}
+.t-editor .t-tool-icon{background-image:url('Metro/editor.png')}
+.t-loading,.t-widget .t-loading{background:transparent url('Metro/loading.gif') no-repeat 0 0}
+.t-dropdown .t-input,.t-header.t-link,.t-group .t-header.t-link,.t-header .t-link,.t-state-active .t-header.t-link{color:#fff}
+.t-widget,.t-link,.t-popup,.t-group,.t-group .t-link,.t-content,.t-editable-area,.t-breadcrumbs .t-breadcrumbs-wrap .t-link{color:#767676}
+.t-group,.t-content,.t-editable-area{border-color:#e5e5e5;background-color:#fff}
+.t-colorpicker .t-arrow-down{border-color:#e5e5e5}
+.t-separator{border-color:#fff;background-color:#999}
+.t-alt{background-color:#f4f4f4}
+.t-state-default{border-color:#e5e5e5}
+.t-active-filter{background-color:#d8d8d8}
+.t-state-active{background-color:#fff;border-color:#e5e5e5}
+.t-state-active,.t-state-active .t-link{color:#000}
+.t-state-selected{background-color:#25a0da}
+.t-state-selected,.t-state-selected .t-link,.t-state-selected.t-link{color:#fff}
+.t-state-hover,.t-state-focused{background-color:#e5e5e5;border-color:#e5e5e5}
+.t-state-hover,.t-state-hover:hover,.t-state-hover:hover .t-link,.t-link.t-state-hover:hover{color:#000}
+.t-state-error,.t-widget.input-validation-error,.t-widget .input-validation-error{border-color:#de3914;background-color:#fff}
+.t-button{color:#777}
+.t-button,button.t-button.t-state-disabled:hover,a.t-button.t-state-disabled:hover,.t-state-disabled .t-button:hover{border-color:#e5e5e5;background:#fff}
+.t-button:hover{background:#e5e5e5;color:#000}
+.t-state-disabled,.t-state-disabled:hover,.t-state-disabled .t-link,.t-state-disabled .t-button{color:#bbb}
+.t-toolbar,.t-grouping-header,.t-grid-pager,.t-widget .t-status{border-color:#e5e5e5;background-color:#fff}
+.t-grid-header-wrap{border-color:#25a0da}
+.t-grid-footer-wrap{border-color:#e5e5e5}
+.t-grid td{border-color:#e5e5e5}
+.t-grid tr.t-state-selected td{border-color:#25a0da}
+.t-grouping-header .t-group-indicator{color:#333;border-color:#e5e5e5}
+.t-grouping-dropclue{background:url('Metro/sprite.png') no-repeat -48px -288px}
+.t-grouping-row .t-group-cell,.t-grouping-row td,.t-grouping-row p{background:#e5e5e5}
+.t-footer-template td{background-color:#fff;border-color:#e5e5e5 #e5e5e5 #fff}
+.t-group-footer td{background-color:#fff;border-color:#e5e5e5}
+.t-grid-footer,.t-grid-footer-wrap table{background-color:#fff;border-color:#e5e5e5}
+.t-treeview .t-drop-clue{background-image:url('Metro/sprite.png');background-position:0 -358px}
+.t-treeview .t-state-selected{border-color:#25a0da}
+.t-panelbar .t-link,.t-panelbar .t-group,.t-panelbar .t-content{border-color:#e5e5e5}
+.t-header .t-arrow-prev{background-position:-48px -496px}
+.t-header .t-arrow-next{background-position:-64px -496px}
+.t-header .t-arrow-up{background-position:-48px -511px}
+.t-header .t-arrow-down{background-position:-64px -510px}
+.t-group .t-arrow-prev,.t-arrow-prev{background-position:-16px -192px}
+.t-group .t-arrow-next{background-position:-32px -192px}
+.t-group .t-arrow-up,.t-state-hover .t-arrow-up{background-position:-16px -160px}
+.t-group .t-arrow-down,.t-state-hover .t-arrow-down{background-position:-16px -176px}
+.t-header .t-link+.t-grid-filter .t-filter{background-position:-48px -538px}
+.t-header .t-state-hover+.t-grid-filter .t-filter,.t-header .t-link+.t-state-hover .t-filter{background-position:0 -240px}
+.t-calendar th{border-color:#e5e5e5}
+.t-other-month .t-link{color:#777}
+/*Slider*/.t-slider .t-draghandle{border-width:1px;border-style:solid;color:#606060}
+.t-slider-horizontal .t-draghandle{width:7px;height:18px;top:-8px}
+.t-slider-vertical .t-draghandle{width:18px;height:7px;left:-8px}
+.t-slider .t-draghandle{border-color:#fff;background-color:#25a0da}
+.t-slider-horizontal .t-draghandle{width:5px}
+.t-slider-vertical .t-draghandle{height:5px}
+.t-slider .t-slider-track{background:#e5e5e5 none;border:1px solid #e5e5e5}
+.t-slider .t-slider-selection{background:#25a0da none;border:1px solid #25a0da}
+.t-slider-horizontal .t-slider-track,.t-slider-horizontal .t-slider-selection{height:4px}
+.t-slider-vertical .t-slider-track,.t-slider-vertical .t-slider-selection{width:4px}
+.t-slider-horizontal .t-tick{background-image:url('Metro/slider-h.gif')}
+.t-slider-vertical .t-tick{background-image:url('Metro/slider-v.gif')}
+/*TabStrip*/.t-tabstrip-items .t-state-default{border-color:#25a0da}
+.t-tabstrip-items .t-state-hover{border-color:#fff;background-color:transparent}
+.t-tabstrip-items .t-state-hover .t-link{color:#fff}
+.t-tabstrip-items .t-state-active{border-color:#fff;background-color:#fff}
+.t-tabstrip-items .t-state-active .t-link{color:#000}
+/*Tooltip*/.t-tooltip{border-color:#25a0da;background:#25a0da;color:#fff}
+.t-callout{background-image:url('Metro/sprite.png')}
+/* Splitter */.t-splitter{border-color:#e5e5e5}
+.t-splitbar-vertical,.t-splitbar-horizontal{background-color:#e5e5e5;border-color:#e5e5e5}
+.t-splitbar-vertical-hover,.t-splitbar-horizontal-hover{background-color:#25a0da}
+.t-splitbar-horizontal-active,.t-splitbar-vertical-active,.t-ghost-splitbar-horizontal,.t-ghost-splitbar-vertical{background-color:#25a0da}
+.t-restricted-size-horizontal,.t-restricted-size-vertical{background-color:#de3914}
+/* Upload */.t-dropzone-active,.t-upload-files{border-color:#e5e5e5}
+.t-dropzone-hovered,.t-upload-files{background-color:#e5e5e5}
+.t-dropzone em{color:#9b9b9b}
+.t-progress{background-color:#e5e5e5;border-color:#e5e5e5}
+.t-progress-status{background-color:#25a0da;border-color:#25a0da}
+/* ImageBrowser */.t-imagebrowser .t-content{background:#e5e5e5}
+.t-breadcrumbs .t-first,.t-breadcrumbs .t-first:hover,.t-search-wrap label{color:#9b9b9b}
+.t-tiles{border-color:#e5e5e5;background:#fff}
+.t-tile{border-color:#fff}
+.t-tiles li.t-state-hover{border-color:#e5e5e5;background-color:#e5e5e5}
+.t-tiles li.t-state-selected{border-color:#25a0da;background-color:#25a0da;color:#fff}
+.t-tile .t-folder{background-image:url('Metro/imagebrowser.png')}
+.t-tile em,.t-tile .t-filesize{color:#6e6659}
+.t-tile-empty strong{color:#9e9e9e}
+/*Window,Editor*/html div.t-window{border-width:1px}
+:root div.t-window{border-width:1px}
+.t-window-actions .t-state-hover,.t-editor-button .t-state-hover{border-color:#fff;background-color:transparent}
+.t-editor-button .t-state-active{border-color:#fff;background-color:#57b5df}
+/*rounded corners and shadows*/.t-button,div.t-window,.t-window-titlebar,div.t-window-content,.t-window-titlebar .t-state-hover,.t-tabstrip-items .t-item,.t-panelbar .t-tabstrip-items .t-item,.t-pager .t-state-active,.t-pager .t-state-hover,.t-grid .t-filter-options,.t-grouping-header .t-group-indicator,.t-treeview .t-state-hover,.t-treeview .t-state-selected,.t-colorpicker .t-selected-color,.t-editor-button .t-state-hover,.t-editor-button .t-state-active,.t-drag-clue,.t-tooltip,.t-dropzone,.t-upload-files,.t-progress,.t-progress-status,.t-tile{-moz-border-radius:0;-webkit-border-radius:0;border-radius:0}
+.t-popup,.t-menu .t-group,div.t-window,.t-imagebrowser .t-image{-moz-box-shadow:0;-webkit-box-shadow:0;box-shadow:0}

@@ -1,0 +1,82 @@
+/* Sunset theme*/.t-widget,.t-input{border-color:#714734;/*font-size:.75em;/* 12px base,if there are no inherited font-sizes(MVC default) */background-color:#ececd8}
+/* .small .t-widget{font-size:.687em}
+/* 11px base,if there are no inherited font-sizes(MVC default) */.t-header,.t-grid-header{border-color:#854324;background:#90330a url('Sunset/sprite.png') repeat-x 0 -752px}
+.t-icon{background-image:url('Sunset/sprite.png')}
+.t-editor .t-tool-icon{background-image:url('Sunset/editor.png')}
+.t-loading,.t-widget .t-loading{background:transparent url('Sunset/loading.gif') no-repeat 0 0}
+.t-widget,.t-link,.t-popup{color:#333}
+.t-header,.t-header .t-link,.t-grid-header .t-header .t-link,.t-grid-header .t-header,.t-state-active .t-header .t-state-default .t-link /*nested tabstrips*/{color:#fbfbc7}
+.t-header .t-group,.t-group .t-link{color:#333}
+.t-group,.t-content,.t-editable-area{border-color:#bbb99d;background-color:#ececd8}
+.t-colorpicker .t-arrow-down{border-color:#714734}
+.t-separator{border-color:#a85835;background-color:#7c2f0c}
+.t-alt{background-color:#fff}
+.t-state-default{border-color:#854324}
+.t-active-filter{background-color:#d25e21}
+.t-state-selected{border-color:#904c23;background-color:#ea9959}
+.t-state-hover,.t-state-hover .t-link,.t-group .t-state-hover{color:#fff}
+.t-state-hover,.t-state-hover:hover{background-color:#c5551c;border-color:#854324}
+.t-state-focused{background-color:#cdccb3}
+.t-state-active{background-color:#ececd8;border-color:#854324}
+.t-state-active,.t-state-active .t-link,.t-state-active .t-tabstrip .t-state-active .t-link /*nested tabstrips*/{color:#333}
+.t-state-active .t-header,.t-state-active .t-state-hover{color:#fff}
+.t-state-error,.t-widget.input-validation-error,.t-widget .input-validation-error{border-color:#f00;background-color:#ffc0cb}
+.t-button{border-color:#d1711a;color:#2d0e06}
+.t-button,button.t-button.t-state-disabled:hover,a.t-button.t-state-disabled:hover,.t-state-disabled .t-button:hover{background:#d1711a url('Sunset/sprite.png') repeat-x 0 -560px}
+.t-button:hover{border-color:#e7941e;background-position:0 -624px;background-color:#e8961e}
+.t-state-disabled,.t-state-disabled:hover,.t-state-disabled .t-link,.t-state-disabled .t-button{border-color:#666;color:#bf9e8f}
+a.t-button.t-state-disabled,button.t-button.t-state-disabled,.t-state-disabled .t-button{color:#b83b01;border-color:#d1711a}
+.t-header .t-state-disabled,.t-header .t-state-disabled .t-link{border-color:#a04a23}
+.t-toolbar,.t-grouping-header,.t-grid-pager,.t-widget .t-status{border-color:#bbb99d;background-color:#dee0c8}
+.t-panelbar .t-link{border-color:#714734}
+.t-editor-button .t-state-active{background-color:#d3751a}
+.t-grid-header-wrap{border-color:#854324}
+.t-grid-footer-wrap{border-color:#cabaab}
+.t-grid td{border-color:#ddd}
+.t-grouping-row td{background:#fff url('Sunset/sprite.png') repeat-x 0 -48px}
+.t-footer-template td{background-color:#dee0c8;border-color:#cabaab #dee0c8 #f1e9dc}
+.t-group-footer td{background-color:#dee0c8;border-color:#cabaab}
+.t-grid-footer,.t-grid-footer-wrap table{background-color:#dee0c8;border-color:#cabaab}
+.t-grouping-header .t-group-indicator{color:#333;border-color:#999}
+.t-grouping-dropclue{background:url('Sunset/sprite.png') no-repeat -48px -288px}
+.t-grouping-row .t-group-cell,.t-grouping-row p{background:#fff}
+.t-treeview .t-drop-clue{background-image:url('Sunset/sprite.png');background-position:0 -358px}
+.t-calendar th{border-color:#d2c7b4}
+.t-other-month .t-link{color:#777}
+.t-treeview-lines .t-top,.t-treeview-lines .t-mid,.t-treeview-lines .t-bot{background-image:url('Sunset/treeview-nodes.png')}
+.t-rtl .t-treeview-lines .t-top,.t-rtl .t-treeview-lines .t-mid,.t-rtl .t-treeview-lines .t-bot{background-image:url('Sunset/treeview-nodes-rtl.png')}
+.t-treeview-lines .t-item{background-image:url('Sunset/treeview-line.png')}
+.t-treeview-lines .t-last{background-image:none}
+.t-editor-button .t-state-hover{border-color:#ca734b #722205 #722205 #ca734b;background-color:#a13606}
+.t-editor-button .t-state-active{border-color:#a24b0f #e09d5c #e09d5c #a24b0f;background-color:#d3751a}
+/*Slider*/.t-slider .t-draghandle{background-image:url('Sunset/sprite.png');color:#714734}
+.t-slider-track{border-color:#c6c0a8}
+.t-slider-horizontal .t-slider-track,.t-slider-horizontal .t-slider-selection{background-image:url('Sunset/sprite.png')}
+.t-slider-vertical .t-slider-track,.t-slider-vertical .t-slider-selection{background-image:url('Sunset/sprite-vertical.png')}
+.t-slider-horizontal .t-tick{background-image:url('Sunset/slider-h.gif')}
+.t-slider-vertical .t-tick{background-image:url('Sunset/slider-v.gif')}
+/*Tooltip*/.t-tooltip{border-color:#c0bca2;background:#d6ceba 0 -96px repeat-x url('Sunset/sprite.png');color:#2d0e06}
+.t-callout{background-image:url('Sunset/sprite.png')}
+/* Splitter */.t-splitter{border-color:#cac8ab}
+.t-splitbar-vertical,.t-splitbar-horizontal{background-color:#ececd8;border-color:#cac8ab}
+.t-splitbar-vertical,.t-ghost-splitbar-vertical{background-image:url('Sunset/sprite.png')}
+.t-splitbar-horizontal,.t-ghost-splitbar-horizontal{background-image:url('Sunset/sprite-vertical.png')}
+/* Upload */.t-dropzone-active,.t-upload-files{border-color:#bbb99d}
+.t-dropzone-hovered,.t-upload-files{background-color:#f5f5e6}
+.t-dropzone em{color:#714734}
+.t-progress,.t-progress-status{background-image:url('Sunset/sprite.png')}
+.t-progress{background-position:0 -465px;border-color:#cfc5b1 #cbc6af #c2bda4}
+.t-progress-status{background-position:0 -472px;border-color:#2b140d transparent #593324}
+/* ImageBrowser */.t-imagebrowser .t-content{background:#dee0c8}
+.t-breadcrumbs .t-link{color:#2d0e06}
+.t-breadcrumbs .t-first,.t-breadcrumbs .t-first:hover,.t-search-wrap label{color:#714734}
+.t-tiles-arrange{color:#714734}
+.t-tiles-arrange a{color:#2d0e06}
+.t-tiles{border-color:#bbb99d;background:#fff}
+.t-tile{border-color:#fff;background:0 100px repeat-x url('Sunset/imagebrowser.png')}
+.t-tiles li.t-state-hover{border-color:#e7941e;background-position:0 0}
+.t-tiles li.t-state-selected{border-color:#854324;background-position:0 -100px;color:#fff}
+.t-tile .t-folder{background-image:url('Sunset/imagebrowser.png')}
+.t-tile em,.t-tile .t-filesize{color:#986011}
+.t-tiles li.t-state-selected em,.t-tiles li.t-state-selected .t-filesize{color:#dbaa93}
+.t-tile-empty strong{color:#ae9b87}

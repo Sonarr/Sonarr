@@ -1,0 +1,69 @@
+/* Office2010Silver theme*/.t-widget,.t-input{border-color:#a4abb2;/*font-size:.75em;/* 12px base,if there are no inherited font-sizes(MVC default) */background-color:#fff;/** #bccadd;*/}
+/* .small .t-widget{font-size:.687em}
+/* 11px base,if there are no inherited font-sizes(MVC default) */.t-header,.t-grid-header,.t-toolbar,.t-grouping-header,.t-tooltip,.t-grid-pager{border-color:#a4abb2;background:#d2d5d9 url('Office2010Silver/gradient.png') repeat-x 0 center}
+.t-menu-vertical,.t-editor,.t-tooltip,.t-tabstrip{background-position:0 -48px}
+.t-icon{background-image:url('Office2010Silver/sprite.png')}
+.t-editor .t-tool-icon{background-image:url('Office2010Silver/editor.png')}
+.t-picker-wrap{padding-right:23px}
+.t-loading,.t-widget .t-loading{background:transparent url('Office2010Silver/loading.gif') no-repeat 0 0}
+.t-widget,.t-link:link,.t-link:active,.t-link:visited,.t-popup,.t-grid .t-header{color:#3b3b3b}
+.t-group{background-color:#f1f2f3;border-color:#a4abb2}
+.t-content,.t-editable-area{border-color:#a4abb2;background-color:#fff}
+.t-colorpicker .t-arrow-down{border-color:#a4abb2}
+.t-separator{border-color:#a4abb2;background-color:#fff}
+.t-alt{background-color:#f1f2f3}
+.t-state-default{border-color:#a4abb2}
+.t-active-filter{background-color:#fff}
+.t-state-hover,.t-state-hover:hover{background-color:#fae185;border-color:#f3d64a;color:#000}
+.t-state-active,.t-header .t-state-active{background-color:#fff;border-color:#a4abb2}
+.t-state-selected{background-color:#f4b914}
+.t-state-focused{background-color:#d3d6da}
+.t-state-hover,.t-state-selected{color:#000}
+.t-state-error,.t-widget.input-validation-error,.t-widget .input-validation-error{border-color:#ff7c7c;background-color:#ffe4e4;color:#f20000}
+.t-button{border-color:#a4abb2;color:#3b3b3b}
+.t-button,button.t-button.t-state-disabled:hover,a.t-button.t-state-disabled:hover,.t-state-disabled .t-button:hover{background:#d2d5d9 url('Office2010Silver/gradient.png') repeat-x 0 center}
+.t-button:hover{border-color:#f3d64a;background-color:#fae185;color:#000}
+.t-state-disabled,.t-state-disabled:hover,.t-state-disabled .t-link,.t-state-disabled .t-button{border-color:#a4abb2;color:#a4abb2}
+.t-autocomplete{background-color:#fff}
+.t-toolbar,.t-grouping-header,.t-grid-pager,.t-group-footer td,.t-grid-footer,.t-footer-template td,.t-widget .t-status{border-color:#a4abb2;background-color:#f1f2f3}
+.t-widget .t-status{background-color:transparent}
+.t-grid-header-wrap,.t-grid-footer-wrap{border-color:#a4abb2}
+.t-grid td{border-color:#d3d6da}
+.t-grouping-row td{background:url('Office2010Silver/sprite.png') repeat-x 0 -48px}
+.t-grouping-header .t-group-indicator{border-color:#a4abb2}
+.t-grouping-dropclue{background:url('Office2010Silver/sprite.png') no-repeat -48px -288px}
+.t-grouping-row .t-group-cell,.t-grouping-row p{background:#fff}
+.t-treeview .t-drop-clue{background-image:url('Office2010Silver/sprite.png');background-position:0 -358px}
+.t-treeview .t-state-selected{border-color:#f4b914}
+.t-panelbar .t-link,.t-panelbar .t-group,.t-panelbar .t-content{border-color:#a4abb2}
+.t-calendar th{border-color:#d3d6da;background-color:#f1f2f3}
+.t-other-month .t-link{color:#a4abb2}
+/* Slider */.t-slider .t-draghandle{background-image:url('Office2010Silver/sprite.png');color:#666}
+.t-slider-track{border-color:#a4abb2}
+.t-slider-horizontal .t-slider-track,.t-slider-horizontal .t-slider-selection{background-image:url('Office2010Silver/sprite.png')}
+.t-slider-vertical .t-slider-track,.t-slider-vertical .t-slider-selection{background-image:url('Office2010Silver/sprite-vertical.png')}
+.t-slider-horizontal .t-tick{background-image:url('Office2010Silver/slider-h.gif')}
+.t-slider-vertical .t-tick{background-image:url('Office2010Silver/slider-v.gif')}
+/* Tooltip */.t-tooltip{border-width:2px;border-color:#dfe1e4}
+.t-callout{background-image:url('Office2010Silver/sprite.png')}
+.t-callout-n,.t-callout-s{width:10px;height:5px}
+.t-callout-w,.t-callout-e{width:5px;height:10px}
+.t-callout-n{top:-7px;left:50%;margin-left:-5px;background-position:-64px -368px}
+.t-callout-w{left:-7px;top:50%;margin-top:-5px;background-position:-64px -384px}
+.t-callout-s{top:100%;left:50%;margin-left:-5px;margin-top:2px;background-position:-64px -400px}
+.t-callout-e{left:100%;top:50%;margin-top:-5px;margin-left:2px;background-position:-64px -416px}
+/* Splitter */.t-splitbar{border-color:#a4abb2;background-color:#f1f2f3}
+.t-splitbar-vertical,.t-ghost-splitbar-vertical{background-image:url('Office2010Silver/sprite.png')}
+.t-splitbar-horizontal,.t-ghost-splitbar-horizontal{background-image:url('Office2010Silver/sprite-vertical.png')}
+/* Upload */.t-dropzone-active,.t-upload-files{border-color:#a4abb2}
+.t-dropzone-hovered,.t-upload-files{background-color:#f1f2f3}
+.t-dropzone em{color:#a4abb2}
+.t-progress,.t-progress-status{background-image:url('Office2010Silver/sprite.png')}
+.t-progress{background-position:0 -464px;border-color:#a4abb2}
+.t-progress-status{background-position:0 -472px;border-color:#f3d64a transparent}
+/* ImageBrowser */.t-tiles{border-color:#a4abb2;background:#fff}
+.t-tile{border-color:#fff;background-image:url('Office2010Silver/gradient.png');background-position:0 100px;background-repeat:repeat-x}
+.t-tiles li.t-state-hover{border-color:#f3d64a;background-position:0 0}
+.t-tiles li.t-state-selected{border-color:#f4b914;background-position:0 0}
+.t-tile .t-folder{background-image:url('Office2010Silver/imagebrowser.png')}
+.t-tile-empty strong{color:#aaa}

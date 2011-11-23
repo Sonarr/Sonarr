@@ -1,0 +1,73 @@
+/* Default theme*/.t-widget,.t-input{border-color:#2c2c2c;/*font-size:.75em;/* 12px base,if there are no inherited font-sizes(MVC default) */background-color:#6f6f6f}
+/* .small .t-widget{font-size:.687em}
+/* 11px base,if there are no inherited font-sizes(MVC default) */.t-header,.t-grid-header{border-color:#444;background:#6b6b6b url('Office2010Black/sprite.png') repeat-x 0 -752px}
+.t-icon{background-image:url('Office2010Black/sprite.png')}
+.t-editor .t-tool-icon{background-image:url('Office2010Black/editor.png')}
+.t-loading,.t-widget .t-loading{background:transparent url('Office2010Black/loading.gif') no-repeat 0 0}
+.t-widget,.t-link:link,.t-link:active,.t-link:visited,.t-popup,.t-group,.t-grid .t-header{color:#000}
+.t-group,.t-content,.t-editable-area{border-color:#828282;background-color:#f6f6f6}
+.t-colorpicker .t-arrow-down{border-color:#606060}
+.t-separator{border-color:#606060;background-color:#adadad}
+.t-alt{background-color:#646464}
+.t-state-default{border-color:#848484}
+.t-active-filter{background-color:#f9d04c}
+.t-state-hover,.t-state-hover:hover{background-color:#ffe175;border-color:#f7c840}
+.t-header .t-state-hover{background-color:#ffe175}
+.t-state-active,.t-header .t-state-active{background-color:#e6e6e6;/*#ffcb36;*/border-color:#444;/*#c28b31 #c29a42 #c2a34c;*/}
+.t-state-selected{background-color:#ffcb36}
+.t-state-focused{background-color:#a9a9a9}
+.t-state-hover,.t-state-selected{color:#000}
+.t-state-error,.t-widget.input-validation-error,.t-widget .input-validation-error{border-color:#f00;background-color:#ffc0cb}
+.t-button{border-color:#262626;color:#000}
+.t-button,button.t-button.t-state-disabled:hover,a.t-button.t-state-disabled:hover,.t-state-disabled .t-button:hover{background:#6f6f6f url('Office2010Black/sprite.png') repeat-x 0 -560px}
+.t-button:hover{background-position:0 -624px;background-color:#fff3c9}
+.t-state-disabled,.t-state-disabled:hover,.t-state-disabled .t-link,.t-state-disabled .t-button{border-color:#262626;color:#5e5e5e}
+.t-popup,.t-menu .t-group{-moz-box-shadow:2px 2px 2px #444;-webkit-box-shadow:2px 2px 2px #444;box-shadow:2px 2px 2px #444}
+.t-autocomplete,.t-input{background-color:#fff}
+.t-toolbar,.t-grouping-header,.t-grid-pager,.t-group-footer td,.t-grid-footer,.t-footer-template td,.t-widget .t-status{border-color:#444;background-color:#777}
+.t-grid{color:#fff}
+.t-grid-pager .t-link{color:#fff}
+.t-grid-pager .t-state-hover,.t-grid-pager .t-state-active{color:#000}
+.t-grid-header-wrap,.t-grid-footer-wrap,.t-grid td{border-color:#444}
+.t-grouping-row td{background:url('Office2010Black/sprite.png') repeat-x 0 -48px}
+.t-grouping-header .t-group-indicator{border-color:#444;background:#6f6f6f url('Office2010Black/sprite.png') repeat-x 0 -560px}
+.t-grouping-dropclue{background:url('Office2010Black/sprite.png') no-repeat -48px -288px}
+.t-grouping-row .t-group-cell,.t-grouping-row p{background:#6f6f6f}
+.t-treeview .t-drop-clue{background-image:url('Office2010Black/sprite.png');background-position:0 -358px}
+.t-treeview .t-state-selected{border-color:#4f4f4f}
+.t-panelbar .t-link,.t-panelbar .t-group,.t-panelbar .t-content{border-color:#4f4f4f}
+.t-filter-options,.t-menu .t-group{-moz-box-shadow:2px 2px 2px #4f4f4f;-webkit-box-shadow:2px 2px 2px #4f4f4f;box-shadow:2px 2px 2px #4f4f4f}
+.t-calendar th{border-color:#c5c5c5}
+.t-other-month .t-link{color:#898989}
+.t-treeview-lines .t-top,.t-treeview-lines .t-mid,.t-treeview-lines .t-bot{background-image:url('Office2010Black/treeview-nodes.png')}
+.t-rtl .t-treeview-lines .t-top,.t-rtl .t-treeview-lines .t-mid,.t-rtl .t-treeview-lines .t-bot{background-image:url('Office2010Black/treeview-nodes-rtl.png')}
+.t-treeview-lines .t-item{background-image:url('Office2010Black/treeview-line.png')}
+.t-treeview-lines .t-last{background-image:none}
+div.t-window{-moz-box-shadow:0 0 5px 2px #444;-webkit-box-shadow:0 0 5px 2px #444;box-shadow:0 0 5px 2px #444}
+/* Slider */.t-slider .t-draghandle{background-image:url('Office2010Black/sprite.png');color:#666}
+.t-slider-track{border-color:#2c2c2c}
+.t-slider-horizontal .t-slider-track,.t-slider-horizontal .t-slider-selection{background-image:url('Office2010Black/sprite.png')}
+.t-slider-vertical .t-slider-track,.t-slider-vertical .t-slider-selection{background-image:url('Office2010Black/sprite-vertical.png')}
+.t-slider-horizontal .t-tick{background-image:url('Office2010Black/slider-h.gif')}
+.t-slider-vertical .t-tick{background-image:url('Office2010Black/slider-v.gif')}
+/* Tooltip */.t-tooltip{border-color:#767676;background:#e9e9f2 0 -96px repeat-x url('Office2010Black/sprite.png')}
+.t-callout{background-image:url('Office2010Black/sprite.png')}
+/* Splitter */.t-splitbar{border-color:#2c2c2c;background-color:#4b4b4b}
+.t-splitbar-vertical,.t-ghost-splitbar-vertical{background-image:url('Office2010Black/sprite.png')}
+.t-splitbar-horizontal,.t-ghost-splitbar-horizontal{background-image:url('Office2010Black/sprite-vertical.png')}
+/* Upload */.t-dropzone-active,.t-upload-files{border-color:#2c2c2c}
+.t-dropzone-active{background-color:#6f6f6f}
+.t-dropzone-hovered,.t-upload-files{background-color:#4b4b4b}
+.t-dropzone em{color:#e2e2e2}
+.t-progress,.t-progress-status{background-image:url('Office2010Black/sprite.png')}
+.t-progress{background-position:0 -464px;border-color:#2c2c2c}
+.t-progress-status{background-position:0 -472px;border-color:#ffe37c transparent #f9cd4c}
+/* ImageBrowser */.t-imagebrowser .t-content{background:#9e9e9e}
+.t-breadcrumbs .t-first,.t-breadcrumbs .t-first:hover,.t-search-wrap label{/*color:#9f9f9f;*/}
+.t-tiles{border-color:#848484;background:#fff}
+.t-tile{border-color:#fff;background:0 100px repeat-x url('Office2010Black/imagebrowser.png')}
+.t-tiles li.t-state-hover{border-color:#ffd14b;background-position:0 0}
+.t-tiles li.t-state-selected{border-color:#c28a30 #c29b43 #c2a44d;background-position:0 -100px}
+.t-tile .t-folder{background-image:url('Office2010Black/imagebrowser.png')}
+.t-tile em,.t-tile .t-filesize{color:#464646}
+.t-tile-empty strong{color:#aaa}
