@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             //Setup
             var mocker = new AutoMoqer();
 
-            var emptyDatabase = MockLib.GetEmptyDatabase();
+            var emptyDatabase = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(emptyDatabase);
             emptyDatabase.Insert(new RootDir { Path = @"C:\TV" });
             emptyDatabase.Insert(new RootDir { Path = @"C:\TV2" });
@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             //Setup
             var mocker = new AutoMoqer();
-            mocker.SetConstant(MockLib.GetEmptyDatabase());
+            mocker.SetConstant(TestDbHelper.GetEmptyDatabase());
 
             //Act
             var rootDirProvider = mocker.Resolve<RootDirProvider>();
@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             //Setup
             var mocker = new AutoMoqer();
-            mocker.SetConstant(MockLib.GetEmptyDatabase());
+            mocker.SetConstant(TestDbHelper.GetEmptyDatabase());
 
             //Act
             var rootDirProvider = mocker.Resolve<RootDirProvider>();
@@ -85,7 +85,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             //Setup
             var mocker = new AutoMoqer();
-            mocker.SetConstant(MockLib.GetEmptyDatabase());
+            mocker.SetConstant(TestDbHelper.GetEmptyDatabase());
 
             const int id = 1;
             const string path = @"C:\TV";

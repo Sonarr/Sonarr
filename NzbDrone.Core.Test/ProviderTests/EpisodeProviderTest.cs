@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void GetEpisodes_exists()
         {
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             var fakeSeries = Builder<Series>.CreateNew().Build();
@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void GetEpisodes_by_season_episode_exists()
         {
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             var fakeSeries = Builder<Series>.CreateNew()
@@ -77,7 +77,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void GetEpisodes_by_season_episode_doesnt_exists()
         {
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
 
@@ -93,7 +93,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void GetEpisode_with_EpisodeFile()
         {
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             var fakeSeries = Builder<Series>.CreateNew().Build();
@@ -119,7 +119,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void GetEpisodes_invalid_series()
         {
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             mocker.Resolve<SeriesProvider>();
@@ -210,7 +210,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void AttachSeries_single_invalid_series()
         {
             var mocker = new AutoMoqer();
-            mocker.SetConstant(MockLib.GetEmptyDatabase());
+            mocker.SetConstant(TestDbHelper.GetEmptyDatabase());
             mocker.Resolve<SeriesProvider>();
             var fakeEpisodes = Builder<Episode>.CreateNew().With(e => e.SeriesId = 12).Build();
 
@@ -230,7 +230,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .TheFirst(5).With(c => c.SeasonNumber = 1)
                 .Build();
 
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             var mocker = new AutoMoqer();
             mocker.SetConstant(db);
 
@@ -265,7 +265,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var mocker = new AutoMoqer();
 
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             db.Insert(fakeSeries);
@@ -304,7 +304,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var mocker = new AutoMoqer();
 
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             db.Insert(fakeSeries);
@@ -348,7 +348,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var mocker = new AutoMoqer();
 
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             db.Insert(fakeSeries);
@@ -382,7 +382,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var currentEpisodes = new List<Episode>();
 
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             mocker.GetMock<TvDbProvider>(MockBehavior.Strict)
@@ -560,7 +560,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void IsSeasonIgnored_should_return_true_if_all_episodes_ignored()
         {
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             var mocker = new AutoMoqer(MockBehavior.Strict);
             mocker.SetConstant(db);
 
@@ -583,7 +583,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void IsSeasonIgnored_should_return_false_if_none_of_episodes_are_ignored()
         {
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             var mocker = new AutoMoqer(MockBehavior.Strict);
             mocker.SetConstant(db);
 
@@ -606,7 +606,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void IsSeasonIgnored_should_return_false_if_some_of_episodes_are_ignored()
         {
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             var mocker = new AutoMoqer(MockBehavior.Strict);
             mocker.SetConstant(db);
 
@@ -632,7 +632,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void IsSeasonIgnored_should_return_false_if_zero_episodes_in_db_for_season()
         {
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             var mocker = new AutoMoqer(MockBehavior.Strict);
             mocker.SetConstant(db);
 
@@ -655,7 +655,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void IsSeasonIgnored_should_return_true_if_zero_episodes_in_db_for_season_and_previous_is_ignored()
         {
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             var mocker = new AutoMoqer(MockBehavior.Strict);
             mocker.SetConstant(db);
 
@@ -678,7 +678,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void IsSeasonIgnored_should_return_false_if_zero_episodes_in_db_for_season_and_previous_is_not_ignored()
         {
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             var mocker = new AutoMoqer(MockBehavior.Strict);
             mocker.SetConstant(db);
 
@@ -701,7 +701,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void IsSeasonIgnored_should_return_false_if_zero_episodes_in_db_for_season_one()
         {
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             var mocker = new AutoMoqer(MockBehavior.Strict);
             mocker.SetConstant(db);
 
@@ -715,7 +715,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void IsSeasonIgnored_should_return_true_if_zero_episodes_in_db_for_season_zero()
         {
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             var mocker = new AutoMoqer(MockBehavior.Strict);
             mocker.SetConstant(db);
 
@@ -729,7 +729,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void IsSeasonIgnored_should_return_false_if_season_zero_is_not_ignored()
         {
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             var mocker = new AutoMoqer(MockBehavior.Strict);
             mocker.SetConstant(db);
 
@@ -754,7 +754,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Add_daily_show_episodes()
         {
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
             mocker.Resolve<TvDbProvider>();
 
@@ -782,7 +782,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void GetEpisode_by_Season_Episode_none_existing()
         {
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
 
@@ -797,7 +797,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void GetEpisode_by_Season_Episode_with_EpisodeFile()
         {
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             var fakeSeries = Builder<Series>.CreateNew().Build();
@@ -822,7 +822,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void GetEpisode_by_Season_Episode_without_EpisodeFile()
         {
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             var fakeSeries = Builder<Series>.CreateNew().Build();
@@ -845,7 +845,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void GetEpisode_by_AirDate_with_EpisodeFile()
         {
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             var fakeSeries = Builder<Series>.CreateNew().Build();
@@ -870,7 +870,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void GetEpisode_by_AirDate_without_EpisodeFile()
         {
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             var fakeSeries = Builder<Series>.CreateNew().Build();
@@ -893,7 +893,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void MarkEpisodeAsFetched()
         {
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
@@ -916,7 +916,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void AddEpisode_episode_is_ignored_when_full_season_is_ignored()
         {
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             var mocker = new AutoMoqer();
             mocker.SetConstant(db);
 
@@ -952,7 +952,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void AddEpisode_episode_is_not_ignored_when_full_season_is_not_ignored()
         {
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             var mocker = new AutoMoqer();
             mocker.SetConstant(db);
 
@@ -988,7 +988,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void AddEpisode_episode_is_not_ignored_when_not_full_season_is_not_ignored()
         {
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             var mocker = new AutoMoqer();
             mocker.SetConstant(db);
 
@@ -1026,7 +1026,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void IgnoreEpisode_Ignore()
         {
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             var mocker = new AutoMoqer();
             mocker.SetConstant(db);
 
@@ -1054,7 +1054,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void IgnoreEpisode_RemoveIgnore()
         {
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             var mocker = new AutoMoqer();
             mocker.SetConstant(db);
 
@@ -1082,7 +1082,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void IgnoreSeason_Ignore()
         {
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             var mocker = new AutoMoqer();
             mocker.SetConstant(db);
 
@@ -1110,7 +1110,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void IgnoreSeason_RemoveIgnore()
         {
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             var mocker = new AutoMoqer();
             mocker.SetConstant(db);
 
@@ -1138,7 +1138,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void IgnoreSeason_Ignore_Half()
         {
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             var mocker = new AutoMoqer();
             mocker.SetConstant(db);
 
@@ -1168,7 +1168,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void EpisodesWithoutFiles_no_specials()
         {
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             var mocker = new AutoMoqer();
             mocker.SetConstant(db);
 
@@ -1215,7 +1215,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void EpisodesWithoutFiles_with_specials()
         {
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             var mocker = new AutoMoqer();
             mocker.SetConstant(db);
 
@@ -1263,7 +1263,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void EpisodesWithFiles_success()
         {
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             var mocker = new AutoMoqer();
             mocker.SetConstant(db);
 
@@ -1309,7 +1309,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void EpisodesWithFiles_no_files()
         {
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             var mocker = new AutoMoqer();
             mocker.SetConstant(db);
 
@@ -1341,7 +1341,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void GetEpisodesByFileId_multi_episodes()
         {
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             var mocker = new AutoMoqer();
             mocker.SetConstant(db);
 
@@ -1370,7 +1370,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void GetEpisodesByFileId_single_episode()
         {
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             var mocker = new AutoMoqer();
             mocker.SetConstant(db);
 
@@ -1399,7 +1399,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void IsFirstOrLastEpisodeInSeason_false()
         {
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             var mocker = new AutoMoqer();
             mocker.SetConstant(db);
 
@@ -1421,7 +1421,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void IsFirstOrLastEpisodeInSeason_true_first()
         {
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             var mocker = new AutoMoqer();
             mocker.SetConstant(db);
 
@@ -1443,7 +1443,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void IsFirstOrLastEpisodeInSeason_true_last()
         {
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             var mocker = new AutoMoqer();
             mocker.SetConstant(db);
 
@@ -1470,7 +1470,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [TestCase("The Office (US) - Season 01 - Episode Title", PostDownloadStatusType.Failed, 10)]
         public void SetPostDownloadStatus(string folderName, PostDownloadStatusType postDownloadStatus, int episodeCount)
         {
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             var mocker = new AutoMoqer();
             mocker.SetConstant(db);
 
@@ -1502,7 +1502,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void SetPostDownloadStatus_Invalid_EpisodeId()
         {
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             var mocker = new AutoMoqer();
             mocker.SetConstant(db);
 

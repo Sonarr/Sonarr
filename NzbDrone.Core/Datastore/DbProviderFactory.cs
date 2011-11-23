@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlServerCe;
-using System.Text;
 using MvcMiniProfiler;
 using MvcMiniProfiler.Data;
 
 namespace NzbDrone.Core.Datastore
 {
-    class PetaDbProviderFactory : DbProviderFactory
+    class DbProviderFactory : System.Data.Common.DbProviderFactory
     {
         public Boolean IsProfiled { get; set; }
 

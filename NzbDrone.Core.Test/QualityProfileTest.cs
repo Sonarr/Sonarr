@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Test
         public void Test_Storage()
         {
             //Arrange
-            var database = MockLib.GetEmptyDatabase();
+            var database = TestDbHelper.GetEmptyDatabase();
             var testProfile = new QualityProfile
                                   {
                                       Name = Guid.NewGuid().ToString(),
@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Test
         public void Test_Storage_no_allowed()
         {
             //Arrange
-            var database = MockLib.GetEmptyDatabase();
+            var database = TestDbHelper.GetEmptyDatabase();
             var testProfile = new QualityProfile
             {
                 Name = Guid.NewGuid().ToString(),
@@ -69,7 +69,7 @@ namespace NzbDrone.Core.Test
         {
             //Arrange
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             var testProfile = new QualityProfile
@@ -100,7 +100,7 @@ namespace NzbDrone.Core.Test
         public void Test_Series_Quality()
         {
             //Arrange
-            var database = MockLib.GetEmptyDatabase();
+            var database = TestDbHelper.GetEmptyDatabase();
 
             var testProfile = new QualityProfile
                                   {
@@ -131,7 +131,7 @@ namespace NzbDrone.Core.Test
         public void SetupInitial_should_add_two_profiles()
         {
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             //Act
@@ -153,7 +153,7 @@ namespace NzbDrone.Core.Test
         public void SetupInitial_should_skip_if_any_profile_exists()
         {
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
             var fakeProfile = Builder<QualityProfile>.CreateNew().Build();
 

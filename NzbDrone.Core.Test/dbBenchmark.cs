@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Test
         [TestFixtureSetUp]
         public void Setup()
         {
-            db = MockLib.GetEmptyDatabase();
+            db = TestDbHelper.GetEmptyDatabase();
             int currentFileId = 0;
 
 

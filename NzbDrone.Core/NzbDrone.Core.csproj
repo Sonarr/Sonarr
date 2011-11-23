@@ -121,6 +121,9 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.4.2.0.0\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
     <Reference Include="Growl.Connector">
       <HintPath>..\packages\Growl.0.6\lib\Growl.Connector.dll</HintPath>
     </Reference>
@@ -159,12 +162,18 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\SqlServerCompact.4.0.8482.1\lib\System.Data.SqlServerCe.dll</HintPath>
     </Reference>
+    <Reference Include="System.Data.SqlServerCe.Entity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.SqlServerCompact.4.1.8482.2\lib\System.Data.SqlServerCe.Entity.dll</HintPath>
+    </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.XML" />
@@ -176,6 +185,9 @@
     <Reference Include="Twitterizer2, Version=2.4.0.26532, Culture=neutral, PublicKeyToken=69d1469eac671567, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\twitterizer.2.4.0.26532\lib\net40\Twitterizer2.dll</HintPath>
+    </Reference>
+    <Reference Include="WebActivator">
+      <HintPath>..\packages\WebActivator.1.0.0.0\lib\WebActivator.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -192,11 +204,12 @@
     <Compile Include="Datastore\Migrations\Migration20110909.cs" />
     <Compile Include="Datastore\Migrations\Migration20110726.cs" />
     <Compile Include="Datastore\Migrations\Migration20110707.cs" />
-    <Compile Include="Datastore\PetaDbProviderFactory.cs" />
+    <Compile Include="Datastore\DbProviderFactory.cs" />
     <Compile Include="Fluent.cs" />
     <Compile Include="Helpers\EpisodeSortingHelper.cs" />
     <Compile Include="Helpers\FileSizeFormatHelpercs.cs" />
     <Compile Include="Helpers\SortHelper.cs" />
+    <Compile Include="Instrumentation\LogDbContext.cs" />
     <Compile Include="Instrumentation\LogProvider.cs" />
     <Compile Include="Instrumentation\DatabaseTarget.cs" />
     <Compile Include="Instrumentation\NlogWriter.cs" />

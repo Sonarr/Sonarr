@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var mocker = new AutoMoqer();
 
-            var database = MockLib.GetEmptyDatabase(true);
+            var database = TestDbHelper.GetEmptyDatabase(true);
 
 
             database.InsertMany(firstSeriesFiles);
@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var mocker = new AutoMoqer();
 
-            var database = MockLib.GetEmptyDatabase(true);
+            var database = TestDbHelper.GetEmptyDatabase(true);
 
             database.InsertMany(firstSeriesFiles);
             database.InsertMany(secondSeriesFiles);
@@ -121,7 +121,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var episodes = Builder<Episode>.CreateListOfSize(10).Build();
 
             var mocker = new AutoMoqer();
-            var database = MockLib.GetEmptyDatabase(true);
+            var database = TestDbHelper.GetEmptyDatabase(true);
             mocker.SetConstant(database);
             database.InsertMany(episodes);
 
@@ -143,7 +143,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var episodes = Builder<Episode>.CreateListOfSize(5).Build();
 
             var mocker = new AutoMoqer();
-            var database = MockLib.GetEmptyDatabase(true);
+            var database = TestDbHelper.GetEmptyDatabase(true);
             mocker.SetConstant(database);
             database.InsertMany(episodes);
             database.InsertMany(episodeFiles);
@@ -189,7 +189,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var episodeFiles = Builder<EpisodeFile>.CreateListOfSize(10).Build();
 
             var mocker = new AutoMoqer();
-            var database = MockLib.GetEmptyDatabase(true);
+            var database = TestDbHelper.GetEmptyDatabase(true);
             mocker.SetConstant(database);
             database.InsertMany(episodeFiles);
 

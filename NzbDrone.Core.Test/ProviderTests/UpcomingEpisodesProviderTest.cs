@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Get_Yesterday()
         {
             //Setup
-            var database = MockLib.GetEmptyDatabase();
+            var database = TestDbHelper.GetEmptyDatabase();
             var mocker = new AutoMoqer();
             mocker.SetConstant(database);
 
@@ -70,7 +70,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Get_Today()
         {
             //Setup
-            var database = MockLib.GetEmptyDatabase();
+            var database = TestDbHelper.GetEmptyDatabase();
             var mocker = new AutoMoqer();
             mocker.SetConstant(database);
 
@@ -91,7 +91,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Get_Tomorrow()
         {
             //Setup
-            var database = MockLib.GetEmptyDatabase();
+            var database = TestDbHelper.GetEmptyDatabase();
             var mocker = new AutoMoqer();
             mocker.SetConstant(database);
 
@@ -112,7 +112,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Get_Week()
         {
             //Setup
-            var database = MockLib.GetEmptyDatabase();
+            var database = TestDbHelper.GetEmptyDatabase();
             var mocker = new AutoMoqer();
             mocker.SetConstant(database);
 
@@ -134,7 +134,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Get_Yesterday_skip_ingored()
         {
             //Setup
-            var database = MockLib.GetEmptyDatabase();
+            var database = TestDbHelper.GetEmptyDatabase();
             var mocker = new AutoMoqer();
             mocker.SetConstant(database);
 
@@ -154,7 +154,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Get_Today_skip_ingored()
         {
             //Setup
-            var database = MockLib.GetEmptyDatabase();
+            var database = TestDbHelper.GetEmptyDatabase();
             var mocker = new AutoMoqer();
             mocker.SetConstant(database);
 
@@ -174,7 +174,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Get_Tomorrow_skip_ingored()
         {
             //Setup
-            var database = MockLib.GetEmptyDatabase();
+            var database = TestDbHelper.GetEmptyDatabase();
             var mocker = new AutoMoqer();
             mocker.SetConstant(database);
 
@@ -194,7 +194,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Get_Week_skip_ingored()
         {
             //Setup
-            var database = MockLib.GetEmptyDatabase();
+            var database = TestDbHelper.GetEmptyDatabase();
             var mocker = new AutoMoqer();
             mocker.SetConstant(database);
 

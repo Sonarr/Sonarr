@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Test
 
             var mocker = new AutoMoqer();
 
-            var emptyDatabase = MockLib.GetEmptyDatabase();
+            var emptyDatabase = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(emptyDatabase);
             emptyDatabase.Insert(fakeMap);
 
@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Test
 
             var mocker = new AutoMoqer();
 
-            var emptyDatabase = MockLib.GetEmptyDatabase();
+            var emptyDatabase = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(emptyDatabase);
             emptyDatabase.Insert(fakeMap);
 
@@ -70,7 +70,7 @@ namespace NzbDrone.Core.Test
 
             var mocker = new AutoMoqer();
 
-            var emptyDatabase = MockLib.GetEmptyDatabase();
+            var emptyDatabase = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(emptyDatabase);
             emptyDatabase.Insert(fakeMap);
 
@@ -93,7 +93,7 @@ namespace NzbDrone.Core.Test
 
             var mocker = new AutoMoqer();
 
-            var emptyDatabase = MockLib.GetEmptyDatabase();
+            var emptyDatabase = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(emptyDatabase);
             emptyDatabase.Insert(fakeMap);
 
@@ -124,7 +124,7 @@ namespace NzbDrone.Core.Test
 
             var mocker = new AutoMoqer();
 
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             db.Insert(fakeMap);

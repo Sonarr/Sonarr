@@ -36,6 +36,9 @@
     <Reference Include="Accessibility">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
+    <Reference Include="EntityFramework, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.4.2.0.0\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
     <Reference Include="FizzWare.NBuilder, Version=3.0.1.0, Culture=neutral, PublicKeyToken=5651b03e12e42c12, processorArchitecture=MSIL">
       <HintPath>..\packages\NBuilder.3.0.1.1\lib\FizzWare.NBuilder.dll</HintPath>
     </Reference>
@@ -66,18 +69,28 @@
       <HintPath>..\packages\Prowlin 0.9.4163.39219\Prowlin.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\SqlServerCompact.4.0.8482.1\lib\System.Data.SqlServerCe.dll</HintPath>
     </Reference>
+    <Reference Include="System.Data.SqlServerCe.Entity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.SqlServerCompact.4.1.8482.2\lib\System.Data.SqlServerCe.Entity.dll</HintPath>
+    </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml" />
     <Reference Include="TvdbLib, Version=0.8.8.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\TvdbLib.dll</HintPath>
+    </Reference>
+    <Reference Include="WebActivator, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebActivator.1.0.0.0\lib\WebActivator.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -112,7 +125,7 @@
     <Compile Include="ProviderTests\EpisodeProviderTest_GetEpisodesByParseResult.cs" />
     <Compile Include="ProviderTests\DiskScanProviderTest_ImportFile.cs" />
     <Compile Include="FluentTest.cs" />
-    <Compile Include="ProviderTests\LogProviderTest.cs" />
+    <Compile Include="ProviderTests\LogProviderTests\LogProviderFixture.cs" />
     <Compile Include="ProviderTests\UpcomingEpisodesProviderTest.cs" />
     <Compile Include="ProviderTests\MediaFileProvider_GetNewFilenameTest.cs" />
     <Compile Include="dbBenchmark.cs" />
@@ -132,8 +145,7 @@
     <Compile Include="ProviderTests\MediaFileProviderTests.cs" />
     <Compile Include="ProviderTests\ConfigProviderTest.cs" />
     <Compile Include="ProviderTests\EpisodeProviderTest.cs" />
-    <Compile Include="Framework\Fixtures.cs" />
-    <Compile Include="Framework\MockLib.cs" />
+    <Compile Include="Framework\TestDbHelper.cs" />
     <Compile Include="ParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QualityProfileTest.cs" />

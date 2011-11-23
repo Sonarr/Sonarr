@@ -1,11 +1,9 @@
-﻿using System;
+﻿// ReSharper disable InconsistentNaming
+using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using FluentAssertions;
-using NLog;
 using NUnit.Framework;
-using NzbDrone.Common;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Indexer;
 using NzbDrone.Core.Providers.Jobs;
@@ -15,7 +13,6 @@ using Ninject;
 namespace NzbDrone.Core.Test
 {
     [TestFixture]
-    // ReSharper disable InconsistentNaming
     class CentralDispatchFixture : CoreTest
     {
         readonly IList<Type> indexers = typeof(CentralDispatch).Assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(IndexerBase))).ToList();

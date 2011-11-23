@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var historyItem = Builder<History>.CreateListOfSize(10).Build();
 
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             db.InsertMany(historyItem);
@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var historyItems = Builder<History>.CreateListOfSize(10).TheFirst(5).With(h => h.SeriesId = seriesOne.SeriesId).TheLast(5).With(h => h.SeriesId = seriesTwo.SeriesId).Build();
 
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             db.InsertMany(historyItems);
@@ -76,7 +76,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var historyItem = Builder<History>.CreateListOfSize(10).Build();
 
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             db.InsertMany(historyItem);
@@ -100,7 +100,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Build();
 
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             db.InsertMany(historyItem);
@@ -122,7 +122,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             var mocker = new AutoMoqer(MockBehavior.Strict);
 
-            mocker.SetConstant(MockLib.GetEmptyDatabase());
+            mocker.SetConstant(TestDbHelper.GetEmptyDatabase());
 
             //Act
             var result = mocker.Resolve<HistoryProvider>().GetBestQualityInHistory(12);
@@ -136,7 +136,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             var mocker = new AutoMoqer(MockBehavior.Strict);
 
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             var history = Builder<History>.CreateNew()
                 .With(h => h.Quality = QualityTypes.Bluray720p).Build();
 
@@ -155,7 +155,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void add_item()
         {
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
 
             mocker.SetConstant(db);
 

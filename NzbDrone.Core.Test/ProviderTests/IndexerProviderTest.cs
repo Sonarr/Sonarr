@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             var mocker = new AutoMoqer();
 
-            mocker.SetConstant(MockLib.GetEmptyDatabase());
+            mocker.SetConstant(TestDbHelper.GetEmptyDatabase());
 
             //Act
             var indexerProvider = mocker.Resolve<IndexerProvider>();
@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             var mocker = new AutoMoqer();
 
-            mocker.SetConstant(MockLib.GetEmptyDatabase());
+            mocker.SetConstant(TestDbHelper.GetEmptyDatabase());
 
             //Act
             var indexerProvider = mocker.Resolve<IndexerProvider>();

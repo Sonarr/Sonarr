@@ -38,7 +38,7 @@ namespace NzbDrone.Web
         }
 
         protected override void OnApplicationStarted()
-        {
+        {          
             base.OnApplicationStarted();
             RegisterRoutes(RouteTable.Routes);
             AreaRegistration.RegisterAllAreas();
@@ -100,7 +100,7 @@ namespace NzbDrone.Web
         protected void Application_BeginRequest()
         {
             Thread.CurrentThread.Name = "UI";
-            var miniprofiler = MiniProfiler.Start();
+            MiniProfiler.Start();
         }
 
         protected void Application_EndRequest()

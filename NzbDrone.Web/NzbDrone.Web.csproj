@@ -480,9 +480,6 @@
     <Content Include="Views\Log\SubMenu.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Log\All.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Settings\System.cshtml" />
   </ItemGroup>
   <ItemGroup>

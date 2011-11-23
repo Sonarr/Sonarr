@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NLog;
 using PetaPoco;
 
@@ -8,18 +9,20 @@ namespace NzbDrone.Core.Instrumentation
     public class LogProvider
     {
         private readonly IDatabase _database;
+        private readonly LogDbContext _logDbContext;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
 
 
-        public LogProvider(IDatabase database)
+        public LogProvider(IDatabase database, LogDbContext logDbContext)
         {
             _database = database;
+            _logDbContext = logDbContext;
         }
 
-        public IList<Log> GetAllLogs()
+        public IQueryable<Log> GetAllLogs()
         {
-            return _database.Fetch<Log>();
+            return _logDbContext.Logs;
         }
 
         public IList<Log> TopLogs(int count)
@@ -50,7 +53,7 @@ namespace NzbDrone.Core.Instrumentation
         public void Trim()
         {
             _database.Delete<Log>("WHERE Time < @0", DateTime.Now.AddDays(-30).Date);
-            Logger.Info("Logs have been trimmed, events older than 30 days have been removed");
+            Logger.Debug("Logs have been trimmed, events older than 30 days have been removed");
         }
     }
 }

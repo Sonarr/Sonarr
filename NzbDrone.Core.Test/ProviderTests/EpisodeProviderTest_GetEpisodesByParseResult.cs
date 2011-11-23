@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void Single_GetSeason_Episode_Exists()
         {
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             var mocker = new AutoMoqer();
             mocker.SetConstant(db);
 
@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Single_GetSeason_Episode_Doesnt_exists_should_not_add()
         {
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             var fakeSeries = Builder<Series>.CreateNew().Build();
@@ -78,7 +78,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Single_GetSeason_Episode_Doesnt_exists_should_add()
         {
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             var fakeSeries = Builder<Series>.CreateNew().Build();
@@ -100,7 +100,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void Multi_GetSeason_Episode_Exists()
         {
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             var mocker = new AutoMoqer();
             mocker.SetConstant(db);
 
@@ -141,7 +141,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Multi_GetSeason_Episode_Doesnt_exists_should_not_add()
         {
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             var fakeSeries = Builder<Series>.CreateNew().Build();
@@ -164,7 +164,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Multi_GetSeason_Episode_Doesnt_exists_should_add()
         {
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             var fakeSeries = Builder<Series>.CreateNew().Build();
@@ -187,7 +187,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Get_Episode_Zero_Doesnt_Exist_Should_add_ignored()
         {
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             var fakeSeries = Builder<Series>.CreateNew().Build();
@@ -211,7 +211,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Get_Multi_Episode_Zero_Doesnt_Exist_Should_not_add_ignored()
         {
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             var fakeSeries = Builder<Series>.CreateNew().Build();

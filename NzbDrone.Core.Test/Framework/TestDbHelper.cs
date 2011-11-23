@@ -12,9 +12,11 @@ using PetaPoco;
 
 namespace NzbDrone.Core.Test.Framework
 {
-    internal static class MockLib
+    internal static class TestDbHelper
     {
-        private const string DbTemplateName = "_dbtemplate.sdf";
+        private const string DB_TEMPLATE_NAME = "_dbtemplate.sdf";
+
+        public static string ConnectionString { get; private set; }
 
         public static IDatabase GetEmptyDatabase(bool enableLogging = false, string fileName = "")
         {
@@ -26,11 +28,11 @@ namespace NzbDrone.Core.Test.Framework
                 fileName = Guid.NewGuid() + ".sdf";
             }
 
-            File.Copy(DbTemplateName, fileName);
+            File.Copy(DB_TEMPLATE_NAME, fileName);
 
-            var connectionString = Connection.GetConnectionString(fileName);
+            ConnectionString = Connection.GetConnectionString(fileName);
 
-            var database = Connection.GetPetaPocoDb(connectionString);
+            var database = Connection.GetPetaPocoDb(ConnectionString);
 
             Console.WriteLine("====================DataBase====================");
             Console.WriteLine();
@@ -42,7 +44,7 @@ namespace NzbDrone.Core.Test.Framework
         public static void CreateDataBaseTemplate()
         {
             Console.WriteLine("Creating an empty PetaPoco database");
-            var connectionString = Connection.GetConnectionString(DbTemplateName);
+            var connectionString = Connection.GetConnectionString(DB_TEMPLATE_NAME);
             var database = Connection.GetPetaPocoDb(connectionString);
             database.Dispose();
         }

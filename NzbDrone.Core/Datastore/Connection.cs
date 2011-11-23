@@ -1,5 +1,10 @@
 ﻿using System;
+using System.Data.Common;
+using System.Data.EntityClient;
+using System.Data.SqlServerCe;
+using MvcMiniProfiler;
 using NzbDrone.Common;
+using NzbDrone.Core.Instrumentation;
 using PetaPoco;
 
 namespace NzbDrone.Core.Datastore
@@ -30,7 +35,7 @@ namespace NzbDrone.Core.Datastore
         {
             get
             {
-               return GetConnectionString(_enviromentProvider.GetLogDbFileDbFile());
+                return GetConnectionString(_enviromentProvider.GetLogDbFileDbFile());
             }
         }
 
@@ -50,11 +55,18 @@ namespace NzbDrone.Core.Datastore
             return GetPetaPocoDb(LogConnectionString, profiled);
         }
 
+        public LogDbContext GetLogEfContext()
+        {
+            return GetLogDbContext(LogConnectionString);
+        }
+
+
+
         public static IDatabase GetPetaPocoDb(string connectionString, Boolean profiled = true)
         {
             MigrationsHelper.Run(connectionString, true);
 
-            var factory = new PetaDbProviderFactory
+            var factory = new DbProviderFactory
                               {
                                   IsProfiled = profiled
                               };
@@ -66,6 +78,13 @@ namespace NzbDrone.Core.Datastore
                          };
 
             return db;
+        }
+
+        public static LogDbContext GetLogDbContext(string connectionString)
+        {
+            MigrationsHelper.Run(connectionString, true);
+            DbConnection connection = new SqlCeConnection(connectionString);
+            return new LogDbContext(connection);
         }
 
     }

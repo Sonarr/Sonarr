@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Test.Framework
                 Directory.Delete(appData, true);
             }
 
-            MockLib.CreateDataBaseTemplate();
+            TestDbHelper.CreateDataBaseTemplate();
         }
 
         protected StandardKernel LiveKernel = null;
@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Test.Framework
 
         protected void WithRealDb()
         {
-            Db = MockLib.GetEmptyDatabase();
+            Db = TestDbHelper.GetEmptyDatabase();
             Mocker.SetConstant(Db);
         }
 

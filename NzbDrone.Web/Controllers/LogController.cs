@@ -2,7 +2,6 @@
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Web.Models;
 using Telerik.Web.Mvc;
-using System.Linq;
 
 namespace NzbDrone.Web.Controllers
 {
@@ -20,32 +19,17 @@ namespace NzbDrone.Web.Controllers
             return View();
         }
 
-        public ActionResult All()
-        {
-            return View();
-        }
-
         public JsonResult Clear()
         {
             _logProvider.DeleteAll();
 
-            return Json(new NotificationResult { Title = "Logs Cleared" });
+            return Json(new NotificationResult() { Title = "Logs Cleared" });
         }
 
         [GridAction]
-        public ActionResult _TopAjaxBinding()
+        public ActionResult _AjaxBinding()
         {
-            var logs = _logProvider.TopLogs(5000);
-
-            return View(new GridModel(logs));
-        }
-
-        [GridAction(EnableCustomBinding = true)]
-        public ActionResult _AllAjaxBinding(GridCommand gridCommand)
-        {
-            var logs = _logProvider.GetPagedLogs(gridCommand.Page, gridCommand.PageSize);
-
-            return View(new GridModel{ Data = logs.Items, Total = (int)logs.TotalItems });
+            return View(new GridModel(_logProvider.GetAllLogs()));
         }
     }
 }

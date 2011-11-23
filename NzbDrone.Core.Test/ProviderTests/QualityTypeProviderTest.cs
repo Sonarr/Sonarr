@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void SetupDefault_should_add_six_profiles()
         {
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             //Act
@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void SetupDefault_already_exists()
         {
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             var fakeQualityType = Builder<QualityType>.CreateNew()
@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void GetList_single_quality_type()
         {
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             var fakeQualityTypes = Builder<QualityType>.CreateListOfSize(6)
@@ -84,7 +84,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void GetList_multiple_quality_type()
         {
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             var fakeQualityTypes = Builder<QualityType>.CreateListOfSize(6)

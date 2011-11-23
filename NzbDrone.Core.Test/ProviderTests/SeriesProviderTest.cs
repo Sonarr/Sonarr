@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             mocker.GetMock<ConfigProvider>()
                 .Setup(c => c.UseSeasonFolder).Returns(useSeasonFolder);
 
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             var fakeProfiles = Builder<QualityProfile>.CreateListOfSize(2).Build();
@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void find_series_empty_repo()
         {
             var mocker = new AutoMoqer();
-            mocker.SetConstant(MockLib.GetEmptyDatabase());
+            mocker.SetConstant(TestDbHelper.GetEmptyDatabase());
 
             //Act
             var seriesProvider = mocker.Resolve<SeriesProvider>();
@@ -71,7 +71,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Get_series_invalid_series_id_should_return_null()
         {
             var mocker = new AutoMoqer();
-            mocker.SetConstant(MockLib.GetEmptyDatabase());
+            mocker.SetConstant(TestDbHelper.GetEmptyDatabase());
 
             //Act
             var seriesProvider = mocker.Resolve<SeriesProvider>();
@@ -86,7 +86,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Get_series_by_id()
         {
             var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             var fakeSeries = Builder<Series>.CreateNew()
@@ -115,7 +115,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Find_series_by_cleanName_mapped()
         {
             var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             var fakeSeries = Builder<Series>.CreateNew()
@@ -143,9 +143,9 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void find_series_empty_match()
         {
             var mocker = new AutoMoqer();
-            var emptyRepository = MockLib.GetEmptyDatabase();
+            var emptyRepository = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(emptyRepository);
-            emptyRepository.Insert(MockLib.GetFakeSeries(1, "MyTitle"));
+            emptyRepository.Insert(TestDbHelper.GetFakeSeries(1, "MyTitle"));
             //Act
             var seriesProvider = mocker.Resolve<SeriesProvider>();
             var series = seriesProvider.FindSeries("WrongTitle");
@@ -160,9 +160,9 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void find_series_match(string title, string searchTitle)
         {
             var mocker = new AutoMoqer();
-            var emptyRepository = MockLib.GetEmptyDatabase();
+            var emptyRepository = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(emptyRepository);
-            emptyRepository.Insert(MockLib.GetFakeSeries(1, title));
+            emptyRepository.Insert(TestDbHelper.GetFakeSeries(1, title));
             emptyRepository.Insert(Builder<QualityProfile>.CreateNew().Build());
             mocker.Resolve<QualityProvider>();
 
@@ -182,7 +182,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             var mocker = new AutoMoqer();
 
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             mocker.SetConstant(db);
@@ -210,7 +210,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Get_Series_With_Count()
         {
             var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
@@ -243,7 +243,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Get_Series_With_Count_AllIgnored()
         {
             var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
@@ -268,7 +268,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Get_Series_With_Count_AllDownloaded()
         {
             var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
@@ -298,7 +298,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Get_Series_With_Count_Half_Ignored()
         {
             var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
@@ -331,7 +331,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Get_Single_Series()
         {
             var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
@@ -356,7 +356,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void SeriesPathExists_exact_match()
         {
             var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             var path = @"C:\Test\TV\30 Rock";
@@ -387,7 +387,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void SeriesPathExists_match()
         {
             var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             var path = @"C:\Test\TV\30 Rock";
@@ -418,7 +418,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void SeriesPathExists_match_alt()
         {
             var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             var path = @"C:\Test\TV\The Simpsons";
@@ -449,7 +449,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void SeriesPathExists_match_false()
         {
             var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             var path = @"C:\Test\TV\30 Rock";
@@ -480,7 +480,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Get_Series_NextAiring_Today()
         {
             var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
@@ -511,7 +511,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Get_Series_NextAiring_Tomorrow_Last_Aired_Yesterday()
         {
             var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
@@ -542,7 +542,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Get_Series_NextAiring_Unknown()
         {
             var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
@@ -571,7 +571,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Get_Series_NextAiring_1_month()
         {
             var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
@@ -602,7 +602,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Get_Series_NextAiring_skip_ignored()
         {
             var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
@@ -634,7 +634,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void SearchForSeries_should_return_results_that_start_with_query()
         {
             var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
@@ -657,7 +657,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void SearchForSeries_should_return_results_that_contain_the_query()
         {
             var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
@@ -680,7 +680,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void SearchForSeries_should_return_results_that_end_with_the_query()
         {
             var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
@@ -703,7 +703,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void SearchForSeries_should_not_return_results_that_do_not_contain_the_query()
         {
             var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();

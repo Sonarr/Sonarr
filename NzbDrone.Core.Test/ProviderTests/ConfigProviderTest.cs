@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             const string value = "MY_VALUE";
 
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             //Act
@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             const string value = "MY_VALUE";
 
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             db.Insert(new Config { Key = key, Value = value });
@@ -62,7 +62,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             const string value = "MY_VALUE";
 
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
 
@@ -81,7 +81,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             const string newValue = "NEW_VALUE";
 
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             db.Insert(new Config { Key = key, Value = originalValue });
@@ -103,7 +103,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
 
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             //Act
@@ -122,7 +122,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
 
             var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             var configProvider = mocker.Resolve<ConfigProvider>();

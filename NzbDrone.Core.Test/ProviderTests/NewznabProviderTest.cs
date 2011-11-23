@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var expectedUrl = "http://www.nzbdrone.com";
 
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             //Act
@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var newUrl = "http://www.nzbdrone.com/gibberish/test.aspx?hello=world";
 
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             newznab.Id = Convert.ToInt32(db.Insert(newznab));
@@ -64,7 +64,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var expectedUrl = "";
 
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             //Act
@@ -83,7 +83,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var newUrl = "";
 
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             newznab.Id = Convert.ToInt32(db.Insert(newznab));
@@ -108,7 +108,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var newUrl = "http://www.nzbdrone.com/gibberish/test.aspx?hello=world";
 
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             db.InsertMany(definitions);
@@ -134,7 +134,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Build();
 
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             db.InsertMany(definitions);
@@ -159,7 +159,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Build();
 
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             db.InsertMany(definitions);
@@ -183,7 +183,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Build();
 
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             db.InsertMany(definitions);
@@ -207,7 +207,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Build();
 
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             //Act
@@ -232,7 +232,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Build();
 
             var mocker = new AutoMoqer();
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             db.Insert(definitions[0]);

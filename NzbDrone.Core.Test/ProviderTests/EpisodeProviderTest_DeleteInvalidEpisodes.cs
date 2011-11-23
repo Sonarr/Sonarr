@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var mocker = new AutoMoqer();
 
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             db.Insert(fakeSeries);
@@ -84,7 +84,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var mocker = new AutoMoqer();
 
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             db.Insert(fakeSeries);
@@ -124,7 +124,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var mocker = new AutoMoqer();
 
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             db.Insert(fakeSeries);
@@ -166,7 +166,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var mocker = new AutoMoqer();
 
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             db.Insert(fakeSeries);
@@ -221,7 +221,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var mocker = new AutoMoqer();
 
-            var db = MockLib.GetEmptyDatabase();
+            var db = TestDbHelper.GetEmptyDatabase();
             mocker.SetConstant(db);
 
             db.Insert(fakeSeries);
