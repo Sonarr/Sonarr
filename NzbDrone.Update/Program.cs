@@ -51,7 +51,7 @@ namespace NzbDrone.Update
             {
                 var enviromentProvider = _kernel.Get<EnviromentProvider>();
                 var diskProvider = _kernel.Get<DiskProvider>();
-                logger.Info("Copying log tiles to application directory.");
+                logger.Info("Copying log files to application directory.");
                 diskProvider.CopyDirectory(enviromentProvider.GetSandboxLogFolder(), enviromentProvider.GetUpdateLogFolder());
             }
             catch (Exception e)

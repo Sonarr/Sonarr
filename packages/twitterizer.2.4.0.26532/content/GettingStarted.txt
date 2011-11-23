@@ -1,0 +1,46 @@
+		___        ___ ___  ___  __    __  ___  __    _ _ _   
+		 |  |  | |  |   |  |__  |__) |  / |__  |__)    | | 
+		 |  |/\| |  |   |  |___ |  \ | /_ |___ |  \   _|_|_
+
+Q) Which files do I need?
+A) More than likely, you only need Twitterizer2.dll and Newtonsoft.Json.dll
+
+Q) What exactly are all these files?
+A)
+	Twitterizer2.dll
+		This is the main binary which contains the core class library. This file is required for all addon 
+		libraries.
+
+	Twitterizer2.Data.dll
+		This is an additional library that provides data conversion functionality. 
+		For example, with it you can quickly generate DataTables from any Twitterizer2 collection.
+		This file is not necessary for most projects.
+
+	Newtonsoft.Json.dll
+		This is JSON.NET, developed by James Newton-King. You do not need to add a reference in your 
+		project to this library, but it must be placed in your project's bin folder along with Twitterizer2.dll.
+		More information can be found here: http://james.newtonking.com/pages/json-net.aspx
+
+	Twitterizer2.Async.dll
+		This is an addon library that allows developers to call Twitterizer2 methods asynchronously.
+		This file is not necessary for most projects.
+
+	Twitterizer2.Streaming.dll
+		This is an addon library that provides access to the Streaming API.
+		This file is not necessary for most projects.
+
+	Twitterizer.OAuth.dll
+		This is a standalone library that provides access to our OAuth request signing functionality without 
+		using Twitterizer2. _DO_NOT_ include this file in your project if you are using Twitterizer2.dll. 
+		All of the functionality found in this library is available within Twitterizer2.dll.
+		This file is not necessary for most projects.
+
+	Twitterizer2lite.dll
+		This is a slimmed down version of the Twitterizer2.dll file built with the client profile as the target framework.
+		It will lack some extra pieces of functionality, such as the built-in data caching and support for application 
+		configuration settings.
+		_DO_NOT_ include this file in your project if you are using Twitterizer2.dll. 
+		This file is not necessary for most projects.
+
+Q) What about the license files?
+A) The license files must accompany the dlls. That means that they must be distributed along with your application.
