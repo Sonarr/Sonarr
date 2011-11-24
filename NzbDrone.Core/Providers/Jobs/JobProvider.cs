@@ -208,8 +208,8 @@ namespace NzbDrone.Core.Providers.Jobs
                                 if (Queue.Count != 0)
                                 {
                                     job = Queue.First();
+                                    logger.Trace("Popping {0} from the queue.", job);
                                     Queue.Remove(job);
-                                    logger.Debug("Popping {0} from the queue.", job);
                                 }
                             }
 

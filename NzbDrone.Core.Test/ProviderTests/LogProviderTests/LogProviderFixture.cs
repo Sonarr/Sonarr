@@ -155,7 +155,7 @@ namespace NzbDrone.Core.Test.ProviderTests.LogProviderTests
 
             //Assert
             var result = Db.Fetch<Log>();
-            result.Should().HaveCount(21);
+            result.Should().HaveCount(20);
             result.Should().OnlyContain(s => s.Time > DateTime.Now.AddDays(-30));
         }
 
