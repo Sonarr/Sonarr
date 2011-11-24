@@ -24,7 +24,11 @@
 Logs
 }
 @section ActionMenu{
-    @{Html.RenderPartial("SubMenu");}
+    <ul class="sub-menu">
+        <li>@Ajax.ActionLink("Clear Logs", "Clear", "Log", new AjaxOptions { OnSuccess = "reloadGrid" })</li>
+    </ul>
+    <div style="margin-bottom: 10px">
+    </div>
 }
 @section MainContent{
     @{Html.Telerik().Grid<Log>().Name("logsGrid")
@@ -32,7 +36,7 @@ Logs
             .Columns(columns =>
                          {
                              columns.Bound(c => c.Time).Title("Time").Width(170);
-                             columns.Bound(c => c.Level).Title("Level");
+                             columns.Bound(c => c.Level).Title("Level").Width(70);
                              columns.Bound(c => c.Logger).Title("Source");
                              columns.Bound(c => c.Message);
                          })
@@ -41,15 +45,12 @@ Logs
                                                                     "<div><#= ExceptionType #></div>" +
                                                                     "<div class='stackframe'><#= Exception #></div>"
                                                                 ))
-            .DataBinding(data =>
-            {
-                data.Server().Select("AjaxBinding", "Log", new { ajax = true });
-                data.Ajax().Select("AjaxBinding", "Log").Enabled(true);
-            })
+            .DataBinding(data => data.Ajax().Select("AjaxBinding", "Log").Enabled(true))
             .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.Time).Descending()).Enabled(true))
-            .Pageable(c => c.PageSize(50).Position(GridPagerPosition.Bottom).Style(GridPagerStyles.NextPrevious))
+            .Pageable(paging => paging.Style(GridPagerStyles.Status).PageOnScroll(true).PageSize(100))
             .Filterable()
             .ClientEvents(c => c.OnRowDataBound("onRowDataBound"))
+            .Scrollable(c=>c.Height(500))
             .Render();}
 }
 <script type="text/javascript">

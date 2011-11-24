@@ -4,18 +4,14 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Web;
-using System.Web.Caching;
 using System.Web.Mvc;
 using System.Web.Routing;
-using MvcMiniProfiler;
 using NLog.Config;
 using Ninject;
 using Ninject.Web.Mvc;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core;
-using NzbDrone.Core.Instrumentation;
-using Telerik.Web.Mvc;
 
 namespace NzbDrone.Web
 {
@@ -99,13 +95,11 @@ namespace NzbDrone.Web
 
         protected void Application_BeginRequest()
         {
-            Thread.CurrentThread.Name = "UI";
-            MiniProfiler.Start();
+            Thread.CurrentThread.Name = "WEB_THREAD";
         }
 
         protected void Application_EndRequest()
         {
-            MiniProfiler.Stop();
         }
     }
 }
