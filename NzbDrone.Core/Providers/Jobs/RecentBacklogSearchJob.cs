@@ -13,16 +13,13 @@ namespace NzbDrone.Core.Providers.Jobs
     {
         private readonly EpisodeProvider _episodeProvider;
         private readonly EpisodeSearchJob _episodeSearchJob;
-        private readonly SeasonSearchJob _seasonSearchJob;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public RecentBacklogSearchJob(EpisodeProvider episodeProvider, EpisodeSearchJob episodeSearchJob,
-                                    SeasonSearchJob seasonSearchJob)
+        public RecentBacklogSearchJob(EpisodeProvider episodeProvider, EpisodeSearchJob episodeSearchJob)
         {
             _episodeProvider = episodeProvider;
             _episodeSearchJob = episodeSearchJob;
-            _seasonSearchJob = seasonSearchJob;
         }
 
         public string Name
