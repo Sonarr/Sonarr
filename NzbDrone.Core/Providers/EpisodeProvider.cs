@@ -125,6 +125,30 @@ namespace NzbDrone.Core.Providers
         {
             var result = new List<Episode>();
 
+            if (parseResult.AirDate.HasValue)
+            {
+                var episodeInfo = GetEpisode(parseResult.Series.SeriesId, parseResult.AirDate.Value);
+
+                //if still null we should add the temp episode
+                if (episodeInfo == null && autoAddNew)
+                {
+                    Logger.Debug("Episode {0} doesn't exist in db. adding it now.", parseResult);
+                    episodeInfo = new Episode
+                    {
+                        SeriesId = parseResult.Series.SeriesId,
+                        AirDate = parseResult.AirDate.Value,
+                        Title = "TBD",
+                        Overview = String.Empty,
+                    };
+
+                    AddEpisode(episodeInfo);
+                }
+
+                //Add to Result and Return (There will only be one episode to return)
+                result.Add(episodeInfo);
+                return result;
+            }
+
             if (parseResult.EpisodeNumbers == null)
                 return result;
 

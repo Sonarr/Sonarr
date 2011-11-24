@@ -1,16 +1,19 @@
 ﻿// ReSharper disable RedundantUsingDirective
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 using FizzWare.NBuilder;
 using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common.AutoMoq;
+using PetaPoco;
 
 namespace NzbDrone.Core.Test.ProviderTests
 {
@@ -255,6 +258,57 @@ namespace NzbDrone.Core.Test.ProviderTests
             episodes.Should().BeEmpty();
         }
 
+        [Test]
+        public void GetEpisodeParseResult_should_return_single_episode_when_air_date_is_provided()
+        {
+            //Setup
+            var fakeEpisode = Builder<Episode>.CreateListOfSize(1)
+                    .All()
+                    .With(e => e.AirDate = DateTime.Today)
+                    .Build()
+                    .ToList();
 
+            var fakeSeries = Builder<Series>.CreateNew()
+                    .With(s => s.SeriesId = 1)
+                    .Build();
+
+            Mocker.GetMock<IDatabase>().Setup(s => s.Fetch<Episode, Series, EpisodeFile>(It.IsAny<String>(), It.IsAny<Object[]>()))
+                .Returns(fakeEpisode);
+            
+            //Act
+            var episodes = Mocker.Resolve<EpisodeProvider>()
+                .GetEpisodesByParseResult(new EpisodeParseResult { AirDate = DateTime.Today, Series = fakeSeries }, true);
+            
+            //Assert
+            episodes.Should().HaveCount(1);
+            episodes.First().AirDate.Should().Be(DateTime.Today);
+
+            Mocker.GetMock<IDatabase>().Verify(v=> v.Insert(It.IsAny<Episode>()), Times.Never());
+        }
+
+        [Test]
+        public void GetEpisodeParseResult_get_daily_should_add_new_episode()
+        {
+            //Setup
+            var fakeSeries = Builder<Series>.CreateNew()
+                    .With(s => s.SeriesId = 1)
+                    .Build();
+
+            Mocker.GetMock<IDatabase>().Setup(s => s.Fetch<Episode, Series, EpisodeFile>(It.IsAny<String>(), It.IsAny<Object[]>()))
+                .Returns(new List<Episode>());
+
+            Mocker.GetMock<IDatabase>().Setup(s => s.Insert(It.IsAny<Episode>()))
+                .Returns(1);
+
+            //Act
+            var episodes = Mocker.Resolve<EpisodeProvider>()
+                .GetEpisodesByParseResult(new EpisodeParseResult { AirDate = DateTime.Today, Series = fakeSeries }, true);
+
+            //Assert
+            episodes.Should().HaveCount(1);
+            episodes.First().AirDate.Should().Be(DateTime.Today);
+
+            Mocker.GetMock<IDatabase>().Verify(v => v.Insert(It.IsAny<Episode>()), Times.Once());
+        }
     }
 }
