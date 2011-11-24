@@ -59,6 +59,8 @@ namespace NzbDrone.Core.Providers.Jobs
 
                     var countInDb = _episodeProvider.GetEpisodeNumbersBySeason(seriesId, seasonNumber).Count;
 
+                    //Todo: Download a full season if more than n% is missing?
+
                     if (count != countInDb)
                     {
                         //Add the episodes to be processed manually
