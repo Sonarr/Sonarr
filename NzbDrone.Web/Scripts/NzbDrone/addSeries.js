@@ -74,7 +74,7 @@ function refreshRoot() {
         $('#rootDirs').html(data);
     });
     reloadAddNew();
-    reloadExistingSeries();    
+    reloadExistingSeries();
 }
 
 

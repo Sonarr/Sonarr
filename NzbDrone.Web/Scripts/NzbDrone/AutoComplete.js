@@ -3,10 +3,19 @@
         cache: false
     });
 
+    bindAutoCompletes();
+});
+
+//
+$('.folderLookup:not(.ui-autocomplete-input), .seriesLookup:not(.ui-autocomplete-input), .localSeriesLookup:not(.ui-autocomplete-input)').live('focus', function (event) {
+    bindAutoCompletes();
+});
+
+function bindAutoCompletes() {
     bindFolderAutoComplete(".folderLookup");
     bindSeriesAutoComplete(".seriesLookup");
     bindLocalSeriesAutoComplete(".localSeriesLookup");
-});
+}
 
 function bindFolderAutoComplete(selector) {
     
