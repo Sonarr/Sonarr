@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Instrumentation
         public void Register()
         {
             LogManager.Configuration.AddTarget("DbLogger", this);
-            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Debug, this));
+            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Info, this));
 
             LogManager.ConfigurationReloaded += (sender, args) => Register();
             LogConfiguration.Reload();
