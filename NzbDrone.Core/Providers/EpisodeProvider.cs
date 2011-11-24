@@ -258,9 +258,10 @@ namespace NzbDrone.Core.Providers
                     episodeToUpdate.Overview = episode.Overview;
 
                     if (episode.FirstAired.Year > 1900)
-                    {
                         episodeToUpdate.AirDate = episode.FirstAired.Date;
-                    }
+
+                    else
+                        episodeToUpdate.AirDate = null;
 
                     successCount++;
                 }

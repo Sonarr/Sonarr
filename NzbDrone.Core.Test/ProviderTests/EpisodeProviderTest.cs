@@ -327,6 +327,51 @@ namespace NzbDrone.Core.Test.ProviderTests
         }
 
         [Test]
+        public void RefreshEpisodeInfo_should_set_older_than_1900_to_null_for_existing_episodes()
+        {
+            //Arrange
+            const int seriesId = 71663;
+
+            var fakeEpisode = Builder<Episode>.CreateNew()
+                    .With(e => e.TvDbEpisodeId = 12345)
+                    .With(e => e.AirDate = DateTime.Today)
+                    .Build();
+
+            var fakeTvDbEpisodes = Builder<TvdbSeries>.CreateNew().With(
+                c => c.Episodes =
+                     new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(1)
+                         .All()
+                         .With(l => l.Language = new TvdbLanguage(0, "eng", "a")).And(e => e.FirstAired = DateTime.Now)
+                         .TheFirst(1).With(e => e.FirstAired = new DateTime(1800, 1, 1))
+                         .Build())
+                ).With(c => c.Id = seriesId).Build();
+
+            var fakeSeries = Builder<Series>.CreateNew().With(c => c.SeriesId = seriesId).Build();
+
+            var mocker = new AutoMoqer();
+
+            var db = TestDbHelper.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            db.Insert(fakeSeries);
+            db.Insert(fakeEpisode);
+
+            mocker.GetMock<TvDbProvider>()
+                .Setup(c => c.GetSeries(seriesId, true))
+                .Returns(fakeTvDbEpisodes);
+
+            //Act
+            mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
+
+            //Assert
+            var storedEpisodes = mocker.Resolve<EpisodeProvider>().GetEpisodeBySeries(seriesId).ToList();
+            storedEpisodes.Should().HaveCount(1);
+            storedEpisodes.Where(e => e.AirDate == null).Should().HaveCount(1);
+
+            mocker.VerifyAllMocks();
+        }
+
+        [Test]
         public void RefreshEpisodeInfo_ignore_episode_zero()
         {
             //Arrange
