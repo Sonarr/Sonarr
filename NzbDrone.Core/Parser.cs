@@ -80,26 +80,36 @@ namespace NzbDrone.Core
 
         internal static EpisodeParseResult ParseTitle(string title)
         {
-            Logger.Trace("Parsing string '{0}'", title);
-            var simpleTitle = SimpleTitleRegex.Replace(title, String.Empty);
-
-            foreach (var regex in ReportTitleRegex)
+            try
             {
-                var match = regex.Matches(simpleTitle);
+                Logger.Trace("Parsing string '{0}'", title);
+                var simpleTitle = SimpleTitleRegex.Replace(title, String.Empty);
 
-                if (match.Count != 0)
+                foreach (var regex in ReportTitleRegex)
                 {
-                    var result = ParseMatchCollection(match);
-                    if (result != null)
+                    var match = regex.Matches(simpleTitle);
+
+                    if (match.Count != 0)
                     {
-                        result.Language = ParseLanguage(title);
-                        result.Quality = ParseQuality(title);
-                        return result;
+                        var result = ParseMatchCollection(match);
+                        if (result != null)
+                        {
+                            //Check if episode is in the future (most likley a parse error)
+                            if (result.AirDate > DateTime.Now.AddDays(1).Date)
+                               break;
+
+                            result.Language = ParseLanguage(title);
+                            result.Quality = ParseQuality(title);
+                            return result;
+                        }
                     }
                 }
+                Logger.Warn("Unable to parse episode info. {0}", title);
             }
-
-            Logger.Warn("Unable to parse episode info. {0}", title);
+            catch (Exception e)
+            {
+                Logger.Error("An error has occurred while trying to parse '{0}'", title);
+            }
             return null;
         }
 
@@ -164,7 +174,7 @@ namespace NzbDrone.Core
 
                 parsedEpisode = new EpisodeParseResult
                 {
-                    AirDate = new DateTime(airyear, airmonth, airday),
+                    AirDate = new DateTime(airyear, airmonth, airday).Date,
                 };
             }
 

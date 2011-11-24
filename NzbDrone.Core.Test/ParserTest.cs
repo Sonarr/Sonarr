@@ -172,13 +172,23 @@ namespace NzbDrone.Core.Test
         [TestCase("2011.01.10 - Denis Leary - HD TV.mkv", "", 2011, 1, 10)]
         [TestCase("2011.03.13 - Denis Leary - HD TV.mkv", "", 2011, 3, 13)]
         [TestCase("The Tonight Show with Jay Leno - 2011-06-16 - Larry David, \"Bachelorette\" Ashley Hebert, Pitbull with Ne-Yo", "The Tonight Show with Jay Leno", 2011, 6, 16)]
-        public void episode_daily_parse(string postTitle, string title, int year, int month, int day)
+        public void parse_daily_episodes(string postTitle, string title, int year, int month, int day)
         {
             var result = Parser.ParseTitle(postTitle);
             var airDate = new DateTime(year, month, day);
             result.CleanTitle.Should().Be(Parser.NormalizeTitle(title));
             result.AirDate.Should().Be(airDate);
             Assert.IsNull(result.EpisodeNumbers);
+        }
+
+        [Test]
+        public void parse_daily_should_fail_if_episode_is_far_in_future()
+        {
+            var title = string.Format("{0}.{1}.{2} - Denis Leary - HD TV.mkv", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.AddDays(2).Day);
+
+            Parser.ParseTitle(title).Should().BeNull();
+
+            ExceptionVerification.ExcpectedWarns(1);
         }
 
 
@@ -363,6 +373,14 @@ namespace NzbDrone.Core.Test
             result.Should().BeNull();
 
             ExceptionVerification.ExcpectedWarns(1);
+        }
+
+        [TestCase("Fussball Bundesliga 2010 2011 30 Spieltag FC Bayern Muenchen vs Bayer 04 Leverkusen German WS dTV XviD WoGS")]
+        public void unparsable_should_log_error_but_not_throw(string title)
+        {
+            Parser.ParseTitle(title);
+            ExceptionVerification.IgnoreWarns();
+            ExceptionVerification.ExcpectedErrors(1);
         }
     }
 }

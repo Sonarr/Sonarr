@@ -137,7 +137,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             //Assert
             VerifySkipImport(result, mocker);
-            ExceptionVerification.ExcpectedWarns(1);
+            ExceptionVerification.ExcpectedWarns(2);
         }
 
         [Test]
