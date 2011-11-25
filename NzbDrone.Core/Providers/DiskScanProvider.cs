@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Providers
     public class DiskScanProvider
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private static readonly string[] MediaExtentions = new[] { ".mkv", ".avi", ".wmv", ".mp4", ".mpg", ".mpeg", ".xvid", ".flv", ".mov", ".vob", ".ts", ".rm", ".rmvb", ".xvid", ".dvr-ms" };
+        private static readonly string[] MediaExtentions = new[] { ".mkv", ".avi", ".wmv", ".mp4", ".mpg", ".mpeg", ".xvid", ".flv", ".mov", ".rm", ".rmvb", ".xvid", ".dvr-ms" };
         private readonly DiskProvider _diskProvider;
         private readonly EpisodeProvider _episodeProvider;
         private readonly MediaFileProvider _mediaFileProvider;
@@ -235,7 +235,7 @@ namespace NzbDrone.Core.Providers
 
         private List<string> GetVideoFiles(string path)
         {
-            Logger.Debug("Scanning '{0}' for episodes", path);
+            Logger.Debug("Scanning '{0}' for video files", path);
 
             var filesOnDisk = _diskProvider.GetFiles(path, SearchOption.AllDirectories);
 

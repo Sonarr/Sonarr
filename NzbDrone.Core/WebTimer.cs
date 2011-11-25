@@ -22,10 +22,10 @@ namespace NzbDrone.Core
             _jobProvider = jobProvider;
         }
 
-        //TODO: Make timer doesn't keep running during unit tests.
+        //TODO: Fix this so the timer doesn't keep running during unit tests.
         public void StartTimer(int secondInterval)
         {
-            _onCacheRemove = new CacheItemRemovedCallback(DoWork);
+            _onCacheRemove = DoWork;
 
             HttpRuntime.Cache.Insert(GetType().ToString(), secondInterval, null,
                 DateTime.Now.AddSeconds(secondInterval), Cache.NoSlidingExpiration,

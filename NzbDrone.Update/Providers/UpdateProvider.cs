@@ -60,6 +60,8 @@ namespace NzbDrone.Update.Providers
                 _serviceProvider.Stop(ServiceProvider.NZBDRONE_SERVICE_NAME);
             }
 
+            //TODO:Should be able to restart service if anything beyond this point fails
+
             logger.Info("Killing all running processes");
             var processes = _processProvider.GetProcessByName(ProcessProvider.NzbDroneProccessName);
             foreach (var processInfo in processes)
@@ -102,6 +104,7 @@ namespace NzbDrone.Update.Providers
 
         private void RollBack(string targetFolder)
         {
+            //TODO:this should ignore single file failures.
             logger.Info("Attempting to rollback upgrade");
             _diskProvider.CopyDirectory(_enviromentProvider.GetUpdateBackUpFolder(), targetFolder);
         }

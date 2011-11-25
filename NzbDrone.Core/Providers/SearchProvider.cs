@@ -157,7 +157,7 @@ namespace NzbDrone.Core.Providers
 
 
             //TODO:fix this so when search returns more than one episode
-            //TODO:-its populated with more than the original episode.
+            //its populated with more than the original episode.
             reports.ForEach(c =>
             {
                 c.Series = series;
