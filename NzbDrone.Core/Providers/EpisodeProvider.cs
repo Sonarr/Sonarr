@@ -138,8 +138,24 @@ namespace NzbDrone.Core.Providers
                         SeriesId = parseResult.Series.SeriesId,
                         AirDate = parseResult.AirDate.Value,
                         Title = "TBD",
-                        Overview = String.Empty,
+                        Overview = String.Empty
                     };
+
+                    var episodesInSeries = GetEpisodeBySeries(parseResult.Series.SeriesId);
+
+                    //Find the current season number
+                    var maxSeasonNumber = episodesInSeries.Select(s => s.SeasonNumber).MaxOrDefault();
+
+                    //Set the season number
+                    episodeInfo.SeasonNumber = (maxSeasonNumber == 0) ? 1 : maxSeasonNumber;
+
+                    //Find the latest episode number
+                    var maxEpisodeNumber = episodesInSeries
+                                                .Where(w => w.SeasonNumber == episodeInfo.SeasonNumber)
+                                                .Select(s => s.EpisodeNumber).MaxOrDefault();
+
+                    //Set the episode number to max + 1
+                    episodeInfo.EpisodeNumber = maxEpisodeNumber + 1;
 
                     AddEpisode(episodeInfo);
                 }

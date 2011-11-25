@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -50,6 +51,16 @@ namespace NzbDrone.Core
         public static string ParentUriString(this Uri uri)
         {
             return uri.AbsoluteUri.Remove(uri.AbsoluteUri.Length - String.Join("", uri.Segments).Length - uri.Query.Length);
+        }
+
+        public static int MaxOrDefault(this IEnumerable<int> ints)
+        {
+            var intList = ints.ToList();
+
+            if (intList.Count() == 0)
+                return 0;
+
+            return intList.Max();
         }
     }
 }
