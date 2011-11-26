@@ -34,18 +34,18 @@
 .providerSection
 {
     float: left;
-    width: 270px;
+    width: 255px;
     margin: 2px;
     border:solid 1px #CCCCCD;
     display: inline-block;
-    overflow: hidden;
-    padding: 5px 5px 5px 5px;
+    overflow: auto;
+    padding: 3px;
 }
 
 .providerOptions label
 {
     margin-top: 10px;
-    margin-left: 7px;
+    margin-left: 3px;
     margin-right: 25px;
     float: left;
     font-weight: bold;
@@ -58,7 +58,7 @@
     padding:4px 2px;
     border:solid 1px #aacfe4;
     width:170px;
-    margin-right: 2px;
+    margin-right: 0px;
 }
     
 .providerOptions select
@@ -80,7 +80,7 @@ input[type="checkbox"]
 
 #newznabProviders
 {
-    overflow: hidden;
+    overflow: auto;
     margin-top: 5px;
     margin-bottom: 10px;
 }

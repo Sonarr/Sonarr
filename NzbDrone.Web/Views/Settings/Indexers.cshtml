@@ -2,9 +2,11 @@
 @model NzbDrone.Web.Models.IndexerSettingsModel
 @section HeaderContent{
     <link rel="stylesheet" type="text/css" href="../../Content/Settings.css" />
+    <link rel="stylesheet" type="text/css" href="../../Content/IndexerSettings.css" />
     <style>
         .indexerPanel
         {
+            overflow: auto;
             padding-top: 20px;
         }
         
@@ -15,6 +17,16 @@
             margin-right: 40px;
             font-size: 120%;
             font-weight: bold;
+        }
+        
+        #stylized .indexerPanel .labelClass
+        {
+            width: 320px;
+        }
+        
+        #stylized .indexerPanel .small
+        {
+            width: 320px;
         }
     </style>
 }
@@ -39,7 +51,7 @@ Settings
             <div id="accordion">
                 <h3>
                     <a href="#">NZBs.org</a></h3>
-                <div class="indexerPanel clearfix">
+                <div class="indexerPanel">
                     <label class="labelClass">
                         Enable <span class="small">@Html.DescriptionFor(m => m.NzbsOrgEnabled)</span>
                     </label>
@@ -55,7 +67,7 @@ Settings
                 </div>
                 <h3>
                     <a href="#">NZBMatrix</a></h3>
-                <div class="indexerPanel clearfix">
+                <div class="indexerPanel">
                     <label class="labelClass">
                         Enable <span class="small">@Html.DescriptionFor(m => m.NzbMatrixEnabled)</span>
                     </label>
@@ -71,7 +83,7 @@ Settings
                 </div>
                 <h3>
                     <a href="#">NZBsRus</a></h3>
-                <div class="indexerPanel clearfix">
+                <div class="indexerPanel">
                     <label class="labelClass">
                         Enable <span class="small">@Html.DescriptionFor(m => m.NzbsRUsEnabled)</span>
                     </label>
@@ -87,7 +99,7 @@ Settings
                 </div>
                 <h3>
                     <a href="#">Newsbin</a></h3>
-                <div class="indexerPanel clearfix">
+                <div class="indexerPanel">
                     <label class="labelClass">
                         Enable <span class="small">@Html.DescriptionFor(m => m.NewzbinEnabled)</span>
                     </label>
@@ -103,13 +115,14 @@ Settings
                 </div>
                 <h3>
                     <a href="#">Newznab</a></h3>
-                <div class="indexerPanel clearfix">
+                <div class="indexerPanel">
                     <label class="labelClass">
                         Enable <span class="small">@Html.DescriptionFor(m => m.NewznabEnabled)</span>
                     </label>
                     @Html.CheckBoxFor(m => m.NewznabEnabled, new { @class = "inputClass checkClass" })
-                    <p>
-                    </p>
+                    <br/>
+                    <br/>
+                    <p></p>
                     <a id="addItem" href="@Url.Action("AddNewznabProvider", "Settings")">
                         <img src="../../Content/Images/Plus.png" alt="Add Newznab Provider" width="20px"
                             height="20px" />
