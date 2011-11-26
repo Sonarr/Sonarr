@@ -387,6 +387,9 @@
     <Content Include="Scripts\2011.3.1115\telerik.treeview.min.js" />
     <Content Include="Scripts\2011.3.1115\telerik.upload.min.js" />
     <Content Include="Scripts\2011.3.1115\telerik.window.min.js" />
+    <Content Include="Scripts\jquery-1.7.1-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.7.1.js" />
+    <Content Include="Scripts\jquery-1.7.1.min.js" />
     <Content Include="Scripts\jquery.hotkeys.js" />
     <Content Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
@@ -400,9 +403,6 @@
     <Content Include="Scripts\NzbDrone\seriesDetails.js" />
     <Content Include="Scripts\NzbDrone\settingsForm.js" />
     <Content Include="Scripts\NzbDrone\slider.js" />
-    <Content Include="Scripts\jquery-1.6.3-vsdoc.js" />
-    <Content Include="Scripts\jquery-1.6.3.js" />
-    <Content Include="Scripts\jquery-1.6.3.min.js" />
     <Content Include="Scripts\jquery-ui-1.8.16.js" />
     <Content Include="Scripts\jquery-ui-1.8.16.min.js" />
     <Content Include="Scripts\jquery.gritter.js" />

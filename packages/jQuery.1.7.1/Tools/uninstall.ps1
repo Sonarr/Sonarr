@@ -3,9 +3,9 @@ param($installPath, $toolsPath, $package, $project)
 #Forcibly delete the -vsdoc file
 #$projectFolder = Split-Path -Parent $project.FileName
 $projectFolder = $project.Properties.Item("FullPath").Value
-$projVsDocPath = Join-Path $projectFolder Scripts\jquery-1.6.3-vsdoc.js
-$origVsDocPath = Join-Path $installPath Content\Scripts\jquery-1.6.3-vsdoc.js
-$origVsDocParaPath = Join-Path $toolsPath jquery-1.6.3-vsdoc-para.js
+$projVsDocPath = Join-Path $projectFolder Scripts\jquery-1.7.1-vsdoc.js
+$origVsDocPath = Join-Path $installPath Content\Scripts\jquery-1.7.1-vsdoc.js
+$origVsDocParaPath = Join-Path $toolsPath jquery-1.7.1-vsdoc-para.js
 
 function Get-Checksum($file) {
     $cryptoProvider = New-Object "System.Security.Cryptography.MD5CryptoServiceProvider"
