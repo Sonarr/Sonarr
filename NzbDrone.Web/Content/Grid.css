@@ -4,9 +4,6 @@
     height: 18px;
     padding: 1px;
     margin: 2px;
-    border-width: 1px;
-    border-style: dashed;
-    border-color: lightgray;
 }
     
 .searchImage:hover, .renameImage:hover, .ignoreEpisode:hover, .ignoreEpisodesMaster:hover

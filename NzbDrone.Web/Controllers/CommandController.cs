@@ -41,7 +41,7 @@ namespace NzbDrone.Web.Controllers
             return new JsonResult { Data = "ok", JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
-        public JsonResult SyncEpisodesOnDisk(int seriesId)
+        public JsonResult ScanDisk(int seriesId)
         {
             //Syncs the episodes on disk for the specified series
             _jobProvider.QueueJob(typeof(DiskScanJob), seriesId);

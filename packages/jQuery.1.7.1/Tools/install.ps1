@@ -14,7 +14,7 @@ if ($copyOverParaFile) {
     #Copy the -vsdoc-para file over the -vsdoc file
     #$projectFolder = Split-Path -Parent $project.FileName
     $projectFolder = $project.Properties.Item("FullPath").Value
-    $paraVsDocPath = Join-Path $toolsPath jquery-1.6.3-vsdoc-para.js
-    $vsDocPath = Join-Path $projectFolder Scripts\jquery-1.6.3-vsdoc.js
+    $paraVsDocPath = Join-Path $toolsPath jquery-1.7.1-vsdoc-para.js
+    $vsDocPath = Join-Path $projectFolder Scripts\jquery-1.7.1-vsdoc.js
     Copy-Item $paraVsDocPath $vsDocPath -Force
 }

@@ -10,11 +10,8 @@ using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 
 //using MvcMiniProfiler.Data.Linq2Sql;
 
-[assembly: WebActivator.PreApplicationStartMethod(
-	typeof(NzbDrone.Web.App_Start.MiniProfilerPackage), "PreStart")]
-
-[assembly: WebActivator.PostApplicationStartMethod(
-	typeof(NzbDrone.Web.App_Start.MiniProfilerPackage), "PostStart")]
+[assembly: WebActivator.PreApplicationStartMethod(typeof(NzbDrone.Web.App_Start.MiniProfilerPackage), "PreStart")]
+[assembly: WebActivator.PostApplicationStartMethod(typeof(NzbDrone.Web.App_Start.MiniProfilerPackage), "PostStart")]
 
 
 namespace NzbDrone.Web.App_Start 
@@ -65,10 +62,11 @@ namespace NzbDrone.Web.App_Start
         {
             context.BeginRequest += (sender, e) =>
             {
-                var request = ((HttpApplication)sender).Request;
+                //var request = ((HttpApplication)sender).Request;
                 //TODO: By default only local requests are profiled, optionally you can set it up
                 //  so authenticated users are always profiled
-                if (request.IsLocal) { MiniProfiler.Start(); }
+                //if (request.IsLocal) { MiniProfiler.Start(); }
+                MiniProfiler.Start();
             };
 
 

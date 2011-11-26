@@ -33,7 +33,7 @@ namespace NzbDrone.Web.Controllers
             return new JsonResult { Data = "ok" };
         }
 
-        public JsonResult SearchSeries(int seriesId)
+        public JsonResult BacklogSeries(int seriesId)
         {
             //Syncs the episodes on disk for the specified series
             _jobProvider.QueueJob(typeof(SeriesSearchJob), seriesId);
@@ -55,7 +55,7 @@ namespace NzbDrone.Web.Controllers
             return new JsonResult { Data = "ok" };
         }
 
-        public JsonResult RenameSeries(int seriesId)
+        public JsonResult RenameEpisodes(int seriesId)
         {
             //Syncs the episodes on disk for the specified series
             _jobProvider.QueueJob(typeof(RenameSeriesJob), seriesId);

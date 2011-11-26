@@ -5,6 +5,7 @@ using NLog;
 
 namespace NzbDrone.Providers
 {
+    [DebuggerStepThroughAttribute]
     public class DebuggerProvider
     {
         private static readonly Logger Logger = LogManager.GetLogger("Host.DebuggerProvider");

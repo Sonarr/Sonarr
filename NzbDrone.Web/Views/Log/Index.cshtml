@@ -31,6 +31,8 @@ Logs
     </div>
 }
 @section MainContent{
+    <div class="infoBox">
+        Log entries older than 30 days are automatically deleted.</div>
     @{Html.Telerik().Grid<Log>().Name("logsGrid")
             .TableHtmlAttributes(new { @class = "Grid" })
             .Columns(columns =>

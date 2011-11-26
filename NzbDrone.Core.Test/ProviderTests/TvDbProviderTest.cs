@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [SetUp]
         public void Setup()
         {
-            tvDbProvider = LiveKernel.Get<TvDbProvider>();
+            tvDbProvider = new StandardKernel().Get<TvDbProvider>();
         }
 
         [TestCase("The Simpsons")]

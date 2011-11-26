@@ -12,7 +12,7 @@ namespace NzbDrone.Common
     {
         public const string NZBDRONE_SERVICE_NAME = "NzbDrone";
 
-        private static readonly Logger Logger = LogManager.GetLogger("Host.ServiceManager");
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public virtual bool ServiceExist(string name)
         {
@@ -90,7 +90,7 @@ namespace NzbDrone.Common
 
         public virtual void Stop(string serviceName)
         {
-            Logger.Info("Stopping {0} Service...");
+            Logger.Info("Stopping {0} Service...", serviceName);
             var service = GetService(serviceName);
             if (service == null)
             {
@@ -108,7 +108,7 @@ namespace NzbDrone.Common
                 service.Refresh();
                 if (service.Status == ServiceControllerStatus.Stopped)
                 {
-                    Logger.Info("{0} has stopped successfully.");
+                    Logger.Info("{0} has stopped successfully.", serviceName);
                 }
                 else
                 {

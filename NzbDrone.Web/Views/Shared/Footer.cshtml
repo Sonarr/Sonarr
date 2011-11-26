@@ -1,5 +1,4 @@
 ﻿@using NzbDrone.Web.Models
 @model FooterModel
-<div>
-    NzbDrone @Model.Version (@Model.BuildTime.ToString("MMM d, yyyy"))
-</div>
+@Html.ActionLink(String.Format("NzbDrone {0} {1:MMM d, yyyy}", Model.Version, Model.BuildTime), "Index", "Update")
+

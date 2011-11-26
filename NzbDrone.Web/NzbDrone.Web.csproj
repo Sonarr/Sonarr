@@ -140,8 +140,14 @@
     <Content Include="Content\2011.3.1115\telerik.common.min.css" />
     <Content Include="Content\2011.3.1115\telerik.metro.min.css" />
     <Content Include="Content\2011.3.1115\telerik.sitefinity.min.css" />
+    <Content Include="Content\Images\blue.png" />
+    <Content Include="Content\Images\green.png" />
+    <Content Include="Content\Images\Indexers\Newznab.png" />
+    <Content Include="Content\Images\Indexers\Nzbsorg.png" />
+    <Content Include="Content\Images\red.png" />
+    <Content Include="Content\Images\yellow.png" />
     <Content Include="Content\IndexerSettings.css" />
-    <Content Include="Content\Slider.css" />
+    <Content Include="Content\Messages.css" />
     <Content Include="Content\Grid.css" />
     <Content Include="Content\Images\close.png" />
     <Content Include="Content\Images\Downloading.png" />
@@ -231,9 +237,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\ActionButton.css" />
-    <Content Include="Content\Blueprint\ie.css" />
-    <Content Include="Content\Blueprint\screen.css" />
-    <Content Include="Content\Blueprint\liquid.css" />
     <Content Include="Content\Images\ignored.png" />
     <Content Include="Content\Images\ignoredNeutral.png" />
     <Content Include="Content\Images\notIgnored.png" />
@@ -266,9 +269,6 @@
     <Content Include="Content\Images\Indexers\NzbMatrix.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Images\Indexers\Nzbs.org.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Content\Images\Indexers\NzbsRus.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -296,7 +296,6 @@
     <Content Include="Content\Images\ui-icons_ffffff_256x240.png" />
     <Content Include="Content\Images\VideoFolder.png" />
     <Content Include="Content\Images\X.png" />
-    <Content Include="Content\notibar.css" />
     <Content Include="Content\Settings.css" />
     <Content Include="Content\NzbDrone.css" />
     <Content Include="Content\Images\XbmcNotification.png" />
@@ -387,6 +386,9 @@
     <Content Include="Scripts\2011.3.1115\telerik.treeview.min.js" />
     <Content Include="Scripts\2011.3.1115\telerik.upload.min.js" />
     <Content Include="Scripts\2011.3.1115\telerik.window.min.js" />
+    <Content Include="Scripts\jquery-1.7.1-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.7.1.js" />
+    <Content Include="Scripts\jquery-1.7.1.min.js" />
     <Content Include="Scripts\jquery.hotkeys.js" />
     <Content Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
@@ -399,10 +401,6 @@
     <Content Include="Scripts\NzbDrone\Notification.js" />
     <Content Include="Scripts\NzbDrone\seriesDetails.js" />
     <Content Include="Scripts\NzbDrone\settingsForm.js" />
-    <Content Include="Scripts\NzbDrone\slider.js" />
-    <Content Include="Scripts\jquery-1.6.3-vsdoc.js" />
-    <Content Include="Scripts\jquery-1.6.3.js" />
-    <Content Include="Scripts\jquery-1.6.3.min.js" />
     <Content Include="Scripts\jquery-ui-1.8.16.js" />
     <Content Include="Scripts\jquery-ui-1.8.16.min.js" />
     <Content Include="Scripts\jquery.gritter.js" />
@@ -494,9 +492,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\QuickAdd.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Shared\LocalSearch.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Settings\Xbmc.cshtml" />

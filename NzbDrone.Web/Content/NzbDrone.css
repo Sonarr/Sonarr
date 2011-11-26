@@ -1,4 +1,3 @@
-
 *
 {
     font-family: "Segoe UI" , "Segoe UI Light" , Tahoma, Geneva, sans-serif;
@@ -10,6 +9,15 @@ body
     font-size: 13px;
     color: #3C3C3C;
     background-attachment: fixed;
+}
+
+#centered
+{
+    margin-right: auto;
+    width: 85%;
+    margin-left: auto;
+    min-width: 800px;
+    max-width: 1400px;
 }
 
 h1, h2, h3, h4, h5, h6
@@ -44,12 +52,17 @@ hr
 
 /* Menu */
 
-
+#menu
+{
+    height: 60px;
+}
 
 #menu ul
 {
-    padding: 0px 0px 0px 0px;
+    margin: 0;
+    padding: 8px 0px 0px 0px;
     list-style: none;
+    line-height: normal;
 }
 
 #menu li
@@ -62,14 +75,15 @@ hr
 {
     display: block;
     float: left;
-    padding: 9px 30px 0px 35px;
+    height: 28px;
+    padding: 7px 30px 0px 35px;
     letter-spacing: -1px;
     text-decoration: none;
     text-align: center;
     text-transform: lowercase;
     font-size: 17px;
+    font-weight: normal;
     vertical-align: middle;
-    height: 28px;
 }
 
 #menu a:hover
@@ -130,11 +144,14 @@ hr
 
 
 /* Footer */
-.footer
+#footer
 {
+    margin-top: 5px;
+    margin-bottom: 30px;
     padding: 1px 1px 1px 1px;
     color: #065EFE;
     text-align: center;
+    text-decoration: none;
 }
 
 
@@ -237,4 +254,17 @@ select, button, input[type="button"], input[type="submit"], input[type="reset"]
     position: fixed;
     top: 30px;
     right: 15px;
+}
+
+
+#localSeriesLookup
+{
+    width: 220px;
+    float: right;
+    margin-top: 7px;
+    margin-bottom: 0px;
+    border: 0px;
+    background: rgb(68, 67, 67);
+    color: rgb(169, 169, 169);
+    padding: 4px;
 }

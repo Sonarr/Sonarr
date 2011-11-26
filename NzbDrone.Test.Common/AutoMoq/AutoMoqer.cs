@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
@@ -14,6 +15,7 @@ using NzbDrone.Test.Common.AutoMoq.Unity;
 
 namespace NzbDrone.Test.Common.AutoMoq
 {
+    [DebuggerStepThrough]
     public class AutoMoqer
     {
         internal readonly MockBehavior DefaultBehavior = MockBehavior.Default;

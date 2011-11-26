@@ -9,16 +9,46 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link type="text/css" rel="stylesheet" href="../../Content/2011.3.1115/telerik.common.min.css" />
     <link type="text/css" rel="stylesheet" href="../../Content/2011.3.1115/telerik.sitefinity.min.css" />
-    <link type="text/css" rel="stylesheet" href="../../Content/Blueprint/screen.css" />
     <link type="text/css" rel="stylesheet" href="../../Content/jQueryUI/jquery-ui-1.8.14.nzbdrone.css" />
     <link type="text/css" rel="stylesheet" href="../../Content/jquery.gritter.css" />
     <link type="text/css" rel="stylesheet" href="../../Content/NzbDrone.css" />
-    <link type="text/css" rel="stylesheet" href="../../Content/Notibar.css" />
     <link type="text/css" rel="stylesheet" href="../../Content/ActionButton.css" />
     <link type="text/css" rel="stylesheet" href="../../Content/overrides.css" />
     <link type="text/css" rel="stylesheet" href="../../Content/Menu.css" />
-    <link type="text/css" rel="stylesheet" href="../../Content/Slider.css" />
-    <script type="text/javascript" src="../../Scripts/jquery-1.6.3.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="../../Content/Messages.css" />
+    @MvcMiniProfiler.MiniProfiler.RenderIncludes()
+    @RenderSection("HeaderContent", required: false)
+</head>
+<body>
+    <div id="centered">
+        <div id="menu">
+            <ul>
+                @MvcHtmlString.Create(Html.CurrentActionLink("Series", "Index", "Series"))
+                @MvcHtmlString.Create(Html.CurrentActionLink("Upcoming", "Index", "Upcoming"))
+                @MvcHtmlString.Create(Html.CurrentActionLink("History", "Index", "History"))
+                @MvcHtmlString.Create(Html.CurrentActionLink("Missing", "Index", "Missing"))
+                @MvcHtmlString.Create(Html.CurrentActionLink("Settings", "Index", "Settings"))
+                @MvcHtmlString.Create(Html.CurrentActionLink("Logs", "Index", "Log"))
+            </ul>
+            <input id="localSeriesLookup" type="text"/>
+        </div>
+        <div id="logo">
+            @RenderSection("TitleContent", required: false)
+        </div>
+        <div id="page">
+            @RenderSection("ActionMenu", required: false)
+            @RenderSection("MainContent", required: false)
+            @RenderBody()
+        </div>
+        <div id="footer">
+            @{Html.RenderAction("Footer", "Shared");}
+        </div>
+    </div>
+    <div id="msgBox">
+        <span id="msgText">background notification</span>
+    </div>
+    @(Html.Telerik().ScriptRegistrar().jQuery(true))
+    @* <script type="text/javascript" src="../../Scripts/jquery-1.7.1.min.js"></script>*@
     <script type="text/javascript" src="../../Scripts/jquery-ui-1.8.16.min.js"></script>
     <script type="text/javascript" src="../../Scripts/MicrosoftAjax.js"></script>
     <script type="text/javascript" src="../../Scripts/MicrosoftMvcAjax.js"></script>
@@ -31,48 +61,8 @@
     <script type="text/javascript" src="../../Scripts/NzbDrone/episodeSearch.js"></script>
     <script type="text/javascript" src="../../Scripts/NzbDrone/AutoComplete.js"></script>
     <script type="text/javascript" src="../../Scripts/NzbDrone/addSeries.js"></script>
-    <script type="text/javascript" src="../../Scripts/NzbDrone/slider.js"></script>
-    @MvcMiniProfiler.MiniProfiler.RenderIncludes()
-    @RenderSection("HeaderContent", required: false)
-</head>
-<body>
-    <div class="container">
-        @{Html.RenderAction("LocalSearch", "Shared");}
-        <div id="menu" class="span-24 last prepend-top append-bottom">
-            <ul>
-                @MvcHtmlString.Create(Html.CurrentActionLink("Series", "Index", "Series"))
-                @MvcHtmlString.Create(Html.CurrentActionLink("Upcoming", "Index", "Upcoming"))
-                @MvcHtmlString.Create(Html.CurrentActionLink("History", "Index", "History"))
-                @MvcHtmlString.Create(Html.CurrentActionLink("Missing", "Index", "Missing"))
-                @MvcHtmlString.Create(Html.CurrentActionLink("Settings", "Index", "Settings"))
-                @MvcHtmlString.Create(Html.CurrentActionLink("Logs", "Index", "Log"))
-            </ul>
-        </div>
-        <hr />
-        <div class="span-24 last">
-            <div id="logo">
-                @RenderSection("TitleContent", required: false)
-            </div>
-        </div>
-        <hr />
-        <div class="span-24 last">
-            <div id="page">
-                @RenderSection("ActionMenu", required: false)
-                @RenderSection("MainContent", required: false)
-                @RenderBody()
-            </div>
-        </div>
-        <hr />
-        <div class="span-24 last footer">
-            @{Html.RenderAction("Footer", "Shared");}
-        </div>
-    </div>
-    <div id="msgBox">
-        <span id="msgText">background notification</span>
-    </div>
-    @(Html.Telerik().ScriptRegistrar().jQuery(false))
-    @RenderSection("Scripts", required: false)
     <script type="text/javascript" src="../../Scripts/NzbDrone/Notification.js"></script>
+    @RenderSection("Scripts", required: false)
     @if (EnviromentProvider.IsProduction)
     {
         <script type="text/javascript">
