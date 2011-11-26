@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
@@ -36,7 +37,7 @@ namespace NzbDrone.Core.Providers.Jobs
                 throw new ArgumentOutOfRangeException("targetId");
 
             Logger.Debug("Getting seasons from database for series: {0}", targetId);
-            var seasons = _episodeProvider.GetSeasons(targetId);
+            var seasons = _episodeProvider.GetSeasons(targetId).Where(s => s > 0);
 
             foreach (var season in seasons)
             {
