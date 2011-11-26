@@ -8,7 +8,8 @@
         #examples
         {
             clear: both;
-            margin-top: 15px;
+            overflow: auto;
+            margin-top: 25px;
             margin-bottom: 15px;
         }
         
@@ -81,8 +82,7 @@
         </label>
         @Html.DropDownListFor(m => m.MultiEpisodeStyle, Model.MultiEpisodeStyles, new { @class = "inputClass selectClass" })  
         
-        <br/>
-        <div id ="examples" class="clearfix">
+        <div id ="examples">
             <div id="singleEpisodeExample">
             </div>
             <div id="multiEpisodeExample">
