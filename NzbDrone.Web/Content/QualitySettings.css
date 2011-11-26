@@ -1,7 +1,13 @@
-﻿#bottom
+﻿#top
+{
+    overflow: auto;
+}
+
+#bottom
 {
     margin-top: -10px;
     margin-left: 15px;
+    overflow: auto;
 }
         
 #addItem
@@ -15,6 +21,11 @@
 #profileHeader
 {
     margin-bottom: 5px;
+}
+
+#profiles
+{
+    overflow: auto;
 }
 
 /* QualityProfileItem */

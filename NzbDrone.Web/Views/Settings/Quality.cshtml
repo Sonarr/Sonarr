@@ -14,7 +14,7 @@ Settings
     <div id="stylized">
         @using (Html.BeginForm("SaveQuality", "Settings", FormMethod.Post, new { id = "form", name = "form" }))
         {
-            <div id="top" class="settingsForm clearfix">
+            <div id="top" class="settingsForm">
                 <h1>
                     Quality</h1>
                 <p>
@@ -69,14 +69,14 @@ Settings
                 </div>
             </div>
 
-            <div id="bottom" class="clearfix">
+            <div id="bottom">
                 <div id="profileContainer">
                     <div id="profileHeader">
                         <a id="addItem" href="@Url.Action("AddProfile", "Settings")">
                             <img src="../../Content/Images/Plus.png" alt="Add New Profile" width="20px" height="20px" />
                             Add New Profile</a>
                     </div>
-                    <div id="profiles" class="clearfix">
+                    <div id="profiles">
                         @foreach (var item in Model.Profiles)
                         {
                             Html.RenderAction("GetQualityProfileView", item);
