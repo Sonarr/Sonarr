@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -50,6 +51,10 @@ namespace NzbDrone.Core.Providers
                 return false;
             }
 
+            //Return false if the series is a daily series (we only support individual episode searching
+            if (series.IsDaily)
+                return false;
+
             notification.CurrentMessage = String.Format("Searching for {0} Season {1}", series.Title, seasonNumber);
 
             var reports = PerformSearch(notification, series, seasonNumber);
@@ -96,6 +101,10 @@ namespace NzbDrone.Core.Providers
                 return new List<int>();
             }
 
+            //Return empty list if the series is a daily series (we only support individual episode searching
+            if (series.IsDaily)
+                return new List<int>();
+
             notification.CurrentMessage = String.Format("Searching for {0} Season {1}", series.Title, seasonNumber);
 
             var episodes = _episodeProvider.GetEpisodesBySeason(seriesId, seasonNumber);
@@ -121,36 +130,18 @@ namespace NzbDrone.Core.Providers
                 Logger.Error("Unable to find an episode {0} in database", episodeId);
                 return false;
             }
+
             notification.CurrentMessage = "Searching for " + episode;
 
             var series = _seriesProvider.GetSeries(episode.SeriesId);
 
-            var indexers = _indexerProvider.GetEnabledIndexers();
-            var reports = new List<EpisodeParseResult>();
-
-            var title = _sceneMappingProvider.GetSceneName(series.SeriesId);
-
-            if (string.IsNullOrWhiteSpace(title))
+            if (episode.Series.IsDaily && !episode.AirDate.HasValue)
             {
-                title = series.Title;
+                Logger.Warn("AirDate is not Valid for: {0}", episode);
+                return false;
             }
 
-            foreach (var indexer in indexers)
-            {
-                try
-                {
-                    //notification.CurrentMessage = String.Format("Searching for {0} in {1}", episode, indexer.Name);
-
-                    //TODO:Add support for daily episodes, maybe search using both date and season/episode?
-                    var indexerResults = indexer.FetchEpisode(title, episode.SeasonNumber, episode.EpisodeNumber);
-
-                    reports.AddRange(indexerResults);
-                }
-                catch (Exception e)
-                {
-                    Logger.ErrorException("An error has occurred while fetching items from " + indexer.Name, e);
-                }
-            }
+            var reports = PerformSearch(notification, series, episode.SeasonNumber, new List<Episode> { episode });
 
             Logger.Debug("Finished searching all indexers. Total {0}", reports.Count);
             notification.CurrentMessage = "Processing search results";
@@ -184,15 +175,23 @@ namespace NzbDrone.Core.Providers
                     if (episodes == null)
                         reports.AddRange(indexer.FetchSeason(title, seasonNumber));
 
-                    else if(episodes.Count == 1)
-                        reports.AddRange(indexer.FetchEpisode(title, seasonNumber, episodes.First().EpisodeNumber));
+                    //Treat as single episode
+                    else if (episodes.Count == 1)
+                    {
+                        if (!series.IsDaily)
+                            reports.AddRange(indexer.FetchEpisode(title, seasonNumber, episodes.First().EpisodeNumber));
+
+                        //Daily Episode
+                        else
+                            reports.AddRange(indexer.FetchDailyEpisode(title, episodes.First().AirDate.Value));
+                    }
 
                     //Treat as Partial Season
                     else
                     {
                         var prefixes = GetEpisodeNumberPrefixes(episodes.Select(s => s.EpisodeNumber));
 
-                        foreach(var episodePrefix in prefixes)
+                        foreach (var episodePrefix in prefixes)
                         {
                             reports.AddRange(indexer.FetchPartialSeason(title, seasonNumber, episodePrefix));
                         }
