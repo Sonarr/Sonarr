@@ -2,7 +2,7 @@
 @model NzbDrone.Web.Models.IndexerSettingsModel
 @section HeaderContent{
     <link rel="stylesheet" type="text/css" href="../../Content/Settings.css" />
-  <style>
+    <style>
         .indexerPanel
         {
             padding-top: 20px;
@@ -25,10 +25,9 @@ Settings
     @{Html.RenderPartial("SubMenu");}
 }
 @section MainContent{
+    <div class="infoBox">
+        RSS feeds are checked every 15 minutes for new episodes.</div>
     <div id="stylized">
-        <div class="additionalInfo">
-            NzbDrone checks all Indexers every 15 minutes
-        </div>
         @using (Html.BeginForm("SaveIndexers", "Settings", FormMethod.Post, new { id = "form", name = "form", @class = "settingsForm" }))
         {
             <h1>
@@ -102,7 +101,8 @@ Settings
                     </label>
                     @Html.TextBoxFor(m => m.NewzbinPassword, new { @class = "inputClass" })
                 </div>
-                <h3><a href="#">First header</a></h3>
+                <h3>
+                    <a href="#">First header</a></h3>
                 <div class="indexerPanel clearfix">
                     <label class="labelClass">
                         Enable <span class="small">@Html.DescriptionFor(m => m.NewznabEnabled)</span>
@@ -144,7 +144,8 @@ Settings
 
         $(function () {
             $("#accordion").accordion({
-                autoHeight: false            });
+                autoHeight: false
+            });
         });
 
 

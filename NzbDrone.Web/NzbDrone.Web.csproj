@@ -140,7 +140,14 @@
     <Content Include="Content\2011.3.1115\telerik.common.min.css" />
     <Content Include="Content\2011.3.1115\telerik.metro.min.css" />
     <Content Include="Content\2011.3.1115\telerik.sitefinity.min.css" />
+    <Content Include="Content\Images\blue.png" />
+    <Content Include="Content\Images\green.png" />
+    <Content Include="Content\Images\Indexers\Newznab.png" />
+    <Content Include="Content\Images\Indexers\Nzbsorg.png" />
+    <Content Include="Content\Images\red.png" />
+    <Content Include="Content\Images\yellow.png" />
     <Content Include="Content\IndexerSettings.css" />
+    <Content Include="Content\Messages.css" />
     <Content Include="Content\Slider.css" />
     <Content Include="Content\Grid.css" />
     <Content Include="Content\Images\close.png" />
@@ -263,9 +270,6 @@
     <Content Include="Content\Images\Indexers\NzbMatrix.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Images\Indexers\Nzbs.org.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Content\Images\Indexers\NzbsRus.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -293,7 +297,6 @@
     <Content Include="Content\Images\ui-icons_ffffff_256x240.png" />
     <Content Include="Content\Images\VideoFolder.png" />
     <Content Include="Content\Images\X.png" />
-    <Content Include="Content\notibar.css" />
     <Content Include="Content\Settings.css" />
     <Content Include="Content\NzbDrone.css" />
     <Content Include="Content\Images\XbmcNotification.png" />
