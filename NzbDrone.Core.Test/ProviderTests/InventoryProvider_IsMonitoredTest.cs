@@ -25,6 +25,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         private Episode episode;
         private Episode episode2;
         private EpisodeParseResult parseResultSingle;
+        private EpisodeParseResult parseResultDaily;
 
         [SetUp]
         public void Setup()
@@ -46,6 +47,14 @@ namespace NzbDrone.Core.Test.ProviderTests
                                         Quality = new Quality(QualityTypes.Bluray720p, true),
                                         EpisodeNumbers = new List<int> { 3 },
                                         SeasonNumber = 12,
+                                        AirDate = DateTime.Now.AddDays(-12).Date,
+                                    };
+
+            parseResultDaily = new EpisodeParseResult()
+                                    {
+                                        CleanTitle = "Title",
+                                        Language = LanguageType.English,
+                                        Quality = new Quality(QualityTypes.Bluray720p, true),
                                         AirDate = DateTime.Now.AddDays(-12).Date,
                                     };
 
@@ -239,6 +248,25 @@ namespace NzbDrone.Core.Test.ProviderTests
             mocker.VerifyAllMocks();
         }
 
+        [Test]
+        public void IsMonitored_daily_not_ignored_should_return_true()
+        {
+            var mocker = new AutoMoqer(MockBehavior.Strict);
 
+            mocker.GetMock<SeriesProvider>()
+                .Setup(p => p.FindSeries(It.IsAny<String>()))
+                .Returns(series);
+
+            mocker.GetMock<EpisodeProvider>()
+                .Setup(p => p.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>(), true))
+                .Returns(new List<Episode> { episode });
+
+            episode.Ignored = false;
+
+            var result = mocker.Resolve<InventoryProvider>().IsMonitored(parseResultDaily);
+
+            //Assert
+            result.Should().BeTrue();
+        }
     }
 }

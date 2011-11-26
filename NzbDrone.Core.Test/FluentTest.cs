@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using FluentAssertions;
 using NUnit.Framework;
@@ -163,6 +164,32 @@ namespace NzbDrone.Core.Test
 
             //Resolve
             result.Should().Be("http://www.nzbdrone.com");
+        }
+
+        [Test]
+        public void MaxOrDefault_should_return_zero_when_collection_is_empty()
+        {
+            //Setup
+
+
+            //Act
+            var result = (new List<int>()).MaxOrDefault();
+
+            //Resolve
+            result.Should().Be(0);
+        }
+
+        [Test]
+        public void MaxOrDefault_should_return_max_when_collection_is_not_empty()
+        {
+            //Setup
+            var list = new List<int> {6, 4, 5, 3, 8, 10};
+
+            //Act
+            var result = list.MaxOrDefault();
+
+            //Resolve
+            result.Should().Be(10);
         }
     }
 }

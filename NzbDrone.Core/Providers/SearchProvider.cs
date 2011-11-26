@@ -155,15 +155,12 @@ namespace NzbDrone.Core.Providers
             Logger.Debug("Finished searching all indexers. Total {0}", reports.Count);
             notification.CurrentMessage = "Processing search results";
 
+            if (ProcessSearchResults(notification, reports, series, episode.SeasonNumber, episode.EpisodeNumber).Count == 1)
+                return true;
 
-            //TODO:fix this so when search returns more than one episode
-            //its populated with more than the original episode.
-            reports.ForEach(c =>
-            {
-                c.Series = series;
-            });
-
-            return (ProcessSearchResults(notification, reports, series, episode.SeasonNumber, episode.EpisodeNumber).Count == 1);
+            Logger.Warn("Unable to find {0} in any of indexers.", episode);
+            notification.CurrentMessage = String.Format("Unable to find {0} in any of indexers.", episode);
+            return false;
         }
 
         public List<EpisodeParseResult> PerformSearch(ProgressNotification notification, Series series, int seasonNumber, IList<Episode> episodes = null)

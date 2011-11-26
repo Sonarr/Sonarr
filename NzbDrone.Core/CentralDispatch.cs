@@ -95,6 +95,7 @@ namespace NzbDrone.Core
             Kernel.Bind<IJob>().To<ConvertEpisodeJob>().InSingletonScope();
             Kernel.Bind<IJob>().To<AppUpdateJob>().InSingletonScope();
             Kernel.Bind<IJob>().To<TrimLogsJob>().InSingletonScope();
+            Kernel.Bind<IJob>().To<RecentBacklogSearchJob>().InSingletonScope();
 
             Kernel.Get<JobProvider>().Initialize();
             Kernel.Get<WebTimer>().StartTimer(30);

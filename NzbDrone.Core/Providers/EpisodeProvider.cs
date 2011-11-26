@@ -125,6 +125,46 @@ namespace NzbDrone.Core.Providers
         {
             var result = new List<Episode>();
 
+            if (parseResult.AirDate.HasValue)
+            {
+                var episodeInfo = GetEpisode(parseResult.Series.SeriesId, parseResult.AirDate.Value);
+
+                //if still null we should add the temp episode
+                if (episodeInfo == null && autoAddNew)
+                {
+                    Logger.Debug("Episode {0} doesn't exist in db. adding it now.", parseResult);
+                    episodeInfo = new Episode
+                    {
+                        SeriesId = parseResult.Series.SeriesId,
+                        AirDate = parseResult.AirDate.Value,
+                        Title = "TBD",
+                        Overview = String.Empty
+                    };
+
+                    var episodesInSeries = GetEpisodeBySeries(parseResult.Series.SeriesId);
+
+                    //Find the current season number
+                    var maxSeasonNumber = episodesInSeries.Select(s => s.SeasonNumber).MaxOrDefault();
+
+                    //Set the season number
+                    episodeInfo.SeasonNumber = (maxSeasonNumber == 0) ? 1 : maxSeasonNumber;
+
+                    //Find the latest episode number
+                    var maxEpisodeNumber = episodesInSeries
+                                                .Where(w => w.SeasonNumber == episodeInfo.SeasonNumber)
+                                                .Select(s => s.EpisodeNumber).MaxOrDefault();
+
+                    //Set the episode number to max + 1
+                    episodeInfo.EpisodeNumber = maxEpisodeNumber + 1;
+
+                    AddEpisode(episodeInfo);
+                }
+
+                //Add to Result and Return (There will only be one episode to return)
+                result.Add(episodeInfo);
+                return result;
+            }
+
             if (parseResult.EpisodeNumbers == null)
                 return result;
 
@@ -258,9 +298,10 @@ namespace NzbDrone.Core.Providers
                     episodeToUpdate.Overview = episode.Overview;
 
                     if (episode.FirstAired.Year > 1900)
-                    {
                         episodeToUpdate.AirDate = episode.FirstAired.Date;
-                    }
+
+                    else
+                        episodeToUpdate.AirDate = null;
 
                     successCount++;
                 }
