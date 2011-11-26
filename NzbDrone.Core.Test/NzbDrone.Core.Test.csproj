@@ -99,6 +99,7 @@
     <Compile Include="JobTests\RecentBacklogSearchJobTest.cs" />
     <Compile Include="ProviderTests\ReferenceDataProviderTest.cs" />
     <Compile Include="ProviderTests\NotificationProviderTests\NotificationProviderFixture.cs" />
+    <Compile Include="ProviderTests\SearchProviderTests\ProcessDailySearchResultsFixture.cs" />
     <Compile Include="ProviderTests\SearchProviderTests\SearchFixture.cs" />
     <Compile Include="ProviderTests\SearchProviderTests\PerformSearchFixture.cs" />
     <Compile Include="ProviderTests\SearchProviderTests\ProcessSearchResultsFixture.cs" />
