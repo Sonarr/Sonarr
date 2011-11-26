@@ -5,7 +5,6 @@ using NLog;
 using Ninject;
 using NzbDrone.Common;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Providers.Core;
 
 namespace NzbDrone.Core.Providers
 {

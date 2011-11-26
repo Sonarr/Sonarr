@@ -168,7 +168,6 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
             //Assert
             mocker.VerifyAllMocks();
             mocker.GetMock<DiskProvider>().Verify(c => c.MoveDirectory(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
-            ExceptionVerification.ExcpectedWarns(1);
         }
 
         [Test]
