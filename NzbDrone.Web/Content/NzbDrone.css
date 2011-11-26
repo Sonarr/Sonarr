@@ -147,9 +147,12 @@ hr
 /* Footer */
 #footer
 {
+    margin-top: 5px;
+    margin-bottom: 30px;
     padding: 1px 1px 1px 1px;
     color: #065EFE;
     text-align: center;
+    text-decoration: none;
 }
 
 

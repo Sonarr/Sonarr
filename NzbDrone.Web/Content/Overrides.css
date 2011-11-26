@@ -21,3 +21,11 @@
 {
    line-height: 25px;
 }
+
+
+/*MiniProfiler*/
+
+.profiler-button 
+{
+    opacity: 0.4;
+}
