@@ -59,8 +59,6 @@ namespace NzbDrone.Core.Providers
 
             if (series == null)
             {
-                Logger.Warn("Unable to Import new download [{0}], Can't find matching series in database.",
-                            subfolderInfo.Name);
                 TagFolder(subfolderInfo, PostDownloadStatusType.UnknownSeries);
                 return;
             }
@@ -77,14 +75,11 @@ namespace NzbDrone.Core.Providers
             {
                 if (importedFiles.Count == 0)
                 {
-                    Logger.Warn("Unable to Import new download [{0}], no importable files were found.",
-                                subfolderInfo.Name);
                     TagFolder(subfolderInfo, PostDownloadStatusType.ParseError);
                 }
                 else
                 {
                     //Unknown Error Importing (Possibly a lesser quality than episode currently on disk)
-                    Logger.Warn("Unable to Import new download [{0}].", subfolderInfo.Name);
                     TagFolder(subfolderInfo, PostDownloadStatusType.Unknown);
                 }
             }
@@ -96,7 +91,12 @@ namespace NzbDrone.Core.Providers
 
             if (!String.Equals(target.NormalizePath(), directory.FullName.NormalizePath(), StringComparison.InvariantCultureIgnoreCase))
             {
+                Logger.Warn("Unable to download [{0}]. Status: {1}",directory.Name, status);
                 _diskProvider.MoveDirectory(directory.FullName, target);
+            }
+            else
+            {
+                Logger.Debug("Unable to download [{0}], {1}", directory.Name, status);    
             }
         }
 
