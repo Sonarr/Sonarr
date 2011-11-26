@@ -1,31 +1,33 @@
 ﻿@{
     Layout = null;
 }
-
 <style>
-    #localSeriesSlider {
+    #localSeriesSlider
+    {
         right: 150px;
+        top: 0px;
     }
-
-    .sliderContent .localSeriesLookup {
+    
+    .sliderContent .localSeriesLookup
+    {
         width: 94%;
     }
-
-    .sliderContent {
+    
+    .sliderContent
+    {
         height: 53px;
     }
 </style>
-
 <div id="localSeriesSlider" class="top-slider">
     <div class="sliderContent">
         Local Series Search
         <input class="localSeriesLookup" type="text" />
     </div>
     <div class="sliderButton">
-        Search<div class="sliderImage sliderClosed"></div>
+        Search<div class="sliderImage sliderClosed">
+        </div>
     </div>
 </div>
-
 <script type="text/javascript">
     //Ctrl+Shift+F to open the slider
     $(document).bind('keydown', 'ctrl+shift+f', function () {
