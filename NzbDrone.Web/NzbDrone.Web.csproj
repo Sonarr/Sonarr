@@ -148,7 +148,6 @@
     <Content Include="Content\Images\yellow.png" />
     <Content Include="Content\IndexerSettings.css" />
     <Content Include="Content\Messages.css" />
-    <Content Include="Content\Slider.css" />
     <Content Include="Content\Grid.css" />
     <Content Include="Content\Images\close.png" />
     <Content Include="Content\Images\Downloading.png" />
@@ -402,7 +401,6 @@
     <Content Include="Scripts\NzbDrone\Notification.js" />
     <Content Include="Scripts\NzbDrone\seriesDetails.js" />
     <Content Include="Scripts\NzbDrone\settingsForm.js" />
-    <Content Include="Scripts\NzbDrone\slider.js" />
     <Content Include="Scripts\jquery-ui-1.8.16.js" />
     <Content Include="Scripts\jquery-ui-1.8.16.min.js" />
     <Content Include="Scripts\jquery.gritter.js" />
@@ -494,9 +492,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\QuickAdd.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Shared\LocalSearch.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Settings\Xbmc.cshtml" />

@@ -1,4 +1,3 @@
-
 *
 {
     font-family: "Segoe UI" , "Segoe UI Light" , Tahoma, Geneva, sans-serif;
@@ -14,11 +13,11 @@ body
 
 #centered
 {
-   margin-right: auto;
-   width: 85%;
-   margin-left: auto;
-   min-width: 800px;
-   max-width: 1400px;
+    margin-right: auto;
+    width: 85%;
+    margin-left: auto;
+    min-width: 800px;
+    max-width: 1400px;
 }
 
 h1, h2, h3, h4, h5, h6
@@ -255,4 +254,17 @@ select, button, input[type="button"], input[type="submit"], input[type="reset"]
     position: fixed;
     top: 30px;
     right: 15px;
+}
+
+
+#localSeriesLookup
+{
+    width: 220px;
+    float: right;
+    margin-top: 7px;
+    margin-bottom: 0px;
+    border: 0px;
+    background: rgb(68, 67, 67);
+    color: rgb(169, 169, 169);
+    padding: 4px;
 }

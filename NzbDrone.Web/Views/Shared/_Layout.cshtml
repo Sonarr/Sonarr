@@ -15,13 +15,11 @@
     <link type="text/css" rel="stylesheet" href="../../Content/ActionButton.css" />
     <link type="text/css" rel="stylesheet" href="../../Content/overrides.css" />
     <link type="text/css" rel="stylesheet" href="../../Content/Menu.css" />
-    <link type="text/css" rel="stylesheet" href="../../Content/Slider.css" />
     <link type="text/css" rel="stylesheet" href="../../Content/Messages.css" />
     @MvcMiniProfiler.MiniProfiler.RenderIncludes()
     @RenderSection("HeaderContent", required: false)
 </head>
 <body>
-    @{Html.RenderAction("LocalSearch", "Shared");}
     <div id="centered">
         <div id="menu">
             <ul>
@@ -32,6 +30,7 @@
                 @MvcHtmlString.Create(Html.CurrentActionLink("Settings", "Index", "Settings"))
                 @MvcHtmlString.Create(Html.CurrentActionLink("Logs", "Index", "Log"))
             </ul>
+            <input id="localSeriesLookup" type="text"/>
         </div>
         <div id="logo">
             @RenderSection("TitleContent", required: false)
@@ -62,7 +61,6 @@
     <script type="text/javascript" src="../../Scripts/NzbDrone/episodeSearch.js"></script>
     <script type="text/javascript" src="../../Scripts/NzbDrone/AutoComplete.js"></script>
     <script type="text/javascript" src="../../Scripts/NzbDrone/addSeries.js"></script>
-    <script type="text/javascript" src="../../Scripts/NzbDrone/slider.js"></script>
     <script type="text/javascript" src="../../Scripts/NzbDrone/Notification.js"></script>
     @RenderSection("Scripts", required: false)
     @if (EnviromentProvider.IsProduction)

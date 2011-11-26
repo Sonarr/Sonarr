@@ -4,6 +4,13 @@
     });
 
     bindAutoCompletes();
+
+    $(document).bind('keydown', 'ctrl+shift+f', function () {
+        $('#localSeriesLookup').focus();
+    });
+    $(document).bind('keyup', 's', function () {
+        $('#localSeriesLookup').focus();
+    });
 });
 
 //
@@ -14,11 +21,10 @@ $('.folderLookup:not(.ui-autocomplete-input), .seriesLookup:not(.ui-autocomplete
 function bindAutoCompletes() {
     bindFolderAutoComplete(".folderLookup");
     bindSeriesAutoComplete(".seriesLookup");
-    bindLocalSeriesAutoComplete(".localSeriesLookup");
+    bindLocalSeriesAutoComplete("#localSeriesLookup");
 }
 
 function bindFolderAutoComplete(selector) {
-    
     $(selector).each(function (index, element) {
         $(element).autocomplete({
             //source: "/Directory/GetDirectories",
@@ -66,10 +72,12 @@ function bindSeriesAutoComplete(selector) {
 function bindLocalSeriesAutoComplete(selector) {
 
     $(selector).each(function (index, element) {
+        $(element).watermark('Search...');
         $(element).autocomplete({
             source: "/Series/LocalSearch",
-            minLength: 3,
-            delay: 500,
+            minLength: 1,
+            delay: 100,
+            autoFocus:true,
             select: function (event, ui) {
                 window.location = "../Series/Details?seriesId=" + ui.item.Id;
             }
