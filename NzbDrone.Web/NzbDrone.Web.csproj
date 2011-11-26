@@ -231,9 +231,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\ActionButton.css" />
-    <Content Include="Content\Blueprint\ie.css" />
-    <Content Include="Content\Blueprint\screen.css" />
-    <Content Include="Content\Blueprint\liquid.css" />
     <Content Include="Content\Images\ignored.png" />
     <Content Include="Content\Images\ignoredNeutral.png" />
     <Content Include="Content\Images\notIgnored.png" />

@@ -9,7 +9,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link type="text/css" rel="stylesheet" href="../../Content/2011.3.1115/telerik.common.min.css" />
     <link type="text/css" rel="stylesheet" href="../../Content/2011.3.1115/telerik.sitefinity.min.css" />
-    <link type="text/css" rel="stylesheet" href="../../Content/Blueprint/screen.css" />
     <link type="text/css" rel="stylesheet" href="../../Content/jQueryUI/jquery-ui-1.8.14.nzbdrone.css" />
     <link type="text/css" rel="stylesheet" href="../../Content/jquery.gritter.css" />
     <link type="text/css" rel="stylesheet" href="../../Content/NzbDrone.css" />
@@ -36,9 +35,9 @@
     @RenderSection("HeaderContent", required: false)
 </head>
 <body>
-    <div class="container">
+    <div id="centered">
         @{Html.RenderAction("LocalSearch", "Shared");}
-        <div id="menu" class="span-24 last prepend-top append-bottom">
+        <div id="menu">
             <ul>
                 @MvcHtmlString.Create(Html.CurrentActionLink("Series", "Index", "Series"))
                 @MvcHtmlString.Create(Html.CurrentActionLink("Upcoming", "Index", "Upcoming"))
@@ -47,23 +46,17 @@
                 @MvcHtmlString.Create(Html.CurrentActionLink("Settings", "Index", "Settings"))
                 @MvcHtmlString.Create(Html.CurrentActionLink("Logs", "Index", "Log"))
             </ul>
+   
         </div>
-        <hr />
-        <div class="span-24 last">
-            <div id="logo">
-                @RenderSection("TitleContent", required: false)
-            </div>
+        <div id="logo">
+            @RenderSection("TitleContent", required: false)
         </div>
-        <hr />
-        <div class="span-24 last">
-            <div id="page">
-                @RenderSection("ActionMenu", required: false)
-                @RenderSection("MainContent", required: false)
-                @RenderBody()
-            </div>
+        <div id="page">
+            @RenderSection("ActionMenu", required: false)
+            @RenderSection("MainContent", required: false)
+            @RenderBody()
         </div>
-        <hr />
-        <div class="span-24 last footer">
+        <div id="footer">
             @{Html.RenderAction("Footer", "Shared");}
         </div>
     </div>
@@ -72,7 +65,8 @@
     </div>
     @(Html.Telerik().ScriptRegistrar().jQuery(false))
     @RenderSection("Scripts", required: false)
-    <script type="text/javascript" src="../../Scripts/NzbDrone/Notification.js"></script>
+    <script type="text/javascript" src="../../Scripts/NzbDrone/Notification.js"></script>   
+   
     @if (EnviromentProvider.IsProduction)
     {
         <script type="text/javascript">
