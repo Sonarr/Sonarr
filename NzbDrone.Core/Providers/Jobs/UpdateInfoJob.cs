@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Providers.Jobs
 
         public int DefaultInterval
         {
-            get { return 1440; } //Daily
+            get { return 720; } //Daily
         }
 
         public virtual void Start(ProgressNotification notification, int targetId, int secondaryTargetId)

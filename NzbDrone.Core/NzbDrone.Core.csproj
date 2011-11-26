@@ -199,6 +199,7 @@
     <Compile Include="Datastore\MigrationLogger.cs" />
     <Compile Include="Datastore\MigrationsHelper.cs" />
     <Compile Include="Datastore\CustomeMapper.cs" />
+    <Compile Include="Datastore\Migrations\Migration20111125.cs" />
     <Compile Include="Datastore\Migrations\Migration20111112.cs" />
     <Compile Include="Datastore\Migrations\Migration20111011.cs" />
     <Compile Include="Datastore\Migrations\Migration20110909.cs" />
@@ -256,6 +257,7 @@
     <Compile Include="Providers\MisnamedProvider.cs" />
     <Compile Include="Providers\PostDownloadProvider.cs" />
     <Compile Include="Providers\QualityTypeProvider.cs" />
+    <Compile Include="Providers\ReferenceDataProvider.cs" />
     <Compile Include="Providers\SearchProvider.cs" />
     <Compile Include="Providers\SmtpProvider.cs" />
     <Compile Include="Providers\TwitterProvider.cs" />
