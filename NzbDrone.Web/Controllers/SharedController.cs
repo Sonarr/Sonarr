@@ -9,12 +9,10 @@ namespace NzbDrone.Web.Controllers
 {
     public class SharedController : Controller
     {
-        private readonly JobProvider _jobProvider;
         private readonly EnviromentProvider _enviromentProvider;
 
         public SharedController(JobProvider jobProvider, EnviromentProvider enviromentProvider)
         {
-            _jobProvider = jobProvider;
             _enviromentProvider = enviromentProvider;
         }
 

@@ -7,13 +7,15 @@
 #if DEBUG
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
-using EnvDTE;
 using EnvDTE80;
+using Process = EnvDTE.Process;
 using Thread = System.Threading.Thread;
 
 namespace NzbDrone
 {
+    [DebuggerStepThrough]
     public class ProcessAttacher
     {
         public static void Attach()

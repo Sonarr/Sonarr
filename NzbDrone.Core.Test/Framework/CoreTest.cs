@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using NUnit.Framework;
 using Ninject;
 using NzbDrone.Common;
@@ -35,24 +36,17 @@ namespace NzbDrone.Core.Test.Framework
             TestDbHelper.CreateDataBaseTemplate();
         }
 
-        protected StandardKernel LiveKernel = null;
-        protected IDatabase Db = null;
-
-
-        [SetUp]
-        public virtual void CoreTestSetup()
+        private IDatabase _db;
+        protected IDatabase Db
         {
-            LiveKernel = new StandardKernel();
-        }
-
-        protected override void WithStrictMocker()
-        {
-            base.WithStrictMocker();
-
-            if (Db != null)
+            get
             {
-                Mocker.SetConstant(Db);
+                if (_db == null)
+                    throw new InvalidOperationException("Test db doesn't exists. Make sure you call WithRealDb() if you intend to use an actual database.");
+
+                return _db;
             }
+            private set { _db = value; }
         }
 
         protected void WithRealDb()
