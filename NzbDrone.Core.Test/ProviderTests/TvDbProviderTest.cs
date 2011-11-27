@@ -9,7 +9,9 @@ using Ninject;
 using NzbDrone.Common;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Test.Common;
 using TvdbLib.Data;
+using TvdbLib.Exceptions;
 
 namespace NzbDrone.Core.Test.ProviderTests
 {
@@ -23,6 +25,12 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Setup()
         {
             tvDbProvider = new StandardKernel().Get<TvDbProvider>();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            ExceptionVerification.MarkInconclusive(typeof(TvdbNotAvailableException));
         }
 
         [TestCase("The Simpsons")]
