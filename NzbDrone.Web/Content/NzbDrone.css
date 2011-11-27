@@ -5,7 +5,7 @@
 
 body
 {
-    background: #191919 url(images/img07.jpg) no-repeat right top;
+    background: #191919 url(images/background.jpg) no-repeat right top;
     font-size: 13px;
     color: #3C3C3C;
     background-attachment: fixed;
@@ -60,7 +60,7 @@ hr
 #menu ul
 {
     margin: 0;
-    padding: 8px 0px 0px 0px;
+    padding: 5px 0px 5px 0px;
     list-style: none;
     line-height: normal;
 }
@@ -76,14 +76,14 @@ hr
     display: block;
     float: left;
     height: 28px;
-    padding: 7px 30px 0px 35px;
-    letter-spacing: -1px;
+    padding: 5px 30px 8px 9px;
     text-decoration: none;
     text-align: center;
     text-transform: lowercase;
-    font-size: 17px;
-    font-weight: normal;
+    font-size: 23px;
+    font-weight: 300;
     vertical-align: middle;
+    font-family: "Segoe UI Light" , "Segoe UI" , Tahoma, Geneva, sans-serif;
 }
 
 #menu a:hover
@@ -93,14 +93,10 @@ hr
 
 #menu li.current_page_item
 {
-    background: url(images/img01.jpg) no-repeat left top;
+    border-bottom: 2px solid;
+    border-color: #065EFE;
 }
 
-#menu li.current_page_item a
-{
-    background: url(images/img02.jpg) no-repeat right top;
-    color: #FFFFFF;
-}
 
 
 /* Page */
@@ -121,7 +117,7 @@ hr
     font-family: "Segoe UI Light" , "Segoe UI" , Tahoma, Geneva, sans-serif;
     font-weight: 100;
     height: 135px;
-    background: url(images/img03.jpg) no-repeat left top;
+    background: url(images/header.jpg) no-repeat left top;
     font-size: 90px;
     color: #FFFFFF;
     text-transform: lowercase;
@@ -264,7 +260,7 @@ select, button, input[type="button"], input[type="submit"], input[type="reset"]
     margin-top: 7px;
     margin-bottom: 0px;
     border: 0px;
-    background: rgb(68, 67, 67);
+    background: rgb(40, 40, 40);
     color: rgb(169, 169, 169);
     padding: 4px;
 }
