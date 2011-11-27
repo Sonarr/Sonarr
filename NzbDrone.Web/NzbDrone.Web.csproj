@@ -378,6 +378,7 @@
     <Content Include="Scripts\NzbDrone\addSeries.js" />
     <Content Include="Scripts\NzbDrone\AutoComplete.js" />
     <Content Include="Scripts\NzbDrone\episodeSearch.js" />
+    <Content Include="Scripts\NzbDrone\LocalSearch.js" />
     <Content Include="Scripts\NzbDrone\Notification.js" />
     <Content Include="Scripts\NzbDrone\seriesDetails.js" />
     <Content Include="Scripts\NzbDrone\settingsForm.js" />

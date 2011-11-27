@@ -2,9 +2,13 @@
 @section TitleContent{
 Add Series
 }
-
+@section Scripts
+{
+    <script type="text/javascript" src="../../Scripts/NzbDrone/addSeries.js"></script>
+}
 @section MainContent{
-    <h2>Add New Series</h2>
+    <h2>
+        Add New Series</h2>
     <div id="addNewSeries">
         @{ Html.RenderAction("AddNew", "AddSeries"); }
     </div>
