@@ -65,11 +65,6 @@ namespace NzbDrone.Core.Providers
             return true;
         }
 
-        public virtual List<SceneMapping> GetAll()
-        {
-            return _database.Fetch<SceneMapping>();
-        }
-
         public virtual string GetSceneName(int seriesId)
         {
             var item = _database.FirstOrDefault<SceneMapping>("WHERE SeriesId = @0", seriesId);
