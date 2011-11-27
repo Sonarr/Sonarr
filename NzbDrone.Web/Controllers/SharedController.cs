@@ -27,11 +27,5 @@ namespace NzbDrone.Web.Controllers
 
             return PartialView(new FooterModel { BuildTime = _enviromentProvider.BuildDateTime, Version = _enviromentProvider.Version });
         }
-
-        [ChildActionOnly]
-        public ActionResult LocalSearch()
-        {
-            return PartialView();
-        }
     }
 }

@@ -38,7 +38,7 @@
 }
 
 @section TitleContent{
-    Settings
+    Settings > Notifications
 }
 
 @section ActionMenu{
@@ -48,10 +48,7 @@
 @section MainContent{
     <div id="stylized">
         @using (Html.BeginForm("SaveNotifications", "Settings", FormMethod.Post, new { id = "form", name = "form", @class = "settingsForm" }))
-        {
-            <h1>Notifications</h1>
-            <p></p>
-            
+        {           
             <div id="tabs">
 	            <ul>
 		            <li><a href="#tabs-xbmc">XBMC</a></li>

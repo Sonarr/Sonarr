@@ -6,7 +6,7 @@
 }
 
 @section TitleContent{
-    Settings
+    Settings > System
 }
 
 @section ActionMenu{
@@ -18,10 +18,6 @@
     @using (Html.BeginForm("SaveSystem", "Settings", FormMethod.Post, new { id = "form", name = "form", @class = "settingsForm" }))
     {
         @Html.ValidationSummary(true, "Unable to save your settings. Please correct the errors and try again.")
-
-        <h1>System</h1>
-        <p></p>
-    
         <label class="labelClass">@Html.LabelFor(m => m.LaunchBrowser)
         <span class="small">@Html.DescriptionFor(m => m.LaunchBrowser)</span>
         </label>

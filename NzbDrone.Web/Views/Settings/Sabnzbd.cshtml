@@ -6,7 +6,7 @@
 }
 
 @section TitleContent{
-    Settings
+    Settings > Sabnzbd
 }
 
 @section ActionMenu{
@@ -18,9 +18,6 @@
     
     @using (Html.BeginForm("SaveSabnzbd", "Settings", FormMethod.Post, new { id = "form", name = "form", @class = "settingsForm" }))
     {
-        <h1>SABnzbd</h1>
-        <p></p>
-    
         <label class="labelClass">Auto-Configure
         <span class="small">If access to SABnzbd doesn't require a username + password and is on the same system as NzbDrone, you can auto-configure it</span>
         </label>

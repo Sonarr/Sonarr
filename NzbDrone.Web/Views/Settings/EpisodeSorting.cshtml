@@ -15,7 +15,7 @@
 }
 
 @section TitleContent{
-    Settings
+    Settings > Naming
 }
 
 @section ActionMenu{
@@ -27,10 +27,6 @@
     @using (Html.BeginForm("SaveEpisodeSorting", "Settings", FormMethod.Post, new { id = "form", name = "form", @class = "settingsForm" }))
     {
         @Html.ValidationSummary(true, "Unable to save your settings. Please correct the errors and try again.")
-
-        <h1>Episode Sorting</h1>
-        <p></p>
-    
         <label class="labelClass">@Html.LabelFor(m => m.SeriesName)
         <span class="small">@Html.DescriptionFor(m => m.SeriesName)</span>
         </label>

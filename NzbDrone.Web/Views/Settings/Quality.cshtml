@@ -5,7 +5,7 @@
     <link href="../../Content/QualitySettings.css" rel="stylesheet" type="text/css" />
 }
 @section TitleContent{
-Settings
+Settings > Quality
 }
 @section ActionMenu{
     @{Html.RenderPartial("SubMenu");}
@@ -15,10 +15,6 @@ Settings
         @using (Html.BeginForm("SaveQuality", "Settings", FormMethod.Post, new { id = "form", name = "form" }))
         {
             <div id="top" class="settingsForm">
-                <h1>
-                    Quality</h1>
-                <p>
-                </p>
                 <label class="labelClass">@Html.LabelFor(m => m.DefaultQualityProfileId)
                     <span class="small">@Html.DescriptionFor(m => m.DefaultQualityProfileId)</span>
                 </label>
