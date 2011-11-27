@@ -7,14 +7,9 @@
     <style>
         #examples
         {
-            clear: both;
-            margin-top: 15px;
+            margin-top: 25px;
             margin-bottom: 15px;
-        }
-        
-        #singleEpisodeExample, #multiEpisodeExample
-        {
-            float: left
+            padding-left: 20px;
         }
     </style>
 }
@@ -81,12 +76,9 @@
         </label>
         @Html.DropDownListFor(m => m.MultiEpisodeStyle, Model.MultiEpisodeStyles, new { @class = "inputClass selectClass" })  
         
-        <br/>
-        <div id ="examples" class="clearfix">
-            <div id="singleEpisodeExample">
-            </div>
-            <div id="multiEpisodeExample">
-            </div>
+        <div id ="examples">
+            <div id="singleEpisodeExample"></div>
+            <div id="multiEpisodeExample"></div>
         </div>
         
         <button type="submit" id="save_button" disabled="disabled">Save</button>

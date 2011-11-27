@@ -179,6 +179,33 @@ namespace NzbDrone.Core.Providers.Indexer
 
         }
 
+        public virtual IList<EpisodeParseResult> FetchDailyEpisode(string seriesTitle, DateTime airDate)
+        {
+            _logger.Debug("Searching {0} for {1}-{2}", Name, seriesTitle, airDate.ToShortDateString());
+
+            var result = new List<EpisodeParseResult>();
+
+            var searchModel = new SearchModel
+            {
+                SeriesTitle = GetQueryTitle(seriesTitle),
+                AirDate = airDate,
+                SearchType = SearchType.DailySearch
+            };
+
+            var searchUrls = GetSearchUrls(searchModel);
+
+            foreach (var url in searchUrls)
+            {
+                result.AddRange(Fetch(url));
+            }
+
+            result = result.Where(e => e.CleanTitle == Parser.NormalizeTitle(seriesTitle)).ToList();
+
+            _logger.Info("Finished searching {0} for {1}-{2}, Found {3}", Name, seriesTitle, airDate.ToShortDateString(), result.Count);
+            return result;
+
+        }
+
         private IEnumerable<EpisodeParseResult> Fetch(string url)
         {
             var result = new List<EpisodeParseResult>();

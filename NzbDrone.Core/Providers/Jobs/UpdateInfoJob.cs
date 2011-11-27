@@ -11,12 +11,15 @@ namespace NzbDrone.Core.Providers.Jobs
     {
         private readonly SeriesProvider _seriesProvider;
         private readonly EpisodeProvider _episodeProvider;
+        private readonly ReferenceDataProvider _referenceDataProvider;
 
         [Inject]
-        public UpdateInfoJob(SeriesProvider seriesProvider, EpisodeProvider episodeProvider)
+        public UpdateInfoJob(SeriesProvider seriesProvider, EpisodeProvider episodeProvider,
+                            ReferenceDataProvider referenceDataProvider)
         {
             _seriesProvider = seriesProvider;
             _episodeProvider = episodeProvider;
+            _referenceDataProvider = referenceDataProvider;
         }
 
         public UpdateInfoJob()
@@ -31,7 +34,7 @@ namespace NzbDrone.Core.Providers.Jobs
 
         public int DefaultInterval
         {
-            get { return 1440; } //Daily
+            get { return 720; } //Daily
         }
 
         public virtual void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
@@ -45,6 +48,9 @@ namespace NzbDrone.Core.Providers.Jobs
             {
                 seriesToUpdate = new List<Series>() { _seriesProvider.GetSeries(targetId) };
             }
+
+            //Update any Daily Series in the DB with the IsDaily flag
+            _referenceDataProvider.UpdateDailySeries();
 
             foreach (var series in seriesToUpdate)
             {
