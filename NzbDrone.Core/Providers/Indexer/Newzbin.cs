@@ -72,6 +72,16 @@ namespace NzbDrone.Core.Providers.Indexer
                            };
             }
 
+            if (searchModel.SearchType == SearchType.DailySearch)
+            {
+                return new List<string>
+                           {
+                               String.Format(
+                                   @"http://www.newzbin.com/search/query/?q={0}+{1:yyyy-MM-dd}&fpn=p&searchaction=Go&category=8&{2}",
+                                   searchModel.SeriesTitle, searchModel.AirDate, UrlParams)
+                           };
+            }
+
             return new List<string>();
         }
 

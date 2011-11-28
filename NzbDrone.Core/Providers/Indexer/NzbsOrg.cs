@@ -62,6 +62,12 @@ namespace NzbDrone.Core.Providers.Indexer
                     searchUrls.Add(String.Format("{0}&action=search&q={1}+Season", url, searchModel.SeriesTitle));
                     searchUrls.Add(String.Format("{0}&action=search&q={1}+S{2:00}", url, searchModel.SeriesTitle, searchModel.SeasonNumber));
                 }
+
+                if (searchModel.SearchType == SearchType.DailySearch)
+                {
+                    searchUrls.Add(String.Format("{0}&action=search&q={1}+{2:yyyy.MM.dd}", url, searchModel.SeriesTitle,
+                                                 searchModel.AirDate));
+                }
             }
 
             return searchUrls;
