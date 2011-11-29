@@ -1,4 +1,5 @@
-﻿@using NzbDrone.Web.Helpers;
+﻿@using NzbDrone.Core.Repository.Quality
+@using NzbDrone.Web.Helpers;
 @model NzbDrone.Web.Models.QualityModel
 @section HeaderContent{
     <link rel="stylesheet" type="text/css" href="../../Content/Settings.css" />
@@ -73,7 +74,7 @@ Settings > Quality
                             Add New Profile</a>
                     </div>
                     <div id="profiles">
-                        @foreach (var item in Model.Profiles)
+                        @foreach (var item in (List<QualityProfile>)ViewData["Profiles"])
                         {
                             Html.RenderAction("GetQualityProfileView", item);
                         }
@@ -91,6 +92,12 @@ Settings > Quality
         type="text/javascript"></script>
     <script src="../../Scripts/NzbDrone/settingsForm.js" type="text/javascript"></script>
     <script type="text/javascript">
+        var deleteQualityProfileUrl = '@Url.Action("DeleteQualityProfile", "Settings")';
+
+        $(document).ready(function () {
+            setupSliders();
+        });
+
         $("#addItem").live('click', function () {
             $.ajax({
                 url: this.href,
@@ -102,8 +109,6 @@ Settings > Quality
             });
             return false;
         });
-
-        var deleteQualityProfileUrl = '@Url.Action("DeleteQualityProfile", "Settings")';
 
         function deleteProfile(id) {
             sendToServer(id);
@@ -165,34 +170,26 @@ Settings > Quality
         }).keyup();
 
         $('.quality-selectee').live('click', function () {
-            var profileId = getProfileId(this);
+            var id = $(this).attr('id');
             var cleanId = getCleanId(this);
             var cutoff = '#' + cleanId + '_Cutoff';
-            var allowedString = '#' + cleanId + '_AllowedString';
+            var name = jQuery('[for="' + id + '"]').children('.ui-button-text').text();
 
+            //Remove 'Unknown'
             $(cutoff + ' option').each(function () { if ($(this).text().indexOf('Unknown') > -1) $(cutoff + ' option').remove(':contains("' + $(this).text() + '")'); });
 
-            if ($(this).hasClass('quality-selected')) {
-                $(this).removeClass('quality-selected');
-                var toRemove = this.firstChild.data;
+            //Add option to cutoff SelectList
+            if ($(this).attr('checked')) {
+                $('<option>' + name + '</option>').appendTo(cutoff);
+            }
 
+            //Remove option from cutoff SelectList
+            else {
                 $(cutoff + ' option').each(function () {
-                    if ($(this).text().indexOf(toRemove) > -1)
+                    if ($(this).text().indexOf(name) > -1)
                         $(cutoff + ' option').remove(':contains("' + $(this).text() + '")');
                 });
             }
-
-            else {
-                $(this).addClass('quality-selected');
-                $('<option>' + this.firstChild.data + '</option>').appendTo(cutoff);
-            }
-
-            var result = "";
-            $("#selectable_" + profileId + " .quality-selected").each(function () {
-                result += this.firstChild.data + ",";
-            });
-
-            $(allowedString).empty().val(result);
         });
         
         var sliderOptions = {
@@ -211,10 +208,6 @@ Settings > Quality
 			    $(this).siblings('.60-minute').text(ui.value * 60);
 			}
         };
-
-        $(document).ready(function () {
-            setupSliders();
-        });
 
         function setupSliders() {
             $(".slider").each(function() {

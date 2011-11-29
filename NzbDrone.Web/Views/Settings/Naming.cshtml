@@ -1,5 +1,5 @@
 ﻿@using NzbDrone.Web.Helpers
-@model NzbDrone.Web.Models.EpisodeSortingModel
+@model NzbDrone.Web.Models.EpisodeNamingModel
            
 @section HeaderContent{
     <link rel="stylesheet" type="text/css" href="../../Content/Settings.css" />
@@ -7,9 +7,14 @@
     <style>
         #examples
         {
-            margin-top: 25px;
-            margin-bottom: 15px;
+            margin-top: 5px;
+            margin-bottom: 20px;
             padding-left: 20px;
+        }
+        
+        .settingsContainer
+        {
+            overflow: auto;
         }
     </style>
 }
@@ -24,8 +29,9 @@
     
 @section MainContent{       
 <div id="stylized">
-    @using (Html.BeginForm("SaveEpisodeSorting", "Settings", FormMethod.Post, new { id = "form", name = "form", @class = "settingsForm" }))
+    @using (Html.BeginForm("SaveNaming", "Settings", FormMethod.Post, new { id = "form", name = "form", @class = "settingsForm" }))
     {
+        <div class="settingsContainer">
         @Html.ValidationSummary(true, "Unable to save your settings. Please correct the errors and try again.")
         <label class="labelClass">@Html.LabelFor(m => m.SeriesName)
         <span class="small">@Html.DescriptionFor(m => m.SeriesName)</span>
@@ -71,10 +77,10 @@
         <span class="small">@Html.DescriptionFor(m => m.MultiEpisodeStyle)</span>
         </label>
         @Html.DropDownListFor(m => m.MultiEpisodeStyle, Model.MultiEpisodeStyles, new { @class = "inputClass selectClass" })  
-        
+        </div>
         <div id ="examples">
-            <div id="singleEpisodeExample"></div>
-            <div id="multiEpisodeExample"></div>
+            <div id="singleEpisodeExample"><b>Single Episode Example: </b><span class="result"></span></div>
+            <div id="multiEpisodeExample"><b>Multi-Episode Example: </b><span class="result"></span></div>
         </div>
         
         <button type="submit" id="save_button" disabled="disabled">Save</button>
@@ -129,9 +135,9 @@
             if ($('#ReplaceSpaces').attr('checked'))
                 result = result.replace(/\s/g, '.');
 
-            result = '<b>Single Episode Example: </b>' + result;
+            //result = '<b>Single Episode Example: </b>' + result;
 
-            $('#singleEpisodeExample').html(result);
+            $('#singleEpisodeExample').children('.result').text(result);
         }
 
         function createMultiEpisodeExample() {
@@ -194,9 +200,9 @@
             if ($('#ReplaceSpaces').attr('checked'))
                 result = result.replace(/\s/g, '.');
 
-            result = '<b>Multi-Episode Example: </b>' + result;
+            //result = '<b>Multi-Episode Example: </b>' + result;
 
-            $('#multiEpisodeExample').html(result);
+            $('#multiEpisodeExample').children('.result').text(result);
         }
     </script>
 }

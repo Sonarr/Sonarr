@@ -7,7 +7,7 @@ namespace NzbDrone.Web.Models
 {
     public class QualityModel
     {
-        public List<QualityProfile> Profiles { get; set; }
+        public List<QualityProfileModel> Profiles { get; set; }
 
         [DisplayName("Default Quality Profile")]
         [Description("The default quality to use when adding series to NzbDrone")]

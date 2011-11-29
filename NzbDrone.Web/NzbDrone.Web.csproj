@@ -221,7 +221,8 @@
     <Compile Include="Helpers\DescriptionExtension.cs" />
     <Compile Include="Helpers\HtmlPrefixScopeExtensions.cs" />
     <Compile Include="Helpers\IsCurrentActionHelper.cs" />
-    <Compile Include="Models\CodeFile1.cs" />
+    <Compile Include="Models\QualityProfileModel.cs" />
+    <Compile Include="Models\FooterModel.cs" />
     <Compile Include="Models\ExistingSeriesModel.cs" />
     <Compile Include="Models\AddNewSeriesModel.cs" />
     <Compile Include="Models\JobQueueItemModel.cs" />
@@ -231,7 +232,7 @@
     <Compile Include="Models\QualityTypeModel.cs" />
     <Compile Include="Models\RootDirModel.cs" />
     <Compile Include="Models\SabnzbdSettingsModel.cs" />
-    <Compile Include="Models\EpisodeSortingModel.cs" />
+    <Compile Include="Models\EpisodeNamingModel.cs" />
     <Compile Include="Models\HistoryModel.cs" />
     <Compile Include="Models\IndexerSettingsModel.cs" />
     <Compile Include="Models\MappingModel.cs" />
@@ -408,7 +409,7 @@
     <Content Include="Views\Settings\Indexers.cshtml" />
     <Content Include="Views\System\Jobs.cshtml" />
     <Content Include="Views\Settings\Sabnzbd.cshtml" />
-    <Content Include="Views\Settings\EpisodeSorting.cshtml" />
+    <Content Include="Views\Settings\Naming.cshtml" />
     <Content Include="Views\Settings\Notifications.cshtml" />
     <Content Include="Views\Settings\Quality.cshtml" />
     <Content Include="Views\AddSeries\RootDir.cshtml" />

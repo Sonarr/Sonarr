@@ -12,23 +12,13 @@ namespace NzbDrone.Core.Repository.Quality
     public class QualityProfile
     {
         public virtual int QualityProfileId { get; set; }
-
-        [Required(ErrorMessage = "A Name is Required")]
-        [DisplayName("Name")]
-        [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string Name { get; set; }
 
         [Ignore]
-        [DisplayName("Allowed Qualities")]
         public List<QualityTypes> Allowed { get; set; }
 
         [Ignore]
-        [DisplayName("Allowed Qualities String")]
-        [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string AllowedString { get; set; }
-
-        [DisplayName("Cut-off")]
-        [Required(ErrorMessage = "Valid Cut-off is Required")]
         public QualityTypes Cutoff { get; set; }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
