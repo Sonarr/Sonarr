@@ -48,7 +48,7 @@
     
     .searchImage:hover, .renameImage:hover, .ignoreEpisode:hover, .ignoreEpisodesMaster:hover
     {
-        background-color: #065EFE;
+
     }
     
     #banner-container
@@ -110,10 +110,10 @@
             .TableHtmlAttributes(new { @class = "Grid" })
             .Columns(columns =>
             {
-                columns.Bound(c => c.EpisodeNumber).Width(0).Title("Episode");
+                columns.Bound(c => c.EpisodeNumber).Width(50).Title("Episode");
                 columns.Bound(c => c.Title).Title("Title");
-                columns.Bound(c => c.AirDate).Width(0);
-                columns.Bound(c => c.Quality).Width(0);
+                columns.Bound(c => c.AirDate).Width(100);
+                columns.Bound(c => c.Quality).Width(100);
                 columns.Bound(c => c.Status)
                     .Title("<img src='../../Content/Images/ignoredNeutral.png' class='ignoredEpisodesMaster ignoreEpisode ignoreSeason_" + season + "' title='Click to toggle season ignore status' />" +
                            "<img src='../../Content/Images/Missing.png' alt='Status' title='Season Status' class='statusImage statusImageMaster' />" +

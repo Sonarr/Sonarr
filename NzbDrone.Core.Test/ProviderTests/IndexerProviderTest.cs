@@ -8,7 +8,6 @@ using System.ServiceModel.Syndication;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Model.Search;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.Indexer;
@@ -76,14 +75,29 @@ namespace NzbDrone.Core.Test.ProviderTests
             get { return new[] { "www.google.com" }; }
         }
 
-        protected override IList<string> GetSearchUrls(SearchModel searchModel)
+        protected override NetworkCredential Credentials
+        {
+            get { return null; }
+        }
+
+        protected override IList<string> GetEpisodeSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber)
         {
             throw new NotImplementedException();
         }
 
-        protected override NetworkCredential Credentials
+        protected override IList<string> GetDailyEpisodeSearchUrls(string seriesTitle, DateTime date)
         {
-            get { return null; }
+            throw new NotImplementedException();
+        }
+
+        protected override IList<string> GetSeasonSearchUrls(string seriesTitle, int seasonNumber)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override IList<string> GetPartialSeasonSearchUrls(string seriesTitle, int seasonNumber, int episodeWildcard)
+        {
+            throw new NotImplementedException();
         }
 
         public override string Name
@@ -115,7 +129,22 @@ namespace NzbDrone.Core.Test.ProviderTests
             get { return new[] { "http://rss.nzbmatrix.com/rss.php?cat=TV" }; }
         }
 
-        protected override IList<string> GetSearchUrls(SearchModel searchModel)
+        protected override IList<string> GetEpisodeSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override IList<string> GetDailyEpisodeSearchUrls(string seriesTitle, DateTime date)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override IList<string> GetSeasonSearchUrls(string seriesTitle, int seasonNumber)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override IList<string> GetPartialSeasonSearchUrls(string seriesTitle, int seasonNumber, int episodeWildcard)
         {
             throw new NotImplementedException();
         }
@@ -143,7 +172,22 @@ namespace NzbDrone.Core.Test.ProviderTests
             get { return new[] { "http://www.google.com" }; }
         }
 
-        protected override IList<string> GetSearchUrls(SearchModel searchModel)
+        protected override IList<string> GetEpisodeSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override IList<string> GetDailyEpisodeSearchUrls(string seriesTitle, DateTime date)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override IList<string> GetSeasonSearchUrls(string seriesTitle, int seasonNumber)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override IList<string> GetPartialSeasonSearchUrls(string seriesTitle, int seasonNumber, int episodeWildcard)
         {
             throw new NotImplementedException();
         }

@@ -4,15 +4,15 @@ using System.ServiceModel.Syndication;
 using System.Text.RegularExpressions;
 using Ninject;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Model.Search;
 using NzbDrone.Core.Providers.Core;
 
 namespace NzbDrone.Core.Providers.Indexer
 {
     public class NzbMatrix : IndexerBase
     {
-          [Inject]
-        public NzbMatrix(HttpProvider httpProvider, ConfigProvider configProvider) : base(httpProvider, configProvider)
+        [Inject]
+        public NzbMatrix(HttpProvider httpProvider, ConfigProvider configProvider)
+            : base(httpProvider, configProvider)
         {
         }
 
@@ -30,6 +30,55 @@ namespace NzbDrone.Core.Providers.Indexer
             }
         }
 
+        protected override IList<string> GetEpisodeSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber)
+        {
+            var searchUrls = new List<String>();
+
+            foreach (var url in Urls)
+            {
+                searchUrls.Add(String.Format("{0}&term={1}+s{2:00}e{3:00}", url, seriesTitle, seasonNumber, episodeNumber));
+            }
+
+            return searchUrls;
+        }
+
+        protected override IList<string> GetDailyEpisodeSearchUrls(string seriesTitle, DateTime date)
+        {
+            var searchUrls = new List<String>();
+
+            foreach (var url in Urls)
+            {
+                searchUrls.Add(String.Format("{0}&term={1}+{2:yyyy MM dd}", url, seriesTitle, date));
+            }
+
+            return searchUrls;
+        }
+
+        protected override IList<string> GetSeasonSearchUrls(string seriesTitle, int seasonNumber)
+        {
+            var searchUrls = new List<String>();
+
+            foreach (var url in Urls)
+            {
+                searchUrls.Add(String.Format("{0}&term={1}+Season", url, seriesTitle));
+                searchUrls.Add(String.Format("{0}&term={1}+S{2:00}", url, seriesTitle, seasonNumber));
+            }
+
+            return searchUrls;
+        }
+
+        protected override IList<string> GetPartialSeasonSearchUrls(string seriesTitle, int seasonNumber, int episodeWildcard)
+        {
+            var searchUrls = new List<String>();
+
+            foreach (var url in Urls)
+            {
+                searchUrls.Add(String.Format("{0}&term={1}+S{2:00}E{3}", url, seriesTitle, seasonNumber, episodeWildcard));
+            }
+
+            return searchUrls;
+        }
+
         public override string Name
         {
             get { return "NzbMatrix"; }
@@ -39,40 +88,6 @@ namespace NzbDrone.Core.Providers.Indexer
         protected override string NzbDownloadUrl(SyndicationItem item)
         {
             return item.Links[0].Uri.ToString();
-        }
-
-        protected override IList<string> GetSearchUrls(SearchModel searchModel)
-        {
-            var searchUrls = new List<String>();
-
-            foreach (var url in Urls)
-            {
-                if (searchModel.SearchType == SearchType.EpisodeSearch)
-                {
-                    searchUrls.Add(String.Format("{0}&term={1}+s{2:00}e{3:00}", url, searchModel.SeriesTitle,
-                                                 searchModel.SeasonNumber, searchModel.EpisodeNumber));
-                }
-
-                if (searchModel.SearchType == SearchType.PartialSeasonSearch)
-                {
-                    searchUrls.Add(String.Format("{0}&term={1}+S{2:00}E{3}",
-                        url, searchModel.SeriesTitle, searchModel.SeasonNumber, searchModel.EpisodePrefix));
-                }
-
-                if (searchModel.SearchType == SearchType.SeasonSearch)
-                {
-                    searchUrls.Add(String.Format("{0}&term={1}+Season", url, searchModel.SeriesTitle));
-                    searchUrls.Add(String.Format("{0}&term={1}+S{2:00}", url, searchModel.SeriesTitle, searchModel.SeasonNumber));
-                }
-
-                if (searchModel.SearchType == SearchType.DailySearch)
-                {
-                    searchUrls.Add(String.Format("{0}&term={1}+{2:yyyy MM dd}", url, searchModel.SeriesTitle,
-                                                 searchModel.AirDate));
-                }
-            }
-
-            return searchUrls;
         }
 
         protected override EpisodeParseResult CustomParser(SyndicationItem item, EpisodeParseResult currentResult)
