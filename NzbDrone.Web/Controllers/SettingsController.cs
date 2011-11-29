@@ -120,21 +120,7 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult Quality()
         {
-            var qualityTypes = new List<QualityTypes>();
-
-            foreach (QualityTypes qual in Enum.GetValues(typeof(QualityTypes)))
-            {
-                qualityTypes.Add(qual);
-            }
-
-            ViewData["Qualities"] = qualityTypes;
-
             var profiles = _qualityProvider.All().ToList();
-
-            foreach (var qualityProfile in profiles)
-            {
-                qualityProfile.AllowedString = string.Join(",", qualityProfile.Allowed);
-            }
 
             var defaultQualityQualityProfileId = Convert.ToInt32(_configProvider.DefaultQualityProfile);
             var qualityProfileSelectList = new SelectList(profiles, "QualityProfileId", "Name");
@@ -142,7 +128,6 @@ namespace NzbDrone.Web.Controllers
 
             var model = new QualityModel
                             {
-                                Profiles = profiles,
                                 DefaultQualityProfileId = defaultQualityQualityProfileId,
                                 QualityProfileSelectList = qualityProfileSelectList,
                                 SdtvMaxSize = qualityTypesFromDb.Single(q => q.QualityTypeId == 1).MaxSize,
@@ -152,6 +137,8 @@ namespace NzbDrone.Web.Controllers
                                 Bluray720pMaxSize = qualityTypesFromDb.Single(q => q.QualityTypeId == 6).MaxSize,
                                 Bluray1080pMaxSize = qualityTypesFromDb.Single(q => q.QualityTypeId == 7).MaxSize
                             };
+
+            ViewData["Profiles"] = profiles;
 
             return View(model);
         }
@@ -239,17 +226,8 @@ namespace NzbDrone.Web.Controllers
             return View(model);
         }
 
-        public ViewResult AddProfile()
+        public PartialViewResult AddProfile()
         {
-            var qualityTypes = new List<QualityTypes>();
-
-            foreach (QualityTypes qual in Enum.GetValues(typeof(QualityTypes)))
-            {
-                qualityTypes.Add(qual);
-            }
-
-            ViewData["Qualities"] = qualityTypes;
-
             var qualityProfile = new QualityProfile
                                      {
                                          Name = "New Profile",
@@ -257,28 +235,25 @@ namespace NzbDrone.Web.Controllers
                                          Cutoff = QualityTypes.Unknown
                                      };
 
-            var id = _qualityProvider.Add(qualityProfile);
-            qualityProfile.QualityProfileId = id;
-            qualityProfile.AllowedString = "Unknown";
+            qualityProfile.QualityProfileId = _qualityProvider.Add(qualityProfile);
 
-            ViewData["ProfileId"] = id;
-
-            return View("QualityProfileItem", qualityProfile);
+            return GetQualityProfileView(qualityProfile);
         }
 
-        public ActionResult GetQualityProfileView(QualityProfile profile)
+        public PartialViewResult GetQualityProfileView(QualityProfile profile)
         {
-            var qualityTypes = new List<QualityTypes>();
+            var model = new QualityProfileModel();
+            model.QualityProfileId = profile.QualityProfileId;
+            model.Name = profile.Name;
+            model.Allowed = profile.Allowed;
+            model.Sdtv = profile.Allowed.Contains(QualityTypes.SDTV);
+            model.Dvd = profile.Allowed.Contains(QualityTypes.DVD);
+            model.Hdtv = profile.Allowed.Contains(QualityTypes.HDTV);
+            model.Webdl = profile.Allowed.Contains(QualityTypes.WEBDL);
+            model.Bluray720p = profile.Allowed.Contains(QualityTypes.Bluray720p);
+            model.Bluray1080p = profile.Allowed.Contains(QualityTypes.Bluray1080p);
 
-            foreach (QualityTypes qual in Enum.GetValues(typeof(QualityTypes)))
-            {
-                qualityTypes.Add(qual);
-            }
-
-            ViewData["Qualities"] = qualityTypes;
-            ViewData["ProfileId"] = profile.QualityProfileId;
-
-            return PartialView("QualityProfileItem", profile);
+            return PartialView("QualityProfileItem", model);
         }
 
         public JsonResult DeleteQualityProfile(int profileId)
@@ -451,25 +426,38 @@ namespace NzbDrone.Web.Controllers
                 if (data.Profiles == null)
                     return GetSuccessResult();
 
-                foreach (var profile in data.Profiles)
+                foreach (var profileModel in data.Profiles)
                 {
-                    Logger.Debug(String.Format("Updating Profile: {0}", profile));
+                    Logger.Debug(String.Format("Updating Profile: {0}", profileModel));
 
+                    var profile = new QualityProfile();
+                    profile.QualityProfileId = profileModel.QualityProfileId;
+                    profile.Name = profileModel.Name;
+                    profile.Cutoff = profileModel.Cutoff;
+                    
                     profile.Allowed = new List<QualityTypes>();
 
-                    //Remove the extra comma from the end
-                    profile.AllowedString = profile.AllowedString.Trim(',');
+                    if (profileModel.Sdtv)
+                        profile.Allowed.Add(QualityTypes.SDTV);
 
-                    foreach (var quality in profile.AllowedString.Split(','))
-                    {
-                        var qType = (QualityTypes)Enum.Parse(typeof(QualityTypes), quality);
-                        profile.Allowed.Add(qType);
-                    }
+                    if (profileModel.Dvd)
+                        profile.Allowed.Add(QualityTypes.DVD);
 
-                    //If the Cutoff value selected is not in the allowed list then use the last allowed value, this should be validated on submit
+                    if (profileModel.Hdtv)
+                        profile.Allowed.Add(QualityTypes.HDTV);
+
+                    if (profileModel.Webdl)
+                        profile.Allowed.Add(QualityTypes.WEBDL);
+
+                    if (profileModel.Bluray720p)
+                        profile.Allowed.Add(QualityTypes.Bluray720p);
+
+                    if (profileModel.Bluray1080p)
+                        profile.Allowed.Add(QualityTypes.Bluray1080p);
+
+                    //If the Cutoff value selected is not in the allowed list then return an error
                     if (!profile.Allowed.Contains(profile.Cutoff))
                         return GetInvalidModelResult();
-                    //profile.Cutoff = profile.Allowed.Last();
 
                     _qualityProvider.Update(profile);
                 }

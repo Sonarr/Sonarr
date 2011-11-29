@@ -221,6 +221,7 @@
     <Compile Include="Helpers\DescriptionExtension.cs" />
     <Compile Include="Helpers\HtmlPrefixScopeExtensions.cs" />
     <Compile Include="Helpers\IsCurrentActionHelper.cs" />
+    <Compile Include="Models\QualityProfileModel.cs" />
     <Compile Include="Models\FooterModel.cs" />
     <Compile Include="Models\ExistingSeriesModel.cs" />
     <Compile Include="Models\AddNewSeriesModel.cs" />

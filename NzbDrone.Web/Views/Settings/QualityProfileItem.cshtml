@@ -1,4 +1,4 @@
-﻿@model NzbDrone.Core.Repository.Quality.QualityProfile
+﻿@model NzbDrone.Web.Models.QualityProfileModel
 @using System.Collections
 @using NzbDrone.Core.Repository.Quality
 @using NzbDrone.Web.Helpers
@@ -25,29 +25,37 @@
             @Html.LabelFor(x => x.Cutoff)
             @Html.DropDownListFor(m => m.Cutoff, new SelectList(Model.Allowed, Model.Cutoff))
         </div>
-        <div id = "selectable_@(Model.QualityProfileId)" class="qualitySelector">
-            @{ var qualitiesList = (List<QualityTypes>) ViewData["Qualities"]; }
-            @for (int i = 0; i < qualitiesList.Count(); i++)
-            {
-                if (qualitiesList[i].ToString() == "Unknown")
-                {
-                    continue;
-                }
+        <div class="qualitySelector">
+            @Html.CheckBoxFor(m => m.Sdtv, new { @class = "quality-selectee sdtv-selector" })
+            @Html.LabelFor(m => m.Sdtv)
 
-                if (Model.Allowed != null)
-                {
-                    if (Model.Allowed.Contains(qualitiesList[i]))
-                    {
-                        <div class="quality-selectee quality-selected">@qualitiesList[i].ToString()</div>
-                        continue;
-                    }
-                }
+            @Html.CheckBoxFor(m => m.Dvd, new { @class = "quality-selectee dvd-selector" })
+            @Html.LabelFor(m => m.Dvd)
 
-                <div class="quality-selectee">@qualitiesList[i].ToString()</div>
-            }
+            @Html.CheckBoxFor(m => m.Hdtv, new { @class = "quality-selectee hdtv-selector" })
+            @Html.LabelFor(m => m.Hdtv)
+
+            @Html.CheckBoxFor(m => m.Webdl, new { @class = "quality-selectee webdl-selector" })
+            @Html.LabelFor(m => m.Webdl)
+
+            @Html.CheckBoxFor(m => m.Bluray720p, new { @class = "quality-selectee bluray720p-selector" })
+            @Html.LabelFor(m => m.Bluray720p)
+
+            @Html.CheckBoxFor(m => m.Bluray1080p, new { @class = "quality-selectee bluray1080p-selector" })
+            @Html.LabelFor(m => m.Bluray1080p)
         </div>
         @Html.HiddenFor(x => x.QualityProfileId, new {@class = "qualityProfileId"})
-        @Html.HiddenFor(m => m.AllowedString)
         @Html.Hidden("cleanId", idClean, new {@class = "cleanId"})
     </div>
 }
+
+<script>
+    $(function () {
+        $('.sdtv-selector').button();
+        $('.dvd-selector').button();
+        $('.hdtv-selector').button();
+        $('.webdl-selector').button();
+        $('.bluray720p-selector').button();
+        $('.bluray1080p-selector').button();
+    });
+</script>
