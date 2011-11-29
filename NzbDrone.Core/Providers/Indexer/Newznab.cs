@@ -49,9 +49,14 @@ namespace NzbDrone.Core.Providers.Indexer
 
                 if (searchModel.SearchType == SearchType.SeasonSearch)
                 {
-                    //Todo: Allow full season searching to process individual episodes
-                    //searchUrls.Add(String.Format("{0}&limit=100&q={1}&season{2}", url, searchModel.SeriesTitle, searchModel.SeasonNumber));
-                    searchUrls.Add(String.Format("{0}&limit=100&q={1}+Season", url, searchModel.SeriesTitle));
+                    searchUrls.Add(String.Format("{0}&limit=100&q={1}&season={2}", url, searchModel.SeriesTitle, searchModel.SeasonNumber));
+                    //searchUrls.Add(String.Format("{0}&limit=100&q={1}+Season", url, searchModel.SeriesTitle));
+                }
+
+                if (searchModel.SearchType == SearchType.DailySearch)
+                {
+                    searchUrls.Add(String.Format("{0}&limit=100&q={1}+{2:yyyy MM dd}", url, searchModel.SeriesTitle,
+                                                 searchModel.AirDate));
                 }
             }
 
