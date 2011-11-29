@@ -5,7 +5,6 @@ using System.ServiceModel.Syndication;
 using System.Text.RegularExpressions;
 using Ninject;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Model.Search;
 using NzbDrone.Core.Providers.Core;
 
 namespace NzbDrone.Core.Providers.Indexer
@@ -18,7 +17,7 @@ namespace NzbDrone.Core.Providers.Indexer
         {
         }
 
-        private const string UrlParams = "feed=rss&hauth=1&ps_rb_language=4096";
+        private const string URL_PARAMS = "feed=rss&hauth=1&ps_rb_language=4096";
 
         protected override string[] Urls
         {
@@ -26,7 +25,7 @@ namespace NzbDrone.Core.Providers.Indexer
             {
                 return new[]
                                    {
-                                       "http://www.newzbin.com/browse/category/p/tv?" + UrlParams
+                                       "http://www.newzbin.com/browse/category/p/tv?" + URL_PARAMS
                                    };
             }
         }
@@ -39,51 +38,46 @@ namespace NzbDrone.Core.Providers.Indexer
             get { return new NetworkCredential(_configProvider.NewzbinUsername, _configProvider.NewzbinPassword); }
         }
 
-        protected override IList<string> GetSearchUrls(SearchModel searchModel)
+        protected override IList<string> GetEpisodeSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber)
         {
-            if (searchModel.SearchType == SearchType.EpisodeSearch)
-            {
-                return new List<string>
+            return new List<string>
                            {
                                String.Format(
                                    @"http://www.newzbin.com/search/query/?q={0}+{1}x{2:00}&fpn=p&searchaction=Go&category=8&{3}",
-                                   searchModel.SeriesTitle, searchModel.SeasonNumber,
-                                   searchModel.EpisodeNumber, UrlParams)
+                                   seriesTitle, seasonNumber,episodeNumber, URL_PARAMS)
                            };
-            }
+        }
 
-            if (searchModel.SearchType == SearchType.SeasonSearch)
-            {
-                return new List<string>
+        protected override IList<string> GetSeasonSearchUrls(string seriesTitle, int seasonNumber)
+        {
+            return new List<string>
                            {
                                String.Format(
                                    @"http://www.newzbin.com/search/query/?q={0}+Season+{1}&fpn=p&searchaction=Go&category=8&{2}",
-                                   searchModel.SeriesTitle, searchModel.SeasonNumber, UrlParams)
+                                   seriesTitle, seasonNumber, URL_PARAMS)
                            };
-            }
+        }
 
-            if (searchModel.SearchType == SearchType.PartialSeasonSearch)
-            {
-                return new List<string>
-                           {
-                               String.Format(
-                                   @"http://www.newzbin.com/search/query/?q={0}+{1}x{2}&fpn=p&searchaction=Go&category=8&{3}",
-                                   searchModel.SeriesTitle, searchModel.SeasonNumber, searchModel.EpisodePrefix, UrlParams)
-                           };
-            }
-
-            if (searchModel.SearchType == SearchType.DailySearch)
-            {
-                return new List<string>
+        protected override IList<string> GetDailyEpisodeSearchUrls(string seriesTitle, DateTime date)
+        {
+            return new List<string>
                            {
                                String.Format(
                                    @"http://www.newzbin.com/search/query/?q={0}+{1:yyyy-MM-dd}&fpn=p&searchaction=Go&category=8&{2}",
-                                   searchModel.SeriesTitle, searchModel.AirDate, UrlParams)
+                                   seriesTitle, date, URL_PARAMS)
                            };
-            }
-
-            return new List<string>();
         }
+
+        protected override IList<string> GetPartialSeasonSearchUrls(string seriesTitle, int seasonNumber, int episodeWildcard)
+        {
+            return new List<string>
+                           {
+                               String.Format(
+                                   @"http://www.newzbin.com/search/query/?q={0}+{1}x{2}&fpn=p&searchaction=Go&category=8&{3}",
+                                   seriesTitle, seasonNumber, episodeWildcard, URL_PARAMS)
+                           };
+        }
+
 
         public override string Name
         {

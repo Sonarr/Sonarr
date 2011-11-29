@@ -4,11 +4,9 @@ using System.Linq;
 using System.Net;
 using System.ServiceModel.Syndication;
 using System.Text.RegularExpressions;
-using System.Web;
 using Ninject;
 using NLog;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Model.Search;
 using NzbDrone.Core.Providers.Core;
 
 namespace NzbDrone.Core.Providers.Indexer
@@ -55,12 +53,10 @@ namespace NzbDrone.Core.Providers.Indexer
         }
 
 
-        /// <summary>
-        /// Gets the rss url for specific episode search
-        /// </summary>
-        /// <param name="searchModel">SearchModel containing episode information</param>
-        /// <returns></returns>
-        protected abstract IList<String> GetSearchUrls(SearchModel searchModel);
+        protected abstract IList<String> GetEpisodeSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber);
+        protected abstract IList<String> GetDailyEpisodeSearchUrls(string seriesTitle, DateTime date);
+        protected abstract IList<String> GetSeasonSearchUrls(string seriesTitle, int seasonNumber);
+        protected abstract IList<String> GetPartialSeasonSearchUrls(string seriesTitle, int seasonNumber, int episodeWildcard);
 
         /// <summary>
         /// This method can be overwritten to provide indexer specific info parsing
@@ -104,14 +100,7 @@ namespace NzbDrone.Core.Providers.Indexer
 
             var result = new List<EpisodeParseResult>();
 
-            var searchModel = new SearchModel
-            {
-                SeriesTitle = GetQueryTitle(seriesTitle),
-                SeasonNumber = seasonNumber,
-                SearchType = SearchType.SeasonSearch
-            };
-
-            var searchUrls = GetSearchUrls(searchModel);
+            var searchUrls = GetSeasonSearchUrls(GetQueryTitle(seriesTitle), seasonNumber);
 
             foreach (var url in searchUrls)
             {
@@ -130,15 +119,7 @@ namespace NzbDrone.Core.Providers.Indexer
 
             var result = new List<EpisodeParseResult>();
 
-            var searchModel = new SearchModel
-            {
-                SeriesTitle = GetQueryTitle(seriesTitle),
-                SeasonNumber = seasonNumber,
-                EpisodePrefix = episodePrefix,
-                SearchType = SearchType.PartialSeasonSearch
-            };
-
-            var searchUrls = GetSearchUrls(searchModel);
+            var searchUrls = GetPartialSeasonSearchUrls(GetQueryTitle(seriesTitle), seasonNumber, episodePrefix);
 
             foreach (var url in searchUrls)
             {
@@ -157,15 +138,7 @@ namespace NzbDrone.Core.Providers.Indexer
 
             var result = new List<EpisodeParseResult>();
 
-            var searchModel = new SearchModel
-                                  {
-                                      SeriesTitle = GetQueryTitle(seriesTitle),
-                                      SeasonNumber = seasonNumber,
-                                      EpisodeNumber = episodeNumber,
-                                      SearchType = SearchType.EpisodeSearch
-                                  };
-
-            var searchUrls = GetSearchUrls(searchModel);
+            var searchUrls = GetEpisodeSearchUrls(GetQueryTitle(seriesTitle), seasonNumber, episodeNumber);
 
             foreach (var url in searchUrls)
             {
@@ -185,14 +158,7 @@ namespace NzbDrone.Core.Providers.Indexer
 
             var result = new List<EpisodeParseResult>();
 
-            var searchModel = new SearchModel
-            {
-                SeriesTitle = GetQueryTitle(seriesTitle),
-                AirDate = airDate,
-                SearchType = SearchType.DailySearch
-            };
-
-            var searchUrls = GetSearchUrls(searchModel);
+            var searchUrls = GetDailyEpisodeSearchUrls(GetQueryTitle(seriesTitle), airDate);
 
             foreach (var url in searchUrls)
             {

@@ -161,6 +161,7 @@ namespace NzbDrone.Core.Providers
                 }
 
                 //Add to Result and Return (There will only be one episode to return)
+                //TODO: This should not add if episode is still null (When doesn't exist and autoadd is false.)
                 result.Add(episodeInfo);
                 return result;
             }
