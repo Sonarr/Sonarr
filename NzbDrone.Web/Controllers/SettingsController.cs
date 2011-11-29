@@ -197,9 +197,9 @@ namespace NzbDrone.Web.Controllers
             return View(model);
         }
 
-        public ActionResult EpisodeSorting()
+        public ActionResult Naming()
         {
-            var model = new EpisodeSortingModel();
+            var model = new EpisodeNamingModel();
 
             model.SeriesName = _configProvider.SortingIncludeSeriesName;
             model.EpisodeName = _configProvider.SortingIncludeEpisodeTitle;
@@ -559,7 +559,7 @@ namespace NzbDrone.Web.Controllers
         }
 
         [HttpPost]
-        public JsonResult SaveEpisodeSorting(EpisodeSortingModel data)
+        public JsonResult SaveNaming(EpisodeNamingModel data)
         {
             if (ModelState.IsValid)
             {

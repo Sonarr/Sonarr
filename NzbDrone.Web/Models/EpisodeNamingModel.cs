@@ -4,7 +4,7 @@ using System.Web.Mvc;
 
 namespace NzbDrone.Web.Models
 {
-    public class EpisodeSortingModel
+    public class EpisodeNamingModel
     {
         [DisplayName("Series Name")]
         [Description("Should filenames contain the series name when renamed?")]
