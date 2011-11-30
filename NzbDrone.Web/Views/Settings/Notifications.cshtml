@@ -7,9 +7,6 @@
     <style>
         .notifier
         {
-            width: 560px;
-            padding: 5px;
-            margin-left: -8px;
             overflow: auto;
         }
         
@@ -21,18 +18,16 @@
             padding-top: 3px;
         }
         
-        .notifierLine
-        {
-            font-size:11px;
-            color:#666666;
-            margin-bottom:20px;
-            border-bottom:solid 1px #CCCCCD;
-            padding-bottom:10px;
-        }
-        
         #save_button
         {
             margin-top: 10px;
+        }
+
+        #smtpTest
+        {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            margin-left: 220px;
         }
     </style>
 }
@@ -48,30 +43,22 @@
 @section MainContent{
     <div id="stylized">
         @using (Html.BeginForm("SaveNotifications", "Settings", FormMethod.Post, new { id = "form", name = "form", @class = "settingsForm" }))
-        {           
-            <div id="tabs">
-	            <ul>
-		            <li><a href="#tabs-xbmc">XBMC</a></li>
-		            <li><a href="#tabs-smtp">SMTP</a></li>
-                    <li><a href="#tabs-twitter">Twitter</a></li>
-                    <li><a href="#tabs-growl">Growl</a></li>
-                    <li><a href="#tabs-prowl">Prowl</a></li>
-	            </ul>
-	            <div id="tabs-xbmc">
-                    @{Html.RenderPartial("Xbmc", Model);}
-	            </div>
-	            <div id="tabs-smtp">
-		            @{Html.RenderPartial("Smtp", Model);}
-	            </div>
-                <div id="tabs-twitter">
-                    @{Html.RenderPartial("Twitter", Model);}
-	            </div>
-                <div id="tabs-growl">
-                    @{Html.RenderPartial("Growl", Model);}
-	            </div>
-                <div id="tabs-prowl">
-                    @{Html.RenderPartial("Prowl", Model);}
-	            </div>
+        {
+            <div id="accordion">
+                <h3><a href="#">XBMC</a></h3>
+                @{Html.RenderPartial("Xbmc", Model);}
+
+                <h3><a href="#">SMTP</a></h3>
+                @{Html.RenderPartial("Smtp", Model);}
+
+                <h3><a href="#">Twitter</a></h3>
+                @{Html.RenderPartial("Twitter", Model);}
+
+                <h3><a href="#">Growl</a></h3>
+                @{Html.RenderPartial("Growl", Model);}
+
+                <h3><a href="#">Prowl</a></h3>
+                @{Html.RenderPartial("Prowl", Model);}
             </div>
             
             <button type="submit" id="save_button" disabled="disabled">Save</button>
@@ -84,7 +71,76 @@
 
     <script type="text/javascript">
         $(function () {
-            $("#tabs").tabs();
+            $("#accordion").accordion({
+                autoHeight: false
+            });
         });
-	</script>
+        
+        //Twitter
+        getAuthorizationUrl = '../Command/GetTwitterAuthorization';
+        verifyAuthorizationUrl = '../Command/VerifyTwitterAuthorization';
+
+        function requestTwitterAuthorization() {
+            $.ajax({
+                    type: "GET",
+                    url: getAuthorizationUrl,
+                    error: function(req, status, error) {
+                        alert("Sorry! We could get Twitter Authorization at this time. " + error);
+                    },
+                    success: function(data, textStatus, jqXHR) {
+                        if (data.IsMessage)
+                            return false;
+
+                        $('#authorizationRequestToken').val(data.Token);
+                        window.open(data.Url);
+                    }
+                });
+        }
+
+        function verifyTwitterAuthorization() {
+            var token = $('#authorizationRequestToken').val();
+            var verifier = $('#twitterVerification').val();
+
+            $.ajax({
+                    type: "GET",
+                    url: verifyAuthorizationUrl,
+                    data: jQuery.param({ token: token, verifier: verifier }),
+                    error: function(req, status, error) {
+                        alert("Sorry! We could verify Twitter Authorization at this time. " + error);
+                    }
+                });
+            }
+
+            //SMTP
+            function testSmtpSettings() {
+                //Get the variables
+                var server = $('#SmtpServer').val();
+                var port = $('#SmtpPort').val();
+                var ssl = $('#SmtpUseSsl').val();
+                var username = $('#SmtpUsername').val();
+                var password = $('#SmtpPassword').val();
+                var fromAddress = $('#SmtpFromAddress').val();
+                var toAddresses = $('#SmtpToAddresses').val();
+
+                //Send the data!
+                $.ajax({
+                    type: "POST",
+                    url: '../Command/SendTestEmail',
+                    data: jQuery.param({
+                        server: server,
+                        port: port,
+                        ssl: ssl,
+                        username: username,
+                        password: password,
+                        fromAddress: fromAddress,
+                        toAddresses: toAddresses
+                    }),
+                    error: function (req, status, error) {
+                        alert("Sorry! We could send a test email at this time. " + error);
+                    }
+                });
+
+                return false;
+            }
+</script>
 }

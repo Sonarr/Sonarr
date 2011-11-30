@@ -38,39 +38,3 @@
 
     @Html.Hidden("authorizationRequestToken")
 </div>
-
-<script type="text/javascript">
-    getAuthorizationUrl = '../Command/GetTwitterAuthorization';
-    verifyAuthorizationUrl = '../Command/VerifyTwitterAuthorization';
-
-    function requestTwitterAuthorization() {
-        $.ajax({
-                type: "GET",
-                url: getAuthorizationUrl,
-                error: function(req, status, error) {
-                    alert("Sorry! We could get Twitter Authorization at this time. " + error);
-                },
-                success: function(data, textStatus, jqXHR) {
-                    if (data.IsMessage)
-                        return false;
-
-                    $('#authorizationRequestToken').val(data.Token);
-                    window.open(data.Url);
-                }
-            });
-    }
-
-    function verifyTwitterAuthorization() {
-        var token = $('#authorizationRequestToken').val();
-        var verifier = $('#twitterVerification').val();
-
-        $.ajax({
-                type: "GET",
-                url: verifyAuthorizationUrl,
-                data: jQuery.param({ token: token, verifier: verifier }),
-                error: function(req, status, error) {
-                    alert("Sorry! We could verify Twitter Authorization at this time. " + error);
-                }
-            });
-    }
-</script>
