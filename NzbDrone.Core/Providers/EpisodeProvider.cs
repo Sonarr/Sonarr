@@ -278,12 +278,13 @@ namespace NzbDrone.Core.Providers
                         episodeToUpdate = new Episode();
                         newList.Add(episodeToUpdate);
 
-                        //We need to check if this episode should be ignored based on IsIgnored rules
-                        IsIgnored(series.SeriesId, episode.SeasonNumber);
-
                         //If it is Episode Zero Ignore it, since it is new
                         if (episode.EpisodeNumber == 0)
                             episodeToUpdate.Ignored = true;
+
+                        //Else we need to check if this episode should be ignored based on IsIgnored rules
+                        else
+                            episodeToUpdate.Ignored = IsIgnored(series.SeriesId, episode.SeasonNumber);
                     }
 
                     else
@@ -436,7 +437,7 @@ namespace NzbDrone.Core.Providers
             var tvDbIdQuery = String.Format("DELETE FROM Episodes WHERE SeriesId = {0} AND TvDbEpisodeId > 0 AND TvDbEpisodeId NOT IN ({1})",
                                                                                     series.SeriesId, tvDbIdString);
 
-            Logger.Trace("Deleting nivalid episodes by TvDbId for {0}", series.SeriesId);
+            Logger.Trace("Deleting invalid episodes by TvDbId for {0}", series.SeriesId);
             _database.Execute(tvDbIdQuery);
 
             Logger.Trace("Finished deleting invalid episodes for {0}", series.SeriesId);

@@ -55,49 +55,6 @@
     <span class="small">@Html.DescriptionFor(m => m.SmtpToAddresses)</span>
     </label>
     @Html.TextBoxFor(m => m.SmtpToAddresses, new { @class = "inputClass" })
+
+    <input type="button" onclick="testSmtpSettings();" value="Test SMTP" id="smtpTest"/>
 </div>
-
-<input type="button" onclick="testSmtpSettings();" value="Test SMTP" id="smtpTest"/>
-
-@*Move this somewhere better*@
-<style>
-    #smtpTest
-    {
-        margin-top: 10px;
-        margin-bottom: 10px;
-        margin-left: 220px;
-    }
-</style>
-
-<script type="text/javascript">
-    function testSmtpSettings() {
-        //Get the variables
-        var server = $('#SmtpServer').val();
-        var port = $('#SmtpPort').val();
-        var ssl = $('#SmtpUseSsl').val();
-        var username = $('#SmtpUsername').val();
-        var password = $('#SmtpPassword').val();
-        var fromAddress = $('#SmtpFromAddress').val();
-        var toAddresses = $('#SmtpToAddresses').val();
-
-        //Send the data!
-        $.ajax({
-            type: "POST",
-            url: '../Command/SendTestEmail',
-            data: jQuery.param({
-                server: server,
-                port: port,
-                ssl: ssl,
-                username: username,
-                password: password,
-                fromAddress: fromAddress,
-                toAddresses: toAddresses
-            }),
-            error: function (req, status, error) {
-                alert("Sorry! We could send a test email at this time. " + error);
-            }
-        });
-
-        return false;
-    }
-</script>

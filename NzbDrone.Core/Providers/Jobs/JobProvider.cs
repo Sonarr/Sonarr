@@ -90,7 +90,7 @@ namespace NzbDrone.Core.Providers.Jobs
                                            TypeName = timer.GetType().ToString(),
                                            Name = timerProviderLocal.Name,
                                            Interval = timerProviderLocal.DefaultInterval,
-                                           LastExecution = new DateTime(2000, 1, 1)
+                                           LastExecution = DateTime.Now
                                        };
 
                     SaveDefinition(settings);

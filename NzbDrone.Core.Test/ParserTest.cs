@@ -184,7 +184,7 @@ namespace NzbDrone.Core.Test
         [Test]
         public void parse_daily_should_fail_if_episode_is_far_in_future()
         {
-            var title = string.Format("{0}.{1}.{2} - Denis Leary - HD TV.mkv", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.AddDays(2).Day);
+            var title = string.Format("{0:yyyy.MM.dd} - Denis Leary - HD TV.mkv", DateTime.Now.AddDays(2));
 
             Parser.ParseTitle(title).Should().BeNull();
 
