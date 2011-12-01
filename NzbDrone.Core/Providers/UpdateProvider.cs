@@ -45,14 +45,15 @@ namespace NzbDrone.Core.Providers
         private List<UpdatePackage> GetAvailablePackages()
         {
             var updateList = new List<UpdatePackage>();
-            var rawUpdateList = _httpProvider.DownloadString(_configProvider.UpdateUrl);
+            var updateUrl = _configProvider.UpdateUrl;
+            var rawUpdateList = _httpProvider.DownloadString(updateUrl);
             var matches = parseRegex.Matches(rawUpdateList);
 
             foreach (Match match in matches)
             {
                 var updatePackage = new UpdatePackage();
                 updatePackage.FileName = match.Groups["filename"].Value;
-                updatePackage.Url = _configProvider.UpdateUrl + updatePackage.FileName;
+                updatePackage.Url = updateUrl + updatePackage.FileName;
                 updatePackage.Version = new Version(match.Groups["version"].Value);
                 updateList.Add(updatePackage);
             }
@@ -83,7 +84,7 @@ namespace NzbDrone.Core.Providers
             {
                 var files = _diskProvider.GetFiles(_enviromentProvider.GetUpdateLogFolder(), SearchOption.TopDirectoryOnly).ToList();
 
-                foreach (var file in files.Select(c => new FileInfo(c)).OrderByDescending(c=>c.Name))
+                foreach (var file in files.Select(c => new FileInfo(c)).OrderByDescending(c => c.Name))
                 {
                     list.Add(DateTime.ParseExact(file.Name.Replace(file.Extension, string.Empty), "yyyy.MM.dd-H-mm", provider), file.FullName);
                 }
