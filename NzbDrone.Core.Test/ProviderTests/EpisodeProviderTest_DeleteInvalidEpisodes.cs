@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             db.Insert(fakeEpisode);
 
             //Act
-            mocker.Resolve<EpisodeProvider>().DeleteInvalidEpisodes(fakeSeries, tvDbSeries);
+            mocker.Resolve<EpisodeProvider>().DeleteEpisodesNotInTvdb(fakeSeries, tvDbSeries);
 
             //Assert
             var result = db.Fetch<Episode>();
@@ -91,7 +91,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             db.Insert(fakeEpisode);
 
             //Act
-            mocker.Resolve<EpisodeProvider>().DeleteInvalidEpisodes(fakeSeries, tvDbSeries);
+            mocker.Resolve<EpisodeProvider>().DeleteEpisodesNotInTvdb(fakeSeries, tvDbSeries);
 
             //Assert
             var result = db.Fetch<Episode>();
@@ -131,7 +131,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             db.Insert(fakeEpisode);
 
             //Act
-            mocker.Resolve<EpisodeProvider>().DeleteInvalidEpisodes(fakeSeries, tvDbSeries);
+            mocker.Resolve<EpisodeProvider>().DeleteEpisodesNotInTvdb(fakeSeries, tvDbSeries);
 
             //Assert
             var result = db.Fetch<Episode>();
@@ -173,7 +173,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             db.Insert(fakeEpisode);
 
             //Act
-            mocker.Resolve<EpisodeProvider>().DeleteInvalidEpisodes(fakeSeries, tvDbSeries);
+            mocker.Resolve<EpisodeProvider>().DeleteEpisodesNotInTvdb(fakeSeries, tvDbSeries);
 
             //Assert
             var result = db.Fetch<Episode>();
@@ -230,7 +230,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             db.Insert(otherFakeEpisode);
 
             //Act
-            mocker.Resolve<EpisodeProvider>().DeleteInvalidEpisodes(fakeSeries, tvDbSeries);
+            mocker.Resolve<EpisodeProvider>().DeleteEpisodesNotInTvdb(fakeSeries, tvDbSeries);
 
             //Assert
             var result = db.Fetch<Episode>();
