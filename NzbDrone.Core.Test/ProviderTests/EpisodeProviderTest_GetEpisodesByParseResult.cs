@@ -290,15 +290,11 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void GetEpisodeParseResult_get_daily_should_add_new_episode()
         {
             //Setup
+            WithRealDb();
+
             var fakeSeries = Builder<Series>.CreateNew()
                     .With(s => s.SeriesId = 1)
                     .Build();
-
-            Mocker.GetMock<IDatabase>().Setup(s => s.Fetch<Episode, Series, EpisodeFile>(It.IsAny<String>(), It.IsAny<Object[]>()))
-                .Returns(new List<Episode>());
-
-            Mocker.GetMock<IDatabase>().Setup(s => s.Insert(It.IsAny<Episode>()))
-                .Returns(1);
 
             //Act
             var episodes = Mocker.Resolve<EpisodeProvider>()
@@ -308,7 +304,9 @@ namespace NzbDrone.Core.Test.ProviderTests
             episodes.Should().HaveCount(1);
             episodes.First().AirDate.Should().Be(DateTime.Today);
 
-            Mocker.GetMock<IDatabase>().Verify(v => v.Insert(It.IsAny<Episode>()), Times.Once());
+            var episodesInDb = Db.Fetch<Episode>();
+
+            episodesInDb.Should().HaveCount(1);
         }
     }
 }
