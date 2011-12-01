@@ -1,11 +1,8 @@
 ﻿@model NzbDrone.Web.Models.QualityProfileModel
-@using System.Collections
-@using NzbDrone.Core.Repository.Quality
 @using NzbDrone.Web.Helpers
 @{
     Layout = null;
 }
-
 @using (Html.BeginCollectionItem("Profiles"))
 {
     var idClean = ViewData.TemplateInfo.HtmlFieldPrefix.Replace('[', '_').Replace(']', '_');
@@ -14,48 +11,35 @@
         <div class="qualityHeader">
             <span class="titleText" id="title_@(Model.QualityProfileId)">
                 @Model.Name
-            </span>
-            <a href="#" id="@Model.QualityProfileId" class="deleteProfile" onclick=" deleteProfile('@(Model.QualityProfileId)'); return false;">
+            </span><a href="#" id="@Model.QualityProfileId" class="deleteProfile" onclick=" deleteProfile('@(Model.QualityProfileId)'); return false;">
                 <img src="../../Content/Images/X.png" alt="Delete" width="22px" height="22px" /></a>
         </div>
         <div class="profileOptions">
             @Html.LabelFor(x => x.Name)
-            @Html.TextBoxFor(x => x.Name, new {@class = "profileName_textbox"})
-
+            @Html.TextBoxFor(x => x.Name, new { @class = "profileName_textbox" })
             @Html.LabelFor(x => x.Cutoff)
             @Html.DropDownListFor(m => m.Cutoff, new SelectList(Model.Allowed, Model.Cutoff))
         </div>
         <div class="qualitySelector">
-            @Html.CheckBoxFor(m => m.Sdtv, new { @class = "quality-selectee sdtv-selector" })
+            @Html.CheckBoxFor(m => m.Sdtv, new { @class = "quality-selectee" })
             @Html.LabelFor(m => m.Sdtv)
-
-            @Html.CheckBoxFor(m => m.Dvd, new { @class = "quality-selectee dvd-selector" })
+            @Html.CheckBoxFor(m => m.Dvd, new { @class = "quality-selectee" })
             @Html.LabelFor(m => m.Dvd)
-
-            @Html.CheckBoxFor(m => m.Hdtv, new { @class = "quality-selectee hdtv-selector" })
+            @Html.CheckBoxFor(m => m.Hdtv, new { @class = "quality-selectee" })
             @Html.LabelFor(m => m.Hdtv)
-
-            @Html.CheckBoxFor(m => m.Webdl, new { @class = "quality-selectee webdl-selector" })
+            @Html.CheckBoxFor(m => m.Webdl, new { @class = "quality-selectee" })
             @Html.LabelFor(m => m.Webdl)
-
-            @Html.CheckBoxFor(m => m.Bluray720p, new { @class = "quality-selectee bluray720p-selector" })
+            @Html.CheckBoxFor(m => m.Bluray720p, new { @class = "quality-selectee" })
             @Html.LabelFor(m => m.Bluray720p)
-
-            @Html.CheckBoxFor(m => m.Bluray1080p, new { @class = "quality-selectee bluray1080p-selector" })
+            @Html.CheckBoxFor(m => m.Bluray1080p, new { @class = "quality-selectee" })
             @Html.LabelFor(m => m.Bluray1080p)
         </div>
-        @Html.HiddenFor(x => x.QualityProfileId, new {@class = "qualityProfileId"})
-        @Html.Hidden("cleanId", idClean, new {@class = "cleanId"})
+        @Html.HiddenFor(x => x.QualityProfileId, new { @class = "qualityProfileId" })
+        @Html.Hidden("cleanId", idClean, new { @class = "cleanId" })
     </div>
 }
-
-<script>
+<script type="text/javascript">
     $(function () {
-        $('.sdtv-selector').button();
-        $('.dvd-selector').button();
-        $('.hdtv-selector').button();
-        $('.webdl-selector').button();
-        $('.bluray720p-selector').button();
-        $('.bluray1080p-selector').button();
+        $('.quality-selectee').button();
     });
 </script>
