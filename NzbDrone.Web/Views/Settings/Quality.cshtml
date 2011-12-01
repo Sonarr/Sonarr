@@ -1,94 +1,93 @@
 ﻿@using NzbDrone.Core.Repository.Quality
 @using NzbDrone.Web.Helpers;
 @model NzbDrone.Web.Models.QualityModel
+@{ Layout = "~/Views/Shared/_RefrenceLayout.cshtml"; }
 @section HeaderContent{
     <link rel="stylesheet" type="text/css" href="../../Content/Settings.css" />
     <link href="../../Content/QualitySettings.css" rel="stylesheet" type="text/css" />
 }
-@section TitleContent{
-Settings > Quality
-}
-@section ActionMenu{
-    @{Html.RenderPartial("SubMenu");}
-}
-@section MainContent{
-    <div id="stylized">
-        @using (Html.BeginForm("SaveQuality", "Settings", FormMethod.Post, new { id = "form", name = "form" }))
-        {
-            <div id="top" class="settingsForm">
-                <label class="labelClass">@Html.LabelFor(m => m.DefaultQualityProfileId)
-                    <span class="small">@Html.DescriptionFor(m => m.DefaultQualityProfileId)</span>
-                </label>
-                @Html.DropDownListFor(m => m.DefaultQualityProfileId, Model.QualityProfileSelectList, new { @class = "inputClass" })
-
-                <div class="sliders">
-                    <div class="slider-container">
-                        <b>SDTV</b>
-                        <div id="sdtv-slider" class="slider"></div>
-                        @Html.HiddenFor(m => m.SdtvMaxSize, new { @class="slider-value" })
-                        30 minute size: <span class="30-minute"></span> | 60 minute size: <span class="60-minute"></span>
+<div id="stylized">
+    @using (Html.BeginForm("SaveQuality", "Settings", FormMethod.Post, new { id = "form", name = "form" }))
+    {
+        <div id="top" class="settingsForm">
+            <label class="labelClass">@Html.LabelFor(m => m.DefaultQualityProfileId)
+                <span class="small">@Html.DescriptionFor(m => m.DefaultQualityProfileId)</span>
+            </label>
+            @Html.DropDownListFor(m => m.DefaultQualityProfileId, Model.QualityProfileSelectList, new { @class = "inputClass" })
+            <div class="sliders">
+                <div class="slider-container">
+                    <b>SDTV</b>
+                    <div id="sdtv-slider" class="slider">
                     </div>
-
-                    <div class="slider-container">
-                        <b>DVD</b>
-                        <div id="dvd-slider" class="slider"></div>
-                        @Html.HiddenFor(m => m.DvdMaxSize, new { @class = "slider-value" })
-                        30 minute size: <span class="30-minute"></span> | 60 minute size: <span class="60-minute"></span>
+                    @Html.HiddenFor(m => m.SdtvMaxSize, new { @class = "slider-value" })
+                    30 minute size: <span class="30-minute"></span>| 60 minute size: <span class="60-minute">
+                    </span>
+                </div>
+                <div class="slider-container">
+                    <b>DVD</b>
+                    <div id="dvd-slider" class="slider">
                     </div>
-
-                    <div class="slider-container">
-                        <b>HDTV</b>
-                        <div id="hdtv-slider" class="slider"></div>
-                        @Html.HiddenFor(m => m.HdtvMaxSize, new { @class = "slider-value" })
-                        30 minute size: <span class="30-minute"></span> | 60 minute size: <span class="60-minute"></span>
+                    @Html.HiddenFor(m => m.DvdMaxSize, new { @class = "slider-value" })
+                    30 minute size: <span class="30-minute"></span>| 60 minute size: <span class="60-minute">
+                    </span>
+                </div>
+                <div class="slider-container">
+                    <b>HDTV</b>
+                    <div id="hdtv-slider" class="slider">
                     </div>
-
-                    <div class="slider-container">
-                        <b>WEBDL</b>
-                        <div id="webdl-slider" class="slider"></div>
-                        @Html.HiddenFor(m => m.WebdlMaxSize, new { @class = "slider-value" })
-                        30 minute size: <span class="30-minute"></span> | 60 minute size: <span class="60-minute"></span>
+                    @Html.HiddenFor(m => m.HdtvMaxSize, new { @class = "slider-value" })
+                    30 minute size: <span class="30-minute"></span>| 60 minute size: <span class="60-minute">
+                    </span>
+                </div>
+                <div class="slider-container">
+                    <b>WEBDL</b>
+                    <div id="webdl-slider" class="slider">
                     </div>
-
-                    <div class="slider-container">
-                        <b>Bluray 720p</b>
-                        <div id="bluray720p-slider" class="slider"></div>
-                        @Html.HiddenFor(m => m.Bluray720pMaxSize, new { @class = "slider-value" })
-                        30 minute size: <span class="30-minute"></span> | 60 minute size: <span class="60-minute"></span>
+                    @Html.HiddenFor(m => m.WebdlMaxSize, new { @class = "slider-value" })
+                    30 minute size: <span class="30-minute"></span>| 60 minute size: <span class="60-minute">
+                    </span>
+                </div>
+                <div class="slider-container">
+                    <b>Bluray 720p</b>
+                    <div id="bluray720p-slider" class="slider">
                     </div>
-
-                    <div class="slider-container">
-                        <b>Bluray 1080p</b>
-                        <div id="bluray1080p-slider" class="slider"></div>
-                        @Html.HiddenFor(m => m.Bluray1080pMaxSize, new { @class = "slider-value" })
-                        30 minute size: <span class="30-minute"></span> | 60 minute size: <span class="60-minute"></span>
+                    @Html.HiddenFor(m => m.Bluray720pMaxSize, new { @class = "slider-value" })
+                    30 minute size: <span class="30-minute"></span>| 60 minute size: <span class="60-minute">
+                    </span>
+                </div>
+                <div class="slider-container">
+                    <b>Bluray 1080p</b>
+                    <div id="bluray1080p-slider" class="slider">
                     </div>
+                    @Html.HiddenFor(m => m.Bluray1080pMaxSize, new { @class = "slider-value" })
+                    30 minute size: <span class="30-minute"></span>| 60 minute size: <span class="60-minute">
+                    </span>
                 </div>
             </div>
+        </div>
 
-            <div id="bottom">
-                <div id="profileContainer">
-                    <div id="profileHeader">
-                        <a id="addItem" href="@Url.Action("AddProfile", "Settings")">
-                            <img src="../../Content/Images/Plus.png" alt="Add New Profile" width="20px" height="20px" />
-                            Add New Profile</a>
-                    </div>
-                    <div id="profiles">
-                        @foreach (var item in (List<QualityProfile>)ViewData["Profiles"])
-                        {
-                            Html.RenderAction("GetQualityProfileView", item);
-                        }
-                    </div>
+        <div id="bottom">
+            <div id="profileContainer">
+                <div id="profileHeader">
+                    <a id="addItem" href="@Url.Action("AddProfile", "Settings")">
+                        <img src="../../Content/Images/Plus.png" alt="Add New Profile" width="20px" height="20px" />
+                        Add New Profile</a>
                 </div>
-                <br />
-                <button type="submit" id="save_button" disabled="disabled">Save</button>
+                <div id="profiles">
+                    @foreach (var item in (List<QualityProfile>)ViewData["Profiles"])
+                    {
+                        Html.RenderAction("GetQualityProfileView", item);
+                    }
+                </div>
             </div>
-        }
-    </div>
-}
+            <br />
+            <button type="submit" id="save_button" disabled="disabled">
+                Save</button>
+        </div>
+    }
+</div>
 @section Scripts{
     <script src="../../Scripts/MicrosoftAjax.js" type="text/javascript"></script>
-    <script src="../../Scripts/jquery.validate.unobtrusive.min.js"type="text/javascript"></script>
     <script src="../../Scripts/NzbDrone/settingsForm.js" type="text/javascript"></script>
     <script type="text/javascript">
         var deleteQualityProfileUrl = '@Url.Action("DeleteQualityProfile", "Settings")';
@@ -190,31 +189,31 @@ Settings > Quality
                 });
             }
         });
-        
+
         var sliderOptions = {
             min: 0,
-			max: 200,
+            max: 200,
             value: 0,
-			step: 1,
-            create: function( event, ui ) {
+            step: 1,
+            create: function (event, ui) {
                 var startingValue = $(this).siblings('.slider-value').val();
-			    $(this).siblings('.30-minute').text(startingValue * 30);
-			    $(this).siblings('.60-minute').text(startingValue * 60);
-			},
-            slide: function( event, ui ) {
-				$(this).siblings('.slider-value').val(ui.value);
-			    $(this).siblings('.30-minute').text(ui.value * 30);
-			    $(this).siblings('.60-minute').text(ui.value * 60);
-			}
+                $(this).siblings('.30-minute').text(startingValue * 30);
+                $(this).siblings('.60-minute').text(startingValue * 60);
+            },
+            slide: function (event, ui) {
+                $(this).siblings('.slider-value').val(ui.value);
+                $(this).siblings('.30-minute').text(ui.value * 30);
+                $(this).siblings('.60-minute').text(ui.value * 60);
+            }
         };
 
         function setupSliders() {
-            $(".slider").each(function() {
+            $(".slider").each(function () {
                 var localOptions = sliderOptions;
                 localOptions["value"] = $(this).siblings('.slider-value').val();
-                
-			    $(this).empty().slider(localOptions);
-		    });
+
+                $(this).empty().slider(localOptions);
+            });
         }
     </script>
 }

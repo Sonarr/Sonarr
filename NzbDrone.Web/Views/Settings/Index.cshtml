@@ -1,0 +1,24 @@
+﻿@section TitleContent
+{
+Settings
+}
+@section Scripts
+{
+    <script type="text/javascript">
+        $(function () {
+            $("#tabs222").tabs();
+        });
+    </script>
+}
+@section MainContent{
+    <div id="tabs222">
+        <ul>
+            <li>@Html.ActionLink("Naming", "Naming", "Settings")</li>
+            <li>@Html.ActionLink("Indexers", "Indexers", "Settings")</li>
+            <li>@Html.ActionLink("Quality", "Quality", "Settings")</li>
+            <li>@Html.ActionLink("SABnzbd", "Sabnzbd", "Settings")</li>
+            <li>@Html.ActionLink("Notifications", "Notifications", "Settings")</li>
+            <li>@Html.ActionLink("System", "System", "Settings")</li>
+        </ul>
+    </div>
+}
