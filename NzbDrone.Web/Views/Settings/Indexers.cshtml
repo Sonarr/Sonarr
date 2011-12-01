@@ -1,5 +1,6 @@
 ﻿@using NzbDrone.Web.Helpers
 @model NzbDrone.Web.Models.IndexerSettingsModel
+@{ Layout = "~/Views/Shared/_RefrenceLayout.cshtml"; }
 @section HeaderContent{
     <link rel="stylesheet" type="text/css" href="../../Content/Settings.css" />
     <link rel="stylesheet" type="text/css" href="../../Content/IndexerSettings.css" />
@@ -10,113 +11,105 @@
         }
     </style>
 }
-@section TitleContent{
-Settings > Indexers
-}
-@section ActionMenu{
-    @{Html.RenderPartial("SubMenu");}
-}
-@section MainContent{
-    <div class="infoBox">
-        RSS feeds are checked every 15 minutes for new episodes.</div>
-    <div id="stylized">
-        @using (Html.BeginForm("SaveIndexers", "Settings", FormMethod.Post, new { id = "form", name = "form", @class = "settingsForm" }))
-        {
-            @Html.ValidationSummary(true, "Unable to save your settings. Please correct the errors and try again.")
-            <div id="accordion">
-                <h3>
-                    <a href="#">NZBs.org</a></h3>
-                <div class="indexerPanel">
-                    <label class="labelClass">
-                        Enable <span class="small">@Html.DescriptionFor(m => m.NzbsOrgEnabled)</span>
-                    </label>
-                    @Html.CheckBoxFor(m => m.NzbsOrgEnabled, new { @class = "inputClass checkClass" })
-                    <label class="labelClass">@Html.LabelFor(m => m.NzbsOrgUId)
-                        <span class="small">@Html.DescriptionFor(m => m.NzbsOrgUId)</span>
-                    </label>
-                    @Html.TextBoxFor(m => m.NzbsOrgUId, new { @class = "inputClass" })
-                    <label class="labelClass">@Html.LabelFor(m => m.NzbsOrgHash)
-                        <span class="small">@Html.DescriptionFor(m => m.NzbsOrgHash)</span>
-                    </label>
-                    @Html.TextBoxFor(m => m.NzbsOrgHash, new { @class = "inputClass" })
-                </div>
-                <h3>
-                    <a href="#">NZBMatrix</a></h3>
-                <div class="indexerPanel">
-                    <label class="labelClass">
-                        Enable <span class="small">@Html.DescriptionFor(m => m.NzbMatrixEnabled)</span>
-                    </label>
-                    @Html.CheckBoxFor(m => m.NzbMatrixEnabled, new { @class = "inputClass checkClass" })
-                    <label class="labelClass">@Html.LabelFor(m => m.NzbMatrixUsername)
-                        <span class="small">@Html.DescriptionFor(m => m.NzbMatrixUsername)</span>
-                    </label>
-                    @Html.TextBoxFor(m => m.NzbMatrixUsername, new { @class = "inputClass" })
-                    <label class="labelClass">@Html.LabelFor(m => m.NzbMatrixApiKey)
-                        <span class="small">@Html.DescriptionFor(m => m.NzbMatrixApiKey)</span>
-                    </label>
-                    @Html.TextBoxFor(m => m.NzbMatrixApiKey, new { @class = "inputClass" })
-                </div>
-                <h3>
-                    <a href="#">NZBsRus</a></h3>
-                <div class="indexerPanel">
-                    <label class="labelClass">
-                        Enable <span class="small">@Html.DescriptionFor(m => m.NzbsRUsEnabled)</span>
-                    </label>
-                    @Html.CheckBoxFor(m => m.NzbsRUsEnabled, new { @class = "inputClass checkClass" })
-                    <label class="labelClass">@Html.LabelFor(m => m.NzbsrusUId)
-                        <span class="small">@Html.DescriptionFor(m => m.NzbsrusUId)</span>
-                    </label>
-                    @Html.TextBoxFor(m => m.NzbsrusUId, new { @class = "inputClass" })
-                    <label class="labelClass">@Html.LabelFor(m => m.NzbsrusHash)
-                        <span class="small">@Html.DescriptionFor(m => m.NzbsrusHash)</span>
-                    </label>
-                    @Html.TextBoxFor(m => m.NzbsrusHash, new { @class = "inputClass" })
-                </div>
-                <h3>
-                    <a href="#">Newsbin</a></h3>
-                <div class="indexerPanel">
-                    <label class="labelClass">
-                        Enable <span class="small">@Html.DescriptionFor(m => m.NewzbinEnabled)</span>
-                    </label>
-                    @Html.CheckBoxFor(m => m.NewzbinEnabled, new { @class = "inputClass checkClass" })
-                    <label class="labelClass">@Html.LabelFor(m => m.NewzbinUsername)
-                        <span class="small">@Html.DescriptionFor(m => m.NewzbinUsername)</span>
-                    </label>
-                    @Html.TextBoxFor(m => m.NewzbinUsername, new { @class = "inputClass" })
-                    <label class="labelClass">@Html.LabelFor(m => m.NewzbinPassword)
-                        <span class="small">@Html.DescriptionFor(m => m.NewzbinPassword)</span>
-                    </label>
-                    @Html.TextBoxFor(m => m.NewzbinPassword, new { @class = "inputClass" })
-                </div>
-                <h3>
-                    <a href="#">Newznab</a></h3>
-                <div class="indexerPanel">
-                    <label class="labelClass">
-                        Enable <span class="small">@Html.DescriptionFor(m => m.NewznabEnabled)</span>
-                    </label>
-                    @Html.CheckBoxFor(m => m.NewznabEnabled, new { @class = "inputClass checkClass" })
-                    <br />
-                    <br />
-                    <p>
-                    </p>
-                    <a id="addItem" href="@Url.Action("AddNewznabProvider", "Settings")">
-                        <img src="../../Content/Images/Plus.png" alt="Add Newznab Provider" width="20px"
-                            height="20px" />
-                        Add Newznab Provider</a>
-                    <div id="newznabProviders">
-                        @foreach (var provider in Model.NewznabDefinitions)
-                        {
-                            Html.RenderAction("GetNewznabProviderView", provider);
-                        }
-                    </div>
+<div class="infoBox">
+    RSS feeds are checked every 15 minutes for new episodes.</div>
+<div id="stylized">
+    @using (Html.BeginForm("SaveIndexers", "Settings", FormMethod.Post, new { id = "form", name = "form", @class = "settingsForm" }))
+    {
+        @Html.ValidationSummary(true, "Unable to save your settings. Please correct the errors and try again.")
+        <div id="accordion">
+            <h3>
+                <a href="#">NZBs.org</a></h3>
+            <div class="indexerPanel">
+                <label class="labelClass">
+                    Enable <span class="small">@Html.DescriptionFor(m => m.NzbsOrgEnabled)</span>
+                </label>
+                @Html.CheckBoxFor(m => m.NzbsOrgEnabled, new { @class = "inputClass checkClass" })
+                <label class="labelClass">@Html.LabelFor(m => m.NzbsOrgUId)
+                    <span class="small">@Html.DescriptionFor(m => m.NzbsOrgUId)</span>
+                </label>
+                @Html.TextBoxFor(m => m.NzbsOrgUId, new { @class = "inputClass" })
+                <label class="labelClass">@Html.LabelFor(m => m.NzbsOrgHash)
+                    <span class="small">@Html.DescriptionFor(m => m.NzbsOrgHash)</span>
+                </label>
+                @Html.TextBoxFor(m => m.NzbsOrgHash, new { @class = "inputClass" })
+            </div>
+            <h3>
+                <a href="#">NZBMatrix</a></h3>
+            <div class="indexerPanel">
+                <label class="labelClass">
+                    Enable <span class="small">@Html.DescriptionFor(m => m.NzbMatrixEnabled)</span>
+                </label>
+                @Html.CheckBoxFor(m => m.NzbMatrixEnabled, new { @class = "inputClass checkClass" })
+                <label class="labelClass">@Html.LabelFor(m => m.NzbMatrixUsername)
+                    <span class="small">@Html.DescriptionFor(m => m.NzbMatrixUsername)</span>
+                </label>
+                @Html.TextBoxFor(m => m.NzbMatrixUsername, new { @class = "inputClass" })
+                <label class="labelClass">@Html.LabelFor(m => m.NzbMatrixApiKey)
+                    <span class="small">@Html.DescriptionFor(m => m.NzbMatrixApiKey)</span>
+                </label>
+                @Html.TextBoxFor(m => m.NzbMatrixApiKey, new { @class = "inputClass" })
+            </div>
+            <h3>
+                <a href="#">NZBsRus</a></h3>
+            <div class="indexerPanel">
+                <label class="labelClass">
+                    Enable <span class="small">@Html.DescriptionFor(m => m.NzbsRUsEnabled)</span>
+                </label>
+                @Html.CheckBoxFor(m => m.NzbsRUsEnabled, new { @class = "inputClass checkClass" })
+                <label class="labelClass">@Html.LabelFor(m => m.NzbsrusUId)
+                    <span class="small">@Html.DescriptionFor(m => m.NzbsrusUId)</span>
+                </label>
+                @Html.TextBoxFor(m => m.NzbsrusUId, new { @class = "inputClass" })
+                <label class="labelClass">@Html.LabelFor(m => m.NzbsrusHash)
+                    <span class="small">@Html.DescriptionFor(m => m.NzbsrusHash)</span>
+                </label>
+                @Html.TextBoxFor(m => m.NzbsrusHash, new { @class = "inputClass" })
+            </div>
+            <h3>
+                <a href="#">Newsbin</a></h3>
+            <div class="indexerPanel">
+                <label class="labelClass">
+                    Enable <span class="small">@Html.DescriptionFor(m => m.NewzbinEnabled)</span>
+                </label>
+                @Html.CheckBoxFor(m => m.NewzbinEnabled, new { @class = "inputClass checkClass" })
+                <label class="labelClass">@Html.LabelFor(m => m.NewzbinUsername)
+                    <span class="small">@Html.DescriptionFor(m => m.NewzbinUsername)</span>
+                </label>
+                @Html.TextBoxFor(m => m.NewzbinUsername, new { @class = "inputClass" })
+                <label class="labelClass">@Html.LabelFor(m => m.NewzbinPassword)
+                    <span class="small">@Html.DescriptionFor(m => m.NewzbinPassword)</span>
+                </label>
+                @Html.TextBoxFor(m => m.NewzbinPassword, new { @class = "inputClass" })
+            </div>
+            <h3>
+                <a href="#">Newznab</a></h3>
+            <div class="indexerPanel">
+                <label class="labelClass">
+                    Enable <span class="small">@Html.DescriptionFor(m => m.NewznabEnabled)</span>
+                </label>
+                @Html.CheckBoxFor(m => m.NewznabEnabled, new { @class = "inputClass checkClass" })
+                <br />
+                <br />
+                <p>
+                </p>
+                <a id="addItem" href="@Url.Action("AddNewznabProvider", "Settings")">
+                    <img src="../../Content/Images/Plus.png" alt="Add Newznab Provider" width="20px"
+                        height="20px" />
+                    Add Newznab Provider</a>
+                <div id="newznabProviders">
+                    @foreach (var provider in Model.NewznabDefinitions)
+                    {
+                        Html.RenderAction("GetNewznabProviderView", provider);
+                    }
                 </div>
             </div>
-            <br />
-            <button type="submit" id="save_button" disabled="disabled">
-                Save</button>
-        }
-    </div>
-}
+        </div>
+        <br />
+        <button type="submit" id="save_button" disabled="disabled">
+            Save</button>
+    }
+</div>
 @section Scripts{
     <script src="../../Scripts/NzbDrone/settingsForm.js" type="text/javascript"></script>
     <script type="text/javascript">

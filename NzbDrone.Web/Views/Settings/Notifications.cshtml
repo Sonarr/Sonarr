@@ -1,9 +1,7 @@
-﻿@using NzbDrone.Web.Helpers
-@model NzbDrone.Web.Models.NotificationSettingsModel
-           
+﻿@model NzbDrone.Web.Models.NotificationSettingsModel
+@{ Layout = "~/Views/Shared/_RefrenceLayout.cshtml"; }
 @section HeaderContent{
     <link rel="stylesheet" type="text/css" href="../../Content/Settings.css" />
-
     <style>
         .notifier
         {
@@ -22,7 +20,7 @@
         {
             margin-top: 10px;
         }
-
+        
         #smtpTest
         {
             margin-top: 10px;
@@ -31,70 +29,59 @@
         }
     </style>
 }
-
-@section TitleContent{
-    Settings > Notifications
-}
-
-@section ActionMenu{
-    @{Html.RenderPartial("SubMenu");}
-}
-
-@section MainContent{
-    <div id="stylized">
-        @using (Html.BeginForm("SaveNotifications", "Settings", FormMethod.Post, new { id = "form", name = "form", @class = "settingsForm" }))
-        {
-            <div id="accordion">
-                <h3><a href="#">XBMC</a></h3>
-                @{Html.RenderPartial("Xbmc", Model);}
-
-                <h3><a href="#">SMTP</a></h3>
-                @{Html.RenderPartial("Smtp", Model);}
-
-                <h3><a href="#">Twitter</a></h3>
-                @{Html.RenderPartial("Twitter", Model);}
-
-                <h3><a href="#">Growl</a></h3>
-                @{Html.RenderPartial("Growl", Model);}
-
-                <h3><a href="#">Prowl</a></h3>
-                @{Html.RenderPartial("Prowl", Model);}
-            </div>
+<div id="stylized">
+    @using (Html.BeginForm("SaveNotifications", "Settings", FormMethod.Post, new { id = "form", name = "form", @class = "settingsForm" }))
+    {
+        <div id="accordion2">
+            <h3>
+                <a href="#">XBMC</a></h3>
+            @{Html.RenderPartial("Xbmc", Model);}
+            <h3>
+                <a href="#">SMTP</a></h3>
+            @{Html.RenderPartial("Smtp", Model);}
+            <h3>
+                <a href="#">Twitter</a></h3>
+            @{Html.RenderPartial("Twitter", Model);}
+            <h3>
+                <a href="#">Growl</a></h3>
+            @{Html.RenderPartial("Growl", Model);}
+            <h3>
+                <a href="#">Prowl</a></h3>
+            @{Html.RenderPartial("Prowl", Model);}
+        </div>
             
-            <button type="submit" id="save_button" disabled="disabled">Save</button>
-        }
-    </div>
-}
-
+        <button type="submit" id="save_button" disabled="disabled">
+            Save</button>
+    }
+</div>
 @section Scripts{
     <script src="../../Scripts/NzbDrone/settingsForm.js" type="text/javascript"></script>
-
     <script type="text/javascript">
         $(function () {
-            $("#accordion").accordion({
+            $("#accordion2").accordion({
                 autoHeight: false
             });
         });
-        
+
         //Twitter
         getAuthorizationUrl = '../Command/GetTwitterAuthorization';
         verifyAuthorizationUrl = '../Command/VerifyTwitterAuthorization';
 
         function requestTwitterAuthorization() {
             $.ajax({
-                    type: "GET",
-                    url: getAuthorizationUrl,
-                    error: function(req, status, error) {
-                        alert("Sorry! We could get Twitter Authorization at this time. " + error);
-                    },
-                    success: function(data, textStatus, jqXHR) {
-                        if (data.IsMessage)
-                            return false;
+                type: "GET",
+                url: getAuthorizationUrl,
+                error: function (req, status, error) {
+                    alert("Sorry! We could get Twitter Authorization at this time. " + error);
+                },
+                success: function (data, textStatus, jqXHR) {
+                    if (data.IsMessage)
+                        return false;
 
-                        $('#authorizationRequestToken').val(data.Token);
-                        window.open(data.Url);
-                    }
-                });
+                    $('#authorizationRequestToken').val(data.Token);
+                    window.open(data.Url);
+                }
+            });
         }
 
         function verifyTwitterAuthorization() {
@@ -102,45 +89,45 @@
             var verifier = $('#twitterVerification').val();
 
             $.ajax({
-                    type: "GET",
-                    url: verifyAuthorizationUrl,
-                    data: jQuery.param({ token: token, verifier: verifier }),
-                    error: function(req, status, error) {
-                        alert("Sorry! We could verify Twitter Authorization at this time. " + error);
-                    }
-                });
-            }
+                type: "GET",
+                url: verifyAuthorizationUrl,
+                data: jQuery.param({ token: token, verifier: verifier }),
+                error: function (req, status, error) {
+                    alert("Sorry! We could verify Twitter Authorization at this time. " + error);
+                }
+            });
+        }
 
-            //SMTP
-            function testSmtpSettings() {
-                //Get the variables
-                var server = $('#SmtpServer').val();
-                var port = $('#SmtpPort').val();
-                var ssl = $('#SmtpUseSsl').val();
-                var username = $('#SmtpUsername').val();
-                var password = $('#SmtpPassword').val();
-                var fromAddress = $('#SmtpFromAddress').val();
-                var toAddresses = $('#SmtpToAddresses').val();
+        //SMTP
+        function testSmtpSettings() {
+            //Get the variables
+            var server = $('#SmtpServer').val();
+            var port = $('#SmtpPort').val();
+            var ssl = $('#SmtpUseSsl').val();
+            var username = $('#SmtpUsername').val();
+            var password = $('#SmtpPassword').val();
+            var fromAddress = $('#SmtpFromAddress').val();
+            var toAddresses = $('#SmtpToAddresses').val();
 
-                //Send the data!
-                $.ajax({
-                    type: "POST",
-                    url: '../Command/SendTestEmail',
-                    data: jQuery.param({
-                        server: server,
-                        port: port,
-                        ssl: ssl,
-                        username: username,
-                        password: password,
-                        fromAddress: fromAddress,
-                        toAddresses: toAddresses
-                    }),
-                    error: function (req, status, error) {
-                        alert("Sorry! We could send a test email at this time. " + error);
-                    }
-                });
+            //Send the data!
+            $.ajax({
+                type: "POST",
+                url: '../Command/SendTestEmail',
+                data: jQuery.param({
+                    server: server,
+                    port: port,
+                    ssl: ssl,
+                    username: username,
+                    password: password,
+                    fromAddress: fromAddress,
+                    toAddresses: toAddresses
+                }),
+                error: function (req, status, error) {
+                    alert("Sorry! We could send a test email at this time. " + error);
+                }
+            });
 
-                return false;
-            }
-</script>
+            return false;
+        }
+    </script>
 }

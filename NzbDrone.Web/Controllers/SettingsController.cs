@@ -68,7 +68,7 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult Index()
         {
-            return RedirectToAction("Indexers");
+            return View();
         }
 
         public ActionResult Indexers()

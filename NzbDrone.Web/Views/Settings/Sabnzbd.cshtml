@@ -1,78 +1,67 @@
 ﻿@using NzbDrone.Web.Helpers;
 @model NzbDrone.Web.Models.SabnzbdSettingsModel
-
+@{ Layout = "~/Views/Shared/_RefrenceLayout.cshtml"; }
 @section HeaderContent{
     <link rel="stylesheet" type="text/css" href="../../Content/Settings.css" />
 }
-
-@section TitleContent{
-    Settings > Sabnzbd
-}
-
-@section ActionMenu{
-    @{Html.RenderPartial("SubMenu");}
-}
-
-@section MainContent{
-    <div id="stylized">
-    
+<div id="stylized">
     @using (Html.BeginForm("SaveSabnzbd", "Settings", FormMethod.Post, new { id = "form", name = "form", @class = "settingsForm" }))
     {
-        <label class="labelClass">Auto-Configure
-        <span class="small">If access to SABnzbd doesn't require a username + password and is on the same system as NzbDrone, you can auto-configure it</span>
+        <label class="labelClass">
+            Auto-Configure <span class="small">If access to SABnzbd doesn't require a username +
+                password and is on the same system as NzbDrone, you can auto-configure it</span>
         </label>
-        <input type="button" onclick="autoConfigureSab(); return false;" value="Auto-Configure" class="inputClass"/>
+        <input type="button" onclick="autoConfigureSab(); return false;" value="Auto-Configure"
+            class="inputClass" />
 
         <label class="labelClass">@Html.LabelFor(m => m.SabHost)
-        <span class="small">@Html.DescriptionFor(m => m.SabHost)</span>
+            <span class="small">@Html.DescriptionFor(m => m.SabHost)</span>
         </label>
         @Html.TextBoxFor(m => m.SabHost, new { @class = "inputClass" })
 
         <label class="labelClass">@Html.LabelFor(m => m.SabPort)
-        <span class="small">@Html.DescriptionFor(m => m.SabPort)</span>
+            <span class="small">@Html.DescriptionFor(m => m.SabPort)</span>
         </label>
         @Html.TextBoxFor(m => m.SabPort, new { @class = "inputClass" })
 
         <label class="labelClass">@Html.LabelFor(m => m.SabApiKey)
-        <span class="small">@Html.DescriptionFor(m => m.SabApiKey)</span>
+            <span class="small">@Html.DescriptionFor(m => m.SabApiKey)</span>
         </label>
         @Html.TextBoxFor(m => m.SabApiKey, new { @class = "inputClass" })
 
         <label class="labelClass">@Html.LabelFor(m => m.SabUsername)
-        <span class="small">@Html.DescriptionFor(m => m.SabUsername)</span>
+            <span class="small">@Html.DescriptionFor(m => m.SabUsername)</span>
         </label>
         @Html.TextBoxFor(m => m.SabUsername, new { @class = "inputClass" })
 
         <label class="labelClass">@Html.LabelFor(m => m.SabPassword)
-        <span class="small">@Html.DescriptionFor(m => m.SabPassword)</span>
+            <span class="small">@Html.DescriptionFor(m => m.SabPassword)</span>
         </label>
         @Html.TextBoxFor(m => m.SabPassword, new { @class = "inputClass" })
 
         <label class="labelClass">@Html.LabelFor(m => m.SabTvCategory)
-        <span class="small">@Html.DescriptionFor(m => m.SabTvCategory)</span>
+            <span class="small">@Html.DescriptionFor(m => m.SabTvCategory)</span>
         </label>
         @Html.DropDownListFor(m => m.SabTvCategory, Model.SabTvCategorySelectList, new { @class = "inputClass selectClass" })
 
         <label class="labelClass">@Html.LabelFor(m => m.SabTvPriority)
-        <span class="small">@Html.DescriptionFor(m => m.SabTvPriority)</span>
+            <span class="small">@Html.DescriptionFor(m => m.SabTvPriority)</span>
         </label>
         @Html.DropDownListFor(m => m.SabTvPriority, Model.PrioritySelectList, new { @class = "inputClass selectClass" })
 
         <label class="labelClass">@Html.LabelFor(m => m.SabDropDirectory)
-        <span class="small">@Html.DescriptionFor(m => m.SabDropDirectory)</span>
+            <span class="small">@Html.DescriptionFor(m => m.SabDropDirectory)</span>
         </label>
         @Html.TextBoxFor(m => m.SabDropDirectory, new { @class = "inputClass folderLookup" })
 
-        <button type="submit" id="save_button" disabled="disabled">Save</button>
+        <button type="submit" id="save_button" disabled="disabled">
+            Save</button>
     }
-    </div>
-
-    <div id="result" class="hiddenResult"></div>
-}
-
+</div>
+<div id="result" class="hiddenResult">
+</div>
 @section Scripts{
     <script src="../../Scripts/NzbDrone/settingsForm.js" type="text/javascript"></script>
-
     <script type="text/javascript">
         var autoConfigureSabUrl = '@Url.Action("AutoConfigureSab", "Settings")';
 
