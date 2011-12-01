@@ -10,9 +10,8 @@ Pending Processing
                 items.Add().Text("Purge History").Action("Purge", "History");
             }).Render();}
 }
-@section MainContent{
-    <div class="grid-container">
-        @{Html.Telerik().Grid<PendingProcessingModel>().Name("PendingProcessingGrid")
+<div class="grid-container">
+    @{Html.Telerik().Grid<PendingProcessingModel>().Name("PendingProcessingGrid")
                .TableHtmlAttributes(new { @class = "Grid" })
                 .Columns(columns =>
                              {
@@ -30,8 +29,7 @@ Pending Processing
                     c =>
                     c.PageSize(20).Position(GridPagerPosition.Bottom).Style(GridPagerStyles.NextPrevious))
                 .Render();}
-    </div>
-}
+</div>
 <script type="text/javascript">
     var renamePendingUrl = '@Url.Action("RenamePendingProcessing", "System")';
 

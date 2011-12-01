@@ -1,15 +1,11 @@
 ﻿@model HandleErrorInfo
-
 @section TitleContent
 {
-    EPIC FAIL!!!
+EPIC FAIL!!!
 }
 
-@section MainContent
-{
-    <h2>
-        @Model.Exception.Message
-    </h2>
-    <br />
-    @Model.Exception.ToString()
-}
+<h2>
+    @Model.Exception.Message
+</h2>
+<br />
+@Model.Exception.ToString()

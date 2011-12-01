@@ -1,10 +1,8 @@
-@using NzbDrone.Core.Helpers;
 @using NzbDrone.Web.Models;
 @model IEnumerable<NzbDrone.Core.Repository.Series>
 @section TitleContent{
 NzbDrone
 }
-
 <style>
     /* progress bar container */
     .progressbar
@@ -47,16 +45,14 @@ NzbDrone
         background: #E5ECF9;
     }
 </style>
-
 @section ActionMenu{
     <ul class="sub-menu">
         <li>@Html.ActionLink("Add Series", "Index", "AddSeries")</li>
         <li>@Ajax.ActionLink("Start RSS Sync", "RssSync", "Command", null)</li>
     </ul>
 }
-@section MainContent{
-    <div class="grid-container">
-        @{Html.Telerik().Grid<SeriesModel>().Name("Grid")
+<div class="grid-container">
+    @{Html.Telerik().Grid<SeriesModel>().Name("Grid")
                 .TableHtmlAttributes(new { @class = "Grid" })
                 .DataKeys(keys => keys.Add(p => p.SeriesId))
                 .DataBinding(data => data.Ajax()
@@ -89,7 +85,7 @@ NzbDrone
 
                              })
                 .Editable(editor => editor.Mode(GridEditMode.PopUp))
-                //.Sortable(sort => sort.OrderBy(order => order.Add(o => o.Title).Ascending()).Enabled(true))
+          //.Sortable(sort => sort.OrderBy(order => order.Add(o => o.Title).Ascending()).Enabled(true))
                 .DetailView(detailView => detailView.ClientTemplate(
                                                                         "<b>Airs Day of Week:</b> " + "<#= AirsDayOfWeek #>" +
                                                                         "<br />" +
@@ -103,8 +99,7 @@ NzbDrone
                     clientEvents.OnRowDataBound("grid_rowBound");
                 })
                 .Render();}
-    </div>
-}
+</div>
 @section Scripts{
     <script type="text/javascript">
         var windowElement;
@@ -128,7 +123,7 @@ NzbDrone
 
             $("#progressbar_" + seriesId).episodeProgress(episodeFileCount, episodeCount);
         }
-        
+
         (function ($) {
             $.fn.episodeProgress = function (episodes, totalEpisodes) {
                 return this.each(

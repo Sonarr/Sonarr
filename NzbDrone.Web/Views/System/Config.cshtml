@@ -2,8 +2,7 @@
 @section TitleContent{
 Configuration
 }
-@section MainContent{
-    @(Html.Telerik().Grid<NzbDrone.Core.Repository.Config>()
+@(Html.Telerik().Grid<NzbDrone.Core.Repository.Config>()
         .Name("Grid")
          .TableHtmlAttributes(new { @class = "Grid" })
         .DataKeys(keys =>
@@ -30,4 +29,3 @@ Configuration
         .Editable(editing => editing.Mode(GridEditMode.InLine))
         .Sortable()
 )
-}

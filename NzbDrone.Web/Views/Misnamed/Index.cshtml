@@ -4,11 +4,10 @@ Misnamed
 }
 @section ActionMenu{
     <ul class="sub-menu">
-        <li>@Ajax.ActionLink("Trim History", "Trim", "History", new AjaxOptions{ OnSuccess = "reloadHistoryGrid" })</li>
-        <li>@Ajax.ActionLink("Purge History", "Purge", "History", new AjaxOptions { OnSuccess = "reloadHistoryGrid"})</li>
+        <li>@Ajax.ActionLink("Trim History", "Trim", "History", new AjaxOptions { OnSuccess = "reloadHistoryGrid" })</li>
+        <li>@Ajax.ActionLink("Purge History", "Purge", "History", new AjaxOptions { OnSuccess = "reloadHistoryGrid" })</li>
     </ul>
 }
-
 <style>
     .searchImage
     {
@@ -26,10 +25,8 @@ Misnamed
         background-color: #065EFE;
     }
 </style>
-
-@section MainContent{
-    <div class="grid-container">
-        @{Html.Telerik().Grid<MisnamedEpisodeModel>().Name("misnamed")
+<div class="grid-container">
+    @{Html.Telerik().Grid<MisnamedEpisodeModel>().Name("misnamed")
                .TableHtmlAttributes(new { @class = "Grid" })
                 .Columns(columns =>
                              {
@@ -54,9 +51,7 @@ Misnamed
                     clientEvents.OnDataBound("grid_dataBound");
                 })
                 .Render();}
-    </div>
-}
-
+</div>
 <script type="text/javascript">
     deleteHistoryRowUrl = '../History/Delete';
     redownloadUrl = '../History/Redownload';
