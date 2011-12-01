@@ -1,24 +1,21 @@
-﻿@using NzbDrone.Core.Repository
-@section TitleContent{
+﻿@section TitleContent{
 Add Series
 }
 @section Scripts
 {
     <script type="text/javascript" src="../../Scripts/NzbDrone/addSeries.js"></script>
 }
-@section MainContent{
-    <h2>
-        Add New Series</h2>
-    <div id="addNewSeries">
-        @{ Html.RenderAction("AddNew", "AddSeries"); }
-    </div>
-    <h2>
-        Add Series Already on Disk</h2>
-    <h3>
-        Manage Root Folders
-    </h3>
-    @{Html.RenderAction("RootDir");}
-    <div id="existingSeries">
-        @{ Html.RenderAction("ExistingSeries", "AddSeries"); }
-    </div>
-}
+<h2>
+    Add New Series</h2>
+<div id="addNewSeries">
+    @{ Html.RenderAction("AddNew", "AddSeries"); }
+</div>
+<h2>
+    Add Series Already on Disk</h2>
+<h3>
+    Manage Root Folders
+</h3>
+@{Html.RenderAction("RootDir");}
+<div id="existingSeries">
+    @{ Html.RenderAction("ExistingSeries", "AddSeries"); }
+</div>
