@@ -30,10 +30,9 @@ Logs
     <div style="margin-bottom: 10px">
     </div>
 }
-@section MainContent{
-    <div class="infoBox">
-        Log entries older than 30 days are automatically deleted.</div>
-    @{Html.Telerik().Grid<Log>().Name("logsGrid")
+<div class="infoBox">
+    Log entries older than 30 days are automatically deleted.</div>
+@{Html.Telerik().Grid<Log>().Name("logsGrid")
             .TableHtmlAttributes(new { @class = "Grid" })
             .Columns(columns =>
                          {
@@ -52,9 +51,8 @@ Logs
             .Pageable(paging => paging.Style(GridPagerStyles.Status).PageOnScroll(true).PageSize(100))
             .Filterable()
             .ClientEvents(c => c.OnRowDataBound("onRowDataBound"))
-            .Scrollable(c=>c.Height(500))
+            .Scrollable(c => c.Height(500))
             .Render();}
-}
 <script type="text/javascript">
     function reloadGrid() {
         var grid = $('#logsGrid').data('tGrid');

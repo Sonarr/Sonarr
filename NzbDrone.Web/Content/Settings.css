@@ -1,11 +1,19 @@
-﻿body 
+﻿body
 {
-    /*font-family:"Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
-    font-size:12px;*/
+    /*font-family:"Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;     font-size:12px;*/
 }
 
-p, h1, form, button{border:0; margin:0; padding:0;}
-.spacer{clear:both; height:1px;}
+p, h1, form, button
+{
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+.spacer
+{
+    clear: both;
+    height: 1px;
+}
 
 .settingsForm
 {
@@ -15,47 +23,47 @@ p, h1, form, button{border:0; margin:0; padding:0;}
 
 #stylized h1
 {
-    font-size:20px;
-    font-weight:bold;
-    margin-bottom:8px;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 8px;
 }
 
 #stylized p
 {
-    font-size:11px;
-    color:#666666;
-    margin-bottom:20px;
-    border-bottom:solid 1px #b7ddf2;
-    padding-bottom:10px;
+    font-size: 11px;
+    color: #666666;
+    margin-bottom: 20px;
+    border-bottom: solid 1px #b7ddf2;
+    padding-bottom: 10px;
 }
 
 #stylized .labelClass
 {
-    display:block;
-    font-weight:bold;
-    text-align:right;
-    width:340px;
-    float:left;
+    display: block;
+    font-weight: bold;
+    text-align: right;
+    width: 340px;
+    float: left;
     margin-bottom: -10px;
 }
 
 #stylized .small
 {
-    color:#666666;
-    display:block;
-    font-size:11px;
-    font-weight:normal;
-    text-align:right;
-    width:340px;
+    color: #666666;
+    display: block;
+    font-size: 11px;
+    font-weight: normal;
+    text-align: right;
+    width: 340px;
 }
 
 #stylized .inputClass
 {
-    float:left;
-    padding:4px 2px;
-    border:solid 1px #aacfe4;
-    width:200px;
-    margin:2px 0 20px 10px;
+    float: left;
+    padding: 4px 2px;
+    border: solid 1px #aacfe4;
+    width: 200px;
+    margin: 2px 0 20px 10px;
 }
 
 #stylized .selectClass
@@ -65,31 +73,22 @@ p, h1, form, button{border:0; margin:0; padding:0;}
 
 #stylized .checkClass
 {
-    margin:10px 0 10px 10px;
+    margin: 10px 0 10px 10px;
 }
 
 #stylized button
 {
-    clear:both;
-    margin-left:220px;
+    clear: both;
+    margin-left: 220px;
     margin-bottom: 10px;
-    width:125px;
-    height:31px;
-    background:#666666;
-    text-align:center;
-    line-height:31px;
-    color:#FFFFFF;
-    font-size:11px;
-    font-weight:bold;
+    width: 125px;
+    height: 31px;
+    text-align: center;
+    line-height: 31px;
+    font-size: 11px;
+    font-weight: bold;
 }
 
-#save_button:hover
-{
-    border-bottom-style: solid;
-    border-bottom-width: 4px;
-    border-color: #3C3C3C;
-    padding-bottom: 2px;
-}
 
 #saveAjax
 {
@@ -101,7 +100,7 @@ p, h1, form, button{border:0; margin:0; padding:0;}
 }
 
 #save_button[disabled="disabled"]
-{      
+{
     padding: 0px 6px 0px 6px;
     border: 2px outset ButtonFace;
     color: lightgrey;

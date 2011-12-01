@@ -3,19 +3,17 @@
 @section TitleContent{
 Upcoming
 }
-
 <link href="../../Content/Grid.css" rel="stylesheet" type="text/css" />
-
 @section ActionMenu{
-        <ul class="sub-menu">
+    <ul class="sub-menu">
         <li>@Ajax.ActionLink("Start RSS Sync", "RssSync", "Command", null, null)</li>
     </ul>
 }
-@section MainContent{
-    <div id="yesterday">
-        <h2>Yesterday</h2>
-        <div class="grid-container">
-            @{Html.Telerik().Grid<UpcomingEpisodeModel>().Name("Yesterday").NoRecordsTemplate(
+<div id="yesterday">
+    <h2>
+        Yesterday</h2>
+    <div class="grid-container">
+        @{Html.Telerik().Grid<UpcomingEpisodeModel>().Name("Yesterday").NoRecordsTemplate(
                     "No watched shows aired yesterday")
                     .TableHtmlAttributes(new { @class = "Grid" })
                     .Columns(columns =>
@@ -43,17 +41,18 @@ Upcoming
                                                     ))
                     .DataBinding(data => data.Ajax().Select("_AjaxBindingYesterday", "Upcoming"))
                     .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.AirDateTime).Ascending()).Enabled(true))
-                    //.Pageable(c => c.PageSize(20).Position(GridPagerPosition.Both).Style(GridPagerStyles.PageInput | GridPagerStyles.NextPreviousAndNumeric))
-                    //.Filterable()
-                    //.ClientEvents(c => c.OnRowDataBound("onRowDataBound"))
+              //.Pageable(c => c.PageSize(20).Position(GridPagerPosition.Both).Style(GridPagerStyles.PageInput | GridPagerStyles.NextPreviousAndNumeric))
+              //.Filterable()
+              //.ClientEvents(c => c.OnRowDataBound("onRowDataBound"))
                     .Render();}
-        </div>
     </div>
-    <br />
-    <div id="today">
-        <h2>Today</h2>
-        <div class="grid-container">
-            @{Html.Telerik().Grid<UpcomingEpisodeModel>().Name("Today").NoRecordsTemplate("No watched shows airing today.")
+</div>
+<br />
+<div id="today">
+    <h2>
+        Today</h2>
+    <div class="grid-container">
+        @{Html.Telerik().Grid<UpcomingEpisodeModel>().Name("Today").NoRecordsTemplate("No watched shows airing today.")
                     .TableHtmlAttributes(new { @class = "Grid" })
                     .Columns(columns =>
                                     {
@@ -81,13 +80,14 @@ Upcoming
                     .DataBinding(data => data.Ajax().Select("_AjaxBindingToday", "Upcoming"))
                     .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.AirDateTime).Ascending()).Enabled(true))
                     .Render();}
-        </div>
     </div>
-    <br />
-    <div id="tomorrow">
-        <h2>Tomorrow</h2>
-        <div class="grid-container">
-            @{Html.Telerik().Grid<UpcomingEpisodeModel>().Name("Tomorrow").NoRecordsTemplate(
+</div>
+<br />
+<div id="tomorrow">
+    <h2>
+        Tomorrow</h2>
+    <div class="grid-container">
+        @{Html.Telerik().Grid<UpcomingEpisodeModel>().Name("Tomorrow").NoRecordsTemplate(
                     "No watched shows airing tomorrow")
                     .TableHtmlAttributes(new { @class = "Grid" })
                     .Columns(columns =>
@@ -117,13 +117,14 @@ Upcoming
                     .DataBinding(data => data.Ajax().Select("_AjaxBindingTomorrow", "Upcoming"))
                     .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.AirDateTime).Ascending()).Enabled(true))
                     .Render();}
-        </div>
     </div>
-    <br />
-    <div id="week">
-        <h2>Future Forecast</h2>
-        <div class="grid-container">
-            @{Html.Telerik().Grid<UpcomingEpisodeModel>().Name("Week").NoRecordsTemplate(
+</div>
+<br />
+<div id="week">
+    <h2>
+        Future Forecast</h2>
+    <div class="grid-container">
+        @{Html.Telerik().Grid<UpcomingEpisodeModel>().Name("Week").NoRecordsTemplate(
                     "No watched shows airing in the next week...")
                     .TableHtmlAttributes(new { @class = "Grid" })
                     .Columns(columns =>
@@ -152,6 +153,5 @@ Upcoming
                     .DataBinding(data => data.Ajax().Select("_AjaxBindingWeek", "Upcoming"))
                     .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.AirDateTime).Ascending()).Enabled(true))
                     .Render();}
-        </div>
     </div>
-}
+</div>

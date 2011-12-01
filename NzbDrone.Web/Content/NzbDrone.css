@@ -169,18 +169,6 @@ hr
     margin-right: 135px;
 }
 
-button, input[type="button"], input[type="submit"], input[type="reset"]
-{
-    color: white;
-    background-color: #065EFE;
-    border-style: solid;
-    border-color: #065EFE;
-}
-
-button:active, input[type="button"]:active, input[type="submit"]:active, input[type="reset"]:active
-{
-    border-color: #0C48B6;
-}
 
 input[type=text], select
 {

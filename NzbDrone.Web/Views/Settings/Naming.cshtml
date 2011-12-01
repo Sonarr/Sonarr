@@ -18,7 +18,7 @@
     </style>
 }
 <div id="stylized">
-    @using (Html.BeginForm("SaveNaming", "Settings", FormMethod.Post, new { id = "form", name = "form", @class = "settingsForm" }))
+    @using (Html.BeginForm("SaveNaming", "Settings", FormMethod.Post, new { id = "NamingForm", name = "NamingForm", @class = "settingsForm" }))
     {
         <div class="settingsContainer">
             @Html.ValidationSummary(true, "Unable to save your settings. Please correct the errors and try again.")
@@ -68,12 +68,12 @@
             </div>
         </div>
         
-        <button type="submit" id="save_button" disabled="disabled">
+        <button type="submit" class="save_button" disabled="disabled">
             Save</button>
     }
 </div>
 @section Scripts{
-    <script src="../../Scripts/NzbDrone/settingsForm.js" type="text/javascript"></script>
+
     <script type="text/javascript">
         $(document).ready(function () {
             createExamples();

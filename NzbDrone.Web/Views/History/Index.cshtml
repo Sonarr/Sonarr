@@ -5,54 +5,50 @@ History
 }
 @section ActionMenu{
     <ul class="sub-menu">
-        <li>@Ajax.ActionLink("Trim History", "Trim", "History", new AjaxOptions{ OnSuccess = "reloadHistoryGrid" })</li>
-        <li>@Ajax.ActionLink("Purge History", "Purge", "History", new AjaxOptions { OnSuccess = "reloadHistoryGrid"})</li>
+        <li>@Ajax.ActionLink("Trim History", "Trim", "History", new AjaxOptions { OnSuccess = "reloadHistoryGrid" })</li>
+        <li>@Ajax.ActionLink("Purge History", "Purge", "History", new AjaxOptions { OnSuccess = "reloadHistoryGrid" })</li>
     </ul>
 }
-
 <link href="../../Content/Grid.css" rel="stylesheet" type="text/css" />
-
-@section MainContent{
-    <div class="grid-container">
-        @{Html.Telerik().Grid<HistoryModel>().Name("history")
-               .TableHtmlAttributes(new { @class = "Grid" })
-                .Columns(columns =>
-                             {
-                                 columns.Bound(c => c.Indexer)
-                                        .ClientTemplate("<center><img alt='<#= Indexer #>' src='" + Url.Content("~/Content/Images/Indexers/") + "<#= Indexer #>.png' /></center>")
-                                        .Title("")
-                                        .Width(20);
-                                 columns.Bound(c => c.SeriesTitle)
-                                            .ClientTemplate("<a href=" +
-                                                            Url.Action("Details", "Series", new { seriesId = "<#= SeriesId #>" }) +
-                                                            "><#= SeriesTitle #></a>")
-                                            .Title("Series Title");
-                                 columns.Bound(c => c.SeasonNumber).Title("Season").Width(1);
-                                 columns.Bound(c => c.EpisodeNumber).Title("Episode").Width(1);
-                                 columns.Bound(c => c.EpisodeTitle).Title("Episode Title");
-                                 columns.Bound(c => c.Quality).Title("Quality").Width(50);
-                                 columns.Bound(c => c.Date).Title("Grabbed on");
-                                 columns.Bound(c => c.HistoryId)
-                                     .Title("Actions")
-                                     .ClientTemplate("<a href=\"../History/Delete?historyId=<#= HistoryId #>\" onclick=\"deleteHistoryRow(<#= HistoryId #>); return false;\"><img src='../../Content/Images/X.png' alt='Delete' title='Delete from History' class='searchImage' /></a>" +
-                                                     "<a href=\"../History/Redownload?historyId=<#= HistoryId #>&episodeId=<#= EpisodeId #>\" onclick=\"redownload(<#= HistoryId #>, <#= EpisodeId #>); return false;\"><img src='../../Content/Images/Downloading.png' alt='Redownload' title='Redownload Episode' class='searchImage' /></a>")
-                                     .Width("40");
-                             })
-                .DetailView(detailView => detailView.ClientTemplate(
-                    "<fieldset>" +
-                    "<div><b>Overview: </b><#= EpisodeOverview #></div>" +
-                    "<div><b>NZB Title: </b><#= NzbTitle #></div>" +
-                    "<div><b>Proper: </b><#= IsProper #></div>" +
-                    "</fieldset>"
-                                              ))
-                .DataBinding(data => data.Ajax().Select("_AjaxBinding", "History"))
-                .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.Date).Descending()).Enabled(true))
-                .Pageable(
-                    c =>
-                    c.PageSize(20).Position(GridPagerPosition.Bottom).Style(GridPagerStyles.NextPrevious))
-                .Render();}
-    </div>
-}
+<div class="grid-container">
+    @{Html.Telerik().Grid<HistoryModel>().Name("history")
+              .TableHtmlAttributes(new { @class = "Grid" })
+              .Columns(columns =>
+                           {
+                               columns.Bound(c => c.Indexer)
+                                       .ClientTemplate("<center><img alt='<#= Indexer #>' src='" + Url.Content("~/Content/Images/Indexers/") + "<#= Indexer #>.png' /></center>")
+                                       .Title("")
+                                       .Width(20);
+                               columns.Bound(c => c.SeriesTitle)
+                                       .ClientTemplate("<a href=" +
+                                                       Url.Action("Details", "Series", new { seriesId = "<#= SeriesId #>" }) +
+                                                       "><#= SeriesTitle #></a>")
+                                       .Title("Series Title");
+                               columns.Bound(c => c.SeasonNumber).Title("Season").Width(1);
+                               columns.Bound(c => c.EpisodeNumber).Title("Episode").Width(1);
+                               columns.Bound(c => c.EpisodeTitle).Title("Episode Title");
+                               columns.Bound(c => c.Quality).Title("Quality").Width(50);
+                               columns.Bound(c => c.Date).Title("Grabbed on");
+                               columns.Bound(c => c.HistoryId)
+                                       .Title("Actions")
+                                       .ClientTemplate("<a href=\"../History/Delete?historyId=<#= HistoryId #>\" onclick=\"deleteHistoryRow(<#= HistoryId #>); return false;\"><img src='../../Content/Images/X.png' alt='Delete' title='Delete from History' class='searchImage' /></a>" +
+                                                       "<a href=\"../History/Redownload?historyId=<#= HistoryId #>&episodeId=<#= EpisodeId #>\" onclick=\"redownload(<#= HistoryId #>, <#= EpisodeId #>); return false;\"><img src='../../Content/Images/Downloading.png' alt='Redownload' title='Redownload Episode' class='searchImage' /></a>")
+                                       .Width("40");
+                           })
+              .DetailView(detailView => detailView.ClientTemplate(
+                                                                  "<fieldset>" +
+                                                                  "<div><b>Overview: </b><#= EpisodeOverview #></div>" +
+                                                                  "<div><b>NZB Title: </b><#= NzbTitle #></div>" +
+                                                                  "<div><b>Proper: </b><#= IsProper #></div>" +
+                                                                  "</fieldset>"
+                                                ))
+              .DataBinding(data => data.Ajax().Select("_AjaxBinding", "History"))
+              .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.Date).Descending()).Enabled(true))
+              .Pageable(
+                        c =>
+                        c.PageSize(20).Position(GridPagerPosition.Bottom).Style(GridPagerStyles.NextPrevious))
+              .Render();}
+</div>
 
 <script type="text/javascript">
     deleteHistoryRowUrl = '../History/Delete';

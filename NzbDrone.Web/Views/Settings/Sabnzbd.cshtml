@@ -5,7 +5,7 @@
     <link rel="stylesheet" type="text/css" href="../../Content/Settings.css" />
 }
 <div id="stylized">
-    @using (Html.BeginForm("SaveSabnzbd", "Settings", FormMethod.Post, new { id = "form", name = "form", @class = "settingsForm" }))
+    @using (Html.BeginForm("SaveSabnzbd", "Settings", FormMethod.Post, new { id = "SabForm", name = "SabForm", @class = "settingsForm" }))
     {
         <label class="labelClass">
             Auto-Configure <span class="small">If access to SABnzbd doesn't require a username +
@@ -54,14 +54,14 @@
         </label>
         @Html.TextBoxFor(m => m.SabDropDirectory, new { @class = "inputClass folderLookup" })
 
-        <button type="submit" id="save_button" disabled="disabled">
+        <button type="submit" class="save_button" disabled="disabled">
             Save</button>
     }
 </div>
 <div id="result" class="hiddenResult">
 </div>
 @section Scripts{
-    <script src="../../Scripts/NzbDrone/settingsForm.js" type="text/javascript"></script>
+
     <script type="text/javascript">
         var autoConfigureSabUrl = '@Url.Action("AutoConfigureSab", "Settings")';
 

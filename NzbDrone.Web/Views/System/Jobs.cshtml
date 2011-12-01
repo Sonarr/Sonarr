@@ -1,10 +1,9 @@
-﻿@using System.Collections
-@using NzbDrone.Web.Models
+﻿@using NzbDrone.Web.Models
 @model IEnumerable<NzbDrone.Core.Repository.JobDefinition>
 @section TitleContent{
 Jobs
 }
-@section MainContent{
+
     @{Html.Telerik().Grid(Model).Name("Grid")
     .Render();}
 
@@ -15,4 +14,4 @@ Jobs
           .Columns(c => c.Bound(g => g.TargetId).Title("Target"))
           .Columns(c => c.Bound(g => g.SecondaryTargetId).Title("Secondary Target"))
         .Render();}
-}
+

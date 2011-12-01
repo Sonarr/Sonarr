@@ -71,7 +71,7 @@
         <li>@Ajax.ActionLink("Rename Episodes", "RenameEpisodes", "Episode", new { seriesId = Model.SeriesId }, null)</li>
     </ul>
 }
-@section MainContent{
+
     <div id="banner-container">
         @{
             var bannerUrl = "../../Content/Images/img03.jpg";
@@ -146,7 +146,7 @@
             .Render();}
         </div>
     }
-}
+
 @section Scripts{
     <script type="text/javascript">
         seriesId = @Model.SeriesId;

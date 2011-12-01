@@ -372,6 +372,7 @@
     <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
     <Content Include="Scripts\jquery.hotkeys.js" />
+    <Content Include="Scripts\jquery.livequery.js" />
     <Content Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
@@ -383,7 +384,7 @@
     <Content Include="Scripts\NzbDrone\LocalSearch.js" />
     <Content Include="Scripts\NzbDrone\Notification.js" />
     <Content Include="Scripts\NzbDrone\seriesDetails.js" />
-    <Content Include="Scripts\NzbDrone\settingsForm.js" />
+    <Content Include="Scripts\NzbDrone\AutoBind.js" />
     <Content Include="Scripts\jquery-ui-1.8.16.js" />
     <Content Include="Scripts\jquery-ui-1.8.16.min.js" />
     <Content Include="Scripts\jquery.gritter.js" />
@@ -414,7 +415,6 @@
     <Content Include="Views\Settings\Notifications.cshtml" />
     <Content Include="Views\Settings\Quality.cshtml" />
     <Content Include="Views\AddSeries\RootDir.cshtml" />
-    <Content Include="Views\Settings\SubMenu.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Shared\Footer.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
@@ -463,9 +463,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\AddSeries\RootList.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Settings\Test.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Misnamed\Index.cshtml" />
