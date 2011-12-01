@@ -239,7 +239,9 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
             timers[0].Interval.Should().Be(fakeJob.DefaultInterval);
             timers[0].Name.Should().Be(fakeJob.Name);
             timers[0].TypeName.Should().Be(fakeJob.GetType().ToString());
-            timers[0].LastExecution.Should().HaveYear(2000);
+            timers[0].LastExecution.Should().HaveYear(DateTime.Now.Year);
+            timers[0].LastExecution.Should().HaveMonth(DateTime.Now.Month);
+            timers[0].LastExecution.Should().HaveDay(DateTime.Today.Day);
             timers[0].Enable.Should().BeTrue();
         }
 
