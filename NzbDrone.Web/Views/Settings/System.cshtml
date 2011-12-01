@@ -6,7 +6,7 @@
     <link rel="stylesheet" type="text/css" href="../../Content/Settings.css" />
 }
 <div id="stylized">
-    @using (Html.BeginForm("SaveSystem", "Settings", FormMethod.Post, new { id = "form", name = "form", @class = "settingsForm" }))
+    @using (Html.BeginForm("SaveSystem", "Settings", FormMethod.Post, new { id = "SystemForm", name = "SystemForm", @class = "settingsForm" }))
     {
         @Html.ValidationSummary(true, "Unable to save your settings. Please correct the errors and try again.")
         <label class="labelClass">@Html.LabelFor(m => m.LaunchBrowser)
@@ -24,10 +24,10 @@
         </label>
         @Html.DropDownListFor(m => m.AuthenticationType, Model.AuthTypeSelectList, new { @class = "inputClass" })
         
-        <button type="submit" id="save_button" disabled="disabled">
+        <button type="submit" class="save_button" disabled="disabled">
             Save</button>
     }
 </div>
 @section Scripts{
-    <script src="../../Scripts/NzbDrone/settingsForm.js" type="text/javascript"></script>
+
 }

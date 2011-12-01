@@ -7,7 +7,7 @@
     <link href="../../Content/QualitySettings.css" rel="stylesheet" type="text/css" />
 }
 <div id="stylized">
-    @using (Html.BeginForm("SaveQuality", "Settings", FormMethod.Post, new { id = "form", name = "form" }))
+    @using (Html.BeginForm("SaveQuality", "Settings", FormMethod.Post, new { id = "QualityForm", name = "QualityForm" }))
     {
         <div id="top" class="settingsForm">
             <label class="labelClass">@Html.LabelFor(m => m.DefaultQualityProfileId)
@@ -81,14 +81,14 @@
                 </div>
             </div>
             <br />
-            <button type="submit" id="save_button" disabled="disabled">
+            <button type="submit" class="save_button" disabled="disabled">
                 Save</button>
         </div>
     }
 </div>
 @section Scripts{
     <script src="../../Scripts/MicrosoftAjax.js" type="text/javascript"></script>
-    <script src="../../Scripts/NzbDrone/settingsForm.js" type="text/javascript"></script>
+
     <script type="text/javascript">
         var deleteQualityProfileUrl = '@Url.Action("DeleteQualityProfile", "Settings")';
 

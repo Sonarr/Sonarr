@@ -30,7 +30,7 @@
     </style>
 }
 <div id="stylized">
-    @using (Html.BeginForm("SaveNotifications", "Settings", FormMethod.Post, new { id = "form", name = "form", @class = "settingsForm" }))
+    @using (Html.BeginForm("SaveNotifications", "Settings", FormMethod.Post, new { id = "NotificationForm", name = "NotificationForm", @class = "settingsForm" }))
     {
         <div id="accordion2">
             <h3>
@@ -50,12 +50,12 @@
             @{Html.RenderPartial("Prowl", Model);}
         </div>
             
-        <button type="submit" id="save_button" disabled="disabled">
+        <button type="submit" class="save_button" disabled="disabled">
             Save</button>
     }
 </div>
 @section Scripts{
-    <script src="../../Scripts/NzbDrone/settingsForm.js" type="text/javascript"></script>
+
     <script type="text/javascript">
         $(function () {
             $("#accordion2").accordion({
