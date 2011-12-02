@@ -4,7 +4,7 @@ using NzbDrone.Core.Providers;
 
 namespace NzbDrone.Core.Jobs
 {
-    public abstract class UpdateSceneMappingsJob : IJob
+    public class UpdateSceneMappingsJob : IJob
     {
         private readonly SceneMappingProvider _sceneNameMappingProvider;
 
