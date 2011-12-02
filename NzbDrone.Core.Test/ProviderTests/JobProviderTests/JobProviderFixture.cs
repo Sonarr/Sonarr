@@ -289,20 +289,41 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
         {
             IList<IJob> fakeJobs = new List<IJob> { fakeJob };
             Mocker.SetConstant(fakeJobs);
-            
+
             WithRealDb();
             var deletedJob = Builder<JobDefinition>.CreateNew().Build();
             Db.Insert(deletedJob);
             var jobProvider = Mocker.Resolve<JobProvider>();
-            
+
             //Act
             jobProvider.Initialize();
 
             //Assert
             var registeredJobs = Db.Fetch<JobDefinition>();
             registeredJobs.Should().HaveCount(1);
-            registeredJobs.Should().NotContain(c => c.Name == deletedJob.Name);
+            registeredJobs.Should().NotContain(c => c.TypeName == deletedJob.TypeName);
+        }
 
+        [Test]
+        public void inti_should_removed_jobs_that_no_longer_exist_even_with_same_name()
+        {
+            IList<IJob> fakeJobs = new List<IJob> { fakeJob };
+            Mocker.SetConstant(fakeJobs);
+
+            WithRealDb();
+            var deletedJob = Builder<JobDefinition>.CreateNew()
+                .With(c => c.Name = fakeJob.Name).Build();
+            
+            Db.Insert(deletedJob);
+            var jobProvider = Mocker.Resolve<JobProvider>();
+
+            //Act
+            jobProvider.Initialize();
+
+            //Assert
+            var registeredJobs = Db.Fetch<JobDefinition>();
+            registeredJobs.Should().HaveCount(1);
+            registeredJobs.Should().NotContain(c => c.TypeName == deletedJob.TypeName);
         }
 
         [Test]

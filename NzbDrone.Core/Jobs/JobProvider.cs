@@ -76,7 +76,7 @@ namespace NzbDrone.Core.Jobs
 
             foreach (var currentJob in currentJobs)
             {
-                if (!_jobs.Any(c => c.Name == currentJob.Name))
+                if (!_jobs.Any(c => c.GetType().ToString() == currentJob.TypeName))
                 {
                     logger.Debug("Removing job from database '{0}'", currentJob.Name);
                     _database.Delete(currentJob);
