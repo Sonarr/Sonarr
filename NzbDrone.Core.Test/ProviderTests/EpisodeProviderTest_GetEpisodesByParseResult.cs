@@ -127,7 +127,6 @@ namespace NzbDrone.Core.Test.ProviderTests
             ep.Should().HaveCount(2);
             Db.Fetch<Episode>().Should().HaveCount(2);
             ep.First().ShouldHave().AllPropertiesBut(e => e.Series);
-            parseResult.EpisodeTitle.Should().Be(fakeEpisode.Title);
         }
 
         [Test]
@@ -312,6 +311,78 @@ namespace NzbDrone.Core.Test.ProviderTests
             //Assert
             episodes.Should().BeEmpty();
             Db.Fetch<Episode>().Should().BeEmpty();
+        }
+
+        [Test]
+        public void GetEpisodeParseResult_should_return_multiple_titles_for_multiple_episodes()
+        {
+            WithRealDb();
+
+            var fakeEpisode = Builder<Episode>.CreateNew()
+                    .With(e => e.SeriesId = 1)
+                    .With(e => e.SeasonNumber = 2)
+                    .With(e => e.EpisodeNumber = 10)
+                    .With(e => e.Title = "Title1")
+                    .Build();
+
+            var fakeEpisode2 = Builder<Episode>.CreateNew()
+                    .With(e => e.SeriesId = 1)
+                    .With(e => e.SeasonNumber = 2)
+                    .With(e => e.EpisodeNumber = 11)
+                    .With(e => e.Title = "Title2")
+                    .Build();
+
+            var fakeSeries = Builder<Series>.CreateNew().Build();
+
+            Db.Insert(fakeEpisode);
+            Db.Insert(fakeEpisode2);
+            Db.Insert(fakeSeries);
+
+            var parseResult = new EpisodeParseResult
+            {
+                Series = fakeSeries,
+                SeasonNumber = 2,
+                EpisodeNumbers = new List<int> { 10, 11 }
+            };
+
+            var ep = Mocker.Resolve<EpisodeProvider>().GetEpisodesByParseResult(parseResult);
+
+            ep.Should().HaveCount(2);
+            Db.Fetch<Episode>().Should().HaveCount(2);
+            ep.First().ShouldHave().AllPropertiesBut(e => e.Series);
+            parseResult.EpisodeTitle.Should().Be(fakeEpisode.Title + " + " + fakeEpisode2.Title);
+        }
+
+        [Test]
+        public void GetEpisodeParseResult_should_return_single_title_for_single_episode()
+        {
+            WithRealDb();
+
+            var fakeEpisode = Builder<Episode>.CreateNew()
+                    .With(e => e.SeriesId = 1)
+                    .With(e => e.SeasonNumber = 2)
+                    .With(e => e.EpisodeNumber = 10)
+                    .With(e => e.Title = "Title1")
+                    .Build();
+
+            var fakeSeries = Builder<Series>.CreateNew().Build();
+
+            Db.Insert(fakeEpisode);
+            Db.Insert(fakeSeries);
+
+            var parseResult = new EpisodeParseResult
+            {
+                Series = fakeSeries,
+                SeasonNumber = 2,
+                EpisodeNumbers = new List<int> { 10 }
+            };
+
+            var ep = Mocker.Resolve<EpisodeProvider>().GetEpisodesByParseResult(parseResult);
+
+            ep.Should().HaveCount(1);
+            Db.Fetch<Episode>().Should().HaveCount(1);
+            ep.First().ShouldHave().AllPropertiesBut(e => e.Series);
+            parseResult.EpisodeTitle.Should().Be(fakeEpisode.Title);
         }
     }
 }

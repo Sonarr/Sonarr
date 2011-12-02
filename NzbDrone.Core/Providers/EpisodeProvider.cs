@@ -161,6 +161,7 @@ namespace NzbDrone.Core.Providers
                 if (episodeInfo != null)
                 {
                     result.Add(episodeInfo);
+                    parseResult.EpisodeTitle = episodeInfo.Title;
                 }
 
                 return result;
@@ -199,7 +200,8 @@ namespace NzbDrone.Core.Providers
                 if (episodeInfo != null)
                 {
                     result.Add(episodeInfo);
-                    parseResult.EpisodeTitle = episodeInfo.Title;
+                    parseResult.EpisodeTitle += String.Format(" + {0}", episodeInfo.Title);
+                    parseResult.EpisodeTitle = parseResult.EpisodeTitle.Trim('+', ' ');
                 }
                 else
                 {
