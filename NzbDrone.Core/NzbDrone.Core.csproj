@@ -223,7 +223,6 @@
     <Compile Include="Model\AtomicParsleyTitleType.cs" />
     <Compile Include="Model\ConnectionInfoModel.cs" />
     <Compile Include="Model\PostDownloadStatusType.cs" />
-    <Compile Include="Model\ExternalNotificationType.cs" />
     <Compile Include="Model\JobQueueItem.cs" />
     <Compile Include="Model\LanguageType.cs" />
     <Compile Include="Model\MisnamedEpisodeModel.cs" />
@@ -239,24 +238,25 @@
     <Compile Include="Providers\Converting\AtomicParsleyProvider.cs" />
     <Compile Include="Providers\Converting\HandbrakeProvider.cs" />
     <Compile Include="Providers\Indexer\Newznab.cs" />
-    <Compile Include="Providers\Jobs\RecentBacklogSearchJob.cs" />
-    <Compile Include="Providers\Jobs\TrimLogsJob.cs" />
+    <Compile Include="Jobs\RecentBacklogSearchJob.cs" />
+    <Compile Include="Jobs\TrimLogsJob.cs" />
+    <Compile Include="Jobs\JobProvider.cs" />
+    <Compile Include="Jobs\RenameSeasonJob.cs" />
+    <Compile Include="Providers\Jobs\RenameSeriesJob.cs" />
     <Compile Include="Providers\NewznzbProvider.cs" />
     <Compile Include="Providers\ExternalNotification\Prowl.cs" />
-    <Compile Include="Providers\Jobs\AppUpdateJob.cs" />
+    <Compile Include="Jobs\AppUpdateJob.cs" />
     <Compile Include="Providers\ProwlProvider.cs" />
     <Compile Include="Providers\Core\UdpProvider.cs" />
     <Compile Include="Providers\ExternalNotification\Growl.cs" />
     <Compile Include="Providers\ExternalNotification\Twitter.cs" />
     <Compile Include="Providers\ExternalNotification\Smtp.cs" />
     <Compile Include="Providers\GrowlProvider.cs" />
-    <Compile Include="Providers\Jobs\BacklogSearchJob.cs" />
-    <Compile Include="Providers\Jobs\BannerDownloadJob.cs" />
-    <Compile Include="Providers\Jobs\ConvertEpisodeJob.cs" />
-    <Compile Include="Providers\Jobs\RenameSeriesJob.cs" />
-    <Compile Include="Providers\Jobs\SeriesSearchJob.cs" />
-    <Compile Include="Providers\Jobs\RenameSeasonJob.cs" />
-    <Compile Include="Providers\Jobs\SeasonSearchJob.cs" />
+    <Compile Include="Jobs\BacklogSearchJob.cs" />
+    <Compile Include="Jobs\BannerDownloadJob.cs" />
+    <Compile Include="Jobs\ConvertEpisodeJob.cs" />
+    <Compile Include="Jobs\SeriesSearchJob.cs" />
+    <Compile Include="Jobs\SeasonSearchJob.cs" />
     <Compile Include="Providers\MisnamedProvider.cs" />
     <Compile Include="Providers\PostDownloadProvider.cs" />
     <Compile Include="Providers\QualityTypeProvider.cs" />
@@ -279,19 +279,18 @@
     <Compile Include="Providers\Indexer\SyndicationFeedXmlReader.cs" />
     <Compile Include="Providers\AutoConfigureProvider.cs" />
     <Compile Include="Providers\Indexer\NzbMatrix.cs" />
-    <Compile Include="Providers\Jobs\UpdateSceneMappingsJob.cs" />
-    <Compile Include="Providers\Jobs\PostDownloadScanJob.cs" />
-    <Compile Include="Providers\Jobs\RenameEpisodeJob.cs" />
-    <Compile Include="Providers\Jobs\EpisodeSearchJob.cs" />
-    <Compile Include="Providers\Jobs\DeleteSeriesJob.cs" />
-    <Compile Include="Providers\Jobs\DiskScanJob.cs" />
-    <Compile Include="Providers\Jobs\ImportNewSeriesJob.cs" />
-    <Compile Include="Providers\Jobs\JobProvider.cs" />
+    <Compile Include="Jobs\UpdateSceneMappingsJob.cs" />
+    <Compile Include="Jobs\PostDownloadScanJob.cs" />
+    <Compile Include="Jobs\RenameEpisodeJob.cs" />
+    <Compile Include="Jobs\EpisodeSearchJob.cs" />
+    <Compile Include="Jobs\DeleteSeriesJob.cs" />
+    <Compile Include="Jobs\DiskScanJob.cs" />
+    <Compile Include="Jobs\ImportNewSeriesJob.cs" />
     <Compile Include="Providers\Indexer\Newzbin.cs" />
     <Compile Include="Providers\Indexer\NzbsRUs.cs" />
-    <Compile Include="Providers\Jobs\IJob.cs" />
-    <Compile Include="Providers\Jobs\RssSyncJob.cs" />
-    <Compile Include="Providers\Jobs\UpdateInfoJob.cs" />
+    <Compile Include="Jobs\IJob.cs" />
+    <Compile Include="Jobs\RssSyncJob.cs" />
+    <Compile Include="Jobs\UpdateInfoJob.cs" />
     <Compile Include="Providers\SceneMappingProvider.cs" />
     <Compile Include="Providers\Xbmc\EventClientProvider.cs" />
     <Compile Include="Repository\NewznabDefinition.cs" />
@@ -299,11 +298,9 @@
     <Compile Include="Repository\JobDefinition.cs" />
     <Compile Include="Repository\IndexerDefinition.cs" />
     <Compile Include="Model\EpisodeParseResult.cs" />
-    <Compile Include="Model\EpisodeRenameModel.cs" />
     <Compile Include="Model\EpisodeSortingType.cs" />
     <Compile Include="Model\EpisodeStatusType.cs" />
     <Compile Include="Model\SabnzbdPriorityType.cs" />
-    <Compile Include="Model\SceneNameModel.cs" />
     <Compile Include="Model\SeasonParseResult.cs" />
     <Compile Include="Model\UpcomingEpisodesModel.cs" />
     <Compile Include="Providers\Indexer\IndexerBase.cs" />
@@ -386,6 +383,7 @@
     <Content Include="NzbDrone.ico" />
     <Content Include="license.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using NzbDrone.Common;
+using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Jobs;
 using NzbDrone.Web.Models;

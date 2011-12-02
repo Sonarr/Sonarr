@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using MvcMiniProfiler;
 using NzbDrone.Core;
 using NzbDrone.Core.Helpers;
+using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Jobs;
 using NzbDrone.Core.Repository;

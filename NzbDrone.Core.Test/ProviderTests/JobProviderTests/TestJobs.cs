@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading;
+using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers.Jobs;
 

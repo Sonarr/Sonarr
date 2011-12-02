@@ -1,7 +1,5 @@
 ﻿using System;
 using System.IO;
-using NUnit.Framework;
-using Ninject;
 using NzbDrone.Common;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Test.Common;
@@ -10,7 +8,6 @@ using PetaPoco;
 namespace NzbDrone.Core.Test.Framework
 {
     public class CoreTest : TestBase
-    // ReSharper disable InconsistentNaming
     {
         static CoreTest()
         {
@@ -46,17 +43,16 @@ namespace NzbDrone.Core.Test.Framework
 
                 return _db;
             }
-            private set { _db = value; }
         }
 
         protected void WithRealDb()
         {
-            Db = TestDbHelper.GetEmptyDatabase();
+            _db = TestDbHelper.GetEmptyDatabase();
             Mocker.SetConstant(Db);
         }
 
 
-        protected ProgressNotification MockNotification
+        protected static ProgressNotification MockNotification
         {
             get
             {

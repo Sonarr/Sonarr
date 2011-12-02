@@ -2,8 +2,9 @@
 using System.Linq;
 using NLog;
 using NzbDrone.Core.Model.Notification;
+using NzbDrone.Core.Providers;
 
-namespace NzbDrone.Core.Providers.Jobs
+namespace NzbDrone.Core.Jobs
 {
     public class RecentBacklogSearchJob : IJob
     {

@@ -52,11 +52,6 @@ namespace NzbDrone.Web.Controllers
             _seriesProvider = seriesProvider;
         }
 
-        public ActionResult Test()
-        {
-            return View();
-        }
-
         public JsonResult TestResults(string q)
         {
             var results = new List<TvDbSearchResultModel>();
@@ -312,10 +307,6 @@ namespace NzbDrone.Web.Controllers
             return new JsonResult { Data = "ok" };
         }
 
-        public ActionResult SubMenu()
-        {
-            return PartialView();
-        }
 
         public QualityModel GetUpdatedProfileList()
         {

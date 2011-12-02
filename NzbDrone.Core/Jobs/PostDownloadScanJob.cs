@@ -1,11 +1,13 @@
-﻿using System;
+﻿using System.Linq;
+using System;
 using NLog;
 using Ninject;
 using NzbDrone.Common;
 using NzbDrone.Core.Model.Notification;
+using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 
-namespace NzbDrone.Core.Providers.Jobs
+namespace NzbDrone.Core.Jobs
 {
     public class PostDownloadScanJob : IJob
     {

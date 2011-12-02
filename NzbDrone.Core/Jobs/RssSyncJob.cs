@@ -5,9 +5,10 @@ using Ninject;
 using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
+using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Indexer;
 
-namespace NzbDrone.Core.Providers.Jobs
+namespace NzbDrone.Core.Jobs
 {
     public class RssSyncJob : IJob
     {

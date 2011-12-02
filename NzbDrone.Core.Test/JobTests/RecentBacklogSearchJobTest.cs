@@ -5,6 +5,7 @@ using System.Linq;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Jobs;

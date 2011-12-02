@@ -1,18 +1,20 @@
-﻿//https://github.com/kayone/NzbDrone/blob/master/NzbDrone.Core/Providers/Jobs/JobProvider.cs
+//https://github.com/kayone/NzbDrone/blob/master/NzbDrone.Core/Providers/Jobs/JobProvider.cs
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using Ninject;
 using NLog;
+using Ninject;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
+using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
 using PetaPoco;
 
-namespace NzbDrone.Core.Providers.Jobs
+namespace NzbDrone.Core.Jobs
 {
     /// <summary>
     /// Provides a background task runner, tasks could be queue either by the scheduler using QueueScheduled()

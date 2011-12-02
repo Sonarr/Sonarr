@@ -5,9 +5,10 @@ using System.Linq;
 using Ninject;
 using NLog;
 using NzbDrone.Core.Model.Notification;
-using NzbDrone.Core.Repository;
+using NzbDrone.Core.Providers;
+using NzbDrone.Core.Providers.Jobs;
 
-namespace NzbDrone.Core.Providers.Jobs
+namespace NzbDrone.Core.Jobs
 {
     /// <summary>
     /// This job processes newly added jobs by downloading their info

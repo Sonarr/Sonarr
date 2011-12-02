@@ -1,10 +1,13 @@
-﻿using System;
+﻿using System.Linq;
+using System;
 using Ninject;
 using NLog;
 using NzbDrone.Core.Model.Notification;
+using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Converting;
+using NzbDrone.Core.Providers.Jobs;
 
-namespace NzbDrone.Core.Providers.Jobs
+namespace NzbDrone.Core.Jobs
 {
     public class ConvertEpisodeJob : IJob
     {
