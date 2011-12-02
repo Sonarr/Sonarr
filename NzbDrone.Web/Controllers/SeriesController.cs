@@ -93,7 +93,7 @@ namespace NzbDrone.Web.Controllers
         {
             using (MiniProfiler.StepStatic("Controller"))
             {
-                var episodes = GetEpisodeModels(_episodeProvider.GetEpisodesBySeason(seriesId, seasonNumber));
+                var episodes = GetEpisodeModels(_episodeProvider.GetEpisodesBySeason(seriesId, seasonNumber)).OrderByDescending(e => e.EpisodeNumber);
                 return View(new GridModel(episodes));
             }
         }
