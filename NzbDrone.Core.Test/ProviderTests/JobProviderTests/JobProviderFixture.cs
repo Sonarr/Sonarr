@@ -8,7 +8,6 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Providers.Jobs;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
 using NzbDrone.Test.Common.AutoMoq;

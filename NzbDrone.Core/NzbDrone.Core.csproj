@@ -242,7 +242,7 @@
     <Compile Include="Jobs\TrimLogsJob.cs" />
     <Compile Include="Jobs\JobProvider.cs" />
     <Compile Include="Jobs\RenameSeasonJob.cs" />
-    <Compile Include="Providers\Jobs\RenameSeriesJob.cs" />
+    <Compile Include="Jobs\RenameSeriesJob.cs" />
     <Compile Include="Providers\NewznzbProvider.cs" />
     <Compile Include="Providers\ExternalNotification\Prowl.cs" />
     <Compile Include="Jobs\AppUpdateJob.cs" />
@@ -383,7 +383,9 @@
     <Content Include="NzbDrone.ico" />
     <Content Include="license.txt" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Providers\Jobs\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

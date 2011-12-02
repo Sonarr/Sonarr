@@ -3,7 +3,6 @@ using System;
 using Ninject;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
-using NzbDrone.Core.Providers.Jobs;
 
 namespace NzbDrone.Core.Jobs
 {

@@ -3,7 +3,6 @@ using System.Web;
 using System.Web.Caching;
 using NLog;
 using NzbDrone.Core.Jobs;
-using NzbDrone.Core.Providers.Jobs;
 
 namespace NzbDrone.Core
 {
