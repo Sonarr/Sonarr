@@ -242,7 +242,7 @@
     <Compile Include="Jobs\TrimLogsJob.cs" />
     <Compile Include="Jobs\JobProvider.cs" />
     <Compile Include="Jobs\RenameSeasonJob.cs" />
-    <Compile Include="Providers\Jobs\RenameSeriesJob.cs" />
+    <Compile Include="Jobs\RenameSeriesJob.cs" />
     <Compile Include="Providers\NewznzbProvider.cs" />
     <Compile Include="Providers\ExternalNotification\Prowl.cs" />
     <Compile Include="Jobs\AppUpdateJob.cs" />

@@ -3,7 +3,6 @@ using System.Linq;
 using NLog;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
-using NzbDrone.Core.Providers.Jobs;
 using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Jobs

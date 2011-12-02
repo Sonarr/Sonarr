@@ -10,7 +10,6 @@ using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
-using NzbDrone.Core.Providers.Jobs;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.JobTests

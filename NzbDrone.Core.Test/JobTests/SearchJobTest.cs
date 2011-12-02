@@ -4,7 +4,6 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Model.Notification;
-using NzbDrone.Core.Providers.Jobs;
 using NzbDrone.Test.Common.AutoMoq;
 
 namespace NzbDrone.Core.Test.JobTests

@@ -5,7 +5,6 @@ using System.Web.Mvc;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
-using NzbDrone.Core.Providers.Jobs;
 using NzbDrone.Web.Models;
 using Telerik.Web.Mvc;
 
