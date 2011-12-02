@@ -117,6 +117,17 @@ namespace NzbDrone.Core.Providers
                 return seasonResult;
             }
 
+            if (parseResult.Series.IsDaily)
+            {
+                var dailyResult = String.Format("{0} - {1:yyyy-MM-dd} - {2} [{3}]", new DirectoryInfo(parseResult.Series.Path).Name,
+                                     parseResult.AirDate, parseResult.EpisodeTitle, parseResult.Quality.QualityType);
+
+                if (parseResult.Quality.Proper)
+                    dailyResult += " [Proper]";
+
+                return dailyResult;
+            }
+
             //Show Name - 1x01-1x02 - Episode Name
             //Show Name - 1x01 - Episode Name
             var episodeString = new List<String>();

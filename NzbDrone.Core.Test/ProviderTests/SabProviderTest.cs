@@ -321,6 +321,32 @@ namespace NzbDrone.Core.Test.ProviderTests
             Assert.AreEqual(expected, actual);
         }
 
+        [TestCase(true, "My Series Name - 2011-12-01 - My Episode Title [Bluray720p] [Proper]")]
+        [TestCase(false, "My Series Name - 2011-12-01 - My Episode Title [Bluray720p]")]
+        public void sab_daily_series_title(bool proper, string expected)
+        {
+            var mocker = new AutoMoqer();
+
+            var series = Builder<Series>.CreateNew()
+                .With(c => c.Path = @"d:\tv shows\My Series Name")
+                .With(c => c.IsDaily = true)
+                .Build();
+
+            var parsResult = new EpisodeParseResult
+            {
+                AirDate = new DateTime(2011, 12,1),
+                Quality = new Quality(QualityTypes.Bluray720p, proper),
+                Series = series,
+                EpisodeTitle = "My Episode Title",
+            };
+
+            //Act
+            var actual = mocker.Resolve<SabProvider>().GetSabTitle(parsResult);
+
+            //Assert
+            Assert.AreEqual(expected, actual);
+        }
+
         [Test]
         [Explicit]
         public void AddNewzbingByUrlSuccess()
