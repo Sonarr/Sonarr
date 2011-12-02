@@ -1,11 +1,14 @@
-﻿using System.Diagnostics;
+﻿using System.Linq;
+using System.Diagnostics;
 using System.IO;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Model.Notification;
+using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
+using NzbDrone.Core.Providers.Jobs;
 
-namespace NzbDrone.Core.Providers.Jobs
+namespace NzbDrone.Core.Jobs
 {
     public class AppUpdateJob : IJob
     {

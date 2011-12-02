@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web.Mvc;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.Jobs;

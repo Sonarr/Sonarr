@@ -6,6 +6,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
@@ -121,7 +122,7 @@ namespace NzbDrone.Core.Test.JobTests
         }
 
         [Test]
-        [Category(IntegrationTest)]
+        [Category(INTEGRATION_TEST)]
         public void Should_download_and_extract_to_temp_folder()
         {
 

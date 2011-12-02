@@ -3,9 +3,10 @@ using System.Linq;
 using Ninject;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model.Notification;
+using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
 
-namespace NzbDrone.Core.Providers.Jobs
+namespace NzbDrone.Core.Jobs
 {
     public class UpdateInfoJob : IJob
     {

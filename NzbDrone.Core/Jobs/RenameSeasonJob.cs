@@ -1,10 +1,11 @@
-﻿using System;
-using Ninject;
+using System.Linq;
+using System;
 using NLog;
+using Ninject;
 using NzbDrone.Core.Model.Notification;
-using NzbDrone.Core.Providers.Core;
+using NzbDrone.Core.Providers;
 
-namespace NzbDrone.Core.Providers.Jobs
+namespace NzbDrone.Core.Jobs
 {
     public class RenameSeasonJob : IJob
     {

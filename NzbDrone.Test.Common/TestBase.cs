@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.IO;
-
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
@@ -9,12 +8,11 @@ using NzbDrone.Test.Common.AutoMoq;
 namespace NzbDrone.Test.Common
 {
     public class TestBase : LoggingTest
-    // ReSharper disable InconsistentNaming
     {
 
-        protected const string IntegrationTest = "Integration Test";
+        protected const string INTEGRATION_TEST = "Integration Test";
 
-        protected AutoMoqer Mocker;
+        protected AutoMoqer Mocker { get; private set; }
 
         protected string VirtualPath
         {
@@ -46,7 +44,7 @@ namespace NzbDrone.Test.Common
 
         }
 
-        protected virtual void WithStrictMocker()
+        protected protected void WithStrictMocker()
         {
             Mocker = new AutoMoqer(MockBehavior.Strict);
         }

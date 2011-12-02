@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using NLog;
+﻿using System.Linq;
+using System;
 using Ninject;
-using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
-using NzbDrone.Core.Repository;
+using NzbDrone.Core.Providers;
+using NzbDrone.Core.Providers.Jobs;
 
-namespace NzbDrone.Core.Providers.Jobs
+namespace NzbDrone.Core.Jobs
 {
     public class EpisodeSearchJob : IJob
     {

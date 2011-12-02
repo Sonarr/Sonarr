@@ -1,8 +1,8 @@
-﻿using System;
-using Ninject;
+using System;
 using NLog;
+using Ninject;
+using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Model.Notification;
-using NzbDrone.Core.Providers.Core;
 
 namespace NzbDrone.Core.Providers.Jobs
 {
