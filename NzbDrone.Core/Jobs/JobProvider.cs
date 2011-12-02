@@ -64,40 +64,45 @@ namespace NzbDrone.Core.Jobs
             }
         }
 
-        /// <summary>
-        /// Returns a list of all registered jobs
-        /// </summary>
         public virtual List<JobDefinition> All()
         {
             return _database.Fetch<JobDefinition>().ToList();
         }
 
-        /// <summary>
-        /// Initializes jobs in the database using the IJob instances that are
-        /// registered using ninject
-        /// </summary>
         public virtual void Initialize()
         {
-            logger.Debug("Initializing jobs. Count {0}", _jobs.Count());
-            var currentTimer = All();
+            var currentJobs = All();
+            logger.Debug("Initializing jobs. Available: {0} Existing:{1}", _jobs.Count(), currentJobs.Count);
 
-            foreach (var timer in _jobs)
+            foreach (var currentJob in currentJobs)
             {
-                var timerProviderLocal = timer;
-                if (!currentTimer.Exists(c => c.TypeName == timerProviderLocal.GetType().ToString()))
+                if (!_jobs.Any(c => c.Name == currentJob.Name))
+                {
+                    logger.Debug("Removing job from database '{0}'", currentJob.Name);
+                    _database.Delete(currentJob);
+                }
+            }
+
+            foreach (var job in _jobs)
+            {
+                var jobLocal = job;
+                if (!currentJobs.Exists(c => c.TypeName == jobLocal.GetType().ToString()))
                 {
                     var settings = new JobDefinition
                                        {
-                                           Enable = timerProviderLocal.DefaultInterval > 0,
-                                           TypeName = timer.GetType().ToString(),
-                                           Name = timerProviderLocal.Name,
-                                           Interval = timerProviderLocal.DefaultInterval,
+                                           Enable = jobLocal.DefaultInterval > 0,
+                                           TypeName = job.GetType().ToString(),
+                                           Name = jobLocal.Name,
+                                           Interval = jobLocal.DefaultInterval,
                                            LastExecution = DateTime.Now
                                        };
 
                     SaveDefinition(settings);
                 }
             }
+
+
+
         }
 
         /// <summary>
@@ -139,17 +144,6 @@ namespace NzbDrone.Core.Jobs
 
             pendingJobTypes.ForEach(jobType => QueueJob(jobType));
             logger.Trace("{0} Scheduled tasks have been added to the queue", pendingJobTypes.Count);
-        }
-
-        /// <summary>
-        /// Gets the next scheduled run time for a specific job
-        /// (Estimated due to schedule timer)
-        /// </summary>
-        /// <returns>DateTime of next scheduled job execution</returns>
-        public virtual DateTime NextScheduledRun(Type jobType)
-        {
-            var job = All().Where(t => t.TypeName == jobType.ToString()).Single();
-            return job.LastExecution.AddMinutes(job.Interval);
         }
 
         public virtual void QueueJob(Type jobType, int targetId = 0, int secondaryTargetId = 0)
