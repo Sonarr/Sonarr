@@ -64,17 +64,6 @@ namespace NzbDrone
                     Logger.ErrorException("Failed to open URL in default browser.", e);
                 }
             }
-            else
-            {
-                try
-                {
-                    _webClient.DownloadString(_iisProvider.AppUrl);
-                }
-                catch (Exception e)
-                {
-                    Logger.ErrorException("Failed to load home page.", e);
-                }
-            }
 
             _monitoringProvider.Start();
         }
