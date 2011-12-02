@@ -129,17 +129,16 @@ namespace NzbDrone.Core.Providers
             {
                 var episodeInfo = GetEpisode(parseResult.Series.SeriesId, parseResult.AirDate.Value);
 
-                //if still null we should add the temp episode
                 if (episodeInfo == null && autoAddNew)
                 {
                     Logger.Debug("Episode {0} doesn't exist in db. adding it now.", parseResult);
                     episodeInfo = new Episode
-                    {
-                        SeriesId = parseResult.Series.SeriesId,
-                        AirDate = parseResult.AirDate.Value,
-                        Title = "TBD",
-                        Overview = String.Empty
-                    };
+                                      {
+                                          SeriesId = parseResult.Series.SeriesId,
+                                          AirDate = parseResult.AirDate.Value,
+                                          Title = "TBD",
+                                          Overview = String.Empty
+                                      };
 
                     var episodesInSeries = GetEpisodeBySeries(parseResult.Series.SeriesId);
 
@@ -151,18 +150,19 @@ namespace NzbDrone.Core.Providers
 
                     //Find the latest episode number
                     var maxEpisodeNumber = episodesInSeries
-                                                .Where(w => w.SeasonNumber == episodeInfo.SeasonNumber)
-                                                .Select(s => s.EpisodeNumber).MaxOrDefault();
+                            .Where(w => w.SeasonNumber == episodeInfo.SeasonNumber)
+                            .Select(s => s.EpisodeNumber).MaxOrDefault();
 
                     //Set the episode number to max + 1
                     episodeInfo.EpisodeNumber = maxEpisodeNumber + 1;
 
                     AddEpisode(episodeInfo);
                 }
+                if (episodeInfo != null)
+                {
+                    result.Add(episodeInfo);
+                }
 
-                //Add to Result and Return (There will only be one episode to return)
-                //TODO: This should not add if episode is still null (When doesn't exist and autoadd is false.)
-                result.Add(episodeInfo);
                 return result;
             }
 
@@ -254,13 +254,6 @@ namespace NzbDrone.Core.Providers
             {
                 try
                 {
-                    //DateTime throws an error in SQLServer per message below:
-                    //SqlDateTime overflow. Must be between 1/1/1753 12:00:00 AM and 12/31/9999 11:59:59 PM.
-                    //So lets hack it so it works for SQLServer (as well as SQLite), perhaps we can find a better solution
-                    //Todo: Fix this hack
-                    if (episode.FirstAired < new DateTime(1753, 1, 1))
-                        episode.FirstAired = new DateTime(1753, 1, 1);
-
                     Logger.Trace("Updating info for [{0}] - S{1}E{2}", tvDbSeriesInfo.SeriesName, episode.SeasonNumber, episode.EpisodeNumber);
 
                     //first check using tvdbId, this should cover cases when and episode number in a season is changed
@@ -280,13 +273,15 @@ namespace NzbDrone.Core.Providers
 
                         //If it is Episode Zero Ignore it, since it is new
                         if (episode.EpisodeNumber == 0)
+                        {
                             episodeToUpdate.Ignored = true;
-
+                        }
                         //Else we need to check if this episode should be ignored based on IsIgnored rules
                         else
+                        {
                             episodeToUpdate.Ignored = IsIgnored(series.SeriesId, episode.SeasonNumber);
+                        }
                     }
-
                     else
                     {
                         updateList.Add(episodeToUpdate);
@@ -301,7 +296,6 @@ namespace NzbDrone.Core.Providers
 
                     if (episode.FirstAired.Year > 1900)
                         episodeToUpdate.AirDate = episode.FirstAired.Date;
-
                     else
                         episodeToUpdate.AirDate = null;
 
@@ -321,8 +315,8 @@ namespace NzbDrone.Core.Providers
             Logger.Info("Finished episode refresh for series: {0}. Successful: {1} - Failed: {2} ",
                          tvDbSeriesInfo.SeriesName, successCount, failCount);
 
-            //DeleteInvalidEpisodes
-            DeleteInvalidEpisodes(series, tvDbSeriesInfo);
+            //DeleteEpisodesNotInTvdb
+            DeleteEpisodesNotInTvdb(series, tvDbSeriesInfo);
         }
 
         public virtual void UpdateEpisode(Episode episode)
@@ -426,9 +420,9 @@ namespace NzbDrone.Core.Providers
             return episode;
         }
 
-        public virtual void DeleteInvalidEpisodes(Series series, TvdbSeries tvDbSeriesInfo)
+        public virtual void DeleteEpisodesNotInTvdb(Series series, TvdbSeries tvDbSeriesInfo)
         {
-            Logger.Info("Starting deletion of invalid episode for series: {0}", series.Title.WithDefault(series.SeriesId));
+            Logger.Trace("Starting deletion of episodes that no longer exist in TVDB: {0}", series.Title.WithDefault(series.SeriesId));
 
             //Delete Episodes not matching TvDbIds for this series
             var tvDbIds = tvDbSeriesInfo.Episodes.Select(e => e.Id);
@@ -437,10 +431,9 @@ namespace NzbDrone.Core.Providers
             var tvDbIdQuery = String.Format("DELETE FROM Episodes WHERE SeriesId = {0} AND TvDbEpisodeId > 0 AND TvDbEpisodeId NOT IN ({1})",
                                                                                     series.SeriesId, tvDbIdString);
 
-            Logger.Trace("Deleting invalid episodes by TvDbId for {0}", series.SeriesId);
             _database.Execute(tvDbIdQuery);
 
-            Logger.Trace("Finished deleting invalid episodes for {0}", series.SeriesId);
+            Logger.Trace("Deleted episodes that no longer exist in TVDB for {0}", series.SeriesId);
         }
 
         public virtual void SetPostDownloadStatus(List<int> episodeIds, PostDownloadStatusType postDownloadStatus)
