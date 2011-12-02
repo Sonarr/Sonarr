@@ -25,7 +25,6 @@ namespace NzbDrone.Common
             {
                 if (isInDebug || Debugger.IsAttached) return false;
 
-                Console.WriteLine(processName);
                 if (processName.Contains("nunit")) return false;
                 if (processName.Contains("jetbrain")) return false;
                 if (processName.Contains("resharper")) return false;

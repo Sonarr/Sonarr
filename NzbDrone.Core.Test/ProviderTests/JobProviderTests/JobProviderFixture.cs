@@ -4,10 +4,12 @@ using System.Linq;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
 using NzbDrone.Test.Common.AutoMoq;
@@ -283,6 +285,27 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
         }
 
         [Test]
+        public void inti_should_removed_jobs_that_no_longer_exist()
+        {
+            IList<IJob> fakeJobs = new List<IJob> { fakeJob };
+            Mocker.SetConstant(fakeJobs);
+            
+            WithRealDb();
+            var deletedJob = Builder<JobDefinition>.CreateNew().Build();
+            Db.Insert(deletedJob);
+            var jobProvider = Mocker.Resolve<JobProvider>();
+            
+            //Act
+            jobProvider.Initialize();
+
+            //Assert
+            var registeredJobs = Db.Fetch<JobDefinition>();
+            registeredJobs.Should().HaveCount(1);
+            registeredJobs.Should().NotContain(c => c.Name == deletedJob.Name);
+
+        }
+
+        [Test]
         public void jobs_with_zero_interval_are_registered_as_disabled()
         {
             IList<IJob> fakeJobs = new List<IJob> { disabledJob };
@@ -294,24 +317,6 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
             //Assert
             jobProvider.All().Should().HaveCount(1);
             jobProvider.All().First().Enable.Should().BeFalse();
-        }
-
-        [Test]
-        public void Get_Next_Execution_Time()
-        {
-            IList<IJob> BaseFakeJobs = new List<IJob> { fakeJob };
-            Mocker.SetConstant(BaseFakeJobs);
-
-            //Act
-            var jobProvider = Mocker.Resolve<JobProvider>();
-            jobProvider.Initialize();
-            jobProvider.QueueScheduled();
-            WaitForQueue();
-
-            //Assert
-            var next = jobProvider.NextScheduledRun(typeof(FakeJob));
-            jobProvider.All().Should().HaveCount(1);
-            jobProvider.All().First().LastExecution.Should().Be(next.AddMinutes(-fakeJob.DefaultInterval));
         }
 
         [Test]
