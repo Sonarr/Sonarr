@@ -44,7 +44,7 @@ namespace NzbDrone.Test.Common
 
         }
 
-        protected protected void WithStrictMocker()
+        protected void WithStrictMocker()
         {
             Mocker = new AutoMoqer(MockBehavior.Strict);
         }
