@@ -43,3 +43,4 @@ NzbDrone.zip
 NzbDrone.sln.DotSettings.user*
 config.xml
 UpdateLogs/
+NzbDrone.Web/MediaCover

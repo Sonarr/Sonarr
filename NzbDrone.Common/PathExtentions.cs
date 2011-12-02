@@ -85,9 +85,19 @@ namespace NzbDrone.Common
             return Path.Combine(enviromentProvider.GetAppDataPath(), LOG_DB_FILE);
         }
 
+        public static string GetMediaCoverPath(this EnviromentProvider enviromentProvider)
+        {
+            return Path.Combine(enviromentProvider.GetWebRoot(), "MediaCover");
+        }
+
         public static string GetBannerPath(this EnviromentProvider enviromentProvider)
         {
-            return Path.Combine(enviromentProvider.GetWebRoot(), "Content", "Images", "Banners");
+            return Path.Combine(enviromentProvider.GetMediaCoverPath(), "Banner");
+        }
+
+        public static string GetFanArthPath(this EnviromentProvider enviromentProvider)
+        {
+            return Path.Combine(enviromentProvider.GetMediaCoverPath(), "Fanart");
         }
 
         public static string GetCacheFolder(this EnviromentProvider enviromentProvider)
