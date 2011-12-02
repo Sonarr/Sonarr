@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Providers
         {
             try
             {
-                var mapping = _httpProvider.DownloadString("http://vps.nzbdrone.com/SceneMappings.csv");
+                var mapping = _httpProvider.DownloadString("http://www.nzbdrone.com/SceneMappings.csv");
                 var newMaps = new List<SceneMapping>();
 
                 using (var reader = new StringReader(mapping))
@@ -59,7 +59,7 @@ namespace NzbDrone.Core.Providers
 
             catch (Exception ex)
             {
-                Logger.InfoException("Failed to Update Scene Mappings", ex);
+                Logger.InfoException("Failed to Update Scene Mappings:", ex);
                 return false;
             }
             return true;
@@ -67,6 +67,8 @@ namespace NzbDrone.Core.Providers
 
         public virtual string GetSceneName(int seriesId)
         {
+            UpdateIfEmpty();
+
             var item = _database.FirstOrDefault<SceneMapping>("WHERE SeriesId = @0", seriesId);
 
             if (item == null)
@@ -77,12 +79,22 @@ namespace NzbDrone.Core.Providers
 
         public virtual Nullable<Int32> GetSeriesId(string cleanName)
         {
+            UpdateIfEmpty();
+
             var item = _database.SingleOrDefault<SceneMapping>("WHERE CleanTitle = @0", cleanName);
 
             if (item == null)
                 return null;
 
             return item.SeriesId;
+        }
+
+        public void UpdateIfEmpty()
+        {
+            var count = _database.ExecuteScalar<int>("SELECT COUNT(*) FROM SceneMappings");
+
+            if (count == 0)
+                UpdateMappings();
         }
     }
 }
