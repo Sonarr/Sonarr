@@ -342,7 +342,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             {
                 Series = fakeSeries,
                 SeasonNumber = 2,
-                EpisodeNumbers = new List<int> { 10, 11 }
+                EpisodeNumbers = new List<int> { fakeEpisode.EpisodeNumber, fakeEpisode2.EpisodeNumber }
             };
 
             var ep = Mocker.Resolve<EpisodeProvider>().GetEpisodesByParseResult(parseResult);
@@ -374,7 +374,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             {
                 Series = fakeSeries,
                 SeasonNumber = 2,
-                EpisodeNumbers = new List<int> { 10 }
+                EpisodeNumbers = new List<int> { fakeEpisode.EpisodeNumber }
             };
 
             var ep = Mocker.Resolve<EpisodeProvider>().GetEpisodesByParseResult(parseResult);
