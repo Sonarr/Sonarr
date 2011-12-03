@@ -21,12 +21,6 @@ p, h1, form, button
     padding: 14px;
 }
 
-#stylized h1
-{
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 8px;
-}
 
 #stylized p
 {
@@ -86,7 +80,6 @@ p, h1, form, button
     text-align: center;
     line-height: 31px;
     font-size: 11px;
-    font-weight: bold;
 }
 
 

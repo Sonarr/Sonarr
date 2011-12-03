@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System.Linq;
 using System.IO;
 using System.Net;
 using FizzWare.NBuilder;
@@ -12,7 +11,7 @@ using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common.AutoMoq;
 
-namespace NzbDrone.Core.Test
+namespace NzbDrone.Core.Test.ProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming

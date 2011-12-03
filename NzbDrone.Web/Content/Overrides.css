@@ -1,17 +1,4 @@
-﻿/*YUI dropdown*/
-.yui3-aclist
-{
-    z-index: 100 !important;
-    width: auto !important;
-}
-
-.yui3-aclist-item-active
-{
-    background: #065EFE !important;
-}
-
-
-/*jQuery UI*/
+﻿/*jQuery UI*/
 .ui-widget-header
 {
     font-weight: normal;
@@ -19,13 +6,29 @@
 
 .t-combobox .t-input
 {
-   line-height: 25px;
+    line-height: 25px;
 }
 
+.ui-autocomplete
+{
+    border-color: #333333;
+    background: #333333;
+}
+
+.ui-autocomplete .ui-state-hover
+{
+    background: #333333;
+    border-color: #065EFE;
+}
+
+.ui-menu-item .ui-corner-all
+{
+    color: #065EFE;
+}
 
 /*MiniProfiler*/
 
-.profiler-button 
+.profiler-button
 {
     opacity: 0.4;
 }
