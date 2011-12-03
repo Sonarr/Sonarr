@@ -364,5 +364,28 @@ namespace NzbDrone.Core.Test.ProviderTests
             //Assert
             result.Should().BeTrue();
         }
+
+        [Test]
+        public void IsAcceptableSize_should_treat_daily_series_as_single_episode()
+        {
+            parseResultSingle.Series = series60minutes;
+            parseResultSingle.Size = 300.Megabytes();
+            parseResultSingle.AirDate = DateTime.Today;
+            parseResultSingle.EpisodeNumbers = null;
+
+            qualityType.MaxSize = (int)600.Megabytes();
+
+            Mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
+
+            Mocker.GetMock<EpisodeProvider>().Setup(
+                s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(true);
+
+            //Act
+            bool result = Mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultSingle);
+
+            //Assert
+            result.Should().BeTrue();
+        }
     }
 }

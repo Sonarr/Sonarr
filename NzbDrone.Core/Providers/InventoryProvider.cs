@@ -156,12 +156,13 @@ namespace NzbDrone.Core.Providers
             //Multiply maxSize by Series.Runtime
             maxSize = maxSize * series.Runtime;
 
-            //Multiply maxSize by the number of episodes parsed
-            maxSize = maxSize * parseResult.EpisodeNumbers.Count;
+            //Multiply maxSize by the number of episodes parsed (if EpisodeNumbers is null it will be treated as a single episode)
+            if (parseResult.EpisodeNumbers != null)
+                maxSize = maxSize * parseResult.EpisodeNumbers.Count;
 
             //Check if there was only one episode parsed
             //and it is the first or last episode of the season
-            if (parseResult.EpisodeNumbers.Count == 1 && 
+            if (parseResult.EpisodeNumbers != null && parseResult.EpisodeNumbers.Count == 1 && 
                 _episodeProvider.IsFirstOrLastEpisodeOfSeason(series.SeriesId,
                 parseResult.SeasonNumber, parseResult.EpisodeNumbers[0]))
             {

@@ -159,7 +159,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QualityProfileTest.cs" />
     <Compile Include="ProviderTests\SabProviderTest.cs" />
-    <Compile Include="SceneMappingTest.cs" />
+    <Compile Include="ProviderTests\SceneMappingProviderTest.cs" />
     <Compile Include="ProviderTests\SeriesProviderTest.cs" />
     <Compile Include="ProviderTests\TvDbProviderTest.cs" />
   </ItemGroup>
@@ -235,6 +235,9 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Files\SceneMappings.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Files\TestArchive.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

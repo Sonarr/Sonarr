@@ -131,23 +131,21 @@ namespace NzbDrone.Core.Providers
 
             notification.CurrentMessage = "Searching for " + episode;
 
-            var series = _seriesProvider.GetSeries(episode.SeriesId);
-
             if (episode.Series.IsDaily && !episode.AirDate.HasValue)
             {
                 Logger.Warn("AirDate is not Valid for: {0}", episode);
                 return false;
             }
 
-            var reports = PerformSearch(notification, series, episode.SeasonNumber, new List<Episode> { episode });
+            var reports = PerformSearch(notification, episode.Series, episode.SeasonNumber, new List<Episode> { episode });
 
             Logger.Debug("Finished searching all indexers. Total {0}", reports.Count);
             notification.CurrentMessage = "Processing search results";
 
-            if (!series.IsDaily && ProcessSearchResults(notification, reports, series, episode.SeasonNumber, episode.EpisodeNumber).Count == 1)
+            if (!episode.Series.IsDaily && ProcessSearchResults(notification, reports, episode.Series, episode.SeasonNumber, episode.EpisodeNumber).Count == 1)
                 return true;
 
-            if (series.IsDaily && ProcessSearchResults(notification, reports, series, episode.AirDate.Value))
+            if (episode.Series.IsDaily && ProcessSearchResults(notification, reports, episode.Series, episode.AirDate.Value))
                 return true;
 
             Logger.Warn("Unable to find {0} in any of indexers.", episode);

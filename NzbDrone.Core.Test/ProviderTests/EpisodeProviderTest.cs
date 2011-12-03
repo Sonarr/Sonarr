@@ -583,6 +583,57 @@ namespace NzbDrone.Core.Test.ProviderTests
         }
 
         [Test]
+        public void RefreshEpisodeInfo_should_ignore_new_episode_for_ignored_season()
+        {
+            //Arrange
+            const int seriesId = 71663;
+            const int episodeCount = 2;
+
+            var fakeEpisode = Builder<Episode>.CreateNew()
+                    .With(e => e.SeasonNumber = 5)
+                    .With(e => e.EpisodeNumber = 1)
+                    .With(e => e.TvDbEpisodeId = 11)
+                    .With(e => e.SeriesId = seriesId)
+                    .With(e => e.Ignored = true)
+                    .Build();
+
+            var tvdbSeries = Builder<TvdbSeries>.CreateNew().With(
+                c => c.Episodes =
+                     new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(episodeCount).
+                                               All()
+                                               .With(l => l.Language = new TvdbLanguage(0, "eng", "a"))
+                                               .With(e => e.SeasonNumber = 5)
+                                               .TheFirst(1)
+                                               .With(e => e.EpisodeNumber = 1)
+                                               .With(e => e.Id = 11)
+                                               .TheNext(1)
+                                               .With(e => e.EpisodeNumber = 2)
+                                               .With(e => e.Id = 22)
+                                               .Build())
+                ).With(c => c.Id = seriesId).Build();
+
+            var fakeSeries = Builder<Series>.CreateNew().With(c => c.SeriesId = seriesId).Build();
+
+            WithRealDb();
+
+            Db.Insert(fakeSeries);
+            Db.Insert(fakeEpisode);
+
+            Mocker.GetMock<TvDbProvider>()
+                .Setup(c => c.GetSeries(seriesId, true))
+                .Returns(tvdbSeries);
+
+            //Act
+            Mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
+
+            //Assert
+            var result = Mocker.Resolve<EpisodeProvider>().GetEpisodeBySeries(seriesId).ToList();
+            Mocker.GetMock<TvDbProvider>().VerifyAll();
+            result.Should().HaveCount(episodeCount);
+            result.Where(e => e.Ignored).Should().HaveCount(episodeCount);
+        }
+
+        [Test]
         public void IsSeasonIgnored_should_return_true_if_all_episodes_ignored()
         {
             WithRealDb();

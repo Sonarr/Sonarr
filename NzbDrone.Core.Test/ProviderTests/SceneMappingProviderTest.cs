@@ -1,7 +1,13 @@
 ﻿
+using System;
+using System.IO;
+using System.Net;
 using FizzWare.NBuilder;
+using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common.AutoMoq;
@@ -10,8 +16,24 @@ namespace NzbDrone.Core.Test
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class SceneMappingTest : CoreTest
+    public class SceneMappingProviderTest : CoreTest
     {
+        private const string SceneMappingUrl = "http://www.nzbdrone.com/SceneMappings.csv";
+
+        private void WithValidCsv()
+        {
+            Mocker.GetMock<HttpProvider>()
+                .Setup(s => s.DownloadString(SceneMappingUrl))
+                .Returns(File.ReadAllText(@".\Files\SceneMappings.csv"));
+        }
+
+        private void WithErrorDownloadingCsv()
+        {
+            Mocker.GetMock<HttpProvider>()
+                    .Setup(s => s.DownloadString(SceneMappingUrl))
+                    .Throws(new WebException());
+        }
+
         [Test]
         public  void GetSceneName_exists()
         {
@@ -135,6 +157,104 @@ namespace NzbDrone.Core.Test
 
             //Assert
             Assert.AreEqual(fakeMap.SceneName, sceneName);
+        }
+
+        [Test]
+        public void UpdateMappings_should_add_all_mappings_to_database()
+        {
+            //Setup
+            WithRealDb();
+            WithValidCsv();
+
+            //Act
+            Mocker.Resolve<SceneMappingProvider>().UpdateMappings();
+
+            //Assert
+            Mocker.Verify<HttpProvider>(v => v.DownloadString(It.IsAny<string>()), Times.Once());
+            var result = Db.Fetch<SceneMapping>();
+            result.Should().HaveCount(5);
+        }
+
+        [Test]
+        public void UpdateMappings_should_overwrite_existing_mappings()
+        {
+            //Setup
+            var fakeMap = Builder<SceneMapping>.CreateNew()
+                .With(f => f.SeriesId = 12345)
+                .With(f => f.SceneName = "Law and Order")
+                .With(f => f.SceneName = "laworder")
+                .Build();
+
+            WithRealDb();
+            WithValidCsv();
+            Db.Insert(fakeMap);
+
+            //Act
+            Mocker.Resolve<SceneMappingProvider>().UpdateMappings();
+
+            //Assert
+            Mocker.Verify<HttpProvider>(v => v.DownloadString(It.IsAny<string>()), Times.Once());
+            var result = Db.Fetch<SceneMapping>();
+            result.Should().HaveCount(5);
+        }
+
+        [Test]
+        public void UpdateMappings_should_not_delete_if_csv_download_fails()
+        {
+            //Setup
+            var fakeMap = Builder<SceneMapping>.CreateNew()
+                .With(f => f.SeriesId = 12345)
+                .With(f => f.SceneName = "Law and Order")
+                .With(f => f.SceneName = "laworder")
+                .Build();
+
+            WithRealDb();
+            WithErrorDownloadingCsv();
+            Db.Insert(fakeMap);
+
+            //Act
+            Mocker.Resolve<SceneMappingProvider>().UpdateMappings();
+
+            //Assert
+            Mocker.Verify<HttpProvider>(v => v.DownloadString(It.IsAny<string>()), Times.Once());
+            var result = Db.Fetch<SceneMapping>();
+            result.Should().HaveCount(1);
+        }
+
+        [Test]
+        public void UpdateIfEmpty_should_not_update_if_count_is_not_zero()
+        {
+            //Setup
+            var fakeMap = Builder<SceneMapping>.CreateNew()
+                .With(f => f.SeriesId = 12345)
+                .With(f => f.SceneName = "Law and Order")
+                .With(f => f.SceneName = "laworder")
+                .Build();
+
+            WithRealDb();
+            Db.Insert(fakeMap);
+
+            //Act
+            Mocker.Resolve<SceneMappingProvider>().UpdateIfEmpty();
+
+            //Assert
+            Mocker.Verify<HttpProvider>(v => v.DownloadString(It.IsAny<string>()), Times.Never());
+        }
+
+        [Test]
+        public void UpdateIfEmpty_should_update_if_count_is_zero()
+        {
+            //Setup
+            WithRealDb();
+            WithValidCsv();
+
+            //Act
+            Mocker.Resolve<SceneMappingProvider>().UpdateIfEmpty();
+
+            //Assert
+            Mocker.Verify<HttpProvider>(v => v.DownloadString(SceneMappingUrl), Times.Once());
+            var result = Db.Fetch<SceneMapping>();
+            result.Should().HaveCount(5);
         }
     }
 }
