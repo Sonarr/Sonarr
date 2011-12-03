@@ -51,10 +51,8 @@ NzbDrone
         <li>@Ajax.ActionLink("Start RSS Sync", "RssSync", "Command", null)</li>
     </ul>
 }
-<div class="grid-container">
-    @{Html.Telerik().Grid<SeriesModel>().Name("Grid")
-                .TableHtmlAttributes(new { @class = "Grid" })
-                .DataKeys(keys => keys.Add(p => p.SeriesId))
+@{Html.Telerik().Grid<SeriesModel>().Name("Grid")
+               .DataKeys(keys => keys.Add(p => p.SeriesId))
                 .DataBinding(data => data.Ajax()
                     .Select("_AjaxSeriesGrid", "Series")
                     .Update("_SaveAjaxSeriesEditing", "Series")
@@ -85,7 +83,6 @@ NzbDrone
 
                              })
                 .Editable(editor => editor.Mode(GridEditMode.PopUp))
-          //.Sortable(sort => sort.OrderBy(order => order.Add(o => o.Title).Ascending()).Enabled(true))
                 .DetailView(detailView => detailView.ClientTemplate(
                                                                         "<b>Airs Day of Week:</b> " + "<#= AirsDayOfWeek #>" +
                                                                         "<br />" +
@@ -99,7 +96,6 @@ NzbDrone
                     clientEvents.OnRowDataBound("grid_rowBound");
                 })
                 .Render();}
-</div>
 @section Scripts{
     <script type="text/javascript">
         var windowElement;

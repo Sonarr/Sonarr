@@ -3,18 +3,16 @@
 @section TitleContent{
     @Model.Title
 }
-
 <script src="../../Scripts/NzbDrone/seriesDetails.js" type="text/javascript"></script>
 <link href="../../Content/Grid.css" rel="stylesheet" type="text/css" />
-
-<style>   
+<style>
     .seasonToggleTopGroup
     {
         overflow: hidden;
     }
     
     .seasonToggleTop
-    {       
+    {
         background-color: #F1EDED;
         background-position: 5px center;
         background-repeat: no-repeat;
@@ -24,7 +22,7 @@
         padding: 2px 5px;
         width: 100px;
     }
-
+    
     .seasonToggleLabel
     {
         margin-left: 5px;
@@ -37,7 +35,7 @@
         margin-bottom: -4px;
         border-style: none;
     }
-
+    
     .statusImage, .searchImage, .renameImage, .ignoreEpisode, .ignoreEpisodesMaster
     {
         width: 18px;
@@ -48,7 +46,6 @@
     
     .searchImage:hover, .renameImage:hover, .ignoreEpisode:hover, .ignoreEpisodesMaster:hover
     {
-
     }
     
     #banner-container
@@ -62,85 +59,80 @@
         margin-right: auto;
     }
 </style>
-
 @section ActionMenu{
-   <ul class="sub-menu">
+    <ul class="sub-menu">
         <li>@Ajax.ActionLink("Scan Disk", "ScanDisk", "Command", new { seriesId = Model.SeriesId }, null)</li>
         <li>@Ajax.ActionLink("Update Info", "UpdateInfo", "Command", new { seriesId = Model.SeriesId }, null)</li>
         <li>@Ajax.ActionLink("Search for missing episodes", "BacklogSeries", "Episode", new { seriesId = Model.SeriesId }, null)</li>
         <li>@Ajax.ActionLink("Rename Episodes", "RenameEpisodes", "Episode", new { seriesId = Model.SeriesId }, null)</li>
     </ul>
 }
+<div id="banner-container">
+    @{
+        var bannerUrl = "../../Content/Images/img03.jpg";
 
-    <div id="banner-container">
-        @{
-            var bannerUrl = "../../Content/Images/img03.jpg";
-            
-            if(Model.HasBanner)
-            {
-                bannerUrl = "../../MediaCover/Banners/" + Model.SeriesId + ".jpg";
-            }
-        }
-        <img src="@bannerUrl" alt="Banner"/>
-    </div>
-
-    <div class="seasonToggleTopGroup">
-        @foreach (var season in Model.Seasons)
+        if (Model.HasBanner)
         {
-            var ignoreSeason = "ignoreSeason_" + season;
-            <div class="seasonToggleTop">
-                <img src='../../Content/Images/ignoredNeutral.png' class='ignoredEpisodesMaster ignoreEpisode @ignoreSeason' title='Click to toggle season ignore status' />
-                <span class="seasonToggleLabel">@(season == 0 ? "Specials" : "Season " + season)</span>
-            </div>
+            bannerUrl = "../../MediaCover/Banners/" + Model.SeriesId + ".jpg";
         }
-    </div>
-
-    @foreach (var s in Model.Seasons.Reverse())
+    }
+    <img src="@bannerUrl" alt="Banner"/>
+</div>
+<div class="seasonToggleTopGroup">
+    @foreach (var season in Model.Seasons)
     {
-        var seriesId = @Model.SeriesId;
-        var season = s;
-        
-        <h2>
-            @(season == 0 ? "Specials" : "Season " + season)
-        </h2>
-        
-        <div class="grid-container">
-            @{
-        Html.Telerik().Grid<EpisodeModel>().Name("seasons_" + season)
-            .TableHtmlAttributes(new { @class = "Grid" })
-            .Columns(columns =>
-            {
-                columns.Bound(c => c.EpisodeNumber).Width(50).Title("Episode");
-                columns.Bound(c => c.Title).Title("Title");
-                columns.Bound(c => c.AirDate).Width(100);
-                columns.Bound(c => c.Quality).Width(100);
-                columns.Bound(c => c.Status)
-                    .Title("<img src='../../Content/Images/ignoredNeutral.png' class='ignoredEpisodesMaster ignoreEpisode ignoreSeason_" + season + "' title='Click to toggle season ignore status' />" +
-                           "<img src='../../Content/Images/Missing.png' alt='Status' title='Season Status' class='statusImage statusImageMaster' />" +
-                           "<a href=\"../Episode/SearchSeason?seriesId=" + @seriesId + "&seasonNumber=" + @season + "\" onclick=\"searchSeason(" + @seriesId + ", "+ @season + "); return false;\"><img src='../../Content/Images/Search.png' alt='Search' title='Search for all episodes in this season' class='searchImage searchImageMaster' /></a>" +
-                           "<a href=\"../Episode/RenameSeason?seriesId=" + @seriesId + "&seasonNumber=" + @season + "\" onclick=\"renameSeason(" + @seriesId + ", " + @season + "); return false;\"><img src='../../Content/Images/Rename.png' alt='Rename' title='Rename all episodes in this season' class=renameImage renameImageMaster' /></a>")
-                    .ClientTemplate("<img src='../../Content/Images/ignoredNeutral.png' class='ignoreEpisode ignoreEpisode_" + season + " ignored' id='<#= EpisodeId #>' title='Click to toggle episode  ignore status' />" +
-                                    "<img src='../../Content/Images/<#= Status #>.png' alt='<#= Status #>' title='<#= Status #>' class='statusImage status-<#= Status #>' />" +
-                                    "<a href=\"../Episode/Season?episodeId=<#= EpisodeId #>\" onclick=\"searchForEpisode('<#= EpisodeId #>'); return false;\"><img src='../../Content/Images/Search.png' alt='Search' title='Search for episode' class='searchImage' /></a>" +
-                                    "<a href=\"../Episode/Rename?episodeFileId=<#= EpisodeId #>\" onclick=\"renameEpisode('<#= EpisodeFileId #>'); return false;\"><img src='../../Content/Images/Rename.png' alt='Rename' title='Rename episode' class='renameImage' />")
-                    .Width(80);
-            })
-            .DetailView(detailView => detailView.ClientTemplate("<div><#= Overview #> </br><#= Path #> </div>"))
-            //.Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.EpisodeNumber).Descending()).Enabled(false))
-            .Footer(true)
-            .DataBinding(
-                d =>
-                d.Ajax().Select("_AjaxSeasonGrid", "Series",
-                               new RouteValueDictionary { { "seriesId", Model.SeriesId }, { "seasonNumber", season } }))
-            .ClientEvents(clientEvents =>
-            {
-                clientEvents.OnRowDataBound("grid_rowBound");
-                clientEvents.OnDataBound("grid_dataBound");
-            })
-            .Render();}
+        var ignoreSeason = "ignoreSeason_" + season;
+        <div class="seasonToggleTop">
+            <img src='../../Content/Images/ignoredNeutral.png' class='ignoredEpisodesMaster ignoreEpisode @ignoreSeason' title='Click to toggle season ignore status' />
+            <span class="seasonToggleLabel">@(season == 0 ? "Specials" : "Season " + season)</span>
         </div>
     }
-
+</div>
+@foreach (var s in Model.Seasons.Reverse())
+{
+    var seriesId = @Model.SeriesId;
+    var season = s;
+        
+    <h2>
+        @(season == 0 ? "Specials" : "Season " + season)
+    </h2>
+        
+    Html.Telerik().Grid<EpisodeModel>().Name("seasons_" + season)
+        .TableHtmlAttributes(new { @class = "Grid" })
+        .Columns(columns =>
+        {
+            columns.Bound(c => c.EpisodeNumber).Width(100).Title("Episode").Sortable(true);
+            columns.Bound(c => c.Title).Title("Title").Sortable(false);
+            columns.Bound(c => c.AirDate).Width(100).Sortable(false);
+            columns.Bound(c => c.Quality).Width(100);
+            columns.Bound(c => c.Status).Sortable(false)
+                .Title("<img src='../../Content/Images/ignoredNeutral.png' class='ignoredEpisodesMaster ignoreEpisode ignoreSeason_" + season + "' title='Click to toggle season ignore status' />" +
+                       "<img src='../../Content/Images/Missing.png' alt='Status' title='Season Status' class='statusImage statusImageMaster' />" +
+                       "<a href=\"../Episode/SearchSeason?seriesId=" + @seriesId + "&seasonNumber=" + @season + "\" onclick=\"searchSeason(" + @seriesId + ", " + @season + "); return false;\"><img src='../../Content/Images/Search.png' alt='Search' title='Search for all episodes in this season' class='searchImage searchImageMaster' /></a>" +
+                       "<a href=\"../Episode/RenameSeason?seriesId=" + @seriesId + "&seasonNumber=" + @season + "\" onclick=\"renameSeason(" + @seriesId + ", " + @season + "); return false;\"><img src='../../Content/Images/Rename.png' alt='Rename' title='Rename all episodes in this season' class=renameImage renameImageMaster' /></a>")
+                .ClientTemplate("<img src='../../Content/Images/ignoredNeutral.png' class='ignoreEpisode ignoreEpisode_" + season + " ignored' id='<#= EpisodeId #>' title='Click to toggle episode  ignore status' />" +
+                                "<img src='../../Content/Images/<#= Status #>.png' alt='<#= Status #>' title='<#= Status #>' class='statusImage status-<#= Status #>' />" +
+                                "<a href=\"../Episode/Season?episodeId=<#= EpisodeId #>\" onclick=\"searchForEpisode('<#= EpisodeId #>'); return false;\"><img src='../../Content/Images/Search.png' alt='Search' title='Search for episode' class='searchImage' /></a>" +
+                                "<a href=\"../Episode/Rename?episodeFileId=<#= EpisodeId #>\" onclick=\"renameEpisode('<#= EpisodeFileId #>'); return false;\"><img src='../../Content/Images/Rename.png' alt='Rename' title='Rename episode' class='renameImage' />")
+                .Width(80);
+        })
+        .DetailView(detailView => detailView.ClientTemplate("<div><#= Overview #> </br><#= Path #> </div>"))
+        //.Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.EpisodeNumber).Descending()).Enabled(false))
+        .Footer(true)
+        .DataBinding(
+            d =>
+            d.Ajax().Select("_AjaxSeasonGrid", "Series",
+                           new RouteValueDictionary { { "seriesId", Model.SeriesId }, { "seasonNumber", season } }))
+        .ClientEvents(clientEvents =>
+        {
+            clientEvents.OnRowDataBound("grid_rowBound");
+            clientEvents.OnDataBound("grid_dataBound");
+        })
+        .Sortable(sorting => sorting
+        .OrderBy(sortOrder => sortOrder.Add(o => o.EpisodeNumber).Descending()).SortMode(GridSortMode.SingleColumn))
+        .Render();
+}
+}
 @section Scripts{
     <script type="text/javascript">
         seriesId = @Model.SeriesId;
