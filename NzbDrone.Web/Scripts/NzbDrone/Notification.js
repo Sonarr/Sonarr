@@ -4,7 +4,7 @@
     $.extend($.gritter.options, {
         fade_in_speed: 'medium', // how fast notifications fade in (string or int)
         fade_out_speed: 'medium', // how fast the notices fade out
-        time: 3000, // hang on the screen for...
+        time: 4000, // hang on the screen for...
         sticky: false
     });
 
