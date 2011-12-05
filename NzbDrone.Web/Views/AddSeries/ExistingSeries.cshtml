@@ -23,6 +23,11 @@
         left: 202px;
         position: relative;      
     }
+
+    .seriesPathValue
+    {
+        display: block;
+    }
 </style>
 
 @if (Model.ExistingSeries.Count == 0)
@@ -42,20 +47,19 @@ else
     </div>
 
 }
+
 @foreach (var series in Model.ExistingSeries)   
 {
-    <span class="existingSeries">
-        <div>
-            <span class="seriesPathValue">
-                @Html.Label(series.Item1)
-            </span>
-        </div>
+    <div class="existingSeries">
+        <span class="seriesPathValue">
+            @Html.Label(series.Item1)
+        </span>
         <div>
             <input class="seriesLookup" type="text" style="width: 400px" value="@series.Item2" />
             @Html.Hidden("seriesId", series.Item3, new { @class = "seriesId" })
             @Html.DropDownList(Guid.NewGuid().ToString(), Model.Quality, new { @class = "qualitySelector" })
-            <button class="addExistingButton">
-                Add</button>
+
+            <button>Add</button>
         </div>
-    </span>
+    </div>
 }
