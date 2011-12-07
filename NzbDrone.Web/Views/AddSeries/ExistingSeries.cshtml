@@ -29,6 +29,11 @@
     {
         display: block;
     }
+    
+    .existingSeriesContainer
+    {
+        position: relative;
+    }
 </style>
 
 @if (Model.ExistingSeries.Count == 0)
@@ -55,12 +60,12 @@ else
         <span class="seriesPathValue">
             @Html.Label(series.Item1)
         </span>
-        <div>
-            <input class="seriesLookup" type="text" style="width: 400px" value="@series.Item2" />
+        <div class="existingSeriesContainer">
+            <input class="seriesLookup" type="text" style="width: 400px;" value="@series.Item2" />
             @Html.Hidden("seriesId", series.Item3, new { @class = "seriesId" })
             @Html.DropDownList(Guid.NewGuid().ToString(), Model.Quality, new { @class = "qualitySelector" })
 
-            <button>Add</button>
+            <button class="addExistingButton">Add</button>
         </div>
     </div>
 }

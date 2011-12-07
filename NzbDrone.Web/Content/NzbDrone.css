@@ -180,18 +180,30 @@ input[type=text], select
     height: 20px;
 }
 
-select, button, input[type="button"], input[type="submit"], input[type="reset"]
+select
 {
     height: 26px;
     min-width: 50px;
     margin-left: 10px;
 }
 
-/*This allows us to override center the text on the jQuery UI Buttons when we set the height above*/
+button, input[type="button"], input[type="submit"], input[type="reset"]
+{
+    margin-left: 10px;
+}
+
+/*select, button, input[type="button"], input[type="submit"], input[type="reset"]
+{
+    height: 26px;
+    min-width: 50px;
+    margin-left: 10px;
+}
+
+/*This allows us to override center the text on the jQuery UI Buttons when we set the height above*
 button span, input[type="button"] span, input[type="submit"] span, input[type="reset"] span
 {
     margin-top: -3px;
-}
+}*/
 
 .listButton
 {
