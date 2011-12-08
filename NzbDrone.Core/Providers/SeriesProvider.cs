@@ -186,11 +186,11 @@ namespace NzbDrone.Core.Providers
 
         public virtual List<Series> SearchForSeries(string title)
         {
-            var query = String.Format(@"SELECT * FROM Series
-                                INNER JOIN QualityProfiles ON Series.QualityProfileId = QualityProfiles.QualityProfileId
-                                WHERE Title LIKE '%{0}%'", title);
+            var query = String.Format("%{0}%", title);
 
-            var series = _database.Fetch<Series, QualityProfile>(query);
+            var series = _database.Fetch<Series, QualityProfile>(@"SELECT * FROM Series
+                                INNER JOIN QualityProfiles ON Series.QualityProfileId = QualityProfiles.QualityProfileId
+                                WHERE Title LIKE @0", query);
 
             return series;
         }

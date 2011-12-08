@@ -721,5 +721,30 @@ namespace NzbDrone.Core.Test.ProviderTests
             //Assert
             series.Should().HaveCount(0);
         }
+
+        [Test]
+        public void SearchForSeries_should_return_results_when_query_has_special_characters()
+        {
+            var mocker = new AutoMoqer(MockBehavior.Strict);
+            var db = TestDbHelper.GetEmptyDatabase();
+            mocker.SetConstant(db);
+
+            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+            var fakeSeries = Builder<Series>.CreateListOfSize(10)
+                .All()
+                .With(e => e.QualityProfileId = fakeQuality.QualityProfileId)
+                .TheLast(1)
+                .With(s => s.Title = "It's Always Sunny")
+                .Build();
+
+            db.InsertMany(fakeSeries);
+            db.Insert(fakeQuality);
+
+            //Act
+            var series = mocker.Resolve<SeriesProvider>().SearchForSeries("it's");
+
+            //Assert
+            series.Should().HaveCount(1);
+        }
     }
 }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
