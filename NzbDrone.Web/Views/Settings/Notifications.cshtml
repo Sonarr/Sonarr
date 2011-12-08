@@ -32,7 +32,7 @@
 <div id="stylized">
     @using (Html.BeginForm("SaveNotifications", "Settings", FormMethod.Post, new { id = "NotificationForm", name = "NotificationForm", @class = "settingsForm" }))
     {
-        <div id="accordion2">
+        <div class="jquery-accordion">
             <h3>
                 <a href="#">XBMC</a></h3>
             @{Html.RenderPartial("Xbmc", Model);}
@@ -55,14 +55,7 @@
     }
 </div>
 @section Scripts{
-
     <script type="text/javascript">
-        $(function () {
-            $("#accordion2").accordion({
-                autoHeight: false
-            });
-        });
-
         //Twitter
         getAuthorizationUrl = '../Command/GetTwitterAuthorization';
         verifyAuthorizationUrl = '../Command/VerifyTwitterAuthorization';

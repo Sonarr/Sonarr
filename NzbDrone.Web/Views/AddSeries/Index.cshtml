@@ -5,17 +5,28 @@ Add Series
 {
     <script type="text/javascript" src="../../Scripts/NzbDrone/addSeries.js"></script>
 }
-<h2>
-    Add New Series</h2>
-<div id="addNewSeries">
-    @{ Html.RenderAction("AddNew", "AddSeries"); }
-</div>
-<h2>
-    Add Series Already on Disk</h2>
-<h3>
-    Manage Root Folders
-</h3>
 @{Html.RenderAction("RootDir");}
-<div id="existingSeries">
-    @{ Html.RenderAction("ExistingSeries", "AddSeries"); }
+<div class="jquery-accordion">
+    <h3>
+        <a href="#">Add New Series</a></h3>
+    <div>
+        @{ Html.RenderAction("AddNew", "AddSeries"); }
+    </div>
+    <h3>
+        <a href="#">Add Series Already on Disk</a></h3>
+    <div>
+        @{ Html.RenderAction("ExistingSeries", "AddSeries"); }
+    </div>
 </div>
+@*<div class="jquery-tabs">
+    <ul>
+        <li><a href="#newSeriesTab">Add New Series</a></li>
+        <li><a href="#existingSeriesTab">Add Series Already on Disk</a></li>
+    </ul>
+    <div id="newSeriesTab" style="min-height: 200px">
+        @{ Html.RenderAction("AddNew", "AddSeries"); }
+    </div>
+    <div id="existingSeriesTab">
+        @{ Html.RenderAction("ExistingSeries", "AddSeries"); }
+    </div>
+</div>*@ 

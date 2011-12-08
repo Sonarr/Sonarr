@@ -5,26 +5,23 @@
 @{
     Layout = null;
 }
-
 <style>
     .existingSeries
     {
-        width: 548px;
         border-color: #f2f2f2;
         border-width: 1px;
         border-style: solid;
         background-color: #f2f2f2;
         margin: 0px 10px 10px 0px;
-        padding-left: 10px;
-        padding-right: 10px;
+        padding: 5px;
         display: block;
     }
     .masterQualitySelector
     {
-        left: 202px;
-        position: relative;      
+        left: 415px;
+        position: relative;
     }
-
+    
     .seriesPathValue
     {
         display: block;
@@ -35,7 +32,6 @@
         position: relative;
     }
 </style>
-
 @if (Model.ExistingSeries.Count == 0)
 {
     <h3 style="color: tomato">
@@ -44,18 +40,10 @@
 }
 else
 {
-    <h3>
-        Series Ready to be added.
-        @Html.DropDownList(Guid.NewGuid().ToString(), Model.Quality, new { @class = "qualitySelector masterQualitySelector" })
-    </h3>
-    <div>
+    @Html.DropDownList(Guid.NewGuid().ToString(), Model.Quality, new { @class = "qualitySelector masterQualitySelector" })
 
-    </div>
-
-}
-
-@foreach (var series in Model.ExistingSeries)   
-{
+    foreach (var series in Model.ExistingSeries)
+    {
     <div class="existingSeries">
         <span class="seriesPathValue">
             @Html.Label(series.Item1)
@@ -64,8 +52,9 @@ else
             <input class="seriesLookup" type="text" style="width: 400px;" value="@series.Item2" />
             @Html.Hidden("seriesId", series.Item3, new { @class = "seriesId" })
             @Html.DropDownList(Guid.NewGuid().ToString(), Model.Quality, new { @class = "qualitySelector" })
-
-            <button class="addExistingButton">Add</button>
+            <button class="addExistingButton">
+                Add</button>
         </div>
     </div>
+    }
 }

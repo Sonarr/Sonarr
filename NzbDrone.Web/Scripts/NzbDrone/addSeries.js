@@ -14,7 +14,7 @@ var rootListUrl = '../AddSeries/RootList';
 $(".masterQualitySelector").live('change', function () {
 
     var profileId = $(this).val();
-    $("#existingSeries").find(".qualitySelector").each(function () {
+    $("#existingSeriesTab").find(".qualitySelector").each(function () {
         $(this).val(profileId);
     });
 });
@@ -45,7 +45,7 @@ $(".addExistingButton").live('click', function () {
 
 function reloadExistingSeries() {
     $.get(existingSeriesUrl, function (data) {
-        $('#existingSeries').html(data);
+        $('#existingSeriesTab').html(data);
     });
 }
 
