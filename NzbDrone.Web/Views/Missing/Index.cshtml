@@ -19,13 +19,13 @@ Missing
                                                             Url.Action("Details", "Series", new { seriesId = "<#= SeriesId #>" }) +
                                                             "><#= SeriesTitle #></a>")
                                             .Title("Series Title");
-                             columns.Bound(c => c.SeasonNumber).Title("Season").Width(40);
-                             columns.Bound(c => c.EpisodeNumber).Title("Episode").Width(40);
+                             columns.Bound(c => c.SeasonNumber).Title("Season #").Width(85);
+                             columns.Bound(c => c.EpisodeNumber).Title("Episode #").Width(85);
                              columns.Bound(c => c.EpisodeTitle).Title("Episode Title");
                              columns.Bound(c => c.AirDate)
                                  .ClientTemplate("<#= AirDateString #>")
                                  .Title("Air Date")
-                                 .Width(80);
+                                 .Width(90);
                              columns.Bound(c => c.EpisodeId)
                                      .Title("Actions")
                                      .ClientTemplate("<a href=\"../Episode/Season?episodeId=<#= EpisodeId #>\" onClick=\"searchForEpisode(<#= EpisodeId #>); return false;\"><img src='../../Content/Images/Search.png' alt='Search' title='Search for Episode' class='searchImage' /></a>")
