@@ -75,15 +75,15 @@ hr
 {
     display: block;
     float: left;
-    height: 28px;
+    height: 26px;
     padding: 5px 20px 8px 15px;
     text-decoration: none;
     text-align: center;
     text-transform: lowercase;
-    font-size: 23px;
-    font-weight: 300;
+    font-size: 21px;
+    font-weight: normal;
     vertical-align: middle;
-    font-family: "Segoe UI Light" , "Segoe UI" , Tahoma, Geneva, sans-serif;
+    font-family: "Segoe UI", "Segoe UI Light" , Tahoma, Geneva, sans-serif;
 }
 
 #menu a:hover
