@@ -3,10 +3,8 @@
     overflow: auto;
 }
 
-#bottom
+#profileContainer
 {
-    margin-top: -10px;
-    margin-left: 15px;
     overflow: auto;
 }
         
@@ -122,6 +120,7 @@
 {
     clear: both;
     padding-bottom: 20px;
+    width: 600px;
 }
 
 .slider-container

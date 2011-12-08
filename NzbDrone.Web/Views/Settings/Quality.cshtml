@@ -14,6 +14,10 @@
                 <span class="small">@Html.DescriptionFor(m => m.DefaultQualityProfileId)</span>
             </label>
             @Html.DropDownListFor(m => m.DefaultQualityProfileId, Model.QualityProfileSelectList, new { @class = "inputClass" })
+        </div>
+        
+        <div class="jquery-accordion">
+            <h3><a href="#">Sizes</a></h3>
             <div class="sliders">
                 <div class="slider-container">
                     <b>SDTV</b>
@@ -64,9 +68,7 @@
                     </span>
                 </div>
             </div>
-        </div>
-
-        <div id="bottom">
+            <h3><a href="#">Profiles</a></h3>
             <div id="profileContainer">
                 <div id="profileHeader">
                     <a id="addItem" href="@Url.Action("AddProfile", "Settings")">
@@ -80,10 +82,11 @@
                     }
                 </div>
             </div>
-            <br />
-            <button type="submit" class="save_button" disabled="disabled">
-                Save</button>
         </div>
+        
+        
+        <br />
+        <button type="submit" class="save_button" disabled="disabled">Save</button>
     }
 </div>
 @section Scripts{
@@ -92,6 +95,10 @@
     <script type="text/javascript">
         var deleteQualityProfileUrl = '@Url.Action("DeleteQualityProfile", "Settings")';
 
+        $('.quality-selectee').livequery(function () {
+            $(this).button();
+        });
+        
         $(document).ready(function () {
             setupSliders();
         });
