@@ -132,7 +132,6 @@
         .OrderBy(sortOrder => sortOrder.Add(o => o.EpisodeNumber).Descending()).SortMode(GridSortMode.SingleColumn))
         .Render();
 }
-}
 @section Scripts{
     <script type="text/javascript">
         seriesId = @Model.SeriesId;
