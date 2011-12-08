@@ -3,7 +3,6 @@
 @section TitleContent{
     @Model.Title
 }
-<script src="../../Scripts/NzbDrone/seriesDetails.js" type="text/javascript"></script>
 <link href="../../Content/Grid.css" rel="stylesheet" type="text/css" />
 <style>
     .seasonToggleTopGroup
@@ -117,7 +116,6 @@
                 .Width(80);
         })
         .DetailView(detailView => detailView.ClientTemplate("<div><#= Overview #> </br><#= Path #> </div>"))
-        //.Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.EpisodeNumber).Descending()).Enabled(false))
         .Footer(true)
         .DataBinding(
             d =>
@@ -133,6 +131,7 @@
         .Render();
 }
 @section Scripts{
+    <script src="../../Scripts/NzbDrone/seriesDetails.js" type="text/javascript"></script>
     <script type="text/javascript">
         seriesId = @Model.SeriesId;
     </script>
