@@ -101,7 +101,7 @@
         .TableHtmlAttributes(new { @class = "Grid" })
         .Columns(columns =>
         {
-            columns.Bound(c => c.EpisodeNumber).Width(100).Title("Episode").Sortable(true);
+            columns.Bound(c => c.EpisodeNumber).Width(100).Title("Episode #").Sortable(true);
             columns.Bound(c => c.Title).Title("Title").Sortable(false);
             columns.Bound(c => c.AirDate).Width(100).Sortable(false);
             columns.Bound(c => c.Quality).Width(100);

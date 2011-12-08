@@ -24,8 +24,8 @@ History
                                                        Url.Action("Details", "Series", new { seriesId = "<#= SeriesId #>" }) +
                                                        "><#= SeriesTitle #></a>")
                                        .Title("Series Title");
-                               columns.Bound(c => c.SeasonNumber).Title("Season").Width(1);
-                               columns.Bound(c => c.EpisodeNumber).Title("Episode").Width(1);
+                               columns.Bound(c => c.SeasonNumber).Title("Season #").Width(50);
+                               columns.Bound(c => c.EpisodeNumber).Title("Episode #").Width(50);
                                columns.Bound(c => c.EpisodeTitle).Title("Episode Title");
                                columns.Bound(c => c.Quality).Title("Quality").Width(50);
                                columns.Bound(c => c.Date).Title("Grabbed on");
