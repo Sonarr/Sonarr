@@ -85,10 +85,9 @@ namespace NzbDrone.Core.Providers.Indexer
 
             var result = new List<EpisodeParseResult>();
 
-            foreach (var url in Urls)
-            {
-                result.AddRange(Fetch(url));
-            }
+
+            result = Fetch(Urls);
+
 
             _logger.Info("Finished processing feeds from " + Name);
             return result;
@@ -98,14 +97,8 @@ namespace NzbDrone.Core.Providers.Indexer
         {
             _logger.Debug("Searching {0} for {1}-Season {2}", Name, seriesTitle, seasonNumber);
 
-            var result = new List<EpisodeParseResult>();
-
             var searchUrls = GetSeasonSearchUrls(GetQueryTitle(seriesTitle), seasonNumber);
-
-            foreach (var url in searchUrls)
-            {
-                result.AddRange(Fetch(url));
-            }
+            var result = Fetch(searchUrls);
 
             result = result.Where(e => e.CleanTitle == Parser.NormalizeTitle(seriesTitle)).ToList();
 
@@ -117,14 +110,10 @@ namespace NzbDrone.Core.Providers.Indexer
         {
             _logger.Debug("Searching {0} for {1}-Season {2}, Prefix: {3}", Name, seriesTitle, seasonNumber, episodePrefix);
 
-            var result = new List<EpisodeParseResult>();
 
             var searchUrls = GetPartialSeasonSearchUrls(GetQueryTitle(seriesTitle), seasonNumber, episodePrefix);
 
-            foreach (var url in searchUrls)
-            {
-                result.AddRange(Fetch(url));
-            }
+            var result = Fetch(searchUrls);
 
             result = result.Where(e => e.CleanTitle == Parser.NormalizeTitle(seriesTitle)).ToList();
 
@@ -136,14 +125,9 @@ namespace NzbDrone.Core.Providers.Indexer
         {
             _logger.Debug("Searching {0} for {1}-S{2:00}E{3:00}", Name, seriesTitle, seasonNumber, episodeNumber);
 
-            var result = new List<EpisodeParseResult>();
-
             var searchUrls = GetEpisodeSearchUrls(GetQueryTitle(seriesTitle), seasonNumber, episodeNumber);
 
-            foreach (var url in searchUrls)
-            {
-                result.AddRange(Fetch(url));
-            }
+            var result = Fetch(searchUrls);
 
             result = result.Where(e => e.CleanTitle == Parser.NormalizeTitle(seriesTitle)).ToList();
 
@@ -156,14 +140,9 @@ namespace NzbDrone.Core.Providers.Indexer
         {
             _logger.Debug("Searching {0} for {1}-{2}", Name, seriesTitle, airDate.ToShortDateString());
 
-            var result = new List<EpisodeParseResult>();
-
             var searchUrls = GetDailyEpisodeSearchUrls(GetQueryTitle(seriesTitle), airDate);
 
-            foreach (var url in searchUrls)
-            {
-                result.AddRange(Fetch(url));
-            }
+            var result = Fetch(searchUrls);
 
             result = result.Where(e => e.CleanTitle == Parser.NormalizeTitle(seriesTitle)).ToList();
 
@@ -172,40 +151,43 @@ namespace NzbDrone.Core.Providers.Indexer
 
         }
 
-        private IEnumerable<EpisodeParseResult> Fetch(string url)
+        private List<EpisodeParseResult> Fetch(IEnumerable<string> urls)
         {
             var result = new List<EpisodeParseResult>();
 
-            try
+            foreach (var url in urls)
             {
-                _logger.Trace("Downloading RSS " + url);
-
-                var reader = new SyndicationFeedXmlReader(_httpProvider.DownloadStream(url, Credentials));
-                var feed = SyndicationFeed.Load(reader).Items;
-
-                foreach (var item in feed)
+                try
                 {
-                    try
-                    {
-                        var parsedEpisode = ParseFeed(item);
-                        if (parsedEpisode != null)
-                        {
-                            parsedEpisode.NzbUrl = NzbDownloadUrl(item);
-                            parsedEpisode.Indexer = Name;
-                            parsedEpisode.NzbTitle = item.Title.Text;
-                            result.Add(parsedEpisode);
-                        }
-                    }
-                    catch (Exception itemEx)
-                    {
-                        _logger.ErrorException("An error occurred while processing feed item", itemEx);
-                    }
+                    _logger.Trace("Downloading RSS " + url);
 
+                    var reader = new SyndicationFeedXmlReader(_httpProvider.DownloadStream(url, Credentials));
+                    var feed = SyndicationFeed.Load(reader).Items;
+
+                    foreach (var item in feed)
+                    {
+                        try
+                        {
+                            var parsedEpisode = ParseFeed(item);
+                            if (parsedEpisode != null)
+                            {
+                                parsedEpisode.NzbUrl = NzbDownloadUrl(item);
+                                parsedEpisode.Indexer = Name;
+                                parsedEpisode.NzbTitle = item.Title.Text;
+                                result.Add(parsedEpisode);
+                            }
+                        }
+                        catch (Exception itemEx)
+                        {
+                            _logger.ErrorException("An error occurred while processing feed item", itemEx);
+                        }
+
+                    }
                 }
-            }
-            catch (Exception feedEx)
-            {
-                _logger.ErrorException("An error occurred while processing feed", feedEx);
+                catch (Exception feedEx)
+                {
+                    _logger.ErrorException("An error occurred while processing feed", feedEx);
+                }
             }
 
             return result;
