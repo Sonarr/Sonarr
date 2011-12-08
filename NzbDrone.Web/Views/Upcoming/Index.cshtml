@@ -25,14 +25,14 @@ Upcoming
                                             .Title("Series Title");
                                         columns.Bound(c => c.SeasonNumber).Title("Season #").Width(40);
                                         columns.Bound(c => c.EpisodeNumber).Title("Episode #").Width(40);
-                                        columns.Bound(c => c.Title).Title("Episode Title");
+                                        columns.Bound(c => c.Title).Title("Episode Title").Width(350);
                                         columns.Bound(c => c.AirDateTime).Title("Air Time")
                                          .ClientTemplate("<#= AirTime #>")
                                          .Width(160);
                                         columns.Bound(c => c.Status)
                                             .ClientTemplate("<img src='../../Content/Images/<#= Status #>.png' alt='<#= Status #>' title='<#= Status #>' class='statusImage status-<#= Status #>' />" +
                                                             "<a href=\"../Episode/Season?episodeId=<#= EpisodeId #>\" onclick=\"searchForEpisode('<#= EpisodeId #>'); return false;\"><img src='../../Content/Images/Search.png' alt='Search' title='Search for episode' class='searchImage' /></a>"
-                                                            );
+                                                            ).Width(100);
                                     })
                     .DetailView(detailView => detailView.ClientTemplate(
                         "<fieldset>" +
@@ -41,9 +41,6 @@ Upcoming
                                                     ))
                     .DataBinding(data => data.Ajax().Select("_AjaxBindingYesterday", "Upcoming"))
                     .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.AirDateTime).Ascending()).Enabled(true))
-              //.Pageable(c => c.PageSize(20).Position(GridPagerPosition.Both).Style(GridPagerStyles.PageInput | GridPagerStyles.NextPreviousAndNumeric))
-              //.Filterable()
-              //.ClientEvents(c => c.OnRowDataBound("onRowDataBound"))
                     .Render();}
     </div>
 </div>
@@ -63,14 +60,14 @@ Upcoming
                                             .Title("Series Name");
                                         columns.Bound(c => c.SeasonNumber).Title("Season #").Width(40);
                                         columns.Bound(c => c.EpisodeNumber).Title("Episode #").Width(40);
-                                        columns.Bound(c => c.Title).Title("Episode Title");
+                                        columns.Bound(c => c.Title).Title("Episode Title").Width(350);
                                         columns.Bound(c => c.AirDateTime).Title("Air Time")
                                          .ClientTemplate("<#= AirTime #>")
                                          .Width(160);
                                         columns.Bound(c => c.Status)
                                             .ClientTemplate("<img src='../../Content/Images/<#= Status #>.png' alt='<#= Status #>' title='<#= Status #>' class='statusImage status-<#= Status #>' />" +
                                                             "<a href=\"../Episode/Season?episodeId=<#= EpisodeId #>\" onclick=\"searchForEpisode('<#= EpisodeId #>'); return false;\"><img src='../../Content/Images/Search.png' alt='Search' title='Search for episode' class='searchImage' /></a>"
-                                                            );
+                                                            ).Width(100);
                                     })
                     .DetailView(detailView => detailView.ClientTemplate(
                         "<fieldset>" +
@@ -99,14 +96,14 @@ Upcoming
                                          .Title("Series Name");
                                      columns.Bound(c => c.SeasonNumber).Title("Season #").Width(40);
                                      columns.Bound(c => c.EpisodeNumber).Title("Episode #").Width(40);
-                                     columns.Bound(c => c.Title).Title("Episode Title");
+                                     columns.Bound(c => c.Title).Title("Episode Title").Width(350);
                                      columns.Bound(c => c.AirDateTime).Title("Air Time")
                                          .ClientTemplate("<#= AirTime #>")
                                          .Width(160);
                                      columns.Bound(c => c.Status)
                                             .ClientTemplate("<img src='../../Content/Images/<#= Status #>.png' alt='<#= Status #>' title='<#= Status #>' class='statusImage status-<#= Status #>' />" +
                                                             "<a href=\"../Episode/Season?episodeId=<#= EpisodeId #>\" onclick=\"searchForEpisode('<#= EpisodeId #>'); return false;\"><img src='../../Content/Images/Search.png' alt='Search' title='Search for episode' class='searchImage' /></a>"
-                                                            );
+                                                            ).Width(100);
                                  })
                     .DetailView(detailView => detailView.ClientTemplate(
                         "<fieldset>" +
@@ -136,14 +133,14 @@ Upcoming
                                          .Title("Series Name");
                                      columns.Bound(c => c.SeasonNumber).Title("Season #").Width(40);
                                      columns.Bound(c => c.EpisodeNumber).Title("Episode #").Width(40);
-                                     columns.Bound(c => c.Title).Title("Episode Title");
+                                     columns.Bound(c => c.Title).Title("Episode Title").Width(350);
                                      columns.Bound(c => c.AirDateTime).Title("Air Date/Time")
                                          .ClientTemplate("<#= AirDate #> at <#= AirTime #>")
                                          .Width(160);
                                      columns.Bound(c => c.Status)
                                             .ClientTemplate("<img src='../../Content/Images/<#= Status #>.png' alt='<#= Status #>' title='<#= Status #>' class='statusImage status-<#= Status #>' />" +
                                                             "<a href=\"../Episode/Season?episodeId=<#= EpisodeId #>\" onclick=\"searchForEpisode('<#= EpisodeId #>'); return false;\"><img src='../../Content/Images/Search.png' alt='Search' title='Search for episode' class='searchImage' /></a>"
-                                                            );
+                                                            ).Width(100);
                                  })
                     .DetailView(detailView => detailView.ClientTemplate(
                         "<fieldset>" +
