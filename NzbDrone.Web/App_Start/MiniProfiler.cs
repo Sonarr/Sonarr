@@ -4,6 +4,8 @@ using System.Linq;
 using MvcMiniProfiler;
 using MvcMiniProfiler.MVCHelpers;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
+using NzbDrone.Common;
+
 //using System.Data;
 //using System.Data.Entity;
 //using System.Data.Entity.Infrastructure;
@@ -66,7 +68,11 @@ namespace NzbDrone.Web.App_Start
                 //TODO: By default only local requests are profiled, optionally you can set it up
                 //  so authenticated users are always profiled
                 //if (request.IsLocal) { MiniProfiler.Start(); }
-                MiniProfiler.Start();
+
+                if (!EnviromentProvider.IsProduction)
+                {
+                    MiniProfiler.Start();
+                }
             };
 
 
@@ -81,10 +87,7 @@ namespace NzbDrone.Web.App_Start
             };
             */
 
-            context.EndRequest += (sender, e) =>
-            {
-                MiniProfiler.Stop();
-            };
+            context.EndRequest += (sender, e) => MiniProfiler.Stop();
         }
 
         public void Dispose() { }
