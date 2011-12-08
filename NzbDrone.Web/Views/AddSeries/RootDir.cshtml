@@ -8,3 +8,9 @@
 </span><span id="rootDirs">
     @{Html.RenderAction("RootList");}
 </span>
+<script language="javascript">
+    $(document).ready(function () {
+        //RootDir
+        $('#rootDirInput').watermark('Enter your new root folder path...');
+    });
+</script>

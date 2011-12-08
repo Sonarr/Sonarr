@@ -125,9 +125,3 @@ $('#quickAddNew').live('click', function () {
         }
     });
 });
-
-//On load
-jQuery(document).ready(function () {
-    //RootDir
-    $('#rootDirInput').watermark('Enter your new root folder path...');
-});
