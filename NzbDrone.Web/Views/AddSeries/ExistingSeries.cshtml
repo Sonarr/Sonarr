@@ -9,6 +9,7 @@
 <style>
     .existingSeries
     {
+        width: 548px;
         border-color: #f2f2f2;
         border-width: 1px;
         border-style: solid;
@@ -16,7 +17,7 @@
         margin: 0px 10px 10px 0px;
         padding-left: 10px;
         padding-right: 10px;
-        display: inline-block;
+        display: block;
     }
     .masterQualitySelector
     {
@@ -27,6 +28,11 @@
     .seriesPathValue
     {
         display: block;
+    }
+    
+    .existingSeriesContainer
+    {
+        position: relative;
     }
 </style>
 
@@ -54,12 +60,12 @@ else
         <span class="seriesPathValue">
             @Html.Label(series.Item1)
         </span>
-        <div>
-            <input class="seriesLookup" type="text" style="width: 400px" value="@series.Item2" />
+        <div class="existingSeriesContainer">
+            <input class="seriesLookup" type="text" style="width: 400px;" value="@series.Item2" />
             @Html.Hidden("seriesId", series.Item3, new { @class = "seriesId" })
             @Html.DropDownList(Guid.NewGuid().ToString(), Model.Quality, new { @class = "qualitySelector" })
 
-            <button>Add</button>
+            <button class="addExistingButton">Add</button>
         </div>
     </div>
 }

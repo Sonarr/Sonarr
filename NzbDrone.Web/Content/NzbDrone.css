@@ -75,15 +75,15 @@ hr
 {
     display: block;
     float: left;
-    height: 28px;
+    height: 26px;
     padding: 5px 20px 8px 15px;
     text-decoration: none;
     text-align: center;
     text-transform: lowercase;
-    font-size: 23px;
-    font-weight: 300;
+    font-size: 21px;
+    font-weight: normal;
     vertical-align: middle;
-    font-family: "Segoe UI Light" , "Segoe UI" , Tahoma, Geneva, sans-serif;
+    font-family: "Segoe UI", "Segoe UI Light" , Tahoma, Geneva, sans-serif;
 }
 
 #menu a:hover
@@ -180,18 +180,30 @@ input[type=text], select
     height: 20px;
 }
 
-select, button, input[type="button"], input[type="submit"], input[type="reset"]
+select
 {
     height: 26px;
     min-width: 50px;
     margin-left: 10px;
 }
 
-/*This allows us to override center the text on the jQuery UI Buttons when we set the height above*/
+button, input[type="button"], input[type="submit"], input[type="reset"]
+{
+    margin-left: 10px;
+}
+
+/*select, button, input[type="button"], input[type="submit"], input[type="reset"]
+{
+    height: 26px;
+    min-width: 50px;
+    margin-left: 10px;
+}
+
+/*This allows us to override center the text on the jQuery UI Buttons when we set the height above*
 button span, input[type="button"] span, input[type="submit"] span, input[type="reset"] span
 {
     margin-top: -3px;
-}
+}*/
 
 .listButton
 {

@@ -170,6 +170,9 @@ namespace NzbDrone.Core.Providers
             if (parseResult.EpisodeNumbers == null)
                 return result;
 
+            //Set it to empty before looping through the episode numbers
+            parseResult.EpisodeTitle = String.Empty;
+
             foreach (var episodeNumber in parseResult.EpisodeNumbers)
             {
                 var episodeInfo = GetEpisode(parseResult.Series.SeriesId, parseResult.SeasonNumber, episodeNumber);
