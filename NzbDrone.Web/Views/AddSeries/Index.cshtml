@@ -10,12 +10,12 @@ Add Series
 <div class="jquery-accordion">
     <h3>
         <a href="#">Add New Series</a></h3>
-    <div>
+    <div id="addNewSeries">
         @{ Html.RenderAction("AddNew", "AddSeries"); }
     </div>
     <h3>
         <a href="#">Add Series Already on Disk</a></h3>
-    <div>
+    <div id="existingSeries">
         @{ Html.RenderAction("ExistingSeries", "AddSeries"); }
     </div>
 </div>

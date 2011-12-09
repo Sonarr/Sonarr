@@ -45,7 +45,7 @@ $(".addExistingButton").live('click', function () {
 
 function reloadExistingSeries() {
     $.get(existingSeriesUrl, function (data) {
-        $('#existingSeriesTab').html(data);
+        $('#existingSeries').html(data);
     });
 }
 
