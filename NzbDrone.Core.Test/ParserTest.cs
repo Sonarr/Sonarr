@@ -195,12 +195,14 @@ namespace NzbDrone.Core.Test
         [TestCase("30.Rock.Season.04.HDTV.XviD-DIMENSION", "30.Rock", 4)]
         [TestCase("Parks.and.Recreation.S02.720p.x264-DIMENSION", "Parks.and.Recreation", 2)]
         [TestCase("The.Office.US.S03.720p.x264-DIMENSION", "The.Office.US", 3)]
+        [TestCase(@"Sons.of.Anarchy.S03.720p.BluRay-CLUE\REWARD", "Sons.of.Anarchy", 3)]
         public void full_season_release_parse(string postTitle, string title, int season)
         {
             var result = Parser.ParseTitle(postTitle);
             result.SeasonNumber.Should().Be(season);
             result.CleanTitle.Should().Be(Parser.NormalizeTitle(title));
             result.EpisodeNumbers.Count.Should().Be(0);
+            result.FullSeason.Should().BeTrue();
         }
 
         [TestCase("Conan", "conan")]
