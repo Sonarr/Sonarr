@@ -20,7 +20,7 @@
             @Html.LabelFor(x => x.Cutoff)
             @Html.DropDownListFor(m => m.Cutoff, new SelectList(Model.Allowed, Model.Cutoff))
         </div>
-        <div class="qualitySelector">
+        <div class="qualitySelectees">
             @Html.CheckBoxFor(m => m.Sdtv, new { @class = "quality-selectee" })
             @Html.LabelFor(m => m.Sdtv)
             @Html.CheckBoxFor(m => m.Dvd, new { @class = "quality-selectee" })

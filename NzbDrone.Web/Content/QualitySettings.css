@@ -65,9 +65,9 @@
 {
     margin-top: 10px;
     margin-left: 7px;
-    margin-right: 25px;
-    float: left;
+    margin-right: 20px;
     font-weight: bold;
+    display: inline-block;
     width: 50px;
 }
     
@@ -79,10 +79,17 @@
     width:170px;
     margin-right: 2px;
 }
-    
+
+.profileOptions input
+{
+    margin-left: 10px;
+    margin-bottom: 2px;
+}
+
 .profileOptions select
 {
-    width:176px;
+    width: 176px;
+    margin-bottom: 7px;
 }
     
 .qualitySelector
