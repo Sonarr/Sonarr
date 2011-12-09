@@ -22,24 +22,21 @@ namespace NzbDrone.Core.Test.ProviderTests
         [TestCase(false)]
         public void Add_new_series(bool useSeasonFolder)
         {
-            var mocker = new AutoMoqer();
+            WithRealDb();
 
-            mocker.GetMock<ConfigProvider>()
+            Mocker.GetMock<ConfigProvider>()
                 .Setup(c => c.UseSeasonFolder).Returns(useSeasonFolder);
-
-            var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
 
             var fakeProfiles = Builder<QualityProfile>.CreateListOfSize(2).Build();
 
-            db.InsertMany(fakeProfiles);
+            Db.InsertMany(fakeProfiles);
 
             const string path = "C:\\Test\\";
             const int tvDbId = 1234;
             const int qualityProfileId = 2;
 
             //Act
-            var seriesProvider = mocker.Resolve<SeriesProvider>();
+            var seriesProvider = Mocker.Resolve<SeriesProvider>();
             seriesProvider.AddSeries(path, tvDbId, qualityProfileId);
 
             //Assert
@@ -54,13 +51,11 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void find_series_empty_repo()
         {
-            var mocker = new AutoMoqer();
-            mocker.SetConstant(TestDbHelper.GetEmptyDatabase());
+            WithRealDb();
 
             //Act
-            var seriesProvider = mocker.Resolve<SeriesProvider>();
+            var seriesProvider = Mocker.Resolve<SeriesProvider>();
             var series = seriesProvider.FindSeries("My Title");
-
 
             //Assert
             Assert.IsNull(series);
@@ -70,11 +65,10 @@ namespace NzbDrone.Core.Test.ProviderTests
         [ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "Sequence contains no elements")]
         public void Get_series_invalid_series_id_should_return_null()
         {
-            var mocker = new AutoMoqer();
-            mocker.SetConstant(TestDbHelper.GetEmptyDatabase());
+            WithRealDb();
 
             //Act
-            var seriesProvider = mocker.Resolve<SeriesProvider>();
+            var seriesProvider = Mocker.Resolve<SeriesProvider>();
             var series = seriesProvider.GetSeries(2);
 
 
@@ -85,9 +79,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void Get_series_by_id()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            WithRealDb();
 
             var fakeSeries = Builder<Series>.CreateNew()
                 .With(c => c.QualityProfileId = 1)
@@ -97,12 +89,12 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Build();
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
 
-            db.Insert(fakeSeries);
-            db.Insert(fakeQuality);
+            Db.Insert(fakeSeries);
+            Db.Insert(fakeQuality);
 
             //Act
-            mocker.Resolve<QualityProvider>();
-            var series = mocker.Resolve<SeriesProvider>().GetSeries(1);
+            Mocker.Resolve<QualityProvider>();
+            var series = Mocker.Resolve<SeriesProvider>().GetSeries(1);
 
             //Assert
             series.ShouldHave().AllPropertiesBut(s => s.QualityProfile, s => s.SeriesId, s => s.NextAiring).EqualTo(fakeSeries);
@@ -114,9 +106,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void Find_series_by_cleanName_mapped()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            WithRealDb();
 
             var fakeSeries = Builder<Series>.CreateNew()
                 .With(c => c.QualityProfileId = 1)
@@ -124,14 +114,14 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Build();
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
 
-            var id = db.Insert(fakeSeries);
-            db.Insert(fakeQuality);
+            var id = Db.Insert(fakeSeries);
+            Db.Insert(fakeQuality);
 
             //Act
-            mocker.Resolve<QualityProvider>();
-            mocker.GetMock<SceneMappingProvider>().Setup(s => s.GetSeriesId("laworder")).Returns(1);
+            Mocker.Resolve<QualityProvider>();
+            Mocker.GetMock<SceneMappingProvider>().Setup(s => s.GetSeriesId("laworder")).Returns(1);
 
-            var series = mocker.Resolve<SeriesProvider>().FindSeries("laworder");
+            var series = Mocker.Resolve<SeriesProvider>().FindSeries("laworder");
 
             //Assert
             series.ShouldHave().AllPropertiesBut(s => s.QualityProfile, s => s.SeriesId);
@@ -142,12 +132,11 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void find_series_empty_match()
         {
-            var mocker = new AutoMoqer();
-            var emptyRepository = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(emptyRepository);
-            emptyRepository.Insert(TestDbHelper.GetFakeSeries(1, "MyTitle"));
+            WithRealDb();
+
+            Db.Insert(TestDbHelper.GetFakeSeries(1, "MyTitle"));
             //Act
-            var seriesProvider = mocker.Resolve<SeriesProvider>();
+            var seriesProvider = Mocker.Resolve<SeriesProvider>();
             var series = seriesProvider.FindSeries("WrongTitle");
 
 
@@ -159,15 +148,14 @@ namespace NzbDrone.Core.Test.ProviderTests
         [TestCase("Through the Wormhole", "Through.the.Wormhole")]
         public void find_series_match(string title, string searchTitle)
         {
-            var mocker = new AutoMoqer();
-            var emptyRepository = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(emptyRepository);
-            emptyRepository.Insert(TestDbHelper.GetFakeSeries(1, title));
-            emptyRepository.Insert(Builder<QualityProfile>.CreateNew().Build());
-            mocker.Resolve<QualityProvider>();
+            WithRealDb();
+
+            Db.Insert(TestDbHelper.GetFakeSeries(1, title));
+            Db.Insert(Builder<QualityProfile>.CreateNew().Build());
+            Mocker.Resolve<QualityProvider>();
 
             //Act
-            var seriesProvider = mocker.Resolve<SeriesProvider>();
+            var seriesProvider = Mocker.Resolve<SeriesProvider>();
             var series = seriesProvider.FindSeries(searchTitle);
 
             //Assert
@@ -180,27 +168,22 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void is_monitored()
         {
-            var mocker = new AutoMoqer();
+            WithRealDb();
 
-            var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
-
-            mocker.SetConstant(db);
-
-            db.Insert(Builder<Series>.CreateNew()
+            Db.Insert(Builder<Series>.CreateNew()
                                                   .With(c => c.Monitored = true)
                                                   .With(c => c.SeriesId = 12)
                                                   .Build());
 
-            db.Insert(Builder<Series>.CreateNew()
+            Db.Insert(Builder<Series>.CreateNew()
                                                  .With(c => c.Monitored = false)
                                                  .With(c => c.SeriesId = 11)
                                                  .Build());
 
-            db.InsertMany(Builder<QualityProfile>.CreateListOfSize(3).Build());
+            Db.InsertMany(Builder<QualityProfile>.CreateListOfSize(3).Build());
 
             //Act, Assert
-            var provider = mocker.Resolve<SeriesProvider>();
+            var provider = Mocker.Resolve<SeriesProvider>();
             provider.IsMonitored(12).Should().BeTrue();
             Assert.IsFalse(provider.IsMonitored(11));
             Assert.IsFalse(provider.IsMonitored(1));
@@ -209,9 +192,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void Get_Series_With_Count()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            WithRealDb();
 
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
             var fakeSeries = Builder<Series>.CreateNew().With(e => e.QualityProfileId = fakeQuality.QualityProfileId).Build();
@@ -225,13 +206,13 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(e => e.AirDate = DateTime.Today.AddDays(1))
                 .Build();
 
-            db.Insert(fakeSeries);
-            db.Insert(fakeQuality);
-            db.InsertMany(fakeEpisodes);
+            Db.Insert(fakeSeries);
+            Db.Insert(fakeQuality);
+            Db.InsertMany(fakeEpisodes);
 
             //Act
-            mocker.Resolve<QualityProvider>();
-            var series = mocker.Resolve<SeriesProvider>().GetAllSeriesWithEpisodeCount();
+            Mocker.Resolve<QualityProvider>();
+            var series = Mocker.Resolve<SeriesProvider>().GetAllSeriesWithEpisodeCount();
 
             //Assert
             series.Should().HaveCount(1);
@@ -242,21 +223,19 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void Get_Series_With_Count_AllIgnored()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            WithRealDb();
 
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
             var fakeSeries = Builder<Series>.CreateNew().With(e => e.QualityProfileId = fakeQuality.QualityProfileId).Build();
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(10).All().With(e => e.SeriesId = fakeSeries.SeriesId).With(e => e.Ignored = true).Random(5).With(e => e.EpisodeFileId = 0).Build();
 
-            db.Insert(fakeSeries);
-            db.Insert(fakeQuality);
-            db.InsertMany(fakeEpisodes);
+            Db.Insert(fakeSeries);
+            Db.Insert(fakeQuality);
+            Db.InsertMany(fakeEpisodes);
 
             //Act
-            mocker.Resolve<QualityProvider>();
-            var series = mocker.Resolve<SeriesProvider>().GetAllSeriesWithEpisodeCount();
+            Mocker.Resolve<QualityProvider>();
+            var series = Mocker.Resolve<SeriesProvider>().GetAllSeriesWithEpisodeCount();
 
             //Assert
             series.Should().HaveCount(1);
@@ -267,9 +246,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void Get_Series_With_Count_AllDownloaded()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            WithRealDb();
 
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
             var fakeSeries = Builder<Series>.CreateNew().With(e => e.QualityProfileId = fakeQuality.QualityProfileId).Build();
@@ -280,13 +257,13 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(e => e.AirDate = DateTime.Today.AddDays(-1))
                 .Build();
 
-            db.Insert(fakeSeries);
-            db.Insert(fakeQuality);
-            db.InsertMany(fakeEpisodes);
+            Db.Insert(fakeSeries);
+            Db.Insert(fakeQuality);
+            Db.InsertMany(fakeEpisodes);
 
             //Act
-            mocker.Resolve<QualityProvider>();
-            var series = mocker.Resolve<SeriesProvider>().GetAllSeriesWithEpisodeCount();
+            Mocker.Resolve<QualityProvider>();
+            var series = Mocker.Resolve<SeriesProvider>().GetAllSeriesWithEpisodeCount();
 
             //Assert
             series.Should().HaveCount(1);
@@ -297,9 +274,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void Get_Series_With_Count_Half_Ignored()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            WithRealDb();
 
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
             var fakeSeries = Builder<Series>.CreateNew().With(e => e.QualityProfileId = fakeQuality.QualityProfileId).Build();
@@ -313,13 +288,13 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(e => e.Ignored = true)
                 .Build();
 
-            db.Insert(fakeSeries);
-            db.Insert(fakeQuality);
-            db.InsertMany(fakeEpisodes);
+            Db.Insert(fakeSeries);
+            Db.Insert(fakeQuality);
+            Db.InsertMany(fakeEpisodes);
 
             //Act
-            mocker.Resolve<QualityProvider>();
-            var series = mocker.Resolve<SeriesProvider>().GetAllSeriesWithEpisodeCount();
+            Mocker.Resolve<QualityProvider>();
+            var series = Mocker.Resolve<SeriesProvider>().GetAllSeriesWithEpisodeCount();
 
             //Assert
             series.Should().HaveCount(1);
@@ -330,9 +305,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void Get_Single_Series()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            WithRealDb();
 
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
             var fakeSeries = Builder<Series>.CreateNew()
@@ -340,12 +313,12 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(e => e.SeriesId = 1)
                 .Build();
 
-            db.Insert(fakeSeries);
-            db.Insert(fakeQuality);
+            Db.Insert(fakeSeries);
+            Db.Insert(fakeQuality);
 
             //Act
-            mocker.Resolve<QualityProvider>();
-            var series = mocker.Resolve<SeriesProvider>().GetSeries(1);
+            Mocker.Resolve<QualityProvider>();
+            var series = Mocker.Resolve<SeriesProvider>().GetSeries(1);
 
             //Assert
             series.QualityProfile.Should().NotBeNull();
@@ -355,9 +328,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void SeriesPathExists_exact_match()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            WithRealDb();
 
             var path = @"C:\Test\TV\30 Rock";
 
@@ -369,15 +340,15 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Build();
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
 
-            db.InsertMany(fakeSeries);
-            db.Insert(fakeQuality);
+            Db.InsertMany(fakeSeries);
+            Db.Insert(fakeQuality);
 
             //Act
-            mocker.Resolve<QualityProvider>();
-            //mocker.GetMock<IDatabase>().Setup(s => s.Fetch<Series, QualityProfile>(It.IsAny<string>())).Returns(
+            Mocker.Resolve<QualityProvider>();
+            //Mocker.GetMock<IDatabase>().Setup(s => s.Fetch<Series, QualityProfile>(It.IsAny<string>())).Returns(
             //fakeSeries.ToList());
 
-            var result = mocker.Resolve<SeriesProvider>().SeriesPathExists(path);
+            var result = Mocker.Resolve<SeriesProvider>().SeriesPathExists(path);
 
             //Assert
             result.Should().BeTrue();
@@ -386,9 +357,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void SeriesPathExists_match()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            WithRealDb();
 
             var path = @"C:\Test\TV\30 Rock";
 
@@ -400,15 +369,15 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Build();
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
 
-            db.InsertMany(fakeSeries);
-            db.Insert(fakeQuality);
+            Db.InsertMany(fakeSeries);
+            Db.Insert(fakeQuality);
 
             //Act
-            mocker.Resolve<QualityProvider>();
-            //mocker.GetMock<IDatabase>().Setup(s => s.Fetch<Series, QualityProfile>(It.IsAny<string>())).Returns(
+            Mocker.Resolve<QualityProvider>();
+            //Mocker.GetMock<IDatabase>().Setup(s => s.Fetch<Series, QualityProfile>(It.IsAny<string>())).Returns(
             //fakeSeries.ToList());
 
-            var result = mocker.Resolve<SeriesProvider>().SeriesPathExists(path.ToUpper());
+            var result = Mocker.Resolve<SeriesProvider>().SeriesPathExists(path.ToUpper());
 
             //Assert
             result.Should().BeTrue();
@@ -417,9 +386,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void SeriesPathExists_match_alt()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            WithRealDb();
 
             var path = @"C:\Test\TV\The Simpsons";
 
@@ -431,15 +398,15 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Build();
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
 
-            db.InsertMany(fakeSeries);
-            db.Insert(fakeQuality);
+            Db.InsertMany(fakeSeries);
+            Db.Insert(fakeQuality);
 
             //Act
-            mocker.Resolve<QualityProvider>();
-            //mocker.GetMock<IDatabase>().Setup(s => s.Fetch<Series, QualityProfile>(It.IsAny<string>())).Returns(
+            Mocker.Resolve<QualityProvider>();
+            //Mocker.GetMock<IDatabase>().Setup(s => s.Fetch<Series, QualityProfile>(It.IsAny<string>())).Returns(
             //fakeSeries.ToList());
 
-            var result = mocker.Resolve<SeriesProvider>().SeriesPathExists(@"c:\Test\Tv\the sIMpsons");
+            var result = Mocker.Resolve<SeriesProvider>().SeriesPathExists(@"c:\Test\Tv\the sIMpsons");
 
             //Assert
             result.Should().BeTrue();
@@ -448,9 +415,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void SeriesPathExists_match_false()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            WithRealDb();
 
             var path = @"C:\Test\TV\30 Rock";
 
@@ -462,15 +427,15 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Build();
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
 
-            db.InsertMany(fakeSeries);
-            db.Insert(fakeQuality);
+            Db.InsertMany(fakeSeries);
+            Db.Insert(fakeQuality);
 
             //Act
-            mocker.Resolve<QualityProvider>();
-            //mocker.GetMock<IDatabase>().Setup(s => s.Fetch<Series, QualityProfile>(It.IsAny<string>())).Returns(
+            Mocker.Resolve<QualityProvider>();
+            //Mocker.GetMock<IDatabase>().Setup(s => s.Fetch<Series, QualityProfile>(It.IsAny<string>())).Returns(
             //fakeSeries.ToList());
 
-            var result = mocker.Resolve<SeriesProvider>().SeriesPathExists(@"C:\Test\TV\Not A match");
+            var result = Mocker.Resolve<SeriesProvider>().SeriesPathExists(@"C:\Test\TV\Not A match");
 
             //Assert
             result.Should().BeFalse();
@@ -479,9 +444,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void Get_Series_NextAiring_Today()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            WithRealDb();
 
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
             var fakeSeries = Builder<Series>.CreateNew().With(e => e.QualityProfileId = fakeQuality.QualityProfileId).Build();
@@ -494,13 +457,13 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(e => e.AirDate = DateTime.Today)
                 .Build();
 
-            db.Insert(fakeSeries);
-            db.Insert(fakeQuality);
-            db.InsertMany(fakeEpisodes);
+            Db.Insert(fakeSeries);
+            Db.Insert(fakeQuality);
+            Db.InsertMany(fakeEpisodes);
 
             //Act
-            mocker.Resolve<QualityProvider>();
-            var series = mocker.Resolve<SeriesProvider>().GetAllSeriesWithEpisodeCount();
+            Mocker.Resolve<QualityProvider>();
+            var series = Mocker.Resolve<SeriesProvider>().GetAllSeriesWithEpisodeCount();
 
             //Assert
             series.Should().HaveCount(1);
@@ -510,9 +473,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void Get_Series_NextAiring_Tomorrow_Last_Aired_Yesterday()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            WithRealDb();
 
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
             var fakeSeries = Builder<Series>.CreateNew().With(e => e.QualityProfileId = fakeQuality.QualityProfileId).Build();
@@ -525,13 +486,13 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(e => e.AirDate = DateTime.Today.AddDays(-1))
                 .Build();
 
-            db.Insert(fakeSeries);
-            db.Insert(fakeQuality);
-            db.InsertMany(fakeEpisodes);
+            Db.Insert(fakeSeries);
+            Db.Insert(fakeQuality);
+            Db.InsertMany(fakeEpisodes);
 
             //Act
-            mocker.Resolve<QualityProvider>();
-            var series = mocker.Resolve<SeriesProvider>().GetAllSeriesWithEpisodeCount();
+            Mocker.Resolve<QualityProvider>();
+            var series = Mocker.Resolve<SeriesProvider>().GetAllSeriesWithEpisodeCount();
 
             //Assert
             series.Should().HaveCount(1);
@@ -541,9 +502,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void Get_Series_NextAiring_Unknown()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            WithRealDb();
 
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
             var fakeSeries = Builder<Series>.CreateNew().With(e => e.QualityProfileId = fakeQuality.QualityProfileId).Build();
@@ -554,13 +513,13 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(e => e.Ignored = false)
                 .Build();
 
-            db.Insert(fakeSeries);
-            db.Insert(fakeQuality);
-            db.InsertMany(fakeEpisodes);
+            Db.Insert(fakeSeries);
+            Db.Insert(fakeQuality);
+            Db.InsertMany(fakeEpisodes);
 
             //Act
-            mocker.Resolve<QualityProvider>();
-            var series = mocker.Resolve<SeriesProvider>().GetAllSeriesWithEpisodeCount();
+            Mocker.Resolve<QualityProvider>();
+            var series = Mocker.Resolve<SeriesProvider>().GetAllSeriesWithEpisodeCount();
 
             //Assert
             series.Should().HaveCount(1);
@@ -570,9 +529,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void Get_Series_NextAiring_1_month()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            WithRealDb();
 
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
             var fakeSeries = Builder<Series>.CreateNew().With(e => e.QualityProfileId = fakeQuality.QualityProfileId).Build();
@@ -585,13 +542,13 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(e => e.AirDate = DateTime.Today.AddDays(-1))
                 .Build();
 
-            db.Insert(fakeSeries);
-            db.Insert(fakeQuality);
-            db.InsertMany(fakeEpisodes);
+            Db.Insert(fakeSeries);
+            Db.Insert(fakeQuality);
+            Db.InsertMany(fakeEpisodes);
 
             //Act
-            mocker.Resolve<QualityProvider>();
-            var series = mocker.Resolve<SeriesProvider>().GetAllSeriesWithEpisodeCount();
+            Mocker.Resolve<QualityProvider>();
+            var series = Mocker.Resolve<SeriesProvider>().GetAllSeriesWithEpisodeCount();
 
             //Assert
             series.Should().HaveCount(1);
@@ -601,9 +558,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void Get_Series_NextAiring_skip_ignored()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            WithRealDb();
 
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
             var fakeSeries = Builder<Series>.CreateNew().With(e => e.QualityProfileId = fakeQuality.QualityProfileId).Build();
@@ -617,13 +572,13 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(e => e.Ignored = true)
                 .Build();
 
-            db.Insert(fakeSeries);
-            db.Insert(fakeQuality);
-            db.InsertMany(fakeEpisodes);
+            Db.Insert(fakeSeries);
+            Db.Insert(fakeQuality);
+            Db.InsertMany(fakeEpisodes);
 
             //Act
-            mocker.Resolve<QualityProvider>();
-            var series = mocker.Resolve<SeriesProvider>().GetAllSeriesWithEpisodeCount();
+            Mocker.Resolve<QualityProvider>();
+            var series = Mocker.Resolve<SeriesProvider>().GetAllSeriesWithEpisodeCount();
 
             //Assert
             series.Should().HaveCount(1);
@@ -633,9 +588,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void SearchForSeries_should_return_results_that_start_with_query()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            WithRealDb();
 
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
             var fakeSeries = Builder<Series>.CreateListOfSize(10)
@@ -643,11 +596,11 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(e => e.QualityProfileId = fakeQuality.QualityProfileId)
                 .Build();
 
-            db.InsertMany(fakeSeries);
-            db.Insert(fakeQuality);
+            Db.InsertMany(fakeSeries);
+            Db.Insert(fakeQuality);
 
             //Act
-            var series = mocker.Resolve<SeriesProvider>().SearchForSeries("Titl");
+            var series = Mocker.Resolve<SeriesProvider>().SearchForSeries("Titl");
 
             //Assert
             series.Should().HaveCount(10);
@@ -656,9 +609,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void SearchForSeries_should_return_results_that_contain_the_query()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            WithRealDb();
 
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
             var fakeSeries = Builder<Series>.CreateListOfSize(10)
@@ -666,11 +617,11 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(e => e.QualityProfileId = fakeQuality.QualityProfileId)
                 .Build();
 
-            db.InsertMany(fakeSeries);
-            db.Insert(fakeQuality);
+            Db.InsertMany(fakeSeries);
+            Db.Insert(fakeQuality);
 
             //Act
-            var series = mocker.Resolve<SeriesProvider>().SearchForSeries("itl");
+            var series = Mocker.Resolve<SeriesProvider>().SearchForSeries("itl");
 
             //Assert
             series.Should().HaveCount(10);
@@ -679,9 +630,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void SearchForSeries_should_return_results_that_end_with_the_query()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            WithRealDb();
 
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
             var fakeSeries = Builder<Series>.CreateListOfSize(10)
@@ -689,11 +638,11 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(e => e.QualityProfileId = fakeQuality.QualityProfileId)
                 .Build();
 
-            db.InsertMany(fakeSeries);
-            db.Insert(fakeQuality);
+            Db.InsertMany(fakeSeries);
+            Db.Insert(fakeQuality);
 
             //Act
-            var series = mocker.Resolve<SeriesProvider>().SearchForSeries("2");
+            var series = Mocker.Resolve<SeriesProvider>().SearchForSeries("2");
 
             //Assert
             series.Should().HaveCount(1);
@@ -702,9 +651,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void SearchForSeries_should_not_return_results_that_do_not_contain_the_query()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+           WithRealDb();
 
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
             var fakeSeries = Builder<Series>.CreateListOfSize(10)
@@ -712,11 +659,11 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(e => e.QualityProfileId = fakeQuality.QualityProfileId)
                 .Build();
 
-            db.InsertMany(fakeSeries);
-            db.Insert(fakeQuality);
+            Db.InsertMany(fakeSeries);
+            Db.Insert(fakeQuality);
 
             //Act
-            var series = mocker.Resolve<SeriesProvider>().SearchForSeries("NotATitle");
+            var series = Mocker.Resolve<SeriesProvider>().SearchForSeries("NotATitle");
 
             //Assert
             series.Should().HaveCount(0);
@@ -725,9 +672,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void SearchForSeries_should_return_results_when_query_has_special_characters()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
-            var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            WithRealDb();
 
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
             var fakeSeries = Builder<Series>.CreateListOfSize(10)
@@ -737,11 +682,11 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(s => s.Title = "It's Always Sunny")
                 .Build();
 
-            db.InsertMany(fakeSeries);
-            db.Insert(fakeQuality);
+            Db.InsertMany(fakeSeries);
+            Db.Insert(fakeQuality);
 
             //Act
-            var series = mocker.Resolve<SeriesProvider>().SearchForSeries("it's");
+            var series = Mocker.Resolve<SeriesProvider>().SearchForSeries("it's");
 
             //Assert
             series.Should().HaveCount(1);
