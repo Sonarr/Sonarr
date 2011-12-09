@@ -307,7 +307,6 @@ namespace NzbDrone.Web.Controllers
             return new JsonResult { Data = "ok" };
         }
 
-
         public QualityModel GetUpdatedProfileList()
         {
             var profiles = _qualityProvider.All().ToList();
@@ -323,7 +322,16 @@ namespace NzbDrone.Web.Controllers
             try
             {
                 var info = _autoConfigureProvider.AutoConfigureSab();
-                return Json(info, JsonRequestBehavior.AllowGet);
+
+                if (info != null)
+                    return Json(info, JsonRequestBehavior.AllowGet);
+
+                return Json(new NotificationResult
+                                {
+                                        Title = "Auto-Configure Failed",
+                                        Text = "Please enter your SAB Settings Manually",
+                                        NotificationType = NotificationType.Error
+                                }, JsonRequestBehavior.AllowGet);
             }
 
             catch (Exception)
