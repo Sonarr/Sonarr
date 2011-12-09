@@ -2,7 +2,7 @@
 @model NzbDrone.Web.Models.EpisodeNamingModel
 @{ Layout = "~/Views/Shared/_RefrenceLayout.cshtml"; }
 @section HeaderContent{
-    <link rel="stylesheet" type="text/css" href="../../Content/Settings.css" />
+    @Html.IncludeCss("Settings.css")
     <style>
         #examples
         {
@@ -73,7 +73,6 @@
     }
 </div>
 @section Scripts{
-
     <script type="text/javascript">
         $(document).ready(function () {
             createExamples();

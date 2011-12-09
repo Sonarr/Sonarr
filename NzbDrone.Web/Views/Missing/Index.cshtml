@@ -1,9 +1,13 @@
 ﻿@model List<MissingEpisodeModel>
+@using NzbDrone.Web.Helpers
 @using NzbDrone.Web.Models;
 @section TitleContent{
 Missing
 }
-<link href="../../Content/Grid.css" rel="stylesheet" type="text/css" />
+@section HeaderContent
+{
+    @Html.IncludeCss("Grid.css")
+}
 @section ActionMenu{
     <ul class="sub-menu">
         <li>@Ajax.ActionLink("Start RSS Sync", "RssSync", "Command", null, null)</li>

@@ -1,7 +1,8 @@
-﻿@model NzbDrone.Web.Models.NotificationSettingsModel
+﻿@using NzbDrone.Web.Helpers
+@model NzbDrone.Web.Models.NotificationSettingsModel
 @{ Layout = "~/Views/Shared/_RefrenceLayout.cshtml"; }
 @section HeaderContent{
-    <link rel="stylesheet" type="text/css" href="../../Content/Settings.css" />
+    @Html.IncludeCss("Settings.css")
     <style>
         .notifier
         {

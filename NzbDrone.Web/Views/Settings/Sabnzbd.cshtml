@@ -2,7 +2,7 @@
 @model NzbDrone.Web.Models.SabnzbdSettingsModel
 @{ Layout = "~/Views/Shared/_RefrenceLayout.cshtml"; }
 @section HeaderContent{
-    <link rel="stylesheet" type="text/css" href="../../Content/Settings.css" />
+     @Html.IncludeCss("Settings.css")
 }
 <div id="stylized">
     @using (Html.BeginForm("SaveSabnzbd", "Settings", FormMethod.Post, new { id = "SabForm", name = "SabForm", @class = "settingsForm" }))

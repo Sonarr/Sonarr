@@ -1,9 +1,10 @@
-﻿@section TitleContent{
+﻿@using NzbDrone.Web.Helpers
+@section TitleContent{
 Add Series
 }
 @section Scripts
 {
-    <script type="text/javascript" src="../../Scripts/NzbDrone/addSeries.js"></script>
+    @Html.IncludeScript("NzbDrone/addSeries.js")
 }
 @{Html.RenderAction("RootDir");}
 <div class="jquery-accordion">

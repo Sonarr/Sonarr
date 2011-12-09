@@ -1,9 +1,13 @@
 ﻿@model SeriesModel
+@using NzbDrone.Web.Helpers
 @using NzbDrone.Web.Models
 @section TitleContent{
     @Model.Title
 }
-<link href="../../Content/Grid.css" rel="stylesheet" type="text/css" />
+@section HeaderContent
+{
+    @Html.IncludeCss("Grid.css")
+}
 <style>
     .seasonToggleTopGroup
     {
@@ -131,7 +135,7 @@
         .Render();
 }
 @section Scripts{
-    <script src="../../Scripts/NzbDrone/seriesDetails.js" type="text/javascript"></script>
+    @Html.IncludeScript("NzbDrone/seriesDetails.js")
     <script type="text/javascript">
         seriesId = @Model.SeriesId;
     </script>

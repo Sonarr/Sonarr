@@ -2,8 +2,8 @@
 @model NzbDrone.Web.Models.IndexerSettingsModel
 @{ Layout = "~/Views/Shared/_RefrenceLayout.cshtml"; }
 @section HeaderContent{
-    <link rel="stylesheet" type="text/css" href="../../Content/Settings.css" />
-    <link rel="stylesheet" type="text/css" href="../../Content/IndexerSettings.css" />
+    @Html.IncludeCss("Settings.css")
+    @Html.IncludeCss("IndexerSettings.css")
     <style>
         .indexerPanel
         {

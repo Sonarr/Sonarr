@@ -3,7 +3,7 @@
 @{ Layout = "~/Views/Shared/_RefrenceLayout.cshtml"; }
 
 @section HeaderContent{
-    <link rel="stylesheet" type="text/css" href="../../Content/Settings.css" />
+    @Html.IncludeCss("Settings.css")
 }
 <div id="stylized">
     @using (Html.BeginForm("SaveSystem", "Settings", FormMethod.Post, new { id = "SystemForm", name = "SystemForm", @class = "settingsForm" }))

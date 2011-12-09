@@ -3,8 +3,8 @@
 @model NzbDrone.Web.Models.QualityModel
 @{ Layout = "~/Views/Shared/_RefrenceLayout.cshtml"; }
 @section HeaderContent{
-    <link rel="stylesheet" type="text/css" href="../../Content/Settings.css" />
-    <link href="../../Content/QualitySettings.css" rel="stylesheet" type="text/css" />
+    @Html.IncludeCss("Settings.css")
+    @Html.IncludeCss("QualitySettings.css")
 }
 <div id="stylized">
     @using (Html.BeginForm("SaveQuality", "Settings", FormMethod.Post, new { id = "QualityForm", name = "QualityForm" }))
@@ -17,7 +17,8 @@
         </div>
         
         <div class="jquery-accordion">
-            <h3><a href="#">Sizes</a></h3>
+            <h3>
+                <a href="#">Sizes</a></h3>
             <div class="sliders">
                 <div class="slider-container">
                     <b>SDTV</b>
@@ -68,7 +69,8 @@
                     </span>
                 </div>
             </div>
-            <h3><a href="#">Profiles</a></h3>
+            <h3>
+                <a href="#">Profiles</a></h3>
             <div id="profileContainer">
                 <div id="profileHeader">
                     <a id="addItem" href="@Url.Action("AddProfile", "Settings")">
@@ -86,19 +88,19 @@
         
         
         <br />
-        <button type="submit" class="save_button" disabled="disabled">Save</button>
+        <button type="submit" class="save_button" disabled="disabled">
+            Save</button>
     }
 </div>
 @section Scripts{
-    <script src="../../Scripts/MicrosoftAjax.js" type="text/javascript"></script>
-
+    @Html.IncludeScript("MicrosoftAjax.js")
     <script type="text/javascript">
         var deleteQualityProfileUrl = '@Url.Action("DeleteQualityProfile", "Settings")';
 
         $('.quality-selectee').livequery(function () {
             $(this).button();
         });
-        
+
         $(document).ready(function () {
             setupSliders();
         });

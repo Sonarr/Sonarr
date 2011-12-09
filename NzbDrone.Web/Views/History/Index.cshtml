@@ -1,5 +1,6 @@
 ﻿@model List<NzbDrone.Web.Models.HistoryModel>
 @using NzbDrone.Web.Models
+@using NzbDrone.Web.Helpers
 @section TitleContent{
 History
 }
@@ -9,7 +10,10 @@ History
         <li>@Ajax.ActionLink("Purge History", "Purge", "History", new AjaxOptions { OnSuccess = "reloadHistoryGrid" })</li>
     </ul>
 }
-<link href="../../Content/Grid.css" rel="stylesheet" type="text/css" />
+@section HeaderContent
+{
+    @Html.IncludeCss("Grid.css")
+}
 <div class="grid-container">
     @{Html.Telerik().Grid<HistoryModel>().Name("history")
               .TableHtmlAttributes(new { @class = "Grid" })
@@ -49,7 +53,6 @@ History
                         c.PageSize(20).Position(GridPagerPosition.Bottom).Style(GridPagerStyles.NextPrevious))
               .Render();}
 </div>
-
 <script type="text/javascript">
     deleteHistoryRowUrl = '../History/Delete';
     redownloadUrl = '../History/Redownload';

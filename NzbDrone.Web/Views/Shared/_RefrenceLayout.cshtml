@@ -1,39 +1,40 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+@using NzbDrone.Web.Helpers
 @using Telerik.Web.Mvc.UI
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <link rel="SHORTCUT ICON" href="../../favicon.ico" />
     <title>NzbDrone</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link type="text/css" rel="stylesheet" href="../../Content/2011.3.1115/telerik.common.min.css" />
-    <link type="text/css" rel="stylesheet" href="../../Content/2011.3.1115/telerik.sitefinity.min.css" />
-    <link type="text/css" rel="stylesheet" href="../../Content/jQueryUI/jquery-ui-1.8.16.custom.css" />
-    <link type="text/css" rel="stylesheet" href="../../Content/jquery.gritter.css" />
-    <link type="text/css" rel="stylesheet" href="../../Content/NzbDrone.css" />
-    <link type="text/css" rel="stylesheet" href="../../Content/ActionButton.css" />
-    <link type="text/css" rel="stylesheet" href="../../Content/overrides.css" />
-    <link type="text/css" rel="stylesheet" href="../../Content/Menu.css" />
-    <link type="text/css" rel="stylesheet" href="../../Content/Messages.css" />
+    @Html.IncludeCss("2011.3.1115/telerik.common.min.css")
+    @Html.IncludeCss("2011.3.1115/telerik.sitefinity.min.css")
+    @Html.IncludeCss("jQueryUI/jquery-ui-1.8.16.custom.css")
+    @Html.IncludeCss("jquery.gritter.css")
+    @Html.IncludeCss("NzbDrone.css")
+    @Html.IncludeCss("ActionButton.css")
+    @Html.IncludeCss("overrides.css")
+    @Html.IncludeCss("Menu.css")
+    @Html.IncludeCss("Messages.css")
     @RenderSection("HeaderContent", required: false)
 </head>
 <body>
     @RenderBody()
     @(Html.Telerik().ScriptRegistrar().jQuery(true))
-    <script type="text/javascript" src="../../Scripts/jquery-ui-1.8.16.min.js"></script>
-    <script type="text/javascript" src="../../Scripts/jquery.livequery.js"></script>
-    <script type="text/javascript" src="../../Scripts/MicrosoftAjax.js"></script>
-    <script type="text/javascript" src="../../Scripts/MicrosoftMvcAjax.js"></script>
-    <script type="text/javascript" src="../../Scripts/jquery.gritter.js"></script>
-    <script type="text/javascript" src="../../Scripts/jquery.form.js"></script>
-    <script type="text/javascript" src="../../Scripts/jquery-tgc-countdown-1.0.js"></script>
-    <script type="text/javascript" src="../../Scripts/jquery.watermark.min.js"></script>
-    <script type="text/javascript" src="../../Scripts/jquery.hotkeys.js"></script>
-    <script type="text/javascript" src="../../Scripts/doTimeout.js"></script>
-    <script type="text/javascript" src="../../Scripts/NzbDrone/episodeSearch.js"></script>
-    <script type="text/javascript" src="../../Scripts/NzbDrone/AutoComplete.js"></script>
-    <script type="text/javascript" src="../../Scripts/NzbDrone/LocalSearch.js"></script>
-    <script type="text/javascript" src="../../Scripts/NzbDrone/Notification.js"></script>
-    <script type="text/javascript" src="../../Scripts/NzbDrone/AutoBind.js"></script>
+    @Html.IncludeScript("jquery-ui-1.8.16.min.js")
+    @Html.IncludeScript("jquery.livequery.js")
+    @Html.IncludeScript("MicrosoftAjax.js")
+    @Html.IncludeScript("MicrosoftMvcAjax.js")
+    @Html.IncludeScript("jquery.gritter.js")
+    @Html.IncludeScript("jquery.form.js")
+    @Html.IncludeScript("jquery-tgc-countdown-1.0.js")
+    @Html.IncludeScript("jquery.watermark.min.js")
+    @Html.IncludeScript("jquery.hotkeys.js")
+    @Html.IncludeScript("doTimeout.js")
+    @Html.IncludeScript("NzbDrone/episodeSearch.js")
+    @Html.IncludeScript("NzbDrone/AutoComplete.js")
+    @Html.IncludeScript("NzbDrone/LocalSearch.js")
+    @Html.IncludeScript("NzbDrone/Notification.js")
+    @Html.IncludeScript("NzbDrone/AutoBind.js")
     @RenderSection("Scripts", required: false)
 </body>
 </html>

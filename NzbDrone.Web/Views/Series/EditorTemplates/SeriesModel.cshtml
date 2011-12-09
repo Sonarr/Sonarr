@@ -1,11 +1,13 @@
 ﻿@using NzbDrone.Web.Helpers;
-@using NzbDrone.Web.Models;
 @model NzbDrone.Web.Models.SeriesModel
 @{
     Layout = null;
 }
 
-<link rel="stylesheet" type="text/css" href="../../../Content/Settings.css" />
+@section HeaderContent
+{
+    @Html.IncludeCss("Settings.css")
+}
 
 <div id="stylized" style="border-color: transparent;">
     <div class="settingsForm clearfix">
