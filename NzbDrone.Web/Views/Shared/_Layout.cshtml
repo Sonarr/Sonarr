@@ -4,41 +4,42 @@
 @using NzbDrone.Web.Helpers
 @section HeaderContent
 {
-    @MvcMiniProfiler.MiniProfiler.RenderIncludes()
+    @if (!EnviromentProvider.IsProduction)
+    {
+        @MvcMiniProfiler.MiniProfiler.RenderIncludes()
+    }
     @RenderSection("HeaderContent", required: false)
 }
-
-<body>
-    <div id="centered">
-        <div id="menu">
-            <ul>
-                @MvcHtmlString.Create(Html.CurrentActionLink("Series", "Index", "Series"))
-                @MvcHtmlString.Create(Html.CurrentActionLink("Upcoming", "Index", "Upcoming"))
-                @MvcHtmlString.Create(Html.CurrentActionLink("History", "Index", "History"))
-                @MvcHtmlString.Create(Html.CurrentActionLink("Missing", "Index", "Missing"))
-                @MvcHtmlString.Create(Html.CurrentActionLink("Settings", "Index", "Settings"))
-                @MvcHtmlString.Create(Html.CurrentActionLink("Logs", "Index", "Log"))
-            </ul>
-            <input id="localSeriesLookup" type="text" />
-        </div>
-        <div id="logo">
-            @RenderSection("TitleContent", required: false)
-        </div>
-        <div id="page">
-            @RenderSection("ActionMenu", required: false)
-            @RenderBody()
-        </div>
-        <div id="footer">
-            @{Html.RenderAction("Footer", "Shared");}
-        </div>
+<div id="centered">
+    <div id="menu">
+        <ul>
+            @MvcHtmlString.Create(Html.CurrentActionLink("Series", "Index", "Series"))
+            @MvcHtmlString.Create(Html.CurrentActionLink("Upcoming", "Index", "Upcoming"))
+            @MvcHtmlString.Create(Html.CurrentActionLink("History", "Index", "History"))
+            @MvcHtmlString.Create(Html.CurrentActionLink("Missing", "Index", "Missing"))
+            @MvcHtmlString.Create(Html.CurrentActionLink("Settings", "Index", "Settings"))
+            @MvcHtmlString.Create(Html.CurrentActionLink("Logs", "Index", "Log"))
+        </ul>
+        <input id="localSeriesLookup" type="text" />
     </div>
-    <div id="msgBox">
-        <span id="msgText">background notification</span>
+    <div id="logo">
+        @RenderSection("TitleContent", required: false)
     </div>
+    <div id="page">
+        @RenderSection("ActionMenu", required: false)
+        @RenderBody()
+    </div>
+    <div id="footer">
+        @{Html.RenderAction("Footer", "Shared");}
+    </div>
+</div>
+<div id="msgBox">
+    <span id="msgText">background notification</span>
+</div>
 @section Scripts
 {
     @RenderSection("Scripts", required: false)
-     @if (EnviromentProvider.IsProduction)
+    @if (EnviromentProvider.IsProduction)
     {
         <script type="text/javascript">
             var _gaq = _gaq || [];
