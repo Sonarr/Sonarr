@@ -1,9 +1,5 @@
 ﻿@model HandleErrorInfo
-@section TitleContent
-{
-EPIC FAIL!!!
-}
-
+@{ ViewBag.Title = "EPIC FAIL!"; }
 <h2>
     @Model.Exception.Message
 </h2>
