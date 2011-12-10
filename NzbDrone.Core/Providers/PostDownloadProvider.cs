@@ -36,7 +36,10 @@ namespace NzbDrone.Core.Providers
             {
                 try
                 {
-                    ProcessDownload(new DirectoryInfo(subfolder));
+                    if (!_seriesProvider.SeriesPathExists(subfolder))
+                    {
+                        ProcessDownload(new DirectoryInfo(subfolder));
+                    }
                 }
                 catch (Exception e)
                 {

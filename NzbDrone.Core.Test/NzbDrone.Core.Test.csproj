@@ -115,7 +115,7 @@
     <Compile Include="ProviderTests\DiskProviderTests\ExtractArchiveFixture.cs" />
     <Compile Include="ProviderTests\PostDownloadProviderTests\PostDownloadProviderFixture.cs" />
     <Compile Include="JobTests\SearchJobTest.cs" />
-    <Compile Include="ProviderTests\PostDownloadProviderTests\ProcessDownloadFixture.cs" />
+    <Compile Include="ProviderTests\PostDownloadProviderTests\ProcessDownloadProviderFixture.cs" />
     <Compile Include="ProviderTests\JobProviderTests\TestJobs.cs" />
     <Compile Include="JobTests\AppUpdateJobFixture.cs" />
     <Compile Include="ProviderTests\UpdateProviderTests\GetUpdateLogFixture.cs" />

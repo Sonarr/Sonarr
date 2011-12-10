@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
+using NzbDrone.Common;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
@@ -176,12 +177,11 @@ namespace NzbDrone.Core.Providers
             }
         }
 
-        public virtual bool SeriesPathExists(string cleanPath)
+        public virtual bool SeriesPathExists(string path)
         {
-            if (GetAllSeries().Any(s => s.Path.ToLower() == cleanPath.ToLower()))
-                return true;
+            var normilizedPath = path.NormalizePath();
 
-            return false;
+            return GetAllSeries().Any(s => s.Path.NormalizePath() == normilizedPath);
         }
 
         public virtual List<Series> SearchForSeries(string title)

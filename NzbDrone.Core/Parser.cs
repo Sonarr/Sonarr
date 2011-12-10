@@ -96,7 +96,7 @@ namespace NzbDrone.Core
                         {
                             //Check if episode is in the future (most likley a parse error)
                             if (result.AirDate > DateTime.Now.AddDays(1).Date)
-                               break;
+                                break;
 
                             result.Language = ParseLanguage(title);
                             result.Quality = ParseQuality(title);
@@ -185,12 +185,7 @@ namespace NzbDrone.Core
             return parsedEpisode;
         }
 
-        /// <summary>
-        ///   Parses a post title to find the series that relates to it
-        /// </summary>
-        /// <param name = "title">Title of the report</param>
-        /// <returns>Normalized Series Name</returns>
-        internal static string ParseSeriesName(string title)
+        public static string ParseSeriesName(string title)
         {
             Logger.Trace("Parsing string '{0}'", title);
 
@@ -207,7 +202,7 @@ namespace NzbDrone.Core
                 }
             }
 
-            return String.Empty;
+            return NormalizeTitle(title);
         }
 
         internal static Quality ParseQuality(string name)

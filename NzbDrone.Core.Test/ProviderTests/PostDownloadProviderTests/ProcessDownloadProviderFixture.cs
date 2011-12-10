@@ -10,7 +10,6 @@ using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
-using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
@@ -19,7 +18,7 @@ using NzbDrone.Test.Common.AutoMoq;
 namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 {
     [TestFixture]
-    public class ProcessDownloadFixture : CoreTest
+    public class ProcessDownloadProviderFixture : CoreTest
     {
         [Test]
         public void should_skip_if_folder_is_tagged_and_too_fresh()
@@ -244,6 +243,45 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
             mocker.GetMock<DiskScanProvider>().Verify(c => c.MoveEpisodeFile(It.IsAny<EpisodeFile>(), true),
                 Times.Exactly(fakeEpisodeFiles.Count));
             mocker.VerifyAllMocks();
+        }
+
+
+        [Test]
+        public void ProcessDropFolder_should_only_process_folders_that_arent_known_series_folders()
+        {
+            var subFolders = new List<string>
+                                 {
+                                    @"c:\drop\episode1",
+                                    @"c:\drop\episode2",
+                                    @"c:\drop\episode3",
+                                    @"c:\drop\episode4"
+                                 };
+
+            Mocker.GetMock<DiskProvider>()
+                .Setup(c => c.GetDirectories(It.IsAny<String>()))
+                .Returns(subFolders);
+
+            Mocker.GetMock<SeriesProvider>()
+                .Setup(c => c.SeriesPathExists(subFolders[1]))
+                .Returns(true);
+
+            Mocker.GetMock<SeriesProvider>()
+                .Setup(c => c.FindSeries(It.IsAny<String>()))
+                .Returns(new Series());
+
+            Mocker.GetMock<DiskScanProvider>()
+                .Setup(c => c.Scan(It.IsAny<Series>(), It.IsAny<String>()))
+                .Returns(new List<EpisodeFile>());
+
+            //Act
+            Mocker.Resolve<PostDownloadProvider>().ProcessDropFolder(@"C:\drop\");
+
+
+            //Assert
+            Mocker.GetMock<DiskScanProvider>().Verify(c => c.Scan(It.IsAny<Series>(), subFolders[0]), Times.Once());
+            Mocker.GetMock<DiskScanProvider>().Verify(c => c.Scan(It.IsAny<Series>(), subFolders[1]), Times.Never());
+            Mocker.GetMock<DiskScanProvider>().Verify(c => c.Scan(It.IsAny<Series>(), subFolders[2]), Times.Once());
+            Mocker.GetMock<DiskScanProvider>().Verify(c => c.Scan(It.IsAny<Series>(), subFolders[3]), Times.Once());
         }
     }
 }
