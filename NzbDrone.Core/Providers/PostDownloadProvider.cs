@@ -91,7 +91,7 @@ namespace NzbDrone.Core.Providers
         {
             var target = GetTaggedFolderName(directory, status);
 
-            if (!String.Equals(target.NormalizePath(), directory.FullName.NormalizePath(), StringComparison.InvariantCultureIgnoreCase))
+            if (!DiskProvider.PathEquals(target, directory.FullName))
             {
                 Logger.Warn("Unable to download [{0}]. Status: {1}",directory.Name, status);
                 _diskProvider.MoveDirectory(directory.FullName, target);

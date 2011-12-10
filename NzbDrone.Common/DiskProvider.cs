@@ -175,5 +175,11 @@ namespace NzbDrone.Common
         {
             return File.ReadAllText(filePath);
         }
+
+
+        public static bool PathEquals(string firstPath, string secondPath)
+        {
+            return String.Equals(firstPath.NormalizePath(), secondPath.NormalizePath(), StringComparison.InvariantCultureIgnoreCase);
+        }
     }
 }

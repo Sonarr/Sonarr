@@ -72,11 +72,9 @@ namespace NzbDrone.Core.Providers
 
             foreach (string seriesFolder in _diskProvider.GetDirectories(path))
             {
-                var cleanPath = new DirectoryInfo(seriesFolder).FullName.NormalizePath();
-
-                if (!_seriesProvider.SeriesPathExists(cleanPath))
+                if (!_seriesProvider.SeriesPathExists(seriesFolder))
                 {
-                    results.Add(cleanPath);
+                    results.Add(seriesFolder.Normalize());
                 }
             }
 

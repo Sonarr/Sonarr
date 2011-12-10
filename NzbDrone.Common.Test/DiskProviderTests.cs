@@ -94,6 +94,26 @@ namespace NzbDrone.Common.Test
             VerifyMove();
         }
 
+
+        [TestCase(@"C:\", @"C:\")]
+        [TestCase(@"C:\\", @"C:\")]
+        [TestCase(@"c:\", @"C:\")]
+        [TestCase(@"c:\Test", @"C:\Test\\")]
+        [TestCase(@"c:\\\\\Test", @"C:\Test\\")]
+        [TestCase(@"c:\Test\\\\", @"C:\Test\\")]
+        [TestCase(@"c:\Test", @"C:\Test\\")]
+        public void paths_should_be_equeal(string first, string second)
+        {
+            DiskProvider.PathEquals(first, second).Should().BeTrue();
+        }
+
+        [TestCase(@"D:\Test", @"C:\Test\")]
+        [TestCase(@"D:\Test\Test", @"C:\TestTest\")]
+        public void paths_should_not_be_equeal(string first, string second)
+        {
+            DiskProvider.PathEquals(first, second).Should().BeFalse();
+        }
+
         private void VerifyCopy()
         {
             BinFolder.Refresh();

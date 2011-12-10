@@ -179,9 +179,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual bool SeriesPathExists(string path)
         {
-            var normilizedPath = path.NormalizePath();
-
-            return GetAllSeries().Any(s => s.Path.NormalizePath() == normilizedPath);
+            return GetAllSeries().Any(s => DiskProvider.PathEquals(s.Path, path));
         }
 
         public virtual List<Series> SearchForSeries(string title)

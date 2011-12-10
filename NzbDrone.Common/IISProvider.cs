@@ -102,7 +102,7 @@ namespace NzbDrone.Common
             foreach (var process in _processProvider.GetProcessByName("IISExpress"))
             {
                 Logger.Info("[{0}]IIS Process found. Path:{1}", process.Id, process.StartPath);
-                if (process.StartPath.NormalizePath() == _enviromentProvider.GetIISExe().NormalizePath())
+                if (DiskProvider.PathEquals(process.StartPath, _enviromentProvider.GetIISExe()))
                 {
                     Logger.Info("[{0}]Process is considered orphaned.", process.Id);
                     _processProvider.Kill(process.Id);
