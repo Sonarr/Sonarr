@@ -20,9 +20,7 @@
         }
     </script>
 }
-@section TitleContent{
-Logs
-}
+@{ ViewBag.Title = "Logs";}
 @section ActionMenu{
     <ul class="sub-menu">
         <li>@Ajax.ActionLink("Clear Logs", "Clear", "Log", new AjaxOptions { OnSuccess = "reloadGrid" })</li>

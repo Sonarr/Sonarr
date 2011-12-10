@@ -1,8 +1,6 @@
 ﻿@using NzbDrone.Web.Models
 @model IEnumerable<NzbDrone.Core.Repository.JobDefinition>
-@section TitleContent{
-Jobs
-}
+@{ViewBag.Title = "Jobs";}
 
     @{Html.Telerik().Grid(Model).Name("Grid")
     .Render();}

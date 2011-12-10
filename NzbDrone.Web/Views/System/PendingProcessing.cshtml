@@ -1,8 +1,6 @@
 ﻿@model List<NzbDrone.Web.Models.PendingProcessingModel>
 @using NzbDrone.Web.Models
-@section TitleContent{
-Pending Processing
-}
+@{ViewBag.Title = "Pending Processing";}
 @section ActionMenu{
     @{Html.Telerik().Menu().Name("historyMenu").Items(items =>
             {

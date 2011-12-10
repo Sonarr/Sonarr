@@ -1,9 +1,7 @@
 ﻿@model List<UpcomingEpisodeModel>
 @using NzbDrone.Web.Helpers
 @using NzbDrone.Web.Models
-@section TitleContent{
-Upcoming
-}
+@{ViewBag.Title = "Upcoming";}
 @section HeaderContent
 {
     @Html.IncludeCss("Grid.css")

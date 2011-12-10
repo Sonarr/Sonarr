@@ -1,7 +1,5 @@
 ﻿@model NzbDrone.Web.Models.UpdateModel
-@section TitleContent{
-Update
-}
+@{ViewBag.Title = "Update";}
 @if (Model.UpdatePackage == null)
 {
     <h2>

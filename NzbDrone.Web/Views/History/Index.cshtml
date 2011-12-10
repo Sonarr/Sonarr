@@ -1,9 +1,7 @@
-﻿@model List<NzbDrone.Web.Models.HistoryModel>
+﻿@model List<HistoryModel>
 @using NzbDrone.Web.Models
 @using NzbDrone.Web.Helpers
-@section TitleContent{
-History
-}
+@{ViewBag.Title = "History";}
 @section ActionMenu{
     <ul class="sub-menu">
         <li>@Ajax.ActionLink("Trim History", "Trim", "History", new AjaxOptions { OnSuccess = "reloadHistoryGrid" })</li>

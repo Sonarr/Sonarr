@@ -1,7 +1,5 @@
 ﻿@model IEnumerable<NzbDrone.Core.Repository.Config>
-@section TitleContent{
-Configuration
-}
+@{ViewBag.Title = "Configuration";}
 @(Html.Telerik().Grid<NzbDrone.Core.Repository.Config>()
         .Name("Grid")
          .TableHtmlAttributes(new { @class = "Grid" })

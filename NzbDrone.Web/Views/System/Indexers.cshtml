@@ -1,7 +1,5 @@
 ﻿@model IEnumerable<NzbDrone.Core.Repository.IndexerDefinition>
-@section TitleContent{
-Indexers
-}
+@{ViewBag.Title = "Indexers";}
 @{Html.Telerik().Grid(Model).Name("Grid")
             .TableHtmlAttributes(new { @class = "Grid" })
             .Render();}

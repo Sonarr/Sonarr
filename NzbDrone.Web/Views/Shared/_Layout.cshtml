@@ -4,6 +4,15 @@
 @using NzbDrone.Web.Helpers
 @section HeaderContent
 {
+    @if (string.IsNullOrWhiteSpace(ViewBag.Title) || String.Equals(ViewBag.Title, "NzbDrone", StringComparison.InvariantCultureIgnoreCase))
+    {
+        ViewBag.Title = "NzbDrone";
+    }
+    else
+    {
+        ViewBag.Title = String.Format("{0} - NzbDrone", ViewBag.Title);
+    }
+    <title>@ViewBag.Title</title>
     @if (!EnviromentProvider.IsProduction)
     {
         @MvcMiniProfiler.MiniProfiler.RenderIncludes()
@@ -23,7 +32,7 @@
         <input id="localSeriesLookup" type="text" />
     </div>
     <div id="logo">
-        @RenderSection("TitleContent", required: false)
+        @ViewBag.Title
     </div>
     <div id="page">
         @RenderSection("ActionMenu", required: false)
