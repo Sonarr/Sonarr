@@ -3,9 +3,15 @@
 @section Scripts
 {
     @Html.IncludeScript("NzbDrone/addSeries.js")
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#addSeriesAccordion').accordion("activate", false);
+        });
+    </script>
 }
 @{Html.RenderAction("RootDir");}
-<div class="jquery-accordion">
+<div class="jquery-accordion" id="addSeriesAccordion">
     <h3>
         <a href="#">Add New Series</a></h3>
     <div id="addNewSeries">
