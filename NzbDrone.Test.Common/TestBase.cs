@@ -28,7 +28,7 @@ namespace NzbDrone.Test.Common
         [SetUp]
         public void TestBaseSetup()
         {
-            if (Directory.Exists(TempFolder) && Directory.GetFiles(TempFolder, "*.*", SearchOption.AllDirectories).Any())
+            if (Directory.Exists(TempFolder))
             {
                 Directory.Delete(TempFolder, true);
             }
