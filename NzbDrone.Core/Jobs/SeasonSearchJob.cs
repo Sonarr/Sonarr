@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Jobs
             var addedSeries = _searchProvider.PartialSeasonSearch(notification, targetId, secondaryTargetId);
 
             addedSeries.Distinct().ToList().Sort();
-            var episodeNumbers = episodes.Select(s => s.EpisodeNumber).ToList();
+            var episodeNumbers = episodes.Where(w => w.AirDate <= DateTime.Today.AddDays(1)).Select(s => s.EpisodeNumber).ToList();
             episodeNumbers.Sort();
 
             if (addedSeries.SequenceEqual(episodeNumbers))

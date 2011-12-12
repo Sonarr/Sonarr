@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using FizzWare.NBuilder;
@@ -20,21 +21,19 @@ namespace NzbDrone.Core.Test.JobTests
         [Test]
         public void SeasonSearch_full_season_success()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
-
             var notification = new ProgressNotification("Season Search");
 
-            mocker.GetMock<SearchProvider>()
+            Mocker.GetMock<SearchProvider>()
                 .Setup(c => c.SeasonSearch(notification, 1, 1)).Returns(true);
 
             //Act
-            mocker.Resolve<SeasonSearchJob>().Start(notification, 1, 1);
+            Mocker.Resolve<SeasonSearchJob>().Start(notification, 1, 1);
 
             //Assert
-            mocker.VerifyAllMocks();
-            mocker.GetMock<SearchProvider>().Verify(c => c.SeasonSearch(notification, 1, 1), Times.Once());
-            mocker.GetMock<SearchProvider>().Verify(c => c.PartialSeasonSearch(notification, 1, 1), Times.Never());
-            mocker.GetMock<EpisodeSearchJob>().Verify(c => c.Start(notification, It.IsAny<int>(), 0), Times.Never());
+            Mocker.VerifyAllMocks();
+            Mocker.GetMock<SearchProvider>().Verify(c => c.SeasonSearch(notification, 1, 1), Times.Once());
+            Mocker.GetMock<SearchProvider>().Verify(c => c.PartialSeasonSearch(notification, 1, 1), Times.Never());
+            Mocker.GetMock<EpisodeSearchJob>().Verify(c => c.Start(notification, It.IsAny<int>(), 0), Times.Never());
         }
 
         [Test]
@@ -46,28 +45,26 @@ namespace NzbDrone.Core.Test.JobTests
                 .With(e => e.SeasonNumber = 1)
                 .Build();
 
-            var mocker = new AutoMoqer(MockBehavior.Strict);
-
             var notification = new ProgressNotification("Season Search");
 
-            mocker.GetMock<SearchProvider>()
+            Mocker.GetMock<SearchProvider>()
                 .Setup(c => c.SeasonSearch(notification, 1, 1)).Returns(false);
 
-            mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeProvider>()
                 .Setup(c => c.GetEpisodesBySeason(1, 1)).Returns(episodes);
 
-            mocker.GetMock<SearchProvider>()
+            Mocker.GetMock<SearchProvider>()
                 .Setup(c => c.PartialSeasonSearch(notification, 1, 1))
                 .Returns(episodes.Select(e => e.EpisodeNumber).ToList());
 
             //Act
-            mocker.Resolve<SeasonSearchJob>().Start(notification, 1, 1);
+            Mocker.Resolve<SeasonSearchJob>().Start(notification, 1, 1);
 
             //Assert
-            mocker.VerifyAllMocks();
-            mocker.GetMock<SearchProvider>().Verify(c => c.SeasonSearch(notification, 1, 1), Times.Once());
-            mocker.GetMock<SearchProvider>().Verify(c => c.PartialSeasonSearch(notification, 1, 1), Times.Once());
-            mocker.GetMock<EpisodeSearchJob>().Verify(c => c.Start(notification, It.IsAny<int>(), 0), Times.Never());
+            Mocker.VerifyAllMocks();
+            Mocker.GetMock<SearchProvider>().Verify(c => c.SeasonSearch(notification, 1, 1), Times.Once());
+            Mocker.GetMock<SearchProvider>().Verify(c => c.PartialSeasonSearch(notification, 1, 1), Times.Once());
+            Mocker.GetMock<EpisodeSearchJob>().Verify(c => c.Start(notification, It.IsAny<int>(), 0), Times.Never());
         }
 
         [Test]
@@ -78,33 +75,70 @@ namespace NzbDrone.Core.Test.JobTests
                 .With(e => e.SeriesId = 1)
                 .With(e => e.SeasonNumber = 1)
                 .With(e => e.Ignored = false)
+                .With(e => e.AirDate = DateTime.Today.AddDays(-1))
                 .Build();
-
-            var mocker = new AutoMoqer(MockBehavior.Strict);
 
             var notification = new ProgressNotification("Season Search");
 
-            mocker.GetMock<SearchProvider>()
+            Mocker.GetMock<SearchProvider>()
                 .Setup(c => c.SeasonSearch(notification, 1, 1)).Returns(false);
 
-            mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeProvider>()
                 .Setup(c => c.GetEpisodesBySeason(1, 1)).Returns(episodes);
 
-            mocker.GetMock<SearchProvider>()
+            Mocker.GetMock<SearchProvider>()
                 .Setup(c => c.PartialSeasonSearch(notification, 1, 1))
                 .Returns(new List<int>{1});
 
-            mocker.GetMock<EpisodeSearchJob>()
+            Mocker.GetMock<EpisodeSearchJob>()
                 .Setup(c => c.Start(notification, It.IsAny<int>(), 0)).Verifiable();
 
             //Act
-            mocker.Resolve<SeasonSearchJob>().Start(notification, 1, 1);
+            Mocker.Resolve<SeasonSearchJob>().Start(notification, 1, 1);
 
             //Assert
-            mocker.VerifyAllMocks();
-            mocker.GetMock<SearchProvider>().Verify(c => c.SeasonSearch(notification, 1, 1), Times.Once());
-            mocker.GetMock<SearchProvider>().Verify(c => c.PartialSeasonSearch(notification, 1, 1), Times.Once());
-            mocker.GetMock<EpisodeSearchJob>().Verify(c => c.Start(notification, It.IsAny<int>(), 0), Times.Exactly(4));
+            Mocker.VerifyAllMocks();
+            Mocker.GetMock<SearchProvider>().Verify(c => c.SeasonSearch(notification, 1, 1), Times.Once());
+            Mocker.GetMock<SearchProvider>().Verify(c => c.PartialSeasonSearch(notification, 1, 1), Times.Once());
+            Mocker.GetMock<EpisodeSearchJob>().Verify(c => c.Start(notification, It.IsAny<int>(), 0), Times.Exactly(4));
+        }
+
+        [Test]
+        public void SeasonSearch_should_not_search_for_episodes_that_havent_aired_yet_or_air_tomorrow()
+        {
+            var episodes = Builder<Episode>.CreateListOfSize(5)
+                .All()
+                .With(e => e.SeriesId = 1)
+                .With(e => e.SeasonNumber = 1)
+                .With(e => e.Ignored = false)
+                .With(e => e.AirDate = DateTime.Today.AddDays(-1))
+                .TheLast(2)
+                .With(e => e.AirDate = DateTime.Today.AddDays(2))
+                .Build();
+
+            var notification = new ProgressNotification("Season Search");
+
+            Mocker.GetMock<SearchProvider>()
+                .Setup(c => c.SeasonSearch(notification, 1, 1)).Returns(false);
+
+            Mocker.GetMock<EpisodeProvider>()
+                .Setup(c => c.GetEpisodesBySeason(1, 1)).Returns(episodes);
+
+            Mocker.GetMock<SearchProvider>()
+                .Setup(c => c.PartialSeasonSearch(notification, 1, 1))
+                .Returns(new List<int>());
+
+            Mocker.GetMock<EpisodeSearchJob>()
+                .Setup(c => c.Start(notification, It.IsAny<int>(), 0)).Verifiable();
+
+            //Act
+            Mocker.Resolve<SeasonSearchJob>().Start(notification, 1, 1);
+
+            //Assert
+            Mocker.VerifyAllMocks();
+            Mocker.GetMock<SearchProvider>().Verify(c => c.SeasonSearch(notification, 1, 1), Times.Once());
+            Mocker.GetMock<SearchProvider>().Verify(c => c.PartialSeasonSearch(notification, 1, 1), Times.Once());
+            Mocker.GetMock<EpisodeSearchJob>().Verify(c => c.Start(notification, It.IsAny<int>(), 0), Times.Exactly(3));
         }
     }
 }
