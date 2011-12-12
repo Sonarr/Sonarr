@@ -14,7 +14,7 @@ var rootListUrl = '../AddSeries/RootList';
 $(".masterQualitySelector").live('change', function () {
 
     var profileId = $(this).val();
-    $("#existingSeriesTab").find(".qualitySelector").each(function () {
+    $("#existingSeries").find(".qualitySelector").each(function () {
         $(this).val(profileId);
     });
 });
@@ -124,4 +124,14 @@ $('#quickAddNew').live('click', function () {
             //$('#newSeriesPath').val("");
         }
     });
+});
+
+
+//Watermark
+$('#rootDirInput').livequery(function () {
+    $('#rootDirInput').watermark('Enter your new root folder path...');
+});
+
+$('#newSeriesLookup').livequery(function () {
+    $('#newSeriesLookup').watermark('Title of the series you want to add...');
 });
