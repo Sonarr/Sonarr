@@ -1,6 +1,12 @@
+@using NzbDrone.Web.Helpers
 @using NzbDrone.Web.Models;
 @model IEnumerable<NzbDrone.Core.Repository.Series>
 @{ViewBag.Title = "NzbDrone";}
+
+@section HeaderContent
+{
+    @Html.IncludeCss("Settings.css")
+}
 <style>
     /* progress bar container */
     .progressbar

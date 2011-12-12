@@ -4,13 +4,15 @@
     Layout = null;
 }
 
-@section HeaderContent
-{
-    @Html.IncludeCss("Settings.css")
-}
+<style>
+    .settingsForm
+    {
+        overflow: auto;
+    }
+</style>
 
 <div id="stylized" style="border-color: transparent;">
-    <div class="settingsForm clearfix">
+    <div class="settingsForm">
         @Html.HiddenFor(m => m.SeriesId)
         <label class="labelClass">@Html.LabelFor(m => m.Monitored)
             <span class="small">@Html.DescriptionFor(m => m.Monitored)</span>
