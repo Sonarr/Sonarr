@@ -51,6 +51,7 @@ namespace NzbDrone.Core.Test
         [TestCase("Breaking.In.S01E07.21.0.Jump.Street.720p.WEB-DL.DD5.1.h.264-KiNGS", "Breaking In", 1, 7)]
         [TestCase("CSI525", "CSI", 5, 25)]
         [TestCase("King of the Hill - 10x12 - 24 Hour Propane People [SDTV]", "King of the Hill", 10, 12)]
+        [TestCase("Brew Masters S01E06 3 Beers For Batali DVDRip XviD SPRiNTER","Brew Masters", 1, 6)]
         public void ParseTitle_single(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
             var result = Parser.ParseTitle(postTitle);
