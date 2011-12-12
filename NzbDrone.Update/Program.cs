@@ -84,21 +84,22 @@ namespace NzbDrone.Update
             VerfityArguments(args);
             int processId = ParseProcessId(args);
 
-            FileInfo exeFileInfo = new FileInfo(_processProvider.GetProcessById(processId).StartPath);
-            string appPath = exeFileInfo.Directory.FullName;
+            var exeFileInfo = new FileInfo(_processProvider.GetProcessById(processId).StartPath);
+            string targetFolder = exeFileInfo.Directory.FullName;
 
-            logger.Info("Starting update process");
-            _updateProvider.Start(appPath);
+            logger.Info("Starting update process. Target Path:{0}", targetFolder);
+            _updateProvider.Start(targetFolder);
         }
 
         private int ParseProcessId(string[] args)
         {
-            int id = 0;
+            int id;
             if (!Int32.TryParse(args[0], out id) || id <= 0)
             {
                 throw new ArgumentOutOfRangeException("Invalid process id: " + args[0]);
             }
 
+            logger.Debug("NzbDrone processId:{0}", id);
             return id;
         }
 
@@ -106,6 +107,8 @@ namespace NzbDrone.Update
         {
             if (args == null || args.Length != 2)
                 throw new ArgumentException("Wrong number of parameters were passed in.");
+
+            logger.Debug("Arguments verified. [{0}] , [{1}]", args[0], args[1]);
         }
     }
 }

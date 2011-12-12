@@ -1,8 +1,11 @@
 ﻿// ReSharper disable InconsistentNaming
+
+using System;
 using System.Diagnostics;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Common.Model;
 using NzbDrone.Test.Common;
 using NzbDrone.Test.Dummy;
 
@@ -39,6 +42,8 @@ namespace NzbDrone.Common.Test
         public void GetById_should_return_null_if_process_doesnt_exist()
         {
             _processProvider.GetProcessById(1234567).Should().BeNull();
+
+            ExceptionVerification.ExcpectedWarns(1);
         }
 
         [TestCase(0)]
@@ -47,6 +52,8 @@ namespace NzbDrone.Common.Test
         public void GetProcessById_should_return_null_for_invalid_process(int processId)
         {
             _processProvider.GetProcessById(processId).Should().BeNull();
+
+            ExceptionVerification.ExcpectedWarns(1);
         }
 
         [Test]
@@ -75,6 +82,12 @@ namespace NzbDrone.Common.Test
         {
             var startInfo = new ProcessStartInfo(DummyApp.DUMMY_PROCCESS_NAME + ".exe");
             return _processProvider.Start(startInfo);
+        }
+
+        [Test]
+        public void ToString_on_new_processInfo()
+        {
+            Console.WriteLine(new ProcessInfo().ToString());
         }
 
     }

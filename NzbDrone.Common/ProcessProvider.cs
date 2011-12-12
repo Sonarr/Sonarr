@@ -19,7 +19,20 @@ namespace NzbDrone.Common
 
         public virtual ProcessInfo GetProcessById(int id)
         {
-            return ConvertToProcessInfo(Process.GetProcesses().Where(p => p.Id == id).FirstOrDefault());
+            Logger.Trace("Finding process with Id:{0}", id);
+
+            var processInfo = ConvertToProcessInfo(Process.GetProcesses().Where(p => p.Id == id).FirstOrDefault());
+
+            if (processInfo == null)
+            {
+                Logger.Warn("Unable to find process with ID {0}", id);
+            }
+            else
+            {
+                Logger.Trace("Found process {0}", processInfo.ToString());
+            }
+
+            return processInfo;
         }
 
         public virtual IEnumerable<ProcessInfo> GetProcessByName(string name)
@@ -84,7 +97,8 @@ namespace NzbDrone.Common
                        {
                            Id = process.Id,
                            Priority = process.PriorityClass,
-                           StartPath = process.MainModule.FileName
+                           StartPath = process.MainModule.FileName,
+                           Name = process.ProcessName
                        };
         }
 
