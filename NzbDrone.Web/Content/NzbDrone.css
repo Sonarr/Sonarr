@@ -1,6 +1,6 @@
 *
 {
-    font-family: "Segoe UI" , "Segoe UI Light" , Tahoma, Geneva, sans-serif;
+    font-family: "Segoe UI" , "Open Sans" , "Segoe UI Light" , sans-serif;
 }
 
 body
@@ -22,7 +22,7 @@ body
 
 h1, h2, h3, h4, h5, h6
 {
-    font-family: "Segoe UI Light" , "Segoe UI" , Tahoma, Geneva, sans-serif;
+    font-family: "Segoe UI Light" , "Open Sans" , "Segoe UI" , sans-serif;
     color: #3C3C3C;
     font-weight: 300;
 }
@@ -84,7 +84,7 @@ hr
     font-size: 21px;
     font-weight: normal;
     vertical-align: middle;
-    font-family: "Segoe UI", "Segoe UI Light" , Tahoma, Geneva, sans-serif;
+    font-family: "Segoe UI" , "Open Sans" , "Segoe UI Light" , sans-serif;
 }
 
 #menu a:hover
@@ -113,7 +113,7 @@ hr
 
 #logo
 {
-    font-family: "Segoe UI Light" , "Segoe UI" , Tahoma, Geneva, sans-serif;
+    font-family: "Segoe UI Light" , "Open Sans" , "Segoe UI" , sans-serif;
     font-weight: 100;
     height: 135px;
     background: url(images/header.jpg) no-repeat left top;
