@@ -313,7 +313,7 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
             WithRealDb();
             var deletedJob = Builder<JobDefinition>.CreateNew()
                 .With(c => c.Name = fakeJob.Name).Build();
-            
+
             Db.Insert(deletedJob);
             var jobProvider = Mocker.Resolve<JobProvider>();
 
@@ -334,9 +334,12 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
 
             WithRealDb();
             var initialFakeJob = Builder<JobDefinition>.CreateNew()
-                .With(c => c.Name = fakeJob.Name)
+                .With(c => c.Name = "NewName")
                 .With(c => c.TypeName = fakeJob.GetType().ToString())
-                .With(c => c.Interval = 60)
+                .With(c => c.Interval = 0)
+                .With(c => c.Enable = false)
+                .With(c => c.Success = true)
+                .With(c => c.LastExecution = DateTime.Now.AddDays(-7).Date)
                 .Build();
 
             var id = Convert.ToInt32(Db.Insert(initialFakeJob));
@@ -349,8 +352,13 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
             //Assert
             var registeredJobs = Db.Fetch<JobDefinition>();
             registeredJobs.Should().HaveCount(1);
+            registeredJobs.First().TypeName.Should().Be(fakeJob.GetType().ToString());
+            registeredJobs.First().Name.Should().Be(fakeJob.Name);
             registeredJobs.First().Interval.Should().Be(fakeJob.DefaultInterval);
-            registeredJobs.First().Id.Should().Be(id);
+
+            registeredJobs.First().Enable.Should().Be(true);
+            registeredJobs.First().Success.Should().Be(initialFakeJob.Success);
+            registeredJobs.First().LastExecution.Should().Be(initialFakeJob.LastExecution);
         }
 
         [Test]

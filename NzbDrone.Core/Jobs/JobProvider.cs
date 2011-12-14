@@ -85,23 +85,20 @@ namespace NzbDrone.Core.Jobs
 
             foreach (var job in _jobs)
             {
-                var jobLocal = job;
+                var jobDefinition = currentJobs.SingleOrDefault(c => c.TypeName == job.GetType().ToString());
 
-                var settings = new JobDefinition
+                if (jobDefinition == null)
                 {
-                    Enable = jobLocal.DefaultInterval > 0,
-                    TypeName = job.GetType().ToString(),
-                    Name = jobLocal.Name,
-                    Interval = jobLocal.DefaultInterval,
-                    LastExecution = DateTime.Now
-                };
-
-                if (currentJobs.Exists(c => c.TypeName == jobLocal.GetType().ToString()))
-                {
-                    settings.Id = currentJobs.Single(c => c.TypeName == jobLocal.GetType().ToString()).Id;
+                    jobDefinition = new JobDefinition();
+                    jobDefinition.TypeName = job.GetType().ToString();
+                    jobDefinition.LastExecution = DateTime.Now;
                 }
 
-                SaveDefinition(settings);
+                jobDefinition.Enable = job.DefaultInterval > 0;
+                jobDefinition.Name = job.Name;
+                jobDefinition.Interval = job.DefaultInterval;
+
+                SaveDefinition(jobDefinition);
             }
         }
 
