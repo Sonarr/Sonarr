@@ -131,7 +131,7 @@ namespace NzbDrone.Core.Providers
 
                 if (episodeInfo == null && autoAddNew)
                 {
-                    Logger.Debug("Episode {0} doesn't exist in db. adding it now.", parseResult);
+                    Logger.Info("Episode {0} doesn't exist in db. adding it now. {1}", parseResult, parseResult.NzbTitle);
                     episodeInfo = new Episode
                                       {
                                           SeriesId = parseResult.Series.SeriesId,
@@ -183,7 +183,7 @@ namespace NzbDrone.Core.Providers
                 //if still null we should add the temp episode
                 if (episodeInfo == null && autoAddNew)
                 {
-                    Logger.Debug("Episode {0} doesn't exist in db. adding it now.", parseResult);
+                    Logger.Info("Episode {0} doesn't exist in db. adding it now. {1}", parseResult, parseResult.NzbTitle);
                     episodeInfo = new Episode
                     {
                         SeriesId = parseResult.Series.SeriesId,
