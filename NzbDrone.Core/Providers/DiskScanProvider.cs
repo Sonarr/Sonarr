@@ -215,19 +215,28 @@ namespace NzbDrone.Core.Providers
         {
             foreach (var episodeFile in files)
             {
-                if (!_diskProvider.FileExists(episodeFile.Path))
+                try
                 {
-                    Logger.Trace("File [{0}] no longer exists on disk. removing from db", episodeFile.Path);
-
-                    //Set the EpisodeFileId for each episode attached to this file to 0
-                    foreach (var episode in _episodeProvider.GetEpisodesByFileId(episodeFile.EpisodeFileId))
+                    if(!_diskProvider.FileExists(episodeFile.Path))
                     {
-                        episode.EpisodeFileId = 0;
-                        _episodeProvider.UpdateEpisode(episode);
-                    }
+                        Logger.Trace("File [{0}] no longer exists on disk. removing from db", episodeFile.Path);
 
-                    //Delete it from the DB
-                    _mediaFileProvider.Delete(episodeFile.EpisodeFileId);
+                        //Set the EpisodeFileId for each episode attached to this file to 0
+                        foreach(var episode in _episodeProvider.GetEpisodesByFileId(episodeFile.EpisodeFileId))
+                        {
+                            Logger.Trace("Setting EpisodeFileId for Episode: [{0}] to 0");
+                            episode.EpisodeFileId = 0;
+                            _episodeProvider.UpdateEpisode(episode);
+                        }
+
+                        //Delete it from the DB
+                        Logger.Trace("Removing EpisodeFile from DB.");
+                        _mediaFileProvider.Delete(episodeFile.EpisodeFileId);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.WarnException(ex.Message, ex);
                 }
             }
         }
