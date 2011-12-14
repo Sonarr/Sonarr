@@ -327,6 +327,33 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
         }
 
         [Test]
+        public void init_should_update_existing_job()
+        {
+            IList<IJob> fakeJobs = new List<IJob> { fakeJob };
+            Mocker.SetConstant(fakeJobs);
+
+            WithRealDb();
+            var initialFakeJob = Builder<JobDefinition>.CreateNew()
+                .With(c => c.Name = fakeJob.Name)
+                .With(c => c.TypeName = fakeJob.GetType().ToString())
+                .With(c => c.Interval = 60)
+                .Build();
+
+            var id = Convert.ToInt32(Db.Insert(initialFakeJob));
+
+            var jobProvider = Mocker.Resolve<JobProvider>();
+
+            //Act
+            jobProvider.Initialize();
+
+            //Assert
+            var registeredJobs = Db.Fetch<JobDefinition>();
+            registeredJobs.Should().HaveCount(1);
+            registeredJobs.First().Interval.Should().Be(fakeJob.DefaultInterval);
+            registeredJobs.First().Id.Should().Be(id);
+        }
+
+        [Test]
         public void jobs_with_zero_interval_are_registered_as_disabled()
         {
             IList<IJob> fakeJobs = new List<IJob> { disabledJob };
