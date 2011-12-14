@@ -219,6 +219,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\HtmlIncludeExtentions.cs" />
+    <Compile Include="Helpers\ProfilerHelper.cs" />
     <Compile Include="Helpers\ValueExtension.cs" />
     <Compile Include="Helpers\DescriptionExtension.cs" />
     <Compile Include="Helpers\HtmlPrefixScopeExtensions.cs" />

@@ -13,7 +13,7 @@
         ViewBag.Title = String.Format("{0} - NzbDrone", ViewBag.Title);
     }
     <title>@ViewBag.Title</title>
-    @if (!EnviromentProvider.IsProduction)
+    @if (!EnviromentProvider.IsProduction || ProfilerHelper.Enabled())
     {
         @MvcMiniProfiler.MiniProfiler.RenderIncludes()
     }

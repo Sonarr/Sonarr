@@ -62,6 +62,12 @@ namespace NzbDrone.Common
             set { SetValue("AuthenticationType", (int)value); }
         }
 
+        public virtual bool EnableProfiler
+        {
+            get { return GetValueBoolean("EnableProfiler", false); }
+            set { SetValue("EnableProfiler", value); }
+        }
+
         public virtual int GetValueInt(string key, int defaultValue)
         {
             return Convert.ToInt32(GetValue(key, defaultValue));

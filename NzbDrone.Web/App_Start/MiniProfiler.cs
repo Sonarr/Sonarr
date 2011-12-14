@@ -5,6 +5,7 @@ using MvcMiniProfiler;
 using MvcMiniProfiler.MVCHelpers;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using NzbDrone.Common;
+using NzbDrone.Web.Helpers;
 
 //using System.Data;
 //using System.Data.Entity;
@@ -69,7 +70,7 @@ namespace NzbDrone.Web.App_Start
                 //  so authenticated users are always profiled
                 //if (request.IsLocal) { MiniProfiler.Start(); }
 
-                if (!EnviromentProvider.IsProduction)
+                if (!EnviromentProvider.IsProduction || ProfilerHelper.Enabled())
                 {
                     MiniProfiler.Start();
                 }
