@@ -49,6 +49,20 @@ namespace NzbDrone.Common.Test
         }
 
         [Test]
+        public void moveFile_should_not_move_overwrite_itself()
+        {
+            var diskProvider = new DiskProvider();
+            diskProvider.CopyDirectory(BinFolder.FullName, BinFolderCopy.FullName);
+
+            var targetPath = BinFolderCopy.GetFiles("*.dll", SearchOption.AllDirectories).First().FullName;
+
+            diskProvider.MoveFile(targetPath, targetPath);
+
+            File.Exists(targetPath).Should().BeTrue();
+            ExceptionVerification.ExcpectedWarns(1);
+        }
+
+        [Test]
         public void CopyFolder_should_copy_folder()
         {
             //Act

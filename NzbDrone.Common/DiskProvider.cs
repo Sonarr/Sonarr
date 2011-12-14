@@ -125,14 +125,20 @@ namespace NzbDrone.Common
             File.Delete(path);
         }
 
-        public virtual void MoveFile(string sourcePath, string destinationPath)
+        public virtual void MoveFile(string source, string destination)
         {
-            if (FileExists(destinationPath))
+            if (PathEquals(source, destination))
             {
-                DeleteFile(destinationPath);
+                Logger.Warn("Source and destination can't be the same {0}", source);
+                return;
             }
 
-            File.Move(sourcePath, destinationPath);
+            if (FileExists(destination))
+            {
+                DeleteFile(destination);
+            }
+
+            File.Move(source, destination);
         }
 
         public virtual void DeleteFolder(string path, bool recursive)
