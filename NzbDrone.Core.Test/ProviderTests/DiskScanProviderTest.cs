@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.IO;
+using System.Linq;
 using FizzWare.NBuilder;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
+using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
 using NzbDrone.Test.Common.AutoMoq;
@@ -162,6 +165,52 @@ namespace NzbDrone.Core.Test.ProviderTests
             //Assert
             mocker.VerifyAllMocks();
             ExceptionVerification.ExcpectedWarns(1);
+        }
+
+        [Test]
+        public void move_should_not_move_file_if_source_and_destination_are_the_same_path()
+        {
+            var fakeSeries = Builder<Series>.CreateNew()
+                    .With(s => s.SeriesId = 5)
+                    .With(s => s.Title = "30 Rock")
+                    .Build();
+
+            var fakeEpisode = Builder<Episode>.CreateListOfSize(1)
+                    .All()
+                    .With(e => e.SeriesId = fakeSeries.SeriesId)
+                    .With(e => e.SeasonNumber = 1)
+                    .With(e => e.EpisodeNumber = 1)
+                    .Build();
+
+            const string filename = @"30 Rock - S01E01 - TBD";
+            var fi = new FileInfo(Path.Combine(@"C:\Test\TV\30 Rock\Season 01\", filename + ".avi"));
+
+            var file = Builder<EpisodeFile>.CreateNew()
+                    .With(f => f.SeriesId = fakeSeries.SeriesId)
+                    .With(f => f.Path = fi.FullName)
+                    .Build();
+
+            Mocker.GetMock<SeriesProvider>()
+                .Setup(e => e.GetSeries(fakeSeries.SeriesId))
+                .Returns(fakeSeries);
+
+            Mocker.GetMock<EpisodeProvider>()
+                .Setup(e => e.GetEpisodesByFileId(file.EpisodeFileId))
+                .Returns(fakeEpisode);
+
+            Mocker.GetMock<MediaFileProvider>()
+                .Setup(e => e.GetNewFilename(fakeEpisode, fakeSeries.Title, It.IsAny<QualityTypes>()))
+                .Returns(filename);
+
+            Mocker.GetMock<MediaFileProvider>()
+                .Setup(e => e.CalculateFilePath(It.IsAny<Series>(), fakeEpisode.First().SeasonNumber, filename, ".avi"))
+                .Returns(fi);
+
+            //Act
+            var result = Mocker.Resolve<DiskScanProvider>().MoveEpisodeFile(file, false);
+
+            //Assert
+            result.Should().BeFalse();
         }
     }
 }

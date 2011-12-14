@@ -175,10 +175,17 @@ namespace NzbDrone.Core.Providers
             string newFileName = _mediaFileProvider.GetNewFilename(episodes, series.Title, episodeFile.Quality);
             var newFile = _mediaFileProvider.CalculateFilePath(series, episodes.First().SeasonNumber, newFileName, Path.GetExtension(episodeFile.Path));
 
+            //Only rename if existing and new filenames don't match
+            if (episodeFile.Path == newFile.FullName)
+            {
+                Logger.Debug("Skipping file rename, source and destination are the same: {0}", episodeFile.Path);
+                return false;
+            }
+
             //Ensure the folder Exists before trying to move it (No error is thrown if the folder already exists)
             _diskProvider.CreateDirectory(newFile.DirectoryName);
 
-            //Do the rename
+            //Rename the file
             Logger.Debug("Moving [{0}] > [{1}]", episodeFile.Path, newFile.FullName);
             _diskProvider.MoveFile(episodeFile.Path, newFile.FullName);
 
