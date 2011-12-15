@@ -176,7 +176,7 @@ namespace NzbDrone.Core.Providers
             var newFile = _mediaFileProvider.CalculateFilePath(series, episodes.First().SeasonNumber, newFileName, Path.GetExtension(episodeFile.Path));
 
             //Only rename if existing and new filenames don't match
-            if (episodeFile.Path == newFile.FullName)
+            if (DiskProvider.PathEquals(episodeFile.Path, newFile.FullName))
             {
                 Logger.Debug("Skipping file rename, source and destination are the same: {0}", episodeFile.Path);
                 return false;
@@ -243,7 +243,8 @@ namespace NzbDrone.Core.Providers
                 }
                 catch (Exception ex)
                 {
-                    Logger.WarnException(ex.Message, ex);
+                    var message = String.Format("Unable to cleanup EpisodeFile in DB: {0}", episodeFile.EpisodeFileId);
+                    Logger.ErrorException(message, ex);
                 }
             }
         }
