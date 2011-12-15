@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Providers.Indexer
             {
                 return new[]
                                    {
-                                       "http://www.newzbin.com/browse/category/p/tv?" + URL_PARAMS
+                                       "https://www.newzbin.com/browse/category/p/tv?" + URL_PARAMS
                                    };
             }
         }
