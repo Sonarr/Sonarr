@@ -30,7 +30,7 @@
                                  .Width(90);
                              columns.Bound(c => c.EpisodeId)
                                      .Title("Actions")
-                                     .ClientTemplate("<a href=\"../Episode/Season?episodeId=<#= EpisodeId #>\" onClick=\"searchForEpisode(<#= EpisodeId #>); return false;\"><img src='../../Content/Images/Search.png' alt='Search' title='Search for Episode' class='searchImage' /></a>")
+                                     .ClientTemplate(Ajax.ImageActionLink("../../Content/Images/Search.png", new { Alt = "Search", Title = "Search for episode", @class = "searchImage" }, "Search", "Episode", new { EpisodeId = "<#= EpisodeId #>" }, null, null).ToString())
                                      .Width("40");
                          })
             .DetailView(detailView => detailView.ClientTemplate(

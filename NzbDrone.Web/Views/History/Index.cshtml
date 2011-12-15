@@ -33,8 +33,8 @@
                                columns.Bound(c => c.Date).Title("Grabbed on");
                                columns.Bound(c => c.HistoryId)
                                        .Title("Actions")
-                                       .ClientTemplate("<a href=\"../History/Delete?historyId=<#= HistoryId #>\" onclick=\"deleteHistoryRow(<#= HistoryId #>); return false;\"><img src='../../Content/Images/X.png' alt='Delete' title='Delete from History' class='searchImage' /></a>" +
-                                                       "<a href=\"../History/Redownload?historyId=<#= HistoryId #>&episodeId=<#= EpisodeId #>\" onclick=\"redownload(<#= HistoryId #>, <#= EpisodeId #>); return false;\"><img src='../../Content/Images/Downloading.png' alt='Redownload' title='Redownload Episode' class='searchImage' /></a>")
+                                       .ClientTemplate(Ajax.ImageActionLink("../../Content/Images/X.png", new { Alt = "Delete", Title = "Delete from history", @class = "searchImage" }, "Delete", "History", new { HistoryId = "<#= HistoryId #>" }, new AjaxOptions { OnSuccess = "reloadHistoryGrid" }, null).ToString() +
+                                                       Ajax.ImageActionLink("../../Content/Images/Downloading.png", new { Alt = "Redownload", Title = "Redownlod Episode", @class = "searchImage" }, "Redownload", "History", new { HistoryId = "<#= HistoryId #>", EpisodeId = "<#= EpisodeId #>" }, new AjaxOptions { OnSuccess = "reloadHistoryGrid" }, null).ToString())
                                        .Width("40");
                            })
               .DetailView(detailView => detailView.ClientTemplate(
@@ -58,27 +58,5 @@
     function reloadHistoryGrid() {
         var grid = $('#history').data('tGrid');
         grid.ajaxRequest();
-    }
-
-    function deleteHistoryRow(historyId) {
-        $.ajax({
-            type: "POST",
-            url: deleteHistoryRowUrl,
-            data: jQuery.param({ historyId: historyId }),
-            success: function () {
-                reloadHistoryGrid();
-            }
-        });
-    }
-
-    function redownload(historyId, episodeId) {
-        $.ajax({
-            type: "POST",
-            url: redownloadUrl,
-            data: jQuery.param({ historyId: historyId, episodeId: episodeId }),
-            success: function () {
-                reloadHistoryGrid();
-            }
-        });
     }
 </script>

@@ -146,7 +146,7 @@
     <Content Include="Content\Images\green.png" />
     <Content Include="Content\Images\header.jpg" />
     <Content Include="Content\Images\Indexers\Newznab.png" />
-    <Content Include="Content\Images\Indexers\Nzbsorg.png" />
+    <Content Include="Content\Images\Indexers\Nzbs.org.png" />
     <Content Include="Content\Images\red.png" />
     <Content Include="Content\Images\yellow.png" />
     <Content Include="Content\IndexerSettings.css" />
@@ -385,7 +385,6 @@
     <Content Include="Scripts\NzbDrone\addSeries.js" />
     <Content Include="Scripts\NzbDrone\AutoComplete.js" />
     <Content Include="Scripts\NzbDrone\episodeSearch.js" />
-    <Content Include="Scripts\NzbDrone\LocalSearch.js" />
     <Content Include="Scripts\NzbDrone\Notification.js" />
     <Content Include="Scripts\NzbDrone\seriesDetails.js" />
     <Content Include="Scripts\NzbDrone\AutoBind.js" />

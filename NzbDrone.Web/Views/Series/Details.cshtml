@@ -110,12 +110,12 @@
             columns.Bound(c => c.Status).Sortable(false)
                 .Title("<img src='../../Content/Images/ignoredNeutral.png' class='ignoredEpisodesMaster ignoreEpisode ignoreSeason_" + season + "' title='Click to toggle season ignore status' />" +
                        "<img src='../../Content/Images/Missing.png' alt='Status' title='Season Status' class='statusImage statusImageMaster' />" +
-                       "<a href=\"../Episode/SearchSeason?seriesId=" + @seriesId + "&seasonNumber=" + @season + "\" onclick=\"searchSeason(" + @seriesId + ", " + @season + "); return false;\"><img src='../../Content/Images/Search.png' alt='Search' title='Search for all episodes in this season' class='searchImage searchImageMaster' /></a>" +
-                       "<a href=\"../Episode/RenameSeason?seriesId=" + @seriesId + "&seasonNumber=" + @season + "\" onclick=\"renameSeason(" + @seriesId + ", " + @season + "); return false;\"><img src='../../Content/Images/Rename.png' alt='Rename' title='Rename all episodes in this season' class=renameImage renameImageMaster' /></a>")
-                .ClientTemplate("<img src='../../Content/Images/ignoredNeutral.png' class='ignoreEpisode ignoreEpisode_" + season + " ignored' id='<#= EpisodeId #>' title='Click to toggle episode  ignore status' />" +
+                       Ajax.ImageActionLink("../../Content/Images/Search.png", new { Alt = "Search", Title = "Search for all episodes in this season", @class = "searchImage searchImageMaster" }, "SearchSeason", "Episode", new { SeriesId = seriesId, SeasonNumber = season }, null, null) +
+                       Ajax.ImageActionLink("../../Content/Images/Rename.png", new { Alt = "Rename", Title = "Rename all episodes in this season", @class = "renameImage renameImageMaster" }, "RenameSeason", "Episode", new { SeriesId = seriesId, SeasonNumber = season }, null, null))
+                .ClientTemplate("<img src='../../Content/Images/ignoredNeutral.png' class='ignoreEpisode ignoreEpisode_" + season + " ignored' id='<#= EpisodeId #>' title='Click to toggle episode ignore status' />" +
                                 "<img src='../../Content/Images/<#= Status #>.png' alt='<#= Status #>' title='<#= Status #>' class='statusImage status-<#= Status #>' />" +
-                                "<a href=\"../Episode/Season?episodeId=<#= EpisodeId #>\" onclick=\"searchForEpisode('<#= EpisodeId #>'); return false;\"><img src='../../Content/Images/Search.png' alt='Search' title='Search for episode' class='searchImage' /></a>" +
-                                "<a href=\"../Episode/Rename?episodeFileId=<#= EpisodeId #>\" onclick=\"renameEpisode('<#= EpisodeFileId #>'); return false;\"><img src='../../Content/Images/Rename.png' alt='Rename' title='Rename episode' class='renameImage' />")
+                                Ajax.ImageActionLink("../../Content/Images/Search.png", new { Alt = "Search", Title = "Search for episode", @class = "searchImage" }, "Search", "Episode", new { EpisodeId = "<#= EpisodeId #>" }, null, null) +
+                                Ajax.ImageActionLink("../../Content/Images/Rename.png", new { Alt = "Rename", Title = "Rename episode", @class = "renameImage" }, "Rename", "Episode", new { EpisodeId = "<#= EpisodeId #>" }, null, null))
                 .Width(80);
         })
         .DetailView(detailView => detailView.ClientTemplate("<div><#= Overview #> </br><#= Path #> </div>"))
