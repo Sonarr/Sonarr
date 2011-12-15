@@ -16,9 +16,9 @@ namespace NzbDrone.Core.Test.Framework
     {
         private const string DB_TEMPLATE_NAME = "_dbtemplate.sdf";
 
-        public static string ConnectionString { get; private set; }
+        internal static string ConnectionString { get; private set; }
 
-        public static IDatabase GetEmptyDatabase(bool enableLogging = false, string fileName = "")
+        internal static IDatabase GetEmptyDatabase(bool enableLogging = false, string fileName = "")
         {
             Console.WriteLine("====================DataBase====================");
             Console.WriteLine("Cloning database from template.");
@@ -41,21 +41,12 @@ namespace NzbDrone.Core.Test.Framework
             return database;
         }
 
-        public static void CreateDataBaseTemplate()
+        internal static void CreateDataBaseTemplate()
         {
             Console.WriteLine("Creating an empty PetaPoco database");
             var connectionString = Connection.GetConnectionString(DB_TEMPLATE_NAME);
             var database = Connection.GetPetaPocoDb(connectionString);
             database.Dispose();
-        }
-
-        public static Series GetFakeSeries(int id, string title)
-        {
-            return Builder<Series>.CreateNew()
-                .With(c => c.SeriesId = id)
-                .With(c => c.Title = title)
-                .With(c => c.CleanTitle = Parser.NormalizeTitle(title))
-                .Build();
         }
     }
 }

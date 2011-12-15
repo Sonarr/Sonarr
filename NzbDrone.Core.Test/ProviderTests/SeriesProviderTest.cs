@@ -3,14 +3,12 @@ using System.Linq;
 
 using FizzWare.NBuilder;
 using FluentAssertions;
-using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Test.Common.AutoMoq;
 
 // ReSharper disable InconsistentNaming
 namespace NzbDrone.Core.Test.ProviderTests
@@ -134,14 +132,16 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             WithRealDb();
 
-            Db.Insert(TestDbHelper.GetFakeSeries(1, "MyTitle"));
+            var fakeSEries = Builder<Series>.CreateNew()
+                                                .Build();
+
+            Db.Insert(fakeSEries);
+
             //Act
             var seriesProvider = Mocker.Resolve<SeriesProvider>();
-            var series = seriesProvider.FindSeries("WrongTitle");
-
 
             //Assert
-            Assert.IsNull(series);
+            seriesProvider.FindSeries("WrongTitle").Should().BeNull();
         }
 
         [TestCase("The Test", "Test")]
@@ -150,19 +150,25 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             WithRealDb();
 
-            Db.Insert(TestDbHelper.GetFakeSeries(1, title));
-            Db.Insert(Builder<QualityProfile>.CreateNew().Build());
-            Mocker.Resolve<QualityProvider>();
+            var fakeSeries = Builder<Series>.CreateNew()
+                .With(c => c.Title = title)
+                .With(c => c.CleanTitle = Parser.NormalizeTitle(title))
+                .Build();
+
+            var fakeQuality = Builder<QualityProfile>.CreateNew()
+                                    .With(c => c.QualityProfileId = fakeSeries.QualityProfileId)
+                                    .Build();
+
+            Db.Insert(fakeSeries);
+            Db.Insert(fakeQuality);
 
             //Act
-            var seriesProvider = Mocker.Resolve<SeriesProvider>();
-            var series = seriesProvider.FindSeries(searchTitle);
+            var series = Mocker.Resolve<SeriesProvider>().FindSeries(searchTitle);
 
             //Assert
-            Assert.IsNotNull(series);
-            Assert.AreEqual(title, series.Title);
-            series.QualityProfile.Should().NotBeNull();
-            series.QualityProfile.ShouldHave().Properties(q => q.Name, q => q.SonicAllowed, q => q.Cutoff, q => q.AllowedString);
+            series.Should().NotBeNull();
+            series.SeriesId.Should().Be(series.SeriesId);
+            series.Title.Should().BeEquivalentTo(series.Title);
         }
 
         [Test]
@@ -651,7 +657,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void SearchForSeries_should_not_return_results_that_do_not_contain_the_query()
         {
-           WithRealDb();
+            WithRealDb();
 
             var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
             var fakeSeries = Builder<Series>.CreateListOfSize(10)
