@@ -20,5 +20,8 @@ namespace NzbDrone.Core.Repository
         public DateTime LastExecution { get; set; }
 
         public Boolean Success { get; set; }
+
+        [Ignore]
+        public string Command { get; set; }
     }
 }

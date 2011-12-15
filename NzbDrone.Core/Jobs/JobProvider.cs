@@ -184,6 +184,17 @@ namespace NzbDrone.Core.Jobs
 
         }
 
+        public virtual bool QueueJob(string jobTypeString)
+        {
+            var type = Type.GetType(jobTypeString);
+
+            if (type == null)
+                return false;
+
+            QueueJob(type);
+            return true;
+        }
+
         private void ProcessQueue()
         {
             try

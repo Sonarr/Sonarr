@@ -35,7 +35,14 @@ namespace NzbDrone.Web.Controllers
                                                                                         TargetId = c.TargetId,
                                                                                         SecondaryTargetId = c.SecondaryTargetId
                                                                                     });
-            return View(_jobProvider.All());
+            var jobs = _jobProvider.All();
+
+            foreach(var jobDefinition in jobs)
+            {
+                jobDefinition.Command = "<a href=\"http://www.google.ca\"></a>";
+            }
+
+            return View(jobs);
         }
 
         public ActionResult Indexers()
@@ -130,6 +137,14 @@ namespace NzbDrone.Web.Controllers
             _diskProvider.MoveDirectory(path, newPath);
 
             return new JsonResult { Data = "ok" };
+        }
+
+        public JsonResult RunJob(string typeName)
+        {
+            if (!_jobProvider.QueueJob(typeName))
+                return Json(new NotificationResult { Title = "Failed to Start Job", Text = "Invalid job name", NotificationType = NotificationType.Error });
+
+            return Json(new NotificationResult { Title = "Job Queued" });
         }
     }
 }
