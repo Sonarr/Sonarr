@@ -23,52 +23,52 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Register_should_add_new_application_to_local_growl_instance()
         {
             //Setup
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
             
             //Act
-            mocker.Resolve<GrowlProvider>().Register("localhost", 23053, "");
+            Mocker.Resolve<GrowlProvider>().Register("localhost", 23053, "");
 
             //Assert
-            mocker.VerifyAllMocks();
+            Mocker.VerifyAllMocks();
         }
 
         [Test]
         public void TestNotification_should_send_a_message_to_local_growl_instance()
         {
             //Setup
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
             //Act
-            mocker.Resolve<GrowlProvider>().TestNotification("localhost", 23053, "");
+            Mocker.Resolve<GrowlProvider>().TestNotification("localhost", 23053, "");
 
             //Assert
-            mocker.VerifyAllMocks();
+            Mocker.VerifyAllMocks();
         }
 
         [Test]
         public void OnGrab_should_send_a_message_to_local_growl_instance()
         {
             //Setup
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
             //Act
-            mocker.Resolve<GrowlProvider>().SendNotification("Episode Grabbed", "Series Title - 1x05 - Episode Title", "GRAB", "localhost", 23053, "");
+            Mocker.Resolve<GrowlProvider>().SendNotification("Episode Grabbed", "Series Title - 1x05 - Episode Title", "GRAB", "localhost", 23053, "");
 
             //Assert
-            mocker.VerifyAllMocks();
+            Mocker.VerifyAllMocks();
         }
 
         [Test]
         public void OnDownload_should_send_a_message_to_local_growl_instance()
         {
             //Setup
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
             //Act
-            mocker.Resolve<GrowlProvider>().SendNotification("Episode Downloaded", "Series Title - 1x05 - Episode Title", "DOWNLOAD", "localhost", 23053, "");
+            Mocker.Resolve<GrowlProvider>().SendNotification("Episode Downloaded", "Series Title - 1x05 - Episode Title", "DOWNLOAD", "localhost", 23053, "");
 
             //Assert
-            mocker.VerifyAllMocks();
+            Mocker.VerifyAllMocks();
         }
     }
 }

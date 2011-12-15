@@ -32,18 +32,18 @@ namespace NzbDrone.Core.Test
         [TestCase("nzbmatrix.xml", 2)]
         public void parse_feed_xml(string fileName, int warns)
         {
-            var mocker = new AutoMoqer();
+            
 
-            mocker.GetMock<HttpProvider>()
+            Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
                           .Returns(File.OpenRead(".\\Files\\Rss\\" + fileName));
 
             var fakeSettings = Builder<IndexerDefinition>.CreateNew().Build();
-            mocker.GetMock<IndexerProvider>()
+            Mocker.GetMock<IndexerProvider>()
                 .Setup(c => c.GetSettings(It.IsAny<Type>()))
                 .Returns(fakeSettings);
 
-            var mockIndexer = mocker.Resolve<MockIndexer>();
+            var mockIndexer = Mocker.Resolve<MockIndexer>();
             var parseResults = mockIndexer.FetchRss();
 
             foreach (var episodeParseResult in parseResults)
@@ -63,15 +63,15 @@ namespace NzbDrone.Core.Test
         [Test]
         public void newzbin_parses_languae()
         {
-            var mocker = new AutoMoqer();
+            
 
-            mocker.GetMock<HttpProvider>()
+            Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
                           .Returns(File.OpenRead(".\\Files\\Rss\\newbin_none_english.xml"));
 
 
 
-            var newzbin = mocker.Resolve<Newzbin>();
+            var newzbin = Mocker.Resolve<Newzbin>();
             var parseResults = newzbin.FetchRss();
 
             foreach (var episodeParseResult in parseResults)
@@ -88,22 +88,22 @@ namespace NzbDrone.Core.Test
         [Test]
         public void newzbin_rss_fetch()
         {
-            var mocker = new AutoMoqer();
-            mocker.Resolve<HttpProvider>();
+            
+            Mocker.Resolve<HttpProvider>();
             var fakeSettings = Builder<IndexerDefinition>.CreateNew().Build();
-            mocker.GetMock<IndexerProvider>()
+            Mocker.GetMock<IndexerProvider>()
                 .Setup(c => c.GetSettings(It.IsAny<Type>()))
                 .Returns(fakeSettings);
 
-            mocker.GetMock<ConfigProvider>()
+            Mocker.GetMock<ConfigProvider>()
              .SetupGet(c => c.NewzbinUsername)
              .Returns("nzbdrone");
 
-            mocker.GetMock<ConfigProvider>()
+            Mocker.GetMock<ConfigProvider>()
                 .SetupGet(c => c.NewzbinPassword)
                 .Returns("smartar39865");
 
-            var newzbinProvider = mocker.Resolve<Newzbin>();
+            var newzbinProvider = Mocker.Resolve<Newzbin>();
             var parseResults = newzbinProvider.FetchRss();
 
             foreach (var episodeParseResult in parseResults)
@@ -125,12 +125,12 @@ namespace NzbDrone.Core.Test
         [TestCase("Adventure.Inc.S03E19.DVDRip.XviD-OSiTV", 3, 19, QualityTypes.DVD)]
         public void custome_parser_partial_success(string title, int season, int episode, QualityTypes quality)
         {
-            var mocker = new AutoMoqer();
+            
 
             const string summary = "My fake summary";
 
             var fakeSettings = Builder<IndexerDefinition>.CreateNew().Build();
-            mocker.GetMock<IndexerProvider>()
+            Mocker.GetMock<IndexerProvider>()
                 .Setup(c => c.GetSettings(It.IsAny<Type>()))
                 .Returns(fakeSettings);
 
@@ -139,7 +139,7 @@ namespace NzbDrone.Core.Test
                 .With(c => c.Summary = new TextSyndicationContent(summary))
                 .Build();
 
-            var result = mocker.Resolve<CustomParserIndexer>().ParseFeed(fakeRssItem);
+            var result = Mocker.Resolve<CustomParserIndexer>().ParseFeed(fakeRssItem);
 
             Assert.IsNotNull(result);
             Assert.AreEqual(LanguageType.Finnish, result.Language);
@@ -152,12 +152,12 @@ namespace NzbDrone.Core.Test
         [TestCase("Adventure.Inc.DVDRip.XviD-OSiTV")]
         public void custome_parser_full_parse(string title)
         {
-            var mocker = new AutoMoqer();
+            
 
             const string summary = "My fake summary";
 
             var fakeSettings = Builder<IndexerDefinition>.CreateNew().Build();
-            mocker.GetMock<IndexerProvider>()
+            Mocker.GetMock<IndexerProvider>()
                 .Setup(c => c.GetSettings(It.IsAny<Type>()))
                 .Returns(fakeSettings);
 
@@ -166,7 +166,7 @@ namespace NzbDrone.Core.Test
                 .With(c => c.Summary = new TextSyndicationContent(summary))
                 .Build();
 
-            var result = mocker.Resolve<CustomParserIndexer>().ParseFeed(fakeRssItem);
+            var result = Mocker.Resolve<CustomParserIndexer>().ParseFeed(fakeRssItem);
 
             Assert.IsNotNull(result);
             Assert.AreEqual(LanguageType.Finnish, result.Language);
@@ -176,15 +176,15 @@ namespace NzbDrone.Core.Test
         [Test]
         public void downloadFeed()
         {
-            var mocker = new AutoMoqer();
-            mocker.SetConstant(new HttpProvider());
+            
+            Mocker.SetConstant(new HttpProvider());
 
             var fakeSettings = Builder<IndexerDefinition>.CreateNew().Build();
-            mocker.GetMock<IndexerProvider>()
+            Mocker.GetMock<IndexerProvider>()
                 .Setup(c => c.GetSettings(It.IsAny<Type>()))
                 .Returns(fakeSettings);
 
-            mocker.Resolve<TestUrlIndexer>().FetchRss();
+            Mocker.Resolve<TestUrlIndexer>().FetchRss();
 
             ExceptionVerification.IgnoreWarns();
         }
@@ -194,19 +194,19 @@ namespace NzbDrone.Core.Test
         [TestCase("In plain Sight", 1, 4)]
         public void nzbsorg_search_returns_valid_results(string title, int season, int episode)
         {
-            var mocker = new AutoMoqer();
+            
 
-            mocker.GetMock<ConfigProvider>()
+            Mocker.GetMock<ConfigProvider>()
                 .SetupGet(c => c.NzbsOrgUId)
                 .Returns("43516");
 
-            mocker.GetMock<ConfigProvider>()
+            Mocker.GetMock<ConfigProvider>()
                 .SetupGet(c => c.NzbsOrgHash)
                 .Returns("bc8edb4cc49d4ae440775adec5ac001f");
 
-            mocker.Resolve<HttpProvider>();
+            Mocker.Resolve<HttpProvider>();
 
-            var result = mocker.Resolve<NzbsOrg>().FetchEpisode(title, season, episode);
+            var result = Mocker.Resolve<NzbsOrg>().FetchEpisode(title, season, episode);
 
             ExceptionVerification.MarkInconclusive(typeof(WebException));
 
@@ -221,19 +221,19 @@ namespace NzbDrone.Core.Test
         [TestCase("In plain Sight", 1, 11, Ignore = true)]
         public void newzbin_search_returns_valid_results(string title, int season, int episode)
         {
-            var mocker = new AutoMoqer();
+            
 
-            mocker.GetMock<ConfigProvider>()
+            Mocker.GetMock<ConfigProvider>()
                 .SetupGet(c => c.NewzbinUsername)
                 .Returns("nzbdrone");
 
-            mocker.GetMock<ConfigProvider>()
+            Mocker.GetMock<ConfigProvider>()
                 .SetupGet(c => c.NewzbinPassword)
                 .Returns("smartar39865");
 
-            mocker.Resolve<HttpProvider>();
+            Mocker.Resolve<HttpProvider>();
 
-            var result = mocker.Resolve<Newzbin>().FetchEpisode(title, season, episode);
+            var result = Mocker.Resolve<Newzbin>().FetchEpisode(title, season, episode);
 
             ExceptionVerification.MarkInconclusive(typeof(WebException));
             ExceptionVerification.IgnoreWarns();
@@ -248,19 +248,19 @@ namespace NzbDrone.Core.Test
         [Test]
         public void nzbmatrix_search_returns_valid_results()
         {
-            var mocker = new AutoMoqer();
+            
 
-            mocker.GetMock<ConfigProvider>()
+            Mocker.GetMock<ConfigProvider>()
                 .SetupGet(c => c.NzbMatrixUsername)
                 .Returns("");
 
-            mocker.GetMock<ConfigProvider>()
+            Mocker.GetMock<ConfigProvider>()
                 .SetupGet(c => c.NzbMatrixApiKey)
                 .Returns("");
 
-            mocker.Resolve<HttpProvider>();
+            Mocker.Resolve<HttpProvider>();
 
-            var result = mocker.Resolve<NzbMatrix>().FetchEpisode("Simpsons", 21, 23);
+            var result = Mocker.Resolve<NzbMatrix>().FetchEpisode("Simpsons", 21, 23);
 
             ExceptionVerification.MarkInconclusive(typeof(WebException));
 
@@ -274,19 +274,19 @@ namespace NzbDrone.Core.Test
         [Test]
         public void nzbmatrix_multi_word_search_returns_valid_results()
         {
-            var mocker = new AutoMoqer();
+            
 
-            mocker.GetMock<ConfigProvider>()
+            Mocker.GetMock<ConfigProvider>()
                 .SetupGet(c => c.NzbMatrixUsername)
                 .Returns("");
 
-            mocker.GetMock<ConfigProvider>()
+            Mocker.GetMock<ConfigProvider>()
                 .SetupGet(c => c.NzbMatrixApiKey)
                 .Returns("");
 
-            mocker.Resolve<HttpProvider>();
+            Mocker.Resolve<HttpProvider>();
 
-            var result = mocker.Resolve<NzbMatrix>().FetchEpisode("Blue Bloods", 1, 19);
+            var result = Mocker.Resolve<NzbMatrix>().FetchEpisode("Blue Bloods", 1, 19);
 
             ExceptionVerification.MarkInconclusive(typeof(WebException));
 
@@ -311,14 +311,14 @@ namespace NzbDrone.Core.Test
         public void size_newzbin()
         {
             //Setup
-            var mocker = new AutoMoqer();
+            
 
-            mocker.GetMock<HttpProvider>()
+            Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
                           .Returns(File.OpenRead(".\\Files\\Rss\\SizeParsing\\newzbin.xml"));
 
             //Act
-            var parseResults = mocker.Resolve<Newzbin>().FetchRss();
+            var parseResults = Mocker.Resolve<Newzbin>().FetchRss();
 
             parseResults.Should().HaveCount(1);
             parseResults[0].Size.Should().Be(1295620506);
@@ -328,14 +328,14 @@ namespace NzbDrone.Core.Test
         public void size_nzbmatrix()
         {
             //Setup
-            var mocker = new AutoMoqer();
+            
 
-            mocker.GetMock<HttpProvider>()
+            Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
                           .Returns(File.OpenRead(".\\Files\\Rss\\SizeParsing\\nzbmatrix.xml"));
 
             //Act
-            var parseResults = mocker.Resolve<NzbMatrix>().FetchRss();
+            var parseResults = Mocker.Resolve<NzbMatrix>().FetchRss();
 
             parseResults.Should().HaveCount(1);
             parseResults[0].Size.Should().Be(1331439862);
@@ -345,14 +345,14 @@ namespace NzbDrone.Core.Test
         public void size_nzbsorg()
         {
             //Setup
-            var mocker = new AutoMoqer();
+            
 
-            mocker.GetMock<HttpProvider>()
+            Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
                           .Returns(File.OpenRead(".\\Files\\Rss\\SizeParsing\\nzbsorg.xml"));
 
             //Act
-            var parseResults = mocker.Resolve<NzbsOrg>().FetchRss();
+            var parseResults = Mocker.Resolve<NzbsOrg>().FetchRss();
 
             parseResults.Should().HaveCount(1);
             parseResults[0].Size.Should().Be(1793148846);
@@ -362,14 +362,14 @@ namespace NzbDrone.Core.Test
         public void size_nzbsrus()
         {
             //Setup
-            var mocker = new AutoMoqer();
+            
 
-            mocker.GetMock<HttpProvider>()
+            Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
                           .Returns(File.OpenRead(".\\Files\\Rss\\SizeParsing\\nzbsrus.xml"));
 
             //Act
-            var parseResults = mocker.Resolve<NzbsRUs>().FetchRss();
+            var parseResults = Mocker.Resolve<NzbsRUs>().FetchRss();
 
             parseResults.Should().HaveCount(1);
             parseResults[0].Size.Should().Be(1793148846);

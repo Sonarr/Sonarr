@@ -19,15 +19,13 @@ namespace NzbDrone.App.Test
         [Test]
         public void Ensure_priority_doesnt_fail_on_invalid_iis_proccess_id()
         {
-            var mocker = new AutoMoqer();
-
-            var processMock = mocker.GetMock<ProcessProvider>();
+            var processMock = Mocker.GetMock<ProcessProvider>();
             processMock.Setup(c => c.GetCurrentProcess())
                 .Returns(Builder<ProcessInfo>.CreateNew().With(c => c.Priority == ProcessPriorityClass.Normal).Build());
 
             processMock.Setup(c => c.GetProcessById(It.IsAny<int>())).Returns((ProcessInfo)null);
 
-            var subject = mocker.Resolve<MonitoringProvider>();
+            var subject = Mocker.Resolve<MonitoringProvider>();
 
 
             //Act

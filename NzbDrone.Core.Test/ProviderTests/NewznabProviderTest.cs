@@ -23,12 +23,12 @@ namespace NzbDrone.Core.Test.ProviderTests
             var newznab = new NewznabDefinition { Name = "Newznab Provider", Enable = true, Url = "http://www.nzbdrone.com/gibberish/test.aspx?hello=world" };
             var expectedUrl = "http://www.nzbdrone.com";
 
-            var mocker = new AutoMoqer();
+            
             var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            Mocker.SetConstant(db);
 
             //Act
-            var result = mocker.Resolve<NewznabProvider>().Save(newznab);
+            var result = Mocker.Resolve<NewznabProvider>().Save(newznab);
 
             //Assert
             db.Single<NewznabDefinition>(result).Url.Should().Be(expectedUrl);
@@ -42,15 +42,15 @@ namespace NzbDrone.Core.Test.ProviderTests
             var expectedUrl = "http://www.nzbdrone.com";
             var newUrl = "http://www.nzbdrone.com/gibberish/test.aspx?hello=world";
 
-            var mocker = new AutoMoqer();
+            
             var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            Mocker.SetConstant(db);
 
             newznab.Id = Convert.ToInt32(db.Insert(newznab));
             newznab.Url = newUrl;
 
             //Act
-            var result = mocker.Resolve<NewznabProvider>().Save(newznab);
+            var result = Mocker.Resolve<NewznabProvider>().Save(newznab);
 
             //Assert
             db.Single<NewznabDefinition>(result).Url.Should().Be(expectedUrl);
@@ -63,12 +63,12 @@ namespace NzbDrone.Core.Test.ProviderTests
             var newznab = new NewznabDefinition { Name = "Newznab Provider", Enable = true, Url = "" };
             var expectedUrl = "";
 
-            var mocker = new AutoMoqer();
+            
             var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            Mocker.SetConstant(db);
 
             //Act
-            var result = mocker.Resolve<NewznabProvider>().Save(newznab);
+            var result = Mocker.Resolve<NewznabProvider>().Save(newznab);
 
             //Assert
             db.Single<NewznabDefinition>(result).Url.Should().Be(expectedUrl);
@@ -82,15 +82,15 @@ namespace NzbDrone.Core.Test.ProviderTests
             var expectedUrl = "";
             var newUrl = "";
 
-            var mocker = new AutoMoqer();
+            
             var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            Mocker.SetConstant(db);
 
             newznab.Id = Convert.ToInt32(db.Insert(newznab));
             newznab.Url = newUrl;
 
             //Act
-            var result = mocker.Resolve<NewznabProvider>().Save(newznab);
+            var result = Mocker.Resolve<NewznabProvider>().Save(newznab);
 
             //Assert
             db.Single<NewznabDefinition>(result).Url.Should().Be(expectedUrl);
@@ -107,16 +107,16 @@ namespace NzbDrone.Core.Test.ProviderTests
             var expectedUrl = "http://www.nzbdrone.com";
             var newUrl = "http://www.nzbdrone.com/gibberish/test.aspx?hello=world";
 
-            var mocker = new AutoMoqer();
+            
             var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            Mocker.SetConstant(db);
 
             db.InsertMany(definitions);
 
             definitions.ToList().ForEach(d => d.Url = newUrl);
 
             //Act
-            mocker.Resolve<NewznabProvider>().SaveAll(definitions);
+            Mocker.Resolve<NewznabProvider>().SaveAll(definitions);
 
             //Assert
             db.Fetch<NewznabDefinition>().Where(d => d.Url == expectedUrl).Should().HaveCount(5);
@@ -133,14 +133,14 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(d => d.Enable = true)
                 .Build();
 
-            var mocker = new AutoMoqer();
+            
             var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            Mocker.SetConstant(db);
 
             db.InsertMany(definitions);
 
             //Act
-            var result = mocker.Resolve<NewznabProvider>().Enabled();
+            var result = Mocker.Resolve<NewznabProvider>().Enabled();
 
             //Assert
             result.Should().HaveCount(3);
@@ -158,14 +158,14 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(d => d.Enable = true)
                 .Build();
 
-            var mocker = new AutoMoqer();
+            
             var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            Mocker.SetConstant(db);
 
             db.InsertMany(definitions);
 
             //Act
-            var result = mocker.Resolve<NewznabProvider>().All();
+            var result = Mocker.Resolve<NewznabProvider>().All();
 
             //Assert
             result.Should().HaveCount(5);
@@ -182,14 +182,14 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(d => d.Enable = true)
                 .Build();
 
-            var mocker = new AutoMoqer();
+            
             var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            Mocker.SetConstant(db);
 
             db.InsertMany(definitions);
 
             //Act
-            mocker.Resolve<NewznabProvider>().Delete(1);
+            Mocker.Resolve<NewznabProvider>().Delete(1);
 
             //Assert
             var result = db.Fetch<NewznabDefinition>();
@@ -206,12 +206,12 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(d => d.Url = "http://www.nzbdrone.com")
                 .Build();
 
-            var mocker = new AutoMoqer();
+            
             var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            Mocker.SetConstant(db);
 
             //Act
-            mocker.Resolve<NewznabProvider>().InitializeNewznabIndexers(definitions);
+            Mocker.Resolve<NewznabProvider>().InitializeNewznabIndexers(definitions);
 
             //Assert
             var result = db.Fetch<NewznabDefinition>();
@@ -231,15 +231,15 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(d => d.Url = "http://www.nzbdrone.com")
                 .Build();
 
-            var mocker = new AutoMoqer();
+            
             var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            Mocker.SetConstant(db);
 
             db.Insert(definitions[0]);
             db.Insert(definitions[1]);
 
             //Act
-            mocker.Resolve<NewznabProvider>().InitializeNewznabIndexers(definitions);
+            Mocker.Resolve<NewznabProvider>().InitializeNewznabIndexers(definitions);
 
             //Assert
             var result = db.Fetch<NewznabDefinition>();

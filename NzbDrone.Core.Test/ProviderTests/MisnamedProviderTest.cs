@@ -7,12 +7,13 @@ using NUnit.Framework;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
+using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common.AutoMoq;
 
 namespace NzbDrone.Core.Test.ProviderTests
 {
     [TestFixture]
-    public class MisnamedProviderTest
+    public class MisnamedProviderTest : CoreTest
     {
         [Test]
         public void no_misnamed_files()
@@ -42,22 +43,22 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(e => e.EpisodeFile = episodeFiles[1])
                 .Build();
 
-            var mocker = new AutoMoqer(MockBehavior.Strict);
-            
-            mocker.GetMock<EpisodeProvider>()
+            WithStrictMocker();
+
+            Mocker.GetMock<EpisodeProvider>()
                 .Setup(c => c.EpisodesWithFiles()).Returns(episodes);
 
-            mocker.GetMock<MediaFileProvider>()
-                .Setup(c => c.GetNewFilename(new List<Episode> {episodes[0]}, "SeriesTitle", It.IsAny<QualityTypes>()))
+            Mocker.GetMock<MediaFileProvider>()
+                .Setup(c => c.GetNewFilename(new List<Episode> { episodes[0] }, "SeriesTitle", It.IsAny<QualityTypes>()))
                 .Returns("Title1");
 
-            mocker.GetMock<MediaFileProvider>()
-                .Setup(c => c.GetNewFilename(new List<Episode> {episodes[1]}, "SeriesTitle", It.IsAny<QualityTypes>()))
+            Mocker.GetMock<MediaFileProvider>()
+                .Setup(c => c.GetNewFilename(new List<Episode> { episodes[1] }, "SeriesTitle", It.IsAny<QualityTypes>()))
                 .Returns("Title2");
 
             //Act
             var totalItems = 0;
-            var misnamedEpisodes = mocker.Resolve<MisnamedProvider>().MisnamedFiles(1, 10, out totalItems);
+            var misnamedEpisodes = Mocker.Resolve<MisnamedProvider>().MisnamedFiles(1, 10, out totalItems);
 
             //Assert
             misnamedEpisodes.Should().HaveCount(0);
@@ -91,22 +92,22 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(e => e.EpisodeFile = episodeFiles[1])
                 .Build();
 
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
-            mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeProvider>()
                 .Setup(c => c.EpisodesWithFiles()).Returns(episodes);
 
-            mocker.GetMock<MediaFileProvider>()
+            Mocker.GetMock<MediaFileProvider>()
                 .Setup(c => c.GetNewFilename(new List<Episode> { episodes[0] }, "SeriesTitle", It.IsAny<QualityTypes>()))
                 .Returns("New Title 1");
 
-            mocker.GetMock<MediaFileProvider>()
+            Mocker.GetMock<MediaFileProvider>()
                 .Setup(c => c.GetNewFilename(new List<Episode> { episodes[1] }, "SeriesTitle", It.IsAny<QualityTypes>()))
                 .Returns("New Title 2");
 
             //Act
             var totalItems = 0;
-            var misnamedEpisodes = mocker.Resolve<MisnamedProvider>().MisnamedFiles(1, 10, out totalItems);
+            var misnamedEpisodes = Mocker.Resolve<MisnamedProvider>().MisnamedFiles(1, 10, out totalItems);
 
             //Assert
             misnamedEpisodes.Should().HaveCount(2);
@@ -140,22 +141,22 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(e => e.EpisodeFile = episodeFiles[1])
                 .Build();
 
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
-            mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeProvider>()
                 .Setup(c => c.EpisodesWithFiles()).Returns(episodes);
 
-            mocker.GetMock<MediaFileProvider>()
+            Mocker.GetMock<MediaFileProvider>()
                 .Setup(c => c.GetNewFilename(new List<Episode> { episodes[0] }, "SeriesTitle", It.IsAny<QualityTypes>()))
                 .Returns("New Title 1");
 
-            mocker.GetMock<MediaFileProvider>()
+            Mocker.GetMock<MediaFileProvider>()
                 .Setup(c => c.GetNewFilename(new List<Episode> { episodes[1] }, "SeriesTitle", It.IsAny<QualityTypes>()))
                 .Returns("Title2");
 
             //Act
             var totalItems = 0;
-            var misnamedEpisodes = mocker.Resolve<MisnamedProvider>().MisnamedFiles(1, 10, out totalItems);
+            var misnamedEpisodes = Mocker.Resolve<MisnamedProvider>().MisnamedFiles(1, 10, out totalItems);
 
             //Assert
             misnamedEpisodes.Should().HaveCount(1);
@@ -191,22 +192,22 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(e => e.EpisodeFile = episodeFiles[1])
                 .Build();
 
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
-            mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeProvider>()
                 .Setup(c => c.EpisodesWithFiles()).Returns(episodes);
 
-            mocker.GetMock<MediaFileProvider>()
+            Mocker.GetMock<MediaFileProvider>()
                 .Setup(c => c.GetNewFilename(new List<Episode> { episodes[0], episodes[1] }, "SeriesTitle", It.IsAny<QualityTypes>()))
                 .Returns("New Title 1");
 
-            mocker.GetMock<MediaFileProvider>()
+            Mocker.GetMock<MediaFileProvider>()
                 .Setup(c => c.GetNewFilename(new List<Episode> { episodes[2] }, "SeriesTitle", It.IsAny<QualityTypes>()))
                 .Returns("Title2");
 
             //Act
             var totalItems = 0;
-            var misnamedEpisodes = mocker.Resolve<MisnamedProvider>().MisnamedFiles(1, 10, out totalItems);
+            var misnamedEpisodes = Mocker.Resolve<MisnamedProvider>().MisnamedFiles(1, 10, out totalItems);
 
             //Assert
             misnamedEpisodes.Should().HaveCount(1);
@@ -242,22 +243,22 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(e => e.EpisodeFile = episodeFiles[1])
                 .Build();
 
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
-            mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeProvider>()
                 .Setup(c => c.EpisodesWithFiles()).Returns(episodes);
 
-            mocker.GetMock<MediaFileProvider>()
+            Mocker.GetMock<MediaFileProvider>()
                 .Setup(c => c.GetNewFilename(new List<Episode> { episodes[0], episodes[1] }, "SeriesTitle", It.IsAny<QualityTypes>()))
                 .Returns("Title1");
 
-            mocker.GetMock<MediaFileProvider>()
+            Mocker.GetMock<MediaFileProvider>()
                 .Setup(c => c.GetNewFilename(new List<Episode> { episodes[2] }, "SeriesTitle", It.IsAny<QualityTypes>()))
                 .Returns("Title2");
 
             //Act
             var totalItems = 0;
-            var misnamedEpisodes = mocker.Resolve<MisnamedProvider>().MisnamedFiles(1, 10, out totalItems);
+            var misnamedEpisodes = Mocker.Resolve<MisnamedProvider>().MisnamedFiles(1, 10, out totalItems);
 
             //Assert
             misnamedEpisodes.Should().HaveCount(0);

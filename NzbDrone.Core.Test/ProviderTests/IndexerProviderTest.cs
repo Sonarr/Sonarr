@@ -23,13 +23,13 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void Init_indexer_test()
         {
-            var mocker = new AutoMoqer();
+            
 
-            mocker.SetConstant(TestDbHelper.GetEmptyDatabase());
+            Mocker.SetConstant(TestDbHelper.GetEmptyDatabase());
 
             //Act
-            var indexerProvider = mocker.Resolve<IndexerProvider>();
-            indexerProvider.InitializeIndexers(new List<IndexerBase> { mocker.Resolve<MockIndexer>() });
+            var indexerProvider = Mocker.Resolve<IndexerProvider>();
+            indexerProvider.InitializeIndexers(new List<IndexerBase> { Mocker.Resolve<MockIndexer>() });
             var settings = indexerProvider.GetSettings(typeof(MockIndexer));
             settings.Enable = true;
             indexerProvider.SaveSettings(settings);
@@ -45,13 +45,13 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void Init_indexer_with_disabled_job()
         {
-            var mocker = new AutoMoqer();
+            
 
-            mocker.SetConstant(TestDbHelper.GetEmptyDatabase());
+            Mocker.SetConstant(TestDbHelper.GetEmptyDatabase());
 
             //Act
-            var indexerProvider = mocker.Resolve<IndexerProvider>();
-            indexerProvider.InitializeIndexers(new List<IndexerBase> { mocker.Resolve<MockIndexer>() });
+            var indexerProvider = Mocker.Resolve<IndexerProvider>();
+            indexerProvider.InitializeIndexers(new List<IndexerBase> { Mocker.Resolve<MockIndexer>() });
             var settings = indexerProvider.GetSettings(typeof(MockIndexer));
             settings.Enable = false;
             indexerProvider.SaveSettings(settings);

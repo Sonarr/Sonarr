@@ -20,17 +20,17 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void SendNotification_true()
         {
             //Setup
-            var mocker = new AutoMoqer();
+            
 
             var header = "NzbDrone Test";
             var message = "Test Message!";
             var address = "localhost";
 
-            var fakeUdp = mocker.GetMock<UdpProvider>();
+            var fakeUdp = Mocker.GetMock<UdpProvider>();
             fakeUdp.Setup(s => s.Send(address, UdpProvider.PacketType.Notification, It.IsAny<byte[]>())).Returns(true);
 
             //Act
-            var result = mocker.Resolve<EventClientProvider>().SendNotification(header, message, IconType.Jpeg, "NzbDrone.jpg", address);
+            var result = Mocker.Resolve<EventClientProvider>().SendNotification(header, message, IconType.Jpeg, "NzbDrone.jpg", address);
 
             //Assert
             Assert.AreEqual(true, result);
@@ -40,17 +40,17 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void SendNotification_false()
         {
             //Setup
-            var mocker = new AutoMoqer();
+            
 
             var header = "NzbDrone Test";
             var message = "Test Message!";
             var address = "localhost";
 
-            var fakeUdp = mocker.GetMock<UdpProvider>();
+            var fakeUdp = Mocker.GetMock<UdpProvider>();
             fakeUdp.Setup(s => s.Send(address, UdpProvider.PacketType.Notification, It.IsAny<byte[]>())).Returns(false);
 
             //Act
-            var result = mocker.Resolve<EventClientProvider>().SendNotification(header, message, IconType.Jpeg, "NzbDrone.jpg", address);
+            var result = Mocker.Resolve<EventClientProvider>().SendNotification(header, message, IconType.Jpeg, "NzbDrone.jpg", address);
 
             //Assert
             Assert.AreEqual(false, result);
@@ -60,17 +60,17 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void SendAction_Update_true()
         {
             //Setup
-            var mocker = new AutoMoqer();
+            
 
             var path = @"C:\Test\TV\30 Rock";
             var command = String.Format("ExecBuiltIn(UpdateLibrary(video,{0}))", path);
             var address = "localhost";
 
-            var fakeUdp = mocker.GetMock<UdpProvider>();
+            var fakeUdp = Mocker.GetMock<UdpProvider>();
             fakeUdp.Setup(s => s.Send(address, UdpProvider.PacketType.Action, It.IsAny<byte[]>())).Returns(true);
 
             //Act
-            var result = mocker.Resolve<EventClientProvider>().SendAction(address, ActionType.ExecBuiltin, command);
+            var result = Mocker.Resolve<EventClientProvider>().SendAction(address, ActionType.ExecBuiltin, command);
 
             //Assert
             Assert.AreEqual(true, result);
@@ -80,17 +80,17 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void SendAction_Update_false()
         {
             //Setup
-            var mocker = new AutoMoqer();
+            
 
             var path = @"C:\Test\TV\30 Rock";
             var command = String.Format("ExecBuiltIn(UpdateLibrary(video,{0}))", path);
             var address = "localhost";
 
-            var fakeUdp = mocker.GetMock<UdpProvider>();
+            var fakeUdp = Mocker.GetMock<UdpProvider>();
             fakeUdp.Setup(s => s.Send(address, UdpProvider.PacketType.Action, It.IsAny<byte[]>())).Returns(false);
 
             //Act
-            var result = mocker.Resolve<EventClientProvider>().SendAction(address, ActionType.ExecBuiltin, command);
+            var result = Mocker.Resolve<EventClientProvider>().SendAction(address, ActionType.ExecBuiltin, command);
 
             //Assert
             Assert.AreEqual(false, result);

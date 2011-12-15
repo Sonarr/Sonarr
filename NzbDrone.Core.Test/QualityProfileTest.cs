@@ -68,9 +68,9 @@ namespace NzbDrone.Core.Test
         public void Update_Success()
         {
             //Arrange
-            var mocker = new AutoMoqer();
+            
             var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            Mocker.SetConstant(db);
 
             var testProfile = new QualityProfile
             {
@@ -85,9 +85,9 @@ namespace NzbDrone.Core.Test
 
             //Update
             currentProfile.Cutoff = QualityTypes.Bluray720p;
-            mocker.Resolve<QualityProvider>().Update(currentProfile);
+            Mocker.Resolve<QualityProvider>().Update(currentProfile);
 
-            var updated = mocker.Resolve<QualityProvider>().Get(currentProfile.QualityProfileId);
+            var updated = Mocker.Resolve<QualityProvider>().Get(currentProfile.QualityProfileId);
 
             //Assert
             updated.Name.Should().Be(currentProfile.Name);
@@ -130,15 +130,15 @@ namespace NzbDrone.Core.Test
         [Test]
         public void SetupInitial_should_add_two_profiles()
         {
-            var mocker = new AutoMoqer();
+            
             var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            Mocker.SetConstant(db);
 
             //Act
-            mocker.Resolve<QualityProvider>().SetupDefaultProfiles();
+            Mocker.Resolve<QualityProvider>().SetupDefaultProfiles();
 
             //Assert
-            var profiles = mocker.Resolve<QualityProvider>().All();
+            var profiles = Mocker.Resolve<QualityProvider>().All();
 
 
             profiles.Should().HaveCount(2);
@@ -152,17 +152,17 @@ namespace NzbDrone.Core.Test
         //We don't want to keep adding them back if a user deleted them on purpose.
         public void SetupInitial_should_skip_if_any_profile_exists()
         {
-            var mocker = new AutoMoqer();
+            
             var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            Mocker.SetConstant(db);
             var fakeProfile = Builder<QualityProfile>.CreateNew().Build();
 
             //Act
-            mocker.Resolve<QualityProvider>().Add(fakeProfile);
-            mocker.Resolve<QualityProvider>().SetupDefaultProfiles();
+            Mocker.Resolve<QualityProvider>().Add(fakeProfile);
+            Mocker.Resolve<QualityProvider>().SetupDefaultProfiles();
 
             //Assert
-            var profiles = mocker.Resolve<QualityProvider>().All();
+            var profiles = Mocker.Resolve<QualityProvider>().All();
 
 
             profiles.Should().HaveCount(1);

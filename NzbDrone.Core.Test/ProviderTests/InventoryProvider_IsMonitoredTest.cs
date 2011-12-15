@@ -86,74 +86,74 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             series.Monitored = false;
 
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
-            mocker.GetMock<SeriesProvider>()
+            Mocker.GetMock<SeriesProvider>()
                 .Setup(p => p.FindSeries(It.IsAny<String>()))
                 .Returns(series);
 
             //Act
-            var result = mocker.Resolve<InventoryProvider>().IsMonitored(parseResultMulti);
+            var result = Mocker.Resolve<InventoryProvider>().IsMonitored(parseResultMulti);
 
             //Assert
             Assert.IsFalse(result);
             Assert.AreSame(series, parseResultMulti.Series);
-            mocker.VerifyAllMocks();
+            Mocker.VerifyAllMocks();
         }
 
 
         [Test]
         public void not_in_db_should_be_skipped()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
-            mocker.GetMock<SeriesProvider>()
+            Mocker.GetMock<SeriesProvider>()
                 .Setup(p => p.FindSeries(It.IsAny<String>()))
                 .Returns<Series>(null);
 
             //Act
-            var result = mocker.Resolve<InventoryProvider>().IsMonitored(parseResultMulti);
+            var result = Mocker.Resolve<InventoryProvider>().IsMonitored(parseResultMulti);
 
             //Assert
             Assert.IsFalse(result);
-            mocker.VerifyAllMocks();
+            Mocker.VerifyAllMocks();
         }
 
 
         [Test]
         public void IsMonitored_should_return_true()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
-            mocker.GetMock<SeriesProvider>()
+            Mocker.GetMock<SeriesProvider>()
                 .Setup(p => p.FindSeries(It.IsAny<String>()))
                 .Returns(series);
 
-            mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeProvider>()
                 .Setup(p => p.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>(), true))
                 .Returns(new List<Episode> { episode });
 
             parseResultSingle.Series.Should().BeNull();
 
-            var result = mocker.Resolve<InventoryProvider>().IsMonitored(parseResultSingle);
+            var result = Mocker.Resolve<InventoryProvider>().IsMonitored(parseResultSingle);
 
             //Assert
             result.Should().BeTrue();
             parseResultSingle.Series.Should().Be(series);
-            mocker.VerifyAllMocks();
+            Mocker.VerifyAllMocks();
         }
 
 
         [Test]
         public void IsMonitored_ignored_single_episode_should_return_false()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
-            mocker.GetMock<SeriesProvider>()
+            Mocker.GetMock<SeriesProvider>()
                 .Setup(p => p.FindSeries(It.IsAny<String>()))
                 .Returns(series);
 
-            mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeProvider>()
                 .Setup(p => p.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>(), true))
                 .Returns(new List<Episode> { episode });
 
@@ -161,24 +161,24 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             parseResultSingle.Series.Should().BeNull();
 
-            var result = mocker.Resolve<InventoryProvider>().IsMonitored(parseResultSingle);
+            var result = Mocker.Resolve<InventoryProvider>().IsMonitored(parseResultSingle);
 
             //Assert
             result.Should().BeFalse();
             parseResultSingle.Series.Should().Be(series);
-            mocker.VerifyAllMocks();
+            Mocker.VerifyAllMocks();
         }
 
         [Test]
         public void IsMonitored_multi_some_episodes_ignored_should_return_true()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
-            mocker.GetMock<SeriesProvider>()
+            Mocker.GetMock<SeriesProvider>()
                 .Setup(p => p.FindSeries(It.IsAny<String>()))
                 .Returns(series);
 
-            mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeProvider>()
                 .Setup(p => p.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>(), true))
                 .Returns(new List<Episode> { episode, episode2 });
 
@@ -187,24 +187,24 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             parseResultMulti.Series.Should().BeNull();
 
-            var result = mocker.Resolve<InventoryProvider>().IsMonitored(parseResultMulti);
+            var result = Mocker.Resolve<InventoryProvider>().IsMonitored(parseResultMulti);
 
             //Assert
             result.Should().BeTrue();
             parseResultMulti.Series.Should().Be(series);
-            mocker.VerifyAllMocks();
+            Mocker.VerifyAllMocks();
         }
 
         [Test]
         public void IsMonitored_multi_all_episodes_ignored_should_return_false()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
-            mocker.GetMock<SeriesProvider>()
+            Mocker.GetMock<SeriesProvider>()
                 .Setup(p => p.FindSeries(It.IsAny<String>()))
                 .Returns(series);
 
-            mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeProvider>()
                 .Setup(p => p.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>(), true))
                 .Returns(new List<Episode> { episode, episode2 });
 
@@ -213,25 +213,25 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             parseResultSingle.Series.Should().BeNull();
 
-            var result = mocker.Resolve<InventoryProvider>().IsMonitored(parseResultMulti);
+            var result = Mocker.Resolve<InventoryProvider>().IsMonitored(parseResultMulti);
 
             //Assert
             result.Should().BeFalse();
             parseResultMulti.Series.Should().Be(series);
-            mocker.VerifyAllMocks();
+            Mocker.VerifyAllMocks();
         }
 
 
         [Test]
         public void IsMonitored_multi_no_episodes_ignored_should_return_true()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
-            mocker.GetMock<SeriesProvider>()
+            Mocker.GetMock<SeriesProvider>()
                 .Setup(p => p.FindSeries(It.IsAny<String>()))
                 .Returns(series);
 
-            mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeProvider>()
                 .Setup(p => p.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>(), true))
                 .Returns(new List<Episode> { episode, episode2 });
 
@@ -240,30 +240,30 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             parseResultSingle.Series.Should().BeNull();
 
-            var result = mocker.Resolve<InventoryProvider>().IsMonitored(parseResultMulti);
+            var result = Mocker.Resolve<InventoryProvider>().IsMonitored(parseResultMulti);
 
             //Assert
             result.Should().BeTrue();
             parseResultMulti.Series.Should().Be(series);
-            mocker.VerifyAllMocks();
+            Mocker.VerifyAllMocks();
         }
 
         [Test]
         public void IsMonitored_daily_not_ignored_should_return_true()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
-            mocker.GetMock<SeriesProvider>()
+            Mocker.GetMock<SeriesProvider>()
                 .Setup(p => p.FindSeries(It.IsAny<String>()))
                 .Returns(series);
 
-            mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeProvider>()
                 .Setup(p => p.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>(), true))
                 .Returns(new List<Episode> { episode });
 
             episode.Ignored = false;
 
-            var result = mocker.Resolve<InventoryProvider>().IsMonitored(parseResultDaily);
+            var result = Mocker.Resolve<InventoryProvider>().IsMonitored(parseResultDaily);
 
             //Assert
             result.Should().BeTrue();

@@ -3,11 +3,9 @@ using System;
 using System.IO;
 
 using FluentAssertions;
-using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Test.Common;
-using NzbDrone.Test.Common.AutoMoq;
 using NzbDrone.Update.Providers;
 
 namespace NzbDrone.Update.Test
@@ -16,17 +14,14 @@ namespace NzbDrone.Update.Test
     class UpdateProviderVerifyFixture : TestBase
     {
 
-        AutoMoqer mocker = new AutoMoqer();
 
         [SetUp]
         public void Setup()
         {
-            mocker = new AutoMoqer();
-
-            mocker.GetMock<EnviromentProvider>()
+            Mocker.GetMock<EnviromentProvider>()
                 .Setup(c => c.StartUpPath).Returns(@"C:\Temp\NzbDrone_update\");
 
-            mocker.GetMock<EnviromentProvider>()
+            Mocker.GetMock<EnviromentProvider>()
                 .Setup(c => c.SystemTemp).Returns(@"C:\Temp\");
         }
 
@@ -35,7 +30,7 @@ namespace NzbDrone.Update.Test
         [TestCase(" ")]
         public void update_should_throw_target_folder_is_blank(string target)
         {
-            Assert.Throws<ArgumentException>(() => mocker.Resolve<UpdateProvider>().Start(target))
+            Assert.Throws<ArgumentException>(() => Mocker.Resolve<UpdateProvider>().Start(target))
             .Message.Should().StartWith("Target folder can not be null or empty");
         }
 
@@ -44,7 +39,7 @@ namespace NzbDrone.Update.Test
         {
             string targetFolder = "c:\\NzbDrone\\";
 
-            Assert.Throws<DirectoryNotFoundException>(() => mocker.Resolve<UpdateProvider>().Start(targetFolder))
+            Assert.Throws<DirectoryNotFoundException>(() => Mocker.Resolve<UpdateProvider>().Start(targetFolder))
             .Message.Should().StartWith("Target folder doesn't exist");
         }
 
@@ -54,15 +49,15 @@ namespace NzbDrone.Update.Test
             const string sandboxFolder = @"C:\Temp\NzbDrone_update\nzbdrone";
             const string targetFolder = "c:\\NzbDrone\\";
 
-            mocker.GetMock<DiskProvider>()
+            Mocker.GetMock<DiskProvider>()
                 .Setup(c => c.FolderExists(targetFolder))
                 .Returns(true);
 
-            mocker.GetMock<DiskProvider>()
+            Mocker.GetMock<DiskProvider>()
                .Setup(c => c.FolderExists(sandboxFolder))
                .Returns(false);
 
-            Assert.Throws<DirectoryNotFoundException>(() => mocker.Resolve<UpdateProvider>().Start(targetFolder))
+            Assert.Throws<DirectoryNotFoundException>(() => Mocker.Resolve<UpdateProvider>().Start(targetFolder))
                 .Message.Should().StartWith("Update folder doesn't exist");
         }
     }

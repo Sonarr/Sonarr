@@ -36,9 +36,9 @@ namespace NzbDrone.Core.Test.ProviderTests
             const string category = "tv";
 
 
-            var mocker = new AutoMoqer();
+            
 
-            var fakeConfig = mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigProvider>();
             fakeConfig.SetupGet(c => c.SabHost)
                 .Returns(sabHost);
             fakeConfig.SetupGet(c => c.SabPort)
@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             fakeConfig.SetupGet(c => c.SabTvCategory)
                 .Returns(category);
 
-            mocker.GetMock<HttpProvider>(MockBehavior.Strict)
+            Mocker.GetMock<HttpProvider>(MockBehavior.Strict)
                 .Setup(
                     s =>
                     s.DownloadString(
@@ -62,7 +62,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Returns("ok");
 
             //Act
-            bool result = mocker.Resolve<SabProvider>().AddByUrl(
+            bool result = Mocker.Resolve<SabProvider>().AddByUrl(
                 "http://www.nzbclub.com/nzb_download.aspx?mid=1950232", "This is an Nzb");
 
             //Assert
@@ -83,9 +83,9 @@ namespace NzbDrone.Core.Test.ProviderTests
             const string category = "tv";
 
 
-            var mocker = new AutoMoqer();
+            
 
-            var fakeConfig = mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigProvider>();
             fakeConfig.SetupGet(c => c.SabHost)
                 .Returns(sabHost);
             fakeConfig.SetupGet(c => c.SabPort)
@@ -101,7 +101,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             fakeConfig.SetupGet(c => c.SabTvCategory)
                 .Returns(category);
 
-            mocker.GetMock<HttpProvider>(MockBehavior.Strict)
+            Mocker.GetMock<HttpProvider>(MockBehavior.Strict)
                 .Setup(
                     s =>
                     s.DownloadString(
@@ -109,7 +109,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Returns("ok");
 
             //Act
-            bool result = mocker.Resolve<SabProvider>().AddByUrl(
+            bool result = Mocker.Resolve<SabProvider>().AddByUrl(
                 "http://www.newzbin.com/browse/post/6107863/nzb", "This is an Nzb");
 
             //Assert
@@ -128,9 +128,9 @@ namespace NzbDrone.Core.Test.ProviderTests
             var priority = SabnzbdPriorityType.Normal;
             string category = "tv";
 
-            var mocker = new AutoMoqer();
+            
 
-            var fakeConfig = mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigProvider>();
             fakeConfig.SetupGet(c => c.SabHost)
                 .Returns(sabHost);
             fakeConfig.SetupGet(c => c.SabPort)
@@ -145,12 +145,12 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Returns(priority);
             fakeConfig.SetupGet(c => c.SabTvCategory)
                 .Returns(category);
-            mocker.GetMock<HttpProvider>()
+            Mocker.GetMock<HttpProvider>()
                 .Setup(s => s.DownloadString(It.IsAny<String>()))
                 .Returns("error");
 
             //Act
-            var sabProvider = mocker.Resolve<SabProvider>();
+            var sabProvider = Mocker.Resolve<SabProvider>();
             var result = sabProvider.AddByUrl("http://www.nzbclub.com/nzb_download.aspx?mid=1950232", "This is an nzb");
 
             //Assert
@@ -168,9 +168,9 @@ namespace NzbDrone.Core.Test.ProviderTests
             string username = "admin";
             string password = "pass";
 
-            var mocker = new AutoMoqer();
+            
 
-            var fakeConfig = mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigProvider>();
             fakeConfig.SetupGet(c => c.SabHost)
               .Returns(sabHost);
             fakeConfig.SetupGet(c => c.SabPort)
@@ -182,12 +182,12 @@ namespace NzbDrone.Core.Test.ProviderTests
             fakeConfig.SetupGet(c => c.SabPassword)
                 .Returns(password);
 
-            mocker.GetMock<HttpProvider>(MockBehavior.Strict)
+            Mocker.GetMock<HttpProvider>(MockBehavior.Strict)
                 .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=queue&output=xml&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
                 .Returns(File.ReadAllText(@".\Files\Queue.xml"));
 
             //Act
-            bool result = mocker.Resolve<SabProvider>().IsInQueue("Ubuntu Test");
+            bool result = Mocker.Resolve<SabProvider>().IsInQueue("Ubuntu Test");
 
             //Assert
             result.Should().BeTrue();
@@ -203,9 +203,9 @@ namespace NzbDrone.Core.Test.ProviderTests
             string username = "admin";
             string password = "pass";
 
-            var mocker = new AutoMoqer();
+            
 
-            var fakeConfig = mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigProvider>();
             fakeConfig.SetupGet(c => c.SabHost)
                 .Returns(sabHost);
             fakeConfig.SetupGet(c => c.SabPort)
@@ -217,12 +217,12 @@ namespace NzbDrone.Core.Test.ProviderTests
             fakeConfig.SetupGet(c => c.SabPassword)
                 .Returns(password);
 
-            mocker.GetMock<HttpProvider>(MockBehavior.Strict)
+            Mocker.GetMock<HttpProvider>(MockBehavior.Strict)
                 .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=queue&output=xml&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
                 .Returns(File.ReadAllText(@".\Files\QueueEmpty.xml"));
 
             //Act
-            bool result = mocker.Resolve<SabProvider>().IsInQueue(String.Empty);
+            bool result = Mocker.Resolve<SabProvider>().IsInQueue(String.Empty);
 
             //Assert
             Assert.IsFalse(result);
@@ -239,9 +239,9 @@ namespace NzbDrone.Core.Test.ProviderTests
             string username = "admin";
             string password = "pass";
 
-            var mocker = new AutoMoqer();
+            
 
-            var fakeConfig = mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigProvider>();
             fakeConfig.SetupGet(c => c.SabHost)
                 .Returns(sabHost);
             fakeConfig.SetupGet(c => c.SabPort)
@@ -253,13 +253,13 @@ namespace NzbDrone.Core.Test.ProviderTests
             fakeConfig.SetupGet(c => c.SabPassword)
                 .Returns(password);
 
-            mocker.GetMock<HttpProvider>(MockBehavior.Strict)
+            Mocker.GetMock<HttpProvider>(MockBehavior.Strict)
                 .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=queue&output=xml&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
                 .Returns(File.ReadAllText(@".\Files\QueueError.xml"));
 
 
             //Act
-            mocker.Resolve<SabProvider>().IsInQueue(String.Empty);
+            Mocker.Resolve<SabProvider>().IsInQueue(String.Empty);
         }
 
         [Test]
@@ -271,7 +271,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [TestCase(1, new[] { 2, 4 }, "", QualityTypes.HDTV, true, "My Series Name - 1x2-1x4 -  [HDTV] [Proper]")]
         public void sab_title(int seasons, int[] episodes, string title, QualityTypes quality, bool proper, string expected)
         {
-            var mocker = new AutoMoqer();
+            
 
             var series = Builder<Series>.CreateNew()
                 .With(c => c.Path = @"d:\tv shows\My Series Name")
@@ -288,7 +288,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             };
 
             //Act
-            var actual = mocker.Resolve<SabProvider>().GetSabTitle(parsResult);
+            var actual = Mocker.Resolve<SabProvider>().GetSabTitle(parsResult);
 
             //Assert
             Assert.AreEqual(expected, actual);
@@ -298,7 +298,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [TestCase(false, "My Series Name - Season 1 [Bluray720p]")]
         public void sab_season_title(bool proper, string expected)
         {
-            var mocker = new AutoMoqer();
+            
 
             var series = Builder<Series>.CreateNew()
                 .With(c => c.Path = @"d:\tv shows\My Series Name")
@@ -315,7 +315,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             };
 
             //Act
-            var actual = mocker.Resolve<SabProvider>().GetSabTitle(parsResult);
+            var actual = Mocker.Resolve<SabProvider>().GetSabTitle(parsResult);
 
             //Assert
             Assert.AreEqual(expected, actual);
@@ -325,7 +325,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [TestCase(false, "My Series Name - 2011-12-01 - My Episode Title [Bluray720p]")]
         public void sab_daily_series_title(bool proper, string expected)
         {
-            var mocker = new AutoMoqer();
+            
 
             var series = Builder<Series>.CreateNew()
                 .With(c => c.Path = @"d:\tv shows\My Series Name")
@@ -341,7 +341,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             };
 
             //Act
-            var actual = mocker.Resolve<SabProvider>().GetSabTitle(parsResult);
+            var actual = Mocker.Resolve<SabProvider>().GetSabTitle(parsResult);
 
             //Assert
             Assert.AreEqual(expected, actual);
@@ -361,9 +361,9 @@ namespace NzbDrone.Core.Test.ProviderTests
             const string category = "tv";
 
 
-            var mocker = new AutoMoqer();
+            
 
-            var fakeConfig = mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigProvider>();
             fakeConfig.SetupGet(c => c.SabHost)
                 .Returns(sabHost);
             fakeConfig.SetupGet(c => c.SabPort)
@@ -380,10 +380,10 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Returns(category);
 
 
-            mocker.SetConstant(new HttpProvider());
+            Mocker.SetConstant(new HttpProvider());
 
             //Act
-            bool result = mocker.Resolve<SabProvider>().AddByUrl(
+            bool result = Mocker.Resolve<SabProvider>().AddByUrl(
                 "http://www.newzbin.com/browse/post/6107863/nzb", "Added by unit tests.");
 
             //Assert
@@ -400,14 +400,14 @@ namespace NzbDrone.Core.Test.ProviderTests
             const string username = "admin";
             const string password = "pass";
 
-            var mocker = new AutoMoqer();
+            
 
-            mocker.GetMock<HttpProvider>(MockBehavior.Strict)
+            Mocker.GetMock<HttpProvider>(MockBehavior.Strict)
                 .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=get_cats&output=json&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
                 .Returns(File.ReadAllText(@".\Files\Categories_json.txt"));
 
             //Act
-            var result = mocker.Resolve<SabProvider>().GetCategories(host, port, apikey, username, password);
+            var result = Mocker.Resolve<SabProvider>().GetCategories(host, port, apikey, username, password);
 
             //Assert
             result.Should().NotBeNull();
@@ -425,9 +425,9 @@ namespace NzbDrone.Core.Test.ProviderTests
             const string username = "admin";
             const string password = "pass";
 
-            var mocker = new AutoMoqer();
+            
 
-            var fakeConfig = mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigProvider>();
             fakeConfig.SetupGet(c => c.SabHost)
                 .Returns(host);
             fakeConfig.SetupGet(c => c.SabPort)
@@ -439,12 +439,12 @@ namespace NzbDrone.Core.Test.ProviderTests
             fakeConfig.SetupGet(c => c.SabPassword)
                 .Returns(password);
 
-            mocker.GetMock<HttpProvider>(MockBehavior.Strict)
+            Mocker.GetMock<HttpProvider>(MockBehavior.Strict)
                 .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=get_cats&output=json&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
                 .Returns(File.ReadAllText(@".\Files\Categories_json.txt"));
 
             //Act
-            var result = mocker.Resolve<SabProvider>().GetCategories();
+            var result = Mocker.Resolve<SabProvider>().GetCategories();
 
             //Assert
             result.Should().NotBeNull();

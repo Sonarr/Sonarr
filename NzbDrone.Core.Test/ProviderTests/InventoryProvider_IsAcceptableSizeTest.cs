@@ -72,19 +72,19 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void IsAcceptableSize_true_single_episode_not_first_or_last_30_minute()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
             parseResultSingle.Series = series30minutes;
             parseResultSingle.Size = 184572800;
 
-            mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
+            Mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 
-            mocker.GetMock<EpisodeProvider>().Setup(
+            Mocker.GetMock<EpisodeProvider>().Setup(
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(false);
 
             //Act
-            bool result = mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultSingle);
+            bool result = Mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultSingle);
 
             //Assert
             result.Should().BeTrue();
@@ -93,19 +93,19 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void IsAcceptableSize_true_single_episode_not_first_or_last_60_minute()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
             parseResultSingle.Series = series60minutes;
             parseResultSingle.Size = 368572800;
 
-            mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
+            Mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 
-            mocker.GetMock<EpisodeProvider>().Setup(
+            Mocker.GetMock<EpisodeProvider>().Setup(
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(false);
 
             //Act
-            bool result = mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultSingle);
+            bool result = Mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultSingle);
 
             //Assert
             result.Should().BeTrue();
@@ -114,19 +114,19 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void IsAcceptableSize_false_single_episode_not_first_or_last_30_minute()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
             parseResultSingle.Series = series30minutes;
             parseResultSingle.Size = 1.Gigabytes();
 
-            mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
+            Mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 
-            mocker.GetMock<EpisodeProvider>().Setup(
+            Mocker.GetMock<EpisodeProvider>().Setup(
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(false);
 
             //Act
-            bool result = mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultSingle);
+            bool result = Mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultSingle);
 
             //Assert
             result.Should().BeFalse();
@@ -135,19 +135,19 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void IsAcceptableSize_false_single_episode_not_first_or_last_60_minute()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
             parseResultSingle.Series = series60minutes;
             parseResultSingle.Size = 1.Gigabytes();
 
-            mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
+            Mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 
-            mocker.GetMock<EpisodeProvider>().Setup(
+            Mocker.GetMock<EpisodeProvider>().Setup(
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(false);
 
             //Act
-            bool result = mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultSingle);
+            bool result = Mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultSingle);
 
             //Assert
             result.Should().BeFalse();
@@ -156,19 +156,19 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void IsAcceptableSize_true_multi_episode_not_first_or_last_30_minute()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
             parseResultMulti.Series = series30minutes;
             parseResultMulti.Size = 184572800;
 
-            mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
+            Mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 
-            mocker.GetMock<EpisodeProvider>().Setup(
+            Mocker.GetMock<EpisodeProvider>().Setup(
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(false);
 
             //Act
-            bool result = mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultMulti);
+            bool result = Mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultMulti);
 
             //Assert
             result.Should().BeTrue();
@@ -177,19 +177,19 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void IsAcceptableSize_true_multi_episode_not_first_or_last_60_minute()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
             parseResultMulti.Series = series60minutes;
             parseResultMulti.Size = 368572800;
 
-            mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
+            Mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 
-            mocker.GetMock<EpisodeProvider>().Setup(
+            Mocker.GetMock<EpisodeProvider>().Setup(
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(false);
 
             //Act
-            bool result = mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultMulti);
+            bool result = Mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultMulti);
 
             //Assert
             result.Should().BeTrue();
@@ -198,19 +198,19 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void IsAcceptableSize_false_multi_episode_not_first_or_last_30_minute()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
             parseResultMulti.Series = series30minutes;
             parseResultMulti.Size = 1.Gigabytes();
 
-            mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
+            Mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 
-            mocker.GetMock<EpisodeProvider>().Setup(
+            Mocker.GetMock<EpisodeProvider>().Setup(
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(false);
 
             //Act
-            bool result = mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultMulti);
+            bool result = Mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultMulti);
 
             //Assert
             result.Should().BeFalse();
@@ -219,19 +219,19 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void IsAcceptableSize_false_multi_episode_not_first_or_last_60_minute()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
             parseResultMulti.Series = series60minutes;
             parseResultMulti.Size = 10.Gigabytes();
 
-            mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
+            Mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 
-            mocker.GetMock<EpisodeProvider>().Setup(
+            Mocker.GetMock<EpisodeProvider>().Setup(
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(false);
 
             //Act
-            bool result = mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultMulti);
+            bool result = Mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultMulti);
 
             //Assert
             result.Should().BeFalse();
@@ -240,19 +240,19 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void IsAcceptableSize_true_single_episode_first_30_minute()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
             parseResultSingle.Series = series30minutes;
             parseResultSingle.Size = 184572800;
 
-            mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
+            Mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 
-            mocker.GetMock<EpisodeProvider>().Setup(
+            Mocker.GetMock<EpisodeProvider>().Setup(
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(true);
 
             //Act
-            bool result = mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultSingle);
+            bool result = Mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultSingle);
 
             //Assert
             result.Should().BeTrue();
@@ -261,19 +261,19 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void IsAcceptableSize_true_single_episode_first_60_minute()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
             parseResultSingle.Series = series60minutes;
             parseResultSingle.Size = 368572800;
 
-            mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
+            Mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 
-            mocker.GetMock<EpisodeProvider>().Setup(
+            Mocker.GetMock<EpisodeProvider>().Setup(
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(true);
 
             //Act
-            bool result = mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultSingle);
+            bool result = Mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultSingle);
 
             //Assert
             result.Should().BeTrue();
@@ -282,19 +282,19 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void IsAcceptableSize_false_single_episode_first_30_minute()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
             parseResultSingle.Series = series30minutes;
             parseResultSingle.Size = 1.Gigabytes();
 
-            mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
+            Mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 
-            mocker.GetMock<EpisodeProvider>().Setup(
+            Mocker.GetMock<EpisodeProvider>().Setup(
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(true);
 
             //Act
-            bool result = mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultSingle);
+            bool result = Mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultSingle);
 
             //Assert
             result.Should().BeFalse();
@@ -303,19 +303,19 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void IsAcceptableSize_false_single_episode_first_60_minute()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
             parseResultSingle.Series = series60minutes;
             parseResultSingle.Size = 10.Gigabytes();
 
-            mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
+            Mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 
-            mocker.GetMock<EpisodeProvider>().Setup(
+            Mocker.GetMock<EpisodeProvider>().Setup(
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(true);
 
             //Act
-            bool result = mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultSingle);
+            bool result = Mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultSingle);
 
             //Assert
             result.Should().BeFalse();
@@ -324,20 +324,20 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void IsAcceptableSize_true_unlimited_30_minute()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
             parseResultSingle.Series = series30minutes;
             parseResultSingle.Size = 18457280000;
             qualityType.MaxSize = 0;
 
-            mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
+            Mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 
-            mocker.GetMock<EpisodeProvider>().Setup(
+            Mocker.GetMock<EpisodeProvider>().Setup(
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(true);
 
             //Act
-            bool result = mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultSingle);
+            bool result = Mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultSingle);
 
             //Assert
             result.Should().BeTrue();
@@ -346,20 +346,20 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void IsAcceptableSize_true_unlimited_60_minute()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
             parseResultSingle.Series = series60minutes;
             parseResultSingle.Size = 36857280000;
             qualityType.MaxSize = 0;
 
-            mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
+            Mocker.GetMock<QualityTypeProvider>().Setup(s => s.Get(1)).Returns(qualityType);
 
-            mocker.GetMock<EpisodeProvider>().Setup(
+            Mocker.GetMock<EpisodeProvider>().Setup(
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(true);
 
             //Act
-            bool result = mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultSingle);
+            bool result = Mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultSingle);
 
             //Assert
             result.Should().BeTrue();

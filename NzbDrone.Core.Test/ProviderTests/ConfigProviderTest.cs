@@ -23,15 +23,15 @@ namespace NzbDrone.Core.Test.ProviderTests
             const string key = "MY_KEY";
             const string value = "MY_VALUE";
 
-            var mocker = new AutoMoqer();
+            
             var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            Mocker.SetConstant(db);
 
             //Act
-            mocker.Resolve<ConfigProvider>().SetValue(key, value);
+            Mocker.Resolve<ConfigProvider>().SetValue(key, value);
 
             //Assert
-            mocker.Resolve<ConfigProvider>().GetValue(key, "").Should().Be(value);
+            Mocker.Resolve<ConfigProvider>().GetValue(key, "").Should().Be(value);
         }
 
         [Test]
@@ -40,15 +40,15 @@ namespace NzbDrone.Core.Test.ProviderTests
             const string key = "MY_KEY";
             const string value = "MY_VALUE";
 
-            var mocker = new AutoMoqer();
+            
             var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            Mocker.SetConstant(db);
 
             db.Insert(new Config { Key = key, Value = value });
             db.Insert(new Config { Key = "Other Key", Value = "OtherValue" });
 
             //Act
-            var result = mocker.Resolve<ConfigProvider>().GetValue(key, "");
+            var result = Mocker.Resolve<ConfigProvider>().GetValue(key, "");
 
             //Assert
             result.Should().Be(value);
@@ -61,13 +61,13 @@ namespace NzbDrone.Core.Test.ProviderTests
             const string key = "MY_KEY";
             const string value = "MY_VALUE";
 
-            var mocker = new AutoMoqer();
+            
             var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            Mocker.SetConstant(db);
 
 
             //Act
-            var result = mocker.Resolve<ConfigProvider>().GetValue(key, value);
+            var result = Mocker.Resolve<ConfigProvider>().GetValue(key, value);
 
             //Assert
             result.Should().Be(value);
@@ -80,15 +80,15 @@ namespace NzbDrone.Core.Test.ProviderTests
             const string originalValue = "OLD_VALUE";
             const string newValue = "NEW_VALUE";
 
-            var mocker = new AutoMoqer();
+            
             var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            Mocker.SetConstant(db);
 
             db.Insert(new Config { Key = key, Value = originalValue });
 
             //Act
-            mocker.Resolve<ConfigProvider>().SetValue(key, newValue);
-            var result = mocker.Resolve<ConfigProvider>().GetValue(key, "");
+            Mocker.Resolve<ConfigProvider>().SetValue(key, newValue);
+            var result = Mocker.Resolve<ConfigProvider>().GetValue(key, "");
 
             //Assert
             result.Should().Be(newValue);
@@ -102,14 +102,14 @@ namespace NzbDrone.Core.Test.ProviderTests
             const string value = "OLD_VALUE";
 
 
-            var mocker = new AutoMoqer();
+            
             var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            Mocker.SetConstant(db);
 
             //Act
-            mocker.Resolve<ConfigProvider>().SetValue(key, value);
-            mocker.Resolve<ConfigProvider>().SetValue(key, value);
-            var result = mocker.Resolve<ConfigProvider>().GetValue(key, "");
+            Mocker.Resolve<ConfigProvider>().SetValue(key, value);
+            Mocker.Resolve<ConfigProvider>().SetValue(key, value);
+            var result = Mocker.Resolve<ConfigProvider>().GetValue(key, "");
 
             //Assert
             result.Should().Be(value);
@@ -121,11 +121,11 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void config_properties_should_write_and_read_using_same_key()
         {
 
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
             var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            Mocker.SetConstant(db);
 
-            var configProvider = mocker.Resolve<ConfigProvider>();
+            var configProvider = Mocker.Resolve<ConfigProvider>();
             var allProperties = typeof(ConfigProvider).GetProperties();
 
 

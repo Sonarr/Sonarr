@@ -43,14 +43,14 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(f => f.SceneName = "Law and Order")
                 .Build();
 
-            var mocker = new AutoMoqer();
+            
 
             var emptyDatabase = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(emptyDatabase);
+            Mocker.SetConstant(emptyDatabase);
             emptyDatabase.Insert(fakeMap);
 
             //Act
-            var sceneName = mocker.Resolve<SceneMappingProvider>().GetSceneName(fakeMap.SeriesId);
+            var sceneName = Mocker.Resolve<SceneMappingProvider>().GetSceneName(fakeMap.SeriesId);
 
             //Assert
             Assert.AreEqual(fakeMap.SceneName, sceneName);
@@ -66,14 +66,14 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(f => f.SceneName = "laworder")
                 .Build();
 
-            var mocker = new AutoMoqer();
+            
 
             var emptyDatabase = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(emptyDatabase);
+            Mocker.SetConstant(emptyDatabase);
             emptyDatabase.Insert(fakeMap);
 
             //Act
-            var seriesId = mocker.Resolve<SceneMappingProvider>().GetSeriesId(fakeMap.CleanTitle);
+            var seriesId = Mocker.Resolve<SceneMappingProvider>().GetSeriesId(fakeMap.CleanTitle);
 
             //Assert
             Assert.AreEqual(fakeMap.SeriesId, seriesId);
@@ -89,14 +89,14 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(f => f.SceneName = "laworder")
                 .Build();
 
-            var mocker = new AutoMoqer();
+            
 
             var emptyDatabase = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(emptyDatabase);
+            Mocker.SetConstant(emptyDatabase);
             emptyDatabase.Insert(fakeMap);
 
             //Act
-            var sceneName = mocker.Resolve<SceneMappingProvider>().GetSceneName(54321);
+            var sceneName = Mocker.Resolve<SceneMappingProvider>().GetSceneName(54321);
 
             //Assert
             Assert.AreEqual(null, sceneName);
@@ -112,14 +112,14 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(f => f.CleanTitle = "laworder")
                 .Build();
 
-            var mocker = new AutoMoqer();
+            
 
             var emptyDatabase = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(emptyDatabase);
+            Mocker.SetConstant(emptyDatabase);
             emptyDatabase.Insert(fakeMap);
 
             //Act
-            var seriesId = mocker.Resolve<SceneMappingProvider>().GetSeriesId("notlaworder");
+            var seriesId = Mocker.Resolve<SceneMappingProvider>().GetSeriesId("notlaworder");
 
             //Assert
             Assert.AreEqual(null, seriesId);
@@ -143,16 +143,16 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(f => f.SceneName = "The Office")
                 .Build();
 
-            var mocker = new AutoMoqer();
+            
 
             var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            Mocker.SetConstant(db);
 
             db.Insert(fakeMap);
             db.Insert(fakeMap2);
 
             //Act
-            var sceneName = mocker.Resolve<SceneMappingProvider>().GetSceneName(fakeMap.SeriesId);
+            var sceneName = Mocker.Resolve<SceneMappingProvider>().GetSceneName(fakeMap.SeriesId);
 
             //Assert
             Assert.AreEqual(fakeMap.SceneName, sceneName);

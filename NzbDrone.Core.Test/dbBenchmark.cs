@@ -102,11 +102,11 @@ namespace NzbDrone.Core.Test
         [Test]
         public void get_episode_by_series_seasons_episode_x5000()
         {
-            var mocker = new AutoMoqer();
-            mocker.SetConstant(db);
-            mocker.Resolve<SeriesProvider>();
+            
+            Mocker.SetConstant(db);
+            Mocker.Resolve<SeriesProvider>();
 
-            var epProvider = mocker.Resolve<EpisodeProvider>();
+            var epProvider = Mocker.Resolve<EpisodeProvider>();
 
             Thread.Sleep(1000);
 
@@ -128,11 +128,11 @@ namespace NzbDrone.Core.Test
         [Test]
         public void get_episode_by_series_seasons_x1000()
         {
-            var mocker = new AutoMoqer();
-            mocker.SetConstant(db);
-            mocker.Resolve<SeriesProvider>();
+            
+            Mocker.SetConstant(db);
+            Mocker.Resolve<SeriesProvider>();
 
-            var epProvider = mocker.Resolve<EpisodeProvider>();
+            var epProvider = Mocker.Resolve<EpisodeProvider>();
 
 
             Thread.Sleep(1000);
@@ -156,11 +156,11 @@ namespace NzbDrone.Core.Test
         [Test]
         public void get_episode_file_count_x100()
         {
-            var mocker = new AutoMoqer();
-            mocker.SetConstant(db);
-            mocker.Resolve<SeriesProvider>();
-            mocker.Resolve<EpisodeProvider>();
-            var mediaProvider = mocker.Resolve<MediaFileProvider>();
+            
+            Mocker.SetConstant(db);
+            Mocker.Resolve<SeriesProvider>();
+            Mocker.Resolve<EpisodeProvider>();
+            var mediaProvider = Mocker.Resolve<MediaFileProvider>();
 
 
             Thread.Sleep(1000);
@@ -184,11 +184,11 @@ namespace NzbDrone.Core.Test
         [Test]
         public void get_episode_file_count_x1000()
         {
-            var mocker = new AutoMoqer();
-            mocker.SetConstant(db);
-            mocker.Resolve<SeriesProvider>();
-            mocker.Resolve<EpisodeProvider>();
-            var mediaProvider = mocker.Resolve<MediaFileProvider>();
+            
+            Mocker.SetConstant(db);
+            Mocker.Resolve<SeriesProvider>();
+            Mocker.Resolve<EpisodeProvider>();
+            var mediaProvider = Mocker.Resolve<MediaFileProvider>();
 
 
             Thread.Sleep(1000);
@@ -213,9 +213,9 @@ namespace NzbDrone.Core.Test
         [Test]
         public void get_season_count_x500()
         {
-            var mocker = new AutoMoqer();
-            mocker.SetConstant(db);
-            var provider = mocker.Resolve<EpisodeProvider>();
+            
+            Mocker.SetConstant(db);
+            var provider = Mocker.Resolve<EpisodeProvider>();
 
 
             Thread.Sleep(1000);

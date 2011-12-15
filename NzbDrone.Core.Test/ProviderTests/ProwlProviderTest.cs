@@ -30,10 +30,10 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Verify_should_return_true_for_a_valid_apiKey()
         {
             //Setup
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
             
             //Act
-            var result = mocker.Resolve<ProwlProvider>().Verify(_apiKey);
+            var result = Mocker.Resolve<ProwlProvider>().Verify(_apiKey);
 
             //Assert
             result.Should().BeTrue();
@@ -43,10 +43,10 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Verify_should_return_false_for_an_invalid_apiKey()
         {
             //Setup
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
             //Act
-            var result = mocker.Resolve<ProwlProvider>().Verify(_badApiKey);
+            var result = Mocker.Resolve<ProwlProvider>().Verify(_badApiKey);
 
             //Assert
             ExceptionVerification.ExcpectedWarns(1);
@@ -57,10 +57,10 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void SendNotification_should_return_true_for_a_valid_apiKey()
         {
             //Setup
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
             //Act
-            var result = mocker.Resolve<ProwlProvider>().SendNotification("NzbDrone Test", "This is a test message from NzbDrone", _apiKey);
+            var result = Mocker.Resolve<ProwlProvider>().SendNotification("NzbDrone Test", "This is a test message from NzbDrone", _apiKey);
 
             //Assert
             result.Should().BeTrue();
@@ -70,10 +70,10 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void SendNotification_should_return_false_for_an_invalid_apiKey()
         {
             //Setup
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
             //Act
-            var result = mocker.Resolve<ProwlProvider>().SendNotification("NzbDrone Test", "This is a test message from NzbDrone", _badApiKey);
+            var result = Mocker.Resolve<ProwlProvider>().SendNotification("NzbDrone Test", "This is a test message from NzbDrone", _badApiKey);
 
             //Assert
             ExceptionVerification.ExcpectedWarns(1);
@@ -84,10 +84,10 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void SendNotification_should_alert_with_high_priority()
         {
             //Setup
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
             //Act
-            var result = mocker.Resolve<ProwlProvider>().SendNotification("NzbDrone Test", "This is a test message from NzbDrone (High)", _apiKey, NotificationPriority.High);
+            var result = Mocker.Resolve<ProwlProvider>().SendNotification("NzbDrone Test", "This is a test message from NzbDrone (High)", _apiKey, NotificationPriority.High);
 
             //Assert
             result.Should().BeTrue();
@@ -97,10 +97,10 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void SendNotification_should_alert_with_VeryLow_priority()
         {
             //Setup
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
             //Act
-            var result = mocker.Resolve<ProwlProvider>().SendNotification("NzbDrone Test", "This is a test message from NzbDrone (VeryLow)", _apiKey, NotificationPriority.VeryLow);
+            var result = Mocker.Resolve<ProwlProvider>().SendNotification("NzbDrone Test", "This is a test message from NzbDrone (VeryLow)", _apiKey, NotificationPriority.VeryLow);
 
             //Assert
             result.Should().BeTrue();
@@ -110,10 +110,10 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void SendNotification_should_have_a_call_back_url()
         {
             //Setup
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
             //Act
-            var result = mocker.Resolve<ProwlProvider>().SendNotification("NzbDrone Test", "This is a test message from NzbDrone", _apiKey, NotificationPriority.Normal, "http://www.nzbdrone.com");
+            var result = Mocker.Resolve<ProwlProvider>().SendNotification("NzbDrone Test", "This is a test message from NzbDrone", _apiKey, NotificationPriority.Normal, "http://www.nzbdrone.com");
 
             //Assert
             result.Should().BeTrue();
@@ -123,10 +123,10 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void SendNotification_should_return_true_for_two_valid_apiKey()
         {
             //Setup
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
             //Act
-            var result = mocker.Resolve<ProwlProvider>().SendNotification("NzbDrone Test", "This is a test message from NzbDrone", _apiKey + ", " + _apiKey2);
+            var result = Mocker.Resolve<ProwlProvider>().SendNotification("NzbDrone Test", "This is a test message from NzbDrone", _apiKey + ", " + _apiKey2);
 
             //Assert
             result.Should().BeTrue();
@@ -136,10 +136,10 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void SendNotification_should_return_true_for_valid_apiKey_with_bad_apiKey()
         {
             //Setup
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
             //Act
-            var result = mocker.Resolve<ProwlProvider>().SendNotification("NzbDrone Test", "This is a test message from NzbDrone", _apiKey + ", " + _badApiKey);
+            var result = Mocker.Resolve<ProwlProvider>().SendNotification("NzbDrone Test", "This is a test message from NzbDrone", _apiKey + ", " + _badApiKey);
 
             //Assert
             result.Should().BeTrue();

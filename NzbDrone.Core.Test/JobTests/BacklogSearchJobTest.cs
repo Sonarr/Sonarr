@@ -8,12 +8,13 @@ using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
+using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common.AutoMoq;
 
 namespace NzbDrone.Core.Test.JobTests
 {
     [TestFixture]
-    public class BacklogSearchJobTest
+    public class BacklogSearchJobTest : CoreTest
     {
         [Test]
         public void no_missing_epsiodes_should_not_trigger_any_search()
@@ -23,19 +24,19 @@ namespace NzbDrone.Core.Test.JobTests
 
             var episodes = new List<Episode>();
 
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
-            mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeProvider>()
                 .Setup(s => s.EpisodesWithoutFiles(true)).Returns(episodes);
 
             //Act
-            mocker.Resolve<BacklogSearchJob>().Start(notification, 0, 0);
+            Mocker.Resolve<BacklogSearchJob>().Start(notification, 0, 0);
 
             //Assert
-            mocker.GetMock<SeasonSearchJob>().Verify(c => c.Start(notification, It.IsAny<int>(), It.IsAny<int>()),
+            Mocker.GetMock<SeasonSearchJob>().Verify(c => c.Start(notification, It.IsAny<int>(), It.IsAny<int>()),
                                                        Times.Never());
 
-            mocker.GetMock<EpisodeSearchJob>().Verify(c => c.Start(notification, It.IsAny<int>(), 0),
+            Mocker.GetMock<EpisodeSearchJob>().Verify(c => c.Start(notification, It.IsAny<int>(), 0),
                                                        Times.Never());
         }
 
@@ -47,22 +48,22 @@ namespace NzbDrone.Core.Test.JobTests
 
             var episodes = Builder<Episode>.CreateListOfSize(1).Build();
 
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
-            mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeProvider>()
                 .Setup(s => s.EpisodesWithoutFiles(true)).Returns(episodes);
 
-            mocker.GetMock<EpisodeSearchJob>()
+            Mocker.GetMock<EpisodeSearchJob>()
                 .Setup(s => s.Start(notification, It.IsAny<int>(), 0)).Verifiable();
 
             //Act
-            mocker.Resolve<BacklogSearchJob>().Start(notification, 0, 0);
+            Mocker.Resolve<BacklogSearchJob>().Start(notification, 0, 0);
 
             //Assert
-            mocker.GetMock<SeasonSearchJob>().Verify(c => c.Start(notification, It.IsAny<int>(), It.IsAny<int>()),
+            Mocker.GetMock<SeasonSearchJob>().Verify(c => c.Start(notification, It.IsAny<int>(), It.IsAny<int>()),
                                                        Times.Never());
 
-            mocker.GetMock<EpisodeSearchJob>().Verify(c => c.Start(notification, It.IsAny<int>(), 0),
+            Mocker.GetMock<EpisodeSearchJob>().Verify(c => c.Start(notification, It.IsAny<int>(), 0),
                                                        Times.Once());
         }
 
@@ -74,22 +75,22 @@ namespace NzbDrone.Core.Test.JobTests
 
             var episodes = Builder<Episode>.CreateListOfSize(5).Build();
 
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
-            mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeProvider>()
                 .Setup(s => s.EpisodesWithoutFiles(true)).Returns(episodes);
 
-            mocker.GetMock<EpisodeSearchJob>()
+            Mocker.GetMock<EpisodeSearchJob>()
                 .Setup(s => s.Start(notification, It.IsAny<int>(), 0)).Verifiable();
 
             //Act
-            mocker.Resolve<BacklogSearchJob>().Start(notification, 0, 0);
+            Mocker.Resolve<BacklogSearchJob>().Start(notification, 0, 0);
 
             //Assert
-            mocker.GetMock<SeasonSearchJob>().Verify(c => c.Start(notification, It.IsAny<int>(), It.IsAny<int>()),
+            Mocker.GetMock<SeasonSearchJob>().Verify(c => c.Start(notification, It.IsAny<int>(), It.IsAny<int>()),
                                                        Times.Never());
 
-            mocker.GetMock<EpisodeSearchJob>().Verify(c => c.Start(notification, It.IsAny<int>(), 0),
+            Mocker.GetMock<EpisodeSearchJob>().Verify(c => c.Start(notification, It.IsAny<int>(), 0),
                                                        Times.Exactly(episodes.Count));
         }
 
@@ -105,25 +106,25 @@ namespace NzbDrone.Core.Test.JobTests
                 .With(e => e.SeasonNumber = 1)
                 .Build();
 
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
-            mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeProvider>()
                 .Setup(s => s.EpisodesWithoutFiles(true)).Returns(episodes);
 
-            mocker.GetMock<EpisodeSearchJob>()
+            Mocker.GetMock<EpisodeSearchJob>()
                 .Setup(s => s.Start(notification, It.IsAny<int>(), 0)).Verifiable();
 
-            mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeProvider>()
                 .Setup(s => s.GetEpisodeNumbersBySeason(1, 1)).Returns(new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
 
             //Act
-            mocker.Resolve<BacklogSearchJob>().Start(notification, 0, 0);
+            Mocker.Resolve<BacklogSearchJob>().Start(notification, 0, 0);
 
             //Assert
-            mocker.GetMock<SeasonSearchJob>().Verify(c => c.Start(notification, It.IsAny<int>(), It.IsAny<int>()),
+            Mocker.GetMock<SeasonSearchJob>().Verify(c => c.Start(notification, It.IsAny<int>(), It.IsAny<int>()),
                                                        Times.Never());
 
-            mocker.GetMock<EpisodeSearchJob>().Verify(c => c.Start(notification, It.IsAny<int>(), 0),
+            Mocker.GetMock<EpisodeSearchJob>().Verify(c => c.Start(notification, It.IsAny<int>(), 0),
                                                        Times.Exactly(episodes.Count));
         }
 
@@ -139,25 +140,25 @@ namespace NzbDrone.Core.Test.JobTests
                 .With(e => e.SeasonNumber = 1)
                 .Build();
 
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
-            mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeProvider>()
                 .Setup(s => s.EpisodesWithoutFiles(true)).Returns(episodes);
 
-            mocker.GetMock<SeasonSearchJob>()
+            Mocker.GetMock<SeasonSearchJob>()
                 .Setup(s => s.Start(notification, It.IsAny<int>(), It.IsAny<int>())).Verifiable();
 
-            mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeProvider>()
                 .Setup(s => s.GetEpisodeNumbersBySeason(1, 1)).Returns(episodes.Select(e => e.EpisodeNumber).ToList());
 
             //Act
-            mocker.Resolve<BacklogSearchJob>().Start(notification, 0, 0);
+            Mocker.Resolve<BacklogSearchJob>().Start(notification, 0, 0);
 
             //Assert
-            mocker.GetMock<SeasonSearchJob>().Verify(c => c.Start(notification, It.IsAny<int>(), It.IsAny<int>()),
+            Mocker.GetMock<SeasonSearchJob>().Verify(c => c.Start(notification, It.IsAny<int>(), It.IsAny<int>()),
                                                        Times.Once());
 
-            mocker.GetMock<EpisodeSearchJob>().Verify(c => c.Start(notification, It.IsAny<int>(), 0),
+            Mocker.GetMock<EpisodeSearchJob>().Verify(c => c.Start(notification, It.IsAny<int>(), 0),
                                                        Times.Never());
         }
 
@@ -173,28 +174,28 @@ namespace NzbDrone.Core.Test.JobTests
                 .With(e => e.SeasonNumber = 1)
                 .Build();
 
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
-            mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeProvider>()
                 .Setup(s => s.EpisodesWithoutFiles(true)).Returns(episodes);
 
-            mocker.GetMock<SeasonSearchJob>()
+            Mocker.GetMock<SeasonSearchJob>()
                 .Setup(s => s.Start(notification, It.IsAny<int>(), It.IsAny<int>())).Verifiable();
 
-            mocker.GetMock<EpisodeSearchJob>()
+            Mocker.GetMock<EpisodeSearchJob>()
                 .Setup(s => s.Start(notification, It.IsAny<int>(), 0)).Verifiable();
 
-            mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeProvider>()
                 .Setup(s => s.GetEpisodeNumbersBySeason(1, 1)).Returns(new List<int> { 1, 2, 3, 4, 5 });
 
             //Act
-            mocker.Resolve<BacklogSearchJob>().Start(notification, 0, 0);
+            Mocker.Resolve<BacklogSearchJob>().Start(notification, 0, 0);
 
             //Assert
-            mocker.GetMock<SeasonSearchJob>().Verify(c => c.Start(notification, It.IsAny<int>(), It.IsAny<int>()),
+            Mocker.GetMock<SeasonSearchJob>().Verify(c => c.Start(notification, It.IsAny<int>(), It.IsAny<int>()),
                                                        Times.Once());
 
-            mocker.GetMock<EpisodeSearchJob>().Verify(c => c.Start(notification, It.IsAny<int>(), 0),
+            Mocker.GetMock<EpisodeSearchJob>().Verify(c => c.Start(notification, It.IsAny<int>(), 0),
                                                        Times.Exactly(5));
         }
     }

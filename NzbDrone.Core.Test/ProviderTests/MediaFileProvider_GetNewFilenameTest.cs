@@ -21,9 +21,9 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void GetNewFilename_Series_Episode_Quality_S01E05_Dash()
         {
             //Setup
-            var mocker = new AutoMoqer();
+            
 
-            var fakeConfig = mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigProvider>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
             fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(true);
@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                             .Build();
 
             //Act
-            string result = mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV);
+            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV);
 
             //Assert
             Assert.AreEqual("South Park - S15E06 - City Sushi [HDTV]", result);
@@ -48,9 +48,9 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void GetNewFilename_Episode_Quality_1x05_Dash()
         {
             //Setup
-            var mocker = new AutoMoqer();
+            
 
-            var fakeConfig = mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigProvider>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(false);
             fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(true);
@@ -65,7 +65,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                             .Build();
 
             //Act
-            string result = mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV);
+            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV);
 
             //Assert
             Assert.AreEqual("15x06 - City Sushi [HDTV]", result);
@@ -75,9 +75,9 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void GetNewFilename_Series_Quality_01x05_Space()
         {
             //Setup
-            var mocker = new AutoMoqer();
+            
 
-            var fakeConfig = mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigProvider>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
             fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(false);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(true);
@@ -92,7 +92,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                             .Build();
 
             //Act
-            string result = mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV);
+            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV);
 
             //Assert
             Assert.AreEqual("South Park 05x06 [HDTV]", result);
@@ -102,9 +102,9 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void GetNewFilename_Series_s01e05_Space()
         {
             //Setup
-            var mocker = new AutoMoqer();
+            
 
-            var fakeConfig = mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigProvider>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
             fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(false);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(false);
@@ -120,7 +120,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                             .Build();
 
             //Act
-            string result = mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV);
+            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV);
 
             //Assert
             Assert.AreEqual("South Park s05e06", result);
@@ -130,9 +130,9 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void GetNewFilename_Series_Episode_s01e05_Periods()
         {
             //Setup
-            var mocker = new AutoMoqer();
+            
 
-            var fakeConfig = mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigProvider>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
             fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(false);
@@ -147,7 +147,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                             .Build();
 
             //Act
-            string result = mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV);
+            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV);
 
             //Assert
             Assert.AreEqual("South.Park.s05e06.City.Sushi", result);
@@ -157,9 +157,9 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void GetNewFilename_Series_Episode_s01e05_Dash_Periods_Quality()
         {
             //Setup
-            var mocker = new AutoMoqer();
+            
 
-            var fakeConfig = mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigProvider>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
             fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(true);
@@ -174,7 +174,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                             .Build();
 
             //Act
-            string result = mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV);
+            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV);
 
             //Assert
             Assert.AreEqual("South.Park.-.s05e06.-.City.Sushi.[HDTV]", result);
@@ -184,9 +184,9 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void GetNewFilename_S01E05_Dash()
         {
             //Setup
-            var mocker = new AutoMoqer();
+            
 
-            var fakeConfig = mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigProvider>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(false);
             fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(false);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(false);
@@ -202,7 +202,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                             .Build();
 
             //Act
-            string result = mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV);
+            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV);
 
             //Assert
             Assert.AreEqual("S15E06", result);
@@ -212,9 +212,9 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void GetNewFilename_multi_Series_Episode_Quality_S01E05_Scene_Dash()
         {
             //Setup
-            var mocker = new AutoMoqer();
+            
 
-            var fakeConfig = mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigProvider>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
             fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(true);
@@ -236,7 +236,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                             .Build();
 
             //Act
-            string result = mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episodeOne, episodeTwo }, "The Mentalist", QualityTypes.HDTV);
+            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episodeOne, episodeTwo }, "The Mentalist", QualityTypes.HDTV);
 
             //Assert
             Assert.AreEqual("The Mentalist - S03E23-E24 - Strawberries and Cream (1) + Strawberries and Cream (2) [HDTV]", result);
@@ -246,9 +246,9 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void GetNewFilename_multi_Episode_Quality_1x05_Repeat_Dash()
         {
             //Setup
-            var mocker = new AutoMoqer();
+            
 
-            var fakeConfig = mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigProvider>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(false);
             fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(true);
@@ -270,7 +270,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                             .Build();
 
             //Act
-            string result = mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episodeOne, episodeTwo }, "The Mentalist", QualityTypes.HDTV);
+            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episodeOne, episodeTwo }, "The Mentalist", QualityTypes.HDTV);
 
             //Assert
             Assert.AreEqual("3x23x24 - Strawberries and Cream (1) + Strawberries and Cream (2) [HDTV]", result);
@@ -280,9 +280,9 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void GetNewFilename_multi_Episode_Quality_01x05_Repeat_Space()
         {
             //Setup
-            var mocker = new AutoMoqer();
+            
 
-            var fakeConfig = mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigProvider>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(false);
             fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(true);
@@ -304,7 +304,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                             .Build();
 
             //Act
-            string result = mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episodeOne, episodeTwo }, "The Mentalist", QualityTypes.HDTV);
+            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episodeOne, episodeTwo }, "The Mentalist", QualityTypes.HDTV);
 
             //Assert
             Assert.AreEqual("3x23x24 Strawberries and Cream (1) + Strawberries and Cream (2) [HDTV]", result);
@@ -314,9 +314,9 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void GetNewFilename_multi_Series_Episode_s01e05_Duplicate_Period()
         {
             //Setup
-            var mocker = new AutoMoqer();
+            
 
-            var fakeConfig = mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigProvider>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
             fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(false);
@@ -338,7 +338,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                             .Build();
 
             //Act
-            string result = mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episodeOne, episodeTwo }, "The Mentalist", QualityTypes.HDTV);
+            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episodeOne, episodeTwo }, "The Mentalist", QualityTypes.HDTV);
 
             //Assert
             Assert.AreEqual("The.Mentalist.s03e23.s03e24.Strawberries.and.Cream.(1).+.Strawberries.and.Cream.(2)", result);
@@ -348,9 +348,9 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void GetNewFilename_multi_Series_S01E05_Extend_Dash_Period()
         {
             //Setup
-            var mocker = new AutoMoqer();
+            
 
-            var fakeConfig = mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigProvider>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
             fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(false);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(false);
@@ -372,7 +372,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                             .Build();
 
             //Act
-            string result = mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episodeOne, episodeTwo }, "The Mentalist", QualityTypes.HDTV);
+            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episodeOne, episodeTwo }, "The Mentalist", QualityTypes.HDTV);
 
             //Assert
             Assert.AreEqual("The.Mentalist.-.S03E23-24", result);
@@ -382,9 +382,9 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void GetNewFilename_multi_1x05_Repeat_Dash_Period()
         {
             //Setup
-            var mocker = new AutoMoqer();
+            
 
-            var fakeConfig = mocker.GetMock<ConfigProvider>();
+            var fakeConfig = Mocker.GetMock<ConfigProvider>();
             fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(false);
             fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(false);
             fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(false);
@@ -406,7 +406,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                             .Build();
 
             //Act
-            string result = mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episodeOne, episodeTwo }, "The Mentalist", QualityTypes.HDTV);
+            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episodeOne, episodeTwo }, "The Mentalist", QualityTypes.HDTV);
 
             //Assert
             Assert.AreEqual("3x23x24", result);

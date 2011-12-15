@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.IO;
 using Moq;
 using NUnit.Framework;
@@ -12,7 +13,19 @@ namespace NzbDrone.Test.Common
 
         protected const string INTEGRATION_TEST = "Integration Test";
 
-        protected AutoMoqer Mocker { get; private set; }
+        private AutoMoqer _mocker;
+        protected AutoMoqer Mocker
+        {
+            get
+            {
+                if (_mocker == null)
+                {
+                    _mocker = new AutoMoqer();
+                }
+
+                return _mocker;
+            }
+        }
 
         protected string VirtualPath
         {
@@ -34,19 +47,20 @@ namespace NzbDrone.Test.Common
             }
 
             Directory.CreateDirectory(TempFolder);
-
-            Mocker = new AutoMoqer();
         }
 
         [TearDown]
         public void TestBaseTearDown()
         {
-
+            _mocker = null;
         }
 
         protected void WithStrictMocker()
         {
-            Mocker = new AutoMoqer(MockBehavior.Strict);
+            if (_mocker != null)
+                throw new InvalidOperationException("Can not switch to a strict container after container has been used. make sure this is the first call in your test.");
+
+            _mocker = new AutoMoqer(MockBehavior.Strict);
         }
 
 

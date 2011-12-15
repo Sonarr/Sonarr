@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void Download_report_should_send_to_sab_add_to_history_mark_as_grabbed()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
             var parseResult = Builder<EpisodeParseResult>.CreateNew()
                 .With(c => c.Quality = new Quality(QualityTypes.DVD, false))
                 .Build();
@@ -33,38 +33,38 @@ namespace NzbDrone.Core.Test.ProviderTests
 
 
             const string sabTitle = "My fake sab title";
-            mocker.GetMock<SabProvider>()
+            Mocker.GetMock<SabProvider>()
                 .Setup(s => s.IsInQueue(It.IsAny<String>()))
                 .Returns(false);
 
-            mocker.GetMock<SabProvider>()
+            Mocker.GetMock<SabProvider>()
                 .Setup(s => s.AddByUrl(parseResult.NzbUrl, sabTitle))
                 .Returns(true);
 
-            mocker.GetMock<SabProvider>()
+            Mocker.GetMock<SabProvider>()
                 .Setup(s => s.GetSabTitle(parseResult))
                 .Returns(sabTitle);
 
-            mocker.GetMock<HistoryProvider>()
+            Mocker.GetMock<HistoryProvider>()
                 .Setup(s => s.Add(It.Is<History>(h => h.EpisodeId == 12 && h.SeriesId == 5)));
-            mocker.GetMock<HistoryProvider>()
+            Mocker.GetMock<HistoryProvider>()
                 .Setup(s => s.Add(It.Is<History>(h => h.EpisodeId == 99 && h.SeriesId == 5)));
 
-            mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeProvider>()
                 .Setup(c => c.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>(), false)).Returns(episodes);
 
-            mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeProvider>()
                 .Setup(c => c.MarkEpisodeAsFetched(12));
 
-            mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeProvider>()
                 .Setup(c => c.MarkEpisodeAsFetched(99));
 
-            mocker.GetMock<ExternalNotificationProvider>()
+            Mocker.GetMock<ExternalNotificationProvider>()
                 .Setup(c => c.OnGrab(It.IsAny<string>()));
 
-            mocker.Resolve<DownloadProvider>().DownloadReport(parseResult);
+            Mocker.Resolve<DownloadProvider>().DownloadReport(parseResult);
 
-            mocker.VerifyAllMocks();
+            Mocker.VerifyAllMocks();
         }
     }
 }

@@ -24,74 +24,74 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void scan_series_should_update_the_last_scan_date()
         {
 
-            var mocker = new AutoMoqer();
-            mocker.GetMock<SeriesProvider>()
+            
+            Mocker.GetMock<SeriesProvider>()
                 .Setup(c => c.UpdateSeries(It.Is<Series>(s => s.LastDiskSync != null))).Verifiable();
 
-            mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeProvider>()
                 .Setup(c => c.GetEpisodeBySeries(It.IsAny<long>()))
                 .Returns(new List<Episode> { new Episode() });
 
-            mocker.GetMock<DiskProvider>()
+            Mocker.GetMock<DiskProvider>()
                 .Setup(c => c.FolderExists(It.IsAny<string>()))
                 .Returns(true);
 
-            mocker.GetMock<MediaFileProvider>()
+            Mocker.GetMock<MediaFileProvider>()
                 .Setup(c => c.GetSeriesFiles(It.IsAny<int>()))
                 .Returns(new List<EpisodeFile>());
 
-            mocker.Resolve<DiskScanProvider>().Scan(new Series());
+            Mocker.Resolve<DiskScanProvider>().Scan(new Series());
 
-            mocker.VerifyAllMocks();
+            Mocker.VerifyAllMocks();
 
         }
 
         [Test]
         public void cleanup_should_skip_existing_files()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
             var episodes = Builder<EpisodeFile>.CreateListOfSize(10).Build();
 
-            mocker.GetMock<DiskProvider>()
+            Mocker.GetMock<DiskProvider>()
                 .Setup(e => e.FileExists(It.IsAny<String>()))
                 .Returns(true);
 
 
             //Act
-            mocker.Resolve<DiskScanProvider>().CleanUp(episodes);
+            Mocker.Resolve<DiskScanProvider>().CleanUp(episodes);
 
             //Assert
-            mocker.VerifyAllMocks();
+            Mocker.VerifyAllMocks();
         }
 
         [Test]
         public void cleanup_should_delete_none_existing_files()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
             var episodes = Builder<EpisodeFile>.CreateListOfSize(10).Build();
 
-            mocker.GetMock<DiskProvider>()
+            Mocker.GetMock<DiskProvider>()
                 .Setup(e => e.FileExists(It.IsAny<String>()))
                 .Returns(false);
 
-            mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeProvider>()
                 .Setup(e => e.GetEpisodesByFileId(It.IsAny<int>()))
                 .Returns(new List<Episode>());
 
-            mocker.GetMock<MediaFileProvider>()
+            Mocker.GetMock<MediaFileProvider>()
                 .Setup(e => e.Delete(It.IsAny<int>()));
 
 
             //Act
-            mocker.Resolve<DiskScanProvider>().CleanUp(episodes);
+            Mocker.Resolve<DiskScanProvider>().CleanUp(episodes);
 
             //Assert
-            mocker.VerifyAllMocks();
+            Mocker.VerifyAllMocks();
 
-            mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeProvider>()
                .Verify(e => e.GetEpisodesByFileId(It.IsAny<int>()), Times.Exactly(10));
 
-            mocker.GetMock<MediaFileProvider>()
+            Mocker.GetMock<MediaFileProvider>()
                 .Verify(e => e.Delete(It.IsAny<int>()), Times.Exactly(10));
 
         }
@@ -99,40 +99,40 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void cleanup_should_delete_none_existing_files_remove_links_to_episodes()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
             var episodes = Builder<EpisodeFile>.CreateListOfSize(10).Build();
 
-            mocker.GetMock<DiskProvider>()
+            Mocker.GetMock<DiskProvider>()
                 .Setup(e => e.FileExists(It.IsAny<String>()))
                 .Returns(false);
 
-            mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeProvider>()
                 .Setup(e => e.GetEpisodesByFileId(It.IsAny<int>()))
                 .Returns(new List<Episode> { new Episode { EpisodeFileId = 10 }, new Episode { EpisodeFileId = 10 } });
 
-            mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeProvider>()
                 .Setup(e => e.UpdateEpisode(It.IsAny<Episode>()));
 
-            mocker.GetMock<MediaFileProvider>()
+            Mocker.GetMock<MediaFileProvider>()
                 .Setup(e => e.Delete(It.IsAny<int>()));
 
 
             //Act
-            mocker.Resolve<DiskScanProvider>().CleanUp(episodes);
+            Mocker.Resolve<DiskScanProvider>().CleanUp(episodes);
 
             //Assert
-            mocker.VerifyAllMocks();
+            Mocker.VerifyAllMocks();
 
-            mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeProvider>()
                .Verify(e => e.GetEpisodesByFileId(It.IsAny<int>()), Times.Exactly(10));
 
-            mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeProvider>()
                 .Verify(e => e.UpdateEpisode(It.Is<Episode>(g=>g.EpisodeFileId == 0)), Times.Exactly(20));
 
-            mocker.GetMock<MediaFileProvider>()
+            Mocker.GetMock<MediaFileProvider>()
                 .Verify(e => e.Delete(It.IsAny<int>()), Times.Exactly(10));
 
-            mocker.GetMock<MediaFileProvider>()
+            Mocker.GetMock<MediaFileProvider>()
                 .Verify(e => e.Delete(It.IsAny<int>()), Times.Exactly(10));
 
         }
@@ -141,29 +141,29 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void scan_series_should_log_warning_if_path_doesnt_exist_on_disk()
         {
             //Setup
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
             var series = Builder<Series>.CreateNew()
                 .With(s => s.Path = @"C:\Test\TV\SeriesName\")
                 .Build();
 
-            mocker.GetMock<MediaFileProvider>()
+            Mocker.GetMock<MediaFileProvider>()
                 .Setup(c => c.DeleteOrphaned())
                 .Returns(0);
 
-            mocker.GetMock<MediaFileProvider>()
+            Mocker.GetMock<MediaFileProvider>()
                 .Setup(c => c.RepairLinks())
                 .Returns(0);    
 
-            mocker.GetMock<DiskProvider>()
+            Mocker.GetMock<DiskProvider>()
                 .Setup(c => c.FolderExists(series.Path))
                 .Returns(false);
 
             //Act
-            mocker.Resolve<DiskScanProvider>().Scan(series, series.Path);
+            Mocker.Resolve<DiskScanProvider>().Scan(series, series.Path);
 
             //Assert
-            mocker.VerifyAllMocks();
+            Mocker.VerifyAllMocks();
             ExceptionVerification.ExcpectedWarns(1);
         }
 

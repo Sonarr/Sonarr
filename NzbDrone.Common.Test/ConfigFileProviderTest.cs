@@ -57,8 +57,6 @@ namespace NzbDrone.Common.Test
             const string key = "LaunchBrowser";
             const bool value = true;
 
-            var mocker = new AutoMoqer();
-
             //Act
             var result = Mocker.Resolve<ConfigFileProvider>().GetValueBoolean(key, value);
 
@@ -69,8 +67,6 @@ namespace NzbDrone.Common.Test
         [Test]
         public void GetLaunchBrowser_Success()
         {
-            var mocker = new AutoMoqer();
-
             //Act
             var result = Mocker.Resolve<ConfigFileProvider>().LaunchBrowser;
 

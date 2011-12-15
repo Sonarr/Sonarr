@@ -24,19 +24,19 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void GetRootDirs()
         {
             //Setup
-            var mocker = new AutoMoqer();
+            
 
             var emptyDatabase = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(emptyDatabase);
+            Mocker.SetConstant(emptyDatabase);
             emptyDatabase.Insert(new RootDir { Path = @"C:\TV" });
             emptyDatabase.Insert(new RootDir { Path = @"C:\TV2" });
 
-            //mocker.GetMock<IRepository>()
+            //Mocker.GetMock<IRepository>()
             //    .Setup(f => f.All<RootDir>())
             //    .Returns(sonicRepo.All<RootDir>);
 
             //Act
-            var result = mocker.Resolve<RootDirProvider>().GetAll();
+            var result = Mocker.Resolve<RootDirProvider>().GetAll();
 
             //Assert
             Assert.AreEqual(result.Count, 2);
@@ -47,11 +47,11 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void AddRootDir(string path)
         {
             //Setup
-            var mocker = new AutoMoqer();
-            mocker.SetConstant(TestDbHelper.GetEmptyDatabase());
+            
+            Mocker.SetConstant(TestDbHelper.GetEmptyDatabase());
 
             //Act
-            var rootDirProvider = mocker.Resolve<RootDirProvider>();
+            var rootDirProvider = Mocker.Resolve<RootDirProvider>();
             rootDirProvider.Add(new RootDir { Path = path });
 
 
@@ -67,11 +67,11 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void RemoveRootDir()
         {
             //Setup
-            var mocker = new AutoMoqer();
-            mocker.SetConstant(TestDbHelper.GetEmptyDatabase());
+            
+            Mocker.SetConstant(TestDbHelper.GetEmptyDatabase());
 
             //Act
-            var rootDirProvider = mocker.Resolve<RootDirProvider>();
+            var rootDirProvider = Mocker.Resolve<RootDirProvider>();
             rootDirProvider.Add(new RootDir { Path = @"C:\TV" });
             rootDirProvider.Remove(1);
 
@@ -84,14 +84,14 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void GetRootDir()
         {
             //Setup
-            var mocker = new AutoMoqer();
-            mocker.SetConstant(TestDbHelper.GetEmptyDatabase());
+            
+            Mocker.SetConstant(TestDbHelper.GetEmptyDatabase());
 
             const int id = 1;
             const string path = @"C:\TV";
 
             //Act
-            var rootDirProvider = mocker.Resolve<RootDirProvider>();
+            var rootDirProvider = Mocker.Resolve<RootDirProvider>();
             rootDirProvider.Add(new RootDir { Id = id, Path = path });
 
             //Assert
@@ -105,24 +105,24 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             const string path = "d:\\bad folder";
 
-            var mocker = new AutoMoqer();
-            mocker.GetMock<DiskProvider>(MockBehavior.Strict)
+            
+            Mocker.GetMock<DiskProvider>(MockBehavior.Strict)
                 .Setup(m => m.FolderExists(path)).Returns(false);
 
-            var result = mocker.Resolve<RootDirProvider>().GetUnmappedFolders(path);
+            var result = Mocker.Resolve<RootDirProvider>().GetUnmappedFolders(path);
 
             result.Should().NotBeNull();
             result.Should().BeEmpty();
 
-            mocker.VerifyAllMocks();
+            Mocker.VerifyAllMocks();
         }
 
         [Test]
         [ExpectedException(typeof(ArgumentException))]
         public void empty_folder_path_throws()
         {
-            var mocker = new AutoMoqer();
-            mocker.Resolve<RootDirProvider>().GetUnmappedFolders("");
+            
+            Mocker.Resolve<RootDirProvider>().GetUnmappedFolders("");
         }
 
         [TestCase("")]
@@ -131,8 +131,8 @@ namespace NzbDrone.Core.Test.ProviderTests
         [ExpectedException(typeof(ArgumentException))]
         public void invalid_folder_path_throws_on_add(string path)
         {
-            var mocker = new AutoMoqer();
-            mocker.Resolve<RootDirProvider>().Add(new RootDir { Id = 0, Path = path });
+            
+            Mocker.Resolve<RootDirProvider>().Add(new RootDir { Id = 0, Path = path });
         }
 
     }

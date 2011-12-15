@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         private Series series;
 
         [SetUp]
-        public new void Setup()
+        public void Setup()
         {
             parseResultMulti = new EpisodeParseResult
                                    {
@@ -108,145 +108,145 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void IsQualityNeeded_report_not_in_quality_profile_should_be_skipped()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
             parseResultMulti.Series.QualityProfile = sdProfile;
             parseResultMulti.Quality = new Quality(QualityTypes.HDTV, true);
 
             //Act
-            bool result = mocker.Resolve<InventoryProvider>().IsQualityNeeded(parseResultMulti);
+            bool result = Mocker.Resolve<InventoryProvider>().IsQualityNeeded(parseResultMulti);
 
             //Assert
             Assert.IsFalse(result);
-            mocker.VerifyAllMocks();
+            Mocker.VerifyAllMocks();
         }
 
         [Test]
         public void IsQualityNeeded_file_already_at_cut_off_should_be_skipped()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
             parseResultMulti.Series.QualityProfile = hdProfile;
 
             parseResultMulti.Quality = new Quality(QualityTypes.HDTV, true);
 
-            mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeProvider>()
                 .Setup(p => p.GetEpisodesByParseResult(parseResultMulti, true))
                 .Returns(new List<Episode> { episode, episode2 });
 
-            mocker.GetMock<QualityTypeProvider>()
+            Mocker.GetMock<QualityTypeProvider>()
                 .Setup(s => s.Get(It.IsAny<int>()))
                 .Returns(new QualityType { MaxSize = 100, MinSize = 0 });
 
             episode.EpisodeFile.Quality = QualityTypes.Bluray720p;
 
             //Act
-            bool result = mocker.Resolve<InventoryProvider>().IsQualityNeeded(parseResultMulti);
+            bool result = Mocker.Resolve<InventoryProvider>().IsQualityNeeded(parseResultMulti);
 
             //Assert
             Assert.IsFalse(result);
-            mocker.VerifyAllMocks();
+            Mocker.VerifyAllMocks();
         }
 
         [Test]
         public void IsQualityNeeded_file_in_history_should_be_skipped()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
             parseResultSingle.Series.QualityProfile = sdProfile;
             parseResultSingle.Quality.QualityType = QualityTypes.DVD;
 
-            mocker.GetMock<HistoryProvider>()
+            Mocker.GetMock<HistoryProvider>()
                 .Setup(p => p.GetBestQualityInHistory(episode.EpisodeId))
                 .Returns(new Quality(QualityTypes.DVD, true));
 
-            mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeProvider>()
                 .Setup(p => p.GetEpisodesByParseResult(parseResultSingle, true))
                 .Returns(new List<Episode> { episode });
 
-            mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeProvider>()
                 .Setup(p => p.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(false);
 
-            mocker.GetMock<QualityTypeProvider>()
+            Mocker.GetMock<QualityTypeProvider>()
                 .Setup(s => s.Get(It.IsAny<int>()))
                 .Returns(new QualityType { MaxSize = 100, MinSize = 0 });
 
             episode.EpisodeFile.Quality = QualityTypes.SDTV;
 
             //Act
-            bool result = mocker.Resolve<InventoryProvider>().IsQualityNeeded(parseResultSingle);
+            bool result = Mocker.Resolve<InventoryProvider>().IsQualityNeeded(parseResultSingle);
 
             //Assert
             Assert.IsFalse(result);
-            mocker.VerifyAllMocks();
+            Mocker.VerifyAllMocks();
         }
 
         [Test]
         public void IsQualityNeeded_lesser_file_in_history_should_be_downloaded()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
             parseResultSingle.Series.QualityProfile = sdProfile;
             parseResultSingle.Quality.QualityType = QualityTypes.DVD;
 
-            mocker.GetMock<HistoryProvider>()
+            Mocker.GetMock<HistoryProvider>()
                 .Setup(p => p.GetBestQualityInHistory(episode.EpisodeId))
                 .Returns(new Quality(QualityTypes.SDTV, true));
 
-            mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeProvider>()
                 .Setup(p => p.GetEpisodesByParseResult(parseResultSingle, true))
                 .Returns(new List<Episode> { episode });
 
-            mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeProvider>()
                 .Setup(p => p.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(false);
 
-            mocker.GetMock<QualityTypeProvider>()
+            Mocker.GetMock<QualityTypeProvider>()
                 .Setup(s => s.Get(It.IsAny<int>()))
                 .Returns(new QualityType { MaxSize = 100, MinSize = 0 });
 
             episode.EpisodeFile.Quality = QualityTypes.SDTV;
 
             //Act
-            bool result = mocker.Resolve<InventoryProvider>().IsQualityNeeded(parseResultSingle);
+            bool result = Mocker.Resolve<InventoryProvider>().IsQualityNeeded(parseResultSingle);
 
             //Assert
             result.Should().BeTrue();
-            mocker.VerifyAllMocks();
+            Mocker.VerifyAllMocks();
         }
 
         [Test]
         public void IsQualityNeeded_file_not_in_history_should_be_downloaded()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
             parseResultSingle.Series.QualityProfile = sdProfile;
             parseResultSingle.Quality.QualityType = QualityTypes.DVD;
 
-            mocker.GetMock<HistoryProvider>()
+            Mocker.GetMock<HistoryProvider>()
                 .Setup(p => p.GetBestQualityInHistory(episode.EpisodeId))
                 .Returns<Quality>(null);
 
-            mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeProvider>()
                 .Setup(p => p.GetEpisodesByParseResult(parseResultSingle, true))
                 .Returns(new List<Episode> { episode });
 
-            mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeProvider>()
                 .Setup(p => p.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(false);
 
-            mocker.GetMock<QualityTypeProvider>()
+            Mocker.GetMock<QualityTypeProvider>()
                 .Setup(s => s.Get(It.IsAny<int>()))
                 .Returns(new QualityType { MaxSize = 100, MinSize = 0 });
 
             episode.EpisodeFile.Quality = QualityTypes.SDTV;
             //Act
-            bool result = mocker.Resolve<InventoryProvider>().IsQualityNeeded(parseResultSingle);
+            bool result = Mocker.Resolve<InventoryProvider>().IsQualityNeeded(parseResultSingle);
 
             //Assert
             result.Should().BeTrue();
-            mocker.VerifyAllMocks();
+            Mocker.VerifyAllMocks();
         }
 
         //Should Download

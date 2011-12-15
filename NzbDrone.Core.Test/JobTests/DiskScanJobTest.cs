@@ -27,22 +27,22 @@ namespace NzbDrone.Core.Test.JobTests
                 .With(s => s.SeriesId = 12)
                 .Build();
 
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
-            mocker.GetMock<SeriesProvider>()
+            Mocker.GetMock<SeriesProvider>()
                 .Setup(p => p.GetSeries(series.SeriesId))
                 .Returns(series);
 
-            mocker.GetMock<DiskScanProvider>()
+            Mocker.GetMock<DiskScanProvider>()
                 .Setup(p => p.Scan(series))
                 .Returns(new List<EpisodeFile>());
 
 
             //Act
-            mocker.Resolve<DiskScanJob>().Start(new ProgressNotification("Test"), series.SeriesId, 0);
+            Mocker.Resolve<DiskScanJob>().Start(new ProgressNotification("Test"), series.SeriesId, 0);
 
             //Assert
-            mocker.VerifyAllMocks();
+            Mocker.VerifyAllMocks();
         }
 
 
@@ -55,24 +55,24 @@ namespace NzbDrone.Core.Test.JobTests
                 .TheNext(1).With(s => s.SeriesId = 15)
                 .Build();
 
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
-            mocker.GetMock<SeriesProvider>()
+            Mocker.GetMock<SeriesProvider>()
                 .Setup(p => p.GetAllSeries())
                 .Returns(series);
 
-            mocker.GetMock<DiskScanProvider>()
+            Mocker.GetMock<DiskScanProvider>()
                 .Setup(s => s.Scan(series[0]))
                 .Returns(new List<EpisodeFile>());
 
-            mocker.GetMock<DiskScanProvider>()
+            Mocker.GetMock<DiskScanProvider>()
                 .Setup(s => s.Scan(series[1]))
                 .Returns(new List<EpisodeFile>());
 
-            mocker.Resolve<DiskScanJob>().Start(new ProgressNotification("Test"), 0, 0);
+            Mocker.Resolve<DiskScanJob>().Start(new ProgressNotification("Test"), 0, 0);
 
 
-            mocker.VerifyAllMocks();
+            Mocker.VerifyAllMocks();
         }
 
         [Test]
@@ -83,24 +83,24 @@ namespace NzbDrone.Core.Test.JobTests
                 .TheNext(1).With(s => s.SeriesId = 15)
                 .Build();
 
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
-            mocker.GetMock<SeriesProvider>()
+            Mocker.GetMock<SeriesProvider>()
                 .Setup(p => p.GetAllSeries())
                 .Returns(series);
 
-            mocker.GetMock<DiskScanProvider>()
+            Mocker.GetMock<DiskScanProvider>()
                 .Setup(s => s.Scan(series[0]))
                 .Throws(new InvalidOperationException("Bad Job"));
 
-            mocker.GetMock<DiskScanProvider>()
+            Mocker.GetMock<DiskScanProvider>()
                 .Setup(s => s.Scan(series[1]))
                 .Throws(new InvalidOperationException("Bad Job"));
 
-            mocker.Resolve<DiskScanJob>().Start(new ProgressNotification("Test"), 0, 0);
+            Mocker.Resolve<DiskScanJob>().Start(new ProgressNotification("Test"), 0, 0);
 
 
-            mocker.VerifyAllMocks();
+            Mocker.VerifyAllMocks();
             ExceptionVerification.ExcpectedErrors(2);
         }
 
@@ -112,26 +112,26 @@ namespace NzbDrone.Core.Test.JobTests
                 .TheNext(1).With(s => s.SeriesId = 15)
                 .Build();
 
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
-            mocker.GetMock<SeriesProvider>()
+            Mocker.GetMock<SeriesProvider>()
                 .Setup(p => p.GetAllSeries())
                 .Returns(series);
 
-            mocker.GetMock<DiskScanProvider>()
+            Mocker.GetMock<DiskScanProvider>()
                 .Setup(s => s.Scan(series[0]))
                 .Returns(new List<EpisodeFile>());
 
-            mocker.GetMock<DiskScanProvider>()
+            Mocker.GetMock<DiskScanProvider>()
                 .Setup(s => s.Scan(series[1]))
                 .Returns(new List<EpisodeFile>());
 
-            mocker.Resolve<DiskScanJob>().Start(new ProgressNotification("Test"), 0, 0);
+            Mocker.Resolve<DiskScanJob>().Start(new ProgressNotification("Test"), 0, 0);
 
 
 
-            mocker.VerifyAllMocks();
-            mocker.GetMock<DiskScanProvider>().Verify(s => s.Scan(It.IsAny<Series>()), Times.Exactly(2));
+            Mocker.VerifyAllMocks();
+            Mocker.GetMock<DiskScanProvider>().Verify(s => s.Scan(It.IsAny<Series>()), Times.Exactly(2));
         }
     }
 

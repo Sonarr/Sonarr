@@ -23,14 +23,14 @@ namespace NzbDrone.Core.Test.ProviderTests
             //Setup
             var historyItem = Builder<History>.CreateListOfSize(10).Build();
 
-            var mocker = new AutoMoqer();
+            
             var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            Mocker.SetConstant(db);
 
             db.InsertMany(historyItem);
 
             //Act
-            var result = mocker.Resolve<HistoryProvider>().AllItems();
+            var result = Mocker.Resolve<HistoryProvider>().AllItems();
 
             //Assert
             result.Should().HaveSameCount(historyItem);
@@ -47,9 +47,9 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var historyItems = Builder<History>.CreateListOfSize(10).TheFirst(5).With(h => h.SeriesId = seriesOne.SeriesId).TheLast(5).With(h => h.SeriesId = seriesTwo.SeriesId).Build();
 
-            var mocker = new AutoMoqer();
+            
             var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            Mocker.SetConstant(db);
 
             db.InsertMany(historyItems);
             db.InsertMany(episodes);
@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             db.Insert(seriesTwo);
 
             //Act
-            var result = mocker.Resolve<HistoryProvider>().AllItemsWithRelationships();
+            var result = Mocker.Resolve<HistoryProvider>().AllItemsWithRelationships();
 
             //Assert
             result.Should().HaveSameCount(historyItems);
@@ -75,16 +75,16 @@ namespace NzbDrone.Core.Test.ProviderTests
             //Setup
             var historyItem = Builder<History>.CreateListOfSize(10).Build();
 
-            var mocker = new AutoMoqer();
+            
             var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            Mocker.SetConstant(db);
 
             db.InsertMany(historyItem);
 
 
             //Act
             db.Fetch<History>().Should().HaveCount(10);
-            mocker.Resolve<HistoryProvider>().Purge();
+            Mocker.Resolve<HistoryProvider>().Purge();
 
             //Assert
             db.Fetch<History>().Should().HaveCount(0);
@@ -99,16 +99,16 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .TheNext(20).With(c => c.Date = DateTime.Now.AddDays(-31))
                 .Build();
 
-            var mocker = new AutoMoqer();
+            
             var db = TestDbHelper.GetEmptyDatabase();
-            mocker.SetConstant(db);
+            Mocker.SetConstant(db);
 
             db.InsertMany(historyItem);
 
 
             //Act
             db.Fetch<History>().Should().HaveCount(30);
-            mocker.Resolve<HistoryProvider>().Trim();
+            Mocker.Resolve<HistoryProvider>().Trim();
 
             //Assert
             var result =  db.Fetch<History>();
@@ -120,12 +120,12 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void GetBestQualityInHistory_no_result()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
-            mocker.SetConstant(TestDbHelper.GetEmptyDatabase());
+            Mocker.SetConstant(TestDbHelper.GetEmptyDatabase());
 
             //Act
-            var result = mocker.Resolve<HistoryProvider>().GetBestQualityInHistory(12);
+            var result = Mocker.Resolve<HistoryProvider>().GetBestQualityInHistory(12);
 
             //Assert
             Assert.IsNull(result);
@@ -134,17 +134,17 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void GetBestQualityInHistory_single_result()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
             var db = TestDbHelper.GetEmptyDatabase();
             var history = Builder<History>.CreateNew()
                 .With(h => h.Quality = QualityTypes.Bluray720p).Build();
 
             db.Insert(history);
-            mocker.SetConstant(db);
+            Mocker.SetConstant(db);
 
             //Act
-            var result = mocker.Resolve<HistoryProvider>().GetBestQualityInHistory(history.EpisodeId);
+            var result = Mocker.Resolve<HistoryProvider>().GetBestQualityInHistory(history.EpisodeId);
 
             //Assert
             result.Should().NotBeNull();
@@ -154,10 +154,10 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void add_item()
         {
-            var mocker = new AutoMoqer();
+            
             var db = TestDbHelper.GetEmptyDatabase();
 
-            mocker.SetConstant(db);
+            Mocker.SetConstant(db);
 
             var episode = Builder<Episode>.CreateNew().Build();
 
@@ -176,7 +176,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                               };
 
             //Act
-            mocker.Resolve<HistoryProvider>().Add(history);
+            Mocker.Resolve<HistoryProvider>().Add(history);
 
             //Assert
             var storedHistory = db.Fetch<History>();

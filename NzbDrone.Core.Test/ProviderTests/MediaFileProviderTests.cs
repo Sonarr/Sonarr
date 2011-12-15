@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var secondSeriesFiles = Builder<EpisodeFile>.CreateListOfSize(10)
                 .All().With(s => s.SeriesId = 20).Build();
 
-            var mocker = new AutoMoqer();
+            
 
             var database = TestDbHelper.GetEmptyDatabase(true);
 
@@ -36,9 +36,9 @@ namespace NzbDrone.Core.Test.ProviderTests
             database.InsertMany(firstSeriesFiles);
             database.InsertMany(secondSeriesFiles);
 
-            mocker.SetConstant(database);
+            Mocker.SetConstant(database);
 
-            var result = mocker.Resolve<MediaFileProvider>().GetSeriesFiles(12);
+            var result = Mocker.Resolve<MediaFileProvider>().GetSeriesFiles(12);
 
 
             result.Should().HaveSameCount(firstSeriesFiles);
@@ -59,16 +59,16 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(s => s.SeasonNumber = 2)
                 .Build();
 
-            var mocker = new AutoMoqer();
+            
 
             var database = TestDbHelper.GetEmptyDatabase(true);
 
             database.InsertMany(firstSeriesFiles);
             database.InsertMany(secondSeriesFiles);
 
-            mocker.SetConstant(database);
+            Mocker.SetConstant(database);
 
-            var result = mocker.Resolve<MediaFileProvider>().GetSeasonFiles(12, 1);
+            var result = Mocker.Resolve<MediaFileProvider>().GetSeasonFiles(12, 1);
 
             result.Should().HaveSameCount(firstSeriesFiles);
         }
@@ -76,19 +76,19 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void Scan_series_should_skip_series_with_no_episodes()
         {
-            var mocker = new AutoMoqer(MockBehavior.Strict);
+            WithStrictMocker();
 
-            mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<EpisodeProvider>()
                 .Setup(c => c.GetEpisodeBySeries(12))
                 .Returns(new List<Episode>());
 
-            mocker.GetMock<MediaFileProvider>()
+            Mocker.GetMock<MediaFileProvider>()
                 .Setup(e => e.RepairLinks()).Returns(0);
 
-            mocker.GetMock<MediaFileProvider>()
+            Mocker.GetMock<MediaFileProvider>()
                 .Setup(e => e.DeleteOrphaned()).Returns(0);
 
-            mocker.GetMock<DiskProvider>()
+            Mocker.GetMock<DiskProvider>()
                 .Setup(c => c.FolderExists(It.IsAny<string>()))
                 .Returns(true);
             
@@ -96,10 +96,10 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(s => s.SeriesId = 12).Build();
 
             //Act
-            mocker.Resolve<DiskScanProvider>().Scan(series);
+            Mocker.Resolve<DiskScanProvider>().Scan(series);
 
             //Assert
-            mocker.VerifyAllMocks();
+            Mocker.VerifyAllMocks();
 
         }
 
@@ -120,13 +120,13 @@ namespace NzbDrone.Core.Test.ProviderTests
             //Setup
             var episodes = Builder<Episode>.CreateListOfSize(10).Build();
 
-            var mocker = new AutoMoqer();
+            
             var database = TestDbHelper.GetEmptyDatabase(true);
-            mocker.SetConstant(database);
+            Mocker.SetConstant(database);
             database.InsertMany(episodes);
 
             //Act
-            var removedLinks = mocker.Resolve<MediaFileProvider>().RepairLinks();
+            var removedLinks = Mocker.Resolve<MediaFileProvider>().RepairLinks();
             var result = database.Fetch<Episode>();
 
             //Assert
@@ -142,14 +142,14 @@ namespace NzbDrone.Core.Test.ProviderTests
             var episodeFiles = Builder<EpisodeFile>.CreateListOfSize(10).Build();
             var episodes = Builder<Episode>.CreateListOfSize(5).Build();
 
-            var mocker = new AutoMoqer();
+            
             var database = TestDbHelper.GetEmptyDatabase(true);
-            mocker.SetConstant(database);
+            Mocker.SetConstant(database);
             database.InsertMany(episodes);
             database.InsertMany(episodeFiles);
 
             //Act
-            mocker.Resolve<MediaFileProvider>().DeleteOrphaned();
+            Mocker.Resolve<MediaFileProvider>().DeleteOrphaned();
             var result = database.Fetch<EpisodeFile>();
 
             //Assert
@@ -172,11 +172,11 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(s => s.SeasonFolder = useSeasonFolder)
                 .Build();
 
-            var mocker = new AutoMoqer();
-            mocker.GetMock<ConfigProvider>().Setup(e => e.SortingSeasonFolderFormat).Returns(seasonFolderFormat);
+            
+            Mocker.GetMock<ConfigProvider>().Setup(e => e.SortingSeasonFolderFormat).Returns(seasonFolderFormat);
 
             //Act
-            var result = mocker.Resolve<MediaFileProvider>().CalculateFilePath(fakeSeries, 1, filename, ".mkv");
+            var result = Mocker.Resolve<MediaFileProvider>().CalculateFilePath(fakeSeries, 1, filename, ".mkv");
 
             //Assert
             Assert.AreEqual(expectedPath, result.FullName);
@@ -188,13 +188,13 @@ namespace NzbDrone.Core.Test.ProviderTests
             //Setup
             var episodeFiles = Builder<EpisodeFile>.CreateListOfSize(10).Build();
 
-            var mocker = new AutoMoqer();
+            
             var database = TestDbHelper.GetEmptyDatabase(true);
-            mocker.SetConstant(database);
+            Mocker.SetConstant(database);
             database.InsertMany(episodeFiles);
 
             //Act
-            mocker.Resolve<MediaFileProvider>().Delete(1);
+            Mocker.Resolve<MediaFileProvider>().Delete(1);
             var result = database.Fetch<EpisodeFile>();
 
             //Assert

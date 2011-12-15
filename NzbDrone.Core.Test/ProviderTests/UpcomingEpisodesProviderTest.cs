@@ -50,14 +50,14 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             //Setup
             var database = TestDbHelper.GetEmptyDatabase();
-            var mocker = new AutoMoqer();
-            mocker.SetConstant(database);
+            
+            Mocker.SetConstant(database);
 
             database.InsertMany(episodes);
             database.Insert(series);
 
             //Act
-            var result = mocker.Resolve<UpcomingEpisodesProvider>().Yesterday();
+            var result = Mocker.Resolve<UpcomingEpisodesProvider>().Yesterday();
 
             //Assert
             result.Should().HaveCount(1);
@@ -71,14 +71,14 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             //Setup
             var database = TestDbHelper.GetEmptyDatabase();
-            var mocker = new AutoMoqer();
-            mocker.SetConstant(database);
+            
+            Mocker.SetConstant(database);
 
             database.InsertMany(episodes);
             database.Insert(series);
 
             //Act
-            var result = mocker.Resolve<UpcomingEpisodesProvider>().Today();
+            var result = Mocker.Resolve<UpcomingEpisodesProvider>().Today();
 
             //Assert
             result.Should().HaveCount(1);
@@ -92,14 +92,14 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             //Setup
             var database = TestDbHelper.GetEmptyDatabase();
-            var mocker = new AutoMoqer();
-            mocker.SetConstant(database);
+            
+            Mocker.SetConstant(database);
 
             database.InsertMany(episodes);
             database.Insert(series);
 
             //Act
-            var result = mocker.Resolve<UpcomingEpisodesProvider>().Tomorrow();
+            var result = Mocker.Resolve<UpcomingEpisodesProvider>().Tomorrow();
 
             //Assert
             result.Should().HaveCount(1);
@@ -113,14 +113,14 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             //Setup
             var database = TestDbHelper.GetEmptyDatabase();
-            var mocker = new AutoMoqer();
-            mocker.SetConstant(database);
+            
+            Mocker.SetConstant(database);
 
             database.InsertMany(episodes);
             database.Insert(series);
 
             //Act
-            var result = mocker.Resolve<UpcomingEpisodesProvider>().Week();
+            var result = Mocker.Resolve<UpcomingEpisodesProvider>().Week();
 
             //Assert
             result.Should().HaveCount(2);
@@ -135,8 +135,8 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             //Setup
             var database = TestDbHelper.GetEmptyDatabase();
-            var mocker = new AutoMoqer();
-            mocker.SetConstant(database);
+            
+            Mocker.SetConstant(database);
 
             episodes.Where(e => e.AirDate == DateTime.Today.AddDays(-1)).Single().Ignored = true;
 
@@ -144,7 +144,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             database.Insert(series);
 
             //Act
-            var result = mocker.Resolve<UpcomingEpisodesProvider>().Yesterday();
+            var result = Mocker.Resolve<UpcomingEpisodesProvider>().Yesterday();
 
             //Assert
             result.Should().BeEmpty();
@@ -155,8 +155,8 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             //Setup
             var database = TestDbHelper.GetEmptyDatabase();
-            var mocker = new AutoMoqer();
-            mocker.SetConstant(database);
+            
+            Mocker.SetConstant(database);
 
             episodes.Where(e => e.AirDate == DateTime.Today).Single().Ignored = true;
 
@@ -164,7 +164,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             database.Insert(series);
 
             //Act
-            var result = mocker.Resolve<UpcomingEpisodesProvider>().Today();
+            var result = Mocker.Resolve<UpcomingEpisodesProvider>().Today();
 
             //Assert
             result.Should().BeEmpty();
@@ -175,8 +175,8 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             //Setup
             var database = TestDbHelper.GetEmptyDatabase();
-            var mocker = new AutoMoqer();
-            mocker.SetConstant(database);
+            
+            Mocker.SetConstant(database);
 
             episodes.Where(e => e.AirDate == DateTime.Today.AddDays(1)).Single().Ignored = true;
 
@@ -184,7 +184,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             database.Insert(series);
 
             //Act
-            var result = mocker.Resolve<UpcomingEpisodesProvider>().Tomorrow();
+            var result = Mocker.Resolve<UpcomingEpisodesProvider>().Tomorrow();
 
             //Assert
             result.Should().BeEmpty();
@@ -195,8 +195,8 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             //Setup
             var database = TestDbHelper.GetEmptyDatabase();
-            var mocker = new AutoMoqer();
-            mocker.SetConstant(database);
+            
+            Mocker.SetConstant(database);
 
             episodes.Where(e => e.AirDate == DateTime.Today.AddDays(2)).Single().Ignored = true;
 
@@ -204,7 +204,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             database.Insert(series);
 
             //Act
-            var result = mocker.Resolve<UpcomingEpisodesProvider>().Week();
+            var result = Mocker.Resolve<UpcomingEpisodesProvider>().Week();
 
             //Assert
             result.Should().HaveCount(1);
