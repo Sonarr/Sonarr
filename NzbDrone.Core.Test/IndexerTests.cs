@@ -26,8 +26,8 @@ namespace NzbDrone.Core.Test
     public class IndexerTests : CoreTest
     {
 
-        [TestCase("nzbsorg.xml", 2)]
-        [TestCase("nzbsrus.xml", 7)]
+        [TestCase("nzbsorg.xml", 1)]
+        [TestCase("nzbsrus.xml", 6)]
         [TestCase("newzbin.xml", 1)]
         [TestCase("nzbmatrix.xml", 2)]
         public void parse_feed_xml(string fileName, int warns)
