@@ -53,6 +53,7 @@ namespace NzbDrone.Core.Test
         [TestCase("Brew Masters S01E06 3 Beers For Batali DVDRip XviD SPRiNTER","Brew Masters", 1, 6)]
         [TestCase("24 7 Flyers Rangers Road to the NHL Winter Classic Part01 720p HDTV x264 ORENJI", "24 7 Flyers Rangers Road to the NHL Winter Classic", 1, 1)]
         [TestCase("24 7 Flyers Rangers Road to the NHL Winter Classic Part 02 720p HDTV x264 ORENJI", "24 7 Flyers Rangers Road to the NHL Winter Classic", 1, 2)]
+        [TestCase("24-7 Flyers-Rangers- Road to the NHL Winter Classic - S01E01 - Part 1", "24 7 Flyers Rangers Road to the NHL Winter Classic", 1, 1)]
         [TestCase("The.Kennedys.Part.2.DSR.XviD-SYS", "The Kennedys", 1, 2)]
         [TestCase("the-pacific-e07-720p", "The Pacific", 1, 7)]
         public void ParseTitle_single(string postTitle, string title, int seasonNumber, int episodeNumber)

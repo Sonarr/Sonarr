@@ -19,10 +19,6 @@ namespace NzbDrone.Core
                                     new Regex(@"^(?<title>.+?)?\W*(?<airyear>\d{4})\W+(?<airmonth>\d{2})\W+(?<airday>\d{2})\W?(?!\\)",
                                         RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
-                                    //Mini-Series, treated as season 1, episodes are labeled as Part01, Part 01, Part.1
-                                    new Regex(@"^(?<title>.+?)(?:\W+(?:(?:Part\W?|(?<!\d+\W+)e)(?<episode>\d{1,2}(?!\d+)))+)\W?(?!\\)",
-                                        RegexOptions.IgnoreCase | RegexOptions.Compiled),
-
                                     //Multi-Part episodes without a title (S01E05.S01E06)
                                     new Regex(@"^(?:\W*S?(?<season>\d{1,2}(?!\d+))(?:(?:\-|[ex]|\s){1,2}(?<episode>\d{1,2}(?!\d+)))+){2,}\W?(?!\\)",
 			                            RegexOptions.IgnoreCase | RegexOptions.Compiled),
@@ -34,6 +30,10 @@ namespace NzbDrone.Core
                                     //Single episodes (S01E05, 1x05, etc)
                                     new Regex(@"^(?<title>.+?)(?:\W+S?(?<season>\d{1,2}(?!\d+))(?:(?:\-|[ex]|\s){1,2}(?<episode>\d{2}(?!\d+)))+)\W?(?!\\)",
 		                                RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
+                                    //Mini-Series, treated as season 1, episodes are labeled as Part01, Part 01, Part.1
+                                    new Regex(@"^(?<title>.+?)(?:\W+(?:(?:Part\W?|(?<!\d+\W+)e)(?<episode>\d{1,2}(?!\d+)))+)\W?(?!\\)",
+                                        RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                                     //No Title - Single episodes or multi-episode (S01E05E06, S01E05-06, etc)
                                     new Regex(@"^(?:\W?S?(?<season>\d{1,2}(?!\d+))(?:(?:\-|[ex]|\s){2}(?<episode>\d{1,2}(?!\d+)))+\W*)+\W?(?!\\)",
