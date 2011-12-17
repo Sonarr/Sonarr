@@ -16,7 +16,6 @@ namespace NzbDrone.Core.Test
     {
         /*Fucked-up hall of shame,
          * WWE.Wrestlemania.27.PPV.HDTV.XviD-KYR
-         * The.Kennedys.Part.2.DSR.XviD-SYS
          * Unreported.World.Chinas.Lost.Sons.WS.PDTV.XviD-FTP
          * [TestCase("Big Time Rush 1x01 to 10 480i DD2 0 Sianto", "Big Time Rush", 1, new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }, 10)]
          * [TestCase("Desparate Housewives - S07E22 - 7x23 - And Lots of Security.. [HDTV].mkv", "Desparate Housewives", 7, new[] { 22, 23 }, 2)]
@@ -52,6 +51,10 @@ namespace NzbDrone.Core.Test
         [TestCase("CSI525", "CSI", 5, 25)]
         [TestCase("King of the Hill - 10x12 - 24 Hour Propane People [SDTV]", "King of the Hill", 10, 12)]
         [TestCase("Brew Masters S01E06 3 Beers For Batali DVDRip XviD SPRiNTER","Brew Masters", 1, 6)]
+        [TestCase("24 7 Flyers Rangers Road to the NHL Winter Classic Part01 720p HDTV x264 ORENJI", "24 7 Flyers Rangers Road to the NHL Winter Classic", 1, 1)]
+        [TestCase("24 7 Flyers Rangers Road to the NHL Winter Classic Part 02 720p HDTV x264 ORENJI", "24 7 Flyers Rangers Road to the NHL Winter Classic", 1, 2)]
+        [TestCase("The.Kennedys.Part.2.DSR.XviD-SYS", "The Kennedys", 1, 2)]
+        [TestCase("the-pacific-e07-720p", "The Pacific", 1, 7)]
         public void ParseTitle_single(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
             var result = Parser.ParseTitle(postTitle);

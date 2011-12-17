@@ -19,6 +19,10 @@ namespace NzbDrone.Core
                                     new Regex(@"^(?<title>.+?)?\W*(?<airyear>\d{4})\W+(?<airmonth>\d{2})\W+(?<airday>\d{2})\W?(?!\\)",
                                         RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
+                                    //Mini-Series, treated as season 1, episodes are labeled as Part01, Part 01, Part.1
+                                    new Regex(@"^(?<title>.+?)(?:\W+(?:(?:Part\W?|(?<!\d+\W+)e)(?<episode>\d{1,2}(?!\d+)))+)\W?(?!\\)",
+                                        RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
                                     //Multi-Part episodes without a title (S01E05.S01E06)
                                     new Regex(@"^(?:\W*S?(?<season>\d{1,2}(?!\d+))(?:(?:\-|[ex]|\s){1,2}(?<episode>\d{1,2}(?!\d+)))+){2,}\W?(?!\\)",
 			                            RegexOptions.IgnoreCase | RegexOptions.Compiled),
@@ -32,7 +36,7 @@ namespace NzbDrone.Core
 		                                RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                                     //No Title - Single episodes or multi-episode (S01E05E06, S01E05-06, etc)
-                                    new Regex(@"^(?:\W?S?(?<season>\d{1,2}(?!\d+))(?:(?:\-|[ex]|\s){1,2}(?<episode>\d{1,2}(?!\d+)))+\W*)+\W?(?!\\)",
+                                    new Regex(@"^(?:\W?S?(?<season>\d{1,2}(?!\d+))(?:(?:\-|[ex]|\s){2}(?<episode>\d{1,2}(?!\d+)))+\W*)+\W?(?!\\)",
 			                            RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                                     //Episodes over 99 (3-digits or more)
@@ -131,8 +135,12 @@ namespace NzbDrone.Core
                         seasons.Add(parsedSeason);
                 }
 
+                //If no season was found it should be treated as a mini series and season 1
+                if (seasons.Count == 0)
+                    seasons.Add(1);
+
                 //If more than 1 season was parsed go to the next REGEX (A multi-season release is unlikely)
-                if (seasons.Distinct().Count() != 1)
+                if (seasons.Distinct().Count() > 1)
                     return null;
 
                 parsedEpisode = new EpisodeParseResult
