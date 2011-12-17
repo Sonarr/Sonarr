@@ -37,11 +37,6 @@ namespace NzbDrone.Web.Controllers
                                                                                     });
             var jobs = _jobProvider.All();
 
-            foreach(var jobDefinition in jobs)
-            {
-                jobDefinition.Command = "<a href=\"http://www.google.ca\"></a>";
-            }
-
             return View(jobs);
         }
 

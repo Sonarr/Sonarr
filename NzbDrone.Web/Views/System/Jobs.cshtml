@@ -11,8 +11,9 @@
           .Columns(c => c.Bound(g => g.Interval))
           .Columns(c => c.Bound(g => g.LastExecution))
           .Columns(c => c.Bound(g => g.Success))
-          .Columns(c => c.Bound(g => g.Command)
-          .Template(@<text>  @{ if(item.Enable)
+          .Columns(c => c.Bound(g => g.Id)
+            .Title("Command")  
+            .Template(@<text>  @{ if(item.Enable)
                                 {
                                     @Ajax.ImageActionLink("../../Content/Images/Gear.png", new { Alt = "Run", Width = 18, Height = 18, Title = "Run Job" }, "RunJob", new { TypeName = item.TypeName }, null, null)
                                 }
