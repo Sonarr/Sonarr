@@ -69,7 +69,6 @@
             $.ajax({
                 type: "GET",
                 url: autoConfigureSabUrl,
-                //data: jQuery.param({ username: $('#SabUsername').val(), password: $('#SabPassword').val() }),
                 error: function (req, status, error) {
                     alert("Sorry! We could not autoconfigure SABnzbd for you");
                 },

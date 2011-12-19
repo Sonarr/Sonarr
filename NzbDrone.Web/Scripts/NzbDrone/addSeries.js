@@ -20,9 +20,7 @@ $(".masterQualitySelector").live('change', function () {
 });
 
 $(".addExistingButton").live('click', function () {
-
     var root = $(this).parents(".existingSeries");
-
     var title = $(this).siblings(".seriesLookup").val();
     var seriesId = $(this).siblings(".seriesId").val();
     var qualityId = $(this).siblings(".qualitySelector").val();
@@ -44,16 +42,27 @@ $(".addExistingButton").live('click', function () {
 });
 
 function reloadExistingSeries() {
-    $.get(existingSeriesUrl, function (data) {
+    $.ajax({
+      url: existingSeriesUrl,
+      success: function( data ) {
         $('#existingSeries').html(data);
+      }
     });
 }
 
 //RootDir
+//Delete RootDir
 $('#rootDirs .actionButton img').live('click', function (image) {
     var path = $(image.target).attr('id');
-    $.post(deleteRootDirUrl, { Path: path }, function () {
-        refreshRoot();
+
+    $.ajax({
+        type: "POST",
+        url: deleteRootDirUrl,
+        data: { Path: path },
+        success: function () {
+            refreshRoot();
+            $("#rootDirInput").val('');
+        }
     });
 });
 
@@ -61,20 +70,29 @@ $('#saveDir').live('click', saveRootDir);
 
 function saveRootDir() {
     var path = $("#rootDirInput").val();
+
     if (path) {
-        $.post(saveRootDirUrl, { Path: path }, function () {
-            refreshRoot();
-            $("#rootDirInput").val('');
+        $.ajax({
+            type: "POST",
+            url: saveRootDirUrl,
+            data: { Path: path },
+            success: function () {
+                refreshRoot();
+                $("#rootDirInput").val('');
+            }
         });
     }
 }
 
 function refreshRoot() {
-    $.get(rootListUrl, function (data) {
-        $('#rootDirs').html(data);
+    $.ajax({
+        url: rootListUrl,
+        success: function (data) {
+            $('#rootDirs').html(data);
+            reloadAddNew();
+            reloadExistingSeries();
+        }
     });
-    reloadAddNew();
-    reloadExistingSeries();
 }
 
 
@@ -94,14 +112,16 @@ $('#saveNewSeries').live('click', function () {
         },
         success: function () {
             $("#newSeriesLookup").val("");
-            //$('#newSeriesPath').val("");
         }
     });
 });
 
 function reloadAddNew() {
-    $.get(addNewUrl, function (data) {
-        $('#addNewSeries').html(data);
+    $.ajax({
+        url: addNewUrl,
+        success: function (data) {
+            $('#addNewSeries').html(data);
+        }
     });
 }
 
@@ -121,7 +141,7 @@ $('#quickAddNew').live('click', function () {
         },
         success: function () {
             $("#newSeriesLookup").val("");
-            //$('#newSeriesPath').val("");
+            $('#newSeriesPath').val("");
         }
     });
 });

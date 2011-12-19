@@ -5,12 +5,14 @@ using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Text.RegularExpressions;
+using NLog;
 using NzbDrone.Core.Model;
 
 namespace NzbDrone.Core.Providers
 {
     public class AutoConfigureProvider
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public SabnzbdInfoModel AutoConfigureSab()
         {
@@ -88,8 +90,8 @@ namespace NzbDrone.Core.Providers
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Failed to get response from: {0}", url);
-                Console.WriteLine(ex.Message, ex);
+                Logger.Trace("Failed to get response from: {0}", url);
+                Logger.Trace(ex.Message, ex);
             }
 
             return String.Empty;

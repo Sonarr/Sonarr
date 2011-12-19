@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using NLog;
 using Ninject;
 
 namespace NzbDrone.Core.Providers.Core
 {
     public class UdpProvider
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         [Inject]
         public UdpProvider()
         {
@@ -168,7 +171,7 @@ namespace NzbDrone.Core.Providers.Core
 
             catch (Exception exc)
             {
-                Console.WriteLine(exc);
+                Logger.TraceException(exc.Message, exc);
                 return null;
             }
         }

@@ -64,9 +64,14 @@ $(window).load(function () {
         refreshNotifications();
     }
 
-
     function refreshNotifications() {
-        $.get('/notification/Comet', { message: currentMessage }, notificationCallback);
+        $.ajax({
+            url: '/notification/Comet',
+            data: { message: currentMessage },
+            success: function (data) {
+                notificationCallback(data);
+            }
+        });
     }
 
     function notificationCallback(data) {
@@ -83,10 +88,6 @@ $(window).load(function () {
     }
 
     //SetupNotifications();
-    //DisplayMsg("Scanning Series Folder.");
-
-
-
     function displayMsg(sMsg) {
         //set the message text
         $("#msgText").showHtml(sMsg, 150);
