@@ -113,8 +113,28 @@ namespace NzbDrone.Web.UI.Automation
 
         static void StartNzbDrone()
         {
-            Process.Start(Path.Combine(testFolder, "nzbdrone.exe"));
+
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = Path.Combine(testFolder, "nzbdrone.exe"),
+                RedirectStandardOutput = true,
+                UseShellExecute = false
+            };
+
+            var nzbDroneProcess = new Process
+                                      {
+                                          StartInfo = startInfo
+                                      };
+            nzbDroneProcess.OutputDataReceived +=
+                    delegate(object o, DataReceivedEventArgs args)
+                        {
+                            Console.WriteLine(args.Data);
+                        };
+
+            nzbDroneProcess.Start();
         }
+
+
 
         public static void StopNzbDrone()
         {

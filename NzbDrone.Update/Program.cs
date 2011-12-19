@@ -62,20 +62,14 @@ namespace NzbDrone.Update
 
         private static void InitLoggers()
         {
+            LogConfiguration.RegisterExceptioneer();
+
             LogConfiguration.RegisterConsoleLogger(LogLevel.Trace);
             LogConfiguration.RegisterUdpLogger();
 
-            var lastUpgradeLog = new FileTarget();
-            lastUpgradeLog.AutoFlush = true;
-            lastUpgradeLog.ConcurrentWrites = false;
-            lastUpgradeLog.FileName = Path.Combine(new EnviromentProvider().GetSandboxLogFolder(), DateTime.Now.ToString("yyyy.MM.dd-H-mm") + ".txt");
-            lastUpgradeLog.KeepFileOpen = false;
-            lastUpgradeLog.Layout = "${longdate} - ${logger}: ${message} ${exception:format=ToString}";
-
-            LogManager.Configuration.AddTarget(lastUpgradeLog.GetType().Name, lastUpgradeLog);
-            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, lastUpgradeLog));
-
-            LogConfiguration.RegisterExceptioneer();
+            var logPath = Path.Combine(new EnviromentProvider().GetSandboxLogFolder(), DateTime.Now.ToString("yyyy.MM.dd-H-mm") + ".txt");
+            LogConfiguration.RegisterFileLogger(logPath);
+            
             LogConfiguration.Reload();
         }
 

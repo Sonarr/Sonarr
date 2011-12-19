@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
@@ -72,6 +73,20 @@ namespace NzbDrone.Common
                 if (LogManager.ThrowExceptions)
                     throw;
             }
+        }
+
+
+        public static void RegisterFileLogger(string fileName)
+        {
+            var fileTarget = new FileTarget();
+            fileTarget.AutoFlush = true;
+            fileTarget.ConcurrentWrites = false;
+            fileTarget.FileName = fileName;
+            fileTarget.KeepFileOpen = false;
+            fileTarget.Layout = "${longdate} - ${logger}: ${message} ${exception:format=ToString}";
+
+            LogManager.Configuration.AddTarget(fileTarget.GetType().Name, fileTarget);
+            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, fileTarget));
         }
 
         public static void RegisterExceptioneer()

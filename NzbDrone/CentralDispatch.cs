@@ -43,6 +43,7 @@ namespace NzbDrone
 
         private static void InitilizeApp()
         {
+            LogConfiguration.RegisterFileLogger("nzbdrone.log");
             LogConfiguration.RegisterConsoleLogger(LogLevel.Debug);
             LogConfiguration.RegisterUdpLogger();
             LogConfiguration.RegisterExceptioneer();
