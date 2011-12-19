@@ -37,13 +37,13 @@ namespace NzbDrone.Web.UI.Automation
         [SetUp]
         public void AutomationSetup()
         {
-            Driver = new FirefoxDriver();
+            
         }
 
         [TearDown]
         public void AutomationTearDown()
         {
-            Driver.Close();
+            
 
             if (!Directory.Exists(Directory.GetCurrentDirectory() + "\\Screenshots"))
             {
@@ -64,12 +64,16 @@ namespace NzbDrone.Web.UI.Automation
             StopNzbDrone();
             ResetUserData();
             StartNzbDrone();
+            Driver = new FirefoxDriver();
         }
 
         [TestFixtureTearDown]
         public void AutomationTestFixtureTearDown()
         {
+            Driver.Close();
             StopNzbDrone();
+
+            File.Copy(Path.Combine(testFolder, "nzbdrone.log"), Path.Combine(Directory.GetCurrentDirectory(), "nzbdrone.log"), true);
         }
 
 
@@ -77,7 +81,7 @@ namespace NzbDrone.Web.UI.Automation
         {
             var method = new StackFrame(1).GetMethod().Name;
 
-            var fileName = String.Format("{0}__{1}.png", this.GetType().Name, method);
+            var fileName = String.Format("{0}__{1}.png", GetType().Name, method);
 
             ((ITakesScreenshot)Driver).GetScreenshot().SaveAsFile(fileName, ImageFormat.Png);
         }
@@ -127,9 +131,9 @@ namespace NzbDrone.Web.UI.Automation
                                       };
             nzbDroneProcess.OutputDataReceived +=
                     delegate(object o, DataReceivedEventArgs args)
-                        {
-                            Console.WriteLine(args.Data);
-                        };
+                    {
+                        Console.WriteLine(args.Data);
+                    };
 
             nzbDroneProcess.Start();
         }
