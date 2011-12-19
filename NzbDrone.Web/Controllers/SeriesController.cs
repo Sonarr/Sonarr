@@ -213,13 +213,5 @@ namespace NzbDrone.Web.Controllers
 
             return episodes;
         }
-
-        private string GetSeasonString(int seasonNumber)
-        {
-            if (seasonNumber == 0)
-                return "Specials";
-
-            return String.Format("Season #{0}", seasonNumber);
-        }
     }
 }

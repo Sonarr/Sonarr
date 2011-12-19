@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 using NzbDrone.Common;
 
@@ -48,8 +49,9 @@ namespace NzbDrone.Web.Controllers
                     dirs = _diskProvider.GetDirectories(term.Substring(0, index + 1));
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                return Json(new List<string>(), JsonRequestBehavior.AllowGet);
                 //Swallow the exceptions so proper JSON is returned to the client (Empty results)
             }
 
