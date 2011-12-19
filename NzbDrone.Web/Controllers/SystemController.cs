@@ -37,6 +37,8 @@ namespace NzbDrone.Web.Controllers
                                                                                     });
             var jobs = _jobProvider.All();
 
+
+
             return View(jobs);
         }
 

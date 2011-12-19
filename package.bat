@@ -7,8 +7,12 @@ del nzbdrone*.zip /Q /F
 
 
 xcopy IISExpress %TARGET%\IISExpress /E /V /I /Y
+
+
+xcopy NzbDrone\bin\Debug\*.*  %TARGET%\ /E /V /I /Y
 xcopy NzbDrone\bin\Release\*.*  %TARGET%\ /E /V /I /Y
 
+xcopy NzbDrone.Update\bin\Debug\*.*  %TARGET%\NzbDrone.Update\ /E /V /I /Y
 xcopy NzbDrone.Update\bin\Release\*.*  %TARGET%\NzbDrone.Update\ /E /V /I /Y
 
 xcopy NzbDrone.Web\bin\*.*  %TARGET%\NzbDrone.Web\bin\ /E /V /I /Y
@@ -40,4 +44,3 @@ del Mvc*.pdb /Q /F /S
 ..\Libraries\7zip\7za.exe a -tzip ..\NzbDrone.zip *
 
 CD ..
-Pause

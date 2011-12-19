@@ -11,25 +11,32 @@ namespace NzbDrone.Common
         public const string NZBDRONE_PID = "NZBDRONE_PID";
         public const string ROOT_MARKER = "NzbDrone.Web";
 
-#if DEBUG
-        private static readonly bool isInDebug = true;
-#else
-        private static readonly bool isInDebug = false; 
-#endif
-
         private static readonly string processName = Process.GetCurrentProcess().ProcessName.ToLower();
 
         public static bool IsProduction
         {
             get
             {
-                if (isInDebug || Debugger.IsAttached) return false;
+                if (IsDebug || Debugger.IsAttached) return false;
 
                 if (processName.Contains("nunit")) return false;
                 if (processName.Contains("jetbrain")) return false;
                 if (processName.Contains("resharper")) return false;
 
                 return true;
+            }
+        }
+
+        public static bool IsDebug
+        {
+            get
+            {
+
+#if DEBUG
+                return true;
+#else
+                return false;
+#endif
             }
         }
 
