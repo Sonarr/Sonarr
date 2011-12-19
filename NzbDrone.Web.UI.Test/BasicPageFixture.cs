@@ -11,29 +11,34 @@ namespace NzbDrone.Web.UI.Automation
         [Test]
         public void HomePage()
         {
-            Driver.GivenHomePage().Should().BeNzbDronePage();
+            Driver.GivenHomePage();
             CaptureScreen();
+            Driver.Should().BeNzbDronePage();
         }
 
         [Test]
         public void HistoryPage()
         {
-            Driver.GivenHistoryPage().Should().BeNzbDronePage();
+            Driver.GivenHistoryPage();
             CaptureScreen();
+            Driver.Should().BeNzbDronePage();
+            
         }
 
         [Test]
         public void MissingPage()
         {
-            Driver.GivenMissingPage().Should().BeNzbDronePage();
+            Driver.GivenMissingPage();
             CaptureScreen();
+            Driver.Should().BeNzbDronePage();
         }
 
         [Test]
         public void SettingsPage()
         {
-            Driver.GivenSettingsPage().Should().BeNzbDronePage();
+            Driver.GivenSettingsPage();
             CaptureScreen();
+            Driver.Should().BeNzbDronePage();
         }
 
     }
