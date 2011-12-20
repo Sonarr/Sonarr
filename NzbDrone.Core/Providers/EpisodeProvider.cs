@@ -127,6 +127,13 @@ namespace NzbDrone.Core.Providers
 
             if (parseResult.AirDate.HasValue)
             {
+                if (!parseResult.Series.IsDaily)
+                {
+                    //Todo: Collect this as a Series we want to treat as a daily series, or possible parsing error
+                    Logger.Warn("Found daily-style episode for non-daily series: {0}", parseResult.Series.Title);
+                    return new List<Episode>();
+                }
+
                 var episodeInfo = GetEpisode(parseResult.Series.SeriesId, parseResult.AirDate.Value);
 
                 if (episodeInfo == null && autoAddNew)

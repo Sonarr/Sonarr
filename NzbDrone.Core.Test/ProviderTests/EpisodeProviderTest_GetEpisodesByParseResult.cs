@@ -11,6 +11,7 @@ using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Test.Common;
 using NzbDrone.Test.Common.AutoMoq;
 using PetaPoco;
 
@@ -383,6 +384,29 @@ namespace NzbDrone.Core.Test.ProviderTests
             Db.Fetch<Episode>().Should().HaveCount(1);
             ep.First().ShouldHave().AllPropertiesBut(e => e.Series);
             parseResult.EpisodeTitle.Should().Be(fakeEpisode.Title);
+        }
+
+        [Test]
+        public void GetEpisodeParseResult_should_log_warning_when_series_is_not_dailt_but_parsed_daily()
+        {
+            WithRealDb();
+
+            var fakeSeries = Builder<Series>.CreateNew()
+                .With(s => s.IsDaily = false)
+                .Build();
+
+            Db.Insert(fakeSeries);
+
+            var parseResult = new EpisodeParseResult
+            {
+                Series = fakeSeries,
+                AirDate = DateTime.Today
+            };
+
+            var ep = Mocker.Resolve<EpisodeProvider>().GetEpisodesByParseResult(parseResult);
+
+            ep.Should().BeEmpty();
+            ExceptionVerification.ExcpectedWarns(1);
         }
     }
 }
