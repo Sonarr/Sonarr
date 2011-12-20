@@ -55,7 +55,10 @@ namespace NzbDrone.Core.Providers
                     {
                         int seriesId;
 
-                        if (Int32.TryParse(line, out seriesId))
+                        //Split CSV, first item should be the seriesId
+                        var split = line.Split(',');
+
+                        if (Int32.TryParse(split[0], out seriesId))
                             seriesIds.Add(seriesId);
                     }
                 }

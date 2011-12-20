@@ -20,8 +20,8 @@ namespace NzbDrone.Core.Test.ProviderTests
     // ReSharper disable InconsistentNaming
     public class ReferenceDataProviderTest : CoreTest
     {
-        private string validSeriesIds = String.Format("1{0}2{0}3{0}4{0}5", Environment.NewLine);
-        private string invalidSeriesIds = String.Format("1{0}2{0}NaN{0}4{0}5", Environment.NewLine);
+        private string validSeriesIds = String.Format("1,Test{0}2,Test{0}3,Test{0}4,Test{0}5,Test", Environment.NewLine);
+        private string invalidSeriesIds = String.Format("1,Test{0}2,Test{0}NaN,Test{0}4,Test{0}5,Test", Environment.NewLine);
 
         [Test]
         public void GetDailySeriesIds_should_return_list_of_int_when_all_are_valid()
