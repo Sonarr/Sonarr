@@ -155,7 +155,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             //Assert
             Assert.IsFalse(result);
-            ExceptionVerification.ExcpectedWarns(1);
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]

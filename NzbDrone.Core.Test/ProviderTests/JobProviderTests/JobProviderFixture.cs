@@ -99,7 +99,7 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
             settings.First().LastExecution.Should().BeWithin(TimeSpan.FromSeconds(10));
             settings.First().Success.Should().BeFalse();
             brokenJob.ExecutionCount.Should().Be(1);
-            ExceptionVerification.ExcpectedErrors(1);
+            ExceptionVerification.ExpectedErrors(1);
         }
 
         [Test]
@@ -182,7 +182,7 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
 
             //Assert
             brokenJob.ExecutionCount.Should().Be(2);
-            ExceptionVerification.ExcpectedErrors(2);
+            ExceptionVerification.ExpectedErrors(2);
         }
 
         [Test]
@@ -487,7 +487,7 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
             jobProvider.QueueJob(typeof(string));
 
             WaitForQueue();
-            ExceptionVerification.ExcpectedErrors(1);
+            ExceptionVerification.ExpectedErrors(1);
         }
 
     }

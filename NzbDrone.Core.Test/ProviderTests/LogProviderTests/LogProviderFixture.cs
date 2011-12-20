@@ -105,7 +105,7 @@ namespace NzbDrone.Core.Test.ProviderTests.LogProviderTests
             logItem.ExceptionType.Should().Be(ex.GetType().ToString());
             logItem.Exception.Should().Be(ex.ToString());
 
-            ExceptionVerification.ExcpectedErrors(1);
+            ExceptionVerification.ExpectedErrors(1);
         }
 
         [Test]
@@ -125,7 +125,7 @@ namespace NzbDrone.Core.Test.ProviderTests.LogProviderTests
 
             VerifyLog(logItem, LogLevel.Error);
 
-            ExceptionVerification.ExcpectedErrors(1);
+            ExceptionVerification.ExpectedErrors(1);
         }
 
         [Test]

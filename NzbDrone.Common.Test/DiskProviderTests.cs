@@ -59,7 +59,7 @@ namespace NzbDrone.Common.Test
             diskProvider.MoveFile(targetPath, targetPath);
 
             File.Exists(targetPath).Should().BeTrue();
-            ExceptionVerification.ExcpectedWarns(1);
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]

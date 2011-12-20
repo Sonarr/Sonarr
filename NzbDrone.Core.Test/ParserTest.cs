@@ -193,7 +193,7 @@ namespace NzbDrone.Core.Test
 
             Parser.ParseTitle(title).Should().BeNull();
 
-            ExceptionVerification.ExcpectedWarns(1);
+            ExceptionVerification.ExpectedWarns(1);
         }
 
 
@@ -368,7 +368,7 @@ namespace NzbDrone.Core.Test
             var result = Parser.ParseTitle(postTitle);
 
             result.Should().BeNull();
-            ExceptionVerification.ExcpectedWarns(1);
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [TestCase("Lie.to.Me.S03.SUBPACK.DVDRip.XviD-REWARD")]
@@ -380,7 +380,7 @@ namespace NzbDrone.Core.Test
 
             result.Should().BeNull();
 
-            ExceptionVerification.ExcpectedWarns(1);
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [TestCase("Fussball Bundesliga 2010 2011 30 Spieltag FC Bayern Muenchen vs Bayer 04 Leverkusen German WS dTV XviD WoGS")]
@@ -388,7 +388,7 @@ namespace NzbDrone.Core.Test
         {
             Parser.ParseTitle(title);
             ExceptionVerification.IgnoreWarns();
-            ExceptionVerification.ExcpectedErrors(1);
+            ExceptionVerification.ExpectedErrors(1);
         }
     }
 }

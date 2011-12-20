@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var result = Mocker.Resolve<ProwlProvider>().Verify(_badApiKey);
 
             //Assert
-            ExceptionVerification.ExcpectedWarns(1);
+            ExceptionVerification.ExpectedWarns(1);
             result.Should().BeFalse();
         }
 
@@ -76,7 +76,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var result = Mocker.Resolve<ProwlProvider>().SendNotification("NzbDrone Test", "This is a test message from NzbDrone", _badApiKey);
 
             //Assert
-            ExceptionVerification.ExcpectedWarns(1);
+            ExceptionVerification.ExpectedWarns(1);
             result.Should().BeFalse();
         }
 

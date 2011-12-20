@@ -35,7 +35,7 @@ namespace NzbDrone.Common.Test
         public void Kill_should_not_fail_on_invalid_process_is(int processId)
         {
             _processProvider.Kill(processId);
-            ExceptionVerification.ExcpectedWarns(1);
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]
@@ -43,7 +43,7 @@ namespace NzbDrone.Common.Test
         {
             _processProvider.GetProcessById(1234567).Should().BeNull();
 
-            ExceptionVerification.ExcpectedWarns(1);
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [TestCase(0)]
@@ -53,7 +53,7 @@ namespace NzbDrone.Common.Test
         {
             _processProvider.GetProcessById(processId).Should().BeNull();
 
-            ExceptionVerification.ExcpectedWarns(1);
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]

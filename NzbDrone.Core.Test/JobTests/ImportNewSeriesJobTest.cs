@@ -134,7 +134,7 @@ namespace NzbDrone.Core.Test.JobTests
 
             Mocker.GetMock<DiskScanJob>().Verify(j => j.Start(notification, series[0].SeriesId, 0), Times.Once());
 
-            ExceptionVerification.ExcpectedErrors(1);
+            ExceptionVerification.ExpectedErrors(1);
 
         }
 

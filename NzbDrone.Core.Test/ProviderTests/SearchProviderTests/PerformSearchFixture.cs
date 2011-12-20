@@ -208,7 +208,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
             Mocker.GetMock<SceneMappingProvider>().Verify(c => c.GetSceneName(_series.SeriesId),
                                                       Times.Once());
 
-            ExceptionVerification.ExcpectedErrors(1);
+            ExceptionVerification.ExpectedErrors(1);
         }
 
         [Test]
@@ -275,7 +275,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
 
             //Assert
             result.Should().HaveCount(0);
-            ExceptionVerification.ExcpectedErrors(2);
+            ExceptionVerification.ExpectedErrors(2);
         }
 
         [Test]

@@ -101,7 +101,7 @@ namespace NzbDrone.Core.Test.JobTests
 
 
             Mocker.VerifyAllMocks();
-            ExceptionVerification.ExcpectedErrors(2);
+            ExceptionVerification.ExpectedErrors(2);
         }
 
         [Test]

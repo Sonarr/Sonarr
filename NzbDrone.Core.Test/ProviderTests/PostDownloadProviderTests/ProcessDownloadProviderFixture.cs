@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 
             //Assert
             Mocker.VerifyAllMocks();
-            ExceptionVerification.ExcpectedWarns(1);
+            ExceptionVerification.ExpectedWarns(1);
         }
 
 
@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 
             //Assert
             Mocker.VerifyAllMocks();
-            ExceptionVerification.ExcpectedWarns(1);
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]
@@ -81,7 +81,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 
             //Assert
             Mocker.VerifyAllMocks();
-            ExceptionVerification.ExcpectedWarns(1);
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]
@@ -108,7 +108,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 
             //Assert
             Mocker.VerifyAllMocks();
-            ExceptionVerification.ExcpectedWarns(1);
+            ExceptionVerification.ExpectedWarns(1);
         }
 
 
@@ -141,7 +141,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 
             //Assert
             Mocker.VerifyAllMocks();
-            ExceptionVerification.ExcpectedWarns(1);
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [TestCase(@"\_UnknownSeries_The Office - S01E01 - Episode Title")]
@@ -184,7 +184,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
             //Assert
             Mocker.VerifyAllMocks();
             Mocker.GetMock<DiskProvider>().Verify(c => c.MoveDirectory(droppedFolder.FullName, taggedFolder), Times.Once());
-            ExceptionVerification.ExcpectedWarns(1);
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]

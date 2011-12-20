@@ -162,7 +162,7 @@ namespace NzbDrone.Update.Test
             //Assert
             Mocker.GetMock<DiskProvider>()
                 .Verify(c => c.CopyDirectory(BACKUP_FOLDER, TARGET_FOLDER), Times.Once());
-            ExceptionVerification.ExcpectedFatals(1);
+            ExceptionVerification.ExpectedFatals(1);
         }
 
         [Test]
@@ -206,7 +206,7 @@ namespace NzbDrone.Update.Test
 
             //Assert
             VerifyServiceRestart();
-            ExceptionVerification.ExcpectedFatals(1);
+            ExceptionVerification.ExpectedFatals(1);
         }
 
         [Test]
@@ -224,7 +224,7 @@ namespace NzbDrone.Update.Test
 
             //Assert
             VerifyProcessRestart();
-            ExceptionVerification.ExcpectedFatals(1);
+            ExceptionVerification.ExpectedFatals(1);
         }
 
         private void VerifyServiceRestart()

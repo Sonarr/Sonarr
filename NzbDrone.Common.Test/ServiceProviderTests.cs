@@ -105,7 +105,7 @@ namespace NzbDrone.Common.Test
             serviceProvider.GetService(ALWAYS_INSTALLED_SERVICE).Status
                 .Should().Be(ServiceControllerStatus.Stopped);
 
-            ExceptionVerification.ExcpectedWarns(1);
+            ExceptionVerification.ExpectedWarns(1);
         }
     }
 }

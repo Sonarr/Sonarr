@@ -164,7 +164,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             //Assert
             Mocker.VerifyAllMocks();
-            ExceptionVerification.ExcpectedWarns(1);
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]

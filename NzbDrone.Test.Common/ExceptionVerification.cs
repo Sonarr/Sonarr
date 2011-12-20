@@ -28,9 +28,9 @@ namespace NzbDrone.Test.Common
 
         public static void AssertNoUnexcpectedLogs()
         {
-            ExcpectedFatals(0);
-            ExcpectedErrors(0);
-            ExcpectedWarns(0);
+            ExpectedFatals(0);
+            ExpectedErrors(0);
+            ExpectedWarns(0);
         }
 
         private static string GetLogsString(IEnumerable<LogEventInfo> logs)
@@ -49,17 +49,17 @@ namespace NzbDrone.Test.Common
             return errors;
         }
 
-        public static void ExcpectedErrors(int count)
+        public static void ExpectedErrors(int count)
         {
             Excpected(LogLevel.Error, count);
         }
 
-        public static void ExcpectedFatals(int count)
+        public static void ExpectedFatals(int count)
         {
             Excpected(LogLevel.Fatal, count);
         }
 
-        public static void ExcpectedWarns(int count)
+        public static void ExpectedWarns(int count)
         {
             Excpected(LogLevel.Warn, count);
         }

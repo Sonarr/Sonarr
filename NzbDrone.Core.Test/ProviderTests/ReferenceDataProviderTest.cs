@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             //Assert
             result.Should().HaveCount(0);
-            ExceptionVerification.ExcpectedWarns(1);
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]

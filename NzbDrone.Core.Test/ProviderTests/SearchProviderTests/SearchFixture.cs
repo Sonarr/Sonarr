@@ -200,7 +200,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
 
             //Assert
             result.Should().BeFalse();
-            ExceptionVerification.ExcpectedWarns(1);
+            ExceptionVerification.ExpectedWarns(1);
         }
     }
 }

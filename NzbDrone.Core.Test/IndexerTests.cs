@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Test
             parseResults.Should().OnlyContain(s => s.Indexer == mockIndexer.Name);
             parseResults.Should().OnlyContain(s => !String.IsNullOrEmpty(s.NzbTitle));
 
-            ExceptionVerification.ExcpectedWarns(warns);
+            ExceptionVerification.ExpectedWarns(warns);
         }
 
         [Test]
@@ -170,7 +170,7 @@ namespace NzbDrone.Core.Test
 
             Assert.IsNotNull(result);
             Assert.AreEqual(LanguageType.Finnish, result.Language);
-            ExceptionVerification.ExcpectedWarns(1);
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]

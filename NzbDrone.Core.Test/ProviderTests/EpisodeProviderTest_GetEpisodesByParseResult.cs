@@ -251,6 +251,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var fakeSeries = Builder<Series>.CreateNew()
                     .With(s => s.SeriesId = 1)
+                    .With(s => s.IsDaily = true)
                     .Build();
 
             Mocker.GetMock<IDatabase>().Setup(
@@ -279,6 +280,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var fakeSeries = Builder<Series>.CreateNew()
                     .With(s => s.SeriesId = 1)
+                    .With(s => s.IsDaily = true)
                     .Build();
 
             //Act
@@ -303,6 +305,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var fakeSeries = Builder<Series>.CreateNew()
                     .With(s => s.SeriesId = 1)
+                    .With(s => s.IsDaily = true)
                     .Build();
 
             //Act
@@ -406,7 +409,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var ep = Mocker.Resolve<EpisodeProvider>().GetEpisodesByParseResult(parseResult);
 
             ep.Should().BeEmpty();
-            ExceptionVerification.ExcpectedWarns(1);
+            ExceptionVerification.ExpectedWarns(1);
         }
     }
 }
