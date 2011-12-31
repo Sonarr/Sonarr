@@ -1,7 +1,7 @@
 ﻿// ReSharper disable RedundantUsingDirective
 
 using System;
-
+using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
@@ -20,6 +20,33 @@ namespace NzbDrone.Core.Test.ProviderTests
     // ReSharper disable InconsistentNaming
     public class XbmcProviderTest : CoreTest
     {
+        private string EdenActivePlayers;
+
+        private void WithNoActivePlayers()
+        {
+            EdenActivePlayers = "{\"id\":10,\"jsonrpc\":\"2.0\",\"result\":[]}";
+        }
+
+        private void WithVideoPlayerActive()
+        {
+            EdenActivePlayers = "{\"id\":10,\"jsonrpc\":\"2.0\",\"result\":[{\"playerid\":1,\"type\":\"video\"}]}";
+        }
+
+        private void WithAudioPlayerActive()
+        {
+            EdenActivePlayers = "{\"id\":10,\"jsonrpc\":\"2.0\",\"result\":[{\"playerid\":1,\"type\":\"audio\"}]}";
+        }
+
+        private void WithPicturePlayerActive()
+        {
+            EdenActivePlayers = "{\"id\":10,\"jsonrpc\":\"2.0\",\"result\":[{\"playerid\":1,\"type\":\"picture\"}]}";
+        }
+
+        private void WithAllPlayersActive()
+        {
+            EdenActivePlayers = "{\"id\":10,\"jsonrpc\":\"2.0\",\"result\":[{\"playerid\":1,\"type\":\"audio\"},{\"playerid\":2,\"type\":\"picture\"},{\"playerid\":3,\"type\":\"video\"}]}";
+        }
+
         [Test]
         public void JsonError_true()
         {
@@ -110,11 +137,9 @@ namespace NzbDrone.Core.Test.ProviderTests
         [TestCase(false, true, true)]
         [TestCase(false, false, true)]
         [TestCase(true, false, true)]
-        public void GetActivePlayers(bool audio, bool picture, bool video)
+        public void GetActivePlayersDharma(bool audio, bool picture, bool video)
         {
             //Setup
-            
-
             var message = "{\"id\":10,\"jsonrpc\":\"2.0\",\"result\":{\"audio\":"
                 + audio.ToString().ToLower()
                 + ",\"picture\":"
@@ -128,12 +153,102 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Returns(message);
 
             //Act
-            var result = Mocker.Resolve<XbmcProvider>().GetActivePlayers("localhost:8080", "xbmc", "xbmc");
+            var result = Mocker.Resolve<XbmcProvider>().GetActivePlayersDharma("localhost:8080", "xbmc", "xbmc");
 
             //Assert
             Assert.AreEqual(audio, result["audio"]);
             Assert.AreEqual(picture, result["picture"]);
             Assert.AreEqual(video, result["video"]);
+        }
+
+        [Test]
+        public void GetActivePlayersEden_should_be_empty_when_no_active_players()
+        {
+            //Setup
+            WithNoActivePlayers();
+
+            var fakeHttp = Mocker.GetMock<HttpProvider>();
+            fakeHttp.Setup(s => s.PostCommand("localhost:8080", "xbmc", "xbmc", It.IsAny<string>()))
+                .Returns(EdenActivePlayers);
+
+            //Act
+            var result = Mocker.Resolve<XbmcProvider>().GetActivePlayersEden("localhost:8080", "xbmc", "xbmc");
+
+            //Assert
+            result.Should().BeEmpty();
+        }
+
+        [Test]
+        public void GetActivePlayersEden_should_have_active_video_player()
+        {
+            //Setup
+            WithVideoPlayerActive();
+
+            var fakeHttp = Mocker.GetMock<HttpProvider>();
+            fakeHttp.Setup(s => s.PostCommand("localhost:8080", "xbmc", "xbmc", It.IsAny<string>()))
+                .Returns(EdenActivePlayers);
+
+            //Act
+            var result = Mocker.Resolve<XbmcProvider>().GetActivePlayersEden("localhost:8080", "xbmc", "xbmc");
+
+            //Assert
+            result.Should().HaveCount(1);
+            result.First().Type.Should().Be("video");
+        }
+
+        [Test]
+        public void GetActivePlayersEden_should_have_active_audio_player()
+        {
+            //Setup
+            WithAudioPlayerActive();
+
+            var fakeHttp = Mocker.GetMock<HttpProvider>();
+            fakeHttp.Setup(s => s.PostCommand("localhost:8080", "xbmc", "xbmc", It.IsAny<string>()))
+                .Returns(EdenActivePlayers);
+
+            //Act
+            var result = Mocker.Resolve<XbmcProvider>().GetActivePlayersEden("localhost:8080", "xbmc", "xbmc");
+
+            //Assert
+            result.Should().HaveCount(1);
+            result.First().Type.Should().Be("audio");
+        }
+
+        [Test]
+        public void GetActivePlayersEden_should_have_active_picture_player()
+        {
+            //Setup
+            WithPicturePlayerActive();
+
+            var fakeHttp = Mocker.GetMock<HttpProvider>();
+            fakeHttp.Setup(s => s.PostCommand("localhost:8080", "xbmc", "xbmc", It.IsAny<string>()))
+                .Returns(EdenActivePlayers);
+
+            //Act
+            var result = Mocker.Resolve<XbmcProvider>().GetActivePlayersEden("localhost:8080", "xbmc", "xbmc");
+
+            //Assert
+            result.Should().HaveCount(1);
+            result.First().Type.Should().Be("picture");
+        }
+
+        [Test]
+        public void GetActivePlayersEden_should_have_all_players_active()
+        {
+            //Setup
+            WithAllPlayersActive();
+
+            var fakeHttp = Mocker.GetMock<HttpProvider>();
+            fakeHttp.Setup(s => s.PostCommand("localhost:8080", "xbmc", "xbmc", It.IsAny<string>()))
+                .Returns(EdenActivePlayers);
+
+            //Act
+            var result = Mocker.Resolve<XbmcProvider>().GetActivePlayersEden("localhost:8080", "xbmc", "xbmc");
+
+            //Assert
+            result.Should().HaveCount(3);
+            result.Select(a => a.PlayerId).Distinct().Should().HaveCount(3);
+            result.Select(a => a.Type).Distinct().Should().HaveCount(3);
         }
 
         [Test]

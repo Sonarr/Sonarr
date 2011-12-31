@@ -56,25 +56,39 @@ namespace NzbDrone.Core.Providers
                 Logger.Trace("Determining version of XBMC Host: {0}", host);
                 var version = GetJsonVersion(host, username, password);
 
-                Logger.Trace("Determining if there are any active players on XBMC host: {0}", host);
-                var activePlayers = GetActivePlayers(host, username, password);
-
-                //If video is currently playing, then skip update
-                if (activePlayers["video"])
-                {
-                    Logger.Debug("Video is currently playing, skipping library update");
-                    continue;
-                }
-
                 Logger.Trace("No video playing, proceeding with library update");
 
                 //If Dharma
                 if (version == 2)
+                {
+                    Logger.Trace("Determining if there are any active players on XBMC host: {0}", host);
+                    var activePlayers = GetActivePlayersDharma(host, username, password);
+
+                    //If video is currently playing, then skip update
+                    if (activePlayers["video"])
+                    {
+                        Logger.Debug("Video is currently playing, skipping library update");
+                        continue;
+                    }
+
                     UpdateWithHttp(series, host, username, password);
+                }
 
                 //If Eden or newer (attempting to make it future compatible)
                 else if (version >= 3)
+                {
+                    Logger.Trace("Determining if there are any active players on XBMC host: {0}", host);
+                    var activePlayers = GetActivePlayersEden(host, username, password);
+
+                    //If video is currently playing, then skip update
+                    if (activePlayers.Any(a => a.Type.Equals("video")))
+                    {
+                        Logger.Debug("Video is currently playing, skipping library update");
+                        continue;
+                    }
+
                     UpdateWithJson(series, password, host, username);
+                }
             }
         }
 
@@ -231,11 +245,8 @@ namespace NzbDrone.Core.Providers
             return version;
         }
 
-        public virtual Dictionary<string, bool> GetActivePlayers(string host, string username, string password)
+        public virtual Dictionary<string, bool> GetActivePlayersDharma(string host, string username, string password)
         {
-            //2 = Dharma
-            //3 = Eden/Nightly (as of July 2011)
-
             try
             {
                 var command = new Command { id = 10, method = "Player.GetActivePlayers" };
@@ -246,7 +257,32 @@ namespace NzbDrone.Core.Providers
                 if (CheckForJsonError(response))
                     return null;
 
-                var result = serializer.Deserialize<ActivePlayersResult>(response);
+                var result = serializer.Deserialize<ActivePlayersDharmaResult>(response);
+
+                return result.Result;
+            }
+
+            catch (Exception ex)
+            {
+                Logger.DebugException(ex.Message, ex);
+            }
+
+            return null;
+        }
+
+        public virtual List<ActivePlayer> GetActivePlayersEden(string host, string username, string password)
+        {
+            try
+            {
+                var command = new Command { id = 10, method = "Player.GetActivePlayers" };
+                var serializer = new JavaScriptSerializer();
+                var serialized = serializer.Serialize(command);
+                var response = _httpProvider.PostCommand(host, username, password, serialized);
+
+                if (CheckForJsonError(response))
+                    return null;
+
+                var result = serializer.Deserialize<ActivePlayersEdenResult>(response);
 
                 return result.Result;
             }

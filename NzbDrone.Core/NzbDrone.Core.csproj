@@ -232,7 +232,8 @@
     <Compile Include="Model\Twitter\TwitterAuthorizationModel.cs" />
     <Compile Include="Model\UpdatePackage.cs" />
     <Compile Include="Model\Xbmc\ActionType.cs" />
-    <Compile Include="Model\Xbmc\ActivePlayersResult.cs" />
+    <Compile Include="Model\Xbmc\ActivePlayersDharmaResult.cs" />
+    <Compile Include="Model\Xbmc\ActivePlayersEdenResult.cs" />
     <Compile Include="Model\Xbmc\ErrorResult.cs" />
     <Compile Include="Model\Xbmc\IconType.cs" />
     <Compile Include="Providers\Converting\AtomicParsleyProvider.cs" />

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace NzbDrone.Core.Model.Xbmc
 {
-    public class ActivePlayersResult
+    public class ActivePlayersDharmaResult
     {
         public string Id { get; set; }
         public string JsonRpc { get; set; }
