@@ -186,7 +186,7 @@ namespace NzbDrone.Core.Providers.Indexer
                 }
                 catch (Exception feedEx)
                 {
-                    _logger.ErrorException("An error occurred while processing feed", feedEx);
+                    _logger.ErrorException("An error occurred while processing feed: " + Name, feedEx);
                 }
             }
 
