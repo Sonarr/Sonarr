@@ -390,5 +390,12 @@ namespace NzbDrone.Core.Test
             ExceptionVerification.IgnoreWarns();
             ExceptionVerification.ExpectedErrors(1);
         }
+
+        [TestCase(@"C:\BuildAgent\work\b5a20f8391187721\NzbDrone.Core.Test\bin\Release\WEEDS.avi")]
+        public void parseTitle_should_log_warning_when_unable_to_parse(string title)
+        {
+            Parser.ParseTitle(title);
+            ExceptionVerification.ExpectedWarns(1);
+        }
     }
 }
