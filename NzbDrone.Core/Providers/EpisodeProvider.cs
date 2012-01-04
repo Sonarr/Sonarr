@@ -321,15 +321,8 @@ namespace NzbDrone.Core.Providers
                 }
             }
 
-            try
-            {
-                _database.InsertMany(newList);
-                _database.UpdateMany(updateList);
-            }
-            catch(Exception ex)
-            {
-                Logger.WarnException("Failed to update episode info for series: " + series.Title, ex);
-            }           
+            _database.InsertMany(newList);
+            _database.UpdateMany(updateList);     
 
             Logger.Info("Finished episode refresh for series: {0}. Successful: {1} - Failed: {2} ",
                          tvDbSeriesInfo.SeriesName, successCount, failCount);

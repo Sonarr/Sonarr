@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using NLog;
 using Ninject;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model.Notification;
@@ -13,6 +15,7 @@ namespace NzbDrone.Core.Jobs
         private readonly SeriesProvider _seriesProvider;
         private readonly EpisodeProvider _episodeProvider;
         private readonly ReferenceDataProvider _referenceDataProvider;
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         [Inject]
         public UpdateInfoJob(SeriesProvider seriesProvider, EpisodeProvider episodeProvider,
@@ -55,10 +58,19 @@ namespace NzbDrone.Core.Jobs
 
             foreach (var series in seriesToUpdate)
             {
-                notification.CurrentMessage = "Updating " + series.Title;
-                _seriesProvider.UpdateSeriesInfo(series.SeriesId);
-                _episodeProvider.RefreshEpisodeInfo(series);
-                notification.CurrentMessage = "Update completed for " + series.Title;
+                try
+                {
+                    notification.CurrentMessage = "Updating " + series.Title;
+                    _seriesProvider.UpdateSeriesInfo(series.SeriesId);
+                    _episodeProvider.RefreshEpisodeInfo(series);
+                    notification.CurrentMessage = "Update completed for " + series.Title;
+                }
+
+                catch(Exception ex)
+                {
+                    Logger.ErrorException("Failed to update episode info for series: " + series.Title, ex);
+                }
+                
             }
         }
     }
