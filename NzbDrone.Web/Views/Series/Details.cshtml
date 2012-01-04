@@ -115,7 +115,7 @@
                 .ClientTemplate("<img src='../../Content/Images/ignoredNeutral.png' class='ignoreEpisode ignoreEpisode_" + season + " ignored' id='<#= EpisodeId #>' title='Click to toggle episode ignore status' />" +
                                 "<img src='../../Content/Images/<#= Status #>.png' alt='<#= Status #>' title='<#= Status #>' class='statusImage status-<#= Status #>' />" +
                                 Ajax.ImageActionLink("../../Content/Images/Search.png", new { Alt = "Search", Title = "Search for episode", @class = "searchImage" }, "Search", "Episode", new { EpisodeId = "<#= EpisodeId #>" }, null, null) +
-                                Ajax.ImageActionLink("../../Content/Images/Rename.png", new { Alt = "Rename", Title = "Rename episode", @class = "renameImage" }, "Rename", "Episode", new { EpisodeIdFile = "<#= EpisodeFileId #>" }, null, null))
+                                Ajax.ImageActionLink("../../Content/Images/Rename.png", new { Alt = "Rename", Title = "Rename episode", @class = "renameImage" }, "Rename", "Episode", new { EpisodeFileId = "<#= EpisodeFileId #>" }, null, null))
                 .Width(80);
         })
         .DetailView(detailView => detailView.ClientTemplate("<div><#= Overview #> </br><#= Path #> </div>"))
