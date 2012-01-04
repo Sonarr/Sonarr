@@ -1,5 +1,5 @@
 ﻿@using NzbDrone.Core.Model
-@{ViewBag.Title = "Misnamed";};
+@{ViewBag.Title = "Misnamed";}
 @section ActionMenu{
     <ul class="sub-menu">
         <li>@Ajax.ActionLink("Trim History", "Trim", "History", new AjaxOptions { OnSuccess = "reloadHistoryGrid" })</li>
