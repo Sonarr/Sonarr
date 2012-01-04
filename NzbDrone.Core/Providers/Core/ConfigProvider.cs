@@ -230,6 +230,13 @@ namespace NzbDrone.Core.Providers.Core
             set { SetValue("XbmcCleanLibrary", value); }
         }
 
+        public virtual Boolean XbmcUpdateWhenPlaying
+        {
+            get { return GetValueBoolean("XbmcUpdateWhenPlaying"); }
+
+            set { SetValue("XbmcUpdateWhenPlaying", value); }
+        }
+
         public virtual string XbmcHosts
         {
             get { return GetValue("XbmcHosts", "localhost:8080"); }

@@ -61,14 +61,18 @@ namespace NzbDrone.Core.Providers
                 //If Dharma
                 if (version == 2)
                 {
-                    Logger.Trace("Determining if there are any active players on XBMC host: {0}", host);
-                    var activePlayers = GetActivePlayersDharma(host, username, password);
-
-                    //If video is currently playing, then skip update
-                    if (activePlayers["video"])
+                    //Check for active player only when we should skip updates when playing
+                    if (!_configProvider.XbmcUpdateWhenPlaying)
                     {
-                        Logger.Debug("Video is currently playing, skipping library update");
-                        continue;
+                        Logger.Trace("Determining if there are any active players on XBMC host: {0}", host);
+                        var activePlayers = GetActivePlayersDharma(host, username, password);
+
+                        //If video is currently playing, then skip update
+                        if(activePlayers["video"])
+                        {
+                            Logger.Debug("Video is currently playing, skipping library update");
+                            continue;
+                        }
                     }
 
                     UpdateWithHttp(series, host, username, password);
@@ -77,14 +81,18 @@ namespace NzbDrone.Core.Providers
                 //If Eden or newer (attempting to make it future compatible)
                 else if (version >= 3)
                 {
-                    Logger.Trace("Determining if there are any active players on XBMC host: {0}", host);
-                    var activePlayers = GetActivePlayersEden(host, username, password);
-
-                    //If video is currently playing, then skip update
-                    if (activePlayers.Any(a => a.Type.Equals("video")))
+                    //Check for active player only when we should skip updates when playing
+                    if (!_configProvider.XbmcUpdateWhenPlaying)
                     {
-                        Logger.Debug("Video is currently playing, skipping library update");
-                        continue;
+                        Logger.Trace("Determining if there are any active players on XBMC host: {0}", host);
+                        var activePlayers = GetActivePlayersEden(host, username, password);
+
+                        //If video is currently playing, then skip update
+                        if(activePlayers.Any(a => a.Type.Equals("video")))
+                        {
+                            Logger.Debug("Video is currently playing, skipping library update");
+                            continue;
+                        }
                     }
 
                     UpdateWithJson(series, password, host, username);
