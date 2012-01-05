@@ -31,7 +31,6 @@ function createSingleEpisodeExample() {
         result += 'Episode Name';
     }
 
-    var appQual = $('#AppendQuality');
     if ($('#AppendQuality').attr('checked'))
         result += ' [TV]';
 
