@@ -6,8 +6,7 @@ namespace NzbDrone.Core.Model.Xbmc
 {
     public class TvShowResult
     {
-        public string Id { get; set; }
-        public string JsonRpc { get; set; }
-        public Dictionary<string, List<TvShow>> Result { get; set; }
+        public Dictionary<string, int> Limits { get; set; }
+        public List<TvShow> TvShows;
     }
 }

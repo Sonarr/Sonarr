@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Web.Script.Serialization;
 using System.Xml.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Ninject;
 using NLog;
 using NzbDrone.Core.Model.Xbmc;
@@ -56,8 +58,6 @@ namespace NzbDrone.Core.Providers
                 Logger.Trace("Determining version of XBMC Host: {0}", host);
                 var version = GetJsonVersion(host, username, password);
 
-                Logger.Trace("No video playing, proceeding with library update");
-
                 //If Dharma
                 if (version == 2)
                 {
@@ -97,6 +97,10 @@ namespace NzbDrone.Core.Providers
 
                     UpdateWithJson(series, password, host, username);
                 }
+
+                //Log Version zero if check failed
+                else
+                    Logger.Trace("Unknown version: [{0}], skipping.", version);
             }
         }
 
@@ -232,16 +236,18 @@ namespace NzbDrone.Core.Providers
 
             try
             {
-                var command = new Command { id = 10, method = "JSONRPC.Version" };
-                var serializer = new JavaScriptSerializer();
-                var serialized = serializer.Serialize(command);
-                var response = _httpProvider.PostCommand(host, username, password, serialized);
+                var postJson = new JObject();
+                postJson.Add(new JProperty("jsonrpc", "2.0"));
+                postJson.Add(new JProperty("method", "JSONRPC.Version"));
+                postJson.Add(new JProperty("id", 10));
+
+                var response = _httpProvider.PostCommand(host, username, password, postJson.ToString());
 
                 if (CheckForJsonError(response))
                     return version;
 
                 Logger.Trace("Getting version from response");
-                var result = serializer.Deserialize<VersionResult>(response);
+                var result = JsonConvert.DeserializeObject<VersionResult>(response);
                 result.Result.TryGetValue("version", out version);
             }
 
@@ -257,15 +263,17 @@ namespace NzbDrone.Core.Providers
         {
             try
             {
-                var command = new Command { id = 10, method = "Player.GetActivePlayers" };
-                var serializer = new JavaScriptSerializer();
-                var serialized = serializer.Serialize(command);
-                var response = _httpProvider.PostCommand(host, username, password, serialized);
+                var postJson = new JObject();
+                postJson.Add(new JProperty("jsonrpc", "2.0"));
+                postJson.Add(new JProperty("method", "Player.GetActivePlayers"));
+                postJson.Add(new JProperty("id", 10));
+
+                var response = _httpProvider.PostCommand(host, username, password, postJson.ToString());
 
                 if (CheckForJsonError(response))
                     return null;
 
-                var result = serializer.Deserialize<ActivePlayersDharmaResult>(response);
+                var result = JsonConvert.DeserializeObject<ActivePlayersDharmaResult>(response);
 
                 return result.Result;
             }
@@ -282,15 +290,17 @@ namespace NzbDrone.Core.Providers
         {
             try
             {
-                var command = new Command { id = 10, method = "Player.GetActivePlayers" };
-                var serializer = new JavaScriptSerializer();
-                var serialized = serializer.Serialize(command);
-                var response = _httpProvider.PostCommand(host, username, password, serialized);
+                var postJson = new JObject();
+                postJson.Add(new JProperty("jsonrpc", "2.0"));
+                postJson.Add(new JProperty("method", "Player.GetActivePlayers"));
+                postJson.Add(new JProperty("id", 10));
+
+                var response = _httpProvider.PostCommand(host, username, password, postJson.ToString());
 
                 if (CheckForJsonError(response))
                     return null;
 
-                var result = serializer.Deserialize<ActivePlayersEdenResult>(response);
+                var result = JsonConvert.DeserializeObject<ActivePlayersEdenResult>(response);
 
                 return result.Result;
             }
@@ -307,18 +317,19 @@ namespace NzbDrone.Core.Providers
         {
             try
             {
-                var fields = new string[] { "file", "imdbnumber" };
-                var xbmcParams = new Params { fields = fields };
-                var command = new Command { id = 10, method = "VideoLibrary.GetTvShows", @params = xbmcParams };
-                var serializer = new JavaScriptSerializer();
-                var serialized = serializer.Serialize(command);
-                var response = _httpProvider.PostCommand(host, username, password, serialized);
+                var postJson = new JObject();
+                postJson.Add(new JProperty("jsonrpc", "2.0"));
+                postJson.Add(new JProperty("method", "VideoLibrary.GetTvShows"));
+                postJson.Add(new JProperty("params", new JObject { new JProperty("properties", new string[] { "file", "imdbnumber" }) }));
+                postJson.Add(new JProperty("id", 10));
+
+                var response = _httpProvider.PostCommand(host, username, password, postJson.ToString());
 
                 if (CheckForJsonError(response))
                     return null;
 
-                var result = serializer.Deserialize<TvShowResult>(response);
-                var shows = result.Result["tvshows"];
+                var result = JsonConvert.DeserializeObject<TvShowResponse>(response);
+                var shows = result.Result.TvShows;
 
                 return shows;
             }

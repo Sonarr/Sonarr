@@ -234,6 +234,7 @@
     <Compile Include="Model\Xbmc\ActionType.cs" />
     <Compile Include="Model\Xbmc\ActivePlayersDharmaResult.cs" />
     <Compile Include="Model\Xbmc\ActivePlayersEdenResult.cs" />
+    <Compile Include="Model\Xbmc\TvShowResult.cs" />
     <Compile Include="Model\Xbmc\ErrorResult.cs" />
     <Compile Include="Model\Xbmc\IconType.cs" />
     <Compile Include="Providers\Converting\AtomicParsleyProvider.cs" />
@@ -267,9 +268,7 @@
     <Compile Include="Providers\TwitterProvider.cs" />
     <Compile Include="Providers\UpdateProvider.cs" />
     <Compile Include="Providers\Xbmc\ResourceManager.cs" />
-    <Compile Include="Model\Xbmc\TvShowResult.cs" />
-    <Compile Include="Model\Xbmc\Params.cs" />
-    <Compile Include="Model\Xbmc\Command.cs" />
+    <Compile Include="Model\Xbmc\TvShowResponse.cs" />
     <Compile Include="Model\Xbmc\TvShow.cs" />
     <Compile Include="Model\Xbmc\VersionResult.cs" />
     <Compile Include="Providers\DiskScanProvider.cs" />
