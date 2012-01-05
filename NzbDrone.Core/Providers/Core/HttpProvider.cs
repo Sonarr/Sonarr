@@ -89,7 +89,7 @@ namespace NzbDrone.Core.Providers.Core
             request.Method = "POST";
             request.Credentials = new NetworkCredential(username, password);
             request.ContentType = "application/json";
-            request.Timeout = 2000;
+            request.Timeout = 10000;
             request.KeepAlive = false;
 
             //Used to hold the JSON response
