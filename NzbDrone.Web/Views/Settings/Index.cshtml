@@ -1,4 +1,5 @@
-﻿@{ViewBag.Title = "Settings";}
+﻿@using NzbDrone.Web.Helpers
+@{ViewBag.Title = "Settings";}
 
 <div class="jquery-tabs">
     <ul>
@@ -10,3 +11,7 @@
         <li>@Html.ActionLink("System", "System", "Settings")</li>
     </ul>
 </div>
+
+@section Scripts{
+    @Html.IncludeScript("NzbDrone/settings.js")
+}
