@@ -41,5 +41,12 @@ namespace NzbDrone.Core.Providers.ExternalNotification
         /// <param name = "message">The message to send to the receiver</param>
         /// <param name = "series">The Series for the new download</param>
         public abstract void OnRename(string message, Series series);
+
+        /// <summary>
+        ///   Performs the after rename action, this will be handled after all renaming for episode/season/series
+        /// </summary>
+        /// <param name = "message">The message to send to the receiver</param>
+        /// <param name = "series">The Series for the new download</param>
+        public abstract void AfterRename(string message, Series series);
     }
 }

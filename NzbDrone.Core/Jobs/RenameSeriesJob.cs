@@ -11,15 +11,19 @@ namespace NzbDrone.Core.Jobs
     {
         private readonly MediaFileProvider _mediaFileProvider;
         private readonly DiskScanProvider _diskScanProvider;
-
+        private readonly ExternalNotificationProvider _externalNotificationProvider;
+        private readonly SeriesProvider _seriesProvider;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         [Inject]
-        public RenameSeriesJob(MediaFileProvider mediaFileProvider, DiskScanProvider diskScanProvider)
+        public RenameSeriesJob(MediaFileProvider mediaFileProvider, DiskScanProvider diskScanProvider,
+                                ExternalNotificationProvider externalNotificationProvider, SeriesProvider seriesProvider)
         {
             _mediaFileProvider = mediaFileProvider;
             _diskScanProvider = diskScanProvider;
+            _externalNotificationProvider = externalNotificationProvider;
+            _seriesProvider = seriesProvider;
         }
 
         public string Name
@@ -50,6 +54,11 @@ namespace NzbDrone.Core.Jobs
             {
                 _diskScanProvider.MoveEpisodeFile(episodeFile);
             }
+
+            //Start AfterRename
+            var series = _seriesProvider.GetSeries(targetId);
+            var message = String.Format("Renamed: Series {0}", series.Title);
+            _externalNotificationProvider.AfterRename(message, series);
 
             notification.CurrentMessage = String.Format("Series rename completed for Series: {0}", targetId);
         }

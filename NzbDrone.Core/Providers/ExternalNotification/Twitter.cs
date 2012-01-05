@@ -39,6 +39,12 @@ namespace NzbDrone.Core.Providers.ExternalNotification
 
         public override void OnRename(string message, Series series)
         {
+
+        }
+
+        public override void AfterRename(string message, Series series)
+        {
+
         }
     }
 }
