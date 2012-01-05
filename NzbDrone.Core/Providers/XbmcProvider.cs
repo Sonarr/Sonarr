@@ -95,7 +95,7 @@ namespace NzbDrone.Core.Providers
                         }
                     }
 
-                    UpdateWithJson(series, password, host, username);
+                    UpdateWithJson(series, host, username, password);
                 }
 
                 //Log Version zero if check failed
