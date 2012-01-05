@@ -113,7 +113,7 @@ namespace NzbDrone.Core.Providers
         {
             foreach (var notifier in _notifiers.Where(i => GetSettings(i.GetType()).Enable))
             {
-                notifier.OnRename(message, series);
+                notifier.AfterRename(message, series);
             }
         }
     }
