@@ -110,14 +110,22 @@ namespace NzbDrone.Core.Providers
             {
                 //Use Json!
                 var xbmcShows = GetTvShowsJson(host, username, password);
-                var path = xbmcShows.Where(s => s.ImdbNumber == series.SeriesId || s.Label == series.Title).FirstOrDefault();
+
+                TvShow path = null;
+
+                //Log if response is null, otherwise try to find XBMC's path for series
+                if (xbmcShows == null)
+                    Logger.Trace("Failed to get TV Shows from XBMC");
+
+                else
+                    path = xbmcShows.FirstOrDefault(s => s.ImdbNumber == series.SeriesId || s.Label == series.Title);
 
                 var hostOnly = GetHostWithoutPort(host);
 
                 if (path != null)
                 {
-                    Logger.Trace("Updating series [{0}] on XBMC host: {1}", series.Title, host);
-                    var command = String.Format("ExecBuiltIn(UpdateLibrary(video,{0}))", path.File);
+                    Logger.Trace("Updating series [{0}] (Path: {1}) on XBMC host: {2}", series.Title, path.File, host);
+                    var command = String.Format("ExecBuiltIn(UpdateLibrary(video, {0}))", path.File);
                     _eventClientProvider.SendAction(hostOnly, ActionType.ExecBuiltin, command);
                 }
 
