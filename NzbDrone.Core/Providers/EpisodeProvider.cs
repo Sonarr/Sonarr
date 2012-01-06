@@ -123,6 +123,9 @@ namespace NzbDrone.Core.Providers
 
         public virtual IList<Episode> GetEpisodesByParseResult(EpisodeParseResult parseResult, Boolean autoAddNew = false)
         {
+            //Disabling auto add, need to make it a lot more conservative.
+            autoAddNew = false;
+
             var result = new List<Episode>();
 
             if (parseResult.AirDate.HasValue)

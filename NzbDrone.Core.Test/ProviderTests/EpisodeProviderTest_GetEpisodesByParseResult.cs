@@ -21,367 +21,231 @@ namespace NzbDrone.Core.Test.ProviderTests
     // ReSharper disable InconsistentNaming
     public class EpisodeProviderTest_GetEpisodesByParseResult : CoreTest
     {
-        [Test]
-        public void Single_GetSeason_Episode_Exists()
+        private EpisodeProvider episodeProvider;
+
+        private Series fakeSeries;
+        private Series fakeDailySeries;
+
+        private Episode fakeEpisode;
+        private Episode fakeDailyEpisode;
+        private Episode fakeEpisode2;
+
+        [SetUp]
+        public void Setup()
         {
+            fakeSeries = Builder<Series>.CreateNew().Build();
+
+            fakeDailySeries = Builder<Series>.CreateNew()
+                .With(c => c.IsDaily = true)
+                .Build();
+
+            fakeEpisode = Builder<Episode>.CreateNew()
+                     .With(e => e.SeriesId = fakeSeries.SeriesId)
+                     .With(e => e.Title = "Episode 1")
+                     .Build();   
+
+            fakeEpisode2 = Builder<Episode>.CreateNew()
+                     .With(e => e.SeriesId = fakeSeries.SeriesId)
+                     .With(e => e.SeasonNumber = fakeEpisode.SeasonNumber)
+                     .With(e => e.EpisodeNumber = fakeEpisode.EpisodeNumber + 1)
+                     .With(e => e.Title = "Episode 2")
+                     .Build();
+
+            fakeDailyEpisode = Builder<Episode>.CreateNew()
+                     .With(e => e.SeriesId = fakeSeries.SeriesId)
+                     .With(e => e.AirDate = DateTime.Now.Date)
+                     .With(e => e.Title = "Daily Episode 1")
+                     .Build();
+
             WithRealDb();
 
-            var fakeEpisode = Builder<Episode>.CreateNew()
-                    .With(e => e.SeriesId = 1)
-                    .With(e => e.SeasonNumber = 2)
-                    .With(e => e.EpisodeNumber = 10)
-                    .Build();
+            episodeProvider = Mocker.Resolve<EpisodeProvider>();
+        }
 
-            var fakeSeries = Builder<Series>.CreateNew().Build();
-
+        [Test]
+        public void existing_single_episode_should_return_single_existing_episode()
+        {
             Db.Insert(fakeEpisode);
             Db.Insert(fakeSeries);
 
             var parseResult = new EpisodeParseResult
                                   {
                                       Series = fakeSeries,
-                                      SeasonNumber = 2,
-                                      EpisodeNumbers = new List<int> { 10 }
+                                      SeasonNumber = fakeEpisode.SeasonNumber,
+                                      EpisodeNumbers = new List<int> { fakeEpisode.EpisodeNumber }
                                   };
 
-            var ep = Mocker.Resolve<EpisodeProvider>().GetEpisodesByParseResult(parseResult);
+            var ep = episodeProvider.GetEpisodesByParseResult(parseResult, true);
 
             ep.Should().HaveCount(1);
             parseResult.EpisodeTitle.Should().Be(fakeEpisode.Title);
-            ep.First().ShouldHave().AllPropertiesBut(e => e.Series);
-        }
-
-        [Test]
-        public void Single_GetSeason_Episode_Doesnt_exists_should_not_add()
-        {
-            WithRealDb();
-
-            var fakeSeries = Builder<Series>.CreateNew().Build();
-
-
-            var parseResult = new EpisodeParseResult
-                                  {
-                                      Series = fakeSeries,
-                                      SeasonNumber = 2,
-                                      EpisodeNumbers = new List<int> { 10 }
-                                  };
-
-            var ep = Mocker.Resolve<EpisodeProvider>().GetEpisodesByParseResult(parseResult);
-
-            ep.Should().BeEmpty();
-            Db.Fetch<Episode>().Should().HaveCount(0);
-        }
-
-        [Test]
-        public void Single_GetSeason_Episode_Doesnt_exists_should_add()
-        {
-            WithRealDb();
-
-            var fakeSeries = Builder<Series>.CreateNew().Build();
-
-
-            var parseResult = new EpisodeParseResult
-                                  {
-                                      Series = fakeSeries,
-                                      SeasonNumber = 2,
-                                      EpisodeNumbers = new List<int> { 10 }
-                                  };
-
-            var ep = Mocker.Resolve<EpisodeProvider>().GetEpisodesByParseResult(parseResult, true);
-
-            ep.Should().HaveCount(1);
+            VerifyEpisode(ep[0], fakeEpisode);
             Db.Fetch<Episode>().Should().HaveCount(1);
         }
 
         [Test]
-        public void Multi_GetSeason_Episode_Exists()
+        public void single_none_existing_episode_should_return_nothing_and_add_nothing()
         {
-            WithRealDb();
+            var parseResult = new EpisodeParseResult
+                                  {
+                                      Series = fakeSeries,
+                                      SeasonNumber = fakeEpisode.SeasonNumber,
+                                      EpisodeNumbers = new List<int> { 10 }
+                                  };
 
-            var fakeEpisode = Builder<Episode>.CreateNew()
-                    .With(e => e.SeriesId = 1)
-                    .With(e => e.SeasonNumber = 2)
-                    .With(e => e.EpisodeNumber = 10)
-                    .Build();
+            var episode = episodeProvider.GetEpisodesByParseResult(parseResult, true);
 
-            var fakeEpisode2 = Builder<Episode>.CreateNew()
-                    .With(e => e.SeriesId = 1)
-                    .With(e => e.SeasonNumber = 2)
-                    .With(e => e.EpisodeNumber = 11)
-                    .Build();
+            episode.Should().BeEmpty();
+            Db.Fetch<Episode>().Should().HaveCount(0);
+        }
 
-            var fakeSeries = Builder<Series>.CreateNew().Build();
+        [Test]
+        public void single_none_existing_series_should_return_nothing_and_add_nothing()
+        {
+            var parseResult = new EpisodeParseResult
+            {
+                Series = fakeSeries,
+                SeasonNumber = 10,
+                EpisodeNumbers = new List<int> { 10 }
+            };
 
+            var episode = episodeProvider.GetEpisodesByParseResult(parseResult, true);
+
+            episode.Should().BeEmpty();
+            Db.Fetch<Episode>().Should().HaveCount(0);
+        }
+
+        [Test]
+        public void existing_multi_episode_should_return_all_episodes()
+        {
+            Db.Insert(fakeSeries);
             Db.Insert(fakeEpisode);
             Db.Insert(fakeEpisode2);
-            Db.Insert(fakeSeries);
+
 
             var parseResult = new EpisodeParseResult
                                   {
                                       Series = fakeSeries,
-                                      SeasonNumber = 2,
-                                      EpisodeNumbers = new List<int> { 10, 11 }
+                                      SeasonNumber = fakeEpisode.SeasonNumber,
+                                      EpisodeNumbers = new List<int> { fakeEpisode.EpisodeNumber, fakeEpisode2.EpisodeNumber }
                                   };
 
-            var ep = Mocker.Resolve<EpisodeProvider>().GetEpisodesByParseResult(parseResult);
+            var ep = episodeProvider.GetEpisodesByParseResult(parseResult, true);
 
             ep.Should().HaveCount(2);
             Db.Fetch<Episode>().Should().HaveCount(2);
-            ep.First().ShouldHave().AllPropertiesBut(e => e.Series);
+
+            VerifyEpisode(ep[0], fakeEpisode);
+            VerifyEpisode(ep[1], fakeEpisode2);
         }
 
+
+
+
         [Test]
-        public void Multi_GetSeason_Episode_Doesnt_exists_should_not_add()
+        public void none_existing_multi_episode_should_not_return_or_add_anything()
         {
-            WithRealDb();
-
-            var fakeSeries = Builder<Series>.CreateNew().Build();
-
-
             var parseResult = new EpisodeParseResult
-                                  {
-                                      Series = fakeSeries,
-                                      SeasonNumber = 2,
-                                      EpisodeNumbers = new List<int> { 10, 11 }
-                                  };
+            {
+                Series = fakeSeries,
+                SeasonNumber = fakeEpisode.SeasonNumber,
+                EpisodeNumbers = new List<int> { fakeEpisode.EpisodeNumber, fakeEpisode2.EpisodeNumber }
+            };
 
-            var ep = Mocker.Resolve<EpisodeProvider>().GetEpisodesByParseResult(parseResult);
+            var ep = episodeProvider.GetEpisodesByParseResult(parseResult,true);
 
             ep.Should().BeEmpty();
             Db.Fetch<Episode>().Should().HaveCount(0);
         }
 
-        [Test]
-        public void Multi_GetSeason_Episode_Doesnt_exists_should_add()
-        {
-            WithRealDb();
-
-            var fakeSeries = Builder<Series>.CreateNew().Build();
-
-
-            var parseResult = new EpisodeParseResult
-                                  {
-                                      Series = fakeSeries,
-                                      SeasonNumber = 2,
-                                      EpisodeNumbers = new List<int> { 10, 11 }
-                                  };
-
-            var ep = Mocker.Resolve<EpisodeProvider>().GetEpisodesByParseResult(parseResult, true);
-
-            ep.Should().HaveCount(2);
-            Db.Fetch<Episode>().Should().HaveCount(2);
-        }
 
         [Test]
-        public void Get_Episode_Zero_Doesnt_Exist_Should_add_ignored()
-        {
-            WithRealDb();
-
-            var fakeSeries = Builder<Series>.CreateNew().Build();
-
-
-            var parseResult = new EpisodeParseResult
-                                  {
-                                      Series = fakeSeries,
-                                      SeasonNumber = 2,
-                                      EpisodeNumbers = new List<int> { 0 }
-                                  };
-
-            var ep = Mocker.Resolve<EpisodeProvider>().GetEpisodesByParseResult(parseResult, true);
-
-            ep.Should().HaveCount(1);
-            Db.Fetch<Episode>().Should().HaveCount(1);
-            ep.First().Ignored.Should().BeTrue();
-        }
-
-        [Test]
-        public void Get_Multi_Episode_Zero_Doesnt_Exist_Should_not_add_ignored()
-        {
-            WithRealDb();
-
-            var fakeSeries = Builder<Series>.CreateNew().Build();
-
-
-            var parseResult = new EpisodeParseResult
-                                  {
-                                      Series = fakeSeries,
-                                      SeasonNumber = 2,
-                                      EpisodeNumbers = new List<int> { 0, 1 }
-                                  };
-
-            var ep = Mocker.Resolve<EpisodeProvider>().GetEpisodesByParseResult(parseResult, true);
-
-            ep.Should().HaveCount(2);
-            Db.Fetch<Episode>().Should().HaveCount(2);
-            ep.First().Ignored.Should().BeFalse();
-        }
-
-        [Test]
-        [Description("GetEpisodeParseResult should return empty list if episode list is null")]
         public void GetEpisodeParseResult_should_return_empty_list_if_episode_list_is_null()
         {
             //Act
-            var episodes = Mocker.Resolve<EpisodeProvider>().GetEpisodesByParseResult(new EpisodeParseResult());
+            var episodes = episodeProvider.GetEpisodesByParseResult(new EpisodeParseResult());
             //Assert
             episodes.Should().NotBeNull();
             episodes.Should().BeEmpty();
         }
 
         [Test]
-        [Description("GetEpisodeParseResult should return empty list if episode list is empty")]
         public void GetEpisodeParseResult_should_return_empty_list_if_episode_list_is_empty()
         {
             //Act
-            var episodes =
-                    Mocker.Resolve<EpisodeProvider>().GetEpisodesByParseResult(new EpisodeParseResult { EpisodeNumbers = new List<int>() });
+            var episodes = episodeProvider.GetEpisodesByParseResult(new EpisodeParseResult { EpisodeNumbers = new List<int>() });
             //Assert
             episodes.Should().NotBeNull();
             episodes.Should().BeEmpty();
         }
 
         [Test]
-        public void GetEpisodeParseResult_should_return_single_episode_when_air_date_is_provided()
+        public void should_return_single_episode_when_air_date_is_provided()
         {
-            //Setup
-            var fakeEpisode = Builder<Episode>.CreateListOfSize(1)
-                    .All()
-                    .With(e => e.AirDate = DateTime.Today)
-                    .Build()
-                    .ToList();
 
-            var fakeSeries = Builder<Series>.CreateNew()
-                    .With(s => s.SeriesId = 1)
-                    .With(s => s.IsDaily = true)
-                    .Build();
-
-            Mocker.GetMock<IDatabase>().Setup(
-                                              s =>
-                                              s.Fetch<Episode, Series, EpisodeFile>(It.IsAny<String>(),
-                                                                                    It.IsAny<Object[]>()))
-                    .Returns(fakeEpisode);
+            Db.Insert(fakeSeries);
+            Db.Insert(fakeDailyEpisode);
 
             //Act
-            var episodes = Mocker.Resolve<EpisodeProvider>()
-                    .GetEpisodesByParseResult(new EpisodeParseResult { AirDate = DateTime.Today, Series = fakeSeries },
-                                              true);
+            var episodes = episodeProvider.GetEpisodesByParseResult(new EpisodeParseResult { AirDate = DateTime.Today, Series = fakeDailySeries },true);
 
             //Assert
             episodes.Should().HaveCount(1);
-            episodes.First().AirDate.Should().Be(DateTime.Today);
+            VerifyEpisode(episodes[0], fakeDailyEpisode);
 
-            Mocker.GetMock<IDatabase>().Verify(v => v.Insert(It.IsAny<Episode>()), Times.Never());
+            Db.Fetch<Episode>().Should().HaveCount(1);
         }
 
         [Test]
-        public void GetEpisodeParseResult_get_daily_should_add_new_episode()
+        public void should_not_add_episode_when_episode_doesnt_exist()
         {
-            //Setup
-            WithRealDb();
-
-            var fakeSeries = Builder<Series>.CreateNew()
-                    .With(s => s.SeriesId = 1)
-                    .With(s => s.IsDaily = true)
-                    .Build();
-
-            //Act
-            var episodes = Mocker.Resolve<EpisodeProvider>()
-                    .GetEpisodesByParseResult(new EpisodeParseResult { AirDate = DateTime.Today, Series = fakeSeries },
-                                              true);
+            var episodes = episodeProvider.GetEpisodesByParseResult(new EpisodeParseResult { AirDate = DateTime.Today, Series = fakeDailySeries }, true);
 
             //Assert
-            episodes.Should().HaveCount(1);
-            episodes.First().AirDate.Should().Be(DateTime.Today);
-
-            var episodesInDb = Db.Fetch<Episode>();
-
-            episodesInDb.Should().HaveCount(1);
+            episodes.Should().HaveCount(0);
+            Db.Fetch<Episode>().Should().HaveCount(0);
         }
 
-        [Test]
-        public void GetEpisodeParseResult_get_daily_should_not_add_new_episode_when_auto_add_is_false()
-        {
-            //Setup
-            WithRealDb();
-
-            var fakeSeries = Builder<Series>.CreateNew()
-                    .With(s => s.SeriesId = 1)
-                    .With(s => s.IsDaily = true)
-                    .Build();
-
-            //Act
-            var episodes = Mocker.Resolve<EpisodeProvider>()
-                    .GetEpisodesByParseResult(new EpisodeParseResult { AirDate = DateTime.Today, Series = fakeSeries }, false);
-
-            //Assert
-            episodes.Should().BeEmpty();
-            Db.Fetch<Episode>().Should().BeEmpty();
-        }
 
         [Test]
         public void GetEpisodeParseResult_should_return_multiple_titles_for_multiple_episodes()
         {
-            WithRealDb();
-
-            var fakeEpisode = Builder<Episode>.CreateNew()
-                    .With(e => e.SeriesId = 1)
-                    .With(e => e.SeasonNumber = 2)
-                    .With(e => e.EpisodeNumber = 10)
-                    .With(e => e.Title = "Title1")
-                    .Build();
-
-            var fakeEpisode2 = Builder<Episode>.CreateNew()
-                    .With(e => e.SeriesId = 1)
-                    .With(e => e.SeasonNumber = 2)
-                    .With(e => e.EpisodeNumber = 11)
-                    .With(e => e.Title = "Title2")
-                    .Build();
-
-            var fakeSeries = Builder<Series>.CreateNew().Build();
-
+            Db.Insert(fakeSeries);
             Db.Insert(fakeEpisode);
             Db.Insert(fakeEpisode2);
-            Db.Insert(fakeSeries);
-
+  
             var parseResult = new EpisodeParseResult
             {
                 Series = fakeSeries,
-                SeasonNumber = 2,
+                SeasonNumber = fakeEpisode.SeasonNumber,
                 EpisodeNumbers = new List<int> { fakeEpisode.EpisodeNumber, fakeEpisode2.EpisodeNumber }
             };
 
-            var ep = Mocker.Resolve<EpisodeProvider>().GetEpisodesByParseResult(parseResult);
+            var ep = episodeProvider.GetEpisodesByParseResult(parseResult);
 
             ep.Should().HaveCount(2);
             Db.Fetch<Episode>().Should().HaveCount(2);
-            ep.First().ShouldHave().AllPropertiesBut(e => e.Series);
+
+            VerifyEpisode(ep[0], fakeEpisode);
+            VerifyEpisode(ep[1], fakeEpisode2);
+
             parseResult.EpisodeTitle.Should().Be(fakeEpisode.Title + " + " + fakeEpisode2.Title);
         }
 
         [Test]
         public void GetEpisodeParseResult_should_return_single_title_for_single_episode()
         {
-            WithRealDb();
-
-            var fakeEpisode = Builder<Episode>.CreateNew()
-                    .With(e => e.SeriesId = 1)
-                    .With(e => e.SeasonNumber = 2)
-                    .With(e => e.EpisodeNumber = 10)
-                    .With(e => e.Title = "Title1")
-                    .Build();
-
-            var fakeSeries = Builder<Series>.CreateNew().Build();
-
             Db.Insert(fakeEpisode);
             Db.Insert(fakeSeries);
 
             var parseResult = new EpisodeParseResult
             {
                 Series = fakeSeries,
-                SeasonNumber = 2,
+                SeasonNumber = fakeEpisode.SeasonNumber,
                 EpisodeNumbers = new List<int> { fakeEpisode.EpisodeNumber }
             };
 
-            var ep = Mocker.Resolve<EpisodeProvider>().GetEpisodesByParseResult(parseResult);
+            var ep = episodeProvider.GetEpisodesByParseResult(parseResult);
 
             ep.Should().HaveCount(1);
             Db.Fetch<Episode>().Should().HaveCount(1);
@@ -390,14 +254,8 @@ namespace NzbDrone.Core.Test.ProviderTests
         }
 
         [Test]
-        public void GetEpisodeParseResult_should_log_warning_when_series_is_not_dailt_but_parsed_daily()
+        public void GetEpisodeParseResult_should_return_nothing_when_series_is_not_daily_but_parsed_daily()
         {
-            WithRealDb();
-
-            var fakeSeries = Builder<Series>.CreateNew()
-                .With(s => s.IsDaily = false)
-                .Build();
-
             Db.Insert(fakeSeries);
 
             var parseResult = new EpisodeParseResult
@@ -406,10 +264,15 @@ namespace NzbDrone.Core.Test.ProviderTests
                 AirDate = DateTime.Today
             };
 
-            var ep = Mocker.Resolve<EpisodeProvider>().GetEpisodesByParseResult(parseResult);
+            var ep = episodeProvider.GetEpisodesByParseResult(parseResult);
 
             ep.Should().BeEmpty();
             ExceptionVerification.ExpectedWarns(1);
+        }
+
+        private void VerifyEpisode(Episode actual, Episode excpected)
+        {
+            actual.ShouldHave().AllProperties().But(e => e.Series).But(e => e.EpisodeFile).EqualTo(excpected);
         }
     }
 }
