@@ -91,7 +91,7 @@ namespace NzbDrone.Common
 
         private static ProcessInfo ConvertToProcessInfo(Process process)
         {
-            if (process == null || process.Id <= 0) return null;
+            if (process == null || process.Id <= 0 || process.HasExited) return null;
 
             return new ProcessInfo
                        {
