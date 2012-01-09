@@ -17,23 +17,23 @@ namespace NzbDrone
                 //Check if full version .NET is installed.
                 try
                 {
-                    //var webAssembly = Assembly.Load("System.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
+                    Assembly.Load("System.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    Console.WriteLine("It seems like you don't have full version of .NET framework installed. Press any key and you will be directed to download page.");
+                    Console.WriteLine("It looks like you don't have full version of .NET Framework installed. Press any key and you will be directed to download page.");
                     Console.Read();
 
                     try
                     {
                         Process.Start("http://www.microsoft.com/download/en/details.aspx?id=17851");
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
-                        Console.WriteLine("Was unable to start default browser. Please visit http://www.microsoft.com/download/en/details.aspx?id=17851 to download .NET framework 4.");
+                        Console.WriteLine("Opps. can't start default browser. Please visit http://www.microsoft.com/download/en/details.aspx?id=17851 to download .NET Framework 4.");
                         Console.ReadLine();
                     }
-
+                    
                     return;
                 }
 
