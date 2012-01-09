@@ -133,7 +133,7 @@ namespace NzbDrone.Core.Providers
                 if (!parseResult.Series.IsDaily)
                 {
                     //Todo: Collect this as a Series we want to treat as a daily series, or possible parsing error
-                    Logger.Warn("Found daily-style episode for non-daily series: {0}", parseResult.Series.Title);
+                    Logger.Warn("Found daily-style episode for non-daily series: {0}. {1}", parseResult.Series.Title, parseResult.NzbTitle);
                     return new List<Episode>();
                 }
 
