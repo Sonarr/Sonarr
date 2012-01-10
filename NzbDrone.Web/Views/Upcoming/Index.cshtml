@@ -33,7 +33,7 @@
                                          .Width(160);
                                         columns.Bound(c => c.Status)
                                             .ClientTemplate("<img src='../../Content/Images/<#= Status #>.png' alt='<#= Status #>' title='<#= Status #>' class='statusImage status-<#= Status #>' />" +
-                                                            "<a href=\"../Episode/Season?episodeId=<#= EpisodeId #>\" onclick=\"searchForEpisode('<#= EpisodeId #>'); return false;\"><img src='../../Content/Images/Search.png' alt='Search' title='Search for episode' class='searchImage' /></a>"
+                                                            Ajax.ImageActionLink("../../Content/Images/Search.png", new { Alt = "Search", Title = "Search for episode", @class = "searchImage" }, "Search", "Episode", new { EpisodeId = "<#= EpisodeId #>" }, null, null)
                                                             ).Width(100);
                                     })
                     .DetailView(detailView => detailView.ClientTemplate(
