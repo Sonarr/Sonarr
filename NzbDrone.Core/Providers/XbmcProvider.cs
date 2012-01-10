@@ -120,20 +120,23 @@ namespace NzbDrone.Core.Providers
                 else
                     path = xbmcShows.FirstOrDefault(s => s.ImdbNumber == series.SeriesId || s.Label == series.Title);
 
-                var hostOnly = GetHostWithoutPort(host);
+                //var hostOnly = GetHostWithoutPort(host);
 
                 if (path != null)
                 {
                     Logger.Trace("Updating series [{0}] (Path: {1}) on XBMC host: {2}", series.Title, path.File, host);
-                    var command = String.Format("ExecBuiltIn(UpdateLibrary(video, {0}))", path.File);
-                    _eventClientProvider.SendAction(hostOnly, ActionType.ExecBuiltin, command);
+                    //var command = String.Format("ExecBuiltIn(UpdateLibrary(video, {0}))", path.File);
+                    //_eventClientProvider.SendAction(hostOnly, ActionType.ExecBuiltin, command);
+                    var command = String.Format("ExecBuiltIn(UpdateLibrary(video,{0}))", path.File);
+                    SendCommand(host, command, username, password);
                 }
 
                 else
                 {
                     Logger.Trace("Series [{0}] doesn't exist on XBMC host: {1}, Updating Entire Library", series.Title, host);
                     var command = String.Format("ExecBuiltIn(UpdateLibrary(video))");
-                    _eventClientProvider.SendAction(hostOnly, ActionType.ExecBuiltin, command);
+                    //_eventClientProvider.SendAction(hostOnly, ActionType.ExecBuiltin, command);
+                    SendCommand(host, "ExecBuiltIn(UpdateLibrary(video))", username, password);
                 }
             }
 

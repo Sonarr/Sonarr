@@ -510,8 +510,13 @@ namespace NzbDrone.Core.Test.ProviderTests
             fakeHttp.Setup(s => s.PostCommand(host, username, password, It.Is<string>(e => e.Replace(" ", "").Replace("\r\n", "").Replace("\t", "") == expectedJson.Replace(" ", ""))))
                 .Returns(tvshows);
 
-            var fakeEventClient = Mocker.GetMock<EventClientProvider>();
-            fakeEventClient.Setup(s => s.SendAction("localhost", ActionType.ExecBuiltin, "ExecBuiltIn(UpdateLibrary(video,smb://HOMESERVER/TV/30 Rock/))"));
+            var command = "ExecBuiltIn(UpdateLibrary(video,smb://HOMESERVER/TV/30 Rock/))";
+            var url = String.Format("http://{0}/xbmcCmds/xbmcHttp?command={1}", host, command);
+
+            fakeHttp.Setup(s => s.DownloadString(url, username, password)).Returns("<html><li>OK</html>");
+
+            //var fakeEventClient = Mocker.GetMock<EventClientProvider>();
+            //fakeEventClient.Setup(s => s.SendAction("localhost", ActionType.ExecBuiltin, "ExecBuiltIn(UpdateLibrary(video,smb://HOMESERVER/TV/30 Rock/))"));
 
             //Act
             var result = Mocker.Resolve<XbmcProvider>().UpdateWithJson(fakeSeries, host, username, password);
@@ -541,8 +546,13 @@ namespace NzbDrone.Core.Test.ProviderTests
             fakeHttp.Setup(s => s.PostCommand(host, username, password, It.Is<string>(e => e.Replace(" ", "").Replace("\r\n", "").Replace("\t", "") == expectedJson.Replace(" ", ""))))
                 .Returns(tvshows);
 
-            var fakeEventClient = Mocker.GetMock<EventClientProvider>();
-            fakeEventClient.Setup(s => s.SendAction("localhost", ActionType.ExecBuiltin, "ExecBuiltIn(UpdateLibrary(video))"));
+            var command = "ExecBuiltIn(UpdateLibrary(video))";
+            var url = String.Format("http://{0}/xbmcCmds/xbmcHttp?command={1}", host, command);
+
+            fakeHttp.Setup(s => s.DownloadString(url, username, password)).Returns("<html><li>OK</html>");
+
+            //var fakeEventClient = Mocker.GetMock<EventClientProvider>();
+            //fakeEventClient.Setup(s => s.SendAction("localhost", ActionType.ExecBuiltin, "ExecBuiltIn(UpdateLibrary(video))"));
 
             //Act
             var result = Mocker.Resolve<XbmcProvider>().UpdateWithJson(fakeSeries, host, username, password);

@@ -1,7 +1,6 @@
 ﻿// ReSharper disable RedundantUsingDirective
 
 using System;
-
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Model.Xbmc;
