@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Jobs
 
         public int DefaultInterval
         {
-            get { return 15; }
+            get { return 25; }
         }
 
         public void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
