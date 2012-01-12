@@ -412,7 +412,6 @@ namespace NzbDrone.Core.Test.ProviderTests
             //Assert
             result.Should().NotBeNull();
             result.categories.Should().HaveCount(c => c > 0);
-            result.categories.Should().NotContain("*");
         }
 
         [Test]
@@ -449,7 +448,6 @@ namespace NzbDrone.Core.Test.ProviderTests
             //Assert
             result.Should().NotBeNull();
             result.categories.Should().HaveCount(c => c > 0);
-            result.categories.Should().NotContain("*");
         }
     }
 }
