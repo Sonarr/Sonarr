@@ -179,8 +179,6 @@ namespace NzbDrone.Core.Providers
 
             var deserialized =  new JavaScriptSerializer().Deserialize<SabnzbdCategoryModel>(response);
 
-            deserialized.categories.Remove("*");
-
             return deserialized;
         }
 
