@@ -297,6 +297,8 @@ namespace NzbDrone.Core.Test
         [TestCase("Mad Men - Season 1 [Bluray720p]", "madmen")]
         [TestCase("Mad Men - Season 1 [Bluray1080p]", "madmen")]
         [TestCase("The Daily Show With Jon Stewart -", "dailyshowwithjonstewart")]
+        [TestCase("The Venture Bros. (2004)", "venturebros2004")]
+        [TestCase("Castle (2011)", "castle2011")]
         public void parse_series_name(string postTitle, string title)
         {
             var result = Parser.ParseSeriesName(postTitle);
