@@ -6,6 +6,7 @@ using Exceptioneer.WindowsFormsClient;
 using NLog;
 using Ninject;
 using NzbDrone.Common;
+using NzbDrone.Common.Model;
 
 namespace NzbDrone.Providers
 {
@@ -16,17 +17,19 @@ namespace NzbDrone.Providers
         private readonly IISProvider _iisProvider;
         private readonly ProcessProvider _processProvider;
         private readonly WebClientProvider _webClientProvider;
+        private readonly ConfigFileProvider _configFileProvider;
 
         private int _pingFailCounter;
         private Timer _pingTimer;
 
         [Inject]
         public MonitoringProvider(ProcessProvider processProvider, IISProvider iisProvider,
-                                  WebClientProvider webClientProvider)
+                                  WebClientProvider webClientProvider, ConfigFileProvider configFileProvider)
         {
             _processProvider = processProvider;
             _iisProvider = iisProvider;
             _webClientProvider = webClientProvider;
+            _configFileProvider = configFileProvider;
         }
 
         public MonitoringProvider()
@@ -68,7 +71,7 @@ namespace NzbDrone.Providers
 
         public virtual void PingServer(object sender, ElapsedEventArgs e)
         {
-            if (!_iisProvider.ServerStarted) return;
+            if (!_iisProvider.ServerStarted || _configFileProvider.AuthenticationType == AuthenticationType.Windows) return;
 
             try
             {
