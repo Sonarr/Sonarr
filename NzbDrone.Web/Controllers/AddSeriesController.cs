@@ -118,6 +118,9 @@ namespace NzbDrone.Web.Controllers
         [HttpPost]
         public JsonResult AddExistingSeries(string path, string seriesName, int seriesId, int qualityProfileId)
         {
+            if (seriesId == 0 || String.IsNullOrWhiteSpace(seriesName))
+                return Json(new NotificationResult() { Title = "Failed", Text = "Invalid Series Information, Series not added.", NotificationType = NotificationType.Error });
+
             try
             {
                 _seriesProvider.AddSeries(path, seriesId, qualityProfileId);

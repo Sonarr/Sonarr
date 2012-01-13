@@ -247,6 +247,7 @@ namespace NzbDrone.Web.Controllers
             model.Webdl = profile.Allowed.Contains(QualityTypes.WEBDL);
             model.Bluray720p = profile.Allowed.Contains(QualityTypes.Bluray720p);
             model.Bluray1080p = profile.Allowed.Contains(QualityTypes.Bluray1080p);
+            model.Cutoff = profile.Cutoff;
 
             return PartialView("QualityProfileItem", model);
         }

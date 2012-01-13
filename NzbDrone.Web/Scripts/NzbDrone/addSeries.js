@@ -27,7 +27,7 @@ $(".addExistingButton").live('click', function () {
 
     var path = root.find(".seriesPathValue Label").text();
 
-    if (seriesId === 0 || title.length === 0) {
+    if (seriesId === 0 || $.trim(title).length === 0) {
         $.gritter.add({
             title: 'Failed',
             text: 'Invalid Series Information for \'' + path + '\'',
