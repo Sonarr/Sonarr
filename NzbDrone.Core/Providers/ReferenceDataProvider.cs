@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using NLog;
+using Newtonsoft.Json;
 using NzbDrone.Core.Providers.Core;
+using NzbDrone.Core.Repository;
 using PetaPoco;
 
 namespace NzbDrone.Core.Providers
@@ -44,24 +46,9 @@ namespace NzbDrone.Core.Providers
         {
             try
             {
-                var dailySeries = _httpProvider.DownloadString("http://www.nzbdrone.com/DailySeries.csv");
+                var dailySeriesIds = _httpProvider.DownloadString("http://services.nzbdrone.com/DailySeries/AllIds");
 
-                var seriesIds = new List<int>();
-
-                using (var reader = new StringReader(dailySeries))
-                {
-                    string line;
-                    while ((line = reader.ReadLine()) != null)
-                    {
-                        int seriesId;
-
-                        //Split CSV, first item should be the seriesId
-                        var split = line.Split(',');
-
-                        if (Int32.TryParse(split[0], out seriesId))
-                            seriesIds.Add(seriesId);
-                    }
-                }
+                var seriesIds = JsonConvert.DeserializeObject<List<int>>(dailySeriesIds);
 
                 return seriesIds;
             }

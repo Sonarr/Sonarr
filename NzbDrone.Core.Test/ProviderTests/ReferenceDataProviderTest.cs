@@ -20,14 +20,16 @@ namespace NzbDrone.Core.Test.ProviderTests
     // ReSharper disable InconsistentNaming
     public class ReferenceDataProviderTest : CoreTest
     {
-        private string validSeriesIds = String.Format("1,Test{0}2,Test{0}3,Test{0}4,Test{0}5,Test", Environment.NewLine);
-        private string invalidSeriesIds = String.Format("1,Test{0}2,Test{0}NaN,Test{0}4,Test{0}5,Test", Environment.NewLine);
+        private const string validSeriesIds = "[1,2,3,4,5]";
+        private const string invalidSeriesIds = "[1,2,NaN,4,5]";
+
+        private const string url = "http://services.nzbdrone.com/DailySeries/AllIds";
 
         [Test]
         public void GetDailySeriesIds_should_return_list_of_int_when_all_are_valid()
         {
             //Setup
-            Mocker.GetMock<HttpProvider>().Setup(s => s.DownloadString("http://www.nzbdrone.com/DailySeries.csv"))
+            Mocker.GetMock<HttpProvider>().Setup(s => s.DownloadString(url))
                     .Returns(validSeriesIds);
 
             //Act
@@ -38,24 +40,25 @@ namespace NzbDrone.Core.Test.ProviderTests
         }
 
         [Test]
-        public void GetDailySeriesIds_should_return_list_of_int_when_any_are_valid()
+        public void GetDailySeriesIds_should_return_empty_list_when_unable_to_parse()
         {
             //Setup
-            Mocker.GetMock<HttpProvider>().Setup(s => s.DownloadString("http://www.nzbdrone.com/DailySeries.csv"))
+            Mocker.GetMock<HttpProvider>().Setup(s => s.DownloadString(url))
                     .Returns(invalidSeriesIds);
 
             //Act
             var result = Mocker.Resolve<ReferenceDataProvider>().GetDailySeriesIds();
 
             //Assert
-            result.Should().HaveCount(4);
+            result.Should().BeEmpty();
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]
         public void GetDailySeriesIds_should_return_empty_list_of_int_when_server_is_unavailable()
         {
             //Setup
-            Mocker.GetMock<HttpProvider>().Setup(s => s.DownloadString("http://www.nzbdrone.com/DailySeries.csv"))
+            Mocker.GetMock<HttpProvider>().Setup(s => s.DownloadString(url))
                     .Throws(new Exception());
 
             //Act
@@ -70,7 +73,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void IsDailySeries_should_return_true()
         {
             //Setup
-            Mocker.GetMock<HttpProvider>().Setup(s => s.DownloadString("http://www.nzbdrone.com/DailySeries.csv"))
+            Mocker.GetMock<HttpProvider>().Setup(s => s.DownloadString(url))
                     .Returns(validSeriesIds);
 
             //Act
@@ -84,7 +87,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void IsDailySeries_should_return_false()
         {
             //Setup
-            Mocker.GetMock<HttpProvider>().Setup(s => s.DownloadString("http://www.nzbdrone.com/DailySeries.csv"))
+            Mocker.GetMock<HttpProvider>().Setup(s => s.DownloadString(url))
                     .Returns(validSeriesIds);
 
             //Act
@@ -107,7 +110,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             Db.InsertMany(fakeSeries);
 
             //Setup
-            Mocker.GetMock<HttpProvider>().Setup(s => s.DownloadString("http://www.nzbdrone.com/DailySeries.csv"))
+            Mocker.GetMock<HttpProvider>().Setup(s => s.DownloadString(url))
                     .Returns(validSeriesIds);
 
             //Act
@@ -138,7 +141,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             Db.InsertMany(fakeSeries);
 
             //Setup
-            Mocker.GetMock<HttpProvider>().Setup(s => s.DownloadString("http://www.nzbdrone.com/DailySeries.csv"))
+            Mocker.GetMock<HttpProvider>().Setup(s => s.DownloadString(url))
                     .Returns(validSeriesIds);
 
             //Act
@@ -171,7 +174,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             Db.InsertMany(fakeSeries);
 
             //Setup
-            Mocker.GetMock<HttpProvider>().Setup(s => s.DownloadString("http://www.nzbdrone.com/DailySeries.csv"))
+            Mocker.GetMock<HttpProvider>().Setup(s => s.DownloadString(url))
                     .Returns(validSeriesIds);
 
             //Act
