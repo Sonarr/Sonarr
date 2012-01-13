@@ -17,16 +17,16 @@ namespace NzbDrone.Core.Test.ProviderTests
     // ReSharper disable InconsistentNaming
     public class SceneMappingProviderTest : CoreTest
     {
-        private const string SceneMappingUrl = "http://www.nzbdrone.com/SceneMappings.csv";
+        private const string SceneMappingUrl = "http://services.nzbdrone.com/SceneMapping/Active";
 
-        private void WithValidCsv()
+        private void WithValidJson()
         {
             Mocker.GetMock<HttpProvider>()
                 .Setup(s => s.DownloadString(SceneMappingUrl))
-                .Returns(File.ReadAllText(@".\Files\SceneMappings.csv"));
+                .Returns(File.ReadAllText(@".\Files\SceneMappings.json"));
         }
 
-        private void WithErrorDownloadingCsv()
+        private void WithErrorDownloadingJson()
         {
             Mocker.GetMock<HttpProvider>()
                     .Setup(s => s.DownloadString(SceneMappingUrl))
@@ -163,13 +163,13 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             //Setup
             WithRealDb();
-            WithValidCsv();
+            WithValidJson();
 
             //Act
             Mocker.Resolve<SceneMappingProvider>().UpdateMappings();
 
             //Assert
-            Mocker.Verify<HttpProvider>(v => v.DownloadString(It.IsAny<string>()), Times.Once());
+            Mocker.Verify<HttpProvider>(v => v.DownloadString(SceneMappingUrl), Times.Once());
             var result = Db.Fetch<SceneMapping>();
             result.Should().HaveCount(5);
         }
@@ -185,14 +185,14 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Build();
 
             WithRealDb();
-            WithValidCsv();
+            WithValidJson();
             Db.Insert(fakeMap);
 
             //Act
             Mocker.Resolve<SceneMappingProvider>().UpdateMappings();
 
             //Assert
-            Mocker.Verify<HttpProvider>(v => v.DownloadString(It.IsAny<string>()), Times.Once());
+            Mocker.Verify<HttpProvider>(v => v.DownloadString(SceneMappingUrl), Times.Once());
             var result = Db.Fetch<SceneMapping>();
             result.Should().HaveCount(5);
         }
@@ -208,14 +208,14 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Build();
 
             WithRealDb();
-            WithErrorDownloadingCsv();
+            WithErrorDownloadingJson();
             Db.Insert(fakeMap);
 
             //Act
             Mocker.Resolve<SceneMappingProvider>().UpdateMappings();
 
             //Assert
-            Mocker.Verify<HttpProvider>(v => v.DownloadString(It.IsAny<string>()), Times.Once());
+            Mocker.Verify<HttpProvider>(v => v.DownloadString(SceneMappingUrl), Times.Once());
             var result = Db.Fetch<SceneMapping>();
             result.Should().HaveCount(1);
         }
@@ -237,7 +237,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             Mocker.Resolve<SceneMappingProvider>().UpdateIfEmpty();
 
             //Assert
-            Mocker.Verify<HttpProvider>(v => v.DownloadString(It.IsAny<string>()), Times.Never());
+            Mocker.Verify<HttpProvider>(v => v.DownloadString(SceneMappingUrl), Times.Never());
         }
 
         [Test]
@@ -245,7 +245,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             //Setup
             WithRealDb();
-            WithValidCsv();
+            WithValidJson();
 
             //Act
             Mocker.Resolve<SceneMappingProvider>().UpdateIfEmpty();

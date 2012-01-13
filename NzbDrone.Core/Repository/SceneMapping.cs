@@ -1,4 +1,5 @@
-﻿using PetaPoco;
+﻿using Newtonsoft.Json;
+using PetaPoco;
 
 namespace NzbDrone.Core.Repository
 {
@@ -8,8 +9,10 @@ namespace NzbDrone.Core.Repository
     {
         public string CleanTitle { get; set; }
 
+        [JsonProperty(PropertyName = "Id")]
         public int SeriesId { get; set; }
 
+        [JsonProperty(PropertyName = "Title")]
         public string SceneName { get; set; }
     }
 }

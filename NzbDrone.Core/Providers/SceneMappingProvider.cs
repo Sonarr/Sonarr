@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using NLog;
+using Newtonsoft.Json;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using PetaPoco;
@@ -29,32 +30,16 @@ namespace NzbDrone.Core.Providers
         {
             try
             {
-                var mapping = _httpProvider.DownloadString("http://www.nzbdrone.com/SceneMappings.csv");
-                var newMaps = new List<SceneMapping>();
-
-                using (var reader = new StringReader(mapping))
-                {
-                    string line;
-                    while ((line = reader.ReadLine()) != null)
-                    {
-                        var split = line.Split(',');
-                        int seriesId;
-                        Int32.TryParse(split[1], out seriesId);
-
-                        var map = new SceneMapping();
-                        map.CleanTitle = split[0];
-                        map.SeriesId = seriesId;
-                        map.SceneName = split[2];
-
-                        newMaps.Add(map);
-                    }
-                }
+                const string url = "http://services.nzbdrone.com/SceneMapping/Active";
+                
+                var mappingsJson = _httpProvider.DownloadString(url);
+                var mappings = JsonConvert.DeserializeObject<List<SceneMapping>>(mappingsJson);
 
                 Logger.Debug("Deleting all existing Scene Mappings.");
                 _database.Delete<SceneMapping>(String.Empty);
 
                 Logger.Debug("Adding Scene Mappings");
-                _database.InsertMany(newMaps);
+                _database.InsertMany(mappings);
             }
 
             catch (Exception ex)

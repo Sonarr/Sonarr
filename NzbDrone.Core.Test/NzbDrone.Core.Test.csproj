@@ -235,7 +235,7 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Files\SceneMappings.csv">
+    <None Include="Files\SceneMappings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Files\TestArchive.zip">
