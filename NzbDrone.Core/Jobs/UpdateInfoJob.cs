@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Jobs
             }
             else
             {
-                seriesToUpdate = new List<Series>() { _seriesProvider.GetSeries(targetId) };
+                seriesToUpdate = new List<Series> { _seriesProvider.GetSeries(targetId) };
             }
 
             //Update any Daily Series in the DB with the IsDaily flag

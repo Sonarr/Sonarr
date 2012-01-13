@@ -46,6 +46,15 @@ namespace NzbDrone.Core.Test.ProviderTests
             series.First().SeasonFolder.Should().Be(useSeasonFolder);
         }
 
+
+        [TestCase(0)]
+        [TestCase(-1)]
+        public void add_series_should_fail_if_series_is_less_than_zero(int seriesId)
+        {
+            WithRealDb();
+            Assert.Throws<ArgumentOutOfRangeException>(() => Mocker.Resolve<SeriesProvider>().AddSeries("C:\\Test", seriesId, 1));
+        }
+
         [Test]
         public void find_series_empty_repo()
         {

@@ -104,6 +104,11 @@ namespace NzbDrone.Core.Providers
         {
             Logger.Info("Adding Series [{0}] Path: [{1}]", tvDbSeriesId, path);
 
+            if (tvDbSeriesId <=0)
+            {
+                throw new ArgumentOutOfRangeException("tvDbSeriesId", tvDbSeriesId.ToString());
+            }
+
             var repoSeries = new Series();
             repoSeries.SeriesId = tvDbSeriesId;
             repoSeries.Path = path;
