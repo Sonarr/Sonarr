@@ -27,6 +27,17 @@ $(".addExistingButton").live('click', function () {
 
     var path = root.find(".seriesPathValue Label").text();
 
+    if (seriesId === 0 || title.length === 0) {
+        $.gritter.add({
+            title: 'Failed',
+            text: 'Invalid Series Information for \'' + path + '\'',
+            image: '../../content/images/error.png',
+            class_name: 'gritter-fail'
+        });
+
+        return false;
+    }
+
     $.ajax({
         type: "POST",
         url: addSeriesUrl,
@@ -149,9 +160,13 @@ $('#quickAddNew').live('click', function () {
 
 //Watermark
 $('#rootDirInput').livequery(function () {
-    $('#rootDirInput').watermark('Enter your new root folder path...');
+    $(this).watermark('Enter your new root folder path...');
 });
 
 $('#newSeriesLookup').livequery(function () {
-    $('#newSeriesLookup').watermark('Title of the series you want to add...');
+    $(this).watermark('Title of the series you want to add...');
+});
+
+$('.existingSeriesContainer .seriesLookup').livequery(function () {
+    $(this).watermark('Please enter the series title...');
 });
