@@ -108,7 +108,7 @@ namespace NzbDrone.Core.Providers
             //Handle Full Naming
             if (parseResult.FullSeason)
             {
-                var seasonResult =  String.Format("{0} - Season {1} [{2}]", new DirectoryInfo(parseResult.Series.Path).Name,
+                var seasonResult =  String.Format("{0} - Season {1} [{2}]", MediaFileProvider.CleanFilename(parseResult.Series.Title),
                                      parseResult.SeasonNumber, parseResult.Quality.QualityType);
 
                 if (parseResult.Quality.Proper)
@@ -119,7 +119,7 @@ namespace NzbDrone.Core.Providers
 
             if (parseResult.Series.IsDaily)
             {
-                var dailyResult = String.Format("{0} - {1:yyyy-MM-dd} - {2} [{3}]", new DirectoryInfo(parseResult.Series.Path).Name,
+                var dailyResult = String.Format("{0} - {1:yyyy-MM-dd} - {2} [{3}]", MediaFileProvider.CleanFilename(parseResult.Series.Title),
                                      parseResult.AirDate, parseResult.EpisodeTitle, parseResult.Quality.QualityType);
 
                 if (parseResult.Quality.Proper)
@@ -139,7 +139,7 @@ namespace NzbDrone.Core.Providers
 
             var epNumberString = String.Join("-", episodeString);
 
-            var result = String.Format("{0} - {1} - {2} [{3}]", new DirectoryInfo(parseResult.Series.Path).Name, epNumberString, parseResult.EpisodeTitle, parseResult.Quality.QualityType);
+            var result = String.Format("{0} - {1} - {2} [{3}]", MediaFileProvider.CleanFilename(parseResult.Series.Title), epNumberString, parseResult.EpisodeTitle, parseResult.Quality.QualityType);
 
             if (parseResult.Quality.Proper)
             {

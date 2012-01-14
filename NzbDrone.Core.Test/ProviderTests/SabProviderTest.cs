@@ -271,10 +271,8 @@ namespace NzbDrone.Core.Test.ProviderTests
         [TestCase(1, new[] { 2, 4 }, "", QualityTypes.HDTV, true, "My Series Name - 1x2-1x4 -  [HDTV] [Proper]")]
         public void sab_title(int seasons, int[] episodes, string title, QualityTypes quality, bool proper, string expected)
         {
-            
-
             var series = Builder<Series>.CreateNew()
-                .With(c => c.Path = @"d:\tv shows\My Series Name")
+                .With(c => c.Title = "My Series Name")
                 .Build();
 
             var parsResult = new EpisodeParseResult()
@@ -301,7 +299,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             
 
             var series = Builder<Series>.CreateNew()
-                .With(c => c.Path = @"d:\tv shows\My Series Name")
+                .With(c => c.Title = "My Series Name")
                 .Build();
 
             var parsResult = new EpisodeParseResult()
@@ -325,11 +323,9 @@ namespace NzbDrone.Core.Test.ProviderTests
         [TestCase(false, "My Series Name - 2011-12-01 - My Episode Title [Bluray720p]")]
         public void sab_daily_series_title(bool proper, string expected)
         {
-            
-
             var series = Builder<Series>.CreateNew()
-                .With(c => c.Path = @"d:\tv shows\My Series Name")
                 .With(c => c.IsDaily = true)
+                .With(c => c.Title = "My Series Name")
                 .Build();
 
             var parsResult = new EpisodeParseResult
