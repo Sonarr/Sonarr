@@ -287,7 +287,7 @@ namespace NzbDrone.Core.Providers
                         newList.Add(episodeToUpdate);
 
                         //If it is Episode Zero Ignore it, since it is new
-                        if (episode.EpisodeNumber == 0)
+                        if (episode.EpisodeNumber == 0 && episode.SeasonNumber > 1)
                         {
                             episodeToUpdate.Ignored = true;
                         }
