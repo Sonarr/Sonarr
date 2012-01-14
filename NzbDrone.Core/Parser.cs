@@ -277,13 +277,23 @@ namespace NzbDrone.Core
                     {
                         case ".avi":
                         case ".xvid":
+                        case ".divx":
                         case ".wmv":
                         case ".mp4":
+                        case ".mpg":
+                        case ".mpeg":
+                        case ".mov":
+                        case ".rm":
+                        case ".rmvb":
+                        case ".flv":
+                        case ".dvr-ms":
+                        case ".ogm":
                             {
                                 result.QualityType = QualityTypes.SDTV;
                                 break;
                             }
                         case ".mkv":
+                        case ".ts":
                             {
                                 result.QualityType = QualityTypes.HDTV;
                                 break;
