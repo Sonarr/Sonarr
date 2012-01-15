@@ -3,6 +3,7 @@ using System.Linq;
 using NLog;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Providers.Core;
 
 namespace NzbDrone.Core.Jobs
 {
@@ -10,13 +11,16 @@ namespace NzbDrone.Core.Jobs
     {
         private readonly EpisodeProvider _episodeProvider;
         private readonly EpisodeSearchJob _episodeSearchJob;
+        private readonly ConfigProvider _configProvider;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public RecentBacklogSearchJob(EpisodeProvider episodeProvider, EpisodeSearchJob episodeSearchJob)
+        public RecentBacklogSearchJob(EpisodeProvider episodeProvider, EpisodeSearchJob episodeSearchJob,
+                                            ConfigProvider configProvider)
         {
             _episodeProvider = episodeProvider;
             _episodeSearchJob = episodeSearchJob;
+            _configProvider = configProvider;
         }
 
         public string Name
@@ -31,6 +35,12 @@ namespace NzbDrone.Core.Jobs
 
         public void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
         {
+            if (!_configProvider.EnableBacklogSearching)
+            {
+                Logger.Trace("Backlog searching is not enabled, aborting job.");
+                return;
+            }
+
             //Get episodes that are considered missing and aired in the last 30 days
             var missingEpisodes = _episodeProvider.EpisodesWithoutFiles(true).Where(e => e.AirDate >= DateTime.Today.AddDays(-30));
 

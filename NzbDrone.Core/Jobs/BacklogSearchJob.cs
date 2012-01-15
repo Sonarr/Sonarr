@@ -3,6 +3,7 @@ using System.Linq;
 using NLog;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Jobs
@@ -12,15 +13,17 @@ namespace NzbDrone.Core.Jobs
         private readonly EpisodeProvider _episodeProvider;
         private readonly EpisodeSearchJob _episodeSearchJob;
         private readonly SeasonSearchJob _seasonSearchJob;
+        private readonly ConfigProvider _configProvider;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public BacklogSearchJob(EpisodeProvider episodeProvider, EpisodeSearchJob episodeSearchJob,
-                                    SeasonSearchJob seasonSearchJob)
+                                    SeasonSearchJob seasonSearchJob, ConfigProvider configProvider)
         {
             _episodeProvider = episodeProvider;
             _episodeSearchJob = episodeSearchJob;
             _seasonSearchJob = seasonSearchJob;
+            _configProvider = configProvider;
         }
 
         public string Name
@@ -35,6 +38,12 @@ namespace NzbDrone.Core.Jobs
 
         public void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
         {
+            if (!_configProvider.EnableBacklogSearching)
+            {
+                Logger.Trace("Backlog searching is not enabled, aborting job.");
+                return;
+            }
+
             var missingEpisodes = _episodeProvider.EpisodesWithoutFiles(true)
                 .GroupBy(e => new { e.SeriesId, e.SeasonNumber });
           

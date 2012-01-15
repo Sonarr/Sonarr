@@ -1,0 +1,24 @@
+﻿@using NzbDrone.Web.Helpers
+@model NzbDrone.Web.Models.MiscSettingsModel
+@{ Layout = "~/Views/Shared/_ReferenceLayout.cshtml"; }
+
+@section HeaderContent{
+    @Html.IncludeCss("Settings.css")
+}
+<div id="stylized">
+    @using (Html.BeginForm("SaveMisc", "Settings", FormMethod.Post, new { id = "MiscForm", name = "MiscForm", @class = "settingsForm" }))
+    {       
+        <label class="labelClass">@Html.LabelFor(m => m.EnableBacklogSearching)
+            <span class="small">@Html.DescriptionFor(m => m.EnableBacklogSearching)</span>
+        </label>
+        @Html.CheckBoxFor(m => m.EnableBacklogSearching, new { @class = "inputClass checkClass" })
+
+        <div style="overflow: hidden; height: 50px;"></div>
+        
+        <button type="submit" class="save_button" disabled="disabled">
+            Save</button>
+    }
+</div>
+@section Scripts{
+
+}

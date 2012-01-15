@@ -396,6 +396,12 @@ namespace NzbDrone.Core.Providers.Core
             set { SetValue("ProwlPriority", value); }
         }
 
+        public virtual bool EnableBacklogSearching
+        {
+            get { return GetValueBoolean("EnableBacklogSearching"); }
+            set { SetValue("EnableBacklogSearching", value); }
+        }
+
         private string GetValue(string key)
         {
             return GetValue(key, String.Empty);

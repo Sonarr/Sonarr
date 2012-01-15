@@ -221,6 +221,14 @@ namespace NzbDrone.Web.Controllers
             return View(model);
         }
 
+        public ActionResult Misc()
+        {
+            var model = new MiscSettingsModel();
+            model.EnableBacklogSearching = _configProvider.EnableBacklogSearching;
+
+            return View(model);
+        }
+
         public PartialViewResult AddProfile()
         {
             var qualityProfile = new QualityProfile
@@ -575,6 +583,19 @@ namespace NzbDrone.Web.Controllers
                 _configFileProvider.Port = data.Port;
                 _configFileProvider.LaunchBrowser = data.LaunchBrowser;
                 _configFileProvider.AuthenticationType = data.AuthenticationType;
+
+                return GetSuccessResult();
+            }
+
+            return GetInvalidModelResult();
+        }
+
+        [HttpPost]
+        public JsonResult SaveMisc(MiscSettingsModel data)
+        {
+            if (ModelState.IsValid)
+            {
+                _configProvider.EnableBacklogSearching = data.EnableBacklogSearching;
 
                 return GetSuccessResult();
             }
