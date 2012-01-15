@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
 
@@ -23,9 +24,9 @@ namespace NzbDrone.Core.Jobs
             get { return "Update Scene Mappings"; }
         }
 
-        public int DefaultInterval
+        public TimeSpan DefaultInterval
         {
-            get { return 720; } //Every 12 hours
+            get { return TimeSpan.FromHours(12); }
         }
 
         public virtual void Start(ProgressNotification notification, int targetId, int secondaryTargetId)

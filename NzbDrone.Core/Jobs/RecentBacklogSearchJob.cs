@@ -28,9 +28,9 @@ namespace NzbDrone.Core.Jobs
             get { return "Recent Backlog Search"; }
         }
 
-        public int DefaultInterval
+        public TimeSpan DefaultInterval
         {
-            get { return 1440; }
+            get { return TimeSpan.FromDays(1); }
         }
 
         public void Start(ProgressNotification notification, int targetId, int secondaryTargetId)

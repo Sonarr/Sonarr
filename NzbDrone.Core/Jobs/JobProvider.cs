@@ -94,9 +94,9 @@ namespace NzbDrone.Core.Jobs
                     jobDefinition.LastExecution = DateTime.Now;
                 }
 
-                jobDefinition.Enable = job.DefaultInterval > 0;
+                jobDefinition.Enable = job.DefaultInterval.TotalSeconds > 0;
                 jobDefinition.Name = job.Name;
-                jobDefinition.Interval = job.DefaultInterval;
+                jobDefinition.Interval = Convert.ToInt32(job.DefaultInterval.TotalMinutes);
 
                 SaveDefinition(jobDefinition);
             }

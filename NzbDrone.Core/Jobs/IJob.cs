@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NzbDrone.Core.Model.Notification;
 
 namespace NzbDrone.Core.Jobs
@@ -17,7 +18,7 @@ namespace NzbDrone.Core.Jobs
         /// </summary>
         /// <remarks>Setting this value to 0 means the job will not be 
         /// executed by the schedule and is only triggered manually.</remarks>
-        int DefaultInterval { get; }
+        TimeSpan DefaultInterval { get; }
 
 
         /// <summary>

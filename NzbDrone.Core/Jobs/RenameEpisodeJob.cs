@@ -32,9 +32,9 @@ namespace NzbDrone.Core.Jobs
             get { return "Rename Episode"; }
         }
 
-        public int DefaultInterval
+        public TimeSpan DefaultInterval
         {
-            get { return 0; }
+            get { return TimeSpan.FromTicks(0); }
         }
 
         public void Start(ProgressNotification notification, int targetId, int secondaryTargetId)

@@ -44,12 +44,12 @@ namespace NzbDrone.Core.Jobs
             get { return "New Series Update"; }
         }
 
-        public int DefaultInterval
+        public TimeSpan DefaultInterval
         {
-            get { return 1; }
+            get { return TimeSpan.FromMinutes(1); }
         }
 
-        public void Start(ProgressNotification notification, int targetId, int secondaryTargetId )
+        public void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
         {
             _attemptedSeries = new List<int>();
             ScanSeries(notification);

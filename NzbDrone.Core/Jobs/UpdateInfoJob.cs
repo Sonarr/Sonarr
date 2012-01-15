@@ -36,9 +36,9 @@ namespace NzbDrone.Core.Jobs
             get { return "Update Episode Info"; }
         }
 
-        public int DefaultInterval
+        public TimeSpan DefaultInterval
         {
-            get { return 720; } //12-hours
+            get { return TimeSpan.FromHours(12); }
         }
 
         public virtual void Start(ProgressNotification notification, int targetId, int secondaryTargetId)

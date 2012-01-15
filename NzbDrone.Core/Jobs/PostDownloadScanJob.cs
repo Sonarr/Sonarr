@@ -34,9 +34,9 @@ namespace NzbDrone.Core.Jobs
             get { return "Drop folder monitor"; }
         }
 
-        public int DefaultInterval
+        public TimeSpan DefaultInterval
         {
-            get { return 1; }
+            get { return TimeSpan.FromMinutes(1); }
         }
 
         public virtual void Start(ProgressNotification notification, int targetId, int secondaryTargetId)

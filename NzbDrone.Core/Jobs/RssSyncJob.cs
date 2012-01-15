@@ -34,9 +34,9 @@ namespace NzbDrone.Core.Jobs
             get { return "RSS Sync"; }
         }
 
-        public int DefaultInterval
+        public TimeSpan DefaultInterval
         {
-            get { return 25; }
+            get { return TimeSpan.FromMinutes(25); }
         }
 
         public void Start(ProgressNotification notification, int targetId, int secondaryTargetId)

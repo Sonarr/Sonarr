@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Diagnostics;
 using System.IO;
 using NLog;
@@ -39,9 +40,9 @@ namespace NzbDrone.Core.Jobs
             get { return "Update Application Job"; }
         }
 
-        public int DefaultInterval
+        public TimeSpan DefaultInterval
         {
-            get { return 10080; }
+            get { return TimeSpan.FromDays(2); }
         }
 
         public virtual void Start(ProgressNotification notification, int targetId, int secondaryTargetId)

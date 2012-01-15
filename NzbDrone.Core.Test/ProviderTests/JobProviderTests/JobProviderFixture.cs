@@ -250,7 +250,7 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
             //assert
             var timers = jobProvider.All();
             timers.Should().HaveCount(1);
-            timers[0].Interval.Should().Be(fakeJob.DefaultInterval);
+            timers[0].Interval.Should().Be((Int32)fakeJob.DefaultInterval.TotalMinutes);
             timers[0].Name.Should().Be(fakeJob.Name);
             timers[0].TypeName.Should().Be(fakeJob.GetType().ToString());
             timers[0].LastExecution.Should().HaveYear(DateTime.Now.Year);
@@ -354,7 +354,7 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
             registeredJobs.Should().HaveCount(1);
             registeredJobs.First().TypeName.Should().Be(fakeJob.GetType().ToString());
             registeredJobs.First().Name.Should().Be(fakeJob.Name);
-            registeredJobs.First().Interval.Should().Be(fakeJob.DefaultInterval);
+            registeredJobs.First().Interval.Should().Be((Int32)fakeJob.DefaultInterval.TotalMinutes);
 
             registeredJobs.First().Enable.Should().Be(true);
             registeredJobs.First().Success.Should().Be(initialFakeJob.Success);

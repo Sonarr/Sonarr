@@ -19,9 +19,10 @@
                                 }
                               }
                     </text>))
+          .Sortable(c=>c.OrderBy(col=>col.Add(g=>g.Interval)))
           .Render();}
 
-    Items currently in queue
+    <h1>Items currently in queue</h1>
 
     @{Html.Telerik().Grid((IEnumerable<JobQueueItemModel>)ViewData["Queue"]).Name("QueueGrid")
           .Columns(c => c.Bound(g => g.Name).Title("Type").Width(100))

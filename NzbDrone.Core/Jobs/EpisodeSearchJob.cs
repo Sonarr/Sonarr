@@ -26,9 +26,9 @@ namespace NzbDrone.Core.Jobs
             get { return "Episode Search"; }
         }
 
-        public int DefaultInterval
+        public TimeSpan DefaultInterval
         {
-            get { return 0; }
+            get { return TimeSpan.FromTicks(0); }
         }
 
         public virtual void Start(ProgressNotification notification, int targetId, int secondaryTargetId)

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Core.Model.Notification;
@@ -31,9 +32,9 @@ namespace NzbDrone.Core.Jobs
             get { return "Backlog Search"; }
         }
 
-        public int DefaultInterval
+        public TimeSpan DefaultInterval
         {
-            get { return 43200; }
+            get { return TimeSpan.FromDays(30); }
         }
 
         public void Start(ProgressNotification notification, int targetId, int secondaryTargetId)

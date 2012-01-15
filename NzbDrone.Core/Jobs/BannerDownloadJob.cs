@@ -40,10 +40,9 @@ namespace NzbDrone.Core.Jobs
             get { return "Banner Download"; }
         }
 
-        public int DefaultInterval
+        public TimeSpan DefaultInterval
         {
-            //30 days
-            get { return 43200; }
+            get { return TimeSpan.FromDays(30); }
         }
 
         public virtual void Start(ProgressNotification notification, int targetId, int secondaryTargetId)

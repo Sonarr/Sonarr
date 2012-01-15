@@ -14,9 +14,9 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
             get { return GetType().Name; }
         }
 
-        public virtual int DefaultInterval
+        public virtual TimeSpan DefaultInterval
         {
-            get { return 15; }
+            get { return TimeSpan.FromMinutes(15); }
         }
 
         public int ExecutionCount { get; private set; }
@@ -36,9 +36,9 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
 
     public class DisabledJob : FakeJob
     {
-        public override int DefaultInterval
+        public override TimeSpan DefaultInterval
         {
-            get { return 0; }
+            get { return TimeSpan.FromTicks(0); }
         }
     }
 

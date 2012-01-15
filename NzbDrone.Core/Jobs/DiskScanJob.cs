@@ -32,9 +32,9 @@ namespace NzbDrone.Core.Jobs
             get { return "Media File Scan"; }
         }
 
-        public int DefaultInterval
+        public TimeSpan DefaultInterval
         {
-            get { return 360; }
+            get { return TimeSpan.FromHours(6); }
         }
 
         public virtual void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
