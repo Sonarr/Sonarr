@@ -5,6 +5,7 @@ using NzbDrone.Web.UI.Automation.Fluent;
 namespace NzbDrone.Web.UI.Automation
 {
     [TestFixture]
+    [Explicit]
     public class BasicPageFixture : AutomationTestBase
     {
 
