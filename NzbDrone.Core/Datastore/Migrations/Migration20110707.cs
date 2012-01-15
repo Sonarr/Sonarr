@@ -6,9 +6,9 @@ namespace NzbDrone.Core.Datastore.Migrations
 {
 
     [Migration(20110707)]
-    public class Migration20110707 : Migration
+    public class Migration20110707 : NzbDroneMigration
     {
-        public override void Up()
+        protected override void MainDbUpgrade()
         {
             Database.AddTable("Series", new[]
                                             {
@@ -137,6 +137,19 @@ namespace NzbDrone.Core.Datastore.Migrations
                                                          new Column("SonicAllowed", DbType.String, ColumnProperty.NotNull),
                                                      });
 
+            Database.AddTable("IndexerDefinitions", new[]
+                                                     {
+                                                         new Column("Id", DbType.Int32, ColumnProperty.PrimaryKeyWithIdentity),
+                                                         new Column("Enable", DbType.Boolean, ColumnProperty.NotNull),
+                                                         new Column("IndexProviderType", DbType.String, ColumnProperty.NotNull),
+                                                         new Column("Name", DbType.String, ColumnProperty.NotNull),
+                                                     });
+        }
+
+
+        protected override void LogDbUpgrade()
+        {
+
             Database.AddTable("Logs", new[]
                                           {
                                               new Column("LogId", DbType.Int64, ColumnProperty.PrimaryKeyWithIdentity),
@@ -148,20 +161,6 @@ namespace NzbDrone.Core.Datastore.Migrations
                                               new Column("ExceptionType", DbType.String, ColumnProperty.Null),
                                               new Column("Level", DbType.String, ColumnProperty.NotNull)
                                           });
-
-            Database.AddTable("IndexerDefinitions", new[]
-                                                     {
-                                                         new Column("Id", DbType.Int32, ColumnProperty.PrimaryKeyWithIdentity),
-                                                         new Column("Enable", DbType.Boolean, ColumnProperty.NotNull),
-                                                         new Column("IndexProviderType", DbType.String, ColumnProperty.NotNull),
-                                                         new Column("Name", DbType.String, ColumnProperty.NotNull),
-                                                     });
-        }
-
-
-        public override void Down()
-        {
-            throw new NotImplementedException();
         }
     }
 }

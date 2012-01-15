@@ -6,16 +6,11 @@ namespace NzbDrone.Core.Datastore.Migrations
 {
 
     [Migration(20111011)]
-    public class Migration20111011 : Migration
+    public class Migration20111011 : NzbDroneMigration
     {
-        public override void Up()
+        protected override void MainDbUpgrade()
         {
             Database.AddColumn("Episodes", "PostDownloadStatus", DbType.Int32, ColumnProperty.Null);
-        }
-
-        public override void Down()
-        {
-            throw new NotImplementedException();
         }
     }
 }

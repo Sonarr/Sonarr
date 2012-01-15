@@ -14,8 +14,8 @@ namespace NzbDrone.Common
         private const string LOG_CONFIG_FILE = "log.config";
         private const string APP_CONFIG_FILE = "config.xml";
 
-        private const string NZBDRONE_DB_FILE = "nzbdrone.sdf";
-        private const string LOG_DB_FILE = "log.sdf";
+        public const string NZBDRONE_DB_FILE = "nzbdrone.sdf";
+        public const string LOG_DB_FILE = "log.sdf";
 
         private const string UPDATE_SANDBOX_FOLDER_NAME = "nzbdrone_update\\";
         private const string UPDATE_PACKAGE_FOLDER_NAME = "nzbdrone\\";

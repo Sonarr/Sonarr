@@ -4,6 +4,67 @@
         <name>Migrator.Providers</name>
     </assembly>
     <members>
+        <member name="T:Migrator.Providers.Dialect">
+            <summary>
+            Defines the implementations specific details for a particular database.
+            </summary>
+        </member>
+        <member name="M:Migrator.Providers.Dialect.RegisterColumnType(System.Data.DbType,System.Int32,System.String)">
+            <summary>
+            Subclasses register a typename for the given type code and maximum
+            column length. <c>$l</c> in the type name will be replaced by the column
+            length (if appropriate)
+            </summary>
+            <param name="code">The typecode</param>
+            <param name="capacity">Maximum length of database type</param>
+            <param name="name">The database type name</param>
+        </member>
+        <member name="M:Migrator.Providers.Dialect.RegisterColumnType(System.Data.DbType,System.String)">
+            <summary>
+            Suclasses register a typename for the given type code. <c>$l</c> in the 
+            typename will be replaced by the column length (if appropriate).
+            </summary>
+            <param name="code">The typecode</param>
+            <param name="name">The database type name</param>
+        </member>
+        <member name="M:Migrator.Providers.Dialect.GetTypeName(System.Data.DbType)">
+            <summary>
+            Get the name of the database type associated with the given 
+            </summary>
+            <param name="type">The DbType</param>
+            <returns>The database type name used by ddl.</returns>
+        </member>
+        <member name="M:Migrator.Providers.Dialect.GetTypeName(System.Data.DbType,System.Int32)">
+            <summary>
+            Get the name of the database type associated with the given 
+            </summary>
+            <param name="type">The DbType</param>
+            <returns>The database type name used by ddl.</returns>
+            <param name="length"></param>
+        </member>
+        <member name="M:Migrator.Providers.Dialect.GetTypeName(System.Data.DbType,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Get the name of the database type associated with the given 
+            </summary>
+            <param name="type">The DbType</param>
+            <returns>The database type name used by ddl.</returns>
+            <param name="length"></param>
+            <param name="precision"></param>
+            <param name="scale"></param>
+        </member>
+        <member name="M:Migrator.Providers.Dialect.RegisterUnsignedCompatible(System.Data.DbType)">
+            <summary>
+            Subclasses register which DbTypes are unsigned-compatible (ie, available in signed and unsigned variants)
+            </summary>
+            <param name="type"></param>
+        </member>
+        <member name="M:Migrator.Providers.Dialect.IsUnsignedCompatible(System.Data.DbType)">
+            <summary>
+            Determine if a particular database type has an unsigned variant
+            </summary>
+            <param name="type">The DbType</param>
+            <returns>True if the database type has an unsigned variant, otherwise false</returns>
+        </member>
         <member name="T:Migrator.Providers.SqlServer.SqlServerCeTransformationProvider">
             <summary>
             Migration transformations provider for Microsoft SQL Server Compact Edition.
@@ -190,70 +251,9 @@
             The list of Migrations currently applied to the database.
             </summary>
         </member>
-        <member name="T:Migrator.Providers.Dialect">
+        <member name="T:Migrator.Providers.NoOpTransformationProvider">
             <summary>
-            Defines the implementations specific details for a particular database.
-            </summary>
-        </member>
-        <member name="M:Migrator.Providers.Dialect.RegisterColumnType(System.Data.DbType,System.Int32,System.String)">
-            <summary>
-            Subclasses register a typename for the given type code and maximum
-            column length. <c>$l</c> in the type name will be replaced by the column
-            length (if appropriate)
-            </summary>
-            <param name="code">The typecode</param>
-            <param name="capacity">Maximum length of database type</param>
-            <param name="name">The database type name</param>
-        </member>
-        <member name="M:Migrator.Providers.Dialect.RegisterColumnType(System.Data.DbType,System.String)">
-            <summary>
-            Suclasses register a typename for the given type code. <c>$l</c> in the 
-            typename will be replaced by the column length (if appropriate).
-            </summary>
-            <param name="code">The typecode</param>
-            <param name="name">The database type name</param>
-        </member>
-        <member name="M:Migrator.Providers.Dialect.GetTypeName(System.Data.DbType)">
-            <summary>
-            Get the name of the database type associated with the given 
-            </summary>
-            <param name="type">The DbType</param>
-            <returns>The database type name used by ddl.</returns>
-        </member>
-        <member name="M:Migrator.Providers.Dialect.GetTypeName(System.Data.DbType,System.Int32)">
-            <summary>
-            Get the name of the database type associated with the given 
-            </summary>
-            <param name="type">The DbType</param>
-            <returns>The database type name used by ddl.</returns>
-            <param name="length"></param>
-        </member>
-        <member name="M:Migrator.Providers.Dialect.GetTypeName(System.Data.DbType,System.Int32,System.Int32,System.Int32)">
-            <summary>
-            Get the name of the database type associated with the given 
-            </summary>
-            <param name="type">The DbType</param>
-            <returns>The database type name used by ddl.</returns>
-            <param name="length"></param>
-            <param name="precision"></param>
-            <param name="scale"></param>
-        </member>
-        <member name="M:Migrator.Providers.Dialect.RegisterUnsignedCompatible(System.Data.DbType)">
-            <summary>
-            Subclasses register which DbTypes are unsigned-compatible (ie, available in signed and unsigned variants)
-            </summary>
-            <param name="type"></param>
-        </member>
-        <member name="M:Migrator.Providers.Dialect.IsUnsignedCompatible(System.Data.DbType)">
-            <summary>
-            Determine if a particular database type has an unsigned variant
-            </summary>
-            <param name="type">The DbType</param>
-            <returns>True if the database type has an unsigned variant, otherwise false</returns>
-        </member>
-        <member name="T:Migrator.Providers.PostgreSQL.PostgreSQLTransformationProvider">
-            <summary>
-            Migration transformations provider for PostgreSql (using NPGSql .Net driver)
+            No Op (Null Object Pattern) implementation of the ITransformationProvider
             </summary>
         </member>
         <member name="T:Migrator.Providers.ColumnPropertiesMapper">
@@ -358,6 +358,11 @@
             <param name="typecode"></param>
             <param name="value"></param>
         </member>
+        <member name="T:Migrator.Providers.PostgreSQL.PostgreSQLTransformationProvider">
+            <summary>
+            Migration transformations provider for PostgreSql (using NPGSql .Net driver)
+            </summary>
+        </member>
         <member name="T:Migrator.Providers.Mysql.MySqlTransformationProvider">
             <summary>
             Summary description for MySqlTransformationProvider.
@@ -379,11 +384,6 @@
             </summary>
             <param name="columnDef"></param>
             <returns></returns>
-        </member>
-        <member name="T:Migrator.Providers.NoOpTransformationProvider">
-            <summary>
-            No Op (Null Object Pattern) implementation of the ITransformationProvider
-            </summary>
         </member>
     </members>
 </doc>

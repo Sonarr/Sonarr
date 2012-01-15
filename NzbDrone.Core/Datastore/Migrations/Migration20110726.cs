@@ -6,9 +6,9 @@ namespace NzbDrone.Core.Datastore.Migrations
 {
 
     [Migration(20110726)]
-    public class Migration20110726 : Migration
+    public class Migration20110726 : NzbDroneMigration
     {
-        public override void Up()
+        protected override void MainDbUpgrade()
         {
             Database.RemoveTable("ExternalNotificationSettings");
 
@@ -21,10 +21,5 @@ namespace NzbDrone.Core.Datastore.Migrations
                                                                   });
         }
 
-
-        public override void Down()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

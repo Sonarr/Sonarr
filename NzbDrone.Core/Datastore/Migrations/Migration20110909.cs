@@ -6,9 +6,9 @@ namespace NzbDrone.Core.Datastore.Migrations
 {
 
     [Migration(20110909)]
-    public class Migration20110909 : Migration
+    public class Migration20110909 : NzbDroneMigration
     {
-        public override void Up()
+        protected override void MainDbUpgrade()
         {
             Database.AddColumn("Series", "Runtime", DbType.Int32, ColumnProperty.Null);
             Database.AddColumn("Series", "BannerUrl", DbType.String, ColumnProperty.Null);
@@ -20,11 +20,6 @@ namespace NzbDrone.Core.Datastore.Migrations
                                                 new Column("MinSize", DbType.Int32, ColumnProperty.NotNull),
                                                 new Column("MaxSize", DbType.Int32, ColumnProperty.NotNull)
                                             });
-        }
-
-        public override void Down()
-        {
-            throw new NotImplementedException();
         }
     }
 }

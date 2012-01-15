@@ -145,6 +145,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\Migrator.NET\Migrator.Framework.dll</HintPath>
     </Reference>
+    <Reference Include="Migrator.Providers, Version=0.0.0.0, Culture=neutral, PublicKeyToken=3b3586e9632ecfce, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libraries\Migrator.NET\Migrator.Providers.dll</HintPath>
+    </Reference>
     <Reference Include="MvcMiniProfiler, Version=1.9.0.0, Culture=neutral, PublicKeyToken=b44f9351044011a3, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\MiniProfiler.1.9\lib\net40\MvcMiniProfiler.dll</HintPath>
@@ -211,6 +215,7 @@
     <Compile Include="Datastore\Migrations\Migration20110726.cs" />
     <Compile Include="Datastore\Migrations\Migration20110707.cs" />
     <Compile Include="Datastore\DbProviderFactory.cs" />
+    <Compile Include="Datastore\Migrations\NzbDroneMigration.cs" />
     <Compile Include="Fluent.cs" />
     <Compile Include="Helpers\EpisodeSortingHelper.cs" />
     <Compile Include="Helpers\FileSizeFormatHelpercs.cs" />

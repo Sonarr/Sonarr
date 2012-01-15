@@ -4,9 +4,19 @@
         <name>Migrator</name>
     </assembly>
     <members>
-        <member name="T:Migrator.MigrationTypeComparer">
+        <member name="T:Migrator.DuplicatedVersionException">
             <summary>
-            Comparer of Migration by their version attribute.
+            Exception thrown when a migration number is not unique.
+            </summary>
+        </member>
+        <member name="T:Migrator.ProviderFactory">
+            <summary>
+            Handles loading Provider implementations
+            </summary>
+        </member>
+        <member name="T:Migrator.MigrateAnywhere">
+            <summary>
+            Description of MigrateAnywhere.
             </summary>
         </member>
         <member name="M:Migrator.BaseMigrate.NextMigration">
@@ -22,6 +32,12 @@
             migrations that HAVE already been applied.
             </summary>
             <returns>The most recently applied Migration.</returns>
+        </member>
+        <member name="T:Migrator.IrreversibleMigrationException">
+            <summary>
+            Exception thrown in a migration <c>Down()</c> method
+            when changes can't be undone.
+            </summary>
         </member>
         <member name="T:Migrator.Migrator">
             <summary>
@@ -99,25 +115,9 @@
             Returns the last version of the migrations.
             </summary>
         </member>
-        <member name="T:Migrator.IrreversibleMigrationException">
+        <member name="T:Migrator.MigrationTypeComparer">
             <summary>
-            Exception thrown in a migration <c>Down()</c> method
-            when changes can't be undone.
-            </summary>
-        </member>
-        <member name="T:Migrator.DuplicatedVersionException">
-            <summary>
-            Exception thrown when a migration number is not unique.
-            </summary>
-        </member>
-        <member name="T:Migrator.ProviderFactory">
-            <summary>
-            Handles loading Provider implementations
-            </summary>
-        </member>
-        <member name="T:Migrator.MigrateAnywhere">
-            <summary>
-            Description of MigrateAnywhere.
+            Comparer of Migration by their version attribute.
             </summary>
         </member>
     </members>

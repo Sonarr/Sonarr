@@ -6,9 +6,9 @@ namespace NzbDrone.Core.Datastore.Migrations
 {
 
     [Migration(20111112)]
-    public class Migration2011112 : Migration
+    public class Migration2011112 : NzbDroneMigration
     {
-        public override void Up()
+        protected override void MainDbUpgrade()
         {
             Database.AddTable("NewznabDefinitions", new[]
                                             {
@@ -18,11 +18,6 @@ namespace NzbDrone.Core.Datastore.Migrations
                                                 new Column("Url", DbType.String, ColumnProperty.Null),
                                                 new Column("ApiKey", DbType.String, ColumnProperty.Null)
                                             });
-        }
-
-        public override void Down()
-        {
-            throw new NotImplementedException();
         }
     }
 }
