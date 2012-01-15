@@ -89,6 +89,8 @@ namespace NzbDrone.Core.Providers
 
         private void TagFolder(DirectoryInfo directory, PostDownloadStatusType status)
         {
+            //Turning off tagging folder for now, to stop messing people's series folders.
+            return;
             var target = GetTaggedFolderName(directory, status);
 
             if (!DiskProvider.PathEquals(target, directory.FullName))

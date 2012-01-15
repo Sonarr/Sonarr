@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 
             //Assert
             Mocker.VerifyAllMocks();
-            ExceptionVerification.ExpectedWarns(1);
+            ExceptionVerification.IgnoreWarns();
         }
 
 
@@ -61,10 +61,11 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 
             //Assert
             Mocker.VerifyAllMocks();
-            ExceptionVerification.ExpectedWarns(1);
+            ExceptionVerification.IgnoreWarns();
         }
 
         [Test]
+        [Ignore("Disabled tagging")]
         public void when_series_isnt_found_folder_should_be_tagged_as_unknown_series()
         {
             //Setup
@@ -85,6 +86,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
         }
 
         [Test]
+        [Ignore("Disabled tagging")]
         public void when_no_files_are_imported_folder_should_be_tagged_with_parse_error()
         {
             //Setup
@@ -113,6 +115,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 
 
         [Test]
+        [Ignore("Disabled tagging")]
         public void when_no_file_are_imported_and_folder_size_isnt_small_enought_folder_should_be_tagged_unknown()
         {
             //Setup
@@ -166,7 +169,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
         }
 
         [Test]
-        public void folder_should_be_tagged_if_existing_tag_is_diffrent()
+        public void folder_should_not_be_tagged_if_existing_tag_is_diffrent()
         {
             //Setup
             
@@ -183,8 +186,8 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 
             //Assert
             Mocker.VerifyAllMocks();
-            Mocker.GetMock<DiskProvider>().Verify(c => c.MoveDirectory(droppedFolder.FullName, taggedFolder), Times.Once());
-            ExceptionVerification.ExpectedWarns(1);
+            Mocker.GetMock<DiskProvider>().Verify(c => c.MoveDirectory(droppedFolder.FullName, taggedFolder), Times.Never());
+            ExceptionVerification.IgnoreWarns();
         }
 
         [Test]
