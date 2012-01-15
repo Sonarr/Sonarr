@@ -8,6 +8,7 @@ using NUnit.Framework;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common.AutoMoq;
@@ -17,6 +18,11 @@ namespace NzbDrone.Core.Test.JobTests
     [TestFixture]
     public class RecentBacklogSearchJobTest : CoreTest
     {
+        private void WithEnableBacklogSearching()
+        {
+            Mocker.GetMock<ConfigProvider>().SetupGet(s => s.EnableBacklogSearching).Returns(true);
+        }
+
         [SetUp]
         public void Setup()
         {
@@ -43,6 +49,8 @@ namespace NzbDrone.Core.Test.JobTests
         [Test]
         public void should_only_process_missing_episodes_from_the_last_30_days()
         {
+            WithEnableBacklogSearching();
+
             //Setup
             var episodes = Builder<Episode>.CreateListOfSize(50)
                 .TheFirst(5)

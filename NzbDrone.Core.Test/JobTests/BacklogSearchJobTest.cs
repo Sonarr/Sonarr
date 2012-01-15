@@ -7,6 +7,7 @@ using NUnit.Framework;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common.AutoMoq;
@@ -16,6 +17,11 @@ namespace NzbDrone.Core.Test.JobTests
     [TestFixture]
     public class BacklogSearchJobTest : CoreTest
     {
+        private void WithEnableBacklogSearching()
+        {
+            Mocker.GetMock<ConfigProvider>().SetupGet(s => s.EnableBacklogSearching).Returns(true);
+        }
+
         [Test]
         public void no_missing_epsiodes_should_not_trigger_any_search()
         {
@@ -25,6 +31,7 @@ namespace NzbDrone.Core.Test.JobTests
             var episodes = new List<Episode>();
 
             WithStrictMocker();
+            WithEnableBacklogSearching();
 
             Mocker.GetMock<EpisodeProvider>()
                 .Setup(s => s.EpisodesWithoutFiles(true)).Returns(episodes);
@@ -49,6 +56,7 @@ namespace NzbDrone.Core.Test.JobTests
             var episodes = Builder<Episode>.CreateListOfSize(1).Build();
 
             WithStrictMocker();
+            WithEnableBacklogSearching();
 
             Mocker.GetMock<EpisodeProvider>()
                 .Setup(s => s.EpisodesWithoutFiles(true)).Returns(episodes);
@@ -76,6 +84,7 @@ namespace NzbDrone.Core.Test.JobTests
             var episodes = Builder<Episode>.CreateListOfSize(5).Build();
 
             WithStrictMocker();
+            WithEnableBacklogSearching();
 
             Mocker.GetMock<EpisodeProvider>()
                 .Setup(s => s.EpisodesWithoutFiles(true)).Returns(episodes);
@@ -107,6 +116,7 @@ namespace NzbDrone.Core.Test.JobTests
                 .Build();
 
             WithStrictMocker();
+            WithEnableBacklogSearching();
 
             Mocker.GetMock<EpisodeProvider>()
                 .Setup(s => s.EpisodesWithoutFiles(true)).Returns(episodes);
@@ -141,6 +151,7 @@ namespace NzbDrone.Core.Test.JobTests
                 .Build();
 
             WithStrictMocker();
+            WithEnableBacklogSearching();
 
             Mocker.GetMock<EpisodeProvider>()
                 .Setup(s => s.EpisodesWithoutFiles(true)).Returns(episodes);
@@ -175,6 +186,7 @@ namespace NzbDrone.Core.Test.JobTests
                 .Build();
 
             WithStrictMocker();
+            WithEnableBacklogSearching();
 
             Mocker.GetMock<EpisodeProvider>()
                 .Setup(s => s.EpisodesWithoutFiles(true)).Returns(episodes);
