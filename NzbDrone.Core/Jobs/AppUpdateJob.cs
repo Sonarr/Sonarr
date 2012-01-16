@@ -3,6 +3,7 @@ using System.Linq;
 using System.Diagnostics;
 using System.IO;
 using NLog;
+using Ninject;
 using NzbDrone.Common;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
@@ -22,7 +23,7 @@ namespace NzbDrone.Core.Jobs
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-
+        [Inject]
         public AppUpdateJob(UpdateProvider updateProvider, EnviromentProvider enviromentProvider, DiskProvider diskProvider,
             HttpProvider httpProvider, ProcessProvider processProvider, ArchiveProvider archiveProvider, ConfigFileProvider configFileProvider)
         {
@@ -51,6 +52,10 @@ namespace NzbDrone.Core.Jobs
 
             var updatePackage = _updateProvider.GetAvilableUpdate();
 
+            //No updates available
+            if (updatePackage == null)
+                return;
+
             var packageDestination = Path.Combine(_enviromentProvider.GetUpdateSandboxFolder(), updatePackage.FileName);
 
             if (_diskProvider.FolderExists(_enviromentProvider.GetUpdateSandboxFolder()))
@@ -75,13 +80,13 @@ namespace NzbDrone.Core.Jobs
 
 
             logger.Info("Starting update client");
-            var startInfo = new ProcessStartInfo()
-            {
+            var startInfo = new ProcessStartInfo
+                                {
                 FileName = _enviromentProvider.GetUpdateClientExePath(),
                 Arguments = string.Format("{0} {1}", _enviromentProvider.NzbDroneProcessIdFromEnviroment, _configFileProvider.Guid)
             };
 
-            var updateProcess = _processProvider.Start(startInfo);
+            _processProvider.Start(startInfo);
             notification.CurrentMessage = "Update in progress. NzbDrone will restart shortly.";
         }
     }

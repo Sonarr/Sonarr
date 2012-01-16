@@ -11,6 +11,7 @@ using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.JobTests
 {
@@ -61,6 +62,7 @@ namespace NzbDrone.Core.Test.JobTests
             Mocker.GetMock<DiskProvider>().Verify(c => c.DeleteFolder(SANDBOX_FOLDER, true), Times.Never());
         }
 
+        
         [Test]
         public void Should_download_update_package()
         {
@@ -118,6 +120,16 @@ namespace NzbDrone.Core.Test.JobTests
                        p.FileName == updateClientPath &&
                        p.Arguments == "12 " + _clientGuid.ToString())
                        ));
+        }
+
+        [Test]
+        public void when_no_updates_are_available_should_return_without_error_or_warnings()
+        {
+            Mocker.GetMock<UpdateProvider>().Setup(c => c.GetAvilableUpdate()).Returns((UpdatePackage)null);
+            
+            StartUpdate();
+
+            ExceptionVerification.AssertNoUnexcpectedLogs();
         }
 
         [Test]
