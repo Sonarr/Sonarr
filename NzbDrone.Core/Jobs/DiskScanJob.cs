@@ -6,6 +6,7 @@ using NLog;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Jobs
@@ -14,13 +15,16 @@ namespace NzbDrone.Core.Jobs
     {
         private readonly SeriesProvider _seriesProvider;
         private readonly DiskScanProvider _diskScanProvider;
+        private readonly AutoIgnoreJob _autoIgnoreJob;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         [Inject]
-        public DiskScanJob(SeriesProvider seriesProvider, DiskScanProvider diskScanProvider)
+        public DiskScanJob(SeriesProvider seriesProvider, DiskScanProvider diskScanProvider,
+                            AutoIgnoreJob autoIgnoreJob)
         {
             _seriesProvider = seriesProvider;
             _diskScanProvider = diskScanProvider;
+            _autoIgnoreJob = autoIgnoreJob;
         }
 
         public DiskScanJob()
@@ -62,6 +66,9 @@ namespace NzbDrone.Core.Jobs
                     Logger.ErrorException("An error has occurred while scanning " + series.Title, e);
                 }
             }
+
+            //Start the Auto Ignore Job
+            _autoIgnoreJob.Start(notification, 0 , 0);
         }
     }
 }

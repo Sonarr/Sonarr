@@ -225,6 +225,7 @@
     <Compile Include="Instrumentation\DatabaseTarget.cs" />
     <Compile Include="Instrumentation\NlogWriter.cs" />
     <Compile Include="Datastore\PetaPoco\PetaPoco.cs" />
+    <Compile Include="Jobs\AutoIgnoreJob.cs" />
     <Compile Include="Model\AtomicParsleyTitleType.cs" />
     <Compile Include="Model\ConnectionInfoModel.cs" />
     <Compile Include="Model\PostDownloadStatusType.cs" />

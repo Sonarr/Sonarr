@@ -402,6 +402,12 @@ namespace NzbDrone.Core.Providers.Core
             set { SetValue("EnableBacklogSearching", value); }
         }
 
+        public virtual bool AutoIgnorePreviouslyDownloadedEpisodes
+        {
+            get { return GetValueBoolean("AutoIgnorePreviouslyDownloadedEpisodes"); }
+            set { SetValue("AutoIgnorePreviouslyDownloadedEpisodes", value); }
+        }
+
         private string GetValue(string key)
         {
             return GetValue(key, String.Empty);
