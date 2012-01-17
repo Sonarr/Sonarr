@@ -5,6 +5,11 @@
 @section HeaderContent{
     @Html.IncludeCss("Settings.css")
 }
+
+<div class="infoBox">
+    You must manually restart NzbDrone for these changes to take effect. (Automatic restart comming soon!)
+</div>
+
 <div id="stylized">
     @using (Html.BeginForm("SaveSystem", "Settings", FormMethod.Post, new { id = "SystemForm", name = "SystemForm", @class = "settingsForm" }))
     {
