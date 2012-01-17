@@ -65,6 +65,9 @@ namespace NzbDrone.Common
         public virtual void UnInstall(string serviceName)
         {
             Logger.Info("Uninstalling {0} service", serviceName);
+
+            Stop(serviceName);
+            
             var serviceInstaller = new ServiceInstaller();
 
             var context = new InstallContext("service_uninstall.log", null);

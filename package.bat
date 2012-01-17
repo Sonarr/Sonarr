@@ -9,6 +9,9 @@ del nzbdrone*.zip /Q /F
 xcopy IISExpress %TARGET%\IISExpress /E /V /I /Y
 
 
+xcopy ServiceHelpers\ServiceInstall\bin\Release\*.exe  %TARGET%\ /E /V /I /Y
+xcopy ServiceHelpers\ServiceUninstall\bin\Release\*.exe  %TARGET%\ /E /V /I /Y
+
 xcopy NzbDrone\bin\Debug\*.*  %TARGET%\ /E /V /I /Y
 xcopy NzbDrone\bin\Release\*.*  %TARGET%\ /E /V /I /Y
 

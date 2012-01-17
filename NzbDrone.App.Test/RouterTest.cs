@@ -1,4 +1,5 @@
-﻿using System.ServiceProcess;
+﻿using System.IO;
+using System.ServiceProcess;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -46,10 +47,10 @@ namespace NzbDrone.App.Test
         [Test]
         public void Route_should_call_install_service_when_application_mode_is_install()
         {
-            WithStrictMocker();
-            var serviceProviderMock = Mocker.GetMock<ServiceProvider>();
+            var serviceProviderMock = Mocker.GetMock<ServiceProvider>(MockBehavior.Strict);
             serviceProviderMock.Setup(c => c.Install(ServiceProvider.NZBDRONE_SERVICE_NAME));
             serviceProviderMock.Setup(c => c.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME)).Returns(false);
+            serviceProviderMock.Setup(c => c.Start(ServiceProvider.NZBDRONE_SERVICE_NAME));
             Mocker.GetMock<EnviromentProvider>().SetupGet(c => c.IsUserInteractive).Returns(true);
 
             Mocker.Resolve<Router>().Route(ApplicationMode.InstallService);
@@ -61,7 +62,6 @@ namespace NzbDrone.App.Test
         [Test]
         public void Route_should_call_uninstall_service_when_application_mode_is_uninstall()
         {
-            WithStrictMocker();
             var serviceProviderMock = Mocker.GetMock<ServiceProvider>();
             serviceProviderMock.Setup(c => c.UnInstall(ServiceProvider.NZBDRONE_SERVICE_NAME));
             Mocker.GetMock<EnviromentProvider>().SetupGet(c => c.IsUserInteractive).Returns(true);
@@ -75,7 +75,6 @@ namespace NzbDrone.App.Test
         [Test]
         public void Route_should_call_console_service_when_application_mode_is_console()
         {
-            WithStrictMocker();
             var consoleProvider = Mocker.GetMock<ConsoleProvider>();
             var appServerProvider = Mocker.GetMock<ApplicationServer>();
             consoleProvider.Setup(c => c.WaitForClose());
@@ -94,7 +93,6 @@ namespace NzbDrone.App.Test
         [TestCase(ApplicationMode.Help)]
         public void Route_should_call_service_start_when_run_in_service_more(ApplicationMode applicationMode)
         {
-            WithStrictMocker();
             var envMock = Mocker.GetMock<EnviromentProvider>();
             var serviceProvider = Mocker.GetMock<ServiceProvider>();
 
@@ -111,7 +109,6 @@ namespace NzbDrone.App.Test
         [Test]
         public void show_error_on_install_if_service_already_exist()
         {
-            WithStrictMocker();
             var consoleMock = Mocker.GetMock<ConsoleProvider>();
             var serviceMock = Mocker.GetMock<ServiceProvider>();
             Mocker.GetMock<EnviromentProvider>().SetupGet(c => c.IsUserInteractive).Returns(true);
@@ -127,7 +124,6 @@ namespace NzbDrone.App.Test
         [Test]
         public void show_error_on_uninstall_if_service_doesnt_exist()
         {
-            WithStrictMocker();
             var consoleMock = Mocker.GetMock<ConsoleProvider>();
             var serviceMock = Mocker.GetMock<ServiceProvider>();
             Mocker.GetMock<EnviromentProvider>().SetupGet(c => c.IsUserInteractive).Returns(true);
@@ -138,6 +134,31 @@ namespace NzbDrone.App.Test
             Mocker.Resolve<Router>().Route(ApplicationMode.UninstallService);
 
             Mocker.VerifyAllMocks();
+        }
+
+        [Test]
+        public void should_delete_service_bat_files_if_they_exist()
+        {
+            WithTempAsAppPath();
+
+            var bat1 = @"c:\nzbdrone\ServiceInstall.bat";
+            var bat2 = @"c:\nzbdrone\ServiceUninstall.bat";
+            var bat3 = @"c:\nzbdrone\Someother.bat";
+            var file1 = @"c:\nzbdrone\ServiceInstall.exe";
+            var file2 = @"c:\nzbdrone\ServiceInstall.dat";
+
+            var files = new string[] {bat1, bat2, bat3, file1, file2};
+
+            Mocker.GetMock<DiskProvider>()
+                    .Setup(c => c.GetFiles(VirtualPath, SearchOption.TopDirectoryOnly)).Returns(files);
+
+            Mocker.Resolve<Router>().Route(ApplicationMode.Console);
+
+            Mocker.GetMock<DiskProvider>().Verify(c=>c.DeleteFile(bat1));
+            Mocker.GetMock<DiskProvider>().Verify(c=>c.DeleteFile(bat2));
+            Mocker.GetMock<DiskProvider>().Verify(c=>c.DeleteFile(bat3),Times.Never());
+            Mocker.GetMock<DiskProvider>().Verify(c=>c.DeleteFile(file1),Times.Never());
+            Mocker.GetMock<DiskProvider>().Verify(c=>c.DeleteFile(file2),Times.Never());
         }
     }
 }

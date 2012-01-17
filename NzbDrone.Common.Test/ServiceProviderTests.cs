@@ -63,6 +63,8 @@ namespace NzbDrone.Common.Test
             serviceProvider.ServiceExist(TEMP_SERVICE_NAME).Should().BeTrue();
             serviceProvider.UnInstall(TEMP_SERVICE_NAME);
             serviceProvider.ServiceExist(TEMP_SERVICE_NAME).Should().BeFalse();
+
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
@@ -15,23 +16,35 @@ namespace NzbDrone
         private readonly ServiceProvider _serviceProvider;
         private readonly ConsoleProvider _consoleProvider;
         private readonly EnviromentProvider _enviromentProvider;
+        private readonly DiskProvider _diskProvider;
 
-        public Router(ApplicationServer applicationServer, ServiceProvider serviceProvider, ConsoleProvider consoleProvider, EnviromentProvider enviromentProvider)
+        public Router(ApplicationServer applicationServer, ServiceProvider serviceProvider, ConsoleProvider consoleProvider, EnviromentProvider enviromentProvider, DiskProvider diskProvider)
         {
             _applicationServer = applicationServer;
             _serviceProvider = serviceProvider;
             _consoleProvider = consoleProvider;
             _enviromentProvider = enviromentProvider;
+            _diskProvider = diskProvider;
         }
 
         public void Route(IEnumerable<string> args)
         {
+
             Route(GetApplicationMode(args));
         }
 
         public void Route(ApplicationMode applicationMode)
         {
             Logger.Info("Application mode: {0}", applicationMode);
+
+            var batFiles = _diskProvider.GetFiles(_enviromentProvider.ApplicationPath, SearchOption.TopDirectoryOnly)
+                            .Where(c => c.EndsWith(".bat", StringComparison.InvariantCultureIgnoreCase)).ToList();
+
+            foreach (var batFile in batFiles)
+            {
+                if (new FileInfo(batFile).Name.StartsWith("service", StringComparison.InvariantCultureIgnoreCase))
+                    _diskProvider.DeleteFile(batFile);
+            }
 
             //TODO:move this outside, it should be one of application modes (ApplicationMode.Service?)
             if (!_enviromentProvider.IsUserInteractive)
@@ -58,6 +71,7 @@ namespace NzbDrone
                             else
                             {
                                 _serviceProvider.Install(ServiceProvider.NZBDRONE_SERVICE_NAME);
+                                _serviceProvider.Start(ServiceProvider.NZBDRONE_SERVICE_NAME);
                             }
                             break;
                         }
@@ -71,7 +85,7 @@ namespace NzbDrone
                             {
                                 _serviceProvider.UnInstall(ServiceProvider.NZBDRONE_SERVICE_NAME);
                             }
-                            
+
                             break;
                         }
                     default:

@@ -14,11 +14,11 @@ namespace NzbDrone.Web.Models
         public int Port { get; set; }
 
         [DisplayName("Launch Browser")]
-        [Description("Start default webrowser when NzbDrone starts?")]
+        [Description("Start web browser when NzbDrone starts?")]
         public bool LaunchBrowser { get; set; }
 
         [DisplayName("Authentication")]
-        [Description("Secure the webserver with Authentication?")]
+        [Description("Secure the server with authentication?")]
         public AuthenticationType AuthenticationType { get; set; }
 
         public SelectList AuthTypeSelectList { get; set; }
