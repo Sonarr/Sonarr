@@ -19,12 +19,13 @@ namespace NzbDrone
         private readonly IISProvider _iisProvider;
         private readonly ProcessProvider _processProvider;
         private readonly MonitoringProvider _monitoringProvider;
+        private readonly SecurityProvider _securityProvider;
         private readonly WebClient _webClient;
 
         [Inject]
         public ApplicationServer(ConfigFileProvider configFileProvider, WebClient webClient, IISProvider iisProvider,
                            DebuggerProvider debuggerProvider, EnviromentProvider enviromentProvider,
-                           ProcessProvider processProvider, MonitoringProvider monitoringProvider)
+                           ProcessProvider processProvider, MonitoringProvider monitoringProvider, SecurityProvider securityProvider)
         {
             _configFileProvider = configFileProvider;
             _webClient = webClient;
@@ -33,6 +34,7 @@ namespace NzbDrone
             _enviromentProvider = enviromentProvider;
             _processProvider = processProvider;
             _monitoringProvider = monitoringProvider;
+            _securityProvider = securityProvider;
         }
 
         public ApplicationServer()
@@ -48,6 +50,7 @@ namespace NzbDrone
         public virtual void Start()
         {
             _iisProvider.StopServer();
+            _securityProvider.MakeAccessible();
             _iisProvider.StartServer();
 
             _debuggerProvider.Attach();

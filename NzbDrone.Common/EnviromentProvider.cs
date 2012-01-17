@@ -142,6 +142,12 @@ namespace NzbDrone.Common
             }
         }
 
+        public virtual Version GetOsVersion()
+        {
+            OperatingSystem os = Environment.OSVersion;
+            Version version = os.Version;
 
+            return version;
+        }
     }
 }
