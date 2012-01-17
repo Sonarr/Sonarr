@@ -11,8 +11,7 @@ namespace NzbDrone.Common
 
         protected override void Write(LogEventInfo logEvent)
         {
-            if (logEvent == null || logEvent.Exception == null) return;
-            if (Debugger.IsAttached || Process.GetCurrentProcess().ProcessName.Contains("JetBrains")) return;
+            if (logEvent == null || logEvent.Exception == null || !EnviromentProvider.IsProduction) return;
 
             Logger.Trace("Sending Exception to Exceptioneer. Process Name: {0}", Process.GetCurrentProcess().ProcessName);
 

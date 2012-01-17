@@ -97,7 +97,7 @@ namespace NzbDrone.Common
                 {
                     var exTarget = new ExceptioneerTarget();
                     LogManager.Configuration.AddTarget("Exceptioneer", exTarget);
-                    LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Error, exTarget));
+                    LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, exTarget));
 
                     LogManager.ConfigurationReloaded += (sender, args) => RegisterExceptioneer();
                 }
