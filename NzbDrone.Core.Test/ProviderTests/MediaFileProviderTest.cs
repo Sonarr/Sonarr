@@ -1,5 +1,6 @@
 // ReSharper disable RedundantUsingDirective
 
+using System;
 using System.Collections.Generic;
 
 using FizzWare.NBuilder;
@@ -7,6 +8,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
@@ -17,7 +19,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class MediaFileProviderTests : CoreTest
+    public class MediaFileProviderTest : CoreTest
     {
         [Test]
         public void get_series_files()
@@ -28,7 +30,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var secondSeriesFiles = Builder<EpisodeFile>.CreateListOfSize(10)
                 .All().With(s => s.SeriesId = 20).Build();
 
-            
+
 
             var database = TestDbHelper.GetEmptyDatabase(true);
 
@@ -59,7 +61,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(s => s.SeasonNumber = 2)
                 .Build();
 
-            
+
 
             var database = TestDbHelper.GetEmptyDatabase(true);
 
@@ -83,15 +85,13 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Returns(new List<Episode>());
 
             Mocker.GetMock<MediaFileProvider>()
-                .Setup(e => e.RepairLinks()).Returns(0);
+                .Setup(e => e.CleanUpDatabase());
 
-            Mocker.GetMock<MediaFileProvider>()
-                .Setup(e => e.DeleteOrphaned()).Returns(0);
 
             Mocker.GetMock<DiskProvider>()
                 .Setup(c => c.FolderExists(It.IsAny<string>()))
                 .Returns(true);
-            
+
             var series = Builder<Series>.CreateNew()
                 .With(s => s.SeriesId = 12).Build();
 
@@ -115,49 +115,6 @@ namespace NzbDrone.Core.Test.ProviderTests
         }
 
         [Test]
-        public void CleanEpisodesWithNonExistantFiles()
-        {
-            //Setup
-            var episodes = Builder<Episode>.CreateListOfSize(10).Build();
-
-            
-            var database = TestDbHelper.GetEmptyDatabase(true);
-            Mocker.SetConstant(database);
-            database.InsertMany(episodes);
-
-            //Act
-            var removedLinks = Mocker.Resolve<MediaFileProvider>().RepairLinks();
-            var result = database.Fetch<Episode>();
-
-            //Assert
-            result.Should().HaveSameCount(episodes);
-            result.Should().OnlyContain(e => e.EpisodeFileId == 0);
-            removedLinks.Should().Be(10);
-        }
-
-        [Test]
-        public void DeleteOrphanedEpisodeFiles()
-        {
-            //Setup
-            var episodeFiles = Builder<EpisodeFile>.CreateListOfSize(10).Build();
-            var episodes = Builder<Episode>.CreateListOfSize(5).Build();
-
-            
-            var database = TestDbHelper.GetEmptyDatabase(true);
-            Mocker.SetConstant(database);
-            database.InsertMany(episodes);
-            database.InsertMany(episodeFiles);
-
-            //Act
-            Mocker.Resolve<MediaFileProvider>().DeleteOrphaned();
-            var result = database.Fetch<EpisodeFile>();
-
-            //Assert
-            result.Should().HaveCount(5);
-            result.Should().OnlyContain(e => e.EpisodeFileId > 0);
-        }
-
-        [Test]
         [TestCase("30 Rock - S01E05 - Episode Title", 1, true, "Season %0s", @"C:\Test\30 Rock\Season 01\30 Rock - S01E05 - Episode Title.mkv")]
         [TestCase("30 Rock - S01E05 - Episode Title", 1, true, "Season %s", @"C:\Test\30 Rock\Season 1\30 Rock - S01E05 - Episode Title.mkv")]
         [TestCase("30 Rock - S01E05 - Episode Title", 1, false, "Season %0s", @"C:\Test\30 Rock\30 Rock - S01E05 - Episode Title.mkv")]
@@ -172,7 +129,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(s => s.SeasonFolder = useSeasonFolder)
                 .Build();
 
-            
+
             Mocker.GetMock<ConfigProvider>().Setup(e => e.SortingSeasonFolderFormat).Returns(seasonFolderFormat);
 
             //Act
@@ -188,7 +145,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             //Setup
             var episodeFiles = Builder<EpisodeFile>.CreateListOfSize(10).Build();
 
-            
+
             var database = TestDbHelper.GetEmptyDatabase(true);
             Mocker.SetConstant(database);
             database.InsertMany(episodeFiles);

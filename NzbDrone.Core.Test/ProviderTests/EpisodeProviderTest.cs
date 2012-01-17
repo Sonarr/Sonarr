@@ -1590,39 +1590,5 @@ namespace NzbDrone.Core.Test.ProviderTests
             result.Where(e => e.Ignored).Should().HaveCount(episodeCount - 1);
             result.Single(e => e.SeasonNumber == 1).Ignored.Should().BeFalse();
         }
-
-        [Test]
-        public void SetPreviouslyDownloadedToIgnored_should_set_only_episodes_with_no_episode_file_and_postdownload_status_noError_to_ignored()
-        {
-            WithRealDb();
-
-            var postDownloadStatus = PostDownloadStatusType.NoError;
-
-            var fakeEpisodes = Builder<Episode>.CreateListOfSize(10)
-                .All()
-                .With(c => c.Ignored = false)
-                .TheFirst(2)
-                .With(c => c.PostDownloadStatus = PostDownloadStatusType.NoError)
-                .With(c => c.EpisodeFileId = 0)
-                .TheNext(3)
-                .With(c => c.PostDownloadStatus = PostDownloadStatusType.Unknown)
-                .With(c => c.EpisodeFileId = 0)
-                .TheNext(4)
-                .With(c => c.PostDownloadStatus = PostDownloadStatusType.NoError)
-                .TheNext(1)
-                .With(c => c.PostDownloadStatus = PostDownloadStatusType.NoError)
-                .With(c => c.Ignored = true)
-                .Build();
-
-            Db.InsertMany(fakeEpisodes);
-
-            //Act
-            Mocker.Resolve<EpisodeProvider>().SetPreviouslyDownloadedToIgnored();
-
-            //Assert
-            var result = Db.Fetch<Episode>();
-            result.Should().HaveCount(10);
-            result.Where(e => e.Ignored).Count().Should().Be(3);
-        }
     }
 }

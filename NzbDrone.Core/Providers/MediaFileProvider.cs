@@ -99,41 +99,42 @@ namespace NzbDrone.Core.Providers
             return new FileInfo(path);
         }
 
-        public virtual int RepairLinks()
+        public virtual void CleanUpDatabase()
         {
-            Logger.Trace("Verifying Episode>Episode file relationships.");
-            var updated = _database.Execute(@"UPDATE Episodes SET EpisodeFileId = 0
-                                WHERE EpisodeFileId IN
-                                (SELECT Episodes.EpisodeFileId FROM Episodes
-                                LEFT OUTER JOIN EpisodeFiles
-                                ON Episodes.EpisodeFileId = EpisodeFiles.EpisodeFileId
-                                WHERE Episodes.EpisodeFileId > 0 AND EpisodeFiles.EpisodeFileId IS null)");
+            Logger.Trace("Verifying Episode > Episode file relationships.");
+
+            string updateString = "UPDATE Episodes SET EpisodeFileId = 0, GrabDate = NULL, PostDownloadStatus = 0";
+
+            if (_configProvider.AutoIgnorePreviouslyDownloadedEpisodes)
+            {
+                updateString += ", Ignored = 1";
+            }
+
+            var updated = _database.Execute(updateString +
+                                                             @"WHERE EpisodeFileId IN
+                                                             (SELECT Episodes.EpisodeFileId FROM Episodes
+                                                             LEFT OUTER JOIN EpisodeFiles
+                                                             ON Episodes.EpisodeFileId = EpisodeFiles.EpisodeFileId
+                                                             WHERE Episodes.EpisodeFileId > 0 AND EpisodeFiles.EpisodeFileId IS NULL)");
 
             if (updated > 0)
             {
                 Logger.Debug("Removed {0} invalid links to episode files.", updated);
             }
 
-            return updated;
-        }
-
-        public virtual int DeleteOrphaned()
-        {
             Logger.Trace("Deleting orphan files.");
 
-            var updated = _database.Execute(@"DELETE FROM EpisodeFiles
+            updated = _database.Execute(@"DELETE FROM EpisodeFiles
                                 WHERE EpisodeFileId IN
                                 (SELECT EpisodeFiles.EpisodeFileId FROM EpisodeFiles
                                 LEFT OUTER JOIN Episodes
                                 ON EpisodeFiles.EpisodeFileId = Episodes.EpisodeFileId
-                                WHERE Episodes.EpisodeFileId IS null)");
+                                WHERE Episodes.EpisodeFileId IS NULL)");
 
             if (updated > 0)
             {
                 Logger.Debug("Removed {0} orphan file(s) from database.S", updated);
             }
-
-            return updated;
         }
 
         public virtual string GetNewFilename(IList<Episode> episodes, string seriesTitle, QualityTypes quality)

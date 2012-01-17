@@ -37,9 +37,6 @@ namespace NzbDrone.Core.Test.JobTests
                 .Setup(p => p.Scan(series))
                 .Returns(new List<EpisodeFile>());
 
-            Mocker.GetMock<AutoIgnoreJob>()
-                    .Setup(s => s.Start(It.IsAny<ProgressNotification>(), 0, 0));
-
             //Act
             Mocker.Resolve<DiskScanJob>().Start(new ProgressNotification("Test"), series.SeriesId, 0);
 
@@ -71,9 +68,6 @@ namespace NzbDrone.Core.Test.JobTests
                 .Setup(s => s.Scan(series[1]))
                 .Returns(new List<EpisodeFile>());
 
-            Mocker.GetMock<AutoIgnoreJob>()
-                    .Setup(s => s.Start(It.IsAny<ProgressNotification>(), 0, 0));
-
             Mocker.Resolve<DiskScanJob>().Start(new ProgressNotification("Test"), 0, 0);
 
 
@@ -101,9 +95,6 @@ namespace NzbDrone.Core.Test.JobTests
             Mocker.GetMock<DiskScanProvider>()
                 .Setup(s => s.Scan(series[1]))
                 .Throws(new InvalidOperationException("Bad Job"));
-
-            Mocker.GetMock<AutoIgnoreJob>()
-                    .Setup(s => s.Start(It.IsAny<ProgressNotification>(), 0, 0));
 
             Mocker.Resolve<DiskScanJob>().Start(new ProgressNotification("Test"), 0, 0);
 
@@ -134,8 +125,6 @@ namespace NzbDrone.Core.Test.JobTests
                 .Setup(s => s.Scan(series[1]))
                 .Returns(new List<EpisodeFile>());
 
-            Mocker.GetMock<AutoIgnoreJob>()
-                    .Setup(s => s.Start(It.IsAny<ProgressNotification>(), 0, 0));
 
             Mocker.Resolve<DiskScanJob>().Start(new ProgressNotification("Test"), 0, 0);
 

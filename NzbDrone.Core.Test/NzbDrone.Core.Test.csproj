@@ -102,6 +102,7 @@
     <Compile Include="JobTests\BacklogSearchJobTest.cs" />
     <Compile Include="JobTests\BannerDownloadJobTest.cs" />
     <Compile Include="JobTests\RecentBacklogSearchJobTest.cs" />
+    <Compile Include="ProviderTests\MediaFileProviderTests\CleanUpDatabaseFixture.cs" />
     <Compile Include="ProviderTests\ReferenceDataProviderTest.cs" />
     <Compile Include="ProviderTests\NotificationProviderTests\NotificationProviderFixture.cs" />
     <Compile Include="ProviderTests\SearchProviderTests\ProcessDailySearchResultsFixture.cs" />
@@ -151,7 +152,7 @@
     <Compile Include="ProviderTests\RootDirProviderTest.cs" />
     <Compile Include="ProviderTests\IndexerProviderTest.cs" />
     <Compile Include="ProviderTests\HistoryProviderTest.cs" />
-    <Compile Include="ProviderTests\MediaFileProviderTests.cs" />
+    <Compile Include="ProviderTests\MediaFileProviderTest.cs" />
     <Compile Include="ProviderTests\ConfigProviderTest.cs" />
     <Compile Include="ProviderTests\EpisodeProviderTest.cs" />
     <Compile Include="Framework\TestDbHelper.cs" />

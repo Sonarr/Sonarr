@@ -147,13 +147,10 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(s => s.Path = @"C:\Test\TV\SeriesName\")
                 .Build();
 
-            Mocker.GetMock<MediaFileProvider>()
-                .Setup(c => c.DeleteOrphaned())
-                .Returns(0);
 
             Mocker.GetMock<MediaFileProvider>()
-                .Setup(c => c.RepairLinks())
-                .Returns(0);    
+                    .Setup(c => c.CleanUpDatabase());
+   
 
             Mocker.GetMock<DiskProvider>()
                 .Setup(c => c.FolderExists(series.Path))

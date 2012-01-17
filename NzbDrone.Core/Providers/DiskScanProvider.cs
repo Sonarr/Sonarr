@@ -56,8 +56,7 @@ namespace NzbDrone.Core.Providers
         /// <param name="path">Path to scan</param>
         public virtual List<EpisodeFile> Scan(Series series, string path)
         {
-            _mediaFileProvider.DeleteOrphaned();
-            _mediaFileProvider.RepairLinks();
+            _mediaFileProvider.CleanUpDatabase();
 
             if (!_diskProvider.FolderExists(path))
             {
@@ -231,8 +230,11 @@ namespace NzbDrone.Core.Providers
                         //Set the EpisodeFileId for each episode attached to this file to 0
                         foreach(var episode in _episodeProvider.GetEpisodesByFileId(episodeFile.EpisodeFileId))
                         {
-                            Logger.Trace("Setting EpisodeFileId for Episode: [{0}] to 0");
+                            Logger.Trace("Setting EpisodeFileId for Episode: [{0}] to 0", episode.EpisodeId);
                             episode.EpisodeFileId = 0;
+                            episode.Ignored = true;
+                            episode.GrabDate = null;
+                            episode.PostDownloadStatus = PostDownloadStatusType.Unknown;
                             _episodeProvider.UpdateEpisode(episode);
                         }
 
