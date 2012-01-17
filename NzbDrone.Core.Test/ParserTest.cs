@@ -56,6 +56,8 @@ namespace NzbDrone.Core.Test
         [TestCase("24-7 Flyers-Rangers- Road to the NHL Winter Classic - S01E01 - Part 1", "24 7 Flyers Rangers Road to the NHL Winter Classic", 1, 1)]
         [TestCase("The.Kennedys.Part.2.DSR.XviD-SYS", "The Kennedys", 1, 2)]
         [TestCase("the-pacific-e07-720p", "The Pacific", 1, 7)]
+        [TestCase("S6E02-Unwrapped-(Playing With Food) - [DarkData]", "", 6, 2)]
+        [TestCase("S06E03-Unwrapped-(Number Ones Unwrapped) - [DarkData]", "", 6, 3)]
         public void ParseTitle_single(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
             var result = Parser.ParseTitle(postTitle);
@@ -159,6 +161,8 @@ namespace NzbDrone.Core.Test
         [TestCase("S03E01.S03E02.720p.HDTV.X264-DIMENSION", "", 3, new[] { 1, 2 }, 2)]
         [TestCase("Desparate Housewives - S07E22 - 7x23 - And Lots of Security.. [HDTV].mkv", "Desparate Housewives", 7, new[] { 22, 23 }, 2)]
         [TestCase("S07E22 - 7x23 - And Lots of Security.. [HDTV].mkv", "", 7, new[] { 22, 23 }, 2)]
+        [TestCase("2x04x05.720p.BluRay-FUTV", "", 2, new[] { 4, 5 }, 2)]
+        [TestCase("S02E04E05.720p.BluRay-FUTV", "", 2, new[] { 4, 5 }, 2)]
         public void TitleParse_multi(string postTitle, string title, int season, int[] episodes, int count)
         {
             var result = Parser.ParseTitle(postTitle);

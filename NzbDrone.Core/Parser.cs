@@ -35,8 +35,8 @@ namespace NzbDrone.Core
                                     new Regex(@"^(?<title>.+?)(?:\W+(?:(?:Part\W?|(?<!\d+\W+)e)(?<episode>\d{1,2}(?!\d+)))+)\W?(?!\\)",
                                         RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
-                                    //No Title - Single episodes or multi-episode (S01E05E06, S01E05-06, etc)
-                                    new Regex(@"^(?:\W?S?(?<season>\d{1,2}(?!\d+))(?:(?:\-|[ex]|\s){2}(?<episode>\d{1,2}(?!\d+)))+\W*)+\W?(?!\\)",
+                                    //Episodes without a title, Single (S01E05, 1x05) AND Multi (S01E04E05, 1x04x05)
+                                    new Regex(@"^(?:S?(?<season>\d{1,2}(?!\d+))(?:(?:\-|[ex]|\s)(?<episode>\d{1,2}(?!\d+)))+\W*)+\W?(?!\\)",
 			                            RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                                     //Episodes over 99 (3-digits or more)
