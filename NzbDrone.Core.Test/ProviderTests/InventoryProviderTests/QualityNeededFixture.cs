@@ -14,11 +14,11 @@ using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common.AutoMoq;
 
-namespace NzbDrone.Core.Test.ProviderTests
+namespace NzbDrone.Core.Test.ProviderTests.InventoryProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class InventoryProvider_QualityNeededTest : CoreTest
+    public class QualityNeededFixture : CoreTest
     {
         private Episode episode;
         private Episode episode2;

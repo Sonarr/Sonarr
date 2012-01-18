@@ -129,6 +129,14 @@ namespace NzbDrone.Core.Providers
                 return false;
             }
 
+            //Check to see if an upgrade is possible before attempting
+            if (!_inventoryProvider.IsUpgradePossible(episode))
+            {
+                Logger.Info("Search for {0} was aborted, file in disk meets or exceeds Profile's Cutoff", episode);
+                notification.CurrentMessage = String.Format("Aborting search for {0}, Upgrade is not possible", episode);
+                return false;
+            }
+
             notification.CurrentMessage = "Searching for " + episode;
 
             if (episode.Series.IsDaily && !episode.AirDate.HasValue)

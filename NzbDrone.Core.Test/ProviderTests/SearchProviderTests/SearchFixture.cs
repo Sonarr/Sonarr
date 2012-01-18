@@ -192,6 +192,9 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
             episode.AirDate = null;
             episode.Series = _series;
 
+            Mocker.GetMock<InventoryProvider>().Setup(s => s.IsUpgradePossible(It.IsAny<Episode>()))
+                    .Returns(true);
+
             Mocker.GetMock<EpisodeProvider>().Setup(s => s.GetEpisode(episode.EpisodeId))
                 .Returns(episode);
 

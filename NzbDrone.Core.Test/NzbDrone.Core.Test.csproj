@@ -102,6 +102,7 @@
     <Compile Include="JobTests\BacklogSearchJobTest.cs" />
     <Compile Include="JobTests\BannerDownloadJobTest.cs" />
     <Compile Include="JobTests\RecentBacklogSearchJobTest.cs" />
+    <Compile Include="ProviderTests\InventoryProviderTests\IsUpgradePossibleFixture.cs" />
     <Compile Include="ProviderTests\MediaFileProviderTests\CleanUpDatabaseFixture.cs" />
     <Compile Include="ProviderTests\ReferenceDataProviderTest.cs" />
     <Compile Include="ProviderTests\NotificationProviderTests\NotificationProviderFixture.cs" />
@@ -123,7 +124,7 @@
     <Compile Include="ProviderTests\UpdateProviderTests\GetAvilableUpdateFixture.cs" />
     <Compile Include="SortHelperTest.cs" />
     <Compile Include="ProviderTests\EpisodeProviderTest_DeleteInvalidEpisodes.cs" />
-    <Compile Include="ProviderTests\InventoryProvider_IsAcceptableSizeTest.cs" />
+    <Compile Include="ProviderTests\InventoryProviderTests\IsAcceptableSizeTestFixture.cs" />
     <Compile Include="ProviderTests\QualityTypeProviderTest.cs" />
     <Compile Include="ProviderTests\MisnamedProviderTest.cs" />
     <Compile Include="JobTests\SeasonSearchJobTest.cs" />
@@ -137,16 +138,16 @@
     <Compile Include="FluentTest.cs" />
     <Compile Include="ProviderTests\LogProviderTests\LogProviderFixture.cs" />
     <Compile Include="ProviderTests\UpcomingEpisodesProviderTest.cs" />
-    <Compile Include="ProviderTests\MediaFileProvider_GetNewFilenameTest.cs" />
+    <Compile Include="ProviderTests\MediaFileProviderTests\GetNewFilenameFixture.cs" />
     <Compile Include="dbBenchmark.cs" />
     <Compile Include="Framework\CoreTest.cs" />
-    <Compile Include="ProviderTests\InventoryProvider_IsMonitoredTest.cs" />
+    <Compile Include="ProviderTests\InventoryProviderTests\IsMonitoredFixture.cs" />
     <Compile Include="ProviderTests\DownloadProviderTest.cs" />
     <Compile Include="EpisodeStatusTest.cs" />
     <Compile Include="JobTests\ImportNewSeriesJobTest.cs" />
     <Compile Include="JobTests\DiskScanJobTest.cs" />
     <Compile Include="IndexerTests.cs" />
-    <Compile Include="ProviderTests\InventoryProvider_QualityNeededTest.cs" />
+    <Compile Include="ProviderTests\InventoryProviderTests\QualityNeededFixture.cs" />
     <Compile Include="ProviderTests\JobProviderTests\JobProviderFixture.cs" />
     <Compile Include="QualityTest.cs" />
     <Compile Include="ProviderTests\RootDirProviderTest.cs" />

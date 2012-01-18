@@ -11,7 +11,7 @@ using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common.AutoMoq;
 
-namespace NzbDrone.Core.Test.ProviderTests
+namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming

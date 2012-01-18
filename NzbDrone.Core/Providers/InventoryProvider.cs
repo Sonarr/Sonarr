@@ -15,17 +15,20 @@ namespace NzbDrone.Core.Providers
         private readonly EpisodeProvider _episodeProvider;
         private readonly HistoryProvider _historyProvider;
         private readonly QualityTypeProvider _qualityTypeProvider;
+        private readonly QualityProvider _qualityProvider;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         [Inject]
         public InventoryProvider(SeriesProvider seriesProvider, EpisodeProvider episodeProvider,
-            HistoryProvider historyProvider, QualityTypeProvider qualityTypeProvider)
+            HistoryProvider historyProvider, QualityTypeProvider qualityTypeProvider,
+            QualityProvider qualityProvider)
         {
             _seriesProvider = seriesProvider;
             _episodeProvider = episodeProvider;
             _historyProvider = historyProvider;
             _qualityTypeProvider = qualityTypeProvider;
+            _qualityProvider = qualityProvider;
         }
 
         public InventoryProvider()
@@ -175,6 +178,24 @@ namespace NzbDrone.Core.Providers
 
             //If the parsed size is greater than maxSize we don't want it
             if (parseResult.Size > maxSize)
+                return false;
+
+            return true;
+        }
+
+        public virtual bool IsUpgradePossible(Episode episode)
+        {
+            //Used to check if the existing episode can be upgraded by searching (Before we search)
+
+            //If no episode file exists on disk, then an upgrade is possible
+            if (episode.EpisodeFileId == 0)
+                return true;
+
+            //Get the quality profile for the series
+            var profile = _qualityProvider.Get(episode.Series.QualityProfileId);
+
+            //If the current episode file meets or exceeds the cutoff, do not attempt upgrade
+            if (episode.EpisodeFile.Quality >= profile.Cutoff)
                 return false;
 
             return true;

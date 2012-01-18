@@ -14,11 +14,11 @@ using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common.AutoMoq;
 
-namespace NzbDrone.Core.Test.ProviderTests
+namespace NzbDrone.Core.Test.ProviderTests.InventoryProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class InventoryProvider_IsAcceptableSizeTest : CoreTest
+    public class IsAcceptableSizeTestFixture : CoreTest
     {
         private EpisodeParseResult parseResultMulti;
         private EpisodeParseResult parseResultSingle;
