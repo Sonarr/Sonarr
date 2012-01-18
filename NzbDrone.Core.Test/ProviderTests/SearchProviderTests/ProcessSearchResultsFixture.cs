@@ -75,14 +75,14 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
         private void WithQualityNeeded()
         {
             Mocker.GetMock<InventoryProvider>()
-                .Setup(s => s.IsQualityNeeded(It.IsAny<EpisodeParseResult>()))
+                .Setup(s => s.IsQualityNeeded(It.IsAny<EpisodeParseResult>(), true))
                 .Returns(true);
         }
 
         private void WithQualityNotNeeded()
         {
             Mocker.GetMock<InventoryProvider>()
-                .Setup(s => s.IsQualityNeeded(It.IsAny<EpisodeParseResult>()))
+                .Setup(s => s.IsQualityNeeded(It.IsAny<EpisodeParseResult>(), true))
                 .Returns(false);
         }
 
@@ -102,7 +102,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
             WithSuccessfulDownload();
 
             Mocker.GetMock<InventoryProvider>()
-                .Setup(s => s.IsQualityNeeded(It.Is<EpisodeParseResult>(d => d.Quality.QualityType == QualityTypes.Bluray1080p)))
+                .Setup(s => s.IsQualityNeeded(It.Is<EpisodeParseResult>(d => d.Quality.QualityType == QualityTypes.Bluray1080p), true))
                 .Returns(true);
 
             //Act
@@ -112,7 +112,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
             result.Should().HaveCount(1);
             result.First().Should().Be(1);
 
-            Mocker.GetMock<InventoryProvider>().Verify(c => c.IsQualityNeeded(It.IsAny<EpisodeParseResult>()),
+            Mocker.GetMock<InventoryProvider>().Verify(c => c.IsQualityNeeded(It.IsAny<EpisodeParseResult>(), true),
                                                        Times.Once());
             Mocker.GetMock<DownloadProvider>().Verify(c => c.DownloadReport(It.IsAny<EpisodeParseResult>()),
                                                       Times.Once());
@@ -137,7 +137,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
             //Assert
             result.Should().HaveCount(0);
 
-            Mocker.GetMock<InventoryProvider>().Verify(c => c.IsQualityNeeded(It.IsAny<EpisodeParseResult>()),
+            Mocker.GetMock<InventoryProvider>().Verify(c => c.IsQualityNeeded(It.IsAny<EpisodeParseResult>(), true),
                                                        Times.Exactly(5));
             Mocker.GetMock<DownloadProvider>().Verify(c => c.DownloadReport(It.IsAny<EpisodeParseResult>()),
                                                       Times.Never());

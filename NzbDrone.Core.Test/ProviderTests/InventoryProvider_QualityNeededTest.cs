@@ -274,5 +274,38 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             Assert.AreEqual(excpected, result);
         }
+
+        [Test]
+        public void IsQualityNeeded_file_should_skip_history_check_for_manual_search()
+        {
+            WithStrictMocker();
+
+            parseResultSingle.Series.QualityProfile = sdProfile;
+            parseResultSingle.Quality.QualityType = QualityTypes.DVD;
+
+            Mocker.GetMock<HistoryProvider>()
+                .Setup(p => p.GetBestQualityInHistory(episode.EpisodeId))
+                .Returns<Quality>(null);
+
+            Mocker.GetMock<EpisodeProvider>()
+                .Setup(p => p.GetEpisodesByParseResult(parseResultSingle, true))
+                .Returns(new List<Episode> { episode });
+
+            Mocker.GetMock<EpisodeProvider>()
+                .Setup(p => p.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(false);
+
+            Mocker.GetMock<QualityTypeProvider>()
+                .Setup(s => s.Get(It.IsAny<int>()))
+                .Returns(new QualityType { MaxSize = 100, MinSize = 0 });
+
+            episode.EpisodeFile.Quality = QualityTypes.SDTV;
+            //Act
+            bool result = Mocker.Resolve<InventoryProvider>().IsQualityNeeded(parseResultSingle, true);
+
+            //Assert
+            result.Should().BeTrue();
+            Mocker.Verify<HistoryProvider>(c => c.GetBestQualityInHistory(It.IsAny<int>()), Times.Never());
+        }
     }
 }

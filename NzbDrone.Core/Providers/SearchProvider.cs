@@ -235,7 +235,7 @@ namespace NzbDrone.Core.Providers
                     if (successes.Intersect(episodeParseResult.EpisodeNumbers).Count() > 0)
                         continue;
 
-                    if (_inventoryProvider.IsQualityNeeded(episodeParseResult))
+                    if (_inventoryProvider.IsQualityNeeded(episodeParseResult, true))
                     {
                         Logger.Debug("Found '{0}'. Adding to download queue.", episodeParseResult);
                         try
@@ -286,7 +286,7 @@ namespace NzbDrone.Core.Providers
                     if (!episodeParseResult.AirDate.HasValue || episodeParseResult.AirDate.Value.Date != airDate.Date)
                         continue;
 
-                    if (_inventoryProvider.IsQualityNeeded(episodeParseResult))
+                    if (_inventoryProvider.IsQualityNeeded(episodeParseResult, true))
                     {
                         Logger.Debug("Found '{0}'. Adding to download queue.", episodeParseResult);
                         try
