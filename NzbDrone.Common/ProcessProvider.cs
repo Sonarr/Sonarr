@@ -37,7 +37,7 @@ namespace NzbDrone.Common
 
         public virtual IEnumerable<ProcessInfo> GetProcessByName(string name)
         {
-            return Process.GetProcessesByName(name).Select(ConvertToProcessInfo);
+            return Process.GetProcessesByName(name).Select(ConvertToProcessInfo).Where(p => p != null);
         }
 
         public virtual void Start(string path)
