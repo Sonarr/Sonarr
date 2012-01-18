@@ -71,11 +71,11 @@ namespace NzbDrone.Core.Providers
         ///   Comprehensive check on whether or not this episode is needed.
         /// </summary>
         /// <param name = "parsedReport">Episode that needs to be checked</param>
-        /// <param name="manualSearch">False unless called by a manual search job</param>
+        /// <param name="skipHistory">False unless called by a manual search job</param>
         /// <returns>Whether or not the file quality meets the requirements </returns>
         /// <remarks>for multi episode files, all episodes need to meet the requirement
         /// before the report is downloaded</remarks>
-        public virtual bool IsQualityNeeded(EpisodeParseResult parsedReport, bool manualSearch = false)
+        public virtual bool IsQualityNeeded(EpisodeParseResult parsedReport, bool skipHistory = false)
         {
             Logger.Trace("Checking if report meets quality requirements. {0}", parsedReport.Quality);
             if (!parsedReport.Series.QualityProfile.Allowed.Contains(parsedReport.Quality.QualityType))
@@ -101,7 +101,7 @@ namespace NzbDrone.Core.Providers
                 }
 
                 //Checking History (If not a manual search)
-                if (!manualSearch)
+                if (!skipHistory)
                 {
                     var bestQualityInHistory = _historyProvider.GetBestQualityInHistory(episode.EpisodeId);
                     if(bestQualityInHistory != null)
