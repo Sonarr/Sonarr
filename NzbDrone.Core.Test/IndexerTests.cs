@@ -194,8 +194,6 @@ namespace NzbDrone.Core.Test
         [TestCase("In plain Sight", 1, 4)]
         public void nzbsorg_search_returns_valid_results(string title, int season, int episode)
         {
-            
-
             Mocker.GetMock<ConfigProvider>()
                 .SetupGet(c => c.NzbsOrgUId)
                 .Returns("43516");
@@ -212,8 +210,7 @@ namespace NzbDrone.Core.Test
 
             result.Should().NotBeEmpty();
             result.Should().OnlyContain(r => r.CleanTitle == Parser.NormalizeTitle(title));
-            result.Should().OnlyContain(r => r.SeasonNumber == season);
-            result.Should().OnlyContain(r => r.EpisodeNumbers.Contains(episode));
+            result.Should().Contain(r => r.SeasonNumber == season && r.EpisodeNumbers.Contains(episode));
         }
 
         [TestCase("simpsons", 21, 23)]
