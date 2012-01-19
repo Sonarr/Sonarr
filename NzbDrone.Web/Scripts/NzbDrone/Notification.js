@@ -12,25 +12,24 @@
     $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
 
         jqXHR.success(function (data) {
-            //Check if the response is a message type,
-            if (data.IsMessage) {
-                if (data.NotificationType === 0) {
-                    $.gritter.add({
-                        title: data.Title,
-                        text: data.Text,
-                        image: '../../content/images/success.png',
-                        class_name: 'gritter-success'
-                    });
-                }
-                else {
-                    $.gritter.add({
-                        title: data.Title,
-                        text: data.Text,
-                        image: '../../content/images/error.png',
-                        class_name: 'gritter-fail'
-                    });
-                }
+            if (data.NotificationType === 0) {
+                $.gritter.add({
+                    title: data.Title,
+                    text: data.Text,
+                    image: '../../content/images/success.png',
+                    class_name: 'gritter-success'
+                });
             }
+            else if (data.NotificationType === 1) {
+                $.gritter.add({
+                    title: data.Title,
+                    text: data.Text,
+                    image: '../../content/images/error.png',
+                    class_name: 'gritter-fail',
+                    time: 10000
+                });
+            }
+
         });
 
         jqXHR.error(function (xhr, ajaxOptions, thrownError) {
@@ -40,7 +39,8 @@
                     title: 'Request failed',
                     text: this.url,
                     image: '../../content/images/error.png',
-                    class_name: 'gritter-fail'
+                    class_name: 'gritter-fail',
+                    time: 10000
                 });
             }
         });

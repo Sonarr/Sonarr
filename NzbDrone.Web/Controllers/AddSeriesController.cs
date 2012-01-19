@@ -9,6 +9,7 @@ using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
+using NzbDrone.Web.Filters;
 using NzbDrone.Web.Models;
 
 namespace NzbDrone.Web.Controllers
@@ -130,7 +131,7 @@ namespace NzbDrone.Web.Controllers
 
             catch (Exception ex)
             {
-                return Json(new NotificationResult() { Title = "Failed", Text  = ex.Message, NotificationType = NotificationType.Error});
+                return Json(new NotificationResult() { Title = "Failed", Text = ex.Message, NotificationType = NotificationType.Error });
             }
         }
 
@@ -176,31 +177,20 @@ namespace NzbDrone.Web.Controllers
         }
 
 
-        //Root Directory
         [HttpPost]
+        [JsonErrorFilter("Can't add root folder")]
         public JsonResult SaveRootDir(string path)
         {
             if (String.IsNullOrWhiteSpace(path))
-                return new JsonResult { Data = "failed" };
+                NotificationResult.Error("Can't add root folder", "Path can not be empty");
 
             //Don't let a user add a rootDir that is the same as their SABnzbd TV Directory
             if (path.Equals(_configProvider.SabDropDirectory, StringComparison.InvariantCultureIgnoreCase))
-                return new JsonResult { Data = "failed" };
+                NotificationResult.Error("Can't add root folder", "Path can not be same as sab folder.");
 
-            try
-            {
-                _rootFolderProvider.Add(new RootDir { Path = path });
+            _rootFolderProvider.Add(new RootDir { Path = path });
 
-            }
-            catch (Exception ex)
-            {
-                Logger.Debug("Failed to save Root Dir");
-                Logger.DebugException(ex.Message, ex);
-
-                return new JsonResult { Data = "failed" };
-            }
-
-            return new JsonResult { Data = "ok" };
+            return NotificationResult.Info("Root Folder saved", "Root foler saved successfully.");
         }
 
         [HttpGet]

@@ -199,6 +199,7 @@
     </Compile>
     <Compile Include="App_Start\EntityFramework.SqlServerCompact.cs" />
     <Compile Include="App_Start\MiniProfiler.cs" />
+    <Compile Include="Filters\JsonErrorFilter.cs" />
     <Compile Include="Controllers\CommandController.cs" />
     <Compile Include="Controllers\DirectoryController.cs" />
     <Compile Include="Controllers\EpisodeController.cs" />
