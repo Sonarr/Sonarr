@@ -42,8 +42,5 @@ namespace NzbDrone.Web.Models
         [DisplayName("Monitored")]
         [Description("Should NzbDrone download episodes for this series?")]
         public bool Monitored { get; set; }
-
-        [DisplayName("Season Editor")]
-        public List<SeasonEditModel> SeasonEditor { get; set; }
     }
 }
