@@ -34,26 +34,21 @@ namespace NzbDrone.Core.Providers
 
         public virtual void Add(RootDir rootDir)
         {
-            ValidatePath(rootDir);
+            if (String.IsNullOrWhiteSpace(rootDir.Path) || !Path.IsPathRooted(rootDir.Path))
+                throw new ArgumentException("Invalid path");
+
+            if (!_diskProvider.FolderExists(rootDir.Path))
+                throw new DirectoryNotFoundException("Can't add root directory that doesn't exist.");
+
+            if (GetAll().Exists(r => DiskProvider.PathEquals(r.Path, rootDir.Path)))
+                throw new InvalidOperationException("Root directory already exist.");
+
             _database.Insert(rootDir);
         }
 
         public virtual void Remove(int rootDirId)
         {
             _database.Delete<RootDir>(rootDirId);
-        }
-
-        private void ValidatePath(RootDir rootDir)
-        {
-            if (String.IsNullOrWhiteSpace(rootDir.Path) || !Path.IsPathRooted(rootDir.Path))
-            {
-                throw new ArgumentException("Invalid path");
-            }
-
-            if (!_diskProvider.FolderExists(rootDir.Path))
-            {
-                throw new DirectoryNotFoundException("Can't add root directory that doesn't exist.");
-            }
         }
 
         public List<String> GetUnmappedFolders(string path)

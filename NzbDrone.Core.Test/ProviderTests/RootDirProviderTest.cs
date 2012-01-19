@@ -92,7 +92,6 @@ namespace NzbDrone.Core.Test.ProviderTests
         }
 
 
-
         [Test]
         public void None_existing_folder_returns_empty_list()
         {
@@ -121,6 +120,17 @@ namespace NzbDrone.Core.Test.ProviderTests
             Assert.Throws<ArgumentException>(() =>
                     Mocker.Resolve<RootDirProvider>().Add(new RootDir { Id = 0, Path = path })
                 );
+        }
+
+        [Test]
+        public void adding_duplicated_root_folder_should_throw()
+        {
+            WithRealDb();
+
+            //Act
+            var rootDirProvider = Mocker.Resolve<RootDirProvider>();
+            rootDirProvider.Add(new RootDir { Path = @"C:\TV" });
+            Assert.Throws<InvalidOperationException>(() => rootDirProvider.Add(new RootDir { Path = @"C:\TV" }));
         }
 
     }

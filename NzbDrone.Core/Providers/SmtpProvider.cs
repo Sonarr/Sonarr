@@ -93,6 +93,7 @@ namespace NzbDrone.Core.Providers
             return Send(email, _configProvider.SmtpServer, _configProvider.SmtpPort, _configProvider.SmtpUseSsl, credentials);
         }
 
+        //TODO: make this throw instead of return false.
         public virtual bool Send(MailMessage email, string server, int port, bool ssl, NetworkCredential credentials)
         {
             try
