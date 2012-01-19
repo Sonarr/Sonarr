@@ -179,6 +179,8 @@ namespace NzbDrone.Core.Providers.Indexer
                         }
                         catch (Exception itemEx)
                         {
+                            itemEx.Data.Add("FeedUrl", url);
+                            itemEx.Data.Add("Item", item.Title);
                             _logger.ErrorException("An error occurred while processing feed item", itemEx);
                         }
 
@@ -186,6 +188,7 @@ namespace NzbDrone.Core.Providers.Indexer
                 }
                 catch (Exception feedEx)
                 {
+                    feedEx.Data.Add("FeedUrl", url);
                     _logger.ErrorException("An error occurred while processing feed: " + Name, feedEx);
                 }
             }
