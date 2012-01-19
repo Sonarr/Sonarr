@@ -1,5 +1,5 @@
 ﻿// ReSharper disable InconsistentNaming
-using System;
+
 using System.IO;
 using System.Linq;
 using FluentAssertions;
@@ -9,7 +9,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Common.Test
 {
     [TestFixture]
-    public class DiskProviderTests : TestBase
+    public class DiskProviderFixture : TestBase
     {
         DirectoryInfo BinFolder;
         DirectoryInfo BinFolderCopy;
@@ -32,6 +32,24 @@ namespace NzbDrone.Common.Test
             {
                 BinFolderMove.Delete(true);
             }
+        }
+
+        [Test]
+        public void directory_exist_should_be_able_to_find_existing_folder()
+        {
+            Mocker.Resolve<DiskProvider>().FolderExists(TempFolder).Should().BeTrue();
+        }
+
+        [Test]
+        public void directory_exist_should_be_able_to_find_existing_unc_share()
+        {
+            Mocker.Resolve<DiskProvider>().FolderExists(@"\\localhost\c$").Should().BeTrue();
+        }
+        
+        [Test]
+        public void directory_exist_should_not_be_able_to_find_none_existing_folder()
+        {
+            Mocker.Resolve<DiskProvider>().FolderExists(@"C:\ThisBetterNotExist\").Should().BeFalse();
         }
 
         [Test]

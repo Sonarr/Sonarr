@@ -32,10 +32,10 @@ namespace NzbDrone.Core.Providers
             return _database.Fetch<RootDir>();
         }
 
-        public virtual int Add(RootDir rootDir)
+        public virtual void Add(RootDir rootDir)
         {
             ValidatePath(rootDir);
-            return Convert.ToInt32(_database.Insert(rootDir));
+            _database.Insert(rootDir);
         }
 
         public virtual void Remove(int rootDirId)
@@ -43,17 +43,17 @@ namespace NzbDrone.Core.Providers
             _database.Delete<RootDir>(rootDirId);
         }
 
-        private static void ValidatePath(RootDir rootDir)
+        private void ValidatePath(RootDir rootDir)
         {
             if (String.IsNullOrWhiteSpace(rootDir.Path) || !Path.IsPathRooted(rootDir.Path))
             {
                 throw new ArgumentException("Invalid path");
             }
-        }
 
-        public virtual RootDir GetRootDir(int rootDirId)
-        {
-            return _database.SingleOrDefault<RootDir>(rootDirId);
+            if (!_diskProvider.FolderExists(rootDir.Path))
+            {
+                throw new DirectoryNotFoundException("Can't add root directory that doesn't exist.");
+            }
         }
 
         public List<String> GetUnmappedFolders(string path)

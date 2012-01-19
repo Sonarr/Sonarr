@@ -1,6 +1,7 @@
 ﻿// ReSharper disable RedundantUsingDirective
 
 using System;
+using System.IO;
 using System.Linq;
 
 using FluentAssertions;
@@ -19,120 +20,107 @@ namespace NzbDrone.Core.Test.ProviderTests
     // ReSharper disable InconsistentNaming
     public class RootDirProviderTest : CoreTest
     {
+        [SetUp]
+        public void Setup()
+        {
+            Mocker.GetMock<DiskProvider>()
+                .Setup(m => m.FolderExists(It.IsAny<string>()))
+                .Returns(true);
+        }
+
+        private void WithNoneExistingFolder()
+        {
+            Mocker.GetMock<DiskProvider>()
+                .Setup(m => m.FolderExists(It.IsAny<string>()))
+                .Returns(false);
+        }
+
 
         [Test]
-        public void GetRootDirs()
+        public void GetRootDir_should_return_all_existing_roots()
         {
-            //Setup
-            
+            WithRealDb();
 
-            var emptyDatabase = TestDbHelper.GetEmptyDatabase();
-            Mocker.SetConstant(emptyDatabase);
-            emptyDatabase.Insert(new RootDir { Path = @"C:\TV" });
-            emptyDatabase.Insert(new RootDir { Path = @"C:\TV2" });
+            Db.Insert(new RootDir { Path = @"C:\TV" });
+            Db.Insert(new RootDir { Path = @"C:\TV2" });
 
-            //Mocker.GetMock<IRepository>()
-            //    .Setup(f => f.All<RootDir>())
-            //    .Returns(sonicRepo.All<RootDir>);
-
-            //Act
             var result = Mocker.Resolve<RootDirProvider>().GetAll();
-
-            //Assert
-            Assert.AreEqual(result.Count, 2);
+            result.Should().HaveCount(2);
         }
+
 
         [TestCase("D:\\TV Shows\\")]
         [TestCase("//server//folder")]
-        public void AddRootDir(string path)
+        public void should_be_able_to_add_root_dir(string path)
         {
-            //Setup
-            
-            Mocker.SetConstant(TestDbHelper.GetEmptyDatabase());
+            WithRealDb();
 
             //Act
             var rootDirProvider = Mocker.Resolve<RootDirProvider>();
             rootDirProvider.Add(new RootDir { Path = path });
 
-
             //Assert
             var rootDirs = rootDirProvider.GetAll();
-            rootDirs.Should().NotBeEmpty();
             rootDirs.Should().HaveCount(1);
-            path.Should().Be(rootDirs.First().Path);
+            rootDirs.First().Path.Should().Be(path);
+        }
+
+        [Test]
+        public void should_throw_if_folder_being_added_doesnt_exist()
+        {
+            WithNoneExistingFolder();
+
+            var rootDirProvider = Mocker.Resolve<RootDirProvider>();
+            Assert.Throws<DirectoryNotFoundException>(() => rootDirProvider.Add(new RootDir { Path = "C:\\TEST" }));
         }
 
 
         [Test]
-        public void RemoveRootDir()
+        public void should_be_able_to_remove_root_dir()
         {
-            //Setup
-            
-            Mocker.SetConstant(TestDbHelper.GetEmptyDatabase());
+            WithRealDb();
 
             //Act
             var rootDirProvider = Mocker.Resolve<RootDirProvider>();
             rootDirProvider.Add(new RootDir { Path = @"C:\TV" });
+            rootDirProvider.Add(new RootDir { Path = @"C:\TV2" });
             rootDirProvider.Remove(1);
 
             //Assert
             var rootDirs = rootDirProvider.GetAll();
-            rootDirs.Should().BeEmpty();
+            rootDirs.Should().HaveCount(1);
         }
 
-        [Test]
-        public void GetRootDir()
-        {
-            //Setup
-            
-            Mocker.SetConstant(TestDbHelper.GetEmptyDatabase());
 
-            const int id = 1;
-            const string path = @"C:\TV";
-
-            //Act
-            var rootDirProvider = Mocker.Resolve<RootDirProvider>();
-            rootDirProvider.Add(new RootDir { Id = id, Path = path });
-
-            //Assert
-            var rootDir = rootDirProvider.GetRootDir(id);
-            rootDir.Id.Should().Be(1);
-            rootDir.Path.Should().Be(path);
-        }
 
         [Test]
         public void None_existing_folder_returns_empty_list()
         {
-            const string path = "d:\\bad folder";
+            WithNoneExistingFolder();
 
-            
-            Mocker.GetMock<DiskProvider>(MockBehavior.Strict)
-                .Setup(m => m.FolderExists(path)).Returns(false);
+            const string path = "d:\\bad folder";
 
             var result = Mocker.Resolve<RootDirProvider>().GetUnmappedFolders(path);
 
             result.Should().NotBeNull();
             result.Should().BeEmpty();
-
-            Mocker.VerifyAllMocks();
+            Mocker.GetMock<DiskProvider>().Verify(c => c.GetDirectories(It.IsAny<String>()), Times.Never());
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
-        public void empty_folder_path_throws()
+        public void GetUnmappedFolders_throw_on_empty_folders()
         {
-            
-            Mocker.Resolve<RootDirProvider>().GetUnmappedFolders("");
+            Assert.Throws<ArgumentException>(() => Mocker.Resolve<RootDirProvider>().GetUnmappedFolders(""));
         }
 
         [TestCase("")]
         [TestCase(null)]
         [TestCase("BAD PATH")]
-        [ExpectedException(typeof(ArgumentException))]
         public void invalid_folder_path_throws_on_add(string path)
         {
-            
-            Mocker.Resolve<RootDirProvider>().Add(new RootDir { Id = 0, Path = path });
+            Assert.Throws<ArgumentException>(() =>
+                    Mocker.Resolve<RootDirProvider>().Add(new RootDir { Id = 0, Path = path })
+                );
         }
 
     }

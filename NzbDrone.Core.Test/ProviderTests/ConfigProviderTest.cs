@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Linq;
-using System.Reflection;
-
 using FluentAssertions;
-using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Test.Common.AutoMoq;
-using PetaPoco;
 
 namespace NzbDrone.Core.Test.ProviderTests
 {

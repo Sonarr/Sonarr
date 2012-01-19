@@ -65,7 +65,7 @@
   <ItemGroup>
     <Compile Include="ConfigFileProviderTest.cs" />
     <Compile Include="PathExtentionFixture.cs" />
-    <Compile Include="DiskProviderTests.cs" />
+    <Compile Include="DiskProviderFixture.cs" />
     <Compile Include="EnviromentProviderTest.cs" />
     <Compile Include="ProcessProviderTests.cs" />
     <Compile Include="ServiceProviderTests.cs" />
