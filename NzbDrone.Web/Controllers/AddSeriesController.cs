@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
-using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Providers;
@@ -16,7 +15,6 @@ namespace NzbDrone.Web.Controllers
 {
     public class AddSeriesController : Controller
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly ConfigProvider _configProvider;
         private readonly QualityProvider _qualityProvider;
         private readonly RootDirProvider _rootFolderProvider;
@@ -42,10 +40,10 @@ namespace NzbDrone.Web.Controllers
         }
 
         [HttpPost]
-        public JsonResult ScanNewSeries()
+        public EmptyResult ScanNewSeries()
         {
             _jobProvider.QueueJob(typeof(ImportNewSeriesJob));
-            return new JsonResult();
+            return new EmptyResult();
         }
 
         public ActionResult AddNew()
@@ -117,22 +115,16 @@ namespace NzbDrone.Web.Controllers
         }
 
         [HttpPost]
+        [JsonErrorFilter]
         public JsonResult AddExistingSeries(string path, string seriesName, int seriesId, int qualityProfileId)
         {
             if (seriesId == 0 || String.IsNullOrWhiteSpace(seriesName))
-                return Json(new NotificationResult() { Title = "Failed", Text = "Invalid Series Information, Series not added.", NotificationType = NotificationType.Error });
+                return JsonNotificationResult.Error("Add Existing series failed.", "Invalid Series information");
 
-            try
-            {
-                _seriesProvider.AddSeries(path, seriesId, qualityProfileId);
-                ScanNewSeries();
-                return Json(new NotificationResult() { Title = seriesName, Text = "Was added successfully" });
-            }
+            _seriesProvider.AddSeries(path, seriesId, qualityProfileId);
+            ScanNewSeries();
 
-            catch (Exception ex)
-            {
-                return Json(new NotificationResult() { Title = "Failed", Text = ex.Message, NotificationType = NotificationType.Error });
-            }
+            return JsonNotificationResult.Info(seriesName, "Was added successfully");
         }
 
         [HttpPost]
@@ -146,19 +138,6 @@ namespace NzbDrone.Web.Controllers
             path = _diskProvider.CreateDirectory(path);
 
             return AddExistingSeries(path, seriesName, seriesId, qualityProfileId);
-        }
-
-        public JsonResult AddSeries(string path, int seriesId, int qualityProfileId)
-        {
-            //Get TVDB Series Name
-            //Create new folder for series
-            //Add the new series to the Database
-
-            _seriesProvider.AddSeries(
-                path.Replace('|', Path.DirectorySeparatorChar).Replace('^', Path.VolumeSeparatorChar).Replace('`', '\''), seriesId,
-                qualityProfileId);
-            ScanNewSeries();
-            return new JsonResult { Data = "ok" };
         }
 
         [ChildActionOnly]
@@ -178,19 +157,15 @@ namespace NzbDrone.Web.Controllers
 
 
         [HttpPost]
-        [JsonErrorFilter("Can't add root folder")]
+        [JsonErrorFilter]
         public JsonResult SaveRootDir(string path)
         {
             if (String.IsNullOrWhiteSpace(path))
-                NotificationResult.Error("Can't add root folder", "Path can not be empty");
-
-            //Don't let a user add a rootDir that is the same as their SABnzbd TV Directory
-            if (path.Equals(_configProvider.SabDropDirectory, StringComparison.InvariantCultureIgnoreCase))
-                NotificationResult.Error("Can't add root folder", "Path can not be same as sab folder.");
+                JsonNotificationResult.Error("Can't add root folder", "Path can not be empty");
 
             _rootFolderProvider.Add(new RootDir { Path = path });
 
-            return NotificationResult.Info("Root Folder saved", "Root foler saved successfully.");
+            return JsonNotificationResult.Info("Root Folder saved", "Root foler saved successfully.");
         }
 
         [HttpGet]
@@ -217,20 +192,14 @@ namespace NzbDrone.Web.Controllers
             return PartialView("RootDir");
         }
 
+        [JsonErrorFilter]
         public JsonResult DeleteRootDir(string path)
         {
-            try
-            {
-                var id = _rootFolderProvider.GetAll().Where(c => c.Path == path).First().Id;
-                _rootFolderProvider.Remove(id);
-            }
 
-            catch (Exception)
-            {
-                return new JsonResult { Data = "failed" };
-            }
+            var id = _rootFolderProvider.GetAll().Where(c => c.Path == path).First().Id;
+            _rootFolderProvider.Remove(id);
 
-            return new JsonResult { Data = "ok" };
+            return null;
         }
     }
 }

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Web;
-using System.Web.Mvc;
-using NLog;
+﻿using System.Web.Mvc;
 using NzbDrone.Core.Jobs;
-using NzbDrone.Core.Model;
-using NzbDrone.Core.Model.Twitter;
 using NzbDrone.Core.Providers;
+using NzbDrone.Web.Filters;
 using NzbDrone.Web.Models;
 
 namespace NzbDrone.Web.Controllers
@@ -17,8 +12,6 @@ namespace NzbDrone.Web.Controllers
         private readonly SabProvider _sabProvider;
         private readonly SmtpProvider _smtpProvider;
         private readonly TwitterProvider _twitterProvider;
-
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public CommandController(JobProvider jobProvider, SabProvider sabProvider,
                                     SmtpProvider smtpProvider, TwitterProvider twitterProvider)
@@ -32,54 +25,41 @@ namespace NzbDrone.Web.Controllers
         public JsonResult RssSync()
         {
             _jobProvider.QueueJob(typeof(RssSyncJob));
-            return new JsonResult { Data = "ok", JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            return JsonNotificationResult.Info("Queued");
         }
 
         public JsonResult BacklogSearch()
         {
             _jobProvider.QueueJob(typeof(BacklogSearchJob));
-            return new JsonResult { Data = "ok", JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            return JsonNotificationResult.Info("Queued");
         }
 
         public JsonResult ScanDisk(int seriesId)
         {
-            //Syncs the episodes on disk for the specified series
             _jobProvider.QueueJob(typeof(DiskScanJob), seriesId);
-
-            return new JsonResult { Data = "ok", JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            return JsonNotificationResult.Info("Queued");
         }
 
         public JsonResult UpdateInfo(int seriesId)
         {
-            //Syncs the episodes on disk for the specified series
             _jobProvider.QueueJob(typeof(UpdateInfoJob), seriesId);
-
-            return new JsonResult { Data = "ok", JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            return JsonNotificationResult.Info("Queued");
         }
 
         [HttpPost]
+        [JsonErrorFilter]
         public JsonResult GetSabnzbdCategories(string host, int port, string apiKey, string username, string password)
         {
-            try
-            {
-                return new JsonResult {Data = _sabProvider.GetCategories(host, port, apiKey, username, password)};
-            }
-
-            catch (Exception ex)
-            {
-                Logger.Warn("Unable to get Categories from SABnzbd");
-                Logger.DebugException(ex.Message, ex);
-                return Json(new NotificationResult { Title = "Failed", Text = "Unable to get SABnzbd Categories", NotificationType = NotificationType.Error });
-            }
+            return new JsonResult { Data = _sabProvider.GetCategories(host, port, apiKey, username, password) };
         }
 
         [HttpPost]
         public JsonResult SendTestEmail(string server, int port, bool ssl, string username, string password, string fromAddress, string toAddresses)
         {
             if (_smtpProvider.SendTestEmail(server, port, ssl, username, password, fromAddress, toAddresses))
-                return Json(new NotificationResult { Title = "Successfully sent test email." });
+                JsonNotificationResult.Info("Successfull", "Test email sent.");
 
-            return Json(new NotificationResult { Title = "Failed", Text = "Unable to send Email, please check your settings", NotificationType = NotificationType.Error });
+            return JsonNotificationResult.Opps("Couldn't send Email, please check your settings");
         }
 
         public JsonResult GetTwitterAuthorization()
@@ -87,7 +67,7 @@ namespace NzbDrone.Web.Controllers
             var result = _twitterProvider.GetAuthorization();
 
             if (result == null)
-                return Json(new NotificationResult { Title = "Failed", Text = "Unable to get Twitter Authorization", NotificationType = NotificationType.Error }, JsonRequestBehavior.AllowGet);
+                JsonNotificationResult.Opps("Couldn't get Twitter Authorization");
 
             return new JsonResult { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
@@ -97,9 +77,10 @@ namespace NzbDrone.Web.Controllers
             var result = _twitterProvider.GetAndSaveAccessToken(token, verifier);
 
             if (!result)
-                return Json(new NotificationResult { Title = "Failed", Text = "Unable to verify Twitter Authorization", NotificationType = NotificationType.Error }, JsonRequestBehavior.AllowGet);
+                JsonNotificationResult.Opps("Couldn't verify Twitter Authorization");
 
-            return Json(new NotificationResult { Title = "Successfully verified Twitter Authorization." }, JsonRequestBehavior.AllowGet);
+            return JsonNotificationResult.Info("Good News!", "Successfully verified Twitter Authorization.");
+
         }
     }
 }

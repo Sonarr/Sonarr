@@ -15,7 +15,7 @@ namespace NzbDrone.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult _autoCompletePath(string text, int? filterMode)
+        public JsonResult _autoCompletePath(string text, int? filterMode)
         {
             var data = GetDirectories(text);
 

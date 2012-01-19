@@ -97,6 +97,8 @@
     font-size: 20px;
     padding: 0;
     display: block;
+    line-height: 1;
+    padding-bottom: 10px;
     text-shadow: 1px 1px #000; /* Not supported by IE :( */
 }
 .gritter-image

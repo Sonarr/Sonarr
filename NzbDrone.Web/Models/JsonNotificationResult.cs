@@ -2,9 +2,9 @@ using System.Web.Mvc;
 
 namespace NzbDrone.Web.Models
 {
-    public class NotificationResult
+    public class JsonNotificationResult
     {
-        public NotificationResult()
+        private JsonNotificationResult()
         {
             Text = string.Empty;
         }
@@ -16,7 +16,12 @@ namespace NzbDrone.Web.Models
 
         public static JsonResult Info(string title, string text)
         {
-            return GetJsonResult(NotificationType.Error, title, text);
+            return GetJsonResult(NotificationType.Info, title, text);
+        }
+
+        public static JsonResult Info(string title)
+        {
+            return GetJsonResult(NotificationType.Info, title, string.Empty);
         }
 
         public static JsonResult Error(string title, string text)
@@ -24,11 +29,17 @@ namespace NzbDrone.Web.Models
             return GetJsonResult(NotificationType.Error, title, text);
         }
 
+        public static JsonResult Opps(string text)
+        {
+            return GetJsonResult(NotificationType.Error, "Opps!", text);
+        }
+
+
         public static JsonResult GetJsonResult(NotificationType notificationType, string title, string text)
         {
             return new JsonResult
             {
-                Data = new NotificationResult { NotificationType = notificationType, Title = title, Text = text },
+                Data = new JsonNotificationResult { NotificationType = notificationType, Title = title, Text = text },
                 ContentType = null,
                 ContentEncoding = null,
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet

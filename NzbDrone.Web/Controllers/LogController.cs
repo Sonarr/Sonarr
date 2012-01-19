@@ -23,7 +23,7 @@ namespace NzbDrone.Web.Controllers
         {
             _logProvider.DeleteAll();
 
-            return Json(new NotificationResult() { Title = "Logs Cleared" });
+            return JsonNotificationResult.Info("Logs Cleared");
         }
 
         [GridAction]

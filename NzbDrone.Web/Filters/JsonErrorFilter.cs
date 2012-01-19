@@ -6,16 +6,9 @@ namespace NzbDrone.Web.Filters
 {
     public class JsonErrorFilter : FilterAttribute, IExceptionFilter
     {
-        private readonly string _errorTitle;
-
-        public JsonErrorFilter(string errorTitle)
-        {
-            _errorTitle = errorTitle;
-        }
-
         public void OnException(ExceptionContext filterContext)
         {
-            filterContext.Result = NotificationResult.Error(_errorTitle, filterContext.Exception.Message);
+            filterContext.Result = JsonNotificationResult.Opps(filterContext.Exception.Message);
             filterContext.ExceptionHandled = true;
         }
 

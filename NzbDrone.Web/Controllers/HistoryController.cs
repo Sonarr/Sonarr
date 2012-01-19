@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Web.Mvc;
 using NzbDrone.Core.Jobs;
-using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Web.Models;
 using Telerik.Web.Mvc;
@@ -21,9 +18,6 @@ namespace NzbDrone.Web.Controllers
             _jobProvider = jobProvider;
         }
 
-        //
-        // GET: /History/
-
         public ActionResult Index()
         {
             return View();
@@ -32,13 +26,13 @@ namespace NzbDrone.Web.Controllers
         public JsonResult Trim()
         {
             _historyProvider.Trim();
-            return Json(new NotificationResult() { Title = "Trimmed History items"});
+            return JsonNotificationResult.Info("Trimmed History");
         }
 
         public JsonResult Purge()
         {
             _historyProvider.Purge();
-            return Json(new NotificationResult() { Title = "History Cleared" });
+            return JsonNotificationResult.Info("History Cleared");
         }
 
         [HttpPost]
@@ -47,7 +41,7 @@ namespace NzbDrone.Web.Controllers
             //Delete the existing item from history
             _historyProvider.Delete(historyId);
 
-            return Json(new NotificationResult() { Title = "History Item Deleted" });
+            return JsonNotificationResult.Info("History Item Deleted");
         }
 
         [HttpPost]
@@ -59,7 +53,7 @@ namespace NzbDrone.Web.Controllers
             //Queue a job to download the replacement episode
             _jobProvider.QueueJob(typeof(EpisodeSearchJob), episodeId);
 
-            return Json(new NotificationResult() { Title = "Episode Redownload Started" });
+            return JsonNotificationResult.Info("Episode Redownload Started");
         }
 
         [GridAction]

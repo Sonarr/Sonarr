@@ -213,7 +213,6 @@
     <Compile Include="Controllers\SeriesController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\SharedController.cs" />
-    <Compile Include="Controllers\StreamController.cs" />
     <Compile Include="Controllers\SystemController.cs" />
     <Compile Include="Controllers\UpcomingController.cs" />
     <Compile Include="Controllers\UpdateController.cs" />
@@ -232,7 +231,7 @@
     <Compile Include="Models\FooterModel.cs" />
     <Compile Include="Models\ExistingSeriesModel.cs" />
     <Compile Include="Models\JobQueueItemModel.cs" />
-    <Compile Include="Models\NotificationResult.cs" />
+    <Compile Include="Models\JsonNotificationResult.cs" />
     <Compile Include="Models\PendingProcessingModel.cs" />
     <Compile Include="Models\ProwlPrioritySelectListModel.cs" />
     <Compile Include="Models\SabnzbdSettingsModel.cs" />

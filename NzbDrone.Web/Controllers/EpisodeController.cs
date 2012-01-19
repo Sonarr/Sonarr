@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using NzbDrone.Core.Jobs;
-using NzbDrone.Core.Providers;
-using NzbDrone.Core.Providers.Core;
 using NzbDrone.Web.Models;
 
 namespace NzbDrone.Web.Controllers
@@ -15,7 +10,6 @@ namespace NzbDrone.Web.Controllers
 
         public EpisodeController(JobProvider jobProvider)
         {
-
             _jobProvider = jobProvider;
         }
 
@@ -23,44 +17,38 @@ namespace NzbDrone.Web.Controllers
         public JsonResult Search(int episodeId)
         {
             _jobProvider.QueueJob(typeof(EpisodeSearchJob), episodeId);
-            return new JsonResult { Data = "ok" };
+            return JsonNotificationResult.Info("Queued");
         }
 
         [HttpPost]
         public JsonResult SearchSeason(int seriesId, int seasonNumber)
         {
             _jobProvider.QueueJob(typeof(SeasonSearchJob), seriesId, seasonNumber);
-            return new JsonResult { Data = "ok" };
+            return JsonNotificationResult.Info("Queued");
         }
 
         public JsonResult BacklogSeries(int seriesId)
         {
-            //Syncs the episodes on disk for the specified series
             _jobProvider.QueueJob(typeof(SeriesSearchJob), seriesId);
-
-            return new JsonResult { Data = "ok", JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            return JsonNotificationResult.Info("Queued");
         }
 
         public JsonResult Rename(int episodeFileId)
         {
             _jobProvider.QueueJob(typeof(RenameEpisodeJob), episodeFileId);
-
-            return new JsonResult { Data = "ok" };
+            return JsonNotificationResult.Info("Queued");
         }
 
         public JsonResult RenameSeason(int seriesId, int seasonNumber)
         {
             _jobProvider.QueueJob(typeof(RenameSeasonJob), seriesId, seasonNumber);
-
-            return new JsonResult { Data = "ok" };
+            return JsonNotificationResult.Info("Queued");
         }
 
         public JsonResult RenameEpisodes(int seriesId)
         {
-            //Syncs the episodes on disk for the specified series
             _jobProvider.QueueJob(typeof(RenameSeriesJob), seriesId);
-
-            return new JsonResult { Data = "ok", JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            return JsonNotificationResult.Info("Queued");
         }
     }
 }

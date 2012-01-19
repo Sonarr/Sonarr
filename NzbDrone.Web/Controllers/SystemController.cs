@@ -30,11 +30,12 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult Jobs()
         {
-            ViewData["Queue"] = _jobProvider.Queue.Select(c => new JobQueueItemModel {
-                                                                                        Name = c.JobType.Name,
-                                                                                        TargetId = c.TargetId,
-                                                                                        SecondaryTargetId = c.SecondaryTargetId
-                                                                                    });
+            ViewData["Queue"] = _jobProvider.Queue.Select(c => new JobQueueItemModel
+            {
+                Name = c.JobType.Name,
+                TargetId = c.TargetId,
+                SecondaryTargetId = c.SecondaryTargetId
+            });
             var jobs = _jobProvider.All();
 
 
@@ -139,9 +140,9 @@ namespace NzbDrone.Web.Controllers
         public JsonResult RunJob(string typeName)
         {
             if (!_jobProvider.QueueJob(typeName))
-                return Json(new NotificationResult { Title = "Failed to Start Job", Text = "Invalid job name", NotificationType = NotificationType.Error });
+                return JsonNotificationResult.Opps("Invalid Job Name");
 
-            return Json(new NotificationResult { Title = "Job Queued" });
+            return JsonNotificationResult.Info("Job Queued");
         }
     }
 }

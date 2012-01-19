@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Model;
 using NzbDrone.Core.Helpers;
-using NzbDrone.Core.Model;
-using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.ExternalNotification;
 using NzbDrone.Core.Providers.Indexer;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
+using NzbDrone.Web.Filters;
 using NzbDrone.Web.Models;
 
 namespace NzbDrone.Web.Controllers
@@ -58,7 +56,7 @@ namespace NzbDrone.Web.Controllers
             results.Add(new TvDbSearchResultModel { Id = 1, Title = "30 Rock", FirstAired = DateTime.Today.ToShortDateString() });
             results.Add(new TvDbSearchResultModel { Id = 2, Title = "The Office", FirstAired = DateTime.Today.AddDays(-1).ToShortDateString() });
 
-            return Json(results, JsonRequestBehavior.AllowGet );
+            return Json(results, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Index()
@@ -260,22 +258,15 @@ namespace NzbDrone.Web.Controllers
             return PartialView("QualityProfileItem", model);
         }
 
+        [JsonErrorFilter]
         public JsonResult DeleteQualityProfile(int profileId)
         {
-            try
-            {
-                if (_seriesProvider.GetAllSeries().Where(s => s.QualityProfileId == profileId).Count() != 0)
-                    return new JsonResult { Data = "Unable to delete Profile, it is still in use." };
+            if (_seriesProvider.GetAllSeries().Where(s => s.QualityProfileId == profileId).Count() != 0)
+                return JsonNotificationResult.Opps("Profile is still in use.");
 
-                _qualityProvider.Delete(profileId);
-            }
+            _qualityProvider.Delete(profileId);
 
-            catch (Exception)
-            {
-                return new JsonResult { Data = "failed" };
-            }
-
-            return new JsonResult { Data = "ok" };
+            return new JsonResult();
         }
 
         public PartialViewResult AddNewznabProvider()
@@ -301,19 +292,11 @@ namespace NzbDrone.Web.Controllers
             return PartialView("NewznabProvider", provider);
         }
 
-        public JsonResult DeleteNewznabProvider(int providerId)
+        [JsonErrorFilter]
+        public EmptyResult DeleteNewznabProvider(int providerId)
         {
-            try
-            {
-                _newznabProvider.Delete(providerId);
-            }
-
-            catch (Exception)
-            {
-                return new JsonResult { Data = "failed" };
-            }
-
-            return new JsonResult { Data = "ok" };
+            _newznabProvider.Delete(providerId);
+            return new EmptyResult();
         }
 
         public QualityModel GetUpdatedProfileList()
@@ -324,7 +307,7 @@ namespace NzbDrone.Web.Controllers
             var selectList = new SelectList(profiles, "QualityProfileId", "Name");
 
             return new QualityModel { DefaultQualityProfileId = defaultQualityQualityProfileId, QualityProfileSelectList = selectList };
-        }    
+        }
 
         public JsonResult AutoConfigureSab()
         {
@@ -334,19 +317,13 @@ namespace NzbDrone.Web.Controllers
 
                 if (info != null)
                     return Json(info, JsonRequestBehavior.AllowGet);
-
-                return Json(new NotificationResult
-                                {
-                                        Title = "Auto-Configure Failed",
-                                        Text = "Please enter your SAB Settings Manually",
-                                        NotificationType = NotificationType.Error
-                                }, JsonRequestBehavior.AllowGet);
             }
 
             catch (Exception)
             {
-                return new JsonResult { Data = "failed" };
             }
+
+            return JsonNotificationResult.Error("Auto-Configure Failed", "Please enter your SAB Settings Manually");
         }
 
         [HttpPost]
@@ -400,11 +377,6 @@ namespace NzbDrone.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                //Check to see if the TV Directory matches any RootDirs (Ignoring Case), if it does, return an error to the user
-                //This prevents a user from finding a way to delete their entire TV Library
-                var rootDirs = _rootDirProvider.GetAll();
-                if (rootDirs.Any(r => r.Path.Equals(data.SabDropDirectory, StringComparison.InvariantCultureIgnoreCase)))
-                    Json(new NotificationResult { Title = "Failed", Text = "Invalid TV Directory", NotificationType = NotificationType.Error });
 
                 _configProvider.SabHost = data.SabHost;
                 _configProvider.SabPort = data.SabPort;
@@ -419,8 +391,7 @@ namespace NzbDrone.Web.Controllers
                 return GetSuccessResult();
             }
 
-            return
-                Json(new NotificationResult() { Title = "Failed", Text = "Invalid request data.", NotificationType = NotificationType.Error });
+            return JsonNotificationResult.Opps("Invalid Data");
         }
 
         [HttpPost]
@@ -442,7 +413,7 @@ namespace NzbDrone.Web.Controllers
                     profile.QualityProfileId = profileModel.QualityProfileId;
                     profile.Name = profileModel.Name;
                     profile.Cutoff = profileModel.Cutoff;
-                    
+
                     profile.Allowed = new List<QualityTypes>();
 
                     if (profileModel.Sdtv)
@@ -506,7 +477,7 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.XbmcPassword = data.XbmcPassword;
 
                 //SMTP
-                var smtpSettings = _externalNotificationProvider.GetSettings(typeof (Smtp));
+                var smtpSettings = _externalNotificationProvider.GetSettings(typeof(Smtp));
                 smtpSettings.Enable = data.SmtpEnabled;
                 _externalNotificationProvider.SaveSettings(smtpSettings);
 
@@ -605,18 +576,18 @@ namespace NzbDrone.Web.Controllers
 
         private JsonResult GetSuccessResult()
         {
-            return Json(new NotificationResult() { Title = "Settings Saved" });
+            return JsonNotificationResult.Info("Settings Saved");
         }
 
         private JsonResult GetInvalidModelResult()
         {
-            return Json(new NotificationResult() { Title = "Unable to save setting", Text = "Invalid post data", NotificationType = NotificationType.Error });
+            return JsonNotificationResult.Opps("Invalid post data");
         }
 
         private SelectList GetProwlPrioritySelectList()
         {
             var list = new List<ProwlPrioritySelectListModel>();
-            list.Add(new ProwlPrioritySelectListModel{ Name = "Very Low", Value = -2 });
+            list.Add(new ProwlPrioritySelectListModel { Name = "Very Low", Value = -2 });
             list.Add(new ProwlPrioritySelectListModel { Name = "Moderate", Value = -1 });
             list.Add(new ProwlPrioritySelectListModel { Name = "Normal", Value = 0 });
             list.Add(new ProwlPrioritySelectListModel { Name = "High", Value = 1 });
