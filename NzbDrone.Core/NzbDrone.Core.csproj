@@ -234,6 +234,7 @@
     <Compile Include="Model\Quality.cs" />
     <Compile Include="Model\SabnzbdCategoryModel.cs" />
     <Compile Include="Model\SabnzbdInfoModel.cs" />
+    <Compile Include="Model\SabQueueItem.cs" />
     <Compile Include="Model\Twitter\TwitterAuthorizationModel.cs" />
     <Compile Include="Model\UpdatePackage.cs" />
     <Compile Include="Model\Xbmc\ActionType.cs" />

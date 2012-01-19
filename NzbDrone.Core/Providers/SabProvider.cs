@@ -10,6 +10,7 @@ using Ninject;
 using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
+using NzbDrone.Core.Repository.Quality;
 
 namespace NzbDrone.Core.Providers
 {
@@ -101,6 +102,34 @@ namespace NzbDrone.Core.Providers
             }
 
             return false; //Not in Queue
+        }
+
+        public virtual List<SabQueueItem> GetQueue()
+        {
+            const string action = "mode=queue&output=xml";
+            string request = GetSabRequest(action);
+            string response = _httpProvider.DownloadString(request);
+
+            XDocument xDoc = XDocument.Parse(response);
+
+            //If an Error Occurred, return)
+            if (xDoc.Descendants("error").Count() != 0)
+                throw new ApplicationException(xDoc.Descendants("error").FirstOrDefault().Value);
+
+            if (!xDoc.Descendants("queue").Any())
+            {
+                Logger.Debug("SAB Queue is empty.");
+                return new List<SabQueueItem>();
+            }
+
+            var items = xDoc.Descendants("slot")
+                                .Select(s => new SabQueueItem
+                                                            {
+                                                                Title = s.Element("filename").Value,
+                                                                Id = s.Element("nzo_id").Value
+                                                            });
+
+            return items.ToList();
         }
 
         public virtual String GetSabTitle(EpisodeParseResult parseResult)

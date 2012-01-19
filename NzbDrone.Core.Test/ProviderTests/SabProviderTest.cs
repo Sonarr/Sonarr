@@ -23,6 +23,28 @@ namespace NzbDrone.Core.Test.ProviderTests
     // ReSharper disable InconsistentNaming
     public class SabProviderTest : CoreTest
     {
+        private void WithSabConfigValues()
+        {
+            //Setup
+            string sabHost = "192.168.5.55";
+            int sabPort = 2222;
+            string apikey = "5c770e3197e4fe763423ee7c392c25d1";
+            string username = "admin";
+            string password = "pass";
+
+            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            fakeConfig.SetupGet(c => c.SabHost)
+              .Returns(sabHost);
+            fakeConfig.SetupGet(c => c.SabPort)
+                .Returns(sabPort);
+            fakeConfig.SetupGet(c => c.SabApiKey)
+                .Returns(apikey);
+            fakeConfig.SetupGet(c => c.SabUsername)
+                .Returns(username);
+            fakeConfig.SetupGet(c => c.SabPassword)
+                .Returns(password);
+        }
+
         [Test]
         public void AddByUrlSuccess()
         {
@@ -168,8 +190,6 @@ namespace NzbDrone.Core.Test.ProviderTests
             string username = "admin";
             string password = "pass";
 
-            
-
             var fakeConfig = Mocker.GetMock<ConfigProvider>();
             fakeConfig.SetupGet(c => c.SabHost)
               .Returns(sabHost);
@@ -187,7 +207,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Returns(File.ReadAllText(@".\Files\Queue.xml"));
 
             //Act
-            bool result = Mocker.Resolve<SabProvider>().IsInQueue("Ubuntu Test");
+            bool result = Mocker.Resolve<SabProvider>().IsInQueue("30 Rock - 1x05 - Title [SDTV]");
 
             //Assert
             result.Should().BeTrue();
@@ -444,6 +464,55 @@ namespace NzbDrone.Core.Test.ProviderTests
             //Assert
             result.Should().NotBeNull();
             result.categories.Should().HaveCount(c => c > 0);
+        }
+
+        [Test]
+        public void GetQueue_should_return_an_empty_list_when_the_queue_is_empty()
+        {
+            WithSabConfigValues();
+
+            Mocker.GetMock<HttpProvider>()
+                .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=queue&output=xml&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
+                .Returns(File.ReadAllText(@".\Files\QueueEmpty.xml"));
+
+            //Act
+            var result = Mocker.Resolve<SabProvider>().GetQueue();
+
+            //Assert
+            result.Should().BeEmpty();
+        }
+
+        [Test]
+        [ExpectedException(typeof(ApplicationException), ExpectedMessage = "API Key Incorrect")]
+        public void GetQueue_should_return_an_empty_list_when_there_is_an_error_getting_the_queue()
+        {
+            WithSabConfigValues();
+
+            Mocker.GetMock<HttpProvider>()
+                .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=queue&output=xml&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
+                .Returns(File.ReadAllText(@".\Files\QueueError.xml"));
+
+            //Act
+            var result = Mocker.Resolve<SabProvider>().GetQueue();
+
+            //Assert
+            result.Should().BeEmpty();
+        }
+
+        [Test]
+        public void GetQueue_should_return_a_list_with_items_when_the_queue_has_items()
+        {
+            WithSabConfigValues();
+
+            Mocker.GetMock<HttpProvider>()
+                .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=queue&output=xml&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
+                .Returns(File.ReadAllText(@".\Files\Queue.xml"));
+
+            //Act
+            var result = Mocker.Resolve<SabProvider>().GetQueue();
+
+            //Assert
+            result.Should().HaveCount(2);
         }
     }
 }

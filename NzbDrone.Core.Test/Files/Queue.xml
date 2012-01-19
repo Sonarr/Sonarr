@@ -15,12 +15,34 @@
       <verbosity></verbosity>
       <mb>770.96</mb>
       <sizeleft>770.96 MB</sizeleft>
-      <filename>Ubuntu Test</filename>
+      <filename>30 Rock - 1x05 - Title [SDTV]</filename>
       <priority>Normal</priority>
       <cat>None</cat>
       <mbleft>770.96</mbleft>
       <percentage>0</percentage>
       <nzo_id>SABnzbd_nzo_xyr5ak</nzo_id>
+
+      <unpackopts>3</unpackopts>
+      <size>770.96 MB</size>
+    </slot>
+    <slot>
+      <status>Queued</status>
+      <index>0</index>
+      <eta>unknown</eta>
+      <timeleft>0:00:00</timeleft>
+      <avg_age>11h</avg_age>
+      <script>None</script>
+
+      <msgid></msgid>
+      <verbosity></verbosity>
+      <mb>770.96</mb>
+      <sizeleft>770.96 MB</sizeleft>
+      <filename>The Office (US) - 1x05 - Title [WEBDL]</filename>
+      <priority>Normal</priority>
+      <cat>None</cat>
+      <mbleft>770.96</mbleft>
+      <percentage>0</percentage>
+      <nzo_id>SABnzbd_nzo_kqr9gl</nzo_id>
 
       <unpackopts>3</unpackopts>
       <size>770.96 MB</size>
