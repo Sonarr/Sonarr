@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Model.Sabnzbd;
 
 namespace NzbDrone.Web.Models
 {
@@ -50,7 +51,7 @@ namespace NzbDrone.Web.Models
         [Required(ErrorMessage = "Please select a valid priority")]
         [DisplayName("SABnzbd Priority")]
         [Description("Priority to use when sending NZBs to SABnzbd")]
-        public SabnzbdPriorityType SabTvPriority { get; set; }
+        public SabPriorityType SabTvPriority { get; set; }
 
         [DisplayName("SABnzbd TV Directory")]
         [Description("The directory where SABnzbd downloads TV shows to (NzbDrone will sort them for you)")]

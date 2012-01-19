@@ -6,9 +6,11 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Script.Serialization;
 using System.Xml.Linq;
+using Newtonsoft.Json;
 using Ninject;
 using NLog;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Model.Sabnzbd;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository.Quality;
 
@@ -104,32 +106,26 @@ namespace NzbDrone.Core.Providers
             return false; //Not in Queue
         }
 
-        public virtual List<SabQueueItem> GetQueue()
+        public virtual List<SabQueueItem> GetQueue(int start = 0, int limit = 0)
         {
-            const string action = "mode=queue&output=xml";
+            string action = String.Format("mode=queue&output=json&start={0}&limit={1}", start, limit);
             string request = GetSabRequest(action);
             string response = _httpProvider.DownloadString(request);
 
-            XDocument xDoc = XDocument.Parse(response);
+            CheckForError(response);
 
-            //If an Error Occurred, return)
-            if (xDoc.Descendants("error").Count() != 0)
-                throw new ApplicationException(xDoc.Descendants("error").FirstOrDefault().Value);
+            return JsonConvert.DeserializeObject<SabQueue>(response).Items;
+        }
 
-            if (!xDoc.Descendants("queue").Any())
-            {
-                Logger.Debug("SAB Queue is empty.");
-                return new List<SabQueueItem>();
-            }
+        public virtual List<SabHistoryItem> GetHistory(int start = 0, int limit = 0)
+        {
+            string action = String.Format("mode=history&output=json&start={0}&limit={1}", start, limit);
+            string request = GetSabRequest(action);
+            string response = _httpProvider.DownloadString(request);
 
-            var items = xDoc.Descendants("slot")
-                                .Select(s => new SabQueueItem
-                                                            {
-                                                                Title = s.Element("filename").Value,
-                                                                Id = s.Element("nzo_id").Value
-                                                            });
+            CheckForError(response);
 
-            return items.ToList();
+            return JsonConvert.DeserializeObject<SabHistory>(response).Items;
         }
 
         public virtual String GetSabTitle(EpisodeParseResult parseResult)
@@ -178,7 +174,7 @@ namespace NzbDrone.Core.Providers
             return result;
         }
 
-        public virtual SabnzbdCategoryModel GetCategories(string host = null, int port = 0, string apiKey = null, string username = null, string password = null)
+        public virtual SabCategoryModel GetCategories(string host = null, int port = 0, string apiKey = null, string username = null, string password = null)
         {
             //Get saved values if any of these are defaults
             if (host == null)
@@ -204,9 +200,9 @@ namespace NzbDrone.Core.Providers
             var response = _httpProvider.DownloadString(command);
 
             if (String.IsNullOrWhiteSpace(response))
-                return new SabnzbdCategoryModel{categories = new List<string>()};
+                return new SabCategoryModel{categories = new List<string>()};
 
-            var deserialized =  new JavaScriptSerializer().Deserialize<SabnzbdCategoryModel>(response);
+            var deserialized = JsonConvert.DeserializeObject<SabCategoryModel>(response);
 
             return deserialized;
         }
@@ -220,6 +216,14 @@ namespace NzbDrone.Core.Providers
                                  _configProvider.SabApiKey,
                                  _configProvider.SabUsername,
                                  _configProvider.SabPassword);
+        }
+
+        private void CheckForError(string response)
+        {
+            var result = JsonConvert.DeserializeObject<SabJsonError>(response);
+            
+            if (result.Status.Equals("false", StringComparison.InvariantCultureIgnoreCase))
+                throw new ApplicationException(result.Error);
         }
     }
 }

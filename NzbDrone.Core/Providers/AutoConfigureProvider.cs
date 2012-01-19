@@ -7,6 +7,7 @@ using System.Net.NetworkInformation;
 using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Model.Sabnzbd;
 
 namespace NzbDrone.Core.Providers
 {
@@ -14,7 +15,7 @@ namespace NzbDrone.Core.Providers
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public SabnzbdInfoModel AutoConfigureSab()
+        public SabModel AutoConfigureSab()
         {
             var info = GetConnectionList();
             return FindApiKey(info);
@@ -41,13 +42,13 @@ namespace NzbDrone.Core.Providers
             return info;
         }
 
-        private SabnzbdInfoModel FindApiKey(List<ConnectionInfoModel> info)
+        private SabModel FindApiKey(List<ConnectionInfoModel> info)
         {
             foreach (var connection in info)
             {
                 var apiKey = GetApiKey(connection.Address, connection.Port);
                 if (!String.IsNullOrEmpty(apiKey))
-                    return new SabnzbdInfoModel
+                    return new SabModel
                     {
                         Host = connection.Address,
                         Port = connection.Port,

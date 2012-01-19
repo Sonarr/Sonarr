@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace NzbDrone.Core.Model
+namespace NzbDrone.Core.Model.Sabnzbd
 {
-    public class SabnzbdCategoryModel
+    public class SabCategoryModel
     {
         public List<string> categories { get; set; }
     }

@@ -232,9 +232,13 @@
     <Compile Include="Model\LanguageType.cs" />
     <Compile Include="Model\MisnamedEpisodeModel.cs" />
     <Compile Include="Model\Quality.cs" />
-    <Compile Include="Model\SabnzbdCategoryModel.cs" />
-    <Compile Include="Model\SabnzbdInfoModel.cs" />
-    <Compile Include="Model\SabQueueItem.cs" />
+    <Compile Include="Model\Sabnzbd\SabHistoryItem.cs" />
+    <Compile Include="Model\Sabnzbd\SabHistory.cs" />
+    <Compile Include="Model\Sabnzbd\SabJsonError.cs" />
+    <Compile Include="Model\Sabnzbd\SabQueue.cs" />
+    <Compile Include="Model\Sabnzbd\SabCategoryModel.cs" />
+    <Compile Include="Model\Sabnzbd\SabModel.cs" />
+    <Compile Include="Model\Sabnzbd\SabQueueItem.cs" />
     <Compile Include="Model\Twitter\TwitterAuthorizationModel.cs" />
     <Compile Include="Model\UpdatePackage.cs" />
     <Compile Include="Model\Xbmc\ActionType.cs" />
@@ -306,7 +310,7 @@
     <Compile Include="Model\EpisodeParseResult.cs" />
     <Compile Include="Model\EpisodeSortingType.cs" />
     <Compile Include="Model\EpisodeStatusType.cs" />
-    <Compile Include="Model\SabnzbdPriorityType.cs" />
+    <Compile Include="Model\Sabnzbd\SabPriorityType.cs" />
     <Compile Include="Model\SeasonParseResult.cs" />
     <Compile Include="Model\UpcomingEpisodesModel.cs" />
     <Compile Include="Providers\Indexer\IndexerBase.cs" />

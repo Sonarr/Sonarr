@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Ninject;
 using NLog;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Model.Sabnzbd;
 using NzbDrone.Core.Repository;
 using PetaPoco;
 
@@ -126,9 +127,9 @@ namespace NzbDrone.Core.Providers.Core
             set { SetValue("SabTvCategory", value); }
         }
 
-        public virtual SabnzbdPriorityType SabTvPriority
+        public virtual SabPriorityType SabTvPriority
         {
-            get { return (SabnzbdPriorityType)GetValueInt("SabTvPriority"); }
+            get { return (SabPriorityType)GetValueInt("SabTvPriority"); }
 
             set { SetValue("SabTvPriority", (int)value); }
         }

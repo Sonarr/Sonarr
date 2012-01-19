@@ -1,6 +1,6 @@
-﻿namespace NzbDrone.Core.Model
+﻿namespace NzbDrone.Core.Model.Sabnzbd
 {
-    public enum SabnzbdPriorityType
+    public enum SabPriorityType
     {
         Default = -100,
         Paused = -2,

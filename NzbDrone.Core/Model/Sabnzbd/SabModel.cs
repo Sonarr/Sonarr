@@ -1,6 +1,6 @@
-﻿namespace NzbDrone.Core.Model
+﻿namespace NzbDrone.Core.Model.Sabnzbd
 {
-    public class SabnzbdInfoModel
+    public class SabModel
     {
         public string Host { get; set; }
         public int Port { get; set; }

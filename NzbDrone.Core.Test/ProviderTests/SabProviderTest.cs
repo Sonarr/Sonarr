@@ -9,6 +9,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Model.Sabnzbd;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
@@ -54,7 +55,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             const string apikey = "5c770e3197e4fe763423ee7c392c25d1";
             const string username = "admin";
             const string password = "pass";
-            const SabnzbdPriorityType priority = SabnzbdPriorityType.Normal;
+            const SabPriorityType priority = SabPriorityType.Normal;
             const string category = "tv";
 
 
@@ -101,7 +102,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             const string apikey = "5c770e3197e4fe763423ee7c392c25d1";
             const string username = "admin";
             const string password = "pass";
-            const SabnzbdPriorityType priority = SabnzbdPriorityType.Normal;
+            const SabPriorityType priority = SabPriorityType.Normal;
             const string category = "tv";
 
 
@@ -147,7 +148,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             string apikey = "5c770e3197e4fe763423ee7c392c25d1";
             string username = "admin";
             string password = "pass";
-            var priority = SabnzbdPriorityType.Normal;
+            var priority = SabPriorityType.Normal;
             string category = "tv";
 
             
@@ -178,108 +179,6 @@ namespace NzbDrone.Core.Test.ProviderTests
             //Assert
             Assert.IsFalse(result);
             ExceptionVerification.ExpectedWarns(1);
-        }
-
-        [Test]
-        public void IsInQueue_True()
-        {
-            //Setup
-            string sabHost = "192.168.5.55";
-            int sabPort = 2222;
-            string apikey = "5c770e3197e4fe763423ee7c392c25d1";
-            string username = "admin";
-            string password = "pass";
-
-            var fakeConfig = Mocker.GetMock<ConfigProvider>();
-            fakeConfig.SetupGet(c => c.SabHost)
-              .Returns(sabHost);
-            fakeConfig.SetupGet(c => c.SabPort)
-                .Returns(sabPort);
-            fakeConfig.SetupGet(c => c.SabApiKey)
-                .Returns(apikey);
-            fakeConfig.SetupGet(c => c.SabUsername)
-                .Returns(username);
-            fakeConfig.SetupGet(c => c.SabPassword)
-                .Returns(password);
-
-            Mocker.GetMock<HttpProvider>(MockBehavior.Strict)
-                .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=queue&output=xml&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
-                .Returns(File.ReadAllText(@".\Files\Queue.xml"));
-
-            //Act
-            bool result = Mocker.Resolve<SabProvider>().IsInQueue("30 Rock - 1x05 - Title [SDTV]");
-
-            //Assert
-            result.Should().BeTrue();
-        }
-
-        [Test]
-        public void IsInQueue_False_Empty()
-        {
-            //Setup
-            string sabHost = "192.168.5.55";
-            int sabPort = 2222;
-            string apikey = "5c770e3197e4fe763423ee7c392c25d1";
-            string username = "admin";
-            string password = "pass";
-
-            
-
-            var fakeConfig = Mocker.GetMock<ConfigProvider>();
-            fakeConfig.SetupGet(c => c.SabHost)
-                .Returns(sabHost);
-            fakeConfig.SetupGet(c => c.SabPort)
-                .Returns(sabPort);
-            fakeConfig.SetupGet(c => c.SabApiKey)
-                .Returns(apikey);
-            fakeConfig.SetupGet(c => c.SabUsername)
-                .Returns(username);
-            fakeConfig.SetupGet(c => c.SabPassword)
-                .Returns(password);
-
-            Mocker.GetMock<HttpProvider>(MockBehavior.Strict)
-                .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=queue&output=xml&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
-                .Returns(File.ReadAllText(@".\Files\QueueEmpty.xml"));
-
-            //Act
-            bool result = Mocker.Resolve<SabProvider>().IsInQueue(String.Empty);
-
-            //Assert
-            Assert.IsFalse(result);
-        }
-
-        [Test]
-        [ExpectedException(typeof(ApplicationException), ExpectedMessage = "API Key Incorrect")]
-        public void IsInQueue_False_Error()
-        {
-            //Setup
-            string sabHost = "192.168.5.55";
-            int sabPort = 2222;
-            string apikey = "5c770e3197e4fe763423ee7c392c25d1";
-            string username = "admin";
-            string password = "pass";
-
-            
-
-            var fakeConfig = Mocker.GetMock<ConfigProvider>();
-            fakeConfig.SetupGet(c => c.SabHost)
-                .Returns(sabHost);
-            fakeConfig.SetupGet(c => c.SabPort)
-                .Returns(sabPort);
-            fakeConfig.SetupGet(c => c.SabApiKey)
-                .Returns(apikey);
-            fakeConfig.SetupGet(c => c.SabUsername)
-                .Returns(username);
-            fakeConfig.SetupGet(c => c.SabPassword)
-                .Returns(password);
-
-            Mocker.GetMock<HttpProvider>(MockBehavior.Strict)
-                .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=queue&output=xml&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
-                .Returns(File.ReadAllText(@".\Files\QueueError.xml"));
-
-
-            //Act
-            Mocker.Resolve<SabProvider>().IsInQueue(String.Empty);
         }
 
         [Test]
@@ -373,7 +272,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             const string apikey = "f37dc33baec2e5566f5aec666287870d";
             const string username = "root";
             const string password = "*************";
-            const SabnzbdPriorityType priority = SabnzbdPriorityType.Normal;
+            const SabPriorityType priority = SabPriorityType.Normal;
             const string category = "tv";
 
 
@@ -472,8 +371,8 @@ namespace NzbDrone.Core.Test.ProviderTests
             WithSabConfigValues();
 
             Mocker.GetMock<HttpProvider>()
-                .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=queue&output=xml&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
-                .Returns(File.ReadAllText(@".\Files\QueueEmpty.xml"));
+                .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=queue&output=json&start=0&limit=0&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
+                .Returns(File.ReadAllText(@".\Files\QueueEmpty.txt"));
 
             //Act
             var result = Mocker.Resolve<SabProvider>().GetQueue();
@@ -489,8 +388,8 @@ namespace NzbDrone.Core.Test.ProviderTests
             WithSabConfigValues();
 
             Mocker.GetMock<HttpProvider>()
-                .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=queue&output=xml&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
-                .Returns(File.ReadAllText(@".\Files\QueueError.xml"));
+                .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=queue&output=json&start=0&limit=0&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
+                .Returns(File.ReadAllText(@".\Files\JsonError.txt"));
 
             //Act
             var result = Mocker.Resolve<SabProvider>().GetQueue();
@@ -505,14 +404,63 @@ namespace NzbDrone.Core.Test.ProviderTests
             WithSabConfigValues();
 
             Mocker.GetMock<HttpProvider>()
-                .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=queue&output=xml&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
-                .Returns(File.ReadAllText(@".\Files\Queue.xml"));
+                .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=queue&output=json&start=0&limit=0&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
+                .Returns(File.ReadAllText(@".\Files\Queue.txt"));
 
             //Act
             var result = Mocker.Resolve<SabProvider>().GetQueue();
 
             //Assert
             result.Should().HaveCount(2);
+        }
+
+        [Test]
+        public void GetHistory_should_return_a_list_with_items_when_the_history_has_items()
+        {
+            WithSabConfigValues();
+
+            Mocker.GetMock<HttpProvider>()
+                .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=history&output=json&start=0&limit=0&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
+                .Returns(File.ReadAllText(@".\Files\History.txt"));
+
+            //Act
+            var result = Mocker.Resolve<SabProvider>().GetHistory();
+
+            //Assert
+            result.Should().HaveCount(1);
+        }
+
+        [Test]
+        public void GetHistory_should_return_an_empty_list_when_the_queue_is_empty()
+        {
+            WithSabConfigValues();
+
+            Mocker.GetMock<HttpProvider>()
+                .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=history&output=json&start=0&limit=0&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
+                .Returns(File.ReadAllText(@".\Files\HistoryEmpty.txt"));
+
+            //Act
+            var result = Mocker.Resolve<SabProvider>().GetHistory();
+
+            //Assert
+            result.Should().BeEmpty();
+        }
+
+        [Test]
+        [ExpectedException(typeof(ApplicationException), ExpectedMessage = "API Key Incorrect")]
+        public void GetHistory_should_return_an_empty_list_when_there_is_an_error_getting_the_queue()
+        {
+            WithSabConfigValues();
+
+            Mocker.GetMock<HttpProvider>()
+                .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=history&output=json&start=0&limit=0&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
+                .Returns(File.ReadAllText(@".\Files\JsonError.txt"));
+
+            //Act
+            var result = Mocker.Resolve<SabProvider>().GetHistory();
+
+            //Assert
+            result.Should().BeEmpty();
         }
     }
 }
