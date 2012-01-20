@@ -117,7 +117,7 @@ namespace NzbDrone.Core
 
         private static EpisodeParseResult ParseMatchCollection(MatchCollection matchCollection)
         {
-            var seriesName = NormalizeTitle(matchCollection[0].Groups["title"].Value);
+            var seriesName = matchCollection[0].Groups["title"].Value;
 
             int airyear;
             Int32.TryParse(matchCollection[0].Groups["airyear"].Value, out airyear);
@@ -184,7 +184,7 @@ namespace NzbDrone.Core
                 };
             }
 
-            parsedEpisode.CleanTitle = seriesName;
+            parsedEpisode.SeriesTitle = seriesName;
 
             Logger.Trace("Episode Parsed. {0}", parsedEpisode);
 
@@ -307,7 +307,15 @@ namespace NzbDrone.Core
                 }
             }
 
-            if ((normalizedName.Contains("sdtv") || (result.QualityType == QualityTypes.Unknown && normalizedName.Contains("hdtv"))) && !normalizedName.Contains("mpeg"))
+            if (name.Contains("[HDTV]"))
+            {
+                result.QualityType = QualityTypes.HDTV;
+                return result;
+            }
+
+            if ((normalizedName.Contains("sdtv") || 
+                (result.QualityType == QualityTypes.Unknown && normalizedName.Contains("hdtv"))) && 
+                !normalizedName.Contains("mpeg"))
             {
                 result.QualityType = QualityTypes.SDTV;
                 return result;

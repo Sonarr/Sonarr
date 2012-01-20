@@ -15,8 +15,18 @@ namespace NzbDrone.Core.Model.Sabnzbd
         [JsonProperty(PropertyName = "mb")]
         public decimal Size { get; set; }
 
+        private string _title;
+
         [JsonProperty(PropertyName = "filename")]
-        public string Title { get; set; }
+        public string Title
+        {
+            get { return _title; }
+            set
+            {
+                _title = value;
+                ParseResult = Parser.ParseTitle(value);
+            }
+        }
 
         public SabPriorityType Priority { get; set; }
 
@@ -30,5 +40,7 @@ namespace NzbDrone.Core.Model.Sabnzbd
 
         [JsonProperty(PropertyName = "nzo_id")]
         public string Id { get; set; }
+
+        public EpisodeParseResult ParseResult { private set; get; }
     }
 }

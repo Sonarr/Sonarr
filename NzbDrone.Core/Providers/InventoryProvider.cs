@@ -187,14 +187,11 @@ namespace NzbDrone.Core.Providers
         {
             //Used to check if the existing episode can be upgraded by searching (Before we search)
 
-            //If no episode file exists on disk, then an upgrade is possible
             if (episode.EpisodeFileId == 0)
                 return true;
 
-            //Get the quality profile for the series
             var profile = _qualityProvider.Get(episode.Series.QualityProfileId);
 
-            //If the current episode file meets or exceeds the cutoff, do not attempt upgrade
             if (episode.EpisodeFile.Quality >= profile.Cutoff)
                 return false;
 

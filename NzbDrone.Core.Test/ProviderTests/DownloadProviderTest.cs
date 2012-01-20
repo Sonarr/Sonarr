@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             const string sabTitle = "My fake sab title";
             Mocker.GetMock<SabProvider>()
-                .Setup(s => s.IsInQueue(It.IsAny<String>()))
+                .Setup(s => s.IsInQueue(It.IsAny<EpisodeParseResult>()))
                 .Returns(false);
 
             Mocker.GetMock<SabProvider>()

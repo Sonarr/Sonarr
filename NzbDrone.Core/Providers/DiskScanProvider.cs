@@ -115,7 +115,7 @@ namespace NzbDrone.Core.Providers
             if (parseResult == null)
                 return null;
 
-            parseResult.CleanTitle = series.Title; //replaces the nasty path as title to help with logging
+            parseResult.SeriesTitle = series.Title; //replaces the nasty path as title to help with logging
             parseResult.Series = series;
 
             var episodes = _episodeProvider.GetEpisodesByParseResult(parseResult);

@@ -135,16 +135,7 @@ namespace NzbDrone.Core.Test
 
             foreach (var qualityEnum in qualityEnums)
             {
-                if (qualityEnum.ToString() == QualityTypes.Unknown.ToString()) continue;
-
-                var extention = "mkv";
-
-                if (qualityEnum.ToString() == QualityTypes.SDTV.ToString() || qualityEnum.ToString() == QualityTypes.DVD.ToString())
-                {
-                    extention = "avi";
-                }
-
-                var fileName = String.Format("My series S01E01 [{0}].{1}", qualityEnum, extention);
+                var fileName = String.Format("My series S01E01 [{0}]", qualityEnum);
                 var result = Parser.ParseQuality(fileName);
                 result.QualityType.Should().Be(qualityEnum);
             }

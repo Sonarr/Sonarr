@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Test.ProviderTests.InventoryProviderTests
         {
             parseResultMulti = new EpisodeParseResult
                                    {
-                                       CleanTitle = "Title",
+                                       SeriesTitle = "Title",
                                        Language = LanguageType.English,
                                        Quality = new Quality(QualityTypes.SDTV, true),
                                        EpisodeNumbers = new List<int> { 3, 4 },
@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Test.ProviderTests.InventoryProviderTests
 
             parseResultSingle = new EpisodeParseResult
                                     {
-                                        CleanTitle = "Title",
+                                        SeriesTitle = "Title",
                                         Language = LanguageType.English,
                                         Quality = new Quality(QualityTypes.SDTV, true),
                                         EpisodeNumbers = new List<int> { 3 },

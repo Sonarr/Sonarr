@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
-using System.Web.Script.Serialization;
 using System.Xml.Linq;
 using Newtonsoft.Json;
 using Ninject;
@@ -12,7 +10,6 @@ using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Sabnzbd;
 using NzbDrone.Core.Providers.Core;
-using NzbDrone.Core.Repository.Quality;
 
 namespace NzbDrone.Core.Providers
 {
@@ -75,35 +72,14 @@ namespace NzbDrone.Core.Providers
             return urlString.Replace("&", "%26");
         }
 
-        public virtual bool IsInQueue(string title)
+        public virtual bool IsInQueue(EpisodeParseResult newParseResult)
         {
-            const string action = "mode=queue&output=xml";
-            string request = GetSabRequest(action);
-            string response = _httpProvider.DownloadString(request);
+            var queue = GetQueue();
 
-            XDocument xDoc = XDocument.Parse(response);
-
-            //If an Error Occurred, return)
-            if (xDoc.Descendants("error").Count() != 0)
-                throw new ApplicationException(xDoc.Descendants("error").FirstOrDefault().Value);
-
-            if (xDoc.Descendants("queue").Count() == 0)
-            {
-                Logger.Debug("SAB Queue is empty. retiring false");
-                return false;
-            }
-            //Get the Count of Items in Queue where 'filename' is Equal to goodName, if not zero, return true (isInQueue)))
-            if (
-                (xDoc.Descendants("slot").Where(
-                    s => s.Element("filename").Value.Equals(title, StringComparison.InvariantCultureIgnoreCase))).Count() !=
-                0)
-            {
-                Logger.Debug("Episode in queue - '{0}'", title);
-
-                return true;
-            }
-
-            return false; //Not in Queue
+            return queue.Any(c => String.Equals(c.ParseResult.SeriesTitle, newParseResult.Series.Title, StringComparison.InvariantCultureIgnoreCase) &&
+                                  c.ParseResult.EpisodeNumbers.SequenceEqual(newParseResult.EpisodeNumbers) &&
+                                  c.ParseResult.SeasonNumber == newParseResult.SeasonNumber &&
+                                  c.ParseResult.Quality >= newParseResult.Quality);
         }
 
         public virtual List<SabQueueItem> GetQueue(int start = 0, int limit = 0)
@@ -133,7 +109,7 @@ namespace NzbDrone.Core.Providers
             //Handle Full Naming
             if (parseResult.FullSeason)
             {
-                var seasonResult =  String.Format("{0} - Season {1} [{2}]", MediaFileProvider.CleanFilename(parseResult.Series.Title),
+                var seasonResult = String.Format("{0} - Season {1} [{2}]", GetSabSeriesName(parseResult),
                                      parseResult.SeasonNumber, parseResult.Quality.QualityType);
 
                 if (parseResult.Quality.Proper)
@@ -144,7 +120,7 @@ namespace NzbDrone.Core.Providers
 
             if (parseResult.Series.IsDaily)
             {
-                var dailyResult = String.Format("{0} - {1:yyyy-MM-dd} - {2} [{3}]", MediaFileProvider.CleanFilename(parseResult.Series.Title),
+                var dailyResult = String.Format("{0} - {1:yyyy-MM-dd} - {2} [{3}]", GetSabSeriesName(parseResult),
                                      parseResult.AirDate, parseResult.EpisodeTitle, parseResult.Quality.QualityType);
 
                 if (parseResult.Quality.Proper)
@@ -164,7 +140,7 @@ namespace NzbDrone.Core.Providers
 
             var epNumberString = String.Join("-", episodeString);
 
-            var result = String.Format("{0} - {1} - {2} [{3}]", MediaFileProvider.CleanFilename(parseResult.Series.Title), epNumberString, parseResult.EpisodeTitle, parseResult.Quality.QualityType);
+            var result = String.Format("{0} - {1} - {2} [{3}]", GetSabSeriesName(parseResult), epNumberString, parseResult.EpisodeTitle, parseResult.Quality.QualityType);
 
             if (parseResult.Quality.Proper)
             {
@@ -172,6 +148,11 @@ namespace NzbDrone.Core.Providers
             }
 
             return result;
+        }
+
+        private static string GetSabSeriesName(EpisodeParseResult parseResult)
+        {
+            return MediaFileProvider.CleanFilename(parseResult.Series.Title);
         }
 
         public virtual SabCategoryModel GetCategories(string host = null, int port = 0, string apiKey = null, string username = null, string password = null)
@@ -200,11 +181,11 @@ namespace NzbDrone.Core.Providers
             var response = _httpProvider.DownloadString(command);
 
             if (String.IsNullOrWhiteSpace(response))
-                return new SabCategoryModel{categories = new List<string>()};
+                return new SabCategoryModel { categories = new List<string>() };
 
-            var deserialized = JsonConvert.DeserializeObject<SabCategoryModel>(response);
+            var categories = JsonConvert.DeserializeObject<SabCategoryModel>(response);
 
-            return deserialized;
+            return categories;
         }
 
         private string GetSabRequest(string action)
@@ -221,7 +202,7 @@ namespace NzbDrone.Core.Providers
         private void CheckForError(string response)
         {
             var result = JsonConvert.DeserializeObject<SabJsonError>(response);
-            
+
             if (result.Status.Equals("false", StringComparison.InvariantCultureIgnoreCase))
                 throw new ApplicationException(result.Error);
         }

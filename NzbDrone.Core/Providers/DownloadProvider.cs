@@ -31,14 +31,13 @@ namespace NzbDrone.Core.Providers
 
         public virtual bool DownloadReport(EpisodeParseResult parseResult)
         {
-            var sabTitle = _sabProvider.GetSabTitle(parseResult);
-
-            if (_sabProvider.IsInQueue(sabTitle))
+            if (_sabProvider.IsInQueue(parseResult))
             {
                 Logger.Warn("Episode {0} is already in sab's queue. skipping.", parseResult);
                 return false;
             }
 
+            var sabTitle = _sabProvider.GetSabTitle(parseResult);
             var addSuccess = _sabProvider.AddByUrl(parseResult.NzbUrl, sabTitle);
 
             if (addSuccess)

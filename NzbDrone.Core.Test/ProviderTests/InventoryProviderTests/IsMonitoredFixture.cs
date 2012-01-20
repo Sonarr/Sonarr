@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Test.ProviderTests.InventoryProviderTests
         {
             parseResultMulti = new EpisodeParseResult()
                                    {
-                                       CleanTitle = "Title",
+                                       SeriesTitle = "Title",
                                        Language = LanguageType.English,
                                        Quality = new Quality(QualityTypes.Bluray720p, true),
                                        EpisodeNumbers = new List<int> { 3, 4 },
@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Test.ProviderTests.InventoryProviderTests
 
             parseResultSingle = new EpisodeParseResult()
                                     {
-                                        CleanTitle = "Title",
+                                        SeriesTitle = "Title",
                                         Language = LanguageType.English,
                                         Quality = new Quality(QualityTypes.Bluray720p, true),
                                         EpisodeNumbers = new List<int> { 3 },
@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Test.ProviderTests.InventoryProviderTests
 
             parseResultDaily = new EpisodeParseResult()
                                     {
-                                        CleanTitle = "Title",
+                                        SeriesTitle = "Title",
                                         Language = LanguageType.English,
                                         Quality = new Quality(QualityTypes.Bluray720p, true),
                                         AirDate = DateTime.Now.AddDays(-12).Date,
