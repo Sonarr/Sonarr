@@ -77,7 +77,10 @@ namespace NzbDrone.Core
                 result = ParseTitle(fileInfo.FullName);
             }
 
-            result.OriginalString = path;
+            if (result != null)
+            {
+                result.OriginalString = path;
+            }
 
             return result;
         }

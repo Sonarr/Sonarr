@@ -90,6 +90,20 @@ namespace NzbDrone.Core.Test
             ExceptionVerification.IgnoreWarns();
         }
 
+        [Test]
+        public void unparsable_path()
+        {
+            Parser.ParsePath("C:\\").Should().BeNull();
+            ExceptionVerification.IgnoreWarns();
+        }
+
+        [Test]
+        public void unparsable_title()
+        {
+            Parser.ParseTitle("SOMETHING").Should().BeNull();
+            ExceptionVerification.IgnoreWarns();
+        }
+
         [TestCase("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD", QualityTypes.DVD)]
         [TestCase("WEEDS.S03E01-06.DUAL.BDRip.X-viD.AC3.-HELLYWOOD", QualityTypes.DVD)]
         [TestCase("WEEDS.S03E01-06.DUAL.BDRip.AC3.-HELLYWOOD", QualityTypes.DVD)]
