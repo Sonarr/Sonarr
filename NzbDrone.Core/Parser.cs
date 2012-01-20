@@ -110,7 +110,7 @@ namespace NzbDrone.Core
             }
             catch (Exception e)
             {
-                Logger.Error("An error has occurred while trying to parse '{0}'", title);
+                Logger.ErrorException("An error has occurred while trying to parse " + title, e);
             }
             return null;
         }
