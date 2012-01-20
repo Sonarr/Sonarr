@@ -198,6 +198,23 @@ namespace NzbDrone.Core.Providers
             return series;
         }
 
+        public virtual void UpdateFromMassEdit(IList<Series> editedSeries)
+        {
+            var allSeries = GetAllSeries();
+
+            foreach(var series in allSeries)
+            {
+                //Only update parameters that can be changed in MassEdit
+                var edited = editedSeries.Single(s => s.SeriesId == series.SeriesId);
+                series.QualityProfileId = edited.QualityProfileId;
+                series.Monitored = edited.Monitored;
+                series.SeasonFolder = edited.SeasonFolder;
+                series.Path = edited.Path;
+            }
+
+            _database.UpdateMany(allSeries);
+        }
+
         /// <summary>
         ///   Cleans up the AirsTime Component from TheTVDB since it can be garbage that comes in.
         /// </summary>

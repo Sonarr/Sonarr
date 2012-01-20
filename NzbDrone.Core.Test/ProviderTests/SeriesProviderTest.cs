@@ -706,5 +706,80 @@ namespace NzbDrone.Core.Test.ProviderTests
             //Assert
             series.Should().HaveCount(1);
         }
+
+        [Test]
+        public void UpdateFromMassEdit_should_only_update_certain_values()
+        {
+            WithRealDb();
+            var newQualityProfileId = 10;
+            var newMonitored = false;
+            var newSeasonFolder = false;
+
+            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+            var fakeSeries = Builder<Series>.CreateListOfSize(1)
+                .All()
+                .With(e => e.QualityProfileId = fakeQuality.QualityProfileId)
+                .With(e => e.Monitored = true)
+                .With(e => e.SeasonFolder = true)
+                .With(s => s.Title = "It's Always Sunny")
+                .Build();
+
+            Db.InsertMany(fakeSeries);
+            Db.Insert(fakeQuality);
+
+            fakeSeries[0].QualityProfileId = newQualityProfileId;
+            fakeSeries[0].Monitored = newMonitored;
+            fakeSeries[0].SeasonFolder = newSeasonFolder;
+
+            //Act
+            Mocker.Resolve<SeriesProvider>().UpdateFromMassEdit(fakeSeries);
+
+            //Assert
+            var result = Db.Fetch<Series>();
+            result.Count.Should().Be(1);
+            result.First().QualityProfileId.Should().Be(newQualityProfileId);
+            result.First().Monitored.Should().Be(newMonitored);
+            result.First().SeasonFolder.Should().Be(newSeasonFolder);
+        }
+
+        [Test]
+        public void UpdateFromMassEdit_should_only_update_changed_values()
+        {
+            WithRealDb();
+            var newQualityProfileId = 10;
+            var newMonitored = false;
+            var newSeasonFolder = false;
+            var monitored = true;
+            var seasonFolder = true;
+
+            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+            var fakeSeries = Builder<Series>.CreateListOfSize(2)
+                .All()
+                .With(e => e.QualityProfileId = fakeQuality.QualityProfileId)
+                .With(e => e.Monitored = monitored)
+                .With(e => e.SeasonFolder = seasonFolder)
+                .With(s => s.Title = "It's Always Sunny")
+                .Build();
+
+            Db.InsertMany(fakeSeries);
+            Db.Insert(fakeQuality);
+
+            fakeSeries[0].QualityProfileId = newQualityProfileId;
+            fakeSeries[0].Monitored = newMonitored;
+            fakeSeries[0].SeasonFolder = newSeasonFolder;
+
+            //Act
+            Mocker.Resolve<SeriesProvider>().UpdateFromMassEdit(fakeSeries);
+
+            //Assert
+            var result = Db.Fetch<Series>();
+            result.Count.Should().Be(2);
+            result.First().QualityProfileId.Should().Be(newQualityProfileId);
+            result.First().Monitored.Should().Be(newMonitored);
+            result.First().SeasonFolder.Should().Be(newSeasonFolder);
+            result.Last().QualityProfileId.Should().Be(fakeQuality.QualityProfileId);
+            result.Last().Monitored.Should().Be(monitored);
+            result.Last().SeasonFolder.Should().Be(seasonFolder);
+        }
     }
 }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             

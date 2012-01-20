@@ -1,0 +1,23 @@
+﻿@model NzbDrone.Core.Repository.Series
+@using NzbDrone.Core.Repository.Quality
+@using NzbDrone.Web.Helpers
+
+@{
+    Layout = null;
+}
+
+@*SeriesId, Title, Quality, Monitored, Use Season Folder, Root Directory/Path*, Backlog Toggle*@
+
+@using (Html.BeginCollectionItem("series"))
+{
+    var idClean = ViewData.TemplateInfo.HtmlFieldPrefix.Replace('[', '_').Replace(']', '_');
+    <tr class="seriesEditRow">
+        @Html.HiddenFor(m => m.SeriesId)
+        <td>@Html.CheckBox("editToggle", false, new {@class = "editToggle"})</td>
+        <td>@Model.Title</td>
+        <td>@Html.DropDownListFor(m => m.QualityProfileId, new SelectList((List<QualityProfile>)ViewData["QualityProfiles"], "QualityProfileId", "Name", Model.QualityProfileId), new { @class = "quality" })</td>
+        <td class="checkboxColumn">@Html.CheckBoxFor(m => m.Monitored, new {@class = "seriesCheckbox monitored"})</td>
+        <td class="checkboxColumn">@Html.CheckBoxFor(m => m.SeasonFolder, new {@class = "seriesCheckbox seasonFolder"})</td>
+        <td>@Html.TextBoxFor(m => m.Path)</td>
+    </tr>
+}

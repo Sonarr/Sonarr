@@ -1,0 +1,147 @@
+@using NzbDrone.Web.Helpers
+@model IEnumerable<NzbDrone.Core.Repository.Series>
+@{ViewBag.Title = "NzbDrone";}
+
+@section HeaderContent
+{
+    @Html.IncludeCss("Settings.css")
+    
+    <style>
+        .checkboxColumn {
+            width: 95px;
+            text-align: center;
+        }
+        
+        .masterControls {
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        
+        .buttons {
+            width: 600px;
+            text-align: center;
+        }
+        
+        table input[type="text"], table select {
+            margin: 2px 5px 2px 5px;
+        }
+        
+        table {
+            width: 100%;
+	        border-width: 1px;
+	        border-spacing: 2px;
+	        border-style: none;
+	        border-color: white;
+	        border-collapse: collapse;
+	        background-color: white;
+        }
+        table th {
+	        border-width: 1px;
+	        padding: 2px;
+	        border-style: inset;
+	        border-color: #EEEEEE;
+	        background-color: white;
+	        -moz-border-radius: ;
+        }
+        table td {
+	        border-width: 1px;
+	        padding: 2px;
+	        border-style: inset;
+	        border-color: #EEEEEE;
+	        background-color: white;
+	        -moz-border-radius: ;
+        }
+    </style>
+}
+
+@using (Html.BeginForm("SaveMassEdit", "Series", FormMethod.Post, new { id = "MassEdit", name = "MassEdit" }))
+{
+    <table>
+        <tr>
+            <th>@Html.CheckBox("editToggleMaster", false, new { @class = "editToggleMaster" })</th>
+            <th>Title</th>
+            <th>Quality</th>
+            <th class="checkboxColumn">Monitored</th>
+            <th class="checkboxColumn">Season Folder</th>
+            <th>Path</th>
+        </tr>
+
+        @foreach (var series in Model)
+        {
+            Html.RenderPartial("SeriesItem", series);
+        }
+    </table>
+    
+    <div class="masterControls">
+        <div id="stylized" style="border-color: transparent;">
+            <div class="settingsForm">
+                <label class="labelClass">Quality Profile
+                    <span class="small">Which Quality Profile should NzbDrone use to download episodes?</span>
+                </label>
+                @Html.DropDownList("masterQualitySelector", (SelectList)ViewData["MasterProfileSelectList"], new { @class = "inputClass" })
+                <label class="labelClass">Monitored
+                    <span class="small">Should NzbDrone download episodes for this series?</span>
+                </label>
+                @Html.DropDownList("masterMonitored", (SelectList)ViewData["BoolSelectList"], new { @class = "inputClass" })
+                <label class="labelClass">Use Season Folder
+                    <span class="small">Should downloaded episodes be stored in season folders?</span>
+                </label>
+                @Html.DropDownList("masterSeasonFolder", (SelectList)ViewData["BoolSelectList"], new { @class = "inputClass" })
+            </div>
+        </div>
+    </div>
+
+    <div class="buttons">
+        <button id="updateSelected" title="Update the selected series with the settings above">Update Selected</button>
+    
+        <button type="submit" class="save_button" disabled="disabled" title="Commit the settings from your series above to the database">
+            Save Changes</button>
+    </div>
+}
+
+@section Scripts
+{
+    <script>
+        $('.editToggleMaster').live('change', function () {
+            var toggle = $(this).prop('checked');
+            $('.editToggle').each(function () {
+                $(this).prop('checked', toggle);
+            });
+        });
+
+        $('#updateSelected').live('click', function () {
+            //Find selected values
+            var profileId = $('#masterQualitySelector').val();
+            var monitored = $('#masterMonitored').val();
+            var seasonFolder = $('#masterSeasonFolder').val();
+
+            var selected = $('.editToggle:checked');
+
+            selected.each(function() {
+                if (profileId != -10) {
+                    $(this).parent('td').parent('.seriesEditRow').find('.quality').val(profileId);
+                }
+                
+                if (monitored != -10) {
+                    var monitoredBool = true;
+                    if (monitored != 1)
+                        monitoredBool = false;
+
+                    $(this).parent('td').parent('.seriesEditRow').find('.monitored').prop('checked', monitoredBool);
+                }
+
+                if (seasonFolder != -10) {
+                    var seasonFolderBool = true;
+                    if (seasonFolder != 1)
+                        seasonFolderBool = false;
+
+                    $(this).parent('td').parent('.seriesEditRow').find('.seasonFolder').prop('checked', seasonFolderBool);
+                }
+            });
+
+        });
+
+
+            //Update all checked rows
+    </script>
+}

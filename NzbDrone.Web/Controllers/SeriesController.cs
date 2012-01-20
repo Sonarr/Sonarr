@@ -9,6 +9,7 @@ using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
+using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Web.Models;
 using Telerik.Web.Mvc;
 
@@ -146,6 +147,40 @@ namespace NzbDrone.Web.Controllers
             model.HasBanner = !String.IsNullOrEmpty(series.BannerUrl);
 
             return View(model);
+        }
+
+        public ActionResult MassEdit()
+        {
+            var profiles = _qualityProvider.All();
+            ViewData["QualityProfiles"] = profiles;
+
+            //Create the select lists
+            var masterProfiles = profiles.ToList();
+            masterProfiles.Insert(0, new QualityProfile {QualityProfileId = -10, Name = "Unchanged"});
+            ViewData["MasterProfileSelectList"] = new SelectList(masterProfiles, "QualityProfileId", "Name");
+
+            ViewData["BoolSelectList"] = new SelectList(new List<KeyValuePair<int, string>>
+                                                            {
+                                                                    new KeyValuePair<int, string>(-10, "Unchanged"),
+                                                                    new KeyValuePair<int, string>(1, "True"),
+                                                                    new KeyValuePair<int, string>(0, "False")
+                                                            }, "Key", "Value"
+                                                        );
+
+            var series = _seriesProvider.GetAllSeries().OrderBy(o => SortHelper.SkipArticles(o.Title));
+
+            return View(series);
+        }
+
+        [HttpPost]
+        public JsonResult SaveMassEdit(List<Series> series)
+        {
+            //Save edits
+            if (series == null || series.Count == 0)
+                return JsonNotificationResult.Opps("Invalid post data");
+
+            _seriesProvider.UpdateFromMassEdit(series);
+            return JsonNotificationResult.Info("Series Mass Edit Saved");
         }
 
         private List<SeriesModel> GetSeriesModels(IList<Series> seriesInDb)
