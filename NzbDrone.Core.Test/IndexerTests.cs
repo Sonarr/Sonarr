@@ -209,6 +209,8 @@ namespace NzbDrone.Core.Test
             ExceptionVerification.MarkInconclusive(typeof(WebException));
 
             result.Should().NotBeEmpty();
+            result.Should().OnlyContain(r => r.SeasonNumber == season);
+            result.Should().OnlyContain(r => r.EpisodeNumbers.Contains(episode));
             result.Should().OnlyContain(r => r.CleanTitle == Parser.NormalizeTitle(title));
             result.Should().Contain(r => r.SeasonNumber == season && r.EpisodeNumbers.Contains(episode));
         }

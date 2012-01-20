@@ -115,7 +115,8 @@ namespace NzbDrone.Core.Providers.Indexer
 
             var result = Fetch(searchUrls);
 
-            result = result.Where(e => e.CleanTitle == Parser.NormalizeTitle(seriesTitle)).ToList();
+            result = result.Where(e => e.CleanTitle == Parser.NormalizeTitle(seriesTitle) &&
+                e.SeasonNumber == seasonNumber).ToList();
 
             _logger.Info("Finished searching {0} for {1}-S{2}, Found {3}", Name, seriesTitle, seasonNumber, result.Count);
             return result;
@@ -129,7 +130,9 @@ namespace NzbDrone.Core.Providers.Indexer
 
             var result = Fetch(searchUrls);
 
-            result = result.Where(e => e.CleanTitle == Parser.NormalizeTitle(seriesTitle)).ToList();
+            result = result.Where(e => e.CleanTitle == Parser.NormalizeTitle(seriesTitle) &&
+                e.SeasonNumber == seasonNumber && e.EpisodeNumbers.Contains(episodeNumber))
+                .ToList();
 
             _logger.Info("Finished searching {0} for {1}-S{2}E{3:00}, Found {4}", Name, seriesTitle, seasonNumber, episodeNumber, result.Count);
             return result;
@@ -144,7 +147,8 @@ namespace NzbDrone.Core.Providers.Indexer
 
             var result = Fetch(searchUrls);
 
-            result = result.Where(e => e.CleanTitle == Parser.NormalizeTitle(seriesTitle)).ToList();
+            result = result.Where(e => e.CleanTitle == Parser.NormalizeTitle(seriesTitle) &&
+                e.AirDate.HasValue && e.AirDate.Value.Date == airDate.Date).ToList();
 
             _logger.Info("Finished searching {0} for {1}-{2}, Found {3}", Name, seriesTitle, airDate.ToShortDateString(), result.Count);
             return result;
