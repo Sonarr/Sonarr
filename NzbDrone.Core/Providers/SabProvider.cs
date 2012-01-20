@@ -203,7 +203,7 @@ namespace NzbDrone.Core.Providers
         {
             var result = JsonConvert.DeserializeObject<SabJsonError>(response);
 
-            if (result.Status.Equals("false", StringComparison.InvariantCultureIgnoreCase))
+            if (result.Status != null && result.Status.Equals("false", StringComparison.InvariantCultureIgnoreCase))
                 throw new ApplicationException(result.Error);
         }
     }

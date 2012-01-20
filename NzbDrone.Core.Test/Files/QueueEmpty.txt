@@ -31,7 +31,6 @@
     "color_scheme":"",
     "darwin":false,
     "nt":true,
-    "status":"Paused",
     "last_warning":"",
     "have_warnings":"0",
     "cache_art":"0",
