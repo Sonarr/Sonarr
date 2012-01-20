@@ -78,7 +78,7 @@ namespace NzbDrone.Core.Providers
             var queue = GetQueue();
 
             return queue.Any(c => String.Equals(c.ParseResult.SeriesTitle, newParseResult.Series.Title, StringComparison.InvariantCultureIgnoreCase) &&
-                                  c.ParseResult.EpisodeNumbers.Any(e=> newParseResult.EpisodeNumbers.Contains(e))&&
+                                  c.ParseResult.EpisodeNumbers.Any(e => newParseResult.EpisodeNumbers.Contains(e)) &&
                                   c.ParseResult.SeasonNumber == newParseResult.SeasonNumber &&
                                   c.ParseResult.Quality >= newParseResult.Quality);
         }
@@ -91,8 +91,7 @@ namespace NzbDrone.Core.Providers
 
             CheckForError(response);
 
-            var items = JsonConvert.DeserializeObject<SabQueue>(JObject.Parse(response).SelectToken("queue").ToString()).Items;
-            return items ?? new List<SabQueueItem>();
+            return JsonConvert.DeserializeObject<SabQueue>(JObject.Parse(response).SelectToken("queue").ToString()).Items;
         }
 
         public virtual List<SabHistoryItem> GetHistory(int start = 0, int limit = 0)
