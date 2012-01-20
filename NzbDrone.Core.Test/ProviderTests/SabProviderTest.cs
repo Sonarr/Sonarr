@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Test.ProviderTests
     public class SabProviderTest : CoreTest
     {
         [SetUp]
-        private void Setup()
+        public void Setup()
         {
             //Setup
             string sabHost = "192.168.5.55";
