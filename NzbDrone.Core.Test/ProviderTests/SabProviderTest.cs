@@ -319,41 +319,44 @@ namespace NzbDrone.Core.Test.ProviderTests
             result.Should().BeTrue();
         }
 
-        [TestCase(2, 5, "30 Rock", QualityTypes.Bluray1080p, true, Description = "Same Series, Diffrent Season, Episode")]
-        [TestCase(1, 6, "30 Rock", QualityTypes.Bluray1080p, true, Description = "Same series, diffrent episode")]
-        [TestCase(1, 6, "Some other show", QualityTypes.Bluray1080p, true, Description = "Diffrent series, same season, episdoe")]
-        [TestCase(1, 5, "Rock", QualityTypes.Bluray1080p, true, Description = "Similar series, same season, episode")]
-        [TestCase(1, 5, "30 Rock", QualityTypes.Bluray720p, false, Description = "Same series, higher quality")]
-        [TestCase(1, 5, "30 Rock", QualityTypes.HDTV, true, Description = "Same series, higher quality")]
-        public void IsInQueue_should_not_find_diffrent_episode_queue(int season, int episode, string title, QualityTypes qualityType, bool proper)
+        [TestCase(2, new[] { 5 }, "30 Rock", QualityTypes.Bluray1080p, true, Description = "Same Series, Diffrent Season, Episode")]
+        [TestCase(1, new[] { 6 }, "30 Rock", QualityTypes.Bluray1080p, true, Description = "Same series, diffrent episodes")]
+        [TestCase(1, new[] { 6,7,8 }, "30 Rock", QualityTypes.Bluray1080p, true, Description = "Same series, diffrent episodes")]
+        [TestCase(1, new[] { 6 }, "Some other show", QualityTypes.Bluray1080p, true, Description = "Diffrent series, same season, episdoe")]
+        [TestCase(1, new[] { 5 }, "Rock", QualityTypes.Bluray1080p, true, Description = "Similar series, same season, episodes")]
+        [TestCase(1, new[] { 5 }, "30 Rock", QualityTypes.Bluray720p, false, Description = "Same series, higher quality")]
+        [TestCase(1, new[] { 5 }, "30 Rock", QualityTypes.HDTV, true, Description = "Same series, higher quality")]
+        public void IsInQueue_should_not_find_diffrent_episode_queue(int season, int[] episodes, string title, QualityTypes qualityType, bool proper)
         {
             WithFullQueue();
 
             var parseResult = new EpisodeParseResult
             {
                 EpisodeTitle = "Title",
-                EpisodeNumbers = new List<int> { episode },
+                EpisodeNumbers = new List<int>(episodes),
                 SeasonNumber = season,
                 Quality = new Quality { QualityType = qualityType, Proper = proper },
                 Series = new Series { Title = title },
             };
-            
+
             var result = Mocker.Resolve<SabProvider>().IsInQueue(parseResult);
 
             result.Should().BeFalse();
         }
 
-        [TestCase(1, 5, "30 Rock", QualityTypes.SDTV, false, Description = "Same Series, lower quality")]
-        [TestCase(1, 5, "30 rocK", QualityTypes.SDTV, false, Description = "Same Series, diffrent casing")]
-        [TestCase(1, 5, "30 RocK", QualityTypes.HDTV, false, Description = "Same Series, same quality")]
-        public void IsInQueue_should_find_same_or_lower_quality_episode_queue(int season, int episode, string title, QualityTypes qualityType, bool proper)
+        [TestCase(1, new[] { 5 }, "30 Rock", QualityTypes.SDTV, false, Description = "Same Series, lower quality")]
+        [TestCase(1, new[] { 5 }, "30 rocK", QualityTypes.SDTV, false, Description = "Same Series, diffrent casing")]
+        [TestCase(1, new[] { 5 }, "30 RocK", QualityTypes.HDTV, false, Description = "Same Series, same quality")]
+        [TestCase(1, new[] { 5, 6 }, "30 RocK", QualityTypes.HDTV, false, Description = "Same Series, same quality, one diffrent episode")]
+        [TestCase(1, new[] { 5, 6 }, "30 RocK", QualityTypes.HDTV, false, Description = "Same Series, same quality, one diffrent episode")]
+        public void IsInQueue_should_find_same_or_lower_quality_episode_queue(int season, int[] episodes, string title, QualityTypes qualityType, bool proper)
         {
             WithFullQueue();
 
             var parseResult = new EpisodeParseResult
             {
                 EpisodeTitle = "Title",
-                EpisodeNumbers = new List<int> { episode },
+                EpisodeNumbers = new List<int>(episodes),
                 SeasonNumber = season,
                 Quality = new Quality { QualityType = qualityType, Proper = proper },
                 Series = new Series { Title = title },

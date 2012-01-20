@@ -77,7 +77,7 @@ namespace NzbDrone.Core.Providers
             var queue = GetQueue();
 
             return queue.Any(c => String.Equals(c.ParseResult.SeriesTitle, newParseResult.Series.Title, StringComparison.InvariantCultureIgnoreCase) &&
-                                  c.ParseResult.EpisodeNumbers.SequenceEqual(newParseResult.EpisodeNumbers) &&
+                                  c.ParseResult.EpisodeNumbers.Any(e=> newParseResult.EpisodeNumbers.Contains(e))&&
                                   c.ParseResult.SeasonNumber == newParseResult.SeasonNumber &&
                                   c.ParseResult.Quality >= newParseResult.Quality);
         }
