@@ -134,6 +134,11 @@ namespace NzbDrone.Common.Test
         [TestCase(@"c:\\\\\Test", @"C:\Test\\")]
         [TestCase(@"c:\Test\\\\", @"C:\Test\\")]
         [TestCase(@"c:\Test", @"C:\Test\\")]
+        [TestCase(@"\\Server\pool", @"\\Server\pool")]
+        [TestCase(@"\\Server\pool\", @"\\Server\pool")]
+        [TestCase(@"\\Server\pool", @"\\Server\pool\")]
+        [TestCase(@"\\Server\pool\", @"\\Server\pool\")]
+        [TestCase(@"\\smallcheese\DRIVE_G\TV-C\Simspsons", @"\\smallcheese\DRIVE_G\TV-C\Simspsons")]
         public void paths_should_be_equeal(string first, string second)
         {
             DiskProvider.PathEquals(first, second).Should().BeTrue();
