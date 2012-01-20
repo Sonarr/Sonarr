@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Providers
                     history.Indexer = parseResult.Indexer;
                     history.IsProper = parseResult.Quality.Proper;
                     history.Quality = parseResult.Quality.QualityType;
-                    history.NzbTitle = parseResult.NzbTitle;
+                    history.NzbTitle = parseResult.OriginalString;
                     history.EpisodeId = episode.EpisodeId;
                     history.SeriesId = episode.SeriesId;
 

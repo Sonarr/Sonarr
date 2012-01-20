@@ -177,7 +177,7 @@ namespace NzbDrone.Core.Providers.Indexer
                             {
                                 parsedEpisode.NzbUrl = NzbDownloadUrl(item);
                                 parsedEpisode.Indexer = Name;
-                                parsedEpisode.NzbTitle = item.Title.Text;
+                                parsedEpisode.OriginalString = item.Title.Text;
                                 result.Add(parsedEpisode);
                             }
                         }

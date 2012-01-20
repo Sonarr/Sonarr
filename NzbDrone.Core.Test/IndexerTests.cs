@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Test
 
             parseResults.Should().NotBeEmpty();
             parseResults.Should().OnlyContain(s => s.Indexer == mockIndexer.Name);
-            parseResults.Should().OnlyContain(s => !String.IsNullOrEmpty(s.NzbTitle));
+            parseResults.Should().OnlyContain(s => !String.IsNullOrEmpty(s.OriginalString));
 
             ExceptionVerification.ExpectedWarns(warns);
         }
@@ -115,7 +115,7 @@ namespace NzbDrone.Core.Test
 
             parseResults.Should().NotBeEmpty();
             parseResults.Should().OnlyContain(s => s.Indexer == newzbinProvider.Name);
-            parseResults.Should().OnlyContain(s => !String.IsNullOrEmpty(s.NzbTitle));
+            parseResults.Should().OnlyContain(s => !String.IsNullOrEmpty(s.OriginalString));
 
             ExceptionVerification.MarkInconclusive(typeof(WebException));
             ExceptionVerification.IgnoreWarns();

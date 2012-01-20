@@ -65,6 +65,7 @@ namespace NzbDrone.Core.Test
             result.SeasonNumber.Should().Be(seasonNumber);
             result.EpisodeNumbers.First().Should().Be(episodeNumber);
             result.CleanTitle.Should().Be(Parser.NormalizeTitle(title));
+            result.OriginalString.Should().Be(postTitle);
         }
 
         [Test]
@@ -84,6 +85,7 @@ namespace NzbDrone.Core.Test
             result.EpisodeNumbers.Should().HaveCount(1);
             result.SeasonNumber.Should().Be(season);
             result.EpisodeNumbers[0].Should().Be(episode);
+            result.OriginalString.Should().Be(path);
 
             ExceptionVerification.IgnoreWarns();
         }
@@ -162,6 +164,7 @@ namespace NzbDrone.Core.Test
             result.EpisodeNumbers.Should().BeEquivalentTo(result.EpisodeNumbers);
             result.CleanTitle.Should().Be(Parser.NormalizeTitle(title));
             result.EpisodeNumbers.Count.Should().Be(count);
+            result.OriginalString.Should().Be(postTitle);
         }
 
 
@@ -178,7 +181,8 @@ namespace NzbDrone.Core.Test
             var airDate = new DateTime(year, month, day);
             result.CleanTitle.Should().Be(Parser.NormalizeTitle(title));
             result.AirDate.Should().Be(airDate);
-            Assert.IsNull(result.EpisodeNumbers);
+            result.EpisodeNumbers.Should().BeNull();
+            result.OriginalString.Should().Be(postTitle);
         }
 
         [Test]
@@ -203,6 +207,7 @@ namespace NzbDrone.Core.Test
             result.CleanTitle.Should().Be(Parser.NormalizeTitle(title));
             result.EpisodeNumbers.Count.Should().Be(0);
             result.FullSeason.Should().BeTrue();
+            result.OriginalString.Should().Be(postTitle);
         }
 
         [TestCase("Conan", "conan")]
@@ -342,6 +347,7 @@ namespace NzbDrone.Core.Test
             result.CleanTitle.Should().Be(Parser.NormalizeTitle(seriesName));
             result.SeasonNumber.Should().Be(seasonNumber);
             result.FullSeason.Should().BeTrue();
+            result.OriginalString.Should().Be(postTitle);
         }
 
         [TestCase("5.64 GB", 6055903887)]

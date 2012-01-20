@@ -77,6 +77,8 @@ namespace NzbDrone.Core
                 result = ParseTitle(fileInfo.FullName);
             }
 
+            result.OriginalString = path;
+
             return result;
         }
 
@@ -102,6 +104,7 @@ namespace NzbDrone.Core
 
                             result.Language = ParseLanguage(title);
                             result.Quality = ParseQuality(title);
+                            result.OriginalString = title;
                             return result;
                         }
                     }
@@ -313,8 +316,8 @@ namespace NzbDrone.Core
                 return result;
             }
 
-            if ((normalizedName.Contains("sdtv") || 
-                (result.QualityType == QualityTypes.Unknown && normalizedName.Contains("hdtv"))) && 
+            if ((normalizedName.Contains("sdtv") ||
+                (result.QualityType == QualityTypes.Unknown && normalizedName.Contains("hdtv"))) &&
                 !normalizedName.Contains("mpeg"))
             {
                 result.QualityType = QualityTypes.SDTV;

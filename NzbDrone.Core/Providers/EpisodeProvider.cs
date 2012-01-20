@@ -133,7 +133,7 @@ namespace NzbDrone.Core.Providers
                 if (!parseResult.Series.IsDaily)
                 {
                     //Todo: Collect this as a Series we want to treat as a daily series, or possible parsing error
-                    Logger.Warn("Found daily-style episode for non-daily series: {0}. {1}", parseResult.Series.Title, parseResult.NzbTitle);
+                    Logger.Warn("Found daily-style episode for non-daily series: {0}. {1}", parseResult.Series.Title, parseResult.OriginalString);
                     return new List<Episode>();
                 }
 
@@ -141,7 +141,7 @@ namespace NzbDrone.Core.Providers
 
                 if (episodeInfo == null && autoAddNew)
                 {
-                    Logger.Info("Episode {0} doesn't exist in db. adding it now. {1}", parseResult, parseResult.NzbTitle);
+                    Logger.Info("Episode {0} doesn't exist in db. adding it now. {1}", parseResult, parseResult.OriginalString);
                     episodeInfo = new Episode
                                       {
                                           SeriesId = parseResult.Series.SeriesId,
@@ -193,7 +193,7 @@ namespace NzbDrone.Core.Providers
                 //if still null we should add the temp episode
                 if (episodeInfo == null && autoAddNew)
                 {
-                    Logger.Info("Episode {0} doesn't exist in db. adding it now. {1}", parseResult, parseResult.NzbTitle);
+                    Logger.Info("Episode {0} doesn't exist in db. adding it now. {1}", parseResult, parseResult.OriginalString);
                     episodeInfo = new Episode
                     {
                         SeriesId = parseResult.Series.SeriesId,

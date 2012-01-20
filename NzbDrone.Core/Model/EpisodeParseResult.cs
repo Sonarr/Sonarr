@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Model
 
         public string NzbUrl { get; set; }
 
-        public string NzbTitle { get; set; }
+        public string OriginalString { get; set; }
 
         public Series Series { get; set; }
 
@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Model
                 return string.Format("{0} - S{1:00}E{2} {3}", SeriesTitle, SeasonNumber,
                                      String.Join("-", EpisodeNumbers), Quality);
 
-            return NzbTitle;
+            return OriginalString;
 
         }
     }
