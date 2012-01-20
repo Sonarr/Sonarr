@@ -53,6 +53,15 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Returns(File.ReadAllText(@".\Files\Queue.txt"));
         }
 
+        private void WithEmptyQueue()
+        {
+            Mocker.GetMock<HttpProvider>()
+                .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=queue&output=json&start=0&limit=0&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
+                .Returns(File.ReadAllText(@".\Files\QueueEmpty.txt"));
+        }
+
+
+
         private void WithFailResponse()
         {
             Mocker.GetMock<HttpProvider>()
@@ -367,6 +376,25 @@ namespace NzbDrone.Core.Test.ProviderTests
             result.Should().BeTrue();
         }
 
+        [Test]
+        public void IsInQueue_should_return_false_if_queue_is_empty()
+        {
+            WithEmptyQueue();
+
+            var parseResult = new EpisodeParseResult
+            {
+                EpisodeTitle = "Title",
+                EpisodeNumbers = new List<int>{1},
+                SeasonNumber = 2,
+                Quality = new Quality { QualityType  = QualityTypes.Bluray1080p, Proper = true },
+                Series = new Series { Title = "Test" },
+            };
+
+            var result = Mocker.Resolve<SabProvider>().IsInQueue(parseResult);
+
+            result.Should().BeFalse();
+
+        }
 
 
     }

@@ -90,7 +90,8 @@ namespace NzbDrone.Core.Providers
 
             CheckForError(response);
 
-            return JsonConvert.DeserializeObject<SabQueue>(response).Items;
+            var items = JsonConvert.DeserializeObject<SabQueue>(response).Items;
+            return items ?? new List<SabQueueItem>();
         }
 
         public virtual List<SabHistoryItem> GetHistory(int start = 0, int limit = 0)

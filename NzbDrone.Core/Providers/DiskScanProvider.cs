@@ -181,21 +181,16 @@ namespace NzbDrone.Core.Providers
                 return false;
             }
 
-            //Ensure the folder Exists before trying to move it (No error is thrown if the folder already exists)
             _diskProvider.CreateDirectory(newFile.DirectoryName);
 
-            //Rename the file
             Logger.Debug("Moving [{0}] > [{1}]", episodeFile.Path, newFile.FullName);
             _diskProvider.MoveFile(episodeFile.Path, newFile.FullName);
 
-            //Make the file inherit parent permissions
             _diskProvider.InheritFolderPermissions(newFile.FullName);
 
-            //Update the filename in the DB
             episodeFile.Path = newFile.FullName;
             _mediaFileProvider.Update(episodeFile);
 
-            //ExternalNotification
             var parseResult = Parser.ParsePath(episodeFile.Path);
             parseResult.Series = series;
 
