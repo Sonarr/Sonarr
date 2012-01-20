@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.Xml.Linq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Ninject;
 using NLog;
 using NzbDrone.Core.Model;
@@ -90,7 +91,7 @@ namespace NzbDrone.Core.Providers
 
             CheckForError(response);
 
-            var items = JsonConvert.DeserializeObject<SabQueue>(response).Items;
+            var items = JsonConvert.DeserializeObject<SabQueue>(JObject.Parse(response).SelectToken("queue").ToString()).Items;
             return items ?? new List<SabQueueItem>();
         }
 
@@ -102,7 +103,8 @@ namespace NzbDrone.Core.Providers
 
             CheckForError(response);
 
-            return JsonConvert.DeserializeObject<SabHistory>(response).Items;
+            var items = JsonConvert.DeserializeObject<SabHistory>(JObject.Parse(response).SelectToken("history").ToString()).Items;
+            return items ?? new List<SabHistoryItem>();
         }
 
         public virtual String GetSabTitle(EpisodeParseResult parseResult)
