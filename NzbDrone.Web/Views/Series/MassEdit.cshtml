@@ -26,6 +26,10 @@
             margin: 2px 5px 2px 5px;
         }
         
+        td .path {
+            width: 300px;
+        }
+        
         table {
             width: 100%;
 	        border-width: 1px;
@@ -58,12 +62,12 @@
 {
     <table>
         <tr>
-            <th>@Html.CheckBox("editToggleMaster", false, new { @class = "editToggleMaster" })</th>
+            <th width="14px">@Html.CheckBox("editToggleMaster", false, new { @class = "editToggleMaster" })</th>
             <th>Title</th>
-            <th>Quality</th>
+            <th width="210px">Quality</th>
             <th class="checkboxColumn">Monitored</th>
             <th class="checkboxColumn">Season Folder</th>
-            <th>Path</th>
+            <th width="310px">Path</th>
         </tr>
 
         @foreach (var series in Model)
