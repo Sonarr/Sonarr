@@ -374,6 +374,33 @@ namespace NzbDrone.Core.Test
             parseResults[0].Size.Should().Be(1793148846);
         }
 
+
+        [Test]
+        public void Server_Unavailable_503_should_not_log_exception()
+        {
+            Mocker.GetMock<HttpProvider>()
+                          .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
+                          .Throws(new WebException("503"));
+
+            Mocker.Resolve<NzbsRUs>().FetchRss();
+                          
+            ExceptionVerification.ExpectedErrors(0);
+            ExceptionVerification.ExpectedWarns(1);
+        }
+
+        [Test]
+        public void none_503_server_error_should_still_log_error()
+        {
+            Mocker.GetMock<HttpProvider>()
+                          .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
+                          .Throws(new WebException("some other server error"));
+
+            Mocker.Resolve<NzbsRUs>().FetchRss();
+
+            ExceptionVerification.ExpectedErrors(1);
+            ExceptionVerification.ExpectedWarns(0);
+        }
+
         [TearDown]
         public void TearDown()
         {

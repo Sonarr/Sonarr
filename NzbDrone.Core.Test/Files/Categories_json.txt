@@ -1,1 +1,25 @@
-﻿{"categories":["*","anime","apps","books","consoles","ds-games","emulation","games","misc","movies","music","pda","resources","test","tv","tv-dvd","unknown","wii-games","xbox-dlc","xbox-xbla","xxx"]}
+﻿{
+   "categories":[
+      "*",
+      "anime",
+      "apps",
+      "books",
+      "consoles",
+      "ds-games",
+      "emulation",
+      "games",
+      "misc",
+      "movies",
+      "music",
+      "pda",
+      "resources",
+      "test",
+      "tv",
+      "tv-dvd",
+      "unknown",
+      "wii-games",
+      "xbox-dlc",
+      "xbox-xbla",
+      "xxx"
+   ]
+}
