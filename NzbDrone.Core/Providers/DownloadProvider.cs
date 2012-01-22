@@ -42,6 +42,8 @@ namespace NzbDrone.Core.Providers
 
             if (addSuccess)
             {
+                Logger.Trace("Download added to Queue: {0}", sabTitle);
+
                 foreach (var episode in _episodeProvider.GetEpisodesByParseResult(parseResult))
                 {
                     var history = new History();

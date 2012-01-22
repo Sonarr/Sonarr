@@ -229,19 +229,31 @@ namespace NzbDrone.Core.Providers
 
                     //If series is null or doesn't match the series we're looking for return
                     if (episodeParseResult.Series == null || episodeParseResult.Series.SeriesId != series.SeriesId)
+                    {
+                        Logger.Trace("Unexpected series for search: {0}. Skipping.", episodeParseResult.CleanTitle);
                         continue;
+                    }
 
                     //If SeasonNumber doesn't match or episode is not in the in the list in the parse result, skip the report.
                     if (episodeParseResult.SeasonNumber != seasonNumber)
+                    {
+                        Logger.Trace("Season number does not match searched season number, skipping.");
                         continue;
+                    }
 
                     //If the EpisodeNumber was passed in and it is not contained in the parseResult, skip the report.
                     if (episodeNumber.HasValue && !episodeParseResult.EpisodeNumbers.Contains(episodeNumber.Value))
+                    {
+                        Logger.Trace("Searched episode number is not contained in post, skipping.");
                         continue;
+                    }
 
                     //Make sure we haven't already downloaded a report with this episodenumber, if we have, skip the report.
                     if (successes.Intersect(episodeParseResult.EpisodeNumbers).Count() > 0)
+                    {
+                        Logger.Trace("Episode has already been downloaded in this search, skipping.");
                         continue;
+                    }
 
                     if (_inventoryProvider.IsQualityNeeded(episodeParseResult, true))
                     {

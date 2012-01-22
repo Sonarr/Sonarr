@@ -87,7 +87,10 @@ namespace NzbDrone.Core.Providers
             var cutoff = parsedReport.Series.QualityProfile.Cutoff;
 
             if (!IsAcceptableSize(parsedReport))
+            {
+                Logger.Trace("Size: {0} is not acceptable for Quality: {1}", parsedReport.Size, parsedReport.Q);
                 return false;
+            }
 
             foreach (var episode in _episodeProvider.GetEpisodesByParseResult(parsedReport, true))
             {

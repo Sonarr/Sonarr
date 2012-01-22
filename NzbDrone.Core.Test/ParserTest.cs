@@ -137,6 +137,7 @@ namespace NzbDrone.Core.Test
         [TestCase("WEEDS.S03E01-06.DUAL.XviD.Bluray.AC3.-HELLYWOOD.avi", QualityTypes.DVD)]
         [TestCase("WEEDS.S03E01-06.DUAL.Bluray.AC3.-HELLYWOOD.avi", QualityTypes.Bluray720p)]
         [TestCase("The Voice S01E11 The Finals 1080i HDTV DD5.1 MPEG2-TrollHD", QualityTypes.Unknown)]
+        [TestCase("Nikita S02E01 HDTV XviD 2HD", QualityTypes.SDTV)]
         public void quality_parse(string postTitle, object quality)
         {
             var result = Parser.ParseQuality(postTitle);
