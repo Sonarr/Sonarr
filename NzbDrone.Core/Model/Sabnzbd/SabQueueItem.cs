@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Model.Sabnzbd
             set
             {
                 _title = value;
-                ParseResult = Parser.ParseTitle(value);
+                ParseResult = Parser.ParseTitle(value.Replace("DUPLICATE / ", String.Empty));
             }
         }
 
