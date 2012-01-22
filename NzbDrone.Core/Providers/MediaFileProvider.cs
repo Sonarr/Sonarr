@@ -137,7 +137,7 @@ namespace NzbDrone.Core.Providers
             }
         }
 
-        public virtual string GetNewFilename(IList<Episode> episodes, string seriesTitle, QualityTypes quality)
+        public virtual string GetNewFilename(IList<Episode> episodes, string seriesTitle, QualityTypes quality, bool proper)
         {
             var separatorStyle = EpisodeSortingHelper.GetSeparatorStyle(_configProvider.SortingSeparatorStyle);
             var numberStyle = EpisodeSortingHelper.GetNumberStyle(_configProvider.SortingNumberStyle);
@@ -186,7 +186,12 @@ namespace NzbDrone.Core.Providers
             }
 
             if (_configProvider.SortingAppendQuality)
+            {
                 result += String.Format(" [{0}]", quality);
+
+                if (proper)
+                    result += " [Proper]";
+            }
 
             if (_configProvider.SortingReplaceSpaces)
                 result = result.Replace(' ', '.');

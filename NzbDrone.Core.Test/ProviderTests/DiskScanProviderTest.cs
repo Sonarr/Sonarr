@@ -196,7 +196,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Returns(fakeEpisode);
 
             Mocker.GetMock<MediaFileProvider>()
-                .Setup(e => e.GetNewFilename(fakeEpisode, fakeSeries.Title, It.IsAny<QualityTypes>()))
+                .Setup(e => e.GetNewFilename(fakeEpisode, fakeSeries.Title, It.IsAny<QualityTypes>(), It.IsAny<bool>()))
                 .Returns(filename);
 
             Mocker.GetMock<MediaFileProvider>()
