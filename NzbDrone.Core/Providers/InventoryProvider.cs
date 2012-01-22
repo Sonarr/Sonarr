@@ -88,7 +88,7 @@ namespace NzbDrone.Core.Providers
 
             if (!IsAcceptableSize(parsedReport))
             {
-                Logger.Trace("Size: {0} is not acceptable for Quality: {1}", parsedReport.Size, parsedReport.Q);
+                Logger.Trace("Size: {0} is not acceptable for Quality: {1}", parsedReport.Size, parsedReport.Quality);
                 return false;
             }
 
