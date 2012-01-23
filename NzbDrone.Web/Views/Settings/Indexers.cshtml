@@ -81,7 +81,7 @@
                 <label class="labelClass">@Html.LabelFor(m => m.NewzbinPassword)
                     <span class="small">@Html.DescriptionFor(m => m.NewzbinPassword)</span>
                 </label>
-                @Html.PasswordFor(m => m.NewzbinPassword, new { @class = "inputClass" })
+                @Html.TextBoxFor(m => m.NewzbinPassword, new { @class = "inputClass", type = "password" })
             </div>
             <h3>
                 <a href="#">Newznab</a></h3>

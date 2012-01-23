@@ -37,7 +37,7 @@
         <label class="labelClass">@Html.LabelFor(m => m.SabPassword)
             <span class="small">@Html.DescriptionFor(m => m.SabPassword)</span>
         </label>
-        @Html.PasswordFor(m => m.SabPassword, new { @class = "inputClass" })
+        @Html.TextBoxFor(m => m.SabPassword, new { @class = "inputClass", type = "password" })
 
         <label class="labelClass">@Html.LabelFor(m => m.SabTvCategory)
             <span class="small">@Html.DescriptionFor(m => m.SabTvCategory)</span>

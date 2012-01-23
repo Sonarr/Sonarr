@@ -44,5 +44,5 @@
     <label class="labelClass">@Html.LabelFor(m => m.XbmcPassword)
     <span class="small">@Html.DescriptionFor(m => m.XbmcPassword)</span>
     </label>
-    @Html.PasswordFor(m => m.XbmcPassword, new { @class = "inputClass" })
+    @Html.TextBoxFor(m => m.XbmcPassword, new { @class = "inputClass", type = "password" })
 </div>

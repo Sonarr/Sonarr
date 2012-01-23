@@ -44,7 +44,7 @@
     <label class="labelClass">@Html.LabelFor(m => m.SmtpPassword)
     <span class="small">@Html.DescriptionFor(m => m.SmtpPassword)</span>
     </label>
-    @Html.PasswordFor(m => m.SmtpPassword, new { @class = "inputClass" })
+    @Html.TextBoxFor(m => m.SmtpPassword, new { @class = "inputClass", type = "password" })
 
     <label class="labelClass">@Html.LabelFor(m => m.SmtpFromAddress)
     <span class="small">@Html.DescriptionFor(m => m.SmtpFromAddress)</span>
