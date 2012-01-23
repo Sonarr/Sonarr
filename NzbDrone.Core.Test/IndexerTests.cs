@@ -179,6 +179,7 @@ namespace NzbDrone.Core.Test
             Mocker.Resolve<TestUrlIndexer>().FetchRss();
 
             Mark500Inconclusive();
+            ExceptionVerification.IgnoreWarns();
         }
 
         [TestCase("simpsons", 21, 23)]
@@ -387,6 +388,7 @@ namespace NzbDrone.Core.Test
         {
             ExceptionVerification.MarkInconclusive(typeof(WebException));
             ExceptionVerification.MarkInconclusive("System.Net.WebException");
+            ExceptionVerification.MarkInconclusive("(503) Server Unavailable.");
         }
     }
 }

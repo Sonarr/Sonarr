@@ -24,6 +24,16 @@ namespace NzbDrone.Common
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
+        public virtual DateTime GetLastDirectoryWrite(string path)
+        {
+            if (!FolderExists(path))
+            {
+                throw new DirectoryNotFoundException("Directory doesn't exist. " + path);
+            }
+
+            GetFiles(path, SearchOption.AllDirectories);
+        }
+
         public virtual bool FolderExists(string path)
         {
             return Directory.Exists(path);
