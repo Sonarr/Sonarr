@@ -68,7 +68,7 @@ namespace NzbDrone.Update
             LogConfiguration.RegisterUdpLogger();
 
             var logPath = Path.Combine(new EnviromentProvider().GetSandboxLogFolder(), DateTime.Now.ToString("yyyy.MM.dd-H-mm") + ".txt");
-            LogConfiguration.RegisterFileLogger(logPath);
+            LogConfiguration.RegisterFileLogger(logPath, LogLevel.Info);
             
             LogConfiguration.Reload();
         }

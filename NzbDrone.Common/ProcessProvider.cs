@@ -8,7 +8,7 @@ namespace NzbDrone.Common
 {
     public class ProcessProvider
     {
-        private static readonly Logger Logger = LogManager.GetLogger("Host.ProcessProvider");
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public static readonly string NzbDroneProccessName = "NzbDrone";
 

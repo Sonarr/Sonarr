@@ -50,17 +50,8 @@ namespace NzbDrone.Web
 
         protected override IKernel CreateKernel()
         {
-            LogManager.Configuration = new XmlLoggingConfiguration(new EnviromentProvider().GetNlogConfigPath(), false);
-
-            LogConfiguration.RegisterUdpLogger();
-            LogConfiguration.RegisterExceptioneer();
-            LogConfiguration.RegisterConsoleLogger(LogLevel.Info, "NzbDrone.Web.MvcApplication");
-            LogConfiguration.RegisterConsoleLogger(LogLevel.Info, "NzbDrone.Core.CentralDispatch");
-
-
-            var dispatch = new CentralDispatch();
             Logger.Info("NzbDrone Starting up.");
-
+            var dispatch = new CentralDispatch();
             dispatch.DedicateToHost();
 
             dispatch.Kernel.Load(Assembly.GetExecutingAssembly());

@@ -1,19 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Security.Principal;
-using System.Text;
 using NLog;
 using NetFwTypeLib;
 using Ninject;
-using NzbDrone.Common.Model;
 
 namespace NzbDrone.Common
 {
     public class SecurityProvider
     {
-        private static readonly Logger Logger = LogManager.GetLogger("Host.SecurityProvider");
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private readonly ConfigFileProvider _configFileProvider;
         private readonly EnviromentProvider _enviromentProvider;

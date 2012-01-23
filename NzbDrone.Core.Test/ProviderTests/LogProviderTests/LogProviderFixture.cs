@@ -32,10 +32,14 @@ namespace NzbDrone.Core.Test.ProviderTests.LogProviderTests
 
             dbContext = Connection.GetLogDbContext(TestDbHelper.ConnectionString);
 
+            Mocker.SetConstant(dbContext);
+
             new DatabaseTarget(Db).Register();
             Logger = LogManager.GetCurrentClassLogger();
 
             UniqueMessage = "Unique message: " + Guid.NewGuid().ToString();
+
+            
         }
 
         [Test]
@@ -76,14 +80,15 @@ namespace NzbDrone.Core.Test.ProviderTests.LogProviderTests
         [Test]
         public void clearLog()
         {
+            WithTempAsAppPath();
+
             //Act
             for (int i = 0; i < 10; i++)
             {
                 Logger.Info(UniqueMessage);
             }
-
-            //Assert
-            var provider = new LogProvider(Db, dbContext);
+            
+            var provider = Mocker.Resolve<LogProvider>();
             provider.GetAllLogs().Should().HaveCount(10);
             provider.DeleteAll();
             provider.GetAllLogs().Should().HaveCount(1);

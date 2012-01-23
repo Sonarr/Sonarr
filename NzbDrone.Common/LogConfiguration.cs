@@ -76,17 +76,40 @@ namespace NzbDrone.Common
         }
 
 
-        public static void RegisterFileLogger(string fileName)
+        private static FileTarget GetBaseTarget()
         {
             var fileTarget = new FileTarget();
             fileTarget.AutoFlush = true;
-            fileTarget.ConcurrentWrites = false;
-            fileTarget.FileName = fileName;
+            fileTarget.ConcurrentWrites = true;
             fileTarget.KeepFileOpen = false;
-            fileTarget.Layout = "${longdate} - ${logger}: ${message} ${exception:format=ToString}";
+            fileTarget.ConcurrentWriteAttemptDelay = 50;
+            fileTarget.ConcurrentWriteAttempts = 200;
 
-            LogManager.Configuration.AddTarget(fileTarget.GetType().Name, fileTarget);
-            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, fileTarget));
+            fileTarget.Layout = @"${date:format=yy-M-d HH\:mm\:ss.f}|${replace:searchFor=NzbDrone.:replaceWith=:inner=${logger}}|${message}|${exception:format=ToString}";
+
+            return fileTarget;
+        }
+
+        public static void RegisterFileLogger(string fileName, LogLevel level)
+        {
+            var fileTarget = GetBaseTarget();
+            fileTarget.FileName = fileName;
+            
+            LogManager.Configuration.AddTarget(Guid.NewGuid().ToString(), fileTarget);
+            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", level, fileTarget));
+        }
+
+        public static void RegisterRollingFileLogger(string fileName, LogLevel level)
+        {
+            var fileTarget = GetBaseTarget();
+            fileTarget.FileName = fileName;
+            fileTarget.ArchiveAboveSize = 200000; //500K
+            fileTarget.MaxArchiveFiles = 1;
+            fileTarget.EnableFileDelete = true;
+            fileTarget.ArchiveNumbering = ArchiveNumberingMode.Rolling;
+
+            LogManager.Configuration.AddTarget(Guid.NewGuid().ToString(), fileTarget);
+            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", level, fileTarget));
         }
 
         public static void RegisterExceptioneer()

@@ -139,5 +139,14 @@ namespace NzbDrone.Common
         {
             return Path.Combine(enviromentProvider.GetUpdateSandboxFolder(), UPDATE_LOG_FOLDER_NAME);
         }
+
+        public static string GetLogFileName(this EnviromentProvider enviromentProvider)
+        {
+            return Path.Combine(enviromentProvider.ApplicationPath, "nzbdrone.log.txt");
+        }
+        public static string GetArchivedLogFileName(this EnviromentProvider enviromentProvider)
+        {
+            return Path.Combine(enviromentProvider.ApplicationPath, "nzbdrone.log.0.txt");
+        }
     }
 }

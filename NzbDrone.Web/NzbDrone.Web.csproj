@@ -198,6 +198,7 @@
       <DependentUpon>UploadLocalization.en-US.resx</DependentUpon>
     </Compile>
     <Compile Include="App_Start\EntityFramework.SqlServerCompact.cs" />
+    <Compile Include="App_Start\Logging.cs" />
     <Compile Include="App_Start\MiniProfiler.cs" />
     <Compile Include="Filters\JsonErrorFilter.cs" />
     <Compile Include="Controllers\CommandController.cs" />

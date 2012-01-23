@@ -47,7 +47,7 @@ namespace NzbDrone.Providers
             prioCheckTimer.Elapsed += EnsurePriority;
             prioCheckTimer.Enabled = true;
 
-            _pingTimer = new Timer(60000) { AutoReset = true };
+            _pingTimer = new Timer(120000) { AutoReset = true };
             _pingTimer.Elapsed += (PingServer);
             _pingTimer.Start();
         }

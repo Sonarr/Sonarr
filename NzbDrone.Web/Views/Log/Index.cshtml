@@ -1,4 +1,5 @@
 @using NzbDrone.Core.Instrumentation
+@using NzbDrone.Web.Helpers
 @model IEnumerable<NzbDrone.Core.Instrumentation.Log>
 @section Scripts{
     <script type="text/javascript">
@@ -24,9 +25,8 @@
 @section ActionMenu{
     <ul class="sub-menu">
         <li>@Ajax.ActionLink("Clear Logs", "Clear", "Log", new AjaxOptions { OnSuccess = "reloadGrid" })</li>
+        <li>@Html.ActionLink("File", "File", "Log")</li>
     </ul>
-    <div style="margin-bottom: 10px">
-    </div>
 }
 <div class="infoBox">
     Log entries older than 30 days are automatically deleted.</div>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Common;
 using PetaPoco;
 
 namespace NzbDrone.Core.Instrumentation
@@ -10,14 +11,18 @@ namespace NzbDrone.Core.Instrumentation
     {
         private readonly IDatabase _database;
         private readonly LogDbContext _logDbContext;
+        private readonly DiskProvider _diskProvider;
+        private readonly EnviromentProvider _enviromentProvider;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
 
 
-        public LogProvider(IDatabase database, LogDbContext logDbContext)
+        public LogProvider(IDatabase database, LogDbContext logDbContext, DiskProvider diskProvider, EnviromentProvider enviromentProvider)
         {
             _database = database;
             _logDbContext = logDbContext;
+            _diskProvider = diskProvider;
+            _enviromentProvider = enviromentProvider;
         }
 
         public IQueryable<Log> GetAllLogs()
@@ -47,6 +52,8 @@ namespace NzbDrone.Core.Instrumentation
         public void DeleteAll()
         {
             _database.Delete<Log>("");
+            _diskProvider.DeleteFile(_enviromentProvider.GetLogFileName());
+            _diskProvider.DeleteFile(_enviromentProvider.GetArchivedLogFileName());
             Logger.Info("Cleared Log History");
         }
 

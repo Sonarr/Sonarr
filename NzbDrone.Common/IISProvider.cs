@@ -8,8 +8,8 @@ namespace NzbDrone.Common
 {
     public class IISProvider
     {
-        private static readonly Logger IISLogger = LogManager.GetLogger("Host.IISExpress");
-        private static readonly Logger Logger = LogManager.GetLogger("Host.IISProvider");
+        private static readonly Logger IISLogger = LogManager.GetLogger("IISExpress");
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly ConfigFileProvider _configFileProvider;
         private readonly ProcessProvider _processProvider;
         private readonly EnviromentProvider _enviromentProvider;

@@ -1,4 +1,5 @@
-﻿using NLog;
+﻿using System.IO;
+using NLog;
 using Ninject;
 using NzbDrone.Common;
 using NzbDrone.Providers;
@@ -43,12 +44,14 @@ namespace NzbDrone
 
         private static void InitilizeApp()
         {
-            LogConfiguration.RegisterFileLogger("nzbdrone.log");
+            var enviromentProvider = _kernel.Get<EnviromentProvider>();
+
+            LogConfiguration.RegisterRollingFileLogger(enviromentProvider.GetLogFileName(), LogLevel.Info);
             LogConfiguration.RegisterConsoleLogger(LogLevel.Debug);
             LogConfiguration.RegisterUdpLogger();
             LogConfiguration.RegisterExceptioneer();
             LogConfiguration.Reload();
-            Logger.Info("Start-up Path:'{0}'", _kernel.Get<EnviromentProvider>().ApplicationPath);
+            Logger.Info("Start-up Path:'{0}'", enviromentProvider.ApplicationPath);
         }
     }
 }
