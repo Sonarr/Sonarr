@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Test.ProviderTests.NotificationProviderTests
             _notificationProvider.Register(fakeNotification);
             fakeNotification.Dispose();
 
-            Thread.Sleep(4000);
+            Thread.Sleep(7000);
 
             _notificationProvider.GetCurrent().Should().BeNull();
         }

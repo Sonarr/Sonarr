@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual ProgressNotification GetCurrent()
         {
-            if (_currentNotification == null || _currentNotification.CompletedTime < DateTime.Now.AddSeconds(-3))
+            if (_currentNotification == null || _currentNotification.CompletedTime < DateTime.Now.AddSeconds(-6))
             {
                 return null;
             }

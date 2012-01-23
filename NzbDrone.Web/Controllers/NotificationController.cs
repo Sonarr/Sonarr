@@ -1,7 +1,6 @@
-﻿using System;
-using System.Diagnostics;
-using System.Threading;
+﻿using System.Threading;
 using System.Web.Mvc;
+using System.Web.UI;
 using MvcMiniProfiler;
 using NzbDrone.Core.Providers;
 
@@ -20,6 +19,7 @@ namespace NzbDrone.Web.Controllers
         }
 
         [HttpGet]
+        [OutputCache(NoStore = true, Location = OutputCacheLocation.None)]
         public JsonResult Comet(string message)
         {
             MiniProfiler.Stop(true);
