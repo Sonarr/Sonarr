@@ -160,7 +160,7 @@ namespace NzbDrone.Core.Providers
             
             if (reports.Any())
             {
-                notification.CurrentMessage = String.Format("Sorry, couldn't find {0} in a none-suckey quality. (by your standards)", episode);
+                notification.CurrentMessage = String.Format("Sorry, couldn't find {0} in a non-sucky quality. (by your standards)", episode);
             }
             else
             {
