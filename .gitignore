@@ -45,3 +45,4 @@ config.xml
 UpdateLogs/
 NzbDrone.Web/MediaCover
 NzbDrone.fpr
+nzbdrone.log*txt
