@@ -318,6 +318,42 @@ namespace NzbDrone.Core.Test.ProviderTests
         }
 
         [Test]
+        public void Get_Series_should_not_return_series_that_do_not_have_info_synced_yet()
+        {
+            WithRealDb();
+
+            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+
+            var fakeSeries = Builder<Series>.CreateListOfSize(5)
+                .All()
+                .With(e => e.QualityProfileId = fakeQuality.QualityProfileId)
+                .TheLast(2)
+                .With(e => e.LastInfoSync = null)
+                .Build();
+
+            var fakeEpisodes = Builder<Episode>.CreateListOfSize(10)
+                .All()
+                .With(e => e.SeriesId = fakeSeries.First().SeriesId)
+                .With(e => e.AirDate = DateTime.Today.AddDays(-1))
+                .TheFirst(5)
+                .With(e => e.Ignored = false)
+                .TheLast(5)
+                .With(e => e.Ignored = true)
+                .Build();
+
+            Db.InsertMany(fakeSeries);
+            Db.Insert(fakeQuality);
+            Db.InsertMany(fakeEpisodes);
+
+            //Act
+            Mocker.Resolve<QualityProvider>();
+            var series = Mocker.Resolve<SeriesProvider>().GetAllSeriesWithEpisodeCount();
+
+            //Assert
+            series.Should().HaveCount(3);
+        }
+
+        [Test]
         public void Get_Single_Series()
         {
             WithRealDb();

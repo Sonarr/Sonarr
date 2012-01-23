@@ -53,6 +53,7 @@ namespace NzbDrone.Core.Providers
                                             FROM Series
                                             INNER JOIN QualityProfiles ON Series.QualityProfileId = QualityProfiles.QualityProfileId
                                             LEFT JOIN Episodes ON Series.SeriesId = Episodes.SeriesId
+                                            WHERE Series.LastInfoSync IS NOT NULL
                                             GROUP BY Series.SeriesId, Series.Title, Series.CleanTitle, Series.Status, Series.Overview, Series.AirsDayOfWeek,Series.AirTimes,
                                             Series.Language, Series.Path, Series.Monitored, Series.QualityProfileId, Series.SeasonFolder,
                                             QualityProfiles.QualityProfileId, QualityProfiles.Name, QualityProfiles.Cutoff, QualityProfiles.SonicAllowed", DateTime.Today);
