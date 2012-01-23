@@ -88,7 +88,7 @@ namespace NzbDrone.Test.Common
 
         public static void MarkInconclusive(string text)
         {
-            var inconclusiveLogs = _logs.Where(l => l.Message.Contains(text)).ToList();
+            var inconclusiveLogs = _logs.Where(l => l.FormattedMessage.Contains(text)).ToList();
 
             if (inconclusiveLogs.Count != 0)
             {
