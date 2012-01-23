@@ -20,10 +20,26 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
     [TestFixture]
     public class ProcessDownloadProviderFixture : CoreTest
     {
+
+        private void WithOldWrite()
+        {
+            Mocker.GetMock<DiskProvider>()
+                .Setup(c => c.GetLastDirectoryWrite(It.IsAny<String>()))
+                .Returns(DateTime.Now.AddDays(-5));
+        }
+
+        private void WithRecentWrite()
+        {
+            Mocker.GetMock<DiskProvider>()
+                .Setup(c => c.GetLastDirectoryWrite(It.IsAny<String>()))
+                .Returns(DateTime.UtcNow);
+        }
+
         [Test]
         public void should_skip_if_folder_is_tagged_and_too_fresh()
         {
             WithStrictMocker();
+            WithRecentWrite();
 
             var droppedFolder = new DirectoryInfo(TempFolder + "\\_test\\");
             droppedFolder.Create();
@@ -34,10 +50,10 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
         [Test]
         public void should_continue_processing_if_folder_is_tagged_and_not_fresh()
         {
+            WithOldWrite();
+
             var droppedFolder = new DirectoryInfo(TempFolder + "\\_test\\");
             droppedFolder.Create();
-
-            droppedFolder.LastWriteTime = DateTime.Now.AddMinutes(-2);
 
             //Act
             Mocker.GetMock<SeriesProvider>().Setup(s => s.FindSeries(It.IsAny<String>())).Returns<Series>(null).Verifiable();
@@ -52,6 +68,8 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
         [Test]
         public void should_search_for_series_using_title_without_status()
         {
+            WithOldWrite();
+
             var droppedFolder = new DirectoryInfo(@"C:\Test\Unsorted TV\_unpack_The Office - S01E01 - Episode Title");
 
             Mocker.GetMock<SeriesProvider>().Setup(s => s.FindSeries("office")).Returns<Series>(null).Verifiable();
@@ -70,6 +88,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
         {
             //Setup
             WithStrictMocker();
+            WithOldWrite();
             var droppedFolder = new DirectoryInfo(@"C:\Test\Unsorted TV\The Office - S01E01 - Episode Title");
 
             var taggedFolder = @"C:\Test\Unsorted TV\_UnknownSeries_The Office - S01E01 - Episode Title";
@@ -91,6 +110,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
         {
             //Setup
             WithStrictMocker();
+            WithOldWrite();
             var droppedFolder = new DirectoryInfo(@"C:\Test\Unsorted TV\The Office - S01E01 - Episode Title");
 
             var taggedFolder = @"C:\Test\Unsorted TV\_ParseError_The Office - S01E01 - Episode Title";
@@ -120,6 +140,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
         {
             //Setup
             WithStrictMocker();
+            WithOldWrite();
             var droppedFolder = new DirectoryInfo(@"C:\Test\Unsorted TV\The Office - Season 01");
 
             var taggedFolder = PostDownloadProvider.GetTaggedFolderName(droppedFolder, PostDownloadStatusType.Unknown);
@@ -154,10 +175,10 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
         public void folder_shouldnt_be_tagged_with_same_tag_again(string path)
         {
             //Setup
-            
+
             var droppedFolder = new DirectoryInfo(TempFolder + path);
             droppedFolder.Create();
-            droppedFolder.LastWriteTime = DateTime.Now.AddHours(-1);
+            WithOldWrite();
 
             //Act
             Mocker.GetMock<SeriesProvider>().Setup(s => s.FindSeries(It.IsAny<String>())).Returns<Series>(null);
@@ -172,7 +193,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
         public void folder_should_not_be_tagged_if_existing_tag_is_diffrent()
         {
             //Setup
-            
+            WithOldWrite();
             var droppedFolder = new DirectoryInfo(TempFolder + @"\_UnknownEpisode_The Office - S01E01 - Episode Title");
             droppedFolder.Create();
             droppedFolder.LastWriteTime = DateTime.Now.AddHours(-1);

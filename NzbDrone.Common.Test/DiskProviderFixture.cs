@@ -1,5 +1,6 @@
 ﻿// ReSharper disable InconsistentNaming
 
+using System;
 using System.IO;
 using System.Linq;
 using FluentAssertions;
@@ -149,6 +150,29 @@ namespace NzbDrone.Common.Test
         public void paths_should_not_be_equeal(string first, string second)
         {
             DiskProvider.PathEquals(first, second).Should().BeFalse();
+        }
+
+        [Test]
+        public void empty_folder_should_return_folder_modified_date()
+        {
+            var tempfolder = new DirectoryInfo(TempFolder);
+            Mocker.Resolve<DiskProvider>().GetLastDirectoryWrite(TempFolder).Should().Be(tempfolder.LastWriteTimeUtc);
+        }
+
+        [Test]
+        public void folder_should_return_correct_value_for_last_write()
+        {
+            var appPath = new EnviromentProvider().ApplicationPath;
+            Mocker.Resolve<DiskProvider>().GetLastDirectoryWrite(appPath).Should().BeOnOrAfter(DateTime.UtcNow.AddMinutes(-10));
+            Mocker.Resolve<DiskProvider>().GetLastDirectoryWrite(appPath).Should().BeBefore(DateTime.UtcNow);
+        }
+
+        [Test]
+        [Explicit]
+        public void check_last_write()
+        {
+           Console.WriteLine(Mocker.Resolve<DiskProvider>().GetLastDirectoryWrite(@"C:\DRIVERS"));
+           Console.WriteLine(new DirectoryInfo(@"C:\DRIVERS").LastWriteTimeUtc);
         }
 
         private void VerifyCopy()

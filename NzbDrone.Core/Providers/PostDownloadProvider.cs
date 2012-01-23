@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual void ProcessDownload(DirectoryInfo subfolderInfo)
         {
-            if (subfolderInfo.Name.StartsWith("_") && subfolderInfo.LastWriteTimeUtc.AddMinutes(1) > DateTime.UtcNow)
+            if (subfolderInfo.Name.StartsWith("_") && _diskProvider.GetLastDirectoryWrite(subfolderInfo.FullName).AddMinutes(2) > DateTime.UtcNow)
             {
                 Logger.Trace("[{0}] is too fresh. skipping", subfolderInfo.Name);
                 return;

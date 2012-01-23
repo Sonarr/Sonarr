@@ -31,7 +31,15 @@ namespace NzbDrone.Common
                 throw new DirectoryNotFoundException("Directory doesn't exist. " + path);
             }
 
-            GetFiles(path, SearchOption.AllDirectories);
+            var dirFiles = GetFiles(path, SearchOption.AllDirectories).ToList();
+
+            if (!dirFiles.Any())
+            {
+                return new DirectoryInfo(path).LastWriteTimeUtc;
+            }
+
+            return dirFiles.Select(f => new FileInfo(f))
+                            .Max(c => c.LastWriteTimeUtc);
         }
 
         public virtual bool FolderExists(string path)
