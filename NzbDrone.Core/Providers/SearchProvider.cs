@@ -133,11 +133,11 @@ namespace NzbDrone.Core.Providers
             if (!_inventoryProvider.IsUpgradePossible(episode))
             {
                 Logger.Info("Search for {0} was aborted, file in disk meets or exceeds Profile's Cutoff", episode);
-                notification.CurrentMessage = String.Format("Aborting search for {0}, Upgrade is not possible", episode);
+                notification.CurrentMessage = String.Format("Skipping search for {0}, file you have is already at cutoff", episode);
                 return false;
             }
 
-            notification.CurrentMessage = "Searching for " + episode;
+            notification.CurrentMessage = "Looking for " + episode;
 
             if (episode.Series.IsDaily && !episode.AirDate.HasValue)
             {
@@ -157,7 +157,17 @@ namespace NzbDrone.Core.Providers
                 return true;
 
             Logger.Warn("Unable to find {0} in any of indexers.", episode);
-            notification.CurrentMessage = String.Format("Unable to find {0} in any of indexers.", episode);
+            
+            if (reports.Any())
+            {
+                notification.CurrentMessage = String.Format("Sorry, couldn't find {0} in a none-suckey quality. (by your standards)", episode);
+            }
+            else
+            {
+                notification.CurrentMessage = String.Format("Sorry, couldn't find you {0} in any of indexers.", episode);
+            }
+
+
             return false;
         }
 
