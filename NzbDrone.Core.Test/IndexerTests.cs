@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.ServiceModel.Syndication;
@@ -17,7 +16,6 @@ using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Test.ProviderTests;
 using NzbDrone.Test.Common;
-using NzbDrone.Test.Common.AutoMoq;
 
 namespace NzbDrone.Core.Test
 {
@@ -32,7 +30,7 @@ namespace NzbDrone.Core.Test
         [TestCase("nzbmatrix.xml", 2)]
         public void parse_feed_xml(string fileName, int warns)
         {
-            
+
 
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
@@ -63,7 +61,7 @@ namespace NzbDrone.Core.Test
         [Test]
         public void newzbin_parses_languae()
         {
-            
+
 
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
@@ -88,7 +86,6 @@ namespace NzbDrone.Core.Test
         [Test]
         public void newzbin_rss_fetch()
         {
-            
             Mocker.Resolve<HttpProvider>();
             var fakeSettings = Builder<IndexerDefinition>.CreateNew().Build();
             Mocker.GetMock<IndexerProvider>()
@@ -117,7 +114,7 @@ namespace NzbDrone.Core.Test
             parseResults.Should().OnlyContain(s => s.Indexer == newzbinProvider.Name);
             parseResults.Should().OnlyContain(s => !String.IsNullOrEmpty(s.OriginalString));
 
-            ExceptionVerification.MarkInconclusive(typeof(WebException));
+            Mark503Inconclusive();
             ExceptionVerification.IgnoreWarns();
         }
 
@@ -125,8 +122,6 @@ namespace NzbDrone.Core.Test
         [TestCase("Adventure.Inc.S03E19.DVDRip.XviD-OSiTV", 3, 19, QualityTypes.DVD)]
         public void custome_parser_partial_success(string title, int season, int episode, QualityTypes quality)
         {
-            
-
             const string summary = "My fake summary";
 
             var fakeSettings = Builder<IndexerDefinition>.CreateNew().Build();
@@ -152,8 +147,6 @@ namespace NzbDrone.Core.Test
         [TestCase("Adventure.Inc.DVDRip.XviD-OSiTV")]
         public void custome_parser_full_parse(string title)
         {
-            
-
             const string summary = "My fake summary";
 
             var fakeSettings = Builder<IndexerDefinition>.CreateNew().Build();
@@ -176,7 +169,6 @@ namespace NzbDrone.Core.Test
         [Test]
         public void downloadFeed()
         {
-            
             Mocker.SetConstant(new HttpProvider());
 
             var fakeSettings = Builder<IndexerDefinition>.CreateNew().Build();
@@ -205,8 +197,8 @@ namespace NzbDrone.Core.Test
             Mocker.Resolve<HttpProvider>();
 
             var result = Mocker.Resolve<NzbsOrg>().FetchEpisode(title, season, episode);
-
-            ExceptionVerification.MarkInconclusive(typeof(WebException));
+            
+            Mark503Inconclusive();
 
             result.Should().NotBeEmpty();
             result.Should().OnlyContain(r => r.SeasonNumber == season);
@@ -220,8 +212,6 @@ namespace NzbDrone.Core.Test
         [TestCase("In plain Sight", 1, 11, Ignore = true)]
         public void newzbin_search_returns_valid_results(string title, int season, int episode)
         {
-            
-
             Mocker.GetMock<ConfigProvider>()
                 .SetupGet(c => c.NewzbinUsername)
                 .Returns("nzbdrone");
@@ -234,21 +224,16 @@ namespace NzbDrone.Core.Test
 
             var result = Mocker.Resolve<Newzbin>().FetchEpisode(title, season, episode);
 
-            ExceptionVerification.MarkInconclusive(typeof(WebException));
-            ExceptionVerification.IgnoreWarns();
+            Mark503Inconclusive();
             result.Should().NotBeEmpty();
             result.Should().OnlyContain(r => r.CleanTitle == Parser.NormalizeTitle(title));
             result.Should().OnlyContain(r => r.SeasonNumber == season);
             result.Should().OnlyContain(r => r.EpisodeNumbers.Contains(episode));
-
-
         }
 
         [Test]
         public void nzbmatrix_search_returns_valid_results()
         {
-            
-
             Mocker.GetMock<ConfigProvider>()
                 .SetupGet(c => c.NzbMatrixUsername)
                 .Returns("");
@@ -261,7 +246,7 @@ namespace NzbDrone.Core.Test
 
             var result = Mocker.Resolve<NzbMatrix>().FetchEpisode("Simpsons", 21, 23);
 
-            ExceptionVerification.MarkInconclusive(typeof(WebException));
+            Mark503Inconclusive();
 
             result.Should().NotBeEmpty();
             result.Should().OnlyContain(r => r.CleanTitle == "simpsons");
@@ -273,7 +258,7 @@ namespace NzbDrone.Core.Test
         [Test]
         public void nzbmatrix_multi_word_search_returns_valid_results()
         {
-            
+
 
             Mocker.GetMock<ConfigProvider>()
                 .SetupGet(c => c.NzbMatrixUsername)
@@ -287,7 +272,7 @@ namespace NzbDrone.Core.Test
 
             var result = Mocker.Resolve<NzbMatrix>().FetchEpisode("Blue Bloods", 1, 19);
 
-            ExceptionVerification.MarkInconclusive(typeof(WebException));
+            Mark503Inconclusive();
 
             result.Should().NotBeEmpty();
             result.Should().OnlyContain(r => r.CleanTitle == "bluebloods");
@@ -309,9 +294,6 @@ namespace NzbDrone.Core.Test
         [Test]
         public void size_newzbin()
         {
-            //Setup
-            
-
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
                           .Returns(File.OpenRead(".\\Files\\Rss\\SizeParsing\\newzbin.xml"));
@@ -327,7 +309,7 @@ namespace NzbDrone.Core.Test
         public void size_nzbmatrix()
         {
             //Setup
-            
+
 
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
@@ -344,7 +326,7 @@ namespace NzbDrone.Core.Test
         public void size_nzbsorg()
         {
             //Setup
-            
+
 
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
@@ -361,7 +343,7 @@ namespace NzbDrone.Core.Test
         public void size_nzbsrus()
         {
             //Setup
-            
+
 
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
@@ -383,7 +365,7 @@ namespace NzbDrone.Core.Test
                           .Throws(new WebException("503"));
 
             Mocker.Resolve<NzbsRUs>().FetchRss();
-                          
+
             ExceptionVerification.ExpectedErrors(0);
             ExceptionVerification.ExpectedWarns(1);
         }
@@ -401,10 +383,10 @@ namespace NzbDrone.Core.Test
             ExceptionVerification.ExpectedWarns(0);
         }
 
-        [TearDown]
-        public void TearDown()
+        private static void Mark503Inconclusive()
         {
             ExceptionVerification.MarkInconclusive(typeof(WebException));
+            ExceptionVerification.MarkInconclusive("The remote server returned an error: (503) Server Unavailable.");
         }
     }
 }

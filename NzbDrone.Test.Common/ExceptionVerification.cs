@@ -86,6 +86,17 @@ namespace NzbDrone.Test.Common
             }
         }
 
+        public static void MarkInconclusive(string text)
+        {
+            var inconclusiveLogs = _logs.Where(l => l.Message.Contains(text)).ToList();
+
+            if (inconclusiveLogs.Count != 0)
+            {
+                inconclusiveLogs.ForEach(c => _logs.Remove(c));
+                Assert.Inconclusive(GetLogsString(inconclusiveLogs));
+            }
+        }
+
         private static void Excpected(LogLevel level, int count)
         {
             var levelLogs = _logs.Where(l => l.Level == level).ToList();
