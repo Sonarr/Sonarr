@@ -114,7 +114,7 @@ namespace NzbDrone.Core.Test
             parseResults.Should().OnlyContain(s => s.Indexer == newzbinProvider.Name);
             parseResults.Should().OnlyContain(s => !String.IsNullOrEmpty(s.OriginalString));
 
-            Mark503Inconclusive();
+            Mark500Inconclusive();
             ExceptionVerification.IgnoreWarns();
         }
 
@@ -178,7 +178,7 @@ namespace NzbDrone.Core.Test
 
             Mocker.Resolve<TestUrlIndexer>().FetchRss();
 
-            ExceptionVerification.IgnoreWarns();
+            Mark500Inconclusive();
         }
 
         [TestCase("simpsons", 21, 23)]
@@ -198,7 +198,7 @@ namespace NzbDrone.Core.Test
 
             var result = Mocker.Resolve<NzbsOrg>().FetchEpisode(title, season, episode);
             
-            Mark503Inconclusive();
+            Mark500Inconclusive();
 
             result.Should().NotBeEmpty();
             result.Should().OnlyContain(r => r.SeasonNumber == season);
@@ -224,7 +224,7 @@ namespace NzbDrone.Core.Test
 
             var result = Mocker.Resolve<Newzbin>().FetchEpisode(title, season, episode);
 
-            Mark503Inconclusive();
+            Mark500Inconclusive();
             result.Should().NotBeEmpty();
             result.Should().OnlyContain(r => r.CleanTitle == Parser.NormalizeTitle(title));
             result.Should().OnlyContain(r => r.SeasonNumber == season);
@@ -246,7 +246,7 @@ namespace NzbDrone.Core.Test
 
             var result = Mocker.Resolve<NzbMatrix>().FetchEpisode("Simpsons", 21, 23);
 
-            Mark503Inconclusive();
+            Mark500Inconclusive();
 
             result.Should().NotBeEmpty();
             result.Should().OnlyContain(r => r.CleanTitle == "simpsons");
@@ -272,7 +272,7 @@ namespace NzbDrone.Core.Test
 
             var result = Mocker.Resolve<NzbMatrix>().FetchEpisode("Blue Bloods", 1, 19);
 
-            Mark503Inconclusive();
+            Mark500Inconclusive();
 
             result.Should().NotBeEmpty();
             result.Should().OnlyContain(r => r.CleanTitle == "bluebloods");
@@ -383,7 +383,7 @@ namespace NzbDrone.Core.Test
             ExceptionVerification.ExpectedWarns(0);
         }
 
-        private static void Mark503Inconclusive()
+        private static void Mark500Inconclusive()
         {
             ExceptionVerification.MarkInconclusive(typeof(WebException));
             ExceptionVerification.MarkInconclusive("System.Net.WebException");
