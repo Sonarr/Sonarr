@@ -266,7 +266,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var result = Mocker.Resolve<SabProvider>().GetQueue();
 
             //Assert
-            result.Should().HaveCount(2);
+            result.Should().HaveCount(3);
         }
 
         [Test]
