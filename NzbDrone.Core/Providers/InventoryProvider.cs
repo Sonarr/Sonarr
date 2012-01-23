@@ -125,8 +125,12 @@ namespace NzbDrone.Core.Providers
         {
             if (currentQuality.QualityType >= cutOff)
             {
-                Logger.Trace("Existing item meets cut-off. skipping.");
-                return false;
+                if (newQuality.QualityType > currentQuality.QualityType ||
+                    (newQuality.QualityType == currentQuality.QualityType && newQuality.Proper == currentQuality.Proper))
+                {
+                    Logger.Trace("Existing item meets cut-off. skipping.");
+                    return false;
+                }
             }
 
             if (newQuality > currentQuality)
@@ -140,7 +144,7 @@ namespace NzbDrone.Core.Providers
 
             if (currentQuality == newQuality && !newQuality.Proper)
             {
-                Logger.Trace("same quality. not proper skipping");
+                Logger.Trace("Same quality, not proper skipping");
                 return false;
             }
 

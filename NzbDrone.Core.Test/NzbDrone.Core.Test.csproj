@@ -102,6 +102,7 @@
     <Compile Include="JobTests\BacklogSearchJobTest.cs" />
     <Compile Include="JobTests\BannerDownloadJobTest.cs" />
     <Compile Include="JobTests\RecentBacklogSearchJobTest.cs" />
+    <Compile Include="ProviderTests\InventoryProviderTests\IsUpgradeFixture.cs" />
     <Compile Include="ProviderTests\InventoryProviderTests\IsUpgradePossibleFixture.cs" />
     <Compile Include="ProviderTests\MediaFileProviderTests\CleanUpDatabaseFixture.cs" />
     <Compile Include="ProviderTests\ReferenceDataProviderTest.cs" />
