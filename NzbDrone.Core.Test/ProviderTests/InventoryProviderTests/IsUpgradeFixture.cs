@@ -123,5 +123,18 @@ namespace NzbDrone.Core.Test.ProviderTests.InventoryProviderTests
             //Assert
             result.Should().BeTrue();
         }
+
+        [Test]
+        public void IsUpgrade_should_return_false_if_new_equals_current_but_current_is_proper_even_if_cutoff_is_met()
+        {
+            var currentQuality = new Quality(QualityTypes.SDTV, true);
+            var newQuality = new Quality(QualityTypes.SDTV, false);
+            var cutoff = QualityTypes.SDTV;
+
+            var result = InventoryProvider.IsUpgrade(currentQuality, newQuality, cutoff);
+
+            //Assert
+            result.Should().BeFalse();
+        }
     }
 }
