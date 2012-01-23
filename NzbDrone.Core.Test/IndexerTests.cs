@@ -202,10 +202,6 @@ namespace NzbDrone.Core.Test
             Mark500Inconclusive();
 
             result.Should().NotBeEmpty();
-            result.Should().OnlyContain(r => r.SeasonNumber == season);
-            result.Should().OnlyContain(r => r.EpisodeNumbers.Contains(episode));
-            result.Should().OnlyContain(r => r.CleanTitle == Parser.NormalizeTitle(title));
-            result.Should().Contain(r => r.SeasonNumber == season && r.EpisodeNumbers.Contains(episode));
         }
 
         [TestCase("simpsons", 21, 23)]
@@ -227,9 +223,6 @@ namespace NzbDrone.Core.Test
 
             Mark500Inconclusive();
             result.Should().NotBeEmpty();
-            result.Should().OnlyContain(r => r.CleanTitle == Parser.NormalizeTitle(title));
-            result.Should().OnlyContain(r => r.SeasonNumber == season);
-            result.Should().OnlyContain(r => r.EpisodeNumbers.Contains(episode));
         }
 
         [Test]
@@ -250,17 +243,12 @@ namespace NzbDrone.Core.Test
             Mark500Inconclusive();
 
             result.Should().NotBeEmpty();
-            result.Should().OnlyContain(r => r.CleanTitle == "simpsons");
-            result.Should().OnlyContain(r => r.SeasonNumber == 21);
-            result.Should().OnlyContain(r => r.EpisodeNumbers.Contains(23));
         }
 
 
         [Test]
         public void nzbmatrix_multi_word_search_returns_valid_results()
         {
-
-
             Mocker.GetMock<ConfigProvider>()
                 .SetupGet(c => c.NzbMatrixUsername)
                 .Returns("");
@@ -276,9 +264,6 @@ namespace NzbDrone.Core.Test
             Mark500Inconclusive();
 
             result.Should().NotBeEmpty();
-            result.Should().OnlyContain(r => r.CleanTitle == "bluebloods");
-            result.Should().OnlyContain(r => r.SeasonNumber == 1);
-            result.Should().OnlyContain(r => r.EpisodeNumbers.Contains(19));
         }
 
 
