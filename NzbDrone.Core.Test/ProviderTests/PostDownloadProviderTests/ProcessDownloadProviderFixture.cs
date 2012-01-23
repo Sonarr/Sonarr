@@ -267,7 +267,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
         [Test]
         public void ProcessDropFolder_should_only_process_folders_that_arent_known_series_folders()
         {
-            var subFolders = new List<string>
+            var subFolders = new []
                                  {
                                     @"c:\drop\episode1",
                                     @"c:\drop\episode2",

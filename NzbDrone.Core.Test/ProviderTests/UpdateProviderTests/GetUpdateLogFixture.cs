@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
 
             Mocker.GetMock<DiskProvider>()
                 .Setup(c => c.GetFiles(UpdateLogFolder, SearchOption.TopDirectoryOnly))
-                .Returns(new List<string> 
+                .Returns(new [] 
                 {
                     "C:\\nzbdrone\\update\\2011.09.20-19-08.txt", 
                     "C:\\nzbdrone\\update\\2011.10.20-20-08.txt", 

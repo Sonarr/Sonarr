@@ -52,14 +52,14 @@ namespace NzbDrone.Common
             return File.Exists(path);
         }
 
-        public virtual IEnumerable<string> GetDirectories(string path)
+        public virtual string[] GetDirectories(string path)
         {
-            return Directory.EnumerateDirectories(path);
+            return Directory.GetDirectories(path);
         }
 
-        public virtual IEnumerable<string> GetFiles(string path, SearchOption searchOption)
+        public virtual string[] GetFiles(string path, SearchOption searchOption)
         {
-            return Directory.EnumerateFiles(path, "*.*", searchOption);
+            return Directory.GetFiles(path, "*.*", searchOption);
         }
 
         public virtual long GetDirectorySize(string path)
