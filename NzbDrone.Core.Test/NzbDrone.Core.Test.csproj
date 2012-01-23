@@ -106,6 +106,7 @@
     <Compile Include="ProviderTests\MediaFileProviderTests\CleanUpDatabaseFixture.cs" />
     <Compile Include="ProviderTests\ReferenceDataProviderTest.cs" />
     <Compile Include="ProviderTests\NotificationProviderTests\NotificationProviderFixture.cs" />
+    <Compile Include="ProviderTests\SabProviderTests\QueueFixture.cs" />
     <Compile Include="ProviderTests\SearchProviderTests\ProcessDailySearchResultsFixture.cs" />
     <Compile Include="ProviderTests\SearchProviderTests\SearchFixture.cs" />
     <Compile Include="ProviderTests\SearchProviderTests\PerformSearchFixture.cs" />
@@ -160,7 +161,7 @@
     <Compile Include="ParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QualityProfileTest.cs" />
-    <Compile Include="ProviderTests\SabProviderTest.cs" />
+    <Compile Include="ProviderTests\SabProviderTests\SabProviderTest.cs" />
     <Compile Include="ProviderTests\SceneMappingProviderTest.cs" />
     <Compile Include="ProviderTests\SeriesProviderTest.cs" />
     <Compile Include="ProviderTests\TvDbProviderTest.cs" />

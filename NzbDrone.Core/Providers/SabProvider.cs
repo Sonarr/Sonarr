@@ -77,10 +77,10 @@ namespace NzbDrone.Core.Providers
         {
             var queue = GetQueue();
 
-            return queue.Any(c => String.Equals(c.ParseResult.SeriesTitle, newParseResult.Series.Title, StringComparison.InvariantCultureIgnoreCase) &&
-                                  c.ParseResult.EpisodeNumbers.Any(e => newParseResult.EpisodeNumbers.Contains(e)) &&
-                                  c.ParseResult.SeasonNumber == newParseResult.SeasonNumber &&
-                                  c.ParseResult.Quality >= newParseResult.Quality);
+            return queue.Any(sabQueueItem => String.Equals(sabQueueItem.ParseResult.CleanTitle, newParseResult.Series.CleanTitle, StringComparison.InvariantCultureIgnoreCase) &&
+                                  sabQueueItem.ParseResult.EpisodeNumbers.Any(e => newParseResult.EpisodeNumbers.Contains(e)) &&
+                                  sabQueueItem.ParseResult.SeasonNumber == newParseResult.SeasonNumber &&
+                                  sabQueueItem.ParseResult.Quality >= newParseResult.Quality);
         }
 
         public virtual List<SabQueueItem> GetQueue(int start = 0, int limit = 0)

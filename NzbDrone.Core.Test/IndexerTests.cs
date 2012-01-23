@@ -386,7 +386,7 @@ namespace NzbDrone.Core.Test
         private static void Mark503Inconclusive()
         {
             ExceptionVerification.MarkInconclusive(typeof(WebException));
-            ExceptionVerification.MarkInconclusive("The remote server returned an error: (503) Server Unavailable.");
+            ExceptionVerification.MarkInconclusive("System.Net.WebException");
         }
     }
 }
