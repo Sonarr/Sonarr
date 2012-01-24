@@ -4,9 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 using MvcMiniProfiler;
+using NzbDrone.Common.Model;
 using NzbDrone.Core;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Jobs;
+using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
@@ -47,6 +49,15 @@ namespace NzbDrone.Web.Controllers
             var profiles = _qualityProvider.All();
             ViewData["SelectList"] = new SelectList(profiles, "QualityProfileId", "Name");
 
+            var backlogStatusTypes = new List<KeyValuePair<int, string>>();
+
+            foreach (BacklogStatusType backlogStatusType in Enum.GetValues(typeof(BacklogStatusType)))
+            {
+                backlogStatusTypes.Add(new KeyValuePair<int, string>((int)backlogStatusType, backlogStatusType.ToString()));
+            }
+
+            ViewData["BacklogStatusSelectList"] = new SelectList(backlogStatusTypes, "Key", "Value");
+
             return View();
         }
 
@@ -59,13 +70,14 @@ namespace NzbDrone.Web.Controllers
 
         [AcceptVerbs(HttpVerbs.Post)]
         [GridAction]
-        public ActionResult _SaveAjaxSeriesEditing(int id, string path, bool monitored, bool seasonFolder, int qualityProfileId)
+        public ActionResult _SaveAjaxSeriesEditing(int id, string path, bool monitored, bool seasonFolder, int qualityProfileId, int backlogStatus)
         {
             var oldSeries = _seriesProvider.GetSeries(id);
             oldSeries.Monitored = monitored;
             oldSeries.SeasonFolder = seasonFolder;
             oldSeries.QualityProfileId = qualityProfileId;
             oldSeries.Path = path;
+            oldSeries.BacklogStatus = (BacklogStatusType)backlogStatus;
 
             _seriesProvider.UpdateSeries(oldSeries);
 
@@ -167,6 +179,19 @@ namespace NzbDrone.Web.Controllers
                                                             }, "Key", "Value"
                                                         );
 
+            var backlogStatusTypes = new List<KeyValuePair<int, string>>();
+
+            foreach (BacklogStatusType backlogStatusType in Enum.GetValues(typeof(BacklogStatusType)))
+            {
+                backlogStatusTypes.Add(new KeyValuePair<int, string>((int)backlogStatusType, backlogStatusType.ToString()));
+            }
+
+            ViewData["BacklogStatusTypes"] = backlogStatusTypes;
+
+            var masterBacklogList = backlogStatusTypes.ToList();
+            masterBacklogList.Insert(0, new KeyValuePair<int, string>(-10, "Unchanged"));
+            ViewData["MasterBacklogStatusSelectList"] = new SelectList(masterBacklogList, "Key", "Value");
+
             var series = _seriesProvider.GetAllSeries().OrderBy(o => SortHelper.SkipArticles(o.Title));
 
             return View(series);
@@ -196,6 +221,7 @@ namespace NzbDrone.Web.Controllers
                                                         QualityProfileId = s.QualityProfileId,
                                                         QualityProfileName = s.QualityProfile.Name,
                                                         SeasonFolder = s.SeasonFolder,
+                                                        BacklogStatus = (int)s.BacklogStatus,
                                                         Status = s.Status,
                                                         SeasonsCount = s.SeasonCount,
                                                         EpisodeCount = s.EpisodeCount,

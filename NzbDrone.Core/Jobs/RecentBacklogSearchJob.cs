@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
+using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Jobs
 {
@@ -35,20 +38,35 @@ namespace NzbDrone.Core.Jobs
 
         public void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
         {
-            if (!_configProvider.EnableBacklogSearching)
-            {
-                Logger.Trace("Backlog searching is not enabled, aborting job.");
-                return;
-            }
+            var missingEpisodes = GetMissingForEnabledSeries();
 
-            //Get episodes that are considered missing and aired in the last 30 days
-            var missingEpisodes = _episodeProvider.EpisodesWithoutFiles(true).Where(e => e.AirDate >= DateTime.Today.AddDays(-30));
-
-            Logger.Debug("Processing missing episodes from the last 30 days");
-            //Process the list of remaining episodes, 1 by 1
+            Logger.Debug("Processing missing episodes from the last 30 days, count: {0}", missingEpisodes.Count);
             foreach (var episode in missingEpisodes)
             {
                 _episodeSearchJob.Start(notification, episode.EpisodeId, 0);
+            }
+        }
+
+        public List<Episode> GetMissingForEnabledSeries()
+        {
+            if (!_configProvider.EnableBacklogSearching)
+            {
+                Logger.Trace("Backlog searching is not enabled, only running for explicitly enabled series.");
+                return _episodeProvider.EpisodesWithoutFiles(true).Where(e =>
+                                                                                e.AirDate >= DateTime.Today.AddDays(-30) &&
+                                                                                e.Series.BacklogStatus == BacklogStatusType.Enable &&
+                                                                                e.Series.Monitored
+                                                                            ).ToList();
+            }
+
+            else
+            {
+                Logger.Trace("Backlog searching is enabled, skipping explicity disabled series.");
+                return _episodeProvider.EpisodesWithoutFiles(true).Where(e =>
+                                                                                e.AirDate >= DateTime.Today.AddDays(-30) &&
+                                                                                e.Series.BacklogStatus != BacklogStatusType.Disable &&
+                                                                                e.Series.Monitored
+                                                                            ).ToList();
             }
         }
     }

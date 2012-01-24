@@ -208,6 +208,7 @@
     <Compile Include="Datastore\MigrationLogger.cs" />
     <Compile Include="Datastore\MigrationsHelper.cs" />
     <Compile Include="Datastore\CustomeMapper.cs" />
+    <Compile Include="Datastore\Migrations\Migration20120123.cs" />
     <Compile Include="Datastore\Migrations\Migration20120118.cs" />
     <Compile Include="Datastore\Migrations\Migration20111125.cs" />
     <Compile Include="Datastore\Migrations\Migration20111112.cs" />
@@ -228,6 +229,7 @@
     <Compile Include="Datastore\PetaPoco\PetaPoco.cs" />
     <Compile Include="Model\AtomicParsleyTitleType.cs" />
     <Compile Include="Model\ConnectionInfoModel.cs" />
+    <Compile Include="Model\BacklogStatusType.cs" />
     <Compile Include="Model\PostDownloadStatusType.cs" />
     <Compile Include="Model\JobQueueItem.cs" />
     <Compile Include="Model\LanguageType.cs" />

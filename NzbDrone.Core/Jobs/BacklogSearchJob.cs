@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
@@ -39,14 +40,7 @@ namespace NzbDrone.Core.Jobs
 
         public void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
         {
-            if (!_configProvider.EnableBacklogSearching)
-            {
-                Logger.Trace("Backlog searching is not enabled, aborting job.");
-                return;
-            }
-
-            var missingEpisodes = _episodeProvider.EpisodesWithoutFiles(true)
-                .GroupBy(e => new { e.SeriesId, e.SeasonNumber });
+            var missingEpisodes = GetMissingForEnabledSeries().GroupBy(e => new { e.SeriesId, e.SeasonNumber });
           
             var individualEpisodes = new List<Episode>();
 
@@ -89,6 +83,27 @@ namespace NzbDrone.Core.Jobs
             foreach (var episode in individualEpisodes)
             {
                 _episodeSearchJob.Start(notification, episode.EpisodeId, 0);
+            }
+        }
+
+        public List<Episode> GetMissingForEnabledSeries()
+        {
+            if (!_configProvider.EnableBacklogSearching)
+            {
+                Logger.Trace("Backlog searching is not enabled, only running for explicitly enabled series.");
+                return _episodeProvider.EpisodesWithoutFiles(true).Where(e =>
+                                                                                e.Series.BacklogStatus == BacklogStatusType.Enable &&
+                                                                                e.Series.Monitored
+                                                                            ).ToList();
+            }
+
+            else
+            {
+                Logger.Trace("Backlog searching is enabled, skipping explicity disabled series.");
+                return _episodeProvider.EpisodesWithoutFiles(true).Where(e =>
+                                                                                e.Series.BacklogStatus != BacklogStatusType.Disable &&
+                                                                                e.Series.Monitored
+                                                                            ).ToList();
             }
         }
     }

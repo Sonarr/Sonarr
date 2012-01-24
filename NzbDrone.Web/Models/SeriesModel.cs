@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Web;
+using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Web.Models
@@ -42,5 +43,9 @@ namespace NzbDrone.Web.Models
         [DisplayName("Monitored")]
         [Description("Should NzbDrone download episodes for this series?")]
         public bool Monitored { get; set; }
+
+        [DisplayName("Backlog Status")]
+        [Description("Should NzbDrone download past missing episodes?")]
+        public int BacklogStatus { get; set; }
     }
 }

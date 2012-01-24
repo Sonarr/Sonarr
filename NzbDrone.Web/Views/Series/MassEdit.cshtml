@@ -30,6 +30,10 @@
             width: 300px;
         }
         
+        td .backlogStatus {
+            width: 90px;
+        }
+        
         table {
             width: 100%;
 	        border-width: 1px;
@@ -67,6 +71,7 @@
             <th width="210px">Quality</th>
             <th class="checkboxColumn">Monitored</th>
             <th class="checkboxColumn">Season Folder</th>
+            <th width="100px">Backlog Status</th>
             <th width="310px">Path</th>
         </tr>
 
@@ -91,6 +96,10 @@
                     <span class="small">Should downloaded episodes be stored in season folders?</span>
                 </label>
                 @Html.DropDownList("masterSeasonFolder", (SelectList)ViewData["BoolSelectList"], new { @class = "inputClass" })
+                <label class="labelClass">Backlog Status
+                    <span class="small">Should NzbDrone perform backlog searches for this series?</span>
+                </label>
+                @Html.DropDownList("masterBacklogStatus", (SelectList)ViewData["MasterBacklogStatusSelectList"], new { @class = "inputClass" })
             </div>
         </div>
     </div>
@@ -118,6 +127,7 @@
             var profileId = $('#masterQualitySelector').val();
             var monitored = $('#masterMonitored').val();
             var seasonFolder = $('#masterSeasonFolder').val();
+            var backlogStatus = $('#masterBacklogStatus').val();
 
             var selected = $('.editToggle:checked');
 
@@ -140,6 +150,10 @@
                         seasonFolderBool = false;
 
                     $(this).parent('td').parent('.seriesEditRow').find('.seasonFolder').prop('checked', seasonFolderBool);
+                }
+
+                if (backlogStatus != -10) {
+                    $(this).parent('td').parent('.seriesEditRow').find('.backlogStatus').val(backlogStatus);
                 }
             });
 

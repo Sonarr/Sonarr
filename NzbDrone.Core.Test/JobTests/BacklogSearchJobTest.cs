@@ -2,9 +2,11 @@
 using System.Linq;
 
 using FizzWare.NBuilder;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Jobs;
+using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
@@ -53,7 +55,15 @@ namespace NzbDrone.Core.Test.JobTests
             //Setup
             var notification = new ProgressNotification("Backlog Search Job Test");
 
-            var episodes = Builder<Episode>.CreateListOfSize(1).Build();
+            var series = Builder<Series>.CreateNew()
+                    .With(s => s.Monitored = true)
+                    .With(s => s.BacklogStatus = BacklogStatusType.Enable)
+                    .Build();
+
+            var episodes = Builder<Episode>.CreateListOfSize(1)
+                .All()
+                .With(e => e.Series = series)
+                .Build();
 
             WithStrictMocker();
             WithEnableBacklogSearching();
@@ -81,7 +91,15 @@ namespace NzbDrone.Core.Test.JobTests
             //Setup
             var notification = new ProgressNotification("Backlog Search Job Test");
 
-            var episodes = Builder<Episode>.CreateListOfSize(5).Build();
+            var series = Builder<Series>.CreateNew()
+                    .With(s => s.Monitored = true)
+                    .With(s => s.BacklogStatus = BacklogStatusType.Enable)
+                    .Build();
+
+            var episodes = Builder<Episode>.CreateListOfSize(5)
+                .All()
+                .With(e => e.Series = series)
+                .Build();
 
             WithStrictMocker();
             WithEnableBacklogSearching();
@@ -109,9 +127,14 @@ namespace NzbDrone.Core.Test.JobTests
             //Setup
             var notification = new ProgressNotification("Backlog Search Job Test");
 
+            var series = Builder<Series>.CreateNew()
+                    .With(s => s.Monitored = true)
+                    .With(s => s.BacklogStatus = BacklogStatusType.Enable)
+                    .Build();
+
             var episodes = Builder<Episode>.CreateListOfSize(5)
                 .All()
-                .With(e => e.SeriesId = 1)
+                .With(e => e.Series = series)
                 .With(e => e.SeasonNumber = 1)
                 .Build();
 
@@ -144,9 +167,15 @@ namespace NzbDrone.Core.Test.JobTests
             //Setup
             var notification = new ProgressNotification("Backlog Search Job Test");
 
+            var series = Builder<Series>.CreateNew()
+                    .With(s => s.Monitored = true)
+                    .With(s => s.BacklogStatus = BacklogStatusType.Enable)
+                    .Build();
+
             var episodes = Builder<Episode>.CreateListOfSize(5)
                 .All()
-                .With(e => e.SeriesId = 1)
+                .With(e => e.Series = series)
+                .With(e => e.SeriesId = series.SeriesId)
                 .With(e => e.SeasonNumber = 1)
                 .Build();
 
@@ -179,10 +208,23 @@ namespace NzbDrone.Core.Test.JobTests
             //Setup
             var notification = new ProgressNotification("Backlog Search Job Test");
 
+            var series = Builder<Series>.CreateNew()
+                    .With(s => s.Monitored = true)
+                    .With(s => s.BacklogStatus = BacklogStatusType.Enable)
+                    .Build();
+
+            var series2 = Builder<Series>.CreateNew()
+                    .With(s => s.Monitored = true)
+                    .With(s => s.BacklogStatus = BacklogStatusType.Enable)
+                    .Build();
+
             var episodes = Builder<Episode>.CreateListOfSize(10)
                 .TheFirst(5)
-                .With(e => e.SeriesId = 1)
+                .With(e => e.Series = series)
+                .With(e => e.SeriesId = series.SeriesId)
                 .With(e => e.SeasonNumber = 1)
+                .TheNext(5)
+                .With(e => e.Series = series2)
                 .Build();
 
             WithStrictMocker();
@@ -209,6 +251,121 @@ namespace NzbDrone.Core.Test.JobTests
 
             Mocker.GetMock<EpisodeSearchJob>().Verify(c => c.Start(notification, It.IsAny<int>(), 0),
                                                        Times.Exactly(5));
+        }
+
+        [Test]
+        public void GetMissingForEnabledSeries_should_only_return_episodes_for_monitored_series()
+        {
+            //Setup
+            var series = Builder<Series>.CreateListOfSize(2)
+                .TheFirst(1)
+                .With(s => s.Monitored = false)
+                .With(s => s.BacklogStatus = BacklogStatusType.Enable)
+                .TheNext(1)
+                .With(s => s.Monitored = true)
+                .With(s => s.BacklogStatus = BacklogStatusType.Enable)
+                .Build();
+
+            var episodes = Builder<Episode>.CreateListOfSize(11)
+                .TheFirst(5)
+                .With(e => e.Series = series[0])
+                .With(e => e.SeasonNumber = 1)
+                .TheLast(6)
+                .With(e => e.Series = series[1])
+                .Build();
+
+            WithEnableBacklogSearching();
+
+            Mocker.GetMock<EpisodeProvider>()
+                .Setup(s => s.EpisodesWithoutFiles(true)).Returns(episodes);
+
+            //Act
+            var result = Mocker.Resolve<BacklogSearchJob>().GetMissingForEnabledSeries();
+
+            //Assert
+            result.Should().NotBeEmpty();
+            result.Should().Contain(s => s.Series.Monitored);
+            result.Should().NotContain(s => !s.Series.Monitored);
+        }
+
+        [Test]
+        public void GetMissingForEnabledSeries_should_only_return_explicity_enabled_series_when_backlog_searching_is_ignored()
+        {
+            //Setup
+            var series = Builder<Series>.CreateListOfSize(3)
+                .TheFirst(1)
+                .With(s => s.Monitored = true)
+                .With(s => s.BacklogStatus = BacklogStatusType.Disable)
+                .TheNext(1)
+                .With(s => s.Monitored = true)
+                .With(s => s.BacklogStatus = BacklogStatusType.Enable)
+                .TheNext(1)
+                .With(s => s.Monitored = true)
+                .With(s => s.BacklogStatus = BacklogStatusType.Inherit)
+                .Build();
+
+            var episodes = Builder<Episode>.CreateListOfSize(12)
+                .TheFirst(3)
+                .With(e => e.Series = series[0])
+                .TheNext(4)
+                .With(e => e.Series = series[1])
+                .TheNext(5)
+                .With(e => e.Series = series[2])
+                .Build();
+
+            //WithEnableBacklogSearching();
+
+            Mocker.GetMock<EpisodeProvider>()
+                .Setup(s => s.EpisodesWithoutFiles(true)).Returns(episodes);
+
+            //Act
+            var result = Mocker.Resolve<BacklogSearchJob>().GetMissingForEnabledSeries();
+
+            //Assert
+            result.Should().NotBeEmpty();
+            result.Should().Contain(s => s.Series.BacklogStatus == BacklogStatusType.Enable);
+            result.Should().NotContain(s => s.Series.BacklogStatus == BacklogStatusType.Disable);
+            result.Should().NotContain(s => s.Series.BacklogStatus == BacklogStatusType.Inherit);
+        }
+
+        [Test]
+        public void GetMissingForEnabledSeries_should_return_explicity_enabled_and_inherit_series_when_backlog_searching_is_enabled()
+        {
+            //Setup
+            var series = Builder<Series>.CreateListOfSize(3)
+                .TheFirst(1)
+                .With(s => s.Monitored = true)
+                .With(s => s.BacklogStatus = BacklogStatusType.Disable)
+                .TheNext(1)
+                .With(s => s.Monitored = true)
+                .With(s => s.BacklogStatus = BacklogStatusType.Enable)
+                .TheNext(1)
+                .With(s => s.Monitored = true)
+                .With(s => s.BacklogStatus = BacklogStatusType.Inherit)
+                .Build();
+
+            var episodes = Builder<Episode>.CreateListOfSize(12)
+                .TheFirst(3)
+                .With(e => e.Series = series[0])
+                .TheNext(4)
+                .With(e => e.Series = series[1])
+                .TheNext(5)
+                .With(e => e.Series = series[2])
+                .Build();
+
+            WithEnableBacklogSearching();
+
+            Mocker.GetMock<EpisodeProvider>()
+                .Setup(s => s.EpisodesWithoutFiles(true)).Returns(episodes);
+
+            //Act
+            var result = Mocker.Resolve<BacklogSearchJob>().GetMissingForEnabledSeries();
+
+            //Assert
+            result.Should().NotBeEmpty();
+            result.Should().Contain(s => s.Series.BacklogStatus == BacklogStatusType.Enable);
+            result.Should().NotContain(s => s.Series.BacklogStatus == BacklogStatusType.Disable);
+            result.Should().Contain(s => s.Series.BacklogStatus == BacklogStatusType.Inherit);
         }
     }
 }

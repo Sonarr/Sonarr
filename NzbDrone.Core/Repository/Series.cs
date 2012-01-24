@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository.Quality;
 using PetaPoco;
 
@@ -42,6 +43,8 @@ namespace NzbDrone.Core.Repository
         public string BannerUrl { get; set; }
 
         public bool IsDaily { get; set; }
+
+        public BacklogStatusType BacklogStatus { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="Series"/> is hidden.
