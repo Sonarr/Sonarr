@@ -409,6 +409,11 @@ namespace NzbDrone.Core.Providers.Core
             set { SetValue("AutoIgnorePreviouslyDownloadedEpisodes", value); }
         }
 
+        public string UGuid
+        {
+            get { return GetValue("UGuid", Guid.NewGuid().ToString(), persist: true); }
+        }
+
         private string GetValue(string key)
         {
             return GetValue(key, String.Empty);
@@ -424,7 +429,7 @@ namespace NzbDrone.Core.Providers.Core
             return Convert.ToInt16(GetValue(key, defaultValue));
         }
 
-        public virtual string GetValue(string key, object defaultValue)
+        public virtual string GetValue(string key, object defaultValue, bool persist = false)
         {
             var dbValue = _database.SingleOrDefault<Config>("WHERE [Key] =@0", key);
 
@@ -432,6 +437,10 @@ namespace NzbDrone.Core.Providers.Core
                 return dbValue.Value;
 
             Logger.Trace("Unable to find config key '{0}' defaultValue:'{1}'", key, defaultValue);
+
+            if (persist)
+                SetValue(key, defaultValue.ToString());
+
             return defaultValue.ToString();
         }
 

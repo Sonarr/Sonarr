@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
 
 
-            var database = TestDbHelper.GetEmptyDatabase(true);
+            var database = TestDbHelper.GetEmptyDatabase();
 
 
             database.InsertMany(firstSeriesFiles);
@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
 
 
-            var database = TestDbHelper.GetEmptyDatabase(true);
+            var database = TestDbHelper.GetEmptyDatabase();
 
             database.InsertMany(firstSeriesFiles);
             database.InsertMany(secondSeriesFiles);
@@ -146,7 +146,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var episodeFiles = Builder<EpisodeFile>.CreateListOfSize(10).Build();
 
 
-            var database = TestDbHelper.GetEmptyDatabase(true);
+            var database = TestDbHelper.GetEmptyDatabase();
             Mocker.SetConstant(database);
             database.InsertMany(episodeFiles);
 

@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using DeskMetrics;
 using Ninject;
 using NLog;
 using NzbDrone.Common;
@@ -9,6 +10,7 @@ using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.ExternalNotification;
 using NzbDrone.Core.Providers.Indexer;
 using PetaPoco;
@@ -27,13 +29,15 @@ namespace NzbDrone.Core
             Kernel = new StandardKernel();
 
             InitDatabase();
+            InitAnalytics();
 
             InitQuality();
             InitExternalNotifications();
             InitIndexers();
             InitJobs();
         }
-        
+
+
         private void InitDatabase()
         {
             Logger.Info("Initializing Database...");
@@ -49,6 +53,13 @@ namespace NzbDrone.Core
 
             Kernel.Get<DatabaseTarget>().Register();
             LogConfiguration.Reload();
+        }
+
+        private void InitAnalytics()
+        {
+            var deskMetricsClient = new DeskMetricsClient(Kernel.Get<ConfigProvider>().UGuid, AnalyticsProvider.DESKMETRICS_ID, new EnviromentProvider().Version);
+            Kernel.Bind<IDeskMetricsClient>().ToConstant(deskMetricsClient);
+            Kernel.Get<AnalyticsProvider>().Checkpoint();
         }
 
         private void InitQuality()

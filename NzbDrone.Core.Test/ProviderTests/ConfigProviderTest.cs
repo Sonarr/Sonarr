@@ -12,20 +12,19 @@ namespace NzbDrone.Core.Test.ProviderTests
     // ReSharper disable InconsistentNaming
     public class ConfigProviderTest : CoreTest
     {
+        [SetUp]
+        public void SetUp()
+        {
+            WithRealDb();
+        }
+
         [Test]
         public void Add_new_value_to_database()
         {
             const string key = "MY_KEY";
             const string value = "MY_VALUE";
 
-            
-            var db = TestDbHelper.GetEmptyDatabase();
-            Mocker.SetConstant(db);
-
-            //Act
             Mocker.Resolve<ConfigProvider>().SetValue(key, value);
-
-            //Assert
             Mocker.Resolve<ConfigProvider>().GetValue(key, "").Should().Be(value);
         }
 
@@ -35,12 +34,9 @@ namespace NzbDrone.Core.Test.ProviderTests
             const string key = "MY_KEY";
             const string value = "MY_VALUE";
 
-            
-            var db = TestDbHelper.GetEmptyDatabase();
-            Mocker.SetConstant(db);
 
-            db.Insert(new Config { Key = key, Value = value });
-            db.Insert(new Config { Key = "Other Key", Value = "OtherValue" });
+            Db.Insert(new Config { Key = key, Value = value });
+            Db.Insert(new Config { Key = "Other Key", Value = "OtherValue" });
 
             //Act
             var result = Mocker.Resolve<ConfigProvider>().GetValue(key, "");
@@ -56,11 +52,6 @@ namespace NzbDrone.Core.Test.ProviderTests
             const string key = "MY_KEY";
             const string value = "MY_VALUE";
 
-            
-            var db = TestDbHelper.GetEmptyDatabase();
-            Mocker.SetConstant(db);
-
-
             //Act
             var result = Mocker.Resolve<ConfigProvider>().GetValue(key, value);
 
@@ -75,11 +66,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             const string originalValue = "OLD_VALUE";
             const string newValue = "NEW_VALUE";
 
-            
-            var db = TestDbHelper.GetEmptyDatabase();
-            Mocker.SetConstant(db);
-
-            db.Insert(new Config { Key = key, Value = originalValue });
+            Db.Insert(new Config { Key = key, Value = originalValue });
 
             //Act
             Mocker.Resolve<ConfigProvider>().SetValue(key, newValue);
@@ -87,7 +74,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             //Assert
             result.Should().Be(newValue);
-            db.Fetch<Config>().Should().HaveCount(1);
+            Db.Fetch<Config>().Should().HaveCount(1);
         }
 
         [Test]
@@ -96,11 +83,6 @@ namespace NzbDrone.Core.Test.ProviderTests
             const string key = "MY_KEY";
             const string value = "OLD_VALUE";
 
-
-            
-            var db = TestDbHelper.GetEmptyDatabase();
-            Mocker.SetConstant(db);
-
             //Act
             Mocker.Resolve<ConfigProvider>().SetValue(key, value);
             Mocker.Resolve<ConfigProvider>().SetValue(key, value);
@@ -108,8 +90,51 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             //Assert
             result.Should().Be(value);
-            db.Fetch<Config>().Should().HaveCount(1);
+            Db.Fetch<Config>().Should().HaveCount(1);
         }
+
+        [Test]
+        public void get_value_with_persist_should_store_default_value()
+        {
+            const string key = "MY_KEY";
+            string value = Guid.NewGuid().ToString();
+
+            //Act
+            Mocker.Resolve<ConfigProvider>().GetValue(key, value, persist: true).Should().Be(value);
+            Mocker.Resolve<ConfigProvider>().GetValue(key, string.Empty).Should().Be(value);
+        }
+
+        [Test]
+        public void get_value_with_out_persist_should_not_store_default_value()
+        {
+            const string key = "MY_KEY";
+            string value1 = Guid.NewGuid().ToString();
+            string value2 = Guid.NewGuid().ToString();
+
+            //Act
+            Mocker.Resolve<ConfigProvider>().GetValue(key, value1).Should().Be(value1);
+            Mocker.Resolve<ConfigProvider>().GetValue(key, value2).Should().Be(value2);
+        }
+
+
+
+        [Test]
+        public void uguid_should_only_be_set_once()
+        {
+            var guid1 = Mocker.Resolve<ConfigProvider>().UGuid;
+            var guid2 = Mocker.Resolve<ConfigProvider>().UGuid;
+
+            guid1.Should().Be(guid2);
+        }
+
+        [Test]
+        public void uguid_should_return_valid_result_on_first_call()
+        {
+            var guid = Mocker.Resolve<ConfigProvider>().UGuid;
+            guid.Should().NotBeBlank();
+            Guid.Parse(guid).ToString().Should().NotBe(new Guid().ToString());
+        }
+
 
         [Test]
         [Description("This test will use reflection to ensure each config property read/writes to a unique key")]
@@ -117,8 +142,6 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
 
             WithStrictMocker();
-            var db = TestDbHelper.GetEmptyDatabase();
-            Mocker.SetConstant(db);
 
             var configProvider = Mocker.Resolve<ConfigProvider>();
             var allProperties = typeof(ConfigProvider).GetProperties();
@@ -157,7 +180,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 returnValue.Should().Be(value, propertyInfo.Name);
             }
 
-            db.Fetch<Config>().Should()
+            Db.Fetch<Config>().Should()
                 .HaveSameCount(allProperties, "two different properties are writing to the same key in db. Copy/Past fail.");
         }
     }

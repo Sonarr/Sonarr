@@ -40,6 +40,9 @@ namespace NzbDrone.Common
             }
         }
 
+
+        public static bool IsNewInstall { get; set; }
+   
         public virtual bool IsUserInteractive
         {
             get { return Environment.UserInteractive; }

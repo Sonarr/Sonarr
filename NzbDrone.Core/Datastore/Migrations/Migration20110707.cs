@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using Migrator.Framework;
+using NzbDrone.Common;
 
 namespace NzbDrone.Core.Datastore.Migrations
 {
@@ -10,6 +11,9 @@ namespace NzbDrone.Core.Datastore.Migrations
     {
         protected override void MainDbUpgrade()
         {
+            //This should not run unless for a clean install
+            EnviromentProvider.IsNewInstall = true;
+            
             Database.AddTable("Series", new[]
                                             {
                                                 new Column("SeriesId", DbType.Int32, ColumnProperty.PrimaryKey),

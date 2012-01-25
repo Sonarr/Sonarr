@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Common;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Indexer;
@@ -99,6 +100,13 @@ namespace NzbDrone.Core.Test
             var second = kernel.Get<JobProvider>();
 
             first.Should().BeSameAs(second);
+        }
+
+        [Test]
+        public void app_should_be_marked_as_new_install_if_db_is_initilized_for_the_first_time()
+        {
+            WithRealDb();
+            EnviromentProvider.IsNewInstall.Should().Be(true);
         }
 
     }

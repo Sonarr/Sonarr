@@ -1,0 +1,248 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DeskMetrics</name>
+    </assembly>
+    <members>
+        <member name="M:DeskMetrics.OperatingSystem.Hardware.WindowsHardware.GetMemoryData">
+            <summary>
+            GetProcessorFrequency  Physical Memory  GetComponentName
+            </summary>
+        </member>
+        <member name="M:DeskMetrics.OperatingSystem.Hardware.WindowsHardware.GetDiskData">
+            <summary>
+            GetProcessorFrequency Disk Size  GetComponentName
+            </summary>
+        </member>
+        <member name="M:DeskMetrics.OperatingSystem.Hardware.WindowsHardware.GetScreenResolution">
+            <summary>
+            GetProcessorFrequency Screen resolution GetComponentName
+            </summary>
+        </member>
+        <member name="F:DeskMetrics.OperatingSystem.WindowsOperatingSystem._servicePack">
+            <summary>
+            Field OS Service Pack
+            </summary>
+        </member>
+        <member name="M:DeskMetrics.OperatingSystem.WindowsOperatingSystem.GetFrameworkVersion">
+            <summary>
+            GetProcessorFrequency Framework ApplicationVersion GetComponentName
+            </summary>
+        </member>
+        <member name="M:DeskMetrics.OperatingSystem.WindowsOperatingSystem.GetArchicteture">
+            <summary>
+            GetProcessorFrequency OS Archicteture GetComponentName
+            </summary>
+        </member>
+        <member name="M:DeskMetrics.OperatingSystem.WindowsOperatingSystem.GetVersion">
+            <summary>
+            GetProcessorFrequency OS ApplicationVersion GetComponentName
+            </summary>
+        </member>
+        <member name="M:DeskMetrics.OperatingSystem.WindowsOperatingSystem.GetJavaVersion">
+            <summary>
+            GetProcessorFrequency Java version GetComponentName
+            </summary>
+        </member>
+        <member name="P:DeskMetrics.OperatingSystem.WindowsOperatingSystem.FrameworkVersion">
+            <summary>
+            GetProcessorFrequency and Set Framework ApplicationVersion
+            </summary>
+        </member>
+        <member name="P:DeskMetrics.OperatingSystem.WindowsOperatingSystem.Architecture">
+            <summary>
+            GetProcessorFrequency and Set OS Archicteture
+            </summary>
+        </member>
+        <member name="P:DeskMetrics.OperatingSystem.WindowsOperatingSystem.Version">
+            <summary>
+            GetProcessorFrequency and Set OS ApplicationVersion
+            </summary>
+        </member>
+        <member name="P:DeskMetrics.OperatingSystem.WindowsOperatingSystem.FrameworkServicePack">
+            <summary>
+            GetProcessorFrequency and Set Frameworl Service Pack
+            </summary>
+        </member>
+        <member name="P:DeskMetrics.OperatingSystem.WindowsOperatingSystem.JavaVersion">
+            <summary>
+            GetProcessorFrequency and Set Java ApplicationVersion
+            </summary>
+        </member>
+        <member name="P:DeskMetrics.OperatingSystem.WindowsOperatingSystem.ServicePack">
+            <summary>
+            GetProcessorFrequency and Set OS Service Pack
+            </summary>
+        </member>
+        <member name="M:DeskMetrics.IDeskMetricsClient.Start">
+            <summary>
+            Starts the application tracking.
+            </summary>
+        </member>
+        <member name="M:DeskMetrics.IDeskMetricsClient.Stop">
+            <summary>
+            Stops the application tracking and send the collected data to DeskMetrics
+            </summary>
+        </member>
+        <member name="M:DeskMetrics.IDeskMetricsClient.RegisterEvent(System.String,System.String)">
+            <summary>
+            Register an event occurrence
+            </summary>
+            <param name="eventCategory">EventCategory Category</param>
+            <param name="eventName">EventCategory eventName</param>
+        </member>
+        <member name="M:DeskMetrics.IDeskMetricsClient.RegisterEventPeriod(System.String,System.String,System.TimeSpan,System.Boolean)">
+            <summary>
+            Tracks an event related to time and intervals
+            </summary>
+            <param name="eventCategory">
+            The event category
+            </param>
+            <param name="eventName">
+            The event name
+            </param>
+            <param name="eventTime">
+            The event duration 
+            </param>
+            <param name="completed">
+            True if the event was completed.
+            </param>
+        </member>
+        <member name="M:DeskMetrics.IDeskMetricsClient.RegisterInstall">
+            <summary>
+            Tracks an installation
+            </summary>
+        </member>
+        <member name="M:DeskMetrics.IDeskMetricsClient.RegisterUninstall">
+            <summary>
+            Tracks an uninstall
+            </summary>
+        </member>
+        <member name="M:DeskMetrics.IDeskMetricsClient.RegisterException(System.Exception)">
+            <summary>
+            Tracks an exception
+            </summary>
+            <param name="exception">
+            The exception object to be tracked
+            </param>
+        </member>
+        <member name="M:DeskMetrics.IDeskMetricsClient.RegisterEventValue(System.String,System.String,System.String)">
+            <summary>
+            Tracks an event with custom value
+            </summary>
+            <param name="eventCategory">
+            The event category
+            </param>
+            <param name="eventName">
+            The event name
+            </param>
+            <param name="eventValue">
+            The custom value
+            </param>
+        </member>
+        <member name="M:DeskMetrics.IDeskMetricsClient.RegisterCustomData(System.String,System.String)">
+            <summary>
+            Tracks custom data
+            </summary>
+            <param name="key">
+            The custom data name
+            </param>
+            <param name="value">
+            The custom data value
+            </param>
+        </member>
+        <member name="M:DeskMetrics.IDeskMetricsClient.RegisterLog(System.String)">
+            <summary>
+            Tracks a log
+            </summary>
+            <param name="message">
+            The log message
+            </param>
+        </member>
+        <member name="M:DeskMetrics.DeskMetricsClient.Start">
+            <summary>
+            Starts the application tracking.
+            </summary>
+        </member>
+        <member name="M:DeskMetrics.DeskMetricsClient.Stop">
+            <summary>
+            Stops the application tracking and send the collected data to DeskMetrics
+            </summary>
+        </member>
+        <member name="M:DeskMetrics.DeskMetricsClient.RegisterEvent(System.String,System.String)">
+            <summary>
+            Register an event occurrence
+            </summary>
+            <param name="eventCategory">EventCategory Category</param>
+            <param name="eventName">EventCategory eventName</param>
+        </member>
+        <member name="M:DeskMetrics.DeskMetricsClient.RegisterEventPeriod(System.String,System.String,System.TimeSpan,System.Boolean)">
+            <summary>
+            Tracks an event related to time and intervals
+            </summary>
+            <param name="eventCategory">
+            The event category
+            </param>
+            <param name="eventName">
+            The event name
+            </param>
+            <param name="eventTime">
+            The event duration 
+            </param>
+            <param name="completed">
+            True if the event was completed.
+            </param>
+        </member>
+        <member name="M:DeskMetrics.DeskMetricsClient.RegisterInstall">
+            <summary>
+            Tracks an installation
+            </summary>
+        </member>
+        <member name="M:DeskMetrics.DeskMetricsClient.RegisterUninstall">
+            <summary>
+            Tracks an uninstall
+            </summary>
+        </member>
+        <member name="M:DeskMetrics.DeskMetricsClient.RegisterException(System.Exception)">
+            <summary>
+            Tracks an exception
+            </summary>
+            <param name="exception">
+            The exception object to be tracked
+            </param>
+        </member>
+        <member name="M:DeskMetrics.DeskMetricsClient.RegisterEventValue(System.String,System.String,System.String)">
+            <summary>
+            Tracks an event with custom value
+            </summary>
+            <param name="eventCategory">
+            The event category
+            </param>
+            <param name="eventName">
+            The event name
+            </param>
+            <param name="eventValue">
+            The custom value
+            </param>
+        </member>
+        <member name="M:DeskMetrics.DeskMetricsClient.RegisterCustomData(System.String,System.String)">
+            <summary>
+            Tracks custom data
+            </summary>
+            <param name="key">
+            The custom data name
+            </param>
+            <param name="value">
+            The custom data value
+            </param>
+        </member>
+        <member name="M:DeskMetrics.DeskMetricsClient.RegisterLog(System.String)">
+            <summary>
+            Tracks a log
+            </summary>
+            <param name="message">
+            The log message
+            </param>
+        </member>
+    </members>
+</doc>
