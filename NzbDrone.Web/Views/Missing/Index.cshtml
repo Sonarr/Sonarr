@@ -9,7 +9,8 @@
 @section ActionMenu{
     <ul class="sub-menu">
         <li>@Ajax.ActionLink("Start RSS Sync", "RssSync", "Command", null, null)</li>
-        <li>@Ajax.ActionLink("Start Backlog Search", "BacklogSearch", "Command", null, null)</li>
+        <li>@Ajax.ActionLink("Start Backlog Search", "BacklogSearch", "Command", null, null, new { title = "Backlog search for ALL missing episodes" })</li>
+        <li>@Ajax.ActionLink("Start Recent Backlog Search", "RecentBacklogSearch", "Command", null, null, new { title = "Backlog search for missing episodes that aired in the last 30 days only" })</li>
     </ul>
 }
 @{Html.Telerik().Grid<MissingEpisodeModel>().Name("missing")

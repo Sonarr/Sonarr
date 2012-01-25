@@ -34,6 +34,12 @@ namespace NzbDrone.Web.Controllers
             return JsonNotificationResult.Info("Queued");
         }
 
+        public JsonResult RecentBacklogSearch()
+        {
+            _jobProvider.QueueJob(typeof(RecentBacklogSearchJob));
+            return JsonNotificationResult.Info("Queued");
+        }
+
         public JsonResult ScanDisk(int seriesId)
         {
             _jobProvider.QueueJob(typeof(DiskScanJob), seriesId);
