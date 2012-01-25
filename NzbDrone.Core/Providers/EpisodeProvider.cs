@@ -227,7 +227,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual IList<Episode> EpisodesWithoutFiles(bool includeSpecials)
         {
-            var episodes = _database.Query<Episode, Series>(@"SELECT Episodes.*, Series.Title FROM Episodes
+            var episodes = _database.Query<Episode, Series>(@"SELECT Episodes.*, Series.* FROM Episodes
                                                         INNER JOIN Series
                                                         ON Episodes.SeriesId = Series.SeriesId
                                                         WHERE (EpisodeFileId=0 OR EpisodeFileId=NULL) AND Ignored = 0 AND AirDate<=@0",
