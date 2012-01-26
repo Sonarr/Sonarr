@@ -75,6 +75,7 @@ namespace NzbDrone.Providers
 
             try
             {
+                _webClientProvider.DownloadString(_iisProvider.AppUrl); //This should preload the home page, making the first load alot faster.
                 string response = _webClientProvider.DownloadString(_iisProvider.AppUrl + "/health");
 
                 if (!response.Contains("OK"))
