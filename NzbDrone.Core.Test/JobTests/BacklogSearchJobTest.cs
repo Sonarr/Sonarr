@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Test.JobTests
 
             var series = Builder<Series>.CreateNew()
                     .With(s => s.Monitored = true)
-                    .With(s => s.BacklogStatus = BacklogStatusType.Enable)
+                    .With(s => s.BacklogSetting = BacklogSettingType.Enable)
                     .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(1)
@@ -93,7 +93,7 @@ namespace NzbDrone.Core.Test.JobTests
 
             var series = Builder<Series>.CreateNew()
                     .With(s => s.Monitored = true)
-                    .With(s => s.BacklogStatus = BacklogStatusType.Enable)
+                    .With(s => s.BacklogSetting = BacklogSettingType.Enable)
                     .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(5)
@@ -129,7 +129,7 @@ namespace NzbDrone.Core.Test.JobTests
 
             var series = Builder<Series>.CreateNew()
                     .With(s => s.Monitored = true)
-                    .With(s => s.BacklogStatus = BacklogStatusType.Enable)
+                    .With(s => s.BacklogSetting = BacklogSettingType.Enable)
                     .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(5)
@@ -169,7 +169,7 @@ namespace NzbDrone.Core.Test.JobTests
 
             var series = Builder<Series>.CreateNew()
                     .With(s => s.Monitored = true)
-                    .With(s => s.BacklogStatus = BacklogStatusType.Enable)
+                    .With(s => s.BacklogSetting = BacklogSettingType.Enable)
                     .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(5)
@@ -210,12 +210,12 @@ namespace NzbDrone.Core.Test.JobTests
 
             var series = Builder<Series>.CreateNew()
                     .With(s => s.Monitored = true)
-                    .With(s => s.BacklogStatus = BacklogStatusType.Enable)
+                    .With(s => s.BacklogSetting = BacklogSettingType.Enable)
                     .Build();
 
             var series2 = Builder<Series>.CreateNew()
                     .With(s => s.Monitored = true)
-                    .With(s => s.BacklogStatus = BacklogStatusType.Enable)
+                    .With(s => s.BacklogSetting = BacklogSettingType.Enable)
                     .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(10)
@@ -260,10 +260,10 @@ namespace NzbDrone.Core.Test.JobTests
             var series = Builder<Series>.CreateListOfSize(2)
                 .TheFirst(1)
                 .With(s => s.Monitored = false)
-                .With(s => s.BacklogStatus = BacklogStatusType.Enable)
+                .With(s => s.BacklogSetting = BacklogSettingType.Enable)
                 .TheNext(1)
                 .With(s => s.Monitored = true)
-                .With(s => s.BacklogStatus = BacklogStatusType.Enable)
+                .With(s => s.BacklogSetting = BacklogSettingType.Enable)
                 .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(11)
@@ -295,13 +295,13 @@ namespace NzbDrone.Core.Test.JobTests
             var series = Builder<Series>.CreateListOfSize(3)
                 .TheFirst(1)
                 .With(s => s.Monitored = true)
-                .With(s => s.BacklogStatus = BacklogStatusType.Disable)
+                .With(s => s.BacklogSetting = BacklogSettingType.Disable)
                 .TheNext(1)
                 .With(s => s.Monitored = true)
-                .With(s => s.BacklogStatus = BacklogStatusType.Enable)
+                .With(s => s.BacklogSetting = BacklogSettingType.Enable)
                 .TheNext(1)
                 .With(s => s.Monitored = true)
-                .With(s => s.BacklogStatus = BacklogStatusType.Inherit)
+                .With(s => s.BacklogSetting = BacklogSettingType.Inherit)
                 .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(12)
@@ -323,9 +323,9 @@ namespace NzbDrone.Core.Test.JobTests
 
             //Assert
             result.Should().NotBeEmpty();
-            result.Should().Contain(s => s.Series.BacklogStatus == BacklogStatusType.Enable);
-            result.Should().NotContain(s => s.Series.BacklogStatus == BacklogStatusType.Disable);
-            result.Should().NotContain(s => s.Series.BacklogStatus == BacklogStatusType.Inherit);
+            result.Should().Contain(s => s.Series.BacklogSetting == BacklogSettingType.Enable);
+            result.Should().NotContain(s => s.Series.BacklogSetting == BacklogSettingType.Disable);
+            result.Should().NotContain(s => s.Series.BacklogSetting == BacklogSettingType.Inherit);
         }
 
         [Test]
@@ -335,13 +335,13 @@ namespace NzbDrone.Core.Test.JobTests
             var series = Builder<Series>.CreateListOfSize(3)
                 .TheFirst(1)
                 .With(s => s.Monitored = true)
-                .With(s => s.BacklogStatus = BacklogStatusType.Disable)
+                .With(s => s.BacklogSetting = BacklogSettingType.Disable)
                 .TheNext(1)
                 .With(s => s.Monitored = true)
-                .With(s => s.BacklogStatus = BacklogStatusType.Enable)
+                .With(s => s.BacklogSetting = BacklogSettingType.Enable)
                 .TheNext(1)
                 .With(s => s.Monitored = true)
-                .With(s => s.BacklogStatus = BacklogStatusType.Inherit)
+                .With(s => s.BacklogSetting = BacklogSettingType.Inherit)
                 .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(12)
@@ -363,9 +363,9 @@ namespace NzbDrone.Core.Test.JobTests
 
             //Assert
             result.Should().NotBeEmpty();
-            result.Should().Contain(s => s.Series.BacklogStatus == BacklogStatusType.Enable);
-            result.Should().NotContain(s => s.Series.BacklogStatus == BacklogStatusType.Disable);
-            result.Should().Contain(s => s.Series.BacklogStatus == BacklogStatusType.Inherit);
+            result.Should().Contain(s => s.Series.BacklogSetting == BacklogSettingType.Enable);
+            result.Should().NotContain(s => s.Series.BacklogSetting == BacklogSettingType.Disable);
+            result.Should().Contain(s => s.Series.BacklogSetting == BacklogSettingType.Inherit);
         }
     }
 }

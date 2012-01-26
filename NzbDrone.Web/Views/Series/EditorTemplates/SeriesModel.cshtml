@@ -30,9 +30,9 @@
         <span class="small">@Html.DescriptionFor(m => m.Path)</span>
         </label>
         @Html.TextBoxFor(m => m.Path, new { @class = "inputClass" })
-        <label class="labelClass">@Html.LabelFor(m => m.BacklogStatus)
-        <span class="small">@Html.DescriptionFor(m => m.BacklogStatus)</span>
+        <label class="labelClass">@Html.LabelFor(m => m.BacklogSetting)
+        <span class="small">@Html.DescriptionFor(m => m.BacklogSetting)</span>
         </label>
-        @Html.DropDownListFor(m => m.BacklogStatus, (SelectList)ViewData["BacklogStatusSelectList"], new { @class = "inputClass" })
+        @Html.DropDownListFor(m => m.BacklogSetting, (SelectList)ViewData["BacklogSettingSelectList"], new { @class = "inputClass" })
     </div>
 </div>

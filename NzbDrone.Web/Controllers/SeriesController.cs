@@ -51,12 +51,12 @@ namespace NzbDrone.Web.Controllers
 
             var backlogStatusTypes = new List<KeyValuePair<int, string>>();
 
-            foreach (BacklogStatusType backlogStatusType in Enum.GetValues(typeof(BacklogStatusType)))
+            foreach (BacklogSettingType backlogStatusType in Enum.GetValues(typeof(BacklogSettingType)))
             {
                 backlogStatusTypes.Add(new KeyValuePair<int, string>((int)backlogStatusType, backlogStatusType.ToString()));
             }
 
-            ViewData["BacklogStatusSelectList"] = new SelectList(backlogStatusTypes, "Key", "Value");
+            ViewData["BacklogSettingSelectList"] = new SelectList(backlogStatusTypes, "Key", "Value");
 
             return View();
         }
@@ -70,14 +70,14 @@ namespace NzbDrone.Web.Controllers
 
         [AcceptVerbs(HttpVerbs.Post)]
         [GridAction]
-        public ActionResult _SaveAjaxSeriesEditing(int id, string path, bool monitored, bool seasonFolder, int qualityProfileId, int backlogStatus)
+        public ActionResult _SaveAjaxSeriesEditing(int id, string path, bool monitored, bool seasonFolder, int qualityProfileId, int backlogSetting)
         {
             var oldSeries = _seriesProvider.GetSeries(id);
             oldSeries.Monitored = monitored;
             oldSeries.SeasonFolder = seasonFolder;
             oldSeries.QualityProfileId = qualityProfileId;
             oldSeries.Path = path;
-            oldSeries.BacklogStatus = (BacklogStatusType)backlogStatus;
+            oldSeries.BacklogSetting = (BacklogSettingType)backlogSetting;
 
             _seriesProvider.UpdateSeries(oldSeries);
 
@@ -179,18 +179,18 @@ namespace NzbDrone.Web.Controllers
                                                             }, "Key", "Value"
                                                         );
 
-            var backlogStatusTypes = new List<KeyValuePair<int, string>>();
+            var backlogSettingTypes = new List<KeyValuePair<int, string>>();
 
-            foreach (BacklogStatusType backlogStatusType in Enum.GetValues(typeof(BacklogStatusType)))
+            foreach (BacklogSettingType backlogSettingType in Enum.GetValues(typeof(BacklogSettingType)))
             {
-                backlogStatusTypes.Add(new KeyValuePair<int, string>((int)backlogStatusType, backlogStatusType.ToString()));
+                backlogSettingTypes.Add(new KeyValuePair<int, string>((int)backlogSettingType, backlogSettingType.ToString()));
             }
 
-            ViewData["BacklogStatusTypes"] = backlogStatusTypes;
+            ViewData["BacklogSettingTypes"] = backlogSettingTypes;
 
-            var masterBacklogList = backlogStatusTypes.ToList();
+            var masterBacklogList = backlogSettingTypes.ToList();
             masterBacklogList.Insert(0, new KeyValuePair<int, string>(-10, "Unchanged"));
-            ViewData["MasterBacklogStatusSelectList"] = new SelectList(masterBacklogList, "Key", "Value");
+            ViewData["MasterBacklogSettingSelectList"] = new SelectList(masterBacklogList, "Key", "Value");
 
             var series = _seriesProvider.GetAllSeries().OrderBy(o => SortHelper.SkipArticles(o.Title));
 
@@ -221,7 +221,7 @@ namespace NzbDrone.Web.Controllers
                                                         QualityProfileId = s.QualityProfileId,
                                                         QualityProfileName = s.QualityProfile.Name,
                                                         SeasonFolder = s.SeasonFolder,
-                                                        BacklogStatus = (int)s.BacklogStatus,
+                                                        BacklogSetting = (int)s.BacklogSetting,
                                                         Status = s.Status,
                                                         SeasonsCount = s.SeasonCount,
                                                         EpisodeCount = s.EpisodeCount,

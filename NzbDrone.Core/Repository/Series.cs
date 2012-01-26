@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Repository
 
         public bool IsDaily { get; set; }
 
-        public BacklogStatusType BacklogStatus { get; set; }
+        public BacklogSettingType BacklogSetting { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="Series"/> is hidden.

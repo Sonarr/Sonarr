@@ -99,7 +99,7 @@
                 <label class="labelClass">Backlog Status
                     <span class="small">Should NzbDrone perform backlog searches for this series?</span>
                 </label>
-                @Html.DropDownList("masterBacklogStatus", (SelectList)ViewData["MasterBacklogStatusSelectList"], new { @class = "inputClass" })
+                @Html.DropDownList("masterBacklogSetting", (SelectList)ViewData["MasterBacklogSettingSelectList"], new { @class = "inputClass" })
             </div>
         </div>
     </div>
@@ -127,7 +127,7 @@
             var profileId = $('#masterQualitySelector').val();
             var monitored = $('#masterMonitored').val();
             var seasonFolder = $('#masterSeasonFolder').val();
-            var backlogStatus = $('#masterBacklogStatus').val();
+            var backlogStatus = $('#masterBacklogSetting').val();
 
             var selected = $('.editToggle:checked');
 
@@ -153,7 +153,7 @@
                 }
 
                 if (backlogStatus != -10) {
-                    $(this).parent('td').parent('.seriesEditRow').find('.backlogStatus').val(backlogStatus);
+                    $(this).parent('td').parent('.seriesEditRow').find('.backlogSetting').val(backlogStatus);
                 }
             });
 

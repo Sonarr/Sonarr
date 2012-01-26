@@ -229,7 +229,7 @@
     <Compile Include="Datastore\PetaPoco\PetaPoco.cs" />
     <Compile Include="Model\AtomicParsleyTitleType.cs" />
     <Compile Include="Model\ConnectionInfoModel.cs" />
-    <Compile Include="Model\BacklogStatusType.cs" />
+    <Compile Include="Model\BacklogSettingType.cs" />
     <Compile Include="Model\PostDownloadStatusType.cs" />
     <Compile Include="Model\JobQueueItem.cs" />
     <Compile Include="Model\LanguageType.cs" />

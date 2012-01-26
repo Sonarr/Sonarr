@@ -8,8 +8,7 @@ namespace NzbDrone.Core.Datastore.Migrations
     {
         protected override void MainDbUpgrade()
         {
-            Database.AddColumn("Series", "BacklogStatus", DbType.Int32, ColumnProperty.Null);
-            Database.ExecuteNonQuery("UPDATE Series SET BacklogStatus = 2");
+            Database.AddColumn("Series", "BacklogSetting", DbType.Int32, ColumnProperty.Null);
         }
     }
 }

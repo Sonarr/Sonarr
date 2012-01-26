@@ -44,8 +44,8 @@ namespace NzbDrone.Web.Models
         [Description("Should NzbDrone download episodes for this series?")]
         public bool Monitored { get; set; }
 
-        [DisplayName("Backlog Status")]
+        [DisplayName("Backlog Setting")]
         [Description("Should NzbDrone download past missing episodes?")]
-        public int BacklogStatus { get; set; }
+        public int BacklogSetting { get; set; }
     }
 }

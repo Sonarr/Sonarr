@@ -92,7 +92,7 @@ namespace NzbDrone.Core.Jobs
             {
                 Logger.Trace("Backlog searching is not enabled, only running for explicitly enabled series.");
                 return _episodeProvider.EpisodesWithoutFiles(true).Where(e =>
-                                                                                e.Series.BacklogStatus == BacklogStatusType.Enable &&
+                                                                                e.Series.BacklogSetting == BacklogSettingType.Enable &&
                                                                                 e.Series.Monitored
                                                                             ).ToList();
             }
@@ -101,7 +101,7 @@ namespace NzbDrone.Core.Jobs
             {
                 Logger.Trace("Backlog searching is enabled, skipping explicity disabled series.");
                 return _episodeProvider.EpisodesWithoutFiles(true).Where(e =>
-                                                                                e.Series.BacklogStatus != BacklogStatusType.Disable &&
+                                                                                e.Series.BacklogSetting != BacklogSettingType.Disable &&
                                                                                 e.Series.Monitored
                                                                             ).ToList();
             }
