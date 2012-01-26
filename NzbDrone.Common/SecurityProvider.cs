@@ -37,17 +37,22 @@ namespace NzbDrone.Common
                 return;
             }
 
-            if (IsNzbDronePortOpen())
+            int port = 0;
+
+            if (IsFirewallEnabled())
             {
-                Logger.Trace("NzbDrone port is already open, skipping.");
-                return;
+                if(IsNzbDronePortOpen())
+                {
+                    Logger.Trace("NzbDrone port is already open, skipping.");
+                    return;
+                }
+
+                //Close any old ports
+                port = CloseFirewallPort();
+
+                //Open the new port
+                OpenFirewallPort(_configFileProvider.Port);
             }
-
-            //Close any old ports
-            var port = CloseFirewallPort();
-
-            //Open the new port
-            OpenFirewallPort(_configFileProvider.Port);
 
             //Skip Url Register if not Vista or 7
             if (_enviromentProvider.GetOsVersion().Major < 6)
@@ -123,7 +128,7 @@ namespace NzbDrone.Common
             }
             catch(Exception ex)
             {
-                Logger.WarnException("Failed to open port in firewall for NzbDrone" + portNumber, ex);
+                Logger.WarnException("Failed to open port in firewall for NzbDrone " + portNumber, ex);
                 return false;
             }
         }
@@ -159,6 +164,22 @@ namespace NzbDrone.Common
             }
 
             return 0;
+        }
+
+        private bool IsFirewallEnabled()
+        {
+            try
+            {
+                var netFwMgrType = Type.GetTypeFromProgID("HNetCfg.FwMgr", false);
+                var mgr = (INetFwMgr)Activator.CreateInstance(netFwMgrType);
+                return mgr.LocalPolicy.CurrentProfile.FirewallEnabled;
+            }
+
+            catch(Exception ex)
+            {
+                Logger.WarnException("Failed to check if the firewall is enabled", ex);
+                return false;
+            }
         }
 
         private bool RegisterUrl(int portNumber)
