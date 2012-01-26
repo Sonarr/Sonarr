@@ -60,7 +60,11 @@ namespace NzbDrone.Core
 
         private void InitAnalytics()
         {
-            var deskMetricsClient = new DeskMetricsClient(Kernel.Get<ConfigProvider>().UGuid, AnalyticsProvider.DESKMETRICS_ID, _enviromentProvider.Version);
+            var appId = AnalyticsProvider.DESKMETRICS_TEST_ID;
+            if (EnviromentProvider.IsProduction)
+                appId = AnalyticsProvider.DESKMETRICS_PRODUCTION_ID;
+
+            var deskMetricsClient = new DeskMetricsClient(Kernel.Get<ConfigProvider>().UGuid, appId, _enviromentProvider.Version);
             Kernel.Bind<IDeskMetricsClient>().ToConstant(deskMetricsClient);
             Kernel.Get<AnalyticsProvider>().Checkpoint();
         }

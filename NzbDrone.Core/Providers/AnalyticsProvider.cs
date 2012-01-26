@@ -8,7 +8,8 @@ namespace NzbDrone.Core.Providers
     public class AnalyticsProvider
     {
         private readonly IDeskMetricsClient _deskMetricsClient;
-        public const string DESKMETRICS_ID = "4ea8d347a14ad71442000002";
+        public const string DESKMETRICS_TEST_ID = "4ea8d347a14ad71442000002";
+        public const string DESKMETRICS_PRODUCTION_ID = "4f20b01ea14ad729b2000000";
 
         [Inject]
         public AnalyticsProvider(IDeskMetricsClient deskMetricsClient)

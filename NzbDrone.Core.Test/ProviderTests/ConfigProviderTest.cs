@@ -140,11 +140,8 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Description("This test will use reflection to ensure each config property read/writes to a unique key")]
         public void config_properties_should_write_and_read_using_same_key()
         {
-
-            WithStrictMocker();
-
             var configProvider = Mocker.Resolve<ConfigProvider>();
-            var allProperties = typeof(ConfigProvider).GetProperties();
+            var allProperties = typeof(ConfigProvider).GetProperties().Where(p => p.GetSetMethod() != null);
 
 
             //Act
