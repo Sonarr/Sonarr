@@ -92,4 +92,4 @@
 .t-window-actions .t-state-hover,.t-editor-button .t-state-hover{border-color:#fff;background-color:transparent}
 .t-editor-button .t-state-active{border-color:#fff;background-color:#57b5df}
 /*rounded corners and shadows*/.t-button,div.t-window,.t-window-titlebar,div.t-window-content,.t-window-titlebar .t-state-hover,.t-tabstrip-items .t-item,.t-panelbar .t-tabstrip-items .t-item,.t-pager .t-state-active,.t-pager .t-state-hover,.t-grid .t-filter-options,.t-grouping-header .t-group-indicator,.t-treeview .t-state-hover,.t-treeview .t-state-selected,.t-colorpicker .t-selected-color,.t-editor-button .t-state-hover,.t-editor-button .t-state-active,.t-drag-clue,.t-tooltip,.t-dropzone,.t-upload-files,.t-progress,.t-progress-status,.t-tile{-moz-border-radius:0;-webkit-border-radius:0;border-radius:0}
-.t-popup,.t-menu .t-group,div.t-window,.t-imagebrowser .t-image{-moz-box-shadow:0;-webkit-box-shadow:0;box-shadow:0}
+.t-popup,.t-menu .t-group,div.t-window,.t-imagebrowser .t-image{-moz-box-shadow:none;-webkit-box-shadow:none;box-shadow:none}

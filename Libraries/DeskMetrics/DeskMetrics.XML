@@ -19,61 +19,6 @@
             GetProcessorFrequency Screen resolution GetComponentName
             </summary>
         </member>
-        <member name="F:DeskMetrics.OperatingSystem.WindowsOperatingSystem._servicePack">
-            <summary>
-            Field OS Service Pack
-            </summary>
-        </member>
-        <member name="M:DeskMetrics.OperatingSystem.WindowsOperatingSystem.GetFrameworkVersion">
-            <summary>
-            GetProcessorFrequency Framework ApplicationVersion GetComponentName
-            </summary>
-        </member>
-        <member name="M:DeskMetrics.OperatingSystem.WindowsOperatingSystem.GetArchicteture">
-            <summary>
-            GetProcessorFrequency OS Archicteture GetComponentName
-            </summary>
-        </member>
-        <member name="M:DeskMetrics.OperatingSystem.WindowsOperatingSystem.GetVersion">
-            <summary>
-            GetProcessorFrequency OS ApplicationVersion GetComponentName
-            </summary>
-        </member>
-        <member name="M:DeskMetrics.OperatingSystem.WindowsOperatingSystem.GetJavaVersion">
-            <summary>
-            GetProcessorFrequency Java version GetComponentName
-            </summary>
-        </member>
-        <member name="P:DeskMetrics.OperatingSystem.WindowsOperatingSystem.FrameworkVersion">
-            <summary>
-            GetProcessorFrequency and Set Framework ApplicationVersion
-            </summary>
-        </member>
-        <member name="P:DeskMetrics.OperatingSystem.WindowsOperatingSystem.Architecture">
-            <summary>
-            GetProcessorFrequency and Set OS Archicteture
-            </summary>
-        </member>
-        <member name="P:DeskMetrics.OperatingSystem.WindowsOperatingSystem.Version">
-            <summary>
-            GetProcessorFrequency and Set OS ApplicationVersion
-            </summary>
-        </member>
-        <member name="P:DeskMetrics.OperatingSystem.WindowsOperatingSystem.FrameworkServicePack">
-            <summary>
-            GetProcessorFrequency and Set Frameworl Service Pack
-            </summary>
-        </member>
-        <member name="P:DeskMetrics.OperatingSystem.WindowsOperatingSystem.JavaVersion">
-            <summary>
-            GetProcessorFrequency and Set Java ApplicationVersion
-            </summary>
-        </member>
-        <member name="P:DeskMetrics.OperatingSystem.WindowsOperatingSystem.ServicePack">
-            <summary>
-            GetProcessorFrequency and Set OS Service Pack
-            </summary>
-        </member>
         <member name="M:DeskMetrics.IDeskMetricsClient.Start">
             <summary>
             Starts the application tracking.
@@ -159,6 +104,61 @@
             The log message
             </param>
         </member>
+        <member name="F:DeskMetrics.OperatingSystem.WindowsOperatingSystem._servicePack">
+            <summary>
+            Field OS Service Pack
+            </summary>
+        </member>
+        <member name="M:DeskMetrics.OperatingSystem.WindowsOperatingSystem.GetFrameworkVersion">
+            <summary>
+            GetProcessorFrequency Framework ApplicationVersion GetComponentName
+            </summary>
+        </member>
+        <member name="M:DeskMetrics.OperatingSystem.WindowsOperatingSystem.GetArchicteture">
+            <summary>
+            GetProcessorFrequency OS Archicteture GetComponentName
+            </summary>
+        </member>
+        <member name="M:DeskMetrics.OperatingSystem.WindowsOperatingSystem.GetVersion">
+            <summary>
+            GetProcessorFrequency OS ApplicationVersion GetComponentName
+            </summary>
+        </member>
+        <member name="M:DeskMetrics.OperatingSystem.WindowsOperatingSystem.GetJavaVersion">
+            <summary>
+            GetProcessorFrequency Java version GetComponentName
+            </summary>
+        </member>
+        <member name="P:DeskMetrics.OperatingSystem.WindowsOperatingSystem.FrameworkVersion">
+            <summary>
+            GetProcessorFrequency and Set Framework ApplicationVersion
+            </summary>
+        </member>
+        <member name="P:DeskMetrics.OperatingSystem.WindowsOperatingSystem.Architecture">
+            <summary>
+            GetProcessorFrequency and Set OS Archicteture
+            </summary>
+        </member>
+        <member name="P:DeskMetrics.OperatingSystem.WindowsOperatingSystem.Version">
+            <summary>
+            GetProcessorFrequency and Set OS ApplicationVersion
+            </summary>
+        </member>
+        <member name="P:DeskMetrics.OperatingSystem.WindowsOperatingSystem.FrameworkServicePack">
+            <summary>
+            GetProcessorFrequency and Set Frameworl Service Pack
+            </summary>
+        </member>
+        <member name="P:DeskMetrics.OperatingSystem.WindowsOperatingSystem.JavaVersion">
+            <summary>
+            GetProcessorFrequency and Set Java ApplicationVersion
+            </summary>
+        </member>
+        <member name="P:DeskMetrics.OperatingSystem.WindowsOperatingSystem.ServicePack">
+            <summary>
+            GetProcessorFrequency and Set OS Service Pack
+            </summary>
+        </member>
         <member name="M:DeskMetrics.DeskMetricsClient.Start">
             <summary>
             Starts the application tracking.
@@ -243,6 +243,36 @@
             <param name="message">
             The log message
             </param>
+        </member>
+        <member name="P:DeskMetrics.DeskMetricsClient.Started">
+            <summary>
+            Indicates if the Start() has been called and a session is active.
+            </summary>
+        </member>
+        <member name="P:DeskMetrics.DeskMetricsClient.SessionId">
+            <summary>
+            Currently active session. will be null if no sessions are active.
+            </summary>
+        </member>
+        <member name="P:DeskMetrics.DeskMetricsClient.ApplicationId">
+            <summary>
+            DeskmMtrics Application ID
+            </summary>
+        </member>
+        <member name="P:DeskMetrics.DeskMetricsClient.ApplicationVersion">
+            <summary>
+            Version of application being tracked.
+            </summary>
+        </member>
+        <member name="P:DeskMetrics.DeskMetricsClient.Enabled">
+            <summary>
+            Checks if application events are tracked.
+            </summary>
+        </member>
+        <member name="P:DeskMetrics.DeskMetricsClient.UserId">
+            <summary>
+            Anonymous identifier of the user being tracked.
+            </summary>
         </member>
     </members>
 </doc>

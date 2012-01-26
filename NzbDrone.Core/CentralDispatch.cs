@@ -20,11 +20,14 @@ namespace NzbDrone.Core
     public class CentralDispatch
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private readonly EnviromentProvider _enviromentProvider;
 
         public StandardKernel Kernel { get; private set; }
 
         public CentralDispatch()
         {
+            _enviromentProvider = new EnviromentProvider();
+
             Logger.Debug("Initializing Kernel:");
             Kernel = new StandardKernel();
 
@@ -42,7 +45,7 @@ namespace NzbDrone.Core
         {
             Logger.Info("Initializing Database...");
 
-            var appDataPath = new EnviromentProvider().GetAppDataPath();
+            var appDataPath = _enviromentProvider.GetAppDataPath();
             if (!Directory.Exists(appDataPath)) Directory.CreateDirectory(appDataPath);
 
             var connection = Kernel.Get<Connection>();
@@ -57,7 +60,7 @@ namespace NzbDrone.Core
 
         private void InitAnalytics()
         {
-            var deskMetricsClient = new DeskMetricsClient(Kernel.Get<ConfigProvider>().UGuid, AnalyticsProvider.DESKMETRICS_ID, new EnviromentProvider().Version);
+            var deskMetricsClient = new DeskMetricsClient(Kernel.Get<ConfigProvider>().UGuid, AnalyticsProvider.DESKMETRICS_ID, _enviromentProvider.Version);
             Kernel.Bind<IDeskMetricsClient>().ToConstant(deskMetricsClient);
             Kernel.Get<AnalyticsProvider>().Checkpoint();
         }
@@ -107,6 +110,7 @@ namespace NzbDrone.Core
             Kernel.Bind<IJob>().To<AppUpdateJob>().InSingletonScope();
             Kernel.Bind<IJob>().To<TrimLogsJob>().InSingletonScope();
             Kernel.Bind<IJob>().To<RecentBacklogSearchJob>().InSingletonScope();
+            Kernel.Bind<IJob>().To<CheckpointJob>().InSingletonScope();
 
             Kernel.Get<JobProvider>().Initialize();
             Kernel.Get<WebTimer>().StartTimer(30);
@@ -129,7 +133,7 @@ namespace NzbDrone.Core
         {
             try
             {
-                var pid = new EnviromentProvider().NzbDroneProcessIdFromEnviroment;
+                var pid = _enviromentProvider.NzbDroneProcessIdFromEnviroment;
 
                 Logger.Debug("Attaching to parent process ({0}) for automatic termination.", pid);
 

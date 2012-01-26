@@ -23,16 +23,16 @@ namespace NzbDrone.Core.Providers
 
         public virtual void Checkpoint()
         {
-            if (_deskMetricsClient.Started)
-            {
-                _deskMetricsClient.Stop();
-            }
-
             if (EnviromentProvider.IsNewInstall)
             {
                 _deskMetricsClient.RegisterInstall();
             }
 
+            if (_deskMetricsClient.Started)
+            {
+                _deskMetricsClient.Stop();
+            }
+            
             _deskMetricsClient.Start();
         }
     }
