@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -421,7 +422,8 @@ namespace NzbDrone.Core
 
             if (match.Count != 0)
             {
-                var value = Convert.ToDecimal(Regex.Replace(match[0].Groups["value"].Value, "\\,", ""));
+                var cultureInfo = new CultureInfo("en-US");
+                var value = Decimal.Parse(Regex.Replace(match[0].Groups["value"].Value, "\\,", ""), cultureInfo);
 
                 var unit = match[0].Groups["unit"].Value;
 
