@@ -2,13 +2,13 @@
 
 namespace NzbDrone.Core.Helpers
 {
-    public class FileSizeFormatHelper
+    public static class FileSizeFormatHelper
     {
         private const Decimal OneKiloByte = 1024M;
         private const Decimal OneMegaByte = OneKiloByte * 1024M;
         private const Decimal OneGigaByte = OneMegaByte * 1024M;
 
-        public static string Format(long bytes, int precision)
+        public static string Format(long bytes, int precision = 0)
         {
             if (bytes == 0)
                 return "0B";

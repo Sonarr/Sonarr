@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Ninject;
 using NLog;
+using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
@@ -88,7 +89,7 @@ namespace NzbDrone.Core.Providers
 
             if (!IsAcceptableSize(parsedReport))
             {
-                Logger.Trace("Size: {0} is not acceptable for Quality: {1}", parsedReport.Size, parsedReport.Quality);
+                Logger.Info("Size: {0} is not acceptable for Quality: {1}", FileSizeFormatHelper.Format(parsedReport.Size, 2), parsedReport.Quality);
                 return false;
             }
 
