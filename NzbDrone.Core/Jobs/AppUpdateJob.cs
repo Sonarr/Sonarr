@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Jobs
 
         public virtual void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
         {
-            notification.CurrentMessage = "Updating NzbDrone";
+            notification.CurrentMessage = "Checking for updates";
 
             var updatePackage = _updateProvider.GetAvilableUpdate();
 

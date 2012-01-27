@@ -1,24 +1,9 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>DeskMetrics</name>
+        <name>DeskMetrics.NET</name>
     </assembly>
     <members>
-        <member name="M:DeskMetrics.OperatingSystem.Hardware.WindowsHardware.GetMemoryData">
-            <summary>
-            GetProcessorFrequency  Physical Memory  GetComponentName
-            </summary>
-        </member>
-        <member name="M:DeskMetrics.OperatingSystem.Hardware.WindowsHardware.GetDiskData">
-            <summary>
-            GetProcessorFrequency Disk Size  GetComponentName
-            </summary>
-        </member>
-        <member name="M:DeskMetrics.OperatingSystem.Hardware.WindowsHardware.GetScreenResolution">
-            <summary>
-            GetProcessorFrequency Screen resolution GetComponentName
-            </summary>
-        </member>
         <member name="M:DeskMetrics.IDeskMetricsClient.Start">
             <summary>
             Starts the application tracking.
@@ -103,61 +88,6 @@
             <param name="message">
             The log message
             </param>
-        </member>
-        <member name="F:DeskMetrics.OperatingSystem.WindowsOperatingSystem._servicePack">
-            <summary>
-            Field OS Service Pack
-            </summary>
-        </member>
-        <member name="M:DeskMetrics.OperatingSystem.WindowsOperatingSystem.GetFrameworkVersion">
-            <summary>
-            GetProcessorFrequency Framework ApplicationVersion GetComponentName
-            </summary>
-        </member>
-        <member name="M:DeskMetrics.OperatingSystem.WindowsOperatingSystem.GetArchicteture">
-            <summary>
-            GetProcessorFrequency OS Archicteture GetComponentName
-            </summary>
-        </member>
-        <member name="M:DeskMetrics.OperatingSystem.WindowsOperatingSystem.GetVersion">
-            <summary>
-            GetProcessorFrequency OS ApplicationVersion GetComponentName
-            </summary>
-        </member>
-        <member name="M:DeskMetrics.OperatingSystem.WindowsOperatingSystem.GetJavaVersion">
-            <summary>
-            GetProcessorFrequency Java version GetComponentName
-            </summary>
-        </member>
-        <member name="P:DeskMetrics.OperatingSystem.WindowsOperatingSystem.FrameworkVersion">
-            <summary>
-            GetProcessorFrequency and Set Framework ApplicationVersion
-            </summary>
-        </member>
-        <member name="P:DeskMetrics.OperatingSystem.WindowsOperatingSystem.Architecture">
-            <summary>
-            GetProcessorFrequency and Set OS Archicteture
-            </summary>
-        </member>
-        <member name="P:DeskMetrics.OperatingSystem.WindowsOperatingSystem.Version">
-            <summary>
-            GetProcessorFrequency and Set OS ApplicationVersion
-            </summary>
-        </member>
-        <member name="P:DeskMetrics.OperatingSystem.WindowsOperatingSystem.FrameworkServicePack">
-            <summary>
-            GetProcessorFrequency and Set Frameworl Service Pack
-            </summary>
-        </member>
-        <member name="P:DeskMetrics.OperatingSystem.WindowsOperatingSystem.JavaVersion">
-            <summary>
-            GetProcessorFrequency and Set Java ApplicationVersion
-            </summary>
-        </member>
-        <member name="P:DeskMetrics.OperatingSystem.WindowsOperatingSystem.ServicePack">
-            <summary>
-            GetProcessorFrequency and Set OS Service Pack
-            </summary>
         </member>
         <member name="M:DeskMetrics.DeskMetricsClient.Start">
             <summary>

@@ -121,8 +121,8 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DeskMetrics">
-      <HintPath>..\Libraries\DeskMetrics\DeskMetrics.dll</HintPath>
+    <Reference Include="DeskMetrics.NET">
+      <HintPath>..\Libraries\DeskMetrics\DeskMetrics.NET.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.4.2.0.0\lib\net40\EntityFramework.dll</HintPath>
