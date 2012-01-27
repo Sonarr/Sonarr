@@ -273,7 +273,7 @@ namespace NzbDrone.Core.Providers
                             if (_downloadProvider.DownloadReport(episodeParseResult))
                             {
                                 notification.CurrentMessage =
-                                        String.Format("{0} - S{1:00}E{2:00} {3}Added to download queue",
+                                        String.Format("{0} - S{1:00}E{2:00} {3} Added to download queue",
                                                       episodeParseResult.Series.Title, episodeParseResult.SeasonNumber,
                                                       episodeParseResult.EpisodeNumbers[0], episodeParseResult.Quality);
 
@@ -324,7 +324,7 @@ namespace NzbDrone.Core.Providers
                             if (_downloadProvider.DownloadReport(episodeParseResult))
                             {
                                 notification.CurrentMessage =
-                                        String.Format("{0} - {1} {2}Added to download queue",
+                                        String.Format("{0} - {1} {2} Added to download queue",
                                                       episodeParseResult.Series.Title, episodeParseResult.AirDate.Value.ToShortDateString(), episodeParseResult.Quality);
 
                                 return true;
