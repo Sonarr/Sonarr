@@ -28,6 +28,11 @@
             <span class="small">@Html.DescriptionFor(m => m.AuthenticationType)</span>
         </label>
         @Html.DropDownListFor(m => m.AuthenticationType, Model.AuthTypeSelectList, new { @class = "inputClass" })
+
+        <label class="labelClass"> Backup Configuration
+            <span class="small">Backup your Configuration file and Database</span>
+        </label>
+        <input type="button" value="Backup Now" onclick="window.location='../System/Backup'; return false;" class="inputClass" />
         
         <button type="submit" class="save_button" disabled="disabled">
             Save</button>
