@@ -36,8 +36,9 @@
     <Reference Include="Accessibility">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="DeskMetrics">
-      <HintPath>..\Libraries\DeskMetrics\DeskMetrics.dll</HintPath>
+    <Reference Include="DeskMetrics.NET, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libraries\DeskMetrics\DeskMetrics.NET.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.4.2.0.0\lib\net40\EntityFramework.dll</HintPath>
