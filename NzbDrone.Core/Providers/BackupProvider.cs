@@ -28,26 +28,18 @@ namespace NzbDrone.Core.Providers
 
         public virtual string CreateBackupZip()
         {
-            try
-            {
-                var dbFile = _enviromentProvider.GetNzbDronoeDbFile();
-                var configFile = _enviromentProvider.GetConfigPath();
-                var zipFile = _enviromentProvider.GetConfigBackupFile();
+            var dbFile = _enviromentProvider.GetNzbDronoeDbFile();
+            var configFile = _enviromentProvider.GetConfigPath();
+            var zipFile = _enviromentProvider.GetConfigBackupFile();
 
-                using (var zip = new ZipFile())
-                {
-                    zip.AddFile(dbFile, String.Empty);
-                    zip.AddFile(configFile, String.Empty);
-                    zip.Save(zipFile);
-                }
-
-                return zipFile;
-            }
-            catch (Exception ex)
+            using (var zip = new ZipFile())
             {
-                logger.ErrorException("Failed to create backup zip", ex);
-                throw;
+                zip.AddFile(dbFile, String.Empty);
+                zip.AddFile(configFile, String.Empty);
+                zip.Save(zipFile);
             }
+
+            return zipFile;
         }
     }
 }
