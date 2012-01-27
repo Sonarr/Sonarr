@@ -12,11 +12,8 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskProviderTests
         [Test]
         public void Should_extract_to_correct_folder()
         {
-            var archiveProvider = new ArchiveProvider();
-
             var destination = Path.Combine(TempFolder, "destination");
-            archiveProvider.ExtractArchive(GetTestFilePath("TestArchive.zip"), destination);
-
+            Mocker.Resolve<ArchiveProvider>().ExtractArchive(GetTestFilePath("TestArchive.zip"), destination);
 
             var destinationFolder = new DirectoryInfo(destination);
 

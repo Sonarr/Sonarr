@@ -1,13 +1,16 @@
-﻿using System.Linq;
+﻿using System;
+using System.IO;
+using System.Linq;
 using Ionic.Zip;
 using NLog;
+using Ninject;
+using NzbDrone.Common;
 
 namespace NzbDrone.Core.Providers.Core
 {
     public class ArchiveProvider
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
-      
 
         public virtual void ExtractArchive(string compressedFile, string destination)
         {
@@ -20,6 +23,5 @@ namespace NzbDrone.Core.Providers.Core
 
             logger.Trace("Extraction complete.");
         }
-
     }
 }

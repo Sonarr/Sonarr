@@ -19,13 +19,17 @@ namespace NzbDrone.Web.Controllers
         private readonly IndexerProvider _indexerProvider;
         private readonly ConfigProvider _configProvider;
         private readonly DiskProvider _diskProvider;
+        private readonly BackupProvider _backupProvider;
 
-        public SystemController(JobProvider jobProvider, IndexerProvider indexerProvider, ConfigProvider configProvider, DiskProvider diskProvider)
+        public SystemController(JobProvider jobProvider, IndexerProvider indexerProvider,
+                                    ConfigProvider configProvider, DiskProvider diskProvider,
+                                    BackupProvider backupProvider)
         {
             _jobProvider = jobProvider;
             _indexerProvider = indexerProvider;
             _configProvider = configProvider;
             _diskProvider = diskProvider;
+            _backupProvider = backupProvider;
         }
 
         public ActionResult Jobs()
@@ -48,12 +52,10 @@ namespace NzbDrone.Web.Controllers
             return View(_indexerProvider.All());
         }
 
-
         public ActionResult Config()
         {
             return View(_configProvider.All());
         }
-
 
         [GridAction]
         public ActionResult _SelectAjaxEditing()
@@ -143,6 +145,14 @@ namespace NzbDrone.Web.Controllers
                 return JsonNotificationResult.Opps("Invalid Job Name");
 
             return JsonNotificationResult.Info("Job Queued");
+        }
+
+        public ActionResult Backup()
+        {
+            var file = _backupProvider.CreateBackupZip();
+            var fileInfo = new FileInfo(file);
+
+            return File(fileInfo.FullName, "application/binary", fileInfo.Name);
         }
     }
 }

@@ -17,6 +17,8 @@ namespace NzbDrone.Common
         public const string NZBDRONE_DB_FILE = "nzbdrone.sdf";
         public const string LOG_DB_FILE = "log.sdf";
 
+        private const string BACKUP_ZIP_FILE = "NzbDrone_Backup.zip";
+
         private const string UPDATE_SANDBOX_FOLDER_NAME = "nzbdrone_update\\";
         private const string UPDATE_PACKAGE_FOLDER_NAME = "nzbdrone\\";
         private const string UPDATE_BACKUP_FOLDER_NAME = "nzbdrone_backup\\";
@@ -144,9 +146,15 @@ namespace NzbDrone.Common
         {
             return Path.Combine(enviromentProvider.ApplicationPath, "nzbdrone.log.txt");
         }
+
         public static string GetArchivedLogFileName(this EnviromentProvider enviromentProvider)
         {
             return Path.Combine(enviromentProvider.ApplicationPath, "nzbdrone.log.0.txt");
+        }
+
+        public static string GetConfigBackupFile(this EnviromentProvider enviromentProvider)
+        {
+            return Path.Combine(enviromentProvider.GetAppDataPath(), BACKUP_ZIP_FILE);
         }
     }
 }
