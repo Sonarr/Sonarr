@@ -19,17 +19,17 @@ namespace NzbDrone.Web.Controllers
         private readonly IndexerProvider _indexerProvider;
         private readonly ConfigProvider _configProvider;
         private readonly DiskProvider _diskProvider;
-        private readonly ArchiveProvider _archiveProvider;
+        private readonly BackupProvider _backupProvider;
 
         public SystemController(JobProvider jobProvider, IndexerProvider indexerProvider,
                                     ConfigProvider configProvider, DiskProvider diskProvider,
-                                    ArchiveProvider archiveProvider)
+                                    BackupProvider backupProvider)
         {
             _jobProvider = jobProvider;
             _indexerProvider = indexerProvider;
             _configProvider = configProvider;
             _diskProvider = diskProvider;
-            _archiveProvider = archiveProvider;
+            _backupProvider = backupProvider;
         }
 
         public ActionResult Jobs()
@@ -149,8 +149,10 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult Backup()
         {
-            var file = _archiveProvider.CreateBackupZip();
-            return File(file.FullName, "application/binary", file.Name);
+            var file = _backupProvider.CreateBackupZip();
+            var fileInfo = new FileInfo(file);
+
+            return File(fileInfo.FullName, "application/binary", fileInfo.Name);
         }
     }
 }
