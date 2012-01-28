@@ -93,6 +93,27 @@
             "verbosity":""
          },
          {
+            "avg_age":"580d",
+            "cat":"tv",
+            "eta":"01:45 PM Mon 23 Jan",
+            "filename":"Invalid Item",
+            "index":1,
+            "mb":"419.23",
+            "mbleft":"419.23",
+            "missing":0,
+            "msgid":5657628,
+            "nzo_id":"SABnzbd_nzo_dgrzts",
+            "percentage":"0",
+            "priority":"Normal",
+            "script":"None",
+            "size":"419 MB",
+            "sizeleft":"419 MB",
+            "status":"Queued",
+            "timeleft":"86:01:55",
+            "unpackopts":"3",
+            "verbosity":""
+         },
+         {
             "status":"Paused",
             "index":1,
             "eta":"unknown",
