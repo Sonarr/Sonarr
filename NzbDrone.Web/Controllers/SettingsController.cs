@@ -113,6 +113,7 @@ namespace NzbDrone.Web.Controllers
                                 DownloadClientDropDirectory = _configProvider.SabDropDirectory,
                                 SabTvCategorySelectList = tvCategorySelectList,
                                 DownloadClient = (int)_configProvider.DownloadClient,
+                                BlackholeDirectory = _configProvider.BlackholeDirectory,
                                 DownloadClientSelectList = new SelectList(downloadClientTypes, "Key", "Value")
                             };
 
@@ -393,6 +394,7 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.SabUsername = data.SabUsername;
                 _configProvider.SabTvPriority = data.SabTvPriority;
                 _configProvider.SabDropDirectory = data.DownloadClientDropDirectory;
+                _configProvider.BlackholeDirectory = data.BlackholeDirectory;
                 _configProvider.DownloadClient = (DownloadClientType)data.DownloadClient;
 
                 return GetSuccessResult();
