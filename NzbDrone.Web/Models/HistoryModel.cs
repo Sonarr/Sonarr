@@ -18,5 +18,6 @@ namespace NzbDrone.Web.Models
         public bool IsProper { get; set; }
         public string Indexer { get; set; }
         public int EpisodeId { get; set; }
+        public bool Blacklisted { get; set; }
     }
 }

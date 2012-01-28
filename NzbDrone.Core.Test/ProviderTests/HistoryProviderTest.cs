@@ -299,5 +299,43 @@ namespace NzbDrone.Core.Test.ProviderTests
             //Assert
             result.Should().BeTrue();
         }
+
+        [Test]
+        public void SetBlacklist_should_set_to_true_when_true_is_passed_in()
+        {
+            WithRealDb();
+
+            var history = Builder<History>.CreateNew()
+                    .With(h => h.Blacklisted = false)
+                    .Build();
+
+            Db.Insert(history);
+
+            //Act
+            Mocker.Resolve<HistoryProvider>().SetBlacklist(history.HistoryId, true);
+
+            //Assert
+            var result = Db.Single<History>(history.HistoryId);
+            result.Blacklisted.Should().BeTrue();
+        }
+
+        [Test]
+        public void SetBlacklist_should_set_to_false_when_false_is_passed_in()
+        {
+            WithRealDb();
+
+            var history = Builder<History>.CreateNew()
+                    .With(h => h.Blacklisted = true)
+                    .Build();
+
+            Db.Insert(history);
+
+            //Act
+            Mocker.Resolve<HistoryProvider>().SetBlacklist(history.HistoryId, false);
+
+            //Assert
+            var result = Db.Single<History>(history.HistoryId);
+            result.Blacklisted.Should().BeFalse();
+        }
     }
 }

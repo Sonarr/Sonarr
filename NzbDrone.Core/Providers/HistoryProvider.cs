@@ -78,5 +78,10 @@ namespace NzbDrone.Core.Providers
         {
             return _database.Exists<History>("WHERE Blacklisted = 1 AND NewzbinId = @0", newzbinId);
         }
+
+        public virtual void SetBlacklist(int historyId, bool toggle)
+        {
+            _database.Execute("UPDATE History SET Blacklisted = @0 WHERE HistoryId = @1", toggle, historyId);
+        }
     }
 }

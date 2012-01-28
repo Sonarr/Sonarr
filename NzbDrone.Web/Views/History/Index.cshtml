@@ -11,6 +11,20 @@
 @section HeaderContent
 {
     @Html.IncludeCss("Grid.css")
+    
+    <style>
+    .blacklist
+    {
+        width: 18px;
+        height: 18px;
+        padding: 1px;
+        margin: 2px;
+    }
+    
+    .blacklist:hover
+    {
+    }
+    </style>
 }
 <div class="grid-container">
     @{Html.Telerik().Grid<HistoryModel>().Name("history")
@@ -33,7 +47,8 @@
                                columns.Bound(c => c.Date).Title("Grabbed on");
                                columns.Bound(c => c.HistoryId)
                                        .Title("Actions")
-                                       .ClientTemplate(Ajax.ImageActionLink("../../Content/Images/X.png", new { Alt = "Delete", Title = "Delete from history", @class = "searchImage" }, "Delete", "History", new { HistoryId = "<#= HistoryId #>" }, new AjaxOptions { OnSuccess = "reloadHistoryGrid" }, null).ToString() +
+                                       .ClientTemplate("<img src='../../Content/Images/blacklist_<#= Blacklisted #>.png' class='blacklist blacklist_<#= Blacklisted #>' id='<#= HistoryId #>' title='Click to toggle blacklisting status' />" +
+                                                       Ajax.ImageActionLink("../../Content/Images/X.png", new { Alt = "Delete", Title = "Delete from history", @class = "searchImage" }, "Delete", "History", new { HistoryId = "<#= HistoryId #>" }, new AjaxOptions { OnSuccess = "reloadHistoryGrid" }, null).ToString() +
                                                        Ajax.ImageActionLink("../../Content/Images/Downloading.png", new { Alt = "Redownload", Title = "Redownlod Episode", @class = "searchImage" }, "Redownload", "History", new { HistoryId = "<#= HistoryId #>", EpisodeId = "<#= EpisodeId #>" }, new AjaxOptions { OnSuccess = "reloadHistoryGrid" }, null).ToString())
                                        .Width("40");
                            })
@@ -54,9 +69,41 @@
 <script type="text/javascript">
     deleteHistoryRowUrl = '../History/Delete';
     redownloadUrl = '../History/Redownload';
+    var toggleBlacklistUrl = '../History/ToggleBlacklist';
+    var blacklistedTrueImage = '../../Content/Images/blacklist_true.png';
+    var blacklistedFalseImage = '../../Content/Images/blacklist_false.png';
 
     function reloadHistoryGrid() {
         var grid = $('#history').data('tGrid');
         grid.ajaxRequest();
+    }
+
+    $(".blacklist").live("click", function () {
+        var toggle = $(this);
+        var result = toggle.hasClass('blacklist_true');
+        var id = toggle.attr('id');
+
+        toggle.toggleClass('blacklist_true blacklist_false');
+        
+        if (result) {
+            toggle.attr('src', blacklistedFalseImage);
+            toggleBlacklist(id, false);
+        }
+
+        else {
+            toggle.attr('src', blacklistedTrueImage);
+            toggleBlacklist(id, true);
+        }
+    });
+
+    function toggleBlacklist(historyId, toggle) {
+        $.ajax({
+            type: "POST",
+            url: toggleBlacklistUrl,
+            data: jQuery.param({ historyId: historyId, toggle: toggle }),
+            error: function (req, status, error) {
+                alert("Sorry! We could not toggle blacklist for History: " + historyId + " " + error);
+            }
+        });
     }
 </script>

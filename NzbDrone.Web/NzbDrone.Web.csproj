@@ -141,6 +141,8 @@
     <Content Include="Content\2011.3.1115\telerik.metro.min.css" />
     <Content Include="Content\2011.3.1115\telerik.sitefinity.min.css" />
     <Content Include="Content\Images\background.jpg" />
+    <Content Include="Content\Images\blacklist_false.png" />
+    <Content Include="Content\Images\blacklist_true.png" />
     <Content Include="Content\Images\blue.png" />
     <Content Include="Content\Images\Gear.png" />
     <Content Include="Content\Images\green.png" />
