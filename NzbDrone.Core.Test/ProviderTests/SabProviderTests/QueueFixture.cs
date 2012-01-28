@@ -94,7 +94,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SabProviderTests
 
             var result = Mocker.Resolve<SabProvider>().GetQueue();
 
-            result.Should().HaveCount(3);
+            result.Should().HaveCount(4);
         }
 
         [Test]
@@ -207,6 +207,12 @@ namespace NzbDrone.Core.Test.ProviderTests.SabProviderTests
             var result = Mocker.Resolve<SabProvider>().IsInQueue(parseResult);
 
             result.Should().BeFalse();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            ExceptionVerification.IgnoreWarns();
         }
 
 

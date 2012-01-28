@@ -75,7 +75,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual bool IsInQueue(EpisodeParseResult newParseResult)
         {
-            var queue = GetQueue();
+            var queue = GetQueue().Where(c => c.ParseResult != null);
 
             return queue.Any(sabQueueItem => String.Equals(sabQueueItem.ParseResult.CleanTitle, newParseResult.Series.CleanTitle, StringComparison.InvariantCultureIgnoreCase) &&
                                   sabQueueItem.ParseResult.EpisodeNumbers.Any(e => newParseResult.EpisodeNumbers.Contains(e)) &&
