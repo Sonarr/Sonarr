@@ -10,6 +10,7 @@ namespace NzbDrone.Core.Datastore.Migrations
         {
             Database.AddColumn("History", "NewzbinId", DbType.Int32, ColumnProperty.Null);
             Database.AddColumn("History", "Blacklisted", DbType.Boolean, ColumnProperty.Null);
+            Database.ExecuteNonQuery("UPDATE History SET Blacklisted = 0");
         }
     }
 }

@@ -247,6 +247,24 @@ namespace NzbDrone.Core.Test.ProviderTests
         }
 
         [Test]
+        public void IsBlacklisted_should_return_true_if_nzbTitle_is_blacklisted_ignoring_case()
+        {
+            WithRealDb();
+
+            var history = Builder<History>.CreateNew()
+                    .With(h => h.Blacklisted = true)
+                    .Build();
+
+            Db.Insert(history);
+
+            //Act
+            var result = Mocker.Resolve<HistoryProvider>().IsBlacklisted(history.NzbTitle.ToLower());
+
+            //Assert
+            result.Should().BeTrue();
+        }
+
+        [Test]
         public void IsBlacklisted_should_return_false_if_newzbinId_doesnt_exist()
         {
             WithRealDb();
@@ -301,6 +319,14 @@ namespace NzbDrone.Core.Test.ProviderTests
         }
 
         [Test]
+        public void IsBlacklisted_should_throw_if_newzbinId_is_less_than_1()
+        {
+            Assert.Throws<ArgumentException>(() =>
+                    Mocker.Resolve<HistoryProvider>().IsBlacklisted(0)
+                );
+        }
+
+        [Test]
         public void SetBlacklist_should_set_to_true_when_true_is_passed_in()
         {
             WithRealDb();
@@ -336,6 +362,14 @@ namespace NzbDrone.Core.Test.ProviderTests
             //Assert
             var result = Db.Single<History>(history.HistoryId);
             result.Blacklisted.Should().BeFalse();
+        }
+
+        [Test]
+        public void SetBlacklist_should_throw_if_newzbinId_is_less_than_1()
+        {
+            Assert.Throws<ArgumentException>(() =>
+                    Mocker.Resolve<HistoryProvider>().SetBlacklist(0, true)
+                );
         }
     }
 }
