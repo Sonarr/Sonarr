@@ -116,6 +116,26 @@ namespace NzbDrone.Core.Providers
                     }
                 }
 
+                if (parsedReport.Indexer == "Newzbin")
+                {
+                    //Check for Blacklisting by NewzbinId
+                    Logger.Trace("Checking if Newzbin ID has been black listed: ", parsedReport.NewzbinId);
+                    if (_historyProvider.IsBlacklisted(parsedReport.NewzbinId))
+                    {
+                        Logger.Info("Newzbin ID has been blacklisted: [{0}] Skipping", parsedReport.NewzbinId);
+                        return false;
+                    }
+                }
+
+                else
+                {
+                    Logger.Trace("Checking if Nzb has been black listed: ", parsedReport.OriginalString);
+                    if(_historyProvider.IsBlacklisted(parsedReport.OriginalString))
+                    {
+                        Logger.Info("Nzb has been blacklisted: [{0}] Skipping", parsedReport.OriginalString);
+                        return false;
+                    }
+                }
             }
 
             Logger.Debug("Episode {0} is needed", parsedReport);

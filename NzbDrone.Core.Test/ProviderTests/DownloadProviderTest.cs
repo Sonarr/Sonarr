@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Returns(false);
 
             Mocker.GetMock<SabProvider>()
-                .Setup(s => s.AddByUrl(parseResult.NzbUrl, sabTitle))
+                .Setup(s => s.AddByUrl(parseResult, sabTitle))
                 .Returns(true);
 
             Mocker.GetMock<SabProvider>()

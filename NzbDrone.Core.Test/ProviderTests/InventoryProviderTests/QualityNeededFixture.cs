@@ -206,6 +206,10 @@ namespace NzbDrone.Core.Test.ProviderTests.InventoryProviderTests
                 .Setup(s => s.Get(It.IsAny<int>()))
                 .Returns(new QualityType { MaxSize = 100, MinSize = 0 });
 
+            Mocker.GetMock<HistoryProvider>()
+                .Setup(s => s.IsBlacklisted(It.IsAny<string>()))
+                .Returns(false);
+
             episode.EpisodeFile.Quality = QualityTypes.SDTV;
 
             //Act
@@ -239,6 +243,10 @@ namespace NzbDrone.Core.Test.ProviderTests.InventoryProviderTests
             Mocker.GetMock<QualityTypeProvider>()
                 .Setup(s => s.Get(It.IsAny<int>()))
                 .Returns(new QualityType { MaxSize = 100, MinSize = 0 });
+
+            Mocker.GetMock<HistoryProvider>()
+                .Setup(s => s.IsBlacklisted(It.IsAny<string>()))
+                .Returns(false);
 
             episode.EpisodeFile.Quality = QualityTypes.SDTV;
             //Act
@@ -298,6 +306,10 @@ namespace NzbDrone.Core.Test.ProviderTests.InventoryProviderTests
             Mocker.GetMock<QualityTypeProvider>()
                 .Setup(s => s.Get(It.IsAny<int>()))
                 .Returns(new QualityType { MaxSize = 100, MinSize = 0 });
+
+            Mocker.GetMock<HistoryProvider>()
+                .Setup(s => s.IsBlacklisted(It.IsAny<string>()))
+                .Returns(false);
 
             episode.EpisodeFile.Quality = QualityTypes.SDTV;
             //Act
