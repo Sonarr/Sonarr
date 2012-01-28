@@ -235,7 +235,7 @@
     <Compile Include="Models\JsonNotificationResult.cs" />
     <Compile Include="Models\PendingProcessingModel.cs" />
     <Compile Include="Models\ProwlPrioritySelectListModel.cs" />
-    <Compile Include="Models\SabnzbdSettingsModel.cs" />
+    <Compile Include="Models\DownloadClientSettingsModel.cs" />
     <Compile Include="Models\EpisodeNamingModel.cs" />
     <Compile Include="Models\HistoryModel.cs" />
     <Compile Include="Models\IndexerSettingsModel.cs" />
@@ -529,6 +529,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Series\SeriesItem.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Settings\DownloadClient.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Settings\Blackhole.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

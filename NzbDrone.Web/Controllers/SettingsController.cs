@@ -6,6 +6,7 @@ using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Model;
 using NzbDrone.Core.Helpers;
+using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.ExternalNotification;
@@ -90,12 +91,17 @@ namespace NzbDrone.Web.Controllers
                             });
         }
 
-        public ActionResult Sabnzbd()
+        public ActionResult DownloadClient()
         {
             var tvCategory = _configProvider.SabTvCategory;
             var tvCategorySelectList = new SelectList(new[] { tvCategory });
 
-            var model = new SabnzbdSettingsModel
+            var downloadClientTypes = new List<KeyValuePair<int, string>>();
+
+            foreach (DownloadClientType downloadClientType in Enum.GetValues(typeof(DownloadClientType)))
+                downloadClientTypes.Add(new KeyValuePair<int, string>((int)downloadClientType, downloadClientType.ToString()));
+
+            var model = new DownloadClientSettingsModel
                             {
                                 SabHost = _configProvider.SabHost,
                                 SabPort = _configProvider.SabPort,
@@ -104,8 +110,10 @@ namespace NzbDrone.Web.Controllers
                                 SabPassword = _configProvider.SabPassword,
                                 SabTvCategory = tvCategory,
                                 SabTvPriority = _configProvider.SabTvPriority,
-                                SabDropDirectory = _configProvider.SabDropDirectory,
-                                SabTvCategorySelectList = tvCategorySelectList
+                                DownloadClientDropDirectory = _configProvider.SabDropDirectory,
+                                SabTvCategorySelectList = tvCategorySelectList,
+                                DownloadClient = (int)_configProvider.DownloadClient,
+                                DownloadClientSelectList = new SelectList(downloadClientTypes, "Key", "Value")
                             };
 
             return View(model);
@@ -373,11 +381,10 @@ namespace NzbDrone.Web.Controllers
         }
 
         [HttpPost]
-        public JsonResult SaveSabnzbd(SabnzbdSettingsModel data)
+        public JsonResult SaveDownloadClient(DownloadClientSettingsModel data)
         {
             if (ModelState.IsValid)
             {
-
                 _configProvider.SabHost = data.SabHost;
                 _configProvider.SabPort = data.SabPort;
                 _configProvider.SabApiKey = data.SabApiKey;
@@ -385,8 +392,8 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.SabTvCategory = data.SabTvCategory;
                 _configProvider.SabUsername = data.SabUsername;
                 _configProvider.SabTvPriority = data.SabTvPriority;
-                _configProvider.SabDropDirectory = data.SabDropDirectory;
-
+                _configProvider.SabDropDirectory = data.DownloadClientDropDirectory;
+                _configProvider.DownloadClient = (DownloadClientType)data.DownloadClient;
 
                 return GetSuccessResult();
             }

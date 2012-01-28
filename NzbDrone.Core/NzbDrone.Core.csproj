@@ -227,6 +227,7 @@
     <Compile Include="Helpers\FileSizeFormatHelper.cs" />
     <Compile Include="Helpers\SortHelper.cs" />
     <Compile Include="Jobs\CheckpointJob.cs" />
+    <Compile Include="Model\DownloadClientType.cs" />
     <Compile Include="Providers\AnalyticsProvider.cs" />
     <Compile Include="Instrumentation\LogDbContext.cs" />
     <Compile Include="Instrumentation\LogProvider.cs" />
