@@ -7,7 +7,7 @@ using NzbDrone.Core.Model.Sabnzbd;
 
 namespace NzbDrone.Web.Models
 {
-    public class SabnzbdSettingsModel
+    public class DownloadClientSettingsModel
     {
         public SelectList PrioritySelectList =
             new SelectList(new[] {"Default", "Paused", "Low", "Normal", "High", "Top"});
@@ -53,11 +53,21 @@ namespace NzbDrone.Web.Models
         [Description("Priority to use when sending NZBs to SABnzbd")]
         public SabPriorityType SabTvPriority { get; set; }
 
-        [DisplayName("SABnzbd TV Directory")]
-        [Description("The directory where SABnzbd downloads TV shows to (NzbDrone will sort them for you)")]
+        [DisplayName("Download Client TV Directory")]
+        [Description("The directory where your download client downloads TV shows to (NzbDrone will sort them for you)")]
         [DisplayFormat(ConvertEmptyStringToNull = false)]
-        public string SabDropDirectory { get; set; }
+        public string DownloadClientDropDirectory { get; set; }
+
+        [DisplayName("Blackhole Directory")]
+        [Description("The directory where your download client will pickup NZB files")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
+        public string BlackholeDirectory { get; set; }
+
+        [DisplayName("Download Client")]
+        [Description("What method do you download NZBs with?")]
+        public int DownloadClient { get; set; }
 
         public SelectList SabTvCategorySelectList { get; set; }
+        public SelectList DownloadClientSelectList { get; set; }
     }
 }
