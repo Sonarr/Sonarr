@@ -1,4 +1,5 @@
 ﻿@model List<UpcomingEpisodeModel>
+@using NzbDrone.Common
 @using NzbDrone.Web.Helpers
 @using NzbDrone.Web.Models
 @{ViewBag.Title = "Upcoming";}
@@ -43,6 +44,11 @@
                                                     ))
                     .DataBinding(data => data.Ajax().Select("_AjaxBindingYesterday", "Upcoming"))
                     .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.AirDateTime).Ascending()).Enabled(true))
+                    .ClientEvents(clientEvents =>
+                    {
+                        if (EnviromentProvider.IsProduction)
+                            clientEvents.OnError("grid_onError");
+                    })
                     .Render();}
     </div>
 </div>
@@ -78,6 +84,11 @@
                                                     ))
                     .DataBinding(data => data.Ajax().Select("_AjaxBindingToday", "Upcoming"))
                     .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.AirDateTime).Ascending()).Enabled(true))
+                    .ClientEvents(clientEvents =>
+                    {
+                        if (EnviromentProvider.IsProduction)
+                            clientEvents.OnError("grid_onError");
+                    })
                     .Render();}
     </div>
 </div>
@@ -115,6 +126,11 @@
 
                     .DataBinding(data => data.Ajax().Select("_AjaxBindingTomorrow", "Upcoming"))
                     .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.AirDateTime).Ascending()).Enabled(true))
+                    .ClientEvents(clientEvents =>
+                    {
+                        if (EnviromentProvider.IsProduction)
+                            clientEvents.OnError("grid_onError");
+                    })
                     .Render();}
     </div>
 </div>
@@ -151,6 +167,11 @@
                                                   ))
                     .DataBinding(data => data.Ajax().Select("_AjaxBindingWeek", "Upcoming"))
                     .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.AirDateTime).Ascending()).Enabled(true))
+                    .ClientEvents(clientEvents =>
+                    {
+                        if (EnviromentProvider.IsProduction)
+                            clientEvents.OnError("grid_onError");
+                    })
                     .Render();}
     </div>
 </div>

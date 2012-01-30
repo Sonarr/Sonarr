@@ -1,3 +1,4 @@
+@using NzbDrone.Common
 @using NzbDrone.Web.Helpers
 @using NzbDrone.Web.Models;
 @model IEnumerable<NzbDrone.Core.Repository.Series>
@@ -98,6 +99,8 @@
                     clientEvents.OnEdit("grid_edit");
                     clientEvents.OnSave("grid_save");
                     clientEvents.OnRowDataBound("grid_rowBound");
+                    if(EnviromentProvider.IsProduction)
+                        clientEvents.OnError("grid_onError");
                 })
                 .Render();}
 @section Scripts{

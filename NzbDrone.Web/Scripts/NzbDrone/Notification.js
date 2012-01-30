@@ -32,9 +32,10 @@
 
         });
 
-        jqXHR.error(function (xhr, ajaxOptions, thrownError) {
+        jqXHR.error(function (xhr, textStatus, thrownError) {
             //ignore notification errors.
             if (this.url.indexOf("/notification/Comet") !== 0) {
+                alert("Status: " + textStatus + ", Error: " + thrownError);
                 $.gritter.add({
                     title: 'Request failed',
                     text: this.url,

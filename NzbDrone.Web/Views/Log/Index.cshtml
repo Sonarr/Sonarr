@@ -1,3 +1,4 @@
+@using NzbDrone.Common
 @using NzbDrone.Core.Instrumentation
 @using NzbDrone.Web.Helpers
 @model IEnumerable<NzbDrone.Core.Instrumentation.Log>
@@ -50,6 +51,11 @@
             .Filterable()
             .ClientEvents(c => c.OnRowDataBound("onRowDataBound"))
             .Scrollable(c => c.Height(500))
+            .ClientEvents(clientEvents =>
+            {
+                if (EnviromentProvider.IsProduction)
+                    clientEvents.OnError("grid_onError");
+            })
             .Render();}
 <script type="text/javascript">
     function reloadGrid() {

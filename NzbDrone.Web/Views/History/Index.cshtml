@@ -1,4 +1,5 @@
 ﻿@model List<HistoryModel>
+@using NzbDrone.Common
 @using NzbDrone.Web.Models
 @using NzbDrone.Web.Helpers
 @{ViewBag.Title = "History";}
@@ -49,6 +50,11 @@
               .Pageable(
                         c =>
                         c.PageSize(20).Position(GridPagerPosition.Bottom).Style(GridPagerStyles.NextPrevious))
+              .ClientEvents(clientEvents =>
+              {
+                  if (EnviromentProvider.IsProduction)
+                      clientEvents.OnError("grid_onError");
+              })
               .Render();}
 </div>
 <script type="text/javascript">

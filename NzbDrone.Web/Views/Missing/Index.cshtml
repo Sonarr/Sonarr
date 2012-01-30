@@ -1,4 +1,5 @@
 ﻿@model List<MissingEpisodeModel>
+@using NzbDrone.Common
 @using NzbDrone.Web.Helpers
 @using NzbDrone.Web.Models;
 @{ViewBag.Title="Missing";}
@@ -48,4 +49,9 @@
             .Pageable(
                 c =>
                 c.PageSize(20).Position(GridPagerPosition.Bottom).Style(GridPagerStyles.NextPrevious))
+            .ClientEvents(clientEvents =>
+            {
+                if (EnviromentProvider.IsProduction)
+                    clientEvents.OnError("grid_onError");
+            })
             .Render();}
