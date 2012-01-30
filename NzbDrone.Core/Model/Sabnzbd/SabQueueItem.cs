@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
+using NzbDrone.Core.Helpers;
 
 namespace NzbDrone.Core.Model.Sabnzbd
 {
@@ -10,6 +11,8 @@ namespace NzbDrone.Core.Model.Sabnzbd
     {
         public string Status { get; set; }
         public int Index { get; set; }
+
+        [JsonConverter(typeof(SabnzbdQueueTimeConverter))]
         public TimeSpan Timeleft { get; set; }
 
         [JsonProperty(PropertyName = "mb")]

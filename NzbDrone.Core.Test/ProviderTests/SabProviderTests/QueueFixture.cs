@@ -188,8 +188,6 @@ namespace NzbDrone.Core.Test.ProviderTests.SabProviderTests
             result.Should().BeTrue();
         }
 
-
-
         [Test]
         public void IsInQueue_should_return_false_if_queue_is_empty()
         {
@@ -207,6 +205,21 @@ namespace NzbDrone.Core.Test.ProviderTests.SabProviderTests
             var result = Mocker.Resolve<SabProvider>().IsInQueue(parseResult);
 
             result.Should().BeFalse();
+        }
+
+        [Test]
+        public void GetQueue_should_parse_timeleft_with_hours_greater_than_24_hours()
+        {
+            WithFullQueue();
+
+            var result = Mocker.Resolve<SabProvider>().GetQueue();
+
+            result.Should().NotBeEmpty();
+            var timeleft = result.First(q => q.Id == "SABnzbd_nzo_qv6ilb").Timeleft;
+            timeleft.Days.Should().Be(2);
+            timeleft.Hours.Should().Be(9);
+            timeleft.Minutes.Should().Be(27);
+            timeleft.Seconds.Should().Be(45);
         }
 
         [TearDown]

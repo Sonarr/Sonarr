@@ -67,7 +67,7 @@
             "size":"267 MB",
             "sizeleft":"239 MB",
             "status":"Downloading",
-            "timeleft":"31:12:34",
+            "timeleft":"57:27:45",
             "unpackopts":"3",
             "verbosity":""
          },
