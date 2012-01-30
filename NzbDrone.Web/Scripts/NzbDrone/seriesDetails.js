@@ -106,6 +106,7 @@ function toggleMasters(seasonNumber, ignored) {
 //Functions called by the Telerik Season Grid 
 function grid_rowBound(e) {
     var dataItem = e.dataItem;
+    var row = e.row;
     var ignored = dataItem.Ignored;
     var episodeId = dataItem.EpisodeId;
 
@@ -122,6 +123,8 @@ function grid_rowBound(e) {
 
     if (seriesId == 0)
         seriesId = dataItem.SeriesId;
+
+    highlightRow(e);
 }
 
 function grid_dataBound(e) {

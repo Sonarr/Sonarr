@@ -46,6 +46,7 @@
                     .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.AirDateTime).Ascending()).Enabled(true))
                     .ClientEvents(clientEvents =>
                     {
+                        clientEvents.OnRowDataBound("grid_rowBound");
                         if (EnviromentProvider.IsProduction)
                             clientEvents.OnError("grid_onError");
                     })
@@ -86,6 +87,7 @@
                     .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.AirDateTime).Ascending()).Enabled(true))
                     .ClientEvents(clientEvents =>
                     {
+                        clientEvents.OnRowDataBound("grid_rowBound");
                         if (EnviromentProvider.IsProduction)
                             clientEvents.OnError("grid_onError");
                     })
@@ -128,6 +130,7 @@
                     .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.AirDateTime).Ascending()).Enabled(true))
                     .ClientEvents(clientEvents =>
                     {
+                        clientEvents.OnRowDataBound("grid_rowBound");
                         if (EnviromentProvider.IsProduction)
                             clientEvents.OnError("grid_onError");
                     })
@@ -169,9 +172,18 @@
                     .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.AirDateTime).Ascending()).Enabled(true))
                     .ClientEvents(clientEvents =>
                     {
+                        clientEvents.OnRowDataBound("grid_rowBound");
                         if (EnviromentProvider.IsProduction)
                             clientEvents.OnError("grid_onError");
                     })
                     .Render();}
     </div>
 </div>
+
+@section Scripts{
+    <script type="text/javascript">
+        function grid_rowBound(e) {
+            highlightRow(e);
+        }
+    </script>
+}
