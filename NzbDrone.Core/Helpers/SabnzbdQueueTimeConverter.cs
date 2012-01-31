@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Helpers
 
             if (split.Count() != 3)
             {
-                throw new ArgumentException("TimeSpan is invalid");
+                throw new ArgumentException("Expected 0:0:0 format, but received: " + reader.Value);
             }
             
             return new TimeSpan(int.Parse(split[0]), // hours
