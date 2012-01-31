@@ -44,6 +44,9 @@ namespace NzbDrone.Core.Model
             if (AirDate != null && EpisodeNumbers == null)
                 return string.Format("{0} - {1} {2}", SeriesTitle, AirDate.Value.ToShortDateString(), Quality);
 
+            if (FullSeason)
+                return string.Format("{0} - Season {1:00}", SeriesTitle, SeasonNumber);
+
             if (EpisodeNumbers != null)
                 return string.Format("{0} - S{1:00}E{2} {3}", SeriesTitle, SeasonNumber,
                                      String.Join("-", EpisodeNumbers), Quality);

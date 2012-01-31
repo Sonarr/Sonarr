@@ -10,34 +10,28 @@ namespace NzbDrone.Core.Helpers
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            if (value is TimeSpan)
-                writer.WriteValue(value.ToString());
-
-            else
-                throw new Exception("Expected TimeSpan object value.");
+            var ts = (TimeSpan)value;
+                writer.WriteValue(ts.ToString());
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             var split = reader.Value.ToString().Split(':');
 
-            if (split.Count() == 3)
+            if (split.Count() != 3)
             {
-                return new TimeSpan(int.Parse(split[0]), // hours
+                throw new ArgumentException("TimeSpan is invalid");
+            }
+            
+            return new TimeSpan(int.Parse(split[0]), // hours
                                     int.Parse(split[1]), // minutes
                                     int.Parse(split[2])  // seconds
                                     );
-            }
-            
-            throw new ArgumentException("TimeSpan is invalid");
         }
 
         public override bool CanConvert(Type objectType)
         {
-            if (objectType == typeof(TimeSpan))
-                return true;
-
-            return false;
+            return objectType == typeof(TimeSpan);
         }
     }
 }
