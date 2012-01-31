@@ -77,10 +77,24 @@ namespace NzbDrone.Core.Providers
         {
             var queue = GetQueue().Where(c => c.ParseResult != null);
 
-            return queue.Any(sabQueueItem => String.Equals(sabQueueItem.ParseResult.CleanTitle, newParseResult.Series.CleanTitle, StringComparison.InvariantCultureIgnoreCase) &&
-                                  sabQueueItem.ParseResult.EpisodeNumbers.Any(e => newParseResult.EpisodeNumbers.Contains(e)) &&
-                                  sabQueueItem.ParseResult.SeasonNumber == newParseResult.SeasonNumber &&
-                                  sabQueueItem.ParseResult.Quality >= newParseResult.Quality);
+            var matchigTitle = queue.Where(q => String.Equals(q.ParseResult.CleanTitle, newParseResult.Series.CleanTitle, StringComparison.InvariantCultureIgnoreCase));
+
+            var matchingTitleWithQuality = matchigTitle.Where(q => q.ParseResult.Quality >= newParseResult.Quality);
+
+
+            if (newParseResult.Series.IsDaily)
+            {
+                return matchingTitleWithQuality.Any(q => q.ParseResult.AirDate.Value.Date == newParseResult.AirDate.Value.Date);
+            }
+
+            var matchingSeason = matchingTitleWithQuality.Where(q => q.ParseResult.SeasonNumber == newParseResult.SeasonNumber);
+
+            if (newParseResult.FullSeason)
+            {
+                return matchingSeason.Any();
+            }
+
+            return matchingSeason.Any(q => q.ParseResult.EpisodeNumbers != null && q.ParseResult.EpisodeNumbers.Any(e => newParseResult.EpisodeNumbers.Contains(e)));
         }
 
         public virtual List<SabQueueItem> GetQueue(int start = 0, int limit = 0)
