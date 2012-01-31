@@ -58,9 +58,11 @@ namespace NzbDrone.Core.Test
         [TestCase("the-pacific-e07-720p", "The Pacific", 1, 7)]
         [TestCase("S6E02-Unwrapped-(Playing With Food) - [DarkData]", "", 6, 2)]
         [TestCase("S06E03-Unwrapped-(Number Ones Unwrapped) - [DarkData]", "", 6, 3)]
+        [TestCase("The Mentalist S02E21 18 5 4 720p WEB DL DD5 1 h 264 EbP", "The Mentalist", 2, 21)]
         public void ParseTitle_single(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
             var result = Parser.ParseTitle(postTitle);
+            result.Should().NotBeNull();
             result.EpisodeNumbers.Should().HaveCount(1);
             result.SeasonNumber.Should().Be(seasonNumber);
             result.EpisodeNumbers.First().Should().Be(episodeNumber);
