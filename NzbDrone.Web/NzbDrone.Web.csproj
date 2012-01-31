@@ -380,6 +380,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\NzbDrone\addSeries.js" />
     <Content Include="Scripts\NzbDrone\AutoComplete.js" />
+    <Content Include="Scripts\NzbDrone\qualitySettings.js" />
     <Content Include="Scripts\NzbDrone\grid.js" />
     <Content Include="Scripts\NzbDrone\settings.js" />
     <Content Include="Scripts\NzbDrone\localSearch.js" />
