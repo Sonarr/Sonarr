@@ -47,11 +47,8 @@ namespace NzbDrone.Core.Providers
                 return Convert.ToInt32(_database.Insert(definition));
             }
 
-            else
-            {
-                Logger.Debug("Updating Newznab definitions for {0}", definition.Name);
-                return _database.Update(definition);
-            }
+            Logger.Debug("Updating Newznab definitions for {0}", definition.Name);
+            return _database.Update(definition);
         }
 
         public virtual void SaveAll(IEnumerable<NewznabDefinition> definitions)

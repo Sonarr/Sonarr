@@ -29,6 +29,15 @@ namespace NzbDrone.Core.Providers.Indexer
             }
         }
 
+        public override bool IsConfigured
+        {
+            get
+            {
+                return !string.IsNullOrWhiteSpace(_configProvider.NzbsrusUId) &&
+                       !string.IsNullOrWhiteSpace(_configProvider.NzbsrusHash);
+            }
+        }
+
         public override string Name
         {
             get { return "NzbsRUs"; }

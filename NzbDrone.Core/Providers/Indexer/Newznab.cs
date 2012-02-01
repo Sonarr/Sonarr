@@ -24,6 +24,11 @@ namespace NzbDrone.Core.Providers.Indexer
             get { return GetUrls(); }
         }
 
+        public override bool IsConfigured
+        {
+            get { return true; }
+        }
+
         protected override IList<string> GetEpisodeSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber)
         {
             var searchUrls = new List<string>();

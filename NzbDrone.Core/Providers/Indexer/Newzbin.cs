@@ -30,7 +30,14 @@ namespace NzbDrone.Core.Providers.Indexer
             }
         }
 
-
+        public override bool IsConfigured
+        {
+            get
+            {
+                return !string.IsNullOrWhiteSpace(_configProvider.NewzbinUsername) &&
+                       !string.IsNullOrWhiteSpace(_configProvider.NewzbinPassword);
+            }
+        }
 
 
         protected override NetworkCredential Credentials

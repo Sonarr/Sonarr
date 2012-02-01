@@ -30,6 +30,15 @@ namespace NzbDrone.Core.Providers.Indexer
             }
         }
 
+        public override bool IsConfigured
+        {
+            get
+            {
+                return !string.IsNullOrWhiteSpace(_configProvider.NzbMatrixUsername) &&
+                       !string.IsNullOrWhiteSpace(_configProvider.NzbMatrixApiKey);
+            }
+        }
+
         protected override IList<string> GetEpisodeSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber)
         {
             var searchUrls = new List<String>();

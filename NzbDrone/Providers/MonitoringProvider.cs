@@ -47,7 +47,7 @@ namespace NzbDrone.Providers
             prioCheckTimer.Elapsed += EnsurePriority;
             prioCheckTimer.Enabled = true;
 
-            _pingTimer = new Timer(120000) { AutoReset = true };
+            _pingTimer = new Timer(180000) { AutoReset = true };
             _pingTimer.Elapsed += (PingServer);
             _pingTimer.Start();
         }
@@ -94,9 +94,10 @@ namespace NzbDrone.Providers
             {
                 _pingFailCounter++;
                 Logger.ErrorException("Application pool is not responding. Count " + _pingFailCounter, ex);
-                if (_pingFailCounter > 2)
+                if (_pingFailCounter > 4)
                 {
-                    _iisProvider.RestartServer();
+                    _pingFailCounter = 0;
+                    //_iisProvider.RestartServer();
                 }
             }
         }

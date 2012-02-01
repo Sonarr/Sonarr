@@ -44,6 +44,9 @@ namespace NzbDrone.Core.Providers.Indexer
         protected abstract string[] Urls { get; }
 
 
+        public abstract bool IsConfigured { get; }
+
+
         /// <summary>
         /// Gets the credential.
         /// </summary>
@@ -147,6 +150,12 @@ namespace NzbDrone.Core.Providers.Indexer
         {
             var result = new List<EpisodeParseResult>();
 
+            if (!IsConfigured)
+            {
+                _logger.Warn("Indexer '{0}' isn't configured correctly. please reconfigure the indexer in settings page.", Name);
+                return result;
+            }
+
             foreach (var url in urls)
             {
                 try
@@ -178,11 +187,11 @@ namespace NzbDrone.Core.Providers.Indexer
 
                     }
                 }
-                catch(WebException webException)
+                catch (WebException webException)
                 {
                     if (webException.Message.Contains("503"))
                     {
-                        _logger.Warn("{0} server is currently unbelievable. {1}", Name, webException.Message);     
+                        _logger.Warn("{0} server is currently unbelievable. {1}", Name, webException.Message);
                     }
                     else
                     {

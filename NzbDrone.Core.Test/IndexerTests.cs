@@ -30,8 +30,6 @@ namespace NzbDrone.Core.Test
         [TestCase("nzbmatrix.xml", 2)]
         public void parse_feed_xml(string fileName, int warns)
         {
-
-
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
                           .Returns(File.OpenRead(".\\Files\\Rss\\" + fileName));
@@ -58,10 +56,25 @@ namespace NzbDrone.Core.Test
             ExceptionVerification.ExpectedWarns(warns);
         }
 
+        private void WithConfiguredIndexers()
+        {
+            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.NzbMatrixApiKey).Returns("MockedConfigValue");
+            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.NzbMatrixUsername).Returns("MockedConfigValue");
+
+            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.NewzbinUsername).Returns("MockedConfigValue");
+            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.NewzbinPassword).Returns("MockedConfigValue");
+
+            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.NzbsOrgHash).Returns("MockedConfigValue");
+            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.NzbsOrgUId).Returns("MockedConfigValue");
+
+            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.NzbsrusHash).Returns("MockedConfigValue");
+            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.NzbsrusUId).Returns("MockedConfigValue");
+        }
+
         [Test]
         public void newzbin_parses_languae()
         {
-
+            WithConfiguredIndexers();
 
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
@@ -169,7 +182,7 @@ namespace NzbDrone.Core.Test
         [Test]
         public void downloadFeed()
         {
-            Mocker.SetConstant(new HttpProvider());
+            Mocker.Resolve<HttpProvider>();
 
             var fakeSettings = Builder<IndexerDefinition>.CreateNew().Build();
             Mocker.GetMock<IndexerProvider>()
@@ -198,7 +211,7 @@ namespace NzbDrone.Core.Test
             Mocker.Resolve<HttpProvider>();
 
             var result = Mocker.Resolve<NzbsOrg>().FetchEpisode(title, season, episode);
-            
+
             Mark500Inconclusive();
 
             result.Should().NotBeEmpty();
@@ -228,13 +241,8 @@ namespace NzbDrone.Core.Test
         [Test]
         public void nzbmatrix_search_returns_valid_results()
         {
-            Mocker.GetMock<ConfigProvider>()
-                .SetupGet(c => c.NzbMatrixUsername)
-                .Returns("");
+            WithConfiguredIndexers();
 
-            Mocker.GetMock<ConfigProvider>()
-                .SetupGet(c => c.NzbMatrixApiKey)
-                .Returns("");
 
             Mocker.Resolve<HttpProvider>();
 
@@ -249,13 +257,7 @@ namespace NzbDrone.Core.Test
         [Test]
         public void nzbmatrix_multi_word_search_returns_valid_results()
         {
-            Mocker.GetMock<ConfigProvider>()
-                .SetupGet(c => c.NzbMatrixUsername)
-                .Returns("");
-
-            Mocker.GetMock<ConfigProvider>()
-                .SetupGet(c => c.NzbMatrixApiKey)
-                .Returns("");
+            WithConfiguredIndexers();
 
             Mocker.Resolve<HttpProvider>();
 
@@ -280,6 +282,8 @@ namespace NzbDrone.Core.Test
         [Test]
         public void size_newzbin()
         {
+            WithConfiguredIndexers();
+
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
                           .Returns(File.OpenRead(".\\Files\\Rss\\SizeParsing\\newzbin.xml"));
@@ -294,8 +298,7 @@ namespace NzbDrone.Core.Test
         [Test]
         public void size_nzbmatrix()
         {
-            //Setup
-
+            WithConfiguredIndexers();
 
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
@@ -311,8 +314,7 @@ namespace NzbDrone.Core.Test
         [Test]
         public void size_nzbsorg()
         {
-            //Setup
-
+            WithConfiguredIndexers();
 
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
@@ -328,8 +330,7 @@ namespace NzbDrone.Core.Test
         [Test]
         public void size_nzbsrus()
         {
-            //Setup
-
+            WithConfiguredIndexers();
 
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
@@ -359,6 +360,8 @@ namespace NzbDrone.Core.Test
         [Test]
         public void none_503_server_error_should_still_log_error()
         {
+            WithConfiguredIndexers();
+
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
                           .Throws(new WebException("some other server error"));
@@ -367,6 +370,17 @@ namespace NzbDrone.Core.Test
 
             ExceptionVerification.ExpectedErrors(1);
             ExceptionVerification.ExpectedWarns(0);
+        }
+
+        [Test]
+        public void indexer_that_isnt_configured_shouldnt_make_an_http_call()
+        {
+            Mocker.Resolve<NotConfiguredIndexer>().FetchRss();
+ 
+            Mocker.GetMock<HttpProvider>()
+                .Verify(c => c.DownloadFile(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
+
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         private static void Mark500Inconclusive()

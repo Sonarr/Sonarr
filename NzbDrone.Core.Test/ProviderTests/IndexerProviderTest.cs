@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void Init_indexer_test()
         {
-            
+
 
             Mocker.SetConstant(TestDbHelper.GetEmptyDatabase());
 
@@ -45,8 +45,6 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void Init_indexer_with_disabled_job()
         {
-            
-
             Mocker.SetConstant(TestDbHelper.GetEmptyDatabase());
 
             //Act
@@ -73,6 +71,11 @@ namespace NzbDrone.Core.Test.ProviderTests
         protected override string[] Urls
         {
             get { return new[] { "www.google.com" }; }
+        }
+
+        public override bool IsConfigured
+        {
+            get { return true; }
         }
 
         protected override NetworkCredential Credentials
@@ -129,6 +132,11 @@ namespace NzbDrone.Core.Test.ProviderTests
             get { return new[] { "http://rss.nzbmatrix.com/rss.php?cat=TV" }; }
         }
 
+        public override bool IsConfigured
+        {
+            get { return true; }
+        }
+
         protected override IList<string> GetEpisodeSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber)
         {
             throw new NotImplementedException();
@@ -172,6 +180,11 @@ namespace NzbDrone.Core.Test.ProviderTests
             get { return new[] { "http://www.google.com" }; }
         }
 
+        public override bool IsConfigured
+        {
+            get { return true; }
+        }
+
         protected override IList<string> GetEpisodeSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber)
         {
             throw new NotImplementedException();
@@ -202,6 +215,54 @@ namespace NzbDrone.Core.Test.ProviderTests
             if (currentResult == null) currentResult = new EpisodeParseResult();
             currentResult.Language = LanguageType.Finnish;
             return currentResult;
+        }
+    }
+
+    public class NotConfiguredIndexer : IndexerBase
+    {
+        public NotConfiguredIndexer(HttpProvider httpProvider, ConfigProvider configProvider)
+            : base(httpProvider, configProvider)
+        {
+        }
+
+        public override string Name
+        {
+            get { return "NotConfiguredIndexer"; }
+        }
+
+        protected override string[] Urls
+        {
+            get { return new[] { "http://rss.nzbmatrix.com/rss.php?cat=TV" }; }
+        }
+
+        public override bool IsConfigured
+        {
+            get { return false; }
+        }
+
+        protected override IList<string> GetEpisodeSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override IList<string> GetDailyEpisodeSearchUrls(string seriesTitle, DateTime date)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override IList<string> GetSeasonSearchUrls(string seriesTitle, int seasonNumber)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override IList<string> GetPartialSeasonSearchUrls(string seriesTitle, int seasonNumber, int episodeWildcard)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override string NzbDownloadUrl(SyndicationItem item)
+        {
+            throw new NotImplementedException();
         }
     }
 
