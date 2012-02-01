@@ -10,7 +10,7 @@ namespace NzbDrone.Web.Models
     public class DownloadClientSettingsModel
     {
         public SelectList PrioritySelectList =
-            new SelectList(new[] {"Default", "Paused", "Low", "Normal", "High", "Top"});
+            new SelectList(new[] {"Default", "Paused", "Low", "Normal", "High", "Force"});
 
         [Required(ErrorMessage = "Please enter a valid host")]
         [DataType(DataType.Text)]
