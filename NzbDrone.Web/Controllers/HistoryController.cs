@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Providers;
@@ -73,10 +74,18 @@ namespace NzbDrone.Web.Controllers
                                                 IsProper = h.IsProper,
                                                 Date = h.Date,
                                                 Indexer = h.Indexer,
-                                                EpisodeId = h.EpisodeId
+                                                EpisodeId = h.EpisodeId,
+                                                Blacklisted = h.Blacklisted
                                             });
 
             return View(new GridModel(history));
+        }
+
+        [HttpPost]
+        public JsonResult ToggleBlacklist(int historyId, bool toggle)
+        {
+            _historyProvider.SetBlacklist(historyId, toggle);
+            return new JsonResult { Data = "Success" };
         }
     }
 }

@@ -31,20 +31,22 @@ namespace NzbDrone.Core.Providers
             _httpProvider = httpProvider;
         }
 
-        public virtual bool AddByUrl(string url, string title)
+        public virtual bool AddByUrl(EpisodeParseResult parseResult, string title)
         {
             string cat = _configProvider.SabTvCategory;
             int priority = (int)_configProvider.SabTvPriority;
-            string name = GetNzbName(url);
+            string name = GetNzbName(parseResult.NzbUrl);
             string nzbName = HttpUtility.UrlEncode(title);
+            string mode = "addurl";
 
-            string action = string.Format("mode=addurl&name={0}&priority={1}&pp=3&cat={2}&nzbname={3}",
-                name, priority, cat, nzbName);
-
-            if (url.ToLower().Contains("newzbin"))
+            if (parseResult.Indexer == "Newzbin")
             {
-                action = action.Replace("mode=addurl", "mode=addid");
+                mode = "addid";
+                name = parseResult.NewzbinId.ToString();
             }
+
+            string action = string.Format("mode={0}&name={1}&priority={2}&pp=3&cat={3}&nzbname={4}", mode,
+                name, priority, cat, nzbName);
 
             string request = GetSabRequest(action);
 
@@ -63,13 +65,6 @@ namespace NzbDrone.Core.Providers
 
         private static string GetNzbName(string urlString)
         {
-            var url = new Uri(urlString);
-            if (url.Host.ToLower().Contains("newzbin"))
-            {
-                var postId = Regex.Match(urlString, @"\d{5,10}").Value;
-                return postId;
-            }
-
             return urlString.Replace("&", "%26");
         }
 

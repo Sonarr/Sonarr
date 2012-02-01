@@ -68,5 +68,26 @@ namespace NzbDrone.Core.Providers
         {
             _database.Delete<History>(historyId);
         }
+
+        public virtual bool IsBlacklisted(string nzbTitle)
+        {
+            return _database.Exists<History>("WHERE Blacklisted = 1 AND NzbTitle = @0", nzbTitle);
+        }
+
+        public virtual bool IsBlacklisted(int newzbinId)
+        {
+            if (newzbinId <= 0)
+                throw new ArgumentException("Newzbin ID must be greater than 0");
+
+            return _database.Exists<History>("WHERE Blacklisted = 1 AND NewzbinId = @0", newzbinId);
+        }
+
+        public virtual void SetBlacklist(int historyId, bool toggle)
+        {
+            if (historyId <= 0)
+                throw new ArgumentException("HistoryId must be greater than 0");
+
+            _database.Execute("UPDATE History SET Blacklisted = @0 WHERE HistoryId = @1", toggle, historyId);
+        }
     }
 }

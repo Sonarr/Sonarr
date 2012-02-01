@@ -191,5 +191,185 @@ namespace NzbDrone.Core.Test.ProviderTests
             history.Quality.Should().Be(storedHistory.First().Quality);
             history.IsProper.Should().Be(storedHistory.First().IsProper);
         }
+
+        [Test]
+        public void IsBlacklisted_should_return_false_if_nzbTitle_doesnt_exist()
+        {
+            WithRealDb();
+
+            var history = Builder<History>.CreateNew()
+                    .With(h => h.Blacklisted = false)
+                    .Build();
+
+            Db.Insert(history);
+
+            //Act
+            var result = Mocker.Resolve<HistoryProvider>().IsBlacklisted("Not a Real NZB Title");
+
+            //Assert
+            result.Should().BeFalse();
+        }
+
+        [Test]
+        public void IsBlacklisted_should_return_false_if_nzbTitle_is_not_blacklisted()
+        {
+            WithRealDb();
+
+            var history = Builder<History>.CreateNew()
+                    .With(h => h.Blacklisted = false)
+                    .Build();
+
+            Db.Insert(history);
+
+            //Act
+            var result = Mocker.Resolve<HistoryProvider>().IsBlacklisted(history.NzbTitle);
+
+            //Assert
+            result.Should().BeFalse();
+        }
+
+        [Test]
+        public void IsBlacklisted_should_return_true_if_nzbTitle_is_blacklisted()
+        {
+            WithRealDb();
+
+            var history = Builder<History>.CreateNew()
+                    .With(h => h.Blacklisted = true)
+                    .Build();
+
+            Db.Insert(history);
+
+            //Act
+            var result = Mocker.Resolve<HistoryProvider>().IsBlacklisted(history.NzbTitle);
+
+            //Assert
+            result.Should().BeTrue();
+        }
+
+        [Test]
+        public void IsBlacklisted_should_return_true_if_nzbTitle_is_blacklisted_ignoring_case()
+        {
+            WithRealDb();
+
+            var history = Builder<History>.CreateNew()
+                    .With(h => h.Blacklisted = true)
+                    .Build();
+
+            Db.Insert(history);
+
+            //Act
+            var result = Mocker.Resolve<HistoryProvider>().IsBlacklisted(history.NzbTitle.ToLower());
+
+            //Assert
+            result.Should().BeTrue();
+        }
+
+        [Test]
+        public void IsBlacklisted_should_return_false_if_newzbinId_doesnt_exist()
+        {
+            WithRealDb();
+
+            var history = Builder<History>.CreateNew()
+                    .With(h => h.Blacklisted = false)
+                    .Build();
+
+            Db.Insert(history);
+
+            //Act
+            var result = Mocker.Resolve<HistoryProvider>().IsBlacklisted(555);
+
+            //Assert
+            result.Should().BeFalse();
+        }
+
+        [Test]
+        public void IsBlacklisted_should_return_false_if_newzbinId_is_not_blacklisted()
+        {
+            WithRealDb();
+
+            var history = Builder<History>.CreateNew()
+                    .With(h => h.Blacklisted = false)
+                    .Build();
+
+            Db.Insert(history);
+
+            //Act
+            var result = Mocker.Resolve<HistoryProvider>().IsBlacklisted(history.NewzbinId);
+
+            //Assert
+            result.Should().BeFalse();
+        }
+
+        [Test]
+        public void IsBlacklisted_should_return_true_if_newzbinId_is_blacklisted()
+        {
+            WithRealDb();
+
+            var history = Builder<History>.CreateNew()
+                    .With(h => h.Blacklisted = true)
+                    .Build();
+
+            Db.Insert(history);
+
+            //Act
+            var result = Mocker.Resolve<HistoryProvider>().IsBlacklisted(history.NewzbinId);
+
+            //Assert
+            result.Should().BeTrue();
+        }
+
+        [Test]
+        public void IsBlacklisted_should_throw_if_newzbinId_is_less_than_1()
+        {
+            Assert.Throws<ArgumentException>(() =>
+                    Mocker.Resolve<HistoryProvider>().IsBlacklisted(0)
+                );
+        }
+
+        [Test]
+        public void SetBlacklist_should_set_to_true_when_true_is_passed_in()
+        {
+            WithRealDb();
+
+            var history = Builder<History>.CreateNew()
+                    .With(h => h.Blacklisted = false)
+                    .Build();
+
+            Db.Insert(history);
+
+            //Act
+            Mocker.Resolve<HistoryProvider>().SetBlacklist(history.HistoryId, true);
+
+            //Assert
+            var result = Db.Single<History>(history.HistoryId);
+            result.Blacklisted.Should().BeTrue();
+        }
+
+        [Test]
+        public void SetBlacklist_should_set_to_false_when_false_is_passed_in()
+        {
+            WithRealDb();
+
+            var history = Builder<History>.CreateNew()
+                    .With(h => h.Blacklisted = true)
+                    .Build();
+
+            Db.Insert(history);
+
+            //Act
+            Mocker.Resolve<HistoryProvider>().SetBlacklist(history.HistoryId, false);
+
+            //Assert
+            var result = Db.Single<History>(history.HistoryId);
+            result.Blacklisted.Should().BeFalse();
+        }
+
+        [Test]
+        public void SetBlacklist_should_throw_if_newzbinId_is_less_than_1()
+        {
+            Assert.Throws<ArgumentException>(() =>
+                    Mocker.Resolve<HistoryProvider>().SetBlacklist(0, true)
+                );
+        }
     }
 }

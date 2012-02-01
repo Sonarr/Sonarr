@@ -85,7 +85,7 @@ namespace NzbDrone.Core.Providers.Indexer
                            };
         }
 
-
+        //Don't change the name or things that rely on it being "Newzbin" will fail... ugly...
         public override string Name
         {
             get { return "Newzbin"; }
@@ -101,19 +101,18 @@ namespace NzbDrone.Core.Providers.Indexer
             if (currentResult != null)
             {
                 var quality = Parser.ParseQuality(item.Summary.Text);
-
                 currentResult.Quality = quality;
 
                 var languageString = Regex.Match(item.Summary.Text, @"Language - \w*", RegexOptions.IgnoreCase).Value;
-
                 currentResult.Language = Parser.ParseLanguage(languageString);
 
                 var sizeString = Regex.Match(item.Summary.Text, @"\(Size: \d*\,?\d+\.\d{1,2}\w{2}\)", RegexOptions.IgnoreCase).Value;
-
                 currentResult.Size = Parser.GetReportSize(sizeString);
+
+                var id = Regex.Match(NzbDownloadUrl(item), @"\d{5,10}").Value;
+                currentResult.NewzbinId = Int32.Parse(id);
             }
             return currentResult;
         }
-
     }
 }

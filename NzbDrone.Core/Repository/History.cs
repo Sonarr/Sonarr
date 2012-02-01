@@ -16,6 +16,8 @@ namespace NzbDrone.Core.Repository
         public DateTime Date { get; set; }
         public bool IsProper { get; set; }
         public string Indexer { get; set; }
+        public int NewzbinId { get; set; }
+        public bool Blacklisted { get; set; }
 
         [ResultColumn]
         public Episode Episode { get; set; }

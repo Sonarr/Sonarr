@@ -29,6 +29,13 @@ namespace NzbDrone.Core.Test.ProviderTests.InventoryProviderTests
         private QualityProfile sdProfile;
         private Series series;
 
+        private void WithNoBlacklist()
+        {
+            Mocker.GetMock<HistoryProvider>()
+                .Setup(s => s.IsBlacklisted(It.IsAny<string>()))
+                .Returns(false);
+        }
+
         [SetUp]
         public void Setup()
         {
@@ -186,6 +193,7 @@ namespace NzbDrone.Core.Test.ProviderTests.InventoryProviderTests
         public void IsQualityNeeded_lesser_file_in_history_should_be_downloaded()
         {
             WithStrictMocker();
+            WithNoBlacklist();
 
             parseResultSingle.Series.QualityProfile = sdProfile;
             parseResultSingle.Quality.QualityType = QualityTypes.DVD;
@@ -239,6 +247,8 @@ namespace NzbDrone.Core.Test.ProviderTests.InventoryProviderTests
             Mocker.GetMock<QualityTypeProvider>()
                 .Setup(s => s.Get(It.IsAny<int>()))
                 .Returns(new QualityType { MaxSize = 100, MinSize = 0 });
+
+            WithNoBlacklist();
 
             episode.EpisodeFile.Quality = QualityTypes.SDTV;
             //Act
@@ -298,6 +308,8 @@ namespace NzbDrone.Core.Test.ProviderTests.InventoryProviderTests
             Mocker.GetMock<QualityTypeProvider>()
                 .Setup(s => s.Get(It.IsAny<int>()))
                 .Returns(new QualityType { MaxSize = 100, MinSize = 0 });
+
+            WithNoBlacklist();
 
             episode.EpisodeFile.Quality = QualityTypes.SDTV;
             //Act

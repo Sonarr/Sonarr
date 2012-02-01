@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Providers
             }
 
             var sabTitle = _sabProvider.GetSabTitle(parseResult);
-            var addSuccess = _sabProvider.AddByUrl(parseResult.NzbUrl, sabTitle);
+            var addSuccess = _sabProvider.AddByUrl(parseResult, sabTitle);
 
             if (addSuccess)
             {
@@ -54,6 +54,7 @@ namespace NzbDrone.Core.Providers
                     history.NzbTitle = parseResult.OriginalString;
                     history.EpisodeId = episode.EpisodeId;
                     history.SeriesId = episode.SeriesId;
+                    history.NewzbinId = parseResult.NewzbinId;
 
                     _historyProvider.Add(history);
                     _episodeProvider.MarkEpisodeAsFetched(episode.EpisodeId);

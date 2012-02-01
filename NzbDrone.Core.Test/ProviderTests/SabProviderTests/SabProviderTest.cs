@@ -21,6 +21,9 @@ namespace NzbDrone.Core.Test.ProviderTests.SabProviderTests
     // ReSharper disable InconsistentNaming
     public class SabProviderTest : CoreTest
     {
+        private EpisodeParseResult newzbinResult;
+        private EpisodeParseResult nonNewzbinResult;
+
         [SetUp]
         public void Setup()
         {
@@ -39,8 +42,17 @@ namespace NzbDrone.Core.Test.ProviderTests.SabProviderTests
             fakeConfig.SetupGet(c => c.SabUsername).Returns(username);
             fakeConfig.SetupGet(c => c.SabPassword).Returns(password);
             fakeConfig.SetupGet(c => c.SabTvCategory).Returns(cat);
-        }
 
+            newzbinResult = Builder<EpisodeParseResult>.CreateNew()
+                    .With(r => r.NewzbinId = 6107863)
+                    .With(r => r.Indexer = "Newzbin")
+                    .Build();
+
+            nonNewzbinResult = Builder<EpisodeParseResult>.CreateNew()
+                    .With(r => r.NzbUrl = "http://www.nzbclub.com/nzb_download.aspx?mid=1950232")
+                    .With(r => r.Indexer = "Not Newzbin")
+                    .Build();
+        }
 
         private void WithFailResponse()
         {
@@ -59,9 +71,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SabProviderTests
                     .Returns("ok");
 
             //Act
-            bool result = Mocker.Resolve<SabProvider>().AddByUrl(
-                                                                 "http://www.nzbclub.com/nzb_download.aspx?mid=1950232",
-                                                                 "This is an Nzb");
+            bool result = Mocker.Resolve<SabProvider>().AddByUrl(nonNewzbinResult, "This is an Nzb");
 
             //Assert
             result.Should().BeTrue();
@@ -79,9 +89,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SabProviderTests
                     .Returns("ok");
 
             //Act
-            bool result = Mocker.Resolve<SabProvider>().AddByUrl(
-                                                                 "http://www.newzbin.com/browse/post/6107863/nzb",
-                                                                 "This is an Nzb");
+            bool result = Mocker.Resolve<SabProvider>().AddByUrl(newzbinResult, "This is an Nzb");
 
             //Assert
             result.Should().BeTrue();
@@ -94,7 +102,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SabProviderTests
 
             //Act
             var sabProvider = Mocker.Resolve<SabProvider>();
-            var result = sabProvider.AddByUrl("http://www.nzbclub.com/nzb_download.aspx?mid=1950232", "This is an nzb");
+            var result = sabProvider.AddByUrl(nonNewzbinResult, "This is an nzb");
 
             //Assert
             Assert.IsFalse(result);
