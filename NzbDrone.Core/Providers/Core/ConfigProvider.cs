@@ -409,6 +409,19 @@ namespace NzbDrone.Core.Providers.Core
             set { SetValue("AutoIgnorePreviouslyDownloadedEpisodes", value); }
         }
 
+        public virtual DownloadClientType DownloadClient
+        {
+            get { return (DownloadClientType)GetValueInt("DownloadClient"); }
+
+            set { SetValue("DownloadClient", (int)value); }
+        }
+
+        public virtual string BlackholeDirectory
+        {
+            get { return GetValue("BlackholeDirectory", String.Empty); }
+            set { SetValue("BlackholeDirectory", value); }
+        }
+
         public string UGuid
         {
             get { return GetValue("UGuid", Guid.NewGuid().ToString(), persist: true); }

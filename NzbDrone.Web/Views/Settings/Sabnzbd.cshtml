@@ -1,124 +1,52 @@
 ﻿@using NzbDrone.Web.Helpers;
-@model NzbDrone.Web.Models.SabnzbdSettingsModel
-@{ Layout = "~/Views/Shared/_ReferenceLayout.cshtml"; }
-@section HeaderContent{
-     @Html.IncludeCss("Settings.css")
+@model NzbDrone.Web.Models.DownloadClientSettingsModel
+
+@{
+    Layout = null;
 }
-<div id="stylized">
-    @using (Html.BeginForm("SaveSabnzbd", "Settings", FormMethod.Post, new { id = "SabForm", name = "SabForm", @class = "settingsForm" }))
-    {
-        <label class="labelClass">
-            Auto-Configure <span class="small">If access to SABnzbd doesn't require a username +
-                password and is on the same system as NzbDrone, you can auto-configure it</span>
-        </label>
-        <input type="button" onclick="autoConfigureSab(); return false;" value="Auto-Configure"
-            class="inputClass" />
 
-        <label class="labelClass">@Html.LabelFor(m => m.SabHost)
-            <span class="small">@Html.DescriptionFor(m => m.SabHost)</span>
-        </label>
-        @Html.TextBoxFor(m => m.SabHost, new { @class = "inputClass" })
+<div class="downloadClient">
+    <label class="labelClass">
+        Auto-Configure <span class="small">If access to SABnzbd doesn't require a username +
+            password and is on the same system as NzbDrone, you can auto-configure it</span>
+    </label>
+    <input type="button" onclick="autoConfigureSab(); return false;" value="Auto-Configure"
+        class="inputClass" />
 
-        <label class="labelClass">@Html.LabelFor(m => m.SabPort)
-            <span class="small">@Html.DescriptionFor(m => m.SabPort)</span>
-        </label>
-        @Html.TextBoxFor(m => m.SabPort, new { @class = "inputClass" })
+    <label class="labelClass">@Html.LabelFor(m => m.SabHost)
+        <span class="small">@Html.DescriptionFor(m => m.SabHost)</span>
+    </label>
+    @Html.TextBoxFor(m => m.SabHost, new { @class = "inputClass" })
 
-        <label class="labelClass">@Html.LabelFor(m => m.SabApiKey)
-            <span class="small">@Html.DescriptionFor(m => m.SabApiKey)</span>
-        </label>
-        @Html.TextBoxFor(m => m.SabApiKey, new { @class = "inputClass" })
+    <label class="labelClass">@Html.LabelFor(m => m.SabPort)
+        <span class="small">@Html.DescriptionFor(m => m.SabPort)</span>
+    </label>
+    @Html.TextBoxFor(m => m.SabPort, new { @class = "inputClass" })
 
-        <label class="labelClass">@Html.LabelFor(m => m.SabUsername)
-            <span class="small">@Html.DescriptionFor(m => m.SabUsername)</span>
-        </label>
-        @Html.TextBoxFor(m => m.SabUsername, new { @class = "inputClass" })
+    <label class="labelClass">@Html.LabelFor(m => m.SabApiKey)
+        <span class="small">@Html.DescriptionFor(m => m.SabApiKey)</span>
+    </label>
+    @Html.TextBoxFor(m => m.SabApiKey, new { @class = "inputClass" })
 
-        <label class="labelClass">@Html.LabelFor(m => m.SabPassword)
-            <span class="small">@Html.DescriptionFor(m => m.SabPassword)</span>
-        </label>
-        @Html.TextBoxFor(m => m.SabPassword, new { @class = "inputClass", type = "password" })
+    <label class="labelClass">@Html.LabelFor(m => m.SabUsername)
+        <span class="small">@Html.DescriptionFor(m => m.SabUsername)</span>
+    </label>
+    @Html.TextBoxFor(m => m.SabUsername, new { @class = "inputClass" })
 
-        <label class="labelClass">@Html.LabelFor(m => m.SabTvCategory)
-            <span class="small">@Html.DescriptionFor(m => m.SabTvCategory)</span>
-        </label>
-        @Html.DropDownListFor(m => m.SabTvCategory, Model.SabTvCategorySelectList, new { @class = "inputClass selectClass" })
+    <label class="labelClass">@Html.LabelFor(m => m.SabPassword)
+        <span class="small">@Html.DescriptionFor(m => m.SabPassword)</span>
+    </label>
+    @Html.TextBoxFor(m => m.SabPassword, new { @class = "inputClass", type = "password" })
 
-        <label class="labelClass">@Html.LabelFor(m => m.SabTvPriority)
-            <span class="small">@Html.DescriptionFor(m => m.SabTvPriority)</span>
-        </label>
-        @Html.DropDownListFor(m => m.SabTvPriority, Model.PrioritySelectList, new { @class = "inputClass selectClass" })
+    <label class="labelClass">@Html.LabelFor(m => m.SabTvCategory)
+        <span class="small">@Html.DescriptionFor(m => m.SabTvCategory)</span>
+    </label>
+    @Html.DropDownListFor(m => m.SabTvCategory, Model.SabTvCategorySelectList, new { @class = "inputClass selectClass" })
 
-        <label class="labelClass">@Html.LabelFor(m => m.SabDropDirectory)
-            <span class="small">@Html.DescriptionFor(m => m.SabDropDirectory)</span>
-        </label>
-        @Html.TextBoxFor(m => m.SabDropDirectory, new { @class = "inputClass folderLookup" })
+    <label class="labelClass">@Html.LabelFor(m => m.SabTvPriority)
+        <span class="small">@Html.DescriptionFor(m => m.SabTvPriority)</span>
+    </label>
+    @Html.DropDownListFor(m => m.SabTvPriority, Model.PrioritySelectList, new { @class = "inputClass selectClass" })
 
-        <button type="submit" class="save_button" disabled="disabled">
-            Save</button>
-    }
+    
 </div>
-<div id="result" class="hiddenResult">
-</div>
-@section Scripts{
-
-    <script type="text/javascript">
-        var autoConfigureSabUrl = '@Url.Action("AutoConfigureSab", "Settings")';
-
-        function autoConfigureSab() {
-            $.ajax({
-                type: "GET",
-                url: autoConfigureSabUrl,
-                error: function (req, status, error) {
-                    alert("Sorry! We could not autoconfigure SABnzbd for you");
-                },
-                success: autoConfigureSuccess
-            });
-
-            function autoConfigureSuccess(data) {
-                $('#SabHost').val(data.Host);
-                $('#SabPort').val(data.Port);
-                $('#SabApiKey').val(data.ApiKey);
-            }
-        }
-        var sabCategoryUrl = '../Command/GetSabnzbdCategories';
-
-        $('#SabTvCategory').focus(function () {
-            var host = $('#SabHost').val();
-            var port = $('#SabPort').val();
-            var apiKey = $('#SabApiKey').val();
-            var username = $('#SabUsername').val();
-            var password = $('#SabPassword').val();
-
-            $.ajax({
-                type: "POST",
-                url: sabCategoryUrl,
-                data: jQuery.param({ host: host, port: port, apiKey: apiKey, username: username, password: password }),
-                error: function (req, status, error) {
-                    $.each($('#SabTvCategory option'), function () {
-                        $(this).remove();
-                    });
-
-                    $('#SabTvCategory').append($('<option />').val('tv').text('Please check your SABnzbd Settings'));
-                },
-                success: function (data, textStatus, jqXHR) {
-                    //Get the current value
-                    var currentlySelected = $('#SabTvCategory').val();
-
-                    //Remove all existing options
-                    $.each($('#SabTvCategory option'), function () {
-                        $(this).remove();
-                    });
-
-                    //Add the new ones
-                    $.each(data.categories, function () {
-                        $('#SabTvCategory').append($('<option />').val(this.toString()).text(this.toString()));
-                    });
-
-                    //Attempt to reset to the preiously selected value (change to lower-case)
-                    $("#SabTvCategory").val(currentlySelected.toLowerCase());
-                }
-            });
-        });
-    </script>
-}

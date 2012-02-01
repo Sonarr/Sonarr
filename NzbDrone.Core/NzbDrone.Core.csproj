@@ -228,6 +228,7 @@
     <Compile Include="Helpers\SortHelper.cs" />
     <Compile Include="Helpers\SabnzbdQueueTimeConverter.cs" />
     <Compile Include="Jobs\CheckpointJob.cs" />
+    <Compile Include="Model\DownloadClientType.cs" />
     <Compile Include="Providers\AnalyticsProvider.cs" />
     <Compile Include="Instrumentation\LogDbContext.cs" />
     <Compile Include="Instrumentation\LogProvider.cs" />
@@ -258,6 +259,7 @@
     <Compile Include="Model\Xbmc\ErrorResult.cs" />
     <Compile Include="Model\Xbmc\IconType.cs" />
     <Compile Include="Providers\BackupProvider.cs" />
+    <Compile Include="Providers\BlackholeProvider.cs" />
     <Compile Include="Providers\Converting\AtomicParsleyProvider.cs" />
     <Compile Include="Providers\Converting\HandbrakeProvider.cs" />
     <Compile Include="Providers\Indexer\Newznab.cs" />
