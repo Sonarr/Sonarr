@@ -25,11 +25,11 @@ namespace NzbDrone.Core
 			                            RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                                     //Multi-episode (S01E05E06, S01E05-06, etc)
-                                    new Regex(@"^(?<title>.+?)(?:\W+S?(?<season>\d{1,2}(?!\d+))(?:(?:\-|[ex]|\s){1,2}(?<episode>\d{2}(?!\d+)))+){2,}\W?(?!\\)",
+                                    new Regex(@"^(?<title>.+?)(?:\W+S?(?<season>\d{1,2}(?!\d+))(?:(?:\-|[ex]){1,2}(?<episode>\d{2}(?!\d+)))+){2,}\W?(?!\\)",
 		                                RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                                     //Single episodes (S01E05, 1x05, etc)
-                                    new Regex(@"^(?<title>.+?)(?:\W+S?(?<season>\d{1,2}(?!\d+))(?:(?:\-|[ex]|\s){1,2}(?<episode>\d{2}(?!\d+)))+)\W?(?!\\)",
+                                    new Regex(@"^(?<title>.+?)(?:\W+S?(?<season>\d{1,2}(?!\d+))(?:\-|[ex]|\s){1,2}(?<episode>\d{2}(?!\d+)))\W?(?!\\)",
 		                                RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                                     //Mini-Series, treated as season 1, episodes are labeled as Part01, Part 01, Part.1
