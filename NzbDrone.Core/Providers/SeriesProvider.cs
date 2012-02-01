@@ -234,10 +234,11 @@ namespace NzbDrone.Core.Providers
             if (String.IsNullOrEmpty(meridiem))
                 meridiem = "PM";
 
-            if (String.IsNullOrEmpty(time))
+            DateTime dateTime;
+
+            if (String.IsNullOrEmpty(time) || !DateTime.TryParse(time + " " + meridiem.ToUpper(), out dateTime))
                 return String.Empty;
 
-            var dateTime = DateTime.Parse(time + " " + meridiem.ToUpper());
             return dateTime.ToString("hh:mm tt");
         }
     }
