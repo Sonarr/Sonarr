@@ -405,7 +405,7 @@ namespace NzbDrone.Core.Test
             ExceptionVerification.ExpectedWarns(1);
         }
 
-        [TestCase("Fussball Bundesliga 2010 2011 30 Spieltag FC Bayern Muenchen vs Bayer 04 Leverkusen German WS dTV XviD WoGS")]
+        [TestCase("Fussball Bundesliga 10e2011e30 Spieltag FC Bayern Muenchen vs Bayer 04 Leverkusen German WS dTV XviD WoGS")]
         public void unparsable_should_log_error_but_not_throw(string title)
         {
             Parser.ParseTitle(title);

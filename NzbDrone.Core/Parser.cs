@@ -21,27 +21,27 @@ namespace NzbDrone.Core
                                         RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                                     //Multi-Part episodes without a title (S01E05.S01E06)
-                                    new Regex(@"^(?:\W*S?(?<season>\d{1,2}(?!\d+))(?:(?:\-|[ex]|\s){1,2}(?<episode>\d{1,2}(?!\d+)))+){2,}\W?(?!\\)",
+                                    new Regex(@"^(?:\W*S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]){1,2}(?<episode>\d{1,2}(?!\d+)))+){2,}\W?(?!\\)",
 			                            RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
-                                    //Multi-episode (S01E05E06, S01E05-06, etc)
-                                    new Regex(@"^(?<title>.+?)(?:\W+S?(?<season>\d{1,2}(?!\d+))(?:(?:\-|[ex]){1,2}(?<episode>\d{2}(?!\d+)))+){2,}\W?(?!\\)",
+                                    //Multi-episode Repeated (S01E05 - S01E06, 1x05 - 1x06, etc)
+                                    new Regex(@"^(?<title>.+?)(?:\W+S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]){1,2}(?<episode>\d{2}(?!\d+)))+){2,}\W?(?!\\)",
 		                                RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
-                                    //Single episodes (S01E05, 1x05, etc)
-                                    new Regex(@"^(?<title>.+?)(?:\W+S?(?<season>\d{1,2}(?!\d+))(?:\-|[ex]|\s){1,2}(?<episode>\d{2}(?!\d+)))\W?(?!\\)",
+                                    //Episodes with a title, Single episodes (S01E05, 1x05, etc) & Multi-episode (S01E05E06, S01E05-06, S01E05 E06, etc)
+                                    new Regex(@"^(?<title>.+?)(?:\W+S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]|\s[ex]){1,2}(?<episode>\d{2}(?!\d+)))+)\W?(?!\\)",
 		                                RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                                     //Mini-Series, treated as season 1, episodes are labeled as Part01, Part 01, Part.1
                                     new Regex(@"^(?<title>.+?)(?:\W+(?:(?:Part\W?|(?<!\d+\W+)e)(?<episode>\d{1,2}(?!\d+)))+)\W?(?!\\)",
                                         RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
-                                    //Episodes without a title, Single (S01E05, 1x05) AND Multi (S01E04E05, 1x04x05)
-                                    new Regex(@"^(?:S?(?<season>\d{1,2}(?!\d+))(?:(?:\-|[ex]|\s)(?<episode>\d{1,2}(?!\d+)))+\W*)+\W?(?!\\)",
+                                    //Episodes without a title, Single (S01E05, 1x05) AND Multi (S01E04E05, 1x04x05, etc)
+                                    new Regex(@"^(?:S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex])(?<episode>\d{1,2}(?!\d+)))+\W*)+\W?(?!\\)",
 			                            RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
-                                    //Episodes over 99 (3-digits or more)
-                                    new Regex(@"^(?<title>.*?)(?:\W?S?(?<season>\d{1,2}(?!\d+))(?:(?:\-|[ex]|\s){1,2}(?<episode>\d+))+)+\W?(?!\\)",
+                                    //Episodes over 99 (3-digits or more) (S01E105, S01E105E106, etc)
+                                    new Regex(@"^(?<title>.*?)(?:\W?S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]){1,2}(?<episode>\d+))+)+\W?(?!\\)",
                                         RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                                     //Supports 1103/1113 naming
