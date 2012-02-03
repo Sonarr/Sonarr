@@ -19,7 +19,7 @@ $(".masterQualitySelector").live('change', function () {
     });
 });
 
-$(".addExistingButton").live('click', function () {
+$(".addExistingButton").live('click', function() {
     var root = $(this).parents(".existingSeries");
     var title = $(this).siblings(".seriesLookup").val();
     var seriesId = $(this).siblings(".seriesId").val();
@@ -42,11 +42,13 @@ $(".addExistingButton").live('click', function () {
         type: "POST",
         url: addSeriesUrl,
         data: jQuery.param({ path: path, seriesName: title, seriesId: seriesId, qualityProfileId: qualityId }),
-        error: function (req, status, error) {
+        error: function(req, status, error) {
             alert("Sorry! We could not add " + path + " at this time. " + error);
         },
-        success: function () {
+        success: function() {
             root.hide('highlight', 'fast');
+            if ($('.existingSeries').filter(":visible").length === 1)
+                reloadExistingSeries();
         }
     });
 
