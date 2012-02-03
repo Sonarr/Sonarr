@@ -258,7 +258,7 @@ namespace NzbDrone.Core.Providers.Core
 
         public virtual string UpdateUrl
         {
-            get { return GetValue("UpdateUrl", @"http://update.nzbdrone.com/master/"); }
+            get { return GetValue("UpdateUrl", UpdateProvider.DEFAULT_UPDATE_URL); }
             set { SetValue("UpdateUrl", value); }
         }
 
