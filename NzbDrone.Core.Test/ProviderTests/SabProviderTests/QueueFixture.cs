@@ -94,7 +94,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SabProviderTests
 
             var result = Mocker.Resolve<SabProvider>().GetQueue();
 
-            result.Should().HaveCount(6);
+            result.Should().HaveCount(7);
         }
 
         [Test]
@@ -208,6 +208,28 @@ namespace NzbDrone.Core.Test.ProviderTests.SabProviderTests
         [TestCase(5, new[] { 13 }, "The Big Bang Theory", QualityTypes.HDTV, true, Description = "Same Series, same quality")]
         [TestCase(5, new[] { 13, 14 }, "The Big Bang Theory", QualityTypes.HDTV, false, Description = "Same Series, same quality, one diffrent episode")]
         public void IsInQueue_should_find_items_marked_as_duplicate(int season, int[] episodes, string title, QualityTypes qualityType, bool proper)
+        {
+            WithFullQueue();
+
+            var parseResult = new EpisodeParseResult
+            {
+                EpisodeTitle = "Title",
+                EpisodeNumbers = new List<int>(episodes),
+                SeasonNumber = season,
+                Quality = new Quality { QualityType = qualityType, Proper = proper },
+                Series = new Series { Title = title, CleanTitle = Parser.NormalizeTitle(title) },
+            };
+
+            var result = Mocker.Resolve<SabProvider>().IsInQueue(parseResult);
+
+            result.Should().BeTrue();
+        }
+
+        [TestCase(3, new[] { 14, 15 }, "My Name Is Earl", QualityTypes.Bluray720p, false)]
+        [TestCase(3, new[] { 15 }, "My Name Is Earl", QualityTypes.DVD, false)]
+        [TestCase(3, new[] { 14 }, "My Name Is Earl", QualityTypes.HDTV, false)]
+        [TestCase(3, new[] { 15, 16 }, "My Name Is Earl", QualityTypes.SDTV, false)]
+        public void IsInQueue_should_find_double_episodes_(int season, int[] episodes, string title, QualityTypes qualityType, bool proper)
         {
             WithFullQueue();
 

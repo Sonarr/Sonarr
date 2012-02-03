@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Ninject;
 using NLog;
 using NzbDrone.Core.Model;
@@ -12,7 +13,12 @@ namespace NzbDrone.Core.Providers
 {
     public class EpisodeProvider
     {
+
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        //this will remove (1),(2) from the end of multi part episodes.
+        private static readonly Regex multiPartCleanupRegex = new Regex(@"\(\d+\)$", RegexOptions.Compiled);
+
         private readonly TvDbProvider _tvDbProvider;
         private readonly IDatabase _database;
         private readonly SeriesProvider _seriesProvider;
@@ -213,8 +219,15 @@ namespace NzbDrone.Core.Providers
                 if (episodeInfo != null)
                 {
                     result.Add(episodeInfo);
-                    parseResult.EpisodeTitle += String.Format(" + {0}", episodeInfo.Title);
-                    parseResult.EpisodeTitle = parseResult.EpisodeTitle.Trim('+', ' ');
+
+                    if (parseResult.EpisodeNumbers.Count == 1)
+                    {
+                        parseResult.EpisodeTitle = episodeInfo.Title.Trim();
+                    }
+                    else
+                    {
+                        parseResult.EpisodeTitle = multiPartCleanupRegex.Replace(episodeInfo.Title, string.Empty).Trim();
+                    }
                 }
                 else
                 {
@@ -325,7 +338,7 @@ namespace NzbDrone.Core.Providers
             }
 
             _database.InsertMany(newList);
-            _database.UpdateMany(updateList);     
+            _database.UpdateMany(updateList);
 
             Logger.Info("Finished episode refresh for series: {0}. Successful: {1} - Failed: {2} ",
                          tvDbSeriesInfo.SeriesName, successCount, failCount);

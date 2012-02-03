@@ -41,14 +41,14 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             fakeEpisode = Builder<Episode>.CreateNew()
                      .With(e => e.SeriesId = fakeSeries.SeriesId)
-                     .With(e => e.Title = "Episode 1")
+                     .With(e => e.Title = "Episode (1)")
                      .Build();   
 
             fakeEpisode2 = Builder<Episode>.CreateNew()
                      .With(e => e.SeriesId = fakeSeries.SeriesId)
                      .With(e => e.SeasonNumber = fakeEpisode.SeasonNumber)
                      .With(e => e.EpisodeNumber = fakeEpisode.EpisodeNumber + 1)
-                     .With(e => e.Title = "Episode 2")
+                     .With(e => e.Title = "Episode (2)")
                      .Build();
 
             fakeDailyEpisode = Builder<Episode>.CreateNew()
@@ -137,6 +137,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             VerifyEpisode(ep[0], fakeEpisode);
             VerifyEpisode(ep[1], fakeEpisode2);
+            parseResult.EpisodeTitle.Should().Be("Episode");
         }
 
 
@@ -155,7 +156,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var ep = episodeProvider.GetEpisodesByParseResult(parseResult,true);
 
             ep.Should().BeEmpty();
-            Db.Fetch<Episode>().Should().HaveCount(0);
+            Db.Fetch<Episode>().Should().BeEmpty();
         }
 
 
@@ -208,7 +209,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
 
         [Test]
-        public void GetEpisodeParseResult_should_return_multiple_titles_for_multiple_episodes()
+        public void GetEpisodeParseResult_should_return_single_title_for_multiple_episodes()
         {
             Db.Insert(fakeSeries);
             Db.Insert(fakeEpisode);
@@ -229,7 +230,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             VerifyEpisode(ep[0], fakeEpisode);
             VerifyEpisode(ep[1], fakeEpisode2);
 
-            parseResult.EpisodeTitle.Should().Be(fakeEpisode.Title + " + " + fakeEpisode2.Title);
+            parseResult.EpisodeTitle.Should().Be("Episode");
         }
 
         [Test]
