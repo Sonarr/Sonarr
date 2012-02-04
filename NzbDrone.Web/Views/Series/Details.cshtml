@@ -68,7 +68,6 @@
 	    border-style: none;
 	    border-color: white;
 	    border-collapse: collapse;
-	    background-color: white;
     }
     
     .seriesTable th {
@@ -86,7 +85,6 @@
 	    padding: 0 0.6em;
 	    border-style: inset;
 	    border-color: #EEEEEE;
-	    background-color: white;
         padding-left: 7px;
     }
 </style>
@@ -110,12 +108,14 @@
     <img src="@bannerUrl" alt="Banner"/>
 </div>
 <div class="seasonToggleTopGroup">
-    @foreach (var season in Model.Seasons.Select(s => s.SeasonNumber))
+    @foreach (var season in Model.Seasons.OrderBy(s => s.SeasonNumber))
     {
-        var ignoreSeason = "ignoreSeason_" + season;
+        var ignoreSeason = "ignoreSeason_" + season.SeasonNumber;
         <div class="seasonToggleTop">
-            <img src='../../Content/Images/ignoredNeutral.png' class='ignoredEpisodesMaster ignoreEpisode @ignoreSeason' title='Click to toggle season ignore status' />
-            <span class="seasonToggleLabel">@(season == 0 ? "Specials" : "Season " + season)</span>
+            <img src='../../Content/Images/@(season.AnyWanted ? "notIgnored" : "ignored").png'
+                 class='ignoredEpisodesMaster ignoreEpisode @ignoreSeason @(season.AnyWanted ? "" : "ignored")'
+                 title='Click to toggle season ignore status' />
+            <span class="seasonToggleLabel">@(season.SeasonNumber == 0 ? "Specials" : "Season " + season.SeasonNumber)</span>
         </div>
     }
 </div>

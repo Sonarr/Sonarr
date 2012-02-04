@@ -185,10 +185,17 @@ namespace NzbDrone.Web.Controllers
 
             foreach (var season in episodes.Select(s => s.SeasonNumber).Distinct())
             {
+                var episodesInSeason = episodes.Where(e => e.SeasonNumber == season).ToList();
+                var commonStatusList = episodes.Select(s => s.Status).Distinct().ToList();
+                var commonStatus = commonStatusList.Count > 1 ? "Missing" : commonStatusList.First().ToString();
+
                 seasons.Add(new SeasonModel
                                       {
-                                              SeasonNumber = season,
-                                              Episodes = GetEpisodeModels(episodes.Where(e => e.SeasonNumber == season).ToList()).OrderByDescending(e=> e.EpisodeNumber).ToList()
+                                            SeriesId = seriesId,
+                                            SeasonNumber = season,
+                                            Episodes = GetEpisodeModels(episodesInSeason).OrderByDescending(e=> e.EpisodeNumber).ToList(),
+                                            AnyWanted = episodesInSeason.Any(e => !e.Ignored),
+                                            CommonStatus = commonStatus
                                       });
             }
 

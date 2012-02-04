@@ -16,11 +16,13 @@ $(".ignoreEpisode").live("click", function () {
     if (ignored) {
         toggle.removeClass('ignored');
         toggle.attr('src', notIgnoredImage);
+        toggleCellColour(toggle, false);
     }
 
     else {
         toggle.addClass('ignored');
         toggle.attr('src', ignoredImage);
+        toggleCellColour(toggle, true);
     }
 
     var seasonNumber = 0;
@@ -29,7 +31,6 @@ $(".ignoreEpisode").live("click", function () {
     ignored = !ignored;
 
     if (toggle.hasClass('ignoredEpisodesMaster')) {
-        //seasonNumber = toggle.attr('id').replace('master_', '');
         seasonNumber = toggle.attr('class').split(/\s+/)[2].replace('ignoreSeason_', '');
 
         toggleChildren(seasonNumber, ignored);
@@ -53,6 +54,7 @@ function toggleChildren(seasonNumber, ignored) {
         ignoreEpisodes.each(function (index) {
             $(this).addClass('ignored');
             $(this).attr('src', ignoredImage);
+            toggleCellColour($(this), true);
         });
     }
 
@@ -60,12 +62,14 @@ function toggleChildren(seasonNumber, ignored) {
         ignoreEpisodes.each(function (index) {
             $(this).removeClass('ignored');
             $(this).attr('src', notIgnoredImage);
+
+            toggleCellColour($(this), false);
         });
     }
 }
 
 function toggleMaster(seasonNumber) {
-    //Toggles all master toggles when the childen changes or the grid is loaded
+    //Toggles all master toggles when the childen changes
     
     var ignoreEpisodes = $('.ignoreEpisode_' + seasonNumber);
     var ignoredCount = ignoreEpisodes.filter('.ignored').length;
@@ -103,36 +107,19 @@ function toggleMasters(seasonNumber, ignored) {
     }
 }
 
-//Functions called by the Telerik Season Grid 
-function grid_rowBound(e) {
-    var dataItem = e.dataItem;
-    var row = e.row;
-    var ignored = dataItem.Ignored;
-    var episodeId = dataItem.EpisodeId;
-
-    var ignoredIcon = $('#' + episodeId);
-
+function toggleCellColour(toggle, ignored) {
     if (ignored) {
-        ignoredIcon.attr('src', ignoredImage);
+        toggle.parent('td').addClass('episodeIgnored');
+        toggle.parent('td').removeClass('episodeMissing');
     }
-
+    
     else {
-        ignoredIcon.attr('src', notIgnoredImage);
-        ignoredIcon.removeClass('ignored');
+        toggle.parent('td').removeClass('episodeIgnored');
+
+        //check to see if episode is missing
+        if (toggle.parent('td').children('.statusImage').hasClass('status-Missing'))
+            toggle.parent('td').addClass('episodeMissing');
     }
-
-    if (seriesId == 0)
-        seriesId = dataItem.SeriesId;
-
-    highlightRow(e);
-}
-
-function grid_dataBound(e) {
-    var id = $(this).attr('id');
-    var seasonNumber = id.replace('seasons_', '');
-
-    toggleMaster(seasonNumber);
-    setMasterStatus(this);
 }
 
 //Episode Ignore Saving
@@ -156,33 +143,4 @@ function saveEpisodeIgnore(episodeId, ignored) {
             alert("Sorry! We could save the ignore settings for Episode: " + episodeId + " at this time. " + error);
         }
     });
-}
-
-//Set master status to match children
-function setMasterStatus(grid) {
-    //Get children of this grid
-    var masterStatus = $(grid).find('.statusImageMaster');
-    var statuses = $(grid).find('.statusImage').filter(':not(.statusImageMaster)');
-    var episodeCount = statuses.length;
-    
-    //Get missing count
-    if (statuses.filter('.status-Missing').length == episodeCount) {
-        //Leave as is (default is missing)
-        return;
-    }
-
-    if (statuses.filter('.status-NotAired').length == episodeCount) {
-        masterStatus.attr('src', notAiredImage);
-        return;
-    }
-
-    if (statuses.filter('.status-Ready').length == episodeCount) {
-        masterStatus.attr('src', readyImage);
-        return;
-    }
-
-    if (statuses.filter('.status-Downloading').length == episodeCount) {
-        masterStatus.attr('src', downloadingImage);
-        return;
-    }
 }

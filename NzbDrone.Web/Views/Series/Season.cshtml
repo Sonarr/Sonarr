@@ -6,19 +6,25 @@
 </h2>
 
 <table class="seriesTable">
+    <colgroup>
+        <col style="width:100px" />
+        <col>
+        <col style="width:100px" />
+        <col style="width:100px" />
+        <col style="width:110px" />
+    </colgroup>
     <tr>
-        <th width="100px">Episode #</th>
+        <th>Episode #</th>
         <th>Title</th>
-        <th width="100px">Air Date</th>
-        <th width="100px">Quality</th>
+        <th>Air Date</th>
+        <th>Quality</th>
         
         @*Commands Column*@
-        <th width="110px">
-            Commands
-            @*            <img src='../../Content/Images/ignoredNeutral.png' class='ignoredEpisodesMaster ignoreEpisode ignoreSeason_" + season + "' title='Click to toggle season ignore status' />
-            <img src='../../Content/Images/Missing.png' alt='Status' title='Season Status' class='statusImage statusImageMaster' />
-            Ajax.ImageActionLink("../../Content/Images/Search.png", new { Alt = "Search", Title = "Search for all episodes in this season", @class = "searchImage searchImageMaster" }, "SearchSeason", "Episode", new { SeriesId = seriesId, SeasonNumber = season }, null, null)
-            Ajax.ImageActionLink("../../Content/Images/Rename.png", new { Alt = "Rename", Title = "Rename all episodes in this season", @class = "renameImage renameImageMaster" }, "RenameSeason", "Episode", new { SeriesId = seriesId, SeasonNumber = season }, null, null))*@
+        <th>
+            <img src='../../Content/Images/@(Model.AnyWanted ? "notIgnored" : "ignored").png' class='ignoredEpisodesMaster ignoreEpisode ignoreSeason_@(Model.SeasonNumber) @(Model.AnyWanted ? "" : "ignored")' title='Click to toggle season ignore status' />
+            <img src='../../Content/Images/@(Model.CommonStatus).png' alt='Status' title='Season Status' class='statusImage statusImageMaster' />
+            @Ajax.ImageActionLink("../../Content/Images/Search.png", new { Alt = "Search", Title = "Search for all episodes in this season", @class = "searchImage searchImageMaster" }, "SearchSeason", "Episode", new { SeriesId = Model.SeriesId, SeasonNumber = Model.SeasonNumber }, null, null)
+            @Ajax.ImageActionLink("../../Content/Images/Rename.png", new { Alt = "Rename", Title = "Rename all episodes in this season", @class = "renameImage renameImageMaster" }, "RenameSeason", "Episode", new { SeriesId = Model.SeriesId, SeasonNumber = Model.SeasonNumber }, null, null)
         </th>
     </tr>
 
