@@ -75,9 +75,9 @@
 	    padding: 2px;
 	    border-style: inset;
 	    border-color: #EEEEEE;
-	    background-color: white;
 	    padding-left: 7px;
         text-align: left;
+        background-color: white;
     }
     
     .seriesTable td {
@@ -87,6 +87,14 @@
 	    border-color: #EEEEEE;
         padding-left: 7px;
     }
+    
+    .detail-view {
+        display: none;
+    }
+    
+    /* Colour alternating rows */
+    .seriesTable tr:nth-child(4n) {background: #E5ECF9}
+    .seriesTable tr:nth-child(4n+1) {background: #E5ECF9}
 </style>
 @section ActionMenu{
     <ul class="sub-menu">

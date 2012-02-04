@@ -29,3 +29,9 @@
         @Ajax.ImageActionLink("../../Content/Images/Rename.png", new { Alt = "Rename", Title = "Rename episode", @class = "renameImage" }, "Rename", "Episode", new { EpisodeFileId = Model.EpisodeFileId }, null, null)
     </td>
 </tr>
+<tr class="detail-view">
+    <td colspan="5">
+        @Model.Overview <br />
+        <b>@Model.Path</b>
+    </td>
+</tr>
