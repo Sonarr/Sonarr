@@ -19,6 +19,13 @@ namespace NzbDrone.Core.Test.ProviderTests
     {
         private const string SceneMappingUrl = "http://services.nzbdrone.com/SceneMapping/Active";
 
+        [SetUp]
+        public void Setup()
+        {
+            Mocker.GetMock<ConfigProvider>().SetupGet(s => s.ServiceRootUrl)
+                    .Returns("http://services.nzbdrone.com");
+        }
+
         private void WithValidJson()
         {
             Mocker.GetMock<HttpProvider>()

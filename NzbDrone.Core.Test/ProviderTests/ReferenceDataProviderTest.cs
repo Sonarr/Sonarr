@@ -3,16 +3,12 @@ using System.Linq;
 
 using FizzWare.NBuilder;
 using FluentAssertions;
-using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
-using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
-using NzbDrone.Test.Common.AutoMoq;
-using PetaPoco;
 
 namespace NzbDrone.Core.Test.ProviderTests
 {
@@ -24,6 +20,14 @@ namespace NzbDrone.Core.Test.ProviderTests
         private const string invalidSeriesIds = "[1,2,NaN,4,5]";
 
         private const string url = "http://services.nzbdrone.com/DailySeries/AllIds";
+
+        [SetUp]
+        public void Setup()
+        {
+            Mocker.GetMock<ConfigProvider>().SetupGet(s => s.ServiceRootUrl)
+                    .Returns("http://services.nzbdrone.com");
+        }
+
 
         [Test]
         public void GetDailySeriesIds_should_return_list_of_int_when_all_are_valid()

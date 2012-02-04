@@ -422,6 +422,11 @@ namespace NzbDrone.Core.Providers.Core
             set { SetValue("BlackholeDirectory", value); }
         }
 
+        public virtual string ServiceRootUrl
+        {
+            get { return "http://services.nzbdrone.com"; }
+        }
+
         public string UGuid
         {
             get { return GetValue("UGuid", Guid.NewGuid().ToString(), persist: true); }

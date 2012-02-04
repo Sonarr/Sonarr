@@ -14,11 +14,13 @@ namespace NzbDrone.Core.Providers
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IDatabase _database;
         private readonly HttpProvider _httpProvider;
+        private readonly ConfigProvider _configProvider;
 
-        public SceneMappingProvider(IDatabase database, HttpProvider httpProvider)
+        public SceneMappingProvider(IDatabase database, HttpProvider httpProvider, ConfigProvider configProvider)
         {
             _database = database;
             _httpProvider = httpProvider;
+            _configProvider = configProvider;
         }
 
         public SceneMappingProvider()
@@ -30,9 +32,7 @@ namespace NzbDrone.Core.Providers
         {
             try
             {
-                const string url = "http://services.nzbdrone.com/SceneMapping/Active";
-                
-                var mappingsJson = _httpProvider.DownloadString(url);
+                var mappingsJson = _httpProvider.DownloadString(_configProvider.ServiceRootUrl + "/SceneMapping/Active");
                 var mappings = JsonConvert.DeserializeObject<List<SceneMapping>>(mappingsJson);
 
                 Logger.Debug("Deleting all existing Scene Mappings.");

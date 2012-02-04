@@ -15,13 +15,15 @@ namespace NzbDrone.Core.Providers
     {
         private readonly IDatabase _database;
         private readonly HttpProvider _httpProvider;
-        
+        private readonly ConfigProvider _configProvider;
+
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public ReferenceDataProvider(IDatabase database, HttpProvider httpProvider)
+        public ReferenceDataProvider(IDatabase database, HttpProvider httpProvider, ConfigProvider configProvider)
         {
             _database = database;
             _httpProvider = httpProvider;
+            _configProvider = configProvider;
         }
 
         public virtual void UpdateDailySeries()
@@ -46,18 +48,18 @@ namespace NzbDrone.Core.Providers
         {
             try
             {
-                var dailySeriesIds = _httpProvider.DownloadString("http://services.nzbdrone.com/DailySeries/AllIds");
+                var dailySeriesIds = _httpProvider.DownloadString(_configProvider.ServiceRootUrl + "/DailySeries/AllIds");
 
                 var seriesIds = JsonConvert.DeserializeObject<List<int>>(dailySeriesIds);
 
                 return seriesIds;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.WarnException("Failed to get Daily Series", ex);
                 return new List<int>();
             }
-            
+
         }
     }
 }
