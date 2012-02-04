@@ -138,7 +138,7 @@ namespace NzbDrone.Web.Controllers
             return new EmptyResult();
         }
 
-        public ActionResult Details(int seriesId)
+        public ActionResult Details2(int seriesId)
         {
             var series = _seriesProvider.GetSeries(seriesId);
 
@@ -158,6 +158,42 @@ namespace NzbDrone.Web.Controllers
             model.SeriesId = series.SeriesId;
             model.HasBanner = !String.IsNullOrEmpty(series.BannerUrl);
 
+            return View(model);
+        }
+
+        public ActionResult Details(int seriesId)
+        {
+            var series = _seriesProvider.GetSeries(seriesId);
+
+            var model = new SeriesDetailsModel();
+
+            if (series.AirsDayOfWeek != null)
+            {
+                model.AirsDayOfWeek = series.AirsDayOfWeek.Value.ToString();
+            }
+            else
+            {
+                model.AirsDayOfWeek = "N/A";
+            }
+            model.Overview = series.Overview;
+            model.Title = series.Title;
+            model.SeriesId = series.SeriesId;
+            model.HasBanner = !String.IsNullOrEmpty(series.BannerUrl);
+
+            var seasons = new List<SeasonModel>();
+            var episodes = _episodeProvider.GetEpisodeBySeries(seriesId);
+
+            foreach (var season in episodes.Select(s => s.SeasonNumber).Distinct())
+            {
+                seasons.Add(new SeasonModel
+                                      {
+                                              SeasonNumber = season,
+                                              Episodes = GetEpisodeModels(episodes.Where(e => e.SeasonNumber == season).ToList()).OrderByDescending(e=> e.EpisodeNumber).ToList()
+                                      });
+            }
+
+            model.Seasons = seasons;
+  
             return View(model);
         }
 

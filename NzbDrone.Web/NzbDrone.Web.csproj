@@ -227,6 +227,8 @@
     <Compile Include="Helpers\DescriptionExtension.cs" />
     <Compile Include="Helpers\HtmlPrefixScopeExtensions.cs" />
     <Compile Include="Helpers\IsCurrentActionHelper.cs" />
+    <Compile Include="Models\SeasonModel.cs" />
+    <Compile Include="Models\SeriesDetailsModel.cs" />
     <Compile Include="Models\MiscSettingsModel.cs" />
     <Compile Include="Models\QualityProfileModel.cs" />
     <Compile Include="Models\FooterModel.cs" />
@@ -423,7 +425,7 @@
     <Content Include="Views\History\Index.cshtml" />
     <Content Include="Views\Log\Index.cshtml" />
     <Content Include="Views\Upcoming\Index.cshtml" />
-    <Content Include="Views\Series\Details.cshtml" />
+    <Content Include="Views\Series\Details2.cshtml" />
     <Content Include="Views\Series\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Settings\QualityProfileItem.cshtml" />
@@ -537,6 +539,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Settings\Blackhole.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Series\Episode.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Series\Season.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Series\Details.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

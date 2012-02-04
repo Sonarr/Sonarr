@@ -1,0 +1,144 @@
+﻿@model SeriesModel
+@using NzbDrone.Common
+@using NzbDrone.Web.Helpers
+@using NzbDrone.Web.Models
+@{ViewBag.Title = Model.Title;}
+@section HeaderContent
+{
+    @Html.IncludeCss("Grid.css")
+}
+@{ ViewBag.Title = Model.Title; }
+<style>  
+    .seasonToggleTopGroup
+    {
+        overflow: hidden;
+    }
+    
+    .seasonToggleTop
+    {
+        background-color: #F1EDED;
+        background-position: 5px center;
+        background-repeat: no-repeat;
+        display: inline-block;
+        font-size: 15px;
+        margin: 2px;
+        padding: 2px 5px;
+        width: 100px;
+    }
+    
+    .seasonToggleLabel
+    {
+        margin-left: 5px;
+    }
+    
+    .seasonToggleTop .ignoredEpisodesMaster
+    {
+        padding-left: 0px;
+        padding-right: 0px;
+        margin-bottom: -4px;
+        border-style: none;
+    }
+    
+    .statusImage, .searchImage, .renameImage, .ignoreEpisode, .ignoreEpisodesMaster
+    {
+        width: 18px;
+        height: 18px;
+        padding: 1px;
+        margin: 2px;
+    }
+    
+    .searchImage:hover, .renameImage:hover, .ignoreEpisode:hover, .ignoreEpisodesMaster:hover
+    {
+    }
+    
+    #banner-container
+    {
+        width: 758px;
+        height: 140px;
+        padding: 0px;
+        margin-top: 10px;
+        margin-bottom: 15px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
+@section ActionMenu{
+    <ul class="sub-menu">
+        <li>@Ajax.ActionLink("Scan Disk", "ScanDisk", "Command", new { seriesId = Model.SeriesId }, null)</li>
+        <li>@Ajax.ActionLink("Update Info", "UpdateInfo", "Command", new { seriesId = Model.SeriesId }, null)</li>
+        <li>@Ajax.ActionLink("Search for missing episodes", "BacklogSeries", "Episode", new { seriesId = Model.SeriesId }, null)</li>
+        <li>@Ajax.ActionLink("Rename Episodes", "RenameEpisodes", "Episode", new { seriesId = Model.SeriesId }, null)</li>
+    </ul>
+}
+<div id="banner-container">
+    @{
+        var bannerUrl = "../../Content/Images/img03.jpg";
+
+        if (Model.HasBanner)
+        {
+            bannerUrl = "../../MediaCover/Banners/" + Model.SeriesId + ".jpg";
+        }
+    }
+    <img src="@bannerUrl" alt="Banner"/>
+</div>
+<div class="seasonToggleTopGroup">
+    @foreach (var season in Model.Seasons)
+    {
+        var ignoreSeason = "ignoreSeason_" + season;
+        <div class="seasonToggleTop">
+            <img src='../../Content/Images/ignoredNeutral.png' class='ignoredEpisodesMaster ignoreEpisode @ignoreSeason' title='Click to toggle season ignore status' />
+            <span class="seasonToggleLabel">@(season == 0 ? "Specials" : "Season " + season)</span>
+        </div>
+    }
+</div>
+@foreach (var s in Model.Seasons.Reverse())
+{
+    var seriesId = @Model.SeriesId;
+    var season = s;
+        
+    <h2>
+        @(season == 0 ? "Specials" : "Season " + season)
+    </h2>
+        
+    Html.Telerik().Grid<EpisodeModel>().Name("seasons_" + season)
+        .TableHtmlAttributes(new { @class = "Grid" })
+        .Columns(columns =>
+        {
+            columns.Bound(c => c.EpisodeNumber).Width(100).Title("Episode #").Sortable(true);
+            columns.Bound(c => c.Title).Title("Title").Sortable(false);
+            columns.Bound(c => c.AirDate).Width(100).Sortable(false);
+            columns.Bound(c => c.Quality).Width(100);
+            columns.Bound(c => c.Status).Sortable(false)
+                .Title("<img src='../../Content/Images/ignoredNeutral.png' class='ignoredEpisodesMaster ignoreEpisode ignoreSeason_" + season + "' title='Click to toggle season ignore status' />" +
+                       "<img src='../../Content/Images/Missing.png' alt='Status' title='Season Status' class='statusImage statusImageMaster' />" +
+                       Ajax.ImageActionLink("../../Content/Images/Search.png", new { Alt = "Search", Title = "Search for all episodes in this season", @class = "searchImage searchImageMaster" }, "SearchSeason", "Episode", new { SeriesId = seriesId, SeasonNumber = season }, null, null) +
+                       Ajax.ImageActionLink("../../Content/Images/Rename.png", new { Alt = "Rename", Title = "Rename all episodes in this season", @class = "renameImage renameImageMaster" }, "RenameSeason", "Episode", new { SeriesId = seriesId, SeasonNumber = season }, null, null))
+                .ClientTemplate("<img src='../../Content/Images/ignoredNeutral.png' class='ignoreEpisode ignoreEpisode_" + season + " ignored' id='<#= EpisodeId #>' title='Click to toggle episode ignore status' />" +
+                                "<img src='../../Content/Images/<#= Status #>.png' alt='<#= Status #>' title='<#= Status #>' class='statusImage status-<#= Status #>' />" +
+                                Ajax.ImageActionLink("../../Content/Images/Search.png", new { Alt = "Search", Title = "Search for episode", @class = "searchImage" }, "Search", "Episode", new { EpisodeId = "<#= EpisodeId #>" }, null, null) +
+                                Ajax.ImageActionLink("../../Content/Images/Rename.png", new { Alt = "Rename", Title = "Rename episode", @class = "renameImage" }, "Rename", "Episode", new { EpisodeFileId = "<#= EpisodeFileId #>" }, null, null))
+                .Width(80);
+        })
+        .DetailView(detailView => detailView.ClientTemplate("<div><#= Overview #> </br><#= Path #> </div>"))
+        .Footer(true)
+        .DataBinding(
+            d =>
+            d.Ajax().Select("_AjaxSeasonGrid", "Series",
+                           new RouteValueDictionary { { "seriesId", Model.SeriesId }, { "seasonNumber", season } }))
+        .ClientEvents(clientEvents =>
+        {
+            clientEvents.OnRowDataBound("grid_rowBound");
+            clientEvents.OnDataBound("grid_dataBound");
+            if (EnviromentProvider.IsProduction)
+                clientEvents.OnError("grid_onError");
+        })
+        .Sortable(sorting => sorting
+        .OrderBy(sortOrder => sortOrder.Add(o => o.EpisodeNumber).Descending()).SortMode(GridSortMode.SingleColumn))
+        .Render();
+}
+@section Scripts{
+    @Html.IncludeScript("NzbDrone/seriesDetails.js")
+    <script type="text/javascript">
+        seriesId = @Model.SeriesId;
+    </script>
+}

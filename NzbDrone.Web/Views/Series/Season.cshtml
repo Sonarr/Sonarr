@@ -1,0 +1,29 @@
+@using NzbDrone.Web.Helpers
+@model NzbDrone.Web.Models.SeasonModel
+
+<h2>
+    @(Model.SeasonNumber == 0 ? "Specials" : "Season " + Model.SeasonNumber)
+</h2>
+
+<table class="seriesTable">
+    <tr>
+        <th width="100px">Episode #</th>
+        <th>Title</th>
+        <th width="100px">Air Date</th>
+        <th width="100px">Quality</th>
+        
+        @*Commands Column*@
+        <th width="110px">
+            Commands
+            @*            <img src='../../Content/Images/ignoredNeutral.png' class='ignoredEpisodesMaster ignoreEpisode ignoreSeason_" + season + "' title='Click to toggle season ignore status' />
+            <img src='../../Content/Images/Missing.png' alt='Status' title='Season Status' class='statusImage statusImageMaster' />
+            Ajax.ImageActionLink("../../Content/Images/Search.png", new { Alt = "Search", Title = "Search for all episodes in this season", @class = "searchImage searchImageMaster" }, "SearchSeason", "Episode", new { SeriesId = seriesId, SeasonNumber = season }, null, null)
+            Ajax.ImageActionLink("../../Content/Images/Rename.png", new { Alt = "Rename", Title = "Rename all episodes in this season", @class = "renameImage renameImageMaster" }, "RenameSeason", "Episode", new { SeriesId = seriesId, SeasonNumber = season }, null, null))*@
+        </th>
+    </tr>
+
+    @foreach (var episode in Model.Episodes)
+    {
+        Html.RenderPartial("Episode", episode);
+    }
+</table>

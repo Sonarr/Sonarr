@@ -1,5 +1,4 @@
-﻿@model SeriesModel
-@using NzbDrone.Common
+﻿@model SeriesDetailsModel
 @using NzbDrone.Web.Helpers
 @using NzbDrone.Web.Models
 @{ViewBag.Title = Model.Title;}
@@ -44,7 +43,7 @@
         width: 18px;
         height: 18px;
         padding: 1px;
-        margin: 2px;
+        margin: 0px;
     }
     
     .searchImage:hover, .renameImage:hover, .ignoreEpisode:hover, .ignoreEpisodesMaster:hover
@@ -60,6 +59,35 @@
         margin-bottom: 15px;
         margin-left: auto;
         margin-right: auto;
+    }
+    
+    .seriesTable {
+        width: 100%;
+	    border-width: 1px;
+	    border-spacing: 2px;
+	    border-style: none;
+	    border-color: white;
+	    border-collapse: collapse;
+	    background-color: white;
+    }
+    
+    .seriesTable th {
+	    border-width: 1px;
+	    padding: 2px;
+	    border-style: inset;
+	    border-color: #EEEEEE;
+	    background-color: white;
+	    padding-left: 7px;
+        text-align: left;
+    }
+    
+    .seriesTable td {
+	    border-width: 1px;
+	    padding: 0 0.6em;
+	    border-style: inset;
+	    border-color: #EEEEEE;
+	    background-color: white;
+        padding-left: 7px;
     }
 </style>
 @section ActionMenu{
@@ -82,7 +110,7 @@
     <img src="@bannerUrl" alt="Banner"/>
 </div>
 <div class="seasonToggleTopGroup">
-    @foreach (var season in Model.Seasons)
+    @foreach (var season in Model.Seasons.Select(s => s.SeasonNumber))
     {
         var ignoreSeason = "ignoreSeason_" + season;
         <div class="seasonToggleTop">
@@ -91,50 +119,10 @@
         </div>
     }
 </div>
-@foreach (var s in Model.Seasons.Reverse())
+@foreach (var s in Model.Seasons.OrderByDescending(a => a.SeasonNumber))
 {
-    var seriesId = @Model.SeriesId;
     var season = s;
-        
-    <h2>
-        @(season == 0 ? "Specials" : "Season " + season)
-    </h2>
-        
-    Html.Telerik().Grid<EpisodeModel>().Name("seasons_" + season)
-        .TableHtmlAttributes(new { @class = "Grid" })
-        .Columns(columns =>
-        {
-            columns.Bound(c => c.EpisodeNumber).Width(100).Title("Episode #").Sortable(true);
-            columns.Bound(c => c.Title).Title("Title").Sortable(false);
-            columns.Bound(c => c.AirDate).Width(100).Sortable(false);
-            columns.Bound(c => c.Quality).Width(100);
-            columns.Bound(c => c.Status).Sortable(false)
-                .Title("<img src='../../Content/Images/ignoredNeutral.png' class='ignoredEpisodesMaster ignoreEpisode ignoreSeason_" + season + "' title='Click to toggle season ignore status' />" +
-                       "<img src='../../Content/Images/Missing.png' alt='Status' title='Season Status' class='statusImage statusImageMaster' />" +
-                       Ajax.ImageActionLink("../../Content/Images/Search.png", new { Alt = "Search", Title = "Search for all episodes in this season", @class = "searchImage searchImageMaster" }, "SearchSeason", "Episode", new { SeriesId = seriesId, SeasonNumber = season }, null, null) +
-                       Ajax.ImageActionLink("../../Content/Images/Rename.png", new { Alt = "Rename", Title = "Rename all episodes in this season", @class = "renameImage renameImageMaster" }, "RenameSeason", "Episode", new { SeriesId = seriesId, SeasonNumber = season }, null, null))
-                .ClientTemplate("<img src='../../Content/Images/ignoredNeutral.png' class='ignoreEpisode ignoreEpisode_" + season + " ignored' id='<#= EpisodeId #>' title='Click to toggle episode ignore status' />" +
-                                "<img src='../../Content/Images/<#= Status #>.png' alt='<#= Status #>' title='<#= Status #>' class='statusImage status-<#= Status #>' />" +
-                                Ajax.ImageActionLink("../../Content/Images/Search.png", new { Alt = "Search", Title = "Search for episode", @class = "searchImage" }, "Search", "Episode", new { EpisodeId = "<#= EpisodeId #>" }, null, null) +
-                                Ajax.ImageActionLink("../../Content/Images/Rename.png", new { Alt = "Rename", Title = "Rename episode", @class = "renameImage" }, "Rename", "Episode", new { EpisodeFileId = "<#= EpisodeFileId #>" }, null, null))
-                .Width(80);
-        })
-        .DetailView(detailView => detailView.ClientTemplate("<div><#= Overview #> </br><#= Path #> </div>"))
-        .Footer(true)
-        .DataBinding(
-            d =>
-            d.Ajax().Select("_AjaxSeasonGrid", "Series",
-                           new RouteValueDictionary { { "seriesId", Model.SeriesId }, { "seasonNumber", season } }))
-        .ClientEvents(clientEvents =>
-        {
-            clientEvents.OnRowDataBound("grid_rowBound");
-            clientEvents.OnDataBound("grid_dataBound");
-            if (EnviromentProvider.IsProduction)
-                clientEvents.OnError("grid_onError");
-        })
-        .Sortable(sorting => sorting
-        .OrderBy(sortOrder => sortOrder.Add(o => o.EpisodeNumber).Descending()).SortMode(GridSortMode.SingleColumn))
-        .Render();
+    Html.RenderPartial("Season", season);
 }
 @section Scripts{
     @Html.IncludeScript("NzbDrone/seriesDetails.js")
