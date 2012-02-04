@@ -5,8 +5,8 @@ var readyImage = '../../Content/Images/Ready.png';
 var downloadingImage = '../../Content/Images/Downloading.png';
 
 var seriesId = 0;
-var saveSeasonIgnoreUrl = '../Series/SaveSeasonIgnore';
-var saveEpisodeIgnoreUrl = '../Series/SaveEpisodeIgnore';
+var saveSeasonIgnoreUrl = '../Command/SaveSeasonIgnore';
+var saveEpisodeIgnoreUrl = '../Command/SaveEpisodeIgnore';
 
 //Episode Ignore Functions
 $(".ignoreEpisode").live("click", function () {
@@ -146,6 +146,6 @@ function saveEpisodeIgnore(episodeId, ignored) {
 }
 
 /* Click on row, show details */
-$('.seriesTable tr').live('click', function() {
-    $(this).next('.detail-view').toggle();
+$('.seriesTable tr td:not(:last-child)').live('click', function () {
+    $(this).parent('tr').next('.detail-view').toggle();
 });

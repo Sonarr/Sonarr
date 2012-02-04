@@ -425,7 +425,6 @@
     <Content Include="Views\History\Index.cshtml" />
     <Content Include="Views\Log\Index.cshtml" />
     <Content Include="Views\Upcoming\Index.cshtml" />
-    <Content Include="Views\Series\Details2.cshtml" />
     <Content Include="Views\Series\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Settings\QualityProfileItem.cshtml" />

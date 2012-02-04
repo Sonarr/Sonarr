@@ -12,14 +12,17 @@ namespace NzbDrone.Web.Controllers
         private readonly SabProvider _sabProvider;
         private readonly SmtpProvider _smtpProvider;
         private readonly TwitterProvider _twitterProvider;
+        private readonly EpisodeProvider _episodeProvider;
 
         public CommandController(JobProvider jobProvider, SabProvider sabProvider,
-                                    SmtpProvider smtpProvider, TwitterProvider twitterProvider)
+                                    SmtpProvider smtpProvider, TwitterProvider twitterProvider,
+                                    EpisodeProvider episodeProvider)
         {
             _jobProvider = jobProvider;
             _sabProvider = sabProvider;
             _smtpProvider = smtpProvider;
             _twitterProvider = twitterProvider;
+            _episodeProvider = episodeProvider;
         }
 
         public JsonResult RssSync()
@@ -87,6 +90,20 @@ namespace NzbDrone.Web.Controllers
 
             return JsonNotificationResult.Info("Good News!", "Successfully verified Twitter Authorization.");
 
+        }
+
+        [HttpPost]
+        public EmptyResult SaveSeasonIgnore(int seriesId, int seasonNumber, bool ignored)
+        {
+            _episodeProvider.SetSeasonIgnore(seriesId, seasonNumber, ignored);
+            return new EmptyResult();
+        }
+
+        [HttpPost]
+        public EmptyResult SaveEpisodeIgnore(int episodeId, bool ignored)
+        {
+            _episodeProvider.SetEpisodeIgnore(episodeId, ignored);
+            return new EmptyResult();
         }
     }
 }

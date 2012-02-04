@@ -23,25 +23,17 @@ namespace NzbDrone.Web.Controllers
         private readonly EpisodeProvider _episodeProvider;
         private readonly QualityProvider _qualityProvider;
         private readonly SeriesProvider _seriesProvider;
-        private readonly TvDbProvider _tvDbProvider;
         private readonly JobProvider _jobProvider;
-        private readonly MediaFileProvider _mediaFileProvider;
         //
         // GET: /Series/
 
-        public SeriesController(SeriesProvider seriesProvider,
-                                EpisodeProvider episodeProvider,
-                                QualityProvider qualityProvider,
-                                TvDbProvider tvDbProvider,
-                                JobProvider jobProvider,
-                                MediaFileProvider mediaFileProvider)
+        public SeriesController(SeriesProvider seriesProvider, EpisodeProvider episodeProvider,
+                                QualityProvider qualityProvider, JobProvider jobProvider)
         {
             _seriesProvider = seriesProvider;
             _episodeProvider = episodeProvider;
             _qualityProvider = qualityProvider;
-            _tvDbProvider = tvDbProvider;
             _jobProvider = jobProvider;
-            _mediaFileProvider = mediaFileProvider;
         }
 
         public ActionResult Index()
@@ -101,16 +93,6 @@ namespace NzbDrone.Web.Controllers
             return View(new GridModel(series));
         }
 
-        [GridAction]
-        public ActionResult _AjaxSeasonGrid(int seriesId, int seasonNumber)
-        {
-            using (MiniProfiler.StepStatic("Controller"))
-            {
-                var episodes = GetEpisodeModels(_episodeProvider.GetEpisodesBySeason(seriesId, seasonNumber));
-                return View(new GridModel(episodes));
-            }
-        }
-
         public JsonResult LocalSearch(string term)
         {
             //Get Results from the local DB and return
@@ -122,43 +104,6 @@ namespace NzbDrone.Web.Controllers
                                                                    }).ToList();
 
             return Json(results, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
-        public EmptyResult SaveSeasonIgnore(int seriesId, int seasonNumber, bool ignored)
-        {
-            _episodeProvider.SetSeasonIgnore(seriesId, seasonNumber, ignored);
-            return new EmptyResult();
-        }
-
-        [HttpPost]
-        public EmptyResult SaveEpisodeIgnore(int episodeId, bool ignored)
-        {
-            _episodeProvider.SetEpisodeIgnore(episodeId, ignored);
-            return new EmptyResult();
-        }
-
-        public ActionResult Details2(int seriesId)
-        {
-            var series = _seriesProvider.GetSeries(seriesId);
-
-            var model = new SeriesModel();
-
-            if (series.AirsDayOfWeek != null)
-            {
-                model.AirsDayOfWeek = series.AirsDayOfWeek.Value.ToString();
-            }
-            else
-            {
-                model.AirsDayOfWeek = "N/A";
-            }
-            model.Overview = series.Overview;
-            model.Seasons = _episodeProvider.GetSeasons(seriesId);
-            model.Title = series.Title;
-            model.SeriesId = series.SeriesId;
-            model.HasBanner = !String.IsNullOrEmpty(series.BannerUrl);
-
-            return View(model);
         }
 
         public ActionResult Details(int seriesId)
