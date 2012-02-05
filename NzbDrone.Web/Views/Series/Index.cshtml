@@ -59,6 +59,11 @@
     {
         background-color: #065EFE;
     }
+    
+    .commandsColumn
+    {
+        text-align: center;
+    }
 </style>
 @section ActionMenu{
     <ul class="sub-menu">
@@ -75,7 +80,7 @@
         <col style="width:100px" />
         <col style="width:100px" />
         <col style="width:140px" />
-        <col style="width:100px" />
+        <col style="width:70px" />
     </colgroup>
     <tr>
         <th>Title</th>
@@ -87,7 +92,7 @@
         
         @*Commands Column*@
         <th>
-            Commands
+            
         </th>
     </tr>
     @foreach (var series in Model)
