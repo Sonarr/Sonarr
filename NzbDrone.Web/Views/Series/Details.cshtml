@@ -28,13 +28,14 @@
     .seasonToggleLabel
     {
         margin-left: 5px;
+        color: black;
+        text-decoration: none;
     }
-    
+        
     .seasonToggleTop .ignoredEpisodesMaster
     {
         padding-left: 0px;
         padding-right: 0px;
-        margin-bottom: -4px;
         border-style: none;
     }
     
@@ -151,8 +152,8 @@
 {
     <div class="seasonSection" id="@string.Format("SeasonSection_{0}", s.SeasonNumber)">
         @{
-            var season = s;
-            Html.RenderPartial("Season", season);
+    var season = s;
+    Html.RenderPartial("Season", season);
         }
     </div>
 }
