@@ -432,11 +432,6 @@ namespace NzbDrone.Core.Providers.Core
             get { return "http://services.nzbdrone.com"; }
         }
 
-        public string UGuid
-        {
-            get { return GetValue("UGuid", Guid.NewGuid().ToString(), persist: true); }
-        }
-
         private string GetValue(string key)
         {
             return GetValue(key, String.Empty);
