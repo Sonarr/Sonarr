@@ -57,7 +57,7 @@
     <Compile Include="ConsoleProvider.cs" />
     <Compile Include="Contract\ExceptionReport.cs" />
     <Compile Include="Contract\ReportBase.cs" />
-    <Compile Include="Contract\ParseErrorRequ.cs" />
+    <Compile Include="Contract\ParseErrorReport.cs" />
     <Compile Include="NlogTargets\RemoteTarget.cs" />
     <Compile Include="IISProvider.cs" />
     <Compile Include="Model\AuthenticationType.cs" />

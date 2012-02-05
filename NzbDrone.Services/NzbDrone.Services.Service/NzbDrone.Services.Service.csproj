@@ -108,6 +108,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\Logging.cs" />
     <Compile Include="App_Start\NinjectMVC3.cs" />
     <Compile Include="Datastore\Connection.cs" />
     <Compile Include="Controllers\DailySeriesController.cs" />
@@ -119,6 +120,7 @@
     </Compile>
     <Compile Include="JsonModelBinder.cs" />
     <Compile Include="Migrations\Migration20120203.cs" />
+    <Compile Include="Migrations\Migration20120205.cs" />
     <Compile Include="Migrations\Migration20120201.cs" />
     <Compile Include="Migrations\MigrationHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

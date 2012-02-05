@@ -86,7 +86,7 @@ namespace NzbDrone.Common
             fileTarget.ConcurrentWriteAttemptDelay = 50;
             fileTarget.ConcurrentWriteAttempts = 200;
 
-            fileTarget.Layout = @"${date:format=yy-M-d HH\:mm\:ss.f}|${replace:searchFor=NzbDrone.:replaceWith=:inner=${logger}}|${message}|${exception:format=ToString}";
+            fileTarget.Layout = @"${date:format=yy-M-d HH\:mm\:ss.f}|${replace:searchFor=NzbDrone.:replaceWith=:inner=${logger}}|${level}|${message}|${exception:format=ToString}";
 
             return fileTarget;
         }

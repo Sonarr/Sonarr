@@ -28,7 +28,7 @@ namespace NzbDrone.Common.Test
             const string badTitle = "Bad Title";
 
             ReportingService.ReportParseError(badTitle);
-            MockedRestProvider.Verify(p => p.PostData(It.Is<string>(c => c.ToLower().StartsWith("http://service.nzbdrone.com/")), It.Is<ParseErrorReport>(c => c.Title == badTitle)), Times.Once());
+            MockedRestProvider.Verify(p => p.PostData(It.Is<string>(c => c.ToLower().StartsWith("http://services.nzbdrone.com/")), It.Is<ParseErrorReport>(c => c.Title == badTitle)), Times.Once());
         }
 
         [Test]
@@ -62,6 +62,15 @@ namespace NzbDrone.Common.Test
             MockedRestProvider.Verify(p => p.PostData(It.IsAny<string>(), It.IsAny<ReportBase>()), Times.Exactly(2));
             MockedRestProvider.Verify(p => p.PostData(It.IsAny<string>(), It.Is<ParseErrorReport>(c => c.Title == "title 1")), Times.Once());
             MockedRestProvider.Verify(p => p.PostData(It.IsAny<string>(), It.Is<ParseErrorReport>(c => c.Title == "title 2")), Times.Once());
+        }
+
+
+        [Test]
+        public void report_parse_error()
+        {
+            ReportingService.RestProvider = new RestProvider(new EnviromentProvider());
+            ReportingService.ReportParseError("Test error");
+
         }
 
     }

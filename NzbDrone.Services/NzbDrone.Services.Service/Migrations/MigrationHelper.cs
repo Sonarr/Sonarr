@@ -46,7 +46,7 @@ namespace NzbDrone.Services.Service.Migrations
             return String.Format("IX_{0}_{1}", tableName, String.Join("_", columns));
         }
 
-        public static readonly Column VersionColumn = new Column("Version", DbType.String, 10, ColumnProperty.NotNull);
+        public static readonly Column VersionColumn = new Column("Version", DbType.String, 50, ColumnProperty.NotNull);
         public static readonly Column ProductionColumn = new Column("IsProduction", DbType.Boolean, ColumnProperty.NotNull);
         public static readonly Column TimestampColumn = new Column("TimeStamp", DbType.DateTime, ColumnProperty.NotNull);
         public static readonly Column UGuidColumn = new Column("UGuid", DbType.Guid, ColumnProperty.Null);

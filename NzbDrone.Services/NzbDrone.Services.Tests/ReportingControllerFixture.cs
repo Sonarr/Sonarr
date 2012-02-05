@@ -28,7 +28,7 @@ namespace NzbDrone.Services.Tests
                                    {
                                        IsProduction = true,
                                        Title = "MyTitle",
-                                       Version = "1.1.2.3",
+                                       Version = "1.1.2.323456",
                                        UGuid = Guid.NewGuid()
                                    };
         }
@@ -38,7 +38,7 @@ namespace NzbDrone.Services.Tests
             return new ExceptionReport
             {
                 IsProduction = true,
-                Version = "1.1.2.3",
+                Version = "1.1.2.323456",
                 UGuid = Guid.NewGuid(),
                 Logger = "NzbDrone.Logger.Name",
                 LogMessage = "Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message",
