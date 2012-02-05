@@ -3,6 +3,7 @@ using System.IO;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
+using NzbDrone.Common.NlogTargets;
 
 namespace NzbDrone.Common
 {
@@ -94,7 +95,7 @@ namespace NzbDrone.Common
         {
             var fileTarget = GetBaseTarget();
             fileTarget.FileName = fileName;
-            
+
             LogManager.Configuration.AddTarget(Guid.NewGuid().ToString(), fileTarget);
             LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", level, fileTarget));
         }
@@ -112,7 +113,7 @@ namespace NzbDrone.Common
             LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", level, fileTarget));
         }
 
-        public static void RegisterExceptioneer()
+        public static void RegisterRemote()
         {
             if (EnviromentProvider.IsProduction)
             {
@@ -121,14 +122,25 @@ namespace NzbDrone.Common
                     var exTarget = new ExceptioneerTarget();
                     LogManager.Configuration.AddTarget("Exceptioneer", exTarget);
                     LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, exTarget));
-
-                    LogManager.ConfigurationReloaded += (sender, args) => RegisterExceptioneer();
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
                 }
             }
+
+            try
+            {
+                var remoteTarget = new RemoteTarget();
+                LogManager.Configuration.AddTarget("RemoteTarget", remoteTarget);
+                LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, remoteTarget));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+            LogManager.ConfigurationReloaded += (sender, args) => RegisterRemote();
         }
 
         public static void Reload()

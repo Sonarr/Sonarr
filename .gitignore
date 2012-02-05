@@ -46,3 +46,4 @@ UpdateLogs/
 NzbDrone.Web/MediaCover
 NzbDrone.fpr
 nzbdrone.log*txt
+_rawPackage_service/

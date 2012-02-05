@@ -1,0 +1,9 @@
+<configuration>
+  <elmah>
+    <errorLog type="Elmah.SqlErrorLog, Elmah" connectionStringName="elmah-sqlserver" />
+  </elmah>
+  <connectionStrings>
+    <!-- TODO: Replace the ****'s with the correct entries -->
+    <add name="elmah-sqlserver" connectionString="Data Source=****;User ID=****;Password=****;Initial Catalog=****;" providerName="System.Data.SqlClient"/>
+  </connectionStrings>
+</configuration>

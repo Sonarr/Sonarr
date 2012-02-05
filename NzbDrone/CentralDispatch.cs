@@ -49,7 +49,7 @@ namespace NzbDrone
             LogConfiguration.RegisterRollingFileLogger(enviromentProvider.GetLogFileName(), LogLevel.Info);
             LogConfiguration.RegisterConsoleLogger(LogLevel.Debug);
             LogConfiguration.RegisterUdpLogger();
-            LogConfiguration.RegisterExceptioneer();
+            LogConfiguration.RegisterRemote();
             LogConfiguration.Reload();
             Logger.Info("Start-up Path:'{0}'", enviromentProvider.ApplicationPath);
         }

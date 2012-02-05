@@ -62,7 +62,7 @@ namespace NzbDrone.Update
 
         private static void InitLoggers()
         {
-            LogConfiguration.RegisterExceptioneer();
+            LogConfiguration.RegisterRemote();
 
             LogConfiguration.RegisterConsoleLogger(LogLevel.Trace);
             LogConfiguration.RegisterUdpLogger();

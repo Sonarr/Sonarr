@@ -28,7 +28,7 @@ namespace NzbDrone.Web.Controllers
         public ActionResult Index()
         {
             var updateModel = new UpdateModel();
-            updateModel.UpdatePackage = _updateProvider.GetAvilableUpdate();
+            updateModel.UpdatePackage = _updateProvider.GetAvilableUpdate(_enviromentProvider.Version);
             updateModel.LogFiles = _updateProvider.UpdateLogFile();
             updateModel.LogFolder = _enviromentProvider.GetUpdateLogFolder();
 

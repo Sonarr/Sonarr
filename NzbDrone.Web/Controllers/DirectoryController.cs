@@ -49,7 +49,7 @@ namespace NzbDrone.Web.Controllers
                     dirs = _diskProvider.GetDirectories(term.Substring(0, index + 1));
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return Json(new List<string>(), JsonRequestBehavior.AllowGet);
                 //Swallow the exceptions so proper JSON is returned to the client (Empty results)

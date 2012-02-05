@@ -70,9 +70,7 @@ namespace NzbDrone.Common
         {
             try
             {
-                var currentIdentity = WindowsIdentity.GetCurrent();
-
-                var principal = new WindowsPrincipal(currentIdentity);
+                var principal = new WindowsPrincipal(WindowsIdentity.GetCurrent());
                 return principal.IsInRole(WindowsBuiltInRole.Administrator);
             }
             catch(Exception ex)

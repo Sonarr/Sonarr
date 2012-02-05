@@ -409,6 +409,11 @@ namespace NzbDrone.Core.Providers.Core
             set { SetValue("AutoIgnorePreviouslyDownloadedEpisodes", value); }
         }
 
+   		public Guid UGuid
+        {
+            get { return Guid.Parse(GetValue("UGuid", Guid.NewGuid().ToString(), persist: true)); }
+        }
+
         public virtual DownloadClientType DownloadClient
         {
             get { return (DownloadClientType)GetValueInt("DownloadClient"); }

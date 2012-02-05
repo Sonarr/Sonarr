@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Providers.Indexer
             {
                 return new[]
                                    {
-                                       "https://www.newzbin.com/browse/category/p/tv?" + URL_PARAMS
+                                       "https://www.newzbin2.es/browse/category/p/tv?" + URL_PARAMS
                                    };
             }
         }
@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Providers.Indexer
             return new List<string>
                            {
                                String.Format(
-                                   @"http://www.newzbin.com/search/query/?q={0}+{1}x{2:00}&fpn=p&searchaction=Go&category=8&{3}",
+                                   @"https://www.newzbin.es/search/query/?q={0}+{1}x{2:00}&fpn=p&searchaction=Go&category=8&{3}",
                                    seriesTitle, seasonNumber,episodeNumber, URL_PARAMS)
                            };
         }
@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Providers.Indexer
             return new List<string>
                            {
                                String.Format(
-                                   @"http://www.newzbin.com/search/query/?q={0}+Season+{1}&fpn=p&searchaction=Go&category=8&{2}",
+                                   @"https://www.newzbin.es/search/query/?q={0}+Season+{1}&fpn=p&searchaction=Go&category=8&{2}",
                                    seriesTitle, seasonNumber, URL_PARAMS)
                            };
         }
@@ -70,7 +70,7 @@ namespace NzbDrone.Core.Providers.Indexer
             return new List<string>
                            {
                                String.Format(
-                                   @"http://www.newzbin.com/search/query/?q={0}+{1:yyyy-MM-dd}&fpn=p&searchaction=Go&category=8&{2}",
+                                   @"https://www.newzbin.es/search/query/?q={0}+{1:yyyy-MM-dd}&fpn=p&searchaction=Go&category=8&{2}",
                                    seriesTitle, date, URL_PARAMS)
                            };
         }
@@ -80,7 +80,7 @@ namespace NzbDrone.Core.Providers.Indexer
             return new List<string>
                            {
                                String.Format(
-                                   @"http://www.newzbin.com/search/query/?q={0}+{1}x{2}&fpn=p&searchaction=Go&category=8&{3}",
+                                   @"https://www.newzbin.es/search/query/?q={0}+{1}x{2}&fpn=p&searchaction=Go&category=8&{3}",
                                    seriesTitle, seasonNumber, episodeWildcard, URL_PARAMS)
                            };
         }

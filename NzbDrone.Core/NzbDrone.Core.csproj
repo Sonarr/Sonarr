@@ -195,7 +195,6 @@
       <HintPath>..\Libraries\TvdbLib.dll</HintPath>
     </Reference>
     <Reference Include="Twitterizer2, Version=2.4.0.26532, Culture=neutral, PublicKeyToken=69d1469eac671567, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\twitterizer.2.4.0.26532\lib\net40\Twitterizer2.dll</HintPath>
     </Reference>
     <Reference Include="WebActivator, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -222,6 +221,7 @@
     <Compile Include="Datastore\Migrations\Migration20110707.cs" />
     <Compile Include="Datastore\DbProviderFactory.cs" />
     <Compile Include="Datastore\Migrations\NzbDroneMigration.cs" />
+    <Compile Include="Datastore\Migrations\SchemaInfo.cs" />
     <Compile Include="Fluent.cs" />
     <Compile Include="Helpers\EpisodeSortingHelper.cs" />
     <Compile Include="Helpers\FileSizeFormatHelper.cs" />

@@ -113,5 +113,40 @@ namespace NzbDrone.Core.Providers.Core
 
             return responseFromServer.Replace("&nbsp;", " ");
         }
+
+        public virtual string Post(string address, string command, string username, string password)
+        {
+            Logger.Trace("Posting command: {0}, to {1}", command, address);
+
+            byte[] byteArray = Encoding.ASCII.GetBytes(command);
+
+            var request = (HttpWebRequest)WebRequest.Create(address);
+            request.Method = "POST";
+            request.Credentials = new NetworkCredential(username, password);
+            request.ContentType = "application/json";
+            request.Timeout = 2000;
+            request.KeepAlive = false;
+
+            //Used to hold the JSON response
+            string responseFromServer;
+
+            using (var requestStream = request.GetRequestStream())
+            {
+                requestStream.Write(byteArray, 0, byteArray.Length);
+
+                using (var response = request.GetResponse())
+                {
+                    using (var responseStream = response.GetResponseStream())
+                    {
+                        using (var reader = new StreamReader(responseStream))
+                        {
+                            responseFromServer = reader.ReadToEnd();
+                        }
+                    }
+                }
+            }
+
+            return responseFromServer.Replace("&nbsp;", " ");
+        }
     }
 }

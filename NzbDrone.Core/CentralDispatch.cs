@@ -32,7 +32,7 @@ namespace NzbDrone.Core
             Kernel = new StandardKernel();
 
             InitDatabase();
-            InitAnalytics();
+            InitReporting();
 
             InitQuality();
             InitExternalNotifications();
@@ -58,13 +58,17 @@ namespace NzbDrone.Core
             LogConfiguration.Reload();
         }
 
-        private void InitAnalytics()
+        private void InitReporting()
         {
+            EnviromentProvider.UGuid = Kernel.Get<ConfigProvider>().UGuid;
+            ReportingService.RestProvider = Kernel.Get<RestProvider>();
+
             var appId = AnalyticsProvider.DESKMETRICS_TEST_ID;
+            
             if (EnviromentProvider.IsProduction)
                 appId = AnalyticsProvider.DESKMETRICS_PRODUCTION_ID;
 
-            var deskMetricsClient = new DeskMetricsClient(Kernel.Get<ConfigProvider>().UGuid, appId, _enviromentProvider.Version);
+            var deskMetricsClient = new DeskMetricsClient(Kernel.Get<ConfigProvider>().UGuid.ToString(), appId, _enviromentProvider.Version);
             Kernel.Bind<IDeskMetricsClient>().ToConstant(deskMetricsClient);
             Kernel.Get<AnalyticsProvider>().Checkpoint();
         }

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
+using NzbDrone.Common;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository.Quality;
 
@@ -113,12 +114,13 @@ namespace NzbDrone.Core
                         }
                     }
                 }
-                Logger.Warn("Unable to parse episode info. {0}", title);
             }
             catch (Exception e)
             {
                 Logger.ErrorException("An error has occurred while trying to parse " + title, e);
             }
+            Logger.Warn("Unable to parse episode info. {0}", title);
+            ReportingService.ReportParseError(title);
             return null;
         }
 
@@ -399,12 +401,6 @@ namespace NzbDrone.Core
             return LanguageType.English;
         }
 
-        /// <summary>
-        ///   Normalizes the title. removing all non-word characters as well as common tokens
-        ///   such as 'the' and 'and'
-        /// </summary>
-        /// <param name = "title">title</param>
-        /// <returns></returns>
         public static string NormalizeTitle(string title)
         {
             long number = 0;
