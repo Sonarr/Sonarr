@@ -7,7 +7,7 @@
     @Html.IncludeCss("Grid.css")
 }
 @{ ViewBag.Title = Model.Title; }
-<style>  
+<style>
     .seasonToggleTopGroup
     {
         overflow: hidden;
@@ -63,41 +63,60 @@
         margin-right: auto;
     }
     
-    .seriesTable {
+    .seriesTable
+    {
         width: 100%;
-	    border-width: 1px;
-	    border-spacing: 2px;
-	    border-style: none;
-	    border-color: white;
-	    border-collapse: collapse;
+        border-width: 1px;
+        border-spacing: 2px;
+        border-style: none;
+        border-color: white;
+        border-collapse: collapse;
     }
     
-    .seriesTable th {
-	    border-width: 1px;
-	    padding: 2px;
-	    border-style: inset;
-	    border-color: #EEEEEE;
-	    padding-left: 7px;
+    .seriesTable th
+    {
+        font-family: "Segoe UI Light" , "Open Sans" , "Segoe UI" , sans-serif;
+        border-width: 300;
+        font-size: 17px;
+        padding: 2px;
+        border-style: inset;
+        border-color: #EEEEEE;
+        padding-left: 7px;
         text-align: left;
         background-color: white;
+        font-weight: lighter;
     }
     
-    .seriesTable td {
-	    border-width: 1px;
-	    padding: 0px 0.6em 0 7px;
-	    border-style: inset;
-	    border-color: #EEEEEE;
+    .seriesTable td
+    {
+        border-width: 1px;
+        padding: 0px 0.6em 0 7px;
+        border-style: inset;
+        border-color: #EEEEEE;
     }
     
-    .detail-view {
+    .detail-view
+    {
         display: none;
     }
     
+    .seasonSection
+    {
+        margin-top: 50px;
+    }
+    
     /* Colour alternating rows */
-    .seriesTable tr:nth-child(4n) {background: #E5ECF9}
-    .seriesTable tr:nth-child(4n+1) {background: #E5ECF9}
+    .seriesTable tr:nth-child(4n)
+    {
+        background: #f0f5ff;
+    }
+    .seriesTable tr:nth-child(4n+1)
+    {
+        background: #f0f5ff;
+    }
 </style>
-@section ActionMenu{
+@section ActionMenu
+{
     <ul class="sub-menu">
         <li>@Ajax.ActionLink("Scan Disk", "ScanDisk", "Command", new { seriesId = Model.SeriesId }, null)</li>
         <li>@Ajax.ActionLink("Update Info", "UpdateInfo", "Command", new { seriesId = Model.SeriesId }, null)</li>
@@ -124,14 +143,18 @@
             <img src='../../Content/Images/@(season.AnyWanted ? "notIgnored" : "ignored").png'
                  class='ignoredEpisodesMaster ignoreEpisode @ignoreSeason @(season.AnyWanted ? "" : "ignored")'
                  title='Click to toggle season ignore status' />
-            <span class="seasonToggleLabel">@(season.SeasonNumber == 0 ? "Specials" : "Season " + season.SeasonNumber)</span>
+            <a href="@string.Format("#SeasonSection_{0}", season.SeasonNumber)" class="seasonToggleLabel">@(season.SeasonNumber == 0 ? "Specials" : "Season " + season.SeasonNumber)</a>
         </div>
     }
 </div>
 @foreach (var s in Model.Seasons.OrderByDescending(a => a.SeasonNumber))
 {
-    var season = s;
-    Html.RenderPartial("Season", season);
+    <div class="seasonSection" id="@string.Format("SeasonSection_{0}", s.SeasonNumber)">
+        @{
+            var season = s;
+            Html.RenderPartial("Season", season);
+        }
+    </div>
 }
 @section Scripts{
     @Html.IncludeScript("NzbDrone/seriesDetails.js")

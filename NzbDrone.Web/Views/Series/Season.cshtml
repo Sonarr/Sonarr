@@ -1,20 +1,20 @@
 @using NzbDrone.Web.Helpers
 @model NzbDrone.Web.Models.SeasonModel
 
-<h2>
+<h1>
     @(Model.SeasonNumber == 0 ? "Specials" : "Season " + Model.SeasonNumber)
-</h2>
+</h1>
 
 <table class="seriesTable">
     <colgroup>
-        <col style="width:80px" />
-        <col>
+        <col style="width:40px"/>
+        <col/>
         <col style="width:100px" />
         <col style="width:100px" />
         <col style="width:110px" />
     </colgroup>
     <tr>
-        <th>Episode #</th>
+        <th>#</th>
         <th>Title</th>
         <th>Air Date</th>
         <th>Quality</th>
@@ -27,7 +27,6 @@
             @Ajax.ImageActionLink("../../Content/Images/Rename.png", new { Alt = "Rename", Title = "Rename all episodes in this season", @class = "renameImage renameImageMaster" }, "RenameSeason", "Episode", new { SeriesId = Model.SeriesId, SeasonNumber = Model.SeasonNumber }, null, null)
         </th>
     </tr>
-
     @foreach (var episode in Model.Episodes)
     {
         Html.RenderPartial("Episode", episode);
