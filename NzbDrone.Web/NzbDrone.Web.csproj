@@ -142,6 +142,7 @@
     <Content Include="Content\2011.3.1115\telerik.sitefinity.min.css" />
     <Content Include="Content\Images\background.jpg" />
     <Content Include="Content\Images\blue.png" />
+    <Content Include="Content\Images\Delete.png" />
     <Content Include="Content\Images\Gear.png" />
     <Content Include="Content\Images\green.png" />
     <Content Include="Content\Images\header.jpg" />
@@ -456,9 +457,6 @@
     <Content Include="Views\Missing\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Series\EditorTemplates\SeriesModel.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\AddSeries\ExistingSeries.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -547,6 +545,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Series\Details.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Series\Series.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Series\SeriesEditor.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

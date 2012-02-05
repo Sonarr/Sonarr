@@ -12,7 +12,8 @@
 </style>
 
 <div id="stylized" style="border-color: transparent;">
-    <div class="settingsForm">
+    @using (Html.BeginForm("SaveSeriesEditor", "Series", FormMethod.Post, new { id = "SeriesEditorForm", name = "SeriesEditorForm", @class = "settingsForm" }))
+    {
         @Html.HiddenFor(m => m.SeriesId)
         <label class="labelClass">@Html.LabelFor(m => m.Monitored)
             <span class="small">@Html.DescriptionFor(m => m.Monitored)</span>
@@ -27,12 +28,12 @@
         </label>
         @Html.DropDownListFor(m => m.QualityProfileId, (SelectList)ViewData["SelectList"], new { @class = "inputClass" })
         <label class="labelClass">@Html.LabelFor(m => m.Path)
-        <span class="small">@Html.DescriptionFor(m => m.Path)</span>
+            <span class="small">@Html.DescriptionFor(m => m.Path)</span>
         </label>
         @Html.TextBoxFor(m => m.Path, new { @class = "inputClass" })
         <label class="labelClass">@Html.LabelFor(m => m.BacklogSetting)
-        <span class="small">@Html.DescriptionFor(m => m.BacklogSetting)</span>
+            <span class="small">@Html.DescriptionFor(m => m.BacklogSetting)</span>
         </label>
         @Html.DropDownListFor(m => m.BacklogSetting, (SelectList)ViewData["BacklogSettingSelectList"], new { @class = "inputClass" })
-    </div>
+    }
 </div>

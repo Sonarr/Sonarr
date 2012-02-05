@@ -144,8 +144,3 @@ function saveEpisodeIgnore(episodeId, ignored) {
         }
     });
 }
-
-/* Click on row, show details */
-$('.seriesTable tr td:not(:last-child)').live('click', function () {
-    $(this).parent('tr').next('.detail-view').toggle();
-});

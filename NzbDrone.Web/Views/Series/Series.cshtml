@@ -1,0 +1,30 @@
+@using NzbDrone.Web.Helpers
+@model NzbDrone.Web.Models.SeriesModel
+
+<tr class="@Model.SeriesId">
+    <td>@Html.ActionLink(Model.Title, "Details", "Series", new { seriesId = Model.SeriesId }, null)</td>
+    <td>@Model.SeasonsCount</td>
+    <td>@Model.QualityProfileName</td>
+    <td>@Model.Status</td>
+    <td>@Model.NextAiring</td>
+    <td>
+        @{ double progress = (double)Model.EpisodeFileCount / (double)Model.EpisodeCount * 100; }
+        <div class='progressBar' rel='@progress.ToString("0")'>
+            <span class='progressBarText'>@Model.EpisodeFileCount / @Model.EpisodeCount</span>
+        </div>
+    </td>
+    
+    @*Commands Column*@
+    <td>
+        <img src="../../Content/Images/Rename.png" class="editButton" value="@Model.SeriesId" rel="@Model.Title" />
+        <img src="../../Content/Images/Delete.png" class="deleteButton" value="@Model.SeriesId" rel="@Model.Title" />
+        @*<div class="editButton" value="@Model.SeriesId" rel="@Model.Title">Edit</div>
+        <div class="deleteButton" value="@Model.SeriesId" rel="@Model.Title">Delete</div>*@
+    </td>
+</tr>
+<tr class="detail-view details_@(Model.SeriesId)">
+    <td colspan="7">
+        <b>Airs Day of Week:</b> @Model.AirsDayOfWeek <br/>
+        <b>Overview:</b> @Model.Overview
+    </td>
+</tr>

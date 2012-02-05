@@ -38,6 +38,12 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult Index()
         {
+            var series = GetSeriesModels(_seriesProvider.GetAllSeriesWithEpisodeCount()).OrderBy(o => SortHelper.SkipArticles(o.Title));
+            return View(series);
+        }
+
+        public ActionResult SeriesEditor(int seriesId)
+        {
             var profiles = _qualityProvider.All();
             ViewData["SelectList"] = new SelectList(profiles, "QualityProfileId", "Name");
 
@@ -50,47 +56,31 @@ namespace NzbDrone.Web.Controllers
 
             ViewData["BacklogSettingSelectList"] = new SelectList(backlogStatusTypes, "Key", "Value");
 
-            return View();
+            var series = GetSeriesModels(new List<Series>{_seriesProvider.GetSeries(seriesId)}).Single();
+            return View(series);
         }
 
-        [GridAction]
-        public ActionResult _AjaxSeriesGrid()
+        [HttpPost]
+        public JsonResult SaveSeriesEditor(SeriesModel seriesModel)
         {
-            var series = GetSeriesModels(_seriesProvider.GetAllSeriesWithEpisodeCount()).OrderBy(o => SortHelper.SkipArticles(o.Title));
-            return View(new GridModel(series));
+            var series = _seriesProvider.GetSeries(seriesModel.SeriesId);
+            series.Monitored = seriesModel.Monitored;
+            series.SeasonFolder = seriesModel.SeasonFolder;
+            series.QualityProfileId = seriesModel.QualityProfileId;
+            series.Path = seriesModel.Path;
+            series.BacklogSetting = (BacklogSettingType)seriesModel.BacklogSetting;
+
+            _seriesProvider.UpdateSeries(series);
+
+            return JsonNotificationResult.Info("Series Saved");
         }
 
-        [AcceptVerbs(HttpVerbs.Post)]
-        [GridAction]
-        public ActionResult _SaveAjaxSeriesEditing(int id, string path, bool monitored, bool seasonFolder, int qualityProfileId, int backlogSetting)
+        [HttpPost]
+        public JsonResult DeleteSeries(int seriesId)
         {
-            var oldSeries = _seriesProvider.GetSeries(id);
-            oldSeries.Monitored = monitored;
-            oldSeries.SeasonFolder = seasonFolder;
-            oldSeries.QualityProfileId = qualityProfileId;
-            oldSeries.Path = path;
-            oldSeries.BacklogSetting = (BacklogSettingType)backlogSetting;
+            _jobProvider.QueueJob(typeof(DeleteSeriesJob), seriesId);
 
-            _seriesProvider.UpdateSeries(oldSeries);
-
-            var series = GetSeriesModels(_seriesProvider.GetAllSeriesWithEpisodeCount()).OrderBy(o => SortHelper.SkipArticles(o.Title));
-            return View(new GridModel(series));
-        }
-
-        [GridAction]
-        public ActionResult _DeleteAjaxSeriesEditing(int id)
-        {
-            //Grab the series from the DB so we can remove it from the list we return to the client
-            var seriesInDb = _seriesProvider.GetAllSeriesWithEpisodeCount().ToList();
-
-            //Remove this so we don't send it back to the client (since it hasn't really been deleted yet)
-            seriesInDb.RemoveAll(s => s.SeriesId == id);
-
-            //Start removing this series
-            _jobProvider.QueueJob(typeof(DeleteSeriesJob), id);
-
-            var series = GetSeriesModels(seriesInDb).OrderBy(o => SortHelper.SkipArticles(o.Title));
-            return View(new GridModel(series));
+            return JsonNotificationResult.Info("Series Deleted");
         }
 
         public JsonResult LocalSearch(string term)
