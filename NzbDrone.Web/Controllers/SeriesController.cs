@@ -61,7 +61,7 @@ namespace NzbDrone.Web.Controllers
         }
 
         [HttpPost]
-        public JsonResult SaveSeriesEditor(SeriesModel seriesModel)
+        public EmptyResult SaveSeriesEditor(SeriesModel seriesModel)
         {
             var series = _seriesProvider.GetSeries(seriesModel.SeriesId);
             series.Monitored = seriesModel.Monitored;
@@ -72,15 +72,15 @@ namespace NzbDrone.Web.Controllers
 
             _seriesProvider.UpdateSeries(series);
 
-            return JsonNotificationResult.Info("Series Saved");
+            return new EmptyResult();
         }
 
         [HttpPost]
-        public JsonResult DeleteSeries(int seriesId)
+        public EmptyResult DeleteSeries(int seriesId)
         {
             _jobProvider.QueueJob(typeof(DeleteSeriesJob), seriesId);
 
-            return JsonNotificationResult.Info("Series Deleted");
+            return new EmptyResult();
         }
 
         public JsonResult LocalSearch(string term)
