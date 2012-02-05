@@ -228,7 +228,7 @@ namespace NzbDrone.Web.Controllers
             {
                 var episodeFileId = 0;
                 var episodePath = String.Empty;
-                var episodeQuality = String.Empty;
+                var episodeQuality = "N/A";
 
                 if (e.EpisodeFile != null)
                 {

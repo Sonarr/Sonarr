@@ -91,7 +91,7 @@
     .seriesTable td
     {
         border-width: 1px;
-        padding: 0px 0.6em 0 7px;
+        padding: 0px 8px 0px 8px;
         border-style: inset;
         border-color: #EEEEEE;
     }
@@ -125,17 +125,15 @@
         <li>@Ajax.ActionLink("Rename Episodes", "RenameEpisodes", "Episode", new { seriesId = Model.SeriesId }, null)</li>
     </ul>
 }
-<div id="banner-container">
-    @{
-        var bannerUrl = "../../Content/Images/img03.jpg";
 
-        if (Model.HasBanner)
-        {
-            bannerUrl = "../../MediaCover/Banners/" + Model.SeriesId + ".jpg";
-        }
-    }
-    <img src="@bannerUrl" alt="Banner"/>
-</div>
+@if (Model.HasBanner)
+{
+    var  bannerUrl = "../../MediaCover/Banners/" + Model.SeriesId + ".jpg";
+    <div id="banner-container">
+        <img src="@bannerUrl" alt="Banner"/>
+    </div>
+}
+
 <div class="seasonToggleTopGroup">
     @foreach (var season in Model.Seasons.OrderBy(s => s.SeasonNumber))
     {
