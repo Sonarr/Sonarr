@@ -1,0 +1,4 @@
+Please note that in order to complete the installation of ELMAH.SqlServer you will have to do the following:
+
+1) Run the Elmah.SqlServer.sql script against your database
+2) Edit your web.config with the correct settings in the elmah <connectionString> to connect to your database

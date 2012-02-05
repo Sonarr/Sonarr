@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{12261AE5-BCC4-4DC7-A218-0764B9C30230}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NzbDrone.Services.Tests</RootNamespace>
+    <AssemblyName>NzbDrone.Services.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="FizzWare.NBuilder">
+      <HintPath>..\..\packages\NBuilder.3.0.1.1\lib\FizzWare.NBuilder.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentAssertions">
+      <HintPath>..\..\packages\FluentAssertions.1.7.0\Lib\net40\FluentAssertions.dll</HintPath>
+    </Reference>
+    <Reference Include="Migrator">
+      <HintPath>..\..\Libraries\Migrator.NET\Migrator.dll</HintPath>
+    </Reference>
+    <Reference Include="Migrator.Framework">
+      <HintPath>..\..\Libraries\Migrator.NET\Migrator.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Migrator.Providers">
+      <HintPath>..\..\Libraries\Migrator.NET\Migrator.Providers.dll</HintPath>
+    </Reference>
+    <Reference Include="Moq">
+      <HintPath>..\..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\packages\NUnit.2.5.10.11092\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.mocks">
+      <HintPath>..\..\packages\NUnit.2.5.10.11092\lib\nunit.mocks.dll</HintPath>
+    </Reference>
+    <Reference Include="pnunit.framework">
+      <HintPath>..\..\packages\NUnit.2.5.10.11092\lib\pnunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ReportingControllerFixture.cs" />
+    <Compile Include="Framework\ServicesTestBase.cs" />
+    <Compile Include="Framework\TestDbHelper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\NzbDrone.Common\NzbDrone.Common.csproj">
+      <Project>{F2BE0FDF-6E47-4827-A420-DD4EF82407F8}</Project>
+      <Name>NzbDrone.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\NzbDrone.Core\NzbDrone.Core.csproj">
+      <Project>{FF5EE3B6-913B-47CE-9CEB-11C51B4E1205}</Project>
+      <Name>NzbDrone.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\NzbDrone.Test.Common\NzbDrone.Test.Common.csproj">
+      <Project>{CADDFCE0-7509-4430-8364-2074E1EEFCA2}</Project>
+      <Name>NzbDrone.Test.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NzbDrone.Services.Service\NzbDrone.Services.Service.csproj">
+      <Project>{63B155D7-AE78-4FEB-88BB-2F025ADD1F15}</Project>
+      <Name>NzbDrone.Services.Service</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

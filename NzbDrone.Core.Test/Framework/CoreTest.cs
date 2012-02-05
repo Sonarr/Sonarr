@@ -33,6 +33,7 @@ namespace NzbDrone.Core.Test.Framework
             TestDbHelper.CreateDataBaseTemplate();
         }
 
+
         private IDatabase _db;
         protected IDatabase Db
         {

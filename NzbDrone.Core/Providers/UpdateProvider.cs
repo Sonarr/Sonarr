@@ -61,13 +61,13 @@ namespace NzbDrone.Core.Providers
             return updateList;
         }
 
-        public virtual UpdatePackage GetAvilableUpdate()
+        public virtual UpdatePackage GetAvilableUpdate(Version currentVersion)
         {
             var latestAvailable = GetAvailablePackages().OrderByDescending(c => c.Version).FirstOrDefault();
 
-            if (latestAvailable != null && latestAvailable.Version > _enviromentProvider.Version)
+            if (latestAvailable != null && latestAvailable.Version > currentVersion)
             {
-                logger.Debug("An update is available ({0}) => ({1})", _enviromentProvider.Version, latestAvailable.Version);
+                logger.Debug("An update is available ({0}) => ({1})", currentVersion, latestAvailable.Version);
                 return latestAvailable;
             }
 

@@ -1,0 +1,671 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AutoMapper</name>
+    </assembly>
+    <members>
+        <member name="T:AutoMapper.MappingEngine.ConversionVisitor">
+            <summary>
+            This expression visitor will replace an input parameter by another one
+            
+            see http://stackoverflow.com/questions/4601844/expression-tree-copy-or-convert
+            </summary>
+        </member>
+        <member name="T:TvdP.Collections.ConcurrentDictionaryKey`2">
+            <summary>
+            Search key structure for <see cref="T:TvdP.Collections.ConcurrentDictionary`2"/>
+            </summary>
+            <typeparam name="TKey">Type of the key.</typeparam>
+            <typeparam name="TValue">Type of the value.</typeparam>
+        </member>
+        <member name="T:TvdP.Collections.ConcurrentDictionary`2">
+            <summary>
+            A Concurrent <see cref="T:System.Collections.Generic.IDictionary`2"/> implementation.
+            </summary>
+            <typeparam name="TKey">Type of the keys.</typeparam>
+            <typeparam name="TValue">Type of the values.</typeparam>
+            <remarks>
+            This class is threadsafe and highly concurrent. This means that multiple threads can do lookup and insert operations
+            on this dictionary simultaneously. 
+            It is not guaranteed that collisions will not occur. The dictionary is partitioned in segments. A segment contains
+            a set of items based on a hash of those items. The more segments there are and the beter the hash, the fewer collisions will occur.
+            This means that a nearly empty ConcurrentDictionary is not as concurrent as one containing many items. 
+            </remarks>
+        </member>
+        <member name="T:TvdP.Collections.ConcurrentHashtable`2">
+            <summary>
+            Base class for concurrent hashtable implementations
+            </summary>
+            <typeparam name="TStored">Type of the items stored in the hashtable.</typeparam>
+            <typeparam name="TSearch">Type of the key to search with.</typeparam>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentHashtable`2.#ctor">
+            <summary>
+            Constructor (protected)
+            </summary>
+            <remarks>Use Initialize method after construction.</remarks>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentHashtable`2.Initialize">
+            <summary>
+            Initialize the newly created ConcurrentHashtable. Invoke in final (sealed) constructor
+            or Create method.
+            </summary>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentHashtable`2.CreateSegmentRange(System.Int32,System.Int32)">
+            <summary>
+            Create a segment range
+            </summary>
+            <param name="segmentCount">Number of segments in range.</param>
+            <param name="initialSegmentSize">Number of slots allocated initialy in each segment.</param>
+            <returns>The created <see cref="T:TvdP.Collections.Segmentrange`2"/> instance.</returns>
+        </member>
+        <member name="F:TvdP.Collections.ConcurrentHashtable`2._NewRange">
+            <summary>
+            While adjusting the segmentation, _NewRange will hold a reference to the new range of segments.
+            when the adjustment is complete this reference will be copied to _CurrentRange.
+            </summary>
+        </member>
+        <member name="F:TvdP.Collections.ConcurrentHashtable`2._CurrentRange">
+            <summary>
+            Will hold the most current reange of segments. When busy adjusting the segmentation, this
+            field will hold a reference to the old range.
+            </summary>
+        </member>
+        <member name="F:TvdP.Collections.ConcurrentHashtable`2._SwitchPoint">
+            <summary>
+            While adjusting the segmentation this field will hold a boundary.
+            Clients accessing items with a key hash value below this boundary (unsigned compared)
+            will access _NewRange. The others will access _CurrentRange
+            </summary>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentHashtable`2.GetItemHashCode(`0@)">
+            <summary>
+            Get a hashcode for given storeable item.
+            </summary>
+            <param name="item">Reference to the item to get a hash value for.</param>
+            <returns>The hash value as an <see cref="T:System.UInt32"/>.</returns>
+            <remarks>
+            The hash returned should be properly randomized hash. The standard GetItemHashCode methods are usually not good enough.
+            A storeable item and a matching search key should return the same hash code.
+            So the statement <code>ItemEqualsItem(storeableItem, searchKey) ? GetItemHashCode(storeableItem) == GetItemHashCode(searchKey) : true </code> should always be true;
+            </remarks>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentHashtable`2.GetKeyHashCode(`1@)">
+            <summary>
+            Get a hashcode for given search key.
+            </summary>
+            <param name="key">Reference to the key to get a hash value for.</param>
+            <returns>The hash value as an <see cref="T:System.UInt32"/>.</returns>
+            <remarks>
+            The hash returned should be properly randomized hash. The standard GetItemHashCode methods are usually not good enough.
+            A storeable item and a matching search key should return the same hash code.
+            So the statement <code>ItemEqualsItem(storeableItem, searchKey) ? GetItemHashCode(storeableItem) == GetItemHashCode(searchKey) : true </code> should always be true;
+            </remarks>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentHashtable`2.ItemEqualsKey(`0@,`1@)">
+            <summary>
+            Compares a storeable item to a search key. Should return true if they match.
+            </summary>
+            <param name="item">Reference to the storeable item to compare.</param>
+            <param name="key">Reference to the search key to compare.</param>
+            <returns>True if the storeable item and search key match; false otherwise.</returns>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentHashtable`2.ItemEqualsItem(`0@,`0@)">
+            <summary>
+            Compares two storeable items for equality.
+            </summary>
+            <param name="item1">Reference to the first storeable item to compare.</param>
+            <param name="item2">Reference to the second storeable item to compare.</param>
+            <returns>True if the two soreable items should be regarded as equal.</returns>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentHashtable`2.IsEmpty(`0@)">
+            <summary>
+            Indicates if a specific item reference contains a valid item.
+            </summary>
+            <param name="item">The storeable item reference to check.</param>
+            <returns>True if the reference doesn't refer to a valid item; false otherwise.</returns>
+            <remarks>The statement <code>IsEmpty(default(TStoredI))</code> should always be true.</remarks>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentHashtable`2.GetKeyType(`0@)">
+            <summary>
+            Returns the type of the key value or object.
+            </summary>
+            <param name="item">The stored item to get the type of the key for.</param>
+            <returns>The actual type of the key or null if it can not be determined.</returns>
+            <remarks>
+            Used for diagnostics purposes.
+            </remarks>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentHashtable`2.GetSegment(System.UInt32)">
+            <summary>
+            Gets a segment out of either _NewRange or _CurrentRange based on the hash value.
+            </summary>
+            <param name="hash"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentHashtable`2.GetSegmentLockedForWriting(System.UInt32)">
+            <summary>
+            Gets a LOCKED segment out of either _NewRange or _CurrentRange based on the hash value.
+            Unlock needs to be called on this segment before it can be used by other clients.
+            </summary>
+            <param name="hash"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentHashtable`2.GetSegmentLockedForReading(System.UInt32)">
+            <summary>
+            Gets a LOCKED segment out of either _NewRange or _CurrentRange based on the hash value.
+            Unlock needs to be called on this segment before it can be used by other clients.
+            </summary>
+            <param name="hash"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentHashtable`2.FindItem(`1@,`0@)">
+            <summary>
+            Finds an item in the table collection that maches the given searchKey
+            </summary>
+            <param name="searchKey">The key to the item.</param>
+            <param name="item">Out reference to a field that will receive the found item.</param>
+            <returns>A boolean that will be true if an item has been found and false otherwise.</returns>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentHashtable`2.GetOldestItem(`0@,`0@)">
+            <summary>
+            Looks for an existing item in the table contents using an alternative copy. If it can be found it will be returned. 
+            If not then the alternative copy will be added to the table contents and the alternative copy will be returned.
+            </summary>
+            <param name="searchKey">A copy to search an already existing instance with</param>
+            <param name="item">Out reference to receive the found item or the alternative copy</param>
+            <returns>A boolean that will be true if an existing copy was found and false otherwise.</returns>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentHashtable`2.ReplaceItem(`1@,`0@,`0@,System.Func{`0,System.Boolean})">
+            <summary>
+            Replaces and existing item
+            </summary>
+            <param name="newItem"></param>
+            <param name="oldItem"></param>
+            <param name="sanction"></param>
+            <returns>true is the existing item was successfully replaced.</returns>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentHashtable`2.InsertItem(`0@,`0@)">
+            <summary>
+            Inserts an item in the table contents possibly replacing an existing item.
+            </summary>
+            <param name="searchKey">The item to insert in the table</param>
+            <param name="replacedItem">Out reference to a field that will receive any possibly replaced item.</param>
+            <returns>A boolean that will be true if an existing copy was found and replaced and false otherwise.</returns>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentHashtable`2.RemoveItem(`1@,`0@)">
+            <summary>
+            Removes an item from the table contents.
+            </summary>
+            <param name="searchKey">The key to find the item with.</param>
+            <param name="removedItem">Out reference to a field that will receive the found and removed item.</param>
+            <returns>A boolean that will be rue if an item was found and removed and false otherwise.</returns>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentHashtable`2.EnumerateAmorphLockedSegments(System.Boolean)">
+            <summary>
+            Enumerates all segments in _CurrentRange and locking them before yielding them and resleasing the lock afterwards
+            The order in which the segments are returned is undefined.
+            Lock SyncRoot before using this enumerable.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentHashtable`2.Clear">
+            <summary>
+            Removes all items from the collection. 
+            Aquires a lock on SyncRoot before it does it's thing.
+            When this method returns and multiple threads have access to this table it
+            is not guaranteed that the table is actually empty.
+            </summary>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentHashtable`2.SegmentationAdjustmentNeeded">
+            <summary>
+            Determines if a segmentation adjustment is needed.
+            </summary>
+            <returns>True</returns>
+        </member>
+        <member name="F:TvdP.Collections.ConcurrentHashtable`2._AssessSegmentationPending">
+            <summary>
+            Bool as int (for interlocked functions) that is true if a Segmentation assesment is pending.
+            </summary>
+        </member>
+        <member name="F:TvdP.Collections.ConcurrentHashtable`2._AllocatedSpace">
+            <summary>
+            The total allocated number of item slots. Filled with nonempty items or not.
+            </summary>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentHashtable`2.EffectTotalAllocatedSpace(System.Int32)">
+            <summary>
+            When a segment resizes it uses this method to inform the hashtable of the change in allocated space.
+            </summary>
+            <param name="effect"></param>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentHashtable`2.ScheduleMaintenance">
+            <summary>
+            Schedule a call to the AssessSegmentation() method.
+            </summary>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentHashtable`2.AssessSegmentation(System.Object)">
+            <summary>
+            Checks if segmentation needs to be adjusted and if so performs the adjustment.
+            </summary>
+            <param name="dummy"></param>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentHashtable`2.AssessSegmentation">
+            <summary>
+            This method is called when a re-segmentation is expected to be needed. It checks if it actually is needed and, if so, performs the re-segementation.
+            </summary>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentHashtable`2.SetSegmentation(System.Int32,System.Int32)">
+            <summary>
+            Adjusts the segmentation to the new segment count
+            </summary>
+            <param name="newSegmentCount">The new number of segments to use. This must be a power of 2.</param>
+            <param name="segmentSize">The number of item slots to reserve in each segment.</param>
+        </member>
+        <member name="P:TvdP.Collections.ConcurrentHashtable`2.SyncRoot">
+            <summary>
+            Returns an object that serves as a lock for range operations 
+            </summary>
+            <remarks>
+            Clients use this primarily for enumerating over the Tables contents.
+            Locking doesn't guarantee that the contents don't change, but prevents operations that would
+            disrupt the enumeration process.
+            Operations that use this lock:
+            Count, Clear, DisposeGarbage and AssessSegmentation.
+            Keeping this lock will prevent the table from re-segmenting.
+            </remarks>
+        </member>
+        <member name="P:TvdP.Collections.ConcurrentHashtable`2.Items">
+            <summary>
+            Gets an IEnumerable to iterate over all items in all segments.
+            </summary>
+            <returns></returns>
+            <remarks>
+            A lock should be aquired and held on SyncRoot while this IEnumerable is being used.
+            The order in which the items are returned is undetermined.
+            </remarks>
+        </member>
+        <member name="P:TvdP.Collections.ConcurrentHashtable`2.Count">
+            <summary>
+            Returns a count of all items in teh collection. This may not be
+            aqurate when multiple threads are accessing this table.
+            Aquires a lock on SyncRoot before it does it's thing.
+            </summary>
+        </member>
+        <member name="P:TvdP.Collections.ConcurrentHashtable`2.MinSegments">
+            <summary>
+            Gives the minimum number of segments a hashtable can contain. This should be 1 or more and always a power of 2.
+            </summary>
+        </member>
+        <member name="P:TvdP.Collections.ConcurrentHashtable`2.MinSegmentAllocatedSpace">
+            <summary>
+            Gives the minimum number of allocated item slots per segment. This should be 1 or more, always a power of 2
+            and less than 1/2 of MeanSegmentAllocatedSpace.
+            </summary>
+        </member>
+        <member name="P:TvdP.Collections.ConcurrentHashtable`2.MeanSegmentAllocatedSpace">
+            <summary>
+            Gives the prefered number of allocated item slots per segment. This should be 4 or more and always a power of 2.
+            </summary>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentDictionary`2.#ctor">
+            <summary>
+            Constructs a <see cref="T:TvdP.Collections.ConcurrentDictionary`2"/> instance using the default <see cref="T:System.Collections.Generic.IEqualityComparer`1"/> to compare keys.
+            </summary>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentDictionary`2.#ctor(System.Collections.Generic.IEqualityComparer{`0})">
+            <summary>
+            Constructs a <see cref="T:TvdP.Collections.ConcurrentDictionary`2"/> instance using the specified <see cref="T:System.Collections.Generic.IEqualityComparer`1"/> to compare keys.
+            </summary>
+            <param name="comparer">The <see cref="T:System.Collections.Generic.IEqualityComparer`1"/> tp compare keys with.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="comparer"/> is null.</exception>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentDictionary`2.GetItemHashCode(System.Nullable{System.Collections.Generic.KeyValuePair{`0,`1}}@)">
+            <summary>
+            Get a hashcode for given storeable item.
+            </summary>
+            <param name="item">Reference to the item to get a hash value for.</param>
+            <returns>The hash value as an <see cref="T:System.UInt32"/>.</returns>
+            <remarks>
+            The hash returned should be properly randomized hash. The standard GetItemHashCode methods are usually not good enough.
+            A storeable item and a matching search key should return the same hash code.
+            So the statement <code>ItemEqualsItem(storeableItem, searchKey) ? GetItemHashCode(storeableItem) == GetItemHashCode(searchKey) : true </code> should always be true;
+            </remarks>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentDictionary`2.GetKeyHashCode(TvdP.Collections.ConcurrentDictionaryKey{`0,`1}@)">
+            <summary>
+            Get a hashcode for given search key.
+            </summary>
+            <param name="key">Reference to the key to get a hash value for.</param>
+            <returns>The hash value as an <see cref="T:System.UInt32"/>.</returns>
+            <remarks>
+            The hash returned should be properly randomized hash. The standard GetItemHashCode methods are usually not good enough.
+            A storeable item and a matching search key should return the same hash code.
+            So the statement <code>ItemEqualsItem(storeableItem, searchKey) ? GetItemHashCode(storeableItem) == GetItemHashCode(searchKey) : true </code> should always be true;
+            </remarks>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentDictionary`2.ItemEqualsKey(System.Nullable{System.Collections.Generic.KeyValuePair{`0,`1}}@,TvdP.Collections.ConcurrentDictionaryKey{`0,`1}@)">
+            <summary>
+            Compares a storeable item to a search key. Should return true if they match.
+            </summary>
+            <param name="item">Reference to the storeable item to compare.</param>
+            <param name="key">Reference to the search key to compare.</param>
+            <returns>True if the storeable item and search key match; false otherwise.</returns>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentDictionary`2.ItemEqualsItem(System.Nullable{System.Collections.Generic.KeyValuePair{`0,`1}}@,System.Nullable{System.Collections.Generic.KeyValuePair{`0,`1}}@)">
+            <summary>
+            Compares two storeable items for equality.
+            </summary>
+            <param name="item1">Reference to the first storeable item to compare.</param>
+            <param name="item2">Reference to the second storeable item to compare.</param>
+            <returns>True if the two soreable items should be regarded as equal.</returns>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentDictionary`2.IsEmpty(System.Nullable{System.Collections.Generic.KeyValuePair{`0,`1}}@)">
+            <summary>
+            Indicates if a specific item reference contains a valid item.
+            </summary>
+            <param name="item">The storeable item reference to check.</param>
+            <returns>True if the reference doesn't refer to a valid item; false otherwise.</returns>
+            <remarks>The statement <code>IsEmpty(default(TStoredI))</code> should always be true.</remarks>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentDictionary`2.System#Collections#Generic#IDictionary{TKey@TValue}#Add(`0,`1)">
+            <summary>
+            Adds an element with the provided key and value to the dictionary.
+            </summary>
+            <param name="key">The object to use as the key of the element to add.</param>
+            <param name="value">The object to use as the value of the element to add.</param>
+            <exception cref="T:System.ArgumentException">An element with the same key already exists in the dictionary.</exception>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentDictionary`2.ContainsKey(`0)">
+            <summary>
+            Determines whether the dictionary
+            contains an element with the specified key.
+            </summary>
+            <param name="key">The key to locate in the dictionary.</param>
+            <returns>true if the dictionary contains
+            an element with the key; otherwise, false.</returns>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentDictionary`2.System#Collections#Generic#IDictionary{TKey@TValue}#Remove(`0)">
+            <summary>
+            Removes the element with the specified key from the dictionary.
+            </summary>
+            <param name="key">The key of the element to remove.</param>
+            <returns>true if the element is successfully removed; otherwise, false. This method
+            also returns false if key was not found in the original dictionary.</returns>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentDictionary`2.TryGetValue(`0,`1@)">
+             <summary>
+             Gets the value associated with the specified key.
+             </summary>
+             <param name="key">The key whose value to get.</param>
+             <param name="value">
+             When this method returns, the value associated with the specified key, if
+             the key is found; otherwise, the default value for the type of the value
+             parameter. This parameter is passed uninitialized.
+            </param>
+             <returns>
+             true if the dictionary contains an element with the specified key; otherwise, false.
+             </returns>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentDictionary`2.System#Collections#Generic#ICollection{System#Collections#Generic#KeyValuePair{TKey@TValue}}#Add(System.Collections.Generic.KeyValuePair{`0,`1})">
+            <summary>
+            Adds an association to the dictionary.
+            </summary>
+            <param name="item">A <see cref="T:System.Collections.Generic.KeyValuePair`2"/> that represents the association to add.</param>
+            <exception cref="T:System.ArgumentException">An association with an equal key already exists in the dicitonary.</exception>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentDictionary`2.Clear">
+            <summary>
+            Removes all items from the dictionary.
+            </summary>
+            <remarks>WHen working with multiple threads, that each can add items to this dictionary, it is not guaranteed that the dictionary will be empty when this method returns.</remarks>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentDictionary`2.System#Collections#Generic#ICollection{System#Collections#Generic#KeyValuePair{TKey@TValue}}#Contains(System.Collections.Generic.KeyValuePair{`0,`1})">
+            <summary>
+            Determines whether the specified association exists in the dictionary.
+            </summary>
+            <param name="item">The key-value association to search fo in the dicionary.</param>
+            <returns>True if item is found in the dictionary; otherwise, false.</returns>
+            <remarks>
+            This method compares both key and value. It uses the default equality comparer to compare values.
+            </remarks>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentDictionary`2.System#Collections#Generic#ICollection{System#Collections#Generic#KeyValuePair{TKey@TValue}}#CopyTo(System.Collections.Generic.KeyValuePair{`0,`1}[],System.Int32)">
+            <summary>
+            Copies all associations of the dictionary to an
+               <see cref="T:System.Array"/>, starting at a particular <see cref="T:System.Array"/> index.
+            </summary>
+            <param name="array">The one-dimensional <see cref="T:System.Array"/> that is the destination of the associations
+                copied from <see cref="T:TvdP.Collections.ConcurrentDictionaryKey`2"/>. The <see cref="T:System.Array"/> must
+                have zero-based indexing.</param>
+            <param name="arrayIndex">The zero-based index in <paramref name="array"/> at which copying begins.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="array"/> is null.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="arrayIndex"/> is less than 0.</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="arrayIndex"/> is equal to or greater than the length of <paramref name="array"/>.</exception>
+            <exception cref="T:System.ArgumentException">The number of associations to be copied
+            is greater than the available space from <paramref name="arrayIndex"/> to the end of the destination
+            <paramref name="array"/>.</exception>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentDictionary`2.System#Collections#Generic#ICollection{System#Collections#Generic#KeyValuePair{TKey@TValue}}#Remove(System.Collections.Generic.KeyValuePair{`0,`1})">
+             <summary>
+             Removes the specified association from the <see cref="T:TvdP.Collections.ConcurrentDictionaryKey`2"/>, comparing both key and value.
+             </summary>
+             <param name="item">A <see cref="T:System.Collections.Generic.KeyValuePair`2"/> representing the association to remove.</param>
+             <returns>true if the association was successfully removed from the <see cref="T:TvdP.Collections.ConcurrentDictionaryKey`2"/>;
+             otherwise, false. This method also returns false if the association is not found in
+             the original <see cref="T:TvdP.Collections.ConcurrentDictionaryKey`2"/>.
+            </returns>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentDictionary`2.GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through all associations in the <see cref="T:TvdP.Collections.ConcurrentDictionaryKey`2"/> at the moment of invocation.
+            </summary>
+            <returns>A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the associations.</returns>
+        </member>
+        <member name="M:TvdP.Collections.ConcurrentDictionary`2.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through all associations in the <see cref="T:TvdP.Collections.ConcurrentDictionaryKey`2"/> at the moment of invocation.
+            </summary>
+            <returns>A <see cref="T:System.Collections.IEnumerator"/> that can be used to iterate through the associations.</returns>
+        </member>
+        <member name="P:TvdP.Collections.ConcurrentDictionary`2.Comparer">
+            <summary>
+            Gives the <see cref="T:System.Collections.Generic.IEqualityComparer`1"/> of TKey that is used to compare keys.
+            </summary>
+        </member>
+        <member name="P:TvdP.Collections.ConcurrentDictionary`2.Keys">
+            <summary>
+            Gets an <see cref="T:System.Collections.Generic.ICollection`1"/>  containing the keys of
+            the dictionary.           
+            </summary>
+            <returns>An <see cref="T:System.Collections.Generic.ICollection`1"/> containing the keys of the dictionary.</returns>
+            <remarks>This property takes a snapshot of the current keys collection of the dictionary at the moment of invocation.</remarks>
+        </member>
+        <member name="P:TvdP.Collections.ConcurrentDictionary`2.Values">
+            <summary>
+            Gets an <see cref="T:System.Collections.Generic.ICollection`1"/> containing the values in
+                the dictionary.
+            </summary>
+            <returns>
+            An <see cref="T:System.Collections.Generic.ICollection`1"/> containing the values in the dictionary.
+            </returns>
+            <remarks>This property takes a snapshot of the current keys collection of the dictionary at the moment of invocation.</remarks>
+        </member>
+        <member name="P:TvdP.Collections.ConcurrentDictionary`2.Item(`0)">
+            <summary>
+            Gets or sets the value associated with the specified key.
+            </summary>
+            <param name="key">The key of the value to get or set.</param>
+            <returns>The value associated with the specified key. If the specified key is not found, a get operation throws a KeyNotFoundException, and a set operation creates a new element with the specified key.</returns>
+            <remarks>
+            When working with multiple threads, that can each potentialy remove the searched for item, a <see cref="T:System.Collections.Generic.KeyNotFoundException"/> can always be expected.
+            </remarks>
+        </member>
+        <member name="P:TvdP.Collections.ConcurrentDictionary`2.Count">
+            <summary>
+            Gets the number of elements contained in the <see cref="T:TvdP.Collections.ConcurrentDictionaryKey`2"/>.
+            </summary>
+        </member>
+        <member name="P:TvdP.Collections.ConcurrentDictionary`2.System#Collections#Generic#ICollection{System#Collections#Generic#KeyValuePair{TKey@TValue}}#IsReadOnly">
+            <summary>
+            Gets a value indicating whether the <see cref="T:TvdP.Collections.ConcurrentDictionaryKey`2"/> is read-only, which is always false.
+            </summary>
+        </member>
+        <member name="T:TvdP.Collections.Segment`2">
+            <summary>
+            A 'single writer - multi reader' threaded segment in a hashtable. 
+            </summary>
+            <typeparam name="TStored"></typeparam>
+            <typeparam name="TSearch"></typeparam>
+            <remarks>
+            Though each segment can be accessed by 1 writer thread simultaneously, the hashtable becomes concurrent 
+            for writing by containing many segments so that collisions are rare. The table will be fully concurrent 
+            for read operations as far as they are not colliding with write operations.
+            Each segment is itself a small hashtable that can grow and shrink individualy. This prevents blocking of
+            the entire hashtable when growing or shrinking is needed. Because each segment is relatively small (depending on
+            the quality of the hash) resizing of the individual segments should not take much time.
+            </remarks>
+        </member>
+        <member name="M:TvdP.Collections.Segment`2.Initialize(System.Int32)">
+            <summary>
+            Initialize the segment.
+            </summary>
+            <param name="initialSize"></param>
+        </member>
+        <member name="M:TvdP.Collections.Segment`2.Welcome(TvdP.Collections.ConcurrentHashtable{`0,`1})">
+            <summary>
+            When segment gets introduced into hashtable then its allocated space should be added to the
+            total allocated space.
+            Single threaded access or locking is needed
+            </summary>
+            <param name="traits"></param>
+        </member>
+        <member name="M:TvdP.Collections.Segment`2.Bye(TvdP.Collections.ConcurrentHashtable{`0,`1})">
+            <summary>
+            When segment gets removed from hashtable then its allocated space should be subtracted to the
+            total allocated space.
+            Single threaded access or locking is needed
+            </summary>
+            <param name="traits"></param>
+        </member>
+        <member name="F:TvdP.Collections.Segment`2._List">
+            <summary>
+            Array with 'slots'. Each slot can be filled or empty.
+            </summary>
+        </member>
+        <member name="M:TvdP.Collections.Segment`2.InsertItemAtIndex(System.UInt32,System.UInt32,`0,TvdP.Collections.ConcurrentHashtable{`0,`1})">
+            <summary>
+            Inserts an item into a *not empty* spot given by position i. It moves items forward until an empty spot is found.
+            </summary>
+            <param name="mask"></param>
+            <param name="i"></param>
+            <param name="itemCopy"></param>
+            <param name="traits"></param>
+        </member>
+        <member name="M:TvdP.Collections.Segment`2.FindItem(`1@,`0@,TvdP.Collections.ConcurrentHashtable{`0,`1})">
+            <summary>
+            Find item in segment.
+            </summary>
+            <param name="key">Reference to the search key to use.</param>
+            <param name="item">Out reference to store the found item in.</param>
+            <param name="traits">Object that tells this segment how to treat items and keys.</param>
+            <returns>True if an item could be found, otherwise false.</returns>
+        </member>
+        <member name="M:TvdP.Collections.Segment`2.GetOldestItem(`0@,`0@,TvdP.Collections.ConcurrentHashtable{`0,`1})">
+            <summary>
+            Find an existing item or, if it can't be found, insert a new item.
+            </summary>
+            <param name="key">Reference to the item that will be inserted if an existing item can't be found. It will also be used to search with.</param>
+            <param name="item">Out reference to store the found item or, if it can not be found, the new inserted item.</param>
+            <param name="traits">Object that tells this segment how to treat items and keys.</param>
+            <returns>True if an existing item could be found, otherwise false.</returns>
+        </member>
+        <member name="M:TvdP.Collections.Segment`2.InsertItem(`0@,`0@,TvdP.Collections.ConcurrentHashtable{`0,`1})">
+            <summary>
+            Inserts an item in the segment, possibly replacing an equal existing item.
+            </summary>
+            <param name="key">A reference to the item to insert.</param>
+            <param name="item">An out reference where any replaced item will be written to, if no item was replaced the new item will be written to this reference.</param>
+            <param name="traits">Object that tells this segment how to treat items and keys.</param>
+            <returns>True if an existing item could be found and is replaced, otherwise false.</returns>
+        </member>
+        <member name="M:TvdP.Collections.Segment`2.RemoveItem(`1@,`0@,TvdP.Collections.ConcurrentHashtable{`0,`1})">
+            <summary>
+            Removes an item from the segment.
+            </summary>
+            <param name="key">A reference to the key to search with.</param>
+            <param name="item">An out reference where the removed item will be stored or default(<typeparamref name="TStored"/>) if no item to remove can be found.</param>
+            <param name="traits">Object that tells this segment how to treat items and keys.</param>
+            <returns>True if an item could be found and is removed, false otherwise.</returns>
+        </member>
+        <member name="M:TvdP.Collections.Segment`2.GetNextItem(System.Int32,`0@,TvdP.Collections.ConcurrentHashtable{`0,`1})">
+            <summary>
+            Iterate over items in the segment. 
+            </summary>
+            <param name="beyond">Position beyond which the next filled slot will be found and the item in that slot returned. (Starting with -1)</param>
+            <param name="item">Out reference where the next item will be stored or default if the end of the segment is reached.</param>
+            <param name="traits">Object that tells this segment how to treat items and keys.</param>
+            <returns>The index position the next item has been found or -1 otherwise.</returns>
+        </member>
+        <member name="F:TvdP.Collections.Segment`2._Count">
+            <summary>
+            Total numer of filled slots in _List.
+            </summary>
+        </member>
+        <member name="M:TvdP.Collections.Segment`2.Trim(TvdP.Collections.ConcurrentHashtable{`0,`1})">
+            <summary>
+            Remove any excess allocated space
+            </summary>
+            <param name="traits"></param>
+        </member>
+        <member name="P:TvdP.Collections.Segment`2.IsAlive">
+            <summary>
+            Boolean value indicating if this segment has not been trashed yet.
+            </summary>
+        </member>
+        <member name="T:TvdP.Threading.TinyReaderWriterLock">
+            <summary>
+            Tiny spin lock that allows multiple readers simultanously and 1 writer exclusively
+            </summary>
+        </member>
+        <member name="M:TvdP.Threading.TinyReaderWriterLock.ReleaseForReading">
+            <summary>
+            Release a reader lock
+            </summary>
+        </member>
+        <member name="M:TvdP.Threading.TinyReaderWriterLock.ReleaseForWriting">
+            <summary>
+            Release a writer lock
+            </summary>
+        </member>
+        <member name="M:TvdP.Threading.TinyReaderWriterLock.LockForReading">
+            <summary>
+            Aquire a reader lock. Wait until lock is aquired.
+            </summary>
+        </member>
+        <member name="M:TvdP.Threading.TinyReaderWriterLock.LockForReading(System.Boolean)">
+            <summary>
+            Aquire a reader lock.
+            </summary>
+            <param name="wait">True if to wait until lock aquired, False to return immediately.</param>
+            <returns>Boolean indicating if lock was successfuly aquired.</returns>
+        </member>
+        <member name="M:TvdP.Threading.TinyReaderWriterLock.LockForWriting">
+            <summary>
+            Aquire a writer lock. Wait until lock is aquired.
+            </summary>
+        </member>
+        <member name="M:TvdP.Threading.TinyReaderWriterLock.LockForWriting(System.Boolean)">
+            <summary>
+            Aquire a writer lock.
+            </summary>
+            <param name="wait">True if to wait until lock aquired, False to return immediately.</param>
+            <returns>Boolean indicating if lock was successfuly aquired.</returns>
+        </member>
+        <member name="T:System.SerializableAttribute">
+            <summary>
+            Attempts to replicate the Desktop CLR.
+            </summary>
+        </member>
+    </members>
+</doc>

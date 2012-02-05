@@ -13,6 +13,7 @@ namespace NzbDrone.Test.Common
 
         protected const string INTEGRATION_TEST = "Integration Test";
 
+
         private AutoMoqer _mocker;
         protected AutoMoqer Mocker
         {
@@ -26,6 +27,9 @@ namespace NzbDrone.Test.Common
                 return _mocker;
             }
         }
+
+        protected Mock<RestProvider> MockedRestProvider { get; private set; }
+
 
         protected string VirtualPath
         {
@@ -41,6 +45,9 @@ namespace NzbDrone.Test.Common
         [SetUp]
         public void TestBaseSetup()
         {
+            MockedRestProvider = new Mock<RestProvider>();
+            ReportingService.RestProvider = MockedRestProvider.Object;
+
             if (Directory.Exists(TempFolder))
             {
                 Directory.Delete(TempFolder, true);

@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
         private static string _latestsTestFileName = "NzbDrone.master.0.6.0.3.zip";
 
         [SetUp]
-        public void setup()
+        public void Setup()
         {
             WithStrictMocker();
 
@@ -31,9 +31,8 @@ namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
         [TestCase("1.0.0.0")]
         public void should_return_null_if_latests_is_lower_than_current_version(string currentVersion)
         {
-            Mocker.GetMock<EnviromentProvider>().SetupGet(c => c.Version).Returns(new Version(currentVersion));
 
-            var updatePackage = Mocker.Resolve<UpdateProvider>().GetAvilableUpdate();
+            var updatePackage = Mocker.Resolve<UpdateProvider>().GetAvilableUpdate(new Version(currentVersion));
 
             updatePackage.Should().BeNull();
         }
@@ -41,9 +40,7 @@ namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
         [Test]
         public void should_return_null_if_latests_is_equal_to_current_version()
         {
-            Mocker.GetMock<EnviromentProvider>().SetupGet(c => c.Version).Returns(_latestsTestVersion);
-
-            var updatePackage = Mocker.Resolve<UpdateProvider>().GetAvilableUpdate();
+            var updatePackage = Mocker.Resolve<UpdateProvider>().GetAvilableUpdate(_latestsTestVersion);
 
             updatePackage.Should().BeNull();
         }
@@ -53,9 +50,7 @@ namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
         [TestCase("0.0.10.10")]
         public void should_return_update_if_latests_is_higher_than_current_version(string currentVersion)
         {
-            Mocker.GetMock<EnviromentProvider>().SetupGet(c => c.Version).Returns(new Version(currentVersion));
-
-            var updatePackage = Mocker.Resolve<UpdateProvider>().GetAvilableUpdate();
+            var updatePackage = Mocker.Resolve<UpdateProvider>().GetAvilableUpdate(new Version(currentVersion));
 
             updatePackage.Should().NotBeNull();
             updatePackage.Version.Should().Be(_latestsTestVersion);

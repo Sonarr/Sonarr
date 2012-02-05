@@ -131,8 +131,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void uguid_should_return_valid_result_on_first_call()
         {
             var guid = Mocker.Resolve<ConfigProvider>().UGuid;
-            guid.Should().NotBeBlank();
-            Guid.Parse(guid).ToString().Should().NotBe(new Guid().ToString());
+            guid.Should().NotBeEmpty();
         }
 
 

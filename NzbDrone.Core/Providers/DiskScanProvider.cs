@@ -6,9 +6,7 @@ using Ninject;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
-using PetaPoco;
 
 namespace NzbDrone.Core.Providers
 {

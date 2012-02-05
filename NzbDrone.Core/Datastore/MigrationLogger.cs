@@ -5,7 +5,7 @@ using NLog;
 
 namespace NzbDrone.Core.Datastore
 {
-    class MigrationLogger : ILogger
+    public class MigrationLogger : ILogger
     {
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();

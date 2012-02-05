@@ -2,7 +2,10 @@
 using System;
 using System.Linq;
 using FluentAssertions;
+using Moq;
 using NUnit.Framework;
+using NzbDrone.Common;
+using NzbDrone.Common.Contract;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
@@ -50,7 +53,7 @@ namespace NzbDrone.Core.Test
         [TestCase("Breaking.In.S01E07.21.0.Jump.Street.720p.WEB-DL.DD5.1.h.264-KiNGS", "Breaking In", 1, 7)]
         [TestCase("CSI525", "CSI", 5, 25)]
         [TestCase("King of the Hill - 10x12 - 24 Hour Propane People [SDTV]", "King of the Hill", 10, 12)]
-        [TestCase("Brew Masters S01E06 3 Beers For Batali DVDRip XviD SPRiNTER","Brew Masters", 1, 6)]
+        [TestCase("Brew Masters S01E06 3 Beers For Batali DVDRip XviD SPRiNTER", "Brew Masters", 1, 6)]
         [TestCase("24 7 Flyers Rangers Road to the NHL Winter Classic Part01 720p HDTV x264 ORENJI", "24 7 Flyers Rangers Road to the NHL Winter Classic", 1, 1)]
         [TestCase("24 7 Flyers Rangers Road to the NHL Winter Classic Part 02 720p HDTV x264 ORENJI", "24 7 Flyers Rangers Road to the NHL Winter Classic", 1, 2)]
         [TestCase("24-7 Flyers-Rangers- Road to the NHL Winter Classic - S01E01 - Part 1", "24 7 Flyers Rangers Road to the NHL Winter Classic", 1, 1)]
@@ -93,16 +96,24 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
-        public void unparsable_path()
+        public void unparsable_path_should_report_the_path()
         {
             Parser.ParsePath("C:\\").Should().BeNull();
+            
+            MockedRestProvider.Verify(c => c.PostData(It.IsAny<string>(), It.IsAny<ParseErrorReport>()), Times.Exactly(2));
+
             ExceptionVerification.IgnoreWarns();
         }
 
         [Test]
-        public void unparsable_title()
+        public void unparsable_title_should_report_title()
         {
-            Parser.ParseTitle("SOMETHING").Should().BeNull();
+            const string TITLE = "SOMETHING";
+
+            Parser.ParseTitle(TITLE).Should().BeNull();
+
+            MockedRestProvider.Verify(c => c.PostData(It.IsAny<string>(), It.Is<ParseErrorReport>(r => r.Title == TITLE)), Times.Once());
+
             ExceptionVerification.IgnoreWarns();
         }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using NzbDrone.Core.Repository;
 
@@ -47,11 +48,11 @@ namespace NzbDrone.Core.Model
             if (FullSeason)
                 return string.Format("{0} - Season {1:00}", SeriesTitle, SeasonNumber);
 
-            if (EpisodeNumbers != null)
+            if (EpisodeNumbers != null && EpisodeNumbers.Any())
                 return string.Format("{0} - S{1:00}E{2} {3}", SeriesTitle, SeasonNumber,
-                                     String.Join("-", EpisodeNumbers), Quality);
+                                     String.Join("-", EpisodeNumbers.Select(c => c.ToString("00"))), Quality);
 
-            return OriginalString;
+            return "[Invalid format]";
 
         }
     }
