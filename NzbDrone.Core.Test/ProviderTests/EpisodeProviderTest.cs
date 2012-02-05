@@ -255,6 +255,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             actualCount.Should().Be(episodeCount);
         }
 
+
         [Test]
         public void RefreshEpisodeInfo_should_set_older_than_1900_to_null()
         {
@@ -368,6 +369,148 @@ namespace NzbDrone.Core.Test.ProviderTests
             result.Should().HaveCount(episodeCount);
             result.Where(e => e.EpisodeNumber == 0 && e.SeasonNumber == 15).Single().Ignored.Should().BeTrue();
         }
+
+        [Test]
+        public void RefreshEpisodeInfo_should_skip_future_episodes_with_no_title()
+        {
+            //Arrange
+            const int seriesId = 71663;
+            const int episodeCount = 10;
+
+            var fakeEpisodes = Builder<TvdbSeries>.CreateNew().With(
+                c => c.Episodes = new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(episodeCount).
+                                               All()
+                                               .With(a => c.FirstAired = DateTime.Now.AddDays(-2))
+                                               .With(e => e.EpisodeName = "Something")
+                                               .TheFirst(3)
+                                               .With(e => e.EpisodeName = "")
+                                               .With(e => e.FirstAired = DateTime.Now.AddDays(10))
+                                               .Build())
+                ).With(c => c.Id = seriesId).Build();
+
+            var fakeSeries = Builder<Series>.CreateNew().With(c => c.SeriesId = seriesId).Build();
+
+            WithRealDb();
+
+            Db.Insert(fakeSeries);
+
+            Mocker.GetMock<TvDbProvider>()
+                .Setup(c => c.GetSeries(seriesId, true))
+                .Returns(fakeEpisodes);
+
+
+            //Act
+            Mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
+
+            //Assert
+            var result = Mocker.Resolve<EpisodeProvider>().GetEpisodeBySeries(seriesId).ToList();
+            result.Should().HaveCount(episodeCount - 3);
+            result.Should().OnlyContain(c => !string.IsNullOrWhiteSpace(c.Title) || c.AirDate < DateTime.Now);
+        }
+
+        [Test]
+        public void RefreshEpisodeInfo_should_skip_older_than_1900_year_episodes_with_no_title()
+        {
+            //Arrange
+            const int seriesId = 71663;
+            const int episodeCount = 10;
+
+            var fakeEpisodes = Builder<TvdbSeries>.CreateNew().With(
+                c => c.Episodes = new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(episodeCount).
+                                               All()
+                                               .With(a => c.FirstAired = DateTime.Now.AddDays(-2))
+                                               .With(e => e.EpisodeName = "Something")
+                                               .TheFirst(3)
+                                               .With(e => e.EpisodeName = "")
+                                               .With(e => e.FirstAired = new DateTime(1889,1,1))
+                                               .Build())
+                ).With(c => c.Id = seriesId).Build();
+
+            var fakeSeries = Builder<Series>.CreateNew().With(c => c.SeriesId = seriesId).Build();
+
+            WithRealDb();
+
+            Db.Insert(fakeSeries);
+
+            Mocker.GetMock<TvDbProvider>()
+                .Setup(c => c.GetSeries(seriesId, true))
+                .Returns(fakeEpisodes);
+
+
+            //Act
+            Mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
+
+            //Assert
+            var result = Mocker.Resolve<EpisodeProvider>().GetEpisodeBySeries(seriesId).ToList();
+            result.Should().HaveCount(episodeCount - 3);
+            result.Should().OnlyContain(c => !string.IsNullOrWhiteSpace(c.Title) || c.AirDate < DateTime.Now);
+        }
+
+        [Test]
+        public void RefreshEpisodeInfo_should_add_future_episodes_with_title()
+        {
+            const int seriesId = 71663;
+
+            var fakeEpisodes = Builder<TvdbSeries>.CreateNew().With(
+                c => c.Episodes = new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(10).
+                                               All()
+                                               .With(a => a.FirstAired = DateTime.Now.AddDays(10))
+                                               .With(e => e.EpisodeName = "Something")
+                                               .Build())
+                ).With(c => c.Id = seriesId).Build();
+
+            var fakeSeries = Builder<Series>.CreateNew().With(c => c.SeriesId = seriesId).Build();
+
+            WithRealDb();
+
+            Db.Insert(fakeSeries);
+
+            Mocker.GetMock<TvDbProvider>()
+                .Setup(c => c.GetSeries(seriesId, true))
+                .Returns(fakeEpisodes);
+
+
+            //Act
+            Mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
+
+            //Assert
+            var result = Mocker.Resolve<EpisodeProvider>().GetEpisodeBySeries(seriesId).ToList();
+            result.Should().HaveSameCount(fakeEpisodes.Episodes);
+        }
+
+        [Test]
+        public void RefreshEpisodeInfo_should_add_old_episodes_with_no_title()
+        {
+            const int seriesId = 71663;
+
+
+            var fakeEpisodes = Builder<TvdbSeries>.CreateNew().With(
+                c => c.Episodes = new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(10).
+                                               All()
+                                               .With(a => a.FirstAired = DateTime.Now.AddDays(-10))
+                                               .With(e => e.EpisodeName = string.Empty)
+                                               .Build())
+                ).With(c => c.Id = seriesId).Build();
+
+            var fakeSeries = Builder<Series>.CreateNew().With(c => c.SeriesId = seriesId).Build();
+
+            WithRealDb();
+
+            Db.Insert(fakeSeries);
+
+            Mocker.GetMock<TvDbProvider>()
+                .Setup(c => c.GetSeries(seriesId, true))
+                .Returns(fakeEpisodes);
+
+
+            //Act
+            Mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
+
+            //Assert
+            var result = Mocker.Resolve<EpisodeProvider>().GetEpisodeBySeries(seriesId).ToList();
+            result.Should().HaveSameCount(fakeEpisodes.Episodes);
+        }
+
 
         [Test]
         public void RefreshEpisodeInfo_ignore_season_zero()

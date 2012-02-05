@@ -282,6 +282,11 @@ namespace NzbDrone.Core.Providers
             {
                 try
                 {
+                    //skip episodes that are too far in the future and have no title.
+                    if ((episode.FirstAired > DateTime.Now.AddDays(2) || episode.FirstAired.Year < 1900) &&
+                        string.IsNullOrWhiteSpace(episode.EpisodeName))
+                        continue;
+
                     Logger.Trace("Updating info for [{0}] - S{1}E{2}", tvDbSeriesInfo.SeriesName, episode.SeasonNumber, episode.EpisodeNumber);
 
                     //first check using tvdbId, this should cover cases when and episode number in a season is changed
