@@ -6,8 +6,8 @@ $('.seriesTable a').live('click', function (event) {
     event.stopPropegation();
 });
 
-$('.seriesTable tr td:not(:last-child)').live('click', function () {
-    $(this).parent('tr').next('.detail-view').toggle();
+$('.seriesTable .data-row td:not(:last-child)').live('click', function () {
+    $(this).parent('tr').next('.detail-row').toggle();
 });
 
 function grid_onError(e) {
