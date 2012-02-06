@@ -1,8 +1,9 @@
 ﻿/* Click on row, show details */
-$('.seriesTable a').live('click', function () {
+$('.seriesTable a').live('click', function (event) {
+    event.preventDefault();
     var link = $(this).attr('href');
     window.location = link;
-    event.preventDefault();
+    event.stopPropegation();
 });
 
 $('.seriesTable tr td:not(:last-child)').live('click', function () {
