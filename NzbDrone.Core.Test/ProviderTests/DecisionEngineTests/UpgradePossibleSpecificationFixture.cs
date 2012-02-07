@@ -1,24 +1,21 @@
 ﻿// ReSharper disable RedundantUsingDirective
 
-using System;
-using System.Collections.Generic;
-
+using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Providers.DecisionEngine;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Test.Common.AutoMoq;
 
-namespace NzbDrone.Core.Test.ProviderTests.InventoryProviderTests
+namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class IsUpgradePossibleFixture : CoreTest
+    public class UpgradePossibleSpecificationFixture : CoreTest
     {
         private void WithWebdlCutoff()
         {
@@ -57,7 +54,7 @@ namespace NzbDrone.Core.Test.ProviderTests.InventoryProviderTests
                     .Build();
 
             //Act
-            bool result = Mocker.Resolve<InventoryProvider>().IsUpgradePossible(episode);
+            bool result = Mocker.Resolve<UpgradePossibleSpecification>().IsSatisfiedBy(episode);
 
             //Assert
             result.Should().BeTrue();
@@ -69,7 +66,7 @@ namespace NzbDrone.Core.Test.ProviderTests.InventoryProviderTests
             WithWebdlCutoff();
 
             //Act
-            bool result = Mocker.Resolve<InventoryProvider>().IsUpgradePossible(_episode);
+            bool result = Mocker.Resolve<UpgradePossibleSpecification>().IsSatisfiedBy(_episode);
 
             //Assert
             result.Should().BeTrue();
@@ -83,7 +80,7 @@ namespace NzbDrone.Core.Test.ProviderTests.InventoryProviderTests
             _episodeFile.Quality = QualityTypes.WEBDL;
 
             //Act
-            bool result = Mocker.Resolve<InventoryProvider>().IsUpgradePossible(_episode);
+            bool result = Mocker.Resolve<UpgradePossibleSpecification>().IsSatisfiedBy(_episode);
 
             //Assert
             result.Should().BeFalse();
@@ -97,7 +94,7 @@ namespace NzbDrone.Core.Test.ProviderTests.InventoryProviderTests
             _episodeFile.Quality = QualityTypes.Bluray720p;
 
             //Act
-            bool result = Mocker.Resolve<InventoryProvider>().IsUpgradePossible(_episode);
+            bool result = Mocker.Resolve<UpgradePossibleSpecification>().IsSatisfiedBy(_episode);
 
             //Assert
             result.Should().BeFalse();

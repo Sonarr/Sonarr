@@ -4,19 +4,18 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Model;
-using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
+using NzbDrone.Core.Providers.DownloadClients;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
 
-namespace NzbDrone.Core.Test.ProviderTests.SabProviderTests
+namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming

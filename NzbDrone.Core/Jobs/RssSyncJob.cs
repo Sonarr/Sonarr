@@ -6,6 +6,7 @@ using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Providers.DecisionEngine;
 using NzbDrone.Core.Providers.Indexer;
 
 namespace NzbDrone.Core.Jobs
@@ -13,20 +14,25 @@ namespace NzbDrone.Core.Jobs
     public class RssSyncJob : IJob
     {
         private readonly IEnumerable<IndexerBase> _indexers;
-        private readonly InventoryProvider _inventoryProvider;
         private readonly DownloadProvider _downloadProvider;
         private readonly IndexerProvider _indexerProvider;
+        private readonly MonitoredEpisodeSpecification _isMonitoredEpisodeSpecification;
+        private readonly AllowedDownloadSpecification _allowedDownloadSpecification;
+        private readonly UpgradeHistorySpecification _upgradeHistorySpecification;
 
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         [Inject]
-        public RssSyncJob(IEnumerable<IndexerBase> indexers, InventoryProvider inventoryProvider, DownloadProvider downloadProvider, IndexerProvider indexerProvider)
+        public RssSyncJob(IEnumerable<IndexerBase> indexers, DownloadProvider downloadProvider, IndexerProvider indexerProvider,
+            MonitoredEpisodeSpecification isMonitoredEpisodeSpecification, AllowedDownloadSpecification allowedDownloadSpecification, UpgradeHistorySpecification upgradeHistorySpecification)
         {
             _indexers = indexers;
-            _inventoryProvider = inventoryProvider;
             _downloadProvider = downloadProvider;
             _indexerProvider = indexerProvider;
+            _isMonitoredEpisodeSpecification = isMonitoredEpisodeSpecification;
+            _allowedDownloadSpecification = allowedDownloadSpecification;
+            _upgradeHistorySpecification = upgradeHistorySpecification;
         }
 
         public string Name
@@ -63,7 +69,9 @@ namespace NzbDrone.Core.Jobs
             {
                 try
                 {
-                    if (_inventoryProvider.IsMonitored(episodeParseResult) && _inventoryProvider.IsQualityNeeded(episodeParseResult))
+                    if (_isMonitoredEpisodeSpecification.IsSatisfiedBy(episodeParseResult) &&
+                        _allowedDownloadSpecification.IsSatisfiedBy(episodeParseResult) &&
+                        _upgradeHistorySpecification.IsSatisfiedBy(episodeParseResult))
                     {
                         _downloadProvider.DownloadReport(episodeParseResult);
                     }

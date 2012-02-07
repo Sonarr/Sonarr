@@ -119,6 +119,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="JsonModelBinder.cs" />
+    <Compile Include="Migrations\Migration20120206.cs" />
     <Compile Include="Migrations\Migration20120203.cs" />
     <Compile Include="Migrations\Migration20120205.cs" />
     <Compile Include="Migrations\Migration20120201.cs" />

@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using Ninject;
 using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
+using NzbDrone.Core.Providers.DownloadClients;
 using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Providers
@@ -16,7 +18,7 @@ namespace NzbDrone.Core.Providers
         private readonly ConfigProvider _configProvider;
         private readonly BlackholeProvider _blackholeProvider;
 
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         [Inject]
         public DownloadProvider(SabProvider sabProvider, HistoryProvider historyProvider,
@@ -37,26 +39,16 @@ namespace NzbDrone.Core.Providers
 
         public virtual bool DownloadReport(EpisodeParseResult parseResult)
         {
-            var sabTitle = _sabProvider.GetSabTitle(parseResult);
-            bool addSuccess = false;
+            var downloadTitle = GetDownloadTitle(parseResult);
 
-            if (_configProvider.DownloadClient == DownloadClientType.Blackhole)
-                addSuccess = _blackholeProvider.DownloadNzb(parseResult, sabTitle);
+            var provider = GetActiveDownloadClient();
 
-            if (_configProvider.DownloadClient == DownloadClientType.Sabnzbd)
+            bool success = provider.DownloadNzb(parseResult.NzbUrl, GetDownloadTitle(parseResult));
+
+            if (success)
             {
-                if(_sabProvider.IsInQueue(parseResult))
-                {
-                    Logger.Warn("Episode {0} is already in sab's queue. skipping.", parseResult);
-                    return false;
-                }
+                logger.Trace("Download added to Queue: {0}", downloadTitle);
 
-                addSuccess = _sabProvider.AddByUrl(parseResult.NzbUrl, sabTitle);
-            }
-
-            if (addSuccess)
-            {
-                Logger.Trace("Download added to Queue: {0}", sabTitle);
 
                 foreach (var episode in _episodeProvider.GetEpisodesByParseResult(parseResult))
                 {
@@ -72,11 +64,74 @@ namespace NzbDrone.Core.Providers
                     _historyProvider.Add(history);
                     _episodeProvider.MarkEpisodeAsFetched(episode.EpisodeId);
                 }
+
+                _externalNotificationProvider.OnGrab(downloadTitle);
             }
 
-            _externalNotificationProvider.OnGrab(sabTitle);
+            return success;
+        }
 
-            return addSuccess;
+
+        public virtual IDownloadClient GetActiveDownloadClient()
+        {
+            switch (_configProvider.DownloadClient)
+            {
+                case DownloadClientType.Blackhole:
+                    return _blackholeProvider;
+                default:
+                    return _sabProvider;
+            }
+        }
+
+
+        public virtual String GetDownloadTitle(EpisodeParseResult parseResult)
+        {
+
+            var seriesTitle = MediaFileProvider.CleanFilename(parseResult.Series.Title);
+
+
+            //Handle Full Naming
+            if (parseResult.FullSeason)
+            {
+                var seasonResult = String.Format("{0} - Season {1} [{2}]", seriesTitle,
+                                     parseResult.SeasonNumber, parseResult.Quality.QualityType);
+
+                if (parseResult.Quality.Proper)
+                    seasonResult += " [Proper]";
+
+                return seasonResult;
+            }
+
+            if (parseResult.Series.IsDaily)
+            {
+                var dailyResult = String.Format("{0} - {1:yyyy-MM-dd} - {2} [{3}]", seriesTitle,
+                                     parseResult.AirDate, parseResult.EpisodeTitle, parseResult.Quality.QualityType);
+
+                if (parseResult.Quality.Proper)
+                    dailyResult += " [Proper]";
+
+                return dailyResult;
+            }
+
+            //Show Name - 1x01-1x02 - Episode Name
+            //Show Name - 1x01 - Episode Name
+            var episodeString = new List<String>();
+
+            foreach (var episode in parseResult.EpisodeNumbers)
+            {
+                episodeString.Add(String.Format("{0}x{1}", parseResult.SeasonNumber, episode));
+            }
+
+            var epNumberString = String.Join("-", episodeString);
+
+            var result = String.Format("{0} - {1} - {2} [{3}]", seriesTitle, epNumberString, parseResult.EpisodeTitle, parseResult.Quality.QualityType);
+
+            if (parseResult.Quality.Proper)
+            {
+                result += " [Proper]";
+            }
+
+            return result;
         }
     }
 }

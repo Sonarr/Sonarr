@@ -52,12 +52,6 @@ namespace NzbDrone.Services.Service
             }
 
             logger.FatalException(lastError.Message + Environment.NewLine + Request.Url.PathAndQuery, lastError);
-
-            if (lastError is DbException)
-            {
-                logger.Warn("Restarting application");
-                HttpRuntime.UnloadAppDomain();
-            }
         }
 
         protected void Application_BeginRequest()
@@ -67,5 +61,6 @@ namespace NzbDrone.Services.Service
         protected void Application_EndRequest()
         {
         }
+
     }
 }

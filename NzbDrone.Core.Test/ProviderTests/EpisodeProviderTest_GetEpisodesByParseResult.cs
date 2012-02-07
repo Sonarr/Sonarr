@@ -75,7 +75,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                                       EpisodeNumbers = new List<int> { fakeEpisode.EpisodeNumber }
                                   };
 
-            var ep = episodeProvider.GetEpisodesByParseResult(parseResult, true);
+            var ep = episodeProvider.GetEpisodesByParseResult(parseResult);
 
             ep.Should().HaveCount(1);
             parseResult.EpisodeTitle.Should().Be(fakeEpisode.Title);
@@ -93,7 +93,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                                       EpisodeNumbers = new List<int> { 10 }
                                   };
 
-            var episode = episodeProvider.GetEpisodesByParseResult(parseResult, true);
+            var episode = episodeProvider.GetEpisodesByParseResult(parseResult);
 
             episode.Should().BeEmpty();
             Db.Fetch<Episode>().Should().HaveCount(0);
@@ -109,7 +109,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 EpisodeNumbers = new List<int> { 10 }
             };
 
-            var episode = episodeProvider.GetEpisodesByParseResult(parseResult, true);
+            var episode = episodeProvider.GetEpisodesByParseResult(parseResult);
 
             episode.Should().BeEmpty();
             Db.Fetch<Episode>().Should().HaveCount(0);
@@ -130,7 +130,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                                       EpisodeNumbers = new List<int> { fakeEpisode.EpisodeNumber, fakeEpisode2.EpisodeNumber }
                                   };
 
-            var ep = episodeProvider.GetEpisodesByParseResult(parseResult, true);
+            var ep = episodeProvider.GetEpisodesByParseResult(parseResult);
 
             ep.Should().HaveCount(2);
             Db.Fetch<Episode>().Should().HaveCount(2);
@@ -153,7 +153,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 EpisodeNumbers = new List<int> { fakeEpisode.EpisodeNumber, fakeEpisode2.EpisodeNumber }
             };
 
-            var ep = episodeProvider.GetEpisodesByParseResult(parseResult,true);
+            var ep = episodeProvider.GetEpisodesByParseResult(parseResult);
 
             ep.Should().BeEmpty();
             Db.Fetch<Episode>().Should().BeEmpty();
@@ -188,7 +188,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             Db.Insert(fakeDailyEpisode);
 
             //Act
-            var episodes = episodeProvider.GetEpisodesByParseResult(new EpisodeParseResult { AirDate = DateTime.Today, Series = fakeDailySeries },true);
+            var episodes = episodeProvider.GetEpisodesByParseResult(new EpisodeParseResult { AirDate = DateTime.Today, Series = fakeDailySeries });
 
             //Assert
             episodes.Should().HaveCount(1);
@@ -200,7 +200,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void should_not_add_episode_when_episode_doesnt_exist()
         {
-            var episodes = episodeProvider.GetEpisodesByParseResult(new EpisodeParseResult { AirDate = DateTime.Today, Series = fakeDailySeries }, true);
+            var episodes = episodeProvider.GetEpisodesByParseResult(new EpisodeParseResult { AirDate = DateTime.Today, Series = fakeDailySeries });
 
             //Assert
             episodes.Should().HaveCount(0);

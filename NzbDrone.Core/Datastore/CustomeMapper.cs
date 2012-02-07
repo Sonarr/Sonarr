@@ -40,9 +40,11 @@ namespace NzbDrone.Core.Datastore
             //if (propertyInfo == null)
             //    return null;
 
+            if (propertyInfo == null) return base.GetFromDbConverter(propertyInfo, sourceType);
+
             return GetFromDbConverter(propertyInfo.PropertyType, sourceType);
         }
     }
 
-    
+
 }

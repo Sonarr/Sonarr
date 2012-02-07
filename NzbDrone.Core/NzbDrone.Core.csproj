@@ -136,6 +136,7 @@
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\DotNetZip.1.9.1.8\lib\net20\Ionic.Zip.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
@@ -259,9 +260,19 @@
     <Compile Include="Model\Xbmc\ErrorResult.cs" />
     <Compile Include="Model\Xbmc\IconType.cs" />
     <Compile Include="Providers\BackupProvider.cs" />
-    <Compile Include="Providers\BlackholeProvider.cs" />
+    <Compile Include="Providers\DecisionEngine\AlreadyInQueueSpecification.cs" />
+    <Compile Include="Providers\DownloadClients\BlackholeProvider.cs" />
     <Compile Include="Providers\Converting\AtomicParsleyProvider.cs" />
     <Compile Include="Providers\Converting\HandbrakeProvider.cs" />
+    <Compile Include="Providers\DownloadClients\IDownloadClient.cs" />
+    <Compile Include="Providers\DecisionEngine\AcceptableSizeSpecification.cs" />
+    <Compile Include="Providers\DecisionEngine\UpgradeHistorySpecification.cs" />
+    <Compile Include="Providers\DecisionEngine\UpgradeDiskSpecification.cs" />
+    <Compile Include="Providers\DecisionEngine\QualityUpgradeSpecification.cs" />
+    <Compile Include="Providers\DecisionEngine\QualityAllowedByProfileSpecification.cs" />
+    <Compile Include="Providers\DecisionEngine\AllowedDownloadSpecification.cs" />
+    <Compile Include="Providers\DecisionEngine\UpgradePossibleSpecification.cs" />
+    <Compile Include="Providers\DecisionEngine\MonitoredEpisodeSpecification.cs" />
     <Compile Include="Providers\Indexer\Newznab.cs" />
     <Compile Include="Jobs\RecentBacklogSearchJob.cs" />
     <Compile Include="Jobs\TrimLogsJob.cs" />
@@ -298,7 +309,6 @@
     <Compile Include="Providers\DownloadProvider.cs" />
     <Compile Include="Providers\ExternalNotification\ExternalNotificationBase.cs" />
     <Compile Include="Providers\ExternalNotification\Xbmc.cs" />
-    <Compile Include="Providers\InventoryProvider.cs" />
     <Compile Include="Providers\Indexer\SyndicationFeedXmlReader.cs" />
     <Compile Include="Providers\AutoConfigureProvider.cs" />
     <Compile Include="Providers\Indexer\NzbMatrix.cs" />
@@ -343,7 +353,7 @@
     <Compile Include="Providers\Core\ConfigProvider.cs" />
     <Compile Include="Providers\EpisodeProvider.cs" />
     <Compile Include="Providers\Core\HttpProvider.cs" />
-    <Compile Include="Providers\SabProvider.cs" />
+    <Compile Include="Providers\DownloadClients\SabProvider.cs" />
     <Compile Include="Repository\Episode.cs" />
     <Compile Include="Instrumentation\Log.cs" />
     <Compile Include="Repository\History.cs" />
