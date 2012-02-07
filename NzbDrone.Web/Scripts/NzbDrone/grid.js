@@ -1,4 +1,16 @@
-﻿function grid_onError(e) {
+﻿/* Click on row, show details */
+$('.seriesTable a').live('click', function (event) {
+    event.preventDefault();
+    var link = $(this).attr('href');
+    window.location = link;
+    event.stopPropegation();
+});
+
+$('.seriesTable .data-row td:not(:last-child)').live('click', function () {
+    $(this).parent('tr').next('.detail-row').toggle();
+});
+
+function grid_onError(e) {
     //Suppress the alert
     e.preventDefault();
 }

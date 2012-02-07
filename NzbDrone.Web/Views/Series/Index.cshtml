@@ -1,53 +1,90 @@
 @using NzbDrone.Common
 @using NzbDrone.Web.Helpers
 @using NzbDrone.Web.Models;
-@model IEnumerable<NzbDrone.Core.Repository.Series>
+@model List<NzbDrone.Web.Models.SeriesModel>
 @{ViewBag.Title = "NzbDrone";}
 
 @section HeaderContent
 {
     @Html.IncludeCss("Settings.css")
+    @Html.IncludeCss("Grid.css")
 }
-<style>
-    /* progress bar container */
-    .progressbar
+<style>  
+    .ui-progressbar
     {
-        border: 1px solid #065EFE;
-        width: 125px;
+        position:relative;
+        width: 125px; 
         height: 20px;
-        position: relative;
-        color: black;
+        background-color: transparent;
+        border: 1px solid #065EFE;
+        margin: 2px;
     }
     
-    
-    /* color bar */
-    .progressbar div.progress
+    .progressBarText 
     {
         position: absolute;
-        width: 0;
-        height: 100%;
-        overflow: hidden;
-        background-color: #065EFE;
-    }
-    /* text on bar */
-    .progressbar div.progress .progressText
-    {
-        position: absolute;
+        display: block;
+        width: 100%;
         text-align: center;
+    }
+
+    .ui-progressbar-value
+    {
+        overflow: hidden;
+        border: 1px solid #065EFE;
+    }
+
+    .ui-progressbar-value .progressBarText
+    {
+        position: relative;
+        font-weight: normal;
         color: white;
     }
-    /* text off bar */
-    .progressbar div.progressText
+    
+    /* Set the row height so it won't resize when the progress bar is created */
+    .seriesTable tr
     {
-        position: absolute;
-        width: 100%;
-        height: 100%;
+        height: 28px;
+    }
+    
+    .editButton, .deleteButton
+    {
+        width: 18px;
+        height: 18px;
+        padding: 3px 1px;
+        margin: 0px;
+        vertical-align: middle;
+    }
+    
+    .editButton:hover, .deleteButton:hover
+    {
+        background-color: #065EFE;
+    }
+    
+    .commandsColumn
+    {
         text-align: center;
     }
     
-    .t-grid .t-alt
+    .ui-dialog-buttonpane .ui-dialog-buttonset .ui-delete-button
     {
-        background: #E5ECF9;
+        margin-right: 445px;
+    }
+       
+    .ui-dialog-buttonset .ui-delete-button
+    {
+        background: url("images/ui-bg_flat_30_b40404_40x100.png") repeat-x scroll 50% 50% #B40404;
+        border: 1px solid #FFFFFF;
+        color: #FFFFFF;
+        font-weight: normal;
+    }
+    
+    .ui-dialog-buttonset .ui-delete-button:active
+    {
+        background: url("images/ui-bg_flat_30_616161_40x100.png") repeat-x scroll 50% 50% #616161;
+        border: 1px solid #FFFFFF;
+        color: #FFFFFF;
+        font-weight: normal;
     }
 </style>
 @section ActionMenu{
@@ -56,90 +93,180 @@
         <li>@Ajax.ActionLink("Start RSS Sync", "RssSync", "Command", null)</li>
     </ul>
 }
-@{Html.Telerik().Grid<SeriesModel>().Name("Grid")
-               .DataKeys(keys => keys.Add(p => p.SeriesId))
-                .DataBinding(data => data.Ajax()
-                    .Select("_AjaxSeriesGrid", "Series")
-                    .Update("_SaveAjaxSeriesEditing", "Series")
-                    .Delete("_DeleteAjaxSeriesEditing", "Series"))
-                .Columns(columns =>
-                             {
-                                 columns.Bound(o => o.Title)
-                                     .ClientTemplate("<a href=" +
-                                                     Url.Action("Details", "Series", new { seriesId = "<#= SeriesId #>" }) +
-                                                     "><#= Title #></a>");
-                                 columns.Bound(o => o.SeasonsCount).Title("Seasons");
-                                 columns.Bound(o => o.QualityProfileName).Title("Quality");
-                                 columns.Bound(o => o.Status);
-                                 //columns.Bound(o => o.AirsDayOfWeek);
-                                 columns.Bound(o => o.NextAiring);
-                                 columns.Bound(o => o.Episodes).Title("Episodes").Width(125)
-                                     .ClientTemplate("<div id=\"progressbar_<#= SeriesId #>\" class=\"progressbar\">" +
-                                                            "<div class=\"progressText\"></div>" +
-                                                            "<div class=\"progress\">" +
-                                                                "<span class=\"progressText\" style=\"width: 125px;\"></span>" +
-                                                            "</div>" +
-                                                     "</div>");
-                                 columns.Command(commands =>
-                                 {
-                                     commands.Edit().ButtonType(GridButtonType.Image);
-                                     commands.Delete().ButtonType(GridButtonType.Image);
-                                 }).Title("Actions").Width(90);
 
-                             })
-                .Editable(editor => editor.Mode(GridEditMode.PopUp))
-                .DetailView(detailView => detailView.ClientTemplate(
-                                                                        "<b>Airs Day of Week:</b> " + "<#= AirsDayOfWeek #>" +
-                                                                        "<br />" +
-                                                                        "<b>Overview:</b> " +
-                                                                        "<#= Overview #>"
-                                                                    ))
-                .ClientEvents(clientEvents =>
-                {
-                    clientEvents.OnEdit("grid_edit");
-                    clientEvents.OnSave("grid_save");
-                    clientEvents.OnRowDataBound("grid_rowBound");
-                    if(EnviromentProvider.IsProduction)
-                        clientEvents.OnError("grid_onError");
-                })
-                .Render();}
+<table class="seriesTable">
+    <colgroup>
+        <col/>
+        <col style="width:100px" />
+        <col style="width:100px" />
+        <col style="width:100px" />
+        <col style="width:100px" />
+        <col style="width:140px" />
+        <col style="width:70px" />
+    </colgroup>
+    <tr>
+        <th>Title</th>
+        <th>Seasons</th>
+        <th>Quality</th>
+        <th>Status</th>
+        <th>Next Airing</th>
+        <th>Episodes</th>
+        
+        @*Commands Column*@
+        <th>
+            
+        </th>
+    </tr>
+    
+    @for (int i = 0; i < Model.Count; i++)
+    {
+        var series = Model[i];
+        
+        if (i % 2 == 0)
+        {
+            Html.RenderPartial("Series", series);
+        }
+
+        else
+        {
+            Html.RenderPartial("Series", series, new ViewDataDictionary { new KeyValuePair<string, object>("AltRow", true) });
+        }
+    }
+</table>
+
+<div id="seriesEditor" title="Edit Series"></div>
+<div id="seriesDelete" title="Delete Series">
+    <input class="seriesId" type="hidden" value="">
+    Are you sure you want to delete '<span class="seriesTitle"></span>'?
+</div>
 @section Scripts{
     <script type="text/javascript">
-        var windowElement;
+        var seriesEditorUrl = './Series/SeriesEditor';
+        var saveSeriesEditorUrl = './Series/SaveSeriesEditor';
+        var seriesDeleteUrl = './Series/DeleteSeries';
 
-        function grid_edit(args) {
-            $(args.form)
-            .closest(".t-window")
-            .data("tWindow")
-            .center();
-        }
+        $(document).ready(function () {
+            $(".progressBar").each(function () {
+                var element = this;
 
-        function grid_save(e) {
-            $('#ajaxSaveWheel').show();
-        }
-
-        function grid_rowBound(e) {
-            var dataItem = e.dataItem;
-            var seriesId = dataItem.SeriesId;
-            var episodeCount = dataItem.EpisodeCount;
-            var episodeFileCount = dataItem.EpisodeFileCount;
-
-            $("#progressbar_" + seriesId).episodeProgress(episodeFileCount, episodeCount);
-        }
-
-        (function ($) {
-            $.fn.episodeProgress = function (episodes, totalEpisodes) {
-                return this.each(
-                function () {
-                    var div = $(this);
-                    var progressBar = div.find(".progress");
-
-                    var width = Math.round(episodes / totalEpisodes * 100);
-
-                    progressBar.css("width", width + "%");
-                    div.find(".progressText").html(episodes + " / " + totalEpisodes);
+                var progressbar = $(element).progressbar({
+                    value: parseInt($(element).attr("value"))
                 });
-            };
-        })(jQuery);
+                var label = progressbar.find('.progressBarText').clone().width(progressbar.width());
+                progressbar.find('.ui-progressbar-value').append(label);
+            });
+        });
+
+        $("#seriesEditor").dialog({
+            autoOpen: false,
+            height: 350,
+            width: 670,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Delete": {
+                    text: "Delete",
+                    class: "ui-delete-button",
+                    click: function () {
+                        var answer = confirm("Are you sure you want to delete this series?");
+                        if (answer) {
+                            var seriesId = $('#SeriesId').val();
+
+                            $.ajax({
+                                type: "POST",
+                                url: seriesDeleteUrl,
+                                data: { seriesId: seriesId },
+                                success: function (data) {
+                                    //Remove the row from the grid... along with the details row
+                                    $('.' + seriesId).hide();
+                                    $('.details_' + seriesId).hide();
+                                }
+                            });
+                            $(this).dialog("close");
+                        }
+                    }
+                },
+                "Save": function () {
+                    //Save the form
+                    $('#SeriesEditorForm').submit();
+                    $(this).dialog("close");
+                },
+                Cancel: function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+        $("#seriesDelete").dialog({
+            autoOpen: false,
+            resizable: false,
+            height: 170,
+            width: 450,
+            modal: true,
+            buttons: {
+                "Delete": function () {
+                    var seriesId = $('.seriesId').val();
+
+                    $.ajax({
+                        type: "POST",
+                        url: seriesDeleteUrl,
+                        data: { seriesId: seriesId },
+                        success: function (data) {
+                            //Remove the row from the grid... along with the details row
+                            $('.' + seriesId).hide();
+                            $('.details_' + seriesId).hide();
+                        }
+                    });
+                    $(this).dialog("close");
+                },
+                Cancel: function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+        $(".editButton")
+            //.button()
+            .live('click', function () {
+                //Get the SeriesId and Title
+                var seriesId = parseInt($(this).attr("value"));
+                var title = $(this).attr("rel");
+
+                //Set the title of the dialog
+                $("#seriesEditor").dialog("option", "title", "Edit Series: " + title);
+
+                //Pre-populate the view with ajax
+                $('#seriesEditor').html('<div style="text-align: center; width: 100%; height: 100%;"><img src="../../Content/Images/ajax-loader.gif" style="padding-top: 120px;" /></div>');
+
+                //Get the view
+                $.ajax({
+                    url: seriesEditorUrl,
+                    data: { seriesId: seriesId },
+                    success: function (data) {
+                        $('#seriesEditor').html(data);
+                    }
+                });
+
+                //Open the dialog
+                $("#seriesEditor").dialog("open");
+            });
+
+            $(".deleteButton")
+            //.button()
+            .live('click', function () {
+                //Get the SeriesId and Title
+                var seriesId = parseInt($(this).attr("value"));
+                var title = $(this).attr("rel");
+
+                //Set the title of the dialog
+                //$("#seriesDelete").dialog("option", "title", "Delete Series: " + title);
+
+                //Fill in the view
+                $('#seriesDelete').children('.seriesId').val(seriesId);
+                $('#seriesDelete').children('.seriesTitle').html(title);
+
+                //Open the dialog
+                $("#seriesDelete").dialog("open");
+            });
     </script>
 }

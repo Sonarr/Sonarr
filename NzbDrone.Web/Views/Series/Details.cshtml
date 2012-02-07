@@ -39,20 +39,6 @@
         border-style: none;
     }
     
-    .statusImage, .searchImage, .renameImage, .ignoreEpisode, .ignoreEpisodesMaster
-    {
-        width: 18px;
-        height: 18px;
-        padding: 3px 1px;
-        margin: 0px;
-        vertical-align: middle;
-    }
-    
-    .searchImage:hover, .renameImage:hover, .ignoreEpisode:hover, .ignoreEpisodesMaster:hover
-    {
-        background-color: #065EFE;
-    }
-    
     #banner-container
     {
         width: 758px;
@@ -63,57 +49,10 @@
         margin-left: auto;
         margin-right: auto;
     }
-    
-    .seriesTable
-    {
-        width: 100%;
-        border-width: 1px;
-        border-spacing: 2px;
-        border-style: none;
-        border-color: white;
-        border-collapse: collapse;
-    }
-    
-    .seriesTable th
-    {
-        font-family: "Segoe UI Light" , "Open Sans" , "Segoe UI" , sans-serif;
-        border-width: 300;
-        font-size: 17px;
-        padding: 2px;
-        border-style: inset;
-        border-color: #EEEEEE;
-        padding-left: 7px;
-        text-align: left;
-        background-color: white;
-        font-weight: lighter;
-    }
-    
-    .seriesTable td
-    {
-        border-width: 1px;
-        padding: 0px 8px 0px 8px;
-        border-style: inset;
-        border-color: #EEEEEE;
-    }
-    
-    .detail-view
-    {
-        display: none;
-    }
-    
+   
     .seasonSection
     {
         margin-top: 50px;
-    }
-    
-    /* Colour alternating rows */
-    .seriesTable tr:nth-child(4n)
-    {
-        background: #f0f5ff;
-    }
-    .seriesTable tr:nth-child(4n+1)
-    {
-        background: #f0f5ff;
     }
 </style>
 @section ActionMenu
@@ -140,7 +79,7 @@
         var ignoreSeason = "ignoreSeason_" + season.SeasonNumber;
         <div class="seasonToggleTop">
             <img src='../../Content/Images/@(season.AnyWanted ? "notIgnored" : "ignored").png'
-                 class='ignoredEpisodesMaster ignoreEpisode @ignoreSeason @(season.AnyWanted ? "" : "ignored")'
+                 class='ignoredEpisodesMaster ignoreEpisode @ignoreSeason@(season.AnyWanted ? " " : " ignored")'
                  title='Click to toggle season ignore status' />
             <a href="@string.Format("#SeasonSection_{0}", season.SeasonNumber)" class="seasonToggleLabel">@(season.SeasonNumber == 0 ? "Specials" : "Season " + season.SeasonNumber)</a>
         </div>

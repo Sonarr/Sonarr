@@ -2,15 +2,83 @@
 {
     width: 18px;
     height: 18px;
-    padding: 1px;
-    margin: 2px;
+    padding: 3px 1px;
+    margin: 0px;
+    vertical-align: middle;
 }
     
 .searchImage:hover, .renameImage:hover, .ignoreEpisode:hover, .ignoreEpisodesMaster:hover
 {
     background-color: #065EFE;
 }
+
+/* Custom Grid */
+.seriesTable
+{
+    width: 100%;
+    border-width: 1px;
+    border-spacing: 2px;
+    border-style: none;
+    border-color: white;
+    border-collapse: collapse;
+}
     
+.seriesTable th
+{
+    font-family: "Segoe UI Light" , "Open Sans" , "Segoe UI" , sans-serif;
+    border-width: 300;
+    font-size: 17px;
+    padding: 2px;
+    border-style: none;
+    border-color: #EEEEEE;
+    padding-left: 7px;
+    text-align: left;
+    background-color: white;
+    font-weight: lighter;
+}
+    
+.seriesTable td
+{
+    border-width: 1px;
+    padding: 0px 8px 0px 8px;
+    border-style: inset;
+    border-color: #EEEEEE;
+}
+
+.title-row
+{
+    font-family: "Segoe UI Light" , "Open Sans" , "Segoe UI" , sans-serif;
+    font-size: 17px;
+    background-color: grey;
+    font-weight: lighter;
+    color: white;
+}
+    
+.detail-row
+{
+    display: none;
+}
+    
+/* Colour alternating rows */
+.seriesTable .alt-row
+{
+    background: #f0f5ff;
+}
+
+/* Episode Grid Row Colouring */
+.episodeIgnored
+{
+    background-color: #F2F5A9;
+}
+    
+.episodeMissing
+{
+    background-color: #F5A9A9;
+}
+
+
+
+/* Telerik Grid */
 .t-grid td
 {
     line-height: 0.6em;

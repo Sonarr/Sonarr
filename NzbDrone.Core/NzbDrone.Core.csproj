@@ -325,7 +325,6 @@
     <Compile Include="Model\EpisodeStatusType.cs" />
     <Compile Include="Model\Sabnzbd\SabPriorityType.cs" />
     <Compile Include="Model\SeasonParseResult.cs" />
-    <Compile Include="Model\UpcomingEpisodesModel.cs" />
     <Compile Include="Providers\Indexer\IndexerBase.cs" />
     <Compile Include="Providers\ExternalNotificationProvider.cs" />
     <Compile Include="Providers\Indexer\NzbsOrg.cs" />

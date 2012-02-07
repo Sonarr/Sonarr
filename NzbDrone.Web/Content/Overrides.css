@@ -26,6 +26,11 @@
     color: #065EFE;
 }
 
+.ui-progressbar-value
+{
+    background: #065EFE url(./jQueryUI/images/ui-bg_flat_30_065efe_40x100.png) 50% 50% repeat-x;
+}
+
 .jquery-tabs
 {
     margin-top: 10px;

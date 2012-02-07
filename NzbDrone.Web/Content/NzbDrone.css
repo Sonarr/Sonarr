@@ -268,14 +268,3 @@ button span, input[type="button"] span, input[type="submit"] span, input[type="r
     color: rgb(169, 169, 169);
     padding: 4px;
 }
-
-/* Episode Grid Row Colouring */
-.episodeIgnored
-{
-    background-color: #F2F5A9;
-}
-    
-.episodeMissing
-{
-    background-color: #F5A9A9;
-}
