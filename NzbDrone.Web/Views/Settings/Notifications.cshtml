@@ -123,5 +123,27 @@
 
             return false;
         }
+
+        //Growl
+        function registerGrowl() {
+            //Get the variables
+            var host = $('#GrowlHost').val();
+            var password = $('#GrowlPassword').val();
+
+            //Send the data!
+            $.ajax({
+                type: "POST",
+                url: '../Command/RegisterGrowl',
+                data: jQuery.param({
+                    host: host,
+                    password: password
+                }),
+                error: function (req, status, error) {
+                    alert("Sorry! We could send a test email at this time. " + error);
+                }
+            });
+
+            return false;
+        }
     </script>
 }

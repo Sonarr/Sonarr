@@ -30,4 +30,9 @@
     <span class="small">@Html.DescriptionFor(m => m.GrowlPassword)</span>
     </label>
     @Html.TextBoxFor(m => m.GrowlPassword, new { @class = "inputClass", type = "password" })
+    
+    <label class="labelClass">Register & Test
+    <span class="small">Register NzbDrone in Growl, must be done before notifications will work</span>
+    </label>
+    <input type="button" onclick="registerGrowl();" value="Register & Test" class="inputClass"/>
 </div>

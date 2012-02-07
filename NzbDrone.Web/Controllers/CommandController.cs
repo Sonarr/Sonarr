@@ -4,6 +4,7 @@ using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.DownloadClients;
 using NzbDrone.Web.Filters;
 using NzbDrone.Web.Models;
+using System;
 
 namespace NzbDrone.Web.Controllers
 {
@@ -14,16 +15,18 @@ namespace NzbDrone.Web.Controllers
         private readonly SmtpProvider _smtpProvider;
         private readonly TwitterProvider _twitterProvider;
         private readonly EpisodeProvider _episodeProvider;
+        private readonly GrowlProvider _growlProvider;
 
         public CommandController(JobProvider jobProvider, SabProvider sabProvider,
                                     SmtpProvider smtpProvider, TwitterProvider twitterProvider,
-                                    EpisodeProvider episodeProvider)
+                                    EpisodeProvider episodeProvider, GrowlProvider growlProvider)
         {
             _jobProvider = jobProvider;
             _sabProvider = sabProvider;
             _smtpProvider = smtpProvider;
             _twitterProvider = twitterProvider;
             _episodeProvider = episodeProvider;
+            _growlProvider = growlProvider;
         }
 
         public JsonResult RssSync()
@@ -91,6 +94,25 @@ namespace NzbDrone.Web.Controllers
 
             return JsonNotificationResult.Info("Good News!", "Successfully verified Twitter Authorization.");
 
+        }
+
+        public JsonResult RegisterGrowl(string host, string password)
+        {
+            try
+            {
+                var split = host.Split(':');
+                var hostname = split[0];
+                var port = Convert.ToInt32(split[1]);
+
+                _growlProvider.Register(hostname, port, password);
+                _growlProvider.TestNotification(hostname, port, password);
+
+                return JsonNotificationResult.Info("Good News!", "Registered and tested growl successfully");
+            }
+            catch(Exception ex)
+            {
+                return JsonNotificationResult.Opps("Couldn't register and test Growl");
+            }
         }
 
         [HttpPost]

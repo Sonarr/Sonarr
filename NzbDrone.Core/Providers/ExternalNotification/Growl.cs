@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Providers.ExternalNotification
                     var host = growlHost[0];
                     var port = Convert.ToInt32(growlHost[1]);
 
-                    _growlProvider.SendNotification(title, message, host, "GRAB", port, _configProvider.GrowlPassword);
+                    _growlProvider.SendNotification(title, message, "GRAB", host, port, _configProvider.GrowlPassword);
                 }
             }
 
@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Providers.ExternalNotification
                     var host = growlHost[0];
                     var port = Convert.ToInt32(growlHost[1]);
 
-                    _growlProvider.SendNotification(title, message, host, "DOWNLOAD", port, _configProvider.GrowlPassword);
+                    _growlProvider.SendNotification(title, message, "DOWNLOAD", host, port, _configProvider.GrowlPassword);
                 }
             }
 
