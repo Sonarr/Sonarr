@@ -5,6 +5,7 @@ using Ninject;
 using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository;
+using NzbDrone.Core.Repository.Quality;
 using PetaPoco;
 
 namespace NzbDrone.Core.Providers
@@ -12,7 +13,7 @@ namespace NzbDrone.Core.Providers
     public class HistoryProvider
     {
         private readonly IDatabase _database;
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
 
         [Inject]
@@ -42,26 +43,34 @@ namespace NzbDrone.Core.Providers
         public virtual void Purge()
         {
             _database.Delete<History>("");
-            Logger.Info("History has been Purged");
+            logger.Info("History has been Purged");
         }
 
         public virtual void Trim()
         {
             _database.Delete<History>("WHERE Date < @0", DateTime.Now.AddDays(-30).Date);
-            Logger.Info("History has been trimmed, items older than 30 days have been removed");
+            logger.Info("History has been trimmed, items older than 30 days have been removed");
         }
 
         public virtual void Add(History item)
         {
             _database.Insert(item);
-            Logger.Debug("Item added to history: {0}", item.NzbTitle);
+            logger.Debug("Item added to history: {0}", item.NzbTitle);
         }
 
-        public virtual Quality GetBestQualityInHistory(long episodeId)
+        public virtual Quality GetBestQualityInHistory(int seriesId, int seasonNumber, int episodeNumber)
         {
-            var history = AllItems().Where(c => c.EpisodeId == episodeId).ToList().Select(d => new Quality(d.Quality, d.IsProper)).OrderBy(c => c);
+            var quality = _database.SingleOrDefault<dynamic>(@"SELECT TOP 1 History.Quality , History.IsProper FROM History 
+                                                    INNER JOIN Episodes ON History.EpisodeId = Episodes.EpisodeId 
+                                                    WHERE Episodes.seriesId = @0 AND 
+                                                          Episodes.SeasonNumber = @1 AND  
+                                                          Episodes.EpisodeNumber = @2
+                                                    ORDER BY History.Quality DESC, History.IsProper DESC"
+                                                    , seriesId, seasonNumber, episodeNumber);
 
-            return history.FirstOrDefault();
+            if (quality == null) return null;
+
+            return new Quality((QualityTypes)quality.Quality, quality.IsProper);
         }
 
         public virtual void Delete(int historyId)

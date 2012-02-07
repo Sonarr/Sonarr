@@ -13,25 +13,25 @@ namespace NzbDrone.Core.Providers
     public class DiskScanProvider
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private static readonly string[] MediaExtentions = new[] { ".mkv", ".avi", ".wmv", ".mp4", ".mpg", ".mpeg", ".xvid", ".flv", ".mov", ".rm", ".rmvb", ".divx", ".dvr-ms", ".ts", ".ogm" };
+        private static readonly string[] mediaExtentions = new[] { ".mkv", ".avi", ".wmv", ".mp4", ".mpg", ".mpeg", ".xvid", ".flv", ".mov", ".rm", ".rmvb", ".divx", ".dvr-ms", ".ts", ".ogm" };
         private readonly DiskProvider _diskProvider;
         private readonly EpisodeProvider _episodeProvider;
         private readonly MediaFileProvider _mediaFileProvider;
         private readonly SeriesProvider _seriesProvider;
         private readonly ExternalNotificationProvider _externalNotificationProvider;
-        private readonly SabProvider _sabProvider;
+        private readonly DownloadProvider _downloadProvider;
 
         [Inject]
         public DiskScanProvider(DiskProvider diskProvider, EpisodeProvider episodeProvider,
                                 SeriesProvider seriesProvider, MediaFileProvider mediaFileProvider,
-                                ExternalNotificationProvider externalNotificationProvider, SabProvider sabProvider)
+                                ExternalNotificationProvider externalNotificationProvider, DownloadProvider downloadProvider)
         {
             _diskProvider = diskProvider;
             _episodeProvider = episodeProvider;
             _seriesProvider = seriesProvider;
             _mediaFileProvider = mediaFileProvider;
             _externalNotificationProvider = externalNotificationProvider;
-            _sabProvider = sabProvider;
+            _downloadProvider = downloadProvider;
         }
 
         public DiskScanProvider()
@@ -192,7 +192,7 @@ namespace NzbDrone.Core.Providers
             var parseResult = Parser.ParsePath(episodeFile.Path);
             parseResult.Series = series;
 
-            var message = _sabProvider.GetSabTitle(parseResult);
+            var message = _downloadProvider.GetDownloadTitle(parseResult);
 
             if (newDownload)
             {
@@ -251,7 +251,7 @@ namespace NzbDrone.Core.Providers
 
             var filesOnDisk = _diskProvider.GetFiles(path, SearchOption.AllDirectories);
 
-            var mediaFileList = filesOnDisk.Where(c => MediaExtentions.Contains(Path.GetExtension(c).ToLower())).ToList();
+            var mediaFileList = filesOnDisk.Where(c => mediaExtentions.Contains(Path.GetExtension(c).ToLower())).ToList();
 
             Logger.Trace("{0} video files were found in {1}", mediaFileList.Count, path);
             return mediaFileList;

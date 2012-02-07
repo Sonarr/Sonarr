@@ -6,6 +6,7 @@ using NLog;
 using Ninject;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
+using NzbDrone.Core.Providers.DecisionEngine;
 using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Providers
@@ -14,25 +15,27 @@ namespace NzbDrone.Core.Providers
     {
         //Season and Episode Searching
         private readonly EpisodeProvider _episodeProvider;
-        private readonly InventoryProvider _inventoryProvider;
         private readonly DownloadProvider _downloadProvider;
         private readonly SeriesProvider _seriesProvider;
         private readonly IndexerProvider _indexerProvider;
         private readonly SceneMappingProvider _sceneMappingProvider;
+        private readonly UpgradePossibleSpecification _upgradePossibleSpecification;
+        private readonly AllowedDownloadSpecification _allowedDownloadSpecification;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         [Inject]
-        public SearchProvider(EpisodeProvider episodeProvider, InventoryProvider inventoryProvider,
-                                DownloadProvider downloadProvider, SeriesProvider seriesProvider,
-                                IndexerProvider indexerProvider, SceneMappingProvider sceneMappingProvider)
+        public SearchProvider(EpisodeProvider episodeProvider, DownloadProvider downloadProvider, SeriesProvider seriesProvider,
+                                IndexerProvider indexerProvider, SceneMappingProvider sceneMappingProvider,
+                                UpgradePossibleSpecification upgradePossibleSpecification, AllowedDownloadSpecification allowedDownloadSpecification)
         {
             _episodeProvider = episodeProvider;
-            _inventoryProvider = inventoryProvider;
             _downloadProvider = downloadProvider;
             _seriesProvider = seriesProvider;
             _indexerProvider = indexerProvider;
             _sceneMappingProvider = sceneMappingProvider;
+            _upgradePossibleSpecification = upgradePossibleSpecification;
+            _allowedDownloadSpecification = allowedDownloadSpecification;
         }
 
         public SearchProvider()
@@ -130,7 +133,7 @@ namespace NzbDrone.Core.Providers
             }
 
             //Check to see if an upgrade is possible before attempting
-            if (!_inventoryProvider.IsUpgradePossible(episode))
+            if (!_upgradePossibleSpecification.IsSatisfiedBy(episode))
             {
                 Logger.Info("Search for {0} was aborted, file in disk meets or exceeds Profile's Cutoff", episode);
                 notification.CurrentMessage = String.Format("Skipping search for {0}, file you have is already at cutoff", episode);
@@ -157,7 +160,7 @@ namespace NzbDrone.Core.Providers
                 return true;
 
             Logger.Warn("Unable to find {0} in any of indexers.", episode);
-            
+
             if (reports.Any())
             {
                 notification.CurrentMessage = String.Format("Sorry, couldn't find {0} in a non-sucky quality. (by your standards)", episode);
@@ -185,7 +188,7 @@ namespace NzbDrone.Core.Providers
                 title = series.Title;
             }
 
-            foreach(var indexer in indexers)
+            foreach (var indexer in indexers)
             {
                 try
                 {
@@ -259,13 +262,13 @@ namespace NzbDrone.Core.Providers
                     }
 
                     //Make sure we haven't already downloaded a report with this episodenumber, if we have, skip the report.
-                    if (successes.Intersect(episodeParseResult.EpisodeNumbers).Count() > 0)
+                    if (successes.Intersect(episodeParseResult.EpisodeNumbers).Any())
                     {
                         Logger.Trace("Episode has already been downloaded in this search, skipping.");
                         continue;
                     }
 
-                    if (_inventoryProvider.IsQualityNeeded(episodeParseResult, true))
+                    if (_allowedDownloadSpecification.IsSatisfiedBy(episodeParseResult))
                     {
                         Logger.Debug("Found '{0}'. Adding to download queue.", episodeParseResult);
                         try
@@ -316,7 +319,7 @@ namespace NzbDrone.Core.Providers
                     if (!episodeParseResult.AirDate.HasValue || episodeParseResult.AirDate.Value.Date != airDate.Date)
                         continue;
 
-                    if (_inventoryProvider.IsQualityNeeded(episodeParseResult, true))
+                    if (_allowedDownloadSpecification.IsSatisfiedBy(episodeParseResult))
                     {
                         Logger.Debug("Found '{0}'. Adding to download queue.", episodeParseResult);
                         try

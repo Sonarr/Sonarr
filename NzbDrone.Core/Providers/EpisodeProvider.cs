@@ -127,10 +127,10 @@ namespace NzbDrone.Core.Providers
             _database.Execute("UPDATE Episodes SET GrabDate=@0 WHERE EpisodeId=@1", DateTime.Now, episodeId);
         }
 
-        public virtual IList<Episode> GetEpisodesByParseResult(EpisodeParseResult parseResult, Boolean autoAddNew = false)
+        public virtual IList<Episode> GetEpisodesByParseResult(EpisodeParseResult parseResult)
         {
             //Disabling auto add, need to make it a lot more conservative.
-            autoAddNew = false;
+            var autoAddNew = false;
 
             var result = new List<Episode>();
 

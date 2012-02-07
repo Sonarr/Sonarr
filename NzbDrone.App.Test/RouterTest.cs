@@ -135,30 +135,5 @@ namespace NzbDrone.App.Test
 
             Mocker.VerifyAllMocks();
         }
-
-        [Test]
-        public void should_delete_service_bat_files_if_they_exist()
-        {
-            WithTempAsAppPath();
-
-            var bat1 = @"c:\nzbdrone\ServiceInstall.bat";
-            var bat2 = @"c:\nzbdrone\ServiceUninstall.bat";
-            var bat3 = @"c:\nzbdrone\Someother.bat";
-            var file1 = @"c:\nzbdrone\ServiceInstall.exe";
-            var file2 = @"c:\nzbdrone\ServiceInstall.dat";
-
-            var files = new string[] {bat1, bat2, bat3, file1, file2};
-
-            Mocker.GetMock<DiskProvider>()
-                    .Setup(c => c.GetFiles(VirtualPath, SearchOption.TopDirectoryOnly)).Returns(files);
-
-            Mocker.Resolve<Router>().Route(ApplicationMode.Console);
-
-            Mocker.GetMock<DiskProvider>().Verify(c=>c.DeleteFile(bat1));
-            Mocker.GetMock<DiskProvider>().Verify(c=>c.DeleteFile(bat2));
-            Mocker.GetMock<DiskProvider>().Verify(c=>c.DeleteFile(bat3),Times.Never());
-            Mocker.GetMock<DiskProvider>().Verify(c=>c.DeleteFile(file1),Times.Never());
-            Mocker.GetMock<DiskProvider>().Verify(c=>c.DeleteFile(file2),Times.Never());
-        }
     }
 }

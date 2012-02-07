@@ -20,6 +20,13 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
     [TestFixture]
     public class ProcessDownloadProviderFixture : CoreTest
     {
+        Series fakeSeries;
+
+        [SetUp]
+        public void Setup()
+        {
+            fakeSeries = Builder<Series>.CreateNew().Build();
+        }
 
         private void WithOldWrite()
         {
@@ -33,6 +40,20 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
             Mocker.GetMock<DiskProvider>()
                 .Setup(c => c.GetLastDirectoryWrite(It.IsAny<String>()))
                 .Returns(DateTime.UtcNow);
+        }
+
+        private void WithValidSeries()
+        {
+            Mocker.GetMock<SeriesProvider>()
+                .Setup(c => c.FindSeries(It.IsAny<string>()))
+                .Returns(fakeSeries);
+        }
+
+        private void WithImportableFiles()
+        {
+            Mocker.GetMock<DiskScanProvider>()
+                .Setup(c => c.Scan(It.IsAny<Series>(), It.IsAny<string>()))
+                .Returns(Builder<EpisodeFile>.CreateListOfSize(1).Build().ToList());
         }
 
         [Test]
@@ -80,6 +101,36 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
             //Assert
             Mocker.VerifyAllMocks();
             ExceptionVerification.IgnoreWarns();
+        }
+
+        [Test]
+        public void should_search_for_series_using_folder_name()
+        {
+            WithOldWrite();
+            WithValidSeries();
+            WithImportableFiles();
+            
+            var droppedFolder = new DirectoryInfo(@"C:\Test\Unsorted TV\The Office - S01E01 - Episode Title");
+            Mocker.Resolve<PostDownloadProvider>().ProcessDownload(droppedFolder);
+
+            Mocker.GetMock<DiskScanProvider>()
+                .Verify(c=>c.Scan(fakeSeries, It.IsAny<string>()));
+            
+        }
+
+        [Test]
+        public void should_search_for_series_using_file_name()
+        {
+            WithOldWrite();
+            WithValidSeries();
+            WithImportableFiles();
+
+            var droppedFolder = new DirectoryInfo(@"C:\Test\Unsorted TV\The Office - S01E01 - Episode Title");
+            Mocker.Resolve<PostDownloadProvider>().ProcessDownload(droppedFolder);
+
+            Mocker.GetMock<DiskScanProvider>()
+                .Verify(c => c.Scan(fakeSeries, It.IsAny<string>()));
+
         }
 
         [Test]
@@ -267,7 +318,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
         [Test]
         public void ProcessDropFolder_should_only_process_folders_that_arent_known_series_folders()
         {
-            var subFolders = new []
+            var subFolders = new[]
                                  {
                                     @"c:\drop\episode1",
                                     @"c:\drop\episode2",

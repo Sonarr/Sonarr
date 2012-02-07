@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Providers.DownloadClients;
 using NzbDrone.Web.Filters;
 using NzbDrone.Web.Models;
 

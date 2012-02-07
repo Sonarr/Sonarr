@@ -9,6 +9,7 @@ using NUnit.Framework;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Providers.DecisionEngine;
 using NzbDrone.Core.Providers.Indexer;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
@@ -74,15 +75,15 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
 
         private void WithQualityNeeded()
         {
-            Mocker.GetMock<InventoryProvider>()
-                .Setup(s => s.IsQualityNeeded(It.IsAny<EpisodeParseResult>(), true))
+            Mocker.GetMock<AllowedDownloadSpecification>()
+                .Setup(s => s.IsSatisfiedBy(It.IsAny<EpisodeParseResult>()))
                 .Returns(true);
         }
 
         private void WithQualityNotNeeded()
         {
-            Mocker.GetMock<InventoryProvider>()
-                .Setup(s => s.IsQualityNeeded(It.IsAny<EpisodeParseResult>(), true))
+            Mocker.GetMock<AllowedDownloadSpecification>()
+                .Setup(s => s.IsSatisfiedBy(It.IsAny<EpisodeParseResult>()))
                 .Returns(false);
         }
 
@@ -100,8 +101,8 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
             WithMatchingSeries();
             WithSuccessfulDownload();
 
-            Mocker.GetMock<InventoryProvider>()
-                .Setup(s => s.IsQualityNeeded(It.Is<EpisodeParseResult>(d => d.Quality.QualityType == QualityTypes.Bluray1080p), true))
+            Mocker.GetMock<AllowedDownloadSpecification>()
+                .Setup(s => s.IsSatisfiedBy(It.Is<EpisodeParseResult>(d => d.Quality.QualityType == QualityTypes.Bluray1080p)))
                 .Returns(true);
 
             //Act
@@ -110,7 +111,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
             //Assert
             result.Should().BeTrue();
 
-            Mocker.GetMock<InventoryProvider>().Verify(c => c.IsQualityNeeded(It.IsAny<EpisodeParseResult>(), true),
+            Mocker.GetMock<AllowedDownloadSpecification>().Verify(c => c.IsSatisfiedBy(It.IsAny<EpisodeParseResult>()),
                                                        Times.Once());
             Mocker.GetMock<DownloadProvider>().Verify(c => c.DownloadReport(It.IsAny<EpisodeParseResult>()),
                                                       Times.Once());
@@ -134,7 +135,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
             //Assert
             result.Should().BeFalse();
 
-            Mocker.GetMock<InventoryProvider>().Verify(c => c.IsQualityNeeded(It.IsAny<EpisodeParseResult>(), true),
+            Mocker.GetMock<AllowedDownloadSpecification>().Verify(c => c.IsSatisfiedBy(It.IsAny<EpisodeParseResult>()),
                                                        Times.Exactly(5));
             Mocker.GetMock<DownloadProvider>().Verify(c => c.DownloadReport(It.IsAny<EpisodeParseResult>()),
                                                       Times.Never());

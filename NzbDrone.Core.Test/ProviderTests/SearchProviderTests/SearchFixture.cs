@@ -7,6 +7,7 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Providers.DecisionEngine;
 using NzbDrone.Core.Providers.Indexer;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
@@ -192,7 +193,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
             episode.AirDate = null;
             episode.Series = _series;
 
-            Mocker.GetMock<InventoryProvider>().Setup(s => s.IsUpgradePossible(It.IsAny<Episode>()))
+            Mocker.GetMock<UpgradePossibleSpecification>().Setup(s => s.IsSatisfiedBy(It.IsAny<Episode>()))
                     .Returns(true);
 
             Mocker.GetMock<EpisodeProvider>().Setup(s => s.GetEpisode(episode.EpisodeId))

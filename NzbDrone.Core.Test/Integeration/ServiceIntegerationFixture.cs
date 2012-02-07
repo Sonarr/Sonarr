@@ -1,7 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Data;
+using System.Linq;
 using FluentAssertions;
+using NLog;
 using NUnit.Framework;
 using Ninject;
+using NzbDrone.Common;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
@@ -48,6 +52,20 @@ namespace NzbDrone.Core.Test.Integeration
 
             dailySeries.Should().NotBeEmpty();
             dailySeries.Should().OnlyContain(c => c > 0);
+        }
+
+
+        [Test]
+        public void should_be_able_to_submit_exceptions()
+        {
+            ReportingService.RestProvider = new RestProvider(new EnviromentProvider());
+
+            var log = new LogEventInfo();
+            log.LoggerName = "LoggerName.LoggerName.LoggerName.LoggerName";
+            log.Exception = new ArgumentOutOfRangeException();
+            log.Message = "New message string. New message string. New message string. New message string. New message string. New message string.";
+
+            ReportingService.ReportException(log);
         }
 
 

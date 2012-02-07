@@ -1,24 +1,24 @@
 ﻿// ReSharper disable RedundantUsingDirective
 
+using System.Linq;
 using System;
 using System.Collections.Generic;
-
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Providers.DecisionEngine;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Test.Common.AutoMoq;
 
-namespace NzbDrone.Core.Test.ProviderTests.InventoryProviderTests
+namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class IsAcceptableSizeTestFixture : CoreTest
+    public class AcceptableSizeSpecificationFixture : CoreTest
     {
         private EpisodeParseResult parseResultMulti;
         private EpisodeParseResult parseResultSingle;
@@ -84,7 +84,7 @@ namespace NzbDrone.Core.Test.ProviderTests.InventoryProviderTests
                 .Returns(false);
 
             //Act
-            bool result = Mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultSingle);
+            bool result = Mocker.Resolve<AcceptableSizeSpecification>().IsSatisfiedBy(parseResultSingle);
 
             //Assert
             result.Should().BeTrue();
@@ -105,7 +105,7 @@ namespace NzbDrone.Core.Test.ProviderTests.InventoryProviderTests
                 .Returns(false);
 
             //Act
-            bool result = Mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultSingle);
+            bool result = Mocker.Resolve<AcceptableSizeSpecification>().IsSatisfiedBy(parseResultSingle);
 
             //Assert
             result.Should().BeTrue();
@@ -126,7 +126,7 @@ namespace NzbDrone.Core.Test.ProviderTests.InventoryProviderTests
                 .Returns(false);
 
             //Act
-            bool result = Mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultSingle);
+            bool result = Mocker.Resolve<AcceptableSizeSpecification>().IsSatisfiedBy(parseResultSingle);
 
             //Assert
             result.Should().BeFalse();
@@ -147,7 +147,7 @@ namespace NzbDrone.Core.Test.ProviderTests.InventoryProviderTests
                 .Returns(false);
 
             //Act
-            bool result = Mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultSingle);
+            bool result = Mocker.Resolve<AcceptableSizeSpecification>().IsSatisfiedBy(parseResultSingle);
 
             //Assert
             result.Should().BeFalse();
@@ -168,7 +168,7 @@ namespace NzbDrone.Core.Test.ProviderTests.InventoryProviderTests
                 .Returns(false);
 
             //Act
-            bool result = Mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultMulti);
+            bool result = Mocker.Resolve<AcceptableSizeSpecification>().IsSatisfiedBy(parseResultMulti);
 
             //Assert
             result.Should().BeTrue();
@@ -189,7 +189,7 @@ namespace NzbDrone.Core.Test.ProviderTests.InventoryProviderTests
                 .Returns(false);
 
             //Act
-            bool result = Mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultMulti);
+            bool result = Mocker.Resolve<AcceptableSizeSpecification>().IsSatisfiedBy(parseResultMulti);
 
             //Assert
             result.Should().BeTrue();
@@ -210,7 +210,7 @@ namespace NzbDrone.Core.Test.ProviderTests.InventoryProviderTests
                 .Returns(false);
 
             //Act
-            bool result = Mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultMulti);
+            bool result = Mocker.Resolve<AcceptableSizeSpecification>().IsSatisfiedBy(parseResultMulti);
 
             //Assert
             result.Should().BeFalse();
@@ -231,7 +231,7 @@ namespace NzbDrone.Core.Test.ProviderTests.InventoryProviderTests
                 .Returns(false);
 
             //Act
-            bool result = Mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultMulti);
+            bool result = Mocker.Resolve<AcceptableSizeSpecification>().IsSatisfiedBy(parseResultMulti);
 
             //Assert
             result.Should().BeFalse();
@@ -252,7 +252,7 @@ namespace NzbDrone.Core.Test.ProviderTests.InventoryProviderTests
                 .Returns(true);
 
             //Act
-            bool result = Mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultSingle);
+            bool result = Mocker.Resolve<AcceptableSizeSpecification>().IsSatisfiedBy(parseResultSingle);
 
             //Assert
             result.Should().BeTrue();
@@ -273,7 +273,7 @@ namespace NzbDrone.Core.Test.ProviderTests.InventoryProviderTests
                 .Returns(true);
 
             //Act
-            bool result = Mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultSingle);
+            bool result = Mocker.Resolve<AcceptableSizeSpecification>().IsSatisfiedBy(parseResultSingle);
 
             //Assert
             result.Should().BeTrue();
@@ -294,7 +294,7 @@ namespace NzbDrone.Core.Test.ProviderTests.InventoryProviderTests
                 .Returns(true);
 
             //Act
-            bool result = Mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultSingle);
+            bool result = Mocker.Resolve<AcceptableSizeSpecification>().IsSatisfiedBy(parseResultSingle);
 
             //Assert
             result.Should().BeFalse();
@@ -315,7 +315,7 @@ namespace NzbDrone.Core.Test.ProviderTests.InventoryProviderTests
                 .Returns(true);
 
             //Act
-            bool result = Mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultSingle);
+            bool result = Mocker.Resolve<AcceptableSizeSpecification>().IsSatisfiedBy(parseResultSingle);
 
             //Assert
             result.Should().BeFalse();
@@ -337,7 +337,7 @@ namespace NzbDrone.Core.Test.ProviderTests.InventoryProviderTests
                 .Returns(true);
 
             //Act
-            bool result = Mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultSingle);
+            bool result = Mocker.Resolve<AcceptableSizeSpecification>().IsSatisfiedBy(parseResultSingle);
 
             //Assert
             result.Should().BeTrue();
@@ -359,7 +359,7 @@ namespace NzbDrone.Core.Test.ProviderTests.InventoryProviderTests
                 .Returns(true);
 
             //Act
-            bool result = Mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultSingle);
+            bool result = Mocker.Resolve<AcceptableSizeSpecification>().IsSatisfiedBy(parseResultSingle);
 
             //Assert
             result.Should().BeTrue();
@@ -382,7 +382,7 @@ namespace NzbDrone.Core.Test.ProviderTests.InventoryProviderTests
                 .Returns(true);
 
             //Act
-            bool result = Mocker.Resolve<InventoryProvider>().IsAcceptableSize(parseResultSingle);
+            bool result = Mocker.Resolve<AcceptableSizeSpecification>().IsSatisfiedBy(parseResultSingle);
 
             //Assert
             result.Should().BeTrue();

@@ -35,16 +35,7 @@ namespace NzbDrone
 
         public void Route(ApplicationMode applicationMode)
         {
-            Logger.Info("Application mode: {0}", applicationMode);
-
-            var batFiles = _diskProvider.GetFiles(_enviromentProvider.ApplicationPath, SearchOption.TopDirectoryOnly)
-                            .Where(c => c.EndsWith(".bat", StringComparison.InvariantCultureIgnoreCase)).ToList();
-
-            foreach (var batFile in batFiles)
-            {
-                if (new FileInfo(batFile).Name.StartsWith("service", StringComparison.InvariantCultureIgnoreCase))
-                    _diskProvider.DeleteFile(batFile);
-            }
+            Logger.Info("Application mode: {0}", applicationMode);    
 
             //TODO:move this outside, it should be one of application modes (ApplicationMode.Service?)
             if (!_enviromentProvider.IsUserInteractive)
