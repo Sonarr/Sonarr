@@ -2,10 +2,28 @@
 @model NzbDrone.Web.Models.SeriesModel
 
 <tr class="@Model.SeriesId data-row @(ViewData["AltRow"] == null || !(bool)ViewData["AltRow"] ? "" : " alt-row")">
+     <td>
+        @{if (!Model.Monitored)
+            {
+                <img src="../../Content/Images/pause.png" width="24" height="24" alt="Not monitored" />
+            }
+            else
+            {
+                if (Model.Status == "Ended")
+                {
+                    <img src="../../Content/Images/stop.png" width="24" height="24" alt="Ended" />
+                }
+                else
+                {
+                <img src="../../Content/Images/play.png" width="24" height="24" alt="Continuing" />
+                }
+            }
+        }
+    </td>
     <td>@Html.ActionLink(Model.Title, "Details", "Series", new { seriesId = Model.SeriesId }, null)</td>
     <td>@Model.SeasonsCount</td>
     <td>@Model.QualityProfileName</td>
-    <td>@Model.Status</td>
+
     <td>@Model.NextAiring</td>
     <td>
         @{ double progress = (double)Model.EpisodeFileCount / (double)Model.EpisodeCount * 100; }
@@ -16,8 +34,8 @@
     
     @*Commands Column*@
     <td class="commandsColumn">
-        <img src="../../Content/Images/Rename.png" class="editButton" value="@Model.SeriesId" rel="@Model.Title" />
-        <img src="../../Content/Images/Delete.png" class="deleteButton" value="@Model.SeriesId" rel="@Model.Title" />
+        <img src="../../Content/Images/settings.png" class="editButton" value="@Model.SeriesId" rel="@Model.Title" />
+        <img src="../../Content/Images/close.png" class="deleteButton" value="@Model.SeriesId" rel="@Model.Title" />
     </td>
 </tr>
 <tr class="detail-row details_@(Model.SeriesId) @(ViewData["AltRow"] == null || !(bool)ViewData["AltRow"] ? "" : " alt-row")">
