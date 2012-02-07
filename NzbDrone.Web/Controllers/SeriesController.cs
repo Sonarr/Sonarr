@@ -38,7 +38,7 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult Index()
         {
-            var series = GetSeriesModels(_seriesProvider.GetAllSeriesWithEpisodeCount()).OrderBy(o => SortHelper.SkipArticles(o.Title));
+            var series = GetSeriesModels(_seriesProvider.GetAllSeriesWithEpisodeCount()).OrderBy(o => SortHelper.SkipArticles(o.Title)).ToList();
             return View(series);
         }
 

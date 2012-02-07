@@ -1,7 +1,7 @@
 @using NzbDrone.Web.Helpers
 @model NzbDrone.Web.Models.SeriesModel
 
-<tr class="@Model.SeriesId data-row">
+<tr class="@Model.SeriesId data-row @(ViewData["AltRow"] == null || !(bool)ViewData["AltRow"] ? "" : " alt-row")">
     <td>@Html.ActionLink(Model.Title, "Details", "Series", new { seriesId = Model.SeriesId }, null)</td>
     <td>@Model.SeasonsCount</td>
     <td>@Model.QualityProfileName</td>
@@ -20,7 +20,7 @@
         <img src="../../Content/Images/Delete.png" class="deleteButton" value="@Model.SeriesId" rel="@Model.Title" />
     </td>
 </tr>
-<tr class="detail-row details_@(Model.SeriesId)">
+<tr class="detail-row details_@(Model.SeriesId) @(ViewData["AltRow"] == null || !(bool)ViewData["AltRow"] ? "" : " alt-row")">
     <td colspan="7">
         <b>Airs Day of Week:</b> @Model.AirsDayOfWeek <br/>
         <b>Overview:</b> @Model.Overview

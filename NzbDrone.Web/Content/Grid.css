@@ -65,17 +65,6 @@
     background: #f0f5ff;
 }
 
-/*
-.seriesTable tr:nth-child(4n)
-{
-    background: #f0f5ff;
-}
-    
-.seriesTable tr:nth-child(4n+1)
-{
-    background: #f0f5ff;
-}*/
-
 /* Episode Grid Row Colouring */
 .episodeIgnored
 {

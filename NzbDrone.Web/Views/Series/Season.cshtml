@@ -27,8 +27,18 @@
             @Ajax.ImageActionLink("../../Content/Images/Rename.png", new { Alt = "Rename", Title = "Rename all episodes in this season", @class = "renameImage renameImageMaster" }, "RenameSeason", "Episode", new { SeriesId = Model.SeriesId, SeasonNumber = Model.SeasonNumber }, null, null)
         </th>
     </tr>
-    @foreach (var episode in Model.Episodes)
+    @for (int i = 0; i < Model.Episodes.Count; i++)
     {
-        Html.RenderPartial("Episode", episode);
+        var episode = Model.Episodes[i];
+        
+        if (i % 2 == 0)
+        {
+            Html.RenderPartial("Episode", episode);
+        }
+
+        else
+        {
+            Html.RenderPartial("Episode", episode, new ViewDataDictionary { new KeyValuePair<string, object>("AltRow", true) });
+        }
     }
 </table>

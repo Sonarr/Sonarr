@@ -556,9 +556,6 @@
     <Content Include="Views\Series\SeriesEditor.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Upcoming\Index2.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Upcoming\UpcomingEpisode.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

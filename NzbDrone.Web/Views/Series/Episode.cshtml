@@ -1,7 +1,7 @@
 @using NzbDrone.Web.Helpers
 @model NzbDrone.Web.Models.EpisodeModel
 
-<tr class="@Model.EpisodeId data-row">
+<tr class="@Model.EpisodeId data-row@(ViewData["AltRow"] == null || !(bool)ViewData["AltRow"] ? "" : " alt-row")">
     <td>@Model.EpisodeNumber</td>
     <td>@Model.Title</td>
     <td>@Model.AirDate</td>
@@ -29,7 +29,7 @@
         @Ajax.ImageActionLink("../../Content/Images/Rename.png", new { Alt = "Rename", Title = "Rename episode", @class = "renameImage" }, "Rename", "Episode", new { EpisodeFileId = Model.EpisodeFileId }, null, null)
     </td>
 </tr>
-<tr class="detail-row">
+<tr class="detail-row@(ViewData["AltRow"] == null || !(bool)ViewData["AltRow"] ? "" : " alt-row")">
     <td colspan="5">
         @Model.Overview <br />
         <b>@Model.Path</b>
