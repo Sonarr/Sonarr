@@ -1,3 +1,4 @@
+
 @using NzbDrone.Web.Helpers
 @model NzbDrone.Web.Models.EpisodeModel
 
@@ -25,8 +26,8 @@
     <td class="@cellColourClass">
         <img src='../../Content/Images/@(Model.Ignored ? "ignored" : "notIgnored").png' class='ignoreEpisode ignoreEpisode_@(Model.SeasonNumber)@(Model.Ignored ? " ignored" : " ")' id='@Model.EpisodeId' title='Click to toggle episode ignore status' />
         <img src='../../Content/Images/@(Model.Status).png' alt='@Model.Status' title='@Model.Status' class='statusImage status-@Model.Status' />
-        @Ajax.ImageActionLink("../../Content/Images/Search.png", new { Alt = "Search", Title = "Search for episode", @class = "searchImage" }, "Search", "Episode", new { EpisodeId = Model.EpisodeId }, null, null)
-        @Ajax.ImageActionLink("../../Content/Images/Rename.png", new { Alt = "Rename", Title = "Rename episode", @class = "renameImage" }, "Rename", "Episode", new { EpisodeFileId = Model.EpisodeFileId }, null, null)
+        @Ajax.ImageActionLink("../../Content/Images/Search.png", new { Alt = "Search", Title = "Search for episode", @class = "searchImage" }, "Search", "Episode", new { episodeId = Model.EpisodeId }, null, null)
+        @Ajax.ImageActionLink("../../Content/Images/Rename.png", new { Alt = "Rename", Title = "Rename episode", @class = "renameImage" }, "Rename", "Episode", new { episodeFileId = Model.EpisodeFileId }, null, null)
     </td>
 </tr>
 <tr class="detail-row@(ViewData["AltRow"] == null || !(bool)ViewData["AltRow"] ? "" : " alt-row")">

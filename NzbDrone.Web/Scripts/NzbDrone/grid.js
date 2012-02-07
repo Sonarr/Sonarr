@@ -1,5 +1,8 @@
 ﻿/* Click on row, show details */
 $('.seriesTable a').live('click', function (event) {
+    if ($(this).attr('onclick'))
+        return;
+
     event.preventDefault();
     var link = $(this).attr('href');
     window.location = link;
