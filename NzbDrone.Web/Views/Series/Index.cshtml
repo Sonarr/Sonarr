@@ -137,6 +137,10 @@
                 var progressbar = $(element).progressbar({
                     value: parseInt($(element).attr("value"))
                 });
+
+                //Magic was hiding the progress bar color... brute force > magic
+                progressbar.children('.ui-progressbar-value').css('display', 'block');
+
                 var label = progressbar.find('.progressBarText').clone().width(progressbar.width());
                 progressbar.find('.ui-progressbar-value').append(label);
             });
