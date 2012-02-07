@@ -44,6 +44,15 @@
     border-style: inset;
     border-color: #EEEEEE;
 }
+
+.title-row
+{
+    font-family: "Segoe UI Light" , "Open Sans" , "Segoe UI" , sans-serif;
+    font-size: 17px;
+    background-color: grey;
+    font-weight: lighter;
+    color: white;
+}
     
 .detail-row
 {
@@ -51,6 +60,12 @@
 }
     
 /* Colour alternating rows */
+.seriesTable .alt-row
+{
+    background: #f0f5ff;
+}
+
+/*
 .seriesTable tr:nth-child(4n)
 {
     background: #f0f5ff;
@@ -59,7 +74,7 @@
 .seriesTable tr:nth-child(4n+1)
 {
     background: #f0f5ff;
-}
+}*/
 
 /* Episode Grid Row Colouring */
 .episodeIgnored
@@ -71,6 +86,8 @@
 {
     background-color: #F5A9A9;
 }
+
+
 
 /* Telerik Grid */
 .t-grid td

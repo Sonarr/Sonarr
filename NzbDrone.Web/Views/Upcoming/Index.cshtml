@@ -1,7 +1,6 @@
-﻿@model List<UpcomingEpisodeModel>
-@using NzbDrone.Common
-@using NzbDrone.Web.Helpers
-@using NzbDrone.Web.Models
+﻿@using NzbDrone.Web.Helpers
+@model NzbDrone.Web.Models.UpcomingEpisodesModel
+
 @{ViewBag.Title = "Upcoming";}
 @section HeaderContent
 {
@@ -12,178 +11,109 @@
         <li>@Ajax.ActionLink("Start RSS Sync", "RssSync", "Command", null, null)</li>
     </ul>
 }
-<div id="yesterday">
-    <h2>
-        Yesterday</h2>
-    <div class="grid-container">
-        @{Html.Telerik().Grid<UpcomingEpisodeModel>().Name("Yesterday").NoRecordsTemplate(
-                    "No watched shows aired yesterday")
-                    .TableHtmlAttributes(new { @class = "Grid" })
-                    .Columns(columns =>
-                                    {
-                                        columns.Bound(c => c.SeriesTitle)
-                                            .ClientTemplate("<a href=" +
-                                                            Url.Action("Details", "Series", new { seriesId = "<#= SeriesId #>" }) +
-                                                            "><#= SeriesTitle #></a>")
-                                            .Title("Series Title");
-                                        columns.Bound(c => c.SeasonNumber).Title("Season #").Width(40);
-                                        columns.Bound(c => c.EpisodeNumber).Title("Episode #").Width(40);
-                                        columns.Bound(c => c.Title).Title("Episode Title").Width(350);
-                                        columns.Bound(c => c.AirDateTime).Title("Air Time")
-                                         .ClientTemplate("<#= AirTime #>")
-                                         .Width(160);
-                                        columns.Bound(c => c.Status)
-                                            .ClientTemplate("<img src='../../Content/Images/<#= Status #>.png' alt='<#= Status #>' title='<#= Status #>' class='statusImage status-<#= Status #>' />" +
-                                                            Ajax.ImageActionLink("../../Content/Images/Search.png", new { Alt = "Search", Title = "Search for episode", @class = "searchImage" }, "Search", "Episode", new { EpisodeId = "<#= EpisodeId #>" }, null, null)
-                                                            ).Width(100);
-                                    })
-                    .DetailView(detailView => detailView.ClientTemplate(
-                        "<fieldset>" +
-                        "<div><b>Overview: </b><#= Overview #></div>" +
-                        "</fieldset>"
-                                                    ))
-                    .DataBinding(data => data.Ajax().Select("_AjaxBindingYesterday", "Upcoming"))
-                    .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.AirDateTime).Ascending()).Enabled(true))
-                    .ClientEvents(clientEvents =>
-                    {
-                        clientEvents.OnRowDataBound("grid_rowBound");
-                        if (EnviromentProvider.IsProduction)
-                            clientEvents.OnError("grid_onError");
-                    })
-                    .Render();}
-    </div>
-</div>
-<br />
-<div id="today">
-    <h2>
-        Today</h2>
-    <div class="grid-container">
-        @{Html.Telerik().Grid<UpcomingEpisodeModel>().Name("Today").NoRecordsTemplate("No watched shows airing today.")
-                    .TableHtmlAttributes(new { @class = "Grid" })
-                    .Columns(columns =>
-                                    {
-                                        columns.Bound(c => c.SeriesTitle)
-                                            .ClientTemplate("<a href=" +
-                                                            Url.Action("Details", "Series", new { seriesId = "<#= SeriesId #>" }) +
-                                                            "><#= SeriesTitle #></a>")
-                                            .Title("Series Name");
-                                        columns.Bound(c => c.SeasonNumber).Title("Season #").Width(40);
-                                        columns.Bound(c => c.EpisodeNumber).Title("Episode #").Width(40);
-                                        columns.Bound(c => c.Title).Title("Episode Title").Width(350);
-                                        columns.Bound(c => c.AirDateTime).Title("Air Time")
-                                         .ClientTemplate("<#= AirTime #>")
-                                         .Width(160);
-                                        columns.Bound(c => c.Status)
-                                            .ClientTemplate("<img src='../../Content/Images/<#= Status #>.png' alt='<#= Status #>' title='<#= Status #>' class='statusImage status-<#= Status #>' />" +
-                                                            "<a href=\"../Episode/Season?episodeId=<#= EpisodeId #>\" onclick=\"searchForEpisode('<#= EpisodeId #>'); return false;\"><img src='../../Content/Images/Search.png' alt='Search' title='Search for episode' class='searchImage' /></a>"
-                                                            ).Width(100);
-                                    })
-                    .DetailView(detailView => detailView.ClientTemplate(
-                        "<fieldset>" +
-                        "<div><b>Overview: </b><#= Overview #></div>" +
-                        "</fieldset>"
-                                                    ))
-                    .DataBinding(data => data.Ajax().Select("_AjaxBindingToday", "Upcoming"))
-                    .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.AirDateTime).Ascending()).Enabled(true))
-                    .ClientEvents(clientEvents =>
-                    {
-                        clientEvents.OnRowDataBound("grid_rowBound");
-                        if (EnviromentProvider.IsProduction)
-                            clientEvents.OnError("grid_onError");
-                    })
-                    .Render();}
-    </div>
-</div>
-<br />
-<div id="tomorrow">
-    <h2>
-        Tomorrow</h2>
-    <div class="grid-container">
-        @{Html.Telerik().Grid<UpcomingEpisodeModel>().Name("Tomorrow").NoRecordsTemplate(
-                    "No watched shows airing tomorrow")
-                    .TableHtmlAttributes(new { @class = "Grid" })
-                    .Columns(columns =>
-                                 {
-                                     columns.Bound(c => c.SeriesTitle)
-                                         .ClientTemplate("<a href=" +
-                                                         Url.Action("Details", "Series", new { seriesId = "<#= SeriesId #>" }) +
-                                                         "><#= SeriesTitle #></a>")
-                                         .Title("Series Name");
-                                     columns.Bound(c => c.SeasonNumber).Title("Season #").Width(40);
-                                     columns.Bound(c => c.EpisodeNumber).Title("Episode #").Width(40);
-                                     columns.Bound(c => c.Title).Title("Episode Title").Width(350);
-                                     columns.Bound(c => c.AirDateTime).Title("Air Time")
-                                         .ClientTemplate("<#= AirTime #>")
-                                         .Width(160);
-                                     columns.Bound(c => c.Status)
-                                            .ClientTemplate("<img src='../../Content/Images/<#= Status #>.png' alt='<#= Status #>' title='<#= Status #>' class='statusImage status-<#= Status #>' />" +
-                                                            "<a href=\"../Episode/Season?episodeId=<#= EpisodeId #>\" onclick=\"searchForEpisode('<#= EpisodeId #>'); return false;\"><img src='../../Content/Images/Search.png' alt='Search' title='Search for episode' class='searchImage' /></a>"
-                                                            ).Width(100);
-                                 })
-                    .DetailView(detailView => detailView.ClientTemplate(
-                        "<fieldset>" +
-                        "<div><b>Overview: </b><#= Overview #></div>" +
-                        "</fieldset>"
-                                                  ))
 
-                    .DataBinding(data => data.Ajax().Select("_AjaxBindingTomorrow", "Upcoming"))
-                    .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.AirDateTime).Ascending()).Enabled(true))
-                    .ClientEvents(clientEvents =>
-                    {
-                        clientEvents.OnRowDataBound("grid_rowBound");
-                        if (EnviromentProvider.IsProduction)
-                            clientEvents.OnError("grid_onError");
-                    })
-                    .Render();}
-    </div>
-</div>
-<br />
-<div id="week">
-    <h2>
-        Future Forecast</h2>
-    <div class="grid-container">
-        @{Html.Telerik().Grid<UpcomingEpisodeModel>().Name("Week").NoRecordsTemplate(
-                    "No watched shows airing in the next week...")
-                    .TableHtmlAttributes(new { @class = "Grid" })
-                    .Columns(columns =>
-                                 {
-                                     columns.Bound(c => c.SeriesTitle)
-                                         .ClientTemplate("<a href=" +
-                                                         Url.Action("Details", "Series", new { seriesId = "<#= SeriesId #>" }) +
-                                                         "><#= SeriesTitle #></a>")
-                                         .Title("Series Name");
-                                     columns.Bound(c => c.SeasonNumber).Title("Season #").Width(40);
-                                     columns.Bound(c => c.EpisodeNumber).Title("Episode #").Width(40);
-                                     columns.Bound(c => c.Title).Title("Episode Title").Width(350);
-                                     columns.Bound(c => c.AirDateTime).Title("Air Date/Time")
-                                         .ClientTemplate("<#= AirDate #> at <#= AirTime #>")
-                                         .Width(160);
-                                     columns.Bound(c => c.Status)
-                                            .ClientTemplate("<img src='../../Content/Images/<#= Status #>.png' alt='<#= Status #>' title='<#= Status #>' class='statusImage status-<#= Status #>' />" +
-                                                            "<a href=\"../Episode/Season?episodeId=<#= EpisodeId #>\" onclick=\"searchForEpisode('<#= EpisodeId #>'); return false;\"><img src='../../Content/Images/Search.png' alt='Search' title='Search for episode' class='searchImage' /></a>"
-                                                            ).Width(100);
-                                 })
-                    .DetailView(detailView => detailView.ClientTemplate(
-                        "<fieldset>" +
-                        "<div><b>Overview: </b><#= Overview #></div>" +
-                        "</fieldset>"
-                                                  ))
-                    .DataBinding(data => data.Ajax().Select("_AjaxBindingWeek", "Upcoming"))
-                    .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.AirDateTime).Ascending()).Enabled(true))
-                    .ClientEvents(clientEvents =>
-                    {
-                        clientEvents.OnRowDataBound("grid_rowBound");
-                        if (EnviromentProvider.IsProduction)
-                            clientEvents.OnError("grid_onError");
-                    })
-                    .Render();}
-    </div>
-</div>
+<table class="seriesTable">
+    <colgroup>
+        <col/>
+        <col style="width:40px" />
+        <col style="width:40px" />
+        <col style="width:350px" />
+        <col style="width:160px" />
+        <col style="width:100px" />
+    </colgroup>
+    <tr>
+        <th>Series Title</th>
+        <th>Season #</th>
+        <th>Episode #</th>
+        <th>Episode Title</th>
+        <th>Air Time</th>
+        
+        @*Commands/Status Column*@
+        <th>
+            Status
+        </th>
+    </tr>
+    <tr class="title-row">
+        <td colspan="6">
+            Yesterday
+        </td>
+    </tr>
+    
+    @for (int i = 0; i < Model.Yesterday.Count; i++)
+    {
+        var episode = Model.Yesterday[i];
+        
+        if (i % 2 == 0)
+        {
+            Html.RenderPartial("UpcomingEpisode", episode);
+        }
+
+        else
+        {
+            Html.RenderPartial("UpcomingEpisode", episode, new ViewDataDictionary { new KeyValuePair<string, object>("AltRow", true) });
+        }
+    }
+    <tr class="title-row">
+        <td colspan="6">
+            Today
+        </td>
+    </tr>
+    
+    @for (int i = 0; i < Model.Today.Count; i++)
+    {
+        var episode = Model.Today[i];
+        
+        if (i % 2 == 0)
+        {
+            Html.RenderPartial("UpcomingEpisode", episode);
+        }
+
+        else
+        {
+            Html.RenderPartial("UpcomingEpisode", episode, new ViewDataDictionary { new KeyValuePair<string, object>("AltRow", true) });
+        }
+    }
+    <tr class="title-row">
+        <td colspan="6">
+            Tomorrow
+        </td>
+    
+    @for (int i = 0; i < Model.Tomorrow.Count; i++)
+    {
+        var episode = Model.Tomorrow[i];
+        
+        if (i % 2 == 0)
+        {
+            Html.RenderPartial("UpcomingEpisode", episode);
+        }
+
+        else
+        {
+            Html.RenderPartial("UpcomingEpisode", episode, new ViewDataDictionary { new KeyValuePair<string, object>("AltRow", true) });
+        }
+    }
+    <tr class="title-row">
+        <td colspan="6">
+            Future Forecast
+        </td>
+    </tr>
+    
+    @for (int i = 0; i < Model.Week.Count; i++)
+    {
+        var episode = Model.Week[i];
+        
+        if (i % 2 == 0)
+        {
+            Html.RenderPartial("UpcomingEpisode", episode);
+        }
+
+        else
+        {
+            Html.RenderPartial("UpcomingEpisode", episode, new ViewDataDictionary { new KeyValuePair<string, object>("AltRow", true) });
+        }
+    }
+</table>
 
 @section Scripts{
-    <script type="text/javascript">
-        function grid_rowBound(e) {
-            highlightRow(e);
-        }
-    </script>
+
 }

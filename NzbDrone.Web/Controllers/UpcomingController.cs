@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Mvc;
 using NzbDrone.Core;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Repository;
 using NzbDrone.Web.Models;
 using Telerik.Web.Mvc;
 
@@ -23,13 +24,20 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            var upcoming = new UpcomingEpisodesModel
+                               {
+                                       Yesterday = GetUpcomingEpisodeModels(_upcomingEpisodesProvider.Yesterday()),
+                                       Today = GetUpcomingEpisodeModels(_upcomingEpisodesProvider.Today()),
+                                       Tomorrow = GetUpcomingEpisodeModels(_upcomingEpisodesProvider.Tomorrow()),
+                                       Week = GetUpcomingEpisodeModels(_upcomingEpisodesProvider.Week())
+                               };
+            
+            return View(upcoming);
         }
 
-        [GridAction]
-        public ActionResult _AjaxBindingYesterday()
+        private List<UpcomingEpisodeModel> GetUpcomingEpisodeModels(List<Episode> episodes)
         {
-            var upcoming = _upcomingEpisodesProvider.Yesterday().Select(u => new UpcomingEpisodeModel
+            return episodes.Select(u => new UpcomingEpisodeModel
             {
                 SeriesId = u.Series.SeriesId,
                 EpisodeId = u.EpisodeId,
@@ -42,72 +50,7 @@ namespace NzbDrone.Web.Controllers
                 AirDate = u.AirDate.Value.ToBestDateString(),
                 AirTime = String.IsNullOrEmpty(u.Series.AirTimes) ? "?" : Convert.ToDateTime(u.Series.AirTimes).ToShortTimeString(),
                 Status = u.Status.ToString()
-            });
-
-            return View(new GridModel(upcoming));
-        }
-
-        [GridAction]
-        public ActionResult _AjaxBindingToday()
-        {
-            var upcoming = _upcomingEpisodesProvider.Today().Select(u => new UpcomingEpisodeModel
-            {
-                SeriesId = u.Series.SeriesId,
-                EpisodeId = u.EpisodeId,
-                SeriesTitle = u.Series.Title,
-                SeasonNumber = u.SeasonNumber,
-                EpisodeNumber = u.EpisodeNumber,
-                Title = u.Title,
-                Overview = u.Overview,
-                AirDateTime = GetDateTime(u.AirDate.Value, u.Series.AirTimes),
-                AirDate = u.AirDate.Value.ToBestDateString(),
-                AirTime = String.IsNullOrEmpty(u.Series.AirTimes) ? "?" : Convert.ToDateTime(u.Series.AirTimes).ToShortTimeString(),
-                Status = u.Status.ToString()
-            });
-
-            return View(new GridModel(upcoming));
-        }
-
-        [GridAction]
-        public ActionResult _AjaxBindingTomorrow()
-        {
-            var upcoming = _upcomingEpisodesProvider.Tomorrow().Select(u => new UpcomingEpisodeModel
-            {
-                SeriesId = u.Series.SeriesId,
-                EpisodeId = u.EpisodeId,
-                SeriesTitle = u.Series.Title,
-                SeasonNumber = u.SeasonNumber,
-                EpisodeNumber = u.EpisodeNumber,
-                Title = u.Title,
-                Overview = u.Overview,
-                AirDateTime = GetDateTime(u.AirDate.Value, u.Series.AirTimes),
-                AirDate = u.AirDate.Value.ToBestDateString(),
-                AirTime = String.IsNullOrEmpty(u.Series.AirTimes) ? "?" : Convert.ToDateTime(u.Series.AirTimes).ToShortTimeString(),
-                Status = u.Status.ToString()
-            });
-
-            return View(new GridModel(upcoming));
-        }
-
-        [GridAction]
-        public ActionResult _AjaxBindingWeek()
-        {
-            var upcoming = _upcomingEpisodesProvider.Week().Select(u => new UpcomingEpisodeModel
-            {
-                SeriesId = u.Series.SeriesId,
-                EpisodeId = u.EpisodeId,
-                SeriesTitle = u.Series.Title,
-                SeasonNumber = u.SeasonNumber,
-                EpisodeNumber = u.EpisodeNumber,
-                Title = u.Title,
-                Overview = u.Overview,
-                AirDateTime = GetDateTime(u.AirDate.Value, u.Series.AirTimes),
-                AirDate = u.AirDate.Value.ToBestDateString(),
-                AirTime = String.IsNullOrEmpty(u.Series.AirTimes) ? "?" : Convert.ToDateTime(u.Series.AirTimes).ToShortTimeString(),
-                Status = u.Status.ToString()
-            });
-
-            return View(new GridModel(upcoming));
+            }).OrderBy(e => e.AirDateTime).ToList();
         }
 
         private DateTime GetDateTime(DateTime airDate, string airTime)

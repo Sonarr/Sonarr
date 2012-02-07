@@ -1,0 +1,48 @@
+﻿@using NzbDrone.Core.Model
+@using NzbDrone.Web.Helpers
+@using NzbDrone.Web.Models
+@model UpcomingEpisodeModel
+           
+@{
+    Layout = null;
+}
+
+<tr class='@Model.EpisodeId data-row@(ViewData["AltRow"] == null || !(bool)ViewData["AltRow"] ? "" : " alt-row")'>
+    <td>@Html.ActionLink(Model.SeriesTitle, "Details", "Series", new { seriesId = Model.SeriesId }, null)</td>
+    <td>@Model.SeasonNumber</td>
+    <td>@Model.EpisodeNumber</td>
+    <td>@Model.Title</td>
+    
+    <td>
+        @{ if(Model.AirDateTime >= DateTime.Today.AddDays(-1) && Model.AirDateTime <= DateTime.Today.AddDays(2))
+           {
+               @(Model.AirTime)
+           }
+           else
+           {
+               @(Model.AirDate + " at " + Model.AirTime)
+           }
+        }
+    </td>
+    
+    @{
+        string cellColourClass = String.Empty;
+
+        if (Model.Status == "Missing")
+        {
+            cellColourClass = "episodeMissing";
+        }
+    }
+
+    @*Commands Column*@
+    <td class="@cellColourClass">
+        <img src='../../Content/Images/@(Model.Status).png' alt='@Model.Status' title='@Model.Status' class='statusImage status-@Model.Status' />
+        @Ajax.ImageActionLink("../../Content/Images/Search.png", new { Alt = "Search", Title = "Search for episode", @class = "searchImage" }, "Search", "Episode", new { episodeId = Model.EpisodeId }, null, null)
+    </td>
+</tr>
+
+<tr class='detail-row@(ViewData["AltRow"] == null || !(bool)ViewData["AltRow"] ? "" : " alt-row")'>
+    <td colspan="6">
+        <b>Overview: </b>@Model.Overview
+    </td>
+</tr>

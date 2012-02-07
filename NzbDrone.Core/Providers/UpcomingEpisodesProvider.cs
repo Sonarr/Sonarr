@@ -18,20 +18,6 @@ namespace NzbDrone.Core.Providers
             _database = database;
         }
 
-        public virtual UpcomingEpisodesModel Upcoming()
-        {
-            var allEps = _database.Fetch<Episode, Series>(@"SELECT * FROM Episodes 
-                                                        INNER JOIN Series ON Episodes.SeriesId = Series.SeriesId
-                                                        WHERE Ignored = 0 AND AirDate BETWEEN @0 AND @1",
-                                                        DateTime.Today.AddDays(-1), DateTime.Today.AddDays(8));
-
-            var yesterday = allEps.Where(e => e.AirDate == DateTime.Today.AddDays(-1)).ToList();
-            var today = allEps.Where(e => e.AirDate == DateTime.Today).ToList();
-            var week = allEps.Where(e => e.AirDate > DateTime.Today).ToList();
-
-            return new UpcomingEpisodesModel { Yesterday = yesterday, Today = today, Week = week };
-        }
-
         public virtual List<Episode> Yesterday()
         {
             return _database.Fetch<Episode, Series>(@"SELECT * FROM Episodes 
