@@ -70,22 +70,7 @@
     {
         margin-right: 445px;
     }
-       
-    .ui-dialog-buttonset .ui-delete-button
-    {
-        background: url("images/ui-bg_flat_30_b40404_40x100.png") repeat-x scroll 50% 50% #B40404;
-        border: 1px solid #FFFFFF;
-        color: #FFFFFF;
-        font-weight: normal;
-    }
     
-    .ui-dialog-buttonset .ui-delete-button:active
-    {
-        background: url("images/ui-bg_flat_30_616161_40x100.png") repeat-x scroll 50% 50% #616161;
-        border: 1px solid #FFFFFF;
-        color: #FFFFFF;
-        font-weight: normal;
-    }
 </style>
 @section ActionMenu{
     <ul class="sub-menu">
@@ -159,7 +144,7 @@
 
         $("#seriesEditor").dialog({
             autoOpen: false,
-            height: 350,
+            height: 360,
             width: 670,
             resizable: false,
             modal: true,
@@ -204,7 +189,9 @@
             width: 450,
             modal: true,
             buttons: {
+                
                 "Delete": function () {
+
                     var seriesId = $('.seriesId').val();
 
                     $.ajax({
@@ -233,7 +220,7 @@
                 var title = $(this).attr("rel");
 
                 //Set the title of the dialog
-                $("#seriesEditor").dialog("option", "title", "Edit Series: " + title);
+                $("#seriesEditor").dialog("option", "title", title);
 
                 //Pre-populate the view with ajax
                 $('#seriesEditor').html('<div style="text-align: center; width: 100%; height: 100%;"><img src="../../Content/Images/ajax-loader.gif" style="padding-top: 120px;" /></div>');

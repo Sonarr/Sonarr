@@ -31,6 +31,17 @@
     background: #065EFE url(./jQueryUI/images/ui-bg_flat_30_065efe_40x100.png) 50% 50% repeat-x;
 }
 
+.ui-dialog .ui-dialog-titlebar, .ui-dialog-title
+{
+    color: #3C3C3C;
+    font-size: 30px;
+    font-family: "Open Sans" , "Segoe UI Light" , "Segoe UI" , sans-serif;
+    font-weight: 300;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 10px;
+}
+
 .jquery-tabs
 {
     margin-top: 10px;
