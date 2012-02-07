@@ -80,8 +80,9 @@
 }
 
 <table class="seriesTable">
+    
     <colgroup>
-       <col style="width: 10px"/>
+        <col style="width: 10px"/>
         <col style="width:auto" />
         <col style="width:100px" />
         <col style="width:100px" />
@@ -89,34 +90,38 @@
         <col style="width:100px" />
         <col style="width:80px"/>
     </colgroup>
-    <tr>
-        <th>Status</>
-        <th>Title</th>
-        <th>Seasons</th>
-        <th>Quality</th>
-        <th>Next Airing</th>
-        <th>Episodes</th>
+    <thead>
         
-        @*Commands Column*@
-        <th>
+        <tr>
+            <th>Status</th>
+            <th>Title</th>
+            <th>Seasons</th>
+            <th>Quality</th>
+            <th>Next Airing</th>
+            <th>Episodes</th>
+        
+            @*Commands Column*@
+            <th>
             
-        </th>
-    </tr>
-    
-    @for (int i = 0; i < Model.Count; i++)
-    {
-        var series = Model[i];
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            var series = Model[i];
         
-        if (i % 2 == 0)
-        {
-            Html.RenderPartial("Series", series);
-        }
+            if (i % 2 == 0)
+            {
+                Html.RenderPartial("Series", series);
+            }
 
-        else
-        {
-            Html.RenderPartial("Series", series, new ViewDataDictionary { new KeyValuePair<string, object>("AltRow", true) });
+            else
+            {
+                Html.RenderPartial("Series", series, new ViewDataDictionary { new KeyValuePair<string, object>("AltRow", true) });
+            }
         }
-    }
+    </tbody>
 </table>
 
 <div id="seriesEditor" title="Edit Series"></div>

@@ -21,97 +21,101 @@
         <col style="width:160px" />
         <col style="width:100px" />
     </colgroup>
-    <tr>
-        <th>Series Title</th>
-        <th>Season #</th>
-        <th>Episode #</th>
-        <th>Episode Title</th>
-        <th>Air Time</th>
+    <thead>
+        <tr>
+            <th>Series Title</th>
+            <th>Season #</th>
+            <th>Episode #</th>
+            <th>Episode Title</th>
+            <th>Air Time</th>
         
-        @*Commands/Status Column*@
-        <th>
-            Status
-        </th>
-    </tr>
-    <tr class="title-row">
-        <td colspan="6">
-            Yesterday
-        </td>
-    </tr>
+            @*Commands/Status Column*@
+            <th>
+                Status
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="title-row">
+            <td colspan="6">
+                Yesterday
+            </td>
+        </tr>
     
-    @for (int i = 0; i < Model.Yesterday.Count; i++)
-    {
-        var episode = Model.Yesterday[i];
+        @for (int i = 0; i < Model.Yesterday.Count; i++)
+        {
+            var episode = Model.Yesterday[i];
         
-        if (i % 2 == 0)
-        {
-            Html.RenderPartial("UpcomingEpisode", episode);
-        }
+            if (i % 2 == 0)
+            {
+                Html.RenderPartial("UpcomingEpisode", episode);
+            }
 
-        else
-        {
-            Html.RenderPartial("UpcomingEpisode", episode, new ViewDataDictionary { new KeyValuePair<string, object>("AltRow", true) });
+            else
+            {
+                Html.RenderPartial("UpcomingEpisode", episode, new ViewDataDictionary { new KeyValuePair<string, object>("AltRow", true) });
+            }
         }
-    }
-    <tr class="title-row">
-        <td colspan="6">
-            Today
-        </td>
-    </tr>
+        <tr class="title-row">
+            <td colspan="6">
+                Today
+            </td>
+        </tr>
     
-    @for (int i = 0; i < Model.Today.Count; i++)
-    {
-        var episode = Model.Today[i];
+        @for (int i = 0; i < Model.Today.Count; i++)
+        {
+            var episode = Model.Today[i];
         
-        if (i % 2 == 0)
-        {
-            Html.RenderPartial("UpcomingEpisode", episode);
-        }
+            if (i % 2 == 0)
+            {
+                Html.RenderPartial("UpcomingEpisode", episode);
+            }
 
-        else
-        {
-            Html.RenderPartial("UpcomingEpisode", episode, new ViewDataDictionary { new KeyValuePair<string, object>("AltRow", true) });
+            else
+            {
+                Html.RenderPartial("UpcomingEpisode", episode, new ViewDataDictionary { new KeyValuePair<string, object>("AltRow", true) });
+            }
         }
-    }
-    <tr class="title-row">
-        <td colspan="6">
-            Tomorrow
-        </td>
+        <tr class="title-row">
+            <td colspan="6">
+                Tomorrow
+            </td>
     
-    @for (int i = 0; i < Model.Tomorrow.Count; i++)
-    {
-        var episode = Model.Tomorrow[i];
+        @for (int i = 0; i < Model.Tomorrow.Count; i++)
+        {
+            var episode = Model.Tomorrow[i];
         
-        if (i % 2 == 0)
-        {
-            Html.RenderPartial("UpcomingEpisode", episode);
-        }
+            if (i % 2 == 0)
+            {
+                Html.RenderPartial("UpcomingEpisode", episode);
+            }
 
-        else
-        {
-            Html.RenderPartial("UpcomingEpisode", episode, new ViewDataDictionary { new KeyValuePair<string, object>("AltRow", true) });
+            else
+            {
+                Html.RenderPartial("UpcomingEpisode", episode, new ViewDataDictionary { new KeyValuePair<string, object>("AltRow", true) });
+            }
         }
-    }
-    <tr class="title-row">
-        <td colspan="6">
-            Future Forecast
-        </td>
-    </tr>
+        <tr class="title-row">
+            <td colspan="6">
+                Future Forecast
+            </td>
+        </tr>
     
-    @for (int i = 0; i < Model.Week.Count; i++)
-    {
-        var episode = Model.Week[i];
+        @for (int i = 0; i < Model.Week.Count; i++)
+        {
+            var episode = Model.Week[i];
         
-        if (i % 2 == 0)
-        {
-            Html.RenderPartial("UpcomingEpisode", episode);
-        }
+            if (i % 2 == 0)
+            {
+                Html.RenderPartial("UpcomingEpisode", episode);
+            }
 
-        else
-        {
-            Html.RenderPartial("UpcomingEpisode", episode, new ViewDataDictionary { new KeyValuePair<string, object>("AltRow", true) });
+            else
+            {
+                Html.RenderPartial("UpcomingEpisode", episode, new ViewDataDictionary { new KeyValuePair<string, object>("AltRow", true) });
+            }
         }
-    }
+    </tbody>
 </table>
 
 @section Scripts{
