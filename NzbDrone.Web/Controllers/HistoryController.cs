@@ -20,7 +20,24 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            var history = _historyProvider.AllItemsWithRelationships().Select(h => new HistoryModel
+            {
+                HistoryId = h.HistoryId,
+                SeriesId = h.SeriesId,
+                SeasonNumber = h.Episode.SeasonNumber,
+                EpisodeNumber = h.Episode.EpisodeNumber,
+                EpisodeTitle = h.Episode.Title,
+                EpisodeOverview = h.Episode.Overview,
+                SeriesTitle = h.SeriesTitle,
+                NzbTitle = h.NzbTitle,
+                Quality = h.Quality.ToString(),
+                IsProper = h.IsProper,
+                Date = h.Date,
+                Indexer = h.Indexer,
+                EpisodeId = h.EpisodeId
+            }).ToList();
+
+            return View(history);
         }
 
         public JsonResult Trim()

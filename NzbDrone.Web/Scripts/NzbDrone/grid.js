@@ -1,5 +1,5 @@
 ﻿/* Click on row, show details */
-$('.seriesTable a').live('click', function (event) {
+$('.seriesTable a, .dataTable a').live('click', function (event) {
     if ($(this).attr('onclick'))
         return;
 
@@ -18,21 +18,25 @@ function grid_onError(e) {
     e.preventDefault();
 }
 
-//Highlight rows based on a number of details
-function highlightRow(e) {
-    var row = e.row;
-    var dataItem = e.dataItem;
+//Perform the details opening
+var oTable;
 
-    var ignored = dataItem.Ignored;
-    var status = dataItem.Status;
+$('.dataTable td:not(:last-child)').live('click', function () {
+    var nTr = this.parentNode;
 
-    if (ignored) {
-        $(row).addClass('episodeIgnored');
-        return;
+    if ($(nTr).hasClass('details-opened')) {
+        oTable.fnClose(nTr);
+        $(nTr).removeClass('details-opened');
     }
 
-    if (status == "Missing") {
-        $(row).addClass('episodeMissing');
-        return;
+    else {
+        oTable.fnOpen(nTr, fnFormatDetails(oTable, nTr), 'Details');
+        $(nTr).addClass('details-opened');
     }
+});
+
+//Datatables format display details
+function fnFormatDetails(oTable, nTr) {
+    var aData = oTable.fnGetData(nTr);
+    return aData[aData.length - 1];
 }

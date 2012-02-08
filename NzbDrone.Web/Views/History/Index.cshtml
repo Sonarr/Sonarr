@@ -13,50 +13,35 @@
 {
     @Html.IncludeCss("Grid.css")
 }
+
 <div class="grid-container">
-    @{Html.Telerik().Grid<HistoryModel>().Name("history")
-              .TableHtmlAttributes(new { @class = "Grid" })
-              .Columns(columns =>
-                           {
-                               columns.Bound(c => c.Indexer)
-                                       .ClientTemplate("<center><img alt='<#= Indexer #>' src='" + Url.Content("~/Content/Images/Indexers/") + "<#= Indexer #>.png' /></center>")
-                                       .Title("")
-                                       .Width(20);
-                               columns.Bound(c => c.SeriesTitle)
-                                       .ClientTemplate("<a href=" +
-                                                       Url.Action("Details", "Series", new { seriesId = "<#= SeriesId #>" }) +
-                                                       "><#= SeriesTitle #></a>")
-                                       .Title("Series Title");
-                               columns.Bound(c => c.SeasonNumber).Title("Season #").Width(50);
-                               columns.Bound(c => c.EpisodeNumber).Title("Episode #").Width(50);
-                               columns.Bound(c => c.EpisodeTitle).Title("Episode Title");
-                               columns.Bound(c => c.Quality).Title("Quality").Width(50);
-                               columns.Bound(c => c.Date).Title("Grabbed on");
-                               columns.Bound(c => c.HistoryId)
-                                       .Title("Actions")
-                                       .ClientTemplate(Ajax.ImageActionLink("../../Content/Images/X.png", new { Alt = "Delete", Title = "Delete from history", @class = "searchImage" }, "Delete", "History", new { HistoryId = "<#= HistoryId #>" }, new AjaxOptions { OnSuccess = "reloadHistoryGrid" }, null).ToString() +
-                                                       Ajax.ImageActionLink("../../Content/Images/Downloading.png", new { Alt = "Redownload", Title = "Redownlod Episode", @class = "searchImage" }, "Redownload", "History", new { HistoryId = "<#= HistoryId #>", EpisodeId = "<#= EpisodeId #>" }, new AjaxOptions { OnSuccess = "reloadHistoryGrid" }, null).ToString())
-                                       .Width("40");
-                           })
-              .DetailView(detailView => detailView.ClientTemplate(
-                                                                  "<fieldset>" +
-                                                                  "<div><b>Overview: </b><#= EpisodeOverview #></div>" +
-                                                                  "<div><b>NZB Title: </b><#= NzbTitle #></div>" +
-                                                                  "<div><b>Proper: </b><#= IsProper #></div>" +
-                                                                  "</fieldset>"
-                                                ))
-              .DataBinding(data => data.Ajax().Select("_AjaxBinding", "History"))
-              .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.Date).Descending()).Enabled(true))
-              .Pageable(
-                        c =>
-                        c.PageSize(20).Position(GridPagerPosition.Bottom).Style(GridPagerStyles.NextPrevious))
-              .ClientEvents(clientEvents =>
-              {
-                  if (EnviromentProvider.IsProduction)
-                      clientEvents.OnError("grid_onError");
-              })
-              .Render();}
+<table id="historyGrid" class="hidden-grid">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Series Title</th>
+            <th>Season #</th>
+            <th>Episode #</th>
+            <th>Episode Title</th>
+            <th>Quality</th>
+            <th>Grabbed On</th>
+        
+            @*Commands Column*@
+            <th>Actions</th>
+            
+            @*Details Column*@
+            <th>Detailsn</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var history in Model)
+        {
+            Html.RenderPartial("History", history);
+        }
+    </tbody>
+</table>
 </div>
+
 <script type="text/javascript">
     deleteHistoryRowUrl = '../History/Delete';
     redownloadUrl = '../History/Redownload';
@@ -65,4 +50,31 @@
         var grid = $('#history').data('tGrid');
         grid.ajaxRequest();
     }
+
+    $(document).ready(function () {
+        $('#historyGrid').removeClass('hidden-grid');
+
+        oTable = $('#historyGrid').dataTable({
+            "bPaginate": true,
+            "bLengthChange": false,
+            "bFilter": true,
+            "bSort": true,
+            "bInfo": true,
+            "bAutoWidth": false,
+            "iDisplayLength": 20,
+            "sPaginationType": "four_button",
+            "aoColumns": [
+                            { sWidth: '20px', "bSortable": false }, //Image
+                            { sWidth: 'auto' }, //Series Title
+                            { sWidth: '90px' }, //Season #
+                            { sWidth: '90px' }, //Episode #
+                            { sWidth: 'auto' }, //Episode Title
+                            { sWidth: '70px' }, //Quality
+                            { sWidth: '150px' }, //Grabbed On
+                            { sWidth: '40px', "bSortable": false }, //Actions
+                            { sWidth: 'auto', "bSortable": false, "bVisible": false } //Details
+                        ],
+            "aaSorting": [[6, 'desc']]
+        });
+    });
 </script>

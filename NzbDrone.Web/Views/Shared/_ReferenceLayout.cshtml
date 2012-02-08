@@ -15,6 +15,7 @@
     @Html.IncludeCss("overrides.css")
     @Html.IncludeCss("Menu.css")
     @Html.IncludeCss("Messages.css")
+    @Html.IncludeCss("DataTables-1.9.0/media/css/jquery.dataTables.css")
     @RenderSection("HeaderContent", required: false)
 </head>
 <body>
@@ -35,6 +36,8 @@
     @Html.IncludeScript("NzbDrone/Notification.js")
     @Html.IncludeScript("NzbDrone/AutoBind.js")
     @Html.IncludeScript("NzbDrone/grid.js")
+    @Html.IncludeScript("DataTables-1.9.0/media/js/jquery.dataTables.min.js")
+    @Html.IncludeScript("jquery.dataTables.4button.pagination.js")
     @RenderSection("Scripts", required: false)
 </body>
 </html>

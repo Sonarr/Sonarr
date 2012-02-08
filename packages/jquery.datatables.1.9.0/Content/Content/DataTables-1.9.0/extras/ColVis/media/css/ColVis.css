@@ -1,0 +1,76 @@
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * ColVis styles
+ */
+.ColVis {
+	float: right;
+	margin-bottom: 1em;
+}
+
+.ColVis_Button {
+	position: relative;
+	float: left;
+	margin-right: 3px;
+	padding: 3px 5px;
+	height: 30px;
+	background-color: #fff;
+	border: 1px solid #d0d0d0;
+	cursor: pointer;
+	*cursor: hand;
+}
+
+button.ColVis_Button::-moz-focus-inner { 
+	border: none !important;
+	padding: 0;
+}
+
+.ColVis_text_hover {
+	border: 1px solid #999;
+	background-color: #f0f0f0;
+}
+
+div.ColVis_collectionBackground {
+	background-color: black;
+	z-index: 1100;
+}
+
+div.ColVis_collection {
+	position: relative;
+	width: 150px;
+	background-color: #f3f3f3;
+	padding: 3px;
+	border: 1px solid #ccc;
+	z-index: 1102;
+}
+
+div.ColVis_collection button.ColVis_Button {
+	background-color: white;
+	width: 100%;
+	float: none;
+	margin-bottom: 2px;
+}
+
+div.ColVis_catcher {
+	position: absolute;
+	z-index: 1101;
+}
+
+.disabled {
+	color: #999;
+}
+
+
+
+button.ColVis_Button {
+	text-align: left;
+}
+
+div.ColVis_collection button.ColVis_Button:hover {
+	border: 1px solid #999;
+	background-color: #f0f0f0;
+}
+
+span.ColVis_radio {
+	display: inline-block;
+	width: 20px;
+}

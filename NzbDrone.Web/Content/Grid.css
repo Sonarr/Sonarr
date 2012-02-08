@@ -76,6 +76,14 @@
     background-color: #F5A9A9;
 }
 
+/*Hidden Grid to prevent FOUSC*/
+.hidden-grid {
+    display: none;
+}
+
+.grid-container {
+    overflow: hidden;
+}
 
 
 /* Telerik Grid */
