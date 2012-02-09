@@ -2,26 +2,6 @@
 @using NzbDrone.Core.Instrumentation
 @using NzbDrone.Web.Helpers
 @model IEnumerable<NzbDrone.Core.Instrumentation.Log>
-@section Scripts{
-    <script type="text/javascript">
-        function onRowDataBound(e) {
-
-            e.row.style.boarder = "";
-
-            if (e.dataItem.Level == "Warn") {
-                e.row.style.backgroundColor = "#FFD700";
-            }
-            else if (e.dataItem.Level == "Error") {
-                e.row.style.backgroundColor = "#FF7500";
-            }
-            else if (e.dataItem.Level == "Fatal") {
-                e.row.style.backgroundColor = "black";
-                e.row.style.color = "red";
-            }
-            //e.row.style.color = 'blue';
-        }
-    </script>
-}
 @{ ViewBag.Title = "Logs";}
 @section ActionMenu{
     <ul class="sub-menu">
@@ -29,37 +9,86 @@
         <li>@Html.ActionLink("File", "File", "Log")</li>
     </ul>
 }
+
+@section HeaderContent{
+    <style>
+        #logGrid td {
+            padding: 2px 8px 2px 8px;
+        }
+    </style>
+}
+
 <div class="infoBox">
     Log entries older than 30 days are automatically deleted.</div>
-@{Html.Telerik().Grid<Log>().Name("logsGrid")
-            .TableHtmlAttributes(new { @class = "Grid" })
-            .Columns(columns =>
-                         {
-                             columns.Bound(c => c.Time).Title("Time").Width(170);
-                             columns.Bound(c => c.Level).Title("Level").Width(70);
-                             columns.Bound(c => c.Logger).Title("Source");
-                             columns.Bound(c => c.Message);
-                         })
-            .DetailView(detailView => detailView.ClientTemplate(
-                                                                    "<div>Method: <#= Method #></div>" +
-                                                                    "<div><#= ExceptionType #></div>" +
-                                                                    "<div class='stackframe'><#= Exception #></div>"
-                                                                ))
-            .DataBinding(data => data.Ajax().Select("AjaxBinding", "Log").Enabled(true))
-            .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.Time).Descending()).Enabled(true))
-            .Pageable(paging => paging.Style(GridPagerStyles.Status).PageOnScroll(true).PageSize(100))
-            .Filterable()
-            .ClientEvents(c => c.OnRowDataBound("onRowDataBound"))
-            .Scrollable(c => c.Height(500))
-            .ClientEvents(clientEvents =>
-            {
-                if (EnviromentProvider.IsProduction)
-                    clientEvents.OnError("grid_onError");
-            })
-            .Render();}
-<script type="text/javascript">
-    function reloadGrid() {
-        var grid = $('#logsGrid').data('tGrid');
-        grid.rebind();
-    }
-</script>
+
+<div class="grid-container">
+    <table id="logGrid" class="dataTablesGrid hidden-grid">
+        <thead>
+            <tr>
+                <th>Time</th>
+                <th>Level</th>
+                <th>Source</th>
+                <th>Message</th>
+                @*Details Column*@
+                <th style="display: none;">Details</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('.dataTablesGrid').removeClass('hidden-grid');
+
+            oTable = $('#logGrid').dataTable({
+                "sAjaxSource": "Log/AjaxBinding",
+                "bProcessing": true,
+                "bServerSide": true,
+                "bShowAll": false,
+                "bPaginate": true,
+                "bLengthChange": false,
+                "bFilter": true,
+                "bSort": true,
+                "bInfo": true,
+                "bAutoWidth": false,
+                "iDisplayLength": 50,
+                "sPaginationType": "four_button",
+                "aoColumns": [
+                                { sWidth: '150px', "mDataProp": "Time" }, //Time
+                                { sWidth: '80px', "mDataProp": "Level" }, //Level
+                                { sWidth: '240px', "mDataProp": "Source" }, //Source
+                                { sWidth: 'auto', "mDataProp": "Message", "bSortable": false }, //Message
+                                { sWidth: 'auto', "mDataProp": "Details", "bSortable": false, "bVisible": false, "fnRender": function (row) {
+                                        var result = "<div>Method: " + row.aData["Method"] + "</div>" +
+                                            "<div>Exception Type: " + row.aData["ExceptionType"] + "</div>" +
+                                                "<div class=\"stackFrame\">Exception: " + row.aData["Exception"] + "</div>";
+                                        return result;
+                                    }
+                                } //Details
+                            ],
+                "aaSorting": [[0, 'desc']],
+                "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+                          fnRowCallback(nRow, aData);
+                }
+            });
+        });
+
+        function fnRowCallback(nRow, aData) {
+            //e.row.style.boarder = "";
+
+            if (aData["Level"] == "Warn") {
+                nRow.style.backgroundColor = "#FFD700";
+            }
+            else if (aData["Level"] == "Error") {
+                nRow.style.backgroundColor = "#FF7500";
+            }
+            else if (aData["Level"] == "Fatal") {
+                nRow.style.backgroundColor = "black";
+                nRow.style.color = "red";
+            }
+        }
+    </script>
+}

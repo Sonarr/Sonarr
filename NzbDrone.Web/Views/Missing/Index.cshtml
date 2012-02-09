@@ -16,7 +16,7 @@
 }
 
 <div class="grid-container">
-    <table id="historyGrid" class="hidden-grid">
+    <table id="missingGrid" class="dataTablesGrid hidden-grid">
         <thead>
             <tr>
                 <th>Series Title</th>
@@ -44,7 +44,7 @@
     $(document).ready(function () {
         $('#historyGrid').removeClass('hidden-grid');
 
-        oTable = $('#historyGrid').dataTable({
+        oTable = $('.dataTablesGrid').dataTable({
             //"sAjaxSource": "History/AjaxBinding",
             //"bProcessing": true,
             "bShowAll": false,
