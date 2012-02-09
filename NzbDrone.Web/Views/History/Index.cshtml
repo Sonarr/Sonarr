@@ -15,30 +15,30 @@
 }
 
 <div class="grid-container">
-<table id="historyGrid" class="hidden-grid">
-    <thead>
-        <tr>
-            <th></th>
-            <th>Series Title</th>
-            <th>Episode</th>
-            <th>Episode Title</th>
-            <th>Quality</th>
-            <th>Grabbed On</th>
+    <table id="historyGrid" class="hidden-grid">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Series Title</th>
+                <th>Episode</th>
+                <th>Episode Title</th>
+                <th>Quality</th>
+                <th>Grabbed On</th>
         
-            @*Commands Column*@
-            <th>Actions</th>
+                @*Commands Column*@
+                <th>Actions</th>
             
-            @*Details Column*@
-            <th style="display: none;">Details</th>
-        </tr>
-    </thead>
-    <tbody>
-        @*@foreach(var history in Model)
-        {
-            Html.RenderPartial("History", history);
-        }*@
-    </tbody>
-</table>
+                @*Details Column*@
+                <th style="display: none;">Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            @*@foreach(var history in Model)
+            {
+                Html.RenderPartial("History", history);
+            }*@
+        </tbody>
+    </table>
 </div>
 
 <script type="text/javascript">

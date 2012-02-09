@@ -53,9 +53,6 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="Mvc.JQuery.Datatables">
-      <HintPath>..\packages\Mvc.JQuery.Datatables.1.1.47\lib\net40\Mvc.JQuery.Datatables.dll</HintPath>
-    </Reference>
     <Reference Include="MvcMiniProfiler, Version=1.9.0.0, Culture=neutral, PublicKeyToken=b44f9351044011a3, processorArchitecture=MSIL">
       <HintPath>..\packages\MiniProfiler.1.9\lib\net40\MvcMiniProfiler.dll</HintPath>
     </Reference>
@@ -273,7 +270,6 @@
     <Compile Include="App_Start\EntityFramework.SqlServerCompact.cs" />
     <Compile Include="App_Start\Logging.cs" />
     <Compile Include="App_Start\MiniProfiler.cs" />
-    <Compile Include="App_Start\RegisterDatatablesModelBinder.cs" />
     <Compile Include="Filters\JsonErrorFilter.cs" />
     <Compile Include="Controllers\CommandController.cs" />
     <Compile Include="Controllers\DirectoryController.cs" />
@@ -301,7 +297,6 @@
     <Compile Include="Helpers\DescriptionExtension.cs" />
     <Compile Include="Helpers\HtmlPrefixScopeExtensions.cs" />
     <Compile Include="Helpers\IsCurrentActionHelper.cs" />
-    <Compile Include="Models\HistoryGridModel.cs" />
     <Compile Include="Models\UpcomingEpisodesModel.cs" />
     <Compile Include="Models\SeasonModel.cs" />
     <Compile Include="Models\SeriesDetailsModel.cs" />
@@ -489,7 +484,6 @@
     <Content Include="Scripts\jquery-1.7.1-vsdoc.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
-    <Content Include="Scripts\jquery.dataTables.columnFilter.js" />
     <Content Include="Scripts\jquery.hotkeys.js" />
     <Content Include="Scripts\jquery.livequery.js" />
     <Content Include="Scripts\jquery.validate-vsdoc.js" />
@@ -686,7 +680,6 @@
     <None Include="Scripts\DataTables-1.9.0\extras\FixedColumns\media\js\FixedColumns.min.js.gz" />
     <None Include="Scripts\DataTables-1.9.0\extras\Scroller\media\js\Scroller.min.js.gz" />
     <None Include="Scripts\DataTables-1.9.0\extras\TableTools\media\js\TableTools.min.js.gz" />
-    <Content Include="Views\Shared\DataTable.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

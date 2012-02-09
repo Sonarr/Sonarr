@@ -1,4 +1,4 @@
-﻿@model List<MissingEpisodeModel>
+﻿@model String
 @using NzbDrone.Common
 @using NzbDrone.Web.Helpers
 @using NzbDrone.Web.Models;
@@ -14,44 +14,73 @@
         <li>@Ajax.ActionLink("Start Recent Backlog Search", "RecentBacklogSearch", "Command", null, null, new { title = "Backlog search for missing episodes that aired in the last 30 days only" })</li>
     </ul>
 }
-@{Html.Telerik().Grid<MissingEpisodeModel>().Name("missing")
-           .TableHtmlAttributes(new { @class = "Grid" })
-            .Columns(columns =>
-                         {
-                             columns.Bound(c => c.SeriesTitle)
-                                            .ClientTemplate("<a href=" +
-                                                            Url.Action("Details", "Series", new { seriesId = "<#= SeriesId #>" }) +
-                                                            "><#= SeriesTitle #></a>")
-                                            .Title("Series Title");
-                             columns.Bound(c => c.SeasonNumber).Title("Season #").Width(85);
-                             columns.Bound(c => c.EpisodeNumber).Title("Episode #").Width(85);
-                             columns.Bound(c => c.EpisodeTitle).Title("Episode Title");
-                             columns.Bound(c => c.AirDate)
-                                 .ClientTemplate("<#= AirDateString #>")
-                                 .Title("Air Date")
-                                 .Width(90);
-                             columns.Bound(c => c.EpisodeId)
-                                     .Title("Actions")
-                                     .ClientTemplate(Ajax.ImageActionLink("../../Content/Images/Search.png", new { Alt = "Search", Title = "Search for episode", @class = "searchImage" }, "Search", "Episode", new { EpisodeId = "<#= EpisodeId #>" }, null, null).ToString())
-                                     .Width("40");
-                         })
-            .DetailView(detailView => detailView.ClientTemplate(
-                "<fieldset>" +
-                "<div><b>Overview: </b><#= Overview #></div>" +
-                "</fieldset>"
-                                          ))
-            .DataBinding(data => data.Ajax().Select("_AjaxBinding", "Missing"))
-            .Sortable(rows => rows.OrderBy(epSort => epSort.Add(c => c.AirDate).Descending()).Enabled(true))
-            .Filterable(filtering => filtering
-            .Filters(filters => filters
-                .Add(o => o.SeasonNumber).IsGreaterThan(0)))
 
-            .Pageable(
-                c =>
-                c.PageSize(20).Position(GridPagerPosition.Bottom).Style(GridPagerStyles.NextPrevious))
-            .ClientEvents(clientEvents =>
+<div class="grid-container">
+    <table id="historyGrid" class="hidden-grid">
+        <thead>
+            <tr>
+                <th>Series Title</th>
+                <th>Episode</th>
+                <th>Episode Title</th>
+                <th>AirDate</th>
+        
+                @*Commands Column*@
+                <th>Actions</th>
+            
+                @*Details Column*@
+                <th style="display: none;">Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            @*@foreach(var history in Model)
             {
-                if (EnviromentProvider.IsProduction)
-                    clientEvents.OnError("grid_onError");
-            })
-            .Render();}
+                Html.RenderPartial("History", history);
+            }*@
+        </tbody>
+    </table>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#historyGrid').removeClass('hidden-grid');
+
+        oTable = $('#historyGrid').dataTable({
+            //"sAjaxSource": "History/AjaxBinding",
+            //"bProcessing": true,
+            "bShowAll": false,
+            "aaData": @Html.Raw(Model),
+            "bPaginate": true,
+            "bLengthChange": false,
+            "bFilter": true,
+            "bSort": true,
+            "bInfo": true,
+            "bAutoWidth": false,
+            "iDisplayLength": 20,
+            "sPaginationType": "four_button",
+            "aoColumns": [
+                            { sWidth: 'auto', "mDataProp": "SeriesTitle" }, //Series Title
+                            { sWidth: '80px', "mDataProp": "EpisodeNumbering", "bSortable": false }, //EpisodeNumbering
+                            { sWidth: 'auto', "mDataProp": "EpisodeTitle", "bSortable": false }, //Episode Title
+                            { sWidth: '150px', "mDataProp": function (source, type, val) {
+                                                                    // 'display' and 'filter' use our fancy naming
+                                                                    if (type === 'display' || type === 'filter') {
+                                                                        return source["AirDateString"];
+                                                                    }
+                                                                    // 'sort' and 'type' both just use the raw data
+                                                                    return source["AirDate"];
+                                                                } 
+                            }, //Grabbed On
+                            { sWidth: '40px', "mDataProp": "EpisodeId", "bSortable": false, "fnRender": function (row) {
+                                    return createImageAjaxLink('/Episode/Search?episodeId=' + row.aData["EpisodeId"], '../../Content/Images/Search.png', 'Search', 'Search for Episode', 'searchImage');
+                                }
+                            }, //Actions
+                            { sWidth: 'auto', "mDataProp": "Details", "bSortable": false, "bVisible": false, "fnRender": function (row) {
+                                var result = "<b>Overview: </b>" + row.aData["Overview"] + "<br/>";
+                                    return result;
+                                }
+                            } //Details
+                        ],
+            "aaSorting": [[3, 'desc']]
+        });
+    });
+</script>

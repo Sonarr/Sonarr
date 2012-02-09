@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 using NzbDrone.Core;
 using NzbDrone.Core.Providers;
 using NzbDrone.Web.Models;
@@ -21,7 +22,23 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            var missingEpisodes = _episodeProvider.EpisodesWithoutFiles(false);
+
+            var missing = missingEpisodes.Select(e => new MissingEpisodeModel
+            {
+                EpisodeId = e.EpisodeId,
+                SeriesId = e.SeriesId,
+                EpisodeNumbering = string.Format("{0}x{1:00}", e.SeasonNumber, e.EpisodeNumber),
+                EpisodeTitle = e.Title,
+                Overview = e.Overview,
+                SeriesTitle = e.Series.Title,
+                AirDate = e.AirDate.Value.ToString(),
+                AirDateString = e.AirDate.Value.ToBestDateString()
+            });
+
+            var serialized = new JavaScriptSerializer().Serialize(missing);
+
+            return View((object)serialized);
         }
 
         [GridAction]
@@ -33,12 +50,11 @@ namespace NzbDrone.Web.Controllers
             {
                 EpisodeId = e.EpisodeId,
                 SeriesId = e.SeriesId,
-                SeasonNumber = e.SeasonNumber,
-                EpisodeNumber = e.EpisodeNumber,
+                EpisodeNumbering = string.Format("{0}x{1:00}", e.SeasonNumber, e.EpisodeNumber),
                 EpisodeTitle = e.Title,
                 Overview = e.Overview,
                 SeriesTitle = e.Series.Title,
-                AirDate = e.AirDate.Value,
+                AirDate = e.AirDate.Value.ToString(),
                 AirDateString = e.AirDate.Value.ToBestDateString()
             });
 
