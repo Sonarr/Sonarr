@@ -8,8 +8,7 @@ namespace NzbDrone.Web.Models
         public int SeriesId { get; set; }
         public int EpisodeId { get; set; }
         public string SeriesTitle { get; set; }
-        public int SeasonNumber { get; set; }
-        public int EpisodeNumber { get; set; }
+        public string EpisodeNumbering { get; set; }
         public string Title { get; set; }
         public string Overview { get; set; }
         public DateTime AirDateTime { get; set; }
