@@ -1,4 +1,4 @@
-﻿@model List<HistoryModel>
+﻿@model String
 @using NzbDrone.Common
 @using NzbDrone.Web.Models
 @using NzbDrone.Web.Helpers
@@ -20,8 +20,7 @@
         <tr>
             <th></th>
             <th>Series Title</th>
-            <th>Season #</th>
-            <th>Episode #</th>
+            <th>Episode</th>
             <th>Episode Title</th>
             <th>Quality</th>
             <th>Grabbed On</th>
@@ -30,14 +29,14 @@
             <th>Actions</th>
             
             @*Details Column*@
-            <th>Detailsn</th>
+            <th style="display: none;">Details</th>
         </tr>
     </thead>
     <tbody>
-        @foreach(var history in Model)
+        @*@foreach(var history in Model)
         {
             Html.RenderPartial("History", history);
-        }
+        }*@
     </tbody>
 </table>
 </div>
@@ -55,6 +54,10 @@
         $('#historyGrid').removeClass('hidden-grid');
 
         oTable = $('#historyGrid').dataTable({
+            //"sAjaxSource": "History/AjaxBinding",
+            //"bProcessing": true,
+            "bShowAll": false,
+            "aaData": @Html.Raw(Model),
             "bPaginate": true,
             "bLengthChange": false,
             "bFilter": true,
@@ -64,17 +67,56 @@
             "iDisplayLength": 20,
             "sPaginationType": "four_button",
             "aoColumns": [
-                            { sWidth: '20px', "bSortable": false }, //Image
-                            { sWidth: 'auto' }, //Series Title
-                            { sWidth: '90px' }, //Season #
-                            { sWidth: '90px' }, //Episode #
-                            { sWidth: 'auto' }, //Episode Title
-                            { sWidth: '70px' }, //Quality
-                            { sWidth: '150px' }, //Grabbed On
-                            { sWidth: '40px', "bSortable": false }, //Actions
-                            { sWidth: 'auto', "bSortable": false, "bVisible": false } //Details
+                            { sWidth: '20px', "bSortable": false, "mDataProp": "Indexer", "fnRender": function (row) {
+                                    return "<img src=\"/Content/Images/Indexers/" + row.aData["Indexer"] + ".png\" alt=\"" + row.aData["Indexer"] + "\">";
+                                }
+                            }, //Image
+                            { sWidth: 'auto', "mDataProp": "SeriesTitle" }, //Series Title
+                            { sWidth: '80px', "mDataProp": "EpisodeNumbering", "bSortable": false }, //EpisodeNumbering
+                            { sWidth: 'auto', "mDataProp": "EpisodeTitle", "bSortable": false }, //Episode Title
+                            { sWidth: '70px', "mDataProp": "Quality", "bSoratble": false }, //Quality
+                            { sWidth: '150px', "mDataProp": "Date" }, //Grabbed On
+                            { sWidth: '40px', "mDataProp": "HistoryId", "bSortable": false, "fnRender": function (row) {
+                                var deleteImage = "<img src=\"../../Content/Images/X.png\" alt=\"Delete\" title=\"Delete from History\" class=\"searchImage\" onclick=\"deleteHistory(this.parentNode.parentNode, " + row.aData["HistoryId"] + ")\">";
+                                var redownloadImage = "<img src=\"../../Content/Images/Downloading.png\" alt=\"Redownload\" title=\Redownload Episode\" class=\"searchImage\" onclick=\"redownloadHistory(this.parentNode.parentNode, " + row.aData["HistoryId"] + ", " + row.aData["EpisodeId"] + ")\">";
+
+                                return deleteImage + redownloadImage;
+                                    //return createImageAjaxLink('/History/Delete?historyId=' + row.aData["HistoryId"], '../../Content/Images/X.png', 'Delete', 'Delete from History', 'searchImage');
+                                }
+                            }, //Actions
+                            { sWidth: 'auto', "mDataProp": "Details", "bSortable": false, "bVisible": false, "fnRender": function (row) {
+                                    var result = "<b>Overview: </b>" + row.aData["EpisodeOverview"] + "<br/>" +
+                                        "<b>NZB Title: </b>" + row.aData["NzbTitle"] + "<br/>" +
+                                            "<b>Proper: </b>" + row.aData["IsProper"];
+                                    return result;
+                                }
+                            } //Details
                         ],
-            "aaSorting": [[6, 'desc']]
+            "aaSorting": [[5, 'desc']]
         });
     });
+    
+    function deleteHistory(row, historyId) {
+        //Delete from DB
+        $.ajax({
+                    type: "POST",
+                    url: deleteHistoryRowUrl,
+                    data: { historyId: historyId },
+                    success: function () {
+                        oTable.fnDeleteRow(oTable.fnGetPosition(row));
+                    }
+                });
+        
+    }
+    
+    function redownloadHistory(row, historyId, episodeId) {
+        $.ajax({
+                    type: "POST",
+                    url: redownloadUrl,
+                    data: { historyId: historyId, episodeId: episodeId },
+                    success: function () {
+                        oTable.fnDeleteRow(oTable.fnGetPosition(row));
+                    }
+                });
+    }
 </script>

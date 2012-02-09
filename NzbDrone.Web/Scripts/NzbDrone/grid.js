@@ -30,13 +30,21 @@ $('.dataTable td:not(:last-child)').live('click', function () {
     }
 
     else {
-        oTable.fnOpen(nTr, fnFormatDetails(oTable, nTr), 'Details');
+        oTable.fnOpen(nTr, fnFormatDetails(nTr), 'Details');
         $(nTr).addClass('details-opened');
     }
 });
 
 //Datatables format display details
-function fnFormatDetails(oTable, nTr) {
+function fnFormatDetails(nTr) {
     var aData = oTable.fnGetData(nTr);
-    return aData[aData.length - 1];
+    return aData["Details"];
+}
+
+//Create Image
+function createImageAjaxLink(url, image, alt, title, classes) {
+    var html = "<a onclick=\"Sys.Mvc.AsyncHyperlink.handleClick(this, new Sys.UI.DomEvent(event), { insertionMode: Sys.Mvc.InsertionMode.replace });\" href=\"" + url + "\">" +
+                    "<img class=\"" + classes + "\" src=\"" + image + "\" title=\"" + title + "\" alt=\"" + alt + "\"></a>";
+
+    return html;
 }

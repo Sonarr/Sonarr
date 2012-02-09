@@ -1,5 +1,7 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
+using Mvc.JQuery.Datatables;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Providers;
 using NzbDrone.Web.Models;
@@ -24,20 +26,21 @@ namespace NzbDrone.Web.Controllers
             {
                 HistoryId = h.HistoryId,
                 SeriesId = h.SeriesId,
-                SeasonNumber = h.Episode.SeasonNumber,
-                EpisodeNumber = h.Episode.EpisodeNumber,
+                EpisodeNumbering = string.Format("{0}x{1:00}", h.Episode.SeasonNumber, h.Episode.EpisodeNumber),
                 EpisodeTitle = h.Episode.Title,
                 EpisodeOverview = h.Episode.Overview,
                 SeriesTitle = h.SeriesTitle,
                 NzbTitle = h.NzbTitle,
                 Quality = h.Quality.ToString(),
                 IsProper = h.IsProper,
-                Date = h.Date,
+                Date = h.Date.ToString(),
                 Indexer = h.Indexer,
                 EpisodeId = h.EpisodeId
-            }).ToList();
+            }).OrderByDescending(h => h.Date).ToList();
 
-            return View(history);
+            var serialized = new JavaScriptSerializer().Serialize(history);
+
+            return View((object)serialized);
         }
 
         public JsonResult Trim()
@@ -71,29 +74,6 @@ namespace NzbDrone.Web.Controllers
             _jobProvider.QueueJob(typeof(EpisodeSearchJob), episodeId);
 
             return JsonNotificationResult.Info("Episode Redownload Started");
-        }
-
-        [GridAction]
-        public ActionResult _AjaxBinding()
-        {
-            var history = _historyProvider.AllItemsWithRelationships().Select(h => new HistoryModel
-                                            {
-                                                HistoryId = h.HistoryId,
-                                                SeriesId = h.SeriesId,
-                                                SeasonNumber = h.Episode.SeasonNumber,
-                                                EpisodeNumber = h.Episode.EpisodeNumber,
-                                                EpisodeTitle = h.Episode.Title,
-                                                EpisodeOverview = h.Episode.Overview,
-                                                SeriesTitle = h.SeriesTitle,
-                                                NzbTitle = h.NzbTitle,
-                                                Quality = h.Quality.ToString(),
-                                                IsProper = h.IsProper,
-                                                Date = h.Date,
-                                                Indexer = h.Indexer,
-                                                EpisodeId = h.EpisodeId
-                                            });
-
-            return View(new GridModel(history));
         }
     }
 }
