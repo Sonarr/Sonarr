@@ -688,7 +688,6 @@
     <None Include="Scripts\DataTables-1.9.0\extras\FixedColumns\media\js\FixedColumns.min.js.gz" />
     <None Include="Scripts\DataTables-1.9.0\extras\Scroller\media\js\Scroller.min.js.gz" />
     <None Include="Scripts\DataTables-1.9.0\extras\TableTools\media\js\TableTools.min.js.gz" />
-    <None Include="Views\Log\IndexOld.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

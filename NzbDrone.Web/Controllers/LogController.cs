@@ -29,11 +29,6 @@ namespace NzbDrone.Web.Controllers
             return View();
         }
 
-        public ActionResult IndexOld()
-        {
-            return View();
-        }
-
         public FileContentResult File()
         {
             string log = string.Empty;
@@ -101,12 +96,6 @@ namespace NzbDrone.Web.Controllers
                 aaData = logModels
             },
             JsonRequestBehavior.AllowGet);
-        }
-
-        [GridAction]
-        public ActionResult AjaxBindingOld()
-        {
-            return View(new GridModel(_logProvider.GetAllLogs()));
         }
     }
 }
