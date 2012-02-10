@@ -130,13 +130,6 @@ hr
     font-family: Consolas, Monospace;
 }
 
-/*fix telerik grid missing border*/
-.t-grid .t-last
-{
-    border-bottom: 1px solid #EEEEEE;
-    border-color: #EEEEEE;
-}
-
 
 /* Footer */
 #footer

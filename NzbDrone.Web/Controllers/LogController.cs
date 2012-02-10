@@ -7,7 +7,6 @@ using System.Web.Mvc;
 using NzbDrone.Common;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Web.Models;
-using Telerik.Web.Mvc;
 
 namespace NzbDrone.Web.Controllers
 {

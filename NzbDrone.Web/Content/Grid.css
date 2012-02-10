@@ -84,35 +84,3 @@
 .grid-container {
     overflow: hidden;
 }
-
-
-/* Telerik Grid */
-.t-grid td
-{
-    line-height: 0.6em;
-}
-    
-.t-grid .t-header
-{
-    line-height: 1.8em;
-}
-    
-.t-grid-header .t-header .t-link
-{
-    padding: 0.3em 0.9em 1.0em 0.6em;
-}
-    
-.t-grid .t-detail-cell
-{
-    line-height: 1.5em;
-}
-    
-.t-grid td 
-{
-    padding: 0em 0.6em;
-}
-
-.t-no-data td
-{
-    padding: 0.6em 0.6em;
-}

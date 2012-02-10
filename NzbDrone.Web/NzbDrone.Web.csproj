@@ -112,10 +112,6 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Xml" />
-    <Reference Include="Telerik.Web.Mvc, Version=2011.3.1115.340, Culture=neutral, PublicKeyToken=29ac1a93ec063d92, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\TelerikMvcExtensions.2011.3.1115\lib\net40\Telerik.Web.Mvc.dll</HintPath>
-    </Reference>
     <Reference Include="TvdbLib, Version=0.8.8.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\TvdbLib.dll</HintPath>
@@ -126,25 +122,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\2011.3.1115\Metro\editor.png" />
-    <Content Include="Content\2011.3.1115\Metro\imagebrowser.png" />
-    <Content Include="Content\2011.3.1115\Metro\loading.gif" />
-    <Content Include="Content\2011.3.1115\Metro\slider-h.gif" />
-    <Content Include="Content\2011.3.1115\Metro\slider-v.gif" />
-    <Content Include="Content\2011.3.1115\Metro\sprite.png" />
-    <Content Include="Content\2011.3.1115\Sitefinity\editor.png" />
-    <Content Include="Content\2011.3.1115\Sitefinity\imagebrowser.png" />
-    <Content Include="Content\2011.3.1115\Sitefinity\loading.gif" />
-    <Content Include="Content\2011.3.1115\Sitefinity\slider-h.gif" />
-    <Content Include="Content\2011.3.1115\Sitefinity\slider-v.gif" />
-    <Content Include="Content\2011.3.1115\Sitefinity\sprite-vertical.png" />
-    <Content Include="Content\2011.3.1115\Sitefinity\sprite.png" />
-    <Content Include="Content\2011.3.1115\Sitefinity\treeview-line.png" />
-    <Content Include="Content\2011.3.1115\Sitefinity\treeview-nodes-rtl.png" />
-    <Content Include="Content\2011.3.1115\Sitefinity\treeview-nodes.png" />
-    <Content Include="Content\2011.3.1115\telerik.common.min.css" />
-    <Content Include="Content\2011.3.1115\telerik.metro.min.css" />
-    <Content Include="Content\2011.3.1115\telerik.sitefinity.min.css" />
     <Content Include="Content\DataTables-1.9.0\media\css\jquery.dataTables.css" />
     <Content Include="Content\DataTables-1.9.0\media\images\favicon.ico" />
     <Content Include="Content\DataTables-1.9.0\media\images\sort_asc.png" />
@@ -197,21 +174,6 @@
     <Compile Include="..\NzbDrone.Common\Properties\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="App_GlobalResources\EditorLocalization.en-US.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>EditorLocalization.en-US.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\GridLocalization.en-US.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>GridLocalization.en-US.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\UploadLocalization.en-US.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>UploadLocalization.en-US.resx</DependentUpon>
-    </Compile>
     <Compile Include="App_Start\EntityFramework.SqlServerCompact.cs" />
     <Compile Include="App_Start\Logging.cs" />
     <Compile Include="App_Start\MiniProfiler.cs" />
@@ -224,7 +186,6 @@
     <Compile Include="Controllers\HistoryController.cs" />
     <Compile Include="Controllers\LogController.cs" />
     <Compile Include="Controllers\AddSeriesController.cs" />
-    <Compile Include="Controllers\MisnamedController.cs" />
     <Compile Include="Controllers\MissingController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\SeriesController.cs" />
@@ -363,35 +324,6 @@
     <Content Include="Dynamic Expressions.html" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="Scripts\2011.3.1115\jquery-1.6.4.min.js" />
-    <Content Include="Scripts\2011.3.1115\jquery.validate.min.js" />
-    <Content Include="Scripts\2011.3.1115\telerik.autocomplete.min.js" />
-    <Content Include="Scripts\2011.3.1115\telerik.calendar.min.js" />
-    <Content Include="Scripts\2011.3.1115\telerik.chart.min.js" />
-    <Content Include="Scripts\2011.3.1115\telerik.combobox.min.js" />
-    <Content Include="Scripts\2011.3.1115\telerik.common.min.js" />
-    <Content Include="Scripts\2011.3.1115\telerik.datepicker.min.js" />
-    <Content Include="Scripts\2011.3.1115\telerik.datetimepicker.min.js" />
-    <Content Include="Scripts\2011.3.1115\telerik.draganddrop.min.js" />
-    <Content Include="Scripts\2011.3.1115\telerik.editor.min.js" />
-    <Content Include="Scripts\2011.3.1115\telerik.grid.editing.min.js" />
-    <Content Include="Scripts\2011.3.1115\telerik.grid.filtering.min.js" />
-    <Content Include="Scripts\2011.3.1115\telerik.grid.grouping.min.js" />
-    <Content Include="Scripts\2011.3.1115\telerik.grid.min.js" />
-    <Content Include="Scripts\2011.3.1115\telerik.grid.reordering.min.js" />
-    <Content Include="Scripts\2011.3.1115\telerik.grid.resizing.min.js" />
-    <Content Include="Scripts\2011.3.1115\telerik.imagebrowser.min.js" />
-    <Content Include="Scripts\2011.3.1115\telerik.list.min.js" />
-    <Content Include="Scripts\2011.3.1115\telerik.menu.min.js" />
-    <Content Include="Scripts\2011.3.1115\telerik.panelbar.min.js" />
-    <Content Include="Scripts\2011.3.1115\telerik.slider.min.js" />
-    <Content Include="Scripts\2011.3.1115\telerik.splitter.min.js" />
-    <Content Include="Scripts\2011.3.1115\telerik.tabstrip.min.js" />
-    <Content Include="Scripts\2011.3.1115\telerik.textbox.min.js" />
-    <Content Include="Scripts\2011.3.1115\telerik.timepicker.min.js" />
-    <Content Include="Scripts\2011.3.1115\telerik.treeview.min.js" />
-    <Content Include="Scripts\2011.3.1115\telerik.upload.min.js" />
-    <Content Include="Scripts\2011.3.1115\telerik.window.min.js" />
     <Content Include="Scripts\DataTables-1.9.0\media\js\jquery.dataTables.editable.js" />
     <Content Include="Scripts\DataTables-1.9.0\media\js\jquery.dataTables.js" />
     <Content Include="Scripts\DataTables-1.9.0\media\js\jquery.dataTables.min.js" />
@@ -493,9 +425,6 @@
     <Content Include="Views\AddSeries\RootList.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Misnamed\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Settings\System.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -524,26 +453,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Update\ViewLog.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_GlobalResources\UploadLocalization.en-US.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>UploadLocalization.en-US.designer.cs</LastGenOutput>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_GlobalResources\GridLocalization.en-US.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>GridLocalization.en-US.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_GlobalResources\EditorLocalization.en-US.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>EditorLocalization.en-US.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Settings\Index.cshtml" />

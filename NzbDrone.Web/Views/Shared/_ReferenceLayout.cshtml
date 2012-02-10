@@ -1,13 +1,11 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 @using NzbDrone.Web.Helpers
-@using Telerik.Web.Mvc.UI
+
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <link rel="SHORTCUT ICON" href="../../favicon.ico" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
-    @Html.IncludeCss("2011.3.1115/telerik.common.min.css")
-    @Html.IncludeCss("2011.3.1115/telerik.sitefinity.min.css")
     @Html.IncludeCss("jQueryUI/jquery-ui-1.8.16.custom.css")
     @Html.IncludeCss("jquery.gritter.css")
     @Html.IncludeCss("NzbDrone.css")
@@ -20,7 +18,7 @@
 </head>
 <body>
     @RenderBody()
-    @(Html.Telerik().ScriptRegistrar().jQuery(true))
+    @Html.IncludeScript("jquery-1.7.1.min.js")
     @Html.IncludeScript("jquery-ui-1.8.16.min.js")
     @Html.IncludeScript("jquery.livequery.js")
     @Html.IncludeScript("MicrosoftAjax.js")
@@ -36,7 +34,7 @@
     @Html.IncludeScript("NzbDrone/Notification.js")
     @Html.IncludeScript("NzbDrone/AutoBind.js")
     @Html.IncludeScript("NzbDrone/grid.js")
-    @Html.IncludeScript("DataTables-1.9.0/media/js/jquery.dataTables.js")
+    @Html.IncludeScript("DataTables-1.9.0/media/js/jquery.dataTables.min.js")
     @Html.IncludeScript("DataTables-1.9.0/media/js/jquery.dataTables.editable.js")
     @Html.IncludeScript("DataTables-1.9.0/media/js/jquery.jeditable.js")
     @Html.IncludeScript("DataTables-1.9.0/media/js/jquery.validate.js")

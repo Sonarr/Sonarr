@@ -6,7 +6,6 @@ using NzbDrone.Core;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
 using NzbDrone.Web.Models;
-using Telerik.Web.Mvc;
 
 namespace NzbDrone.Web.Controllers
 {

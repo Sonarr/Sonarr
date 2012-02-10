@@ -4,7 +4,6 @@ using System.Web.Script.Serialization;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Providers;
 using NzbDrone.Web.Models;
-using Telerik.Web.Mvc;
 
 namespace NzbDrone.Web.Controllers
 {

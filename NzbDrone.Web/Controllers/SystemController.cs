@@ -11,7 +11,6 @@ using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.DownloadClients;
 using NzbDrone.Web.Models;
-using Telerik.Web.Mvc;
 
 namespace NzbDrone.Web.Controllers
 {
