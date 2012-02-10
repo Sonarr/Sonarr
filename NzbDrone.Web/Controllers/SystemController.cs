@@ -109,12 +109,7 @@ namespace NzbDrone.Web.Controllers
         public ActionResult PendingProcessing()
         {
             ViewData["DropDir"] = _configProvider.SabDropDirectory;
-            return View();
-        }
 
-        [GridAction]
-        public ActionResult _PendingProcessingAjaxBinding()
-        {
             var dropDir = _configProvider.SabDropDirectory;
             var subFolders = _diskProvider.GetDirectories(dropDir);
 
@@ -125,7 +120,7 @@ namespace NzbDrone.Web.Controllers
             {
                 var model = new PendingProcessingModel();
                 model.Name = new DirectoryInfo(folder).Name;
-                model.Created = _diskProvider.DirectoryDateCreated(folder);
+                model.Created = _diskProvider.DirectoryDateCreated(folder).ToString();
                 model.Path = folder.Replace(Path.DirectorySeparatorChar, '|').Replace(Path.VolumeSeparatorChar, '^').Replace('\'', '`');
 
                 var files = _diskProvider.GetFileInfos(folder, "*.*", SearchOption.AllDirectories);
@@ -143,7 +138,9 @@ namespace NzbDrone.Web.Controllers
                 models.Add(model);
             }
 
-            return View(new GridModel(models));
+            var serialized = new JavaScriptSerializer().Serialize(models);
+
+            return View((object)serialized);
         }
 
         public JsonResult RenamePendingProcessing(string path)

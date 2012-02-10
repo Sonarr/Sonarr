@@ -40,25 +40,5 @@ namespace NzbDrone.Web.Controllers
 
             return View((object)serialized);
         }
-
-        [GridAction]
-        public ActionResult _AjaxBinding()
-        {
-            var missingEpisodes = _episodeProvider.EpisodesWithoutFiles(false);
-
-            var missing = missingEpisodes.Select(e => new MissingEpisodeModel
-            {
-                EpisodeId = e.EpisodeId,
-                SeriesId = e.SeriesId,
-                EpisodeNumbering = string.Format("{0}x{1:00}", e.SeasonNumber, e.EpisodeNumber),
-                EpisodeTitle = e.Title,
-                Overview = e.Overview,
-                SeriesTitle = e.Series.Title,
-                AirDate = e.AirDate.Value.ToString(),
-                AirDateString = e.AirDate.Value.ToBestDateString()
-            });
-
-            return View(new GridModel(missing));
-        }
     }
 }
