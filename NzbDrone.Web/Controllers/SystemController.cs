@@ -36,15 +36,31 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult Jobs()
         {
-            ViewData["Queue"] = _jobProvider.Queue.Select(c => new JobQueueItemModel
+            var queue = _jobProvider.Queue.Select(c => new JobQueueItemModel
             {
                 Name = c.JobType.Name,
                 TargetId = c.TargetId,
                 SecondaryTargetId = c.SecondaryTargetId
             });
-            var jobs = _jobProvider.All();
 
-            return View(jobs);
+            var serializedQueue = new JavaScriptSerializer().Serialize(queue);
+
+            ViewData["Queue"] = serializedQueue;
+
+            var jobs = _jobProvider.All().Select(j => new JobModel
+                                                          {
+                                                                  Id = j.Id,
+                                                                  Enable = j.Enable,
+                                                                  TypeName = j.TypeName,
+                                                                  Name = j.Name,
+                                                                  Interval = j.Interval,
+                                                                  LastExecution = j.LastExecution.ToString(),
+                                                                  Success = j.Success
+                                                          }).OrderBy(j => j.Interval);
+
+            var serializedJobs = new JavaScriptSerializer().Serialize(jobs);
+
+            return View((object)serializedJobs);
         }
 
         public ActionResult Indexers()

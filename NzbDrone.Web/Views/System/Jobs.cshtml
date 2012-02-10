@@ -1,9 +1,113 @@
 @using NzbDrone.Web.Models
 @using NzbDrone.Web.Helpers
-@model IEnumerable<NzbDrone.Core.Repository.JobDefinition>
+@model string
 @{ViewBag.Title = "Jobs";}
 
-    @{Html.Telerik().Grid(Model).Name("Grid")
+@section HeaderContent
+{
+    @Html.IncludeCss("Grid.css")
+}
+
+<div class="grid-container">
+    <table id="jobGrid" class="dataTablesGrid hidden-grid no-details">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Enable</th>
+                <th>Type Name</th>
+                <th>Name</th>
+                <th>Interval</th>
+                <th>Last Execution</th>
+                <th>Success</th>
+        
+                @*Commands Column*@
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+<h1>Items currently in queue</h1>
+
+<div class="grid-container">
+    <table id="queueGrid" class="dataTablesGrid hidden-grid no-details">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Target</th>
+                <th>Secondary</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#jobGrid').removeClass('hidden-grid');
+
+            oTable = $('#jobGrid').dataTable({
+            "bShowAll": false,
+            "aaData": @Html.Raw(Model),
+            "bPaginate": false,
+            "bLengthChange": false,
+            "bFilter": false,
+            "bSort": false,
+            "bInfo": false,
+            "bAutoWidth": false,
+            "iDisplayLength": 20,
+            "sPaginationType": "four_button",
+            "aoColumns": [
+                            { sWidth: '30px', "mDataProp": "Id"}, //Id
+                            { sWidth: '70px', "mDataProp": "Enable" }, //Enable
+                            { sWidth: '80px', "mDataProp": "TypeName" }, //TypeName
+                            { sWidth: 'auto', "mDataProp": "Name" }, //Name
+                            { sWidth: '70px', "mDataProp": "Interval" }, //Interval
+                            { sWidth: '150px', "mDataProp": "LastExecution" }, //LastExecution
+                            { sWidth: '80px', "mDataProp": "Success" }, //Success
+                            { sWidth: '40px', "mDataProp": "Actions", "bSortable": false, "fnRender": function (row) {
+                                if (!row.aData["Enable"])
+                                    return "";
+
+                                return createImageAjaxLink('/System/RunJob?typeName=' + row.aData["TypeName"], '../../Content/Images/Gear.png', 'Run', 'Run Job', 'searchImage');
+                                //return createImageAjaxLink('/History/Delete?historyId=' + row.aData["HistoryId"], '../../Content/Images/X.png', 'Delete', 'Delete from History', 'searchImage');
+                            }
+                            } //Actions
+            ],
+                "aaSorting": [[4, 'asc']]
+            });
+            
+            $('#queueGrid').removeClass('hidden-grid');
+
+            oTable = $('#queueGrid').dataTable({
+            "bShowAll": false,
+            "aaData": @ViewData["Queue"],
+            "bPaginate": false,
+            "bLengthChange": false,
+            "bFilter": false,
+            "bSort": false,
+            "bInfo": false,
+            "bAutoWidth": false,
+            "iDisplayLength": 20,
+            "sPaginationType": "four_button",
+            "aoColumns": [
+                            { sWidth: 'auto', "mDataProp": "Type"}, //Type
+                            { sWidth: '100px', "mDataProp": "Target" }, //Target
+                            { sWidth: '100px', "mDataProp": "SecondaryTarget" }, //SecondaryTarget
+            ]
+            });
+        });
+    </script>
+}
+
+
+
+
+@*@{Html.Telerik().Grid(Model).Name("Grid")
           .Columns(c => c.Bound(g => g.Id))
           .Columns(c => c.Bound(g => g.Enable))
           .Columns(c => c.Bound(g => g.TypeName))
@@ -28,4 +132,4 @@
           .Columns(c => c.Bound(g => g.Name).Title("Type").Width(100))
           .Columns(c => c.Bound(g => g.TargetId).Title("Target"))
           .Columns(c => c.Bound(g => g.SecondaryTargetId).Title("Secondary Target"))
-        .Render();}
+        .Render();}*@
