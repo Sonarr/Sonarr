@@ -65,7 +65,10 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult Indexers()
         {
-            return View(_indexerProvider.All());
+            var indexers = _indexerProvider.All();
+            var serialized = new JavaScriptSerializer().Serialize(indexers);
+
+            return View((object)serialized);
         }
 
         public ActionResult Config()

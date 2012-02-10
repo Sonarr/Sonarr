@@ -103,33 +103,3 @@
         });
     </script>
 }
-
-
-
-
-@*@{Html.Telerik().Grid(Model).Name("Grid")
-          .Columns(c => c.Bound(g => g.Id))
-          .Columns(c => c.Bound(g => g.Enable))
-          .Columns(c => c.Bound(g => g.TypeName))
-          .Columns(c => c.Bound(g => g.Name))
-          .Columns(c => c.Bound(g => g.Interval))
-          .Columns(c => c.Bound(g => g.LastExecution))
-          .Columns(c => c.Bound(g => g.Success))
-          .Columns(c => c.Bound(g => g.Id)
-            .Title("Command")  
-            .Template(@<text>  @{ if(item.Enable)
-                                {
-                                    @Ajax.ImageActionLink("../../Content/Images/Gear.png", new { Alt = "Run", Width = 18, Height = 18, Title = "Run Job" }, "RunJob", new { TypeName = item.TypeName }, null, null)
-                                }
-                              }
-                    </text>))
-          .Sortable(c=>c.OrderBy(col=>col.Add(g=>g.Interval)))
-          .Render();}
-
-    <h1>Items currently in queue</h1>
-
-    @{Html.Telerik().Grid((IEnumerable<JobQueueItemModel>)ViewData["Queue"]).Name("QueueGrid")
-          .Columns(c => c.Bound(g => g.Name).Title("Type").Width(100))
-          .Columns(c => c.Bound(g => g.TargetId).Title("Target"))
-          .Columns(c => c.Bound(g => g.SecondaryTargetId).Title("Secondary Target"))
-        .Render();}*@
