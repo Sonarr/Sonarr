@@ -149,6 +149,7 @@
     <Content Include="Content\jQueryUI\images\ui-bg_flat_20_ffffff_40x100.png" />
     <Content Include="Content\jQueryUI\images\ui-bg_flat_30_065efe_40x100.png" />
     <Content Include="Content\jQueryUI\images\ui-bg_flat_30_616161_40x100.png" />
+    <Content Include="Content\jQueryUI\images\ui-bg_flat_30_b40404_40x100.png" />
     <Content Include="Content\jQueryUI\images\ui-bg_flat_40_065efe_40x100.png" />
     <Content Include="Content\jQueryUI\images\ui-bg_white-lines_10_000000_40x100.png" />
     <Content Include="Content\jQueryUI\images\ui-icons_98d2fb_256x240.png" />
