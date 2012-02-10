@@ -42,6 +42,9 @@ del Twitterizer2.pdb /Q /F /S
 del *.vshost.exe.* /Q /F /S
 del ninject*.pdb /Q /F /S
 del ninject*.xml /Q /F /S
+del nlog.pdb /Q /F /S
+del Newtonsoft.Json.xml /Q /F /S
+del Newtonsoft.Json.pdb /Q /F /S
 del Mvc*.pdb /Q /F /S
 
 ..\Libraries\7zip\7za.exe a -tzip ..\NzbDrone.zip *
