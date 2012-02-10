@@ -180,6 +180,8 @@
                 "Save": function () {
                     //Save the form
                     $('#SeriesEditorForm').submit();
+                    updateStatus();
+
                     $(this).dialog("close");
                 },
                 Cancel: function () {
@@ -261,5 +263,31 @@
                 //Open the dialog
                 $("#seriesDelete").dialog("open");
             });
+            
+            function updateStatus() {
+                var monitored = $('#Monitored').attr('checked');
+                var seriesId = $('#SeriesId').val();
+                var img = $('.' + seriesId).children('.statusColumn').children('img');
+                var state = img.attr('alt');
+
+                if (state == "Ended")
+                    return;
+
+                if (state == "Active") {
+                    if (!monitored) {
+                        img.attr('title', 'Not monitored');
+                        img.attr('alt', 'Paused');
+                        img.attr('src', '../../Content/Images/pause.png');
+                    }
+                }
+
+                if (state == "Paused") {
+                    if (monitored) {
+                        img.attr('title', 'Continuing');
+                        img.attr('alt', 'Active');
+                        img.attr('src', '../../Content/Images/play.png');
+                    }
+                }
+            }
     </script>
 }
