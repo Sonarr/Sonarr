@@ -10,6 +10,8 @@ $('.seriesTable a, .dataTable a').live('click', function (event) {
 });
 
 $('.seriesTable .data-row td:not(:last-child)').live('click', function () {
+    if ($(this).closest('table').hasClass('no-details'))
+        return;
     $(this).parent('tr').next('.detail-row').toggle();
 });
 
@@ -22,6 +24,9 @@ function grid_onError(e) {
 var oTable;
 
 $('.dataTable td:not(:last-child)').live('click', function () {
+    if ($(this).closest('table').hasClass('no-details'))
+        return;
+
     var nTr = this.parentNode;
 
     if ($(nTr).hasClass('details-opened')) {

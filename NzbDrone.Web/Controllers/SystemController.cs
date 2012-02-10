@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 using NzbDrone.Common;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Jobs;
@@ -43,8 +44,6 @@ namespace NzbDrone.Web.Controllers
             });
             var jobs = _jobProvider.All();
 
-
-
             return View(jobs);
         }
 
@@ -55,30 +54,36 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult Config()
         {
-            return View(_configProvider.All());
+            var config = _configProvider.All();
+            var serialized = new JavaScriptSerializer().Serialize(config);
+
+            return View((object)serialized);
         }
 
-        [GridAction]
-        public ActionResult _SelectAjaxEditing()
+        public JsonResult SelectConfigAjax()
         {
-            return View(new GridModel(_configProvider.All()));
+            var config = _configProvider.All();
+
+            return Json(new
+                            {
+                                    iTotalRecords = config.Count,
+                                    iTotalDisplayRecords = config.Count,
+                                    aaData = config
+                            }, JsonRequestBehavior.AllowGet);
         }
 
-        [AcceptVerbs(HttpVerbs.Post)]
-        [GridAction]
-        public ActionResult _SaveAjaxEditing(string key, string value)
+        [HttpPost]
+        public string SaveConfigAjax(string id, string value)
+        {
+            _configProvider.SetValue(id, value);
+            return value;
+        }
+
+        [HttpPost]
+        public string InsertConfigAjax(string key, string value)
         {
             _configProvider.SetValue(key, value);
-            return View(new GridModel(_configProvider.All()));
-        }
-
-        [AcceptVerbs(HttpVerbs.Post)]
-        [GridAction]
-        public ActionResult _InsertAjaxEditing(string key, string value)
-        {
-
-            _configProvider.SetValue(key, value);
-            return View(new GridModel(_configProvider.All()));
+            return key;
         }
 
         //PostDownloadView

@@ -391,9 +391,11 @@
     <Content Include="Scripts\2011.3.1115\telerik.treeview.min.js" />
     <Content Include="Scripts\2011.3.1115\telerik.upload.min.js" />
     <Content Include="Scripts\2011.3.1115\telerik.window.min.js" />
+    <Content Include="Scripts\DataTables-1.9.0\media\js\jquery.dataTables.editable.js" />
     <Content Include="Scripts\DataTables-1.9.0\media\js\jquery.dataTables.js" />
     <Content Include="Scripts\DataTables-1.9.0\media\js\jquery.dataTables.min.js" />
-    <Content Include="Scripts\DataTables-1.9.0\media\js\jquery.js" />
+    <Content Include="Scripts\DataTables-1.9.0\media\js\jquery.jeditable.js" />
+    <Content Include="Scripts\DataTables-1.9.0\media\js\jquery.validate.js" />
     <Content Include="Scripts\jquery-1.7.1-vsdoc.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />

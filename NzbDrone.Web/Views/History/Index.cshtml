@@ -37,23 +37,24 @@
     </table>
 </div>
 
-<script type="text/javascript">
-    deleteHistoryRowUrl = '../History/Delete';
-    redownloadUrl = '../History/Redownload';
+@section Scripts{
+    <script type="text/javascript">
+        deleteHistoryRowUrl = '../History/Delete';
+        redownloadUrl = '../History/Redownload';
 
-    function reloadHistoryGrid() {
-        var grid = $('#history').data('tGrid');
-        grid.ajaxRequest();
-    }
+        function reloadHistoryGrid() {
+            var grid = $('#history').data('tGrid');
+            grid.ajaxRequest();
+        }
 
-    $(document).ready(function () {
-        $('#historyGrid').removeClass('hidden-grid');
+        $(document).ready(function() {
+            $('#historyGrid').removeClass('hidden-grid');
 
-        oTable = $('.dataTablesGrid').dataTable({
+            oTable = $('.dataTablesGrid').dataTable({
             //"sAjaxSource": "History/AjaxBinding",
             //"bProcessing": true,
-            "bShowAll": false,
-            "aaData": @Html.Raw(Model),
+                "bShowAll": false,
+                "aaData": @Html.Raw(Model),
             "bPaginate": true,
             "bLengthChange": false,
             "bFilter": true,
@@ -77,42 +78,48 @@
                                 var redownloadImage = "<img src=\"../../Content/Images/Downloading.png\" alt=\"Redownload\" title=\Redownload Episode\" class=\"searchImage\" onclick=\"redownloadHistory(this.parentNode.parentNode, " + row.aData["HistoryId"] + ", " + row.aData["EpisodeId"] + ")\">";
 
                                 return deleteImage + redownloadImage;
-                                    //return createImageAjaxLink('/History/Delete?historyId=' + row.aData["HistoryId"], '../../Content/Images/X.png', 'Delete', 'Delete from History', 'searchImage');
-                                }
+                                //return createImageAjaxLink('/History/Delete?historyId=' + row.aData["HistoryId"], '../../Content/Images/X.png', 'Delete', 'Delete from History', 'searchImage');
+                            }
                             }, //Actions
-                            { sWidth: 'auto', "mDataProp": "Details", "bSortable": false, "bVisible": false, "fnRender": function (row) {
-                                    var result = "<b>Overview: </b>" + row.aData["EpisodeOverview"] + "<br/>" +
-                                        "<b>NZB Title: </b>" + row.aData["NzbTitle"] + "<br/>" +
-                                            "<b>Proper: </b>" + row.aData["IsProper"];
-                                    return result;
-                                }
-                            } //Details
-                        ],
-            "aaSorting": [[5, 'desc']]
+                {
+                    sWidth: 'auto',
+                    "mDataProp": "Details",
+                    "bSortable": false,
+                    "bVisible": false,
+                    "fnRender": function(row) {
+                        var result = "<b>Overview: </b>" + row.aData["EpisodeOverview"] + "<br/>" +
+                            "<b>NZB Title: </b>" + row.aData["NzbTitle"] + "<br/>" +
+                                "<b>Proper: </b>" + row.aData["IsProper"];
+                        return result;
+                    }
+                } //Details
+            ],
+                "aaSorting": [[5, 'desc']]
+            });
         });
-    });
-    
-    function deleteHistory(row, historyId) {
-        //Delete from DB
-        $.ajax({
-                    type: "POST",
-                    url: deleteHistoryRowUrl,
-                    data: { historyId: historyId },
-                    success: function () {
-                        oTable.fnDeleteRow(oTable.fnGetPosition(row));
-                    }
-                });
-        
-    }
-    
-    function redownloadHistory(row, historyId, episodeId) {
-        $.ajax({
-                    type: "POST",
-                    url: redownloadUrl,
-                    data: { historyId: historyId, episodeId: episodeId },
-                    success: function () {
-                        oTable.fnDeleteRow(oTable.fnGetPosition(row));
-                    }
-                });
-    }
-</script>
+
+        function deleteHistory(row, historyId) {
+            //Delete from DB
+            $.ajax({
+                type: "POST",
+                url: deleteHistoryRowUrl,
+                data: { historyId: historyId },
+                success: function() {
+                    oTable.fnDeleteRow(oTable.fnGetPosition(row));
+                }
+            });
+
+        }
+
+        function redownloadHistory(row, historyId, episodeId) {
+            $.ajax({
+                type: "POST",
+                url: redownloadUrl,
+                data: { historyId: historyId, episodeId: episodeId },
+                success: function() {
+                    oTable.fnDeleteRow(oTable.fnGetPosition(row));
+                }
+            });
+        }
+    </script>
+}
