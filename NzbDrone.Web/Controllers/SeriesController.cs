@@ -120,7 +120,7 @@ namespace NzbDrone.Web.Controllers
             foreach (var season in episodes.Select(s => s.SeasonNumber).Distinct())
             {
                 var episodesInSeason = episodes.Where(e => e.SeasonNumber == season).ToList();
-                var commonStatusList = episodes.Select(s => s.Status).Distinct().ToList();
+                var commonStatusList = episodesInSeason.Select(s => s.Status).Distinct().ToList();
                 var commonStatus = commonStatusList.Count > 1 ? "Missing" : commonStatusList.First().ToString();
 
                 seasons.Add(new SeasonModel
