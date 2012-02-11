@@ -29,7 +29,7 @@ namespace NzbDrone.App.Test
 
 
             //Act
-            subject.EnsurePriority(null, null);
+            subject.EnsurePriority(null);
         }
 
 

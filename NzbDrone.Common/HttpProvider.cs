@@ -3,6 +3,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Security.Principal;
 using System.Text;
 using NLog;
 
@@ -14,28 +15,23 @@ namespace NzbDrone.Common
 
         public virtual string DownloadString(string address)
         {
-            try
-            {
-                return new WebClient().DownloadString(address);
-            }
-            catch (Exception ex)
-            {
-                logger.TraceException(ex.Message, ex);
-                throw;
-            }
+            return DownloadString(address, null);
         }
 
         public virtual string DownloadString(string address, string username, string password)
         {
+            return DownloadString(address, new NetworkCredential(username, password));
+        }
+
+        public virtual string DownloadString(string address, ICredentials identity)
+        {
             try
             {
-                var webClient = new WebClient();
-                webClient.Credentials = new NetworkCredential(username, password);
-                return webClient.DownloadString(address);
+                var client = new WebClient { Credentials = identity };
+                return client.DownloadString(address);
             }
             catch (Exception ex)
             {
-                logger.Warn("Failed to get response from: {0}", address);
                 logger.TraceException(ex.Message, ex);
                 throw;
             }
@@ -113,5 +109,7 @@ namespace NzbDrone.Common
 
             return responseFromServer.Replace("&nbsp;", " ");
         }
+
+
     }
 }

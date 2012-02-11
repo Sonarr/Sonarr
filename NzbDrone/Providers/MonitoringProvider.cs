@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Net;
 using System.Runtime.Remoting;
-using System.Timers;
+using System.Threading;
 using Exceptioneer.WindowsFormsClient;
 using NLog;
 using Ninject;
@@ -12,7 +13,7 @@ namespace NzbDrone.Providers
 {
     public class MonitoringProvider
     {
-        private static readonly Logger Logger = LogManager.GetLogger("Host.MonitoringProvider");
+        private static readonly Logger logger = LogManager.GetLogger("Host.MonitoringProvider");
 
         private readonly IISProvider _iisProvider;
         private readonly ProcessProvider _processProvider;
@@ -21,6 +22,7 @@ namespace NzbDrone.Providers
 
         private int _pingFailCounter;
         private Timer _pingTimer;
+        private Timer _processPriorityCheckTimer;
 
         [Inject]
         public MonitoringProvider(ProcessProvider processProvider, IISProvider iisProvider,
@@ -42,18 +44,16 @@ namespace NzbDrone.Providers
 
             AppDomain.CurrentDomain.ProcessExit += ProgramExited;
             AppDomain.CurrentDomain.DomainUnload += ProgramExited;
+            
+            _processPriorityCheckTimer = new Timer(EnsurePriority);
+            _processPriorityCheckTimer.Change(TimeSpan.FromSeconds(15), TimeSpan.FromMinutes(30));
 
-            var prioCheckTimer = new Timer(5000);
-            prioCheckTimer.Elapsed += EnsurePriority;
-            prioCheckTimer.Enabled = true;
-
-            _pingTimer = new Timer(180000) { AutoReset = true };
-            _pingTimer.Elapsed += (PingServer);
-            _pingTimer.Start();
+            _pingTimer = new Timer(PingServer);
+            _pingTimer.Change(TimeSpan.FromSeconds(5), TimeSpan.FromMinutes(1));
         }
 
 
-        public virtual void EnsurePriority(object sender, ElapsedEventArgs e)
+        public virtual void EnsurePriority(object sender)
         {
             var currentProcess = _processProvider.GetCurrentProcess();
             if (currentProcess.Priority != ProcessPriorityClass.Normal)
@@ -69,14 +69,21 @@ namespace NzbDrone.Providers
             }
         }
 
-        public virtual void PingServer(object sender, ElapsedEventArgs e)
+        public virtual void PingServer(object sender)
         {
-            if (!_iisProvider.ServerStarted || _configFileProvider.AuthenticationType == AuthenticationType.Windows) return;
+            if (!_iisProvider.ServerStarted) return;
 
             try
             {
-                _httpProvider.DownloadString(_iisProvider.AppUrl); //This should preload the home page, making the first load alot faster.
-                string response = _httpProvider.DownloadString(_iisProvider.AppUrl + "/health");
+                ICredentials identity = null;
+
+                if (_configFileProvider.AuthenticationType == AuthenticationType.Windows)
+                {
+                    identity = CredentialCache.DefaultCredentials;
+                }
+
+                _httpProvider.DownloadString(_iisProvider.AppUrl, identity); //This should preload the home page, making the first load faster.
+                string response = _httpProvider.DownloadString(_iisProvider.AppUrl + "/health", identity);
 
                 if (!response.Contains("OK"))
                 {
@@ -85,7 +92,7 @@ namespace NzbDrone.Providers
 
                 if (_pingFailCounter > 0)
                 {
-                    Logger.Info("Application pool has been successfully recovered.");
+                    logger.Info("Application pool has been successfully recovered.");
                 }
 
                 _pingFailCounter = 0;
@@ -93,7 +100,7 @@ namespace NzbDrone.Providers
             catch (Exception ex)
             {
                 _pingFailCounter++;
-                Logger.ErrorException("Application pool is not responding. Count " + _pingFailCounter, ex);
+                logger.ErrorException("Application pool is not responding. Count " + _pingFailCounter, ex);
                 if (_pingFailCounter > 4)
                 {
                     _pingFailCounter = 0;
@@ -122,7 +129,7 @@ namespace NzbDrone.Providers
                     }.Submit();
             }
 
-            Logger.FatalException("EPIC FAIL: " + excepion.Message, excepion);
+            logger.FatalException("EPIC FAIL: " + excepion.Message, excepion);
         }
     }
 }
