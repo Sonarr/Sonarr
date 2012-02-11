@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net;
 using System.ServiceProcess;
 using NLog;
 using Ninject;
@@ -11,7 +10,7 @@ namespace NzbDrone
 {
     public class ApplicationServer : ServiceBase
     {
-        private static readonly Logger Logger = LogManager.GetLogger("Host.App");
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         private readonly ConfigFileProvider _configFileProvider;
         private readonly DebuggerProvider _debuggerProvider;
@@ -20,15 +19,13 @@ namespace NzbDrone
         private readonly ProcessProvider _processProvider;
         private readonly MonitoringProvider _monitoringProvider;
         private readonly SecurityProvider _securityProvider;
-        private readonly WebClient _webClient;
 
         [Inject]
-        public ApplicationServer(ConfigFileProvider configFileProvider, WebClient webClient, IISProvider iisProvider,
+        public ApplicationServer(ConfigFileProvider configFileProvider, IISProvider iisProvider,
                            DebuggerProvider debuggerProvider, EnviromentProvider enviromentProvider,
                            ProcessProvider processProvider, MonitoringProvider monitoringProvider, SecurityProvider securityProvider)
         {
             _configFileProvider = configFileProvider;
-            _webClient = webClient;
             _iisProvider = iisProvider;
             _debuggerProvider = debuggerProvider;
             _enviromentProvider = enviromentProvider;
@@ -59,12 +56,12 @@ namespace NzbDrone
             {
                 try
                 {
-                    Logger.Info("Starting default browser. {0}", _iisProvider.AppUrl);
+                    logger.Info("Starting default browser. {0}", _iisProvider.AppUrl);
                     _processProvider.Start(_iisProvider.AppUrl);
                 }
                 catch (Exception e)
                 {
-                    Logger.ErrorException("Failed to open URL in default browser.", e);
+                    logger.ErrorException("Failed to open URL in default browser.", e);
                 }
             }
 
@@ -73,9 +70,9 @@ namespace NzbDrone
 
         protected override void OnStop()
         {
-            Logger.Info("Attempting to stop application.");
+            logger.Info("Attempting to stop application.");
             _iisProvider.StopServer();
-            Logger.Info("Application has finished stop routine.");
+            logger.Info("Application has finished stop routine.");
         }
     }
 }

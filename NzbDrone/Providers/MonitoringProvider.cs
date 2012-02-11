@@ -16,7 +16,7 @@ namespace NzbDrone.Providers
 
         private readonly IISProvider _iisProvider;
         private readonly ProcessProvider _processProvider;
-        private readonly WebClientProvider _webClientProvider;
+        private readonly HttpProvider _httpProvider;
         private readonly ConfigFileProvider _configFileProvider;
 
         private int _pingFailCounter;
@@ -24,11 +24,11 @@ namespace NzbDrone.Providers
 
         [Inject]
         public MonitoringProvider(ProcessProvider processProvider, IISProvider iisProvider,
-                                  WebClientProvider webClientProvider, ConfigFileProvider configFileProvider)
+                                  HttpProvider httpProvider, ConfigFileProvider configFileProvider)
         {
             _processProvider = processProvider;
             _iisProvider = iisProvider;
-            _webClientProvider = webClientProvider;
+            _httpProvider = httpProvider;
             _configFileProvider = configFileProvider;
         }
 
@@ -75,8 +75,8 @@ namespace NzbDrone.Providers
 
             try
             {
-                _webClientProvider.DownloadString(_iisProvider.AppUrl); //This should preload the home page, making the first load alot faster.
-                string response = _webClientProvider.DownloadString(_iisProvider.AppUrl + "/health");
+                _httpProvider.DownloadString(_iisProvider.AppUrl); //This should preload the home page, making the first load alot faster.
+                string response = _httpProvider.DownloadString(_iisProvider.AppUrl + "/health");
 
                 if (!response.Contains("OK"))
                 {

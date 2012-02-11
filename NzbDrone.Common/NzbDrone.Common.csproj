@@ -53,6 +53,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HttpProvider.cs" />
     <Compile Include="ConfigFileProvider.cs" />
     <Compile Include="ConsoleProvider.cs" />
     <Compile Include="Contract\ExceptionReport.cs" />
@@ -74,7 +75,6 @@
     <Compile Include="RestProvider.cs" />
     <Compile Include="SecurityProvider.cs" />
     <Compile Include="ServiceProvider.cs" />
-    <Compile Include="WebClientProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

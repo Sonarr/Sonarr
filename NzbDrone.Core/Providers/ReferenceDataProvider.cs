@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using NLog;
 using Newtonsoft.Json;
+using NzbDrone.Common;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using PetaPoco;

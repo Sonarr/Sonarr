@@ -41,8 +41,31 @@ namespace NzbDrone.Services.Tests
                 Version = "1.1.2.323456",
                 UGuid = Guid.NewGuid(),
                 Logger = "NzbDrone.Logger.Name",
-                LogMessage = "Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message",
-                String = "Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message",
+                LogMessage = @"Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
+                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
+                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
+                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
+                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
+                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message",
+                String = @"Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
+                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
+                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
+                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
+                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
+                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
+                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
+                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
+                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
+                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
+                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
+                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
+                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
+                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
+                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
+                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
+                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
+                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message",
+
                 Type = typeof(InvalidOperationException).Name
             };
         }

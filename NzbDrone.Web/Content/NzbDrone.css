@@ -264,7 +264,7 @@ button span, input[type="button"] span, input[type="submit"] span, input[type="r
 
 .ui-dialog-buttonset .ui-delete-button
 {
-    background: url("images/ui-bg_flat_30_b40404_40x100.png") repeat-x scroll 50% 50% #B40404;
+    background: url("jQueryUI/images/ui-bg_flat_30_b40404_40x100.png") repeat-x scroll 50% 50% #B40404;
     border: 1px solid #FFFFFF;
     color: #FFFFFF;
     font-weight: normal;
@@ -272,7 +272,7 @@ button span, input[type="button"] span, input[type="submit"] span, input[type="r
 
 .ui-dialog-buttonset .ui-delete-button:active
 {
-    background: url("images/ui-bg_flat_30_616161_40x100.png") repeat-x scroll 50% 50% #616161;
+    background: url("jQueryUI/images/ui-bg_flat_30_616161_40x100.png") repeat-x scroll 50% 50% #616161;
     border: 1px solid #FFFFFF;
     color: #FFFFFF;
     font-weight: normal;

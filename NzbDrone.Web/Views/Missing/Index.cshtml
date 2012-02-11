@@ -2,7 +2,7 @@
 @using NzbDrone.Common
 @using NzbDrone.Web.Helpers
 @using NzbDrone.Web.Models;
-@{ViewBag.Title="Missing";}
+@{ViewBag.Title = "Missing";}
 @section HeaderContent
 {
     @Html.IncludeCss("Grid.css")
@@ -14,21 +14,30 @@
         <li>@Ajax.ActionLink("Start Recent Backlog Search", "RecentBacklogSearch", "Command", null, null, new { title = "Backlog search for missing episodes that aired in the last 30 days only" })</li>
     </ul>
 }
-
 <div class="grid-container">
     <table id="missingGrid" class="dataTablesGrid hidden-grid">
         <thead>
             <tr>
-                <th>Series Title</th>
-                <th>Episode</th>
-                <th>Episode Title</th>
-                <th>AirDate</th>
-        
+                <th>
+                    Series Title
+                </th>
+                <th>
+                    Episode
+                </th>
+                <th>
+                    Episode Title
+                </th>
+                <th>
+                    AirDate
+                </th>
                 @*Commands Column*@
-                <th>Actions</th>
-            
+                <th>
+                    Actions
+                </th>
                 @*Details Column*@
-                <th style="display: none;">Details</th>
+                <th style="display: none;">
+                    Details
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -39,16 +48,17 @@
         </tbody>
     </table>
 </div>
+@section Scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#missingGrid').removeClass('hidden-grid');
 
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('#missingGrid').removeClass('hidden-grid');
-
-        oTable = $('.dataTablesGrid').dataTable({
+            oTable = $('.dataTablesGrid').dataTable({
             //"sAjaxSource": "History/AjaxBinding",
             //"bProcessing": true,
-            "bShowAll": false,
-            "aaData": @Html.Raw(Model),
+                "bShowAll": false,
+                "aaData": @Html.Raw(Model),
             "bPaginate": true,
             "bLengthChange": false,
             "bFilter": true,
@@ -83,4 +93,5 @@
             "aaSorting": [[3, 'desc']]
         });
     });
-</script>
+    </script>
+}

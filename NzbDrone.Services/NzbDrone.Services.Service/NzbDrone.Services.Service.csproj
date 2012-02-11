@@ -123,6 +123,7 @@
     <Compile Include="Migrations\Migration20120203.cs" />
     <Compile Include="Migrations\Migration20120205.cs" />
     <Compile Include="Migrations\Migration20120201.cs" />
+    <Compile Include="Migrations\Migration20120210.cs" />
     <Compile Include="Migrations\MigrationHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\DailySeriesProvider.cs" />

@@ -7,6 +7,7 @@ using System.ServiceModel.Syndication;
 
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Common;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;

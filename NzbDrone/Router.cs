@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
@@ -10,21 +9,19 @@ namespace NzbDrone
 {
     public class Router
     {
-        private static readonly Logger Logger = LogManager.GetLogger("Host.Router");
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         private readonly ApplicationServer _applicationServer;
         private readonly ServiceProvider _serviceProvider;
         private readonly ConsoleProvider _consoleProvider;
         private readonly EnviromentProvider _enviromentProvider;
-        private readonly DiskProvider _diskProvider;
 
-        public Router(ApplicationServer applicationServer, ServiceProvider serviceProvider, ConsoleProvider consoleProvider, EnviromentProvider enviromentProvider, DiskProvider diskProvider)
+        public Router(ApplicationServer applicationServer, ServiceProvider serviceProvider, ConsoleProvider consoleProvider, EnviromentProvider enviromentProvider)
         {
             _applicationServer = applicationServer;
             _serviceProvider = serviceProvider;
             _consoleProvider = consoleProvider;
             _enviromentProvider = enviromentProvider;
-            _diskProvider = diskProvider;
         }
 
         public void Route(IEnumerable<string> args)
@@ -35,7 +32,7 @@ namespace NzbDrone
 
         public void Route(ApplicationMode applicationMode)
         {
-            Logger.Info("Application mode: {0}", applicationMode);    
+            logger.Info("Application mode: {0}", applicationMode);    
 
             //TODO:move this outside, it should be one of application modes (ApplicationMode.Service?)
             if (!_enviromentProvider.IsUserInteractive)

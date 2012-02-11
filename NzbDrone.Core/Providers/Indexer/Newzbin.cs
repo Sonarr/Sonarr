@@ -4,6 +4,7 @@ using System.Net;
 using System.ServiceModel.Syndication;
 using System.Text.RegularExpressions;
 using Ninject;
+using NzbDrone.Common;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
 

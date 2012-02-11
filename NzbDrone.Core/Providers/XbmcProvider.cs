@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Ninject;
 using NLog;
+using NzbDrone.Common;
 using NzbDrone.Core.Model.Xbmc;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.Xbmc;

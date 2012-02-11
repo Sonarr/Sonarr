@@ -1,5 +1,4 @@
-﻿using System.IO;
-using NLog;
+﻿using NLog;
 using Ninject;
 using NzbDrone.Common;
 using NzbDrone.Providers;
@@ -38,7 +37,7 @@ namespace NzbDrone
             _kernel.Bind<MonitoringProvider>().ToSelf().InSingletonScope();
             _kernel.Bind<ProcessProvider>().ToSelf().InSingletonScope();
             _kernel.Bind<ServiceProvider>().ToSelf().InSingletonScope();
-            _kernel.Bind<WebClientProvider>().ToSelf().InSingletonScope();
+            _kernel.Bind<HttpProvider>().ToSelf().InSingletonScope();
 
         }
 

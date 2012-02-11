@@ -29,19 +29,17 @@ namespace NzbDrone.Web.Controllers
         private readonly SeriesProvider _seriesProvider;
         private readonly ExternalNotificationProvider _externalNotificationProvider;
         private readonly QualityTypeProvider _qualityTypeProvider;
-        private readonly RootDirProvider _rootDirProvider;
         private readonly ConfigFileProvider _configFileProvider;
         private readonly NewznabProvider _newznabProvider;
 
         public SettingsController(ConfigProvider configProvider, IndexerProvider indexerProvider,
                                   QualityProvider qualityProvider, AutoConfigureProvider autoConfigureProvider,
                                   SeriesProvider seriesProvider, ExternalNotificationProvider externalNotificationProvider,
-                                  QualityTypeProvider qualityTypeProvider, RootDirProvider rootDirProvider,
+                                  QualityTypeProvider qualityTypeProvider,
                                   ConfigFileProvider configFileProvider, NewznabProvider newznabProvider)
         {
             _externalNotificationProvider = externalNotificationProvider;
             _qualityTypeProvider = qualityTypeProvider;
-            _rootDirProvider = rootDirProvider;
             _configFileProvider = configFileProvider;
             _newznabProvider = newznabProvider;
             _configProvider = configProvider;

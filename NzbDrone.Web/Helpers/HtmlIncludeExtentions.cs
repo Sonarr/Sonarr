@@ -40,7 +40,7 @@ namespace NzbDrone.Web.Helpers
 
             if (!File.Exists(path))
             {
-                throw new FileNotFoundException("Static file not found " + path, path);
+                throw new FileNotFoundException("Included static resource was not found.", path);
             }
 
         }

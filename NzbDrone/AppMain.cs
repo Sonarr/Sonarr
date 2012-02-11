@@ -21,7 +21,7 @@ namespace NzbDrone
                 }
                 catch (Exception)
                 {
-                    Console.WriteLine("It looks like you don't have full version of .NET Framework installed. Press any key and you will be directed to download page.");
+                    Console.WriteLine("It looks like you don't have full version of .NET Framework installed. Press any key and you will be directed to the download page.");
                     Console.Read();
 
                     try

@@ -47,6 +47,9 @@ del Newtonsoft.Json.xml /Q /F /S
 del Newtonsoft.Json.pdb /Q /F /S
 del Mvc*.pdb /Q /F /S
 
+del *debug.js /Q /F /S
+del *-vsdoc.js /Q /F /S
+
 ..\Libraries\7zip\7za.exe a -tzip ..\NzbDrone.zip *
 
 CD ..
