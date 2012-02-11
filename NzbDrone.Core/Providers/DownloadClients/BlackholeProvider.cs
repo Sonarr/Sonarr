@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Providers.DownloadClients
                 if (_diskProvider.FileExists(filename))
                 {
                     //Return true so a lesser quality is not returned.
-                    logger.Info("NZB already exists on disk: {0)", filename);
+                    logger.Info("NZB already exists on disk: {0}", filename);
                     return true;
                 }
 
