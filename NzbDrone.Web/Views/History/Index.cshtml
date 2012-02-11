@@ -5,8 +5,8 @@
 @{ViewBag.Title = "History";}
 @section ActionMenu{
     <ul class="sub-menu">
-        <li>@Ajax.ActionLink("Trim History", "Trim", "History", new AjaxOptions { OnSuccess = "reloadHistoryGrid" })</li>
-        <li>@Ajax.ActionLink("Purge History", "Purge", "History", new AjaxOptions { OnSuccess = "reloadHistoryGrid" })</li>
+        <li>@Ajax.ActionLink("Trim History", "Trim", "History", new AjaxOptions { OnSuccess = "reloadGrid" })</li>
+        <li>@Ajax.ActionLink("Purge History", "Purge", "History", new AjaxOptions { OnSuccess = "reloadGrid" })</li>
     </ul>
 }
 @section HeaderContent
@@ -50,51 +50,50 @@
         $(document).ready(function() {
             $('#historyGrid').removeClass('hidden-grid');
 
-            oTable = $('.dataTablesGrid').dataTable({
-            //"sAjaxSource": "History/AjaxBinding",
-            //"bProcessing": true,
+            oTable = $('#historyGrid').dataTable({
+                "sAjaxSource": "History/AjaxBinding",
+                "bServerSide": false,
+                "bProcessing": true,
                 "bShowAll": false,
-                "aaData": @Html.Raw(Model),
-            "bPaginate": true,
-            "bLengthChange": false,
-            "bFilter": true,
-            "bSort": true,
-            "bInfo": true,
-            "bAutoWidth": false,
-            "iDisplayLength": 20,
-            "sPaginationType": "four_button",
-            "aoColumns": [
-                            { sWidth: '20px', "bSortable": false, "mDataProp": "Indexer", "fnRender": function (row) {
-                                    return "<img src=\"/Content/Images/Indexers/" + row.aData["Indexer"] + ".png\" alt=\"" + row.aData["Indexer"] + "\">";
-                                }
-                            }, //Image
-                            { sWidth: 'auto', "mDataProp": "SeriesTitle" }, //Series Title
-                            { sWidth: '80px', "mDataProp": "EpisodeNumbering", "bSortable": false }, //EpisodeNumbering
-                            { sWidth: 'auto', "mDataProp": "EpisodeTitle", "bSortable": false }, //Episode Title
-                            { sWidth: '70px', "mDataProp": "Quality", "bSortable": false }, //Quality
-                            { sWidth: '150px', "mDataProp": "Date" }, //Grabbed On
-                            { sWidth: '40px', "mDataProp": "HistoryId", "bSortable": false, "fnRender": function (row) {
-                                var deleteImage = "<img src=\"../../Content/Images/X.png\" alt=\"Delete\" title=\"Delete from History\" class=\"searchImage\" onclick=\"deleteHistory(this.parentNode.parentNode, " + row.aData["HistoryId"] + ")\">";
-                                var redownloadImage = "<img src=\"../../Content/Images/Downloading.png\" alt=\"Redownload\" title=\Redownload Episode\" class=\"searchImage\" onclick=\"redownloadHistory(this.parentNode.parentNode, " + row.aData["HistoryId"] + ", " + row.aData["EpisodeId"] + ")\">";
+                "bPaginate": true,
+                "bLengthChange": false,
+                "bFilter": true,
+                "bSort": true,
+                "bInfo": true,
+                "bAutoWidth": false,
+                "iDisplayLength": 20,
+                "sPaginationType": "four_button",
+                "aoColumns": [
+                                { sWidth: '20px', "bSortable": false, "mDataProp": "Indexer", "fnRender": function (row) {
+                                        return "<img src=\"/Content/Images/Indexers/" + row.aData["Indexer"] + ".png\" alt=\"" + row.aData["Indexer"] + "\">";
+                                    }
+                                }, //Image
+                                { sWidth: 'auto', "mDataProp": "SeriesTitle" }, //Series Title
+                                { sWidth: '80px', "mDataProp": "EpisodeNumbering", "bSortable": false }, //EpisodeNumbering
+                                { sWidth: 'auto', "mDataProp": "EpisodeTitle", "bSortable": false }, //Episode Title
+                                { sWidth: '70px', "mDataProp": "Quality", "bSortable": false }, //Quality
+                                { sWidth: '150px', "mDataProp": "Date" }, //Grabbed On
+                                { sWidth: '40px', "mDataProp": "HistoryId", "bSortable": false, "fnRender": function (row) {
+                                    var deleteImage = "<img src=\"../../Content/Images/X.png\" alt=\"Delete\" title=\"Delete from History\" class=\"searchImage\" onclick=\"deleteHistory(this.parentNode.parentNode, " + row.aData["HistoryId"] + ")\">";
+                                    var redownloadImage = "<img src=\"../../Content/Images/Downloading.png\" alt=\"Redownload\" title=\Redownload Episode\" class=\"searchImage\" onclick=\"redownloadHistory(this.parentNode.parentNode, " + row.aData["HistoryId"] + ", " + row.aData["EpisodeId"] + ")\">";
 
-                                return deleteImage + redownloadImage;
-                                //return createImageAjaxLink('/History/Delete?historyId=' + row.aData["HistoryId"], '../../Content/Images/X.png', 'Delete', 'Delete from History', 'searchImage');
-                            }
-                            }, //Actions
-                {
-                    sWidth: 'auto',
-                    "mDataProp": "Details",
-                    "bSortable": false,
-                    "bVisible": false,
-                    "fnRender": function(row) {
-                        var result = "<b>Overview: </b>" + row.aData["EpisodeOverview"] + "<br/>" +
-                            "<b>NZB Title: </b>" + row.aData["NzbTitle"] + "<br/>" +
-                                "<b>Proper: </b>" + row.aData["IsProper"];
-                        return result;
-                    }
-                } //Details
-            ],
-                "aaSorting": [[5, 'desc']]
+                                    return deleteImage + redownloadImage;
+                                }
+                                }, //Actions
+                    {
+                        sWidth: 'auto',
+                        "mDataProp": "Details",
+                        "bSortable": false,
+                        "bVisible": false,
+                        "fnRender": function(row) {
+                            var result = "<b>Overview: </b>" + row.aData["EpisodeOverview"] + "<br/>" +
+                                "<b>NZB Title: </b>" + row.aData["NzbTitle"] + "<br/>" +
+                                    "<b>Proper: </b>" + row.aData["IsProper"];
+                            return result;
+                        }
+                    } //Details
+                ],
+                    "aaSorting": [[5, 'desc']]
             });
         });
 

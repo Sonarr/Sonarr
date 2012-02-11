@@ -20,6 +20,11 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult Index()
         {
+            return View();
+        }
+
+        public JsonResult AjaxBinding()
+        {
             var history = _historyProvider.AllItemsWithRelationships().Select(h => new HistoryModel
             {
                 HistoryId = h.HistoryId,
@@ -36,9 +41,11 @@ namespace NzbDrone.Web.Controllers
                 EpisodeId = h.EpisodeId
             }).OrderByDescending(h => h.Date).ToList();
 
-            var serialized = new JavaScriptSerializer().Serialize(history);
-
-            return View((object)serialized);
+            return Json(new
+            {
+                aaData = history
+            },
+            JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult Trim()

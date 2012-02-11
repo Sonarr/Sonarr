@@ -53,3 +53,13 @@ function createImageAjaxLink(url, image, alt, title, classes) {
 
     return html;
 }
+
+//Reload/Redraw the grid from the server (bServerSide == true)
+function redrawGrid() {
+    oTable.fnDraw();
+}
+
+//Force reload using Ajax Binding (bServerSide == false)
+function reloadGrid() {
+    oTable.fnReloadAjax();
+}

@@ -5,7 +5,7 @@
 @{ ViewBag.Title = "Logs";}
 @section ActionMenu{
     <ul class="sub-menu">
-        <li>@Ajax.ActionLink("Clear Logs", "Clear", "Log", new AjaxOptions { OnSuccess = "reloadGrid" })</li>
+        <li>@Ajax.ActionLink("Clear Logs", "Clear", "Log", new AjaxOptions { OnSuccess = "redrawGrid" })</li>
         <li>@Html.ActionLink("File", "File", "Log")</li>
     </ul>
 }
