@@ -25,11 +25,11 @@ namespace NzbDrone.Core.Test
     public class IndexerTests : CoreTest
     {
 
-        [TestCase("nzbsorg.xml", 1)]
-        [TestCase("nzbsrus.xml", 8)]
-        [TestCase("newzbin.xml", 1)]
-        [TestCase("nzbmatrix.xml", 2)]
-        public void parse_feed_xml(string fileName, int warns)
+        [TestCase("nzbsorg.xml")]
+        [TestCase("nzbsrus.xml")]
+        [TestCase("newzbin.xml")]
+        [TestCase("nzbmatrix.xml")]
+        public void parse_feed_xml(string fileName)
         {
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
@@ -53,8 +53,6 @@ namespace NzbDrone.Core.Test
             parseResults.Should().NotBeEmpty();
             parseResults.Should().OnlyContain(s => s.Indexer == mockIndexer.Name);
             parseResults.Should().OnlyContain(s => !String.IsNullOrEmpty(s.OriginalString));
-
-            ExceptionVerification.ExpectedWarns(warns);
         }
 
         private void WithConfiguredIndexers()
@@ -177,7 +175,6 @@ namespace NzbDrone.Core.Test
 
             Assert.IsNotNull(result);
             Assert.AreEqual(LanguageType.Finnish, result.Language);
-            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]

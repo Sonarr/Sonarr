@@ -221,8 +221,6 @@ namespace NzbDrone.Core.Test
             var title = string.Format("{0:yyyy.MM.dd} - Denis Leary - HD TV.mkv", DateTime.Now.AddDays(2));
 
             Parser.ParseTitle(title).Should().BeNull();
-
-            ExceptionVerification.ExpectedWarns(1);
         }
 
 
@@ -401,7 +399,6 @@ namespace NzbDrone.Core.Test
             var result = Parser.ParseTitle(postTitle);
 
             result.Should().BeNull();
-            ExceptionVerification.ExpectedWarns(1);
         }
 
         [TestCase("Lie.to.Me.S03.SUBPACK.DVDRip.XviD-REWARD")]
@@ -412,8 +409,6 @@ namespace NzbDrone.Core.Test
             var result = Parser.ParseTitle(postTitle);
 
             result.Should().BeNull();
-
-            ExceptionVerification.ExpectedWarns(1);
         }
 
         [TestCase("Fussball Bundesliga 10e2011e30 Spieltag FC Bayern Muenchen vs Bayer 04 Leverkusen German WS dTV XviD WoGS")]
@@ -422,13 +417,6 @@ namespace NzbDrone.Core.Test
             Parser.ParseTitle(title);
             ExceptionVerification.IgnoreWarns();
             ExceptionVerification.ExpectedErrors(1);
-        }
-
-        [TestCase(@"C:\BuildAgent\work\b5a20f8391187721\NzbDrone.Core.Test\bin\Release\WEEDS.avi")]
-        public void parseTitle_should_log_warning_when_unable_to_parse(string title)
-        {
-            Parser.ParseTitle(title);
-            ExceptionVerification.ExpectedWarns(1);
         }
     }
 }
