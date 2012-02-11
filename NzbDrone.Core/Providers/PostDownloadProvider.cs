@@ -61,6 +61,7 @@ namespace NzbDrone.Core.Providers
 
             if (series == null)
             {
+                Logger.Trace("Unknown Series on Import: {0}", subfolderInfo.Name);
                 TagFolder(subfolderInfo, PostDownloadStatusType.UnknownSeries);
                 return;
             }
@@ -71,17 +72,20 @@ namespace NzbDrone.Core.Providers
             //Delete the folder only if folder is small enough
             if (_diskProvider.GetDirectorySize(subfolderInfo.FullName) < Constants.IgnoreFileSize)
             {
+                Logger.Trace("Episode(s) imported, deleting folder: {0}", subfolderInfo.Name);
                 _diskProvider.DeleteFolder(subfolderInfo.FullName, true);
             }
             else
             {
                 if (importedFiles.Count == 0)
                 {
+                    Logger.Trace("No Imported files: {0}", subfolderInfo.Name);
                     TagFolder(subfolderInfo, PostDownloadStatusType.ParseError);
                 }
                 else
                 {
                     //Unknown Error Importing (Possibly a lesser quality than episode currently on disk)
+                    Logger.Trace("Unable to import series (Unknown): {0}", subfolderInfo.Name);
                     TagFolder(subfolderInfo, PostDownloadStatusType.Unknown);
                 }
             }
