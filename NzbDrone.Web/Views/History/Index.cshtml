@@ -74,8 +74,8 @@
                                 { sWidth: '70px', "mDataProp": "Quality", "bSortable": false }, //Quality
                                 { sWidth: '150px', "mDataProp": "Date" }, //Grabbed On
                                 { sWidth: '40px', "mDataProp": "HistoryId", "bSortable": false, "fnRender": function (row) {
-                                    var deleteImage = "<img src=\"../../Content/Images/X.png\" alt=\"Delete\" title=\"Delete from History\" class=\"searchImage\" onclick=\"deleteHistory(this.parentNode.parentNode, " + row.aData["HistoryId"] + ")\">";
-                                    var redownloadImage = "<img src=\"../../Content/Images/Downloading.png\" alt=\"Redownload\" title=\Redownload Episode\" class=\"searchImage\" onclick=\"redownloadHistory(this.parentNode.parentNode, " + row.aData["HistoryId"] + ", " + row.aData["EpisodeId"] + ")\">";
+                                    var deleteImage = "<img src=\"../../Content/Images/X.png\" alt=\"Delete\" title=\"Delete from History\" class=\"gridImage\" onclick=\"deleteHistory(this.parentNode.parentNode, " + row.aData["HistoryId"] + ")\">";
+                                    var redownloadImage = "<img src=\"../../Content/Images/Downloading.png\" alt=\"Redownload\" title=\Redownload Episode\" class=\"gridImage\" onclick=\"redownloadHistory(this.parentNode.parentNode, " + row.aData["HistoryId"] + ", " + row.aData["EpisodeId"] + ")\">";
 
                                     return deleteImage + redownloadImage;
                                 }

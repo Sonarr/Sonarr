@@ -35,8 +35,8 @@
 
     @*Commands Column*@
     <td class="@cellColourClass">
-        <img src='../../Content/Images/@(Model.Status).png' alt='@Model.Status' title='@Model.Status' class='statusImage status-@Model.Status' />
-        @Ajax.ImageActionLink("../../Content/Images/Search.png", new { Alt = "Search", Title = "Search for episode", @class = "searchImage" }, "Search", "Episode", new { episodeId = Model.EpisodeId }, null, null)
+        <img src='../../Content/Images/@(Model.Status).png' alt='@Model.Status' title='@Model.Status' class='gridImage' />
+        @Ajax.ImageActionLink("../../Content/Images/Search.png", new { Alt = "Search", Title = "Search for episode", @class = "gridImage" }, "Search", "Episode", new { episodeId = Model.EpisodeId }, null, null)
     </td>
 </tr>
 

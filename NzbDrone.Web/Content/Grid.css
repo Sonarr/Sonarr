@@ -1,4 +1,4 @@
-.statusImage, .searchImage, .renameImage, .ignoreEpisode, .ignoreEpisodesMaster
+.gridImage
 {
     width: 18px;
     height: 18px;
@@ -7,7 +7,7 @@
     vertical-align: middle;
 }
     
-.searchImage:hover, .renameImage:hover, .ignoreEpisode:hover, .ignoreEpisodesMaster:hover
+.gridImage:hover
 {
     background-color: #065EFE;
 }
