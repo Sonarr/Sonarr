@@ -17,6 +17,8 @@ namespace NzbDrone.Core.Providers.Indexer
         {
         }
 
+        private static readonly Regex TitleSearchRegex = new Regex(@"[\W]", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
         protected override string[] Urls
         {
             get
@@ -94,7 +96,6 @@ namespace NzbDrone.Core.Providers.Indexer
             get { return "NzbMatrix"; }
         }
 
-
         protected override string NzbDownloadUrl(SyndicationItem item)
         {
             return item.Links[0].Uri.ToString();
@@ -109,6 +110,17 @@ namespace NzbDrone.Core.Providers.Indexer
                 currentResult.Size = Parser.GetReportSize(sizeString);
             }
             return currentResult;
+        }
+
+        public override string GetQueryTitle(string title)
+        {
+            //Replace apostrophe with empty string
+            title = title.Replace("'", "");
+            var cleanTitle = TitleSearchRegex.Replace(title, "+").Trim('+', ' ');
+
+            //remove any repeating +s
+            cleanTitle = Regex.Replace(cleanTitle, @"\+{1,100}", "+");
+            return cleanTitle;
         }
     }
 }

@@ -222,7 +222,12 @@ namespace NzbDrone.Core.Providers.Indexer
             return CustomParser(item, episodeParseResult);
         }
 
-        public static string GetQueryTitle(string title)
+        /// <summary>
+        /// This method can be overwritten to provide indexer specific title cleaning
+        /// </summary>
+        /// <param name="title">Title that needs to be cleaned</param>
+        /// <returns></returns>
+        public virtual string GetQueryTitle(string title)
         {
             var cleanTitle = TitleSearchRegex.Replace(title, "+").Trim('+', ' ');
 

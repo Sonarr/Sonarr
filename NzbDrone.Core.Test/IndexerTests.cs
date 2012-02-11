@@ -270,10 +270,22 @@ namespace NzbDrone.Core.Test
         [TestCase("hawaii five-0 (2010)", "hawaii+five+0+2010")]
         [TestCase("this& that", "this+that")]
         [TestCase("this&    that", "this+that")]
+        [TestCase("grey's anatomy", "grey+s+anatomy")]
         public void get_query_title(string raw, string clean)
         {
-            var result = IndexerBase.GetQueryTitle(raw);
+            var mock = new Mock<IndexerBase>();
+            mock.CallBase = true;           
+            var result = mock.Object.GetQueryTitle(raw);
+            result.Should().Be(clean);
+        }
 
+        [TestCase("hawaii five-0 (2010)", "hawaii+five+0+2010")]
+        [TestCase("this& that", "this+that")]
+        [TestCase("this&    that", "this+that")]
+        [TestCase("grey's anatomy", "greys+anatomy")]
+        public void get_query_title_nzbmatrix_should_replace_apostrophe_with_empty_string(string raw, string clean)
+        {
+            var result = Mocker.Resolve<NzbMatrix>().GetQueryTitle(raw);
             result.Should().Be(clean);
         }
 
