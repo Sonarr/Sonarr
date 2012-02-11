@@ -83,6 +83,10 @@ namespace NzbDrone.Core
             {
                 result.OriginalString = path;
             }
+            else
+            {
+                Logger.Warn("Unable to parse episode info from path {0}", path);
+            }
 
             return result;
         }
@@ -119,7 +123,8 @@ namespace NzbDrone.Core
             {
                 Logger.ErrorException("An error has occurred while trying to parse " + title, e);
             }
-            Logger.Warn("Unable to parse episode info. {0}", title);
+
+            Logger.Trace("Unable to parse {0}", title);
             ReportingService.ReportParseError(title);
             return null;
         }
