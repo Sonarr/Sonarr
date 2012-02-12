@@ -20,30 +20,31 @@ namespace NzbDrone.Core.Providers
 
         public virtual List<Episode> Yesterday()
         {
-            return _database.Fetch<Episode, Series>(@"SELECT * FROM Episodes 
-                                                        INNER JOIN Series ON Episodes.SeriesId = Series.SeriesId
-                                                        WHERE Ignored = 0 AND AirDate = @0", DateTime.Today.AddDays(-1));
+            return RecentEpisodes().Where(c => c.AirDate.Value.Date == DateTime.Now.Date.AddDays(-1)).ToList();
         }
 
         public virtual List<Episode> Today()
         {
-            return _database.Fetch<Episode, Series>(@"SELECT * FROM Episodes 
-                                                        INNER JOIN Series ON Episodes.SeriesId = Series.SeriesId
-                                                        WHERE Ignored = 0 AND AirDate = @0", DateTime.Today);
+            return RecentEpisodes().Where(c => c.AirDate.Value.Date == DateTime.Now.Date).ToList();
         }
 
         public virtual List<Episode> Tomorrow()
         {
-            return _database.Fetch<Episode, Series>(@"SELECT * FROM Episodes 
-                                                        INNER JOIN Series ON Episodes.SeriesId = Series.SeriesId
-                                                        WHERE Ignored = 0 AND AirDate = @0", DateTime.Today.AddDays(1));
+            return RecentEpisodes().Where(c => c.AirDate.Value.Date == DateTime.Now.Date.AddDays(1)).ToList();
         }
 
         public virtual List<Episode> Week()
         {
+            return RecentEpisodes().Where(c => c.AirDate >= DateTime.Today.AddDays(2).Date).ToList();
+
+        }
+
+        private List<Episode> RecentEpisodes()
+        {
             return _database.Fetch<Episode, Series>(@"SELECT * FROM Episodes 
                                                         INNER JOIN Series ON Episodes.SeriesId = Series.SeriesId
-                                                        WHERE Ignored = 0 AND AirDate BETWEEN @0 AND @1", DateTime.Today.AddDays(2), DateTime.Today.AddDays(8));
+                                                        WHERE Series.Monitored = 1 AND Ignored = 0 AND AirDate BETWEEN @0 AND @1"
+                                                        ,DateTime.Today.AddDays(-1).Date, DateTime.Today.AddDays(8).Date);
         }
     }
 }
