@@ -48,13 +48,13 @@ namespace NzbDrone.Web.Controllers
 
             var jobs = _jobProvider.All().Select(j => new JobModel
                                                           {
-                                                                  Id = j.Id,
-                                                                  Enable = j.Enable,
-                                                                  TypeName = j.TypeName,
-                                                                  Name = j.Name,
-                                                                  Interval = j.Interval,
-                                                                  LastExecution = j.LastExecution.ToString(),
-                                                                  Success = j.Success
+                                                              Id = j.Id,
+                                                              Enable = j.Enable,
+                                                              TypeName = j.TypeName,
+                                                              Name = j.Name,
+                                                              Interval = j.Interval,
+                                                              LastExecution = j.LastExecution.ToString(),
+                                                              Success = j.Success
                                                           }).OrderBy(j => j.Interval);
 
             var serializedJobs = new JavaScriptSerializer().Serialize(jobs);
@@ -84,9 +84,9 @@ namespace NzbDrone.Web.Controllers
 
             return Json(new
                             {
-                                    iTotalRecords = config.Count,
-                                    iTotalDisplayRecords = config.Count,
-                                    aaData = config
+                                iTotalRecords = config.Count(),
+                                iTotalDisplayRecords = config.Count(),
+                                aaData = config
                             }, JsonRequestBehavior.AllowGet);
         }
 

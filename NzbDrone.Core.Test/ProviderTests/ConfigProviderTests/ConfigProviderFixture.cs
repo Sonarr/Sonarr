@@ -6,11 +6,11 @@ using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
 
-namespace NzbDrone.Core.Test.ProviderTests
+namespace NzbDrone.Core.Test.ProviderTests.ConfigProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class ConfigProviderTest : CoreTest
+    public class ConfigProviderFixture : CoreTest
     {
         [SetUp]
         public void SetUp()
@@ -134,6 +134,15 @@ namespace NzbDrone.Core.Test.ProviderTests
             guid.Should().NotBeEmpty();
         }
 
+        [Test]
+        public void updating_a_vakye_should_update_its_value()
+        {
+            Mocker.Resolve<ConfigProvider>().SabHost = "Test";
+            Mocker.Resolve<ConfigProvider>().SabHost.Should().Be("Test");
+
+            Mocker.Resolve<ConfigProvider>().SabHost = "Test2";
+            Mocker.Resolve<ConfigProvider>().SabHost.Should().Be("Test2");
+        }
 
         [Test]
         [Description("This test will use reflection to ensure each config property read/writes to a unique key")]

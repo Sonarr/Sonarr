@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Ninject;
 using NLog;
 using NzbDrone.Core.Model;
@@ -11,7 +12,10 @@ namespace NzbDrone.Core.Providers.Core
 {
     public class ConfigProvider
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+
+        private static Dictionary<string, string> cache = new Dictionary<string, string>();
+
         private readonly IDatabase _database;
 
         [Inject]
@@ -24,7 +28,7 @@ namespace NzbDrone.Core.Providers.Core
         {
         }
 
-        public IList<Config> All()
+        public IEnumerable<Config> All()
         {
             return _database.Fetch<Config>();
         }
@@ -409,7 +413,7 @@ namespace NzbDrone.Core.Providers.Core
             set { SetValue("AutoIgnorePreviouslyDownloadedEpisodes", value); }
         }
 
-   		public Guid UGuid
+        public Guid UGuid
         {
             get { return Guid.Parse(GetValue("UGuid", Guid.NewGuid().ToString(), persist: true)); }
         }
@@ -449,12 +453,15 @@ namespace NzbDrone.Core.Providers.Core
 
         public virtual string GetValue(string key, object defaultValue, bool persist = false)
         {
-            var dbValue = _database.SingleOrDefault<Config>("WHERE [Key] =@0", key);
+            EnsureCache();
 
-            if (dbValue != null && !String.IsNullOrEmpty(dbValue.Value))
-                return dbValue.Value;
 
-            Logger.Trace("Unable to find config key '{0}' defaultValue:'{1}'", key, defaultValue);
+            string dbValue;
+
+            if (cache.TryGetValue(key, out dbValue) && dbValue != null && !String.IsNullOrEmpty(dbValue))
+                return dbValue;
+
+            logger.Trace("Unable to find config key '{0}' defaultValue:'{1}'", key, defaultValue);
 
             if (persist)
                 SetValue(key, defaultValue.ToString());
@@ -479,7 +486,7 @@ namespace NzbDrone.Core.Providers.Core
             if (value == null)
                 throw new ArgumentNullException("key");
 
-            Logger.Trace("Writing Setting to file. Key:'{0}' Value:'{1}'", key, value);
+            logger.Trace("Writing Setting to file. Key:'{0}' Value:'{1}'", key, value);
 
             var dbValue = _database.SingleOrDefault<Config>("WHERE [KEY]=@0", key);
 
@@ -490,11 +497,28 @@ namespace NzbDrone.Core.Providers.Core
             else
             {
                 dbValue.Value = value;
-                using (var tran = _database.GetTransaction())
+                _database.Update(dbValue);
+            }
+
+            ClearCache();
+        }
+
+        private void EnsureCache()
+        {
+            lock (cache)
+            {
+                if (!cache.Any())
                 {
-                    _database.Update(dbValue);
-                    tran.Complete();
+                    cache = _database.Fetch<Config>().ToDictionary(c => c.Key, c => c.Value);
                 }
+            }
+        }
+
+        public static void ClearCache()
+        {
+            lock (cache)
+            {
+                cache = new Dictionary<string, string>();
             }
         }
     }

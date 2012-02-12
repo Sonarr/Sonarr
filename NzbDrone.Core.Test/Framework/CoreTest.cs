@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
+using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Model.Notification;
+using NzbDrone.Core.Providers.Core;
 using NzbDrone.Test.Common;
 using PetaPoco;
 
@@ -59,6 +61,12 @@ namespace NzbDrone.Core.Test.Framework
             {
                 return new ProgressNotification("Mock notification");
             }
+        }
+
+        [TearDown]
+        public void CoreTestTearDown()
+        {
+            ConfigProvider.ClearCache();
         }
     }
 }

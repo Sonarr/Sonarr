@@ -113,6 +113,7 @@
     <Compile Include="JobTests\BannerDownloadJobTest.cs" />
     <Compile Include="JobTests\RecentBacklogSearchJobTest.cs" />
     <Compile Include="ProviderTests\AnalyticsProviderTests\AnalyticsProviderFixture.cs" />
+    <Compile Include="ProviderTests\ConfigProviderTests\ConfigCachingFixture.cs" />
     <Compile Include="ProviderTests\DecisionEngineTests\QualityAllowedByProfileSpecificationFixtrue.cs" />
     <Compile Include="ProviderTests\DecisionEngineTests\UpgradeHistorySpecificationFixtrue.cs" />
     <Compile Include="ProviderTests\DecisionEngineTests\UpgradeDiskSpecificationFixtrue.cs" />
@@ -172,7 +173,7 @@
     <Compile Include="ProviderTests\IndexerProviderTest.cs" />
     <Compile Include="ProviderTests\HistoryProviderTest.cs" />
     <Compile Include="ProviderTests\MediaFileProviderTest.cs" />
-    <Compile Include="ProviderTests\ConfigProviderTest.cs" />
+    <Compile Include="ProviderTests\ConfigProviderTests\ConfigProviderFixture.cs" />
     <Compile Include="ProviderTests\EpisodeProviderTest.cs" />
     <Compile Include="Framework\TestDbHelper.cs" />
     <Compile Include="ParserTest.cs" />
