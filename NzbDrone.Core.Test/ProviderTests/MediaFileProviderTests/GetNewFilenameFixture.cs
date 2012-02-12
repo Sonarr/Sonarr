@@ -487,5 +487,37 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
             //Assert
             result.Should().Be("South Park - S15E06 - City Sushi");
         }
+
+        [Test]
+        public void GetNewFilename_should_order_multiple_episode_files_in_numerical_order()
+        {
+            //Setup
+            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingSeparatorStyle).Returns(0);
+            fakeConfig.SetupGet(c => c.SortingNumberStyle).Returns(2);
+            fakeConfig.SetupGet(c => c.SortingReplaceSpaces).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingMultiEpisodeStyle).Returns(3);
+
+            var episode = Builder<Episode>.CreateNew()
+                            .With(e => e.Title = "Hey, Baby, What's Wrong? (1)")
+                            .With(e => e.SeasonNumber = 6)
+                            .With(e => e.EpisodeNumber = 6)
+                            .Build();
+
+            var episode2 = Builder<Episode>.CreateNew()
+                            .With(e => e.Title = "Hey, Baby, What's Wrong? (2)")
+                            .With(e => e.SeasonNumber = 6)
+                            .With(e => e.EpisodeNumber = 7)
+                            .Build();
+
+            //Act
+            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode2, episode }, "30 Rock", QualityTypes.HDTV, false);
+
+            //Assert
+            result.Should().Be("30 Rock - S06E06-E07 - Hey, Baby, What's Wrong! (1) + Hey, Baby, What's Wrong! (2)");
+        }
     }
 }

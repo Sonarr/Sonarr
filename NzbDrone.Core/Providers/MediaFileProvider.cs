@@ -139,10 +139,12 @@ namespace NzbDrone.Core.Providers
 
         public virtual string GetNewFilename(IList<Episode> episodes, string seriesTitle, QualityTypes quality, bool proper)
         {
+            var sortedEpisodes = episodes.OrderBy(e => e.EpisodeNumber);
+
             var separatorStyle = EpisodeSortingHelper.GetSeparatorStyle(_configProvider.SortingSeparatorStyle);
             var numberStyle = EpisodeSortingHelper.GetNumberStyle(_configProvider.SortingNumberStyle);
 
-            string episodeNames = episodes[0].Title;
+            string episodeNames = sortedEpisodes.First().Title;
 
             string result = String.Empty;
 
@@ -151,13 +153,13 @@ namespace NzbDrone.Core.Providers
                 result += seriesTitle + separatorStyle.Pattern;
             }
 
-            result += numberStyle.Pattern.Replace("%0e", String.Format("{0:00}", episodes[0].EpisodeNumber));
+            result += numberStyle.Pattern.Replace("%0e", String.Format("{0:00}", sortedEpisodes.First().EpisodeNumber));
 
             if (episodes.Count > 1)
             {
                 var multiEpisodeStyle = EpisodeSortingHelper.GetMultiEpisodeStyle(_configProvider.SortingMultiEpisodeStyle);
 
-                foreach (var episode in episodes.OrderBy(e => e.EpisodeNumber).Skip(1))
+                foreach (var episode in sortedEpisodes.Skip(1))
                 {
                     if (multiEpisodeStyle.Name == "Duplicate")
                     {
