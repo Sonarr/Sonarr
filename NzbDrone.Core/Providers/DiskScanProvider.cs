@@ -20,11 +20,13 @@ namespace NzbDrone.Core.Providers
         private readonly SeriesProvider _seriesProvider;
         private readonly ExternalNotificationProvider _externalNotificationProvider;
         private readonly DownloadProvider _downloadProvider;
+        private readonly SignalRProvider _signalRProvider;
 
         [Inject]
         public DiskScanProvider(DiskProvider diskProvider, EpisodeProvider episodeProvider,
                                 SeriesProvider seriesProvider, MediaFileProvider mediaFileProvider,
-                                ExternalNotificationProvider externalNotificationProvider, DownloadProvider downloadProvider)
+                                ExternalNotificationProvider externalNotificationProvider, DownloadProvider downloadProvider,
+                                SignalRProvider signalRProvider)
         {
             _diskProvider = diskProvider;
             _episodeProvider = episodeProvider;
@@ -32,6 +34,7 @@ namespace NzbDrone.Core.Providers
             _mediaFileProvider = mediaFileProvider;
             _externalNotificationProvider = externalNotificationProvider;
             _downloadProvider = downloadProvider;
+            _signalRProvider = signalRProvider;
         }
 
         public DiskScanProvider()
@@ -197,6 +200,9 @@ namespace NzbDrone.Core.Providers
             if (newDownload)
             {
                 _externalNotificationProvider.OnDownload(message, series);
+                
+                foreach(var episode in episodes)
+                    _signalRProvider.UpdateEpisodeStatus(episode.EpisodeId, EpisodeStatusType.Ready);
             }
             else
             {

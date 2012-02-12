@@ -13,18 +13,18 @@ namespace NzbDrone.Core.Providers
 {
     public class SignalRProvider : Hub
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public virtual void UpdateEpisodeStatus(int episodeId, EpisodeStatusType episodeStatus)
         {
-            Logger.Trace("Sending Status update to client. EpisodeId: {0}, Status: {1}", episodeId, episodeStatus);
+            logger.Trace("Sending Status update to client. EpisodeId: {0}, Status: {1}", episodeId, episodeStatus);
 
             GetClients().updatedStatus(episodeId, episodeStatus.ToString());
         }
 
         private static dynamic GetClients()
         {
-            IConnectionManager connectionManager = AspNetHost.DependencyResolver.Resolve<IConnectionManager>();
+            var connectionManager = AspNetHost.DependencyResolver.Resolve<IConnectionManager>();
             return connectionManager.GetClients<SignalRProvider>();
         }
     }
