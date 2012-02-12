@@ -63,3 +63,35 @@ function redrawGrid() {
 function reloadGrid() {
     oTable.fnReloadAjax();
 }
+
+
+//SignalR
+$(function () {
+    // Proxy created on the fly
+    var signalRProvider = $.connection.signalRProvider;
+
+    // Declare a function on the chat hub so the server can invoke it
+    signalRProvider.updatedStatus = function (episodeId, episodeStatus) {
+        var imageSrc = '../../Content/Images/' + episodeStatus + '.png';
+        var row = $('tr.episodeId_' + episodeId);
+
+        if (row.length == 0)
+            return;
+
+        var statusImage = $(row).find('img.statusImage');
+
+        if (statusImage.length == 0)
+            return;
+
+        statusImage.attr('alt', episodeStatus);
+        statusImage.attr('title', episodeStatus);
+        statusImage.attr('src', imageSrc);
+
+        if (episodeStatus != "Missing") {
+            statusImage.parent('td').removeClass('episodeMissing');
+        }
+    };
+
+    // Start the connection
+    $.connection.hub.start();
+});

@@ -171,6 +171,12 @@
     <Reference Include="Prowlin">
       <HintPath>..\packages\Prowlin 0.9.4163.39219\Prowlin.dll</HintPath>
     </Reference>
+    <Reference Include="SignalR">
+      <HintPath>..\packages\SignalR.Server.0.4.0.0\lib\net40\SignalR.dll</HintPath>
+    </Reference>
+    <Reference Include="SignalR.Hosting.AspNet">
+      <HintPath>..\packages\SignalR.Hosting.AspNet.0.4.0.0\lib\net40\SignalR.Hosting.AspNet.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
@@ -299,6 +305,7 @@
     <Compile Include="Providers\QualityTypeProvider.cs" />
     <Compile Include="Providers\ReferenceDataProvider.cs" />
     <Compile Include="Providers\SearchProvider.cs" />
+    <Compile Include="Providers\SignalRProvider.cs" />
     <Compile Include="Providers\SmtpProvider.cs" />
     <Compile Include="Providers\TwitterProvider.cs" />
     <Compile Include="Providers\UpdateProvider.cs" />

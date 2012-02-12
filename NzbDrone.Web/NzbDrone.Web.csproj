@@ -59,6 +59,9 @@
     <Reference Include="MvcMiniProfiler, Version=1.9.0.0, Culture=neutral, PublicKeyToken=b44f9351044011a3, processorArchitecture=MSIL">
       <HintPath>..\packages\MiniProfiler.1.9\lib\net40\MvcMiniProfiler.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.0.8.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.4.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Ninject, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\packages\Ninject.2.2.1.4\lib\net40-Full\Ninject.dll</HintPath>
     </Reference>
@@ -67,6 +70,12 @@
     </Reference>
     <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="SignalR, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SignalR.Server.0.4.0.0\lib\net40\SignalR.dll</HintPath>
+    </Reference>
+    <Reference Include="SignalR.Hosting.AspNet, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SignalR.Hosting.AspNet.0.4.0.0\lib\net40\SignalR.Hosting.AspNet.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -325,13 +334,14 @@
     <Content Include="Scripts\DataTables-1.9.0\media\js\jquery.dataTables.js" />
     <Content Include="Scripts\DataTables-1.9.0\media\js\jquery.dataTables.min.js" />
     <Content Include="Scripts\DataTables-1.9.0\media\js\jquery.jeditable.js" />
-    <Content Include="Scripts\DataTables-1.9.0\media\js\jquery.validate.js" />
     <Content Include="Scripts\jquery-1.7.1-vsdoc.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
     <Content Include="Scripts\jquery-ui-1.8.17.js" />
     <Content Include="Scripts\jquery-ui-1.8.17.min.js" />
     <Content Include="Scripts\jquery.hotkeys.js" />
     <Content Include="Scripts\jquery.livequery.js" />
+    <Content Include="Scripts\jquery.signalR.js" />
+    <Content Include="Scripts\jquery.signalR.min.js" />
     <Content Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
