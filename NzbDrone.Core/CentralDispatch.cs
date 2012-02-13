@@ -64,13 +64,17 @@ namespace NzbDrone.Core
             ReportingService.RestProvider = Kernel.Get<RestProvider>();
 
             var appId = AnalyticsProvider.DESKMETRICS_TEST_ID;
-            
+
             if (EnviromentProvider.IsProduction)
                 appId = AnalyticsProvider.DESKMETRICS_PRODUCTION_ID;
 
             var deskMetricsClient = new DeskMetricsClient(Kernel.Get<ConfigProvider>().UGuid.ToString(), appId, _enviromentProvider.Version);
             Kernel.Bind<IDeskMetricsClient>().ToConstant(deskMetricsClient);
-            Kernel.Get<AnalyticsProvider>().Checkpoint();
+
+            if (EnviromentProvider.IsProduction)
+            {
+                Kernel.Get<AnalyticsProvider>().Checkpoint();
+            }
         }
 
         private void InitQuality()
@@ -119,7 +123,7 @@ namespace NzbDrone.Core
             Kernel.Bind<IJob>().To<TrimLogsJob>().InSingletonScope();
             Kernel.Bind<IJob>().To<RecentBacklogSearchJob>().InSingletonScope();
             Kernel.Bind<IJob>().To<CheckpointJob>().InSingletonScope();
-            
+
             Kernel.Get<JobProvider>().Initialize();
             Kernel.Get<WebTimer>().StartTimer(30);
         }

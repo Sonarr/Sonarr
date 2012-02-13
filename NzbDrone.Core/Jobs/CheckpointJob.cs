@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Ninject;
+using NzbDrone.Common;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
 
@@ -33,7 +34,10 @@ namespace NzbDrone.Core.Jobs
 
         public void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
         {
-            _analyticsProvider.Checkpoint();
+            if(EnviromentProvider.IsProduction)
+            {
+                _analyticsProvider.Checkpoint();
+            }
         }
     }
 }
