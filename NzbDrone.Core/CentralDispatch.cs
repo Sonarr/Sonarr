@@ -120,10 +120,6 @@ namespace NzbDrone.Core
             Kernel.Bind<IJob>().To<RecentBacklogSearchJob>().InSingletonScope();
             Kernel.Bind<IJob>().To<CheckpointJob>().InSingletonScope();
             
-            Kernel.Bind<IJob>().To<FakeNotificationJob>().InSingletonScope();
-
-
-
             Kernel.Get<JobProvider>().Initialize();
             Kernel.Get<WebTimer>().StartTimer(30);
         }
