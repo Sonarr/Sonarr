@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Providers
             try
             {
                 //Don't report anything unless working from master branch.
-                if (!IsOnMasterBranch())
+                if (!IsOnMasterBranch() || !EnviromentProvider.IsProduction)
                     return;
 
                 if (EnviromentProvider.IsNewInstall)
