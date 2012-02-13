@@ -126,7 +126,7 @@ namespace NzbDrone.Core
 
         private void InitExternalNotifications()
         {
-            logger.Info("Initializing External Notifications...");
+            logger.Debug("Initializing External Notifications...");
             Kernel.Bind<ExternalNotificationBase>().To<Xbmc>();
             Kernel.Bind<ExternalNotificationBase>().To<Smtp>();
             Kernel.Bind<ExternalNotificationBase>().To<Twitter>();

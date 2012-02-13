@@ -12,12 +12,12 @@ namespace NzbDrone.Core.Datastore
 
         public void Started(List<long> currentVersion, long finalVersion)
         {
-            Logger.Info("Starting Datastore migration {0} -> {1}", String.Join(",", currentVersion), finalVersion);
+            Logger.Debug("Starting database migration {0} -> {1}", String.Join(",", currentVersion), finalVersion);
         }
 
         public void MigrateUp(long version, string migrationName)
         {
-            Logger.Info("Starting MigrateUp {0} [{1}]", version, migrationName);
+            Logger.Info("Starting migration {0} [{1}]", version, migrationName);
         }
 
         public void MigrateDown(long version, string migrationName)

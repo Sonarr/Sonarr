@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual void InitializeNewznabIndexers(IList<NewznabDefinition> indexers)
         {
-            Logger.Info("Initializing Newznab indexers. Count {0}", indexers.Count);
+            Logger.Debug("Initializing Newznab indexers. Count {0}", indexers.Count);
 
             var currentIndexers = All();
 

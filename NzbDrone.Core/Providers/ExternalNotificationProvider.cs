@@ -62,7 +62,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual void InitializeNotifiers(IList<ExternalNotificationBase> notifiers)
         {
-            Logger.Info("Initializing notifiers. Count {0}", notifiers.Count);
+            Logger.Debug("Initializing notifiers. Count {0}", notifiers.Count);
 
             _notifiers = notifiers;
 

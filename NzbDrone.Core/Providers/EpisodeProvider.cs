@@ -409,13 +409,11 @@ namespace NzbDrone.Core.Providers
 
         public virtual void SetEpisodeIgnore(int episodeId, bool isIgnored)
         {
-            logger.Info("Setting ignore flag on Episode:{0} to {1}", episodeId, isIgnored);
-
             _database.Execute(@"UPDATE Episodes SET Ignored = @0
                                 WHERE EpisodeId = @1",
                 isIgnored, episodeId);
 
-            logger.Info("Ignore flag for Episode:{0} successfully set to {1}", episodeId, isIgnored);
+            logger.Info("Ignore flag for Episode:{0} was set to {1}", episodeId, isIgnored);
         }
 
         public virtual bool IsFirstOrLastEpisodeOfSeason(int seriesId, int seasonNumber, int episodeNumber)

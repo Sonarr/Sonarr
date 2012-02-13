@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual void InitializeIndexers(IList<IndexerBase> indexers)
         {
-            Logger.Info("Initializing indexers. Count {0}", indexers.Count);
+            Logger.Debug("Initializing indexers. Count {0}", indexers.Count);
 
             _indexers = indexers;
 

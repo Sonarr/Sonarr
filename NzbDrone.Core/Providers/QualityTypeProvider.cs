@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Providers
             if (All().Count != 0)
                 return;
 
-            Logger.Info("Setting up default quality types");
+            Logger.Debug("Setting up default quality types");
 
             var qualityTypes = new List<QualityType>();
             qualityTypes.Add(new QualityType { QualityTypeId = 1, Name = "SDTV", MinSize = 0, MaxSize = 100 });
