@@ -6,7 +6,6 @@ using DeskMetrics;
 using Ninject;
 using NLog;
 using NzbDrone.Common;
-using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Providers;
@@ -14,6 +13,11 @@ using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.ExternalNotification;
 using NzbDrone.Core.Providers.Indexer;
 using PetaPoco;
+using SignalR;
+using SignalR.Hosting.AspNet;
+using SignalR.Infrastructure;
+using SignalR.Ninject;
+using Connection = NzbDrone.Core.Datastore.Connection;
 
 namespace NzbDrone.Core
 {
@@ -30,6 +34,9 @@ namespace NzbDrone.Core
 
             logger.Debug("Initializing Kernel:");
             Kernel = new StandardKernel();
+
+            var resolver = new NinjectDependencyResolver(Kernel);
+            AspNetHost.SetResolver(resolver);
 
             InitDatabase();
             InitReporting();

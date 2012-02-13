@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Providers
             GetClients().updatedStatus(episodeId, episodeStatus.ToString());
         }
 
-        private static dynamic GetClients()
+        private dynamic GetClients()
         {
             var connectionManager = AspNetHost.DependencyResolver.Resolve<IConnectionManager>();
             return connectionManager.GetClients<SignalRProvider>();
