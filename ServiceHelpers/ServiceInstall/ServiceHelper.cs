@@ -1,10 +1,11 @@
+using System.Linq;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Security.Principal;
 
-namespace InstallService
+namespace ServiceInstall
 {
     internal static class ServiceHelper
     {

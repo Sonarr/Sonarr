@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System;
-using UninstallService;
 
 namespace ServiceUninstall
 {

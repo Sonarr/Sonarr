@@ -1,7 +1,5 @@
-@using NzbDrone.Common
 @using NzbDrone.Core.Instrumentation
-@using NzbDrone.Web.Helpers
-@model IEnumerable<NzbDrone.Core.Instrumentation.Log>
+@model IEnumerable<Log>
 @{ ViewBag.Title = "Logs";}
 @section ActionMenu{
     <ul class="sub-menu">
@@ -9,38 +7,45 @@
         <li>@Html.ActionLink("File", "File", "Log")</li>
     </ul>
 }
-
 @section HeaderContent{
     <style>
-        #logGrid td {
+        #logGrid td
+        {
             padding: 2px 8px 2px 8px;
         }
     </style>
 }
-
 <div class="infoBox">
     Log entries older than 30 days are automatically deleted.</div>
-
 <div class="grid-container">
     <table id="logGrid" class="dataTablesGrid hidden-grid">
         <thead>
             <tr>
-                <th>Time</th>
-                <th>Level</th>
-                <th>Source</th>
-                <th>Message</th>
+                <th>
+                    Time
+                </th>
+                <th>
+                    Level
+                </th>
+                <th>
+                    Source
+                </th>
+                <th>
+                    Message
+                </th>
                 @*Details Column*@
-                <th style="display: none;">Details</th>
+                <th style="display: none;">
+                    Details
+                </th>
             </tr>
         </thead>
         <tbody>
         </tbody>
     </table>
 </div>
-
 @section Scripts{
     <script type="text/javascript">
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('.dataTablesGrid').removeClass('hidden-grid');
 
             oTable = $('#logGrid').dataTable({
@@ -58,20 +63,24 @@
                 "sPaginationType": "four_button",
                 "aoColumns": [
                                 { sWidth: '150px', "mDataProp": "Time" }, //Time
-                                { sWidth: '80px', "mDataProp": "Level" }, //Level
-                                { sWidth: '240px', "mDataProp": "Source" }, //Source
-                                { sWidth: 'auto', "mDataProp": "Message", "bSortable": false }, //Message
-                                { sWidth: 'auto', "mDataProp": "Details", "bSortable": false, "bVisible": false, "fnRender": function (row) {
-                                        var result = "<div>Method: " + row.aData["Method"] + "</div>" +
-                                            "<div>Exception Type: " + row.aData["ExceptionType"] + "</div>" +
-                                                "<div class=\"stackFrame\">Exception: " + row.aData["Exception"] + "</div>";
-                                        return result;
+                                {sWidth: '80px', "mDataProp": "Level" }, //Level
+                                {sWidth: '240px', "mDataProp": "Source" }, //Source
+                                {sWidth: 'auto', "mDataProp": "Message", "bSortable": false }, //Message
+                                {sWidth: 'auto', "mDataProp": "Details", "bSortable": false, "bVisible": false, "fnRender": function (row) {
+                                    var result = "<div>Method: " + row.aData["Method"] + "</div>";
+                                    
+                                    if (row.aData["ExceptionType"] !== null) {
+                                        result += "<div>Exception Type: " + row.aData["ExceptionType"] + "</div>" +
+                                            "<div class=\"stackFrame\">Exception: " + row.aData["Exception"] + "</div>";
                                     }
-                                } //Details
+                                    
+                                    return result;
+                                }
+                            } //Details
                             ],
                 "aaSorting": [[0, 'desc']],
-                "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull) {
-                          fnRowCallback(nRow, aData);
+                "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+                    fnRowCallback(nRow, aData);
                 }
             });
         });

@@ -5,7 +5,7 @@ using System.IO;
 using System.Reflection;
 using System.Security.Principal;
 
-namespace UninstallService
+namespace ServiceUninstall
 {
     internal static class ServiceHelper
     {
