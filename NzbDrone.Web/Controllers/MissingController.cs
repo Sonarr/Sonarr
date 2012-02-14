@@ -31,7 +31,7 @@ namespace NzbDrone.Web.Controllers
                 EpisodeTitle = e.Title,
                 Overview = e.Overview,
                 SeriesTitle = e.Series.Title,
-                AirDate = e.AirDate.Value.ToString(),
+                AirDate = e.AirDate.Value.ToString("MM/dd/yyyy"),
                 AirDateString = e.AirDate.Value.ToBestDateString()
             });
 

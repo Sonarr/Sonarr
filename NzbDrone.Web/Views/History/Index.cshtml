@@ -73,6 +73,15 @@
                                 { sWidth: 'auto', "mDataProp": "EpisodeTitle", "bSortable": false }, //Episode Title
                                 { sWidth: '70px', "mDataProp": "Quality", "bSortable": false }, //Quality
                                 { sWidth: '150px', "mDataProp": "Date" }, //Grabbed On
+                                { sWidth: '150px', "mDataProp": function (source, type, val) {
+                                        // 'display' and 'filter' use our fancy naming
+                                        if (type === 'display' || type === 'filter') {
+                                            return source["Date"];
+                                        }
+                                        // 'sort' and 'type' both just use the raw data
+                                        return source["DateSorter"];
+                                    }
+                                }, //Date
                                 { sWidth: '40px', "mDataProp": "HistoryId", "bSortable": false, "fnRender": function (row) {
                                     var deleteImage = "<img src=\"../../Content/Images/X.png\" alt=\"Delete\" title=\"Delete from History\" class=\"gridImage\" onclick=\"deleteHistory(this.parentNode.parentNode, " + row.aData["HistoryId"] + ")\">";
                                     var redownloadImage = "<img src=\"../../Content/Images/Downloading.png\" alt=\"Redownload\" title=\Redownload Episode\" class=\"gridImage\" onclick=\"redownloadHistory(this.parentNode.parentNode, " + row.aData["HistoryId"] + ", " + row.aData["EpisodeId"] + ")\">";

@@ -37,6 +37,7 @@ namespace NzbDrone.Web.Controllers
                 Quality = h.Quality.ToString(),
                 IsProper = h.IsProper,
                 Date = h.Date.ToString(),
+                DateSorter = h.Date.ToString("MM/dd/yyyy h:mm:ss tt"),
                 Indexer = h.Indexer,
                 EpisodeId = h.EpisodeId
             }).OrderByDescending(h => h.Date).ToList();

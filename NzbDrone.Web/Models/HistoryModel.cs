@@ -14,6 +14,7 @@ namespace NzbDrone.Web.Models
         public string NzbTitle { get; set; }
         public string Quality { get; set; }
         public string Date { get; set; }
+        public string DateSorter { get; set; }
         public bool IsProper { get; set; }
         public string Indexer { get; set; }
         public int EpisodeId { get; set; }
