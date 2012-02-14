@@ -46,7 +46,7 @@ namespace NzbDrone.Web.Controllers
                 Overview = u.Overview,
                 AirDateTime = GetDateTime(u.AirDate.Value, u.Series.AirTimes),
                 AirDate = u.AirDate.Value.ToBestDateString(),
-                AirTime = String.IsNullOrEmpty(u.Series.AirTimes) ? "?" : Convert.ToDateTime(u.Series.AirTimes).ToString("MM/dd/yyyy"),
+                AirTime = String.IsNullOrEmpty(u.Series.AirTimes) ? "?" : Convert.ToDateTime(u.Series.AirTimes).ToShortTimeString(),
                 Status = u.Status.ToString()
             }).OrderBy(e => e.AirDateTime).ToList();
         }
