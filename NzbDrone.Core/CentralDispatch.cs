@@ -71,10 +71,7 @@ namespace NzbDrone.Core
             var deskMetricsClient = new DeskMetricsClient(Kernel.Get<ConfigProvider>().UGuid.ToString(), appId, _enviromentProvider.Version);
             Kernel.Bind<IDeskMetricsClient>().ToConstant(deskMetricsClient);
 
-            if (EnviromentProvider.IsProduction)
-            {
-                Kernel.Get<AnalyticsProvider>().Checkpoint();
-            }
+            Kernel.Get<AnalyticsProvider>().Checkpoint();
         }
 
         private void InitQuality()

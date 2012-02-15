@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Jobs
 
         public CheckpointJob()
         {
-            
+
         }
 
         public string Name
@@ -34,10 +34,7 @@ namespace NzbDrone.Core.Jobs
 
         public void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
         {
-            if(EnviromentProvider.IsProduction)
-            {
-                _analyticsProvider.Checkpoint();
-            }
+            _analyticsProvider.Checkpoint();
         }
     }
 }

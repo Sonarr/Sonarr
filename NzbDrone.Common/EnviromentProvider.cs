@@ -43,7 +43,7 @@ namespace NzbDrone.Common
         public static Guid UGuid { get; set; }
 
 
-        public static bool IsNewInstall { get; set; }
+        public static bool RegisterNewInstall { get; set; }
 
         public virtual bool IsUserInteractive
         {
