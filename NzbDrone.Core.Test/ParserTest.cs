@@ -62,6 +62,7 @@ namespace NzbDrone.Core.Test
         [TestCase("S6E02-Unwrapped-(Playing With Food) - [DarkData]", "", 6, 2)]
         [TestCase("S06E03-Unwrapped-(Number Ones Unwrapped) - [DarkData]", "", 6, 3)]
         [TestCase("The Mentalist S02E21 18 5 4 720p WEB DL DD5 1 h 264 EbP", "The Mentalist", 2, 21)]
+        [TestCase("01x04 - Halloween, Part 1 - 720p WEB-DL", "", 1, 4)]
         public void ParseTitle_single(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
             var result = Parser.ParseTitle(postTitle);
