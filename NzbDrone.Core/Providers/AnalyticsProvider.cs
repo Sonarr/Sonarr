@@ -40,6 +40,7 @@ namespace NzbDrone.Core.Providers
                 if (EnviromentProvider.RegisterNewInstall)
                 {
                     _deskMetricsClient.RegisterInstall();
+                    EnviromentProvider.RegisterNewInstall = false;
                 }
 
                 if (_deskMetricsClient.Started)
