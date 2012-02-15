@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Providers
                 if (!IsOnMasterBranch())
                     return;
 
-                if (EnviromentProvider.IsNewInstall)
+                if (EnviromentProvider.RegisterNewInstall)
                 {
                     _deskMetricsClient.RegisterInstall();
                 }
