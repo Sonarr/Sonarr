@@ -45,6 +45,8 @@ namespace NzbDrone.Test.Common
         [SetUp]
         public void TestBaseSetup()
         {
+            EnviromentProvider.RegisterNewInstall = true; 
+
             MockedRestProvider = new Mock<RestProvider>();
             ReportingService.RestProvider = MockedRestProvider.Object;
 
