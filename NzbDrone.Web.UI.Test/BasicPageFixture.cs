@@ -4,10 +4,8 @@ using NzbDrone.Web.UI.Automation.Fluent;
 
 namespace NzbDrone.Web.UI.Automation
 {
-    [TestFixture]
     public class BasicPageFixture : AutomationTestBase
     {
-
         [Test]
         public void HomePage()
         {
@@ -22,7 +20,6 @@ namespace NzbDrone.Web.UI.Automation
             Driver.GivenHistoryPage();
             CaptureScreen();
             Driver.Should().BeNzbDronePage();
-            
         }
 
         [Test]
@@ -42,7 +39,4 @@ namespace NzbDrone.Web.UI.Automation
         }
 
     }
-
-
-
 }

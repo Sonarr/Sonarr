@@ -12,6 +12,7 @@ using OpenQA.Selenium.Remote;
 namespace NzbDrone.Web.UI.Automation
 {
     [Explicit]
+    [TestFixture(Category = "Automation")]
     public abstract class AutomationTestBase
     {
         private static readonly EnviromentProvider enviromentProvider = new EnviromentProvider();
