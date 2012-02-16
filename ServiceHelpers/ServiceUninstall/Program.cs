@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System;
 
 namespace ServiceUninstall
 {
@@ -8,8 +7,6 @@ namespace ServiceUninstall
         static void Main()
         {
             ServiceHelper.Run(@"/u");
-            Console.WriteLine("Press any key to continue");
-            Console.ReadLine();
         }
     }
 }

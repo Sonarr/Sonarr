@@ -11,12 +11,15 @@ using OpenQA.Selenium.Remote;
 
 namespace NzbDrone.Web.UI.Automation
 {
+    [Explicit]
     public abstract class AutomationTestBase
     {
-        static readonly EnviromentProvider enviromentProvider = new EnviromentProvider();
-        private static readonly string testFolder;
+        private static readonly EnviromentProvider enviromentProvider = new EnviromentProvider();
 
-        public string AppUrl
+        private readonly string _clonePackagePath;
+        private readonly string _masterPackagePath;
+
+        protected string AppUrl
         {
             get
             {
@@ -24,26 +27,28 @@ namespace NzbDrone.Web.UI.Automation
             }
         }
 
-
-        public RemoteWebDriver Driver { get; private set; }
-
-        static AutomationTestBase()
+        protected AutomationTestBase()
         {
-            CleanBinFolder();
-            testFolder = CreatePackage();
-            StartNzbDrone();
+            var rawPackagePath = Path.Combine(enviromentProvider.ApplicationPath, "_rawPackage");
+            _clonePackagePath = Path.Combine(rawPackagePath, "NzbDrone_Automation");
+            _masterPackagePath = Path.Combine(rawPackagePath, "NzbDrone");
         }
+
+
+        protected RemoteWebDriver Driver { get; private set; }
+
+
 
         [SetUp]
         public void AutomationSetup()
         {
-            
+
         }
 
         [TearDown]
         public void AutomationTearDown()
         {
-            
+
 
             if (!Directory.Exists(Directory.GetCurrentDirectory() + "\\Screenshots"))
             {
@@ -62,18 +67,26 @@ namespace NzbDrone.Web.UI.Automation
         public void AutomationTestFixtureSetup()
         {
             StopNzbDrone();
-            ResetUserData();
-            StartNzbDrone();
+
+
+            DeleteClone();
+            ClonePackage();
+
+            //StartNzbDrone();
+            InstallNzbDroneService();
+
+            new HttpProvider().DownloadString(AppUrl);
+
             Driver = new FirefoxDriver();
         }
+
+
 
         [TestFixtureTearDown]
         public void AutomationTestFixtureTearDown()
         {
             Driver.Close();
             StopNzbDrone();
-
-            File.Copy(Path.Combine(testFolder, "nzbdrone.log"), Path.Combine(Directory.GetCurrentDirectory(), "nzbdrone.log"), true);
         }
 
 
@@ -86,70 +99,90 @@ namespace NzbDrone.Web.UI.Automation
             ((ITakesScreenshot)Driver).GetScreenshot().SaveAsFile(fileName, ImageFormat.Png);
         }
 
-        private void ResetUserData()
-        {
-            var appDataPath = Path.Combine(testFolder, "NzbDrone.Web", "app_data");
 
-            if (Directory.Exists(appDataPath))
-                Directory.Delete(appDataPath, true);
+
+        private void StartNzbDrone()
+        {
+            StartProcess("nzbdrone.exe", false);
 
         }
 
-
-        private static void CleanBinFolder()
-        {
-            var folderName = "Debug";
-
-            if (EnviromentProvider.IsDebug)
-            {
-                folderName = "Release";
-            }
-
-            var dirs = Directory.GetDirectories(enviromentProvider.ApplicationPath, folderName, SearchOption.AllDirectories);
-
-
-            foreach (var dir in dirs)
-            {
-                Directory.Delete(dir, true);
-            }
-
-        }
-
-        static void StartNzbDrone()
-        {
-
-            var startInfo = new ProcessStartInfo
-            {
-                FileName = Path.Combine(testFolder, "nzbdrone.exe"),
-                RedirectStandardOutput = true,
-                UseShellExecute = false
-            };
-
-            var nzbDroneProcess = new Process
-                                      {
-                                          StartInfo = startInfo
-                                      };
-            nzbDroneProcess.OutputDataReceived +=
-                    delegate(object o, DataReceivedEventArgs args)
-                    {
-                        Console.WriteLine(args.Data);
-                    };
-
-            nzbDroneProcess.Start();
-        }
-
-
-
-        public static void StopNzbDrone()
+        private void StopNzbDrone()
         {
             foreach (var process in Process.GetProcessesByName("nzbdrone"))
             {
                 process.Kill();
                 process.WaitForExit();
             }
+
+            foreach (var process in Process.GetProcessesByName("iisexpress"))
+            {
+                process.Kill();
+                process.WaitForExit();
+            }
+
+            try
+            {
+                StartProcess("ServiceUninstall.exe", true);
+            }
+            catch (Exception)
+            {
+
+            }
+
         }
 
-        private static string CreatePackage()
+        private void InstallNzbDroneService()
+        {
+            StartProcess("ServiceInstall.exe", true);
+        }
+
+        private void StartProcess(string fileName, bool waitForExit)
+        {
+
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = Path.Combine(_clonePackagePath, fileName),
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+            };
+
+            var nzbDroneProcess = new Process
+            {
+                StartInfo = startInfo
+            };
+
+            nzbDroneProcess.OutputDataReceived += (o, args) => Console.WriteLine(args.Data);
+            nzbDroneProcess.ErrorDataReceived += (o, args) => Console.WriteLine(args.Data);
+
+            nzbDroneProcess.Start();
+
+            nzbDroneProcess.BeginErrorReadLine();
+            nzbDroneProcess.BeginOutputReadLine();
+
+            if (waitForExit)
+            {
+                nzbDroneProcess.WaitForExit();
+            }
+        }
+
+
+        private void ClonePackage()
+        {
+            new DiskProvider().CopyDirectory(_masterPackagePath, _clonePackagePath);
+        }
+
+        private void DeleteClone()
+        {
+            if (Directory.Exists(_clonePackagePath))
+            {
+                Directory.Delete(_clonePackagePath, true);
+            }
+        }
+
+        private string CreatePackage()
         {
             Console.WriteLine("Creating NzbDrone Package");
 
@@ -182,6 +215,33 @@ namespace NzbDrone.Web.UI.Automation
 
 
             return testFolder;
+        }
+
+        private void ResetUserData()
+        {
+            var appDataPath = Path.Combine(_clonePackagePath, "NzbDrone.Web", "app_data");
+
+            if (Directory.Exists(appDataPath))
+                Directory.Delete(appDataPath, true);
+        }
+
+
+        private static void CleanBinFolder()
+        {
+            var folderName = "Debug";
+
+            if (EnviromentProvider.IsDebug)
+            {
+                folderName = "Release";
+            }
+
+            var dirs = Directory.GetDirectories(enviromentProvider.ApplicationPath, folderName, SearchOption.AllDirectories);
+
+
+            foreach (var dir in dirs)
+            {
+                Directory.Delete(dir, true);
+            }
         }
     }
 }
