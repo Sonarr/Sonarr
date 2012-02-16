@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace NzbDrone.Common.Contract
@@ -7,5 +8,15 @@ namespace NzbDrone.Common.Contract
     {
         [JsonProperty("t")]
         public string Title { get; set; }
+
+        protected override Dictionary<string, string> GetString()
+        {
+            var dic = new Dictionary<string, string>
+                          {
+                                  {"Title", Title.NullCheck()},
+                          };
+
+            return dic;
+        }
     }
 }
