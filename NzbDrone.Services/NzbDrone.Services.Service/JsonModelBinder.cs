@@ -25,9 +25,13 @@ namespace NzbDrone.Services.Service
                     return base.BindModel(controllerContext, bindingContext);
                 }
 
-                using (var reader = new StreamReader(request.InputStream))
+                using (var stream = request.InputStream)
                 {
-                    input = reader.ReadToEnd();
+                    stream.Seek(0, SeekOrigin.Begin);
+                    using (var reader = new StreamReader(stream))
+                    {
+                        input = reader.ReadToEnd();
+                    }
                 }
 
                 var deserializedObject = JsonConvert.DeserializeObject(input, bindingContext.ModelMetadata.ModelType);
@@ -36,7 +40,7 @@ namespace NzbDrone.Services.Service
             }
             catch (Exception e)
             {
-                logger.FatalException("Error deserializing request. " + input, e);
+                logger.FatalException("Error deserilizing request. " + input, e);
                 throw;
             }
         }
