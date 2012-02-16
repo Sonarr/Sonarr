@@ -7,12 +7,13 @@ using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Web.Models
 {
-    public class SeriesModel
+    public class  SeriesModel
     {
         public int SeriesId { get; set; }
 
         //View Only
         public string Title { get; set; }
+        public string TitleSorter { get; set; }
         public int SeasonsCount { get; set; }
         public int EpisodeCount { get; set; }
         public int EpisodeFileCount { get; set; }
@@ -23,6 +24,8 @@ namespace NzbDrone.Web.Models
         public int Episodes { get; set; }
         public bool HasBanner { get; set; }
         public string NextAiring { get; set; }
+        public string NextAiringSorter { get; set; }
+        public string Details { get; set; }
 
         public IList<int> Seasons { get; set; }
 

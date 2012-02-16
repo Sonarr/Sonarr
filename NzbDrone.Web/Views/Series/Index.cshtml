@@ -1,7 +1,7 @@
 @using NzbDrone.Common
 @using NzbDrone.Web.Helpers
 @using NzbDrone.Web.Models;
-@model List<NzbDrone.Web.Models.SeriesModel>
+@model string
 @{ViewBag.Title = "NzbDrone";}
 
 @section HeaderContent
@@ -79,48 +79,24 @@
     </ul>
 }
 
-<table class="seriesTable">
-    
-    <colgroup>
-        <col style="width: 10px"/>
-        <col style="width:auto" />
-        <col style="width:100px" />
-        <col style="width:100px" />
-        <col style="width:140px" />
-        <col style="width:100px" />
-        <col style="width:80px"/>
-    </colgroup>
+<table id="seriesGrid" class="dataTablesGrid seriesTable">
     <thead>
         
         <tr>
-            <th>Status</th>
-            <th>Title</th>
-            <th>Seasons</th>
-            <th>Quality</th>
-            <th>Next Airing</th>
-            <th>Episodes</th>
+            <th style="width: 10px">Status</th>
+            <th style="width: auto">Title</th>
+            <th style="width: 100px">Seasons</th>
+            <th style="width: 100px">Quality</th>
+            <th style="width: 140px">Next Airing</th>
+            <th style="width: 100px">Episodes</th>
         
             @*Commands Column*@
-            <th>
+            <th style="width: 80px">
             
             </th>
         </tr>
     </thead>
     <tbody>
-        @for (int i = 0; i < Model.Count; i++)
-        {
-            var series = Model[i];
-        
-            if (i % 2 == 0)
-            {
-                Html.RenderPartial("Series", series);
-            }
-
-            else
-            {
-                Html.RenderPartial("Series", series, new ViewDataDictionary { new KeyValuePair<string, object>("AltRow", true) });
-            }
-        }
     </tbody>
 </table>
 
@@ -134,8 +110,97 @@
         var seriesEditorUrl = './Series/SeriesEditor';
         var saveSeriesEditorUrl = './Series/SaveSeriesEditor';
         var seriesDeleteUrl = './Series/DeleteSeries';
+        var pauseImage = '<img src="../../Content/Images/pause.png" width="24" height="24" alt="Paused" title="Not monitored" />';
+        var stopImage = '<img src="../../Content/Images/stop.png" width="24" height="24" alt="Ended" title="Ended" />';
+        var playImage = '<img src="../../Content/Images/play.png" width="24" height="24" alt="Active" title="Continuing" />';
 
         $(document).ready(function () {
+            $('#seriesGrid').removeClass('hidden-grid');
+
+            oTable = $('.dataTablesGrid').dataTable({
+                "bShowAll": false,
+                "aaData": @Html.Raw(Model),
+                "bPaginate": false,
+                "bLengthChange": false,
+                "bFilter": false,
+                "bSort": true,
+                "bInfo": false,
+                "bAutoWidth": false,
+                "aoColumns": [
+                                { sWidth: '70px',
+                                  "sClass": "statusColumn",
+                                  "mDataProp": function (source, type, val) {
+                                                    // 'display' and 'filter' use our fancy naming
+                                                    if (type === 'display' || type === 'filter') {
+                                                        var monitored = source["Monitored"];
+                                                        var status = source["Status"];
+                                    
+                                                        if (!monitored) {
+                                                            return pauseImage;
+                                                        }
+                                    
+                                                        else {
+                                                            if (status === "Ended"){
+                                                                return stopImage;
+                                                            }
+                                            
+                                                            else {
+                                                                return playImage;
+                                                            }
+                                                        }
+                                                    }
+                                                    // 'sort' and 'type' both just use the raw data
+                                                    return source["Status"];
+                                                }
+                                }, //Status
+                                { sWidth: 'auto', "mDataProp": function (source, type, val) {
+                                                                        // 'display' and 'filter' use our fancy naming
+                                                                        if (type === 'display' || type === 'filter') {
+                                                                            return source["Title"];
+                                                                        }
+                                                                        // 'sort' and 'type' both just use the raw data
+                                                                        return source["TitleSorter"];
+                                                                    } 
+                                }, //Title
+                                { sWidth: '100px', "mDataProp": "SeasonsCount", "bSortable": false }, //Seasons
+                                { sWidth: '100px', "mDataProp": "QualityProfileName" }, //Quality
+                                { sWidth: '120px', "mDataProp": function (source, type, val) {
+                                                                        // 'display' and 'filter' use our fancy naming
+                                                                        if (type === 'display' || type === 'filter') {
+                                                                            return source["NextAiring"];
+                                                                        }
+                                                                        // 'sort' and 'type' both just use the raw data
+                                                                        return source["NextAiringSorter"];
+                                                                    } 
+                                }, //Next Airing
+                                { sWidth: '140px', "mDataProp": "Episodes", "bSortable": false, "fnRender": function (row) {
+                                        var progress = row.aData["EpisodeFileCount"] / row.aData["EpisodeCount"] * 100;
+                                        
+                                        var result = "<div class='progressBar' rel='" + progress + "'>" +
+                                                        "<span class='progressBarText'>" + row.aData["EpisodeFileCount"] + " / " + row.aData["EpisodeCount"] +"</span>" +
+                                                     "</div>";
+
+                                        return result;
+                                    }
+                                }, //Episodes
+                                { sWidth: '50px', "mDataProp": "HasBanner", "bSortable": false, "fnRender": function (row) {
+                                        return "<img src='../../Content/Images/settings.png' class='editButton' value='" + row.aData["SeriesId"] + "' rel='" + row.aData["Title"] + "' />" +
+                                                "<img src='../../Content/Images/close.png' class='deleteButton' value='" + row.aData["SeriesId"] + "' rel='" + row.aData["Title"] + "'/>";
+                                    }
+                                }, //Commands
+                                { sWidth: '60px', "mDataProp": "Details", "bSortable": false, "bVisible": false, "fnRender": function (row) {
+                                        var result = "<b>Airs Day of Week: </b>" + row.aData["AirsDayOfWeek"] + "<br/>" +
+                                                        "<b>Overview: </b>" + row.aData["Overview"] + "<br/>";
+                                        return result;
+                                    }
+                                } //Details
+                            ],
+                "aaSorting": [[1, 'asc']],
+                "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                    $(nRow).addClass(aData["SeriesId"].toString());
+                }
+            });
+
             $(".progressBar").each(function () {
                 var element = this;
 
@@ -197,11 +262,8 @@
             width: 450,
             modal: true,
             buttons: {
-                
                 "Delete": function () {
-
                     var seriesId = $('.seriesId').val();
-
                     $.ajax({
                         type: "POST",
                         url: seriesDeleteUrl,
@@ -221,7 +283,6 @@
         });
 
         $(".editButton")
-            //.button()
             .live('click', function () {
                 //Get the SeriesId and Title
                 var seriesId = parseInt($(this).attr("value"));
@@ -246,8 +307,7 @@
                 $("#seriesEditor").dialog("open");
             });
 
-            $(".deleteButton")
-            //.button()
+        $(".deleteButton")
             .live('click', function () {
                 //Get the SeriesId and Title
                 var seriesId = parseInt($(this).attr("value"));
@@ -267,25 +327,20 @@
             function updateStatus() {
                 var monitored = $('#Monitored').attr('checked');
                 var seriesId = $('#SeriesId').val();
-                var img = $('.' + seriesId).children('.statusColumn').children('img');
-                var state = img.attr('alt');
-
-                if (state == "Ended")
-                    return;
-
-                if (state == "Active") {
-                    if (!monitored) {
-                        img.attr('title', 'Not monitored');
-                        img.attr('alt', 'Paused');
-                        img.attr('src', '../../Content/Images/pause.png');
-                    }
+                var status = $('#Status').val();
+                var imgContainer = $('.' + seriesId).children('.statusColumn');
+                                    
+                if (!monitored) {
+                    imgContainer.html(pauseImage);
                 }
-
-                if (state == "Paused") {
-                    if (monitored) {
-                        img.attr('title', 'Continuing');
-                        img.attr('alt', 'Active');
-                        img.attr('src', '../../Content/Images/play.png');
+                                    
+                else {
+                    if (status === "Ended"){
+                        imgContainer.html(stopImage);
+                    }
+                                            
+                    else {
+                        imgContainer.html(playImage);
                     }
                 }
             }

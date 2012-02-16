@@ -15,6 +15,7 @@
     @using (Html.BeginForm("SaveSeriesEditor", "Series", FormMethod.Post, new { id = "SeriesEditorForm", name = "SeriesEditorForm", @class = "settingsForm" }))
     {
         @Html.HiddenFor(m => m.SeriesId)
+        @Html.HiddenFor(m => m.Status)
         <label class="labelClass">@Html.LabelFor(m => m.Monitored)
             <span class="small">@Html.DescriptionFor(m => m.Monitored)</span>
         </label>

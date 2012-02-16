@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 using MvcMiniProfiler;
 using NzbDrone.Common.Model;
 using NzbDrone.Core;
@@ -37,8 +38,10 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult Index()
         {
-            var series = GetSeriesModels(_seriesProvider.GetAllSeriesWithEpisodeCount()).OrderBy(o => SortHelper.SkipArticles(o.Title)).ToList();
-            return View(series);
+            var series = GetSeriesModels(_seriesProvider.GetAllSeriesWithEpisodeCount());
+            var serialized = new JavaScriptSerializer().Serialize(series);
+
+            return View((object)serialized);
         }
 
         public ActionResult SeriesEditor(int seriesId)
@@ -191,6 +194,7 @@ namespace NzbDrone.Web.Controllers
                                                     {
                                                         SeriesId = s.SeriesId,
                                                         Title = s.Title,
+                                                        TitleSorter = SortHelper.SkipArticles(s.Title),
                                                         AirsDayOfWeek = s.AirsDayOfWeek.ToString(),
                                                         Monitored = s.Monitored,
                                                         Overview = s.Overview,
@@ -203,7 +207,8 @@ namespace NzbDrone.Web.Controllers
                                                         SeasonsCount = s.SeasonCount,
                                                         EpisodeCount = s.EpisodeCount,
                                                         EpisodeFileCount = s.EpisodeFileCount,
-                                                        NextAiring = s.NextAiring == null ? String.Empty : s.NextAiring.Value.ToBestDateString()
+                                                        NextAiring = s.NextAiring == null ? String.Empty : s.NextAiring.Value.ToBestDateString(),
+                                                        NextAiringSorter = s.NextAiring == null ? "12/31/9999" : s.NextAiring.Value.ToString("MM/dd/yyyy")
                                                     }).ToList();
 
             return series;
