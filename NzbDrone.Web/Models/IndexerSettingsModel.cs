@@ -76,6 +76,12 @@ namespace NzbDrone.Web.Models
         [Description("Enable downloading episodes from Newznab Providers")]
         public bool NewznabEnabled { get; set; }
 
+        [Required(ErrorMessage = "Please enter a valid number of days")]
+        [DataType(DataType.Text)]
+        [DisplayName("Retention")]
+        [Description("Usenet provider retention in days (0 = unlimited)")]
+        public int Retention { get; set; }
+
         public List<NewznabDefinition> NewznabDefinitions { get; set; }
     }
 }

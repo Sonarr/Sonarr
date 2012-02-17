@@ -67,6 +67,8 @@ namespace NzbDrone.Web.Controllers
         {
             return View(new IndexerSettingsModel
                             {
+                                Retention = _configProvider.Retention,
+
                                 NzbMatrixUsername = _configProvider.NzbMatrixUsername,
                                 NzbMatrixApiKey = _configProvider.NzbMatrixApiKey,
 
@@ -338,6 +340,8 @@ namespace NzbDrone.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                _configProvider.Retention = data.Retention;
+
                 var nzbsOrgSettings = _indexerProvider.GetSettings(typeof(NzbsOrg));
                 nzbsOrgSettings.Enable = data.NzbsOrgEnabled;
                 _indexerProvider.SaveSettings(nzbsOrgSettings);

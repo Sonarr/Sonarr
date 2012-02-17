@@ -413,6 +413,12 @@ namespace NzbDrone.Core.Providers.Core
             set { SetValue("AutoIgnorePreviouslyDownloadedEpisodes", value); }
         }
 
+        public virtual int Retention
+        {
+            get { return GetValueInt("Retention", 0); }
+            set { SetValue("Retention", value); }
+        }
+
         public Guid UGuid
         {
             get { return Guid.Parse(GetValue("UGuid", Guid.NewGuid().ToString(), persist: true)); }

@@ -11,17 +11,19 @@ namespace NzbDrone.Core.Providers.DecisionEngine
         private readonly UpgradeDiskSpecification _upgradeDiskSpecification;
         private readonly AcceptableSizeSpecification _acceptableSizeSpecification;
         private readonly AlreadyInQueueSpecification _alreadyInQueueSpecification;
+        private readonly RetentionSpecification _retentionSpecification;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         [Inject]
         public AllowedDownloadSpecification(QualityAllowedByProfileSpecification qualityAllowedByProfileSpecification,
             UpgradeDiskSpecification upgradeDiskSpecification, AcceptableSizeSpecification acceptableSizeSpecification,
-            AlreadyInQueueSpecification alreadyInQueueSpecification)
+            AlreadyInQueueSpecification alreadyInQueueSpecification, RetentionSpecification retentionSpecification)
         {
             _qualityAllowedByProfileSpecification = qualityAllowedByProfileSpecification;
             _upgradeDiskSpecification = upgradeDiskSpecification;
             _acceptableSizeSpecification = acceptableSizeSpecification;
             _alreadyInQueueSpecification = alreadyInQueueSpecification;
+            _retentionSpecification = retentionSpecification;
         }
 
         public AllowedDownloadSpecification()
@@ -32,6 +34,7 @@ namespace NzbDrone.Core.Providers.DecisionEngine
         {
             if (!_qualityAllowedByProfileSpecification.IsSatisfiedBy(subject)) return false;
             if (!_upgradeDiskSpecification.IsSatisfiedBy(subject)) return false;
+            if (!_retentionSpecification.IsSatisfiedBy(subject)) return false;
             if (!_acceptableSizeSpecification.IsSatisfiedBy(subject)) return false;
             if (_alreadyInQueueSpecification.IsSatisfiedBy(subject)) return false;
 

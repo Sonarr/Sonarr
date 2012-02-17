@@ -40,6 +40,8 @@ namespace NzbDrone.Core.Model
 
         public long Size { get; set; }
 
+        public int Age { get; set; }
+
         public override string ToString()
         {
             if (AirDate != null && EpisodeNumbers == null)

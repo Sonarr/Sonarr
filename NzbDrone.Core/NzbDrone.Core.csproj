@@ -261,6 +261,7 @@
     <Compile Include="Model\Xbmc\IconType.cs" />
     <Compile Include="Providers\BackupProvider.cs" />
     <Compile Include="Providers\DecisionEngine\AlreadyInQueueSpecification.cs" />
+    <Compile Include="Providers\DecisionEngine\RetentionSpecification.cs" />
     <Compile Include="Providers\DownloadClients\BlackholeProvider.cs" />
     <Compile Include="Providers\Converting\AtomicParsleyProvider.cs" />
     <Compile Include="Providers\Converting\HandbrakeProvider.cs" />
