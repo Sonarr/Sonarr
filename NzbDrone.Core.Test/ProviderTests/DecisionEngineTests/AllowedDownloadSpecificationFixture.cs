@@ -44,6 +44,10 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
             Mocker.GetMock<AlreadyInQueueSpecification>()
                     .Setup(c => c.IsSatisfiedBy(It.IsAny<EpisodeParseResult>()))
                     .Returns(false);
+
+            Mocker.GetMock<RetentionSpecification>()
+                    .Setup(c => c.IsSatisfiedBy(It.IsAny<EpisodeParseResult>()))
+                    .Returns(true);
         }
 
         private void WithProfileNotAllowed()
@@ -72,6 +76,13 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
             Mocker.GetMock<AlreadyInQueueSpecification>()
                     .Setup(c => c.IsSatisfiedBy(It.IsAny<EpisodeParseResult>()))
                     .Returns(true);
+        }
+
+        private void WithOverRetention()
+        {
+            Mocker.GetMock<RetentionSpecification>()
+                    .Setup(c => c.IsSatisfiedBy(It.IsAny<EpisodeParseResult>()))
+                    .Returns(false);
         }
 
         [Test]
@@ -109,11 +120,19 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
         }
 
         [Test]
+        public void should_not_be_allowed_if_report_is_over_retention()
+        {
+            WithOverRetention();
+            spec.IsSatisfiedBy(parseResult).Should().BeFalse();
+        }
+
+        [Test]
         public void should_not_be_allowed_if_none_of_conditions_are_met()
         {
             WithNoDiskUpgrade();
             WithNotAcceptableSize();
             WithProfileNotAllowed();
+            WithOverRetention();
 
             spec.IsSatisfiedBy(parseResult).Should().BeFalse();
         }
