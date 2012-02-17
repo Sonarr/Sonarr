@@ -1,7 +1,10 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
+using System.Data.SqlClient;
 using System.Linq;
 using NzbDrone.Services.Service.Migrations;
-using PetaPoco;
+using Services.PetaPoco;
+
 
 namespace NzbDrone.Services.Service.Datastore
 {
@@ -16,7 +19,7 @@ namespace NzbDrone.Services.Service.Datastore
         {
 
             MigrationsHelper.Run(GetConnectionString);
-            
+
             var db = new Database("SqlExpress")
             {
                 KeepConnectionAlive = true,

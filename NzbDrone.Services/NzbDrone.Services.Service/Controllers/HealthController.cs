@@ -3,7 +3,7 @@ using System.Linq;
 using System.Web.Mvc;
 using NzbDrone.Common;
 using NzbDrone.Core.Datastore.Migrations;
-using PetaPoco;
+using Services.PetaPoco;
 
 namespace NzbDrone.Services.Service.Controllers
 {

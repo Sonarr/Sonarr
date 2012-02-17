@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using NzbDrone.Services.Service.Repository;
-using PetaPoco;
+using Services.PetaPoco;
 
 namespace NzbDrone.Services.Service.Providers
 {

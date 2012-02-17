@@ -5,7 +5,7 @@ using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Contract;
 using NzbDrone.Services.Service.Repository.Reporting;
-using PetaPoco;
+using Services.PetaPoco;
 
 
 namespace NzbDrone.Services.Service.Controllers
@@ -42,7 +42,7 @@ namespace NzbDrone.Services.Service.Controllers
 
         private bool ParseErrorExists(string title)
         {
-            return _database.Exists<ParseErrorRow>("WHERE Title = @0", title);
+            return _database.Exists<ParseErrorRow>(title);
         }
 
         [HttpPost]
@@ -61,12 +61,12 @@ namespace NzbDrone.Services.Service.Controllers
 
                 return Json(OK);
             }
-            catch(Exception)
+            catch (Exception)
             {
                 logger.Trace(exceptionReport.NullCheck());
                 throw;
             }
-  
+
         }
     }
 }

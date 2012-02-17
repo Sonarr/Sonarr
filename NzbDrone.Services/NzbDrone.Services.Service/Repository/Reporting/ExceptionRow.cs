@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using PetaPoco;
+using Services.PetaPoco;
 
 namespace NzbDrone.Services.Service.Repository.Reporting
 {

@@ -1,8 +1,8 @@
 using NzbDrone.Services.Service.Datastore;
-using PetaPoco;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ninject;
 using Ninject.Web.Mvc;
+using Services.PetaPoco;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(NzbDrone.Services.Service.App_Start.NinjectMVC3), "Start")]
 [assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(NzbDrone.Services.Service.App_Start.NinjectMVC3), "Stop")]

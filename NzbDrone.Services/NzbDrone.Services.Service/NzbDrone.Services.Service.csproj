@@ -110,6 +110,7 @@
   <ItemGroup>
     <Compile Include="App_Start\Logging.cs" />
     <Compile Include="App_Start\NinjectMVC3.cs" />
+    <Compile Include="Services.PetaPoco.cs" />
     <Compile Include="Datastore\Connection.cs" />
     <Compile Include="Controllers\DailySeriesController.cs" />
     <Compile Include="Controllers\HealthController.cs" />

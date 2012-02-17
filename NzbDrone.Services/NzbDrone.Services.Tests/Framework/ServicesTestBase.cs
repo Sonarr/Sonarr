@@ -7,7 +7,8 @@ using Migrator.Providers.SqlServer;
 using NzbDrone.Services.Service.Migrations;
 using NzbDrone.Test.Common;
 using NzbDrone.Test.Common.AutoMoq;
-using PetaPoco;
+using Services.PetaPoco;
+
 
 namespace NzbDrone.Services.Tests.Framework
 {
