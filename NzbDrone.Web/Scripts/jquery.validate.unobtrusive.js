@@ -1,7 +1,4 @@
-﻿/// <reference path="jquery-1.5.1.js" />
-/// <reference path="jquery.validate.js" />
-
-/*!
+﻿/*!
 ** Unobtrusive validation support library for jQuery and jQuery Validate
 ** Copyright (C) Microsoft Corporation. All rights reserved.
 */
@@ -57,7 +54,7 @@
         }
     }
 
-    function onErrors(form, validator) {  // 'this' is the form element
+    function onErrors(event, validator) {  // 'this' is the form element
         var container = $(this).find("[data-valmsg-summary=true]"),
             list = container.find("ul");
 
@@ -85,9 +82,24 @@
         }
     }
 
+    function onReset(event) {  // 'this' is the form element
+        var $form = $(this);
+        $form.data("validator").resetForm();
+        $form.find(".validation-summary-errors")
+            .addClass("validation-summary-valid")
+            .removeClass("validation-summary-errors");
+        $form.find(".field-validation-error")
+            .addClass("field-validation-valid")
+            .removeClass("field-validation-error")
+            .removeData("unobtrusiveContainer")
+            .find(">*")  // If we were using valmsg-replace, get the underlying error
+                .removeData("unobtrusiveContainer");
+    }
+
     function validationInfo(form) {
         var $form = $(form),
-            result = $form.data(data_validation);
+            result = $form.data(data_validation),
+            onResetProxy = $.proxy(onReset, form);
 
         if (!result) {
             result = {
@@ -101,7 +113,10 @@
                     success: $.proxy(onSuccess, form)
                 },
                 attachValidation: function () {
-                    $form.validate(this.options);
+                    $form
+                        .unbind("reset." + data_validation, onResetProxy)
+                        .bind("reset." + data_validation, onResetProxy)
+                        .validate(this.options);
                 },
                 validate: function () {  // a validation function that is called by unobtrusive Ajax
                     $form.validate();
@@ -161,7 +176,7 @@
                 }
             });
 
-            jQuery.extend(rules, { "__dummy__": true });
+            $.extend(rules, { "__dummy__": true });
 
             if (!skipAttach) {
                 valInfo.attachValidation();
@@ -175,11 +190,17 @@
             /// attribute values.
             /// </summary>
             /// <param name="selector" type="String">Any valid jQuery selector.</param>
+            var $forms = $(selector)
+                .parents("form")
+                .andSelf()
+                .add($(selector).find("form"))
+                .filter("form");
+
             $(selector).find(":input[data-val=true]").each(function () {
                 $jQval.unobtrusive.parseElement(this, true);
             });
 
-            $("form").each(function () {
+            $forms.each(function () {
                 var info = validationInfo(this);
                 if (info) {
                     info.attachValidation();
@@ -290,7 +311,7 @@
         var prefix = getModelPrefix(options.element.name),
             other = options.params.other,
             fullOtherName = appendModelPrefix(other, prefix),
-            element = $(options.form).find(":input[name=" + escapeAttributeValue(fullOtherName) + "]")[0];
+            element = $(options.form).find(":input[name='" + escapeAttributeValue(fullOtherName) + "']")[0];
 
         setValidationValues(options, "equalTo", element);
     });
