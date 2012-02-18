@@ -13,15 +13,23 @@ namespace NzbDrone.Common
 
         private static readonly string processName = Process.GetCurrentProcess().ProcessName.ToLower();
 
+        private static readonly EnviromentProvider instance = new EnviromentProvider();
+
         public static bool IsProduction
         {
             get
             {
                 if (IsDebug || Debugger.IsAttached) return false;
+                if (instance.Version.Revision > 10000) return false; //Official builds will never have such a high revision
 
-                if (processName.Contains("nunit")) return false;
-                if (processName.Contains("jetbrain")) return false;
-                if (processName.Contains("resharper")) return false;
+                var lowerProcessName = processName.ToLower();
+                if (lowerProcessName.Contains("vshost")) return false;
+                if (lowerProcessName.Contains("nunit")) return false;
+                if (lowerProcessName.Contains("jetbrain")) return false;
+                if (lowerProcessName.Contains("resharper")) return false;
+
+                if (instance.ApplicationPath.ToLower().Contains("_rawpackage")) return false;
+
 
                 return true;
             }
