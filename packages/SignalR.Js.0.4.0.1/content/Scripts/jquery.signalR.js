@@ -130,6 +130,7 @@
                     global: false,
                     type: "POST",
                     data: {},
+                    dataType: "json",
                     error: function (error) {
                         $(connection).trigger(events.onError, [error]);
                         promise.reject("SignalR: Error during negotiation request: " + error);
@@ -282,7 +283,7 @@
             delete connection.groups;
 
             // Trigger the disconnect event
-            $connection.trigger(events.onDisconnect);
+            $(connection).trigger(events.onDisconnect);
 
             return connection;
         },
