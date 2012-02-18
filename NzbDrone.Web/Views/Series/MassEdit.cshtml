@@ -38,7 +38,7 @@
 
 @using (Html.BeginForm("SaveMassEdit", "Series", FormMethod.Post, new { id = "MassEdit", name = "MassEdit" }))
 {
-    <table class="dataTable dataTablesGrid">
+    <table class="dataTable dataTablesGrid no-details">
         <thead>
             <th width="14px">@Html.CheckBox("editToggleMaster", false, new { @class = "editToggleMaster" })</th>
             <th>Title</th>
