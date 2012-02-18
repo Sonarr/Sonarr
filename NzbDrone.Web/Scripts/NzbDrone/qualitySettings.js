@@ -1,9 +1,5 @@
 ﻿var deleteQualityProfileUrl = '../../Settings/DeleteQualityProfile';
 
-$(document).ready(function () {
-    setupSliders();
-});
-
 $("#addItem").live('click', function () {
     $.ajax({
         url: this.href,

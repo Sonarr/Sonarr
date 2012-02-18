@@ -96,6 +96,10 @@
     @Html.IncludeScript("MicrosoftAjax.js")
     
     <script type="text/javascript">
+        $(document).ready(function () {
+            setupSliders();
+        });
+
         $('.quality-selectee').livequery(function () {
             $(this).button();
         });
