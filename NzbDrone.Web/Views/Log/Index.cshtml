@@ -50,7 +50,7 @@
 
             oTable = $('#logGrid').dataTable({
                 "sAjaxSource": "Log/AjaxBinding",
-                "bProcessing": true,
+                "bProcessing": false,
                 "bServerSide": true,
                 "bShowAll": false,
                 "bPaginate": true,
@@ -63,7 +63,7 @@
                 "sPaginationType": "four_button",
                 "aoColumns": [
                                 { sWidth: '150px', "mDataProp": "Time" }, //Time
-                                {sWidth: '80px', "mDataProp": "Level" }, //Level
+                                {sWidth: '50px', "mDataProp": "Level" }, //Level
                                 {sWidth: '240px', "mDataProp": "Source" }, //Source
                                 {sWidth: 'auto', "mDataProp": "Message", "bSortable": false }, //Message
                                 {sWidth: 'auto', "mDataProp": "Details", "bSortable": false, "bVisible": false, "fnRender": function (row) {

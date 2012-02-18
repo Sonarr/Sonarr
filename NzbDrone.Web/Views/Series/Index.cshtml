@@ -100,10 +100,13 @@
     </tbody>
 </table>
 
-<div id="seriesEditor" title="Edit Series"></div>
-<div id="seriesDelete" title="Delete Series">
-    <input class="seriesId" type="hidden" value="">
-    Are you sure you want to delete '<span class="seriesTitle"></span>'?
+<div style="visibility: hidden">
+    <div id="seriesEditor" title="Edit Series">
+    </div>
+    <div id="seriesDelete" title="Delete Series">
+        <input class="seriesId" type="hidden" value="" />
+        Are you sure you want to delete '<span class="seriesTitle"></span>'?
+    </div>
 </div>
 @section Scripts{
     <script type="text/javascript">
