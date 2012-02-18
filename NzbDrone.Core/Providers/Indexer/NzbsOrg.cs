@@ -104,13 +104,8 @@ namespace NzbDrone.Core.Providers.Indexer
             {
                 var sizeString = Regex.Match(item.Summary.Text, @">\d+\.\d{1,2} \w{2}</a>", RegexOptions.IgnoreCase).Value;
                 currentResult.Size = Parser.GetReportSize(sizeString);
-
-                var dateString = Regex.Match(item.Summary.Text,
-                                             @"(?:\<b\>Posted\:\<\/b\>\s)(?<date>.+?)(?:\s[a-zA-Z]+)(?:\<br\s\/\>)",
-                                             RegexOptions.IgnoreCase | RegexOptions.Compiled).Groups["date"].Value;
-
-                currentResult.Age = DateTime.Today.Subtract(DateTime.Parse(dateString)).Days;
             }
+            
             return currentResult;
         }
     }

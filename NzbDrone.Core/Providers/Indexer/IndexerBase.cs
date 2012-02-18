@@ -218,6 +218,7 @@ namespace NzbDrone.Core.Providers.Indexer
         public EpisodeParseResult ParseFeed(SyndicationItem item)
         {
             var episodeParseResult = Parser.ParseTitle(item.Title.Text);
+            if (episodeParseResult != null) episodeParseResult.Age = DateTime.Now.Date.Subtract(item.PublishDate.Date).Days;
 
             return CustomParser(item, episodeParseResult);
         }
