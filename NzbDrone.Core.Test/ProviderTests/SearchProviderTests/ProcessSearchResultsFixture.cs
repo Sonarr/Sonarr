@@ -91,8 +91,10 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
                 .With(e => e.SeasonNumber = 1)
                 .With(e => e.EpisodeNumbers = new List<int> { 1 })
                 .With(c => c.Quality = new Quality(QualityTypes.DVD, true))
+                .With(c => c.Age = 10)
                 .Random(1)
                 .With(c => c.Quality = new Quality(QualityTypes.Bluray1080p, true))
+                .With(c => c.Age = 100)
                 .Build();
 
             WithMatchingSeries();
@@ -113,6 +115,37 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
                                                        Times.Once());
             Mocker.GetMock<DownloadProvider>().Verify(c => c.DownloadReport(It.IsAny<EpisodeParseResult>()),
                                                       Times.Once());
+        }
+
+        [Test]
+        public void processSearchResults_newer_report_should_be_called_first()
+        {
+            var parseResults = Builder<EpisodeParseResult>.CreateListOfSize(5)
+                .All()
+                .With(e => e.SeasonNumber = 1)
+                .With(e => e.EpisodeNumbers = new List<int> { 1 })
+                .With(c => c.Quality = new Quality(QualityTypes.Bluray1080p, true))
+                .With(c => c.Age = 300)
+                .Build();
+
+            parseResults[2].Age = 100;
+     
+
+            WithMatchingSeries();
+            WithSuccessfulDownload();
+
+            Mocker.GetMock<AllowedDownloadSpecification>()
+                .Setup(s => s.IsSatisfiedBy(It.IsAny<EpisodeParseResult>())).Returns(true);
+
+            //Act
+            var result = Mocker.Resolve<SearchProvider>().ProcessSearchResults(MockNotification, parseResults, _matchingSeries, 1, 1);
+
+            //Assert
+            result.Should().HaveCount(1);
+
+
+            Mocker.GetMock<DownloadProvider>().Verify(c => c.DownloadReport(It.Is<EpisodeParseResult>(d => d.Age != 100)), Times.Never());
+            Mocker.GetMock<DownloadProvider>().Verify(c => c.DownloadReport(It.Is<EpisodeParseResult>(d => d.Age == 100)), Times.Once());
         }
 
         [Test]
@@ -233,7 +266,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
                 .With(e => e.EpisodeNumbers = new List<int> { 5 })
                 .With(c => c.Quality = new Quality(QualityTypes.DVD, true))
                 .TheLast(1)
-                .With(e => e.EpisodeNumbers = new List<int> { 1,2,3,4,5 })
+                .With(e => e.EpisodeNumbers = new List<int> { 1, 2, 3, 4, 5 })
                 .Build();
 
             WithMatchingSeries();

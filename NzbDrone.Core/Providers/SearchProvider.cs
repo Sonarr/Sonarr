@@ -231,7 +231,7 @@ namespace NzbDrone.Core.Providers
         {
             var successes = new List<int>();
 
-            foreach (var episodeParseResult in reports.OrderByDescending(c => c.Quality))
+            foreach (var episodeParseResult in reports.OrderByDescending(c => c.Quality).ThenBy(c => c.Age))
             {
                 try
                 {
