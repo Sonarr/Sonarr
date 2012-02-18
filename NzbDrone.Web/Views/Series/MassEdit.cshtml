@@ -23,49 +23,23 @@
         }
         
         table input[type="text"], table select {
-            margin: 2px 5px 2px 5px;
+            margin: 2px 2px;
         }
         
         td .path {
             width: 300px;
         }
         
-        td .backlogStatus {
+        td .backlogSetting {
             width: 90px;
-        }
-        
-        table {
-            width: 100%;
-	        border-width: 1px;
-	        border-spacing: 2px;
-	        border-style: none;
-	        border-color: white;
-	        border-collapse: collapse;
-	        background-color: white;
-        }
-        table th {
-	        border-width: 1px;
-	        padding: 2px;
-	        border-style: inset;
-	        border-color: #EEEEEE;
-	        background-color: white;
-	        -moz-border-radius: ;
-        }
-        table td {
-	        border-width: 1px;
-	        padding: 2px;
-	        border-style: inset;
-	        border-color: #EEEEEE;
-	        background-color: white;
-	        -moz-border-radius: ;
         }
     </style>
 }
 
 @using (Html.BeginForm("SaveMassEdit", "Series", FormMethod.Post, new { id = "MassEdit", name = "MassEdit" }))
 {
-    <table>
-        <tr>
+    <table class="dataTable dataTablesGrid">
+        <thead>
             <th width="14px">@Html.CheckBox("editToggleMaster", false, new { @class = "editToggleMaster" })</th>
             <th>Title</th>
             <th width="210px">Quality</th>
@@ -73,12 +47,14 @@
             <th class="checkboxColumn">Season Folder</th>
             <th width="100px">Backlog Status</th>
             <th width="310px">Path</th>
-        </tr>
-
-        @foreach (var series in Model)
-        {
-            Html.RenderPartial("SeriesItem", series);
-        }
+        </thead>
+        
+        <tbody>
+            @foreach (var series in Model)
+            {
+                Html.RenderPartial("SeriesItem", series);
+            }
+        </tbody>
     </table>
     
     <div class="masterControls">
@@ -114,7 +90,21 @@
 
 @section Scripts
 {
-    <script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#missingGrid').removeClass('hidden-grid');
+
+            oTable = $('.dataTablesGrid').dataTable({
+                "bShowAll": false,
+                "bPaginate": false,
+                "bLengthChange": false,
+                "bFilter": false,
+                "bSort": false,
+                "bInfo": false,
+                "bAutoWidth": false
+            });
+        });
+
         $('.editToggleMaster').live('change', function () {
             var toggle = $(this).prop('checked');
             $('.editToggle').each(function () {
@@ -160,6 +150,6 @@
         });
 
 
-            //Update all checked rows
+    //Update all checked rows
     </script>
 }
