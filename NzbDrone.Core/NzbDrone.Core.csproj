@@ -240,7 +240,6 @@
     <Compile Include="Helpers\SabnzbdQueueTimeConverter.cs" />
     <Compile Include="Jobs\CheckpointJob.cs" />
     <Compile Include="Model\DownloadClientType.cs" />
-    <Compile Include="Providers\AnalyticsProvider.cs" />
     <Compile Include="Instrumentation\LogDbContext.cs" />
     <Compile Include="Instrumentation\LogProvider.cs" />
     <Compile Include="Instrumentation\DatabaseTarget.cs" />
@@ -268,61 +267,20 @@
     <Compile Include="Model\Xbmc\TvShowResult.cs" />
     <Compile Include="Model\Xbmc\ErrorResult.cs" />
     <Compile Include="Model\Xbmc\IconType.cs" />
-    <Compile Include="Providers\BackupProvider.cs" />
-    <Compile Include="Providers\DecisionEngine\AlreadyInQueueSpecification.cs" />
-    <Compile Include="Providers\DecisionEngine\RetentionSpecification.cs" />
-    <Compile Include="Providers\DownloadClients\BlackholeProvider.cs" />
-    <Compile Include="Providers\Converting\AtomicParsleyProvider.cs" />
-    <Compile Include="Providers\Converting\HandbrakeProvider.cs" />
-    <Compile Include="Providers\DownloadClients\IDownloadClient.cs" />
-    <Compile Include="Providers\DecisionEngine\AcceptableSizeSpecification.cs" />
-    <Compile Include="Providers\DecisionEngine\UpgradeHistorySpecification.cs" />
-    <Compile Include="Providers\DecisionEngine\UpgradeDiskSpecification.cs" />
-    <Compile Include="Providers\DecisionEngine\QualityUpgradeSpecification.cs" />
-    <Compile Include="Providers\DecisionEngine\QualityAllowedByProfileSpecification.cs" />
-    <Compile Include="Providers\DecisionEngine\AllowedDownloadSpecification.cs" />
-    <Compile Include="Providers\DecisionEngine\UpgradePossibleSpecification.cs" />
-    <Compile Include="Providers\DecisionEngine\MonitoredEpisodeSpecification.cs" />
-    <Compile Include="Providers\Indexer\Newznab.cs" />
     <Compile Include="Jobs\RecentBacklogSearchJob.cs" />
     <Compile Include="Jobs\TrimLogsJob.cs" />
     <Compile Include="Jobs\JobProvider.cs" />
     <Compile Include="Jobs\RenameSeasonJob.cs" />
     <Compile Include="Jobs\RenameSeriesJob.cs" />
-    <Compile Include="Providers\NewznzbProvider.cs" />
-    <Compile Include="Providers\ExternalNotification\Prowl.cs" />
     <Compile Include="Jobs\AppUpdateJob.cs" />
-    <Compile Include="Providers\ProwlProvider.cs" />
-    <Compile Include="Providers\Core\UdpProvider.cs" />
-    <Compile Include="Providers\ExternalNotification\Growl.cs" />
-    <Compile Include="Providers\ExternalNotification\Twitter.cs" />
-    <Compile Include="Providers\ExternalNotification\Smtp.cs" />
-    <Compile Include="Providers\GrowlProvider.cs" />
     <Compile Include="Jobs\BacklogSearchJob.cs" />
     <Compile Include="Jobs\BannerDownloadJob.cs" />
     <Compile Include="Jobs\ConvertEpisodeJob.cs" />
     <Compile Include="Jobs\SeriesSearchJob.cs" />
     <Compile Include="Jobs\SeasonSearchJob.cs" />
-    <Compile Include="Providers\MisnamedProvider.cs" />
-    <Compile Include="Providers\PostDownloadProvider.cs" />
-    <Compile Include="Providers\QualityTypeProvider.cs" />
-    <Compile Include="Providers\ReferenceDataProvider.cs" />
-    <Compile Include="Providers\SearchProvider.cs" />
-    <Compile Include="Providers\SignalRProvider.cs" />
-    <Compile Include="Providers\SmtpProvider.cs" />
-    <Compile Include="Providers\TwitterProvider.cs" />
-    <Compile Include="Providers\UpdateProvider.cs" />
-    <Compile Include="Providers\Xbmc\ResourceManager.cs" />
     <Compile Include="Model\Xbmc\TvShowResponse.cs" />
     <Compile Include="Model\Xbmc\TvShow.cs" />
     <Compile Include="Model\Xbmc\VersionResult.cs" />
-    <Compile Include="Providers\DiskScanProvider.cs" />
-    <Compile Include="Providers\DownloadProvider.cs" />
-    <Compile Include="Providers\ExternalNotification\ExternalNotificationBase.cs" />
-    <Compile Include="Providers\ExternalNotification\Xbmc.cs" />
-    <Compile Include="Providers\Indexer\SyndicationFeedXmlReader.cs" />
-    <Compile Include="Providers\AutoConfigureProvider.cs" />
-    <Compile Include="Providers\Indexer\NzbMatrix.cs" />
     <Compile Include="Jobs\UpdateSceneMappingsJob.cs" />
     <Compile Include="Jobs\PostDownloadScanJob.cs" />
     <Compile Include="Jobs\RenameEpisodeJob.cs" />
@@ -330,13 +288,202 @@
     <Compile Include="Jobs\DeleteSeriesJob.cs" />
     <Compile Include="Jobs\DiskScanJob.cs" />
     <Compile Include="Jobs\ImportNewSeriesJob.cs" />
-    <Compile Include="Providers\Indexer\Newzbin.cs" />
-    <Compile Include="Providers\Indexer\NzbsRUs.cs" />
     <Compile Include="Jobs\IJob.cs" />
     <Compile Include="Jobs\RssSyncJob.cs" />
     <Compile Include="Jobs\UpdateInfoJob.cs" />
-    <Compile Include="Providers\SceneMappingProvider.cs" />
-    <Compile Include="Providers\Xbmc\EventClientProvider.cs" />
+    <Compile Include="Providers\AnalyticsProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\AutoConfigureProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\BackupProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\Converting\AtomicParsleyProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\Converting\HandbrakeProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\Core\ArchiveProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\Core\ConfigProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\Core\UdpProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\DecisionEngine\AcceptableSizeSpecification.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\DecisionEngine\AllowedDownloadSpecification.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\DecisionEngine\AlreadyInQueueSpecification.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\DecisionEngine\MonitoredEpisodeSpecification.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\DecisionEngine\QualityAllowedByProfileSpecification.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\DecisionEngine\QualityUpgradeSpecification.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\DecisionEngine\RetentionSpecification.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\DecisionEngine\UpgradeDiskSpecification.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\DecisionEngine\UpgradeHistorySpecification.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\DecisionEngine\UpgradePossibleSpecification.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\DiskScanProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\DownloadClients\BlackholeProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\DownloadClients\IDownloadClient.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\DownloadClients\SabProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\DownloadProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\EpisodeProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\ExternalNotificationProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\ExternalNotification\ExternalNotificationBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\ExternalNotification\Growl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\ExternalNotification\Plex.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\ExternalNotification\Prowl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\ExternalNotification\Smtp.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\ExternalNotification\Twitter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\ExternalNotification\Xbmc.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\GrowlProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\HistoryProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\IndexerProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\Indexer\IndexerBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\Indexer\Newzbin.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\Indexer\Newznab.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\Indexer\NzbMatrix.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\Indexer\NzbsOrg.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\Indexer\NzbsRUs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\Indexer\SyndicationFeedXmlReader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\MediaFileProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\MisnamedProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\NewznzbProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\NotificationProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\PlexProvider.cs" />
+    <Compile Include="Providers\PostDownloadProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\ProwlProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\QualityProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\QualityTypeProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\ReferenceDataProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\RootDirProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\SceneMappingProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\SearchProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\SeriesProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\SignalRProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\SmtpProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\TvDbProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\TwitterProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\UpcomingEpisodesProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\UpdateProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\XbmcProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\Xbmc\EventClientProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers\Xbmc\ResourceManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Repository\NewznabDefinition.cs" />
     <Compile Include="Repository\ExternalNotificationDefinition.cs" />
     <Compile Include="Repository\JobDefinition.cs" />
@@ -346,24 +493,10 @@
     <Compile Include="Model\EpisodeStatusType.cs" />
     <Compile Include="Model\Sabnzbd\SabPriorityType.cs" />
     <Compile Include="Model\SeasonParseResult.cs" />
-    <Compile Include="Providers\Indexer\IndexerBase.cs" />
-    <Compile Include="Providers\ExternalNotificationProvider.cs" />
-    <Compile Include="Providers\Indexer\NzbsOrg.cs" />
-    <Compile Include="Providers\HistoryProvider.cs" />
-    <Compile Include="Providers\IndexerProvider.cs" />
-    <Compile Include="Providers\QualityProvider.cs" />
-    <Compile Include="Providers\RootDirProvider.cs" />
-    <Compile Include="Providers\UpcomingEpisodesProvider.cs" />
-    <Compile Include="Providers\XbmcProvider.cs" />
     <Compile Include="Repository\EpisodeFile.cs" />
     <Compile Include="Model\Notification\ProgressNotificationStatus.cs" />
     <Compile Include="Parser.cs" />
-    <Compile Include="Providers\MediaFileProvider.cs" />
     <Compile Include="Model\Notification\ProgressNotification.cs" />
-    <Compile Include="Providers\NotificationProvider.cs" />
-    <Compile Include="Providers\Core\ConfigProvider.cs" />
-    <Compile Include="Providers\EpisodeProvider.cs" />
-    <Compile Include="Providers\DownloadClients\SabProvider.cs" />
     <Compile Include="Repository\Episode.cs" />
     <Compile Include="Instrumentation\Log.cs" />
     <Compile Include="Repository\History.cs" />
@@ -376,9 +509,6 @@
     <Compile Include="Repository\Series.cs" />
     <Compile Include="CentralDispatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Providers\Core\ArchiveProvider.cs" />
-    <Compile Include="Providers\SeriesProvider.cs" />
-    <Compile Include="Providers\TvDbProvider.cs" />
     <Compile Include="WebTimer.cs" />
   </ItemGroup>
   <ItemGroup>

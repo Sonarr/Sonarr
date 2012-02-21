@@ -34,21 +34,23 @@
     @using (Html.BeginForm("SaveNotifications", "Settings", FormMethod.Post, new { id = "NotificationForm", name = "NotificationForm", @class = "settingsForm" }))
     {
         <div class="jquery-accordion">
-            <h3>
-                <a href="#">XBMC</a></h3>
+            <h3><a href="#">XBMC</a></h3>
             @{Html.RenderPartial("Xbmc", Model);}
-            <h3>
-                <a href="#">SMTP</a></h3>
+
+            <h3><a href="#">SMTP</a></h3>
             @{Html.RenderPartial("Smtp", Model);}
-            <h3>
-                <a href="#">Twitter</a></h3>
+
+            <h3><a href="#">Twitter</a></h3>
             @{Html.RenderPartial("Twitter", Model);}
-            <h3>
-                <a href="#">Growl</a></h3>
+
+            <h3><a href="#">Growl</a></h3>
             @{Html.RenderPartial("Growl", Model);}
-            <h3>
-                <a href="#">Prowl</a></h3>
+
+            <h3><a href="#">Prowl</a></h3>
             @{Html.RenderPartial("Prowl", Model);}
+
+            <h3><a href="#">Plex</a></h3>
+            @{Html.RenderPartial("Plex", Model);}
         </div>
             
         <button type="submit" class="save_button" disabled="disabled">

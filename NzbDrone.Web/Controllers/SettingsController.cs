@@ -180,7 +180,15 @@ namespace NzbDrone.Web.Controllers
                                 ProwlNotifyOnDownload = _configProvider.ProwlNotifyOnDownload,
                                 ProwlApiKeys = _configProvider.ProwlApiKeys,
                                 ProwlPriority = _configProvider.ProwlPriority,
-                                ProwlPrioritySelectList = GetProwlPrioritySelectList()
+                                ProwlPrioritySelectList = GetProwlPrioritySelectList(),
+                                PlexEnabled = _externalNotificationProvider.GetSettings(typeof(Plex)).Enable,
+                                PlexNotifyOnGrab = _configProvider.PlexNotifyOnGrab,
+                                PlexNotifyOnDownload = _configProvider.PlexNotifyOnDownload,
+                                PlexUpdateLibrary = _configProvider.PlexUpdateLibrary,
+                                PlexServerHost = _configProvider.PlexServerHost,
+                                PlexClientHosts = _configProvider.PlexClientHosts,
+                                PlexUsername = _configProvider.PlexUsername,
+                                PlexPassword = _configProvider.PlexPassword,
                             };
 
             return View(model);
@@ -529,6 +537,19 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.ProwlNotifyOnDownload = data.ProwlNotifyOnDownload;
                 _configProvider.ProwlApiKeys = data.ProwlApiKeys;
                 _configProvider.ProwlPriority = data.ProwlPriority;
+
+                //Plex
+                var plexSettings = _externalNotificationProvider.GetSettings(typeof(Plex));
+                plexSettings.Enable = data.PlexEnabled;
+                _externalNotificationProvider.SaveSettings(plexSettings);
+
+                _configProvider.PlexNotifyOnGrab = data.PlexNotifyOnGrab;
+                _configProvider.PlexNotifyOnDownload = data.PlexNotifyOnDownload;
+                _configProvider.PlexUpdateLibrary = data.PlexUpdateLibrary;
+                _configProvider.PlexServerHost = data.PlexServerHost;
+                _configProvider.PlexClientHosts = data.PlexClientHosts;
+                _configProvider.PlexUsername = data.PlexUsername;
+                _configProvider.PlexPassword = data.PlexPassword;
 
                 return GetSuccessResult();
             }

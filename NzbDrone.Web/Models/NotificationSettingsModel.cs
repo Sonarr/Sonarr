@@ -164,5 +164,46 @@ namespace NzbDrone.Web.Models
         public int ProwlPriority { get; set; }
 
         public SelectList ProwlPrioritySelectList { get; set; }
+
+        //Plex
+        [DisplayName("Enabled")]
+        [Description("Enable notifications for Plex?")]
+        public bool PlexEnabled { get; set; }
+
+        [DisplayName("Notify on Grab")]
+        [Description("Send notification when episode is sent to SABnzbd?")]
+        public bool PlexNotifyOnGrab { get; set; }
+
+        [DisplayName("Notify on Download")]
+        [Description("Send notification when episode is downloaded?")]
+        public bool PlexNotifyOnDownload { get; set; }
+
+        [DisplayName("Update on Download and Rename")]
+        [Description("Update Plex library after episode is downloaded or renamed?")]
+        public bool PlexUpdateLibrary { get; set; }
+
+        [DataType(DataType.Text)]
+        [DisplayName("Server Host")]
+        [Description("Plex Server host with port")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
+        public string PlexServerHost { get; set; }
+
+        [DataType(DataType.Text)]
+        [DisplayName("Client Hosts")]
+        [Description("Plex client hosts with port, comma separated for multiple clients")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
+        public string PlexClientHosts { get; set; }
+
+        [DataType(DataType.Text)]
+        [DisplayName("Username")]
+        [Description("Plex client webserver username")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
+        public string PlexUsername { get; set; }
+
+        [DataType(DataType.Text)]
+        [DisplayName("Password")]
+        [Description("Plex client webserver password")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
+        public string PlexPassword { get; set; }
     }
 }

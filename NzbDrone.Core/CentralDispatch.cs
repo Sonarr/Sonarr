@@ -140,6 +140,7 @@ namespace NzbDrone.Core
             Kernel.Bind<ExternalNotificationBase>().To<Twitter>();
             Kernel.Bind<ExternalNotificationBase>().To<Providers.ExternalNotification.Growl>();
             Kernel.Bind<ExternalNotificationBase>().To<Prowl>();
+            Kernel.Bind<ExternalNotificationBase>().To<Plex>();
 
             var notifiers = Kernel.GetAll<ExternalNotificationBase>();
             Kernel.Get<ExternalNotificationProvider>().InitializeNotifiers(notifiers.ToList());
