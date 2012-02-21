@@ -103,6 +103,8 @@ namespace NzbDrone.Core.Test.ProviderTests
         [Test]
         public void IsIgnored_should_return_ignored_status_of_season()
         {
+            WithRealDb();
+
             //Setup
             var fakeSeason = Builder<Season>.CreateNew()
                 .With(s => s.Ignored = false)
@@ -155,7 +157,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var lastSeason = Builder<Season>.CreateNew()
                 .With(s => s.SeriesId = 10)
                 .With(s => s.SeasonNumber = 4)
-                .With(s => s.Ignored = true)
+                .With(s => s.Ignored = false)
                 .Build();
 
             Db.Insert(lastSeason);
@@ -188,6 +190,92 @@ namespace NzbDrone.Core.Test.ProviderTests
             //Assert
             result.Should().BeTrue();
             Db.Fetch<Season>().Should().HaveCount(2);
+        }
+
+        [Test]
+        public void IsIgnored_should_return_false_if_not_in_db_and_previous_season_does_not_exist()
+        {
+            //Setup
+            WithRealDb();
+
+            //Act
+            var result = Mocker.Resolve<SeasonProvider>().IsIgnored(10, 5);
+
+            //Assert
+            result.Should().BeFalse();
+            Db.Fetch<Season>().Should().HaveCount(1);
+        }
+
+        [Test]
+        public void All_should_return_seasons_with_episodes()
+        {
+            const int seriesId = 10;
+
+            //Setup
+            WithRealDb();
+
+            var season = Builder<Season>.CreateNew()
+                .With(s => s.SeriesId = seriesId)
+                .With(s => s.SeasonNumber = 4)
+                .With(s => s.Ignored = true)
+                .Build();
+
+            var episodes = Builder<Episode>.CreateListOfSize(10)
+                .All()
+                .With(e => e.SeriesId = seriesId)
+                .With(e => e.SeasonNumber = season.SeasonNumber)
+                .Build();
+
+            Db.Insert(season);
+            Db.InsertMany(episodes);
+
+            //Act
+            var result = Mocker.Resolve<SeasonProvider>().All(seriesId);
+
+            //Assert
+            result.Should().HaveCount(1);
+            result.First().Episodes.Should().HaveCount(episodes.Count);
+        }
+
+        [Test]
+        public void All_should_return_all_seasons_with_episodes()
+        {
+            const int seriesId = 10;
+
+            //Setup
+            WithRealDb();
+
+            var seasons = Builder<Season>.CreateListOfSize(5)
+                .All()
+                .With(s => s.SeriesId = seriesId)
+                .Build();
+
+            var episodes = new List<Episode>();
+
+            for (int i = 0; i < seasons.Count; i++)
+            {
+                var newEps = Builder<Episode>.CreateListOfSize(2)
+                .All()
+                .With(e => e.SeriesId = seriesId)
+                .With(e => e.SeasonNumber = i + 1)
+                .Build();
+
+                episodes.AddRange(newEps);
+            }
+
+            Db.InsertMany(seasons);
+            Db.InsertMany(episodes);
+
+            //Act
+            var result = Mocker.Resolve<SeasonProvider>().All(seriesId);
+
+            //Assert
+            result.Should().HaveCount(5);
+
+            foreach(var season in result)
+            {
+                season.Episodes.Count.Should().Be(2);
+            }
         }
     }
 }

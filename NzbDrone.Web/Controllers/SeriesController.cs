@@ -24,16 +24,19 @@ namespace NzbDrone.Web.Controllers
         private readonly QualityProvider _qualityProvider;
         private readonly SeriesProvider _seriesProvider;
         private readonly JobProvider _jobProvider;
+        private readonly SeasonProvider _seasonProvider;
         //
         // GET: /Series/
 
         public SeriesController(SeriesProvider seriesProvider, EpisodeProvider episodeProvider,
-                                QualityProvider qualityProvider, JobProvider jobProvider)
+                                QualityProvider qualityProvider, JobProvider jobProvider,
+                                SeasonProvider seasonProvider)
         {
             _seriesProvider = seriesProvider;
             _episodeProvider = episodeProvider;
             _qualityProvider = qualityProvider;
             _jobProvider = jobProvider;
+            _seasonProvider = seasonProvider;
         }
 
         public ActionResult Index()
@@ -117,25 +120,14 @@ namespace NzbDrone.Web.Controllers
             model.SeriesId = series.SeriesId;
             model.HasBanner = !String.IsNullOrEmpty(series.BannerUrl);
 
-            var seasons = new List<SeasonModel>();
-            var episodes = _episodeProvider.GetEpisodeBySeries(seriesId);
-
-            foreach (var season in episodes.Select(s => s.SeasonNumber).Distinct())
-            {
-                var episodesInSeason = episodes.Where(e => e.SeasonNumber == season).ToList();
-                var commonStatusList = episodesInSeason.Select(s => s.Status).Distinct().ToList();
-                var commonStatus = commonStatusList.Count > 1 ? "Missing" : commonStatusList.First().ToString();
-
-                seasons.Add(new SeasonModel
-                                      {
-                                            SeriesId = seriesId,
-                                            SeasonNumber = season,
-                                            Episodes = GetEpisodeModels(episodesInSeason).OrderByDescending(e=> e.EpisodeNumber).ToList(),
-                                            AnyWanted = episodesInSeason.Any(e => !e.Ignored),
-                                            CommonStatus = commonStatus
-                                      });
-            }
-
+            var seasons = _seasonProvider.All(seriesId).Select(s => new SeasonModel
+                                                                    {
+                                                                        SeriesId = seriesId,
+                                                                        SeasonNumber = s.SeasonNumber,
+                                                                        Ignored = s.Ignored,
+                                                                        Episodes = GetEpisodeModels(s.Episodes).OrderByDescending(e => e.EpisodeNumber).ToList(),
+                                                                        CommonStatus = GetCommonStatus(s.Episodes)
+                                                                    }).ToList();
             model.Seasons = seasons;
   
             return View(model);
@@ -253,6 +245,13 @@ namespace NzbDrone.Web.Controllers
             }
 
             return episodes;
+        }
+
+        private string GetCommonStatus(IList<Episode> episodes)
+        {
+            var commonStatusList = episodes.Select(s => s.Status).Distinct().ToList();
+            var commonStatus = commonStatusList.Count > 1 ? "Missing" : commonStatusList.First().ToString();
+            return commonStatus;
         }
     }
 }

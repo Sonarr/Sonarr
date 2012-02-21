@@ -17,6 +17,13 @@ namespace NzbDrone.Core.Datastore.Migrations
                                                 new Column("SeasonNumber", DbType.Int32, ColumnProperty.NotNull), 
                                                 new Column("Ignored", DbType.Boolean, ColumnProperty.NotNull)
                                             });
+
+            Database.ExecuteNonQuery(@"INSERT INTO Seasons (SeriesId, SeasonNumber, Ignored)
+                                            SELECT SeriesId, SeasonNumber,
+                                            CASE WHEN Count(*) = 
+                                            SUM(CASE WHEN Ignored = 1 THEN 1 ELSE 0 END) THEN 1 ELSE 0 END AS Ignored
+                                            FROM Episodes
+                                            GROUP BY SeriesId, SeasonNumber");
         }
     }
 }

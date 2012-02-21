@@ -280,7 +280,7 @@ namespace NzbDrone.Core.Providers
             var updateList = new List<Episode>();
             var newList = new List<Episode>();
 
-            foreach (var episode in tvDbSeriesInfo.Episodes)
+            foreach (var episode in tvDbSeriesInfo.Episodes.OrderBy(e => e.SeasonNumber).ThenBy(e => e.EpisodeNumber))
             {
                 try
                 {

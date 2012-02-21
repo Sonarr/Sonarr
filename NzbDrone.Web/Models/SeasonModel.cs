@@ -9,5 +9,6 @@ namespace NzbDrone.Web.Models
         public List<EpisodeModel> Episodes { get; set; }
         public bool AnyWanted { get; set; }
         public string CommonStatus { get; set; }
+        public bool Ignored { get; set; }
     }
 }

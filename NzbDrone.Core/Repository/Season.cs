@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NzbDrone.Core.Model;
 using PetaPoco;
 
@@ -12,5 +13,8 @@ namespace NzbDrone.Core.Repository
         public int SeriesId { get; set; }
         public int SeasonNumber { get; set; }
         public Boolean Ignored { get; set; }
+
+        [ResultColumn]
+        public List<Episode> Episodes { get; set; }
     }
 }
