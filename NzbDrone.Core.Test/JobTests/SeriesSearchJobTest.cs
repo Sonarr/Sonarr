@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Test.JobTests
             Mocker.GetMock<EpisodeProvider>()
                 .Setup(c => c.GetSeasons(1)).Returns(seasons);
 
-            Mocker.GetMock<EpisodeProvider>()
+            Mocker.GetMock<SeasonProvider>()
                 .Setup(c => c.IsIgnored(It.IsAny<int>(), It.IsAny<int>())).Returns(false);
 
             Mocker.GetMock<SeasonSearchJob>()

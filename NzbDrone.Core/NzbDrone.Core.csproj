@@ -222,6 +222,7 @@
     <Compile Include="Datastore\MigrationLogger.cs" />
     <Compile Include="Datastore\MigrationsHelper.cs" />
     <Compile Include="Datastore\CustomeMapper.cs" />
+    <Compile Include="Datastore\Migrations\Migration20120220.cs" />
     <Compile Include="Datastore\Migrations\Migration20120123.cs" />
     <Compile Include="Datastore\Migrations\Migration20120118.cs" />
     <Compile Include="Datastore\Migrations\Migration20111125.cs" />
@@ -269,6 +270,7 @@
     <Compile Include="Model\Xbmc\ErrorResult.cs" />
     <Compile Include="Model\Xbmc\IconType.cs" />
     <Compile Include="Providers\BackupProvider.cs" />
+    <Compile Include="Providers\SeasonProvider.cs" />
     <Compile Include="Providers\DecisionEngine\AlreadyInQueueSpecification.cs" />
     <Compile Include="Providers\DecisionEngine\RetentionSpecification.cs" />
     <Compile Include="Providers\DownloadClients\BlackholeProvider.cs" />
@@ -337,6 +339,7 @@
     <Compile Include="Jobs\UpdateInfoJob.cs" />
     <Compile Include="Providers\SceneMappingProvider.cs" />
     <Compile Include="Providers\Xbmc\EventClientProvider.cs" />
+    <Compile Include="Repository\Season.cs" />
     <Compile Include="Repository\NewznabDefinition.cs" />
     <Compile Include="Repository\ExternalNotificationDefinition.cs" />
     <Compile Include="Repository\JobDefinition.cs" />
