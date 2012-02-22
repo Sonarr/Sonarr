@@ -3,6 +3,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using FizzWare.NBuilder;
 using FluentAssertions;
@@ -23,6 +24,27 @@ namespace NzbDrone.Core.Test.ProviderTests
     // ReSharper disable InconsistentNaming
     public class PlexProviderTest : CoreTest
     {
+        private void WithSingleClient()
+        {
+            Mocker.GetMock<ConfigProvider>().SetupGet(s => s.PlexClientHosts)
+                    .Returns("localhost:3000");
+        }
+
+        private void WithMultipleClients()
+        {
+            Mocker.GetMock<ConfigProvider>().SetupGet(s => s.PlexClientHosts)
+                    .Returns("localhost:3000, 192.168.0.10:3000");
+        }
+
+        public void WithClientCredentials()
+        {
+            Mocker.GetMock<ConfigProvider>().SetupGet(s => s.PlexUsername)
+                    .Returns("plex");
+
+            Mocker.GetMock<ConfigProvider>().SetupGet(s => s.PlexPassword)
+                    .Returns("plex");
+        }
+
         [Test]
         public void GetSectionKeys_should_return_single_section_key_when_only_one_show_section()
         {
@@ -97,6 +119,73 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             //Assert
             
+        }
+
+        [Test]
+        public void Notify_should_send_update_for_single_client_when_only_one_is_configured()
+        {
+            //Setup
+            WithSingleClient();
+
+            const string header = "Test Header";
+            const string message = "Test Message";
+
+            var expectedUrl = String.Format("http://localhost:3000/xbmcCmds/xbmcHttp?command=ExecBuiltIn(Notification({0}, {1}))", header, message);
+
+            var fakeHttp = Mocker.GetMock<HttpProvider>();
+            fakeHttp.Setup(s => s.DownloadString(expectedUrl))
+                    .Returns("ok");
+
+            //Act
+            Mocker.Resolve<PlexProvider>().Notify(header, message);
+
+            //Assert
+            fakeHttp.Verify(v => v.DownloadString(expectedUrl), Times.Once());
+        }
+
+        [Test]
+        public void Notify_should_send_update_to_all_configured_clients()
+        {
+            //Setup
+            WithMultipleClients();
+
+            const string header = "Test Header";
+            const string message = "Test Message";
+
+            var expectedUrl = String.Format("http://localhost:3000/xbmcCmds/xbmcHttp?command=ExecBuiltIn(Notification({0}, {1}))", header, message);
+
+            var fakeHttp = Mocker.GetMock<HttpProvider>();
+            fakeHttp.Setup(s => s.DownloadString(It.IsAny<string>()))
+                    .Returns("ok");
+
+            //Act
+            Mocker.Resolve<PlexProvider>().Notify(header, message);
+
+            //Assert
+            fakeHttp.Verify(v => v.DownloadString(It.IsAny<string>()), Times.Exactly(2));
+        }
+
+        [Test]
+        public void Notify_should_send_notification_with_credentials_when_configured()
+        {
+            //Setup
+            WithSingleClient();
+            WithClientCredentials();
+
+            const string header = "Test Header";
+            const string message = "Test Message";
+
+            var expectedUrl = String.Format("http://localhost:3000/xbmcCmds/xbmcHttp?command=ExecBuiltIn(Notification({0}, {1}))", header, message);
+
+            var fakeHttp = Mocker.GetMock<HttpProvider>();
+            fakeHttp.Setup(s => s.DownloadString(expectedUrl, "plex", "plex"))
+                    .Returns("ok");
+
+            //Act
+            Mocker.Resolve<PlexProvider>().Notify(header, message);
+
+            //Assert
+            fakeHttp.Verify(v => v.DownloadString(expectedUrl, "plex", "plex"), Times.Once());
         }
     }
 }

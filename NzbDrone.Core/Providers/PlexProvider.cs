@@ -37,11 +37,11 @@ namespace NzbDrone.Core.Providers
                 try
                 {
                     var command = String.Format("ExecBuiltIn(Notification({0}, {1}))", header, message);
-                    SendCommand(host, command, _configProvider.PlexUsername, _configProvider.PlexPassword);
+                    SendCommand(host.Trim(), command, _configProvider.PlexUsername, _configProvider.PlexPassword);
                 }
                 catch(Exception ex)
                 {
-                    logger.WarnException("Failed to send notification to Plex Client: " + host, ex);
+                    logger.WarnException("Failed to send notification to Plex Client: " + host.Trim(), ex);
                 }
             }
         }
