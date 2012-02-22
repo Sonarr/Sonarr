@@ -9,7 +9,8 @@
     <style>
         .gridControls {
             float: right;
-            padding: 0px 5px 25px 0px;
+            padding: 0px 5px 20px 0px;
+            visibility: hidden;
         }
     </style>
 }
@@ -20,7 +21,8 @@
 }
 
 <div class="gridControls">
-@Html.CheckBox("hideDownloaded") Hide Downloaded
+    @Html.CheckBox("showDownloaded", true)
+    <label for="showDownloaded">Show Downloaded</label>
 </div>
 
 <table class="seriesTable">
@@ -130,45 +132,48 @@
 @section Scripts{
     <script type="text/javascript">
         $(document).ready(function () {
-            var cookieValue = $.cookie("hideDownloaded");
+            var cookieValue = $.cookie("showDownloaded");
 
-            if (cookieValue == "true") {
-                $('#hideDownloaded').attr('checked', true);
-                toggleDownloaded(true);
+            if (cookieValue == "false") {
+                $('#showDownloaded').attr('checked', false);
+                toggleDownloaded(false);
             }
 
             else {
-                $('#hideDownloaded').attr('checked', false);
-                toggleDownloaded(false);
+                $('#showDownloaded').attr('checked', true);
+                toggleDownloaded(true);
             }
+
+            $('#showDownloaded').button();
+            $('.gridControls').css('visibility', 'visible');
         });
 
-        $('#hideDownloaded').on('change', function () {
+        $('#showDownloaded').on('change', function () {
             var checked = $(this).attr('checked');
             toggleDownloaded(checked);
             toggleHideDownloadedCookie(checked);
         });
 
-        function toggleDownloaded(hide) {
+        function toggleDownloaded(show) {
             var ready = $('.statusImage[title="Ready"]');
 
             ready.each(function () {
-                if (hide) {
-                    $(this).parents('tr').hide();
+                if (show) {
+                    $(this).parents('tr').show();
                 }
 
                 else {
-                    $(this).parents('tr').show();
+                    $(this).parents('tr').hide();
                 }
             });
         }
 
-        function toggleHideDownloadedCookie(hide) {
-            if (hide)
-                $.cookie("hideDownloaded", true, { expires: 365 });
+        function toggleHideDownloadedCookie(show) {
+            if (show)
+                $.cookie("showDownloaded", true, { expires: 365 });
             
             else
-                $.cookie("hideDownloaded", false, { expires: 365 });
+                $.cookie("showDownloaded", false, { expires: 365 });
         }
     </script>
 }
