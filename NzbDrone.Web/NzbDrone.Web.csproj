@@ -351,6 +351,7 @@
     <Content Include="Scripts\NzbDrone\addSeries.js" />
     <Content Include="Scripts\NzbDrone\AutoComplete.js" />
     <Content Include="Scripts\jquery.dataTables.4button.pagination.js" />
+    <Content Include="Scripts\NzbDrone\series.js" />
     <Content Include="Scripts\NzbDrone\qualitySettings.js" />
     <Content Include="Scripts\NzbDrone\grid.js" />
     <Content Include="Scripts\NzbDrone\settings.js" />
