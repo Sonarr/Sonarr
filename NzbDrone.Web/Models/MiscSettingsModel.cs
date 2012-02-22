@@ -9,7 +9,7 @@ namespace NzbDrone.Web.Models
     public class MiscSettingsModel
     {
         [DisplayName("Enable Backlog Searching")]
-        [Description("Should NzbDrone try tp download missing episodes automatically?")]
+        [Description("Should NzbDrone try to download missing episodes automatically?")]
         public bool EnableBacklogSearching { get; set; }
     }
 }
