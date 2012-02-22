@@ -55,6 +55,7 @@ $(".addExistingButton").live('click', function() {
 });
 
 function reloadExistingSeries() {
+    $('#existingSeries').html('<img src="../../Content/Images/ajax-loader.gif" />');
     $.ajax({
       url: existingSeriesUrl,
       success: function( data ) {
