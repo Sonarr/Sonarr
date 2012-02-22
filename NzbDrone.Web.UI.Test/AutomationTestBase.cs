@@ -114,9 +114,11 @@ namespace NzbDrone.Web.UI.Automation
             foreach (var process in Process.GetProcesses())
             {
                 if (string.Equals(process.ProcessName, "NzbDrone", StringComparison.InvariantCultureIgnoreCase)
-                    || string.Equals(process.ProcessName, "IISExpress", StringComparison.InvariantCultureIgnoreCase))
+                   || string.Equals(process.ProcessName, "IISExpress", StringComparison.InvariantCultureIgnoreCase))
+                {
                     process.Kill();
-                process.WaitForExit();
+                    process.WaitForExit();
+                }
             }
 
             try
@@ -128,10 +130,13 @@ namespace NzbDrone.Web.UI.Automation
             foreach (var process in Process.GetProcesses())
             {
                 if (string.Equals(process.ProcessName, "NzbDrone", StringComparison.InvariantCultureIgnoreCase)
-                    || string.Equals(process.ProcessName, "IISExpress", StringComparison.InvariantCultureIgnoreCase)
-                    || string.Equals(process.ProcessName, "ServiceUninstall", StringComparison.InvariantCultureIgnoreCase))
+                   || string.Equals(process.ProcessName, "IISExpress", StringComparison.InvariantCultureIgnoreCase)
+                   ||
+                   string.Equals(process.ProcessName, "ServiceUninstall", StringComparison.InvariantCultureIgnoreCase))
+                {
                     process.Kill();
-                process.WaitForExit();
+                    process.WaitForExit();
+                }
             }
 
         }
