@@ -173,6 +173,9 @@ namespace NzbDrone.Core.Providers
                 Logger.Debug("Deleting EpisodeFiles from DB for Series: {0}", series.Title);
                 _database.Delete<EpisodeFile>("WHERE SeriesId=@0", seriesId);
 
+                Logger.Debug("Deleting Seasons from DB for Series: {0}", series.Title);
+                _database.Delete<Season>("WHERE SeriesId=@0", seriesId);
+
                 Logger.Debug("Deleting Episodes from DB for Series: {0}", series.Title);
                 _database.Delete<Episode>("WHERE SeriesId=@0", seriesId);
 
