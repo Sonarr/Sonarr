@@ -5,12 +5,23 @@
 @section HeaderContent
 {
     @Html.IncludeCss("Grid.css")
+    
+    <style>
+        .gridControls {
+            float: right;
+            padding: 0px 5px 25px 0px;
+        }
+    </style>
 }
 @section ActionMenu{
     <ul class="sub-menu">
         <li>@Ajax.ActionLink("Start RSS Sync", "RssSync", "Command", null, null)</li>
     </ul>
 }
+
+<div class="gridControls">
+@Html.CheckBox("hideDownloaded") Hide Downloaded
+</div>
 
 <table class="seriesTable">
     <colgroup>
@@ -117,5 +128,47 @@
 </table>
 
 @section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var cookieValue = $.cookie("hideDownloaded");
 
+            if (cookieValue == "true") {
+                $('#hideDownloaded').attr('checked', true);
+                toggleDownloaded(true);
+            }
+
+            else {
+                $('#hideDownloaded').attr('checked', false);
+                toggleDownloaded(false);
+            }
+        });
+
+        $('#hideDownloaded').on('change', function () {
+            var checked = $(this).attr('checked');
+            toggleDownloaded(checked);
+            toggleHideDownloadedCookie(checked);
+        });
+
+        function toggleDownloaded(hide) {
+            var ready = $('.statusImage[title="Downloading"]');
+
+            ready.each(function () {
+                if (hide) {
+                    $(this).parents('tr').hide();
+                }
+
+                else {
+                    $(this).parents('tr').show();
+                }
+            });
+        }
+
+        function toggleHideDownloadedCookie(hide) {
+            if (hide)
+                $.cookie("hideDownloaded", true, { expires: 365 });
+            
+            else
+                $.cookie("hideDownloaded", false, { expires: 365 });
+        }
+    </script>
 }
