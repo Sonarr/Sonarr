@@ -44,17 +44,23 @@ namespace NzbDrone.Core.Model
 
         public override string ToString()
         {
+
+            string episodeString = "[Unknown Episode]";
+
             if (AirDate != null && EpisodeNumbers == null)
-                return string.Format("{0} - {1} {2}", SeriesTitle, AirDate.Value.ToShortDateString(), Quality);
+            {
+                episodeString = string.Format("{0}", AirDate.Value.ToString("yyyy-MM-dd"));
+            }
+            else if (FullSeason)
+            {
+                episodeString = string.Format("Season {0:00}", SeasonNumber);
+            }
+            else if (EpisodeNumbers != null && EpisodeNumbers.Any())
+            {
+                episodeString = string.Format("S{0:00}E{1}",SeasonNumber, String.Join("-", EpisodeNumbers.Select(c => c.ToString("00"))));
+            }
 
-            if (FullSeason)
-                return string.Format("{0} - Season {1:00}", SeriesTitle, SeasonNumber);
-
-            if (EpisodeNumbers != null && EpisodeNumbers.Any())
-                return string.Format("{0} - S{1:00}E{2} {3}", SeriesTitle, SeasonNumber,
-                                     String.Join("-", EpisodeNumbers.Select(c => c.ToString("00"))), Quality);
-
-            return "[Invalid format]";
+            return string.Format("{0} - {1} {2}", SeriesTitle, episodeString, Quality);
 
         }
     }

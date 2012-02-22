@@ -84,6 +84,8 @@ namespace NzbDrone.Core.Jobs
 
             notification.CurrentMessage = "RSS Sync Completed";
 
+            Logger.Info("RSS Sync completed");
+
         }
     }
 }

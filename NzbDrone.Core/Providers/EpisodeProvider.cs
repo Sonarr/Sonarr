@@ -231,7 +231,7 @@ namespace NzbDrone.Core.Providers
                 }
                 else
                 {
-                    logger.Debug("Unable to find {0}-S{1:00}E{2:00}", parseResult.Series.Title, parseResult.SeasonNumber, episodeNumber);
+                    logger.Debug("Unable to find {0}", parseResult);
                 }
             }
 

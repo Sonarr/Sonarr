@@ -275,10 +275,7 @@ namespace NzbDrone.Core.Providers
                         {
                             if (_downloadProvider.DownloadReport(episodeParseResult))
                             {
-                                notification.CurrentMessage =
-                                        String.Format("{0} - S{1:00}E{2:00} {3} Added to download queue",
-                                                      episodeParseResult.Series.Title, episodeParseResult.SeasonNumber,
-                                                      episodeParseResult.EpisodeNumbers[0], episodeParseResult.Quality);
+                                notification.CurrentMessage = String.Format("{0} Added to download queue", episodeParseResult);
 
                                 //Add the list of episode numbers from this release
                                 successes.AddRange(episodeParseResult.EpisodeNumbers);

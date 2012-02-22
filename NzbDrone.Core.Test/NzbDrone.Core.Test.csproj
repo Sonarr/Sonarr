@@ -109,6 +109,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EpisodeParseResultTest.cs" />
     <Compile Include="Integeration\ServiceIntegerationFixture.cs" />
     <Compile Include="JobTests\BacklogSearchJobTest.cs" />
     <Compile Include="JobTests\BannerDownloadJobTest.cs" />

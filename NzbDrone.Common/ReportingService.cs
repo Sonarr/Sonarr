@@ -51,7 +51,7 @@ namespace NzbDrone.Common
                 }
 
                 e.Data.Add("title", title);
-                logger.ErrorException("Unable to report parse error", e);
+                logger.InfoException("Unable to report parse error", e);
             }
         }
 
@@ -77,8 +77,8 @@ namespace NzbDrone.Common
                     throw;
                 }
 
-                //this shouldn't log an exception since it might cause a recursive loop.
-                logger.Error("Unable to report exception. " + e);
+                //this shouldn't log an exception since it will cause a recursive loop.
+                logger.Info("Unable to report exception. " + e);
             }
         }
     }

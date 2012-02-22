@@ -93,7 +93,7 @@ namespace NzbDrone.Core.Providers.Indexer
             result = Fetch(Urls);
 
 
-            _logger.Info("Finished processing feeds from " + Name);
+            _logger.Debug("Finished processing feeds from " + Name);
             return result;
         }
 
