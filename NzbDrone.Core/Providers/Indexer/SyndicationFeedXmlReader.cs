@@ -9,59 +9,61 @@ using System.Linq;
 using System.Reflection;
 using System.ServiceModel.Syndication;
 using System.Xml;
+using NLog;
 
 namespace NzbDrone.Core.Providers.Indexer
 {
-
     public class SyndicationFeedXmlReader : XmlTextReader
     {
-        readonly string[] Rss20DateTimeHints = { "pubDate" };
-        readonly string[] Atom10DateTimeHints = { "updated", "published", "lastBuildDate" };
-        private bool isRss2DateTime = false;
-        private bool isAtomDateTime = false;
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+
+        private static readonly string[] rss20DateTimeHints = { "pubDate" };
+        private static readonly string[] atom10DateTimeHints = { "updated", "published", "lastBuildDate" };
+        private bool _isRss2DateTime;
+        private bool _isAtomDateTime;
+
+        private static readonly MethodInfo rss20FeedFormatterMethodInfo = typeof(Rss20FeedFormatter).GetMethod("DateFromString", BindingFlags.NonPublic | BindingFlags.Static);
+        private static readonly MethodInfo atom10FeedFormatterMethodInfo = typeof(Atom10FeedFormatter).GetMethod("DateFromString", BindingFlags.NonPublic | BindingFlags.Static);
 
         public SyndicationFeedXmlReader(Stream stream) : base(stream) { }
 
         public override bool IsStartElement(string localname, string ns)
         {
-            isRss2DateTime = false;
-            isAtomDateTime = false;
-
-            if (Rss20DateTimeHints.Contains(localname)) isRss2DateTime = true;
-            if (Atom10DateTimeHints.Contains(localname)) isAtomDateTime = true;
+            _isRss2DateTime = rss20DateTimeHints.Contains(localname);
+            _isAtomDateTime = atom10DateTimeHints.Contains(localname);
 
             return base.IsStartElement(localname, ns);
         }
 
         public override string ReadString()
         {
-            string dateVal = base.ReadString();
+            var dateVal = base.ReadString();
 
             try
             {
-                if (isRss2DateTime)
+                if (_isRss2DateTime)
                 {
-                    MethodInfo objMethod = typeof(Rss20FeedFormatter).GetMethod("DateFromString", BindingFlags.NonPublic | BindingFlags.Static);
-                    Debug.Assert(objMethod != null);
-                    objMethod.Invoke(null, new object[] { dateVal, this });
-
+                    rss20FeedFormatterMethodInfo.Invoke(null, new object[] { dateVal, this });
                 }
-                if (isAtomDateTime)
+                if (_isAtomDateTime)
                 {
-                    MethodInfo objMethod = typeof(Atom10FeedFormatter).GetMethod("DateFromString", BindingFlags.NonPublic | BindingFlags.Instance);
-                    Debug.Assert(objMethod != null);
-                    objMethod.Invoke(new Atom10FeedFormatter(), new object[] { dateVal, this });
+                    atom10FeedFormatterMethodInfo.Invoke(new Atom10FeedFormatter(), new object[] { dateVal, this });
                 }
             }
-            catch (TargetInvocationException)
+            catch (TargetInvocationException e)
             {
-                DateTimeFormatInfo dtfi = CultureInfo.CurrentCulture.DateTimeFormat;
-                return DateTimeOffset.UtcNow.ToString(dtfi.RFC1123Pattern);
+                DateTime parsedDate;
+
+                if (!DateTime.TryParse(dateVal, new CultureInfo("en-US"), DateTimeStyles.None, out parsedDate))
+                {
+                    parsedDate = DateTime.UtcNow;
+                    logger.WarnException("Unable to parse Feed date " + dateVal, e);
+                }
+
+                dateVal = parsedDate.ToString(CultureInfo.CurrentCulture.DateTimeFormat.RFC1123Pattern);
             }
 
             return dateVal;
-
         }
-
     }
 }
