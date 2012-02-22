@@ -5,57 +5,65 @@
 
 @section HeaderContent
 {
+    @Html.IncludeCss("Settings.css")
     @Html.IncludeCss("Grid.css")
+    
+    <style>
+        .seasonToggleTopGroup
+        {
+            overflow: hidden;
+        }
+    
+        .seasonToggleTop
+        {
+            background-color: #F1EDED;
+            background-position: 5px center;
+            background-repeat: no-repeat;
+            display: inline-block;
+            font-size: 15px;
+            margin: 2px;
+            padding: 2px 5px;
+            width: 100px;
+        }
+    
+        .seasonToggleLabel
+        {
+            margin-left: 5px;
+            color: black;
+            text-decoration: none;
+        }
+        
+        .seasonToggleTop .ignoredEpisodesMaster
+        {
+            padding-left: 0px;
+            padding-right: 0px;
+            border-style: none;
+        }
+    
+        #banner-container
+        {
+            width: 758px;
+            height: 140px;
+            padding: 0px;
+            margin-top: 10px;
+            margin-bottom: 15px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+   
+        .seasonSection
+        {
+            margin-top: 50px;
+        }
+        
+        .ui-dialog-buttonpane .ui-dialog-buttonset .ui-delete-button
+        {
+            margin-right: 445px;
+        }
+    </style>
 }
 @{ ViewBag.Title = Model.Title; }
-<style>
-    .seasonToggleTopGroup
-    {
-        overflow: hidden;
-    }
-    
-    .seasonToggleTop
-    {
-        background-color: #F1EDED;
-        background-position: 5px center;
-        background-repeat: no-repeat;
-        display: inline-block;
-        font-size: 15px;
-        margin: 2px;
-        padding: 2px 5px;
-        width: 100px;
-    }
-    
-    .seasonToggleLabel
-    {
-        margin-left: 5px;
-        color: black;
-        text-decoration: none;
-    }
-        
-    .seasonToggleTop .ignoredEpisodesMaster
-    {
-        padding-left: 0px;
-        padding-right: 0px;
-        border-style: none;
-    }
-    
-    #banner-container
-    {
-        width: 758px;
-        height: 140px;
-        padding: 0px;
-        margin-top: 10px;
-        margin-bottom: 15px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-   
-    .seasonSection
-    {
-        margin-top: 50px;
-    }
-</style>
+
 @section ActionMenu
 {
     <ul class="sub-menu">
@@ -63,6 +71,7 @@
         <li>@Ajax.ActionLink("Update Info", "UpdateInfo", "Command", new { seriesId = Model.SeriesId }, null)</li>
         <li>@Ajax.ActionLink("Search for missing episodes", "BacklogSeries", "Episode", new { seriesId = Model.SeriesId }, null)</li>
         <li>@Ajax.ActionLink("Rename Episodes", "RenameEpisodes", "Episode", new { seriesId = Model.SeriesId }, null)</li>
+        <li><a class="editButton" value="@Model.SeriesId" rel="@Model.Title">Edit</a></li>
     </ul>
 }
 
@@ -95,9 +104,27 @@
         }
     </div>
 }
+
+<div style="visibility: hidden">
+    <div id="seriesEditor" title="Edit Series">
+    </div>
+</div>
+
 @section Scripts{
     @Html.IncludeScript("NzbDrone/seriesDetails.js")
+    @Html.IncludeScript("NzbDrone/series.js")
+    
     <script type="text/javascript">
         seriesId = @Model.SeriesId;
+
+        //Used when we delete this series
+        function afterDelete(seriesId) {
+            window.location = "/";
+        }
+        
+        //After we save do this...
+        function afterSave() {
+            //Do nothing
+        }        
     </script>
 }
