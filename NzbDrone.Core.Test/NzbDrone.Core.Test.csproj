@@ -117,6 +117,7 @@
     <Compile Include="ProviderTests\AnalyticsProviderTests\AnalyticsProviderFixture.cs" />
     <Compile Include="ProviderTests\ConfigProviderTests\ConfigCachingFixture.cs" />
     <Compile Include="ProviderTests\PlexProviderTest.cs" />
+    <Compile Include="ProviderTests\SeasonProviderTest.cs" />
     <Compile Include="ProviderTests\DecisionEngineTests\RetentionSpecificationFixture.cs" />
     <Compile Include="ProviderTests\DecisionEngineTests\QualityAllowedByProfileSpecificationFixtrue.cs" />
     <Compile Include="ProviderTests\DecisionEngineTests\UpgradeHistorySpecificationFixtrue.cs" />

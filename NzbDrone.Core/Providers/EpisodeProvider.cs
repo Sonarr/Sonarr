@@ -20,13 +20,16 @@ namespace NzbDrone.Core.Providers
         private static readonly Regex multiPartCleanupRegex = new Regex(@"\(\d+\)$", RegexOptions.Compiled);
 
         private readonly TvDbProvider _tvDbProvider;
+        private readonly SeasonProvider _seasonProvider;
         private readonly IDatabase _database;
         private readonly SeriesProvider _seriesProvider;
 
         [Inject]
-        public EpisodeProvider(IDatabase database, SeriesProvider seriesProvider, TvDbProvider tvDbProviderProvider)
+        public EpisodeProvider(IDatabase database, SeriesProvider seriesProvider,
+            TvDbProvider tvDbProviderProvider, SeasonProvider seasonProvider)
         {
             _tvDbProvider = tvDbProviderProvider;
+            _seasonProvider = seasonProvider;
             _database = database;
             _seriesProvider = seriesProvider;
         }
@@ -38,8 +41,7 @@ namespace NzbDrone.Core.Providers
         public virtual void AddEpisode(Episode episode)
         {
             //If Season is ignored ignore this episode
-            if (IsIgnored(episode.SeriesId, episode.SeasonNumber))
-                episode.Ignored = true;
+            episode.Ignored = _seasonProvider.IsIgnored(episode.SeriesId, episode.SeasonNumber);
 
             _database.Insert(episode);
         }
@@ -278,7 +280,7 @@ namespace NzbDrone.Core.Providers
             var updateList = new List<Episode>();
             var newList = new List<Episode>();
 
-            foreach (var episode in tvDbSeriesInfo.Episodes)
+            foreach (var episode in tvDbSeriesInfo.Episodes.OrderBy(e => e.SeasonNumber).ThenBy(e => e.EpisodeNumber))
             {
                 try
                 {
@@ -312,7 +314,7 @@ namespace NzbDrone.Core.Providers
                         //Else we need to check if this episode should be ignored based on IsIgnored rules
                         else
                         {
-                            episodeToUpdate.Ignored = IsIgnored(series.SeriesId, episode.SeasonNumber);
+                            episodeToUpdate.Ignored = _seasonProvider.IsIgnored(series.SeriesId, episode.SeasonNumber);
                         }
                     }
                     else
@@ -396,10 +398,14 @@ namespace NzbDrone.Core.Providers
             return _database.Fetch<int>("SELECT EpisodeNumber FROM Episodes WHERE SeriesId=@0 AND SeasonNumber=@1", seriesId, seasonNumber).OrderBy(c => c).ToList();
         }
 
-        public virtual void SetSeasonIgnore(long seriesId, int seasonNumber, bool isIgnored)
+        public virtual void SetSeasonIgnore(int seriesId, int seasonNumber, bool isIgnored)
         {
             logger.Info("Setting ignore flag on Series:{0} Season:{1} to {2}", seriesId, seasonNumber, isIgnored);
 
+            //Set the SeasonIgnore
+            _seasonProvider.SetIgnore(seriesId, seasonNumber, isIgnored);
+
+            //Ignore all the episodes in the season
             _database.Execute(@"UPDATE Episodes SET Ignored = @0
                                 WHERE SeriesId = @1 AND SeasonNumber = @2 AND Ignored = @3",
                 isIgnored, seriesId, seasonNumber, !isIgnored);

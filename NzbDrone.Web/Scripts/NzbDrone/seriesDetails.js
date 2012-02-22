@@ -40,9 +40,7 @@ $(".ignoreEpisode").live("click", function () {
 
     else {
         //Check to see if this is the last one ignored or the first not ignored
-        seasonNumber = toggle.attr('class').split(/\s+/)[1].replace('ignoreEpisode_', '');
         var episodeId = toggle.attr('id');
-        toggleMaster(seasonNumber, ignored);
         saveEpisodeIgnore(episodeId, ignored);
     }
 });
@@ -66,26 +64,6 @@ function toggleChildren(seasonNumber, ignored) {
             toggleCellColour($(this), false);
         });
     }
-}
-
-function toggleMaster(seasonNumber) {
-    //Toggles all master toggles when the childen changes
-    
-    var ignoreEpisodes = $('.ignoreEpisode_' + seasonNumber);
-    var ignoredCount = ignoreEpisodes.filter('.ignored').length;
-    var masters = $('.ignoreSeason_' + seasonNumber);
-
-    masters.each(function (index) {
-        if (ignoreEpisodes.length == ignoredCount) {
-            $(this).attr('src', ignoredImage);
-            $(this).addClass('ignored');
-        }
-
-        else {
-            $(this).attr('src', notIgnoredImage);
-            $(this).removeClass('ignored');
-        }
-    });
 }
 
 function toggleMasters(seasonNumber, ignored) {

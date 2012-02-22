@@ -222,6 +222,7 @@
     <Compile Include="Datastore\MigrationLogger.cs" />
     <Compile Include="Datastore\MigrationsHelper.cs" />
     <Compile Include="Datastore\CustomeMapper.cs" />
+    <Compile Include="Datastore\Migrations\Migration20120220.cs" />
     <Compile Include="Datastore\Migrations\Migration20120123.cs" />
     <Compile Include="Datastore\Migrations\Migration20120118.cs" />
     <Compile Include="Datastore\Migrations\Migration20111125.cs" />
@@ -233,6 +234,7 @@
     <Compile Include="Datastore\DbProviderFactory.cs" />
     <Compile Include="Datastore\Migrations\NzbDroneMigration.cs" />
     <Compile Include="Datastore\Migrations\SchemaInfo.cs" />
+    <Compile Include="Datastore\PetaPoco\EpisodeSeasonRelator.cs" />
     <Compile Include="Fluent.cs" />
     <Compile Include="Helpers\EpisodeSortingHelper.cs" />
     <Compile Include="Helpers\FileSizeFormatHelper.cs" />
@@ -267,6 +269,7 @@
     <Compile Include="Model\Xbmc\TvShowResult.cs" />
     <Compile Include="Model\Xbmc\ErrorResult.cs" />
     <Compile Include="Model\Xbmc\IconType.cs" />
+    <Compile Include="Providers\SeasonProvider.cs" />
     <Compile Include="Jobs\RecentBacklogSearchJob.cs" />
     <Compile Include="Jobs\TrimLogsJob.cs" />
     <Compile Include="Jobs\JobProvider.cs" />
@@ -294,6 +297,7 @@
     <Compile Include="Providers\AnalyticsProvider.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Repository\Season.cs" />
     <Compile Include="Providers\AutoConfigureProvider.cs">
       <SubType>Code</SubType>
     </Compile>
