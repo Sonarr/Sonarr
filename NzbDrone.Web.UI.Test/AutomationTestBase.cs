@@ -110,15 +110,12 @@ namespace NzbDrone.Web.UI.Automation
 
         private void StopNzbDrone()
         {
-            foreach (var process in Process.GetProcessesByName("nzbdrone"))
-            {
-                process.Kill();
-                process.WaitForExit();
-            }
 
-            foreach (var process in Process.GetProcessesByName("iisexpress"))
+            foreach (var process in Process.GetProcesses())
             {
-                process.Kill();
+                if (string.Equals(process.ProcessName, "NzbDrone", StringComparison.InvariantCultureIgnoreCase)
+                    || string.Equals(process.ProcessName, "IISExpress", StringComparison.InvariantCultureIgnoreCase))
+                    process.Kill();
                 process.WaitForExit();
             }
 
@@ -126,9 +123,15 @@ namespace NzbDrone.Web.UI.Automation
             {
                 StartProcess("ServiceUninstall.exe", true);
             }
-            catch (Exception)
-            {
+            catch { }
 
+            foreach (var process in Process.GetProcesses())
+            {
+                if (string.Equals(process.ProcessName, "NzbDrone", StringComparison.InvariantCultureIgnoreCase)
+                    || string.Equals(process.ProcessName, "IISExpress", StringComparison.InvariantCultureIgnoreCase)
+                    || string.Equals(process.ProcessName, "ServiceUninstall", StringComparison.InvariantCultureIgnoreCase))
+                    process.Kill();
+                process.WaitForExit();
             }
 
         }
