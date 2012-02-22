@@ -1101,6 +1101,42 @@ namespace NzbDrone.Core.Test.ProviderTests
         }
 
         [Test]
+        public void IgnoreSeason_should_call_SetIgnore_in_season_provider_one_time_only()
+        {
+            WithRealDb();
+
+            var episodes = Builder<Episode>.CreateListOfSize(4)
+                .All()
+                .With(c => c.SeriesId = 10)
+                .With(c => c.SeasonNumber = 1)
+                .With(c => c.Ignored = false)
+                .Build().ToList();
+
+            var season = new Season
+                             {
+                                     SeriesId = 10,
+                                     SeasonNumber = 1,
+                                     Ignored = false
+                             };
+
+            Db.Insert(season);
+            Db.InsertMany(episodes);
+
+            Mocker.GetMock<SeasonProvider>().Setup(s => s.SetIgnore(10, 1, true)).Verifiable();
+
+            //Act
+            Mocker.Resolve<EpisodeProvider>().SetSeasonIgnore(10, 1, true);
+
+            //Assert
+            var episodesInDb = Db.Fetch<Episode>(@"SELECT * FROM Episodes");
+
+            episodesInDb.Should().HaveCount(4);
+            episodesInDb.Where(e => e.Ignored).Should().HaveCount(4);
+
+            Mocker.GetMock<SeasonProvider>().Verify(s => s.SetIgnore(10, 1, true), Times.Once());
+        }
+
+        [Test]
         public void EpisodesWithoutFiles_no_specials()
         {
             WithRealDb();
