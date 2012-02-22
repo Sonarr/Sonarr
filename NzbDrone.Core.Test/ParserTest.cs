@@ -64,6 +64,8 @@ namespace NzbDrone.Core.Test
         [TestCase("The Mentalist S02E21 18 5 4 720p WEB DL DD5 1 h 264 EbP", "The Mentalist", 2, 21)]
         [TestCase("01x04 - Halloween, Part 1 - 720p WEB-DL", "", 1, 4)]
         [TestCase("extras.s03.e05.ws.dvdrip.xvid-m00tv", "Extras", 3, 5)]
+        [TestCase("castle.2009.416.hdtv-lol", "Castle 2009", 4, 16)]
+        [TestCase("hawaii.five-0.2010.217.hdtv-lol", "Hawaii Five-0 (2010)", 2, 17)]
         public void ParseTitle_single(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
             var result = Parser.ParseTitle(postTitle);
