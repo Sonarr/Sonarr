@@ -1,11 +1,7 @@
 ﻿@using NzbDrone.Core.Repository.Quality
 @using NzbDrone.Web.Helpers;
 @model NzbDrone.Web.Models.QualityModel
-@{ Layout = "~/Views/Shared/_ReferenceLayout.cshtml"; }
-@section HeaderContent{
-    @Html.IncludeCss("Settings.css")
-    @Html.IncludeCss("QualitySettings.css")
-}
+@{ Layout = null; }
 <div id="stylized">
     @using (Html.BeginForm("SaveQuality", "Settings", FormMethod.Post, new { id = "QualityForm", name = "QualityForm" }))
     {
@@ -18,7 +14,22 @@
         
         <div class="jquery-accordion">
             <h3>
-                <a href="#">Sizes</a></h3>
+                <a href="#">Profiles</a></h3>
+            <div id="profileContainer">
+                <div id="profileHeader">
+                    <a id="addItem" href="@Url.Action("AddProfile", "Settings")">
+                        <img src="../../Content/Images/Plus.png" alt="Add New Profile" width="20px" height="20px" />
+                        Add New Profile</a>
+                </div>
+                <div id="profiles">
+                    @foreach (var item in (List<QualityProfile>)ViewData["Profiles"])
+                    {
+                        Html.RenderAction("GetQualityProfileView", item);
+                    }
+                </div>
+            </div>
+            <h3>
+                <a href="#">Size Limits</a></h3>
             <div class="sliders">
                 <div class="slider-container">
                     <b>SDTV</b>
@@ -69,39 +80,18 @@
                     </span>
                 </div>
             </div>
-            <h3>
-                <a href="#">Profiles</a></h3>
-            <div id="profileContainer">
-                <div id="profileHeader">
-                    <a id="addItem" href="@Url.Action("AddProfile", "Settings")">
-                        <img src="../../Content/Images/Plus.png" alt="Add New Profile" width="20px" height="20px" />
-                        Add New Profile</a>
-                </div>
-                <div id="profiles">
-                    @foreach (var item in (List<QualityProfile>)ViewData["Profiles"])
-                    {
-                        Html.RenderAction("GetQualityProfileView", item);
-                    }
-                </div>
-            </div>
         </div>
-        
-        
         <br />
         <button type="submit" class="save_button" disabled="disabled">
             Save</button>
     }
 </div>
-@section Scripts{
-    @Html.IncludeScript("MicrosoftAjax.js")
-    
-    <script type="text/javascript">
-        $(document).ready(function () {
-            setupSliders();
-        });
+<script type="text/javascript">
+    $(document).ready(function () {
+        setupSliders();
+    });
 
-        $('.quality-selectee').livequery(function () {
-            $(this).button();
-        });
-    </script>
-}
+    $('.quality-selectee').livequery(function () {
+        $(this).button();
+    });
+</script>

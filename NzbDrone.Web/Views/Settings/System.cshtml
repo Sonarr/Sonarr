@@ -1,10 +1,7 @@
 ﻿@using NzbDrone.Web.Helpers
 @model NzbDrone.Web.Models.SystemSettingsModel
-@{ Layout = "~/Views/Shared/_ReferenceLayout.cshtml"; }
+@{ Layout = null; }
 
-@section HeaderContent{
-    @Html.IncludeCss("Settings.css")
-}
 
 <div class="infoBox">
     You must manually restart NzbDrone for these changes to take effect. (Automatic restart comming soon!)
@@ -38,6 +35,3 @@
             Save</button>
     }
 </div>
-@section Scripts{
-
-}

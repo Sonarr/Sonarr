@@ -1,11 +1,18 @@
 ﻿@using NzbDrone.Web.Helpers
 @{ViewBag.Title = "Settings";}
 
+@section HeaderContent
+{
+    @Html.IncludeCss("Settings.css")
+    @Html.IncludeCss("IndexerSettings.css")
+    @Html.IncludeCss("QualitySettings.css")
+}
+
 <div class="jquery-tabs">
     <ul>
         <li>@Html.ActionLink("Naming", "Naming", "Settings")</li>
-        <li>@Html.ActionLink("Indexers", "Indexers", "Settings")</li>
         <li>@Html.ActionLink("Quality", "Quality", "Settings")</li>
+        <li>@Html.ActionLink("Indexers", "Indexers", "Settings")</li>
         <li>@Html.ActionLink("Download Client", "DownloadClient", "Settings")</li>
         <li>@Html.ActionLink("Notifications", "Notifications", "Settings")</li>
         <li>@Html.ActionLink("System", "System", "Settings")</li>

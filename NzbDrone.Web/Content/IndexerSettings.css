@@ -3,28 +3,28 @@
     margin-top: -10px;
     margin-left: 15px;
 }
-        
+
 #addItem
 {
     text-decoration: none;
-    font-size:16px;
+    font-size: 16px;
     color: black;
-    font-weight:bold;
+    font-weight: bold;
 }
-        
+
 .titleText
 {
     font-size: 1.5em;
     line-height: 1;
     margin-bottom: 1em;
-    display:inline;
+    display: inline;
     position: absolute;
     top: -1px;
     left: 2px;
     padding-bottom: 0px;
-    white-space:nowrap;
+    white-space: nowrap;
 }
-    
+
 .providerHeader
 {
     min-height: 23px;
@@ -36,7 +36,7 @@
     float: left;
     width: 255px;
     margin: 2px;
-    border:solid 1px #CCCCCD;
+    border: solid 1px #CCCCCD;
     display: inline-block;
     overflow: auto;
     padding: 3px;
@@ -51,19 +51,19 @@
     font-weight: bold;
     width: 50px;
 }
-    
+
 .providerOptions input, .providerOptions select
 {
-    font-size:12px;
-    padding:4px 2px;
-    border:solid 1px #aacfe4;
-    width:170px;
+    font-size: 12px;
+    padding: 4px 2px;
+    border: solid 1px #aacfe4;
+    width: 170px;
     margin-right: 0px;
 }
-    
+
 .providerOptions select
 {
-    width:176px;
+    width: 176px;
 }
 
 .deleteProvider
@@ -83,4 +83,39 @@ input[type="checkbox"]
     overflow: auto;
     margin-top: 5px;
     margin-bottom: 10px;
+}
+
+.indexerPanel
+{
+    overflow: auto;
+}
+
+.retentionContainer
+{
+    padding-top: 20px;
+    overflow: hidden;
+}
+
+.indexerStatusContainer
+{
+    margin-left: 12px;
+    margin-bottom: -4px;
+}
+
+.indexerStatus
+{
+    padding: 6px 10px;
+    display: inline-block;
+    color: white;
+    margin: 3px;
+}
+
+.enabled
+{
+    background-color: #065EFE;
+}
+
+.disabled
+{
+    background-color: #616161;
 }
