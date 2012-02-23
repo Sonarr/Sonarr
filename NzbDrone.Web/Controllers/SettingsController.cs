@@ -279,7 +279,7 @@ namespace NzbDrone.Web.Controllers
         public JsonResult DeleteQualityProfile(int profileId)
         {
             if (_seriesProvider.GetAllSeries().Where(s => s.QualityProfileId == profileId).Count() != 0)
-                return JsonNotificationResult.Opps("Profile is still in use.");
+                return JsonNotificationResult.Oops("Profile is still in use.");
 
             _qualityProvider.Delete(profileId);
 
@@ -410,7 +410,7 @@ namespace NzbDrone.Web.Controllers
                 return GetSuccessResult();
             }
 
-            return JsonNotificationResult.Opps("Invalid Data");
+            return JsonNotificationResult.Oops("Invalid Data");
         }
 
         [HttpPost]
@@ -613,7 +613,7 @@ namespace NzbDrone.Web.Controllers
 
         private JsonResult GetInvalidModelResult()
         {
-            return JsonNotificationResult.Opps("Invalid post data");
+            return JsonNotificationResult.Oops("Invalid post data");
         }
 
         private SelectList GetProwlPrioritySelectList()

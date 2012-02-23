@@ -163,7 +163,7 @@ namespace NzbDrone.Web.Controllers
         public JsonResult RunJob(string typeName)
         {
             if (!_jobProvider.QueueJob(typeName))
-                return JsonNotificationResult.Opps("Invalid Job Name");
+                return JsonNotificationResult.Oops("Invalid Job Name");
 
             return JsonNotificationResult.Info("Job Queued");
         }

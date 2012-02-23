@@ -11,7 +11,7 @@ namespace NzbDrone.Web.Filters
 
         public void OnException(ExceptionContext filterContext)
         {
-            filterContext.Result = JsonNotificationResult.Opps(filterContext.Exception.Message);
+            filterContext.Result = JsonNotificationResult.Oops(filterContext.Exception.Message);
             filterContext.ExceptionHandled = true;
             logger.FatalException(filterContext.RequestContext.HttpContext.Request.RawUrl, filterContext.Exception);
         }

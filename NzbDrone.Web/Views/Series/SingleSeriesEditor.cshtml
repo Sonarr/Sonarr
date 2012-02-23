@@ -1,0 +1,40 @@
+﻿@using NzbDrone.Web.Helpers;
+@model NzbDrone.Web.Models.SeriesModel
+@{
+    Layout = null;
+}
+
+<style>
+    .settingsForm
+    {
+        overflow: auto;
+    }
+</style>
+
+<div id="stylized" style="border-color: transparent;">
+    @using (Html.BeginForm("SaveSingleSeriesEditor", "Series", FormMethod.Post, new { id = "SeriesEditorForm", name = "SeriesEditorForm", @class = "settingsForm" }))
+    {
+        @Html.HiddenFor(m => m.SeriesId)
+        @Html.HiddenFor(m => m.Status)
+        <label class="labelClass">@Html.LabelFor(m => m.Monitored)
+            <span class="small">@Html.DescriptionFor(m => m.Monitored)</span>
+        </label>
+        @Html.CheckBoxFor(m => m.Monitored, new { @class = "inputClass checkClass" })
+        <label class="labelClass">@Html.LabelFor(m => m.SeasonFolder)
+            <span class="small">@Html.DescriptionFor(m => m.SeasonFolder)</span>
+        </label>
+        @Html.CheckBoxFor(m => m.SeasonFolder, new { @class = "inputClass checkClass" })
+        <label class="labelClass">@Html.LabelFor(m => m.QualityProfileId)
+            <span class="small">@Html.DescriptionFor(m => m.QualityProfileId)</span>
+        </label>
+        @Html.DropDownListFor(m => m.QualityProfileId, (SelectList)ViewData["SelectList"], new { @class = "inputClass" })
+        <label class="labelClass">@Html.LabelFor(m => m.Path)
+            <span class="small">@Html.DescriptionFor(m => m.Path)</span>
+        </label>
+        @Html.TextBoxFor(m => m.Path, new { @class = "inputClass" })
+        <label class="labelClass">@Html.LabelFor(m => m.BacklogSetting)
+            <span class="small">@Html.DescriptionFor(m => m.BacklogSetting)</span>
+        </label>
+        @Html.DropDownListFor(m => m.BacklogSetting, (SelectList)ViewData["BacklogSettingSelectList"], new { @class = "inputClass" })
+    }
+</div>

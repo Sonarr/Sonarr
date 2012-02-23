@@ -204,7 +204,7 @@ namespace NzbDrone.Core.Providers
             return series;
         }
 
-        public virtual void UpdateFromMassEdit(IList<Series> editedSeries)
+        public virtual void UpdateFromSeriesEditor(IList<Series> editedSeries)
         {
             var allSeries = GetAllSeries();
 

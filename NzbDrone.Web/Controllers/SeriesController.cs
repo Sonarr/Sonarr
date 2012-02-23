@@ -47,7 +47,7 @@ namespace NzbDrone.Web.Controllers
             return View((object)serialized);
         }
 
-        public ActionResult SeriesEditor(int seriesId)
+        public ActionResult SingleSeriesEditor(int seriesId)
         {
             var profiles = _qualityProvider.All();
             ViewData["SelectList"] = new SelectList(profiles, "QualityProfileId", "Name");
@@ -66,7 +66,7 @@ namespace NzbDrone.Web.Controllers
         }
 
         [HttpPost]
-        public EmptyResult SaveSeriesEditor(SeriesModel seriesModel)
+        public EmptyResult SaveSingleSeriesEditor(SeriesModel seriesModel)
         {
             var series = _seriesProvider.GetSeries(seriesModel.SeriesId);
             series.Monitored = seriesModel.Monitored;
@@ -133,7 +133,7 @@ namespace NzbDrone.Web.Controllers
             return View(model);
         }
 
-        public ActionResult MassEdit()
+        public ActionResult SeriesEditor()
         {
             var profiles = _qualityProvider.All();
             ViewData["QualityProfiles"] = profiles;
@@ -170,13 +170,13 @@ namespace NzbDrone.Web.Controllers
         }
 
         [HttpPost]
-        public JsonResult SaveMassEdit(List<Series> series)
+        public JsonResult SaveSeriesEditor(List<Series> series)
         {
             //Save edits
             if (series == null || series.Count == 0)
-                return JsonNotificationResult.Opps("Invalid post data");
+                return JsonNotificationResult.Oops("Invalid post data");
 
-            _seriesProvider.UpdateFromMassEdit(series);
+            _seriesProvider.UpdateFromSeriesEditor(series);
             return JsonNotificationResult.Info("Series Mass Edit Saved");
         }
 

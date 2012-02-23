@@ -768,7 +768,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             fakeSeries[0].SeasonFolder = newSeasonFolder;
 
             //Act
-            Mocker.Resolve<SeriesProvider>().UpdateFromMassEdit(fakeSeries);
+            Mocker.Resolve<SeriesProvider>().UpdateFromSeriesEditor(fakeSeries);
 
             //Assert
             var result = Db.Fetch<Series>();
@@ -805,7 +805,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             fakeSeries[0].SeasonFolder = newSeasonFolder;
 
             //Act
-            Mocker.Resolve<SeriesProvider>().UpdateFromMassEdit(fakeSeries);
+            Mocker.Resolve<SeriesProvider>().UpdateFromSeriesEditor(fakeSeries);
 
             //Assert
             var result = Db.Fetch<Series>();

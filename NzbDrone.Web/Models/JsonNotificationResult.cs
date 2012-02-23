@@ -29,9 +29,9 @@ namespace NzbDrone.Web.Models
             return GetJsonResult(NotificationType.Error, title, text);
         }
 
-        public static JsonResult Opps(string text)
+        public static JsonResult Oops(string text)
         {
-            return GetJsonResult(NotificationType.Error, "Opps!", text);
+            return GetJsonResult(NotificationType.Error, "Oops!", text);
         }
 
 

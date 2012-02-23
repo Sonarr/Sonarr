@@ -472,10 +472,10 @@
     <Content Include="Views\Settings\Misc.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Series\MassEdit.cshtml" />
+    <Content Include="Views\Series\SeriesEditor.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Series\SeriesItem.cshtml" />
+    <Content Include="Views\Series\SeriesEditorItem.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Settings\DownloadClient.cshtml" />
@@ -493,7 +493,7 @@
     <Content Include="Views\Series\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Series\SeriesEditor.cshtml" />
+    <Content Include="Views\Series\SingleSeriesEditor.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Upcoming\UpcomingEpisode.cshtml" />

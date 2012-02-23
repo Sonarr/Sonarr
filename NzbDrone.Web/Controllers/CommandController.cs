@@ -72,7 +72,7 @@ namespace NzbDrone.Web.Controllers
             if (_smtpProvider.SendTestEmail(server, port, ssl, username, password, fromAddress, toAddresses))
                 JsonNotificationResult.Info("Successfull", "Test email sent.");
 
-            return JsonNotificationResult.Opps("Couldn't send Email, please check your settings");
+            return JsonNotificationResult.Oops("Couldn't send Email, please check your settings");
         }
 
         public JsonResult GetTwitterAuthorization()
@@ -80,7 +80,7 @@ namespace NzbDrone.Web.Controllers
             var result = _twitterProvider.GetAuthorization();
 
             if (result == null)
-                JsonNotificationResult.Opps("Couldn't get Twitter Authorization");
+                JsonNotificationResult.Oops("Couldn't get Twitter Authorization");
 
             return new JsonResult { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
@@ -90,7 +90,7 @@ namespace NzbDrone.Web.Controllers
             var result = _twitterProvider.GetAndSaveAccessToken(token, verifier);
 
             if (!result)
-                JsonNotificationResult.Opps("Couldn't verify Twitter Authorization");
+                JsonNotificationResult.Oops("Couldn't verify Twitter Authorization");
 
             return JsonNotificationResult.Info("Good News!", "Successfully verified Twitter Authorization.");
 
@@ -111,7 +111,7 @@ namespace NzbDrone.Web.Controllers
             }
             catch(Exception ex)
             {
-                return JsonNotificationResult.Opps("Couldn't register and test Growl");
+                return JsonNotificationResult.Oops("Couldn't register and test Growl");
             }
         }
 

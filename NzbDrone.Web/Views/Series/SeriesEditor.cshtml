@@ -1,40 +1,155 @@
-﻿@using NzbDrone.Web.Helpers;
-@model NzbDrone.Web.Models.SeriesModel
-@{
-    Layout = null;
+@using NzbDrone.Web.Helpers
+@model IEnumerable<NzbDrone.Core.Repository.Series>
+@{ViewBag.Title = "NzbDrone";}
+
+@section HeaderContent
+{
+    @Html.IncludeCss("Settings.css")
+    
+    <style>
+        .checkboxColumn {
+            width: 95px;
+            text-align: center;
+        }
+        
+        .masterControls {
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        
+        .buttons {
+            width: 600px;
+            text-align: center;
+        }
+        
+        table input[type="text"], table select {
+            margin: 2px 2px;
+        }
+        
+        td .path {
+            width: 300px;
+        }
+        
+        td .backlogSetting {
+            width: 90px;
+        }
+    </style>
 }
 
-<style>
-    .settingsForm
-    {
-        overflow: auto;
-    }
-</style>
+@using (Html.BeginForm("SaveSeriesEditor", "Series", FormMethod.Post, new { id = "SeriesEditor", name = "SeriesEditor" }))
+{
+    <table id ="seriesEditorGrid" class="dataTable dataTablesGrid no-details">
+        <thead>
+            <th width="14px">@Html.CheckBox("editToggleMaster", false, new { @class = "editToggleMaster" })</th>
+            <th>Title</th>
+            <th width="210px">Quality</th>
+            <th class="checkboxColumn">Monitored</th>
+            <th class="checkboxColumn">Season Folder</th>
+            <th width="100px">Backlog Status</th>
+            <th width="310px">Path</th>
+        </thead>
+        
+        <tbody>
+            @foreach (var series in Model)
+            {
+                Html.RenderPartial("SeriesEditorItem", series);
+            }
+        </tbody>
+    </table>
+    
+    <div class="masterControls">
+        <div id="stylized" style="border-color: transparent;">
+            <div class="settingsForm">
+                <label class="labelClass">Quality Profile
+                    <span class="small">Which Quality Profile should NzbDrone use to download episodes?</span>
+                </label>
+                @Html.DropDownList("masterQualitySelector", (SelectList)ViewData["MasterProfileSelectList"], new { @class = "inputClass" })
+                <label class="labelClass">Monitored
+                    <span class="small">Should NzbDrone download episodes for this series?</span>
+                </label>
+                @Html.DropDownList("masterMonitored", (SelectList)ViewData["BoolSelectList"], new { @class = "inputClass" })
+                <label class="labelClass">Use Season Folder
+                    <span class="small">Should downloaded episodes be stored in season folders?</span>
+                </label>
+                @Html.DropDownList("masterSeasonFolder", (SelectList)ViewData["BoolSelectList"], new { @class = "inputClass" })
+                <label class="labelClass">Backlog Status
+                    <span class="small">Should NzbDrone perform backlog searches for this series?</span>
+                </label>
+                @Html.DropDownList("masterBacklogSetting", (SelectList)ViewData["MasterBacklogSettingSelectList"], new { @class = "inputClass" })
+            </div>
+        </div>
+    </div>
 
-<div id="stylized" style="border-color: transparent;">
-    @using (Html.BeginForm("SaveSeriesEditor", "Series", FormMethod.Post, new { id = "SeriesEditorForm", name = "SeriesEditorForm", @class = "settingsForm" }))
-    {
-        @Html.HiddenFor(m => m.SeriesId)
-        @Html.HiddenFor(m => m.Status)
-        <label class="labelClass">@Html.LabelFor(m => m.Monitored)
-            <span class="small">@Html.DescriptionFor(m => m.Monitored)</span>
-        </label>
-        @Html.CheckBoxFor(m => m.Monitored, new { @class = "inputClass checkClass" })
-        <label class="labelClass">@Html.LabelFor(m => m.SeasonFolder)
-            <span class="small">@Html.DescriptionFor(m => m.SeasonFolder)</span>
-        </label>
-        @Html.CheckBoxFor(m => m.SeasonFolder, new { @class = "inputClass checkClass" })
-        <label class="labelClass">@Html.LabelFor(m => m.QualityProfileId)
-            <span class="small">@Html.DescriptionFor(m => m.QualityProfileId)</span>
-        </label>
-        @Html.DropDownListFor(m => m.QualityProfileId, (SelectList)ViewData["SelectList"], new { @class = "inputClass" })
-        <label class="labelClass">@Html.LabelFor(m => m.Path)
-            <span class="small">@Html.DescriptionFor(m => m.Path)</span>
-        </label>
-        @Html.TextBoxFor(m => m.Path, new { @class = "inputClass" })
-        <label class="labelClass">@Html.LabelFor(m => m.BacklogSetting)
-            <span class="small">@Html.DescriptionFor(m => m.BacklogSetting)</span>
-        </label>
-        @Html.DropDownListFor(m => m.BacklogSetting, (SelectList)ViewData["BacklogSettingSelectList"], new { @class = "inputClass" })
-    }
-</div>
+    <div class="buttons">
+        <button id="updateSelected" title="Update the selected series with the settings above">Update Selected</button>
+    
+        <button type="submit" class="save_button" disabled="disabled" title="Commit the settings from your series above to the database">
+            Save Changes</button>
+    </div>
+}
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#seriesEditorGrid').removeClass('hidden-grid');
+
+            oTable = $('.dataTablesGrid').dataTable({
+                "bShowAll": false,
+                "bPaginate": false,
+                "bLengthChange": false,
+                "bFilter": false,
+                "bSort": false,
+                "bInfo": false,
+                "bAutoWidth": false
+            });
+        });
+
+        $('.editToggleMaster').live('change', function () {
+            var toggle = $(this).prop('checked');
+            $('.editToggle').each(function () {
+                $(this).prop('checked', toggle);
+            });
+        });
+
+        $('#updateSelected').live('click', function () {
+            //Find selected values
+            var profileId = $('#masterQualitySelector').val();
+            var monitored = $('#masterMonitored').val();
+            var seasonFolder = $('#masterSeasonFolder').val();
+            var backlogStatus = $('#masterBacklogSetting').val();
+
+            var selected = $('.editToggle:checked');
+
+            selected.each(function() {
+                if (profileId != -10) {
+                    $(this).parent('td').parent('.seriesEditRow').find('.quality').val(profileId);
+                }
+                
+                if (monitored != -10) {
+                    var monitoredBool = true;
+                    if (monitored != 1)
+                        monitoredBool = false;
+
+                    $(this).parent('td').parent('.seriesEditRow').find('.monitored').prop('checked', monitoredBool);
+                }
+
+                if (seasonFolder != -10) {
+                    var seasonFolderBool = true;
+                    if (seasonFolder != 1)
+                        seasonFolderBool = false;
+
+                    $(this).parent('td').parent('.seriesEditRow').find('.seasonFolder').prop('checked', seasonFolderBool);
+                }
+
+                if (backlogStatus != -10) {
+                    $(this).parent('td').parent('.seriesEditRow').find('.backlogSetting').val(backlogStatus);
+                }
+            });
+
+        });
+
+
+    //Update all checked rows
+    </script>
+}
