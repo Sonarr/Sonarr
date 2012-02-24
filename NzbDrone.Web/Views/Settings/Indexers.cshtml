@@ -1,19 +1,46 @@
 ﻿@using NzbDrone.Web.Helpers
 @model NzbDrone.Web.Models.IndexerSettingsModel
 @{ Layout = null;  }
+
+<style>
+    .indexerStatusContainer {
+        margin-left: 14px;
+    }
+    
+    .field-validation-error {
+        color: red;
+    }
+        
+    .input-validation-error {
+        background-color: #FFEEEE;
+        border: 1px solid #FF0000;
+    }
+    
+    #IndexersForm .validation-error {
+        background: url("../../Content/jQueryUI/images/ui-bg_flat_30_b40404_40x100.png") repeat-x scroll 50% 50% #B40404;
+    }
+    #validation-error-summary {
+        display: none;
+        color: red;
+    }
+</style>
 <div class="infoBox">
     RSS feeds are checked every 25 minutes for new episodes.</div>
 <div class="indexerStatusContainer">
-    <div class="indexerStatus disabled" id="nzbsOrgStatus" title="Enabled/Disabled">
-        Nzbs.Org</div>
-    <div class="indexerStatus disabled" id="nzbMatrixStatus" title="Enabled/Disabled">
-        NZBMatrix</div>
-    <div class="indexerStatus disabled" id="nzbsRusStatus" title="Enabled/Disabled">
-        NZBsRus</div>
-    <div class="indexerStatus disabled" id="newzbinStatus" title="Enabled/Disabled">
-        Newzbin</div>
-    <div class="indexerStatus disabled" id="newznabStatus" title="Enabled/Disabled">
-        Newznab</div>
+    @Html.CheckBox("nzbsOrgStatus", @Model.NzbsOrgEnabled, new{ @class = "indexerStatusButton" })
+    <label for="nzbsOrgStatus">Nzbs.Org</label>
+    
+    @Html.CheckBox("nzbMatrixStatus", @Model.NzbMatrixEnabled, new { @class = "indexerStatusButton" })
+    <label for="nzbMatrixStatus">NZBMatrix</label>
+    
+    @Html.CheckBox("nzbsRusStatus", @Model.NzbsRUsEnabled, new { @class = "indexerStatusButton" })
+    <label for="nzbsRusStatus">NZBsRus</label>
+    
+    @Html.CheckBox("newzbinStatus", @Model.NewzbinEnabled, new { @class = "indexerStatusButton" })
+    <label for="newzbinStatus">Newzbin</label>
+    
+    @Html.CheckBox("newznabStatus", @Model.NewznabEnabled, new { @class = "indexerStatusButton" })
+    <label for="newznabStatus">Newznab</label>
 </div>
 <div id="stylized">
     @using (Html.BeginForm("SaveIndexers", "Settings", FormMethod.Post, new { id = "IndexersForm", name = "IndexersForm", @class = "settingsForm" }))
@@ -28,10 +55,12 @@
                 @Html.CheckBoxFor(m => m.NzbsOrgEnabled, new { @class = "inputClass checkClass enabledCheck" })
                 <label class="labelClass">@Html.LabelFor(m => m.NzbsOrgUId)
                     <span class="small">@Html.DescriptionFor(m => m.NzbsOrgUId)</span>
+                    <span class="small">@Html.ValidationMessageFor(m => m.NzbsOrgUId)</span>
                 </label>
                 @Html.TextBoxFor(m => m.NzbsOrgUId, new { @class = "inputClass" })
                 <label class="labelClass">@Html.LabelFor(m => m.NzbsOrgHash)
                     <span class="small">@Html.DescriptionFor(m => m.NzbsOrgHash)</span>
+                    <span class="small">@Html.ValidationMessageFor(m => m.NzbsOrgHash)</span>
                 </label>
                 @Html.TextBoxFor(m => m.NzbsOrgHash, new { @class = "inputClass" })
             </div>
@@ -44,10 +73,12 @@
                 @Html.CheckBoxFor(m => m.NzbMatrixEnabled, new { @class = "inputClass checkClass enabledCheck" })
                 <label class="labelClass">@Html.LabelFor(m => m.NzbMatrixUsername)
                     <span class="small">@Html.DescriptionFor(m => m.NzbMatrixUsername)</span>
+                    <span class="small">@Html.ValidationMessageFor(m => m.NzbMatrixUsername)</span>
                 </label>
                 @Html.TextBoxFor(m => m.NzbMatrixUsername, new { @class = "inputClass" })
                 <label class="labelClass">@Html.LabelFor(m => m.NzbMatrixApiKey)
                     <span class="small">@Html.DescriptionFor(m => m.NzbMatrixApiKey)</span>
+                    <span class="small">@Html.ValidationMessageFor(m => m.NzbMatrixApiKey)</span>
                 </label>
                 @Html.TextBoxFor(m => m.NzbMatrixApiKey, new { @class = "inputClass" })
             </div>
@@ -62,10 +93,12 @@
                 @Html.CheckBoxFor(m => m.NzbsRUsEnabled, new { @class = "inputClass checkClass enabledCheck" })
                 <label class="labelClass">@Html.LabelFor(m => m.NzbsrusUId)
                     <span class="small">@Html.DescriptionFor(m => m.NzbsrusUId)</span>
+                    <span class="small">@Html.ValidationMessageFor(m => m.NzbsrusUId)</span>
                 </label>
                 @Html.TextBoxFor(m => m.NzbsrusUId, new { @class = "inputClass" })
                 <label class="labelClass">@Html.LabelFor(m => m.NzbsrusHash)
                     <span class="small">@Html.DescriptionFor(m => m.NzbsrusHash)</span>
+                    <span class="small">@Html.ValidationMessageFor(m => m.NzbsrusHash)</span>
                 </label>
                 @Html.TextBoxFor(m => m.NzbsrusHash, new { @class = "inputClass" })
             </div>
@@ -78,10 +111,12 @@
                 @Html.CheckBoxFor(m => m.NewzbinEnabled, new { @class = "inputClass checkClass enabledCheck" })
                 <label class="labelClass">@Html.LabelFor(m => m.NewzbinUsername)
                     <span class="small">@Html.DescriptionFor(m => m.NewzbinUsername)</span>
+                    <span class="small">@Html.ValidationMessageFor(m => m.NewzbinUsername)</span>
                 </label>
                 @Html.TextBoxFor(m => m.NewzbinUsername, new { @class = "inputClass" })
                 <label class="labelClass">@Html.LabelFor(m => m.NewzbinPassword)
                     <span class="small">@Html.DescriptionFor(m => m.NewzbinPassword)</span>
+                    <span class="small">@Html.ValidationMessageFor(m => m.NewzbinPassword)</span>
                 </label>
                 @Html.TextBoxFor(m => m.NewzbinPassword, new { @class = "inputClass", type = "password" })
             </div>
@@ -98,7 +133,7 @@
                 </p>
                 <a id="addItem" href="@Url.Action("AddNewznabProvider", "Settings")">
                     <img src="../../Content/Images/Plus.png" alt="Add Newznab Provider" width="20px"
-                        height="20px" />
+                         height="20px" />
                     Add Newznab Provider</a>
                 <div id="newznabProviders">
                     @foreach (var provider in Model.NewznabDefinitions)
@@ -117,47 +152,96 @@
             @Html.TextBoxFor(m => m.Retention, new { @class = "inputClass" })
         </div>
         
-        <button type="submit" class="save_button" disabled="disabled">
-            Save</button>
+        <button type="submit" class="save_button" disabled="disabled">Save</button>
+        
+        <span id="validation-error-summary">Please check your settings and re-save</span>
     }
 </div>
+
 <script type="text/javascript">
     $(document).ready(function () {
-        if ($('#NzbsOrgEnabled').attr('checked'))
-            $('#nzbsOrgStatus').toggleClass('enabled disabled');
+        //Allow unobstrusive validation of the AJAX loaded form
+        $.validator.unobtrusive.parse("#IndexersForm");
+        
+        //Make the buttons
+        $('.indexerStatusButton').button();
 
-        if ($('#NzbMatrixEnabled').attr('checked'))
-            $('#nzbMatrixStatus').toggleClass('enabled disabled');
+        //Validator Settings
+        var settings = $.data($('#IndexersForm')[0], 'validator').settings;
+        settings.ignore = [];
+        settings.focusInvalid = false;
+        settings.onfocusout = function (element) { $(element).valid(); };
 
-        if ($('#NzbsRUsEnabled').attr('checked'))
-            $('#nzbsRusStatus').toggleClass('enabled disabled');
+        var oldHighlight = settings.highlight;
+        var oldUnhighlight = settings.unhighlight;
 
-        if ($('#NewzbinEnabled').attr('checked'))
-            $('#newzbinStatus').toggleClass('enabled disabled');
+        settings.highlight = function (element, errorClass, validClass) {
+            oldHighlight(element, errorClass, validClass);
+            $(element).parents('div.indexerPanel').prev('h3.ui-accordion-header').addClass('validation-error');
+        };
+        settings.unhighlight = function (element, errorClass, validClass) {
+            oldUnhighlight(element, errorClass, validClass);
 
-        if ($('#NewznabEnabled').attr('checked'))
-            $('#newznabStatus').toggleClass('enabled disabled');
+            var container = $(element).parents('div.indexerPanel');
+            if ($(container).children('.' + errorClass).length == 0)
+                $(container).prev('h3.ui-accordion-header').removeClass('validation-error');
+        };
     });
 
     $('.enabledCheck').on('change', function () {
-        var id = $(this).attr('id');
+        var id = $(this).prop('id');
+        var checked = $(this).prop('checked');
 
         if (id == 'NzbsOrgEnabled')
-            $('#nzbsOrgStatus').toggleClass('enabled disabled');
+            $('#nzbsOrgStatus').prop('checked', checked);
 
         if (id == 'NzbMatrixEnabled')
-            $('#nzbMatrixStatus').toggleClass('enabled disabled');
+            $('#nzbMatrixStatus').prop('checked', checked);
 
         if (id == 'NzbsRUsEnabled')
-            $('#nzbsRusStatus').toggleClass('enabled disabled');
+            $('#nzbsRusStatus').prop('checked', checked);
 
         if (id == 'NewzbinEnabled')
-            $('#newzbinStatus').toggleClass('enabled disabled');
+            $('#newzbinStatus').prop('checked', checked);
 
         if (id == 'NewznabEnabled')
-            $('#newznabStatus').toggleClass('enabled disabled');
+            $('#newznabStatus').prop('checked', checked);
+
+        $('.indexerStatusButton').button("refresh");
+        reValidate();
     });
 
+    $('.indexerStatusButton').on('change', function () {
+        var id = $(this).prop('id');
+        var checked = $(this).prop('checked');
+
+        if (id == 'nzbsOrgStatus')
+            $('#NzbsOrgEnabled').prop('checked', checked);
+
+        if (id == 'nzbMatrixStatus')
+            $('#NzbMatrixEnabled').prop('checked', checked);
+
+        if (id == 'nzbsRusStatus')
+            $('#NzbsRUsEnabled').prop('checked', checked);
+
+        if (id == 'newzbinStatus')
+            $('#NewzbinEnabled').prop('checked', checked);
+
+        if (id == 'newznabStatus')
+            $('#NewznabEnabled').prop('checked', checked);
+
+        reValidate();
+    });
+
+    function reValidate() {
+        $("#IndexersForm").validate().form();
+
+        var container = $('div.indexerPanel');
+        if ($(container).children('.input-validation-error').length == 0)
+            $(container).prev('h3.ui-accordion-header').removeClass('validation-error');
+    }
+
+    //Newznab
     $("#addItem").live('click', function () {
         $.ajax({
             url: this.href,
@@ -180,13 +264,7 @@
                 alert("Sorry! We could not delete your Provider at this time. " + error);
             },
             success: function (data, textStatus, jqXHR) {
-                if (data == "ok") {
-                    $("#provider_" + id).remove();
-                }
-
-                else {
-                    alert(data);
-                }
+                $("#provider_" + id).remove();
             }
         });
     }
@@ -196,10 +274,9 @@
         return parentProviderSection.children('.newznabProviderId').val();
     }
 
-    $(".providerName_textbox").live('keyup', function () {
+    $(".providerName_textbox").on('keyup', function () {
         var value = $(this).val();
         var profileId = getProviderId(this);
         $("#title_" + profileId).text(value);
     }).keyup();
-
-</script>
+  </script>

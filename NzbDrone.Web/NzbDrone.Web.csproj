@@ -131,6 +131,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\Validation\RequiredIfAttribute.cs" />
     <Content Include="Content\DataTables-1.9.0\media\css\jquery.dataTables.css" />
     <Content Include="Content\DataTables-1.9.0\media\images\back_disabled.png" />
     <Content Include="Content\DataTables-1.9.0\media\images\back_enabled.png" />
@@ -331,6 +332,7 @@
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\conditional-validation.js" />
     <Content Include="Scripts\DataTables-1.9.0\media\js\jquery.dataTables.reloadAjax.js" />
     <Content Include="Scripts\DataTables-1.9.0\media\js\jquery.dataTables.editable.js" />
     <Content Include="Scripts\DataTables-1.9.0\media\js\jquery.dataTables.js" />
