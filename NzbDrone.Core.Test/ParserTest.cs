@@ -209,10 +209,14 @@ namespace NzbDrone.Core.Test
         [TestCase("2011.01.10 - Denis Leary - HD TV.mkv", "", 2011, 1, 10)]
         [TestCase("2011.03.13 - Denis Leary - HD TV.mkv", "", 2011, 3, 13)]
         [TestCase("The Tonight Show with Jay Leno - 2011-06-16 - Larry David, \"Bachelorette\" Ashley Hebert, Pitbull with Ne-Yo", "The Tonight Show with Jay Leno", 2011, 6, 16)]
+        [TestCase("2020.NZ.2012.16.02.PDTV.XviD-C4TV","2020nz", 2012,2, 16)]
+        [TestCase("2020.NZ.2012.13.02.PDTV.XviD-C4TV","2020nz", 2012,2, 13)]
+        [TestCase("2020.NZ.2011.12.02.PDTV.XviD-C4TV","2020nz", 2011,12, 2)]
         public void parse_daily_episodes(string postTitle, string title, int year, int month, int day)
         {
             var result = Parser.ParseTitle(postTitle);
             var airDate = new DateTime(year, month, day);
+            result.Should().NotBeNull();
             result.CleanTitle.Should().Be(Parser.NormalizeTitle(title));
             result.AirDate.Should().Be(airDate);
             result.EpisodeNumbers.Should().BeNull();

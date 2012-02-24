@@ -192,8 +192,17 @@ namespace NzbDrone.Core
                 var airmonth = Convert.ToInt32(matchCollection[0].Groups["airmonth"].Value);
                 var airday = Convert.ToInt32(matchCollection[0].Groups["airday"].Value);
 
+                //Swap day and month if month is bigger than 12 (scene fail)
+                if (airmonth > 12)
+                {
+                    var tempDay = airday;
+                    airday = airmonth;
+                    airmonth = tempDay;
+                }
+
                 parsedEpisode = new EpisodeParseResult
                 {
+                   
                     AirDate = new DateTime(airyear, airmonth, airday).Date,
                 };
             }
