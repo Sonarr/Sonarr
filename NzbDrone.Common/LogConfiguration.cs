@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
@@ -104,7 +103,7 @@ namespace NzbDrone.Common
         {
             var fileTarget = GetBaseTarget();
             fileTarget.FileName = fileName;
-            fileTarget.ArchiveAboveSize = 200000; //500K
+            fileTarget.ArchiveAboveSize = 512000; //500K x 2
             fileTarget.MaxArchiveFiles = 1;
             fileTarget.EnableFileDelete = true;
             fileTarget.ArchiveNumbering = ArchiveNumberingMode.Rolling;
@@ -115,19 +114,19 @@ namespace NzbDrone.Common
 
         public static void RegisterRemote()
         {
-            if (EnviromentProvider.IsProduction)
-            {
-                try
-                {
-                    var exceptioneerTarget = new ExceptioneerTarget();
-                    LogManager.Configuration.AddTarget("Exceptioneer", exceptioneerTarget);
-                    LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, exceptioneerTarget));
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                }
-            }
+            //if (EnviromentProvider.IsProduction)
+            //{
+            //    try
+            //    {
+            //        var exceptioneerTarget = new ExceptioneerTarget();
+            //        LogManager.Configuration.AddTarget("Exceptioneer", exceptioneerTarget);
+            //        LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, exceptioneerTarget));
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        Console.WriteLine(e);
+            //    }
+            //}
 
             try
             {
