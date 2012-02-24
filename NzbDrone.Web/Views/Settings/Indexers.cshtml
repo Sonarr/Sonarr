@@ -131,7 +131,7 @@
                 <br />
                 <p>
                 </p>
-                <a id="addItem" href="@Url.Action("AddNewznabProvider", "Settings")">
+                <a id="addNewznab" href="@Url.Action("AddNewznabProvider", "Settings")">
                     <img src="../../Content/Images/Plus.png" alt="Add Newznab Provider" width="20px"
                          height="20px" />
                     Add Newznab Provider</a>
@@ -242,7 +242,7 @@
     }
 
     //Newznab
-    $("#addItem").live('click', function () {
+    $("#addNewznab").on('click', function (event) {
         $.ajax({
             url: this.href,
             cache: false,
@@ -250,7 +250,8 @@
                 $("#newznabProviders").append(html);
             }
         });
-        return false;
+        event.preventDefault();
+        //event.stopPropagation();
     });
 
     var deleteNewznabProviderUrl = '@Url.Action("DeleteNewznabProvider", "Settings")';

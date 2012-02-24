@@ -1,15 +1,15 @@
 ﻿var deleteQualityProfileUrl = '../../Settings/DeleteQualityProfile';
 
-$("#addItem").live('click', function () {
+$(document).on("click", "#addProfile", function (event) {
     $.ajax({
         url: this.href,
         cache: false,
         success: function (html) {
             $("#profiles").append(html);
-
         }
     });
-    return false;
+
+    event.preventDefault();
 });
 
 function deleteProfile(id) {
@@ -66,14 +66,14 @@ function getCleanId(obj) {
     return parentProfileSection.children('.cleanId').val();
 }
 
-$(".profileName_textbox").live('keyup', function () {
+$(document).on('keyup', '.profileName_textbox', function () {
     var value = $(this).val();
     var profileId = getProfileId(this);
     $("#title_" + profileId).text(value);
     renameOption(value, profileId);
 }).keyup();
 
-$('.quality-selectee').live('click', function () {
+$(document).on('click', '.quality-selectee', function () {
     var id = $(this).attr('id');
     var cleanId = getCleanId(this);
     var cutoff = '#' + cleanId + '_Cutoff';
