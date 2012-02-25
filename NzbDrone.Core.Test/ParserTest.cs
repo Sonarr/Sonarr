@@ -156,6 +156,7 @@ namespace NzbDrone.Core.Test
         [TestCase("The Voice S01E11 The Finals 1080i HDTV DD5.1 MPEG2-TrollHD", QualityTypes.Unknown, false)]
         [TestCase("Nikita S02E01 HDTV XviD 2HD", QualityTypes.SDTV, false)]
         [TestCase("Gossip Girl S05E11 PROPER HDTV XviD 2HD", QualityTypes.SDTV, true)]
+        [TestCase("The Jonathan Ross Show S02E08 HDTV x264 FTP", QualityTypes.SDTV, false)]
         public void quality_parse(string postTitle, object quality, bool proper)
         {
             var result = Parser.ParseQuality(postTitle);
