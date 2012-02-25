@@ -399,6 +399,7 @@ namespace NzbDrone.Core.Test
             ExceptionVerification.MarkInconclusive(typeof(WebException));
             ExceptionVerification.MarkInconclusive("System.Net.WebException");
             ExceptionVerification.MarkInconclusive("(503) Server Unavailable.");
+            ExceptionVerification.MarkInconclusive("(500) Internal Server Error.");
         }
     }
 }

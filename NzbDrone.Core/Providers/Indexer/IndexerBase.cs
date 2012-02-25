@@ -99,25 +99,25 @@ namespace NzbDrone.Core.Providers.Indexer
 
         public virtual IList<EpisodeParseResult> FetchSeason(string seriesTitle, int seasonNumber)
         {
-            _logger.Debug("Searching {0} for {1}-Season {2}", Name, seriesTitle, seasonNumber);
+            _logger.Debug("Searching {0} for {1} Season {2}", Name, seriesTitle, seasonNumber);
 
             var searchUrls = GetSeasonSearchUrls(GetQueryTitle(seriesTitle), seasonNumber);
             var result = Fetch(searchUrls);
 
-            _logger.Info("Finished searching {0} for {1}-S{2}, Found {3}", Name, seriesTitle, seasonNumber, result.Count);
+            _logger.Info("Finished searching {0} for {1} Season {2}, Found {3}", Name, seriesTitle, seasonNumber, result.Count);
             return result;
         }
 
         public virtual IList<EpisodeParseResult> FetchPartialSeason(string seriesTitle, int seasonNumber, int episodePrefix)
         {
-            _logger.Debug("Searching {0} for {1}-Season {2}, Prefix: {3}", Name, seriesTitle, seasonNumber, episodePrefix);
+            _logger.Debug("Searching {0} for {1} Season {2}, Prefix: {3}", Name, seriesTitle, seasonNumber, episodePrefix);
 
 
             var searchUrls = GetPartialSeasonSearchUrls(GetQueryTitle(seriesTitle), seasonNumber, episodePrefix);
 
             var result = Fetch(searchUrls);
 
-            _logger.Info("Finished searching {0} for {1}-S{2}, Found {3}", Name, seriesTitle, seasonNumber, result.Count);
+            _logger.Info("Finished searching {0} for {1} Season {2}, Found {3}", Name, seriesTitle, seasonNumber, result.Count);
             return result;
         }
 
@@ -129,7 +129,7 @@ namespace NzbDrone.Core.Providers.Indexer
 
             var result = Fetch(searchUrls);
 
-            _logger.Info("Finished searching {0} for {1}-S{2}E{3:00}, Found {4}", Name, seriesTitle, seasonNumber, episodeNumber, result.Count);
+            _logger.Info("Finished searching {0} for {1} S{2:00}E{3:00}, Found {4}", Name, seriesTitle, seasonNumber, episodeNumber, result.Count);
             return result;
 
         }

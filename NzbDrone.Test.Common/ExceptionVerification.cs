@@ -78,19 +78,18 @@ namespace NzbDrone.Test.Common
         {
             var inconclusiveLogs = _logs.Where(l => l.Exception != null && l.Exception.GetType() == exception).ToList();
 
-            if (inconclusiveLogs.Count != 0)
+            if (inconclusiveLogs.Any())
             {
                 inconclusiveLogs.ForEach(c => _logs.Remove(c));
                 Assert.Inconclusive(GetLogsString(inconclusiveLogs));
-
             }
         }
 
         public static void MarkInconclusive(string text)
         {
-            var inconclusiveLogs = _logs.Where(l => l.FormattedMessage.Contains(text)).ToList();
+            var inconclusiveLogs = _logs.Where(l => l.FormattedMessage.ToLower().Contains(text.ToLower())).ToList();
 
-            if (inconclusiveLogs.Count != 0)
+            if (inconclusiveLogs.Any())
             {
                 inconclusiveLogs.ForEach(c => _logs.Remove(c));
                 Assert.Inconclusive(GetLogsString(inconclusiveLogs));
