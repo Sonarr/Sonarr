@@ -15,11 +15,13 @@
 
     <label class="labelClass">@Html.LabelFor(m => m.SabHost)
         <span class="small">@Html.DescriptionFor(m => m.SabHost)</span>
+        <span class="small">@Html.ValidationMessageFor(m => m.SabHost)</span>
     </label>
     @Html.TextBoxFor(m => m.SabHost, new { @class = "inputClass" })
 
     <label class="labelClass">@Html.LabelFor(m => m.SabPort)
         <span class="small">@Html.DescriptionFor(m => m.SabPort)</span>
+        <span class="small">@Html.ValidationMessageFor(m => m.SabPort)</span>
     </label>
     @Html.TextBoxFor(m => m.SabPort, new { @class = "inputClass" })
 

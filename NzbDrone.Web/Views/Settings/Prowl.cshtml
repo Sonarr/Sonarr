@@ -7,27 +7,28 @@
 
 <div class="notifier">
     <label class="labelClass">@Html.LabelFor(m => m.ProwlEnabled)
-    <span class="small">@Html.DescriptionFor(m => m.ProwlEnabled)</span>
+        <span class="small">@Html.DescriptionFor(m => m.ProwlEnabled)</span>
     </label>
     @Html.CheckBoxFor(m => m.ProwlEnabled, new { @class = "inputClass checkClass" })
 
     <label class="labelClass">@Html.LabelFor(m => m.ProwlNotifyOnGrab)
-    <span class="small">@Html.DescriptionFor(m => m.ProwlNotifyOnGrab)</span>
+        <span class="small">@Html.DescriptionFor(m => m.ProwlNotifyOnGrab)</span>
     </label>
     @Html.CheckBoxFor(m => m.ProwlNotifyOnGrab, new { @class = "inputClass checkClass" })
 
     <label class="labelClass">@Html.LabelFor(m => m.ProwlNotifyOnDownload)
-    <span class="small">@Html.DescriptionFor(m => m.ProwlNotifyOnDownload)</span>
+        <span class="small">@Html.DescriptionFor(m => m.ProwlNotifyOnDownload)</span>
     </label>
     @Html.CheckBoxFor(m => m.ProwlNotifyOnDownload, new { @class = "inputClass checkClass" })
             
     <label class="labelClass">@Html.LabelFor(m => m.ProwlApiKeys)
-    <span class="small">@Html.DescriptionFor(m => m.ProwlApiKeys)</span>
+        <span class="small">@Html.DescriptionFor(m => m.ProwlApiKeys)</span>
+        <span class="small">@Html.ValidationMessageFor(m => m.ProwlApiKeys)</span>
     </label>
     @Html.TextBoxFor(m => m.ProwlApiKeys, new { @class = "inputClass" })
 
     <label class="labelClass">@Html.LabelFor(m => m.ProwlPriority)
-    <span class="small">@Html.DescriptionFor(m => m.ProwlPriority)</span>
+        <span class="small">@Html.DescriptionFor(m => m.ProwlPriority)</span>
     </label>
     @Html.DropDownListFor(m => m.ProwlPriority, Model.ProwlPrioritySelectList, new { @class = "inputClass selectClass" })
 </div>

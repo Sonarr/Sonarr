@@ -8,6 +8,7 @@
 <div class="downloadClient">
     <label class="labelClass">@Html.LabelFor(m => m.BlackholeDirectory)
         <span class="small">@Html.DescriptionFor(m => m.BlackholeDirectory)</span>
+        <span class="small">@Html.ValidationMessageFor(m => m.BlackholeDirectory)</span>
     </label>
     @Html.TextBoxFor(m => m.BlackholeDirectory, new { @class = "inputClass folderLookup" })
 </div>

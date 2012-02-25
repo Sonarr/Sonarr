@@ -13,7 +13,7 @@ namespace NzbDrone.Web.Models
         [DisplayName("Username")]
         [Description("Username for NZB Matrix")]
         [DisplayFormat(ConvertEmptyStringToNull = false)]
-        [RequiredIf("NzbMatrixEnabled", true, ErrorMessage = "USername Required when NZBMatrix is enabled")]
+        [RequiredIf("NzbMatrixEnabled", true, ErrorMessage = "Username Required when NZBMatrix is enabled")]
         public String NzbMatrixUsername { get; set; }
 
         [DataType(DataType.Text)]

@@ -35,6 +35,7 @@
             @Html.DropDownListFor(m => m.DownloadClient, Model.DownloadClientSelectList, new { @class = "inputClass selectClass" })
             <label class="labelClass">@Html.LabelFor(m => m.DownloadClientDropDirectory)
                 <span class="small">@Html.DescriptionFor(m => m.DownloadClientDropDirectory)</span>
+                <span class="small">@Html.ValidationMessageFor(m => m.DownloadClientDropDirectory)</span>
             </label>
             @Html.TextBoxFor(m => m.DownloadClientDropDirectory, new { @class = "inputClass folderLookup" })
         </div>
@@ -58,6 +59,38 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $('#downloadClientAccordion').accordion("activate", false);
+
+        //Allow unobstrusive validation of the AJAX loaded form
+        $.validator.unobtrusive.parse('#DownloadClientForm');
+
+        //Validator Settings
+        var settings = $.data($('#DownloadClientForm')[0], 'validator').settings;
+        settings.ignore = [];
+        settings.focusInvalid = false;
+        settings.onfocusout = function (element) { $(element).valid(); };
+
+        var oldHighlight = settings.highlight;
+        var oldUnhighlight = settings.unhighlight;
+
+        settings.highlight = function (element, errorClass, validClass) {
+            oldHighlight(element, errorClass, validClass);
+            $(element).parents('div.ui-accordion-content').prev('h3.ui-accordion-header').addClass('validation-error');
+        };
+        settings.unhighlight = function (element, errorClass, validClass) {
+            oldUnhighlight(element, errorClass, validClass);
+
+            var container = $(element).parents('div.ui-accordion-content');
+            if ($(container).children('.' + errorClass).length == 0)
+                $(container).prev('h3.ui-accordion-header').removeClass('validation-error');
+        };
+    });
+
+    $(document).on('change', '#DownloadClient', function () {
+        $("#DownloadClientForm").validate().form();
+
+        var container = $('div.ui-accordion-content');
+        if ($(container).children('.input-validation-error').length == 0)
+            $(container).prev('h3.ui-accordion-header').removeClass('validation-error');
     });
 
     var autoConfigureSabUrl = '@Url.Action("AutoConfigureSab", "Settings")';

@@ -11,6 +11,7 @@ namespace NzbDrone.Web.Models
         [DisplayName("Port")]
         [Description("Port that NzbDrone runs on")]
         [Range(1, 65535, ErrorMessage = "Port must be between 1 and 65535")]
+        [Required(ErrorMessage = "Port must be between 1 and 65535")]
         public int Port { get; set; }
 
         [DisplayName("Launch Browser")]

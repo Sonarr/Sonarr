@@ -4,7 +4,7 @@
 
 
 <div class="infoBox">
-    You must manually restart NzbDrone for these changes to take effect. (Automatic restart comming soon!)
+    You must manually restart NzbDrone for these changes to take effect. (Automatic restart coming soon!)
 </div>
 
 <div id="stylized">
@@ -18,6 +18,7 @@
         
         <label class="labelClass">@Html.LabelFor(m => m.Port)
             <span class="small">@Html.DescriptionFor(m => m.Port)</span>
+            <span class="small">@Html.ValidationMessageFor(m => m.Port)</span>
         </label>
         @Html.TextBoxFor(m => m.Port, new { @class = "inputClass" })
 
@@ -35,3 +36,31 @@
             Save</button>
     }
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        //Allow unobstrusive validation of the AJAX loaded form
+        $.validator.unobtrusive.parse('#SystemForm');
+
+        //Validator Settings
+        var settings = $.data($('#SystemForm')[0], 'validator').settings;
+        settings.ignore = [];
+        settings.focusInvalid = false;
+        settings.onfocusout = function (element) { $(element).valid(); };
+
+        var oldHighlight = settings.highlight;
+        var oldUnhighlight = settings.unhighlight;
+
+        settings.highlight = function (element, errorClass, validClass) {
+            oldHighlight(element, errorClass, validClass);
+            $(element).parents('div.ui-accordion-content').prev('h3.ui-accordion-header').addClass('validation-error');
+        };
+        settings.unhighlight = function (element, errorClass, validClass) {
+            oldUnhighlight(element, errorClass, validClass);
+
+            var container = $(element).parents('div.ui-accordion-content');
+            if ($(container).children('.' + errorClass).length == 0)
+                $(container).prev('h3.ui-accordion-header').removeClass('validation-error');
+        };
+    });
+</script>

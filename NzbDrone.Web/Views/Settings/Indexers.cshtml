@@ -6,23 +6,6 @@
     .indexerStatusContainer {
         margin-left: 14px;
     }
-    
-    .field-validation-error {
-        color: red;
-    }
-        
-    .input-validation-error {
-        background-color: #FFEEEE;
-        border: 1px solid #FF0000;
-    }
-    
-    #IndexersForm .validation-error {
-        background: url("../../Content/jQueryUI/images/ui-bg_flat_30_b40404_40x100.png") repeat-x scroll 50% 50% #B40404;
-    }
-    #validation-error-summary {
-        display: none;
-        color: red;
-    }
 </style>
 <div class="infoBox">
     RSS feeds are checked every 25 minutes for new episodes.</div>
@@ -148,13 +131,12 @@
             @Html.ValidationSummary(true, "Unable to save your settings. Please correct the errors and try again.")
             <label class="labelClass">@Html.LabelFor(m => m.Retention)
                 <span class="small">@Html.DescriptionFor(m => m.Retention)</span>
+                <span class="small">@Html.ValidationMessageFor(m => m.Retention)</span>
             </label>
             @Html.TextBoxFor(m => m.Retention, new { @class = "inputClass" })
         </div>
         
         <button type="submit" class="save_button" disabled="disabled">Save</button>
-        
-        <span id="validation-error-summary">Please check your settings and re-save</span>
     }
 </div>
 
@@ -177,18 +159,18 @@
 
         settings.highlight = function (element, errorClass, validClass) {
             oldHighlight(element, errorClass, validClass);
-            $(element).parents('div.indexerPanel').prev('h3.ui-accordion-header').addClass('validation-error');
+            $(element).parents('div.ui-accordion-content').prev('h3.ui-accordion-header').addClass('validation-error');
         };
         settings.unhighlight = function (element, errorClass, validClass) {
             oldUnhighlight(element, errorClass, validClass);
 
-            var container = $(element).parents('div.indexerPanel');
+            var container = $(element).parents('div.ui-accordion-content');
             if ($(container).children('.' + errorClass).length == 0)
                 $(container).prev('h3.ui-accordion-header').removeClass('validation-error');
         };
     });
 
-    $('.enabledCheck').on('change', function () {
+    $(document).on('change', '.enabledCheck', function () {
         var id = $(this).prop('id');
         var checked = $(this).prop('checked');
 
@@ -211,7 +193,7 @@
         reValidate();
     });
 
-    $('.indexerStatusButton').on('change', function () {
+    $(document).on('change', '.indexerStatusButton', function () {
         var id = $(this).prop('id');
         var checked = $(this).prop('checked');
 
@@ -236,7 +218,7 @@
     function reValidate() {
         $("#IndexersForm").validate().form();
 
-        var container = $('div.indexerPanel');
+        var container = $('div.ui-accordion-content');
         if ($(container).children('.input-validation-error').length == 0)
             $(container).prev('h3.ui-accordion-header').removeClass('validation-error');
     }

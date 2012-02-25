@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Sabnzbd;
+using NzbDrone.Web.Helpers.Validation;
 
 namespace NzbDrone.Web.Models
 {
@@ -12,16 +13,16 @@ namespace NzbDrone.Web.Models
         public SelectList PrioritySelectList =
             new SelectList(new[] {"Default", "Paused", "Low", "Normal", "High", "Force"});
 
-        [Required(ErrorMessage = "Please enter a valid host")]
         [DataType(DataType.Text)]
         [DisplayName("SABnzbd Host")]
         [Description("Hostname or IP Address running SABnzbd")]
+        [RequiredIf("DownloadClient", (int)DownloadClientType.Sabnzbd, ErrorMessage = "Required when Download Client is SABnzbd")]
         public String SabHost { get; set; }
 
-        [Required(ErrorMessage = "Please enter a valid port")]
         [DataType(DataType.Text)]
         [DisplayName("SABnzbd Port")]
         [Description("Port for SABnzbd web interface")]
+        [RequiredIf("DownloadClient", (int)DownloadClientType.Sabnzbd, ErrorMessage = "Required when Download Client is SABnzbd")]
         public int SabPort { get; set; }
 
         [DataType(DataType.Text)]
@@ -53,14 +54,16 @@ namespace NzbDrone.Web.Models
         [Description("Priority to use when sending NZBs to SABnzbd")]
         public SabPriorityType SabTvPriority { get; set; }
 
+        [Required(ErrorMessage = "Required so NzbDrone can sort downloads")]
         [DisplayName("Download Client TV Directory")]
-        [Description("The directory where your download client downloads TV shows to (NzbDrone will sort them for you)")]
+        [Description("The directory where your download client downloads TV shows to")]
         [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string DownloadClientDropDirectory { get; set; }
 
         [DisplayName("Blackhole Directory")]
         [Description("The directory where your download client will pickup NZB files")]
         [DisplayFormat(ConvertEmptyStringToNull = false)]
+        [RequiredIf("DownloadClient", (int)DownloadClientType.Blackhole, ErrorMessage = "Required when Download Client is Blackhole")]
         public string BlackholeDirectory { get; set; }
 
         [DisplayName("Download Client")]

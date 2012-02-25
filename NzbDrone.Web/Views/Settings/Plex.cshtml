@@ -7,42 +7,44 @@
 
 <div class="notifier">
     <label class="labelClass">@Html.LabelFor(m => m.PlexEnabled)
-    <span class="small">@Html.DescriptionFor(m => m.PlexEnabled)</span>
+        <span class="small">@Html.DescriptionFor(m => m.PlexEnabled)</span>
     </label>
     @Html.CheckBoxFor(m => m.PlexEnabled, new { @class = "inputClass checkClass" })
 
     <label class="labelClass">@Html.LabelFor(m => m.PlexNotifyOnGrab)
-    <span class="small">@Html.DescriptionFor(m => m.PlexNotifyOnGrab)</span>
+        <span class="small">@Html.DescriptionFor(m => m.PlexNotifyOnGrab)</span>
     </label>
     @Html.CheckBoxFor(m => m.PlexNotifyOnGrab, new { @class = "inputClass checkClass" })
 
     <label class="labelClass">@Html.LabelFor(m => m.PlexNotifyOnDownload)
-    <span class="small">@Html.DescriptionFor(m => m.PlexNotifyOnDownload)</span>
+        <span class="small">@Html.DescriptionFor(m => m.PlexNotifyOnDownload)</span>
     </label>
     @Html.CheckBoxFor(m => m.PlexNotifyOnDownload, new { @class = "inputClass checkClass" })
 
     <label class="labelClass">@Html.LabelFor(m => m.PlexUpdateLibrary)
-    <span class="small">@Html.DescriptionFor(m => m.PlexUpdateLibrary)</span>
+        <span class="small">@Html.DescriptionFor(m => m.PlexUpdateLibrary)</span>
     </label>
     @Html.CheckBoxFor(m => m.PlexUpdateLibrary, new { @class = "inputClass checkClass" })
     
     <label class="labelClass">@Html.LabelFor(m => m.PlexServerHost)
-    <span class="small">@Html.DescriptionFor(m => m.PlexServerHost)</span>
+        <span class="small">@Html.DescriptionFor(m => m.PlexServerHost)</span>
+        <span class="small">@Html.ValidationMessageFor(m => m.PlexServerHost)</span>
     </label>
     @Html.TextBoxFor(m => m.PlexServerHost, new { @class = "inputClass" })
             
     <label class="labelClass">@Html.LabelFor(m => m.PlexClientHosts)
-    <span class="small">@Html.DescriptionFor(m => m.PlexClientHosts)</span>
+        <span class="small">@Html.DescriptionFor(m => m.PlexClientHosts)</span>
+        <span class="small">@Html.ValidationMessageFor(m => m.PlexClientHosts)</span>
     </label>
     @Html.TextBoxFor(m => m.PlexClientHosts, new { @class = "inputClass" })
 
     <label class="labelClass">@Html.LabelFor(m => m.PlexUsername)
-    <span class="small">@Html.DescriptionFor(m => m.PlexUsername)</span>
+        <span class="small">@Html.DescriptionFor(m => m.PlexUsername)</span>
     </label>
     @Html.TextBoxFor(m => m.PlexUsername, new { @class = "inputClass" })
 
     <label class="labelClass">@Html.LabelFor(m => m.PlexPassword)
-    <span class="small">@Html.DescriptionFor(m => m.PlexPassword)</span>
+        <span class="small">@Html.DescriptionFor(m => m.PlexPassword)</span>
     </label>
     @Html.TextBoxFor(m => m.PlexPassword, new { @class = "inputClass", type = "password" })
 </div>

@@ -111,3 +111,17 @@
     color: #FFFFFF;
     font-weight: normal;
 }
+
+/* Common Validation Settings */
+.field-validation-error {
+    color: red;
+}
+        
+.input-validation-error {
+    background-color: #FFEEEE;
+    border: 1px solid #FF0000;
+}
+
+.settingsForm .validation-error {
+        background: url("../Content/jQueryUI/images/ui-bg_flat_30_b40404_40x100.png") repeat-x scroll 50% 50% #B40404;
+    }

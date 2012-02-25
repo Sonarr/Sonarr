@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
+using NzbDrone.Core.Model;
+using NzbDrone.Web.Helpers.Validation;
 
 namespace NzbDrone.Web.Models
 {
@@ -31,6 +33,7 @@ namespace NzbDrone.Web.Models
         [DisplayName("Hosts")]
         [Description("XBMC hosts with port, comma separated")]
         [DisplayFormat(ConvertEmptyStringToNull = false)]
+        [RequiredIf("XbmcEnabled", true, ErrorMessage = "Required when XBMC Notifications are enabled")]
         public string XbmcHosts { get; set; }
 
         [DataType(DataType.Text)]
@@ -62,12 +65,14 @@ namespace NzbDrone.Web.Models
         [DisplayName("Server")]
         [Description("SMTP Server Hostname")]
         [DisplayFormat(ConvertEmptyStringToNull = false)]
+        [RequiredIf("SmtpEnabled", true, ErrorMessage = "Required when SMTP Notifications are enabled")]
         public string SmtpServer{ get; set; }
 
         [DataType(DataType.Text)]
         [DisplayName("Port")]
         [Description("SMTP Server Port")]
         [DisplayFormat(ConvertEmptyStringToNull = false)]
+        [RequiredIf("SmtpEnabled", true, ErrorMessage = "Required when SMTP Notifications are enabled")]
         public int SmtpPort { get; set; }
 
         [DisplayName("SSL")]
@@ -91,12 +96,14 @@ namespace NzbDrone.Web.Models
         [DisplayName("Send From Address")]
         [Description("Sender Email address")]
         [DisplayFormat(ConvertEmptyStringToNull = false)]
+        [RequiredIf("SmtpEnabled", true, ErrorMessage = "Required when SMTP Notifications are enabled")]
         public string SmtpFromAddress { get; set; }
 
         [DataType(DataType.Text)]
         [DisplayName("Send To Addresses")]
         [Description("Comma separated list of addresses to email")]
         [DisplayFormat(ConvertEmptyStringToNull = false)]
+        [RequiredIf("SmtpEnabled", true, ErrorMessage = "Required when SMTP Notifications are enabled")]
         public string SmtpToAddresses { get; set; }
 
         //Twitter
@@ -129,6 +136,7 @@ namespace NzbDrone.Web.Models
         [DisplayName("Host running Growl")]
         [Description("Host or IP Address:Port")]
         [DisplayFormat(ConvertEmptyStringToNull = false)]
+        [RequiredIf("GrowlEnabled", true, ErrorMessage = "Required when Growl Notifications are enabled")]
         public string GrowlHost { get; set; }
 
         [DataType(DataType.Text)]
@@ -155,6 +163,7 @@ namespace NzbDrone.Web.Models
         [DisplayName("API Keys")]
         [Description("Comma-Separated list of API Keys")]
         [DisplayFormat(ConvertEmptyStringToNull = false)]
+        [RequiredIf("ProwlEnabled", true, ErrorMessage = "Required when Prowl Notifications are enabled")]
         public string ProwlApiKeys { get; set; }
 
         [DataType(DataType.Text)]
@@ -186,11 +195,13 @@ namespace NzbDrone.Web.Models
         [DisplayName("Server Host")]
         [Description("Plex Server host with port")]
         [DisplayFormat(ConvertEmptyStringToNull = false)]
+        [RequiredIf("PlexUpdateLibrary", true, ErrorMessage = "Required when Plex Library Update is Enabled")]
         public string PlexServerHost { get; set; }
 
         [DataType(DataType.Text)]
         [DisplayName("Client Hosts")]
         [Description("Plex client hosts with port, comma separated for multiple clients")]
+        [RequiredIf("PlexNotifyOnGrab", true, ErrorMessage = "Required when Plex Notifications are enabled")]
         [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string PlexClientHosts { get; set; }
 
