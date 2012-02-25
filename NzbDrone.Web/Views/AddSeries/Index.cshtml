@@ -1,15 +1,43 @@
 ﻿@using NzbDrone.Web.Helpers
 @{ViewBag.Title = "Add Series";}
-@section Scripts
-{
-    @Html.IncludeScript("NzbDrone/addSeries.js")
 
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('#addSeriesAccordion').accordion("activate", false);
-        });
-    </script>
+@section HeaderContent
+{
+    <style>
+    .existingSeries
+    {
+        border-color: #f2f2f2;
+        border-width: 1px;
+        border-style: solid;
+        background-color: #f2f2f2;
+        margin: 0px 10px 10px 0px;
+        padding: 5px;
+        display: block;
+    }
+    .masterQualitySelector
+    {
+        left: 415px;
+        position: relative;
+    }
+    
+    .seriesPathValue
+    {
+        display: block;
+    }
+    
+    .existingSeriesContainer
+    {
+        position: relative;
+    }
+    
+    #newSeriesLookup.ui-autocomplete-loading {
+         background: white url('../../Content/Images/ajax-loader.gif') 99% center no-repeat;
+         background-size: 18px 18px
+
+    }
+</style>
 }
+
 @{Html.RenderAction("RootDir");}
 <div class="jquery-accordion" id="addSeriesAccordion">
     <h3>
@@ -23,3 +51,14 @@
         @{ Html.RenderAction("ExistingSeries", "AddSeries"); }
     </div>
 </div>
+
+@section Scripts
+{
+    @Html.IncludeScript("NzbDrone/addSeries.js")
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#addSeriesAccordion').accordion("activate", false);
+        });
+    </script>
+}
