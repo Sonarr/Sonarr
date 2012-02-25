@@ -336,7 +336,7 @@ namespace NzbDrone.Core
                 return result;
             }
 
-            if ((normalizedName.Contains("sdtv") ||
+            if ((normalizedName.Contains("sdtv") || normalizedName.Contains("pdtv") ||
                 (result.QualityType == QualityTypes.Unknown && normalizedName.Contains("hdtv"))) &&
                 !normalizedName.Contains("mpeg"))
             {
