@@ -30,10 +30,26 @@
         position: relative;
     }
     
-    #newSeriesLookup.ui-autocomplete-loading {
+    .ui-autocomplete.seriesLookupResults {
+        max-height: 180px;
+		overflow-y: auto;
+		/* prevent horizontal scrollbar */
+		overflow-x: hidden;
+    }
+    
+    .seriesLookup.ui-autocomplete-loading {
          background: white url('../../Content/Images/ajax-loader.gif') 99% center no-repeat;
          background-size: 18px 18px
-
+    }
+    
+    .ui-autocomplete .seriesLookupTitle {
+        font-size: 110%;
+        font-family: "Segoe UI Light", "Open Sans", "Segoe UI", sans-serif;
+        color: lightgrey;
+    }
+    
+    .ui-autocomplete .seriesLookupFirstAired {
+        font-family: "Segoe UI Light", "Open Sans", "Segoe UI", sans-serif;
     }
 </style>
 }
