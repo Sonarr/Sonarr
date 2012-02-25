@@ -6,9 +6,9 @@ table.dataTable {
 	margin: 0 auto;
 	clear: both;
 	width: 100%;
+	border-style: none;
     border-width: 1px;
     border-spacing: 2px;
-    border-style: none;
     border-color: white;
     border-collapse: collapse;
 }
@@ -38,9 +38,9 @@ table.dataTable tfoot th
 table.dataTable td {
 	/*padding: 3px 10px;*/
 	border-width: 1px;
-    padding: 0px 8px 0px 8px;
-    border-style: inset;
+	border-style: solid;
     border-color: #EEEEEE;
+    padding: 0px 8px 0px 8px;
 }
 
 table.dataTable td.center,
