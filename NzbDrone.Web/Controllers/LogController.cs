@@ -64,11 +64,16 @@ namespace NzbDrone.Web.Controllers
 
             int filteredCount = q.Count();
 
-            int sortCol = dataTablesParams.iSortCol.First();
-            var sortColName = sortCol == 0 ? "Time" : sortCol == 1 ? "Level" : "Logger";
-            var sortExpression = String.Format("{0} {1}", sortColName, dataTablesParams.sSortDir.First());
+            IQueryable<Log> sorted = q;
 
-            var sorted = q.OrderBy(sortExpression);
+            for (int i = 0; i < dataTablesParams.iSortingCols; i++)
+            {
+                int sortCol = dataTablesParams.iSortCol[i];
+                var sortColName = sortCol == 0 ? "Time" : sortCol == 1 ? "Level" : "Logger";
+                var sortExpression = String.Format("{0} {1}", sortColName, dataTablesParams.sSortDir[i]);
+
+                sorted = sorted.OrderBy(sortExpression);
+            }
 
             IQueryable<Log> filteredAndSorted = sorted;
             if (filteredCount > dataTablesParams.iDisplayLength)
