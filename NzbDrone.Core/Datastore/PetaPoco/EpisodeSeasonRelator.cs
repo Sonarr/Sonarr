@@ -9,13 +9,17 @@ namespace NzbDrone.Core.Datastore.PetaPoco
     public class EpisodeSeasonRelator
     {
         public Season _current;
-        public Season MapIt(Season season, Episode episode)
+        public Season MapIt(Season season, Episode episode, EpisodeFile episodeFile)
         {
             // Terminating call. Since we can return null from this function
             // we need to be ready for PetaPoco to callback later with null
             // parameters
             if (season == null)
                 return _current;
+
+            //Todo: Find a Query that doesn't require this check
+            //Map EpisodeFile to Episode (Map to null if 0, because PetaPoco is returning a POCO when it should be null)
+            episode.EpisodeFile = (episode.EpisodeFileId == 0 ?  null : episodeFile);
 
             // Is this the same season as the current one we're processing
             if (_current != null && _current.SeasonId == season.SeasonId)
