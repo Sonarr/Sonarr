@@ -237,7 +237,6 @@ namespace NzbDrone.Web.Controllers
                                      Overview = e.Overview,
                                      AirDate = airDate,
                                      Path = episodePath,
-                                     EpisodeFileId = episodeFileId,
                                      Status = e.Status.ToString(),
                                      Quality = episodeQuality,
                                      Ignored = e.Ignored

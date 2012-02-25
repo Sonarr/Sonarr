@@ -36,23 +36,15 @@ namespace NzbDrone.Core.Jobs
 
         private void DeleteSeries(ProgressNotification notification, int seriesId)
         {
-            Logger.Warn("Deleting Series [{0}]", seriesId);
+            Logger.Trace("Deleting Series [{0}]", seriesId);
 
-            try
-            {
-                var title = _seriesProvider.GetSeries(seriesId).Title;
+            var title = _seriesProvider.GetSeries(seriesId).Title;
 
-                notification.CurrentMessage = String.Format("Deleting '{0}' from database", title);
+            notification.CurrentMessage = String.Format("Deleting '{0}' from database", title);
 
-                _seriesProvider.DeleteSeries(seriesId);
+            _seriesProvider.DeleteSeries(seriesId);
 
-                notification.CurrentMessage = String.Format("Successfully deleted '{0}' from database", title);
-            }
-            catch (Exception e)
-            {
-                Logger.ErrorException("An error has occurred while deleting series: " + seriesId, e);
-                throw;
-            }
+            notification.CurrentMessage = String.Format("Successfully deleted '{0}' from database", title);
         }
     }
 }

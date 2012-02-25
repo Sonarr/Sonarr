@@ -41,26 +41,38 @@ namespace NzbDrone.Core.Jobs
             if (targetId <= 0)
                 throw new ArgumentOutOfRangeException("targetId");
 
-            Logger.Debug("Getting episodes from database for series: {0}", targetId);
-            var episodeFiles = _mediaFileProvider.GetSeriesFiles(targetId);
+            var series = _seriesProvider.GetSeries(targetId);
+
+            notification.CurrentMessage = String.Format("Renaming episodes for '{0}'", series.Title);
+
+            Logger.Debug("Getting episodes from database for series: {0}", series.SeriesId);
+            var episodeFiles = _mediaFileProvider.GetSeriesFiles(series.SeriesId);
 
             if (episodeFiles == null || episodeFiles.Count == 0)
             {
-                Logger.Warn("No episodes in database found for series: {0}", targetId);
+                Logger.Warn("No episodes in database found for series: {0}", series.SeriesId);
                 return;
             }
 
             foreach (var episodeFile in episodeFiles)
             {
-                _diskScanProvider.MoveEpisodeFile(episodeFile);
+                try
+                {
+                    _diskScanProvider.MoveEpisodeFile(episodeFile);
+                }
+                catch(Exception e)
+                {
+                    Logger.WarnException("An error has occurred while renaming file", e);
+                }
+                
             }
 
             //Start AfterRename
-            var series = _seriesProvider.GetSeries(targetId);
+           
             var message = String.Format("Renamed: Series {0}", series.Title);
             _externalNotificationProvider.AfterRename(message, series);
 
-            notification.CurrentMessage = String.Format("Series rename completed for Series: {0}", targetId);
+            notification.CurrentMessage = String.Format("Rename completed for {0}", series.Title);
         }
     }
 }

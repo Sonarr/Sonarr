@@ -113,7 +113,6 @@ namespace NzbDrone.Core
             Kernel.Bind<IJob>().To<DiskScanJob>().InSingletonScope();
             Kernel.Bind<IJob>().To<DeleteSeriesJob>().InSingletonScope();
             Kernel.Bind<IJob>().To<EpisodeSearchJob>().InSingletonScope();
-            Kernel.Bind<IJob>().To<RenameEpisodeJob>().InSingletonScope();
             Kernel.Bind<IJob>().To<PostDownloadScanJob>().InSingletonScope();
             Kernel.Bind<IJob>().To<UpdateSceneMappingsJob>().InSingletonScope();
             Kernel.Bind<IJob>().To<SeasonSearchJob>().InSingletonScope();

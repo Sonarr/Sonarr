@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Web.Models;
 
@@ -30,12 +31,6 @@ namespace NzbDrone.Web.Controllers
         public JsonResult BacklogSeries(int seriesId)
         {
             _jobProvider.QueueJob(typeof(SeriesSearchJob), seriesId);
-            return JsonNotificationResult.Info("Queued");
-        }
-
-        public JsonResult Rename(int episodeFileId)
-        {
-            _jobProvider.QueueJob(typeof(RenameEpisodeJob), episodeFileId);
             return JsonNotificationResult.Info("Queued");
         }
 

@@ -271,7 +271,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual void RefreshEpisodeInfo(Series series)
         {
-            logger.Info("Starting episode info refresh for series: {0}", series.Title.WithDefault(series.SeriesId));
+            logger.Trace("Starting episode info refresh for series: {0}", series.Title.WithDefault(series.SeriesId));
             int successCount = 0;
             int failCount = 0;
             var tvDbSeriesInfo = _tvDbProvider.GetSeries(series.SeriesId, true);
@@ -347,45 +347,22 @@ namespace NzbDrone.Core.Providers
             _database.InsertMany(newList);
             _database.UpdateMany(updateList);
 
-            logger.Info("Finished episode refresh for series: {0}. Successful: {1} - Failed: {2} ",
-                         tvDbSeriesInfo.SeriesName, successCount, failCount);
-
-            //DeleteEpisodesNotInTvdb
+            if (failCount != 0)
+            {
+                logger.Info("Finished episode refresh for series: {0}. Successful: {1} - Failed: {2} ",
+                            tvDbSeriesInfo.SeriesName, successCount, failCount);
+            }
+            else
+            {
+                logger.Info("Finished episode refresh for series: {0}.", tvDbSeriesInfo.SeriesName);
+            }
+            
             DeleteEpisodesNotInTvdb(series, tvDbSeriesInfo);
         }
 
         public virtual void UpdateEpisode(Episode episode)
         {
             _database.Update(episode);
-        }
-
-        public virtual bool IsIgnored(int seriesId, int seasonNumber)
-        {
-            var episodes = _database.Fetch<Episode>(@"SELECT * FROM Episodes WHERE SeriesId=@0 AND SeasonNumber=@1", seriesId, seasonNumber);
-
-            if (episodes == null || episodes.Count == 0)
-            {
-                if (seasonNumber == 0)
-                    return true;
-
-                //Don't check for a previous season if season is 1
-                if (seasonNumber == 1)
-                    return false;
-
-                //else
-                var lastSeasonsEpisodes = _database.Fetch<Episode>(@"SELECT * FROM Episodes 
-                                                                     WHERE SeriesId=@0 AND SeasonNumber=@1", seriesId, seasonNumber - 1);
-
-                if (lastSeasonsEpisodes != null && lastSeasonsEpisodes.Any() && lastSeasonsEpisodes.Count == lastSeasonsEpisodes.Count(e => e.Ignored))
-                    return true;
-
-                return false;
-            }
-
-            if (episodes.Count == episodes.Count(e => e.Ignored))
-                return true;
-
-            return false;
         }
 
         public virtual IList<int> GetSeasons(int seriesId)

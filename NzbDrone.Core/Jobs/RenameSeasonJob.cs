@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Jobs
         private readonly ExternalNotificationProvider _externalNotificationProvider;
         private readonly SeriesProvider _seriesProvider;
 
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         [Inject]
         public RenameSeasonJob(MediaFileProvider mediaFileProvider, DiskScanProvider diskScanProvider,
@@ -44,26 +44,37 @@ namespace NzbDrone.Core.Jobs
             if (secondaryTargetId <= 0)
                 throw new ArgumentOutOfRangeException("secondaryTargetId");
 
-            Logger.Debug("Getting episodes from database for series: {0} and season: {1}", targetId, secondaryTargetId);
+            var series = _seriesProvider.GetSeries(targetId);
+
+            notification.CurrentMessage = String.Format("Renaming episodes for {0} Season {1}", series.Title, secondaryTargetId);
+
+            logger.Debug("Getting episodes from database for series: {0} and season: {1}", targetId, secondaryTargetId);
             var episodeFiles = _mediaFileProvider.GetSeasonFiles(targetId, secondaryTargetId);
 
-            if (episodeFiles == null || episodeFiles.Count == 0)
+            if (episodeFiles == null || !episodeFiles.Any())
             {
-                Logger.Warn("No episodes in database found for series: {0} and season: {1}.", targetId, secondaryTargetId);
+                logger.Warn("No episodes in database found for series: {0} and season: {1}.", targetId, secondaryTargetId);
                 return;
             }
 
             foreach (var episodeFile in episodeFiles)
             {
-                _diskScanProvider.MoveEpisodeFile(episodeFile);
+                try
+                {
+                    _diskScanProvider.MoveEpisodeFile(episodeFile);
+                }
+                catch (Exception exception)
+                {
+                    logger.WarnException("An error has occurred while renaming file", exception);
+                }
             }
 
             //Start AfterRename
-            var series = _seriesProvider.GetSeries(targetId);
+
             var message = String.Format("Renamed: Series {0}, Season: {1}", series.Title, secondaryTargetId);
             _externalNotificationProvider.AfterRename(message, series);
 
-            notification.CurrentMessage = String.Format("Season rename completed for Series: {0} Season: {1}", targetId, secondaryTargetId);
+            notification.CurrentMessage = String.Format("Rename completed for {0} Season {1}", series.Title, secondaryTargetId);
         }
     }
 }

@@ -286,7 +286,6 @@
     <Compile Include="Model\Xbmc\VersionResult.cs" />
     <Compile Include="Jobs\UpdateSceneMappingsJob.cs" />
     <Compile Include="Jobs\PostDownloadScanJob.cs" />
-    <Compile Include="Jobs\RenameEpisodeJob.cs" />
     <Compile Include="Jobs\EpisodeSearchJob.cs" />
     <Compile Include="Jobs\DeleteSeriesJob.cs" />
     <Compile Include="Jobs\DiskScanJob.cs" />
