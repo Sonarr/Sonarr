@@ -131,6 +131,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\Validation\RequiredIfAnyAttribute.cs" />
     <Compile Include="Helpers\Validation\RequiredIfAttribute.cs" />
     <Content Include="Content\DataTables-1.9.0\media\css\jquery.dataTables.css" />
     <Content Include="Content\DataTables-1.9.0\media\images\back_disabled.png" />

@@ -201,7 +201,7 @@ namespace NzbDrone.Web.Models
         [DataType(DataType.Text)]
         [DisplayName("Client Hosts")]
         [Description("Plex client hosts with port, comma separated for multiple clients")]
-        [RequiredIf("PlexNotifyOnGrab", true, ErrorMessage = "Required when Plex Notifications are enabled")]
+        [RequiredIfAny(new string[]{ "PlexNotifyOnGrab", "PlexNotifyOnDownload" }, new object[]{ true, true }, ErrorMessage = "Required when Plex Notifications are enabled")]
         [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string PlexClientHosts { get; set; }
 
