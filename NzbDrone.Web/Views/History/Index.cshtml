@@ -80,8 +80,8 @@
                                     }
                                 }, //Date
                                 { sWidth: '40px', "mDataProp": "HistoryId", "bSortable": false, "fnRender": function (row) {
-                                    var deleteImage = "<img src=\"../../Content/Images/X.png\" alt=\"Delete\" title=\"Delete from History\" class=\"gridImage\" onclick=\"deleteHistory(this.parentNode.parentNode, " + row.aData["HistoryId"] + ")\">";
-                                    var redownloadImage = "<img src=\"../../Content/Images/redownload.png\" alt=\"Redownload\" title=\Redownload Episode\" class=\"gridImage\" onclick=\"redownloadHistory(this.parentNode.parentNode, " + row.aData["HistoryId"] + ", " + row.aData["EpisodeId"] + ")\">";
+                                    var deleteImage = "<img src=\"../../Content/Images/X.png\" alt=\"Delete\" title=\"Delete from History\" class=\"gridAction\" onclick=\"deleteHistory(this.parentNode.parentNode, " + row.aData["HistoryId"] + ")\">";
+                                    var redownloadImage = "<img src=\"../../Content/Images/redownload.png\" alt=\"Redownload\" title=\Redownload Episode\" class=\"gridAction\" onclick=\"redownloadHistory(this.parentNode.parentNode, " + row.aData["HistoryId"] + ", " + row.aData["EpisodeId"] + ")\">";
 
                                     return deleteImage + redownloadImage;
                                 }

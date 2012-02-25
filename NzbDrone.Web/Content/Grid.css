@@ -1,4 +1,4 @@
-.gridImage
+.gridImage , .gridAction
 {
     width: 18px;
     height: 18px;
@@ -7,9 +7,9 @@
     vertical-align: middle;
 }
     
-.gridImage:hover
+.gridAction:hover
 {
-    background-color: #065EFE;
+    cursor: pointer;
 }
 
 /* Custom Grid */
@@ -68,12 +68,12 @@
 /* Episode Grid Row Colouring */
 .episodeIgnored
 {
-    background-color: #F2F5A9;
+      background: lightgray;
 }
     
 .episodeMissing
 {
-    background-color: #F5A9A9;
+    background-color: #f5c5c5;
 }
 
 /*Hidden Grid to prevent FOUSC*/

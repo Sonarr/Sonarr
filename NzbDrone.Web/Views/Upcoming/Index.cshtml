@@ -1,16 +1,20 @@
 ﻿@using NzbDrone.Web.Helpers
 @model NzbDrone.Web.Models.UpcomingEpisodesModel
-
 @{ViewBag.Title = "Upcoming";}
 @section HeaderContent
 {
     @Html.IncludeCss("Grid.css")
-    
     <style>
-        .gridControls {
+        .gridControls
+        {
             float: right;
-            padding: 0px 5px 20px 0px;
+            padding-top: 10px;
             visibility: hidden;
+        }
+        
+        .sub-menu
+        {
+            float: left;
         }
     </style>
 }
@@ -19,27 +23,33 @@
         <li>@Ajax.ActionLink("Start RSS Sync", "RssSync", "Command", null, null)</li>
     </ul>
 }
-
 <div class="gridControls">
     @Html.CheckBox("showDownloaded", true)
-    <label for="showDownloaded">Show Downloaded</label>
+    <label for="showDownloaded">
+        Show Downloaded</label>
 </div>
-
 <table class="seriesTable">
     <colgroup>
-        <col/>
-        <col style="width:90px" />
-        <col style="width:300px" />
-        <col style="width:160px" />
-        <col style="width:100px" />
+        <col />
+        <col style="width: 90px" />
+        <col style="width: 300px" />
+        <col style="width: 160px" />
+        <col style="width: 100px" />
     </colgroup>
     <thead>
         <tr>
-            <th>Series Title</th>
-            <th>Episode</th>
-            <th>Episode Title</th>
-            <th>Air Time</th>
-        
+            <th>
+                Series Title
+            </th>
+            <th>
+                Episode
+            </th>
+            <th>
+                Episode Title
+            </th>
+            <th>
+                Air Time
+            </th>
             @*Commands/Status Column*@
             <th>
                 Status
@@ -52,11 +62,10 @@
                 Yesterday
             </td>
         </tr>
-    
         @for (int i = 0; i < Model.Yesterday.Count; i++)
         {
             var episode = Model.Yesterday[i];
-        
+
             if (i % 2 == 0)
             {
                 Html.RenderPartial("UpcomingEpisode", episode);
@@ -72,11 +81,10 @@
                 Today
             </td>
         </tr>
-    
         @for (int i = 0; i < Model.Today.Count; i++)
         {
             var episode = Model.Today[i];
-        
+
             if (i % 2 == 0)
             {
                 Html.RenderPartial("UpcomingEpisode", episode);
@@ -91,31 +99,29 @@
             <td colspan="6">
                 Tomorrow
             </td>
-    
-        @for (int i = 0; i < Model.Tomorrow.Count; i++)
-        {
-            var episode = Model.Tomorrow[i];
-        
-            if (i % 2 == 0)
+            @for (int i = 0; i < Model.Tomorrow.Count; i++)
             {
-                Html.RenderPartial("UpcomingEpisode", episode);
-            }
+                var episode = Model.Tomorrow[i];
 
-            else
-            {
-                Html.RenderPartial("UpcomingEpisode", episode, new ViewDataDictionary { new KeyValuePair<string, object>("AltRow", true) });
+                if (i % 2 == 0)
+                {
+                    Html.RenderPartial("UpcomingEpisode", episode);
+                }
+
+                else
+                {
+                    Html.RenderPartial("UpcomingEpisode", episode, new ViewDataDictionary { new KeyValuePair<string, object>("AltRow", true) });
+                }
             }
-        }
-        <tr class="title-row">
-            <td colspan="6">
-                Future Forecast
-            </td>
-        </tr>
-    
+            <tr class="title-row">
+                <td colspan="6">
+                    Future Forecast
+                </td>
+            </tr>
         @for (int i = 0; i < Model.Week.Count; i++)
         {
             var episode = Model.Week[i];
-        
+
             if (i % 2 == 0)
             {
                 Html.RenderPartial("UpcomingEpisode", episode);
@@ -128,7 +134,6 @@
         }
     </tbody>
 </table>
-
 @section Scripts{
     <script type="text/javascript">
         $(document).ready(function () {
@@ -171,7 +176,7 @@
         function toggleHideDownloadedCookie(show) {
             if (show)
                 $.cookie("showDownloaded", true, { expires: 365 });
-            
+
             else
                 $.cookie("showDownloaded", false, { expires: 365 });
         }

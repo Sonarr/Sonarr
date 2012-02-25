@@ -47,9 +47,13 @@
     margin-top: 10px;
 }
 
+.ui-button .ui-state-default{
+    background: none;
+}
+
 /*MiniProfiler*/
 
 .profiler-button
 {
-    opacity: 0.4;
+    opacity: 0.6;
 }

@@ -88,7 +88,7 @@
         var ignoreSeason = "ignoreSeason_" + season.SeasonNumber;
         <div class="seasonToggleTop">
             <img src='../../Content/Images/@(season.Ignored ? "ignored" : "notIgnored").png'
-                 class='ignoredEpisodesMaster ignoreEpisode @ignoreSeason@(season.Ignored ? " ignored" : " ") gridImage'
+                 class='ignoredEpisodesMaster ignoreEpisode @ignoreSeason@(season.Ignored ? " ignored" : " ") gridAction'
                  title='Click to toggle season ignore status' />
             <a href="@string.Format("#SeasonSection_{0}", season.SeasonNumber)" class="seasonToggleLabel">@(season.SeasonNumber == 0 ? "Specials" : "Season " + season.SeasonNumber)</a>
         </div>
