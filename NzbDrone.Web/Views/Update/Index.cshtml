@@ -9,7 +9,7 @@ else
 {
     <h2>
         Available Update: @Model.UpdatePackage.Version
-        @Ajax.ActionLink("Update", "StartUpdate", "Update", null)
+        @Html.ActionLink("Update", "StartUpdate", "Update", null, new { @class = "ajaxLink" })
     </h2> 
 }
 @if (Model.LogFiles.Count != 0)

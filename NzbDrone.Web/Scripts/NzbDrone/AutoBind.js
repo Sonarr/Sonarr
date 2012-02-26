@@ -43,3 +43,20 @@
         });
     });
 });
+
+//Make .ajaxLink use jQuery Ajax for the request
+
+$(document).on('click', '.ajaxLink', function (event) {
+    event.preventDefault();
+    var onSuccess = $(this).attr('onsuccess');
+    $.ajax({
+        url: this.href,
+        cache: false,
+        success: function () {
+            if (onSuccess) {
+                window[onSuccess]();
+            }
+        }
+    });
+    return false;
+});

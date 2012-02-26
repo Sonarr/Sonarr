@@ -3,8 +3,8 @@
 @{ViewBag.Title = "History";}
 @section ActionMenu{
     <ul class="sub-menu">
-        <li>@Ajax.ActionLink("Trim History", "Trim", "History", new AjaxOptions { OnSuccess = "reloadGrid" })</li>
-        <li>@Ajax.ActionLink("Purge History", "Purge", "History", new AjaxOptions { OnSuccess = "reloadGrid" })</li>
+        <li>@Html.ActionLink("Trim History", "Trim", "History", null, new { @class = "ajaxLink", onSuccess = "reloadGrid" })</li>
+        <li>@Html.ActionLink("Purge History", "Purge", "History", null, new { @class = "ajaxLink", onSuccess = "reloadGrid" })</li>
     </ul>
 }
 @section HeaderContent

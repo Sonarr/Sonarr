@@ -1,6 +1,6 @@
 ﻿/* Click on row, show details */
-$('.seriesTable a, .dataTable a').live('click', function (event) {
-    if ($(this).attr('onclick'))
+$(document).on('click', '.seriesTable a, .dataTable a', function (event) {
+    if ($(this).hasClass('ajaxLink') || $(this).attr('onclick'))
         return;
 
     event.preventDefault();
@@ -48,8 +48,8 @@ function fnFormatDetails(nTr) {
 
 //Create Image
 function createImageAjaxLink(url, image, alt, title, classes) {
-    var html = "<a onclick=\"Sys.Mvc.AsyncHyperlink.handleClick(this, new Sys.UI.DomEvent(event), { insertionMode: Sys.Mvc.InsertionMode.replace });\" href=\"" + url + "\">" +
-                    "<img class=\"" + classes + "\" src=\"" + image + "\" title=\"" + title + "\" alt=\"" + alt + "\"></a>";
+    var html = '<a href="' + url + '" class="ajaxLink">' +
+        '<img class="' + classes + '" src="' + image + '" title="' + title + '" alt="' + alt + '" /></a>';
 
     return html;
 }

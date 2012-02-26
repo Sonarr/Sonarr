@@ -68,9 +68,9 @@
 {
     <ul class="sub-menu">
         <li><a class="editButton" value="@Model.SeriesId" rel="@Model.Title">Edit</a></li>
-        <li>@Ajax.ActionLink("Force Refresh", "ForceRefresh", "Command", new { seriesId = Model.SeriesId }, null)</li>
-        <li>@Ajax.ActionLink("Search for missing episodes", "BacklogSeries", "Episode", new { seriesId = Model.SeriesId }, null)</li>
-        <li>@Ajax.ActionLink("Rename Episode Files", "RenameEpisodes", "Episode", new { seriesId = Model.SeriesId }, null)</li>
+        <li>@Html.ActionLink("Force Refresh", "ForceRefresh", "Command", new { seriesId = Model.SeriesId }, new { @class = "ajaxLink" })</li>
+        <li>@Html.ActionLink("Search for missing episodes", "BacklogSeries", "Episode", new { seriesId = Model.SeriesId }, new { @class = "ajaxLink" })</li>
+        <li>@Html.ActionLink("Rename Episode Files", "RenameEpisodes", "Episode", new { seriesId = Model.SeriesId }, new { @class = "ajaxLink" })</li>
     </ul>
 }
 

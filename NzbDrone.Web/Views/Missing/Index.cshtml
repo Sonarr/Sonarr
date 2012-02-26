@@ -9,9 +9,9 @@
 }
 @section ActionMenu{
     <ul class="sub-menu">
-        <li>@Ajax.ActionLink("Start RSS Sync", "RssSync", "Command", null, null)</li>
-        <li>@Ajax.ActionLink("Start Backlog Search", "BacklogSearch", "Command", null, null, new { title = "Backlog search for ALL missing episodes" })</li>
-        <li>@Ajax.ActionLink("Start Recent Backlog Search", "RecentBacklogSearch", "Command", null, null, new { title = "Backlog search for missing episodes that aired in the last 30 days only" })</li>
+        <li>@Html.ActionLink("Start RSS Sync", "RssSync", "Command", null, new { @class = "ajaxLink" })</li>
+        <li>@Html.ActionLink("Start Backlog Search", "BacklogSearch", "Command", null, new { title = "Backlog search for ALL missing episodes", @class = "ajaxLink" })</li>
+        <li>@Html.ActionLink("Start Recent Backlog Search", "RecentBacklogSearch", "Command", null, new { title = "Backlog search for missing episodes that aired in the last 30 days only", @class = "ajaxLink" })</li>
     </ul>
 }
 <div class="grid-container">

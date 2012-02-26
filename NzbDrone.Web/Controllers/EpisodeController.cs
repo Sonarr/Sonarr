@@ -14,14 +14,12 @@ namespace NzbDrone.Web.Controllers
             _jobProvider = jobProvider;
         }
 
-        [HttpPost]
         public JsonResult Search(int episodeId)
         {
             _jobProvider.QueueJob(typeof(EpisodeSearchJob), episodeId);
             return JsonNotificationResult.Info("Queued");
         }
 
-        [HttpPost]
         public JsonResult SearchSeason(int seriesId, int seasonNumber)
         {
             _jobProvider.QueueJob(typeof(SeasonSearchJob), seriesId, seasonNumber);

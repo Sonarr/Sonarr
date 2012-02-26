@@ -75,7 +75,7 @@
 @section ActionMenu{
     <ul class="sub-menu">
         <li>@Html.ActionLink("Add Series", "Index", "AddSeries")</li>
-        <li>@Ajax.ActionLink("Start RSS Sync", "RssSync", "Command", null)</li>
+        <li>@Html.ActionLink("Start RSS Sync", "RssSync", "Command", null, new { @class = "ajaxLink" })</li>
         <li>@Html.ActionLink("Series Editor", "SeriesEditor", "Series")</li>
     </ul>
 }
