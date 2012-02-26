@@ -8,6 +8,8 @@ namespace NzbDrone.Core.Model
         public int TargetId { get; set; }
         public int SecondaryTargetId { get; set; }
 
+        public JobSourceType Source { get; set; }
+
         public bool Equals(JobQueueItem other)
         {
             return (JobType == other.JobType && TargetId == other.TargetId
@@ -17,6 +19,12 @@ namespace NzbDrone.Core.Model
         public override string ToString()
         {
             return string.Format("[{0}({1}, {2})]", JobType.Name, TargetId, SecondaryTargetId);
+        }
+
+        public enum JobSourceType
+        {
+            User,
+            Scheduler
         }
     }
 }

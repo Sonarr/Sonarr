@@ -139,17 +139,18 @@ namespace NzbDrone.Core.Jobs
                 ).Select(c => _jobs.Where(t => t.GetType().ToString() == c.TypeName).Single().GetType()).ToList();
 
 
-            pendingJobTypes.ForEach(jobType => QueueJob(jobType));
+            pendingJobTypes.ForEach(jobType => QueueJob(jobType, source: JobQueueItem.JobSourceType.Scheduler));
             logger.Trace("{0} Scheduled tasks have been added to the queue", pendingJobTypes.Count);
         }
 
-        public virtual void QueueJob(Type jobType, int targetId = 0, int secondaryTargetId = 0)
+        public virtual void QueueJob(Type jobType, int targetId = 0, int secondaryTargetId = 0, JobQueueItem.JobSourceType source = JobQueueItem.JobSourceType.User)
         {
             var queueItem = new JobQueueItem
             {
                 JobType = jobType,
                 TargetId = targetId,
-                SecondaryTargetId = secondaryTargetId
+                SecondaryTargetId = secondaryTargetId,
+                Source = source
             };
 
             logger.Debug("Attempting to queue {0}", queueItem);
@@ -211,7 +212,7 @@ namespace NzbDrone.Core.Jobs
                             {
                                 if (Queue.Count != 0)
                                 {
-                                    job = Queue.First();
+                                    job = Queue.OrderByDescending(c=>c.Source).First();
                                     logger.Trace("Popping {0} from the queue.", job);
                                     Queue.Remove(job);
                                 }

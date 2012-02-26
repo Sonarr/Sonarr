@@ -490,6 +490,22 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
             ExceptionVerification.ExpectedErrors(1);
         }
 
+        [Test]
+        public void scheduled_job_should_have_scheduler_as_source()
+        {
+            IList<IJob> BaseFakeJobs = new List<IJob> { slowJob, fakeJob};
+            Mocker.SetConstant(BaseFakeJobs);
+
+            var jobProvider = Mocker.Resolve<JobProvider>();
+            jobProvider.Initialize();
+            ResetLastExecution();
+            jobProvider.QueueScheduled();
+
+            jobProvider.Queue.Should().OnlyContain(c => c.Source == JobQueueItem.JobSourceType.Scheduler);
+
+            WaitForQueue();
+        }
+
     }
 
 
