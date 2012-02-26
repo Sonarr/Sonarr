@@ -57,6 +57,12 @@ namespace NzbDrone.Common
             return process;
         }
 
+        public virtual void WaitForExit(Process process)
+        {
+            Logger.Trace("Waiting for process {0} to exit.", process.ProcessName);
+            process.WaitForExit();
+        }
+
         public virtual void Kill(int processId)
         {
             if (processId == 0 || !Process.GetProcesses().Any(p => p.Id == processId))

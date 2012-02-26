@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Jobs
         }
 
         public virtual void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
-        {           
+        {
             notification.CurrentMessage = "Checking for updates";
 
             var updatePackage = _updateProvider.GetAvilableUpdate(_enviromentProvider.Version);
@@ -82,12 +82,14 @@ namespace NzbDrone.Core.Jobs
             logger.Info("Starting update client");
             var startInfo = new ProcessStartInfo
                                 {
-                FileName = _enviromentProvider.GetUpdateClientExePath(),
-                Arguments = string.Format("{0} {1}", _enviromentProvider.NzbDroneProcessIdFromEnviroment, _configFileProvider.Guid)
-            };
+                                    FileName = _enviromentProvider.GetUpdateClientExePath(),
+                                    Arguments = string.Format("{0} {1}", _enviromentProvider.NzbDroneProcessIdFromEnviroment, _configFileProvider.Guid)
+                                };
 
-            _processProvider.Start(startInfo);
+            var process = _processProvider.Start(startInfo);
             notification.CurrentMessage = "Update in progress. NzbDrone will restart shortly.";
+
+           _processProvider.WaitForExit(process);
         }
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -62,7 +63,7 @@ namespace NzbDrone.Core.Test.JobTests
             Mocker.GetMock<DiskProvider>().Verify(c => c.DeleteFolder(SANDBOX_FOLDER, true), Times.Never());
         }
 
-        
+
         [Test]
         public void Should_download_update_package()
         {
@@ -126,7 +127,7 @@ namespace NzbDrone.Core.Test.JobTests
         public void when_no_updates_are_available_should_return_without_error_or_warnings()
         {
             Mocker.GetMock<UpdateProvider>().Setup(c => c.GetAvilableUpdate(It.IsAny<Version>())).Returns((UpdatePackage)null);
-            
+
             StartUpdate();
 
             ExceptionVerification.AssertNoUnexcpectedLogs();
