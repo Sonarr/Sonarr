@@ -1,6 +1,6 @@
 ﻿/* Click on row, show details */
 $(document).on('click', '.seriesTable a, .dataTable a', function (event) {
-    if ($(this).attr('data-ajax') === "true")
+    if ($(this).attr('data-ajax') === "true" || $(this).attr('onclick'))
         return;
 
     event.preventDefault();
