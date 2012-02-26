@@ -9,9 +9,9 @@
 }
 @section ActionMenu{
     <ul class="sub-menu">
-        <li>@Html.ActionLink("Start RSS Sync", "RssSync", "Command", null, new { @class = "ajaxLink" })</li>
-        <li>@Html.ActionLink("Start Backlog Search", "BacklogSearch", "Command", null, new { title = "Backlog search for ALL missing episodes", @class = "ajaxLink" })</li>
-        <li>@Html.ActionLink("Start Recent Backlog Search", "RecentBacklogSearch", "Command", null, new { title = "Backlog search for missing episodes that aired in the last 30 days only", @class = "ajaxLink" })</li>
+        <li>@Ajax.ActionLink("Start RSS Sync", "RssSync", "Command", null, null)</li>
+        <li>@Ajax.ActionLink("Start Backlog Search", "BacklogSearch", "Command",null, null, new { title = "Backlog search for ALL missing episodes"})</li>
+        <li>@Ajax.ActionLink("Start Recent Backlog Search", "RecentBacklogSearch", "Command", null, null, new { title = "Backlog search for missing episodes that aired in the last 30 days only" })</li>
     </ul>
 }
 <div class="grid-container">
@@ -81,7 +81,9 @@
                                                                 } 
                             }, //Grabbed On
                             { sWidth: '40px', "mDataProp": "EpisodeId", "bSortable": false, "fnRender": function (row) {
-                                    return createImageAjaxLink('/Episode/Search?episodeId=' + row.aData["EpisodeId"], '../../Content/Images/Search.png', 'Search', 'Search for Episode', 'gridAction');
+                                    var link = '@Ajax.ImageActionLink("../../Content/Images/Search.png", new {  title = "Search for Episode", alt = "Search", @class = "gridAction" }, "Search", "Episode", new { episodeId = "REPLACE" }, null, null)';
+                                    link = link.replace("REPLACE", row.aData["EpisodeId"]);
+                                    return link;
                                 }
                             }, //Actions
                             { sWidth: 'auto', "mDataProp": "Details", "bSortable": false, "bVisible": false, "fnRender": function (row) {

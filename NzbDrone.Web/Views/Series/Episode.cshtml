@@ -25,7 +25,7 @@
     @*Commands Column*@
     <td class="@cellColourClass">
         <img src='../../Content/Images/@(Model.Ignored ? "ignored" : "notIgnored").png' class='ignoreEpisode ignoreEpisode_@(Model.SeasonNumber)@(Model.Ignored ? " ignored" : " ") gridAction' id='@Model.EpisodeId' title='Click to toggle episode ignore status' />
-        @Html.ImageActionLink("../../Content/Images/Search.png", new { Alt = "Search", Title = "Search for episode", @class = "gridAction" }, "Search", "Episode", new { episodeId = Model.EpisodeId }, new { @class = "ajaxLink" })
+        @Ajax.ImageActionLink("../../Content/Images/Search.png", new { Alt = "Search", Title = "Search for episode", @class = "gridAction" }, "Search", "Episode", new { episodeId = Model.EpisodeId }, null, null)
         <img src='../../Content/Images/@(Model.Status).png' alt='@Model.Status' title='@Model.Status' class='gridImage status-@Model.Status statusImage' />
     </td>
 </tr>

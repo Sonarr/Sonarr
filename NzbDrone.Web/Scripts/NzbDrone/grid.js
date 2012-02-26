@@ -1,6 +1,6 @@
 ﻿/* Click on row, show details */
 $(document).on('click', '.seriesTable a, .dataTable a', function (event) {
-    if ($(this).hasClass('ajaxLink') || $(this).attr('onclick'))
+    if ($(this).attr('data-ajax') === "true")
         return;
 
     event.preventDefault();
@@ -44,14 +44,6 @@ $('.dataTable td:not(:last-child)').live('click', function () {
 function fnFormatDetails(nTr) {
     var aData = oTable.fnGetData(nTr);
     return aData["Details"];
-}
-
-//Create Image
-function createImageAjaxLink(url, image, alt, title, classes) {
-    var html = '<a href="' + url + '" class="ajaxLink">' +
-        '<img class="' + classes + '" src="' + image + '" title="' + title + '" alt="' + alt + '" /></a>';
-
-    return html;
 }
 
 //Reload/Redraw the grid from the server (bServerSide == true)
