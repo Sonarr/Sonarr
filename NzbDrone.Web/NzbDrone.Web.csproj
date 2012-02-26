@@ -150,9 +150,9 @@
     <Content Include="Content\Images\blue.png" />
     <Content Include="Content\Images\Gear.png" />
     <Content Include="Content\Images\green.png" />
-    <Content Include="Content\Images\header.jpg" />
     <Content Include="Content\Images\Indexers\Newznab.png" />
     <Content Include="Content\Images\Indexers\Nzbs.org.png" />
+    <Content Include="Content\Images\logo.png" />
     <Content Include="Content\Images\pause.png" />
     <Content Include="Content\Images\play.png" />
     <Content Include="Content\Images\red.png" />

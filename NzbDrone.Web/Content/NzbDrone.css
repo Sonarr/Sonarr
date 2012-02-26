@@ -116,14 +116,15 @@ hr
     font-family: "Segoe UI Light" , "Open Sans" , "Segoe UI" , sans-serif;
     font-weight: 100;
     height: 135px;
-    background: url(images/header.jpg) no-repeat left top;
+    background: url(images/logo.png) no-repeat left top;
     background-color: #065EFE;
-    font-size: 90px;
-    color: #FFFFFF;
+    font-size: 110px;
+    /**color: rgb(249, 249, 249);**/
+    color: rgb(40, 40, 40);
     text-transform: lowercase;
     letter-spacing: -1px;
-    line-height: normal;
-    padding-left: 120px;
+    line-height: 110px;
+    padding-left: 140px;
 }
 
 .stackframe
