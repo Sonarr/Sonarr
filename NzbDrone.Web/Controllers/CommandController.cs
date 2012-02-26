@@ -32,19 +32,19 @@ namespace NzbDrone.Web.Controllers
         public JsonResult RssSync()
         {
             _jobProvider.QueueJob(typeof(RssSyncJob));
-            return JsonNotificationResult.Info("Queued");
+            return JsonNotificationResult.Queued("RSS sync");
         }
 
         public JsonResult BacklogSearch()
         {
             _jobProvider.QueueJob(typeof(BacklogSearchJob));
-            return JsonNotificationResult.Info("Queued");
+            return JsonNotificationResult.Queued("Backlog search");
         }
 
         public JsonResult RecentBacklogSearch()
         {
             _jobProvider.QueueJob(typeof(RecentBacklogSearchJob));
-            return JsonNotificationResult.Info("Queued");
+            return JsonNotificationResult.Queued("Recent backlog search");
         }
 
         public JsonResult ForceRefresh(int seriesId)
@@ -52,7 +52,7 @@ namespace NzbDrone.Web.Controllers
             _jobProvider.QueueJob(typeof(UpdateInfoJob), seriesId);
             _jobProvider.QueueJob(typeof(DiskScanJob), seriesId);
 
-            return JsonNotificationResult.Info("Queued");
+            return JsonNotificationResult.Queued("Episode update/Disk scan");
         }
 
         [HttpPost]
@@ -66,7 +66,7 @@ namespace NzbDrone.Web.Controllers
         public JsonResult SendTestEmail(string server, int port, bool ssl, string username, string password, string fromAddress, string toAddresses)
         {
             if (_smtpProvider.SendTestEmail(server, port, ssl, username, password, fromAddress, toAddresses))
-                JsonNotificationResult.Info("Successfull", "Test email sent.");
+                JsonNotificationResult.Info("Successful", "Test email sent.");
 
             return JsonNotificationResult.Oops("Couldn't send Email, please check your settings");
         }

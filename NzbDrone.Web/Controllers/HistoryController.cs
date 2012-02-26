@@ -79,7 +79,7 @@ namespace NzbDrone.Web.Controllers
             //Queue a job to download the replacement episode
             _jobProvider.QueueJob(typeof(EpisodeSearchJob), episodeId);
 
-            return JsonNotificationResult.Info("Episode Redownload Started");
+            return JsonNotificationResult.Queued("Episode search");
         }
     }
 }
