@@ -24,7 +24,9 @@ using System.Reflection.Emit;
 using System.Linq.Expressions;
 using System.Threading;
 
+// ReSharper disable CheckNamespace
 namespace Services.PetaPoco
+
 {
     // Poco's marked [Explicit] require all column properties to be marked
     [AttributeUsage(AttributeTargets.Class)]

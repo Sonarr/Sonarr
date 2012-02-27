@@ -90,9 +90,6 @@ namespace NzbDrone.Core.Test.JobTests
                 .Setup(c => c.PartialSeasonSearch(notification, 1, 1))
                 .Returns(new List<int>{1});
 
-            Mocker.GetMock<EpisodeSearchJob>()
-                .Setup(c => c.Start(notification, It.IsAny<int>(), 0)).Verifiable();
-
             //Act
             Mocker.Resolve<SeasonSearchJob>().Start(notification, 1, 1);
 
@@ -100,7 +97,6 @@ namespace NzbDrone.Core.Test.JobTests
             Mocker.VerifyAllMocks();
             Mocker.GetMock<SearchProvider>().Verify(c => c.SeasonSearch(notification, 1, 1), Times.Once());
             Mocker.GetMock<SearchProvider>().Verify(c => c.PartialSeasonSearch(notification, 1, 1), Times.Once());
-            Mocker.GetMock<EpisodeSearchJob>().Verify(c => c.Start(notification, It.IsAny<int>(), 0), Times.Exactly(4));
         }
 
         [Test]
@@ -128,8 +124,6 @@ namespace NzbDrone.Core.Test.JobTests
                 .Setup(c => c.PartialSeasonSearch(notification, 1, 1))
                 .Returns(new List<int>());
 
-            Mocker.GetMock<EpisodeSearchJob>()
-                .Setup(c => c.Start(notification, It.IsAny<int>(), 0)).Verifiable();
 
             //Act
             Mocker.Resolve<SeasonSearchJob>().Start(notification, 1, 1);
@@ -138,7 +132,6 @@ namespace NzbDrone.Core.Test.JobTests
             Mocker.VerifyAllMocks();
             Mocker.GetMock<SearchProvider>().Verify(c => c.SeasonSearch(notification, 1, 1), Times.Once());
             Mocker.GetMock<SearchProvider>().Verify(c => c.PartialSeasonSearch(notification, 1, 1), Times.Once());
-            Mocker.GetMock<EpisodeSearchJob>().Verify(c => c.Start(notification, It.IsAny<int>(), 0), Times.Exactly(3));
         }
     }
 }
