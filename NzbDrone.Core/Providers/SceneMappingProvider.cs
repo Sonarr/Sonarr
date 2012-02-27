@@ -82,5 +82,22 @@ namespace NzbDrone.Core.Providers
             if (count == 0)
                 UpdateMappings();
         }
+
+        public virtual bool SubmitMapping(int id, string postTitle)
+        {
+            Logger.Trace("Parsing example post");
+            var episodeParseResult = Parser.ParseTitle(postTitle);
+            var cleanTitle = episodeParseResult.CleanTitle;
+            var title = episodeParseResult.SeriesTitle.Replace('.', ' ');
+            Logger.Trace("Example post parsed. CleanTitle: {0}, Title: {1}", cleanTitle, title);
+
+            var newMapping = String.Format("/SceneMapping/AddPending?cleanTitle={0}&id={1}&title={2}", cleanTitle, id, title);
+            var response = _httpProvider.DownloadString(_configProvider.ServiceRootUrl + newMapping);
+
+            if (JsonConvert.DeserializeObject<String>(response).Equals("Ok"))
+                return true;
+
+            return false;
+        }
     }
 }

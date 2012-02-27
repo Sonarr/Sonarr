@@ -36,21 +36,31 @@ namespace NzbDrone.Services.Service.Providers
             _database.Insert(pendingSceneMapping);
         }
 
-        public void DeleteLive(string cleanTitle)
+        public void Update(PendingSceneMapping pendingSceneMapping)
         {
-            _database.Delete<SceneMapping>(cleanTitle);
+            _database.Update(pendingSceneMapping);
         }
 
-        public void DeletePending(string cleanTitle)
+        public PendingSceneMapping GetPending(int mappingId)
         {
-            _database.Delete<PendingSceneMapping>(cleanTitle);
+            return _database.SingleOrDefault<PendingSceneMapping>("WHERE MappingId = @mappingId", new{ mappingId });
         }
 
-        public bool Promote(string cleanTitle)
+        public void DeleteLive(int mappingId)
+        {
+            _database.Delete<SceneMapping>(mappingId);
+        }
+
+        public void DeletePending(int mappingId)
+        {
+            _database.Delete<PendingSceneMapping>(mappingId);
+        }
+
+        public bool Promote(int mappingId)
         {
             try
             {
-                var pendingItem = _database.Single<PendingSceneMapping>(cleanTitle);
+                var pendingItem = GetPending(mappingId);
 
                 var mapping = new SceneMapping
                 {
@@ -59,8 +69,8 @@ namespace NzbDrone.Services.Service.Providers
                     Title = pendingItem.Title
                 };
 
-                _database.Insert(mapping);
-                _database.Delete(pendingItem);
+                Insert(mapping);
+                DeletePending(mappingId);
             }
             catch (Exception ex)
             {
@@ -78,7 +88,7 @@ namespace NzbDrone.Services.Service.Providers
 
                 foreach (var pendingItem in pendingItems)
                 {
-                    Promote(pendingItem.Title);
+                    Promote(pendingItem.MappingId);
                 }
             }
             catch (Exception ex)

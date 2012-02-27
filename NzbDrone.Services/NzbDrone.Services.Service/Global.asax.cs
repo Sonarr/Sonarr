@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Common;
+using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -35,7 +36,9 @@ namespace NzbDrone.Services.Service
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
 
+            var razor = ViewEngines.Engines.Single(e => e is RazorViewEngine);
             ViewEngines.Engines.Clear();
+            ViewEngines.Engines.Add(razor);
 
             ModelBinders.Binders.DefaultBinder = new JsonModelBinder();
         }
