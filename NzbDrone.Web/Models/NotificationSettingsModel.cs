@@ -50,7 +50,7 @@ namespace NzbDrone.Web.Models
 
         //SMTP
         [DisplayName("Enabled")]
-        [Description("Enable SMTP notifications?")]
+        [Description("Enable Email notifications?")]
         public bool SmtpEnabled { get; set; }
 
         [DisplayName("Notify on Grab")]
