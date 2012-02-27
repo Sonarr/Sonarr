@@ -49,14 +49,6 @@ namespace NzbDrone.Web.Controllers
             _seriesProvider = seriesProvider;
         }
 
-        public JsonResult TestResults(string q)
-        {
-            var results = new List<TvDbSearchResultModel>();
-            results.Add(new TvDbSearchResultModel { Id = 1, Title = "30 Rock", FirstAired = DateTime.Today.ToShortDateString() });
-            results.Add(new TvDbSearchResultModel { Id = 2, Title = "The Office", FirstAired = DateTime.Today.AddDays(-1).ToShortDateString() });
-
-            return Json(results, JsonRequestBehavior.AllowGet);
-        }
 
         public ActionResult Index()
         {

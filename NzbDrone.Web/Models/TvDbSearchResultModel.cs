@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Linq;
 
 namespace NzbDrone.Web.Models
 {
@@ -9,6 +6,6 @@ namespace NzbDrone.Web.Models
     {
         public int Id { get; set; }
         public string Title { get; set; }
-        public string FirstAired { get; set; }
+        public string Banner { get; set; }
     }
 }

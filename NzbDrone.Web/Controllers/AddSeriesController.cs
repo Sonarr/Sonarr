@@ -105,6 +105,9 @@ namespace NzbDrone.Web.Controllers
         [HttpPost]
         public JsonResult AddNewSeries(string path, string seriesName, int seriesId, int qualityProfileId)
         {
+            if (string.IsNullOrWhiteSpace(path) || String.Equals(path,"null",StringComparison.InvariantCultureIgnoreCase)) 
+                return JsonNotificationResult.Error("Couldn't add " + seriesName, "You need a valid root folder"); 
+
             path = Path.Combine(path, MediaFileProvider.CleanFilename(seriesName));
 
             //Create the folder for the new series
@@ -174,8 +177,10 @@ namespace NzbDrone.Web.Controllers
             var tvDbResults = _tvDbProvider.SearchSeries(term).Select(r => new TvDbSearchResultModel
                     {
                         Id = r.Id,
-                        Title = r.SeriesName,
-                        FirstAired = r.FirstAired.ToShortDateString()
+                        Title = r.FirstAired.Year > 1900 
+                                                        ?string.Format("{0} ({1})", r.SeriesName, r.FirstAired.Year)
+                                                        :r.SeriesName,
+                        Banner = r.Banner.BannerPath
                     }).ToList();
 
             return Json(tvDbResults, JsonRequestBehavior.AllowGet);
