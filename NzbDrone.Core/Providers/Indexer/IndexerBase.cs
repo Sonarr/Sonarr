@@ -19,6 +19,7 @@ namespace NzbDrone.Core.Providers.Indexer
         protected readonly ConfigProvider _configProvider;
 
         private static readonly Regex TitleSearchRegex = new Regex(@"[\W]", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        protected static readonly Regex RemoveThe = new Regex(@"^the\s", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         [Inject]
         protected IndexerBase(HttpProvider httpProvider, ConfigProvider configProvider)
@@ -230,6 +231,8 @@ namespace NzbDrone.Core.Providers.Indexer
         /// <returns></returns>
         public virtual string GetQueryTitle(string title)
         {
+            title = RemoveThe.Replace(title, string.Empty);
+
             var cleanTitle = TitleSearchRegex.Replace(title, "+").Trim('+', ' ');
 
             //remove any repeating +s

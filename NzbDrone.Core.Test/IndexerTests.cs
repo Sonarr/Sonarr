@@ -237,20 +237,22 @@ namespace NzbDrone.Core.Test
             result.Should().NotBeEmpty();
         }
 
-        [Test]
-        public void nzbmatrix_search_returns_valid_results()
+        [TestCase("simpsons", 21, 23)]
+        [TestCase("The walking dead", 2, 10)]
+        public void nzbmatrix_search_returns_valid_results(string title, int season, int episode)
         {
             WithConfiguredIndexers();
 
 
             Mocker.Resolve<HttpProvider>();
 
-            var result = Mocker.Resolve<NzbMatrix>().FetchEpisode("Simpsons", 21, 23);
+            var result = Mocker.Resolve<NzbMatrix>().FetchEpisode(title, season, episode);
 
             Mark500Inconclusive();
 
             result.Should().NotBeEmpty();
         }
+
 
 
         [Test]
@@ -275,7 +277,7 @@ namespace NzbDrone.Core.Test
         public void get_query_title(string raw, string clean)
         {
             var mock = new Mock<IndexerBase>();
-            mock.CallBase = true;           
+            mock.CallBase = true;
             var result = mock.Object.GetQueryTitle(raw);
             result.Should().Be(clean);
         }
@@ -387,7 +389,7 @@ namespace NzbDrone.Core.Test
         public void indexer_that_isnt_configured_shouldnt_make_an_http_call()
         {
             Mocker.Resolve<NotConfiguredIndexer>().FetchRss();
- 
+
             Mocker.GetMock<HttpProvider>()
                 .Verify(c => c.DownloadFile(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
 

@@ -116,6 +116,7 @@ namespace NzbDrone.Core.Providers.Indexer
         {
             //Replace apostrophe with empty string
             title = title.Replace("'", "");
+            title = RemoveThe.Replace(title, string.Empty);
             var cleanTitle = TitleSearchRegex.Replace(title, "+").Trim('+', ' ');
 
             //remove any repeating +s
