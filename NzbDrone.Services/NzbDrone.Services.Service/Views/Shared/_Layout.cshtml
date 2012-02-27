@@ -14,10 +14,6 @@
         ViewBag.Title = String.Format("{0} - NzbDrone", ViewBag.Title);
     }
     <title>@ViewBag.Title</title>
-    @if (!EnviromentProvider.IsProduction)
-    {
-        @MvcMiniProfiler.MiniProfiler.RenderIncludes()
-    }
     @RenderSection("HeaderContent", required: false)
 }
 <div id="centered">

@@ -14,7 +14,7 @@ namespace NzbDrone.Web.Helpers
         static HtmlIncludeExtentions()
         {
             versionString = new EnviromentProvider().Version.ToString().Replace('.', '_');
-            isProduction = EnviromentProvider.IsProduction;
+            isProduction = true;
         }
 
         public static MvcHtmlString IncludeScript(this HtmlHelper helper, string filename)
