@@ -68,7 +68,15 @@
             "iDisplayLength": 20,
             "sPaginationType": "four_button",
             "aoColumns": [
-                            { sWidth: 'auto', "mDataProp": "SeriesTitle" }, //Series Title
+                            { sWidth: 'auto', "mDataProp": function (source, type, val) {
+                                                                        // 'display' and 'filter' use our fancy naming
+                                                                        if (type === 'display' || type === 'filter') {
+                                                                            return "<a href='/Series/Details?seriesId=" + source["SeriesId"] + "'>" + source["SeriesTitle"] + "</a>";
+                                                                        }
+                                                                        // 'sort' and 'type' both just use the raw data
+                                                                        return source["SeriesTitleSorter"];
+                                                                    } 
+                            }, //Series Title
                             { sWidth: '80px', "mDataProp": "EpisodeNumbering", "bSortable": false }, //EpisodeNumbering
                             { sWidth: 'auto', "mDataProp": "EpisodeTitle", "bSortable": false }, //Episode Title
                             { sWidth: '150px', "mDataProp": function (source, type, val) {

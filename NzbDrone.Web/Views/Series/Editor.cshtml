@@ -1,6 +1,6 @@
 @using NzbDrone.Web.Helpers
 @model IEnumerable<NzbDrone.Core.Repository.Series>
-@{ViewBag.Title = "NzbDrone";}
+@{ViewBag.Title = "Series Editor";}
 
 @section HeaderContent
 {
@@ -33,10 +33,23 @@
         td .backlogSetting {
             width: 90px;
         }
+        
+        #stylized, .settingsForm {
+            overflow: hidden;
+        }
+        
+        #stylized {
+            float: left;
+        }
+        
+        #changesOverview {
+            margin-top: 15px;
+            float: left;
+        }
     </style>
 }
 
-@using (Html.BeginForm("SaveSeriesEditor", "Series", FormMethod.Post, new { id = "SeriesEditor", name = "SeriesEditor" }))
+@using (Html.BeginForm("SaveEditor", "Series", FormMethod.Post, new { id = "SeriesEditor", name = "SeriesEditor" }))
 {
     <table id ="seriesEditorGrid" class="dataTable dataTablesGrid no-details">
         <thead>
@@ -52,7 +65,7 @@
         <tbody>
             @foreach (var series in Model)
             {
-                Html.RenderPartial("SeriesEditorItem", series);
+                Html.RenderPartial("EditorItem", series);
             }
         </tbody>
     </table>
@@ -63,26 +76,27 @@
                 <label class="labelClass">Quality Profile
                     <span class="small">Which Quality Profile should NzbDrone use to download episodes?</span>
                 </label>
-                @Html.DropDownList("masterQualitySelector", (SelectList)ViewData["MasterProfileSelectList"], new { @class = "inputClass" })
+                @Html.DropDownList("masterQualitySelector", (SelectList)ViewData["MasterProfileSelectList"], new { @class = "inputClass masterSelector", disabled = true })
                 <label class="labelClass">Monitored
                     <span class="small">Should NzbDrone download episodes for this series?</span>
                 </label>
-                @Html.DropDownList("masterMonitored", (SelectList)ViewData["BoolSelectList"], new { @class = "inputClass" })
+                @Html.DropDownList("masterMonitored", (SelectList)ViewData["BoolSelectList"], new { @class = "inputClass masterSelector", disabled = true })
                 <label class="labelClass">Use Season Folder
                     <span class="small">Should downloaded episodes be stored in season folders?</span>
                 </label>
-                @Html.DropDownList("masterSeasonFolder", (SelectList)ViewData["BoolSelectList"], new { @class = "inputClass" })
+                @Html.DropDownList("masterSeasonFolder", (SelectList)ViewData["BoolSelectList"], new { @class = "inputClass masterSelector", disabled = true })
                 <label class="labelClass">Backlog Status
                     <span class="small">Should NzbDrone perform backlog searches for this series?</span>
                 </label>
-                @Html.DropDownList("masterBacklogSetting", (SelectList)ViewData["MasterBacklogSettingSelectList"], new { @class = "inputClass" })
+                @Html.DropDownList("masterBacklogSetting", (SelectList)ViewData["MasterBacklogSettingSelectList"], new { @class = "inputClass masterSelector", disabled = true })
             </div>
+        </div>
+        <div id="changesOverview" style="border-color: transparent;">
+            <h1><div id="editingCount"></div></h1>
         </div>
     </div>
 
-    <div class="buttons">
-        <button id="updateSelected" title="Update the selected series with the settings above">Update Selected</button>
-    
+    <div class="buttons">  
         <button type="submit" class="save_button" disabled="disabled" title="Commit the settings from your series above to the database">
             Save Changes</button>
     </div>
@@ -105,14 +119,37 @@
             });
         });
 
-        $('.editToggleMaster').live('change', function () {
+        $(document).on('change', '.editToggleMaster', function () {
             var toggle = $(this).prop('checked');
             $('.editToggle').each(function () {
                 $(this).prop('checked', toggle);
             });
         });
 
-        $('#updateSelected').live('click', function () {
+        $(document).on('change', '.editToggle, .editToggleMaster', function () {
+            var selectedCount = $('.editToggle:checked');
+
+            if (selectedCount.length > 0) {
+                $('.masterSelector').each(function () {
+                    $(this).attr("disabled", false);
+                });
+
+                $('#editingCount').text(selectedCount.length + ' series have been selected for editing');
+
+                if (selectedCount.length === 1) {
+                    $('#editingCount').text(selectedCount.length + ' series has been selected for editing');
+                }
+            }
+
+            else {
+                $('.masterSelector').each(function () {
+                    $(this).attr("disabled", true);
+                    $('#editingCount').text('');
+                });
+            }
+        });
+
+        $(document).on('change', '.masterSelector', function () {
             //Find selected values
             var profileId = $('#masterQualitySelector').val();
             var monitored = $('#masterMonitored').val();
@@ -146,10 +183,6 @@
                     $(this).parent('td').parent('.seriesEditRow').find('.backlogSetting').val(backlogStatus);
                 }
             });
-
         });
-
-
-    //Update all checked rows
     </script>
 }

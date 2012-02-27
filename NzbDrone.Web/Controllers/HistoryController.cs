@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Providers;
 using NzbDrone.Web.Models;
@@ -33,6 +34,7 @@ namespace NzbDrone.Web.Controllers
                 EpisodeTitle = h.Episode.Title,
                 EpisodeOverview = h.Episode.Overview,
                 SeriesTitle = h.SeriesTitle,
+                SeriesTitleSorter = SortHelper.SkipArticles(h.SeriesTitle),
                 NzbTitle = h.NzbTitle,
                 Quality = h.Quality.ToString(),
                 IsProper = h.IsProper,

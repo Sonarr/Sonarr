@@ -479,10 +479,10 @@
     <Content Include="Views\Settings\Misc.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Series\SeriesEditor.cshtml" />
+    <Content Include="Views\Series\Editor.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Series\SeriesEditorItem.cshtml" />
+    <Content Include="Views\Series\EditorItem.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Settings\DownloadClient.cshtml" />

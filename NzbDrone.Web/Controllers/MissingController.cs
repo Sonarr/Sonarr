@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using NzbDrone.Core;
+using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Providers;
 using NzbDrone.Web.Models;
 
@@ -31,6 +32,7 @@ namespace NzbDrone.Web.Controllers
                 EpisodeTitle = e.Title,
                 Overview = e.Overview,
                 SeriesTitle = e.Series.Title,
+                SeriesTitleSorter = SortHelper.SkipArticles(e.Series.Title),
                 AirDate = e.AirDate.Value.ToString("MM/dd/yyyy"),
                 AirDateString = e.AirDate.Value.ToBestDateString()
             });

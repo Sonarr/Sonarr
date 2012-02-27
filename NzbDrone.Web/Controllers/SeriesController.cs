@@ -133,19 +133,19 @@ namespace NzbDrone.Web.Controllers
             return View(model);
         }
 
-        public ActionResult SeriesEditor()
+        public ActionResult Editor()
         {
             var profiles = _qualityProvider.All();
             ViewData["QualityProfiles"] = profiles;
 
             //Create the select lists
             var masterProfiles = profiles.ToList();
-            masterProfiles.Insert(0, new QualityProfile {QualityProfileId = -10, Name = "Unchanged"});
+            masterProfiles.Insert(0, new QualityProfile {QualityProfileId = -10, Name = "Select..."});
             ViewData["MasterProfileSelectList"] = new SelectList(masterProfiles, "QualityProfileId", "Name");
 
             ViewData["BoolSelectList"] = new SelectList(new List<KeyValuePair<int, string>>
                                                             {
-                                                                    new KeyValuePair<int, string>(-10, "Unchanged"),
+                                                                    new KeyValuePair<int, string>(-10, "Select..."),
                                                                     new KeyValuePair<int, string>(1, "True"),
                                                                     new KeyValuePair<int, string>(0, "False")
                                                             }, "Key", "Value"
@@ -161,7 +161,7 @@ namespace NzbDrone.Web.Controllers
             ViewData["BacklogSettingTypes"] = backlogSettingTypes;
 
             var masterBacklogList = backlogSettingTypes.ToList();
-            masterBacklogList.Insert(0, new KeyValuePair<int, string>(-10, "Unchanged"));
+            masterBacklogList.Insert(0, new KeyValuePair<int, string>(-10, "Select..."));
             ViewData["MasterBacklogSettingSelectList"] = new SelectList(masterBacklogList, "Key", "Value");
 
             var series = _seriesProvider.GetAllSeries().OrderBy(o => SortHelper.SkipArticles(o.Title));
@@ -170,7 +170,7 @@ namespace NzbDrone.Web.Controllers
         }
 
         [HttpPost]
-        public JsonResult SaveSeriesEditor(List<Series> series)
+        public JsonResult SaveEditor(List<Series> series)
         {
             //Save edits
             if (series == null || series.Count == 0)
