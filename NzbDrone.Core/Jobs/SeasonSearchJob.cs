@@ -70,11 +70,12 @@ namespace NzbDrone.Core.Jobs
             //Get the list of episodes that weren't downloaded
             var missingEpisodes = episodeNumbers.Except(addedSeries).ToList();
 
+            //TODO: do one by one check only when max number of feeds have been returned by the indexer
             //Only process episodes that is in missing episodes (To ensure we double check if the episode is available)
-            foreach (var episode in episodes.Where(e => !e.Ignored && missingEpisodes.Contains(e.EpisodeNumber)).OrderBy(o => o.EpisodeNumber))
-            {
-                _episodeSearchJob.Start(notification, episode.EpisodeId, 0);
-            }
+            //foreach (var episode in episodes.Where(e => !e.Ignored && missingEpisodes.Contains(e.EpisodeNumber)).OrderBy(o => o.EpisodeNumber))
+            //{
+            //    _episodeSearchJob.Start(notification, episode.EpisodeId, 0);
+            //}
         }
     }
 }
