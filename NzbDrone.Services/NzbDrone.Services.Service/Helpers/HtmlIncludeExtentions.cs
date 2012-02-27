@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web.Mvc;
 using NzbDrone.Common;
 
-namespace NzbDrone.Web.Helpers
+namespace NzbDrone.Services.Service.Helpers
 {
     public static class HtmlIncludeExtentions
     {

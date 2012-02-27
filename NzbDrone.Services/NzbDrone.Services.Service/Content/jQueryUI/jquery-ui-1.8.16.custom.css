@@ -59,8 +59,8 @@
 .ui-widget { font-family: ; font-size: ; }
 .ui-widget .ui-widget { font-size: 1em; }
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button { font-family: ; font-size: 1em; }
-.ui-widget-content { border: 1px solid #e8e8e8; background: #ffffff url(images/ui-bg_flat_20_ffffff_40x100.png) 50% 50% repeat-x; color: #; }
-.ui-widget-content a { color: #; }
+.ui-widget-content { border: 1px solid #e8e8e8; background: #ffffff url(images/ui-bg_flat_20_ffffff_40x100.png) 50% 50% repeat-x; }
+.ui-widget-content a {  }
 .ui-widget-header { border: 1px solid #ffffff; background: #ffffff url(images/ui-bg_flat_0_ffffff_40x100.png) 50% 50% repeat-x; color: #000000; font-weight: bold; }
 .ui-widget-header a { color: #000000; }
 
@@ -68,7 +68,7 @@
 ----------------------------------*/
 .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default { border: 1px solid #ffffff; background: #616161 url(images/ui-bg_flat_30_616161_40x100.png) 50% 50% repeat-x; font-weight: normal; color: #ffffff; }
 .ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited { color: #ffffff; text-decoration: none; }
-.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus { border: 1px solid #ffffff; background: # url(images/ui-bg_flat_100__40x100.png) 50% 50% repeat-x; font-weight: normal; color: #ffffff; }
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus { border: 1px solid #ffffff; background: url(images/ui-bg_flat_100__40x100.png) 50% 50% repeat-x; font-weight: normal; color: #ffffff; }
 .ui-state-hover a, .ui-state-hover a:hover { color: #ffffff; text-decoration: none; }
 .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active { border: 1px solid #ffffff; background: #065efe url(images/ui-bg_flat_40_065efe_40x100.png) 50% 50% repeat-x; font-weight: normal; color: #ffffff; }
 .ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited { color: #ffffff; text-decoration: none; }
