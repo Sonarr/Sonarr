@@ -71,7 +71,7 @@ namespace NzbDrone.Core.Providers.Indexer
 
         protected override string NzbDownloadUrl(SyndicationItem item)
         {
-            return item.Id;
+            return item.Links[0].Uri.ToString();
         }
 
 
@@ -79,8 +79,8 @@ namespace NzbDrone.Core.Providers.Indexer
         {
             if (currentResult != null)
             {
-                var sizeString = Regex.Match(item.Summary.Text, @">\d+\.\d{1,2} \w{2}</a>", RegexOptions.IgnoreCase).Value;
-                currentResult.Size = Parser.GetReportSize(sizeString);
+                if (item.Links.Count > 1)
+                    currentResult.Size = item.Links[1].Length;
             }
 
             return currentResult;
@@ -89,9 +89,9 @@ namespace NzbDrone.Core.Providers.Indexer
         private string[] GetUrls()
         {
             var urls = new List<string>();
-            var newznzbIndexers = _newznabProvider.Enabled();
+            var newznabIndexers = _newznabProvider.Enabled();
 
-            foreach (var newznabDefinition in newznzbIndexers)
+            foreach (var newznabDefinition in newznabIndexers)
             {
                 if (!String.IsNullOrWhiteSpace(newznabDefinition.ApiKey))
                     urls.Add(String.Format("{0}/api?t=tvsearch&cat=5030,5040&apikey={1}", newznabDefinition.Url,

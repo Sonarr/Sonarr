@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.ServiceModel.Syndication;
 
@@ -29,6 +30,7 @@ namespace NzbDrone.Core.Test
         [TestCase("nzbsrus.xml")]
         [TestCase("newzbin.xml")]
         [TestCase("nzbmatrix.xml")]
+        [TestCase("newznab.xml")]
         public void parse_feed_xml(string fileName)
         {
             Mocker.GetMock<HttpProvider>()
@@ -356,6 +358,28 @@ namespace NzbDrone.Core.Test
             parseResults[0].Size.Should().Be(1793148846);
         }
 
+        [Test]
+        public void size_newznab()
+        {
+            WithConfiguredIndexers();
+
+            var newznabDefs = Builder<NewznabDefinition>.CreateListOfSize(1)
+                    .All()
+                    .With(n => n.ApiKey = String.Empty)
+                    .Build();
+
+            Mocker.GetMock<NewznabProvider>().Setup(s => s.Enabled()).Returns(newznabDefs.ToList());
+
+            Mocker.GetMock<HttpProvider>()
+                          .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
+                          .Returns(File.OpenRead(".\\Files\\Rss\\SizeParsing\\newznab.xml"));
+
+            //Act
+            var parseResults = Mocker.Resolve<Newznab>().FetchRss();
+
+            parseResults.Should().HaveCount(1);
+            parseResults[0].Size.Should().Be(1183105773);
+        }
 
         [Test]
         public void Server_Unavailable_503_should_not_log_exception()
@@ -394,6 +418,26 @@ namespace NzbDrone.Core.Test
                 .Verify(c => c.DownloadFile(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
 
             ExceptionVerification.ExpectedWarns(1);
+        }
+
+        [Test]
+        public void newznab_link_should_be_link_to_nzb_not_details()
+        {
+            Mocker.GetMock<HttpProvider>()
+                          .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
+                          .Returns(File.OpenRead(".\\Files\\Rss\\newznab.xml"));
+
+            var fakeSettings = Builder<IndexerDefinition>.CreateNew().Build();
+            Mocker.GetMock<IndexerProvider>()
+                .Setup(c => c.GetSettings(It.IsAny<Type>()))
+                .Returns(fakeSettings);
+
+            var mockIndexer = Mocker.Resolve<MockIndexer>();
+            var parseResults = mockIndexer.FetchRss();
+
+            parseResults.Should().NotBeEmpty();
+            parseResults.Should().OnlyContain(s => s.NzbUrl.Contains("getnzb"));
+            parseResults.Should().NotContain(s => s.NzbUrl.Contains("details"));
         }
 
         private static void Mark500Inconclusive()

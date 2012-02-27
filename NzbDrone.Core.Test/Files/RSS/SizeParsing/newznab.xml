@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:newznab="http://www.newznab.com/DTD/2010/feeds/attributes/">
+  <channel>
+    <atom:link href="http://nzb.su/api?t=tvsearch&amp;cat=5030,5040&amp;apikey=524d129cbd8a329be916e0573d10be5c" rel="self" type="application/rss+xml" />
+    <title>Nzb.su</title>
+    <description>Nzb.su Feed</description>
+    <link>http://nzb.su/</link>
+    <language>en-gb</language>
+    <webMaster>root@nzb.su (Nzb.su)</webMaster>
+    <category></category>
+    <image>
+      <url>http://nzb.su/views/images/banner.jpg</url>
+
+      <title>Nzb.su</title>
+      <link>http://nzb.su/</link>
+      <description>Visit Nzb.su - indexing usenet one part at a time</description>
+    </image>
+
+
+    <newznab:response offset="0" total="10000" />
+    <item>
+      <title>White.Collar.S03E05.720p.HDTV.X264-DIMENSION</title>
+
+      <guid isPermaLink="true">http://nzb.su/details/24967ef4c2e26296c65d3bbfa97aa8fe</guid>
+      <link>http://nzb.su/getnzb/24967ef4c2e26296c65d3bbfa97aa8fe.nzb&amp;i=37292&amp;r=524d129cbd8a329be916e0573d10be5c</link>
+      <comments>http://nzb.su/details/24967ef4c2e26296c65d3bbfa97aa8fe#comments</comments>
+      <pubDate>Mon, 27 Feb 2012 11:09:39 -0500</pubDate>
+      <category>TV &gt; HD</category>
+      <description>White.Collar.S03E05.720p.HDTV.X264-DIMENSION</description>
+
+      <enclosure url="http://nzb.su/getnzb/24967ef4c2e26296c65d3bbfa97aa8fe.nzb&amp;i=37292&amp;r=524d129cbd8a329be916e0573d10be5c" length="1183105773" type="application/x-nzb" />
+
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="1183105773" />
+      <newznab:attr name="guid" value="24967ef4c2e26296c65d3bbfa97aa8fe" />
+
+
+    </item>
+ 
+  </channel>
+</rss>
