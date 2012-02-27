@@ -119,8 +119,8 @@ hr
     background: url(images/logo.png) no-repeat left top;
     background-color: #065EFE;
     font-size: 110px;
-    /**color: rgb(249, 249, 249);**/
-    color: rgb(40, 40, 40);
+    color: rgb(249, 249, 249);
+    /**color: rgb(40, 40, 40);**/
     text-transform: lowercase;
     letter-spacing: -1px;
     line-height: 110px;
@@ -259,7 +259,7 @@ button span, input[type="button"] span, input[type="submit"] span, input[type="r
     margin-top: 7px;
     margin-bottom: 0px;
     border: 0px;
-    background: rgb(40, 40, 40);
+    background: rgb(75, 75, 75);
     color: rgb(169, 169, 169);
     padding: 4px;
 }

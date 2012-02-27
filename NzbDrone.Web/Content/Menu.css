@@ -1,22 +1,26 @@
 ﻿.sub-menu
 {
     padding-left: 5px;
+    margin-top: 0px;
 }
-    
+
 .sub-menu li
 {
     display: inline;
-    list-style-type: none;
-    padding-left: 8px;
-    padding-right: 12px;
-    padding-top: 6px;
-    border-right: 1px solid #F0F0F0;
+    list-style-type: circle;
+    margin-right: 12px;
+    padding-left: 2px;
+    border-left: 1px solid #065EFE;
 }
-    
+
 .sub-menu a
 {
     text-decoration: none;
-    color: #105CD6;
+    font-size: 21px;
+    font-family: "Segoe UI Light" , "Open Sans" , "Segoe UI" , sans-serif;
+    color: #065EFE;
+    font-weight: 300;
+    text-transform: lowercase;
 }
 
 .t-grid .sub-menu
