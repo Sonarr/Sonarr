@@ -6,6 +6,7 @@ using Ninject;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Providers
@@ -21,12 +22,13 @@ namespace NzbDrone.Core.Providers
         private readonly ExternalNotificationProvider _externalNotificationProvider;
         private readonly DownloadProvider _downloadProvider;
         private readonly SignalRProvider _signalRProvider;
+        private readonly ConfigProvider _configProvider;
 
         [Inject]
         public DiskScanProvider(DiskProvider diskProvider, EpisodeProvider episodeProvider,
                                 SeriesProvider seriesProvider, MediaFileProvider mediaFileProvider,
                                 ExternalNotificationProvider externalNotificationProvider, DownloadProvider downloadProvider,
-                                SignalRProvider signalRProvider)
+                                SignalRProvider signalRProvider, ConfigProvider configProvider)
         {
             _diskProvider = diskProvider;
             _episodeProvider = episodeProvider;
@@ -35,6 +37,7 @@ namespace NzbDrone.Core.Providers
             _externalNotificationProvider = externalNotificationProvider;
             _downloadProvider = downloadProvider;
             _signalRProvider = signalRProvider;
+            _configProvider = configProvider;
         }
 
         public DiskScanProvider()
@@ -231,7 +234,7 @@ namespace NzbDrone.Core.Providers
                         {
                             Logger.Trace("Setting EpisodeFileId for Episode: [{0}] to 0", episode.EpisodeId);
                             episode.EpisodeFileId = 0;
-                            episode.Ignored = true;
+                            episode.Ignored = _configProvider.AutoIgnorePreviouslyDownloadedEpisodes;
                             episode.GrabDate = null;
                             episode.PostDownloadStatus = PostDownloadStatusType.Unknown;
                             _episodeProvider.UpdateEpisode(episode);
