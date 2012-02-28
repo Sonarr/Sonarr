@@ -179,27 +179,26 @@ namespace NzbDrone.Core.Test
             }
         }
 
-        [Timeout(1000)]
-        [TestCase("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD", "WEEDS", 3, new[] { 1, 2, 3, 4, 5, 6 }, 6)]
-        [TestCase("Two.and.a.Half.Men.103.104.720p.HDTV.X264-DIMENSION", "Two.and.a.Half.Men", 1, new[] { 3, 4 }, 2)]
-        [TestCase("Weeds.S03E01.S03E02.720p.HDTV.X264-DIMENSION", "Weeds", 3, new[] { 1, 2 }, 2)]
-        [TestCase("The Borgias S01e01 e02 ShoHD On Demand 1080i DD5 1 ALANiS", "The Borgias", 1, new[] { 1, 2 }, 2)]
-        [TestCase("White.Collar.2x04.2x05.720p.BluRay-FUTV", "White.Collar", 2, new[] { 4, 5 }, 2)]
-        [TestCase("Desperate.Housewives.S07E22E23.720p.HDTV.X264-DIMENSION", "Desperate.Housewives", 7, new[] { 22, 23 }, 2)]
-        [TestCase("Desparate Housewives - S07E22 - S07E23 - And Lots of Security.. [HDTV].mkv", "Desparate Housewives", 7, new[] { 22, 23 }, 2)]
+        //[Timeout(1000)]
+        [TestCase("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD", "WEEDS", 3, new[] { 1, 2, 3, 4, 5, 6 })]
+        [TestCase("Two.and.a.Half.Men.103.104.720p.HDTV.X264-DIMENSION", "Two.and.a.Half.Men", 1, new[] { 3, 4 })]
+        [TestCase("Weeds.S03E01.S03E02.720p.HDTV.X264-DIMENSION", "Weeds", 3, new[] { 1, 2 })]
+        [TestCase("The Borgias S01e01 e02 ShoHD On Demand 1080i DD5 1 ALANiS", "The Borgias", 1, new[] { 1, 2 })]
+        [TestCase("White.Collar.2x04.2x05.720p.BluRay-FUTV", "White.Collar", 2, new[] { 4, 5 })]
+        [TestCase("Desperate.Housewives.S07E22E23.720p.HDTV.X264-DIMENSION", "Desperate.Housewives", 7, new[] { 22, 23 })]
+        [TestCase("Desparate Housewives - S07E22 - S07E23 - And Lots of Security.. [HDTV].mkv", "Desparate Housewives", 7, new[] { 22, 23 })]
         [TestCase("S03E01.S03E02.720p.HDTV.X264-DIMENSION", "", 3, new[] { 1, 2 }, 2)]
-        [TestCase("Desparate Housewives - S07E22 - 7x23 - And Lots of Security.. [HDTV].mkv", "Desparate Housewives", 7, new[] { 22, 23 }, 2)]
-        [TestCase("S07E22 - 7x23 - And Lots of Security.. [HDTV].mkv", "", 7, new[] { 22, 23 }, 2)]
-        [TestCase("2x04x05.720p.BluRay-FUTV", "", 2, new[] { 4, 5 }, 2)]
-        [TestCase("S02E04E05.720p.BluRay-FUTV", "", 2, new[] { 4, 5 }, 2)]
-        public void TitleParse_multi(string postTitle, string title, int season, int[] episodes, int count)
+        [TestCase("Desparate Housewives - S07E22 - 7x23 - And Lots of Security.. [HDTV].mkv", "Desparate Housewives", 7, new[] { 22, 23 })]
+        [TestCase("S07E22 - 7x23 - And Lots of Security.. [HDTV].mkv", "", 7, new[] { 22, 23 })]
+        [TestCase("2x04x05.720p.BluRay-FUTV", "", 2, new[] { 4, 5 })]
+        [TestCase("S02E04E05.720p.BluRay-FUTV", "", 2, new[] { 4, 5 })]
+        [TestCase("S02E03-04-05.720p.BluRay-FUTV", "", 2, new[] { 3,4,5 })]
+        public void TitleParse_multi(string postTitle, string title, int season, int[] episodes)
         {
             var result = Parser.ParseTitle(postTitle);
             result.SeasonNumber.Should().Be(season);
-            result.EpisodeNumbers.Should().HaveSameCount(episodes);
-            result.EpisodeNumbers.Should().BeEquivalentTo(result.EpisodeNumbers);
+            result.EpisodeNumbers.Should().BeEquivalentTo(episodes);
             result.CleanTitle.Should().Be(Parser.NormalizeTitle(title));
-            result.EpisodeNumbers.Count.Should().Be(count);
             result.OriginalString.Should().Be(postTitle);
         }
 
