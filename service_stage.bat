@@ -3,6 +3,9 @@ SET TARGET=_rawPackage_service
 rd %TARGET% /S /Q
 
 xcopy NzbDrone.Services\NzbDrone.Services.Service\bin\*.*  %TARGET%\bin\ /E /V /I /Y /F /O
+xcopy NzbDrone.Services\NzbDrone.Services.Service\Content\*.*  %TARGET%\Content\ /E /V /I /Y /F /O
+xcopy NzbDrone.Services\NzbDrone.Services.Service\Scripts\*.*  %TARGET%\Scripts\ /E /V /I /Y /F /O
+xcopy NzbDrone.Services\NzbDrone.Services.Service\Views\*.*  %TARGET%\Views\ /E /V /I /Y /F /O
 xcopy NzbDrone.Services\NzbDrone.Services.Service\log.config  %TARGET% /S /V /I /Y /F /O
 xcopy NzbDrone.Services\NzbDrone.Services.Service\Global.asax  %TARGET% /S /V /I /Y /F /O
 xcopy service_deploy_production.bat  %TARGET% /O /Y
