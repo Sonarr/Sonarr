@@ -28,8 +28,7 @@ namespace NzbDrone.Common
                 if (lowerProcessName.Contains("jetbrain")) return false;
                 if (lowerProcessName.Contains("resharper")) return false;
 
-                if (instance.ApplicationPath.ToLower().Contains("_rawpackage")) return false;
-
+                if (instance.StartUpPath.ToLower().Contains("_rawpackage")) return false;
 
                 return true;
             }
