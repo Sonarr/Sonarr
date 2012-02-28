@@ -116,6 +116,9 @@ namespace NzbDrone.Core.Test.ProviderTests
             Mocker.GetMock<MediaFileProvider>()
                 .Setup(e => e.Delete(It.IsAny<int>()));
 
+            Mocker.GetMock<ConfigProvider>()
+                .SetupGet(s => s.AutoIgnorePreviouslyDownloadedEpisodes)
+                .Returns(true);
 
             //Act
             Mocker.Resolve<DiskScanProvider>().CleanUp(episodes);
