@@ -63,9 +63,9 @@ $(function () {
     var signalRProvider = $.connection.signalRProvider;
 
     // Declare a function on the chat hub so the server can invoke it
-    signalRProvider.updatedStatus = function (episodeId, episodeStatus) {
-        var imageSrc = '../../Content/Images/' + episodeStatus + '.png';
-        var row = $('tr.episodeId_' + episodeId);
+    signalRProvider.updatedStatus = function (data) {
+        var imageSrc = '../../Content/Images/' + data.EpisodeStatus + '.png';
+        var row = $('tr.episodeId_' + data.EpisodeId);
 
         if (row.length == 0)
             return;
@@ -75,12 +75,19 @@ $(function () {
         if (statusImage.length == 0)
             return;
 
-        statusImage.attr('alt', episodeStatus);
-        statusImage.attr('title', episodeStatus);
+        statusImage.attr('alt', data.EpisodeStatus);
+        statusImage.attr('title', data.EpisodeStatus);
         statusImage.attr('src', imageSrc);
 
-        if (episodeStatus != "Missing") {
+        if (data.EpisodeStatus != "Missing") {
             statusImage.parent('td').removeClass('episodeMissing');
+        }
+
+        if (data.Quality != null) {
+            var qualityColumn = $(row).find('.episodeQuality');
+            
+            if (qualityColumn)
+                qualityColumn.text(data.Quality);
         }
     };
 

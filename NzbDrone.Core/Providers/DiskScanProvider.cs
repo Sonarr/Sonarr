@@ -202,7 +202,7 @@ namespace NzbDrone.Core.Providers
                 _externalNotificationProvider.OnDownload(message, series);
                 
                 foreach(var episode in episodes)
-                    _signalRProvider.UpdateEpisodeStatus(episode.EpisodeId, EpisodeStatusType.Ready);
+                    _signalRProvider.UpdateEpisodeStatus(episode.EpisodeId, EpisodeStatusType.Ready, parseResult.Quality);
             }
             else
             {

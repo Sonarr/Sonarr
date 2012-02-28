@@ -67,7 +67,7 @@ namespace NzbDrone.Core.Providers
                     _historyProvider.Add(history);
                     _episodeProvider.MarkEpisodeAsFetched(episode.EpisodeId);
 
-                    _signalRProvider.UpdateEpisodeStatus(episode.EpisodeId, EpisodeStatusType.Downloading);
+                    _signalRProvider.UpdateEpisodeStatus(episode.EpisodeId, EpisodeStatusType.Downloading, null);
                 }
 
                 _externalNotificationProvider.OnGrab(downloadTitle);
