@@ -193,18 +193,18 @@ namespace NzbDrone.Core.Providers.Indexer
                 {
                     if (webException.Message.Contains("503"))
                     {
-                        _logger.Warn("{0} server is currently unbelievable. {1}", Name, webException.Message);
+                        _logger.Warn("{0} server is currently unbelievable.{1} {2}", Name,url, webException.Message);
                     }
                     else
                     {
                         webException.Data.Add("FeedUrl", url);
-                        _logger.ErrorException("An error occurred while processing feed: " + Name, webException);
+                        _logger.ErrorException("An error occurred while processing feed. " + url, webException);
                     }
                 }
                 catch (Exception feedEx)
                 {
                     feedEx.Data.Add("FeedUrl", url);
-                    _logger.ErrorException("An error occurred while processing feed: " + Name, feedEx);
+                    _logger.ErrorException("An error occurred while processing feed. " + url, feedEx);
                 }
             }
 
