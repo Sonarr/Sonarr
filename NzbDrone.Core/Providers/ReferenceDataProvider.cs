@@ -34,10 +34,13 @@ namespace NzbDrone.Core.Providers
 
             var seriesIds = GetDailySeriesIds();
 
-            var dailySeriesString = String.Join(", ", seriesIds);
-            var sql = String.Format("UPDATE Series SET IsDaily = 1 WHERE SeriesId in ({0})", dailySeriesString);
+            if (seriesIds.Any())
+            {
+                var dailySeriesString = String.Join(", ", seriesIds);
+                var sql = String.Format("UPDATE Series SET IsDaily = 1 WHERE SeriesId in ({0})", dailySeriesString);
 
-            _database.Execute(sql);
+                _database.Execute(sql);
+            }
         }
 
         public virtual bool IsSeriesDaily(int seriesId)

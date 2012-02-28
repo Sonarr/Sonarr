@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Jobs
         private readonly SeasonSearchJob _seasonSearchJob;
         private readonly SeasonProvider _seasonProvider;
 
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public SeriesSearchJob(SeasonSearchJob seasonSearchJob,
                                 SeasonProvider seasonProvider)
@@ -35,16 +35,15 @@ namespace NzbDrone.Core.Jobs
             if (targetId <= 0)
                 throw new ArgumentOutOfRangeException("targetId");
 
-            Logger.Debug("Getting seasons from database for series: {0}", targetId);
+            logger.Debug("Getting seasons from database for series: {0}", targetId);
             var seasons = _seasonProvider.GetSeasons(targetId).Where(s => s > 0);
 
             foreach (var season in seasons)
             {
-                //Skip ignored seasons
-                if (_seasonProvider.IsIgnored(targetId, season))
-                    continue;
-
-                _seasonSearchJob.Start(notification, targetId, season);
+                if (!_seasonProvider.IsIgnored(targetId, season))
+                {
+                    _seasonSearchJob.Start(notification, targetId, season);
+                }
             }
         }
     }

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Linq;
-
+using System.Net;
 using FizzWare.NBuilder;
 using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Providers;
@@ -190,6 +191,21 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             result.Where(s => s.IsDaily).Should().HaveCount(3);
             result.Where(s => !s.IsDaily).Should().HaveCount(2);
+        }
+
+        [Test]
+        public void broken_service_should_not_cause_this_call_to_fail()
+        {
+            WithRealDb();
+
+            Mocker.GetMock<HttpProvider>().Setup(s => s.DownloadString(It.IsAny<string>()))
+                .Throws(new WebException())
+                .Verifiable();
+
+            Mocker.Resolve<ReferenceDataProvider>().UpdateDailySeries();
+
+            ExceptionVerification.ExpectedWarns(1);
+            Mocker.VerifyAllMocks();
         }
     }
 }

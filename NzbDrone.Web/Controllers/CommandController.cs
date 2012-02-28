@@ -16,10 +16,11 @@ namespace NzbDrone.Web.Controllers
         private readonly TwitterProvider _twitterProvider;
         private readonly EpisodeProvider _episodeProvider;
         private readonly GrowlProvider _growlProvider;
+        private readonly SeasonProvider _seasonProvider;
 
         public CommandController(JobProvider jobProvider, SabProvider sabProvider,
                                     SmtpProvider smtpProvider, TwitterProvider twitterProvider,
-                                    EpisodeProvider episodeProvider, GrowlProvider growlProvider)
+                                    EpisodeProvider episodeProvider, GrowlProvider growlProvider, SeasonProvider seasonProvider)
         {
             _jobProvider = jobProvider;
             _sabProvider = sabProvider;
@@ -27,6 +28,7 @@ namespace NzbDrone.Web.Controllers
             _twitterProvider = twitterProvider;
             _episodeProvider = episodeProvider;
             _growlProvider = growlProvider;
+            _seasonProvider = seasonProvider;
         }
 
         public JsonResult RssSync()
@@ -114,7 +116,7 @@ namespace NzbDrone.Web.Controllers
         [HttpPost]
         public EmptyResult SaveSeasonIgnore(int seriesId, int seasonNumber, bool ignored)
         {
-            _episodeProvider.SetSeasonIgnore(seriesId, seasonNumber, ignored);
+            _seasonProvider.SetIgnore(seriesId, seasonNumber, ignored);
             return new EmptyResult();
         }
 

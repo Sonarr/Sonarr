@@ -1,5 +1,4 @@
 ﻿// ReSharper disable RedundantUsingDirective
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,89 +24,51 @@ namespace NzbDrone.Core.Test.ProviderTests
     // ReSharper disable InconsistentNaming
     public class SeasonProviderTest : CoreTest
     {
-        [Test]
-        public void AddSeason_should_insert_season_to_database_with_ignored_false()
+        [SetUp]
+        public void Setup()
         {
             WithRealDb();
-
-            var seriesId = 10;
-            var seasonNumber = 50;
-
-            //Act
-            Mocker.Resolve<SeasonProvider>().Add(seriesId, seasonNumber);
-
-            //Assert
-            var result = Db.Fetch<Season>();
-            result.Should().HaveCount(1);
-            result.First().SeriesId.Should().Be(seriesId);
-            result.First().SeasonNumber.Should().Be(seasonNumber);
-            result.First().Ignored.Should().BeFalse();
         }
+
 
         [TestCase(true)]
         [TestCase(false)]
-        public void AddSeason_should_insert_season_to_database_with_preset_ignored_status(bool isIgnored)
+        public void SetIgnore_should_update_ignored_status(bool ignoreFlag)
         {
-            WithRealDb();
-
-            var seriesId = 10;
-            var seasonNumber = 50;
-
-            //Act
-            Mocker.Resolve<SeasonProvider>().Add(seriesId, seasonNumber, isIgnored);
-
-            //Assert
-            var result = Db.Fetch<Season>();
-            result.Should().HaveCount(1);
-            result.First().SeriesId.Should().Be(seriesId);
-            result.First().SeasonNumber.Should().Be(seasonNumber);
-            result.First().Ignored.Should().Be(isIgnored);
-        }
-
-        [Test]
-        public void DeleteSeason_should_remove_season_from_database()
-        {
-            WithRealDb();
-
-            var fakeSeason = Builder<Season>.CreateNew().Build();
-
-            Db.Insert(fakeSeason);
-
-            //Act
-            Mocker.Resolve<SeasonProvider>().Delete(fakeSeason.SeriesId, fakeSeason.SeasonNumber);
-
-            //Assert
-            var result = Db.Fetch<Season>();
-            result.Should().BeEmpty();
-        }
-
-        [Test]
-        public void SetIgnore_should_update_ignored_status()
-        {
-            WithRealDb();
-
             var fakeSeason = Builder<Season>.CreateNew()
-                .With(s => s.Ignored = false)
+                .With(s => s.Ignored = !ignoreFlag)
                 .Build();
+
+            var fakeEpisodes = Builder<Episode>.CreateListOfSize(4)
+                .All()
+                .With(c => c.SeriesId = fakeSeason.SeriesId)
+                .With(c => c.SeasonNumber = fakeSeason.SeasonId)
+                .With(c => c.Ignored = !ignoreFlag)
+                .Build().ToList();
+
+            fakeEpisodes.ForEach(c => Db.Insert(c));
 
             var id = Db.Insert(fakeSeason);
 
             //Act
-            Mocker.Resolve<SeasonProvider>().SetIgnore(fakeSeason.SeriesId, fakeSeason.SeasonNumber, true);
+            Mocker.Resolve<SeasonProvider>().SetIgnore(fakeSeason.SeriesId, fakeSeason.SeasonNumber, ignoreFlag);
 
             //Assert
-            var result = Db.SingleOrDefault<Season>(id);
-            result.Ignored.Should().BeTrue();
+            var season = Db.SingleOrDefault<Season>(id);
+            season.Ignored.Should().Be(ignoreFlag);
+
+            var episodes = Db.Fetch<Episode>();
+            episodes.Should().HaveSameCount(fakeEpisodes);
+            episodes.Should().OnlyContain(c => c.Ignored == ignoreFlag);
         }
 
-        [Test]
-        public void IsIgnored_should_return_ignored_status_of_season()
+        [TestCase(true)]
+        [TestCase(false)]
+        public void IsIgnored_should_return_ignored_status_of_season(bool ignoreFlag)
         {
-            WithRealDb();
-
             //Setup
             var fakeSeason = Builder<Season>.CreateNew()
-                .With(s => s.Ignored = false)
+                .With(s => s.Ignored = ignoreFlag)
                 .Build();
 
             Db.Insert(fakeSeason);
@@ -116,103 +77,19 @@ namespace NzbDrone.Core.Test.ProviderTests
             var result = Mocker.Resolve<SeasonProvider>().IsIgnored(fakeSeason.SeriesId, fakeSeason.SeasonNumber);
 
             //Assert
-            result.Should().Be(fakeSeason.Ignored);
-            Db.Fetch<Season>().Count.Should().Be(1);
+            result.Should().Be(ignoreFlag);
         }
 
         [Test]
-        public void IsIgnored_should_return_true_if_not_in_db_and_is_season_zero()
+        public void IsIgnored_should_throw_an_exception_if_not_in_db()
         {
-            //Setup
-            WithRealDb();
-
-            //Act
-            var result = Mocker.Resolve<SeasonProvider>().IsIgnored(10, 0);
-
-            //Assert
-            result.Should().BeTrue();
-            Db.Fetch<Season>().Should().HaveCount(1);
-        }
-
-        [Test]
-        public void IsIgnored_should_return_false_if_not_in_db_and_is_season_one()
-        {
-            //Setup
-            WithRealDb();
-
-            //Act
-            var result = Mocker.Resolve<SeasonProvider>().IsIgnored(10, 1);
-
-            //Assert
-            result.Should().BeFalse();
-            Db.Fetch<Season>().Should().HaveCount(1);
-        }
-
-        [Test]
-        public void IsIgnored_should_return_false_if_not_in_db_and_previous_season_is_not_ignored()
-        {
-            //Setup
-            WithRealDb();
-
-            var lastSeason = Builder<Season>.CreateNew()
-                .With(s => s.SeriesId = 10)
-                .With(s => s.SeasonNumber = 4)
-                .With(s => s.Ignored = false)
-                .Build();
-
-            Db.Insert(lastSeason);
-
-            //Act
-            var result = Mocker.Resolve<SeasonProvider>().IsIgnored(10, 5);
-
-            //Assert
-            result.Should().BeFalse();
-            Db.Fetch<Season>().Should().HaveCount(2);
-        }
-
-        [Test]
-        public void IsIgnored_should_return_true_if_not_in_db_and_previous_season_is_ignored()
-        {
-            //Setup
-            WithRealDb();
-
-            var lastSeason = Builder<Season>.CreateNew()
-                .With(s => s.SeriesId = 10)
-                .With(s => s.SeasonNumber = 4)
-                .With(s => s.Ignored = true)
-                .Build();
-
-            Db.Insert(lastSeason);
-
-            //Act
-            var result = Mocker.Resolve<SeasonProvider>().IsIgnored(10, 5);
-
-            //Assert
-            result.Should().BeTrue();
-            Db.Fetch<Season>().Should().HaveCount(2);
-        }
-
-        [Test]
-        public void IsIgnored_should_return_false_if_not_in_db_and_previous_season_does_not_exist()
-        {
-            //Setup
-            WithRealDb();
-
-            //Act
-            var result = Mocker.Resolve<SeasonProvider>().IsIgnored(10, 5);
-
-            //Assert
-            result.Should().BeFalse();
-            Db.Fetch<Season>().Should().HaveCount(1);
+            Assert.Throws<InvalidOperationException>(() => Mocker.Resolve<SeasonProvider>().IsIgnored(10, 0));
         }
 
         [Test]
         public void All_should_return_seasons_with_episodes()
         {
             const int seriesId = 10;
-
-            //Setup
-            WithRealDb();
 
             var season = Builder<Season>.CreateNew()
                 .With(s => s.SeriesId = seriesId)
@@ -272,10 +149,73 @@ namespace NzbDrone.Core.Test.ProviderTests
             //Assert
             result.Should().HaveCount(5);
 
-            foreach(var season in result)
+            foreach (var season in result)
             {
                 season.Episodes.Count.Should().Be(2);
+                season.Episodes.Should().OnlyContain(c => c.SeasonNumber == season.SeasonNumber);
             }
         }
+
+        [Test]
+        public void EnsureSeason_should_add_all_seasons_for_new_series()
+        {
+            var seasons = new[] { 0, 1, 2, 3, 4, 5 };
+            Mocker.Resolve<SeasonProvider>().EnsureSeasons(12, seasons);
+
+            Mocker.Resolve<SeasonProvider>().GetSeasons(12).SequenceEqual(seasons);
+        }
+
+        [Test]
+        public void EnsureSeason_should_add_missing_seasons()
+        {
+            var seasonsA = new[] { 0, 1, 2, 3 };
+            var seasonsB = new[] { 0, 1, 2, 3, 4, 5 };
+            Mocker.Resolve<SeasonProvider>().EnsureSeasons(12, seasonsA);
+            Mocker.Resolve<SeasonProvider>().GetSeasons(12).SequenceEqual(seasonsA);
+
+            Mocker.Resolve<SeasonProvider>().EnsureSeasons(12, seasonsB);
+            Mocker.Resolve<SeasonProvider>().GetSeasons(12).SequenceEqual(seasonsB);
+        }
+
+
+        [Test]
+        public void EnsureSeason_marks_season_zero_as_ignored()
+        {
+            var seasons = new[] { 0, 1, 2, 3 };
+
+            Mocker.Resolve<SeasonProvider>().EnsureSeasons(12, seasons);
+            Db.Fetch<Season>().Should().Contain(c => c.SeasonNumber == 0 && c.Ignored);
+        }
+
+
+        [Test]
+        public void EnsureSeason_none_zero_seasons_arent_ignored()
+        {
+            var seasons = new[] { 1, 2, 3 };
+
+            Mocker.Resolve<SeasonProvider>().EnsureSeasons(12, seasons);
+            Db.Fetch<Season>().Should().OnlyContain(c => c.Ignored == false);
+        }
+
+        [Test]
+        public void GetSeason_should_return_seasons_for_specified_series_only()
+        {
+            var seriesA = new[] { 1, 2, 3 };
+            var seriesB = new[] { 4, 5, 6 };
+
+            Mocker.Resolve<SeasonProvider>().EnsureSeasons(1, seriesA);
+            Mocker.Resolve<SeasonProvider>().EnsureSeasons(2, seriesB);
+
+            Mocker.Resolve<SeasonProvider>().GetSeasons(1).Should().Equal(seriesA);
+            Mocker.Resolve<SeasonProvider>().GetSeasons(2).Should().Equal(seriesB);
+        }
+
+
+        [Test]
+        public void GetSeason_should_return_emptylist_if_series_doesnt_exist()
+        {
+            Mocker.Resolve<SeasonProvider>().GetSeasons(1).Should().BeEmpty();
+        }
+
     }
 }

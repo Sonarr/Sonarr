@@ -25,13 +25,11 @@ namespace NzbDrone.Core.Test.ProviderTests
             const int seriesId = 71663;
             const int episodeCount = 10;
 
-            var tvDbSeries = Builder<TvdbSeries>.CreateNew().With(
-                c => c.Episodes =
-                     new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(episodeCount).
+            var tvDbSeries = Builder<TvdbEpisode>.CreateListOfSize(episodeCount).
                                                All()
                                                .With(l => l.Language = new TvdbLanguage(0, "eng", "a"))
-                                               .Build())
-                ).With(c => c.Id = seriesId).Build();
+                                               .Build();
+                
 
             var fakeSeries = Builder<Series>.CreateNew()
                 .With(c => c.SeriesId = seriesId)
@@ -39,7 +37,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var fakeEpisode = Builder<Episode>.CreateNew()
                 .With(e => e.SeriesId = seriesId)
-                .With(e => e.TvDbEpisodeId = tvDbSeries.Episodes.First().Id)
+                .With(e => e.TvDbEpisodeId = tvDbSeries.First().Id)
                 .Build();
 
             
@@ -65,13 +63,10 @@ namespace NzbDrone.Core.Test.ProviderTests
             const int seriesId = 71663;
             const int episodeCount = 10;
 
-            var tvDbSeries = Builder<TvdbSeries>.CreateNew().With(
-                c => c.Episodes =
-                     new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(episodeCount).
-                                               All()
-                                               .With(l => l.Language = new TvdbLanguage(0, "eng", "a"))
-                                               .Build())
-                ).With(c => c.Id = seriesId).Build();
+            var tvDbSeries = Builder<TvdbEpisode>.CreateListOfSize(episodeCount).
+                    All()
+                    .With(l => l.Language = new TvdbLanguage(0, "eng", "a"))
+                    .Build();
 
             var fakeSeries = Builder<Series>.CreateNew()
                 .With(c => c.SeriesId = seriesId)
@@ -105,13 +100,10 @@ namespace NzbDrone.Core.Test.ProviderTests
             const int seriesId = 71663;
             const int episodeCount = 10;
 
-            var tvDbSeries = Builder<TvdbSeries>.CreateNew().With(
-                c => c.Episodes =
-                     new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(episodeCount).
-                                               All()
-                                               .With(l => l.Language = new TvdbLanguage(0, "eng", "a"))
-                                               .Build())
-                ).With(c => c.Id = seriesId).Build();
+            var tvDbSeries = Builder<TvdbEpisode>.CreateListOfSize(episodeCount).
+                    All()
+                    .With(l => l.Language = new TvdbLanguage(0, "eng", "a"))
+                    .Build();
 
             var fakeSeries = Builder<Series>.CreateNew()
                 .With(c => c.SeriesId = seriesId)
@@ -145,13 +137,10 @@ namespace NzbDrone.Core.Test.ProviderTests
             const int seriesId = 71663;
             const int episodeCount = 10;
 
-            var tvDbSeries = Builder<TvdbSeries>.CreateNew().With(
-                c => c.Episodes =
-                     new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(episodeCount).
-                                               All()
-                                               .With(l => l.Language = new TvdbLanguage(0, "eng", "a"))
-                                               .Build())
-                ).With(c => c.Id = seriesId).Build();
+            var tvDbSeries = Builder<TvdbEpisode>.CreateListOfSize(episodeCount).
+                    All()
+                    .With(l => l.Language = new TvdbLanguage(0, "eng", "a"))
+                    .Build();
 
             var fakeSeries = Builder<Series>.CreateNew()
                 .With(c => c.SeriesId = seriesId)
@@ -188,13 +177,10 @@ namespace NzbDrone.Core.Test.ProviderTests
             const int seriesId = 71663;
             const int episodeCount = 10;
 
-            var tvDbSeries = Builder<TvdbSeries>.CreateNew().With(
-                c => c.Episodes =
-                     new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(episodeCount).
-                                               All()
-                                               .With(l => l.Language = new TvdbLanguage(0, "eng", "a"))
-                                               .Build())
-                ).With(c => c.Id = seriesId).Build();
+            var tvDbSeries = Builder<TvdbEpisode>.CreateListOfSize(episodeCount).
+                    All()
+                    .With(l => l.Language = new TvdbLanguage(0, "eng", "a"))
+                    .Build();
 
             var fakeSeries = Builder<Series>.CreateNew()
                 .With(c => c.SeriesId = seriesId)
@@ -235,6 +221,16 @@ namespace NzbDrone.Core.Test.ProviderTests
             //Assert
             var result = db.Fetch<Episode>();
             result.Should().HaveCount(1);
+        }
+        
+        [Test]
+        public void should_not_do_anything_if_episode_list_is_empty()
+        {
+            WithStrictMocker();
+
+            var fakeSeries = Builder<Series>.CreateNew().Build();
+
+            Mocker.Resolve<EpisodeProvider>().DeleteEpisodesNotInTvdb(fakeSeries, new List<TvdbEpisode>());
         }
     }
 }

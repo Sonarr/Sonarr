@@ -157,7 +157,7 @@ namespace NzbDrone.Core.Test.JobTests
             Mocker.Resolve<ImportNewSeriesJob>().AutoIgnoreSeasons(seriesId);
 
 
-            Mocker.GetMock<EpisodeProvider>().Verify(p => p.SetSeasonIgnore(seriesId, It.IsAny<int>(), It.IsAny<Boolean>()), Times.Never());
+            Mocker.GetMock<SeasonProvider>().Verify(p => p.SetIgnore(seriesId, It.IsAny<int>(), It.IsAny<Boolean>()), Times.Never());
         }
 
         [Test]
@@ -184,7 +184,7 @@ namespace NzbDrone.Core.Test.JobTests
 
             Mocker.Resolve<ImportNewSeriesJob>().AutoIgnoreSeasons(seriesId);
 
-            Mocker.GetMock<EpisodeProvider>().Verify(p => p.SetSeasonIgnore(seriesId, 2, It.IsAny<Boolean>()), Times.Never());
+            Mocker.GetMock<SeasonProvider>().Verify(p => p.SetIgnore(seriesId, 2, It.IsAny<Boolean>()), Times.Never());
         }
 
         [Test]
@@ -210,9 +210,9 @@ namespace NzbDrone.Core.Test.JobTests
 
             Mocker.Resolve<ImportNewSeriesJob>().AutoIgnoreSeasons(seriesId);
 
-            Mocker.GetMock<EpisodeProvider>().Verify(p => p.SetSeasonIgnore(seriesId, 0, true), Times.Once());
-            Mocker.GetMock<EpisodeProvider>().Verify(p => p.SetSeasonIgnore(seriesId, 1, true), Times.Never());
-            Mocker.GetMock<EpisodeProvider>().Verify(p => p.SetSeasonIgnore(seriesId, 2, It.IsAny<Boolean>()), Times.Never());
+            Mocker.GetMock<SeasonProvider>().Verify(p => p.SetIgnore(seriesId, 0, true), Times.Once());
+            Mocker.GetMock<SeasonProvider>().Verify(p => p.SetIgnore(seriesId, 1, true), Times.Never());
+            Mocker.GetMock<SeasonProvider>().Verify(p => p.SetIgnore(seriesId, 2, It.IsAny<Boolean>()), Times.Never());
         }
     }
 

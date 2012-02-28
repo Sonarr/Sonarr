@@ -21,6 +21,7 @@ namespace NzbDrone.Core.Jobs
         private readonly UpdateInfoJob _updateInfoJob;
         private readonly DiskScanJob _diskScanJob;
         private readonly BannerDownloadJob _bannerDownloadJob;
+        private readonly SeasonProvider _seasonProvider;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
@@ -29,7 +30,7 @@ namespace NzbDrone.Core.Jobs
         [Inject]
         public ImportNewSeriesJob(SeriesProvider seriesProvider, EpisodeProvider episodeProvider,
                                     MediaFileProvider mediaFileProvider, UpdateInfoJob updateInfoJob,
-                                    DiskScanJob diskScanJob, BannerDownloadJob bannerDownloadJob)
+                                    DiskScanJob diskScanJob, BannerDownloadJob bannerDownloadJob,SeasonProvider seasonProvider)
         {
             _seriesProvider = seriesProvider;
             _episodeProvider = episodeProvider;
@@ -37,6 +38,7 @@ namespace NzbDrone.Core.Jobs
             _updateInfoJob = updateInfoJob;
             _diskScanJob = diskScanJob;
             _bannerDownloadJob = bannerDownloadJob;
+            _seasonProvider = seasonProvider;
         }
 
         public string Name
@@ -105,7 +107,7 @@ namespace NzbDrone.Core.Jobs
                 {
                     if (season != currentSeasons && !episodeFiles.Any(e => e.SeasonNumber == season))
                     {
-                        _episodeProvider.SetSeasonIgnore(seriesId, season, true);
+                        _seasonProvider.SetIgnore(seriesId, season, true);
                     }
                 }
             }
