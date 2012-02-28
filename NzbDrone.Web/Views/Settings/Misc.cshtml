@@ -9,6 +9,11 @@
         </label>
         @Html.CheckBoxFor(m => m.EnableBacklogSearching, new { @class = "inputClass checkClass" })
 
+        <label class="labelClass">@Html.LabelFor(m => m.AutoIgnorePreviouslyDownloadedEpisodes)
+            <span class="small">@Html.DescriptionFor(m => m.AutoIgnorePreviouslyDownloadedEpisodes)</span>
+        </label>
+        @Html.CheckBoxFor(m => m.AutoIgnorePreviouslyDownloadedEpisodes, new { @class = "inputClass checkClass" })
+
         <div style="overflow: hidden; height: 50px;">
         </div>
         
