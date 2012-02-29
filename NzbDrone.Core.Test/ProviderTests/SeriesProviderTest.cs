@@ -30,12 +30,13 @@ namespace NzbDrone.Core.Test.ProviderTests
             Db.InsertMany(fakeProfiles);
 
             const string path = "C:\\Test\\";
+            const string title = "Test Title";
             const int tvDbId = 1234;
             const int qualityProfileId = 2;
 
             //Act
             var seriesProvider = Mocker.Resolve<SeriesProvider>();
-            seriesProvider.AddSeries(path, tvDbId, qualityProfileId);
+            seriesProvider.AddSeries(title, path, tvDbId, qualityProfileId);
 
             //Assert
             var series = seriesProvider.GetAllSeries();
@@ -43,6 +44,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             Assert.AreEqual(path, series.First().Path);
             Assert.AreEqual(tvDbId, series.First().SeriesId);
             Assert.AreEqual(qualityProfileId, series.First().QualityProfileId);
+            Assert.AreEqual(title, series.First().Title);
             series.First().SeasonFolder.Should().Be(useSeasonFolder);
         }
 
@@ -52,7 +54,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void add_series_should_fail_if_series_is_less_than_zero(int seriesId)
         {
             WithRealDb();
-            Assert.Throws<ArgumentOutOfRangeException>(() => Mocker.Resolve<SeriesProvider>().AddSeries("C:\\Test", seriesId, 1));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Mocker.Resolve<SeriesProvider>().AddSeries("Title", "C:\\Test", seriesId, 1));
         }
 
         [Test]
@@ -823,11 +825,11 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             var fakeSeries = Builder<Series>.CreateListOfSize(3).Build();
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(30)
-                                .TheFirst(10).With(c=>c.SeriesId = fakeSeries[0].SeriesId)
-                                .TheNext(10).With(c=>c.SeriesId = fakeSeries[1].SeriesId)
+                                .TheFirst(10).With(c => c.SeriesId = fakeSeries[0].SeriesId)
+                                .TheNext(10).With(c => c.SeriesId = fakeSeries[1].SeriesId)
                                 .TheNext(10).With(c => c.SeriesId = fakeSeries[2].SeriesId)
                                 .Build();
-            
+
 
 
         }

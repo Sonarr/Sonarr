@@ -13,10 +13,6 @@
     cursor: pointer;
 }
 
-.statusImage:hover {
-    background-color: white;
-}
-
 /* Custom Grid */
 .seriesTable
 {
@@ -45,15 +41,15 @@
     padding: 0px 8px 0px 8px;
 }
 
-.title-row
+.title-row td
 {
     font-family: "Segoe UI Light" , "Open Sans" , "Segoe UI" , sans-serif;
-    font-size: 17px;
-    background-color: grey;
+    font-size: 20px;
+    background-color: #F1EDED;
     font-weight: lighter;
-    color: white;
+    color: #3C3C3C;   
 }
-    
+
 .detail-row
 {
     display: none;
@@ -68,14 +64,15 @@
 /* Episode Grid Row Colouring */
 .episodeIgnored
 {
-      background: lightgray;
+      background: rgb(229, 228, 228);
+        opacity: 0.7;
 }
     
     
     
 .episodeMissing
 {
-    background-color: #f5c5c5;
+    background-color: #f5d6d6;
 }
 
 /*Hidden Grid to prevent FOUSC*/

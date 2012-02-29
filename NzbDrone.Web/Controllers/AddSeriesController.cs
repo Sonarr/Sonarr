@@ -124,7 +124,7 @@ namespace NzbDrone.Web.Controllers
             if (seriesId == 0 || String.IsNullOrWhiteSpace(seriesName))
                 return JsonNotificationResult.Error("Add Existing series failed.", "Invalid Series information");
 
-            _seriesProvider.AddSeries(path, seriesId, qualityProfileId);
+            _seriesProvider.AddSeries(seriesName,path, seriesId, qualityProfileId);
             ScanNewSeries();
 
             return JsonNotificationResult.Info(seriesName, "Was added successfully");

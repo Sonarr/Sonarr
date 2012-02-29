@@ -103,7 +103,7 @@ namespace NzbDrone.Core.Providers
             return series;
         }
 
-        public virtual void AddSeries(string path, int tvDbSeriesId, int qualityProfileId)
+        public virtual void AddSeries(string title, string path, int tvDbSeriesId, int qualityProfileId)
         {
             Logger.Info("Adding Series [{0}] Path: [{1}]", tvDbSeriesId, path);
 
@@ -117,6 +117,7 @@ namespace NzbDrone.Core.Providers
             repoSeries.Path = path;
             repoSeries.Monitored = true; //New shows should be monitored
             repoSeries.QualityProfileId = qualityProfileId;
+            repoSeries.Title = title;
             if (qualityProfileId == 0)
                 repoSeries.QualityProfileId = _configProvider.DefaultQualityProfile;
 

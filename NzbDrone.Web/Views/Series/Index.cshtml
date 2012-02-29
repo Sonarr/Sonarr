@@ -46,21 +46,7 @@
     {
         height: 28px;
     }
-    
-    .editButton, .deleteButton
-    {
-        width: 18px;
-        height: 18px;
-        padding: 3px 1px;
-        margin: 0px;
-        vertical-align: middle;
-    }
-    
-    .editButton:hover, .deleteButton:hover
-    {
-        background-color: #065EFE;
-    }
-    
+       
     .commandsColumn, .statusColumn
     {
         text-align: center;
@@ -192,8 +178,8 @@
                                     }
                                 }, //Episodes
                                 { sWidth: '50px', "mDataProp": "HasBanner", "bSortable": false, "fnRender": function (row) {
-                                        return "<img src='../../Content/Images/settings.png' class='editButton' value='" + row.aData["SeriesId"] + "' rel='" + row.aData["Title"] + "' />" +
-                                                "<img src='../../Content/Images/close.png' class='deleteButton' value='" + row.aData["SeriesId"] + "' rel='" + row.aData["Title"] + "'/>";
+                                        return "<img src='../../Content/Images/settings.png' class='editButton gridAction' value='" + row.aData["SeriesId"] + "' rel='" + row.aData["Title"] + "' />" +
+                                                "<img src='../../Content/Images/close.png' class='deleteButton gridAction' value='" + row.aData["SeriesId"] + "' rel='" + row.aData["Title"] + "'/>";
                                     }
                                 }, //Commands
                                 { sWidth: '60px', "mDataProp": "Details", "bSortable": false, "bVisible": false, "fnRender": function (row) {
