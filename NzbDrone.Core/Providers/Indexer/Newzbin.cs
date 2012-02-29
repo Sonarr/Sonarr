@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Providers.Indexer
         {
         }
 
-        private const string URL_PARAMS = "feed=rss&hauth=1&ps_rb_language=4096";
+        private const string URL_PARAMS = "feed=rss&hauth=1&ps_rb_language=4096&ps_rb_video_format=3082257";
 
         protected override string[] Urls
         {
@@ -107,12 +107,6 @@ namespace NzbDrone.Core.Providers.Indexer
             {
                 var quality = Parser.ParseQuality(item.Summary.Text);
                 currentResult.Quality = quality;
-
-                if (Regex.IsMatch(item.Summary.Text, @"\|\s+Video Format - DVD\s+\|", RegexOptions.Compiled | RegexOptions.IgnoreCase))
-                {
-                    _logger.Trace("Report is a full DVD, setting Quality to False");
-                    currentResult.Quality = new Quality(QualityTypes.Unknown, false);
-                }
 
                 var languageString = Regex.Match(item.Summary.Text, @"Language - \w*", RegexOptions.IgnoreCase).Value;
                 currentResult.Language = Parser.ParseLanguage(languageString);
