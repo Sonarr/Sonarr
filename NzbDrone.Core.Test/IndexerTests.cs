@@ -440,6 +440,24 @@ namespace NzbDrone.Core.Test
             parseResults.Should().NotContain(s => s.NzbUrl.Contains("details"));
         }
 
+        [Test]
+        public void nzbmatrix_should_use_age_from_custom()
+        {
+            WithConfiguredIndexers();
+
+            var expectedAge = DateTime.Now.Subtract(new DateTime(2011, 4, 25, 15, 6, 58)).Days;
+
+            Mocker.GetMock<HttpProvider>()
+                          .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
+                          .Returns(File.OpenRead(".\\Files\\Rss\\SizeParsing\\nzbmatrix.xml"));
+
+            //Act
+            var parseResults = Mocker.Resolve<NzbMatrix>().FetchRss();
+
+            parseResults.Should().HaveCount(1);
+            parseResults[0].Age.Should().Be(expectedAge);
+        }
+
         private static void Mark500Inconclusive()
         {
             ExceptionVerification.MarkInconclusive(typeof(WebException));
