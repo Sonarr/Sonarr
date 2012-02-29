@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Providers
         {
             var series = _database
           .Fetch<Series, QualityProfile>(@"SELECT Series.SeriesId, Series.Title, Series.CleanTitle, Series.Status, Series.Overview, Series.AirsDayOfWeek,Series.AirTimes,
-                                            Series.Language, Series.Path, Series.Monitored, Series.QualityProfileId, Series.SeasonFolder, Series.BacklogSetting,
+                                            Series.Language, Series.Path, Series.Monitored, Series.QualityProfileId, Series.SeasonFolder, Series.BacklogSetting, Series.Network,
                                             SUM(CASE WHEN Ignored = 0 AND Airdate <= @0 THEN 1 ELSE 0 END) AS EpisodeCount,
                                             SUM(CASE WHEN Episodes.Ignored = 0 AND Episodes.EpisodeFileId > 0 AND Episodes.AirDate <= @0 THEN 1 ELSE 0 END) as EpisodeFileCount,
                                             MAX(Episodes.SeasonNumber) as SeasonCount, MIN(CASE WHEN AirDate < @0 OR Ignored = 1 THEN NULL ELSE AirDate END) as NextAiring,
@@ -55,8 +55,8 @@ namespace NzbDrone.Core.Providers
                                             INNER JOIN QualityProfiles ON Series.QualityProfileId = QualityProfiles.QualityProfileId
                                             LEFT JOIN Episodes ON Series.SeriesId = Episodes.SeriesId
                                             WHERE Series.LastInfoSync IS NOT NULL
-                                            GROUP BY Series.SeriesId, Series.Title, Series.CleanTitle, Series.Status, Series.Overview, Series.AirsDayOfWeek,Series.AirTimes,
-                                            Series.Language, Series.Path, Series.Monitored, Series.QualityProfileId, Series.SeasonFolder, Series.BacklogSetting,
+                                            GROUP BY Series.SeriesId, Series.Title, Series.CleanTitle, Series.Status, Series.Overview, Series.AirsDayOfWeek, Series.AirTimes,
+                                            Series.Language, Series.Path, Series.Monitored, Series.QualityProfileId, Series.SeasonFolder, Series.BacklogSetting, Series.Network,
                                             QualityProfiles.QualityProfileId, QualityProfiles.Name, QualityProfiles.Cutoff, QualityProfiles.SonicAllowed", DateTime.Today);
 
             return series;
@@ -97,6 +97,7 @@ namespace NzbDrone.Core.Providers
             series.LastInfoSync = DateTime.Now;
             series.Runtime = (int)tvDbSeries.Runtime;
             series.BannerUrl = tvDbSeries.BannerPath;
+            series.Network = tvDbSeries.Network;
 
             UpdateSeries(series);
             return series;

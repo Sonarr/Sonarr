@@ -26,6 +26,7 @@ namespace NzbDrone.Web.Models
         public string NextAiring { get; set; }
         public string NextAiringSorter { get; set; }
         public string Details { get; set; }
+        public string Network { get; set; }
 
         public IList<int> Seasons { get; set; }
 

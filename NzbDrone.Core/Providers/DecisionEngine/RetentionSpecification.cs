@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Providers.DecisionEngine
             logger.Trace("Checking if report meets retention requirements. {0}", subject.Age);
             if (_configProvider.Retention > 0 && subject.Age > _configProvider.Retention)
             {
-                logger.Trace("Quality {0} rejected by user's retention limit", subject.Age);
+                logger.Trace("Report age: {0} rejected by user's retention limit", subject.Age);
                 return false;
             }
 

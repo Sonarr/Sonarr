@@ -46,6 +46,8 @@ namespace NzbDrone.Core.Repository
 
         public BacklogSettingType BacklogSetting { get; set; }
 
+        public string Network { get; set; }
+
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="Series"/> is hidden.
         /// </summary>

@@ -193,6 +193,7 @@ namespace NzbDrone.Web.Controllers
                                                         Path = s.Path,
                                                         QualityProfileId = s.QualityProfileId,
                                                         QualityProfileName = s.QualityProfile.Name,
+                                                        Network = s.Network,
                                                         SeasonFolder = s.SeasonFolder,
                                                         BacklogSetting = (int)s.BacklogSetting,
                                                         Status = s.Status,
