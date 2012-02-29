@@ -1,0 +1,19 @@
+﻿@model NzbDrone.Web.Models.PostUpgradeModel
+@{
+    ViewBag.Title = "Post Upgrade";
+}
+
+    @if (Model.Success)
+    {
+        <h1><strong>Successfully upgraded to @(Model.CurrentVersion)</strong></h1>
+    }
+    
+    else{
+        <h1><strong>Failed to upgrade to @(Model.ExpectedVersion)</strong></h1>
+        
+        <div>
+            <h3>Please review the log file: 
+            <a href="@Url.Action("ViewLog", "Update", new { filePath = Model.LogFile.Value })">
+                @Model.LogFile.Key.ToString("MMM dd, hh:mm tt")</a></h3>
+        </div>
+    }

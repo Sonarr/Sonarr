@@ -34,16 +34,17 @@
 
         jqXHR.error(function (xhr, textStatus, thrownError) {
             //ignore notification errors.
-            if (this.url.indexOf("/notification/Comet") !== 0) {
-                alert("Status: " + textStatus + ", Error: " + thrownError);
-                $.gritter.add({
-                    title: 'Request failed',
-                    text: this.url,
-                    image: '../../content/images/error.png',
-                    class_name: 'gritter-fail',
-                    time: 10000
-                });
-            }
+            if (this.url.indexOf("/notification/Comet") === 0 || this.url.indexOf("/Health/Index") === 0)
+                return;
+
+            alert("Status: " + textStatus + ", Error: " + thrownError);
+            $.gritter.add({
+                title: 'Request failed',
+                text: this.url,
+                image: '../../content/images/error.png',
+                class_name: 'gritter-fail',
+                time: 10000
+            });
         });
 
     });
@@ -71,6 +72,9 @@ $(window).load(function () {
             data: { message: currentMessage },
             success: function (data) {
                 notificationCallback(data);
+            },
+            error: function () {
+                $.doTimeout(5000, refreshNotifications);
             }
         });
     }

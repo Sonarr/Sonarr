@@ -1,5 +1,6 @@
 ﻿@model NzbDrone.Web.Models.UpdateModel
 @{ViewBag.Title = "Update";}
+
 @if (Model.UpdatePackage == null)
 {
     <h2>
@@ -9,7 +10,7 @@ else
 {
     <h2>
         Available Update: @Model.UpdatePackage.Version
-        @Ajax.ActionLink("Update", "StartUpdate", "Update", null)
+        @Ajax.ActionLink("Update", "StartUpdate", "Update", new AjaxOptions{ OnSuccess = "updateStarted" })
     </h2> 
 }
 @if (Model.LogFiles.Count != 0)
@@ -25,4 +26,34 @@ else
             @log.Key.ToString("MMM dd, hh:mm tt")</a>
     </div>
     }
+}
+
+@section Scripts
+{
+    <script type="text/javascript">
+        function updateStarted() {
+            var errors = 0;
+
+            //Pool the server every 5 seconds for a change in state
+            $.doTimeout('updateStarted', 5000, function () {
+                $.ajax({
+                    url: '/Health/Index',
+                    type: "GET",
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        //Handle the first error that occured
+                        errors++;
+                    },
+                    success: function (data, textStatus, jqXHR) {
+                        if (errors > 0) {
+                            //Kill the timer, redirect
+                            $.doTimeout('updateStarted');
+                            window.location = '/Update/Post?expectedVersion=@Model.UpdatePackage.Version';
+                        }
+                    }
+                });
+
+                return true;
+            });
+        }
+    </script>
 }

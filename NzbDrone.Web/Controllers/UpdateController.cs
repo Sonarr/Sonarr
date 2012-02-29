@@ -46,5 +46,19 @@ namespace NzbDrone.Web.Controllers
             ViewBag.Log = _diskProvider.ReadAllText(filepath).Replace(Environment.NewLine, "<br/>");
             return View();
         }
+
+        [HttpGet]
+        public ActionResult Post(string expectedVersion)
+        {
+            var model = new PostUpgradeModel();
+            model.CurrentVersion = _enviromentProvider.Version;
+            model.ExpectedVersion = Version.Parse(expectedVersion);
+            model.Success = model.CurrentVersion >= model.ExpectedVersion;
+            
+            if (!model.Success)
+                model.LogFile = _updateProvider.UpdateLogFile().FirstOrDefault();
+
+            return View(model);
+        }
     }
 }

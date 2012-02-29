@@ -228,6 +228,7 @@
     <Compile Include="Models\DataTablesParams.cs" />
     <Compile Include="Models\JobModel.cs" />
     <Compile Include="Models\LogModel.cs" />
+    <Compile Include="Models\PostUpgradeModel.cs" />
     <Compile Include="Models\UpcomingEpisodesModel.cs" />
     <Compile Include="Models\SeasonModel.cs" />
     <Compile Include="Models\SeriesDetailsModel.cs" />
@@ -509,6 +510,7 @@
     <None Include="Content\DataTables-1.9.0\media\images\Sorting icons.psd" />
     <Content Include="Views\Settings\Plex.cshtml" />
     <Content Include="Views\Shared\NoSeriesBanner.cshtml" />
+    <Content Include="Views\Update\Post.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
