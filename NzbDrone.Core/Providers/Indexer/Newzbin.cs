@@ -7,6 +7,7 @@ using Ninject;
 using NzbDrone.Common;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
+using NzbDrone.Core.Repository.Quality;
 
 namespace NzbDrone.Core.Providers.Indexer
 {
@@ -106,6 +107,12 @@ namespace NzbDrone.Core.Providers.Indexer
             {
                 var quality = Parser.ParseQuality(item.Summary.Text);
                 currentResult.Quality = quality;
+
+                if (Regex.IsMatch(item.Summary.Text, @"\|\s+Video Format - DVD\s+\|", RegexOptions.Compiled | RegexOptions.IgnoreCase))
+                {
+                    _logger.Trace("Report is a full DVD, setting Quality to False");
+                    currentResult.Quality = new Quality(QualityTypes.Unknown, false);
+                }
 
                 var languageString = Regex.Match(item.Summary.Text, @"Language - \w*", RegexOptions.IgnoreCase).Value;
                 currentResult.Language = Parser.ParseLanguage(languageString);

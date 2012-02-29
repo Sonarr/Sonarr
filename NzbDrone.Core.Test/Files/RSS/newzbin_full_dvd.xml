@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<rss version="2.0" xml:lang="en-GB"
+xmlns:report="http://www.newzbin.com/DTD/2007/feeds/report/">
+  <channel>
+    <title>www.newzbin.com (reports)</title>
+    <link>http://www.newzbin.com/browse/category/p/tv/</link>
+    <description>Newzbin Reports Feed</description>
+    <pubDate>Mon, 25 Apr 2011 16:08:24 GMT</pubDate>
+    <ttl>42</ttl>
+    <generator>www.newzbin.com - Usenet Search</generator>
+    <copyright>Copyright (c) 2002 - 2007 Newzbin Limited. All Rights Reserved.</copyright>
+    <image>
+      <url>http://www.newzbin.com/m/i/logo/newzbinv3.png</url>
+      <link>http://www.newzbin.com/browse/category/p/tv/</link>
+      <title>www.newzbin.com</title>
+      <description>Visit Newzbin.com - The Ultimate In Usenet Indexing</description>
+    </image>
+    <item>
+      <title>Last Man Standing - Season 1 [DVD 1]</title>
+      <guid isPermaLink="true">https://newzbin2.es/browse/post/6514817/</guid>
+      <link>https://newzbin2.es/browse/post/6514817/</link>
+      <comments>https://newzbin2.es/browse/post/6514817/#CommentsPH</comments>
+      <description>
+        <![CDATA[
+			<ul>
+			<li>
+			ID: <a href="https://newzbin2.es/browse/post/6514817">6514817</a>
+			(<a
+			href="https://newzbin2.es/account/bookmarks/add/?ps_id=6514817">Bookmark</a>)
+			(<a href="https://newzbin2.es/browse/post/6514817/nzb/">NZB</a>)
+			(NFO)
+			(<a href="http://tvrage.com/Last_Man_Standing/episode_list/1">More Info</a>)
+			(Size: 5,056.7MiB)
+			</li>
+			<li>
+				Attributes:
+				Category - TV
+				|  Region System - NTSC |  Video Source - DVD |  Video Format - DVD |  Video Genre - Comedy |  Language - English |  Subtitled Language - Dutch
+			</li>
+			<li>Groups:  alt.binaries.boneless</li>
+			<li>Poster: CPP-gebruiker@domein.nl (Darkling)</li>
+			<li>PostDate: Saturday 25 Feb 2012, 06:57AM PST</li>
+			</ul>			]]>
+      </description>
+      <report:id>6514817</report:id>
+      <report:category>TV</report:category>
+      <report:attributes>
+        <report:attribute type="Region">NTSC</report:attribute>
+        <report:attribute type="Source">DVD</report:attribute>
+        <report:attribute type="Video Fmt">DVD</report:attribute>
+        <report:attribute type="Video Genre">Comedy</report:attribute>
+        <report:attribute type="Language">English</report:attribute>
+        <report:attribute type="Subtitles">Dutch</report:attribute>
+      </report:attributes>
+      <report:groups>
+        <report:group>alt.binaries.boneless</report:group>
+      </report:groups>
+      <report:progress value="1">Report is complete</report:progress>
+      <report:moreinfo>http://tvrage.com/Last_Man_Standing/episode_list/1</report:moreinfo>
+      <report:nfo>
+        <report:fileid>0</report:fileid>
+        <report:filename></report:filename>
+        <report:link></report:link>
+      </report:nfo>
+      <report:nzb>https://newzbin2.es/browse/post/6514817/nzb/</report:nzb>
+      <report:poster>CPP-gebruiker@domein.nl (Darkling)</report:poster>
+      <report:size type="bytes">5302349730</report:size>
+      <report:postdate>Sat, 25 Feb 2012 14:57:21 GMT</report:postdate>
+      <report:stats>
+        <report:views>3</report:views>
+        <report:comments>0</report:comments>
+      </report:stats>
+      <enclosure url="https://newzbin2.es/browse/post/6514817/nzb/"
+				length="5302349730" type="application/x-nzb" />
+      <pubDate>Mon, 27 Feb 2012 17:42:50 GMT</pubDate>
+    </item>
+  </channel>
+</rss>

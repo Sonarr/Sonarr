@@ -205,6 +205,9 @@
     <Content Include="Files\HistoryEmpty.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Files\RSS\newzbin_full_dvd.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Files\Queue.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -458,6 +458,22 @@ namespace NzbDrone.Core.Test
             parseResults[0].Age.Should().Be(expectedAge);
         }
 
+        [Test]
+        public void newzbin_should_mark_full_dvd_report_as_unknown()
+        {
+            WithConfiguredIndexers();
+
+            Mocker.GetMock<HttpProvider>()
+                          .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
+                          .Returns(File.OpenRead(".\\Files\\Rss\\newzbin_full_dvd.xml"));
+
+            //Act
+            var parseResults = Mocker.Resolve<Newzbin>().FetchRss();
+
+            parseResults.Should().HaveCount(1);
+            parseResults[0].Quality.QualityType.Should().Be(QualityTypes.Unknown);
+        }
+
         private static void Mark500Inconclusive()
         {
             ExceptionVerification.MarkInconclusive(typeof(WebException));
