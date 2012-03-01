@@ -12,5 +12,6 @@ namespace NzbDrone.Services.Service.Repository.Reporting
         public string LogMessage { get; set; }
         public DateTime Timestamp { get; set; }
         public bool IsProduction { get; set; }
+        public Guid UGuid { get; set; }
     }
 }

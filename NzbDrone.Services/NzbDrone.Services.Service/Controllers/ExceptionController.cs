@@ -33,6 +33,7 @@ namespace NzbDrone.Services.Service.Controllers
                                                     ExceptionHash = existingExceptionReport.Hash,
                                                     IsProduction = existingExceptionReport.IsProduction,
                                                     LogMessage = existingExceptionReport.LogMessage,
+                                                    UGuid = existingExceptionReport.UGuid,
                                                     Timestamp = DateTime.Now
                                                 };
 
@@ -64,7 +65,8 @@ namespace NzbDrone.Services.Service.Controllers
                                          ExceptionHash = exceptionHash,
                                          IsProduction = exceptionReport.IsProduction,
                                          LogMessage = exceptionReport.LogMessage,
-                                         Timestamp = DateTime.Now
+                                         Timestamp = DateTime.Now,
+                                         UGuid = exceptionReport.UGuid
                                      };
 
                 _database.Insert(exceptionInstance);

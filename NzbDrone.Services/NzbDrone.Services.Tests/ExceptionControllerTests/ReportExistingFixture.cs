@@ -53,13 +53,21 @@ namespace NzbDrone.Services.Tests.ExceptionControllerTests
             WithRealDb();
 
             var existing = CreateExceptionReport();
+      
 
             Db.Insert(Builder<ExceptionDetail>.CreateNew().With(c => c.Hash = existing.Hash).Build());
-            
-            Controller.ReportExisting(CreateExceptionReport());
+
+            Controller.ReportExisting(existing);
             
             Db.Fetch<ExceptionDetail>().Should().HaveCount(1);
-            Db.Fetch<ExceptionInstance>().Should().HaveCount(1);
+            var exceptionInstance = Db.Fetch<ExceptionInstance>();
+            exceptionInstance.Should().HaveCount(1);
+            exceptionInstance.Single().Id.Should().BeGreaterThan(0);
+            exceptionInstance.Single().ExceptionHash.Should().NotBeBlank();
+            exceptionInstance.Single().IsProduction.Should().Be(existing.IsProduction);
+            exceptionInstance.Single().Timestamp.Should().BeWithin(TimeSpan.FromSeconds(4)).Before(DateTime.Now);
+            exceptionInstance.Single().LogMessage.Should().Be(existing.LogMessage);
+            exceptionInstance.Single().UGuid.Should().Be(existing.UGuid);
         }
 
     }

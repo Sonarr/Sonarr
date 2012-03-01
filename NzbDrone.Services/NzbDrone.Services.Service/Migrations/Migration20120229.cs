@@ -14,6 +14,7 @@ namespace NzbDrone.Services.Service.Migrations
                                                     new Column("ExceptionHash", DbType.String, ColumnProperty.NotNull),
                                                     new Column("LogMessage", DbType.String, 3000, ColumnProperty.NotNull),
                                                     MigrationsHelper.TimestampColumn,
+                                                    MigrationsHelper.UGuidColumn,
                                                     MigrationsHelper.ProductionColumn);
 
             Database.AddTable("Exceptions", new Column("Hash", DbType.String, ColumnProperty.Unique),

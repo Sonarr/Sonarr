@@ -92,6 +92,7 @@ namespace NzbDrone.Services.Tests.ExceptionControllerTests
             exceptionInstance.Single().IsProduction.Should().Be(exceptionReport.IsProduction);
             exceptionInstance.Single().Timestamp.Should().BeWithin(TimeSpan.FromSeconds(4)).Before(DateTime.Now);
             exceptionInstance.Single().LogMessage.Should().Be(exceptionReport.LogMessage);
+            exceptionInstance.Single().UGuid.Should().Be(exceptionReport.UGuid);
         }
 
         [Test]
