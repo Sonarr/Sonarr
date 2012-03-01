@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Contract\ExceptionReportResponse.cs" />
+    <Compile Include="Contract\ExistingExceptionReport.cs" />
     <Compile Include="StringExtention.cs" />
     <Compile Include="HttpProvider.cs" />
     <Compile Include="ConfigFileProvider.cs" />

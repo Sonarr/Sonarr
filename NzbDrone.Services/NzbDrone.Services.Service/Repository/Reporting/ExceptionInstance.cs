@@ -8,7 +8,7 @@ namespace NzbDrone.Services.Service.Repository.Reporting
     public class ExceptionInstance 
     {
         public long Id { get; set; }
-        public int ExceptionDetail { get; set; }
+        public string ExceptionHash { get; set; }
         public string LogMessage { get; set; }
         public DateTime Timestamp { get; set; }
         public bool IsProduction { get; set; }

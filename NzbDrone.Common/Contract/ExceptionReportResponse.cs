@@ -5,7 +5,7 @@ namespace NzbDrone.Common.Contract
 {
     public class ExceptionReportResponse 
     {
-        [JsonProperty("id")]
-        public int ExceptionId { get; set; }
+        [JsonProperty("h")]
+        public string ExceptionHash { get; set; }
     }
 }

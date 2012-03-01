@@ -50,6 +50,9 @@
     <Reference Include="Moq">
       <HintPath>..\..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
     </Reference>
+    <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework, Version=2.6.0.12051, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\NUnit.2.6.0.12054\lib\nunit.framework.dll</HintPath>
@@ -65,7 +68,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExceptionControllerFixture.cs" />
+    <Compile Include="ExceptionController\ReportExistingFixture.cs" />
+    <Compile Include="ExceptionController\ReportNewFixture.cs" />
     <Compile Include="ReportingControllerFixture.cs" />
     <Compile Include="Framework\ServicesTestBase.cs" />
     <Compile Include="Framework\TestDbHelper.cs" />

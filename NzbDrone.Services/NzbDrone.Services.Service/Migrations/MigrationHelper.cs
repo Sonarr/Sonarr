@@ -20,7 +20,7 @@ namespace NzbDrone.Services.Service.Migrations
 
             try
             {
-                var migrator = new Migrator.Migrator("sqlserver", connetionString, Assembly.GetAssembly(typeof(MigrationsHelper)), true, new MigrationLogger());
+                var migrator = new Migrator.Migrator("sqlserver", connetionString, Assembly.GetAssembly(typeof(MigrationsHelper)), true);
                 migrator.MigrateToLastVersion();
                 logger.Info("Database migration completed");
             }

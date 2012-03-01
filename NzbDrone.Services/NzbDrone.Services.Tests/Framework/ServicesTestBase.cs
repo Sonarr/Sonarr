@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using Migrator.Providers.SqlServer;
+using NUnit.Framework;
 using NzbDrone.Services.Service.Migrations;
 using NzbDrone.Test.Common;
 using NzbDrone.Test.Common.AutoMoq;
@@ -58,6 +59,12 @@ namespace NzbDrone.Services.Tests.Framework
 
             Db = new Database("SqlExpress");
             Mocker.SetConstant(Db);
+        }
+
+        [TearDown]
+        public void ServiceTearDown()
+        {
+            ExceptionVerification.IgnoreWarns();
         }
 
     }

@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Web.Mvc;
 using NLog;
-using NzbDrone.Common;
 using NzbDrone.Common.Contract;
 using NzbDrone.Services.Service.Repository.Reporting;
 using Services.PetaPoco;
@@ -14,23 +13,53 @@ namespace NzbDrone.Services.Service.Controllers
         private readonly IDatabase _database;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        private const string OK = "OK";
-
         public ExceptionController(IDatabase database)
         {
             _database = database;
         }
+        
+        [HttpPost]
+        public EmptyResult ReportExisting(ExistingExceptionReport existingExceptionReport)
+        {
+            try
+            {
+               if (ExceptionHashExists(existingExceptionReport.Hash))
+               {
 
+                   var exceptionInstance = new ExceptionInstance
+                                               {
+                                                       ExceptionHash = existingExceptionReport.Hash,
+                                                       IsProduction = existingExceptionReport.IsProduction,
+                                                       LogMessage = existingExceptionReport.LogMessage,
+                                                       Timestamp = DateTime.Now
+                                               };
+
+                   _database.Insert(exceptionInstance);
+               }
+               else
+               {
+                   logger.Warn("Invalid exception hash '{0}'", existingExceptionReport.Hash);
+               }
+            }
+            catch (Exception e)
+            {
+                logger.FatalException("Error has occurred while saving exception", e);
+                throw;
+            }
+
+            return new EmptyResult();
+        }
+        
         [HttpPost]
         public JsonResult ReportNew(ExceptionReport exceptionReport)
         {
             try
             {
-                var exceptionId = GetExceptionDetailId(exceptionReport);
+                var exceptionHash = GetExceptionDetailId(exceptionReport);
 
                 var exceptionInstance = new ExceptionInstance
                                      {
-                                         ExceptionDetail = exceptionId,
+                                         ExceptionHash = exceptionHash,
                                          IsProduction = exceptionReport.IsProduction,
                                          LogMessage = exceptionReport.LogMessage,
                                          Timestamp = DateTime.Now
@@ -38,22 +67,20 @@ namespace NzbDrone.Services.Service.Controllers
 
                 _database.Insert(exceptionInstance);
 
-                return new JsonResult { Data = new ExceptionReportResponse { ExceptionId = exceptionId } };
+                return new JsonResult { Data = new ExceptionReportResponse { ExceptionHash = exceptionHash } };
             }
             catch (Exception e)
             {
-                logger.FatalException("Error has occurred while logging exception", e);
+                logger.FatalException("Error has occurred while saving exception", e);
                 throw;
             }
         }
-
-
-        private int GetExceptionDetailId(ExceptionReport exceptionReport)
+        
+        private string GetExceptionDetailId(ExceptionReport exceptionReport)
         {
-            var reportHash = Hash(exceptionReport.Version + exceptionReport.String + exceptionReport.Logger);
-            var id = _database.FirstOrDefault<int>("SELECT Id FROM Exceptions WHERE Hash =@0", reportHash);
-
-            if (id == 0)
+            var reportHash = Hash(String.Concat(exceptionReport.Version, exceptionReport.String, exceptionReport.Logger));
+           
+            if (!ExceptionHashExists(reportHash))
             {
                 var exeptionDetail = new ExceptionDetail();
                 exeptionDetail.Hash = reportHash;
@@ -62,10 +89,15 @@ namespace NzbDrone.Services.Service.Controllers
                 exeptionDetail.Type = exceptionReport.Type;
                 exeptionDetail.Version = exceptionReport.Version;
 
-                id = Convert.ToInt32(_database.Insert(exeptionDetail));
+               _database.Insert(exeptionDetail);
             }
 
-            return id;
+            return reportHash;
+        }
+
+        private bool ExceptionHashExists(string reportHash)
+        {
+            return _database.Exists<ExceptionDetail>(reportHash);
         }
 
         private static string Hash(string input)
