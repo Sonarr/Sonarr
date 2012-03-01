@@ -1,6 +1,4 @@
-﻿using System;
-using System.Configuration;
-using System.Data.SqlClient;
+﻿using System.Configuration;
 using System.Linq;
 using NzbDrone.Services.Service.Migrations;
 using Services.PetaPoco;
@@ -22,7 +20,7 @@ namespace NzbDrone.Services.Service.Datastore
 
             var db = new Database("SqlExpress")
             {
-                KeepConnectionAlive = true,
+                KeepConnectionAlive = false,
                 ForceDateTimesToUtc = false,
             };
 

@@ -29,15 +29,8 @@ namespace NzbDrone.Services.Service.App_Start
         private static IKernel CreateKernel()
         {
             var kernel = new StandardKernel();
-            InitDb(kernel);
+            kernel.Bind<IDatabase>().ToMethod(c => Connection.GetPetaPocoDb());
             return kernel;
-        }
-
-
-        private static void InitDb(IKernel kernel)
-        {
-            var db = Connection.GetPetaPocoDb();
-            kernel.Bind<IDatabase>().ToConstant(db);
         }
     }
 }
