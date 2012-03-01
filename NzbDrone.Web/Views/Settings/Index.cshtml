@@ -10,7 +10,7 @@
 
 <div class="jquery-tabs">
     <ul>
-        <li>@Html.ActionLink("Naming", "Naming", "Settings")</li>
+        <li><a href="#Naming">Naming</a></li>
         <li>@Html.ActionLink("Quality", "Quality", "Settings")</li>
         <li>@Html.ActionLink("Indexers", "Indexers", "Settings")</li>
         <li>@Html.ActionLink("Download Client", "DownloadClient", "Settings")</li>
@@ -18,6 +18,8 @@
         <li>@Html.ActionLink("System", "System", "Settings")</li>
         <li>@Html.ActionLink("Misc", "Misc", "Settings")</li>
     </ul>
+    
+    <div id="Naming">@{ Html.RenderAction("Naming", "Settings"); }</div>
 </div>
 
 @section Scripts{

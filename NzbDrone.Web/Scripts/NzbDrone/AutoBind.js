@@ -30,6 +30,8 @@
     });
 
     $('.jquery-tabs').livequery(function () {
+        $(this).show();
+
         $(this).tabs({
             fx: { opacity: 'toggle' },
             select: function (event, ui) {

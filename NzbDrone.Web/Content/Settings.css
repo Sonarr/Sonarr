@@ -4,6 +4,11 @@
     margin: 0;
     padding: 0;
 }
+
+.jquery-tabs {
+    display: none;
+}
+
 .spacer
 {
     clear: both;
