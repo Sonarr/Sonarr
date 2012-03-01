@@ -25,7 +25,7 @@ namespace NzbDrone.Services.Service.Controllers
         [HttpPost]
         public JsonResult ParseError(ParseErrorReport parseErrorReport)
         {
-            logger.Trace(parseErrorReport.NullCheck());
+            logger.Trace(parseErrorReport.NullSafe());
 
             if (ParseErrorExists(parseErrorReport.Title))
                 return Json(OK);
@@ -63,7 +63,7 @@ namespace NzbDrone.Services.Service.Controllers
             }
             catch (Exception)
             {
-                logger.Trace(exceptionReport.NullCheck());
+                logger.Trace(exceptionReport.NullSafe());
                 throw;
             }
 

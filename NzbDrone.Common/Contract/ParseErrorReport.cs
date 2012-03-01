@@ -13,7 +13,7 @@ namespace NzbDrone.Common.Contract
         {
             var dic = new Dictionary<string, string>
                           {
-                                  {"Title", Title.NullCheck()},
+                                  {"Title", Title.NullSafe()},
                           };
 
             return dic;

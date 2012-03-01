@@ -20,14 +20,13 @@ namespace NzbDrone.Common.Contract
         {
             var dic = new Dictionary<string, string>
                           {
-                                  {"ExType", Type.NullCheck()},
-                                  {"Logger", Logger.NullCheck()},
-                                  {"Message", LogMessage.NullCheck()},
-                                  {"Str", String.NullCheck()}
+                                  {"ExType", Type.NullSafe()},
+                                  {"Logger", Logger.NullSafe()},
+                                  {"Message", LogMessage.NullSafe()},
+                                  {"Str", String.NullSafe()}
                           };
 
             return dic;
         }
     }
-
 }

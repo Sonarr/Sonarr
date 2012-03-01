@@ -10,27 +10,15 @@ using NzbDrone.Services.Tests.Framework;
 namespace NzbDrone.Services.Tests
 {
     [TestFixture]
-    public class ReportingControllerFixture : ServicesTestBase
+    public class ExceptionControllerFixture : ServicesTestBase
     {
 
-        ReportingController Controller
+        ExceptionController Controller
         {
             get
             {
-                return Mocker.Resolve<ReportingController>();
+                return Mocker.Resolve<ExceptionController>();
             }
-        }
-
-
-        private static ParseErrorReport CreateParseErrorReport()
-        {
-            return new ParseErrorReport
-                                   {
-                                       IsProduction = true,
-                                       Title = "MyTitle",
-                                       Version = "1.1.2.323456",
-                                       UGuid = Guid.NewGuid()
-                                   };
         }
 
         private static ExceptionReport CreateExceptionReport()
@@ -90,75 +78,56 @@ namespace NzbDrone.Services.Tests
 
 
         [Test]
-        public void parse_report_should_be_saved()
-        {
-            var parseReport = CreateParseErrorReport();
-
-            WithRealDb();
-
-            Controller.ParseError(parseReport);
-
-            var reports = Db.Fetch<ParseErrorRow>();
-            reports.Should().HaveCount(1);
-            reports.Single().Title.Should().Be(parseReport.Title);
-            reports.Single().IsProduction.Should().Be(parseReport.IsProduction);
-            reports.Single().Version.Should().Be(parseReport.Version);
-            reports.Single().Timestamp.Should().BeWithin(TimeSpan.FromSeconds(4)).Before(DateTime.Now);
-            reports.Single().UGuid.Should().Be(parseReport.UGuid);
-        }
-
-        [Test]
-        public void parse_report_should_save_report_if_title_doesnt_exist()
-        {
-            var parseReport1 = CreateParseErrorReport();
-            var parseReport2 = CreateParseErrorReport();
-
-            parseReport1.Title = Guid.NewGuid().ToString();
-
-            WithRealDb();
-
-            Controller.ParseError(parseReport1);
-            Controller.ParseError(parseReport2);
-
-            var reports = Db.Fetch<ParseErrorRow>();
-            reports.Should().HaveCount(2);
-        }
-
-        [Test]
-        public void parse_report_should_not_save_report_if_title_exist()
-        {
-            var parseReport1 = CreateParseErrorReport();
-            var parseReport2 = CreateParseErrorReport();
-
-            WithRealDb();
-
-            Controller.ParseError(parseReport1);
-            Controller.ParseError(parseReport2);
-
-            var reports = Db.Fetch<ParseErrorRow>();
-            reports.Should().HaveCount(1);
-        }
-
-        [Test]
-        public void exception_report_should_be_saved()
+        public void ReportNew_should_save_instance()
         {
             var exceptionReport = CreateExceptionReport();
 
             WithRealDb();
 
-            Controller.ReportException(exceptionReport);
+            Controller.ReportNew(exceptionReport);
 
-            var exceptionRows = Db.Fetch<ExceptionRow>();
-            exceptionRows.Should().HaveCount(1);
-            exceptionRows.Single().IsProduction.Should().Be(exceptionReport.IsProduction);
-            exceptionRows.Single().Version.Should().Be(exceptionReport.Version);
-            exceptionRows.Single().Timestamp.Should().BeWithin(TimeSpan.FromSeconds(4)).Before(DateTime.Now);
-            exceptionRows.Single().UGuid.Should().Be(exceptionReport.UGuid);
+            var exceptionInstance = Db.Fetch<ExceptionInstance>();
+            exceptionInstance.Should().HaveCount(1);
+            exceptionInstance.Single().Id.Should().BeGreaterThan(0);
+            exceptionInstance.Single().ExceptionDetail.Should().BeGreaterThan(0);
+            exceptionInstance.Single().IsProduction.Should().Be(exceptionReport.IsProduction);
+            exceptionInstance.Single().Timestamp.Should().BeWithin(TimeSpan.FromSeconds(4)).Before(DateTime.Now);
+            exceptionInstance.Single().LogMessage.Should().Be(exceptionReport.LogMessage);
+        }
 
-            exceptionRows.Single().Logger.Should().Be(exceptionReport.Logger);
-            exceptionRows.Single().LogMessage.Should().Be(exceptionReport.LogMessage);
-            exceptionRows.Single().String.Should().Be(exceptionReport.String);
-            exceptionRows.Single().Type.Should().Be(exceptionReport.Type);
+        [Test]
+        public void ReportNew_should_return_exception_id()
+        {
+            var exceptionReport = CreateExceptionReport();
+
+            WithRealDb();
+
+            var response = Controller.ReportNew(exceptionReport);
+
+            response.Data.Should().BeOfType<ExceptionReportResponse>();
+            ((ExceptionReportResponse)response.Data).ExceptionId.Should().BeGreaterThan(0);
+        }
+
+
+        [Test]
+        public void Reporting_exception_more_than_once_should_create_single_detail_with_multiple_instances()
+        {
+            var exceptionReport = CreateExceptionReport();
+
+            WithRealDb();
+
+            var response1 = Controller.ReportNew(exceptionReport);
+            var response2 = Controller.ReportNew(exceptionReport);
+            var response3 = Controller.ReportNew(exceptionReport);
+            
+            var detail = Db.Fetch<ExceptionDetail>();
+            var instances = Db.Fetch<ExceptionInstance>();
+
+            detail.Should().HaveCount(1);
+            instances.Should().HaveCount(3);
+
+            instances.Should().OnlyContain(c => c.ExceptionDetail == detail.Single().Id);
+
         }
     }
 }
