@@ -17,29 +17,29 @@ namespace NzbDrone.Services.Service.Controllers
         {
             _database = database;
         }
-        
+
         [HttpPost]
         public EmptyResult ReportExisting(ExistingExceptionReport existingExceptionReport)
         {
             try
             {
-               if (ExceptionHashExists(existingExceptionReport.Hash))
-               {
+                if (ExceptionHashExists(existingExceptionReport.Hash))
+                {
 
-                   var exceptionInstance = new ExceptionInstance
-                                               {
-                                                       ExceptionHash = existingExceptionReport.Hash,
-                                                       IsProduction = existingExceptionReport.IsProduction,
-                                                       LogMessage = existingExceptionReport.LogMessage,
-                                                       Timestamp = DateTime.Now
-                                               };
+                    var exceptionInstance = new ExceptionInstance
+                                                {
+                                                    ExceptionHash = existingExceptionReport.Hash,
+                                                    IsProduction = existingExceptionReport.IsProduction,
+                                                    LogMessage = existingExceptionReport.LogMessage,
+                                                    Timestamp = DateTime.Now
+                                                };
 
-                   _database.Insert(exceptionInstance);
-               }
-               else
-               {
-                   logger.Warn("Invalid exception hash '{0}'", existingExceptionReport.Hash);
-               }
+                    _database.Insert(exceptionInstance);
+                }
+                else
+                {
+                    logger.Warn("Invalid exception hash '{0}'", existingExceptionReport.Hash);
+                }
             }
             catch (Exception e)
             {
@@ -49,7 +49,7 @@ namespace NzbDrone.Services.Service.Controllers
 
             return new EmptyResult();
         }
-        
+
         [HttpPost]
         public JsonResult ReportNew(ExceptionReport exceptionReport)
         {
@@ -72,14 +72,19 @@ namespace NzbDrone.Services.Service.Controllers
             catch (Exception e)
             {
                 logger.FatalException("Error has occurred while saving exception", e);
-                throw;
+                if (!exceptionReport.IsProduction)
+                {
+                    throw;
+                }
             }
+
+            return new JsonResult();
         }
-        
+
         private string GetExceptionDetailId(ExceptionReport exceptionReport)
         {
             var reportHash = Hash(String.Concat(exceptionReport.Version, exceptionReport.String, exceptionReport.Logger));
-           
+
             if (!ExceptionHashExists(reportHash))
             {
                 var exeptionDetail = new ExceptionDetail();
@@ -89,7 +94,7 @@ namespace NzbDrone.Services.Service.Controllers
                 exeptionDetail.Type = exceptionReport.Type;
                 exeptionDetail.Version = exceptionReport.Version;
 
-               _database.Insert(exeptionDetail);
+                _database.Insert(exeptionDetail);
             }
 
             return reportHash;

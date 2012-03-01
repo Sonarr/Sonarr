@@ -13,30 +13,47 @@ namespace NzbDrone.Services.Service.Controllers
     public class ReportingController : Controller
     {
         private readonly IDatabase _database;
+        private readonly ExceptionController _exceptionController;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         private const string OK = "OK";
 
-        public ReportingController(IDatabase database)
+        public ReportingController(IDatabase database, ExceptionController exceptionController)
         {
             _database = database;
+            _exceptionController = exceptionController;
         }
 
         [HttpPost]
         public JsonResult ParseError(ParseErrorReport parseErrorReport)
         {
-            logger.Trace(parseErrorReport.NullSafe());
+            try
+            {
 
-            if (ParseErrorExists(parseErrorReport.Title))
+
+                logger.Trace(parseErrorReport.NullSafe());
+
+                if (ParseErrorExists(parseErrorReport.Title))
+                    return Json(OK);
+
+                var row = new ParseErrorRow();
+                row.LoadBase(parseErrorReport);
+                row.Title = parseErrorReport.Title;
+
+                _database.Insert(row);
+
                 return Json(OK);
+            }
+            catch (Exception e)
+            {
+                logger.FatalException("Error has occurred while saving parse report", e);
+                if (!parseErrorReport.IsProduction)
+                {
+                    throw;
+                }
+            }
 
-            var row = new ParseErrorRow();
-            row.LoadBase(parseErrorReport);
-            row.Title = parseErrorReport.Title;
-
-            _database.Insert(row);
-
-            return Json(OK);
+            return new JsonResult();
         }
 
 
@@ -48,25 +65,7 @@ namespace NzbDrone.Services.Service.Controllers
         [HttpPost]
         public JsonResult ReportException(ExceptionReport exceptionReport)
         {
-            try
-            {
-                var row = new ExceptionRow();
-                row.LoadBase(exceptionReport);
-                row.LogMessage = exceptionReport.LogMessage;
-                row.Logger = exceptionReport.Logger;
-                row.String = exceptionReport.String;
-                row.Type = exceptionReport.Type;
-
-                _database.Insert(row);
-
-                return Json(OK);
-            }
-            catch (Exception)
-            {
-                logger.Trace(exceptionReport.NullSafe());
-                throw;
-            }
-
+           return _exceptionController.ReportNew(exceptionReport);
         }
     }
 }
