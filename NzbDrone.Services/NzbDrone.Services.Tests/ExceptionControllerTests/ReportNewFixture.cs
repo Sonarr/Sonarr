@@ -6,7 +6,7 @@ using NzbDrone.Common.Contract;
 using NzbDrone.Services.Service.Repository.Reporting;
 using NzbDrone.Services.Tests.Framework;
 
-namespace NzbDrone.Services.Tests.ExceptionController
+namespace NzbDrone.Services.Tests.ExceptionControllerTests
 {
     [TestFixture]
     public class ReportNewFixture : ServicesTestBase

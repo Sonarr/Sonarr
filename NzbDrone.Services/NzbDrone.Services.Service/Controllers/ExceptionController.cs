@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using NLog;
+using Ninject;
 using NzbDrone.Common.Contract;
 using NzbDrone.Services.Service.Repository.Reporting;
 using Services.PetaPoco;
@@ -13,6 +14,7 @@ namespace NzbDrone.Services.Service.Controllers
         private readonly IDatabase _database;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
+        [Inject]
         public ExceptionController(IDatabase database)
         {
             _database = database;

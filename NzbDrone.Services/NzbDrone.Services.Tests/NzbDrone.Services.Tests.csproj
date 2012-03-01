@@ -68,8 +68,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExceptionController\ReportExistingFixture.cs" />
-    <Compile Include="ExceptionController\ReportNewFixture.cs" />
+    <Compile Include="ExceptionControllerTests\ReportExistingFixture.cs" />
+    <Compile Include="ExceptionControllerTests\ReportNewFixture.cs" />
     <Compile Include="ReportingControllerFixture.cs" />
     <Compile Include="Framework\ServicesTestBase.cs" />
     <Compile Include="Framework\TestDbHelper.cs" />

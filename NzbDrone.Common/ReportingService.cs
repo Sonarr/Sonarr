@@ -10,7 +10,7 @@ namespace NzbDrone.Common
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        private const string SERVICE_URL = "http://services.nzbdrone.com/reporting";
+        private const string SERVICE_URL = "http://stage.services.nzbdrone.com/reporting";
         private const string PARSE_URL = SERVICE_URL + "/ParseError";
         private const string EXCEPTION_URL = SERVICE_URL + "/ReportException";
 
