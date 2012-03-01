@@ -279,3 +279,9 @@ button span, input[type="button"] span, input[type="submit"] span, input[type="r
     color: #FFFFFF;
     font-weight: normal;
 }
+
+#footer a {
+    font-family: "Segoe UI Light", "Open Sans", "Segoe UI", sans-serif;
+    font-size: 14px;
+    font-weight: lighter;
+}
