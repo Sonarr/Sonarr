@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Linq;
 
 using FizzWare.NBuilder;
@@ -8,7 +9,6 @@ using NzbDrone.Common;
 using NzbDrone.Common.Model;
 using NzbDrone.Providers;
 using NzbDrone.Test.Common;
-using NzbDrone.Test.Common.AutoMoq;
 
 namespace NzbDrone.App.Test
 {
@@ -19,17 +19,21 @@ namespace NzbDrone.App.Test
         [Test]
         public void Ensure_priority_doesnt_fail_on_invalid_iis_proccess_id()
         {
-            var processMock = Mocker.GetMock<ProcessProvider>();
-            processMock.Setup(c => c.GetCurrentProcess())
+            Mocker.GetMock<ProcessProvider>().Setup(c => c.GetCurrentProcess())
                 .Returns(Builder<ProcessInfo>.CreateNew().With(c => c.Priority == ProcessPriorityClass.Normal).Build());
 
-            processMock.Setup(c => c.GetProcessById(It.IsAny<int>())).Returns((ProcessInfo)null);
+            Mocker.GetMock<ProcessProvider>().Setup(c => c.GetProcessById(It.IsAny<int>())).Returns((ProcessInfo)null);
 
-            var subject = Mocker.Resolve<MonitoringProvider>();
+            Mocker.Resolve<MonitoringProvider>().EnsurePriority(null);
+        }
 
+        [Test]
+        public void Ensure_should_log_warn_exception_rather_than_throw()
+        {
+            Mocker.GetMock<ProcessProvider>().Setup(c => c.GetCurrentProcess()).Throws<InvalidOperationException>();
+            Mocker.Resolve<MonitoringProvider>().EnsurePriority(null);
 
-            //Act
-            subject.EnsurePriority(null);
+            ExceptionVerification.ExpectedWarns(1);
         }
 
 

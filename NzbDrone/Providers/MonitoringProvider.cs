@@ -44,7 +44,7 @@ namespace NzbDrone.Providers
 
             AppDomain.CurrentDomain.ProcessExit += ProgramExited;
             AppDomain.CurrentDomain.DomainUnload += ProgramExited;
-            
+
             _processPriorityCheckTimer = new Timer(EnsurePriority);
             _processPriorityCheckTimer.Change(TimeSpan.FromSeconds(15), TimeSpan.FromMinutes(30));
 
@@ -55,17 +55,24 @@ namespace NzbDrone.Providers
 
         public virtual void EnsurePriority(object sender)
         {
-            var currentProcess = _processProvider.GetCurrentProcess();
-            if (currentProcess.Priority != ProcessPriorityClass.Normal)
+            try
             {
-                _processProvider.SetPriority(currentProcess.Id, ProcessPriorityClass.Normal);
-            }
+                var currentProcess = _processProvider.GetCurrentProcess();
+                if (currentProcess.Priority != ProcessPriorityClass.Normal)
+                {
+                    _processProvider.SetPriority(currentProcess.Id, ProcessPriorityClass.Normal);
+                }
 
-            var iisProcess = _processProvider.GetProcessById(_iisProvider.IISProcessId);
-            if (iisProcess != null && iisProcess.Priority != ProcessPriorityClass.Normal &&
-                iisProcess.Priority != ProcessPriorityClass.AboveNormal)
+                var iisProcess = _processProvider.GetProcessById(_iisProvider.IISProcessId);
+                if (iisProcess != null && iisProcess.Priority != ProcessPriorityClass.Normal &&
+                    iisProcess.Priority != ProcessPriorityClass.AboveNormal)
+                {
+                    _processProvider.SetPriority(iisProcess.Id, ProcessPriorityClass.Normal);
+                }
+            }
+            catch (Exception e)
             {
-                _processProvider.SetPriority(iisProcess.Id, ProcessPriorityClass.Normal);
+                logger.WarnException("Unable to verify priority", e);
             }
         }
 
