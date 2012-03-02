@@ -18,13 +18,9 @@
 .ui-autocomplete .ui-state-hover
 {
     background: #333333;
-    border-color: #065EFE;
+    border-color: lightgrey;
 }
 
-.ui-menu-item .ui-corner-all
-{
-    color: #065EFE;
-}
 
 .ui-progressbar-value
 {
@@ -42,12 +38,26 @@
     padding-left: 10px;
 }
 
+.ui-autocomplete-loading
+{
+    background: white url('/Content/Images/ajax-loader.gif') 99% center no-repeat;
+    background-size: 18px 18px;
+}
+
+.ui-menu-item .ui-corner-all
+{
+    font-size: 110%;
+    font-family: "Segoe UI" , "Open Sans" , "Segoe UI" , sans-serif;
+    color: lightgrey;
+}
+
 .jquery-tabs
 {
     margin-top: 10px;
 }
 
-.ui-button .ui-state-default{
+.ui-button .ui-state-default
+{
     background: none;
 }
 
