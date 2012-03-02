@@ -1,4 +1,4 @@
-.gridImage , .gridAction
+.gridImage, .gridAction
 {
     width: 18px;
     height: 18px;
@@ -7,7 +7,7 @@
     vertical-align: middle;
     border: none;
 }
-    
+
 .gridAction:hover
 {
     cursor: pointer;
@@ -20,7 +20,7 @@
     border-style: none;
     border-collapse: collapse;
 }
-    
+
 .seriesTable th
 {
     font-family: "Segoe UI Light" , "Open Sans" , "Segoe UI" , sans-serif;
@@ -32,7 +32,7 @@
     background-color: white;
     font-weight: lighter;
 }
-    
+
 .seriesTable td
 {
     border-style: solid;
@@ -47,14 +47,14 @@
     font-size: 20px;
     background-color: #CAD5E3;
     font-weight: lighter;
-    color: #3C3C3C;   
+    color: #3C3C3C;
 }
 
 .detail-row
 {
     display: none;
 }
-    
+
 /* Colour alternating rows */
 .seriesTable .alt-row
 {
@@ -64,30 +64,54 @@
 /* Episode Grid Row Colouring */
 .episodeIgnored
 {
-      background: rgb(229, 228, 228);
-        opacity: 0.7;
+    background: rgb(229, 228, 228);
+    opacity: 0.7;
 }
-    
-    
-    
+
+
+
 .episodeMissing
 {
     background-color: #f5d6d6;
 }
 
 /*Hidden Grid to prevent FOUSC*/
-.hidden-grid {
+.hidden-grid
+{
     display: none;
 }
 
-.grid-container {
+.grid-container
+{
     overflow: hidden;
 }
 
-table.dataTable thead th.sorting_disabled {
-    cursor:default;
+table.dataTable thead th.sorting_disabled
+{
+    cursor: default;
 }
 
-table.dataTable thead th.sorting_desc, table.dataTable thead th.sorting_asc, table.dataTable thead th.sorting:hover {
+.dataTables_paginate {
+    margin-top: 10px;
+}
+
+table.dataTable thead th.sorting_desc, table.dataTable thead th.sorting_asc, table.dataTable thead th.sorting:hover
+{
     background-color: #e7efff;
+}
+
+.paginate_disabled_previous:hover, .paginate_disabled_next:hover, .paginate_disabled_first:hover, .paginate_disabled_last:hover, .paginate_disabled_previous, .paginate_disabled_next, .paginate_disabled_first, .paginate_disabled_last
+{
+    opacity: 0.2;
+    cursor: default;
+}
+
+.paginate_enabled_previous, .paginate_enabled_next, .paginate_enabled_first, .paginate_enabled_last
+{
+    opacity: 0.7;
+}
+
+.paginate_enabled_previous:hover, .paginate_enabled_next:hover, .paginate_enabled_first:hover, .paginate_enabled_last:hover
+{
+    opacity: 1;
 }
