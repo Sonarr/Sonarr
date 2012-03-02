@@ -2,8 +2,6 @@
 using System.IO;
 using System.Linq;
 using NLog;
-using NLog.Config;
-using NLog.Targets;
 using Ninject;
 using NzbDrone.Common;
 using NzbDrone.Update.Providers;
@@ -29,9 +27,10 @@ namespace NzbDrone.Update
             try
             {
                 Console.WriteLine("Starting NzbDrone Update Client");
-
-                InitLoggers();
                 _kernel = new StandardKernel();
+                InitLoggers();
+
+   
 
                 logger.Info("Updating NzbDrone to version {0}", _kernel.Get<EnviromentProvider>().Version);
                 _kernel.Get<Program>().Start(args);
@@ -62,6 +61,8 @@ namespace NzbDrone.Update
 
         private static void InitLoggers()
         {
+            ReportingService.RestProvider = _kernel.Get<RestProvider>();
+
             LogConfiguration.RegisterRemote();
 
             LogConfiguration.RegisterConsoleLogger(LogLevel.Trace);

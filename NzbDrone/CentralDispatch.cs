@@ -44,6 +44,8 @@ namespace NzbDrone
         private static void InitilizeApp()
         {
             var enviromentProvider = _kernel.Get<EnviromentProvider>();
+            
+            ReportingService.RestProvider = _kernel.Get<RestProvider>();
 
             LogConfiguration.RegisterRollingFileLogger(enviromentProvider.GetLogFileName(), LogLevel.Info);
             LogConfiguration.RegisterConsoleLogger(LogLevel.Debug);

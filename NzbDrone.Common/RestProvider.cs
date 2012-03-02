@@ -14,7 +14,7 @@ namespace NzbDrone.Common
     public class RestProvider
     {
 
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         private readonly EnviromentProvider _enviromentProvider;
 

@@ -30,8 +30,7 @@ namespace NzbDrone.Common
         {
             try
             {
-                if (RestProvider == null && EnviromentProvider.IsProduction)
-                    return;
+                VerifyRestProvider();
 
                 lock (parserErrorCache)
                 {
@@ -59,9 +58,8 @@ namespace NzbDrone.Common
         {
             try
             {
-                if (RestProvider == null && EnviromentProvider.IsProduction)
-                    return;
-
+                VerifyRestProvider();
+                    
                 var report = new ExceptionReport();
                 report.LogMessage = logEvent.FormattedMessage;
                 report.String = logEvent.Exception.ToString();
@@ -79,6 +77,22 @@ namespace NzbDrone.Common
 
                 //this shouldn't log an exception since it will cause a recursive loop.
                 logger.Info("Unable to report exception. " + e);
+            }
+        }
+
+        private static void VerifyRestProvider()
+        {
+            if(RestProvider == null)
+            {
+                if(EnviromentProvider.IsProduction)
+                {
+                    logger.Warn("Rest provider wasn't provided. creating new one!");
+                    RestProvider = new RestProvider(new EnviromentProvider());
+                }
+                else
+                {
+                    throw new InvalidOperationException("REST Provider wasn't configured correctly.");
+                }
             }
         }
     }
