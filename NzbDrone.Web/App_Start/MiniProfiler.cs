@@ -17,7 +17,7 @@ using NzbDrone.Web.Helpers;
 [assembly: WebActivator.PostApplicationStartMethod(typeof(NzbDrone.Web.App_Start.MiniProfilerPackage), "PostStart")]
 
 
-namespace NzbDrone.Web.App_Start 
+namespace NzbDrone.Web.App_Start
 {
     public static class MiniProfilerPackage
     {
@@ -33,11 +33,11 @@ namespace NzbDrone.Web.App_Start
             //TODO: Non SQL Server based installs can use other formatters like: new MvcMiniProfiler.SqlFormatters.InlineFormatter()
             MiniProfiler.Settings.SqlFormatter = new MvcMiniProfiler.SqlFormatters.SqlServerFormatter();
 
-			//TODO: To profile a standard DbConnection: 
-			// var profiled = new ProfiledDbConnection(cnn, MiniProfiler.Current);
+            //TODO: To profile a standard DbConnection: 
+            // var profiled = new ProfiledDbConnection(cnn, MiniProfiler.Current);
 
             //TODO: If you are profiling EF code first try: 
-			// MiniProfilerEF.Initialize();
+            // MiniProfilerEF.Initialize();
 
             //Make sure the MiniProfiler handles BeginRequest and EndRequest
             DynamicModuleUtility.RegisterModule(typeof(MiniProfilerStartupModule));
@@ -72,10 +72,13 @@ namespace NzbDrone.Web.App_Start
 
                 if (!EnviromentProvider.IsProduction || ProfilerHelper.Enabled())
                 {
-                    MiniProfiler.Start();
+                    var requestPath = ((HttpApplication)sender).Request.AppRelativeCurrentExecutionFilePath.ToLower();
+                    if (!requestPath.StartsWith("~/signalr") && !requestPath.EndsWith("notification/comet"))
+                    {
+                        MiniProfiler.Start();
+                    }
                 }
             };
-
 
             // TODO: You can control who sees the profiling information
             /*
