@@ -83,3 +83,11 @@
 .grid-container {
     overflow: hidden;
 }
+
+table.dataTable thead th.sorting_disabled {
+    cursor:default;
+}
+
+table.dataTable thead th.sorting_desc, table.dataTable thead th.sorting_asc, table.dataTable thead th.sorting:hover {
+    background-color: #e7efff;
+}
