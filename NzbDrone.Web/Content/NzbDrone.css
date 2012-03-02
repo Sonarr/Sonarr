@@ -50,54 +50,6 @@ hr
     display: none;
 }
 
-/* Menu */
-
-#menu
-{
-    height: 60px;
-}
-
-#menu ul
-{
-    margin: 0;
-    padding: 5px 0px 5px 0px;
-    list-style: none;
-    line-height: normal;
-}
-
-#menu li
-{
-    display: block;
-    float: left;
-    padding: 5px 15px 2px 10px;
-}
-
-#menu a
-{
-    display: block;
-    float: left;
-    height: 26px;
-    padding: 0px 5px 7px 5px;
-    text-decoration: none;
-    text-align: center;
-    text-transform: lowercase;
-    font-size: 21px;
-    font-weight: normal;
-    vertical-align: middle;
-    font-family: "Segoe UI" , "Open Sans" , "Segoe UI Light" , sans-serif;
-}
-
-#menu a:hover
-{
-    text-decoration: none;
-}
-
-#menu li.current_page_item a
-{
-    border-bottom: 2px solid;
-    border-color: #065EFE;
-}
-
 /* Page */
 
 #page
@@ -119,8 +71,7 @@ hr
     background: url(images/logo.png) no-repeat left top;
     background-color: #065EFE;
     font-size: 110px;
-    color: white;
-    /**color: rgb(40, 40, 40);**/
+    color: white; /**color: rgb(40, 40, 40);**/
     text-transform: lowercase;
     letter-spacing: -1px;
     line-height: 110px;
@@ -280,8 +231,15 @@ button span, input[type="button"] span, input[type="submit"] span, input[type="r
     font-weight: normal;
 }
 
-#footer a {
-    font-family: "Segoe UI Light", "Open Sans", "Segoe UI", sans-serif;
-    font-size: 14px;
+#footer a
+{
+    font-family: "Segoe UI" , "Open Sans" , "Segoe UI" , sans-serif;
+    font-size: 16px;
+    text-decoration: none;
     font-weight: lighter;
+}
+
+#footer a:hover
+{
+    text-decoration: underline;
 }
