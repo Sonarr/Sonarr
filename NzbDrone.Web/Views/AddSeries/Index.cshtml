@@ -71,9 +71,10 @@
             $('#addSeriesAccordion').accordion("activate", false);
         });
 
-        $(document).on('click', '.tvDbLink', function () {
+        $(document).on('click', '.tvDbLink', function (event) {
             var url = $(this).text();
             window.open(url, 'thetvdb');
+            event.preventDefault();
         });
     </script>
 }
