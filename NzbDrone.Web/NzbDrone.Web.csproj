@@ -159,6 +159,7 @@
     <Content Include="Content\Images\redownload.png" />
     <Content Include="Content\Images\settings.png" />
     <Content Include="Content\Images\stop.png" />
+    <Content Include="Content\Images\thetvdb.png" />
     <Content Include="Content\Images\yellow.png" />
     <Content Include="Content\IndexerSettings.css" />
     <Content Include="Content\jQueryUI\images\ui-bg_diagonals-thick_30_a32d00_40x40.png" />

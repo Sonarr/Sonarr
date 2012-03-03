@@ -65,7 +65,7 @@ function bindSeriesAutoComplete(selector) {
 	    .data("autocomplete")._renderItem = function (ul, item) {
 	        return $("<li></li>")
 			.data("item.autocomplete", item)
-			.append("<a>" + item.DisplayedTitle + "<div class='tvDbLink'>" + item.Url + "</div></a>")
+			.append("<a>" + item.DisplayedTitle + "<div class='tvDbLink' rel='" + item.Url + "'></div></a>")
 			.appendTo(ul);
 	    };
     });
