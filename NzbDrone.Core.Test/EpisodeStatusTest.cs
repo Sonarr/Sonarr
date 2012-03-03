@@ -14,7 +14,9 @@ namespace NzbDrone.Core.Test
     {        
         [TestCase(1, false, false, EpisodeStatusType.NotAired)]
         [TestCase(-2, false, false, EpisodeStatusType.Missing)]
+        [TestCase(0, false, false, EpisodeStatusType.AirsToday)]
         [TestCase(1, true, false, EpisodeStatusType.Ready)]
+        [TestCase(0, true, false, EpisodeStatusType.Ready)]
         public void no_grab_date(int offsetDays, bool hasEpisodes, bool ignored, EpisodeStatusType status)
         {
             Episode episode = Builder<Episode>.CreateNew()
@@ -41,7 +43,8 @@ namespace NzbDrone.Core.Test
             Episode episode = Builder<Episode>.CreateNew()
                .With(e => e.Ignored = ignored)
                 .With(e => e.EpisodeFileId = 0)
-                .With(e => e.GrabDate = DateTime.Now.AddDays(-1).AddHours(-1))
+                .With(e => e.GrabDate = DateTime.Now.AddDays(-2).AddHours(-1))
+                .With(e => e.AirDate = DateTime.Today.AddDays(-2))
                 .Build();
 
             if (hasEpisodes)
@@ -49,7 +52,7 @@ namespace NzbDrone.Core.Test
                 episode.EpisodeFileId = 12;
             }
 
-            Assert.AreEqual(status, episode.Status);
+            episode.Status.Should().Be(status);
         }
 
         [TestCase(1, false, false, EpisodeStatusType.Downloading)]
