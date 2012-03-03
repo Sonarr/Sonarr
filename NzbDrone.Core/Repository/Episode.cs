@@ -56,6 +56,9 @@ namespace NzbDrone.Core.Repository
                 if (GrabDate != null && GrabDate.Value.AddDays(1) >= DateTime.Now)
                     return EpisodeStatusType.Downloading;
 
+                if (AirDate != null && AirDate.Value.Date == DateTime.Today)
+                    return EpisodeStatusType.AirsToday;
+
                 if (AirDate != null && AirDate.Value.Date < DateTime.Now)
                     return EpisodeStatusType.Missing;
 

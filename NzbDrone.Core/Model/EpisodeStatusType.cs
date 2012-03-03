@@ -13,10 +13,16 @@
         Ignored,
 
         /// <summary>
-        /// Episode has aired but no episode
-        /// files have avilable
+        /// Episode has aired, but no episode
+        /// files are avilable
         /// </summary>
         Missing,
+
+        /// <summary>
+        /// Episode airs today, but no episode
+        /// files are avilable
+        /// </summary>
+        AirsToday,
         
         /// <summary>
         /// Episode is being downloaded
