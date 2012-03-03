@@ -181,7 +181,8 @@ namespace NzbDrone.Web.Controllers
                         DisplayedTitle = r.FirstAired.Year > 1900 && !r.SeriesName.EndsWith("(" + r.FirstAired.Year + ")")
                                                         ?string.Format("{0} ({1})", r.SeriesName, r.FirstAired.Year)
                                                         :r.SeriesName,
-                        Banner = r.Banner.BannerPath
+                        Banner = r.Banner.BannerPath,
+                        Url = String.Format("http://www.thetvdb.com/?tab=series&id={0}", r.Id)
                     }).ToList();
 
             return Json(tvDbResults, JsonRequestBehavior.AllowGet);

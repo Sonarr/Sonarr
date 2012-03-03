@@ -8,5 +8,6 @@ namespace NzbDrone.Web.Models
         public string Title { get; set; }
         public string Banner { get; set; }
         public string DisplayedTitle { get; set; }
+        public string Url { get; set; }
     }
 }

@@ -66,6 +66,7 @@ function bindSeriesAutoComplete(selector) {
 	        return $("<li></li>")
 			.data("item.autocomplete", item)
 			.append("<a>" + item.DisplayedTitle + "</a>")
+	        .append("<div class='tvDbLink'>" + item.Url + "</div>")
 			.appendTo(ul);
 	    };
     });

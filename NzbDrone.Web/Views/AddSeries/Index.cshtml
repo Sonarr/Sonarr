@@ -37,8 +37,14 @@
 		overflow-x: hidden;
     }
     
-  
+    .tvDbLink {
+        color: #065EFE;
+    }
 
+    .tvDbLink:hover {
+        cursor: pointer;
+        text-decoration: underline;
+    }
 </style>
 }
 
@@ -63,6 +69,11 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('#addSeriesAccordion').accordion("activate", false);
+        });
+
+        $(document).on('click', '.tvDbLink', function () {
+            var url = $(this).text();
+            window.open(url, 'thetvdb');
         });
     </script>
 }
