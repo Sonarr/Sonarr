@@ -31,53 +31,56 @@
             <h3>
                 <a href="#">Size Limits</a></h3>
             <div class="sliders">
+                <div class="infoBox">
+                    Size Limits specify the maximum download size NzbDrone will send to your download client.
+                </div>
                 <div class="slider-container">
                     <b>SDTV</b>
                     <div id="sdtv-slider" class="slider">
                     </div>
                     @Html.HiddenFor(m => m.SdtvMaxSize, new { @class = "slider-value" })
-                    30 minute size: <span class="30-minute"></span>| 60 minute size: <span class="60-minute">
-                    </span>
+                    30 minute size: <span class="30-minute"></span>MB | 60 minute size: <span class="60-minute">
+                                                                                     </span>MB
                 </div>
                 <div class="slider-container">
                     <b>DVD</b>
                     <div id="dvd-slider" class="slider">
                     </div>
                     @Html.HiddenFor(m => m.DvdMaxSize, new { @class = "slider-value" })
-                    30 minute size: <span class="30-minute"></span>| 60 minute size: <span class="60-minute">
-                    </span>
+                    30 minute size: <span class="30-minute"></span>MB | 60 minute size: <span class="60-minute">
+                                                                                     </span>MB
                 </div>
                 <div class="slider-container">
                     <b>HDTV</b>
                     <div id="hdtv-slider" class="slider">
                     </div>
                     @Html.HiddenFor(m => m.HdtvMaxSize, new { @class = "slider-value" })
-                    30 minute size: <span class="30-minute"></span>| 60 minute size: <span class="60-minute">
-                    </span>
+                    30 minute size: <span class="30-minute"></span>MB | 60 minute size: <span class="60-minute">
+                                                                                     </span>MB
                 </div>
                 <div class="slider-container">
                     <b>WEBDL</b>
                     <div id="webdl-slider" class="slider">
                     </div>
                     @Html.HiddenFor(m => m.WebdlMaxSize, new { @class = "slider-value" })
-                    30 minute size: <span class="30-minute"></span>| 60 minute size: <span class="60-minute">
-                    </span>
+                    30 minute size: <span class="30-minute"></span>MB | 60 minute size: <span class="60-minute">
+                                                                                     </span>MB
                 </div>
                 <div class="slider-container">
                     <b>Bluray 720p</b>
                     <div id="bluray720p-slider" class="slider">
                     </div>
                     @Html.HiddenFor(m => m.Bluray720pMaxSize, new { @class = "slider-value" })
-                    30 minute size: <span class="30-minute"></span>| 60 minute size: <span class="60-minute">
-                    </span>
+                    30 minute size: <span class="30-minute"></span>MB | 60 minute size: <span class="60-minute">
+                                                                                     </span>MB
                 </div>
                 <div class="slider-container">
                     <b>Bluray 1080p</b>
                     <div id="bluray1080p-slider" class="slider">
                     </div>
                     @Html.HiddenFor(m => m.Bluray1080pMaxSize, new { @class = "slider-value" })
-                    30 minute size: <span class="30-minute"></span>| 60 minute size: <span class="60-minute">
-                    </span>
+                    30 minute size: <span class="30-minute"></span>MB | 60 minute size: <span class="60-minute">
+                                                                                     </span>MB
                 </div>
             </div>
         </div>
