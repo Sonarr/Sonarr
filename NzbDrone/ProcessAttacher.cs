@@ -7,26 +7,32 @@
 #if DEBUG
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
+using EnvDTE;
 using EnvDTE80;
-using Process = EnvDTE.Process;
 using Thread = System.Threading.Thread;
 
 namespace NzbDrone
 {
-    [DebuggerStepThrough]
+    //[DebuggerStepThrough]
     public class ProcessAttacher
     {
         public static void Attach()
         {
             DTE2 dte2;
-            dte2 = (DTE2) Marshal.
-                              GetActiveObject("VisualStudio.DTE.10.0");
+
+            try
+            {
+                dte2 = (DTE2)Marshal.GetActiveObject("VisualStudio.DTE.10.0");
+            }
+            catch (Exception e)
+            {
+                dte2 = (DTE2)Marshal.GetActiveObject("VisualStudio.DTE.11.0");
+            }
+
 
             var pa = new ProcessAttacher(dte2, "iisexpress", 10);
             pa.PessimisticAttachManaged();
-            return;
 
             // Get an instance of the currently running Visual Studio IDE.
         }
