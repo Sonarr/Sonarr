@@ -17,6 +17,7 @@ Features include:
 
 
 NZBDrone makes use of the following projects:
+=====
 
 ## Platform
 * [ASP.NET MVC 3.0](http://www.asp.net/mvc)
@@ -30,7 +31,6 @@ NZBDrone makes use of the following projects:
 * [PetaPoco](http://www.toptensoftware.com/petapoco/)
 * [MVC Mini Profiler](http://code.google.com/p/mvc-mini-profiler/)
 * [Migrator.NET](https://github.com/kayone/Migrator.NET)
-* [Telerik Extensions for ASP.NET MVC](http://www.telerik.com/products/aspnet-mvc.aspx)
 
 ## Development Tools
 * [Visual Studio 2010](http://www.microsoft.com/visualstudio/en-us/products/2010-editions)
@@ -42,3 +42,8 @@ NZBDrone makes use of the following projects:
 * [Fluent Assertions](http://fluentassertions.codeplex.com/)
 * [TeamCity](http://www.jetbrains.com/teamcity/)
 * [DotCover](http://www.jetbrains.com/dotcover/)
+
+
+## License
+* [GNU GPL v3](http://www.gnu.org/licenses/gpl.html)
+Copyright 2010-2013
