@@ -1,6 +1,11 @@
 ﻿@using NzbDrone.Web.Helpers
 @model NzbDrone.Web.Models.MiscSettingsModel
 @{ Layout = null; }
+
+<div class="warningBox">
+    Enabling Backlog searching will use lots of bandwidth, not recommended when using block accounts or you have bandwidth restrictions
+</div>
+
 <div id="stylized">
     @using (Html.BeginForm("SaveMisc", "Settings", FormMethod.Post, new { id = "MiscForm", name = "MiscForm", @class = "settingsForm" }))
     {       
