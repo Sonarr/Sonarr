@@ -97,7 +97,7 @@ namespace NzbDrone.Common
             return Path.Combine(enviromentProvider.GetMediaCoverPath(), "Banners");
         }
 
-        public static string GetFanArthPath(this EnviromentProvider enviromentProvider)
+        public static string GetFanArtPath(this EnviromentProvider enviromentProvider)
         {
             return Path.Combine(enviromentProvider.GetMediaCoverPath(), "Fanarts");
         }

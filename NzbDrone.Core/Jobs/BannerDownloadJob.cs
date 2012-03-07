@@ -14,21 +14,16 @@ namespace NzbDrone.Core.Jobs
     public class BannerDownloadJob : IJob
     {
         private readonly SeriesProvider _seriesProvider;
-        private readonly HttpProvider _httpProvider;
-        private readonly DiskProvider _diskProvider;
-        private readonly EnviromentProvider _enviromentProvider;
+        private readonly BannerProvider _bannerProvider;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        private const string _bannerUrlPrefix = "http://www.thetvdb.com/banners/";
+        private const string BANNER_URL_PREFIX = "http://www.thetvdb.com/banners/";
 
         [Inject]
-        public BannerDownloadJob(SeriesProvider seriesProvider, HttpProvider httpProvider, DiskProvider diskProvider,
-            EnviromentProvider enviromentProvider)
+        public BannerDownloadJob(SeriesProvider seriesProvider, BannerProvider bannerProvider)
         {
             _seriesProvider = seriesProvider;
-            _httpProvider = httpProvider;
-            _diskProvider = diskProvider;
-            _enviromentProvider = enviromentProvider;
+            _bannerProvider = bannerProvider;
         }
 
         public BannerDownloadJob()
@@ -49,15 +44,12 @@ namespace NzbDrone.Core.Jobs
         {
             Logger.Debug("Starting banner download job");
 
-
-            _diskProvider.CreateDirectory(_enviromentProvider.GetBannerPath());
-
             if (targetId > 0)
             {
                 var series = _seriesProvider.GetSeries(targetId);
 
                 if (series != null && !String.IsNullOrEmpty(series.BannerUrl))
-                    DownloadBanner(notification, series);
+                    _bannerProvider.Download(notification, series);
 
                 return;
             }
@@ -66,28 +58,10 @@ namespace NzbDrone.Core.Jobs
 
             foreach (var series in seriesInDb.Where(s => !String.IsNullOrEmpty(s.BannerUrl)))
             {
-                DownloadBanner(notification, series);
+                _bannerProvider.Download(notification, series);
             }
 
             Logger.Debug("Finished banner download job");
-        }
-
-        public virtual void DownloadBanner(ProgressNotification notification, Series series)
-        {
-            var bannerFilename = Path.Combine(_enviromentProvider.GetBannerPath(), series.SeriesId.ToString()) + ".jpg";
-
-            notification.CurrentMessage = string.Format("Downloading banner for '{0}'", series.Title);
-
-            try
-            {
-                _httpProvider.DownloadFile(_bannerUrlPrefix + series.BannerUrl, bannerFilename);
-                notification.CurrentMessage = string.Format("Successfully download banner for '{0}'", series.Title);
-            }
-            catch (Exception)
-            {
-                Logger.Debug("Failed to download banner for '{0}'", series.Title);
-                notification.CurrentMessage = string.Format("Failed to download banner for '{0}'", series.Title);
-            }
         }
     }
 }

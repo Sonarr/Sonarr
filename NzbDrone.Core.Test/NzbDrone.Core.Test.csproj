@@ -111,6 +111,7 @@
     <Compile Include="JobTests\RecentBacklogSearchJobTest.cs" />
     <Compile Include="ProviderTests\AnalyticsProviderTests\AnalyticsProviderFixture.cs" />
     <Compile Include="ProviderTests\ConfigProviderTests\ConfigCachingFixture.cs" />
+    <Compile Include="ProviderTests\BannerProviderTest.cs" />
     <Compile Include="ProviderTests\PlexProviderTest.cs" />
     <Compile Include="ProviderTests\SeasonProviderTest.cs" />
     <Compile Include="ProviderTests\DecisionEngineTests\RetentionSpecificationFixture.cs" />

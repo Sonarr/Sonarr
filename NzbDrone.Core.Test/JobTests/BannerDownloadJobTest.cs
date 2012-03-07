@@ -18,199 +18,79 @@ namespace NzbDrone.Core.Test.JobTests
     // ReSharper disable InconsistentNaming
     public class BannerDownloadJobTest : CoreTest
     {
+        private ProgressNotification _notification;
 
         [SetUp]
         public void Setup()
         {
-            WithStrictMocker();
+            _notification = new ProgressNotification("Test");
             WithTempAsAppPath();
         }
 
-        [Test]
-        public void BannerDownload_all()
+        private void WithSuccessfulDownload()
         {
-            //Setup
-            var fakeSeries = Builder<Series>.CreateListOfSize(10)
-                .Build();
+            Mocker.GetMock<BannerProvider>()
+                .Setup(s => s.Download(It.IsAny<ProgressNotification>(), It.IsAny<Series>()))
+                    .Returns(true);
+        }
 
-            var notification = new ProgressNotification("Banner Download");
+        private void WithFailedDownload()
+        {
+            Mocker.GetMock<BannerProvider>()
+                .Setup(s => s.Download(It.IsAny<ProgressNotification>(), It.IsAny<Series>()))
+                    .Returns(false);
+        }
 
-            Mocker.GetMock<SeriesProvider>()
-                .Setup(c => c.GetAllSeries())
-                .Returns(fakeSeries);
-
-            Mocker.GetMock<HttpProvider>()
-                .Setup(s => s.DownloadFile(It.IsAny<string>(), It.IsAny<string>()));
-
-            Mocker.GetMock<DiskProvider>()
-                .Setup(S => S.CreateDirectory(It.IsAny<string>()))
-                .Returns("");
-
-            //Act
-            Mocker.Resolve<BannerDownloadJob>().Start(notification, 0, 0);
-
-            //Assert
-            Mocker.VerifyAllMocks();
-            Mocker.GetMock<HttpProvider>().Verify(s => s.DownloadFile(It.IsAny<string>(), It.IsAny<string>()),
-                                                       Times.Exactly(fakeSeries.Count));
+        private void VerifyDownloadMock(int times)
+        {
+            Mocker.GetMock<BannerProvider>().Verify(v => v.Download(_notification, It.IsAny<Series>()), Times.Exactly(times));
         }
 
         [Test]
-        public void BannerDownload_some_null_BannerUrl()
+        public void Start_should_download_banners_for_all_series_when_no_targetId_is_passed_in()
         {
-            //Setup
-            var fakeSeries = Builder<Series>.CreateListOfSize(10)
-                .Random(2)
-                .With(s => s.BannerUrl = null)
-                .Build();
+            WithSuccessfulDownload();
 
-          var notification = new ProgressNotification("Banner Download");
+            var series = Builder<Series>.CreateListOfSize(5)
+                    .Build();
 
-            Mocker.GetMock<SeriesProvider>()
-                .Setup(c => c.GetAllSeries())
-                .Returns(fakeSeries);
+            Mocker.GetMock<SeriesProvider>().Setup(s => s.GetAllSeries())
+                    .Returns(series);
 
-            Mocker.GetMock<HttpProvider>()
-                .Setup(s => s.DownloadFile(It.IsAny<string>(), It.IsAny<string>()));
-
-            Mocker.GetMock<DiskProvider>()
-                .Setup(S => S.CreateDirectory(It.IsAny<string>()))
-                .Returns("");
-
-            //Act
-            Mocker.Resolve<BannerDownloadJob>().Start(notification, 0, 0);
-
-            //Assert
-            Mocker.VerifyAllMocks();
-            Mocker.GetMock<HttpProvider>().Verify(s => s.DownloadFile(It.IsAny<string>(), It.IsAny<string>()),
-                                                       Times.Exactly(8));
+            Mocker.Resolve<BannerDownloadJob>().Start(_notification, 0, 0);
+            VerifyDownloadMock(series.Count);
         }
 
         [Test]
-        public void BannerDownload_some_failed_download()
+        public void Start_should_only_attempt_to_download_for_series_with_banner_url()
         {
-            //Setup
-            var fakeSeries = Builder<Series>.CreateListOfSize(4)
-                .Build();
+            WithSuccessfulDownload();
 
+            var series = Builder<Series>.CreateListOfSize(5)
+                    .TheFirst(2)
+                    .With(s => s.BannerUrl = null)
+                    .Build();
 
-            var bannerPath = Mocker.GetMock<EnviromentProvider>().Object.GetBannerPath();
+            Mocker.GetMock<SeriesProvider>().Setup(s => s.GetAllSeries())
+                    .Returns(series);
 
-            var notification = new ProgressNotification("Banner Download");
-
-            Mocker.GetMock<SeriesProvider>()
-                .Setup(c => c.GetAllSeries())
-                .Returns(fakeSeries);
-
-            Mocker.GetMock<HttpProvider>()
-                .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(bannerPath, "1.jpg")))
-                .Throws(new WebException());
-
-            Mocker.GetMock<HttpProvider>()
-                .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(bannerPath, "2.jpg")));
-
-            Mocker.GetMock<HttpProvider>()
-                .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(bannerPath, "3.jpg")))
-                .Throws(new WebException());
-
-            Mocker.GetMock<HttpProvider>()
-                .Setup(s => s.DownloadFile(It.IsAny<string>(), Path.Combine(bannerPath, "4.jpg")));
-
-            Mocker.GetMock<DiskProvider>()
-                .Setup(S => S.CreateDirectory(It.IsAny<string>()))
-                .Returns("");
-
-            //Act
-            Mocker.Resolve<BannerDownloadJob>().Start(notification, 0, 0);
-
-            //Assert
-            Mocker.VerifyAllMocks();
-            Mocker.GetMock<HttpProvider>().Verify(s => s.DownloadFile(It.IsAny<string>(), It.IsAny<string>()),
-                                                       Times.Exactly(fakeSeries.Count));
+            Mocker.Resolve<BannerDownloadJob>().Start(_notification, 0, 0);
+            VerifyDownloadMock(3);
         }
 
         [Test]
-        public void BannerDownload_all_failed_download()
+        public void Start_should_download_single_banner_when_seriesId_is_passed_in()
         {
-            //Setup
-            var fakeSeries = Builder<Series>.CreateListOfSize(10)
-                .Build();
+            WithSuccessfulDownload();
 
-            var notification = new ProgressNotification("Banner Download");
+            var series = Builder<Series>.CreateNew()
+                    .Build();
 
-            Mocker.GetMock<SeriesProvider>()
-                .Setup(c => c.GetAllSeries())
-                .Returns(fakeSeries);
+            Mocker.GetMock<SeriesProvider>().Setup(s => s.GetSeries(series.SeriesId))
+                    .Returns(series);
 
-            Mocker.GetMock<HttpProvider>()
-                .Setup(s => s.DownloadFile(It.IsAny<string>(), It.IsAny<string>()))
-                .Throws(new WebException());
-
-            Mocker.GetMock<DiskProvider>()
-                .Setup(S => S.CreateDirectory(It.IsAny<string>()))
-                .Returns("");
-
-            //Act
-            Mocker.Resolve<BannerDownloadJob>().Start(notification, 0, 0);
-
-            //Assert
-            Mocker.VerifyAllMocks();
-            Mocker.GetMock<HttpProvider>().Verify(s => s.DownloadFile(It.IsAny<string>(), It.IsAny<string>()),
-                                                       Times.Exactly(fakeSeries.Count));
-        }
-
-        [Test]
-        public void BannerDownload_single_banner()
-        {
-            //Setup
-            var fakeSeries = Builder<Series>.CreateNew()
-                .With(s => s.SeriesId = 1)
-                .Build();
-
-            var notification = new ProgressNotification("Banner Download");
-
-            Mocker.GetMock<SeriesProvider>()
-                .Setup(c => c.GetSeries(1))
-                .Returns(fakeSeries);
-
-            Mocker.GetMock<HttpProvider>()
-                .Setup(s => s.DownloadFile(It.IsAny<string>(), It.IsAny<string>()))
-                .Throws(new WebException());
-
-            Mocker.GetMock<DiskProvider>()
-                .Setup(S => S.CreateDirectory(It.IsAny<string>()))
-                .Returns("");
-
-            //Act
-            Mocker.Resolve<BannerDownloadJob>().Start(notification, 1, 0);
-
-            //Assert
-            Mocker.VerifyAllMocks();
-            Mocker.GetMock<HttpProvider>().Verify(s => s.DownloadFile(It.IsAny<string>(), It.IsAny<string>()),
-                                                       Times.Once());
-        }
-
-        [Test]
-        public void Download_Banner()
-        {
-            //Setup
-            var fakeSeries = Builder<Series>.CreateNew()
-                .With(s => s.SeriesId = 1)
-                .Build();
-
-            var notification = new ProgressNotification("Banner Download");
-
-            Mocker.GetMock<HttpProvider>()
-                .Setup(s => s.DownloadFile(It.IsAny<string>(), It.IsAny<string>()))
-                .Throws(new WebException());
-
-            //Act
-            Mocker.Resolve<BannerDownloadJob>().DownloadBanner(notification, fakeSeries);
-
-            //Assert
-            Mocker.VerifyAllMocks();
-            Mocker.GetMock<HttpProvider>().Verify(s => s.DownloadFile(It.IsAny<string>(), It.IsAny<string>()),
-                                                       Times.Once());
+            Mocker.Resolve<BannerDownloadJob>().Start(_notification, 1, 0);
+            VerifyDownloadMock(1);
         }
     }
 }

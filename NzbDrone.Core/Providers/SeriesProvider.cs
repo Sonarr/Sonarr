@@ -19,15 +19,18 @@ namespace NzbDrone.Core.Providers
         private readonly TvDbProvider _tvDbProvider;
         private readonly IDatabase _database;
         private readonly SceneMappingProvider _sceneNameMappingProvider;
+        private readonly BannerProvider _bannerProvider;
         private static readonly Regex TimeRegex = new Regex(@"^(?<time>\d+:?\d*)\W*(?<meridiem>am|pm)?", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         public SeriesProvider(IDatabase database, ConfigProvider configProviderProvider,
-                                TvDbProvider tvDbProviderProvider, SceneMappingProvider sceneNameMappingProvider)
+                                TvDbProvider tvDbProviderProvider, SceneMappingProvider sceneNameMappingProvider,
+                                BannerProvider bannerProvider)
         {
             _database = database;
             _configProvider = configProviderProvider;
             _tvDbProvider = tvDbProviderProvider;
             _sceneNameMappingProvider = sceneNameMappingProvider;
+            _bannerProvider = bannerProvider;
         }
 
         public SeriesProvider()
@@ -188,6 +191,9 @@ namespace NzbDrone.Core.Providers
 
                 tran.Complete();
             }
+
+            Logger.Trace("Beginning deletion of banner for SeriesID: ", seriesId);
+            _bannerProvider.Delete(seriesId);
         }
 
         public virtual bool SeriesPathExists(string path)
