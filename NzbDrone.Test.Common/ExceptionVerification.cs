@@ -51,17 +51,17 @@ namespace NzbDrone.Test.Common
 
         public static void ExpectedErrors(int count)
         {
-            Excpected(LogLevel.Error, count);
+            Expected(LogLevel.Error, count);
         }
 
         public static void ExpectedFatals(int count)
         {
-            Excpected(LogLevel.Fatal, count);
+            Expected(LogLevel.Fatal, count);
         }
 
         public static void ExpectedWarns(int count)
         {
-            Excpected(LogLevel.Warn, count);
+            Expected(LogLevel.Warn, count);
         }
 
         public static void IgnoreWarns()
@@ -96,7 +96,7 @@ namespace NzbDrone.Test.Common
             }
         }
 
-        private static void Excpected(LogLevel level, int count)
+        private static void Expected(LogLevel level, int count)
         {
             var levelLogs = _logs.Where(l => l.Level == level).ToList();
 

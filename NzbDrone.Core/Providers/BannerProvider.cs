@@ -34,12 +34,12 @@ namespace NzbDrone.Core.Providers
 
         public virtual bool Download(ProgressNotification notification, Series series)
         {
-            var bannerPath = _environmentProvider.GetBannerPath();
-            
-            logger.Trace("Ensuring Banner Folder exists: ", bannerPath);
-            _diskProvider.CreateDirectory(bannerPath);
+            //var bannerPath = _environmentProvider.GetBannerPath();
 
-            var bannerFilename = Path.Combine(bannerPath, series.SeriesId.ToString()) + ".jpg";
+            logger.Trace("Ensuring Banner Folder exists: ", _environmentProvider.GetBannerPath());
+            _diskProvider.CreateDirectory(_environmentProvider.GetBannerPath());
+
+            var bannerFilename = Path.Combine(_environmentProvider.GetBannerPath(), series.SeriesId.ToString()) + ".jpg";
 
             notification.CurrentMessage = string.Format("Downloading banner for '{0}'", series.Title);
             logger.Trace("Downloading banner for '{0}'", series.Title);

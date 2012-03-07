@@ -13,6 +13,7 @@ using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common.AutoMoq;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.ProviderTests
 {
@@ -26,6 +27,8 @@ namespace NzbDrone.Core.Test.ProviderTests
         [SetUp]
         public void Setup()
         {
+            WithTempAsAppPath();
+
             _series = Builder<Series>.CreateNew()
                 .With(s => s.SeriesId = 12345)
                     .Build();
@@ -97,6 +100,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var result = Mocker.Resolve<BannerProvider>().Delete(1);
             result.Should().BeFalse();
+            ExceptionVerification.ExpectedWarns(1);
         }
     }
 }
