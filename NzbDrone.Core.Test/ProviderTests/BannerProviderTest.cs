@@ -22,7 +22,6 @@ namespace NzbDrone.Core.Test.ProviderTests
     public class BannerProviderTest : CoreTest
     {
         private Series _series;
-        private ProgressNotification _notification;
 
         [SetUp]
         public void Setup()
@@ -32,8 +31,6 @@ namespace NzbDrone.Core.Test.ProviderTests
             _series = Builder<Series>.CreateNew()
                 .With(s => s.SeriesId = 12345)
                     .Build();
-
-            _notification = new ProgressNotification("Test");
 
             var path = @"C:\Windows\Temp";
 
@@ -55,7 +52,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Download_should_return_true_when_banner_is_downloaded_successfully()
         {
             WithSuccessfulDownload();
-            var result = Mocker.Resolve<BannerProvider>().Download(_notification, _series);
+            var result = Mocker.Resolve<BannerProvider>().Download(_series);
             result.Should().BeTrue();
         }
 
@@ -63,7 +60,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void Download_should_return_false_when_banner_download_fails()
         {
             WithFailedDownload();
-            var result = Mocker.Resolve<BannerProvider>().Download(_notification, _series);
+            var result = Mocker.Resolve<BannerProvider>().Download(_series);
             result.Should().BeFalse();
         }
 

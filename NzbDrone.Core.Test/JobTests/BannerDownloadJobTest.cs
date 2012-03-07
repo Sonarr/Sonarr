@@ -30,20 +30,20 @@ namespace NzbDrone.Core.Test.JobTests
         private void WithSuccessfulDownload()
         {
             Mocker.GetMock<BannerProvider>()
-                .Setup(s => s.Download(It.IsAny<ProgressNotification>(), It.IsAny<Series>()))
+                .Setup(s => s.Download(It.IsAny<Series>()))
                     .Returns(true);
         }
 
         private void WithFailedDownload()
         {
             Mocker.GetMock<BannerProvider>()
-                .Setup(s => s.Download(It.IsAny<ProgressNotification>(), It.IsAny<Series>()))
+                .Setup(s => s.Download(It.IsAny<Series>()))
                     .Returns(false);
         }
 
         private void VerifyDownloadMock(int times)
         {
-            Mocker.GetMock<BannerProvider>().Verify(v => v.Download(_notification, It.IsAny<Series>()), Times.Exactly(times));
+            Mocker.GetMock<BannerProvider>().Verify(v => v.Download(It.IsAny<Series>()), Times.Exactly(times));
         }
 
         [Test]

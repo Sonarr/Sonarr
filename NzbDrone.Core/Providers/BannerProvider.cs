@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using NLog;
+using Ninject;
 using NzbDrone.Common;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Repository;
@@ -19,6 +20,7 @@ namespace NzbDrone.Core.Providers
 
         private const string BANNER_URL_PREFIX = "http://www.thetvdb.com/banners/";
 
+        [Inject]
         public BannerProvider(HttpProvider httpProvider, EnvironmentProvider environmentProvider,
                                 DiskProvider diskProvider)
         {
@@ -32,28 +34,25 @@ namespace NzbDrone.Core.Providers
             
         }
 
-        public virtual bool Download(ProgressNotification notification, Series series)
+        public virtual bool Download(Series series)
         {
-            //var bannerPath = _environmentProvider.GetBannerPath();
+            var bannerPath = _environmentProvider.GetBannerPath();
 
-            logger.Trace("Ensuring Banner Folder exists: ", _environmentProvider.GetBannerPath());
-            _diskProvider.CreateDirectory(_environmentProvider.GetBannerPath());
+            logger.Trace("Ensuring Banner Folder exists: ", bannerPath);
+            _diskProvider.CreateDirectory(bannerPath);
 
-            var bannerFilename = Path.Combine(_environmentProvider.GetBannerPath(), series.SeriesId.ToString()) + ".jpg";
+            var bannerFilename = Path.Combine(bannerPath, series.SeriesId.ToString()) + ".jpg";
 
-            notification.CurrentMessage = string.Format("Downloading banner for '{0}'", series.Title);
             logger.Trace("Downloading banner for '{0}'", series.Title);
 
             try
             {
                 _httpProvider.DownloadFile(BANNER_URL_PREFIX + series.BannerUrl, bannerFilename);
-                notification.CurrentMessage = string.Format("Successfully download banner for '{0}'", series.Title);
                 logger.Trace("Successfully download banner for '{0}'", series.Title);
             }
             catch (Exception)
             {
                 logger.Debug("Failed to download banner for '{0}'", series.Title);
-                notification.CurrentMessage = string.Format("Failed to download banner for '{0}'", series.Title);
                 return false;
             }
 

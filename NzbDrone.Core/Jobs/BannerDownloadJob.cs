@@ -49,7 +49,9 @@ namespace NzbDrone.Core.Jobs
                 var series = _seriesProvider.GetSeries(targetId);
 
                 if (series != null && !String.IsNullOrEmpty(series.BannerUrl))
-                    _bannerProvider.Download(notification, series);
+                {
+                    DownloadBanner(notification, series);
+                }
 
                 return;
             }
@@ -58,10 +60,21 @@ namespace NzbDrone.Core.Jobs
 
             foreach (var series in seriesInDb.Where(s => !String.IsNullOrEmpty(s.BannerUrl)))
             {
-                _bannerProvider.Download(notification, series);
+                DownloadBanner(notification, series);
             }
 
             Logger.Debug("Finished banner download job");
+        }
+
+        public virtual void DownloadBanner(ProgressNotification notification, Series series)
+        {
+            notification.CurrentMessage = string.Format("Downloading banner for '{0}'", series.Title);
+
+            if (_bannerProvider.Download(series))
+                notification.CurrentMessage = string.Format("Successfully download banner for '{0}'", series.Title);
+
+            else
+                notification.CurrentMessage = string.Format("Failed to download banner for '{0}'", series.Title);
         }
     }
 }
