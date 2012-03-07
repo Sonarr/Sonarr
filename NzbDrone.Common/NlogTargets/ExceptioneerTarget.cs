@@ -11,11 +11,11 @@ namespace NzbDrone.Common.NlogTargets
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        private static readonly Version version = new EnviromentProvider().Version;
+        private static readonly Version version = new EnvironmentProvider().Version;
 
         protected override void Write(LogEventInfo logEvent)
         {
-            if (logEvent == null || logEvent.Exception == null || !EnviromentProvider.IsProduction) return;
+            if (logEvent == null || logEvent.Exception == null || !EnvironmentProvider.IsProduction) return;
 
             Logger.Trace("Sending Exception to Exceptioneer. Process Name: {0}", Process.GetCurrentProcess().ProcessName);
 

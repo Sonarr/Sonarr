@@ -12,17 +12,17 @@ namespace NzbDrone.Core.Instrumentation
         private readonly IDatabase _database;
         private readonly LogDbContext _logDbContext;
         private readonly DiskProvider _diskProvider;
-        private readonly EnviromentProvider _enviromentProvider;
+        private readonly EnvironmentProvider _environmentProvider;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
 
 
-        public LogProvider(IDatabase database, LogDbContext logDbContext, DiskProvider diskProvider, EnviromentProvider enviromentProvider)
+        public LogProvider(IDatabase database, LogDbContext logDbContext, DiskProvider diskProvider, EnvironmentProvider environmentProvider)
         {
             _database = database;
             _logDbContext = logDbContext;
             _diskProvider = diskProvider;
-            _enviromentProvider = enviromentProvider;
+            _environmentProvider = environmentProvider;
         }
 
         public IQueryable<Log> GetAllLogs()
@@ -52,8 +52,8 @@ namespace NzbDrone.Core.Instrumentation
         public void DeleteAll()
         {
             _database.Delete<Log>("");
-            _diskProvider.DeleteFile(_enviromentProvider.GetLogFileName());
-            _diskProvider.DeleteFile(_enviromentProvider.GetArchivedLogFileName());
+            _diskProvider.DeleteFile(_environmentProvider.GetLogFileName());
+            _diskProvider.DeleteFile(_environmentProvider.GetArchivedLogFileName());
             Logger.Info("Cleared Log History");
         }
 

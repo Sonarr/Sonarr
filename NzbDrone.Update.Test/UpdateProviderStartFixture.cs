@@ -19,16 +19,16 @@ namespace NzbDrone.Update.Test
         private const string TARGET_FOLDER = @"C:\NzbDrone\";
         private const string UPDATE_LOG_FOLDER = @"C:\NzbDrone\UpdateLogs\";
 
-        Mock<EnviromentProvider> _enviromentProvider;
+        Mock<EnvironmentProvider> _environmentProvider;
 
 
         [SetUp]
         public void Setup()
         {
 
-            _enviromentProvider = Mocker.GetMock<EnviromentProvider>();
+            _environmentProvider = Mocker.GetMock<EnvironmentProvider>();
 
-            _enviromentProvider.SetupGet(c => c.SystemTemp).Returns(@"C:\Temp\");
+            _environmentProvider.SetupGet(c => c.SystemTemp).Returns(@"C:\Temp\");
 
             Mocker.GetMock<DiskProvider>()
                .Setup(c => c.FolderExists(UPDATE_FOLDER))

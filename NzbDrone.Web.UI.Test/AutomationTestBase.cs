@@ -15,7 +15,7 @@ namespace NzbDrone.Web.UI.Automation
     [TestFixture(Category = "Automation")]
     public abstract class AutomationTestBase
     {
-        private static readonly EnviromentProvider enviromentProvider = new EnviromentProvider();
+        private static readonly EnvironmentProvider environmentProvider = new EnvironmentProvider();
 
         private readonly string _clonePackagePath;
         private readonly string _masterPackagePath;
@@ -30,7 +30,7 @@ namespace NzbDrone.Web.UI.Automation
 
         protected AutomationTestBase()
         {
-            var rawPackagePath = Path.Combine(enviromentProvider.ApplicationPath, "_rawPackage");
+            var rawPackagePath = Path.Combine(environmentProvider.ApplicationPath, "_rawPackage");
             _clonePackagePath = Path.Combine(rawPackagePath, "NzbDrone_Automation");
             _masterPackagePath = Path.Combine(rawPackagePath, "NzbDrone");
         }
@@ -197,7 +197,7 @@ namespace NzbDrone.Web.UI.Automation
 
             StopNzbDrone();
 
-            var rootDirectory = new DirectoryInfo(enviromentProvider.ApplicationPath);
+            var rootDirectory = new DirectoryInfo(environmentProvider.ApplicationPath);
 
             if (rootDirectory.GetDirectories("_rawPackage").Any())
             {
@@ -212,7 +212,7 @@ namespace NzbDrone.Web.UI.Automation
 
             Process.Start(startInfo).WaitForExit();
 
-            var testFolder = Path.Combine(enviromentProvider.SystemTemp, "NzbDroneAutomation");
+            var testFolder = Path.Combine(environmentProvider.SystemTemp, "NzbDroneAutomation");
 
             if (Directory.Exists(testFolder))
             {
@@ -239,12 +239,12 @@ namespace NzbDrone.Web.UI.Automation
         {
             var folderName = "Debug";
 
-            if (EnviromentProvider.IsDebug)
+            if (EnvironmentProvider.IsDebug)
             {
                 folderName = "Release";
             }
 
-            var dirs = Directory.GetDirectories(enviromentProvider.ApplicationPath, folderName, SearchOption.AllDirectories);
+            var dirs = Directory.GetDirectories(environmentProvider.ApplicationPath, folderName, SearchOption.AllDirectories);
 
 
             foreach (var dir in dirs)

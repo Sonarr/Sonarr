@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Test.JobTests
         [SetUp]
         public void Setup()
         {
-            Mocker.GetMock<EnviromentProvider>().SetupGet(c => c.SystemTemp).Returns(@"C:\Temp\");
+            Mocker.GetMock<EnvironmentProvider>().SetupGet(c => c.SystemTemp).Returns(@"C:\Temp\");
             Mocker.GetMock<ConfigFileProvider>().SetupGet(c => c.Guid).Returns(_clientGuid);
             Mocker.GetMock<UpdateProvider>().Setup(c => c.GetAvilableUpdate(It.IsAny<Version>())).Returns(updatePackage);
         }
@@ -93,7 +93,7 @@ namespace NzbDrone.Core.Test.JobTests
         [Test]
         public void Should_copy_update_client_to_root_of_sandbox()
         {
-            var updateClientFolder = Mocker.GetMock<EnviromentProvider>().Object.GetUpdateClientFolder();
+            var updateClientFolder = Mocker.GetMock<EnvironmentProvider>().Object.GetUpdateClientFolder();
 
             //Act
             StartUpdate();
@@ -107,9 +107,9 @@ namespace NzbDrone.Core.Test.JobTests
         public void should_start_update_client()
         {
             //Setup
-            var updateClientPath = Mocker.GetMock<EnviromentProvider>().Object.GetUpdateClientExePath();
+            var updateClientPath = Mocker.GetMock<EnvironmentProvider>().Object.GetUpdateClientExePath();
 
-            Mocker.GetMock<EnviromentProvider>()
+            Mocker.GetMock<EnvironmentProvider>()
                 .SetupGet(c => c.NzbDroneProcessIdFromEnviroment).Returns(12);
 
             //Act
@@ -138,9 +138,9 @@ namespace NzbDrone.Core.Test.JobTests
         public void Should_download_and_extract_to_temp_folder()
         {
 
-            Mocker.GetMock<EnviromentProvider>().SetupGet(c => c.SystemTemp).Returns(TempFolder);
+            Mocker.GetMock<EnvironmentProvider>().SetupGet(c => c.SystemTemp).Returns(TempFolder);
 
-            var updateSubFolder = new DirectoryInfo(Mocker.GetMock<EnviromentProvider>().Object.GetUpdateSandboxFolder());
+            var updateSubFolder = new DirectoryInfo(Mocker.GetMock<EnvironmentProvider>().Object.GetUpdateSandboxFolder());
 
 
             //Act

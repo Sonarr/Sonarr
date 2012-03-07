@@ -13,15 +13,15 @@ namespace NzbDrone.Common
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private readonly ConfigFileProvider _configFileProvider;
-        private readonly EnviromentProvider _enviromentProvider;
+        private readonly EnvironmentProvider _environmentProvider;
         private readonly ProcessProvider _processProvider;
 
         [Inject]
-        public SecurityProvider(ConfigFileProvider configFileProvider, EnviromentProvider enviromentProvider,
+        public SecurityProvider(ConfigFileProvider configFileProvider, EnvironmentProvider environmentProvider,
                                     ProcessProvider processProvider)
         {
             _configFileProvider = configFileProvider;
-            _enviromentProvider = enviromentProvider;
+            _environmentProvider = environmentProvider;
             _processProvider = processProvider;
         }
 
@@ -55,7 +55,7 @@ namespace NzbDrone.Common
             }
 
             //Skip Url Register if not Vista or 7
-            if (_enviromentProvider.GetOsVersion().Major < 6)
+            if (_environmentProvider.GetOsVersion().Major < 6)
                 return;
 
             //Unregister Url (if port != 0)

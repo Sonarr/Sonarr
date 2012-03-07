@@ -13,17 +13,17 @@ namespace NzbDrone.Core.Providers
     public class BannerProvider
     {
         private readonly HttpProvider _httpProvider;
-        private readonly EnviromentProvider _enviromentProvider;
+        private readonly EnvironmentProvider _environmentProvider;
         private readonly DiskProvider _diskProvider;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         private const string BANNER_URL_PREFIX = "http://www.thetvdb.com/banners/";
 
-        public BannerProvider(HttpProvider httpProvider, EnviromentProvider enviromentProvider,
+        public BannerProvider(HttpProvider httpProvider, EnvironmentProvider environmentProvider,
                                 DiskProvider diskProvider)
         {
             _httpProvider = httpProvider;
-            _enviromentProvider = enviromentProvider;
+            _environmentProvider = environmentProvider;
             _diskProvider = diskProvider;
         }
 
@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual bool Download(ProgressNotification notification, Series series)
         {
-            var bannerPath = _enviromentProvider.GetBannerPath();
+            var bannerPath = _environmentProvider.GetBannerPath();
             
             logger.Trace("Ensuring Banner Folder exists: ", bannerPath);
             _diskProvider.CreateDirectory(bannerPath);
@@ -62,7 +62,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual bool Delete(int seriesId)
         {
-            var bannerPath = _enviromentProvider.GetBannerPath();
+            var bannerPath = _environmentProvider.GetBannerPath();
             var bannerFilename = Path.Combine(bannerPath, seriesId.ToString()) + ".jpg";
 
             try

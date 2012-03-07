@@ -126,7 +126,7 @@ namespace NzbDrone.Providers
         {
             Console.WriteLine("EPIC FAIL: {0}", excepion);
 
-            if (EnviromentProvider.IsProduction)
+            if (EnvironmentProvider.IsProduction)
             {
                 new Client
                     {

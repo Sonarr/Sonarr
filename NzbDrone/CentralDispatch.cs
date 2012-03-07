@@ -32,7 +32,7 @@ namespace NzbDrone
             _kernel.Bind<ConfigFileProvider>().ToSelf().InSingletonScope();
             _kernel.Bind<ConsoleProvider>().ToSelf().InSingletonScope();
             _kernel.Bind<DebuggerProvider>().ToSelf().InSingletonScope();
-            _kernel.Bind<EnviromentProvider>().ToSelf().InSingletonScope();
+            _kernel.Bind<EnvironmentProvider>().ToSelf().InSingletonScope();
             _kernel.Bind<IISProvider>().ToSelf().InSingletonScope();
             _kernel.Bind<MonitoringProvider>().ToSelf().InSingletonScope();
             _kernel.Bind<ProcessProvider>().ToSelf().InSingletonScope();
@@ -43,16 +43,16 @@ namespace NzbDrone
 
         private static void InitilizeApp()
         {
-            var enviromentProvider = _kernel.Get<EnviromentProvider>();
+            var environmentProvider = _kernel.Get<EnvironmentProvider>();
             
             ReportingService.RestProvider = _kernel.Get<RestProvider>();
 
-            LogConfiguration.RegisterRollingFileLogger(enviromentProvider.GetLogFileName(), LogLevel.Info);
+            LogConfiguration.RegisterRollingFileLogger(environmentProvider.GetLogFileName(), LogLevel.Info);
             LogConfiguration.RegisterConsoleLogger(LogLevel.Debug);
             LogConfiguration.RegisterUdpLogger();
             LogConfiguration.RegisterRemote();
             LogConfiguration.Reload();
-            Logger.Info("Start-up Path:'{0}'", enviromentProvider.ApplicationPath);
+            Logger.Info("Start-up Path:'{0}'", environmentProvider.ApplicationPath);
         }
     }
 }

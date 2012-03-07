@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace NzbDrone.Common
 {
-    public class EnviromentProvider
+    public class EnvironmentProvider
     {
         public const string NZBDRONE_PATH = "NZBDRONE_PATH";
         public const string NZBDRONE_PID = "NZBDRONE_PID";
@@ -13,7 +13,7 @@ namespace NzbDrone.Common
 
         private static readonly string processName = Process.GetCurrentProcess().ProcessName.ToLower();
 
-        private static readonly EnviromentProvider instance = new EnviromentProvider();
+        private static readonly EnvironmentProvider instance = new EnvironmentProvider();
 
         public static bool IsProduction
         {

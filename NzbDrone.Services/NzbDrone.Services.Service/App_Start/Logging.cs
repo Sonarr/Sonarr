@@ -15,8 +15,8 @@ namespace NzbDrone.Services.Service.App_Start
 
         public static void PreStart()
         {
-            string logPath = string.Format("C:\\NLog\\{0}\\{1}\\${{shortdate}}-${{logger}}.log", HostingEnvironment.SiteName, new EnviromentProvider().Version);
-            string error = string.Format("C:\\NLog\\{0}\\{1}\\${{shortdate}}_Error.log", HostingEnvironment.SiteName, new EnviromentProvider().Version);
+            string logPath = string.Format("C:\\NLog\\{0}\\{1}\\${{shortdate}}-${{logger}}.log", HostingEnvironment.SiteName, new EnvironmentProvider().Version);
+            string error = string.Format("C:\\NLog\\{0}\\{1}\\${{shortdate}}_Error.log", HostingEnvironment.SiteName, new EnvironmentProvider().Version);
 
             LogConfiguration.RegisterUdpLogger();
             LogConfiguration.RegisterFileLogger(logPath, LogLevel.Trace);

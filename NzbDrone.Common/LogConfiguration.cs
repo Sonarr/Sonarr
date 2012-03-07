@@ -10,7 +10,7 @@ namespace NzbDrone.Common
     {
         static LogConfiguration()
         {
-            if (EnviromentProvider.IsProduction)
+            if (EnvironmentProvider.IsProduction)
             {
                 LogManager.ThrowExceptions = false;
             }

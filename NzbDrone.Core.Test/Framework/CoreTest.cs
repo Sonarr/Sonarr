@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Test.Framework
             }
 
             //Delete App_data folder
-            var appData = new EnviromentProvider().GetAppDataPath();
+            var appData = new EnvironmentProvider().GetAppDataPath();
 
             if (Directory.Exists(appData))
             {

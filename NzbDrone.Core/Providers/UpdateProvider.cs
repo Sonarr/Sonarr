@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Providers
     {
         private readonly HttpProvider _httpProvider;
         private readonly ConfigProvider _configProvider;
-        private readonly EnviromentProvider _enviromentProvider;
+        private readonly EnvironmentProvider _environmentProvider;
 
         private readonly DiskProvider _diskProvider;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
@@ -29,11 +29,11 @@ namespace NzbDrone.Core.Providers
 
         [Inject]
         public UpdateProvider(HttpProvider httpProvider, ConfigProvider configProvider,
-            EnviromentProvider enviromentProvider, DiskProvider diskProvider)
+            EnvironmentProvider environmentProvider, DiskProvider diskProvider)
         {
             _httpProvider = httpProvider;
             _configProvider = configProvider;
-            _enviromentProvider = enviromentProvider;
+            _environmentProvider = environmentProvider;
             _diskProvider = diskProvider;
         }
 
@@ -80,9 +80,9 @@ namespace NzbDrone.Core.Providers
             var list = new Dictionary<DateTime, string>();
             CultureInfo provider = CultureInfo.InvariantCulture;
 
-            if (_diskProvider.FolderExists(_enviromentProvider.GetUpdateLogFolder()))
+            if (_diskProvider.FolderExists(_environmentProvider.GetUpdateLogFolder()))
             {
-                var files = _diskProvider.GetFiles(_enviromentProvider.GetUpdateLogFolder(), SearchOption.TopDirectoryOnly).ToList();
+                var files = _diskProvider.GetFiles(_environmentProvider.GetUpdateLogFolder(), SearchOption.TopDirectoryOnly).ToList();
 
                 foreach (var file in files.Select(c => new FileInfo(c)).OrderByDescending(c => c.Name))
                 {

@@ -14,14 +14,14 @@ namespace NzbDrone
         private readonly ApplicationServer _applicationServer;
         private readonly ServiceProvider _serviceProvider;
         private readonly ConsoleProvider _consoleProvider;
-        private readonly EnviromentProvider _enviromentProvider;
+        private readonly EnvironmentProvider _environmentProvider;
 
-        public Router(ApplicationServer applicationServer, ServiceProvider serviceProvider, ConsoleProvider consoleProvider, EnviromentProvider enviromentProvider)
+        public Router(ApplicationServer applicationServer, ServiceProvider serviceProvider, ConsoleProvider consoleProvider, EnvironmentProvider environmentProvider)
         {
             _applicationServer = applicationServer;
             _serviceProvider = serviceProvider;
             _consoleProvider = consoleProvider;
-            _enviromentProvider = enviromentProvider;
+            _environmentProvider = environmentProvider;
         }
 
         public void Route(IEnumerable<string> args)
@@ -35,7 +35,7 @@ namespace NzbDrone
             logger.Info("Application mode: {0}", applicationMode);    
 
             //TODO:move this outside, it should be one of application modes (ApplicationMode.Service?)
-            if (!_enviromentProvider.IsUserInteractive)
+            if (!_environmentProvider.IsUserInteractive)
             {
                 _serviceProvider.Run(_applicationServer);
             }

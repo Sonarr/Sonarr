@@ -37,10 +37,10 @@ namespace NzbDrone.Core.Providers
                 if (!IsOnMasterBranch())
                     return;
 
-                if (EnviromentProvider.RegisterNewInstall)
+                if (EnvironmentProvider.RegisterNewInstall)
                 {
                     _deskMetricsClient.RegisterInstall();
-                    EnviromentProvider.RegisterNewInstall = false;
+                    EnvironmentProvider.RegisterNewInstall = false;
                 }
 
                 if (_deskMetricsClient.Started)
@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Providers
             }
             catch (Exception e)
             {
-                if (!EnviromentProvider.IsProduction)
+                if (!EnvironmentProvider.IsProduction)
                     throw;
 
                 logger.WarnException("Error while sending analytics data.", e);

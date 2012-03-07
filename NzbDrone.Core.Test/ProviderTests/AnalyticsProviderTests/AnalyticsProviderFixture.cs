@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Test.ProviderTests.AnalyticsProviderTests
         [Test]
         public void new_install_should_be_registered()
         {
-            EnviromentProvider.RegisterNewInstall = true;
+            EnvironmentProvider.RegisterNewInstall = true;
 
             var provider = Mocker.Resolve<AnalyticsProvider>();
 
@@ -65,7 +65,7 @@ namespace NzbDrone.Core.Test.ProviderTests.AnalyticsProviderTests
         [Test]
         public void new_install_should_only_be_registered_on_first_call()
         {
-            EnviromentProvider.RegisterNewInstall = true;
+            EnvironmentProvider.RegisterNewInstall = true;
 
             var provider = Mocker.Resolve<AnalyticsProvider>();
 
@@ -79,7 +79,7 @@ namespace NzbDrone.Core.Test.ProviderTests.AnalyticsProviderTests
         [Test]
         public void upgrade_should_not_register_install()
         {
-            EnviromentProvider.RegisterNewInstall = false;
+            EnvironmentProvider.RegisterNewInstall = false;
 
             var provider = Mocker.Resolve<AnalyticsProvider>();
 
@@ -92,7 +92,7 @@ namespace NzbDrone.Core.Test.ProviderTests.AnalyticsProviderTests
         [Test]
         public void shouldnt_register_anything_if_not_on_master_branch()
         {
-            EnviromentProvider.RegisterNewInstall = false;
+            EnvironmentProvider.RegisterNewInstall = false;
 
             Mocker.GetMock<ConfigProvider>().SetupGet(c => c.UpdateUrl).Returns("http://update.nzbdrone.com/master_auto/");
 
@@ -104,7 +104,7 @@ namespace NzbDrone.Core.Test.ProviderTests.AnalyticsProviderTests
         [Test]
         public void new_install_shouldnt_register_anything_if_not_on_master_branch()
         {
-            EnviromentProvider.RegisterNewInstall = true;
+            EnvironmentProvider.RegisterNewInstall = true;
 
             Mocker.GetMock<ConfigProvider>().SetupGet(c => c.UpdateUrl).Returns("http://update.nzbdrone.com/master_auto/");
 
@@ -116,7 +116,7 @@ namespace NzbDrone.Core.Test.ProviderTests.AnalyticsProviderTests
         [Test]
         public void should_be_able_to_call_deskmetrics_using_test_appid()
         {
-            EnviromentProvider.RegisterNewInstall = true;
+            EnvironmentProvider.RegisterNewInstall = true;
             Mocker.Resolve<AnalyticsProvider>().Checkpoint();
         }
 

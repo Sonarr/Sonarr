@@ -6,11 +6,11 @@ namespace NzbDrone.Web.Controllers
 {
     public class SharedController : Controller
     {
-        private readonly EnviromentProvider _enviromentProvider;
+        private readonly EnvironmentProvider _environmentProvider;
 
-        public SharedController(EnviromentProvider enviromentProvider)
+        public SharedController(EnvironmentProvider environmentProvider)
         {
-            _enviromentProvider = enviromentProvider;
+            _environmentProvider = environmentProvider;
         }
 
         public ActionResult Index()
@@ -22,7 +22,7 @@ namespace NzbDrone.Web.Controllers
         [OutputCache(Duration = 3600)]
         public ActionResult Footer()
         {
-            return PartialView(new FooterModel { BuildTime = _enviromentProvider.BuildDateTime, Version = _enviromentProvider.Version });
+            return PartialView(new FooterModel { BuildTime = _environmentProvider.BuildDateTime, Version = _environmentProvider.Version });
         }
     }
 }

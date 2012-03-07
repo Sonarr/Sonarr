@@ -13,7 +13,7 @@
         ViewBag.Title = String.Format("{0} - NzbDrone", ViewBag.Title);
     }
     <title>@ViewBag.Title</title>
-    @if (!EnviromentProvider.IsProduction || ProfilerHelper.Enabled())
+    @if (!EnvironmentProvider.IsProduction || ProfilerHelper.Enabled())
     {
         @MvcMiniProfiler.MiniProfiler.RenderIncludes()
     }
@@ -51,7 +51,7 @@
     @RenderSection("Scripts", required: false)
     @Html.IncludeScript("jquery.signalR.min.js")
     <script src="@Url.Content("~/signalr/hubs")" type="text/javascript"></script>
-    @if (EnviromentProvider.IsProduction)
+    @if (EnvironmentProvider.IsProduction)
     {
         <script type="text/javascript">
             var _gaq = _gaq || [];

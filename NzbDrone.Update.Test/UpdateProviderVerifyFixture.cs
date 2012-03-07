@@ -18,10 +18,10 @@ namespace NzbDrone.Update.Test
         [SetUp]
         public void Setup()
         {
-            Mocker.GetMock<EnviromentProvider>()
+            Mocker.GetMock<EnvironmentProvider>()
                 .Setup(c => c.StartUpPath).Returns(@"C:\Temp\NzbDrone_update\");
 
-            Mocker.GetMock<EnviromentProvider>()
+            Mocker.GetMock<EnvironmentProvider>()
                 .Setup(c => c.SystemTemp).Returns(@"C:\Temp\");
         }
 

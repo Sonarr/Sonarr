@@ -11,16 +11,16 @@ namespace NzbDrone.Common
 {
     public class ConfigFileProvider
     {
-        private readonly EnviromentProvider _enviromentProvider;
+        private readonly EnvironmentProvider _environmentProvider;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         private readonly string _configFile;
         
         [Inject]
-        public ConfigFileProvider(EnviromentProvider enviromentProvider)
+        public ConfigFileProvider(EnvironmentProvider environmentProvider)
         {
-            _enviromentProvider = enviromentProvider;
-            _configFile = _enviromentProvider.GetConfigPath();
+            _environmentProvider = environmentProvider;
+            _configFile = _environmentProvider.GetConfigPath();
 
             CreateDefaultConfigFile();
         }

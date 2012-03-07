@@ -44,7 +44,7 @@ namespace NzbDrone.Common
             }
             catch (Exception e)
             {
-                if (!EnviromentProvider.IsProduction)
+                if (!EnvironmentProvider.IsProduction)
                 {
                     throw;
                 }
@@ -70,7 +70,7 @@ namespace NzbDrone.Common
             }
             catch (Exception e)
             {
-                if (!EnviromentProvider.IsProduction)
+                if (!EnvironmentProvider.IsProduction)
                 {
                     throw;
                 }
@@ -84,10 +84,10 @@ namespace NzbDrone.Common
         {
             if(RestProvider == null)
             {
-                if(EnviromentProvider.IsProduction)
+                if(EnvironmentProvider.IsProduction)
                 {
                     logger.Warn("Rest provider wasn't provided. creating new one!");
-                    RestProvider = new RestProvider(new EnviromentProvider());
+                    RestProvider = new RestProvider(new EnvironmentProvider());
                 }
                 else
                 {

@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Datastore
 {
     public class Connection
     {
-        private readonly EnviromentProvider _enviromentProvider;
+        private readonly EnvironmentProvider _environmentProvider;
 
         static Connection()
         {
@@ -23,16 +23,16 @@ namespace NzbDrone.Core.Datastore
             , "System.Data.SqlServerCe.SqlCeProviderFactory, System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91");
         }
 
-        public Connection(EnviromentProvider enviromentProvider)
+        public Connection(EnvironmentProvider environmentProvider)
         {
-            _enviromentProvider = enviromentProvider;
+            _environmentProvider = environmentProvider;
         }
         
         public String MainConnectionString
         {
             get
             {
-                return GetConnectionString(_enviromentProvider.GetNzbDronoeDbFile());
+                return GetConnectionString(_environmentProvider.GetNzbDronoeDbFile());
             }
         }
 
@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Datastore
         {
             get
             {
-                return GetConnectionString(_enviromentProvider.GetLogDbFileDbFile());
+                return GetConnectionString(_environmentProvider.GetLogDbFileDbFile());
             }
         }
 

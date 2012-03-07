@@ -70,7 +70,7 @@ namespace NzbDrone.Web.App_Start
                 //  so authenticated users are always profiled
                 //if (request.IsLocal) { MiniProfiler.Start(); }
 
-                if (!EnviromentProvider.IsProduction || ProfilerHelper.Enabled())
+                if (!EnvironmentProvider.IsProduction || ProfilerHelper.Enabled())
                 {
                     var requestPath = ((HttpApplication)sender).Request.AppRelativeCurrentExecutionFilePath.ToLower();
                     if (!requestPath.StartsWith("~/signalr") && !requestPath.EndsWith("notification/comet"))

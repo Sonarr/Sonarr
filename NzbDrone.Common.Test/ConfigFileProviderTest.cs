@@ -19,7 +19,7 @@ namespace NzbDrone.Common.Test
             WithTempAsAppPath();
 
             //Reset config file
-            var configFile = Mocker.Resolve<EnviromentProvider>().GetConfigPath();
+            var configFile = Mocker.Resolve<EnvironmentProvider>().GetConfigPath();
 
             if (File.Exists(configFile))
                 File.Delete(configFile);

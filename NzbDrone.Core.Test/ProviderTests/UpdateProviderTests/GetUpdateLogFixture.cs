@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Test.ProviderTests.UpdateProviderTests
         {
             WithTempAsAppPath();
 
-            UpdateLogFolder = Mocker.GetMock<EnviromentProvider>().Object.GetUpdateLogFolder();
+            UpdateLogFolder = Mocker.GetMock<EnvironmentProvider>().Object.GetUpdateLogFolder();
 
             Mocker.GetMock<DiskProvider>()
                 .Setup(c => c.GetFiles(UpdateLogFolder, SearchOption.TopDirectoryOnly))

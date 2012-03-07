@@ -9,13 +9,13 @@ namespace NzbDrone.Core.Providers
 {
     public class BackupProvider
     {
-        private readonly EnviromentProvider _enviromentProvider;
+        private readonly EnvironmentProvider _environmentProvider;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
       
         [Inject]
-        public BackupProvider(EnviromentProvider enviromentProvider)
+        public BackupProvider(EnvironmentProvider environmentProvider)
         {
-            _enviromentProvider = enviromentProvider;
+            _environmentProvider = environmentProvider;
         }
 
         public BackupProvider()
@@ -25,9 +25,9 @@ namespace NzbDrone.Core.Providers
 
         public virtual string CreateBackupZip()
         {
-            var dbFile = _enviromentProvider.GetNzbDronoeDbFile();
-            var configFile = _enviromentProvider.GetConfigPath();
-            var zipFile = _enviromentProvider.GetConfigBackupFile();
+            var dbFile = _environmentProvider.GetNzbDronoeDbFile();
+            var configFile = _environmentProvider.GetConfigPath();
+            var zipFile = _environmentProvider.GetConfigBackupFile();
 
             using (var zip = new ZipFile())
             {

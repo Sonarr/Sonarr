@@ -11,9 +11,9 @@ namespace NzbDrone.Common.Test
     public class PathExtentionFixture : TestBase
     {
 
-        private EnviromentProvider GetEnviromentProvider()
+        private EnvironmentProvider GetEnviromentProvider()
         {
-            var envMoq = new Mock<EnviromentProvider>();
+            var envMoq = new Mock<EnvironmentProvider>();
 
             envMoq.SetupGet(c => c.ApplicationPath).Returns(@"C:\NzbDrone\");
 

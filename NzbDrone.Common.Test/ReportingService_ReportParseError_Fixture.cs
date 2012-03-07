@@ -68,7 +68,7 @@ namespace NzbDrone.Common.Test
         [Test]
         public void report_parse_error()
         {
-            ReportingService.RestProvider = new RestProvider(new EnviromentProvider());
+            ReportingService.RestProvider = new RestProvider(new EnvironmentProvider());
             ReportingService.ReportParseError("Test error");
 
         }

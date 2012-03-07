@@ -24,13 +24,13 @@ namespace NzbDrone.Core
     public class CentralDispatch
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
-        private readonly EnviromentProvider _enviromentProvider;
+        private readonly EnvironmentProvider _environmentProvider;
 
         public StandardKernel Kernel { get; private set; }
 
         public CentralDispatch()
         {
-            _enviromentProvider = new EnviromentProvider();
+            _environmentProvider = new EnvironmentProvider();
 
             logger.Debug("Initializing Kernel:");
             Kernel = new StandardKernel();
@@ -52,7 +52,7 @@ namespace NzbDrone.Core
         {
             logger.Info("Initializing Database...");
 
-            var appDataPath = _enviromentProvider.GetAppDataPath();
+            var appDataPath = _environmentProvider.GetAppDataPath();
             if (!Directory.Exists(appDataPath)) Directory.CreateDirectory(appDataPath);
 
             var connection = Kernel.Get<Connection>();
@@ -67,15 +67,15 @@ namespace NzbDrone.Core
 
         private void InitReporting()
         {
-            EnviromentProvider.UGuid = Kernel.Get<ConfigProvider>().UGuid;
+            EnvironmentProvider.UGuid = Kernel.Get<ConfigProvider>().UGuid;
             ReportingService.RestProvider = Kernel.Get<RestProvider>();
 
             var appId = AnalyticsProvider.DESKMETRICS_TEST_ID;
 
-            if (EnviromentProvider.IsProduction)
+            if (EnvironmentProvider.IsProduction)
                 appId = AnalyticsProvider.DESKMETRICS_PRODUCTION_ID;
 
-            var deskMetricsClient = new DeskMetricsClient(Kernel.Get<ConfigProvider>().UGuid.ToString(), appId, _enviromentProvider.Version);
+            var deskMetricsClient = new DeskMetricsClient(Kernel.Get<ConfigProvider>().UGuid.ToString(), appId, _environmentProvider.Version);
             Kernel.Bind<IDeskMetricsClient>().ToConstant(deskMetricsClient);
 
             Kernel.Get<AnalyticsProvider>().Checkpoint();
@@ -149,7 +149,7 @@ namespace NzbDrone.Core
         {
             try
             {
-                var pid = _enviromentProvider.NzbDroneProcessIdFromEnviroment;
+                var pid = _environmentProvider.NzbDroneProcessIdFromEnviroment;
 
                 logger.Debug("Attaching to parent process ({0}) for automatic termination.", pid);
 

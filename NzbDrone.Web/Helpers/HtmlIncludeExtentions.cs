@@ -13,8 +13,8 @@ namespace NzbDrone.Web.Helpers
 
         static HtmlIncludeExtentions()
         {
-            versionString = new EnviromentProvider().Version.ToString().Replace('.', '_');
-            isProduction = EnviromentProvider.IsProduction;
+            versionString = new EnvironmentProvider().Version.ToString().Replace('.', '_');
+            isProduction = EnvironmentProvider.IsProduction;
         }
 
         public static MvcHtmlString IncludeScript(this HtmlHelper helper, string filename)

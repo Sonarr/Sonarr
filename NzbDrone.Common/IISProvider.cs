@@ -12,15 +12,15 @@ namespace NzbDrone.Common
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly ConfigFileProvider _configFileProvider;
         private readonly ProcessProvider _processProvider;
-        private readonly EnviromentProvider _enviromentProvider;
+        private readonly EnvironmentProvider _environmentProvider;
 
 
         [Inject]
-        public IISProvider(ConfigFileProvider configFileProvider, ProcessProvider processProvider, EnviromentProvider enviromentProvider)
+        public IISProvider(ConfigFileProvider configFileProvider, ProcessProvider processProvider, EnvironmentProvider environmentProvider)
         {
             _configFileProvider = configFileProvider;
             _processProvider = processProvider;
-            _enviromentProvider = enviromentProvider;
+            _environmentProvider = environmentProvider;
         }
 
         public IISProvider()
@@ -42,9 +42,9 @@ namespace NzbDrone.Common
 
             var startInfo = new ProcessStartInfo();
 
-            startInfo.FileName = _enviromentProvider.GetIISExe();
-            startInfo.Arguments = String.Format("/config:\"{0}\" /trace:i", _enviromentProvider.GetIISConfigPath());
-            startInfo.WorkingDirectory = _enviromentProvider.ApplicationPath;
+            startInfo.FileName = _environmentProvider.GetIISExe();
+            startInfo.Arguments = String.Format("/config:\"{0}\" /trace:i", _environmentProvider.GetIISConfigPath());
+            startInfo.WorkingDirectory = _environmentProvider.ApplicationPath;
 
             startInfo.UseShellExecute = false;
             startInfo.RedirectStandardOutput = true;
@@ -52,12 +52,12 @@ namespace NzbDrone.Common
             startInfo.CreateNoWindow = true;
 
 
-            startInfo.EnvironmentVariables[EnviromentProvider.NZBDRONE_PATH] = _enviromentProvider.ApplicationPath;
-            startInfo.EnvironmentVariables[EnviromentProvider.NZBDRONE_PID] = Process.GetCurrentProcess().Id.ToString();
+            startInfo.EnvironmentVariables[EnvironmentProvider.NZBDRONE_PATH] = _environmentProvider.ApplicationPath;
+            startInfo.EnvironmentVariables[EnvironmentProvider.NZBDRONE_PID] = Process.GetCurrentProcess().Id.ToString();
 
             try
             {
-                _configFileProvider.UpdateIISConfig(_enviromentProvider.GetIISConfigPath());
+                _configFileProvider.UpdateIISConfig(_environmentProvider.GetIISConfigPath());
             }
             catch (Exception e)
             {
@@ -102,7 +102,7 @@ namespace NzbDrone.Common
             foreach (var process in _processProvider.GetProcessByName("IISExpress"))
             {
                 Logger.Info("[{0}]IIS Process found. Path:{1}", process.Id, process.StartPath);
-                if (DiskProvider.PathEquals(process.StartPath, _enviromentProvider.GetIISExe()))
+                if (DiskProvider.PathEquals(process.StartPath, _environmentProvider.GetIISExe()))
                 {
                     Logger.Info("[{0}]Process is considered orphaned.", process.Id);
                     _processProvider.Kill(process.Id);

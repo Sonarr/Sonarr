@@ -14,7 +14,7 @@ namespace NzbDrone
 
         private readonly ConfigFileProvider _configFileProvider;
         private readonly DebuggerProvider _debuggerProvider;
-        private readonly EnviromentProvider _enviromentProvider;
+        private readonly EnvironmentProvider _environmentProvider;
         private readonly IISProvider _iisProvider;
         private readonly ProcessProvider _processProvider;
         private readonly MonitoringProvider _monitoringProvider;
@@ -22,13 +22,13 @@ namespace NzbDrone
 
         [Inject]
         public ApplicationServer(ConfigFileProvider configFileProvider, IISProvider iisProvider,
-                           DebuggerProvider debuggerProvider, EnviromentProvider enviromentProvider,
+                           DebuggerProvider debuggerProvider, EnvironmentProvider environmentProvider,
                            ProcessProvider processProvider, MonitoringProvider monitoringProvider, SecurityProvider securityProvider)
         {
             _configFileProvider = configFileProvider;
             _iisProvider = iisProvider;
             _debuggerProvider = debuggerProvider;
-            _enviromentProvider = enviromentProvider;
+            _environmentProvider = environmentProvider;
             _processProvider = processProvider;
             _monitoringProvider = monitoringProvider;
             _securityProvider = securityProvider;
@@ -52,7 +52,7 @@ namespace NzbDrone
 
             _debuggerProvider.Attach();
 
-            if (_enviromentProvider.IsUserInteractive && _configFileProvider.LaunchBrowser)
+            if (_environmentProvider.IsUserInteractive && _configFileProvider.LaunchBrowser)
             {
                 try
                 {

@@ -16,13 +16,13 @@ namespace NzbDrone.Common
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        private readonly EnviromentProvider _enviromentProvider;
+        private readonly EnvironmentProvider _environmentProvider;
 
 
         [Inject]
-        public RestProvider(EnviromentProvider enviromentProvider)
+        public RestProvider(EnvironmentProvider environmentProvider)
         {
-            _enviromentProvider = enviromentProvider;
+            _environmentProvider = environmentProvider;
         }
 
         public RestProvider()
@@ -35,9 +35,9 @@ namespace NzbDrone.Common
 
         public virtual void PostData(string url, ReportBase reportBase)
         {
-            reportBase.UGuid = EnviromentProvider.UGuid;
-            reportBase.Version = _enviromentProvider.Version.ToString();
-            reportBase.IsProduction = EnviromentProvider.IsProduction;
+            reportBase.UGuid = EnvironmentProvider.UGuid;
+            reportBase.Version = _environmentProvider.Version.ToString();
+            reportBase.IsProduction = EnvironmentProvider.IsProduction;
 
             PostData(url, reportBase as object);
         }

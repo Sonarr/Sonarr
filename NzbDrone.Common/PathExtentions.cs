@@ -42,119 +42,119 @@ namespace NzbDrone.Common
         }
 
 
-        public static string GetIISFolder(this EnviromentProvider enviromentProvider)
+        public static string GetIISFolder(this EnvironmentProvider environmentProvider)
         {
-            return Path.Combine(enviromentProvider.ApplicationPath, IIS_FOLDER);
+            return Path.Combine(environmentProvider.ApplicationPath, IIS_FOLDER);
         }
 
-        public static string GetIISExe(this EnviromentProvider enviromentProvider)
+        public static string GetIISExe(this EnvironmentProvider environmentProvider)
         {
-            return Path.Combine(enviromentProvider.GetIISFolder(), IIS_EXE);
+            return Path.Combine(environmentProvider.GetIISFolder(), IIS_EXE);
         }
 
-        public static string GetIISConfigPath(this EnviromentProvider enviromentProvider)
+        public static string GetIISConfigPath(this EnvironmentProvider environmentProvider)
         {
-            return Path.Combine(enviromentProvider.GetIISFolder(), "AppServer", "applicationhost.config");
+            return Path.Combine(environmentProvider.GetIISFolder(), "AppServer", "applicationhost.config");
         }
 
-        public static string GetWebRoot(this EnviromentProvider enviromentProvider)
+        public static string GetWebRoot(this EnvironmentProvider environmentProvider)
         {
-            return Path.Combine(enviromentProvider.ApplicationPath, WEB_FOLDER);
+            return Path.Combine(environmentProvider.ApplicationPath, WEB_FOLDER);
         }
 
-        public static string GetAppDataPath(this EnviromentProvider enviromentProvider)
+        public static string GetAppDataPath(this EnvironmentProvider environmentProvider)
         {
-            return Path.Combine(enviromentProvider.GetWebRoot(), APP_DATA);
+            return Path.Combine(environmentProvider.GetWebRoot(), APP_DATA);
         }
 
-        public static string GetNlogConfigPath(this EnviromentProvider enviromentProvider)
+        public static string GetNlogConfigPath(this EnvironmentProvider environmentProvider)
         {
-            return Path.Combine(enviromentProvider.GetWebRoot(), LOG_CONFIG_FILE);
+            return Path.Combine(environmentProvider.GetWebRoot(), LOG_CONFIG_FILE);
         }
 
-        public static string GetConfigPath(this EnviromentProvider enviromentProvider)
+        public static string GetConfigPath(this EnvironmentProvider environmentProvider)
         {
-            return Path.Combine(enviromentProvider.ApplicationPath, APP_CONFIG_FILE);
+            return Path.Combine(environmentProvider.ApplicationPath, APP_CONFIG_FILE);
         }
 
-        public static string GetNzbDronoeDbFile(this EnviromentProvider enviromentProvider)
+        public static string GetNzbDronoeDbFile(this EnvironmentProvider environmentProvider)
         {
-            return Path.Combine(enviromentProvider.GetAppDataPath(), NZBDRONE_DB_FILE);
+            return Path.Combine(environmentProvider.GetAppDataPath(), NZBDRONE_DB_FILE);
         }
 
-        public static string GetLogDbFileDbFile(this EnviromentProvider enviromentProvider)
+        public static string GetLogDbFileDbFile(this EnvironmentProvider environmentProvider)
         {
-            return Path.Combine(enviromentProvider.GetAppDataPath(), LOG_DB_FILE);
+            return Path.Combine(environmentProvider.GetAppDataPath(), LOG_DB_FILE);
         }
 
-        public static string GetMediaCoverPath(this EnviromentProvider enviromentProvider)
+        public static string GetMediaCoverPath(this EnvironmentProvider environmentProvider)
         {
-            return Path.Combine(enviromentProvider.GetWebRoot(), "MediaCover");
+            return Path.Combine(environmentProvider.GetWebRoot(), "MediaCover");
         }
 
-        public static string GetBannerPath(this EnviromentProvider enviromentProvider)
+        public static string GetBannerPath(this EnvironmentProvider environmentProvider)
         {
-            return Path.Combine(enviromentProvider.GetMediaCoverPath(), "Banners");
+            return Path.Combine(environmentProvider.GetMediaCoverPath(), "Banners");
         }
 
-        public static string GetFanArtPath(this EnviromentProvider enviromentProvider)
+        public static string GetFanArtPath(this EnvironmentProvider environmentProvider)
         {
-            return Path.Combine(enviromentProvider.GetMediaCoverPath(), "Fanarts");
+            return Path.Combine(environmentProvider.GetMediaCoverPath(), "Fanarts");
         }
 
-        public static string GetCacheFolder(this EnviromentProvider enviromentProvider)
+        public static string GetCacheFolder(this EnvironmentProvider environmentProvider)
         {
-            return Path.Combine(enviromentProvider.GetWebRoot(), "Cache");
+            return Path.Combine(environmentProvider.GetWebRoot(), "Cache");
         }
 
-        public static string GetUpdateLogFolder(this EnviromentProvider enviromentProvider)
+        public static string GetUpdateLogFolder(this EnvironmentProvider environmentProvider)
         {
-            return Path.Combine(enviromentProvider.ApplicationPath, UPDATE_LOG_FOLDER_NAME);
+            return Path.Combine(environmentProvider.ApplicationPath, UPDATE_LOG_FOLDER_NAME);
         }
 
-        public static string GetUpdateSandboxFolder(this EnviromentProvider enviromentProvider)
+        public static string GetUpdateSandboxFolder(this EnvironmentProvider environmentProvider)
         {
-            return Path.Combine(enviromentProvider.SystemTemp, UPDATE_SANDBOX_FOLDER_NAME);
+            return Path.Combine(environmentProvider.SystemTemp, UPDATE_SANDBOX_FOLDER_NAME);
         }
 
-        public static string GetUpdateBackUpFolder(this EnviromentProvider enviromentProvider)
+        public static string GetUpdateBackUpFolder(this EnvironmentProvider environmentProvider)
         {
-            return Path.Combine(enviromentProvider.GetUpdateSandboxFolder(), UPDATE_BACKUP_FOLDER_NAME);
+            return Path.Combine(environmentProvider.GetUpdateSandboxFolder(), UPDATE_BACKUP_FOLDER_NAME);
         }
 
-        public static string GetUpdatePackageFolder(this EnviromentProvider enviromentProvider)
+        public static string GetUpdatePackageFolder(this EnvironmentProvider environmentProvider)
         {
-            return Path.Combine(enviromentProvider.GetUpdateSandboxFolder(), UPDATE_PACKAGE_FOLDER_NAME);
+            return Path.Combine(environmentProvider.GetUpdateSandboxFolder(), UPDATE_PACKAGE_FOLDER_NAME);
         }
 
-        public static string GetUpdateClientFolder(this EnviromentProvider enviromentProvider)
+        public static string GetUpdateClientFolder(this EnvironmentProvider environmentProvider)
         {
-            return Path.Combine(enviromentProvider.GetUpdatePackageFolder(), UPDATE_CLIENT_FOLDER_NAME);
+            return Path.Combine(environmentProvider.GetUpdatePackageFolder(), UPDATE_CLIENT_FOLDER_NAME);
         }
 
-        public static string GetUpdateClientExePath(this EnviromentProvider enviromentProvider)
+        public static string GetUpdateClientExePath(this EnvironmentProvider environmentProvider)
         {
-            return Path.Combine(enviromentProvider.GetUpdateSandboxFolder(), UPDATE_CLIENT_EXE);
+            return Path.Combine(environmentProvider.GetUpdateSandboxFolder(), UPDATE_CLIENT_EXE);
         }
 
-        public static string GetSandboxLogFolder(this EnviromentProvider enviromentProvider)
+        public static string GetSandboxLogFolder(this EnvironmentProvider environmentProvider)
         {
-            return Path.Combine(enviromentProvider.GetUpdateSandboxFolder(), UPDATE_LOG_FOLDER_NAME);
+            return Path.Combine(environmentProvider.GetUpdateSandboxFolder(), UPDATE_LOG_FOLDER_NAME);
         }
 
-        public static string GetLogFileName(this EnviromentProvider enviromentProvider)
+        public static string GetLogFileName(this EnvironmentProvider environmentProvider)
         {
-            return Path.Combine(enviromentProvider.ApplicationPath, "nzbdrone.log.txt");
+            return Path.Combine(environmentProvider.ApplicationPath, "nzbdrone.log.txt");
         }
 
-        public static string GetArchivedLogFileName(this EnviromentProvider enviromentProvider)
+        public static string GetArchivedLogFileName(this EnvironmentProvider environmentProvider)
         {
-            return Path.Combine(enviromentProvider.ApplicationPath, "nzbdrone.log.0.txt");
+            return Path.Combine(environmentProvider.ApplicationPath, "nzbdrone.log.0.txt");
         }
 
-        public static string GetConfigBackupFile(this EnviromentProvider enviromentProvider)
+        public static string GetConfigBackupFile(this EnvironmentProvider environmentProvider)
         {
-            return Path.Combine(enviromentProvider.GetAppDataPath(), BACKUP_ZIP_FILE);
+            return Path.Combine(environmentProvider.GetAppDataPath(), BACKUP_ZIP_FILE);
         }
     }
 }

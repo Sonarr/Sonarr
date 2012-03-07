@@ -13,7 +13,7 @@ namespace NzbDrone.Services.Service.Helpers
 
         static HtmlIncludeExtentions()
         {
-            versionString = new EnviromentProvider().Version.ToString().Replace('.', '_');
+            versionString = new EnvironmentProvider().Version.ToString().Replace('.', '_');
             isProduction = true;
         }
 

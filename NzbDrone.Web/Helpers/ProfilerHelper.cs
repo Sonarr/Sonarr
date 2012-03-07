@@ -10,8 +10,8 @@ namespace NzbDrone.Web.Helpers
     {
         public static bool Enabled()
         {
-            var enviromentProvider = new EnviromentProvider();
-            var configFileProvider = new ConfigFileProvider(enviromentProvider);
+            var environmentProvider = new EnvironmentProvider();
+            var configFileProvider = new ConfigFileProvider(environmentProvider);
 
             return configFileProvider.EnableProfiler;
         }
