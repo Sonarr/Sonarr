@@ -140,13 +140,8 @@
     <Compile Include="Helpers\Validation\RequiredIfAnyAttribute.cs" />
     <Compile Include="Helpers\Validation\RequiredIfAttribute.cs" />
     <Content Include="Content\DataTables-1.9.0\media\css\jquery.dataTables.css" />
-    <Content Include="Content\DataTables-1.9.0\media\images\back_disabled.png" />
-    <Content Include="Content\DataTables-1.9.0\media\images\back_enabled.png" />
-    <Content Include="Content\DataTables-1.9.0\media\images\back_enabled_hover.png" />
-    <Content Include="Content\DataTables-1.9.0\media\images\favicon.ico" />
-    <Content Include="Content\DataTables-1.9.0\media\images\forward_disabled.png" />
-    <Content Include="Content\DataTables-1.9.0\media\images\forward_enabled.png" />
-    <Content Include="Content\DataTables-1.9.0\media\images\forward_enabled_hover.png" />
+    <Content Include="Content\DataTables-1.9.0\media\images\back.png" />
+    <Content Include="Content\DataTables-1.9.0\media\images\forward.png" />
     <Content Include="Content\DataTables-1.9.0\media\images\sort_asc.png" />
     <Content Include="Content\DataTables-1.9.0\media\images\sort_asc_disabled.png" />
     <Content Include="Content\DataTables-1.9.0\media\images\sort_both.png" />
@@ -514,7 +509,6 @@
     <Content Include="Views\Upcoming\UpcomingEpisode.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Content\DataTables-1.9.0\media\images\Sorting icons.psd" />
     <Content Include="Views\Settings\Plex.cshtml" />
     <Content Include="Views\Shared\NoSeriesBanner.cshtml" />
     <Content Include="Views\Update\Post.cshtml" />

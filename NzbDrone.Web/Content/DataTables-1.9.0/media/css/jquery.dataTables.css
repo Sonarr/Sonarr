@@ -207,21 +207,21 @@ table.dataTable tr.even td.sorting_3 { background-color: #F9F9FF; }
 	margin-left: 10px;
 }
 
-.paginate_enabled_first { background: url('../images/back_enabled.png') no-repeat top left; }
-.paginate_enabled_first:hover { background: url('../images/back_enabled_hover.png') no-repeat top left; }
-.paginate_disabled_first { background: url('../images/back_disabled.png') no-repeat top left; }
+.paginate_enabled_first { background: url('../images/back.png') no-repeat top left; }
+.paginate_enabled_first:hover { background: url('../images/back.png') no-repeat top left; }
+.paginate_disabled_first { background: url('../images/back.png') no-repeat top left; }
 
-.paginate_enabled_previous { background: url('../images/back_enabled.png') no-repeat top left; }
-.paginate_enabled_previous:hover { background: url('../images/back_enabled_hover.png') no-repeat top left; }
-.paginate_disabled_previous { background: url('../images/back_disabled.png') no-repeat top left; }
+.paginate_enabled_previous { background: url('../images/back.png') no-repeat top left; }
+.paginate_enabled_previous:hover { background: url('../images/back.png') no-repeat top left; }
+.paginate_disabled_previous { background: url('../images/back.png') no-repeat top left; }
 
-.paginate_enabled_next { background: url('../images/forward_enabled.png') no-repeat top right; }
-.paginate_enabled_next:hover { background: url('../images/forward_enabled_hover.png') no-repeat top right; }
-.paginate_disabled_next { background: url('../images/forward_disabled.png') no-repeat top right; }
+.paginate_enabled_next { background: url('../images/forward.png') no-repeat top right; }
+.paginate_enabled_next:hover { background: url('../images/forward.png') no-repeat top right; }
+.paginate_disabled_next { background: url('../images/forward.png') no-repeat top right; }
 
-.paginate_enabled_last { background: url('../images/forward_enabled.png') no-repeat top right; }
-.paginate_enabled_last:hover { background: url('../images/forward_enabled_hover.png') no-repeat top right; }
-.paginate_disabled_last { background: url('../images/forward_disabled.png') no-repeat top right; }
+.paginate_enabled_last { background: url('../images/forward.png') no-repeat top right; }
+.paginate_enabled_last:hover { background: url('../images/forward.png') no-repeat top right; }
+.paginate_disabled_last { background: url('../images/forward.png') no-repeat top right; }
 
 /* Full number pagination */
 .paging_full_numbers {
