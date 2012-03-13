@@ -153,7 +153,7 @@
                                                                     } 
                                 }, //Title
                                 { sWidth: '100px', "mDataProp": "SeasonsCount" }, //Seasons
-                                { sWidth: '100px', "mDataProp": "QualityProfileName" }, //Quality
+                                { sWidth: '100px', "mDataProp": "QualityProfileName", sClass: "qualityColumn" }, //Quality
                                 { sWidth: '120px', "mDataProp": "Network" }, //Network
                                 { sWidth: '120px', "mDataProp": function (source, type, val) {
                                                                         // 'display' and 'filter' use our fancy naming
@@ -175,8 +175,8 @@
                                     }
                                 }, //Episodes
                                 { sWidth: '50px', "mDataProp": "HasBanner", "bSortable": false, "fnRender": function (row) {
-                                        return "<img src='../../Content/Images/settings.png' class='editButton gridAction' value='" + row.aData["SeriesId"] + "' rel='" + row.aData["Title"] + "' />" +
-                                                "<img src='../../Content/Images/close.png' class='deleteButton gridAction' value='" + row.aData["SeriesId"] + "' rel='" + row.aData["Title"] + "'/>";
+                                        return "<img src='../../Content/Images/settings.png' class='editButton gridAction' title = 'Edit Series' value='" + row.aData["SeriesId"] + "' rel='" + row.aData["Title"] + "' />" +
+                                                "<img src='../../Content/Images/close.png' class='deleteButton gridAction' title = 'Delete Series' value='" + row.aData["SeriesId"] + "' rel='" + row.aData["Title"] + "'/>";
                                     }
                                 }, //Commands
                                 { sWidth: '60px', "mDataProp": "Details", "bSortable": false, "bVisible": false, "fnRender": function (row) {
@@ -213,6 +213,11 @@
         //After we save do this...
         function afterSave() {
             updateStatus();
+            
+            //Update Quality
+            var seriesId = $('#SeriesId').val();
+            var quality = $('#QualityProfileId :selected').text();
+            $('.' + seriesId).children('.qualityColumn').text(quality);
         }
 
         function updateStatus() {
