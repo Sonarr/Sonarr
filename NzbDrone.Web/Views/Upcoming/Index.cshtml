@@ -18,7 +18,7 @@
 }
 @section ActionMenu{
     <ul class="sub-menu">
-        <li>@Ajax.ActionLink("Start RSS Sync", "RssSync", "Command", null)</li>
+        <li>@Ajax.ActionLink("Start RSS Sync", "RssSync", "Command", null, null, new { Title = "Check for newly released downloads" })</li>
     </ul>
 }
 <div class="gridControls">
