@@ -212,7 +212,7 @@ namespace NzbDrone.Core.Jobs
                             {
                                 if (Queue.Count != 0)
                                 {
-                                    job = Queue.OrderByDescending(c=>c.Source).First();
+                                    job = Queue.OrderBy(c=>c.Source).First();
                                     logger.Trace("Popping {0} from the queue.", job);
                                     Queue.Remove(job);
                                 }
