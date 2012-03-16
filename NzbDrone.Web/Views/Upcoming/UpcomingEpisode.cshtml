@@ -33,9 +33,23 @@
         }
     }
 
+    @{
+        var statusTitle = Model.Status;
+
+        if (Model.Status == "AirsToday")
+        {
+            statusTitle = "Airs today";
+        }
+        
+        if (Model.Status == "NotAired")
+        {
+            statusTitle = "Not yet aired";
+        }
+    }
+
     @*Commands Column*@
     <td class="@cellColourClass">
-        <img src='../../Content/Images/@(Model.Status).png' alt='@Model.Status' title='@Model.Status' class='gridImage statusImage' />
+        <img src='../../Content/Images/@(Model.Status).png' alt='@Model.Status' title='@statusTitle' class='gridImage statusImage' />
         @Ajax.ImageActionLink("../../Content/Images/Search.png", new { Alt = "Search", Title = "Search for episode", @class = "gridAction" }, "Search", "Episode", new { episodeId = Model.EpisodeId }, null, null)
     </td>
 </tr>
