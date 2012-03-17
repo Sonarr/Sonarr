@@ -66,6 +66,7 @@ namespace NzbDrone.Core.Test
         [TestCase("extras.s03.e05.ws.dvdrip.xvid-m00tv", "Extras", 3, 5)]
         [TestCase("castle.2009.416.hdtv-lol", "Castle 2009", 4, 16)]
         [TestCase("hawaii.five-0.2010.217.hdtv-lol", "Hawaii Five-0 (2010)", 2, 17)]
+        [TestCase("Looney Tunes - S1936E18 - I Love to Singa", "Looney Tunes", 1936, 18)]
         public void ParseTitle_single(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
             var result = Parser.ParseTitle(postTitle);
