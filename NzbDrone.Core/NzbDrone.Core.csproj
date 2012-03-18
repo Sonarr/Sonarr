@@ -263,6 +263,7 @@
     <Compile Include="Model\Sabnzbd\SabCategoryModel.cs" />
     <Compile Include="Model\Sabnzbd\SabModel.cs" />
     <Compile Include="Model\Sabnzbd\SabQueueItem.cs" />
+    <Compile Include="Model\Sabnzbd\SabVersionModel.cs" />
     <Compile Include="Model\Twitter\TwitterAuthorizationModel.cs" />
     <Compile Include="Model\UpdatePackage.cs" />
     <Compile Include="Model\Xbmc\ActionType.cs" />

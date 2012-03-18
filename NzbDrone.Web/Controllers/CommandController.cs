@@ -17,10 +17,12 @@ namespace NzbDrone.Web.Controllers
         private readonly EpisodeProvider _episodeProvider;
         private readonly GrowlProvider _growlProvider;
         private readonly SeasonProvider _seasonProvider;
+        private readonly ProwlProvider _prowlProvider;
 
         public CommandController(JobProvider jobProvider, SabProvider sabProvider,
                                     SmtpProvider smtpProvider, TwitterProvider twitterProvider,
-                                    EpisodeProvider episodeProvider, GrowlProvider growlProvider, SeasonProvider seasonProvider)
+                                    EpisodeProvider episodeProvider, GrowlProvider growlProvider,
+                                    SeasonProvider seasonProvider, ProwlProvider prowlProvider)
         {
             _jobProvider = jobProvider;
             _sabProvider = sabProvider;
@@ -29,6 +31,7 @@ namespace NzbDrone.Web.Controllers
             _episodeProvider = episodeProvider;
             _growlProvider = growlProvider;
             _seasonProvider = seasonProvider;
+            _prowlProvider = prowlProvider;
         }
 
         public JsonResult RssSync()
@@ -125,6 +128,23 @@ namespace NzbDrone.Web.Controllers
         {
             _episodeProvider.SetEpisodeIgnore(episodeId, ignored);
             return new EmptyResult();
+        }
+
+        public JsonResult TestProwl(string apiKeys)
+        {
+            _prowlProvider.TestNotification(apiKeys);
+            return JsonNotificationResult.Info("Good News!", "Test message has been sent to Prowl");
+        }
+
+        public JsonResult TestSabnzbd(string host, int port, string apiKey, string username, string password)
+        {
+            //_prowlProvider.TestNotification(apiKeys);
+            var version = _sabProvider.Test(host, port, apiKey, username, password);
+
+            if (String.IsNullOrWhiteSpace(version))
+                return JsonNotificationResult.Oops("Failed to connect to SABnzbd, please check your settings");
+
+            return JsonNotificationResult.Info("Success!", "SABnzbd settings have been verified successfully! Version: " + version);
         }
     }
 }

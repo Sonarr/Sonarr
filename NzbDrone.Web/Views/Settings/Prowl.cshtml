@@ -31,4 +31,9 @@
         <span class="small">@Html.DescriptionFor(m => m.ProwlPriority)</span>
     </label>
     @Html.DropDownListFor(m => m.ProwlPriority, Model.ProwlPrioritySelectList, new { @class = "inputClass selectClass" })
+
+    <label class="labelClass">Test Prowl
+        <span class="small">Test Prowl by sending a message to your client(s)</span>
+    </label>
+    <input type="button" onclick="testProwl();" value="Test" class="inputClass" />
 </div>

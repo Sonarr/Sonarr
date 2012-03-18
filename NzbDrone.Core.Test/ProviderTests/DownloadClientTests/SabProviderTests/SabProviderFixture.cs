@@ -39,7 +39,6 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
             fakeConfig.SetupGet(c => c.SabTvCategory).Returns("tv");
         }
 
-
         private void WithFailResponse()
         {
             Mocker.GetMock<HttpProvider>()
@@ -56,7 +55,6 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
             //Act
             Mocker.Resolve<SabProvider>().DownloadNzb(url, title).Should().BeTrue();
         }
-
 
         [Test]
         public void newzbin_add_url_should_format_request_properly()
@@ -122,7 +120,6 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
             result.categories.Should().NotBeEmpty();
         }
 
-
         [Test]
         public void GetHistory_should_return_a_list_with_items_when_the_history_has_items()
         {
@@ -162,5 +159,54 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
             Assert.Throws<ApplicationException>(() => Mocker.Resolve<SabProvider>().GetHistory(), "API Key Incorrect");
         }
 
+        [Test]
+        public void GetVersion_should_return_the_version_using_passed_in_values()
+        {
+            var response = "{ \"version\": \"0.6.9\" }";
+
+            Mocker.GetMock<HttpProvider>()
+                    .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=version&output=json&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
+                    .Returns(response);
+
+            //Act
+            var result = Mocker.Resolve<SabProvider>().GetVersion("192.168.5.55", 2222, "5c770e3197e4fe763423ee7c392c25d1", "admin", "pass");
+
+            //Assert
+            result.Should().NotBeNull();
+            result.Version.Should().Be("0.6.9");
+        }
+
+        [Test]
+        public void GetVersion_should_return_the_version_using_saved_values()
+        {
+            var response = "{ \"version\": \"0.6.9\" }";
+
+            Mocker.GetMock<HttpProvider>()
+                    .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=version&output=json&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
+                    .Returns(response);
+
+            //Act
+            var result = Mocker.Resolve<SabProvider>().GetVersion();
+
+            //Assert
+            result.Should().NotBeNull();
+            result.Version.Should().Be("0.6.9");
+        }
+
+        [Test]
+        public void Test_should_return_version_as_a_string()
+        {
+            var response = "{ \"version\": \"0.6.9\" }";
+
+            Mocker.GetMock<HttpProvider>()
+                    .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=version&output=json&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
+                    .Returns(response);
+
+            //Act
+            var result = Mocker.Resolve<SabProvider>().Test("192.168.5.55", 2222, "5c770e3197e4fe763423ee7c392c25d1", "admin", "pass");
+
+            //Assert
+            result.Should().Be("0.6.9");
+        }
     }
 }

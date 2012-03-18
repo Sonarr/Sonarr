@@ -6,6 +6,10 @@ $('#SeparatorStyle').live('change', function () { createExamples(); });
 $('#NumberStyle').live('change', function () { createExamples(); });
 $('#MultiEpisodeStyle').live('change', function () { createExamples(); });
 
+var testProwlUrl = '../Command/TestProwl';
+var testSabUrl = '../Command/TestSabnzbd';
+
+
 function createExamples() {
     createSingleEpisodeExample();
     createMultiEpisodeExample();
@@ -101,4 +105,32 @@ function createMultiEpisodeExample() {
         result = result.replace(/\s/g, '.');
 
     $('#multiEpisodeExample').children('.result').text(result);
+}
+
+function testProwl(event) {
+    var apiKeys = $('#ProwlApiKeys').val();
+
+    $.ajax({
+        type: "GET",
+        url: testProwlUrl,
+        data: jQuery.param({ apiKeys: apiKeys })
+    });
+
+    event.preventDefault();
+}
+
+function testSabnzbd(event) {
+    var host = $('#SabHost').val();
+    var port = $('#SabPort').val();
+    var apiKey = $('#SabApiKey').val();
+    var username = $('#SabUsername').val();
+    var password = $('#SabPassword').val();
+
+    $.ajax({
+        type: "GET",
+        url: testSabUrl,
+        data: jQuery.param({ host: host, port: port, apiKey: apiKey, username: username, password: password })
+    });
+
+    event.preventDefault();
 }

@@ -50,5 +50,8 @@
     </label>
     @Html.DropDownListFor(m => m.SabTvPriority, Model.PrioritySelectList, new { @class = "inputClass selectClass" })
 
-    
+    <label class="labelClass">Test SABnzbd
+        <span class="small">Test SABnzbd settings</span>
+    </label>
+    <input type="button" onclick="testSabnzbd();" value="Test" class="inputClass" />
 </div>
