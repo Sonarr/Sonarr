@@ -23,7 +23,7 @@ namespace NzbDrone.Web.Models
         public bool AppendQuality { get; set; }
 
         [DisplayName("Use Season Folders")]
-        [Description("Should files be stored in season folders?")]
+        [Description("Should files be stored in season folders by default? (Applied only when a series is added)")]
         public bool SeasonFolders { get; set; }
 
         [DisplayName("Season Folder Format")]
