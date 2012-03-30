@@ -14,6 +14,10 @@ namespace NzbDrone.Services.Service.Exceptions
             _mongoDb = mongoDb;
         }
 
+        public ExceptionRepository()
+        {
+            
+        }
 
         public virtual string Store(NzbDrone.Services.Service.Exceptions.ExceptionReport exceptionReport)
         {

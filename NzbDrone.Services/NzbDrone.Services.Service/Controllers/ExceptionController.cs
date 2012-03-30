@@ -17,7 +17,6 @@ namespace NzbDrone.Services.Service.Controllers
     {
         private readonly IDatabase _database;
         private readonly ExceptionRepository _exceptionRepository;
-        private readonly MongoDatabase _mongoDatabase;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         [Inject]
@@ -76,20 +75,20 @@ namespace NzbDrone.Services.Service.Controllers
                 report.Stack = exceptionReport.Stack;
                 report.Uid = exceptionReport.UGuid.ToString();
 
-                var exceptionHash = _exceptionRepository.Store(report);
+                _exceptionRepository.Store(report);
 
-                //var exceptionHash = GetExceptionDetailId(exceptionReport);
+                var exceptionHash = GetExceptionDetailId(exceptionReport);
 
-                //var exceptionInstance = new ExceptionInstance
-                //                     {
-                //                         ExceptionHash = exceptionHash,
-                //                         IsProduction = exceptionReport.IsProduction,
-                //                         LogMessage = exceptionReport.LogMessage,
-                //                         Timestamp = DateTime.Now,
-                //                         UGuid = exceptionReport.UGuid
-                //                     };
+                var exceptionInstance = new ExceptionInstance
+                                     {
+                                         ExceptionHash = exceptionHash,
+                                         IsProduction = exceptionReport.IsProduction,
+                                         LogMessage = exceptionReport.LogMessage,
+                                         Timestamp = DateTime.Now,
+                                         UGuid = exceptionReport.UGuid
+                                     };
 
-                //_database.Insert(exceptionInstance);
+                _database.Insert(exceptionInstance);
 
                 return new JsonResult { Data = new ExceptionReportResponse { ExceptionHash = exceptionHash } };
             }
