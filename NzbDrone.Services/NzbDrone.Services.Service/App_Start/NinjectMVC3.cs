@@ -1,7 +1,9 @@
+using MongoDB.Driver;
 using NzbDrone.Services.Service.Datastore;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ninject;
 using Ninject.Web.Mvc;
+using NzbDrone.Services.Service.Migrations;
 using Services.PetaPoco;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(NzbDrone.Services.Service.App_Start.NinjectMVC3), "Start")]
@@ -29,7 +31,11 @@ namespace NzbDrone.Services.Service.App_Start
         private static IKernel CreateKernel()
         {
             var kernel = new StandardKernel();
+            MigrationsHelper.Run(Connection.GetConnectionString);
             kernel.Bind<IDatabase>().ToMethod(c => Connection.GetPetaPocoDb());
+            kernel.Bind<MongoDatabase>().ToConstant(Connection.GetMongoDb());
+
+
             return kernel;
         }
     }

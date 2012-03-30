@@ -15,6 +15,11 @@ namespace NzbDrone.Common.Contract
         [JsonProperty("s")]
         public string String { get; set; }
 
+        [JsonProperty("xmessage")]
+        public string ExceptionMessage { get; set; }
+       
+        [JsonProperty("stk")]
+        public string Stack { get; set; }
 
         protected override Dictionary<string, string> GetString()
         {

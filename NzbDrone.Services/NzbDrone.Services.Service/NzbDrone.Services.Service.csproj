@@ -47,6 +47,9 @@
     <Reference Include="Elmah">
       <HintPath>..\..\packages\elmah.corelibrary.1.2.1\lib\Elmah.dll</HintPath>
     </Reference>
+    <Reference Include="Exceptrack.Core">
+      <HintPath>..\..\Libraries\Exceptrack\Exceptrack.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -63,6 +66,12 @@
     <Reference Include="Migrator.Providers, Version=0.0.0.0, Culture=neutral, PublicKeyToken=3b3586e9632ecfce, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Libraries\Migrator.NET\Migrator.Providers.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Bson">
+      <HintPath>..\..\packages\mongocsharpdriver.1.4\lib\net35\MongoDB.Bson.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver">
+      <HintPath>..\..\packages\mongocsharpdriver.1.4\lib\net35\MongoDB.Driver.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.0.8.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.4.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
@@ -216,6 +225,10 @@
     <Compile Include="App_Start\Logging.cs" />
     <Compile Include="App_Start\NinjectMVC3.cs" />
     <Compile Include="Controllers\ExceptionController.cs" />
+    <Compile Include="Exceptions\ExceptionInfo.cs" />
+    <Compile Include="Exceptions\ExceptionInstance.cs" />
+    <Compile Include="Exceptions\ExceptionReport.cs" />
+    <Compile Include="Exceptions\ExceptionRepository.cs" />
     <Compile Include="Helpers\HtmlIncludeExtentions.cs" />
     <Compile Include="Migrations\Migration20120226.cs" />
     <Compile Include="Migrations\Migration20120229.cs" />

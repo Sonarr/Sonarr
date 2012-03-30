@@ -62,7 +62,8 @@ namespace NzbDrone.Common
                     
                 var report = new ExceptionReport();
                 report.LogMessage = logEvent.FormattedMessage;
-                report.String = logEvent.Exception.ToString();
+                report.Stack = logEvent.Exception.StackTrace;
+                report.ExceptionMessage = logEvent.Exception.Message;
                 report.Logger = logEvent.LoggerName;
                 report.Type = logEvent.Exception.GetType().Name;
 
