@@ -69,11 +69,11 @@ namespace NzbDrone.Services.Service.Controllers
                 var report = new Exceptions.ExceptionReport();
                 report.AppVersion = exceptionReport.Version;
                 report.ApplicationId = "NzbDrone";
-                report.ExceptionMessage = exceptionReport.String;
+                report.ExceptionMessage = exceptionReport.ExceptionMessage;
                 report.ExceptionType = exceptionReport.Type;
                 report.Location = exceptionReport.Logger;
                 report.Message = exceptionReport.LogMessage;
-                report.Stack = exceptionReport.String;
+                report.Stack = exceptionReport.Stack;
                 report.Uid = exceptionReport.UGuid.ToString();
 
                 var exceptionHash = _exceptionRepository.Store(report);
