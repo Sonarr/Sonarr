@@ -1,0 +1,58 @@
+﻿var test = @"As Sterling Cooper Draper Pryce tries to build upon its current business, Peggy is given new responsibility. Don and Harry indulge a client. Betty contemplates her mortality after seeing a doctor.
+
+Recap:
+
+Sally and Bobby struggle to zip Betty into a tight dress, but without success. Betty crawls under the covers, tells Henry she doesn’t feel well and refuses to join him at a social function that evening.
+
+At Don’s apartment, Megan speaks in French to her mother on the phone while dressing for an SCDP client dinner with Heinz. She passes the phone to Don who, flustered by the language barrier, hands the phone back.
+
+Later at the restaurant, the Heinz client and his wife ask how Don and Megan met. "At work," Don says. "Don was divorced," Megan adds. The client asks Don to enlist the Rolling Stones for a television ad. Don says he’ll try.
+
+Pete tells Roger they’re on the verge of signing Mohawk, and he would like Roger to handle the account. They decide to hire an additional copywriter because Peggy has her hands full. They believe the client would want a man.
+
+Harry tells Don that he’s arranged a backstage meeting with the Rolling Stones’ manager on Saturday night.
+
+At home, Betty sits on the couch in her robe, eating Bugles and reading the paper. Her mother-in-law stops by and suggests diet pills to help Betty get back into shape.
+
+Back at the office, Don and Roger inform Peggy about Mohawk then ask her to hire a male copywriter.
+
+Betty visits her doctor to inquire about diet pills. The doctor explains that rapid weight gain in housewives is usually caused by unhappiness or boredom. During his exam, he finds a lump in her throat.
+
+Betty returns home and looks for Henry, who is not there. She calls Don and frantically tells him about the thyroid lump. "Say what you always say," she begs. "Everything’s gonna be okay," he replies.
+
+In her office, Peggy leafs through portfolios. She’s impressed by the work of Michael Ginsberg. Stan advises her to hire someone less talented or the new guy will end up her boss.
+
+As Betty relaxes in the bathtub, Henry tells her he scheduled a doctor’s appointment for her the next morning. At the doctor’s office, she runs into Joyce, an old acquaintance who suggests they meet for lunch.
+
+Peggy interviews Michael but is put off by his insistence on seeing Don. When she ends the interview prematurely, he apologizes.
+
+Over lunch, Betty predicts that if she dies, her kids will "never hear a nice word about me again." A fortuneteller stops by her and Joyce’s table and reads Betty’s tea leaves: "You’re a great soul. You mean so much to the people around you." Betty bursts into tears.
+
+Peggy tells Roger that Michael is crazy, but Roger insists that she hire him. He says hiring a Jew would make the agency more modern, then cracks a joke about Don’s new black secretary, Dawn.
+
+As he gets ready for the Stones concert, Don warns Megan that Betty might call.
+
+Backstage at the concert, Don and Harry wait for the Stones to arrive. Harry tells two teenage girls that he and Don are in the advertising business.
+
+Henry kisses Betty in bed. She returns his advance, surprising him. "It’s been too long," she says.
+
+Back at the concert, one of the girls sneaks Harry in past security. The other girl remains with Don.
+
+In the kitchen, Betty dreams that she’s watching Henry and the kids seated for a meal while Henry’s mother serves them. Sally turns Betty’s chair upside down. "I’m so sorry sweetheart," says Betty. She wakes from the dream.
+Harry bursts out of the backstage room exclaiming that he’s signed the Stones for the commercial. But when he hears the crowd screaming "They’re here!" he realizes he accidentally signed the wrong band: The Trade Winds.
+
+The next morning, Don tells Megan that Betty might be sick. Megan encourages him to not get stuck thinking about what might happen.
+
+In his office, Don admires Michael’s portfolio during the interview. Michael fawns over Don, who congratulates Peggy on finding a good candidate. Peggy tells Michael he got the job.
+
+Betty finds out the tumor is benign. Henry hugs her, but she replies: "It’s nice to be put through the ringer and find out I’m just fat.'
+
+Pete gathers everyone at the office to announce that he landed the Mohawk account but Roger will handle it. Roger storms out then tells Don he’s tired of trying to prove his worth. Don reveals that Betty might have cancer. "When is everything going to get back to normal?" Roger wonders.
+
+Don calls Betty for an update. Henry picks up the phone and is surprised that Don knew about Betty’s situation. He tells Don that Betty is fine and promptly hangs up.
+
+Michael comes home, unpacks groceries and tells his father that he got the job. His father blesses him with a prayer in Hebrew.
+
+Betty and Sally eat ice cream sundaes at the kitchen table. Sally leaves hers half-eaten, and Betty reaches over to finish it.";
+
+test.Length.Dump();
