@@ -8,6 +8,7 @@ $('#MultiEpisodeStyle').live('change', function () { createExamples(); });
 
 var testProwlUrl = '../Command/TestProwl';
 var testSabUrl = '../Command/TestSabnzbd';
+var testEmailUrl = '../Command/TestEmail';
 
 
 function createExamples() {
@@ -133,4 +134,93 @@ function testSabnzbd(event) {
     });
 
     event.preventDefault();
+}
+
+//Twitter
+getAuthorizationUrl = '../Command/GetTwitterAuthorization';
+verifyAuthorizationUrl = '../Command/VerifyTwitterAuthorization';
+
+function requestTwitterAuthorization() {
+    $.ajax({
+        type: "GET",
+        url: getAuthorizationUrl,
+        error: function (req, status, error) {
+            alert("Sorry! We could get Twitter Authorization at this time. " + error);
+        },
+        success: function (data, textStatus, jqXHR) {
+            if (data.IsMessage)
+                return false;
+
+            $('#authorizationRequestToken').val(data.Token);
+            window.open(data.Url);
+        }
+    });
+}
+
+function verifyTwitterAuthorization() {
+    var token = $('#authorizationRequestToken').val();
+    var verifier = $('#twitterVerification').val();
+
+    $.ajax({
+        type: "GET",
+        url: verifyAuthorizationUrl,
+        data: jQuery.param({ token: token, verifier: verifier }),
+        error: function (req, status, error) {
+            alert("Sorry! We could verify Twitter Authorization at this time. " + error);
+        }
+    });
+}
+
+//SMTP
+function testSmtpSettings() {
+    //Get the variables
+    var server = $('#SmtpServer').val();
+    var port = $('#SmtpPort').val();
+    var ssl = $('#SmtpUseSsl').val();
+    var username = $('#SmtpUsername').val();
+    var password = $('#SmtpPassword').val();
+    var fromAddress = $('#SmtpFromAddress').val();
+    var toAddresses = $('#SmtpToAddresses').val();
+
+    //Send the data!
+    $.ajax({
+        type: "POST",
+        url: testEmailUrl,
+        data: jQuery.param({
+            server: server,
+            port: port,
+            ssl: ssl,
+            username: username,
+            password: password,
+            fromAddress: fromAddress,
+            toAddresses: toAddresses
+        }),
+        error: function (req, status, error) {
+            alert("Sorry! We could send a test email at this time. " + error);
+        }
+    });
+
+    return false;
+}
+
+//Growl
+function registerGrowl() {
+    //Get the variables
+    var host = $('#GrowlHost').val();
+    var password = $('#GrowlPassword').val();
+
+    //Send the data!
+    $.ajax({
+        type: "POST",
+        url: '../Command/RegisterGrowl',
+        data: jQuery.param({
+            host: host,
+            password: password
+        }),
+        error: function (req, status, error) {
+            alert("Sorry! We could send a test email at this time. " + error);
+        }
+    });
+
+    return false;
 }

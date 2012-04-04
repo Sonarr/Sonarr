@@ -90,7 +90,7 @@ namespace NzbDrone.Core.Providers
                 credentials = new NetworkCredential(username, password);
 
             //Send the email
-            return Send(email, _configProvider.SmtpServer, _configProvider.SmtpPort, _configProvider.SmtpUseSsl, credentials);
+            return Send(email, server, port, ssl, credentials);
         }
 
         //TODO: make this throw instead of return false.

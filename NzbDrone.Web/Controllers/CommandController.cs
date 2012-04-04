@@ -68,10 +68,10 @@ namespace NzbDrone.Web.Controllers
         }
 
         [HttpPost]
-        public JsonResult SendTestEmail(string server, int port, bool ssl, string username, string password, string fromAddress, string toAddresses)
+        public JsonResult TestEmail(string server, int port, bool ssl, string username, string password, string fromAddress, string toAddresses)
         {
             if (_smtpProvider.SendTestEmail(server, port, ssl, username, password, fromAddress, toAddresses))
-                JsonNotificationResult.Info("Successful", "Test email sent.");
+                return JsonNotificationResult.Info("Successful", "Test email sent.");
 
             return JsonNotificationResult.Oops("Couldn't send Email, please check your settings");
         }
