@@ -62,5 +62,30 @@ namespace NzbDrone.Core
 
             return intList.Max();
         }
+
+        public static string Truncate(this string s, int maxLength)
+        {
+            if (Encoding.UTF8.GetByteCount(s) <= maxLength)
+                return s;
+            var cs = s.ToCharArray();
+            int length = 0;
+            int i = 0;
+            while (i < cs.Length)
+            {
+                int charSize = 1;
+                if (i < (cs.Length - 1) && char.IsSurrogate(cs[i]))
+                    charSize = 2;
+                int byteSize = Encoding.UTF8.GetByteCount(cs, i, charSize);
+                if ((byteSize + length) <= maxLength)
+                {
+                    i = i + charSize;
+                    length += byteSize;
+                }
+                else
+                    break;
+            }
+            return s.Substring(0, i);
+        }
+
     }
 }

@@ -191,5 +191,33 @@ namespace NzbDrone.Core.Test
             //Resolve
             result.Should().Be(10);
         }
+
+        [Test]
+        public void Truncate_should_truncate_strings_to_max_specified_number_of_bytes()
+        {
+            //Setup
+            var str = File.ReadAllText(@"Files\LongOverview.txt");
+
+            //Act
+            var resultString = str.Truncate(1000);
+
+            //Resolve
+            var result =  new System.Text.UTF8Encoding().GetBytes(resultString);
+            result.Length.Should().BeLessOrEqualTo(1000);
+        }
+
+        [Test]
+        public void Truncate_should_not_truncate_string_shorter_than_max_bytes()
+        {
+            //Setup
+            var str = "Hello World";
+
+            //Act
+            var resultString = str.Truncate(1000);
+
+            //Resolve
+            var result = new System.Text.UTF8Encoding().GetBytes(resultString);
+            result.Length.Should().Be(11);
+        }
     }
 }
