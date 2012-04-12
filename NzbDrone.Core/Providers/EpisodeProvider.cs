@@ -328,10 +328,7 @@ namespace NzbDrone.Core.Providers
                     episodeToUpdate.SeasonNumber = episode.SeasonNumber;
                     episodeToUpdate.Title = episode.EpisodeName;
 
-                    if (episode.Overview.Length > 3998)
-                        episodeToUpdate.Overview = episode.Overview.Substring(0, 3998);
-                    else
-                        episodeToUpdate.Overview = episode.Overview;
+                    episodeToUpdate.Overview = episode.Overview.Truncate(4000);
 
                     if (episode.FirstAired.Year > 1900)
                         episodeToUpdate.AirDate = episode.FirstAired.Date;

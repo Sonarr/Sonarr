@@ -481,48 +481,6 @@ namespace NzbDrone.Core.Test.ProviderTests
         }
 
         [Test]
-        public void RefreshEpisodeInfo_should_trim_overview_to_4000_characters()
-        {
-            //Arrange
-            const int seriesId = 71663;
-            const int episodeCount = 10;
-
-            var longOverview = File.ReadAllText(@".\Files\LongOverview.txt");
-
-            var fakeEpisodes = Builder<TvdbSeries>.CreateNew().With(
-                c => c.Episodes =
-                     new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(episodeCount).
-                                               All()
-                                               .With(l => l.Language = new TvdbLanguage(0, "eng", "a"))
-                                               .With(e => e.SeasonNumber = 0)
-                                               .TheLast(1)
-                                               .With(e => e.Overview = longOverview)
-                                               .Build())
-                ).With(c => c.Id = seriesId).Build();
-
-            var fakeSeries = Builder<Series>.CreateNew().With(c => c.SeriesId = seriesId).Build();
-
-            WithRealDb();
-
-            Db.Insert(fakeSeries);
-
-            Mocker.GetMock<TvDbProvider>()
-                .Setup(c => c.GetSeries(seriesId, true))
-                .Returns(fakeEpisodes);
-
-            Mocker.GetMock<SeasonProvider>()
-                .Setup(s => s.IsIgnored(seriesId, 0))
-                .Returns(false);
-
-            //Act
-            Mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
-
-            //Assert
-            var result = Mocker.Resolve<EpisodeProvider>().GetEpisodeBySeries(seriesId).ToList();
-            result.Should().HaveCount(episodeCount);
-        }
-
-        [Test]
         public void new_episodes_only_calls_Insert()
         {
             const int seriesId = 71663;
