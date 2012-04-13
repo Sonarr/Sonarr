@@ -273,6 +273,7 @@
     <Compile Include="Model\Xbmc\ErrorResult.cs" />
     <Compile Include="Model\Xbmc\IconType.cs" />
     <Compile Include="Providers\BannerProvider.cs" />
+    <Compile Include="Providers\Indexer\Wombles.cs" />
     <Compile Include="Providers\SeasonProvider.cs" />
     <Compile Include="Jobs\RecentBacklogSearchJob.cs" />
     <Compile Include="Jobs\TrimLogsJob.cs" />
