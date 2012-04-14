@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Providers.Indexer
 
         public override string Name
         {
-            get { return "Womble's Index"; }
+            get { return "WomblesIndex"; }
         }
 
         protected override string NzbDownloadUrl(SyndicationItem item)

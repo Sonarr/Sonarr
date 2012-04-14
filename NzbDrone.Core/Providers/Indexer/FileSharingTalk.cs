@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Providers.Indexer
 
         public override string Name
         {
-            get { return "File Sharing Talk"; }
+            get { return "FileSharingTalk"; }
         }
 
         protected override string NzbDownloadUrl(SyndicationItem item)
