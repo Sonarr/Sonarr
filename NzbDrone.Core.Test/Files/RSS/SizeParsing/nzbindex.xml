@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>NZBIndex: '#a.b.teevee@EFNet'</title>
+    <link>http://www.nzbindex.nl/</link>
+    <description>NZBIndex is a website where you can search for files on usenet. Files that you find can be downloaded by means of a NZB file that is generated for you.</description>
+    <webMaster>info@nzbindex.nl (Webmaster)</webMaster>
+    <ttl>60</ttl>
+    <item>
+      <title>[93923]-[FULL]-[#a.b.teevee@EFNet]-[ Britains.Got.More.Talent.S06E04.PDTV.x264-C4TV ]-[01/36] - &quot;britains.got.more.talent.s06e04.pdtv.x264-c4tv.nfo&quot; yEnc</title>
+      <link>http://www.nzbindex.nl/release/69196969/93923-FULL-a.b.teeveeEFNet-Britains.Got.More.Talent.S06E04.PDTV.x264-C4TV-0136-britains.got.more.talent.s06e04.pdtv.x264-c4tv.nfo.nzb</link>
+      <description>
+        <![CDATA[<p><font color="gray">alt.binaries.multimedia, alt.binaries.teevee</font><br />
+<b>560.12 MB</b><br />
+1 hour<br />
+<font color="#3DA233">36 files (774 parts)</font>
+<font color="gray">by teevee@4u.tv (teevee)</font><br />
+<font color="#E2A910">
+1 NFO | 8 PAR2 | 26 ARCHIVE</font>
+ - <a href="http://www.nzbindex.nl/nfo/69196969/93923-FULL-a.b.teeveeEFNet-Britains.Got.More.Talent.S06E04.PDTV.x264-C4TV-0136-britains.got.more.talent.s06e04.pdtv.x264-c4tv.nfo.nzb/?q=" target="_blank">View NFO</a></p>]]>
+      </description>
+      <category>alt.binaries.multimedia</category>
+      <category>alt.binaries.teevee</category>
+      <pubDate>Sat, 14 Apr 2012 23:32:13 +0200</pubDate>
+      <guid isPermaLink="true">http://www.nzbindex.nl/release/69196969/93923-FULL-a.b.teeveeEFNet-Britains.Got.More.Talent.S06E04.PDTV.x264-C4TV-0136-britains.got.more.talent.s06e04.pdtv.x264-c4tv.nfo.nzb</guid>
+      <enclosure url="http://www.nzbindex.nl/download/69196969/93923-FULL-a.b.teeveeEFNet-Britains.Got.More.Talent.S06E04.PDTV.x264-C4TV-0136-britains.got.more.talent.s06e04.pdtv.x264-c4tv.nfo.nzb" length="587327040" type="text/xml" />
+    </item>
+  </channel>
+</rss>

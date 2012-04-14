@@ -33,6 +33,7 @@ namespace NzbDrone.Core.Test
         [TestCase("newznab.xml")]
         [TestCase("wombles.xml")]
         [TestCase("filesharingtalk.xml")]
+        [TestCase("nzbindex.xml")]
         public void parse_feed_xml(string fileName)
         {
             Mocker.GetMock<HttpProvider>()
@@ -384,6 +385,22 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
+        public void size_nzbindex()
+        {
+            WithConfiguredIndexers();
+
+            Mocker.GetMock<HttpProvider>()
+                          .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
+                          .Returns(File.OpenRead(".\\Files\\Rss\\SizeParsing\\nzbindex.xml"));
+
+            //Act
+            var parseResults = Mocker.Resolve<NzbIndex>().FetchRss();
+
+            parseResults.Should().HaveCount(1);
+            parseResults[0].Size.Should().Be(587328389);
+        }
+
+        [Test]
         public void Server_Unavailable_503_should_not_log_exception()
         {
             Mocker.GetMock<HttpProvider>()
@@ -466,6 +483,22 @@ namespace NzbDrone.Core.Test
             ExceptionVerification.MarkInconclusive("System.Net.WebException");
             ExceptionVerification.MarkInconclusive("(503) Server Unavailable.");
             ExceptionVerification.MarkInconclusive("(500) Internal Server Error.");
+        }
+
+        [Test]
+        public void title_preparse_nzbindex()
+        {
+            WithConfiguredIndexers();
+
+            Mocker.GetMock<HttpProvider>()
+                          .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
+                          .Returns(File.OpenRead(".\\Files\\Rss\\SizeParsing\\nzbindex.xml"));
+
+            //Act
+            var parseResults = Mocker.Resolve<NzbIndex>().FetchRss();
+
+            parseResults.Should().HaveCount(1);
+            parseResults[0].CleanTitle.Should().Be("britainsgotmoretalent");
         }
     }
 }

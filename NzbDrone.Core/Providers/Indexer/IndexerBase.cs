@@ -81,6 +81,16 @@ namespace NzbDrone.Core.Providers.Indexer
         }
 
         /// <summary>
+        /// This method can be overwritten to provide pre-parse the title
+        /// </summary>
+        /// <param name="item">RSS item that needs to be parsed</param>
+        /// <returns></returns>
+        protected virtual string TitlePreParser(SyndicationItem item)
+        {
+            return item.Title.Text;
+        }
+
+        /// <summary>
         ///   Generates direct link to download an NZB
         /// </summary>
         /// <param name = "item">RSS Feed item to generate the link for</param>
@@ -224,7 +234,9 @@ namespace NzbDrone.Core.Providers.Indexer
         /// <returns>Detailed episode info</returns>
         public EpisodeParseResult ParseFeed(SyndicationItem item)
         {
-            var episodeParseResult = Parser.ParseTitle(item.Title.Text);
+            var title = TitlePreParser(item);
+
+            var episodeParseResult = Parser.ParseTitle(title);
             if (episodeParseResult != null) episodeParseResult.Age = DateTime.Now.Date.Subtract(item.PublishDate.Date).Days;
 
             return CustomParser(item, episodeParseResult);
