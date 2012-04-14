@@ -155,7 +155,7 @@
                     <span class="small">@Html.DescriptionFor(m => m.FileSharingTalkSecret)</span>
                     <span class="small">@Html.ValidationMessageFor(m => m.FileSharingTalkSecret)</span>
                 </label>
-                @Html.TextBoxFor(m => m.FileSharingTalkSecret, new { @class = "inputClass", type = "password" })
+                @Html.TextBoxFor(m => m.FileSharingTalkSecret, new { @class = "inputClass" })
             </div>
         </div>
         
@@ -254,7 +254,7 @@
             $('#WomblesEnabled').prop('checked', checked);
         
         if (id == 'fileSharingTalkStatus')
-            $('#FileSharingTalk').prop('checked', checked);
+            $('#FileSharingTalkEnabled').prop('checked', checked);
 
         reValidate();
     });

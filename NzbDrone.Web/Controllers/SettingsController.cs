@@ -73,6 +73,9 @@ namespace NzbDrone.Web.Controllers
                                 NewzbinUsername = _configProvider.NewzbinUsername,
                                 NewzbinPassword = _configProvider.NewzbinPassword,
 
+                                FileSharingTalkUid = _configProvider.FileSharingTalkUid,
+                                FileSharingTalkSecret = _configProvider.FileSharingTalkSecret,
+
                                 NzbsOrgEnabled = _indexerProvider.GetSettings(typeof(NzbsOrg)).Enable,
                                 NzbMatrixEnabled = _indexerProvider.GetSettings(typeof(NzbMatrix)).Enable,
                                 NzbsRUsEnabled = _indexerProvider.GetSettings(typeof(NzbsRUs)).Enable,
