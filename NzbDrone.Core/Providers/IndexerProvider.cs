@@ -73,7 +73,7 @@ namespace NzbDrone.Core.Providers
                 {
                     var settings = new IndexerDefinition
                                        {
-                                           Enable = false,
+                                           Enable = indexerLocal.EnabledByDefault,
                                            IndexProviderType = indexerLocal.GetType().ToString(),
                                            Name = indexerLocal.Name
                                        };

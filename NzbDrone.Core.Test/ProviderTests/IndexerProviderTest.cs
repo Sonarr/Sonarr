@@ -60,6 +60,38 @@ namespace NzbDrone.Core.Test.ProviderTests
             indexerProvider.All().Should().HaveCount(1);
             indexerProvider.GetEnabledIndexers().Should().BeEmpty();
         }
+
+        [Test]
+        public void Init_indexer_should_enable_indexer_that_is_enabled_by_default()
+        {
+            Mocker.SetConstant(TestDbHelper.GetEmptyDatabase());
+
+            //Act
+            var indexerProvider = Mocker.Resolve<IndexerProvider>();
+            indexerProvider.InitializeIndexers(new List<IndexerBase> { Mocker.Resolve<DefaultEnabledIndexer>() });
+
+            //Assert
+            indexerProvider.All();
+            indexerProvider.All().Should().HaveCount(1);
+            indexerProvider.GetEnabledIndexers().Should().HaveCount(1);
+            indexerProvider.GetSettings(typeof(DefaultEnabledIndexer)).Enable.Should().BeTrue();
+        }
+
+        [Test]
+        public void Init_indexer_should_not_enable_indexer_that_is_not_enabled_by_default()
+        {
+            Mocker.SetConstant(TestDbHelper.GetEmptyDatabase());
+
+            //Act
+            var indexerProvider = Mocker.Resolve<IndexerProvider>();
+            indexerProvider.InitializeIndexers(new List<IndexerBase> { Mocker.Resolve<MockIndexer>() });
+
+            //Assert
+            indexerProvider.All();
+            indexerProvider.All().Should().HaveCount(1);
+            indexerProvider.GetEnabledIndexers().Should().HaveCount(0);
+            indexerProvider.GetSettings(typeof(MockIndexer)).Enable.Should().BeFalse();
+        }
     }
 
     public class MockIndexer : IndexerBase
@@ -267,4 +299,61 @@ namespace NzbDrone.Core.Test.ProviderTests
         }
     }
 
+    public class DefaultEnabledIndexer : IndexerBase
+    {
+        public DefaultEnabledIndexer(HttpProvider httpProvider, ConfigProvider configProvider)
+            : base(httpProvider, configProvider)
+        {
+        }
+
+        protected override string[] Urls
+        {
+            get { return new[] { "www.google.com" }; }
+        }
+
+        public override bool IsConfigured
+        {
+            get { return true; }
+        }
+
+        protected override NetworkCredential Credentials
+        {
+            get { return null; }
+        }
+
+        protected override IList<string> GetEpisodeSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override IList<string> GetDailyEpisodeSearchUrls(string seriesTitle, DateTime date)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override IList<string> GetSeasonSearchUrls(string seriesTitle, int seasonNumber)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override IList<string> GetPartialSeasonSearchUrls(string seriesTitle, int seasonNumber, int episodeWildcard)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string Name
+        {
+            get { return "Mocked Indexer"; }
+        }
+
+
+        protected override string NzbDownloadUrl(SyndicationItem item)
+        {
+            return item.Links[0].Uri.ToString();
+        }
+        public override bool EnabledByDefault
+        {
+            get { return true; }
+        }
+    }
 }

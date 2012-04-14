@@ -45,9 +45,15 @@ namespace NzbDrone.Core.Providers.Indexer
         /// </summary>
         protected abstract string[] Urls { get; }
 
-
         public abstract bool IsConfigured { get; }
 
+        /// <summary>
+        ///   Should the indexer be enabled by default?
+        /// </summary>
+        public virtual bool EnabledByDefault
+        {
+            get { return false; }
+        }
 
         /// <summary>
         /// Gets the credential.

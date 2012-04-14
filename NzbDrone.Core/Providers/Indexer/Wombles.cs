@@ -75,5 +75,10 @@ namespace NzbDrone.Core.Providers.Indexer
 
             return currentResult;
         }
+
+        public override bool EnabledByDefault
+        {
+            get { return true; }
+        }
     }
 }
