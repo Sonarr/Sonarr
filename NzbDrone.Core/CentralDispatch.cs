@@ -98,6 +98,7 @@ namespace NzbDrone.Core
             Kernel.Bind<IndexerBase>().To<Wombles>();
             Kernel.Bind<IndexerBase>().To<FileSharingTalk>();
             Kernel.Bind<IndexerBase>().To<NzbIndex>();
+            Kernel.Bind<IndexerBase>().To<NzbClub>();
 
             var indexers = Kernel.GetAll<IndexerBase>();
             Kernel.Get<IndexerProvider>().InitializeIndexers(indexers.ToList());
