@@ -57,8 +57,14 @@
                 "iDisplayLength": 20,
                 "sPaginationType": "four_button",
                 "aoColumns": [
-                                { sWidth: '20px', "bSortable": false, "mDataProp": "Indexer", "fnRender": function (row) {
-                                        return "<img src='/Content/Images/Indexers/" + row.aData['Indexer'] + ".png' alt=" + row.aData["Indexer"] + ">";
+                                {
+                                    sWidth: '20px', "bSortable": false, "mDataProp": function (source, type, val) {
+                                        // 'display' and 'filter' use the image
+                                        if (type === 'display' || type === 'filter') {
+                                            return "<img src='/Content/Images/Indexers/" + source['Indexer'] + ".png' alt='" + source["Indexer"] + "' title='" + source["Indexer"] + "'>";
+                                        }
+                                        // 'sort' and 'type' both just use the raw data
+                                        return source["Indexer"];
                                     }
                                 }, //Image
                                 { sWidth: 'auto', "mDataProp": function (source, type, val) {
@@ -97,7 +103,8 @@
                         "fnRender": function(row) {
                             var result = "<b>Overview: </b>" + row.aData["EpisodeOverview"] + "<br/>" +
                                 "<b>NZB Title: </b>" + row.aData["NzbTitle"] + "<br/>" +
-                                    "<b>Proper: </b>" + row.aData["IsProper"];
+                                    "<b>Proper: </b>" + row.aData["IsProper"] + "<br/>" +
+                                    "<b>Indexer: </b>" + row.aData["Indexer"];
                             return result;
                         }
                     } //Details

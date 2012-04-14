@@ -220,6 +220,7 @@
     </Content>
     <Content Include="Files\RSS\wombles.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Files\RSS\filesharingtalk.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
