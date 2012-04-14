@@ -78,6 +78,8 @@ namespace NzbDrone.Web.Controllers
                                 NzbsRUsEnabled = _indexerProvider.GetSettings(typeof(NzbsRUs)).Enable,
                                 NewzbinEnabled = _indexerProvider.GetSettings(typeof(Newzbin)).Enable,
                                 NewznabEnabled = _indexerProvider.GetSettings(typeof(Newznab)).Enable,
+                                WomblesEnabled = _indexerProvider.GetSettings(typeof(Wombles)).Enable,
+                                FileSharingTalkEnabled = _indexerProvider.GetSettings(typeof(FileSharingTalk)).Enable,
 
                                 NewznabDefinitions = _newznabProvider.All(),
                             });
@@ -363,6 +365,14 @@ namespace NzbDrone.Web.Controllers
                 newznabSettings.Enable = data.NewznabEnabled;
                 _indexerProvider.SaveSettings(newznabSettings);
 
+                var womblesSettings = _indexerProvider.GetSettings(typeof(Wombles));
+                womblesSettings.Enable = data.WomblesEnabled;
+                _indexerProvider.SaveSettings(womblesSettings);
+
+                var fileSharingTalkSettings = _indexerProvider.GetSettings(typeof(FileSharingTalk));
+                fileSharingTalkSettings.Enable = data.FileSharingTalkEnabled;
+                _indexerProvider.SaveSettings(fileSharingTalkSettings);
+
                 _configProvider.NzbsOrgUId = data.NzbsOrgUId;
                 _configProvider.NzbsOrgHash = data.NzbsOrgHash;
 
@@ -374,6 +384,9 @@ namespace NzbDrone.Web.Controllers
 
                 _configProvider.NewzbinUsername = data.NewzbinUsername;
                 _configProvider.NewzbinPassword = data.NewzbinPassword;
+
+                _configProvider.FileSharingTalkUid = data.FileSharingTalkUid;
+                _configProvider.FileSharingTalkSecret = data.FileSharingTalkSecret;
 
                 if (data.NewznabDefinitions != null)
                     _newznabProvider.SaveAll(data.NewznabDefinitions);

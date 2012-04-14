@@ -65,6 +65,20 @@ namespace NzbDrone.Web.Models
         [RequiredIf("NewzbinEnabled", true, ErrorMessage = "Password Required when Newzbin is enabled")]
         public String NewzbinPassword { get; set; }
 
+        [DataType(DataType.Text)]
+        [DisplayName("UID")]
+        [Description("UserID for File Sharing Talk")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
+        [RequiredIf("FileSharingTalkEnabled", true, ErrorMessage = "UserID Required when File Sharing Talk is enabled")]
+        public String FileSharingTalkUid { get; set; }
+
+        [DataType(DataType.Text)]
+        [DisplayName("Secret")]
+        [Description("Password Secret for File Sharing Talk")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
+        [RequiredIf("FileSharingTalkEnabled", true, ErrorMessage = "Password Secret Required when File Sharing Talk is enabled")]
+        public String FileSharingTalkSecret { get; set; }
+
         [DisplayName("NZBs.org")]
         [Description("Enable downloading episodes from Nzbs.org")]
         public bool NzbsOrgEnabled { get; set; }
@@ -84,6 +98,14 @@ namespace NzbDrone.Web.Models
         [DisplayName("Newznab")]
         [Description("Enable downloading episodes from Newznab Providers")]
         public bool NewznabEnabled { get; set; }
+
+        [DisplayName("Womble's Index")]
+        [Description("Enable downloading episodes from Womble's Index")]
+        public bool WomblesEnabled { get; set; }
+
+        [DisplayName("File Sharing Talk")]
+        [Description("Enable downloading episodes from File Sharing Talk")]
+        public bool FileSharingTalkEnabled { get; set; }
 
         [Required(ErrorMessage = "Please enter a valid number of days")]
         [DataType(DataType.Text)]

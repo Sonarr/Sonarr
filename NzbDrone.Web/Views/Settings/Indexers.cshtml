@@ -24,13 +24,18 @@
     
     @Html.CheckBox("newznabStatus", @Model.NewznabEnabled, new { @class = "indexerStatusButton" })
     <label for="newznabStatus">Newznab</label>
+
+    @Html.CheckBox("womblesStatus", @Model.WomblesEnabled, new { @class = "indexerStatusButton" })
+    <label for="womblesStatus">Womble's Index</label>
+
+    @Html.CheckBox("fileSharingTalkStatus", @Model.FileSharingTalkEnabled, new { @class = "indexerStatusButton" })
+    <label for="fileSharingTalkStatus">File Sharing Talk</label>
 </div>
 <div id="stylized">
     @using (Html.BeginForm("SaveIndexers", "Settings", FormMethod.Post, new { id = "IndexersForm", name = "IndexersForm", @class = "settingsForm" }))
     {     
         <div class="jquery-accordion">
-            <h3>
-                <a href="#">NZBs.org</a></h3>
+            <h3><a href="#">NZBs.org</a></h3>
             <div class="indexerPanel">
                 <label class="labelClass">
                     Enable <span class="small">@Html.DescriptionFor(m => m.NzbsOrgEnabled)</span>
@@ -47,8 +52,8 @@
                 </label>
                 @Html.TextBoxFor(m => m.NzbsOrgHash, new { @class = "inputClass" })
             </div>
-            <h3>
-                <a href="#">NZBMatrix</a></h3>
+
+            <h3><a href="#">NZBMatrix</a></h3>
             <div class="indexerPanel">
                 <label class="labelClass">
                     Enable <span class="small">@Html.DescriptionFor(m => m.NzbMatrixEnabled)</span>
@@ -65,11 +70,10 @@
                 </label>
                 @Html.TextBoxFor(m => m.NzbMatrixApiKey, new { @class = "inputClass" })
             </div>
-            <h3>
-                <a href="#">NZBsRus</a></h3>
+
+            <h3><a href="#">NZBsRus</a></h3>
             <div class="indexerPanel">
-                <div class="warningBox">
-                    NZBsRus does not support backlog searching</div>
+                <div class="warningBox">NZBsRus does not support backlog searching</div>
                 <label class="labelClass">
                     Enable <span class="small">@Html.DescriptionFor(m => m.NzbsRUsEnabled)</span>
                 </label>
@@ -85,8 +89,8 @@
                 </label>
                 @Html.TextBoxFor(m => m.NzbsrusHash, new { @class = "inputClass" })
             </div>
-            <h3>
-                <a href="#">Newzbin</a></h3>
+
+            <h3><a href="#">Newzbin</a></h3>
             <div class="indexerPanel">
                 <label class="labelClass">
                     Enable <span class="small">@Html.DescriptionFor(m => m.NewzbinEnabled)</span>
@@ -103,8 +107,8 @@
                 </label>
                 @Html.TextBoxFor(m => m.NewzbinPassword, new { @class = "inputClass", type = "password" })
             </div>
-            <h3>
-                <a href="#">Newznab</a></h3>
+
+            <h3><a href="#">Newznab</a></h3>
             <div class="indexerPanel">
                 <label class="labelClass">
                     Enable <span class="small">@Html.DescriptionFor(m => m.NewznabEnabled)</span>
@@ -124,6 +128,34 @@
                         Html.RenderAction("GetNewznabProviderView", provider);
                     }
                 </div>
+            </div>
+
+            <h3><a href="#">Womble's Index</a></h3>
+            <div class="indexerPanel">
+                <div class="warningBox">Womble's Index does not support backlog searching</div>
+                <label class="labelClass">
+                    Enable <span class="small">@Html.DescriptionFor(m => m.WomblesEnabled)</span>
+                </label>
+                @Html.CheckBoxFor(m => m.WomblesEnabled, new { @class = "inputClass checkClass enabledCheck" })
+            </div>
+
+            <h3><a href="#">File Sharing Talk</a></h3>
+            <div class="indexerPanel">
+                <div class="warningBox">File Sharing Talk does not support backlog searching</div>
+                <label class="labelClass">
+                    Enable <span class="small">@Html.DescriptionFor(m => m.FileSharingTalkEnabled)</span>
+                </label>
+                @Html.CheckBoxFor(m => m.FileSharingTalkEnabled, new { @class = "inputClass checkClass enabledCheck" })
+                <label class="labelClass">@Html.LabelFor(m => m.FileSharingTalkUid)
+                    <span class="small">@Html.DescriptionFor(m => m.FileSharingTalkUid)</span>
+                    <span class="small">@Html.ValidationMessageFor(m => m.FileSharingTalkUid)</span>
+                </label>
+                @Html.TextBoxFor(m => m.FileSharingTalkUid, new { @class = "inputClass" })
+                <label class="labelClass">@Html.LabelFor(m => m.FileSharingTalkSecret)
+                    <span class="small">@Html.DescriptionFor(m => m.FileSharingTalkSecret)</span>
+                    <span class="small">@Html.ValidationMessageFor(m => m.FileSharingTalkSecret)</span>
+                </label>
+                @Html.TextBoxFor(m => m.FileSharingTalkSecret, new { @class = "inputClass", type = "password" })
             </div>
         </div>
         
@@ -188,6 +220,12 @@
 
         if (id == 'NewznabEnabled')
             $('#newznabStatus').prop('checked', checked);
+        
+        if (id == 'WomblesEnabled')
+            $('#womblesStatus').prop('checked', checked);
+        
+        if (id == 'FileSharingTalkEnabled')
+            $('#fileSharingTalkStatus').prop('checked', checked);
 
         $('.indexerStatusButton').button("refresh");
         reValidate();
@@ -211,6 +249,12 @@
 
         if (id == 'newznabStatus')
             $('#NewznabEnabled').prop('checked', checked);
+        
+        if (id == 'womblesStatus')
+            $('#WomblesEnabled').prop('checked', checked);
+        
+        if (id == 'fileSharingTalkStatus')
+            $('#FileSharingTalk').prop('checked', checked);
 
         reValidate();
     });

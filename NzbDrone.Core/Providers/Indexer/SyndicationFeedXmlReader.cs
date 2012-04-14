@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Providers.Indexer
         private bool _isAtomDateTime;
 
         private static readonly MethodInfo rss20FeedFormatterMethodInfo = typeof(Rss20FeedFormatter).GetMethod("DateFromString", BindingFlags.NonPublic | BindingFlags.Static);
-        private static readonly MethodInfo atom10FeedFormatterMethodInfo = typeof(Atom10FeedFormatter).GetMethod("DateFromString", BindingFlags.NonPublic | BindingFlags.Static);
+        private static readonly MethodInfo atom10FeedFormatterMethodInfo = typeof(Atom10FeedFormatter).GetMethod("DateFromString", BindingFlags.NonPublic | BindingFlags.Instance);
 
         public SyndicationFeedXmlReader(Stream stream) : base(stream) { }
 
