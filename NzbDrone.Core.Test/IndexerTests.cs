@@ -34,6 +34,7 @@ namespace NzbDrone.Core.Test
         [TestCase("wombles.xml")]
         [TestCase("filesharingtalk.xml")]
         [TestCase("nzbindex.xml")]
+        [TestCase("nzbclub.xml")]
         public void parse_feed_xml(string fileName)
         {
             Mocker.GetMock<HttpProvider>()
@@ -258,8 +259,6 @@ namespace NzbDrone.Core.Test
             result.Should().NotBeEmpty();
         }
 
-
-
         [Test]
         public void nzbmatrix_multi_word_search_returns_valid_results()
         {
@@ -273,7 +272,6 @@ namespace NzbDrone.Core.Test
 
             result.Should().NotBeEmpty();
         }
-
 
         [TestCase("hawaii five-0 (2010)", "hawaii+five+0+2010")]
         [TestCase("this& that", "this+that")]
@@ -401,6 +399,22 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
+        public void size_nzbclub()
+        {
+            WithConfiguredIndexers();
+
+            Mocker.GetMock<HttpProvider>()
+                          .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
+                          .Returns(File.OpenRead(".\\Files\\Rss\\SizeParsing\\nzbclub.xml"));
+
+            //Act
+            var parseResults = Mocker.Resolve<NzbClub>().FetchRss();
+
+            parseResults.Should().HaveCount(1);
+            parseResults[0].Size.Should().Be(2652142305);
+        }
+
+        [Test]
         public void Server_Unavailable_503_should_not_log_exception()
         {
             Mocker.GetMock<HttpProvider>()
@@ -499,6 +513,22 @@ namespace NzbDrone.Core.Test
 
             parseResults.Should().HaveCount(1);
             parseResults[0].CleanTitle.Should().Be("britainsgotmoretalent");
+        }
+
+        [Test]
+        public void title_preparse_nzbclub()
+        {
+            WithConfiguredIndexers();
+
+            Mocker.GetMock<HttpProvider>()
+                          .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
+                          .Returns(File.OpenRead(".\\Files\\Rss\\SizeParsing\\nzbclub.xml"));
+
+            //Act
+            var parseResults = Mocker.Resolve<NzbIndex>().FetchRss();
+
+            parseResults.Should().HaveCount(1);
+            parseResults[0].CleanTitle.Should().Be("britainsgottalent");
         }
     }
 }
