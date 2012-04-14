@@ -65,7 +65,7 @@ namespace NzbDrone.Common
                 report.Stack = logEvent.Exception.StackTrace;
                 report.ExceptionMessage = logEvent.Exception.Message;
                 report.Logger = logEvent.LoggerName;
-                report.Type = logEvent.Exception.GetType().Name;
+                report.Type = logEvent.Exception.GetType().FullName;
 
                 RestProvider.PostData(EXCEPTION_URL, report);
             }

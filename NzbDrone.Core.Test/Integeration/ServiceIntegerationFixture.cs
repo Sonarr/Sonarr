@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Test.Integeration
             _kernel.Bind<IDatabase>().ToConstant(Db);
 
             Mocker.GetMock<ConfigProvider>().SetupGet(s => s.ServiceRootUrl)
-                    .Returns("http://stage.services.nzbdrone.com");
+                    .Returns("http://services.nzbdrone.com");
 
         }
 
