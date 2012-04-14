@@ -89,6 +89,20 @@ namespace NzbDrone.Core.Providers.Core
             set { SetValue("NewzbinPassword", value); }
         }
 
+        public virtual String FileSharingTalkUid
+        {
+            get { return GetValue("FileSharingTalkUid"); }
+
+            set { SetValue("FileSharingTalkUid", value); }
+        }
+
+        public virtual String FileSharingTalkSecret
+        {
+            get { return GetValue("FileSharingTalkSecret"); }
+
+            set { SetValue("FileSharingTalkSecret", value); }
+        }
+
         public virtual String SabHost
         {
             get { return GetValue("SabHost", "localhost"); }

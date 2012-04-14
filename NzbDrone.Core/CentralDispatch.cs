@@ -47,7 +47,6 @@ namespace NzbDrone.Core
             InitJobs();
         }
 
-
         private void InitDatabase()
         {
             logger.Info("Initializing Database...");
@@ -96,6 +95,8 @@ namespace NzbDrone.Core
             Kernel.Bind<IndexerBase>().To<NzbsRUs>();
             Kernel.Bind<IndexerBase>().To<Newzbin>();
             Kernel.Bind<IndexerBase>().To<Newznab>();
+            Kernel.Bind<IndexerBase>().To<Wombles>();
+            Kernel.Bind<IndexerBase>().To<FileSharingTalk>();
 
             var indexers = Kernel.GetAll<IndexerBase>();
             Kernel.Get<IndexerProvider>().InitializeIndexers(indexers.ToList());

@@ -218,6 +218,12 @@
     <Content Include="Files\JsonError.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Files\RSS\wombles.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\RSS\filesharingtalk.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Files\RSS\newznab.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

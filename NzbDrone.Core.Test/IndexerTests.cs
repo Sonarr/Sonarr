@@ -31,6 +31,8 @@ namespace NzbDrone.Core.Test
         [TestCase("newzbin.xml")]
         [TestCase("nzbmatrix.xml")]
         [TestCase("newznab.xml")]
+        [TestCase("wombles.xml")]
+        [TestCase("filesharingtalk.xml")]
         public void parse_feed_xml(string fileName)
         {
             Mocker.GetMock<HttpProvider>()
