@@ -57,7 +57,6 @@ namespace NzbDrone.Services.Service.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Users")]
         public JsonResult AddPending(string cleanTitle, int id, string title)
         {
             _sceneMappingProvider.Insert(new PendingSceneMapping { CleanTitle = cleanTitle, Id = id, Title = title });
