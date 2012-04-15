@@ -107,6 +107,14 @@ namespace NzbDrone.Web.Models
         [Description("Enable downloading episodes from File Sharing Talk")]
         public bool FileSharingTalkEnabled { get; set; }
 
+        [DisplayName("NzbIndex")]
+        [Description("Enable downloading episodes from NzbIndex")]
+        public bool NzbIndexEnabled { get; set; }
+
+        [DisplayName("NzbClub")]
+        [Description("Enable downloading episodes from NzbClub")]
+        public bool NzbClubEnabled { get; set; }
+
         [Required(ErrorMessage = "Please enter a valid number of days")]
         [DataType(DataType.Text)]
         [DisplayName("Retention")]

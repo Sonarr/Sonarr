@@ -83,6 +83,8 @@ namespace NzbDrone.Web.Controllers
                                 NewznabEnabled = _indexerProvider.GetSettings(typeof(Newznab)).Enable,
                                 WomblesEnabled = _indexerProvider.GetSettings(typeof(Wombles)).Enable,
                                 FileSharingTalkEnabled = _indexerProvider.GetSettings(typeof(FileSharingTalk)).Enable,
+                                NzbIndexEnabled = _indexerProvider.GetSettings(typeof(NzbIndex)).Enable,
+                                NzbClubEnabled = _indexerProvider.GetSettings(typeof(NzbClub)).Enable,
 
                                 NewznabDefinitions = _newznabProvider.All(),
                             });
@@ -375,6 +377,14 @@ namespace NzbDrone.Web.Controllers
                 var fileSharingTalkSettings = _indexerProvider.GetSettings(typeof(FileSharingTalk));
                 fileSharingTalkSettings.Enable = data.FileSharingTalkEnabled;
                 _indexerProvider.SaveSettings(fileSharingTalkSettings);
+
+                var nzbIndexSettings = _indexerProvider.GetSettings(typeof(NzbIndex));
+                nzbIndexSettings.Enable = data.NzbIndexEnabled;
+                _indexerProvider.SaveSettings(nzbIndexSettings);
+
+                var nzbClubSettings = _indexerProvider.GetSettings(typeof(NzbClub));
+                nzbClubSettings.Enable = data.NzbClubEnabled;
+                _indexerProvider.SaveSettings(nzbClubSettings);
 
                 _configProvider.NzbsOrgUId = data.NzbsOrgUId;
                 _configProvider.NzbsOrgHash = data.NzbsOrgHash;
