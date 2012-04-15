@@ -180,7 +180,8 @@
                                     }
                                 }, //Commands
                                 { sWidth: '60px', "mDataProp": "Details", "bSortable": false, "bVisible": false, "fnRender": function (row) {
-                                        var result = "<b>Airs Day of Week: </b>" + row.aData["AirsDayOfWeek"] + "<br/>" +
+                                    var result = "<b>Airs Day of Week: </b>" + row.aData["AirsDayOfWeek"] + "<br/>" +
+                                                        "<b>Air Time: </b>" + row.aData["AirTime"] + "<br/>" +
                                                         "<b>Overview: </b>" + row.aData["Overview"] + "<br/>";
                                         return result;
                                     }

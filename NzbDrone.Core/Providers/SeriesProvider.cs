@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Providers
         public virtual IList<Series> GetAllSeriesWithEpisodeCount()
         {
             var series = _database
-          .Fetch<Series, QualityProfile>(@"SELECT Series.SeriesId, Series.Title, Series.CleanTitle, Series.Status, Series.Overview, Series.AirsDayOfWeek,Series.AirTimes,
+          .Fetch<Series, QualityProfile>(@"SELECT Series.SeriesId, Series.Title, Series.CleanTitle, Series.Status, Series.Overview, Series.AirsDayOfWeek, Series.AirTimes,
                                             Series.Language, Series.Path, Series.Monitored, Series.QualityProfileId, Series.SeasonFolder, Series.BacklogSetting, Series.Network,
                                             SUM(CASE WHEN Ignored = 0 AND Airdate <= @0 THEN 1 ELSE 0 END) AS EpisodeCount,
                                             SUM(CASE WHEN Episodes.Ignored = 0 AND Episodes.EpisodeFileId > 0 AND Episodes.AirDate <= @0 THEN 1 ELSE 0 END) as EpisodeFileCount,
