@@ -23,6 +23,9 @@ function createSingleEpisodeExample() {
 
     if ($("#SeparatorStyle option:selected").val() == 1)
         separator = ' ';
+    
+    if ($("#SeparatorStyle option:selected").val() == 2)
+        separator = '.';
 
     if ($('#SeriesName').attr('checked')) {
         result += 'Series Name';
@@ -52,6 +55,9 @@ function createMultiEpisodeExample() {
 
     if ($("#SeparatorStyle option:selected").val() == 1)
         separator = ' ';
+    
+    if ($("#SeparatorStyle option:selected").val() == 2)
+        separator = '.';
 
     if ($('#SeriesName').attr('checked')) {
         result += 'Series Name';

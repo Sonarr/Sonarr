@@ -519,5 +519,59 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
             //Assert
             result.Should().Be("30 Rock - S06E06-E07 - Hey, Baby, What's Wrong! (1) + Hey, Baby, What's Wrong! (2)");
         }
+
+        [Test]
+        public void GetNewFilename_Series_Episode_Quality_S01E05_Period()
+        {
+            //Setup
+
+
+            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingSeparatorStyle).Returns(2);
+            fakeConfig.SetupGet(c => c.SortingNumberStyle).Returns(2);
+            fakeConfig.SetupGet(c => c.SortingReplaceSpaces).Returns(false);
+
+            var episode = Builder<Episode>.CreateNew()
+                            .With(e => e.Title = "City Sushi")
+                            .With(e => e.SeasonNumber = 15)
+                            .With(e => e.EpisodeNumber = 6)
+                            .Build();
+
+            //Act
+            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV, false);
+
+            //Assert
+            Assert.AreEqual("South Park.S15E06.City Sushi [HDTV]", result);
+        }
+
+        [Test]
+        public void GetNewFilename_Episode_Quality_1x05_Period()
+        {
+            //Setup
+
+
+            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingSeparatorStyle).Returns(2);
+            fakeConfig.SetupGet(c => c.SortingNumberStyle).Returns(0);
+            fakeConfig.SetupGet(c => c.SortingReplaceSpaces).Returns(false);
+
+            var episode = Builder<Episode>.CreateNew()
+                            .With(e => e.Title = "City Sushi")
+                            .With(e => e.SeasonNumber = 15)
+                            .With(e => e.EpisodeNumber = 6)
+                            .Build();
+
+            //Act
+            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV, false);
+
+            //Assert
+            Assert.AreEqual("15x06.City Sushi [HDTV]", result);
+        }
     }
 }

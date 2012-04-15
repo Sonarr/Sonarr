@@ -19,6 +19,12 @@ namespace NzbDrone.Core.Helpers
                                                                                            Id = 1,
                                                                                            Name = "Space",
                                                                                            Pattern = " "
+                                                                                       },
+                                                                                    new EpisodeSortingType
+                                                                                       {
+                                                                                           Id = 2,
+                                                                                           Name = "Period",
+                                                                                           Pattern = "."
                                                                                        }
                                                                                };
 
