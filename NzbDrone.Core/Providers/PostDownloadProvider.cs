@@ -66,6 +66,8 @@ namespace NzbDrone.Core.Providers
                 return;
             }
 
+            _diskScanProvider.CleanUpDropFolder(subfolderInfo.FullName);
+
             var importedFiles = _diskScanProvider.Scan(series, subfolderInfo.FullName);
             importedFiles.ForEach(file => _diskScanProvider.MoveEpisodeFile(file, true));
 

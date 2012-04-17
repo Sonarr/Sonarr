@@ -158,5 +158,40 @@ namespace NzbDrone.Core.Test.ProviderTests
             result.Should().HaveCount(9);
             result.Should().NotContain(e => e.EpisodeFileId == 1);
         }
+
+        [Test]
+        public void GetFileByPath_should_return_null_if_file_does_not_exist_in_database()
+        {
+            //Setup
+            WithRealDb();
+
+            //Act
+            var result = Mocker.Resolve<MediaFileProvider>().GetFileByPath(@"C:\Test\EpisodeFile.avi");
+
+            //Resolve
+            result.Should().BeNull();
+        }
+
+        [Test]
+        public void GetFileByPath_should_return_EpisodeFile_if_file_exists_in_database()
+        {
+            var path = @"C:\Test\EpisodeFile.avi";
+
+            //Setup
+            WithRealDb();
+            var episodeFile = Builder<EpisodeFile>.CreateNew()
+                    .With(f => f.Path = path.NormalizePath())
+                    .Build();
+
+            var episodeFileId = Convert.ToInt32(Db.Insert(episodeFile));
+
+            //Act
+            var result = Mocker.Resolve<MediaFileProvider>().GetFileByPath(path);
+
+            //Resolve
+            result.Should().NotBeNull();
+            result.Path.Should().Be(path.NormalizePath());
+            result.EpisodeFileId.Should().Be(episodeFileId);
+        }
     }
 }
