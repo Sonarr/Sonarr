@@ -239,6 +239,8 @@ namespace NzbDrone.Core.Providers.Indexer
             var episodeParseResult = Parser.ParseTitle(title);
             if (episodeParseResult != null) episodeParseResult.Age = DateTime.Now.Date.Subtract(item.PublishDate.Date).Days;
 
+            _logger.Trace("Parsed: {0} from: {1}", episodeParseResult, item.Title.Text);
+
             return CustomParser(item, episodeParseResult);
         }
 

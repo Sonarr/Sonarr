@@ -25,6 +25,7 @@ namespace NzbDrone.Core.Providers.DecisionEngine
 
         public virtual bool IsSatisfiedBy(EpisodeParseResult subject)
         {
+            logger.Trace("Beginning size check for: {0}", subject);
             var qualityType = _qualityTypeProvider.Get((int)subject.Quality.QualityType);
 
             //Need to determine if this is a 30 or 60 minute episode
@@ -33,7 +34,10 @@ namespace NzbDrone.Core.Providers.DecisionEngine
 
             //0 will be treated as unlimited
             if (qualityType.MaxSize == 0)
+            {
+                logger.Trace("Max size is 0 (unlimited) - skipping check.");
                 return true;
+            }
 
             var maxSize = qualityType.MaxSize.Megabytes();
             var series = subject.Series;
@@ -57,8 +61,12 @@ namespace NzbDrone.Core.Providers.DecisionEngine
 
             //If the parsed size is greater than maxSize we don't want it
             if (subject.Size > maxSize)
+            {
+                logger.Trace("Item: {0}, Size: {1} is greater than maximum allowed size ({1}), rejecting.", subject, subject.Size, maxSize);
                 return false;
-
+            }
+                
+            logger.Trace("Item: {0}, meets size contraints.", subject);
             return true;
         }
        
