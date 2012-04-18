@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Providers.ExternalNotification
             if (_configProvider.TwitterNotifyOnDownload)
             {
                 _logger.Trace("Sending Notification to Twitter (On Grab)");
-                _twitterProvider.SendTweet("Downloaded Complete: " + message);
+                _twitterProvider.SendTweet("Download Completed: " + message);
             }
         }
 
