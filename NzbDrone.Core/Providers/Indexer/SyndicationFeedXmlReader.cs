@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.ServiceModel.Syndication;
+using System.Threading;
 using System.Xml;
 using NLog;
 
@@ -60,7 +61,11 @@ namespace NzbDrone.Core.Providers.Indexer
                     logger.WarnException("Unable to parse Feed date " + dateVal, e);
                 }
 
-                dateVal = parsedDate.ToString(CultureInfo.CurrentCulture.DateTimeFormat.RFC1123Pattern);
+                var currentCulture = Thread.CurrentThread.CurrentCulture;
+                Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+                dateVal = parsedDate.ToString("ddd, dd MMM yyyy HH:mm:ss zzz");
+                dateVal = dateVal.Remove(dateVal.LastIndexOf(':'), 1);
+                Thread.CurrentThread.CurrentCulture = currentCulture;
             }
 
             return dateVal;
