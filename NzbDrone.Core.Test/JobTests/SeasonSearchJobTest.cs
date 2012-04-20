@@ -6,9 +6,11 @@ using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Jobs;
+using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
+using NzbDrone.Core.Repository.Search;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common.AutoMoq;
 
@@ -39,10 +41,16 @@ namespace NzbDrone.Core.Test.JobTests
         [Test]
         public void SeasonSearch_partial_season_success()
         {
+            var resultItems = Builder<SearchResultItem>.CreateListOfSize(5)
+                .All()
+                .With(e => e.SearchError = ReportRejectionType.None)
+                .With(e => e.Success = true)
+                .Build();
+
             var episodes = Builder<Episode>.CreateListOfSize(5)
                 .All()
-                .With(e => e.SeriesId = 1)
                 .With(e => e.SeasonNumber = 1)
+                .With(e => e.SeriesId = 5)
                 .Build();
 
             var notification = new ProgressNotification("Season Search");
@@ -55,7 +63,7 @@ namespace NzbDrone.Core.Test.JobTests
 
             Mocker.GetMock<SearchProvider>()
                 .Setup(c => c.PartialSeasonSearch(notification, 1, 1))
-                .Returns(episodes.Select(e => e.EpisodeNumber).ToList());
+                .Returns(resultItems.ToList());
 
             //Act
             Mocker.Resolve<SeasonSearchJob>().Start(notification, 1, 1);
@@ -88,7 +96,7 @@ namespace NzbDrone.Core.Test.JobTests
 
             Mocker.GetMock<SearchProvider>()
                 .Setup(c => c.PartialSeasonSearch(notification, 1, 1))
-                .Returns(new List<int>{1});
+                .Returns(new List<SearchResultItem>{ new SearchResultItem{ Success = true }});
 
             //Act
             Mocker.Resolve<SeasonSearchJob>().Start(notification, 1, 1);
@@ -122,7 +130,7 @@ namespace NzbDrone.Core.Test.JobTests
 
             Mocker.GetMock<SearchProvider>()
                 .Setup(c => c.PartialSeasonSearch(notification, 1, 1))
-                .Returns(new List<int>());
+                .Returns(new List<SearchResultItem> { new SearchResultItem { Success = false, SearchError = ReportRejectionType.Size} });
 
 
             //Act

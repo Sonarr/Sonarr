@@ -60,15 +60,15 @@ namespace NzbDrone.Core.Jobs
             //Perform a Partial Season Search
             var addedSeries = _searchProvider.PartialSeasonSearch(notification, targetId, secondaryTargetId);
 
-            addedSeries.Distinct().ToList().Sort();
-            var episodeNumbers = episodes.Where(w => w.AirDate <= DateTime.Today.AddDays(1)).Select(s => s.EpisodeNumber).ToList();
-            episodeNumbers.Sort();
+            //addedSeries.Distinct().ToList().Sort();
+            //var episodeNumbers = episodes.Where(w => w.AirDate <= DateTime.Today.AddDays(1)).Select(s => s.EpisodeNumber).ToList();
+            //episodeNumbers.Sort();
 
-            if (addedSeries.SequenceEqual(episodeNumbers))
-                return;
+            //if (addedSeries.SequenceEqual(episodeNumbers))
+            //    return;
             
-            //Get the list of episodes that weren't downloaded
-            var missingEpisodes = episodeNumbers.Except(addedSeries).ToList();
+            ////Get the list of episodes that weren't downloaded
+            //var missingEpisodes = episodeNumbers.Except(addedSeries).ToList();
 
             //TODO: do one by one check only when max number of feeds have been returned by the indexer
             //Only process episodes that is in missing episodes (To ensure we double check if the episode is available)

@@ -88,42 +88,42 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
         [Test]
         public void should_be_allowed_if_all_conditions_are_met()
         {
-            spec.IsSatisfiedBy(parseResult).Should().BeTrue();
+            spec.IsSatisfiedBy(parseResult).Should().Be(ReportRejectionType.None);
         }
 
         [Test]
         public void should_not_be_allowed_if_profile_is_not_allowed()
         {
             WithProfileNotAllowed();
-            spec.IsSatisfiedBy(parseResult).Should().BeFalse();
+            spec.IsSatisfiedBy(parseResult).Should().Be(ReportRejectionType.QualityNotWanted);
         }
 
         [Test]
         public void should_not_be_allowed_if_size_is_not_allowed()
         {
             WithNotAcceptableSize();
-            spec.IsSatisfiedBy(parseResult).Should().BeFalse();
+            spec.IsSatisfiedBy(parseResult).Should().Be(ReportRejectionType.Size);
         }
 
         [Test]
         public void should_not_be_allowed_if_disk_is_not_upgrade()
         {
             WithNoDiskUpgrade();
-            spec.IsSatisfiedBy(parseResult).Should().BeFalse();
+            spec.IsSatisfiedBy(parseResult).Should().Be(ReportRejectionType.ExistingQualityIsEqualOrBetter);
         }
 
         [Test]
         public void should_not_be_allowed_if_episode_is_already_in_queue()
         {
             WithEpisodeAlreadyInQueue();
-            spec.IsSatisfiedBy(parseResult).Should().BeFalse();
+            spec.IsSatisfiedBy(parseResult).Should().Be(ReportRejectionType.AlreadyInQueue);
         }
 
         [Test]
         public void should_not_be_allowed_if_report_is_over_retention()
         {
             WithOverRetention();
-            spec.IsSatisfiedBy(parseResult).Should().BeFalse();
+            spec.IsSatisfiedBy(parseResult).Should().Be(ReportRejectionType.Retention);
         }
 
         [Test]
@@ -134,7 +134,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
             WithProfileNotAllowed();
             WithOverRetention();
 
-            spec.IsSatisfiedBy(parseResult).Should().BeFalse();
+            spec.IsSatisfiedBy(parseResult).Should().Be(ReportRejectionType.QualityNotWanted);
         }
     }
 }

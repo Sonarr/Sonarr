@@ -8,6 +8,7 @@ using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers.DecisionEngine;
 using NzbDrone.Core.Repository;
+using NzbDrone.Core.Repository.Search;
 
 namespace NzbDrone.Core.Providers
 {
@@ -21,13 +22,15 @@ namespace NzbDrone.Core.Providers
         private readonly SceneMappingProvider _sceneMappingProvider;
         private readonly UpgradePossibleSpecification _upgradePossibleSpecification;
         private readonly AllowedDownloadSpecification _allowedDownloadSpecification;
+        private readonly SearchResultProvider _searchResultProvider;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         [Inject]
         public SearchProvider(EpisodeProvider episodeProvider, DownloadProvider downloadProvider, SeriesProvider seriesProvider,
                                 IndexerProvider indexerProvider, SceneMappingProvider sceneMappingProvider,
-                                UpgradePossibleSpecification upgradePossibleSpecification, AllowedDownloadSpecification allowedDownloadSpecification)
+                                UpgradePossibleSpecification upgradePossibleSpecification, AllowedDownloadSpecification allowedDownloadSpecification,
+                                SearchResultProvider searchResultProvider)
         {
             _episodeProvider = episodeProvider;
             _downloadProvider = downloadProvider;
@@ -36,6 +39,7 @@ namespace NzbDrone.Core.Providers
             _sceneMappingProvider = sceneMappingProvider;
             _upgradePossibleSpecification = upgradePossibleSpecification;
             _allowedDownloadSpecification = allowedDownloadSpecification;
+            _searchResultProvider = searchResultProvider;
         }
 
         public SearchProvider()
@@ -44,13 +48,20 @@ namespace NzbDrone.Core.Providers
 
         public virtual bool SeasonSearch(ProgressNotification notification, int seriesId, int seasonNumber)
         {
+            var searchResult = new SearchResult
+            {
+                SearchTime = DateTime.Now,
+                SeriesId = seriesId,
+                SeasonNumber = seasonNumber
+            };
+
             var series = _seriesProvider.GetSeries(seriesId);
 
             if (series == null)
             {
                 Logger.Error("Unable to find an series {0} in database", seriesId);
                 return false;
-            }
+            }  
 
             //Return false if the series is a daily series (we only support individual episode searching
             if (series.IsDaily)
@@ -80,46 +91,45 @@ namespace NzbDrone.Core.Providers
                 e => e.EpisodeNumbers = episodeNumbers.ToList()
                 );
 
-            var downloadedEpisodes = ProcessSearchResults(notification, reports, series, seasonNumber);
+            searchResult.SearchResultItems = ProcessSearchResults(notification, reports, series, seasonNumber);
 
-            downloadedEpisodes.Sort();
-            episodeNumbers.ToList().Sort();
-
-            //Returns true if the list of downloaded episodes matches the list of episode numbers
-            //(either a full season release was grabbed or all individual episodes)
-            return (downloadedEpisodes.SequenceEqual(episodeNumbers));
+            return (searchResult.SearchResultItems.Select(s => s.Success).Count() == episodeNumbers.Count);
         }
 
-        public virtual List<int> PartialSeasonSearch(ProgressNotification notification, int seriesId, int seasonNumber)
+        public virtual List<SearchResultItem> PartialSeasonSearch(ProgressNotification notification, int seriesId, int seasonNumber)
         {
-            //This method will search for episodes in a season in groups of 10 episodes S01E0, S01E1, S01E2, etc 
+            var searchResult = new SearchResult
+            {
+                SearchTime = DateTime.Now,
+                SeriesId = seriesId,
+                SeasonNumber = seasonNumber
+            };
 
             var series = _seriesProvider.GetSeries(seriesId);
 
             if (series == null)
             {
                 Logger.Error("Unable to find an series {0} in database", seriesId);
-                return new List<int>();
+                return new List<SearchResultItem>();
             }
 
             //Return empty list if the series is a daily series (we only support individual episode searching
             if (series.IsDaily)
-                return new List<int>();
+                return new List<SearchResultItem>();
 
             notification.CurrentMessage = String.Format("Searching for {0} Season {1}", series.Title, seasonNumber);
-
             var episodes = _episodeProvider.GetEpisodesBySeason(seriesId, seasonNumber);
-
             var reports = PerformSearch(notification, series, seasonNumber, episodes);
-
             Logger.Debug("Finished searching all indexers. Total {0}", reports.Count);
 
             if (reports.Count == 0)
-                return new List<int>();
+                return new List<SearchResultItem>();
 
             notification.CurrentMessage = "Processing search results";
+            searchResult.SearchResultItems = ProcessSearchResults(notification, reports, series, seasonNumber);
 
-            return ProcessSearchResults(notification, reports, series, seasonNumber);
+            _searchResultProvider.Add(searchResult);
+            return searchResult.SearchResultItems;
         }
 
         public virtual bool EpisodeSearch(ProgressNotification notification, int episodeId)
@@ -136,7 +146,7 @@ namespace NzbDrone.Core.Providers
             if (!_upgradePossibleSpecification.IsSatisfiedBy(episode))
             {
                 Logger.Info("Search for {0} was aborted, file in disk meets or exceeds Profile's Cutoff", episode);
-                notification.CurrentMessage = String.Format("Skipping search for {0}, file you have is already at cutoff", episode);
+                notification.CurrentMessage = String.Format("Skipping search for {0}, the file you have is already at cutoff", episode);
                 return false;
             }
 
@@ -145,19 +155,41 @@ namespace NzbDrone.Core.Providers
             if (episode.Series.IsDaily && !episode.AirDate.HasValue)
             {
                 Logger.Warn("AirDate is not Valid for: {0}", episode);
+                notification.CurrentMessage = String.Format("Search for {0} Failed, AirDate is invalid", episode);
                 return false;
             }
+
+            var searchResult = new SearchResult
+                                   {
+                                        SearchTime = DateTime.Now,
+                                        SeriesId = episode.Series.SeriesId
+                                   };
 
             var reports = PerformSearch(notification, episode.Series, episode.SeasonNumber, new List<Episode> { episode });
 
             Logger.Debug("Finished searching all indexers. Total {0}", reports.Count);
             notification.CurrentMessage = "Processing search results";
 
-            if (!episode.Series.IsDaily && ProcessSearchResults(notification, reports, episode.Series, episode.SeasonNumber, episode.EpisodeNumber).Count == 1)
-                return true;
+            if (episode.Series.IsDaily)
+            {
+                searchResult.AirDate = episode.AirDate.Value;
+                searchResult.SearchResultItems = ProcessSearchResults(notification, reports, episode.Series, episode.AirDate.Value);
 
-            if (episode.Series.IsDaily && ProcessSearchResults(notification, reports, episode.Series, episode.AirDate.Value))
+                _searchResultProvider.Add(searchResult);
+
+                if (searchResult.SearchResultItems.Any(r => r.Success))
+                    return true;
+
+                return false;
+            }
+
+            if (!episode.Series.IsDaily)
+            {
+                searchResult.SeasonNumber = episode.SeasonNumber;
+                searchResult.EpisodeId = episodeId;
+                ProcessSearchResults(notification, reports, episode.Series, episode.SeasonNumber, episode.EpisodeNumber);
                 return true;
+            }
 
             Logger.Warn("Unable to find {0} in any of indexers.", episode);
 
@@ -169,7 +201,6 @@ namespace NzbDrone.Core.Providers
             {
                 notification.CurrentMessage = String.Format("Sorry, couldn't find you {0} in any of indexers.", episode);
             }
-
 
             return false;
         }
@@ -227,15 +258,24 @@ namespace NzbDrone.Core.Providers
             return reports;
         }
 
-        public List<int> ProcessSearchResults(ProgressNotification notification, IEnumerable<EpisodeParseResult> reports, Series series, int seasonNumber, int? episodeNumber = null)
+        public List<SearchResultItem> ProcessSearchResults(ProgressNotification notification, IEnumerable<EpisodeParseResult> reports, Series series, int seasonNumber, int? episodeNumber = null)
         {
             var successes = new List<int>();
+            var items = new List<SearchResultItem>();
 
             foreach (var episodeParseResult in reports.OrderByDescending(c => c.Quality).ThenBy(c => c.Age))
             {
                 try
                 {
                     Logger.Trace("Analysing report " + episodeParseResult);
+
+                    var item = new SearchResultItem
+                    {
+                        ReportTitle = episodeParseResult.OriginalString,
+                        NzbUrl = episodeParseResult.NzbUrl
+                    };
+
+                    items.Add(item);
 
                     //Get the matching series
                     episodeParseResult.Series = _seriesProvider.FindSeries(episodeParseResult.CleanTitle);
@@ -244,6 +284,7 @@ namespace NzbDrone.Core.Providers
                     if (episodeParseResult.Series == null || episodeParseResult.Series.SeriesId != series.SeriesId)
                     {
                         Logger.Trace("Unexpected series for search: {0}. Skipping.", episodeParseResult.CleanTitle);
+                        item.SearchError = ReportRejectionType.WrongSeries;
                         continue;
                     }
 
@@ -251,6 +292,7 @@ namespace NzbDrone.Core.Providers
                     if (episodeParseResult.SeasonNumber != seasonNumber)
                     {
                         Logger.Trace("Season number does not match searched season number, skipping.");
+                        item.SearchError = ReportRejectionType.WrongSeason;
                         continue;
                     }
 
@@ -258,6 +300,7 @@ namespace NzbDrone.Core.Providers
                     if (episodeNumber.HasValue && !episodeParseResult.EpisodeNumbers.Contains(episodeNumber.Value))
                     {
                         Logger.Trace("Searched episode number is not contained in post, skipping.");
+                        item.SearchError = ReportRejectionType.WrongEpisode;
                         continue;
                     }
 
@@ -265,10 +308,12 @@ namespace NzbDrone.Core.Providers
                     if (successes.Intersect(episodeParseResult.EpisodeNumbers).Any())
                     {
                         Logger.Trace("Episode has already been downloaded in this search, skipping.");
+                        item.SearchError = ReportRejectionType.Skipped;
                         continue;
                     }
 
-                    if (_allowedDownloadSpecification.IsSatisfiedBy(episodeParseResult))
+                    var rejectionType = _allowedDownloadSpecification.IsSatisfiedBy(episodeParseResult);
+                    if (rejectionType == ReportRejectionType.None)
                     {
                         Logger.Debug("Found '{0}'. Adding to download queue.", episodeParseResult);
                         try
@@ -279,12 +324,18 @@ namespace NzbDrone.Core.Providers
 
                                 //Add the list of episode numbers from this release
                                 successes.AddRange(episodeParseResult.EpisodeNumbers);
+                                item.Success = true;
+                            }
+                            else
+                            {
+                                item.SearchError = ReportRejectionType.DownloadClientFailure;
                             }
                         }
                         catch (Exception e)
                         {
                             Logger.ErrorException("Unable to add report to download queue." + episodeParseResult, e);
                             notification.CurrentMessage = String.Format("Unable to add report to download queue. {0}", episodeParseResult);
+                            item.SearchError = ReportRejectionType.DownloadClientFailure;
                         }
                     }
                 }
@@ -294,15 +345,32 @@ namespace NzbDrone.Core.Providers
                 }
             }
 
-            return successes;
+            return items;
         }
 
-        public bool ProcessSearchResults(ProgressNotification notification, IEnumerable<EpisodeParseResult> reports, Series series, DateTime airDate)
+        public List<SearchResultItem> ProcessSearchResults(ProgressNotification notification, IEnumerable<EpisodeParseResult> reports, Series series, DateTime airDate)
         {
+            var items = new List<SearchResultItem>();
+            var skip = false;
+
             foreach (var episodeParseResult in reports.OrderByDescending(c => c.Quality))
             {
                 try
                 {
+                    var item = new SearchResultItem
+                    {
+                        ReportTitle = episodeParseResult.OriginalString,
+                        NzbUrl = episodeParseResult.NzbUrl
+                    };
+
+                    items.Add(item);
+
+                    if (skip)
+                    {
+                        item.SearchError = ReportRejectionType.Skipped;
+                        continue;
+                    }
+
                     Logger.Trace("Analysing report " + episodeParseResult);
 
                     //Get the matching series
@@ -310,13 +378,20 @@ namespace NzbDrone.Core.Providers
 
                     //If series is null or doesn't match the series we're looking for return
                     if (episodeParseResult.Series == null || episodeParseResult.Series.SeriesId != series.SeriesId)
+                    {
+                        item.SearchError = ReportRejectionType.WrongSeries;
                         continue;
+                    }
 
                     //If parse result doesn't have an air date or it doesn't match passed in airdate, skip the report.
                     if (!episodeParseResult.AirDate.HasValue || episodeParseResult.AirDate.Value.Date != airDate.Date)
+                    {
+                        item.SearchError = ReportRejectionType.WrongEpisode;
                         continue;
+                    }
 
-                    if (_allowedDownloadSpecification.IsSatisfiedBy(episodeParseResult))
+                    var allowedDownload = _allowedDownloadSpecification.IsSatisfiedBy(episodeParseResult);
+                    if (allowedDownload == ReportRejectionType.None)
                     {
                         Logger.Debug("Found '{0}'. Adding to download queue.", episodeParseResult);
                         try
@@ -327,7 +402,12 @@ namespace NzbDrone.Core.Providers
                                         String.Format("{0} - {1} {2} Added to download queue",
                                                       episodeParseResult.Series.Title, episodeParseResult.AirDate.Value.ToShortDateString(), episodeParseResult.Quality);
 
-                                return true;
+                                item.Success = true;
+                                skip = true;
+                            }
+                            else
+                            {
+                                item.SearchError = ReportRejectionType.DownloadClientFailure;
                             }
                         }
                         catch (Exception e)
@@ -336,13 +416,18 @@ namespace NzbDrone.Core.Providers
                             notification.CurrentMessage = String.Format("Unable to add report to download queue. {0}", episodeParseResult);
                         }
                     }
+                    else
+                    {
+                        item.SearchError = allowedDownload;
+                    }
                 }
                 catch (Exception e)
                 {
                     Logger.ErrorException("An error has occurred while processing parse result items from " + episodeParseResult, e);
                 }
             }
-            return false;
+
+            return items;
         }
 
         private List<int> GetEpisodeNumberPrefixes(IEnumerable<int> episodeNumbers)
