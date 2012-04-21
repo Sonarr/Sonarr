@@ -51,6 +51,9 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DataTables.Mvc.Core">
+      <HintPath>..\packages\DataTables.Mvc.0.1.0.54\lib\DataTables.Mvc.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Dynamic">
       <HintPath>..\packages\DynamicQuery.1.0\lib\35\Dynamic.dll</HintPath>
     </Reference>
@@ -137,6 +140,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\DataTablesMvc.cs" />
     <Compile Include="Helpers\Validation\RequiredIfAnyAttribute.cs" />
     <Compile Include="Helpers\Validation\RequiredIfAttribute.cs" />
     <Content Include="Content\DataTables-1.9.0\media\css\jquery.dataTables.css" />
@@ -204,7 +208,6 @@
     <Compile Include="App_Start\EntityFramework.SqlServerCompact.cs" />
     <Compile Include="App_Start\Logging.cs" />
     <Compile Include="App_Start\MiniProfiler.cs" />
-    <Compile Include="App_Start\RegisterDataTablesModelBinder.cs" />
     <Compile Include="Filters\JsonErrorFilter.cs" />
     <Compile Include="Controllers\CommandController.cs" />
     <Compile Include="Controllers\DirectoryController.cs" />
@@ -224,7 +227,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\DataTablesModelBinder.cs" />
     <Compile Include="Helpers\HtmlIncludeExtentions.cs" />
     <Compile Include="Helpers\LinkHelper.cs" />
     <Compile Include="Helpers\ProfilerHelper.cs" />
@@ -232,7 +234,6 @@
     <Compile Include="Helpers\DescriptionExtension.cs" />
     <Compile Include="Helpers\HtmlPrefixScopeExtensions.cs" />
     <Compile Include="Helpers\IsCurrentActionHelper.cs" />
-    <Compile Include="Models\DataTablesParams.cs" />
     <Compile Include="Models\JobModel.cs" />
     <Compile Include="Models\LogModel.cs" />
     <Compile Include="Models\PostUpgradeModel.cs" />
