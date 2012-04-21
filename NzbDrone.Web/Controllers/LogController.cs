@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Dynamic;
 using System.Text;
 using System.Web.Mvc;
+using DataTables.Mvc.Core.Models;
 using NzbDrone.Common;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Web.Models;
