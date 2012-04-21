@@ -237,6 +237,7 @@
     <Compile Include="Models\JobModel.cs" />
     <Compile Include="Models\LogModel.cs" />
     <Compile Include="Models\PostUpgradeModel.cs" />
+    <Compile Include="Models\SearchResultsModel.cs" />
     <Compile Include="Models\UpcomingEpisodesModel.cs" />
     <Compile Include="Models\SeasonModel.cs" />
     <Compile Include="Models\SeriesDetailsModel.cs" />
@@ -518,6 +519,9 @@
     <Content Include="Views\Settings\Plex.cshtml" />
     <Content Include="Views\Shared\NoSeriesBanner.cshtml" />
     <Content Include="Views\Update\Post.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Log\SearchResults.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

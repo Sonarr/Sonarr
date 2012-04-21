@@ -222,6 +222,7 @@
     <Compile Include="Datastore\MigrationLogger.cs" />
     <Compile Include="Datastore\MigrationsHelper.cs" />
     <Compile Include="Datastore\CustomeMapper.cs" />
+    <Compile Include="Datastore\Migrations\Migration20120420.cs" />
     <Compile Include="Datastore\Migrations\Migration20120228.cs" />
     <Compile Include="Datastore\Migrations\Migration20120227.cs" />
     <Compile Include="Datastore\Migrations\Migration20120220.cs" />

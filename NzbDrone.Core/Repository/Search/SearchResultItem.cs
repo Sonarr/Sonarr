@@ -14,6 +14,7 @@ namespace NzbDrone.Core.Repository.Search
         public int Id { get; set; }
         public int SearchResultId { get; set; }
         public string ReportTitle { get; set; }
+        public string Indexer { get; set; }
         public string NzbUrl { get; set; }
         public string NzbInfoUrl { get; set; }
         public bool Success { get; set; }

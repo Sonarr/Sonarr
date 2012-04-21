@@ -7,6 +7,8 @@ using System.Web.Mvc;
 using DataTables.Mvc.Core.Models;
 using NzbDrone.Common;
 using NzbDrone.Core.Instrumentation;
+using NzbDrone.Core.Providers;
+using NzbDrone.Core.Repository.Search;
 using NzbDrone.Web.Models;
 
 namespace NzbDrone.Web.Controllers
@@ -16,12 +18,15 @@ namespace NzbDrone.Web.Controllers
         private readonly LogProvider _logProvider;
         private readonly EnvironmentProvider _environmentProvider;
         private readonly DiskProvider _diskProvider;
+        private readonly SearchResultProvider _searchResultProvider;
 
-        public LogController(LogProvider logProvider, EnvironmentProvider environmentProvider, DiskProvider diskProvider)
+        public LogController(LogProvider logProvider, EnvironmentProvider environmentProvider,
+                                DiskProvider diskProvider, SearchResultProvider searchResultProvider)
         {
             _logProvider = logProvider;
             _environmentProvider = environmentProvider;
             _diskProvider = diskProvider;
+            _searchResultProvider = searchResultProvider;
         }
 
         public ActionResult Index()
@@ -48,6 +53,28 @@ namespace NzbDrone.Web.Controllers
             _logProvider.DeleteAll();
 
             return JsonNotificationResult.Info("Logs Cleared");
+        }
+
+        public ActionResult SearchResults()
+        {
+            var results = _searchResultProvider.AllSearchResults();
+
+            var model = results.Select(s => new SearchResultsModel
+                                                {
+                                                        Id = s.Id,
+                                                        SearchTime = s.SearchTime.ToString(),
+                                                        DisplayName = GetDisplayName(s),
+                                                        ReportCount = s.TotalItems,
+                                                        Successful = s.Successes > 0
+                                                });
+
+            return View(model);
+        }
+
+        public ActionResult SearchDetails(int searchId)
+        {
+            var model = _searchResultProvider.GetSearchResult(searchId);
+            return View(model);
         }
 
         public ActionResult AjaxBinding(DataTablesParams dataTablesParams)
@@ -101,6 +128,25 @@ namespace NzbDrone.Web.Controllers
                 aaData = logModels
             },
             JsonRequestBehavior.AllowGet);
+        }
+
+        public string GetDisplayName(SearchResult searchResult)
+        {
+            if (!searchResult.EpisodeNumber.HasValue)
+            {
+                return String.Format("{0} - Season {1}", searchResult.SeriesTitle, searchResult.SeasonNumber);
+            }
+
+            string episodeString;
+
+            if (searchResult.IsDaily)
+                episodeString = searchResult.AirDate.ToShortDateString().Replace('/', '-');
+
+            else
+                episodeString = String.Format("S{0:00}E{1:00}", searchResult.SeasonNumber,
+                                              searchResult.EpisodeNumber);
+
+            return String.Format("{0} - {1} - {2}", searchResult.SeriesTitle, episodeString, searchResult.EpisodeTitle);
         }
     }
 }

@@ -172,22 +172,20 @@ namespace NzbDrone.Core.Providers
 
             if (episode.Series.IsDaily)
             {
-                searchResult.AirDate = episode.AirDate.Value;
                 searchResult.SearchResultItems = ProcessSearchResults(notification, reports, episode.Series, episode.AirDate.Value);
-
                 _searchResultProvider.Add(searchResult);
 
                 if (searchResult.SearchResultItems.Any(r => r.Success))
                     return true;
-
-                return false;
             }
 
-            if (!episode.Series.IsDaily)
+            else
             {
-                searchResult.SeasonNumber = episode.SeasonNumber;
                 searchResult.EpisodeId = episodeId;
-                ProcessSearchResults(notification, reports, episode.Series, episode.SeasonNumber, episode.EpisodeNumber);
+                searchResult.SearchResultItems = ProcessSearchResults(notification, reports, episode.Series, episode.SeasonNumber, episode.EpisodeNumber);
+                _searchResultProvider.Add(searchResult);
+
+                if (searchResult.SearchResultItems.Any(r => r.Success))
                 return true;
             }
 
@@ -272,7 +270,8 @@ namespace NzbDrone.Core.Providers
                     var item = new SearchResultItem
                     {
                         ReportTitle = episodeParseResult.OriginalString,
-                        NzbUrl = episodeParseResult.NzbUrl
+                        NzbUrl = episodeParseResult.NzbUrl,
+                        Indexer = episodeParseResult.Indexer
                     };
 
                     items.Add(item);
@@ -312,8 +311,8 @@ namespace NzbDrone.Core.Providers
                         continue;
                     }
 
-                    var rejectionType = _allowedDownloadSpecification.IsSatisfiedBy(episodeParseResult);
-                    if (rejectionType == ReportRejectionType.None)
+                    item.SearchError = _allowedDownloadSpecification.IsSatisfiedBy(episodeParseResult);
+                    if (item.SearchError == ReportRejectionType.None)
                     {
                         Logger.Debug("Found '{0}'. Adding to download queue.", episodeParseResult);
                         try
@@ -360,7 +359,8 @@ namespace NzbDrone.Core.Providers
                     var item = new SearchResultItem
                     {
                         ReportTitle = episodeParseResult.OriginalString,
-                        NzbUrl = episodeParseResult.NzbUrl
+                        NzbUrl = episodeParseResult.NzbUrl,
+                        Indexer = episodeParseResult.Indexer
                     };
 
                     items.Add(item);
@@ -390,8 +390,8 @@ namespace NzbDrone.Core.Providers
                         continue;
                     }
 
-                    var allowedDownload = _allowedDownloadSpecification.IsSatisfiedBy(episodeParseResult);
-                    if (allowedDownload == ReportRejectionType.None)
+                    item.SearchError = _allowedDownloadSpecification.IsSatisfiedBy(episodeParseResult);
+                    if (item.SearchError == ReportRejectionType.None)
                     {
                         Logger.Debug("Found '{0}'. Adding to download queue.", episodeParseResult);
                         try
@@ -415,10 +415,6 @@ namespace NzbDrone.Core.Providers
                             Logger.ErrorException("Unable to add report to download queue." + episodeParseResult, e);
                             notification.CurrentMessage = String.Format("Unable to add report to download queue. {0}", episodeParseResult);
                         }
-                    }
-                    else
-                    {
-                        item.SearchError = allowedDownload;
                     }
                 }
                 catch (Exception e)

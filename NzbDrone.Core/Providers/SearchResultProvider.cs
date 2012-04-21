@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using NLog;
 using Ninject;
+using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Search;
 using PetaPoco;
 
@@ -28,9 +29,10 @@ namespace NzbDrone.Core.Providers
         public virtual void Add(SearchResult searchResult)
         {
             logger.Trace("Adding new search result");
+            searchResult.SuccessfulDownload = searchResult.SearchResultItems.Any(s => s.Success);
             var id = Convert.ToInt32(_database.Insert(searchResult));
 
-            searchResult.SearchResultItems.ForEach(s => s.Id = id);
+            searchResult.SearchResultItems.ForEach(s => s.SearchResultId = id);
             logger.Trace("Adding search result items");
             _database.InsertMany(searchResult.SearchResultItems);
         }
@@ -46,7 +48,27 @@ namespace NzbDrone.Core.Providers
 
         public virtual List<SearchResult> AllSearchResults()
         {
-            return _database.Fetch<SearchResult>();
+            var sql = @"SELECT SearchResults.Id, SearchResults.SeriesId, SearchResults.SeasonNumber,
+                        SearchResults.EpisodeId, SearchResults.SearchTime,
+                        Series.Title as SeriesTitle, Series.IsDaily,
+                        Episodes.EpisodeNumber, Episodes.SeasonNumber, Episodes.Title as EpisodeTitle,
+                        Episodes.AirDate,
+                        Count(SearchResultItems.Id) as TotalItems,
+                        SUM(CASE WHEN SearchResultItems.Success = 1 THEN 1 ELSE 0 END) as Successes
+                        FROM SearchResults
+                        INNER JOIN Series
+                        ON Series.SeriesId = SearchResults.SeriesId
+                        LEFT JOIN Episodes
+                        ON Episodes.EpisodeId = SearchResults.EpisodeId
+                        INNER JOIN SearchResultItems
+                        ON SearchResultItems.SearchResultId = SearchResults.Id
+                        GROUP BY SearchResults.Id, SearchResults.SeriesId, SearchResults.SeasonNumber,
+                        SearchResults.EpisodeId, SearchResults.SearchTime,
+                        Series.Title, Series.IsDaily,
+                        Episodes.EpisodeNumber, Episodes.SeasonNumber, Episodes.Title,
+                        Episodes.AirDate";
+
+            return _database.Fetch<SearchResult>(sql);
         }
 
         public virtual SearchResult GetSearchResult(int id)
