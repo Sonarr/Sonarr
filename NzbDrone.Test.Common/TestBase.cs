@@ -49,6 +49,8 @@ namespace NzbDrone.Test.Common
 
             MockedRestProvider = new Mock<RestProvider>();
             ReportingService.RestProvider = MockedRestProvider.Object;
+            ReportingService.SetupExceptrackDriver();
+
 
             if (Directory.Exists(TempFolder))
             {

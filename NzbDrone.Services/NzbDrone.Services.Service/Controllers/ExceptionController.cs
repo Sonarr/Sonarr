@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
-using NzbDrone.Common.Contract;
 
 namespace NzbDrone.Services.Service.Controllers
 {
@@ -8,13 +7,13 @@ namespace NzbDrone.Services.Service.Controllers
     {
 
         [HttpPost]
-        public EmptyResult ReportExisting(ExistingExceptionReport existingExceptionReport)
+        public EmptyResult ReportExisting()
         {
             return new EmptyResult();
         }
 
         [HttpPost]
-        public JsonResult ReportNew(ExceptionReport exceptionReport)
+        public JsonResult ReportNew()
         {
             return new JsonResult();
         }

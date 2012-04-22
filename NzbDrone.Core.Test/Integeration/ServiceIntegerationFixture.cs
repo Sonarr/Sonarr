@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Test.Integeration
         [Test]
         public void should_be_able_to_submit_exceptions()
         {
-            ReportingService.RestProvider = new RestProvider(new EnvironmentProvider());
+            ReportingService.SetupExceptrackDriver();
 
             var log = new LogEventInfo();
             log.LoggerName = "LoggerName.LoggerName.LoggerName.LoggerName";

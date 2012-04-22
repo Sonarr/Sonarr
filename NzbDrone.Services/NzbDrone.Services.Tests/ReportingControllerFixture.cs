@@ -39,62 +39,6 @@ namespace NzbDrone.Services.Tests
                                    };
         }
 
-        private static ExceptionReport CreateExceptionReport()
-        {
-            return new ExceptionReport
-            {
-                IsProduction = true,
-                Version = "1.1.2.323456",
-                UGuid = Guid.NewGuid(),
-                Logger = "NzbDrone.Logger.Name",
-                LogMessage = @"Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
-                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
-                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
-                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
-                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
-                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message",
-                String = @"Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
-                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
-                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
-                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
-                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
-                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
-                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
-                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
-                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
-                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
-                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
-                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
-                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
-                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
-                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
-                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
-                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
-                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
-                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
-                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
-                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
-                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
-                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
-                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
-                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
-                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
-                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
-                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
-                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
-                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
-                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
-                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
-                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
-                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
-                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message
-                            Long message Long message Long messageLong messageLong messageLong messageLong messageLong messageLong messageLong messageLong message",
-
-                Type = typeof(InvalidOperationException).Name
-            };
-        }
-
-
         [Test]
         public void parse_report_should_be_saved()
         {

@@ -63,9 +63,9 @@ namespace NzbDrone.Services.Service.Controllers
         }
 
         [HttpPost]
-        public JsonResult ReportException(ExceptionReport exceptionReport)
+        public JsonResult ReportException()
         {
-           return _exceptionController.ReportNew(exceptionReport);
+            return new JsonResult();
         }
     }
 }

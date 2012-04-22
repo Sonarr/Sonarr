@@ -62,6 +62,7 @@ namespace NzbDrone.Update
         private static void InitLoggers()
         {
             ReportingService.RestProvider = _kernel.Get<RestProvider>();
+            ReportingService.SetupExceptrackDriver();
 
             LogConfiguration.RegisterRemote();
 
