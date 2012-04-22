@@ -152,6 +152,11 @@
             </summary>
             <param name="expression">The LINQ query expression tree.</param>
         </member>
+        <member name="P:MongoDB.Driver.Linq.SelectQuery.OfType">
+            <summary>
+            Gets the final result type if an OfType query operator was used (otherwise null).
+            </summary>
+        </member>
         <member name="P:MongoDB.Driver.Linq.SelectQuery.OrderBy">
             <summary>
             Gets a list of Expressions that defines the sort order (or null if not specified).
@@ -2695,6 +2700,37 @@
             </summary>
             <returns>An enumerator for the result objects.</returns>
         </member>
+        <member name="T:MongoDB.Driver.Linq.ExpressionParameterFinder">
+            <summary>
+            A class that finds the first parameter in an expression.
+            </summary>
+        </member>
+        <member name="M:MongoDB.Driver.Linq.ExpressionParameterFinder.#ctor">
+            <summary>
+            Initializes a new instance of the ExpressionParameterFinder class.
+            </summary>
+        </member>
+        <member name="M:MongoDB.Driver.Linq.ExpressionParameterFinder.FindParameter(System.Linq.Expressions.Expression)">
+            <summary>
+            Finds the first parameter in an expression.
+            </summary>
+            <param name="node">The expression containing the parameter that should be found.</param>
+            <returns>The first parameter found in the expression (or null if none was found).</returns>
+        </member>
+        <member name="M:MongoDB.Driver.Linq.ExpressionParameterFinder.Visit(System.Linq.Expressions.Expression)">
+            <summary>
+            Visits an Expression.
+            </summary>
+            <param name="node">The Expression.</param>
+            <returns>The Expression (posibly modified).</returns>
+        </member>
+        <member name="M:MongoDB.Driver.Linq.ExpressionParameterFinder.VisitParameter(System.Linq.Expressions.ParameterExpression)">
+            <summary>
+            Remembers this parameter if it is the first parameter found.
+            </summary>
+            <param name="node">The ParameterExpression.</param>
+            <returns>The ParameterExpression.</returns>
+        </member>
         <member name="T:MongoDB.Driver.GridFS.MongoGridFSException">
             <summary>
             Represents a MongoDB GridFS exception.
@@ -4222,6 +4258,16 @@
             Gets or sets the safe mode.
             </summary>
         </member>
+        <member name="P:MongoDB.Driver.GridFS.MongoGridFSSettings.UpdateMD5">
+            <summary>
+            Gets or sets whether to udpate the MD5 hash on the server when a file is uploaded or modified.
+            </summary>
+        </member>
+        <member name="P:MongoDB.Driver.GridFS.MongoGridFSSettings.VerifyMD5">
+            <summary>
+            Gets or sets whether to verify the MD5 hash when a file is uploaded or downloaded.
+            </summary>
+        </member>
         <member name="T:MongoDB.Driver.Internal.MongoConnectionPool">
             <summary>
             Represents a pool of connections to a MongoDB server.
@@ -5566,6 +5612,14 @@
             </summary>
             <returns>An instance of DatabaseStatsResult.</returns>
         </member>
+        <member name="M:MongoDB.Driver.MongoDatabase.IsCollectionNameValid(System.String,System.String@)">
+            <summary>
+            Checks whether a given collection name is valid in this database.
+            </summary>
+            <param name="collectionName">The collection name.</param>
+            <param name="message">An error message if the collection name is not valid.</param>
+            <returns>True if the collection name is valid; otherwise, false.</returns>
+        </member>
         <member name="M:MongoDB.Driver.MongoDatabase.RemoveUser(MongoDB.Driver.MongoUser)">
             <summary>
             Removes a user from this database.
@@ -6478,6 +6532,14 @@
             </summary>
         </member>
         <member name="M:MongoDB.Driver.Linq.LinqExtensionMethods.AsQueryable``1(MongoDB.Driver.MongoCollection)">
+            <summary>
+            Returns an instance of IQueryable{{T}} for a MongoCollection.
+            </summary>
+            <typeparam name="T">The type of the returned documents.</typeparam>
+            <param name="collection">The name of the collection.</param>
+            <returns>An instance of IQueryable{{T}} for a MongoCollection.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.Linq.LinqExtensionMethods.AsQueryable``1(MongoDB.Driver.MongoCollection{``0})">
             <summary>
             Returns an instance of IQueryable{{T}} for a MongoCollection.
             </summary>
@@ -7578,6 +7640,14 @@
             </summary>
             <param name="adminCredentials">Credentials for the admin database.</param>
             <returns>The last error (<see cref="T:MongoDB.Driver.GetLastErrorResult"/>)</returns>
+        </member>
+        <member name="M:MongoDB.Driver.MongoServer.IsDatabaseNameValid(System.String,System.String@)">
+            <summary>
+            Checks whether a given database name is valid on this server.
+            </summary>
+            <param name="databaseName">The database name.</param>
+            <param name="message">An error message if the database name is not valid.</param>
+            <returns>True if the database name is valid; otherwise, false.</returns>
         </member>
         <member name="M:MongoDB.Driver.MongoServer.Ping">
             <summary>
