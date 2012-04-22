@@ -65,7 +65,9 @@ namespace NzbDrone.Core.Test.Integeration
             log.Exception = new ArgumentOutOfRangeException();
             log.Message = "New message string. New message string. New message string. New message string. New message string. New message string.";
 
-            ReportingService.ReportException(log);
+            var hash = ReportingService.ReportException(log);
+
+            hash.Should().HaveLength(8);
         }
 
 

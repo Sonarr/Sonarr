@@ -57,7 +57,7 @@ namespace NzbDrone.Common
             }
         }
 
-        public static void ReportException(LogEventInfo logEvent)
+        public static string ReportException(LogEventInfo logEvent)
         {
             try
             {
@@ -69,7 +69,7 @@ namespace NzbDrone.Common
                 exceptionData.Location = logEvent.LoggerName;
                 exceptionData.UserId = EnvironmentProvider.UGuid.ToString().Replace("-", string.Empty);
 
-                ExceptrackDriver.SubmitException(exceptionData);
+               return ExceptrackDriver.SubmitException(exceptionData);
             }
             catch (Exception e)
             {
@@ -81,6 +81,8 @@ namespace NzbDrone.Common
                 //this shouldn't log an exception since it will cause a recursive loop.
                 logger.Info("Unable to report exception. " + e);
             }
+
+            return null;
         }
 
 
@@ -89,7 +91,9 @@ namespace NzbDrone.Common
             ExceptrackDriver = new ExceptionClient(
                                                    "CB230C312E5C4FF38B4FB9644B05E60D",
                                                    new EnvironmentProvider().Version.ToString(),
-                                                   new Uri("http://api.exceptrack.com/"));
+                                                   new Uri("http://api.exceptrack.com/v1/"));
+
+            ExceptrackDriver.ThrowsExceptions = !EnvironmentProvider.IsProduction;
         }
 
         private static void VerifyDependencies()
