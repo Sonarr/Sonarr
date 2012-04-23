@@ -183,6 +183,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
                 .All()
                 .With(e => e.SeasonNumber = 1)
                 .With(e => e.EpisodeNumbers = new List<int> { 1 })
+                .With(e => e.Quality = new Quality(QualityTypes.HDTV, false))
                 .Build();
 
             WithNullSeries();
@@ -205,6 +206,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
                 .All()
                 .With(e => e.SeasonNumber = 1)
                 .With(e => e.EpisodeNumbers = new List<int> { 1 })
+                .With(e => e.Quality = new Quality(QualityTypes.HDTV, false))
                 .Build();
 
             WithMisMatchedSeries();
@@ -227,6 +229,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
                 .All()
                 .With(e => e.SeasonNumber = 2)
                 .With(e => e.EpisodeNumbers = new List<int> { 1 })
+                .With(e => e.Quality = new Quality(QualityTypes.HDTV, false))
                 .Build();
 
             WithMatchingSeries();
@@ -249,6 +252,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
                 .All()
                 .With(e => e.SeasonNumber = 1)
                 .With(e => e.EpisodeNumbers = new List<int> { 2 })
+                .With(e => e.Quality = new Quality(QualityTypes.HDTV, false))
                 .Build();
 
             WithMatchingSeries();
