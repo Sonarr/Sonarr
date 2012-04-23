@@ -15,15 +15,18 @@ namespace NzbDrone.Core.Providers
         private readonly IDatabase _database;
         private readonly SeriesProvider _seriesProvider;
         private readonly DownloadProvider _downloadProvider;
+        private readonly EpisodeProvider _episodeProvider;
+
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         [Inject]
         public SearchResultProvider(IDatabase database, SeriesProvider seriesProvider,
-                                        DownloadProvider downloadProvider)
+                                        DownloadProvider downloadProvider, EpisodeProvider episodeProvider)
         {
             _database = database;
             _seriesProvider = seriesProvider;
             _downloadProvider = downloadProvider;
+            _episodeProvider = episodeProvider;
         }
 
         public SearchResultProvider()
@@ -101,11 +104,12 @@ namespace NzbDrone.Core.Providers
             var item = _database.Single<SearchResultItem>(itemId);
             var searchResult = _database.Single<SearchResult>(item.SearchResultId);
             var series = _seriesProvider.GetSeries(searchResult.SeriesId);
-
+            
             var parseResult = Parser.ParseTitle(item.ReportTitle);
             parseResult.NzbUrl = item.NzbUrl;
             parseResult.Series = series;
             parseResult.Indexer = item.Indexer;
+            var episodes = _episodeProvider.GetEpisodesByParseResult(parseResult);
 
             _downloadProvider.DownloadReport(parseResult);
         }
