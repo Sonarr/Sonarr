@@ -179,12 +179,12 @@ namespace NzbDrone.Core.Test.ProviderTests
         }
 
 
-        [TestCase(1, new[] { 2 }, "My Episode Title", QualityTypes.DVD, false, Result = "My Series Name - 1x2 - My Episode Title [DVD]")]
-        [TestCase(1, new[] { 2 }, "My Episode Title", QualityTypes.DVD, true, Result = "My Series Name - 1x2 - My Episode Title [DVD] [Proper]")]
-        [TestCase(1, new[] { 2 }, "", QualityTypes.DVD, true, Result = "My Series Name - 1x2 -  [DVD] [Proper]")]
-        [TestCase(1, new[] { 2, 4 }, "My Episode Title", QualityTypes.HDTV, false, Result = "My Series Name - 1x2-1x4 - My Episode Title [HDTV]")]
-        [TestCase(1, new[] { 2, 4 }, "My Episode Title", QualityTypes.HDTV, true, Result = "My Series Name - 1x2-1x4 - My Episode Title [HDTV] [Proper]")]
-        [TestCase(1, new[] { 2, 4 }, "", QualityTypes.HDTV, true, Result = "My Series Name - 1x2-1x4 -  [HDTV] [Proper]")]
+        [TestCase(1, new[] { 2 }, "My Episode Title", QualityTypes.DVD, false, Result = "My Series Name - 1x02 - My Episode Title [DVD]")]
+        [TestCase(1, new[] { 2 }, "My Episode Title", QualityTypes.DVD, true, Result = "My Series Name - 1x02 - My Episode Title [DVD] [Proper]")]
+        [TestCase(1, new[] { 2 }, "", QualityTypes.DVD, true, Result = "My Series Name - 1x02 -  [DVD] [Proper]")]
+        [TestCase(1, new[] { 2, 4 }, "My Episode Title", QualityTypes.HDTV, false, Result = "My Series Name - 1x02-1x04 - My Episode Title [HDTV]")]
+        [TestCase(1, new[] { 2, 4 }, "My Episode Title", QualityTypes.HDTV, true, Result = "My Series Name - 1x02-1x04 - My Episode Title [HDTV] [Proper]")]
+        [TestCase(1, new[] { 2, 4 }, "", QualityTypes.HDTV, true, Result = "My Series Name - 1x02-1x04 -  [HDTV] [Proper]")]
         public string create_proper_sab_titles(int seasons, int[] episodes, string title, QualityTypes quality, bool proper)
         {
             var series = Builder<Series>.CreateNew()
