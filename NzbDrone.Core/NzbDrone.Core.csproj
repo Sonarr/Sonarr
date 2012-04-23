@@ -128,9 +128,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.4.3.0\lib\net40\EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="Exceptrack.Driver">
-      <HintPath>..\packages\Exceptrack.Driver.0.1.0.2\lib\net20\Exceptrack.Driver.dll</HintPath>
-    </Reference>
     <Reference Include="Growl.Connector">
       <HintPath>..\packages\Growl.0.6\lib\Growl.Connector.dll</HintPath>
     </Reference>

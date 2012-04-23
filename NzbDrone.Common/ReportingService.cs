@@ -67,6 +67,7 @@ namespace NzbDrone.Common
 
                 exceptionData.Exception = logEvent.Exception;
                 exceptionData.Location = logEvent.LoggerName;
+                exceptionData.Message = logEvent.FormattedMessage;
                 exceptionData.UserId = EnvironmentProvider.UGuid.ToString().Replace("-", string.Empty);
 
                return ExceptrackDriver.SubmitException(exceptionData);

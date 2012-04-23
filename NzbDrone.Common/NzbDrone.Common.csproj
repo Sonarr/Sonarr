@@ -36,8 +36,9 @@
     <Reference Include="Exceptioneer.WindowsFormsClient">
       <HintPath>..\Libraries\Exceptioneer.WindowsFormsClient.dll</HintPath>
     </Reference>
-    <Reference Include="Exceptrack.Driver">
-      <HintPath>..\packages\Exceptrack.Driver.0.1.0.2\lib\net20\Exceptrack.Driver.dll</HintPath>
+    <Reference Include="Exceptrack.Driver, Version=0.1.0.96, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Exceptrack.Driver.0.1.0.3\lib\net20\Exceptrack.Driver.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
