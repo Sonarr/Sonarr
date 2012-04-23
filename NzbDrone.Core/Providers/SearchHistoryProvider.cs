@@ -10,7 +10,7 @@ using PetaPoco;
 
 namespace NzbDrone.Core.Providers
 {
-    public class SearchResultProvider
+    public class SearchHistoryProvider
     {
         private readonly IDatabase _database;
         private readonly SeriesProvider _seriesProvider;
@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Providers
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         [Inject]
-        public SearchResultProvider(IDatabase database, SeriesProvider seriesProvider,
+        public SearchHistoryProvider(IDatabase database, SeriesProvider seriesProvider,
                                         DownloadProvider downloadProvider, EpisodeProvider episodeProvider)
         {
             _database = database;
@@ -29,80 +29,80 @@ namespace NzbDrone.Core.Providers
             _episodeProvider = episodeProvider;
         }
 
-        public SearchResultProvider()
+        public SearchHistoryProvider()
         {
             
         }
 
-        public virtual void Add(SearchResult searchResult)
+        public virtual void Add(SearchHistory searchResult)
         {
             logger.Trace("Adding new search result");
-            searchResult.SuccessfulDownload = searchResult.SearchResultItems.Any(s => s.Success);
+            searchResult.SuccessfulDownload = searchResult.SearchHistoryItems.Any(s => s.Success);
             var id = Convert.ToInt32(_database.Insert(searchResult));
 
-            searchResult.SearchResultItems.ForEach(s => s.SearchResultId = id);
+            searchResult.SearchHistoryItems.ForEach(s => s.SearchHistoryId = id);
             logger.Trace("Adding search result items");
-            _database.InsertMany(searchResult.SearchResultItems);
+            _database.InsertMany(searchResult.SearchHistoryItems);
         }
 
         public virtual void Delete(int id)
         {
             logger.Trace("Deleting search result items attached to: {0}", id);
-            _database.Execute("DELETE FROM SearchResultItems WHERE SearchResultId = @0", id);
+            _database.Execute("DELETE FROM SearchHistoryItems WHERE SearchHistoryId = @0", id);
 
             logger.Trace("Deleting search result: {0}", id);
-            _database.Delete<SearchResult>(id);
+            _database.Delete<SearchHistory>(id);
         }
 
-        public virtual List<SearchResult> AllSearchResults()
+        public virtual List<SearchHistory> AllSearchHistory()
         {
-            var sql = @"SELECT SearchResults.Id, SearchResults.SeriesId, SearchResults.SeasonNumber,
-                        SearchResults.EpisodeId, SearchResults.SearchTime,
+            var sql = @"SELECT SearchHistory.Id, SearchHistory.SeriesId, SearchHistory.SeasonNumber,
+                        SearchHistory.EpisodeId, SearchHistory.SearchTime,
                         Series.Title as SeriesTitle, Series.IsDaily,
                         Episodes.EpisodeNumber, Episodes.SeasonNumber, Episodes.Title as EpisodeTitle,
                         Episodes.AirDate,
-                        Count(SearchResultItems.Id) as TotalItems,
-                        SUM(CASE WHEN SearchResultItems.Success = 1 THEN 1 ELSE 0 END) as SuccessfulCount
-                        FROM SearchResults
+                        Count(SearchHistoryItems.Id) as TotalItems,
+                        SUM(CASE WHEN SearchHistoryItems.Success = 1 THEN 1 ELSE 0 END) as SuccessfulCount
+                        FROM SearchHistory
                         INNER JOIN Series
-                        ON Series.SeriesId = SearchResults.SeriesId
+                        ON Series.SeriesId = SearchHistory.SeriesId
                         LEFT JOIN Episodes
-                        ON Episodes.EpisodeId = SearchResults.EpisodeId
-                        INNER JOIN SearchResultItems
-                        ON SearchResultItems.SearchResultId = SearchResults.Id
-                        GROUP BY SearchResults.Id, SearchResults.SeriesId, SearchResults.SeasonNumber,
-                        SearchResults.EpisodeId, SearchResults.SearchTime,
+                        ON Episodes.EpisodeId = SearchHistory.EpisodeId
+                        INNER JOIN SearchHistoryItems
+                        ON SearchHistoryItems.SearchHistoryId = SearchHistory.Id
+                        GROUP BY SearchHistory.Id, SearchHistory.SeriesId, SearchHistory.SeasonNumber,
+                        SearchHistory.EpisodeId, SearchHistory.SearchTime,
                         Series.Title, Series.IsDaily,
                         Episodes.EpisodeNumber, Episodes.SeasonNumber, Episodes.Title,
                         Episodes.AirDate";
 
-            return _database.Fetch<SearchResult>(sql);
+            return _database.Fetch<SearchHistory>(sql);
         }
 
-        public virtual SearchResult GetSearchResult(int id)
+        public virtual SearchHistory GetSearchHistory(int id)
         {
-            var sql = @"SELECT SearchResults.Id, SearchResults.SeriesId, SearchResults.SeasonNumber,
-                        SearchResults.EpisodeId, SearchResults.SearchTime,
+            var sql = @"SELECT SearchHistory.Id, SearchHistory.SeriesId, SearchHistory.SeasonNumber,
+                        SearchHistory.EpisodeId, SearchHistory.SearchTime,
                         Series.Title as SeriesTitle, Series.IsDaily,
                         Episodes.EpisodeNumber, Episodes.SeasonNumber, Episodes.Title as EpisodeTitle,
                         Episodes.AirDate
-                        FROM SearchResults
+                        FROM SearchHistory
                         INNER JOIN Series
-                        ON Series.SeriesId = SearchResults.SeriesId
+                        ON Series.SeriesId = SearchHistory.SeriesId
                         LEFT JOIN Episodes
-                        ON Episodes.EpisodeId = SearchResults.EpisodeId
-                        WHERE SearchResults.Id = @0";
+                        ON Episodes.EpisodeId = SearchHistory.EpisodeId
+                        WHERE SearchHistory.Id = @0";
 
-            var result = _database.Single<SearchResult>(sql, id);
-            result.SearchResultItems = _database.Fetch<SearchResultItem>("WHERE SearchResultId = @0", id);
+            var result = _database.Single<SearchHistory>(sql, id);
+            result.SearchHistoryItems = _database.Fetch<SearchHistoryItem>("WHERE SearchHistoryId = @0", id);
 
             return result;
         }
 
         public virtual void ForceDownload(int itemId)
         {
-            var item = _database.Single<SearchResultItem>(itemId);
-            var searchResult = _database.Single<SearchResult>(item.SearchResultId);
+            var item = _database.Single<SearchHistoryItem>(itemId);
+            var searchResult = _database.Single<SearchHistory>(item.SearchHistoryId);
             var series = _seriesProvider.GetSeries(searchResult.SeriesId);
             
             var parseResult = Parser.ParseTitle(item.ReportTitle);

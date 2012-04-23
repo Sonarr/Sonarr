@@ -10,20 +10,20 @@ using NzbDrone.Web.Models;
 
 namespace NzbDrone.Web.Controllers
 {
-    public class SearchResultController : Controller
+    public class SearchHistoryController : Controller
     {
-        private readonly SearchResultProvider _searchResultProvider;
+        private readonly SearchHistoryProvider _searchHistoryProvider;
 
-        public SearchResultController(SearchResultProvider searchResultProvider)
+        public SearchHistoryController(SearchHistoryProvider searchHistoryProvider)
         {
-            _searchResultProvider = searchResultProvider;
+            _searchHistoryProvider = searchHistoryProvider;
         }
 
         public ActionResult Index()
         {
-            var results = _searchResultProvider.AllSearchResults();
+            var results = _searchHistoryProvider.AllSearchHistory();
 
-            var model = results.Select(s => new SearchResultsModel
+            var model = results.Select(s => new SearchHistoryModel
             {
                 Id = s.Id,
                 SearchTime = s.SearchTime.ToString(),
@@ -37,13 +37,13 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult Details(int searchId)
         {
-            var searchResult = _searchResultProvider.GetSearchResult(searchId);
+            var searchResult = _searchHistoryProvider.GetSearchHistory(searchId);
             var model = new SearchDetailsModel
             {
                 Id = searchResult.Id,
                 DisplayName = GetDisplayName(searchResult),
-                SearchResultItems =
-                searchResult.SearchResultItems.Select(s => new SearchItemModel
+                SearchHistoryItems =
+                searchResult.SearchHistoryItems.Select(s => new SearchItemModel
                 {
                     Id = s.Id,
                     ReportTitle = s.ReportTitle,
@@ -66,12 +66,12 @@ namespace NzbDrone.Web.Controllers
 
         public JsonResult ForceDownload(int id)
         {
-            _searchResultProvider.ForceDownload(id);
+            _searchHistoryProvider.ForceDownload(id);
 
             return new JsonResult { Data = "ok", JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
-        public string GetDisplayName(SearchResult searchResult)
+        public string GetDisplayName(SearchHistory searchResult)
         {
             if (!searchResult.EpisodeNumber.HasValue)
             {

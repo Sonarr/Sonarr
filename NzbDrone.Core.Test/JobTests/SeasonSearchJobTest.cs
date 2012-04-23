@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Test.JobTests
         [Test]
         public void SeasonSearch_partial_season_success()
         {
-            var resultItems = Builder<SearchResultItem>.CreateListOfSize(5)
+            var resultItems = Builder<SearchHistoryItem>.CreateListOfSize(5)
                 .All()
                 .With(e => e.SearchError = ReportRejectionType.None)
                 .With(e => e.Success = true)

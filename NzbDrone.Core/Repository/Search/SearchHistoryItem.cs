@@ -8,11 +8,11 @@ using PetaPoco;
 namespace NzbDrone.Core.Repository.Search
 {
     [PrimaryKey("Id", autoIncrement = true)]
-    [TableName("SearchResultItems")]
-    public class SearchResultItem
+    [TableName("SearchHistoryItems")]
+    public class SearchHistoryItem
     {
         public int Id { get; set; }
-        public int SearchResultId { get; set; }
+        public int SearchHistoryId { get; set; }
         public string ReportTitle { get; set; }
         public string Indexer { get; set; }
         public string NzbUrl { get; set; }

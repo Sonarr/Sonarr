@@ -8,8 +8,8 @@ using PetaPoco;
 namespace NzbDrone.Core.Repository.Search
 {
     [PrimaryKey("Id", autoIncrement = true)]
-    [TableName("SearchResults")]
-    public class SearchResult
+    [TableName("SearchHistory")]
+    public class SearchHistory
     {
         public int Id { get; set; }
         public int SeriesId { get; set; }
@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Repository.Search
         public bool SuccessfulDownload { get; set; }
 
         [ResultColumn]
-        public List<SearchResultItem> SearchResultItems { get; set; }
+        public List<SearchHistoryItem> SearchHistoryItems { get; set; }
 
         [Ignore]
         public List<int> Successes { get; set; }

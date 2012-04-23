@@ -142,7 +142,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\DataTablesMvc.cs" />
-    <Compile Include="Controllers\SearchResultController.cs" />
+    <Compile Include="Controllers\SearchHistoryController.cs" />
     <Compile Include="Helpers\Validation\RequiredIfAnyAttribute.cs" />
     <Compile Include="Helpers\Validation\RequiredIfAttribute.cs" />
     <Content Include="Content\DataTables-1.9.0\media\css\jquery.dataTables.css" />
@@ -241,7 +241,7 @@
     <Compile Include="Models\LogModel.cs" />
     <Compile Include="Models\PostUpgradeModel.cs" />
     <Compile Include="Models\SearchItemModel.cs" />
-    <Compile Include="Models\SearchResultsModel.cs" />
+    <Compile Include="Models\SearchHistoryModel.cs" />
     <Compile Include="Models\UpcomingEpisodesModel.cs" />
     <Compile Include="Models\SeasonModel.cs" />
     <Compile Include="Models\SeriesDetailsModel.cs" />
@@ -525,10 +525,10 @@
     <Content Include="Views\Update\Post.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\SearchResult\Index.cshtml" />
+    <Content Include="Views\SearchHistory\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\SearchResult\Details.cshtml" />
+    <Content Include="Views\SearchHistory\Details.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

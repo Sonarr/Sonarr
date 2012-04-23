@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Providers
         private readonly SceneMappingProvider _sceneMappingProvider;
         private readonly UpgradePossibleSpecification _upgradePossibleSpecification;
         private readonly AllowedDownloadSpecification _allowedDownloadSpecification;
-        private readonly SearchResultProvider _searchResultProvider;
+        private readonly SearchHistoryProvider _searchHistoryProvider;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Providers
         public SearchProvider(EpisodeProvider episodeProvider, DownloadProvider downloadProvider, SeriesProvider seriesProvider,
                                 IndexerProvider indexerProvider, SceneMappingProvider sceneMappingProvider,
                                 UpgradePossibleSpecification upgradePossibleSpecification, AllowedDownloadSpecification allowedDownloadSpecification,
-                                SearchResultProvider searchResultProvider)
+                                SearchHistoryProvider searchHistoryProvider)
         {
             _episodeProvider = episodeProvider;
             _downloadProvider = downloadProvider;
@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Providers
             _sceneMappingProvider = sceneMappingProvider;
             _upgradePossibleSpecification = upgradePossibleSpecification;
             _allowedDownloadSpecification = allowedDownloadSpecification;
-            _searchResultProvider = searchResultProvider;
+            _searchHistoryProvider = searchHistoryProvider;
         }
 
         public SearchProvider()
@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual bool SeasonSearch(ProgressNotification notification, int seriesId, int seasonNumber)
         {
-            var searchResult = new SearchResult
+            var searchResult = new SearchHistory
             {
                 SearchTime = DateTime.Now,
                 SeriesId = seriesId,
@@ -91,15 +91,15 @@ namespace NzbDrone.Core.Providers
                 e => e.EpisodeNumbers = episodeNumbers.ToList()
                 );
 
-            searchResult.SearchResultItems = ProcessSearchResults(notification, reports, searchResult, series, seasonNumber);
-            _searchResultProvider.Add(searchResult);
+            searchResult.SearchHistoryItems = ProcessSearchResults(notification, reports, searchResult, series, seasonNumber);
+            _searchHistoryProvider.Add(searchResult);
 
             return (searchResult.Successes.Count == episodeNumbers.Count);
         }
 
         public virtual List<int> PartialSeasonSearch(ProgressNotification notification, int seriesId, int seasonNumber)
         {
-            var searchResult = new SearchResult
+            var searchResult = new SearchHistory
             {
                 SearchTime = DateTime.Now,
                 SeriesId = seriesId,
@@ -127,9 +127,9 @@ namespace NzbDrone.Core.Providers
                 return new List<int>();
 
             notification.CurrentMessage = "Processing search results";
-            searchResult.SearchResultItems = ProcessSearchResults(notification, reports, searchResult, series, seasonNumber);
+            searchResult.SearchHistoryItems = ProcessSearchResults(notification, reports, searchResult, series, seasonNumber);
 
-            _searchResultProvider.Add(searchResult);
+            _searchHistoryProvider.Add(searchResult);
             return searchResult.Successes;
         }
 
@@ -160,7 +160,7 @@ namespace NzbDrone.Core.Providers
                 return false;
             }
 
-            var searchResult = new SearchResult
+            var searchResult = new SearchHistory
                                    {
                                         SearchTime = DateTime.Now,
                                         SeriesId = episode.Series.SeriesId
@@ -173,20 +173,20 @@ namespace NzbDrone.Core.Providers
 
             if (episode.Series.IsDaily)
             {
-                searchResult.SearchResultItems = ProcessSearchResults(notification, reports, episode.Series, episode.AirDate.Value);
-                _searchResultProvider.Add(searchResult);
+                searchResult.SearchHistoryItems = ProcessSearchResults(notification, reports, episode.Series, episode.AirDate.Value);
+                _searchHistoryProvider.Add(searchResult);
 
-                if (searchResult.SearchResultItems.Any(r => r.Success))
+                if (searchResult.SearchHistoryItems.Any(r => r.Success))
                     return true;
             }
 
             else
             {
                 searchResult.EpisodeId = episodeId;
-                searchResult.SearchResultItems = ProcessSearchResults(notification, reports, searchResult, episode.Series, episode.SeasonNumber, episode.EpisodeNumber);
-                _searchResultProvider.Add(searchResult);
+                searchResult.SearchHistoryItems = ProcessSearchResults(notification, reports, searchResult, episode.Series, episode.SeasonNumber, episode.EpisodeNumber);
+                _searchHistoryProvider.Add(searchResult);
 
-                if (searchResult.SearchResultItems.Any(r => r.Success))
+                if (searchResult.SearchHistoryItems.Any(r => r.Success))
                 return true;
             }
 
@@ -257,10 +257,10 @@ namespace NzbDrone.Core.Providers
             return reports;
         }
 
-        public List<SearchResultItem> ProcessSearchResults(ProgressNotification notification, IEnumerable<EpisodeParseResult> reports, SearchResult searchResult, Series series, int seasonNumber, int? episodeNumber = null)
+        public List<SearchHistoryItem> ProcessSearchResults(ProgressNotification notification, IEnumerable<EpisodeParseResult> reports, SearchHistory searchResult, Series series, int seasonNumber, int? episodeNumber = null)
         {
             var successes = new List<int>();
-            var items = new List<SearchResultItem>();
+            var items = new List<SearchHistoryItem>();
 
             foreach (var episodeParseResult in reports.OrderByDescending(c => c.Quality).ThenBy(c => c.Age))
             {
@@ -268,7 +268,7 @@ namespace NzbDrone.Core.Providers
                 {
                     Logger.Trace("Analysing report " + episodeParseResult);
 
-                    var item = new SearchResultItem
+                    var item = new SearchHistoryItem
                     {
                         ReportTitle = episodeParseResult.OriginalString,
                         NzbUrl = episodeParseResult.NzbUrl,
@@ -353,16 +353,16 @@ namespace NzbDrone.Core.Providers
             return items;
         }
 
-        public List<SearchResultItem> ProcessSearchResults(ProgressNotification notification, IEnumerable<EpisodeParseResult> reports, Series series, DateTime airDate)
+        public List<SearchHistoryItem> ProcessSearchResults(ProgressNotification notification, IEnumerable<EpisodeParseResult> reports, Series series, DateTime airDate)
         {
-            var items = new List<SearchResultItem>();
+            var items = new List<SearchHistoryItem>();
             var skip = false;
 
             foreach (var episodeParseResult in reports.OrderByDescending(c => c.Quality))
             {
                 try
                 {
-                    var item = new SearchResultItem
+                    var item = new SearchHistoryItem
                     {
                         ReportTitle = episodeParseResult.OriginalString,
                         NzbUrl = episodeParseResult.NzbUrl,

@@ -2,7 +2,7 @@
 
 namespace NzbDrone.Web.Models
 {
-    public class SearchResultsModel
+    public class SearchHistoryModel
     {
         public int Id { get; set; }
         public string DisplayName { get; set; }

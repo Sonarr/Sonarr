@@ -8,7 +8,7 @@ namespace NzbDrone.Core.Datastore.Migrations
     {
         protected override void MainDbUpgrade()
         {
-            Database.AddTable("SearchResults", new[]
+            Database.AddTable("SearchHistory", new[]
                                             {
                                                 new Column("Id", DbType.Int32, ColumnProperty.PrimaryKeyWithIdentity),
                                                 new Column("SeriesId", DbType.Int32, ColumnProperty.NotNull),
@@ -18,10 +18,10 @@ namespace NzbDrone.Core.Datastore.Migrations
                                                 new Column("SuccessfulDownload", DbType.Boolean, ColumnProperty.NotNull)
                                             });
 
-            Database.AddTable("SearchResultItems", new[]
+            Database.AddTable("SearchHistoryItems", new[]
                                             {
                                                 new Column("Id", DbType.Int32, ColumnProperty.PrimaryKeyWithIdentity),
-                                                new Column("SearchResultId", DbType.Int32, ColumnProperty.NotNull),
+                                                new Column("SearchHistoryId", DbType.Int32, ColumnProperty.NotNull),
                                                 new Column("ReportTitle", DbType.String, ColumnProperty.NotNull),
                                                 new Column("Indexer", DbType.String, ColumnProperty.NotNull),
                                                 new Column("NzbUrl", DbType.String, ColumnProperty.NotNull),

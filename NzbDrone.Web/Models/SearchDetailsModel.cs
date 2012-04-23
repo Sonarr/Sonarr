@@ -8,6 +8,6 @@ namespace NzbDrone.Web.Models
     {
         public int Id { get; set; }
         public string DisplayName { get; set; }
-        public List<SearchItemModel> SearchResultItems { get; set; }
+        public List<SearchItemModel> SearchHistoryItems { get; set; }
     }
 }

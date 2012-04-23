@@ -12,7 +12,7 @@
 
 @section Scripts
 {
-    @(Html.GridScriptFor(m => m.SearchResultItems, "#searchDetailsGrid")
+    @(Html.GridScriptFor(m => m.SearchHistoryItems, "#searchDetailsGrid")
                 .PageLength(20)
                 .ChangePageLength(false)
                 .AddColumn(new Column().Image("/Content/Images/Indexers/{Indexer}.png", new { alt = "{Indexer}", title = "{Indexer}" }, "{Indexer}").Sortable(false).Title("").Width("20px"))
@@ -36,7 +36,7 @@
         
         function actionColumn(source, type, val) {
             if (type === 'display' || type === 'filter') {
-                return '<a href="/SearchResult/ForceDownload/' + source["Id"] + '" data-ajax="true" data-ajax-confirm="Are you sure?"><img src="/Content/Images/Plus.png" alt="Force" title="Force" class="gridAction"/></a>';
+                return '<a href="/SearchHistory/ForceDownload/' + source["Id"] + '" data-ajax="true" data-ajax-confirm="Are you sure?"><img src="/Content/Images/Plus.png" alt="Force" title="Force" class="gridAction"/></a>';
             }
             // 'sort' and 'type' both just use the raw data
             return '';
