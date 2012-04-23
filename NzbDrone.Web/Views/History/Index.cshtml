@@ -4,7 +4,7 @@
     <ul class="sub-menu">
         <li>@Ajax.ActionLink("Trim History", "Trim", "History", null, new AjaxOptions{ OnSuccess = "reloadGrid", Confirm = "Delete history items older than 30 days?"}, new { Title = "Delete history items older than 30 days" })</li>
         <li>@Ajax.ActionLink("Purge History", "Purge", "History", null, new AjaxOptions{ OnSuccess = "reloadGrid", Confirm = "Purge all history items?" }, new { Title = "Delete all history items" })</li>
-        <li>@Html.ActionLink("Search Hisotry", "Index", "SearchHistory", null, new { Title = "Review recent searches" })</li>
+        <li>@Html.ActionLink("Search History", "Index", "SearchHistory", null, new { Title = "Review recent searches" })</li>
     </ul>
 }
 
