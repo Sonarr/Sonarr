@@ -34,7 +34,7 @@
 
         jqXHR.error(function (xhr, textStatus, thrownError) {
             //ignore notification errors.
-            if (this.url.indexOf("/notification/Comet") === 0 || this.url.indexOf("/Health/Index") === 0)
+            if (this.url.indexOf("/notification/Comet") === 0 || this.url.indexOf("/Health/Index") === 0 || this.url.indexOf("/signalr") === 0)
                 return;
 
             alert("Status: " + textStatus + ", Error: " + thrownError);

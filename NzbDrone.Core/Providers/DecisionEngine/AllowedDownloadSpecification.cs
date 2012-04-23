@@ -2,6 +2,7 @@
 using NLog;
 using Ninject;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Repository.Search;
 
 namespace NzbDrone.Core.Providers.DecisionEngine
 {
@@ -30,16 +31,16 @@ namespace NzbDrone.Core.Providers.DecisionEngine
         {
         }
 
-        public virtual bool IsSatisfiedBy(EpisodeParseResult subject)
+        public virtual ReportRejectionType IsSatisfiedBy(EpisodeParseResult subject)
         {
-            if (!_qualityAllowedByProfileSpecification.IsSatisfiedBy(subject)) return false;
-            if (!_upgradeDiskSpecification.IsSatisfiedBy(subject)) return false;
-            if (!_retentionSpecification.IsSatisfiedBy(subject)) return false;
-            if (!_acceptableSizeSpecification.IsSatisfiedBy(subject)) return false;
-            if (_alreadyInQueueSpecification.IsSatisfiedBy(subject)) return false;
+            if (!_qualityAllowedByProfileSpecification.IsSatisfiedBy(subject)) return ReportRejectionType.QualityNotWanted;
+            if (!_upgradeDiskSpecification.IsSatisfiedBy(subject)) return ReportRejectionType.ExistingQualityIsEqualOrBetter;
+            if (!_retentionSpecification.IsSatisfiedBy(subject)) return ReportRejectionType.Retention;
+            if (!_acceptableSizeSpecification.IsSatisfiedBy(subject)) return ReportRejectionType.Size;
+            if (_alreadyInQueueSpecification.IsSatisfiedBy(subject)) return ReportRejectionType.AlreadyInQueue;
 
             logger.Debug("Episode {0} is needed", subject);
-            return true;
+            return ReportRejectionType.None;
         }
     }
 }

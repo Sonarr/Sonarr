@@ -222,6 +222,7 @@
     <Compile Include="Datastore\MigrationLogger.cs" />
     <Compile Include="Datastore\MigrationsHelper.cs" />
     <Compile Include="Datastore\CustomeMapper.cs" />
+    <Compile Include="Datastore\Migrations\Migration20120420.cs" />
     <Compile Include="Datastore\Migrations\Migration20120228.cs" />
     <Compile Include="Datastore\Migrations\Migration20120227.cs" />
     <Compile Include="Datastore\Migrations\Migration20120220.cs" />
@@ -239,7 +240,6 @@
     <Compile Include="Datastore\PetaPoco\EpisodeSeasonRelator.cs" />
     <Compile Include="Fluent.cs" />
     <Compile Include="Helpers\EpisodeSortingHelper.cs" />
-    <Compile Include="Helpers\FileSizeFormatHelper.cs" />
     <Compile Include="Helpers\SortHelper.cs" />
     <Compile Include="Helpers\SabnzbdQueueTimeConverter.cs" />
     <Compile Include="Jobs\CheckpointJob.cs" />
@@ -277,6 +277,7 @@
     <Compile Include="Providers\Indexer\NzbIndex.cs" />
     <Compile Include="Providers\Indexer\FileSharingTalk.cs" />
     <Compile Include="Providers\Indexer\Wombles.cs" />
+    <Compile Include="Providers\SearchHistoryProvider.cs" />
     <Compile Include="Providers\SeasonProvider.cs" />
     <Compile Include="Jobs\RecentBacklogSearchJob.cs" />
     <Compile Include="Jobs\TrimLogsJob.cs" />
@@ -304,6 +305,9 @@
     <Compile Include="Providers\AnalyticsProvider.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Repository\Search\SearchHistoryItem.cs" />
+    <Compile Include="Repository\Search\SearchHistory.cs" />
+    <Compile Include="Model\ReportRejectionType.cs" />
     <Compile Include="Repository\Season.cs" />
     <Compile Include="Providers\AutoConfigureProvider.cs">
       <SubType>Code</SubType>

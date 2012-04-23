@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using NzbDrone.Common;
+using NzbDrone.Core;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Providers;
@@ -129,7 +130,7 @@ namespace NzbDrone.Web.Controllers
                 foreach (var fileInfo in files)
                 {
                     fileResult += String.Format("<div><div style=\"width: 600px; display: inline-block;\">{0}</div><div style=\"display: inline-block;\">{1}</div></div>", fileInfo.Name,
-                                                FileSizeFormatHelper.Format(fileInfo.Length, 1));
+                                                fileInfo.Length.ToBestFileSize(1));
                 }
 
                 model.Files = fileResult;

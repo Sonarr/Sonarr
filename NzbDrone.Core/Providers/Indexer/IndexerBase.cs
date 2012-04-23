@@ -192,7 +192,6 @@ namespace NzbDrone.Core.Providers.Indexer
                             {
                                 parsedEpisode.NzbUrl = NzbDownloadUrl(item);
                                 parsedEpisode.Indexer = Name;
-                                parsedEpisode.OriginalString = item.Title.Text;
                                 result.Add(parsedEpisode);
                             }
                         }
@@ -237,6 +236,7 @@ namespace NzbDrone.Core.Providers.Indexer
             var title = TitlePreParser(item);
 
             var episodeParseResult = Parser.ParseTitle(title);
+            episodeParseResult.OriginalString = title;
             if (episodeParseResult != null) episodeParseResult.Age = DateTime.Now.Date.Subtract(item.PublishDate.Date).Days;
 
             _logger.Trace("Parsed: {0} from: {1}", episodeParseResult, item.Title.Text);

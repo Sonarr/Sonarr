@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Dynamic;
 using System.Text;
 using System.Web.Mvc;
+using DataTables.Mvc.Core;
 using DataTables.Mvc.Core.Models;
 using NzbDrone.Common;
 using NzbDrone.Core.Instrumentation;
@@ -17,7 +18,8 @@ namespace NzbDrone.Web.Controllers
         private readonly EnvironmentProvider _environmentProvider;
         private readonly DiskProvider _diskProvider;
 
-        public LogController(LogProvider logProvider, EnvironmentProvider environmentProvider, DiskProvider diskProvider)
+        public LogController(LogProvider logProvider, EnvironmentProvider environmentProvider,
+                                DiskProvider diskProvider)
         {
             _logProvider = logProvider;
             _environmentProvider = environmentProvider;
