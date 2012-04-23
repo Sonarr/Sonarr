@@ -51,9 +51,9 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DataTables.Mvc.Core">
-      <HintPath>..\packages\DataTables.Mvc.0.1.0.67\lib\DataTables.Mvc.Core.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="DataTables.Mvc.Core, Version=0.1.0.68, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\DataTables.Mvc.0.1.0.68\lib\DataTables.Mvc.Core.dll</HintPath>
     </Reference>
     <Reference Include="Dynamic">
       <HintPath>..\packages\DynamicQuery.1.0\lib\35\Dynamic.dll</HintPath>

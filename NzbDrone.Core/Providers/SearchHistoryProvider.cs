@@ -34,15 +34,17 @@ namespace NzbDrone.Core.Providers
             
         }
 
-        public virtual void Add(SearchHistory searchResult)
+        public virtual int Add(SearchHistory searchHistory)
         {
             logger.Trace("Adding new search result");
-            searchResult.SuccessfulDownload = searchResult.SearchHistoryItems.Any(s => s.Success);
-            var id = Convert.ToInt32(_database.Insert(searchResult));
+            searchHistory.SuccessfulDownload = searchHistory.SearchHistoryItems.Any(s => s.Success);
+            var id = Convert.ToInt32(_database.Insert(searchHistory));
 
-            searchResult.SearchHistoryItems.ForEach(s => s.SearchHistoryId = id);
+            searchHistory.SearchHistoryItems.ForEach(s => s.SearchHistoryId = id);
             logger.Trace("Adding search result items");
-            _database.InsertMany(searchResult.SearchHistoryItems);
+            _database.InsertMany(searchHistory.SearchHistoryItems);
+
+            return id;
         }
 
         public virtual void Delete(int id)
@@ -102,6 +104,7 @@ namespace NzbDrone.Core.Providers
         public virtual void ForceDownload(int itemId)
         {
             var item = _database.Single<SearchHistoryItem>(itemId);
+            logger.Info("Starting Force Download of: {0}", item.ReportTitle);
             var searchResult = _database.Single<SearchHistory>(item.SearchHistoryId);
             var series = _seriesProvider.GetSeries(searchResult.SeriesId);
             
@@ -111,6 +114,7 @@ namespace NzbDrone.Core.Providers
             parseResult.Indexer = item.Indexer;
             var episodes = _episodeProvider.GetEpisodesByParseResult(parseResult);
 
+            logger.Info("Forcing Download of: {0}", item.ReportTitle);
             _downloadProvider.DownloadReport(parseResult);
         }
     }

@@ -20,7 +20,7 @@
                 .AddColumn(new Column().DataProperty("Success").Title("Successful").Width("120px"))
                 .AddColumn(new Column().DisplayAndSort("Quality", "QualityInt").Title("Quality").Width("80px"))
                 .AddColumn(new Column().DataProperty("SearchError").Title("Error"))
-                .AddColumn(new Column().DataProperty("return actionColumn(source, type, val);", true))
+                .AddColumn(new Column().DataProperty("return actionColumn(source, type, val);", true).Sortable(false).Searchable(false))
                 .AddColumn(new Column().DataProperty("Details").RenderFunction("return getDetails(row, val);").Visible(false))
                 .AddSorting(3, SortDirection.Desc))
     
