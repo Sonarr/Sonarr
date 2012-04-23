@@ -91,12 +91,13 @@ namespace NzbDrone.Core.Providers
                 e => e.EpisodeNumbers = episodeNumbers.ToList()
                 );
 
-            searchResult.SearchResultItems = ProcessSearchResults(notification, reports, series, seasonNumber);
+            searchResult.SearchResultItems = ProcessSearchResults(notification, reports, searchResult, series, seasonNumber);
+            _searchResultProvider.Add(searchResult);
 
-            return (searchResult.SearchResultItems.Select(s => s.Success).Count() == episodeNumbers.Count);
+            return (searchResult.Successes.Count == episodeNumbers.Count);
         }
 
-        public virtual List<SearchResultItem> PartialSeasonSearch(ProgressNotification notification, int seriesId, int seasonNumber)
+        public virtual List<int> PartialSeasonSearch(ProgressNotification notification, int seriesId, int seasonNumber)
         {
             var searchResult = new SearchResult
             {
@@ -110,12 +111,12 @@ namespace NzbDrone.Core.Providers
             if (series == null)
             {
                 Logger.Error("Unable to find an series {0} in database", seriesId);
-                return new List<SearchResultItem>();
+                return new List<int>();
             }
 
             //Return empty list if the series is a daily series (we only support individual episode searching
             if (series.IsDaily)
-                return new List<SearchResultItem>();
+                return new List<int>();
 
             notification.CurrentMessage = String.Format("Searching for {0} Season {1}", series.Title, seasonNumber);
             var episodes = _episodeProvider.GetEpisodesBySeason(seriesId, seasonNumber);
@@ -123,13 +124,13 @@ namespace NzbDrone.Core.Providers
             Logger.Debug("Finished searching all indexers. Total {0}", reports.Count);
 
             if (reports.Count == 0)
-                return new List<SearchResultItem>();
+                return new List<int>();
 
             notification.CurrentMessage = "Processing search results";
-            searchResult.SearchResultItems = ProcessSearchResults(notification, reports, series, seasonNumber);
+            searchResult.SearchResultItems = ProcessSearchResults(notification, reports, searchResult, series, seasonNumber);
 
             _searchResultProvider.Add(searchResult);
-            return searchResult.SearchResultItems;
+            return searchResult.Successes;
         }
 
         public virtual bool EpisodeSearch(ProgressNotification notification, int episodeId)
@@ -182,7 +183,7 @@ namespace NzbDrone.Core.Providers
             else
             {
                 searchResult.EpisodeId = episodeId;
-                searchResult.SearchResultItems = ProcessSearchResults(notification, reports, episode.Series, episode.SeasonNumber, episode.EpisodeNumber);
+                searchResult.SearchResultItems = ProcessSearchResults(notification, reports, searchResult, episode.Series, episode.SeasonNumber, episode.EpisodeNumber);
                 _searchResultProvider.Add(searchResult);
 
                 if (searchResult.SearchResultItems.Any(r => r.Success))
@@ -256,7 +257,7 @@ namespace NzbDrone.Core.Providers
             return reports;
         }
 
-        public List<SearchResultItem> ProcessSearchResults(ProgressNotification notification, IEnumerable<EpisodeParseResult> reports, Series series, int seasonNumber, int? episodeNumber = null)
+        public List<SearchResultItem> ProcessSearchResults(ProgressNotification notification, IEnumerable<EpisodeParseResult> reports, SearchResult searchResult, Series series, int seasonNumber, int? episodeNumber = null)
         {
             var successes = new List<int>();
             var items = new List<SearchResultItem>();
@@ -271,7 +272,12 @@ namespace NzbDrone.Core.Providers
                     {
                         ReportTitle = episodeParseResult.OriginalString,
                         NzbUrl = episodeParseResult.NzbUrl,
-                        Indexer = episodeParseResult.Indexer
+                        Indexer = episodeParseResult.Indexer,
+                        Quality = episodeParseResult.Quality.QualityType,
+                        Proper = episodeParseResult.Quality.Proper,
+                        Size = episodeParseResult.Size,
+                        Age = episodeParseResult.Age,
+                        Language = episodeParseResult.Language
                     };
 
                     items.Add(item);
@@ -360,7 +366,12 @@ namespace NzbDrone.Core.Providers
                     {
                         ReportTitle = episodeParseResult.OriginalString,
                         NzbUrl = episodeParseResult.NzbUrl,
-                        Indexer = episodeParseResult.Indexer
+                        Indexer = episodeParseResult.Indexer,
+                        Quality = episodeParseResult.Quality.QualityType,
+                        Proper = episodeParseResult.Quality.Proper,
+                        Size = episodeParseResult.Size,
+                        Age = episodeParseResult.Age,
+                        Language = episodeParseResult.Language
                     };
 
                     items.Add(item);
@@ -414,6 +425,7 @@ namespace NzbDrone.Core.Providers
                         {
                             Logger.ErrorException("Unable to add report to download queue." + episodeParseResult, e);
                             notification.CurrentMessage = String.Format("Unable to add report to download queue. {0}", episodeParseResult);
+                            item.SearchError = ReportRejectionType.DownloadClientFailure;
                         }
                     }
                 }

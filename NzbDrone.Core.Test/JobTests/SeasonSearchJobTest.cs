@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Test.JobTests
 
             Mocker.GetMock<SearchProvider>()
                 .Setup(c => c.PartialSeasonSearch(notification, 1, 1))
-                .Returns(resultItems.ToList());
+                .Returns(episodes.Select(e => e.EpisodeNumber).ToList());
 
             //Act
             Mocker.Resolve<SeasonSearchJob>().Start(notification, 1, 1);
@@ -96,7 +96,7 @@ namespace NzbDrone.Core.Test.JobTests
 
             Mocker.GetMock<SearchProvider>()
                 .Setup(c => c.PartialSeasonSearch(notification, 1, 1))
-                .Returns(new List<SearchResultItem>{ new SearchResultItem{ Success = true }});
+                .Returns(new List<int>());
 
             //Act
             Mocker.Resolve<SeasonSearchJob>().Start(notification, 1, 1);
@@ -130,7 +130,7 @@ namespace NzbDrone.Core.Test.JobTests
 
             Mocker.GetMock<SearchProvider>()
                 .Setup(c => c.PartialSeasonSearch(notification, 1, 1))
-                .Returns(new List<SearchResultItem> { new SearchResultItem { Success = false, SearchError = ReportRejectionType.Size} });
+                .Returns(new List<int>());
 
 
             //Act

@@ -21,6 +21,9 @@ namespace NzbDrone.Core.Repository.Search
         [ResultColumn]
         public List<SearchResultItem> SearchResultItems { get; set; }
 
+        [Ignore]
+        public List<int> Successes { get; set; }
+
         [ResultColumn]
         public string SeriesTitle { get; set; }
 
@@ -40,6 +43,6 @@ namespace NzbDrone.Core.Repository.Search
         public int TotalItems { get; set; }
 
         [ResultColumn]
-        public int Successes { get; set; }
+        public int SuccessfulCount { get; set; }
     }
 }

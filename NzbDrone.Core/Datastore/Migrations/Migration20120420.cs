@@ -27,7 +27,12 @@ namespace NzbDrone.Core.Datastore.Migrations
                                                 new Column("NzbUrl", DbType.String, ColumnProperty.NotNull),
                                                 new Column("NzbInfoUrl", DbType.String, ColumnProperty.Null),
                                                 new Column("Success", DbType.Boolean, ColumnProperty.NotNull),
-                                                new Column("SearchError", DbType.Int32, ColumnProperty.NotNull)
+                                                new Column("SearchError", DbType.Int32, ColumnProperty.NotNull),
+                                                new Column("Quality", DbType.Int32, ColumnProperty.NotNull),
+                                                new Column("Proper", DbType.Boolean, ColumnProperty.NotNull),
+                                                new Column("Age", DbType.Int32, ColumnProperty.NotNull),
+                                                new Column("Language", DbType.Int32, ColumnProperty.NotNull),
+                                                new Column("Size", DbType.Int64, ColumnProperty.NotNull),
                                             });
         }
     }
