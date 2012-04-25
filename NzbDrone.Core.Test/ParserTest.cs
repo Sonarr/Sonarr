@@ -159,6 +159,9 @@ namespace NzbDrone.Core.Test
         [TestCase("Gossip Girl S05E11 PROPER HDTV XviD 2HD", QualityTypes.SDTV, true)]
         [TestCase("The Jonathan Ross Show S02E08 HDTV x264 FTP", QualityTypes.SDTV, false)]
         [TestCase("White.Van.Man.2011.S02E01.WS.PDTV.x264-TLA", QualityTypes.SDTV, false)]
+        [TestCase("White.Van.Man.2011.S02E01.WS.PDTV.x264-REPACK-TLA", QualityTypes.SDTV, true)]
+        [TestCase("WEEDS.S03E01-06.DUAL.XviD.Bluray.AC3-REPACK.-HELLYWOOD.avi", QualityTypes.DVD, true)]
+        [TestCase("Pawn Stars S04E87 REPACK 720p HDTV x264 aAF", QualityTypes.HDTV, true)]
         public void quality_parse(string postTitle, object quality, bool proper)
         {
             var result = Parser.ParseQuality(postTitle);

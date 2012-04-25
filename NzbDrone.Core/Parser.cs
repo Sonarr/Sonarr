@@ -251,7 +251,7 @@ namespace NzbDrone.Core
             name = name.Trim();
             var normalizedName = NormalizeTitle(name);
             var result = new Quality { QualityType = QualityTypes.Unknown };
-            result.Proper = normalizedName.Contains("proper");
+            result.Proper = (normalizedName.Contains("proper") || normalizedName.Contains("repack"));
 
             if (normalizedName.Contains("dvd") || normalizedName.Contains("bdrip") || normalizedName.Contains("brrip"))
             {
