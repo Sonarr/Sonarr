@@ -269,7 +269,7 @@ namespace NzbDrone.Core.Providers
                     {
                         Logger.Trace("[{0}] was imported but not moved, moving it now", file);
 
-                        MoveEpisodeFile(episodeFile);
+                        MoveEpisodeFile(episodeFile, true);
                     }
 
                 }
