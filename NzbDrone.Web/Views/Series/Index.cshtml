@@ -207,8 +207,16 @@
         
         //After we delete a series do this...
         function afterDelete(seriesId) {
-            $('.' + seriesId).hide();
-            $('.details_' + seriesId).hide();
+            var row = $('.' + seriesId);
+            
+            if ($(row).hasClass('details-opened')) {
+                var nextRow = $(row).next('tr');
+                if($(nextRow).children('.Details').length > 0) {
+                    $(nextRow).hide();
+                }
+            }
+            
+            $(row).hide();
         }
         
         //After we save do this...
