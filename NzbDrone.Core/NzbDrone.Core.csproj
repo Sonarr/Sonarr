@@ -264,6 +264,7 @@
     <Compile Include="Model\Sabnzbd\SabModel.cs" />
     <Compile Include="Model\Sabnzbd\SabQueueItem.cs" />
     <Compile Include="Model\Sabnzbd\SabVersionModel.cs" />
+    <Compile Include="Model\StatsModel.cs" />
     <Compile Include="Model\Twitter\TwitterAuthorizationModel.cs" />
     <Compile Include="Model\UpdatePackage.cs" />
     <Compile Include="Model\Xbmc\ActionType.cs" />
@@ -305,6 +306,7 @@
     <Compile Include="Providers\AnalyticsProvider.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Providers\StatsProvider.cs" />
     <Compile Include="Repository\Search\SearchHistoryItem.cs" />
     <Compile Include="Repository\Search\SearchHistory.cs" />
     <Compile Include="Model\ReportRejectionType.cs" />

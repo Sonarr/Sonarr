@@ -22,16 +22,18 @@ namespace NzbDrone.Web.Controllers
         private readonly ConfigProvider _configProvider;
         private readonly DiskProvider _diskProvider;
         private readonly BackupProvider _backupProvider;
+        private readonly StatsProvider _statsProvider;
 
         public SystemController(JobProvider jobProvider, IndexerProvider indexerProvider,
                                     ConfigProvider configProvider, DiskProvider diskProvider,
-                                    BackupProvider backupProvider)
+                                    BackupProvider backupProvider, StatsProvider statsProvider)
         {
             _jobProvider = jobProvider;
             _indexerProvider = indexerProvider;
             _configProvider = configProvider;
             _diskProvider = diskProvider;
             _backupProvider = backupProvider;
+            _statsProvider = statsProvider;
         }
 
         public ActionResult Jobs()
@@ -175,6 +177,13 @@ namespace NzbDrone.Web.Controllers
             var fileInfo = new FileInfo(file);
 
             return File(fileInfo.FullName, "application/binary", fileInfo.Name);
+        }
+
+        public ActionResult Stats()
+        {
+            var model = _statsProvider.GetStats();
+
+            return View(model);
         }
     }
 }
