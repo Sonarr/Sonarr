@@ -259,7 +259,7 @@ namespace NzbDrone.Core
                 return result;
             }
 
-            if (normalizedName.Contains("xvid") || normalizedName.Contains("divx"))
+            if (normalizedName.Contains("xvid") || normalizedName.Contains("divx") || normalizedName.Contains("dsr"))
             {
                 if (normalizedName.Contains("bluray"))
                 {
@@ -299,8 +299,6 @@ namespace NzbDrone.Core
                 return result;
             }
             //Based on extension
-
-
 
             if (result.QualityType == QualityTypes.Unknown)
             {
