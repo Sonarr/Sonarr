@@ -17,7 +17,7 @@
                 .ChangePageLength(false)
                 .AddColumn(new Column().Image("/Content/Images/Indexers/{Indexer}.png", new { alt = "{Indexer}", title = "{Indexer}" }, "{Indexer}").Sortable(false).Title("").Width("20px"))
                 .AddColumn(new Column().DataProperty("ReportTitle").Title("Report Title"))
-                .AddColumn(new Column().DataProperty("Success").Title("Successful").Width("120px"))
+                .AddColumn(new Column().Image("/Content/Images/{Success}.png", new { alt = "{Success}", title = "{Success}", @class = "gridImage" }, "{Success}").Title("Successful").Width("100px"))
                 .AddColumn(new Column().DisplayAndSort("Quality", "QualityInt").Title("Quality").Width("80px"))
                 .AddColumn(new Column().DataProperty("SearchError").Title("Error"))
                 .AddColumn(new Column().DataProperty("return actionColumn(source, type, val);", true).Sortable(false).Searchable(false))

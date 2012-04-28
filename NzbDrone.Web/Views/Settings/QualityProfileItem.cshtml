@@ -12,7 +12,7 @@
             <span class="titleText" id="title_@(Model.QualityProfileId)">
                 @Model.Name
             </span><a href="#" id="@Model.QualityProfileId" class="deleteProfile" onclick=" deleteProfile('@(Model.QualityProfileId)'); return false;">
-                <img src="../../Content/Images/X.png" alt="Delete" width="22px" height="22px" /></a>
+                <img src="../../Content/Images/close.png" alt="Delete" width="22px" height="22px" /></a>
         </div>
         <div class="profileOptions">
             @Html.LabelFor(x => x.Name)

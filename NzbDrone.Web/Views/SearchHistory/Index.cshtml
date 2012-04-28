@@ -16,7 +16,7 @@
             .AddColumn(new Column().DataProperty("DisplayName").Link("SearchHistory/Details?searchId={Id}", "{DisplayName}", null).Title("Name"))
             .AddColumn(new Column().DataProperty("SearchTime").Title("Time").Width("170px"))
             .AddColumn(new Column().DataProperty("ReportCount").Title("Reports Found").Width("140px"))
-            .AddColumn(new Column().DataProperty("Successful").Title("Successful").Width("110px"))
+            .AddColumn(new Column().Image("/Content/Images/{Successful}.png", new { alt = "{Successful}", title = "{Successful}", @class = "gridImage" }, "{Successful}").Title("Successful").Width("110px"))
             .AddSorting(1)
     )
 }
