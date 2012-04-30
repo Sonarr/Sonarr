@@ -15,7 +15,6 @@ using PetaPoco;
 namespace NzbDrone.Core.Test.Integeration
 {
     [TestFixture(Category = "ServiceIngeneration")]
-    [Explicit]
     public class ServiceIntegerationFixture : CoreTest
     {
         private KernelBase _kernel;

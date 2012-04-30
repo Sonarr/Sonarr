@@ -77,9 +77,10 @@ namespace NzbDrone.Common
                 {
                     throw;
                 }
-
-                //this shouldn't log an exception since it will cause a recursive loop.
-                logger.Info("Unable to report exception. " + e);
+                if (logEvent.LoggerName != logger.Name)//prevents a recursive loop.
+                {
+                    logger.WarnException("Unable to report exception. ", e);
+                }
             }
 
             return null;
@@ -91,7 +92,7 @@ namespace NzbDrone.Common
             ExceptronDriver = new ExceptionClient(
                     "CB230C312E5C4FF38B4FB9644B05E60E",
                     new EnvironmentProvider().Version.ToString(),
-                    new Uri("http://api.Exceptron.com/v1aa/"));
+                    new Uri("http://api.Exceptron.com/v1a/"));
 
             ExceptronDriver.ThrowsExceptions = !EnvironmentProvider.IsProduction;
             ExceptronDriver.Enviroment = EnvironmentProvider.IsProduction ? "Prod" : "Dev";
