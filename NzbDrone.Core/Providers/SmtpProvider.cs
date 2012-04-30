@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Providers
             _configProvider = configProvider;
         }
 
-        public virtual bool SendEmail(string subject, string body, bool htmlBody = false)
+        public virtual void SendEmail(string subject, string body, bool htmlBody = false)
         {
             //Create the Email message
             var email = new MailMessage();
@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Providers
                 credentials = new NetworkCredential(username, password);
 
             //Send the email
-            return Send(email, _configProvider.SmtpServer, _configProvider.SmtpPort, _configProvider.SmtpUseSsl, credentials);
+            Send(email, _configProvider.SmtpServer, _configProvider.SmtpPort, _configProvider.SmtpUseSsl, credentials);
         }
 
         public virtual bool SendTestEmail(string server, int port, bool ssl, string username, string password, string fromAddress, string toAddresses)
@@ -90,11 +90,19 @@ namespace NzbDrone.Core.Providers
                 credentials = new NetworkCredential(username, password);
 
             //Send the email
-            return Send(email, server, port, ssl, credentials);
+            try
+            {
+                Send(email, server, port, ssl, credentials);
+            }
+            catch(Exception ex)
+            {
+                Logger.TraceException("Failed to send test email", ex);
+                return false;
+            }
+            return true;
         }
 
-        //TODO: make this throw instead of return false.
-        public virtual bool Send(MailMessage email, string server, int port, bool ssl, NetworkCredential credentials)
+        public virtual void Send(MailMessage email, string server, int port, bool ssl, NetworkCredential credentials)
         {
             try
             {
@@ -109,15 +117,12 @@ namespace NzbDrone.Core.Providers
 
                 //Send the email
                 smtp.Send(email);
-
-                return true;
             }
 
             catch (Exception ex)
             {
-                Logger.Error("There was an error sending an email.");
-                Logger.TraceException(ex.Message, ex);
-                return false;
+                Logger.ErrorException("There was an error sending an email.", ex);
+                throw;
             }
         }
     }
