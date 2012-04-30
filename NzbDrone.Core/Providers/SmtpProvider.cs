@@ -54,7 +54,14 @@ namespace NzbDrone.Core.Providers
                 credentials = new NetworkCredential(username, password);
 
             //Send the email
-            Send(email, _configProvider.SmtpServer, _configProvider.SmtpPort, _configProvider.SmtpUseSsl, credentials);
+            try
+            {
+                Send(email, _configProvider.SmtpServer, _configProvider.SmtpPort, _configProvider.SmtpUseSsl, credentials);
+            }
+            catch(Exception ex)
+            {
+                Logger.Error("Error sending email. Subject: {0}", email.Subject);
+            }
         }
 
         public virtual bool SendTestEmail(string server, int port, bool ssl, string username, string password, string fromAddress, string toAddresses)
