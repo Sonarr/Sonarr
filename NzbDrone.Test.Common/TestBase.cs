@@ -49,7 +49,7 @@ namespace NzbDrone.Test.Common
 
             MockedRestProvider = new Mock<RestProvider>();
             ReportingService.RestProvider = MockedRestProvider.Object;
-            ReportingService.SetupExceptrackDriver();
+            ReportingService.SetupExceptronDriver();
 
 
             if (Directory.Exists(TempFolder))

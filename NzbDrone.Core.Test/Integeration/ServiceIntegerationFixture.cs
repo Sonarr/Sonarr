@@ -58,16 +58,27 @@ namespace NzbDrone.Core.Test.Integeration
         [Test]
         public void should_be_able_to_submit_exceptions()
         {
-            ReportingService.SetupExceptrackDriver();
+            ReportingService.SetupExceptronDriver();
 
-            var log = new LogEventInfo();
-            log.LoggerName = "LoggerName.LoggerName.LoggerName.LoggerName";
-            log.Exception = new ArgumentOutOfRangeException();
-            log.Message = "New message string. New message string. New message string. New message string. New message string. New message string.";
+            try
+            {
+                ThrowException();
+            }
+            catch (Exception e)
+            {
+                var log = new LogEventInfo
+                              {
+                                  LoggerName = "LoggerName.LoggerName.LoggerName.LoggerName",
+                                  Exception = e,
+                                  Message = "New message string. New message string.",
+                              };
 
-            var hash = ReportingService.ReportException(log);
+                var hash = ReportingService.ReportException(log);
 
-            hash.Should().HaveLength(8);
+                hash.Should().HaveLength(8);
+            }
+
+
         }
 
 

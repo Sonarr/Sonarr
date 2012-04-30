@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Exceptrack.Driver;
+using Exceptron.Driver;
 using NLog;
 using NzbDrone.Common.Contract;
 
@@ -13,10 +13,9 @@ namespace NzbDrone.Common
 
         private const string SERVICE_URL = "http://services.nzbdrone.com/reporting";
         private const string PARSE_URL = SERVICE_URL + "/ParseError";
-        private const string EXCEPTION_URL = SERVICE_URL + "/ReportException";
 
         public static RestProvider RestProvider { get; set; }
-        public static ExceptionClient ExceptrackDriver { get; set; }
+        public static ExceptionClient ExceptronDriver { get; set; }
 
 
         private static readonly HashSet<string> parserErrorCache = new HashSet<string>();
@@ -70,7 +69,7 @@ namespace NzbDrone.Common
                 exceptionData.Message = logEvent.FormattedMessage;
                 exceptionData.UserId = EnvironmentProvider.UGuid.ToString().Replace("-", string.Empty);
 
-               return ExceptrackDriver.SubmitException(exceptionData);
+                return ExceptronDriver.SubmitException(exceptionData);
             }
             catch (Exception e)
             {
@@ -87,14 +86,15 @@ namespace NzbDrone.Common
         }
 
 
-        public static void SetupExceptrackDriver()
+        public static void SetupExceptronDriver()
         {
-            ExceptrackDriver = new ExceptionClient(
-                                                   "CB230C312E5C4FF38B4FB9644B05E60D",
-                                                   new EnvironmentProvider().Version.ToString(),
-                                                   new Uri("http://api.exceptrack.com/v1/"));
+            ExceptronDriver = new ExceptionClient(
+                    "CB230C312E5C4FF38B4FB9644B05E60E",
+                    new EnvironmentProvider().Version.ToString(),
+                    new Uri("http://api.Exceptron.com/v1aa/"));
 
-            ExceptrackDriver.ThrowsExceptions = !EnvironmentProvider.IsProduction;
+            ExceptronDriver.ThrowsExceptions = !EnvironmentProvider.IsProduction;
+            ExceptronDriver.Enviroment = EnvironmentProvider.IsProduction ? "Prod" : "Dev";
         }
 
         private static void VerifyDependencies()
@@ -112,16 +112,16 @@ namespace NzbDrone.Common
                 }
             }
 
-            if (ExceptrackDriver == null)
+            if (ExceptronDriver == null)
             {
                 if (EnvironmentProvider.IsProduction)
                 {
-                    logger.Warn("Exceptrack Driver wasn't provided. creating new one!");
-                    SetupExceptrackDriver();
+                    logger.Warn("Exceptron Driver wasn't provided. creating new one!");
+                    SetupExceptronDriver();
                 }
                 else
                 {
-                    throw new InvalidOperationException("Exceptrack Driver wasn't configured correctly.");
+                    throw new InvalidOperationException("Exceptron Driver wasn't configured correctly.");
                 }
             }
         }
