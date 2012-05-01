@@ -89,10 +89,10 @@ namespace NzbDrone.Common
 
         public static void SetupExceptronDriver()
         {
-            ExceptronDriver = new ExceptionClient(
-                    "CB230C312E5C4FF38B4FB9644B05E60E",
-                    new EnvironmentProvider().Version.ToString(),
-                    new Uri("http://api.Exceptron.com/v1a/"));
+            ExceptronDriver = new ExceptionClient("CB230C312E5C4FF38B4FB9644B05E60E")
+                                  {
+                                      ApplicationVersion = new EnvironmentProvider().Version.ToString()
+                                  };
 
             ExceptronDriver.ThrowsExceptions = !EnvironmentProvider.IsProduction;
             ExceptronDriver.Enviroment = EnvironmentProvider.IsProduction ? "Prod" : "Dev";
