@@ -30,6 +30,8 @@ namespace NzbDrone.Core.Model
 
         public string NzbUrl { get; set; }
 
+        public string NzbInfoUrl { get; set; }
+
         public string OriginalString { get; set; }
 
         public Series Series { get; set; }

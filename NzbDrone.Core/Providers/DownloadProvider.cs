@@ -52,7 +52,6 @@ namespace NzbDrone.Core.Providers
             {
                 logger.Trace("Download added to Queue: {0}", downloadTitle);
 
-
                 foreach (var episode in _episodeProvider.GetEpisodesByParseResult(parseResult))
                 {
                     var history = new History();
@@ -63,6 +62,7 @@ namespace NzbDrone.Core.Providers
                     history.NzbTitle = parseResult.OriginalString;
                     history.EpisodeId = episode.EpisodeId;
                     history.SeriesId = episode.SeriesId;
+                    history.NzbInfoUrl = parseResult.NzbInfoUrl;
 
                     _historyProvider.Add(history);
                     _episodeProvider.MarkEpisodeAsFetched(episode.EpisodeId);
