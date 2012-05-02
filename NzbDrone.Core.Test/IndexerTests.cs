@@ -26,7 +26,6 @@ namespace NzbDrone.Core.Test
     // ReSharper disable InconsistentNaming
     public class IndexerTests : CoreTest
     {
-
         [TestCase("nzbsorg.xml")]
         [TestCase("nzbsrus.xml")]
         [TestCase("newzbin.xml")]
@@ -562,6 +561,40 @@ namespace NzbDrone.Core.Test
             parseResults.Should().OnlyContain(s => s.Age >= 0);
 
             Thread.CurrentThread.CurrentCulture = currentCulture;
+        }
+
+        [TestCase("nzbsorg.xml", "info")]
+        [TestCase("nzbsrus.xml", "info")]
+        [TestCase("newzbin.xml", "info")]
+        [TestCase("nzbmatrix.xml", "info")]
+        [TestCase("newznab.xml", "info")]
+        [TestCase("wombles.xml", "info")]
+        [TestCase("filesharingtalk.xml", "info")]
+        [TestCase("nzbindex.xml", "info")]
+        [TestCase("nzbclub.xml", "info")]
+        public void NzbInfoUrl_should_contain_information_string(string fileName, string expectedContent)
+        {
+            Mocker.GetMock<HttpProvider>()
+                          .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
+                          .Returns(File.OpenRead(".\\Files\\Rss\\" + fileName));
+
+            var fakeSettings = Builder<IndexerDefinition>.CreateNew().Build();
+            Mocker.GetMock<IndexerProvider>()
+                .Setup(c => c.GetSettings(It.IsAny<Type>()))
+                .Returns(fakeSettings);
+
+            var mockIndexer = Mocker.Resolve<MockIndexer>();
+            var parseResults = mockIndexer.FetchRss();
+
+            foreach (var episodeParseResult in parseResults)
+            {
+                episodeParseResult.NzbInfoUrl.Should().Contain(expectedContent);
+            }
+            
+            parseResults.Should().NotBeEmpty();
+            parseResults.Should().OnlyContain(s => s.Indexer == mockIndexer.Name);
+            parseResults.Should().OnlyContain(s => !String.IsNullOrEmpty(s.OriginalString));
+            parseResults.Should().OnlyContain(s => s.Age >= 0);
         }
     }
 }

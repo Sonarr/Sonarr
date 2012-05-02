@@ -141,10 +141,14 @@ namespace NzbDrone.Core.Test.ProviderTests
             get { return "Mocked Indexer"; }
         }
 
-
         protected override string NzbDownloadUrl(SyndicationItem item)
         {
             return item.Links[0].Uri.ToString();
+        }
+
+        protected override string NzbInfoUrl(SyndicationItem item)
+        {
+            return item.Links[1].Uri.ToString();
         }
     }
 
@@ -194,6 +198,11 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             return "http://google.com";
         }
+
+        protected override string NzbInfoUrl(SyndicationItem item)
+        {
+            return "http://google.com";
+        }
     }
 
     public class CustomParserIndexer : IndexerBase
@@ -239,6 +248,11 @@ namespace NzbDrone.Core.Test.ProviderTests
         }
 
         protected override string NzbDownloadUrl(SyndicationItem item)
+        {
+            return "http://www.google.com";
+        }
+
+        protected override string NzbInfoUrl(SyndicationItem item)
         {
             return "http://www.google.com";
         }
@@ -297,6 +311,11 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             throw new NotImplementedException();
         }
+
+        protected override string NzbInfoUrl(SyndicationItem item)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class DefaultEnabledIndexer : IndexerBase
@@ -345,12 +364,17 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             get { return "Mocked Indexer"; }
         }
-
-
+        
         protected override string NzbDownloadUrl(SyndicationItem item)
         {
             return item.Links[0].Uri.ToString();
         }
+
+        protected override string NzbInfoUrl(SyndicationItem item)
+        {
+            return item.Links[1].Uri.ToString();
+        }
+
         public override bool EnabledByDefault
         {
             get { return true; }
