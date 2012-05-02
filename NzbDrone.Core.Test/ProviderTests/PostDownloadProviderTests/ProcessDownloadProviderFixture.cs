@@ -279,6 +279,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
                 .Build().ToList();
 
             Mocker.GetMock<SeriesProvider>().Setup(s => s.FindSeries("office")).Returns(fakeSeries);
+            Mocker.GetMock<DiskScanProvider>().Setup(s => s.CleanUpDropFolder(droppedFolder.FullName));
             Mocker.GetMock<DiskScanProvider>().Setup(s => s.Scan(fakeSeries, droppedFolder.FullName)).Returns(fakeEpisodeFiles);
             Mocker.GetMock<DiskScanProvider>().Setup(s => s.MoveEpisodeFile(It.IsAny<EpisodeFile>(), true)).Returns(true);
             Mocker.GetMock<DiskProvider>().Setup(s => s.GetDirectorySize(droppedFolder.FullName)).Returns(Constants.IgnoreFileSize - 1.Megabytes());

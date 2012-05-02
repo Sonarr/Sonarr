@@ -87,5 +87,60 @@ namespace NzbDrone.Core
             return s.Substring(0, i);
         }
 
+        public static string AddSpacesToEnum(this Enum enumValue)
+        {
+            var text = enumValue.ToString();
+
+            if (string.IsNullOrWhiteSpace(text))
+                return "";
+            var newText = new StringBuilder(text.Length * 2);
+            newText.Append(text[0]);
+            for (int i = 1; i < text.Length; i++)
+            {
+                if (char.IsUpper(text[i]) && text[i - 1] != ' ')
+                    newText.Append(' ');
+                newText.Append(text[i]);
+            }
+            return newText.ToString();
+        }
+
+        private const Decimal ONE_KILOBYTE = 1024M;
+        private const Decimal ONE_MEGABYTE = ONE_KILOBYTE * 1024M;
+        private const Decimal ONE_GIGABYTE = ONE_MEGABYTE * 1024M;
+
+        public static string ToBestFileSize(this long bytes, int precision = 0)
+        {
+            if (bytes == 0)
+                return "0B";
+
+            decimal size = Convert.ToDecimal(bytes);
+
+            string suffix;
+
+            if (size > ONE_GIGABYTE)
+            {
+                size /= ONE_GIGABYTE;
+                suffix = "GB";
+            }
+
+            else if (size > ONE_MEGABYTE)
+            {
+                size /= ONE_MEGABYTE;
+                suffix = "MB";
+            }
+
+            else if (size > ONE_KILOBYTE)
+            {
+                size /= ONE_KILOBYTE;
+                suffix = "KB";
+            }
+
+            else
+            {
+                suffix = " B";
+            }
+
+            return String.Format("{0:N" + precision + "} {1}", size, suffix);
+        }
     }
 }

@@ -4,6 +4,7 @@
     <ul class="sub-menu">
         <li>@Ajax.ActionLink("Trim History", "Trim", "History", null, new AjaxOptions{ OnSuccess = "reloadGrid", Confirm = "Delete history items older than 30 days?"}, new { Title = "Delete history items older than 30 days" })</li>
         <li>@Ajax.ActionLink("Purge History", "Purge", "History", null, new AjaxOptions{ OnSuccess = "reloadGrid", Confirm = "Purge all history items?" }, new { Title = "Delete all history items" })</li>
+        <li>@Html.ActionLink("Search History", "Index", "SearchHistory", null, new { Title = "Review recent searches" })</li>
     </ul>
 }
 
@@ -89,7 +90,7 @@
                                     }
                                 }, //Date
                                 { sWidth: '40px', "mDataProp": "HistoryId", "bSortable": false, "fnRender": function (row) {
-                                    var deleteImage = "<img src=\"../../Content/Images/X.png\" alt=\"Delete\" title=\"Delete from History\" class=\"gridAction\" onclick=\"deleteHistory(this.parentNode.parentNode, " + row.aData["HistoryId"] + ")\">";
+                                    var deleteImage = "<img src=\"../../Content/Images/close.png\" alt=\"Delete\" title=\"Delete from History\" class=\"gridAction\" onclick=\"deleteHistory(this.parentNode.parentNode, " + row.aData["HistoryId"] + ")\">";
                                     var redownloadImage = "<img src=\"../../Content/Images/redownload.png\" alt=\"Redownload\" title=\Redownload Episode\" class=\"gridAction\" onclick=\"redownloadHistory(this.parentNode.parentNode, " + row.aData["HistoryId"] + ", " + row.aData["EpisodeId"] + ")\">";
 
                                     return deleteImage + redownloadImage;

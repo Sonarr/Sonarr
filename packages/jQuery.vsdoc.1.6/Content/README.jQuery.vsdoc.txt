@@ -1,0 +1,1 @@
+vsdoc files for Visual Studio IntelliSense are now included in the core jquery NuGet package. As a result, this pacakge is obsolete and will not be updated past version 1.6. You can uninstall it.

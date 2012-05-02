@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Providers.Indexer
 
         protected override string NzbDownloadUrl(SyndicationItem item)
         {
-            return item.Links[1].Uri.ToString();
+            return item.Links[0].Uri.ToString();
         }
 
         protected override IList<string> GetEpisodeSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber)

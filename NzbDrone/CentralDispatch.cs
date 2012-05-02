@@ -46,6 +46,7 @@ namespace NzbDrone
             var environmentProvider = _kernel.Get<EnvironmentProvider>();
             
             ReportingService.RestProvider = _kernel.Get<RestProvider>();
+            ReportingService.SetupExceptronDriver();
 
             LogConfiguration.RegisterRollingFileLogger(environmentProvider.GetLogFileName(), LogLevel.Info);
             LogConfiguration.RegisterConsoleLogger(LogLevel.Debug);

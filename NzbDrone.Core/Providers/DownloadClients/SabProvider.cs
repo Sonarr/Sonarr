@@ -46,26 +46,35 @@ namespace NzbDrone.Core.Providers.DownloadClients
 
         public virtual bool IsInQueue(EpisodeParseResult newParseResult)
         {
-            var queue = GetQueue().Where(c => c.ParseResult != null);
-
-            var matchigTitle = queue.Where(q => String.Equals(q.ParseResult.CleanTitle, newParseResult.Series.CleanTitle, StringComparison.InvariantCultureIgnoreCase));
-
-            var matchingTitleWithQuality = matchigTitle.Where(q => q.ParseResult.Quality >= newParseResult.Quality);
-
-
-            if (newParseResult.Series.IsDaily)
+            try
             {
-                return matchingTitleWithQuality.Any(q => q.ParseResult.AirDate.Value.Date == newParseResult.AirDate.Value.Date);
+                var queue = GetQueue().Where(c => c.ParseResult != null);
+
+                var matchigTitle = queue.Where(q => String.Equals(q.ParseResult.CleanTitle, newParseResult.Series.CleanTitle, StringComparison.InvariantCultureIgnoreCase));
+
+                var matchingTitleWithQuality = matchigTitle.Where(q => q.ParseResult.Quality >= newParseResult.Quality);
+
+
+                if (newParseResult.Series.IsDaily)
+                {
+                    return matchingTitleWithQuality.Any(q => q.ParseResult.AirDate.Value.Date == newParseResult.AirDate.Value.Date);
+                }
+
+                var matchingSeason = matchingTitleWithQuality.Where(q => q.ParseResult.SeasonNumber == newParseResult.SeasonNumber);
+
+                if (newParseResult.FullSeason)
+                {
+                    return matchingSeason.Any();
+                }
+
+                return matchingSeason.Any(q => q.ParseResult.EpisodeNumbers != null && q.ParseResult.EpisodeNumbers.Any(e => newParseResult.EpisodeNumbers.Contains(e)));
             }
 
-            var matchingSeason = matchingTitleWithQuality.Where(q => q.ParseResult.SeasonNumber == newParseResult.SeasonNumber);
-
-            if (newParseResult.FullSeason)
+            catch (Exception ex)
             {
-                return matchingSeason.Any();
+                logger.WarnException("Unable to connect to SABnzbd to check queue.", ex);
+                return false;
             }
-
-            return matchingSeason.Any(q => q.ParseResult.EpisodeNumbers != null && q.ParseResult.EpisodeNumbers.Any(e => newParseResult.EpisodeNumbers.Contains(e)));
         }
 
         public virtual bool DownloadNzb(string url, string title)

@@ -253,6 +253,33 @@ namespace NzbDrone.Core.Providers
             }
         }
 
+        public virtual void CleanUpDropFolder(string path)
+        {
+            //Todo: We should rename files before importing them to prevent this issue from ever happening
+
+            var filesOnDisk = GetVideoFiles(path);
+
+            foreach(var file in filesOnDisk)
+            {
+                try
+                {
+                    var episodeFile = _mediaFileProvider.GetFileByPath(file);
+
+                    if (episodeFile != null)
+                    {
+                        Logger.Trace("[{0}] was imported but not moved, moving it now", file);
+
+                        MoveEpisodeFile(episodeFile, true);
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    Logger.WarnException("Failed to move epiosde file from drop folder: " + file, ex);
+                    throw;
+                }
+            }
+        }
 
         private List<string> GetVideoFiles(string path)
         {

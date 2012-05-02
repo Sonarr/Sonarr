@@ -1,0 +1,22 @@
+﻿@using DataTables.Mvc.Core
+@model IEnumerable<NzbDrone.Web.Models.SearchHistoryModel>
+
+@{
+    ViewBag.Title = "Search Results";
+}
+
+@Html.GridHtml("searchResultsGrid", "dataTablesGrid no-details")
+
+@section Scripts
+{
+    @(
+ Html.GridScriptForModel("#searchResultsGrid")
+            .PageLength(20)
+            .ChangePageLength(false)
+            .AddColumn(new Column().DataProperty("DisplayName").Link("SearchHistory/Details?searchId={Id}", "{DisplayName}", null).Title("Name"))
+            .AddColumn(new Column().DataProperty("SearchTime").Title("Time").Width("170px"))
+            .AddColumn(new Column().DataProperty("ReportCount").Title("Reports Found").Width("140px"))
+            .AddColumn(new Column().Image("/Content/Images/{Successful}.png", new { alt = "{Successful}", title = "{Successful}", @class = "gridImage" }, "{Successful}").Title("Successful").Width("110px"))
+            .AddSorting(1)
+    )
+}

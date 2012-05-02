@@ -1,0 +1,41 @@
+﻿@model NzbDrone.Core.Model.StatsModel
+
+@{
+    ViewBag.Title = "Stats";
+}
+
+@section HeaderContent
+{
+    <style>
+        label
+        {
+            font-weight: bold;
+        }
+    </style>
+}
+
+<h2>Stats</h2>
+
+@Html.LabelFor(m => m.SeriesTotal): 
+@Html.DisplayTextFor(m => m.SeriesTotal)
+<br/>
+@Html.LabelFor(m => m.SeriesContinuing): 
+@Html.DisplayTextFor(m => m.SeriesContinuing)
+<br/>
+@Html.LabelFor(m => m.SeriesEnded): 
+@Html.DisplayTextFor(m => m.SeriesEnded)
+<br/>
+@Html.LabelFor(m => m.EpisodesTotal): 
+@Html.DisplayTextFor(m => m.EpisodesTotal)
+<br/>
+@Html.LabelFor(m => m.EpisodesOnDisk): 
+@Html.DisplayTextFor(m => m.EpisodesOnDisk)
+<br/>
+@Html.LabelFor(m => m.EpisodesMissing): 
+@Html.DisplayTextFor(m => m.EpisodesMissing)
+<br/>
+@Html.LabelFor(m => m.DownloadLastWeek): 
+@Html.DisplayTextFor(m => m.DownloadLastWeek)
+<br/>
+@Html.LabelFor(m => m.DownloadedLastMonth): 
+@Html.DisplayTextFor(m => m.DownloadedLastMonth)

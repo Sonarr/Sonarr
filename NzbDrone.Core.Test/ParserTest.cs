@@ -67,6 +67,8 @@ namespace NzbDrone.Core.Test
         [TestCase("castle.2009.416.hdtv-lol", "Castle 2009", 4, 16)]
         [TestCase("hawaii.five-0.2010.217.hdtv-lol", "Hawaii Five-0 (2010)", 2, 17)]
         [TestCase("Looney Tunes - S1936E18 - I Love to Singa", "Looney Tunes", 1936, 18)]
+        [TestCase("American_Dad!_-_7x6_-_The_Scarlett_Getter_[SDTV]", "American Dad!", 7, 6)]
+        [TestCase("Falling_Skies_-_1x1_-_Live_and_Learn_[HDTV]", "Falling Skies", 1, 1)]
         public void ParseTitle_single(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
             var result = Parser.ParseTitle(postTitle);
@@ -159,6 +161,14 @@ namespace NzbDrone.Core.Test
         [TestCase("Gossip Girl S05E11 PROPER HDTV XviD 2HD", QualityTypes.SDTV, true)]
         [TestCase("The Jonathan Ross Show S02E08 HDTV x264 FTP", QualityTypes.SDTV, false)]
         [TestCase("White.Van.Man.2011.S02E01.WS.PDTV.x264-TLA", QualityTypes.SDTV, false)]
+        [TestCase("White.Van.Man.2011.S02E01.WS.PDTV.x264-REPACK-TLA", QualityTypes.SDTV, true)]
+        [TestCase("WEEDS.S03E01-06.DUAL.XviD.Bluray.AC3-REPACK.-HELLYWOOD.avi", QualityTypes.DVD, true)]
+        [TestCase("Pawn Stars S04E87 REPACK 720p HDTV x264 aAF", QualityTypes.HDTV, true)]
+        [TestCase("The Real Housewives of Vancouver S01E04 DSR x264 2HD", QualityTypes.SDTV, false)]
+        [TestCase("Vanguard S01E04 Mexicos Death Train DSR x264 MiNDTHEGAP", QualityTypes.SDTV, false)]
+        [TestCase("Vanguard S01E04 Mexicos Death Train 720 WEB DL", QualityTypes.WEBDL, false)]
+        [TestCase("Hawaii Five 0 S02E21 720p WEB DL DD5 1 H 264", QualityTypes.WEBDL, false)]
+        [TestCase("Castle S04E22 720p WEB DL DD5 1 H 264 NFHD", QualityTypes.WEBDL, false)]
         public void quality_parse(string postTitle, object quality, bool proper)
         {
             var result = Parser.ParseQuality(postTitle);
@@ -194,6 +204,9 @@ namespace NzbDrone.Core.Test
         [TestCase("2x04x05.720p.BluRay-FUTV", "", 2, new[] { 4, 5 })]
         [TestCase("S02E04E05.720p.BluRay-FUTV", "", 2, new[] { 4, 5 })]
         [TestCase("S02E03-04-05.720p.BluRay-FUTV", "", 2, new[] { 3,4,5 })]
+        [TestCase("Breakout.Kings.S02E09-E10.HDTV.x264-ASAP", "Breakout Kings", 2, new[] { 9, 10 })]
+        [TestCase("Breakout Kings - 2x9-2x10 - Served Cold [SDTV] ", "Breakout Kings", 2, new[] { 9, 10 })]
+        [TestCase("Breakout Kings - 2x09-2x10 - Served Cold [SDTV] ", "Breakout Kings", 2, new[] { 9, 10 })]
         public void TitleParse_multi(string postTitle, string title, int season, int[] episodes)
         {
             var result = Parser.ParseTitle(postTitle);

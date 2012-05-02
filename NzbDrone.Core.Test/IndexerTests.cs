@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.ServiceModel.Syndication;
-
+using System.Threading;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
@@ -529,6 +530,38 @@ namespace NzbDrone.Core.Test
 
             parseResults.Should().HaveCount(1);
             parseResults[0].CleanTitle.Should().Be("britainsgottalent");
+        }
+
+        [TestCase("wombles.xml", "de-de")]
+        public void dateTime_should_parse_when_using_other_cultures(string fileName, string culture)
+        {
+            var currentCulture = Thread.CurrentThread.CurrentCulture;
+            Thread.CurrentThread.CurrentCulture = new CultureInfo(culture);
+
+            Mocker.GetMock<HttpProvider>()
+                          .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
+                          .Returns(File.OpenRead(".\\Files\\Rss\\" + fileName));
+
+            var fakeSettings = Builder<IndexerDefinition>.CreateNew().Build();
+            Mocker.GetMock<IndexerProvider>()
+                .Setup(c => c.GetSettings(It.IsAny<Type>()))
+                .Returns(fakeSettings);
+
+            var mockIndexer = Mocker.Resolve<MockIndexer>();
+            var parseResults = mockIndexer.FetchRss();
+
+            foreach (var episodeParseResult in parseResults)
+            {
+                var Uri = new Uri(episodeParseResult.NzbUrl);
+                Uri.PathAndQuery.Should().NotContain("//");
+            }
+
+            parseResults.Should().NotBeEmpty();
+            parseResults.Should().OnlyContain(s => s.Indexer == mockIndexer.Name);
+            parseResults.Should().OnlyContain(s => !String.IsNullOrEmpty(s.OriginalString));
+            parseResults.Should().OnlyContain(s => s.Age >= 0);
+
+            Thread.CurrentThread.CurrentCulture = currentCulture;
         }
     }
 }

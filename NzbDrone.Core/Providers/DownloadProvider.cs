@@ -124,7 +124,7 @@ namespace NzbDrone.Core.Providers
 
             foreach (var episode in parseResult.EpisodeNumbers)
             {
-                episodeString.Add(String.Format("{0}x{1}", parseResult.SeasonNumber, episode));
+                episodeString.Add(String.Format("{0}x{1:00}", parseResult.SeasonNumber, episode));
             }
 
             var epNumberString = String.Join("-", episodeString);

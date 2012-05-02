@@ -74,7 +74,7 @@
                     { sWidth: 'auto', "mDataProp": "Title", "bSortable": false }, //Title
                     { sWidth: '40px', "mDataProp": "Commands", "bSortable": false, "fnRender": function (row) {
                             var promoteImage = "<img src=\"../../Content/Images/Promote.png\" alt=\"Promote\" title=\Promote to Active\" class=\"gridAction\" onclick=\"promoteMapping(this.parentNode.parentNode, " + row.aData["MappingId"] + ")\">";
-                            var deleteImage = "<img src=\"../../Content/Images/X.png\" alt=\"Delete\" title=\"Delete\" class=\"gridAction\" onclick=\"deleteMapping(this.parentNode.parentNode, " + row.aData["MappingId"] + ")\">";
+                            var deleteImage = "<img src=\"../../Content/Images/close.png\" alt=\"Delete\" title=\"Delete\" class=\"gridAction\" onclick=\"deleteMapping(this.parentNode.parentNode, " + row.aData["MappingId"] + ")\">";
                             
                             return promoteImage + deleteImage;
                         }

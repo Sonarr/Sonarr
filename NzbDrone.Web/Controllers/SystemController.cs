@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using NzbDrone.Common;
+using NzbDrone.Core;
 using NzbDrone.Core.Helpers;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Providers;
@@ -21,16 +22,18 @@ namespace NzbDrone.Web.Controllers
         private readonly ConfigProvider _configProvider;
         private readonly DiskProvider _diskProvider;
         private readonly BackupProvider _backupProvider;
+        private readonly StatsProvider _statsProvider;
 
         public SystemController(JobProvider jobProvider, IndexerProvider indexerProvider,
                                     ConfigProvider configProvider, DiskProvider diskProvider,
-                                    BackupProvider backupProvider)
+                                    BackupProvider backupProvider, StatsProvider statsProvider)
         {
             _jobProvider = jobProvider;
             _indexerProvider = indexerProvider;
             _configProvider = configProvider;
             _diskProvider = diskProvider;
             _backupProvider = backupProvider;
+            _statsProvider = statsProvider;
         }
 
         public ActionResult Jobs()
@@ -129,7 +132,7 @@ namespace NzbDrone.Web.Controllers
                 foreach (var fileInfo in files)
                 {
                     fileResult += String.Format("<div><div style=\"width: 600px; display: inline-block;\">{0}</div><div style=\"display: inline-block;\">{1}</div></div>", fileInfo.Name,
-                                                FileSizeFormatHelper.Format(fileInfo.Length, 1));
+                                                fileInfo.Length.ToBestFileSize(1));
                 }
 
                 model.Files = fileResult;
@@ -174,6 +177,13 @@ namespace NzbDrone.Web.Controllers
             var fileInfo = new FileInfo(file);
 
             return File(fileInfo.FullName, "application/binary", fileInfo.Name);
+        }
+
+        public ActionResult Stats()
+        {
+            var model = _statsProvider.GetStats();
+
+            return View(model);
         }
     }
 }

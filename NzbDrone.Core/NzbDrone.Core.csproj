@@ -29,6 +29,8 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -158,9 +160,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\MiniProfiler.1.9\lib\net40\MvcMiniProfiler.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.0.8.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.4.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.4.5.3\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Ninject, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\packages\Ninject.2.2.1.4\lib\net40-Full\Ninject.dll</HintPath>
@@ -222,6 +224,7 @@
     <Compile Include="Datastore\MigrationLogger.cs" />
     <Compile Include="Datastore\MigrationsHelper.cs" />
     <Compile Include="Datastore\CustomeMapper.cs" />
+    <Compile Include="Datastore\Migrations\Migration20120420.cs" />
     <Compile Include="Datastore\Migrations\Migration20120228.cs" />
     <Compile Include="Datastore\Migrations\Migration20120227.cs" />
     <Compile Include="Datastore\Migrations\Migration20120220.cs" />
@@ -239,7 +242,6 @@
     <Compile Include="Datastore\PetaPoco\EpisodeSeasonRelator.cs" />
     <Compile Include="Fluent.cs" />
     <Compile Include="Helpers\EpisodeSortingHelper.cs" />
-    <Compile Include="Helpers\FileSizeFormatHelper.cs" />
     <Compile Include="Helpers\SortHelper.cs" />
     <Compile Include="Helpers\SabnzbdQueueTimeConverter.cs" />
     <Compile Include="Jobs\CheckpointJob.cs" />
@@ -264,6 +266,7 @@
     <Compile Include="Model\Sabnzbd\SabModel.cs" />
     <Compile Include="Model\Sabnzbd\SabQueueItem.cs" />
     <Compile Include="Model\Sabnzbd\SabVersionModel.cs" />
+    <Compile Include="Model\StatsModel.cs" />
     <Compile Include="Model\Twitter\TwitterAuthorizationModel.cs" />
     <Compile Include="Model\UpdatePackage.cs" />
     <Compile Include="Model\Xbmc\ActionType.cs" />
@@ -277,6 +280,7 @@
     <Compile Include="Providers\Indexer\NzbIndex.cs" />
     <Compile Include="Providers\Indexer\FileSharingTalk.cs" />
     <Compile Include="Providers\Indexer\Wombles.cs" />
+    <Compile Include="Providers\SearchHistoryProvider.cs" />
     <Compile Include="Providers\SeasonProvider.cs" />
     <Compile Include="Jobs\RecentBacklogSearchJob.cs" />
     <Compile Include="Jobs\TrimLogsJob.cs" />
@@ -304,6 +308,10 @@
     <Compile Include="Providers\AnalyticsProvider.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Providers\StatsProvider.cs" />
+    <Compile Include="Repository\Search\SearchHistoryItem.cs" />
+    <Compile Include="Repository\Search\SearchHistory.cs" />
+    <Compile Include="Model\ReportRejectionType.cs" />
     <Compile Include="Repository\Season.cs" />
     <Compile Include="Providers\AutoConfigureProvider.cs">
       <SubType>Code</SubType>
@@ -574,6 +582,7 @@
 if not exist "$(TargetDir)x86" md "$(TargetDir)x86"
 xcopy /s /y "$(SolutionDir)packages\SqlServerCompact.4.0.8482.1\NativeBinaries\x86\*.*" "$(TargetDir)x86"</PostBuildEvent>
   </PropertyGroup>
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

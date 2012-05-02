@@ -11,6 +11,7 @@ using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.DecisionEngine;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
+using NzbDrone.Core.Repository.Search;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
@@ -73,14 +74,14 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
         {
             Mocker.GetMock<AllowedDownloadSpecification>()
                 .Setup(s => s.IsSatisfiedBy(It.IsAny<EpisodeParseResult>()))
-                .Returns(true);
+                .Returns(ReportRejectionType.None);
         }
 
         private void WithQualityNotNeeded()
         {
             Mocker.GetMock<AllowedDownloadSpecification>()
                 .Setup(s => s.IsSatisfiedBy(It.IsAny<EpisodeParseResult>()))
-                .Returns(false);
+                .Returns(ReportRejectionType.ExistingQualityIsEqualOrBetter);
         }
 
         [Test]
@@ -102,14 +103,14 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
 
             Mocker.GetMock<AllowedDownloadSpecification>()
                 .Setup(s => s.IsSatisfiedBy(It.Is<EpisodeParseResult>(d => d.Quality.QualityType == QualityTypes.Bluray1080p)))
-                .Returns(true);
+                .Returns(ReportRejectionType.None);
 
             //Act
-            var result = Mocker.Resolve<SearchProvider>().ProcessSearchResults(new ProgressNotification("Test"), parseResults, _matchingSeries, 1, 1);
+            var result = Mocker.Resolve<SearchProvider>().ProcessSearchResults(new ProgressNotification("Test"), parseResults, new SearchHistory(), _matchingSeries, 1, 1);
 
             //Assert
-            result.Should().HaveCount(1);
-            result.First().Should().Be(1);
+            result.Should().HaveCount(parseResults.Count);
+            result.Should().Contain(s => s.Success);
 
             Mocker.GetMock<AllowedDownloadSpecification>().Verify(c => c.IsSatisfiedBy(It.IsAny<EpisodeParseResult>()),
                                                        Times.Once());
@@ -135,13 +136,14 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
             WithSuccessfulDownload();
 
             Mocker.GetMock<AllowedDownloadSpecification>()
-                .Setup(s => s.IsSatisfiedBy(It.IsAny<EpisodeParseResult>())).Returns(true);
+                .Setup(s => s.IsSatisfiedBy(It.IsAny<EpisodeParseResult>())).Returns(ReportRejectionType.None);
 
             //Act
-            var result = Mocker.Resolve<SearchProvider>().ProcessSearchResults(MockNotification, parseResults, _matchingSeries, 1, 1);
+            var result = Mocker.Resolve<SearchProvider>().ProcessSearchResults(MockNotification, parseResults, new SearchHistory(), _matchingSeries, 1, 1);
 
             //Assert
-            result.Should().HaveCount(1);
+            result.Should().HaveCount(parseResults.Count);
+            result.Should().Contain(s => s.Success);
 
 
             Mocker.GetMock<DownloadProvider>().Verify(c => c.DownloadReport(It.Is<EpisodeParseResult>(d => d.Age != 100)), Times.Never());
@@ -162,10 +164,11 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
             WithQualityNotNeeded();
 
             //Act
-            var result = Mocker.Resolve<SearchProvider>().ProcessSearchResults(new ProgressNotification("Test"), parseResults, _matchingSeries, 1, 1);
+            var result = Mocker.Resolve<SearchProvider>().ProcessSearchResults(new ProgressNotification("Test"), parseResults, new SearchHistory(), _matchingSeries, 1, 1);
 
             //Assert
-            result.Should().HaveCount(0);
+            result.Should().HaveCount(parseResults.Count);
+            result.Should().NotContain(s => s.Success);
 
             Mocker.GetMock<AllowedDownloadSpecification>().Verify(c => c.IsSatisfiedBy(It.IsAny<EpisodeParseResult>()),
                                                        Times.Exactly(5));
@@ -180,15 +183,17 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
                 .All()
                 .With(e => e.SeasonNumber = 1)
                 .With(e => e.EpisodeNumbers = new List<int> { 1 })
+                .With(e => e.Quality = new Quality(QualityTypes.HDTV, false))
                 .Build();
 
             WithNullSeries();
 
             //Act
-            var result = Mocker.Resolve<SearchProvider>().ProcessSearchResults(new ProgressNotification("Test"), parseResults, _matchingSeries, 1, 1);
+            var result = Mocker.Resolve<SearchProvider>().ProcessSearchResults(new ProgressNotification("Test"), parseResults, new SearchHistory(), _matchingSeries, 1, 1);
 
             //Assert
-            result.Should().HaveCount(0);
+            result.Should().HaveCount(parseResults.Count);
+            result.Should().NotContain(s => s.Success);
 
             Mocker.GetMock<DownloadProvider>().Verify(c => c.DownloadReport(It.IsAny<EpisodeParseResult>()),
                                                       Times.Never());
@@ -201,15 +206,17 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
                 .All()
                 .With(e => e.SeasonNumber = 1)
                 .With(e => e.EpisodeNumbers = new List<int> { 1 })
+                .With(e => e.Quality = new Quality(QualityTypes.HDTV, false))
                 .Build();
 
             WithMisMatchedSeries();
 
             //Act
-            var result = Mocker.Resolve<SearchProvider>().ProcessSearchResults(new ProgressNotification("Test"), parseResults, _matchingSeries, 1, 1);
+            var result = Mocker.Resolve<SearchProvider>().ProcessSearchResults(new ProgressNotification("Test"), parseResults, new SearchHistory(), _matchingSeries, 1, 1);
 
             //Assert
-            result.Should().HaveCount(0);
+            result.Should().HaveCount(parseResults.Count);
+            result.Should().NotContain(s => s.Success);
 
             Mocker.GetMock<DownloadProvider>().Verify(c => c.DownloadReport(It.IsAny<EpisodeParseResult>()),
                                                       Times.Never());
@@ -222,15 +229,17 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
                 .All()
                 .With(e => e.SeasonNumber = 2)
                 .With(e => e.EpisodeNumbers = new List<int> { 1 })
+                .With(e => e.Quality = new Quality(QualityTypes.HDTV, false))
                 .Build();
 
             WithMatchingSeries();
 
             //Act
-            var result = Mocker.Resolve<SearchProvider>().ProcessSearchResults(new ProgressNotification("Test"), parseResults, _matchingSeries, 1, 1);
+            var result = Mocker.Resolve<SearchProvider>().ProcessSearchResults(new ProgressNotification("Test"), parseResults, new SearchHistory(), _matchingSeries, 1, 1);
 
             //Assert
-            result.Should().HaveCount(0);
+            result.Should().HaveCount(parseResults.Count);
+            result.Should().NotContain(s => s.Success);
 
             Mocker.GetMock<DownloadProvider>().Verify(c => c.DownloadReport(It.IsAny<EpisodeParseResult>()),
                                                       Times.Never());
@@ -243,15 +252,17 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
                 .All()
                 .With(e => e.SeasonNumber = 1)
                 .With(e => e.EpisodeNumbers = new List<int> { 2 })
+                .With(e => e.Quality = new Quality(QualityTypes.HDTV, false))
                 .Build();
 
             WithMatchingSeries();
 
             //Act
-            var result = Mocker.Resolve<SearchProvider>().ProcessSearchResults(new ProgressNotification("Test"), parseResults, _matchingSeries, 1, 1);
+            var result = Mocker.Resolve<SearchProvider>().ProcessSearchResults(new ProgressNotification("Test"), parseResults, new SearchHistory(), _matchingSeries, 1, 1);
 
             //Assert
-            result.Should().HaveCount(0);
+            result.Should().HaveCount(parseResults.Count);
+            result.Should().NotContain(s => s.Success);
 
             Mocker.GetMock<DownloadProvider>().Verify(c => c.DownloadReport(It.IsAny<EpisodeParseResult>()),
                                                       Times.Never());
@@ -274,10 +285,11 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
             WithSuccessfulDownload();
 
             //Act
-            var result = Mocker.Resolve<SearchProvider>().ProcessSearchResults(new ProgressNotification("Test"), parseResults, _matchingSeries, 1);
+            var result = Mocker.Resolve<SearchProvider>().ProcessSearchResults(new ProgressNotification("Test"), parseResults, new SearchHistory(), _matchingSeries, 1);
 
             //Assert
-            result.Should().HaveCount(1);
+            result.Should().HaveCount(parseResults.Count);
+            result.Should().Contain(s => s.Success);
 
             Mocker.GetMock<DownloadProvider>().Verify(c => c.DownloadReport(It.IsAny<EpisodeParseResult>()),
                                                       Times.Once());
@@ -307,10 +319,11 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
                 .Returns(true);
 
             //Act
-            var result = Mocker.Resolve<SearchProvider>().ProcessSearchResults(new ProgressNotification("Test"), parseResults, _matchingSeries, 1);
+            var result = Mocker.Resolve<SearchProvider>().ProcessSearchResults(new ProgressNotification("Test"), parseResults, new SearchHistory(), _matchingSeries, 1);
 
             //Assert
-            result.Should().HaveCount(1);
+            result.Should().HaveCount(parseResults.Count);
+            result.Should().Contain(s => s.Success);
 
             Mocker.GetMock<DownloadProvider>().Verify(c => c.DownloadReport(It.IsAny<EpisodeParseResult>()),
                                                       Times.Exactly(2));

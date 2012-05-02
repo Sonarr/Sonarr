@@ -26,7 +26,7 @@ namespace NzbDrone.Core
 			                            RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                                     //Multi-episode Repeated (S01E05 - S01E06, 1x05 - 1x06, etc)
-                                    new Regex(@"^(?<title>.+?)(?:\W+S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:[ex]){1,2}(?<episode>\d{2}(?!\d+)))+){2,}\W?(?!\\)",
+                                    new Regex(@"^(?<title>.+?)(?:\W+S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:[ex]){1,2}(?<episode>\d{1,2}(?!\d+)))+){2,}\W?(?!\\)",
 		                                RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                                     //Episodes without a title, Single (S01E05, 1x05) AND Multi (S01E04E05, 1x04x05, etc)
@@ -65,7 +65,7 @@ namespace NzbDrone.Core
                                         RegexOptions.IgnoreCase | RegexOptions.Compiled)
                                 };
 
-        private static readonly Regex NormalizeRegex = new Regex(@"((^|\W)(a|an|the|and|or|of)($|\W))|\W|(?:(?<=[^0-9]+)|\b)(?!(?:19\d{2}|20\d{2}))\d+(?=[^0-9ip]+|\b)",
+        private static readonly Regex NormalizeRegex = new Regex(@"((^|\W)(a|an|the|and|or|of)($|\W))|\W|_|(?:(?<=[^0-9]+)|\b)(?!(?:19\d{2}|20\d{2}))\d+(?=[^0-9ip]+|\b)",
                                                                  RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         private static readonly Regex SimpleTitleRegex = new Regex(@"480[i|p]|720[i|p]|1080[i|p]|[x|h|x\s|h\s]264|DD\W?5\W1|\<|\>|\?|\*|\:|\||""",
@@ -251,7 +251,7 @@ namespace NzbDrone.Core
             name = name.Trim();
             var normalizedName = NormalizeTitle(name);
             var result = new Quality { QualityType = QualityTypes.Unknown };
-            result.Proper = normalizedName.Contains("proper");
+            result.Proper = (normalizedName.Contains("proper") || normalizedName.Contains("repack"));
 
             if (normalizedName.Contains("dvd") || normalizedName.Contains("bdrip") || normalizedName.Contains("brrip"))
             {
@@ -259,7 +259,7 @@ namespace NzbDrone.Core
                 return result;
             }
 
-            if (normalizedName.Contains("xvid") || normalizedName.Contains("divx"))
+            if (normalizedName.Contains("xvid") || normalizedName.Contains("divx") || normalizedName.Contains("dsr"))
             {
                 if (normalizedName.Contains("bluray"))
                 {
@@ -299,8 +299,6 @@ namespace NzbDrone.Core
                 return result;
             }
             //Based on extension
-
-
 
             if (result.QualityType == QualityTypes.Unknown)
             {

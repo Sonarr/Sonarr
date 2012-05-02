@@ -92,5 +92,5 @@ $(function () {
     };
 
     // Start the connection
-    $.connection.hub.start();
+    $.connection.hub.start({ transport: 'longPolling' });
 });

@@ -52,6 +52,11 @@ namespace NzbDrone.Core.Providers
             return _database.Exists<EpisodeFile>("WHERE Path =@0", path.NormalizePath());
         }
 
+        public virtual EpisodeFile GetFileByPath(string path)
+        {
+            return _database.SingleOrDefault<EpisodeFile>("WHERE Path =@0", path.NormalizePath());
+        }
+
         public virtual EpisodeFile GetEpisodeFile(int episodeFileId)
         {
             return _database.Single<EpisodeFile>(episodeFileId);
@@ -133,7 +138,7 @@ namespace NzbDrone.Core.Providers
 
             if (updated > 0)
             {
-                Logger.Debug("Removed {0} orphan file(s) from database.S", updated);
+                Logger.Debug("Removed {0} orphan file(s) from database.", updated);
             }
         }
 

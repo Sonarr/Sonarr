@@ -68,6 +68,7 @@ namespace NzbDrone.Core
         {
             EnvironmentProvider.UGuid = Kernel.Get<ConfigProvider>().UGuid;
             ReportingService.RestProvider = Kernel.Get<RestProvider>();
+            ReportingService.SetupExceptronDriver();
 
             var appId = AnalyticsProvider.DESKMETRICS_TEST_ID;
 

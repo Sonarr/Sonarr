@@ -23,6 +23,8 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -51,6 +53,10 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DataTables.Mvc.Core, Version=0.1.0.68, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\DataTables.Mvc.0.1.0.68\lib\DataTables.Mvc.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Dynamic">
       <HintPath>..\packages\DynamicQuery.1.0\lib\35\Dynamic.dll</HintPath>
     </Reference>
@@ -65,8 +71,9 @@
     <Reference Include="MvcMiniProfiler, Version=1.9.0.0, Culture=neutral, PublicKeyToken=b44f9351044011a3, processorArchitecture=MSIL">
       <HintPath>..\packages\MiniProfiler.1.9\lib\net40\MvcMiniProfiler.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.0.8.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.4.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.4.5.3\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Ninject, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\packages\Ninject.2.2.1.4\lib\net40-Full\Ninject.dll</HintPath>
@@ -137,6 +144,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\DataTablesMvc.cs" />
+    <Compile Include="Controllers\SearchHistoryController.cs" />
     <Compile Include="Helpers\Validation\RequiredIfAnyAttribute.cs" />
     <Compile Include="Helpers\Validation\RequiredIfAttribute.cs" />
     <Content Include="Content\DataTables-1.9.0\media\css\jquery.dataTables.css" />
@@ -150,6 +159,7 @@
     <Content Include="Content\Images\AirsToday.png" />
     <Content Include="Content\Images\background.jpg" />
     <Content Include="Content\Images\blue.png" />
+    <Content Include="Content\Images\False.png" />
     <Content Include="Content\Images\Gear.png" />
     <Content Include="Content\Images\green.png" />
     <Content Include="Content\Images\Indexers\FileSharingTalk.png" />
@@ -159,6 +169,7 @@
     <Content Include="Content\Images\Indexers\Nzbs.org.png" />
     <Content Include="Content\Images\Indexers\WomblesIndex.png" />
     <Content Include="Content\Images\logo.png" />
+    <Content Include="Content\Images\logo_small.png" />
     <Content Include="Content\Images\pause.png" />
     <Content Include="Content\Images\play.png" />
     <Content Include="Content\Images\red.png" />
@@ -166,6 +177,7 @@
     <Content Include="Content\Images\settings.png" />
     <Content Include="Content\Images\stop.png" />
     <Content Include="Content\Images\thetvdb.png" />
+    <Content Include="Content\Images\True.png" />
     <Content Include="Content\Images\yellow.png" />
     <Content Include="Content\IndexerSettings.css" />
     <Content Include="Content\jQueryUI\images\ui-bg_diagonals-thick_30_a32d00_40x40.png" />
@@ -204,7 +216,6 @@
     <Compile Include="App_Start\EntityFramework.SqlServerCompact.cs" />
     <Compile Include="App_Start\Logging.cs" />
     <Compile Include="App_Start\MiniProfiler.cs" />
-    <Compile Include="App_Start\RegisterDataTablesModelBinder.cs" />
     <Compile Include="Filters\JsonErrorFilter.cs" />
     <Compile Include="Controllers\CommandController.cs" />
     <Compile Include="Controllers\DirectoryController.cs" />
@@ -224,7 +235,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\DataTablesModelBinder.cs" />
     <Compile Include="Helpers\HtmlIncludeExtentions.cs" />
     <Compile Include="Helpers\LinkHelper.cs" />
     <Compile Include="Helpers\ProfilerHelper.cs" />
@@ -232,10 +242,12 @@
     <Compile Include="Helpers\DescriptionExtension.cs" />
     <Compile Include="Helpers\HtmlPrefixScopeExtensions.cs" />
     <Compile Include="Helpers\IsCurrentActionHelper.cs" />
-    <Compile Include="Models\DataTablesParams.cs" />
+    <Compile Include="Models\SearchDetailsModel.cs" />
     <Compile Include="Models\JobModel.cs" />
     <Compile Include="Models\LogModel.cs" />
     <Compile Include="Models\PostUpgradeModel.cs" />
+    <Compile Include="Models\SearchItemModel.cs" />
+    <Compile Include="Models\SearchHistoryModel.cs" />
     <Compile Include="Models\UpcomingEpisodesModel.cs" />
     <Compile Include="Models\SeasonModel.cs" />
     <Compile Include="Models\SeriesDetailsModel.cs" />
@@ -279,7 +291,6 @@
     <Content Include="Content\Images\Indexers\Unknown.png" />
     <Content Include="Content\Images\Plus.png" />
     <Content Include="Content\Images\VideoFolder.png" />
-    <Content Include="Content\Images\X.png" />
     <Content Include="Content\Settings.css" />
     <Content Include="Content\NzbDrone.css" />
     <Content Include="Content\Images\XbmcNotification.png" />
@@ -518,6 +529,15 @@
     <Content Include="Views\Shared\NoSeriesBanner.cshtml" />
     <Content Include="Views\Update\Post.cshtml" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\SearchHistory\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\SearchHistory\Details.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\System\Stats.cshtml" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -550,4 +570,5 @@
 if not exist "$(TargetDir)x86" md "$(TargetDir)x86"
 xcopy /s /y "$(SolutionDir)packages\SqlServerCompact.4.0.8482.1\NativeBinaries\x86\*.*" "$(TargetDir)x86"</PostBuildEvent>
   </PropertyGroup>
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
 </Project>
