@@ -166,6 +166,7 @@ namespace NzbDrone.Core.Test
         [TestCase("Pawn Stars S04E87 REPACK 720p HDTV x264 aAF", QualityTypes.HDTV, true)]
         [TestCase("The Real Housewives of Vancouver S01E04 DSR x264 2HD", QualityTypes.SDTV, false)]
         [TestCase("Vanguard S01E04 Mexicos Death Train DSR x264 MiNDTHEGAP", QualityTypes.SDTV, false)]
+        [TestCase("Vanguard S01E04 Mexicos Death Train 720 WEB DL", QualityTypes.WEBDL, false)]
         public void quality_parse(string postTitle, object quality, bool proper)
         {
             var result = Parser.ParseQuality(postTitle);
@@ -201,6 +202,9 @@ namespace NzbDrone.Core.Test
         [TestCase("2x04x05.720p.BluRay-FUTV", "", 2, new[] { 4, 5 })]
         [TestCase("S02E04E05.720p.BluRay-FUTV", "", 2, new[] { 4, 5 })]
         [TestCase("S02E03-04-05.720p.BluRay-FUTV", "", 2, new[] { 3,4,5 })]
+        [TestCase("Breakout.Kings.S02E09-E10.HDTV.x264-ASAP", "Breakout Kings", 2, new[] { 9, 10 })]
+        [TestCase("Breakout Kings - 2x9-2x10 - Served Cold [SDTV] ", "Breakout Kings", 2, new[] { 9, 10 })]
+        [TestCase("Breakout Kings - 2x09-2x10 - Served Cold [SDTV] ", "Breakout Kings", 2, new[] { 9, 10 })]
         public void TitleParse_multi(string postTitle, string title, int season, int[] episodes)
         {
             var result = Parser.ParseTitle(postTitle);
