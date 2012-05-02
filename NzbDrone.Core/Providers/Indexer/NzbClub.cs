@@ -46,6 +46,11 @@ namespace NzbDrone.Core.Providers.Indexer
             return item.Links[0].Uri.ToString();
         }
 
+        protected override string NzbInfoUrl(SyndicationItem item)
+        {
+            return item.Links[1].Uri.ToString();
+        }
+
         protected override IList<string> GetEpisodeSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber)
         {
             var searchUrls = new List<String>();

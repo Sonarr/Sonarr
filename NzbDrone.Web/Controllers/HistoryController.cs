@@ -41,7 +41,8 @@ namespace NzbDrone.Web.Controllers
                 Date = h.Date.ToString(),
                 DateSorter = h.Date.ToString("MM/dd/yyyy h:mm:ss tt"),
                 Indexer = h.Indexer,
-                EpisodeId = h.EpisodeId
+                EpisodeId = h.EpisodeId,
+                NzbInfoUrl = h.NzbInfoUrl
             }).OrderByDescending(h => h.Date).ToList();
 
             return Json(new

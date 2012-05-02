@@ -5,7 +5,13 @@ $(document).on('click', '.seriesTable a, .dataTable a', function (event) {
 
     event.preventDefault();
     var link = $(this).attr('href');
-    window.location = link;
+
+    if ($(this).attr('target') === '_blank')
+        window.open(link);
+
+    else
+        window.location = link;
+    
     event.stopPropegation();
 });
 

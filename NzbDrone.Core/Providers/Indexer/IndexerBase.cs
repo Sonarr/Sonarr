@@ -98,6 +98,13 @@ namespace NzbDrone.Core.Providers.Indexer
         protected abstract string NzbDownloadUrl(SyndicationItem item);
 
         /// <summary>
+        ///   Generates link to the NZB info at the indexer
+        /// </summary>
+        /// <param name = "item">RSS Feed item to generate the link for</param>
+        /// <returns>Nzb Info URL</returns>
+        protected abstract string NzbInfoUrl(SyndicationItem item);
+
+        /// <summary>
         ///   Fetches RSS feed and process each news item.
         /// </summary>
         public virtual IList<EpisodeParseResult> FetchRss()
@@ -191,6 +198,7 @@ namespace NzbDrone.Core.Providers.Indexer
                             if (parsedEpisode != null)
                             {
                                 parsedEpisode.NzbUrl = NzbDownloadUrl(item);
+                                parsedEpisode.NzbInfoUrl = NzbInfoUrl(item);
                                 parsedEpisode.Indexer = Name;
                                 result.Add(parsedEpisode);
                             }

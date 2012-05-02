@@ -98,6 +98,11 @@ namespace NzbDrone.Core.Providers.Indexer
             return item.Id;
         }
 
+        protected override string NzbInfoUrl(SyndicationItem item)
+        {
+            return item.Links[0].Uri.ToString();
+        }
+
         protected override EpisodeParseResult CustomParser(SyndicationItem item, EpisodeParseResult currentResult)
         {
             if (currentResult != null)

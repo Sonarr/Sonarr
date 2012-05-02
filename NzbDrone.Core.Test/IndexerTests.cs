@@ -26,7 +26,6 @@ namespace NzbDrone.Core.Test
     // ReSharper disable InconsistentNaming
     public class IndexerTests : CoreTest
     {
-
         [TestCase("nzbsorg.xml")]
         [TestCase("nzbsrus.xml")]
         [TestCase("newzbin.xml")]
@@ -56,7 +55,6 @@ namespace NzbDrone.Core.Test
                 Uri.PathAndQuery.Should().NotContain("//");
             }
 
-
             parseResults.Should().NotBeEmpty();
             parseResults.Should().OnlyContain(s => s.Indexer == mockIndexer.Name);
             parseResults.Should().OnlyContain(s => !String.IsNullOrEmpty(s.OriginalString));
@@ -76,6 +74,9 @@ namespace NzbDrone.Core.Test
 
             Mocker.GetMock<ConfigProvider>().SetupGet(c => c.NzbsrusHash).Returns("MockedConfigValue");
             Mocker.GetMock<ConfigProvider>().SetupGet(c => c.NzbsrusUId).Returns("MockedConfigValue");
+
+            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.FileSharingTalkUid).Returns("MockedConfigValue");
+            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.FileSharingTalkSecret).Returns("MockedConfigValue");
         }
 
         [Test]
@@ -562,6 +563,193 @@ namespace NzbDrone.Core.Test
             parseResults.Should().OnlyContain(s => s.Age >= 0);
 
             Thread.CurrentThread.CurrentCulture = currentCulture;
+        }
+
+        [Test]
+        public void NzbsOrg_NzbInfoUrl_should_contain_information_string()
+        {
+            WithConfiguredIndexers();
+
+            const string fileName = "nzbsorg.xml";
+            const string expectedString = "action=view";
+
+            Mocker.GetMock<HttpProvider>()
+                          .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
+                          .Returns(File.OpenRead(".\\Files\\Rss\\" + fileName));
+
+            var parseResults = Mocker.Resolve<NzbsOrg>().FetchRss();
+
+            foreach (var episodeParseResult in parseResults)
+            {
+                episodeParseResult.NzbInfoUrl.Should().Contain(expectedString);
+            }
+        }
+
+        [Test]
+        public void NzbsRus_NzbInfoUrl_should_contain_information_string()
+        {
+            WithConfiguredIndexers();
+
+            const string fileName = "nzbsrus.xml";
+            const string expectedString = "nzbdetails";
+
+            Mocker.GetMock<HttpProvider>()
+                          .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
+                          .Returns(File.OpenRead(".\\Files\\Rss\\" + fileName));
+
+            var parseResults = Mocker.Resolve<NzbsRUs>().FetchRss();
+
+            foreach (var episodeParseResult in parseResults)
+            {
+                episodeParseResult.NzbInfoUrl.Should().Contain(expectedString);
+            }
+        }
+
+        [Test]
+        public void Newzbin_NzbInfoUrl_should_contain_information_string()
+        {
+            WithConfiguredIndexers();
+
+            const string fileName = "newzbin.xml";
+            const string expectedString = "browse";
+
+            Mocker.GetMock<HttpProvider>()
+                          .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
+                          .Returns(File.OpenRead(".\\Files\\Rss\\" + fileName));
+
+            var parseResults = Mocker.Resolve<Newzbin>().FetchRss();
+
+            foreach (var episodeParseResult in parseResults)
+            {
+                episodeParseResult.NzbInfoUrl.Should().Contain(expectedString);
+            }
+        }
+
+        [Test]
+        public void NzbMatrix_NzbInfoUrl_should_contain_information_string()
+        {
+            WithConfiguredIndexers();
+
+            const string fileName = "nzbmatrix.xml";
+            const string expectedString = "nzb-details";
+
+            Mocker.GetMock<HttpProvider>()
+                          .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
+                          .Returns(File.OpenRead(".\\Files\\Rss\\" + fileName));
+
+            var parseResults = Mocker.Resolve<NzbMatrix>().FetchRss();
+
+            foreach (var episodeParseResult in parseResults)
+            {
+                episodeParseResult.NzbInfoUrl.Should().Contain(expectedString);
+            }
+        }
+
+        [Test]
+        public void Newznab_NzbInfoUrl_should_contain_information_string()
+        {
+            WithConfiguredIndexers();
+
+            const string fileName = "newznab.xml";
+            const string expectedString = "/details/";
+
+            var newznabDefs = Builder<NewznabDefinition>.CreateListOfSize(1)
+                    .All()
+                    .With(n => n.ApiKey = String.Empty)
+                    .Build();
+
+            Mocker.GetMock<NewznabProvider>().Setup(s => s.Enabled()).Returns(newznabDefs.ToList());
+
+            Mocker.GetMock<HttpProvider>()
+                          .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
+                          .Returns(File.OpenRead(".\\Files\\Rss\\" + fileName));
+
+            var parseResults = Mocker.Resolve<Newznab>().FetchRss();
+
+            foreach (var episodeParseResult in parseResults)
+            {
+                episodeParseResult.NzbInfoUrl.Should().Contain(expectedString);
+            }
+        }
+
+        [Test]
+        public void Wombles_NzbInfoUrl_should_contain_information_string()
+        {
+            WithConfiguredIndexers();
+
+            const string fileName = "wombles.xml";
+            const string expectedString = "nzbdetails";
+
+            Mocker.GetMock<HttpProvider>()
+                          .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
+                          .Returns(File.OpenRead(".\\Files\\Rss\\" + fileName));
+
+            var parseResults = Mocker.Resolve<Wombles>().FetchRss();
+
+            foreach (var episodeParseResult in parseResults)
+            {
+                episodeParseResult.NzbInfoUrl.Should().BeNull();
+            }
+        }
+
+        [Test]
+        public void FileSharingTalk_NzbInfoUrl_should_contain_information_string()
+        {
+            WithConfiguredIndexers();
+
+            const string fileName = "filesharingtalk.xml";
+            const string expectedString = "/nzbs/tv";
+
+            Mocker.GetMock<HttpProvider>()
+                          .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
+                          .Returns(File.OpenRead(".\\Files\\Rss\\" + fileName));
+
+            var parseResults = Mocker.Resolve<FileSharingTalk>().FetchRss();
+
+            foreach (var episodeParseResult in parseResults)
+            {
+                episodeParseResult.NzbInfoUrl.Should().Contain(expectedString);
+            }
+        }
+
+        [Test]
+        public void NzbIndex_NzbInfoUrl_should_contain_information_string()
+        {
+            WithConfiguredIndexers();
+
+            const string fileName = "nzbindex.xml";
+            const string expectedString = "release";
+
+            Mocker.GetMock<HttpProvider>()
+                          .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
+                          .Returns(File.OpenRead(".\\Files\\Rss\\" + fileName));
+
+            var parseResults = Mocker.Resolve<NzbIndex>().FetchRss();
+
+            foreach (var episodeParseResult in parseResults)
+            {
+                episodeParseResult.NzbInfoUrl.Should().Contain(expectedString);
+            }
+        }
+
+        [Test]
+        public void NzbClub_NzbInfoUrl_should_contain_information_string()
+        {
+            WithConfiguredIndexers();
+
+            const string fileName = "nzbclub.xml";
+            const string expectedString = "nzb_view";
+
+            Mocker.GetMock<HttpProvider>()
+                          .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
+                          .Returns(File.OpenRead(".\\Files\\Rss\\" + fileName));
+
+            var parseResults = Mocker.Resolve<NzbClub>().FetchRss();
+
+            foreach (var episodeParseResult in parseResults)
+            {
+                episodeParseResult.NzbInfoUrl.Should().Contain(expectedString);
+            }
         }
     }
 }
