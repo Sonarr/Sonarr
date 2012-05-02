@@ -103,7 +103,7 @@ namespace NzbDrone.Core.Providers.Indexer
 
         protected override string NzbInfoUrl(SyndicationItem item)
         {
-            return item.Links[0].Uri.ToString();
+            return Regex.Match(item.Summary.Text, "(?<=\\<a\\shref\\=\").+nzb-details.+(?=\"\\>View\\<\\/a\\>)", RegexOptions.Compiled | RegexOptions.IgnoreCase).Value;
         }
 
         protected override EpisodeParseResult CustomParser(SyndicationItem item, EpisodeParseResult currentResult)
@@ -114,7 +114,7 @@ namespace NzbDrone.Core.Providers.Indexer
                 currentResult.Size = Parser.GetReportSize(sizeString);
 
                 var ageString = Regex.Match(item.Summary.Text, @"(?<=\<b\>Added\:\<\/b\>\s)(?<date>.+?)(?=\<br \/\>)", RegexOptions.Compiled | RegexOptions.IgnoreCase).Value;
-                currentResult.Age = DateTime.Now.Subtract(DateTime.Parse(ageString)).Days;
+                currentResult.Age = DateTime.Now.Subtract(DateTime.Parse(ageString)).Days;                
             }
 
             return currentResult;

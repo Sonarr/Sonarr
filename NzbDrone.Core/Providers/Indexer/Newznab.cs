@@ -76,7 +76,7 @@ namespace NzbDrone.Core.Providers.Indexer
 
         protected override string NzbInfoUrl(SyndicationItem item)
         {
-            return item.Links[0].Uri.ToString();
+            return item.Id;
         }
 
         protected override EpisodeParseResult CustomParser(SyndicationItem item, EpisodeParseResult currentResult)

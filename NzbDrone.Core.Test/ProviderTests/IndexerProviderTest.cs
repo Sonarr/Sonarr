@@ -148,7 +148,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
         protected override string NzbInfoUrl(SyndicationItem item)
         {
-            return item.Links[1].Uri.ToString();
+            return item.Links[0].Uri.ToString();
         }
     }
 

@@ -106,6 +106,10 @@
                                 "<b>NZB Title: </b>" + row.aData["NzbTitle"] + "<br/>" +
                                     "<b>Proper: </b>" + row.aData["IsProper"] + "<br/>" +
                                     "<b>Indexer: </b>" + row.aData["Indexer"];
+                            
+                            if (row.aData["NzbInfoUrl"] != null && row.aData["NzbInfoUrl"] != "")
+                                result += "<br/><b>Nzb Details: </b> <a href=\"" + row.aData["NzbInfoUrl"] + "\" target=\"_blank\">Details</a>";
+
                             return result;
                         }
                     } //Details
