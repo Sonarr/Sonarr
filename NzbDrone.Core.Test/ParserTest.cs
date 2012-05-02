@@ -167,6 +167,8 @@ namespace NzbDrone.Core.Test
         [TestCase("The Real Housewives of Vancouver S01E04 DSR x264 2HD", QualityTypes.SDTV, false)]
         [TestCase("Vanguard S01E04 Mexicos Death Train DSR x264 MiNDTHEGAP", QualityTypes.SDTV, false)]
         [TestCase("Vanguard S01E04 Mexicos Death Train 720 WEB DL", QualityTypes.WEBDL, false)]
+        [TestCase("Hawaii Five 0 S02E21 720p WEB DL DD5 1 H 264", QualityTypes.WEBDL, false)]
+        [TestCase("Castle S04E22 720p WEB DL DD5 1 H 264 NFHD", QualityTypes.WEBDL, false)]
         public void quality_parse(string postTitle, object quality, bool proper)
         {
             var result = Parser.ParseQuality(postTitle);
