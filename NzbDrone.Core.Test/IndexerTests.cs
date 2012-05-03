@@ -26,7 +26,6 @@ namespace NzbDrone.Core.Test
     // ReSharper disable InconsistentNaming
     public class IndexerTests : CoreTest
     {
-        [TestCase("nzbsorg.xml")]
         [TestCase("nzbsrus.xml")]
         [TestCase("newzbin.xml")]
         [TestCase("nzbmatrix.xml")]
