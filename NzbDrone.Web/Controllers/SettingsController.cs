@@ -67,16 +67,12 @@ namespace NzbDrone.Web.Controllers
                                 NzbsrusUId = _configProvider.NzbsrusUId,
                                 NzbsrusHash = _configProvider.NzbsrusHash,
 
-                                NzbsOrgHash = _configProvider.NzbsOrgHash,
-                                NzbsOrgUId = _configProvider.NzbsOrgUId,
-
                                 NewzbinUsername = _configProvider.NewzbinUsername,
                                 NewzbinPassword = _configProvider.NewzbinPassword,
 
                                 FileSharingTalkUid = _configProvider.FileSharingTalkUid,
                                 FileSharingTalkSecret = _configProvider.FileSharingTalkSecret,
 
-                                NzbsOrgEnabled = _indexerProvider.GetSettings(typeof(NzbsOrg)).Enable,
                                 NzbMatrixEnabled = _indexerProvider.GetSettings(typeof(NzbMatrix)).Enable,
                                 NzbsRUsEnabled = _indexerProvider.GetSettings(typeof(NzbsRUs)).Enable,
                                 NewzbinEnabled = _indexerProvider.GetSettings(typeof(Newzbin)).Enable,
@@ -350,10 +346,6 @@ namespace NzbDrone.Web.Controllers
             {
                 _configProvider.Retention = data.Retention;
 
-                var nzbsOrgSettings = _indexerProvider.GetSettings(typeof(NzbsOrg));
-                nzbsOrgSettings.Enable = data.NzbsOrgEnabled;
-                _indexerProvider.SaveSettings(nzbsOrgSettings);
-
                 var nzbMatrixSettings = _indexerProvider.GetSettings(typeof(NzbMatrix));
                 nzbMatrixSettings.Enable = data.NzbMatrixEnabled;
                 _indexerProvider.SaveSettings(nzbMatrixSettings);
@@ -385,9 +377,6 @@ namespace NzbDrone.Web.Controllers
                 var nzbClubSettings = _indexerProvider.GetSettings(typeof(NzbClub));
                 nzbClubSettings.Enable = data.NzbClubEnabled;
                 _indexerProvider.SaveSettings(nzbClubSettings);
-
-                _configProvider.NzbsOrgUId = data.NzbsOrgUId;
-                _configProvider.NzbsOrgHash = data.NzbsOrgHash;
 
                 _configProvider.NzbMatrixUsername = data.NzbMatrixUsername;
                 _configProvider.NzbMatrixApiKey = data.NzbMatrixApiKey;

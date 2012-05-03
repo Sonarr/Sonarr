@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -12,6 +13,7 @@ using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.ExternalNotification;
 using NzbDrone.Core.Providers.Indexer;
+using NzbDrone.Core.Repository;
 using PetaPoco;
 using SignalR;
 using SignalR.Hosting.AspNet;
@@ -91,7 +93,6 @@ namespace NzbDrone.Core
         private void InitIndexers()
         {
             logger.Debug("Initializing Indexers...");
-            Kernel.Bind<IndexerBase>().To<NzbsOrg>();
             Kernel.Bind<IndexerBase>().To<NzbMatrix>();
             Kernel.Bind<IndexerBase>().To<NzbsRUs>();
             Kernel.Bind<IndexerBase>().To<Newzbin>();
@@ -103,6 +104,18 @@ namespace NzbDrone.Core
 
             var indexers = Kernel.GetAll<IndexerBase>();
             Kernel.Get<IndexerProvider>().InitializeIndexers(indexers.ToList());
+
+            var newznabIndexers = new List<NewznabDefinition>
+                                      {
+                                              new NewznabDefinition
+                                                  {
+                                                          Enable = false,
+                                                          Name = "Nzbs.org",
+                                                          Url = "http://nzbs.org"
+                                                  }
+                                      };
+
+            Kernel.Get<NewznabProvider>().InitializeNewznabIndexers(newznabIndexers);
         }
 
         private void InitJobs()

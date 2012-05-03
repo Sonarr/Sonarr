@@ -428,9 +428,6 @@
     <Compile Include="Providers\Indexer\NzbMatrix.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\Indexer\NzbsOrg.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Providers\Indexer\NzbsRUs.cs">
       <SubType>Code</SubType>
     </Compile>

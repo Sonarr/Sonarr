@@ -25,20 +25,6 @@ namespace NzbDrone.Web.Models
 
         [DataType(DataType.Text)]
         [DisplayName("UID")]
-        [Description("User ID for Nzbs.org")]
-        [DisplayFormat(ConvertEmptyStringToNull = false)]
-        [RequiredIf("NzbsOrgEnabled", true, ErrorMessage = "UID Required when Nzbs.org is enabled")]
-        public String NzbsOrgUId { get; set; }
-
-        [DataType(DataType.Text)]
-        [DisplayName("Hash")]
-        [Description("Hash for Nzbs.org")]
-        [DisplayFormat(ConvertEmptyStringToNull = false)]
-        [RequiredIf("NzbsOrgEnabled", true, ErrorMessage = "Hash Required when Nzbs.org is enabled")]
-        public String NzbsOrgHash { get; set; }
-
-        [DataType(DataType.Text)]
-        [DisplayName("UID")]
         [Description("User ID for NZBsRus")]
         [DisplayFormat(ConvertEmptyStringToNull = false)]
         [RequiredIf("NzbsRUsEnabled", true, ErrorMessage = "UID Required when NzbsRus is enabled")]
@@ -78,10 +64,6 @@ namespace NzbDrone.Web.Models
         [DisplayFormat(ConvertEmptyStringToNull = false)]
         [RequiredIf("FileSharingTalkEnabled", true, ErrorMessage = "Password Secret Required when File Sharing Talk is enabled")]
         public String FileSharingTalkSecret { get; set; }
-
-        [DisplayName("NZBs.org")]
-        [Description("Enable downloading episodes from Nzbs.org")]
-        public bool NzbsOrgEnabled { get; set; }
 
         [DisplayName("NZB Matrix")]
         [Description("Enable downloading episodes from NZB Matrix")]

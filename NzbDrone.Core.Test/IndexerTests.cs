@@ -203,28 +203,6 @@ namespace NzbDrone.Core.Test
         }
 
         [TestCase("simpsons", 21, 23)]
-        [TestCase("Hawaii Five-0 (2010)", 1, 5)]
-        [TestCase("In plain Sight", 1, 4)]
-        public void nzbsorg_search_returns_valid_results(string title, int season, int episode)
-        {
-            Mocker.GetMock<ConfigProvider>()
-                .SetupGet(c => c.NzbsOrgUId)
-                .Returns("43516");
-
-            Mocker.GetMock<ConfigProvider>()
-                .SetupGet(c => c.NzbsOrgHash)
-                .Returns("bc8edb4cc49d4ae440775adec5ac001f");
-
-            Mocker.Resolve<HttpProvider>();
-
-            var result = Mocker.Resolve<NzbsOrg>().FetchEpisode(title, season, episode);
-
-            Mark500Inconclusive();
-
-            result.Should().NotBeEmpty();
-        }
-
-        [TestCase("simpsons", 21, 23)]
         [TestCase("Hawaii Five-0 (2010)", 1, 1)]
         [TestCase("In plain Sight", 1, 11, Ignore = true)]
         public void newzbin_search_returns_valid_results(string title, int season, int episode)
@@ -327,22 +305,6 @@ namespace NzbDrone.Core.Test
 
             parseResults.Should().HaveCount(1);
             parseResults[0].Size.Should().Be(1331439862);
-        }
-
-        [Test]
-        public void size_nzbsorg()
-        {
-            WithConfiguredIndexers();
-
-            Mocker.GetMock<HttpProvider>()
-                          .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
-                          .Returns(File.OpenRead(".\\Files\\Rss\\SizeParsing\\nzbsorg.xml"));
-
-            //Act
-            var parseResults = Mocker.Resolve<NzbsOrg>().FetchRss();
-
-            parseResults.Should().HaveCount(1);
-            parseResults[0].Size.Should().Be(1793148846);
         }
 
         [Test]
@@ -563,26 +525,6 @@ namespace NzbDrone.Core.Test
             parseResults.Should().OnlyContain(s => s.Age >= 0);
 
             Thread.CurrentThread.CurrentCulture = currentCulture;
-        }
-
-        [Test]
-        public void NzbsOrg_NzbInfoUrl_should_contain_information_string()
-        {
-            WithConfiguredIndexers();
-
-            const string fileName = "nzbsorg.xml";
-            const string expectedString = "action=view";
-
-            Mocker.GetMock<HttpProvider>()
-                          .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
-                          .Returns(File.OpenRead(".\\Files\\Rss\\" + fileName));
-
-            var parseResults = Mocker.Resolve<NzbsOrg>().FetchRss();
-
-            foreach (var episodeParseResult in parseResults)
-            {
-                episodeParseResult.NzbInfoUrl.Should().Contain(expectedString);
-            }
         }
 
         [Test]
