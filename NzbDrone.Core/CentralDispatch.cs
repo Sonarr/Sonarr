@@ -107,12 +107,8 @@ namespace NzbDrone.Core
 
             var newznabIndexers = new List<NewznabDefinition>
                                       {
-                                              new NewznabDefinition
-                                                  {
-                                                          Enable = false,
-                                                          Name = "Nzbs.org",
-                                                          Url = "http://nzbs.org"
-                                                  }
+                                              new NewznabDefinition { Enable = false, Name = "Nzbs.org", Url = "http://nzbs.org" },
+                                              new NewznabDefinition { Enable = false, Name = "Nzb.su", Url = "http://nzb.su" }
                                       };
 
             Kernel.Get<NewznabProvider>().InitializeNewznabIndexers(newznabIndexers);
