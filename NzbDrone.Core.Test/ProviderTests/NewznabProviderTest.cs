@@ -272,5 +272,28 @@ namespace NzbDrone.Core.Test.ProviderTests
             result.Should().HaveCount(1);
             result.First().BuiltIn.Should().BeTrue();
         }
+
+        [Test]
+        public void InitializeNewznabIndexers_should_not_blow_up_if_more_than_one_indexer_with_the_same_url_is_found()
+        {
+            //Setup
+            var definition = Builder<NewznabDefinition>.CreateNew()
+                .With(d => d.Url = "http://www.nzbdrone2.com")
+                .With(d => d.BuiltIn = false)
+                .Build();
+
+            var db = TestDbHelper.GetEmptyDatabase();
+            Mocker.SetConstant(db);
+
+            db.Insert(definition);
+            db.Insert(definition);
+
+            //Act
+            Mocker.Resolve<NewznabProvider>().InitializeNewznabIndexers(new List<NewznabDefinition> { definition });
+
+            //Assert
+            var result = db.Fetch<NewznabDefinition>();
+            result.Should().HaveCount(2);
+        }
     }
 }

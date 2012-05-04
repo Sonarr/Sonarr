@@ -71,7 +71,7 @@ namespace NzbDrone.Core.Providers
             {
                 NewznabDefinition indexerLocal = feedProvider;
                 var currentIndexer = currentIndexers
-                                        .SingleOrDefault(c => new Uri(c.Url.ToLower()).Host == new Uri(indexerLocal.Url.ToLower()).Host);
+                                        .FirstOrDefault(c => new Uri(c.Url.ToLower()).Host == new Uri(indexerLocal.Url.ToLower()).Host);
 
                 if (currentIndexer == null)
                 {
