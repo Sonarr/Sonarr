@@ -141,5 +141,22 @@ namespace NzbDrone.Core.Test.JobTests
             Mocker.GetMock<SearchProvider>().Verify(c => c.SeasonSearch(notification, 1, 1), Times.Once());
             Mocker.GetMock<SearchProvider>().Verify(c => c.PartialSeasonSearch(notification, 1, 1), Times.Once());
         }
+
+        [Test]
+        public void SeasonSearch_should_allow_searching_of_season_zero()
+        {
+            var notification = new ProgressNotification("Season Search");
+
+            Mocker.GetMock<SearchProvider>()
+                .Setup(c => c.SeasonSearch(notification, 1, 0)).Returns(true);
+
+            //Act
+            Mocker.Resolve<SeasonSearchJob>().Start(notification, 1, 0);
+
+            //Assert
+            Mocker.GetMock<SearchProvider>().Verify(c => c.SeasonSearch(notification, 1, 0), Times.Once());
+            Mocker.GetMock<SearchProvider>().Verify(c => c.PartialSeasonSearch(notification, 1, 1), Times.Never());
+            Mocker.GetMock<EpisodeSearchJob>().Verify(c => c.Start(notification, It.IsAny<int>(), 0), Times.Never());
+        }
     }
 }

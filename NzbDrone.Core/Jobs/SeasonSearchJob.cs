@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Jobs
             if (targetId <= 0)
                 throw new ArgumentOutOfRangeException("targetId");
 
-            if (secondaryTargetId <= 0)
+            if (secondaryTargetId < 0)
                 throw new ArgumentOutOfRangeException("secondaryTargetId");
 
             if (_searchProvider.SeasonSearch(notification, targetId, secondaryTargetId))
