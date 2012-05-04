@@ -35,7 +35,8 @@
             else
             {
                 @Html.LabelFor(x => x.Url)
-                @Html.TextBoxFor(m => m.Url, new { disabled = "disabled" })
+                @Html.TextBox("DisabledIndexer", Model.Url, new { disabled = "disabled" })
+                @Html.HiddenFor(m => m.Url)
             }
 
             @Html.LabelFor(x => x.ApiKey)
