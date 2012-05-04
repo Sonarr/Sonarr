@@ -16,5 +16,7 @@ namespace NzbDrone.Core.Repository
         public String Url { get; set; }
 
         public String ApiKey { get; set; }
+
+        public bool BuiltIn { get; set; }
     }
 }

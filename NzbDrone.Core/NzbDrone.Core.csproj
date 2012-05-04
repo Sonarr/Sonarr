@@ -224,6 +224,7 @@
     <Compile Include="Datastore\MigrationLogger.cs" />
     <Compile Include="Datastore\MigrationsHelper.cs" />
     <Compile Include="Datastore\CustomeMapper.cs" />
+    <Compile Include="Datastore\Migrations\Migration20120504.cs" />
     <Compile Include="Datastore\Migrations\Migration20120430.cs" />
     <Compile Include="Datastore\Migrations\Migration20120420.cs" />
     <Compile Include="Datastore\Migrations\Migration20120228.cs" />
@@ -440,7 +441,7 @@
     <Compile Include="Providers\MisnamedProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Providers\NewznzbProvider.cs">
+    <Compile Include="Providers\NewznabProvider.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Providers\NotificationProvider.cs">

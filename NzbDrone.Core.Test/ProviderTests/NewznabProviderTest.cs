@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
@@ -216,6 +217,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             //Assert
             var result = db.Fetch<NewznabDefinition>();
             result.Should().HaveCount(5);
+            result.Should().OnlyContain(i => i.BuiltIn);
         }
 
         [Test]
@@ -236,16 +238,39 @@ namespace NzbDrone.Core.Test.ProviderTests
             Mocker.SetConstant(db);
 
             db.Insert(definitions[0]);
-            db.Insert(definitions[1]);
+            db.Insert(definitions[2]);
 
             //Act
             Mocker.Resolve<NewznabProvider>().InitializeNewznabIndexers(definitions);
 
             //Assert
             var result = db.Fetch<NewznabDefinition>();
-            result.Should().HaveCount(5);
-            result.Where(d => d.Url == "http://www.nzbdrone.com").Should().HaveCount(3);
-            result.Where(d => d.Url == "http://www.nzbdrone2.com").Should().HaveCount(2);
+            result.Should().HaveCount(2);
+            result.Where(d => d.Url == "http://www.nzbdrone.com").Should().HaveCount(1);
+            result.Where(d => d.Url == "http://www.nzbdrone2.com").Should().HaveCount(1);
+        }
+
+        [Test]
+        public void InitializeNewznabIndexers_should_update_matching_indexer_to_be_builtin()
+        {
+            //Setup
+            var definition = Builder<NewznabDefinition>.CreateNew()
+                .With(d => d.Url = "http://www.nzbdrone2.com")
+                .With(d => d.BuiltIn = false)
+                .Build();
+
+            var db = TestDbHelper.GetEmptyDatabase();
+            Mocker.SetConstant(db);
+
+            db.Insert(definition);
+
+            //Act
+            Mocker.Resolve<NewznabProvider>().InitializeNewznabIndexers(new List<NewznabDefinition>{ definition });
+
+            //Assert
+            var result = db.Fetch<NewznabDefinition>();
+            result.Should().HaveCount(1);
+            result.First().BuiltIn.Should().BeTrue();
         }
     }
 }

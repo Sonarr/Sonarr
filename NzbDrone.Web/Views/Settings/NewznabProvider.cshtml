@@ -13,8 +13,11 @@
             <span class="titleText" id="title_@(Model.Id)">
                 @Model.Name
             </span>
-            <a href="#" id="@Model.Id" class="deleteProvider" onclick="deleteProvider('@(Model.Id)'); return false;">
-                <img src="../../Content/Images/close.png" alt="Delete" width="22px" height="22px" /></a>
+            @if(!Model.BuiltIn)
+            {
+                <a href="#" id="@Model.Id" class="deleteProvider" onclick="deleteProvider('@(Model.Id)'); return false;">
+                    <img src="../../Content/Images/close.png" alt="Delete" width="22px" height="22px" /></a>
+            }
         </div>
         <div class="providerOptions">
             @Html.Label("Enabled")
@@ -22,9 +25,18 @@
 
             @Html.LabelFor(x => x.Name)
             @Html.TextBoxFor(x => x.Name, new {@class = "providerName_textbox"})
-
-            @Html.LabelFor(x => x.Url)
-            @Html.TextBoxFor(m => m.Url)
+            
+            @if(!Model.BuiltIn)
+            {
+                @Html.LabelFor(x => x.Url)
+                @Html.TextBoxFor(m => m.Url)
+            }
+            
+            else
+            {
+                @Html.LabelFor(x => x.Url)
+                @Html.TextBoxFor(m => m.Url, new { disabled = "disabled" })
+            }
 
             @Html.LabelFor(x => x.ApiKey)
             @Html.TextBoxFor(m => m.ApiKey)

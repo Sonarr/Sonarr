@@ -70,17 +70,27 @@ namespace NzbDrone.Core.Providers
             foreach (var feedProvider in indexers)
             {
                 NewznabDefinition indexerLocal = feedProvider;
-                if (!currentIndexers.Exists(c => c.Name == indexerLocal.Name))
+                var currentIndexer = currentIndexers
+                                        .SingleOrDefault(c => new Uri(c.Url.ToLower()).Host == new Uri(indexerLocal.Url.ToLower()).Host);
+
+                if (currentIndexer == null)
                 {
                     var settings = new NewznabDefinition
                                        {
                                            Enable = false,
                                            Name = indexerLocal.Name,
                                            Url = indexerLocal.Url,
-                                           ApiKey = indexerLocal.ApiKey
+                                           ApiKey = indexerLocal.ApiKey,
+                                           BuiltIn = true
                                        };
 
                     Save(settings);
+                }
+
+                else
+                {
+                    currentIndexer.BuiltIn = true;
+                    Save(currentIndexer);
                 }
             }
         }
