@@ -45,5 +45,6 @@
 
         @Html.HiddenFor(x => x.Id, new {@class = "newznabProviderId"})
         @Html.Hidden("cleanId", idClean, new {@class = "cleanId"})
+        @Html.HiddenFor(m => m.BuiltIn)
     </div>
 }
