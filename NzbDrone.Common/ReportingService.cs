@@ -65,7 +65,7 @@ namespace NzbDrone.Common
                 var exceptionData = new ExceptionData();
 
                 exceptionData.Exception = logEvent.Exception;
-                exceptionData.Location = logEvent.LoggerName;
+                exceptionData.Component = logEvent.LoggerName;
                 exceptionData.Message = logEvent.FormattedMessage;
                 exceptionData.UserId = EnvironmentProvider.UGuid.ToString().Replace("-", string.Empty);
 
@@ -89,7 +89,7 @@ namespace NzbDrone.Common
 
         public static void SetupExceptronDriver()
         {
-            ExceptronDriver = new ExceptionClient("CB230C312E5C4FF38B4FB9644B05E60E")
+            ExceptronDriver = new ExceptionClient("CB230C312E5C4FF38B4FB9644B05E60G")
                                   {
                                       ApplicationVersion = new EnvironmentProvider().Version.ToString()
                                   };
