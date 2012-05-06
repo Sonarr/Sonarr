@@ -27,9 +27,7 @@ namespace Exceptron.Driver
         {
             _appId = appId;
 
-            ServerUrl = "http://localhost:57674/v1a/";
-
-
+            ServerUrl = "http://api.exceptron.com/v1a/";
 
             RestClient = new RestClient();
         }

@@ -38,8 +38,8 @@
     <Reference Include="Exceptioneer.WindowsFormsClient">
       <HintPath>..\Libraries\Exceptioneer.WindowsFormsClient.dll</HintPath>
     </Reference>
-    <Reference Include="Exceptron.Driver">
-      <HintPath>..\packages\Exceptron.Driver.0.1.0.15\lib\net20\Exceptron.Driver.dll</HintPath>
+    <Reference Include="Exceptron.Driver, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Exceptron.Driver.0.1.0.17\lib\net20\Exceptron.Driver.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.4.5.4\lib\net40\Newtonsoft.Json.dll</HintPath>
