@@ -30,6 +30,11 @@
         <span class="small">@Html.DescriptionFor(m => m.XbmcCleanLibrary)</span>
     </label>
     @Html.CheckBoxFor(m => m.XbmcCleanLibrary, new { @class = "inputClass checkClass" })
+
+    <label class="labelClass">@Html.LabelFor(m => m.XbmcUpdateWhenPlaying)
+        <span class="small">@Html.DescriptionFor(m => m.XbmcUpdateWhenPlaying)</span>
+    </label>
+    @Html.CheckBoxFor(m => m.XbmcUpdateWhenPlaying, new { @class = "inputClass checkClass" })
             
     <label class="labelClass">@Html.LabelFor(m => m.XbmcHosts)
         <span class="small">@Html.DescriptionFor(m => m.XbmcHosts)</span>

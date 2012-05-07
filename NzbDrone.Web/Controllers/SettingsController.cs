@@ -152,6 +152,7 @@ namespace NzbDrone.Web.Controllers
                                 XbmcHosts = _configProvider.XbmcHosts,
                                 XbmcUsername = _configProvider.XbmcUsername,
                                 XbmcPassword = _configProvider.XbmcPassword,
+                                XbmcUpdateWhenPlaying = _configProvider.XbmcUpdateWhenPlaying,
                                 SmtpEnabled = _externalNotificationProvider.GetSettings(typeof(Smtp)).Enable,
                                 SmtpNotifyOnGrab = _configProvider.SmtpNotifyOnGrab,
                                 SmtpNotifyOnDownload = _configProvider.SmtpNotifyOnGrab,
@@ -502,6 +503,7 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.XbmcHosts = data.XbmcHosts;
                 _configProvider.XbmcUsername = data.XbmcUsername;
                 _configProvider.XbmcPassword = data.XbmcPassword;
+                _configProvider.XbmcUpdateWhenPlaying = data.XbmcUpdateWhenPlaying;
 
                 //SMTP
                 var smtpSettings = _externalNotificationProvider.GetSettings(typeof(Smtp));

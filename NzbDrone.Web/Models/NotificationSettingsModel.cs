@@ -48,6 +48,10 @@ namespace NzbDrone.Web.Models
         [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string XbmcPassword { get; set; }
 
+        [DisplayName("Always Update")]
+        [Description("Update Library even when a video is playing?")]
+        public bool XbmcUpdateWhenPlaying { get; set; }
+
         //SMTP
         [DisplayName("Enabled")]
         [Description("Enable Email notifications?")]
