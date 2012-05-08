@@ -166,7 +166,7 @@
     <Content Include="Content\Images\Indexers\Newznab.png" />
     <Content Include="Content\Images\Indexers\NzbClub.png" />
     <Content Include="Content\Images\Indexers\NzbIndex.png" />
-    <Content Include="Content\Images\Indexers\Nzbs.org.png" />
+    <Content Include="Content\Images\Indexers\Newznab_Nzbs.org.png" />
     <Content Include="Content\Images\Indexers\WomblesIndex.png" />
     <Content Include="Content\Images\logo.png" />
     <Content Include="Content\Images\logo_small.png" />

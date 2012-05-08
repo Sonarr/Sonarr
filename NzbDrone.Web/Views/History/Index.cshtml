@@ -62,6 +62,9 @@
                                     sWidth: '20px', "bSortable": false, "mDataProp": function (source, type, val) {
                                         // 'display' and 'filter' use the image
                                         if (type === 'display' || type === 'filter') {
+                                            if (source['Indexer'].indexOf("Newznab") === 0)
+                                                return "<img src='/Content/Images/Indexers/" + source['Indexer'] + ".png' alt='" + source["Indexer"].replace('_', ' - ') + "' title='" + source["Indexer"].replace('_', ' - ') + "' onerror='this.src=\"/Content/Images/Indexers/Newznab.png\"'>";
+
                                             return "<img src='/Content/Images/Indexers/" + source['Indexer'] + ".png' alt='" + source["Indexer"] + "' title='" + source["Indexer"] + "'>";
                                         }
                                         // 'sort' and 'type' both just use the raw data
@@ -105,7 +108,7 @@
                             var result = "<b>Overview: </b>" + row.aData["EpisodeOverview"] + "<br/>" +
                                 "<b>NZB Title: </b>" + row.aData["NzbTitle"] + "<br/>" +
                                     "<b>Proper: </b>" + row.aData["IsProper"] + "<br/>" +
-                                    "<b>Indexer: </b>" + row.aData["Indexer"];
+                                    "<b>Indexer: </b>" + row.aData["Indexer"].replace('_', ' - ');
                             
                             if (row.aData["NzbInfoUrl"] != null && row.aData["NzbInfoUrl"] != "")
                                 result += "<br/><b>Nzb Details: </b> <a href=\"" + row.aData["NzbInfoUrl"] + "\" target=\"_blank\">Details</a>";

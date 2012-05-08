@@ -85,6 +85,8 @@ namespace NzbDrone.Core.Providers.Indexer
             {
                 if (item.Links.Count > 1)
                     currentResult.Size = item.Links[1].Length;
+
+                currentResult.Indexer = GetName(item);
             }
 
             return currentResult;
@@ -106,6 +108,12 @@ namespace NzbDrone.Core.Providers.Indexer
             }
 
             return urls.ToArray();
+        }
+
+        private string GetName(SyndicationItem item)
+        {
+            var hostname = item.Links[0].Uri.DnsSafeHost.ToLower();
+            return String.Format("{0}_{1}", Name, hostname);
         }
     }
 }

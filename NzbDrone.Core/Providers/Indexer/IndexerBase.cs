@@ -199,7 +199,7 @@ namespace NzbDrone.Core.Providers.Indexer
                             {
                                 parsedEpisode.NzbUrl = NzbDownloadUrl(item);
                                 parsedEpisode.NzbInfoUrl = NzbInfoUrl(item);
-                                parsedEpisode.Indexer = Name;
+                                parsedEpisode.Indexer = String.IsNullOrWhiteSpace(parsedEpisode.Indexer) ? Name : parsedEpisode.Indexer;
                                 result.Add(parsedEpisode);
                             }
                         }
