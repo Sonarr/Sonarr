@@ -328,5 +328,41 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
             Mocker.GetMock<DownloadProvider>().Verify(c => c.DownloadReport(It.IsAny<EpisodeParseResult>()),
                                                       Times.Exactly(2));
         }
+
+        [Test]
+        public void processSearchResults_Successes_should_not_be_null_or_empty()
+        {
+            var parseResults = Builder<EpisodeParseResult>.CreateListOfSize(5)
+                .All()
+                .With(e => e.SeasonNumber = 1)
+                .With(e => e.EpisodeNumbers = new List<int> { 1 })
+                .With(c => c.Quality = new Quality(QualityTypes.DVD, true))
+                .With(c => c.Age = 10)
+                .Random(1)
+                .With(c => c.Quality = new Quality(QualityTypes.Bluray1080p, true))
+                .With(c => c.Age = 100)
+                .Build();
+
+            var searchHistory = new SearchHistory();
+
+            WithMatchingSeries();
+            WithSuccessfulDownload();
+
+            Mocker.GetMock<AllowedDownloadSpecification>()
+                .Setup(s => s.IsSatisfiedBy(It.Is<EpisodeParseResult>(d => d.Quality.QualityType == QualityTypes.Bluray1080p)))
+                .Returns(ReportRejectionType.None);
+
+            //Act
+            var result = Mocker.Resolve<SearchProvider>().ProcessSearchResults(new ProgressNotification("Test"), parseResults, searchHistory, _matchingSeries, 1, 1);
+
+            //Assert
+            searchHistory.Successes.Should().NotBeNull();
+            searchHistory.Successes.Should().NotBeEmpty();
+
+            Mocker.GetMock<AllowedDownloadSpecification>().Verify(c => c.IsSatisfiedBy(It.IsAny<EpisodeParseResult>()),
+                                                       Times.Once());
+            Mocker.GetMock<DownloadProvider>().Verify(c => c.DownloadReport(It.IsAny<EpisodeParseResult>()),
+                                                      Times.Once());
+        }
     }
 }

@@ -52,8 +52,7 @@ namespace NzbDrone.Core.Providers
             {
                 SearchTime = DateTime.Now,
                 SeriesId = seriesId,
-                SeasonNumber = seasonNumber,
-                Successes = new List<int>()
+                SeasonNumber = seasonNumber
             };
 
             var series = _seriesProvider.GetSeries(seriesId);
@@ -104,8 +103,7 @@ namespace NzbDrone.Core.Providers
             {
                 SearchTime = DateTime.Now,
                 SeriesId = seriesId,
-                SeasonNumber = seasonNumber,
-                Successes = new List<int>()
+                SeasonNumber = seasonNumber
             };
 
             var series = _seriesProvider.GetSeries(seriesId);
@@ -262,6 +260,7 @@ namespace NzbDrone.Core.Providers
         public List<SearchHistoryItem> ProcessSearchResults(ProgressNotification notification, IEnumerable<EpisodeParseResult> reports, SearchHistory searchResult, Series series, int seasonNumber, int? episodeNumber = null)
         {
             var items = new List<SearchHistoryItem>();
+            searchResult.Successes = new List<int>();
 
             foreach (var episodeParseResult in reports.OrderByDescending(c => c.Quality).ThenBy(c => c.Age))
             {
