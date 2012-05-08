@@ -164,6 +164,7 @@
     <Content Include="Content\Images\green.png" />
     <Content Include="Content\Images\Indexers\FileSharingTalk.png" />
     <Content Include="Content\Images\Indexers\Newznab.png" />
+    <Content Include="Content\Images\Indexers\Newznab_nzb.su.png" />
     <Content Include="Content\Images\Indexers\NzbClub.png" />
     <Content Include="Content\Images\Indexers\NzbIndex.png" />
     <Content Include="Content\Images\Indexers\Newznab_Nzbs.org.png" />

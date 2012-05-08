@@ -52,7 +52,8 @@ namespace NzbDrone.Core.Providers
             {
                 SearchTime = DateTime.Now,
                 SeriesId = seriesId,
-                SeasonNumber = seasonNumber
+                SeasonNumber = seasonNumber,
+                Successes = new List<int>()
             };
 
             var series = _seriesProvider.GetSeries(seriesId);
@@ -103,7 +104,8 @@ namespace NzbDrone.Core.Providers
             {
                 SearchTime = DateTime.Now,
                 SeriesId = seriesId,
-                SeasonNumber = seasonNumber
+                SeasonNumber = seasonNumber,
+                Successes = new List<int>()
             };
 
             var series = _seriesProvider.GetSeries(seriesId);
@@ -259,7 +261,6 @@ namespace NzbDrone.Core.Providers
 
         public List<SearchHistoryItem> ProcessSearchResults(ProgressNotification notification, IEnumerable<EpisodeParseResult> reports, SearchHistory searchResult, Series series, int seasonNumber, int? episodeNumber = null)
         {
-            var successes = new List<int>();
             var items = new List<SearchHistoryItem>();
 
             foreach (var episodeParseResult in reports.OrderByDescending(c => c.Quality).ThenBy(c => c.Age))
@@ -310,7 +311,7 @@ namespace NzbDrone.Core.Providers
                     }
 
                     //Make sure we haven't already downloaded a report with this episodenumber, if we have, skip the report.
-                    if (successes.Intersect(episodeParseResult.EpisodeNumbers).Any())
+                    if (searchResult.Successes.Intersect(episodeParseResult.EpisodeNumbers).Any())
                     {
                         Logger.Trace("Episode has already been downloaded in this search, skipping.");
                         item.SearchError = ReportRejectionType.Skipped;
@@ -328,7 +329,7 @@ namespace NzbDrone.Core.Providers
                                 notification.CurrentMessage = String.Format("{0} Added to download queue", episodeParseResult);
 
                                 //Add the list of episode numbers from this release
-                                successes.AddRange(episodeParseResult.EpisodeNumbers);
+                                searchResult.Successes.AddRange(episodeParseResult.EpisodeNumbers);
                                 item.Success = true;
                             }
                             else
