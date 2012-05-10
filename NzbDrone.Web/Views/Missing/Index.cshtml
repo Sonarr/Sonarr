@@ -1,5 +1,7 @@
-﻿@model String
+﻿@model IEnumerable<NzbDrone.Web.Models.MissingEpisodeModel>
+@using DataTables.Mvc.Core
 @using NzbDrone.Web.Helpers
+@using SortDirection = DataTables.Mvc.Core.Enum.SortDirection
 @{ViewBag.Title = "Missing";}
 
 @section ActionMenu{
@@ -9,94 +11,57 @@
         <li>@Ajax.ActionLink("Start Recent Backlog Search", "RecentBacklogSearch", "Command", null, null, new { title = "Search and download missing episodes that aired in the last 30 days" })</li>
     </ul>
 }
-<div class="grid-container">
-    <table id="missingGrid" class="dataTablesGrid hidden-grid">
-        <thead>
-            <tr>
-                <th>
-                    Series Title
-                </th>
-                <th>
-                    Episode
-                </th>
-                <th>
-                    Episode Title
-                </th>
-                <th>
-                    AirDate
-                </th>
-                @*Commands Column*@
-                <th/>
-                    
-                
-                @*Details Column*@
-                <th style="display: none;">
-                    Details
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @*@foreach(var history in Model)
-            {
-                Html.RenderPartial("History", history);
-            }*@
-        </tbody>
-    </table>
-</div>
+
+@Html.GridHtml("missingGrid", "dataTablesGrid")   
+
 @section Scripts
 {
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $('#missingGrid').removeClass('hidden-grid');
+    @( Html.GridScriptForModel("#missingGrid")
+               .Paginate(true)
+               .PageLength(20)
+               .ChangePageLength(false)
+               .Filter(true)
+               .Sort(true)
+               .PaginationType("four_button")
+               .AddColumn(new Column().DataProperty("return seriesTitle(source, type, val);", true).Title("Series Title"))
+               .AddColumn(new Column().DataProperty("EpisodeNumbering").Width("80px").Sortable(false).Title("Episode"))
+               .AddColumn(new Column().DataProperty("EpisodeTitle").Sortable(false).Title("Episode Title"))
+               .AddColumn(new Column().DataProperty("return airDate(source, type, val);", true).Width("150px").Title("Air Date"))
+               .AddColumn(new Column().DataProperty("EpisodeId").Width("40px").Sortable(false).RenderFunction("return actions(row);"))
+               .AddColumn(new Column().DataProperty("Details").Sortable(false).Visible(false).RenderFunction("return details(row);"))
+               .AddSorting(3, SortDirection.Desc)
+    )
 
-            oTable = $('.dataTablesGrid').dataTable({
-            //"sAjaxSource": "History/AjaxBinding",
-            //"bProcessing": true,
-                "bShowAll": false,
-                "aaData": @Html.Raw(Model),
-            "bPaginate": true,
-            "bLengthChange": false,
-            "bFilter": true,
-            "bSort": true,
-            "bInfo": true,
-            "bAutoWidth": false,
-            "iDisplayLength": 20,
-            "sPaginationType": "four_button",
-            "aoColumns": [
-                            { sWidth: 'auto', "mDataProp": function (source, type, val) {
-                                                                        // 'display' and 'filter' use our fancy naming
-                                                                        if (type === 'display' || type === 'filter') {
-                                                                            return "<a href='/Series/Details?seriesId=" + source["SeriesId"] + "'>" + source["SeriesTitle"] + "</a>";
-                                                                        }
-                                                                        // 'sort' and 'type' both just use the raw data
-                                                                        return source["SeriesTitleSorter"];
-                                                                    } 
-                            }, //Series Title
-                            { sWidth: '80px', "mDataProp": "EpisodeNumbering", "bSortable": false }, //EpisodeNumbering
-                            { sWidth: 'auto', "mDataProp": "EpisodeTitle", "bSortable": false }, //Episode Title
-                            { sWidth: '150px', "mDataProp": function (source, type, val) {
-                                                                    // 'display' and 'filter' use our fancy naming
-                                                                    if (type === 'display' || type === 'filter') {
-                                                                        return source["AirDateString"];
-                                                                    }
-                                                                    // 'sort' and 'type' both just use the raw data
-                                                                    return source["AirDate"];
-                                                                } 
-                            }, //Grabbed On
-                            { sWidth: '40px', "mDataProp": "EpisodeId", "bSortable": false, "fnRender": function (row) {
-                                    var link = '@Ajax.ImageActionLink("../../Content/Images/Search.png", new {  title = "Search for Episode", alt = "Search", @class = "gridAction" }, "Search", "Episode", new { episodeId = "REPLACE" }, null, null)';
-                                    link = link.replace("REPLACE", row.aData["EpisodeId"]);
-                                    return link;
-                                }
-                            }, //Actions
-                            { sWidth: 'auto', "mDataProp": "Details", "bSortable": false, "bVisible": false, "fnRender": function (row) {
-                                var result = "<b>Overview: </b>" + row.aData["Overview"] + "<br/>";
-                                    return result;
-                                }
-                            } //Details
-                        ],
-            "aaSorting": [[3, 'desc']]
-        });
-    });
+    <script type="text/javascript">
+        
+        
+        function seriesTitle (source, type, val) {
+            // 'display' and 'filter' use our fancy naming
+            if (type === 'display' || type === 'filter') {
+                return "<a href='/Series/Details?seriesId=" + source["SeriesId"] + "'>" + source["SeriesTitle"] + "</a>";
+            }
+            // 'sort' and 'type' both just use the raw data
+            return source["SeriesTitleSorter"];
+        }
+        
+        function airDate (source, type, val) {
+            // 'display' and 'filter' use our fancy naming
+            if (type === 'display' || type === 'filter') {
+                return source["AirDateString"];
+            }
+            // 'sort' and 'type' both just use the raw data
+            return source["AirDate"];
+        }
+        
+        function actions (row) {
+            var link = '@Ajax.ImageActionLink("../../Content/Images/Search.png", new {  title = "Search for Episode", alt = "Search", @class = "gridAction" }, "Search", "Episode", new { episodeId = "REPLACE" }, null, null)';
+            link = link.replace("REPLACE", row.aData["EpisodeId"]);
+            return link;
+        }
+        
+        function details (row) {
+            var result = "<b>Overview: </b>" + row.aData["Overview"] + "<br/>";
+            return result;
+        }
     </script>
 }

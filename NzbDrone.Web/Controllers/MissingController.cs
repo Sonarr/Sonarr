@@ -37,9 +37,9 @@ namespace NzbDrone.Web.Controllers
                 AirDateString = e.AirDate.Value.ToBestDateString()
             });
 
-            var serialized = new JavaScriptSerializer().Serialize(missing);
+            //var serialized = new JavaScriptSerializer().Serialize(missing);
 
-            return View((object)serialized);
+            return View(missing);
         }
     }
 }
