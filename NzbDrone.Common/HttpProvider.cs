@@ -43,7 +43,7 @@ namespace NzbDrone.Common
             }
             catch (Exception ex)
             {
-                logger.TraceException(ex.Message, ex);
+                logger.Trace(ex.Message, ex.ToString());
                 throw;
             }
         }
