@@ -85,8 +85,6 @@ namespace NzbDrone.Core.Providers.Indexer
 
                 if (this.HasAttributes)
                 {
-                    var attributes = new Dictionary<string, string>();
-
                     while (this.MoveToNextAttribute())
                     {
                         message += String.Format(" [{0}:{1}]", this.Name, this.Value);
