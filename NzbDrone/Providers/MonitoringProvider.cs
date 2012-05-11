@@ -82,13 +82,7 @@ namespace NzbDrone.Providers
 
             try
             {
-                ICredentials identity = null;
-
-                if (_configFileProvider.AuthenticationType == AuthenticationType.Windows)
-                {
-                    identity = CredentialCache.DefaultCredentials;
-                }
-
+                ICredentials identity = CredentialCache.DefaultCredentials;
                 _httpProvider.DownloadString(_iisProvider.AppUrl, identity); //This should preload the home page, making the first load faster.
                 string response = _httpProvider.DownloadString(_iisProvider.AppUrl + "/health", identity);
 
@@ -107,11 +101,11 @@ namespace NzbDrone.Providers
             catch (Exception ex)
             {
                 _pingFailCounter++;
-                logger.ErrorException("Application pool is not responding. Count " + _pingFailCounter, ex);
-                if (_pingFailCounter > 4)
+                logger.Error("Application pool is not responding. Count " + _pingFailCounter + ex.Message);
+                if (_pingFailCounter > 10)
                 {
                     _pingFailCounter = 0;
-                    //_iisProvider.RestartServer();
+                    _iisProvider.RestartServer();
                 }
             }
         }
