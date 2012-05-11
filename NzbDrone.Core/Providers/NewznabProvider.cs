@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using Ninject;
 using NLog;
 using NzbDrone.Core.Providers.Indexer;
@@ -56,7 +57,11 @@ namespace NzbDrone.Core.Providers
             var definitionsList = definitions.ToList();
 
             //Cleanup the URL for each definition
-            definitionsList.ForEach(p => p.Url = (new Uri(p.Url).ParentUriString()));
+            foreach(var newznabDefinition in definitionsList)
+            {
+                CheckHostname(newznabDefinition.Url);
+                newznabDefinition.Url = new Uri(newznabDefinition.Url).ParentUriString();
+            }
 
             _database.UpdateMany(definitionsList);
         }
@@ -98,6 +103,23 @@ namespace NzbDrone.Core.Providers
         public virtual void Delete(int id)
         {
             _database.Delete<NewznabDefinition>(id);
+        }
+
+        public virtual void CheckHostname(string url)
+        {
+            try
+            {
+                var uri = new Uri(url);
+                var hostname = uri.DnsSafeHost;
+
+                Dns.GetHostEntry(hostname);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("Invalid address {0}, please correct the site URL.", url);
+                throw;
+            }
+
         }
     }
 }

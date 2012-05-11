@@ -391,8 +391,15 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.FileSharingTalkUid = data.FileSharingTalkUid;
                 _configProvider.FileSharingTalkSecret = data.FileSharingTalkSecret;
 
-                if (data.NewznabDefinitions != null)
-                    _newznabProvider.SaveAll(data.NewznabDefinitions);
+                try
+                {
+                    if (data.NewznabDefinitions != null)
+                        _newznabProvider.SaveAll(data.NewznabDefinitions);
+                }
+                catch(Exception)
+                {
+                    return JsonNotificationResult.Oops("Invalid Nzbnab Indexer found, please check your settings");
+                }
 
                 return GetSuccessResult();
             }

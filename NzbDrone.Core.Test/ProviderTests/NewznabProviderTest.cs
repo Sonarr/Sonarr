@@ -9,6 +9,7 @@ using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Test.Common;
 using NzbDrone.Test.Common.AutoMoq;
 
 namespace NzbDrone.Core.Test.ProviderTests
@@ -294,6 +295,20 @@ namespace NzbDrone.Core.Test.ProviderTests
             //Assert
             var result = db.Fetch<NewznabDefinition>();
             result.Should().HaveCount(2);
+        }
+
+        [Test]
+        public void CheckHostname_should_do_nothing_if_hostname_is_valid()
+        {
+            Mocker.Resolve<NewznabProvider>().CheckHostname("http://www.google.com");
+        }
+
+        [Test]
+        [ExpectedException("System.Net.Sockets.SocketException")]  
+        public void CheckHostname_should_log_error_and_throw_exception_if_dnsHostname_is_invalid()
+        {
+            Mocker.Resolve<NewznabProvider>().CheckHostname("http://BadName");
+            ExceptionVerification.ExpectedErrors(1);
         }
     }
 }
