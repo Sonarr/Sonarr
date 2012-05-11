@@ -2,6 +2,7 @@
 //https://connect.microsoft.com/VisualStudio/feedback/details/325421/syndicationfeed-load-fails-to-parse-datetime-against-a-real-world-feeds-ie7-can-read
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -32,6 +33,8 @@ namespace NzbDrone.Core.Providers.Indexer
         {
             _isRss2DateTime = rss20DateTimeHints.Contains(localname);
             _isAtomDateTime = atom10DateTimeHints.Contains(localname);
+
+            CheckForError();       
 
             return base.IsStartElement(localname, ns);
         }
@@ -69,6 +72,31 @@ namespace NzbDrone.Core.Providers.Indexer
             }
 
             return dateVal;
+        }
+
+        internal void CheckForError()
+        {
+            if (this.MoveToContent() == XmlNodeType.Element)
+            {
+               if (this.Name != "error")
+                    return;
+
+                var message = "Error: ";
+
+                if (this.HasAttributes)
+                {
+                    var attributes = new Dictionary<string, string>();
+
+                    while (this.MoveToNextAttribute())
+                    {
+                        message += String.Format(" [{0}:{1}]", this.Name, this.Value);
+                    }
+                }
+
+                logger.Error("Error in RSS feed: {0}", message);
+                throw new Exception(message);
+            }
+            
         }
     }
 }
