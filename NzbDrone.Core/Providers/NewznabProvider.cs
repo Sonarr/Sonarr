@@ -74,6 +74,12 @@ namespace NzbDrone.Core.Providers
             {
                 var currentIndexers = All();
 
+                Logger.Debug("Deleting broken Newznab indexer");
+                var brokenIndexers = currentIndexers.Where(i => String.IsNullOrEmpty(i.Name) || String.IsNullOrWhiteSpace(i.Url)).ToList();
+                brokenIndexers.ForEach(e => _database.Delete<NewznabDefinition>(e.Id));
+
+                currentIndexers = All();
+
                 foreach(var feedProvider in indexers)
                 {
                     try

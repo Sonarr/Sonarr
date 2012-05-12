@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using PetaPoco;
 
 namespace NzbDrone.Core.Repository
@@ -11,8 +12,10 @@ namespace NzbDrone.Core.Repository
 
         public Boolean Enable { get; set; }
 
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
         public String Name { get; set; }
 
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
         public String Url { get; set; }
 
         public String ApiKey { get; set; }
