@@ -78,8 +78,6 @@ namespace NzbDrone.Core.Providers
                 {
                     try
                     {
-
-
                         NewznabDefinition indexerLocal = feedProvider;
                         var currentIndexer = currentIndexers
                                 .FirstOrDefault(
