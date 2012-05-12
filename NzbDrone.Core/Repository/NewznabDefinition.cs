@@ -12,10 +12,12 @@ namespace NzbDrone.Core.Repository
 
         public Boolean Enable { get; set; }
 
+        [StringLength(100, MinimumLength = 2)]
         [DisplayFormat(ConvertEmptyStringToNull = false)]
         public String Name { get; set; }
 
         [DisplayFormat(ConvertEmptyStringToNull = false)]
+        [RegularExpression(@"^http[s]?://.+")]
         public String Url { get; set; }
 
         public String ApiKey { get; set; }
