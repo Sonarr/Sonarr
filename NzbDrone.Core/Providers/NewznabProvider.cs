@@ -70,33 +70,51 @@ namespace NzbDrone.Core.Providers
         {
             Logger.Debug("Initializing Newznab indexers. Count {0}", indexers.Count);
 
-            var currentIndexers = All();
-
-            foreach (var feedProvider in indexers)
+            try
             {
-                NewznabDefinition indexerLocal = feedProvider;
-                var currentIndexer = currentIndexers
-                                        .FirstOrDefault(c => new Uri(c.Url.ToLower()).Host == new Uri(indexerLocal.Url.ToLower()).Host);
+                var currentIndexers = All();
 
-                if (currentIndexer == null)
+                foreach(var feedProvider in indexers)
                 {
-                    var settings = new NewznabDefinition
-                                       {
-                                           Enable = false,
-                                           Name = indexerLocal.Name,
-                                           Url = indexerLocal.Url,
-                                           ApiKey = indexerLocal.ApiKey,
-                                           BuiltIn = true
-                                       };
+                    try
+                    {
 
-                    Save(settings);
-                }
 
-                else
-                {
-                    currentIndexer.BuiltIn = true;
-                    Save(currentIndexer);
+                        NewznabDefinition indexerLocal = feedProvider;
+                        var currentIndexer = currentIndexers
+                                .FirstOrDefault(
+                                                c =>
+                                                new Uri(c.Url.ToLower()).Host == new Uri(indexerLocal.Url.ToLower()).Host);
+
+                        if (currentIndexer == null)
+                        {
+                            var settings = new NewznabDefinition
+                                               {
+                                                   Enable = false,
+                                                   Name = indexerLocal.Name,
+                                                   Url = indexerLocal.Url,
+                                                   ApiKey = indexerLocal.ApiKey,
+                                                   BuiltIn = true
+                                               };
+
+                            Save(settings);
+                        }
+
+                        else
+                        {
+                            currentIndexer.BuiltIn = true;
+                            Save(currentIndexer);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.ErrorException("An error occurred while setting up indexer: " + feedProvider.Name, ex);
+                    }
                 }
+            }
+            catch(Exception ex)
+            {
+                Logger.ErrorException("An Error occurred while initializing Newznab Indexers", ex);
             }
         }
 
