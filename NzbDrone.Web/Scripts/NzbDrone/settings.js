@@ -182,7 +182,7 @@ function testSmtpSettings() {
     //Get the variables
     var server = $('#SmtpServer').val();
     var port = $('#SmtpPort').val();
-    var ssl = $('#SmtpUseSsl').val();
+    var ssl = $('#SmtpUseSsl').prop('checked');
     var username = $('#SmtpUsername').val();
     var password = $('#SmtpPassword').val();
     var fromAddress = $('#SmtpFromAddress').val();
