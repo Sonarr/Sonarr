@@ -69,6 +69,7 @@ namespace NzbDrone.Core.Test
         [TestCase("Looney Tunes - S1936E18 - I Love to Singa", "Looney Tunes", 1936, 18)]
         [TestCase("American_Dad!_-_7x6_-_The_Scarlett_Getter_[SDTV]", "American Dad!", 7, 6)]
         [TestCase("Falling_Skies_-_1x1_-_Live_and_Learn_[HDTV]", "Falling Skies", 1, 1)]
+        [TestCase("Top Gear - 07x03 - 2005.11.70", "Top Gear", 7, 3)]
         public void ParseTitle_single(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
             var result = Parser.ParseTitle(postTitle);
@@ -169,6 +170,8 @@ namespace NzbDrone.Core.Test
         [TestCase("Vanguard S01E04 Mexicos Death Train 720 WEB DL", QualityTypes.WEBDL, false)]
         [TestCase("Hawaii Five 0 S02E21 720p WEB DL DD5 1 H 264", QualityTypes.WEBDL, false)]
         [TestCase("Castle S04E22 720p WEB DL DD5 1 H 264 NFHD", QualityTypes.WEBDL, false)]
+        [TestCase("Fringe S04E22 720p WEB-DL DD5.1 H264-EbP.mkv", QualityTypes.WEBDL, false)]
+        [TestCase("Fringe.S04E22.720p.WEB.DL.DD5.1.H264-EbP", QualityTypes.WEBDL, false)]
         public void quality_parse(string postTitle, object quality, bool proper)
         {
             var result = Parser.ParseQuality(postTitle);
