@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Providers
         {
         }
 
-        public virtual bool SeasonSearch(ProgressNotification notification, int seriesId, int seasonNumber)
+        public virtual List<int> SeasonSearch(ProgressNotification notification, int seriesId, int seasonNumber)
         {
             var searchResult = new SearchHistory
             {
@@ -60,12 +60,12 @@ namespace NzbDrone.Core.Providers
             if (series == null)
             {
                 Logger.Error("Unable to find an series {0} in database", seriesId);
-                return false;
+                return new List<int>();
             }  
 
             //Return false if the series is a daily series (we only support individual episode searching
             if (series.IsDaily)
-                return false;
+                return new List<int>();
 
             notification.CurrentMessage = String.Format("Searching for {0} Season {1}", series.Title, seasonNumber);
 
@@ -74,7 +74,7 @@ namespace NzbDrone.Core.Providers
             Logger.Debug("Finished searching all indexers. Total {0}", reports.Count);
 
             if (reports.Count == 0)
-                return false;
+                return new List<int>();
 
             Logger.Debug("Getting episodes from database for series: {0} and season: {1}", seriesId, seasonNumber);
             var episodeNumbers = _episodeProvider.GetEpisodeNumbersBySeason(seriesId, seasonNumber);
@@ -82,7 +82,7 @@ namespace NzbDrone.Core.Providers
             if (episodeNumbers == null || episodeNumbers.Count == 0)
             {
                 Logger.Warn("No episodes in database found for series: {0} and season: {1}.", seriesId, seasonNumber);
-                return false;
+                return new List<int>();
             }
 
             notification.CurrentMessage = "Processing search results";
@@ -94,7 +94,7 @@ namespace NzbDrone.Core.Providers
             searchResult.SearchHistoryItems = ProcessSearchResults(notification, reports, searchResult, series, seasonNumber);
             _searchHistoryProvider.Add(searchResult);
 
-            return (searchResult.Successes.Count == episodeNumbers.Count);
+            return searchResult.Successes;
         }
 
         public virtual List<int> PartialSeasonSearch(ProgressNotification notification, int seriesId, int seasonNumber)

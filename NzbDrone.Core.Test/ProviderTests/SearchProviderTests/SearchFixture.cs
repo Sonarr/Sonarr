@@ -166,7 +166,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
             var result = Mocker.Resolve<SearchProvider>().SeasonSearch(MockNotification, _series.SeriesId, 1);
 
             //Assert
-            result.Should().BeFalse();
+            result.Should().BeEmpty();
         }
 
         [Test]

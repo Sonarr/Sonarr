@@ -45,7 +45,11 @@ namespace NzbDrone.Core.Jobs
             if (secondaryTargetId < 0)
                 throw new ArgumentOutOfRangeException("secondaryTargetId");
 
-            if (_searchProvider.SeasonSearch(notification, targetId, secondaryTargetId))
+            //Perform a Partial Season Search - Because a full season search is a waste
+            //3 searches should guarentee results, (24 eps) versus, a potential 4 to get the same eps.
+            var successes = _searchProvider.PartialSeasonSearch(notification, targetId, secondaryTargetId);
+
+            if (successes.Count == 0)
                 return;
 
             Logger.Debug("Getting episodes from database for series: {0} and season: {1}", targetId, secondaryTargetId);
@@ -57,25 +61,15 @@ namespace NzbDrone.Core.Jobs
                 return;
             }
 
-            //Perform a Partial Season Search
-            var addedSeries = _searchProvider.PartialSeasonSearch(notification, targetId, secondaryTargetId);
+            if (episodes.Count == successes.Count)
+                return;
 
-            //addedSeries.Distinct().ToList().Sort();
-            //var episodeNumbers = episodes.Where(w => w.AirDate <= DateTime.Today.AddDays(1)).Select(s => s.EpisodeNumber).ToList();
-            //episodeNumbers.Sort();
+            var missingEpisodes = episodes.Select(e => e.EpisodeNumber).Except(successes).ToList();
 
-            //if (addedSeries.SequenceEqual(episodeNumbers))
-            //    return;
-            
-            ////Get the list of episodes that weren't downloaded
-            //var missingEpisodes = episodeNumbers.Except(addedSeries).ToList();
-
-            //TODO: do one by one check only when max number of feeds have been returned by the indexer
-            //Only process episodes that is in missing episodes (To ensure we double check if the episode is available)
-            //foreach (var episode in episodes.Where(e => !e.Ignored && missingEpisodes.Contains(e.EpisodeNumber)).OrderBy(o => o.EpisodeNumber))
-            //{
-            //    _episodeSearchJob.Start(notification, episode.EpisodeId, 0);
-            //}
+            foreach (var episode in episodes.Where(e => !e.Ignored && missingEpisodes.Contains(e.EpisodeNumber)).OrderBy(o => o.EpisodeNumber))
+            {
+                _episodeSearchJob.Start(notification, episode.EpisodeId, 0);
+            }
         }
     }
 }
