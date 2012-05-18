@@ -18,27 +18,7 @@ namespace NzbDrone.Core.Providers
             _database = database;
         }
 
-        public virtual List<Episode> Yesterday()
-        {
-            return RecentEpisodes().Where(c => c.AirDate.Value.Date == DateTime.Now.Date.AddDays(-1)).ToList();
-        }
-
-        public virtual List<Episode> Today()
-        {
-            return RecentEpisodes().Where(c => c.AirDate.Value.Date == DateTime.Now.Date).ToList();
-        }
-
-        public virtual List<Episode> Tomorrow()
-        {
-            return RecentEpisodes().Where(c => c.AirDate.Value.Date == DateTime.Now.Date.AddDays(1)).ToList();
-        }
-
-        public virtual List<Episode> Week()
-        {
-            return RecentEpisodes().Where(c => c.AirDate >= DateTime.Today.AddDays(2).Date).ToList();
-        }
-
-        public virtual List<Episode> RecentEpisodes()
+        public virtual List<Episode> UpcomingEpisodes()
         {
             return _database.Fetch<Episode, Series>(@"SELECT * FROM Episodes 
                                                         INNER JOIN Series ON Episodes.SeriesId = Series.SeriesId

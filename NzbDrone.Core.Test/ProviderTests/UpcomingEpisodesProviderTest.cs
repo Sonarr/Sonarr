@@ -64,97 +64,27 @@ namespace NzbDrone.Core.Test.ProviderTests
         }
 
         [Test]
-        public void Get_Yesterday()
+        public void Get_UpcomingEpisodes()
         {
-            var result = Mocker.Resolve<UpcomingEpisodesProvider>().Yesterday();
+            var result = Mocker.Resolve<UpcomingEpisodesProvider>().UpcomingEpisodes();
 
             //Assert
-            result.Should().NotBeEmpty();
-            result.Should().OnlyContain(c => c.AirDate.Value.Date == DateTime.Today.AddDays(-1).Date);
-            result.First().Series.Should().NotBeNull();
-            result.First().Series.SeriesId.Should().Be(series.SeriesId);
-        }
-
-        [Test]
-        public void Get_Today()
-        {
-            //Act
-            var result = Mocker.Resolve<UpcomingEpisodesProvider>().Today();
-
-            result.Should().NotBeEmpty();
-            result.Should().OnlyContain(c => c.AirDate.Value.Date == DateTime.Today.Date);
-            result.First().Series.Should().NotBeNull();
-            result.First().Series.SeriesId.Should().Be(series.SeriesId);
-        }
-
-        [Test]
-        public void Get_Tomorrow()
-        {
-            var result = Mocker.Resolve<UpcomingEpisodesProvider>().Tomorrow();
-
-            result.Should().NotBeEmpty();
-            result.Should().OnlyContain(c => c.AirDate.Value.Date == DateTime.Today.AddDays(1).Date);
-            result.First().Series.Should().NotBeNull();
-            result.First().Series.SeriesId.Should().Be(series.SeriesId);
-        }
-
-        [Test]
-        public void Get_Week()
-        {
-            var result = Mocker.Resolve<UpcomingEpisodesProvider>().Week();
-
-            //Assert
-            result.Should().HaveCount(2);
+            result.Should().HaveCount(5);
             result.Should().OnlyContain(c => c.Series != null && c.SeriesId == series.SeriesId);
         }
 
         [Test]
-        public void Get_Yesterday_should_skip_ingored()
+        public void Get_UpcomingEpisodes_should_skip_ingored()
         {
             WithIgnoredEpisodes();
-            Mocker.Resolve<UpcomingEpisodesProvider>().Yesterday().Should().BeEmpty();
+            Mocker.Resolve<UpcomingEpisodesProvider>().UpcomingEpisodes().Should().BeEmpty();
         }
 
         [Test]
-        public void Get_Today_should_skip_ingored()
-        {
-            WithIgnoredEpisodes();
-            Mocker.Resolve<UpcomingEpisodesProvider>().Today().Should().BeEmpty();
-        }
-
-        [Test]
-        public void Get_Tomorrow_should_skip_ingored()
-        {
-            WithIgnoredEpisodes();
-            Mocker.Resolve<UpcomingEpisodesProvider>().Tomorrow().Should().BeEmpty();
-        }
-
-        [Test]
-        public void Get_Week_should_skip_ingored()
-        {
-            WithIgnoredEpisodes();
-            Mocker.Resolve<UpcomingEpisodesProvider>().Week().Should().BeEmpty();
-        }
-
-        [Test]
-        public void Get_Today_should_skip_unmonitored_series()
+        public void Get_UpcomingEpisodes_should_skip_unmonitored_series()
         {
             WithIgnoredSeries();
-            Mocker.Resolve<UpcomingEpisodesProvider>().Today().Should().BeEmpty();
-        }
-
-        [Test]
-        public void Get_Tomoroww_should_skip_unmonitored_series()
-        {
-            WithIgnoredSeries();
-            Mocker.Resolve<UpcomingEpisodesProvider>().Tomorrow().Should().BeEmpty();
-        }
-
-        [Test]
-        public void Get_Week_should_skip_unmonitored_series()
-        {
-            WithIgnoredSeries();
-            Mocker.Resolve<UpcomingEpisodesProvider>().Week().Should().BeEmpty();
+            Mocker.Resolve<UpcomingEpisodesProvider>().UpcomingEpisodes().Should().BeEmpty();
         }
     }
 }
