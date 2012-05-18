@@ -23,12 +23,20 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult Index()
         {
+            var upcomingEpisodes = GetUpcomingEpisodeModels(_upcomingEpisodesProvider.RecentEpisodes());
+
+
             var upcoming = new UpcomingEpisodesModel
                                {
-                                       Yesterday = GetUpcomingEpisodeModels(_upcomingEpisodesProvider.Yesterday()),
-                                       Today = GetUpcomingEpisodeModels(_upcomingEpisodesProvider.Today()),
-                                       Tomorrow = GetUpcomingEpisodeModels(_upcomingEpisodesProvider.Tomorrow()),
-                                       Week = GetUpcomingEpisodeModels(_upcomingEpisodesProvider.Week())
+                                   Yesterday = upcomingEpisodes.Where(e => e.AirDateTime.Date == DateTime.Today.AddDays(-1)).ToList(),
+                                   Today = upcomingEpisodes.Where(e => e.AirDateTime.Date == DateTime.Today).ToList(),
+                                   Tomorrow = upcomingEpisodes.Where(e => e.AirDateTime.Date == DateTime.Today.AddDays(1)).ToList(),
+                                   TwoDays = upcomingEpisodes.Where(e => e.AirDateTime.Date == DateTime.Today.AddDays(2)).ToList(),
+                                   ThreeDays = upcomingEpisodes.Where(e => e.AirDateTime.Date == DateTime.Today.AddDays(3)).ToList(),
+                                   FourDays = upcomingEpisodes.Where(e => e.AirDateTime.Date == DateTime.Today.AddDays(4)).ToList(),
+                                   FiveDays = upcomingEpisodes.Where(e => e.AirDateTime.Date == DateTime.Today.AddDays(5)).ToList(),
+                                   SixDays = upcomingEpisodes.Where(e => e.AirDateTime.Date == DateTime.Today.AddDays(6)).ToList(),
+                                   Later = upcomingEpisodes.Where(e => e.AirDateTime.Date >= DateTime.Today.AddDays(7)).ToList()
                                };
             
             return View(upcoming);

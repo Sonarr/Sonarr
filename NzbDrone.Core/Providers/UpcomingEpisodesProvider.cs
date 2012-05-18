@@ -36,10 +36,9 @@ namespace NzbDrone.Core.Providers
         public virtual List<Episode> Week()
         {
             return RecentEpisodes().Where(c => c.AirDate >= DateTime.Today.AddDays(2).Date).ToList();
-
         }
 
-        private List<Episode> RecentEpisodes()
+        public virtual List<Episode> RecentEpisodes()
         {
             return _database.Fetch<Episode, Series>(@"SELECT * FROM Episodes 
                                                         INNER JOIN Series ON Episodes.SeriesId = Series.SeriesId
