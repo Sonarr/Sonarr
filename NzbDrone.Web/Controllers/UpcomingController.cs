@@ -23,7 +23,7 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult Index()
         {
-            var upcomingEpisodes = GetUpcomingEpisodeModels(_upcomingEpisodesProvider.RecentEpisodes());
+            var upcomingEpisodes = GetUpcomingEpisodeModels(_upcomingEpisodesProvider.UpcomingEpisodes());
 
 
             var upcoming = new UpcomingEpisodesModel

@@ -262,7 +262,9 @@ namespace NzbDrone.Core.Providers
             var items = new List<SearchHistoryItem>();
             searchResult.Successes = new List<int>();
 
-            foreach (var episodeParseResult in reports.OrderByDescending(c => c.Quality).ThenBy(c => c.Age))
+            foreach (var episodeParseResult in reports.OrderByDescending(c => c.Quality)
+                                                        .ThenBy(c => c.EpisodeNumbers.Min())
+                                                        .ThenBy(c => c.Age))
             {
                 try
                 {
