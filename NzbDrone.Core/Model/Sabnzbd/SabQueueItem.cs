@@ -31,6 +31,7 @@ namespace NzbDrone.Core.Model.Sabnzbd
             }
         }
 
+        [JsonConverter(typeof(SabnzbdPriorityTypeConverter))]
         public SabPriorityType Priority { get; set; }
 
         [JsonProperty(PropertyName = "cat")]

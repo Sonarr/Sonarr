@@ -9,6 +9,7 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Core.Model;
+using NzbDrone.Core.Model.Sabnzbd;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.DownloadClients;
 using NzbDrone.Core.Repository;
@@ -42,7 +43,6 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
             fakeConfig.SetupGet(c => c.SabTvCategory).Returns(cat);
         }
 
-
         private void WithFullQueue()
         {
             Mocker.GetMock<HttpProvider>()
@@ -67,6 +67,16 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
         {
             Mocker.GetMock<HttpProvider>()
                     .Setup(s => s.DownloadString(It.IsAny<String>())).Returns(File.ReadAllText(@".\Files\JsonError.txt"));
+        }
+
+        private void WithUnknownPriorityQueue()
+        {
+            Mocker.GetMock<HttpProvider>()
+                    .Setup(
+                           s =>
+                           s.DownloadString(
+                                            "http://192.168.5.55:2222/api?mode=queue&output=json&start=0&limit=0&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
+                    .Returns(File.ReadAllText(@".\Files\QueueUnknownPriority.txt"));
         }
 
         [Test]
@@ -95,6 +105,17 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
             var result = Mocker.Resolve<SabProvider>().GetQueue();
 
             result.Should().HaveCount(7);
+        }
+
+        [Test]
+        public void GetQueue_should_return_a_list_with_items_even_when_priority_is_non_standard()
+        {
+            WithUnknownPriorityQueue();
+
+            var result = Mocker.Resolve<SabProvider>().GetQueue();
+
+            result.Should().HaveCount(7);
+            result.Should().OnlyContain(i => i.Priority == SabPriorityType.Normal);
         }
 
         [Test]
