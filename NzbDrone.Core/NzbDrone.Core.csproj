@@ -243,10 +243,10 @@
     <Compile Include="Datastore\Migrations\SchemaInfo.cs" />
     <Compile Include="Datastore\PetaPoco\EpisodeSeasonRelator.cs" />
     <Compile Include="Fluent.cs" />
-    <Compile Include="Helpers\SabnzbdPriorityTypeConverter.cs" />
+    <Compile Include="Helpers\SabnzbdQueueTimeConverter.cs" />
     <Compile Include="Helpers\EpisodeSortingHelper.cs" />
     <Compile Include="Helpers\SortHelper.cs" />
-    <Compile Include="Helpers\SabnzbdQueueTimeConverter.cs" />
+    <Compile Include="Helpers\SabnzbdPriorityTypeConverter.cs" />
     <Compile Include="Jobs\CheckpointJob.cs" />
     <Compile Include="Model\DownloadClientType.cs" />
     <Compile Include="Instrumentation\LogDbContext.cs" />
