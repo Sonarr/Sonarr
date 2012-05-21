@@ -69,7 +69,24 @@ namespace NzbDrone.Common
                 exceptionData.Message = logEvent.FormattedMessage;
                 exceptionData.UserId = EnvironmentProvider.UGuid.ToString().Replace("-", string.Empty);
 
-                return ExceptronDriver.SubmitException(exceptionData);
+                if (logEvent.Level <= LogLevel.Info)
+                {
+                    exceptionData.Severity = ExceptionSeverity.None;
+                }
+                else if (logEvent.Level <= LogLevel.Warn)
+                {
+                    exceptionData.Severity = ExceptionSeverity.Warning;
+                }
+                else if (logEvent.Level <= LogLevel.Error)
+                {
+                    exceptionData.Severity = ExceptionSeverity.Error;
+                }
+                else if (logEvent.Level <= LogLevel.Fatal)
+                {
+                    exceptionData.Severity = ExceptionSeverity.Fatal;
+                }
+
+                return ExceptronDriver.SubmitException(exceptionData).RefId;
             }
             catch (Exception e)
             {
