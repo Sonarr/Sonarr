@@ -263,7 +263,7 @@ namespace NzbDrone.Core.Providers
             searchResult.Successes = new List<int>();
 
             foreach (var episodeParseResult in reports.OrderByDescending(c => c.Quality)
-                                                        .ThenBy(c => c.EpisodeNumbers.Min())
+                                                        .ThenBy(c => c.EpisodeNumbers.MinOrDefault())
                                                         .ThenBy(c => c.Age))
             {
                 try
