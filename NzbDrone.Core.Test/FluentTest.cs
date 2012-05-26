@@ -219,5 +219,31 @@ namespace NzbDrone.Core.Test
             var result = new System.Text.UTF8Encoding().GetBytes(resultString);
             result.Length.Should().Be(11);
         }
+
+        [Test]
+        public void MinOrDefault_should_return_zero_when_collection_is_empty()
+        {
+            //Setup
+
+
+            //Act
+            var result = (new List<int>()).MinOrDefault();
+
+            //Resolve
+            result.Should().Be(0);
+        }
+
+        [Test]
+        public void MinOrDefault_should_return_max_when_collection_is_not_empty()
+        {
+            //Setup
+            var list = new List<int> { 6, 4, 5, 3, 8, 10 };
+
+            //Act
+            var result = list.MinOrDefault();
+
+            //Resolve
+            result.Should().Be(3);
+        }
     }
 }

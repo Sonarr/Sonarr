@@ -57,7 +57,7 @@ namespace NzbDrone.Core
         {
             var intList = ints.ToList();
 
-            if (intList.Count() == 0)
+            if (!intList.Any())
                 return 0;
 
             return intList.Max();
@@ -141,6 +141,16 @@ namespace NzbDrone.Core
             }
 
             return String.Format("{0:N" + precision + "} {1}", size, suffix);
+        }
+
+        public static int MinOrDefault(this IEnumerable<int> ints)
+        {
+            var intsList = ints.ToList();
+
+            if (!intsList.Any())
+                return 0;
+
+            return intsList.Min();
         }
     }
 }
