@@ -117,5 +117,19 @@ namespace NzbDrone.Core.Providers
             logger.Info("Forcing Download of: {0}", item.ReportTitle);
             _downloadProvider.DownloadReport(parseResult);
         }
+
+        public virtual void Cleanup()
+        {
+            var ids = _database.Fetch<int>("SELECT Id FROM SearchHistory WHERE SearchTime > @0", DateTime.Now.AddDays(7));
+
+            if (ids.Any())
+            {
+                logger.Trace("Deleting old search items");
+                _database.Execute("DELETE FROM SearchHistoryItems WHERE SearchHistoryId IN (@0)", ids);
+
+                logger.Trace("Deleting old search results");
+                _database.Execute("DELETE FROM SearchHistory WHERE Id IN (@0)", ids);
+            }
+        }
     }
 }

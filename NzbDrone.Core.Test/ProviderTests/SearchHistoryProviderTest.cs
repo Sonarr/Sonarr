@@ -66,6 +66,46 @@ namespace NzbDrone.Core.Test.ProviderTests
             i.SearchError = ReportRejectionType.None;
         }
 
+        private void WithExpiredHistory()
+        {
+            var history = Builder<SearchHistory>.CreateListOfSize(10)
+                    .All()
+                    .With(h => h.SearchTime = DateTime.Now.AddDays(10))
+                    .Build();
+
+            foreach(var searchHistory in history)
+            {
+                var items = Builder<SearchHistoryItem>.CreateListOfSize(10)
+                        .All()
+                        .With(i => i.Id == searchHistory.Id)
+                        .Build();
+
+                Db.InsertMany(items);
+            }
+
+            Db.InsertMany(history);
+        }
+
+        private void WithValidHistory()
+        {
+            var history = Builder<SearchHistory>.CreateListOfSize(10)
+                    .All()
+                    .With(h => h.SearchTime = DateTime.Now)
+                    .Build();
+
+            foreach (var searchHistory in history)
+            {
+                var items = Builder<SearchHistoryItem>.CreateListOfSize(10)
+                        .All()
+                        .With(i => i.Id == searchHistory.Id)
+                        .Build();
+
+                Db.InsertMany(items);
+            }
+
+            Db.InsertMany(history);
+        }
+
         [Test]
         public void Add_should_add_history_and_history_items()
         {
@@ -262,6 +302,55 @@ namespace NzbDrone.Core.Test.ProviderTests
             Mocker.Resolve<SearchHistoryProvider>().ForceDownload(items.First().Id);
 
             Mocker.GetMock<DownloadProvider>().Verify(v => v.DownloadReport(It.IsAny<EpisodeParseResult>()), Times.Once());
+        }
+
+        [Test]
+        public void Cleanup_should_not_blowup_if_there_is_nothing_to_delete()
+        {
+            WithRealDb();
+
+            Mocker.Resolve<SearchHistoryProvider>().Cleanup();
+            Db.Fetch<SearchHistory>().Should().HaveCount(0);
+        }
+
+        [Test]
+        public void Cleanup_should_delete_searchHistory_older_than_1_week()
+        {
+            WithRealDb();
+            WithExpiredHistory();
+
+            Mocker.Resolve<SearchHistoryProvider>().Cleanup();
+            Db.Fetch<SearchHistory>().Should().HaveCount(0);
+        }
+
+        [Test]
+        public void Cleanup_should_delete_searchHistoryItems_older_than_1_week()
+        {
+            WithRealDb();
+            WithExpiredHistory();
+
+            Mocker.Resolve<SearchHistoryProvider>().Cleanup();
+            Db.Fetch<SearchHistoryItem>().Should().HaveCount(0);
+        }
+
+        [Test]
+        public void Cleanup_should_not_delete_searchHistory_younger_than_1_week()
+        {
+            WithRealDb();
+            WithValidHistory();
+
+            Mocker.Resolve<SearchHistoryProvider>().Cleanup();
+            Db.Fetch<SearchHistory>().Should().HaveCount(10);
+        }
+
+        [Test]
+        public void Cleanup_should_not_delete_searchHistoryItems_younger_than_1_week()
+        {
+            WithRealDb();
+            WithValidHistory();
+
+            Mocker.Resolve<SearchHistoryProvider>().Cleanup();
+            Db.Fetch<SearchHistoryItem>().Should().HaveCount(100);
         }
     }
 }
