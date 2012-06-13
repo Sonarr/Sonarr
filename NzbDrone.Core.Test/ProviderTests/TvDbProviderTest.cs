@@ -91,13 +91,14 @@ namespace NzbDrone.Core.Test.ProviderTests
             }
 
             //assert
-            seasonsNumbers.Should().HaveCount(8);
+            seasonsNumbers.Should().HaveCount(9);
             seasons[1].Should().HaveCount(23);
             seasons[2].Should().HaveCount(19);
             seasons[3].Should().HaveCount(16);
             seasons[4].Should().HaveCount(20);
             seasons[5].Should().HaveCount(18);
             seasons[6].Should().HaveCount(19);
+            seasons[7].Should().HaveCount(18);
 
             foreach (var season in seasons)
             {
