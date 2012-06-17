@@ -111,7 +111,7 @@ namespace NzbDrone.Common
                                       ApplicationVersion = new EnvironmentProvider().Version.ToString()
                                   };
 
-            ExceptronDriver.ThrowsExceptions = !EnvironmentProvider.IsProduction;
+            ExceptronDriver.ClientConfiguration.ThrowsExceptions = !EnvironmentProvider.IsProduction;
             ExceptronDriver.Enviroment = EnvironmentProvider.IsProduction ? "Prod" : "Dev";
         }
 
