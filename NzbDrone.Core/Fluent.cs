@@ -55,6 +55,9 @@ namespace NzbDrone.Core
 
         public static int MaxOrDefault(this IEnumerable<int> ints)
         {
+            if (ints == null)
+                return 0;
+
             var intList = ints.ToList();
 
             if (!intList.Any())

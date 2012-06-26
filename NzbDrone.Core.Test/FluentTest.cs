@@ -193,6 +193,19 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
+        public void MaxOrDefault_should_return_zero_when_collection_is_null()
+        {
+            //Setup
+            List<int> list = null;
+
+            //Act
+            var result = list.MaxOrDefault();
+
+            //Resolve
+            result.Should().Be(0);
+        }
+
+        [Test]
         public void Truncate_should_truncate_strings_to_max_specified_number_of_bytes()
         {
             //Setup
@@ -234,7 +247,7 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
-        public void MinOrDefault_should_return_max_when_collection_is_not_empty()
+        public void MinOrDefault_should_return_min_when_collection_is_not_empty()
         {
             //Setup
             var list = new List<int> { 6, 4, 5, 3, 8, 10 };
@@ -244,6 +257,19 @@ namespace NzbDrone.Core.Test
 
             //Resolve
             result.Should().Be(3);
+        }
+
+        [Test]
+        public void MinOrDefault_should_return_zero_when_collection_is_null()
+        {
+            //Setup
+            List<int> list = null;
+
+            //Act
+            var result = list.MinOrDefault();
+
+            //Resolve
+            result.Should().Be(0);
         }
     }
 }
