@@ -145,6 +145,9 @@ namespace NzbDrone.Core
 
         public static int MinOrDefault(this IEnumerable<int> ints)
         {
+            if (ints == null)
+                return 0;
+
             var intsList = ints.ToList();
 
             if (!intsList.Any())
