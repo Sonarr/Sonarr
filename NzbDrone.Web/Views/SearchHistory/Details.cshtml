@@ -21,11 +21,11 @@
                 .AddColumn(new Column().DisplayAndSort("Quality", "QualityInt").Title("Quality").Width("80px"))
                 .AddColumn(new Column().DataProperty("SearchError").Title("Error"))
                 .AddColumn(new Column().DataProperty("return actionColumn(source, type, val);", true).Sortable(false).Searchable(false))
-                .AddColumn(new Column().DataProperty("Details").RenderFunction("return getDetails(row, val);").Visible(false))
+                .AddColumn(new Column().DataProperty("Details").Sortable(false).Visible(false).RenderFunction("return details(row);"))
                 .AddSorting(3, SortDirection.Desc))
     
     <script type="text/javascript">
-        function getDetails(row, val) {
+        function details(row) {
             var result = "<a href=\"" + row.aData["NzbInfoUrl"] + "\">Nzb Info</a><br/>" +
                 "<b>Proper: </b>" + row.aData["Proper"] + " <br/>" +
                 "<b>Age: </b>" + row.aData["Age"] + " days<br/>" +
