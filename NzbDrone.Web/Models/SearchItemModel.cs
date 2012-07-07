@@ -5,6 +5,11 @@ namespace NzbDrone.Web.Models
 {
     public class SearchItemModel
     {
+        public SearchItemModel()
+        {
+            Details = "";
+        }
+
         public int Id { get; set; }
         public string ReportTitle { get; set; }
         public string Indexer { get; set; }
