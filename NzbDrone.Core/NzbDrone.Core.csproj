@@ -248,6 +248,7 @@
     <Compile Include="Helpers\SortHelper.cs" />
     <Compile Include="Helpers\SabnzbdPriorityTypeConverter.cs" />
     <Compile Include="Jobs\CheckpointJob.cs" />
+    <Compile Include="Jobs\PastWeekBacklogSearchJob.cs" />
     <Compile Include="Jobs\SearchHistoryCleanupJob.cs" />
     <Compile Include="Model\DownloadClientType.cs" />
     <Compile Include="Instrumentation\LogDbContext.cs" />

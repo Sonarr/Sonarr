@@ -9,6 +9,7 @@
         <li>@Ajax.ActionLink("Start RSS Sync", "RssSync", "Command", null, null, new { Title = "Check for newly released downloads" })</li>
         <li>@Ajax.ActionLink("Start Backlog Search", "BacklogSearch", "Command",null, null, new { title = "Search and download all missing episodes"})</li>
         <li>@Ajax.ActionLink("Start Recent Backlog Search", "RecentBacklogSearch", "Command", null, null, new { title = "Search and download missing episodes that aired in the last 30 days" })</li>
+        <li>@Ajax.ActionLink("Force Past Week Backlog Search", "PastWeekBacklogSearch", "Command", null, null, new { title = "Search and download missing episodes that aired in the last 7 days (Ignores backlog search settings)" })</li>
     </ul>
 }
 

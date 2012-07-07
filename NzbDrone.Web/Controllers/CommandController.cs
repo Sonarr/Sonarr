@@ -52,6 +52,12 @@ namespace NzbDrone.Web.Controllers
             return JsonNotificationResult.Queued("Recent backlog search");
         }
 
+        public JsonResult PastWeekBacklogSearch()
+        {
+            _jobProvider.QueueJob(typeof(PastWeekBacklogSearchJob));
+            return JsonNotificationResult.Queued("Past Week backlog search");
+        }
+
         public JsonResult ForceRefresh(int seriesId)
         {
             _jobProvider.QueueJob(typeof(UpdateInfoJob), seriesId);
