@@ -141,6 +141,7 @@ namespace NzbDrone.Core
             Kernel.Bind<IJob>().To<RecentBacklogSearchJob>().InSingletonScope();
             Kernel.Bind<IJob>().To<CheckpointJob>().InSingletonScope();
             Kernel.Bind<IJob>().To<SearchHistoryCleanupJob>().InSingletonScope();
+            Kernel.Bind<IJob>().To<PastWeekBacklogSearchJob>().InSingletonScope();
 
             Kernel.Get<JobProvider>().Initialize();
             Kernel.Get<WebTimer>().StartTimer(30);
