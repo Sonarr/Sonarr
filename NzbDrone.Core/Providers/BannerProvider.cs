@@ -81,5 +81,22 @@ namespace NzbDrone.Core.Providers
             }
             return true;
         }
+
+        public virtual void Download(string remotePath, string filename)
+        {
+            var url = BANNER_URL_PREFIX + remotePath;
+
+            try
+            {
+                _httpProvider.DownloadFile(url, filename);
+                logger.Trace("Successfully download banner from '{0}' to '{1}'", url, filename);
+            }
+            catch (Exception ex)
+            {
+                var message = String.Format("Failed to download Banner from '{0}' to '{1}'", url, filename);
+                logger.DebugException(message, ex);
+                throw;
+            }
+        }
     }
 }

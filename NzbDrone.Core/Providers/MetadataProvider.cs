@@ -16,13 +16,15 @@ namespace NzbDrone.Core.Providers
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IDatabase _database;
 
-        private IEnumerable<MetadataBase> _metadataBases;
+        private IEnumerable<MetadataBase> _metadataProviders;
+        private readonly TvDbProvider _tvDbProvider;
 
         [Inject]
-        public MetadataProvider(IDatabase database, IEnumerable<MetadataBase> metadataBases)
+        public MetadataProvider(IDatabase database, IEnumerable<MetadataBase> metadataProviders, TvDbProvider tvDbProvider)
         {
             _database = database;
-            _metadataBases = metadataBases;
+            _metadataProviders = metadataProviders;
+            _tvDbProvider = tvDbProvider;
         }
 
         public MetadataProvider()
@@ -30,12 +32,12 @@ namespace NzbDrone.Core.Providers
 
         }
 
-        public virtual List<MetabaseDefinition> All()
+        public virtual List<MetadataDefinition> All()
         {
-            return _database.Fetch<MetabaseDefinition>();
+            return _database.Fetch<MetadataDefinition>();
         }
 
-        public virtual void SaveSettings(MetabaseDefinition settings)
+        public virtual void SaveSettings(MetadataDefinition settings)
         {
             if (settings.Id == 0)
             {
@@ -50,31 +52,31 @@ namespace NzbDrone.Core.Providers
             }
         }
 
-        public virtual MetabaseDefinition GetSettings(Type type)
+        public virtual MetadataDefinition GetSettings(Type type)
         {
-            return _database.SingleOrDefault<MetabaseDefinition>("WHERE MetadataProviderType = @0", type.ToString());
+            return _database.SingleOrDefault<MetadataDefinition>("WHERE MetadataProviderType = @0", type.ToString());
         }
 
-        public virtual IList<MetadataBase> GetEnabledExternalNotifiers()
+        public virtual IList<MetadataBase> GetEnabledMetabaseProviders()
         {
             var all = All();
-            return _metadataBases.Where(i => all.Exists(c => c.MetadataProviderType == i.GetType().ToString() && c.Enable)).ToList();
+            return _metadataProviders.Where(i => all.Exists(c => c.MetadataProviderType == i.GetType().ToString() && c.Enable)).ToList();
         }
 
-        public virtual void InitializeNotifiers(IList<MetadataBase> notifiers)
+        public virtual void Initialize(IList<MetadataBase> metabaseProviders)
         {
-            Logger.Debug("Initializing notifiers. Count {0}", notifiers.Count);
+            Logger.Debug("Initializing metabases. Count {0}", metabaseProviders.Count);
 
-            _metadataBases = notifiers;
+            _metadataProviders = metabaseProviders;
 
             var currentNotifiers = All();
 
-            foreach (var notificationProvider in notifiers)
+            foreach (var notificationProvider in metabaseProviders)
             {
                 MetadataBase metadataProviderLocal = notificationProvider;
                 if (!currentNotifiers.Exists(c => c.MetadataProviderType == metadataProviderLocal.GetType().ToString()))
                 {
-                    var settings = new MetabaseDefinition
+                    var settings = new MetadataDefinition
                                        {
                                            Enable = false,
                                            MetadataProviderType = metadataProviderLocal.GetType().ToString(),
@@ -86,35 +88,23 @@ namespace NzbDrone.Core.Providers
             }
         }
 
-        public virtual void OnGrab(string message)
+        public virtual void CreateForSeries(Series series)
         {
-            foreach (var notifier in _metadataBases.Where(i => GetSettings(i.GetType()).Enable))
+            var tvDbSeries = _tvDbProvider.GetSeries(series.SeriesId, false, true);
+
+            foreach (var provider in _metadataProviders.Where(i => GetSettings(i.GetType()).Enable))
             {
-                notifier.OnGrab(message);
+                provider.ForSeries(series, tvDbSeries);
             }
         }
 
-        public virtual void OnDownload(string message, Series series)
+        public virtual void CreateForEpisodeFile(EpisodeFile episodeFile)
         {
-            foreach (var notifier in _metadataBases.Where(i => GetSettings(i.GetType()).Enable))
-            {
-                notifier.OnDownload(message, series);
-            }
-        }
+            var tvDbSeries = _tvDbProvider.GetSeries(episodeFile.SeriesId, true, true);
 
-        public virtual void OnRename(string message, Series series)
-        {
-            foreach (var notifier in _metadataBases.Where(i => GetSettings(i.GetType()).Enable))
+            foreach (var provider in _metadataProviders.Where(i => GetSettings(i.GetType()).Enable))
             {
-                notifier.OnRename(message, series);
-            }
-        }
-
-        public virtual void AfterRename(string message, Series series)
-        {
-            foreach (var notifier in _metadataBases.Where(i => GetSettings(i.GetType()).Enable))
-            {
-                notifier.AfterRename(message, series);
+                provider.ForEpisodeFile(episodeFile, tvDbSeries);
             }
         }
     }

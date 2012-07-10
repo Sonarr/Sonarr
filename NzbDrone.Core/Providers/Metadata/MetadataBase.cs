@@ -1,8 +1,10 @@
 ﻿using System;
 using NLog;
+using NzbDrone.Common;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
+using TvdbLib.Data;
 
 namespace NzbDrone.Core.Providers.Metadata
 {
@@ -10,43 +12,42 @@ namespace NzbDrone.Core.Providers.Metadata
     {
         protected readonly Logger _logger;
         protected readonly ConfigProvider _configProvider;
+        protected readonly DiskProvider _diskProvider;
+        protected readonly BannerProvider _bannerProvider;
+        protected readonly EpisodeProvider _episodeProvider;
 
-        protected MetadataBase(ConfigProvider configProvider)
+        protected MetadataBase(ConfigProvider configProvider, DiskProvider diskProvider,
+                                BannerProvider bannerProvider, EpisodeProvider episodeProvider)
         {
             _configProvider = configProvider;
+            _diskProvider = diskProvider;
+            _bannerProvider = bannerProvider;
+            _episodeProvider = episodeProvider;
             _logger = LogManager.GetLogger(GetType().ToString());
         }
 
         /// <summary>
-        ///   Gets the name for the notification provider
+        ///   Gets the name for the metabase provider
         /// </summary>
         public abstract string Name { get; }
 
         /// <summary>
-        ///   Performs the on grab action
+        ///   Creates metadata for a series
         /// </summary>
-        /// <param name = "message">The message to send to the receiver</param>
-        public abstract void OnGrab(string message);
+        /// <param name = "series">The series to create the metadata for</param>
+        /// <param name = "tvDbSeries">Series information from TheTvDb</param>
+        public abstract void ForSeries(Series series, TvdbSeries tvDbSeries);
 
         /// <summary>
-        ///   Performs the on download action
+        ///   Creates metadata for the episode file
         /// </summary>
-        /// <param name = "message">The message to send to the receiver</param>
-        /// <param name = "series">The Series for the new download</param>
-        public abstract void OnDownload(string message, Series series);
+        /// <param name = "episodeFile">The episode file to create the metadata</param>
+        /// <param name = "tvDbSeries">Series information from TheTvDb</param>
+        public abstract void ForEpisodeFile(EpisodeFile episodeFile, TvdbSeries tvDbSeries);
 
-        /// <summary>
-        ///   Performs the on rename action
-        /// </summary>
-        /// <param name = "message">The message to send to the receiver</param>
-        /// <param name = "series">The Series for the new download</param>
-        public abstract void OnRename(string message, Series series);
-
-        /// <summary>
-        ///   Performs the after rename action, this will be handled after all renaming for episode/season/series
-        /// </summary>
-        /// <param name = "message">The message to send to the receiver</param>
-        /// <param name = "series">The Series for the new download</param>
-        public abstract void AfterRename(string message, Series series);
+        public virtual string GetEpisodeGuideUrl(int seriesId)
+        {
+            return String.Format("http://www.thetvdb.com/api/{0}/series/{1}/all/en.zip", TvDbProvider.TVDB_APIKEY, seriesId);
+        }
     }
 }

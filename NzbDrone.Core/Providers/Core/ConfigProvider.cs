@@ -501,6 +501,27 @@ namespace NzbDrone.Core.Providers.Core
             set { SetValue("PlexPassword", value); }
         }
 
+        public virtual Boolean MetadataEnabled
+        {
+            get { return GetValueBoolean("MetadataEnabled"); }
+
+            set { SetValue("MetadataEnabled", value); }
+        }
+
+        public virtual Boolean MetadataXbmcEnabled
+        {
+            get { return GetValueBoolean("MetadataXbmcEnabled"); }
+
+            set { SetValue("MetadataXbmcEnabled", value); }
+        }
+
+        public virtual Boolean MetadataUseBanners
+        {
+            get { return GetValueBoolean("MetadataUseBanners"); }
+
+            set { SetValue("MetadataUseBanners", value); }
+        }
+
         private string GetValue(string key)
         {
             return GetValue(key, String.Empty);

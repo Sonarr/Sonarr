@@ -2,9 +2,9 @@
 
 namespace NzbDrone.Core.Repository
 {
-    [TableName("MetabaseDefinitions")]
+    [TableName("MetadataDefinitions")]
     [PrimaryKey("Id", autoIncrement = true)]
-    public class MetabaseDefinition
+    public class MetadataDefinition
     {
         public int Id { get; set; }
 
