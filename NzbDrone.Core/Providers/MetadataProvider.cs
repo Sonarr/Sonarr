@@ -8,6 +8,7 @@ using NzbDrone.Core.Providers.ExternalNotification;
 using NzbDrone.Core.Providers.Metadata;
 using NzbDrone.Core.Repository;
 using PetaPoco;
+using TvdbLib.Data;
 
 namespace NzbDrone.Core.Providers
 {
@@ -92,6 +93,11 @@ namespace NzbDrone.Core.Providers
         {
             var tvDbSeries = _tvDbProvider.GetSeries(series.SeriesId, false, true);
 
+            CreateForSeries(series, tvDbSeries);
+        }
+
+        public virtual void CreateForSeries(Series series, TvdbSeries tvDbSeries)
+        {
             foreach (var provider in _metadataProviders.Where(i => GetSettings(i.GetType()).Enable))
             {
                 provider.ForSeries(series, tvDbSeries);

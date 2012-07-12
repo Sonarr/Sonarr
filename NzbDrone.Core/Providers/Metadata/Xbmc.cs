@@ -14,9 +14,9 @@ using TvdbLib.Data.Banner;
 
 namespace NzbDrone.Core.Providers.Metadata
 {
-    public abstract class Xbmc : MetadataBase
+    public class Xbmc : MetadataBase
     {
-        protected readonly Logger _logger;
+        protected readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         public Xbmc(ConfigProvider configProvider, DiskProvider diskProvider, BannerProvider bannerProvider, EpisodeProvider episodeProvider)
             : base(configProvider, diskProvider, bannerProvider, episodeProvider)
@@ -71,22 +71,22 @@ namespace NzbDrone.Core.Providers.Metadata
             _logger.Debug("Downloading fanart for: {0}", series.Title);
             _bannerProvider.Download(tvDbSeries.FanartPath, Path.Combine(series.Path, "fanart.jpg"));
 
-            if (!_configProvider.MetadataUseBanners)
+            if (_configProvider.MetadataUseBanners)
             {
-                _logger.Debug("Downloading series thumbnail for: {0}", series.Title);
-                _bannerProvider.Download(tvDbSeries.PosterPath, "folder.jpg");
+                _logger.Debug("Downloading series banner for: {0}", series.Title);
+                _bannerProvider.Download(tvDbSeries.BannerPath, Path.Combine(series.Path, "folder.jpg"));
 
-                _logger.Debug("Downloading Season posters for {0}", series.Title);
-                DownloadSeasonThumbnails(series, tvDbSeries, TvdbSeasonBanner.Type.season);
+                _logger.Debug("Downloading Season banners for {0}", series.Title);
+                DownloadSeasonThumbnails(series, tvDbSeries, TvdbSeasonBanner.Type.seasonwide);
             }
 
             else
             {
-                _logger.Debug("Downloading series banner for: {0}", series.Title);
-                _bannerProvider.Download(tvDbSeries.BannerPath, "folder.jpg");
+                _logger.Debug("Downloading series thumbnail for: {0}", series.Title);
+                _bannerProvider.Download(tvDbSeries.PosterPath, Path.Combine(series.Path, "folder.jpg"));
 
-                _logger.Debug("Downloading Season banners for {0}", series.Title);
-                DownloadSeasonThumbnails(series, tvDbSeries, TvdbSeasonBanner.Type.seasonwide);
+                _logger.Debug("Downloading Season posters for {0}", series.Title);
+                DownloadSeasonThumbnails(series, tvDbSeries, TvdbSeasonBanner.Type.season);
             }
         }
 
@@ -114,25 +114,33 @@ namespace NzbDrone.Core.Providers.Metadata
             }
             
             _logger.Debug("Downloading episode thumbnail for: {0}", episodeFile.EpisodeFileId);
-            _bannerProvider.Download(episodeFileThumbnail.BannerPath, "folder.jpg");
+            _bannerProvider.Download(episodeFileThumbnail.BannerPath, episodeFile.Path.Replace(Path.GetExtension(episodeFile.Path), ".tbn"));
 
             _logger.Debug("Generating filename.nfo for: {0}", episodeFile.EpisodeFileId);
-            var sb = new StringBuilder();
-            var xws = new XmlWriterSettings();
-            xws.OmitXmlDeclaration = false;
-            xws.Indent = false;
 
-            using (var xw = XmlWriter.Create(sb, xws))
+            var xmlResult = String.Empty;
+            foreach (var episode in episodes)
             {
-                var doc = new XDocument();
+                var sb = new StringBuilder();
+                var xws = new XmlWriterSettings();
+                xws.OmitXmlDeclaration = false;
+                xws.Indent = false;
 
-                foreach (var episode in episodes)
+                using (var xw = XmlWriter.Create(sb, xws))
                 {
-                    var tvdbEpisode =
-                            tvDbSeries.Episodes.FirstOrDefault(
-                                                               e =>
-                                                               e.SeasonNumber == episode.SeasonNumber &&
-                                                               e.EpisodeNumber == episode.EpisodeNumber);
+                    var doc = new XDocument();
+                    var tvdbEpisode = tvDbSeries.Episodes.FirstOrDefault(
+                                                                e =>
+                                                                e.Id == episode.TvDbEpisodeId);
+
+                    if (tvdbEpisode == null)
+                    {
+                        _logger.Debug("Looking up by TvDbEpisodeId failed, trying to match via season/episode number combination");
+                        tvdbEpisode = tvDbSeries.Episodes.FirstOrDefault(
+                                                                            e =>
+                                                                            e.SeasonNumber == episode.SeasonNumber &&
+                                                                            e.EpisodeNumber == episode.EpisodeNumber);
+                    }
 
                     if (tvdbEpisode == null)
                     {
@@ -161,7 +169,7 @@ namespace NzbDrone.Core.Providers.Metadata
 
                         details.Add(new XElement("actor",
                                                 new XElement("name", actor)
-                                           ));
+                                            ));
                     }
 
                     foreach(var actor in tvDbSeries.TvdbActors)
@@ -170,17 +178,17 @@ namespace NzbDrone.Core.Providers.Metadata
                                                 new XElement("name", actor.Name),
                                                 new XElement("role", actor.Role),
                                                 new XElement("thumb", actor.ActorImage)
-                                           ));
+                                            ));
                     }
 
                     doc.Add(details);
                     doc.Save(xw);
                 }
+                xmlResult += sb.ToString();
             }
-
-            var filename = Path.GetFileNameWithoutExtension(episodeFile.Path) + ".nfo";
+            var filename = episodeFile.Path.Replace(Path.GetExtension(episodeFile.Path), ".nfo");
             _logger.Debug("Saving episodedetails to: {0}", filename);
-            _diskProvider.WriteAllText(filename, sb.ToString());
+            _diskProvider.WriteAllText(filename, xmlResult);
         }
 
         private void DownloadSeasonThumbnails(Series series, TvdbSeries tvDbSeries, TvdbSeasonBanner.Type bannerType)

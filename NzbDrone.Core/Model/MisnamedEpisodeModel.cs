@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace NzbDrone.Core.Model.Metadata
+namespace NzbDrone.Core.Model
 {
     public class MisnamedEpisodeModel
     {
