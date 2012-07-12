@@ -28,9 +28,9 @@ namespace NzbDrone.Core.Providers.Metadata
             get { return "XBMC"; }
         }
 
-        public override void ForSeries(Series series, TvdbSeries tvDbSeries)
+        public override void CreateForSeries(Series series, TvdbSeries tvDbSeries)
         {
-            //Create tvshow.nfo, fanart.jpg, folder.jpg and searon##.tbn
+            //Create tvshow.nfo, fanart.jpg, folder.jpg and season##.tbn
             var episodeGuideUrl = GetEpisodeGuideUrl(series.SeriesId);
 
             _logger.Debug("Generating tvshow.nfo for: {0}", series.Title);
@@ -90,10 +90,9 @@ namespace NzbDrone.Core.Providers.Metadata
             }
         }
 
-        public override void ForEpisodeFile(EpisodeFile episodeFile, TvdbSeries tvDbSeries)
+        public override void CreateForEpisodeFile(EpisodeFile episodeFile, TvdbSeries tvDbSeries)
         {
-            //Download filename.tbn and filename.nfo
-            //Use BannerPath for Thumbnail
+            //Create filename.tbn and filename.nfo
             var episodes = _episodeProvider.GetEpisodesByFileId(episodeFile.EpisodeFileId);
 
             if (!episodes.Any())
@@ -189,6 +188,37 @@ namespace NzbDrone.Core.Providers.Metadata
             var filename = episodeFile.Path.Replace(Path.GetExtension(episodeFile.Path), ".nfo");
             _logger.Debug("Saving episodedetails to: {0}", filename);
             _diskProvider.WriteAllText(filename, xmlResult);
+        }
+
+        public override void RemoveForSeries(Series series)
+        {
+            //Remove tvshow.nfo, fanart.jpg, folder.jpg and season##.tbn
+            _logger.Debug("Deleting series metadata for: ", series.Title);
+
+            _diskProvider.DeleteFile(Path.Combine(series.Path, "tvshow.nfo"));
+            _diskProvider.DeleteFile(Path.Combine(series.Path, "fanart.jpg"));
+            _diskProvider.DeleteFile(Path.Combine(series.Path, "fanart.jpg"));
+            
+            foreach (var file in _diskProvider.GetFiles(series.Path, SearchOption.TopDirectoryOnly))
+            {
+                if (Path.GetExtension(file) != ".tbn")
+                    continue;
+
+                if (!Path.GetFileName(file).StartsWith("season"))
+                    continue;
+
+                _logger.Debug("Deleting season thumbnail: {0}", file);
+                _diskProvider.DeleteFile(file);
+            }
+        }
+
+        public override void RemoveForEpisodeFile(EpisodeFile episodeFile)
+        {
+            //Remove filename.tbn and filename.nfo
+            _logger.Debug("Deleting episode metadata for: {0}", episodeFile);
+
+            _diskProvider.DeleteFile(episodeFile.Path.Replace(Path.GetExtension(episodeFile.Path), ".nfo"));
+            _diskProvider.DeleteFile(episodeFile.Path.Replace(Path.GetExtension(episodeFile.Path), ".tbn"));
         }
 
         private void DownloadSeasonThumbnails(Series series, TvdbSeries tvDbSeries, TvdbSeasonBanner.Type bannerType)

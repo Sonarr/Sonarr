@@ -100,7 +100,7 @@ namespace NzbDrone.Core.Providers
         {
             foreach (var provider in _metadataProviders.Where(i => GetSettings(i.GetType()).Enable))
             {
-                provider.ForSeries(series, tvDbSeries);
+                provider.CreateForSeries(series, tvDbSeries);
             }
         }
 
@@ -108,10 +108,60 @@ namespace NzbDrone.Core.Providers
         {
             var tvDbSeries = _tvDbProvider.GetSeries(episodeFile.SeriesId, true, true);
 
+            CreateForEpisodeFile(episodeFile, tvDbSeries);
+        }
+
+        public virtual void CreateForEpisodeFile(EpisodeFile episodeFile, TvdbSeries tvDbSeries)
+        {
             foreach (var provider in _metadataProviders.Where(i => GetSettings(i.GetType()).Enable))
             {
-                provider.ForEpisodeFile(episodeFile, tvDbSeries);
+                provider.CreateForEpisodeFile(episodeFile, tvDbSeries);
             }
+        }
+
+        public virtual void CreateForEpisodeFiles(List<EpisodeFile> episodeFiles)
+        {
+            var tvDbSeries = _tvDbProvider.GetSeries(episodeFiles.First().SeriesId, true, true);
+
+            foreach(var episodeFile in episodeFiles)
+            {
+                foreach (var provider in _metadataProviders.Where(i => GetSettings(i.GetType()).Enable))
+                {
+                    provider.CreateForEpisodeFile(episodeFile, tvDbSeries);
+                }
+            }
+        }
+
+        public virtual void RemoveForSeries(Series series)
+        {
+            foreach (var provider in _metadataProviders.Where(i => GetSettings(i.GetType()).Enable))
+            {
+                provider.RemoveForSeries(series);
+            }
+        }
+
+        public virtual void RemoveForEpisodeFile(EpisodeFile episodeFile)
+        {
+            foreach (var provider in _metadataProviders.Where(i => GetSettings(i.GetType()).Enable))
+            {
+                provider.RemoveForEpisodeFile(episodeFile);
+            }
+        }
+
+        public virtual void RemoveForEpisodeFiles(List<EpisodeFile> episodeFiles)
+        {
+            foreach (var episodeFile in episodeFiles)
+            {
+                foreach (var provider in _metadataProviders.Where(i => GetSettings(i.GetType()).Enable))
+                {
+                    provider.RemoveForEpisodeFile(episodeFile);
+                }
+            }
+        }
+
+        public virtual void RenameForEpisodeFile(EpisodeFile episodeFile)
+        {
+            
         }
     }
 }

@@ -78,27 +78,27 @@ namespace NzbDrone.Core.Test.ProviderTests.Metadata
         [Test]
         public void should_not_blowup()
         {
-            Mocker.Resolve<Xbmc>().ForSeries(series, tvdbSeries);
+            Mocker.Resolve<Xbmc>().CreateForSeries(series, tvdbSeries);
         }
 
         [Test]
         public void should_call_diskprovider_writeAllText()
         {
-            Mocker.Resolve<Xbmc>().ForSeries(series, tvdbSeries);
+            Mocker.Resolve<Xbmc>().CreateForSeries(series, tvdbSeries);
             Mocker.GetMock<DiskProvider>().Verify(v => v.WriteAllText(Path.Combine(series.Path, "tvshow.nfo"), It.IsAny<string>()), Times.Once());
         }
 
         [Test]
         public void should_download_fanart()
         {
-            Mocker.Resolve<Xbmc>().ForSeries(series, tvdbSeries);
+            Mocker.Resolve<Xbmc>().CreateForSeries(series, tvdbSeries);
             Mocker.GetMock<BannerProvider>().Verify(v => v.Download(tvdbSeries.FanartPath, Path.Combine(series.Path, "fanart.jpg")), Times.Once());
         }
 
         [Test]
         public void should_download_poster_when_useBanners_is_false()
         {
-            Mocker.Resolve<Xbmc>().ForSeries(series, tvdbSeries);
+            Mocker.Resolve<Xbmc>().CreateForSeries(series, tvdbSeries);
             Mocker.GetMock<BannerProvider>().Verify(v => v.Download(tvdbSeries.PosterPath, Path.Combine(series.Path, "folder.jpg")), Times.Once());
         }
 
@@ -106,14 +106,14 @@ namespace NzbDrone.Core.Test.ProviderTests.Metadata
         public void should_download_banner_when_useBanners_is_true()
         {
             WithUseBanners();
-            Mocker.Resolve<Xbmc>().ForSeries(series, tvdbSeries);
+            Mocker.Resolve<Xbmc>().CreateForSeries(series, tvdbSeries);
             Mocker.GetMock<BannerProvider>().Verify(v => v.Download(tvdbSeries.BannerPath, Path.Combine(series.Path, "folder.jpg")), Times.Once());
         }
 
         [Test]
         public void should_download_season_poster_when_useBanners_is_false()
         {
-            Mocker.Resolve<Xbmc>().ForSeries(series, tvdbSeries);
+            Mocker.Resolve<Xbmc>().CreateForSeries(series, tvdbSeries);
             Mocker.GetMock<BannerProvider>().Verify(v => v.Download(It.Is<string>(s => !s.Contains("banners")), It.IsRegex(@"season\d{2}\.tbn")), Times.Exactly(2));
         }
 
@@ -121,7 +121,7 @@ namespace NzbDrone.Core.Test.ProviderTests.Metadata
         public void should_download_season_banner_when_useBanners_is_true()
         {
             WithUseBanners();
-            Mocker.Resolve<Xbmc>().ForSeries(series, tvdbSeries);
+            Mocker.Resolve<Xbmc>().CreateForSeries(series, tvdbSeries);
             Mocker.GetMock<BannerProvider>().Verify(v => v.Download(It.Is<string>(s => s.Contains("banners")), It.IsRegex(@"season\d{2}\.tbn")), Times.Exactly(2));
         }
     }

@@ -36,14 +36,26 @@ namespace NzbDrone.Core.Providers.Metadata
         /// </summary>
         /// <param name = "series">The series to create the metadata for</param>
         /// <param name = "tvDbSeries">Series information from TheTvDb</param>
-        public abstract void ForSeries(Series series, TvdbSeries tvDbSeries);
+        public abstract void CreateForSeries(Series series, TvdbSeries tvDbSeries);
 
         /// <summary>
         ///   Creates metadata for the episode file
         /// </summary>
         /// <param name = "episodeFile">The episode file to create the metadata</param>
         /// <param name = "tvDbSeries">Series information from TheTvDb</param>
-        public abstract void ForEpisodeFile(EpisodeFile episodeFile, TvdbSeries tvDbSeries);
+        public abstract void CreateForEpisodeFile(EpisodeFile episodeFile, TvdbSeries tvDbSeries);
+
+        /// <summary>
+        ///   Removes metadata for a series
+        /// </summary>
+        /// <param name = "series">The series to create the metadata for</param>
+        public abstract void RemoveForSeries(Series series);
+
+        /// <summary>
+        ///   Removes metadata for the episode file
+        /// </summary>
+        /// <param name = "episodeFile">The episode file to create the metadata</param>
+        public abstract void RemoveForEpisodeFile(EpisodeFile episodeFile);
 
         public virtual string GetEpisodeGuideUrl(int seriesId)
         {
