@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Providers.Metadata
             _logger.Debug("Generating tvshow.nfo for: {0}", series.Title);
             var sb = new StringBuilder();
             var xws = new XmlWriterSettings();
-            xws.OmitXmlDeclaration = false;
+            xws.OmitXmlDeclaration = true;
             xws.Indent = false;
 
             using (var xw = XmlWriter.Create(sb, xws))
@@ -63,11 +63,11 @@ namespace NzbDrone.Core.Providers.Metadata
 
                 var doc = new XDocument(tvShow);
                 doc.Save(xw);
+
+                _logger.Debug("Saving tvshow.nfo for {0}", series.Title);
+                _diskProvider.WriteAllText(Path.Combine(series.Path, "tvshow.nfo"), doc.ToString());
             }
 
-            _logger.Debug("Saving tvshow.nfo for {0}", series.Title);
-            _diskProvider.WriteAllText(Path.Combine(series.Path, "tvshow.nfo"), sb.ToString());
-            
             _logger.Debug("Downloading fanart for: {0}", series.Title);
             _bannerProvider.Download(tvDbSeries.FanartPath, Path.Combine(series.Path, "fanart.jpg"));
 
@@ -122,7 +122,7 @@ namespace NzbDrone.Core.Providers.Metadata
             {
                 var sb = new StringBuilder();
                 var xws = new XmlWriterSettings();
-                xws.OmitXmlDeclaration = false;
+                xws.OmitXmlDeclaration = true;
                 xws.Indent = false;
 
                 using (var xw = XmlWriter.Create(sb, xws))
@@ -182,8 +182,9 @@ namespace NzbDrone.Core.Providers.Metadata
 
                     doc.Add(details);
                     doc.Save(xw);
-                }
-                xmlResult += sb.ToString();
+
+                    xmlResult += doc.ToString();
+                }       
             }
             var filename = episodeFile.Path.Replace(Path.GetExtension(episodeFile.Path), ".nfo");
             _logger.Debug("Saving episodedetails to: {0}", filename);
@@ -229,8 +230,18 @@ namespace NzbDrone.Core.Providers.Metadata
             {
                 var banner = tvDbSeries.SeasonBanners.FirstOrDefault(b => b.BannerType == bannerType && b.Season == season);
                 _logger.Debug("Downloading banner for Season: {0} Series: {1}", season, series.Title);
-                _bannerProvider.Download(banner.BannerPath,
+
+                if (season == 0)
+                {
+                    _bannerProvider.Download(banner.BannerPath,
+                                             Path.Combine(series.Path, "season-specials.tbn"));
+                }
+
+                else
+                {
+                    _bannerProvider.Download(banner.BannerPath,
                                 Path.Combine(series.Path, String.Format("season{0:00}.tbn", season)));
+                }
             }
         }
     }

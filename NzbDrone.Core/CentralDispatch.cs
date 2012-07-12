@@ -13,6 +13,7 @@ using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.ExternalNotification;
 using NzbDrone.Core.Providers.Indexer;
+using NzbDrone.Core.Providers.Metadata;
 using NzbDrone.Core.Repository;
 using PetaPoco;
 using SignalR;
@@ -20,6 +21,7 @@ using SignalR.Hosting.AspNet;
 using SignalR.Infrastructure;
 using SignalR.Ninject;
 using Connection = NzbDrone.Core.Datastore.Connection;
+using Xbmc = NzbDrone.Core.Providers.ExternalNotification.Xbmc;
 
 namespace NzbDrone.Core
 {
@@ -45,8 +47,9 @@ namespace NzbDrone.Core
 
             InitQuality();
             InitExternalNotifications();
+            InitMetadataProviders();
             InitIndexers();
-            InitJobs();
+            InitJobs();         
         }
 
         private void InitDatabase()
@@ -158,6 +161,16 @@ namespace NzbDrone.Core
 
             var notifiers = Kernel.GetAll<ExternalNotificationBase>();
             Kernel.Get<ExternalNotificationProvider>().InitializeNotifiers(notifiers.ToList());
+        }
+
+        private void InitMetadataProviders()
+        {
+            logger.Debug("Initializing Metadata Providers...");
+
+            Kernel.Bind<MetadataBase>().To<Providers.Metadata.Xbmc>().InSingletonScope();
+
+            var providers = Kernel.GetAll<MetadataBase>();
+            Kernel.Get<MetadataProvider>().Initialize(providers.ToList());
         }
 
         public void DedicateToHost()

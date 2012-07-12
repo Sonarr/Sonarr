@@ -75,6 +75,34 @@ namespace NzbDrone.Core.Test.ProviderTests.Metadata
             Mocker.GetMock<ConfigProvider>().SetupGet(s => s.MetadataUseBanners).Returns(true);
         }
 
+        private void WithSpecials()
+        {
+            var seasonBanners = Builder<TvdbSeasonBanner>
+                    .CreateListOfSize(2)
+                    .All()
+                    .With(b => b.Season = 0)
+                    .TheFirst(1)
+                    .With(b => b.BannerType = TvdbSeasonBanner.Type.season)
+                    .With(b => b.BannerPath = "seasons/79488-0-1.jpg")
+                    .TheLast(1)
+                    .With(b => b.BannerType = TvdbSeasonBanner.Type.seasonwide)
+                    .With(b => b.BannerPath = "banners/seasons/79488-0-1.jpg")
+                    .Build();
+
+            var seriesActors = Builder<TvdbActor>
+                    .CreateListOfSize(5)
+                    .Build();
+
+            tvdbSeries = Builder<TvdbSeries>
+                    .CreateNew()
+                    .With(s => s.Id = 79488)
+                    .With(s => s.SeriesName = "30 Rock")
+                    .With(s => s.TvdbActors = seriesActors.ToList())
+                    .Build();
+
+            tvdbSeries.Banners.AddRange(seasonBanners);
+        }
+
         [Test]
         public void should_not_blowup()
         {
@@ -123,6 +151,15 @@ namespace NzbDrone.Core.Test.ProviderTests.Metadata
             WithUseBanners();
             Mocker.Resolve<Xbmc>().CreateForSeries(series, tvdbSeries);
             Mocker.GetMock<BannerProvider>().Verify(v => v.Download(It.Is<string>(s => s.Contains("banners")), It.IsRegex(@"season\d{2}\.tbn")), Times.Exactly(2));
+        }
+
+        [Test]
+        public void should_download_special_thumb_with_proper_name()
+        {
+            WithUseBanners();
+            WithSpecials();
+            Mocker.Resolve<Xbmc>().CreateForSeries(series, tvdbSeries);
+            Mocker.GetMock<BannerProvider>().Verify(v => v.Download(It.Is<string>(s => s.Contains("banners")), It.IsRegex(@"season-specials.tbn")), Times.Exactly(1));
         }
     }
 }
