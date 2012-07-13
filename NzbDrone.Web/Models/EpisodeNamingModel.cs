@@ -43,6 +43,14 @@ namespace NzbDrone.Web.Models
         [Description("How will multi-episode files be named?")]
         public int MultiEpisodeStyle { get; set; }
 
+        [DisplayName("XBMC")]
+        [Description("Enable creating metadata for XBMC")]
+        public bool MetadataXbmcEnabled { get; set; }
+
+        [DisplayName("Use Banners")]
+        [Description("Use banners instead of posters?")]
+        public bool MetadataUseBanners { get; set; }
+
         public SelectList SeparatorStyles { get; set; }
         public SelectList NumberStyles { get; set; }
         public SelectList MultiEpisodeStyles { get; set; }

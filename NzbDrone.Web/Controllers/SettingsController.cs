@@ -31,17 +31,19 @@ namespace NzbDrone.Web.Controllers
         private readonly QualityTypeProvider _qualityTypeProvider;
         private readonly ConfigFileProvider _configFileProvider;
         private readonly NewznabProvider _newznabProvider;
+        private readonly MetadataProvider _metadataProvider;
 
         public SettingsController(ConfigProvider configProvider, IndexerProvider indexerProvider,
-                                  QualityProvider qualityProvider, AutoConfigureProvider autoConfigureProvider,
-                                  SeriesProvider seriesProvider, ExternalNotificationProvider externalNotificationProvider,
-                                  QualityTypeProvider qualityTypeProvider,
-                                  ConfigFileProvider configFileProvider, NewznabProvider newznabProvider)
+                                    QualityProvider qualityProvider, AutoConfigureProvider autoConfigureProvider,
+                                    SeriesProvider seriesProvider, ExternalNotificationProvider externalNotificationProvider,
+                                    QualityTypeProvider qualityTypeProvider, ConfigFileProvider configFileProvider, 
+                                    NewznabProvider newznabProvider, MetadataProvider metadataProvider)
         {
             _externalNotificationProvider = externalNotificationProvider;
             _qualityTypeProvider = qualityTypeProvider;
             _configFileProvider = configFileProvider;
             _newznabProvider = newznabProvider;
+            _metadataProvider = metadataProvider;
             _configProvider = configProvider;
             _indexerProvider = indexerProvider;
             _qualityProvider = qualityProvider;
@@ -207,6 +209,10 @@ namespace NzbDrone.Web.Controllers
             model.SeparatorStyles = new SelectList(EpisodeSortingHelper.GetSeparatorStyles(), "Id", "Name");
             model.NumberStyles = new SelectList(EpisodeSortingHelper.GetNumberStyles(), "Id", "Name");
             model.MultiEpisodeStyles = new SelectList(EpisodeSortingHelper.GetMultiEpisodeStyles(), "Id", "Name");
+            
+            //Metadata
+            model.MetadataXbmcEnabled = _metadataProvider.GetSettings(typeof(Core.Providers.Metadata.Xbmc)).Enable;
+            model.MetadataUseBanners = _configProvider.MetadataUseBanners;
 
             return View(model);
         }
@@ -588,6 +594,14 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.SortingSeparatorStyle = data.SeparatorStyle;
                 _configProvider.SortingNumberStyle = data.NumberStyle;
                 _configProvider.SortingMultiEpisodeStyle = data.MultiEpisodeStyle;
+
+                //Metadata
+                _configProvider.MetadataUseBanners = data.MetadataUseBanners;
+                
+                //Xbmc
+                var xbmc = _metadataProvider.GetSettings(typeof(Core.Providers.Metadata.Xbmc));
+                xbmc.Enable = data.MetadataXbmcEnabled;
+                _metadataProvider.SaveSettings(xbmc);
 
                 return GetSuccessResult();
             }
