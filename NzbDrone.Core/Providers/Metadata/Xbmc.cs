@@ -16,8 +16,6 @@ namespace NzbDrone.Core.Providers.Metadata
 {
     public class Xbmc : MetadataBase
     {
-        protected readonly Logger _logger = LogManager.GetCurrentClassLogger();
-
         public Xbmc(ConfigProvider configProvider, DiskProvider diskProvider, BannerProvider bannerProvider, EpisodeProvider episodeProvider)
             : base(configProvider, diskProvider, bannerProvider, episodeProvider)
         {
