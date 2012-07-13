@@ -123,14 +123,14 @@ namespace NzbDrone.Core.Test.ProviderTests.Metadata
         public void should_not_blowup()
         {
             WithSingleEpisodeFile();
-            Mocker.Resolve<Core.Providers.Metadata.Xbmc>().CreateForEpisodeFile(episodeFile, tvdbSeries);
+            Mocker.Resolve<Xbmc>().CreateForEpisodeFile(episodeFile, tvdbSeries);
         }
 
         [Test]
         public void should_call_diskprovider_writeAllText_once_for_single_episode()
         {
             WithSingleEpisodeFile();
-            Mocker.Resolve<Core.Providers.Metadata.Xbmc>().CreateForEpisodeFile(episodeFile, tvdbSeries);
+            Mocker.Resolve<Xbmc>().CreateForEpisodeFile(episodeFile, tvdbSeries);
             Mocker.GetMock<DiskProvider>().Verify(v => v.WriteAllText(episodeFile.Path.Replace("avi", "nfo"), It.IsAny<string>()), Times.Once());
         }
 
@@ -138,7 +138,7 @@ namespace NzbDrone.Core.Test.ProviderTests.Metadata
         public void should_call_diskprovider_writeAllText_once_for_multi_episode()
         {
             WithMultiEpisodeFile();
-            Mocker.Resolve<Core.Providers.Metadata.Xbmc>().CreateForEpisodeFile(episodeFile, tvdbSeries);
+            Mocker.Resolve<Xbmc>().CreateForEpisodeFile(episodeFile, tvdbSeries);
             Mocker.GetMock<DiskProvider>().Verify(v => v.WriteAllText(episodeFile.Path.Replace("avi", "nfo"), It.IsAny<string>()), Times.Once());
         }
 
@@ -146,7 +146,7 @@ namespace NzbDrone.Core.Test.ProviderTests.Metadata
         public void should_download_thumbnail_when_thumbnail_path_is_not_null()
         {
             WithSingleEpisodeFile();
-            Mocker.Resolve<Core.Providers.Metadata.Xbmc>().CreateForEpisodeFile(episodeFile, tvdbSeries);
+            Mocker.Resolve<Xbmc>().CreateForEpisodeFile(episodeFile, tvdbSeries);
             Mocker.GetMock<BannerProvider>().Verify(v => v.Download(tvdbSeries.Episodes.First().BannerPath, episodeFile.Path.Replace("avi", "tbn")), Times.Once());
         }
     }
