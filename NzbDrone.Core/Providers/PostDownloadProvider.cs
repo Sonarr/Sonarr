@@ -16,14 +16,16 @@ namespace NzbDrone.Core.Providers
         private readonly DiskProvider _diskProvider;
         private readonly DiskScanProvider _diskScanProvider;
         private readonly SeriesProvider _seriesProvider;
+        private readonly MetadataProvider _metadataProvider;
 
         [Inject]
         public PostDownloadProvider(DiskProvider diskProvider, DiskScanProvider diskScanProvider,
-                                    SeriesProvider seriesProvider)
+                                    SeriesProvider seriesProvider, MetadataProvider metadataProvider)
         {
             _diskProvider = diskProvider;
             _diskScanProvider = diskScanProvider;
             _seriesProvider = seriesProvider;
+            _metadataProvider = metadataProvider;
         }
 
         public PostDownloadProvider()
@@ -70,6 +72,9 @@ namespace NzbDrone.Core.Providers
 
             var importedFiles = _diskScanProvider.Scan(series, subfolderInfo.FullName);
             importedFiles.ForEach(file => _diskScanProvider.MoveEpisodeFile(file, true));
+
+            //Create Metadata for all the episode files found
+            _metadataProvider.CreateForEpisodeFiles(importedFiles);
 
             //Delete the folder only if folder is small enough
             if (_diskProvider.GetDirectorySize(subfolderInfo.FullName) < Constants.IgnoreFileSize)

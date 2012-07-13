@@ -114,6 +114,8 @@
     <Compile Include="ProviderTests\AnalyticsProviderTests\AnalyticsProviderFixture.cs" />
     <Compile Include="ProviderTests\ConfigProviderTests\ConfigCachingFixture.cs" />
     <Compile Include="ProviderTests\BannerProviderTest.cs" />
+    <Compile Include="ProviderTests\Metadata\Xbmc_ForEpisodeFile_Fixture.cs" />
+    <Compile Include="ProviderTests\Metadata\Xbmc_ForSeries_Fixture.cs" />
     <Compile Include="ProviderTests\SearchHistoryProviderTest.cs" />
     <Compile Include="ProviderTests\PlexProviderTest.cs" />
     <Compile Include="ProviderTests\SeasonProviderTest.cs" />

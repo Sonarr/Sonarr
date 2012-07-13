@@ -1,9 +1,11 @@
+using System.Collections.Generic;
 using System.Linq;
 using System;
 using NLog;
 using Ninject;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Jobs
 {
@@ -13,17 +15,20 @@ namespace NzbDrone.Core.Jobs
         private readonly DiskScanProvider _diskScanProvider;
         private readonly ExternalNotificationProvider _externalNotificationProvider;
         private readonly SeriesProvider _seriesProvider;
+        private readonly MetadataProvider _metadataProvider;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         [Inject]
         public RenameSeriesJob(MediaFileProvider mediaFileProvider, DiskScanProvider diskScanProvider,
-                                ExternalNotificationProvider externalNotificationProvider, SeriesProvider seriesProvider)
+                                ExternalNotificationProvider externalNotificationProvider, SeriesProvider seriesProvider,
+                                MetadataProvider metadataProvider)
         {
             _mediaFileProvider = mediaFileProvider;
             _diskScanProvider = diskScanProvider;
             _externalNotificationProvider = externalNotificationProvider;
             _seriesProvider = seriesProvider;
+            _metadataProvider = metadataProvider;
         }
 
         public string Name
@@ -54,18 +59,31 @@ namespace NzbDrone.Core.Jobs
                 return;
             }
 
+            var newEpisodeFiles = new List<EpisodeFile>();
+            var oldEpisodeFiles = new List<EpisodeFile>();
+
             foreach (var episodeFile in episodeFiles)
             {
                 try
                 {
-                    _diskScanProvider.MoveEpisodeFile(episodeFile);
+                    var newFile = _diskScanProvider.MoveEpisodeFile(episodeFile);
+
+                    if (newFile != null)
+                    {
+                        newEpisodeFiles.Add(newFile);
+                        oldEpisodeFiles.Add(episodeFile);
+                    }
                 }
+
                 catch(Exception e)
                 {
                     Logger.WarnException("An error has occurred while renaming file", e);
-                }
-                
+                }         
             }
+
+            //Remove & Create Metadata for episode files
+            _metadataProvider.RemoveForEpisodeFiles(oldEpisodeFiles);
+            _metadataProvider.CreateForEpisodeFiles(newEpisodeFiles);
 
             //Start AfterRename
            

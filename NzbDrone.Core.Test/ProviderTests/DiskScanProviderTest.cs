@@ -212,7 +212,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var result = Mocker.Resolve<DiskScanProvider>().MoveEpisodeFile(file, false);
 
             //Assert
-            result.Should().BeFalse();
+            result.Should().BeNull();
         }
 
         [Test]
@@ -368,7 +368,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var result = Mocker.Resolve<DiskScanProvider>().MoveEpisodeFile(file, true);
 
             //Assert
-            result.Should().BeTrue();
+            result.Should().NotBeNull();
             Mocker.GetMock<ExternalNotificationProvider>()
                     .Verify(e => e.OnDownload("30 Rock - 1x01 - [WEBDL]", It.IsAny<Series>()), Times.Once());
         }

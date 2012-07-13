@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Providers
     public class TvDbProvider
     {
         private readonly EnvironmentProvider _environmentProvider;
-        private const string TVDB_APIKEY = "5D2D188E86E07F4F";
+        public const string TVDB_APIKEY = "5D2D188E86E07F4F";
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private readonly TvdbHandler _handler;
@@ -44,13 +44,12 @@ namespace NzbDrone.Core.Providers
             }
         }
 
-
-        public virtual TvdbSeries GetSeries(int id, bool loadEpisodes)
+        public virtual TvdbSeries GetSeries(int id, bool loadEpisodes, bool loadActors = false)
         {
             lock (_handler)
             {
                 Logger.Debug("Fetching SeriesId'{0}' from tvdb", id);
-                var result = _handler.GetSeries(id, TvdbLanguage.DefaultLanguage, loadEpisodes, false, true, true);
+                var result = _handler.GetSeries(id, TvdbLanguage.DefaultLanguage, loadEpisodes, loadActors, true, true);
 
                 //Fix American Dad's scene gongshow 
                 if (result != null && result.Id == 73141)
@@ -86,6 +85,5 @@ namespace NzbDrone.Core.Providers
                 return result;
             }
         }
-
     }
 }

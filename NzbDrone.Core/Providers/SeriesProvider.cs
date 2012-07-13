@@ -20,17 +20,19 @@ namespace NzbDrone.Core.Providers
         private readonly IDatabase _database;
         private readonly SceneMappingProvider _sceneNameMappingProvider;
         private readonly BannerProvider _bannerProvider;
+        private readonly MetadataProvider _metadataProvider;
         private static readonly Regex TimeRegex = new Regex(@"^(?<time>\d+:?\d*)\W*(?<meridiem>am|pm)?", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         public SeriesProvider(IDatabase database, ConfigProvider configProviderProvider,
                                 TvDbProvider tvDbProviderProvider, SceneMappingProvider sceneNameMappingProvider,
-                                BannerProvider bannerProvider)
+                                BannerProvider bannerProvider, MetadataProvider metadataProvider)
         {
             _database = database;
             _configProvider = configProviderProvider;
             _tvDbProvider = tvDbProviderProvider;
             _sceneNameMappingProvider = sceneNameMappingProvider;
             _bannerProvider = bannerProvider;
+            _metadataProvider = metadataProvider;
         }
 
         public SeriesProvider()
@@ -86,7 +88,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual Series UpdateSeriesInfo(int seriesId)
         {
-            var tvDbSeries = _tvDbProvider.GetSeries(seriesId, false);
+            var tvDbSeries = _tvDbProvider.GetSeries(seriesId, false, true);
             var series = GetSeries(seriesId);
 
             series.SeriesId = tvDbSeries.Id;
@@ -103,6 +105,8 @@ namespace NzbDrone.Core.Providers
             series.Network = tvDbSeries.Network;
 
             UpdateSeries(series);
+            _metadataProvider.CreateForSeries(series, tvDbSeries);
+
             return series;
         }
 

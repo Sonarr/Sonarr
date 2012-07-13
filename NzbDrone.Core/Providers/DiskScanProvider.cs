@@ -168,7 +168,7 @@ namespace NzbDrone.Core.Providers
             return episodeFile;
         }
 
-        public virtual bool MoveEpisodeFile(EpisodeFile episodeFile, bool newDownload = false)
+        public virtual EpisodeFile MoveEpisodeFile(EpisodeFile episodeFile, bool newDownload = false)
         {
             if (episodeFile == null)
                 throw new ArgumentNullException("episodeFile");
@@ -182,14 +182,14 @@ namespace NzbDrone.Core.Providers
             if (DiskProvider.PathEquals(episodeFile.Path, newFile.FullName))
             {
                 Logger.Debug("Skipping file rename, source and destination are the same: {0}", episodeFile.Path);
-                return false;
+                return null;
             }
 
             _diskProvider.CreateDirectory(newFile.DirectoryName);
 
             Logger.Debug("Moving [{0}] > [{1}]", episodeFile.Path, newFile.FullName);
             _diskProvider.MoveFile(episodeFile.Path, newFile.FullName);
-
+            
             _diskProvider.InheritFolderPermissions(newFile.FullName);
 
             episodeFile.Path = newFile.FullName;
@@ -213,7 +213,7 @@ namespace NzbDrone.Core.Providers
                 _externalNotificationProvider.OnRename(message, series);
             }
 
-            return true;
+            return episodeFile;
         }
 
         /// <summary>

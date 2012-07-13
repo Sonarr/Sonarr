@@ -20,51 +20,15 @@
 <div id="stylized">
     @using (Html.BeginForm("SaveNaming", "Settings", FormMethod.Post, new { id = "NamingForm", name = "NamingForm", @class = "settingsForm" }))
     {
-        <div class="settingsContainer">
-            @Html.ValidationSummary(true, "Unable to save your settings. Please correct the errors and try again.")
-            <label class="labelClass">@Html.LabelFor(m => m.SeriesName)
-                <span class="small">@Html.DescriptionFor(m => m.SeriesName)</span>
-            </label>
-            @Html.CheckBoxFor(m => m.SeriesName, new { @class = "inputClass checkClass" })
-            <label class="labelClass">@Html.LabelFor(m => m.EpisodeName)
-                <span class="small">@Html.DescriptionFor(m => m.EpisodeName)</span>
-            </label>
-            @Html.CheckBoxFor(m => m.EpisodeName, new { @class = "inputClass checkClass" })
-            <label class="labelClass">@Html.LabelFor(m => m.ReplaceSpaces)
-                <span class="small">@Html.DescriptionFor(m => m.ReplaceSpaces)</span>
-            </label>
-            @Html.CheckBoxFor(m => m.ReplaceSpaces, new { @class = "inputClass checkClass" })
-            <label class="labelClass">@Html.LabelFor(m => m.AppendQuality)
-                <span class="small">@Html.DescriptionFor(m => m.AppendQuality)</span>
-            </label>
-            @Html.CheckBoxFor(m => m.AppendQuality, new { @class = "inputClass checkClass" })
-            <label class="labelClass">@Html.LabelFor(m => m.SeasonFolders)
-                <span class="small">@Html.DescriptionFor(m => m.SeasonFolders)</span>
-            </label>
-            @Html.CheckBoxFor(m => m.SeasonFolders, new { @class = "inputClass checkClass" })
-            <label class="labelClass">@Html.LabelFor(m => m.SeasonFolderFormat)
-                <span class="small">@Html.DescriptionFor(m => m.SeasonFolderFormat)</span>
-            </label>
-            @Html.TextBoxFor(m => m.SeasonFolderFormat, new { @class = "inputClass" })
-            <label class="labelClass">@Html.LabelFor(m => m.SeparatorStyle)
-                <span class="small">@Html.DescriptionFor(m => m.SeparatorStyle)</span>
-            </label>
-            @Html.DropDownListFor(m => m.SeparatorStyle, Model.SeparatorStyles, new { @class = "inputClass selectClass" })
-            <label class="labelClass">@Html.LabelFor(m => m.NumberStyle)
-                <span class="small">@Html.DescriptionFor(m => m.NumberStyle)</span>
-            </label>
-            @Html.DropDownListFor(m => m.NumberStyle, Model.NumberStyles, new { @class = "inputClass selectClass" })
-            <label class="labelClass">@Html.LabelFor(m => m.MultiEpisodeStyle)
-                <span class="small">@Html.DescriptionFor(m => m.MultiEpisodeStyle)</span>
-            </label>
-            @Html.DropDownListFor(m => m.MultiEpisodeStyle, Model.MultiEpisodeStyles, new { @class = "inputClass selectClass" })
-        </div>
-        <div id="examples">
-            <div id="singleEpisodeExample">
-                <b>Single Episode Example: </b><span class="result"></span>
+        <div class="jquery-accordion">
+            <h3><a href="#">Episode Naming</a></h3>
+            <div id="episodeNamingContainer">
+                @{Html.RenderPartial("EpisodeNamingPartial", Model);}
             </div>
-            <div id="multiEpisodeExample">
-                <b>Multi-Episode Example: </b><span class="result"></span>
+            
+            <h3><a href="#">Metadata</a></h3>
+            <div id="metadataContainer">
+                @{Html.RenderPartial("MetaDataPartial", Model);}
             </div>
         </div>
         

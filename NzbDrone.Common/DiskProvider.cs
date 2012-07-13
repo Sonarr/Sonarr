@@ -200,6 +200,10 @@ namespace NzbDrone.Common
             return File.ReadAllText(filePath);
         }
 
+        public virtual void WriteAllText(string filename, string contents)
+        {
+            File.WriteAllText(filename, contents);
+        }
 
         public static bool PathEquals(string firstPath, string secondPath)
         {
