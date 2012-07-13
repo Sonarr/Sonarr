@@ -22,7 +22,7 @@
                 .AddColumn(new Column().DataProperty("SearchError").Title("Error"))
                 .AddColumn(new Column().DataProperty("return actionColumn(source, type, val);", true).Sortable(false).Searchable(false))
                 .AddColumn(new Column().DataProperty("Details").Sortable(false).Visible(false).RenderFunction("return details(row);"))
-                .AddSorting(3, SortDirection.Desc))
+                .AddSorting(3, DataTables.Mvc.Core.Enum.SortDirection.Desc))
     
     <script type="text/javascript">
         function details(row) {
