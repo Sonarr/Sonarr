@@ -21,7 +21,8 @@ namespace NzbDrone.Core.Providers
         private readonly TvDbProvider _tvDbProvider;
 
         [Inject]
-        public MetadataProvider(IDatabase database, IEnumerable<MetadataBase> metadataProviders, TvDbProvider tvDbProvider)
+        public MetadataProvider(IDatabase database, IEnumerable<MetadataBase> metadataProviders,
+                                TvDbProvider tvDbProvider)
         {
             _database = database;
             _metadataProviders = metadataProviders;
@@ -121,6 +122,9 @@ namespace NzbDrone.Core.Providers
 
         public virtual void CreateForEpisodeFiles(List<EpisodeFile> episodeFiles)
         {
+            if (episodeFiles == null || !episodeFiles.Any())
+                return;
+            
             var tvDbSeries = _tvDbProvider.GetSeries(episodeFiles.First().SeriesId, true, true);
 
             foreach(var episodeFile in episodeFiles)
@@ -157,11 +161,6 @@ namespace NzbDrone.Core.Providers
                     provider.RemoveForEpisodeFile(episodeFile);
                 }
             }
-        }
-
-        public virtual void RenameForEpisodeFile(EpisodeFile episodeFile)
-        {
-            
         }
     }
 }

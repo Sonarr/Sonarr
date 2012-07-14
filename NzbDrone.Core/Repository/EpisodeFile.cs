@@ -9,6 +9,22 @@ namespace NzbDrone.Core.Repository
     [PrimaryKey("EpisodeFileId", autoIncrement = true)]
     public class EpisodeFile
     {
+        public EpisodeFile()
+        {
+            
+        }
+
+        public EpisodeFile(EpisodeFile source)
+        {
+            EpisodeFileId = source.EpisodeFileId;
+            SeriesId = source.SeriesId;
+            SeasonNumber = source.SeasonNumber;
+            Path = source.Path;
+            Quality = source.Quality;
+            Proper = source.Proper;
+            Size = source.Size;
+        }
+
         public int EpisodeFileId { get; set; }
 
         public int SeriesId { get; set; }

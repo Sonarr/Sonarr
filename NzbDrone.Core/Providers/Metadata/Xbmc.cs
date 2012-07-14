@@ -16,7 +16,8 @@ namespace NzbDrone.Core.Providers.Metadata
 {
     public class Xbmc : MetadataBase
     {
-        public Xbmc(ConfigProvider configProvider, DiskProvider diskProvider, BannerProvider bannerProvider, EpisodeProvider episodeProvider)
+        public Xbmc(ConfigProvider configProvider, DiskProvider diskProvider, 
+                    BannerProvider bannerProvider, EpisodeProvider episodeProvider)
             : base(configProvider, diskProvider, bannerProvider, episodeProvider)
         {
         }

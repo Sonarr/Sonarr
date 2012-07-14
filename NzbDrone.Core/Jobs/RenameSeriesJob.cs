@@ -66,12 +66,13 @@ namespace NzbDrone.Core.Jobs
             {
                 try
                 {
+                    var oldFile = new EpisodeFile(episodeFile);
                     var newFile = _diskScanProvider.MoveEpisodeFile(episodeFile);
 
                     if (newFile != null)
                     {
                         newEpisodeFiles.Add(newFile);
-                        oldEpisodeFiles.Add(episodeFile);
+                        oldEpisodeFiles.Add(oldFile);
                     }
                 }
 
