@@ -58,6 +58,8 @@ namespace NzbDrone.Core.Test.ProviderTests.Metadata
 
             var seriesActors = Builder<TvdbActor>
                     .CreateListOfSize(5)
+                    .All()
+                    .With(a => a.ActorImage = Builder<TvdbActorBanner>.CreateNew().Build())
                     .Build();
 
             tvdbSeries = Builder<TvdbSeries>
@@ -91,6 +93,8 @@ namespace NzbDrone.Core.Test.ProviderTests.Metadata
 
             var seriesActors = Builder<TvdbActor>
                     .CreateListOfSize(5)
+                    .All()
+                    .With(a => a.ActorImage = Builder<TvdbActorBanner>.CreateNew().Build())
                     .Build();
 
             tvdbSeries = Builder<TvdbSeries>
