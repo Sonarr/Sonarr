@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Providers.Metadata
                     tvShow.Add(new XElement("actor",
                                     new XElement("name", actor.Name),
                                     new XElement("role", actor.Role),
-                                    new XElement("thumb", actor.ActorImage)
+                                    new XElement("thumb", actor.ActorImage.BannerPath)
                             ));
                 }
 
@@ -174,7 +174,7 @@ namespace NzbDrone.Core.Providers.Metadata
                         details.Add(new XElement("actor",
                                                 new XElement("name", actor.Name),
                                                 new XElement("role", actor.Role),
-                                                new XElement("thumb", actor.ActorImage)
+                                                new XElement("thumb", actor.ActorImage.BannerPath)
                                             ));
                     }
 
