@@ -121,6 +121,16 @@ namespace NzbDrone.Core.Test.ProviderTests.Metadata
                         .Returns(episodes.ToList());
         }
 
+        private void WithNoDirectors()
+        {
+            tvdbSeries.Episodes.ForEach(e => e.Directors = new List<string>());
+        }
+
+        private void WithNoWriters()
+        {
+            tvdbSeries.Episodes.ForEach(e => e.Writer = new List<string>());
+        }
+
         [Test]
         public void should_not_blowup()
         {
@@ -150,6 +160,22 @@ namespace NzbDrone.Core.Test.ProviderTests.Metadata
             WithSingleEpisodeFile();
             Mocker.Resolve<Xbmc>().CreateForEpisodeFile(episodeFile, tvdbSeries);
             Mocker.GetMock<BannerProvider>().Verify(v => v.Download(tvdbSeries.Episodes.First().BannerPath, episodeFile.Path.Replace("avi", "tbn")), Times.Once());
+        }
+
+        [Test]
+        public void should_not_blowup_when_director_is_not_found()
+        {
+            WithSingleEpisodeFile();
+            WithNoDirectors();
+            Mocker.Resolve<Xbmc>().CreateForEpisodeFile(episodeFile, tvdbSeries);
+        }
+
+        [Test]
+        public void should_not_blowup_when_writer_is_not_found()
+        {
+            WithSingleEpisodeFile();
+            WithNoWriters();
+            Mocker.Resolve<Xbmc>().CreateForEpisodeFile(episodeFile, tvdbSeries);
         }
     }
 }

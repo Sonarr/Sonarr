@@ -155,8 +155,8 @@ namespace NzbDrone.Core.Providers.Metadata
                     details.Add(new XElement("displayepisode"));
                     details.Add(new XElement("thumb", "http://www.thetvdb.com/banners/" + tvdbEpisode.BannerPath));
                     details.Add(new XElement("watched", "false"));
-                    details.Add(new XElement("credits", tvdbEpisode.Writer.First()));
-                    details.Add(new XElement("director", tvdbEpisode.Directors.First()));
+                    details.Add(new XElement("credits", tvdbEpisode.Writer.FirstOrDefault()));
+                    details.Add(new XElement("director", tvdbEpisode.Directors.FirstOrDefault()));
                     details.Add(new XElement("rating", tvDbSeries.Rating));
 
                     foreach(var actor in tvdbEpisode.GuestStars)
