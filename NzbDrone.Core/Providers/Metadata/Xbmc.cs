@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Providers.Metadata
                 tvShow.Add(new XElement("title", tvDbSeries.SeriesName));
                 tvShow.Add(new XElement("rating", tvDbSeries.Rating));
                 tvShow.Add(new XElement("plot", tvDbSeries.Overview));
-                tvShow.Add(new XElement("episodeguide", new XElement("url"), episodeGuideUrl));
+                tvShow.Add(new XElement("episodeguide", new XElement("url", episodeGuideUrl)));
                 tvShow.Add(new XElement("episodeguideurl", episodeGuideUrl));
                 tvShow.Add(new XElement("mpaa", tvDbSeries.ContentRating));
                 tvShow.Add(new XElement("genre", tvDbSeries.GenreString));
