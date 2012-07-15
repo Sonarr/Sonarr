@@ -66,25 +66,31 @@ namespace NzbDrone.Core.Providers.Metadata
                 _diskProvider.WriteAllText(Path.Combine(series.Path, "tvshow.nfo"), doc.ToString());
             }
 
-            _logger.Debug("Downloading fanart for: {0}", series.Title);
-            _bannerProvider.Download(tvDbSeries.FanartPath, Path.Combine(series.Path, "fanart.jpg"));
-
-            if (_configProvider.MetadataUseBanners)
+            if (!_diskProvider.FileExists(Path.Combine(series.Path, "fanart.jpg")))
             {
-                _logger.Debug("Downloading series banner for: {0}", series.Title);
-                _bannerProvider.Download(tvDbSeries.BannerPath, Path.Combine(series.Path, "folder.jpg"));
-
-                _logger.Debug("Downloading Season banners for {0}", series.Title);
-                DownloadSeasonThumbnails(series, tvDbSeries, TvdbSeasonBanner.Type.seasonwide);
+                _logger.Debug("Downloading fanart for: {0}", series.Title);
+                _bannerProvider.Download(tvDbSeries.FanartPath, Path.Combine(series.Path, "fanart.jpg"));
             }
 
-            else
+            if (!_diskProvider.FileExists(Path.Combine(series.Path, "folder.jpg")))
             {
-                _logger.Debug("Downloading series thumbnail for: {0}", series.Title);
-                _bannerProvider.Download(tvDbSeries.PosterPath, Path.Combine(series.Path, "folder.jpg"));
+                if(_configProvider.MetadataUseBanners)
+                {
+                    _logger.Debug("Downloading series banner for: {0}", series.Title);
+                    _bannerProvider.Download(tvDbSeries.BannerPath, Path.Combine(series.Path, "folder.jpg"));
 
-                _logger.Debug("Downloading Season posters for {0}", series.Title);
-                DownloadSeasonThumbnails(series, tvDbSeries, TvdbSeasonBanner.Type.season);
+                    _logger.Debug("Downloading Season banners for {0}", series.Title);
+                    DownloadSeasonThumbnails(series, tvDbSeries, TvdbSeasonBanner.Type.seasonwide);
+                }
+
+                else
+                {
+                    _logger.Debug("Downloading series thumbnail for: {0}", series.Title);
+                    _bannerProvider.Download(tvDbSeries.PosterPath, Path.Combine(series.Path, "folder.jpg"));
+
+                    _logger.Debug("Downloading Season posters for {0}", series.Title);
+                    DownloadSeasonThumbnails(series, tvDbSeries, TvdbSeasonBanner.Type.season);
+                }
             }
         }
 
@@ -109,9 +115,13 @@ namespace NzbDrone.Core.Providers.Metadata
                 _logger.Debug("No thumbnail is available for this episode");
                 return;
             }
-            
-            _logger.Debug("Downloading episode thumbnail for: {0}", episodeFile.EpisodeFileId);
-            _bannerProvider.Download(episodeFileThumbnail.BannerPath, episodeFile.Path.Replace(Path.GetExtension(episodeFile.Path), ".tbn"));
+
+            if (!_diskProvider.FileExists(episodeFile.Path.Replace(Path.GetExtension(episodeFile.Path), ".tbn")))
+            {
+                _logger.Debug("Downloading episode thumbnail for: {0}", episodeFile.EpisodeFileId);
+                _bannerProvider.Download(episodeFileThumbnail.BannerPath,
+                                         episodeFile.Path.Replace(Path.GetExtension(episodeFile.Path), ".tbn"));
+            }
 
             _logger.Debug("Generating filename.nfo for: {0}", episodeFile.EpisodeFileId);
 
@@ -231,14 +241,20 @@ namespace NzbDrone.Core.Providers.Metadata
 
                 if (season == 0)
                 {
-                    _bannerProvider.Download(banner.BannerPath,
-                                             Path.Combine(series.Path, "season-specials.tbn"));
+                    if (!_diskProvider.FileExists(Path.Combine(series.Path, "season-specials.tbn")))
+                    {
+                        _bannerProvider.Download(banner.BannerPath,
+                                                 Path.Combine(series.Path, "season-specials.tbn"));
+                    }
                 }
 
                 else
                 {
-                    _bannerProvider.Download(banner.BannerPath,
-                                Path.Combine(series.Path, String.Format("season{0:00}.tbn", season)));
+                    if (!_diskProvider.FileExists(Path.Combine(series.Path, String.Format("season{0:00}.tbn", season))))
+                    {
+                        _bannerProvider.Download(banner.BannerPath,
+                                                 Path.Combine(series.Path, String.Format("season{0:00}.tbn", season)));
+                    }
                 }
             }
         }

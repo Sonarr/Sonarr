@@ -62,6 +62,16 @@ namespace NzbDrone.Web.Controllers
         {
             _jobProvider.QueueJob(typeof(UpdateInfoJob), seriesId);
             _jobProvider.QueueJob(typeof(DiskScanJob), seriesId);
+            _jobProvider.QueueJob(typeof(RefreshEpisodeMetadata), seriesId);
+
+            return JsonNotificationResult.Queued("Episode update/Disk scan");
+        }
+
+        public JsonResult ForceRefreshAll()
+        {
+            _jobProvider.QueueJob(typeof(UpdateInfoJob));
+            _jobProvider.QueueJob(typeof(DiskScanJob));
+            _jobProvider.QueueJob(typeof(RefreshEpisodeMetadata));
 
             return JsonNotificationResult.Queued("Episode update/Disk scan");
         }
