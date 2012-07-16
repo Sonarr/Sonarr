@@ -40,13 +40,16 @@ namespace NzbDrone.Core.Providers.Metadata
             using (var xw = XmlWriter.Create(sb, xws))
             {
                 var tvShow = new XElement("tvshow");
+             
+
                 tvShow.Add(new XElement("title", tvDbSeries.SeriesName));
                 tvShow.Add(new XElement("rating", tvDbSeries.Rating));
                 tvShow.Add(new XElement("plot", tvDbSeries.Overview));
                 tvShow.Add(new XElement("episodeguide", new XElement("url", episodeGuideUrl)));
                 tvShow.Add(new XElement("episodeguideurl", episodeGuideUrl));
                 tvShow.Add(new XElement("mpaa", tvDbSeries.ContentRating));
-                tvShow.Add(new XElement("genre", tvDbSeries.GenreString));
+                tvShow.Add(new XElement("id", tvDbSeries.Id));
+                tvShow.Add(new XElement("genre", tvDbSeries.Genre.FirstOrDefault()));
                 tvShow.Add(new XElement("premiered", tvDbSeries.FirstAired.ToString("yyyy-MM-dd")));
                 tvShow.Add(new XElement("studio", tvDbSeries.Network));
 
@@ -55,7 +58,7 @@ namespace NzbDrone.Core.Providers.Metadata
                     tvShow.Add(new XElement("actor",
                                     new XElement("name", actor.Name),
                                     new XElement("role", actor.Role),
-                                    new XElement("thumb", actor.ActorImage.BannerPath)
+                                    new XElement("thumb", "http://www.thetvdb.com/banners/" + actor.ActorImage.BannerPath)
                             ));
                 }
 
@@ -184,7 +187,7 @@ namespace NzbDrone.Core.Providers.Metadata
                         details.Add(new XElement("actor",
                                                 new XElement("name", actor.Name),
                                                 new XElement("role", actor.Role),
-                                                new XElement("thumb", actor.ActorImage.BannerPath)
+                                                new XElement("thumb", "http://www.thetvdb.com/banners/" + actor.ActorImage.BannerPath)
                                             ));
                     }
 
