@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Providers.Metadata
                 tvShow.Add(new XElement("episodeguideurl", episodeGuideUrl));
                 tvShow.Add(new XElement("mpaa", tvDbSeries.ContentRating));
                 tvShow.Add(new XElement("id", tvDbSeries.Id));
-                tvShow.Add(new XElement("genre", tvDbSeries.Genre.FirstOrDefault()));
+                tvShow.Add(new XElement("genre", tvDbSeries.GenreString.Trim('|').Split('|')[0]));
                 tvShow.Add(new XElement("premiered", tvDbSeries.FirstAired.ToString("yyyy-MM-dd")));
                 tvShow.Add(new XElement("studio", tvDbSeries.Network));
 
