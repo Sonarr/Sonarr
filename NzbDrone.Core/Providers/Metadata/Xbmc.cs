@@ -41,7 +41,6 @@ namespace NzbDrone.Core.Providers.Metadata
             {
                 var tvShow = new XElement("tvshow");
              
-
                 tvShow.Add(new XElement("title", tvDbSeries.SeriesName));
                 tvShow.Add(new XElement("rating", tvDbSeries.Rating));
                 tvShow.Add(new XElement("plot", tvDbSeries.Overview));
@@ -162,7 +161,7 @@ namespace NzbDrone.Core.Providers.Metadata
                     details.Add(new XElement("title", tvdbEpisode.EpisodeName));
                     details.Add(new XElement("season", tvdbEpisode.SeasonNumber));
                     details.Add(new XElement("episode", tvdbEpisode.EpisodeNumber));
-                    details.Add(new XElement("aired", tvdbEpisode.FirstAired));
+                    details.Add(new XElement("aired", tvdbEpisode.FirstAired.ToString("yyyy-MM-dd")));
                     details.Add(new XElement("plot", tvDbSeries.Overview));
                     details.Add(new XElement("displayseason"));
                     details.Add(new XElement("displayepisode"));
