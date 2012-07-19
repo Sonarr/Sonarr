@@ -319,6 +319,7 @@ namespace NzbDrone.Core
                         case ".flv":
                         case ".dvr-ms":
                         case ".ogm":
+                        case ".strm":
                             {
                                 result.QualityType = QualityTypes.SDTV;
                                 break;
