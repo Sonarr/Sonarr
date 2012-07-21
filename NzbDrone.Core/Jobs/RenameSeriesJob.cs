@@ -43,55 +43,65 @@ namespace NzbDrone.Core.Jobs
 
         public void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
         {
+            List<Series> seriesToRename;
+
             if (targetId <= 0)
-                throw new ArgumentOutOfRangeException("targetId");
-
-            var series = _seriesProvider.GetSeries(targetId);
-
-            notification.CurrentMessage = String.Format("Renaming episodes for '{0}'", series.Title);
-
-            Logger.Debug("Getting episodes from database for series: {0}", series.SeriesId);
-            var episodeFiles = _mediaFileProvider.GetSeriesFiles(series.SeriesId);
-
-            if (episodeFiles == null || episodeFiles.Count == 0)
             {
-                Logger.Warn("No episodes in database found for series: {0}", series.SeriesId);
-                return;
+                seriesToRename = _seriesProvider.GetAllSeries().ToList();
             }
 
-            var newEpisodeFiles = new List<EpisodeFile>();
-            var oldEpisodeFiles = new List<EpisodeFile>();
-
-            foreach (var episodeFile in episodeFiles)
+            else
             {
-                try
-                {
-                    var oldFile = new EpisodeFile(episodeFile);
-                    var newFile = _diskScanProvider.MoveEpisodeFile(episodeFile);
+                seriesToRename = new List<Series>{  _seriesProvider.GetSeries(targetId) };
+            }
 
-                    if (newFile != null)
+            foreach(var series in seriesToRename)
+            {
+                notification.CurrentMessage = String.Format("Renaming episodes for '{0}'", series.Title);
+
+                Logger.Debug("Getting episodes from database for series: {0}", series.SeriesId);
+                var episodeFiles = _mediaFileProvider.GetSeriesFiles(series.SeriesId);
+
+                if (episodeFiles == null || episodeFiles.Count == 0)
+                {
+                    Logger.Warn("No episodes in database found for series: {0}", series.SeriesId);
+                    return;
+                }
+
+                var newEpisodeFiles = new List<EpisodeFile>();
+                var oldEpisodeFiles = new List<EpisodeFile>();
+
+                foreach (var episodeFile in episodeFiles)
+                {
+                    try
                     {
-                        newEpisodeFiles.Add(newFile);
-                        oldEpisodeFiles.Add(oldFile);
+                        var oldFile = new EpisodeFile(episodeFile);
+                        var newFile = _diskScanProvider.MoveEpisodeFile(episodeFile);
+
+                        if (newFile != null)
+                        {
+                            newEpisodeFiles.Add(newFile);
+                            oldEpisodeFiles.Add(oldFile);
+                        }
+                    }
+
+                    catch (Exception e)
+                    {
+                        Logger.WarnException("An error has occurred while renaming file", e);
                     }
                 }
 
-                catch(Exception e)
-                {
-                    Logger.WarnException("An error has occurred while renaming file", e);
-                }         
+                //Remove & Create Metadata for episode files
+                _metadataProvider.RemoveForEpisodeFiles(oldEpisodeFiles);
+                _metadataProvider.CreateForEpisodeFiles(newEpisodeFiles);
+
+                //Start AfterRename
+
+                var message = String.Format("Renamed: Series {0}", series.Title);
+                _externalNotificationProvider.AfterRename(message, series);
+
+                notification.CurrentMessage = String.Format("Rename completed for {0}", series.Title);
             }
-
-            //Remove & Create Metadata for episode files
-            _metadataProvider.RemoveForEpisodeFiles(oldEpisodeFiles);
-            _metadataProvider.CreateForEpisodeFiles(newEpisodeFiles);
-
-            //Start AfterRename
-           
-            var message = String.Format("Renamed: Series {0}", series.Title);
-            _externalNotificationProvider.AfterRename(message, series);
-
-            notification.CurrentMessage = String.Format("Rename completed for {0}", series.Title);
         }
     }
 }

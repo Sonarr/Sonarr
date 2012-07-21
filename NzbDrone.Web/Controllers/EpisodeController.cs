@@ -41,9 +41,15 @@ namespace NzbDrone.Web.Controllers
 
         }
 
-        public JsonResult RenameEpisodes(int seriesId)
+        public JsonResult RenameSeries(int seriesId)
         {
             _jobProvider.QueueJob(typeof(RenameSeriesJob), seriesId);
+            return JsonNotificationResult.Queued("Series rename");
+        }
+
+        public JsonResult RenameAllSeries()
+        {
+            _jobProvider.QueueJob(typeof(RenameSeriesJob));
             return JsonNotificationResult.Queued("Series rename");
         }
     }

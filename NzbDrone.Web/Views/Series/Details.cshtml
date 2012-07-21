@@ -72,7 +72,7 @@
         <li><a class="editButton" value="@Model.SeriesId" rel="@Model.Title" title="Edit series">Edit</a></li>
         <li>@Ajax.ActionLink("Force Refresh", "ForceRefresh", "Command", new { seriesId = Model.SeriesId }, null, new { Title = "Refresh episode and series information and scan for new episodes" })</li>
         <li>@Ajax.ActionLink("Search for missing episodes", "BacklogSeries", "Episode", new { seriesId = Model.SeriesId }, null, new { Title = "Search for episodes missing from this series" })</li>
-        <li>@Ajax.ActionLink("Rename Episode Files", "RenameEpisodes", "Episode", new { seriesId = Model.SeriesId }, null, new { Title = "Rename all episode files to match your preferred naming" })</li>
+        <li>@Ajax.ActionLink("Rename Episode Files", "RenameSeries", "Episode", new { seriesId = Model.SeriesId }, null, new { Title = "Rename all episode files to match your preferred naming" })</li>
     </ul>
 }
 

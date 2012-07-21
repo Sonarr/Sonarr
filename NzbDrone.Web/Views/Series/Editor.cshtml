@@ -58,6 +58,7 @@
 {
     <ul class="sub-menu">
         <li>@Ajax.ActionLink("Force Refresh", "ForceRefreshAll", "Command", null, null, new { Title = "Refresh episode and series information and scan for new episodes for all series" })</li>
+        <li>@Ajax.ActionLink("Rename All Series", "RenameAllSeries", "Episode", null, new AjaxOptions { Confirm = "Are you sure you want to rename all series?" }, new { Title = "Rename all series monitored by NzbDrone" })</li>
     </ul>
 }
 
