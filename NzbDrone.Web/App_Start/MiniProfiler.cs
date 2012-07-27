@@ -84,7 +84,8 @@ namespace NzbDrone.Web.App_Start
                 var request = ((HttpApplication)sender).Request;
                 //TODO: By default only local requests are profiled, optionally you can set it up
                 //  so authenticated users are always profiled
-                if (request.IsLocal) { MiniProfiler.Start(); }
+                //if (request.IsLocal) { MiniProfiler.Start(); }
+                MiniProfiler.Start();
             };
 
 
