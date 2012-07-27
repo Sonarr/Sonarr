@@ -38,18 +38,18 @@ namespace NzbDrone.Core.Jobs
 
         public void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
         {
+            List<Series> seriesToRefresh;
+
             if (targetId <= 0)
+                seriesToRefresh = _seriesProvider.GetAllSeries().ToList();
+
+            else
+                seriesToRefresh = new List<Series> { _seriesProvider.GetSeries(targetId) };
+
+            foreach(var series in seriesToRefresh)
             {
-                var allSeries = _seriesProvider.GetAllSeries();
-
-                foreach(var s in allSeries)
-                {
-                    RefreshMetadata(notification, s);  
-                }
-            }
-
-            var series = _seriesProvider.GetSeries(targetId);
-            RefreshMetadata(notification, series);          
+                RefreshMetadata(notification, series); 
+            }  
         }
 
         private void RefreshMetadata(ProgressNotification notification, Series series)
