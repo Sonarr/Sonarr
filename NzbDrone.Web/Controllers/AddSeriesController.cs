@@ -168,7 +168,7 @@ namespace NzbDrone.Web.Controllers
 
             _rootFolderProvider.Add(new RootDir { Path = path });
 
-            return JsonNotificationResult.Info("Root Folder saved", "Root foler saved successfully.");
+            return JsonNotificationResult.Info("Root Folder saved", "Root folder saved successfully.");
         }
 
         [HttpGet]
