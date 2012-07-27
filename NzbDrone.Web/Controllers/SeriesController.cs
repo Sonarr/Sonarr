@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
-using MvcMiniProfiler;
 using NzbDrone.Common.Model;
 using NzbDrone.Core;
 using NzbDrone.Core.Helpers;
@@ -14,6 +13,7 @@ using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Web.Models;
+using StackExchange.Profiling;
 
 namespace NzbDrone.Web.Controllers
 {

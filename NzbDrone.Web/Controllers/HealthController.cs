@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using StackExchange.Profiling;
 
 namespace NzbDrone.Web.Controllers
 {
@@ -7,7 +8,7 @@ namespace NzbDrone.Web.Controllers
         [HttpGet]
         public JsonResult Index()
         {
-            MvcMiniProfiler.MiniProfiler.Stop(true);
+            MiniProfiler.Stop(true);
             return Json("OK", JsonRequestBehavior.AllowGet);
         }
 

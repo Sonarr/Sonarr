@@ -1,8 +1,8 @@
 ﻿using System.Threading;
 using System.Web.Mvc;
 using System.Web.UI;
-using MvcMiniProfiler;
 using NzbDrone.Core.Providers;
+using StackExchange.Profiling;
 
 namespace NzbDrone.Web.Controllers
 {

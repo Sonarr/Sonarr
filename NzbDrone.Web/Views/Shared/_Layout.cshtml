@@ -2,6 +2,7 @@
 @{ Layout = "~/Views/Shared/_ReferenceLayout.cshtml"; }
 @using NzbDrone.Common
 @using NzbDrone.Web.Helpers
+@using StackExchange.Profiling
 @section HeaderContent
 {
     @if (string.IsNullOrWhiteSpace(ViewBag.Title) || String.Equals(ViewBag.Title, "NzbDrone", StringComparison.InvariantCultureIgnoreCase))
@@ -15,7 +16,7 @@
     <title>@ViewBag.Title</title>
     @if (!EnvironmentProvider.IsProduction || ProfilerHelper.Enabled())
     {
-        @MvcMiniProfiler.MiniProfiler.RenderIncludes()
+        @MiniProfiler.RenderIncludes()
     }
     @Html.IncludeCss("Grid.css")
     @RenderSection("HeaderContent", required: false)
