@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DataTables.Mvc.Core.Helpers;
+using DataTables.Mvc.Core.Models;
 using Ninject;
 using NLog;
 using NzbDrone.Core.Model;
@@ -76,6 +78,43 @@ namespace NzbDrone.Core.Providers
         public virtual void Delete(int historyId)
         {
             _database.Delete<History>(historyId);
+        }
+
+        public virtual Page<HistoryQueryModel> GetPagedItems(DataTablesPageRequest pageRequest)
+        {
+            var query = Sql.Builder
+                    .Select(@"History.*, Series.Title as SeriesTitle, Episodes.Title as EpisodeTitle, 
+                                Episodes.SeasonNumber as SeasonNumber, Episodes.EpisodeNumber as EpisodeNumber,
+                                Episodes.Overview as EpisodeOverview")
+                    .From("History")
+                    .InnerJoin("Series")
+                    .On("History.SeriesId = Series.SeriesId")
+                    .InnerJoin("Episodes")
+                    .On("History.EpisodeId = Episodes.EpisodeId");
+
+            var startPage = (pageRequest.DisplayLength == 0) ? 1 : pageRequest.DisplayStart / pageRequest.DisplayLength + 1;
+
+            if (!string.IsNullOrEmpty(pageRequest.Search))
+            {
+                var whereClause = string.Join(" OR ", SqlBuilderHelper.GetSearchClause(pageRequest));
+
+                if (!string.IsNullOrEmpty(whereClause))
+                    query.Append("WHERE " + whereClause, "%" + pageRequest.Search + "%");
+            }
+
+            var orderBy = string.Join(",", SqlBuilderHelper.GetOrderByClause(pageRequest));
+
+            if (!string.IsNullOrEmpty(orderBy))
+            {
+                query.Append("ORDER BY " + orderBy);
+            }
+
+            return _database.Page<HistoryQueryModel>(startPage, pageRequest.DisplayLength, query);
+        }
+
+        public virtual long Count()
+        {
+            return _database.Single<long>(@"SELECT COUNT(*) from History");
         }
     }
 }

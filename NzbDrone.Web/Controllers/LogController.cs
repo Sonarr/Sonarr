@@ -52,36 +52,36 @@ namespace NzbDrone.Web.Controllers
             return JsonNotificationResult.Info("Logs Cleared");
         }
 
-        public ActionResult AjaxBinding(DataTablesParams dataTablesParams)
+        public ActionResult AjaxBinding(DataTablesPageRequest pageRequest)
         {
             var logs = _logProvider.GetAllLogs();
             var totalCount = logs.Count();
 
             IQueryable<Log> q = logs;
-            if (!string.IsNullOrEmpty(dataTablesParams.sSearch))
+            if (!string.IsNullOrEmpty(pageRequest.Search))
             {
-                q = q.Where(b => b.Logger.Contains(dataTablesParams.sSearch)
-                    || b.Exception.Contains(dataTablesParams.sSearch)
-                    || b.Message.Contains(dataTablesParams.sSearch));
+                q = q.Where(b => b.Logger.Contains(pageRequest.Search)
+                    || b.Exception.Contains(pageRequest.Search)
+                    || b.Message.Contains(pageRequest.Search));
             }
 
             int filteredCount = q.Count();
 
             IQueryable<Log> sorted = q;
 
-            for (int i = 0; i < dataTablesParams.iSortingCols; i++)
+            for (int i = 0; i < pageRequest.SortingCols; i++)
             {
-                int sortCol = dataTablesParams.iSortCol[i];
+                int sortCol = pageRequest.SortCol[i];
                 var sortColName = sortCol == 0 ? "Time" : sortCol == 1 ? "Level" : "Logger";
-                var sortExpression = String.Format("{0} {1}", sortColName, dataTablesParams.sSortDir[i]);
+                var sortExpression = String.Format("{0} {1}", sortColName, pageRequest.SortDir[i]);
 
                 sorted = sorted.OrderBy(sortExpression);
             }
 
             IQueryable<Log> filteredAndSorted = sorted;
-            if (filteredCount > dataTablesParams.iDisplayLength)
+            if (filteredCount > pageRequest.DisplayLength)
             {
-                filteredAndSorted = sorted.Skip(dataTablesParams.iDisplayStart).Take(dataTablesParams.iDisplayLength);
+                filteredAndSorted = sorted.Skip(pageRequest.DisplayStart).Take(pageRequest.DisplayLength);
             }
 
             var logModels = filteredAndSorted.ToList().Select(s => new LogModel
@@ -97,7 +97,7 @@ namespace NzbDrone.Web.Controllers
 
             return Json(new
             {
-                sEcho = dataTablesParams.sEcho,
+                sEcho = pageRequest.Echo,
                 iTotalRecords = totalCount,
                 iTotalDisplayRecords = filteredCount,
                 aaData = logModels

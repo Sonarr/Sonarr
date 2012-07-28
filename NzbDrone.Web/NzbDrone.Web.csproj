@@ -53,9 +53,9 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DataTables.Mvc.Core">
-      <HintPath>..\packages\DataTables.Mvc.0.1.0.79\lib\DataTables.Mvc.Core.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="DataTables.Mvc.Core, Version=0.1.0.85, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\DataTables.Mvc.Core.0.1.0.85\lib\DataTables.Mvc.Core.dll</HintPath>
     </Reference>
     <Reference Include="Dynamic">
       <HintPath>..\packages\DynamicQuery.1.0\lib\35\Dynamic.dll</HintPath>
@@ -142,9 +142,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\TvdbLib.dll</HintPath>
     </Reference>
-    <Reference Include="WebActivator, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="WebActivator, Version=1.5.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\WebActivator.1.5\lib\net40\WebActivator.dll</HintPath>
+      <HintPath>..\packages\WebActivator.1.5.1\lib\net40\WebActivator.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -363,6 +363,7 @@
     <Content Include="Scripts\DataTables-1.9.0\media\js\jquery.dataTables.editable.js" />
     <Content Include="Scripts\DataTables-1.9.0\media\js\jquery.dataTables.js" />
     <Content Include="Scripts\DataTables-1.9.0\media\js\jquery.dataTables.min.js" />
+    <Content Include="Scripts\DataTables-1.9.0\media\js\jquery.dataTablesFilteringDelay.js" />
     <Content Include="Scripts\DataTables-1.9.0\media\js\jquery.jeditable.js" />
     <Content Include="Scripts\jquery-1.7.1-vsdoc.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
