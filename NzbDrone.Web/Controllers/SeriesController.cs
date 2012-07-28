@@ -13,7 +13,6 @@ using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Web.Models;
-using StackExchange.Profiling;
 
 namespace NzbDrone.Web.Controllers
 {
