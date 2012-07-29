@@ -42,7 +42,7 @@
     <WarningLevel>4</WarningLevel>
     <UseVSHostingProcess>true</UseVSHostingProcess>
     <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
-    <IntermediateOutputPath>C:\Users\MARK~1.MCD\AppData\Local\Temp\vs273.tmp\x86\Debug\</IntermediateOutputPath>
+    <IntermediateOutputPath>C:\Users\Markus\AppData\Local\Temp\vs73DE.tmp\x86\Debug\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -52,7 +52,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <IntermediateOutputPath>C:\Users\MARK~1.MCD\AppData\Local\Temp\vs273.tmp\x86\Release\</IntermediateOutputPath>
+    <IntermediateOutputPath>C:\Users\Markus\AppData\Local\Temp\vs73DE.tmp\x86\Release\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>NzbDrone.ico</ApplicationIcon>
