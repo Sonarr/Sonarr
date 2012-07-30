@@ -24,17 +24,17 @@ namespace NzbDrone.Web.Models
         public String NzbMatrixApiKey { get; set; }
 
         [DataType(DataType.Text)]
-        [DisplayName("UID")]
+        [DisplayName("User ID")]
         [Description("User ID for NZBsRus")]
         [DisplayFormat(ConvertEmptyStringToNull = false)]
-        [RequiredIf("NzbsRUsEnabled", true, ErrorMessage = "UID Required when NzbsRus is enabled")]
+        [RequiredIf("NzbsRUsEnabled", true, ErrorMessage = "User ID Required when NzbsRus is enabled")]
         public String NzbsrusUId { get; set; }
 
         [DataType(DataType.Text)]
-        [DisplayName("Hash")]
-        [Description("Hash for NZBsRus")]
+        [DisplayName("API Key")]
+        [Description("API Key for NZBsRus")]
         [DisplayFormat(ConvertEmptyStringToNull = false)]
-        [RequiredIf("NzbsRUsEnabled", true, ErrorMessage = "Hash Required when NzbsRus is enabled")]
+        [RequiredIf("NzbsRUsEnabled", true, ErrorMessage = "API Key Required when NzbsRus is enabled")]
         public String NzbsrusHash { get; set; }
 
         [DataType(DataType.Text)]
