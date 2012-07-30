@@ -162,7 +162,7 @@ namespace NzbDrone.Core.Providers.Metadata
                     details.Add(new XElement("season", tvdbEpisode.SeasonNumber));
                     details.Add(new XElement("episode", tvdbEpisode.EpisodeNumber));
                     details.Add(new XElement("aired", tvdbEpisode.FirstAired.ToString("yyyy-MM-dd")));
-                    details.Add(new XElement("rating", tvdbEpisode.Rating));
+                    details.Add(new XElement("plot", tvdbEpisode.Overview));
                     details.Add(new XElement("displayseason"));
                     details.Add(new XElement("displayepisode"));
                     details.Add(new XElement("thumb", "http://www.thetvdb.com/banners/" + tvdbEpisode.BannerPath));
