@@ -214,6 +214,12 @@ namespace NzbDrone.Core.Providers.Core
             set { SetValue("Sorting_MultiEpisodeStyle", value); }
         }
 
+        public virtual bool SortingUseSceneName
+        {
+            get { return GetValueBoolean("Sorting_UseSceneName", false); }
+            set { SetValue("Sorting_UseSceneName", value); }
+        }
+
         public virtual int DefaultQualityProfile
         {
             get { return GetValueInt("DefaultQualityProfile", 1); }

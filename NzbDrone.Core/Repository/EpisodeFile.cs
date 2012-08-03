@@ -34,6 +34,7 @@ namespace NzbDrone.Core.Repository
         public bool Proper { get; set; }
         public long Size { get; set; }
         public DateTime DateAdded { get; set; }
+        public string SceneName { get; set; }
 
         [Ignore]
         public Model.Quality QualityWrapper

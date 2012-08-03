@@ -42,6 +42,10 @@
         <span class="small">@Html.DescriptionFor(m => m.MultiEpisodeStyle)</span>
     </label>
     @Html.DropDownListFor(m => m.MultiEpisodeStyle, Model.MultiEpisodeStyles, new { @class = "inputClass selectClass" })
+    <label class="labelClass">@Html.LabelFor(m => m.SceneName)
+        <span class="small">@Html.DescriptionFor(m => m.SceneName)</span>
+    </label>
+    @Html.CheckBoxFor(m => m.SceneName, new { @class = "inputClass checkClass" })
 </div>
 <div id="examples">
     <div id="singleEpisodeExample">

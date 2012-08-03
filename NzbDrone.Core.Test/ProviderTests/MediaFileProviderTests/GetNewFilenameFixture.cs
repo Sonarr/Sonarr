@@ -1,7 +1,7 @@
 ﻿// ReSharper disable RedundantUsingDirective
 
 using System.Collections.Generic;
-
+using System.IO;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
                             .Build();
 
             //Act
-            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV, false);
+            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV, false, new EpisodeFile());
 
             //Assert
             Assert.AreEqual("South Park - S15E06 - City Sushi [HDTV]", result);
@@ -66,7 +66,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
                             .Build();
 
             //Act
-            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV, false);
+            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV, false, new EpisodeFile());
 
             //Assert
             Assert.AreEqual("15x06 - City Sushi [HDTV]", result);
@@ -93,7 +93,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
                             .Build();
 
             //Act
-            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV, false);
+            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV, false, new EpisodeFile());
 
             //Assert
             Assert.AreEqual("South Park 05x06 [HDTV]", result);
@@ -121,7 +121,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
                             .Build();
 
             //Act
-            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV, false);
+            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV, false, new EpisodeFile());
 
             //Assert
             Assert.AreEqual("South Park s05e06", result);
@@ -148,7 +148,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
                             .Build();
 
             //Act
-            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV, false);
+            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV, false, new EpisodeFile());
 
             //Assert
             Assert.AreEqual("South.Park.s05e06.City.Sushi", result);
@@ -175,7 +175,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
                             .Build();
 
             //Act
-            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV, false);
+            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV, false, new EpisodeFile());
 
             //Assert
             Assert.AreEqual("South.Park.-.s05e06.-.City.Sushi.[HDTV]", result);
@@ -203,7 +203,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
                             .Build();
 
             //Act
-            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV, false);
+            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV, false, new EpisodeFile());
 
             //Assert
             Assert.AreEqual("S15E06", result);
@@ -237,7 +237,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
                             .Build();
 
             //Act
-            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episodeOne, episodeTwo }, "The Mentalist", QualityTypes.HDTV, false);
+            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episodeOne, episodeTwo }, "The Mentalist", QualityTypes.HDTV, false, new EpisodeFile());
 
             //Assert
             Assert.AreEqual("The Mentalist - S03E23-E24 - Strawberries and Cream (1) + Strawberries and Cream (2) [HDTV]", result);
@@ -271,7 +271,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
                             .Build();
 
             //Act
-            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episodeOne, episodeTwo }, "The Mentalist", QualityTypes.HDTV, false);
+            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episodeOne, episodeTwo }, "The Mentalist", QualityTypes.HDTV, false, new EpisodeFile());
 
             //Assert
             Assert.AreEqual("3x23x24 - Strawberries and Cream (1) + Strawberries and Cream (2) [HDTV]", result);
@@ -305,7 +305,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
                             .Build();
 
             //Act
-            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episodeOne, episodeTwo }, "The Mentalist", QualityTypes.HDTV, false);
+            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episodeOne, episodeTwo }, "The Mentalist", QualityTypes.HDTV, false, new EpisodeFile());
 
             //Assert
             Assert.AreEqual("3x23x24 Strawberries and Cream (1) + Strawberries and Cream (2) [HDTV]", result);
@@ -339,7 +339,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
                             .Build();
 
             //Act
-            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episodeOne, episodeTwo }, "The Mentalist", QualityTypes.HDTV, false);
+            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episodeOne, episodeTwo }, "The Mentalist", QualityTypes.HDTV, false, new EpisodeFile());
 
             //Assert
             Assert.AreEqual("The.Mentalist.s03e23.s03e24.Strawberries.and.Cream.(1).+.Strawberries.and.Cream.(2)", result);
@@ -373,7 +373,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
                             .Build();
 
             //Act
-            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episodeOne, episodeTwo }, "The Mentalist", QualityTypes.HDTV, false);
+            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episodeOne, episodeTwo }, "The Mentalist", QualityTypes.HDTV, false, new EpisodeFile());
 
             //Assert
             Assert.AreEqual("The.Mentalist.-.S03E23-24", result);
@@ -407,7 +407,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
                             .Build();
 
             //Act
-            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episodeOne, episodeTwo }, "The Mentalist", QualityTypes.HDTV, false);
+            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episodeOne, episodeTwo }, "The Mentalist", QualityTypes.HDTV, false, new EpisodeFile());
 
             //Assert
             Assert.AreEqual("3x23x24", result);
@@ -432,7 +432,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
                             .Build();
 
             //Act
-            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV, true);
+            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV, true, new EpisodeFile());
 
             //Assert
             result.Should().Be("South Park - S15E06 - City Sushi [HDTV] [Proper]");
@@ -457,7 +457,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
                             .Build();
 
             //Act
-            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV, false);
+            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV, false, new EpisodeFile());
 
             //Assert
             result.Should().Be("South Park - S15E06 - City Sushi [HDTV]");
@@ -482,7 +482,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
                             .Build();
 
             //Act
-            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV, true);
+            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV, true, new EpisodeFile());
 
             //Assert
             result.Should().Be("South Park - S15E06 - City Sushi");
@@ -514,7 +514,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
                             .Build();
 
             //Act
-            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode2, episode }, "30 Rock", QualityTypes.HDTV, false);
+            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode2, episode }, "30 Rock", QualityTypes.HDTV, false, new EpisodeFile());
 
             //Assert
             result.Should().Be("30 Rock - S06E06-E07 - Hey, Baby, What's Wrong! (1) + Hey, Baby, What's Wrong! (2)");
@@ -541,7 +541,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
                             .Build();
 
             //Act
-            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV, false);
+            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV, false, new EpisodeFile());
 
             //Assert
             Assert.AreEqual("South Park.S15E06.City Sushi [HDTV]", result);
@@ -568,10 +568,72 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
                             .Build();
 
             //Act
-            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV, false);
+            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV, false, new EpisodeFile());
 
             //Assert
             Assert.AreEqual("15x06.City Sushi [HDTV]", result);
+        }
+
+        [Test]
+        public void GetNewFilename_UseSceneName_when_sceneName_isNull()
+        {
+            //Setup
+            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingSeparatorStyle).Returns(2);
+            fakeConfig.SetupGet(c => c.SortingNumberStyle).Returns(0);
+            fakeConfig.SetupGet(c => c.SortingReplaceSpaces).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingUseSceneName).Returns(true);
+
+            var episode = Builder<Episode>.CreateNew()
+                            .With(e => e.Title = "City Sushi")
+                            .With(e => e.SeasonNumber = 15)
+                            .With(e => e.EpisodeNumber = 6)
+                            .Build();
+
+            var episodeFile = Builder<EpisodeFile>.CreateNew()
+                    .With(e => e.SceneName = null)
+                    .With(e => e.Path = @"C:\Test\TV\30 Rock - S01E01 - Test")
+                    .Build();
+
+            //Act
+            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV, false, episodeFile);
+
+            //Assert
+            result.Should().Be(Path.GetFileNameWithoutExtension(episodeFile.Path));
+        }
+
+        [Test]
+        public void GetNewFilename_UseSceneName_when_sceneName_isNotNull()
+        {
+            //Setup
+            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingSeparatorStyle).Returns(2);
+            fakeConfig.SetupGet(c => c.SortingNumberStyle).Returns(0);
+            fakeConfig.SetupGet(c => c.SortingReplaceSpaces).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingUseSceneName).Returns(true);
+
+            var episode = Builder<Episode>.CreateNew()
+                            .With(e => e.Title = "City Sushi")
+                            .With(e => e.SeasonNumber = 15)
+                            .With(e => e.EpisodeNumber = 6)
+                            .Build();
+
+            var episodeFile = Builder<EpisodeFile>.CreateNew()
+                    .With(e => e.SceneName = "30.Rock.S01E01.xvid-LOL")
+                    .With(e => e.Path = @"C:\Test\TV\30 Rock - S01E01 - Test")
+                    .Build();
+
+            //Act
+            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode }, "South Park", QualityTypes.HDTV, false, episodeFile);
+
+            //Assert
+            result.Should().Be(episodeFile.SceneName);
         }
     }
 }

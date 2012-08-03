@@ -201,7 +201,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Returns(fakeEpisode);
 
             Mocker.GetMock<MediaFileProvider>()
-                .Setup(e => e.GetNewFilename(fakeEpisode, fakeSeries.Title, It.IsAny<QualityTypes>(), It.IsAny<bool>()))
+                .Setup(e => e.GetNewFilename(fakeEpisode, fakeSeries.Title, It.IsAny<QualityTypes>(), It.IsAny<bool>(), It.IsAny<EpisodeFile>()))
                 .Returns(filename);
 
             Mocker.GetMock<MediaFileProvider>()
@@ -298,7 +298,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             Mocker.GetMock<EpisodeProvider>().Setup(s => s.GetEpisodesByFileId(episodeFile.EpisodeFileId))
                     .Returns(episode);
 
-            Mocker.GetMock<MediaFileProvider>().Setup(s => s.GetNewFilename(It.IsAny<IList<Episode>>(), series.Title, QualityTypes.Unknown, false))
+            Mocker.GetMock<MediaFileProvider>().Setup(s => s.GetNewFilename(It.IsAny<IList<Episode>>(), series.Title, QualityTypes.Unknown, false, It.IsAny<EpisodeFile>()))
                 .Returns(newFilename);
 
             Mocker.GetMock<MediaFileProvider>().Setup(s => s.CalculateFilePath(It.IsAny<Series>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>()))
@@ -350,7 +350,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Returns(fakeEpisode);
 
             Mocker.GetMock<MediaFileProvider>()
-                .Setup(e => e.GetNewFilename(fakeEpisode, fakeSeries.Title, It.IsAny<QualityTypes>(), It.IsAny<bool>()))
+                .Setup(e => e.GetNewFilename(fakeEpisode, fakeSeries.Title, It.IsAny<QualityTypes>(), It.IsAny<bool>(), It.IsAny<EpisodeFile>()))
                 .Returns(filename);
 
             Mocker.GetMock<MediaFileProvider>()

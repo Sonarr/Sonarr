@@ -185,7 +185,6 @@ namespace NzbDrone.Core.Test
         {
             var qualityEnums = Enum.GetValues(typeof(QualityTypes));
 
-
             foreach (var qualityEnum in qualityEnums)
             {
                 var fileName = String.Format("My series S01E01 [{0}]", qualityEnum);
@@ -276,8 +275,6 @@ namespace NzbDrone.Core.Test
             result.Should().Be(seriesName);
         }
 
-
-
         [TestCase("CaPitAl", "capital")]
         [TestCase("peri.od", "period")]
         [TestCase("this.^&%^**$%@#$!That", "thisthat")]
@@ -289,7 +286,6 @@ namespace NzbDrone.Core.Test
             var result = Parser.NormalizeTitle(dirty);
             result.Should().Be(clean);
         }
-
 
         [TestCase("the")]
         [TestCase("and")]
@@ -359,7 +355,6 @@ namespace NzbDrone.Core.Test
             var result = Parser.ParseSeriesName(postTitle);
             result.Should().Be(Parser.NormalizeTitle(title));
         }
-
 
         [TestCase("Castle.2009.S01E14.English.HDTV.XviD-LOL", LanguageType.English)]
         [TestCase("Castle.2009.S01E14.French.HDTV.XviD-LOL", LanguageType.French)]
@@ -444,6 +439,17 @@ namespace NzbDrone.Core.Test
             Parser.ParseTitle(title);
             ExceptionVerification.IgnoreWarns();
             ExceptionVerification.ExpectedErrors(1);
+        }
+
+        [TestCase("Castle.2009.S01E14.English.HDTV.XviD-LOL", "LOL")]
+        [TestCase("Castle 2009 S01E14 English HDTV XviD LOL", "LOL")]
+        [TestCase("Acropolis Now S05 EXTRAS DVDRip XviD RUNNER", "RUNNER")]
+        [TestCase("Punky.Brewster.S01.EXTRAS.DVDRip.XviD-RUNNER", "RUNNER")]
+        [TestCase("2020.NZ.2011.12.02.PDTV.XviD-C4TV", "C4TV")]
+        [TestCase("The.Office.S03E115.DVDRip.XviD-OSiTV", "OSiTV")]
+        public void parse_releaseGroup(string title, string expected)
+        {
+            Parser.ParseReleaseGroup(title).Should().Be(expected);
         }
     }
 }

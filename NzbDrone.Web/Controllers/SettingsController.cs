@@ -205,6 +205,7 @@ namespace NzbDrone.Web.Controllers
             model.SeparatorStyle = _configProvider.SortingSeparatorStyle;
             model.NumberStyle = _configProvider.SortingNumberStyle;
             model.MultiEpisodeStyle = _configProvider.SortingMultiEpisodeStyle;
+            model.SceneName = _configProvider.SortingUseSceneName;
 
             model.SeparatorStyles = new SelectList(EpisodeSortingHelper.GetSeparatorStyles(), "Id", "Name");
             model.NumberStyles = new SelectList(EpisodeSortingHelper.GetNumberStyles(), "Id", "Name");
@@ -594,6 +595,7 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.SortingSeparatorStyle = data.SeparatorStyle;
                 _configProvider.SortingNumberStyle = data.NumberStyle;
                 _configProvider.SortingMultiEpisodeStyle = data.MultiEpisodeStyle;
+                _configProvider.SortingUseSceneName = data.SceneName;
 
                 //Metadata
                 _configProvider.MetadataUseBanners = data.MetadataUseBanners;
