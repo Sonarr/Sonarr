@@ -123,14 +123,20 @@ namespace NzbDrone.Core.Providers
         public virtual void CreateForEpisodeFiles(List<EpisodeFile> episodeFiles)
         {
             if (episodeFiles == null || !episodeFiles.Any())
-                return;
-            
+            {
+                Logger.Warn("No episode files, no metadata will be created.");
+                throw new ArgumentException("EpsiodeFiles must not be null or empty", "episodeFiles");
+            }
+
+            Logger.Trace("Creating metadata for {0} files.", episodeFiles.Count);
+
             var tvDbSeries = _tvDbProvider.GetSeries(episodeFiles.First().SeriesId, true, true);
 
             foreach(var episodeFile in episodeFiles)
             {
                 foreach (var provider in _metadataProviders.Where(i => GetSettings(i.GetType()).Enable))
                 {
+                    Logger.Trace("Creating {0} metadata for {1}", provider.Name, episodeFile.EpisodeFileId);
                     provider.CreateForEpisodeFile(episodeFile, tvDbSeries);
                 }
             }
