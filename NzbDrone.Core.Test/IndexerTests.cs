@@ -692,5 +692,21 @@ namespace NzbDrone.Core.Test
                 episodeParseResult.NzbInfoUrl.Should().Contain(expectedString);
             }
         }
+
+        [Test]
+        public void releaseGroup_should_use_nfo_filename_for_newzbin()
+        {
+            WithConfiguredIndexers();
+
+            Mocker.GetMock<HttpProvider>()
+                          .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
+                          .Returns(File.OpenRead(".\\Files\\Rss\\SizeParsing\\newzbin.xml"));
+
+            //Act
+            var parseResults = Mocker.Resolve<Newzbin>().FetchRss();
+
+            parseResults.Should().HaveCount(1);
+            parseResults[0].ReleaseGroup.Should().Be("tvp");
+        }
     }
 }
