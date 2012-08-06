@@ -44,6 +44,8 @@ namespace NzbDrone.Core.Model
 
         public int Age { get; set; }
 
+        public string ReleaseGroup { get; set; }
+
         public override string ToString()
         {
 

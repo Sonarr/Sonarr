@@ -63,6 +63,7 @@ namespace NzbDrone.Core.Providers
                     history.EpisodeId = episode.EpisodeId;
                     history.SeriesId = episode.SeriesId;
                     history.NzbInfoUrl = parseResult.NzbInfoUrl;
+                    history.ReleaseGroup = parseResult.ReleaseGroup;
 
                     _historyProvider.Add(history);
                     _episodeProvider.MarkEpisodeAsFetched(episode.EpisodeId);

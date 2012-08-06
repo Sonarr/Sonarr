@@ -124,6 +124,7 @@ namespace NzbDrone.Core
                             result.Language = ParseLanguage(title);
                             result.Quality = ParseQuality(title);
                             result.OriginalString = title;
+                            result.ReleaseGroup = ParseReleaseGroup(title);
                             return result;
                         }
                     }
@@ -424,19 +425,22 @@ namespace NzbDrone.Core
             return LanguageType.English;
         }
 
-        internal static string ParseReleaseGroup(string name)
+        internal static string ParseReleaseGroup(string title)
         {
-            Logger.Trace("Trying to parse release group for {0}", name);
+            Logger.Trace("Trying to parse release group for {0}", title);
 
-            name = name.Trim();
-            var index = name.LastIndexOf('-');
+            title = title.Trim();
+            var index = title.LastIndexOf('-');
             
             if (index < 0)
-                index = name.LastIndexOf(' ');
+                index = title.LastIndexOf(' ');
 
-            var group = name.Substring(index + 1);
+            if (index < 0)
+                return String.Empty;
 
-            if (group.Length == name.Length)
+            var group = title.Substring(index + 1);
+
+            if (group.Length == title.Length)
                 return String.Empty;
 
             Logger.Trace("Release Group found: {0}", group);

@@ -12,6 +12,8 @@ namespace NzbDrone.Core.Datastore.Migrations
         protected override void MainDbUpgrade()
         {
             Database.AddColumn("EpisodeFiles", new Column("SceneName", DbType.String, ColumnProperty.Null));
+            Database.AddColumn("EpisodeFiles", new Column("ReleaseGroup", DbType.String, ColumnProperty.Null));
+            Database.AddColumn("History", new Column("ReleaseGroup", DbType.String, ColumnProperty.Null));
         }
     }
 }
