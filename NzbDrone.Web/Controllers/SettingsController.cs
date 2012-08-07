@@ -244,6 +244,7 @@ namespace NzbDrone.Web.Controllers
             var model = new MiscSettingsModel();
             model.EnableBacklogSearching = _configProvider.EnableBacklogSearching;
             model.AutoIgnorePreviouslyDownloadedEpisodes = _configProvider.AutoIgnorePreviouslyDownloadedEpisodes;
+            model.AllowedReleaseGroups = _configProvider.AllowedReleaseGroups;
 
             return View(model);
         }
@@ -633,6 +634,7 @@ namespace NzbDrone.Web.Controllers
             {
                 _configProvider.EnableBacklogSearching = data.EnableBacklogSearching;
                 _configProvider.AutoIgnorePreviouslyDownloadedEpisodes = data.AutoIgnorePreviouslyDownloadedEpisodes;
+                _configProvider.AllowedReleaseGroups = data.AllowedReleaseGroups;
 
                 return GetSuccessResult();
             }

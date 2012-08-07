@@ -19,6 +19,11 @@
         </label>
         @Html.CheckBoxFor(m => m.AutoIgnorePreviouslyDownloadedEpisodes, new { @class = "inputClass checkClass" })
 
+        <label class="labelClass">@Html.LabelFor(m => m.AllowedReleaseGroups)
+            <span class="small">@Html.DescriptionFor(m => m.AllowedReleaseGroups)</span>
+        </label>
+        @Html.TextBoxFor(m => m.AllowedReleaseGroups, new { @class = "inputClass" })
+
         <div style="overflow: hidden; height: 50px;">
         </div>
         
