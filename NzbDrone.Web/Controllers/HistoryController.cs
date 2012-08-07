@@ -48,7 +48,8 @@ namespace NzbDrone.Web.Controllers
                 DateSorter = h.Date.ToString("MM/dd/yyyy h:mm:ss tt"),
                 Indexer = h.Indexer,
                 EpisodeId = h.EpisodeId,
-                NzbInfoUrl = h.NzbInfoUrl
+                NzbInfoUrl = h.NzbInfoUrl,
+                ReleaseGroup = h.ReleaseGroup
             });
 
             return Json(new

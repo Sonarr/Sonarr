@@ -16,6 +16,7 @@ namespace NzbDrone.Core.Model
         public bool IsProper { get; set; }
         public string Indexer { get; set; }
         public string NzbInfoUrl { get; set; }
+        public string ReleaseGroup { get; set; }
 
         public string EpisodeTitle { get; set; }
         public int SeasonNumber { get; set; }
