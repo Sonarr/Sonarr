@@ -514,6 +514,12 @@ namespace NzbDrone.Core.Providers.Core
             set { SetValue("MetadataUseBanners", value); }
         }
 
+        public virtual string AllowedReleaseGroups
+        {
+            get { return GetValue("AllowedReleaseGroups"); }
+            set { SetValue("AllowedReleaseGroups", value); }
+        }
+
         private string GetValue(string key)
         {
             return GetValue(key, String.Empty);
