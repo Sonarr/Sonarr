@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 
         private void WithLotsOfFreeDiskSpace()
         {
-            Mocker.GetMock<DiskProvider>().Setup(s => s.FreeDiskSpace(It.IsAny<DirectoryInfo>())).Returns(1000000);
+            Mocker.GetMock<DiskProvider>().Setup(s => s.FreeDiskSpace(It.IsAny<DirectoryInfo>())).Returns(1000000000);
         }
 
         private void WithImportedFiles(string droppedFolder)
@@ -280,7 +280,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
         }
 
         [Test]
-        public void when_files_are_imported_and_folder_is_small_enought_dir_should_be_deleted()
+        public void when_files_are_imported_and_folder_is_small_enough_dir_should_be_deleted()
         {
             //Setup
             WithStrictMocker();
@@ -289,15 +289,6 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
             var droppedFolder = new DirectoryInfo(@"C:\Test\Unsorted TV\The Office - Season 01");
 
             WithImportedFiles(droppedFolder.FullName);
-
-            var fakeSeries = Builder<Series>.CreateNew()
-                .With(s => s.Title = "The Office")
-                .Build();
-
-            var fakeEpisodeFiles = Builder<EpisodeFile>.CreateListOfSize(2)
-                .All()
-                .With(f => f.SeriesId = fakeSeries.SeriesId)
-                .Build().ToList();
 
             Mocker.GetMock<SeriesProvider>().Setup(s => s.FindSeries("office")).Returns(fakeSeries);
             Mocker.GetMock<DiskScanProvider>().Setup(s => s.CleanUpDropFolder(droppedFolder.FullName));
