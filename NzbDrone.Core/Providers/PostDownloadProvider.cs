@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
 using Ninject;
@@ -83,7 +84,8 @@ namespace NzbDrone.Core.Providers
             importedFiles.ForEach(file => _diskScanProvider.MoveEpisodeFile(file, true));
 
             //Create Metadata for all the episode files found
-            _metadataProvider.CreateForEpisodeFiles(importedFiles);
+            if (importedFiles.Any())
+                _metadataProvider.CreateForEpisodeFiles(importedFiles);
 
             //Delete the folder only if folder is small enough
             if (_diskProvider.GetDirectorySize(subfolderInfo.FullName) < Constants.IgnoreFileSize)
