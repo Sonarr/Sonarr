@@ -165,7 +165,9 @@
                                                                     } 
                                 }, //Next Airing
                                 { sWidth: '140px', "mDataProp": "Episodes", "bSortable": false, "fnRender": function (row) {
-                                        var progress = row.aData["EpisodeFileCount"] / row.aData["EpisodeCount"] * 100;
+                                        var progress = 100;
+                                        if (row.aData["EpisodeCount"] > 0)
+                                            progress = row.aData["EpisodeFileCount"] / row.aData["EpisodeCount"] * 100;
                                         
                                         var result = "<div class='progressBar' rel='" + progress + "'>" +
                                                         "<span class='progressBarText'>" + row.aData["EpisodeFileCount"] + " / " + row.aData["EpisodeCount"] +"</span>" +
