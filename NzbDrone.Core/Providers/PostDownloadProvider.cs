@@ -68,6 +68,15 @@ namespace NzbDrone.Core.Providers
                 return;
             }
 
+            var size = _diskProvider.GetDirectorySize(subfolderInfo.FullName);
+            var freeSpace = _diskProvider.FreeDiskSpace(new DirectoryInfo(series.Path));
+
+            if (Convert.ToUInt64(size) > freeSpace)
+            {
+                Logger.Error("Not enough free disk space for series: {0}, {1}", series.Title, series.Path);
+                return;
+            }
+
             _diskScanProvider.CleanUpDropFolder(subfolderInfo.FullName);
 
             var importedFiles = _diskScanProvider.Scan(series, subfolderInfo.FullName);
