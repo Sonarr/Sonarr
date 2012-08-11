@@ -106,6 +106,7 @@ namespace NzbDrone.Core.Providers
 
                         else
                         {
+                            currentIndexer.Url = indexerLocal.Url;
                             currentIndexer.BuiltIn = true;
                             Save(currentIndexer);
                         }
