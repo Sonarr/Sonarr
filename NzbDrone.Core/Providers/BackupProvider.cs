@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual string CreateBackupZip()
         {
-            var dbFile = _environmentProvider.GetNzbDronoeDbFile();
+            var dbFile = _environmentProvider.GetNzbDroneDbFile();
             var configFile = _environmentProvider.GetConfigPath();
             var zipFile = _environmentProvider.GetConfigBackupFile();
 

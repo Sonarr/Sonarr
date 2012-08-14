@@ -77,7 +77,7 @@ namespace NzbDrone.Common
             return Path.Combine(environmentProvider.ApplicationPath, APP_CONFIG_FILE);
         }
 
-        public static string GetNzbDronoeDbFile(this EnvironmentProvider environmentProvider)
+        public static string GetNzbDroneDbFile(this EnvironmentProvider environmentProvider)
         {
             return Path.Combine(environmentProvider.GetAppDataPath(), NZBDRONE_DB_FILE);
         }

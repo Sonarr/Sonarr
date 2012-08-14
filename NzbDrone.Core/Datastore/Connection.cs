@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Datastore
         {
             get
             {
-                return GetConnectionString(_environmentProvider.GetNzbDronoeDbFile());
+                return GetConnectionString(_environmentProvider.GetNzbDroneDbFile());
             }
         }
 
@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Datastore
 
         public static string GetConnectionString(string path)
         {
-            return String.Format("Data Source={0}", path);
+            return String.Format("Data Source=\"{0}\"; Max Database Size = 512;", path);
         }
 
         public IDatabase GetMainPetaPocoDb(Boolean profiled = true)
