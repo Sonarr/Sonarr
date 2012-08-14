@@ -101,13 +101,5 @@ namespace NzbDrone.Core.Test
 
             first.Should().BeSameAs(second);
         }
-
-        [Test]
-        public void app_should_be_marked_as_new_install_if_db_is_initilized_for_the_first_time()
-        {
-            WithRealDb();
-            EnvironmentProvider.RegisterNewInstall.Should().Be(true);
-        }
-
     }
 }

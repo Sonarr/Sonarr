@@ -45,8 +45,6 @@ namespace NzbDrone.Test.Common
         [SetUp]
         public void TestBaseSetup()
         {
-            EnvironmentProvider.RegisterNewInstall = true; 
-
             MockedRestProvider = new Mock<RestProvider>();
             ReportingService.RestProvider = MockedRestProvider.Object;
             ReportingService.SetupExceptronDriver();

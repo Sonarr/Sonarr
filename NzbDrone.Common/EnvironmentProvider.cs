@@ -49,9 +49,6 @@ namespace NzbDrone.Common
 
         public static Guid UGuid { get; set; }
 
-
-        public static bool RegisterNewInstall { get; set; }
-
         public virtual bool IsUserInteractive
         {
             get { return Environment.UserInteractive; }
@@ -101,7 +98,6 @@ namespace NzbDrone.Common
         {
             return dir.GetDirectories(ROOT_MARKER).Length != 0;
         }
-
 
         public virtual string StartUpPath
         {

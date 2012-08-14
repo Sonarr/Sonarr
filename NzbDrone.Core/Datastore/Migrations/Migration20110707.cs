@@ -11,9 +11,6 @@ namespace NzbDrone.Core.Datastore.Migrations
     {
         protected override void MainDbUpgrade()
         {
-            //This should not run unless for a clean install
-            EnvironmentProvider.RegisterNewInstall = true;
-            
             Database.AddTable("Series", new[]
                                             {
                                                 new Column("SeriesId", DbType.Int32, ColumnProperty.PrimaryKey),

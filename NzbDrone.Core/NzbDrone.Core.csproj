@@ -252,7 +252,6 @@
     <Compile Include="Helpers\EpisodeSortingHelper.cs" />
     <Compile Include="Helpers\SortHelper.cs" />
     <Compile Include="Helpers\SabnzbdPriorityTypeConverter.cs" />
-    <Compile Include="Jobs\CheckpointJob.cs" />
     <Compile Include="Jobs\RefreshEpsiodeMetadata.cs" />
     <Compile Include="Jobs\PastWeekBacklogSearchJob.cs" />
     <Compile Include="Jobs\SearchHistoryCleanupJob.cs" />
@@ -320,9 +319,6 @@
     <Compile Include="Jobs\IJob.cs" />
     <Compile Include="Jobs\RssSyncJob.cs" />
     <Compile Include="Jobs\UpdateInfoJob.cs" />
-    <Compile Include="Providers\AnalyticsProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Providers\StatsProvider.cs" />
     <Compile Include="Repository\MetadataDefinition.cs" />
     <Compile Include="Repository\Search\SearchHistoryItem.cs" />

@@ -74,16 +74,6 @@ namespace NzbDrone.Core
             EnvironmentProvider.UGuid = Kernel.Get<ConfigProvider>().UGuid;
             ReportingService.RestProvider = Kernel.Get<RestProvider>();
             ReportingService.SetupExceptronDriver();
-
-            var appId = AnalyticsProvider.DESKMETRICS_TEST_ID;
-
-            if (EnvironmentProvider.IsProduction)
-                appId = AnalyticsProvider.DESKMETRICS_PRODUCTION_ID;
-
-            var deskMetricsClient = new DeskMetricsClient(Kernel.Get<ConfigProvider>().UGuid.ToString(), appId, _environmentProvider.Version);
-            Kernel.Bind<IDeskMetricsClient>().ToConstant(deskMetricsClient);
-
-            Kernel.Get<AnalyticsProvider>().Checkpoint();
         }
 
         private void InitQuality()
@@ -142,7 +132,6 @@ namespace NzbDrone.Core
             Kernel.Bind<IJob>().To<AppUpdateJob>().InSingletonScope();
             Kernel.Bind<IJob>().To<TrimLogsJob>().InSingletonScope();
             Kernel.Bind<IJob>().To<RecentBacklogSearchJob>().InSingletonScope();
-            Kernel.Bind<IJob>().To<CheckpointJob>().InSingletonScope();
             Kernel.Bind<IJob>().To<SearchHistoryCleanupJob>().InSingletonScope();
             Kernel.Bind<IJob>().To<PastWeekBacklogSearchJob>().InSingletonScope();
             Kernel.Bind<IJob>().To<RefreshEpisodeMetadata>().InSingletonScope();
