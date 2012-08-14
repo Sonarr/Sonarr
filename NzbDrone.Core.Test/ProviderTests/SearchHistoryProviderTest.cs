@@ -70,7 +70,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             var history = Builder<SearchHistory>.CreateListOfSize(10)
                     .All()
-                    .With(h => h.SearchTime = DateTime.Now.AddDays(10))
+                    .With(h => h.SearchTime = DateTime.Now.AddDays(-10))
                     .Build();
 
             foreach(var searchHistory in history)
