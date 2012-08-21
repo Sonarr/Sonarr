@@ -56,12 +56,26 @@ namespace NzbDrone.Core.Providers.Indexer
 
         protected override IList<string> GetSeasonSearchUrls(string seriesTitle, int seasonNumber)
         {
-            return new List<string>();
+            var searchUrls = new List<string>();
+
+            foreach (var url in Urls)
+            {
+                searchUrls.Add(String.Format("{0}&limit=100&q={1}&season{2}", url, seriesTitle, seasonNumber));
+            }
+
+            return searchUrls;
         }
 
         protected override IList<string> GetPartialSeasonSearchUrls(string seriesTitle, int seasonNumber, int episodeWildcard)
         {
-            return new List<string>();
+            var searchUrls = new List<string>();
+
+            foreach (var url in Urls)
+            {
+                searchUrls.Add(String.Format("{0}&limit=100&q={1}+S{2:00}E{3}", url, seriesTitle, seasonNumber, episodeWildcard));
+            }
+
+            return searchUrls;
         }
 
         public override string Name
