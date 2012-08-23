@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Exceptron.Driver;
+using Exceptron.Client;
+using Exceptron.Client.Configuration;
 using NLog;
 using NzbDrone.Common.Contract;
 
@@ -15,7 +16,7 @@ namespace NzbDrone.Common
         private const string PARSE_URL = SERVICE_URL + "/ParseError";
 
         public static RestProvider RestProvider { get; set; }
-        public static ExceptionClient ExceptronDriver { get; set; }
+        public static ExceptronClient ExceptronClient { get; set; }
 
 
         private static readonly HashSet<string> parserErrorCache = new HashSet<string>();
@@ -86,7 +87,7 @@ namespace NzbDrone.Common
                     exceptionData.Severity = ExceptionSeverity.Fatal;
                 }
 
-                return ExceptronDriver.SubmitException(exceptionData).RefId;
+                return ExceptronClient.SubmitException(exceptionData).RefId;
             }
             catch (Exception e)
             {
@@ -106,13 +107,18 @@ namespace NzbDrone.Common
 
         public static void SetupExceptronDriver()
         {
-            ExceptronDriver = new ExceptionClient("CB230C312E5C4FF38B4FB9644B05E60G")
+            var config = new ExceptronConfiguration
+                             {
+                                     ApiKey = "CB230C312E5C4FF38B4FB9644B05E60G",
+                                     ThrowExceptions = !EnvironmentProvider.IsProduction,
+                             };
+
+            //ExceptronClient.Enviroment = EnvironmentProvider.IsProduction ? "Prod" : "Dev";
+
+            ExceptronClient = new ExceptronClient(config)
                                   {
                                       ApplicationVersion = new EnvironmentProvider().Version.ToString()
                                   };
-
-            ExceptronDriver.ClientConfiguration.ThrowsExceptions = !EnvironmentProvider.IsProduction;
-            ExceptronDriver.Enviroment = EnvironmentProvider.IsProduction ? "Prod" : "Dev";
         }
 
         private static void VerifyDependencies()
@@ -130,7 +136,7 @@ namespace NzbDrone.Common
                 }
             }
 
-            if (ExceptronDriver == null)
+            if (ExceptronClient == null)
             {
                 if (EnvironmentProvider.IsProduction)
                 {

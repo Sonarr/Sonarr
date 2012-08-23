@@ -1,0 +1,351 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Exceptron.Client</name>
+    </assembly>
+    <members>
+        <member name="P:Exceptron.Client.Configuration.ExceptronConfiguration.Host">
+            <summary>
+            exceptron api address. Do not modify this property.
+            </summary>
+        </member>
+        <member name="P:Exceptron.Client.Configuration.ExceptronConfiguration.ThrowExceptions">
+            <summary>
+            If ExceptronClinet should throw exceptions in case of an error. Default: <see cref="!:bool.False"/>
+            </summary>
+            <remarks>
+            Its recommended that this flag is set to True during development and <see cref="!:bool.False"/> in production systems.
+            If an exception is thrown while this flag is set to <see cref="!:bool.False"/> the thrown exception will be returned in <see cref="P:Exceptron.Client.Message.ExceptionResponse.Exception"/>
+            </remarks>
+        </member>
+        <member name="P:Exceptron.Client.Configuration.ExceptronConfiguration.ApiKey">
+            <summary>
+            The API of this application. Can find your API key in application settings page.
+            </summary>
+        </member>
+        <member name="P:Exceptron.Client.Configuration.ExceptronConfiguration.IncludeMachineName">
+            <summary>
+            If the machine name should be attached to the exception report
+            </summary>
+            <remarks>Machine name can be usefull in webfarm enviroments when multiple
+            servers are running the same app and the issue could be machine specific.
+            Hoewever, You might want to disable this feature for privacy reasons.</remarks>
+        </member>
+        <member name="T:Exceptron.Client.ExceptionData">
+            <summary>
+            Represents information that will be used to construct an exception report.
+            </summary>
+        </member>
+        <member name="P:Exceptron.Client.ExceptionData.Exception">
+            <summary>
+            Exception that is being reported
+            </summary>
+        </member>
+        <member name="P:Exceptron.Client.ExceptionData.Component">
+            <summary>
+            Component that experianced this exception.
+            </summary>
+            <remarks>
+            It is common to use the logger name that was used to log the exception as the component.
+            </remarks>
+            <example>
+            DataAccess, Configuration, Registration, etc.
+            </example>
+        </member>
+        <member name="P:Exceptron.Client.ExceptionData.UserId">
+            <summary>
+            ID that will uniquely identify the user
+            </summary>
+            <remarks>
+            This Id does not have to be tied to the user's identity. 
+            You can use a system generated unique ID such as GUID. 
+            This field is used to report how many unique users are experiencing an error.
+            </remarks>
+            <example>
+            "62E5C8EF-0CA2-43AB-B278-FC6994F776ED"
+            "Timmy@aol.com"
+            "26437"
+            </example>
+        </member>
+        <member name="P:Exceptron.Client.ExceptionData.Message">
+            <summary>
+            Any message that should be attached to this exceptions
+            </summary>
+            <example>
+            Something went wrong while checking for application updates.
+            </example>
+        </member>
+        <member name="P:Exceptron.Client.ExceptionData.Severity">
+            <summary>
+            Severity of the exception being reported
+            </summary>
+        </member>
+        <member name="P:Exceptron.Client.ExceptionData.HttpContext">
+            <summary>
+            <see cref="T:System.Web.HttpContext"/> that triggered this exception. If no <see cref="T:System.Web.HttpContext"/> is provided
+            <see cref="T:Exceptron.Client.ExceptronClient"/> will try to get the current <see cref="T:System.Web.HttpContext"/> from <see cref="P:System.Web.HttpContext.Current"/>
+            </summary>
+        </member>
+        <member name="M:Exceptron.Client.IExceptronClient.SubmitException(Exceptron.Client.ExceptionData)">
+            <summary>
+            Submit an exception to Exceptron Servers.
+            </summary>
+            <param name="exceptionData">Exception data to be reported to the server</param>
+        </member>
+        <member name="M:Exceptron.Client.IExceptronClient.SubmitException(System.Exception,System.String,Exceptron.Client.ExceptionSeverity,System.String,System.String,System.Web.HttpContext)">
+            <summary>
+            Submit an exception to Exceptron Servers.
+            </summary>
+            <param name="exception">Exception that is being reported</param>
+            <param name="component" example="DataAccess, Configuration, Registration, etc." remarks="It is common to use the logger name that was used to log the exception as the component.">Component that experianced this exception.</param>
+            <param name="severity">Severity of the exception being reported</param>
+            <param name="message" example="Something went wrong while checking for application updates.">Any message that should be attached to this exceptions</param>
+            <param name="userId" remarks="This Id does not have to be tied to the user's identity. &#xA;            You can use a system generated unique ID such as GUID. &#xA;            This field is used to report how many unique users are experiencing an error." example="&#xA;            62E5C8EF-0CA2-43AB-B278-FC6994F776ED&#xA;            Timmy@aol.com&#xA;            26437&#xA;            ">ID that will uniquely identify the user</param>
+            <param name="httpContext"><see cref="T:System.Web.HttpContext"/> in which the exception occured. If no <see cref="T:System.Web.HttpContext"/> is provided
+            <see cref="T:Exceptron.Client.ExceptronClient"/> will try to get the current <see cref="T:System.Web.HttpContext"/> from <see cref="P:System.Web.HttpContext.Current"/></param>
+            <returns></returns>
+        </member>
+        <member name="P:Exceptron.Client.IExceptronClient.Configuration">
+            <summary>
+            Client Configuration
+            </summary>
+        </member>
+        <member name="P:Exceptron.Client.IExceptronClient.ApplicationVersion">
+            <summary>
+            Version of application executing. Default: Version of <see cref="M:System.Reflection.Assembly.GetEntryAssembly"/>
+            </summary>
+        </member>
+        <member name="M:Exceptron.Client.ExceptronClient.#ctor">
+            <summary>
+            Creates a new instance of <see cref="T:Exceptron.Client.ExceptronClient"/>
+            Loads <see cref="T:Exceptron.Client.Configuration.ExceptronConfiguration"/> from application config file.
+            </summary>
+        </member>
+        <member name="M:Exceptron.Client.ExceptronClient.#ctor(Exceptron.Client.Configuration.ExceptronConfiguration)">
+            <param name="exceptronConfiguration">Exceptron client configuration</param>
+        </member>
+        <member name="M:Exceptron.Client.ExceptronClient.SubmitException(System.Exception,System.String,Exceptron.Client.ExceptionSeverity,System.String,System.String,System.Web.HttpContext)">
+            <summary>
+            Submit an exception to Exceptron Servers.
+            </summary>
+            <param name="exception">Exception that is being reported</param>
+            <param name="component" example="DataAccess, Configuration, Registration, etc." remarks="It is common to use the logger name that was used to log the exception as the component.">Component that experianced this exception.</param>
+            <param name="severity">Severity of the exception being reported</param>
+            <param name="message" example="Something went wrong while checking for application updates.">Any message that should be attached to this exceptions</param>
+            <param name="userId" remarks="This Id does not have to be tied to the user's identity. &#xA;            You can use a system generated unique ID such as GUID. &#xA;            This field is used to report how many unique users are experiencing an error." example="&#xA;            62E5C8EF-0CA2-43AB-B278-FC6994F776ED&#xA;            Timmy@aol.com&#xA;            26437&#xA;            ">ID that will uniquely identify the user</param>
+            <param name="httpContext"><see cref="T:System.Web.HttpContext"/> in which the exception occured. If no <see cref="T:System.Web.HttpContext"/> is provided
+            <see cref="T:Exceptron.Client.ExceptronClient"/> will try to get the current <see cref="T:System.Web.HttpContext"/> from <see cref="P:System.Web.HttpContext.Current"/></param>
+            <returns></returns>
+        </member>
+        <member name="M:Exceptron.Client.ExceptronClient.SubmitException(Exceptron.Client.ExceptionData)">
+            <summary>
+            Submit an exception to Exceptron Servers.
+            </summary>
+            <param name="exceptionData">Exception data to be reported to the server</param>
+        </member>
+        <member name="P:Exceptron.Client.ExceptronClient.ClientVersion">
+            <summary>
+            Version of Client
+            </summary>
+        </member>
+        <member name="P:Exceptron.Client.ExceptronClient.ClientName">
+            <summary>
+            Name of Client
+            </summary>
+        </member>
+        <member name="P:Exceptron.Client.ExceptronClient.Configuration">
+            <summary>
+            Client Configuration
+            </summary>
+        </member>
+        <member name="P:Exceptron.Client.ExceptronClient.ApplicationVersion">
+            <summary>
+            Version of application executing. Default: Version of <see cref="M:System.Reflection.Assembly.GetEntryAssembly"/>
+            </summary>
+        </member>
+        <member name="P:Exceptron.Client.ExceptronClient.FrameworkType">
+            <summary>
+            Framework Type of the Host Application (.Net/mono)
+            </summary>
+        </member>
+        <member name="P:Exceptron.Client.Message.ExceptionResponse.RefId">
+            <summary>
+            Exception report reference ID. This ID will be shared across
+            similar exceptions
+            </summary>
+        </member>
+        <member name="P:Exceptron.Client.Message.ExceptionResponse.Successful">
+            <summary>
+            Was the report successfully processed on the server
+            </summary>
+        </member>
+        <member name="P:Exceptron.Client.Message.ExceptionResponse.Exception">
+            <summary>
+            Exception that caused the message to fail. 
+            </summary>
+            <remarks>
+            This property will only be populated if <see cref="P:Exceptron.Client.Configuration.ExceptronConfiguration.ThrowExceptions"/> is set to <see cref="!:bool.False"/>/&gt;
+            Exception is thrown if <see cref="P:Exceptron.Client.Configuration.ExceptronConfiguration.ThrowExceptions"/> is set to <see cref="!:bool.True"/>.
+            </remarks>
+        </member>
+        <member name="T:Exceptron.Client.ExceptionSeverity">
+            <summary>
+            Severity of the exception being reported
+            </summary>
+        </member>
+        <member name="F:Exceptron.Client.ExceptionSeverity.None">
+            <summary>
+            Excepted Error. Can be ignored
+            </summary>
+        </member>
+        <member name="F:Exceptron.Client.ExceptionSeverity.Warning">
+            <summary>
+            Error that can be handled gracefully
+            </summary>
+        </member>
+        <member name="F:Exceptron.Client.ExceptionSeverity.Error">
+            <summary>
+            Blocking user from completing their intended action
+            </summary>
+        </member>
+        <member name="F:Exceptron.Client.ExceptionSeverity.Fatal">
+            <summary>
+            Will most likely cause the application to crash
+            </summary>
+        </member>
+        <member name="P:Exceptron.Client.Message.ExceptionReport.ap">
+            <summary>
+            API key
+            </summary>
+        </member>
+        <member name="P:Exceptron.Client.Message.ExceptionReport.aver">
+            <summary>
+            Application Version
+            </summary>
+        </member>
+        <member name="P:Exceptron.Client.Message.ExceptionReport.sv">
+            <summary>
+            Exception Severity
+            </summary>
+        </member>
+        <member name="P:Exceptron.Client.Message.ExceptionReport.uid">
+            <summary>
+            User or Instance ID
+            </summary>
+        </member>
+        <member name="P:Exceptron.Client.Message.ExceptionReport.ext">
+            <summary>
+            Type of exception
+            </summary>
+        </member>
+        <member name="P:Exceptron.Client.Message.ExceptionReport.exm">
+            <summary>
+            Exception message
+            </summary>
+        </member>
+        <member name="P:Exceptron.Client.Message.ExceptionReport.stk">
+            <summary>
+            List of frames that make up the StackTrace of the exception
+            </summary>
+        </member>
+        <member name="P:Exceptron.Client.Message.ExceptionReport.cmp">
+            <summary>
+            Component that experienced this exception
+            </summary>
+        </member>
+        <member name="P:Exceptron.Client.Message.ExceptionReport.msg">
+            <summary>
+            Message that was logged along with the exception.
+            </summary>
+        </member>
+        <member name="P:Exceptron.Client.Message.ExceptionReport.cul">
+            <summary>
+            User's culture in 
+            </summary>
+            <remarks>http://msdn.microsoft.com/en-us/library/system.globalization.cultureinfo.name.aspx</remarks>
+        </member>
+        <member name="P:Exceptron.Client.Message.ExceptionReport.os">
+            <summary>
+            OS Version 
+            </summary>
+        </member>
+        <member name="P:Exceptron.Client.Message.ExceptionReport.dn">
+            <summary>
+            Name of the Client that generated and is sending this message
+            </summary>
+        </member>
+        <member name="P:Exceptron.Client.Message.ExceptionReport.dv">
+            <summary>
+            Version of the Client that generated and is sending this message
+            </summary>
+        </member>
+        <member name="P:Exceptron.Client.Message.ExceptionReport.hn">
+            <summary>
+            Host name of the machine that encountered this exception
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:Exceptron.Client.Message.ExceptionReport.url" -->
+        <member name="P:Exceptron.Client.Message.ExceptionReport.ua">
+            <summary>
+            Browser useragent
+            </summary>
+            <remarks>Only used for exception in context of a web request/</remarks>
+        </member>
+        <member name="P:Exceptron.Client.Message.ExceptionReport.sc">
+            <summary>
+            HTTP response status code
+            </summary>
+            <remarks>Only used for exception in context of a web request/</remarks>
+        </member>
+        <member name="P:Exceptron.Client.Message.ExceptionReport.hm">
+            <summary>
+            Indicates the HTTP data transfer method used by the client.
+            </summary>
+            <example>GET, POST, PUT, DELETE</example>
+        </member>
+        <member name="P:Exceptron.Client.Message.ExceptionReport.fv">
+            <summary>
+            Framework Version (CLR) of the Host Application
+            </summary>
+        </member>
+        <member name="P:Exceptron.Client.Message.ExceptionReport.ft">
+            <summary>
+            Framework Type of the Host Application
+            </summary>
+        </member>
+        <member name="T:Exceptron.Client.fastJSON.JsonParser">
+            <summary>
+            This class encodes and decodes JSON strings.
+            Spec. details, see http://www.json.org/
+            
+            JSON uses Arrays and Objects. These correspond here to the datatypes ArrayList and Hashtable.
+            All numbers are parsed to doubles.
+            </summary>
+        </member>
+        <member name="P:Exceptron.Client.Message.Frame.i">
+            <summary>
+            Order of current frame
+            </summary>
+        </member>
+        <member name="P:Exceptron.Client.Message.Frame.ln">
+            <summary>
+            Line number of the current frame
+            </summary>
+        </member>
+        <member name="P:Exceptron.Client.Message.Frame.fn">
+            <summary>
+            File name of the current frame
+            </summary>
+        </member>
+        <member name="P:Exceptron.Client.Message.Frame.m">
+            <summary>
+            Method name for current frame
+            </summary>
+        </member>
+        <member name="P:Exceptron.Client.Message.Frame.c">
+            <summary>
+            Class name for current frame
+            </summary>
+        </member>
+    </members>
+</doc>
