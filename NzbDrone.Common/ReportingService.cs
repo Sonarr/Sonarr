@@ -113,8 +113,6 @@ namespace NzbDrone.Common
                                      ThrowExceptions = !EnvironmentProvider.IsProduction,
                              };
 
-            //ExceptronClient.Enviroment = EnvironmentProvider.IsProduction ? "Prod" : "Dev";
-
             ExceptronClient = new ExceptronClient(config)
                                   {
                                       ApplicationVersion = new EnvironmentProvider().Version.ToString()
