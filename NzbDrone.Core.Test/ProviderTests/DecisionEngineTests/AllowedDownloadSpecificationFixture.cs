@@ -48,6 +48,10 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
             Mocker.GetMock<RetentionSpecification>()
                     .Setup(c => c.IsSatisfiedBy(It.IsAny<EpisodeParseResult>()))
                     .Returns(true);
+
+            Mocker.GetMock<AllowedReleaseGroupSpecification>()
+                    .Setup(c => c.IsSatisfiedBy(It.IsAny<EpisodeParseResult>()))
+                    .Returns(true);
         }
 
         private void WithProfileNotAllowed()
