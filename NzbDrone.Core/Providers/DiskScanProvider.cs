@@ -153,6 +153,8 @@ namespace NzbDrone.Core.Providers
             episodeFile.Quality = parseResult.Quality.QualityType;
             episodeFile.Proper = parseResult.Quality.Proper;
             episodeFile.SeasonNumber = parseResult.SeasonNumber;
+            episodeFile.SceneName = Path.GetFileNameWithoutExtension(filePath.NormalizePath());
+            episodeFile.ReleaseGroup = parseResult.ReleaseGroup;
             var fileId = _mediaFileProvider.Add(episodeFile);
 
             //Link file to all episodes
@@ -175,7 +177,7 @@ namespace NzbDrone.Core.Providers
 
             var series = _seriesProvider.GetSeries(episodeFile.SeriesId);
             var episodes = _episodeProvider.GetEpisodesByFileId(episodeFile.EpisodeFileId);
-            string newFileName = _mediaFileProvider.GetNewFilename(episodes, series.Title, episodeFile.Quality, episodeFile.Proper);
+            string newFileName = _mediaFileProvider.GetNewFilename(episodes, series.Title, episodeFile.Quality, episodeFile.Proper, episodeFile);
             var newFile = _mediaFileProvider.CalculateFilePath(series, episodes.First().SeasonNumber, newFileName, Path.GetExtension(episodeFile.Path));
 
             //Only rename if existing and new filenames don't match

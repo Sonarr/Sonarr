@@ -63,7 +63,6 @@ namespace NzbDrone.Core.Providers.Indexer
             get { return null; }
         }
 
-
         protected abstract IList<String> GetEpisodeSearchUrls(string seriesTitle, int seasonNumber, int episodeNumber);
         protected abstract IList<String> GetDailyEpisodeSearchUrls(string seriesTitle, DateTime date);
         protected abstract IList<String> GetSeasonSearchUrls(string seriesTitle, int seasonNumber);

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.ServiceModel.Syndication;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 using Ninject;
 using NzbDrone.Common;
 using NzbDrone.Core.Model;
@@ -43,7 +45,6 @@ namespace NzbDrone.Core.Providers.Indexer
                        !string.IsNullOrWhiteSpace(_configProvider.NewzbinPassword);
             }
         }
-
 
         protected override NetworkCredential Credentials
         {
@@ -90,7 +91,6 @@ namespace NzbDrone.Core.Providers.Indexer
                            };
         }
 
-
         public override string Name
         {
             get { return "Newzbin"; }
@@ -118,10 +118,25 @@ namespace NzbDrone.Core.Providers.Indexer
 
                 var sizeString = Regex.Match(item.Summary.Text, @"\(Size: \d*\,?\d+\.\d{1,2}\w{2}\)", RegexOptions.IgnoreCase).Value;
                 currentResult.Size = Parser.GetReportSize(sizeString);
+
+                try
+                {
+                    var releaseGroupText = item.ElementExtensions.Single(s => s.OuterName == "nfo")
+                                        .GetObject<XElement>()
+                                        .Element(XName.Get("filename", "http://www.newzbin2.es/DTD/2007/feeds/report/"))
+                                        .Value;
+
+                    var releaseGroup = Parser.ParseReleaseGroup(releaseGroupText.Replace(".nfo", ""));
+                    currentResult.ReleaseGroup = releaseGroup;
+                }
+                catch(Exception ex)
+                {
+                    _logger.TraceException("Error getting release group for newzbin release", ex);
+                    currentResult.ReleaseGroup = "";
+                }           
             }
 
             return currentResult;
         }
-
     }
 }

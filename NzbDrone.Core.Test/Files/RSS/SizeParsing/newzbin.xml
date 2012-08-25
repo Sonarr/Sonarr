@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <rss version="2.0" xml:lang="en-GB"
-xmlns:report="http://www.newzbin.com/DTD/2007/feeds/report/">
+xmlns:report="http://www.newzbin2.es/DTD/2007/feeds/report/">
   <channel>
     <title>www.newzbin.com (reports)</title>
     <link>http://www.newzbin.com/browse/category/p/tv/</link>
@@ -63,7 +63,7 @@ xmlns:report="http://www.newzbin.com/DTD/2007/feeds/report/">
       <report:moreinfo>http://www.tvrage.com/Rookie_Blue/episodes/1064943067/1x10/</report:moreinfo>
       <report:nfo>
         <report:fileid>373966350</report:fileid>
-        <report:filename>tvp-rookieblue-s01e10-720p.nfo</report:filename>
+        <report:filename>rookieblue-s01e10-720p-tvp.nfo</report:filename>
         <report:link>http://www.newzbin.com/nfo/view/txt/373966350/</report:link>
       </report:nfo>
       <report:nzb>http://www.newzbin.com/browse/post/6076287/nzb/</report:nzb>

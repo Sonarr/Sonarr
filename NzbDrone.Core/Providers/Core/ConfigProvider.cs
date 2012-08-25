@@ -214,6 +214,12 @@ namespace NzbDrone.Core.Providers.Core
             set { SetValue("Sorting_MultiEpisodeStyle", value); }
         }
 
+        public virtual bool SortingUseSceneName
+        {
+            get { return GetValueBoolean("Sorting_UseSceneName", false); }
+            set { SetValue("Sorting_UseSceneName", value); }
+        }
+
         public virtual int DefaultQualityProfile
         {
             get { return GetValueInt("DefaultQualityProfile", 1); }
@@ -506,6 +512,12 @@ namespace NzbDrone.Core.Providers.Core
             get { return GetValueBoolean("MetadataUseBanners"); }
 
             set { SetValue("MetadataUseBanners", value); }
+        }
+
+        public virtual string AllowedReleaseGroups
+        {
+            get { return GetValue("AllowedReleaseGroups"); }
+            set { SetValue("AllowedReleaseGroups", value); }
         }
 
         private string GetValue(string key)

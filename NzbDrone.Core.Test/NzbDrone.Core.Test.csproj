@@ -113,6 +113,7 @@
     <Compile Include="JobTests\RecentBacklogSearchJobTest.cs" />
     <Compile Include="ProviderTests\ConfigProviderTests\ConfigCachingFixture.cs" />
     <Compile Include="ProviderTests\BannerProviderTest.cs" />
+    <Compile Include="ProviderTests\DecisionEngineTests\AllowedReleaseGroupSpecificationFixture.cs" />
     <Compile Include="ProviderTests\Metadata\Xbmc_ForEpisodeFile_Fixture.cs" />
     <Compile Include="ProviderTests\Metadata\Xbmc_ForSeries_Fixture.cs" />
     <Compile Include="ProviderTests\SearchHistoryProviderTest.cs" />

@@ -43,6 +43,10 @@ namespace NzbDrone.Web.Models
         [Description("How will multi-episode files be named?")]
         public int MultiEpisodeStyle { get; set; }
 
+        [DisplayName("Use Scene Name")]
+        [Description("Use the scene name, ignoring all other naming settings?")]
+        public bool SceneName { get; set; }
+
         [DisplayName("XBMC")]
         [Description("Enable creating metadata for XBMC")]
         public bool MetadataXbmcEnabled { get; set; }

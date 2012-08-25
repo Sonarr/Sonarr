@@ -112,6 +112,9 @@
                                     "<b>Proper: </b>" + row.aData["IsProper"] + "<br/>" +
                                     "<b>Indexer: </b>" + row.aData["Indexer"].replace('_', ' - ');
                             
+                            if (row.aData["ReleaseGroup"] != null && row.aData["ReleaseGroup"] != "")
+                                result += "<br/><b>Release Group: </b> " + row.aData["ReleaseGroup"];
+
                             if (row.aData["NzbInfoUrl"] != null && row.aData["NzbInfoUrl"] != "")
                                 result += "<br/><b>Nzb Details: </b> <a href=\"" + row.aData["NzbInfoUrl"] + "\" target=\"_blank\">Details</a>";
 

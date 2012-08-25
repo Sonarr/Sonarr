@@ -17,6 +17,7 @@ namespace NzbDrone.Core.Repository
         public bool IsProper { get; set; }
         public string Indexer { get; set; }
         public string NzbInfoUrl { get; set; }
+        public string ReleaseGroup { get; set; }
 
         [ResultColumn]
         public Episode Episode { get; set; }

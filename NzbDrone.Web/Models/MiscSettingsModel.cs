@@ -15,5 +15,9 @@ namespace NzbDrone.Web.Models
         [DisplayName("Automatically Ignore Deleted Episodes")]
         [Description("Should NzbDrone automatically ignore episodes that were deleted from disk?")]
         public bool AutoIgnorePreviouslyDownloadedEpisodes { get; set; }
+
+        [DisplayName("Allowed Release Groups")]
+        [Description("Comma separated list of release groups to download episodes")]
+        public string AllowedReleaseGroups { get; set; }
     }
 }

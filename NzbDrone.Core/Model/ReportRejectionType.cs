@@ -17,5 +17,6 @@ namespace NzbDrone.Core.Model
         DownloadClientFailure = 10,
         Skipped = 11,
         Failure = 12,
+        ReleaseGroupNotWanted = 13
     }
 }

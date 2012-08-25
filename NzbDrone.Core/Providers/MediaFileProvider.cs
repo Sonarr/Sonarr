@@ -142,8 +142,22 @@ namespace NzbDrone.Core.Providers
             }
         }
 
-        public virtual string GetNewFilename(IList<Episode> episodes, string seriesTitle, QualityTypes quality, bool proper)
+        public virtual string GetNewFilename(IList<Episode> episodes, string seriesTitle, QualityTypes quality, bool proper, EpisodeFile episodeFile)
         {
+            if (_configProvider.SortingUseSceneName)
+            {
+                Logger.Trace("Attempting to use scene name");
+                if (String.IsNullOrWhiteSpace(episodeFile.SceneName))
+                {
+                    var name = Path.GetFileNameWithoutExtension(episodeFile.Path);
+                    Logger.Trace("Unable to use scene name, because it is null, sticking with current name: {0}", name);
+
+                    return name;
+                }
+
+                return episodeFile.SceneName;
+            }
+
             var sortedEpisodes = episodes.OrderBy(e => e.EpisodeNumber);
 
             var separatorStyle = EpisodeSortingHelper.GetSeparatorStyle(_configProvider.SortingSeparatorStyle);
