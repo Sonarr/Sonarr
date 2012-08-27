@@ -284,11 +284,12 @@ namespace NzbDrone.Core.Providers
             }
         }
 
-        private List<string> GetVideoFiles(string path)
+        public List<string> GetVideoFiles(string path, bool allDirectories = true)
         {
             Logger.Debug("Scanning '{0}' for video files", path);
 
-            var filesOnDisk = _diskProvider.GetFiles(path, SearchOption.AllDirectories);
+            var searchOption = allDirectories ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
+            var filesOnDisk = _diskProvider.GetFiles(path, searchOption);
 
             var mediaFileList = filesOnDisk.Where(c => mediaExtentions.Contains(Path.GetExtension(c).ToLower())).ToList();
 

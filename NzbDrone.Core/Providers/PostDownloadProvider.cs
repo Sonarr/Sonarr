@@ -49,6 +49,19 @@ namespace NzbDrone.Core.Providers
                     Logger.ErrorException("An error has occurred while importing folder" + subfolder, e);
                 }
             }
+
+            //Todo: Process files directly in the drop folder
+            foreach(var videoFile in _diskScanProvider.GetVideoFiles(dropFolder, false))
+            {
+                try
+                {
+                    ProcessVideoFile(videoFile);
+                }
+                catch(Exception ex)
+                {
+                    Logger.ErrorException("An error has occurred while importing video file" + videoFile, ex);
+                }
+            }
         }
 
         public virtual void ProcessDownload(DirectoryInfo subfolderInfo)
@@ -106,6 +119,25 @@ namespace NzbDrone.Core.Providers
                     Logger.Trace("Unable to import series (Unknown): {0}", subfolderInfo.Name);
                     TagFolder(subfolderInfo, PostDownloadStatusType.Unknown);
                 }
+            }
+        }
+
+        public virtual void ProcessVideoFile(string videoFile)
+        {
+            var seriesName = Parser.ParseSeriesName(Path.GetFileNameWithoutExtension(videoFile));
+            var series = _seriesProvider.FindSeries(seriesName);
+
+            if (series == null)
+            {
+                Logger.Trace("Unknown Series on Import: {0}", videoFile);
+                return;
+            }
+
+            var episodeFile = _diskScanProvider.ImportFile(series, videoFile);
+            if (episodeFile != null)
+            {
+                _diskScanProvider.MoveEpisodeFile(episodeFile, true);
+                _metadataProvider.CreateForEpisodeFile(episodeFile);
             }
         }
 
