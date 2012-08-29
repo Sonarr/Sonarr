@@ -50,7 +50,6 @@ namespace NzbDrone.Core.Providers
                 }
             }
 
-            //Todo: Process files directly in the drop folder
             foreach(var videoFile in _diskScanProvider.GetVideoFiles(dropFolder, false))
             {
                 try
@@ -124,12 +123,27 @@ namespace NzbDrone.Core.Providers
 
         public virtual void ProcessVideoFile(string videoFile)
         {
+            if (_diskProvider.GetLastFileWrite(videoFile).AddMinutes(2) > DateTime.UtcNow)
+            {
+                Logger.Trace("[{0}] is too fresh. skipping", videoFile);
+                return;
+            }
+
             var seriesName = Parser.ParseSeriesName(Path.GetFileNameWithoutExtension(videoFile));
             var series = _seriesProvider.FindSeries(seriesName);
 
             if (series == null)
             {
                 Logger.Trace("Unknown Series on Import: {0}", videoFile);
+                return;
+            }
+
+            var size = _diskProvider.GetFileSize(videoFile);
+            var freeSpace = _diskProvider.FreeDiskSpace(new DirectoryInfo(series.Path));
+
+            if (Convert.ToUInt64(size) > freeSpace)
+            {
+                Logger.Error("Not enough free disk space for series: {0}, {1}", series.Title, series.Path);
                 return;
             }
 

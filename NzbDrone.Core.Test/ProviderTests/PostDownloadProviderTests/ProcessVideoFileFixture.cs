@@ -1,0 +1,215 @@
+// ReSharper disable InconsistentNaming
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
+using FizzWare.NBuilder;
+using Moq;
+using NUnit.Framework;
+using NzbDrone.Common;
+using NzbDrone.Core.Model;
+using NzbDrone.Core.Providers;
+using NzbDrone.Core.Repository;
+using NzbDrone.Core.Test.Framework;
+using NzbDrone.Test.Common;
+using NzbDrone.Test.Common.AutoMoq;
+
+namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
+{
+    [TestFixture]
+    public class ProcessVideoFileFixture : CoreTest
+    {
+        Series fakeSeries;
+
+        [SetUp]
+        public void Setup()
+        {
+            fakeSeries = Builder<Series>.CreateNew()
+                .With(s => s.Path = @"C:\Test\TV\30 Rock")
+                .Build();
+        }
+
+        private void WithOldWrite()
+        {
+            Mocker.GetMock<DiskProvider>()
+                .Setup(c => c.GetLastFileWrite(It.IsAny<String>()))
+                .Returns(DateTime.Now.AddDays(-5));
+        }
+
+        private void WithRecentWrite()
+        {
+            Mocker.GetMock<DiskProvider>()
+                .Setup(c => c.GetLastFileWrite(It.IsAny<String>()))
+                .Returns(DateTime.UtcNow);
+        }
+
+        private void WithValidSeries()
+        {
+            Mocker.GetMock<SeriesProvider>()
+                .Setup(c => c.FindSeries(It.IsAny<string>()))
+                .Returns(fakeSeries);
+        }
+
+        private void WithImportableFiles()
+        {
+            Mocker.GetMock<DiskScanProvider>()
+                .Setup(c => c.Scan(It.IsAny<Series>(), It.IsAny<string>()))
+                .Returns(Builder<EpisodeFile>.CreateListOfSize(1).Build().ToList());
+        }
+
+        private void WithLotsOfFreeDiskSpace()
+        {
+            Mocker.GetMock<DiskProvider>().Setup(s => s.FreeDiskSpace(It.IsAny<DirectoryInfo>())).Returns(1000000000);
+        }
+
+        private void WithImportedFile(string file)
+        {
+            var fakeEpisodeFile = Builder<EpisodeFile>.CreateNew()
+                .With(f => f.SeriesId = fakeSeries.SeriesId)
+                .Build();
+
+            Mocker.GetMock<DiskScanProvider>().Setup(s => s.ImportFile(fakeSeries, file)).Returns(fakeEpisodeFile);
+        }
+
+        [Test]
+        public void should_skip_if_and_too_fresh()
+        {
+            WithStrictMocker();
+            WithRecentWrite();
+
+            var file = Path.Combine(TempFolder, "test.avi");
+
+            Mocker.Resolve<PostDownloadProvider>().ProcessVideoFile(file);
+        }
+
+        [Test]
+        public void should_continue_processing_if_not_fresh()
+        {
+            WithOldWrite();
+
+            var file = Path.Combine(TempFolder, "test.avi");
+
+            //Act
+            Mocker.GetMock<SeriesProvider>().Setup(s => s.FindSeries(It.IsAny<String>())).Returns<Series>(null).Verifiable();
+            Mocker.Resolve<PostDownloadProvider>().ProcessVideoFile(file);
+
+            //Assert
+            Mocker.GetMock<SeriesProvider>().Verify(s => s.FindSeries(It.IsAny<String>()), Times.Once());
+            ExceptionVerification.IgnoreWarns();
+        }
+
+        [Test]
+        public void should_return_if_series_is_not_found()
+        {
+            WithOldWrite();
+
+            var file = Path.Combine(TempFolder, "test.avi");
+
+            //Act
+            Mocker.GetMock<SeriesProvider>().Setup(s => s.FindSeries(It.IsAny<String>())).Returns<Series>(null);
+            Mocker.Resolve<PostDownloadProvider>().ProcessVideoFile(file);
+
+            //Assert
+            Mocker.GetMock<DiskProvider>().Verify(s => s.GetFileSize(It.IsAny<String>()), Times.Never());
+            ExceptionVerification.IgnoreWarns();
+        }
+
+        [Test]
+        public void should_move_file_if_imported()
+        {
+            WithLotsOfFreeDiskSpace();
+            WithOldWrite();
+
+            var file = Path.Combine(TempFolder, "test.avi");
+
+            WithValidSeries();
+            WithImportedFile(file);
+
+            //Act
+            Mocker.Resolve<PostDownloadProvider>().ProcessVideoFile(file);
+
+            //Assert
+            Mocker.GetMock<DiskScanProvider>().Verify(s => s.MoveEpisodeFile(It.IsAny<EpisodeFile>(), true), Times.Once());
+            ExceptionVerification.IgnoreWarns();
+        }
+        
+        [Test]
+        public void should_logError_and_return_if_size_exceeds_free_space()
+        {
+            var downloadName = @"C:\Test\Drop\30.Rock.S01E01.Pilot.mkv";
+
+            var series = Builder<Series>.CreateNew()
+                    .With(s => s.Title = "30 Rock")
+                    .With(s => s.Path = @"C:\Test\TV\30 Rock")
+                    .Build();
+
+            Mocker.GetMock<SeriesProvider>()
+                .Setup(c => c.FindSeries("rock"))
+                .Returns(series);
+
+            Mocker.GetMock<DiskProvider>()
+                    .Setup(s => s.GetFileSize(downloadName))
+                    .Returns(10);
+
+            Mocker.GetMock<DiskProvider>()
+                    .Setup(s => s.FreeDiskSpace(new DirectoryInfo(series.Path)))
+                    .Returns(9);
+
+            //Act
+            Mocker.Resolve<PostDownloadProvider>().ProcessVideoFile(downloadName);
+
+
+            //Assert
+            Mocker.GetMock<DiskScanProvider>().Verify(c => c.ImportFile(series, downloadName), Times.Never());
+            ExceptionVerification.ExpectedErrors(1);
+        }
+
+        [Test]
+        public void should_process_if_free_disk_space_exceeds_size()
+        {
+            WithLotsOfFreeDiskSpace();
+            WithValidSeries();
+
+            var downloadName = @"C:\Test\Drop\30.Rock.S01E01.Pilot.mkv";
+
+            Mocker.GetMock<SeriesProvider>()
+                .Setup(c => c.FindSeries("rock"))
+                .Returns(fakeSeries);
+
+            Mocker.GetMock<DiskProvider>()
+                    .Setup(s => s.GetFileSize(downloadName))
+                    .Returns(8);
+
+            //Act
+            Mocker.Resolve<PostDownloadProvider>().ProcessVideoFile(downloadName);
+
+
+            //Assert
+            Mocker.GetMock<DiskScanProvider>().Verify(c => c.ImportFile(fakeSeries, downloadName), Times.Once());
+        }
+
+        [Test]
+        public void should_process_if_free_disk_space_equals_size()
+        {
+            var downloadName = @"C:\Test\Drop\30.Rock.S01E01.Pilot.mkv";
+
+            WithValidSeries();
+
+            Mocker.GetMock<DiskProvider>()
+                    .Setup(s => s.GetDirectorySize(downloadName))
+                    .Returns(10);
+
+            Mocker.GetMock<DiskProvider>()
+                    .Setup(s => s.FreeDiskSpace(It.IsAny<DirectoryInfo>()))
+                    .Returns(10);
+
+            //Act
+            Mocker.Resolve<PostDownloadProvider>().ProcessVideoFile(downloadName);
+
+
+            //Assert
+            Mocker.GetMock<DiskScanProvider>().Verify(c => c.ImportFile(fakeSeries, downloadName), Times.Once());
+        }
+    }
+}

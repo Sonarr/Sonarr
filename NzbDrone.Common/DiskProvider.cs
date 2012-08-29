@@ -42,6 +42,14 @@ namespace NzbDrone.Common
                             .Max(c => c.LastWriteTimeUtc);
         }
 
+        public virtual DateTime GetLastFileWrite(string path)
+        {
+            if (!FileExists(path))
+                throw new FileNotFoundException("File doesn't exist: " + path);
+
+            return new FileInfo(path).LastWriteTimeUtc;
+        }
+
         public virtual bool FolderExists(string path)
         {
             return Directory.Exists(path);
@@ -208,6 +216,14 @@ namespace NzbDrone.Common
         public static bool PathEquals(string firstPath, string secondPath)
         {
             return String.Equals(firstPath.NormalizePath(), secondPath.NormalizePath(), StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        public virtual long GetFileSize(string path)
+        {
+            if (!FileExists(path))
+                throw new FileNotFoundException("File doesn't exist: " + path);
+
+            return new FileInfo(path).Length;
         }
     }
 }

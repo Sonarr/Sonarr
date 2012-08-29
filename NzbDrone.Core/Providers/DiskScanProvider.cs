@@ -284,7 +284,7 @@ namespace NzbDrone.Core.Providers
             }
         }
 
-        public List<string> GetVideoFiles(string path, bool allDirectories = true)
+        public virtual List<string> GetVideoFiles(string path, bool allDirectories = true)
         {
             Logger.Debug("Scanning '{0}' for video files", path);
 
