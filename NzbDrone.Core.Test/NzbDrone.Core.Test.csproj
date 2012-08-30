@@ -118,6 +118,7 @@
     <Compile Include="ProviderTests\DiskScanProviderTests\CleanUpDropFolderFixture.cs" />
     <Compile Include="ProviderTests\DiskScanProviderTests\GetVideoFilesFixture.cs" />
     <Compile Include="ProviderTests\DiskScanProviderTests\ScanFixture.cs" />
+    <Compile Include="ProviderTests\DownloadClientTests\PneumaticProviderFixture.cs" />
     <Compile Include="ProviderTests\Metadata\Xbmc_ForEpisodeFile_Fixture.cs" />
     <Compile Include="ProviderTests\Metadata\Xbmc_ForSeries_Fixture.cs" />
     <Compile Include="ProviderTests\PostDownloadProviderTests\ProcessDropDirectoryFixture.cs" />
