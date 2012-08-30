@@ -69,7 +69,7 @@ namespace NzbDrone.Common
                 if (!string.IsNullOrWhiteSpace(applicationPath))
                     return applicationPath;
 
-                applicationPath = CrawlToRoot(StartUpPath);
+                applicationPath = CrawlToRoot(AppDomain.CurrentDomain.BaseDirectory);
                 if (!string.IsNullOrWhiteSpace(applicationPath))
                     return applicationPath;
 
@@ -77,7 +77,7 @@ namespace NzbDrone.Common
                 if (!string.IsNullOrWhiteSpace(applicationPath))
                     return applicationPath;
 
-                throw new ApplicationException("Can't fine IISExpress folder.");
+                throw new ApplicationException("Can't finds IISExpress folder.");
             }
         }
 
