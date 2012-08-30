@@ -6,7 +6,14 @@
     Layout = null;
 }
 
-@if (Model.ExistingSeries.Count == 0)
+@if (Model == null)
+{
+    <h2 style="color: tomato">
+        Error searching TheTVDB, please try again later.
+    </h2>
+}
+
+else if (!Model.ExistingSeries.Any())
 {
     <h2 style="color: tomato">
         No series available. Try adding a new Root Folder.

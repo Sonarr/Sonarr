@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
+using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Providers;
@@ -22,6 +23,8 @@ namespace NzbDrone.Web.Controllers
         private readonly JobProvider _jobProvider;
         private readonly TvDbProvider _tvDbProvider;
         private readonly DiskProvider _diskProvider;
+
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public AddSeriesController(RootDirProvider rootFolderProvider,
                                    ConfigProvider configProvider,
@@ -83,17 +86,26 @@ namespace NzbDrone.Web.Controllers
             foreach (var folder in unmappedList)
             {
                 var foldername = new DirectoryInfo(folder).Name;
-                var tvdbResult = _tvDbProvider.SearchSeries(foldername).FirstOrDefault();
 
-                var title = String.Empty;
-                var seriesId = 0;
-                if (tvdbResult != null)
+                try
                 {
-                    title = tvdbResult.SeriesName;
-                    seriesId = tvdbResult.Id;
-                }
+                    var tvdbResult = _tvDbProvider.SearchSeries(foldername).FirstOrDefault();
 
-                result.ExistingSeries.Add(new Tuple<string, string, int>(folder, title, seriesId));
+                    var title = String.Empty;
+                    var seriesId = 0;
+                    if (tvdbResult != null)
+                    {
+                        title = tvdbResult.SeriesName;
+                        seriesId = tvdbResult.Id;
+                    }
+
+                    result.ExistingSeries.Add(new Tuple<string, string, int>(folder, title, seriesId));
+                }
+                catch(Exception ex)
+                {
+                    logger.WarnException("Failed to connect to TheTVDB to search for: " + foldername, ex);
+                    return View();
+                }
             }
 
             var defaultQuality = Convert.ToInt32(_configProvider.DefaultQualityProfile);
