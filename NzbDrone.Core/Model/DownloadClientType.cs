@@ -3,6 +3,7 @@
     public enum DownloadClientType
     {
         Sabnzbd = 0,
-        Blackhole = 1
+        Blackhole = 1,
+        Pneumatic = 2
     }
 }
