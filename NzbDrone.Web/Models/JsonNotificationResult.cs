@@ -45,8 +45,8 @@ namespace NzbDrone.Web.Models
             return new JsonResult
             {
                 Data = new JsonNotificationResult { NotificationType = notificationType, Title = title, Text = text },
-                ContentType = null,
-                ContentEncoding = null,
+                ContentType = "application/json; charset=UTF-8",
+                ContentEncoding = System.Text.Encoding.UTF8,
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }

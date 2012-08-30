@@ -18,6 +18,7 @@ namespace NzbDrone.Web.Models
 
         [DisplayName("Specified Release Groups")]
         [Description("Comma separated list of release groups to download episodes (leave empty for all groups)")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string AllowedReleaseGroups { get; set; }
     }
 }
