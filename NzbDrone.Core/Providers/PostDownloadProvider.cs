@@ -49,6 +49,18 @@ namespace NzbDrone.Core.Providers
                     Logger.ErrorException("An error has occurred while importing folder" + subfolder, e);
                 }
             }
+
+            foreach(var videoFile in _diskScanProvider.GetVideoFiles(dropFolder, false))
+            {
+                try
+                {
+                    ProcessVideoFile(videoFile);
+                }
+                catch(Exception ex)
+                {
+                    Logger.ErrorException("An error has occurred while importing video file" + videoFile, ex);
+                }
+            }
         }
 
         public virtual void ProcessDownload(DirectoryInfo subfolderInfo)
@@ -106,6 +118,40 @@ namespace NzbDrone.Core.Providers
                     Logger.Trace("Unable to import series (Unknown): {0}", subfolderInfo.Name);
                     TagFolder(subfolderInfo, PostDownloadStatusType.Unknown);
                 }
+            }
+        }
+
+        public virtual void ProcessVideoFile(string videoFile)
+        {
+            if (_diskProvider.GetLastFileWrite(videoFile).AddMinutes(2) > DateTime.UtcNow)
+            {
+                Logger.Trace("[{0}] is too fresh. skipping", videoFile);
+                return;
+            }
+
+            var seriesName = Parser.ParseSeriesName(Path.GetFileNameWithoutExtension(videoFile));
+            var series = _seriesProvider.FindSeries(seriesName);
+
+            if (series == null)
+            {
+                Logger.Trace("Unknown Series on Import: {0}", videoFile);
+                return;
+            }
+
+            var size = _diskProvider.GetFileSize(videoFile);
+            var freeSpace = _diskProvider.FreeDiskSpace(new DirectoryInfo(series.Path));
+
+            if (Convert.ToUInt64(size) > freeSpace)
+            {
+                Logger.Error("Not enough free disk space for series: {0}, {1}", series.Title, series.Path);
+                return;
+            }
+
+            var episodeFile = _diskScanProvider.ImportFile(series, videoFile);
+            if (episodeFile != null)
+            {
+                _diskScanProvider.MoveEpisodeFile(episodeFile, true);
+                _metadataProvider.CreateForEpisodeFile(episodeFile);
             }
         }
 

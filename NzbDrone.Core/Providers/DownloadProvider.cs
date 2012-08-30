@@ -18,6 +18,7 @@ namespace NzbDrone.Core.Providers
         private readonly ConfigProvider _configProvider;
         private readonly BlackholeProvider _blackholeProvider;
         private readonly SignalRProvider _signalRProvider;
+        private readonly PneumaticProvider _pneumaticProvider;
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -25,7 +26,7 @@ namespace NzbDrone.Core.Providers
         public DownloadProvider(SabProvider sabProvider, HistoryProvider historyProvider,
             EpisodeProvider episodeProvider, ExternalNotificationProvider externalNotificationProvider,
             ConfigProvider configProvider, BlackholeProvider blackholeProvider,
-            SignalRProvider signalRProvider)
+            SignalRProvider signalRProvider, PneumaticProvider pneumaticProvider)
         {
             _sabProvider = sabProvider;
             _historyProvider = historyProvider;
@@ -34,6 +35,7 @@ namespace NzbDrone.Core.Providers
             _configProvider = configProvider;
             _blackholeProvider = blackholeProvider;
             _signalRProvider = signalRProvider;
+            _pneumaticProvider = pneumaticProvider;
         }
 
         public DownloadProvider()
@@ -54,16 +56,18 @@ namespace NzbDrone.Core.Providers
 
                 foreach (var episode in _episodeProvider.GetEpisodesByParseResult(parseResult))
                 {
-                    var history = new History();
-                    history.Date = DateTime.Now;
-                    history.Indexer = parseResult.Indexer;
-                    history.IsProper = parseResult.Quality.Proper;
-                    history.Quality = parseResult.Quality.QualityType;
-                    history.NzbTitle = parseResult.OriginalString;
-                    history.EpisodeId = episode.EpisodeId;
-                    history.SeriesId = episode.SeriesId;
-                    history.NzbInfoUrl = parseResult.NzbInfoUrl;
-                    history.ReleaseGroup = parseResult.ReleaseGroup;
+                    var history = new History
+                                      {
+                                            Date = DateTime.Now,
+                                            Indexer = parseResult.Indexer,
+                                            IsProper = parseResult.Quality.Proper,
+                                            Quality = parseResult.Quality.QualityType,
+                                            NzbTitle = parseResult.OriginalString,
+                                            EpisodeId = episode.EpisodeId,
+                                            SeriesId = episode.SeriesId,
+                                            NzbInfoUrl = parseResult.NzbInfoUrl,
+                                            ReleaseGroup = parseResult.ReleaseGroup,
+                                      };
 
                     _historyProvider.Add(history);
                     _episodeProvider.MarkEpisodeAsFetched(episode.EpisodeId);
@@ -77,13 +81,16 @@ namespace NzbDrone.Core.Providers
             return success;
         }
 
-
         public virtual IDownloadClient GetActiveDownloadClient()
         {
             switch (_configProvider.DownloadClient)
             {
                 case DownloadClientType.Blackhole:
                     return _blackholeProvider;
+
+                case DownloadClientType.Pneumatic:
+                    return _pneumaticProvider;
+
                 default:
                     return _sabProvider;
             }

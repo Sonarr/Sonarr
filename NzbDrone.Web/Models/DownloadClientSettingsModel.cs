@@ -70,6 +70,12 @@ namespace NzbDrone.Web.Models
         [Description("What method do you download NZBs with?")]
         public int DownloadClient { get; set; }
 
+        [DisplayName("Pneumatic Nzb Directory")]
+        [Description("Directory to save NZBs for Pneumatic, must be able from XBMC")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
+        [RequiredIf("DownloadClient", (int)DownloadClientType.Pneumatic, ErrorMessage = "Required when Download Client is Blackhole")]
+        public string PneumaticDirectory { get; set; }
+
         public SelectList SabTvCategorySelectList { get; set; }
         public SelectList DownloadClientSelectList { get; set; }
     }

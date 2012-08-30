@@ -15,10 +15,10 @@ using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
 using NzbDrone.Test.Common.AutoMoq;
 
-namespace NzbDrone.Core.Test.ProviderTests
+namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
 {
     // ReSharper disable InconsistentNaming
-    public class DiskScanProviderTest_ImportFile : CoreTest
+    public class ImportFileFixture : CoreTest
     {
         [Test]
         public void import_new_file_should_succeed()

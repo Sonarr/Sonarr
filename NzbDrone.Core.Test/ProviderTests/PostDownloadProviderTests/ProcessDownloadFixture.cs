@@ -18,7 +18,7 @@ using NzbDrone.Test.Common.AutoMoq;
 namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 {
     [TestFixture]
-    public class ProcessDownloadProviderFixture : CoreTest
+    public class ProcessDownloadFixture : CoreTest
     {
         Series fakeSeries;
 
@@ -328,51 +328,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
         }
 
         [Test]
-        public void ProcessDropFolder_should_only_process_folders_that_arent_known_series_folders()
-        {
-            WithLotsOfFreeDiskSpace();
-
-            var subFolders = new[]
-                                 {
-                                    @"c:\drop\episode1",
-                                    @"c:\drop\episode2",
-                                    @"c:\drop\episode3",
-                                    @"c:\drop\episode4"
-                                 };
-
-            Mocker.GetMock<DiskProvider>()
-                .Setup(c => c.GetDirectories(It.IsAny<String>()))
-                .Returns(subFolders);
-
-            Mocker.GetMock<SeriesProvider>()
-                .Setup(c => c.SeriesPathExists(subFolders[1]))
-                .Returns(true);
-
-            Mocker.GetMock<SeriesProvider>()
-                .Setup(c => c.FindSeries(It.IsAny<String>()))
-                .Returns(fakeSeries);
-
-            Mocker.GetMock<DiskScanProvider>()
-                .Setup(c => c.Scan(It.IsAny<Series>(), It.IsAny<String>()))
-                .Returns(new List<EpisodeFile>());
-
-            Mocker.GetMock<DiskProvider>()
-                .Setup(c => c.GetDirectorySize(It.IsAny<String>()))
-                .Returns(10);
-
-            //Act
-            Mocker.Resolve<PostDownloadProvider>().ProcessDropFolder(@"C:\drop\");
-
-
-            //Assert
-            Mocker.GetMock<DiskScanProvider>().Verify(c => c.Scan(It.IsAny<Series>(), subFolders[0]), Times.Once());
-            Mocker.GetMock<DiskScanProvider>().Verify(c => c.Scan(It.IsAny<Series>(), subFolders[1]), Times.Never());
-            Mocker.GetMock<DiskScanProvider>().Verify(c => c.Scan(It.IsAny<Series>(), subFolders[2]), Times.Once());
-            Mocker.GetMock<DiskScanProvider>().Verify(c => c.Scan(It.IsAny<Series>(), subFolders[3]), Times.Once());
-        }
-
-        [Test]
-        public void ProcessDownload_should_logError_and_return_if_size_exceeds_free_space()
+        public void should_logError_and_return_if_size_exceeds_free_space()
         {
             var downloadName = new DirectoryInfo(@"C:\Test\Drop\30.Rock.S01E01.Pilot");
 
@@ -403,7 +359,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
         }
 
         [Test]
-        public void ProcessDownload_should_process_if_free_disk_space_exceeds_size()
+        public void should_process_if_free_disk_space_exceeds_size()
         {
             WithLotsOfFreeDiskSpace();
             WithValidSeries();
@@ -429,7 +385,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
         }
 
         [Test]
-        public void ProcessDownload_should_process_if_free_disk_space_equals_size()
+        public void should_process_if_free_disk_space_equals_size()
         {
             var downloadName = new DirectoryInfo(@"C:\Test\Drop\30.Rock.S01E01.Pilot");
 

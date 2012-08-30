@@ -520,6 +520,12 @@ namespace NzbDrone.Core.Providers.Core
             set { SetValue("AllowedReleaseGroups", value); }
         }
 
+        public virtual string PneumaticDirectory
+        {
+            get { return GetValue("PneumaticDirectory", String.Empty); }
+            set { SetValue("PneumaticDirectory", value); }
+        }
+
         private string GetValue(string key)
         {
             return GetValue(key, String.Empty);
