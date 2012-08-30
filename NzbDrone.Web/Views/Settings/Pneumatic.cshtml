@@ -1,0 +1,14 @@
+﻿@using NzbDrone.Web.Helpers;
+@model NzbDrone.Web.Models.DownloadClientSettingsModel
+
+@{
+    Layout = null;
+}
+
+<div class="downloadClient">
+    <label class="labelClass">@Html.LabelFor(m => m.PneumaticDirectory)
+        <span class="small">@Html.DescriptionFor(m => m.PneumaticDirectory)</span>
+        <span class="small">@Html.ValidationMessageFor(m => m.PneumaticDirectory)</span>
+    </label>
+    @Html.TextBoxFor(m => m.PneumaticDirectory, new { @class = "inputClass folderLookup" })
+</div>

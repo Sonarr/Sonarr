@@ -41,12 +41,14 @@
         </div>
         
         <div class="jquery-accordion" id="downloadClientAccordion">
-            <h3>
-                <a href="#">Sabnzbd</a></h3>
+            <h3><a href="#">Sabnzbd</a></h3>
             @{Html.RenderPartial("Sabnzbd", Model);}
-            <h3>
-                <a href="#">Blackhole</a></h3>
+            
+            <h3><a href="#">Blackhole</a></h3>
             @{Html.RenderPartial("Blackhole", Model);}
+            
+            <h3><a href="#">Pneumatic</a></h3>
+            @{Html.RenderPartial("Pneumatic", Model);}
         </div>
             
         <button type="submit" class="save_button" disabled="disabled">

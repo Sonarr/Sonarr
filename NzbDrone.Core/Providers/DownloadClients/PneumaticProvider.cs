@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Providers.DownloadClients
                 logger.Trace("NZB Download succeeded, saved to: {0}", filename);
 
                 var contents = String.Format("plugin://plugin.program.pneumatic/?mode=strm&type=add_file&nzb={0}&nzbname={1}", filename, title);
-                _diskProvider.WriteAllText(title + ".strm", contents);
+                _diskProvider.WriteAllText(Path.Combine(_configProvider.SabDropDirectory, title + ".strm"), contents);
                 
                 return true;
             }
