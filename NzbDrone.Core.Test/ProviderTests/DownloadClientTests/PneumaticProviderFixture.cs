@@ -18,14 +18,18 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests
     public class PneumaticProviderFixture : CoreTest
     {
         private const string nzbUrl = "http://www.nzbs.com/url";
-        private const string title = "some_nzb_title";
+        private const string title = "30.Rock.S01E05.hdtv.xvid-LoL";
         private const string pneumaticFolder = @"d:\nzb\pneumatic\";
-        private const string nzbPath = @"d:\nzb\blackhole\some_nzb_title.nzb";
+        private const string sabDrop = @"d:\unsorted tv\";
+        private string nzbPath;
 
         [SetUp]
         public void Setup()
         {
-            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.BlackholeDirectory).Returns(pneumaticFolder);
+            nzbPath = pneumaticFolder + title + ".nzb";
+
+            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.PneumaticDirectory).Returns(pneumaticFolder);
+            Mocker.GetMock<ConfigProvider>().SetupGet(c => c.SabDropDirectory).Returns(sabDrop);
         }
 
         private void WithExistingFile()
@@ -70,9 +74,6 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests
         public void should_skip_if_full_season_download()
         {
             Mocker.Resolve<PneumaticProvider>().DownloadNzb(nzbUrl, "30 Rock - Season 1").Should().BeFalse();
-            ExceptionVerification.ExpectedErrors(1);
         }
-
-
     }
 }
