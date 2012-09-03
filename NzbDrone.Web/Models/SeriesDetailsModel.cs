@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Web;
+using System.Web.Mvc;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository;
 
@@ -18,5 +19,6 @@ namespace NzbDrone.Web.Models
         public string Path { get; set; }
         public bool HasBanner { get; set; }
         public List<SeasonModel> Seasons { get; set; }
+        public SelectList QualitySelectList { get; set; }
     }
 }

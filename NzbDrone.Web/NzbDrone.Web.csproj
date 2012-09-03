@@ -164,6 +164,7 @@
     <Content Include="Content\Images\AirsToday.png" />
     <Content Include="Content\Images\background.jpg" />
     <Content Include="Content\Images\blue.png" />
+    <Content Include="Content\Images\changequality.png" />
     <Content Include="Content\Images\False.png" />
     <Content Include="Content\Images\Gear.png" />
     <Content Include="Content\Images\green.png" />

@@ -2,11 +2,11 @@
 @using NzbDrone.Web.Helpers
 @model NzbDrone.Web.Models.EpisodeModel
 
-<tr class="episodeId_@(Model.EpisodeId) data-row@(ViewData["AltRow"] == null || !(bool)ViewData["AltRow"] ? "" : " alt-row")">
+<tr class="episodeId_@(Model.EpisodeId) data-row@(ViewData["AltRow"] == null || !(bool)ViewData["AltRow"] ? "" : " alt-row")" data-episodefileid="@Model.EpisodeFileId">
     <td>@Model.EpisodeNumber</td>
     <td>@Model.Title</td>
     <td>@Model.AirDate</td>
-    <td class="episodeQuality">@Model.Quality</td>
+    <td class="episodeQuality" data-qualityid="@Model.QualityId">@Model.Quality</td>
     
     @{
         string cellColourClass = String.Empty;
@@ -26,6 +26,7 @@
     <td class="@cellColourClass">
         <img src='../../Content/Images/@(Model.Ignored ? "ignored" : "notIgnored").png' class='ignoreEpisode ignoreEpisode_@(Model.SeasonNumber)@(Model.Ignored ? " ignored" : " ") gridAction' id='@Model.EpisodeId' title='Click to toggle episode ignore status' />
         @Ajax.ImageActionLink("../../Content/Images/Search.png", new { Alt = "Search", Title = "Search for episode", @class = "gridAction" }, "Search", "Episode", new { episodeId = Model.EpisodeId }, null, null)
+        <img src='../../Content/Images/changequality.png' class='changeQuality gridAction' title='Click to change the quality of the episode file' data-changetype="episode"/>
         <img src='../../Content/Images/@(Model.Status).png' alt='@Model.Status' title='@Model.Status' class='gridImage status-@Model.Status statusImage' />
     </td>
 </tr>

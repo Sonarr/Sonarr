@@ -111,6 +111,13 @@
     </div>
 </div>
 
+<div style="visibility: hidden">
+    <div id="qualityChanger" title="Change Quality">
+        <label for="NewQuality">New Quality</label>
+        @Html.DropDownList("NewQuality", Model.QualitySelectList)
+    </div>
+</div>
+
 @section Scripts{
     @Html.IncludeScript("NzbDrone/seriesDetails.js")
     @Html.IncludeScript("NzbDrone/series.js")

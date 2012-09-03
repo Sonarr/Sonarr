@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Web.Mvc;
 using NzbDrone.Core.Jobs;
+using NzbDrone.Core.Providers;
+using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Web.Models;
 
 namespace NzbDrone.Web.Controllers
@@ -8,10 +10,12 @@ namespace NzbDrone.Web.Controllers
     public class EpisodeController : Controller
     {
         private readonly JobProvider _jobProvider;
+        private readonly MediaFileProvider _mediaFileProvider;
 
-        public EpisodeController(JobProvider jobProvider)
+        public EpisodeController(JobProvider jobProvider, MediaFileProvider mediaFileProvider)
         {
             _jobProvider = jobProvider;
+            _mediaFileProvider = mediaFileProvider;
         }
 
         public JsonResult Search(int episodeId)
@@ -51,6 +55,20 @@ namespace NzbDrone.Web.Controllers
         {
             _jobProvider.QueueJob(typeof(RenameSeriesJob));
             return JsonNotificationResult.Queued("Series rename");
+        }
+
+        [HttpPost]
+        public JsonResult ChangeEpisodeQuality(int episodeFileId, QualityTypes quality)
+        {
+            _mediaFileProvider.ChangeQuality(episodeFileId, quality);
+            return Json("ok");
+        }
+
+        [HttpPost]
+        public JsonResult ChangeSeasonQuality(int seriesId, int seasonNumber, QualityTypes quality)
+        {
+            _mediaFileProvider.ChangeQuality(seriesId, seasonNumber, quality);
+            return Json("ok");
         }
     }
 }

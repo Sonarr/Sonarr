@@ -8,6 +8,11 @@ var seriesId = 0;
 var saveSeasonIgnoreUrl = '../Command/SaveSeasonIgnore';
 var saveEpisodeIgnoreUrl = '../Command/SaveEpisodeIgnore';
 
+var changeQualityType;
+var changeQualityData;
+var changeEpisodeQualityUrl = '../Episode/ChangeEpisodeQuality';
+var changeSeasonQualityUrl = '../Episode/ChangeSeasonQuality';
+
 //Episode Ignore Functions
 $(".ignoreEpisode").live("click", function () {
     var toggle = $(this);
@@ -122,3 +127,81 @@ function saveEpisodeIgnore(episodeId, ignored) {
         }
     });
 }
+
+//Change quality
+$(document).on('click', '.changeQuality', function() {   
+    changeQualityType = $(this).attr('data-changetype');
+
+    if (changeQualityType === "episode") {
+        var row = $(this).closest('tr');
+
+        changeQualityData = $(row).attr('data-episodefileid');
+        
+        if (changeQualityData === "0")
+            return;
+        
+        var qualityId = $(row).find('.episodeQuality').attr('data-qualityid');
+        $('#NewQuality').val(qualityId);
+    }
+
+    else {
+        changeQualityData = $(this).closest('table').attr('data-season');
+    }
+    
+    $('#qualityChanger').dialog('open');
+});
+
+$("#qualityChanger").dialog({
+    autoOpen: false,
+    height: 'auto',
+    width: 670,
+    resizable: false,
+    modal: true,
+    buttons: {
+        "Save": function () {        
+            //Save the quality
+            var newQualityId = $('#NewQuality').val();
+            var newQualityText = $('#NewQuality :selected').text();
+
+            if (changeQualityType === "episode") {
+                $.ajax({
+                    url: changeEpisodeQualityUrl,
+                    data: { episodeFileId: changeQualityData, quality: newQualityId },
+                    type: 'POST',
+                    success: function(data) {
+                        var row = $('tr[data-episodefileid="' + changeQualityData + '"]');
+                        var qualityCell = $(row).find('.episodeQuality');
+                        $(qualityCell).attr('data-qualityid', newQualityId);
+                        $(qualityCell).text(newQualityText);
+                    }
+                });
+            }
+
+            else {
+                $.ajax({
+                    url: changeSeasonQualityUrl,
+                    data: { seriesId: seriesId, seasonNumber: changeQualityData, quality: newQualityId },
+                    type: 'POST',
+                    success: function (data) {
+                        var table = $('table[data-season="' + changeQualityData + '"]');
+                        var rows = $(table).children('tr');
+
+                        $(rows).each(function() {   
+                            if ($(this).attr('data-episodefileid') === 0)
+                                return;
+                            
+                            var qualityCell = $(this).find('.episodeQuality');
+                            $(qualityCell).attr('data-qualityid', newQualityId);
+                            $(qualityCell).text(newQualityText);
+                        });
+                    }
+                });
+            }
+
+            $(this).dialog("close");
+        },
+        Cancel: function () {
+            $(this).dialog("close");
+        }
+    }
+});

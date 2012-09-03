@@ -221,6 +221,16 @@ namespace NzbDrone.Core.Providers
             return CleanFilename(result.Trim());
         }
 
+        public virtual void ChangeQuality(int episodeFileId, QualityTypes quality)
+        {
+            _database.Execute("UPDATE EpisodeFiles SET Quality = @quality WHERE EpisodeFileId = @episodeFileId", new { episodeFileId, quality });
+        }
+
+        public virtual void ChangeQuality(int seriesId, int seasonNumber, QualityTypes quality)
+        {
+            _database.Execute("UPDATE EpisodeFiles SET Quality = @quality WHERE SeriesId = @seriesId AND SeasonNumber = @seasonNumber", new { seriesId, seasonNumber, quality });
+        }
+
         public static string CleanFilename(string name)
         {
             string result = name;

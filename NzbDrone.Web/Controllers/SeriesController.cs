@@ -128,6 +128,11 @@ namespace NzbDrone.Web.Controllers
                                                                         CommonStatus = GetCommonStatus(s.Episodes)
                                                                     }).ToList();
             model.Seasons = seasons;
+
+            var qualities = (from QualityTypes q in Enum.GetValues(typeof(QualityTypes))
+                             select new { Id = (int)q, Name = q.ToString() }).ToList();
+
+            model.QualitySelectList = new SelectList(qualities.Where(q => q.Id > 0), "Id", "Name");
   
             return View(model);
         }
@@ -216,12 +221,14 @@ namespace NzbDrone.Web.Controllers
                 var episodeFileId = 0;
                 var episodePath = String.Empty;
                 var episodeQuality = "N/A";
+                var episodeQualityId = 0;
 
                 if (e.EpisodeFile != null)
                 {
                     episodePath = e.EpisodeFile.Path;
                     episodeFileId = e.EpisodeFile.EpisodeFileId;
                     episodeQuality = e.EpisodeFile.Quality.ToString();
+                    episodeQualityId = (int)e.EpisodeFile.Quality;
                 }
 
                 var airDate = String.Empty;
@@ -232,6 +239,7 @@ namespace NzbDrone.Web.Controllers
                 episodes.Add(new EpisodeModel
                                  {
                                      EpisodeId = e.EpisodeId,
+                                     EpisodeFileId = episodeFileId,
                                      EpisodeNumber = e.EpisodeNumber,
                                      SeasonNumber = e.SeasonNumber,
                                      Title = e.Title,
@@ -240,6 +248,7 @@ namespace NzbDrone.Web.Controllers
                                      Path = episodePath,
                                      Status = e.Status.ToString(),
                                      Quality = episodeQuality,
+                                     QualityId = episodeQualityId,
                                      Ignored = e.Ignored
                                  });
             }

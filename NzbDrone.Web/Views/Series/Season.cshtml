@@ -5,13 +5,13 @@
     @(Model.SeasonNumber == 0 ? "Specials" : "Season " + Model.SeasonNumber)
 </h1>
 
-<table class="seriesTable">
+<table class="seriesTable" data-season="@Model.SeasonNumber">
     <colgroup>
         <col style="width:40px"/>
         <col style="width:auto"/>
         <col style="width:100px" />
         <col style="width:100px" />
-        <col style="width:90px" />
+        <col style="width:110px" />
     </colgroup>
     <thead>
         <tr>
@@ -24,6 +24,7 @@
             <th>
                 <img src='../../Content/Images/@(Model.Ignored ? "ignored" : "notIgnored").png' class='ignoredEpisodesMaster ignoreEpisode ignoreSeason_@(Model.SeasonNumber)@(Model.Ignored ? " ignored" : " ") gridAction' title='Click to toggle season ignore status' />
                 @Ajax.ImageActionLink("../../Content/Images/Search.png", new { Alt = "Search", Title = "Search for all episodes in this season", @class = "gridAction" }, "SearchSeason", "Episode", new { SeriesId = Model.SeriesId, SeasonNumber = Model.SeasonNumber }, null, null)
+                <img src='../../Content/Images/changequality.png' class='changeQuality gridAction' title='Click to change the quality of all episode files in this season' data-changetype="season"/>
                 @Ajax.ImageActionLink("../../Content/Images/Rename.png", new { Alt = "Rename", Title = "Rename all episodes in this season", @class = "gridAction" }, "RenameSeason", "Episode", new { SeriesId = Model.SeriesId, SeasonNumber = Model.SeasonNumber }, null, null)
             </th>
         </tr>
