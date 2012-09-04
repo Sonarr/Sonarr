@@ -19,7 +19,6 @@ namespace NzbDrone.Web.Controllers
     [HandleError]
     public class SeriesController : Controller
     {
-        private readonly EpisodeProvider _episodeProvider;
         private readonly QualityProvider _qualityProvider;
         private readonly SeriesProvider _seriesProvider;
         private readonly JobProvider _jobProvider;
@@ -27,12 +26,11 @@ namespace NzbDrone.Web.Controllers
         //
         // GET: /Series/
 
-        public SeriesController(SeriesProvider seriesProvider, EpisodeProvider episodeProvider,
+        public SeriesController(SeriesProvider seriesProvider,
                                 QualityProvider qualityProvider, JobProvider jobProvider,
                                 SeasonProvider seasonProvider)
         {
             _seriesProvider = seriesProvider;
-            _episodeProvider = episodeProvider;
             _qualityProvider = qualityProvider;
             _jobProvider = jobProvider;
             _seasonProvider = seasonProvider;
@@ -80,9 +78,9 @@ namespace NzbDrone.Web.Controllers
         }
 
         [HttpPost]
-        public EmptyResult DeleteSeries(int seriesId)
+        public EmptyResult DeleteSeries(int seriesId, bool deleteFiles)
         {
-            _jobProvider.QueueJob(typeof(DeleteSeriesJob), seriesId);
+            _jobProvider.QueueJob(typeof(DeleteSeriesJob), seriesId, Convert.ToInt32(deleteFiles));
 
             return new EmptyResult();
         }

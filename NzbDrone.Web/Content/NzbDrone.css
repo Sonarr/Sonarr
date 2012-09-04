@@ -243,3 +243,7 @@ button span, input[type="button"] span, input[type="submit"] span, input[type="r
 {
     text-decoration: underline;
 }
+
+.series-delete-files {
+    padding-top: 15px;
+}

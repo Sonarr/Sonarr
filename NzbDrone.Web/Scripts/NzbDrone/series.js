@@ -13,21 +13,17 @@ $("#seriesEditor").dialog({
             text: "Delete",
             class: "ui-delete-button",
             click: function () {
-                var answer = confirm("Are you sure you want to delete this series?");
-                if (answer) {
-                    var seriesId = $('#SeriesId').val();
+                $(this).dialog("close");
+                
+                //Get the SeriesId and Title
+                var seriesId = $('#SeriesId').val();
+                var title = $('[aria-labelledby="ui-dialog-title-seriesEditor"]').find('#ui-dialog-title-seriesEditor').text();
 
-                    $.ajax({
-                        type: "POST",
-                        url: seriesDeleteUrl,
-                        data: { seriesId: seriesId },
-                        success: function (data) {
-                            //Remove the row from the grid... along with the details row
-                            afterDelete();
-                        }
-                    });
-                    $(this).dialog("close");
-                }
+                //Fill in the view
+                $('#seriesDelete').children('.seriesId').val(seriesId);
+                $('#seriesDelete').children('.seriesTitle').html(title);
+
+                $("#seriesDelete").dialog("open");
             }
         },
         "Save": function () {
@@ -52,12 +48,12 @@ $("#seriesDelete").dialog({
     buttons: {
         "Delete": function () {
             var seriesId = $('.seriesId').val();
+            var deleteFiles = $('#DeleteFilesFromDisk').is(':checked');
             $.ajax({
                 type: "POST",
                 url: seriesDeleteUrl,
-                data: { seriesId: seriesId },
+                data: { seriesId: seriesId, deleteFiles: deleteFiles },
                 success: function (data) {
-                    //Remove the row from the grid... along with the details row
                     afterDelete(seriesId);
                 }
             });

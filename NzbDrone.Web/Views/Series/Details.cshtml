@@ -109,9 +109,16 @@
 <div style="visibility: hidden">
     <div id="seriesEditor" title="Edit Series">
     </div>
-</div>
 
-<div style="visibility: hidden">
+    <div id="seriesDelete" title="Delete Series">
+        <input class="seriesId" type="hidden" value="" />
+        Are you sure you want to delete '<span class="seriesTitle"></span>'?
+        <div class="series-delete-files">
+            @Html.CheckBox("DeleteFilesFromDisk")
+            <label for="DeleteFilesFromDisk">Delete all files from disk?</label>
+        </div>
+    </div>
+
     <div id="qualityChanger" title="Change Quality">
         <label for="NewQuality">New Quality</label>
         @Html.DropDownList("NewQuality", Model.QualitySelectList)
