@@ -23,5 +23,10 @@ namespace NzbDrone.Web.Models
         public AuthenticationType AuthenticationType { get; set; }
 
         public SelectList AuthTypeSelectList { get; set; }
+
+        [DisplayName("Recycle Bin")]
+        [Description("Path to NzbDrone's internal recycle bin (optional)")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
+        public string RecycleBin { get; set; }
     }
 }

@@ -27,6 +27,12 @@
         </label>
         @Html.DropDownListFor(m => m.AuthenticationType, Model.AuthTypeSelectList, new { @class = "inputClass" })
 
+        <label class="labelClass">@Html.LabelFor(m => m.RecycleBin)
+            <span class="small">@Html.DescriptionFor(m => m.RecycleBin)</span>
+            <span class="small">@Html.ValidationMessageFor(m => m.RecycleBin)</span>
+        </label>
+        @Html.TextBoxFor(m => m.RecycleBin, new { @class = "inputClass" })
+
         <label class="labelClass"> Backup Configuration
             <span class="small">Backup your Configuration file and Database</span>
         </label>

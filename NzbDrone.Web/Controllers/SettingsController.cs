@@ -236,6 +236,7 @@ namespace NzbDrone.Web.Controllers
             model.LaunchBrowser = _configFileProvider.LaunchBrowser;
             model.AuthenticationType = selectedAuthenticationType;
             model.AuthTypeSelectList = authTypeSelectList;
+            model.RecycleBin = _configProvider.RecycleBin;
 
             return View(model);
         }
@@ -622,6 +623,7 @@ namespace NzbDrone.Web.Controllers
                 _configFileProvider.Port = data.Port;
                 _configFileProvider.LaunchBrowser = data.LaunchBrowser;
                 _configFileProvider.AuthenticationType = data.AuthenticationType;
+                _configProvider.RecycleBin = data.RecycleBin;
 
                 return GetSuccessResult();
             }
