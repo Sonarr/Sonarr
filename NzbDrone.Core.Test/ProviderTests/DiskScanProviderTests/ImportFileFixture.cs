@@ -244,7 +244,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
 
             //Assert
             VerifyFileImport(result, Mocker, fakeEpisode, 12345);
-            Mocker.GetMock<DiskProvider>().Verify(p => p.DeleteFile(It.IsAny<string>()), Times.Once());
+            Mocker.GetMock<RecycleBinProvider>().Verify(p => p.DeleteFile(It.IsAny<string>()), Times.Once());
         }
 
         [TestCase("WEEDS.S03E01.DUAL.hdtv.XviD.AC3.-HELLYWOOD.avi")]
@@ -280,7 +280,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
 
             //Assert
             VerifyFileImport(result, Mocker, fakeEpisodes[0], 12345);
-            Mocker.GetMock<DiskProvider>().Verify(p => p.DeleteFile(It.IsAny<string>()), Times.Once());
+            Mocker.GetMock<RecycleBinProvider>().Verify(p => p.DeleteFile(It.IsAny<string>()), Times.Once());
         }
 
         [TestCase("WEEDS.S03E01.DUAL.DVD.XviD.AC3.-HELLYWOOD.avi")]
@@ -356,7 +356,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
 
             //Assert
             VerifyFileImport(result, Mocker, fakeEpisode1, 12345);
-            Mocker.GetMock<DiskProvider>().Verify(p => p.DeleteFile(It.IsAny<string>()), Times.Exactly(2));
+            Mocker.GetMock<RecycleBinProvider>().Verify(p => p.DeleteFile(It.IsAny<string>()), Times.Exactly(2));
         }
 
         [Test]
