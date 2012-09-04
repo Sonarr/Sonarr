@@ -1,0 +1,36 @@
+﻿using System.Linq;
+using System;
+using Ninject;
+using NLog;
+using NzbDrone.Core.Model.Notification;
+using NzbDrone.Core.Providers;
+using NzbDrone.Core.Providers.Converting;
+
+namespace NzbDrone.Core.Jobs
+{
+    public class CleanupRecycleBinJob : IJob
+    {
+        private readonly RecycleBinProvider _recycleBinProvider;
+
+        [Inject]
+        public CleanupRecycleBinJob(RecycleBinProvider recycleBinProvider)
+        {
+            _recycleBinProvider = recycleBinProvider;
+        }
+
+        public string Name
+        {
+            get { return "Cleanup Recycle Bin"; }
+        }
+
+        public TimeSpan DefaultInterval
+        {
+            get { return TimeSpan.FromDays(24); }
+        }
+
+        public void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
+        {
+            _recycleBinProvider.Cleanup();
+        }
+    }
+}

@@ -225,5 +225,15 @@ namespace NzbDrone.Common
 
             return new FileInfo(path).Length;
         }
+
+        public virtual void FileSetLastWriteTimeUtc(string path, DateTime dateTime)
+        {
+            File.SetLastWriteTimeUtc(path, dateTime);
+        }
+
+        public virtual void DirectorySetLastWriteTimeUtc(string path, DateTime dateTime)
+        {
+            Directory.SetLastWriteTimeUtc(path, dateTime);
+        }
     }
 }

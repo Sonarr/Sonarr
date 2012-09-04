@@ -11,15 +11,15 @@ namespace NzbDrone.Core.Jobs
     public class DeleteSeriesJob : IJob
     {
         private readonly SeriesProvider _seriesProvider;
-        private readonly DiskProvider _diskProvider;
+        private readonly RecycleBinProvider _recycleBinProvider;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         [Inject]
-        public DeleteSeriesJob(SeriesProvider seriesProvider, DiskProvider diskProvider)
+        public DeleteSeriesJob(SeriesProvider seriesProvider, RecycleBinProvider recycleBinProvider)
         {
             _seriesProvider = seriesProvider;
-            _diskProvider = diskProvider;
+            _recycleBinProvider = recycleBinProvider;
         }
 
         public string Name
@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Jobs
             {
                 notification.CurrentMessage = String.Format("Deleting files from disk for series '{0}'", title);
 
-                _diskProvider.DeleteFolder(series.Path, true);
+                _recycleBinProvider.DeleteDirectory(series.Path);
 
                 notification.CurrentMessage = String.Format("Successfully deleted files from disk for series '{0}'", title);
             }

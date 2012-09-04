@@ -23,12 +23,14 @@ namespace NzbDrone.Core.Providers
         private readonly DownloadProvider _downloadProvider;
         private readonly SignalRProvider _signalRProvider;
         private readonly ConfigProvider _configProvider;
+        private readonly RecycleBinProvider _recycleBinProvider;
 
         [Inject]
         public DiskScanProvider(DiskProvider diskProvider, EpisodeProvider episodeProvider,
                                 SeriesProvider seriesProvider, MediaFileProvider mediaFileProvider,
                                 ExternalNotificationProvider externalNotificationProvider, DownloadProvider downloadProvider,
-                                SignalRProvider signalRProvider, ConfigProvider configProvider)
+                                SignalRProvider signalRProvider, ConfigProvider configProvider,
+                                RecycleBinProvider recycleBinProvider)
         {
             _diskProvider = diskProvider;
             _episodeProvider = episodeProvider;
@@ -38,6 +40,7 @@ namespace NzbDrone.Core.Providers
             _downloadProvider = downloadProvider;
             _signalRProvider = signalRProvider;
             _configProvider = configProvider;
+            _recycleBinProvider = recycleBinProvider;
         }
 
         public DiskScanProvider()
@@ -135,7 +138,7 @@ namespace NzbDrone.Core.Providers
             {
                 Logger.Debug("Deleting the existing file(s) on disk to upgrade to: {0}", filePath);
                 //Do the delete for files where there is already an episode on disk
-                episodes.Where(e => e.EpisodeFile != null).Select(e => e.EpisodeFile.Path).Distinct().ToList().ForEach(p => _diskProvider.DeleteFile(p));
+                episodes.Where(e => e.EpisodeFile != null).Select(e => e.EpisodeFile.Path).Distinct().ToList().ForEach(p => _recycleBinProvider.DeleteFile(p));
             }
 
             else

@@ -253,6 +253,8 @@
     <Compile Include="Helpers\EpisodeSortingHelper.cs" />
     <Compile Include="Helpers\SortHelper.cs" />
     <Compile Include="Helpers\SabnzbdPriorityTypeConverter.cs" />
+    <Compile Include="Jobs\CleanupRecycleBinJob.cs" />
+    <Compile Include="Jobs\EmptyRecycleBinJob.cs" />
     <Compile Include="Jobs\RefreshEpsiodeMetadata.cs" />
     <Compile Include="Jobs\PastWeekBacklogSearchJob.cs" />
     <Compile Include="Jobs\SearchHistoryCleanupJob.cs" />
@@ -297,6 +299,7 @@
     <Compile Include="Providers\MetadataProvider.cs" />
     <Compile Include="Providers\Metadata\MetadataBase.cs" />
     <Compile Include="Providers\Metadata\Xbmc.cs" />
+    <Compile Include="Providers\RecycleBinProvider.cs" />
     <Compile Include="Providers\SearchHistoryProvider.cs" />
     <Compile Include="Providers\SeasonProvider.cs" />
     <Compile Include="Jobs\RecentBacklogSearchJob.cs" />

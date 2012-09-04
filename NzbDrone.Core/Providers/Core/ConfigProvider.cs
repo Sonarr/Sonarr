@@ -526,6 +526,12 @@ namespace NzbDrone.Core.Providers.Core
             set { SetValue("PneumaticDirectory", value); }
         }
 
+        public virtual string RecycleBin
+        {
+            get { return GetValue("RecycleBin", String.Empty); }
+            set { SetValue("RecycleBin", value); }
+        }
+
         private string GetValue(string key)
         {
             return GetValue(key, String.Empty);
