@@ -31,7 +31,7 @@
             <span class="small">@Html.DescriptionFor(m => m.RecycleBin)</span>
             <span class="small">@Html.ValidationMessageFor(m => m.RecycleBin)</span>
         </label>
-        @Html.TextBoxFor(m => m.RecycleBin, new { @class = "inputClass" })
+        @Html.TextBoxFor(m => m.RecycleBin, new { @class = "inputClass folderLookup" })
 
         <label class="labelClass"> Backup Configuration
             <span class="small">Backup your Configuration file and Database</span>
