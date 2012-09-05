@@ -184,10 +184,10 @@ $("#qualityChanger").dialog({
                     type: 'POST',
                     success: function (data) {
                         var table = $('table[data-season="' + changeQualityData + '"]');
-                        var rows = $(table).children('tr');
+                        var rows = $(table).find('tbody').children('tr');
 
                         $(rows).each(function() {   
-                            if ($(this).attr('data-episodefileid') === 0)
+                            if ($(this).attr('data-episodefileid') === '0')
                                 return;
                             
                             var qualityCell = $(this).find('.episodeQuality');
