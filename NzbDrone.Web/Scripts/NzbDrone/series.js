@@ -48,7 +48,7 @@ $("#seriesDelete").dialog({
     buttons: {
         "Delete": function () {
             var seriesId = $('.seriesId').val();
-            var deleteFiles = $('#DeleteFilesFromDisk').is(':checked');
+            var deleteFiles = $('#DeleteFromDisk').is(':checked');
             $.ajax({
                 type: "POST",
                 url: seriesDeleteUrl,
