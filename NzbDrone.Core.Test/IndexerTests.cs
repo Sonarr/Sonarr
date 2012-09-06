@@ -708,5 +708,17 @@ namespace NzbDrone.Core.Test
             parseResults.Should().HaveCount(1);
             parseResults[0].ReleaseGroup.Should().Be("tvp");
         }
+
+        [TestCase("30 Rock", "30%20Rock")]
+        [TestCase("The Office (US)", "Office%20US")]
+        [TestCase("Revenge", "Revenge")]
+        [TestCase(" Top Gear ", "Top%20Gear")]
+        [TestCase("Breaking   Bad", "Breaking%20Bad")]
+        [TestCase("Top Chef (US)", "Top%20Chef%20US")]
+        [TestCase("Castle (2009)", "Castle%202009")]
+        public void newznab_GetQueryTitle_should_return_expected_result(string seriesTitle, string expected)
+        {
+            Mocker.Resolve<Newznab>().GetQueryTitle(seriesTitle).Should().Be(expected);
+        }
     }
 }

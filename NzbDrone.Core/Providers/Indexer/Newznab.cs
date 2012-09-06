@@ -129,5 +129,21 @@ namespace NzbDrone.Core.Providers.Indexer
             var hostname = item.Links[0].Uri.DnsSafeHost.ToLower();
             return String.Format("{0}_{1}", Name, hostname);
         }
+
+        public override string GetQueryTitle(string title)
+        {
+            title = RemoveThe.Replace(title, string.Empty);
+            
+            //remove any repeating whitespace
+            var cleanTitle = TitleSearchRegex.Replace(title, "%20");
+
+            cleanTitle = Regex.Replace(cleanTitle, @"(%20){1,100}", "%20");
+
+            //Trim %20 from start then then the end
+            cleanTitle = Regex.Replace(cleanTitle, "^(%20)", "");
+            cleanTitle = Regex.Replace(cleanTitle, "(%20)$", "");
+
+            return cleanTitle;
+        }
     }
 }

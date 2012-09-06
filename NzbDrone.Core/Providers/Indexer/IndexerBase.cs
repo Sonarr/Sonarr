@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Providers.Indexer
         private readonly HttpProvider _httpProvider;
         protected readonly ConfigProvider _configProvider;
 
-        private static readonly Regex TitleSearchRegex = new Regex(@"[\W]", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        protected static readonly Regex TitleSearchRegex = new Regex(@"[\W]", RegexOptions.IgnoreCase | RegexOptions.Compiled);
         protected static readonly Regex RemoveThe = new Regex(@"^the\s", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         [Inject]
