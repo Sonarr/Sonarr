@@ -73,11 +73,6 @@
     right: 0px;
 }
 
-input[type="checkbox"]
-{
-    height: 25px;
-}
-
 #newznabProviders
 {
     overflow: auto;
