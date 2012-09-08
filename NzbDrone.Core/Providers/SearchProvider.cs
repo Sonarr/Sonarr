@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using NLog;
 using Ninject;
 using NzbDrone.Core.Model;
@@ -208,7 +209,6 @@ namespace NzbDrone.Core.Providers
         {
             //If single episode, do a single episode search, if full season then do a full season search, otherwise, do a partial search
 
-            var indexers = _indexerProvider.GetEnabledIndexers();
             var reports = new List<EpisodeParseResult>();
 
             var title = _sceneMappingProvider.GetSceneName(series.SeriesId);
@@ -218,7 +218,7 @@ namespace NzbDrone.Core.Providers
                 title = series.Title;
             }
 
-            foreach (var indexer in indexers)
+            Parallel.ForEach(_indexerProvider.GetEnabledIndexers(), indexer =>
             {
                 try
                 {
@@ -252,7 +252,7 @@ namespace NzbDrone.Core.Providers
                 {
                     Logger.ErrorException("An error has occurred while fetching items from " + indexer.Name, e);
                 }
-            }
+            });
 
             return reports;
         }
