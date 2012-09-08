@@ -42,28 +42,34 @@
     padding: 3px;
 }
 
-.providerOptions label
-{
-    margin-top: 10px;
+.providerOptions label {
+    margin-top: 8px;
     margin-left: 3px;
-    margin-right: 25px;
     float: left;
     font-weight: bold;
     width: 50px;
 }
 
-.providerOptions input, .providerOptions select
-{
+.providerOptions input, .providerOptions select {
     font-size: 12px;
     padding: 4px 2px;
     border: solid 1px #aacfe4;
     width: 170px;
-    margin-right: 0px;
+    margin-right: 2px;
+    float: right;
 }
 
-.providerOptions select
-{
+.providerOptions select {
     width: 176px;
+}
+
+.providerOptions div {
+    overflow: hidden;
+    height: 35px;
+}
+
+.providerOptions input[type="checkbox"] {
+    margin-top: 10px;
 }
 
 .deleteProvider

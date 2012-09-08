@@ -20,27 +20,34 @@
             }
         </div>
         <div class="providerOptions">
-            @Html.Label("Enabled")
-            @Html.CheckBoxFor(m => m.Enable)
-
-            @Html.LabelFor(x => x.Name)
-            @Html.TextBoxFor(x => x.Name, new {@class = "providerName_textbox"})
+            <div>
+                @Html.Label("Enabled")
+                @Html.CheckBoxFor(m => m.Enable)
+            </div>
             
-            @if(!Model.BuiltIn)
-            {
-                @Html.LabelFor(x => x.Url)
-                @Html.TextBoxFor(m => m.Url)
-            }
+            <div>
+                @Html.LabelFor(x => x.Name)
+                @Html.TextBoxFor(x => x.Name, new {@class = "providerName_textbox"})
+            </div>
+            <div>
+                @if(!Model.BuiltIn)
+                {
+                    @Html.LabelFor(x => x.Url)
+                    @Html.TextBoxFor(m => m.Url)
+                }
             
-            else
-            {
-                @Html.LabelFor(x => x.Url)
-                @Html.TextBox("DisabledIndexer", Model.Url, new { disabled = "disabled" })
-                @Html.HiddenFor(m => m.Url)
-            }
-
-            @Html.LabelFor(x => x.ApiKey)
-            @Html.TextBoxFor(m => m.ApiKey)
+                else
+                {
+                    @Html.LabelFor(x => x.Url)
+                    @Html.TextBox("DisabledIndexer", Model.Url, new { disabled = "disabled" })
+                    @Html.HiddenFor(m => m.Url)
+                }
+            </div>
+            
+            <div>
+                @Html.LabelFor(x => x.ApiKey)
+                @Html.TextBoxFor(m => m.ApiKey)
+            </div>
         </div>
 
         @Html.HiddenFor(x => x.Id, new {@class = "newznabProviderId"})
