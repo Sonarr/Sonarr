@@ -5,7 +5,6 @@ rd %PACKAGEROOT% /S /Q
 del nzbdrone*.zip /Q /F
 
 
-
 xcopy IISExpress %TARGET%\IISExpress /E /V /I /Y
 
 
@@ -25,7 +24,6 @@ xcopy NzbDrone.Web\Scripts\*.*  %TARGET%\NzbDrone.Web\Scripts\ /E /V /I /Y
 xcopy NzbDrone.Web\Views\*.*  %TARGET%\NzbDrone.Web\Views\ /E /V /I /Y
 
 del %TARGET%\NzbDrone.Web\bin\*.xml /Q /F
-
 
 
 xcopy NzbDrone.Web\log.config  %TARGET%\NzbDrone.Web\
@@ -49,7 +47,6 @@ del Mvc*.pdb /Q /F /S
 
 del *debug.js /Q /F /S
 del *-vsdoc.js /Q /F /S
-
 
 
 ..\Libraries\7zip\7za.exe a -tzip ..\NzbDrone.zip *
