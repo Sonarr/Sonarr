@@ -7,7 +7,6 @@ namespace NzbDrone.Web.Models
     public class JobQueueItemModel
     {
         public string Name { get; set; }
-        public int TargetId { get; set; }
-        public int SecondaryTargetId { get; set; }
+        public dynamic Options { get; set; }
     }
 }

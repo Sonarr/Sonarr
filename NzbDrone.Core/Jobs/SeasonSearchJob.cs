@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Jobs
 {
@@ -37,27 +39,27 @@ namespace NzbDrone.Core.Jobs
             get { return TimeSpan.FromTicks(0); }
         }
 
-        public virtual void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
+        public virtual void Start(ProgressNotification notification, dynamic options)
         {
-            if (targetId <= 0)
-                throw new ArgumentOutOfRangeException("targetId");
+            if (options == null || options.SeriesId <= 0)
+                throw new ArgumentException("options");
 
-            if (secondaryTargetId < 0)
-                throw new ArgumentOutOfRangeException("secondaryTargetId");
+            if (options.SeasonNumber < 0)
+                throw new ArgumentException("options.SeasonNumber");
 
             //Perform a Partial Season Search - Because a full season search is a waste
             //3 searches should guarentee results, (24 eps) versus, a potential 4 to get the same eps.
-            var successes = _searchProvider.PartialSeasonSearch(notification, targetId, secondaryTargetId);
+            List<int> successes = _searchProvider.PartialSeasonSearch(notification, options.SeriesId, options.SeasonNumber);
 
             if (successes.Count == 0)
                 return;
 
-            Logger.Debug("Getting episodes from database for series: {0} and season: {1}", targetId, secondaryTargetId);
-            var episodes = _episodeProvider.GetEpisodesBySeason(targetId, secondaryTargetId);
+            Logger.Debug("Getting episodes from database for series: {0} and season: {1}", options.SeriesId, options.SeasonNumber);
+            List<Episode> episodes = _episodeProvider.GetEpisodesBySeason(options.SeriesId, options.SeasonNumber);
 
             if (episodes == null || episodes.Count == 0)
             {
-                Logger.Warn("No episodes in database found for series: {0} and season: {1}.", targetId, secondaryTargetId);
+                Logger.Warn("No episodes in database found for series: {0} and season: {1}.", options.SeriesId, options.SeasonNumber);
                 return;
             }
 
@@ -68,7 +70,7 @@ namespace NzbDrone.Core.Jobs
 
             foreach (var episode in episodes.Where(e => !e.Ignored && missingEpisodes.Contains(e.EpisodeNumber)).OrderBy(o => o.EpisodeNumber))
             {
-                _episodeSearchJob.Start(notification, episode.EpisodeId, 0);
+                _episodeSearchJob.Start(notification, new { EpisodeId = episode.EpisodeId });
             }
         }
     }

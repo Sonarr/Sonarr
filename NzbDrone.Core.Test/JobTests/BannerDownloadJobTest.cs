@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Test.JobTests
             Mocker.GetMock<SeriesProvider>().Setup(s => s.GetAllSeries())
                     .Returns(series);
 
-            Mocker.Resolve<BannerDownloadJob>().Start(_notification, 0, 0);
+            Mocker.Resolve<BannerDownloadJob>().Start(_notification, null);
             VerifyDownloadMock(series.Count);
         }
 
@@ -74,7 +74,7 @@ namespace NzbDrone.Core.Test.JobTests
             Mocker.GetMock<SeriesProvider>().Setup(s => s.GetAllSeries())
                     .Returns(series);
 
-            Mocker.Resolve<BannerDownloadJob>().Start(_notification, 0, 0);
+            Mocker.Resolve<BannerDownloadJob>().Start(_notification, null);
             VerifyDownloadMock(3);
         }
 
@@ -89,7 +89,7 @@ namespace NzbDrone.Core.Test.JobTests
             Mocker.GetMock<SeriesProvider>().Setup(s => s.GetSeries(series.SeriesId))
                     .Returns(series);
 
-            Mocker.Resolve<BannerDownloadJob>().Start(_notification, 1, 0);
+            Mocker.Resolve<BannerDownloadJob>().Start(_notification, new { SeriesId = 0 });
             VerifyDownloadMock(1);
         }
     }

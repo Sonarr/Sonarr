@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Jobs
             get { return TimeSpan.FromMinutes(25); }
         }
 
-        public void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
+        public void Start(ProgressNotification notification, dynamic options)
         {
             var reports = new List<EpisodeParseResult>();
 

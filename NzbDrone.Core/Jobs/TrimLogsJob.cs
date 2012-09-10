@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Jobs
             get { return TimeSpan.FromDays(1); }
         }
 
-        public virtual void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
+        public virtual void Start(ProgressNotification notification, dynamic options)
         {
             _logProvider.Trim();
         }

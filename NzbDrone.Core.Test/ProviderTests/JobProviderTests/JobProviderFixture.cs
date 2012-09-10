@@ -436,8 +436,7 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
             var stuckQueueItem = new JobQueueItem
                                     {
                                         JobType = fakeJob.GetType(),
-                                        TargetId = 12,
-                                        SecondaryTargetId = 0
+                                        Options = new { TargetId = 12 }
                                     };
 
             //Act
@@ -446,7 +445,7 @@ namespace NzbDrone.Core.Test.ProviderTests.JobProviderTests
             jobProvider.Queue.Add(stuckQueueItem);
 
             WaitForQueue();
-            jobProvider.QueueJob(stuckQueueItem.JobType, stuckQueueItem.TargetId, stuckQueueItem.SecondaryTargetId);
+            jobProvider.QueueJob(stuckQueueItem.JobType, stuckQueueItem.Options);
             WaitForQueue();
 
             //Assert

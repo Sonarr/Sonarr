@@ -26,7 +26,7 @@ namespace NzbDrone.Web.Controllers
 
         public JsonResult SearchSeason(int seriesId, int seasonNumber)
         {
-            _jobProvider.QueueJob(typeof(SeasonSearchJob), seriesId, seasonNumber);
+            _jobProvider.QueueJob(typeof(SeasonSearchJob), new { SeriesId = seriesId, SeasonNumber = seasonNumber });
             return JsonNotificationResult.Queued("Season search");
 
         }
@@ -40,7 +40,7 @@ namespace NzbDrone.Web.Controllers
 
         public JsonResult RenameSeason(int seriesId, int seasonNumber)
         {
-            _jobProvider.QueueJob(typeof(RenameSeasonJob), seriesId, seasonNumber);
+            _jobProvider.QueueJob(typeof(RenameSeasonJob), new { SeriesId = seriesId, SeasonNumber = seasonNumber });
             return JsonNotificationResult.Queued("Season rename");
 
         }

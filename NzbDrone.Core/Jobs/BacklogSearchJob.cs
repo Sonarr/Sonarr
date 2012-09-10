@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Jobs
             get { return TimeSpan.FromDays(30); }
         }
 
-        public void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
+        public void Start(ProgressNotification notification, dynamic options)
         {
             var missingEpisodes = GetMissingForEnabledSeries().GroupBy(e => new { e.SeriesId, e.SeasonNumber });
           
@@ -73,7 +73,7 @@ namespace NzbDrone.Core.Jobs
                     {
                         //Process as a full season
                         Logger.Debug("Processing Full Season: {0} Season {1}", seriesId, seasonNumber);
-                        _seasonSearchJob.Start(notification, seriesId, seasonNumber);
+                        _seasonSearchJob.Start(notification, new { SeriesId = seriesId, SeasonNumber = seasonNumber });
                     }
                 }
             }
@@ -82,7 +82,7 @@ namespace NzbDrone.Core.Jobs
             //Process the list of remaining episodes, 1 by 1
             foreach (var episode in individualEpisodes)
             {
-                _episodeSearchJob.Start(notification, episode.EpisodeId, 0);
+                _episodeSearchJob.Start(notification, new { EpisodeId = episode.EpisodeId});
             }
         }
 

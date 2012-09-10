@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Test.JobTests
                 .Returns(new List<EpisodeFile>());
 
             //Act
-            Mocker.Resolve<DiskScanJob>().Start(new ProgressNotification("Test"), series.SeriesId, 0);
+            Mocker.Resolve<DiskScanJob>().Start(new ProgressNotification("Test"), new { SeriesId = series.SeriesId });
 
             //Assert
             Mocker.VerifyAllMocks();
@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Test.JobTests
                 .Setup(s => s.Scan(series[1]))
                 .Returns(new List<EpisodeFile>());
 
-            Mocker.Resolve<DiskScanJob>().Start(new ProgressNotification("Test"), 0, 0);
+            Mocker.Resolve<DiskScanJob>().Start(new ProgressNotification("Test"), null);
 
 
             Mocker.VerifyAllMocks();
@@ -96,7 +96,7 @@ namespace NzbDrone.Core.Test.JobTests
                 .Setup(s => s.Scan(series[1]))
                 .Throws(new InvalidOperationException("Bad Job"));
 
-            Mocker.Resolve<DiskScanJob>().Start(new ProgressNotification("Test"), 0, 0);
+            Mocker.Resolve<DiskScanJob>().Start(new ProgressNotification("Test"), null);
 
 
             Mocker.VerifyAllMocks();
@@ -126,7 +126,7 @@ namespace NzbDrone.Core.Test.JobTests
                 .Returns(new List<EpisodeFile>());
 
 
-            Mocker.Resolve<DiskScanJob>().Start(new ProgressNotification("Test"), 0, 0);
+            Mocker.Resolve<DiskScanJob>().Start(new ProgressNotification("Test"), null);
 
 
 

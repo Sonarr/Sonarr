@@ -41,8 +41,7 @@ namespace NzbDrone.Web.Controllers
             var queue = _jobProvider.Queue.Select(c => new JobQueueItemModel
             {
                 Name = c.JobType.Name,
-                TargetId = c.TargetId,
-                SecondaryTargetId = c.SecondaryTargetId
+                Options = c.Options
             });
 
             var serializedQueue = new JavaScriptSerializer().Serialize(queue);

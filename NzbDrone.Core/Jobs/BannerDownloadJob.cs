@@ -40,13 +40,13 @@ namespace NzbDrone.Core.Jobs
             get { return TimeSpan.FromDays(30); }
         }
 
-        public virtual void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
+        public virtual void Start(ProgressNotification notification, dynamic options)
         {
             Logger.Debug("Starting banner download job");
 
-            if (targetId > 0)
+            if (options != null)
             {
-                var series = _seriesProvider.GetSeries(targetId);
+                var series = _seriesProvider.GetSeries(options.SeriesId);
 
                 if (series != null && !String.IsNullOrEmpty(series.BannerUrl))
                 {

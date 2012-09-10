@@ -41,24 +41,24 @@ namespace NzbDrone.Core.Jobs
             get { return TimeSpan.FromTicks(0); }
         }
 
-        public void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
+        public void Start(ProgressNotification notification, dynamic options)
         {
-            if (targetId <= 0)
-                throw new ArgumentOutOfRangeException("targetId");
+            if (options == null || options.SeriesId <= 0)
+                throw new ArgumentException("options");
 
-            if (secondaryTargetId <= 0)
-                throw new ArgumentOutOfRangeException("secondaryTargetId");
+            if (options.SeasonNumber < 0)
+                throw new ArgumentException("options.SeasonNumber");
 
-            var series = _seriesProvider.GetSeries(targetId);
+            var series = _seriesProvider.GetSeries(options.SeriesId);
 
-            notification.CurrentMessage = String.Format("Renaming episodes for {0} Season {1}", series.Title, secondaryTargetId);
+            notification.CurrentMessage = String.Format("Renaming episodes for {0} Season {1}", series.Title, options.SeasonNumber);
 
-            logger.Debug("Getting episodes from database for series: {0} and season: {1}", targetId, secondaryTargetId);
-            var episodeFiles = _mediaFileProvider.GetSeasonFiles(targetId, secondaryTargetId);
+            logger.Debug("Getting episodes from database for series: {0} and season: {1}", options.SeriesId, options.SeasonNumber);
+            var episodeFiles = _mediaFileProvider.GetSeasonFiles(options.SeriesId, options.SeasonNumber);
 
             if (episodeFiles == null || !episodeFiles.Any())
             {
-                logger.Warn("No episodes in database found for series: {0} and season: {1}.", targetId, secondaryTargetId);
+                logger.Warn("No episodes in database found for series: {0} and season: {1}.", options.SeriesId, options.SeasonNumber);
                 return;
             }
 
@@ -91,10 +91,10 @@ namespace NzbDrone.Core.Jobs
 
             //Start AfterRename
 
-            var message = String.Format("Renamed: Series {0}, Season: {1}", series.Title, secondaryTargetId);
+            var message = String.Format("Renamed: Series {0}, Season: {1}", series.Title, options.SeasonNumber);
             _externalNotificationProvider.AfterRename(message, series);
 
-            notification.CurrentMessage = String.Format("Rename completed for {0} Season {1}", series.Title, secondaryTargetId);
+            notification.CurrentMessage = String.Format("Rename completed for {0} Season {1}", series.Title, options.SeasonNumber);
         }
     }
 }

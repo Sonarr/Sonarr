@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Jobs
             get { return TimeSpan.FromHours(24); }
         }
 
-        public virtual void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
+        public virtual void Start(ProgressNotification notification, dynamic options)
         {
             Logger.Info("Running search history cleanup.");
             _searchHistoryProvider.Cleanup();

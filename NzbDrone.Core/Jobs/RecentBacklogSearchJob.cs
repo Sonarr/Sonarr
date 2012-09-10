@@ -36,14 +36,14 @@ namespace NzbDrone.Core.Jobs
             get { return TimeSpan.FromDays(1); }
         }
 
-        public void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
+        public void Start(ProgressNotification notification, dynamic options)
         {
             var missingEpisodes = GetMissingForEnabledSeries();
 
             Logger.Debug("Processing missing episodes from the last 30 days, count: {0}", missingEpisodes.Count);
             foreach (var episode in missingEpisodes)
             {
-                _episodeSearchJob.Start(notification, episode.EpisodeId, 0);
+                _episodeSearchJob.Start(notification,  new { EpisodeId = episode.EpisodeId });
             }
         }
 

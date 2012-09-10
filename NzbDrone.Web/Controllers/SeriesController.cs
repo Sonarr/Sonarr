@@ -80,7 +80,7 @@ namespace NzbDrone.Web.Controllers
         [HttpPost]
         public EmptyResult DeleteSeries(int seriesId, bool deleteFiles)
         {
-            _jobProvider.QueueJob(typeof(DeleteSeriesJob), seriesId, Convert.ToInt32(deleteFiles));
+            _jobProvider.QueueJob(typeof(DeleteSeriesJob), new { SeriesId = seriesId, DeleteFiles = deleteFiles });
 
             return new EmptyResult();
         }
