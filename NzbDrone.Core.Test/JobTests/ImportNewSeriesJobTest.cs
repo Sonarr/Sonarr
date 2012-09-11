@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Test.JobTests
     public class ImportNewSeriesJobTest : CoreTest
     {
         [Test]
-        public void import_new_series_succesfull()
+        public void import_new_series_succesful()
         {
             var series = Builder<Series>.CreateListOfSize(2)
                      .All().With(s => s.LastInfoSync = null)
@@ -39,23 +39,23 @@ namespace NzbDrone.Core.Test.JobTests
 
 
             Mocker.GetMock<DiskScanJob>()
-                .Setup(j => j.Start(notification, new { SeriesId = series[0].SeriesId, SeasonNumber = 0}))
+                .Setup(j => j.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("SeriesId") == series[0].SeriesId)))
                 .Callback(() => series[0].LastDiskSync = DateTime.Now);
 
 
             Mocker.GetMock<DiskScanJob>()
-                .Setup(j => j.Start(notification, new { SeriesId = series[1].SeriesId, SeasonNumber = 0 }))
+                .Setup(j => j.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("SeriesId") == series[1].SeriesId)))
                 .Callback(() => series[1].LastDiskSync = DateTime.Now);
 
             Mocker.GetMock<BannerDownloadJob>()
-                .Setup(j => j.Start(notification, new { SeriesId = It.IsAny<int>(), SeasonNumber = 0 }));
+                .Setup(j => j.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("SeriesId") >= 0)));
 
             Mocker.GetMock<UpdateInfoJob>()
-                .Setup(j => j.Start(notification, new { SeriesId = series[0].SeriesId, SeasonNumber = 0 }))
+                .Setup(j => j.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("SeriesId") == series[0].SeriesId)))
                 .Callback(() => series[0].LastInfoSync = DateTime.Now);
 
             Mocker.GetMock<UpdateInfoJob>()
-                .Setup(j => j.Start(notification, new { SeriesId = series[1].SeriesId, SeasonNumber = 0 }))
+                .Setup(j => j.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("SeriesId") == series[1].SeriesId)))
                 .Callback(() => series[1].LastInfoSync = DateTime.Now);
 
             Mocker.GetMock<SeriesProvider>()
@@ -71,11 +71,11 @@ namespace NzbDrone.Core.Test.JobTests
             Mocker.Resolve<ImportNewSeriesJob>().Start(notification, null);
 
             //Assert
-            Mocker.GetMock<DiskScanJob>().Verify(j => j.Start(notification, new { SeriesId = series[0].SeriesId, SeasonNumber = 0 }), Times.Once());
-            Mocker.GetMock<DiskScanJob>().Verify(j => j.Start(notification, new { SeriesId = series[1].SeriesId, SeasonNumber = 0 }), Times.Once());
+            Mocker.GetMock<DiskScanJob>().Verify(j => j.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("SeriesId") == series[0].SeriesId)), Times.Once());
+            Mocker.GetMock<DiskScanJob>().Verify(j => j.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("SeriesId") == series[1].SeriesId)), Times.Once());
 
-            Mocker.GetMock<UpdateInfoJob>().Verify(j => j.Start(notification, new { SeriesId = series[0].SeriesId, SeasonNumber = 0 }), Times.Once());
-            Mocker.GetMock<UpdateInfoJob>().Verify(j => j.Start(notification, new { SeriesId = series[1].SeriesId, SeasonNumber = 0 }), Times.Once());
+            Mocker.GetMock<UpdateInfoJob>().Verify(j => j.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("SeriesId") == series[0].SeriesId)), Times.Once());
+            Mocker.GetMock<UpdateInfoJob>().Verify(j => j.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("SeriesId") == series[1].SeriesId)), Times.Once());
 
         }
 
@@ -101,19 +101,19 @@ namespace NzbDrone.Core.Test.JobTests
                 .Returns(series);
 
             Mocker.GetMock<UpdateInfoJob>()
-                .Setup(j => j.Start(notification, new { SeriesId = series[0].SeriesId, SeasonNumber = 0 }))
+                .Setup(j => j.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("SeriesId") == series[0].SeriesId)))
                 .Callback(() => series[0].LastInfoSync = DateTime.Now);
 
             Mocker.GetMock<UpdateInfoJob>()
-                .Setup(j => j.Start(notification, new { SeriesId = series[1].SeriesId, SeasonNumber = 0 }))
+                .Setup(j => j.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("SeriesId") == series[1].SeriesId)))
                 .Throws(new InvalidOperationException());
 
             Mocker.GetMock<DiskScanJob>()
-                .Setup(j => j.Start(notification, new { SeriesId = series[0].SeriesId, SeasonNumber = 0 }))
+                .Setup(j => j.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("SeriesId") == series[0].SeriesId)))
                 .Callback(() => series[0].LastDiskSync = DateTime.Now);
 
             Mocker.GetMock<BannerDownloadJob>()
-                .Setup(j => j.Start(notification, new { SeriesId = series[0].SeriesId, SeasonNumber = 0 }));
+                .Setup(j => j.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("SeriesId") == series[0].SeriesId)));
 
             Mocker.GetMock<SeriesProvider>()
                 .Setup(s => s.GetSeries(series[0].SeriesId)).Returns(series[0]);
@@ -125,12 +125,10 @@ namespace NzbDrone.Core.Test.JobTests
             Mocker.Resolve<ImportNewSeriesJob>().Start(notification, null);
 
             //Assert
-            Mocker.VerifyAllMocks();
+            Mocker.GetMock<UpdateInfoJob>().Verify(j => j.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("SeriesId") == series[0].SeriesId)), Times.Once());
+            Mocker.GetMock<UpdateInfoJob>().Verify(j => j.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("SeriesId") == series[1].SeriesId)), Times.Once());
 
-            Mocker.GetMock<UpdateInfoJob>().Verify(j => j.Start(notification, new { SeriesId = series[0].SeriesId, SeasonNumber = 0 }), Times.Once());
-            Mocker.GetMock<UpdateInfoJob>().Verify(j => j.Start(notification, new { SeriesId = series[1].SeriesId, SeasonNumber = 0 }), Times.Once());
-
-            Mocker.GetMock<DiskScanJob>().Verify(j => j.Start(notification, new { SeriesId = series[0].SeriesId, SeasonNumber = 0}), Times.Once());
+            Mocker.GetMock<DiskScanJob>().Verify(j => j.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("SeriesId") == series[0].SeriesId)), Times.Once());
 
             ExceptionVerification.ExpectedErrors(1);
 

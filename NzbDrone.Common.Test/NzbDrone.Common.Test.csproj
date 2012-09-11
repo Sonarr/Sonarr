@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigFileProviderTest.cs" />
+    <Compile Include="ReflectionExtensions.cs" />
     <Compile Include="ReportingService_ReportParseError_Fixture.cs" />
     <Compile Include="PathExtentionFixture.cs" />
     <Compile Include="DiskProviderFixture.cs" />

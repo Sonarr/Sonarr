@@ -15,21 +15,20 @@ namespace NzbDrone.Core.Test.JobTests
         [TestCase(0)]
         [TestCase(-1)]
         [TestCase(-100)]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [ExpectedException(typeof(ArgumentException))]
         public void start_target_id_less_than_0_throws_exception(int target)
         {
             WithStrictMocker();
-            //Mocker.Resolve<EpisodeSearchJob>().Start(new ProgressNotification("Test"), target, 0);
+            Mocker.Resolve<EpisodeSearchJob>().Start(new ProgressNotification("Test"), new { EpisodeId = target });
         }
 
-        [TestCase(0)]
         [TestCase(-1)]
         [TestCase(-100)]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [ExpectedException(typeof(ArgumentException))]
         public void start_secondary_target_id_less_than_0_throws_exception(int target)
         {
             WithStrictMocker();
-            //Mocker.Resolve<SeasonSearchJob>().Start(new ProgressNotification("Test"), 0, target);
+            Mocker.Resolve<SeasonSearchJob>().Start(new ProgressNotification("Test"), new { SeriesId = 1, SeasonNumber = target });
         }
     }
 }
