@@ -45,7 +45,7 @@
     padding: 10px;
     text-align: left;
     position: fixed;
-    z-index: 99;
+    z-index: 999;
     bottom: 0;
     right: 0;
     font-size: 20px;
