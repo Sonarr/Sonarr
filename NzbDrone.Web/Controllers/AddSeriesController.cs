@@ -11,6 +11,7 @@ using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using NzbDrone.Web.Filters;
 using NzbDrone.Web.Models;
+using TvdbLib.Exceptions;
 
 namespace NzbDrone.Web.Controllers
 {
@@ -186,18 +187,34 @@ namespace NzbDrone.Web.Controllers
         [HttpGet]
         public JsonResult LookupSeries(string term)
         {
-            var tvDbResults = _tvDbProvider.SearchSeries(term).Select(r => new TvDbSearchResultModel
-                    {
-                        Id = r.Id,
-                        Title = r.SeriesName,
-                        DisplayedTitle = r.FirstAired.Year > 1900 && !r.SeriesName.EndsWith("(" + r.FirstAired.Year + ")")
-                                                        ?string.Format("{0} ({1})", r.SeriesName, r.FirstAired.Year)
-                                                        :r.SeriesName,
-                        Banner = r.Banner.BannerPath,
-                        Url = String.Format("http://www.thetvdb.com/?tab=series&id={0}", r.Id)
-                    }).ToList();
+            try
+            {
+                var tvDbResults = _tvDbProvider.SearchSeries(term).Select(r => new TvDbSearchResultModel
+                {
+                    Id = r.Id,
+                    Title = r.SeriesName,
+                    DisplayedTitle = r.FirstAired.Year > 1900 && !r.SeriesName.EndsWith("(" + r.FirstAired.Year + ")")
+                                                    ? string.Format("{0} ({1})", r.SeriesName, r.FirstAired.Year)
+                                                    : r.SeriesName,
+                    Banner = r.Banner.BannerPath,
+                    Url = String.Format("http://www.thetvdb.com/?tab=series&id={0}", r.Id)
+                }).ToList();
 
-            return Json(tvDbResults, JsonRequestBehavior.AllowGet);
+                return Json(tvDbResults, JsonRequestBehavior.AllowGet);
+            }
+
+            catch(TvdbNotAvailableException ex)
+            {
+                logger.WarnException("Unable to lookup series on TheTVDB", ex);
+                return JsonNotificationResult.Info("Lookup Failed", "TheTVDB is not available at this time.");
+            }
+
+            catch(Exception ex)
+            {
+                logger.WarnException("Unknown Error when looking up series on TheTVDB", ex);
+                return JsonNotificationResult.Info("Lookup Failed", "Unknown error while connecting to TheTVDB");
+            }
+            
         }
 
         public ActionResult RootList()

@@ -74,7 +74,7 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.4.5.3\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.4.5.9\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Ninject, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\packages\Ninject.2.2.1.4\lib\net40-Full\Ninject.dll</HintPath>
@@ -153,6 +153,7 @@
     <Compile Include="Controllers\SearchHistoryController.cs" />
     <Compile Include="Helpers\Validation\RequiredIfAnyAttribute.cs" />
     <Compile Include="Helpers\Validation\RequiredIfAttribute.cs" />
+    <Content Include="Content\SeriesEditor.css" />
     <Content Include="Content\DataTables-1.9.0\media\css\jquery.dataTables.css" />
     <Content Include="Content\DataTables-1.9.0\media\images\back.png" />
     <Content Include="Content\DataTables-1.9.0\media\images\forward.png" />
@@ -360,6 +361,8 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\conditional-validation.js" />
+    <Content Include="Scripts\DataTables-1.9.0\media\js\FixedHeader.js" />
+    <Content Include="Scripts\DataTables-1.9.0\media\js\FixedHeader.min.js" />
     <Content Include="Scripts\DataTables-1.9.0\media\js\jquery.dataTables.reloadAjax.js" />
     <Content Include="Scripts\DataTables-1.9.0\media\js\jquery.dataTables.editable.js" />
     <Content Include="Scripts\DataTables-1.9.0\media\js\jquery.dataTables.js" />
@@ -368,6 +371,9 @@
     <Content Include="Scripts\DataTables-1.9.0\media\js\jquery.jeditable.js" />
     <Content Include="Scripts\jquery-1.7.1-vsdoc.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
+    <None Include="Scripts\jquery-1.8.1.intellisense.js" />
+    <Content Include="Scripts\jquery-1.8.1.js" />
+    <Content Include="Scripts\jquery-1.8.1.min.js" />
     <Content Include="Scripts\jquery-ui-1.8.17.js" />
     <Content Include="Scripts\jquery-ui-1.8.17.min.js" />
     <Content Include="Scripts\jquery.cookie.js" />
@@ -385,6 +391,7 @@
     <Content Include="Scripts\NzbDrone\addSeries.js" />
     <Content Include="Scripts\NzbDrone\AutoComplete.js" />
     <Content Include="Scripts\jquery.dataTables.4button.pagination.js" />
+    <Content Include="Scripts\NzbDrone\common.js" />
     <Content Include="Scripts\NzbDrone\series.js" />
     <Content Include="Scripts\NzbDrone\qualitySettings.js" />
     <Content Include="Scripts\NzbDrone\grid.js" />

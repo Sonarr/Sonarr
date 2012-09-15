@@ -28,11 +28,19 @@ table.dataTable thead th {
 	*cursor: hand;
 }
 
-table.dataTable tfoot th 
-{
-	padding: 3px 18px 3px 10px;
-	border-top: 1px solid black;
-	font-weight: bold;
+table.dataTable tfoot th {
+	font-family: "Segoe UI Light" , "Open Sans" , "Segoe UI" , sans-serif;
+    border-width: 300;
+    font-size: 17px;
+    padding: 2px;
+    border-style: none;
+    border-color: #EEEEEE;
+    padding-left: 7px;
+    text-align: left;
+    background-color: white;
+    font-weight: lighter;
+	cursor: pointer;
+	*cursor: hand;
 }
 
 table.dataTable td {

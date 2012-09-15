@@ -1,0 +1,60 @@
+﻿.masterControls {
+    margin-top: 10px;
+    overflow: hidden;
+}
+
+.checkboxColumn {
+    width: 110px;
+    text-align: center;
+}
+        
+.buttons {
+    width: 600px;
+    text-align: center;
+}
+        
+table input[type="text"], table select {
+    margin: 2px 2px;
+}
+        
+td .path {
+    width: 300px;
+}
+        
+td .backlogSetting {
+    width: 100px;
+}
+        
+td .quality {
+    width: 120px;
+}
+        
+th .footer-control {
+    width: 100px;
+}
+
+th .footer-control-quality {
+    width: 120px;
+}
+
+#stylized, .settingsForm {
+    overflow: hidden;
+}
+        
+#stylized {
+    float: left;
+}
+        
+#changesOverview {
+    margin-top: 15px;
+    float: left;
+    font-size: 20px;
+}
+
+#seriesEditorGrid tfoot {
+    background-color: lightgrey;
+}
+
+#editToggleMaster {
+    margin-left: 5px;
+}
