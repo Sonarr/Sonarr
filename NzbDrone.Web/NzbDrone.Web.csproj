@@ -153,6 +153,7 @@
     <Compile Include="Controllers\SearchHistoryController.cs" />
     <Compile Include="Helpers\Validation\RequiredIfAnyAttribute.cs" />
     <Compile Include="Helpers\Validation\RequiredIfAttribute.cs" />
+    <Content Include="Content\SeriesEditor.css" />
     <Content Include="Content\DataTables-1.9.0\media\css\jquery.dataTables.css" />
     <Content Include="Content\DataTables-1.9.0\media\images\back.png" />
     <Content Include="Content\DataTables-1.9.0\media\images\forward.png" />
@@ -360,6 +361,8 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\conditional-validation.js" />
+    <Content Include="Scripts\DataTables-1.9.0\media\js\FixedHeader.js" />
+    <Content Include="Scripts\DataTables-1.9.0\media\js\FixedHeader.min.js" />
     <Content Include="Scripts\DataTables-1.9.0\media\js\jquery.dataTables.reloadAjax.js" />
     <Content Include="Scripts\DataTables-1.9.0\media\js\jquery.dataTables.editable.js" />
     <Content Include="Scripts\DataTables-1.9.0\media\js\jquery.dataTables.js" />
@@ -388,6 +391,7 @@
     <Content Include="Scripts\NzbDrone\addSeries.js" />
     <Content Include="Scripts\NzbDrone\AutoComplete.js" />
     <Content Include="Scripts\jquery.dataTables.4button.pagination.js" />
+    <Content Include="Scripts\NzbDrone\common.js" />
     <Content Include="Scripts\NzbDrone\series.js" />
     <Content Include="Scripts\NzbDrone\qualitySettings.js" />
     <Content Include="Scripts\NzbDrone\grid.js" />
