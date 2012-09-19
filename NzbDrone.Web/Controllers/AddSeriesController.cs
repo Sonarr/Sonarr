@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
@@ -116,7 +117,7 @@ namespace NzbDrone.Web.Controllers
         }
 
         [HttpPost]
-        public JsonResult AddNewSeries(string path, string seriesName, int seriesId, int qualityProfileId)
+        public JsonResult AddNewSeries(string path, string seriesName, int seriesId, int qualityProfileId, string airedAfter)
         {
             if (string.IsNullOrWhiteSpace(path) || String.Equals(path,"null",StringComparison.InvariantCultureIgnoreCase)) 
                 return JsonNotificationResult.Error("Couldn't add " + seriesName, "You need a valid root folder"); 
@@ -127,17 +128,22 @@ namespace NzbDrone.Web.Controllers
             //Use the created folder name when adding the series
             path = _diskProvider.CreateDirectory(path);
 
-            return AddExistingSeries(path, seriesName, seriesId, qualityProfileId);
+            return AddExistingSeries(path, seriesName, seriesId, qualityProfileId, airedAfter);
         }
 
         [HttpPost]
         [JsonErrorFilter]
-        public JsonResult AddExistingSeries(string path, string seriesName, int seriesId, int qualityProfileId)
+        public JsonResult AddExistingSeries(string path, string seriesName, int seriesId, int qualityProfileId, string airedAfter)
         {
             if (seriesId == 0 || String.IsNullOrWhiteSpace(seriesName))
                 return JsonNotificationResult.Error("Add Existing series failed.", "Invalid Series information");
 
-            _seriesProvider.AddSeries(seriesName,path, seriesId, qualityProfileId);
+            DateTime? date = null;
+            
+            if (!String.IsNullOrWhiteSpace(airedAfter))
+                date = DateTime.Parse(airedAfter, null, DateTimeStyles.RoundtripKind);
+
+            _seriesProvider.AddSeries(seriesName,path, seriesId, qualityProfileId, date);
             ScanNewSeries();
 
             return JsonNotificationResult.Info(seriesName, "Was added successfully");
@@ -153,7 +159,7 @@ namespace NzbDrone.Web.Controllers
             //Use the created folder name when adding the series
             path = _diskProvider.CreateDirectory(path);
 
-            return AddExistingSeries(path, seriesName, seriesId, qualityProfileId);
+            return AddExistingSeries(path, seriesName, seriesId, qualityProfileId, null);
         }
 
         [ChildActionOnly]

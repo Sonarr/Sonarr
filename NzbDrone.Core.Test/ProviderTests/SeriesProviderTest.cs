@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             //Act
             var seriesProvider = Mocker.Resolve<SeriesProvider>();
-            seriesProvider.AddSeries(title, path, tvDbId, qualityProfileId);
+            seriesProvider.AddSeries(title, path, tvDbId, qualityProfileId, null);
 
             //Assert
             var series = seriesProvider.GetAllSeries();
@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         public void add_series_should_fail_if_series_is_less_than_zero(int seriesId)
         {
             WithRealDb();
-            Assert.Throws<ArgumentOutOfRangeException>(() => Mocker.Resolve<SeriesProvider>().AddSeries("Title", "C:\\Test", seriesId, 1));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Mocker.Resolve<SeriesProvider>().AddSeries("Title", "C:\\Test", seriesId, 1, null));
         }
 
         [Test]

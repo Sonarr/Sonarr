@@ -44,4 +44,10 @@
             }
         });
     });
+    
+    $('.jQuery-dateTime').livequery(function () {
+        $(this).datepicker({
+            dateFormat: "yy-mm-dd"
+        });
+    });
 });

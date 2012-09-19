@@ -7,6 +7,7 @@
     </div>
     @Html.DropDownList("newSeriesPath", new SelectList((IList)ViewData["RootDirs"]), new { style = "width: 406px; margin-left: 0px;" })
     @Html.DropDownList("qualityList", (SelectList)ViewData["QualityProfiles"], new { @class = "qualitySelector" })
+    @Html.TextBox("newAiredAfter", "", new { type = "date", @class = "jQuery-dateTime aired-after", title = "Only download episodes that aired after the choosen date" })
     <button id="saveNewSeries">
         Add</button>
 </div>

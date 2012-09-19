@@ -115,7 +115,7 @@ hr
 }
 
 
-input[type=text], select
+input[type=text], input[type=date], select
 {
     font-size: small;
     padding: 2px 2px;

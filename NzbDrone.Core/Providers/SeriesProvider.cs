@@ -110,7 +110,7 @@ namespace NzbDrone.Core.Providers
             return series;
         }
 
-        public virtual void AddSeries(string title, string path, int tvDbSeriesId, int qualityProfileId)
+        public virtual void AddSeries(string title, string path, int tvDbSeriesId, int qualityProfileId, DateTime? airedAfter)
         {
             Logger.Info("Adding Series [{0}] Path: [{1}]", tvDbSeriesId, path);
 
@@ -130,6 +130,9 @@ namespace NzbDrone.Core.Providers
 
             repoSeries.SeasonFolder = _configProvider.UseSeasonFolder;
             repoSeries.BacklogSetting = BacklogSettingType.Inherit;
+
+            if (airedAfter.HasValue)
+                repoSeries.DownloadEpisodesAiredAfter = airedAfter;
 
             _database.Insert(repoSeries);
         }

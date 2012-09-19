@@ -24,6 +24,7 @@ $(".addExistingButton").live('click', function() {
     var title = $(this).siblings(".seriesLookup").val();
     var seriesId = $(this).siblings(".seriesId").val();
     var qualityId = $(this).siblings(".qualitySelector").val();
+    var date = $(this).siblings('.aired-after').val();
 
     var path = root.find(".seriesPathValue Label").text();
 
@@ -41,7 +42,7 @@ $(".addExistingButton").live('click', function() {
     $.ajax({
         type: "POST",
         url: addSeriesUrl,
-        data: jQuery.param({ path: path, seriesName: title, seriesId: seriesId, qualityProfileId: qualityId }),
+        data: jQuery.param({ path: path, seriesName: title, seriesId: seriesId, qualityProfileId: qualityId, airedAfter: date }),
         error: function(req, status, error) {
             alert("Sorry! We could not add " + path + " at this time. " + error);
         },
@@ -63,6 +64,14 @@ function reloadExistingSeries() {
       }
     });
 }
+
+$(".aired-after-master").live('change', function () {
+
+    var date = $(this).val();
+    $("#existingSeries").find(".aired-after").each(function () {
+        $(this).val(date);
+    });
+});
 
 //RootDir
 //Delete RootDir
@@ -116,11 +125,12 @@ $('#saveNewSeries').live('click', function () {
     var seriesId = $("#newSeriesId").val();
     var qualityId = $("#qualityList").val();
     var path = $('#newSeriesPath').val();
+    var date = $('#newAiredAfter').val();
 
     $.ajax({
         type: "POST",
         url: addNewSeriesUrl,
-        data: jQuery.param({ path: path, seriesName: seriesTitle, seriesId: seriesId, qualityProfileId: qualityId }),
+        data: jQuery.param({ path: path, seriesName: seriesTitle, seriesId: seriesId, qualityProfileId: qualityId, airedAfter: date }),
         error: function (req, status, error) {
             alert("Sorry! We could not add " + path + " at this time. " + error);
         },
