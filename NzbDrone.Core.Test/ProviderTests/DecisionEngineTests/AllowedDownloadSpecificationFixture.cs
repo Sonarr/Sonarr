@@ -52,6 +52,10 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
             Mocker.GetMock<AllowedReleaseGroupSpecification>()
                     .Setup(c => c.IsSatisfiedBy(It.IsAny<EpisodeParseResult>()))
                     .Returns(true);
+
+            Mocker.GetMock<EpisodeAiredAfterCutoffSpecification>()
+                    .Setup(c => c.IsSatisfiedBy(It.IsAny<EpisodeParseResult>()))
+                    .Returns(true);
         }
 
         private void WithProfileNotAllowed()
@@ -85,6 +89,13 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
         private void WithOverRetention()
         {
             Mocker.GetMock<RetentionSpecification>()
+                    .Setup(c => c.IsSatisfiedBy(It.IsAny<EpisodeParseResult>()))
+                    .Returns(false);
+        }
+
+        private void WithAiredBeforeCutoff()
+        {
+            Mocker.GetMock<EpisodeAiredAfterCutoffSpecification>()
                     .Setup(c => c.IsSatisfiedBy(It.IsAny<EpisodeParseResult>()))
                     .Returns(false);
         }
@@ -128,6 +139,13 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
         {
             WithOverRetention();
             spec.IsSatisfiedBy(parseResult).Should().Be(ReportRejectionType.Retention);
+        }
+
+        [Test]
+        public void should_not_be_allowed_if_episode_aired_before_cutoff()
+        {
+            WithAiredBeforeCutoff();
+            spec.IsSatisfiedBy(parseResult).Should().Be(ReportRejectionType.EpisodeAiredBeforeCutoff);
         }
 
         [Test]
