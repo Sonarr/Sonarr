@@ -1,7 +1,6 @@
 ﻿//URLs
 var addSeriesUrl = '../AddSeries/AddExistingSeries';
 var addNewSeriesUrl = '../AddSeries/AddNewSeries';
-var quickAddNewSeriesUrl = '../AddSeries/QuickAddNewSeries';
 var existingSeriesUrl = '../AddSeries/ExistingSeries';
 var addNewUrl = '../AddSeries/AddNew';
 
@@ -19,7 +18,9 @@ $(".masterQualitySelector").live('change', function () {
     });
 });
 
-$(".addExistingButton").live('click', function() {
+$(".addExistingButton").live('click', function () {
+    var button = $(this);
+    $(button).attr('disabled', 'disabled');
     var root = $(this).parents(".existingSeries");
     var title = $(this).siblings(".seriesLookup").val();
     var seriesId = $(this).siblings(".seriesId").val();
@@ -43,7 +44,8 @@ $(".addExistingButton").live('click', function() {
         type: "POST",
         url: addSeriesUrl,
         data: jQuery.param({ path: path, seriesName: title, seriesId: seriesId, qualityProfileId: qualityId, airedAfter: date }),
-        error: function(req, status, error) {
+        error: function (req, status, error) {
+            $(button).removeAttr('disabled');
             alert("Sorry! We could not add " + path + " at this time. " + error);
         },
         success: function() {
@@ -121,6 +123,8 @@ function refreshRoot() {
 
 //AddNew
 $('#saveNewSeries').live('click', function () {
+    $('#saveNewSeries').attr('disabled', 'disabled');
+
     var seriesTitle = $("#newSeriesLookup").val();
     var seriesId = $("#newSeriesId").val();
     var qualityId = $("#qualityList").val();
@@ -132,10 +136,13 @@ $('#saveNewSeries').live('click', function () {
         url: addNewSeriesUrl,
         data: jQuery.param({ path: path, seriesName: seriesTitle, seriesId: seriesId, qualityProfileId: qualityId, airedAfter: date }),
         error: function (req, status, error) {
+            $('#saveNewSeries').removeAttr('disabled');
             alert("Sorry! We could not add " + path + " at this time. " + error);
         },
         success: function () {
-            $("#newSeriesLookup").val("");
+            $('#saveNewSeries').removeAttr('disabled');
+            $("#newSeriesLookup").val('');
+            $('#newAiredAfter').val('');
         }
     });
 });
@@ -148,27 +155,6 @@ function reloadAddNew() {
         }
     });
 }
-
-
-//QuickAddNew
-$('#quickAddNew').live('click', function () {
-    var seriesTitle = $("#newSeriesLookup").val();
-    var seriesId = $("#newSeriesId").val();
-    var qualityId = $("#qualityList").val();
-
-    $.ajax({
-        type: "POST",
-        url: quickAddNewSeriesUrl,
-        data: jQuery.param({ seriesName: seriesTitle, seriesId: seriesId, qualityProfileId: qualityId }),
-        error: function (req, status, error) {
-            alert("Sorry! We could not add " + path + " at this time. " + error);
-        },
-        success: function () {
-            $("#newSeriesLookup").val("");
-            $('#newSeriesPath').val("");
-        }
-    });
-});
 
 
 //Watermark
