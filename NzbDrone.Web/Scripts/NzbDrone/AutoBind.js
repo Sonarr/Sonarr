@@ -45,7 +45,7 @@
         });
     });
     
-    $('.jQuery-dateTime').livequery(function () {
+    $('.jQuery-datepicker').livequery(function () {
         $(this).datepicker({
             dateFormat: "yy-mm-dd"
         });

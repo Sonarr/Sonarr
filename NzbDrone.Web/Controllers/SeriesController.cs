@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
@@ -44,7 +45,7 @@ namespace NzbDrone.Web.Controllers
             return View((object)serialized);
         }
 
-        public ActionResult SingleSeriesEditor(int seriesId)
+        public ActionResult Edit(int seriesId)
         {
             var profiles = _qualityProvider.All();
             ViewData["SelectList"] = new SelectList(profiles, "QualityProfileId", "Name");
@@ -63,7 +64,7 @@ namespace NzbDrone.Web.Controllers
         }
 
         [HttpPost]
-        public EmptyResult SaveSingleSeriesEditor(SeriesModel seriesModel)
+        public EmptyResult Edit(SeriesModel seriesModel)
         {
             var series = _seriesProvider.GetSeries(seriesModel.SeriesId);
             series.Monitored = seriesModel.Monitored;
@@ -71,6 +72,9 @@ namespace NzbDrone.Web.Controllers
             series.QualityProfileId = seriesModel.QualityProfileId;
             series.Path = seriesModel.Path;
             series.BacklogSetting = (BacklogSettingType)seriesModel.BacklogSetting;
+
+            if (!String.IsNullOrWhiteSpace(seriesModel.DownloadEpisodesAiredAfter))
+                series.DownloadEpisodesAiredAfter = DateTime.Parse(seriesModel.DownloadEpisodesAiredAfter, null, DateTimeStyles.RoundtripKind);
 
             _seriesProvider.UpdateSeries(series);
 
@@ -172,7 +176,7 @@ namespace NzbDrone.Web.Controllers
         }
 
         [HttpPost]
-        public JsonResult SaveEditor(List<Series> series)
+        public JsonResult Editor(List<Series> series)
         {
             //Save edits
             if (series == null || series.Count == 0)
@@ -204,7 +208,8 @@ namespace NzbDrone.Web.Controllers
                                                         EpisodeFileCount = s.EpisodeFileCount,
                                                         NextAiring = s.NextAiring == null ? String.Empty : s.NextAiring.Value.ToBestDateString(),
                                                         NextAiringSorter = s.NextAiring == null ? "12/31/9999" : s.NextAiring.Value.ToString("MM/dd/yyyy"),
-                                                        AirTime = s.AirTimes
+                                                        AirTime = s.AirTimes,
+                                                        DownloadEpisodesAiredAfter = s.DownloadEpisodesAiredAfter.HasValue ? s.DownloadEpisodesAiredAfter.Value.ToString("yyyy-MM-dd") : String.Empty
                                                     }).ToList();
 
             return series;

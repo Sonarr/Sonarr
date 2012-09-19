@@ -4,7 +4,7 @@
 }
 
 .checkboxColumn {
-    width: 110px;
+    width: 50px;
     text-align: center;
 }
         
@@ -13,7 +13,7 @@
     text-align: center;
 }
         
-table input[type="text"], table select {
+table input[type="text"], table input[type="date"], table select {
     margin: 2px 2px;
 }
         
@@ -36,6 +36,19 @@ th .footer-control {
 th .footer-control-quality {
     width: 120px;
 }
+
+td .aired-after {
+    width: 80px;
+}
+
+th .footer-control-boolean {
+    width: 90px;
+}
+
+th .footer-control-aired-after {
+    width: 80px;
+}
+
 
 #stylized, .settingsForm {
     overflow: hidden;

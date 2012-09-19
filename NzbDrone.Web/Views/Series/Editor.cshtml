@@ -16,7 +16,7 @@
     </ul>
 }
 
-@using (Html.BeginForm("SaveEditor", "Series", FormMethod.Post, new { id = "SeriesEditor", name = "SeriesEditor" }))
+@using (Html.BeginForm("Editor", "Series", FormMethod.Post, new { id = "SeriesEditor", name = "SeriesEditor" }))
 {
     <table id="seriesEditorGrid" class="dataTable dataTablesGrid no-details">
         <thead>
@@ -24,9 +24,10 @@
                 <th width="14px">@Html.CheckBox("editToggleMaster", false, new { @class = "editToggleMaster" })</th>
                 <th>Title</th>
                 <th width="125px;">Quality</th>
-                <th class="checkboxColumn">Monitored</th>
-                <th class="checkboxColumn">Season Folder</th>
-                <th width="100px">Backlog Status</th>
+                <th width="90px">Monitored</th>
+                <th width="110px">Season Folder</th>
+                <th width="110px">Backlog Status</th>
+                <th width="80px">Aired After</th>
                 <th width="310px">Path</th>
             </tr>
         </thead>
@@ -46,13 +47,16 @@
                     @Html.DropDownList("masterQualitySelector", (SelectList)ViewData["MasterProfileSelectList"], new { @class = "footer-control-quality masterSelector master-quality", disabled = true })
                 </th>
                 <th>
-                    @Html.DropDownList("masterMonitored", (SelectList)ViewData["BoolSelectList"], new { @class = "footer-control masterSelector master-monitored", disabled = true })
+                    @Html.DropDownList("masterMonitored", (SelectList)ViewData["BoolSelectList"], new { @class = "footer-control-boolean masterSelector master-monitored", disabled = true })
                 </th>
                 <th>
-                    @Html.DropDownList("masterSeasonFolder", (SelectList)ViewData["BoolSelectList"], new { @class = "footer-control masterSelector master-season-folder", disabled = true })
+                    @Html.DropDownList("masterSeasonFolder", (SelectList)ViewData["BoolSelectList"], new { @class = "footer-control-boolean masterSelector master-season-folder", disabled = true })
                 </th>
                 <th>
                     @Html.DropDownList("masterBacklogSetting", (SelectList)ViewData["MasterBacklogSettingSelectList"], new { @class = "footer-control masterSelector master-backlog-setting", disabled = true })
+                </th>
+                <th>
+                    @Html.TextBox("masterAiredAfter", "" , new { type = "date", @class = "footer-control-aired-after masterSelector master-aired-after jQuery-datepicker", disabled = true })
                 </th>
                 <th>
                     <button id="series-editor-save" type="submit" class="save_button" disabled="disabled" title="Commit the settings from your series above to the database">
@@ -177,6 +181,16 @@
 
             selected.each(function () {
                 $(this).parent('td').parent('.seriesEditRow').find('.backlogSetting').val(backlogStatus);
+            });
+        });
+        
+        $(document).on('change', '#masterAiredAfter', function () {
+            var airedAfter = $(this).val();
+
+            var selected = $('.editToggle:checked');
+
+            selected.each(function () {
+                $(this).parent('td').parent('.seriesEditRow').find('.aired-after').val(airedAfter);
             });
         });
         

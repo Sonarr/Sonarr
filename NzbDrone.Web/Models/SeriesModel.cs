@@ -28,7 +28,7 @@ namespace NzbDrone.Web.Models
         public string Details { get; set; }
         public string Network { get; set; }
         public string AirTime { get; set; }
-
+        
         public IList<int> Seasons { get; set; }
 
         //View & Edit
@@ -52,5 +52,9 @@ namespace NzbDrone.Web.Models
         [DisplayName("Backlog Setting")]
         [Description("Should NzbDrone search for missing episodes every 30 days?")]
         public int BacklogSetting { get; set; }
+
+        [DisplayName("Download Episodes Aired After")]
+        [Description("Should NzbDrone only download episodes a certain date?")]
+        public string DownloadEpisodesAiredAfter { get; set; }
     }
 }

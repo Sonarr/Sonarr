@@ -534,7 +534,7 @@
     <Content Include="Views\Series\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Series\SingleSeriesEditor.cshtml" />
+    <Content Include="Views\Series\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Upcoming\UpcomingEpisode.cshtml" />

@@ -232,6 +232,7 @@ namespace NzbDrone.Core.Providers
                 series.SeasonFolder = edited.SeasonFolder;
                 series.BacklogSetting = edited.BacklogSetting;
                 series.Path = edited.Path;
+                series.DownloadEpisodesAiredAfter = edited.DownloadEpisodesAiredAfter;
             }
 
             _database.UpdateMany(allSeries);

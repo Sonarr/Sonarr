@@ -1,5 +1,5 @@
-﻿var seriesEditorUrl = '../Series/SingleSeriesEditor';
-var saveSeriesEditorUrl = '../Series/SaveSingleSeriesEditor';
+﻿var seriesEditorUrl = '../Series/Edit';
+var saveSeriesEditorUrl = '../Series/Edit';
 var seriesDeleteUrl = '../Series/DeleteSeries';
 
 $("#seriesEditor").dialog({

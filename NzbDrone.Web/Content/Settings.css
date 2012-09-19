@@ -1,5 +1,4 @@
-﻿p, h1, form, button
-{
+﻿p, h1, form, button {
     border: 0;
     margin: 0;
     padding: 0;
@@ -9,21 +8,18 @@
     display: none;
 }
 
-.spacer
-{
+.spacer {
     clear: both;
     height: 1px;
 }
 
-.settingsForm
-{
+.settingsForm {
     width: 620px;
     padding: 14px;
 }
 
 
-#stylized p
-{
+#stylized p {
     font-size: 11px;
     color: #666666;
     margin-bottom: 20px;
@@ -31,8 +27,7 @@
     padding-bottom: 10px;
 }
 
-#stylized .labelClass
-{
+#stylized .labelClass {
     display: block;
     font-weight: bold;
     text-align: right;
@@ -41,8 +36,7 @@
     margin-bottom: -10px;
 }
 
-#stylized .small
-{
+#stylized .small {
     color: #666666;
     display: block;
     font-size: 11px;
@@ -51,8 +45,7 @@
     width: 340px;
 }
 
-#stylized .inputClass
-{
+#stylized .inputClass {
     float: left;
     padding: 2px 2px;
     border: solid 1px #aacfe4;
@@ -60,19 +53,16 @@
     margin: 4px 0 20px 10px;
 }
 
-#stylized .selectClass
-{
+#stylized .selectClass {
     width: 206px;
 }
 
-#stylized .checkClass
-{
+#stylized .checkClass {
     margin: 12px 0px 20px 10px;
     border: none;
 }
 
-#stylized button
-{
+#stylized button {
     clear: both;
     margin-left: 220px;
     margin-bottom: 10px;
@@ -85,8 +75,7 @@
 }
 
 
-#saveAjax
-{
+#saveAjax {
     padding-left: 6px;
     margin-bottom: -7px;
     width: 20px;
@@ -94,24 +83,21 @@
     display: none;
 }
 
-#save_button[disabled="disabled"]
-{
+#save_button[disabled="disabled"] {
     padding: 0px 6px 0px 6px;
     border: 2px outset ButtonFace;
     color: lightgrey;
     cursor: progress;
 }
 
-.ui-dialog-buttonset .ui-delete-button 
-{
+.ui-dialog-buttonset .ui-delete-button {
     background: url("jQueryUI/images/ui-bg_flat_30_b40404_40x100.png") repeat-x scroll 50% 50% #B40404;
     border: 1px solid #FFFFFF;
     color: #FFFFFF;
     font-weight: normal;
 }
 
-.ui-dialog-buttonset .ui-delete-button:active
-{
+.ui-dialog-buttonset .ui-delete-button:active {
     background: url("jQueryUI/images/ui-bg_flat_30_616161_40x100.png") repeat-x scroll 50% 50% #616161;
     border: 1px solid #FFFFFF;
     color: #FFFFFF;
