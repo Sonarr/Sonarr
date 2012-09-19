@@ -170,19 +170,30 @@ namespace NzbDrone.Web.Controllers
             masterBacklogList.Insert(0, new KeyValuePair<int, string>(-10, "Select..."));
             ViewData["MasterBacklogSettingSelectList"] = new SelectList(masterBacklogList, "Key", "Value");
 
-            var series = _seriesProvider.GetAllSeries().OrderBy(o => SortHelper.SkipArticles(o.Title));
+            var series = GetSeriesModels(_seriesProvider.GetAllSeries()).OrderBy(o => SortHelper.SkipArticles(o.Title));
 
             return View(series);
         }
 
         [HttpPost]
-        public JsonResult Editor(List<Series> series)
+        public JsonResult Editor(List<SeriesModel> series)
         {
             //Save edits
             if (series == null || series.Count == 0)
                 return JsonNotificationResult.Oops("Invalid post data");
 
-            _seriesProvider.UpdateFromSeriesEditor(series);
+            _seriesProvider.UpdateFromSeriesEditor(series.Select(s => new Series
+                                            {
+                                                    SeriesId = s.SeriesId,
+                                                    QualityProfileId = s.QualityProfileId,
+                                                    Monitored = s.Monitored,
+                                                    SeasonFolder =  s.SeasonFolder,
+                                                    BacklogSetting = (BacklogSettingType)s.BacklogSetting,
+                                                    Path = s.Path,
+                                                    DownloadEpisodesAiredAfter = String.IsNullOrWhiteSpace(s.DownloadEpisodesAiredAfter) ? (DateTime?)null 
+                                                                                : DateTime.Parse(s.DownloadEpisodesAiredAfter, null, DateTimeStyles.RoundtripKind)
+                                            }
+                    ).ToList());
             return JsonNotificationResult.Info("Series Mass Edit Saved");
         }
 
