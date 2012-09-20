@@ -27,7 +27,7 @@
                 <th width="90px">Monitored</th>
                 <th width="110px">Season Folder</th>
                 <th width="110px">Backlog Status</th>
-                <th width="80px">Aired After</th>
+                <th width="80px" title="Custom Start Date">Start Date</th>
                 <th width="310px">Path</th>
             </tr>
         </thead>
@@ -56,7 +56,7 @@
                     @Html.DropDownList("masterBacklogSetting", (SelectList)ViewData["MasterBacklogSettingSelectList"], new { @class = "footer-control masterSelector master-backlog-setting", disabled = true })
                 </th>
                 <th>
-                    @Html.TextBox("masterAiredAfter", "" , new { type = "date", @class = "footer-control-aired-after masterSelector master-aired-after jQuery-datepicker", disabled = true })
+                    @Html.TextBox("masterStartDate", "" , new { type = "date", @class = "footer-control-start-date masterSelector master-start-date jQuery-datepicker", disabled = true })
                 </th>
                 <th>
                     <button id="series-editor-save" type="submit" class="save_button" disabled="disabled" title="Commit the settings from your series above to the database">
@@ -184,13 +184,13 @@
             });
         });
         
-        $(document).on('change', '#masterAiredAfter', function () {
-            var airedAfter = $(this).val();
+        $(document).on('change', '#masterStartDate', function () {
+            var startDate = $(this).val();
 
             var selected = $('.editToggle:checked');
 
             selected.each(function () {
-                $(this).parent('td').parent('.seriesEditRow').find('.aired-after').val(airedAfter);
+                $(this).parent('td').parent('.seriesEditRow').find('.start-date').val(startDate);
             });
         });
         

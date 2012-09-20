@@ -37,9 +37,9 @@
         </label>
         @Html.DropDownListFor(m => m.BacklogSetting, (SelectList)ViewData["BacklogSettingSelectList"], new { @class = "inputClass" })
 
-        <label class="labelClass">@Html.LabelFor(m => m.DownloadEpisodesAiredAfter)
-            <span class="small">@Html.DescriptionFor(m => m.DownloadEpisodesAiredAfter)</span>
+        <label class="labelClass">@Html.LabelFor(m => m.CustomStartDate)
+            <span class="small">@Html.DescriptionFor(m => m.CustomStartDate)</span>
         </label>
-        @Html.TextBoxFor(m => m.DownloadEpisodesAiredAfter, new { type = "date", @class = "inputClass jQuery-datepicker" })
+        @Html.TextBoxFor(m => m.CustomStartDate, new { type = "date", @class = "inputClass jQuery-datepicker" })
     }
 </div>

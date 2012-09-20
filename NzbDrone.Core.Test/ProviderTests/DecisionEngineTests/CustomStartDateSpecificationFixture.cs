@@ -17,9 +17,9 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    public class EpisodeAiredAfterCutoffSpecificationFixture : CoreTest
+    public class CustomStartDateSpecificationFixture : CoreTest
     {
-        private EpisodeAiredAfterCutoffSpecification episodeAiredAfterCutoffSpecification;
+        private CustomStartDateSpecification _customStartDateSpecification;
 
         private EpisodeParseResult parseResultMulti;
         private EpisodeParseResult parseResultSingle;
@@ -30,11 +30,11 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
         [SetUp]
         public void Setup()
         {
-            episodeAiredAfterCutoffSpecification = Mocker.Resolve<EpisodeAiredAfterCutoffSpecification>();
+            _customStartDateSpecification = Mocker.Resolve<CustomStartDateSpecification>();
 
             fakeSeries = Builder<Series>.CreateNew()
                 .With(c => c.Monitored = true)
-                .With(c => c.DownloadEpisodesAiredAfter = null)
+                .With(c => c.CustomStartDate = null)
                 .Build();
 
             parseResultMulti = new EpisodeParseResult
@@ -75,38 +75,38 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
 
         private void WithAiredAfterYesterday()
         {
-            fakeSeries.DownloadEpisodesAiredAfter = DateTime.Today.AddDays(-1);
+            fakeSeries.CustomStartDate = DateTime.Today.AddDays(-1);
         }
 
         private void WithAiredAfterLastWeek()
         {
-            fakeSeries.DownloadEpisodesAiredAfter = DateTime.Today.AddDays(-7);
+            fakeSeries.CustomStartDate = DateTime.Today.AddDays(-7);
         }
 
         [Test]
         public void should_return_true_when_downloadEpisodesAiredAfter_is_null_for_single_episode()
         {
-            episodeAiredAfterCutoffSpecification.IsSatisfiedBy(parseResultSingle).Should().BeTrue();
+            _customStartDateSpecification.IsSatisfiedBy(parseResultSingle).Should().BeTrue();
         }
 
         [Test]
         public void should_return_true_when_downloadEpisodesAiredAfter_is_null_for_multiple_episodes()
         {
-            episodeAiredAfterCutoffSpecification.IsSatisfiedBy(parseResultMulti).Should().BeTrue();
+            _customStartDateSpecification.IsSatisfiedBy(parseResultMulti).Should().BeTrue();
         }
 
         [Test]
         public void should_return_true_if_both_episodes_air_after_cutoff()
         {
             WithAiredAfterLastWeek();
-            episodeAiredAfterCutoffSpecification.IsSatisfiedBy(parseResultMulti).Should().BeTrue();
+            _customStartDateSpecification.IsSatisfiedBy(parseResultMulti).Should().BeTrue();
         }
 
         [Test]
         public void should_return_true_if_episode_airs_after_cutoff()
         {
             WithAiredAfterLastWeek();
-            episodeAiredAfterCutoffSpecification.IsSatisfiedBy(parseResultSingle).Should().BeTrue();
+            _customStartDateSpecification.IsSatisfiedBy(parseResultSingle).Should().BeTrue();
         }
 
         [Test]
@@ -114,7 +114,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
         {
             WithAiredAfterLastWeek();
             WithSecondEpisodeYear();
-            episodeAiredAfterCutoffSpecification.IsSatisfiedBy(parseResultMulti).Should().BeTrue();
+            _customStartDateSpecification.IsSatisfiedBy(parseResultMulti).Should().BeTrue();
         }
 
         [Test]
@@ -122,7 +122,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
         {
             WithAiredAfterLastWeek();
             WithFirstEpisodeLastYear();
-            episodeAiredAfterCutoffSpecification.IsSatisfiedBy(parseResultMulti).Should().BeTrue();
+            _customStartDateSpecification.IsSatisfiedBy(parseResultMulti).Should().BeTrue();
         }
 
         [Test]
@@ -131,7 +131,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
             WithAiredAfterLastWeek();
             WithFirstEpisodeLastYear();
             WithSecondEpisodeYear();
-            episodeAiredAfterCutoffSpecification.IsSatisfiedBy(parseResultMulti).Should().BeFalse();
+            _customStartDateSpecification.IsSatisfiedBy(parseResultMulti).Should().BeFalse();
         }
 
         [Test]
@@ -139,7 +139,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
         {
             WithAiredAfterLastWeek();
             WithFirstEpisodeLastYear();
-            episodeAiredAfterCutoffSpecification.IsSatisfiedBy(parseResultSingle).Should().BeFalse();
+            _customStartDateSpecification.IsSatisfiedBy(parseResultSingle).Should().BeFalse();
         }
     }
 }

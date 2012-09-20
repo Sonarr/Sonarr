@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
                     .Setup(c => c.IsSatisfiedBy(It.IsAny<EpisodeParseResult>()))
                     .Returns(true);
 
-            Mocker.GetMock<EpisodeAiredAfterCutoffSpecification>()
+            Mocker.GetMock<CustomStartDateSpecification>()
                     .Setup(c => c.IsSatisfiedBy(It.IsAny<EpisodeParseResult>()))
                     .Returns(true);
         }
@@ -93,9 +93,9 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
                     .Returns(false);
         }
 
-        private void WithAiredBeforeCutoff()
+        private void WithAiredBeforeCustomStartDateCutoff()
         {
-            Mocker.GetMock<EpisodeAiredAfterCutoffSpecification>()
+            Mocker.GetMock<CustomStartDateSpecification>()
                     .Setup(c => c.IsSatisfiedBy(It.IsAny<EpisodeParseResult>()))
                     .Returns(false);
         }
@@ -144,8 +144,8 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
         [Test]
         public void should_not_be_allowed_if_episode_aired_before_cutoff()
         {
-            WithAiredBeforeCutoff();
-            spec.IsSatisfiedBy(parseResult).Should().Be(ReportRejectionType.EpisodeAiredBeforeCutoff);
+            WithAiredBeforeCustomStartDateCutoff();
+            spec.IsSatisfiedBy(parseResult).Should().Be(ReportRejectionType.AiredAfterCustomStartDate);
         }
 
         [Test]

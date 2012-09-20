@@ -37,7 +37,7 @@ th .footer-control-quality {
     width: 120px;
 }
 
-td .aired-after {
+td .start-date {
     width: 80px;
 }
 
@@ -45,7 +45,7 @@ th .footer-control-boolean {
     width: 90px;
 }
 
-th .footer-control-aired-after {
+th .footer-control-start-date {
     width: 80px;
 }
 

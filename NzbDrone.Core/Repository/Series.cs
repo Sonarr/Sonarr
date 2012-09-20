@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Repository
 
         public string Network { get; set; }
 
-        public DateTime? DownloadEpisodesAiredAfter { get; set; }
+        public DateTime? CustomStartDate { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="Series"/> is hidden.

@@ -132,7 +132,7 @@ namespace NzbDrone.Core.Providers
             repoSeries.BacklogSetting = BacklogSettingType.Inherit;
 
             if (airedAfter.HasValue)
-                repoSeries.DownloadEpisodesAiredAfter = airedAfter;
+                repoSeries.CustomStartDate = airedAfter;
 
             _database.Insert(repoSeries);
         }
@@ -232,7 +232,7 @@ namespace NzbDrone.Core.Providers
                 series.SeasonFolder = edited.SeasonFolder;
                 series.BacklogSetting = edited.BacklogSetting;
                 series.Path = edited.Path;
-                series.DownloadEpisodesAiredAfter = edited.DownloadEpisodesAiredAfter;
+                series.CustomStartDate = edited.CustomStartDate;
             }
 
             _database.UpdateMany(allSeries);

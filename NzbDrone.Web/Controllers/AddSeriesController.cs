@@ -110,7 +110,7 @@ namespace NzbDrone.Web.Controllers
         }
 
         [HttpPost]
-        public JsonResult AddNewSeries(string path, string seriesName, int seriesId, int qualityProfileId, string airedAfter)
+        public JsonResult AddNewSeries(string path, string seriesName, int seriesId, int qualityProfileId, string startDate)
         {
             if (string.IsNullOrWhiteSpace(path) || String.Equals(path,"null",StringComparison.InvariantCultureIgnoreCase)) 
                 return JsonNotificationResult.Error("Couldn't add " + seriesName, "You need a valid root folder"); 
@@ -121,20 +121,20 @@ namespace NzbDrone.Web.Controllers
             //Use the created folder name when adding the series
             path = _diskProvider.CreateDirectory(path);
 
-            return AddExistingSeries(path, seriesName, seriesId, qualityProfileId, airedAfter);
+            return AddExistingSeries(path, seriesName, seriesId, qualityProfileId, startDate);
         }
 
         [HttpPost]
         [JsonErrorFilter]
-        public JsonResult AddExistingSeries(string path, string seriesName, int seriesId, int qualityProfileId, string airedAfter)
+        public JsonResult AddExistingSeries(string path, string seriesName, int seriesId, int qualityProfileId, string startDate)
         {
             if (seriesId == 0 || String.IsNullOrWhiteSpace(seriesName))
                 return JsonNotificationResult.Error("Add Existing series failed.", "Invalid Series information");
 
             DateTime? date = null;
             
-            if (!String.IsNullOrWhiteSpace(airedAfter))
-                date = DateTime.Parse(airedAfter, null, DateTimeStyles.RoundtripKind);
+            if (!String.IsNullOrWhiteSpace(startDate))
+                date = DateTime.Parse(startDate, null, DateTimeStyles.RoundtripKind);
 
             _seriesProvider.AddSeries(seriesName,path, seriesId, qualityProfileId, date);
             _jobProvider.QueueJob(typeof(ImportNewSeriesJob));

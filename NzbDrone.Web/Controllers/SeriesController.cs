@@ -73,8 +73,8 @@ namespace NzbDrone.Web.Controllers
             series.Path = seriesModel.Path;
             series.BacklogSetting = (BacklogSettingType)seriesModel.BacklogSetting;
 
-            if (!String.IsNullOrWhiteSpace(seriesModel.DownloadEpisodesAiredAfter))
-                series.DownloadEpisodesAiredAfter = DateTime.Parse(seriesModel.DownloadEpisodesAiredAfter, null, DateTimeStyles.RoundtripKind);
+            if (!String.IsNullOrWhiteSpace(seriesModel.CustomStartDate))
+                series.CustomStartDate = DateTime.Parse(seriesModel.CustomStartDate, null, DateTimeStyles.RoundtripKind);
 
             _seriesProvider.UpdateSeries(series);
 
@@ -190,8 +190,8 @@ namespace NzbDrone.Web.Controllers
                                                     SeasonFolder =  s.SeasonFolder,
                                                     BacklogSetting = (BacklogSettingType)s.BacklogSetting,
                                                     Path = s.Path,
-                                                    DownloadEpisodesAiredAfter = String.IsNullOrWhiteSpace(s.DownloadEpisodesAiredAfter) ? (DateTime?)null 
-                                                                                : DateTime.Parse(s.DownloadEpisodesAiredAfter, null, DateTimeStyles.RoundtripKind)
+                                                    CustomStartDate = String.IsNullOrWhiteSpace(s.CustomStartDate) ? (DateTime?)null 
+                                                                                : DateTime.Parse(s.CustomStartDate, null, DateTimeStyles.RoundtripKind)
                                             }
                     ).ToList());
             return JsonNotificationResult.Info("Series Mass Edit Saved");
@@ -220,7 +220,7 @@ namespace NzbDrone.Web.Controllers
                                                         NextAiring = s.NextAiring == null ? String.Empty : s.NextAiring.Value.ToBestDateString(),
                                                         NextAiringSorter = s.NextAiring == null ? "12/31/9999" : s.NextAiring.Value.ToString("MM/dd/yyyy"),
                                                         AirTime = s.AirTimes,
-                                                        DownloadEpisodesAiredAfter = s.DownloadEpisodesAiredAfter.HasValue ? s.DownloadEpisodesAiredAfter.Value.ToString("yyyy-MM-dd") : String.Empty
+                                                        CustomStartDate = s.CustomStartDate.HasValue ? s.CustomStartDate.Value.ToString("yyyy-MM-dd") : String.Empty
                                                     }).ToList();
 
             return series;

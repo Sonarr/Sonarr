@@ -25,7 +25,7 @@ $(".addExistingButton").live('click', function () {
     var title = $(this).siblings(".seriesLookup").val();
     var seriesId = $(this).siblings(".seriesId").val();
     var qualityId = $(this).siblings(".qualitySelector").val();
-    var date = $(this).siblings('.aired-after').val();
+    var date = $(this).siblings('.start-date').val();
 
     var path = root.find(".seriesPathValue Label").text();
 
@@ -43,7 +43,7 @@ $(".addExistingButton").live('click', function () {
     $.ajax({
         type: "POST",
         url: addSeriesUrl,
-        data: jQuery.param({ path: path, seriesName: title, seriesId: seriesId, qualityProfileId: qualityId, airedAfter: date }),
+        data: jQuery.param({ path: path, seriesName: title, seriesId: seriesId, qualityProfileId: qualityId, startDate: date }),
         error: function (req, status, error) {
             $(button).removeAttr('disabled');
             alert("Sorry! We could not add " + path + " at this time. " + error);
@@ -67,10 +67,10 @@ function reloadExistingSeries() {
     });
 }
 
-$(".aired-after-master").live('change', function () {
+$(".start-date-master").live('change', function () {
 
     var date = $(this).val();
-    $("#existingSeries").find(".aired-after").each(function () {
+    $("#existingSeries").find(".start-date").each(function () {
         $(this).val(date);
     });
 });
@@ -129,12 +129,12 @@ $('#saveNewSeries').live('click', function () {
     var seriesId = $("#newSeriesId").val();
     var qualityId = $("#qualityList").val();
     var path = $('#newSeriesPath').val();
-    var date = $('#newAiredAfter').val();
+    var date = $('#newStartDate').val();
 
     $.ajax({
         type: "POST",
         url: addNewSeriesUrl,
-        data: jQuery.param({ path: path, seriesName: seriesTitle, seriesId: seriesId, qualityProfileId: qualityId, airedAfter: date }),
+        data: jQuery.param({ path: path, seriesName: seriesTitle, seriesId: seriesId, qualityProfileId: qualityId, startDate: date }),
         error: function (req, status, error) {
             $('#saveNewSeries').removeAttr('disabled');
             alert("Sorry! We could not add " + path + " at this time. " + error);
@@ -142,7 +142,7 @@ $('#saveNewSeries').live('click', function () {
         success: function () {
             $('#saveNewSeries').removeAttr('disabled');
             $("#newSeriesLookup").val('');
-            $('#newAiredAfter').val('');
+            $('#newStartDate').val('');
         }
     });
 });

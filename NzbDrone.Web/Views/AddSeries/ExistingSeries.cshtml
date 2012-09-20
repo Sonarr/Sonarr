@@ -23,7 +23,7 @@ else
 {
     @Html.DropDownList(Guid.NewGuid().ToString(), Model.Quality, new { @class = "qualitySelector masterQualitySelector" })
 
-    @Html.TextBox(Guid.NewGuid().ToString(), "", new { type="date", @class = "jQuery-datepicker aired-after-master", title = "Skip episodes that aired before the choosen date" })
+    @Html.TextBox(Guid.NewGuid().ToString(), "", new { type="date", @class = "jQuery-datepicker start-date-master", placeholder = "Custom Start Date", title = "Only download episodes that aired after the specified date" })
 
     foreach (var series in Model.ExistingSeries)
     {
@@ -35,7 +35,7 @@ else
             <input class="seriesLookup" type="text" style="width: 400px;" value="@series.Item2" placeholder="Series Title" />
             @Html.Hidden("seriesId", series.Item3, new { @class = "seriesId" })
             @Html.DropDownList(Guid.NewGuid().ToString(), Model.Quality, new { @class = "qualitySelector" })
-            @Html.TextBox(Guid.NewGuid().ToString(), "", new { type="date", @class = "jQuery-datepicker aired-after", title = "Only download episodes that aired after the choosen date" })
+            @Html.TextBox(Guid.NewGuid().ToString(), "", new { type="date", @class = "jQuery-datepicker start-date", placeholder = "Custom Start Date", title = "Only download episodes that aired after the specified date" })
             <button class="addExistingButton">
                 Add</button>
         </div>
