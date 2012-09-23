@@ -115,7 +115,7 @@ hr
 }
 
 
-input[type=text], select
+input[type=text], input[type=date], select
 {
     font-size: small;
     padding: 2px 2px;
@@ -181,27 +181,17 @@ button span, input[type="button"] span, input[type="submit"] span, input[type="r
     height: 25px;
 }
 
-
 .dialog
 {
     margin-left: auto;
     margin-right: auto;
 }
 
-
 .qualitySelector
 {
     min-width: 60px;
     width: auto;
 }
-
-#quickAdd
-{
-    position: fixed;
-    top: 30px;
-    right: 15px;
-}
-
 
 #localSeriesLookup
 {

@@ -227,6 +227,8 @@
     <Compile Include="Datastore\MigrationLogger.cs" />
     <Compile Include="Datastore\MigrationsHelper.cs" />
     <Compile Include="Datastore\CustomeMapper.cs" />
+    <Compile Include="Datastore\Migrations\Migration20120919.cs" />
+    <Compile Include="Datastore\Migrations\Migration20120918.cs" />
     <Compile Include="Datastore\Migrations\Migration20120802.cs" />
     <Compile Include="Datastore\Migrations\Migration20120727.cs" />
     <Compile Include="Datastore\Migrations\Migration20120504.cs" />
@@ -291,6 +293,7 @@
     <Compile Include="Model\Xbmc\IconType.cs" />
     <Compile Include="Providers\BannerProvider.cs" />
     <Compile Include="Providers\DecisionEngine\AllowedReleaseGroupSpecification.cs" />
+    <Compile Include="Providers\DecisionEngine\CustomStartDateSpecification.cs" />
     <Compile Include="Providers\DownloadClients\PneumaticProvider.cs" />
     <Compile Include="Providers\Indexer\NzbClub.cs" />
     <Compile Include="Providers\Indexer\NzbIndex.cs" />

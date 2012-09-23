@@ -4,7 +4,7 @@
 }
 
 .checkboxColumn {
-    width: 110px;
+    width: 50px;
     text-align: center;
 }
         
@@ -13,12 +13,12 @@
     text-align: center;
 }
         
-table input[type="text"], table select {
+table input[type="text"], table input[type="date"], table select {
     margin: 2px 2px;
 }
         
 td .path {
-    width: 300px;
+    width: 290px;
 }
         
 td .backlogSetting {
@@ -36,6 +36,19 @@ th .footer-control {
 th .footer-control-quality {
     width: 120px;
 }
+
+td .start-date {
+    width: 80px;
+}
+
+th .footer-control-boolean {
+    width: 90px;
+}
+
+th .footer-control-start-date {
+    width: 80px;
+}
+
 
 #stylized, .settingsForm {
     overflow: hidden;

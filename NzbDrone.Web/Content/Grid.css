@@ -68,10 +68,7 @@
     opacity: 0.7;
 }
 
-
-
-.episodeMissing
-{
+.episodeMissing, table.dataTable tr.series-ended {
     background-color: #f5d6d6;
 }
 

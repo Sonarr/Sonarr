@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
@@ -43,11 +44,9 @@ namespace NzbDrone.Web.Controllers
             _diskProvider = diskProvider;
         }
 
-        [HttpPost]
-        public EmptyResult ScanNewSeries()
+        public ActionResult Index()
         {
-            _jobProvider.QueueJob(typeof(ImportNewSeriesJob));
-            return new EmptyResult();
+            return View();
         }
 
         public ActionResult AddNew()
@@ -63,11 +62,6 @@ namespace NzbDrone.Web.Controllers
                 "Name",
                 defaultQuality);
 
-            return View();
-        }
-
-        public ActionResult Index()
-        {
             return View();
         }
 
@@ -116,7 +110,7 @@ namespace NzbDrone.Web.Controllers
         }
 
         [HttpPost]
-        public JsonResult AddNewSeries(string path, string seriesName, int seriesId, int qualityProfileId)
+        public JsonResult AddNewSeries(string path, string seriesName, int seriesId, int qualityProfileId, string startDate)
         {
             if (string.IsNullOrWhiteSpace(path) || String.Equals(path,"null",StringComparison.InvariantCultureIgnoreCase)) 
                 return JsonNotificationResult.Error("Couldn't add " + seriesName, "You need a valid root folder"); 
@@ -127,61 +121,25 @@ namespace NzbDrone.Web.Controllers
             //Use the created folder name when adding the series
             path = _diskProvider.CreateDirectory(path);
 
-            return AddExistingSeries(path, seriesName, seriesId, qualityProfileId);
+            return AddExistingSeries(path, seriesName, seriesId, qualityProfileId, startDate);
         }
 
         [HttpPost]
         [JsonErrorFilter]
-        public JsonResult AddExistingSeries(string path, string seriesName, int seriesId, int qualityProfileId)
+        public JsonResult AddExistingSeries(string path, string seriesName, int seriesId, int qualityProfileId, string startDate)
         {
             if (seriesId == 0 || String.IsNullOrWhiteSpace(seriesName))
                 return JsonNotificationResult.Error("Add Existing series failed.", "Invalid Series information");
 
-            _seriesProvider.AddSeries(seriesName,path, seriesId, qualityProfileId);
-            ScanNewSeries();
+            DateTime? date = null;
+            
+            if (!String.IsNullOrWhiteSpace(startDate))
+                date = DateTime.Parse(startDate, null, DateTimeStyles.RoundtripKind);
+
+            _seriesProvider.AddSeries(seriesName,path, seriesId, qualityProfileId, date);
+            _jobProvider.QueueJob(typeof(ImportNewSeriesJob));
 
             return JsonNotificationResult.Info(seriesName, "Was added successfully");
-        }
-
-        [HttpPost]
-        public JsonResult QuickAddNewSeries(string seriesName, int seriesId, int qualityProfileId)
-        {
-            var path = _rootFolderProvider.GetMostFreeRootDir();
-            path = Path.Combine(path, MediaFileProvider.CleanFilename(seriesName));
-
-            //Create the folder for the new series
-            //Use the created folder name when adding the series
-            path = _diskProvider.CreateDirectory(path);
-
-            return AddExistingSeries(path, seriesName, seriesId, qualityProfileId);
-        }
-
-        [ChildActionOnly]
-        public ActionResult QuickAdd()
-        {
-            var defaultQuality = _configProvider.DefaultQualityProfile;
-            var qualityProfiles = _qualityProvider.All();
-
-            ViewData["qualityProfiles"] = new SelectList(
-                qualityProfiles,
-                "QualityProfileId",
-                "Name",
-                defaultQuality);
-
-            return PartialView();
-        }
-
-
-        [HttpPost]
-        [JsonErrorFilter]
-        public JsonResult SaveRootDir(string path)
-        {
-            if (String.IsNullOrWhiteSpace(path))
-                JsonNotificationResult.Error("Can't add root folder", "Path can not be empty");
-
-            _rootFolderProvider.Add(new RootDir { Path = path });
-
-            return JsonNotificationResult.Info("Root Folder saved", "Root folder saved successfully.");
         }
 
         [HttpGet]
@@ -226,6 +184,18 @@ namespace NzbDrone.Web.Controllers
         public ActionResult RootDir()
         {
             return PartialView("RootDir");
+        }
+
+        [HttpPost]
+        [JsonErrorFilter]
+        public JsonResult SaveRootDir(string path)
+        {
+            if (String.IsNullOrWhiteSpace(path))
+                JsonNotificationResult.Error("Can't add root folder", "Path can not be empty");
+
+            _rootFolderProvider.Add(new RootDir { Path = path });
+
+            return JsonNotificationResult.Info("Root Folder saved", "Root folder saved successfully.");
         }
 
         [JsonErrorFilter]

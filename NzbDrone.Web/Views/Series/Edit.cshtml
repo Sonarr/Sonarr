@@ -12,7 +12,7 @@
 </style>
 
 <div id="stylized" style="border-color: transparent;">
-    @using (Html.BeginForm("SaveSingleSeriesEditor", "Series", FormMethod.Post, new { id = "SeriesEditorForm", name = "SeriesEditorForm", @class = "settingsForm" }))
+    @using (Html.BeginForm("Edit", "Series", FormMethod.Post, new { id = "SeriesEditorForm", name = "SeriesEditorForm", @class = "settingsForm" }))
     {
         @Html.HiddenFor(m => m.SeriesId)
         @Html.HiddenFor(m => m.Status)
@@ -36,5 +36,10 @@
             <span class="small">@Html.DescriptionFor(m => m.BacklogSetting)</span>
         </label>
         @Html.DropDownListFor(m => m.BacklogSetting, (SelectList)ViewData["BacklogSettingSelectList"], new { @class = "inputClass" })
+
+        <label class="labelClass">@Html.LabelFor(m => m.CustomStartDate)
+            <span class="small">@Html.DescriptionFor(m => m.CustomStartDate)</span>
+        </label>
+        @Html.TextBoxFor(m => m.CustomStartDate, new { type = "date", @class = "inputClass jQuery-datepicker" })
     }
 </div>

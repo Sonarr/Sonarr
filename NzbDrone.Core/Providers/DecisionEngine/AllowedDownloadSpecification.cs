@@ -14,13 +14,14 @@ namespace NzbDrone.Core.Providers.DecisionEngine
         private readonly AlreadyInQueueSpecification _alreadyInQueueSpecification;
         private readonly RetentionSpecification _retentionSpecification;
         private readonly AllowedReleaseGroupSpecification _allowedReleaseGroupSpecification;
+        private readonly CustomStartDateSpecification _customStartDateSpecification;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         [Inject]
         public AllowedDownloadSpecification(QualityAllowedByProfileSpecification qualityAllowedByProfileSpecification,
             UpgradeDiskSpecification upgradeDiskSpecification, AcceptableSizeSpecification acceptableSizeSpecification,
             AlreadyInQueueSpecification alreadyInQueueSpecification, RetentionSpecification retentionSpecification,
-            AllowedReleaseGroupSpecification allowedReleaseGroupSpecification)
+            AllowedReleaseGroupSpecification allowedReleaseGroupSpecification, CustomStartDateSpecification customStartDateSpecification)
         {
             _qualityAllowedByProfileSpecification = qualityAllowedByProfileSpecification;
             _upgradeDiskSpecification = upgradeDiskSpecification;
@@ -28,6 +29,7 @@ namespace NzbDrone.Core.Providers.DecisionEngine
             _alreadyInQueueSpecification = alreadyInQueueSpecification;
             _retentionSpecification = retentionSpecification;
             _allowedReleaseGroupSpecification = allowedReleaseGroupSpecification;
+            _customStartDateSpecification = customStartDateSpecification;
         }
 
         public AllowedDownloadSpecification()
@@ -37,6 +39,7 @@ namespace NzbDrone.Core.Providers.DecisionEngine
         public virtual ReportRejectionType IsSatisfiedBy(EpisodeParseResult subject)
         {
             if (!_qualityAllowedByProfileSpecification.IsSatisfiedBy(subject)) return ReportRejectionType.QualityNotWanted;
+            if (!_customStartDateSpecification.IsSatisfiedBy(subject)) return ReportRejectionType.AiredAfterCustomStartDate;
             if (!_upgradeDiskSpecification.IsSatisfiedBy(subject)) return ReportRejectionType.ExistingQualityIsEqualOrBetter;
             if (!_retentionSpecification.IsSatisfiedBy(subject)) return ReportRejectionType.Retention;
             if (!_acceptableSizeSpecification.IsSatisfiedBy(subject)) return ReportRejectionType.Size;

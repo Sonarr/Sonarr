@@ -729,7 +729,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             //act
             var seriesProvider = Mocker.Resolve<SeriesProvider>();
 
-            seriesProvider.AddSeries("Test Series","c:\\test\\", tvDbSeriesId, 1);
+            seriesProvider.AddSeries("Test Series","c:\\test\\", tvDbSeriesId, 1, null);
 
             var episodeProvider = Mocker.Resolve<EpisodeProvider>();
             episodeProvider.RefreshEpisodeInfo(seriesProvider.GetSeries(tvDbSeriesId));
