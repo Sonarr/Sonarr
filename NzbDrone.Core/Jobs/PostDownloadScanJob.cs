@@ -41,7 +41,13 @@ namespace NzbDrone.Core.Jobs
 
         public virtual void Start(ProgressNotification notification, dynamic options)
         {
-            var dropFolder = _configProvider.SabDropDirectory;
+            string dropFolder;
+
+            if (options != null && !String.IsNullOrWhiteSpace(options.Path))
+                dropFolder = options.Path;
+
+            else
+                dropFolder = _configProvider.SabDropDirectory;
 
             if (String.IsNullOrWhiteSpace(dropFolder))
             {

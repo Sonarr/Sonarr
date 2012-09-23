@@ -143,6 +143,7 @@
     <Compile Include="Integeration\ServiceIntegerationFixture.cs" />
     <Compile Include="JobTests\BacklogSearchJobTest.cs" />
     <Compile Include="JobTests\BannerDownloadJobTest.cs" />
+    <Compile Include="JobTests\PostDownloadScanJobFixture.cs" />
     <Compile Include="JobTests\RecentBacklogSearchJobTest.cs" />
     <Compile Include="ProviderTests\ConfigProviderTests\ConfigCachingFixture.cs" />
     <Compile Include="ProviderTests\BannerProviderTest.cs" />
