@@ -18,7 +18,7 @@ table input[type="text"], table input[type="date"], table select {
 }
         
 td .path {
-    width: 300px;
+    width: 290px;
 }
         
 td .backlogSetting {

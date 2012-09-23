@@ -28,7 +28,8 @@
                 <th width="110px">Season Folder</th>
                 <th width="110px">Backlog Status</th>
                 <th width="80px" title="Custom Start Date">Start Date</th>
-                <th width="310px">Path</th>
+                <th width="300px">Path</th>
+                <th style="width: 10px"></th>
             </tr>
         </thead>
         
@@ -62,10 +63,15 @@
                     <button id="series-editor-save" type="submit" class="save_button" disabled="disabled" title="Commit the settings from your series above to the database">
                         Save Changes
                     </button>
+                    
+                    
                 </th>
             </tr>
         </tfoot>
-    </table>
+</table>
+    
+@Html.CheckBox("highlightEnded", true)
+<label for="highlightEnded">Highlight Ended</label>
 }
 
 @section Scripts
@@ -79,19 +85,70 @@
                 "bPaginate": false,
                 "bLengthChange": false,
                 "bFilter": false,
-                "bSort": false,
+                "bSort": true,
                 "bInfo": false,
-                "bAutoWidth": false
+                "bAutoWidth": false,
+                "aaSorting": [[1, 'asc']],
+                "aoColumns": [
+                    { "bSortable": false },
+                    { "bSortable": true },
+                    { "bSortable": false },
+                    { "bSortable": false },
+                    { "bSortable": false },
+                    { "bSortable": false },
+                    { "bSortable": false },
+                    { "bSortable": false },
+                    { "bSortable": true }
+                ]
             });
             
             new FixedHeader(oTable, { "top": true, "left": false, "right": false, "bottom": true });
             
             $('.editToggle').enableCheckboxRangeSelection();
             
-            //$('.master-quality option[value=-10]').text('Quality...');
-            //$('.master-monitored option[value=-10]').text('Monitored...');
-            //$('.master-season-folder option[value=-10]').text('Season Folder...');
-            //$('.master-backlog-setting option[value=-10]').text('Backlog Setting...');
+            $(document).ready(function () {
+                var cookieValue = $.cookie("highlightEnded");
+
+                if (cookieValue == "true") {
+                    $('#highlightEnded').attr('checked', true);
+                    toggleHighlightEnded(true);
+                }
+
+                else {
+                    $('#highlightEnded').attr('checked', false);
+                    toggleHighlightEnded(false);
+                }
+
+                $('#highlightEnded').button();
+            });
+
+            $('#highlightEnded').on('change', function () {
+                var checked = $(this).attr('checked');
+                toggleHighlightEnded(checked);
+                toggleHighlightEndedCookie(checked);
+            });
+            
+            function toggleHighlightEnded(highlight) {
+                var ended = $('tr[data-status="Ended"]');
+
+                ended.each(function () {
+                    if (highlight) {
+                        $(this).addClass('series-ended');
+                    }
+
+                    else {
+                        $(this).removeClass('series-ended');
+                    }
+                });
+            }
+
+            function toggleHighlightEndedCookie(highlight) {
+                if (highlight)
+                    $.cookie("highlightEnded", true, { expires: 365 });
+
+                else
+                    $.cookie("highlightEnded", false, { expires: 365 });
+            }
         });
 
         $(document).on('change', '.editToggleMaster', function () {

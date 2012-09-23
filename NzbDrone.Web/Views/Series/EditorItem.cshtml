@@ -9,7 +9,7 @@
 
 @*SeriesId, Title, Quality, Monitored, Use Season Folder, Root Directory/Path*, Backlog Toggle*@
 
-<tr class="seriesEditRow">
+<tr class="seriesEditRow" data-status="@Model.Status">
     @using (Html.BeginCollectionItem("series"))
     {
         var idClean = ViewData.TemplateInfo.HtmlFieldPrefix.Replace('[', '_').Replace(']', '_');
@@ -23,5 +23,16 @@
         <td>@Html.DropDownListFor(m => m.BacklogSetting, new SelectList((List<KeyValuePair<int, string>>)ViewData["BacklogSettingTypes"], "Key", "Value", (int)Model.BacklogSetting), new { @class = "backlogSetting" })</td>
         <td>@Html.TextBoxFor(m => m.CustomStartDate, new { type = "date", @class = "start-date jQuery-datepicker" })</td>
         <td>@Html.TextBoxFor(m => m.Path, new { @class = "path" })</td>
+        <td>
+            @if (Model.Status == "Ended")
+            {
+                <img src="../../Content/Images/stop.png" width="24" height="24" alt="Ended" title="Ended" />
+            }
+            
+            else
+            {
+                <img src="../../Content/Images/play.png" width="24" height="24" alt="Active" title="Continuing" />
+            }
+        </td>
     }
 </tr>
