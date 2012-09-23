@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Providers
                 }
                 catch (Exception e)
                 {
-                    Logger.ErrorException("An error has occurred while importing folder" + subfolder, e);
+                    Logger.ErrorException("An error has occurred while importing folder: " + subfolder, e);
                 }
             }
 
