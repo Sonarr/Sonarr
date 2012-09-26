@@ -53,9 +53,6 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Exceptioneer.WindowsFormsClient">
-      <HintPath>..\Libraries\Exceptioneer.WindowsFormsClient.dll</HintPath>
-    </Reference>
     <Reference Include="Exceptron.Client, Version=1.0.7.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Exceptron.Client.1.0.7\lib\net20\Exceptron.Client.dll</HintPath>
@@ -91,7 +88,6 @@
     <Compile Include="PathExtentions.cs" />
     <Compile Include="DiskProvider.cs" />
     <Compile Include="EnvironmentProvider.cs" />
-    <Compile Include="NlogTargets\ExceptioneerTarget.cs" />
     <Compile Include="LogConfiguration.cs" />
     <Compile Include="Model\ProcessInfo.cs" />
     <Compile Include="ProcessProvider.cs" />
