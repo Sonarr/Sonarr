@@ -197,6 +197,9 @@
                 "aaSorting": [[1, 'asc']],
                 "fnCreatedRow": function( nRow, aData, iDataIndex ) {
                     $(nRow).addClass(aData["SeriesId"].toString());
+                },
+                "oLanguage": {
+                    "sEmptyTable": "No series have been added"
                 }
             });
 

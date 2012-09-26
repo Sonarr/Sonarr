@@ -31,6 +31,7 @@
                .AddColumn(new Column().DataProperty("EpisodeId").Width("40px").Sortable(false).RenderFunction("return actions(row);"))
                .AddColumn(new Column().DataProperty("Details").Sortable(false).Visible(false).RenderFunction("return details(row);"))
                .AddSorting(3, SortDirection.Desc)
+               .Language(new Language().EmptyTable("No missing episodes found").ZeroRecords("No missing episodes match the filter"))
     )
 
     <script type="text/javascript">
