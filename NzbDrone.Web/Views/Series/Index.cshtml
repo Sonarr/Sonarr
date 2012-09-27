@@ -1,5 +1,4 @@
 @using NzbDrone.Web.Helpers
-@model string
 @{ViewBag.Title = "NzbDrone";}
 
 @section HeaderContent
@@ -76,9 +75,7 @@
             <th style="width: 100px">Episodes</th>
         
             @*Commands Column*@
-            <th style="width: 80px">
-            
-            </th>
+            <th style="width: 80px"></th>
         </tr>
     </thead>
     <tbody>
@@ -111,8 +108,9 @@
             $('#seriesGrid').removeClass('hidden-grid');
 
             oTable = $('.dataTablesGrid').dataTable({
+                "sAjaxSource": "Series/Series",
+                "bServerSide": false,
                 "bShowAll": false,
-                "aaData": @Html.Raw(Model),
                 "bPaginate": false,
                 "bLengthChange": false,
                 "bFilter": false,

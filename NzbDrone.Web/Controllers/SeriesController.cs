@@ -39,10 +39,15 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult Index()
         {
-            var series = GetSeriesModels(_seriesProvider.GetAllSeriesWithEpisodeCount());
-            var serialized = new JavaScriptSerializer().Serialize(series);
+            return View();
+        }
 
-            return View((object)serialized);
+        [HttpGet]
+        public ActionResult Series()
+        {
+            var series = GetSeriesModels(_seriesProvider.GetAllSeriesWithEpisodeCount());
+
+            return Json(new { aaData = series }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Edit(int seriesId)
