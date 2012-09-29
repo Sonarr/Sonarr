@@ -64,7 +64,6 @@ namespace NzbDrone.Common
                 if (!string.IsNullOrWhiteSpace(applicationPath))
                     return applicationPath;
 
-
                 applicationPath = CrawlToRoot(Environment.CurrentDirectory);
                 if (!string.IsNullOrWhiteSpace(applicationPath))
                     return applicationPath;
@@ -83,6 +82,9 @@ namespace NzbDrone.Common
 
         public string CrawlToRoot(string dir)
         {
+            if (String.IsNullOrWhiteSpace(dir))
+                return null;
+
             var directoryInfo = new DirectoryInfo(dir);
 
             while (!IsRoot(directoryInfo))

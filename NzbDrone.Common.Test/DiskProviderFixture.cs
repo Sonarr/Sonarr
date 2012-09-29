@@ -62,7 +62,7 @@ namespace NzbDrone.Common.Test
             var targetPath = Path.Combine(BinFolderCopy.FullName, "file.move");
 
             diskProvider.MoveFile(BinFolderCopy.GetFiles("*.dll", SearchOption.AllDirectories).First().FullName, targetPath);
-            diskProvider.MoveFile(BinFolderCopy.GetFiles("*.dll", SearchOption.AllDirectories).First().FullName, targetPath);
+            diskProvider.MoveFile(BinFolderCopy.GetFiles("*.pdb", SearchOption.AllDirectories).First().FullName, targetPath);
 
             File.Exists(targetPath).Should().BeTrue();
         }

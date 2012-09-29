@@ -13,7 +13,21 @@
   <AnalyseExecutionTimes>true</AnalyseExecutionTimes>
   <IncludeStaticReferencesInWorkspace>true</IncludeStaticReferencesInWorkspace>
   <DefaultTestTimeout>60000</DefaultTestTimeout>
-  <UseBuildConfiguration />
-  <ProxyProcessPath />
+  <UseBuildConfiguration></UseBuildConfiguration>
+  <ProxyProcessPath></ProxyProcessPath>
   <UseCPUArchitecture>AutoDetect</UseCPUArchitecture>
+  <IgnoredTests>
+    <NamedTestSelector>
+      <TestName>NzbDrone.Web.UI.Automation.BasicPageFixture.HistoryPage</TestName>
+    </NamedTestSelector>
+    <NamedTestSelector>
+      <TestName>NzbDrone.Web.UI.Automation.BasicPageFixture.HomePage</TestName>
+    </NamedTestSelector>
+    <NamedTestSelector>
+      <TestName>NzbDrone.Web.UI.Automation.BasicPageFixture.MissingPage</TestName>
+    </NamedTestSelector>
+    <NamedTestSelector>
+      <TestName>NzbDrone.Web.UI.Automation.BasicPageFixture.SettingsPage</TestName>
+    </NamedTestSelector>
+  </IgnoredTests>
 </ProjectConfiguration>

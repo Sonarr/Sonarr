@@ -13,7 +13,15 @@
   <AnalyseExecutionTimes>true</AnalyseExecutionTimes>
   <IncludeStaticReferencesInWorkspace>true</IncludeStaticReferencesInWorkspace>
   <DefaultTestTimeout>60000</DefaultTestTimeout>
-  <UseBuildConfiguration />
-  <ProxyProcessPath />
+  <UseBuildConfiguration></UseBuildConfiguration>
+  <ProxyProcessPath></ProxyProcessPath>
   <UseCPUArchitecture>AutoDetect</UseCPUArchitecture>
+  <IgnoredTests>
+    <NamedTestSelector>
+      <TestName>NzbDrone.Core.Test.ProviderTests.NewznabProviderTest.CheckHostname_should_log_error_and_throw_exception_if_dnsHostname_is_invalid</TestName>
+    </NamedTestSelector>
+    <NamedTestSelector>
+      <TestName>NzbDrone.Core.Test.Integeration.ServiceIntegerationFixture.should_be_able_to_submit_exceptions</TestName>
+    </NamedTestSelector>
+  </IgnoredTests>
 </ProjectConfiguration>

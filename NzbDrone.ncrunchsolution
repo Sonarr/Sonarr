@@ -6,6 +6,7 @@
   <FrameworkUtilisationTypeForGallio>UseStaticAnalysis</FrameworkUtilisationTypeForGallio>
   <FrameworkUtilisationTypeForMSpec>UseStaticAnalysis</FrameworkUtilisationTypeForMSpec>
   <FrameworkUtilisationTypeForMSTest>UseStaticAnalysis</FrameworkUtilisationTypeForMSTest>
+  <AdditionalFilesToInclude>NzbDrone.Web\**.*</AdditionalFilesToInclude>
   <EngineModes>Run all tests automatically:BFRydWU=;Run all tests manually:BUZhbHNl;Run impacted tests automatically, others manually (experimental!):CklzSW1wYWN0ZWQ=;Run pinned tests automatically, others manually:CElzUGlubmVk</EngineModes>
   <MetricsExclusionList>
 </MetricsExclusionList>
