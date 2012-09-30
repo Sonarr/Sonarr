@@ -7,7 +7,7 @@
     Layout = null;
 }
 
-<tr class='episodeId_@(Model.EpisodeId) data-row@(ViewData["AltRow"] == null || !(bool)ViewData["AltRow"] ? "" : " alt-row")'>
+<tr class="data-row@(ViewData["AltRow"] == null || !(bool)ViewData["AltRow"] ? "" : " alt-row")" data-episode-id="@Model.EpisodeId">
     <td>@Html.ActionLink(Model.SeriesTitle, "Details", "Series", new { seriesId = Model.SeriesId }, null)</td>
     <td>@Model.EpisodeNumbering</td>
     <td>@Model.Title</td>

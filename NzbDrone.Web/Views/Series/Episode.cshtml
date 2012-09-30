@@ -2,7 +2,7 @@
 @using NzbDrone.Web.Helpers
 @model NzbDrone.Web.Models.EpisodeModel
 
-<tr class="episodeId_@(Model.EpisodeId) data-row@(ViewData["AltRow"] == null || !(bool)ViewData["AltRow"] ? "" : " alt-row")" data-episodefileid="@Model.EpisodeFileId">
+<tr class="data-row@(ViewData["AltRow"] == null || !(bool)ViewData["AltRow"] ? "" : " alt-row")" data-episodefileid="@Model.EpisodeFileId" data-episode-id="@Model.EpisodeId">
     <td>@Model.EpisodeNumber</td>
     <td>@Model.Title</td>
     <td>@Model.AirDate</td>

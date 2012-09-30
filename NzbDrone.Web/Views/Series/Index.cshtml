@@ -194,7 +194,7 @@
                             ],
                 "aaSorting": [[1, 'asc']],
                 "fnCreatedRow": function( nRow, aData, iDataIndex ) {
-                    $(nRow).addClass(aData["SeriesId"].toString());
+                    $(nRow).attr('data-series-id', aData["SeriesId"].toString());
                 },
                 "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
                     var element = $(nRow).find('.progressBar');
@@ -214,7 +214,7 @@
         
         //After we delete a series do this...
         function afterDelete(seriesId) {
-            var row = $('.' + seriesId);
+            var row = $('[data-series-id="' + seriesId + '"]');
             
             if ($(row).hasClass('details-opened')) {
                 var nextRow = $(row).next('tr');

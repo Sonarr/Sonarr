@@ -71,7 +71,7 @@ $(function () {
     // Declare a function on the chat hub so the server can invoke it
     signalRProvider.updatedStatus = function (data) {
         var imageSrc = '../../Content/Images/' + data.EpisodeStatus + '.png';
-        var row = $('tr.episodeId_' + data.EpisodeId);
+        var row = $('[data-episode-id="' + data.EpisodeId + '"]');
 
         if (row.length == 0)
             return;
