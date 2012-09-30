@@ -172,7 +172,7 @@
                                         if (row.aData["EpisodeCount"] > 0)
                                             progress = row.aData["EpisodeFileCount"] / row.aData["EpisodeCount"] * 100;
                                         
-                                        var result = "<div class='progressBar' rel='" + progress + "'>" +
+                                        var result = "<div class='progressBar' data-value='" + progress + "'>" +
                                                         "<span class='progressBarText'>" + row.aData["EpisodeFileCount"] + " / " + row.aData["EpisodeCount"] +"</span>" +
                                                      "</div>";
 
@@ -196,20 +196,19 @@
                 "fnCreatedRow": function( nRow, aData, iDataIndex ) {
                     $(nRow).addClass(aData["SeriesId"].toString());
                 },
+                "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+                    var element = $(nRow).find('.progressBar');
+                    
+                    var progressbar = $(element).progressbar({
+                        value: parseInt($(element).attr("data-value"))
+                    });
+
+                    var label = progressbar.find('.progressBarText').clone().width(progressbar.width());
+                    progressbar.find('.ui-progressbar-value').append(label);
+                },
                 "oLanguage": {
                     "sEmptyTable": "No series have been added"
                 }
-            });
-
-            $(".progressBar").each(function () {
-                var element = this;
-
-                var progressbar = $(element).progressbar({
-                    value: parseInt($(element).attr("rel"))
-                });
-
-                var label = progressbar.find('.progressBarText').clone().width(progressbar.width());
-                progressbar.find('.ui-progressbar-value').append(label);
             });
         });
         
