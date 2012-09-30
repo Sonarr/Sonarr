@@ -36,7 +36,7 @@ $(".ignoreEpisode").live("click", function () {
     ignored = !ignored;
 
     if (toggle.hasClass('ignoredEpisodesMaster')) {
-        seasonNumber = toggle.attr('class').split(/\s+/)[2].replace('ignoreSeason_', '');
+        seasonNumber = toggle.attr('data-season');
 
         toggleChildren(seasonNumber, ignored);
         toggleMasters(seasonNumber, ignored);
@@ -45,13 +45,13 @@ $(".ignoreEpisode").live("click", function () {
 
     else {
         //Check to see if this is the last one ignored or the first not ignored
-        var episodeId = toggle.attr('id');
+        var episodeId = toggle.attr('data-episode-id');
         saveEpisodeIgnore(episodeId, ignored);
     }
 });
 
 function toggleChildren(seasonNumber, ignored) {
-    var ignoreEpisodes = $('.ignoreEpisode_' + seasonNumber);
+    var ignoreEpisodes = $('[data-season="' + seasonNumber + '"]');
 
     if (ignored) {
         ignoreEpisodes.each(function (index) {
@@ -100,7 +100,7 @@ function toggleCellColour(toggle, ignored) {
         toggle.parent('td').removeClass('episodeIgnored');
 
         //check to see if episode is missing
-        if (toggle.parent('td').children('.statusImage').hasClass('status-Missing'))
+        if (toggle.parent('td').children('.statusImage').attr('data-status') === 'Missing')
             toggle.parent('td').addClass('episodeMissing');
     }
 }
