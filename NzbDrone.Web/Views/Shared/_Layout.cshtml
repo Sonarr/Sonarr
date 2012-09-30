@@ -14,7 +14,7 @@
         ViewBag.Title = String.Format("{0} - NzbDrone", ViewBag.Title);
     }
     <title>@ViewBag.Title</title>
-    @if (!EnvironmentProvider.IsProduction || ProfilerHelper.Enabled())
+    @if (!Request.Browser.IsMobileDevice && (!EnvironmentProvider.IsProduction || ProfilerHelper.Enabled()))
     {
         @MiniProfiler.RenderIncludes()
     }
