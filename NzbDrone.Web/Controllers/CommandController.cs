@@ -133,6 +133,7 @@ namespace NzbDrone.Web.Controllers
         }
 
         [HttpPost]
+        [JsonErrorFilter]
         public EmptyResult SaveSeasonIgnore(int seriesId, int seasonNumber, bool ignored)
         {
             _seasonProvider.SetIgnore(seriesId, seasonNumber, ignored);
@@ -140,6 +141,7 @@ namespace NzbDrone.Web.Controllers
         }
 
         [HttpPost]
+        [JsonErrorFilter]
         public EmptyResult SaveEpisodeIgnore(int episodeId, bool ignored)
         {
             _episodeProvider.SetEpisodeIgnore(episodeId, ignored);

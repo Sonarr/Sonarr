@@ -110,6 +110,7 @@ namespace NzbDrone.Web.Controllers
         }
 
         [HttpPost]
+        [JsonErrorFilter]
         public JsonResult AddNewSeries(string path, string seriesName, int seriesId, int qualityProfileId, string startDate)
         {
             if (string.IsNullOrWhiteSpace(path) || String.Equals(path,"null",StringComparison.InvariantCultureIgnoreCase)) 
@@ -143,6 +144,7 @@ namespace NzbDrone.Web.Controllers
         }
 
         [HttpGet]
+        [JsonErrorFilter]
         public JsonResult LookupSeries(string term)
         {
             try

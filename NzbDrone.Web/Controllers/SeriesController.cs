@@ -13,6 +13,7 @@ using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
+using NzbDrone.Web.Filters;
 using NzbDrone.Web.Models;
 
 namespace NzbDrone.Web.Controllers
@@ -94,10 +95,9 @@ namespace NzbDrone.Web.Controllers
             return new EmptyResult();
         }
 
+        [JsonErrorFilter]
         public JsonResult LocalSearch(string term)
         {
-            //Get Results from the local DB and return
-
             var results = _seriesProvider.SearchForSeries(term).Select(s => new SeriesSearchResultModel
                                                                    {
                                                                        Id = s.SeriesId,

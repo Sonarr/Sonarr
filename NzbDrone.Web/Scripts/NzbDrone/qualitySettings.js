@@ -40,17 +40,10 @@ function sendToServer(id) {
         type: "POST",
         url: deleteQualityProfileUrl,
         data: jQuery.param({ profileId: id }),
-        error: function (req, status, error) {
-            alert("Sorry! We could not delete your Profile at this time. " + error);
-        },
         success: function (data, textStatus, jqXHR) {
             if (data == "ok") {
                 $("#profile_" + id).remove();
                 removeOption(id);
-            }
-
-            else {
-                alert(data);
             }
         }
     });

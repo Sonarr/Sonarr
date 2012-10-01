@@ -111,9 +111,6 @@ function saveSeasonIgnore(seasonNumber, ignored) {
         type: "POST",
         url: saveSeasonIgnoreUrl,
         data: jQuery.param({ seriesId: seriesId, seasonNumber: seasonNumber, ignored: ignored }),
-        error: function (req, status, error) {
-            alert("Sorry! We could save the ignore settings for Series: " + seriesId + ", Season: " + seasonNumber + " at this time. " + error);
-        }
     });
 }
 
@@ -122,9 +119,6 @@ function saveEpisodeIgnore(episodeId, ignored) {
         type: "POST",
         url: saveEpisodeIgnoreUrl,
         data: jQuery.param({ episodeId: episodeId, ignored: ignored }),
-        error: function (req, status, error) {
-            alert("Sorry! We could save the ignore settings for Episode: " + episodeId + " at this time. " + error);
-        }
     });
 }
 

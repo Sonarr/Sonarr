@@ -46,7 +46,6 @@ $(".addExistingButton").live('click', function () {
         data: jQuery.param({ path: path, seriesName: title, seriesId: seriesId, qualityProfileId: qualityId, startDate: date }),
         error: function (req, status, error) {
             $(button).removeAttr('disabled');
-            alert("Sorry! We could not add " + path + " at this time. " + error);
         },
         success: function() {
             root.hide('highlight', 'fast');
@@ -137,7 +136,6 @@ $('#saveNewSeries').live('click', function () {
         data: jQuery.param({ path: path, seriesName: seriesTitle, seriesId: seriesId, qualityProfileId: qualityId, startDate: date }),
         error: function (req, status, error) {
             $('#saveNewSeries').removeAttr('disabled');
-            alert("Sorry! We could not add " + path + " at this time. " + error);
         },
         success: function () {
             $('#saveNewSeries').removeAttr('disabled');

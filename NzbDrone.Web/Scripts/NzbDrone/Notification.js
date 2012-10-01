@@ -37,10 +37,9 @@
             if (this.url.indexOf("/notification/Comet") === 0 || this.url.indexOf("/Health/Index") === 0 || this.url.indexOf("/signalr") === 0)
                 return;
 
-            alert("Status: " + textStatus + ", Error: " + thrownError);
             $.gritter.add({
                 title: 'Request failed',
-                text: this.url,
+                text: 'Url: ' + this.url + '<br/>Error: ' + thrownError,
                 image: '../../content/images/error.png',
                 class_name: 'gritter-fail',
                 time: 10000

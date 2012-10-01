@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Web.Mvc;
 using NzbDrone.Common;
+using NzbDrone.Web.Filters;
 
 namespace NzbDrone.Web.Controllers
 {
@@ -27,6 +28,7 @@ namespace NzbDrone.Web.Controllers
         }
 
         [HttpGet]
+        [JsonErrorFilter]
         public JsonResult GetDirectories(string term)
         {
             IEnumerable<string> dirs = null;
@@ -38,7 +40,6 @@ namespace NzbDrone.Web.Controllers
                 if (windowsSep > -1)
                 {
                     dirs = _diskProvider.GetDirectories(term.Substring(0, windowsSep + 1));
-
                 }
 
                 //Unix
@@ -54,6 +55,9 @@ namespace NzbDrone.Web.Controllers
                 return Json(new List<string>(), JsonRequestBehavior.AllowGet);
                 //Swallow the exceptions so proper JSON is returned to the client (Empty results)
             }
+
+            if (dirs == null)
+                throw new Exception("A valid path was not provided");
 
             return Json(dirs, JsonRequestBehavior.AllowGet);
         }
