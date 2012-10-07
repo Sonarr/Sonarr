@@ -322,6 +322,16 @@ namespace NzbDrone.Core.Providers
                         updateList.Add(episodeToUpdate);
                     }
 
+                    if ((episodeToUpdate.EpisodeNumber != episode.EpisodeNumber || 
+                        episodeToUpdate.SeasonNumber != episode.SeasonNumber) && 
+                        episodeToUpdate.EpisodeFileId > 0)
+                    {
+                        logger.Info("Unlinking episode file because TheTVDB changed the epsiode number...");
+
+                        _database.Delete<EpisodeFile>(episodeToUpdate.EpisodeFileId);
+                        episodeToUpdate.EpisodeFileId = 0;
+                    }
+
                     episodeToUpdate.SeriesId = series.SeriesId;
                     episodeToUpdate.TvDbEpisodeId = episode.Id;
                     episodeToUpdate.EpisodeNumber = episode.EpisodeNumber;

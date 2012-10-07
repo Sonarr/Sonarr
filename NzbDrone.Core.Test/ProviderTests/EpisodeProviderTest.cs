@@ -630,7 +630,16 @@ namespace NzbDrone.Core.Test.ProviderTests
             var currentEpisodes = new List<Episode>();
             foreach (var tvDbEpisode in tvdbSeries.Episodes)
             {
-                currentEpisodes.Add(new Episode { TvDbEpisodeId = tvDbEpisode.Id, EpisodeId = 99, EpisodeFileId = 69, Ignored = true, Series = fakeSeries });
+                currentEpisodes.Add(new Episode
+                                        {
+                                                TvDbEpisodeId = tvDbEpisode.Id, 
+                                                EpisodeId = 99,
+                                                EpisodeFileId = 69,
+                                                Ignored = true,
+                                                Series = fakeSeries,
+                                                EpisodeNumber = tvDbEpisode.EpisodeNumber,
+                                                SeasonNumber = tvDbEpisode.SeasonNumber
+                                        });
             }
 
             Mocker.GetMock<TvDbProvider>(MockBehavior.Strict)
@@ -655,6 +664,98 @@ namespace NzbDrone.Core.Test.ProviderTests
             updatedEpisodes.Should().OnlyContain(c => c.EpisodeId == 99);
             updatedEpisodes.Should().OnlyContain(c => c.EpisodeFileId == 69);
             updatedEpisodes.Should().OnlyContain(c => c.Ignored == true);
+        }
+
+        [Test]
+        public void existing_episodes_remote_their_episodeId_file_id_when_episode_number_doesnt_match_tvdbid()
+        {
+            const int seriesId = 71663;
+            var tvdbSeries = Builder<TvdbSeries>.CreateNew()
+                .With(c => c.Episodes = new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(5).Build())
+                ).With(c => c.Id = seriesId).Build();
+
+            var fakeSeries = Builder<Series>.CreateNew().With(c => c.SeriesId = seriesId).Build();
+
+            var currentEpisodes = new List<Episode>();
+            foreach (var tvDbEpisode in tvdbSeries.Episodes)
+            {
+                currentEpisodes.Add(new Episode
+                {
+                    TvDbEpisodeId = tvDbEpisode.Id,
+                    EpisodeId = 99,
+                    EpisodeFileId = 69,
+                    Ignored = true,
+                    Series = fakeSeries,
+                    EpisodeNumber = tvDbEpisode.EpisodeNumber + 1,
+                    SeasonNumber = tvDbEpisode.SeasonNumber
+                });
+            }
+
+            Mocker.GetMock<TvDbProvider>(MockBehavior.Strict)
+                .Setup(c => c.GetSeries(seriesId, true, false))
+                .Returns(tvdbSeries);
+
+            var updatedEpisodes = new List<Episode>();
+
+            Mocker.GetMock<IDatabase>()
+                 .Setup(d => d.Fetch<Episode, Series, EpisodeFile>(It.IsAny<String>(), It.IsAny<Object[]>()))
+                 .Returns(currentEpisodes);
+
+            Mocker.GetMock<IDatabase>()
+                .Setup(c => c.UpdateMany(It.IsAny<IEnumerable<Episode>>()))
+                .Callback<IEnumerable<Episode>>(ep => updatedEpisodes = ep.ToList());
+
+            //Act
+            Mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
+
+            //Assert
+            updatedEpisodes.Should().OnlyContain(c => c.EpisodeFileId == 0);
+        }
+
+        [Test]
+        public void existing_episodes_remote_their_episodeId_file_id_when_season_number_doesnt_match_tvdbid()
+        {
+            const int seriesId = 71663;
+            var tvdbSeries = Builder<TvdbSeries>.CreateNew()
+                .With(c => c.Episodes = new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(5).Build())
+                ).With(c => c.Id = seriesId).Build();
+
+            var fakeSeries = Builder<Series>.CreateNew().With(c => c.SeriesId = seriesId).Build();
+
+            var currentEpisodes = new List<Episode>();
+            foreach (var tvDbEpisode in tvdbSeries.Episodes)
+            {
+                currentEpisodes.Add(new Episode
+                {
+                    TvDbEpisodeId = tvDbEpisode.Id,
+                    EpisodeId = 99,
+                    EpisodeFileId = 69,
+                    Ignored = true,
+                    Series = fakeSeries,
+                    EpisodeNumber = tvDbEpisode.EpisodeNumber,
+                    SeasonNumber = tvDbEpisode.SeasonNumber + 1
+                });
+            }
+
+            Mocker.GetMock<TvDbProvider>(MockBehavior.Strict)
+                .Setup(c => c.GetSeries(seriesId, true, false))
+                .Returns(tvdbSeries);
+
+            var updatedEpisodes = new List<Episode>();
+
+            Mocker.GetMock<IDatabase>()
+                 .Setup(d => d.Fetch<Episode, Series, EpisodeFile>(It.IsAny<String>(), It.IsAny<Object[]>()))
+                 .Returns(currentEpisodes);
+
+            Mocker.GetMock<IDatabase>()
+                .Setup(c => c.UpdateMany(It.IsAny<IEnumerable<Episode>>()))
+                .Callback<IEnumerable<Episode>>(ep => updatedEpisodes = ep.ToList());
+
+            //Act
+            Mocker.Resolve<EpisodeProvider>().RefreshEpisodeInfo(fakeSeries);
+
+            //Assert
+            updatedEpisodes.Should().OnlyContain(c => c.EpisodeFileId == 0);
         }
 
         [Test]
