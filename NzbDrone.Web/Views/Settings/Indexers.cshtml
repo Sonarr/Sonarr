@@ -160,13 +160,19 @@
             </div>
         </div>
         
-        <div class="retentionContainer">
+        <div class="indexer-global-settings">
             @Html.ValidationSummary(true, "Unable to save your settings. Please correct the errors and try again.")
             <label class="labelClass">@Html.LabelFor(m => m.Retention)
                 <span class="small">@Html.DescriptionFor(m => m.Retention)</span>
                 <span class="small">@Html.ValidationMessageFor(m => m.Retention)</span>
             </label>
             @Html.TextBoxFor(m => m.Retention, new { @class = "inputClass" })
+            
+            <label class="labelClass">@Html.LabelFor(m => m.RssSyncInterval)
+                <span class="small">@Html.DescriptionFor(m => m.RssSyncInterval)</span>
+                <span class="small">@Html.ValidationMessageFor(m => m.RssSyncInterval)</span>
+            </label>
+            @Html.TextBoxFor(m => m.RssSyncInterval, new { @class = "inputClass" })
         </div>
         
         <button type="submit" class="save_button" disabled="disabled">Save</button>

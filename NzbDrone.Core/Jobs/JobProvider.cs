@@ -96,7 +96,9 @@ namespace NzbDrone.Core.Jobs
 
                 jobDefinition.Enable = job.DefaultInterval.TotalSeconds > 0;
                 jobDefinition.Name = job.Name;
+
                 jobDefinition.Interval = Convert.ToInt32(job.DefaultInterval.TotalMinutes);
+                //Todo: Need to have a way for users to change this and not have it overwritten on start-up.
 
                 SaveDefinition(jobDefinition);
             }
@@ -194,6 +196,11 @@ namespace NzbDrone.Core.Jobs
 
             QueueJob(type);
             return true;
+        }
+
+        public virtual JobDefinition GetDefinition(Type type)
+        {
+            return _database.Single<JobDefinition>("WHERE TypeName = @0", type.ToString());
         }
 
         private void ProcessQueue()
@@ -321,7 +328,5 @@ namespace NzbDrone.Core.Jobs
             logger.Trace("resetting queue processor thread");
             _jobThread = new Thread(ProcessQueue) { Name = "JobQueueThread" };
         }
-
-
     }
 }

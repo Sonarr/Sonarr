@@ -532,6 +532,12 @@ namespace NzbDrone.Core.Providers.Core
             set { SetValue("RecycleBin", value); }
         }
 
+        public virtual int RssSyncInterval
+        {
+            get { return GetValueInt("RssSyncInterval", 25); }
+            set { SetValue("RssSyncInterval", value); }
+        }
+
         private string GetValue(string key)
         {
             return GetValue(key, String.Empty);

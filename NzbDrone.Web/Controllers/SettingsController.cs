@@ -6,6 +6,7 @@ using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Model;
 using NzbDrone.Core.Helpers;
+using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Core;
@@ -32,18 +33,21 @@ namespace NzbDrone.Web.Controllers
         private readonly ConfigFileProvider _configFileProvider;
         private readonly NewznabProvider _newznabProvider;
         private readonly MetadataProvider _metadataProvider;
+        private readonly JobProvider _jobProvider;
 
         public SettingsController(ConfigProvider configProvider, IndexerProvider indexerProvider,
                                     QualityProvider qualityProvider, AutoConfigureProvider autoConfigureProvider,
                                     SeriesProvider seriesProvider, ExternalNotificationProvider externalNotificationProvider,
                                     QualityTypeProvider qualityTypeProvider, ConfigFileProvider configFileProvider, 
-                                    NewznabProvider newznabProvider, MetadataProvider metadataProvider)
+                                    NewznabProvider newznabProvider, MetadataProvider metadataProvider,
+                                    JobProvider jobProvider)
         {
             _externalNotificationProvider = externalNotificationProvider;
             _qualityTypeProvider = qualityTypeProvider;
             _configFileProvider = configFileProvider;
             _newznabProvider = newznabProvider;
             _metadataProvider = metadataProvider;
+            _jobProvider = jobProvider;
             _configProvider = configProvider;
             _indexerProvider = indexerProvider;
             _qualityProvider = qualityProvider;
@@ -83,6 +87,8 @@ namespace NzbDrone.Web.Controllers
                                 FileSharingTalkEnabled = _indexerProvider.GetSettings(typeof(FileSharingTalk)).Enable,
                                 NzbIndexEnabled = _indexerProvider.GetSettings(typeof(NzbIndex)).Enable,
                                 NzbClubEnabled = _indexerProvider.GetSettings(typeof(NzbClub)).Enable,
+
+                                RssSyncInterval = _configProvider.RssSyncInterval,
 
                                 NewznabDefinitions = _newznabProvider.All(),
                             });
@@ -400,6 +406,13 @@ namespace NzbDrone.Web.Controllers
 
                 _configProvider.FileSharingTalkUid = data.FileSharingTalkUid;
                 _configProvider.FileSharingTalkSecret = data.FileSharingTalkSecret;
+
+                //Save the interval to config and immediately apply it the the job (to avoid a restart)
+                _configProvider.RssSyncInterval = data.RssSyncInterval;
+
+                var rssSyncJob = _jobProvider.GetDefinition(typeof(RssSyncJob));
+                rssSyncJob.Interval = data.RssSyncInterval;
+                _jobProvider.SaveDefinition(rssSyncJob);
 
                 try
                 {

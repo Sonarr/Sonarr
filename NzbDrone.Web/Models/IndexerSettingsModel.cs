@@ -103,6 +103,13 @@ namespace NzbDrone.Web.Models
         [Description("Usenet provider retention in days (0 = unlimited)")]
         public int Retention { get; set; }
 
+        [DisplayName("RSS Sync Interval")]
+        [Description("Check for new episodes every X minutes")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "You must enter a valid time in minutes")]
+        [Range(15, 240, ErrorMessage = "Interval must be between 15 and 240 minutes")]
+        public int RssSyncInterval { get; set; }
+
         public List<NewznabDefinition> NewznabDefinitions { get; set; }
     }
 }

@@ -7,6 +7,7 @@ using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Providers.DecisionEngine;
 using NzbDrone.Core.Providers.Indexer;
 using StackExchange.Profiling;
@@ -20,19 +21,22 @@ namespace NzbDrone.Core.Jobs
         private readonly MonitoredEpisodeSpecification _isMonitoredEpisodeSpecification;
         private readonly AllowedDownloadSpecification _allowedDownloadSpecification;
         private readonly UpgradeHistorySpecification _upgradeHistorySpecification;
+        private readonly ConfigProvider _configProvider;
 
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         [Inject]
         public RssSyncJob(DownloadProvider downloadProvider, IndexerProvider indexerProvider,
-            MonitoredEpisodeSpecification isMonitoredEpisodeSpecification, AllowedDownloadSpecification allowedDownloadSpecification, UpgradeHistorySpecification upgradeHistorySpecification)
+            MonitoredEpisodeSpecification isMonitoredEpisodeSpecification, AllowedDownloadSpecification allowedDownloadSpecification, 
+            UpgradeHistorySpecification upgradeHistorySpecification, ConfigProvider configProvider)
         {
             _downloadProvider = downloadProvider;
             _indexerProvider = indexerProvider;
             _isMonitoredEpisodeSpecification = isMonitoredEpisodeSpecification;
             _allowedDownloadSpecification = allowedDownloadSpecification;
             _upgradeHistorySpecification = upgradeHistorySpecification;
+            _configProvider = configProvider;
         }
 
         public string Name
@@ -42,7 +46,7 @@ namespace NzbDrone.Core.Jobs
 
         public TimeSpan DefaultInterval
         {
-            get { return TimeSpan.FromMinutes(25); }
+            get { return TimeSpan.FromMinutes(_configProvider.RssSyncInterval); }
         }
 
         public void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
