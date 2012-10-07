@@ -27,6 +27,9 @@
             autoHeight: false,
             collapsible: true
         });
+        
+        if ($(this).hasClass('jquery-accordion-collapse-all'))
+            $(this).accordion("activate", false);
     });
 
     $('.jquery-tabs').livequery(function () {

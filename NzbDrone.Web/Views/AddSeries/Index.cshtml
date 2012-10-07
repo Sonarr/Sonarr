@@ -58,7 +58,7 @@
 }
 
 @{Html.RenderAction("RootDir");}
-<div class="jquery-accordion" id="addSeriesAccordion">
+<div class="jquery-accordion jquery-accordion-collapse-all" id="addSeriesAccordion">
     <h3>
         <a href="#">Add New Series</a></h3>
     <div id="addNewSeries">
@@ -76,10 +76,6 @@
     @Html.IncludeScript("NzbDrone/addSeries.js")
 
     <script type="text/javascript">
-        $(document).ready(function () {
-            $('#addSeriesAccordion').accordion("activate", false);
-        });
-
         $(document).on('click', '.tvDbLink', function (event) {
             var url = $(this).attr('rel');
             window.open(url, 'thetvdb');
