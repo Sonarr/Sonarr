@@ -100,9 +100,9 @@
 
     <script type="text/javascript">
         
-        var pauseImage = '<img src="../../Content/Images/pause.png" width="24" height="24" alt="Paused" title="Not monitored" />';
-        var stopImage = '<img src="../../Content/Images/stop.png" width="24" height="24" alt="Ended" title="Ended" />';
-        var playImage = '<img src="../../Content/Images/play.png" width="24" height="24" alt="Active" title="Continuing" />';
+        var pauseImage = '<i class="icon-pause" title="Not Monitored"></i>';
+        var stopImage = '<i class="icon-stop" title="Ended"></i>';
+        var playImage = '<i class="icon-play" title="Continuing"></i>';
 
         $(document).ready(function () {
             $('#seriesGrid').removeClass('hidden-grid');
@@ -179,7 +179,11 @@
                                         return result;
                                     }
                                 }, //Episodes
-                                { sWidth: '50px', "mDataProp": "HasBanner", "bSortable": false, "fnRender": function (row) {
+                                {
+                                    sWidth: '50px', "mDataProp": "HasBanner", "bSortable": false, "fnRender": function (row) {
+                                        return "<i class='icon-cog editButton gridAction' title = 'Edit Series' value='" + row.aData["SeriesId"] + "' rel='" + row.aData["Title"] + "' ></i> " +
+                                                "<i class='icon-remove deleteButton gridAction' title = 'Delete Series' value='" + row.aData["SeriesId"] + "' rel='" + row.aData["Title"] + "'></i>";
+
                                         return "<img src='../../Content/Images/settings.png' class='editButton gridAction' title = 'Edit Series' value='" + row.aData["SeriesId"] + "' rel='" + row.aData["Title"] + "' />" +
                                                 "<img src='../../Content/Images/close.png' class='deleteButton gridAction' title = 'Delete Series' value='" + row.aData["SeriesId"] + "' rel='" + row.aData["Title"] + "'/>";
                                     }
