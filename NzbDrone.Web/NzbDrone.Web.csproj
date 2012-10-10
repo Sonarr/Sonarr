@@ -153,6 +153,9 @@
     <Compile Include="Controllers\SearchHistoryController.cs" />
     <Compile Include="Helpers\Validation\RequiredIfAnyAttribute.cs" />
     <Compile Include="Helpers\Validation\RequiredIfAttribute.cs" />
+    <Content Include="Content\font-awesome-ie7.css" />
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\font\fontawesome-webfont.svg" />
     <Content Include="Content\SeriesEditor.css" />
     <Content Include="Content\DataTables-1.9.0\media\css\jquery.dataTables.css" />
     <Content Include="Content\DataTables-1.9.0\media\images\back.png" />
@@ -371,6 +374,9 @@
     <Content Include="Scripts\DataTables-1.9.0\media\js\jquery.jeditable.js" />
     <Content Include="Scripts\jquery-1.7.1-vsdoc.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
+    <Content Include="Content\font\fontawesome-webfont.woff" />
+    <Content Include="Content\font\fontawesome-webfont.ttf" />
+    <Content Include="Content\font\fontawesome-webfont.eot" />
     <None Include="Scripts\jquery-1.8.1.intellisense.js" />
     <Content Include="Scripts\jquery-1.8.1.js" />
     <Content Include="Scripts\jquery-1.8.1.min.js" />
