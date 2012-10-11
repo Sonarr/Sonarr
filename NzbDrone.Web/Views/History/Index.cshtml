@@ -95,7 +95,7 @@
                                 }, //Date
                                 { sName: 'Actions', sWidth: '40px', "mDataProp": "HistoryId", "bSortable": false, "bSearchable": false, "fnRender": function (row) {
                                     var deleteImage = '<i class="icon-remove gridAction" title="Delete from History" onclick="deleteHistory(this.parentNode.parentNode, ' + row.aData["HistoryId"] + ')"></i>';
-                                    var redownloadImage = '<i class="icon-share-alt gridAction" title="Redownload Episode" onclick="redownloadHistory(this.parentNode.parentNode, ' + row.aData["HistoryId"] + ', ' + row.aData["EpisodeId"] + ')"></i>';
+                                    var redownloadImage = '<i class="icon-repeat gridAction" title="Redownload Episode" onclick="redownloadHistory(this.parentNode.parentNode, ' + row.aData["HistoryId"] + ', ' + row.aData["EpisodeId"] + ')"></i>';
 
                                     return deleteImage + redownloadImage;
                                 }

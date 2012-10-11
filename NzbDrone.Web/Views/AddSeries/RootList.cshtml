@@ -8,7 +8,7 @@
 @foreach (var root in Model)
 {
     <div class="actionButton delete">
-        <img src="../../Content/Images/x_16.png" alt="delete" id='@root'/>
+        <i class="icon-remove icon-large delete-root" data-path="@root"></i>
         <span>@root</span>
     </div>
 }

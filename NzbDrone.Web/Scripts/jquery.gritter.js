@@ -103,6 +103,7 @@
             var user = params.title,
 				text = params.text,
 				image = params.image || '',
+                icon = params.icon || '',
 				sticky = params.sticky || false,
 				item_class = params.class_name || '',
                 position = $.gritter.options.position,
@@ -127,13 +128,22 @@
                 this._custom_timer = time_alive;
             }
 
-            var image_str = (image != '') ? '<img src="' + image + '" class="gritter-image" />' : '',
-				class_name = (image != '') ? 'gritter-with-image' : 'gritter-without-image';
+            var image_str = (image != '') ? '<img src="' + image + '" class="gritter-image" />' : '';
+            var icon_str = (icon != '') ? '<i class="' + icon + ' gritter-icon"></i>' : '';
+            var class_name = (image != ''|| icon != '') ? 'gritter-with-image' : 'gritter-without-image';
+
+            var iconImage = '';
+            
+            if (image_str != '')
+                iconImage = image_str;
+            
+            if (icon_str != '')
+                iconImage = icon_str;
 
             // String replacements on the template
             tmp = this._str_replace(
 				['[[username]]', '[[text]]', '[[close]]', '[[image]]', '[[number]]', '[[class_name]]', '[[item_class]]'],
-				[user, text, this._tpl_close, image_str, this._item_count, class_name, item_class], tmp
+				[user, text, this._tpl_close, iconImage, this._item_count, class_name, item_class], tmp
 			);
 
             this['_before_open_' + number]();

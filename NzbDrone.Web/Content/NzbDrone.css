@@ -193,6 +193,19 @@ button span, input[type="button"] span, input[type="submit"] span, input[type="r
     width: auto;
 }
 
+.delete-root {
+    color: red;
+}
+
+.delete-root:before {
+    vertical-align: middle !important;
+}
+
+.delete-root:hover {
+    cursor: pointer !important;
+}
+
+/* Local Series Search */
 #localSeriesLookup
 {
     width: 220px;

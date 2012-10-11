@@ -72,6 +72,16 @@
     border-color: rgb(212, 44, 44);
 }
 
+.gritter-success .gritter-icon
+{
+    color: rgb(100, 135, 46);
+}
+
+.gritter-fail .gritter-icon
+{
+    color: rgb(212, 44, 44);
+}
+
 .hover .gritter-item
 {
     background-position: right -40px;
@@ -115,4 +125,10 @@
 {
     width: 220px;
     float: right;
+}
+
+.gritter-icon {
+    font-size: 50px;
+    float: left;
+    line-height: 35px;
 }

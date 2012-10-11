@@ -165,12 +165,8 @@
     <Content Include="Content\DataTables-1.9.0\media\images\sort_both.png" />
     <Content Include="Content\DataTables-1.9.0\media\images\sort_desc.png" />
     <Content Include="Content\DataTables-1.9.0\media\images\sort_desc_disabled.png" />
-    <Content Include="Content\Images\AirsToday.png" />
     <Content Include="Content\Images\background.jpg" />
     <Content Include="Content\Images\blue.png" />
-    <Content Include="Content\Images\changequality.png" />
-    <Content Include="Content\Images\False.png" />
-    <Content Include="Content\Images\Gear.png" />
     <Content Include="Content\Images\green.png" />
     <Content Include="Content\Images\Indexers\FileSharingTalk.png" />
     <Content Include="Content\Images\Indexers\Newznab.png" />
@@ -182,14 +178,8 @@
     <Content Include="Content\Images\Indexers\WomblesIndex.png" />
     <Content Include="Content\Images\logo.png" />
     <Content Include="Content\Images\logo_small.png" />
-    <Content Include="Content\Images\pause.png" />
-    <Content Include="Content\Images\play.png" />
     <Content Include="Content\Images\red.png" />
-    <Content Include="Content\Images\redownload.png" />
-    <Content Include="Content\Images\settings.png" />
-    <Content Include="Content\Images\stop.png" />
     <Content Include="Content\Images\thetvdb.png" />
-    <Content Include="Content\Images\True.png" />
     <Content Include="Content\Images\yellow.png" />
     <Content Include="Content\IndexerSettings.css" />
     <Content Include="Content\jQueryUI\images\ui-bg_diagonals-thick_30_a32d00_40x40.png" />
@@ -208,18 +198,9 @@
     <Content Include="Content\jQueryUI\jquery-ui-1.8.16.custom.css" />
     <Content Include="Content\Messages.css" />
     <Content Include="Content\Grid.css" />
-    <Content Include="Content\Images\close.png" />
-    <Content Include="Content\Images\Downloading.png" />
     <Content Include="Content\Images\error.png" />
-    <Content Include="Content\Images\Failed.png" />
     <Content Include="Content\Images\gritter.png" />
-    <Content Include="Content\Images\Missing.png" />
-    <Content Include="Content\Images\NotAired.png" />
-    <Content Include="Content\Images\Ready.png" />
-    <Content Include="Content\Images\Rename.png" />
-    <Content Include="Content\Images\Search.png" />
     <Content Include="Content\Images\success.png" />
-    <Content Include="Content\Images\Unpacking.png" />
     <Content Include="Content\jquery.gritter.css" />
     <Content Include="Content\Menu.css" />
     <Compile Include="..\NzbDrone.Common\Properties\SharedAssemblyInfo.cs">
@@ -288,10 +269,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\ActionButton.css" />
-    <Content Include="Content\Images\ignored.png" />
-    <Content Include="Content\Images\ignoredNeutral.png" />
-    <Content Include="Content\Images\notIgnored.png" />
-    <Content Include="Content\Images\x_16.png" />
     <Content Include="Content\QualitySettings.css" />
     <Content Include="Content\Overrides.css" />
     <Content Include="Content\Images\ajax-loader.gif" />
@@ -300,11 +277,8 @@
     <Content Include="Content\Images\Indexers\NzbMatrix.png" />
     <Content Include="Content\Images\Indexers\NzbsRus.png" />
     <Content Include="Content\Images\Indexers\Unknown.png" />
-    <Content Include="Content\Images\Plus.png" />
-    <Content Include="Content\Images\VideoFolder.png" />
     <Content Include="Content\Settings.css" />
     <Content Include="Content\NzbDrone.css" />
-    <Content Include="Content\Images\XbmcNotification.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />

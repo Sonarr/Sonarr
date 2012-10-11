@@ -33,7 +33,7 @@ $(".addExistingButton").live('click', function () {
         $.gritter.add({
             title: 'Failed',
             text: 'Invalid Series Information for \'' + path + '\'',
-            image: '../../content/images/error.png',
+            icon: 'icon-minus-sign',
             class_name: 'gritter-fail'
         });
 
@@ -76,8 +76,8 @@ $(".start-date-master").live('change', function () {
 
 //RootDir
 //Delete RootDir
-$('#rootDirs .actionButton img').live('click', function (image) {
-    var path = $(image.target).attr('id');
+$(document).on('click', '.delete-root', function () {
+    var path = $(this).attr('data-path');
 
     $.ajax({
         type: "POST",

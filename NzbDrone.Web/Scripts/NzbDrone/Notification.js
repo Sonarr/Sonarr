@@ -16,7 +16,7 @@
                 $.gritter.add({
                     title: data.Title,
                     text: data.Text,
-                    image: '../../content/images/success.png',
+                    icon: 'icon-info-sign',
                     class_name: 'gritter-success'
                 });
             }
@@ -24,7 +24,7 @@
                 $.gritter.add({
                     title: data.Title,
                     text: data.Text,
-                    image: '../../content/images/error.png',
+                    icon: 'icon-minus-sign',
                     class_name: 'gritter-fail',
                     time: 10000
                 });
@@ -40,7 +40,7 @@
             $.gritter.add({
                 title: 'Request failed',
                 text: 'Url: ' + this.url + '<br/>Error: ' + thrownError,
-                image: '../../content/images/error.png',
+                icon: 'icon-minus-sign',
                 class_name: 'gritter-fail',
                 time: 10000
             });
