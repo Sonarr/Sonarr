@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Providers
         {
             var series = _database.Fetch<Series>();
             var episodes = _database.Fetch<Episode>();
-            var history = _database.Fetch<History>("WHERE Date <= @0", DateTime.Today.AddDays(-30));
+            var history = _database.Fetch<History>("WHERE Date >= @0", DateTime.Today.AddDays(-30));
 
             var stats = new StatsModel();
             stats.SeriesTotal = series.Count;
@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Providers
             stats.EpisodesOnDisk = episodes.Count(e => e.EpisodeFileId > 0);
             stats.EpisodesMissing = episodes.Count(e => e.Ignored == false && e.EpisodeFileId == 0);
             stats.DownloadedLastMonth = history.Count;
-            stats.DownloadLastWeek = history.Count(h => h.Date <= DateTime.Today.AddDays(7));
+            stats.DownloadLastWeek = history.Count(h => h.Date >= DateTime.Today.AddDays(-7));
 
             return stats;
         }

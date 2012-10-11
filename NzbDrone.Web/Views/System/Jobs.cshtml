@@ -2,7 +2,6 @@
 @model string
 @{ViewBag.Title = "Jobs";}
 
-
 <div class="grid-container">
     <table id="jobGrid" class="dataTablesGrid hidden-grid no-details">
         <thead>
@@ -68,7 +67,7 @@
                                     if (!row.aData["Enable"])
                                         return "";
 
-                                    var link = '@Ajax.ImageActionLink("../../Content/Images/Gear.png", new {  title = "Run Job", alt = "Job", @class = "gridAction" }, "RunJob", "System", new { typeName = "REPLACE" }, null, null)';
+                                    var link = '@Ajax.IconActionLink("icon-cog gridAction", "", "RunJob", "System", new { typeName = "REPLACE" }, null, new {  title = "Run Job" })';
                                     link = link.replace("REPLACE", row.aData["TypeName"]);
                                     return link;
                                 }
