@@ -32,7 +32,6 @@
 
     .ui-progressbar-value .progressBarText
     {
-        position: relative;
         font-weight: normal;
         color: white;
     }
@@ -46,6 +45,7 @@
     .commandsColumn, .statusColumn
     {
         text-align: center;
+        white-space: nowrap;
     }
     
     .ui-dialog-buttonpane .ui-dialog-buttonset .ui-delete-button
@@ -75,7 +75,7 @@
             <th style="width: 100px">Episodes</th>
         
             @*Commands Column*@
-            <th style="width: 90px"></th>
+            <th style="width: 80px"></th>
         </tr>
     </thead>
     <tbody>
@@ -180,6 +180,7 @@
                                     }
                                 }, //Episodes
                                 {
+                                    sClass: "commandsColumn",
                                     sWidth: '50px', "mDataProp": "HasBanner", "bSortable": false, "fnRender": function (row) {
                                         return "<i class='icon-cog editButton gridAction' title = 'Edit Series' data-series-id='" + row.aData["SeriesId"] + "' data-series-title='" + row.aData["Title"] + "' ></i> " +
                                                 "<i class='icon-remove deleteButton gridAction' title = 'Delete Series' data-series-id='" + row.aData["SeriesId"] + "' data-series-title='" + row.aData["Title"] + "'></i>";
