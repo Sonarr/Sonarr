@@ -24,7 +24,7 @@
     @*Commands Column*@
     <td class="@cellColourClass">
         <i class="icon-eye-open ignoreEpisode @(Model.Ignored ? " ignored" : " ") gridAction" title="Click to toggle episode ignore status" data-season="@Model.SeasonNumber" data-episode-id="@Model.EpisodeId" ></i>
-        @Ajax.IconActionLink("icon-search gridAction", "", "Search", "Episode", new { SeriesId = Model.EpisodeId }, null, new { title = "Search for episode" })
+        @Ajax.IconActionLink("icon-search gridAction", "", "Search", "Episode", new { EpisodeId = Model.EpisodeId }, null, new { title = "Search for episode" })
         <i class="icon-tag changeQuality gridAction" title="Click to change the quality of the episode file" data-changetype="episode"></i>
         <i class="gridImage statusImage" title="@Model.Status" data-status="@Model.Status" ></i>
     </td>

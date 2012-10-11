@@ -55,8 +55,8 @@
             return source["AirDate"];
         }
         
-        function actions (row) {
-            var link = '@Ajax.ImageActionLink("../../Content/Images/Search.png", new {  title = "Search for Episode", alt = "Search", @class = "gridAction" }, "Search", "Episode", new { episodeId = "REPLACE" }, null, null)';
+        function actions(row) {
+            var link = '@Ajax.IconActionLink("icon-search gridAction", "", "Search", "Episode", new { EpisodeId = "REPLACE" }, null, new { title = "Search for episode" })';
             link = link.replace("REPLACE", row.aData["EpisodeId"]);
             return link;
         }
