@@ -181,11 +181,8 @@
                                 }, //Episodes
                                 {
                                     sWidth: '50px', "mDataProp": "HasBanner", "bSortable": false, "fnRender": function (row) {
-                                        return "<i class='icon-cog editButton gridAction' title = 'Edit Series' value='" + row.aData["SeriesId"] + "' rel='" + row.aData["Title"] + "' ></i> " +
-                                                "<i class='icon-remove deleteButton gridAction' title = 'Delete Series' value='" + row.aData["SeriesId"] + "' rel='" + row.aData["Title"] + "'></i>";
-
-                                        return "<img src='../../Content/Images/settings.png' class='editButton gridAction' title = 'Edit Series' value='" + row.aData["SeriesId"] + "' rel='" + row.aData["Title"] + "' />" +
-                                                "<img src='../../Content/Images/close.png' class='deleteButton gridAction' title = 'Delete Series' value='" + row.aData["SeriesId"] + "' rel='" + row.aData["Title"] + "'/>";
+                                        return "<i class='icon-cog editButton gridAction' title = 'Edit Series' data-series-id='" + row.aData["SeriesId"] + "' data-series-title='" + row.aData["Title"] + "' ></i> " +
+                                                "<i class='icon-remove deleteButton gridAction' title = 'Delete Series' data-series-id='" + row.aData["SeriesId"] + "' data-series-title='" + row.aData["Title"] + "'></i>";
                                     }
                                 }, //Commands
                                 { sWidth: '60px', "mDataProp": "Details", "bSortable": false, "bVisible": false, "fnRender": function (row) {

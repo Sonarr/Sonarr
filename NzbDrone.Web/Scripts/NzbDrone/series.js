@@ -67,8 +67,8 @@ $("#seriesDelete").dialog({
 
 $(".editButton").live('click', function () {
     //Get the SeriesId and Title
-    var seriesId = parseInt($(this).attr("value"));
-    var title = $(this).attr("rel");
+    var seriesId = parseInt($(this).attr("data-series-id"));
+    var title = $(this).attr("data-series-title");
 
     //Set the title of the dialog
     $("#seriesEditor").dialog("option", "title", title);
