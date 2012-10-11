@@ -40,5 +40,25 @@ namespace NzbDrone.Web.Helpers
             var link = helper.ActionLink("[replaceme]", actionName, controllerName, routeValues, htmlAttributes).ToHtmlString();
             return new MvcHtmlString(link.Replace("[replaceme]", builder.ToString(TagRenderMode.SelfClosing)));
         }
+
+        public static MvcHtmlString IconActionLink(this AjaxHelper helper, string icon, string text, string actionName, string controllerName, object routeValues, AjaxOptions ajaxOptions, object htmlAttributes)
+        {
+            var linkText = String.IsNullOrWhiteSpace(text) ? "" : " " + text;
+
+            var builder = new TagBuilder("i");
+            builder.MergeAttribute("class", icon);
+            var link = helper.ActionLink("[replaceme]" + linkText, actionName, controllerName, routeValues, ajaxOptions, htmlAttributes).ToHtmlString();
+            return new MvcHtmlString(link.Replace("[replaceme]", builder.ToString()));
+        }
+
+        public static MvcHtmlString IconActionLink(this HtmlHelper helper, string icon, string text, string actionName, string controllerName, object routeValues, object htmlAttributes)
+        {
+            var linkText = String.IsNullOrWhiteSpace(text) ? "" : " " + text;
+
+            var builder = new TagBuilder("i");
+            builder.MergeAttribute("class", icon);
+            var link = helper.ActionLink("[replaceme]" + linkText, actionName, controllerName, routeValues, htmlAttributes).ToHtmlString();
+            return new MvcHtmlString(link.Replace("[replaceme]", builder.ToString()));
+        }
     }
 }

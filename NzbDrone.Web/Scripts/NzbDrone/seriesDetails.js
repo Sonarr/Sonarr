@@ -1,10 +1,4 @@
-﻿var notIgnoredImage = '../../Content/Images/notIgnored.png';
-var ignoredImage = '../../Content/Images/ignored.png';
-var notAiredImage = '../../Content/Images/NotAired.png';
-var readyImage = '../../Content/Images/Ready.png';
-var downloadingImage = '../../Content/Images/Downloading.png';
-
-var seriesId = 0;
+﻿var seriesId = 0;
 var saveSeasonIgnoreUrl = '../Command/SaveSeasonIgnore';
 var saveEpisodeIgnoreUrl = '../Command/SaveEpisodeIgnore';
 
@@ -20,13 +14,11 @@ $(".ignoreEpisode").live("click", function () {
 
     if (ignored) {
         toggle.removeClass('ignored');
-        toggle.attr('src', notIgnoredImage);
         toggleCellColour(toggle, false);
     }
 
     else {
         toggle.addClass('ignored');
-        toggle.attr('src', ignoredImage);
         toggleCellColour(toggle, true);
     }
 
@@ -51,12 +43,11 @@ $(".ignoreEpisode").live("click", function () {
 });
 
 function toggleChildren(seasonNumber, ignored) {
-    var ignoreEpisodes = $('[data-season="' + seasonNumber + '"]');
+    var ignoreEpisodes = $('[data-season="' + seasonNumber + '"]:not(table)');
 
     if (ignored) {
         ignoreEpisodes.each(function (index) {
             $(this).addClass('ignored');
-            $(this).attr('src', ignoredImage);
             toggleCellColour($(this), true);
         });
     }
@@ -64,7 +55,6 @@ function toggleChildren(seasonNumber, ignored) {
     else {
         ignoreEpisodes.each(function (index) {
             $(this).removeClass('ignored');
-            $(this).attr('src', notIgnoredImage);
 
             toggleCellColour($(this), false);
         });
@@ -78,14 +68,12 @@ function toggleMasters(seasonNumber, ignored) {
     if (ignored) {
         masters.each(function (index) {
             $(this).addClass('ignored');
-            $(this).attr('src', ignoredImage);
         });
     }
 
     else {
         masters.each(function (index) {
             $(this).removeClass('ignored');
-            $(this).attr('src', notIgnoredImage);
         });
     }
 }

@@ -23,10 +23,10 @@
 
     @*Commands Column*@
     <td class="@cellColourClass">
-        <img src='../../Content/Images/@(Model.Ignored ? "ignored" : "notIgnored").png' class="ignoreEpisode @(Model.Ignored ? " ignored" : " ") gridAction" title="Click to toggle episode ignore status" data-season="@Model.SeasonNumber" data-episode-id="@Model.EpisodeId" />
-        @Ajax.ImageActionLink("../../Content/Images/Search.png", new { Alt = "Search", Title = "Search for episode", @class = "gridAction" }, "Search", "Episode", new { episodeId = Model.EpisodeId }, null, null)
-        <img src="../../Content/Images/changequality.png" class="changeQuality gridAction" title="Click to change the quality of the episode file" data-changetype="episode"/>
-        <img src="../../Content/Images/@(Model.Status).png" alt="@Model.Status" title="@Model.Status" class="gridImage statusImage" data-status="@Model.Status" />
+        <i class="icon-eye-open ignoreEpisode @(Model.Ignored ? " ignored" : " ") gridAction" title="Click to toggle episode ignore status" data-season="@Model.SeasonNumber" data-episode-id="@Model.EpisodeId" ></i>
+        @Ajax.IconActionLink("icon-search gridAction", "", "Search", "Episode", new { SeriesId = Model.EpisodeId }, null, new { title = "Search for episode" })
+        <i class="icon-tag changeQuality gridAction" title="Click to change the quality of the episode file" data-changetype="episode"></i>
+        <i class="gridImage statusImage" title="@Model.Status" data-status="@Model.Status" ></i>
     </td>
 </tr>
 <tr class="detail-row@(ViewData["AltRow"] == null || !(bool)ViewData["AltRow"] ? "" : " alt-row")">

@@ -1,4 +1,4 @@
-.gridImage, .gridAction
+.gridImage, .gridAction, .grid-icon
 {
     width: 18px;
     height: 18px;
@@ -6,6 +6,10 @@
     margin: 0px;
     vertical-align: middle;
     border: none;
+    display: inline !important;
+    text-decoration: none !important;
+    color: #000000;
+    font-size: 20px;
 }
 
 .gridAction:hover
@@ -111,4 +115,9 @@ table.dataTable thead th.sorting_desc, table.dataTable thead th.sorting_asc, tab
 .paginate_enabled_previous:hover, .paginate_enabled_next:hover, .paginate_enabled_first:hover, .paginate_enabled_last:hover
 {
     opacity: 1;
+}
+
+/* Icon color when ignored */
+.ignored {
+    color: gray !important;
 }

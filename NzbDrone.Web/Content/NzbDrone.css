@@ -238,11 +238,8 @@ button span, input[type="button"] span, input[type="submit"] span, input[type="r
     padding-top: 15px;
 }
 
+
+/* Font-Awesome */
 i[class*="icon-"]:not(.gridAction):hover {
     cursor: default;
-}
-
-table i[class*="icon-"] {
-    color: #000000;
-    font-size: 18px;
 }

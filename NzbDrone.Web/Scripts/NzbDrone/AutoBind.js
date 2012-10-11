@@ -53,4 +53,32 @@
             dateFormat: "yy-mm-dd"
         });
     });
+    
+    $('[data-status]').livequery(function () {
+        var status = $(this).attr('data-status');
+        
+        $(this).removeClass(function (index, css) {
+            return (css.match(/\bicon-\S+/g) || []).join(' ');
+        });
+
+        if (status == 'Downloading') {
+            $(this).addClass('icon-download-alt');
+        }
+        
+        if (status == 'Ready') {
+            $(this).addClass('icon-play');
+        }
+        
+        if (status == 'AirsToday') {
+            $(this).addClass('icon-time');
+        }
+        
+        if (status == 'NotAired') {
+            $(this).addClass('icon-calendar');
+        }
+
+        if (status == 'Missing') {
+            $(this).addClass('icon-sign-blank');
+        }
+    });
 });
