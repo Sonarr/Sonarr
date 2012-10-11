@@ -7,12 +7,14 @@
 {
     var idClean = ViewData.TemplateInfo.HtmlFieldPrefix.Replace('[', '_').Replace(']', '_');
 
-    <div class="profileSection" id="profile_@(Model.QualityProfileId)">
+    <div class="profileSection" data-profile-id="@Model.QualityProfileId">
         <div class="qualityHeader">
-            <span class="titleText" id="title_@(Model.QualityProfileId)">
+            <span class="titleText">
                 @Model.Name
-            </span><a href="#" id="@Model.QualityProfileId" class="deleteProfile" onclick=" deleteProfile('@(Model.QualityProfileId)'); return false;">
-                <img src="../../Content/Images/close.png" alt="Delete" width="22px" height="22px" /></a>
+            </span>
+            <a href="@Url.Action("DeleteQualityProfile", "Settings", new { profileId = @Model.QualityProfileId })" class="delete-profile">
+                <i class="icon-remove"></i>
+            </a>
         </div>
         <div class="profileOptions">
             @Html.LabelFor(x => x.Name)

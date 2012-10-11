@@ -288,6 +288,7 @@ namespace NzbDrone.Web.Controllers
             return PartialView("QualityProfileItem", model);
         }
 
+        [HttpPost]
         [JsonErrorFilter]
         public JsonResult DeleteQualityProfile(int profileId)
         {
@@ -296,7 +297,7 @@ namespace NzbDrone.Web.Controllers
 
             _qualityProvider.Delete(profileId);
 
-            return new JsonResult();
+            return Json("ok");
         }
 
         public PartialViewResult AddNewznabProvider()

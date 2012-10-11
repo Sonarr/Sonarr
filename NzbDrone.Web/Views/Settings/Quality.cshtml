@@ -18,8 +18,9 @@
             <div id="profileContainer">
                 <div id="profileHeader">
                     <a id="addProfile" href="@Url.Action("AddProfile", "Settings")">
-                        <img src="../../Content/Images/Plus.png" alt="Add New Profile" width="20px" height="20px" />
-                        Add New Profile</a>
+                        <i class="icon-plus icon-large"></i>
+                        Add New Profile
+                    </a>
                 </div>
                 <div id="profiles">
                     @foreach (var item in (List<QualityProfile>)ViewData["Profiles"])
