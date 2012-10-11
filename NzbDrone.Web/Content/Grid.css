@@ -58,10 +58,6 @@
     display: none;
 }
 
-.dataTable tr {
-    line-height: 25px;
-}
-
 /* Colour alternating rows */
 .seriesTable .alt-row
 {

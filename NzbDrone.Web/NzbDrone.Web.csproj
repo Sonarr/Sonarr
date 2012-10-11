@@ -198,9 +198,7 @@
     <Content Include="Content\jQueryUI\jquery-ui-1.8.16.custom.css" />
     <Content Include="Content\Messages.css" />
     <Content Include="Content\Grid.css" />
-    <Content Include="Content\Images\error.png" />
     <Content Include="Content\Images\gritter.png" />
-    <Content Include="Content\Images\success.png" />
     <Content Include="Content\jquery.gritter.css" />
     <Content Include="Content\Menu.css" />
     <Compile Include="..\NzbDrone.Common\Properties\SharedAssemblyInfo.cs">
