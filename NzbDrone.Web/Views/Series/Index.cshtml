@@ -6,7 +6,7 @@
     @Html.IncludeCss("Settings.css")
 }
 <style>  
-    .ui-progressbar, .progressbar {
+    .progressbar {
         position:relative;
         width: 125px; 
         height: 20px;
@@ -15,7 +15,7 @@
         margin: 2px;
     }
     
-    .progressBarText, .progressbar-text {
+    .progressbar-text {
         position: absolute;
         display: block;
         width: 100%;
@@ -27,7 +27,8 @@
         border: 1px solid #065EFE;
     }
 
-    .ui-progressbar-value .progressBarText, .ui-progressbar-value .progressbar-text {
+    .ui-progressbar-value .progressbar-text {
+        position: relative;
         font-weight: normal;
         color: white;
     }
@@ -168,16 +169,17 @@
                                         if (row.aData["EpisodeCount"] > 0)
                                             progress = row.aData["EpisodeFileCount"] / row.aData["EpisodeCount"] * 100;
 
+                                        var roundedProgress = Math.round(progress);
                                         var progressbar =
-                                            '<div class="progressbar ui-progressbar ui-widget ui-widget-content ui-corner-all" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="92" data-value="' + progress + '">' +
+                                            '<div class="progressbar ui-progressbar ui-widget ui-widget-content ui-corner-all" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + roundedProgress + '" data-value="' + progress + '">' +
                                                 '<span class="progressbar-text">' + row.aData["EpisodeFileCount"] + ' / ' + row.aData["EpisodeCount"] + '</span>' +
-                                                '<div class="ui-progressbar-value ui-widget-header ui-corner-left" style="width: ' + Math.round(progress) + '%">' +
+                                                '<div class="ui-progressbar-value ui-widget-header ui-corner-left" style="width: ' + roundedProgress + '%">' +
                                                     '<span class="progressbar-text" style="width: 125px">' + row.aData["EpisodeFileCount"] + ' / ' + row.aData["EpisodeCount"] + '</span>' +
                                                 '</div>' +
                                             '</div>';
 
                                         return progressbar;
-                                }
+                                    }
                                 }, //Episodes
                                 {
                                     sClass: "commandsColumn",
@@ -197,16 +199,6 @@
                 "aaSorting": [[1, 'asc']],
                 "fnCreatedRow": function( nRow, aData, iDataIndex ) {
                     $(nRow).attr('data-series-id', aData["SeriesId"].toString());
-                },
-                "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
-                    var element = $(nRow).find('.progressBar');
-                    
-                    var progressbar = $(element).progressbar({
-                        value: parseInt($(element).attr("data-value"))
-                    });
-
-                    var label = progressbar.find('.progressBarText').clone().width(progressbar.width());
-                    progressbar.find('.ui-progressbar-value').append(label);
                 },
                 "oLanguage": {
                     "sEmptyTable": "No series have been added"
