@@ -81,4 +81,8 @@
             $(this).addClass('icon-sign-blank');
         }
     });
+    
+    $('.infoBox, .successBox, .warningBox, .errorBox, .validationBox').livequery(function () {
+        $(this).prepend('<i class="icon-certificate"></i>');
+    });
 });

@@ -166,8 +166,6 @@
     <Content Include="Content\DataTables-1.9.0\media\images\sort_desc.png" />
     <Content Include="Content\DataTables-1.9.0\media\images\sort_desc_disabled.png" />
     <Content Include="Content\Images\background.jpg" />
-    <Content Include="Content\Images\blue.png" />
-    <Content Include="Content\Images\green.png" />
     <Content Include="Content\Images\Indexers\FileSharingTalk.png" />
     <Content Include="Content\Images\Indexers\Newznab.png" />
     <Content Include="Content\Images\Indexers\Newznab_dognzb.cr.png" />
@@ -178,9 +176,7 @@
     <Content Include="Content\Images\Indexers\WomblesIndex.png" />
     <Content Include="Content\Images\logo.png" />
     <Content Include="Content\Images\logo_small.png" />
-    <Content Include="Content\Images\red.png" />
     <Content Include="Content\Images\thetvdb.png" />
-    <Content Include="Content\Images\yellow.png" />
     <Content Include="Content\IndexerSettings.css" />
     <Content Include="Content\jQueryUI\images\ui-bg_diagonals-thick_30_a32d00_40x40.png" />
     <Content Include="Content\jQueryUI\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -270,7 +266,6 @@
     <Content Include="Content\QualitySettings.css" />
     <Content Include="Content\Overrides.css" />
     <Content Include="Content\Images\ajax-loader.gif" />
-    <Content Include="Content\Images\arrow.png" />
     <Content Include="Content\Images\Indexers\Newzbin.png" />
     <Content Include="Content\Images\Indexers\NzbMatrix.png" />
     <Content Include="Content\Images\Indexers\NzbsRus.png" />

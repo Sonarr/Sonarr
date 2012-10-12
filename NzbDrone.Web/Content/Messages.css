@@ -1,36 +1,34 @@
 ﻿/*Pinned messages*/
 
-.infoBox, .successBox, .warningBox, .errorBox, .validationBox
-{
+.infoBox, .successBox, .warningBox, .errorBox, .validationBox {
     border: 0px solid;
     margin: 10px 0px;
-    padding: 10px 10px 10px 50px;
+    padding: 10px 10px 10px 10px;
     background-repeat: no-repeat;
     background-position: 10px center;
+    line-height: 20px;
 }
-.infoBox
-{
+.infoBox {
     color: #00529B;
     background-color: #f4f7f9;
-    background-image: url(images/blue.png);
 }
-.successBox
-{
+.successBox {
     color: #4F8A10;
     background-color: #DFF2BF;
-    background-image: url(images/green.png);
 }
-.warningBox
-{
+.warningBox {
     color: #9F6000;
     background-color: #FEEFB3;
-    background-image: url(images/yellow.png);
 }
-.errorBox
-{
+.errorBox {
     color: #D8000C;
     background-color: #FFBABA;
-    background-image: url(images/red.png);
+}
+
+.infoBox i, .successBox i, .warningBox i, .errorBox i, .validationBox i {
+    font-size: 2.33em;
+    vertical-align: text-bottom;
+    padding-right: 8px;
 }
 
 /*Progress Notification*/
