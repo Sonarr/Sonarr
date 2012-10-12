@@ -6,8 +6,7 @@
     @Html.IncludeCss("Settings.css")
 }
 <style>  
-    .ui-progressbar
-    {
+    .ui-progressbar, .progressbar {
         position:relative;
         width: 125px; 
         height: 20px;
@@ -16,22 +15,19 @@
         margin: 2px;
     }
     
-    .progressBarText 
-    {
+    .progressBarText, .progressbar-text {
         position: absolute;
         display: block;
         width: 100%;
         text-align: center;
     }
 
-    .ui-progressbar-value
-    {
+    .ui-progressbar-value {
         overflow: hidden;
         border: 1px solid #065EFE;
     }
 
-    .ui-progressbar-value .progressBarText
-    {
+    .ui-progressbar-value .progressBarText, .ui-progressbar-value .progressbar-text {
         font-weight: normal;
         color: white;
     }
@@ -171,13 +167,17 @@
                                         var progress = 100;
                                         if (row.aData["EpisodeCount"] > 0)
                                             progress = row.aData["EpisodeFileCount"] / row.aData["EpisodeCount"] * 100;
-                                        
-                                        var result = "<div class='progressBar' data-value='" + progress + "'>" +
-                                                        "<span class='progressBarText'>" + row.aData["EpisodeFileCount"] + " / " + row.aData["EpisodeCount"] +"</span>" +
-                                                     "</div>";
 
-                                        return result;
-                                    }
+                                        var progressbar =
+                                            '<div class="progressbar ui-progressbar ui-widget ui-widget-content ui-corner-all" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="92" data-value="' + progress + '">' +
+                                                '<span class="progressbar-text">' + row.aData["EpisodeFileCount"] + ' / ' + row.aData["EpisodeCount"] + '</span>' +
+                                                '<div class="ui-progressbar-value ui-widget-header ui-corner-left" style="width: ' + Math.round(progress) + '%">' +
+                                                    '<span class="progressbar-text" style="width: 125px">' + row.aData["EpisodeFileCount"] + ' / ' + row.aData["EpisodeCount"] + '</span>' +
+                                                '</div>' +
+                                            '</div>';
+
+                                        return progressbar;
+                                }
                                 }, //Episodes
                                 {
                                     sClass: "commandsColumn",
