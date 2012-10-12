@@ -54,32 +54,48 @@
         });
     });
     
-    $('[data-status]').livequery(function () {
-        var status = $(this).attr('data-status');
-        
+    $('[data-status="Downloading"]').livequery(function () {
         $(this).removeClass(function (index, css) {
             return (css.match(/\bicon-\S+/g) || []).join(' ');
         });
 
-        if (status == 'Downloading') {
-            $(this).addClass('icon-download-alt');
-        }
-        
-        if (status == 'Ready') {
-            $(this).addClass('icon-play');
-        }
-        
-        if (status == 'AirsToday') {
-            $(this).addClass('icon-time');
-        }
-        
-        if (status == 'NotAired') {
-            $(this).addClass('icon-calendar');
-        }
+        $(this).addClass('icon-download-alt');
+    });
 
-        if (status == 'Missing') {
-            $(this).addClass('icon-sign-blank');
-        }
+    $('[data-status="Ready"]').livequery(function() {
+        $(this).removeClass(function (index, css) {
+            return (css.match(/\bicon-\S+/g) || []).join(' ');
+        });
+
+        $(this).addClass('icon-play');
+        
+    });
+    
+    $('[data-status="AirsToday"]').livequery(function () {
+        $(this).removeClass(function (index, css) {
+            return (css.match(/\bicon-\S+/g) || []).join(' ');
+        });
+
+        $(this).addClass('icon-time');
+
+    });
+    
+    $('[data-status="NotAired"]').livequery(function () {
+        $(this).removeClass(function (index, css) {
+            return (css.match(/\bicon-\S+/g) || []).join(' ');
+        });
+
+        $(this).addClass('icon-calendar');
+
+    });
+    
+    $('[data-status="Missing"]').livequery(function () {
+        $(this).removeClass(function (index, css) {
+            return (css.match(/\bicon-\S+/g) || []).join(' ');
+        });
+
+        $(this).addClass('icon-sign-blank');
+
     });
     
     $('.infoBox, .successBox, .warningBox, .errorBox, .validationBox').livequery(function () {

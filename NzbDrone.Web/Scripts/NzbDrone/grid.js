@@ -70,23 +70,20 @@ $(function () {
 
     // Declare a function on the chat hub so the server can invoke it
     signalRProvider.updatedStatus = function (data) {
-        var imageSrc = '../../Content/Images/' + data.EpisodeStatus + '.png';
         var row = $('[data-episode-id="' + data.EpisodeId + '"]');
 
         if (row.length == 0)
             return;
 
-        var statusImage = $(row).find('img.statusImage');
+        var statusElement = $(row).find('i.statusImage');
 
-        if (statusImage.length == 0)
+        if (statusElement.length == 0)
             return;
 
-        statusImage.attr('alt', data.EpisodeStatus);
-        statusImage.attr('title', data.EpisodeStatus);
-        statusImage.attr('src', imageSrc);
+        statusElement.attr('data-status', data.EpisodeStatus);
 
         if (data.EpisodeStatus != "Missing") {
-            statusImage.parent('td').removeClass('episodeMissing');
+            statusElement.parent('td').removeClass('episodeMissing');
         }
 
         if (data.Quality != null) {
