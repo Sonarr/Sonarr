@@ -10,7 +10,7 @@ using NzbDrone.Core.Providers;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common.AutoMoq;
-using TvdbLib.Data;
+using XemLib.Data;
 
 namespace NzbDrone.Core.Test.ProviderTests
 {
@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var tvDbSeries = Builder<TvdbEpisode>.CreateListOfSize(episodeCount).
                                                All()
-                                               .With(l => l.Language = new TvdbLanguage(0, "eng", "a"))
+                                               .With(l => l.Language = "en")
                                                .Build();
                 
 
@@ -65,7 +65,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var tvDbSeries = Builder<TvdbEpisode>.CreateListOfSize(episodeCount).
                     All()
-                    .With(l => l.Language = new TvdbLanguage(0, "eng", "a"))
+                    .With(l => l.Language = "en")
                     .Build();
 
             var fakeSeries = Builder<Series>.CreateNew()
@@ -102,7 +102,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var tvDbSeries = Builder<TvdbEpisode>.CreateListOfSize(episodeCount).
                     All()
-                    .With(l => l.Language = new TvdbLanguage(0, "eng", "a"))
+                    .With(l => l.Language = "en")
                     .Build();
 
             var fakeSeries = Builder<Series>.CreateNew()
@@ -139,7 +139,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var tvDbSeries = Builder<TvdbEpisode>.CreateListOfSize(episodeCount).
                     All()
-                    .With(l => l.Language = new TvdbLanguage(0, "eng", "a"))
+                    .With(l => l.Language = "en")
                     .Build();
 
             var fakeSeries = Builder<Series>.CreateNew()
@@ -179,7 +179,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var tvDbSeries = Builder<TvdbEpisode>.CreateListOfSize(episodeCount).
                     All()
-                    .With(l => l.Language = new TvdbLanguage(0, "eng", "a"))
+                    .With(l => l.Language = "en")
                     .Build();
 
             var fakeSeries = Builder<Series>.CreateNew()

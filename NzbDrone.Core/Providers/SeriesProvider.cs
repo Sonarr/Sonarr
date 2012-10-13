@@ -97,11 +97,11 @@ namespace NzbDrone.Core.Providers
             series.AirsDayOfWeek = tvDbSeries.AirsDayOfWeek;
             series.Overview = tvDbSeries.Overview;
             series.Status = tvDbSeries.Status;
-            series.Language = tvDbSeries.Language != null ? tvDbSeries.Language.Abbriviation : string.Empty;
+            series.Language = tvDbSeries.Language != null ? tvDbSeries.Language : string.Empty;
             series.CleanTitle = Parser.NormalizeTitle(tvDbSeries.SeriesName);
             series.LastInfoSync = DateTime.Now;
             series.Runtime = (int)tvDbSeries.Runtime;
-            series.BannerUrl = tvDbSeries.BannerPath;
+            series.BannerUrl = tvDbSeries.Banner;
             series.Network = tvDbSeries.Network;
 
             UpdateSeries(series);

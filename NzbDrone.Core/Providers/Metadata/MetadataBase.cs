@@ -4,7 +4,7 @@ using NzbDrone.Common;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
-using TvdbLib.Data;
+using XemLib.Data;
 
 namespace NzbDrone.Core.Providers.Metadata
 {

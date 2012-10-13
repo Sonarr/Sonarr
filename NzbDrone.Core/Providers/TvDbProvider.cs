@@ -5,9 +5,8 @@ using System.Text.RegularExpressions;
 using NLog;
 using Ninject;
 using NzbDrone.Common;
-using TvdbLib;
-using TvdbLib.Cache;
-using TvdbLib.Data;
+using XemLib;
+using XemLib.Data;
 
 namespace NzbDrone.Core.Providers
 {
@@ -17,13 +16,13 @@ namespace NzbDrone.Core.Providers
         public const string TVDB_APIKEY = "5D2D188E86E07F4F";
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        private readonly TvdbHandler _handler;
+        private readonly XemClient _xemClient;
 
         [Inject]
         public TvDbProvider(EnvironmentProvider environmentProvider)
         {
             _environmentProvider = environmentProvider;
-            _handler = new TvdbHandler(new XmlCacheProvider(_environmentProvider.GetCacheFolder()), TVDB_APIKEY);
+            _xemClient = new XemClient(TVDB_APIKEY);
         }
 
         public TvDbProvider()
@@ -33,57 +32,27 @@ namespace NzbDrone.Core.Providers
 
         public virtual IList<TvdbSearchResult> SearchSeries(string title)
         {
-            lock (_handler)
-            {
-                Logger.Debug("Searching TVDB for '{0}'", title);
+            Logger.Debug("Searching TVDB for '{0}'", title);
 
-                var result = _handler.SearchSeries(title);
+            var result = _xemClient.SearchSeries(title);
 
-                Logger.Debug("Search for '{0}' returned {1} possible results", title, result.Count);
-                return result;
-            }
+            Logger.Debug("Search for '{0}' returned {1} possible results", title, result.Count);
+            return result;
         }
 
-        public virtual TvdbSeries GetSeries(int id, bool loadEpisodes, bool loadActors = false)
+        public virtual TvdbSeries GetSeries(int id, bool loadEpisodes, bool loadActors = false, bool loadBanners = false)
         {
-            lock (_handler)
-            {
-                Logger.Debug("Fetching SeriesId'{0}' from tvdb", id);
-                var result = _handler.GetSeries(id, TvdbLanguage.DefaultLanguage, loadEpisodes, loadActors, true, true);
+            Logger.Debug("Fetching SeriesId'{0}' from tvdb", id);
+            var result = _xemClient.GetSeries(id, loadEpisodes, loadActors, true, TvdbLanguage.Default);
 
-                //Fix American Dad's scene gongshow 
-                if (result != null && result.Id == 73141)
-                {
-                    result.Episodes = result.Episodes.Where(e => e.SeasonNumber == 0 || e.EpisodeNumber > 0).ToList();
+            //Remove duplicated episodes
+            var episodes = result.Episodes.OrderByDescending(e => e.FirstAired).ThenByDescending(e => e.EpisodeName)
+                    .GroupBy(e => e.SeriesId.ToString("000000") + e.SeasonNumber.ToString("000") + e.EpisodeNumber.ToString("000"))
+                    .Select(e => e.First());
 
-                    var seasonOneEpisodeCount = result.Episodes.Where(e => e.SeasonNumber == 1).Count();
-                    var seasonOneId = result.Episodes.Where(e => e.SeasonNumber == 1).First().SeasonId;
+            result.Episodes = episodes.ToList();
 
-                    foreach (var episode in result.Episodes)
-                    {
-                        if (episode.SeasonNumber > 1)
-                        {
-                            if (episode.SeasonNumber == 2)
-                            {
-                                episode.EpisodeNumber = episode.EpisodeNumber + seasonOneEpisodeCount;
-                                episode.SeasonId = seasonOneId;
-                            }
-
-                            episode.SeasonNumber = episode.SeasonNumber - 1;
-                        }
-
-                    }
-                }
-
-                //Remove duplicated episodes
-                var episodes = result.Episodes.OrderByDescending(e => e.FirstAired).ThenByDescending(e => e.EpisodeName)
-                     .GroupBy(e => e.SeriesId.ToString("000000") + e.SeasonNumber.ToString("000") + e.EpisodeNumber.ToString("000"))
-                     .Select(e => e.First());
-
-                result.Episodes = episodes.ToList();
-
-                return result;
-            }
+            return result;
         }
     }
 }
