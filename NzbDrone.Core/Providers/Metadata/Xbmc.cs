@@ -194,11 +194,12 @@ namespace NzbDrone.Core.Providers.Metadata
                     doc.Save(xw);
 
                     xmlResult += doc.ToString();
+                    xmlResult += Environment.NewLine;
                 }       
             }
             var filename = episodeFile.Path.Replace(Path.GetExtension(episodeFile.Path), ".nfo");
             _logger.Debug("Saving episodedetails to: {0}", filename);
-            _diskProvider.WriteAllText(filename, xmlResult);
+            _diskProvider.WriteAllText(filename, xmlResult.Trim(EnvironmentProvider.NewLineChars));
         }
 
         public override void RemoveForSeries(Series series)

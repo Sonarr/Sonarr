@@ -11,6 +11,8 @@ namespace NzbDrone.Common
         public const string NZBDRONE_PID = "NZBDRONE_PID";
         public const string ROOT_MARKER = "NzbDrone.Web";
 
+        public static readonly char[] NewLineChars = Environment.NewLine.ToCharArray();
+
         private static readonly string processName = Process.GetCurrentProcess().ProcessName.ToLower();
 
         private static readonly EnvironmentProvider instance = new EnvironmentProvider();
