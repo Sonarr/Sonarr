@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                     .Setup(c => c.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>())).Returns(episodes);
 
             return Builder<EpisodeParseResult>.CreateNew()
-                .With(c => c.Quality = new Quality(QualityTypes.DVD, false))
+                .With(c => c.Quality = new QualityModel(QualityTypes.DVD, false))
                 .With(c => c.Series = Builder<Series>.CreateNew().Build())
                 .With(c => c.EpisodeNumbers = new List<int>{2})
                 .Build();
@@ -195,7 +195,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             {
                 AirDate = DateTime.Now,
                 EpisodeNumbers = episodes.ToList(),
-                Quality = new Quality(quality, proper),
+                Quality = new QualityModel(quality, proper),
                 SeasonNumber = seasons,
                 Series = series,
                 EpisodeTitle = title
@@ -215,7 +215,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var parsResult = new EpisodeParseResult()
             {
                 AirDate = DateTime.Now,
-                Quality = new Quality(QualityTypes.Bluray720p, proper),
+                Quality = new QualityModel(QualityTypes.Bluray720p, proper),
                 SeasonNumber = 1,
                 Series = series,
                 EpisodeTitle = "My Episode Title",
@@ -237,7 +237,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var parsResult = new EpisodeParseResult
             {
                 AirDate = new DateTime(2011, 12, 1),
-                Quality = new Quality(QualityTypes.Bluray720p, proper),
+                Quality = new QualityModel(QualityTypes.Bluray720p, proper),
                 Series = series,
                 EpisodeTitle = "My Episode Title",
             };

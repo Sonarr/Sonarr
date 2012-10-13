@@ -245,13 +245,13 @@ namespace NzbDrone.Core
             return NormalizeTitle(title);
         }
 
-        internal static Quality ParseQuality(string name)
+        internal static QualityModel ParseQuality(string name)
         {
             Logger.Trace("Trying to parse quality for {0}", name);
 
             name = name.Trim();
             var normalizedName = NormalizeTitle(name);
-            var result = new Quality { QualityType = QualityTypes.Unknown };
+            var result = new QualityModel { QualityType = QualityTypes.Unknown };
             result.Proper = (normalizedName.Contains("proper") || normalizedName.Contains("repack"));
 
             if (normalizedName.Contains("dvd") || normalizedName.Contains("bdrip") || normalizedName.Contains("brrip"))

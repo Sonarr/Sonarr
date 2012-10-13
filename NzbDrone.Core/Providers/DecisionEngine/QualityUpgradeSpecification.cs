@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Providers.DecisionEngine
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public virtual bool IsSatisfiedBy(Quality currentQuality, Quality newQuality, QualityTypes cutOff)
+        public virtual bool IsSatisfiedBy(QualityModel currentQuality, QualityModel newQuality, QualityTypes cutOff)
         {
             if (currentQuality >= newQuality)
             {

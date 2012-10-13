@@ -38,11 +38,11 @@ namespace NzbDrone.Core.Repository
         public string ReleaseGroup { get; set; }
 
         [Ignore]
-        public Model.Quality QualityWrapper
+        public Model.QualityModel QualityWrapper
         {
             get
             {
-                return new Model.Quality(Quality, Proper);
+                return new Model.QualityModel(Quality, Proper);
             }
             set
             {

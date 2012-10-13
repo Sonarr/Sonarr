@@ -128,7 +128,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
                                       EpisodeTitle = "Title",
                                       EpisodeNumbers = new List<int> { 5 },
                                       SeasonNumber = 1,
-                                      Quality = new Quality { QualityType = QualityTypes.SDTV, Proper = false },
+                                      Quality = new QualityModel { QualityType = QualityTypes.SDTV, Proper = false },
                                       Series = new Series { Title = "30 Rock", CleanTitle = Parser.NormalizeTitle("30 Rock") },
                                   };
 
@@ -145,7 +145,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
 
             var parseResult = new EpisodeParseResult
             {
-                Quality = new Quality { QualityType = QualityTypes.Bluray720p, Proper = false },
+                Quality = new QualityModel { QualityType = QualityTypes.Bluray720p, Proper = false },
                 AirDate = new DateTime(2011, 12, 01),
                 Series = new Series { Title = "The Dailyshow", CleanTitle = Parser.NormalizeTitle("The Dailyshow"), IsDaily = true },
             };
@@ -164,7 +164,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
 
             var parseResult = new EpisodeParseResult
             {
-                Quality = new Quality { QualityType = QualityTypes.Bluray720p, Proper = false },
+                Quality = new QualityModel { QualityType = QualityTypes.Bluray720p, Proper = false },
                 FullSeason = true,
                 SeasonNumber = 5,
                 Series = new Series { Title = "My Name is earl", CleanTitle = Parser.NormalizeTitle("My Name is earl") },
@@ -191,7 +191,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
                                       EpisodeTitle = "Title",
                                       EpisodeNumbers = new List<int>(episodes),
                                       SeasonNumber = season,
-                                      Quality = new Quality { QualityType = qualityType, Proper = proper },
+                                      Quality = new QualityModel { QualityType = qualityType, Proper = proper },
                                       Series = new Series { Title = title, CleanTitle = Parser.NormalizeTitle(title) },
                                   };
 
@@ -215,7 +215,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
                                       EpisodeTitle = "Title",
                                       EpisodeNumbers = new List<int>(episodes),
                                       SeasonNumber = season,
-                                      Quality = new Quality { QualityType = qualityType, Proper = proper },
+                                      Quality = new QualityModel { QualityType = qualityType, Proper = proper },
                                       Series = new Series { Title = title, CleanTitle = Parser.NormalizeTitle(title) },
                                   };
 
@@ -237,7 +237,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
                 EpisodeTitle = "Title",
                 EpisodeNumbers = new List<int>(episodes),
                 SeasonNumber = season,
-                Quality = new Quality { QualityType = qualityType, Proper = proper },
+                Quality = new QualityModel { QualityType = qualityType, Proper = proper },
                 Series = new Series { Title = title, CleanTitle = Parser.NormalizeTitle(title) },
             };
 
@@ -259,7 +259,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
                 EpisodeTitle = "Title",
                 EpisodeNumbers = new List<int>(episodes),
                 SeasonNumber = season,
-                Quality = new Quality { QualityType = qualityType, Proper = proper },
+                Quality = new QualityModel { QualityType = qualityType, Proper = proper },
                 Series = new Series { Title = title, CleanTitle = Parser.NormalizeTitle(title) },
             };
 
@@ -278,7 +278,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
                 EpisodeTitle = "Title",
                 EpisodeNumbers = new List<int> { 1 },
                 SeasonNumber = 2,
-                Quality = new Quality { QualityType = QualityTypes.Bluray1080p, Proper = true },
+                Quality = new QualityModel { QualityType = QualityTypes.Bluray1080p, Proper = true },
                 Series = new Series { Title = "Test", CleanTitle = Parser.NormalizeTitle("Test") },
             };
 

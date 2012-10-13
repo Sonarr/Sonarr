@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
         [TestCase(QualityTypes.SDTV, false, QualityTypes.SDTV, true, QualityTypes.SDTV, Result = true)]
         public bool IsUpgradeTest(QualityTypes current, bool currentProper, QualityTypes newQuality, bool newProper, QualityTypes cutoff)
         {
-            return new QualityUpgradeSpecification().IsSatisfiedBy(new Quality(current, currentProper), new Quality(newQuality, newProper), cutoff);
+            return new QualityUpgradeSpecification().IsSatisfiedBy(new QualityModel(current, currentProper), new QualityModel(newQuality, newProper), cutoff);
         }
     }
 }

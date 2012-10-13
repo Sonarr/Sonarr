@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
             parseResult = new EpisodeParseResult
             {
                 Series = fakeSeries,
-                Quality = new Quality(QualityTypes.DVD, true),
+                Quality = new QualityModel(QualityTypes.DVD, true),
                 EpisodeNumbers = new List<int> { 3 },
                 SeasonNumber = 12,
             };

@@ -3,21 +3,21 @@ using NzbDrone.Core.Repository.Quality;
 
 namespace NzbDrone.Core.Model
 {
-    public class Quality : IComparable<Quality>
+    public class QualityModel : IComparable<QualityModel>
     {
         public QualityTypes QualityType { get; set; }
 
         public Boolean Proper { get; set; }
 
-        public Quality() { }
+        public QualityModel() { }
 
-        public Quality(QualityTypes quality, Boolean proper)
+        public QualityModel(QualityTypes quality, Boolean proper)
         {
             QualityType = quality;
             Proper = proper;
         }
 
-        public int CompareTo(Quality other)
+        public int CompareTo(QualityModel other)
         {
             if (other.QualityType > QualityType)
                 return -1;
@@ -37,12 +37,12 @@ namespace NzbDrone.Core.Model
             return 0;
         }
 
-        public static bool operator !=(Quality x, Quality y)
+        public static bool operator !=(QualityModel x, QualityModel y)
         {
             return !(x == y);
         }
 
-        public static bool operator ==(Quality x, Quality y)
+        public static bool operator ==(QualityModel x, QualityModel y)
         {
             var xObj = (Object)x;
             var yObj = (object)y;
@@ -55,22 +55,22 @@ namespace NzbDrone.Core.Model
             return x.CompareTo(y) == 0;
         }
 
-        public static bool operator >(Quality x, Quality y)
+        public static bool operator >(QualityModel x, QualityModel y)
         {
             return x.CompareTo(y) > 0;
         }
 
-        public static bool operator <(Quality x, Quality y)
+        public static bool operator <(QualityModel x, QualityModel y)
         {
             return x.CompareTo(y) < 1;
         }
 
-        public static bool operator <=(Quality x, Quality y)
+        public static bool operator <=(QualityModel x, QualityModel y)
         {
             return x.CompareTo(y) <= 0;
         }
 
-        public static bool operator >=(Quality x, Quality y)
+        public static bool operator >=(QualityModel x, QualityModel y)
         {
             return x.CompareTo(y) >= 0;
         }
@@ -97,7 +97,7 @@ namespace NzbDrone.Core.Model
             }
         }
 
-        public bool Equals(Quality other)
+        public bool Equals(QualityModel other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -108,8 +108,8 @@ namespace NzbDrone.Core.Model
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != typeof (Quality)) return false;
-            return Equals((Quality) obj);
+            if (obj.GetType() != typeof (QualityModel)) return false;
+            return Equals((QualityModel) obj);
         }
     }
 }

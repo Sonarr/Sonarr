@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
                                     {
                                         SeriesTitle = "Title",
                                         Language = LanguageType.English,
-                                        Quality = new Quality(QualityTypes.SDTV, true),
+                                        Quality = new QualityModel(QualityTypes.SDTV, true),
                                         EpisodeNumbers = new List<int> { 3 },
                                         SeasonNumber = 12,
                                         AirDate = DateTime.Now.AddDays(-12).Date,

@@ -202,7 +202,7 @@ namespace NzbDrone.Core.Providers
 
             var parseResult = Parser.ParsePath(episodeFile.Path);
             parseResult.Series = series;
-            parseResult.Quality = new Quality{ QualityType = episodeFile.Quality, Proper = episodeFile.Proper };
+            parseResult.Quality = new QualityModel{ QualityType = episodeFile.Quality, Proper = episodeFile.Proper };
 
             var message = _downloadProvider.GetDownloadTitle(parseResult);
 

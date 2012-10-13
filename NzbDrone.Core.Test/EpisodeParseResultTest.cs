@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Test
             parseResult.EpisodeNumbers = new List<int> { 3 };
             parseResult.FullSeason = false;
             parseResult.AirDate = null;
-            parseResult.Quality = new Quality(QualityTypes.HDTV, false);
+            parseResult.Quality = new QualityModel(QualityTypes.HDTV, false);
 
 
             parseResult.ToString().Should().Be("My Series - S12E03 HDTV");
@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Test
             parseResult.EpisodeNumbers = new List<int> { 3 };
             parseResult.FullSeason = false;
             parseResult.AirDate = null;
-            parseResult.Quality = new Quality(QualityTypes.HDTV, true);
+            parseResult.Quality = new QualityModel(QualityTypes.HDTV, true);
 
 
             parseResult.ToString().Should().Be("My Series - S12E03 HDTV [proper]");
@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Test
             parseResult.EpisodeNumbers = new List<int> { 3, 4, 5 };
             parseResult.FullSeason = false;
             parseResult.AirDate = null;
-            parseResult.Quality = new Quality(QualityTypes.HDTV, false);
+            parseResult.Quality = new QualityModel(QualityTypes.HDTV, false);
 
 
             parseResult.ToString().Should().Be("My Series - S12E03-04-05 HDTV");
@@ -66,7 +66,7 @@ namespace NzbDrone.Core.Test
             parseResult.EpisodeNumbers = new List<int> { 3, 4, 5 };
             parseResult.FullSeason = false;
             parseResult.AirDate = null;
-            parseResult.Quality = new Quality(QualityTypes.HDTV, true);
+            parseResult.Quality = new QualityModel(QualityTypes.HDTV, true);
 
 
             parseResult.ToString().Should().Be("My Series - S12E03-04-05 HDTV [proper]");
@@ -81,7 +81,7 @@ namespace NzbDrone.Core.Test
             parseResult.SeasonNumber = 12;
             parseResult.FullSeason = true;
             parseResult.AirDate = null;
-            parseResult.Quality = new Quality(QualityTypes.HDTV, false);
+            parseResult.Quality = new QualityModel(QualityTypes.HDTV, false);
 
 
             parseResult.ToString().Should().Be("My Series - Season 12 HDTV");
@@ -96,7 +96,7 @@ namespace NzbDrone.Core.Test
             parseResult.SeasonNumber = 12;
             parseResult.FullSeason = true;
             parseResult.AirDate = null;
-            parseResult.Quality = new Quality(QualityTypes.HDTV, true);
+            parseResult.Quality = new QualityModel(QualityTypes.HDTV, true);
 
 
             parseResult.ToString().Should().Be("My Series - Season 12 HDTV [proper]");
@@ -110,7 +110,7 @@ namespace NzbDrone.Core.Test
             parseResult.SeasonNumber = 12;
             parseResult.FullSeason = true;
             parseResult.AirDate = new DateTime(2010, 12, 30);
-            parseResult.Quality = new Quality(QualityTypes.HDTV, false);
+            parseResult.Quality = new QualityModel(QualityTypes.HDTV, false);
 
 
             parseResult.ToString().Should().Be("My Series - 2010-12-30 HDTV");
@@ -124,7 +124,7 @@ namespace NzbDrone.Core.Test
             parseResult.SeasonNumber = 12;
             parseResult.FullSeason = true;
             parseResult.AirDate = new DateTime(2010, 12, 30);
-            parseResult.Quality = new Quality(QualityTypes.HDTV, true);
+            parseResult.Quality = new QualityModel(QualityTypes.HDTV, true);
 
 
             parseResult.ToString().Should().Be("My Series - 2010-12-30 HDTV [proper]");

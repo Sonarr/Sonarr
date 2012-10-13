@@ -112,7 +112,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                 .Returns(fi);
 
             Mocker.GetMock<DownloadProvider>()
-                    .Setup(s => s.GetDownloadTitle(It.Is<EpisodeParseResult>(e => e.Quality == new Quality{ QualityType = QualityTypes.WEBDL, Proper = false })))
+                    .Setup(s => s.GetDownloadTitle(It.Is<EpisodeParseResult>(e => e.Quality == new QualityModel{ QualityType = QualityTypes.WEBDL, Proper = false })))
                     .Returns(message);
 
             Mocker.GetMock<ExternalNotificationProvider>()

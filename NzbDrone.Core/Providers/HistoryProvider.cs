@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Providers
             logger.Debug("Item added to history: {0}", item.NzbTitle);
         }
 
-        public virtual Quality GetBestQualityInHistory(int seriesId, int seasonNumber, int episodeNumber)
+        public virtual QualityModel GetBestQualityInHistory(int seriesId, int seasonNumber, int episodeNumber)
         {
             var quality = _database.SingleOrDefault<dynamic>(@"SELECT TOP 1 History.Quality , History.IsProper FROM History 
                                                     INNER JOIN Episodes ON History.EpisodeId = Episodes.EpisodeId 
@@ -72,7 +72,7 @@ namespace NzbDrone.Core.Providers
 
             if (quality == null) return null;
 
-            return new Quality((QualityTypes)quality.Quality, quality.IsProper);
+            return new QualityModel((QualityTypes)quality.Quality, quality.IsProper);
         }
 
         public virtual void Delete(int historyId)

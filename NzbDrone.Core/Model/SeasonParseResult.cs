@@ -6,7 +6,7 @@
         internal int SeasonNumber { get; set; }
         internal int Year { get; set; }
 
-        public Quality Quality { get; set; }
+        public QualityModel Quality { get; set; }
 
         public override string ToString()
         {
