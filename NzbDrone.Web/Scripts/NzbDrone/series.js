@@ -91,8 +91,8 @@ $(".editButton").live('click', function () {
 
 $(".deleteButton").live('click', function () {
     //Get the SeriesId and Title
-    var seriesId = parseInt($(this).attr("value"));
-    var title = $(this).attr("rel");
+    var seriesId = parseInt($(this).attr("data-series-id"));
+    var title = $(this).attr("data-series-title");
 
     //Fill in the view
     $('#seriesDelete').children('.seriesId').val(seriesId);
