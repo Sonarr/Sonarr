@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Datastore.Migrations
     {
         protected override void MainDbUpgrade()
         {
-            Database.AddColumn("Episode", new Column("AbsoluteEpisodeNumber", DbType.Int32, ColumnProperty.Null));
+            Database.AddColumn("Episodes", new Column("AbsoluteEpisodeNumber", DbType.Int32, ColumnProperty.Null));
         }
     }
 }
