@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace NzbDrone.Core.Repository.Quality
 {
@@ -98,17 +100,28 @@ namespace NzbDrone.Core.Repository.Quality
         public static QualityTypes Bluray720p = new QualityTypes { Id = 6, Name = "Bluray720p", Weight = 6 };
         public static QualityTypes Bluray1080p = new QualityTypes { Id = 7, Name = "Bluray1080p", Weight = 7 };
 
+        public static List<QualityTypes> All()
+        {
+            return new List<QualityTypes>
+                       {
+                               Unknown,
+                               SDTV,
+                               DVD,
+                               HDTV,
+                               WEBDL,
+                               Bluray720p,
+                               Bluray1080p
+                       };
+        }
+
         public static QualityTypes FindById(int id)
         {
-            if (id == 0) return Unknown;
-            if (id == 1) return SDTV;
-            if (id == 2) return DVD;
-            if (id == 4) return HDTV;
-            if (id == 5) return WEBDL;
-            if (id == 6) return Bluray720p;
-            if (id == 7) return Bluray1080p;
+            var quality = All().SingleOrDefault(q => q.Id == id);
 
-            throw new ArgumentException("ID does not match a known quality", "id");
+            if (quality == null)
+                throw new ArgumentException("ID does not match a known quality", "id");
+
+            return quality;            
         }
 
         public static explicit operator QualityTypes(int id)

@@ -136,8 +136,7 @@ namespace NzbDrone.Web.Controllers
                                                                     }).ToList();
             model.Seasons = seasons;
 
-            var qualities = (from QualityTypes q in Enum.GetValues(typeof(QualityTypes))
-                             select new { Id = (int)q, Name = q.ToString() }).ToList();
+            var qualities = QualityTypes.All().ToList();
 
             model.QualitySelectList = new SelectList(qualities.Where(q => q.Id > 0), "Id", "Name");
   
