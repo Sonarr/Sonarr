@@ -155,7 +155,7 @@ namespace NzbDrone.Core.Test
             
             var db = TestDbHelper.GetEmptyDatabase();
             Mocker.SetConstant(db);
-            var fakeProfile = Builder<QualityProfile>.CreateNew().Build();
+            var fakeProfile = Builder<QualityProfile>.CreateNew().With(p => p.Cutoff = QualityTypes.DVD).With(p => p.Allowed = new List<QualityTypes> { QualityTypes.SDTV, QualityTypes.DVD }).Build();
 
             //Act
             Mocker.Resolve<QualityProvider>().Add(fakeProfile);

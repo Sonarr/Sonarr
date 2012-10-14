@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using FizzWare.NBuilder;
@@ -16,6 +17,19 @@ namespace NzbDrone.Core.Test.ProviderTests
     [TestFixture]
     public class SeriesProviderTest : CoreTest
     {
+        private IList<QualityProfile> _qualityProfiles;
+            
+        [SetUp]
+        public void Setup()
+        {
+            _qualityProfiles = Builder<QualityProfile>
+                .CreateListOfSize(2)
+                .All()
+                .With(p => p.Cutoff = QualityTypes.DVD)
+                .With(p => p.Allowed = new List<QualityTypes> { QualityTypes.SDTV, QualityTypes.DVD })
+                .Build();
+        }
+
         [TestCase(true)]
         [TestCase(false)]
         public void Add_new_series(bool useSeasonFolder)
@@ -25,7 +39,12 @@ namespace NzbDrone.Core.Test.ProviderTests
             Mocker.GetMock<ConfigProvider>()
                 .Setup(c => c.UseSeasonFolder).Returns(useSeasonFolder);
 
-            var fakeProfiles = Builder<QualityProfile>.CreateListOfSize(2).Build();
+            var fakeProfiles = Builder<QualityProfile>
+                .CreateListOfSize(2)
+                .All()
+                .With(p => p.Cutoff = QualityTypes.DVD)
+                .With(p => p.Allowed = new List<QualityTypes> { QualityTypes.SDTV, QualityTypes.DVD })
+                .Build();
 
             Db.InsertMany(fakeProfiles);
 
@@ -96,7 +115,12 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(c => c.EpisodeFileCount = 0)
                 .With(c => c.SeasonCount = 0)
                 .Build();
-            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+
+            var fakeQuality = Builder<QualityProfile>
+                .CreateNew()
+                .With(p => p.Cutoff = QualityTypes.DVD)
+                .With(p => p.Allowed = new List<QualityTypes> { QualityTypes.SDTV, QualityTypes.DVD })
+                .Build();
 
             Db.Insert(fakeSeries);
             Db.Insert(fakeQuality);
@@ -121,7 +145,12 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(c => c.QualityProfileId = 1)
                 .With(c => c.CleanTitle = "laworder")
                 .Build();
-            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+
+            var fakeQuality = Builder<QualityProfile>
+                .CreateNew()
+                .With(p => p.Cutoff = QualityTypes.DVD)
+                .With(p => p.Allowed = new List<QualityTypes> { QualityTypes.SDTV, QualityTypes.DVD })
+                .Build();
 
             var id = Db.Insert(fakeSeries);
             Db.Insert(fakeQuality);
@@ -168,6 +197,8 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var fakeQuality = Builder<QualityProfile>.CreateNew()
                                     .With(c => c.QualityProfileId = fakeSeries.QualityProfileId)
+                                    .With(p => p.Cutoff = QualityTypes.DVD)
+                                    .With(p => p.Allowed = new List<QualityTypes> { QualityTypes.SDTV, QualityTypes.DVD })
                                     .Build();
 
             Db.Insert(fakeSeries);
@@ -197,7 +228,11 @@ namespace NzbDrone.Core.Test.ProviderTests
                                                  .With(c => c.SeriesId = 11)
                                                  .Build());
 
-            Db.InsertMany(Builder<QualityProfile>.CreateListOfSize(3).Build());
+            Db.InsertMany(Builder<QualityProfile>.CreateListOfSize(3)
+                .All()
+                .With(p => p.Cutoff = QualityTypes.DVD)
+                .With(p => p.Allowed = new List<QualityTypes> { QualityTypes.SDTV, QualityTypes.DVD })
+                .Build());
 
             //Act, Assert
             var provider = Mocker.Resolve<SeriesProvider>();
@@ -211,7 +246,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             WithRealDb();
 
-            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+            var fakeQuality = Builder<QualityProfile>.CreateNew().With(p => p.Cutoff = QualityTypes.DVD).With(p => p.Allowed = new List<QualityTypes> { QualityTypes.SDTV, QualityTypes.DVD }).Build();
             var fakeSeries = Builder<Series>.CreateNew().With(e => e.QualityProfileId = fakeQuality.QualityProfileId).Build();
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(10)
                 .All().With(e => e.SeriesId = fakeSeries.SeriesId)
@@ -242,7 +277,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             WithRealDb();
 
-            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+            var fakeQuality = Builder<QualityProfile>.CreateNew().With(p => p.Cutoff = QualityTypes.DVD).With(p => p.Allowed = new List<QualityTypes> { QualityTypes.SDTV, QualityTypes.DVD }).Build();
             var fakeSeries = Builder<Series>.CreateNew().With(e => e.QualityProfileId = fakeQuality.QualityProfileId).Build();
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(10).All().With(e => e.SeriesId = fakeSeries.SeriesId).With(e => e.Ignored = true).Random(5).With(e => e.EpisodeFileId = 0).Build();
 
@@ -265,7 +300,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             WithRealDb();
 
-            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+            var fakeQuality = Builder<QualityProfile>.CreateNew().With(p => p.Cutoff = QualityTypes.DVD).With(p => p.Allowed = new List<QualityTypes> { QualityTypes.SDTV, QualityTypes.DVD }).Build();
             var fakeSeries = Builder<Series>.CreateNew().With(e => e.QualityProfileId = fakeQuality.QualityProfileId).Build();
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(10)
                 .All()
@@ -293,7 +328,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             WithRealDb();
 
-            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+            var fakeQuality = Builder<QualityProfile>.CreateNew().With(p => p.Cutoff = QualityTypes.DVD).With(p => p.Allowed = new List<QualityTypes> { QualityTypes.SDTV, QualityTypes.DVD }).Build();
             var fakeSeries = Builder<Series>.CreateNew().With(e => e.QualityProfileId = fakeQuality.QualityProfileId).Build();
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(10)
                 .All()
@@ -324,7 +359,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             WithRealDb();
 
-            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+            var fakeQuality = Builder<QualityProfile>.CreateNew().With(p => p.Cutoff = QualityTypes.DVD).With(p => p.Allowed = new List<QualityTypes> { QualityTypes.SDTV, QualityTypes.DVD }).Build();
 
             var fakeSeries = Builder<Series>.CreateListOfSize(5)
                 .All()
@@ -360,7 +395,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             WithRealDb();
 
-            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+            var fakeQuality = Builder<QualityProfile>.CreateNew().With(p => p.Cutoff = QualityTypes.DVD).With(p => p.Allowed = new List<QualityTypes> { QualityTypes.SDTV, QualityTypes.DVD }).Build();
             var fakeSeries = Builder<Series>.CreateNew()
                 .With(e => e.QualityProfileId = fakeQuality.QualityProfileId)
                 .With(e => e.SeriesId = 1)
@@ -391,7 +426,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .TheFirst(1)
                 .With(c => c.Path = path)
                 .Build();
-            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+            var fakeQuality = Builder<QualityProfile>.CreateNew().With(p => p.Cutoff = QualityTypes.DVD).With(p => p.Allowed = new List<QualityTypes> { QualityTypes.SDTV, QualityTypes.DVD }).Build();
 
             Db.InsertMany(fakeSeries);
             Db.Insert(fakeQuality);
@@ -420,7 +455,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .TheFirst(1)
                 .With(c => c.Path = path)
                 .Build();
-            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+            var fakeQuality = Builder<QualityProfile>.CreateNew().With(p => p.Cutoff = QualityTypes.DVD).With(p => p.Allowed = new List<QualityTypes> { QualityTypes.SDTV, QualityTypes.DVD }).Build();
 
             Db.InsertMany(fakeSeries);
             Db.Insert(fakeQuality);
@@ -449,7 +484,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .TheFirst(1)
                 .With(c => c.Path = path)
                 .Build();
-            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+            var fakeQuality = Builder<QualityProfile>.CreateNew().With(p => p.Cutoff = QualityTypes.DVD).With(p => p.Allowed = new List<QualityTypes> { QualityTypes.SDTV, QualityTypes.DVD }).Build();
 
             Db.InsertMany(fakeSeries);
             Db.Insert(fakeQuality);
@@ -478,7 +513,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .TheFirst(1)
                 .With(c => c.Path = path)
                 .Build();
-            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+            var fakeQuality = Builder<QualityProfile>.CreateNew().With(p => p.Cutoff = QualityTypes.DVD).With(p => p.Allowed = new List<QualityTypes> { QualityTypes.SDTV, QualityTypes.DVD }).Build();
 
             Db.InsertMany(fakeSeries);
             Db.Insert(fakeQuality);
@@ -499,7 +534,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             WithRealDb();
 
-            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+            var fakeQuality = Builder<QualityProfile>.CreateNew().With(p => p.Cutoff = QualityTypes.DVD).With(p => p.Allowed = new List<QualityTypes> { QualityTypes.SDTV, QualityTypes.DVD }).Build();
             var fakeSeries = Builder<Series>.CreateNew().With(e => e.QualityProfileId = fakeQuality.QualityProfileId).Build();
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(2)
                 .All()
@@ -528,7 +563,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             WithRealDb();
 
-            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+            var fakeQuality = Builder<QualityProfile>.CreateNew().With(p => p.Cutoff = QualityTypes.DVD).With(p => p.Allowed = new List<QualityTypes> { QualityTypes.SDTV, QualityTypes.DVD }).Build();
             var fakeSeries = Builder<Series>.CreateNew().With(e => e.QualityProfileId = fakeQuality.QualityProfileId).Build();
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(2)
                 .All()
@@ -557,7 +592,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             WithRealDb();
 
-            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+            var fakeQuality = Builder<QualityProfile>.CreateNew().With(p => p.Cutoff = QualityTypes.DVD).With(p => p.Allowed = new List<QualityTypes> { QualityTypes.SDTV, QualityTypes.DVD }).Build();
             var fakeSeries = Builder<Series>.CreateNew().With(e => e.QualityProfileId = fakeQuality.QualityProfileId).Build();
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(2)
                 .All()
@@ -584,7 +619,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             WithRealDb();
 
-            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+            var fakeQuality = Builder<QualityProfile>.CreateNew().With(p => p.Cutoff = QualityTypes.DVD).With(p => p.Allowed = new List<QualityTypes> { QualityTypes.SDTV, QualityTypes.DVD }).Build();
             var fakeSeries = Builder<Series>.CreateNew().With(e => e.QualityProfileId = fakeQuality.QualityProfileId).Build();
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(2)
                 .All()
@@ -613,7 +648,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             WithRealDb();
 
-            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+            var fakeQuality = Builder<QualityProfile>.CreateNew().With(p => p.Cutoff = QualityTypes.DVD).With(p => p.Allowed = new List<QualityTypes> { QualityTypes.SDTV, QualityTypes.DVD }).Build();
             var fakeSeries = Builder<Series>.CreateNew().With(e => e.QualityProfileId = fakeQuality.QualityProfileId).Build();
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(2)
                 .All()
@@ -643,7 +678,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             WithRealDb();
 
-            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+            var fakeQuality = Builder<QualityProfile>.CreateNew().With(p => p.Cutoff = QualityTypes.DVD).With(p => p.Allowed = new List<QualityTypes> { QualityTypes.SDTV, QualityTypes.DVD }).Build();
             var fakeSeries = Builder<Series>.CreateListOfSize(10)
                 .All()
                 .With(e => e.QualityProfileId = fakeQuality.QualityProfileId)
@@ -664,7 +699,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             WithRealDb();
 
-            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+            var fakeQuality = Builder<QualityProfile>.CreateNew().With(p => p.Cutoff = QualityTypes.DVD).With(p => p.Allowed = new List<QualityTypes> { QualityTypes.SDTV, QualityTypes.DVD }).Build();
             var fakeSeries = Builder<Series>.CreateListOfSize(10)
                 .All()
                 .With(e => e.QualityProfileId = fakeQuality.QualityProfileId)
@@ -685,7 +720,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             WithRealDb();
 
-            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+            var fakeQuality = Builder<QualityProfile>.CreateNew().With(p => p.Cutoff = QualityTypes.DVD).With(p => p.Allowed = new List<QualityTypes> { QualityTypes.SDTV, QualityTypes.DVD }).Build();
             var fakeSeries = Builder<Series>.CreateListOfSize(10)
                 .All()
                 .With(e => e.QualityProfileId = fakeQuality.QualityProfileId)
@@ -706,7 +741,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             WithRealDb();
 
-            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+            var fakeQuality = Builder<QualityProfile>.CreateNew().With(p => p.Cutoff = QualityTypes.DVD).With(p => p.Allowed = new List<QualityTypes> { QualityTypes.SDTV, QualityTypes.DVD }).Build();
             var fakeSeries = Builder<Series>.CreateListOfSize(10)
                 .All()
                 .With(e => e.QualityProfileId = fakeQuality.QualityProfileId)
@@ -727,7 +762,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             WithRealDb();
 
-            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+            var fakeQuality = Builder<QualityProfile>.CreateNew().With(p => p.Cutoff = QualityTypes.DVD).With(p => p.Allowed = new List<QualityTypes> { QualityTypes.SDTV, QualityTypes.DVD }).Build();
             var fakeSeries = Builder<Series>.CreateListOfSize(10)
                 .All()
                 .With(e => e.QualityProfileId = fakeQuality.QualityProfileId)
@@ -753,7 +788,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var newMonitored = false;
             var newSeasonFolder = false;
 
-            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+            var fakeQuality = Builder<QualityProfile>.CreateNew().With(p => p.Cutoff = QualityTypes.DVD).With(p => p.Allowed = new List<QualityTypes> { QualityTypes.SDTV, QualityTypes.DVD }).Build();
             var fakeSeries = Builder<Series>.CreateListOfSize(1)
                 .All()
                 .With(e => e.QualityProfileId = fakeQuality.QualityProfileId)
@@ -790,7 +825,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var monitored = true;
             var seasonFolder = true;
 
-            var fakeQuality = Builder<QualityProfile>.CreateNew().Build();
+            var fakeQuality = Builder<QualityProfile>.CreateNew().With(p => p.Cutoff = QualityTypes.DVD).With(p => p.Allowed = new List<QualityTypes> { QualityTypes.SDTV, QualityTypes.DVD }).Build();
             var fakeSeries = Builder<Series>.CreateListOfSize(2)
                 .All()
                 .With(e => e.QualityProfileId = fakeQuality.QualityProfileId)
