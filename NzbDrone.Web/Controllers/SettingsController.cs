@@ -127,7 +127,7 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult Quality()
         {
-            var profiles = _qualityProvider.All().ToList();
+            var profiles = _qualityProvider.All();
 
             var defaultQualityQualityProfileId = Convert.ToInt32(_configProvider.DefaultQualityProfile);
             var qualityProfileSelectList = new SelectList(profiles, "QualityProfileId", "Name");
@@ -272,7 +272,7 @@ namespace NzbDrone.Web.Controllers
             return GetQualityProfileView(qualityProfile);
         }
 
-        public PartialViewResult GetQualityProfileView(QualityProfile profile)
+        public PartialViewResult  GetQualityProfileView(QualityProfile profile)
         {
             var model = new QualityProfileModel();
             model.QualityProfileId = profile.QualityProfileId;
@@ -284,7 +284,14 @@ namespace NzbDrone.Web.Controllers
             model.Webdl = profile.Allowed.Contains(QualityTypes.WEBDL);
             model.Bluray720p = profile.Allowed.Contains(QualityTypes.Bluray720p);
             model.Bluray1080p = profile.Allowed.Contains(QualityTypes.Bluray1080p);
-            model.Cutoff = profile.Cutoff;
+            model.Cutoff = (int)profile.Cutoff;
+
+            model.SdtvId = QualityTypes.SDTV.Id;
+            model.DvdId = QualityTypes.DVD.Id;
+            model.HdtvId = QualityTypes.HDTV.Id;
+            model.WebdlId = QualityTypes.WEBDL.Id;
+            model.Bluray720pId = QualityTypes.Bluray720p.Id;
+            model.Bluray1080pId = QualityTypes.Bluray1080p.Id;
 
             return PartialView("QualityProfileItem", model);
         }
@@ -473,7 +480,7 @@ namespace NzbDrone.Web.Controllers
                     var profile = new QualityProfile();
                     profile.QualityProfileId = profileModel.QualityProfileId;
                     profile.Name = profileModel.Name;
-                    profile.Cutoff = profileModel.Cutoff;
+                    profile.Cutoff = (QualityTypes)profileModel.Cutoff;
 
                     profile.Allowed = new List<QualityTypes>();
 

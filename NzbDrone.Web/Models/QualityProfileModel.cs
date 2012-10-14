@@ -18,7 +18,7 @@ namespace NzbDrone.Web.Models
 
         [DisplayName("Cut-off")]
         [Required(ErrorMessage = "Valid Cut-off is Required")]
-        public QualityTypes Cutoff { get; set; }
+        public int Cutoff { get; set; }
 
         [DisplayName("Allowed Qualities")]
         public List<QualityTypes> Allowed { get; set; }
@@ -26,20 +26,26 @@ namespace NzbDrone.Web.Models
         //Quality Booleans
         [DisplayName("SDTV")]
         public bool Sdtv { get; set; }
+        public int SdtvId { get; set; }
 
         [DisplayName("DVD")]
         public bool Dvd { get; set; }
+        public int DvdId { get; set; }
 
         [DisplayName("HDTV")]
         public bool Hdtv { get; set; }
+        public int HdtvId { get; set; }
 
         [DisplayName("WEBDL")]
         public bool Webdl { get; set; }
+        public int WebdlId { get; set; }
 
         [DisplayName("Bluray720p")]
         public bool Bluray720p { get; set; }
+        public int Bluray720pId { get; set; }
 
         [DisplayName("Bluray1080p")]
         public bool Bluray1080p { get; set; }
+        public int Bluray1080pId { get; set; }
     }
 }

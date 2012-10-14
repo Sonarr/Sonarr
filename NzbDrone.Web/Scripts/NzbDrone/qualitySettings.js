@@ -70,21 +70,19 @@ $(document).on('click', '.quality-selectee', function () {
     var cleanId = getCleanId(this);
     var cutoff = '#' + cleanId + '_Cutoff';
     var name = jQuery('[for="' + id + '"]').children('.ui-button-text').text();
+    var qualityId = $(this).attr('data-quality-id');
 
     //Remove 'Unknown'
     $(cutoff + ' option').each(function () { if ($(this).text().indexOf('Unknown') > -1) $(cutoff + ' option').remove(':contains("' + $(this).text() + '")'); });
 
     //Add option to cutoff SelectList
     if ($(this).attr('checked')) {
-        $('<option>' + name + '</option>').appendTo(cutoff);
+        $('<option>' + name + '</option>').val(qualityId).appendTo(cutoff);
     }
 
     //Remove option from cutoff SelectList
     else {
-        $(cutoff + ' option').each(function () {
-            if ($(this).text().indexOf(name) > -1)
-                $(cutoff + ' option').remove(':contains("' + $(this).text() + '")');
-        });
+        $(cutoff).find('option[value="' + qualityId + '"]').remove();
     }
 });
 
