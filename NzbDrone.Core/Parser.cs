@@ -251,12 +251,12 @@ namespace NzbDrone.Core
 
             name = name.Trim();
             var normalizedName = NormalizeTitle(name);
-            var result = new QualityModel { QualityType = QualityTypes.Unknown };
+            var result = new QualityModel { Quality = QualityTypes.Unknown };
             result.Proper = (normalizedName.Contains("proper") || normalizedName.Contains("repack"));
 
             if (normalizedName.Contains("dvd") || normalizedName.Contains("bdrip") || normalizedName.Contains("brrip"))
             {
-                result.QualityType = QualityTypes.DVD;
+                result.Quality = QualityTypes.DVD;
                 return result;
             }
 
@@ -264,11 +264,11 @@ namespace NzbDrone.Core
             {
                 if (normalizedName.Contains("bluray"))
                 {
-                    result.QualityType = QualityTypes.DVD;
+                    result.Quality = QualityTypes.DVD;
                     return result;
                 }
 
-                result.QualityType = QualityTypes.SDTV;
+                result.Quality = QualityTypes.SDTV;
                 return result;
             }
 
@@ -276,32 +276,32 @@ namespace NzbDrone.Core
             {
                 if (normalizedName.Contains("720p"))
                 {
-                    result.QualityType = QualityTypes.Bluray720p;
+                    result.Quality = QualityTypes.Bluray720p;
                     return result;
                 }
 
                 if (normalizedName.Contains("1080p"))
                 {
-                    result.QualityType = QualityTypes.Bluray1080p;
+                    result.Quality = QualityTypes.Bluray1080p;
                     return result;
                 }
 
-                result.QualityType = QualityTypes.Bluray720p;
+                result.Quality = QualityTypes.Bluray720p;
                 return result;
             }
             if (normalizedName.Contains("webdl"))
             {
-                result.QualityType = QualityTypes.WEBDL;
+                result.Quality = QualityTypes.WEBDL;
                 return result;
             }
             if (normalizedName.Contains("x264") || normalizedName.Contains("h264") || normalizedName.Contains("720p"))
             {
-                result.QualityType = QualityTypes.HDTV;
+                result.Quality = QualityTypes.HDTV;
                 return result;
             }
             //Based on extension
 
-            if (result.QualityType == QualityTypes.Unknown)
+            if (result.Quality == QualityTypes.Unknown)
             {
                 try
                 {
@@ -322,13 +322,13 @@ namespace NzbDrone.Core
                         case ".ogm":
                         case ".strm":
                             {
-                                result.QualityType = QualityTypes.SDTV;
+                                result.Quality = QualityTypes.SDTV;
                                 break;
                             }
                         case ".mkv":
                         case ".ts":
                             {
-                                result.QualityType = QualityTypes.HDTV;
+                                result.Quality = QualityTypes.HDTV;
                                 break;
                             }
                     }
@@ -342,15 +342,15 @@ namespace NzbDrone.Core
 
             if (name.Contains("[HDTV]"))
             {
-                result.QualityType = QualityTypes.HDTV;
+                result.Quality = QualityTypes.HDTV;
                 return result;
             }
 
             if ((normalizedName.Contains("sdtv") || normalizedName.Contains("pdtv") ||
-                (result.QualityType == QualityTypes.Unknown && normalizedName.Contains("hdtv"))) &&
+                (result.Quality == QualityTypes.Unknown && normalizedName.Contains("hdtv"))) &&
                 !normalizedName.Contains("mpeg"))
             {
-                result.QualityType = QualityTypes.SDTV;
+                result.Quality = QualityTypes.SDTV;
                 return result;
             }
 

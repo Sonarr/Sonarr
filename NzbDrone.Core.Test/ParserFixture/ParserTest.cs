@@ -11,7 +11,7 @@ using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
 
-namespace NzbDrone.Core.Test
+namespace NzbDrone.Core.Test.ParserFixture
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
@@ -124,73 +124,6 @@ namespace NzbDrone.Core.Test
             MockedRestProvider.Verify(c => c.PostData(It.IsAny<string>(), It.Is<ParseErrorReport>(r => r.Title == TITLE)), Times.Once());
 
             ExceptionVerification.IgnoreWarns();
-        }
-
-        [TestCase("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD", QualityTypes.DVD, false)]
-        [TestCase("WEEDS.S03E01-06.DUAL.BDRip.X-viD.AC3.-HELLYWOOD", QualityTypes.DVD, false)]
-        [TestCase("WEEDS.S03E01-06.DUAL.BDRip.AC3.-HELLYWOOD", QualityTypes.DVD, false)]
-        [TestCase("Two.and.a.Half.Men.S08E05.720p.HDTV.X264-DIMENSION", QualityTypes.HDTV, false)]
-        [TestCase("this has no extention or periods HDTV", QualityTypes.SDTV, false)]
-        [TestCase("Chuck.S04E05.HDTV.XviD-LOL", QualityTypes.SDTV, false)]
-        [TestCase("The.Girls.Next.Door.S03E06.DVDRip.XviD-WiDE", QualityTypes.DVD, false)]
-        [TestCase("The.Girls.Next.Door.S03E06.DVD.Rip.XviD-WiDE", QualityTypes.DVD, false)]
-        [TestCase("The.Girls.Next.Door.S03E06.HDTV-WiDE", QualityTypes.SDTV, false)]
-        [TestCase("Degrassi.S10E27.WS.DSR.XviD-2HD", QualityTypes.SDTV, false)]
-        [TestCase("Sonny.With.a.Chance.S02E15.720p.WEB-DL.DD5.1.H.264-SURFER", QualityTypes.WEBDL, false)]
-        [TestCase("Sonny.With.a.Chance.S02E15.720p", QualityTypes.HDTV, false)]
-        [TestCase("Sonny.With.a.Chance.S02E15.mkv", QualityTypes.HDTV, false)]
-        [TestCase("Sonny.With.a.Chance.S02E15.avi", QualityTypes.SDTV, false)]
-        [TestCase("Sonny.With.a.Chance.S02E15.xvid", QualityTypes.SDTV, false)]
-        [TestCase("Sonny.With.a.Chance.S02E15.divx", QualityTypes.SDTV, false)]
-        [TestCase("Sonny.With.a.Chance.S02E15", QualityTypes.Unknown, false)]
-        [TestCase("Chuck - S01E04 - So Old - Playdate - 720p TV.mkv", QualityTypes.HDTV, false)]
-        [TestCase("Chuck - S22E03 - MoneyBART - HD TV.mkv", QualityTypes.HDTV, false)]
-        [TestCase("Chuck - S01E03 - Come Fly With Me - 720p BluRay.mkv", QualityTypes.Bluray720p, false)]
-        [TestCase("Chuck - S01E03 - Come Fly With Me - 1080p BluRay.mkv", QualityTypes.Bluray1080p, false)]
-        [TestCase("Chuck - S11E06 - D-Yikes! - 720p WEB-DL.mkv", QualityTypes.WEBDL, false)]
-        [TestCase("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD.avi", QualityTypes.DVD, false)]
-        [TestCase("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD.avi", QualityTypes.DVD, false)]
-        [TestCase("Law & Order: Special Victims Unit - 11x11 - Quickie", QualityTypes.Unknown, false)]
-        [TestCase("(<a href=\"http://www.newzbin.com/browse/post/6076286/nzb/\">NZB</a>)", QualityTypes.Unknown, false)]
-        [TestCase("S07E23 - [HDTV].mkv ", QualityTypes.HDTV, false)]
-        [TestCase("S07E23 - [WEBDL].mkv ", QualityTypes.WEBDL, false)]
-        [TestCase("S07E23.mkv ", QualityTypes.HDTV, false)]
-        [TestCase("S07E23 .avi ", QualityTypes.SDTV, false)]
-        [TestCase("WEEDS.S03E01-06.DUAL.XviD.Bluray.AC3.-HELLYWOOD.avi", QualityTypes.DVD, false)]
-        [TestCase("WEEDS.S03E01-06.DUAL.Bluray.AC3.-HELLYWOOD.avi", QualityTypes.Bluray720p, false)]
-        [TestCase("The Voice S01E11 The Finals 1080i HDTV DD5.1 MPEG2-TrollHD", QualityTypes.Unknown, false)]
-        [TestCase("Nikita S02E01 HDTV XviD 2HD", QualityTypes.SDTV, false)]
-        [TestCase("Gossip Girl S05E11 PROPER HDTV XviD 2HD", QualityTypes.SDTV, true)]
-        [TestCase("The Jonathan Ross Show S02E08 HDTV x264 FTP", QualityTypes.SDTV, false)]
-        [TestCase("White.Van.Man.2011.S02E01.WS.PDTV.x264-TLA", QualityTypes.SDTV, false)]
-        [TestCase("White.Van.Man.2011.S02E01.WS.PDTV.x264-REPACK-TLA", QualityTypes.SDTV, true)]
-        [TestCase("WEEDS.S03E01-06.DUAL.XviD.Bluray.AC3-REPACK.-HELLYWOOD.avi", QualityTypes.DVD, true)]
-        [TestCase("Pawn Stars S04E87 REPACK 720p HDTV x264 aAF", QualityTypes.HDTV, true)]
-        [TestCase("The Real Housewives of Vancouver S01E04 DSR x264 2HD", QualityTypes.SDTV, false)]
-        [TestCase("Vanguard S01E04 Mexicos Death Train DSR x264 MiNDTHEGAP", QualityTypes.SDTV, false)]
-        [TestCase("Vanguard S01E04 Mexicos Death Train 720 WEB DL", QualityTypes.WEBDL, false)]
-        [TestCase("Hawaii Five 0 S02E21 720p WEB DL DD5 1 H 264", QualityTypes.WEBDL, false)]
-        [TestCase("Castle S04E22 720p WEB DL DD5 1 H 264 NFHD", QualityTypes.WEBDL, false)]
-        [TestCase("Fringe S04E22 720p WEB-DL DD5.1 H264-EbP.mkv", QualityTypes.WEBDL, false)]
-        [TestCase("Fringe.S04E22.720p.WEB.DL.DD5.1.H264-EbP", QualityTypes.WEBDL, false)]
-        public void quality_parse(string postTitle, object quality, bool proper)
-        {
-            var result = Parser.ParseQuality(postTitle);
-            result.QualityType.Should().Be(quality);
-            result.Proper.Should().Be(proper);
-        }
-
-        [Test]
-        public void parsing_our_own_quality_enum()
-        {
-            var qualityEnums = Enum.GetValues(typeof(QualityTypes));
-
-            foreach (var qualityEnum in qualityEnums)
-            {
-                var fileName = String.Format("My series S01E01 [{0}]", qualityEnum);
-                var result = Parser.ParseQuality(fileName);
-                result.QualityType.Should().Be(qualityEnum);
-            }
         }
 
         //[Timeout(1000)]

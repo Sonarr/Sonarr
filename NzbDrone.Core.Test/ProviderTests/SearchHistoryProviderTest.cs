@@ -37,6 +37,8 @@ namespace NzbDrone.Core.Test.ProviderTests
                     .Build();
 
             var items = Builder<SearchHistoryItem>.CreateListOfSize(10)
+                    .All()
+                    .With(c => c.Quality = QualityTypes.SDTV)
                     .Build().ToList();
 
             _searchHistory = Builder<SearchHistory>.CreateNew()
@@ -77,6 +79,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             {
                 var items = Builder<SearchHistoryItem>.CreateListOfSize(10)
                         .All()
+                        .With(c => c.Quality = QualityTypes.SDTV)
                         .With(i => i.Id == searchHistory.Id)
                         .Build();
 
@@ -97,6 +100,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             {
                 var items = Builder<SearchHistoryItem>.CreateListOfSize(10)
                         .All()
+                        .With(c => c.Quality = QualityTypes.SDTV)
                         .With(i => i.Id == searchHistory.Id)
                         .Build();
 

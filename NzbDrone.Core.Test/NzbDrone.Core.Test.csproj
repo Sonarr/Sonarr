@@ -137,12 +137,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="QualityTypesTest.cs" />
     <Compile Include="EpisodeParseResultTest.cs" />
     <Compile Include="Integeration\ServiceIntegerationFixture.cs" />
     <Compile Include="JobTests\BacklogSearchJobTest.cs" />
     <Compile Include="JobTests\BannerDownloadJobTest.cs" />
     <Compile Include="JobTests\RssSyncJobTest.cs" />
     <Compile Include="JobTests\RecentBacklogSearchJobTest.cs" />
+    <Compile Include="ParserFixture\QualityParserTests.cs" />
     <Compile Include="ProviderTests\ConfigProviderTests\ConfigCachingFixture.cs" />
     <Compile Include="ProviderTests\BannerProviderTest.cs" />
     <Compile Include="ProviderTests\DecisionEngineTests\AllowedReleaseGroupSpecificationFixture.cs" />
@@ -226,7 +228,7 @@
     <Compile Include="ProviderTests\ConfigProviderTests\ConfigProviderFixture.cs" />
     <Compile Include="ProviderTests\EpisodeProviderTest.cs" />
     <Compile Include="Framework\TestDbHelper.cs" />
-    <Compile Include="ParserTest.cs" />
+    <Compile Include="ParserFixture\ParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QualityProfileTest.cs" />
     <Compile Include="ProviderTests\DownloadClientTests\SabProviderTests\SabProviderFixture.cs" />

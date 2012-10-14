@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Providers
                                                {
                                                        EpisodeId = episodeId,
                                                        EpisodeStatus = episodeStatus.ToString(),
-                                                       Quality = (quality == null ? String.Empty : quality.QualityType.ToString())
+                                                       Quality = (quality == null ? String.Empty : quality.Quality.ToString())
                                                });
                 var test = 0;
             }

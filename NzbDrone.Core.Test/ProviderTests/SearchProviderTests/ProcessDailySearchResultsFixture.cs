@@ -102,7 +102,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
             WithSuccessfulDownload();
 
             Mocker.GetMock<AllowedDownloadSpecification>()
-                .Setup(s => s.IsSatisfiedBy(It.Is<EpisodeParseResult>(d => d.Quality.QualityType == QualityTypes.Bluray1080p)))
+                .Setup(s => s.IsSatisfiedBy(It.Is<EpisodeParseResult>(d => d.Quality.Quality == QualityTypes.Bluray1080p)))
                 .Returns(ReportRejectionType.None);
 
             //Act
@@ -221,11 +221,11 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
             WithQualityNeeded();
 
             Mocker.GetMock<DownloadProvider>()
-                .Setup(s => s.DownloadReport(It.Is<EpisodeParseResult>(d => d.Quality.QualityType == QualityTypes.DVD)))
+                .Setup(s => s.DownloadReport(It.Is<EpisodeParseResult>(d => d.Quality.Quality == QualityTypes.DVD)))
                 .Returns(false);
 
             Mocker.GetMock<DownloadProvider>()
-                .Setup(s => s.DownloadReport(It.Is<EpisodeParseResult>(d => d.Quality.QualityType == QualityTypes.SDTV)))
+                .Setup(s => s.DownloadReport(It.Is<EpisodeParseResult>(d => d.Quality.Quality == QualityTypes.SDTV)))
                 .Returns(true);
 
             //Act

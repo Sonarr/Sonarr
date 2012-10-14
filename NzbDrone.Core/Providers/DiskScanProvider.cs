@@ -153,7 +153,7 @@ namespace NzbDrone.Core.Providers
             episodeFile.SeriesId = series.SeriesId;
             episodeFile.Path = filePath.NormalizePath();
             episodeFile.Size = size;
-            episodeFile.Quality = parseResult.Quality.QualityType;
+            episodeFile.Quality = parseResult.Quality.Quality;
             episodeFile.Proper = parseResult.Quality.Proper;
             episodeFile.SeasonNumber = parseResult.SeasonNumber;
             episodeFile.SceneName = Path.GetFileNameWithoutExtension(filePath.NormalizePath());
@@ -202,7 +202,7 @@ namespace NzbDrone.Core.Providers
 
             var parseResult = Parser.ParsePath(episodeFile.Path);
             parseResult.Series = series;
-            parseResult.Quality = new QualityModel{ QualityType = episodeFile.Quality, Proper = episodeFile.Proper };
+            parseResult.Quality = new QualityModel{ Quality = episodeFile.Quality, Proper = episodeFile.Proper };
 
             var message = _downloadProvider.GetDownloadTitle(parseResult);
 

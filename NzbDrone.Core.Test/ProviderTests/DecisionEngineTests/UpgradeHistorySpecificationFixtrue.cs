@@ -71,12 +71,12 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
 
         private void WithFirstReportUpgradable()
         {
-            firstQuality.QualityType = QualityTypes.SDTV;
+            firstQuality.Quality = QualityTypes.SDTV;
         }
 
         private void WithSecondReportUpgradable()
         {
-            secondQuality.QualityType = QualityTypes.SDTV;
+            secondQuality.Quality = QualityTypes.SDTV;
         }
 
 

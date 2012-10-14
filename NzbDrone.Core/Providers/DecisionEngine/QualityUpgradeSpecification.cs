@@ -17,13 +17,13 @@ namespace NzbDrone.Core.Providers.DecisionEngine
                 return false;
             }
 
-            if (currentQuality.QualityType == newQuality.QualityType && newQuality.Proper)
+            if (currentQuality.Quality == newQuality.Quality && newQuality.Proper)
             {
                 logger.Trace("Upgrading existing item to proper.");
                 return true;
             }
 
-            if (currentQuality.QualityType >= cutOff)
+            if (currentQuality.Quality >= cutOff)
             {
                 logger.Trace("Existing item meets cut-off. skipping.");
                 return false;

@@ -138,10 +138,14 @@ namespace NzbDrone.Core.Test
             ExceptionVerification.IgnoreWarns();
         }
 
-
-        [TestCase("Adventure.Inc.S03E19.DVDRip.XviD-OSiTV", 3, 19, QualityTypes.DVD)]
-        public void custome_parser_partial_success(string title, int season, int episode, QualityTypes quality)
+        [Test]
+        public void custome_parser_partial_success()
         {
+            const string title = "Adventure.Inc.S03E19.DVDRip.XviD-OSiTV";
+            const int season = 3;
+            const int episode = 19;
+            var quality = QualityTypes.DVD;
+
             const string summary = "My fake summary";
 
             var fakeSettings = Builder<IndexerDefinition>.CreateNew().Build();
@@ -160,9 +164,8 @@ namespace NzbDrone.Core.Test
             Assert.AreEqual(LanguageType.Finnish, result.Language);
             Assert.AreEqual(season, result.SeasonNumber);
             Assert.AreEqual(episode, result.EpisodeNumbers[0]);
-            Assert.AreEqual(quality, result.Quality.QualityType);
+            Assert.AreEqual(quality, result.Quality.Quality);
         }
-
 
         [TestCase("Adventure.Inc.DVDRip.XviD-OSiTV")]
         public void custome_parser_full_parse(string title)

@@ -16,6 +16,7 @@ using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Web.Filters;
 using NzbDrone.Web.Models;
+using QualityModel = NzbDrone.Web.Models.QualityModel;
 
 namespace NzbDrone.Web.Controllers
 {

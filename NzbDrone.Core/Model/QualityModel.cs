@@ -5,7 +5,7 @@ namespace NzbDrone.Core.Model
 {
     public class QualityModel : IComparable<QualityModel>
     {
-        public QualityTypes QualityType { get; set; }
+        public QualityTypes Quality { get; set; }
 
         public Boolean Proper { get; set; }
 
@@ -13,19 +13,19 @@ namespace NzbDrone.Core.Model
 
         public QualityModel(QualityTypes quality, Boolean proper)
         {
-            QualityType = quality;
+            Quality = quality;
             Proper = proper;
         }
 
         public int CompareTo(QualityModel other)
         {
-            if (other.QualityType > QualityType)
+            if (other.Quality > Quality)
                 return -1;
 
-            if (other.QualityType < QualityType)
+            if (other.Quality < Quality)
                 return 1;
 
-            if (other.QualityType == QualityType && other.Proper == Proper)
+            if (other.Quality == Quality && other.Proper == Proper)
                 return 0;
 
             if (Proper && !other.Proper)
@@ -62,7 +62,7 @@ namespace NzbDrone.Core.Model
 
         public static bool operator <(QualityModel x, QualityModel y)
         {
-            return x.CompareTo(y) < 1;
+            return x.CompareTo(y) < 0;
         }
 
         public static bool operator <=(QualityModel x, QualityModel y)
@@ -77,7 +77,7 @@ namespace NzbDrone.Core.Model
 
         public override string ToString()
         {
-            string result = QualityType.ToString();
+            string result = Quality.ToString();
             if (Proper)
             {
                 result += " [proper]";
@@ -92,7 +92,7 @@ namespace NzbDrone.Core.Model
             {
                 int hash = 17;
                 hash = hash * 23 + Proper.GetHashCode();
-                hash = hash * 23 + QualityType.GetHashCode();
+                hash = hash * 23 + Quality.GetHashCode();
                 return hash;
             }
         }
@@ -101,7 +101,7 @@ namespace NzbDrone.Core.Model
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Equals(other.QualityType, QualityType) && other.Proper.Equals(Proper);
+            return Equals(other.Quality, Quality) && other.Proper.Equals(Proper);
         }
 
         public override bool Equals(object obj)

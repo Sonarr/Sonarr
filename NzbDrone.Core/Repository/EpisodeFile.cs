@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Repository
             }
             set
             {
-                Quality = value.QualityType;
+                Quality = value.Quality;
                 Proper = value.Proper;
             }
         }

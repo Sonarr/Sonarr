@@ -128,7 +128,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
                                       EpisodeTitle = "Title",
                                       EpisodeNumbers = new List<int> { 5 },
                                       SeasonNumber = 1,
-                                      Quality = new QualityModel { QualityType = QualityTypes.SDTV, Proper = false },
+                                      Quality = new QualityModel { Quality = QualityTypes.SDTV, Proper = false },
                                       Series = new Series { Title = "30 Rock", CleanTitle = Parser.NormalizeTitle("30 Rock") },
                                   };
 
@@ -145,7 +145,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
 
             var parseResult = new EpisodeParseResult
             {
-                Quality = new QualityModel { QualityType = QualityTypes.Bluray720p, Proper = false },
+                Quality = new QualityModel { Quality = QualityTypes.Bluray720p, Proper = false },
                 AirDate = new DateTime(2011, 12, 01),
                 Series = new Series { Title = "The Dailyshow", CleanTitle = Parser.NormalizeTitle("The Dailyshow"), IsDaily = true },
             };
@@ -164,7 +164,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
 
             var parseResult = new EpisodeParseResult
             {
-                Quality = new QualityModel { QualityType = QualityTypes.Bluray720p, Proper = false },
+                Quality = new QualityModel { Quality = QualityTypes.Bluray720p, Proper = false },
                 FullSeason = true,
                 SeasonNumber = 5,
                 Series = new Series { Title = "My Name is earl", CleanTitle = Parser.NormalizeTitle("My Name is earl") },
@@ -175,13 +175,18 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
             result.Should().BeTrue();
         }
 
-        [TestCase(2, new[] { 5 }, "30 Rock", QualityTypes.Bluray1080p, true, Description = "Same Series, Different Season, Episode")]
-        [TestCase(1, new[] { 6 }, "30 Rock", QualityTypes.Bluray1080p, true, Description = "Same series, different episodes")]
-        [TestCase(1, new[] { 6, 7, 8 }, "30 Rock", QualityTypes.Bluray1080p, true, Description = "Same series, different episodes")]
-        [TestCase(1, new[] { 6 }, "Some other show", QualityTypes.Bluray1080p, true, Description = "Different series, same season, episode")]
-        [TestCase(1, new[] { 5 }, "Rock", QualityTypes.Bluray1080p, true, Description = "Similar series, same season, episodes")]
-        [TestCase(1, new[] { 5 }, "30 Rock", QualityTypes.Bluray720p, false, Description = "Same series, higher quality")]
-        [TestCase(1, new[] { 5 }, "30 Rock", QualityTypes.HDTV, true, Description = "Same series, higher quality")]
+        public static object[] DifferentEpisodeCases =
+        {
+            new object[] { 2, new[] { 5 }, "30 Rock", QualityTypes.Bluray1080p, true }, //Same Series, Different Season, Episode
+            new object[] { 1, new[] { 6 }, "30 Rock", QualityTypes.Bluray1080p, true }, //Same series, different episodes
+            new object[] { 1, new[] { 6, 7, 8 }, "30 Rock", QualityTypes.Bluray1080p, true }, //Same series, different episodes
+            new object[] { 1, new[] { 6 }, "Some other show", QualityTypes.Bluray1080p, true }, //Different series, same season, episode
+            new object[] { 1, new[] { 5 }, "Rock", QualityTypes.Bluray1080p, true }, //Similar series, same season, episodes
+            new object[] { 1, new[] { 5 }, "30 Rock", QualityTypes.Bluray720p, false }, //Same series, higher quality
+            new object[] { 1, new[] { 5 }, "30 Rock", QualityTypes.HDTV, true } //Same series, higher quality
+        };
+
+        [Test, TestCaseSource("DifferentEpisodeCases")]
         public void IsInQueue_should_not_find_diffrent_episode_queue(int season, int[] episodes, string title, QualityTypes qualityType, bool proper)
         {
             WithFullQueue();
@@ -191,7 +196,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
                                       EpisodeTitle = "Title",
                                       EpisodeNumbers = new List<int>(episodes),
                                       SeasonNumber = season,
-                                      Quality = new QualityModel { QualityType = qualityType, Proper = proper },
+                                      Quality = new QualityModel { Quality = qualityType, Proper = proper },
                                       Series = new Series { Title = title, CleanTitle = Parser.NormalizeTitle(title) },
                                   };
 
@@ -200,12 +205,17 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
             result.Should().BeFalse();
         }
 
-        [TestCase(1, new[] { 5 }, "30 Rock", QualityTypes.SDTV, false, Description = "Same Series, lower quality")]
-        [TestCase(1, new[] { 5 }, "30 rocK", QualityTypes.SDTV, false, Description = "Same Series, different casing")]
-        [TestCase(1, new[] { 5 }, "30 RocK", QualityTypes.HDTV, false, Description = "Same Series, same quality")]
-        [TestCase(1, new[] { 5, 6 }, "30 RocK", QualityTypes.HDTV, false, Description = "Same Series, same quality, one different episode")]
-        [TestCase(1, new[] { 5, 6 }, "30 RocK", QualityTypes.HDTV, false, Description = "Same Series, same quality, one different episode")]
-        [TestCase(4, new[] { 8 }, "Parks and Recreation", QualityTypes.WEBDL, false, Description = "Same Series, same quality")]
+        public static object[] LowerQualityCases =
+        {
+            new object[] { 1, new[] { 5 }, "30 Rock", QualityTypes.SDTV, false }, //Same Series, lower quality
+            new object[] { 1, new[] { 5 }, "30 rocK", QualityTypes.SDTV, false }, //Same Series, different casing
+            new object[] { 1, new[] { 5 }, "30 RocK", QualityTypes.HDTV, false }, //Same Series, same quality
+            new object[] { 1, new[] { 5, 6 }, "30 RocK", QualityTypes.HDTV, false }, //Same Series, same quality, one different episode
+            new object[] { 1, new[] { 5, 6 }, "30 RocK", QualityTypes.HDTV, false }, //Same Series, same quality, one different episode
+            new object[] { 4, new[] { 8 }, "Parks and Recreation", QualityTypes.WEBDL }, false, //Same Series, same quality
+        };
+
+        [Test, TestCaseSource("LowerQualityCases")]
         public void IsInQueue_should_find_same_or_lower_quality_episode_queue(int season, int[] episodes, string title, QualityTypes qualityType, bool proper)
         {
             WithFullQueue();
@@ -215,7 +225,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
                                       EpisodeTitle = "Title",
                                       EpisodeNumbers = new List<int>(episodes),
                                       SeasonNumber = season,
-                                      Quality = new QualityModel { QualityType = qualityType, Proper = proper },
+                                      Quality = new QualityModel { Quality = qualityType, Proper = proper },
                                       Series = new Series { Title = title, CleanTitle = Parser.NormalizeTitle(title) },
                                   };
 
@@ -224,10 +234,15 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
             result.Should().BeTrue();
         }
 
-        [TestCase(5, new[] { 13 }, "The Big Bang Theory", QualityTypes.SDTV, false, Description = "Same Series, lower quality")]
-        [TestCase(5, new[] { 13 }, "The Big Bang Theory", QualityTypes.HDTV, false, Description = "Same Series, same quality")]
-        [TestCase(5, new[] { 13 }, "The Big Bang Theory", QualityTypes.HDTV, true, Description = "Same Series, same quality")]
-        [TestCase(5, new[] { 13, 14 }, "The Big Bang Theory", QualityTypes.HDTV, false, Description = "Same Series, same quality, one diffrent episode")]
+        public static object[] DuplicateItemsCases =
+        {
+            new object[] { 5, new[] { 13 }, "The Big Bang Theory", QualityTypes.SDTV, false }, //Same Series, lower quality
+            new object[] { 5, new[] { 13 }, "The Big Bang Theory", QualityTypes.HDTV, false }, //Same Series, same quality
+            new object[] { 5, new[] { 13 }, "The Big Bang Theory", QualityTypes.HDTV, true }, //Same Series, same quality
+            new object[] { 5, new[] { 13, 14 }, "The Big Bang Theory", QualityTypes.HDTV, false } //Same Series, same quality, one diffrent episode
+        };
+
+        [Test, TestCaseSource("DuplicateItemsCases")]
         public void IsInQueue_should_find_items_marked_as_duplicate(int season, int[] episodes, string title, QualityTypes qualityType, bool proper)
         {
             WithFullQueue();
@@ -237,7 +252,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
                 EpisodeTitle = "Title",
                 EpisodeNumbers = new List<int>(episodes),
                 SeasonNumber = season,
-                Quality = new QualityModel { QualityType = qualityType, Proper = proper },
+                Quality = new QualityModel { Quality = qualityType, Proper = proper },
                 Series = new Series { Title = title, CleanTitle = Parser.NormalizeTitle(title) },
             };
 
@@ -246,10 +261,15 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
             result.Should().BeTrue();
         }
 
-        [TestCase(3, new[] { 14, 15 }, "My Name Is Earl", QualityTypes.Bluray720p, false)]
-        [TestCase(3, new[] { 15 }, "My Name Is Earl", QualityTypes.DVD, false)]
-        [TestCase(3, new[] { 14 }, "My Name Is Earl", QualityTypes.HDTV, false)]
-        [TestCase(3, new[] { 15, 16 }, "My Name Is Earl", QualityTypes.SDTV, false)]
+        public static object[] DoubleEpisodeCases =
+        {
+            new object[] { 3, new[] { 14, 15 }, "My Name Is Earl", QualityTypes.Bluray720p, false },
+            new object[] { 3, new[] { 15 }, "My Name Is Earl", QualityTypes.DVD, false },
+            new object[] { 3, new[] { 14 }, "My Name Is Earl", QualityTypes.HDTV, false },
+            new object[] { 3, new[] { 15, 16 }, "My Name Is Earl", QualityTypes.SDTV, false }
+        };
+
+        [Test, TestCaseSource("DoubleEpisodeCases")]
         public void IsInQueue_should_find_double_episodes_(int season, int[] episodes, string title, QualityTypes qualityType, bool proper)
         {
             WithFullQueue();
@@ -259,7 +279,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
                 EpisodeTitle = "Title",
                 EpisodeNumbers = new List<int>(episodes),
                 SeasonNumber = season,
-                Quality = new QualityModel { QualityType = qualityType, Proper = proper },
+                Quality = new QualityModel { Quality = qualityType, Proper = proper },
                 Series = new Series { Title = title, CleanTitle = Parser.NormalizeTitle(title) },
             };
 
@@ -278,7 +298,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
                 EpisodeTitle = "Title",
                 EpisodeNumbers = new List<int> { 1 },
                 SeasonNumber = 2,
-                Quality = new QualityModel { QualityType = QualityTypes.Bluray1080p, Proper = true },
+                Quality = new QualityModel { Quality = QualityTypes.Bluray1080p, Proper = true },
                 Series = new Series { Title = "Test", CleanTitle = Parser.NormalizeTitle("Test") },
             };
 

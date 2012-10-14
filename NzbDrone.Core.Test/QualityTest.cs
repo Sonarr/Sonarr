@@ -75,7 +75,6 @@ namespace NzbDrone.Core.Test
             (first == second).Should().BeFalse();
         }
 
-
         [Test]
         public void not_equal_operand()
         {
