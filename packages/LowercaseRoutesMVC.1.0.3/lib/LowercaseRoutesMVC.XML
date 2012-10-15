@@ -1,0 +1,144 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>LowercaseRoutesMVC</name>
+    </assembly>
+    <members>
+        <member name="T:LowercaseRoutesMVC.RouteCollectionExtensions">
+            <summary>
+            Contains extension methods to map routes to lowercase URLs.
+            </summary>
+        </member>
+        <member name="M:LowercaseRoutesMVC.RouteCollectionExtensions.MapRouteLowercase(System.Web.Routing.RouteCollection,System.String,System.String)">
+            <summary>
+            Maps the specified URL route using a lowercase URL. Does not change casing in the querystring, if any.
+            </summary>
+            <param name="routes">A collection of routes for the application.</param>
+            <param name="name">The name of the route to map.</param>
+            <param name="url">The URL pattern for the route.</param>
+            <returns>A reference to the mapped route.</returns>
+        </member>
+        <member name="M:LowercaseRoutesMVC.RouteCollectionExtensions.MapRouteLowercase(System.Web.Routing.RouteCollection,System.String,System.String,System.Object)">
+            <summary>
+            Maps the specified URL route using a lowercase URL and sets default route values. Does not change casing in the querystring, if any.
+            </summary>
+            <param name="routes">A collection of routes for the application.</param>
+            <param name="name">The name of the route to map.</param>
+            <param name="url">The URL pattern for the route.</param>
+            <param name="defaults">An object that contains default route values.</param>
+            <returns>A reference to the mapped route.</returns>
+        </member>
+        <member name="M:LowercaseRoutesMVC.RouteCollectionExtensions.MapRouteLowercase(System.Web.Routing.RouteCollection,System.String,System.String,System.String[])">
+            <summary>
+            Maps the specified URL route using a lowercase URL and sets the namespaces. Does not change casing in the querystring, if any.
+            </summary>
+            <param name="routes">A collection of routes for the application.</param>
+            <param name="name">The name of the route to map.</param>
+            <param name="url">The URL pattern for the route.</param>
+            <param name="namespaces">A set of namespaces for the application.</param>
+            <returns>A reference to the mapped route.</returns>
+        </member>
+        <member name="M:LowercaseRoutesMVC.RouteCollectionExtensions.MapRouteLowercase(System.Web.Routing.RouteCollection,System.String,System.String,System.Object,System.Object)">
+            <summary>
+            Maps the specified URL route using a lowercase URL and sets default route values and constraints. Does not change casing in the querystring, if any.
+            </summary>
+            <param name="routes">A collection of routes for the application.</param>
+            <param name="name">The name of the route to map.</param>
+            <param name="url">The URL pattern for the route.</param>
+            <param name="defaults">An object that contains default route values.</param>
+            <param name="constraints">A set of expressions that specify valid values for a URL parameter.</param>
+            <returns>A reference to the mapped route.</returns>
+        </member>
+        <member name="M:LowercaseRoutesMVC.RouteCollectionExtensions.MapRouteLowercase(System.Web.Routing.RouteCollection,System.String,System.String,System.Object,System.String[])">
+            <summary>
+            Maps the specified URL route using a lowercase URL and sets default route values and namespaces. Does not change casing in the querystring, if any.
+            </summary>
+            <param name="routes">A collection of routes for the application.</param>
+            <param name="name">The name of the route to map.</param>
+            <param name="url">The URL pattern for the route.</param>
+            <param name="defaults">An object that contains default route values.</param>
+            <param name="namespaces">A set of namespaces for the application.</param>
+            <returns>A reference to the mapped route.</returns>
+        </member>
+        <member name="M:LowercaseRoutesMVC.RouteCollectionExtensions.MapRouteLowercase(System.Web.Routing.RouteCollection,System.String,System.String,System.Object,System.Object,System.String[])">
+            <summary>
+            Maps the specified URL route and sets default route values, constraints, and namespaces. Does not change casing in the querystring, if any.
+            </summary>
+            <param name="routes">A collection of routes for the application.</param>
+            <param name="name">The name of the route to map.</param>
+            <param name="url">The URL pattern for the route.</param>
+            <param name="defaults">An object that contains default route values.</param>
+            <param name="constraints">A set of expressions that specify valid values for a URL parameter.</param>
+            <param name="namespaces">A set of namespaces for the application.</param>
+            <returns>A reference to the mapped route.</returns>
+        </member>
+        <member name="T:LowercaseRoutesMVC.AreaRegistrationContextExtensions">
+            <summary>
+            Contains extension methods to map routes in Areas to lowercase URLs.
+            </summary>
+        </member>
+        <member name="M:LowercaseRoutesMVC.AreaRegistrationContextExtensions.MapRouteLowercase(System.Web.Mvc.AreaRegistrationContext,System.String,System.String)">
+            <summary>
+            Maps the specified URL route using a lowercase URL and associates it with the area that is specified by the AreaName property. Does not change casing in the querystring, if any.
+            </summary>
+            <param name="context">The context that encapsulates the information that is required in order to register an area within an ASP.NET MVC application.</param>
+            <param name="name">The name of the route.</param>
+            <param name="url">The URL pattern for the route.</param>
+            <returns>A reference to the mapped route.</returns>
+        </member>
+        <member name="M:LowercaseRoutesMVC.AreaRegistrationContextExtensions.MapRouteLowercase(System.Web.Mvc.AreaRegistrationContext,System.String,System.String,System.Object)">
+            <summary>
+            Maps the specified URL route using a lowercase URL and associates it with the area that is specified by the AreaName property, using the specified route default values. Does not change casing in the querystring, if any.
+            </summary>
+            <param name="context">The context that encapsulates the information that is required in order to register an area within an ASP.NET MVC application.</param>
+            <param name="name">The name of the route.</param>
+            <param name="url">The URL pattern for the route.</param>
+            <param name="defaults">An object that contains default route values.</param>
+            <returns>A reference to the mapped route.</returns>
+        </member>
+        <member name="M:LowercaseRoutesMVC.AreaRegistrationContextExtensions.MapRouteLowercase(System.Web.Mvc.AreaRegistrationContext,System.String,System.String,System.String[])">
+            <summary>
+            Maps the specified URL route using a lowercase URL and associates it with the area that is specified by the AreaName property, using the specified namespaces. Does not change casing in the querystring, if any.
+            </summary>
+            <param name="context">The context that encapsulates the information that is required in order to register an area within an ASP.NET MVC application.</param>
+            <param name="name">The name of the route.</param>
+            <param name="url">The URL pattern for the route.</param>
+            <param name="namespaces">A set of namespaces for the application.</param>
+            <returns>A reference to the mapped route.</returns>
+        </member>
+        <member name="M:LowercaseRoutesMVC.AreaRegistrationContextExtensions.MapRouteLowercase(System.Web.Mvc.AreaRegistrationContext,System.String,System.String,System.Object,System.Object)">
+            <summary>
+            Maps the specified URL route using a lowercase URL and associates it with the area that is specified by the AreaName property, using the specified route default values and constraints. Does not change casing in the querystring, if any.
+            </summary>
+            <param name="context">The context that encapsulates the information that is required in order to register an area within an ASP.NET MVC application.</param>
+            <param name="name">The name of the route.</param>
+            <param name="url">The URL pattern for the route.</param>
+            <param name="defaults">An object that contains default route values.</param>
+            <param name="constraints">A set of expressions that specify valid values for a URL parameter.</param>
+            <returns>A reference to the mapped route.</returns>
+        </member>
+        <member name="M:LowercaseRoutesMVC.AreaRegistrationContextExtensions.MapRouteLowercase(System.Web.Mvc.AreaRegistrationContext,System.String,System.String,System.Object,System.String[])">
+            <summary>
+            Maps the specified URL route using a lowercase URL and associates it with the area that is specified by the AreaName property, using the specified route default values and namespaces. Does not change casing in the querystring, if any.
+            </summary>
+            <param name="context">The context that encapsulates the information that is required in order to register an area within an ASP.NET MVC application.</param>
+            <param name="name">The name of the route.</param>
+            <param name="url">The URL pattern for the route.</param>
+            <param name="defaults">An object that contains default route values.</param>
+            <param name="namespaces">A set of namespaces for the application.</param>
+            <returns>A reference to the mapped route.</returns>
+        </member>
+        <member name="M:LowercaseRoutesMVC.AreaRegistrationContextExtensions.MapRouteLowercase(System.Web.Mvc.AreaRegistrationContext,System.String,System.String,System.Object,System.Object,System.String[])">
+            <summary>
+            Maps the specified URL route using a lowercase URL and associates it with the area that is specified by the AreaName property, using the specified route default values, constraints, and namespaces. Does not change casing in the querystring, if any.
+            </summary>
+            <param name="context">The context that encapsulates the information that is required in order to register an area within an ASP.NET MVC application.</param>
+            <param name="name">The name of the route.</param>
+            <param name="url">The URL pattern for the route.</param>
+            <param name="defaults">An object that contains default route values.</param>
+            <param name="constraints">A set of expressions that specify valid values for a URL parameter.</param>
+            <param name="namespaces">A set of namespaces for the application.</param>
+            <returns>A reference to the mapped route.</returns>
+        </member>
+    </members>
+</doc>
