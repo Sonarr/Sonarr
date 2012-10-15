@@ -23,7 +23,8 @@ namespace NzbDrone.Core.Providers.Indexer
             {
                 return new[]
                            {
-                               string.Format("http://www.nzbclub.com/nzbfeed.aspx?ig=2&gid=102952&st=1&ns=1&q=%23a.b.teevee%40EFNet")
+                               String.Format("http://www.nzbclub.com/nzbfeed.aspx?ig=2&gid=102952&st=1&ns=1&q=%23a.b.teevee%40EFNet"),
+                               String.Format("http://www.nzbclub.com/nzbfeed.aspx?ig=2&gid=5542&st=1&ns=1&q=%23a.b.teevee%40EFNet")
                            };
             }
         }
