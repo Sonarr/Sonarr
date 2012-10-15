@@ -23,7 +23,6 @@ namespace NzbDrone.Web.Controllers
     [HandleError]
     public class SettingsController : Controller
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly ConfigProvider _configProvider;
         private readonly IndexerProvider _indexerProvider;
         private readonly QualityProvider _qualityProvider;
@@ -35,6 +34,8 @@ namespace NzbDrone.Web.Controllers
         private readonly NewznabProvider _newznabProvider;
         private readonly MetadataProvider _metadataProvider;
         private readonly JobProvider _jobProvider;
+
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public SettingsController(ConfigProvider configProvider, IndexerProvider indexerProvider,
                                     QualityProvider qualityProvider, AutoConfigureProvider autoConfigureProvider,
@@ -59,7 +60,33 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            return RedirectToAction("Naming", "Settings");
+        }
+
+        public ActionResult Naming()
+        {
+            var model = new EpisodeNamingModel();
+
+            model.SeriesName = _configProvider.SortingIncludeSeriesName;
+            model.EpisodeName = _configProvider.SortingIncludeEpisodeTitle;
+            model.ReplaceSpaces = _configProvider.SortingReplaceSpaces;
+            model.AppendQuality = _configProvider.SortingAppendQuality;
+            model.SeasonFolders = _configProvider.UseSeasonFolder;
+            model.SeasonFolderFormat = _configProvider.SortingSeasonFolderFormat;
+            model.SeparatorStyle = _configProvider.SortingSeparatorStyle;
+            model.NumberStyle = _configProvider.SortingNumberStyle;
+            model.MultiEpisodeStyle = _configProvider.SortingMultiEpisodeStyle;
+            model.SceneName = _configProvider.SortingUseSceneName;
+
+            model.SeparatorStyles = new SelectList(EpisodeSortingHelper.GetSeparatorStyles(), "Id", "Name");
+            model.NumberStyles = new SelectList(EpisodeSortingHelper.GetNumberStyles(), "Id", "Name");
+            model.MultiEpisodeStyles = new SelectList(EpisodeSortingHelper.GetMultiEpisodeStyles(), "Id", "Name");
+
+            //Metadata
+            model.MetadataXbmcEnabled = _metadataProvider.GetSettings(typeof(Core.Providers.Metadata.Xbmc)).Enable;
+            model.MetadataUseBanners = _configProvider.MetadataUseBanners;
+
+            return View(model);
         }
 
         public ActionResult Indexers()
@@ -196,32 +223,6 @@ namespace NzbDrone.Web.Controllers
                                 PlexUsername = _configProvider.PlexUsername,
                                 PlexPassword = _configProvider.PlexPassword,
                             };
-
-            return View(model);
-        }
-
-        public ActionResult Naming()
-        {
-            var model = new EpisodeNamingModel();
-
-            model.SeriesName = _configProvider.SortingIncludeSeriesName;
-            model.EpisodeName = _configProvider.SortingIncludeEpisodeTitle;
-            model.ReplaceSpaces = _configProvider.SortingReplaceSpaces;
-            model.AppendQuality = _configProvider.SortingAppendQuality;
-            model.SeasonFolders = _configProvider.UseSeasonFolder;
-            model.SeasonFolderFormat = _configProvider.SortingSeasonFolderFormat;
-            model.SeparatorStyle = _configProvider.SortingSeparatorStyle;
-            model.NumberStyle = _configProvider.SortingNumberStyle;
-            model.MultiEpisodeStyle = _configProvider.SortingMultiEpisodeStyle;
-            model.SceneName = _configProvider.SortingUseSceneName;
-
-            model.SeparatorStyles = new SelectList(EpisodeSortingHelper.GetSeparatorStyles(), "Id", "Name");
-            model.NumberStyles = new SelectList(EpisodeSortingHelper.GetNumberStyles(), "Id", "Name");
-            model.MultiEpisodeStyles = new SelectList(EpisodeSortingHelper.GetMultiEpisodeStyles(), "Id", "Name");
-            
-            //Metadata
-            model.MetadataXbmcEnabled = _metadataProvider.GetSettings(typeof(Core.Providers.Metadata.Xbmc)).Enable;
-            model.MetadataUseBanners = _configProvider.MetadataUseBanners;
 
             return View(model);
         }

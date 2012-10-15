@@ -24,12 +24,12 @@
 <div id="centered">
     <div id="menu">
         <ul>
-            @MvcHtmlString.Create(Html.CurrentActionLink("Series", "Index", "Series"))
-            @MvcHtmlString.Create(Html.CurrentActionLink("Upcoming", "Index", "Upcoming"))
-            @MvcHtmlString.Create(Html.CurrentActionLink("History", "Index", "History"))
-            @MvcHtmlString.Create(Html.CurrentActionLink("Missing", "Index", "Missing"))
-            @MvcHtmlString.Create(Html.CurrentActionLink("Settings", "Index", "Settings"))
-            @MvcHtmlString.Create(Html.CurrentActionLink("Logs", "Index", "Log"))
+            @MvcHtmlString.Create(Html.CurrentControllerLink("Series", "Index", "Series"))
+            @MvcHtmlString.Create(Html.CurrentControllerLink("Upcoming", "Index", "Upcoming"))
+            @MvcHtmlString.Create(Html.CurrentControllerLink("History", "Index", "History"))
+            @MvcHtmlString.Create(Html.CurrentControllerLink("Missing", "Index", "Missing"))
+            @MvcHtmlString.Create(Html.CurrentControllerLink("Settings", "Index", "Settings"))
+            @MvcHtmlString.Create(Html.CurrentControllerLink("Logs", "Index", "Log"))
         </ul>
         <input id="localSeriesLookup" type="text" />
     </div>

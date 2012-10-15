@@ -1,6 +1,9 @@
 ﻿@using NzbDrone.Web.Helpers
 @model NzbDrone.Web.Models.MiscSettingsModel
-@{ Layout = null; }
+
+@{
+    Layout = "_SettingsLayout.cshtml";
+}
 
 <div class="warningBox">
     Enabling Backlog Searching can use lots of bandwidth and is not recommended for users with block Usenet accounts or bandwidth restrictions.

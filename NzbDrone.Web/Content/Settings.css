@@ -115,5 +115,40 @@
 }
 
 .settingsForm .validation-error {
-        background: url("../Content/jQueryUI/images/ui-bg_flat_30_b40404_40x100.png") repeat-x scroll 50% 50% #B40404;
-    }
+    background: url("../Content/jQueryUI/images/ui-bg_flat_30_b40404_40x100.png") repeat-x scroll 50% 50% #B40404;
+}
+
+
+/* Navigation */
+.settings-navigation {
+    line-height: normal;
+    list-style: none outside none;
+    margin-left: 5px;
+    margin-bottom: 30px;
+    padding: 5px 0px 20px 0px;
+}
+
+.settings-navigation li {
+    display: block;
+    float: left;
+    padding: 5px;
+}
+
+.settings-navigation li.current_action a {
+    background-color: #065EFE;
+}
+
+.settings-navigation a {
+    background-color: #191919;
+    color: white;
+    display: block;
+    float: left;
+    font-family: "Segoe UI","Open Sans","Segoe UI Light",sans-serif;
+    font-size: 16px;
+    font-weight: normal;
+    height: 26px;
+    padding: 2px 10px;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+}

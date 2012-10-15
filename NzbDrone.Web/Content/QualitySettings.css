@@ -1,6 +1,11 @@
 ﻿#top
 {
-    overflow: auto;
+    margin: 20px;
+    overflow: hidden;
+}
+
+#top .settingsForm {
+    float: left;
 }
 
 #profileContainer
@@ -59,7 +64,7 @@
 .profileSection
 {
     float: left;
-    width: 270px;
+    width: 265px;
     margin: 2px;
     border:solid 1px #CCCCCD;
     display: inline-block;
@@ -74,7 +79,7 @@
     margin-right: 20px;
     font-weight: bold;
     display: inline-block;
-    width: 50px;
+    width: 40px;
 }
     
 .profileOptions input, .profileOptions select
@@ -142,7 +147,6 @@
     width: 600px;
 }
 
-.slider-container
-{
-    margin-bottom: 10px;
+#QualityForm .ui-accordion .ui-accordion-content {
+    padding: 1em 2em;
 }
