@@ -83,6 +83,8 @@ namespace NzbDrone.Core
                                                                         RegexOptions.IgnoreCase | RegexOptions.Compiled),
                                                           };
 
+        private static readonly Regex MultiPartCleanupRegex = new Regex(@"\(\d+\)$", RegexOptions.Compiled);
+
         internal static EpisodeParseResult ParsePath(string path)
         {
             var fileInfo = new FileInfo(path);
@@ -500,6 +502,12 @@ namespace NzbDrone.Core
             }
 
             return header;
+        }
+
+        internal static string CleanupEpisodeTitle(string title)
+        {
+            //this will remove (1),(2) from the end of multi part episodes.
+            return MultiPartCleanupRegex.Replace(title, string.Empty).Trim();
         }
     }
 }

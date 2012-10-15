@@ -16,22 +16,17 @@ namespace NzbDrone.Core.Providers
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        //this will remove (1),(2) from the end of multi part episodes.
-        private static readonly Regex multiPartCleanupRegex = new Regex(@"\(\d+\)$", RegexOptions.Compiled);
-
         private readonly TvDbProvider _tvDbProvider;
         private readonly SeasonProvider _seasonProvider;
         private readonly IDatabase _database;
-        private readonly SeriesProvider _seriesProvider;
 
         [Inject]
-        public EpisodeProvider(IDatabase database, SeriesProvider seriesProvider,
-            TvDbProvider tvDbProviderProvider, SeasonProvider seasonProvider)
+        public EpisodeProvider(IDatabase database, TvDbProvider tvDbProviderProvider,
+                SeasonProvider seasonProvider)
         {
             _tvDbProvider = tvDbProviderProvider;
             _seasonProvider = seasonProvider;
             _database = database;
-            _seriesProvider = seriesProvider;
         }
 
         public EpisodeProvider()
@@ -228,7 +223,7 @@ namespace NzbDrone.Core.Providers
                     }
                     else
                     {
-                        parseResult.EpisodeTitle = multiPartCleanupRegex.Replace(episodeInfo.Title, string.Empty).Trim();
+                        parseResult.EpisodeTitle = Parser.CleanupEpisodeTitle(episodeInfo.Title);
                     }
                 }
                 else

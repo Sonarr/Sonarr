@@ -240,7 +240,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
             string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episodeOne, episodeTwo }, "The Mentalist", QualityTypes.HDTV, false, new EpisodeFile());
 
             //Assert
-            Assert.AreEqual("The Mentalist - S03E23-E24 - Strawberries and Cream (1) + Strawberries and Cream (2) [HDTV]", result);
+            Assert.AreEqual("The Mentalist - S03E23-E24 - Strawberries and Cream [HDTV]", result);
         }
 
         [Test]
@@ -274,7 +274,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
             string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episodeOne, episodeTwo }, "The Mentalist", QualityTypes.HDTV, false, new EpisodeFile());
 
             //Assert
-            Assert.AreEqual("3x23x24 - Strawberries and Cream (1) + Strawberries and Cream (2) [HDTV]", result);
+            Assert.AreEqual("3x23x24 - Strawberries and Cream [HDTV]", result);
         }
 
         [Test]
@@ -308,7 +308,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
             string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episodeOne, episodeTwo }, "The Mentalist", QualityTypes.HDTV, false, new EpisodeFile());
 
             //Assert
-            Assert.AreEqual("3x23x24 Strawberries and Cream (1) + Strawberries and Cream (2) [HDTV]", result);
+            Assert.AreEqual("3x23x24 Strawberries and Cream [HDTV]", result);
         }
 
         [Test]
@@ -342,7 +342,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
             string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episodeOne, episodeTwo }, "The Mentalist", QualityTypes.HDTV, false, new EpisodeFile());
 
             //Assert
-            Assert.AreEqual("The.Mentalist.s03e23.s03e24.Strawberries.and.Cream.(1).+.Strawberries.and.Cream.(2)", result);
+            Assert.AreEqual("The.Mentalist.s03e23.s03e24.Strawberries.and.Cream", result);
         }
 
         [Test]
@@ -517,7 +517,7 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
             string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode2, episode }, "30 Rock", QualityTypes.HDTV, false, new EpisodeFile());
 
             //Assert
-            result.Should().Be("30 Rock - S06E06-E07 - Hey, Baby, What's Wrong! (1) + Hey, Baby, What's Wrong! (2)");
+            result.Should().Be("30 Rock - S06E06-E07 - Hey, Baby, What's Wrong!");
         }
 
         [Test]
@@ -634,6 +634,70 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
 
             //Assert
             result.Should().Be(episodeFile.SceneName);
+        }
+
+        [Test]
+        public void should_only_have_one_episodeTitle_when_episode_titles_are_the_same()
+        {
+            //Setup
+            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingSeparatorStyle).Returns(0);
+            fakeConfig.SetupGet(c => c.SortingNumberStyle).Returns(2);
+            fakeConfig.SetupGet(c => c.SortingReplaceSpaces).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingMultiEpisodeStyle).Returns(3);
+
+            var episode = Builder<Episode>.CreateNew()
+                            .With(e => e.Title = "Hey, Baby, What's Wrong? (1)")
+                            .With(e => e.SeasonNumber = 6)
+                            .With(e => e.EpisodeNumber = 6)
+                            .Build();
+
+            var episode2 = Builder<Episode>.CreateNew()
+                            .With(e => e.Title = "Hey, Baby, What's Wrong? (2)")
+                            .With(e => e.SeasonNumber = 6)
+                            .With(e => e.EpisodeNumber = 7)
+                            .Build();
+
+            //Act
+            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode2, episode }, "30 Rock", QualityTypes.HDTV, false, new EpisodeFile());
+
+            //Assert
+            result.Should().Be("30 Rock - S06E06-E07 - Hey, Baby, What's Wrong!");
+        }
+
+        [Test]
+        public void should_have_two_episodeTitles_when_episode_titles_are_not_the_same()
+        {
+            //Setup
+            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingSeparatorStyle).Returns(0);
+            fakeConfig.SetupGet(c => c.SortingNumberStyle).Returns(2);
+            fakeConfig.SetupGet(c => c.SortingReplaceSpaces).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingMultiEpisodeStyle).Returns(3);
+
+            var episode = Builder<Episode>.CreateNew()
+                            .With(e => e.Title = "Hello")
+                            .With(e => e.SeasonNumber = 6)
+                            .With(e => e.EpisodeNumber = 6)
+                            .Build();
+
+            var episode2 = Builder<Episode>.CreateNew()
+                            .With(e => e.Title = "World")
+                            .With(e => e.SeasonNumber = 6)
+                            .With(e => e.EpisodeNumber = 7)
+                            .Build();
+
+            //Act
+            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode2, episode }, "30 Rock", QualityTypes.HDTV, false, new EpisodeFile());
+
+            //Assert
+            result.Should().Be("30 Rock - S06E06-E07 - Hello + World");
         }
     }
 }
