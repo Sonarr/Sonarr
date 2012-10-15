@@ -167,7 +167,8 @@ namespace NzbDrone.Web.Controllers
                                 SdtvMaxSize = qualityTypesFromDb.Single(q => q.QualityTypeId == 1).MaxSize,
                                 DvdMaxSize = qualityTypesFromDb.Single(q => q.QualityTypeId == 2).MaxSize,
                                 HdtvMaxSize = qualityTypesFromDb.Single(q => q.QualityTypeId == 4).MaxSize,
-                                WebdlMaxSize = qualityTypesFromDb.Single(q => q.QualityTypeId == 5).MaxSize,
+                                Webdl720pMaxSize = qualityTypesFromDb.Single(q => q.QualityTypeId == 5).MaxSize,
+                                Webdl1080pMaxSize = qualityTypesFromDb.Single(q => q.QualityTypeId == 3).MaxSize,
                                 Bluray720pMaxSize = qualityTypesFromDb.Single(q => q.QualityTypeId == 6).MaxSize,
                                 Bluray1080pMaxSize = qualityTypesFromDb.Single(q => q.QualityTypeId == 7).MaxSize
                             };
@@ -282,7 +283,8 @@ namespace NzbDrone.Web.Controllers
             model.Sdtv = profile.Allowed.Contains(QualityTypes.SDTV);
             model.Dvd = profile.Allowed.Contains(QualityTypes.DVD);
             model.Hdtv = profile.Allowed.Contains(QualityTypes.HDTV);
-            model.Webdl = profile.Allowed.Contains(QualityTypes.WEBDL);
+            model.Webdl720p = profile.Allowed.Contains(QualityTypes.WEBDL720p);
+            model.Webdl1080p = profile.Allowed.Contains(QualityTypes.WEBDL1080p);
             model.Bluray720p = profile.Allowed.Contains(QualityTypes.Bluray720p);
             model.Bluray1080p = profile.Allowed.Contains(QualityTypes.Bluray1080p);
             model.Cutoff = (int)profile.Cutoff;
@@ -290,7 +292,8 @@ namespace NzbDrone.Web.Controllers
             model.SdtvId = QualityTypes.SDTV.Id;
             model.DvdId = QualityTypes.DVD.Id;
             model.HdtvId = QualityTypes.HDTV.Id;
-            model.WebdlId = QualityTypes.WEBDL.Id;
+            model.Webdl720pId = QualityTypes.WEBDL720p.Id;
+            model.Webdl1080pId = QualityTypes.WEBDL1080p.Id;
             model.Bluray720pId = QualityTypes.Bluray720p.Id;
             model.Bluray1080pId = QualityTypes.Bluray1080p.Id;
 
@@ -494,8 +497,11 @@ namespace NzbDrone.Web.Controllers
                     if (profileModel.Hdtv)
                         profile.Allowed.Add(QualityTypes.HDTV);
 
-                    if (profileModel.Webdl)
-                        profile.Allowed.Add(QualityTypes.WEBDL);
+                    if (profileModel.Webdl720p)
+                        profile.Allowed.Add(QualityTypes.WEBDL720p);
+
+                    if (profileModel.Webdl1080p)
+                        profile.Allowed.Add(QualityTypes.WEBDL1080p);
 
                     if (profileModel.Bluray720p)
                         profile.Allowed.Add(QualityTypes.Bluray720p);
@@ -515,7 +521,8 @@ namespace NzbDrone.Web.Controllers
                 qualityTypesFromDb.Single(q => q.QualityTypeId == 1).MaxSize = data.SdtvMaxSize;
                 qualityTypesFromDb.Single(q => q.QualityTypeId == 2).MaxSize = data.DvdMaxSize;
                 qualityTypesFromDb.Single(q => q.QualityTypeId == 4).MaxSize = data.HdtvMaxSize;
-                qualityTypesFromDb.Single(q => q.QualityTypeId == 5).MaxSize = data.WebdlMaxSize;
+                qualityTypesFromDb.Single(q => q.QualityTypeId == 5).MaxSize = data.Webdl720pMaxSize;
+                qualityTypesFromDb.Single(q => q.QualityTypeId == 3).MaxSize = data.Webdl1080pMaxSize;
                 qualityTypesFromDb.Single(q => q.QualityTypeId == 6).MaxSize = data.Bluray720pMaxSize;
                 qualityTypesFromDb.Single(q => q.QualityTypeId == 7).MaxSize = data.Bluray1080pMaxSize;
 

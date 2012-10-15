@@ -36,9 +36,13 @@ namespace NzbDrone.Web.Models
         public bool Hdtv { get; set; }
         public int HdtvId { get; set; }
 
-        [DisplayName("WEBDL")]
-        public bool Webdl { get; set; }
-        public int WebdlId { get; set; }
+        [DisplayName("WEBDL-720p")]
+        public bool Webdl720p { get; set; }
+        public int Webdl720pId { get; set; }
+
+        [DisplayName("WEBDL-1080p")]
+        public bool Webdl1080p { get; set; }
+        public int Webdl1080pId { get; set; }
 
         [DisplayName("Bluray720p")]
         public bool Bluray720p { get; set; }

@@ -54,8 +54,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual void SetupDefault()
         {
-            if (All().Count != 0)
-                return;
+            var inDb = All();
 
             Logger.Debug("Setting up default quality types");
 
@@ -63,11 +62,18 @@ namespace NzbDrone.Core.Providers
             qualityTypes.Add(new QualityType { QualityTypeId = 1, Name = "SDTV", MinSize = 0, MaxSize = 100 });
             qualityTypes.Add(new QualityType { QualityTypeId = 2, Name = "DVD", MinSize = 0, MaxSize = 100 });
             qualityTypes.Add(new QualityType { QualityTypeId = 4, Name = "HDTV", MinSize = 0, MaxSize = 100 });
-            qualityTypes.Add(new QualityType { QualityTypeId = 5, Name = "WEBDL", MinSize = 0, MaxSize = 100 });
+            qualityTypes.Add(new QualityType { QualityTypeId = 5, Name = "WEBDL720p", MinSize = 0, MaxSize = 100 });
+            qualityTypes.Add(new QualityType { QualityTypeId = 3, Name = "WEBDL1080p", MinSize = 0, MaxSize = 100 });
             qualityTypes.Add(new QualityType { QualityTypeId = 6, Name = "Bluray720p", MinSize = 0, MaxSize = 100 });
             qualityTypes.Add(new QualityType { QualityTypeId = 7, Name = "Bluray1080p", MinSize = 0, MaxSize = 100 });
 
-            _database.InsertMany(qualityTypes);
+            foreach(var qualityType in qualityTypes)
+            {
+                var db = inDb.SingleOrDefault(s => s.QualityTypeId == qualityType.QualityTypeId);
+
+                if (db == null)
+                    _database.Insert(qualityType);
+            }
         }
     }
 }

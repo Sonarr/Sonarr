@@ -212,7 +212,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
             new object[] { 1, new[] { 5 }, "30 RocK", QualityTypes.HDTV, false }, //Same Series, same quality
             new object[] { 1, new[] { 5, 6 }, "30 RocK", QualityTypes.HDTV, false }, //Same Series, same quality, one different episode
             new object[] { 1, new[] { 5, 6 }, "30 RocK", QualityTypes.HDTV, false }, //Same Series, same quality, one different episode
-            new object[] { 4, new[] { 8 }, "Parks and Recreation", QualityTypes.WEBDL }, false, //Same Series, same quality
+            new object[] { 4, new[] { 8 }, "Parks and Recreation", QualityTypes.WEBDL720p }, false, //Same Series, same quality
         };
 
         [Test, TestCaseSource("LowerQualityCases")]

@@ -18,7 +18,8 @@ namespace NzbDrone.Web.Models
         public int SdtvMaxSize { get; set; }
         public int DvdMaxSize { get; set; }
         public int HdtvMaxSize { get; set; }
-        public int WebdlMaxSize { get; set; }
+        public int Webdl720pMaxSize { get; set; }
+        public int Webdl1080pMaxSize { get; set; }
         public int Bluray720pMaxSize { get; set; }
         public int Bluray1080pMaxSize { get; set; }
     }

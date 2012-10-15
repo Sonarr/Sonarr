@@ -64,10 +64,10 @@
                                                                                         </span>MB
                 </div>
                 <div class="slider-container">
-                    <b>WEBDL</b>
+                    <b>WEBDL-720p</b>
                     <div id="webdl-slider" class="slider">
                     </div>
-                    @Html.HiddenFor(m => m.WebdlMaxSize, new { @class = "slider-value" })
+                    @Html.HiddenFor(m => m.Webdl720pMaxSize, new { @class = "slider-value" })
                     30 minute size: <span class="30-minute"></span>MB | 60 minute size: <span class="60-minute">
                                                                                         </span>MB
                 </div>
@@ -76,6 +76,14 @@
                     <div id="bluray720p-slider" class="slider">
                     </div>
                     @Html.HiddenFor(m => m.Bluray720pMaxSize, new { @class = "slider-value" })
+                    30 minute size: <span class="30-minute"></span>MB | 60 minute size: <span class="60-minute">
+                                                                                        </span>MB
+                </div>
+                <div class="slider-container">
+                    <b>WEBDL-1080p</b>
+                    <div id="webdl-slider" class="slider">
+                    </div>
+                    @Html.HiddenFor(m => m.Webdl1080pMaxSize, new { @class = "slider-value" })
                     30 minute size: <span class="30-minute"></span>MB | 60 minute size: <span class="60-minute">
                                                                                         </span>MB
                 </div>
@@ -96,9 +104,9 @@
 </div>
 
 @section Scripts {
-    <script type="text/javascript">
-        @Html.IncludeScript("NzbDrone/qualitySettings.js")
+    @Html.IncludeScript("NzbDrone/qualitySettings.js")
 
+    <script type="text/javascript">
         $(document).ready(function() {
             setupSliders();
         });

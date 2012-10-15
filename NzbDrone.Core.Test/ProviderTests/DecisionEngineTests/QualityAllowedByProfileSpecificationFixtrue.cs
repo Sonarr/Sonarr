@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
         public static object[] DeniedTestCases =
         {
             new object[] { QualityTypes.SDTV },
-            new object[] { QualityTypes.WEBDL },
+            new object[] { QualityTypes.WEBDL720p },
             new object[] { QualityTypes.Bluray720p }
         };
 

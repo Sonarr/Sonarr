@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
     {
         private void WithWebdlCutoff()
         {
-            var profile = new QualityProfile { Cutoff = QualityTypes.WEBDL };
+            var profile = new QualityProfile { Cutoff = QualityTypes.WEBDL720p };
             Mocker.GetMock<QualityProvider>().Setup(s => s.Get(It.IsAny<int>())).Returns(profile);
         }
 
@@ -77,7 +77,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
         {
             WithWebdlCutoff();
 
-            _episodeFile.Quality = QualityTypes.WEBDL;
+            _episodeFile.Quality = QualityTypes.WEBDL720p;
 
             //Act
             bool result = Mocker.Resolve<UpgradePossibleSpecification>().IsSatisfiedBy(_episode);

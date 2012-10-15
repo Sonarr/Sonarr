@@ -17,12 +17,12 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
         public static object[] IsUpgradeTestCases =
         {
             new object[] { QualityTypes.SDTV, false, QualityTypes.SDTV, true, QualityTypes.SDTV, true },
-            new object[] { QualityTypes.WEBDL, false, QualityTypes.WEBDL, true, QualityTypes.WEBDL, true },
+            new object[] { QualityTypes.WEBDL720p, false, QualityTypes.WEBDL720p, true, QualityTypes.WEBDL720p, true },
             new object[] { QualityTypes.SDTV, false, QualityTypes.SDTV, false, QualityTypes.SDTV, false },
             new object[] { QualityTypes.SDTV, false, QualityTypes.DVD, true, QualityTypes.SDTV, false },
-            new object[] { QualityTypes.WEBDL, false, QualityTypes.HDTV, true, QualityTypes.Bluray720p, false },
-            new object[] { QualityTypes.WEBDL, false, QualityTypes.HDTV, true, QualityTypes.WEBDL, false },
-            new object[] { QualityTypes.WEBDL, false, QualityTypes.WEBDL, false, QualityTypes.WEBDL, false },
+            new object[] { QualityTypes.WEBDL720p, false, QualityTypes.HDTV, true, QualityTypes.Bluray720p, false },
+            new object[] { QualityTypes.WEBDL720p, false, QualityTypes.HDTV, true, QualityTypes.WEBDL720p, false },
+            new object[] { QualityTypes.WEBDL720p, false, QualityTypes.WEBDL720p, false, QualityTypes.WEBDL720p, false },
             new object[] { QualityTypes.SDTV, false, QualityTypes.SDTV, true, QualityTypes.SDTV, true }
         };
 
