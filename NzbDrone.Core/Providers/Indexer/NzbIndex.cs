@@ -23,7 +23,8 @@ namespace NzbDrone.Core.Providers.Indexer
             {
                 return new[]
                            {
-                               string.Format("http://www.nzbindex.nl/rss/alt.binaries.teevee/?sort=agedesc&minsize=100&complete=1&max=50&more=1&q=%23a.b.teevee%40EFNet")
+                               String.Format("http://www.nzbindex.nl/rss/alt.binaries.teevee/?sort=agedesc&minsize=100&complete=1&max=50&more=1&q=%23a.b.teevee%40EFNet"),
+                               String.Format("http://www.nzbindex.nl/rss/alt.binaries.hdtv/?sort=agedesc&minsize=100&complete=1&max=50&more=1&q=")
                            };
             }
         }

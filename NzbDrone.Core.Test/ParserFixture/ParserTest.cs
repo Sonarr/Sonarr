@@ -386,5 +386,12 @@ namespace NzbDrone.Core.Test.ParserFixture
         {
             Parser.ParseReleaseGroup(title).Should().Be(expected);
         }
+
+        [TestCase("[112461]-[FULL]-[#a.b.teevee@EFNet]-[ 666.Park.Avenue.S01E03.720p.HDTV.X264-DIMENSION ]-[02/31] - \"the.devils.address.103.720p-dimension.par2\" yEnc", "666.Park.Avenue.S01E03.720p.HDTV.X264-DIMENSION")]
+        [TestCase("[112438]-[FULL]-[#a.b.teevee@EFNet]-[ Downton_Abbey.3x05.HDTV_x264-FoV ]-[01/26] - \"downton_abbey.3x05.hdtv_x264-fov.nfo\" yEnc", "Downton_Abbey.3x05.HDTV_x264-FoV")]
+        public void parse_header(string title, string expected)
+        {
+            Parser.ParseHeader(title).Should().Be(expected);
+        }
     }
 }
