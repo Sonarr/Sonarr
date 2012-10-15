@@ -96,12 +96,9 @@ namespace NzbDrone.Core.Providers
             }
         }
 
-
         public virtual String GetDownloadTitle(EpisodeParseResult parseResult)
         {
-
             var seriesTitle = MediaFileProvider.CleanFilename(parseResult.Series.Title);
-
 
             //Handle Full Naming
             if (parseResult.FullSeason)

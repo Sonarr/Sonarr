@@ -163,7 +163,9 @@ namespace NzbDrone.Core.Providers
             var separatorStyle = EpisodeSortingHelper.GetSeparatorStyle(_configProvider.SortingSeparatorStyle);
             var numberStyle = EpisodeSortingHelper.GetNumberStyle(_configProvider.SortingNumberStyle);
 
-            string episodeNames = sortedEpisodes.First().Title;
+            var episodeNames = new List<String>();
+
+            episodeNames.Add(Parser.CleanupEpisodeTitle(sortedEpisodes.First().Title));
 
             string result = String.Empty;
 
@@ -190,7 +192,7 @@ namespace NzbDrone.Core.Providers
                     }
 
                     result = result.Replace("%0e", String.Format("{0:00}", episode.EpisodeNumber));
-                    episodeNames += String.Format(" + {0}", episode.Title);
+                    episodeNames.Add(Parser.CleanupEpisodeTitle(episode.Title));
                 }
             }
 
@@ -202,8 +204,11 @@ namespace NzbDrone.Core.Providers
 
             if (_configProvider.SortingIncludeEpisodeTitle)
             {
-                episodeNames = episodeNames.TrimEnd(' ', '+');
-                result += separatorStyle.Pattern + episodeNames;
+                if (episodeNames.Distinct().Count() == 1)
+                    result += separatorStyle.Pattern + episodeNames.First();
+
+                else
+                    result += separatorStyle.Pattern + String.Join(" + ", episodeNames);
             }
 
             if (_configProvider.SortingAppendQuality)
