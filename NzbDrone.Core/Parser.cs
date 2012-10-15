@@ -74,8 +74,14 @@ namespace NzbDrone.Core
         private static readonly Regex ReportSizeRegex = new Regex(@"(?<value>\d+\.\d{1,2}|\d+\,\d+\.\d{1,2})\W?(?<unit>GB|MB|GiB|MiB)",
                                                               RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        private static readonly Regex HeaderRegex = new Regex(@"(?:\[.+\]\-\[.+\]\-\[.+\]\-\[)(?<nzbTitle>.+)(?:\]\-.+)",
-                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private static readonly Regex[] HeaderRegex = new[]
+                                                          {
+                                                                new Regex(@"(?:\[.+\]\-\[.+\]\-\[.+\]\-\[)(?<nzbTitle>.+)(?:\]\-.+)",
+                                                                        RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
+                                                                new Regex(@"(?:\[)(?<nzbTitle>.+)(?:\]\-.+)",
+                                                                        RegexOptions.IgnoreCase | RegexOptions.Compiled),
+                                                          };
 
         internal static EpisodeParseResult ParsePath(string path)
         {
@@ -480,10 +486,13 @@ namespace NzbDrone.Core
 
         internal static string ParseHeader(string header)
         {
-            var match = HeaderRegex.Matches(header);
+            foreach(var regex in HeaderRegex)
+            {
+                var match = regex.Matches(header);
 
-            if (match.Count != 0)
-                return match[0].Groups["nzbTitle"].Value;
+                if (match.Count != 0)
+                    return match[0].Groups["nzbTitle"].Value.Trim();
+            }
 
             return header;
         }
