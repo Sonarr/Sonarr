@@ -7,7 +7,7 @@ using NLog;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Repository;
 using PetaPoco;
-using XemLib.Data;
+using TvdbLib.Data;
 
 namespace NzbDrone.Core.Providers
 {

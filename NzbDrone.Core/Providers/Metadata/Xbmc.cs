@@ -8,8 +8,8 @@ using NzbDrone.Common;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
-using XemLib.Data;
-using XemLib.Data.Banner;
+using TvdbLib.Data;
+using TvdbLib.Data.Banner;
 
 namespace NzbDrone.Core.Providers.Metadata
 {
@@ -48,16 +48,16 @@ namespace NzbDrone.Core.Providers.Metadata
                 tvShow.Add(new XElement("episodeguideurl", episodeGuideUrl));
                 tvShow.Add(new XElement("mpaa", tvDbSeries.ContentRating));
                 tvShow.Add(new XElement("id", tvDbSeries.Id));
-                tvShow.Add(new XElement("genre", tvDbSeries.Genres.FirstOrDefault()));
+                tvShow.Add(new XElement("genre", tvDbSeries.GenreString.Trim('|').Split('|')[0]));
                 tvShow.Add(new XElement("premiered", tvDbSeries.FirstAired.ToString("yyyy-MM-dd")));
-                tvShow.Add(new XElement("studio", tvDbSeries.Network));     
+                tvShow.Add(new XElement("studio", tvDbSeries.Network));
 
                 foreach(var actor in tvDbSeries.TvdbActors)
                 {
                     tvShow.Add(new XElement("actor",
                                     new XElement("name", actor.Name),
                                     new XElement("role", actor.Role),
-                                    new XElement("thumb", "http://www.thetvdb.com/banners/" + actor.Image)
+                                    new XElement("thumb", "http://www.thetvdb.com/banners/" + actor.ActorImage.BannerPath)
                             ));
                 }
 
@@ -71,7 +71,7 @@ namespace NzbDrone.Core.Providers.Metadata
             if (!_diskProvider.FileExists(Path.Combine(series.Path, "fanart.jpg")))
             {
                 _logger.Debug("Downloading fanart for: {0}", series.Title);
-                _bannerProvider.Download(tvDbSeries.Fanart, Path.Combine(series.Path, "fanart.jpg"));
+                _bannerProvider.Download(tvDbSeries.FanartPath, Path.Combine(series.Path, "fanart.jpg"));
             }
 
             if (!_diskProvider.FileExists(Path.Combine(series.Path, "folder.jpg")))
@@ -79,19 +79,19 @@ namespace NzbDrone.Core.Providers.Metadata
                 if(_configProvider.MetadataUseBanners)
                 {
                     _logger.Debug("Downloading series banner for: {0}", series.Title);
-                    _bannerProvider.Download(tvDbSeries.Banner, Path.Combine(series.Path, "folder.jpg"));
+                    _bannerProvider.Download(tvDbSeries.BannerPath, Path.Combine(series.Path, "folder.jpg"));
 
                     _logger.Debug("Downloading Season banners for {0}", series.Title);
-                    DownloadSeasonThumbnails(series, tvDbSeries, TvdbSeasonBanner.Type.Banner);
+                    DownloadSeasonThumbnails(series, tvDbSeries, TvdbSeasonBanner.Type.seasonwide);
                 }
 
                 else
                 {
                     _logger.Debug("Downloading series thumbnail for: {0}", series.Title);
-                    _bannerProvider.Download(tvDbSeries.Poster, Path.Combine(series.Path, "folder.jpg"));
+                    _bannerProvider.Download(tvDbSeries.PosterPath, Path.Combine(series.Path, "folder.jpg"));
 
                     _logger.Debug("Downloading Season posters for {0}", series.Title);
-                    DownloadSeasonThumbnails(series, tvDbSeries, TvdbSeasonBanner.Type.Poster);
+                    DownloadSeasonThumbnails(series, tvDbSeries, TvdbSeasonBanner.Type.season);
                 }
             }
         }
@@ -112,7 +112,7 @@ namespace NzbDrone.Core.Providers.Metadata
                                                        e.SeasonNumber == episodeFile.SeasonNumber &&
                                                        e.EpisodeNumber == episodes.First().EpisodeNumber);
 
-            if (episodeFileThumbnail == null || String.IsNullOrWhiteSpace(episodeFileThumbnail.Banner))
+            if (episodeFileThumbnail == null || String.IsNullOrWhiteSpace(episodeFileThumbnail.BannerPath))
             {
                 _logger.Debug("No thumbnail is available for this episode");
                 return;
@@ -121,7 +121,7 @@ namespace NzbDrone.Core.Providers.Metadata
             if (!_diskProvider.FileExists(episodeFile.Path.Replace(Path.GetExtension(episodeFile.Path), ".tbn")))
             {
                 _logger.Debug("Downloading episode thumbnail for: {0}", episodeFile.EpisodeFileId);
-                _bannerProvider.Download(episodeFileThumbnail.Banner,
+                _bannerProvider.Download(episodeFileThumbnail.BannerPath,
                                          episodeFile.Path.Replace(Path.GetExtension(episodeFile.Path), ".tbn"));
             }
 
@@ -165,9 +165,9 @@ namespace NzbDrone.Core.Providers.Metadata
                     details.Add(new XElement("plot", tvdbEpisode.Overview));
                     details.Add(new XElement("displayseason"));
                     details.Add(new XElement("displayepisode"));
-                    details.Add(new XElement("thumb", "http://www.thetvdb.com/banners/" + tvdbEpisode.Banner));
+                    details.Add(new XElement("thumb", "http://www.thetvdb.com/banners/" + tvdbEpisode.BannerPath));
                     details.Add(new XElement("watched", "false"));
-                    details.Add(new XElement("credits", tvdbEpisode.Writers.FirstOrDefault()));
+                    details.Add(new XElement("credits", tvdbEpisode.Writer.FirstOrDefault()));
                     details.Add(new XElement("director", tvdbEpisode.Directors.FirstOrDefault()));
                     details.Add(new XElement("rating", tvdbEpisode.Rating));
 
@@ -186,7 +186,7 @@ namespace NzbDrone.Core.Providers.Metadata
                         details.Add(new XElement("actor",
                                                 new XElement("name", actor.Name),
                                                 new XElement("role", actor.Role),
-                                                new XElement("thumb", "http://www.thetvdb.com/banners/" + actor.Image)
+                                                new XElement("thumb", "http://www.thetvdb.com/banners/" + actor.ActorImage.BannerPath)
                                             ));
                     }
 
@@ -235,11 +235,11 @@ namespace NzbDrone.Core.Providers.Metadata
 
         private void DownloadSeasonThumbnails(Series series, TvdbSeries tvDbSeries, TvdbSeasonBanner.Type bannerType)
         {
-            var seasons = tvDbSeries.Banners.SeasonBanners.Where(s => s.BannerType == bannerType).Select(s => s.SeasonNumber);
+            var seasons = tvDbSeries.SeasonBanners.Where(s => s.BannerType == bannerType).Select(s => s.Season);
 
             foreach (var season in seasons)
             {
-                var banner = tvDbSeries.Banners.SeasonBanners.FirstOrDefault(b => b.BannerType == bannerType && b.SeasonNumber == season);
+                var banner = tvDbSeries.SeasonBanners.FirstOrDefault(b => b.BannerType == bannerType && b.Season == season);
                 _logger.Debug("Downloading banner for Season: {0} Series: {1}", season, series.Title);
 
                 if (season == 0)

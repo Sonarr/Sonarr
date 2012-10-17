@@ -206,15 +206,16 @@
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="TvdbLib, Version=0.8.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libraries\TvdbLib.dll</HintPath>
+    </Reference>
     <Reference Include="Twitterizer2, Version=2.4.0.26532, Culture=neutral, PublicKeyToken=69d1469eac671567, processorArchitecture=MSIL">
       <HintPath>..\packages\twitterizer.2.4.0.26532\lib\net40\Twitterizer2.dll</HintPath>
     </Reference>
     <Reference Include="WebActivator, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\WebActivator.1.5\lib\net40\WebActivator.dll</HintPath>
-    </Reference>
-    <Reference Include="XemLib">
-      <HintPath>..\Libraries\XemLib\XemLib.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
