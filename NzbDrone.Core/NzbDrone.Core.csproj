@@ -292,6 +292,9 @@
     <Compile Include="Model\Xbmc\TvShowResult.cs" />
     <Compile Include="Model\Xbmc\ErrorResult.cs" />
     <Compile Include="Model\Xbmc\IconType.cs" />
+    <Compile Include="Model\Xem\XemResult.cs" />
+    <Compile Include="Model\Xem\XemSceneTvdbMapping.cs" />
+    <Compile Include="Model\Xem\XemValues.cs" />
     <Compile Include="Providers\BannerProvider.cs" />
     <Compile Include="Providers\DecisionEngine\AllowedReleaseGroupSpecification.cs" />
     <Compile Include="Providers\DecisionEngine\CustomStartDateSpecification.cs" />
@@ -330,6 +333,7 @@
     <Compile Include="Jobs\RssSyncJob.cs" />
     <Compile Include="Jobs\UpdateInfoJob.cs" />
     <Compile Include="Providers\StatsProvider.cs" />
+    <Compile Include="Providers\XemCommunicationProvider.cs" />
     <Compile Include="Repository\MetadataDefinition.cs" />
     <Compile Include="Repository\Search\SearchHistoryItem.cs" />
     <Compile Include="Repository\Search\SearchHistory.cs" />

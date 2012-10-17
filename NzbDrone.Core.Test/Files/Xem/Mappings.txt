@@ -1,0 +1,32 @@
+{
+
+    "result": "success",
+    "data": [
+        {
+            "scene": {
+                "season": 1,
+                "episode": 1,
+                "absolute": 1
+            },
+            "tvdb": {
+                "season": 1,
+                "episode": 1,
+                "absolute": 1
+            }
+        },
+        {
+            "scene": {
+                "season": 1,
+                "episode": 2,
+                "absolute": 2
+            },
+            "tvdb": {
+                "season": 1,
+                "episode": 2,
+                "absolute": 2
+            }
+        }
+    ],
+    "message": "full mapping for 73388 on tvdb. this was a cached version"
+
+}

@@ -191,6 +191,8 @@
     <Compile Include="JobTests\AppUpdateJobFixture.cs" />
     <Compile Include="ProviderTests\UpdateProviderTests\GetUpdateLogFixture.cs" />
     <Compile Include="ProviderTests\UpdateProviderTests\GetAvilableUpdateFixture.cs" />
+    <Compile Include="ProviderTests\XemCommunicationProviderTests\GetSceneTvdbMappingsFixture.cs" />
+    <Compile Include="ProviderTests\XemCommunicationProviderTests\GetXemSeriesIdsFixture.cs" />
     <Compile Include="Services\ParseErrorServiceFixture.cs" />
     <Compile Include="SortHelperTest.cs" />
     <Compile Include="ProviderTests\EpisodeProviderTest_DeleteInvalidEpisodes.cs" />
@@ -332,6 +334,15 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Content Include="Files\Xem\Failure.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\Xem\Ids.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\Xem\Mappings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="log.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
