@@ -31,6 +31,12 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
             Mocker.Resolve<QualityUpgradeSpecification>();
             _upgradeDisk = Mocker.Resolve<UpgradeDiskSpecification>();
 
+            firstFile = new EpisodeFile { Quality = QualityTypes.Bluray1080p, Proper = true };
+            secondFile = new EpisodeFile { Quality = QualityTypes.Bluray1080p, Proper = true };
+
+            var singleEpisodeList = new List<Episode> { new Episode { EpisodeFile = firstFile }, new Episode { EpisodeFile = null } };
+            var doubleEpisodeList = new List<Episode> { new Episode { EpisodeFile = firstFile }, new Episode { EpisodeFile = secondFile }, new Episode { EpisodeFile = null } };
+
             var fakeSeries = Builder<Series>.CreateNew()
                          .With(c => c.QualityProfile = new QualityProfile { Cutoff = QualityTypes.Bluray1080p })
                          .Build();
@@ -41,6 +47,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
                 Quality = new Quality(QualityTypes.DVD, true),
                 EpisodeNumbers = new List<int> { 3, 4 },
                 SeasonNumber = 12,
+                Episodes = doubleEpisodeList
             };
 
             parseResultSingle = new EpisodeParseResult
@@ -49,17 +56,8 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
                 Quality = new Quality(QualityTypes.DVD, true),
                 EpisodeNumbers = new List<int> { 3 },
                 SeasonNumber = 12,
+                Episodes = singleEpisodeList
             };
-
-
-            firstFile = new EpisodeFile { Quality = QualityTypes.Bluray1080p, Proper = true };
-            secondFile = new EpisodeFile { Quality = QualityTypes.Bluray1080p, Proper = true };
-
-            var singleEpisodeList = new List<Episode> { new Episode { EpisodeFile = firstFile }, new Episode { EpisodeFile = null } };
-            var doubleEpisodeList = new List<Episode> { new Episode { EpisodeFile = firstFile }, new Episode { EpisodeFile = secondFile }, new Episode { EpisodeFile = null } };
-
-            Mocker.GetMock<EpisodeProvider>().Setup(c => c.GetEpisodesByParseResult(parseResultSingle)).Returns(singleEpisodeList);
-            Mocker.GetMock<EpisodeProvider>().Setup(c => c.GetEpisodesByParseResult(parseResultMulti)).Returns(doubleEpisodeList);
         }
 
         private void WithFirstFileUpgradable()
@@ -73,9 +71,9 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
         }
 
         [Test]
-        public void should_return_false_if_single_episode_doesnt_exist_on_disk()
+        public void should_return_true_if_single_episode_doesnt_exist_on_disk()
         {
-            Mocker.GetMock<EpisodeProvider>().Setup(c => c.GetEpisodesByParseResult(parseResultSingle)).Returns(new List<Episode>());
+            parseResultSingle.Episodes = new List<Episode>();
 
             _upgradeDisk.IsSatisfiedBy(parseResultSingle).Should().BeTrue();
         }

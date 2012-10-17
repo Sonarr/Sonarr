@@ -48,13 +48,13 @@ namespace NzbDrone.Core.Providers
 
             var provider = GetActiveDownloadClient();
 
-            bool success = provider.DownloadNzb(parseResult.NzbUrl, GetDownloadTitle(parseResult));
+            bool success = provider.DownloadNzb(parseResult.NzbUrl, downloadTitle);
 
             if (success)
             {
                 logger.Trace("Download added to Queue: {0}", downloadTitle);
 
-                foreach (var episode in _episodeProvider.GetEpisodesByParseResult(parseResult))
+                foreach (var episode in parseResult.Episodes)
                 {
                     var history = new History
                                       {
@@ -127,9 +127,9 @@ namespace NzbDrone.Core.Providers
             //Show Name - 1x01 - Episode Name
             var episodeString = new List<String>();
 
-            foreach (var episode in parseResult.EpisodeNumbers)
+            foreach (var episode in parseResult.Episodes)
             {
-                episodeString.Add(String.Format("{0}x{1:00}", parseResult.SeasonNumber, episode));
+                episodeString.Add(String.Format("{0}x{1:00}", parseResult.SeasonNumber, episode.EpisodeNumber));
             }
 
             var epNumberString = String.Join("-", episodeString);

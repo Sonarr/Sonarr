@@ -227,6 +227,7 @@
     <Compile Include="Datastore\MigrationLogger.cs" />
     <Compile Include="Datastore\MigrationsHelper.cs" />
     <Compile Include="Datastore\CustomeMapper.cs" />
+    <Compile Include="Datastore\Migrations\Migration20121016.cs" />
     <Compile Include="Datastore\Migrations\Migration20121012.cs" />
     <Compile Include="Datastore\Migrations\Migration20120919.cs" />
     <Compile Include="Datastore\Migrations\Migration20120918.cs" />
@@ -334,6 +335,7 @@
     <Compile Include="Jobs\UpdateInfoJob.cs" />
     <Compile Include="Providers\StatsProvider.cs" />
     <Compile Include="Providers\XemCommunicationProvider.cs" />
+    <Compile Include="Providers\XemProvider.cs" />
     <Compile Include="Repository\MetadataDefinition.cs" />
     <Compile Include="Repository\Search\SearchHistoryItem.cs" />
     <Compile Include="Repository\Search\SearchHistory.cs" />

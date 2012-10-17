@@ -43,6 +43,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .With(c => c.Quality = new Quality(QualityTypes.DVD, false))
                 .With(c => c.Series = Builder<Series>.CreateNew().Build())
                 .With(c => c.EpisodeNumbers = new List<int>{2})
+                .With(c => c.Episodes = episodes)
                 .Build();
         }
 
@@ -191,6 +192,11 @@ namespace NzbDrone.Core.Test.ProviderTests
                     .With(c => c.Title = "My Series Name")
                     .Build();
 
+            var fakeEpisodes = new List<Episode>();
+
+            foreach(var episode in episodes)
+                fakeEpisodes.Add(Builder<Episode>.CreateNew().With(e => e.EpisodeNumber = episode).Build());
+
             var parsResult = new EpisodeParseResult()
             {
                 AirDate = DateTime.Now,
@@ -198,7 +204,8 @@ namespace NzbDrone.Core.Test.ProviderTests
                 Quality = new Quality(quality, proper),
                 SeasonNumber = seasons,
                 Series = series,
-                EpisodeTitle = title
+                EpisodeTitle = title,
+                Episodes = fakeEpisodes
             };
 
             return Mocker.Resolve<DownloadProvider>().GetDownloadTitle(parsResult);

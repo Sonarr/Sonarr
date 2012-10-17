@@ -201,6 +201,9 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             Mocker.GetMock<DiskProvider>(MockBehavior.Strict)
                 .Setup(e => e.GetSize(fileName)).Returns(90000000000);
 
+            Mocker.GetMock<DiskProvider>(MockBehavior.Strict)
+                .Setup(e => e.IsChildOfPath(fileName, fakeSeries.Path)).Returns(false);
+
             Mocker.GetMock<EpisodeProvider>()
                 .Setup(c => c.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>()))
                 .Returns(new List<Episode>());
@@ -415,6 +418,48 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             Mocker.GetMock<MediaFileProvider>().Verify(p => p.Add(It.IsAny<EpisodeFile>()), Times.Never());
             Mocker.GetMock<EpisodeProvider>().Verify(p => p.UpdateEpisode(It.IsAny<Episode>()), Times.Never());
             Mocker.GetMock<DiskProvider>().Verify(p => p.DeleteFile(It.IsAny<string>()), Times.Never());
+        }
+
+        [Test]
+        public void should_set_parseResult_SceneSource_if_not_in_series_Path()
+        {
+            var series = Builder<Series>
+                    .CreateNew()
+                    .With(s => s.Path == @"C:\Test\TV\30 Rock")
+                    .Build();
+
+            const string path = @"C:\Test\Unsorted TV\30 Rock\30.rock.s01e01.pilot.mkv";
+            
+            Mocker.GetMock<EpisodeProvider>().Setup(s => s.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>()))
+                .Returns(new List<Episode>());
+
+            Mocker.GetMock<DiskProvider>().Setup(s => s.IsChildOfPath(path, series.Path))
+                    .Returns(false);
+
+            Mocker.Resolve<DiskScanProvider>().ImportFile(series, path);
+
+            Mocker.Verify<EpisodeProvider>(s => s.GetEpisodesByParseResult(It.Is<EpisodeParseResult>(p => p.SceneSource)), Times.Once());
+        }
+
+        [Test]
+        public void should_not_set_parseResult_SceneSource_if_in_series_Path()
+        {
+            var series = Builder<Series>
+                    .CreateNew()
+                    .With(s => s.Path == @"C:\Test\TV\30 Rock")
+                    .Build();
+
+            const string path = @"C:\Test\TV\30 Rock\30.rock.s01e01.pilot.mkv";
+
+            Mocker.GetMock<EpisodeProvider>().Setup(s => s.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>()))
+                .Returns(new List<Episode>());
+
+            Mocker.GetMock<DiskProvider>().Setup(s => s.IsChildOfPath(path, series.Path))
+                    .Returns(true);
+
+            Mocker.Resolve<DiskScanProvider>().ImportFile(series, path);
+
+            Mocker.Verify<EpisodeProvider>(s => s.GetEpisodesByParseResult(It.Is<EpisodeParseResult>(p => p.SceneSource == false)), Times.Once());
         }
     }
 }

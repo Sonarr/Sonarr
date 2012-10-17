@@ -112,6 +112,8 @@ namespace NzbDrone.Core.Providers
             parseResult.NzbUrl = item.NzbUrl;
             parseResult.Series = series;
             parseResult.Indexer = item.Indexer;
+            parseResult.Episodes = _episodeProvider.GetEpisodesByParseResult(parseResult);
+            parseResult.SceneSource = true;
 
             logger.Info("Forcing Download of: {0}", item.ReportTitle);
             _downloadProvider.DownloadReport(parseResult);

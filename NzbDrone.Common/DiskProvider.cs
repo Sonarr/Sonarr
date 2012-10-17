@@ -235,5 +235,13 @@ namespace NzbDrone.Common
         {
             Directory.SetLastWriteTimeUtc(path, dateTime);
         }
+
+        public virtual bool IsChildOfPath(string child, string parent)
+        {
+            if (Path.GetFullPath(child).StartsWith(Path.GetFullPath(parent)))
+                return true;
+
+            return false;
+        }
     }
 }

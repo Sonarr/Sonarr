@@ -13,6 +13,8 @@ namespace NzbDrone.Core.Datastore.Migrations
             Database.AddColumn("Episodes", new Column("SceneAbsoluteEpisodeNumber", DbType.Int32, ColumnProperty.Null));
             Database.AddColumn("Episodes", new Column("SceneSeasonNumber", DbType.Int32, ColumnProperty.Null));
             Database.AddColumn("Episodes", new Column("SceneEpisodeNumber", DbType.Int32, ColumnProperty.Null));
+
+            Database.AddColumn("Series", new Column("UseSceneNumbering", DbType.Boolean, ColumnProperty.Null));
         }
     }
 }

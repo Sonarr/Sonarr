@@ -23,5 +23,8 @@
     <NamedTestSelector>
       <TestName>NzbDrone.Core.Test.Integeration.ServiceIntegerationFixture.should_be_able_to_submit_exceptions</TestName>
     </NamedTestSelector>
+    <NamedTestSelector>
+      <TestName>NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests.ImportFileFixture.import_unparsable_file_should_skip</TestName>
+    </NamedTestSelector>
   </IgnoredTests>
 </ProjectConfiguration>

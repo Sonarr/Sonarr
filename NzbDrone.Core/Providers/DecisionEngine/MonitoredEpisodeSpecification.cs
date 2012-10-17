@@ -42,6 +42,7 @@ namespace NzbDrone.Core.Providers.DecisionEngine
             }
 
             var episodes = _episodeProvider.GetEpisodesByParseResult(subject);
+            subject.Episodes = episodes;
 
             //return monitored if any of the episodes are monitored
             if (episodes.Any(episode => !episode.Ignored))

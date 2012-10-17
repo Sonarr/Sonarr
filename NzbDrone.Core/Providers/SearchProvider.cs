@@ -319,6 +319,8 @@ namespace NzbDrone.Core.Providers
                         continue;
                     }
 
+                    episodeParseResult.Episodes = _episodeProvider.GetEpisodesByParseResult(episodeParseResult);
+
                     item.SearchError = _allowedDownloadSpecification.IsSatisfiedBy(episodeParseResult);
                     if (item.SearchError == ReportRejectionType.None)
                     {
@@ -402,6 +404,8 @@ namespace NzbDrone.Core.Providers
                         item.SearchError = ReportRejectionType.WrongEpisode;
                         continue;
                     }
+
+                    episodeParseResult.Episodes = _episodeProvider.GetEpisodesByParseResult(episodeParseResult);
 
                     item.SearchError = _allowedDownloadSpecification.IsSatisfiedBy(episodeParseResult);
                     if (item.SearchError == ReportRejectionType.None)
