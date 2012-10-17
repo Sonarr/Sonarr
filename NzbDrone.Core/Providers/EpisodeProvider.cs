@@ -191,7 +191,7 @@ namespace NzbDrone.Core.Providers
                 Episode episodeInfo;
 
                 if (parseResult.SceneSource && parseResult.Series.UseSceneNumbering)
-                    episodeInfo = GetEpisodeFromSceneNumbering(parseResult.Series.SeriesId, parseResult.SeasonNumber, episodeNumber);
+                    episodeInfo = GetEpisodeBySceneNumbering(parseResult.Series.SeriesId, parseResult.SeasonNumber, episodeNumber);
 
                 else
                 {
@@ -450,7 +450,7 @@ namespace NzbDrone.Core.Providers
             _database.UpdateMany(episodes);
         }
 
-        public virtual Episode GetEpisodeFromSceneNumbering(int seriesId, int seasonNumber, int episodeNumber)
+        public virtual Episode GetEpisodeBySceneNumbering(int seriesId, int seasonNumber, int episodeNumber)
         {
             var episode = _database.Fetch<Episode, Series, EpisodeFile>(@"SELECT * FROM Episodes 
                                                             INNER JOIN Series ON Episodes.SeriesId = Series.SeriesId

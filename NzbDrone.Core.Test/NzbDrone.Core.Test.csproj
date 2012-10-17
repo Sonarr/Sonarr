@@ -153,6 +153,7 @@
     <Compile Include="ProviderTests\DiskScanProviderTests\GetVideoFilesFixture.cs" />
     <Compile Include="ProviderTests\DiskScanProviderTests\ScanFixture.cs" />
     <Compile Include="ProviderTests\DownloadClientTests\PneumaticProviderFixture.cs" />
+    <Compile Include="ProviderTests\EpisodeProviderTests\GetEpisodeBySceneNumberFixture.cs" />
     <Compile Include="ProviderTests\Metadata\Xbmc_ForEpisodeFile_Fixture.cs" />
     <Compile Include="ProviderTests\Metadata\Xbmc_ForSeries_Fixture.cs" />
     <Compile Include="ProviderTests\PostDownloadProviderTests\ProcessDropDirectoryFixture.cs" />
@@ -195,7 +196,7 @@
     <Compile Include="ProviderTests\XemCommunicationProviderTests\GetXemSeriesIdsFixture.cs" />
     <Compile Include="Services\ParseErrorServiceFixture.cs" />
     <Compile Include="SortHelperTest.cs" />
-    <Compile Include="ProviderTests\EpisodeProviderTest_DeleteInvalidEpisodes.cs" />
+    <Compile Include="ProviderTests\EpisodeProviderTests\EpisodeProviderTest_DeleteInvalidEpisodes.cs" />
     <Compile Include="ProviderTests\DecisionEngineTests\AcceptableSizeSpecificationFixture.cs" />
     <Compile Include="ProviderTests\QualityTypeProviderTest.cs" />
     <Compile Include="ProviderTests\MisnamedProviderTest.cs" />
@@ -205,7 +206,7 @@
     <Compile Include="CentralDispatchFixture.cs" />
     <Compile Include="ProviderTests\XbmcProviderTest.cs" />
     <Compile Include="ProviderTests\DiskScanProviderTests\MoveEpisodeFileFixture.cs" />
-    <Compile Include="ProviderTests\EpisodeProviderTest_GetEpisodesByParseResult.cs" />
+    <Compile Include="ProviderTests\EpisodeProviderTests\EpisodeProviderTest_GetEpisodesByParseResult.cs" />
     <Compile Include="ProviderTests\DiskScanProviderTests\ImportFileFixture.cs" />
     <Compile Include="FluentTest.cs" />
     <Compile Include="ProviderTests\LogProviderTests\LogProviderFixture.cs" />
@@ -227,7 +228,7 @@
     <Compile Include="ProviderTests\HistoryProviderTest.cs" />
     <Compile Include="ProviderTests\MediaFileProviderTest.cs" />
     <Compile Include="ProviderTests\ConfigProviderTests\ConfigProviderFixture.cs" />
-    <Compile Include="ProviderTests\EpisodeProviderTest.cs" />
+    <Compile Include="ProviderTests\EpisodeProviderTests\EpisodeProviderTest.cs" />
     <Compile Include="Framework\TestDbHelper.cs" />
     <Compile Include="ParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
