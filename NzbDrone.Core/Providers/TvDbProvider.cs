@@ -51,30 +51,6 @@ namespace NzbDrone.Core.Providers
                 Logger.Debug("Fetching SeriesId'{0}' from tvdb", id);
                 var result = _handler.GetSeries(id, TvdbLanguage.DefaultLanguage, loadEpisodes, loadActors, true, true);
 
-                //Fix American Dad's scene gongshow 
-                if (result != null && result.Id == 73141)
-                {
-                    result.Episodes = result.Episodes.Where(e => e.SeasonNumber == 0 || e.EpisodeNumber > 0).ToList();
-
-                    var seasonOneEpisodeCount = result.Episodes.Where(e => e.SeasonNumber == 1).Count();
-                    var seasonOneId = result.Episodes.Where(e => e.SeasonNumber == 1).First().SeasonId;
-
-                    foreach (var episode in result.Episodes)
-                    {
-                        if (episode.SeasonNumber > 1)
-                        {
-                            if (episode.SeasonNumber == 2)
-                            {
-                                episode.EpisodeNumber = episode.EpisodeNumber + seasonOneEpisodeCount;
-                                episode.SeasonId = seasonOneId;
-                            }
-
-                            episode.SeasonNumber = episode.SeasonNumber - 1;
-                        }
-
-                    }
-                }
-
                 //Remove duplicated episodes
                 var episodes = result.Episodes.OrderByDescending(e => e.FirstAired).ThenByDescending(e => e.EpisodeName)
                      .GroupBy(e => e.SeriesId.ToString("000000") + e.SeasonNumber.ToString("000") + e.EpisodeNumber.ToString("000"))

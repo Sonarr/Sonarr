@@ -238,6 +238,14 @@ namespace NzbDrone.Core.Providers
             _database.UpdateMany(allSeries);
         }
 
+        public virtual void UpdateUseSceneNumbering(IEnumerable<Int32> seriesIds)
+        {
+            _database.Execute("UPDATE Series SET UseSceneNumbering = 0");
+
+            var query = String.Format("UPDATE Series SET UseSceneNumbering = 1 WHERE SeriesId IN ({0})", String.Join(",", seriesIds));
+            _database.Execute(query);
+        }
+
         /// <summary>
         ///   Cleans up the AirsTime Component from TheTVDB since it can be garbage that comes in.
         /// </summary>

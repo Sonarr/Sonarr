@@ -226,6 +226,16 @@ namespace NzbDrone.Core.Providers
                 {
                     result.Add(episodeInfo);
 
+                    if (parseResult.Series.UseSceneNumbering)
+                    {
+                        logger.Info("Using Scene to TVDB Mapping for: {0} - Scene: {1}x{2:00} - TVDB: {3}x{4:00}",
+                                    parseResult.Series.Title,
+                                    episodeInfo.SceneSeasonNumber,
+                                    episodeInfo.SceneEpisodeNumber,
+                                    episodeInfo.SeasonNumber,
+                                    episodeInfo.EpisodeNumber);
+                    }
+
                     if (parseResult.EpisodeNumbers.Count == 1)
                     {
                         parseResult.EpisodeTitle = episodeInfo.Title.Trim();

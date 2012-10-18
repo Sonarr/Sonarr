@@ -208,7 +208,7 @@ namespace NzbDrone.Core.Providers
                     result += separatorStyle.Pattern + episodeNames.First();
 
                 else
-                    result += separatorStyle.Pattern + String.Join(" + ", episodeNames);
+                    result += separatorStyle.Pattern + String.Join(" + ", episodeNames.Distinct());
             }
 
             if (_configProvider.SortingAppendQuality)

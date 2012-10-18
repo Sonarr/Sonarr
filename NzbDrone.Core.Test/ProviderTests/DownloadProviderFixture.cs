@@ -195,7 +195,11 @@ namespace NzbDrone.Core.Test.ProviderTests
             var fakeEpisodes = new List<Episode>();
 
             foreach(var episode in episodes)
-                fakeEpisodes.Add(Builder<Episode>.CreateNew().With(e => e.EpisodeNumber = episode).Build());
+                fakeEpisodes.Add(Builder<Episode>
+                    .CreateNew()
+                    .With(e => e.EpisodeNumber = episode)
+                    .With(e => e.Title = title)
+                    .Build());
 
             var parsResult = new EpisodeParseResult()
             {
@@ -241,16 +245,49 @@ namespace NzbDrone.Core.Test.ProviderTests
                     .With(c => c.Title = "My Series Name")
                     .Build();
 
+            var episode = Builder<Episode>.CreateNew()
+                    .With(e => e.Title = "My Episode Title")
+                    .Build();
+
             var parsResult = new EpisodeParseResult
             {
                 AirDate = new DateTime(2011, 12, 1),
                 Quality = new Quality(QualityTypes.Bluray720p, proper),
                 Series = series,
                 EpisodeTitle = "My Episode Title",
+                Episodes = new List<Episode>{ episode }
             };
 
             return Mocker.Resolve<DownloadProvider>().GetDownloadTitle(parsResult);
         }
 
+        [Test]
+        public void should_not_repeat_the_same_episode_title()
+        {
+            var series = Builder<Series>.CreateNew()
+                    .With(c => c.Title = "My Series Name")
+                    .Build();
+
+            var fakeEpisodes = Builder<Episode>.CreateListOfSize(2)
+                    .All()
+                    .With(e => e.SeasonNumber = 5)
+                    .TheFirst(1)
+                    .With(e => e.Title = "My Episode Title (1)")
+                    .TheLast(1)
+                    .With(e => e.Title = "My Episode Title (2)")
+                    .Build();
+
+            var parsResult = new EpisodeParseResult
+            {
+                AirDate = DateTime.Now,
+                EpisodeNumbers = new List<int>{ 10, 11 },
+                Quality = new Quality(QualityTypes.HDTV, false),
+                SeasonNumber = 35,
+                Series = series,
+                Episodes = fakeEpisodes
+            };
+
+            Mocker.Resolve<DownloadProvider>().GetDownloadTitle(parsResult).Should().Be("My Series Name - 5x01-5x02 - My Episode Title [HDTV]");
+        }
     }
 }

@@ -833,5 +833,41 @@ namespace NzbDrone.Core.Test.ProviderTests
 
 
         }
+
+        [Test]
+        public void Update_UseSceneNumbering_should_update_applicable_series()
+        {
+            WithRealDb();
+            var series = Builder<Series>.CreateListOfSize(5)
+                .All()
+                .With(s => s.UseSceneNumbering = false)
+                .Build();
+
+            Db.InsertMany(series);
+
+            Mocker.Resolve<SeriesProvider>().UpdateUseSceneNumbering(new []{ 2, 3 });
+
+            var seriesResults = Db.Fetch<Series>();
+            seriesResults.Single(s => s.SeriesId == 2).UseSceneNumbering.Should().BeTrue();
+            seriesResults.Single(s => s.SeriesId == 3).UseSceneNumbering.Should().BeTrue();
+        }
+
+        [Test]
+        public void Update_UseSceneNumbering_should_not_update_other_series()
+        {
+            WithRealDb();
+            var series = Builder<Series>.CreateListOfSize(5)
+                .All()
+                .With(s => s.UseSceneNumbering = false)
+                .Build();
+
+            Db.InsertMany(series);
+
+            Mocker.Resolve<SeriesProvider>().UpdateUseSceneNumbering(new [] { 2, 3 });
+
+            var seriesResults = Db.Fetch<Series>();
+            seriesResults.Where(s => !s.UseSceneNumbering).Should().HaveCount(3);
+            seriesResults.Where(s => !s.UseSceneNumbering).Should().NotContain(s => s.SeriesId == 2 || s.SeriesId == 3);
+        }
     }
 }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             

@@ -185,12 +185,36 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
         }
 
         [Test]
-        public void EpisodeSearch_should_skip_if_air_date_is_null()
+        public void EpisodeSearch_should_skip_if_air_date_is_null_and_is_a_daily_series()
         {
             //Setup
             _series.IsDaily = true;
             var episode = _episodes.First();
             episode.AirDate = null;
+            episode.Series = _series;
+
+            Mocker.GetMock<UpgradePossibleSpecification>().Setup(s => s.IsSatisfiedBy(It.IsAny<Episode>()))
+                    .Returns(true);
+
+            Mocker.GetMock<EpisodeProvider>().Setup(s => s.GetEpisode(episode.EpisodeId))
+                .Returns(episode);
+
+            //Act
+            var result = Mocker.Resolve<SearchProvider>().EpisodeSearch(MockNotification, episode.EpisodeId);
+
+            //Assert
+            result.Should().BeFalse();
+            ExceptionVerification.ExpectedWarns(1);
+        }
+
+        [Test]
+        public void EpisodeSearch_should_skip_if_sceneNumbering_is_invalid_and_should_use_sceneNumbering()
+        {
+            //Setup
+            _series.UseSceneNumbering = true;
+            var episode = _episodes.First();
+            episode.SceneSeasonNumber = 0;
+            episode.SceneEpisodeNumber = 0;
             episode.Series = _series;
 
             Mocker.GetMock<UpgradePossibleSpecification>().Setup(s => s.IsSatisfiedBy(It.IsAny<Episode>()))
