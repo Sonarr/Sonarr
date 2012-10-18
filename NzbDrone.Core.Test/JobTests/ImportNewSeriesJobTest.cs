@@ -42,7 +42,6 @@ namespace NzbDrone.Core.Test.JobTests
                 .Setup(j => j.Start(notification, series[0].SeriesId, 0))
                 .Callback(() => series[0].LastDiskSync = DateTime.Now);
 
-
             Mocker.GetMock<DiskScanJob>()
                 .Setup(j => j.Start(notification, series[1].SeriesId, 0))
                 .Callback(() => series[1].LastDiskSync = DateTime.Now);

@@ -1,0 +1,24 @@
+{
+
+    "result": "success",
+    "data": {
+        "220571": [
+            "Is This a Zombie? Of the Dead",
+            "Kore wa Zombie Desuka?",
+            "Kore wa Zombie Desuka? Of the Dead",
+            "Kore wa Zombie Desuka Of the Dead",
+            "Kore wa Zombie Desu ka - Of the Dead",
+            "Kore wa Zombie Desu ka of the Dead"
+        ],
+        "79151": [
+            "Fate Stay Night",
+            "Fate/Zero",
+            "Fate Zero",
+            "Fate/Zero (2012)",
+            "Fate Zero S2",
+            "Fate Zero"
+        ]
+    },
+    "message": ""
+
+}

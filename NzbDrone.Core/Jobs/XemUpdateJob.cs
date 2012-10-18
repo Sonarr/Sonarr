@@ -44,8 +44,13 @@ namespace NzbDrone.Core.Jobs
                 _logger.Trace("Starting XEM Update for all series");
                 _xemProvider.UpdateMappings();
             }
-            _logger.Trace("Starting XEM Update for series: {0}", targetId);
-            _xemProvider.UpdateMappings(targetId);
+
+            else
+            {
+                _logger.Trace("Starting XEM Update for series: {0}", targetId);
+                _xemProvider.UpdateMappings(targetId);
+            }
+            
             _logger.Trace("XEM Update complete");
         }
     }

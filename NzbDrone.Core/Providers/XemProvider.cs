@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Providers
             {
                 var ids = _xemCommunicationProvider.GetXemSeriesIds();
                 var series = _seriesProvider.GetAllSeries();
-                var wantedSeries = series.Where(s => ids.Contains(s.SeriesId));
+                var wantedSeries = series.Where(s => ids.Contains(s.SeriesId)).ToList();
 
                 foreach(var ser in wantedSeries)
                 {
@@ -80,11 +80,20 @@ namespace NzbDrone.Core.Providers
                     return;
                 }
 
+                var episodes = _episodeProvider.GetEpisodeBySeries(series.SeriesId);
+
                 foreach (var mapping in mappings)
                 {
                     _logger.Trace("Setting scene numbering mappings for {0} S{1:00}E{2:00}", series.Title, mapping.Tvdb.Season, mapping.Tvdb.Episode);
 
-                    var episode = _episodeProvider.GetEpisode(series.SeriesId, mapping.Tvdb.Season, mapping.Tvdb.Episode);
+                    var episode = episodes.SingleOrDefault(e => e.SeasonNumber == mapping.Tvdb.Season && e.EpisodeNumber == mapping.Tvdb.Episode);
+
+                    if (episode == null)
+                    {
+                        _logger.Trace("Information hasn't been added to TheTVDB yet, skipping.");
+                        continue;
+                    }
+
                     episode.AbsoluteEpisodeNumber = mapping.Scene.Absolute;
                     episode.SceneSeasonNumber = mapping.Scene.Season;
                     episode.SceneEpisodeNumber = mapping.Scene.Episode;
@@ -93,6 +102,10 @@ namespace NzbDrone.Core.Providers
 
                 _logger.Trace("Committing scene numbering mappings to database for: {0}", series.Title);
                 _episodeProvider.UpdateEpisodes(episodesToUpdate);
+
+                _logger.Trace("Setting UseSceneMapping for {0}", series.Title);
+                series.UseSceneNumbering = true;
+                _seriesProvider.UpdateSeries(series);
             }
 
             catch (Exception ex)
