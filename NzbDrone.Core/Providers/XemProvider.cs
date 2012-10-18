@@ -40,37 +40,7 @@ namespace NzbDrone.Core.Providers
 
                 foreach(var ser in wantedSeries)
                 {
-                    _logger.Trace("Updating scene numbering mapping for: {0}", ser.Title);
-                    try
-                    {
-                        var episodesToUpdate = new List<Episode>();
-                        var mappings = _xemCommunicationProvider.GetSceneTvdbMappings(ser.SeriesId);
-
-                        if (mappings == null)
-                        {
-                            _logger.Trace("Mappings for: {0} are null, skipping", ser.Title);
-                            continue;
-                        }
-
-                        foreach(var mapping in mappings)
-                        {
-                            _logger.Trace("Setting scene numbering mappings for {0} S{1:00}E{2:00}", ser.Title, mapping.Tvdb.Season, mapping.Tvdb.Episode);
-
-                            var episode = _episodeProvider.GetEpisode(ser.SeriesId, mapping.Tvdb.Season, mapping.Tvdb.Episode);
-                            episode.AbsoluteEpisodeNumber = mapping.Scene.Absolute;
-                            episode.SceneSeasonNumber = mapping.Scene.Season;
-                            episode.SceneEpisodeNumber = mapping.Scene.Episode;
-                            episodesToUpdate.Add(episode);
-                        }
-                        
-                        _logger.Trace("Committing scene numbering mappings to database for: {0}", ser.Title);
-                        _episodeProvider.UpdateEpisodes(episodesToUpdate);
-                    }
-
-                    catch(Exception ex)
-                    {
-                        _logger.WarnException("Error updating scene numbering mappings for: " + ser, ex);
-                    }
+                    PerformUpdate(ser);
                 }
 
                 _logger.Trace("Completed scene numbering update");
@@ -80,6 +50,54 @@ namespace NzbDrone.Core.Providers
             {
                 _logger.WarnException("Error updating Scene Mappings", ex);
                 throw;
+            }
+        }
+
+        public virtual void UpdateMappings(int seriesId)
+        {
+            var series = _seriesProvider.GetSeries(seriesId);
+
+            if (series == null)
+            {
+                _logger.Trace("Series could not be found: {0}", seriesId);
+                return;
+            }
+
+            PerformUpdate(series);
+        }
+
+        public virtual void PerformUpdate(Series series)
+        {
+            _logger.Trace("Updating scene numbering mapping for: {0}", series.Title);
+            try
+            {
+                var episodesToUpdate = new List<Episode>();
+                var mappings = _xemCommunicationProvider.GetSceneTvdbMappings(series.SeriesId);
+
+                if (mappings == null)
+                {
+                    _logger.Trace("Mappings for: {0} are null, skipping", series.Title);
+                    return;
+                }
+
+                foreach (var mapping in mappings)
+                {
+                    _logger.Trace("Setting scene numbering mappings for {0} S{1:00}E{2:00}", series.Title, mapping.Tvdb.Season, mapping.Tvdb.Episode);
+
+                    var episode = _episodeProvider.GetEpisode(series.SeriesId, mapping.Tvdb.Season, mapping.Tvdb.Episode);
+                    episode.AbsoluteEpisodeNumber = mapping.Scene.Absolute;
+                    episode.SceneSeasonNumber = mapping.Scene.Season;
+                    episode.SceneEpisodeNumber = mapping.Scene.Episode;
+                    episodesToUpdate.Add(episode);
+                }
+
+                _logger.Trace("Committing scene numbering mappings to database for: {0}", series.Title);
+                _episodeProvider.UpdateEpisodes(episodesToUpdate);
+            }
+
+            catch (Exception ex)
+            {
+                _logger.WarnException("Error updating scene numbering mappings for: " + series, ex);
             }
         }
     }
