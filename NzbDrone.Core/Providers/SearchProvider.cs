@@ -254,7 +254,12 @@ namespace NzbDrone.Core.Providers
                     //Treat as single episode
                     else if (episodes.Count == 1)
                     {
-                        if (!series.IsDaily)
+                        //Use SceneNumbering
+                        if (series.UseSceneNumbering)
+                            reports.AddRange(indexer.FetchEpisode(title, episodes.First().SceneSeasonNumber, episodes.First().SceneEpisodeNumber));
+
+                        //Standard
+                        else if (!series.IsDaily)
                             reports.AddRange(indexer.FetchEpisode(title, seasonNumber, episodes.First().EpisodeNumber));
 
                         //Daily Episode
