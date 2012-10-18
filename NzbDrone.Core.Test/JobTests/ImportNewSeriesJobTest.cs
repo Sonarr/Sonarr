@@ -50,6 +50,9 @@ namespace NzbDrone.Core.Test.JobTests
             Mocker.GetMock<BannerDownloadJob>()
                 .Setup(j => j.Start(notification, It.IsAny<int>(), 0));
 
+            Mocker.GetMock<XemUpdateJob>()
+                .Setup(j => j.Start(notification, It.IsAny<int>(), 0));
+
             Mocker.GetMock<UpdateInfoJob>()
                 .Setup(j => j.Start(notification, series[0].SeriesId, 0))
                 .Callback(() => series[0].LastInfoSync = DateTime.Now);
@@ -122,6 +125,9 @@ namespace NzbDrone.Core.Test.JobTests
 
             Mocker.GetMock<MediaFileProvider>()
                 .Setup(s => s.GetSeriesFiles(It.IsAny<int>())).Returns(new List<EpisodeFile>());
+
+            Mocker.GetMock<XemUpdateJob>()
+                .Setup(j => j.Start(notification, series[0].SeriesId, 0));
 
             //Act
             Mocker.Resolve<ImportNewSeriesJob>().Start(notification, 0, 0);
