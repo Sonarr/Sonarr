@@ -188,12 +188,12 @@ namespace NzbDrone.Core.Providers
 
             foreach (var episodeNumber in parseResult.EpisodeNumbers)
             {
-                Episode episodeInfo;
+                Episode episodeInfo = null;
 
                 if (parseResult.SceneSource && parseResult.Series.UseSceneNumbering)
                     episodeInfo = GetEpisodeBySceneNumbering(parseResult.Series.SeriesId, parseResult.SeasonNumber, episodeNumber);
 
-                else
+                if (episodeInfo == null)
                 {
                     episodeInfo = GetEpisode(parseResult.Series.SeriesId, parseResult.SeasonNumber, episodeNumber);
                     if (episodeInfo == null && parseResult.AirDate != null)

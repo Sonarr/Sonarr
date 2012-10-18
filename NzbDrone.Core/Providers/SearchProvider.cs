@@ -161,14 +161,6 @@ namespace NzbDrone.Core.Providers
                 return false;
             }
 
-            if (episode.Series.UseSceneNumbering && episode.SceneSeasonNumber <= 0 && episode.SceneEpisodeNumber <= 0)
-            {
-                _logger.Warn("Series should use Scene Numbering, but it is not available: {0}", episode);
-
-                notification.CurrentMessage = String.Format("Search Failed, invalid scene episode data found: {0}", episode);
-                return false;
-            }
-
             var searchResult = new SearchHistory
                                    {
                                         SearchTime = DateTime.Now,
@@ -192,13 +184,23 @@ namespace NzbDrone.Core.Providers
             else if (episode.Series.UseSceneNumbering)
             {
                 searchResult.EpisodeId = episodeId;
+
+                var seasonNumber = episode.SceneSeasonNumber;
+                var episodeNumber = episode.SceneEpisodeNumber;
+
+                if (seasonNumber == 0 || episodeNumber == 0)
+                {
+                    seasonNumber = episode.SeasonNumber;
+                    episodeNumber = episode.EpisodeNumber;
+                }
+
                 searchResult.SearchHistoryItems = ProcessSearchResults(
                                                                         notification,
                                                                         reports,
                                                                         searchResult,
                                                                         episode.Series,
-                                                                        episode.SceneSeasonNumber,
-                                                                        episode.SceneEpisodeNumber
+                                                                        seasonNumber,
+                                                                        episodeNumber
                                                                         );
 
                 _searchHistoryProvider.Add(searchResult);
@@ -254,8 +256,8 @@ namespace NzbDrone.Core.Providers
                     //Treat as single episode
                     else if (episodes.Count == 1)
                     {
-                        //Use SceneNumbering
-                        if (series.UseSceneNumbering)
+                        //Use SceneNumbering - Only if SceneSN and SceneEN are greater than zero
+                        if (series.UseSceneNumbering && episodes.First().SceneSeasonNumber > 0 && episodes.First().SceneEpisodeNumber > 0)
                             reports.AddRange(indexer.FetchEpisode(title, episodes.First().SceneSeasonNumber, episodes.First().SceneEpisodeNumber));
 
                         //Standard
