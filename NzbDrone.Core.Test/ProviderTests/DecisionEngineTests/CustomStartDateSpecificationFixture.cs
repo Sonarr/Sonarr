@@ -141,5 +141,12 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
             WithFirstEpisodeLastYear();
             _customStartDateSpecification.IsSatisfiedBy(parseResultSingle).Should().BeFalse();
         }
+
+        [Test]
+        public void should_return_true_if_episode_airs_the_same_day_as_the_cutoff()
+        {
+            fakeSeries.CustomStartDate = DateTime.Today;
+            _customStartDateSpecification.IsSatisfiedBy(parseResultSingle).Should().BeTrue();
+        }
     }
 }

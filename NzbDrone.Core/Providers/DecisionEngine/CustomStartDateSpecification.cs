@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Providers.DecisionEngine
 
             var episodes = _episodeProvider.GetEpisodesByParseResult(subject);
 
-            if (episodes.Any(episode => episode.AirDate > subject.Series.CustomStartDate.Value))
+            if (episodes.Any(episode => episode.AirDate >= subject.Series.CustomStartDate.Value))
             {
                 logger.Debug("One or more episodes aired after cutoff, downloading.");
                 return true;

@@ -82,6 +82,9 @@ namespace NzbDrone.Web.Controllers
             if (!String.IsNullOrWhiteSpace(seriesModel.CustomStartDate))
                 series.CustomStartDate = DateTime.Parse(seriesModel.CustomStartDate, null, DateTimeStyles.RoundtripKind);
 
+            else
+                series.CustomStartDate = null;
+
             _seriesProvider.UpdateSeries(series);
 
             return new EmptyResult();
