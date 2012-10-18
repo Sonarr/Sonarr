@@ -258,6 +258,7 @@
     <Compile Include="Helpers\SortHelper.cs" />
     <Compile Include="Helpers\SabnzbdPriorityTypeConverter.cs" />
     <Compile Include="Jobs\CleanupRecycleBinJob.cs" />
+    <Compile Include="Jobs\XemUpdateJob.cs" />
     <Compile Include="Jobs\EmptyRecycleBinJob.cs" />
     <Compile Include="Jobs\RefreshEpsiodeMetadata.cs" />
     <Compile Include="Jobs\PastWeekBacklogSearchJob.cs" />
