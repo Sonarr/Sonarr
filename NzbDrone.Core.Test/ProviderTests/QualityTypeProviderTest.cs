@@ -29,26 +29,24 @@ namespace NzbDrone.Core.Test.ProviderTests
             //Assert
             var types = Mocker.Resolve<QualityTypeProvider>().All();
 
-            types.Should().HaveCount(6);
+            types.Should().HaveCount(7);
             types.Should().Contain(e => e.Name == "SDTV" && e.QualityTypeId == 1);
             types.Should().Contain(e => e.Name == "DVD" && e.QualityTypeId == 2);
             types.Should().Contain(e => e.Name == "HDTV" && e.QualityTypeId == 4);
-            types.Should().Contain(e => e.Name == "WEBDL" && e.QualityTypeId == 5);
+            types.Should().Contain(e => e.Name == "WEBDL720p" && e.QualityTypeId == 5);
+            types.Should().Contain(e => e.Name == "WEBDL1080p" && e.QualityTypeId == 3);
             types.Should().Contain(e => e.Name == "Bluray720p" && e.QualityTypeId == 6);
             types.Should().Contain(e => e.Name == "Bluray1080p" && e.QualityTypeId == 7);
         }
 
         [Test]
-        public void SetupDefault_already_exists()
+        public void SetupDefault_already_exists_should_insert_missing()
         {
             
             var db = TestDbHelper.GetEmptyDatabase();
             Mocker.SetConstant(db);
 
-            var fakeQualityType = Builder<QualityType>.CreateNew()
-                .Build();
-
-            db.Insert(fakeQualityType);
+            db.Insert(new QualityType { QualityTypeId = 1, Name = "SDTV", MinSize = 0, MaxSize = 100 });
 
             //Act
             Mocker.Resolve<QualityTypeProvider>().SetupDefault();
@@ -56,7 +54,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             //Assert
             var types = Mocker.Resolve<QualityTypeProvider>().All();
 
-            types.Should().HaveCount(1);
+            types.Should().HaveCount(7);
         }
 
         [Test]

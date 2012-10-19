@@ -22,8 +22,8 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
 
         private EpisodeParseResult parseResultMulti;
         private EpisodeParseResult parseResultSingle;
-        private Quality firstQuality;
-        private Quality secondQuality;
+        private QualityModel firstQuality;
+        private QualityModel secondQuality;
 
         [SetUp]
         public void Setup()
@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
             parseResultMulti = new EpisodeParseResult
             {
                 Series = fakeSeries,
-                Quality = new Quality(QualityTypes.DVD, true),
+                Quality = new QualityModel(QualityTypes.DVD, true),
                 EpisodeNumbers = new List<int> { 3, 4 },
                 SeasonNumber = 12,
             };
@@ -46,13 +46,13 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
             parseResultSingle = new EpisodeParseResult
             {
                 Series = fakeSeries,
-                Quality = new Quality(QualityTypes.DVD, true),
+                Quality = new QualityModel(QualityTypes.DVD, true),
                 EpisodeNumbers = new List<int> { 3 },
                 SeasonNumber = 12,
             };
 
-            firstQuality = new Quality(QualityTypes.Bluray1080p, true);
-            secondQuality = new Quality(QualityTypes.Bluray1080p, true);
+            firstQuality = new QualityModel(QualityTypes.Bluray1080p, true);
+            secondQuality = new QualityModel(QualityTypes.Bluray1080p, true);
 
             var singleEpisodeList = new List<Episode> { new Episode { SeasonNumber = 12, EpisodeNumber = 3 } };
             var doubleEpisodeList = new List<Episode> { 
@@ -66,17 +66,17 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
 
             Mocker.GetMock<HistoryProvider>().Setup(c => c.GetBestQualityInHistory(fakeSeries.SeriesId, 12, 3)).Returns(firstQuality);
             Mocker.GetMock<HistoryProvider>().Setup(c => c.GetBestQualityInHistory(fakeSeries.SeriesId, 12, 4)).Returns(secondQuality);
-            Mocker.GetMock<HistoryProvider>().Setup(c => c.GetBestQualityInHistory(fakeSeries.SeriesId, 12, 5)).Returns<Quality>(null);
+            Mocker.GetMock<HistoryProvider>().Setup(c => c.GetBestQualityInHistory(fakeSeries.SeriesId, 12, 5)).Returns<QualityModel>(null);
         }
 
         private void WithFirstReportUpgradable()
         {
-            firstQuality.QualityType = QualityTypes.SDTV;
+            firstQuality.Quality = QualityTypes.SDTV;
         }
 
         private void WithSecondReportUpgradable()
         {
-            secondQuality.QualityType = QualityTypes.SDTV;
+            secondQuality.Quality = QualityTypes.SDTV;
         }
 
 

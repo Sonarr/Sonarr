@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Providers
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        public virtual void UpdateEpisodeStatus(int episodeId, EpisodeStatusType episodeStatus, Quality quality)
+        public virtual void UpdateEpisodeStatus(int episodeId, EpisodeStatusType episodeStatus, QualityModel quality)
         {
             try
             {
@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Providers
                                                {
                                                        EpisodeId = episodeId,
                                                        EpisodeStatus = episodeStatus.ToString(),
-                                                       Quality = (quality == null ? String.Empty : quality.QualityType.ToString())
+                                                       Quality = (quality == null ? String.Empty : quality.Quality.ToString())
                                                });
                 var test = 0;
             }

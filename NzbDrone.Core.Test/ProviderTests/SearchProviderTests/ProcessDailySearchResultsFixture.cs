@@ -93,16 +93,16 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
             var parseResults = Builder<EpisodeParseResult>.CreateListOfSize(5)
                 .All()
                 .With(c => c.AirDate = DateTime.Today)
-                .With(c => c.Quality = new Quality(QualityTypes.DVD, true))
+                .With(c => c.Quality = new QualityModel(QualityTypes.DVD, true))
                 .Random(1)
-                .With(c => c.Quality = new Quality(QualityTypes.Bluray1080p, true))
+                .With(c => c.Quality = new QualityModel(QualityTypes.Bluray1080p, true))
                 .Build();
 
             WithMatchingSeries();
             WithSuccessfulDownload();
 
             Mocker.GetMock<AllowedDownloadSpecification>()
-                .Setup(s => s.IsSatisfiedBy(It.Is<EpisodeParseResult>(d => d.Quality.QualityType == QualityTypes.Bluray1080p)))
+                .Setup(s => s.IsSatisfiedBy(It.Is<EpisodeParseResult>(d => d.Quality.Quality == QualityTypes.Bluray1080p)))
                 .Returns(ReportRejectionType.None);
 
             //Act
@@ -123,7 +123,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
             var parseResults = Builder<EpisodeParseResult>.CreateListOfSize(5)
                 .All()
                 .With(c => c.AirDate = DateTime.Today)
-                .With(c => c.Quality = new Quality(QualityTypes.DVD, true))
+                .With(c => c.Quality = new QualityModel(QualityTypes.DVD, true))
                 .Build();
 
             WithMatchingSeries();
@@ -147,7 +147,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
             var parseResults = Builder<EpisodeParseResult>.CreateListOfSize(5)
                 .All()
                 .With(e => e.AirDate = DateTime.Today)
-                .With(e => e.Quality = new Quality(QualityTypes.HDTV, false))
+                .With(e => e.Quality = new QualityModel(QualityTypes.HDTV, false))
                 .Build();
 
             WithNullSeries();
@@ -168,7 +168,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
             var parseResults = Builder<EpisodeParseResult>.CreateListOfSize(5)
                 .All()
                 .With(e => e.AirDate = DateTime.Today)
-                .With(e => e.Quality = new Quality(QualityTypes.HDTV, false))
+                .With(e => e.Quality = new QualityModel(QualityTypes.HDTV, false))
                 .Build();
 
             WithMisMatchedSeries();
@@ -189,7 +189,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
             var parseResults = Builder<EpisodeParseResult>.CreateListOfSize(2)
                 .All()
                 .With(e => e.AirDate = DateTime.Today)
-                .With(c => c.Quality = new Quality(QualityTypes.DVD, true))
+                .With(c => c.Quality = new QualityModel(QualityTypes.DVD, true))
                 .Build();
 
             WithMatchingSeries();
@@ -212,20 +212,20 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
             var parseResults = Builder<EpisodeParseResult>.CreateListOfSize(2)
                 .All()
                 .With(e => e.AirDate = DateTime.Today)
-                .With(c => c.Quality = new Quality(QualityTypes.DVD, true))
+                .With(c => c.Quality = new QualityModel(QualityTypes.DVD, true))
                 .TheLast(1)
-                .With(c => c.Quality = new Quality(QualityTypes.SDTV, true))
+                .With(c => c.Quality = new QualityModel(QualityTypes.SDTV, true))
                 .Build();
 
             WithMatchingSeries();
             WithQualityNeeded();
 
             Mocker.GetMock<DownloadProvider>()
-                .Setup(s => s.DownloadReport(It.Is<EpisodeParseResult>(d => d.Quality.QualityType == QualityTypes.DVD)))
+                .Setup(s => s.DownloadReport(It.Is<EpisodeParseResult>(d => d.Quality.Quality == QualityTypes.DVD)))
                 .Returns(false);
 
             Mocker.GetMock<DownloadProvider>()
-                .Setup(s => s.DownloadReport(It.Is<EpisodeParseResult>(d => d.Quality.QualityType == QualityTypes.SDTV)))
+                .Setup(s => s.DownloadReport(It.Is<EpisodeParseResult>(d => d.Quality.Quality == QualityTypes.SDTV)))
                 .Returns(true);
 
             //Act
@@ -244,7 +244,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
             var parseResults = Builder<EpisodeParseResult>.CreateListOfSize(5)
                 .All()
                 .With(e => e.AirDate = null)
-                .With(e => e.Quality = new Quality(QualityTypes.HDTV, false))
+                .With(e => e.Quality = new QualityModel(QualityTypes.HDTV, false))
                 .Build();
 
             WithMatchingSeries();
@@ -265,7 +265,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
             var parseResults = Builder<EpisodeParseResult>.CreateListOfSize(5)
                 .All()
                 .With(e => e.AirDate = DateTime.Today.AddDays(10))
-                .With(e => e.Quality = new Quality(QualityTypes.HDTV, false))
+                .With(e => e.Quality = new QualityModel(QualityTypes.HDTV, false))
                 .Build();
 
             WithMatchingSeries();

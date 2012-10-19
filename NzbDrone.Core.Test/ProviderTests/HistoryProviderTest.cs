@@ -19,7 +19,10 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             WithRealDb();
             //Setup
-            var historyItem = Builder<History>.CreateListOfSize(10).Build();
+            var historyItem = Builder<History>.CreateListOfSize(10)
+                .All()
+                .With(c => c.Quality = QualityTypes.SDTV)
+                .Build();
 
             Db.InsertMany(historyItem);
 
@@ -39,7 +42,15 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var episodes = Builder<Episode>.CreateListOfSize(10).Build();
 
-            var historyItems = Builder<History>.CreateListOfSize(10).TheFirst(5).With(h => h.SeriesId = seriesOne.SeriesId).TheLast(5).With(h => h.SeriesId = seriesTwo.SeriesId).Build();
+            var historyItems = Builder<History>
+                .CreateListOfSize(10)
+                .All()
+                .With(c => c.Quality = QualityTypes.SDTV)
+                .TheFirst(5)
+                .With(h => h.SeriesId = seriesOne.SeriesId)
+                .TheLast(5)
+                .With(h => h.SeriesId = seriesTwo.SeriesId)
+                .Build();
 
 
             Db.InsertMany(historyItems);
@@ -65,7 +76,11 @@ namespace NzbDrone.Core.Test.ProviderTests
         {
             WithRealDb();
 
-            var historyItem = Builder<History>.CreateListOfSize(10).Build();
+            var historyItem = Builder<History>
+                .CreateListOfSize(10)
+                .All()
+                .With(c => c.Quality = QualityTypes.SDTV)
+                .Build();
             Db.InsertMany(historyItem);
 
             //Act
@@ -82,6 +97,8 @@ namespace NzbDrone.Core.Test.ProviderTests
             WithRealDb();
 
             var historyItem = Builder<History>.CreateListOfSize(30)
+                .All()
+                .With(c => c.Quality = QualityTypes.SDTV)
                 .TheFirst(10).With(c => c.Date = DateTime.Now)
                 .TheNext(20).With(c => c.Date = DateTime.Now.AddDays(-31))
                 .Build();
@@ -129,7 +146,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             //Assert
             result.Should().NotBeNull();
-            result.QualityType.Should().Be(QualityTypes.Bluray720p);
+            result.Quality.Should().Be(QualityTypes.Bluray720p);
             result.Proper.Should().BeTrue();
         }
 
@@ -184,7 +201,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             //Assert
             result.Should().NotBeNull();
-            result.QualityType.Should().Be(QualityTypes.Bluray720p);
+            result.Quality.Should().Be(QualityTypes.Bluray720p);
             result.Proper.Should().BeTrue();
         }
 
@@ -195,7 +212,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var episode = Builder<Episode>.CreateNew().Build();
 
-            const QualityTypes quality = QualityTypes.HDTV;
+            QualityTypes quality = QualityTypes.HDTV;
             const bool proper = true;
 
             var history = new History

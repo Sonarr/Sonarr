@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Providers.DecisionEngine
         public virtual bool IsSatisfiedBy(EpisodeParseResult subject)
         {
             logger.Trace("Beginning size check for: {0}", subject);
-            var qualityType = _qualityTypeProvider.Get((int)subject.Quality.QualityType);
+            var qualityType = _qualityTypeProvider.Get((int)subject.Quality.Quality);
 
             //Need to determine if this is a 30 or 60 minute episode
             //Is it a multi-episode release?

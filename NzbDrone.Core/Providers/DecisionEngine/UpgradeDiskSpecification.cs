@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Providers.DecisionEngine
             foreach (var file in _episodeProvider.GetEpisodesByParseResult(subject).Select(c => c.EpisodeFile).Where(c => c != null))
             {
                 logger.Trace("Comparing file quality with report. Existing file is {0} proper:{1}", file.Quality, file.Proper);
-                if (!_qualityUpgradeSpecification.IsSatisfiedBy(new Quality { QualityType = file.Quality, Proper = file.Proper }, subject.Quality, subject.Series.QualityProfile.Cutoff))
+                if (!_qualityUpgradeSpecification.IsSatisfiedBy(new QualityModel { Quality = file.Quality, Proper = file.Proper }, subject.Quality, subject.Series.QualityProfile.Cutoff))
                     return false;
             }
 

@@ -20,6 +20,13 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
     // ReSharper disable InconsistentNaming
     public class ImportFileFixture : CoreTest
     {
+        public static object[] ImportTestCases =
+        {
+            new object[] { QualityTypes.SDTV },
+            new object[] { QualityTypes.DVD },
+            new object[] { QualityTypes.HDTV }
+        };
+
         [Test]
         public void import_new_file_should_succeed()
         {
@@ -49,9 +56,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
 
         }
 
-        [TestCase(QualityTypes.SDTV, false)]
-        [TestCase(QualityTypes.DVD, true)]
-        [TestCase(QualityTypes.HDTV, false)]
+        [Test, TestCaseSource("ImportTestCases")]
         public void import_new_file_with_better_same_quality_should_succeed(QualityTypes currentFileQuality, bool currentFileProper)
         {
             const string newFile = @"WEEDS.S03E01.DUAL.1080p.HELLYWOOD.mkv";
@@ -261,9 +266,6 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                                                .With(f => f.Quality = QualityTypes.SDTV)
                                                .Build())
                 .Build();
-
-            //Mocks
-            
 
             Mocker.GetMock<DiskProvider>()
                 .Setup(e => e.GetSize(fileName)).Returns(12345).Verifiable();

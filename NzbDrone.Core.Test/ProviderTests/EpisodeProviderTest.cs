@@ -88,7 +88,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             WithRealDb();
 
             var fakeSeries = Builder<Series>.CreateNew().Build();
-            var fakeFile = Builder<EpisodeFile>.CreateNew().With(f => f.EpisodeFileId).Build();
+            var fakeFile = Builder<EpisodeFile>.CreateNew().With(f => f.EpisodeFileId).With(c => c.Quality = QualityTypes.SDTV).Build();
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
                 .All().With(e => e.SeriesId = 1).TheFirst(1).With(e => e.EpisodeFileId = 1).With(e => e.EpisodeFile = fakeFile).Build();
 
@@ -858,7 +858,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             WithRealDb();
 
             var fakeSeries = Builder<Series>.CreateNew().Build();
-            var fakeFile = Builder<EpisodeFile>.CreateNew().With(f => f.EpisodeFileId).Build();
+            var fakeFile = Builder<EpisodeFile>.CreateNew().With(f => f.EpisodeFileId).With(c => c.Quality = QualityTypes.SDTV).Build();
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
                 .All().With(e => e.SeriesId = 1).TheFirst(1).With(e => e.EpisodeFileId = 1).With(e => e.EpisodeFile = fakeFile).Build();
 
@@ -902,7 +902,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             WithRealDb();
 
             var fakeSeries = Builder<Series>.CreateNew().Build();
-            var fakeFile = Builder<EpisodeFile>.CreateNew().With(f => f.EpisodeFileId).Build();
+            var fakeFile = Builder<EpisodeFile>.CreateNew().With(f => f.EpisodeFileId).With(c => c.Quality = QualityTypes.SDTV).Build();
             var fakeEpisodes = Builder<Episode>.CreateListOfSize(5)
                 .All().With(e => e.SeriesId = 1).TheFirst(1).With(e => e.EpisodeFileId = 1).With(e => e.EpisodeFile = fakeFile).Build();
 
@@ -1224,6 +1224,7 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             var episodeFile = Builder<EpisodeFile>.CreateNew()
                 .With(c => c.EpisodeFileId = 1)
+                .With(c => c.Quality = QualityTypes.SDTV)
                 .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(2)

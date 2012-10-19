@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Repository.Quality
 
                 foreach (var q in Allowed)
                 {
-                    result += (int)q + "|";
+                    result += q.Id + "|";
                 }
                 return result.Trim('|');
             }
@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Repository.Quality
                 Allowed = new List<QualityTypes>(qualities.Length);
                 foreach (var quality in qualities.Where(q => !String.IsNullOrWhiteSpace(q)))
                 {
-                    Allowed.Add((QualityTypes)Convert.ToInt32(quality));
+                    Allowed.Add(QualityTypes.FindById(Convert.ToInt32(quality)));
                 }
             }
         }

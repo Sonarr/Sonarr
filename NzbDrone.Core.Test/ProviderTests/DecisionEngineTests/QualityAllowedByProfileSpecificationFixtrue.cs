@@ -18,10 +18,21 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
     public class QualityAllowedByProfileSpecificationFixtrue : CoreTest
     {
         private QualityAllowedByProfileSpecification _qualityAllowedByProfile;
-
-
         private EpisodeParseResult parseResult;
 
+        public static object[] AllowedTestCases =
+        {
+            new object[] { QualityTypes.DVD },
+            new object[] { QualityTypes.HDTV },
+            new object[] { QualityTypes.Bluray1080p }
+        };
+
+        public static object[] DeniedTestCases =
+        {
+            new object[] { QualityTypes.SDTV },
+            new object[] { QualityTypes.WEBDL720p },
+            new object[] { QualityTypes.Bluray720p }
+        };
 
         [SetUp]
         public void Setup()
@@ -35,35 +46,28 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
             parseResult = new EpisodeParseResult
             {
                 Series = fakeSeries,
-                Quality = new Quality(QualityTypes.DVD, true),
+                Quality = new QualityModel(QualityTypes.DVD, true),
                 EpisodeNumbers = new List<int> { 3 },
                 SeasonNumber = 12,
             };
         }
 
-
-
-        [TestCase(QualityTypes.DVD)]
-        [TestCase(QualityTypes.HDTV)]
-        [TestCase(QualityTypes.Bluray1080p)]
+        [Test, TestCaseSource("AllowedTestCases")]
         public void should_allow_if_quality_is_defined_in_profile(QualityTypes qualityType)
         {
-            parseResult.Quality.QualityType = qualityType;
+            parseResult.Quality.Quality = qualityType;
             parseResult.Series.QualityProfile.Allowed = new List<QualityTypes> { QualityTypes.DVD, QualityTypes.HDTV, QualityTypes.Bluray1080p };
 
             _qualityAllowedByProfile.IsSatisfiedBy(parseResult).Should().BeTrue();
         }
 
-        [TestCase(QualityTypes.SDTV)]
-        [TestCase(QualityTypes.WEBDL)]
-        [TestCase(QualityTypes.Bluray720p)]
+        [Test, TestCaseSource("DeniedTestCases")]
         public void should_not_allow_if_quality_is_not_defined_in_profile(QualityTypes qualityType)
         {
-            parseResult.Quality.QualityType = qualityType;
+            parseResult.Quality.Quality = qualityType;
             parseResult.Series.QualityProfile.Allowed = new List<QualityTypes> { QualityTypes.DVD, QualityTypes.HDTV, QualityTypes.Bluray1080p };
 
             _qualityAllowedByProfile.IsSatisfiedBy(parseResult).Should().BeFalse();
         }
-
     }
 }

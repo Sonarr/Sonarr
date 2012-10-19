@@ -20,6 +20,15 @@ namespace NzbDrone.Core.Test.ProviderTests
     [TestFixture]
     public class DownloadProviderFixture : CoreTest
     {
+        public static object[] SabNamingCases =
+        {
+            new object[] { 1, new[] { 2 }, "My Episode Title", QualityTypes.DVD, false, "My Series Name - 1x02 - My Episode Title [DVD]" },
+            new object[] { 1, new[] { 2 }, "My Episode Title", QualityTypes.DVD, true, "My Series Name - 1x02 - My Episode Title [DVD] [Proper]" },
+            new object[] { 1, new[] { 2 }, "", QualityTypes.DVD, true, "My Series Name - 1x02 -  [DVD] [Proper]" },
+            new object[] { 1, new[] { 2, 4 }, "My Episode Title", QualityTypes.HDTV, false, "My Series Name - 1x02-1x04 - My Episode Title [HDTV]" },
+            new object[] { 1, new[] { 2, 4 }, "My Episode Title", QualityTypes.HDTV, true, "My Series Name - 1x02-1x04 - My Episode Title [HDTV] [Proper]" },
+            new object[] { 1, new[] { 2, 4 }, "", QualityTypes.HDTV, true, "My Series Name - 1x02-1x04 -  [HDTV] [Proper]" },
+        };
 
         private void SetDownloadClient(DownloadClientType clientType)
         {
@@ -40,7 +49,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                     .Setup(c => c.GetEpisodesByParseResult(It.IsAny<EpisodeParseResult>())).Returns(episodes);
 
             return Builder<EpisodeParseResult>.CreateNew()
-                .With(c => c.Quality = new Quality(QualityTypes.DVD, false))
+                .With(c => c.Quality = new QualityModel(QualityTypes.DVD, false))
                 .With(c => c.Series = Builder<Series>.CreateNew().Build())
                 .With(c => c.EpisodeNumbers = new List<int>{2})
                 .Build();
@@ -67,7 +76,6 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Setup(s => s.DownloadNzb(It.IsAny<String>(), It.IsAny<String>()))
                 .Returns(false);
         }
-
 
         [Test]
         public void Download_report_should_send_to_sab_add_to_history_mark_as_grabbed()
@@ -162,8 +170,6 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Verify(c => c.OnGrab(It.IsAny<String>()), Times.Never());
         }
 
-
-
         [Test]
         public void should_return_sab_as_active_client()
         {
@@ -178,14 +184,8 @@ namespace NzbDrone.Core.Test.ProviderTests
             Mocker.Resolve<DownloadProvider>().GetActiveDownloadClient().Should().BeAssignableTo<BlackholeProvider>();
         }
 
-
-        [TestCase(1, new[] { 2 }, "My Episode Title", QualityTypes.DVD, false, Result = "My Series Name - 1x02 - My Episode Title [DVD]")]
-        [TestCase(1, new[] { 2 }, "My Episode Title", QualityTypes.DVD, true, Result = "My Series Name - 1x02 - My Episode Title [DVD] [Proper]")]
-        [TestCase(1, new[] { 2 }, "", QualityTypes.DVD, true, Result = "My Series Name - 1x02 -  [DVD] [Proper]")]
-        [TestCase(1, new[] { 2, 4 }, "My Episode Title", QualityTypes.HDTV, false, Result = "My Series Name - 1x02-1x04 - My Episode Title [HDTV]")]
-        [TestCase(1, new[] { 2, 4 }, "My Episode Title", QualityTypes.HDTV, true, Result = "My Series Name - 1x02-1x04 - My Episode Title [HDTV] [Proper]")]
-        [TestCase(1, new[] { 2, 4 }, "", QualityTypes.HDTV, true, Result = "My Series Name - 1x02-1x04 -  [HDTV] [Proper]")]
-        public string create_proper_sab_titles(int seasons, int[] episodes, string title, QualityTypes quality, bool proper)
+        [Test, TestCaseSource("SabNamingCases")]
+        public void create_proper_sab_titles(int seasons, int[] episodes, string title, QualityTypes quality, bool proper, string expected)
         {
             var series = Builder<Series>.CreateNew()
                     .With(c => c.Title = "My Series Name")
@@ -195,13 +195,13 @@ namespace NzbDrone.Core.Test.ProviderTests
             {
                 AirDate = DateTime.Now,
                 EpisodeNumbers = episodes.ToList(),
-                Quality = new Quality(quality, proper),
+                Quality = new QualityModel(quality, proper),
                 SeasonNumber = seasons,
                 Series = series,
                 EpisodeTitle = title
             };
 
-            return Mocker.Resolve<DownloadProvider>().GetDownloadTitle(parsResult);
+            Mocker.Resolve<DownloadProvider>().GetDownloadTitle(parsResult).Should().Be(expected);
         }
 
         [TestCase(true, Result = "My Series Name - Season 1 [Bluray720p] [Proper]")]
@@ -215,7 +215,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var parsResult = new EpisodeParseResult()
             {
                 AirDate = DateTime.Now,
-                Quality = new Quality(QualityTypes.Bluray720p, proper),
+                Quality = new QualityModel(QualityTypes.Bluray720p, proper),
                 SeasonNumber = 1,
                 Series = series,
                 EpisodeTitle = "My Episode Title",
@@ -237,7 +237,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var parsResult = new EpisodeParseResult
             {
                 AirDate = new DateTime(2011, 12, 1),
-                Quality = new Quality(QualityTypes.Bluray720p, proper),
+                Quality = new QualityModel(QualityTypes.Bluray720p, proper),
                 Series = series,
                 EpisodeTitle = "My Episode Title",
             };

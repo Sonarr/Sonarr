@@ -91,10 +91,10 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
                 .All()
                 .With(e => e.SeasonNumber = 1)
                 .With(e => e.EpisodeNumbers = new List<int> { 1 })
-                .With(c => c.Quality = new Quality(QualityTypes.DVD, true))
+                .With(c => c.Quality = new QualityModel(QualityTypes.DVD, true))
                 .With(c => c.Age = 10)
                 .Random(1)
-                .With(c => c.Quality = new Quality(QualityTypes.Bluray1080p, true))
+                .With(c => c.Quality = new QualityModel(QualityTypes.Bluray1080p, true))
                 .With(c => c.Age = 100)
                 .Build();
 
@@ -102,7 +102,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
             WithSuccessfulDownload();
 
             Mocker.GetMock<AllowedDownloadSpecification>()
-                .Setup(s => s.IsSatisfiedBy(It.Is<EpisodeParseResult>(d => d.Quality.QualityType == QualityTypes.Bluray1080p)))
+                .Setup(s => s.IsSatisfiedBy(It.Is<EpisodeParseResult>(d => d.Quality.Quality == QualityTypes.Bluray1080p)))
                 .Returns(ReportRejectionType.None);
 
             //Act
@@ -125,7 +125,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
                 .All()
                 .With(e => e.SeasonNumber = 1)
                 .With(e => e.EpisodeNumbers = new List<int> { 1 })
-                .With(c => c.Quality = new Quality(QualityTypes.Bluray1080p, true))
+                .With(c => c.Quality = new QualityModel(QualityTypes.Bluray1080p, true))
                 .With(c => c.Age = 300)
                 .Build();
 
@@ -157,7 +157,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
                 .All()
                 .With(e => e.SeasonNumber = 1)
                 .With(e => e.EpisodeNumbers = new List<int> { 1 })
-                .With(c => c.Quality = new Quality(QualityTypes.DVD, true))
+                .With(c => c.Quality = new QualityModel(QualityTypes.DVD, true))
                 .Build();
 
             WithMatchingSeries();
@@ -183,7 +183,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
                 .All()
                 .With(e => e.SeasonNumber = 1)
                 .With(e => e.EpisodeNumbers = new List<int> { 1 })
-                .With(e => e.Quality = new Quality(QualityTypes.HDTV, false))
+                .With(e => e.Quality = new QualityModel(QualityTypes.HDTV, false))
                 .Build();
 
             WithNullSeries();
@@ -206,7 +206,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
                 .All()
                 .With(e => e.SeasonNumber = 1)
                 .With(e => e.EpisodeNumbers = new List<int> { 1 })
-                .With(e => e.Quality = new Quality(QualityTypes.HDTV, false))
+                .With(e => e.Quality = new QualityModel(QualityTypes.HDTV, false))
                 .Build();
 
             WithMisMatchedSeries();
@@ -229,7 +229,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
                 .All()
                 .With(e => e.SeasonNumber = 2)
                 .With(e => e.EpisodeNumbers = new List<int> { 1 })
-                .With(e => e.Quality = new Quality(QualityTypes.HDTV, false))
+                .With(e => e.Quality = new QualityModel(QualityTypes.HDTV, false))
                 .Build();
 
             WithMatchingSeries();
@@ -252,7 +252,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
                 .All()
                 .With(e => e.SeasonNumber = 1)
                 .With(e => e.EpisodeNumbers = new List<int> { 2 })
-                .With(e => e.Quality = new Quality(QualityTypes.HDTV, false))
+                .With(e => e.Quality = new QualityModel(QualityTypes.HDTV, false))
                 .Build();
 
             WithMatchingSeries();
@@ -275,7 +275,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
                 .All()
                 .With(e => e.SeasonNumber = 1)
                 .With(e => e.EpisodeNumbers = new List<int> { 5 })
-                .With(c => c.Quality = new Quality(QualityTypes.DVD, true))
+                .With(c => c.Quality = new QualityModel(QualityTypes.DVD, true))
                 .TheLast(1)
                 .With(e => e.EpisodeNumbers = new List<int> { 1, 2, 3, 4, 5 })
                 .Build();
@@ -302,20 +302,20 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
                 .All()
                 .With(e => e.SeasonNumber = 1)
                 .With(e => e.EpisodeNumbers = new List<int> { 1 })
-                .With(c => c.Quality = new Quality(QualityTypes.DVD, true))
+                .With(c => c.Quality = new QualityModel(QualityTypes.DVD, true))
                 .TheLast(1)
-                .With(c => c.Quality = new Quality(QualityTypes.SDTV, true))
+                .With(c => c.Quality = new QualityModel(QualityTypes.SDTV, true))
                 .Build();
 
             WithMatchingSeries();
             WithQualityNeeded();
 
             Mocker.GetMock<DownloadProvider>()
-                .Setup(s => s.DownloadReport(It.Is<EpisodeParseResult>(d => d.Quality.QualityType == QualityTypes.DVD)))
+                .Setup(s => s.DownloadReport(It.Is<EpisodeParseResult>(d => d.Quality.Quality == QualityTypes.DVD)))
                 .Returns(false);
 
             Mocker.GetMock<DownloadProvider>()
-                .Setup(s => s.DownloadReport(It.Is<EpisodeParseResult>(d => d.Quality.QualityType == QualityTypes.SDTV)))
+                .Setup(s => s.DownloadReport(It.Is<EpisodeParseResult>(d => d.Quality.Quality == QualityTypes.SDTV)))
                 .Returns(true);
 
             //Act
@@ -336,10 +336,10 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
                 .All()
                 .With(e => e.SeasonNumber = 1)
                 .With(e => e.EpisodeNumbers = new List<int> { 1 })
-                .With(c => c.Quality = new Quality(QualityTypes.DVD, true))
+                .With(c => c.Quality = new QualityModel(QualityTypes.DVD, true))
                 .With(c => c.Age = 10)
                 .Random(1)
-                .With(c => c.Quality = new Quality(QualityTypes.Bluray1080p, true))
+                .With(c => c.Quality = new QualityModel(QualityTypes.Bluray1080p, true))
                 .With(c => c.Age = 100)
                 .Build();
 
@@ -349,7 +349,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
             WithSuccessfulDownload();
 
             Mocker.GetMock<AllowedDownloadSpecification>()
-                .Setup(s => s.IsSatisfiedBy(It.Is<EpisodeParseResult>(d => d.Quality.QualityType == QualityTypes.Bluray1080p)))
+                .Setup(s => s.IsSatisfiedBy(It.Is<EpisodeParseResult>(d => d.Quality.Quality == QualityTypes.Bluray1080p)))
                 .Returns(ReportRejectionType.None);
 
             //Act

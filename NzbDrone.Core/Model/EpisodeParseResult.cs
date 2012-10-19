@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Model
 
         public DateTime? AirDate { get; set; }
 
-        public Quality Quality { get; set; }
+        public QualityModel Quality { get; set; }
 
         public LanguageType Language { get; set; }
 

@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Providers
             var hd = new QualityProfile
             {
                 Name = "HD",
-                Allowed = new List<QualityTypes> { QualityTypes.HDTV, QualityTypes.WEBDL, QualityTypes.Bluray720p },
+                Allowed = new List<QualityTypes> { QualityTypes.HDTV, QualityTypes.WEBDL720p, QualityTypes.Bluray720p },
                 Cutoff = QualityTypes.HDTV
             };
 

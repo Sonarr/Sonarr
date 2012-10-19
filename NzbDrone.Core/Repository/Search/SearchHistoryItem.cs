@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Repository.Search
         public string NzbInfoUrl { get; set; }
         public bool Success { get; set; }
         public ReportRejectionType SearchError { get; set; }
-        public QualityTypes Quality { get; set; }
+        public Quality.QualityTypes Quality { get; set; }
         public bool Proper { get; set; }
         public int Age { get; set; }
         public LanguageType Language { get; set; }

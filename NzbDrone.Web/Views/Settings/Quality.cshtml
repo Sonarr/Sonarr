@@ -1,11 +1,15 @@
 ﻿@using NzbDrone.Core.Repository.Quality
 @using NzbDrone.Web.Helpers;
 @model NzbDrone.Web.Models.QualityModel
-@{ Layout = null; }
+
+@{
+    Layout = "_SettingsLayout.cshtml";
+}
+
 <div id="stylized">
-    @using (Html.BeginForm("SaveQuality", "Settings", FormMethod.Post, new { id = "QualityForm", name = "QualityForm" }))
+    @using (Html.BeginForm("SaveQuality", "Settings", FormMethod.Post, new { id = "QualityForm", name = "QualityForm", @class = "settingsForm" }))
     {
-        <div id="top" class="settingsForm">
+        <div id="top">
             <label class="labelClass">@Html.LabelFor(m => m.DefaultQualityProfileId)
                 <span class="small">@Html.DescriptionFor(m => m.DefaultQualityProfileId)</span>
             </label>
@@ -41,7 +45,7 @@
                     </div>
                     @Html.HiddenFor(m => m.SdtvMaxSize, new { @class = "slider-value" })
                     30 minute size: <span class="30-minute"></span>MB | 60 minute size: <span class="60-minute">
-                                                                                     </span>MB
+                                                                                        </span>MB
                 </div>
                 <div class="slider-container">
                     <b>DVD</b>
@@ -49,7 +53,7 @@
                     </div>
                     @Html.HiddenFor(m => m.DvdMaxSize, new { @class = "slider-value" })
                     30 minute size: <span class="30-minute"></span>MB | 60 minute size: <span class="60-minute">
-                                                                                     </span>MB
+                                                                                        </span>MB
                 </div>
                 <div class="slider-container">
                     <b>HDTV</b>
@@ -57,15 +61,15 @@
                     </div>
                     @Html.HiddenFor(m => m.HdtvMaxSize, new { @class = "slider-value" })
                     30 minute size: <span class="30-minute"></span>MB | 60 minute size: <span class="60-minute">
-                                                                                     </span>MB
+                                                                                        </span>MB
                 </div>
                 <div class="slider-container">
-                    <b>WEBDL</b>
+                    <b>WEBDL-720p</b>
                     <div id="webdl-slider" class="slider">
                     </div>
-                    @Html.HiddenFor(m => m.WebdlMaxSize, new { @class = "slider-value" })
+                    @Html.HiddenFor(m => m.Webdl720pMaxSize, new { @class = "slider-value" })
                     30 minute size: <span class="30-minute"></span>MB | 60 minute size: <span class="60-minute">
-                                                                                     </span>MB
+                                                                                        </span>MB
                 </div>
                 <div class="slider-container">
                     <b>Bluray 720p</b>
@@ -73,7 +77,15 @@
                     </div>
                     @Html.HiddenFor(m => m.Bluray720pMaxSize, new { @class = "slider-value" })
                     30 minute size: <span class="30-minute"></span>MB | 60 minute size: <span class="60-minute">
-                                                                                     </span>MB
+                                                                                        </span>MB
+                </div>
+                <div class="slider-container">
+                    <b>WEBDL-1080p</b>
+                    <div id="webdl-slider" class="slider">
+                    </div>
+                    @Html.HiddenFor(m => m.Webdl1080pMaxSize, new { @class = "slider-value" })
+                    30 minute size: <span class="30-minute"></span>MB | 60 minute size: <span class="60-minute">
+                                                                                        </span>MB
                 </div>
                 <div class="slider-container">
                     <b>Bluray 1080p</b>
@@ -81,7 +93,7 @@
                     </div>
                     @Html.HiddenFor(m => m.Bluray1080pMaxSize, new { @class = "slider-value" })
                     30 minute size: <span class="30-minute"></span>MB | 60 minute size: <span class="60-minute">
-                                                                                     </span>MB
+                                                                                        </span>MB
                 </div>
             </div>
         </div>
@@ -90,12 +102,17 @@
             Save</button>
     }
 </div>
-<script type="text/javascript">
-    $(document).ready(function () {
-        setupSliders();
-    });
 
-    $('.quality-selectee').livequery(function () {
-        $(this).button();
-    });
-</script>
+@section Scripts {
+    @Html.IncludeScript("NzbDrone/qualitySettings.js")
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            setupSliders();
+        });
+
+        $('.quality-selectee').livequery(function() {
+            $(this).button();
+        });
+    </script>
+}

@@ -273,7 +273,7 @@
     <Compile Include="Model\JobQueueItem.cs" />
     <Compile Include="Model\LanguageType.cs" />
     <Compile Include="Model\MisnamedEpisodeModel.cs" />
-    <Compile Include="Model\Quality.cs" />
+    <Compile Include="Model\QualityModel.cs" />
     <Compile Include="Model\Sabnzbd\SabHistoryItem.cs" />
     <Compile Include="Model\Sabnzbd\SabHistory.cs" />
     <Compile Include="Model\Sabnzbd\SabJsonError.cs" />
@@ -330,6 +330,7 @@
     <Compile Include="Jobs\UpdateInfoJob.cs" />
     <Compile Include="Providers\StatsProvider.cs" />
     <Compile Include="Repository\MetadataDefinition.cs" />
+    <Compile Include="Repository\Quality\QualityTypes.cs" />
     <Compile Include="Repository\Search\SearchHistoryItem.cs" />
     <Compile Include="Repository\Search\SearchHistory.cs" />
     <Compile Include="Model\ReportRejectionType.cs" />
@@ -541,7 +542,6 @@
     <Compile Include="Repository\Quality\QualityType.cs" />
     <Compile Include="Repository\Quality\QualityProfile.cs" />
     <Compile Include="Repository\RootDir.cs" />
-    <Compile Include="Repository\Quality\QualityTypes.cs" />
     <Compile Include="Repository\SceneMapping.cs" />
     <Compile Include="Repository\Series.cs" />
     <Compile Include="CentralDispatch.cs" />

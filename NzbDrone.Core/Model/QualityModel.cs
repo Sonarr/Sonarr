@@ -3,29 +3,29 @@ using NzbDrone.Core.Repository.Quality;
 
 namespace NzbDrone.Core.Model
 {
-    public class Quality : IComparable<Quality>
+    public class QualityModel : IComparable<QualityModel>
     {
-        public QualityTypes QualityType { get; set; }
+        public QualityTypes Quality { get; set; }
 
         public Boolean Proper { get; set; }
 
-        public Quality() { }
+        public QualityModel() { }
 
-        public Quality(QualityTypes quality, Boolean proper)
+        public QualityModel(QualityTypes quality, Boolean proper)
         {
-            QualityType = quality;
+            Quality = quality;
             Proper = proper;
         }
 
-        public int CompareTo(Quality other)
+        public int CompareTo(QualityModel other)
         {
-            if (other.QualityType > QualityType)
+            if (other.Quality > Quality)
                 return -1;
 
-            if (other.QualityType < QualityType)
+            if (other.Quality < Quality)
                 return 1;
 
-            if (other.QualityType == QualityType && other.Proper == Proper)
+            if (other.Quality == Quality && other.Proper == Proper)
                 return 0;
 
             if (Proper && !other.Proper)
@@ -37,12 +37,12 @@ namespace NzbDrone.Core.Model
             return 0;
         }
 
-        public static bool operator !=(Quality x, Quality y)
+        public static bool operator !=(QualityModel x, QualityModel y)
         {
             return !(x == y);
         }
 
-        public static bool operator ==(Quality x, Quality y)
+        public static bool operator ==(QualityModel x, QualityModel y)
         {
             var xObj = (Object)x;
             var yObj = (object)y;
@@ -55,29 +55,29 @@ namespace NzbDrone.Core.Model
             return x.CompareTo(y) == 0;
         }
 
-        public static bool operator >(Quality x, Quality y)
+        public static bool operator >(QualityModel x, QualityModel y)
         {
             return x.CompareTo(y) > 0;
         }
 
-        public static bool operator <(Quality x, Quality y)
+        public static bool operator <(QualityModel x, QualityModel y)
         {
-            return x.CompareTo(y) < 1;
+            return x.CompareTo(y) < 0;
         }
 
-        public static bool operator <=(Quality x, Quality y)
+        public static bool operator <=(QualityModel x, QualityModel y)
         {
             return x.CompareTo(y) <= 0;
         }
 
-        public static bool operator >=(Quality x, Quality y)
+        public static bool operator >=(QualityModel x, QualityModel y)
         {
             return x.CompareTo(y) >= 0;
         }
 
         public override string ToString()
         {
-            string result = QualityType.ToString();
+            string result = Quality.ToString();
             if (Proper)
             {
                 result += " [proper]";
@@ -92,24 +92,24 @@ namespace NzbDrone.Core.Model
             {
                 int hash = 17;
                 hash = hash * 23 + Proper.GetHashCode();
-                hash = hash * 23 + QualityType.GetHashCode();
+                hash = hash * 23 + Quality.GetHashCode();
                 return hash;
             }
         }
 
-        public bool Equals(Quality other)
+        public bool Equals(QualityModel other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Equals(other.QualityType, QualityType) && other.Proper.Equals(Proper);
+            return Equals(other.Quality, Quality) && other.Proper.Equals(Proper);
         }
 
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != typeof (Quality)) return false;
-            return Equals((Quality) obj);
+            if (obj.GetType() != typeof (QualityModel)) return false;
+            return Equals((QualityModel) obj);
         }
     }
 }

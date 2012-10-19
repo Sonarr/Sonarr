@@ -1,12 +1,16 @@
 ﻿@using NzbDrone.Web.Helpers
 @model NzbDrone.Web.Models.IndexerSettingsModel
-@{ Layout = null;  }
+
+@{
+    Layout = "_SettingsLayout.cshtml";
+}
 
 <style>
     .indexerStatusContainer {
         margin-left: 14px;
     }
 </style>
+
 <div class="indexerStatusContainer">
     @Html.CheckBox("nzbMatrixStatus", @Model.NzbMatrixEnabled, new { @class = "indexerStatusButton" })
     <label for="nzbMatrixStatus">NZBMatrix</label>
@@ -177,7 +181,9 @@
     }
 </div>
 
-<script type="text/javascript">
+@section Scripts
+{
+    <script type="text/javascript">
     $(document).ready(function () {
         //Allow unobstrusive validation of the AJAX loaded form
         $.validator.unobtrusive.parse("#IndexersForm");
@@ -318,3 +324,4 @@
         $("#title_" + profileId).text(value);
     }).keyup();
   </script>
+}

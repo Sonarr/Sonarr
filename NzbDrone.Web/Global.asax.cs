@@ -6,6 +6,7 @@ using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using LowercaseRoutesMVC;
 using NLog.Config;
 using Ninject;
 using Ninject.Web.Mvc;
@@ -26,7 +27,7 @@ namespace NzbDrone.Web
             routes.IgnoreRoute("{*favicon}", new { favicon = @"(.*/)?favicon.ico(/.*)?" });
 
 
-            routes.MapRoute(
+            routes.MapRouteLowercase(
                 "Default", // Route name
                 "{controller}/{action}/{id}", // URL with parameters
                 new { controller = "Series", action = "Index", id = UrlParameter.Optional } // Parameter defaults

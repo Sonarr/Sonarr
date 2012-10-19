@@ -1,7 +1,6 @@
-﻿@using NzbDrone.Web.Helpers
-@model NzbDrone.Web.Models.EpisodeNamingModel
+﻿@model NzbDrone.Web.Models.EpisodeNamingModel
 @{
-    Layout = null;
+    Layout = "_SettingsLayout.cshtml";
 }
 <style>
     #examples
@@ -36,3 +35,11 @@
             Save</button>
     }
 </div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            createExamples();
+        });
+    </script>
+}

@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Providers
                                             Date = DateTime.Now,
                                             Indexer = parseResult.Indexer,
                                             IsProper = parseResult.Quality.Proper,
-                                            Quality = parseResult.Quality.QualityType,
+                                            Quality = parseResult.Quality.Quality,
                                             NzbTitle = parseResult.OriginalString,
                                             EpisodeId = episode.EpisodeId,
                                             SeriesId = episode.SeriesId,
@@ -104,7 +104,7 @@ namespace NzbDrone.Core.Providers
             if (parseResult.FullSeason)
             {
                 var seasonResult = String.Format("{0} - Season {1} [{2}]", seriesTitle,
-                                     parseResult.SeasonNumber, parseResult.Quality.QualityType);
+                                     parseResult.SeasonNumber, parseResult.Quality.Quality);
 
                 if (parseResult.Quality.Proper)
                     seasonResult += " [Proper]";
@@ -115,7 +115,7 @@ namespace NzbDrone.Core.Providers
             if (parseResult.Series.IsDaily)
             {
                 var dailyResult = String.Format("{0} - {1:yyyy-MM-dd} - {2} [{3}]", seriesTitle,
-                                     parseResult.AirDate, parseResult.EpisodeTitle, parseResult.Quality.QualityType);
+                                     parseResult.AirDate, parseResult.EpisodeTitle, parseResult.Quality.Quality);
 
                 if (parseResult.Quality.Proper)
                     dailyResult += " [Proper]";
@@ -134,7 +134,7 @@ namespace NzbDrone.Core.Providers
 
             var epNumberString = String.Join("-", episodeString);
 
-            var result = String.Format("{0} - {1} - {2} [{3}]", seriesTitle, epNumberString, parseResult.EpisodeTitle, parseResult.Quality.QualityType);
+            var result = String.Format("{0} - {1} - {2} [{3}]", seriesTitle, epNumberString, parseResult.EpisodeTitle, parseResult.Quality.Quality);
 
             if (parseResult.Quality.Proper)
             {
