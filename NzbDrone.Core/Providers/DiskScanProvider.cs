@@ -110,8 +110,8 @@ namespace NzbDrone.Core.Providers
 
             long size = _diskProvider.GetSize(filePath);
 
-            //If Size is less than 40MB and contains sample. Check for Size to ensure its not an episode with sample in the title
-            if (size < Constants.IgnoreFileSize && filePath.ToLower().Contains("sample"))
+            //Skip any file under 40MB - New samples don't even have sample in the name...
+            if (size < Constants.IgnoreFileSize)
             {
                 Logger.Trace("[{0}] appears to be a sample. skipping.", filePath);
                 return null;

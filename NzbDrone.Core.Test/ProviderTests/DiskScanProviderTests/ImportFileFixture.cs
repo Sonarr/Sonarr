@@ -393,6 +393,26 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
             Mocker.GetMock<DiskProvider>().Verify(p => p.DeleteFile(It.IsAny<string>()), Times.Never());
         }
 
+        [Test]
+        public void should_return_null_if_file_size_is_under_40MB()
+        {
+            var series = Builder<Series>
+                    .CreateNew()
+                    .Build();
+
+            const string path = @"C:\Test\TV\30.rock.s01e01.pilot.avi";
+
+            Mocker.GetMock<MediaFileProvider>()
+                    .Setup(m => m.Exists(path))
+                    .Returns(false);
+
+            Mocker.GetMock<DiskProvider>()
+                    .Setup(d => d.GetFileSize(path))
+                    .Returns(20.Megabytes());
+
+            Mocker.Resolve<DiskScanProvider>().ImportFile(series, path).Should().BeNull();
+        }
+
         private static void VerifyFileImport(EpisodeFile result, AutoMoqer Mocker, Episode fakeEpisode, int size)
         {
             Mocker.VerifyAllMocks();
