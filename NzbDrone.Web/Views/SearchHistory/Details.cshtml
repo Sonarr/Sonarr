@@ -17,7 +17,8 @@
                 .ChangePageLength(false)
                 .AddColumn(new Column().Image("/Content/Images/Indexers/{Indexer}.png", new { alt = "{Indexer}", title = "{Indexer}" }, "{Indexer}").Sortable(false).Title("").Width("20px"))
                 .AddColumn(new Column().DataProperty("ReportTitle").Title("Report Title"))
-                .AddColumn(new Column().Image("/Content/Images/{Success}.png", new { alt = "{Success}", title = "{Success}", @class = "gridImage" }, "{Success}").Title("Successful").Width("100px"))
+                .AddColumn(new Column().DataProperty("Success").Title("Successful").Width("100px"))
+                //.AddColumn(new Column().Image("/Content/Images/{Success}.png", new { alt = "{Success}", title = "{Success}", @class = "gridImage" }, "{Success}").Title("Successful").Width("100px"))
                 .AddColumn(new Column().DisplayAndSort("Quality", "QualityInt").Title("Quality").Width("80px"))
                 .AddColumn(new Column().DataProperty("SearchError").Title("Error"))
                 .AddColumn(new Column().DataProperty("return actionColumn(source, type, val);", true).Sortable(false).Searchable(false))
@@ -37,7 +38,7 @@
         
         function actionColumn(source, type, val) {
             if (type === 'display' || type === 'filter') {
-                return '<a href="/SearchHistory/ForceDownload/' + source["Id"] + '" data-ajax="true" data-ajax-confirm="Are you sure?"><img src="/Content/Images/Plus.png" alt="Force" title="Force" class="gridAction"/></a>';
+                return '<a href="/SearchHistory/ForceDownload/' + source["Id"] + '" data-ajax="true" data-ajax-confirm="Are you sure?"><i class="icon-plus gridAction"></i></a>';
             }
             // 'sort' and 'type' both just use the raw data
             return '';
