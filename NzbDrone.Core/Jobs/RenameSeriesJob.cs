@@ -41,18 +41,18 @@ namespace NzbDrone.Core.Jobs
             get { return TimeSpan.FromTicks(0); }
         }
 
-        public void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
+        public void Start(ProgressNotification notification, dynamic options)
         {
             List<Series> seriesToRename;
 
-            if (targetId <= 0)
+            if (options == null || options.SeriesId <= 0)
             {
                 seriesToRename = _seriesProvider.GetAllSeries().ToList();
             }
 
             else
             {
-                seriesToRename = new List<Series>{  _seriesProvider.GetSeries(targetId) };
+                seriesToRename = new List<Series>{  _seriesProvider.GetSeries(options.SeriesId) };
             }
 
             foreach(var series in seriesToRename)

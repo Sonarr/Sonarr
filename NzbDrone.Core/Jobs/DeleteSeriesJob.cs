@@ -32,9 +32,9 @@ namespace NzbDrone.Core.Jobs
             get { return TimeSpan.FromTicks(0); }
         }
 
-        public void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
+        public void Start(ProgressNotification notification, dynamic options)
         {
-            DeleteSeries(notification, targetId, Convert.ToBoolean(secondaryTargetId));
+            DeleteSeries(notification, options.SeriesId, options.DeleteFiless);
         }
 
         private void DeleteSeries(ProgressNotification notification, int seriesId, bool deleteFiles)

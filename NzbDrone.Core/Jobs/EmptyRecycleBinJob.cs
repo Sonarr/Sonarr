@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Jobs
             get { return TimeSpan.FromTicks(0); }
         }
 
-        public void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
+        public void Start(ProgressNotification notification, dynamic options)
         {
             _recycleBinProvider.Empty();
         }

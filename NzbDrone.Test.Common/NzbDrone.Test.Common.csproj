@@ -89,6 +89,7 @@
     <Compile Include="ExceptionVerification.cs" />
     <Compile Include="LoggingTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReflectionExtensions.cs" />
     <Compile Include="TestBase.cs" />
   </ItemGroup>
   <ItemGroup>

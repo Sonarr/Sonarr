@@ -6,6 +6,7 @@ using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Test.Common;
 using NzbDrone.Test.Common.AutoMoq;
 
 namespace NzbDrone.Core.Test.JobTests
@@ -30,14 +31,14 @@ namespace NzbDrone.Core.Test.JobTests
                 .Setup(c => c.IsIgnored(It.IsAny<int>(), It.IsAny<int>())).Returns(false);
 
             Mocker.GetMock<SeasonSearchJob>()
-                .Setup(c => c.Start(notification, 1, It.IsAny<int>())).Verifiable();
+                .Setup(c => c.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("SeriesId") == 1 && d.GetPropertyValue<int>("SeasonNumber") >= 0))).Verifiable();
 
             //Act
-            Mocker.Resolve<SeriesSearchJob>().Start(notification, 1, 0);
+            Mocker.Resolve<SeriesSearchJob>().Start(notification, new { SeriesId = 1 });
 
             //Assert
             Mocker.VerifyAllMocks();
-            Mocker.GetMock<SeasonSearchJob>().Verify(c => c.Start(notification, 1, It.IsAny<int>()),
+            Mocker.GetMock<SeasonSearchJob>().Verify(c => c.Start(notification, It.Is<object>(d => d.GetPropertyValue<int>("SeriesId") == 1 && d.GetPropertyValue<int>("SeasonNumber") >= 0)),
                                                        Times.Exactly(seasons.Count));
         }
 
@@ -54,11 +55,11 @@ namespace NzbDrone.Core.Test.JobTests
                 .Setup(c => c.GetSeasons(1)).Returns(seasons);
 
             //Act
-            Mocker.Resolve<SeriesSearchJob>().Start(notification, 1, 0);
+            Mocker.Resolve<SeriesSearchJob>().Start(notification, new { SeriesId = 1 });
 
             //Assert
             Mocker.VerifyAllMocks();
-            Mocker.GetMock<SeasonSearchJob>().Verify(c => c.Start(notification, 1, It.IsAny<int>()),
+            Mocker.GetMock<SeasonSearchJob>().Verify(c => c.Start(notification, new { SeriesId = 1, SeasonNumber = It.IsAny<int>() }),
                                                        Times.Never());
         }
 
@@ -69,11 +70,11 @@ namespace NzbDrone.Core.Test.JobTests
                 .Setup(c => c.GetSeasons(It.IsAny<int>()))
                 .Returns(new List<int> { 0, 1, 2 });
 
-            Mocker.Resolve<SeriesSearchJob>().Start(MockNotification, 12, 0);
+            Mocker.Resolve<SeriesSearchJob>().Start(MockNotification, new { SeriesId = 12 });
 
 
             Mocker.GetMock<SeasonSearchJob>()
-                .Verify(c => c.Start(It.IsAny<ProgressNotification>(), It.IsAny<int>(), 0), Times.Never());
+                .Verify(c => c.Start(It.IsAny<ProgressNotification>(), new { SeriesId = It.IsAny<int>(), SeasonNumber = 0 }), Times.Never());
         }
     }
 }

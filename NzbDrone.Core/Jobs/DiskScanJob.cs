@@ -38,16 +38,16 @@ namespace NzbDrone.Core.Jobs
             get { return TimeSpan.FromHours(6); }
         }
 
-        public virtual void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
+        public virtual void Start(ProgressNotification notification, dynamic options)
         {
             IList<Series> seriesToScan;
-            if (targetId == 0)
+            if (options == null || options.SeriesId == 0)
             {
                 seriesToScan = _seriesProvider.GetAllSeries().OrderBy(o => SortHelper.SkipArticles(o.Title)).ToList();
             }
             else
             {
-                seriesToScan = new List<Series>() { _seriesProvider.GetSeries(targetId) };
+                seriesToScan = new List<Series>() { _seriesProvider.GetSeries(options.SeriesId) };
             }
 
             foreach (var series in seriesToScan)

@@ -31,12 +31,12 @@ namespace NzbDrone.Core.Jobs
             get { return TimeSpan.FromTicks(0); }
         }
 
-        public virtual void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
+        public virtual void Start(ProgressNotification notification, dynamic options)
         {
-            if (targetId <= 0)
-                throw new ArgumentOutOfRangeException("targetId");
+            if (options == null || options.EpisodeId <= 0)
+                throw new ArgumentException("options");
 
-            _searchProvider.EpisodeSearch(notification, targetId);
+            _searchProvider.EpisodeSearch(notification, options.EpisodeId);
         }
     }
 }

@@ -41,16 +41,16 @@ namespace NzbDrone.Core.Jobs
             get { return TimeSpan.FromHours(12); }
         }
 
-        public virtual void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
+        public virtual void Start(ProgressNotification notification, dynamic options)
         {
             IList<Series> seriesToUpdate;
-            if (targetId == 0)
+            if (options == null || options.SeriesId == 0)
             {
                 seriesToUpdate = _seriesProvider.GetAllSeries().OrderBy(o => SortHelper.SkipArticles(o.Title)).ToList();
             }
             else
             {
-                seriesToUpdate = new List<Series> { _seriesProvider.GetSeries(targetId) };
+                seriesToUpdate = new List<Series> { _seriesProvider.GetSeries(options.SeriesId) };
             }
 
             //Update any Daily Series in the DB with the IsDaily flag

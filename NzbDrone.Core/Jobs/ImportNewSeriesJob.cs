@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Jobs
             get { return TimeSpan.FromMinutes(1); }
         }
 
-        public void Start(ProgressNotification notification, int targetId, int secondaryTargetId)
+        public void Start(ProgressNotification notification, dynamic options)
         {
             _attemptedSeries = new List<int>();
             ScanSeries(notification);
@@ -72,14 +72,14 @@ namespace NzbDrone.Core.Jobs
                     _attemptedSeries.Add(currentSeries.SeriesId);
                     notification.CurrentMessage = String.Format("Searching for '{0}'", new DirectoryInfo(currentSeries.Path).Name);
 
-                    _updateInfoJob.Start(notification, currentSeries.SeriesId, 0);
-                    _diskScanJob.Start(notification, currentSeries.SeriesId, 0);
+                    _updateInfoJob.Start(notification, new { SeriesId = currentSeries.SeriesId });
+                    _diskScanJob.Start(notification, new { SeriesId = currentSeries.SeriesId });
 
                     var updatedSeries = _seriesProvider.GetSeries(currentSeries.SeriesId);
                     AutoIgnoreSeasons(updatedSeries.SeriesId);
 
                     //Download the banner for the new series
-                    _bannerDownloadJob.Start(notification, updatedSeries.SeriesId, 0);
+                    _bannerDownloadJob.Start(notification, new { SeriesId = updatedSeries.SeriesId });
 
                     notification.CurrentMessage = String.Format("{0} was successfully imported", updatedSeries.Title);
                 }
