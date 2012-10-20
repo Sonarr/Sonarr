@@ -77,9 +77,11 @@ namespace NzbDrone.Common
 
         public virtual long GetSize(string path)
         {
+            if (!FileExists(path))
+                throw new FileNotFoundException("File doesn't exist: " + path);
+
             var fi = new FileInfo(path);
             return fi.Length;
-            //return new FileInfo(path).Length;
         }
 
         public virtual String CreateDirectory(string path)
@@ -216,14 +218,6 @@ namespace NzbDrone.Common
         public static bool PathEquals(string firstPath, string secondPath)
         {
             return String.Equals(firstPath.NormalizePath(), secondPath.NormalizePath(), StringComparison.InvariantCultureIgnoreCase);
-        }
-
-        public virtual long GetFileSize(string path)
-        {
-            if (!FileExists(path))
-                throw new FileNotFoundException("File doesn't exist: " + path);
-
-            return new FileInfo(path).Length;
         }
 
         public virtual void FileSetLastWriteTimeUtc(string path, DateTime dateTime)

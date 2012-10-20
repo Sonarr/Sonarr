@@ -111,7 +111,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
             Mocker.Resolve<PostDownloadProvider>().ProcessVideoFile(file);
 
             //Assert
-            Mocker.GetMock<DiskProvider>().Verify(s => s.GetFileSize(It.IsAny<String>()), Times.Never());
+            Mocker.GetMock<DiskProvider>().Verify(s => s.GetSize(It.IsAny<String>()), Times.Never());
             ExceptionVerification.IgnoreWarns();
         }
 
@@ -149,7 +149,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
                 .Returns(series);
 
             Mocker.GetMock<DiskProvider>()
-                    .Setup(s => s.GetFileSize(downloadName))
+                    .Setup(s => s.GetSize(downloadName))
                     .Returns(10);
 
             Mocker.GetMock<DiskProvider>()
@@ -178,7 +178,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
                 .Returns(fakeSeries);
 
             Mocker.GetMock<DiskProvider>()
-                    .Setup(s => s.GetFileSize(downloadName))
+                    .Setup(s => s.GetSize(downloadName))
                     .Returns(8);
 
             //Act

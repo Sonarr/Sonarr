@@ -138,7 +138,7 @@ namespace NzbDrone.Core.Providers
                 return;
             }
 
-            var size = _diskProvider.GetFileSize(videoFile);
+            var size = _diskProvider.GetSize(videoFile);
             var freeSpace = _diskProvider.FreeDiskSpace(new DirectoryInfo(series.Path));
 
             if (Convert.ToUInt64(size) > freeSpace)
