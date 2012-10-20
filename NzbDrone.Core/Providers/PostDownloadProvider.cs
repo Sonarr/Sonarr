@@ -81,6 +81,12 @@ namespace NzbDrone.Core.Providers
                 return;
             }
 
+            if (!_diskProvider.FolderExists(series.Path))
+            {
+                Logger.Warn("Series Folder doesn't exist: {0}", series.Path);
+                return;
+            }
+
             var size = _diskProvider.GetDirectorySize(subfolderInfo.FullName);
             var freeSpace = _diskProvider.FreeDiskSpace(new DirectoryInfo(series.Path));
 
@@ -135,6 +141,12 @@ namespace NzbDrone.Core.Providers
             if (series == null)
             {
                 Logger.Trace("Unknown Series on Import: {0}", videoFile);
+                return;
+            }
+
+            if (!_diskProvider.FolderExists(series.Path))
+            {
+                Logger.Warn("Series Folder doesn't exist: {0}", series.Path);
                 return;
             }
 

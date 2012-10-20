@@ -193,6 +193,9 @@ namespace NzbDrone.Common
 
         public virtual ulong FreeDiskSpace(DirectoryInfo directoryInfo)
         {
+            if (!directoryInfo.Exists)
+                throw new DirectoryNotFoundException();
+
             ulong freeBytesAvailable;
             ulong totalNumberOfBytes;
             ulong totalNumberOfFreeBytes;
