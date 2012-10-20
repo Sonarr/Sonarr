@@ -8,7 +8,7 @@ using NzbDrone.Core.Providers.ExternalNotification;
 using NzbDrone.Core.Providers.Metadata;
 using NzbDrone.Core.Repository;
 using PetaPoco;
-using XemLib.Data;
+using TvdbLib.Data;
 
 namespace NzbDrone.Core.Providers
 {
@@ -92,7 +92,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual void CreateForSeries(Series series)
         {
-            var tvDbSeries = _tvDbProvider.GetSeries(series.SeriesId, false, true, true);
+            var tvDbSeries = _tvDbProvider.GetSeries(series.SeriesId, false, true);
 
             CreateForSeries(series, tvDbSeries);
         }
@@ -107,7 +107,7 @@ namespace NzbDrone.Core.Providers
 
         public virtual void CreateForEpisodeFile(EpisodeFile episodeFile)
         {
-            var tvDbSeries = _tvDbProvider.GetSeries(episodeFile.SeriesId, true, true, true);
+            var tvDbSeries = _tvDbProvider.GetSeries(episodeFile.SeriesId, true, true);
 
             CreateForEpisodeFile(episodeFile, tvDbSeries);
         }
@@ -130,7 +130,7 @@ namespace NzbDrone.Core.Providers
 
             Logger.Trace("Creating metadata for {0} files.", episodeFiles.Count);
 
-            var tvDbSeries = _tvDbProvider.GetSeries(episodeFiles.First().SeriesId, true, true, true);
+            var tvDbSeries = _tvDbProvider.GetSeries(episodeFiles.First().SeriesId, true, true);
 
             foreach(var episodeFile in episodeFiles)
             {

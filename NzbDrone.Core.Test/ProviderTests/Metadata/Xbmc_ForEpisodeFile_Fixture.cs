@@ -17,8 +17,8 @@ using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common.AutoMoq;
 using NzbDrone.Test.Common;
-using XemLib.Data;
-using XemLib.Data.Banner;
+using TvdbLib.Data;
+using TvdbLib.Data.Banner;
 
 namespace NzbDrone.Core.Test.ProviderTests.Metadata
 {
@@ -52,30 +52,31 @@ namespace NzbDrone.Core.Test.ProviderTests.Metadata
                     .With(e => e.SeriesId = 79488)
                     .With(e => e.SeasonNumber = 1)
                     .With(e => e.Directors = new List<string>{ "Fake Director" })
-                    .With(e => e.Writers = new List<string>{ "Fake Writer" })
+                    .With(e => e.Writer = new List<string>{ "Fake Writer" })
                     .With(e => e.GuestStars = new List<string> { "Guest Star 1", "Guest Star 2", "Guest Star 3", "" })
                     .Build();
 
             var seasonBanners = Builder<TvdbSeasonBanner>
                     .CreateListOfSize(4)
                     .TheFirst(2)
-                    .With(b => b.SeasonNumber = 1)
+                    .With(b => b.Season = 1)
                     .TheLast(2)
-                    .With(b => b.SeasonNumber = 2)
+                    .With(b => b.Season = 2)
                     .TheFirst(1)
-                    .With(b => b.BannerType = TvdbSeasonBanner.Type.Poster)
+                    .With(b => b.BannerType = TvdbSeasonBanner.Type.season)
                     .With(b => b.BannerPath = "seasons/79488-1-1.jpg")
                     .TheNext(2)
-                    .With(b => b.BannerType = TvdbSeasonBanner.Type.Banner)
+                    .With(b => b.BannerType = TvdbSeasonBanner.Type.seasonwide)
                     .With(b => b.BannerPath = "banners/seasons/79488-test.jpg")
                     .TheLast(1)
-                    .With(b => b.BannerType = TvdbSeasonBanner.Type.Poster)
+                    .With(b => b.BannerType = TvdbSeasonBanner.Type.season)
                     .With(b => b.BannerPath = "seasons/79488-2-1.jpg")
                     .Build();
 
             var seriesActors = Builder<TvdbActor>
                     .CreateListOfSize(5)
                     .All()
+                    .With(a => a.ActorImage = Builder<TvdbActorBanner>.CreateNew().Build())
                     .Build();
 
             tvdbSeries = Builder<TvdbSeries>
@@ -84,10 +85,9 @@ namespace NzbDrone.Core.Test.ProviderTests.Metadata
                     .With(s => s.SeriesName = "30 Rock")
                     .With(s => s.TvdbActors = seriesActors.ToList())
                     .With(s => s.Episodes = tvdbEpisodes.ToList())
-                    .With(s => s.Banners = new TvdbBanners())
                     .Build();
 
-            tvdbSeries.Banners.SeasonBanners.AddRange(seasonBanners);
+            tvdbSeries.Banners.AddRange(seasonBanners);
         }
 
         private void WithUseBanners()
@@ -128,7 +128,7 @@ namespace NzbDrone.Core.Test.ProviderTests.Metadata
 
         private void WithNoWriters()
         {
-            tvdbSeries.Episodes.ForEach(e => e.Writers = new List<string>());
+            tvdbSeries.Episodes.ForEach(e => e.Writer = new List<string>());
         }
 
         [Test]
@@ -159,7 +159,7 @@ namespace NzbDrone.Core.Test.ProviderTests.Metadata
         {
             WithSingleEpisodeFile();
             Mocker.Resolve<Xbmc>().CreateForEpisodeFile(episodeFile, tvdbSeries);
-            Mocker.GetMock<BannerProvider>().Verify(v => v.Download(tvdbSeries.Episodes.First().Banner, episodeFile.Path.Replace("avi", "tbn")), Times.Once());
+            Mocker.GetMock<BannerProvider>().Verify(v => v.Download(tvdbSeries.Episodes.First().BannerPath, episodeFile.Path.Replace("avi", "tbn")), Times.Once());
         }
 
         [Test]

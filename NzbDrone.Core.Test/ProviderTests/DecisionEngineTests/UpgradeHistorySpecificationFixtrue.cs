@@ -31,6 +31,13 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
             Mocker.Resolve<QualityUpgradeSpecification>();
             _upgradeHistory = Mocker.Resolve<UpgradeHistorySpecification>();
 
+            var singleEpisodeList = new List<Episode> { new Episode { SeasonNumber = 12, EpisodeNumber = 3 } };
+            var doubleEpisodeList = new List<Episode> { 
+                                                            new Episode { SeasonNumber = 12, EpisodeNumber = 3 }, 
+                                                            new Episode { SeasonNumber = 12, EpisodeNumber = 4 }, 
+                                                            new Episode { SeasonNumber = 12, EpisodeNumber = 5 }
+                                                       };
+
             var fakeSeries = Builder<Series>.CreateNew()
                          .With(c => c.QualityProfile = new QualityProfile { Cutoff = QualityTypes.Bluray1080p })
                          .Build();
@@ -41,6 +48,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
                 Quality = new QualityModel(QualityTypes.DVD, true),
                 EpisodeNumbers = new List<int> { 3, 4 },
                 SeasonNumber = 12,
+                Episodes = doubleEpisodeList
             };
 
             parseResultSingle = new EpisodeParseResult
@@ -49,20 +57,11 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
                 Quality = new QualityModel(QualityTypes.DVD, true),
                 EpisodeNumbers = new List<int> { 3 },
                 SeasonNumber = 12,
+                Episodes = singleEpisodeList
             };
 
             firstQuality = new QualityModel(QualityTypes.Bluray1080p, true);
             secondQuality = new QualityModel(QualityTypes.Bluray1080p, true);
-
-            var singleEpisodeList = new List<Episode> { new Episode { SeasonNumber = 12, EpisodeNumber = 3 } };
-            var doubleEpisodeList = new List<Episode> { 
-                                                            new Episode { SeasonNumber = 12, EpisodeNumber = 3 }, 
-                                                            new Episode { SeasonNumber = 12, EpisodeNumber = 4 }, 
-                                                            new Episode { SeasonNumber = 12, EpisodeNumber = 5 }
-                                                       };
-
-            Mocker.GetMock<EpisodeProvider>().Setup(c => c.GetEpisodesByParseResult(parseResultSingle)).Returns(singleEpisodeList);
-            Mocker.GetMock<EpisodeProvider>().Setup(c => c.GetEpisodesByParseResult(parseResultMulti)).Returns(doubleEpisodeList);
 
             Mocker.GetMock<HistoryProvider>().Setup(c => c.GetBestQualityInHistory(fakeSeries.SeriesId, 12, 3)).Returns(firstQuality);
             Mocker.GetMock<HistoryProvider>().Setup(c => c.GetBestQualityInHistory(fakeSeries.SeriesId, 12, 4)).Returns(secondQuality);

@@ -2,9 +2,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
@@ -15,11 +13,10 @@ using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
 using NzbDrone.Core.Repository.Quality;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Test.Common.AutoMoq;
 using PetaPoco;
-using XemLib.Data;
+using TvdbLib.Data;
 
-namespace NzbDrone.Core.Test.ProviderTests
+namespace NzbDrone.Core.Test.ProviderTests.EpisodeProviderTests
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
@@ -161,7 +158,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 c => c.Episodes =
                      new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(episodeCount).
                                                All()
-                                               .With(l => l.Language = "en")
+                                               .With(l => l.Language = new TvdbLanguage(0, "eng", "a"))
                                                .Build())
                 ).With(c => c.Id = seriesId).Build();
 
@@ -172,7 +169,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             Db.Insert(fakeSeries);
 
             Mocker.GetMock<TvDbProvider>()
-                .Setup(c => c.GetSeries(seriesId, true, false, false))
+                .Setup(c => c.GetSeries(seriesId, true, false))
                 .Returns(fakeEpisodes);
 
             //Act
@@ -195,7 +192,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 c => c.Episodes =
                      new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(10).
                                                All()
-                                               .With(l => l.Language = "en").And(e => e.FirstAired = DateTime.Now)
+                                               .With(l => l.Language = new TvdbLanguage(0, "eng", "a")).And(e => e.FirstAired = DateTime.Now)
                                                .TheFirst(7).With(e => e.FirstAired = new DateTime(1800, 1, 1))
                                                .Build())
                 ).With(c => c.Id = seriesId).Build();
@@ -207,7 +204,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             Db.Insert(fakeSeries);
 
             Mocker.GetMock<TvDbProvider>()
-                .Setup(c => c.GetSeries(seriesId, true, false, false))
+                .Setup(c => c.GetSeries(seriesId, true, false))
                 .Returns(fakeEpisodes);
 
 
@@ -236,7 +233,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 c => c.Episodes =
                      new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(1)
                          .All()
-                         .With(l => l.Language = "en").And(e => e.FirstAired = DateTime.Now)
+                         .With(l => l.Language = new TvdbLanguage(0, "eng", "a")).And(e => e.FirstAired = DateTime.Now)
                          .TheFirst(1).With(e => e.FirstAired = new DateTime(1800, 1, 1))
                          .Build())
                 ).With(c => c.Id = seriesId).Build();
@@ -248,7 +245,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             Db.Insert(fakeEpisode);
 
             Mocker.GetMock<TvDbProvider>()
-                .Setup(c => c.GetSeries(seriesId, true, false, false))
+                .Setup(c => c.GetSeries(seriesId, true, false))
                 .Returns(fakeTvDbEpisodes);
 
             //Act
@@ -271,7 +268,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 c => c.Episodes =
                      new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(episodeCount).
                                                All()
-                                               .With(l => l.Language = "en")
+                                               .With(l => l.Language = new TvdbLanguage(0, "eng", "a"))
                                                .TheFirst(1)
                                                .With(e => e.EpisodeNumber = 0)
                                                .With(e => e.SeasonNumber = 15)
@@ -285,7 +282,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             Db.Insert(fakeSeries);
 
             Mocker.GetMock<TvDbProvider>()
-                .Setup(c => c.GetSeries(seriesId, true, false, false))
+                .Setup(c => c.GetSeries(seriesId, true, false))
                 .Returns(fakeEpisodes);
 
 
@@ -324,7 +321,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             Db.Insert(fakeSeries);
 
             Mocker.GetMock<TvDbProvider>()
-                .Setup(c => c.GetSeries(seriesId, true, false, false))
+                .Setup(c => c.GetSeries(seriesId, true, false))
                 .Returns(fakeEpisodes);
 
 
@@ -362,7 +359,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             Db.Insert(fakeSeries);
 
             Mocker.GetMock<TvDbProvider>()
-                .Setup(c => c.GetSeries(seriesId, true, false, false))
+                .Setup(c => c.GetSeries(seriesId, true, false))
                 .Returns(fakeEpisodes);
 
 
@@ -395,7 +392,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             Db.Insert(fakeSeries);
 
             Mocker.GetMock<TvDbProvider>()
-                .Setup(c => c.GetSeries(seriesId, true, false, false))
+                .Setup(c => c.GetSeries(seriesId, true, false))
                 .Returns(fakeEpisodes);
 
 
@@ -428,7 +425,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             Db.Insert(fakeSeries);
 
             Mocker.GetMock<TvDbProvider>()
-                .Setup(c => c.GetSeries(seriesId, true, false, false))
+                .Setup(c => c.GetSeries(seriesId, true, false))
                 .Returns(fakeEpisodes);
 
 
@@ -451,7 +448,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 c => c.Episodes =
                      new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(episodeCount).
                                                All()
-                                               .With(l => l.Language = "en")
+                                               .With(l => l.Language = new TvdbLanguage(0, "eng", "a"))
                                                .With(e => e.SeasonNumber = 0)
                                                .Build())
                 ).With(c => c.Id = seriesId).Build();
@@ -463,7 +460,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             Db.Insert(fakeSeries);
 
             Mocker.GetMock<TvDbProvider>()
-                .Setup(c => c.GetSeries(seriesId, true, false, false))
+                .Setup(c => c.GetSeries(seriesId, true, false))
                 .Returns(fakeEpisodes);
 
             Mocker.GetMock<SeasonProvider>()
@@ -493,7 +490,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var currentEpisodes = new List<Episode>();
 
             Mocker.GetMock<TvDbProvider>(MockBehavior.Strict)
-                .Setup(c => c.GetSeries(seriesId, true, false, false))
+                .Setup(c => c.GetSeries(seriesId, true, false))
                 .Returns(tvdbSeries);
 
             Mocker.GetMock<IDatabase>()
@@ -528,7 +525,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             }
 
             Mocker.GetMock<TvDbProvider>(MockBehavior.Strict)
-                .Setup(c => c.GetSeries(seriesId, true, false, false))
+                .Setup(c => c.GetSeries(seriesId, true, false))
                 .Returns(tvdbSeries);
 
             Mocker.GetMock<IDatabase>()
@@ -565,7 +562,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 .Returns(fakeEpisodeList);
 
             Mocker.GetMock<TvDbProvider>()
-                .Setup(c => c.GetSeries(seriesId, true, false, false))
+                .Setup(c => c.GetSeries(seriesId, true, false))
                 .Returns(fakeTvDbResult);
 
             //Act
@@ -602,7 +599,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             var fakeSeries = Builder<Series>.CreateNew().With(c => c.SeriesId = seriesId).Build();
 
             Mocker.GetMock<TvDbProvider>(MockBehavior.Strict)
-                .Setup(c => c.GetSeries(seriesId, true, false, false))
+                .Setup(c => c.GetSeries(seriesId, true, false))
                 .Returns(tvdbSeries);
 
             Mocker.GetMock<IDatabase>()
@@ -643,7 +640,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             }
 
             Mocker.GetMock<TvDbProvider>(MockBehavior.Strict)
-                .Setup(c => c.GetSeries(seriesId, true, false, false))
+                .Setup(c => c.GetSeries(seriesId, true, false))
                 .Returns(tvdbSeries);
 
             var updatedEpisodes = new List<Episode>();
@@ -692,7 +689,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             }
 
             Mocker.GetMock<TvDbProvider>(MockBehavior.Strict)
-                .Setup(c => c.GetSeries(seriesId, true, false, false))
+                .Setup(c => c.GetSeries(seriesId, true, false))
                 .Returns(tvdbSeries);
 
             var updatedEpisodes = new List<Episode>();
@@ -738,7 +735,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             }
 
             Mocker.GetMock<TvDbProvider>(MockBehavior.Strict)
-                .Setup(c => c.GetSeries(seriesId, true, false, false))
+                .Setup(c => c.GetSeries(seriesId, true, false))
                 .Returns(tvdbSeries);
 
             var updatedEpisodes = new List<Episode>();
@@ -777,7 +774,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 c => c.Episodes =
                      new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(episodeCount).
                                                All()
-                                               .With(l => l.Language = "en")
+                                               .With(l => l.Language = new TvdbLanguage(0, "eng", "a"))
                                                .With(e => e.SeasonNumber = 5)
                                                .TheFirst(1)
                                                .With(e => e.EpisodeNumber = 1)
@@ -796,7 +793,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             Db.Insert(fakeEpisode);
 
             Mocker.GetMock<TvDbProvider>()
-                .Setup(c => c.GetSeries(seriesId, true, false, false))
+                .Setup(c => c.GetSeries(seriesId, true, false))
                 .Returns(tvdbSeries);
 
             Mocker.GetMock<SeasonProvider>()
@@ -1487,7 +1484,7 @@ namespace NzbDrone.Core.Test.ProviderTests
                 c => c.Episodes =
                      new List<TvdbEpisode>(Builder<TvdbEpisode>.CreateListOfSize(episodeCount).
                                                All()
-                                               .With(l => l.Language = "en")
+                                               .With(l => l.Language = new TvdbLanguage(0, "eng", "a"))
                                                .With(e => e.EpisodeNumber = 0)
                                                .TheFirst(1)
                                                .With(e => e.SeasonNumber = 1)
@@ -1509,7 +1506,7 @@ namespace NzbDrone.Core.Test.ProviderTests
             Db.Insert(fakeSeries);
 
             Mocker.GetMock<TvDbProvider>()
-                .Setup(c => c.GetSeries(seriesId, true, false, false))
+                .Setup(c => c.GetSeries(seriesId, true, false))
                 .Returns(tvdbSeries);
 
             //Act

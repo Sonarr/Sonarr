@@ -129,12 +129,13 @@
     <Reference Include="System.Transactions" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="TvdbLib, Version=0.8.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libraries\TvdbLib.dll</HintPath>
+    </Reference>
     <Reference Include="WebActivator, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\WebActivator.1.5\lib\net40\WebActivator.dll</HintPath>
-    </Reference>
-    <Reference Include="XemLib">
-      <HintPath>..\Libraries\XemLib\XemLib.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -156,6 +157,7 @@
     <Compile Include="ProviderTests\DiskScanProviderTests\GetVideoFilesFixture.cs" />
     <Compile Include="ProviderTests\DiskScanProviderTests\ScanFixture.cs" />
     <Compile Include="ProviderTests\DownloadClientTests\PneumaticProviderFixture.cs" />
+    <Compile Include="ProviderTests\EpisodeProviderTests\GetEpisodeBySceneNumberFixture.cs" />
     <Compile Include="ProviderTests\Metadata\Xbmc_ForEpisodeFile_Fixture.cs" />
     <Compile Include="ProviderTests\Metadata\Xbmc_ForSeries_Fixture.cs" />
     <Compile Include="ProviderTests\PostDownloadProviderTests\ProcessDropDirectoryFixture.cs" />
@@ -194,9 +196,11 @@
     <Compile Include="JobTests\AppUpdateJobFixture.cs" />
     <Compile Include="ProviderTests\UpdateProviderTests\GetUpdateLogFixture.cs" />
     <Compile Include="ProviderTests\UpdateProviderTests\GetAvilableUpdateFixture.cs" />
+    <Compile Include="ProviderTests\XemCommunicationProviderTests\GetSceneTvdbMappingsFixture.cs" />
+    <Compile Include="ProviderTests\XemCommunicationProviderTests\GetXemSeriesIdsFixture.cs" />
     <Compile Include="Services\ParseErrorServiceFixture.cs" />
     <Compile Include="SortHelperTest.cs" />
-    <Compile Include="ProviderTests\EpisodeProviderTest_DeleteInvalidEpisodes.cs" />
+    <Compile Include="ProviderTests\EpisodeProviderTests\EpisodeProviderTest_DeleteInvalidEpisodes.cs" />
     <Compile Include="ProviderTests\DecisionEngineTests\AcceptableSizeSpecificationFixture.cs" />
     <Compile Include="ProviderTests\QualityTypeProviderTest.cs" />
     <Compile Include="ProviderTests\MisnamedProviderTest.cs" />
@@ -206,7 +210,7 @@
     <Compile Include="CentralDispatchFixture.cs" />
     <Compile Include="ProviderTests\XbmcProviderTest.cs" />
     <Compile Include="ProviderTests\DiskScanProviderTests\MoveEpisodeFileFixture.cs" />
-    <Compile Include="ProviderTests\EpisodeProviderTest_GetEpisodesByParseResult.cs" />
+    <Compile Include="ProviderTests\EpisodeProviderTests\EpisodeProviderTest_GetEpisodesByParseResult.cs" />
     <Compile Include="ProviderTests\DiskScanProviderTests\ImportFileFixture.cs" />
     <Compile Include="FluentTest.cs" />
     <Compile Include="ProviderTests\LogProviderTests\LogProviderFixture.cs" />
@@ -228,7 +232,7 @@
     <Compile Include="ProviderTests\HistoryProviderTest.cs" />
     <Compile Include="ProviderTests\MediaFileProviderTest.cs" />
     <Compile Include="ProviderTests\ConfigProviderTests\ConfigProviderFixture.cs" />
-    <Compile Include="ProviderTests\EpisodeProviderTest.cs" />
+    <Compile Include="ProviderTests\EpisodeProviderTests\EpisodeProviderTest.cs" />
     <Compile Include="Framework\TestDbHelper.cs" />
     <Compile Include="ParserFixture\ParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -335,6 +339,18 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Content Include="Files\Xem\Ids.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\Xem\Failure.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\Xem\Names.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\Xem\Mappings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="log.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

@@ -122,6 +122,9 @@ namespace NzbDrone.Core.Providers
             if (parseResult == null)
                 return null;
 
+            if (!_diskProvider.IsChildOfPath(filePath, series.Path))
+                parseResult.SceneSource = true;
+
             parseResult.SeriesTitle = series.Title; //replaces the nasty path as title to help with logging
             parseResult.Series = series;
 
@@ -203,6 +206,7 @@ namespace NzbDrone.Core.Providers
             var parseResult = Parser.ParsePath(episodeFile.Path);
             parseResult.Series = series;
             parseResult.Quality = new QualityModel{ Quality = episodeFile.Quality, Proper = episodeFile.Proper };
+            parseResult.Episodes = episodes;
 
             var message = _downloadProvider.GetDownloadTitle(parseResult);
 

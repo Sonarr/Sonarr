@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Providers.DecisionEngine
 
         public virtual bool IsSatisfiedBy(EpisodeParseResult subject)
         {
-            foreach (var file in _episodeProvider.GetEpisodesByParseResult(subject).Select(c => c.EpisodeFile).Where(c => c != null))
+            foreach (var file in subject.Episodes.Select(c => c.EpisodeFile).Where(c => c != null))
             {
                 logger.Trace("Comparing file quality with report. Existing file is {0} proper:{1}", file.Quality, file.Proper);
                 if (!_qualityUpgradeSpecification.IsSatisfiedBy(new QualityModel { Quality = file.Quality, Proper = file.Proper }, subject.Quality, subject.Series.QualityProfile.Cutoff))

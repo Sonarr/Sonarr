@@ -32,6 +32,9 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
         {
             _customStartDateSpecification = Mocker.Resolve<CustomStartDateSpecification>();
 
+            firstEpisode = new Episode { AirDate = DateTime.Today };
+            secondEpisode = new Episode { AirDate = DateTime.Today };
+
             fakeSeries = Builder<Series>.CreateNew()
                 .With(c => c.Monitored = true)
                 .With(c => c.CustomStartDate = null)
@@ -43,6 +46,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
                 Series = fakeSeries,
                 EpisodeNumbers = new List<int> { 3, 4 },
                 SeasonNumber = 12,
+                Episodes = new List<Episode> { firstEpisode, secondEpisode }
             };
 
             parseResultSingle = new EpisodeParseResult
@@ -51,16 +55,8 @@ namespace NzbDrone.Core.Test.ProviderTests.DecisionEngineTests
                 Series = fakeSeries,
                 EpisodeNumbers = new List<int> { 3 },
                 SeasonNumber = 12,
+                Episodes = new List<Episode> { firstEpisode }
             };
-
-            firstEpisode = new Episode { AirDate = DateTime.Today };
-            secondEpisode = new Episode { AirDate = DateTime.Today };
-
-            var singleEpisodeList = new List<Episode> { firstEpisode };
-            var doubleEpisodeList = new List<Episode> { firstEpisode, secondEpisode };
-
-            Mocker.GetMock<EpisodeProvider>().Setup(c => c.GetEpisodesByParseResult(parseResultSingle)).Returns(singleEpisodeList);
-            Mocker.GetMock<EpisodeProvider>().Setup(c => c.GetEpisodesByParseResult(parseResultMulti)).Returns(doubleEpisodeList);
         }
 
         private void WithFirstEpisodeLastYear()

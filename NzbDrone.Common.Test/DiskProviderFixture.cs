@@ -175,6 +175,18 @@ namespace NzbDrone.Common.Test
            Console.WriteLine(new DirectoryInfo(@"C:\DRIVERS").LastWriteTimeUtc);
         }
 
+        [Test]
+        public void IsChildOfPath_should_return_true_when_it_is_a_child()
+        {
+            Mocker.Resolve<DiskProvider>().IsChildOfPath(@"C:\Test\TV", @"C:\Test").Should().BeTrue();
+        }
+
+        [Test]
+        public void IsChildOfPath_should_return_false_when_it_is_not_a_child()
+        {
+            Mocker.Resolve<DiskProvider>().IsChildOfPath(@"C:\NOT_Test\TV", @"C:\Test").Should().BeFalse();
+        }
+
         private void VerifyCopy()
         {
             BinFolder.Refresh();

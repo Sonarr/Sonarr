@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Providers.DecisionEngine
 
         public virtual bool IsSatisfiedBy(EpisodeParseResult subject)
         {
-            foreach (var episode in _episodeProvider.GetEpisodesByParseResult(subject))
+            foreach (var episode in subject.Episodes)
             {
                 var bestQualityInHistory = _historyProvider.GetBestQualityInHistory(subject.Series.SeriesId, episode.SeasonNumber, episode.EpisodeNumber);
                 if (bestQualityInHistory != null)

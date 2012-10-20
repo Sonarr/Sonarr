@@ -22,6 +22,9 @@ namespace NzbDrone.Core.Repository
         public Boolean Ignored { get; set; }
         public PostDownloadStatusType PostDownloadStatus { get; set; }
         public int AbsoluteEpisodeNumber { get; set; }
+        public int SceneAbsoluteEpisodeNumber { get; set; }
+        public int SceneSeasonNumber { get; set; }
+        public int SceneEpisodeNumber { get; set; }
 
         /// <summary>
         /// Gets or sets the grab date.

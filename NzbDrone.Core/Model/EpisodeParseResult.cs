@@ -46,6 +46,10 @@ namespace NzbDrone.Core.Model
 
         public string ReleaseGroup { get; set; }
 
+        public bool SceneSource { get; set; }
+
+        public IList<Episode> Episodes { get; set; } 
+
         public override string ToString()
         {
 

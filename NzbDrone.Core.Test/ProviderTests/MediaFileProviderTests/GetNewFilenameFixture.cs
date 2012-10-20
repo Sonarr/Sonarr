@@ -699,5 +699,43 @@ namespace NzbDrone.Core.Test.ProviderTests.MediaFileProviderTests
             //Assert
             result.Should().Be("30 Rock - S06E06-E07 - Hello + World");
         }
+
+        [Test]
+        public void should_have_two_episodeTitles_when_distinct_count_is_two()
+        {
+            //Setup
+            var fakeConfig = Mocker.GetMock<ConfigProvider>();
+            fakeConfig.SetupGet(c => c.SortingIncludeSeriesName).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingIncludeEpisodeTitle).Returns(true);
+            fakeConfig.SetupGet(c => c.SortingAppendQuality).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingSeparatorStyle).Returns(0);
+            fakeConfig.SetupGet(c => c.SortingNumberStyle).Returns(2);
+            fakeConfig.SetupGet(c => c.SortingReplaceSpaces).Returns(false);
+            fakeConfig.SetupGet(c => c.SortingMultiEpisodeStyle).Returns(3);
+
+            var episode = Builder<Episode>.CreateNew()
+                            .With(e => e.Title = "Hello (3)")
+                            .With(e => e.SeasonNumber = 6)
+                            .With(e => e.EpisodeNumber = 6)
+                            .Build();
+
+            var episode2 = Builder<Episode>.CreateNew()
+                            .With(e => e.Title = "Hello (2)")
+                            .With(e => e.SeasonNumber = 6)
+                            .With(e => e.EpisodeNumber = 7)
+                            .Build();
+
+            var episode3 = Builder<Episode>.CreateNew()
+                            .With(e => e.Title = "World")
+                            .With(e => e.SeasonNumber = 6)
+                            .With(e => e.EpisodeNumber = 8)
+                            .Build();
+
+            //Act
+            string result = Mocker.Resolve<MediaFileProvider>().GetNewFilename(new List<Episode> { episode, episode2, episode3 }, "30 Rock", QualityTypes.HDTV, false, new EpisodeFile());
+
+            //Assert
+            result.Should().Be("30 Rock - S06E06-E07-E08 - Hello + World");
+        }
     }
 }

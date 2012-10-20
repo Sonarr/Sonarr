@@ -268,5 +268,12 @@ namespace NzbDrone.Common
             return false;
         }
 
+        public virtual bool IsChildOfPath(string child, string parent)
+        {
+            if (Path.GetFullPath(child).StartsWith(Path.GetFullPath(parent)))
+                return true;
+
+            return false;
+        }
     }
 }

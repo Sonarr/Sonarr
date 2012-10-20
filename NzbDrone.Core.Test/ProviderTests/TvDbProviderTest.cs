@@ -10,8 +10,8 @@ using NzbDrone.Common;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
-using XemLib.Data;
-using XemLib.Exceptions;
+using TvdbLib.Data;
+using TvdbLib.Exceptions;
 
 namespace NzbDrone.Core.Test.ProviderTests
 {
@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Test.ProviderTests
         [TearDown]
         public void TearDown()
         {
-            ExceptionVerification.MarkInconclusive(typeof(TheTvbdbUnavailableException));
+            ExceptionVerification.MarkInconclusive(typeof(TvdbNotAvailableException));
         }
 
         [TestCase("The Simpsons")]

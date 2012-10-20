@@ -206,15 +206,16 @@
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="TvdbLib, Version=0.8.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libraries\TvdbLib.dll</HintPath>
+    </Reference>
     <Reference Include="Twitterizer2, Version=2.4.0.26532, Culture=neutral, PublicKeyToken=69d1469eac671567, processorArchitecture=MSIL">
       <HintPath>..\packages\twitterizer.2.4.0.26532\lib\net40\Twitterizer2.dll</HintPath>
     </Reference>
     <Reference Include="WebActivator, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\WebActivator.1.5\lib\net40\WebActivator.dll</HintPath>
-    </Reference>
-    <Reference Include="XemLib">
-      <HintPath>..\Libraries\XemLib\XemLib.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -226,6 +227,7 @@
     <Compile Include="Datastore\MigrationLogger.cs" />
     <Compile Include="Datastore\MigrationsHelper.cs" />
     <Compile Include="Datastore\CustomeMapper.cs" />
+    <Compile Include="Datastore\Migrations\Migration20121016.cs" />
     <Compile Include="Datastore\Migrations\Migration20121012.cs" />
     <Compile Include="Datastore\Migrations\Migration20120919.cs" />
     <Compile Include="Datastore\Migrations\Migration20120918.cs" />
@@ -256,6 +258,7 @@
     <Compile Include="Helpers\SortHelper.cs" />
     <Compile Include="Helpers\SabnzbdPriorityTypeConverter.cs" />
     <Compile Include="Jobs\CleanupRecycleBinJob.cs" />
+    <Compile Include="Jobs\XemUpdateJob.cs" />
     <Compile Include="Jobs\EmptyRecycleBinJob.cs" />
     <Compile Include="Jobs\RefreshEpsiodeMetadata.cs" />
     <Compile Include="Jobs\PastWeekBacklogSearchJob.cs" />
@@ -291,6 +294,9 @@
     <Compile Include="Model\Xbmc\TvShowResult.cs" />
     <Compile Include="Model\Xbmc\ErrorResult.cs" />
     <Compile Include="Model\Xbmc\IconType.cs" />
+    <Compile Include="Model\Xem\XemResult.cs" />
+    <Compile Include="Model\Xem\XemSceneTvdbMapping.cs" />
+    <Compile Include="Model\Xem\XemValues.cs" />
     <Compile Include="Providers\BannerProvider.cs" />
     <Compile Include="Providers\DecisionEngine\AllowedReleaseGroupSpecification.cs" />
     <Compile Include="Providers\DecisionEngine\CustomStartDateSpecification.cs" />
@@ -329,6 +335,8 @@
     <Compile Include="Jobs\RssSyncJob.cs" />
     <Compile Include="Jobs\UpdateInfoJob.cs" />
     <Compile Include="Providers\StatsProvider.cs" />
+    <Compile Include="Providers\XemCommunicationProvider.cs" />
+    <Compile Include="Providers\XemProvider.cs" />
     <Compile Include="Repository\MetadataDefinition.cs" />
     <Compile Include="Repository\Quality\QualityTypes.cs" />
     <Compile Include="Repository\Search\SearchHistoryItem.cs" />

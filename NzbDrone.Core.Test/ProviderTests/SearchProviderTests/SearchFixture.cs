@@ -185,7 +185,7 @@ namespace NzbDrone.Core.Test.ProviderTests.SearchProviderTests
         }
 
         [Test]
-        public void EpisodeSearch_should_skip_if_air_date_is_null()
+        public void EpisodeSearch_should_skip_if_air_date_is_null_and_is_a_daily_series()
         {
             //Setup
             _series.IsDaily = true;
