@@ -71,6 +71,12 @@ namespace NzbDrone.Core.Providers
                 return;
             }
 
+            if (_diskProvider.IsFolderLocked(subfolderInfo.FullName))
+            {
+                Logger.Trace("[{0}] is currently locked by another process, skipping", subfolderInfo.Name);
+                return;
+            }
+
             string seriesName = Parser.ParseSeriesName(RemoveStatusFromFolderName(subfolderInfo.Name));
             var series = _seriesProvider.FindSeries(seriesName);
 
@@ -132,6 +138,12 @@ namespace NzbDrone.Core.Providers
             if (_diskProvider.GetLastFileWrite(videoFile).AddMinutes(2) > DateTime.UtcNow)
             {
                 Logger.Trace("[{0}] is too fresh. skipping", videoFile);
+                return;
+            }
+
+            if (_diskProvider.IsFileLocked(new FileInfo(videoFile)))
+            {
+                Logger.Trace("[{0}] is currently locked by another process, skipping", videoFile);
                 return;
             }
 

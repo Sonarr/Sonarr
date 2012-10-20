@@ -232,5 +232,41 @@ namespace NzbDrone.Common
         {
             Directory.SetLastWriteTimeUtc(path, dateTime);
         }
+
+        public virtual bool IsFolderLocked(string path)
+        {
+            var files = GetFileInfos(path, "*.*", SearchOption.AllDirectories);
+
+            foreach(var fileInfo in files)
+            {
+                if (IsFileLocked(fileInfo))
+                    return true;
+            }
+
+            return false;
+        }
+
+        public virtual bool IsFileLocked(FileInfo file)
+        {
+            FileStream stream = null;
+
+            try
+            {
+                stream = file.Open(FileMode.Open, FileAccess.Read, FileShare.None);
+            }
+            catch (IOException)
+            {
+                return true;
+            }
+            finally
+            {
+                if (stream != null)
+                    stream.Close();
+            }
+
+            //file is not locked
+            return false;
+        }
+
     }
 }

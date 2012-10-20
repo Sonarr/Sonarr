@@ -228,14 +228,6 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
             WithValidSeries();
 
             Mocker.GetMock<DiskProvider>()
-                    .Setup(s => s.GetDirectorySize(downloadName))
-                    .Returns(10);
-
-            Mocker.GetMock<DiskProvider>()
-                    .Setup(s => s.FreeDiskSpace(It.IsAny<DirectoryInfo>()))
-                    .Returns(10);
-
-            Mocker.GetMock<DiskProvider>()
                                 .Setup(s => s.FolderExists(fakeSeries.Path))
                                 .Returns(false);
 
@@ -245,6 +237,25 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 
             //Assert
             ExceptionVerification.ExpectedWarns(1);
+        }
+
+        [Test]
+        public void should_skip_if_file_is_in_use_by_another_process()
+        {
+            var downloadName = @"C:\Test\Drop\30.Rock.S01E01.Pilot.mkv";
+
+            WithValidSeries();
+
+            Mocker.GetMock<DiskProvider>()
+                                .Setup(s => s.IsFileLocked(It.Is<FileInfo>(f => f.FullName == downloadName)))
+                                .Returns(true);
+
+            //Act
+            Mocker.Resolve<PostDownloadProvider>().ProcessVideoFile(downloadName);
+
+
+            //Assert
+            Mocker.GetMock<DiskScanProvider>().Verify(c => c.ImportFile(fakeSeries, downloadName), Times.Never());
         }
     }
 }

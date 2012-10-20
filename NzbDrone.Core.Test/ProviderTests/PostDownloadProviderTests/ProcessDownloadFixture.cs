@@ -300,6 +300,7 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
             Mocker.GetMock<DiskProvider>().Setup(s => s.GetDirectorySize(droppedFolder.FullName)).Returns(Constants.IgnoreFileSize - 1.Megabytes());
             Mocker.GetMock<DiskProvider>().Setup(s => s.DeleteFolder(droppedFolder.FullName, true));
             Mocker.GetMock<DiskProvider>().Setup(s => s.FolderExists(fakeSeries.Path)).Returns(true);
+            Mocker.GetMock<DiskProvider>().Setup(s => s.IsFolderLocked(droppedFolder.FullName)).Returns(false);
             Mocker.GetMock<MetadataProvider>().Setup(s => s.CreateForEpisodeFiles(It.IsAny<List<EpisodeFile>>()));
 
             //Act
@@ -433,6 +434,22 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 
             Mocker.GetMock<DiskProvider>().Verify(c => c.GetDirectorySize(It.IsAny<String>()), Times.Never());
             ExceptionVerification.ExpectedWarns(1);
+        }
+
+        [Test]
+        public void should_skip_if_folder_is_in_use_by_another_process()
+        {
+            var downloadName = new DirectoryInfo(@"C:\Test\Drop\30.Rock.S01E01.Pilot");
+
+            WithValidSeries();
+
+            Mocker.GetMock<DiskProvider>()
+                    .Setup(s => s.IsFolderLocked(downloadName.FullName))
+                    .Returns(true);
+
+            Mocker.Resolve<PostDownloadProvider>().ProcessDownload(downloadName);
+
+            Mocker.GetMock<DiskProvider>().Verify(c => c.GetDirectorySize(It.IsAny<String>()), Times.Never());
         }
     }
 }
