@@ -20,7 +20,7 @@ namespace NzbDrone.Web.Controllers
 
         public JsonResult Search(int episodeId)
         {
-            _jobProvider.QueueJob(typeof(EpisodeSearchJob), episodeId);
+            _jobProvider.QueueJob(typeof(EpisodeSearchJob), new { EpisodeId = episodeId });
             return JsonNotificationResult.Queued("Episode search");
         }
 
@@ -33,7 +33,7 @@ namespace NzbDrone.Web.Controllers
 
         public JsonResult BacklogSeries(int seriesId)
         {
-            _jobProvider.QueueJob(typeof(SeriesSearchJob), seriesId);
+            _jobProvider.QueueJob(typeof(SeriesSearchJob), new { SeriesId = seriesId });
             return JsonNotificationResult.Queued("Series Backlog");
 
         }
@@ -47,7 +47,7 @@ namespace NzbDrone.Web.Controllers
 
         public JsonResult RenameSeries(int seriesId)
         {
-            _jobProvider.QueueJob(typeof(RenameSeriesJob), seriesId);
+            _jobProvider.QueueJob(typeof(RenameSeriesJob), new { SeriesId = seriesId });
             return JsonNotificationResult.Queued("Series rename");
         }
 

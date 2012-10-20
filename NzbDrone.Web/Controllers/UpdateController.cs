@@ -36,7 +36,7 @@ namespace NzbDrone.Web.Controllers
 
         public ActionResult StartUpdate()
         {
-            _jobProvider.QueueJob(typeof(AppUpdateJob), 0, 0);
+            _jobProvider.QueueJob(typeof(AppUpdateJob));
 
             return JsonNotificationResult.Info("Update will begin shortly", "NzbDrone will restart automatically.");
         }

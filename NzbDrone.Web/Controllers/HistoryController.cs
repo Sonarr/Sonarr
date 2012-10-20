@@ -90,7 +90,7 @@ namespace NzbDrone.Web.Controllers
             _historyProvider.Delete(historyId);
 
             //Queue a job to download the replacement episode
-            _jobProvider.QueueJob(typeof(EpisodeSearchJob), episodeId);
+            _jobProvider.QueueJob(typeof(EpisodeSearchJob), new { EpisodeId = episodeId });
 
             return JsonNotificationResult.Queued("Episode search");
         }

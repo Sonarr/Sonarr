@@ -199,7 +199,7 @@ namespace NzbDrone.Core.Providers
             }
             else
             {
-                notification.CurrentMessage = String.Format("Sorry, couldn't find you {0} in any of indexers.", episode);
+                notification.CurrentMessage = String.Format("Sorry, couldn't find {0} in any of indexers.", episode);
             }
 
             return false;
