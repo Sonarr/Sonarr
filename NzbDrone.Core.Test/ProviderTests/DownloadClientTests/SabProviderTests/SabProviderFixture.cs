@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
@@ -207,6 +208,16 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
 
             //Assert
             result.Should().Be("0.6.9");
+        }
+
+        [Test]
+        public void should_return_false_when_WebException_is_thrown()
+        {
+            Mocker.GetMock<HttpProvider>()
+                    .Setup(s => s.DownloadString(It.IsAny<String>())).Throws(new WebException());
+
+            Mocker.Resolve<SabProvider>().DownloadNzb(url, title).Should().BeFalse();
+            ExceptionVerification.ExpectedErrors(1);
         }
     }
 }

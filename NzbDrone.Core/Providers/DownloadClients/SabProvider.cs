@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
 using System.Web;
 using Newtonsoft.Json;
@@ -79,30 +80,38 @@ namespace NzbDrone.Core.Providers.DownloadClients
 
         public virtual bool DownloadNzb(string url, string title)
         {
-            string cat = _configProvider.SabTvCategory;
-            int priority = (int)_configProvider.SabTvPriority;
-            string name = GetNzbName(url);
-            string nzbName = HttpUtility.UrlEncode(title);
-
-            string action = string.Format("mode=addurl&name={0}&priority={1}&pp=3&cat={2}&nzbname={3}",
-                name, priority, cat, nzbName);
-
-            if (url.ToLower().Contains("newzbin"))
+            try
             {
-                action = action.Replace("mode=addurl", "mode=addid");
+                string cat = _configProvider.SabTvCategory;
+                int priority = (int)_configProvider.SabTvPriority;
+                string name = GetNzbName(url);
+                string nzbName = HttpUtility.UrlEncode(title);
+
+                string action = string.Format("mode=addurl&name={0}&priority={1}&pp=3&cat={2}&nzbname={3}",
+                    name, priority, cat, nzbName);
+
+                if (url.ToLower().Contains("newzbin"))
+                {
+                    action = action.Replace("mode=addurl", "mode=addid");
+                }
+
+                string request = GetSabRequest(action);
+                logger.Info("Adding report [{0}] to the queue.", title);
+
+                var response = _httpProvider.DownloadString(request).Replace("\n", String.Empty);
+            
+                logger.Debug("Queue Response: [{0}]", response);
+
+                if (response == "ok")
+                    return true;
+
+                logger.Warn("SAB returned unexpected response '{0}'", response);
             }
 
-            string request = GetSabRequest(action);
-
-            logger.Info("Adding report [{0}] to the queue.", title);
-
-            string response = _httpProvider.DownloadString(request).Replace("\n", String.Empty);
-            logger.Debug("Queue Response: [{0}]", response);
-
-            if (response == "ok")
-                return true;
-
-            logger.Warn("SAB returned unexpected response '{0}'", response);
+            catch (WebException ex)
+            {
+                logger.Error("Error communicating with SAB");
+            }
 
             return false;
         }
