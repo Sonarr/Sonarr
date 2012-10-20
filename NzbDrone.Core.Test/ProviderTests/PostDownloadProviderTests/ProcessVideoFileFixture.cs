@@ -49,6 +49,10 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
             Mocker.GetMock<SeriesProvider>()
                 .Setup(c => c.FindSeries(It.IsAny<string>()))
                 .Returns(fakeSeries);
+
+            Mocker.GetMock<DiskProvider>()
+                    .Setup(s => s.FolderExists(fakeSeries.Path))
+                    .Returns(true);
         }
 
         private void WithImportableFiles()
@@ -156,6 +160,10 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
                     .Setup(s => s.FreeDiskSpace(new DirectoryInfo(series.Path)))
                     .Returns(9);
 
+            Mocker.GetMock<DiskProvider>()
+                    .Setup(s => s.FolderExists(series.Path))
+                    .Returns(true);
+
             //Act
             Mocker.Resolve<PostDownloadProvider>().ProcessVideoFile(downloadName);
 
@@ -210,6 +218,33 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
 
             //Assert
             Mocker.GetMock<DiskScanProvider>().Verify(c => c.ImportFile(fakeSeries, downloadName), Times.Once());
+        }
+
+        [Test]
+        public void should_return_if_series_Path_doesnt_exist()
+        {
+            var downloadName = @"C:\Test\Drop\30.Rock.S01E01.Pilot.mkv";
+
+            WithValidSeries();
+
+            Mocker.GetMock<DiskProvider>()
+                    .Setup(s => s.GetDirectorySize(downloadName))
+                    .Returns(10);
+
+            Mocker.GetMock<DiskProvider>()
+                    .Setup(s => s.FreeDiskSpace(It.IsAny<DirectoryInfo>()))
+                    .Returns(10);
+
+            Mocker.GetMock<DiskProvider>()
+                                .Setup(s => s.FolderExists(fakeSeries.Path))
+                                .Returns(false);
+
+            //Act
+            Mocker.Resolve<PostDownloadProvider>().ProcessVideoFile(downloadName);
+
+
+            //Assert
+            ExceptionVerification.ExpectedWarns(1);
         }
     }
 }

@@ -72,9 +72,12 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
                 .Setup(c => c.GetDirectorySize(It.IsAny<String>()))
                 .Returns(10);
 
+            Mocker.GetMock<DiskProvider>()
+                .Setup(c => c.FolderExists(It.IsAny<String>()))
+                .Returns(true);
+
             //Act
             Mocker.Resolve<PostDownloadProvider>().ProcessDropFolder(@"C:\drop\");
-
 
             //Assert
             Mocker.GetMock<DiskScanProvider>().Verify(c => c.Scan(It.IsAny<Series>(), subFolders[0]), Times.Once());
@@ -111,6 +114,10 @@ namespace NzbDrone.Core.Test.ProviderTests.PostDownloadProviderTests
             Mocker.GetMock<DiskProvider>()
                 .Setup(c => c.GetDirectorySize(It.IsAny<String>()))
                 .Returns(10);
+
+            Mocker.GetMock<DiskProvider>()
+                .Setup(c => c.FolderExists(It.IsAny<String>()))
+                .Returns(true);
 
             //Act
             Mocker.Resolve<PostDownloadProvider>().ProcessDropFolder(@"C:\drop\");
