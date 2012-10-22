@@ -18,11 +18,13 @@ namespace NzbDrone.Web.Controllers
         private readonly GrowlProvider _growlProvider;
         private readonly SeasonProvider _seasonProvider;
         private readonly ProwlProvider _prowlProvider;
+        private readonly XbmcProvider _xbmcProvider;
 
         public CommandController(JobProvider jobProvider, SabProvider sabProvider,
                                     SmtpProvider smtpProvider, TwitterProvider twitterProvider,
                                     EpisodeProvider episodeProvider, GrowlProvider growlProvider,
-                                    SeasonProvider seasonProvider, ProwlProvider prowlProvider)
+                                    SeasonProvider seasonProvider, ProwlProvider prowlProvider,
+                                    XbmcProvider xbmcProvider)
         {
             _jobProvider = jobProvider;
             _sabProvider = sabProvider;
@@ -32,6 +34,7 @@ namespace NzbDrone.Web.Controllers
             _growlProvider = growlProvider;
             _seasonProvider = seasonProvider;
             _prowlProvider = prowlProvider;
+            _xbmcProvider = xbmcProvider;
         }
 
         public JsonResult RssSync()
@@ -163,6 +166,34 @@ namespace NzbDrone.Web.Controllers
                 return JsonNotificationResult.Oops("Failed to connect to SABnzbd, please check your settings");
 
             return JsonNotificationResult.Info("Success!", "SABnzbd settings have been verified successfully! Version: " + version);
+        }
+
+        public JsonResult TestXbmcNotification(string hosts)
+        {
+            try
+            {
+                _xbmcProvider.TestNotification(hosts);
+                return JsonNotificationResult.Info("Success!", "Test Notification Sent Successfully");
+            }
+            catch(Exception)
+            {
+            }
+
+            return JsonNotificationResult.Oops("Failed to send test notification, please review your settings.");
+        }
+
+        public JsonResult TestXbmcJsonApi(string hosts, string username, string password)
+        {
+            try
+            {
+                _xbmcProvider.TestJsonApi(hosts, username, password);
+                return JsonNotificationResult.Info("Success!", "Successfully tested JSON API");
+            }
+            catch (Exception)
+            {
+            }
+
+            return JsonNotificationResult.Oops("Failed to test JSON API, please review your settings.");
         }
     }
 }

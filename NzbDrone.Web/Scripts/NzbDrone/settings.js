@@ -9,7 +9,8 @@ $('#MultiEpisodeStyle').live('change', function () { createExamples(); });
 var testProwlUrl = '../Command/TestProwl';
 var testSabUrl = '../Command/TestSabnzbd';
 var testEmailUrl = '../Command/TestEmail';
-
+var testXbmcNotificationUrl = '../Command/TestXbmcNotification';
+var testXbmcJsonApiUrl = '../Command/TestXbmcJsonApi';
 
 function createExamples() {
     createSingleEpisodeExample();
@@ -200,10 +201,7 @@ function testSmtpSettings() {
             password: password,
             fromAddress: fromAddress,
             toAddresses: toAddresses
-        }),
-        error: function (req, status, error) {
-            alert("Sorry! We could send a test email at this time. " + error);
-        }
+        })
     });
 
     return false;
@@ -222,11 +220,34 @@ function registerGrowl() {
         data: jQuery.param({
             host: host,
             password: password
-        }),
-        error: function (req, status, error) {
-            alert("Sorry! We could send a test email at this time. " + error);
-        }
+        })
     });
 
     return false;
 }
+
+//XBMC
+$(document).on('click', '#xbmc-test-notification', function() {
+    var hosts = $('#XbmcHosts').val();
+
+    $.ajax({
+        url: testXbmcNotificationUrl,
+        data: jQuery.param({ hosts: hosts })
+    });
+});
+
+$(document).on('click', '#xbmc-test-jsonapi', function () {
+    var hosts = $('#XbmcHosts').val();
+    var username = $('#XbmcUsername').val();
+    var password = $('#XbmcPassword').val();
+    
+
+    $.ajax({
+        url: testXbmcJsonApiUrl,
+        data: jQuery.param({
+            hosts: hosts,
+            username: username,
+            password: password
+        })
+    });
+});

@@ -51,4 +51,14 @@
         <span class="small">@Html.DescriptionFor(m => m.XbmcPassword)</span>
     </label>
     @Html.TextBoxFor(m => m.XbmcPassword, new { @class = "inputClass", type = "password" })
+    
+    <label class="labelClass">Test Notification
+        <span class="small">Sends a test notification to your XBMC client(s)</span>
+    </label>
+    <input type="button" id="xbmc-test-notification" value="Test Notification" class="inputClass"/>
+    
+    <label class="labelClass">Test JSON-API
+        <span class="small">Test that library updates will work</span>
+    </label>
+    <input type="button" id="xbmc-test-jsonapi" value="Test JSON-API" class="inputClass"/>
 </div>

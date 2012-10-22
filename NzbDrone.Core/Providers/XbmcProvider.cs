@@ -31,6 +31,11 @@ namespace NzbDrone.Core.Providers
             _eventClientProvider = eventClientProvider;
         }
 
+        public XbmcProvider()
+        {
+
+        }
+
         public virtual void Notify(string header, string message)
         {
             //Always use EventServer, until Json has real support for it
@@ -39,11 +44,6 @@ namespace NzbDrone.Core.Providers
                 Logger.Trace("Sending Notifcation to XBMC Host: {0}", host);
                 _eventClientProvider.SendNotification(header, message, IconType.Jpeg, "NzbDrone.jpg", GetHostWithoutPort(host));
             }
-        }
-
-        public XbmcProvider()
-        {
-            
         }
 
         public virtual void Update(Series series)
@@ -374,6 +374,26 @@ namespace NzbDrone.Core.Providers
             }
 
             return false;
+        }
+
+        public virtual void TestNotification(string hosts)
+        {
+            foreach (var host in hosts.Split(','))
+            {
+                Logger.Trace("Sending Test Notifcation to XBMC Host: {0}", host);
+                _eventClientProvider.SendNotification("Test Notification", "Success! Notifications are setup correctly", IconType.Jpeg, "NzbDrone.jpg", GetHostWithoutPort(host));
+            }
+        }
+
+        public virtual void TestJsonApi(string hosts, string username, string password)
+        {
+            foreach (var host in hosts.Split(','))
+            {
+                Logger.Trace("Sending Test Notifcation to XBMC Host: {0}", host);
+                var version = GetJsonVersion(host, username, password);
+                if (version == 0)
+                    throw new Exception("Failed to get JSON version in test");
+            }
         }
 
         private string GetHostWithoutPort(string address)
