@@ -47,4 +47,14 @@
         <span class="small">@Html.DescriptionFor(m => m.PlexPassword)</span>
     </label>
     @Html.TextBoxFor(m => m.PlexPassword, new { @class = "inputClass", type = "password" })
+    
+    <label class="labelClass">Test Notification
+        <span class="small">Sends a test notification to your Plex client(s)</span>
+    </label>
+    <input type="button" id="plex-test-notification" value="Test Notification" class="inputClass"/>
+    
+    <label class="labelClass">Test Server
+        <span class="small">Test Plex server settings</span>
+    </label>
+    <input type="button" id="plex-test-server" value="Test Server" class="inputClass"/>
 </div>

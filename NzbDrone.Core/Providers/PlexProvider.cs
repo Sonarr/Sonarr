@@ -93,5 +93,15 @@ namespace NzbDrone.Core.Providers
 
             return _httpProvider.DownloadString(url);
         }
+
+        public virtual void TestNotification(string hosts, string username, string password)
+        {
+            foreach (var host in hosts.Split(','))
+            {
+                logger.Trace("Sending Test Notifcation to XBMC Host: {0}", host);
+                var command = String.Format("ExecBuiltIn(Notification({0}, {1}))", "Test Notification", "Success! Notifications are setup correctly");
+                SendCommand(host.Trim(), command, _configProvider.PlexUsername, _configProvider.PlexPassword);
+            }
+        }
     }
 }

@@ -11,6 +11,8 @@ var testSabUrl = '../Command/TestSabnzbd';
 var testEmailUrl = '../Command/TestEmail';
 var testXbmcNotificationUrl = '../Command/TestXbmcNotification';
 var testXbmcJsonApiUrl = '../Command/TestXbmcJsonApi';
+var testPlexNotificationUrl = '../Command/TestPlexNotification';
+var testPlexServerUrl = '../Command/TestPlexServer';
 
 function createExamples() {
     createSingleEpisodeExample();
@@ -248,6 +250,33 @@ $(document).on('click', '#xbmc-test-jsonapi', function () {
             hosts: hosts,
             username: username,
             password: password
+        })
+    });
+});
+
+//Plex
+$(document).on('click', '#plex-test-notification', function () {
+    var hosts = $('#PlexsClientHosts').val();
+    var username = $('#PlexUsername').val();
+    var password = $('#PlexPassword').val();
+
+    $.ajax({
+        url: testPlexNotificationUrl,
+        data: jQuery.param({
+            hosts: hosts,
+            username: username,
+            password: password
+        })
+    });
+});
+
+$(document).on('click', '#plex-test-server', function () {
+    var host = $('#PlexServerHost').val();
+    
+    $.ajax({
+        url: testPlexServerUrl,
+        data: jQuery.param({
+            host: host
         })
     });
 });
