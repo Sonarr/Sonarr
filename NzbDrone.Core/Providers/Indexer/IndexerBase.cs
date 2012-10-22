@@ -215,7 +215,7 @@ namespace NzbDrone.Core.Providers.Indexer
                 {
                     if (webException.Message.Contains("503"))
                     {
-                        _logger.Warn("{0} server is currently unbelievable.{1} {2}", Name,url, webException.Message);
+                        _logger.Warn("{0} server is currently unavailable.{1} {2}", Name,url, webException.Message);
                     }
                     else
                     {
