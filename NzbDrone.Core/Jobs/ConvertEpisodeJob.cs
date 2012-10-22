@@ -5,6 +5,7 @@ using NLog;
 using NzbDrone.Core.Model.Notification;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.Converting;
+using NzbDrone.Core.Repository;
 
 namespace NzbDrone.Core.Jobs
 {
@@ -41,7 +42,7 @@ namespace NzbDrone.Core.Jobs
             if (options == null || options.EpisodeId <= 0)
                 throw new ArgumentNullException(options);
 
-            var episode = _episodeProvider.GetEpisode(options.EpisodeId);
+            Episode episode = _episodeProvider.GetEpisode(options.EpisodeId);
             notification.CurrentMessage = String.Format("Starting Conversion for {0}", episode);
             var outputFile = _handbrakeProvider.ConvertFile(episode, notification);
 

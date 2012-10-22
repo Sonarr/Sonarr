@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Jobs
             notification.CurrentMessage = String.Format("Renaming episodes for {0} Season {1}", series.Title, options.SeasonNumber);
 
             logger.Debug("Getting episodes from database for series: {0} and season: {1}", options.SeriesId, options.SeasonNumber);
-            var episodeFiles = _mediaFileProvider.GetSeasonFiles(options.SeriesId, options.SeasonNumber);
+            IList<EpisodeFile> episodeFiles = _mediaFileProvider.GetSeasonFiles(options.SeriesId, options.SeasonNumber);
 
             if (episodeFiles == null || !episodeFiles.Any())
             {

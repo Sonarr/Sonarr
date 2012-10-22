@@ -146,7 +146,7 @@
                                 { sWidth: 'auto', "mDataProp": function (source, type, val) {
                                                                         // 'display' and 'filter' use our fancy naming
                                                                         if (type === 'display' || type === 'filter') {
-                                                                            return "<a href='/Series/Details?seriesId=" + source["SeriesId"] + "'>" + source["Title"] + "</a>";
+                                                                            return "<a href='/series/details/" + source["SeriesId"] + "'>" + source["Title"] + "</a>";
                                                                         }
                                                                         // 'sort' and 'type' both just use the raw data
                                                                         return source["TitleSorter"];
