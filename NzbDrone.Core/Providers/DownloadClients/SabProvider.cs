@@ -87,7 +87,7 @@ namespace NzbDrone.Core.Providers.DownloadClients
                 string name = GetNzbName(url);
                 string nzbName = HttpUtility.UrlEncode(title);
 
-                string action = string.Format("mode=addurl&name={0}&priority={1}&pp=3&cat={2}&nzbname={3}",
+                string action = string.Format("mode=addurl&name={0}&priority={1}&pp=3&cat={2}&nzbname={3}&output=json",
                     name, priority, cat, nzbName);
 
                 if (url.ToLower().Contains("newzbin"))
@@ -98,19 +98,17 @@ namespace NzbDrone.Core.Providers.DownloadClients
                 string request = GetSabRequest(action);
                 logger.Info("Adding report [{0}] to the queue.", title);
 
-                var response = _httpProvider.DownloadString(request).Replace("\n", String.Empty);
+                var response = _httpProvider.DownloadString(request);
             
                 logger.Debug("Queue Response: [{0}]", response);
 
-                if (response == "ok")
-                    return true;
-
-                logger.Warn("SAB returned unexpected response '{0}'", response);
+                CheckForError(response);
+                return true;
             }
 
             catch (WebException ex)
             {
-                logger.Error("Error communicating with SAB");
+                logger.Error("Error communicating with SAB: " + ex.Message);
             }
 
             return false;

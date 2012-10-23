@@ -277,6 +277,7 @@
     <Compile Include="Model\LanguageType.cs" />
     <Compile Include="Model\MisnamedEpisodeModel.cs" />
     <Compile Include="Model\QualityModel.cs" />
+    <Compile Include="Model\Sabnzbd\SabAddResponse.cs" />
     <Compile Include="Model\Sabnzbd\SabHistoryItem.cs" />
     <Compile Include="Model\Sabnzbd\SabHistory.cs" />
     <Compile Include="Model\Sabnzbd\SabJsonError.cs" />

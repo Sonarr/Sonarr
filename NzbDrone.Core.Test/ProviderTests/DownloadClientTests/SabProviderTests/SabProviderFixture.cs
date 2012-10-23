@@ -43,15 +43,15 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
         private void WithFailResponse()
         {
             Mocker.GetMock<HttpProvider>()
-                    .Setup(s => s.DownloadString(It.IsAny<String>())).Returns("failed");
+                    .Setup(s => s.DownloadString(It.IsAny<String>())).Returns("{ \"status\": false, \"error\": \"API Key Required\" }");
         }
 
         [Test]
         public void add_url_should_format_request_properly()
         {
             Mocker.GetMock<HttpProvider>(MockBehavior.Strict)
-                    .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=addurl&name=http://www.nzbclub.com/nzb_download.aspx?mid=1950232&priority=0&pp=3&cat=tv&nzbname=My+Series+Name+-+5x2-5x3+-+My+title+%5bBluray720p%5d+%5bProper%5d&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
-                    .Returns("ok");
+                    .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=addurl&name=http://www.nzbclub.com/nzb_download.aspx?mid=1950232&priority=0&pp=3&cat=tv&nzbname=My+Series+Name+-+5x2-5x3+-+My+title+%5bBluray720p%5d+%5bProper%5d&output=json&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
+                    .Returns("{ \"status\": true }");
 
             //Act
             Mocker.Resolve<SabProvider>().DownloadNzb(url, title).Should().BeTrue();
@@ -61,8 +61,8 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
         public void newzbin_add_url_should_format_request_properly()
         {
             Mocker.GetMock<HttpProvider>(MockBehavior.Strict)
-                    .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=addid&name=6107863&priority=0&pp=3&cat=tv&nzbname=My+Series+Name+-+5x2-5x3+-+My+title+%5bBluray720p%5d+%5bProper%5d&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
-                    .Returns("ok");
+                    .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=addid&name=6107863&priority=0&pp=3&cat=tv&nzbname=My+Series+Name+-+5x2-5x3+-+My+title+%5bBluray720p%5d+%5bProper%5d&output=json&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
+                    .Returns("{ \"status\": true }");
 
 
             //Act
@@ -78,8 +78,8 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests.SabProviderTests
             WithFailResponse();
 
             //Act
-            Mocker.Resolve<SabProvider>().DownloadNzb(url, title).Should().BeFalse();
-            ExceptionVerification.ExpectedWarns(1);
+            Assert.Throws<ApplicationException>(() => Mocker.Resolve<SabProvider>().DownloadNzb(url, title).Should().BeFalse());
+            //ExceptionVerification.ExpectedErrors(1);
         }
 
         [Test]
