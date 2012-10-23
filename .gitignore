@@ -48,3 +48,4 @@ NzbDrone.fpr
 nzbdrone.log*txt
 _rawPackage_service/
 _NCrunch_*
+_TeamCity*

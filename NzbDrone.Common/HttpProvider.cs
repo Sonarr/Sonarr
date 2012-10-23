@@ -93,35 +93,12 @@ namespace NzbDrone.Common
 
             byte[] byteArray = Encoding.ASCII.GetBytes(command);
 
-            var request = (HttpWebRequest)WebRequest.Create(address);
-            request.Method = "POST";
-            request.Credentials = new NetworkCredential(username, password);
-            request.ContentType = "application/json";
-            request.Timeout = 20000;
-            request.KeepAlive = false;
+            var wc = new WebClient();
+            wc.Credentials = new NetworkCredential(username, password);
+            var response = wc.UploadData(address, "POST", byteArray);
+            var text = Encoding.ASCII.GetString(response);
 
-            //Used to hold the JSON response
-            string responseFromServer;
-
-            using (var requestStream = request.GetRequestStream())
-            {
-                requestStream.Write(byteArray, 0, byteArray.Length);
-
-                using (var response = request.GetResponse())
-                {
-                    using (var responseStream = response.GetResponseStream())
-                    {
-                        using (var reader = new StreamReader(responseStream))
-                        {
-                            responseFromServer = reader.ReadToEnd();
-                        }
-                    }
-                }
-            }
-
-            return responseFromServer.Replace("&nbsp;", " ");
+            return text.Replace("&nbsp;", " ");
         }
-
-
     }
 }
