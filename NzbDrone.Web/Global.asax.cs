@@ -28,8 +28,7 @@ namespace NzbDrone.Web
 
             routes.MapRouteLowercase(
                 name: "WithSeasonNumber",
-                url: "{controller}/{action}/{seriesId}/{seasonNumber}",
-                defaults: new { controller = "Series", action = "Index", seriesId = UrlParameter.Optional, seasonNumber = UrlParameter.Optional }
+                url: "{controller}/{action}/{seriesId}/{seasonNumber}"
             );
 
             routes.MapRouteLowercase(

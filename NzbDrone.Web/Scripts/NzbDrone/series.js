@@ -1,6 +1,6 @@
-﻿var seriesEditorUrl = '../Series/Edit';
-var saveSeriesEditorUrl = '../Series/Edit';
-var seriesDeleteUrl = '../Series/Delete';
+﻿var seriesEditorUrl = '../series/edit';
+var saveSeriesEditorUrl = '../series/edit';
+var seriesDeleteUrl = '../series/delete';
 
 $("#seriesEditor").dialog({
     autoOpen: false,
