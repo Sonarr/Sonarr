@@ -1,12 +1,12 @@
 ﻿//URLs
-var addSeriesUrl = '../AddSeries/AddExistingSeries';
-var addNewSeriesUrl = '../AddSeries/AddNewSeries';
-var existingSeriesUrl = '../AddSeries/ExistingSeries';
-var addNewUrl = '../AddSeries/AddNew';
+var addSeriesUrl = '/addseries/addexistingseries';
+var addNewSeriesUrl = '/addseries/addnewseries';
+var existingSeriesUrl = '/addseries/existingseries';
+var addNewUrl = '/addseries/addnew';
 
-var deleteRootDirUrl = '../AddSeries/DeleteRootDir';
-var saveRootDirUrl = '../AddSeries/SaveRootDir';
-var rootListUrl = '../AddSeries/RootList';
+var deleteRootDirUrl = '/addseries/deleterootdir';
+var saveRootDirUrl = '/addseries/saverootdir';
+var rootListUrl = '/addseries/rootlist';
 
 
 //ExistingSeries
