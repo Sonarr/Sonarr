@@ -67,7 +67,14 @@
     <h3>
         <a href="#">Add Series Already on Disk</a></h3>
     <div id="existingSeries">
-        @{ Html.RenderAction("ExistingSeries", "AddSeries"); }
+        <img src="../../Content/Images/ajax-loader.gif" />
+
+        @Ajax.RenderAction(
+                               "ExistingSeries",
+                               "AddSeries",
+                               null,
+                               new AjaxOptions { UpdateTargetId = "existingSeries", InsertionMode = InsertionMode.Replace }
+                           )
     </div>
 </div>
 
