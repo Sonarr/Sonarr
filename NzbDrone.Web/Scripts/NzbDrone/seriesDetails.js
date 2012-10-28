@@ -1,11 +1,11 @@
 ﻿var seriesId = 0;
-var saveSeasonIgnoreUrl = '../Command/SaveSeasonIgnore';
-var saveEpisodeIgnoreUrl = '../Command/SaveEpisodeIgnore';
+var saveSeasonIgnoreUrl = '/command/saveseasonignore';
+var saveEpisodeIgnoreUrl = '/command/saveepisodeignore';
 
 var changeQualityType;
 var changeQualityData;
-var changeEpisodeQualityUrl = '../Episode/ChangeEpisodeQuality';
-var changeSeasonQualityUrl = '../Episode/ChangeSeasonQuality';
+var changeEpisodeQualityUrl = '/episode/changeepisodequality';
+var changeSeasonQualityUrl = '/episode/changeseasonquality';
 
 //Episode Ignore Functions
 $(".ignoreEpisode").live("click", function () {
