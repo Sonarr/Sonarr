@@ -65,17 +65,24 @@ hr
 
 #logo
 {
-    font-family: "Segoe UI Light" , "Open Sans" , "Segoe UI" , sans-serif;
-    font-weight: 100;
     height: 135px;
     background: url(images/logo.png) no-repeat left top;
     background-color: #065EFE;
-    font-size: 110px;
     color: white; /**color: rgb(40, 40, 40);**/
     text-transform: lowercase;
     letter-spacing: -1px;
     line-height: 110px;
     padding-left: 140px;
+}
+
+#logo span {
+    font-family: "Segoe UI Light" , "Open Sans" , "Segoe UI" , sans-serif;
+    font-weight: 100;
+    margin-top: 0;
+    padding-top: 0;
+    font-size: 110px;
+    margin-bottom: -20px;
+    display: inline-block;
 }
 
 .stackframe

@@ -10,7 +10,13 @@
                   Math.max($spec.index(lastCheckbox), $spec.index(e.target)) + 1
                 ).prop('checked', e.target.checked);
             }
-            lastCheckbox = e.target;
+            lastCheckbox = e.targety()
         });
     };
 })(jQuery);
+
+$(document).ready(function () {
+    while($('#logo span').height() > $('#logo').height()) {
+        $('#logo span').css('font-size', (parseInt($('#logo span').css('font-size')) - 1) + "px" );
+    };
+});
