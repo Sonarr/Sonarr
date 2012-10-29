@@ -8,7 +8,9 @@
 @foreach (var root in Model)
 {
     <div class="actionButton delete">
-        <i class="icon-remove icon-large delete-root" data-path="@root"></i>
+        <div class="delete-root" data-path="@root">
+            <i class="icon-remove icon-large"></i>
+        </div>
         <span>@root</span>
     </div>
 }

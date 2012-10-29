@@ -202,13 +202,12 @@ button span, input[type="button"] span, input[type="submit"] span, input[type="r
 
 .delete-root {
     color: red;
+    display: inline-block;
+    cursor: pointer;
 }
 
-.delete-root:before {
+.delete-root i:before {
     vertical-align: middle !important;
-}
-
-.delete-root:hover {
     cursor: pointer !important;
 }
 
