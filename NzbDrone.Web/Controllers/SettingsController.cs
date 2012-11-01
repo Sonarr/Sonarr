@@ -193,7 +193,7 @@ namespace NzbDrone.Web.Controllers
                                 XbmcUpdateWhenPlaying = _configProvider.XbmcUpdateWhenPlaying,
                                 SmtpEnabled = _externalNotificationProvider.GetSettings(typeof(Smtp)).Enable,
                                 SmtpNotifyOnGrab = _configProvider.SmtpNotifyOnGrab,
-                                SmtpNotifyOnDownload = _configProvider.SmtpNotifyOnGrab,
+                                SmtpNotifyOnDownload = _configProvider.SmtpNotifyOnDownload,
                                 SmtpServer = _configProvider.SmtpServer,
                                 SmtpPort = _configProvider.SmtpPort,
                                 SmtpUseSsl = _configProvider.SmtpUseSsl,
