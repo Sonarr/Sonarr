@@ -13,6 +13,10 @@ using Ninject.Web.Mvc;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core;
+using NzbDrone.Web.App_Start;
+using ServiceStack.CacheAccess;
+using ServiceStack.CacheAccess.Providers;
+using ServiceStack.ServiceInterface;
 
 namespace NzbDrone.Web
 {
@@ -22,10 +26,11 @@ namespace NzbDrone.Web
 
         public static void RegisterRoutes(RouteCollection routes)
         {
+            routes.IgnoreRoute("api/{*pathInfo}");
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             routes.IgnoreRoute("{*robotstxt}", new { robotstxt = @"(.*/)?robots.txt(/.*)?" });
             routes.IgnoreRoute("{*favicon}", new { favicon = @"(.*/)?favicon.ico(/.*)?" });
-
+            
             routes.MapRouteLowercase(
                 name: "WithSeasonNumber",
                 url: "{controller}/{action}/{seriesId}/{seasonNumber}"
@@ -50,6 +55,8 @@ namespace NzbDrone.Web
 
             RegisterGlobalFilters(GlobalFilters.Filters);
 
+            new AppHost().Init();
+
             Logger.Info("Fully initialized and ready.");
         }
 
@@ -60,9 +67,13 @@ namespace NzbDrone.Web
             dispatch.DedicateToHost();
 
             dispatch.Kernel.Load(Assembly.GetExecutingAssembly());
+
+            //ServiceStack
+            dispatch.Kernel.Bind<ICacheClient>().To<MemoryCacheClient>().InSingletonScope();
+            dispatch.Kernel.Bind<ISessionFactory>().To<SessionFactory>().InSingletonScope();
+
             return dispatch.Kernel;
         }
-
 
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {

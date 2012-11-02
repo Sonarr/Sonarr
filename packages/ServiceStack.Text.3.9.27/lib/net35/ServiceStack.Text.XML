@@ -185,11 +185,44 @@
             and parsing member names and enum values in a case-insensitive manner.
             </summary>
         </member>
+        <member name="F:ServiceStack.Text.JsConfig.tsEmitLowercaseUnderscoreNames">
+            <summary>
+            <see langword="true"/> if the <see cref="T:ServiceStack.Text.Common.ITypeSerializer"/> is configured
+            to support web-friendly serialized formats, ie emitting lowercase_underscore_casing for JSON
+            </summary>
+        </member>
+        <member name="F:ServiceStack.Text.JsConfig.propertyConvention">
+            <summary>
+            Define how property names are mapped during deserialization
+            </summary>
+        </member>
         <member name="F:ServiceStack.Text.JsConfig.tsThrowOnDeserializationError">
             <summary>
             Gets or sets a value indicating if the framework should throw serialization exceptions
             or continue regardless of deserialization errors. If <see langword="true"/>  the framework
             will throw; otherwise, it will parse as many fields as possible. The default is <see langword="false"/>.
+            </summary>
+        </member>
+        <member name="P:ServiceStack.Text.JsConfig.TimeSpanHandler">
+            <summary>
+            Sets which format to use when serializing TimeSpans
+            </summary>
+        </member>
+        <member name="P:ServiceStack.Text.JsConfig.PreferInterfaces">
+            <summary>
+            If set to true, Interface types will be prefered over concrete types when serializing.
+            </summary>
+        </member>
+        <member name="P:ServiceStack.Text.JsConfig.ModelFactory">
+            <summary>
+            Set this to enable your own type construction provider.
+            This is helpful for integration with IoC containers where you need to call the container constructor.
+            Return null if you don't know how to construct the type and the parameterless constructor will be used.
+            </summary>
+        </member>
+        <member name="F:ServiceStack.Text.JsConfig`1.IncludeTypeInfo">
+            <summary>
+            Always emit type info for this type.  Takes precedence over ExcludeTypeInfo
             </summary>
         </member>
         <member name="F:ServiceStack.Text.JsConfig`1.ExcludeTypeInfo">
@@ -210,9 +243,24 @@
             Define custom serialization fn for BCL Structs
             </summary>
         </member>
+        <member name="F:ServiceStack.Text.JsConfig`1.rawSerializeFn">
+            <summary>
+            Define custom raw serialization fn
+            </summary>
+        </member>
+        <member name="F:ServiceStack.Text.JsConfig`1.onSerializingFn">
+            <summary>
+            Define custom serialization hook
+            </summary>
+        </member>
         <member name="F:ServiceStack.Text.JsConfig`1.DeSerializeFn">
             <summary>
             Define custom deserialization fn for BCL Structs
+            </summary>
+        </member>
+        <member name="F:ServiceStack.Text.JsConfig`1.RawDeserializeFn">
+            <summary>
+            Define custom raw deserialization fn for objects
             </summary>
         </member>
         <member name="F:ServiceStack.Text.JsConfig`1.ExcludePropertyNames">
@@ -223,6 +271,31 @@
         <member name="P:ServiceStack.Text.JsConfig`1.TreatValueAsRefTypes">
             <summary>
             Opt-in flag to set some Value Types to be treated as a Ref Type
+            </summary>
+        </member>
+        <member name="P:ServiceStack.Text.JsConfig`1.HasSerializeFn">
+            <summary>
+            Whether there is a fn (raw or otherwise)
+            </summary>
+        </member>
+        <member name="F:ServiceStack.Text.JsonPropertyConvention.ExactMatch">
+            <summary>
+            The property names on target types must match property names in the JSON source
+            </summary>
+        </member>
+        <member name="F:ServiceStack.Text.JsonPropertyConvention.Lenient">
+            <summary>
+            The property names on target types may not match the property names in the JSON source
+            </summary>
+        </member>
+        <member name="F:ServiceStack.Text.JsonTimeSpanHandler.DurationFormat">
+            <summary>
+            Uses the xsd format like PT15H10M20S
+            </summary>
+        </member>
+        <member name="F:ServiceStack.Text.JsonTimeSpanHandler.StandardFormat">
+            <summary>
+            Uses the standard .net ToString method of the TimeSpan class
             </summary>
         </member>
         <member name="T:ServiceStack.Text.TypeSerializer">
@@ -266,6 +339,16 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:ServiceStack.Text.TypeSerializer.PrintDump``1(``0)">
+            <summary>
+            Print Dump to Console.WriteLine
+            </summary>
+        </member>
+        <member name="M:ServiceStack.Text.TypeSerializer.Print(System.String,System.Object[])">
+            <summary>
+            Print string.Format to Console.WriteLine
+            </summary>
+        </member>
         <member name="T:ServiceStack.Text.WP.HashSet`1">
             <summary>
              A hashset implementation that uses an IDictionary
@@ -284,6 +367,36 @@
             </summary>
             <param name="utf32"></param>
             <returns></returns>
+        </member>
+        <member name="M:ServiceStack.Text.JsonExtensions.Get``1(System.Collections.Generic.Dictionary{System.String,System.String},System.String)">
+            <summary>
+            Get JSON string value converted to T
+            </summary>
+        </member>
+        <member name="M:ServiceStack.Text.JsonExtensions.Get(System.Collections.Generic.Dictionary{System.String,System.String},System.String)">
+            <summary>
+            Get JSON string value
+            </summary>
+        </member>
+        <member name="M:ServiceStack.Text.JsonObject.GetUnescaped(System.String)">
+            <summary>
+            Get unescaped string value
+            </summary>
+        </member>
+        <member name="M:ServiceStack.Text.JsonObject.Child(System.String)">
+            <summary>
+            Get unescaped string value
+            </summary>
+        </member>
+        <member name="M:ServiceStack.Text.JsonObject.WriteValue(System.IO.TextWriter,System.Object)">
+            <summary>
+            Write JSON Array, Object, bool or number values as raw string
+            </summary>
+        </member>
+        <member name="P:ServiceStack.Text.JsonObject.Item(System.String)">
+            <summary>
+            Get JSON string value
+            </summary>
         </member>
         <member name="T:ServiceStack.Text.Controller.PathInfo">
             <summary>
@@ -375,6 +488,11 @@
             </summary>
             <param name="typeName">[typeName] or [typeName, assemblyName]</param>
             <returns></returns>
+        </member>
+        <member name="M:ServiceStack.Text.AssemblyUtils.MainInterface``1">
+            <summary>
+            The top-most interface of the given type, if any.
+            </summary>
         </member>
         <member name="M:ServiceStack.Text.AssemblyUtils.FindType(System.String,System.String)">
             <summary>

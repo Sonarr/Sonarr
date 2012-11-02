@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>ServiceStack.Mvc</id>
+    <version>3.9.25</version>
+    <title>MVC Adapters for integrating with ServiceStack webservices</title>
+    <authors>Demis Bellot</authors>
+    <owners>Demis Bellot</owners>
+    <licenseUrl>https://github.com/ServiceStack/ServiceStack/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/ServiceStack/ServiceStack</projectUrl>
+    <iconUrl>http://www.servicestack.net/logo-100x100.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Full details in Mvc PowerPack: http://servicestack.net/mvc-powerpack/
+      Adapter classes to provide tight integration and re-usable functionality between ServiceStack and MVC3.
+      Including adapters for: MiniProfiler, FluentValidation, Funq IOC Controller Factory, Funq Validator Factory
+      ControllerBase (configured with access to ServiceStack's ICacheClient, ISession, typed UserSession dependencies).</description>
+    <summary>.NET 4.0 project Integration of ServiceStack with MVC3</summary>
+    <copyright>servicestack.net 2012 and contributors</copyright>
+    <language>en-US</language>
+    <tags>MiniProfiler FluentValidation MVC Controller</tags>
+    <dependencies>
+      <dependency id="ServiceStack" />
+    </dependencies>
+  </metadata>
+</package>
