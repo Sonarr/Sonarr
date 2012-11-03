@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>SignalR.Ninject</id>
+    <version>0.5.0</version>
+    <authors>David Fowler,  Damian Edwards</authors>
+    <owners>David Fowler,  Damian Edwards</owners>
+    <licenseUrl>https://github.com/SignalR/SignalR/blob/master/LICENSE.md</licenseUrl>
+    <projectUrl>https://github.com/SignalR/SignalR</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A ninject dependency resolver implementation for SignalR.</description>
+    <dependencies>
+      <dependency id="Ninject" version="2.2.1.4" />
+      <dependency id="SignalR.Server" version="0.5.0" />
+    </dependencies>
+  </metadata>
+</package>

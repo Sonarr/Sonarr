@@ -67,6 +67,7 @@
       <HintPath>..\packages\LowercaseRoutesMVC.1.0.3\lib\LowercaseRoutesMVC.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
@@ -77,13 +78,18 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.4.5.9\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.4.5.10\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Ninject.2.2.1.4\lib\net40-Full\Ninject.dll</HintPath>
+    <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject.Web.Mvc, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Ninject.MVC3.2.2.2.0\lib\net40-Full\Ninject.Web.Mvc.dll</HintPath>
+    <Reference Include="Ninject.Web.Common, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Ninject.Web.Common.3.0.0.7\lib\net40-full\Ninject.Web.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Web.Mvc">
+      <HintPath>..\packages\Ninject.MVC3.3.0.0.6\lib\net40-full\Ninject.Web.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
@@ -124,11 +130,17 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\ServiceStack.Text.3.9.27\lib\net35\ServiceStack.Text.dll</HintPath>
     </Reference>
-    <Reference Include="SignalR, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SignalR.Server.0.4.0.0\lib\net40\SignalR.dll</HintPath>
+    <Reference Include="SignalR, Version=0.5.1.10822, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\SignalR.Server.0.5.3\lib\net40\SignalR.dll</HintPath>
     </Reference>
-    <Reference Include="SignalR.Hosting.AspNet, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SignalR.Hosting.AspNet.0.4.0.0\lib\net40\SignalR.Hosting.AspNet.dll</HintPath>
+    <Reference Include="SignalR.Hosting.AspNet, Version=0.5.1.10822, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\SignalR.Hosting.AspNet.0.5.3\lib\net40\SignalR.Hosting.AspNet.dll</HintPath>
+    </Reference>
+    <Reference Include="SignalR.Hosting.Common, Version=0.5.1.10822, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\SignalR.Hosting.Common.0.5.3\lib\net40\SignalR.Hosting.Common.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -178,31 +190,30 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\TvdbLib.dll</HintPath>
     </Reference>
-    <Reference Include="WebActivator, Version=1.5.1.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="WebActivator, Version=1.5.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\WebActivator.1.5.1\lib\net40\WebActivator.dll</HintPath>
+      <HintPath>..\packages\WebActivator.1.5.2\lib\net40\WebActivator.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\AppHost.cs" />
     <Compile Include="App_Start\DataTablesMvc.cs" />
     <Compile Include="App_Start\MiniProfiler.cs" />
     <Compile Include="Controllers\SearchHistoryController.cs" />
     <Compile Include="Helpers\RenderActionHelper.cs" />
     <Compile Include="Helpers\Validation\RequiredIfAnyAttribute.cs" />
     <Compile Include="Helpers\Validation\RequiredIfAttribute.cs" />
+    <Content Include="Content\DataTables-NzbDrone\media\images\sort_both.png" />
+    <Content Include="Content\DataTables-NzbDrone\media\images\sort_desc_disabled.png" />
     <Content Include="Content\font-awesome-ie7.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font\fontawesome-webfont.svg" />
     <Content Include="Content\SeriesEditor.css" />
-    <Content Include="Content\DataTables-1.9.0\media\css\jquery.dataTables.css" />
-    <Content Include="Content\DataTables-1.9.0\media\images\back.png" />
-    <Content Include="Content\DataTables-1.9.0\media\images\forward.png" />
-    <Content Include="Content\DataTables-1.9.0\media\images\sort_asc.png" />
-    <Content Include="Content\DataTables-1.9.0\media\images\sort_asc_disabled.png" />
-    <Content Include="Content\DataTables-1.9.0\media\images\sort_both.png" />
-    <Content Include="Content\DataTables-1.9.0\media\images\sort_desc.png" />
-    <Content Include="Content\DataTables-1.9.0\media\images\sort_desc_disabled.png" />
+    <Content Include="Content\DataTables-NzbDrone\media\css\jquery.dataTables.css" />
+    <Content Include="Content\DataTables-NzbDrone\media\images\back.png" />
+    <Content Include="Content\DataTables-NzbDrone\media\images\forward.png" />
+    <Content Include="Content\DataTables-NzbDrone\media\images\sort_asc.png" />
+    <Content Include="Content\DataTables-NzbDrone\media\images\sort_asc_disabled.png" />
+    <Content Include="Content\DataTables-NzbDrone\media\images\sort_desc.png" />
     <Content Include="Content\Images\background.jpg" />
     <Content Include="Content\Images\Indexers\FileSharingTalk.png" />
     <Content Include="Content\Images\Indexers\Newznab.png" />
@@ -332,12 +343,15 @@
     <Content Include="Content\themes\base\jquery.ui.core.css" />
     <Content Include="Content\themes\base\jquery.ui.datepicker.css" />
     <Content Include="Content\themes\base\jquery.ui.dialog.css" />
+    <Content Include="Content\themes\base\jquery.ui.menu.css" />
     <Content Include="Content\themes\base\jquery.ui.progressbar.css" />
     <Content Include="Content\themes\base\jquery.ui.resizable.css" />
     <Content Include="Content\themes\base\jquery.ui.selectable.css" />
     <Content Include="Content\themes\base\jquery.ui.slider.css" />
+    <Content Include="Content\themes\base\jquery.ui.spinner.css" />
     <Content Include="Content\themes\base\jquery.ui.tabs.css" />
     <Content Include="Content\themes\base\jquery.ui.theme.css" />
+    <Content Include="Content\themes\base\jquery.ui.tooltip.css" />
     <Content Include="Content\themes\base\minified\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\minified\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\minified\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -360,38 +374,85 @@
     <Content Include="Content\themes\base\minified\jquery.ui.core.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.datepicker.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.dialog.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.menu.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.progressbar.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.resizable.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.selectable.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.spinner.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\conditional-validation.js" />
-    <Content Include="Scripts\DataTables-1.9.0\media\js\FixedHeader.js" />
-    <Content Include="Scripts\DataTables-1.9.0\media\js\FixedHeader.min.js" />
-    <Content Include="Scripts\DataTables-1.9.0\media\js\jquery.dataTables.reloadAjax.js" />
-    <Content Include="Scripts\DataTables-1.9.0\media\js\jquery.dataTables.editable.js" />
-    <Content Include="Scripts\DataTables-1.9.0\media\js\jquery.dataTables.js" />
-    <Content Include="Scripts\DataTables-1.9.0\media\js\jquery.dataTables.min.js" />
-    <Content Include="Scripts\DataTables-1.9.0\media\js\jquery.dataTablesFilteringDelay.js" />
-    <Content Include="Scripts\DataTables-1.9.0\media\js\jquery.jeditable.js" />
-    <Content Include="Scripts\jquery-1.7.1-vsdoc.js" />
-    <Content Include="Scripts\jquery-1.7.1.min.js" />
+    <Content Include="Scripts\DataTables-1.9.4\media\js\FixedHeader.js" />
+    <Content Include="Scripts\DataTables-1.9.4\media\js\FixedHeader.min.js" />
+    <Content Include="Scripts\DataTables-1.9.4\media\js\jquery.dataTables.reloadAjax.js" />
+    <Content Include="Scripts\DataTables-1.9.4\media\js\jquery.dataTables.editable.js" />
+    <Content Include="Scripts\DataTables-1.9.4\media\js\jquery.dataTablesFilteringDelay.js" />
+    <Content Include="Scripts\DataTables-1.9.4\media\js\jquery.jeditable.js" />
     <Content Include="Content\font\fontawesome-webfont.woff" />
     <Content Include="Content\font\fontawesome-webfont.ttf" />
     <Content Include="Content\font\fontawesome-webfont.eot" />
-    <None Include="Scripts\jquery-1.8.1.intellisense.js" />
-    <Content Include="Scripts\jquery-1.8.1.js" />
-    <Content Include="Scripts\jquery-1.8.1.min.js" />
+    <Fakes Include="Fakes\Ninject.Web.Mvc.fakes" />
+    <Content Include="Scripts\DataTables-1.9.4\docs\media\js\doc.js" />
+    <Content Include="Scripts\DataTables-1.9.4\docs\media\js\jquery.js" />
+    <Content Include="Scripts\DataTables-1.9.4\docs\media\js\shBrushJScript.js" />
+    <Content Include="Scripts\DataTables-1.9.4\docs\media\js\shCore.js" />
+    <Content Include="Scripts\DataTables-1.9.4\extras\AutoFill\media\docs\media\js\doc.js" />
+    <Content Include="Scripts\DataTables-1.9.4\extras\AutoFill\media\docs\media\js\jquery.js" />
+    <Content Include="Scripts\DataTables-1.9.4\extras\AutoFill\media\docs\media\js\shBrushJScript.js" />
+    <Content Include="Scripts\DataTables-1.9.4\extras\AutoFill\media\docs\media\js\shCore.js" />
+    <Content Include="Scripts\DataTables-1.9.4\extras\AutoFill\media\js\AutoFill.js" />
+    <Content Include="Scripts\DataTables-1.9.4\extras\AutoFill\media\js\AutoFill.min.js" />
+    <Content Include="Scripts\DataTables-1.9.4\extras\ColReorder\media\docs\media\js\doc.js" />
+    <Content Include="Scripts\DataTables-1.9.4\extras\ColReorder\media\docs\media\js\jquery.js" />
+    <Content Include="Scripts\DataTables-1.9.4\extras\ColReorder\media\docs\media\js\shBrushJScript.js" />
+    <Content Include="Scripts\DataTables-1.9.4\extras\ColReorder\media\docs\media\js\shCore.js" />
+    <Content Include="Scripts\DataTables-1.9.4\extras\ColReorder\media\js\ColReorder.js" />
+    <Content Include="Scripts\DataTables-1.9.4\extras\ColReorder\media\js\ColReorder.min.js" />
+    <Content Include="Scripts\DataTables-1.9.4\extras\ColVis\media\docs\media\js\doc.js" />
+    <Content Include="Scripts\DataTables-1.9.4\extras\ColVis\media\docs\media\js\jquery.js" />
+    <Content Include="Scripts\DataTables-1.9.4\extras\ColVis\media\docs\media\js\shBrushJScript.js" />
+    <Content Include="Scripts\DataTables-1.9.4\extras\ColVis\media\docs\media\js\shCore.js" />
+    <Content Include="Scripts\DataTables-1.9.4\extras\ColVis\media\js\ColVis.js" />
+    <Content Include="Scripts\DataTables-1.9.4\extras\ColVis\media\js\ColVis.min.js" />
+    <Content Include="Scripts\DataTables-1.9.4\extras\FixedColumns\docs\media\js\doc.js" />
+    <Content Include="Scripts\DataTables-1.9.4\extras\FixedColumns\docs\media\js\jquery.js" />
+    <Content Include="Scripts\DataTables-1.9.4\extras\FixedColumns\docs\media\js\shBrushJScript.js" />
+    <Content Include="Scripts\DataTables-1.9.4\extras\FixedColumns\docs\media\js\shCore.js" />
+    <Content Include="Scripts\DataTables-1.9.4\extras\FixedColumns\media\js\FixedColumns.js" />
+    <Content Include="Scripts\DataTables-1.9.4\extras\FixedColumns\media\js\FixedColumns.min.js" />
+    <Content Include="Scripts\DataTables-1.9.4\extras\Scroller\media\docs\media\js\doc.js" />
+    <Content Include="Scripts\DataTables-1.9.4\extras\Scroller\media\docs\media\js\jquery.js" />
+    <Content Include="Scripts\DataTables-1.9.4\extras\Scroller\media\docs\media\js\shBrushJScript.js" />
+    <Content Include="Scripts\DataTables-1.9.4\extras\Scroller\media\docs\media\js\shCore.js" />
+    <Content Include="Scripts\DataTables-1.9.4\extras\Scroller\media\js\dataTables.scroller.js" />
+    <Content Include="Scripts\DataTables-1.9.4\extras\Scroller\media\js\dataTables.scroller.min.js" />
+    <Content Include="Scripts\DataTables-1.9.4\extras\TableTools\media\js\TableTools.js" />
+    <Content Include="Scripts\DataTables-1.9.4\extras\TableTools\media\js\TableTools.min.js" />
+    <Content Include="Scripts\DataTables-1.9.4\extras\TableTools\media\js\TableTools.min.js.gz" />
+    <Content Include="Scripts\DataTables-1.9.4\extras\Scroller\media\js\dataTables.scroller.min.js.gz" />
+    <Content Include="Scripts\DataTables-1.9.4\extras\FixedColumns\media\js\FixedColumns.min.js.gz" />
+    <Content Include="Scripts\DataTables-1.9.4\extras\ColVis\media\js\ColVis.min.js.gz" />
+    <Content Include="Scripts\DataTables-1.9.4\extras\ColReorder\media\js\ColReorder.min.js.gz" />
+    <Content Include="Scripts\DataTables-1.9.4\extras\AutoFill\media\js\AutoFill.min.js.gz" />
+    <None Include="Scripts\jquery-1.8.2.intellisense.js" />
+    <Content Include="Scripts\DataTables-1.9.4\extras\TableTools\media\js\ZeroClipboard.js" />
+    <Content Include="Scripts\DataTables-1.9.4\media\js\jquery.dataTables.js" />
+    <Content Include="Scripts\DataTables-1.9.4\media\js\jquery.dataTables.min.js" />
+    <Content Include="Scripts\jquery-1.8.2.js" />
+    <Content Include="Scripts\jquery-1.8.2.min.js" />
     <Content Include="Scripts\jquery-ui-1.8.17.js" />
     <Content Include="Scripts\jquery-ui-1.8.17.min.js" />
+    <Content Include="Scripts\jquery-ui-1.9.0.js" />
+    <Content Include="Scripts\jquery-ui-1.9.0.min.js" />
     <Content Include="Scripts\jquery.cookie.js" />
     <Content Include="Scripts\jquery.hotkeys.js" />
     <Content Include="Scripts\jquery.livequery.js" />
-    <Content Include="Scripts\jquery.signalR.js" />
-    <Content Include="Scripts\jquery.signalR.min.js" />
+    <Content Include="Scripts\jquery.signalR-0.5.3.js" />
+    <Content Include="Scripts\jquery.signalR-0.5.3.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate-vsdoc.js" />
@@ -472,6 +533,7 @@
   <ItemGroup>
     <Content Include="log.config">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>

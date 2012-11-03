@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>jQuery.UI.Combined</id>
+    <version>1.9.0</version>
+    <title>jQuery UI (Combined Library)</title>
+    <authors>jQuery UI Team</authors>
+    <owners>jQuery UI Team</owners>
+    <licenseUrl>http://jquery.org/license</licenseUrl>
+    <projectUrl>http://jqueryui.com/</projectUrl>
+    <iconUrl>http://nuget.org/Media/Default/Packages/jQuery.UI.Combined/1.8.9/jQueryUILogo.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>jQuery UI is an open source library of interface components — interactions, full-featured widgets, and animation effects — based on the stellar jQuery javascript library . Each component is built according to jQuery's event-driven architecture (find something, manipulate it) and is themeable, making it easy for developers of any skill level to integrate and extend into their own code.
+    NOTE: This package is maintained on behalf of the library owners by the NuGet Community Packages project at http://nugetpackages.codeplex.com/</description>
+    <summary>The full jQuery UI library as a single combined file. Includes the base theme.</summary>
+    <language>en-US</language>
+    <tags>jQuery jQueryUI plugins</tags>
+    <dependencies>
+      <dependency id="jQuery" version="1.4.4" />
+    </dependencies>
+  </metadata>
+</package>

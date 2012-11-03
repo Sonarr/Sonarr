@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Providers
             {
                 logger.Trace("Sending Status update to client. EpisodeId: {0}, Status: {1}", episodeId, episodeStatus);
 
-                GetClients().updatedStatus(new
+                Clients.updatedStatus(new
                                                {
                                                        EpisodeId = episodeId,
                                                        EpisodeStatus = episodeStatus.ToString(),
@@ -35,12 +35,6 @@ namespace NzbDrone.Core.Providers
                 logger.Trace("Error");
                 throw;
             }
-        }
-
-        private dynamic GetClients()
-        {
-            var connectionManager = AspNetHost.DependencyResolver.Resolve<IConnectionManager>();
-            return connectionManager.GetClients<SignalRProvider>();
         }
     }
 }

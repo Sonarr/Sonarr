@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Ninject</id>
+    <version>3.0.1.10</version>
+    <authors>Ninject Project Contributors</authors>
+    <owners>Ninject Project Contributors</owners>
+    <licenseUrl>https://github.com/ninject/ninject/raw/master/LICENSE.txt</licenseUrl>
+    <projectUrl>http://www.ninject.org/</projectUrl>
+    <iconUrl>https://github.com/ninject/ninject/raw/master/logos/Ninject-Logo32.png</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>Stop writing monolithic applications that make you feel like you have to move mountains to make the simplest of changes. Ninject helps you use the technique of dependency injection to break your applications into loosely-coupled, highly-cohesive components, and then glue them back together in a flexible manner.</description>
+    <summary>IoC container for .NET</summary>
+    <tags>Ninject ioc di</tags>
+  </metadata>
+</package>

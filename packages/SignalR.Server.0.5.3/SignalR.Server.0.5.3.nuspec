@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>SignalR.Server</id>
+    <version>0.5.3</version>
+    <authors>David Fowler,  Damian Edwards</authors>
+    <owners>David Fowler,  Damian Edwards</owners>
+    <licenseUrl>https://github.com/SignalR/SignalR/blob/master/LICENSE.md</licenseUrl>
+    <projectUrl>https://github.com/SignalR/SignalR</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Async signaling library for .NET to help build real-time, multi-user interactive web applications.</description>
+    <dependencies>
+      <dependency id="Newtonsoft.Json" version="4.5.4" />
+    </dependencies>
+  </metadata>
+</package>

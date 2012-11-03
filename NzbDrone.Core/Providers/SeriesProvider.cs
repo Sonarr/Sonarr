@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
+using Ninject;
 using NzbDrone.Common;
 using NzbDrone.Core.Model;
 using NzbDrone.Core.Providers.Core;
@@ -23,6 +24,7 @@ namespace NzbDrone.Core.Providers
         private readonly MetadataProvider _metadataProvider;
         private static readonly Regex TimeRegex = new Regex(@"^(?<time>\d+:?\d*)\W*(?<meridiem>am|pm)?", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
+        [Inject]
         public SeriesProvider(IDatabase database, ConfigProvider configProviderProvider,
                                 TvDbProvider tvDbProviderProvider, SceneMappingProvider sceneNameMappingProvider,
                                 BannerProvider bannerProvider, MetadataProvider metadataProvider)

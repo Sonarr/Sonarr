@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>jQuery.Ajax.Unobtrusive</id>
+    <version>2.0.20710.0</version>
+    <title>jQuery Unobtrusive Ajax</title>
+    <authors>Microsoft</authors>
+    <owners>Microsoft</owners>
+    <licenseUrl>http://go.microsoft.com/fwlink/?LinkID=227523</licenseUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>Legacy package, jQuery.Ajax.Unobtrusive is now included in the 'Microsoft.jQuery.Unobtrusive.Ajax' package.</description>
+    <summary>Legacy package, jQuery.Ajax.Unobtrusive is now included in the 'Microsoft.jQuery.Unobtrusive.Ajax' package.</summary>
+    <dependencies>
+      <dependency id="Microsoft.jQuery.Unobtrusive.Ajax" version="2.0.20613.0" />
+    </dependencies>
+  </metadata>
+</package>

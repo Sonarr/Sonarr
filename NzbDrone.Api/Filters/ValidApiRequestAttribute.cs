@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using Ninject;
 using NzbDrone.Api.Exceptions;
-using NzbDrone.Api.RequestModels;
 using NzbDrone.Core.Providers.Core;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;

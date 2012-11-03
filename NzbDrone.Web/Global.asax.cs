@@ -9,11 +9,11 @@ using System.Web.Routing;
 using LowercaseRoutesMVC;
 using NLog.Config;
 using Ninject;
-using Ninject.Web.Mvc;
+using Ninject.Web.Common;
 using NLog;
+using NzbDrone.Api;
 using NzbDrone.Common;
 using NzbDrone.Core;
-using NzbDrone.Web.App_Start;
 using ServiceStack.CacheAccess;
 using ServiceStack.CacheAccess.Providers;
 using ServiceStack.ServiceInterface;
@@ -44,8 +44,9 @@ namespace NzbDrone.Web
         }
 
         protected override void OnApplicationStarted()
-        {          
+        {
             base.OnApplicationStarted();
+
             RegisterRoutes(RouteTable.Routes);
             AreaRegistration.RegisterAllAreas();
 
@@ -54,8 +55,6 @@ namespace NzbDrone.Web
             ViewEngines.Engines.Add(razor);
 
             RegisterGlobalFilters(GlobalFilters.Filters);
-
-            new AppHost().Init();
 
             Logger.Info("Fully initialized and ready.");
         }
@@ -71,6 +70,7 @@ namespace NzbDrone.Web
             //ServiceStack
             dispatch.Kernel.Bind<ICacheClient>().To<MemoryCacheClient>().InSingletonScope();
             dispatch.Kernel.Bind<ISessionFactory>().To<SessionFactory>().InSingletonScope();
+            new AppHost(dispatch.Kernel).Init();
 
             return dispatch.Kernel;
         }

@@ -163,12 +163,12 @@
     <Reference Include="MiniProfiler">
       <HintPath>..\packages\MiniProfiler.2.0.2\lib\net40\MiniProfiler.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.4.5.9\lib\net40\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.10\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Ninject.2.2.1.4\lib\net40-Full\Ninject.dll</HintPath>
+    <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
@@ -177,13 +177,16 @@
       <HintPath>..\packages\Prowlin 0.9.4163.39219\Prowlin.dll</HintPath>
     </Reference>
     <Reference Include="SignalR">
-      <HintPath>..\packages\SignalR.Server.0.4.0.0\lib\net40\SignalR.dll</HintPath>
+      <HintPath>..\packages\SignalR.Server.0.5.3\lib\net40\SignalR.dll</HintPath>
     </Reference>
     <Reference Include="SignalR.Hosting.AspNet">
-      <HintPath>..\packages\SignalR.Hosting.AspNet.0.4.0.0\lib\net40\SignalR.Hosting.AspNet.dll</HintPath>
+      <HintPath>..\packages\SignalR.Hosting.AspNet.0.5.3\lib\net40\SignalR.Hosting.AspNet.dll</HintPath>
+    </Reference>
+    <Reference Include="SignalR.Hosting.Common">
+      <HintPath>..\packages\SignalR.Hosting.Common.0.5.3\lib\net40\SignalR.Hosting.Common.dll</HintPath>
     </Reference>
     <Reference Include="SignalR.Ninject">
-      <HintPath>..\packages\SignalR.Ninject.0.4\lib\net40\SignalR.Ninject.dll</HintPath>
+      <HintPath>..\packages\SignalR.Ninject.0.5.0\lib\net40\SignalR.Ninject.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -200,6 +203,7 @@
       <HintPath>..\packages\EntityFramework.SqlServerCompact.4.1.8482.2\lib\System.Data.SqlServerCe.Entity.dll</HintPath>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />

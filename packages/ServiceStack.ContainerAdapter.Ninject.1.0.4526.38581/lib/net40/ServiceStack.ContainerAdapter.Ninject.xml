@@ -1,0 +1,24 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+ServiceStack.ContainerAdapter.Ninject
+</name>
+</assembly>
+<members>
+<member name="P:ServiceStack.ContainerAdapter.Ninject.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:ServiceStack.ContainerAdapter.Ninject.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:ServiceStack.ContainerAdapter.Ninject.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+</members>
+</doc>

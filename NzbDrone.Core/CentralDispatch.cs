@@ -39,8 +39,7 @@ namespace NzbDrone.Core
             logger.Debug("Initializing Kernel:");
             Kernel = new StandardKernel();
 
-            var resolver = new NinjectDependencyResolver(Kernel);
-            AspNetHost.SetResolver(resolver);
+            GlobalHost.DependencyResolver = new NinjectDependencyResolver(Kernel);
 
             InitDatabase();
             InitReporting();

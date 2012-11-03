@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>SignalR.Js</id>
+    <version>0.5.3</version>
+    <authors>David Fowler,  Damian Edwards</authors>
+    <owners>David Fowler,  Damian Edwards</owners>
+    <licenseUrl>https://github.com/SignalR/SignalR/blob/master/LICENSE.md</licenseUrl>
+    <projectUrl>https://github.com/SignalR/SignalR</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Javascript library for SignalR</description>
+    <dependencies>
+      <dependency id="jQuery" version="1.6" />
+    </dependencies>
+  </metadata>
+</package>

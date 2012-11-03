@@ -12,6 +12,9 @@
     $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
 
         jqXHR.success(function (data) {
+            if (data === null)
+                return;
+
             if (data.NotificationType === 0) {
                 $.gritter.add({
                     title: data.Title,
@@ -34,7 +37,7 @@
 
         jqXHR.error(function (xhr, textStatus, thrownError) {
             //ignore notification errors.
-            if (this.url.indexOf("/notification/Comet") === 0 || this.url.indexOf("/Health/Index") === 0 || this.url.indexOf("/signalr") === 0)
+            if (this.url.indexOf("/notification/Comet") === 0 || this.url.indexOf("/Health/Index") === 0 || this.url.indexOf("/signalr/signalr") >= 0)
                 return;
 
             $.gritter.add({

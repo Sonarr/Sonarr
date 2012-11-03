@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SignalR.Hosting.AspNet</name>
+    </assembly>
+    <members>
+        <member name="T:SignalR.Hosting.AspNet.AspNetBootstrapper">
+            <summary>
+            Initializes the AspNet hosting pipeline
+            </summary>
+        </member>
+        <member name="M:SignalR.Hosting.AspNet.AspNetBootstrapper.Initialize">
+            <summary>
+            Initializes the ASP.NET host and sets up the default hub route (~/signalr). Do not call this from your code.
+            </summary>
+        </member>
+        <member name="T:SignalR.RouteExtensions">
+            <summary>
+            Extensions to ASP.NET routing for SignalR
+            </summary>
+        </member>
+        <member name="M:SignalR.RouteExtensions.MapConnection``1(System.Web.Routing.RouteCollection,System.String,System.String)">
+            <summary>
+            Maps a <see cref="T:SignalR.PersistentConnection"/> with the default dependency resolver to the specified url.
+            </summary>
+            <param name="routes">The route table</param>
+            <typeparam name="T">The type of <see cref="T:SignalR.PersistentConnection"/></typeparam>
+            <param name="name">The name of the route</param>
+            <param name="url">url pattern of the route. Should end with catch-all parameter.</param>
+            <returns>The registered route</returns>
+            <example>
+            routes.MapConnection{MyConnection}("echo", "echo/{*operation}");
+            </example>
+        </member>
+        <member name="M:SignalR.RouteExtensions.MapConnection``1(System.Web.Routing.RouteCollection,System.String,System.String,SignalR.IDependencyResolver)">
+            <summary>
+            Maps a <see cref="T:SignalR.PersistentConnection"/> with the default dependency resolver to the specified url.
+            </summary>
+            <param name="routes">The route table</param>
+            <typeparam name="T">The type of <see cref="T:SignalR.PersistentConnection"/></typeparam>
+            <param name="name">The name of the route</param>
+            <param name="url">url pattern of the route. Should end with catch-all parameter.</param>
+            <param name="resolver">The dependency resolver to use for this connection</param>
+            <returns>The registered route</returns>
+        </member>
+        <member name="M:SignalR.RouteExtensions.MapConnection(System.Web.Routing.RouteCollection,System.String,System.String,System.Type)">
+            <summary>
+            Maps a <see cref="T:SignalR.PersistentConnection"/> with the default dependency resolver to the specified url.
+            </summary>
+            <param name="routes">The route table</param>
+            <param name="type">The type of <see cref="T:SignalR.PersistentConnection"/></param>
+            <param name="name">The name of the route</param>
+            <param name="url">url pattern of the route. Should end with catch-all parameter.</param>
+            <returns>The registered route</returns>
+            <example>
+            routes.MapConnection("echo", "echo/{*operation}", typeof(MyConnection));
+            </example>
+        </member>
+        <member name="M:SignalR.RouteExtensions.MapHubs(System.Web.Routing.RouteCollection)">
+            <summary>
+            Initializes the default hub route (~/signalr).
+            </summary>
+            <param name="routes">The route table</param>
+            <returns>The registered route</returns>
+        </member>
+        <member name="M:SignalR.RouteExtensions.MapHubs(System.Web.Routing.RouteCollection,SignalR.IDependencyResolver)">
+            <summary>
+            Changes the dependency resolver for the default hub route (~/signalr).
+            </summary>
+            <param name="routes">The route table</param>
+            <param name="resolver">The dependency resolver to use for the hub connection</param>
+            <returns>The registered route</returns>
+        </member>
+        <member name="M:SignalR.RouteExtensions.MapHubs(System.Web.Routing.RouteCollection,System.String)">
+            <summary>
+            Changes the default hub route from ~/signalr to a specified url.
+            </summary>
+            <param name="routes">The route table</param>
+            <param name="url">The url of the hubs route. This should *NOT* contain catch-all parameter.</param>
+            <returns>The registered route</returns>
+        </member>
+        <member name="M:SignalR.RouteExtensions.MapHubs(System.Web.Routing.RouteCollection,System.String,SignalR.IDependencyResolver)">
+            <summary>
+            Changes the default hub route from ~/signalr to a specified url.
+            </summary>
+            <param name="routes">The route table</param>
+            <param name="url">The url of the hubs route. This should *NOT* contain catch-all parameter.</param>
+            <param name="resolver">The dependency resolver to use for the hub connection</param>
+            <returns>The registered route</returns>
+        </member>
+        <member name="M:SignalR.RouteExtensions.MapConnection(System.Web.Routing.RouteCollection,System.String,System.String,System.Type,SignalR.IDependencyResolver)">
+            <summary>
+            Maps a <see cref="T:SignalR.PersistentConnection"/> with the default dependency resolver to the specified url.
+            </summary>        
+            <param name="routes">The route table</param>
+            <param name="name">The name of the route</param>
+            <param name="url">url pattern of the route. Should end with catch-all parameter.</param>
+            <param name="type">The type of <see cref="T:SignalR.PersistentConnection"/></param>
+            <param name="resolver">The dependency resolver to use for the hub connection</param>
+            <returns>The registered route</returns>
+        </member>
+        <member name="M:SignalR.TaskAsyncHelper.Interleave``1(System.Func{``0,System.Action,System.Threading.Tasks.Task},System.Func{System.Threading.Tasks.Task},``0,System.Threading.Tasks.TaskCompletionSource{System.Object})">
+            <summary>
+            Passes a task returning function into another task returning function so that
+            it can decide when it starts and returns a task that completes when all are finished
+            </summary>
+        </member>
+    </members>
+</doc>

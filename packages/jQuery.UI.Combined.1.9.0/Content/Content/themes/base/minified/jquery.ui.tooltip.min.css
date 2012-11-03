@@ -1,0 +1,5 @@
+/*! jQuery UI - v1.9.0 - 2012-10-05
+* http://jqueryui.com
+* Includes: jquery.ui.tooltip.css
+* Copyright 2012 jQuery Foundation and other contributors; Licensed MIT */
+.ui-tooltip{padding:8px;position:absolute;z-index:9999;-o-box-shadow:0 0 5px #aaa;-moz-box-shadow:0 0 5px #aaa;-webkit-box-shadow:0 0 5px #aaa;box-shadow:0 0 5px #aaa}* html .ui-tooltip{background-image:none}body .ui-tooltip{border-width:2px}

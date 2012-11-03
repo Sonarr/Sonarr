@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>WebActivator</id>
+    <version>1.5.2</version>
+    <authors>David Ebbo</authors>
+    <owners>David Ebbo</owners>
+    <licenseUrl>http://www.opensource.org/licenses/ms-pl</licenseUrl>
+    <projectUrl>https://github.com/davidebbo/WebActivator</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A NuGet package that allows other packages to execute some startup code in web apps</description>
+    <dependencies>
+      <dependency id="Microsoft.Web.Infrastructure" version="1.0.0.0" />
+    </dependencies>
+  </metadata>
+</package>
