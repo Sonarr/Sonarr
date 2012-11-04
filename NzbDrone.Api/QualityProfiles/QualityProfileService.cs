@@ -1,13 +1,16 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using AutoMapper;
 using Ninject;
 using NzbDrone.Api.Filters;
 using NzbDrone.Core.Providers;
+using NzbDrone.Core.Repository.Quality;
 using ServiceStack.ServiceInterface;
 
 namespace NzbDrone.Api.QualityProfiles
 {
     [ValidApiRequest]
-    public class QualityProfileService : RestServiceBase<QualityProfileRequest>
+    public class QualityProfileService : RestServiceBase<QualityProfileModel>
     {
         private readonly QualityProvider _qualityProvider;
 
@@ -21,32 +24,39 @@ namespace NzbDrone.Api.QualityProfiles
         {
         }
 
-        public override object OnGet(QualityProfileRequest request)
+        public override object OnGet(QualityProfileModel request)
         {
             if (request.Id == 0)
             {
                 var profiles = _qualityProvider.All();
-                return new { Profiles = profiles };
+                return Mapper.Map<IEnumerable<QualityProfile>, IEnumerable<QualityProfileModel>>(profiles);
             }
 
             var profile = _qualityProvider.Get(request.Id);
-            return profile;
+            return Mapper.Map<QualityProfile, QualityProfileModel>(profile);
         }
 
-        //public override object OnPost(Todo todo)
-        //{
-        //    return Repository.Store(todo);
-        //}
+        public override object OnPost(QualityProfileModel data)
+        {
+            var profile = Mapper.Map<QualityProfileModel, QualityProfile>(data);
+            _qualityProvider.Update(profile);
 
-        //public override object OnPut(Todo todo)
-        //{
-        //    return Repository.Store(todo);
-        //}
+            return data;
+        }
 
-        //public override object OnDelete(Todo request)
-        //{
-        //    Repository.DeleteById(request.Id);
-        //    return null;
-        //}
+        public override object OnPut(QualityProfileModel data)
+        {
+            var profile = Mapper.Map<QualityProfileModel, QualityProfile>(data);
+            data.Id = _qualityProvider.Add(profile);
+
+            return data;
+        }
+
+        public override object OnDelete(QualityProfileModel data)
+        {
+            _qualityProvider.Delete(data.Id);
+
+            return "ok";
+        }
     }
 }

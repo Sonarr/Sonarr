@@ -27,8 +27,10 @@ namespace NzbDrone.Api
             SetConfig(new EndpointHostConfig { ServiceStackHandlerFactoryPath = "api" });
 
             Routes
-                .Add<QualityProfileRequest>("{ApiKey}/qualityprofiles")
-                .Add<QualityProfileRequest>("{ApiKey}/qualityprofiles/{Id}");
+                .Add<QualityProfileModel>("/qualityprofiles")
+                .Add<QualityProfileModel>("/qualityprofiles/{Id}");
+
+            Bootstrapper.Initialize();
         }
     }
 }
