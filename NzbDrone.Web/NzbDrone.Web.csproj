@@ -385,6 +385,18 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\backbone.js" />
+    <Content Include="Scripts\backbone.marionette.min.js" />
+    <Content Include="Scripts\backbone.min.js" />
+    <Content Include="Scripts\backbone\app.js" />
+    <Content Include="Scripts\backbone\bootstrapper.js" />
+    <Content Include="Scripts\backbone\constants.js" />
+    <Content Include="Scripts\backbone\controller.js" />
+    <Content Include="Scripts\backbone\models\profileCollection.js" />
+    <Content Include="Scripts\backbone\models\profileModel.js" />
+    <Content Include="Scripts\backbone\router.js" />
+    <Content Include="Scripts\backbone\utils.js" />
+    <Content Include="Scripts\backbone\views\qualityProfiles.js" />
     <Content Include="Scripts\conditional-validation.js" />
     <Content Include="Scripts\DataTables-1.9.4\media\js\FixedHeader.js" />
     <Content Include="Scripts\DataTables-1.9.4\media\js\FixedHeader.min.js" />
@@ -481,6 +493,8 @@
     <Content Include="Scripts\jquery.form.js" />
     <Content Include="Scripts\jquery-tgc-countdown-1.0.js" />
     <Content Include="Scripts\jquery.watermark.min.js" />
+    <Content Include="Scripts\underscore.js" />
+    <Content Include="Scripts\underscore.min.js" />
     <Content Include="Views\AddSeries\Index.cshtml" />
     <Content Include="Views\AddSeries\AddNew.cshtml" />
     <Content Include="Web.config">

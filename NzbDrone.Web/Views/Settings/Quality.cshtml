@@ -27,10 +27,10 @@
                     </a>
                 </div>
                 <div id="profiles">
-                    @foreach (var item in (List<QualityProfile>)ViewData["Profiles"])
+                    @*@foreach (var item in (List<QualityProfile>)ViewData["Profiles"])
                     {
                         Html.RenderAction("GetQualityProfileView", item);
-                    }
+                    }*@
                 </div>
             </div>
             <h3>
@@ -114,5 +114,21 @@
         $('.quality-selectee').livequery(function() {
             $(this).button();
         });
+    </script>
+    
+    @Html.IncludeScript("backbone/app.js")
+    @Html.IncludeScript("backbone/controller.js")
+    @Html.IncludeScript("backbone/router.js")
+    @Html.IncludeScript("backbone/constants.js")
+    @Html.IncludeScript("backbone/utils.js")
+    @Html.IncludeScript("backbone/models/profileCollection.js")
+    @Html.IncludeScript("backbone/models/profileModel.js")
+    @Html.IncludeScript("backbone/views/qualityProfiles.js")
+    @*@Html.IncludeScript("backbone/bootstrapper.js")*@
+
+    <script id="QualityProfileView" type="text/template">
+        <%= Name %>
+        <%= Cutoff %>
+        <%= Allowed %>
     </script>
 }
