@@ -197,8 +197,16 @@ namespace NzbDrone.Core.Providers
 
             Logger.Debug("Moving [{0}] > [{1}]", episodeFile.Path, newFile.FullName);
             _diskProvider.MoveFile(episodeFile.Path, newFile.FullName);
-            
-            _diskProvider.InheritFolderPermissions(newFile.FullName);
+
+            //Wrapped in Try/Catch to prevent this from causing issues with remote NAS boxes, the move worked, which is more important.
+            try
+            {
+                _diskProvider.InheritFolderPermissions(newFile.FullName);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                Logger.Debug("Unable to apply folder permissions to: ", newFile.FullName);
+            }
 
             episodeFile.Path = newFile.FullName;
             _mediaFileProvider.Update(episodeFile);
