@@ -352,11 +352,13 @@ namespace NzbDrone.Web.Controllers
             return new QualityModel { DefaultQualityProfileId = defaultQualityQualityProfileId, QualityProfileSelectList = selectList };
         }
 
-        public JsonResult AutoConfigureSab()
+        public JsonResult AutoConfigureSab(string host, string port, string username, string password)
         {
             try
             {
-                var info = _autoConfigureProvider.AutoConfigureSab();
+                int iPort = 0;
+                int.TryParse(port, out iPort);
+                var info = _autoConfigureProvider.AutoConfigureSab(host, iPort, username, password);
 
                 if (info != null)
                     return Json(info, JsonRequestBehavior.AllowGet);

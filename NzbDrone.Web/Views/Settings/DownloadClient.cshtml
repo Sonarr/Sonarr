@@ -103,9 +103,15 @@
         var autoConfigureSabUrl = '@Url.Action("AutoConfigureSab", "Settings")';
 
         function autoConfigureSab() {
+            var host = $('#SabHost').val();
+            var port = $('#SabPort').val();
+            var username = $('#SabUsername').val();
+            var password = $('#SabPassword').val();
+
             $.ajax({
                 type: "GET",
                 url: autoConfigureSabUrl,
+                data: jQuery.param({ host: host, port: port, username: username, password: password}),
                 error: function (req, status, error) {
                     alert("Sorry! We could not autoconfigure SABnzbd for you");
                 },
@@ -116,6 +122,9 @@
                 $('#SabHost').val(data.Host);
                 $('#SabPort').val(data.Port);
                 $('#SabApiKey').val(data.ApiKey);
+                $('#SabUsername').val(data.Username);
+                $('#SabPassword').val(data.Password);
+
             }
         }
         var sabCategoryUrl = '../Command/GetSabnzbdCategories';

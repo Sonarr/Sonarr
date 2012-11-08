@@ -253,6 +253,7 @@
     <Compile Include="Datastore\Migrations\SchemaInfo.cs" />
     <Compile Include="Datastore\PetaPoco\EpisodeSeasonRelator.cs" />
     <Compile Include="Fluent.cs" />
+    <Compile Include="Helpers\IpHelper.cs" />
     <Compile Include="Helpers\SabnzbdQueueTimeConverter.cs" />
     <Compile Include="Helpers\EpisodeSortingHelper.cs" />
     <Compile Include="Helpers\SortHelper.cs" />
