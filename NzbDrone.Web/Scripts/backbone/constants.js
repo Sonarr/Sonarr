@@ -1,11 +1,6 @@
-﻿NzbDrone.Constants = {
+﻿QualityProfileApp.Constants = {
     Templates: {
-        AppLayout: '#AppLayout',
-        QualityProfilesView: '#QualityProfilesView',
-        QualityProfileView: '#QualityProfileView'
+        QualityProfileCollection: '#QualityProfileCollectionTemplate',
+        QualityProfile: '#QualityProfileTemplate'
     },
-
-    Events: {
-        MenuItemSelected: 'MenuItemSelected'
-    }
 };

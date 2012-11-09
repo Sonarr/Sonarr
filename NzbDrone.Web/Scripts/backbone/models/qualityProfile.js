@@ -1,4 +1,4 @@
-﻿window.Profile = Backbone.Model.extend({
+﻿window.QualityProfile = Backbone.Model.extend({
 
     urlRoot: '/api/qualityprofiles',
 

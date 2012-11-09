@@ -388,13 +388,12 @@
     <Content Include="Scripts\backbone.js" />
     <Content Include="Scripts\backbone.marionette.min.js" />
     <Content Include="Scripts\backbone.min.js" />
-    <Content Include="Scripts\backbone\app.js" />
+    <Content Include="Scripts\backbone\apps\qualityProfileApp.js" />
     <Content Include="Scripts\backbone\bootstrapper.js" />
     <Content Include="Scripts\backbone\constants.js" />
     <Content Include="Scripts\backbone\controller.js" />
-    <Content Include="Scripts\backbone\models\profileCollection.js" />
-    <Content Include="Scripts\backbone\models\profileModel.js" />
-    <Content Include="Scripts\backbone\router.js" />
+    <Content Include="Scripts\backbone\models\qualityProfileCollection.js" />
+    <Content Include="Scripts\backbone\models\qualityProfile.js" />
     <Content Include="Scripts\backbone\utils.js" />
     <Content Include="Scripts\backbone\views\qualityProfiles.js" />
     <Content Include="Scripts\conditional-validation.js" />

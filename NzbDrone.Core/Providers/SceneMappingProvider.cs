@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using NLog;
 using Newtonsoft.Json;
+using Ninject;
 using NzbDrone.Common;
 using NzbDrone.Core.Providers.Core;
 using NzbDrone.Core.Repository;
@@ -17,6 +18,7 @@ namespace NzbDrone.Core.Providers
         private readonly HttpProvider _httpProvider;
         private readonly ConfigProvider _configProvider;
 
+        [Inject]
         public SceneMappingProvider(IDatabase database, HttpProvider httpProvider, ConfigProvider configProvider)
         {
             _database = database;

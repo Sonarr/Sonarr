@@ -10,7 +10,7 @@ namespace NzbDrone.Api.QualityProfiles
     {
         public Int32 Id { get; set; }
         public String Name { get; set; }
-        public QualityTypes Cutoff { get; set; }
-        public List<QualityTypes> Allowed { get; set; }
+        public Int32 Cutoff { get; set; }
+        public List<Int32> Allowed { get; set; }
     }
 }
