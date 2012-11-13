@@ -13,6 +13,8 @@ using Ninject.Web.Mvc;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core;
+using NzbDrone.Core.Repository.Quality;
+using NzbDrone.Web.Helpers.Binders;
 
 namespace NzbDrone.Web
 {
@@ -48,6 +50,8 @@ namespace NzbDrone.Web
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(razor);
 
+            ModelBinders.Binders.Add(typeof(QualityTypes), new QualityTypesBinder());
+
             RegisterGlobalFilters(GlobalFilters.Filters);
 
             Logger.Info("Fully initialized and ready.");
@@ -62,7 +66,6 @@ namespace NzbDrone.Web
             dispatch.Kernel.Load(Assembly.GetExecutingAssembly());
             return dispatch.Kernel;
         }
-
 
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
