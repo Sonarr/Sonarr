@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Test.ProviderTests
     public class QualityTypeProviderTest : CoreTest
     {
         [Test]
-        public void SetupDefault_should_add_six_profiles()
+        public void SetupDefault_should_add_all_profiles()
         {
             
             var db = TestDbHelper.GetEmptyDatabase();
@@ -33,8 +33,8 @@ namespace NzbDrone.Core.Test.ProviderTests
             types.Should().Contain(e => e.Name == "SDTV" && e.QualityTypeId == 1);
             types.Should().Contain(e => e.Name == "DVD" && e.QualityTypeId == 2);
             types.Should().Contain(e => e.Name == "HDTV" && e.QualityTypeId == 4);
-            types.Should().Contain(e => e.Name == "WEBDL720p" && e.QualityTypeId == 5);
-            types.Should().Contain(e => e.Name == "WEBDL1080p" && e.QualityTypeId == 3);
+            types.Should().Contain(e => e.Name == "WEBDL-720p" && e.QualityTypeId == 5);
+            types.Should().Contain(e => e.Name == "WEBDL-1080p" && e.QualityTypeId == 3);
             types.Should().Contain(e => e.Name == "Bluray720p" && e.QualityTypeId == 6);
             types.Should().Contain(e => e.Name == "Bluray1080p" && e.QualityTypeId == 7);
         }
