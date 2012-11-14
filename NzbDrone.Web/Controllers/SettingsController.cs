@@ -173,7 +173,7 @@ namespace NzbDrone.Web.Controllers
                                 Bluray1080pMaxSize = qualityTypesFromDb.Single(q => q.QualityTypeId == 7).MaxSize
                             };
 
-            ViewData["Profiles"] = profiles;
+            ViewData["Profiles"] = profiles.Select(s => s.QualityProfileId).ToList();
 
             return View(model);
         }
@@ -269,13 +269,15 @@ namespace NzbDrone.Web.Controllers
                                          Cutoff = QualityTypes.Unknown
                                      };
 
-            qualityProfile.QualityProfileId = _qualityProvider.Add(qualityProfile);
+            var qualityProfileId = _qualityProvider.Add(qualityProfile);
 
-            return GetQualityProfileView(qualityProfile);
+            return GetQualityProfileView(qualityProfileId);
         }
 
-        public PartialViewResult  GetQualityProfileView(QualityProfile profile)
+        public PartialViewResult GetQualityProfileView(int profileId)
         {
+            var profile = _qualityProvider.Get(profileId);
+
             var model = new QualityProfileModel();
             model.QualityProfileId = profile.QualityProfileId;
             model.Name = profile.Name;
