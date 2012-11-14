@@ -199,6 +199,7 @@
     <Compile Include="App_Start\DataTablesMvc.cs" />
     <Compile Include="App_Start\MiniProfiler.cs" />
     <Compile Include="Controllers\SearchHistoryController.cs" />
+    <Compile Include="Helpers\Binders\QualityTypesBinder.cs" />
     <Compile Include="Helpers\RenderActionHelper.cs" />
     <Compile Include="Helpers\Validation\RequiredIfAnyAttribute.cs" />
     <Compile Include="Helpers\Validation\RequiredIfAttribute.cs" />

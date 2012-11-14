@@ -16,6 +16,8 @@ using NzbDrone.Common;
 using NzbDrone.Core;
 using ServiceStack.CacheAccess;
 using ServiceStack.CacheAccess.Providers;
+using NzbDrone.Core.Repository.Quality;
+using NzbDrone.Web.Helpers.Binders;
 using ServiceStack.ServiceInterface;
 
 namespace NzbDrone.Web
@@ -53,6 +55,8 @@ namespace NzbDrone.Web
             var razor = ViewEngines.Engines.Single(e => e is RazorViewEngine);
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(razor);
+
+            ModelBinders.Binders.Add(typeof(QualityTypes), new QualityTypesBinder());
 
             RegisterGlobalFilters(GlobalFilters.Filters);
 
