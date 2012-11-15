@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Providers.Indexer
 
             foreach (var url in Urls)
             {
-                searchUrls.Add(String.Format("{0}&term={1}+s{2:00}e{3:00}", url, seriesTitle, seasonNumber, episodeNumber));
+                searchUrls.Add(String.Format("{0}&term=(\"{1}+s{2:00}e{3:00}\",\"{1}+{2}x{3:00}\")", url, seriesTitle, seasonNumber, episodeNumber));
             }
 
             return searchUrls;
