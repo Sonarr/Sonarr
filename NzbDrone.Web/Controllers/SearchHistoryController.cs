@@ -68,7 +68,7 @@ namespace NzbDrone.Web.Controllers
         {
             _searchHistoryProvider.ForceDownload(id);
 
-            return new JsonResult { Data = "ok", JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            return JsonNotificationResult.Info("Success", "Requested episode has been sent to download client");
         }
 
         public string GetDisplayName(SearchHistory searchResult)
