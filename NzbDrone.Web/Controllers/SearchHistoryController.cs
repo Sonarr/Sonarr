@@ -53,7 +53,7 @@ namespace NzbDrone.Web.Controllers
                     Success = s.Success,
                     SearchError = s.SearchError.AddSpacesToEnum().Replace("None", "Grabbed"),
                     Quality = s.Quality.ToString(),
-                    QualityInt = (int)s.Quality,
+                    QualityInt = s.Quality.Weight,
                     Proper = s.Proper,
                     Age = s.Age,
                     Size = s.Size.ToBestFileSize(1),
