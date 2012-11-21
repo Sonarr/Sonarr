@@ -220,8 +220,7 @@ namespace NzbDrone.Core
                 }
 
                 parsedEpisode = new EpisodeParseResult
-                {
-                   
+                {                  
                     AirDate = new DateTime(airyear, airmonth, airday).Date,
                 };
             }

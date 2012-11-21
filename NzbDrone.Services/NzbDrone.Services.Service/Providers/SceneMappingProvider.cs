@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using NLog;
 using NzbDrone.Services.Service.Repository;
 using Services.PetaPoco;
 
@@ -10,6 +11,8 @@ namespace NzbDrone.Services.Service.Providers
     public class SceneMappingProvider
     {
         private readonly IDatabase _database;
+
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public SceneMappingProvider(IDatabase database)
         {
@@ -74,6 +77,7 @@ namespace NzbDrone.Services.Service.Providers
             }
             catch (Exception ex)
             {
+                logger.WarnException("Unable to promote scene mapping", ex);
                 return false;
             }
 
@@ -93,6 +97,7 @@ namespace NzbDrone.Services.Service.Providers
             }
             catch (Exception ex)
             {
+                logger.WarnException("Unable to promote all scene mappings", ex);
                 return false;
             }
 

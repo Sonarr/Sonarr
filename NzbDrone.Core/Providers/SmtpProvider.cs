@@ -61,6 +61,7 @@ namespace NzbDrone.Core.Providers
             catch(Exception ex)
             {
                 Logger.Error("Error sending email. Subject: {0}", email.Subject);
+                Logger.TraceException(ex.Message, ex);
             }
         }
 

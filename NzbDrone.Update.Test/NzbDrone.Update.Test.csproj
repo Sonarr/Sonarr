@@ -80,11 +80,11 @@
       <Name>NzbDrone.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\NzbDrone.Test.Common\NzbDrone.Test.Common.csproj">
-      <Project>{CADDFCE0-7509-4430-8364-2074E1EEFCA2}</Project>
+      <Project>{caddfce0-7509-4430-8364-2074e1eefca2}</Project>
       <Name>NzbDrone.Test.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\NzbDrone.Update\NzbDrone.Update.csproj">
-      <Project>{4CCC53CD-8D5E-4CC4-97D2-5C9312AC2BD7}</Project>
+      <Project>{4ccc53cd-8d5e-4cc4-97d2-5c9312ac2bd7}</Project>
       <Name>NzbDrone.Update</Name>
     </ProjectReference>
   </ItemGroup>
