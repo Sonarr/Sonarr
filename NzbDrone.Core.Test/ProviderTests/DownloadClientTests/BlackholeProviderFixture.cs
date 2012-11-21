@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -67,6 +68,15 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests
             ExceptionVerification.ExpectedWarns(1);
         }
 
+        [Test]
+        public void should_replace_illegal_characters_in_title()
+        {
+            var illegalTitle = "Saturday Night Live - S38E08 - Jeremy Renner/Maroon 5 [SDTV]";
+            var expectedFilename = Path.Combine(blackHoleFolder, "Saturday Night Live - S38E08 - Jeremy Renner+Maroon 5 [SDTV].nzb");
 
+            Mocker.Resolve<BlackholeProvider>().DownloadNzb(nzbUrl, illegalTitle).Should().BeTrue();
+
+            Mocker.GetMock<HttpProvider>().Verify(c => c.DownloadFile(It.IsAny<string>(), expectedFilename), Times.Once());
+        }
     }
 }

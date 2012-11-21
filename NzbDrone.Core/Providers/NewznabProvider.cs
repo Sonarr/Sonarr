@@ -140,6 +140,7 @@ namespace NzbDrone.Core.Providers
             catch (Exception ex)
             {
                 Logger.Error("Invalid address {0}, please correct the site URL.", url);
+                Logger.TraceException(ex.Message, ex);
                 throw;
             }
 

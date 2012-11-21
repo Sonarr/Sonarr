@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -74,6 +75,17 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests
         public void should_skip_if_full_season_download()
         {
             Mocker.Resolve<PneumaticProvider>().DownloadNzb(nzbUrl, "30 Rock - Season 1").Should().BeFalse();
+        }
+
+        [Test]
+        public void should_replace_illegal_characters_in_title()
+        {
+            var illegalTitle = "Saturday Night Live - S38E08 - Jeremy Renner/Maroon 5 [SDTV]";
+            var expectedFilename = Path.Combine(pneumaticFolder, "Saturday Night Live - S38E08 - Jeremy Renner+Maroon 5 [SDTV].nzb");
+
+            Mocker.Resolve<PneumaticProvider>().DownloadNzb(nzbUrl, illegalTitle).Should().BeTrue();
+
+            Mocker.GetMock<HttpProvider>().Verify(c => c.DownloadFile(It.IsAny<string>(), expectedFilename), Times.Once());
         }
     }
 }

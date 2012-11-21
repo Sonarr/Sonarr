@@ -38,6 +38,8 @@ namespace NzbDrone.Core.Providers.DownloadClients
         {
             try
             {
+                title = MediaFileProvider.CleanFilename(title);
+
                 var filename = Path.Combine(_configProvider.BlackholeDirectory, title + ".nzb");
 
                 if (_diskProvider.FileExists(filename))
@@ -64,7 +66,5 @@ namespace NzbDrone.Core.Providers.DownloadClients
         {
             return !_upgradeHistorySpecification.IsSatisfiedBy(newParseResult);
         }
-
-
     }
 }

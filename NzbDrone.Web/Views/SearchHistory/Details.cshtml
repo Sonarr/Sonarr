@@ -38,7 +38,7 @@
         
         function actionColumn(source, type, val) {
             if (type === 'display' || type === 'filter') {
-                return '<a href="/SearchHistory/ForceDownload/' + source["Id"] + '" data-ajax="true" data-ajax-confirm="Are you sure?"><i class="icon-plus gridAction"></i></a>';
+                return '<a href="/SearchHistory/ForceDownload?id=' + source["Id"] + '" data-ajax="true" data-ajax-confirm="Are you sure?"><i class="icon-plus gridAction"></i></a>';
             }
             // 'sort' and 'type' both just use the raw data
             return '';
