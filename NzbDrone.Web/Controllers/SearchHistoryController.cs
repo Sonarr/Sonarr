@@ -53,7 +53,7 @@ namespace NzbDrone.Web.Controllers
                     Success = s.Success,
                     SearchError = s.SearchError.AddSpacesToEnum().Replace("None", "Grabbed"),
                     Quality = s.Quality.ToString(),
-                    QualityInt = (int)s.Quality,
+                    QualityInt = s.Quality.Weight,
                     Proper = s.Proper,
                     Age = s.Age,
                     Size = s.Size.ToBestFileSize(1),
@@ -68,7 +68,7 @@ namespace NzbDrone.Web.Controllers
         {
             _searchHistoryProvider.ForceDownload(id);
 
-            return new JsonResult { Data = "ok", JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            return JsonNotificationResult.Info("Success", "Requested episode has been sent to download client");
         }
 
         public string GetDisplayName(SearchHistory searchResult)

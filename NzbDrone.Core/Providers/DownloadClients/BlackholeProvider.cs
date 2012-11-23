@@ -34,10 +34,12 @@ namespace NzbDrone.Core.Providers.DownloadClients
         {
         }
 
-        public virtual bool DownloadNzb(string url, string title)
+        public virtual bool DownloadNzb(string url, string title, bool recentlyAired)
         {
             try
             {
+                title = MediaFileProvider.CleanFilename(title);
+
                 var filename = Path.Combine(_configProvider.BlackholeDirectory, title + ".nzb");
 
                 if (_diskProvider.FileExists(filename))
@@ -64,7 +66,5 @@ namespace NzbDrone.Core.Providers.DownloadClients
         {
             return !_upgradeHistorySpecification.IsSatisfiedBy(newParseResult);
         }
-
-
     }
 }

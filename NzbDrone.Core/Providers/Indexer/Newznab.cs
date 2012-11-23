@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Providers.Indexer
 
             foreach (var url in Urls)
             {
-                searchUrls.Add(String.Format("{0}&limit=100&q={1}&season{2}&ep{3}", url, seriesTitle, seasonNumber, episodeNumber));
+                searchUrls.Add(String.Format("{0}&limit=100&q={1}&season={2}&ep={3}", url, seriesTitle, seasonNumber, episodeNumber));
             }
 
             return searchUrls;
@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Providers.Indexer
 
             foreach (var url in Urls)
             {
-                searchUrls.Add(String.Format("{0}&limit=100&q={1}&season{2}", url, seriesTitle, seasonNumber));
+                searchUrls.Add(String.Format("{0}&limit=100&q={1}&season={2}", url, seriesTitle, seasonNumber));
             }
 
             return searchUrls;

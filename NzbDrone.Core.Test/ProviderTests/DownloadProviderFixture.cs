@@ -59,22 +59,22 @@ namespace NzbDrone.Core.Test.ProviderTests
         private void WithSuccessfullAdd()
         {
             Mocker.GetMock<SabProvider>()
-                .Setup(s => s.DownloadNzb(It.IsAny<String>(), It.IsAny<String>()))
+                .Setup(s => s.DownloadNzb(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<bool>()))
                 .Returns(true);
 
             Mocker.GetMock<BlackholeProvider>()
-                .Setup(s => s.DownloadNzb(It.IsAny<String>(), It.IsAny<String>()))
+                .Setup(s => s.DownloadNzb(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<bool>()))
                 .Returns(true);
         }
 
         private void WithFailedAdd()
         {
             Mocker.GetMock<SabProvider>()
-                .Setup(s => s.DownloadNzb(It.IsAny<String>(), It.IsAny<String>()))
+                .Setup(s => s.DownloadNzb(It.IsAny<String>(), It.IsAny<String>(), false))
                 .Returns(false);
 
             Mocker.GetMock<BlackholeProvider>()
-                .Setup(s => s.DownloadNzb(It.IsAny<String>(), It.IsAny<String>()))
+                .Setup(s => s.DownloadNzb(It.IsAny<String>(), It.IsAny<String>(), false))
                 .Returns(false);
         }
 
@@ -92,10 +92,10 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             //Assert
             Mocker.GetMock<SabProvider>()
-                .Verify(s => s.DownloadNzb(It.IsAny<String>(), It.IsAny<String>()), Times.Once());
+                .Verify(s => s.DownloadNzb(It.IsAny<String>(), It.IsAny<String>(), true), Times.Once());
 
             Mocker.GetMock<BlackholeProvider>()
-                .Verify(s => s.DownloadNzb(It.IsAny<String>(), It.IsAny<String>()), Times.Never());
+                .Verify(s => s.DownloadNzb(It.IsAny<String>(), It.IsAny<String>(), true), Times.Never());
 
             Mocker.GetMock<HistoryProvider>()
                 .Verify(s => s.Add(It.Is<History>(h => h.EpisodeId == 12 && h.SeriesId == 5)), Times.Once());
@@ -127,10 +127,10 @@ namespace NzbDrone.Core.Test.ProviderTests
 
             //Assert
             Mocker.GetMock<SabProvider>()
-                .Verify(s => s.DownloadNzb(It.IsAny<String>(), It.IsAny<String>()), Times.Never());
+                .Verify(s => s.DownloadNzb(It.IsAny<String>(), It.IsAny<String>(), true), Times.Never());
 
             Mocker.GetMock<BlackholeProvider>()
-                .Verify(s => s.DownloadNzb(It.IsAny<String>(), It.IsAny<String>()), Times.Once());
+                .Verify(s => s.DownloadNzb(It.IsAny<String>(), It.IsAny<String>(), true), Times.Once());
 
             Mocker.GetMock<HistoryProvider>()
                 .Verify(s => s.Add(It.Is<History>(h => h.EpisodeId == 12 && h.SeriesId == 5)), Times.Once());

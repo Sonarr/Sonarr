@@ -206,6 +206,7 @@ namespace NzbDrone.Core.Providers
             catch (UnauthorizedAccessException ex)
             {
                 Logger.Debug("Unable to apply folder permissions to: ", newFile.FullName);
+                Logger.TraceException(ex.Message, ex);
             }
 
             episodeFile.Path = newFile.FullName;

@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Providers.Indexer
 
             foreach (var url in Urls)
             {
-                searchUrls.Add(String.Format("{0}&term={1}+s{2:00}e{3:00}", url, seriesTitle, seasonNumber, episodeNumber));
+                searchUrls.Add(String.Format("{0}&term=(\"{1}+s{2:00}e{3:00}\",\"{1}+{2}x{3:00}\")", url, seriesTitle, seasonNumber, episodeNumber));
             }
 
             return searchUrls;
@@ -72,8 +72,7 @@ namespace NzbDrone.Core.Providers.Indexer
 
             foreach (var url in Urls)
             {
-                searchUrls.Add(String.Format("{0}&term={1}+Season", url, seriesTitle));
-                searchUrls.Add(String.Format("{0}&term={1}+S{2:00}", url, seriesTitle, seasonNumber));
+                searchUrls.Add(String.Format("{0}&term=(\"{1}+Season\",\"{1}+S{2:00}\")", url, seriesTitle, seasonNumber));
             }
 
             return searchUrls;
@@ -85,7 +84,7 @@ namespace NzbDrone.Core.Providers.Indexer
 
             foreach (var url in Urls)
             {
-                searchUrls.Add(String.Format("{0}&term={1}+S{2:00}E{3}", url, seriesTitle, seasonNumber, episodeWildcard));
+                searchUrls.Add(String.Format("{0}&term=(\"{1}+S{2:00}E{3}\", \"{1}+{2}x{3}\")", url, seriesTitle, seasonNumber, episodeWildcard));
             }
 
             return searchUrls;

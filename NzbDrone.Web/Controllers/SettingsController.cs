@@ -140,8 +140,9 @@ namespace NzbDrone.Web.Controllers
                                 SabUsername = _configProvider.SabUsername,
                                 SabPassword = _configProvider.SabPassword,
                                 SabTvCategory = tvCategory,
-                                SabTvPriority = _configProvider.SabTvPriority,
-                                DownloadClientDropDirectory = _configProvider.SabDropDirectory,
+                                SabBacklogTvPriority = _configProvider.SabBacklogTvPriority,
+                                SabRecentTvPriority = _configProvider.SabRecentTvPriority,
+                                DownloadClientDropDirectory = _configProvider.DownloadClientTvDirectory,
                                 SabTvCategorySelectList = tvCategorySelectList,
                                 DownloadClient = (int)_configProvider.DownloadClient,
                                 BlackholeDirectory = _configProvider.BlackholeDirectory,
@@ -173,7 +174,7 @@ namespace NzbDrone.Web.Controllers
                                 Bluray1080pMaxSize = qualityTypesFromDb.Single(q => q.QualityTypeId == 7).MaxSize
                             };
 
-            ViewData["Profiles"] = profiles;
+            ViewData["Profiles"] = profiles.Select(s => s.QualityProfileId).ToList();
 
             return View(model);
         }
@@ -269,13 +270,15 @@ namespace NzbDrone.Web.Controllers
                                          Cutoff = QualityTypes.Unknown
                                      };
 
-            qualityProfile.QualityProfileId = _qualityProvider.Add(qualityProfile);
+            var qualityProfileId = _qualityProvider.Add(qualityProfile);
 
-            return GetQualityProfileView(qualityProfile);
+            return GetQualityProfileView(qualityProfileId);
         }
 
-        public PartialViewResult  GetQualityProfileView(QualityProfile profile)
+        public PartialViewResult GetQualityProfileView(int profileId)
         {
+            var profile = _qualityProvider.Get(profileId);
+
             var model = new QualityProfileModel();
             model.QualityProfileId = profile.QualityProfileId;
             model.Name = profile.Name;
@@ -454,8 +457,9 @@ namespace NzbDrone.Web.Controllers
                 _configProvider.SabPassword = data.SabPassword;
                 _configProvider.SabTvCategory = data.SabTvCategory;
                 _configProvider.SabUsername = data.SabUsername;
-                _configProvider.SabTvPriority = data.SabTvPriority;
-                _configProvider.SabDropDirectory = data.DownloadClientDropDirectory;
+                _configProvider.SabBacklogTvPriority = data.SabBacklogTvPriority;
+                _configProvider.SabRecentTvPriority = data.SabRecentTvPriority;
+                _configProvider.DownloadClientTvDirectory = data.DownloadClientDropDirectory;
                 _configProvider.BlackholeDirectory = data.BlackholeDirectory;
                 _configProvider.DownloadClient = (DownloadClientType)data.DownloadClient;
                 _configProvider.PneumaticDirectory = data.PneumaticDirectory;

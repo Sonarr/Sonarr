@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using NLog;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Providers;
 using NzbDrone.Core.Providers.DownloadClients;
@@ -20,6 +21,8 @@ namespace NzbDrone.Web.Controllers
         private readonly ProwlProvider _prowlProvider;
         private readonly XbmcProvider _xbmcProvider;
         private readonly PlexProvider _plexProvider;
+
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public CommandController(JobProvider jobProvider, SabProvider sabProvider,
                                     SmtpProvider smtpProvider, TwitterProvider twitterProvider,
@@ -133,6 +136,7 @@ namespace NzbDrone.Web.Controllers
             }
             catch(Exception ex)
             {
+                logger.TraceException(ex.Message, ex);
                 return JsonNotificationResult.Oops("Couldn't register and test Growl");
             }
         }

@@ -596,7 +596,6 @@ namespace NzbDrone.Core.Test
             WithConfiguredIndexers();
 
             const string fileName = "wombles.xml";
-            const string expectedString = "nzbdetails";
 
             Mocker.GetMock<HttpProvider>()
                           .Setup(h => h.DownloadStream(It.IsAny<String>(), It.IsAny<NetworkCredential>()))
@@ -635,7 +634,6 @@ namespace NzbDrone.Core.Test
         {
             WithConfiguredIndexers();
 
-            const string fileName = "nzbindex.xml";
             const string expectedString = "release";
 
             Mocker.GetMock<HttpProvider>()

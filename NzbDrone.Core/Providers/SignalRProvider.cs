@@ -28,11 +28,10 @@ namespace NzbDrone.Core.Providers
                                                        EpisodeStatus = episodeStatus.ToString(),
                                                        Quality = (quality == null ? String.Empty : quality.Quality.ToString())
                                                });
-                var test = 0;
             }
             catch (Exception ex)
             {
-                logger.Trace("Error");
+                logger.TraceException("Error", ex);
                 throw;
             }
         }

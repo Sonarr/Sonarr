@@ -55,6 +55,14 @@ namespace NzbDrone.Core.Providers
 
         public virtual void UpdateMappings(int seriesId)
         {
+            var xemIds = _xemCommunicationProvider.GetXemSeriesIds();
+
+            if (!xemIds.Contains(seriesId))
+            {
+                _logger.Trace("Xem doesn't have a mapping for this series: {0}", seriesId);
+                return;
+            }
+
             var series = _seriesProvider.GetSeries(seriesId);
 
             if (series == null)

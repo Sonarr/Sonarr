@@ -78,12 +78,13 @@ namespace NzbDrone.Core.Providers.DownloadClients
             }
         }
 
-        public virtual bool DownloadNzb(string url, string title)
+        public virtual bool DownloadNzb(string url, string title, bool recentlyAired)
         {
             try
             {
                 string cat = _configProvider.SabTvCategory;
-                int priority = (int)_configProvider.SabTvPriority;
+                int priority = recentlyAired ? (int)_configProvider.SabRecentTvPriority : (int)_configProvider.SabBacklogTvPriority;
+
                 string name = GetNzbName(url);
                 string nzbName = HttpUtility.UrlEncode(title);
 

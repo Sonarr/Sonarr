@@ -50,9 +50,14 @@ namespace NzbDrone.Web.Models
         public String SabTvCategory { get; set; }
 
         [Required(ErrorMessage = "Please select a valid priority")]
-        [DisplayName("SABnzbd Priority")]
-        [Description("Priority to use when sending NZBs to SABnzbd")]
-        public SabPriorityType SabTvPriority { get; set; }
+        [DisplayName("SABnzbd Backlog Priority")]
+        [Description("Priority to use when sending episodes older than 7 days to SABnzbd")]
+        public SabPriorityType SabBacklogTvPriority { get; set; }
+
+        [Required(ErrorMessage = "Please select a valid priority")]
+        [DisplayName("SABnzbd Recent Priority")]
+        [Description("Priority to use when sending episodes newer than 7 days to SABnzbd")]
+        public SabPriorityType SabRecentTvPriority { get; set; }
 
         [Required(ErrorMessage = "Required so NzbDrone can sort downloads")]
         [DisplayName("Download Client TV Directory")]

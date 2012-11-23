@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Jobs
                 dropFolder = options.Path;
 
             else
-                dropFolder = _configProvider.SabDropDirectory;
+                dropFolder = _configProvider.DownloadClientTvDirectory;
 
             if (String.IsNullOrWhiteSpace(dropFolder))
             {
