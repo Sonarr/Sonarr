@@ -19,14 +19,14 @@ Thumbs.db
 *.log
 [Bb]in
 [Dd]ebug*/
-[Rrelease]*/
+[Rr]elease]*/
 *.lib
 *.sbr
 *.nzb
 obj/
-[Rr]elease*/
 _ReSharper*/
-[Tt]est[Rr]esult[s]
+[Tt]est
+[Rr]esult[s]
 [Nn]zbs
 [Bb]uild/
 [Ll]ogs/
