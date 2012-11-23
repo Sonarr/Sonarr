@@ -145,18 +145,25 @@ namespace NzbDrone.Core.Providers.Core
             set { SetValue("SabTvCategory", value); }
         }
 
-        public virtual SabPriorityType SabTvPriority
+        public virtual SabPriorityType SabBacklogTvPriority
         {
-            get { return (SabPriorityType)GetValueInt("SabTvPriority"); }
+            get { return (SabPriorityType)GetValueInt("SabBacklogTvPriority"); }
 
-            set { SetValue("SabTvPriority", (int)value); }
+            set { SetValue("SabBacklogTvPriority", (int)value); }
         }
 
-        public virtual String SabDropDirectory
+        public virtual SabPriorityType SabRecentTvPriority
         {
-            get { return GetValue("SabTvDropDirectory"); }
+            get { return (SabPriorityType)GetValueInt("SabRecentTvPriority"); }
 
-            set { SetValue("SabTvDropDirectory", value); }
+            set { SetValue("SabRecentTvPriority", (int)value); }
+        }
+
+        public virtual String DownloadClientTvDirectory
+        {
+            get { return GetValue("DownloadClientTvDirectory"); }
+
+            set { SetValue("DownloadClientTvDirectory", value); }
         }
 
         public virtual bool SortingIncludeSeriesName
@@ -556,7 +563,6 @@ namespace NzbDrone.Core.Providers.Core
         public virtual string GetValue(string key, object defaultValue, bool persist = false)
         {
             EnsureCache();
-
 
             string dbValue;
 

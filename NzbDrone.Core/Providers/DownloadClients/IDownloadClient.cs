@@ -6,6 +6,6 @@ namespace NzbDrone.Core.Providers.DownloadClients
     public interface IDownloadClient
     {
         bool IsInQueue(EpisodeParseResult newParseResult);
-        bool DownloadNzb(string url, string title);
+        bool DownloadNzb(string url, string title, bool recentlyAired);
     }
 }

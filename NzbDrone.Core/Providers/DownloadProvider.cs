@@ -46,10 +46,10 @@ namespace NzbDrone.Core.Providers
         public virtual bool DownloadReport(EpisodeParseResult parseResult)
         {
             var downloadTitle = GetDownloadTitle(parseResult);
-
             var provider = GetActiveDownloadClient();
+            var recentEpisode = CheckIfRecentEpisode(parseResult);
 
-            bool success = provider.DownloadNzb(parseResult.NzbUrl, downloadTitle);
+            bool success = provider.DownloadNzb(parseResult.NzbUrl, downloadTitle, recentEpisode);
 
             if (success)
             {
@@ -153,6 +153,15 @@ namespace NzbDrone.Core.Providers
             }
 
             return result;
+        }
+
+        public virtual bool CheckIfRecentEpisode(EpisodeParseResult parseResult)
+        {
+            return parseResult.Episodes
+                                           .Where(e => e.AirDate.HasValue)
+                                           .Select(e => e.AirDate)
+                                           .OrderBy(e => e.Value)
+                                           .First().Value <= DateTime.Today.AddDays(7);
         }
     }
 }

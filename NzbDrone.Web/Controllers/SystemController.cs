@@ -109,9 +109,9 @@ namespace NzbDrone.Web.Controllers
         //PostDownloadView
         public ActionResult PendingProcessing()
         {
-            ViewData["DropDir"] = _configProvider.SabDropDirectory;
+            ViewData["DropDir"] = _configProvider.DownloadClientTvDirectory;
 
-            var dropDir = _configProvider.SabDropDirectory;
+            var dropDir = _configProvider.DownloadClientTvDirectory;
             var subFolders = _diskProvider.GetDirectories(dropDir);
 
             var models = new List<PendingProcessingModel>();

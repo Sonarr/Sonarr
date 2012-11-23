@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Providers.DownloadClients
         {
         }
 
-        public virtual bool DownloadNzb(string url, string title)
+        public virtual bool DownloadNzb(string url, string title, bool recentlyAired)
         {
             try
             {

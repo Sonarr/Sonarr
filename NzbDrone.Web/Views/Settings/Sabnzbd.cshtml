@@ -45,10 +45,15 @@
     </label>
     @Html.DropDownListFor(m => m.SabTvCategory, Model.SabTvCategorySelectList, new { @class = "inputClass selectClass" })
 
-    <label class="labelClass">@Html.LabelFor(m => m.SabTvPriority)
-        <span class="small">@Html.DescriptionFor(m => m.SabTvPriority)</span>
+    <label class="labelClass">@Html.LabelFor(m => m.SabBacklogTvPriority)
+        <span class="small">@Html.DescriptionFor(m => m.SabBacklogTvPriority)</span>
     </label>
-    @Html.DropDownListFor(m => m.SabTvPriority, Model.PrioritySelectList, new { @class = "inputClass selectClass" })
+    @Html.DropDownListFor(m => m.SabBacklogTvPriority, Model.PrioritySelectList, new { @class = "inputClass selectClass" })
+    
+    <label class="labelClass">@Html.LabelFor(m => m.SabRecentTvPriority)
+        <span class="small">@Html.DescriptionFor(m => m.SabRecentTvPriority)</span>
+    </label>
+    @Html.DropDownListFor(m => m.SabRecentTvPriority, Model.PrioritySelectList, new { @class = "inputClass selectClass" })
 
     <label class="labelClass">Test SABnzbd
         <span class="small">Test SABnzbd settings</span>

@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests
         [Test]
         public void DownloadNzb_should_download_file_if_it_doesnt_exist()
         {
-            Mocker.Resolve<BlackholeProvider>().DownloadNzb(nzbUrl, title).Should().BeTrue();
+            Mocker.Resolve<BlackholeProvider>().DownloadNzb(nzbUrl, title, false).Should().BeTrue();
 
             Mocker.GetMock<HttpProvider>().Verify(c => c.DownloadFile(nzbUrl, nzbPath),Times.Once());
         }
@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests
         {
             WithExistingFile();
 
-            Mocker.Resolve<BlackholeProvider>().DownloadNzb(nzbUrl, title).Should().BeTrue();
+            Mocker.Resolve<BlackholeProvider>().DownloadNzb(nzbUrl, title, false).Should().BeTrue();
 
             Mocker.GetMock<HttpProvider>().Verify(c => c.DownloadFile(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
         }
@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests
         {
             WithFailedDownload();
 
-            Mocker.Resolve<BlackholeProvider>().DownloadNzb(nzbUrl, title).Should().BeFalse();
+            Mocker.Resolve<BlackholeProvider>().DownloadNzb(nzbUrl, title, false).Should().BeFalse();
             
             ExceptionVerification.ExpectedWarns(1);
         }
@@ -74,7 +74,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DownloadClientTests
             var illegalTitle = "Saturday Night Live - S38E08 - Jeremy Renner/Maroon 5 [SDTV]";
             var expectedFilename = Path.Combine(blackHoleFolder, "Saturday Night Live - S38E08 - Jeremy Renner+Maroon 5 [SDTV].nzb");
 
-            Mocker.Resolve<BlackholeProvider>().DownloadNzb(nzbUrl, illegalTitle).Should().BeTrue();
+            Mocker.Resolve<BlackholeProvider>().DownloadNzb(nzbUrl, illegalTitle, false).Should().BeTrue();
 
             Mocker.GetMock<HttpProvider>().Verify(c => c.DownloadFile(It.IsAny<string>(), expectedFilename), Times.Once());
         }

@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Providers.DownloadClients
         {
         }
 
-        public virtual bool DownloadNzb(string url, string title)
+        public virtual bool DownloadNzb(string url, string title, bool recentlyAired)
         {
             try
             {
@@ -62,7 +62,7 @@ namespace NzbDrone.Core.Providers.DownloadClients
                 logger.Trace("NZB Download succeeded, saved to: {0}", filename);
 
                 var contents = String.Format("plugin://plugin.program.pneumatic/?mode=strm&type=add_file&nzb={0}&nzbname={1}", filename, title);
-                _diskProvider.WriteAllText(Path.Combine(_configProvider.SabDropDirectory, title + ".strm"), contents);
+                _diskProvider.WriteAllText(Path.Combine(_configProvider.DownloadClientTvDirectory, title + ".strm"), contents);
                 
                 return true;
             }
